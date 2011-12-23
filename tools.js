@@ -214,7 +214,7 @@ function BattleTools()
 		}
 		else
 		{
-			if (format.banlistTable) format.banlistTable = {};
+			if (!format.banlistTable) format.banlistTable = {};
 			if (!format.setBanTable) format.setBanTable = [];
 			if (!format.teamBanTable) format.teamBanTable = [];
 			
@@ -224,10 +224,10 @@ function BattleTools()
 			{
 				for (var i=0; i<subformat.banlist.length; i++)
 				{
-					banlistTable[subformat.banlist[i]] = true;
-					
 					// make sure we don't infinitely recurse
 					if (banlistTable[toId(subformat.banlist[i])]) continue;
+					
+					banlistTable[subformat.banlist[i]] = true;
 					banlistTable[toId(subformat.banlist[i])] = true;
 					
 					var plusPos = subformat.banlist[i].indexOf('+');
@@ -255,7 +255,7 @@ function BattleTools()
 					}
 					
 					var subsubformat = selfT.getEffect(subformat.banlist[i]);
-					if (subsubformat.banlist)
+					if (subsubformat.banlist && subsubformat.effectType === 'Banlist')
 					{
 						selfT.getBanlistTable(format, subsubformat);
 					}
@@ -280,9 +280,10 @@ function BattleTools()
 		{
 			return ["Your team has no pokemon."];
 		}
+		var teamHas = {};
 		for (var i=0; i<team.length; i++)
 		{
-			var setProblems = selfT.validateSet(team[i], format);
+			var setProblems = selfT.validateSet(team[i], format, teamHas);
 			if (setProblems)
 			{
 				problems = problems.concat(setProblems);
@@ -294,7 +295,7 @@ function BattleTools()
 			var bannedCombo = '';
 			for (var j=0; j<format.teamBanTable[i].length; j++)
 			{
-				if (!setHas[format.teamBanTable[i][j]])
+				if (!teamHas[format.teamBanTable[i][j]])
 				{
 					bannedCombo = false;
 					break;
@@ -386,7 +387,7 @@ function BattleTools()
 				unreleasedDW = {
 					Serperior: 1, Chandelure: 1, Ditto: 1,
 					Breloom: 1, Zapdos: 1, Lucario: 1, Feraligatr: 1, Gothitelle: 1,
-					'Ho-Oh': 1, Lugia: 1
+					'Ho-Oh': 1, Lugia: 1, Raikou: 1
 				};
 				
 				if (unreleasedDW[set.species] && banlistTable['Unreleased'])
