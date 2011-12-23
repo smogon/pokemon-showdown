@@ -44,14 +44,14 @@ exports.BattleFormats = {
 		name: "UU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','CAP']
+		banlist: ['Standard','Uber','OU','BL','CAP', 'Hail','Drought']
 	},
 	RU: {
 		effectType: 'Format',
 		name: "RU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','UU','BL2','CAP']
+		banlist: ['Standard','Uber','OU','BL','UU','BL2','CAP', 'ShellSmash + BatonPass']
 	},
 	NU: {
 		effectType: 'Format',
