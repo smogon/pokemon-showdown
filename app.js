@@ -1200,7 +1200,7 @@ function Lobby(roomid)
 		var problems = Tools.validateTeam(user.team, format);
 		if (problems)
 		{
-			user.emit('message', "Your team was rejected for the following reasons:\n\n"+problems.join("\n"));
+			user.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 			return;
 		}
 		
