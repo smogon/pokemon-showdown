@@ -44,7 +44,7 @@ exports.BattleFormats = {
 		name: "UU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','CAP', 'Hail','Drought']
+		banlist: ['Standard','Uber','OU','BL','CAP', 'SnowWarning','Drought']
 	},
 	RU: {
 		effectType: 'Format',
