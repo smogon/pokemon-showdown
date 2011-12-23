@@ -1,0 +1,26 @@
+nodejs-hashlib (0.0.1-0sg3) lucid; urgency=low
+
+  [ Seth Fitzsimmons ]
+  * Depend on 1st non-broken-for-extensons nodejs pkg
+
+  [ SimpleGeo Nerds ]
+
+ -- SimpleGeo Nerds <nerds@simplegeo.com>  Mon, 01 Nov 2010 20:34:38 +0000
+
+nodejs-hashlib (0.0.1-0sg2) lucid; urgency=low
+
+  * UNRELEASED
+
+ -- SimpleGeo Nerds <nerds@simplegeo.com>  Wed, 13 Oct 2010 22:59:09 +0000
+
+nodejs-hashlib (0.0.1-0sg1) lucid; urgency=low
+
+  * UNRELEASED
+
+ -- SimpleGeo Nerds <nerds@simplegeo.com>  Wed, 13 Oct 2010 22:40:33 +0000
+
+nodejs-hashlib (0.0.1-0sg0) unstable; urgency=low
+
+  * Debianized
+
+ -- Wade Simmons <wade@simplegeo.com>  Wed, 13 Oct 2010 15:31:27 -0600
