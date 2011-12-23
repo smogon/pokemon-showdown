@@ -762,7 +762,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Dragon-type move by 50%. One-time use."
+		desc: "Raises the power of a Electric-type move by 50%. One-time use."
 	},
 	"EnergyPowder": {
 		id: "EnergyPowder",
