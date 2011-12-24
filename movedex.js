@@ -7075,8 +7075,24 @@ exports.BattleMovedex = {
 		name: "Power Trick",
 		pp: 10,
 		priority: 0,
+		volatileStatus: 'PowerTrick',
+		effect: {
+			onStart: function(pokemon) {
+				this.add('message Attack and Defense swapped. (placeholder)');
+			},
+			onRestart: function(pokemon) {
+				this.add('message Attack and Defense swapped. (placeholder)');
+				pokemon.removeVolatile('PowerTrick');
+			},
+			onModifyStatsPriority: 100,
+			onModifyStats: function(stats) {
+				var temp = stats.atk;
+				stats.atk = stats.def;
+				stats.def = temp;
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Psychic"
 	},
 	"PowerWhip": {
