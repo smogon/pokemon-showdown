@@ -76,8 +76,9 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 55,
 		basePowerCallback: function(pokemon) {
-			if (!pokemon.item || pokemon.getItem().isGem)
+			if (!pokemon.item || pokemon.item === 'FlyingGem')
 			{
+				this.debug("Power doubled for no item.");
 				return 110;
 			}
 			return 55;
