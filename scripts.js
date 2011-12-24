@@ -274,7 +274,14 @@ exports.BattleScripts = {
 		}
 		if (hitResult)
 		{
-			hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
+			if (move.target === 'foeSide' || move.target === 'allySide')
+			{
+				hitResult = this.singleEvent('Hit', moveData, {}, target.side, pokemon, move);
+			}
+			else
+			{
+				hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
+			}
 		}
 		
 		if (hitResult === 0)

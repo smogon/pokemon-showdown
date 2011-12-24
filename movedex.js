@@ -366,13 +366,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
-		onHit: function(target) {
-			var pokemon = target.side.pokemon;
-			for (var i=0; i<pokemon.length; i++)
+		onHit: function(side, source) {
+			for (var i=0; i<side.pokemon.length; i++)
 			{
-				pokemon[i].status = '';
+				side.pokemon[i].status = '';
 			}
-			this.add('r-cure-all '+target.id+' Aromatherapy');
+			this.add('r-cure-all '+source.id+' Aromatherapy');
 		},
 		secondary: false,
 		target: "allySide",
@@ -4251,13 +4250,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
-		onHit: function(target) {
-			var pokemon = target.side.pokemon;
-			for (var i=0; i<pokemon.length; i++)
+		onHit: function(side, source) {
+			for (var i=0; i<side.pokemon.length; i++)
 			{
-				pokemon[i].status = '';
+				side.pokemon[i].status = '';
 			}
-			this.add('r-cure-all '+target.id+' HealBell');
+			this.add('r-cure-all '+source.id+' HealBell');
 		},
 		secondary: false,
 		target: "allySide",
@@ -7446,7 +7444,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 3,
 		sideCondition: 'QuickGuard',
-		onHit: function(pokemon, source) {
+		onHit: function(side, source) {
 			if (!this.willAct())
 			{
 				return false;
