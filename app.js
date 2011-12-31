@@ -606,7 +606,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 
 function parseCommand(user, cmd, target, room, socket)
 {
-	if (cmd === 1 || cmd === 'b')
+	if (cmd === 'ban' || cmd === 'b')
 	{
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
