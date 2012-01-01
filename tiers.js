@@ -12,7 +12,7 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"Aerodactyl": {
-		tier: "UU"
+		tier: "RU"
 	},
 	"Aggron": {
 		tier: "RU"
@@ -21,7 +21,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Alakazam": {
-		tier: "BL2"
+		tier: "OU"
 	},
 	"Alomomola": {
 		tier: "NU"
@@ -210,7 +210,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"Bronzong": {
-		tier: "OU"
+		tier: "UU"
 	},
 	"Bronzor": {
 		tier: "LC"
@@ -267,7 +267,7 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"Chansey": {
-		tier: "UU"
+		tier: "OU"
 	},
 	"Charizard": {
 		tier: "RU"
@@ -357,7 +357,7 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"Cresselia": {
-		tier: "UU"
+		tier: "RU"
 	},
 	"Croagunk": {
 		tier: "LC"
@@ -468,13 +468,13 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Druddigon": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"Ducklett": {
 		tier: "LC"
 	},
 	"Dugtrio": {
-		tier: "NU"
+		tier: "OU"
 	},
 	"Dunsparce": {
 		tier: "NU"
@@ -693,7 +693,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Golurk": {
-		tier: "UU"
+		tier: "RU"
 	},
 	"Gorebyss": {
 		tier: "NU"
@@ -831,7 +831,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"Jolteon": {
-		tier: "UU"
+		tier: "OU"
 	},
 	"Joltik": {
 		tier: "LC"
@@ -882,7 +882,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Klinklang": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"Koffing": {
 		tier: "LC"
@@ -900,7 +900,7 @@ exports.BattleTiers = {
 		tier: "Limbo"
 	},
 	"Krookodile": {
-		tier: "RU"
+		tier: "UU"
 	},
 	"Kyogre": {
 		tier: "Uber"
@@ -918,7 +918,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"Lanturn": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"Lapras": {
 		tier: "NU"
@@ -1035,7 +1035,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Magneton": {
-		tier: "Limbo"
+		tier: "RU"
 	},
 	"Magnezone": {
 		tier: "OU"
@@ -1044,7 +1044,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Mamoswine": {
-		tier: "UU"
+		tier: "OU"
 	},
 	"Manaphy": {
 		tier: "Uber"
@@ -1428,7 +1428,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"Rhydon": {
-		tier: "Limbo"
+		tier: "RU"
 	},
 	"Rhyhorn": {
 		tier: "LC"
@@ -1443,7 +1443,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Roselia": {
-		tier: "Limbo"
+		tier: "RU"
 	},
 	"Roserade": {
 		tier: "UU"
@@ -1470,7 +1470,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Sableye": {
-		tier: "BL2"
+		tier: "UU"
 	},
 	"Salamence": {
 		tier: "OU"
@@ -1500,7 +1500,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"Scolipede": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"Scrafty": {
 		tier: "OU"
@@ -1587,7 +1587,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Sigilyph": {
-		tier: "UU"
+		tier: "RU"
 	},
 	"Silcoon": {
 		tier: "Limbo"
@@ -1626,7 +1626,7 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"Slowking": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"Slowpoke": {
 		tier: "LC"
@@ -1635,7 +1635,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Smeargle": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"Smoochum": {
 		tier: "LC"
@@ -1677,7 +1677,7 @@ exports.BattleTiers = {
 		tier: "Limbo"
 	},
 	"Spiritomb": {
-		tier: "UU"
+		tier: "RU"
 	},
 	"Spoink": {
 		tier: "LC"
@@ -1740,7 +1740,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"Swampert": {
-		tier: "OU"
+		tier: "UU"
 	},
 	"Swanna": {
 		tier: "NU"
@@ -1809,7 +1809,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"Tornadus": {
-		tier: "UU"
+		tier: "OU"
 	},
 	"Torterra": {
 		tier: "NU"
@@ -1902,7 +1902,7 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"Victreebel": {
-		tier: "RU"
+		tier: "NU"
 	},
 	"Vigoroth": {
 		tier: "Limbo"
@@ -1956,7 +1956,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"Whimsicott": {
-		tier: "UU"
+		tier: "RU"
 	},
 	"Whirlipede": {
 		tier: "Limbo"
