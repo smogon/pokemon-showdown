@@ -427,6 +427,10 @@ exports.BattleScripts = {
 			{
 				template.viablemoves = ["Magikarp'sRevenge", "Splash", "Bounce"];
 			}
+			if (template.species === 'Delibird')
+			{
+				template.viablemoves = ["Present"];
+			}
 			
 			var moveKeys = shuffle(objectKeys(template.viablemoves));
 			var moves = [];

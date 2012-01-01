@@ -7116,12 +7116,31 @@ exports.BattleMovedex = {
 		num: 217,
 		accuracy: true,
 		basePower: false,
+		basePowerCallback: function() {
+			var rand = Math.random() * 8;
+			if (rand < 1)
+			{
+				return 120;
+			}
+			else if (rand < 4)
+			{
+				return 80;
+			}
+			return 40;
+		},
 		category: "Physical",
 		desc: "Randomly either attacks with a variable power, between 40 base power and 120 base power, or heals the target by 80 HP.",
 		id: "Present",
 		name: "Present",
 		pp: 15,
 		priority: 0,
+		onHit: function(target, source) {
+			if (Math.random() * 10 < 2)
+			{
+				this.heal(80, target);
+				return null;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
