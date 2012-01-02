@@ -429,7 +429,7 @@ exports.BattleScripts = {
 			}
 			if (template.species === 'Delibird')
 			{
-				template.viablemoves = ["Present"];
+				template.viablemoves = ["Present", "Bestow"];
 			}
 			
 			var moveKeys = shuffle(objectKeys(template.viablemoves));
@@ -821,6 +821,11 @@ exports.BattleScripts = {
 				{
 					// this is just to amuse myself
 					item = 'AirBalloon';
+				}
+				else if (template.species === 'Delibird')
+				{
+					// to go along with the Christmas Delibird set
+					item = 'Leftovers';
 				}
 				else if (ability === 'Imposter')
 				{
