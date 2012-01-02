@@ -1857,6 +1857,7 @@ exports.BattleAbilities = {
 	},
 	"SuctionCups": {
 		desc: "Roar and Whirlwind do not affect this Pokemon. [Field Effect]\u00a0Pokemon hooked by a fishing rod are easier to catch.",
+		onDragOut: false,
 		id: "SuctionCups",
 		name: "Suction Cups",
 		rating: 3,
