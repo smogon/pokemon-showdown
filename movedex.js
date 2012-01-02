@@ -6769,7 +6769,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 50,
 		basePowerCallback: function(pokemon, target) {
-			if (target.newlySwitched || this.willMove(target))
+			if (!target.newlySwitched && this.willMove(target))
 			{
 				this.debug('Payback NOT boosted');
 				return 50;
