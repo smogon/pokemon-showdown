@@ -919,7 +919,7 @@ function parseCommand(user, cmd, target, room, socket)
 					else for (var i=0; i<data.length; i++)
 					{
 						var row = data[i];
-						socket.emit('console', row.formatid+': '+Math.floor(row.rpr)+' (percentile: '+row.pgxe+')');
+						socket.emit('console', row.formatid+': '+Math.round(row.acre)+' (GXE:'+Math.round(row.pgxe,1)+') (W:'+row.w+'/L:'+row.l+'/T:'+row.t+')');
 					}
 				}
 				catch(e)
@@ -1000,7 +1000,7 @@ function parseCommand(user, cmd, target, room, socket)
 			socket.emit('console', '/ip - Get your own IP address. Can be used by: anyone');
 			socket.emit('console', '/ip [username] - Get a user\'s IP address. Can be used by: @ &');
 		}
-		if (target === 'all' || target === 'ranking')
+		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank')
 		{
 			matched = true;
 			socket.emit('console', '/ranking - Get your own ranking.');
