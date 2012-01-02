@@ -56,7 +56,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
-		desc: "Lowers the target's Special Defense by one stage.",
+		desc: "Lowers the target's Special Defense by two stages.",
 		id: "AcidSpray",
 		name: "Acid Spray",
 		pp: 20,
@@ -65,7 +65,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 100,
 			boosts: {
-				spd: -1
+				spd: -2
 			}
 		},
 		target: "normal",
