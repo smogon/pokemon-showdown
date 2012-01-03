@@ -2211,6 +2211,11 @@ function Battle(roomid, format, ranked)
 		
 		baseDamage *= (85 + floor(Math.random() * 16)) / 100;
 		
+		if (basePower && !floor(baseDamage))
+		{
+			return 1;
+		}
+		
 		return floor(baseDamage);
 	};
 	this.getTarget = function(decision)
