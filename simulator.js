@@ -517,6 +517,7 @@ function BattlePokemon(set, side)
 	if (!this.id) this.id = (side.n?'foe':'ally')+'-'+toId(this.name);
 	
 	this.hasType = function (type) {
+		if (type === undefined) return false;
 		if (selfP.types[0] === type) return true;
 		if (selfP.types[1] === type) return true;
 		return false;
