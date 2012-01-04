@@ -10322,7 +10322,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		secondary: false,
 		target: "normal",
-		type: "Normal"
+		type: "Normal",
+		typeCallback: function(pokemon) {
+			return this.runEvent('Drive', pokemon, null, 'TechnoBlast', 'Normal');
+		}
 	},
 	"TeeterDance": {
 		num: 298,

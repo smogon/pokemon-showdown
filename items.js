@@ -264,6 +264,7 @@ exports.BattleItems = {
 		id: "BurnDrive",
 		name: "Burn Drive",
 		spritenum: 54,
+		onDrive: 'Fire',
 		desc: "Changes the type of Techno Blast to Fire."
 	},
 	"CellBattery": {
@@ -381,6 +382,7 @@ exports.BattleItems = {
 		id: "ChillDrive",
 		name: "Chill Drive",
 		spritenum: 67,
+		onDrive: 'Ice',
 		desc: "Changes the type of Techno Blast to Ice."
 	},
 	"ChoiceBand": {
@@ -650,6 +652,7 @@ exports.BattleItems = {
 		id: "DouseDrive",
 		name: "Douse Drive",
 		spritenum: 103,
+		onDrive: 'Water',
 		desc: "Changes the type of Techno Blast to Water."
 	},
 	"DracoPlate": {
@@ -2243,6 +2246,7 @@ exports.BattleItems = {
 		id: "ShockDrive",
 		name: "Shock Drive",
 		spritenum: 442,
+		onDrive: 'Electric',
 		desc: "Changes the type of Techno Blast to Electric."
 	},
 	"ShucaBerry": {
