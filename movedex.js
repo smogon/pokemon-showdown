@@ -1325,6 +1325,9 @@ exports.BattleMovedex = {
 		name: "Chatter",
 		pp: 20,
 		priority: 0,
+		onSecondaryHit: function(target, source) {
+			if (source.template.species !== 'Chatot') return false;
+		},
 		secondary: {
 			chance: 31,
 			volatileStatus: 'confusion'
@@ -3565,6 +3568,18 @@ exports.BattleMovedex = {
 		name: "Freeze Shock",
 		pp: 5,
 		priority: 0,
+		beforeMoveCallback: function(pokemon) {
+			if (pokemon.removeVolatile('FreezeShock')) return;
+			this.add('prepare-move '+pokemon.id+' FreezeShock');
+			pokemon.addVolatile('FreezeShock');
+			return true;
+		},
+		effect: {
+			duration: 2,
+			onModifyPokemon: function(pokemon) {
+				pokemon.lockMove('FreezeShock');
+			}
+		},
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -5304,7 +5319,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		secondary: false,
 		target: "normal",
-		type: "Normal"
+		type: "Normal",
+		typeCallback: function(pokemon) {
+			return this.runEvent('Plate', pokemon, null, 'Judgment', 'Normal');
+		}
 	},
 	"JumpKick": {
 		num: 26,
@@ -8439,6 +8457,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
+		defensiveCategory: "Physical",
 		desc: "Inflicts damage based on the target's Defense, not Special Defense.",
 		id: "SecretSword",
 		name: "Secret Sword",
@@ -8795,6 +8814,7 @@ exports.BattleMovedex = {
 		name: "Sketch",
 		pp: 1,
 		priority: 0,
+		onHit: false,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8839,6 +8859,19 @@ exports.BattleMovedex = {
 		pp: 15,
 		isContact: true,
 		priority: 0,
+		beforeMoveCallback: function(pokemon) {
+			if (pokemon.removeVolatile('SkullBash')) return;
+			this.add('message '+pokemon.id+' lowered its head! (placeholder)');
+			pokemon.addVolatile('SkullBash');
+			this.boost({def:1});
+			return true;
+		},
+		effect: {
+			duration: 2,
+			onModifyPokemon: function(pokemon) {
+				pokemon.lockMove('SkullBash');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10082,11 +10115,15 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
-		desc: null,
+		desc: "Hits any Pokémon that shares a type with the user.",
 		id: "Synchronoise",
 		name: "Synchronoise",
 		pp: 15,
 		priority: 0,
+		onHit: function(target, source) {
+			if (target.hasType(source.types[0]) || target.hasType(source.types[1])) return;
+			return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
