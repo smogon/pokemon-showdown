@@ -517,9 +517,19 @@ function BattlePokemon(set, side)
 	if (!this.id) this.id = (side.n?'foe':'ally')+'-'+toId(this.name);
 	
 	this.hasType = function (type) {
-		if (type === undefined) return false;
-		if (selfP.types[0] === type) return true;
-		if (selfP.types[1] === type) return true;
+		if (!type) return false;
+		if (Array.isArray(type))
+		{
+			for (var i=0; i<type.length; i++)
+			{
+				if (this.hasType(type[i])) return true;
+			}
+		}
+		else
+		{
+			if (selfP.types[0] === type) return true;
+			if (selfP.types[1] === type) return true;
+		}
 		return false;
 	};
 	// returns the amount of damage actually dealt
