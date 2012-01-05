@@ -7015,6 +7015,7 @@ exports.BattleMovedex = {
 		pp: 25,
 		isContact: true,
 		priority: 0,
+		critRatio: 2,
 		secondary: {
 			chance: 10,
 			status: 'psn'
