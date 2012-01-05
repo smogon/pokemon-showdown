@@ -9051,9 +9051,9 @@ exports.BattleMovedex = {
 		onHit: function(target) {
 			if (target.status !== 'slp') return false;
 			var moves = [];
-			for (var i=0; i<target.moves.length; i++)
+			for (var i=0; i<target.moveset.length; i++)
 			{
-				var move = target.moves[i];
+				var move = target.moveset[i].id;
 				var NoSleepTalk = {
 					Assist:1, Bide:1, Bounce:1, Chatter:1, Copycat:1, Dig:1, Dive:1, Fly:1, FocusPunch:1, MeFirst:1, Metronome:1, MirrorMove:1, ShadowForce:1, SkullBash:1, SkyAttack:1, SkyDrop:1, SleepTalk:1, SolarBeam:1, RazorWind:1, Uproar:1
 				};
