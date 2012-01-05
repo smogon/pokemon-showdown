@@ -2838,6 +2838,18 @@ exports.BattleMovedex = {
 		name: "Entrainment",
 		pp: 15,
 		priority: 0,
+		onHit: function(target, source) {
+			if (target.ability === 'Multitype' || target.ability === 'Truant' || target.ability === 'ZenMode' || target.ability === source.ability)
+			{
+				return false;
+			}
+			if (target.setAbility(source.ability))
+			{
+				this.add('message '+target.name+' acquired '+source.ability+'! (placeholder)');
+				return;
+			}
+			return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -7200,7 +7212,7 @@ exports.BattleMovedex = {
 			},
 			onHitPriority: 1,
 			onHit: function(target, source, effect) {
-				if (effect && effect.id === 'Feint')
+				if (effect && (effect.id === 'Feint' || effect.id === 'RolePlay'))
 				{
 					return;
 				}
@@ -8141,11 +8153,23 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "The user's own ability is overwritten with the target's ability; does nothing if the target's ability is Wonder Guard.",
+		desc: "The user's own ability is overwritten with the target's ability; does nothing if the target's ability is Multitype or Wonder Guard.",
 		id: "RolePlay",
 		name: "Role Play",
 		pp: 10,
 		priority: 0,
+		onHit: function(target, source) {
+			if (target.ability === 'Multitype' || target.ability === 'WonderGuard' || target.ability === source.ability)
+			{
+				return false;
+			}
+			if (source.setAbility(target.ability))
+			{
+				this.add('message '+source.name+' copied '+target.name+'\'s '+source.ability+'! (placeholder)');
+				return;
+			}
+			return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -8861,7 +8885,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('SkullBash')) return;
-			this.add('message '+pokemon.id+' lowered its head! (placeholder)');
+			this.add('message '+pokemon.name+' lowered its head! (placeholder)');
 			pokemon.addVolatile('SkullBash');
 			this.boost({def:1});
 			return true;
@@ -9819,7 +9843,7 @@ exports.BattleMovedex = {
 				if (move.category === 'Status')
 				{
 					var SubBlocked = {
-						Acupressure:1, Block:1, DreamEater:1, Embargo:1, Flatter:1, GastroAcid:1, Grudge:1, HealBlock:1, LeechSeed:1, 'Lock-On':1, MeanLook:1, Mimic:1, MindReader:1, Nightmare:1, PainSplit:1, PsychoShift:1, SpiderWeb:1, Sketch:1, Swagger:1, Switcheroo:1, Trick:1, WorrySeed:1, Yawn:1
+						Acupressure:1, Block:1, DreamEater:1, Embargo:1, Entrainment:1, Flatter:1, GastroAcid:1, Grudge:1, HealBlock:1, LeechSeed:1, 'Lock-On':1, MeanLook:1, Mimic:1, MindReader:1, Nightmare:1, PainSplit:1, PsychoShift:1, SpiderWeb:1, Sketch:1, Swagger:1, Switcheroo:1, Trick:1, WorrySeed:1, Yawn:1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion')
 					{
