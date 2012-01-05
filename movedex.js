@@ -10121,8 +10121,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function(target, source) {
-			if (target.hasType(source.types[0]) || target.hasType(source.types[1])) return;
-			return false;
+			return target.hasType(source.types);
 		},
 		secondary: false,
 		target: "normal",
