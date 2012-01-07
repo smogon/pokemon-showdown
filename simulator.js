@@ -522,7 +522,7 @@ function BattlePokemon(set, side)
 		{
 			for (var i=0; i<type.length; i++)
 			{
-				if (this.hasType(type[i])) return true;
+				if (selfP.hasType(type[i])) return true;
 			}
 		}
 		else
