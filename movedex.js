@@ -3468,21 +3468,8 @@ exports.BattleMovedex = {
 		name: "Focus Energy",
 		pp: 30,
 		priority: 0,
-		volatileStatus: 'FocusEnergy',
-		effect: {
-			onModifyMove: function(move) {
-				move.critRatio += 2;
-			}
-		},
-		onHit: function(target) {
-			if (target.volatiles['FocusEnergy'])
-			{
-				return false;
-			}
-			this.add('message '+target.name+' is getting pumped! (placeholder)');
-		},
 		secondary: false,
-		target: "self",
+		target: "normal",
 		type: "Normal"
 	},
 	"FocusPunch": {
@@ -6812,7 +6799,12 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 50,
 		basePowerCallback: function(pokemon, target) {
-			if (!target.newlySwitched && this.willMove(target))
+			if (target.newlySwitched)
+			{
+				this.debug('Payback NOT boosted on a switch');
+				return 50;
+			}
+			if (this.willMove(target))
 			{
 				this.debug('Payback NOT boosted');
 				return 50;
