@@ -3468,8 +3468,21 @@ exports.BattleMovedex = {
 		name: "Focus Energy",
 		pp: 30,
 		priority: 0,
+		volatileStatus: 'FocusEnergy',
+		effect: {
+			onModifyMove: function(move) {
+				move.critRatio += 2;
+			}
+		},
+		onHit: function(target) {
+			if (target.volatiles['FocusEnergy'])
+			{
+				return false;
+			}
+			this.add('message '+target.name+' is getting pumped! (placeholder)');
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"FocusPunch": {

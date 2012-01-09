@@ -2039,6 +2039,9 @@ exports.BattleItems = {
 		id: "RazorClaw",
 		name: "Razor Claw",
 		spritenum: 382,
+		onModifyMove: function(move) {
+			move.critRatio++;
+		}
 		desc: "Raises critical hit rate one stage. Evolves Sneasel into Weavile."
 	},
 	"RazorFang": {
@@ -2190,7 +2193,7 @@ exports.BattleItems = {
 		name: "Scope Lens",
 		spritenum: 429,
 		onModifyMove: function(move) {
-			move.critRatio += 1;
+			move.critRatio++;
 		},
 		desc: "Raises critical hit rate one stage."
 	},
