@@ -7226,8 +7226,15 @@ exports.BattleMovedex = {
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove)
 				{
-					// Outrage counter is reset
-					source.volatiles['lockedmove'].duration = lockedmove.durationCallback();
+					// Outrage counter is removed
+					if (source.volatiles['lockedmove'].duration === 1)
+					{
+						source.removeVolatile('lockedmove');
+					}
+					else
+					{
+						delete source.volatiles['lockedmove'];
+					}
 				}
 				this.singleEvent('MoveFail', effect, null, target, source, effect);
 				return null;
