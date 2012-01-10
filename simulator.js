@@ -1213,7 +1213,7 @@ function Battle(roomid, format, ranked)
 		return Math.random()-0.5;
 	};
 	this.getResidualStatuses = function(thing, callbackType) {
-		var statuses = selfB.getRelevantStatusesInner(thing || selfB, callbackType || 'residualCallback', null, null, false, true, 'duration');
+		var statuses = selfB.getRelevantEffectsInner(thing || selfB, callbackType || 'residualCallback', null, null, false, true, 'duration');
 		statuses.sort(selfB.comparePriority);
 		//if (statuses[0]) selfB.debug('match '+(callbackType||'residualCallback')+': '+statuses[0].status.id);
 		return statuses;
@@ -1242,7 +1242,7 @@ function Battle(roomid, format, ranked)
 		}
 	};
 	this.residualEvent = function(eventid, relayVar) {
-		var statuses = selfB.getRelevantStatusesInner(selfB, 'on'+eventid, null, null, false, true, 'duration');
+		var statuses = selfB.getRelevantEffectsInner(selfB, 'on'+eventid, null, null, false, true, 'duration');
 		statuses.sort(selfB.comparePriority);
 		while (statuses.length)
 		{
@@ -1333,7 +1333,7 @@ function Battle(roomid, format, ranked)
 			return false;
 		}
 		if (!target) target = selfB;
-		var statuses = selfB.getRelevantStatuses(target, 'on'+eventid, 'onSource'+eventid, source);
+		var statuses = selfB.getRelevantEffects(target, 'on'+eventid, 'onSource'+eventid, source);
 		var hasRelayVar = true;
 		effect = selfB.getEffect(effect);
 		var args = [target, source, effect];
@@ -1426,13 +1426,13 @@ function Battle(roomid, format, ranked)
 		return relayVar;
 	};
 	// bubbles up to parents
-	this.getRelevantStatuses = function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
-		var statuses = selfB.getRelevantStatusesInner(thing, callbackType, foeCallbackType, foeThing, true, false);
+	this.getRelevantEffects = function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
+		var statuses = selfB.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
 		statuses.sort(selfB.comparePriority);
 		//if (statuses[0]) selfB.debug('match '+callbackType+': '+statuses[0].status.id);
 		return statuses;
 	};
-	this.getRelevantStatusesInner = function(thing, callbackType, foeCallbackType, foeThing, bubbleUp, bubbleDown, getAll) {
+	this.getRelevantEffectsInner = function(thing, callbackType, foeCallbackType, foeThing, bubbleUp, bubbleDown, getAll) {
 		if (!callbackType || !thing) return [];
 		var statuses = [];
 		var status;
@@ -1454,8 +1454,8 @@ function Battle(roomid, format, ranked)
 			}
 			if (bubbleDown)
 			{
-				statuses = statuses.concat(selfB.getRelevantStatusesInner(selfB.allySide, callbackType,null,null,false,true, getAll));
-				statuses = statuses.concat(selfB.getRelevantStatusesInner(selfB.foeSide, callbackType,null,null,false,true, getAll));
+				statuses = statuses.concat(selfB.getRelevantEffectsInner(selfB.allySide, callbackType,null,null,false,true, getAll));
+				statuses = statuses.concat(selfB.getRelevantEffectsInner(selfB.foeSide, callbackType,null,null,false,true, getAll));
 			}
 			return statuses;
 		}
@@ -1472,17 +1472,17 @@ function Battle(roomid, format, ranked)
 			}
 			if (foeCallbackType)
 			{
-				statuses = statuses.concat(selfB.getRelevantStatusesInner(thing.foe, foeCallbackType,null,null,false,false, getAll));
+				statuses = statuses.concat(selfB.getRelevantEffectsInner(thing.foe, foeCallbackType,null,null,false,false, getAll));
 			}
 			if (bubbleUp)
 			{
-				statuses = statuses.concat(selfB.getRelevantStatusesInner(selfB, callbackType,null,null,true,false, getAll));
+				statuses = statuses.concat(selfB.getRelevantEffectsInner(selfB, callbackType,null,null,true,false, getAll));
 			}
 			if (bubbleDown)
 			{
 				for (var i=0;i<thing.active.length;i++)
 				{
-					statuses = statuses.concat(selfB.getRelevantStatusesInner(thing.active[i], callbackType,null,null,false,true, getAll));
+					statuses = statuses.concat(selfB.getRelevantEffectsInner(thing.active[i], callbackType,null,null,false,true, getAll));
 				}
 			}
 			return statuses;
@@ -1520,7 +1520,7 @@ function Battle(roomid, format, ranked)
 		
 		if (foeThing && foeCallbackType && foeCallbackType.substr(0,8) !== 'onSource')
 		{
-			statuses = statuses.concat(selfB.getRelevantStatusesInner(foeThing, foeCallbackType,null,null,false,false, getAll));
+			statuses = statuses.concat(selfB.getRelevantEffectsInner(foeThing, foeCallbackType,null,null,false,false, getAll));
 		}
 		else if (foeCallbackType)
 		{
@@ -1532,7 +1532,7 @@ function Battle(roomid, format, ranked)
 				eventName = foeCallbackType.substr(8);
 				if (foeThing)
 				{
-					statuses = statuses.concat(selfB.getRelevantStatusesInner(foeThing, foeCallbackType,null,null,false,false, getAll));
+					statuses = statuses.concat(selfB.getRelevantEffectsInner(foeThing, foeCallbackType,null,null,false,false, getAll));
 				}
 				foeCallbackType = 'onFoe'+eventName;
 				foeThing = null;
@@ -1542,22 +1542,22 @@ function Battle(roomid, format, ranked)
 				eventName = foeCallbackType.substr(5);
 				for (var i=0; i<allyActive.length; i++)
 				{
-					statuses = statuses.concat(selfB.getRelevantStatusesInner(allyActive[i], 'onAlly'+eventName,null,null,false,false, getAll));
-					statuses = statuses.concat(selfB.getRelevantStatusesInner(allyActive[i], 'onAny'+eventName,null,null,false,false, getAll));
+					statuses = statuses.concat(selfB.getRelevantEffectsInner(allyActive[i], 'onAlly'+eventName,null,null,false,false, getAll));
+					statuses = statuses.concat(selfB.getRelevantEffectsInner(allyActive[i], 'onAny'+eventName,null,null,false,false, getAll));
 				}
 				for (var i=0; i<foeActive.length; i++)
 				{
-					statuses = statuses.concat(selfB.getRelevantStatusesInner(foeActive[i], 'onAny'+eventName,null,null,false,false, getAll));
+					statuses = statuses.concat(selfB.getRelevantEffectsInner(foeActive[i], 'onAny'+eventName,null,null,false,false, getAll));
 				}
 			}
 			for (var i=0; i<foeActive.length; i++)
 			{
-				statuses = statuses.concat(selfB.getRelevantStatusesInner(foeActive[i], foeCallbackType,null,null,false,false, getAll));
+				statuses = statuses.concat(selfB.getRelevantEffectsInner(foeActive[i], foeCallbackType,null,null,false,false, getAll));
 			}
 		}
 		if (bubbleUp)
 		{
-			statuses = statuses.concat(selfB.getRelevantStatusesInner(thing.side, callbackType, foeCallbackType, null, true, false, getAll));
+			statuses = statuses.concat(selfB.getRelevantEffectsInner(thing.side, callbackType, foeCallbackType, null, true, false, getAll));
 		}
 		return statuses;
 	};
