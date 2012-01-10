@@ -2798,7 +2798,7 @@ exports.BattleMovedex = {
 			},
 			onDamagePriority: -10,
 			onDamage: function(damage, target, effect) {
-				if (effect && effect.effectType === 'Move' && damage > target.hp)
+				if (effect && effect.effectType === 'Move' && damage >= target.hp)
 				{
 					return target.hp-1;
 				}

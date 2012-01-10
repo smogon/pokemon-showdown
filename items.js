@@ -957,12 +957,10 @@ exports.BattleItems = {
 		name: "Focus Band",
 		spritenum: 150,
 		onDamage: function(damage, target, source, effect) {
-			if (Math.random()*10 < 1 && damage >= target.hp)
+			if (Math.random()*10 < 1 && damage >= target.hp && effect && effect.effectType === 'Move')
 			{
-				if (target.useItem())
-				{
-					return target.hp - 1;
-				}
+				this.add("message "+target.name+" held on using its Focus Band! (placeholder)");
+				return target.hp - 1;
 			}
 		},
 		desc: "Gives a 10% chance of surviving a hit with at least 1 HP."
@@ -972,7 +970,7 @@ exports.BattleItems = {
 		name: "Focus Sash",
 		spritenum: 151,
 		onDamage: function(damage, target, source, effect) {
-			if (target.hp == target.maxhp && damage >= target.hp)
+			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move')
 			{
 				if (target.useItem())
 				{
