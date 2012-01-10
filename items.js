@@ -957,7 +957,7 @@ exports.BattleItems = {
 		name: "Focus Band",
 		spritenum: 150,
 		onDamage: function(damage, target, source, effect) {
-			if (Math.random()*10 < 1 && damage > target.hp)
+			if (Math.random()*10 < 1 && damage >= target.hp)
 			{
 				if (target.useItem())
 				{
@@ -972,7 +972,7 @@ exports.BattleItems = {
 		name: "Focus Sash",
 		spritenum: 151,
 		onDamage: function(damage, target, source, effect) {
-			if (target.hp == target.maxhp && damage > target.hp)
+			if (target.hp == target.maxhp && damage >= target.hp)
 			{
 				if (target.useItem())
 				{
