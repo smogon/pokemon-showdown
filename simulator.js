@@ -1296,7 +1296,7 @@ function Battle(roomid, format, ranked)
 			return true;
 		}
 		
-		if (!effect['on'+eventid]) return true;
+		if (typeof effect['on'+eventid] === 'undefined') return true;
 		var parentEffect = selfB.effect;
 		var parentEffectData = selfB.effectData;
 		var parentEvent = selfB.event;
@@ -1306,7 +1306,15 @@ function Battle(roomid, format, ranked)
 		selfB.eventDepth++;
 		var args = [target, source, sourceEffect];
 		if (typeof relayVar !== 'undefined') args.unshift(relayVar);
-		var returnVal = effect['on'+eventid].apply(selfB, args);
+		var returnVal = true;
+		if (typeof effect['on'+eventid] === 'function')
+		{
+			returnVal = effect['on'+eventid].apply(selfB, args);
+		}
+		else
+		{
+			returnVal = effect['on'+eventid];
+		}
 		selfB.eventDepth--;
 		selfB.effect = parentEffect;
 		selfB.effectData = parentEffectData;
