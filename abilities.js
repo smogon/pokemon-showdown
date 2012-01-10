@@ -1847,7 +1847,7 @@ exports.BattleAbilities = {
 				this.add('r-sturdy '+target.id);
 				return 0;
 			}
-			if (target.hp == target.maxhp && damage > target.hp)
+			if (target.hp == target.maxhp && damage >= target.hp)
 			{
 				this.add('r-sturdy '+target.id);
 				return target.hp - 1;
