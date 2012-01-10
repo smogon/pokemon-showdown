@@ -2041,7 +2041,7 @@ exports.BattleItems = {
 		spritenum: 382,
 		onModifyMove: function(move) {
 			move.critRatio++;
-		}
+		},
 		desc: "Raises critical hit rate one stage. Evolves Sneasel into Weavile."
 	},
 	"RazorFang": {
