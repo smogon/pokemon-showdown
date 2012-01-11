@@ -2688,6 +2688,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.effectData.time = 3;
+				this.effectData.move = target.lastMove;
 				this.add('r-volatile '+target.id+' encore');
 				var decision = this.willMove(target);
 				if (decision)
@@ -2697,28 +2698,27 @@ exports.BattleMovedex = {
 					{
 						this.effectData.duration = 1;
 					}
-					this.changeDecision(target, {move:target.lastMove});
+					this.changeDecision(target, {move:this.effectData.move});
 				}
 			},
 			onEnd: function(target) {
 				this.add('r-volatile '+target.id+' encore end');
 			},
 			onModifyPokemon: function(pokemon) {
-				if (!pokemon.lastMove || !pokemon.hasMove(pokemon.lastMove))
+				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move))
 				{
 					return;
 				}
-				var moves = pokemon.moveset;
-				for (var i=0; i<moves.length; i++)
+				for (var i=0; i<pokemon.moveset.length; i++)
 				{
-					if (moves[i].id !== pokemon.lastMove)
+					if (pokemon.moveset[i].id !== this.effectData.move)
 					{
-						moves[i].disabled = true;
+						pokemon.moveset[i].disabled = true;
 					}
 				}
 			},
 			onBeforeTurn: function(pokemon) {
-				if (!pokemon.lastMove)
+				if (!this.effectData.move)
 				{
 					// ???
 					return;
@@ -2731,7 +2731,7 @@ exports.BattleMovedex = {
 					{
 						pokemon.volatiles['Encore'].duration = 1;
 					}
-					this.changeDecision(pokemon, {move:pokemon.lastMove});
+					this.changeDecision(pokemon, {move:this.effectData.move});
 				}
 			}
 		},
