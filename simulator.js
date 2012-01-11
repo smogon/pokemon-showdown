@@ -1202,13 +1202,13 @@ function Battle(roomid, format, ranked)
 		{
 			return b.priority - a.priority;
 		}
-		if (b.subPriority - a.subPriority)
-		{
-			return b.subPriority - a.subPriority;
-		}
 		if (b.speed - a.speed)
 		{
 			return b.speed - a.speed;
+		}
+		if (b.subPriority - a.subPriority)
+		{
+			return b.subPriority - a.subPriority;
 		}
 		return Math.random()-0.5;
 	};
@@ -1425,6 +1425,30 @@ function Battle(roomid, format, ranked)
 		}
 		return relayVar;
 	};
+	this.resolveLastPriority = function(statuses, callbackType) {
+		var priority = 0;
+		var subPriority = 0;
+		var status = statuses[statuses.length-1].status;
+		if (status[callbackType+'Priority'])
+		{
+			priority = status[callbackType+'Priority'];
+		}
+		else if (status[callbackType+'Order'])
+		{
+			priority = -status[callbackType+'Order'];
+		}
+		if (status[callbackType+'SubPriority'])
+		{
+			subPriority = status[callbackType+'SubPriority'];
+		}
+		else if (status[callbackType+'SubOrder'])
+		{
+			subPriority = -status[callbackType+'SubOrder'];
+		}
+		
+		statuses[statuses.length-1].priority = priority;
+		statuses[statuses.length-1].subPriority = subPriority;
+	};
 	// bubbles up to parents
 	this.getRelevantEffects = function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
 		var statuses = selfB.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
@@ -1444,13 +1468,15 @@ function Battle(roomid, format, ranked)
 				status = selfB.getPseudoWeather(i);
 				if (status[callbackType] || (getAll && thing.pseudoWeather[i][getAll]))
 				{
-					statuses.push({status: status, callback: status[callbackType], statusData: selfB.pseudoWeather[i], end: selfB.removePseudoWeather, thing: thing, priority: status[callbackType+'Priority']||0});
+					statuses.push({status: status, callback: status[callbackType], statusData: selfB.pseudoWeather[i], end: selfB.removePseudoWeather, thing: thing});
+					selfB.resolveLastPriority(statuses,callbackType);
 				}
 			}
 			status = selfB.getWeather();
 			if (status[callbackType] || (getAll && thing.weatherData[getAll]))
 			{
 				statuses.push({status: status, callback: status[callbackType], statusData: selfB.weatherData, end: selfB.clearWeather, thing: thing, priority: status[callbackType+'Priority']||0});
+				selfB.resolveLastPriority(statuses,callbackType);
 			}
 			if (bubbleDown)
 			{
@@ -1467,7 +1493,8 @@ function Battle(roomid, format, ranked)
 				status = thing.getSideCondition(i);
 				if (status[callbackType] || (getAll && thing.sideConditions[i][getAll]))
 				{
-					statuses.push({status: status, callback: status[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing, priority: status[callbackType+'Priority']||0});
+					statuses.push({status: status, callback: status[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
+					selfB.resolveLastPriority(statuses,callbackType);
 				}
 			}
 			if (foeCallbackType)
@@ -1497,25 +1524,29 @@ function Battle(roomid, format, ranked)
 		var status = thing.getStatus();
 		if (status[callbackType] || (getAll && thing.statusData[getAll]))
 		{
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus, thing: thing, priority: status[callbackType+'Priority']||0});
+			statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
+			selfB.resolveLastPriority(statuses,callbackType);
 		}
 		for (var i in thing.volatiles)
 		{
 			status = thing.getVolatile(i);
 			if (status[callbackType] || (getAll && thing.volatiles[i][getAll]))
 			{
-				statuses.push({status: status, callback: status[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing, priority: status[callbackType+'Priority']||0});
+				statuses.push({status: status, callback: status[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
+				selfB.resolveLastPriority(statuses,callbackType);
 			}
 		}
 		status = thing.getAbility();
 		if (status[callbackType] || (getAll && thing.abilityData[getAll]))
 		{
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing, priority: status[callbackType+'Priority']||0});
+			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
+			selfB.resolveLastPriority(statuses,callbackType);
 		}
 		status = thing.getItem();
 		if (status[callbackType] || (getAll && thing.itemData[getAll]))
 		{
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing, priority: status[callbackType+'Priority']||0});
+			statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
+			selfB.resolveLastPriority(statuses,callbackType);
 		}
 		
 		if (foeThing && foeCallbackType && foeCallbackType.substr(0,8) !== 'onSource')
