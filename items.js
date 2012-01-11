@@ -742,6 +742,16 @@ exports.BattleItems = {
 		id: "EjectButton",
 		name: "Eject Button",
 		spritenum: 118,
+		onAfterMoveSecondary: function(target, source, move) {
+			if (source && source !== target && move)
+			{
+				if (target.useItem())
+				{
+					this.add("message "+target.name+" is switched out with the Eject Button! (placeholder)");
+					target.switchFlag = true;
+				}
+			}
+		},
 		desc: "When the holder is hit, it immediately switches out. One-time use."
 	},
 	"Electirizer": {
@@ -2063,6 +2073,19 @@ exports.BattleItems = {
 		id: "RedCard",
 		name: "Red Card",
 		spritenum: 387,
+		onAfterMoveSecondary: function(target, source, move) {
+			if (source && source !== target && move)
+			{
+				if (target.useItem()) // This order is correct - the item is used up even against a pokemon with Ingrain or that otherwise can't be forced out
+				{
+					if (this.runEvent('DragOut', source, target, move))
+					{
+						this.add("message "+target.name+" held up its Red Card against "+source.name+"! (placeholder)");
+						this.dragIn(source.side);
+					}
+				}
+			}
+		},
 		desc: "The opponent is forced out immediately if it attacks the holder. One-time use."
 	},
 	"RindoBerry": {
