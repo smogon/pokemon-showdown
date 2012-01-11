@@ -2797,7 +2797,7 @@ exports.BattleMovedex = {
 				this.add('r-turnstatus '+target.id+' endure');
 			},
 			onDamagePriority: -10,
-			onDamage: function(damage, target, effect) {
+			onDamage: function(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && damage >= target.hp)
 				{
 					return target.hp-1;
