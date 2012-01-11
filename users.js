@@ -371,6 +371,7 @@ function User(name, socket, token)
 				selfP.leaveRoom(person.rooms[j], person);
 			}
 		}
+		selfP.people = [];
 	};
 	this.joinRoom = function(room, socket) {
 		roomid = room?(room.id||room):'';
