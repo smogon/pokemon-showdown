@@ -4070,6 +4070,24 @@ exports.BattleMovedex = {
 		name: "Guard Swap",
 		pp: 10,
 		priority: 0,
+		onHit: function(target, source) {
+			var targetBoosts = {};
+			var sourceBoosts = {};
+			
+			for (var i in {def:1,spd:1})
+			{
+				targetBoosts[i] = target.baseBoosts[i];
+			}
+			for (var i in {def:1,spd:1})
+			{
+				sourceBoosts[i] = source.baseBoosts[i];
+			}
+			
+			source.setBoost(targetBoosts);
+			target.setBoost(sourceBoosts);
+			
+			this.add('message Defensive boosts swapped. (placeholder; graphics will be incorrect)');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -7107,6 +7125,24 @@ exports.BattleMovedex = {
 		name: "Power Swap",
 		pp: 10,
 		priority: 0,
+		onHit: function(target, source) {
+			var targetBoosts = {};
+			var sourceBoosts = {};
+			
+			for (var i in {atk:1,spa:1})
+			{
+				targetBoosts[i] = target.baseBoosts[i];
+			}
+			for (var i in {atk:1,spa:1})
+			{
+				sourceBoosts[i] = source.baseBoosts[i];
+			}
+			
+			source.setBoost(targetBoosts);
+			target.setBoost(sourceBoosts);
+			
+			this.add('message Offensive boosts swapped. (placeholder; graphics will be incorrect)');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -7130,7 +7166,7 @@ exports.BattleMovedex = {
 				this.add('message Attack and Defense swapped. (placeholder)');
 				pokemon.removeVolatile('PowerTrick');
 			},
-			onModifyStatsPriority: 100,
+			onModifyStatsPriority: -100,
 			onModifyStats: function(stats) {
 				var temp = stats.atk;
 				stats.atk = stats.def;
