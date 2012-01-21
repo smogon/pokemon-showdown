@@ -316,6 +316,10 @@ function BattlePokemon(set, side)
 		if (ppData && ppData.pp)
 		{
 			ppData.pp -= selfB.runEvent('DeductPP', selfP, selfP, move, 1);
+			if (ppData.pp <= 0)
+			{
+				ppData.pp = 0;
+			}
 		}
 		selfP.lastMove = move.id;
 		selfP.movedThisTurn = true;
