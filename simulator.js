@@ -773,6 +773,10 @@ function BattlePokemon(set, side)
 	this.setAbility = function(ability, source, effect) {
 		if (!selfP.hp) return false;
 		ability = selfB.getAbility(ability);
+		if (ability.id === 'Multitype' || ability.id === 'Illusion')
+		{
+			return false;
+		}
 		selfP.ability = ability.id;
 		selfP.abilityData = {id: ability.id, target: selfP};
 		if (ability.id)
