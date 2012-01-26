@@ -260,7 +260,7 @@ exports.BattleScripts = {
 					}
 					if (hitResult !== 0)
 					{
-						return;
+						return false;
 					}
 				}
 			}
@@ -269,7 +269,7 @@ exports.BattleScripts = {
 		{
 			if (!this.runEvent('FieldHit', target, pokemon, move))
 			{
-				return;
+				return false;
 			}
 		}
 		if (hitResult)
@@ -294,7 +294,7 @@ exports.BattleScripts = {
 			{
 				this.add('r-failed '+target.id);
 			}
-			return;
+			return false;
 		}
 		
 		if (target)
