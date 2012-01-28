@@ -429,7 +429,7 @@ function User(name, socket, token)
 		room = getRoom(room);
 		for (var i=0; i<selfP.people.length; i++)
 		{
-			if (selfP.people[i] === socket || selfP.people[i].socket === socket)
+			if (selfP.people[i] === socket || selfP.people[i].socket === socket || !socket)
 			{
 				if (selfP.people[i].rooms[room.id])
 				{
@@ -444,7 +444,10 @@ function User(name, socket, token)
 					}
 					delete selfP.people[i].rooms[room.id];
 				}
-				break;
+				if (socket)
+				{
+					break;
+				}
 			}
 		}
 	};
