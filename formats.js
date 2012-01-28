@@ -58,7 +58,7 @@ exports.BattleFormats = {
 		name: "NU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','UU','BL2','RU','CAP']
+		banlist: ['Standard','Uber','OU','BL','UU','BL2','RU','BL3','CAP']
 	},
 	Hackmons: {
 		effectType: 'Format',
