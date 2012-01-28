@@ -205,7 +205,10 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		// empty rooms time out after an hour
 		if (!hasUsers)
 		{
-			selfR.destroyTimer = setTimeout(selfR.tryDestroy, 3600000);
+			if (!selfR.destroyTimer)
+			{
+				selfR.destroyTimer = setTimeout(selfR.tryDestroy, 3600000);
+			}
 		}
 		else if (selfR.destroyTimer)
 		{
@@ -217,7 +220,8 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		for (var i in selfR.users)
 		{
 			// don't destroy ourselves if there are users in this room
-			// theoretically, we should stop well before we get here
+			// theoretically, Room.update should've stopped tryDestroy's timer
+			// well before we get here
 			return;
 		}
 		selfR.destroy();
