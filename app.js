@@ -127,6 +127,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	this.battle = new Battle(selfR.id, format, ranked);
 	this.resetTimer = null;
 	this.graceTimer = null;
+	this.destroyTimer = null;
 	this.graceUp = false;
 	
 	this.parentid = parentid||'';
@@ -193,11 +194,33 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		}
 		
 		update.room = roomid;
+		var hasUsers = false;
 		for (var i in selfR.users)
 		{
+			hasUsers = true;
 			if (selfR.users[i] === excludeUser) continue;
 			selfR.users[i].emit('update', update);
 		}
+		
+		// empty rooms time out after an hour
+		if (!hasUsers)
+		{
+			selfR.destroyTimer = setTimeout(selfR.tryDestroy, 3600000);
+		}
+		else if (selfR.destroyTimer)
+		{
+			clearTimeout(selfR.destroyTimer);
+			selfR.destroyTimer = null;
+		}
+	};
+	this.tryDestroy = function() {
+		for (var i in selfR.users)
+		{
+			// don't destroy ourselves if there are users in this room
+			// theoretically, we should stop well before we get here
+			return;
+		}
+		selfR.destroy();
 	};
 	this.broadcastError = function(message) {
 		for (var i in selfR.users)
@@ -602,6 +625,41 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		}
 		selfR.update();
 	};
+	
+	this.destroy = function() {
+		// deallocate ourself
+		
+		// remove references to ourself
+		for (var i in selfR.users)
+		{
+			selfR.users[i].leaveRoom(selfR);
+			delete selfR.users[i];
+		}
+		selfR.users = null;
+		
+		// deallocate children and get rid of references to them
+		if (selfR.battle)
+		{
+			selfR.battle.destroy();
+		}
+		selfR.battle = null;
+		
+		if (selfR.graceTimer)
+		{
+			clearTimeout(selfR.graceTimer);
+		}
+		selfR.graceTimer = null;
+		if (selfR.resetTimer)
+		{
+			clearTimeout(selfR.resetTimer);
+		}
+		selfR.resetTimer = null;
+		
+		// get rid of some possibly-circular references
+		rooms[selfR.id] = null;
+		
+		selfR = null;
+	}
 }
 
 function parseCommand(user, cmd, target, room, socket)

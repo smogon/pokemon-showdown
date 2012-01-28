@@ -920,6 +920,17 @@ function BattlePokemon(set, side)
 		if (selfP.fainted) return true;
 		return !selfB.runEvent('BeforeMove', selfP, target, move);
 	};
+	this.destroy = function() {
+		// deallocate ourself
+		
+		// get rid of some possibly-circular references
+		side = null;
+		selfB = null;
+		selfS = null;
+		selfP.side = null;
+		
+		selfP = null;
+	};
 	
 	selfP.clearVolatile(true);
 }
@@ -1033,6 +1044,44 @@ function BattleSide(user, battle, n)
 			update.room = selfB.roomid;
 			selfS.user.emit('update', update);
 		}
+	};
+	this.destroy = function() {
+		// deallocate ourself
+		
+		// deallocate children and get rid of references to them
+		for (var i=0; i<selfS.pokemon.length; i++)
+		{
+			selfS.pokemon[i].destroy();
+			selfS.pokemon[i] = null;
+		}
+		selfS.pokemon = null;
+		for (var i=0; i<selfS.active.length; i++)
+		{
+			selfS.active[i] = null;
+		}
+		selfS.active = null;
+		
+		if (selfS.decision)
+		{
+			delete selfS.decision.side;
+			delete selfS.decision.pokemon;
+			delete selfS.decision.user;
+		}
+		selfS.decision = null;
+		
+		// make sure no user is referencing us
+		if (selfS.user)
+		{
+			delete selfS.user.sides[selfB.roomid];
+		}
+		selfS.user = null;
+		
+		// get rid of some possibly-circular references
+		selfS.battle = null;
+		selfS.foe = null;
+		selfB = null;
+		
+		selfS = null;
 	};
 }
 
@@ -2852,16 +2901,6 @@ function Battle(roomid, format, ranked)
 	};
 	
 	// merge in scripts and tools
-	/* for (var i in BattleScripts)
-	{
-		if (!this[i])
-		{
-			var script = BattleScripts[i];
-			this[i] = function() {
-				return script.apply(selfBT, arguments);
-			};
-		}
-	} */
 	for (var i in Tools)
 	{
 		if (!this[i])
@@ -2869,6 +2908,34 @@ function Battle(roomid, format, ranked)
 			this[i] = Tools[i];
 		}
 	}
+
+	this.destroy = function() {
+		// deallocate ourself
+		
+		// deallocate children and get rid of references to them
+		for (var i=0; i<selfB.sides.length; i++)
+		{
+			selfB.sides[i].destroy();
+			selfB.sides[i] = null;
+		}
+		selfB.allySide = null;
+		selfB.foeSide = null;
+		for (var i=0; i<selfB.queue.length; i++)
+		{
+			delete selfB.queue[i].pokemon;
+			delete selfB.queue[i].side;
+			delete selfB.queue[i].user;
+			selfB.queue[i] = null;
+		}
+		selfB.queue = null;
+		
+		// in case the garbage collector really sucks, at least deallocate the log
+		selfB.log = null;
+		
+		// get rid of some possibly-circular references
+		
+		selfB = null;
+	};
 }
 
 exports.BattlePokemon = BattlePokemon;
