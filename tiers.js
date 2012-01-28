@@ -357,7 +357,7 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"Cresselia": {
-		tier: "RU"
+		tier: "BL2"
 	},
 	"Croagunk": {
 		tier: "LC"
@@ -1344,7 +1344,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Porygon-Z": {
-		tier: "RU"
+		tier: "BL2"
 	},
 	"Porygon2": {
 		tier: "UU"
@@ -2074,5 +2074,9 @@ exports.BattleTiers = {
 
 	"Tomohawk": {
 		tier: "CAP"
+	},
+	"Necturna": {
+		tier: "CAP"
 	}
+	
 }
