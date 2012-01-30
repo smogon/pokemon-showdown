@@ -1051,7 +1051,7 @@ function BattleSide(user, battle, n)
 		// deallocate children and get rid of references to them
 		for (var i=0; i<selfS.pokemon.length; i++)
 		{
-			selfS.pokemon[i].destroy();
+			if (selfS.pokemon[i]) selfS.pokemon[i].destroy();
 			selfS.pokemon[i] = null;
 		}
 		selfS.pokemon = null;
@@ -2915,7 +2915,7 @@ function Battle(roomid, format, ranked)
 		// deallocate children and get rid of references to them
 		for (var i=0; i<selfB.sides.length; i++)
 		{
-			selfB.sides[i].destroy();
+			if (selfB.sides[i]) selfB.sides[i].destroy();
 			selfB.sides[i] = null;
 		}
 		selfB.allySide = null;
