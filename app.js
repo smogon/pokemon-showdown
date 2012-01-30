@@ -736,7 +736,19 @@ function parseCommand(user, cmd, target, room, socket)
 		var targetUser = getUser(target.substr(0, commaIndex));
 		if (!targetUser || !targetUser.connected)
 		{
-			socket.emit('console', 'User '+target+' not found. Did you forget a comma?');
+			target = target.substr(0, commaIndex);
+			if (targetUser)
+			{
+				socket.emit('console', 'User '+target+' is currently offline.');
+			}
+			else if (target.indexOf(' '))
+			{
+				socket.emit('console', 'User '+target+' not found. Did you forget a comma?');
+			}
+			else
+			{
+				socket.emit('console', 'User '+target+' not found. Did you misspell their name?');
+			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
 		
@@ -747,7 +759,7 @@ function parseCommand(user, cmd, target, room, socket)
 			pm: targetUser.getIdentity(),
 			message: target
 		};
-		socket.emit('console', message);
+		user.emit('console', message);
 		targetUser.emit('console', message);
 		targetUser.lastPM = user.userid;
 		user.lastPM = targetUser.userid;
