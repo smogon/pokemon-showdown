@@ -26,6 +26,11 @@ function handler (req, res) {
 
 app.listen(8000); */
 
+if (process.argv[2] && parseInt(process.argv[2]))
+{
+	config.port = parseInt(process.argv[2]);
+}
+
 var io = require('socket.io').listen(config.port);
 
 function getTime()
@@ -1175,6 +1180,7 @@ function Lobby(roomid)
 	this.lastUpdate = 0;
 	this.users = {};
 	this.rooms = [];
+	this.numRooms = 0;
 	this.searchers = [];
 	
 	this.usersChanged = true;
@@ -1419,7 +1425,7 @@ function Lobby(roomid)
 		selfR.update();
 	};
 	this.startBattle = function(p1, p2, format, ranked) {
-		var newRoom, i=1;
+		var newRoom;
 		p1 = getUser(p1);
 		p2 = getUser(p2);
 		
@@ -1441,10 +1447,12 @@ function Lobby(roomid)
 		}
 		
 		//console.log('BATTLE START BETWEEN: '+p1.userid+' '+p2.userid);
+		var i = selfR.numRooms+1;
 		while(rooms[selfR.id+'-battle'+i])
 		{
 			i++;
 		}
+		selfR.numRooms = i;
 		newRoom = selfR.addRoom(selfR.id+'-battle'+i, format, p1, p2, selfR.id, ranked);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
