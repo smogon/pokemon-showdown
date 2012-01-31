@@ -15,8 +15,8 @@ After this, start Node:
     cd <location of PS>
     node app.js
 
-Visit your server at `http://play.pokemonshowdown.com/?server=SERVER&serverport=PORT`
+Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT`
 
 Replace `SERVER` with your server domain or IP, and `PORT` with the server's port (default is 8000).
 
-Currently, this workflow works for testing Pokemon Showdown and testing your patches before submitting pull requests, but I wouldn't recommend running a production server this way. I'll make it easier to host your own server in the future.
+Currently, this workflow works for testing Pokemon Showdown and testing your patches before submitting pull requests, but it ends up with somewhat ugly URLs. I'll make it easier to host your own server in the future, when we're closer to leaving beta.
