@@ -310,19 +310,32 @@ function BattlePokemon(set, side)
 		}
 		return null;
 	};
-	this.deductPP = function(move) {
+	this.deductPP = function(move, amount) {
 		move = selfB.getMove(move);
 		var ppData = selfP.getMoveData(move);
+		var success = false;
 		if (ppData && ppData.pp)
 		{
-			ppData.pp -= selfB.runEvent('DeductPP', selfP, selfP, move, 1);
+			if (amount)
+			{
+				ppData.pp -= amount;
+			}
+			else
+			{
+				ppData.pp -= selfB.runEvent('DeductPP', selfP, selfP, move, 1);
+			}
 			if (ppData.pp <= 0)
 			{
 				ppData.pp = 0;
 			}
+			success = true;
 		}
 		selfP.lastMove = move.id;
-		selfP.movedThisTurn = true;
+		if (!amount)
+		{
+			selfP.movedThisTurn = true;
+		}
+		return success;
 	};
 	this.gotHit = function(move, damage, source) {
 		if (!damage) damage = 0;

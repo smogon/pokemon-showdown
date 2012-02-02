@@ -9547,6 +9547,14 @@ exports.BattleMovedex = {
 		name: "Spite",
 		pp: 10,
 		priority: 0,
+		onHit: function(target) {
+			if (target.deductPP(target.lastMove, 4))
+			{
+				this.add("message It reduced the PP of "+target.name+"'s "+target.lastMove+" by 4! (placeholder)");
+				return;
+			}
+			return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
