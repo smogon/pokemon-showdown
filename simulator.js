@@ -523,6 +523,7 @@ function BattlePokemon(set, side)
 			}
 		}
 		selfP.volatiles = {};
+		selfP.switchFlag = false;
 		selfP.lastMove = '';
 		selfP.lastDamage = 0;
 		selfP.lastHitBy = null;
