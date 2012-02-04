@@ -2074,7 +2074,7 @@ exports.BattleItems = {
 		name: "Red Card",
 		spritenum: 387,
 		onAfterMoveSecondary: function(target, source, move) {
-			if (source && source !== target && move)
+			if (source && source !== target && move && move.isContact)
 			{
 				if (target.useItem()) // This order is correct - the item is used up even against a pokemon with Ingrain or that otherwise can't be forced out
 				{
