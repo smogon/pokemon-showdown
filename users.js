@@ -450,6 +450,11 @@ function User(name, socket, token)
 				}
 			}
 		}
+		if (!socket && selfP.roomCount[room.id])
+		{
+			room.leave(selfP);
+			delete selfP.roomCount[room.id];
+		}
 	};
 	
 	// challenges
