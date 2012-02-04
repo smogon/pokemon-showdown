@@ -2039,44 +2039,44 @@ exports.BattleTiers = {
 	
 	// CAP
 	"Syclant": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Revenankh": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Pyroak": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Fidgit": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Stratagem": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Arghonaut": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Kitsunoh": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Cyclohm": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Colossoil": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Krilowatt": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 	"Voodoom": {
-		tier: "CAP"
+		tier: "G4CAP"
 	},
 
 	"Tomohawk": {
-		tier: "CAP"
+		tier: "G5CAP"
 	},
 	"Necturna": {
-		tier: "CAP"
+		tier: "G5CAP"
 	}
 	
 }

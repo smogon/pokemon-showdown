@@ -30,55 +30,62 @@ exports.BattleFormats = {
 		name: "CAP",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber']
+		banlist: ['Standard','Uber', 'Necturna']
+	},
+	CAPNecturnaPlaytest: {
+		effectType: 'Format',
+		name: "CAP Necturna Playtest",
+		searchHide: true,
+		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
+		banlist: ['Standard','Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
 	},
 	Ubers: {
 		effectType: 'Format',
 		name: "Ubers",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','CAP']
+		banlist: ['Standard','G4CAP','G5CAP']
 	},
 	UU: {
 		effectType: 'Format',
 		name: "UU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','CAP', 'SnowWarning','Drought']
+		banlist: ['Standard','Uber','OU','BL','G4CAP','G5CAP', 'SnowWarning','Drought']
 	},
 	RU: {
 		effectType: 'Format',
 		name: "RU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','UU','BL2','CAP', 'ShellSmash + BatonPass']
+		banlist: ['Standard','Uber','OU','BL','UU','BL2','G4CAP','G5CAP', 'ShellSmash + BatonPass']
 	},
 	NU: {
 		effectType: 'Format',
 		name: "NU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','UU','BL2','RU','BL3','CAP']
+		banlist: ['Standard','Uber','OU','BL','UU','BL2','RU','BL3','G4CAP','G5CAP']
 	},
 	Hackmons: {
 		effectType: 'Format',
 		name: "Hackmons",
 		searchHide: true,
 		ruleset: [],
-		banlist: []
+		banlist: ['G4CAP','G5CAP']
 	},
 	BalancedHackmons: {
 		effectType: 'Format',
 		name: "Balanced Hackmons",
 		ranked: true,
 		ruleset: [],
-		banlist: ['OHKO', 'WonderGuard']
+		banlist: ['OHKO', 'WonderGuard', 'G4CAP','G5CAP']
 	},
 	Haxmons: {
 		effectType: 'Format',
 		name: "Haxmons",
 		searchHide: true,
-		ruleset: ['HaxClause', 'TeamPreview']
+		ruleset: ['HaxClause', 'TeamPreview', 'G4CAP','G5CAP']
 	},
 	"DebugMode(ALPHA)": {
 		effectType: 'Format',
