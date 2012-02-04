@@ -41,6 +41,7 @@ function BattleTools()
 		if (!template || !template.id)
 		{
 			var id = toId(template);
+			if (id === 'Necturna') id = 'Venusaur';
 			template = {};
 			if (id && BattlePokedex[id])
 			{
@@ -190,6 +191,13 @@ function BattleTools()
 			if (!template.learnset || template.learnset[move])
 			{
 				return true;
+			}
+			if (template.learnset['Sketch'])
+			{
+				var lset = template.learnset['Sketch'];
+				if (typeof lset === 'string') lset = [lset];
+				for (var i=0; i<lset.length; i++) if (lset[i].substr(1) !== 'E') return true;
+				return 1;
 			}
 			if (template.species === 'Deoxys-S' || template.species === 'Deoxys-A' || template.species === 'Deoxys-D')
 			{
@@ -396,12 +404,14 @@ function BattleTools()
 				}
 			}
 		}
+		var limit1 = 0;
 		if (!set.moves || !set.moves.length)
 		{
 			problems.push(set.name+" has no moves.");
 		}
 		else for (var i=0; i<set.moves.length; i++)
 		{
+			if (!set.moves[i]) continue;
 			var move = selfT.getMove(set.moves[i]);
 			setHas[move.id] = true;
 			if (banlistTable[move.id])
@@ -415,9 +425,18 @@ function BattleTools()
 			
 			if (banlistTable['Standard'])
 			{
-				if (!selfT.checkLearnset(move, template))
+				var lset = selfT.checkLearnset(move, template);
+				if (!lset)
 				{
 					problems.push(set.name+" ("+set.species+") can't learn "+move.name);
+				}
+				else if (lset === 1)
+				{
+					limit1++;
+				}
+				if (limit1 > 1)
+				{
+					problems.push(set.name+" ("+set.species+") can't Sketch "+move.name+" - it's limited to 1 Sketch move");
 				}
 			}
 		}
