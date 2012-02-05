@@ -380,6 +380,11 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		{
 			waitTime = 30;
 		}
+		if (waitTime > 60 && (!selfR.battle.allySide.user || !selfR.battle.foeSide.user))
+		{
+			// if a player has left, don't wait longer than 60 seconds
+			waitTime = 60;
+		}
 		selfR.battle.add('message Inactive players will '+action+' in '+waitTime+' seconds'+attrib+'.');
 		selfR.update();
 		selfR.resetTimer = setTimeout(selfR.kickInactive, waitTime*1000);
