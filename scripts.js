@@ -80,21 +80,27 @@ exports.BattleScripts = {
 		var accuracy = move.accuracy;
 		if (accuracy !== true)
 		{
-			if (pokemon.boosts.accuracy > 0)
+			if (!move.ignoreAccuracy)
 			{
-				accuracy *= boostTable[pokemon.boosts.accuracy];
+				if (pokemon.boosts.accuracy > 0)
+				{
+					accuracy *= boostTable[pokemon.boosts.accuracy];
+				}
+				else
+				{
+					accuracy /= boostTable[-pokemon.boosts.accuracy];
+				}
 			}
-			else
+			if (!move.ignoreEvasion)
 			{
-				accuracy /= boostTable[-pokemon.boosts.accuracy];
-			}
-			if (target.boosts.evasion > 0)
-			{
-				accuracy /= boostTable[target.boosts.evasion];
-			}
-			else
-			{
-				accuracy *= boostTable[-target.boosts.evasion];
+				if (target.boosts.evasion > 0)
+				{
+					accuracy /= boostTable[target.boosts.evasion];
+				}
+				else
+				{
+					accuracy *= boostTable[-target.boosts.evasion];
+				}
 			}
 		}
 		if (move.ohko) accuracy = 30; // bypasses accuracy modifiers

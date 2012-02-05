@@ -2278,13 +2278,21 @@ function Battle(roomid, format, ranked)
 		
 		if (move.crit && attack < (move.category==='Physical'?pokemon.unboostedStats.atk:pokemon.unboostedStats.spa))
 		{
-			attack = (move.category==='Physical'?pokemon.unboostedStats.atk:pokemon.unboostedStats.spa);
+			move.ignoreOffensive = true;
 			selfB.debug('Crit negating (sp)atk penalty.');
+		}
+		if (move.ignoreOffensive)
+		{
+			attack = (move.category==='Physical'?pokemon.unboostedStats.atk:pokemon.unboostedStats.spa);
 		}
 		if (move.crit && defense > (move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd))
 		{
-			defense = move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd;
+			move.ignoreDefensive = true;
 			selfB.debug('Crit negating (sp)def boost.');
+		}
+		if (move.ignoreDefensive)
+		{
+			defense = move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd;
 		}
 		
 		//int(int(int(2*L/5+2)*A*P/D)/50);
