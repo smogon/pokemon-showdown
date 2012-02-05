@@ -5,6 +5,7 @@ servertoken = config.servertoken;
 require("./node_modules/long-stack-traces");
 
 request = require('request');
+fs = require('fs');
 
 /*
 var app = require('http').createServer()
@@ -192,6 +193,18 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 					{
 					}
 				});
+				fs.writeFile('logs/lastbattle.txt', ''+lobby.numRooms);
+				var logData = {
+					p1score: p1score,
+					turns: selfR.battle.turn,
+					p1: selfR.battle.allySide.name,
+					p2: selfR.battle.foeSide.name,
+					p1team: selfR.battle.allySide.team,
+					p2team: selfR.battle.foeSide.team
+				};
+				fs.writeFile('logs/'+selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'')+'/'+selfR.id+'.log.json',
+					JSON.stringify(logData)
+				);
 			}
 			
 			selfR.ranked = false;
@@ -1189,6 +1202,10 @@ function Lobby(roomid)
 	
 	this.usersChanged = true;
 	this.roomsChanged = true;
+	
+	// Never do any other file IO synchronously
+	// but this is okay to prevent race conditions as we start up PS
+	this.numRooms = parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
 	
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
 		var update = {room: roomid};
