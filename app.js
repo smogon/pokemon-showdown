@@ -131,9 +131,8 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	this.ranked = ranked;
 	this.battle = new Battle(selfR.id, format, ranked);
 	this.resetTimer = null;
-	this.graceTimer = null;
 	this.destroyTimer = null;
-	this.graceUp = false;
+	this.graceTime = 0;
 	
 	this.parentid = parentid||'';
 	this.p1 = p1 || '';
@@ -321,16 +320,26 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			selfR.battle.add('message The battle cannot be restarted because it is a ranked battle'+attrib+'.');
 			return;
 		}
-		if (!selfR.graceUp)
+		var elapsedTime = getTime() - selfR.graceTime;
+		if (elapsedTime < 60000)
 		{
-			selfR.battle.add('message The battle will restart if there is no activity for 90 seconds'+attrib+'.');
-			selfR.update();
-			selfR.resetTimer = setTimeout(selfR.reset, 90000);
-			return;
+			waitTime = 180;
 		}
-		selfR.battle.add('message The battle will restart if there is no activity for 30 seconds'+attrib+'.');
+		else if (elapsedTime < 120000)
+		{
+			waitTime = 120;
+		}
+		else if (elapsedTime < 150000)
+		{
+			waitTime = 60;
+		}
+		else
+		{
+			waitTime = 30;
+		}
+		selfR.battle.add('message The battle will restart if there is no activity for '+waitTime+' seconds'+attrib+'.');
 		selfR.update();
-		selfR.resetTimer = setTimeout(selfR.reset, 30000);
+		selfR.resetTimer = setTimeout(selfR.reset, waitTime*1000);
 	};
 	this.requestKickInactive = function(user) {
 		if (selfR.resetTimer) return;
@@ -341,16 +350,26 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		{
 			action = 'forfeit';
 		}
-		if (!selfR.graceUp)
+		var elapsedTime = getTime() - selfR.graceTime;
+		if (elapsedTime < 60000)
 		{
-			selfR.battle.add('message Inactive players will '+action+' in 90 seconds'+attrib+'.');
-			selfR.update();
-			selfR.resetTimer = setTimeout(selfR.kickInactive, 90000);
-			return;
+			waitTime = 180;
 		}
-		selfR.battle.add('message Inactive players will '+action+' in 30 seconds'+attrib+'.');
+		else if (elapsedTime < 120000)
+		{
+			waitTime = 120;
+		}
+		else if (elapsedTime < 150000)
+		{
+			waitTime = 60;
+		}
+		else
+		{
+			waitTime = 30;
+		}
+		selfR.battle.add('message Inactive players will '+action+' in '+waitTime+' seconds'+attrib+'.');
 		selfR.update();
-		selfR.resetTimer = setTimeout(selfR.kickInactive, 30000);
+		selfR.resetTimer = setTimeout(selfR.kickInactive, waitTime*1000);
 	};
 	this.cancelReset = function() {
 		if (selfR.resetTimer)
@@ -360,17 +379,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			clearTimeout(selfR.resetTimer);
 			selfR.resetTimer = null;
 		}
-		if (selfR.graceTimer)
-		{
-			clearTimeout(selfR.graceTimer);
-			selfR.graceUp = false;
-		}
-		setTimeout(selfR.graceTimeout, 60000);
-	};
-	this.graceTimeout = function() {
-		clearTimeout(selfR.graceTimer);
-		selfR.graceUp = true;
-		selfR.graceTimer = null;
+		selfR.graceTime = getTime();
 	};
 	this.decision = function(user, choice, data) {
 		selfR.cancelReset();
@@ -653,11 +662,6 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		}
 		selfR.battle = null;
 		
-		if (selfR.graceTimer)
-		{
-			clearTimeout(selfR.graceTimer);
-		}
-		selfR.graceTimer = null;
 		if (selfR.resetTimer)
 		{
 			clearTimeout(selfR.resetTimer);
@@ -665,7 +669,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		selfR.resetTimer = null;
 		
 		// get rid of some possibly-circular references
-		rooms[selfR.id] = null;
+		delete rooms[selfR.id];
 		
 		selfR = null;
 	}
