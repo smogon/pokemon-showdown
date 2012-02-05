@@ -87,9 +87,9 @@ exports.BattleFormats = {
 		searchHide: true,
 		ruleset: ['HaxClause', 'TeamPreview', 'G4CAP','G5CAP']
 	},
-	"DebugMode(ALPHA)": {
+	DebugMode: {
 		effectType: 'Format',
-		name: "Debug Mode (ALPHA)",
+		name: "Debug Mode",
 		searchHide: true,
 		// no restrictions, for serious
 		ruleset: ['Standard']
