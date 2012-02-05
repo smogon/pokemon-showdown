@@ -56,6 +56,8 @@ function BattlePokemon(set, side)
 		this.species = 'Bulbasaur';
 	}
 	this.speciesid = toId(this.species);
+	this.baseTemplate = selfB.getTemplate(this.species);
+	this.template = this.baseTemplate;
 	this.moves = [];
 	this.baseMoves = this.moves;
 	this.movepp = {};
@@ -66,8 +68,9 @@ function BattlePokemon(set, side)
 	this.level = clampIntRange(set.level || 100, 1, 100);
 	this.hp = 0;
 	this.maxhp = 100;
-	var Genders = {M:'M',F:'F'};
-	this.gender = Genders[set.gender] || '';
+	var genders = {M:'M',F:'F'};
+	this.gender = this.template.gender || genders[set.gender] || (Math.random()*2<1?'M':'F');
+	if (this.gender === 'N') this.gender = '';
 	this.detailString = '['+(this.gender?this.gender+'|':'')+'L'+this.level+']';
 	
 	this.fullid = side.id+'-'+this.name+this.detailString+(this.species===this.name?'':'('+this.species+')');
@@ -92,8 +95,6 @@ function BattlePokemon(set, side)
 	this.beingCalledBack = false;
 	this.isActive = false;
 	
-	this.baseTemplate = selfB.getTemplate(this.species);
-	this.template = this.baseTemplate;
 	this.transformed = false;
 	this.negateImmunity = {};
 	
