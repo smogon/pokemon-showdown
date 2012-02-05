@@ -6222,8 +6222,30 @@ exports.BattleMovedex = {
 		name: "Metronome",
 		pp: 10,
 		priority: 0,
+		onHit: function(target) {
+			var moves = [];
+			for (var i in exports.BattleMovedex)
+			{
+				var move = exports.BattleMovedex[i];
+				if (i !== move.id) continue;
+				var NoMetronome = {
+					Assist:1, Chatter:1, Copycat:1, Counter:1, Covet:1, DestinyBond:1, Detect:1, Endure:1, Feint:1, FocusPunch:1, FollowMe:1, HelpingHand:1, MeFirst:1, Metronome:1, Mimic:1, MirrorCoat:1, MirrorMove:1, Protect:1, QuickGuard:1, Sketch:1, SleepTalk:1, Snatch:1, Struggle:1, Switcheroo:1, Thief:1, Trick:1, WideGuard:1
+				};
+				if (!NoMetronome[move.id])
+				{
+					moves.push(move.id);
+				}
+			}
+			var move = '';
+			if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
+			if (!move)
+			{
+				return false;
+			}
+			this.useMove(move, target);
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"MilkDrink": {
@@ -11607,6 +11629,7 @@ exports.BattleMovedex = {
 		name: "Paleo Wave",
 		pp: 15,
 		isViable: true,
+		isNonstandard: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -11627,6 +11650,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		isContact: true,
+		isNonstandard: true,
 		priority: 0,
 		secondary: {
 			chance: 50,
@@ -11647,6 +11671,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		isContact: true,
+		isNonstandard: true,
 		priority: 0,
 		drain: [1,2],
 		onHit: function(target, source) {
