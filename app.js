@@ -994,7 +994,7 @@ function parseCommand(user, cmd, target, room, socket)
 			return true;
 		}
 	}
-	else if (cmd === 'rating' || cmd === 'ranking' || cmd === 'rank')
+	else if (cmd === 'rating' || cmd === 'ranking' || cmd === 'rank' || cmd === 'ladder')
 	{
 		target = toUserid(target) || user.userid;
 		request({
@@ -1096,7 +1096,7 @@ function parseCommand(user, cmd, target, room, socket)
 			socket.emit('console', '/ip - Get your own IP address. Can be used by: anyone');
 			socket.emit('console', '/ip [username] - Get a user\'s IP address. Can be used by: @ &');
 		}
-		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank')
+		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder')
 		{
 			matched = true;
 			socket.emit('console', '/ranking - Get your own ranking.');
