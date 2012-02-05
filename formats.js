@@ -23,7 +23,7 @@ exports.BattleFormats = {
 		challengeDefault: true,
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard', 'Uber', 'CAP', 'Drizzle ++ SwiftSwim']
+		banlist: ['Standard', 'Uber', 'G4CAP','G5CAP', 'Drizzle ++ SwiftSwim']
 	},
 	CAP: {
 		effectType: 'Format',
