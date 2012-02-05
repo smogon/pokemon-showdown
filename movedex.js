@@ -5575,6 +5575,7 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		priority: 0,
 		volatileStatus: 'LeechSeed',
+		affectedByImmunities: true,
 		effect: {
 			onStart: function(target) {
 				this.add('r-volatile '+target.id+' seed');
