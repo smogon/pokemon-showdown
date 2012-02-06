@@ -792,6 +792,47 @@ function parseCommand(user, cmd, target, room, socket)
 		user.lastPM = targetUser.userid;
 		return true;
 	}
+	else if (cmd === 'data')
+	{
+		var pokemon = Tools.getTemplate(target);
+		var item = Tools.getItem(target);
+		var move = Tools.getMove(target);
+		var ability = Tools.getAbility(target);
+		var atLeastOne = false;
+		if (pokemon.name)
+		{
+			user.emit('console', {
+				evalRawMessage: "'<ul class=\"utilichart\">'+Chart.pokemonRow(exports.BattlePokedex['"+pokemon.name.replace(/ /g,'')+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			});
+			atLeastOne = true;
+		}
+		if (ability.name)
+		{
+			user.emit('console', {
+				evalRawMessage: "'<ul class=\"utilichart\">'+Chart.abilityRow(exports.BattleAbilities['"+ability.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			});
+			atLeastOne = true;
+		}
+		if (item.name)
+		{
+			user.emit('console', {
+				evalRawMessage: "'<ul class=\"utilichart\">'+Chart.itemRow(exports.BattleItems['"+item.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			});
+			atLeastOne = true;
+		}
+		if (move.name)
+		{
+			user.emit('console', {
+				evalRawMessage: "'<ul class=\"utilichart\">'+Chart.moveRow(exports.BattleMovedex['"+move.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			});
+			atLeastOne = true;
+		}
+		if (!atLeastOne)
+		{
+			user.emit('console', "No pokemon, item, move, or ability named '"+target+"' was found. (Check your capitalization?)");
+		}
+		return true;
+	}
 	else if (cmd === 'getip' || cmd === 'ip')
 	{
 		if (!target)
