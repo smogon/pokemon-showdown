@@ -1345,7 +1345,7 @@ function Lobby(roomid)
 		if (!user.connected) return;
 		if (lockdown)
 		{
-			user.emit('connectionError', 'The server is shutting down. Battles cannot be started at this time.');
+			user.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
 			return;
 		}
 		
@@ -1513,7 +1513,8 @@ function Lobby(roomid)
 		{
 			selfR.cancelSearch(p1, true);
 			selfR.cancelSearch(p2, true);
-			selfR.add('A battle was not started because the server is shutting down.');
+			p1.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
+			p2.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
 			selfR.update();
 			return;
 		}
