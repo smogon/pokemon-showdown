@@ -502,17 +502,33 @@ function User(name, socket, token)
 		if (user) user.updateChallenges();
 	};
 	this.rejectChallengeFrom = function(user) {
+		var userid = toUserid(user);
 		user = getUser(user);
-		if (!user || !selfP.challengesFrom[user.userid]) return true;
-		delete selfP.challengesFrom[user.userid];
-		user.challengeTo = null;
+		if (selfP.challengesFrom[userid])
+		{
+			delete selfP.challengesFrom[userid];
+		}
+		if (user)
+		{
+			delete selfP.challengesFrom[user.userid];
+			if (user.challengeTo && user.challengeTo.to === selfP.userid)
+			{
+				user.challengeTo = null;
+				user.updateChallenges();
+			}
+		}
 		selfP.updateChallenges();
-		user.updateChallenges();
 	};
 	this.acceptChallengeFrom = function(user) {
+		var userid = toUserid(user);
 		user = getUser(user);
 		if (!user || !user.challengeTo || user.challengeTo.to !== selfP.userid)
 		{
+			if (selfP.challengesFrom[userid])
+			{
+				delete selfP.challengesFrom[userid];
+				selfP.updateChallenges();
+			}
 			return false;
 		}
 		getRoom('lobby').startBattle(selfP, user, user.challengeTo.format);
