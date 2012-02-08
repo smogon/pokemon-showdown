@@ -219,12 +219,12 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			selfR.users[i].emit('update', update);
 		}
 		
-		// empty rooms time out after an hour
+		// empty rooms time out after ten minutes
 		if (!hasUsers)
 		{
 			if (!selfR.destroyTimer)
 			{
-				selfR.destroyTimer = setTimeout(selfR.tryDestroy, 3600000);
+				selfR.destroyTimer = setTimeout(selfR.tryDestroy, 600000);
 			}
 		}
 		else if (selfR.destroyTimer)
