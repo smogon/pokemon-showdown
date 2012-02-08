@@ -29,10 +29,11 @@ Showdown currently supports, in order of preference:
  - Chrome
  - Firefox 4+
  - Safari
- - Safari Mobile
+ - Safari for iPhone/iPod/iPad
+ - Firefox for Android
  - IE9+
 
-Android is not supported because of [socket.io bug 651][1], but will be when that bug is fixed.
+The built-in Android browser is not supported because of [socket.io bug 651][1], but will be when that bug is fixed. In the meantime, Firefox for Android works.
 
 IE8 has a few teambuilder issues that will be worked out when I have time.
 
