@@ -1284,6 +1284,11 @@ function Lobby(roomid)
 				userList.guests++;
 				continue;
 			}
+			if (config.lagmode && !selfR.users[i].authenticated && selfR.users[i].group === ' ')
+			{
+				userList.guests++;
+				continue;
+			}
 			userList.users++;
 			userList.list[selfR.users[i].userid] = selfR.users[i].getIdentity();
 		}
@@ -1292,6 +1297,7 @@ function Lobby(roomid)
 	this.getRoomList = function()
 	{
 		var roomList = {};
+		var roomCount = 0;
 		for (i=0; i<selfR.rooms.length; i++)
 		{
 			var room = selfR.rooms[i];
@@ -1314,6 +1320,12 @@ function Lobby(roomid)
 				}
 			}
 			roomList[selfR.rooms[i].id] = roomData;
+			
+			roomCount++;
+			if (roomCount > 24)
+			{
+				break;
+			}
 		}
 		return roomList;
 	};
@@ -1452,9 +1464,12 @@ function Lobby(roomid)
 		selfR.users[user.userid] = user;
 		if (user.named)
 		{
-			selfR.log.push({name: user.name, action: 'join'});
 			selfR.usersChanged = true;
-			selfR.update(user);
+			if (config.reportjoins)
+			{
+				selfR.log.push({name: user.name, action: 'join'});
+				selfR.update(user);
+			}
 		}
 		
 		var initdata = {
@@ -1475,26 +1490,32 @@ function Lobby(roomid)
 		return user;
 	};
 	this.rename = function(user, oldid, joining) {
-		if (joining)
+		if (joining && config.reportjoins)
 		{
 			selfR.log.push({name: user.name, action: 'join'});
 		}
 		delete selfR.users[oldid];
 		selfR.users[user.userid] = user;
 		selfR.usersChanged = true;
-		selfR.update();
+		if (config.reportjoins)
+		{
+			selfR.update();
+		}
 		return user;
 	};
 	this.leave = function(user) {
 		if (!user) return; // ...
 		delete selfR.users[user.userid];
 		selfR.cancelSearch(user, true);
-		if (user.named)
-		{
-			selfR.log.push({name: user.name, action: 'leave'});
-		}
 		selfR.usersChanged = true;
-		selfR.update();
+		if (config.reportjoins)
+		{
+			if (user.named)
+			{
+				selfR.log.push({name: user.name, action: 'leave'});
+			}
+			selfR.update();
+		}
 	};
 	this.startBattle = function(p1, p2, format, ranked) {
 		var newRoom;
@@ -1531,17 +1552,20 @@ function Lobby(roomid)
 		p2.joinRoom(newRoom);
 		newRoom.joinBattle(p1);
 		newRoom.joinBattle(p2);
-		selfR.log.push({
-			name: p1.name,
-			name2: p2.name,
-			room: newRoom.id,
-			format: format,
-			action: 'battle'
-		});
 		selfR.cancelSearch(p1, true);
 		selfR.cancelSearch(p2, true);
 		selfR.roomsChanged = true;
-		selfR.update();
+		if (config.reportbattles)
+		{
+			selfR.log.push({
+				name: p1.name,
+				name2: p2.name,
+				room: newRoom.id,
+				format: format,
+				action: 'battle'
+			});
+			selfR.update();
+		}
 	};
 	this.addRoom = function(room, format, p1, p2, parent, ranked) {
 		room = newRoom(room, format, p1, p2, parent, ranked);
@@ -1628,6 +1652,11 @@ function Lobby(roomid)
 		}
 		else if (!user.muted)
 		{
+			if (config.modchat && !user.authenticated && user.group === ' ')
+			{
+				user.emit('console', 'Due to an influx of spam, you must be voiced or registered to speak in lobby chat.');
+				return;
+			}
 			selfR.log.push({
 				name: user.getIdentity(),
 				message: message
@@ -1795,4 +1824,3 @@ io.sockets.on('connection', function (socket) {
 		youUser.emit('update', {team: 'saved', room: 'teambuilder'});
 	});
 });
-
