@@ -1409,7 +1409,7 @@ function Battle(roomid, format, ranked)
 		var hasRelayVar = true;
 		effect = selfB.getEffect(effect);
 		var args = [target, source, effect];
-		console.log('Event: '+eventid+' (depth '+selfB.eventDepth+') t:'+target.id+' s:'+(!source||source.id)+' e:'+effect.id);
+		//console.log('Event: '+eventid+' (depth '+selfB.eventDepth+') t:'+target.id+' s:'+(!source||source.id)+' e:'+effect.id);
 		if (typeof relayVar === 'undefined' || relayVar === null)
 		{
 			relayVar = true;
