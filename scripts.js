@@ -1079,6 +1079,8 @@ exports.BattleScripts = {
 				BL: 78,
 				OU: 75,
 				CAP: 74,
+				G4CAP: 74,
+				G5CAP: 74,
 				Unreleased: 75,
 				Uber: 70
 			};
