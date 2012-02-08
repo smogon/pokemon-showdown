@@ -715,6 +715,11 @@ function parseCommand(user, cmd, target, room, socket)
 			return true;
 		}
 	}
+	else if (cmd === 'register')
+	{
+		socket.emit('console', 'You must have a beta key to register.');
+		return true;
+	}
 	else if (cmd === 'unban')
 	{
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
