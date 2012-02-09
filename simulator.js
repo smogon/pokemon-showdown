@@ -2851,6 +2851,7 @@ function Battle(roomid, format, ranked)
 				user.sides[selfB.roomid] = selfB.foeSide;
 			}
 			selfB.add('foe-player '+selfB.foeSide.name);
+			selfB.add('foe-avatar '+selfB.foeSide.user.avatar);
 		}
 		else
 		{
@@ -2868,6 +2869,7 @@ function Battle(roomid, format, ranked)
 				user.sides[selfB.roomid] = selfB.allySide;
 			}
 			selfB.add('player '+selfB.allySide.name);
+			selfB.add('avatar '+selfB.allySide.user.avatar);
 		}
 		selfB.start();
 		return true;
@@ -2878,11 +2880,13 @@ function Battle(roomid, format, ranked)
 		{
 			user.sides[selfB.roomid].name = user.name;
 			selfB.add('player '+selfB.allySide.name);
+			selfB.add('avatar '+user.avatar);
 		}
 		if (user.sides[selfB.roomid] === selfB.foeSide)
 		{
 			user.sides[selfB.roomid].name = user.name;
 			selfB.add('foe-player '+selfB.foeSide.name);
+			selfB.add('foe-avatar '+user.avatar);
 		}
 	};
 	this.leave = function(user) {
