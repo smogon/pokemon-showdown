@@ -241,7 +241,7 @@ function User(name, socket, token)
 					}
 					
 					users[userid].group = group;
-					users[userid].avatar = avatar;
+					if (avatar) users[userid].avatar = avatar;
 					users[userid].authenticated = authenticated;
 					return true;
 				}
