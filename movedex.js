@@ -6584,13 +6584,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
-			var item = pokemon.getItem();
-			if (!item.id || !item.naturalGift)
-			{
-				return false;
-			}
-			pokemon.setItem('');
-			return item.naturalGift.basePower;
+			if (pokemon.volatiles['NaturalGift']) return this.effectData.basePower;
+			return false;
 		},
 		category: "Physical",
 		desc: "The user's berry is thrown at the target. This attack's base power and type vary depending on the thrown berry. The berry is gone for the rest of the battle unless Recycle is used; it will return to the original holder after wireless battles but will be permanently lost if it is thrown during in-game battles.",
@@ -6598,16 +6593,28 @@ exports.BattleMovedex = {
 		name: "Natural Gift",
 		pp: 15,
 		priority: 0,
+		beforeMoveCallback: function(pokemon) {
+			var item = pokemon.getItem();
+			if (item.id && item.naturalGift)
+			{
+				pokemon.addVolatile('NaturalGift');
+				this.effectData.basePower = item.naturalGift.basePower;
+				this.effectData.type = item.naturalGift.type;
+				pokemon.setItem('');
+			}
+		},
+		onHit: function(target, source) {
+			return !!source.volatiles['NaturalGift'];
+		},
+		effect: {
+			duration: 1
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal",
 		typeCallback: function(pokemon) {
-			var item = pokemon.getItem();
-			if (!item.id || !item.naturalGift)
-			{
-				return 'Normal';
-			}
-			return item.naturalGift.type;
+			if (pokemon.volatiles['NaturalGift']) return this.effectData.type;
+			return 'Normal';
 		}
 	},
 	"NaturePower": {
