@@ -564,6 +564,11 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
+		if (message.length > 255)
+		{
+			socket.emit('message', "Your message is too long.");
+			return;
+		}
 		if (message.substr(0,2) === '//')
 		{
 			message = message.substr(1);
@@ -1614,6 +1619,11 @@ function Lobby(roomid)
 	this.isFull = function() { return false; };
 	this.chat = function(user, message, socket) {
 		if (!user.named || !message.trim().length) return;
+		if (message.length > 255)
+		{
+			socket.emit('message', "Your message is too long.");
+			return;
+		}
 		var cmd = '', target = '';
 		if (message.substr(0,2) === '//')
 		{
