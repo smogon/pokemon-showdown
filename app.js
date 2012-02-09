@@ -550,7 +550,14 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		return false;
 	};
 	this.add = function(message) {
-		selfR.battle.add('chatmsg '+message);
+		if (message.rawMessage)
+		{
+			selfR.battle.add('chatmsg-raw '+message.rawMessage);
+		}
+		else
+		{
+			selfR.battle.add('chatmsg '+message);
+		}
 	};
 	this.addRaw = function(message) {
 		selfR.battle.add('chatmsg-raw '+message);
@@ -799,42 +806,10 @@ function parseCommand(user, cmd, target, room, socket)
 	}
 	else if (cmd === 'data')
 	{
-		var pokemon = Tools.getTemplate(target);
-		var item = Tools.getItem(target);
-		var move = Tools.getMove(target);
-		var ability = Tools.getAbility(target);
-		var atLeastOne = false;
-		if (pokemon.name)
+		var message = getDataMessage(target);
+		for (var i=0; i<message.length; i++)
 		{
-			user.emit('console', {
-				evalRawMessage: "'<ul class=\"utilichart\">'+Chart.pokemonRow(exports.BattlePokedex['"+pokemon.name.replace(/ /g,'')+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
-			});
-			atLeastOne = true;
-		}
-		if (ability.name)
-		{
-			user.emit('console', {
-				evalRawMessage: "'<ul class=\"utilichart\">'+Chart.abilityRow(exports.BattleAbilities['"+ability.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
-			});
-			atLeastOne = true;
-		}
-		if (item.name)
-		{
-			user.emit('console', {
-				evalRawMessage: "'<ul class=\"utilichart\">'+Chart.itemRow(exports.BattleItems['"+item.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
-			});
-			atLeastOne = true;
-		}
-		if (move.name)
-		{
-			user.emit('console', {
-				evalRawMessage: "'<ul class=\"utilichart\">'+Chart.moveRow(exports.BattleMovedex['"+move.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
-			});
-			atLeastOne = true;
-		}
-		if (!atLeastOne)
-		{
-			user.emit('console', "No pokemon, item, move, or ability named '"+target+"' was found. (Check your capitalization?)");
+			user.emit('console', message[i]);
 		}
 		return true;
 	}
@@ -1238,6 +1213,48 @@ function parseCommand(user, cmd, target, room, socket)
 	}
 	return false;
 }
+function getDataMessage(target)
+{
+	var pokemon = Tools.getTemplate(target);
+	var item = Tools.getItem(target);
+	var move = Tools.getMove(target);
+	var ability = Tools.getAbility(target);
+	var atLeastOne = false;
+	var response = [];
+	if (pokemon.name)
+	{
+		response.push({
+			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.pokemonRow(exports.BattlePokedex['"+pokemon.name.replace(/ /g,'')+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+		});
+		atLeastOne = true;
+	}
+	if (ability.name)
+	{
+		response.push({
+			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.abilityRow(exports.BattleAbilities['"+ability.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+		});
+		atLeastOne = true;
+	}
+	if (item.name)
+	{
+		response.push({
+			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.itemRow(exports.BattleItems['"+item.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+		});
+		atLeastOne = true;
+	}
+	if (move.name)
+	{
+		response.push({
+			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.moveRow(exports.BattleMovedex['"+move.id.replace("'","\\'")+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+		});
+		atLeastOne = true;
+	}
+	if (!atLeastOne)
+	{
+		response.push({message: "No pokemon, item, move, or ability named '"+target+"' was found. (Check your capitalization?)"});
+	}
+	return response;
+}
 
 function Lobby(roomid)
 {
@@ -1430,9 +1447,16 @@ function Lobby(roomid)
 		selfR.roomsChanged = false;
 	};
 	this.add = function(message) {
-		selfR.log.push({
-			message: message
-		});
+		if (typeof message === 'string')
+		{
+			selfR.log.push({
+				message: message
+			});
+		}
+		else
+		{
+			selfR.log.push(message);
+		}
 		selfR.update();
 	};
 	this.addRaw = function(message) {
@@ -1609,10 +1633,36 @@ function Lobby(roomid)
 				target = '';
 			}
 		}
+		else if (message.substr(0,1) === '!')
+		{
+			var spaceIndex = message.indexOf(' ');
+			if (spaceIndex > 0)
+			{
+				cmd = message.substr(0, spaceIndex);
+				target = message.substr(spaceIndex+1);
+			}
+			else
+			{
+				cmd = message;
+				target = '';
+			}
+		}
 		
 		if (parseCommand(user, cmd, target, selfR, socket))
 		{
 			// do nothing
+		}
+		else if (cmd === '!data')
+		{
+			var dataMessages = getDataMessage(target);
+			selfR.log.push({
+				name: user.getIdentity(),
+				message: message
+			});
+			for (var i=0; i<dataMessages.length; i++)
+			{
+				selfR.log.push(dataMessages[i]);
+			}
 		}
 		else if (message.substr(0,3) === '>> ')
 		{
