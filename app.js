@@ -1826,12 +1826,26 @@ io.sockets.on('connection', function (socket) {
 		switch (data.act)
 		{
 		case 'make':
+			var problems = Tools.validateTeam(youUser.team, data.format);
+			if (problems)
+			{
+				socket.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+				return;
+			}
 			youUser.makeChallenge(data.userid, data.format);
 			break;
 		case 'cancel':
 			youUser.cancelChallengeTo(data.userid);
 			break;
 		case 'accept':
+			var format = 'DebugMode';
+			if (youUser.challengesFrom[data.userid]) format = youUser.challengesFrom[data.userid].format;
+			var problems = Tools.validateTeam(youUser.team, format);
+			if (problems)
+			{
+				socket.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+				return;
+			}
 			youUser.acceptChallengeFrom(data.userid);
 			break;
 		case 'reject':
