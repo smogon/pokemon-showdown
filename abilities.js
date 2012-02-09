@@ -42,6 +42,7 @@ Ratings and how they work:
 exports.BattleAbilities = {
 	"Adaptability": {
 		desc: "This Pokemon's attacks that receive STAB (Same Type Attack Bonus) are increased from 50% to 100%.",
+		shortDesc: "The Pokemon's STAB modifier becomes x2.",
 		onModifyMove: function(move) {
 			move.stab = 2;
 		},
@@ -51,7 +52,8 @@ exports.BattleAbilities = {
 		num: "91"
 	},
 	"Aftermath": {
-		desc: "If a\u00a0direct attack\u00a0knocks out this Pokemon, the opponent receives damage equal to one-fourth of its max HP.",
+		desc: "If a contact move knocks out this Pokemon, the opponent receives damage equal to one-fourth of its max HP.",
+		shortDesc: "Deals 25% damage when KOed by contact damage.",
 		id: "Aftermath",
 		name: "Aftermath",
 		onFaint: function(target, source, effect) {
@@ -65,6 +67,7 @@ exports.BattleAbilities = {
 	},
 	"AirLock": {
 		desc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
+		shortDesc: "Blocks the effects of weather.",
 		onAnyModifyPokemon: function(pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
 		},
@@ -74,14 +77,16 @@ exports.BattleAbilities = {
 		num: "76"
 	},
 	"Analytic": {
-		desc: "If the user moves after the target, the power of the user's next move is increased by 30%.",
+		desc: "If the user moves last, the power of that move is increased by 30%.",
+		shortDesc: "Raises the power of all moves by 30% if the Pokemon moves last.",
 		id: "Analytic",
 		name: "Analytic",
 		rating: 1,
 		num: "??"
 	},
 	"AngerPoint": {
-		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted by six stages.",
+		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
+		shortDesc: "Raises Attack to +6 (4x) if struck by a critical hit.",
 		onCriticalHit: function(target) {
 			if (!target.volatiles['Substitute'])
 			{
@@ -97,6 +102,7 @@ exports.BattleAbilities = {
 	},
 	"Anticipation": {
 		desc: "A warning is displayed if an opposing Pokemon has the moves Selfdestruct, Explosion, Fissure, Guillotine, Horn Drill, Sheer Cold or any move from a type that is considered Super Effective against this Pokemon. Hidden Power, Judgment, Natural Gift and Weather Ball are viewed as Normal-type moves; Counter, Mirror Coat and Metal Burst do not receive warnings.",
+		shortDesc: "Alerts the Pokemon to super-effective or otherwise dangerous moves.",
 		id: "Anticipation",
 		name: "Anticipation",
 		rating: 1,
@@ -104,6 +110,7 @@ exports.BattleAbilities = {
 	},
 	"ArenaTrap": {
 		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they are part Flying-type, have the Levitate ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn. Flying-type and Levitate Pokemon cannot escape if they are holding Iron Ball or Gravity is in effect. Levitate Pokemon also cannot escape if their ability is disabled through other means, such as Skill Swap or Gastro Acid. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon battles is doubled.",
+		shortDesc: "Prevents foe from switching unless it is immune to Ground.",
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.runImmunity('Ground', false))
 			{
@@ -117,6 +124,7 @@ exports.BattleAbilities = {
 	},
 	"BadDreams": {
 		desc: "If asleep, each of this Pokemon's opponents receives damage equal to one-eighth of its max HP.",
+		shortDesc: "Deals 12.5% damage to sleeping opponents per turn.",
 		onResidualPriority: -26.1,
 		onResidual: function(pokemon) {
 			for (var i=0; i<pokemon.side.foe.active.length; i++)
@@ -135,6 +143,7 @@ exports.BattleAbilities = {
 	},
 	"BattleArmor": {
 		desc: "Critical Hits cannot strike this Pokemon.",
+		shortDesc: "Prevents critical hits.",
 		onCriticalHit: false,
 		id: "BattleArmor",
 		name: "Battle Armor",
@@ -143,6 +152,7 @@ exports.BattleAbilities = {
 	},
 	"BigPecks": {
 		desc: "Prevents the Pok\u00e9mon's Defense stat from being reduced.",
+		shortDesc: "Prevents the enemy from lowering this Pokemon's Defense.",
 		onBoost: function(boost, target, source) {
 			if (source && target === source) return;
 			if (boost['def'] && boost['def'] < 0)
