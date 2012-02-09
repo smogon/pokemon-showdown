@@ -79,6 +79,9 @@ function User(name, socket, token)
 	this.group = ' ';
 	this.muted = false;
 	
+	var trainersprites = [1, 2, 101, 102, 169, 170];
+	this.avatar = trainersprites[parseInt(Math.random()*trainersprites.length)];
+	
 	this.connected = true;
 	
 	console.log("NEW PERSON: "+socket.id);
@@ -168,10 +171,22 @@ function User(name, socket, token)
 					return false;
 				}
 				var group = ' ';
+				var avatar = 0;
 				var authenticated = false;
 				if (body !== '1')
 				{
 					authenticated = true;
+					
+					if (userid === "serei") avatar = 172;
+					else if (userid === "hobsgoblin") avatar = 52;
+					else if (userid === "etherealsol") avatar = 1001;
+					else if (userid === "mortygymleader") avatar = 144;
+					else if (userid === "aeo") avatar = 167;
+					else if (userid === "aeo1") avatar = 167;
+					else if (userid === "aeo2") avatar = 166;
+					else if (userid === "sharktamer") avatar = 7;
+					else if (userid === "bmelts") avatar = 226;
+					
 					try
 					{
 						var data = JSON.parse(body);
@@ -190,6 +205,12 @@ function User(name, socket, token)
 							group = '@';
 							break;
 						}
+						/* var userdata = JSON.parse(body.userdata);
+						avatar = parseInt(userdata.trainersprite);
+						if (!avatar || avatar > 263 || avatar < 1)
+						{
+							avatar = 0;
+						} */
 					}
 					catch(e)
 					{
@@ -220,6 +241,7 @@ function User(name, socket, token)
 					}
 					
 					users[userid].group = group;
+					users[userid].avatar = avatar;
 					users[userid].authenticated = authenticated;
 					return true;
 				}

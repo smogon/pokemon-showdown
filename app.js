@@ -732,6 +732,20 @@ function parseCommand(user, cmd, target, room, socket)
 		socket.emit('console', 'You must have a beta key to register.');
 		return true;
 	}
+	else if (cmd === 'avatar')
+	{
+		var avatar = parseInt(target);
+		if (!avatar || avatar > 263 || avatar < 1)
+		{
+			socket.emit('console', 'Invalid avatar.');
+			return true;
+		}
+		
+		user.avatar = avatar;
+		socket.emit('console', 'Avatar changed.');
+		
+		return true;
+	}
 	else if (cmd === 'unban')
 	{
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
