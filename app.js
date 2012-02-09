@@ -747,6 +747,33 @@ function parseCommand(user, cmd, target, room, socket)
 		
 		return true;
 	}
+	else if (cmd === 'whois')
+	{
+		var targetUser = user;
+		if (target)
+		{
+			targetUser = getUser(target);
+		}
+		if (!targetUser)
+		{
+			socket.emit('console', 'User '+target+' not found.');
+		}
+		else
+		{
+			socket.emit('console', 'User: '+targetUser.name);
+			var output = 'In rooms: ';
+			var first = true;
+			for (var i in targetUser.roomCount)
+			{
+				if (!first) output += ' | ';
+				first = false;
+				
+				output += '<a href="/'+i+'" onclick="return selectTab(\''+i+'\');">'+i+'</a>';
+			}
+			socket.emit('console', {rawMessage: output});
+		}
+		return true;
+	}
 	else if (cmd === 'unban')
 	{
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -1570,7 +1597,7 @@ function Lobby(roomid)
 		{
 			selfR.cancelSearch(p1, true);
 			selfR.cancelSearch(p2, true);
-			selfR.add('A battle between '+p1.name+' and '+p2.name+' was not started because you can\'t battle your own account. Please use Private Browsing to battle yourself.');
+			p1.emit('message', 'You can\'t battle your own account. Please use Private Browsing to battle yourself.');
 			return;
 		}
 		
