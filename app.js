@@ -768,7 +768,7 @@ function parseCommand(user, cmd, target, room, socket)
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		return parseCommand(user, 'msg', ''+(user.lastPM||'')+', '+target, room, socket);
 	}
-	else if (cmd === 'msg' || cmd === 'pm')
+	else if (cmd === 'msg' || cmd === 'pm' || cmd === 'whisper' || cmd === 'w')
 	{
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var commaIndex = target.indexOf(',');
@@ -1111,10 +1111,10 @@ function parseCommand(user, cmd, target, room, socket)
 	else if (cmd === 'help' || cmd === 'commands' || cmd === 'h' || cmd === '?')
 	{
 		var matched = false;
-		if (target === 'all' || target === 'msg' || target === 'pm')
+		if (target === 'all' || target === 'msg' || target === 'pm' || cmd === 'whisper' || cmd === 'w')
 		{
 			matched = true;
-			socket.emit('console', '/msg [username], [message] - Send a private message. Can be used by: anyone');
+			socket.emit('console', '/msg OR /whisper OR /w [username], [message] - Send a private message. Can be used by: anyone');
 		}
 		if (target === 'all' || target === 'r' || target === 'reply')
 		{
