@@ -254,6 +254,7 @@ function User(name, socket, token)
 				users[selfP.userid] = selfP;
 				selfP.token = token;
 				selfP.group = group;
+				if (avatar) selfP.avatar = avatar;
 				selfP.authenticated = authenticated;
 				
 				for (var i=0; i<selfP.people.length; i++)

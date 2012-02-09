@@ -742,7 +742,8 @@ function parseCommand(user, cmd, target, room, socket)
 		}
 		
 		user.avatar = avatar;
-		socket.emit('console', 'Avatar changed.');
+		socket.emit('console', 'Avatar changed to:');
+		socket.emit('console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" />'});
 		
 		return true;
 	}
