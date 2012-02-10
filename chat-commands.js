@@ -20,6 +20,37 @@ function parseCommand(user, cmd, target, room, socket, message)
 			return true;
 		}
 	}
+	if (cmd === 'banredirect' || cmd === 'br')
+	{
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (user.isMod())
+		{
+			var targets = splitTarget(target);
+			var targetUser = targets[0];
+			if (!targetUser)
+			{
+				socket.emit('console', 'User not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group)) return true;
+			
+			if (targets[1].substr(0,2) == '~~')
+			{
+				targets[1] = '/'+targets[1];
+			}
+			else if (targets[1].substr(0,7) !== 'http://' && targets[1].substr(0,8) !== 'https://')
+			{
+				targets[1] = 'http://'+targets[1];
+			}
+			
+			room.add(''+targetUser.name+' was banned by '+user.name+' and redirected to: '+targets[1]);
+			
+			bannedIps[targetUser.ip] = targetUser.userid;
+			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
+			targetUser.destroy();
+			return true;
+		}
+	}
 	else if (cmd === 'register')
 	{
 		socket.emit('console', 'You must have a beta key to register.');
@@ -106,21 +137,15 @@ function parseCommand(user, cmd, target, room, socket, message)
 	else if (cmd === 'msg' || cmd === 'pm' || cmd === 'whisper' || cmd === 'w')
 	{
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		var commaIndex = target.indexOf(',');
-		if (commaIndex < 0)
+		var targets = splitTarget(target);
+		if (!targets[1])
 		{
 			socket.emit('console', 'You forgot the comma.');
 			return parseCommand(user, '?', cmd, room, socket);
 		}
-		var targetUser = getUser(target.substr(0, commaIndex));
-		if (!targetUser || !targetUser.connected)
+		if (!targets[0])
 		{
-			target = target.substr(0, commaIndex);
-			if (targetUser)
-			{
-				socket.emit('console', 'User '+target+' is currently offline.');
-			}
-			else if (target.indexOf(' '))
+			if (target.indexOf(' '))
 			{
 				socket.emit('console', 'User '+target+' not found. Did you forget a comma?');
 			}
@@ -131,17 +156,15 @@ function parseCommand(user, cmd, target, room, socket, message)
 			return parseCommand(user, '?', cmd, room, socket);
 		}
 		
-		target = target.substr(commaIndex+1).trim();
-		
 		var message = {
 			name: user.getIdentity(),
 			pm: targetUser.getIdentity(),
-			message: target
+			message: targets[1]
 		};
 		user.emit('console', message);
-		targetUser.emit('console', message);
-		targetUser.lastPM = user.userid;
-		user.lastPM = targetUser.userid;
+		targets[0].emit('console', message);
+		targets[0].lastPM = user.userid;
+		user.lastPM = targets[0].userid;
 		return true;
 	}
 	else if (cmd === 'data')
@@ -625,6 +648,21 @@ function getDataMessage(target)
 		response.push({message: "No pokemon, item, move, or ability named '"+target+"' was found. (Check your capitalization?)"});
 	}
 	return response;
+}
+
+function splitTarget(target)
+{
+	var commaIndex = target.indexOf(',');
+	if (commaIndex < 0)
+	{
+		return [getUser(target), ''];
+	}
+	var targetUser = getUser(target.substr(0, commaIndex));
+	if (!targetUser || !targetUser.connected)
+	{
+		targetUser = null;
+	}
+	return [targetUser, target.substr(commaIndex+1).trim()];
 }
 
 exports.parseCommand = parseCommand;
