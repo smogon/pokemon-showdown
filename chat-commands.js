@@ -510,27 +510,27 @@ function parseCommand(user, cmd, target, room, socket, message)
 		if (target === 'all' || target === 'ban' || target === 'b')
 		{
 			matched = true;
-			socket.emit('console', '/ban OR /b [username] - Kick user from all rooms and ban user\'s IP address. Can be used by: + % @ &');
+			socket.emit('console', '/ban OR /b [username] - Kick user from all rooms and ban user\'s IP address. Can be used by: % @ &');
 		}
 		if (target === 'all' || target === 'unban')
 		{
 			matched = true;
-			socket.emit('console', '/unban [username] - Unban a user. Can be used by: + % @ &');
+			socket.emit('console', '/unban [username] - Unban a user. Can be used by: % @ &');
 		}
 		if (target === 'all' || target === 'unbanall')
 		{
 			matched = true;
-			socket.emit('console', '/unbanall - Unban all IP addresses. Can be used by: + % @ &');
+			socket.emit('console', '/unbanall - Unban all IP addresses. Can be used by: % @ &');
 		}
 		if (target === 'all' || target === 'mute')
 		{
 			matched = true;
-			socket.emit('console', '/mute OR /m [username] - Mute user. Can be used by: + % @ &');
+			socket.emit('console', '/mute OR /m [username] - Mute user. Can be used by: % @ &');
 		}
 		if (target === 'all' || target === 'unmute')
 		{
 			matched = true;
-			socket.emit('console', '/unmute [username] - Remove mute from user. Can be used by: + % @ &');
+			socket.emit('console', '/unmute [username] - Remove mute from user. Can be used by: % @ &');
 		}
 		if (target === 'all' || target === 'voice')
 		{
