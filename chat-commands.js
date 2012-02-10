@@ -1,3 +1,13 @@
+function toId(text)
+{
+	text = text || '';
+	return text.replace(/ /g, '');
+}
+function toUserid(name)
+{
+	return name.toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
 function parseCommand(user, cmd, target, room, socket, message)
 {
 	if (cmd === 'ban' || cmd === 'b')
@@ -138,6 +148,7 @@ function parseCommand(user, cmd, target, room, socket, message)
 	{
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
+		var targetUser = targets[0];
 		if (!targets[1])
 		{
 			socket.emit('console', 'You forgot the comma.');

@@ -1065,7 +1065,7 @@ function Lobby(roomid)
 	this.isEmpty = function() { return false; };
 	this.isFull = function() { return false; };
 	this.chat = function(user, message, socket) {
-		if (!user.named || !message.trim().length) return;
+		if (!user.named || !message || !message.trim || !message.trim().length) return;
 		if (message.length > 255)
 		{
 			socket.emit('message', "Your message is too long.");
