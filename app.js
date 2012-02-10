@@ -1884,6 +1884,10 @@ io.sockets.on('connection', function (socket) {
 				socket.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 				return;
 			}
+			if (!getUser(data.userid) || !getUser(data.userid).connected)
+			{
+				socket.emit('message', "The user '"+data.userid+"' was not found.");
+			}
 			youUser.makeChallenge(data.userid, data.format);
 			break;
 		case 'cancel':
