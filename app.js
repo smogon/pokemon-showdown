@@ -1340,7 +1340,7 @@ function Lobby(roomid)
 	};
 	this.getUserList = function()
 	{
-		var userList = {list: {}, users: 0, guests: 0};
+		var userList = {list: {}, users: 0, unregistered: 0, guests: 0};
 		for (var i in selfR.users)
 		{
 			if (!selfR.users[i].named)
@@ -1350,7 +1350,7 @@ function Lobby(roomid)
 			}
 			if (config.lagmode && !selfR.users[i].authenticated && selfR.users[i].group === ' ')
 			{
-				userList.guests++;
+				userList.unregistered++;
 				continue;
 			}
 			userList.users++;
