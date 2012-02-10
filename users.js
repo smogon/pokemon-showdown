@@ -156,9 +156,17 @@ function User(name, socket, token)
 		}
 		selfP.renamePending = true;
 		// todo: sanitize
-		console.log('POSTING TO SERVER: loginserver/action.php?act=verifysessiontoken&servertoken=novawave.ca&userid='+userid+'&token='+token);
+		
+		// This is ridiculous spaghetti code because I made a mistake in the authentication protocol earlier
+		// this should hopefully fix it while remaining backwards-compatible
+		var loginservertoken = 'novawave.ca';
+		var tokens = token.split('::');
+		if (tokens[1]) loginservertoken = tokens[1];
+		token = tokens[0];
+		
+		console.log('POSTING TO SERVER: loginserver/action.php?act=verifysessiontoken&servertoken='+loginservertoken+'&userid='+userid+'&token='+token);
 		request({
-			uri: config.loginserver+'action.php?act=verifysessiontoken&servertoken=novawave.ca&userid='+userid+'&token='+token,
+			uri: config.loginserver+'action.php?act=verifysessiontoken&servertoken='+loginservertoken+'&userid='+userid+'&token='+token,
 		}, function(error, response, body) {
 			selfP.renamePending = false;
 			if (body)
