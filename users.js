@@ -160,7 +160,8 @@ function User(name, socket, token)
 		// This is ridiculous spaghetti code because I made a mistake in the authentication protocol earlier
 		// this should hopefully fix it while remaining backwards-compatible
 		var loginservertoken = 'novawave.ca';
-		var tokens = token.split('::');
+		var tokens = [''];
+		if (token) tokens = token.split('::');
 		if (tokens[1]) loginservertoken = tokens[1];
 		token = tokens[0];
 		
