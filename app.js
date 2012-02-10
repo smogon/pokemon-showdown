@@ -1706,12 +1706,22 @@ function Lobby(roomid)
 		}
 		else if (cmd === '!data')
 		{
+			if (user.group === ' ')
+			{
+				socket.emit('console', {rawMessage:'You do not have permission to use <code>!data</code>. Please use <code>/data</code> instead.'});
+				return;
+			}
 			var dataMessages = getDataMessage(target);
 			selfR.log.push({
 				name: user.getIdentity(),
 				message: message
 			});
-			for (var i=0; i<dataMessages.length; i++)
+			if (dataMessages[0].message)
+			{
+				socket.emit('console', dataMessages[0]);
+				return;
+			}
+			else for (var i=0; i<dataMessages.length; i++)
 			{
 				selfR.log.push(dataMessages[i]);
 			}
