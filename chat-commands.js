@@ -603,8 +603,8 @@ function parseCommand(user, cmd, target, room, socket, message)
 		return true;
 		break;
 		
-	case 'opensource':
-	case '!opensource':
+	case 'groups':
+	case '!groups':
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
 			'<div style="border:1px solid #6688AA;padding:2px 4px">' +
