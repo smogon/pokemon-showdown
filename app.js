@@ -725,7 +725,12 @@ function Lobby(roomid)
 	
 	// Never do any other file IO synchronously
 	// but this is okay to prevent race conditions as we start up PS
-	this.numRooms = parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
+	this.numRooms = 0;
+	try
+	{
+		parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
+	}
+	catch (e) {} // file doesn't exist [yet]
 	
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
 		var update = {room: roomid};
