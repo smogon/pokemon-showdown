@@ -1,6 +1,8 @@
-// to reload chat commands:
+/* to reload chat commands:
 
-// >> for (var i in require.cache) delete require.cache[i];parseCommand = require('./chat-commands.js').parseCommand;''
+>> for (var i in require.cache) delete require.cache[i];parseCommand = require('./chat-commands.js').parseCommand;''
+
+*/
 
 function toId(text)
 {
@@ -700,7 +702,7 @@ function parseCommand(user, cmd, target, room, socket, message)
 			lockdown = true;
 			for (var id in rooms)
 			{
-				rooms[id].addRaw('<strong style="color:red">The server is restarting soon. Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</strong>');
+				rooms[id].addRaw('<div style="background-color:#AA5544;color:white;padding:2px 4px"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>');
 			}
 		}
 		return true;
@@ -712,7 +714,7 @@ function parseCommand(user, cmd, target, room, socket, message)
 			lockdown = false;
 			for (var id in rooms)
 			{
-				rooms[id].addRaw('<strong style="color:blue">The server shutdown was canceled.</strong>');
+				rooms[id].addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>The server shutdown was canceled.</b></div>');
 			}
 		}
 		return true;
