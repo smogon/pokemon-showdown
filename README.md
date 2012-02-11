@@ -6,7 +6,7 @@ Showdown is a simulator of Pokemon battles. It currently only supports Generatio
 Installing
 ------------------------------------------------------------------------
 
-Showdown requires Node.js (and perhaps also Socket.IO).
+Showdown requires Node.js.
 
 Copy `config/config-example.js` into `config/config.js`, and edit as you please.
 
@@ -15,9 +15,13 @@ After this, start Node:
     cd <location of PS>
     node app.js
 
-Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT`
+If Node fails to start, you may need to install Socket.IO: `npm install socket.io`
+
+Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT/`
 
 Replace `SERVER` with your server domain or IP, and `PORT` with the server's port (default is 8000).
+
+Yes, you can test even if you are behind a NAT without port forwarding: `http://play.pokemonshowdown.com/~~localhost/` will connect to your local machine.
 
 Currently, this workflow works for testing Pokemon Showdown and testing your patches before submitting pull requests, but it ends up with somewhat ugly URLs. I'll make it easier to host your own server in the future, when we're closer to leaving beta.
 
