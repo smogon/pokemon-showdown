@@ -1023,12 +1023,13 @@ function Lobby(roomid)
 		
 		//console.log('BATTLE START BETWEEN: '+p1.userid+' '+p2.userid);
 		var i = selfR.numRooms+1;
-		while(rooms[selfR.id+'-battle'+i])
+		var formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g,'');
+		while(rooms['battle-'+formaturlid+i])
 		{
 			i++;
 		}
 		selfR.numRooms = i;
-		newRoom = selfR.addRoom(selfR.id+'-battle'+i, format, p1, p2, selfR.id, ranked);
+		newRoom = selfR.addRoom('battle-'+formaturlid+i, format, p1, p2, selfR.id, ranked);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
 		newRoom.joinBattle(p1);
