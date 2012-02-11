@@ -141,6 +141,10 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	this.p1 = p1 || '';
 	this.p2 = p2 || '';
 	
+	this.sideTicksLeft = [9, 9];
+	this.sideFreeTicks = [0, 0];
+	this.inactiveTicksLeft = 0;
+	
 	this.active = false;
 	
 	this.update = function(excludeUser) {
@@ -276,49 +280,84 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			getRoom(selfR.parentid).updateRooms();
 		}
 	};
+	this.getInactiveSide = function()
+	{
+		var inactiveSide = -1;
+		if (!selfR.battle.allySide.user && selfR.battle.foeSide.user)
+		{
+			inactiveSide = 0;
+			noUser = true;
+		}
+		else if (selfR.battle.allySide.user && !selfR.battle.foeSide.user)
+		{
+			inactiveSide = 1;
+			noUser = true;
+		}
+		else if (!selfR.battle.allySide.decision && selfR.battle.foeSide.decision)
+		{
+			inactiveSide = 0;
+		}
+		else if (selfR.battle.allySide.decision && !selfR.battle.foeSide.decision)
+		{
+			inactiveSide = 1;
+		}
+		return inactiveSide;
+	};
 	this.kickInactive = function()
 	{
 		clearTimeout(selfR.resetTimer);
 		selfR.resetTimer = null;
+		
+		var action = 'be kicked';
 		if (selfR.ranked)
 		{
-			if (!selfR.battle.allySide.user && selfR.battle.foeSide.user)
+			action = 'forfeit';
+		}
+		
+		var inactiveSide = selfR.getInactiveSide();
+		
+		if (inactiveSide == -1)
+		{
+			selfR.battle.add('message Both players are inactive, so neither player was kicked.');
+			selfR.update();
+			return;
+		}
+		
+		// now to see how much time we have left
+		if (selfR.inactiveTicksLeft)
+		{
+			selfR.inactiveTicksLeft--;
+			if (selfR.sideFreeTicks[inactiveSide])
 			{
-				selfR.battle.add('message '+selfR.battle.allySide.name+' lost because of their inactivity.');
-				selfR.battle.win(selfR.battle.foeSide);
-			}
-			else if (selfR.battle.allySide.user && !selfR.battle.foeSide.user)
-			{
-				selfR.battle.add('message '+selfR.battle.foeSide.name+' lost because of their inactivity.');
-				selfR.battle.win(selfR.battle.allySide);
-			}
-			else if (!selfR.battle.allySide.decision && selfR.battle.foeSide.decision)
-			{
-				selfR.battle.add('message '+selfR.battle.allySide.name+' lost because of their inactivity.');
-				selfR.battle.win(selfR.battle.foeSide);
-			}
-			else if (selfR.battle.allySide.decision && !selfR.battle.foeSide.decision)
-			{
-				selfR.battle.add('message '+selfR.battle.foeSide.name+' lost because of their inactivity.');
-				selfR.battle.win(selfR.battle.allySide);
+				selfR.sideFreeTicks[inactiveSide]--;
 			}
 			else
 			{
-				selfR.battle.add('message Both players are inactive, so neither player was kicked.');
+				selfR.sideTicksLeft[inactiveSide]--;
 			}
+		}
+		if (selfR.inactiveTicksLeft)
+		{
+			selfR.battle.add('message Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.');
+			selfR.update();
+			selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
+			return;
+		}
+		
+		if (selfR.battle.ranked)
+		{
+			selfR.battle.add('message '+selfR.battle.sides[inactiveSide].name+' lost because of their inactivity.');
+			selfR.battle.win(selfR.battle.sides[inactiveSide].foe);
 		}
 		else
 		{
-			selfR.battle.add('message Kicking inactive players.');
-			if (!selfR.battle.allySide.decision)
+			if (!noUser)
 			{
-				selfR.battle.leave(selfR.battle.allySide.user);
-			}
-			if (!selfR.battle.foeSide.decision)
-			{
-				selfR.battle.leave(selfR.battle.foeSide.user);
+				selfR.battle.add('message Kicking inactive players.');
+				selfR.battle.leave(selfR.battle.sides[inactiveSide].user);
 			}
 		}
+		
 		selfR.active = selfR.battle.active;
 		selfR.update();
 		if (selfR.parentid)
@@ -336,60 +375,86 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			return;
 		}
 		var elapsedTime = getTime() - selfR.graceTime;
+		
+		// tickTime is in chunks of 30
+		var tickTime = 1;
+		
 		if (elapsedTime < 60000)
 		{
-			waitTime = 180;
+			tickTime = 6;
 		}
 		else if (elapsedTime < 120000)
 		{
-			waitTime = 120;
+			tickTime = 4;
 		}
 		else if (elapsedTime < 150000)
 		{
-			waitTime = 60;
+			tickTime = 2;
 		}
 		else
 		{
-			waitTime = 30;
+			tickTime = 1;
 		}
-		selfR.battle.add('message The battle will restart if there is no activity for '+waitTime+' seconds'+attrib+'.');
+		selfR.battle.add('message The battle will restart if there is no activity for '+(tickTime*30)+' seconds'+attrib+'.');
 		selfR.update();
-		selfR.resetTimer = setTimeout(selfR.reset, waitTime*1000);
+		selfR.resetTimer = setTimeout(selfR.reset, tickTime*30*1000);
 	};
 	this.requestKickInactive = function(user) {
 		if (selfR.resetTimer) return;
-		if (!selfR.battle.active && !selfR.ranked) return; // no point
+		if ((!selfR.battle.allySide.user || !selfR.battle.foeSide.user) && !selfR.ranked)
+		{
+			selfR.battle.add('message This isn\'t a ranked battle; victory doesn\'t mean anything.');
+			selfR.battle.add('message Do you just want to see the text "you win"? Okay. You win.');
+			selfR.update();
+			return;
+		}
+		
 		if (user) attrib = ' (requested by '+user.name+')';
 		var action = 'be kicked';
 		if (selfR.ranked)
 		{
 			action = 'forfeit';
 		}
+				
+		// tickTime is in chunks of 30
 		var elapsedTime = getTime() - selfR.graceTime;
 		if (elapsedTime < 60000)
 		{
-			waitTime = 180;
+			tickTime = 6;
 		}
 		else if (elapsedTime < 120000)
 		{
-			waitTime = 120;
+			tickTime = 4;
 		}
 		else if (elapsedTime < 150000)
 		{
-			waitTime = 60;
+			tickTime = 2;
 		}
 		else
 		{
-			waitTime = 30;
+			tickTime = 1;
 		}
-		if (waitTime > 60 && (!selfR.battle.allySide.user || !selfR.battle.foeSide.user))
+		if (tickTime > 2 && (!selfR.battle.allySide.user || !selfR.battle.foeSide.user))
 		{
-			// if a player has left, don't wait longer than 60 seconds
-			waitTime = 60;
+			// if a player has left, don't wait longer than 2 ticks
+			tickTime = 2;
 		}
-		selfR.battle.add('message Inactive players will '+action+' in '+waitTime+' seconds'+attrib+'.');
+		
+		var inactiveSide = selfR.getInactiveSide();
+		if (tickTime > 2 && selfR.sideTicksLeft[inactiveSide] < tickTime)
+		{
+			tickTime = selfR.sideTicksLeft[inactiveSide];
+			if (tickTime < 2) tickTime = 2;
+			
+			selfR.sideFreeTicks[inactiveSide] = 0;
+			if (elapsedTime > 150000) selfR.sideTicksLeft[inactiveSide]--;
+			else if (elapsedTime < 30000) selfR.sideFreeTicks[inactiveSide] = 1;
+		}
+		
+		selfR.inactiveTicksLeft = tickTime;
+		selfR.battle.add('message Inactive players will '+action+' in '+(tickTime*30)+' seconds'+attrib+'.');
 		selfR.update();
-		selfR.resetTimer = setTimeout(selfR.kickInactive, waitTime*1000);
+		selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
 	};
 	this.cancelReset = function() {
 		if (selfR.resetTimer)
