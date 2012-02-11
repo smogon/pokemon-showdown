@@ -1,6 +1,7 @@
 /config/config.js
 /logs/*
-/node_modules/v8-profiler/
+/node_modules
+npm-debug.log
 
 # boilerplate #
 ###############
