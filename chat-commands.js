@@ -748,7 +748,12 @@ function parseCommand(user, cmd, target, room, socket, message)
 		if (target === 'all' || target === 'nick')
 		{
 			matched = true;
-			socket.emit('console', '/nick [username] - Change your username.');
+			socket.emit('console', '/nick [new username] - Change your username.');
+		}
+		if (target === 'all' || target === 'whois')
+		{
+			matched = true;
+			socket.emit('console', '/whois [username] - Get details on a username: group, and rooms.');
 		}
 		if (target === 'all' || target === 'data')
 		{
@@ -862,7 +867,7 @@ function parseCommand(user, cmd, target, room, socket, message)
 		}
 		if (!matched)
 		{
-			socket.emit('console', 'Commands: /msg, /reply, /ip, /ranking, /nick, /help');
+			socket.emit('console', 'Commands: /msg, /reply, /ip, /ranking, /nick, /whois, /help');
 			socket.emit('console', 'Informational commands: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
 			socket.emit('console', 'Moderator commands: /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
 			socket.emit('console', 'Admin commands: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
