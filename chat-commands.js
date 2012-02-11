@@ -1,3 +1,7 @@
+// to reload chat commands:
+
+// >> for (var i in require.cache) delete require.cache[i];parseCommand = require('./chat-commands.js').parseCommand;''
+
 function toId(text)
 {
 	text = text || '';
@@ -10,8 +14,10 @@ function toUserid(name)
 
 function parseCommand(user, cmd, target, room, socket, message)
 {
-	if (cmd === 'ban' || cmd === 'b')
+	switch (cmd)
 	{
+	case 'ban':
+	case 'b':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -29,9 +35,10 @@ function parseCommand(user, cmd, target, room, socket, message)
 			targetUser.destroy();
 			return true;
 		}
-	}
-	if (cmd === 'banredirect' || cmd === 'br')
-	{
+		break;
+		
+	case 'banredirect':
+	case 'br':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -48,7 +55,7 @@ function parseCommand(user, cmd, target, room, socket, message)
 			{
 				targets[1] = '/'+targets[1];
 			}
-			else if (targets[1].substr(0,7) !== 'http://' && targets[1].substr(0,8) !== 'https://')
+			else if (targets[1].substr(0,7) !== 'http://' && targets[1].substr(0,8) !== 'https://' && targets[1].substr(0,1) !== '/')
 			{
 				targets[1] = 'http://'+targets[1];
 			}
@@ -60,14 +67,43 @@ function parseCommand(user, cmd, target, room, socket, message)
 			targetUser.destroy();
 			return true;
 		}
-	}
-	else if (cmd === 'register')
-	{
+		break;
+		
+	case 'redirect':
+	case 'redir':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (user.isMod())
+		{
+			var targets = splitTarget(target);
+			var targetUser = targets[0];
+			if (!targetUser)
+			{
+				socket.emit('console', 'User not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group) && user !== targetUser) return true;
+			
+			if (targets[1].substr(0,2) == '~~')
+			{
+				targets[1] = '/'+targets[1];
+			}
+			else if (targets[1].substr(0,7) !== 'http://' && targets[1].substr(0,8) !== 'https://' && targets[1].substr(0,1) !== '/')
+			{
+				targets[1] = 'http://'+targets[1];
+			}
+			
+			room.add(''+targetUser.name+' was redirected by '+user.name+' to: '+targets[1]);
+			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
+			return true;
+		}
+		break;
+		
+	case 'register':
 		socket.emit('console', 'You must have a beta key to register.');
 		return true;
-	}
-	else if (cmd === 'avatar')
-	{
+		break;
+		
+	case 'avatar':
 		var avatar = parseInt(target);
 		if (!avatar || avatar > 263 || avatar < 1)
 		{
@@ -80,9 +116,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 		socket.emit('console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" />'});
 		
 		return true;
-	}
-	else if (cmd === 'whois')
-	{
+		break;
+		
+	case 'whois':
 		var targetUser = user;
 		if (target)
 		{
@@ -95,6 +131,25 @@ function parseCommand(user, cmd, target, room, socket, message)
 		else
 		{
 			socket.emit('console', 'User: '+targetUser.name);
+			switch (targetUser.group)
+			{
+			case '&':
+				socket.emit('console', 'Group: System Operator (&)');
+				break;
+			case '@':
+				socket.emit('console', 'Group: Administrator (@)');
+				break;
+			case '%':
+				socket.emit('console', 'Group: Moderator (%)');
+				break;
+			case '+':
+				socket.emit('console', 'Group: Voiced (+)');
+				break;
+			}
+			if (user.group === '&' || user.group === '@')
+			{
+				socket.emit('console', 'IP: '+targetUser.ip);
+			}
 			var output = 'In rooms: ';
 			var first = true;
 			for (var i in targetUser.roomCount)
@@ -107,9 +162,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			socket.emit('console', {rawMessage: output});
 		}
 		return true;
-	}
-	else if (cmd === 'unban')
-	{
+		break;
+		
+	case 'unban':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -138,14 +193,28 @@ function parseCommand(user, cmd, target, room, socket, message)
 			socket.emit('console', 'Access denied.');
 		}
 		return true;
-	}
-	else if (cmd === 'reply' || cmd === 'r')
-	{
+		break;
+		
+	case 'unbanall':
+		if (user.isMod())
+		{
+			room.add('All bans have been lifted by '+user.name+'.');
+			bannedIps = {};
+			mutedIps = {};
+			return true;
+		}
+		break;
+		
+	case 'reply':
+	case 'r':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		return parseCommand(user, 'msg', ''+(user.lastPM||'')+', '+target, room, socket);
-	}
-	else if (cmd === 'msg' || cmd === 'pm' || cmd === 'whisper' || cmd === 'w')
-	{
+		break;
+		
+	case 'msg':
+	case 'pm':
+	case 'whisper':
+	case 'w':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
 		var targetUser = targets[0];
@@ -177,18 +246,10 @@ function parseCommand(user, cmd, target, room, socket, message)
 		targets[0].lastPM = user.userid;
 		user.lastPM = targets[0].userid;
 		return true;
-	}
-	else if (cmd === 'data')
-	{
-		var message = getDataMessage(target);
-		for (var i=0; i<message.length; i++)
-		{
-			user.emit('console', message[i]);
-		}
-		return true;
-	}
-	else if (cmd === 'getip' || cmd === 'ip')
-	{
+		break;
+		
+	case 'ip':
+	case 'getip':
 		if (!target)
 		{
 			socket.emit('console', 'Your IP is: '+user.ip);
@@ -211,9 +272,10 @@ function parseCommand(user, cmd, target, room, socket, message)
 			socket.emit('console', 'Access denied.');
 		}
 		return true;
-	}
-	else if (cmd === 'mute' || cmd === 'm')
-	{
+		break;
+		
+	case 'mute':
+	case 'm':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -227,9 +289,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			rooms.lobby.usersChanged = true;
 			return true;
 		} 
-	}
-	else if (cmd === 'unmute')
-	{
+		break;
+		
+	case 'unmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -243,9 +305,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
-	}
-	else if (cmd === 'voice')
-	{
+		break;
+	
+	case 'voice':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -259,9 +321,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
-	}
-	else if (cmd === 'devoice')
-	{
+		break;
+		
+	case 'devoice':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -275,25 +337,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
-	}
-	else if (cmd === 'potd')
-	{
-		if (user.group !== '&' && user.group !== '@' && user.group !== '%') return true;
+		break;
 		
-		BattleFormats.PotD.onPotD = target;
-		if (target)
-		{
-			room.add('The Pokemon of the Day was changed to '+target+' by '+user.name+'.');
-		}
-		else
-		{
-			room.add('The Pokemon of the Day was removed by '+user.name+'.');
-		}
-		
-		return true;
-	}
-	else if (cmd === 'mod')
-	{
+	case 'mod':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -314,9 +360,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
-	}
-	else if (cmd === 'demod')
-	{
+		break;
+	
+	case 'demod':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -334,9 +380,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			}
 			return true;
 		}
-	}
-	else if (cmd === 'admin')
-	{
+		break;
+	
+	case 'admin':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -357,9 +403,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
-	}
-	else if (cmd === 'deadmin')
-	{
+		break;
+	
+	case 'deadmin':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -377,9 +423,103 @@ function parseCommand(user, cmd, target, room, socket, message)
 			}
 			return true;
 		}
-	}
-	else if (cmd === 'hotpatch')
-	{
+		break;
+	
+	case 'sysop':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (user.group === '&')
+		{
+			target = getUser(target);
+			if (!target) return true;
+			
+			room.add(''+target.name+' was promoted to sysop by '+user.name+'.');
+			target.group = '&';
+			rooms.lobby.usersChanged = true;
+			return true;
+		}
+		break;
+	
+	case 'desysop':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (user.group === '&')
+		{
+			target = getUser(target);
+			if (!target) return true;
+			
+			if (target.group === '&')
+			{
+				room.add(''+target.name+' was demoted to admin by '+user.name+'.');
+				target.group = '@';
+				rooms.lobby.usersChanged = true;
+			}
+			else
+			{
+				socket.emit('console', ''+target.name+' is not a sysop.');
+			}
+			return true;
+		}
+		break;
+	
+	case 'modchat':
+		if (!target)
+		{
+			socket.emit('console', 'Moderated chat is currently set to: '+config.modchat);
+			return true;
+		}
+		if (user.group === '&' || user.group === '@')
+		{
+			target = target.toLowerCase();
+			switch (target)
+			{
+			case 'on':
+			case 'true':
+			case 'yes':
+				config.modchat = true;
+				break;
+			case 'off':
+			case 'false':
+			case 'no':
+				config.modchat = false;
+				break;
+			case '+':
+			case '%':
+			case '@':
+			case '&':
+				config.modchat = target;
+				break;
+			default:
+				socket.emit('console', 'That moderated chat setting is unrecognized.');
+				return true;
+				break;
+			}
+			if (config.modchat === true)
+			{
+				room.addRaw('<div style="background-color:#AA5544;color:white;padding:2px 4px"><b>Moderated chat was enabled!</b><br />Only registered users and users of rank + and higher can talk.</div>');
+			}
+			else if (!config.modchat)
+			{
+				room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
+			}
+			else
+			{
+				var modchat = config.modchat;
+				if (modchat === '&') modchat = '&amp;';
+				room.addRaw('<div style="background-color:#AA6655;color:white;padding:2px 4px"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
+			}
+			return true;
+		}
+		break;
+	
+	case 'announce':
+		if (user.group === '&' || user.group === '@')
+		{
+			target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
+			room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>'+target+'</b></div>');
+			return true;
+		}
+		break;
+	
+	case 'hotpatch':
 		if (user.group === '&')
 		{
 			if (target === 'confirm')
@@ -393,9 +533,12 @@ function parseCommand(user, cmd, target, room, socket, message)
 			socket.emit('console', 'To reload the engine, use /hotpatch confirm.');
 			return true;
 		}
-	}
-	else if (cmd === 'rating' || cmd === 'ranking' || cmd === 'rank' || cmd === 'ladder')
-	{
+		break;
+	
+	case 'rating':
+	case 'ranking':
+	case 'rank':
+	case 'ladder':
 		target = toUserid(target) || user.userid;
 		request({
 			uri: config.loginserver+'action.php?act=ladderget&serverid='+serverid+'&user='+target,
@@ -428,15 +571,96 @@ function parseCommand(user, cmd, target, room, socket, message)
 			}
 		});
 		return true;
-	}
-	else if (cmd === 'nick')
-	{
+		break;
+		
+	case 'nick':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		user.rename(target);
 		return true;
-	}
-	else if (cmd === 'forcewin')
-	{
+		break;
+		
+	case 'data':
+	case '!data':
+		if (room.type !== 'lobby' && cmd.substr(0,1) === '!')
+		{
+			socket.emit('console', {rawMessage: '<code>!data</code> can only be used in the lobby.'});
+			return true;
+		}
+		
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		var dataMessages = getDataMessage(target);
+		for (var i=0; i<dataMessages.length; i++)
+		{
+			if (cmd.substr(0,1) !== '!')
+			{
+				socket.emit('console', dataMessages[i]);
+			}
+			else if (user.group !== ' ')
+			{
+				room.add(dataMessages[i]);
+			}
+		}
+		return true;
+		break;
+		
+	case 'opensource':
+	case '!opensource':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">' +
+			'+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
+			'% <b>Moderator</b> - The above, and they can also ban/mute users<br />' +
+			'@ <b>Administrator</b> - The above, and they can promote moderators and enable moderated chat<br />' +
+			'&amp; <b>System operator</b> - They can do anything, like change what this message says'+
+			'</div>');
+		return true;
+		break;
+		
+	case 'opensource':
+	case '!opensource':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Showdown is open source:<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master" target="_blank">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown" target="_blank">Source code</a></div>');
+		return true;
+		break;
+		
+	case 'avatars':
+	case '!avatars':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Want a custom avatar?<br />- <a href="/sprites/trainers/" target="_blank">How to change your avatar</a></div>');
+		return true;
+		break;
+		
+	case 'intro':
+	case 'introduction':
+	case '!intro':
+	case '!introduction':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">New to competitive pokemon?<br />' +
+			'- <a href="http://www.smogon.com/dp/articles/intro_comp_pokemon" target="_blank">An introduction to competitive pokemon</a><br />' +
+			'- <a href="http://www.smogon.com/bw/articles/bw_tiers" target="_blank">What do "OU", "UU", etc mean?</a><br />' +
+			'- <a href="http://www.smogon.com/bw/banlist/" target="_blank">What are the rules for each format? What is "Sleep Clause"?</a>' +
+			'</div>');
+		return true;
+		break;
+		
+	case 'rules':
+	case 'rule':
+	case '!rules':
+	case '!rule':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">We follow Smogon\'s simulator rules:<br />' +
+			'- <a href="http://www.smogon.com/sim/rules" target="_blank">Smogon\'s simulator rules</a><br />' +
+			'</div>');
+		return true;
+		break;
+		
+	// Admin commands
+		
+	case 'forcewin':
 		if (user.group === '&' && room.battle)
 		{
 			if (!target)
@@ -452,9 +676,25 @@ function parseCommand(user, cmd, target, room, socket, message)
 			
 			return true;
 		}
-	}
-	else if (cmd === 'lockdown')
-	{
+		break;
+		
+	case 'potd':
+		if (user.group !== '&' && user.group !== '@') return true;
+		
+		BattleFormats.PotD.onPotD = target;
+		if (target)
+		{
+			room.add('The Pokemon of the Day was changed to '+target+' by '+user.name+'.');
+		}
+		else
+		{
+			room.add('The Pokemon of the Day was removed by '+user.name+'.');
+		}
+		
+		return true;
+		break;
+	
+	case 'lockdown':
 		if (user.group === '&')
 		{
 			lockdown = true;
@@ -464,9 +704,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			}
 		}
 		return true;
-	}
-	else if (cmd === 'endlockdown')
-	{
+		break;
+		
+	case 'endlockdown':
 		if (user.group === '&')
 		{
 			lockdown = false;
@@ -476,9 +716,12 @@ function parseCommand(user, cmd, target, room, socket, message)
 			}
 		}
 		return true;
-	}
-	else if (cmd === 'help' || cmd === 'commands' || cmd === 'h' || cmd === '?')
-	{
+		break;
+		
+	case 'help':
+	case 'commands':
+	case 'h':
+	case '?':
 		var matched = false;
 		if (target === 'all' || target === 'msg' || target === 'pm' || cmd === 'whisper' || cmd === 'w')
 		{
@@ -507,60 +750,110 @@ function parseCommand(user, cmd, target, room, socket, message)
 			matched = true;
 			socket.emit('console', '/nick [username] - Change your username.');
 		}
-		if (target === 'all' || target === 'ban' || target === 'b')
+		if (target === 'all' || target === 'data')
 		{
 			matched = true;
-			socket.emit('console', '/ban OR /b [username] - Kick user from all rooms and ban user\'s IP address. Can be used by: % @ &');
+			socket.emit('console', '/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.');
+			socket.emit('console', '!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ &');
 		}
-		if (target === 'all' || target === 'unban')
+		if (target === 'all' || target === 'groups')
 		{
 			matched = true;
-			socket.emit('console', '/unban [username] - Unban a user. Can be used by: % @ &');
+			socket.emit('console', '/groups - Explains what the + % @ & next to people\'s names mean.');
+			socket.emit('console', '!groups - Show everyone that information. Requires: + % @ &');
 		}
-		if (target === 'all' || target === 'unbanall')
+		if (target === 'all' || target === 'opensource')
 		{
 			matched = true;
-			socket.emit('console', '/unbanall - Unban all IP addresses. Can be used by: % @ &');
+			socket.emit('console', '/opensource - Links to PS\'s source code repository.');
+			socket.emit('console', '!opensource - Show everyone that information. Requires: + % @ &');
 		}
-		if (target === 'all' || target === 'mute')
+		if (target === 'all' || target === 'avatars')
 		{
 			matched = true;
-			socket.emit('console', '/mute OR /m [username] - Mute user. Can be used by: % @ &');
+			socket.emit('console', '/avatars - Explains how to change avatars.');
+			socket.emit('console', '!avatars - Show everyone that information. Requires: + % @ &');
 		}
-		if (target === 'all' || target === 'unmute')
+		if (target === 'all' || target === 'intro')
 		{
 			matched = true;
-			socket.emit('console', '/unmute [username] - Remove mute from user. Can be used by: % @ &');
+			socket.emit('console', '/intro - Provides an introduction to competitive pokemon.');
+			socket.emit('console', '!intro - Show everyone that information. Requires: + % @ &');
 		}
-		if (target === 'all' || target === 'voice')
+		if (target === '%' || target === 'ban' || target === 'b')
 		{
 			matched = true;
-			socket.emit('console', '/voice [username] - Change user\'s group to +. Can be used by: % @ &');
+			socket.emit('console', '/ban OR /b [username] - Kick user from all rooms and ban user\'s IP address. Requires: % @ &');
 		}
-		if (target === 'all' || target === 'devoice')
+		if (target === '%' || target === 'unban')
 		{
 			matched = true;
-			socket.emit('console', '/devoice [username] - Remove user\'s group. Can be used by: % @ &');
+			socket.emit('console', '/unban [username] - Unban a user. Requires: % @ &');
 		}
-		if (target === 'all' || target === 'mod')
+		if (target === '%' || target === 'unbanall')
 		{
 			matched = true;
-			socket.emit('console', '/mod [username] - Change user\'s group to %. Can be used by: @ &');
+			socket.emit('console', '/unbanall - Unban all IP addresses. Requires: % @ &');
 		}
-		if (target === 'all' || target === 'demod')
+		if (target === '%' || target === 'mute' || target === 'm')
 		{
 			matched = true;
-			socket.emit('console', '/demod [username] - Change user\'s group from % to +. Can be used by: @ &');
+			socket.emit('console', '/mute OR /m [username] - Mute user. Requires: % @ &');
 		}
-		if (target === 'all' || target === 'admin')
+		if (target === '%' || target === 'unmute')
 		{
 			matched = true;
-			socket.emit('console', '/admin [username] - Change user\'s group to @. Can be used by: @ &');
+			socket.emit('console', '/unmute [username] - Remove mute from user. Requires: % @ &');
 		}
-		if (target === 'all' || target === 'deadmin')
+		if (target === '%' || target === 'voice')
 		{
 			matched = true;
-			socket.emit('console', '/deadmin [username] - Change user\'s group from @ to %. Can be used by: @ &');
+			socket.emit('console', '/voice [username] - Change user\'s group to +. Requires: % @ &');
+		}
+		if (target === '%' || target === 'devoice')
+		{
+			matched = true;
+			socket.emit('console', '/devoice [username] - Remove user\'s group. Requires: % @ &');
+		}
+		if (target === '@' || target === 'mod')
+		{
+			matched = true;
+			socket.emit('console', '/mod [username] - Change user\'s group to %. Requires: @ &');
+		}
+		if (target === '@' || target === 'demod')
+		{
+			matched = true;
+			socket.emit('console', '/demod [username] - Change user\'s group from % to +. Requires: @ &');
+		}
+		if (target === '@' || target === 'admin')
+		{
+			matched = true;
+			socket.emit('console', '/admin [username] - Change user\'s group to @. Requires: @ &');
+		}
+		if (target === '@' || target === 'deadmin')
+		{
+			matched = true;
+			socket.emit('console', '/deadmin [username] - Change user\'s group from @ to %. Requires: @ &');
+		}
+		if (target === '@' || target === 'sysop')
+		{
+			matched = true;
+			socket.emit('console', '/sysop [username] - Change user\'s group to @. Requires: &');
+		}
+		if (target === '@' || target === 'desysop')
+		{
+			matched = true;
+			socket.emit('console', '/sysop [username] - Change user\'s group from @ to %. Requires: &');
+		}
+		if (target === '@' || target === 'announce')
+		{
+			matched = true;
+			socket.emit('console', '/announce [message] - Make an announcement. Requires: @ &');
+		}
+		if (target === '@' || target === 'modchat')
+		{
+			matched = true;
+			socket.emit('console', '/modchat [on/off/+/%/@/&] - Set the level of moderated chat. Requires: @ &');
 		}
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands')
 		{
@@ -570,37 +863,75 @@ function parseCommand(user, cmd, target, room, socket, message)
 		if (!matched)
 		{
 			socket.emit('console', 'Commands: /msg, /reply, /ip, /ranking, /nick, /help');
-			socket.emit('console', 'Moderator commands: /ip, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice, /mod, /demod, /admin, /deadmin');
+			socket.emit('console', 'Informational commands: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
+			socket.emit('console', 'Moderator commands: /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
+			socket.emit('console', 'Admin commands: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
 			socket.emit('console', 'For details on all commands, use /help all. For details of a specific command, use something like: /help ban');
 		}
 		return true;
-	}
-	else if (cmd === 'unbanall')
-	{
-		if (user.isMod())
-		{
-			room.add('All bans have been lifted by '+user.name+'.');
-			bannedIps = {};
-			mutedIps = {};
-			return true;
-		}
+		break;
 	}
 
 	// !commands
 	
 	if (user.muted) return false;
+	
+	// chat moderation
+	if (config.modchat)
+	{
+		var cantalk = true;
+		switch (config.modchat)
+		{
+		case '&':
+			if (user.group !== '&')
+			{
+				socket.emit('console', 'Due to an influx of spam, you must be a sysop to speak in lobby chat.');
+				return true;
+			}
+			break;
+		case '@':
+			if (user.group !== '&' && user.group !== '@')
+			{
+				socket.emit('console', 'Due to an influx of spam, you must be an admin or sysop to speak in lobby chat.');
+				return true;
+			}
+			break;
+		case '%':
+			if (user.group !== '&' && user.group !== '@' && user.group !== '%')
+			{
+				socket.emit('console', 'Due to an influx of spam, you must be an moderator to speak in lobby chat.');
+				return true;
+			}
+			break;
+		case '+':
+			if (user.group === ' ')
+			{
+				socket.emit('console', 'Due to an influx of spam, you must be voiced to speak in lobby chat.');
+				return true;
+			}
+			break;
+		default:
+			if (!user.authenticated && user.group === ' ')
+			{
+				socket.emit('console', 'Due to an influx of spam, you must be registered or voiced to speak in lobby chat.');
+				return true;
+			}
+			break;
+		}
+	}
 
-	if (cmd === '!data' && room.type === 'lobby')
+	
+	return false;
+}
+
+function showOrBroadcastStart(user, cmd, room, socket, message)
+{
+	if (cmd.substr(0,1) === '!')
 	{
 		if (user.group === ' ')
 		{
-			socket.emit('console', {rawMessage: 'You do not have permission to use <code>!data</code>. Please use <code>/data</code> instead.'});
-		}
-		var dataMessages = getDataMessage(target);
-		if (dataMessages[0].message)
-		{
-			// didn't find matching data
-			socket.emit('console', dataMessages[0]);
+			socket.emit('console', "You need to be voiced to broadcast this command's information.");
+			socket.emit('console', "To see it for yourself, use: /"+message.substr(1));
 		}
 		else
 		{
@@ -608,16 +939,21 @@ function parseCommand(user, cmd, target, room, socket, message)
 				name: user.getIdentity(),
 				message: message
 			});
-			for (var i=0; i<dataMessages.length; i++)
-			{
-				room.add(dataMessages[i]);
-			}
 		}
-		return true;
 	}
-
-	return false;
 }
+function showOrBroadcast(user, cmd, room, socket, rawMessage)
+{
+	if (cmd.substr(0,1) !== '!')
+	{
+		socket.emit('console', {rawMessage: rawMessage});
+	}
+	else if (user.group !== ' ')
+	{
+		room.addRaw(rawMessage);
+	}
+}
+
 function getDataMessage(target)
 {
 	var pokemon = Tools.getTemplate(target);
