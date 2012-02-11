@@ -394,7 +394,7 @@ function BattleTools()
 				
 				unreleasedDW = {
 					Serperior: 1, Chandelure: 1, Ditto: 1,
-					Breloom: 1, Zapdos: 1, Lucario: 1, Feraligatr: 1, Gothitelle: 1,
+					Breloom: 1, Zapdos: 1, Feraligatr: 1, Gothitelle: 1,
 					'Ho-Oh': 1, Lugia: 1, Raikou: 1
 				};
 				
