@@ -1147,11 +1147,6 @@ function Lobby(roomid)
 		}
 		else if (!user.muted)
 		{
-			if (config.modchat && !user.authenticated && user.group === ' ')
-			{
-				user.emit('console', 'Due to an influx of spam, you must be voiced or registered to speak in lobby chat.');
-				return;
-			}
 			selfR.log.push({
 				name: user.getIdentity(),
 				message: message
