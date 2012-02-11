@@ -1446,7 +1446,8 @@ function Battle(roomid, format, ranked)
 					ModifyPokemon: 1,
 					ModifyStats: 1,
 					FieldHit: 1,
-					Boost: 1
+					Boost: 1,
+					DragOut: 1
 				};
 				if (AttackingEvents[eventid])
 				{
@@ -1898,12 +1899,16 @@ function Battle(roomid, format, ranked)
 	};
 	this.dragIn = function(side) {
 		var pokemon = selfB.getRandomSwitchable(side);
-		if (!pokemon) return;
+		if (!pokemon) return false;
 		if (side.active[0])
 		{
 			var oldActive = side.active[0];
 			var oldpos = pokemon.position;
 			if (!oldActive.hp)
+			{
+				return false;
+			}
+			if (!selfB.runEvent('DragOut', oldActive))
 			{
 				return false;
 			}
@@ -1922,6 +1927,7 @@ function Battle(roomid, format, ranked)
 		selfB.add('drag-in '+side.active[0].id);
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
+		return true;
 	};
 	this.faint = function(pokemon, source, effect) {
 		pokemon.faint(source, effect);
