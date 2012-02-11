@@ -6,7 +6,9 @@ Showdown is a simulator of Pokemon battles. It currently only supports Generatio
 Installing
 ------------------------------------------------------------------------
 
-Showdown requires Node.js.
+Showdown requires Node.js and npm (which is installed by default with Node.js since v0.6.3).
+
+Run `npm install` to install all necessary dependencies.
 
 Copy `config/config-example.js` into `config/config.js`, and edit as you please.
 
@@ -14,8 +16,6 @@ After this, start Node:
 
     cd <location of PS>
     node app.js
-
-If Node fails to start, you may need to install Socket.IO: `npm install socket.io`
 
 Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT/`
 
