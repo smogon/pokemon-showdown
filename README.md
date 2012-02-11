@@ -19,11 +19,13 @@ If Node fails to start, you may need to install Socket.IO: `npm install socket.i
 
 Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT/`
 
-Replace `SERVER` with your server domain or IP, and `PORT` with the server's port (default is 8000).
+Replace `SERVER` with your server domain or IP, and `PORT` with the server's port. You can leave off `:PORT` if it is 8000 (the default).
 
 Yes, you can test even if you are behind a NAT without port forwarding: `http://play.pokemonshowdown.com/~~localhost/` will connect to your local machine.
 
 Currently, this workflow works for testing Pokemon Showdown and testing your patches before submitting pull requests, but it ends up with somewhat ugly URLs. I'll make it easier to host your own server in the future, when we're closer to leaving beta.
+
+The reason your server is visited through `play.pokemonshowdown.com` is to ensure that your server itself will not see any user's password in any form.
 
 Browser support
 ------------------------------------------------------------------------
