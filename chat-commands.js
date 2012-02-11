@@ -884,7 +884,7 @@ function parseCommand(user, cmd, target, room, socket, message)
 	if (user.muted) return false;
 	
 	// chat moderation
-	if (config.modchat)
+	if (config.modchat && room.id === 'lobby')
 	{
 		var cantalk = true;
 		switch (config.modchat)
