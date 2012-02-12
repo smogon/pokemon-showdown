@@ -2043,8 +2043,11 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
 			var abilityid = target.ability;
-			this.add('r-trace '+pokemon.id+' '+target.id+' '+abilityid);
-			pokemon.setAbility(abilityid);
+			if (abilityid === 'Trace') return;
+			if (pokemon.setAbility(abilityid))
+			{
+				this.add('r-trace '+pokemon.id+' '+target.id+' '+abilityid);
+			}
 		},
 		id: "Trace",
 		name: "Trace",
