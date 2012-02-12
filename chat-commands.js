@@ -513,6 +513,7 @@ function parseCommand(user, cmd, target, room, socket, message)
 		break;
 	
 	case 'announce':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.group === '&' || user.group === '@')
 		{
 			target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
