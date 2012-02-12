@@ -102,7 +102,6 @@ function parseCommand(user, cmd, target, room, socket, message)
 		
 	case 'forfeit':
 	case 'concede':
-		return;
 		if (!room.battle) return;
 		if (!room.forfeit(user))
 		{
