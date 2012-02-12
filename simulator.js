@@ -2080,16 +2080,20 @@ function Battle(roomid, format, ranked)
 		effect = selfB.getEffect(effect);
 		if (!damage) return 0;
 		damage = clampIntRange(damage, 1);
-		if (effect.effectType === 'Weather' && !target.runImmunity(effect.id))
+		
+		if (effect.id !== 'Struggle') // Struggle recoil is not affected by effects
 		{
-			this.debug('weather immunity');
-			return 0;
-		}
-		damage = selfB.runEvent('Damage', target, source, effect, damage);
-		if (!damage)
-		{
-			this.debug('damage event said zero');
-			return 0;
+			if (effect.effectType === 'Weather' && !target.runImmunity(effect.id))
+			{
+				this.debug('weather immunity');
+				return 0;
+			}
+			damage = selfB.runEvent('Damage', target, source, effect, damage);
+			if (!damage)
+			{
+				this.debug('damage event said zero');
+				return 0;
+			}
 		}
 		damage = clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
