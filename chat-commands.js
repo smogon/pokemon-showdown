@@ -100,6 +100,17 @@ function parseCommand(user, cmd, target, room, socket, message)
 		}
 		break;
 		
+	case 'forfeit':
+	case 'concede':
+		return;
+		if (!room.battle) return;
+		if (!room.forfeit(user))
+		{
+			socket.emit('console', "You can't forfeit this battle.");
+		}
+		return true;
+		break;
+		
 	case 'register':
 		socket.emit('console', 'You must have a beta key to register.');
 		return true;

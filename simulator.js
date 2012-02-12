@@ -1982,7 +1982,7 @@ function Battle(roomid, format, ranked)
 		selfB.add('tier '+format.name);
 		if (selfB.ranked)
 		{
-			selfB.add('rule [[Rated]]');
+			selfB.add('rated');
 		}
 		if (format && format.ruleset)
 		{
