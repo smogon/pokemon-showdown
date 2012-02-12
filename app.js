@@ -303,6 +303,28 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		}
 		return inactiveSide;
 	};
+	// side can be a side or user
+	this.forfeit = function(side, message)
+	{
+		var forfeitSide = -1;
+		if (!selfR.battle || !selfR.battle.active) return false;
+		
+		if (side === selfR.battle.sides[0]) forfeitSide = 0;
+		else if (side === selfR.battle.sides[1]) forfeitSide = 1;
+		else if (side === 0) forfeitSide = 0;
+		else if (side === 1) forfeitSide = 1;
+		else if (side === selfR.battle.sides[0].user) forfeitSide = 0;
+		else if (side === selfR.battle.sides[1].user) forfeitSide = 1;
+		else return false;
+		
+		if (!message) message = ' forfeited.';
+		
+		selfR.battle.add('message '+selfR.battle.sides[forfeitSide].name+message);
+		selfR.battle.win(selfR.battle.sides[forfeitSide].foe);
+		selfR.active = selfR.battle.active;
+		selfR.update();
+		return true;
+	}
 	this.kickInactive = function()
 	{
 		clearTimeout(selfR.resetTimer);
@@ -346,8 +368,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		
 		if (selfR.battle.ranked)
 		{
-			selfR.battle.add('message '+selfR.battle.sides[inactiveSide].name+' lost because of their inactivity.');
-			selfR.battle.win(selfR.battle.sides[inactiveSide].foe);
+			selfR.forfeit(inactiveSide,' lost because of their inactivity.');
 		}
 		else
 		{
@@ -355,11 +376,11 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			{
 				selfR.battle.add('message Kicking inactive players.');
 				selfR.battle.leave(selfR.battle.sides[inactiveSide].user);
+				selfR.active = selfR.battle.active;
+				selfR.update();
 			}
 		}
 		
-		selfR.active = selfR.battle.active;
-		selfR.update();
 		if (selfR.parentid)
 		{
 			getRoom(selfR.parentid).updateRooms();
@@ -371,7 +392,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		if (user) attrib = ' (requested by '+user.name+')';
 		if (selfR.ranked)
 		{
-			selfR.battle.add('message The battle cannot be restarted because it is a ranked battle'+attrib+'.');
+			selfR.battle.add('message The battle cannot be restarted because it is a rated battle'+attrib+'.');
 			return;
 		}
 		var elapsedTime = getTime() - selfR.graceTime;
@@ -403,7 +424,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		if (selfR.resetTimer) return;
 		if ((!selfR.battle.allySide.user || !selfR.battle.foeSide.user) && !selfR.ranked)
 		{
-			selfR.battle.add('message This isn\'t a ranked battle; victory doesn\'t mean anything.');
+			selfR.battle.add('message This isn\'t a rated battle; victory doesn\'t mean anything.');
 			selfR.battle.add('message Do you just want to see the text "you win"? Okay. You win.');
 			selfR.update();
 			return;
