@@ -307,7 +307,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	this.forfeit = function(side, message)
 	{
 		var forfeitSide = -1;
-		if (!selfR.battle || !selfR.battle.active) return false;
+		if (!selfR.battle || selfR.battle.ended || !selfR.battle.started) return false;
 		
 		if (side === selfR.battle.sides[0]) forfeitSide = 0;
 		else if (side === selfR.battle.sides[1]) forfeitSide = 1;
@@ -338,9 +338,17 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		
 		var inactiveSide = selfR.getInactiveSide();
 		
+		if (!selfR.battle || selfR.battle.ended || !selfR.battle.started) return false;
+		
 		if (inactiveSide == -1)
 		{
 			selfR.battle.add('message Both players are inactive, so neither player was kicked.');
+			selfR.update();
+			return;
+		}
+		if (!selfR.battle.curCallback)
+		{
+			selfR.battle.add('message We are experiencing a bug. Please notify a system operator (people with & next to their name).');
 			selfR.update();
 			return;
 		}
