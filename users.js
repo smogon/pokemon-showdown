@@ -287,6 +287,12 @@ function User(name, socket, token)
 				}
 				return true;
 			}
+			else if (tokens[1])
+			{
+				console.log('BODY: ""');
+				// rename failed, but shouldn't
+				selfP.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
+			}
 			else
 			{
 				console.log('BODY: ""');
