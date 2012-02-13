@@ -199,7 +199,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 					{
 					}
 				});
-/*				fs.writeFile('logs/lastbattle.txt', ''+lobby.numRooms);
+				fs.writeFile('logs/lastbattle.txt', ''+lobby.numRooms);
 				var logData = {
 					p1score: p1score,
 					turns: selfR.battle.turn,
@@ -210,7 +210,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 				};
 				fs.writeFile('logs/'+selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'')+'/'+selfR.id+'.log.json',
 					JSON.stringify(logData)
-				);*/
+				);
 			}
 			
 			selfR.ranked = false;
