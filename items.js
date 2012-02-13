@@ -2703,12 +2703,13 @@ exports.BattleItems = {
 				if (pokemon.baseBoosts[i] < 0)
 				{
 					activate = true;
-					boosts[i] = -pokemon.baseBoosts[i];
+					boosts[i] = 0;
 				}
 			}
 			if (activate && pokemon.useItem())
 			{
-				this.boost(boosts);
+				pokemon.setBoost(boosts);
+				this.add('residual '+pokemon.id+' item-restore WhiteHerb');
 			}
 		},
 		desc: "Removes stat decreases. Consumed after use."
