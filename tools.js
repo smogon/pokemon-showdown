@@ -41,7 +41,7 @@ function BattleTools()
 		if (!template || !template.id)
 		{
 			var id = toId(template);
-			if (id === 'Necturna') id = 'Venusaur';
+			if (id === config.shadowBannedPokemon) id = 'Venusaur';
 			template = {};
 			if (id && BattlePokedex[id])
 			{
