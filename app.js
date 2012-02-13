@@ -286,12 +286,10 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		if (!selfR.battle.allySide.user && selfR.battle.foeSide.user)
 		{
 			inactiveSide = 0;
-			noUser = true;
 		}
 		else if (selfR.battle.allySide.user && !selfR.battle.foeSide.user)
 		{
 			inactiveSide = 1;
-			noUser = true;
 		}
 		else if (!selfR.battle.allySide.decision && selfR.battle.foeSide.decision)
 		{
@@ -357,21 +355,21 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		if (selfR.inactiveTicksLeft)
 		{
 			selfR.inactiveTicksLeft--;
-			if (selfR.sideFreeTicks[inactiveSide])
-			{
-				selfR.sideFreeTicks[inactiveSide]--;
-			}
-			else
-			{
-				selfR.sideTicksLeft[inactiveSide]--;
-			}
 		}
 		if (selfR.inactiveTicksLeft)
 		{
-			selfR.battle.add('message Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.');
+			selfR.battle.add('message Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
 			selfR.update();
 			selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
 			return;
+		}
+		if (selfR.sideFreeTicks[inactiveSide])
+		{
+			selfR.sideFreeTicks[inactiveSide]--;
+		}
+		else
+		{
+			selfR.sideTicksLeft[inactiveSide]--;
 		}
 		
 		if (selfR.battle.ranked)
@@ -380,12 +378,16 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		}
 		else
 		{
-			if (!noUser)
+			if (selfR.battle.sides[0].user && selfR.battle.sides[1].user)
 			{
 				selfR.battle.add('message Kicking inactive players.');
 				selfR.battle.leave(selfR.battle.sides[inactiveSide].user);
 				selfR.active = selfR.battle.active;
 				selfR.update();
+			}
+			else
+			{
+				selfR.battle.add('message There are already empty slots; no kicks are necessary.');
 			}
 		}
 		
@@ -424,7 +426,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		{
 			tickTime = 1;
 		}
-		selfR.battle.add('message The battle will restart if there is no activity for '+(tickTime*30)+' seconds'+attrib+'.');
+		selfR.battle.add('message The battle will restart if there is no activity for '+(tickTime*30)+' seconds.'+attrib);
 		selfR.update();
 		selfR.resetTimer = setTimeout(selfR.reset, tickTime*30*1000);
 	};
@@ -438,50 +440,53 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			return;
 		}
 		
-		if (user) attrib = ' (requested by '+user.name+')';
+		selfR.inactiveAtrrib = '';
+		if (user) selfR.inactiveAtrrib = ' (requested by '+user.name+')';
+		
 		var action = 'be kicked';
 		if (selfR.ranked)
 		{
 			action = 'forfeit';
 		}
 				
-		// tickTime is in chunks of 30
-		var elapsedTime = getTime() - selfR.graceTime;
-		if (elapsedTime < 60000)
-		{
-			tickTime = 6;
-		}
-		else if (elapsedTime < 120000)
-		{
-			tickTime = 4;
-		}
-		else if (elapsedTime < 150000)
-		{
-			tickTime = 2;
-		}
-		else
+		// a tick is 30 seconds
+		
+		var elapsedTicks = Math.floor((getTime() - selfR.graceTime) / 30000);
+		tickTime = 6 - elapsedTicks;
+		if (tickTime < 1)
 		{
 			tickTime = 1;
 		}
+		
 		if (tickTime > 2 && (!selfR.battle.allySide.user || !selfR.battle.foeSide.user))
 		{
-			// if a player has left, don't wait longer than 2 ticks
+			// if a player has left, don't wait longer than 2 ticks (60 seconds)
 			tickTime = 2;
 		}
 		
+		if (elapsedTicks >= 8) selfR.sideTicksLeft[inactiveSide]--;
+		if (elapsedTicks >= 4) selfR.sideTicksLeft[inactiveSide]--;
 		var inactiveSide = selfR.getInactiveSide();
 		if (tickTime > 2 && selfR.sideTicksLeft[inactiveSide] < tickTime)
 		{
 			tickTime = selfR.sideTicksLeft[inactiveSide];
 			if (tickTime < 2) tickTime = 2;
-			
-			selfR.sideFreeTicks[inactiveSide] = 0;
-			if (elapsedTime > 150000) selfR.sideTicksLeft[inactiveSide]--;
-			else if (elapsedTime < 30000) selfR.sideFreeTicks[inactiveSide] = 1;
 		}
 		
 		selfR.inactiveTicksLeft = tickTime;
-		selfR.battle.add('message Inactive players will '+action+' in '+(tickTime*30)+' seconds'+attrib+'.');
+		var message = 'Inactive players will '+action+' in '+(tickTime*30)+' seconds.'+selfR.inactiveAtrrib;
+		if (elapsedTicks < 1 && tickTime >= 2)
+		{
+			// the foe has at least a minute left, and hasn't been given 30 seconds to make a move yet
+			// we'll wait another 30 seconds before notifying them that they have a time limit
+			user.emit('console', {room:selfR.id, message: message});
+			selfR.sideFreeTicks[inactiveSide] = 1;
+		}
+		else
+		{
+			selfR.battle.add('message '+message);
+			selfR.sideFreeTicks[inactiveSide] = 0;
+		}
 		selfR.update();
 		selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
 	};
@@ -513,6 +518,9 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		selfR.update();
 	};
 	this.battleEndRestart = function() {
+		selfR.add('Rematch support has been temporarily disabled. Please challenge this user again in a different format.');
+		return;
+		
 		if (selfR.resetTimer) return;
 		if (selfR.battle.ended)
 		{
