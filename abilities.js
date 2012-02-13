@@ -574,6 +574,34 @@ exports.BattleAbilities = {
 	},
 	"Forewarn": {
 		desc: "The move with the highest Base Power in the opponent's moveset is revealed.",
+		onStart: function(pokemon) {
+			var targets = pokemon.side.foe.active;
+			var warnMoves = [];
+			var warnBp = 1;
+			for (var i=0; i<targets.length; i++)
+			{
+				for (var j=0; j<targets[i].moveset.length; j++)
+				{
+					var move = this.getMove(targets[i].moveset[j].move);
+					var bp = move.basePower;
+					if (move.ohko) bp = 160;
+					if (move.id === 'Counter' || move.id === 'MetalBurst' || move.id === 'MirrorCoat') bp = 120;
+					if (!bp && move.category !== 'Status') bp = 80;
+					if (bp > warnBp)
+					{
+						warnMoves = [[move, targets[i]]];
+						warnBp = bp;
+					}
+					else if (bp == warnBp)
+					{
+						warnMoves.push([move, targets[i]]);
+					}
+				}
+			}
+			if (!warnMoves.length) return;
+			var warnMove = warnMoves[Math.floor(Math.random()*warnMoves.length)];
+			this.add('message '+pokemon.name+'\'s Forewarn alerted it to '+warnMove[0].name+'!');
+		},
 		id: "Forewarn",
 		name: "Forewarn",
 		rating: 1,
