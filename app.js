@@ -518,7 +518,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		selfR.update();
 	};
 	this.battleEndRestart = function() {
-		selfR.add('Rematch support has been temporarily disabled. Please challenge this user again in a different format.');
+		selfR.add('Rematch support has been temporarily disabled. Please challenge this user again in the lobby.');
 		return;
 		
 		if (selfR.resetTimer) return;
