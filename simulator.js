@@ -920,17 +920,6 @@ function BattlePokemon(set, side)
 		}
 		return true;
 	};
-	this.runBasePower = function(target, basePower, move) {
-		if (selfP.fainted) return false;
-		
-		basePower = selfB.runEvent('BasePower', selfP, target, move, basePower);
-		
-		if (move.basePowerModifier)
-		{
-			basePower *= move.basePowerModifier;
-		}
-		return basePower;
-	};
 	this.runBeforeMove = function(target, move) {
 		if (selfP.fainted) return true;
 		return !selfB.runEvent('BeforeMove', selfP, target, move);
@@ -2278,7 +2267,12 @@ function Battle(roomid, format, ranked)
 		// happens after crit calculation
 		if (basePower)
 		{
-			basePower = pokemon.runBasePower(target, basePower, move);
+			basePower = selfB.runEvent('BasePower', pokemon, target, move, basePower);
+			
+			if (move.basePowerModifier)
+			{
+				basePower *= move.basePowerModifier;
+			}
 		}
 		if (!basePower) return 0;
 		

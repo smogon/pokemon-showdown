@@ -276,7 +276,8 @@ exports.BattleStatuses = {
 				this.add('message '+move.name+' hit! (placeholder)');
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
-				BattleScripts.moveHit.call(this, target, posData.source, move, posData.moveData);
+				
+				this.moveHit(target, posData.source, move, posData.moveData);
 				
 				this.effectData.positions[i] = null;
 			}
