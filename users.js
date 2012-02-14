@@ -71,6 +71,7 @@ function User(name, socket, token)
 		token = ''+socket.id;
 	}
 	this.token = token;
+	this.guestNum = numUsers;
 	this.name = 'Guest '+numUsers;
 	this.named = false;
 	this.renamePending = false;
@@ -131,6 +132,80 @@ function User(name, socket, token)
 		}
 		return false;
 	};
+	this.forceRename = function(name, authenticated) {
+		// skip the login server
+		var userid = toUserid(name);
+		
+		if (users[userid] && users[userid] !== selfP) return false;
+		if (typeof authenticated === 'undefined' && userid === selfP.userid)
+		{
+			authenticated = selfP.authenticated;
+		}
+		
+		selfP.name = name;
+		var oldid = selfP.userid;
+		delete users[oldid];
+		selfP.userid = userid;
+		users[selfP.userid] = selfP;
+		selfP.authenticated = (authenticated || false);
+		
+		for (var i=0; i<selfP.people.length; i++)
+		{
+			selfP.people[i].rename(name, oldid);
+			console.log(''+name+' renaming: socket '+i+' of '+selfP.people.length);
+			selfP.people[i].socket.emit('update', {
+				name: name,
+				userid: selfP.userid,
+				named: true,
+				token: token
+			});
+		}
+		var joining = !selfP.named;
+		selfP.named = true;
+		for (var i in selfP.roomCount)
+		{
+			getRoom(i).rename(selfP, oldid, joining);
+		}
+		return true;
+	};
+	this.resetName = function() {
+		var name = 'Guest '+selfP.guestNum;
+		var userid = toUserid(name);
+		
+		var i = 0;
+		while (users[userid] && users[userid] !== selfP)
+		{
+			selfP.guestNum++;
+			name = 'Guest '+selfP.guestNum;
+			userid = toUserid(name);
+			if (i > 1000) return false;
+		}
+		
+		selfP.name = name;
+		var oldid = selfP.userid;
+		delete users[oldid];
+		selfP.userid = userid;
+		users[selfP.userid] = selfP;
+		selfP.authenticated = false;
+		
+		for (var i=0; i<selfP.people.length; i++)
+		{
+			selfP.people[i].rename(name, oldid);
+			console.log(''+name+' renaming: socket '+i+' of '+selfP.people.length);
+			selfP.people[i].socket.emit('update', {
+				name: name,
+				userid: selfP.userid,
+				named: false,
+				token: token
+			});
+		}
+		selfP.named = false;
+		for (var i in selfP.roomCount)
+		{
+			getRoom(i).rename(selfP, oldid, false);
+		}
+		return true;
+	};
 	this.rename = function(name, token) {
 		if (!name) name = '';
 		name = name.trim();
@@ -148,6 +223,10 @@ function User(name, socket, token)
 			// before it gets to this stage it's your own fault
 			selfP.emit('nameTaken', {userid: '', reason: "You did not specify a name."});
 			return false;
+		}
+		else if (userid === selfP.userid)
+		{
+			return selfP.forceRename(name, selfP.authenticated);
 		}
 		if (users[userid] && !users[userid].authenticated && users[userid].connected)
 		{
@@ -230,6 +309,7 @@ function User(name, socket, token)
 				}
 				if (users[userid])
 				{
+					// This user already exists; let's merge
 					if (selfP === users[userid])
 					{
 						// !!!
@@ -241,7 +321,7 @@ function User(name, socket, token)
 					}
 					for (var i=0; i<selfP.people.length; i++)
 					{
-						console.log(''+selfP.name+' preparing to mergeg: socket '+i+' of '+selfP.people.length);
+						console.log(''+selfP.name+' preparing to merge: socket '+i+' of '+selfP.people.length);
 						users[userid].merge(selfP.people[i]);
 					}
 					selfP.roomCount = {};
@@ -259,34 +339,10 @@ function User(name, socket, token)
 				}
 				
 				// rename success
-				selfP.name = name;
-				var oldid = selfP.userid;
-				delete users[oldid];
-				selfP.userid = toUserid(selfP.name);
-				users[selfP.userid] = selfP;
 				selfP.token = token;
 				selfP.group = group;
 				if (avatar) selfP.avatar = avatar;
-				selfP.authenticated = authenticated;
-				
-				for (var i=0; i<selfP.people.length; i++)
-				{
-					selfP.people[i].rename(name, oldid);
-					console.log(''+name+' renaming: socket '+i+' of '+selfP.people.length);
-					selfP.people[i].socket.emit('update', {
-						name: name,
-						userid: selfP.userid,
-						named: true,
-						token: token
-					});
-				}
-				var joining = !selfP.named;
-				selfP.named = true;
-				for (var i in selfP.roomCount)
-				{
-					getRoom(i).rename(selfP, oldid, joining);
-				}
-				return true;
+				return selfP.forceRename(name, authenticated);
 			}
 			else if (tokens[1])
 			{
