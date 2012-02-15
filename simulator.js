@@ -224,6 +224,10 @@ function BattlePokemon(set, side)
 	this.maxhp = this.stats['hp'];
 	this.hp = this.hp || this.maxhp;
 	
+	this.toString = function() {
+		return 'Pokemon: '+selfP.id;
+	};
+	
 	this.update = function(init) {
 		selfP.id = selfP.baseId;
 		selfP.fullid = selfP.baseFullid;
@@ -969,6 +973,10 @@ function BattleSide(user, battle, n)
 		this.pokemon[i].position = i;
 	}
 	
+	this.toString = function() {
+		return 'Side: '+selfS.name;
+	};
+	
 	this.getData = function() {
 		var data = {
 			name: selfS.name,
@@ -1118,6 +1126,10 @@ function Battle(roomid, format, ranked)
 	this.effectData = {id:''};
 	this.event = {id:''};
 	this.eventDepth = 0;
+	
+	this.toString = function() {
+		return 'Battle: '+selfS.format;
+	};
 	
 	this.setWeather = function(status, source, sourceEffect) {
 		status = selfB.getEffect(status);
@@ -1528,14 +1540,14 @@ function Battle(roomid, format, ranked)
 			for (var i in selfB.pseudoWeather)
 			{
 				status = selfB.getPseudoWeather(i);
-				if (status[callbackType] || (getAll && thing.pseudoWeather[i][getAll]))
+				if (typeof status[callbackType] !== 'undefined' || (getAll && thing.pseudoWeather[i][getAll]))
 				{
 					statuses.push({status: status, callback: status[callbackType], statusData: selfB.pseudoWeather[i], end: selfB.removePseudoWeather, thing: thing});
 					selfB.resolveLastPriority(statuses,callbackType);
 				}
 			}
 			status = selfB.getWeather();
-			if (status[callbackType] || (getAll && thing.weatherData[getAll]))
+			if (typeof status[callbackType] !== 'undefined' || (getAll && thing.weatherData[getAll]))
 			{
 				statuses.push({status: status, callback: status[callbackType], statusData: selfB.weatherData, end: selfB.clearWeather, thing: thing, priority: status[callbackType+'Priority']||0});
 				selfB.resolveLastPriority(statuses,callbackType);
@@ -1553,7 +1565,7 @@ function Battle(roomid, format, ranked)
 			for (var i in thing.sideConditions)
 			{
 				status = thing.getSideCondition(i);
-				if (status[callbackType] || (getAll && thing.sideConditions[i][getAll]))
+				if (typeof status[callbackType] !== 'undefined' || (getAll && thing.sideConditions[i][getAll]))
 				{
 					statuses.push({status: status, callback: status[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
 					selfB.resolveLastPriority(statuses,callbackType);
@@ -1584,7 +1596,7 @@ function Battle(roomid, format, ranked)
 			return statuses;
 		}
 		var status = thing.getStatus();
-		if (status[callbackType] || (getAll && thing.statusData[getAll]))
+		if (typeof status[callbackType] !== 'undefined' || (getAll && thing.statusData[getAll]))
 		{
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
 			selfB.resolveLastPriority(statuses,callbackType);
@@ -1592,20 +1604,20 @@ function Battle(roomid, format, ranked)
 		for (var i in thing.volatiles)
 		{
 			status = thing.getVolatile(i);
-			if (status[callbackType] || (getAll && thing.volatiles[i][getAll]))
+			if (typeof status[callbackType] !== 'undefined' || (getAll && thing.volatiles[i][getAll]))
 			{
 				statuses.push({status: status, callback: status[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
 				selfB.resolveLastPriority(statuses,callbackType);
 			}
 		}
 		status = thing.getAbility();
-		if (status[callbackType] || (getAll && thing.abilityData[getAll]))
+		if (typeof status[callbackType] !== 'undefined' || (getAll && thing.abilityData[getAll]))
 		{
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
 			selfB.resolveLastPriority(statuses,callbackType);
 		}
 		status = thing.getItem();
-		if (status[callbackType] || (getAll && thing.itemData[getAll]))
+		if (typeof status[callbackType] !== 'undefined' || (getAll && thing.itemData[getAll]))
 		{
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
 			selfB.resolveLastPriority(statuses,callbackType);
