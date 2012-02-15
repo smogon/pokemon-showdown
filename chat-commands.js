@@ -597,6 +597,22 @@ function parseCommand(user, cmd, target, room, socket, message)
 		return true;
 		break;
 		
+	case 'forcerename':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		var targets = splitTarget(target);
+		var targetUser = targets[0]
+		if (targetUser && user.canMod(targetUser))
+		{
+			if (targets[1]) targetUser.forceRename(targets[1]);
+			else
+			{
+				targetUser.resetName();
+				targetUser.emit('nameTaken', {reason: "Please choose a different name."});
+			}
+		}
+		return true;
+		break;
+		
 	case 'data':
 	case '!data':
 		if (room.type !== 'lobby' && cmd.substr(0,1) === '!')
