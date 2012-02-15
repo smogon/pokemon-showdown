@@ -2050,6 +2050,9 @@ exports.BattleMovedex = {
 		volatileStatus: 'Disable',
 		effect: {
 			duration: 4,
+			durationCallback: function() {
+				return 4+Math.floor(4*Math.random());
+			},
 			onStart: function(pokemon) {
 				if (!pokemon.lastMove)
 				{
@@ -2079,6 +2082,13 @@ exports.BattleMovedex = {
 			},
 			onEnd: function(pokemon) {
 				this.add('message Disable ended. (placeholder)');
+			},
+			onBeforeMove: function(attacker, defender, move) {
+				if (move.id === this.effectData.move)
+				{
+					this.add('cant-move '+attacker.id+' disable '+move.id);
+					return false;
+				}
 			},
 			onModifyPokemon: function(pokemon) {
 				var moves = pokemon.moveset;
@@ -10415,8 +10425,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'Taunt',
 		effect: {
+			duration: 3,
 			onStart: function(target) {
-				this.effectData.time = 3;
 				this.add('r-volatile '+target.id+' taunt');
 			},
 			onEnd: function(target) {
@@ -10433,11 +10443,6 @@ exports.BattleMovedex = {
 				}
 			},
 			onBeforeMove: function(attacker, defender, move) {
-				attacker.volatiles['Taunt'].time--;
-				if (attacker.volatiles['Taunt'].time <= 0)
-				{
-					attacker.volatiles['Taunt'].duration = 1;
-				}
 				if (move.category === 'Status')
 				{
 					this.add('cant-move '+attacker.id+' taunt '+move.id);
