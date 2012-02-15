@@ -159,6 +159,10 @@ function parseCommand(user, cmd, target, room, socket, message)
 				socket.emit('console', 'Group: Voiced (+)');
 				break;
 			}
+			if (!user.authenticated)
+			{
+				socket.emit('console', '(Unregistered)');
+			}
 			if (user.group === '&' || user.group === '@')
 			{
 				socket.emit('console', 'IP: '+targetUser.ip);
