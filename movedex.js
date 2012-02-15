@@ -9860,7 +9860,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		self: {
 			onHit: function(source) {
-				this.damage(source.maxhp/4, source, 'recoil');
+				this.damage(source.maxhp/4, source, 'struggle-recoil');
 			}
 		},
 		secondary: false,
