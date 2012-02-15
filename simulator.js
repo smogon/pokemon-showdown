@@ -2070,7 +2070,7 @@ function Battle(roomid, format, ranked)
 		if (!damage) return 0;
 		damage = clampIntRange(damage, 1);
 		
-		if (effect.id !== 'Struggle') // Struggle recoil is not affected by effects
+		if (effect.id !== 'struggle-recoil') // Struggle recoil is not affected by effects
 		{
 			if (effect.effectType === 'Weather' && !target.runImmunity(effect.id))
 			{
