@@ -2719,7 +2719,11 @@ function Battle(roomid, format, ranked)
 		selfB.cancelDecision(side.active[0]);
 		if (choice === 'undo')
 		{
-			side.decision = null;
+			if (side.decision !== true)
+			{
+				// Don't undo a decision if it's not your turn
+				side.decision = null;
+			}
 			return;
 		}
 		else if (choice === 'team')
