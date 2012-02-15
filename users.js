@@ -149,6 +149,11 @@ function User(name, socket, token)
 		users[selfP.userid] = selfP;
 		selfP.authenticated = (authenticated || false);
 		
+		if (config.localsysop && selfP.ip === '127.0.0.1')
+		{
+			selfP.group = '&';
+		}
+		
 		for (var i=0; i<selfP.people.length; i++)
 		{
 			selfP.people[i].rename(name, oldid);
