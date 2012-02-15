@@ -100,7 +100,11 @@ exports.BattleFormats = {
 	
 	Standard: {
 		effectType: 'Banlist',
-		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam']
+		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam', 'Legal']
+	},
+	Legal: {
+		effectType: 'Banlist',
+		banlist: ['Crobat+BraveBird+Hypnosis']
 	},
 	PotD: {
 		effectType: 'Rule',
