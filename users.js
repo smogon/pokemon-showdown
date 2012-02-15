@@ -270,6 +270,7 @@ function User(name, socket, token)
 					else if (userid === "etherealsol") avatar = 1001;
 					else if (userid === "mortygymleader") avatar = 144;
 					else if (userid === "leadermorty") avatar = 144;
+					else if (userid === "leaderjasmine") avatar = 146;
 					else if (userid === "championcynthia") avatar = 260;
 					else if (userid === "elitefourlorelei") avatar = 1002;
 					else if (userid === "aeo") avatar = 167;
