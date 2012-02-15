@@ -459,6 +459,18 @@ function User(name, socket, token)
 			selfP.roomCount = {};
 		}
 	};
+	this.ban = function(noRecurse) {
+		bannedIps[selfP.ip] = selfP.userid;
+		// no need to recurse, since the root for-loop already bans everything with your IP
+		if (!noRecurse) for (var i in users)
+		{
+			if (users[i].ip === selfP.ip)
+			{
+				users[i].ban(true);
+			}
+		}
+		selfP.destroy();
+	};
 	this.destroy = function() {
 		// banned!
 		var person = null;
