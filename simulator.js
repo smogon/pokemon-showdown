@@ -2749,7 +2749,7 @@ function Battle(roomid, format, ranked)
 				// todo: wtf
 				if (!side.active[0])
 				{
-					console.debug("The game hasn't started yet");
+					selfB.debug("The game hasn't started yet");
 					selfB.decision(user, 'move', 'no clue', recurse+1);
 					return;
 				}
@@ -2757,14 +2757,14 @@ function Battle(roomid, format, ranked)
 				if (side.active[0].trapped && selfB.curCallback === 'move')
 				{
 					// hacker!
-					console.debug("Can't switch: The active pokemon is trapped");
+					selfB.debug("Can't switch: The active pokemon is trapped");
 					selfB.decision(user, 'move', 'switch trapped', recurse+1);
 					return;
 				}
 				if (decision.pokemon === pokemon)
 				{
 					// no
-					console.debug("Can't switch: You can't switch to an active pokemon");
+					selfB.debug("Can't switch: You can't switch to an active pokemon");
 					selfB.decision(user, 'move', 'null switch', recurse+1);
 					return;
 				}
@@ -2772,7 +2772,7 @@ function Battle(roomid, format, ranked)
 			}
 			else
 			{
-				console.debug("Can't switch: This pokemon doesn't exist");
+				selfB.debug("Can't switch: This pokemon doesn't exist");
 				// hacker!
 				selfB.decision(user, 'move', 'pokemon doesnt exist', recurse+1);
 				return;
