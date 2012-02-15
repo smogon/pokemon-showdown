@@ -21,6 +21,10 @@ exports.loginserver = 'http://play.pokemonshowdown.com/';
 //   getting more than 80 or so users.
 exports.reportjoins = true;
 
+// local sysop - automatically promote users who connect from
+//   127.0.0.1 to sysop
+exports.localsysop = false;
+
 // report battles - shows messages like "OU battle started"
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 160 or so users.
