@@ -31,10 +31,11 @@ function parseCommand(user, cmd, target, room, socket, message)
 			}
 			if (!user.canMod(targetUser.group)) return true;
 			
-			room.add(''+targetUser.name+' was banned by '+user.name+'.');
+			room.add(""+targetUser.name+" was banned by "+user.name+".");
+			var alts = targetUser.getAlts();
+			if (alts.length) room.add(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
 			
-			bannedIps[targetUser.ip] = targetUser.userid;
-			targetUser.destroy();
+			targetUser.ban();
 			return true;
 		}
 		break;
@@ -64,9 +65,8 @@ function parseCommand(user, cmd, target, room, socket, message)
 			
 			room.add(''+targetUser.name+' was banned by '+user.name+' and redirected to: '+targets[1]);
 			
-			bannedIps[targetUser.ip] = targetUser.userid;
 			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
-			targetUser.destroy();
+			targetUser.ban();
 			return true;
 		}
 		break;
@@ -129,6 +129,78 @@ function parseCommand(user, cmd, target, room, socket, message)
 		socket.emit('console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" />'});
 		
 		return true;
+		break;
+		
+	case 'rooms':
+		var targetUser = user;
+		if (target)
+		{
+			targetUser = getUser(target);
+		}
+		if (!targetUser)
+		{
+			socket.emit('console', 'User '+target+' not found.');
+		}
+		else
+		{
+			socket.emit('console', targetUser.name+" is in:");
+			var output = "";
+			var first = true;
+			for (var i in targetUser.roomCount)
+			{
+				if (!first) output += ' | ';
+				first = false;
+				
+				output += '<a href="/'+i+'" onclick="return selectTab(\''+i+'\');">'+i+'</a>';
+			}
+			if (!output)
+			{
+				output = "(no rooms - user is offline)"
+			}
+			socket.emit('console', {rawMessage: output});
+		}
+		return true;
+		break;
+		
+	case 'altcheck':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (user.isMod())
+		{
+			var targetUser = getUser(target);
+			if (!targetUser)
+			{
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group)) return true;
+			
+			var alts = targetUser.getAlts();
+			
+			socket.emit('console', 'User: '+targetUser.name);
+			var output = '';
+			for (var i in targetUser.prevNames)
+			{
+				if (output) output += ", ";
+				output += targetUser.prevNames[i];
+			}
+			if (output) socket.emit('console', 'Previous names: '+output);
+			
+			for (var j=0; j<alts.length; j++)
+			{
+				var targetAlt = getUser(alts[j]);
+				if (!targetAlt || !user.canMod(targetAlt)) continue;
+				
+				socket.emit('console', 'Alt: '+targetAlt.name);
+				output = '';
+				for (var i in targetAlt.prevNames)
+				{
+					if (output) output += ", ";
+					output += targetAlt.prevNames[i];
+				}
+				if (output) socket.emit('console', 'Previous names: '+output);
+			}
+			return true;
+		}
 		break;
 		
 	case 'whois':
@@ -296,13 +368,21 @@ function parseCommand(user, cmd, target, room, socket, message)
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
-			target = getUser(target);
-			if (!target) return true;
-			if (!user.canMod(target.group)) return true;
+			var targetUser = getUser(target);
+			if (!targetUser) return true;
+			if (!user.canMod(targetUser.group)) return true;
 			
-			room.add(''+target.name+' was muted by '+user.name+'.');
+			room.add(''+targetUser.name+' was muted by '+user.name+'.');
+			var alts = targetUser.getAlts();
+			if (alts.length) room.add(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 			
-			target.muted = true;
+			targetUser.muted = true;
+			for (var i=0; i<alts.length; i++)
+			{
+				var targetAlt = getUser(alts[i]);
+				if (targetAlt) targetAlt.muted = true;
+			}
+			
 			rooms.lobby.usersChanged = true;
 			return true;
 		} 
@@ -606,6 +686,7 @@ function parseCommand(user, cmd, target, room, socket, message)
 			if (targets[1]) targetUser.forceRename(targets[1]);
 			else
 			{
+				room.add(''+targetUser.name+' was forced to choose a new name.');
 				targetUser.resetName();
 				targetUser.emit('nameTaken', {reason: "Please choose a different name."});
 			}
