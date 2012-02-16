@@ -668,7 +668,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
-		if (message.length > 255)
+		if (message.length > 511)
 		{
 			socket.emit('message', "Your message is too long.");
 			return;
