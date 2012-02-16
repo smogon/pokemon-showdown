@@ -117,6 +117,7 @@ function parseCommand(user, cmd, target, room, socket, message)
 		break;
 		
 	case 'avatar':
+		if (!target) return parseCommand(user, 'avatars', '', room, socket);
 		var avatar = parseInt(target);
 		if (!avatar || avatar > 263 || avatar < 1)
 		{
@@ -143,7 +144,6 @@ function parseCommand(user, cmd, target, room, socket, message)
 		}
 		else
 		{
-			socket.emit('console', targetUser.name+" is in:");
 			var output = "";
 			var first = true;
 			for (var i in targetUser.roomCount)
@@ -155,14 +155,20 @@ function parseCommand(user, cmd, target, room, socket, message)
 			}
 			if (!output)
 			{
-				output = "(no rooms - user is offline)"
+				socket.emit('console', ""+targetUser.name+" is offline.");
 			}
-			socket.emit('console', {rawMessage: output});
+			else
+			{
+				socket.emit('console', {rawMessage: ""+targetUser.name+" is in: "+output});
+			}
 		}
 		return true;
 		break;
 		
 	case 'altcheck':
+	case 'alt':
+	case 'alts':
+	case 'getalts':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -857,13 +863,23 @@ function parseCommand(user, cmd, target, room, socket, message)
 		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder')
 		{
 			matched = true;
-			socket.emit('console', '/ranking - Get your own ranking.');
-			socket.emit('console', '/ranking [username] - Get user\'s ranking.');
+			socket.emit('console', '/rating - Get your own rating.');
+			socket.emit('console', '/rating [username] - Get user\'s rating.');
 		}
 		if (target === 'all' || target === 'nick')
 		{
 			matched = true;
 			socket.emit('console', '/nick [new username] - Change your username.');
+		}
+		if (target === 'all' || target === 'avatar')
+		{
+			matched = true;
+			socket.emit('console', '/avatar [new avatar number] - Change your trainer sprite.');
+		}
+		if (target === 'all' || target === 'rooms')
+		{
+			matched = true;
+			socket.emit('console', '/rooms [username] - Show what rooms a user is in.');
 		}
 		if (target === 'all' || target === 'whois')
 		{
@@ -899,6 +915,11 @@ function parseCommand(user, cmd, target, room, socket, message)
 			matched = true;
 			socket.emit('console', '/intro - Provides an introduction to competitive pokemon.');
 			socket.emit('console', '!intro - Show everyone that information. Requires: + % @ &');
+		}
+		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts')
+		{
+			matched = true;
+			socket.emit('console', '/alts [username] - Get a user\'s alts. Requires: % @ &');
 		}
 		if (target === '%' || target === 'ban' || target === 'b')
 		{
@@ -978,11 +999,15 @@ function parseCommand(user, cmd, target, room, socket, message)
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands')
 		{
 			matched = true;
-			socket.emit('console', '/help OR /h OR /? - Tells you things.');
+			socket.emit('console', '/help OR /h OR /? - Gives you help.');
 		}
 		if (!matched)
 		{
-			socket.emit('console', 'Commands: /msg, /reply, /ip, /ranking, /nick, /whois, /help');
+			socket.emit('console', 'The command "/'+target+'" was not found. Try /help for general help');
+		}
+		if (!target)
+		{
+			socket.emit('console', 'Commands: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
 			socket.emit('console', 'Informational commands: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
 			socket.emit('console', 'Moderator commands: /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
 			socket.emit('console', 'Admin commands: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
