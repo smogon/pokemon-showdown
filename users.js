@@ -79,6 +79,7 @@ function User(name, socket, token)
 	this.userid = toUserid(this.name);
 	this.group = ' ';
 	this.muted = false;
+	this.prevNames = {};
 	
 	var trainersprites = [1, 2, 101, 102, 169, 170];
 	this.avatar = trainersprites[parseInt(Math.random()*trainersprites.length)];
@@ -137,6 +138,9 @@ function User(name, socket, token)
 		var userid = toUserid(name);
 		
 		if (users[userid] && users[userid] !== selfP) return false;
+		
+		if (selfP.named) selfP.prevNames[selfP.userid] = selfP.name;
+		
 		if (typeof authenticated === 'undefined' && userid === selfP.userid)
 		{
 			authenticated = selfP.authenticated;
@@ -185,6 +189,8 @@ function User(name, socket, token)
 			userid = toUserid(name);
 			if (i > 1000) return false;
 		}
+		
+		if (selfP.named) selfP.prevNames[selfP.userid] = selfP.name;
 		
 		selfP.name = name;
 		var oldid = selfP.userid;
@@ -316,7 +322,8 @@ function User(name, socket, token)
 				if (users[userid])
 				{
 					// This user already exists; let's merge
-					if (selfP === users[userid])
+					var user = users[userid];
+					if (selfP === user)
 					{
 						// !!!
 						return true;
@@ -328,7 +335,7 @@ function User(name, socket, token)
 					for (var i=0; i<selfP.people.length; i++)
 					{
 						console.log(''+selfP.name+' preparing to merge: socket '+i+' of '+selfP.people.length);
-						users[userid].merge(selfP.people[i]);
+						user.merge(selfP.people[i]);
 					}
 					selfP.roomCount = {};
 					selfP.people = [];
@@ -338,9 +345,18 @@ function User(name, socket, token)
 						selfP.group = ' ';
 					}
 					
-					users[userid].group = group;
-					if (avatar) users[userid].avatar = avatar;
-					users[userid].authenticated = authenticated;
+					user.group = group;
+					if (avatar) user.avatar = avatar;
+					user.authenticated = authenticated;
+					
+					for (var i in selfP.prevNames)
+					{
+						if (!user.prevNames[i])
+						{
+							user.prevNames[i] = selfP.prevNames[i];
+						}
+					}
+					if (selfP.named) user.prevNames[selfP.userid] = selfP.name;
 					return true;
 				}
 				
@@ -459,16 +475,28 @@ function User(name, socket, token)
 			selfP.roomCount = {};
 		}
 	};
+	this.getAlts = function() {
+		var alts = [];
+		for (var i in users)
+		{
+			if (users[i].ip === selfP.ip && users[i] !== selfP)
+			{
+				alts.push(users[i].name);
+			}
+		}
+		return alts;
+	};
 	this.ban = function(noRecurse) {
 		bannedIps[selfP.ip] = selfP.userid;
 		// no need to recurse, since the root for-loop already bans everything with your IP
 		if (!noRecurse) for (var i in users)
 		{
-			if (users[i].ip === selfP.ip)
+			if (users[i].ip === selfP.ip && users[i] !== selfP)
 			{
 				users[i].ban(true);
 			}
 		}
+		selfP.emit('message', 'You were banned.');
 		selfP.destroy();
 	};
 	this.destroy = function() {
