@@ -14,92 +14,10 @@ function toUserid(name)
 	return name.toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 
-function parseCommand(user, cmd, target, room, socket, message)
+function parseCommandLocal(user, cmd, target, room, socket, message)
 {
 	switch (cmd)
 	{
-	case 'ban':
-	case 'b':
-		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (user.isMod())
-		{
-			var targetUser = getUser(target);
-			if (!targetUser)
-			{
-				socket.emit('console', 'User '+target+' not found.');
-				return true;
-			}
-			if (!user.canMod(targetUser.group)) return true;
-			
-			room.add(""+targetUser.name+" was banned by "+user.name+".");
-			var alts = targetUser.getAlts();
-			if (alts.length) room.add(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
-			
-			targetUser.ban();
-			return true;
-		}
-		break;
-		
-	case 'banredirect':
-	case 'br':
-		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (user.isMod())
-		{
-			var targets = splitTarget(target);
-			var targetUser = targets[0];
-			if (!targetUser)
-			{
-				socket.emit('console', 'User not found.');
-				return true;
-			}
-			if (!user.canMod(targetUser.group)) return true;
-			
-			if (targets[1].substr(0,2) == '~~')
-			{
-				targets[1] = '/'+targets[1];
-			}
-			else if (targets[1].substr(0,7) !== 'http://' && targets[1].substr(0,8) !== 'https://' && targets[1].substr(0,1) !== '/')
-			{
-				targets[1] = 'http://'+targets[1];
-			}
-			
-			room.add(''+targetUser.name+' was banned by '+user.name+' and redirected to: '+targets[1]);
-			
-			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
-			targetUser.ban();
-			return true;
-		}
-		break;
-		
-	case 'redirect':
-	case 'redir':
-		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (user.isMod())
-		{
-			var targets = splitTarget(target);
-			var targetUser = targets[0];
-			if (!targetUser)
-			{
-				socket.emit('console', 'User not found.');
-				return true;
-			}
-			if (!user.canMod(targetUser.group) && user !== targetUser) return true;
-			
-			if (targets[1].substr(0,2) == '~~')
-			{
-				targets[1] = '/'+targets[1];
-			}
-			else if (targets[1].substr(0,7) !== 'http://' && targets[1].substr(0,8) !== 'https://' && targets[1].substr(0,1) !== '/')
-			{
-				targets[1] = 'http://'+targets[1];
-			}
-			
-			room.add(''+targetUser.name+' was redirected by '+user.name+' to: '+targets[1]);
-			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
-			return true;
-		}
-		break;
-		
 	case 'forfeit':
 	case 'concede':
 	case 'surrender':
@@ -178,7 +96,11 @@ function parseCommand(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+target+' not found.');
 				return true;
 			}
-			if (!user.canMod(targetUser.group)) return true;
+			if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
 			
 			var alts = targetUser.getAlts();
 			
@@ -207,6 +129,8 @@ function parseCommand(user, cmd, target, room, socket, message)
 			}
 			return true;
 		}
+		socket.emit('console', '/alts - Access denied.');
+		return true;
 		break;
 		
 	case 'whois':
@@ -259,6 +183,106 @@ function parseCommand(user, cmd, target, room, socket, message)
 		return true;
 		break;
 		
+	case 'ban':
+	case 'b':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (user.isMod())
+		{
+			var targetUser = getUser(target);
+			if (!targetUser)
+			{
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
+			
+			room.add(""+targetUser.name+" was banned by "+user.name+".");
+			var alts = targetUser.getAlts();
+			if (alts.length) room.add(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
+			
+			targetUser.ban();
+			return true;
+		}
+		socket.emit('console', '/ban - Access denied.');
+		return true;
+		break;
+		
+	case 'banredirect':
+	case 'br':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (user.isMod())
+		{
+			var targets = splitTarget(target);
+			var targetUser = targets[0];
+			if (!targetUser)
+			{
+				socket.emit('console', 'User not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
+			
+			if (targets[1].substr(0,2) == '~~')
+			{
+				targets[1] = '/'+targets[1];
+			}
+			else if (targets[1].substr(0,7) !== 'http://' && targets[1].substr(0,8) !== 'https://' && targets[1].substr(0,1) !== '/')
+			{
+				targets[1] = 'http://'+targets[1];
+			}
+			
+			room.add(''+targetUser.name+' was banned by '+user.name+' and redirected to: '+targets[1]);
+			
+			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
+			targetUser.ban();
+			return true;
+		}
+		socket.emit('console', '/banredirect - Access denied.');
+		return true;
+		break;
+		
+	case 'redirect':
+	case 'redir':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (user.isMod())
+		{
+			var targets = splitTarget(target);
+			var targetUser = targets[0];
+			if (!targetUser)
+			{
+				socket.emit('console', 'User not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group) && user !== targetUser)
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
+			
+			if (targets[1].substr(0,2) == '~~')
+			{
+				targets[1] = '/'+targets[1];
+			}
+			else if (targets[1].substr(0,7) !== 'http://' && targets[1].substr(0,8) !== 'https://' && targets[1].substr(0,1) !== '/')
+			{
+				targets[1] = 'http://'+targets[1];
+			}
+			
+			room.add(''+targetUser.name+' was redirected by '+user.name+' to: '+targets[1]);
+			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
+			return true;
+		}
+		socket.emit('console', '/redirect - Access denied.');
+		return true;
+		break;
+		
 	case 'unban':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
@@ -282,11 +306,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			{
 				socket.emit('console', 'User '+target+' is not banned.');
 			}
+			return true;
 		}
-		else
-		{
-			socket.emit('console', 'Access denied.');
-		}
+		socket.emit('console', '/unban - Access denied.');
 		return true;
 		break;
 		
@@ -298,6 +320,8 @@ function parseCommand(user, cmd, target, room, socket, message)
 			mutedIps = {};
 			return true;
 		}
+		socket.emit('console', '/unbanall - Access denied.');
+		return true;
 		break;
 		
 	case 'reply':
@@ -361,11 +385,9 @@ function parseCommand(user, cmd, target, room, socket, message)
 			{
 				socket.emit('console', 'User '+targetUser.name+' has IP: '+targetUser.ip);
 			}
+			return true;
 		}
-		else
-		{
-			socket.emit('console', 'Access denied.');
-		}
+		socket.emit('console', '/ip - Access denied.');
 		return true;
 		break;
 		
@@ -375,8 +397,16 @@ function parseCommand(user, cmd, target, room, socket, message)
 		if (user.isMod())
 		{
 			var targetUser = getUser(target);
-			if (!targetUser) return true;
-			if (!user.canMod(targetUser.group)) return true;
+			if (!targetUser)
+			{
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
 			
 			room.add(''+targetUser.name+' was muted by '+user.name+'.');
 			var alts = targetUser.getAlts();
@@ -391,176 +421,256 @@ function parseCommand(user, cmd, target, room, socket, message)
 			
 			rooms.lobby.usersChanged = true;
 			return true;
-		} 
+		}
+		socket.emit('console', '/mute - Access denied.');
+		return true;
 		break;
 		
 	case 'unmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
-			target = getUser(target);
-			if (!target) return true;
-			if (!user.canMod(target.group)) return true;
+			var targetUser = getUser(target);
+			if (!targetUser)
+			{
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
 			
-			room.add(''+target.name+' was unmuted by '+user.name+'.');
+			room.add(''+targetUser.name+' was unmuted by '+user.name+'.');
 			
-			target.muted = false;
+			targetUser.muted = false;
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
+		socket.emit('console', '/unmute - Access denied.');
+		return true;
 		break;
 	
 	case 'voice':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
-			target = getUser(target);
-			if (!target) return true;
-			if (!user.canMod(target.group) || user.group === '+') return true;
+			var targetUser = getUser(target);
+			if (!targetUser)
+			{
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group) || user.group === '+')
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
 			
-			room.add(''+target.name+' was voiced by '+user.name+'.');
+			room.add(''+targetUser.name+' was voiced by '+user.name+'.');
 			
-			target.group = '+';
+			targetUser.group = '+';
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
+		socket.emit('console', '/voice - Access denied.');
+		return true;
 		break;
 		
 	case 'devoice':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
-			target = getUser(target);
-			if (!target) return true;
-			if (!user.canMod(target.group) || user.group === '+') return true;
+			var targetUser = getUser(target);
+			if (!targetUser)
+			{
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group) || user.group === '+')
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
 			
-			room.add(''+target.name+' was devoiced by '+user.name+'.');
+			room.add(''+targetUser.name+' was devoiced by '+user.name+'.');
 			
-			target.group = ' ';
+			targetUser.group = ' ';
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
+		socket.emit('console', '/devoice - Access denied.');
+		return true;
 		break;
 		
 	case 'mod':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (user.isMod())
+		if (user.isMod() && (user.group === '&' || user.group === '@'))
 		{
-			target = getUser(target);
-			if (!target) return true;
-			if (user.group !== '&' && user.group !== '@') return true;
-			if (!user.canMod(target.group)) return true;
-			
-			if (target.group === '@' || target.group === '&')
+			var targetUser = getUser(target);
+			if (!targetUser)
 			{
-				room.add(''+target.name+' was demoted to moderator by '+user.name+'.');
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
+			
+			if (targetUser.group === '@' || targetUser.group === '&')
+			{
+				room.add(''+targetUser.name+' was demoted to moderator by '+user.name+'.');
 			}
 			else
 			{
-				room.add(''+target.name+' was promoted to moderator by '+user.name+'.');
+				room.add(''+targetUser.name+' was promoted to moderator by '+user.name+'.');
 			}
-			target.group = '%';
+			targetUser.group = '%';
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
+		socket.emit('console', '/mod - Access denied.');
+		return true;
 		break;
 	
 	case 'demod':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (user.isMod())
+		if (user.isMod() && (user.group === '&' || user.group === '@'))
 		{
-			target = getUser(target);
-			if (!target) return true;
-			if (user.group !== '&' && user.group !== '@') return true;
-			if (!user.canMod(target.group)) return true;
-			
-			room.add(''+target.name+' was demoted to voice by '+user.name+'.');
-			
-			if (target.group === '%')
+			var targetUser = getUser(target);
+			if (!targetUser)
 			{
-				target.group = '+';
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
+			
+			room.add(''+targetUser.name+' was demoted to voice by '+user.name+'.');
+			
+			if (targetUser.group === '%')
+			{
+				targetUser.group = '+';
 				rooms.lobby.usersChanged = true;
 			}
 			return true;
 		}
+		socket.emit('console', '/demod - Access denied.');
+		return true;
 		break;
 	
 	case 'admin':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (user.isMod())
+		if (user.isMod() && (user.group === '&' || user.group === '@'))
 		{
-			target = getUser(target);
-			if (!target) return true;
-			if (user.group !== '&' && user.group !== '@') return true;
-			if (!user.canMod(target.group)) return true;
-			
-			if (target.group === '&')
+			var targetUser = getUser(target);
+			if (!targetUser)
 			{
-				room.add(''+target.name+' was demoted to admin by '+user.name+'.');
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
+			
+			if (targetUser.group === '&')
+			{
+				room.add(''+targetUser.name+' was demoted to admin by '+user.name+'.');
 			}
 			else
 			{
-				room.add(''+target.name+' was promoted to admin by '+user.name+'.');
+				room.add(''+targetUser.name+' was promoted to admin by '+user.name+'.');
 			}
-			target.group = '@';
+			targetUser.group = '@';
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
+		socket.emit('console', '/admin - Access denied.');
+		return true;
 		break;
 	
 	case 'deadmin':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (user.isMod())
+		if (user.isMod() && (user.group === '&' || user.group === '@'))
 		{
-			target = getUser(target);
-			if (!target) return true;
-			if (user.group !== '&' && user.group !== '@') return true;
-			if (!user.canMod(target.group)) return true;
-			
-			room.add(''+target.name+' was demoted to moderator by '+user.name+'.');
-			
-			if (target.group === '@')
+			var targetUser = getUser(target);
+			if (!targetUser)
 			{
-				target.group = '%';
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+				return true;
+			}
+			
+			room.add(''+targetUser.name+' was demoted to moderator by '+user.name+'.');
+			
+			if (targetUser.group === '@')
+			{
+				targetUser.group = '%';
 				rooms.lobby.usersChanged = true;
 			}
 			return true;
 		}
+		socket.emit('console', 'Access denied.');
+		return true;
 		break;
 	
 	case 'sysop':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.group === '&')
 		{
-			target = getUser(target);
-			if (!target) return true;
+			var targetUser = getUser(target);
+			if (!targetUser)
+			{
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
 			
-			room.add(''+target.name+' was promoted to sysop by '+user.name+'.');
-			target.group = '&';
+			room.add(''+targetUser.name+' was promoted to sysop by '+user.name+'.');
+			targetUser.group = '&';
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
+		socket.emit('console', 'Access denied.');
+		return true;
 		break;
 	
 	case 'desysop':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.group === '&')
 		{
-			target = getUser(target);
-			if (!target) return true;
-			
-			if (target.group === '&')
+			var targetUser = getUser(target);
+			if (!targetUser)
 			{
-				room.add(''+target.name+' was demoted to admin by '+user.name+'.');
-				target.group = '@';
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			
+			if (targetUser.group === '&')
+			{
+				room.add(''+targetUser.name+' was demoted to admin by '+user.name+'.');
+				targetUser.group = '@';
 				rooms.lobby.usersChanged = true;
 			}
 			else
 			{
-				socket.emit('console', ''+target.name+' is not a sysop.');
+				socket.emit('console', ''+targetUser.name+' is not a sysop.');
 			}
 			return true;
 		}
+		socket.emit('console', 'Access denied.');
+		return true;
 		break;
 	
 	case 'modchat':
@@ -611,6 +721,8 @@ function parseCommand(user, cmd, target, room, socket, message)
 			}
 			return true;
 		}
+		socket.emit('console', '/modchat - Access denied.');
+		return true;
 		break;
 	
 	case 'announce':
@@ -621,22 +733,32 @@ function parseCommand(user, cmd, target, room, socket, message)
 			room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>'+target+'</b></div>');
 			return true;
 		}
+		socket.emit('console', '/announce - Access denied.');
+		return true;
 		break;
 	
 	case 'hotpatch':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.group === '&')
 		{
-			if (target === 'confirm')
+			if (target === 'engine')
 			{
 				reloadEngine();
-				room.add('The game engine has been updated.');
+				socket.emit('console', 'The game engine has been hot-patched.');
 				return true;
 			}
-			socket.emit('console', 'Hot-patching the game engine allows you to update most of Showdown without interrupting currently-running battles.');
-			socket.emit('console', 'WARNING: This uses significantly more memory than restarting Showdown, since currently-running battles will use the old engine, but new battles will use the new engine.');
-			socket.emit('console', 'To reload the engine, use /hotpatch confirm.');
+			else if (target === 'chat')
+			{
+				for (var i in require.cache) delete require.cache[i];
+				parseCommand = require('./chat-commands.js').parseCommand;
+				socket.emit('console', 'Chat commands have been hot-patched.');
+				return true;
+			}
+			socket.emit('console', 'Your hot-patch command was unrecognized.');
 			return true;
 		}
+		socket.emit('console', '/hotpatch - Access denied.');
+		return true;
 		break;
 	
 	case 'rating':
@@ -847,18 +969,18 @@ function parseCommand(user, cmd, target, room, socket, message)
 		if (target === 'all' || target === 'msg' || target === 'pm' || cmd === 'whisper' || cmd === 'w')
 		{
 			matched = true;
-			socket.emit('console', '/msg OR /whisper OR /w [username], [message] - Send a private message. Can be used by: anyone');
+			socket.emit('console', '/msg OR /whisper OR /w [username], [message] - Send a private message.');
 		}
 		if (target === 'all' || target === 'r' || target === 'reply')
 		{
 			matched = true;
-			socket.emit('console', '/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to. Can be used by: anyone');
+			socket.emit('console', '/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to.');
 		}
 		if (target === 'all' || target === 'getip' || target === 'ip')
 		{
 			matched = true;
-			socket.emit('console', '/ip - Get your own IP address. Can be used by: anyone');
-			socket.emit('console', '/ip [username] - Get a user\'s IP address. Can be used by: @ &');
+			socket.emit('console', '/ip - Get your own IP address.');
+			socket.emit('console', '/ip [username] - Get a user\'s IP address. Requires: @ &');
 		}
 		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder')
 		{
@@ -976,15 +1098,15 @@ function parseCommand(user, cmd, target, room, socket, message)
 			matched = true;
 			socket.emit('console', '/deadmin [username] - Change user\'s group from @ to %. Requires: @ &');
 		}
-		if (target === '@' || target === 'sysop')
+		if (target === '&' || target === 'sysop')
 		{
 			matched = true;
-			socket.emit('console', '/sysop [username] - Change user\'s group to @. Requires: &');
+			socket.emit('console', '/sysop [username] - Change user\'s group to &. Requires: &');
 		}
-		if (target === '@' || target === 'desysop')
+		if (target === '&' || target === 'desysop')
 		{
 			matched = true;
-			socket.emit('console', '/sysop [username] - Change user\'s group from @ to %. Requires: &');
+			socket.emit('console', '/desysop [username] - Change user\'s group from & to @. Requires: &');
 		}
 		if (target === '@' || target === 'announce')
 		{
@@ -996,22 +1118,31 @@ function parseCommand(user, cmd, target, room, socket, message)
 			matched = true;
 			socket.emit('console', '/modchat [on/off/+/%/@/&] - Set the level of moderated chat. Requires: @ &');
 		}
+		if (target === '&' || target === 'hotpatch')
+		{
+			socket.emit('console', 'Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: &');
+			socket.emit('console', 'Hot-patching has greater memory requirements than restarting.');
+			socket.emit('console', '/hotpatch engine - reload the game engine');
+			socket.emit('console', '/hotpatch chat - reload chat-commands.js');
+		}
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands')
 		{
 			matched = true;
 			socket.emit('console', '/help OR /h OR /? - Gives you help.');
 		}
-		if (!matched)
-		{
-			socket.emit('console', 'The command "/'+target+'" was not found. Try /help for general help');
-		}
 		if (!target)
 		{
-			socket.emit('console', 'Commands: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
-			socket.emit('console', 'Informational commands: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
-			socket.emit('console', 'Moderator commands: /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
-			socket.emit('console', 'Admin commands: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
-			socket.emit('console', 'For details on all commands, use /help all. For details of a specific command, use something like: /help ban');
+			socket.emit('console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
+			socket.emit('console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
+			if (user.isMod()) socket.emit('console', 'MODERATOR COMMANDS: /alts, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
+			if (user.isMod()) socket.emit('console', 'ADMIN COMMANDS: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
+			socket.emit('console', 'For details on all commands, use /help all');
+			if (user.isMod()) socket.emit('console', 'For details on all moderator commands, use /help %');
+			socket.emit('console', 'For details of a specific command, use something like: /help ban');
+		}
+		else if (!matched)
+		{
+			socket.emit('console', 'The command "/'+target+'" was not found. Try /help for general help');
 		}
 		return true;
 		break;
@@ -1157,4 +1288,4 @@ function splitTarget(target)
 	return [targetUser, target.substr(commaIndex+1).trim()];
 }
 
-exports.parseCommand = parseCommand;
+exports.parseCommand = parseCommandLocal;
