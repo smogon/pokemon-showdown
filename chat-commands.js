@@ -327,6 +327,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case 'reply':
 	case 'r':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (!user.lastPM)
+		{
+			socket.emit('console', 'No one has PMed you yet.');
+			return true;
+		}
 		return parseCommand(user, 'msg', ''+(user.lastPM||'')+', '+target, room, socket);
 		break;
 		
@@ -346,11 +351,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			if (target.indexOf(' '))
 			{
-				socket.emit('console', 'User '+target+' not found. Did you forget a comma?');
+				socket.emit('console', 'User not found. Did you forget a comma?');
 			}
 			else
 			{
-				socket.emit('console', 'User '+target+' not found. Did you misspell their name?');
+				socket.emit('console', 'User not found. Did you misspell their name?');
 			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
