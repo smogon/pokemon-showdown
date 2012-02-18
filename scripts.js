@@ -421,7 +421,7 @@ exports.BattleScripts = {
 		{
 			var template = this.getTemplate(keys[i]);
 			
-			if (!template || !template.name) continue;
+			if (!template || !template.name || !template.types) continue;
 			if (template.tier === 'CAP' && Math.random()*3>1) continue;
 			
 			if (i===1 && ruleset && ruleset[0]==='PotD' && PotD && PotD.onPotD)
