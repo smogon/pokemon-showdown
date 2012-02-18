@@ -14,16 +14,23 @@ exports.servertoken = 'exampletoken-382hgraw4jr2tioq';
 //   Don't change this setting - there aren't any other login servers right now
 exports.loginserver = 'http://play.pokemonshowdown.com/';
 
+// crash guard - write errors to log file instead of crashing
+//   This is normally not recommended - if Node wants to crash, the
+//   server needs to be restarted
+//   Unfortunately, socket.io bug 409 requires some sort of crash guard
+//   https://github.com/LearnBoost/socket.io/issues/609
+exports.crashguard = true;
+
+// local sysop - automatically promote users who connect from
+//   127.0.0.1 to sysop
+exports.localsysop = false;
+
 // report joins and leaves - shows messages like "<USERNAME> joined"
 //   Join and leave messages are small and consolidated, so there will never
 //   be more than one line of messages.
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 80 or so users.
 exports.reportjoins = true;
-
-// local sysop - automatically promote users who connect from
-//   127.0.0.1 to sysop
-exports.localsysop = false;
 
 // report battles - shows messages like "OU battle started"
 //   This feature can lag larger servers - turn this off if your server is

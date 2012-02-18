@@ -712,7 +712,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			if (config.modchat === true)
 			{
-				room.addRaw('<div style="background-color:#AA5544;color:white;padding:2px 4px"><b>Moderated chat was enabled!</b><br />Only registered users and users of rank + and higher can talk.</div>');
+				room.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>Moderated chat was enabled!</b><br />Only registered users and users of rank + and higher can talk.</div>');
 			}
 			else if (!config.modchat)
 			{
@@ -1164,8 +1164,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		switch (config.modchat)
 		{
 		case '&':
+		case '&&':
 			if (user.group !== '&')
 			{
+				if (config.modchat === '&&')
+				{
+					socket.emit('console', 'Because the server has crashed, you cannot speak in lobby chat.');
+					return true;
+				}
 				socket.emit('console', 'Due to an influx of spam, you must be a sysop to speak in lobby chat.');
 				return true;
 			}

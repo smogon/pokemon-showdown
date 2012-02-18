@@ -1307,6 +1307,21 @@ function resolveUser(you, socket)
 	return you.user;
 }
 
+if (config.crashguard)
+{
+	// graceful crash - allow current battles to finish before restarting
+	process.on('uncaughtException', function (err) {
+		console.log("\n"+err.stack+"\n");
+		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
+			this.write("\n"+err.stack+"\n")
+			this.end();
+		});
+		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+err+'<br />Please restart the server.</div>');
+		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
+		config.modchat = '&&';
+	});
+}
+
 io.sockets.on('connection', function (socket) {
 	var you = null;
 	console.log('INIT SOCKET: '+socket.id);
