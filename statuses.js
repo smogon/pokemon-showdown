@@ -77,8 +77,9 @@ exports.BattleStatuses = {
 			this.add('r-status '+target.id+' frz');
 		},
 		onBeforeMovePriority: 2,
-		onBeforeMove: function(pokemon) {
-			if (Math.random()*5 < 1)
+		onBeforeMove: function(pokemon, target, move) {
+			var thawMoves = {FlameWheel:1, SacredFire:1, FlareBlitz:1, FusionFlare:1, Scald:1}
+			if (Math.random()*5 < 1 || thawMoves[move.id])
 			{
 				this.add('r-cure-status '+pokemon.id+' frz');
 				pokemon.setStatus('');
@@ -87,6 +88,13 @@ exports.BattleStatuses = {
 			this.add('cant-move '+pokemon.id+' frozen');
 			return false;
 		},
+		onHit: function(target, source, move) {
+			if (move.type === 'Fire' || move.id === 'Scald')
+			{
+				this.add('r-cure-status '+target.id+' frz');
+				target.setStatus('');
+			}
+		}
 	},
 	psn: {
 		effectType: 'Status',
