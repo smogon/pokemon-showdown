@@ -481,6 +481,10 @@ function User(name, socket, token)
 		{
 			if (users[i].ip === selfP.ip && users[i] !== selfP)
 			{
+				if (!users[i].named && !users[i].connected)
+				{
+					continue;
+				}
 				alts.push(users[i].name);
 			}
 		}
