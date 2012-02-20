@@ -490,6 +490,23 @@ function User(name, socket, token)
 		}
 		return alts;
 	};
+	this.getAltGroup = function() {
+		var groupRanks = {'+': 1, '%': 2, '@': 3, '&': 100};
+		var group = selfP.group;
+		var groupRank = (groupRanks[group] || 0);
+		for (var i in users)
+		{
+			if (users[i].ip === selfP.ip && users[i] !== selfP)
+			{
+				if ((groupRanks[users[i].group]||0) > groupRank)
+				{
+					group = users[i].group;
+					groupRank = (groupRanks[group] || 0);
+				}
+			}
+		}
+		return group;
+	};
 	this.ban = function(noRecurse) {
 		bannedIps[selfP.ip] = selfP.userid;
 		// no need to recurse, since the root for-loop already bans everything with your IP

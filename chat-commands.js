@@ -103,8 +103,15 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			
 			var alts = targetUser.getAlts();
+			var altGroup = targetUser.getAltGroup();
 			
 			socket.emit('console', 'User: '+targetUser.name);
+			
+			if (!user.canMod(altGroup))
+			{
+				return true;
+			}
+			
 			var output = '';
 			for (var i in targetUser.prevNames)
 			{
@@ -116,7 +123,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			for (var j=0; j<alts.length; j++)
 			{
 				var targetAlt = getUser(alts[j]);
-				if (!targetAlt || !user.canMod(targetAlt)) continue;
+				if (!targetAlt || !user.canMod(targetAlt.group)) continue;
+				if (!targetAlt.named && !targetAlt.connected) continue;
 				
 				socket.emit('console', 'Alt: '+targetAlt.name);
 				output = '';
