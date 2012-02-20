@@ -211,7 +211,7 @@ function BattleTools()
 			{
 				template = selfT.getTemplate(template.prevo);
 			}
-		} while (template && template.id);
+		} while (template && template.species);
 		return false;
 	};
 	this.getBanlistTable = function(format, subformat) {
