@@ -295,14 +295,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
-			var targetid = toUserid(target);
+			var targetip = getUser(target).ip;
 			var success = false;
 			
-			for (var id in bannedIps)
+			for (var ip in bannedIps)
 			{
-				if (bannedIps[id] === targetid)
+				if (bannedIps[ip] === targetip)
 				{
-					delete bannedIps[id];
+					delete bannedIps[ip];
 					if (!success)
 					{
 						room.add(''+target+' was unbanned by '+user.name+'.');
