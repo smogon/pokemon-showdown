@@ -420,7 +420,7 @@ exports.BattleMovedex = {
 					var NoAssist = {
 						Assist:1, Chatter:1, CircleThrow:1, Copycat:1, Counter:1, Covet:1, DestinyBond:1, Detect:1, DragonTail:1, Endure:1, Feint:1, FocusPunch:1, FollowMe:1, HelpingHand:1, MeFirst:1, Metronome:1, Mimic:1, MirrorCoat:1, MirrorMove:1, Protect:1, QuickGuard:1, Sketch:1, SleepTalk:1, Snatch:1, Struggle:1, Switcheroo:1, Thief:1, Trick:1, WideGuard:1
 					};
-					if (!NoAssist[move])
+					if (move && !NoAssist[move])
 					{
 						moves.push(move);
 					}
