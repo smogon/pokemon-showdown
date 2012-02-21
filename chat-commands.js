@@ -295,14 +295,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
-			var targetid = toUserid(target);
+			var targetip = getUser(target).ip;
 			var success = false;
 			
-			for (var id in bannedIps)
+			for (var ip in bannedIps)
 			{
-				if (bannedIps[id] === targetid)
+				if (bannedIps[ip] === targetip)
 				{
-					delete bannedIps[id];
+					delete bannedIps[ip];
 					if (!success)
 					{
 						room.add(''+target+' was unbanned by '+user.name+'.');
@@ -1238,7 +1238,7 @@ function showOrBroadcastStart(user, cmd, room, socket, message)
 {
 	if (cmd.substr(0,1) === '!')
 	{
-		if (user.group === ' ')
+		if (user.group === ' ' || user.muted)
 		{
 			socket.emit('console', "You need to be voiced to broadcast this command's information.");
 			socket.emit('console', "To see it for yourself, use: /"+message.substr(1));
@@ -1258,7 +1258,7 @@ function showOrBroadcast(user, cmd, room, socket, rawMessage)
 	{
 		socket.emit('console', {rawMessage: rawMessage});
 	}
-	else if (user.group !== ' ')
+	else if (user.group !== ' ' && !user.muted)
 	{
 		room.addRaw(rawMessage);
 	}
