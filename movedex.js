@@ -9339,12 +9339,14 @@ exports.BattleMovedex = {
 		priority: 0,
 		secondary: {
 			chance: 10,
-			boosts: {
-				atk: 1,
-				def: 1,
-				spa: 1,
-				spd: 1,
-				spe: 1
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1
+				}
 			}
 		},
 		target: "normal",
