@@ -6152,7 +6152,7 @@ exports.BattleMovedex = {
 	},
 	"MagicCoat": {
 		num: 277,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes first. Until the end of the turn, the user will reflect one disabling move back at its user (including teammates); these include status effect inducers, confusion inducers (including Flatter and Swagger), Attract, trapping moves that do not damage, Leech Seed, Worry Seed, Gastro Acid and negative stat modifiers (except Defog). In double battles, Magic Coat will only reflect the first applicable move performed against its user before wearing off.",
