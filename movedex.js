@@ -2000,7 +2000,7 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		boosts: {
-			def: 2
+			def: 1
 		},
 		secondary: false,
 		target: "self",
