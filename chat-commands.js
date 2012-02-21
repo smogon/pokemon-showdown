@@ -387,7 +387,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			socket.emit('console', 'Your IP is: '+user.ip);
 			return true;
 		}
-		if (user.group === '&' || user.group === '@')
+		if (user.group === '&' || user.group === '@' || user.group === '%')
 		{
 			var targetUser = getUser(target);
 			if (!targetUser)
@@ -1002,7 +1002,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			matched = true;
 			socket.emit('console', '/ip - Get your own IP address.');
-			socket.emit('console', '/ip [username] - Get a user\'s IP address. Requires: @ &');
+			socket.emit('console', '/ip [username] - Get a user\'s IP address. Requires: % @ &');
 		}
 		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder')
 		{
