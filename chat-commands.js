@@ -169,7 +169,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'Group: Voiced (+)');
 				break;
 			}
-			if (!user.authenticated)
+			if (!targetUser.authenticated)
 			{
 				socket.emit('console', '(Unregistered)');
 			}
