@@ -4794,7 +4794,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Heavy Bomber deals varying damage depending on the weight of both the user and the target. The heavier the user is in comparison to its target, the more damage will be inflicted. The base power varies as follows: 120 base power, if the target's weight is less than or equal to 1/5 (20%) of the user's weight. 100 base power, if the target's weight is greater than 1/5 (20%) of the user's weight and less than or equal to 1/4 (25%) of user's weight. 80 base power, if the target's weight is greater than 1/4 (25%) of the user's weight and less than or equal to 1/2 (50%) of user's weight. 60 base power, if the target's weight is greater than 1/3 (33.3%) of the user's weight and less than or equal to 1/2 of user's weight (50%). 40 base power, if the target's weight is greater than 1/2 (50%) of the user's weight.",
-		shortDesc: "Damage based on Difference in Weight (Heavy). More power for heavier user, lighter foe.",
+		shortDesc: "More power for heavier user, lighter foe.",
 		id: "HeavySlam",
 		name: "Heavy Slam",
 		pp: 10,
