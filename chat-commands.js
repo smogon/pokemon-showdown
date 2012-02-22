@@ -295,12 +295,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
-			var targetip = getUser(target).ip;
+			var targetid = toUserid(target);
 			var success = false;
 			
 			for (var ip in bannedIps)
 			{
-				if (bannedIps[ip] === targetip)
+				if (bannedIps[ip] === targetid)
 				{
 					delete bannedIps[ip];
 					if (!success)
