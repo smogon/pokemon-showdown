@@ -8,14 +8,14 @@ exports.BattleFormats = {
 		team: 'random',
 		searchDefault: true,
 		ranked: true,
-		ruleset: ['PotD', 'SleepClause']
+		ruleset: ['Pokemon','PotD', 'SleepClause']
 	},
 	UnrankedRandomBattle: {
 		effectType: 'Format',
 		name: "Unranked Random Battle",
 		team: 'random',
 		challengeHide: true,
-		ruleset: ['PotD', 'SleepClause']
+		ruleset: ['Pokemon','PotD', 'SleepClause']
 	},
 	OU: {
 		effectType: 'Format',
@@ -23,7 +23,7 @@ exports.BattleFormats = {
 		challengeDefault: true,
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard', 'Uber', 'G4CAP','G5CAP', 'Drizzle ++ SwiftSwim']
+		banlist: ['Pokemon','Standard', 'Uber', 'G4CAP','G5CAP', 'Drizzle ++ SwiftSwim']
 	},
 	CAP: {
 		effectType: 'Format',
@@ -31,56 +31,56 @@ exports.BattleFormats = {
 		ranked: true,
 		searchHide: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber', 'Necturna']
+		banlist: ['Pokemon','Standard','Uber', 'Necturna']
 	},
 	CAPNecturnaPlaytest: {
 		effectType: 'Format',
 		name: "CAP Necturna Playtest",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
+		banlist: ['Pokemon','Standard','Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
 	},
 	Ubers: {
 		effectType: 'Format',
 		name: "Ubers",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','G4CAP','G5CAP']
+		banlist: ['Pokemon','Standard','G4CAP','G5CAP']
 	},
 	UU: {
 		effectType: 'Format',
 		name: "UU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','G4CAP','G5CAP', 'SnowWarning','Drought']
+		banlist: ['Pokemon','Standard','Uber','OU','BL','G4CAP','G5CAP', 'SnowWarning','Drought']
 	},
 	RU: {
 		effectType: 'Format',
 		name: "RU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','UU','BL2','G4CAP','G5CAP', 'ShellSmash + BatonPass']
+		banlist: ['Pokemon','Standard','Uber','OU','BL','UU','BL2','G4CAP','G5CAP', 'ShellSmash + BatonPass']
 	},
 	NU: {
 		effectType: 'Format',
 		name: "NU",
 		ranked: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Standard','Uber','OU','BL','UU','BL2','RU','BL3','G4CAP','G5CAP']
+		banlist: ['Pokemon','Standard','Uber','OU','BL','UU','BL2','RU','BL3','G4CAP','G5CAP']
 	},
 	Hackmons: {
 		effectType: 'Format',
 		name: "Hackmons",
 		searchHide: true,
 		ruleset: [],
-		banlist: ['G4CAP','G5CAP']
+		banlist: ['Pokemon','G4CAP','G5CAP']
 	},
 	BalancedHackmons: {
 		effectType: 'Format',
 		name: "Balanced Hackmons",
 		ranked: true,
 		ruleset: [],
-		banlist: ['OHKO', 'WonderGuard', 'G4CAP','G5CAP']
+		banlist: ['Pokemon','OHKO', 'WonderGuard', 'G4CAP','G5CAP']
 	},
 	Haxmons: {
 		effectType: 'Format',
@@ -93,14 +93,69 @@ exports.BattleFormats = {
 		name: "Debug Mode",
 		searchHide: true,
 		// no restrictions, for serious
-		ruleset: ['Standard']
+		ruleset: []
 	},
 	
 	// rules
 	
 	Standard: {
 		effectType: 'Banlist',
-		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam', 'Legal']
+		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam', 'Legal'],
+		validateSet: function(set) {
+			// limit one of each move in Standard
+			var moves = [];
+			if (set.moves)
+			{
+				var hasMove = {};
+				for (var i=0; i<set.moves.length; i++)
+				{
+					var move = this.getMove(set.moves[i]);
+					var moveid = move.id;
+					if (hasMove[moveid]) continue;
+					hasMove[moveid] = true;
+					moves.push(set.moves[i]);
+				}
+			}
+			set.moves = moves;
+		}
+	},
+	Pokemon: {
+		effectType: 'Banlist',
+		validateSet: function(set) {
+			var item = this.getItem(set.item);
+			var template = this.getTemplate(set.species);
+			
+			if (template.num == 493) // Arceus
+			{
+				if (item.onPlate)
+				{
+					set.species = 'Arceus-'+item.onPlate;
+				}
+				else
+				{
+					set.species = 'Arceus';
+				}
+			}
+			if (template.num == 487) // Giratina
+			{
+				if (item.id === 'GriseousOrb')
+				{
+					set.species = 'Giratina-O';
+				}
+				else
+				{
+					set.species = 'Giratina';
+				}
+			}
+			if (template.num == 555) // Darmanitan
+			{
+				set.species = 'Darmanitan';
+			}
+			if (template.num == 648) // Meloetta
+			{
+				set.species = 'Meloetta';
+			}
+		}
 	},
 	Legal: {
 		effectType: 'Banlist',

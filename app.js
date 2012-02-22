@@ -1319,6 +1319,7 @@ if (config.crashguard)
 		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+err+'<br />Please restart the server.</div>');
 		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		config.modchat = '&&';
+		lockdown = true;
 	});
 }
 
