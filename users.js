@@ -508,7 +508,6 @@ function User(name, socket, token)
 		return group;
 	};
 	this.ban = function(noRecurse) {
-		bannedIps[selfP.ip] = selfP.userid;
 		// no need to recurse, since the root for-loop already bans everything with your IP
 		if (!noRecurse) for (var i in users)
 		{
@@ -517,6 +516,7 @@ function User(name, socket, token)
 				users[i].ban(true);
 			}
 		}
+		bannedIps[selfP.ip] = selfP.userid;
 		selfP.emit('message', 'You were banned.');
 		selfP.destroy();
 	};
