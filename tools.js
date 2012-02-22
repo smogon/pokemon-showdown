@@ -324,6 +324,22 @@ function BattleTools()
 			}
 		}
 		
+		if (format.banlist)
+		{
+			for (var i=0; i<format.banlist.length; i++)
+			{
+				var subformat = selfT.getEffect(format.banlist[i]);
+				if (subformat.validateTeam)
+				{
+					problems.concat(subformat.validateTeam.call(selfT, team, format));
+				}
+			}
+		}
+		if (format.validateTeam)
+		{
+			problems.concat(format.validateTeam.call(selfT, team, format));
+		}
+		
 		if (!problems.length) return false;
 		return problems;
 	};
@@ -477,6 +493,22 @@ function BattleTools()
 			{
 				problems.push(set.name+" has the combination of "+bannedCombo+", which is banned.");
 			}
+		}
+		
+		if (format.banlist)
+		{
+			for (var i=0; i<format.banlist.length; i++)
+			{
+				var subformat = selfT.getEffect(format.banlist[i]);
+				if (subformat.validateSet)
+				{
+					problems.concat(subformat.validateSet.call(selfT, set, format));
+				}
+			}
+		}
+		if (format.validateSet)
+		{
+			problems.concat(format.validateSet.call(selfT, set, format));
 		}
 		
 		if (!problems.length) return false;
