@@ -8309,6 +8309,18 @@ exports.BattleMovedex = {
 		name: "Reflect Type",
 		pp: 15,
 		priority: 0,
+		onHit: function(target, source) {
+			source.addVolatile("ReflectType", target)
+		},
+		effect: {
+			onStart: function(target, source) {
+				this.effectData.types = source.types;
+				this.add("message Type reflected. (Placeholder)");
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.types = this.effectData.types;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
