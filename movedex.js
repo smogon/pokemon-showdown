@@ -7084,8 +7084,25 @@ exports.BattleMovedex = {
 		name: "Nightmare",
 		pp: 15,
 		priority: 0,
+		volatileStatus: 'Nightmare',
 		effect: {
 			onResidualPriority: 50-9,
+			onStart: function(pokemon) {
+				if (pokemon.status !== 'slp')
+				{
+					return false;
+				}
+				this.add('message Afflicted by Nightmare! (placeholder)');
+			},
+			onResidualPriority: 50-9,
+			onResidual: function(pokemon) {
+				if (pokemon.status !== 'slp')
+				{
+					pokemon.removeVolatile('Nightmare');
+					return;
+				}
+				this.damage(pokemon.maxhp/4);
+			}
 		},
 		secondary: false,
 		target: "normal",
