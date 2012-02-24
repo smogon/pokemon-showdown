@@ -2021,8 +2021,11 @@ exports.BattleMovedex = {
 		name: "Defog",
 		pp: 15,
 		priority: 0,
+		boosts: {
+			evasion: -1
+		},
 		secondary: false,
-		target: "all",
+		target: "normal",
 		type: "Flying"
 	},
 	"DestinyBond": {
