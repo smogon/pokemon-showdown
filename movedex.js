@@ -6351,7 +6351,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target, source) {
-			source.addVolatile('trapping', target);
+			target.addVolatile('trapped');
 		},
 		secondary: false,
 		target: "normal",

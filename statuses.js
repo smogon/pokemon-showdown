@@ -158,9 +158,14 @@ exports.BattleStatuses = {
 			return false;
 		}
 	},
-	trapping: {
+	trapped: {
 		noCopy: true,
-		onSourceModifyPokemon: function(pokemon) {
+		onModifyPokemon: function(pokemon) {
+			if (!this.effectData.source || !this.effectData.source.isActive)
+			{
+				delete pokemon.volatiles['trapped'];
+				return;
+			}
 			pokemon.trapped = true;
 		}
 	},
