@@ -2334,7 +2334,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.heal(pokemon.maxhp/4);
+			this.heal(pokemon.maxhp/4);
 		},
 		desc: "Restores 25% max HP when at 50% HP or less. One-time use."
 	},
