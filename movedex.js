@@ -6350,7 +6350,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
-		onHit: function(target, source) {
+		onHit: function(target) {
 			target.addVolatile('trapped');
 		},
 		secondary: false,
@@ -10000,8 +10000,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
-		onHit: function(target, source) {
-			source.addVolatile('trapping', target);
+		onHit: function(target) {
+			target.addVolatile('trapped');
 		},
 		secondary: false,
 		target: "normal",
