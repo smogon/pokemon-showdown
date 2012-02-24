@@ -816,6 +816,12 @@ function BattlePokemon(set, side)
 	this.addVolatile = function(status, source, sourceEffect) {
 		if (!selfP.hp) return false;
 		status = selfB.getEffect(status);
+		if (selfB.event)
+		{
+			if (!source) source = selfB.event.source;
+			if (!sourceEffect) sourceEffect = selfB.effect;
+		}
+		
 		if (selfP.volatiles[status.id])
 		{
 			selfB.singleEvent('Restart', status, selfP.volatiles[status.id], selfP, source, sourceEffect);
