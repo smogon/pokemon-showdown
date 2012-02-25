@@ -2006,6 +2006,7 @@ exports.BattleMovedex = {
 		boosts: {
 			def: 1
 		},
+		volatileStatus: 'DefenseCurl',
 		secondary: false,
 		target: "self",
 		type: "Normal"
@@ -8758,6 +8759,19 @@ exports.BattleMovedex = {
 		num: 205,
 		accuracy: 90,
 		basePower: 30,
+		basePowerCallback: function(pokemon, target) {
+			var bp = 30;
+			var bpTable = [30, 60, 120, 240, 480];
+			if (pokemon.volatiles.Rollout && pokemon.volatiles.Rollout.hitCount) {
+				bp = (bpTable[pokemon.volatiles.Rollout.hitCount] || 480);
+			}
+			pokemon.addVolatile('Rollout');
+			if (pokemon.volatiles.DefenseCurl) {
+				bp *= 2;
+			}
+			this.debug("Rollout bp: "+bp);
+			return bp;
+		},
 		category: "Physical",
 		desc: "The user attacks uncontrollably for five turns; this move's power doubles after each turn and also if Defense Curl was used beforehand. Its power resets after five turns have ended or if the attack misses.",
 		shortDesc: "Doubles in power with each hit. Repeats for 5 turns.",
@@ -8766,6 +8780,36 @@ exports.BattleMovedex = {
 		pp: 20,
 		isContact: true,
 		priority: 0,
+		effect: {
+			duration: 2,
+			onStart: function() {
+				this.effectData.hitCount = 1;
+			},
+			onRestart: function() {
+				this.effectData.hitCount++;
+				if (this.effectData.hitCount < 5) {
+					this.effectData.duration = 2;
+				}
+			},
+			onResidual: function(target) {
+				var move = this.getMove(target.lastMove);
+				if (move.id !== 'Rollout')
+				{
+					// don't lock
+					delete target.volatiles['Rollout'];
+				}
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.lockMove("Rollout");
+			},
+			onBeforeTurn: function(pokemon) {
+				if (pokemon.lastMove === 'Rollout')
+				{
+					this.debug('Forcing into Rollout');
+					this.changeDecision(pokemon, {move: 'Rollout'});
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Rock"
