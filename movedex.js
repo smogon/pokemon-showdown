@@ -1433,10 +1433,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: -6,
-		secondary: {
-			chance: 100,
-			forceSwitch: true
-		},
+		forceSwitch: true,
 		target: "normal",
 		type: "Fighting"
 	},
@@ -2532,10 +2529,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: -6,
-		secondary: {
-			chance: 100,
-			forceSwitch: true
-		},
+		forceSwitch: true,
 		target: "normal",
 		type: "Dragon"
 	},
