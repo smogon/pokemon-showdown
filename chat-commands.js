@@ -16,7 +16,8 @@ function toUserid(name)
 
 function parseCommandLocal(user, cmd, target, room, socket, message)
 {
-	switch (cmd.toLowerCase())
+	cmd = cmd.toLowerCase();
+	switch (cmd)
 	{
 	case 'forfeit':
 	case 'concede':
@@ -987,6 +988,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case 'commands':
 	case 'h':
 	case '?':
+		target = target.toLowerCase();
 		var matched = false;
 		if (target === 'all' || target === 'msg' || target === 'pm' || cmd === 'whisper' || cmd === 'w')
 		{
