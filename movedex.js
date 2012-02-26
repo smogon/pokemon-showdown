@@ -2104,7 +2104,9 @@ exports.BattleMovedex = {
 				counter = pokemon.volatiles['stall'].counter || 0;
 			}
 			if (counter >= 8) counter = 32;
-			if (counter > 0 && Math.random()*Math.pow(2, counter) > 1)
+			var denom = Math.pow(2, counter);
+			this.debug("Success chance: "+Math.round(100*1/denom)+"%");
+			if (counter > 0 && Math.random()*denom > 1)
 			{
 				return false;
 			}
@@ -2952,7 +2954,9 @@ exports.BattleMovedex = {
 				counter = pokemon.volatiles['stall'].counter || 0;
 			}
 			if (counter >= 8) counter = 32;
-			if (counter > 0 && Math.random()*Math.pow(2, counter) > 1)
+			var denom = Math.pow(2, counter);
+			this.debug("Success chance: "+Math.round(100*1/denom)+"%");
+			if (counter > 0 && Math.random()*denom > 1)
 			{
 				return false;
 			}
@@ -7712,7 +7716,9 @@ exports.BattleMovedex = {
 				counter = pokemon.volatiles['stall'].counter || 0;
 			}
 			if (counter >= 8) counter = 32;
-			if (counter > 0 && Math.random()*Math.pow(2, counter) > 1)
+			var denom = Math.pow(2, counter);
+			this.debug("Success chance: "+Math.round(100*1/denom)+"%");
+			if (counter > 0 && Math.random()*denom > 1)
 			{
 				return false;
 			}
