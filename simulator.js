@@ -2174,13 +2174,14 @@ function Battle(roomid, format, ranked)
 			if (!source) source = selfB.event.source;
 			if (!effect) effect = selfB.effect;
 		}
-		if (!target || !target.hp) return 0;
-		if (target.hp >= target.maxhp) return 0;
 		effect = selfB.getEffect(effect);
 		damage = Math.ceil(damage);
+		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
 		damage = selfB.runEvent('Heal', target, source, effect, damage);
 		if (!damage) return 0;
 		damage = Math.ceil(damage);
+		if (!target || !target.hp) return 0;
+		if (target.hp >= target.maxhp) return 0;
 		damage = target.heal(damage, source, effect);
 		switch (effect.id) {
 		case 'drain':
