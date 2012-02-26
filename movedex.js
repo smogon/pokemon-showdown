@@ -5903,7 +5903,7 @@ exports.BattleMovedex = {
 				var damage = this.damage(pokemon.maxhp/8);
 				if (damage)
 				{
-					this.heal(damage, target);
+					this.heal(damage, target, pokemon);
 					this.add('residual '+pokemon.id+' leech-seed ?? ??'+pokemon.getHealth()+target.getHealth());
 				}
 			}
