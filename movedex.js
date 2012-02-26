@@ -6173,7 +6173,7 @@ exports.BattleMovedex = {
 				if (target === source) return;
 				if (typeof move.isBounceable === 'undefined')
 				{
-					move.isBounceable = !!(move.status || move.volatileStatus === 'confusion' || move.forceSwitch);
+					move.isBounceable = !!(move.category === 'Status' && (move.status || move.volatileStatus === 'confusion' || move.forceSwitch));
 				}
 				if (move.target !== 'foeSide' && target !== this.effectData.target)
 				{
