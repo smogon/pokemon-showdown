@@ -2178,10 +2178,10 @@ exports.BattleMovedex = {
 		volatileStatus: 'Disable',
 		effect: {
 			duration: 4,
-			durationCallback: function() {
-				return 4+Math.floor(4*Math.random());
-			},
 			onStart: function(pokemon) {
+				if (!this.willMove(pokemon)) {
+					this.effectData.duration++;
+				}
 				if (!pokemon.lastMove)
 				{
 					this.debug('pokemon hasn\'t moved yet');
@@ -2846,6 +2846,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'Encore',
 		effect: {
+			duration: 3,
 			onStart: function(target) {
 				if (!target.lastMove)
 				{
@@ -2854,17 +2855,12 @@ exports.BattleMovedex = {
 					delete target.volatiles['Encore'];
 					return;
 				}
-				this.effectData.time = 3;
 				this.effectData.move = target.lastMove;
 				this.add('r-volatile '+target.id+' encore');
 				var decision = this.willMove(target);
 				if (decision)
 				{
-					this.effectData.time--;
-					if (this.effectData.time <= 0)
-					{
-						this.effectData.duration = 1;
-					}
+					this.effectData.duration++;
 					this.changeDecision(target, {move:this.effectData.move});
 				}
 			},
@@ -2893,11 +2889,6 @@ exports.BattleMovedex = {
 				var decision = this.willMove(pokemon);
 				if (decision)
 				{
-					pokemon.volatiles['Encore'].time--;
-					if (pokemon.volatiles['Encore'].time <= 0)
-					{
-						pokemon.volatiles['Encore'].duration = 1;
-					}
 					this.changeDecision(pokemon, {move:this.effectData.move});
 				}
 			}
@@ -11044,6 +11035,9 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart: function(target) {
+				if (!this.willMove(target)) {
+					this.effectData.duration++;
+				}
 				this.add('r-volatile '+target.id+' taunt');
 			},
 			onEnd: function(target) {
