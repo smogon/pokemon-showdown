@@ -501,6 +501,26 @@ exports.BattleMovedex = {
 		name: "Attract",
 		pp: 15,
 		priority: 0,
+		onHit: function(target, source) {
+			if ((target.gender === 'M' && source.gender === 'F') ||
+				(target.gender === 'F' && source.gender === 'M')) {
+				target.addVolatile('Attract');
+			} else {
+				return false;
+			}
+		},
+		effect: {
+			onStart: function() {
+				this.add("message Attract started (placeholder).");
+			},
+			onBeforeMove: function(pokemon) {
+				if (Math.random()*2 < 1)
+				{
+					this.add('cant-move '+pokemon.id+' attract');
+					return false;
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
