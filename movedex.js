@@ -1308,7 +1308,7 @@ exports.BattleMovedex = {
 	},
 	"Camouflage": {
 		num: 293,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's type changes according to the current terrain. It becomes Grass-type in tall grass and very tall grass (as well as in puddles), Water-type while surfing on any body of water, Rock-type while inside any caves or on any rocky terrain, Ground-type on beach sand, desert sand and dirt roads, Ice-type in snow, and Normal-type everywhere else. The user will always become Normal-type during Wi-Fi battles. ",
@@ -1347,7 +1347,7 @@ exports.BattleMovedex = {
 	},
 	"Charge": {
 		num: 268,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Doubles the power of the user's Electric attacks on the next turn and increases the user's Special Defense by 1 stage.",
@@ -8364,7 +8364,7 @@ exports.BattleMovedex = {
 	},
 	"Refresh": {
 		num: 287,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user recovers from burn, poison and paralysis.",
@@ -9661,7 +9661,7 @@ exports.BattleMovedex = {
 	},
 	"SlackOff": {
 		num: 303,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores 1/2 of the user's max HP.",
@@ -9975,7 +9975,7 @@ exports.BattleMovedex = {
 	},
 	"Softboiled": {
 		num: 135,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores 1/2 of the user's max HP.",
@@ -10914,7 +10914,7 @@ exports.BattleMovedex = {
 	},
 	"TailGlow": {
 		num: 294,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack by 3 stages.",
@@ -12044,7 +12044,7 @@ exports.BattleMovedex = {
 	},
 	"Wish": {
 		num: 273,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "At the end of the next turn, the active Pokemon from the user's team is healed by 1/2 of the user's HP; this can be any member of the user's team.",
