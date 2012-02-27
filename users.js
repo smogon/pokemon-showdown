@@ -348,6 +348,7 @@ function User(name, socket, token)
 					user.group = group;
 					if (avatar) user.avatar = avatar;
 					user.authenticated = authenticated;
+					user.ip = selfP.ip;
 					
 					for (var i in selfP.prevNames)
 					{
