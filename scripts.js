@@ -58,14 +58,13 @@ exports.BattleScripts = {
 		pokemon.deductPP(move);
 	},
 	useMove: function(move, pokemon, target) {
+		move = this.getMoveCopy(move);
+
 		this.setActiveMove(move, pokemon, target);
 		var damage = 0;
 		var canTargetFainted = {
 			all: 1, foeSide: 1
 		};
-		move = this.getMove(move);
-		
-		move = clone(move);
 		move = this.runEvent('ModifyMove',pokemon,target,move,move);
 		if (!move) return false;
 		
@@ -230,6 +229,8 @@ exports.BattleScripts = {
 		return true;
 	},
 	moveHit: function(target, pokemon, move, moveData, isSecondary, isSelf) {
+		move = this.getMoveCopy(move);
+
 		this.setActiveMove(move, pokemon, target);
 		hitResult = true;
 		move = this.getMove(move);
