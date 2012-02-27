@@ -27,9 +27,17 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	switch (cmd)
 	{
 	case 'me':
+		if (!target)
+		{
+			return true;
+		}
 		if (canTalk(user, room, socket))
 		{
-			room.addRaw('<div class="chat"><strong>&bull;</strong> <em>'+sanitize(user.name)+' <i>'+sanitize(target)+'</i></em></div>');
+			room.add({
+				name: user.getIdentity(),
+				act: 1,
+				message: target
+			});
 		}
 		return true;
 		break;
