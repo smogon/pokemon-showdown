@@ -78,8 +78,6 @@ function User(name, socket, token)
 	this.authenticated = false;
 	this.userid = toUserid(this.name);
 	this.group = ' ';
-	this.muted = false;
-	this.prevNames = {};
 	
 	var trainersprites = [1, 2, 101, 102, 169, 170];
 	this.avatar = trainersprites[parseInt(Math.random()*trainersprites.length)];
@@ -90,6 +88,8 @@ function User(name, socket, token)
 	this.people = [new Person(name,socket,selfP)];
 	this.ip = this.people[0].ip;
 	
+	this.muted = !!mutedIps[this.ip];
+	this.prevNames = {};
 	this.sides = {};
 	this.roomCount = {};
 	
