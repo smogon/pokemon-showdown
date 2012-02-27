@@ -1437,6 +1437,8 @@ exports.BattleMovedex = {
 		pp: 20,
 		isContact: true,
 		priority: 0,
+		ignoreDefensive: true,
+		ignoreEvasion: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
