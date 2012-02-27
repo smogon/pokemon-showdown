@@ -658,6 +658,10 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		{
 			selfR.battle.add('chatmsg-raw '+message.rawMessage);
 		}
+		else if (message.act)
+		{
+			selfR.battle.add('chat-me '+message.name.substr(1)+' '+message.message);
+		}
 		else
 		{
 			selfR.battle.add('chatmsg '+message);
