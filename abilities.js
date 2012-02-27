@@ -1213,9 +1213,18 @@ exports.BattleAbilities = {
 		num: "121"
 	},
 	"Mummy": {
-		desc: "When the user is attacked by a contact move or attacks with a contact move, the opposing Pokemon's ability is turned into Mummy as well. Multitype, Wonder Guard and Mummy itself are the only abilities not affected by Mummy. The effect of Mummy is not removed by Mold Breaker, Turboblaze, or Teravolt.",
+		desc: "When the user is attacked by a contact move, the opposing Pokemon's ability is turned into Mummy as well. Multitype, Wonder Guard and Mummy itself are the only abilities not affected by Mummy. The effect of Mummy is not removed by Mold Breaker, Turboblaze, or Teravolt.",
 		id: "Mummy",
 		name: "Mummy",
+		onAfterDamage: function(damage, target, source, move) {
+			if (source && source !== target && move && move.isContact)
+			{
+				if (source.ability !== 'WonderGuard' && source.setAbility('Mummy'))
+				{
+					this.add("message "+source.name+"'s ability became Mummy! (placeholder)");
+				}
+			}
+		},
 		rating: 1,
 		num: "152"
 	},
