@@ -6196,16 +6196,17 @@ exports.BattleMovedex = {
 				{
 					return;
 				}
-				if (this.pseudoWeather['MagicBounce'])
+				if (move.hasBounced)
 				{
 					return;
 				}
 				if (move.isBounceable)
 				{
 					target.removeVolatile('MagicCoat');
-					this.addPseudoWeather('MagicBounce');
+					var newMove = this.getMoveCopy(move.id);
+					newMove.hasBounced = true;
 					this.add('r-bounce-back '+source.id+' MagicCoat '+move.id+' '+target.id);
-					this.moveHit(source, target, move);
+					this.moveHit(source, target, newMove);
 					return null;
 				}
 			}

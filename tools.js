@@ -4,6 +4,14 @@ function toId(text)
 	if (typeof text !== 'string') return ''; //???
 	return text.replace(/ /g, '');
 }
+function clone(object) {
+	var newObj = (object instanceof Array) ? [] : {};
+	for (var i in object) {
+		if (object[i] && typeof object[i] == "object") {
+			newObj[i] = clone(object[i]);
+		} else newObj[i] = object[i]
+	} return newObj;
+};
 
 function BattleTools()
 {
@@ -79,9 +87,26 @@ function BattleTools()
 			}
 			if (!move.critRatio) move.critRatio = 1;
 			if (!move.id) move.id = id;
+			if (!move.baseType) move.baseType = move.type;
 			if (!move.effectType) move.effectType = 'Move';
 		}
 		return move;
+	};
+	/**
+	 * Ensure we're working on a copy of a move (and make a copy if we aren't)
+	 *
+	 * Remember: "ensure" - by default, it won't make a copy of a copy:
+	 *     moveCopy === Tools.getMoveCopy(moveCopy)
+	 *
+	 * If you really want to, use:
+	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id) 
+	 */
+	this.getMoveCopy = function(move) {
+		if (move && move.isCopy) return move;
+		var move = this.getMove(move);
+		var moveCopy = clone(move);
+		moveCopy.isCopy = true;
+		return moveCopy;
 	};
 	this.getNature = function(nature) {
 		return BattleScripts.getNature.call(selfT, nature);
