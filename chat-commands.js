@@ -861,7 +861,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				socket.emit('console', dataMessages[i]);
 			}
-			else if (user.group !== ' ')
+			else if (user.group !== ' ' && canTalk(user, room))
 			{
 				room.add(dataMessages[i]);
 			}
@@ -1178,14 +1178,28 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		break;
 	}
 
-	// !commands
-	
-	if (user.muted) return false;
-	
 	// chat moderation
+	if (!canTalk(user, room, socket))
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+ * Can this user talk?
+ * Pass the corresponding socket to give the user an error, if not
+ */
+function canTalk(user, room, socket)
+{
+	if (user.muted)
+	{
+		if (socket) socket.emit('console', 'You are muted.');
+		return false;
+	}
 	if (config.modchat && room.id === 'lobby')
 	{
-		var cantalk = true;
 		switch (config.modchat)
 		{
 		case '&':
@@ -1194,46 +1208,44 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				if (config.modchat === '&&')
 				{
-					socket.emit('console', 'Because the server has crashed, you cannot speak in lobby chat.');
-					return true;
+					if (socket) socket.emit('console', 'Because the server has crashed, you cannot speak in lobby chat.');
+					return false;
 				}
-				socket.emit('console', 'Due to an influx of spam, you must be a sysop to speak in lobby chat.');
-				return true;
+				if (socket) socket.emit('console', 'Due to an influx of spam, you must be a sysop to speak in lobby chat.');
+				return false;
 			}
 			break;
 		case '@':
 			if (user.group !== '&' && user.group !== '@')
 			{
-				socket.emit('console', 'Due to an influx of spam, you must be an admin or sysop to speak in lobby chat.');
-				return true;
+				if (socket) socket.emit('console', 'Due to an influx of spam, you must be an admin or sysop to speak in lobby chat.');
+				return false;
 			}
 			break;
 		case '%':
 			if (user.group !== '&' && user.group !== '@' && user.group !== '%')
 			{
-				socket.emit('console', 'Due to an influx of spam, you must be an moderator to speak in lobby chat.');
-				return true;
+				if (socket) socket.emit('console', 'Due to an influx of spam, you must be an moderator to speak in lobby chat.');
+				return false;
 			}
 			break;
 		case '+':
 			if (user.group === ' ')
 			{
-				socket.emit('console', 'Due to an influx of spam, you must be voiced to speak in lobby chat.');
-				return true;
+				if (socket) socket.emit('console', 'Due to an influx of spam, you must be voiced to speak in lobby chat.');
+				return false;
 			}
 			break;
 		default:
 			if (!user.authenticated && user.group === ' ')
 			{
-				socket.emit('console', 'Due to an influx of spam, you must be registered or voiced to speak in lobby chat.');
-				return true;
+				if (socket) socket.emit('console', 'Due to an influx of spam, you must be registered or voiced to speak in lobby chat.');
+				return false;
 			}
 			break;
 		}
 	}
-
-	
-	return false;
+	return true;
 }
 
 function showOrBroadcastStart(user, cmd, room, socket, message)
@@ -1245,7 +1257,7 @@ function showOrBroadcastStart(user, cmd, room, socket, message)
 			socket.emit('console', "You need to be voiced to broadcast this command's information.");
 			socket.emit('console', "To see it for yourself, use: /"+message.substr(1));
 		}
-		else
+		else if (canTalk(user, room, socket))
 		{
 			room.add({
 				name: user.getIdentity(),
@@ -1254,13 +1266,14 @@ function showOrBroadcastStart(user, cmd, room, socket, message)
 		}
 	}
 }
+
 function showOrBroadcast(user, cmd, room, socket, rawMessage)
 {
 	if (cmd.substr(0,1) !== '!')
 	{
 		socket.emit('console', {rawMessage: rawMessage});
 	}
-	else if (user.group !== ' ' && !user.muted)
+	else if (user.group !== ' ' && canTalk(user, room))
 	{
 		room.addRaw(rawMessage);
 	}
