@@ -871,6 +871,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		
 	case 'data':
 	case '!data':
+	case 'stats':
+	case '!stats':
 		if (room.type !== 'lobby' && cmd.substr(0,1) === '!')
 		{
 			socket.emit('console', {rawMessage: '<code>!data</code> can only be used in the lobby.'});
