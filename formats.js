@@ -29,14 +29,15 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "CAP",
 		ranked: true,
-		searchHide: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Pokemon','Standard','Uber', 'Necturna']
+		banlist: ['Pokemon','Standard','Uber']
 	},
 	CAPNecturnaPlaytest: {
 		effectType: 'Format',
 		name: "CAP Necturna Playtest",
 		ranked: true,
+		searchHide: true,
+		challengeHide: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
 		banlist: ['Pokemon','Standard','Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
 	},
