@@ -128,7 +128,7 @@ exports.BattleFormats = {
 			
 			if (template.num == 493) // Arceus
 			{
-				if (item.onPlate)
+				if (template.ability === 'Multitype' && item.onPlate)
 				{
 					set.species = 'Arceus-'+item.onPlate;
 				}
@@ -155,6 +155,14 @@ exports.BattleFormats = {
 			if (template.num == 648) // Meloetta
 			{
 				set.species = 'Meloetta';
+			}
+			if (template.num == 351) // Castform
+			{
+				set.species = 'Castform';
+			}
+			if (template.num == 421) // Cherrim
+			{
+				set.species = 'Cherrim';
 			}
 		}
 	},
