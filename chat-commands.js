@@ -13,12 +13,27 @@ function toUserid(name)
 {
 	return name.toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
+function sanitize(str, strEscape)
+{
+	if (!str) str = '';
+	str = str.replace(/&/g,'&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	if (strEscape) str = str.replace(/'/g, '\\\'');
+	return str;
+}
 
 function parseCommandLocal(user, cmd, target, room, socket, message)
 {
 	cmd = cmd.toLowerCase();
 	switch (cmd)
 	{
+	case 'me':
+		if (canTalk(user, room, socket))
+		{
+			room.addRaw('<div class="chat"><strong>&bull;</strong> <em>'+sanitize(user.name)+' <i>'+sanitize(target)+'</i></em></div>');
+		}
+		return true;
+		break;
+
 	case 'forfeit':
 	case 'concede':
 	case 'surrender':
