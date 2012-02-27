@@ -2299,22 +2299,27 @@ function Battle(roomid, format, ranked)
 		var defense = move.defensiveCategory==='Physical'?target.stats.def:target.stats.spd;
 		var level = pokemon.level;
 		
-		if (move.crit && attack < (move.category==='Physical'?pokemon.unboostedStats.atk:pokemon.unboostedStats.spa))
+		if (move.crit)
+		{
+			move.ignoreNegativeOffensive = true;
+			move.ignorePositiveDefensive = true;
+		}
+		if (move.ignoreNegativeOffensive && attack < (move.category==='Physical'?pokemon.unboostedStats.atk:pokemon.unboostedStats.spa))
 		{
 			move.ignoreOffensive = true;
-			selfB.debug('Crit negating (sp)atk penalty.');
 		}
 		if (move.ignoreOffensive)
 		{
+			selfB.debug('Negating (sp)atk boost/penalty.');
 			attack = (move.category==='Physical'?pokemon.unboostedStats.atk:pokemon.unboostedStats.spa);
 		}
-		if (move.crit && defense > (move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd))
+		if (move.ignorePositiveDefensive && defense > (move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd))
 		{
 			move.ignoreDefensive = true;
-			selfB.debug('Crit negating (sp)def boost.');
 		}
 		if (move.ignoreDefensive)
 		{
+			selfB.debug('Negating (sp)def boost/penalty.');
 			defense = move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd;
 		}
 		

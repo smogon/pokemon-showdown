@@ -2134,6 +2134,14 @@ exports.BattleAbilities = {
 		desc: "This Pokemon ignores an opponent's stat boosts for Attack, Defense, Special Attack and Special Defense. These boosts will still be calculated if this Pokemon uses Punishment.",
 		id: "Unaware",
 		name: "Unaware",
+		onModifyMove: function(move, user, target) {
+			move.ignoreEvasion = true;
+			move.ignoreDefensive = true;
+		},
+		onSourceModifyMove: function(move, user, target) {
+			move.ignoreAccuracy = true;
+			move.ignoreOffensive = true;
+		},
 		rating: 2,
 		num: "109"
 	},
