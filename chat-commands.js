@@ -252,7 +252,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			var targetUser = targets[0];
 			if (!targetUser)
 			{
-				socket.emit('console', 'User not found.');
+				socket.emit('console', 'User '+targets[2]+' not found.');
 				return true;
 			}
 			if (!user.canMod(targetUser.group))
@@ -289,7 +289,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			var targetUser = targets[0];
 			if (!targetUser)
 			{
-				socket.emit('console', 'User not found.');
+				socket.emit('console', 'User '+targets[2]+' not found.');
 				return true;
 			}
 			if (!user.canMod(targetUser.group) && user !== targetUser)
@@ -383,11 +383,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			if (target.indexOf(' '))
 			{
-				socket.emit('console', 'User not found. Did you forget a comma?');
+				socket.emit('console', 'User '+targets[2]+' not found. Did you forget a comma?');
 			}
 			else
 			{
-				socket.emit('console', 'User not found. Did you misspell their name?');
+				socket.emit('console', 'User '+targets[2]+' not found. Did you misspell their name?');
 			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
