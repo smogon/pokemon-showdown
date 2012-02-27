@@ -843,6 +843,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		break;
 		
 	case 'forcerename':
+	case 'fr':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
 		var targetUser = targets[0];
@@ -1090,11 +1091,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			matched = true;
 			socket.emit('console', '/alts [username] - Get a user\'s alts. Requires: % @ &');
 		}
-		if (target === '%' || target === 'forcerename')
+		if (target === '%' || target === 'forcerename' || target === 'fr')
 		{
 			matched = true;
-			socket.emit('console', '/forcerename [username] - Force a user to choose a new name. Requires: % @ &');
-			socket.emit('console', '/forcerename [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: % @ &');
+			socket.emit('console', '/forcerename OR /fr [username] - Force a user to choose a new name. Requires: % @ &');
+			socket.emit('console', '/forcerename OR /fr [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: % @ &');
 		}
 		if (target === '%' || target === 'ban' || target === 'b')
 		{
