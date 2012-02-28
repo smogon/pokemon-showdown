@@ -70,7 +70,8 @@ BattleTools = require('./tools.js').BattleTools;
 
 Tools = new BattleTools();
 
-getUser = require('./users.js').getUser;
+Users = require('./users.js');
+getUser = Users.getUser;
 parseCommand = require('./chat-commands.js').parseCommand;
 
 lockdown = false;

@@ -1,4 +1,5 @@
 var users = {};
+var prevUsers = {};
 var numUsers = 0;
 var people = {};
 var numPeople = 0;
@@ -26,6 +27,21 @@ function getUser(name, socket, token, room)
 	if (socket)
 	{
 		return connectUser(name, socket, token, room);
+	}
+	var i = 0;
+	while (userid && !users[userid] && i < 1000)
+	{
+		userid = prevUsers[userid];
+		i++;
+	}
+	return users[userid];
+}
+function searchUser(name)
+{
+	var userid = toUserid(name);
+	while (userid && !users[userid])
+	{
+		userid = prevUsers[userid];
 	}
 	return users[userid];
 }
@@ -144,6 +160,13 @@ function User(name, socket, token)
 		if (typeof authenticated === 'undefined' && userid === selfP.userid)
 		{
 			authenticated = selfP.authenticated;
+		}
+
+		if (userid !== selfP.userid)
+		{
+			// doing it this way mathematically ensures no cycles
+			delete prevUsers[userid];
+			prevUsers[selfP.userid] = userid;
 		}
 		
 		selfP.name = name;
@@ -350,6 +373,12 @@ function User(name, socket, token)
 					user.authenticated = authenticated;
 					user.ip = selfP.ip;
 					
+					if (userid !== selfP.userid)
+					{
+						// doing it this way mathematically ensures no cycles
+						delete prevUsers[userid];
+						prevUsers[selfP.userid] = userid;
+					}
 					for (var i in selfP.prevNames)
 					{
 						if (!user.prevNames[i])
@@ -755,3 +784,6 @@ function Person(name, socket, user)
 }
 
 exports.getUser = getUser;
+exports.searchUser = searchUser;
+exports.users = users;
+exports.prevUsers = prevUsers;
