@@ -2275,7 +2275,6 @@ exports.BattleAbilities = {
 		onDamage: function(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') return;
 			if (effect.type === '???' || effect.id === 'Struggle') return;
-			if (target.negateImmunity[effect.type]) return;
 			this.debug('Wonder Guard immunity: '+effect.id);
 			if (this.getEffectiveness(effect.type, target) <= 0)
 			{
