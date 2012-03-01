@@ -914,11 +914,15 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				room.add(''+targetUser.name+' was forcibly renamed to '+targets[1]+' by '+user.name+'.');
 				targetUser.forceRename(targets[1]);
 			}
-			else
+			else if (targetUser.userid === toUserid(targets[2]))
 			{
 				room.add(''+targetUser.name+' was forced to choose a new name by '+user.name+'.');
 				targetUser.resetName();
 				targetUser.emit('nameTaken', {reason: "Please choose a different name."});
+			}
+			else
+			{
+				socket.emit('console', "User "+targetUser.name+" is no longer using that name.");
 			}
 		}
 		return true;
