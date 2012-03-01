@@ -560,6 +560,7 @@ function BattlePokemon(set, side)
 		if (selfP.fainted) return 0;
 		var d = selfP.hp;
 		selfP.hp = 0;
+		selfP.switchFlag = false;
 		selfP.status = 'fnt';
 		//selfP.fainted = true;
 		selfB.faintQueue.push({
