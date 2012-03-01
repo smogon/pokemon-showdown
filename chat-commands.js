@@ -462,8 +462,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/mute - Access denied.');
 		return true;
 		break;
-		
-	case 'unmute':
+
+	case 'ipmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
@@ -479,7 +479,62 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				return true;
 			}
 			
-			room.add(''+targetUser.name+' was unmuted by '+user.name+'.');
+			room.add(''+targetUser.name+"'s IP was muted by "+user.name+'.');
+			var alts = targetUser.getAlts();
+			if (alts.length) room.add(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
+			
+			targetUser.muted = true;
+			mutedIps[targetUser.ip] = targetUser.userid;
+			for (var i=0; i<alts.length; i++)
+			{
+				var targetAlt = getUser(alts[i]);
+				if (targetAlt) targetAlt.muted = true;
+			}
+			
+			rooms.lobby.usersChanged = true;
+			return true;
+		}
+		socket.emit('console', '/mute - Access denied.');
+		return true;
+		break;
+		
+	case 'unmute':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (user.isMod())
+		{
+			var targetid = toUserid(target);
+			var targetUser = getUser(target);
+
+			var success = false;
+			
+			for (var ip in mutedIps)
+			{
+				if (mutedIps[ip] === targetid)
+				{
+					delete mutedIps[ip];
+					if (!success)
+					{
+						room.add(''+(targetUser?targetUser.name:target)+"'s IP was unmuted by "+user.name+'.');
+						success = true;
+					}
+				}
+			}
+
+			if (!targetUser && !success)
+			{
+				socket.emit('console', 'User '+target+' not found.');
+				return true;
+			}
+			else if (targetUser)
+			{
+				if (!user.canMod(targetUser.group))
+				{
+					socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
+					return true;
+				}
+				
+				room.add(''+targetUser.name+' was unmuted by '+user.name+'.');
+			}
 			
 			targetUser.muted = false;
 			rooms.lobby.usersChanged = true;
