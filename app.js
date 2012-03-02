@@ -240,6 +240,27 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			selfR.destroyTimer = null;
 		}
 	};
+	this.emit = function(type, message, user) {
+		if (type === 'console' || type === 'update')
+		{
+			if (typeof message === 'string')
+			{
+				message = {message: message};
+			}
+			message.room = selfR.id;
+		}
+		if (user && user.emit)
+		{
+			user.emit(type, message);
+		}
+		else
+		{
+			for (var i in selfR.users)
+			{
+				selfR.users[i].emit(type, message);
+			}
+		}
+	};
 	this.tryDestroy = function() {
 		for (var i in selfR.users)
 		{
@@ -865,11 +886,6 @@ function Lobby(roomid)
 				userList.guests++;
 				continue;
 			}
-			if (config.lagmode && !selfR.users[i].authenticated && selfR.users[i].group === ' ')
-			{
-				userList.unregistered++;
-				continue;
-			}
 			userList.users++;
 			userList.list[selfR.users[i].userid] = selfR.users[i].getIdentity();
 		}
@@ -994,6 +1010,27 @@ function Lobby(roomid)
 		selfR.usersChanged = false;
 		selfR.roomsChanged = false;
 	};
+	this.emit = function(type, message, user) {
+		if (type === 'console' || type === 'update')
+		{
+			if (typeof message === 'string')
+			{
+				message = {message: message};
+			}
+			message.room = selfR.id;
+		}
+		if (user && user.emit)
+		{
+			user.emit(type, message);
+		}
+		else
+		{
+			for (var i in selfR.users)
+			{
+				selfR.users[i].emit(type, message);
+			}
+		}
+	};
 	this.updateRooms = function(excludeUser) {
 		var update = {
 			rooms: selfR.getRoomList()
@@ -1046,14 +1083,14 @@ function Lobby(roomid)
 		if (selfR.users[user.userid]) return user;
 		
 		selfR.users[user.userid] = user;
-		if (user.named)
+		if (user.named && config.reportjoins)
 		{
-			selfR.usersChanged = true;
-			if (config.reportjoins)
-			{
-				selfR.log.push({name: user.name, action: 'join'});
-				selfR.update(user);
-			}
+			selfR.log.push({name: user.getIdentity(), action: 'join'});
+			selfR.update(user);
+		}
+		else if (user.named)
+		{
+			selfR.emit('console', {name: user.getIdentity(), action: 'join', silent: 1});
 		}
 		
 		var initdata = {
@@ -1074,16 +1111,24 @@ function Lobby(roomid)
 		return user;
 	};
 	this.rename = function(user, oldid, joining) {
-		if (joining && config.reportjoins)
-		{
-			selfR.log.push({name: user.name, action: 'join'});
-		}
 		delete selfR.users[oldid];
 		selfR.users[user.userid] = user;
-		selfR.usersChanged = true;
-		if (config.reportjoins)
+		if (joining && config.reportjoins)
 		{
+			selfR.log.push({name: user.getIdentity(), oldid: oldid, action: 'join'});
 			selfR.update();
+		}
+		else if (joining)
+		{
+			selfR.emit('console', {name: user.getIdentity(), oldid: oldid, action: 'join', silent: 1});
+		}
+		else if (!user.named)
+		{
+			selfR.emit('console', {name: oldid, action: 'leave', silent: 1});
+		}
+		else
+		{
+			selfR.emit('console', {name: user.getIdentity(), oldid: oldid, action: 'rename', silent: 1});
 		}
 		return user;
 	};
@@ -1091,14 +1136,14 @@ function Lobby(roomid)
 		if (!user) return; // ...
 		delete selfR.users[user.userid];
 		selfR.cancelSearch(user, true);
-		selfR.usersChanged = true;
 		if (config.reportjoins)
 		{
-			if (user.named)
-			{
-				selfR.log.push({name: user.name, action: 'leave'});
-			}
+			selfR.log.push({name: user.getIdentity(), action: 'leave'});
 			selfR.update();
+		}
+		else if (user.named)
+		{
+			selfR.emit('console', {name: user.getIdentity(), action: 'leave', silent: 1});
 		}
 	};
 	this.startBattle = function(p1, p2, format, ranked) {
@@ -1379,6 +1424,11 @@ io.sockets.on('connection', function (socket) {
 		getRoom(data.room).joinBattle(youUser);
 	});
 	
+	socket.on('command', function(data) {
+		var youUser = resolveUser(you, socket);
+		if (!youUser) return;
+		parseCommand(user, 'command', data, getRoom(data.room), socket);
+	});
 	socket.on('disconnect', function() {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;

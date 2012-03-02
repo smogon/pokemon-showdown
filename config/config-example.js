@@ -37,11 +37,6 @@ exports.reportjoins = true;
 //   getting more than 160 or so users.
 exports.reportbattles = true;
 
-// lag mode - really crunch down on the user list
-//   This feature hides unregistered, unvoiced users from the user list.
-//   It can alleviate lag on really large servers with 160+ users.
-exports.lagmode = false;
-
 // moderated chat - prevent unregistered, unvoiced users from speaking
 //   This should only be enabled temporarily, when you're dealing with
 //   huge influxes of spammy users.
