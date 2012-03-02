@@ -203,6 +203,7 @@ function User(name, socket, token)
 	this.resetName = function() {
 		var name = 'Guest '+selfP.guestNum;
 		var userid = toUserid(name);
+		if (selfP.userid === userid) return;
 		
 		var i = 0;
 		while (users[userid] && users[userid] !== selfP)
@@ -214,6 +215,8 @@ function User(name, socket, token)
 		}
 		
 		if (selfP.named) selfP.prevNames[selfP.userid] = selfP.name;
+		delete prevUsers[userid];
+		prevUsers[selfP.userid] = userid;
 		
 		selfP.name = name;
 		var oldid = selfP.userid;
