@@ -878,8 +878,9 @@ function Lobby(roomid)
 	this.getRoomList = function()
 	{
 		var roomList = {};
-		var roomCount = 0;
-		for (i=0; i<selfR.rooms.length; i++)
+		var start = selfR.rooms.length-6;
+		if (start < 0) start = 0;
+		for (i=start; i<selfR.rooms.length; i++)
 		{
 			var room = selfR.rooms[i];
 			if (!room.active) continue;
@@ -901,13 +902,8 @@ function Lobby(roomid)
 				}
 			}
 			roomList[selfR.rooms[i].id] = roomData;
-			
-			roomCount++;
-			if (roomCount > 24)
-			{
-				break;
-			}
 		}
+		//roomList = roomList.reverse().slice(0,6)
 		return roomList;
 	};
 	this.cancelSearch = function(user, noUpdate) {
