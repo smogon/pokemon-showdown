@@ -11099,9 +11099,18 @@ exports.BattleMovedex = {
 		isViable: true,
 		isBounceable: true,
 		priority: 0,
-		volatileStatus: 'confusion',
+		onHit: function(target, source) {
+			for (var i=0; i<this.sides.length; i++)
+			{
+				for (var j=0; j<this.sides[i].active.length; j++)
+				{
+					if (this.sides[i].active[j] === source) continue;
+					this.sides[i].active[j].addVolatile('confusion');
+				}
+			}
+		},
 		secondary: false,
-		target: "adjacent",
+		target: "all",
 		type: "Normal"
 	},
 	"Telekinesis": {
