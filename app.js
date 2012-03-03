@@ -891,14 +891,15 @@ function Lobby(roomid)
 		}
 		return userList;
 	};
-	this.getRoomList = function(getAll)
+	this.getRoomList = function(filter)
 	{
 		var roomList = {};
 		var total = 0;
-		for (i=selfR.rooms.length; i>=0; i--)
+		for (i=selfR.rooms.length-1; i>=0; i--)
 		{
 			var room = selfR.rooms[i];
-			if (!room.active) continue;
+			if (!room || !room.active) continue;
+			if (filter && filter !== room.format && filter !== true) continue;
 			var roomData = {};
 			if (room.battle && room.battle.sides[0] && room.battle.sides[1])
 			{
@@ -916,11 +917,10 @@ function Lobby(roomid)
 					roomData.p1 = room.battle.sides[1].user.getIdentity();
 				}
 			}
-			roomData.format = room.format;
 			roomList[selfR.rooms[i].id] = roomData;
 
 			total++;
-			if (total >= 8 && !getAll) break;
+			if (total >= 8 && !filter) break;
 		}
 		return roomList;
 	};
