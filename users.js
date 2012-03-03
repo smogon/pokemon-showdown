@@ -247,7 +247,7 @@ function User(name, socket, token)
 		if (!name) name = '';
 		name = name.trim();
 		if (name.length > 18) name = name.substr(0,18);
-		var noStartChars = {'&':1,'@':1,'+':1,'!':1};
+		var noStartChars = {'&':1,'@':1,'%':1,'+':1,'!':1};
 		while (noStartChars[name.substr(0,1)])
 		{
 			name = name.substr(1);
