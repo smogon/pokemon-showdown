@@ -968,7 +968,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		return true;
 		break;
-		
+	
+	// INFORMATIONAL COMMANDS
+
 	case 'data':
 	case '!data':
 	case 'stats':
@@ -1049,7 +1051,52 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'</div>');
 		return true;
 		break;
-		
+	
+	// Battle commands
+
+	case 'reset':
+	case 'restart':
+		// These commands used to be:
+		//   selfR.requestReset(user);
+		//   selfR.battleEndRestart(user);
+		// but are currently unused
+		socket.emit('console', 'This functionality is no longer available.');
+		return true;
+
+	case 'kickinactive':
+		if (room.requestKickInactive)
+		{
+			room.requestKickInactive(user);
+		}
+		else
+		{
+			socket.emit('console', 'You can only kick inactive players from inside a room.');
+		}
+		return true;
+
+	case 'forcereset':
+		if (user.group !== '@' && user.group !== '&')
+		{
+			socket.emit('console', '/forcereset - Access denied.');
+		}
+		else if (room.reset)
+		{
+			room.reset();
+		}
+		else
+		{
+			socket.emit('console', 'You can only force-reset from inside a room.');
+		}
+		return true;
+
+	case 'a':
+		if (user.group === '&')
+		{
+			// secret sysop command
+			room.battle.add(target);
+			return true;
+		}
+
 	// Admin commands
 		
 	case 'forcewin':
@@ -1110,6 +1157,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		return true;
 		break;
 		
+	case 'crashfixed':
+		if (user.group === '&')
+		{
+			lockdown = false;
+			config.modchat = false;
+			rooms.lobby.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
+		}
+		return true;
+		break;
+
 	case 'help':
 	case 'commands':
 	case 'h':

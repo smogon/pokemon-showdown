@@ -722,17 +722,6 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		{
 			// do nothing
 		}
-		else if (cmd === 'a')
-		{
-			if (user.isMod())
-			{
-				selfR.battle.add(target);
-			}
-		}
-		else if (cmd === 'shutdown')
-		{
-			selfR.broadcastError('The server is restarting. Please refresh this page.');
-		}
 		else if (message.substr(0,3) === '>> ')
 		{
 			var cmd = message.substr(3);
@@ -775,29 +764,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 				selfR.battle.add('chat '+toId(user.name)+' << Access denied. To use the developer console, you must be: &');
 			}
 		}
-		else if (cmd === 'forcereset')
-		{
-			if (user.isMod())
-			{
-				selfR.reset();
-			}
-			else
-			{
-			}
-		}
-		else if (cmd === 'reset')
-		{
-			selfR.requestReset(user);
-		}
-		else if (cmd === 'restart')
-		{
-			selfR.battleEndRestart(user);
-		}
-		else if (cmd === 'kickinactive')
-		{
-			selfR.requestKickInactive(user);
-		}
-		else if (!user.muted)
+		else
 		{
 			selfR.battle.add('chat '+toId(user.name)+' '+message);
 		}
