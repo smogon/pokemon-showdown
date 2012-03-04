@@ -4395,8 +4395,8 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon, target) {
 			var targetSpeed = target.stats.spe;
 			var pokemonSpeed = pokemon.stats.spe;
-			var power = 25 * targetSpeed / pokemonSpeed;
-			if (power > 150) power = 150
+			var power = (Math.floor(25 * targetSpeed / pokemonSpeed) || 1);
+			if (power > 150) power = 150;
 			this.debug(''+power+' bp');
 			return power;
 		},
