@@ -1429,7 +1429,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('command', function(data) {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		parseCommand(user, 'command', data, getRoom(data.room), socket);
+		parseCommand(youUser, 'command', data, getRoom(data.room), socket);
 	});
 	socket.on('disconnect', function() {
 		var youUser = resolveUser(you, socket);
