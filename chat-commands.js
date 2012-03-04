@@ -26,6 +26,47 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	cmd = cmd.toLowerCase();
 	switch (cmd)
 	{
+	case 'command':
+		if (target.command === 'userdetails')
+		{
+			var targetUser = getUser(target.userid);
+			if (!targetUser) return true;
+			var roomList = {};
+			for (var i in targetUser.roomCount)
+			{
+				if (i==='lobby') continue;
+				var targetRoom = getRoom(i);
+				if (!targetRoom) continue;
+				var roomData = {};
+				if (targetRoom.battle && targetRoom.battle.sides[0] && targetRoom.battle.sides[1])
+				{
+					if (targetRoom.battle.sides[0].user && targetRoom.battle.sides[1].user)
+					{
+						roomData.p1 = targetRoom.battle.sides[0].user.getIdentity();
+						roomData.p2 = targetRoom.battle.sides[1].user.getIdentity();
+					}
+					else if (targetRoom.battle.sides[0].user)
+					{
+						roomData.p1 = targetRoom.battle.sides[0].user.getIdentity();
+					}
+					else if (targetRoom.battle.sides[1].user)
+					{
+						roomData.p1 = targetRoom.battle.sides[1].user.getIdentity();
+					}
+				}
+				roomList[i] = roomData;
+			}
+			socket.emit('command', {
+				command: 'userdetails',
+				userid: targetUser.userid,
+				avatar: targetUser.avatar,
+				rooms: roomList,
+				room: room.id
+			});
+		}
+		return true;
+		break;
+
 	case 'me':
 		if (!target)
 		{
