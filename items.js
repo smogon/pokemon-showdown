@@ -18,7 +18,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && user.template.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon'))
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -185,7 +184,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Fighting')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -215,7 +213,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Dark')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -286,7 +283,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Fire')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -663,7 +659,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Dragon')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -676,7 +671,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Dragon')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -707,7 +701,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Dark')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -732,7 +725,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Ground')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -832,7 +824,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && this.getEffectiveness(move.type, target) > 0)
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -902,7 +893,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Fighting')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -930,7 +920,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Fire')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1073,7 +1062,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (user.template.species === 'Giratina' && (move.type === 'Ghost' || move.type === 'Dragon'))
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1123,7 +1111,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Rock')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1199,7 +1186,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ice')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1219,7 +1205,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Bug')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1245,7 +1230,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Steel')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1484,7 +1468,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && user.template.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon'))
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1506,7 +1489,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Electric')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1553,7 +1535,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Grass')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1587,7 +1568,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Steel')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1631,7 +1611,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Psychic')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1644,7 +1623,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Grass')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1657,7 +1635,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.category === 'Physical')
 			{
-				this.debug('+10% boost');
 				return basePower * 1.1;
 			}
 		},
@@ -1670,7 +1647,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Water')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1694,7 +1670,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ice')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1755,7 +1730,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Psychic')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -1923,7 +1897,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Poison')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2132,7 +2105,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Rock')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2163,7 +2135,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Grass')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2225,7 +2196,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Water')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2238,7 +2208,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Flying')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2300,7 +2269,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Normal')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2313,7 +2281,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Bug')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2352,7 +2319,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Flying')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2371,7 +2337,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ground')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2397,7 +2362,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ghost')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2422,7 +2386,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Water')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2436,7 +2399,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ghost')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2529,7 +2491,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Rock')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2600,7 +2561,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Poison')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2613,7 +2573,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Psychic')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2674,7 +2633,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Water')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
@@ -2755,7 +2713,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.category === 'Special')
 			{
-				this.debug('+10% boost');
 				return basePower * 1.1;
 			}
 		},
@@ -2789,7 +2746,6 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Electric')
 			{
-				this.debug('+20% boost');
 				return basePower * 1.2;
 			}
 		},
