@@ -78,8 +78,7 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
-			var thawMoves = {FlameWheel:1, SacredFire:1, FlareBlitz:1, FusionFlare:1, Scald:1}
-			if (Math.random()*5 < 1 || thawMoves[move.id])
+			if (Math.random()*5 < 1 || move.thawsUser)
 			{
 				this.add('r-cure-status '+pokemon.id+' frz');
 				pokemon.setStatus('');

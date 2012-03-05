@@ -3466,6 +3466,7 @@ exports.BattleMovedex = {
 		name: "Flame Wheel",
 		pp: 25,
 		isContact: true,
+		thawsUser: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3505,6 +3506,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
+		thawsUser: true,
 		priority: 0,
 		recoil: [1,3],
 		secondary: {
@@ -3958,6 +3960,7 @@ exports.BattleMovedex = {
 		name: "Fusion Flare",
 		pp: 5,
 		isViable: true,
+		thawsUser: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -8893,6 +8896,7 @@ exports.BattleMovedex = {
 		name: "Sacred Fire",
 		pp: 5,
 		isViable: true,
+		thawsUser: true,
 		priority: 0,
 		secondary: {
 			chance: 50,
@@ -9017,6 +9021,7 @@ exports.BattleMovedex = {
 		name: "Scald",
 		pp: 15,
 		isViable: true,
+		thawsUser: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
