@@ -823,6 +823,7 @@ exports.BattleAbilities = {
 	},
 	"Infiltrator": {
 		desc: "Ignores Reflect, Light Screen and Safeguard under effect on the target.",
+		// Implemented in the corresponding effects.
 		id: "Infiltrator",
 		name: "Infiltrator",
 		rating: 1,
