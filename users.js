@@ -104,7 +104,7 @@ function User(name, socket, token)
 	this.people = [new Person(name,socket,selfP)];
 	this.ip = this.people[0].ip;
 	
-	this.muted = !!mutedIps[this.ip];
+	this.muted = !!ipSearch(this.ip,mutedIps);
 	this.prevNames = {};
 	this.sides = {};
 	this.roomCount = {};
@@ -780,11 +780,23 @@ function Person(name, socket, user)
 		this.ip = socket.handshake.address.address;
 	}
 	
-	if (bannedIps[this.ip])
+	if (ipSearch(this.ip,bannedIps))
 	{
 		// gonna kill this
 		this.banned = true;
 	}
+}
+
+function ipSearch(ip, table)
+{
+	if (table[ip]) return true;
+	var dotIndex = ip.lastIndexOf('.');
+	while (dotIndex > 0)
+	{
+		ip = ip.substr(0, dotIndex);
+		if (table[ip+'.*']) return true;
+	}
+	return false;
 }
 
 exports.getUser = getUser;
