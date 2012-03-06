@@ -210,7 +210,7 @@ exports.BattleScripts = {
 		{
 			move.affectedByImmunities = (move.category !== 'Status');
 		}
-		if (move.affectedByImmunities)
+		if (moveData.affectedByImmunities)
 		{
 			var type = move.type;
 			if (move.typeCallback)
