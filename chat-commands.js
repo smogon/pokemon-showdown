@@ -885,8 +885,42 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			if (target === 'engine')
 			{
-				reloadEngine();
+				for (var i in require.cache) delete require.cache[i];
+				BattlePokedex = require('./pokedex.js').BattlePokedex;
+				BattleTiers = require('./tiers.js').BattleTiers;
+				BattleMovedex = require('./movedex.js').BattleMovedex;
+				BattleStatuses = require('./statuses.js').BattleStatuses;
+				BattleTypeChart = require('./typechart.js').BattleTypeChart;
+				BattleScripts = require('./scripts.js').BattleScripts;
+				BattleItems = require('./items.js').BattleItems;
+				BattleAbilities = require('./abilities.js').BattleAbilities;
+				BattleFormats = require('./formats.js').BattleFormats;
+				BattleLearnsets = require('./learnsets.js').BattleLearnsets;
+				BattleTools = require('./tools.js').BattleTools;
+				Tools = new BattleTools();
+				sim = require('./simulator.js');
+
+				BattlePokemon = sim.BattlePokemon;
+				BattleSide = sim.BattleSide;
+				Battle = sim.Battle;
 				socket.emit('console', 'The game engine has been hot-patched.');
+				return true;
+			}
+			else if (target === 'data')
+			{
+				for (var i in require.cache) delete require.cache[i];
+				BattlePokedex = require('./pokedex.js').BattlePokedex;
+				BattleTiers = require('./tiers.js').BattleTiers;
+				BattleMovedex = require('./movedex.js').BattleMovedex;
+				BattleStatuses = require('./statuses.js').BattleStatuses;
+				BattleTypeChart = require('./typechart.js').BattleTypeChart;
+				BattleScripts = require('./scripts.js').BattleScripts;
+				BattleItems = require('./items.js').BattleItems;
+				BattleAbilities = require('./abilities.js').BattleAbilities;
+				BattleFormats = require('./formats.js').BattleFormats;
+				BattleLearnsets = require('./learnsets.js').BattleLearnsets;
+				BattleTools = require('./tools.js').BattleTools;
+				socket.emit('console', 'Game resources have been hot-patched.');
 				return true;
 			}
 			else if (target === 'chat')
@@ -1345,6 +1379,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			socket.emit('console', 'Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: &');
 			socket.emit('console', 'Hot-patching has greater memory requirements than restarting.');
 			socket.emit('console', '/hotpatch engine - reload the game engine');
+			socket.emit('console', '/hotpatch data - reload the game data (abilities, moves...)');
 			socket.emit('console', '/hotpatch chat - reload chat-commands.js');
 		}
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands')
