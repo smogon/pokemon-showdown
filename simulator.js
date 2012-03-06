@@ -914,20 +914,20 @@ function BattlePokemon(set, side)
 			return true;
 		}
 		if (selfP.negateImmunity[type]) return true;
-		var immunity = selfB.runEvent('Immunity', selfP, null, null, type);
-		if (!immunity)
+		if (!selfB.getImmunity(type, selfP))
 		{
-			selfB.debug('artificial immunity');
-			if (message && immunity !== null)
+			selfB.debug('natural immunity');
+			if (message)
 			{
 				selfB.add('r-immune '+selfP.id);
 			}
 			return false;
 		}
-		if (!selfB.getImmunity(type, selfP))
+		var immunity = selfB.runEvent('Immunity', selfP, null, null, type);
+		if (!immunity)
 		{
-			selfB.debug('natural immunity');
-			if (message)
+			selfB.debug('artificial immunity');
+			if (message && immunity !== null)
 			{
 				selfB.add('r-immune '+selfP.id);
 			}
