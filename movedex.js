@@ -5981,10 +5981,13 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onFoeBasePower: function(basePower, attacker, defender, move) {
-				if (move.category === 'Special' && defender.side === this.effectData.target && !move.crit)
+				if (move.category === 'Special' && defender.side === this.effectData.target)
 				{
-					this.debug('Light Screen weaken');
-					return basePower/2;
+					if (!move.crit && attacker.ability !== 'Infiltrator')
+					{
+						this.debug('Light Screen weaken');
+						return basePower/2;
+					}
 				}
 			},
 			onStart: function(side) {
@@ -8324,10 +8327,13 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onFoeBasePower: function(basePower, attacker, defender, move) {
-				if (move.category === 'Physical' && defender.side === this.effectData.target && !move.crit)
+				if (move.category === 'Physical' && defender.side === this.effectData.target)
 				{
-					this.debug('Reflect weaken');
-					return basePower/2;
+					if (!move.crit && attacker.ability !== 'Infiltrator')
+					{
+						this.debug('Reflect weaken');
+						return basePower/2;
+					}
 				}
 			},
 			onStart: function(side) {
@@ -8947,9 +8953,12 @@ exports.BattleMovedex = {
 				}
 				return 5;
 			},
-			onSetStatus: function() {
-				this.debug('interrupting setstatus');
-				return false;
+			onSetStatus: function(status, target, source) {
+				if (source === target || (source && source.ability !== 'Infiltrator'))
+				{
+					this.debug('interrupting setstatus');
+					return false;
+				}
 			},
 			onStart: function(side) {
 				this.add('r-side-condition '+side.id+' Safeguard');
