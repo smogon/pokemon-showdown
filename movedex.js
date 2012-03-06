@@ -500,6 +500,7 @@ exports.BattleMovedex = {
 		id: "Attract",
 		name: "Attract",
 		pp: 15,
+		isBounceable: true,
 		priority: 0,
 		onHit: function(target, source) {
 			if ((target.gender === 'M' && source.gender === 'F') ||
@@ -903,6 +904,7 @@ exports.BattleMovedex = {
 		name: "Block",
 		pp: 5,
 		isViable: true,
+		isBounceable: true,
 		priority: 0,
 		onHit: function(target) {
 			target.addVolatile('trapped');
@@ -2045,6 +2047,7 @@ exports.BattleMovedex = {
 		boosts: {
 			evasion: -1
 		},
+		isBounceable: true,
 		secondary: false,
 		target: "normal",
 		type: "Flying"
@@ -2797,6 +2800,7 @@ exports.BattleMovedex = {
 		id: "Embargo",
 		name: "Embargo",
 		pp: 15,
+		isBounceable: true,
 		priority: 0,
 		volatileStatus: 'Embargo',
 		effect: {
@@ -3004,8 +3008,10 @@ exports.BattleMovedex = {
 		id: "Entrainment",
 		name: "Entrainment",
 		pp: 15,
+		isBounceable: true,
 		priority: 0,
 		onHit: function(target, source) {
+			if (target === source) return false;
 			if (target.ability === 'Multitype' || target.ability === 'Truant' || target.ability === 'ZenMode' || target.ability === source.ability)
 			{
 				return false;
@@ -3763,6 +3769,7 @@ exports.BattleMovedex = {
 		id: "Foresight",
 		name: "Foresight",
 		pp: 40,
+		isBounceable: true,
 		priority: 0,
 		volatileStatus: 'Foresight',
 		effect: {
@@ -4013,6 +4020,7 @@ exports.BattleMovedex = {
 		id: "GastroAcid",
 		name: "Gastro Acid",
 		pp: 10,
+		isBounceable: true,
 		priority: 0,
 		onHit: function(pokemon) {
 			if (pokemon.ability === 'Multitype')
@@ -4588,6 +4596,7 @@ exports.BattleMovedex = {
 		id: "HealBlock",
 		name: "Heal Block",
 		pp: 15,
+		isBounceable: true,
 		priority: 0,
 		volatileStatus: 'HealBlock',
 		effect: {
@@ -4638,6 +4647,7 @@ exports.BattleMovedex = {
 		id: "HealPulse",
 		name: "Heal Pulse",
 		pp: 10,
+		isBounceable: true,
 		priority: 0,
 		heal: [1,2],
 		secondary: false,
@@ -6198,7 +6208,7 @@ exports.BattleMovedex = {
 				if (target === source) return;
 				if (typeof move.isBounceable === 'undefined')
 				{
-					move.isBounceable = !!(move.category === 'Status' && (move.status || move.volatileStatus === 'confusion' || move.forceSwitch));
+					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
 				}
 				if (move.target !== 'foeSide' && target !== this.effectData.target)
 				{
@@ -6376,6 +6386,7 @@ exports.BattleMovedex = {
 		name: "Mean Look",
 		pp: 5,
 		isViable: true,
+		isBounceable: true,
 		priority: 0,
 		onHit: function(target) {
 			target.addVolatile('trapped');
@@ -6691,6 +6702,7 @@ exports.BattleMovedex = {
 		id: "MiracleEye",
 		name: "Miracle Eye",
 		pp: 40,
+		isBounceable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -7159,6 +7171,7 @@ exports.BattleMovedex = {
 		id: "OdorSleuth",
 		name: "Odor Sleuth",
 		pp: 40,
+		isBounceable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -9471,6 +9484,7 @@ exports.BattleMovedex = {
 		id: "SimpleBeam",
 		name: "Simple Beam",
 		pp: 15,
+		isBounceable: true,
 		priority: 0,
 		onHit: function(pokemon) {
 			if (pokemon.ability === 'Multitype' || pokemon.ability === 'Truant')
@@ -10110,6 +10124,7 @@ exports.BattleMovedex = {
 		name: "Spider Web",
 		pp: 10,
 		isViable: true,
+		isBounceable: true,
 		priority: 0,
 		onHit: function(target) {
 			target.addVolatile('trapped');
@@ -10196,6 +10211,7 @@ exports.BattleMovedex = {
 		id: "Spite",
 		name: "Spite",
 		pp: 10,
+		isBounceable: true,
 		priority: 0,
 		onHit: function(target) {
 			if (target.deductPP(target.lastMove, 4))
@@ -11141,6 +11157,7 @@ exports.BattleMovedex = {
 		id: "Telekinesis",
 		name: "Telekinesis",
 		pp: 15,
+		isBounceable: true,
 		priority: -7,
 		secondary: false,
 		target: "normal",
@@ -12211,6 +12228,7 @@ exports.BattleMovedex = {
 		id: "WorrySeed",
 		name: "Worry Seed",
 		pp: 10,
+		isBounceable: true,
 		priority: 0,
 		onHit: function(pokemon) {
 			if (pokemon.ability === 'Multitype' || pokemon.ability === 'Truant')
