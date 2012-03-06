@@ -2227,7 +2227,7 @@ exports.BattleItems = {
 		id: "ShellBell",
 		name: "Shell Bell",
 		spritenum: 438,
-		onSourceDamage: function(damage, target, source, effect) {
+		onSourceAfterDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && target !== source)
 			{
 				this.heal(damage/8, source);
