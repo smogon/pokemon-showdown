@@ -872,7 +872,7 @@ exports.BattleAbilities = {
 	},
 	"IronBarbs": {
 		desc: "All moves that make contact with the Pok\u00e9mon with Iron Barbs will damage the user by 1/8 of their maximum HP after damage is dealt.",
-		onAfterMoveSecondary: function(target, source, move) {
+		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact)
 			{
 				this.damage(source.maxhp/8, source, target);
@@ -1497,7 +1497,7 @@ exports.BattleAbilities = {
 	},
 	"RoughSkin": {
 		desc: "Causes recoil damage equal to 1/8 of the opponent's max HP if an opponent\u00a0directly attacks.",
-		onAfterMoveSecondary: function(target, source, move) {
+		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact)
 			{
 				this.damage(source.maxhp/8, source, target);
