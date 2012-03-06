@@ -1719,6 +1719,7 @@ exports.BattleMovedex = {
 		boosts: {
 			spe: -2
 		},
+		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -4191,6 +4192,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		status: 'slp',
+		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -12212,6 +12214,7 @@ exports.BattleMovedex = {
 				}
 			}
 		},
+		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
