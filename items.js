@@ -2114,7 +2114,7 @@ exports.BattleItems = {
 		id: "RockyHelmet",
 		name: "Rocky Helmet",
 		spritenum: 417,
-		onAfterMoveSecondary: function(target, source, move) {
+		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact)
 			{
 				this.damage(source.maxhp/6, source, target);
