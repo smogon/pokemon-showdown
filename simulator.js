@@ -1463,7 +1463,10 @@ function Battle(roomid, format, ranked)
 				};
 				if (AttackingEvents[eventid])
 				{
-					selfB.debug(eventid+' handler suppressed by Mold Breaker');
+					if (eventid !== 'ModifyPokemon' && eventid !== 'ModifyStats')
+					{
+						selfB.debug(eventid+' handler suppressed by Mold Breaker');
+					}
 					continue;
 				}
 			}
