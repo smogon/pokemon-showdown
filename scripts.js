@@ -138,36 +138,6 @@ exports.BattleScripts = {
 		{
 			move.basePower = 102;
 		}
-		if (typeof move.affectedByImmunities === 'undefined')
-		{
-			move.affectedByImmunities = (move.category !== 'Status');
-		}
-		if (move.affectedByImmunities)
-		{
-			var type = move.type;
-			if (move.typeCallback)
-			{
-				if (typeof move.typeCallback === 'string')
-				{
-					type = move.typeCallback;
-				}
-				else
-				{
-					type = move.typeCallback.call(this, pokemon, target);
-				}
-				move.type = type;
-			}
-			if (!target.runImmunity(type, true))
-			{
-				this.singleEvent('MoveFail', move, null, target, pokemon, move);
-				if (move.selfdestruct)
-				{
-					this.faint(pokemon, pokemon, move);
-				}
-				return true;
-			}
-		}
-		
 		
 		pokemon.lastDamage = 0;
 		if (!move.multihit)
@@ -197,6 +167,7 @@ exports.BattleScripts = {
 			for (var i=0; i<hits && target.hp; i++)
 			{
 				damage = BattleScripts.moveHit.call(this, target, pokemon, move);
+				if (damage === false) return true;
 			}
 			this.add('r-hit-count '+target.id+' '+i);
 		}
@@ -233,8 +204,38 @@ exports.BattleScripts = {
 
 		this.setActiveMove(move, pokemon, target);
 		hitResult = true;
-		move = this.getMove(move);
 		if (!moveData) moveData = move;
+
+		if (typeof move.affectedByImmunities === 'undefined')
+		{
+			move.affectedByImmunities = (move.category !== 'Status');
+		}
+		if (move.affectedByImmunities)
+		{
+			var type = move.type;
+			if (move.typeCallback)
+			{
+				if (typeof move.typeCallback === 'string')
+				{
+					type = move.typeCallback;
+				}
+				else
+				{
+					type = move.typeCallback.call(this, pokemon, target);
+				}
+				move.type = type;
+			}
+			if (!target.runImmunity(type, true))
+			{
+				this.singleEvent('MoveFail', move, null, target, pokemon, move);
+				if (move.selfdestruct)
+				{
+					this.faint(pokemon, pokemon, move);
+				}
+				return true;
+			}
+		}
+
 		// don't run the pokemon hit events for side-hits and field-hits
 		if (move.target !== 'all' && move.target !== 'foeSide' && move.target !== 'allySide')
 		{
