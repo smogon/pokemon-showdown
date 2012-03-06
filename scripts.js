@@ -328,6 +328,11 @@ exports.BattleScripts = {
 			if (moveData.heal && !target.fainted)
 			{
 				var d = target.heal(target.maxhp * moveData.heal[0] / moveData.heal[1]);
+				if (!d)
+				{
+					this.add('r-failed '+target.id);
+					return false;
+				}
 				this.add('r-heal '+target.id+' '+target.hpPercent(d)+target.getHealth());
 			}
 			if (moveData.status)
