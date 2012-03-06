@@ -9978,6 +9978,7 @@ exports.BattleMovedex = {
 				pokemon.types = ['Water'];
 			}
 		},
+		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
