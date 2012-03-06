@@ -9968,6 +9968,7 @@ exports.BattleMovedex = {
 		name: "Soak",
 		pp: 20,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'Soak',
 		effect: {
 			onStart: function(pokemon) {
