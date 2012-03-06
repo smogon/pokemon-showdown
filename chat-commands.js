@@ -30,7 +30,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (target.command === 'userdetails')
 		{
 			var targetUser = getUser(target.userid);
-			if (!targetUser) return true;
+			if (!targetUser || !room) return true;
 			var roomList = {};
 			for (var i in targetUser.roomCount)
 			{
@@ -61,6 +61,15 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				userid: targetUser.userid,
 				avatar: targetUser.avatar,
 				rooms: roomList,
+				room: room.id
+			});
+		}
+		if (target.command === 'roomlist')
+		{
+			if (!room || !room.getRoomList) return true;
+			socket.emit('command', {
+				command: 'roomlist',
+				rooms: room.getRoomList(true),
 				room: room.id
 			});
 		}
