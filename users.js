@@ -791,10 +791,11 @@ function ipSearch(ip, table)
 {
 	if (table[ip]) return true;
 	var dotIndex = ip.lastIndexOf('.');
-	while (dotIndex > 0)
+	for (var i=0; i<4 && dotIndex > 0; i++)
 	{
 		ip = ip.substr(0, dotIndex);
 		if (table[ip+'.*']) return true;
+		dotIndex = ip.lastIndexOf('.');
 	}
 	return false;
 }
