@@ -668,6 +668,12 @@ exports.BattleAbilities = {
 				return basePower / 2;
 			}
 		},
+		onDamage: function(damage, attacker, defender, effect) {
+			if (effect && effect.id === 'brn')
+			{
+				return damage / 2;
+			}
+		},
 		id: "Heatproof",
 		name: "Heatproof",
 		rating: 2.5,
