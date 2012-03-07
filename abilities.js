@@ -1794,7 +1794,7 @@ exports.BattleAbilities = {
 		onWeather: function(target, source, effect) {
 			if (effect.id === 'SunnyDay')
 			{
-				this.damage(target.hp/8);
+				this.damage(target.maxhp/8);
 			}
 		},
 		id: "SolarPower",
