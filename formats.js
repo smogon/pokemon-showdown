@@ -17,7 +17,6 @@ exports.BattleFormats = {
 		name: "Unranked Random Battle",
 		team: 'random',
 		searchShow: true,
-		challengeHide: true,
 		ruleset: ['Pokemon','PotD', 'SleepClause']
 	},
 	OU: {
@@ -45,8 +44,6 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "CAP Necturna Playtest",
 		ranked: true,
-		searchHide: true,
-		challengeHide: true,
 		ruleset: ['SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
 		banlist: ['Pokemon','SpeciesClause','Standard','Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
 	},
@@ -93,7 +90,6 @@ exports.BattleFormats = {
 	Hackmons: {
 		effectType: 'Format',
 		name: "Hackmons",
-		searchHide: true,
 		challengeShow: true,
 		isTeambuilderFormat: true,
 		ruleset: [],
@@ -112,7 +108,6 @@ exports.BattleFormats = {
 	Haxmons: {
 		effectType: 'Format',
 		name: "Haxmons",
-		searchHide: true,
 		ruleset: ['HaxClause', 'TeamPreview', 'G4CAP','G5CAP']
 	},
 	DebugMode: {
@@ -120,7 +115,6 @@ exports.BattleFormats = {
 		name: "Debug Mode",
 		challengeShow: true,
 		canUseRandomTeam: true,
-		searchHide: true,
 		// no restrictions, for serious
 		ruleset: []
 	},
