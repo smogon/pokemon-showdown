@@ -8,12 +8,15 @@ exports.BattleFormats = {
 		team: 'random',
 		searchDefault: true,
 		ranked: true,
+		challengeShow: true,
+		searchShow: true,
 		ruleset: ['Pokemon','PotD', 'SleepClause']
 	},
 	UnrankedRandomBattle: {
 		effectType: 'Format',
 		name: "Unranked Random Battle",
 		team: 'random',
+		searchShow: true,
 		challengeHide: true,
 		ruleset: ['Pokemon','PotD', 'SleepClause']
 	},
@@ -22,6 +25,9 @@ exports.BattleFormats = {
 		name: "OU",
 		challengeDefault: true,
 		ranked: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
 		banlist: ['Pokemon','Standard', 'Uber', 'G4CAP','G5CAP', 'Drizzle ++ SwiftSwim']
 	},
@@ -29,6 +35,9 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "CAP",
 		ranked: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
 		banlist: ['Pokemon','Standard','Uber']
 	},
@@ -45,6 +54,9 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "Ubers",
 		ranked: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
 		banlist: ['Pokemon','Standard','G4CAP','G5CAP']
 	},
@@ -52,6 +64,9 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "UU",
 		ranked: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
 		banlist: ['Pokemon','Standard','Uber','OU','BL','G4CAP','G5CAP', 'SnowWarning','Drought']
 	},
@@ -59,6 +74,9 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "RU",
 		ranked: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
 		banlist: ['Pokemon','Standard','Uber','OU','BL','UU','BL2','G4CAP','G5CAP', 'ShellSmash + BatonPass']
 	},
@@ -66,6 +84,9 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "NU",
 		ranked: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
 		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
 		banlist: ['Pokemon','Standard','Uber','OU','BL','UU','BL2','RU','BL3','G4CAP','G5CAP']
 	},
@@ -73,6 +94,8 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "Hackmons",
 		searchHide: true,
+		challengeShow: true,
+		isTeambuilderFormat: true,
 		ruleset: [],
 		banlist: ['Pokemon','G4CAP','G5CAP']
 	},
@@ -80,6 +103,9 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "Balanced Hackmons",
 		ranked: true,
+		challengeShow: true,
+		searchShow: true,
+		teambuilderFormat: 'Hackmons',
 		ruleset: [],
 		banlist: ['Pokemon','OHKO', 'WonderGuard', 'G4CAP','G5CAP']
 	},
@@ -92,6 +118,8 @@ exports.BattleFormats = {
 	DebugMode: {
 		effectType: 'Format',
 		name: "Debug Mode",
+		challengeShow: true,
+		canUseRandomTeam: true,
 		searchHide: true,
 		// no restrictions, for serious
 		ruleset: []
