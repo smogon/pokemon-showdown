@@ -307,6 +307,10 @@ function BattleTools()
 		}
 		if (!team)
 		{
+			if (format.canUseRandomTeam)
+			{
+				return false;
+			}
 			return ["Random teams are not allowed in this format."];
 		}
 		if (!team.length)
