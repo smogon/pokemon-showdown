@@ -28,8 +28,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Pokemon','Standard', 'Uber', 'G4CAP','G5CAP', 'Drizzle ++ SwiftSwim']
+		ruleset: ['SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
+		banlist: ['Pokemon','SpeciesClause','Standard', 'Uber', 'G4CAP','G5CAP', 'Drizzle ++ SwiftSwim']
 	},
 	CAP: {
 		effectType: 'Format',
@@ -38,8 +38,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Pokemon','Standard','Uber']
+		ruleset: ['SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
+		banlist: ['Pokemon','SpeciesClause','Standard','Uber']
 	},
 	CAPNecturnaPlaytest: {
 		effectType: 'Format',
@@ -47,8 +47,8 @@ exports.BattleFormats = {
 		ranked: true,
 		searchHide: true,
 		challengeHide: true,
-		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Pokemon','Standard','Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
+		ruleset: ['SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
+		banlist: ['Pokemon','SpeciesClause','Standard','Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
 	},
 	Ubers: {
 		effectType: 'Format',
@@ -57,8 +57,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Pokemon','Standard','G4CAP','G5CAP']
+		ruleset: ['SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
+		banlist: ['Pokemon','SpeciesClause','Standard','G4CAP','G5CAP']
 	},
 	UU: {
 		effectType: 'Format',
@@ -67,8 +67,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Pokemon','Standard','Uber','OU','BL','G4CAP','G5CAP', 'SnowWarning','Drought']
+		ruleset: ['SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
+		banlist: ['Pokemon','SpeciesClause','Standard','Uber','OU','BL','G4CAP','G5CAP', 'SnowWarning','Drought']
 	},
 	RU: {
 		effectType: 'Format',
@@ -77,8 +77,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Pokemon','Standard','Uber','OU','BL','UU','BL2','G4CAP','G5CAP', 'ShellSmash + BatonPass']
+		ruleset: ['SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
+		banlist: ['Pokemon','SpeciesClause','Standard','Uber','OU','BL','UU','BL2','G4CAP','G5CAP', 'ShellSmash + BatonPass']
 	},
 	NU: {
 		effectType: 'Format',
@@ -87,8 +87,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['SleepClause', 'Standard', 'TeamPreview'],
-		banlist: ['Pokemon','Standard','Uber','OU','BL','UU','BL2','RU','BL3','G4CAP','G5CAP']
+		ruleset: ['SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
+		banlist: ['Pokemon','SpeciesClause','Standard','Uber','OU','BL','UU','BL2','RU','BL3','G4CAP','G5CAP']
 	},
 	Hackmons: {
 		effectType: 'Format',
@@ -240,6 +240,22 @@ exports.BattleFormats = {
 				move.accuracy = 0;
 			}
 			move.willCrit = true;
+		}
+	},
+	SpeciesClause: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule Species Clause');
+		},
+		validateTeam: function(team, format) {
+			var speciesTable = {};
+			for (var i=0; i<team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				if (speciesTable[template.num]) {
+					return [template.name+" is banned by Species Clause."];
+				}
+				speciesTable[template.num] = true;
+			}
 		}
 	},
 	SleepClause: {
