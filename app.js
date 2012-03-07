@@ -1354,7 +1354,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('join', function(data) {
 		if (!you)
 		{
-			you = getUser(data.name, socket, data.token, data.room);
+			you = Users.connectUser(data.name, socket, data.token, data.room);
 			console.log('JOIN: '+data.name+' => '+you.name+' ['+data.token+']');
 		}
 		else
