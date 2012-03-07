@@ -1200,6 +1200,23 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		return true;
 		break;
 		
+	case 'loadbanlist':
+		if (user.group === '&')
+		{
+			socket.emit('console', 'loading');
+			fs.readFile('config/ipbans.txt', function (err, data) {
+				if (err) return;
+				data = (''+data).split("\n");
+				for (var i=0; i<data.length; i++)
+				{
+					if (data[i]) bannedIps[data[i]] = '#ipban';
+				}
+				socket.emit('console', 'banned '+i+' ips');
+			});
+		}
+		return true;
+		break;
+
 	case 'crashfixed':
 		if (user.group === '&')
 		{
