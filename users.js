@@ -18,16 +18,11 @@ function toUserid(name)
 	return name.toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 
-function getUser(name, socket, token, room)
+function getUser(name)
 {
-	if (name === '!') return null;
-	if (!name && !socket) return null;
+	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
 	var userid = toUserid(name);
-	if (socket)
-	{
-		return connectUser(name, socket, token, room);
-	}
 	var i = 0;
 	while (userid && !users[userid] && i < 1000)
 	{
@@ -49,24 +44,23 @@ function connectUser(name, socket, token, room)
 {
 	var userid = toUserid(name);
 	var user;
-	var person;
+	console.log("NEW PERSON: "+socket.id);
+	var person = new Person(name, socket, true);
+	if (person.banned) return person;
 	if (users[userid])
 	{
 		user = users[userid];
-		person = user.add(name, socket, token);
-		if (!person)
+		if (!user.add(name, person, token))
 		{
 			console.log("NEW USER: [guest] (userid: "+userid+" taken) "+name);
-			user = new User('', socket, token);
-			person = user.people[0];
+			user = new User('', person, token);
 			user.rename(name, token);
 		}
 	}
 	else
 	{
 		console.log("NEW USER: [guest] "+name);
-		user = new User(name, socket, token);
-		person = user.people[0];
+		user = new User(name, person, token);
 	}
 	if (room)
 	{
@@ -75,7 +69,7 @@ function connectUser(name, socket, token, room)
 	return person;
 }
 
-function User(name, socket, token)
+function User(name, person, token)
 {
 	var selfP = this;
 	
@@ -84,7 +78,7 @@ function User(name, socket, token)
 	if (!token)
 	{
 		//token = ''+Math.floor(Math.random()*10000);
-		token = ''+socket.id;
+		token = ''+person.socket.id;
 	}
 	this.token = token;
 	this.guestNum = numUsers;
@@ -100,9 +94,9 @@ function User(name, socket, token)
 	
 	this.connected = true;
 	
-	console.log("NEW PERSON: "+socket.id);
-	this.people = [new Person(name,socket,selfP)];
-	this.ip = this.people[0].ip;
+	if (person.user) person.user = this;
+	this.people = [person];
+	this.ip = person.ip;
 	
 	this.muted = !!ipSearch(this.ip,mutedIps);
 	this.prevNames = {};
@@ -415,18 +409,17 @@ function User(name, socket, token)
 			return false;
 		});
 	};
-	this.add = function(name, socket, token) {
+	this.add = function(name, person, token) {
 		// name is ignored - this is intentional
-		if (selfP.token !== token)
+		if (person.banned || selfP.token !== token)
 		{
 			return false;
 		}
 		selfP.connected = true;
-		console.log("NEW PERSON: "+socket.id+" (add)");
-		var newPerson = new Person(name, socket, selfP);
-		selfP.people.push(newPerson);
-		selfP.ip = newPerson.ip;
-		return newPerson;
+		person.user = selfP;
+		selfP.people.push(person);
+		selfP.ip = person.ip;
+		return person;
 	};
 	this.merge = function(person) {
 		selfP.connected = true;
@@ -739,7 +732,11 @@ function User(name, socket, token)
 	
 	// initialize
 	users[selfP.userid] = selfP;
-	if (name)
+	if (person.banned)
+	{
+		selfP.destroy();
+	}
+	else if (name)
 	{
 		selfP.rename(name,token);
 	}
@@ -784,6 +781,7 @@ function Person(name, socket, user)
 	{
 		// gonna kill this
 		this.banned = true;
+		this.user = null;
 	}
 }
 
@@ -802,5 +800,6 @@ function ipSearch(ip, table)
 
 exports.getUser = getUser;
 exports.searchUser = searchUser;
+exports.connectUser = connectUser;
 exports.users = users;
 exports.prevUsers = prevUsers;
