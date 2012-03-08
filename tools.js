@@ -252,7 +252,7 @@ function BattleTools()
 			
 			banlistTable = format.banlistTable;
 			if (!subformat) subformat = format;
-			if (subformat.ruleset)
+			if (subformat.banlist)
 			{
 				for (var i=0; i<subformat.banlist.length; i++)
 				{
@@ -286,6 +286,9 @@ function BattleTools()
 						}
 					}
 				}
+			}
+			if (subformat.ruleset)
+			{
 				for (var i=0; i<subformat.ruleset.length; i++)
 				{
 					var subsubformat = selfT.getEffect(subformat.ruleset[i]);
