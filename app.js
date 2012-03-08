@@ -378,13 +378,6 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		{
 			selfR.inactiveTicksLeft--;
 		}
-		if (selfR.inactiveTicksLeft)
-		{
-			selfR.battle.add('message Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
-			selfR.update();
-			selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
-			return;
-		}
 		if (selfR.sideFreeTicks[inactiveSide])
 		{
 			selfR.sideFreeTicks[inactiveSide]--;
@@ -392,6 +385,13 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		else
 		{
 			selfR.sideTicksLeft[inactiveSide]--;
+		}
+		if (selfR.inactiveTicksLeft)
+		{
+			selfR.battle.add('message Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
+			selfR.update();
+			selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
+			return;
 		}
 		
 		if (selfR.battle.ranked)
