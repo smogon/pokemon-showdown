@@ -178,6 +178,11 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			}
 			else
 			{
+				var winner = getUser(selfR.battle.winner);
+				if (winner && !winner.authenticated)
+				{
+					winner.emit('console', {rawMessage: '<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>Register an account to protect your ladder rating!</b><br /><button onclick="overlay(\'register\',{ifuserid:\''+winner.userid+'\'});return false"><b>Register</b></button></div>'});
+				}
 				// update rankings
 				request({
 					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.ranked.format)+'&servertoken='+servertoken+'&nocache='+getTime(),
@@ -1367,7 +1372,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('rename', function(data) {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		youUser.rename(data.name, data.token);
+		youUser.rename(data.name, data.token, data.auth);
 	});
 	socket.on('chat', function(message) {
 		var youUser = resolveUser(you, socket);

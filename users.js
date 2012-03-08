@@ -147,7 +147,10 @@ function User(name, person, token)
 		// skip the login server
 		var userid = toUserid(name);
 		
-		if (users[userid] && users[userid] !== selfP) return false;
+		if (users[userid] && users[userid] !== selfP)
+		{
+			return false;
+		}
 		
 		if (selfP.named) selfP.prevNames[selfP.userid] = selfP.name;
 		
@@ -168,7 +171,7 @@ function User(name, person, token)
 		delete users[oldid];
 		selfP.userid = userid;
 		users[selfP.userid] = selfP;
-		selfP.authenticated = (authenticated || false);
+		selfP.authenticated = !!authenticated;
 		
 		if (config.localsysop && selfP.ip === '127.0.0.1')
 		{
@@ -237,7 +240,13 @@ function User(name, person, token)
 		}
 		return true;
 	};
-	this.rename = function(name, token) {
+	/**
+	 *
+	 * @param name    The name you want
+	 * @param token   Login token
+	 * @param auth    Make sure this account will identify as registered
+	 */
+	this.rename = function(name, token, auth) {
 		if (!name) name = '';
 		name = name.trim();
 		if (name.length > 18) name = name.substr(0,18);
@@ -247,6 +256,7 @@ function User(name, person, token)
 			name = name.substr(1);
 		}
 		var userid = toUserid(name);
+		if (selfP.authenticated) auth = false;
 		
 		if (!userid)
 		{
@@ -255,11 +265,11 @@ function User(name, person, token)
 			selfP.emit('nameTaken', {userid: '', reason: "You did not specify a name."});
 			return false;
 		}
-		else if (userid === selfP.userid)
+		else if (userid === selfP.userid && !auth)
 		{
 			return selfP.forceRename(name, selfP.authenticated);
 		}
-		if (users[userid] && !users[userid].authenticated && users[userid].connected)
+		if (users[userid] && !users[userid].authenticated && users[userid].connected && !auth)
 		{
 			selfP.emit('nameTaken', {userid:selfP.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
 			return false;
@@ -286,8 +296,15 @@ function User(name, person, token)
 				
 				if (users[userid] && !users[userid].authenticated && users[userid].connected)
 				{
-					selfP.emit('nameTaken', {userid:selfP.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
-					return false;
+					if (auth)
+					{
+						if (users[userid] !== selfP) users[userid].resetName();
+					}
+					else
+					{
+						selfP.emit('nameTaken', {userid:selfP.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
+						return false;
+					}
 				}
 				var group = ' ';
 				var avatar = 0;
@@ -340,7 +357,7 @@ function User(name, person, token)
 					{
 					}
 				}
-				if (users[userid])
+				if (users[userid] && users[userid] !== selfP)
 				{
 					// This user already exists; let's merge
 					var user = users[userid];
