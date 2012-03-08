@@ -142,7 +142,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	this.p1 = p1 || '';
 	this.p2 = p2 || '';
 	
-	this.sideTicksLeft = [9, 9];
+	this.sideTicksLeft = [8, 8];
 	this.sideFreeTicks = [0, 0];
 	this.inactiveTicksLeft = 0;
 	
