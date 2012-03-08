@@ -56,13 +56,18 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				}
 				roomList[i] = roomData;
 			}
-			socket.emit('command', {
+			var userdetails = {
 				command: 'userdetails',
 				userid: targetUser.userid,
 				avatar: targetUser.avatar,
 				rooms: roomList,
 				room: room.id
-			});
+			};
+			if (user.canMod(targetUser.group))
+			{
+				userdetails.ip = targetUser.ip;
+			}
+			socket.emit('command', userdetails);
 		}
 		if (target.command === 'roomlist')
 		{
@@ -247,7 +252,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				socket.emit('console', '(Unregistered)');
 			}
-			if (user.group === '&' || user.group === '@')
+			if (user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'IP: '+targetUser.ip);
 			}
