@@ -58,10 +58,7 @@ function BattleTools()
 			if (BattleTiers[id])
 			{
 				template.tier = BattleTiers[id].tier;
-			}
-			if (BattleTiers[id])
-			{
-				template.tier = BattleTiers[id].tier;
+				template.isNonstandard = BattleTiers[id].isNonstandard;
 			}
 			if (BattleLearnsets[id])
 			{
@@ -239,8 +236,10 @@ function BattleTools()
 		} while (template && template.species);
 		return false;
 	};
-	this.getBanlistTable = function(format, subformat) {
+	this.getBanlistTable = function(format, subformat, depth) {
 		var banlistTable;
+		if (!depth) depth = 0;
+		if (depth>4) return; // avoid infinite recursion
 		if (format.banlistTable && !subformat)
 		{
 			banlistTable = format.banlistTable;
@@ -253,16 +252,16 @@ function BattleTools()
 			
 			banlistTable = format.banlistTable;
 			if (!subformat) subformat = format;
-			if (subformat.banlist)
+			if (subformat.ruleset)
 			{
 				for (var i=0; i<subformat.banlist.length; i++)
 				{
-					// make sure we don't infinitely recurse
+					// don't revalidate what we already validate
 					if (banlistTable[toId(subformat.banlist[i])]) continue;
 					
 					banlistTable[subformat.banlist[i]] = true;
 					banlistTable[toId(subformat.banlist[i])] = true;
-					
+
 					var plusPos = subformat.banlist[i].indexOf('+');
 					if (plusPos && plusPos > 0)
 					{
@@ -286,11 +285,13 @@ function BattleTools()
 							format.setBanTable.push(complexList);
 						}
 					}
-					
-					var subsubformat = selfT.getEffect(subformat.banlist[i]);
-					if (subsubformat.banlist && subsubformat.effectType === 'Banlist')
+				}
+				for (var i=0; i<subformat.ruleset.length; i++)
+				{
+					var subsubformat = selfT.getEffect(subformat.ruleset[i]);
+					if (subsubformat.ruleset && subsubformat.effectType === 'Banlist')
 					{
-						selfT.getBanlistTable(format, subsubformat);
+						selfT.getBanlistTable(format, subsubformat, depth+1);
 					}
 				}
 			}
@@ -353,11 +354,11 @@ function BattleTools()
 			}
 		}
 		
-		if (format.banlist)
+		if (format.ruleset)
 		{
-			for (var i=0; i<format.banlist.length; i++)
+			for (var i=0; i<format.ruleset.length; i++)
 			{
-				var subformat = selfT.getEffect(format.banlist[i]);
+				var subformat = selfT.getEffect(format.ruleset[i]);
 				if (subformat.validateTeam)
 				{
 					problems = problems.concat(subformat.validateTeam.call(selfT, team, format)||[]);
@@ -528,11 +529,11 @@ function BattleTools()
 			}
 		}
 		
-		if (format.banlist)
+		if (format.ruleset)
 		{
-			for (var i=0; i<format.banlist.length; i++)
+			for (var i=0; i<format.ruleset.length; i++)
 			{
-				var subformat = selfT.getEffect(format.banlist[i]);
+				var subformat = selfT.getEffect(format.ruleset[i]);
 				if (subformat.validateSet)
 				{
 					problems = problems.concat(subformat.validateSet.call(selfT, set, format)||[]);
