@@ -9578,7 +9578,7 @@ exports.BattleMovedex = {
 			if (pokemon.removeVolatile('SkullBash')) return;
 			this.add('message '+pokemon.name+' lowered its head! (placeholder)');
 			pokemon.addVolatile('SkullBash');
-			this.boost({def:1});
+			this.boost({def:1}, pokemon, pokemon, this.getMove('SkullBash'));
 			return true;
 		},
 		effect: {
