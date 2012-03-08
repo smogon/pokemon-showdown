@@ -1,6 +1,6 @@
 exports.BattleTiers = {
 	"Abomasnow": {
-		tier: "UU"
+		tier: "BL"
 	},
 	"Abra": {
 		tier: "LC"
@@ -441,7 +441,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Donphan": {
-		tier: "UU"
+		tier: "OU"
 	},
 	"Dragonair": {
 		tier: "Limbo"
@@ -483,7 +483,7 @@ exports.BattleTiers = {
 		tier: "Limbo"
 	},
 	"Durant": {
-		tier: "RU"
+		tier: "BL2"
 	},
 	"Dusclops": {
 		tier: "UU"
@@ -1146,7 +1146,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"Misdreavus": {
-		tier: "LC Uber"
+		tier: "LC"
 	},
 	"Mismagius": {
 		tier: "UU"
@@ -1176,7 +1176,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Murkrow": {
-		tier: "LC Uber"
+		tier: "LC"
 	},
 	"Musharna": {
 		tier: "NU"
@@ -1653,7 +1653,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Snover": {
-		tier: "NU"
+		tier: "BL"
 	},
 	"Snubbull": {
 		tier: "LC"
@@ -1854,7 +1854,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Umbreon": {
-		tier: "NU"
+		tier: "UU"
 	},
 	"Unfezant": {
 		tier: "NU"
