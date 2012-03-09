@@ -1389,7 +1389,8 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			this.add('message '+pokemon.name+' has Pressure. (placeholder)');
 		},
-		onSourceDeductPP: function(pp) {
+		onSourceDeductPP: function(pp, target, source) {
+			if (target === source) return;
 			return pp+1;
 		},
 		id: "Pressure",
