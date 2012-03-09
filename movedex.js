@@ -2096,7 +2096,7 @@ exports.BattleMovedex = {
 		name: "Detect",
 		pp: 5,
 		isViable: true,
-		priority: 3,
+		priority: 4,
 		stallingMove: true, // decrease success of repeated use to 50%
 		volatileStatus: 'Protect',
 		onHit: function(pokemon) {
@@ -2938,7 +2938,7 @@ exports.BattleMovedex = {
 		id: "Endure",
 		name: "Endure",
 		pp: 10,
-		priority: 3,
+		priority: 4,
 		stallingMove: true, // decrease success of repeated use to 50%
 		volatileStatus: 'Endure',
 		onHit: function(pokemon) {
@@ -6243,7 +6243,7 @@ exports.BattleMovedex = {
 		id: "MagicRoom",
 		name: "Magic Room",
 		pp: 10,
-		priority: 0,
+		priority: -7,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -7586,7 +7586,7 @@ exports.BattleMovedex = {
 		id: "PowerSplit",
 		name: "Power Split",
 		pp: 10,
-		priority: -7,
+		priority: 0,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -8155,7 +8155,7 @@ exports.BattleMovedex = {
 		id: "RagePowder",
 		name: "Rage Powder",
 		pp: 20,
-		priority: 0,
+		priority: 3,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -11158,7 +11158,7 @@ exports.BattleMovedex = {
 		name: "Telekinesis",
 		pp: 15,
 		isBounceable: true,
-		priority: -7,
+		priority: 0,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -12153,7 +12153,7 @@ exports.BattleMovedex = {
 		id: "WonderRoom",
 		name: "Wonder Room",
 		pp: 10,
-		priority: 0,
+		priority: -7,
 		onHit: function(target, source, effect) {
 			if (this.pseudoWeather['WonderRoom'])
 			{
