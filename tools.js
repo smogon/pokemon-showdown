@@ -297,7 +297,7 @@ function BattleTools()
 					banlistTable['Rule:'+toId(subformat.ruleset[i])] = true;
 
 					var subsubformat = selfT.getEffect(subformat.ruleset[i]);
-					if (subsubformat.ruleset && subsubformat.effectType === 'Banlist')
+					if (subsubformat.ruleset || subsubformat.banlist)
 					{
 						selfT.getBanlistTable(format, subsubformat, depth+1);
 					}
