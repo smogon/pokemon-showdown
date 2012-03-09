@@ -11590,8 +11590,11 @@ exports.BattleMovedex = {
 			},
 			onModifyStatsPriority: -100,
 			onModifyStats: function(stats) {
-				// :o
-				stats.spe = -stats.spe;
+				// just for fun: Trick Room glitch
+				if (stats.spe <= 1809)
+				{
+					stats.spe = -stats.spe;
+				}
 			},
 			onEnd: function() {
 				this.add('pseudo-weather-end TrickRoom');
