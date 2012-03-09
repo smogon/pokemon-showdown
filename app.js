@@ -458,7 +458,11 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		selfR.resetTimer = setTimeout(selfR.reset, tickTime*30*1000);
 	};
 	this.requestKickInactive = function(user) {
-		if (selfR.resetTimer) return;
+		if (selfR.resetTimer)
+		{
+			user.emit('console', {room:selfR.id, message: 'The inactivity timer is already counting down.'});
+				return;
+		}
 		if ((!selfR.battle.allySide.user || !selfR.battle.foeSide.user) && !selfR.ranked)
 		{
 			selfR.battle.add('message This isn\'t a rated battle; victory doesn\'t mean anything.');
@@ -492,7 +496,9 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		}
 		
 		if (elapsedTicks >= 8) selfR.sideTicksLeft[inactiveSide]--;
+		if (elapsedTicks >= 6) selfR.sideTicksLeft[inactiveSide]--;
 		if (elapsedTicks >= 4) selfR.sideTicksLeft[inactiveSide]--;
+		if (elapsedTicks >= 2) selfR.sideTicksLeft[inactiveSide]--;
 		var inactiveSide = selfR.getInactiveSide();
 		if (tickTime > 2 && selfR.sideTicksLeft[inactiveSide] < tickTime)
 		{
@@ -502,7 +508,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		
 		selfR.inactiveTicksLeft = tickTime;
 		var message = 'Inactive players will '+action+' in '+(tickTime*30)+' seconds.'+selfR.inactiveAtrrib;
-		if (elapsedTicks < 1 && tickTime >= 2)
+		if (elapsedTicks < 1 && tickTime >= 2 && selfR.sideTicksLeft[inactiveSide] > -4)
 		{
 			// the foe has at least a minute left, and hasn't been given 30 seconds to make a move yet
 			// we'll wait another 30 seconds before notifying them that they have a time limit
