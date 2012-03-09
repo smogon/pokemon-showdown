@@ -291,6 +291,11 @@ function BattleTools()
 			{
 				for (var i=0; i<subformat.ruleset.length; i++)
 				{
+					// don't revalidate what we already validate
+					if (banlistTable['Rule:'+toId(subformat.ruleset[i])]) continue;
+					
+					banlistTable['Rule:'+toId(subformat.ruleset[i])] = true;
+
 					var subsubformat = selfT.getEffect(subformat.ruleset[i]);
 					if (subsubformat.ruleset && subsubformat.effectType === 'Banlist')
 					{
@@ -418,7 +423,7 @@ function BattleTools()
 			problems.push(set.name+"'s item "+set.item+" is unreleased.");
 		}
 		setHas[toId(set.ability)] = true;
-		if (banlistTable['Standard'])
+		if (banlistTable['Rule:Standard'])
 		{
 			var totalEV = 0;
 			for (var k in set.evs)
@@ -476,7 +481,7 @@ function BattleTools()
 				problems.push(set.name+"'s move "+set.moves[i]+" is an OHKO move, which is banned.");
 			}
 			
-			if (banlistTable['Standard'])
+			if (banlistTable['Rule:Standard'])
 			{
 				var lset = selfT.checkLearnset(move, template);
 				if (!lset)
