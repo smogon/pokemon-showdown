@@ -573,7 +573,7 @@ exports.BattleMovedex = {
 		name: "Autotomize",
 		pp: 15,
 		isViable: true,
-		priority: 3,
+		priority: 0,
 		volatileStatus: 'Autotomize',
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
