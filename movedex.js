@@ -11588,12 +11588,16 @@ exports.BattleMovedex = {
 			onStart: function(target, source) {
 				this.add('r-pseudo-weather '+source.id+' TrickRoom');
 			},
-			onModifyStatsPriority: -100,
-			onModifyStats: function(stats) {
+			onModifyPokemonPriority: -100,
+			onModifyPokemon: function(pokemon) {
 				// just for fun: Trick Room glitch
-				if (stats.spe <= 1809)
+				if (pokemon.stats.spe <= 1809)
 				{
-					stats.spe = -stats.spe;
+					pokemon.stats.spe = -pokemon.stats.spe;
+				}
+				if (pokemon.unboostedStats.spe <= 1809)
+				{
+					pokemon.unboostedStats.spe = -pokemon.unboostedStats.spe;
 				}
 			},
 			onEnd: function() {
