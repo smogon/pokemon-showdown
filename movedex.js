@@ -5546,8 +5546,21 @@ exports.BattleMovedex = {
 		name: "Imprison",
 		pp: 10,
 		priority: 0,
+		volatileStatus: 'Imprison',
+		effect: {
+			onStart: function(target) {
+				this.add('message '+target.name + ' sealed the opponent\'s move(s)! (placeholder)');
+			},
+			onFoeModifyPokemon: function(pokemon) {
+				var foeMoves = this.effectData.source.moveset;
+				for (var f=0; f<foeMoves.length; f++)
+				{
+					pokemon.disabledMoves[foeMoves[f].move] = true;
+				}
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Psychic"
 	},
 	"Incinerate": {
