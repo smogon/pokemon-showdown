@@ -3308,7 +3308,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		secondary: [
+		secondaries: [
 			{
 				chance: 10,
 				status: 'brn'
@@ -5442,7 +5442,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		secondary: [
+		secondaries: [
 			{
 				chance: 10,
 				status: 'frz'
@@ -11290,7 +11290,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		secondary: [
+		secondaries: [
 			{
 				chance: 10,
 				status: 'par'
