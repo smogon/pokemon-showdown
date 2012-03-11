@@ -2272,6 +2272,32 @@ exports.BattleMovedex = {
 		pp: 10,
 		isContact: true,
 		priority: 0,
+		isTwoTurnMove: true,
+		beforeMoveCallback: function(pokemon) {
+			if (pokemon.removeVolatile('Dive')) return;
+			pokemon.addVolatile('Dive');
+			this.add('message '+pokemon.name+' hid underwater! (placeholder)');
+			return true;
+		},
+		effect: {
+			duration: 2,
+			onModifyPokemon: function(pokemon) {
+				pokemon.lockMove('Dive');
+			},
+			onSourceModifyMove: function(move) {
+				if (move.target === 'foeSide') return;
+				if (move.id === 'Surf' || move.id === 'Whirlpool')
+				{
+					// should not normally be done in ModifyMove event,
+					// but Surf and Whirlpool have static base power, and
+					// it's faster to do this here than in
+					// onFoeBasePower
+					move.basePower *= 2;
+					return;
+				}
+				move.accuracy = 0;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Water"
