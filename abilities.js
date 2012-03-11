@@ -1638,7 +1638,17 @@ exports.BattleAbilities = {
 			if (move.secondary)
 			{
 				this.debug('doubling secondary chance');
-				move.secondary.chance *= 2;
+				if (Array.isArray(move.secondary))
+				{
+					for (var i=0; i<move.secondary.length; i++)
+					{
+						move.secondary[i].chance *= 2;
+					}
+				}
+				else
+				{
+					move.secondary.chance *= 2;
+				}
 			}
 		},
 		id: "SereneGrace",
@@ -2327,7 +2337,17 @@ exports.BattleAbilities = {
 			if (move.secondary)
 			{
 				this.debug('halving secondary chance');
-				move.secondary.chance /= 2;
+				if (Array.isArray(move.secondary))
+				{
+					for (var i=0; i<move.secondary.length; i++)
+					{
+						move.secondary[i].chance /= 2;
+					}
+				}
+				else
+				{
+					move.secondary.chance /= 2;
+				}
 			}
 		},
 		id: "WonderSkin",
