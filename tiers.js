@@ -201,7 +201,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Bouffalant": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"Braviary": {
 		tier: "NU"
