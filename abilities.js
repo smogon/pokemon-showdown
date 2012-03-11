@@ -1364,7 +1364,23 @@ exports.BattleAbilities = {
 		num: "38"
 	},
 	"PoisonTouch": {
-		desc: "The contact-based attacks from a Pok\u00e9mon with PoisonTouch have a 30% chance of poisoning the target.",
+		desc: "The contact-based attacks from a Pokemon with Poison Touch have a 30% chance of poisoning the target.",
+		// upokecenter says this is implemented as an added secondary effect
+		onModifyMove: function(move) {
+			if (!move || !move.isContact) return;
+			if (!move.secondary)
+			{
+				move.secondary = [];
+			}
+			else if (!Array.isArray(move.secondary))
+			{
+				move.secondary = [move.secondary];
+			}
+			move.secondary.push({
+				chance: 30,
+				status: 'psn'
+			});
+		},
 		id: "PoisonTouch",
 		name: "Poison Touch",
 		rating: 2,
