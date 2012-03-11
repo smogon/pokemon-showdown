@@ -385,7 +385,7 @@ exports.BattleScripts = {
 				}
 			}
 		}
-		if (target)
+		if (target && target.hp > 0 && pokemon.hp > 0)
 		{
 			if (moveData.forceSwitch && this.runEvent('DragOut', target, pokemon, move))
 			{
