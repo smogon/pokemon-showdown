@@ -86,6 +86,7 @@ function BattleTools()
 			if (!move.id) move.id = id;
 			if (!move.baseType) move.baseType = move.type;
 			if (!move.effectType) move.effectType = 'Move';
+			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
 		}
 		return move;
 	};
