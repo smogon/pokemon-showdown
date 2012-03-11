@@ -6735,12 +6735,13 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Evasion by 2 stage; however, Stomp retains its normal accuracy and gains doubled power against Minimized Pokemon.",
+		desc: "Raises the user's Evasion by 2 stages; however, Stomp and Steamroller gain doubled power against Minimized Pokemon.",
 		shortDesc: "Boosts evasion by 2.",
 		id: "Minimize",
 		name: "Minimize",
 		pp: 20,
 		priority: 0,
+		volatileStatus: 'Minimize',
 		boosts: {
 			evasion: 2
 		},
@@ -10418,8 +10419,12 @@ exports.BattleMovedex = {
 		num: 23,
 		accuracy: 100,
 		basePower: 65,
+		basePowerCallback: function(pokemon, target) {
+			if (target.volatiles['Minimize']) return 130;
+			return 65;
+		},
 		category: "Physical",
-		desc: "Has a 30% chance to make the target flinch; also retains its normal accuracy and gains doubled power against Minimized Pokemon.",
+		desc: "Has a 30% chance to make the target flinch; also gains doubled power against Minimized Pokemon.",
 		shortDesc: "30% chance to flinch foe.",
 		id: "Stomp",
 		name: "Stomp",
@@ -10490,8 +10495,12 @@ exports.BattleMovedex = {
 	"Steamroller": {
 		accuracy: 100,
 		basePower: 65,
+		basePowerCallback: function(pokemon, target) {
+			if (target.volatiles['Minimize']) return 130;
+			return 65;
+		},
 		category: "Physical",
-		desc: "Has a 30% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch; also gains doubled power against Minimized Pokemon.",
 		shortDesc: "30% chance to flinch foe.",
 		id: "Steamroller",
 		name: "Steamroller",
