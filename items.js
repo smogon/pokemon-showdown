@@ -1930,6 +1930,21 @@ exports.BattleItems = {
 		},
 		desc: "Increases happiness, but lowers HP EVs by 10."
 	},
+	"PowerHerb": {
+		id: "PowerHerb",
+		onBeforeMovePriority: -10,
+		onBeforeMove: function(pokemon, target, move) {
+			if (move.isTwoTurnMove && pokemon.useItem())
+			{
+				this.debug('power herb - remove charge turn for '+move.id);
+				this.add('prepare-move '+pokemon.id+' '+move.id);
+				pokemon.addVolatile(move.id);
+			}
+		},
+		name: "Power Herb",
+		spritenum: 358,
+		desc: "Moves with a charge turn activate instantly."
+	},
 	"PsychicGem": {
 		id: "PsychicGem",
 		name: "Psychic Gem",

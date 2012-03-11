@@ -1037,6 +1037,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('Bounce')) return;
 			pokemon.addVolatile('Bounce');
@@ -2134,6 +2135,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isContact: true,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('Dig')) return;
 			pokemon.addVolatile('Dig');
@@ -3614,6 +3616,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isContact: true,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('Fly')) return;
 			pokemon.addVolatile('Fly');
@@ -3826,6 +3829,7 @@ exports.BattleMovedex = {
 		name: "Freeze Shock",
 		pp: 5,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('FreezeShock')) return;
 			this.add('prepare-move '+pokemon.id+' FreezeShock');
@@ -5410,6 +5414,7 @@ exports.BattleMovedex = {
 		name: "Ice Burn",
 		pp: 5,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('IceBurn')) return;
 			this.add('prepare-move '+pokemon.id+' IceBurn');
@@ -8293,6 +8298,7 @@ exports.BattleMovedex = {
 		name: "Razor Wind",
 		pp: 10,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('RazorWind')) return;
 			this.add('prepare-move '+pokemon.id+' RazorWind');
@@ -9307,6 +9313,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('ShadowForce')) return;
 			pokemon.addVolatile('ShadowForce');
@@ -9599,15 +9606,18 @@ exports.BattleMovedex = {
 		pp: 15,
 		isContact: true,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('SkullBash')) return;
 			this.add('message '+pokemon.name+' lowered its head! (placeholder)');
 			pokemon.addVolatile('SkullBash');
-			this.boost({def:1}, pokemon, pokemon, this.getMove('SkullBash'));
 			return true;
 		},
 		effect: {
 			duration: 2,
+			onStart: function(pokemon) {
+				this.boost({def:1}, pokemon, pokemon, this.getMove('SkullBash'));
+			},
 			onModifyPokemon: function(pokemon) {
 				pokemon.lockMove('SkullBash');
 			}
@@ -9627,6 +9637,7 @@ exports.BattleMovedex = {
 		name: "Sky Attack",
 		pp: 5,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('SkyAttack')) return;
 			this.add('prepare-move '+pokemon.id+' SkyAttack');
@@ -9657,6 +9668,7 @@ exports.BattleMovedex = {
 		name: "Sky Drop",
 		pp: 10,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('SkyDrop')) return;
 			pokemon.addVolatile('SkyDrop');
@@ -10068,6 +10080,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
+		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('SolarBeam')) return;
 			this.add('prepare-move '+pokemon.id+' SolarBeam');
