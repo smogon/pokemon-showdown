@@ -326,7 +326,7 @@ function User(name, person, token)
 					else if (userid === "aeo1") avatar = 167;
 					else if (userid === "aeo2") avatar = 166;
 					else if (userid === "sharktamer") avatar = 7;
-					else if (userid === "bmelts") avatar = 226;
+					else if (userid === "bmelts") avatar = 1004;
 					
 					try
 					{
