@@ -375,10 +375,25 @@ exports.BattleScripts = {
 		}
 		if (moveData.secondary && target)
 		{
-			var secondaryRoll = Math.random()*100;
-			if (typeof moveData.secondary.chance === 'undefined' || secondaryRoll < moveData.secondary.chance)
+			var secondaryRoll;
+			if (Array.isArray(moveData.secondary))
 			{
-				BattleScripts.moveHit.call(this, target, pokemon, move, moveData.secondary, true, isSelf);
+				for (var i = 0; i < moveData.secondary.length; i++)
+				{
+					secondaryRoll = Math.random()*100;
+					if (typeof moveData.secondary[i].chance === 'undefined' || secondaryRoll < moveData.secondary[i].chance)
+					{
+						BattleScripts.moveHit.call(this, target, pokemon, move, moveData.secondary[i], true, isSelf);
+					}
+				}
+			}
+			else
+			{
+				secondaryRoll = Math.random()*100;
+				if (typeof moveData.secondary.chance === 'undefined' || secondaryRoll < moveData.secondary.chance)
+				{
+					BattleScripts.moveHit.call(this, target, pokemon, move, moveData.secondary, true, isSelf);
+				}
 			}
 		}
 		if (target)
