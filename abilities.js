@@ -1368,15 +1368,20 @@ exports.BattleAbilities = {
 		// upokecenter says this is implemented as an added secondary effect
 		onModifyMove: function(move) {
 			if (!move || !move.isContact) return;
-			if (!move.secondary)
+			if (!move.secondary && !move.secondaries)
 			{
-				move.secondary = [];
+				move.secondary = {
+					chance: 30,
+					status: 'psn'
+				};
+				return;
 			}
-			else if (!Array.isArray(move.secondary))
+			else if (move.secondary)
 			{
-				move.secondary = [move.secondary];
+				move.secondaries = [move.secondary];
+				delete move.secondary;
 			}
-			move.secondary.push({
+			move.secondaries.push({
 				chance: 30,
 				status: 'psn'
 			});
@@ -1638,16 +1643,14 @@ exports.BattleAbilities = {
 			if (move.secondary)
 			{
 				this.debug('doubling secondary chance');
-				if (Array.isArray(move.secondary))
+				move.secondary.chance *= 2;
+			}
+			else if (move.secondaries)
+			{
+				this.debug('doubling secondary chance');
+				for (var i=0; i<move.secondaries.length; i++)
 				{
-					for (var i=0; i<move.secondary.length; i++)
-					{
-						move.secondary[i].chance *= 2;
-					}
-				}
-				else
-				{
-					move.secondary.chance *= 2;
+					move.secondaries[i].chance *= 2;
 				}
 			}
 		},
@@ -1686,12 +1689,13 @@ exports.BattleAbilities = {
 	"SheerForce": {
 		desc: "Raises the base power of all moves that have any secondary effects by 30%, but the secondary effects are ignored. However, this ability is not applied to moves that have a negative effect on the user, such as recoil, two-turn moves, and stat reduction after using certain moves. If a Pok\u00e9mon with Sheer Force is holding a Life Orb and uses an attack that would be boosted by Sheer Force, then the move gains both boosts but the user receives no recoil damage.",
 		onModifyMove: function(move) {
-			if (move.secondary)
+			if (move.secondary || move.secondaries)
 			{
 				this.debug('Sheer Force boost');
 				if (!move.basePowerModifier) move.basePowerModifier = 1;
 				move.basePowerModifier *= 13/10;
 				delete move.secondary;
+				delete move.secondaries;
 				move.negateSecondary = true;
 			}
 		},
@@ -1711,10 +1715,11 @@ exports.BattleAbilities = {
 	"ShieldDust": {
 		desc: "If the opponent uses a move that has secondary effects that affect this Pokemon in addition to damage, the move's secondary effects will not trigger. (For example, an Ice Beam will lose its 10% chance to freeze this Pokemon.)",
 		onSourceModifyMove: function(move) {
-			if (move.secondary)
+			if (move.secondary || move.secondaries)
 			{
 				this.debug('Shield Dust remove secondary');
 				delete move.secondary;
+				delete move.secondaries;
 			}
 		},
 		id: "ShieldDust",
@@ -2337,16 +2342,14 @@ exports.BattleAbilities = {
 			if (move.secondary)
 			{
 				this.debug('halving secondary chance');
-				if (Array.isArray(move.secondary))
+				move.secondary.chance /= 2;
+			}
+			else if (move.secondaries)
+			{
+				this.debug('halving secondary chance');
+				for (var i=0; i<move.secondaries.length; i++)
 				{
-					for (var i=0; i<move.secondary.length; i++)
-					{
-						move.secondary[i].chance /= 2;
-					}
-				}
-				else
-				{
-					move.secondary.chance /= 2;
+					move.secondaries[i].chance /= 2;
 				}
 			}
 		},
