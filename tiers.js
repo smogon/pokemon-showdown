@@ -846,7 +846,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Kabutops": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"Kadabra": {
 		tier: "Limbo"
@@ -1707,7 +1707,7 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"Stoutland": {
-		tier: "NU"
+		tier: "UU"
 	},
 	"Stunfisk": {
 		tier: "NU"
