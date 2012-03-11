@@ -3308,10 +3308,16 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		secondary: {
-			chance: 10,
-			status: 'brn'
-		},
+		secondary: [
+			{
+				chance: 10,
+				status: 'brn'
+			},
+			{
+				chance: 10,
+				volatileStatus: 'flinch'
+			}
+		],
 		target: "normal",
 		type: "Fire"
 	},
@@ -5436,10 +5442,16 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		secondary: {
-			chance: 10,
-			status: 'frz'
-		},
+		secondary: [
+			{
+				chance: 10,
+				status: 'frz'
+			},
+			{
+				chance: 10,
+				volatileStatus: 'flinch'
+			}
+		],
 		target: "normal",
 		type: "Ice"
 	},
@@ -11278,10 +11290,16 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		secondary: {
-			chance: 10,
-			status: 'par'
-		},
+		secondary: [
+			{
+				chance: 10,
+				status: 'par'
+			},
+			{
+				chance: 10,
+				volatileStatus: 'flinch'
+			}
+		],
 		target: "normal",
 		type: "Electric"
 	},
