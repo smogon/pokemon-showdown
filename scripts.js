@@ -232,7 +232,7 @@ exports.BattleScripts = {
 				{
 					this.faint(pokemon, pokemon, move);
 				}
-				return true;
+				return false;
 			}
 		}
 
