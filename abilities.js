@@ -2338,19 +2338,12 @@ exports.BattleAbilities = {
 	},
 	"WonderSkin": {
 		desc: "Causes the chance of a status move working to be halved. It does not affect moves that inflict status as a secondary effect like Thunder's chance to paralyze.",
+		onSourceModifyMovePriority: 10,
 		onSourceModifyMove: function(move) {
-			if (move.secondary)
+			if (move.category === 'Status' && typeof move.accuracy === 'number')
 			{
-				this.debug('halving secondary chance');
-				move.secondary.chance /= 2;
-			}
-			else if (move.secondaries)
-			{
-				this.debug('halving secondary chance');
-				for (var i=0; i<move.secondaries.length; i++)
-				{
-					move.secondaries[i].chance /= 2;
-				}
+				this.debug('setting move accuracy to 50%');
+				move.accuracy = 50;
 			}
 		},
 		id: "WonderSkin",
