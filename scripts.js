@@ -373,17 +373,17 @@ exports.BattleScripts = {
 		{
 			BattleScripts.moveHit.call(this, pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
-		if (moveData.secondary && target)
+		if ((moveData.secondary || moveData.secondaries) && target)
 		{
 			var secondaryRoll;
-			if (Array.isArray(moveData.secondary))
+			if (moveData.secondaries)
 			{
-				for (var i = 0; i < moveData.secondary.length; i++)
+				for (var i = 0; i < moveData.secondaries.length; i++)
 				{
 					secondaryRoll = Math.random()*100;
-					if (typeof moveData.secondary[i].chance === 'undefined' || secondaryRoll < moveData.secondary[i].chance)
+					if (typeof moveData.secondaries[i].chance === 'undefined' || secondaryRoll < moveData.secondaries[i].chance)
 					{
-						BattleScripts.moveHit.call(this, target, pokemon, move, moveData.secondary[i], true, isSelf);
+						BattleScripts.moveHit.call(this, target, pokemon, move, moveData.secondaries[i], true, isSelf);
 					}
 				}
 			}
