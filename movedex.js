@@ -10301,8 +10301,12 @@ exports.BattleMovedex = {
 	},
 	"SpitUp": {
 		num: 255,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
+		basePowerCallback: function(pokemon) {
+			if (!pokemon.volatiles['Stockpile'] || !pokemon.volatiles['Stockpile'].layers) return false;
+			return pokemon.volatiles['Stockpile'].layers * 100;
+		},
 		category: "Special",
 		desc: "Power increases with user's Stockpile count; fails with zero Stockpiles.",
 		shortDesc: "Varies in power depending on Stockpile uses.",
@@ -10310,6 +10314,15 @@ exports.BattleMovedex = {
 		name: "Spit Up",
 		pp: 10,
 		priority: 0,
+		onHit: function(target, pokemon) {
+			if (!pokemon.volatiles['Stockpile'] || !pokemon.volatiles['Stockpile'].layers) return false;
+		},
+		onMoveFail: function(pokemon) {
+			pokemon.removeVolatile('Stockpile');
+		},
+		afterMoveCallback: function(pokemon) {
+			pokemon.removeVolatile('Stockpile');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10443,20 +10456,28 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		priority: 0,
+		onHit: function(pokemon) {
+			if (pokemon.volatiles['Stockpile'] && pokemon.volatiles['Stockpile'].layers >= 3) return false;
+		},
 		volatileStatus: 'Stockpile',
 		effect: {
 			onStart: function(target) {
-				this.add('r-volatile '+target.id+' Stockpile');
+				this.add('r-volatile '+target.id+' Stockpile'); // target.name + ' stockpiled 1!'
 				this.effectData.layers = 1;
 				this.boost({def:1, spd:1});
 			},
 			onRestart: function(target) {
 				if (this.effectData.layers < 3)
 				{
-					this.add('r-volatile '+target.id+' Stockpile');
+					this.add('r-volatile '+target.id+' Stockpile'); // target.name + ' stockpiled '+this.effectData.layers+'!'
 					this.effectData.layers++;
 					this.boost({def:1, spd:1});
 				}
+			},
+			onEnd: function(target) {
+				var layers = this.effectData.layers * -1;
+				this.effectData.layers = 0;
+				this.boost({def:layers, spd:layers});
 			}
 		},
 		secondary: false,
@@ -10910,8 +10931,14 @@ exports.BattleMovedex = {
 		name: "Swallow",
 		pp: 10,
 		priority: 0,
+		onHit: function(pokemon) {
+			if (!pokemon.volatiles['Stockpile'] || !pokemon.volatiles['Stockpile'].layers) return false;
+			var healAmount = [4,2,1]
+			this.heal(pokemon.maxhp / healAmount[pokemon.volatiles['Stockpile'].layers]);
+			pokemon.removeVolatile('Stockpile');
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"SweetKiss": {
@@ -11516,7 +11543,14 @@ exports.BattleMovedex = {
 				this.add('r-volatile '+pokemon.id+' torment end');
 			},
 			onModifyPokemon: function(pokemon) {
-				pokemon.disabledMoves[pokemon.lastMove] = true;
+				var moves = pokemon.moveset;
+				for (var i=0; i<moves.length; i++)
+				{
+					if (moves[i].id === pokemon.activeMove)
+					{
+						moves[i].disabled = true;
+					}
+				}
 			}
 		},
 		secondary: false,
