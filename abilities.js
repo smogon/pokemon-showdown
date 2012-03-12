@@ -221,8 +221,8 @@ exports.BattleAbilities = {
 	},
 	"ColorChange": {
 		desc: "This Pokemon's type changes according to the type of the last move that hit this Pokemon.",
-		onSecondary: function(target, source, effect) {
-			if (effect && effect.effectType === 'Move')
+		onAfterMoveSecondary: function(target, source, effect) {
+			if (effect && effect.effectType === 'Move' && target.lastDamage)
 			{
 				target.addVolatile('ColorChange', source, effect);
 			}
