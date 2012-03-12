@@ -11530,14 +11530,7 @@ exports.BattleMovedex = {
 				this.add('r-volatile '+pokemon.id+' torment end');
 			},
 			onModifyPokemon: function(pokemon) {
-				var moves = pokemon.moveset;
-				for (var i=0; i<moves.length; i++)
-				{
-					if (moves[i].id === pokemon.activeMove)
-					{
-						moves[i].disabled = true;
-					}
-				}
+				pokemon.disabledMoves[pokemon.lastMove] = true;
 			}
 		},
 		secondary: false,
