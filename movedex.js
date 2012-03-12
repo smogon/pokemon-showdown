@@ -3253,12 +3253,23 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 30,
 		category: "Physical",
-		desc: "Is not blocked by Protect or Detect, but is blocked by Fast Guard.",
-		shortDesc: "Nullifies effect of Detect and Protect.",
+		desc: "Breaks through Protect, Detect, Quick Guard, and Wide Guard.",
+		shortDesc: "Nullifies Detect, Protect, and Quick/Wide Guard.",
 		id: "Feint",
 		name: "Feint",
 		pp: 10,
 		priority: 2,
+		onHit: function(target, source) {
+			if (target.removeVolatile('Protect'))
+			{
+				this.add("message "+target.name+" fell for the feint! (placeholder)");
+			}
+			if (target.side !== source.side)
+			{
+				target.side.removeSideCondition('QuickGuard');
+				target.side.removeSideCondition('WideGuard');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8144,15 +8155,17 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(target) {
-				this.add('r-volatile '+target.id+' protect');
+				this.add('message Quick Guard protected '+target.name+'\'s team! (placeholder)');
 			},
 			onHitPriority: 1,
 			onHit: function(target, source, effect) {
-				if (effect && (effect.id === 'Feint' || effect.priority <= 0))
+				// Quick Guard only blocks moves with a natural positive priority
+				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
+				if (effect && (effect.id === 'Feint' || this.getMove(effect.id).priority <= 0))
 				{
 					return;
 				}
-				this.add('r-volatile '+target.id+' protect');
+				this.add('message Quick Guard protected '+target.name+'! (placeholder)');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove)
 				{
