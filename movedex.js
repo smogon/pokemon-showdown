@@ -4347,8 +4347,34 @@ exports.BattleMovedex = {
 		name: "Grudge",
 		pp: 5,
 		priority: 0,
+		volatileStatus: 'Grudge',
+		effect: {
+			onStart: function(pokemon) {
+				this.add('message '+pokemon.name+' wants its target to bear a grudge! (placeholder)');
+			},
+			onFaint: function(target, source, effect) {
+				this.debug('Grudge detected fainted pokemon');
+				if (!source || !effect) return;
+				if (effect.effectType === 'Move' && target.lastMove === 'Grudge')
+				{
+					for (var i in source.moveset)
+					{
+						if (source.moveset[i].id === source.lastMove)
+						{
+							source.moveset[i].pp = 0;
+							this.add('message '+source.name+'\'s '+this.getMove(source.moveset[i].id).name+' lost all its PP due to the grudge! (placeholder)');
+						}
+					}
+				}
+			},
+			onBeforeMovePriority: -10,
+			onBeforeMove: function(pokemon) {
+				this.debug('removing Grudge before attack');
+				pokemon.removeVolatile('Grudge');
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Ghost"
 	},
 	"GuardSplit": {
