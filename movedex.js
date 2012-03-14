@@ -11797,6 +11797,22 @@ exports.BattleMovedex = {
 		num: 376,
 		accuracy: true,
 		basePower: false,
+		basePowerCallback: function(pokemon) {
+			var move = pokemon.getMoveData(pokemon.lastMove); // Account for calling Trump Card via other moves
+			switch (move.pp)
+			{
+				case 0:
+					return 200;
+				case 1:
+					return 80;
+				case 2:
+					return 60;
+				case 3:
+					return 50;
+				default:
+					return 40;
+			}
+		},
 		category: "Special",
 		desc: "This move's base power increases as its remaining PP decreases.",
 		shortDesc: "Power increases as PP decreases.",
