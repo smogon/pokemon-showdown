@@ -5888,6 +5888,15 @@ exports.BattleMovedex = {
 		pp: 5,
 		isContact: true,
 		priority: 0,
+		onHit: function(target, source) {
+			/*if (source.moveset.length === 1) return false; // Last Resort fails unless the user knows at least 2 moves
+			for (var i in source.moveset)
+			{
+				if (!source.moveset[i].used && source.moveset[i].move !== source.lastMove) return false;
+			}*/
+			this.debug('Last Resort is not implemented yet');
+			return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
