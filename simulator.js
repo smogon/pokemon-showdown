@@ -131,7 +131,8 @@ function BattlePokemon(set, side)
 				id: move.id,
 				pp: move.pp * 8/5,
 				maxpp: move.pp * 8/5,
-				disabled: false
+				disabled: false,
+				used: false
 			});
 			this.moves.push(moveid);
 		}
@@ -1880,6 +1881,10 @@ function Battle(roomid, format, ranked)
 		side.active[0] = pokemon;
 		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
+		for (var m in pokemon.moveset)
+		{
+			pokemon.moveset[m].used = false;
+		}
 		selfB.add('pokemon '+side.active[0].fullid);
 		selfB.add('switch-in '+side.active[0].id+side.active[0].getHealth());
 		selfB.runEvent('SwitchIn', pokemon);
@@ -1939,6 +1944,10 @@ function Battle(roomid, format, ranked)
 		side.active[0] = pokemon;
 		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
+		for (var m in pokemon.moveset)
+		{
+			pokemon.moveset[m].used = false;
+		}
 		selfB.add('pokemon '+side.active[0].fullid);
 		selfB.add('drag-in '+side.active[0].id);
 		selfB.runEvent('SwitchIn', pokemon);
@@ -2277,7 +2286,7 @@ function Battle(roomid, format, ranked)
 		if (!basePower) return 0;
 		
 		move.critRatio = clampIntRange(move.critRatio, 0, 5);
-		var critMult = [0, 16, 8, 4, 3, 2]
+		var critMult = [0, 16, 8, 4, 3, 2];
 		
 		move.crit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined')
