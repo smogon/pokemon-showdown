@@ -55,6 +55,7 @@ exports.BattleScripts = {
 		}
 		pokemon.lastDamage = 0;
 		pokemon.deductPP(move);
+		pokemon.getMoveData(move).used = true;
 		this.useMove(move, pokemon, target);
 	},
 	useMove: function(move, pokemon, target) {
