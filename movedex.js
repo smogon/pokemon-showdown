@@ -175,12 +175,15 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: false,
 		category: "Status",
-		desc: "After this move is used, the next turn the target will attack first, ignoring priority.",
+		desc: "After this move is used, the target will attack first, ignoring priority.",
 		shortDesc: "The target moves immediately after this move is used.",
 		id: "AfterYou",
 		name: "After You",
 		pp: 15,
 		priority: 0,
+		onHit: function() {
+			return false; // After You will always fail when used in a single battle
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
