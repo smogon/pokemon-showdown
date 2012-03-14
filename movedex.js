@@ -5649,12 +5649,20 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 30,
 		category: "Special",
-		desc: "Inflicts damage and renders the target's Berry unusable. Berries that would activate in response to Devastate, such as the Occa Berry, will be destroyed before their effect takes place. It also hits all opponents in double and all adjacent opponents in triple battles.",
+		desc: "Inflicts damage and renders the target's Berry unusable. Berries that would activate in response to Incinerate, such as the Occa Berry, will be destroyed before their effect takes place. It also hits all opponents in double and all adjacent opponents in triple battles.",
 		shortDesc: "Removes the target's Berry.",
 		id: "Incinerate",
 		name: "Incinerate",
 		pp: 15,
 		priority: 0,
+		onHit: function(pokemon) {
+			var item = pokemon.getItem();
+			if (item.isBerry)
+			{
+				this.add('message '+pokemon.name+'\'s '+item.name+' was burnt up by Incinerate! (placeholder)');
+				pokemon.item = '';
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Fire"
