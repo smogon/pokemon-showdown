@@ -57,6 +57,8 @@ exports.BattleScripts = {
 		pokemon.deductPP(move);
 		pokemon.getMoveData(move).used = true;
 		this.useMove(move, pokemon, target);
+		this.runEvent('AfterMove', target, pokemon, move);
+		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	useMove: function(move, pokemon, target) {
 		move = this.getMoveCopy(move);
