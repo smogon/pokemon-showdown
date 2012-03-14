@@ -5639,6 +5639,13 @@ exports.BattleMovedex = {
 				{
 					pokemon.disabledMoves[foeMoves[f].move] = true;
 				}
+			},
+			onFoeBeforeMove: function(attacker, defender, move) {
+				if (attacker.disabledMoves[move.id])
+				{
+					this.add('message '+attacker.name+' can\'t use '+move.name+' due to Imprison! (placeholder)');
+					return false;
+				}
 			}
 		},
 		secondary: false,
