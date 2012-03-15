@@ -888,7 +888,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.group === '&')
 		{
-			if (target === 'engine')
+			if (target === 'all')
 			{
 				for (var i in require.cache) delete require.cache[i];
 				BattlePokedex = require('./pokedex.js').BattlePokedex;
@@ -903,6 +903,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				BattleLearnsets = require('./learnsets.js').BattleLearnsets;
 				BattleTools = require('./tools.js').BattleTools;
 				Tools = new BattleTools();
+
+				parseCommand = require('./chat-commands.js').parseCommand;
 
 				sim = require('./simulator.js');
 				BattlePokemon = sim.BattlePokemon;
@@ -936,6 +938,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				BattleFormats = require('./formats.js').BattleFormats;
 				BattleLearnsets = require('./learnsets.js').BattleLearnsets;
 				BattleTools = require('./tools.js').BattleTools;
+				Tools = new BattleTools();
 				socket.emit('console', 'Game resources have been hot-patched.');
 				return true;
 			}
@@ -1737,7 +1740,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			socket.emit('console', 'Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: &');
 			socket.emit('console', 'Hot-patching has greater memory requirements than restarting.');
-			socket.emit('console', '/hotpatch engine - reload the game engine');
+			socket.emit('console', '/hotpatch all - reload the game engine, data, and chat commands');
 			socket.emit('console', '/hotpatch data - reload the game data (abilities, moves...)');
 			socket.emit('console', '/hotpatch chat - reload chat-commands.js');
 		}
