@@ -1368,6 +1368,37 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Fighting"
 		},
+		onAfterMoveSelf: function(pokemon, target, move) {
+			move = pokemon.getMoveData(move);
+			if (move && move.pp === 0)
+			{
+				pokemon.addVolatile('LeppaBerry');
+				pokemon.volatiles['LeppaBerry'].move = move;
+				pokemon.eatItem();
+			}
+		},
+		onEat: function(pokemon) {
+			var move;
+			if (pokemon.volatiles['LeppaBerry'])
+			{
+				move = pokemon.volatiles['LeppaBerry'].move;
+				pokemon.removeVolatile('LeppaBerry');
+			}
+			else
+			{
+				var pp = 99;
+				for (var i in pokemon.moveset)
+				{
+					if (pokemon.moveset[i].pp < pp) {
+						move = pokemon.moveset[i];
+						pp = move.pp;
+					}
+				}
+			}
+			move.pp += 10;
+			if (move.pp > move.maxpp) move.pp = move.maxpp;
+			this.add("message "+pokemon.name+" restored "+move.move+"'s PP using its Leppa Berry! (placeholder)");
+		},
 		desc: "Restores 10 PP to a move that has run out of PP. One-time use."
 	},
 	"LiechiBerry": {
