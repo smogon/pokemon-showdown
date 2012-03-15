@@ -279,7 +279,6 @@ function BattlePokemon(set, side)
 		if (init) return;
 
 		selfB.runEvent('ModifyStats', selfP, null, null, selfP.stats);
-		selfB.runEvent('ModifyPokemon', selfP);
 
 		for (var i in selfP.stats)
 		{
@@ -303,6 +302,8 @@ function BattlePokemon(set, side)
 			}
 		}
 	};
+
+	selfB.runEvent('ModifyPokemon', selfP);
 	this.getMoveData = function(move) {
 		move = selfB.getMove(move);
 		for (var i=0; i<selfP.moveset.length; i++)
