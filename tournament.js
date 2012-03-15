@@ -561,13 +561,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     {
             //var tournamentInjection = "<script type=\"application/javascript\" src=\""; // Doesn't seem to work
             var tournamentInjection = "<script type=\"text/javascript\" src=\"";
-            tournamentInjection += "http://110-174-48-248.static.tpgi.com.au/~kotarou3/ps/tournament.js";
-            tournamentInjection += "\"></script>";
-            this.lobby_.addRaw(tournamentInjection);
-
-            // Temp fix for my crap router
-            var tournamentInjection = "<script type=\"text/javascript\" src=\"";
-            tournamentInjection += "http://127.0.0.1/~kotarou3/ps/tournament.js";
+            tournamentInjection += "http://kotarou.x10.mx/pokemonshowdowntournament/tournament.js";
             tournamentInjection += "\"></script>";
             this.lobby_.addRaw(tournamentInjection);
     }
