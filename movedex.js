@@ -175,15 +175,12 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: false,
 		category: "Status",
-		desc: "After this move is used, the target will attack first, ignoring priority.",
+		desc: "After this move is used, the next turn the target will attack first, ignoring priority.",
 		shortDesc: "The target moves immediately after this move is used.",
 		id: "AfterYou",
 		name: "After You",
 		pp: 15,
 		priority: 0,
-		onHit: function() {
-			return false; // After You will always fail when used in a single battle
-		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -1053,9 +1050,9 @@ exports.BattleMovedex = {
 				pokemon.lockMove('Bounce');
 			},
 			onSourceModifyMove: function(move) {
-
+				
 				// warning: does not work the same way as Fly
-
+				
 				if (move.target === 'foeSide') return;
 				if (move.id === 'Gust' || move.id === 'Twister' || move.id === 'Thunder')
 				{
@@ -2159,7 +2156,7 @@ exports.BattleMovedex = {
 					// but EQ has static base power, and
 					// it's faster to do this here than in
 					// onFoeBasePower
-
+					
 					// TODO: Magnitude
 					move.basePower *= 2;
 					return;
@@ -2339,7 +2336,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
-
+			
 			if (source.side.sideConditions['futureMove'].positions[source.position])
 			{
 				return false;
@@ -3256,12 +3253,23 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 30,
 		category: "Physical",
-		desc: "Is not blocked by Protect or Detect, but is blocked by Fast Guard.",
-		shortDesc: "Nullifies effect of Detect and Protect.",
+		desc: "Breaks through Protect, Detect, Quick Guard, and Wide Guard.",
+		shortDesc: "Nullifies Detect, Protect, and Quick/Wide Guard.",
 		id: "Feint",
 		name: "Feint",
 		pp: 10,
 		priority: 2,
+		onHit: function(target, source) {
+			if (target.removeVolatile('Protect'))
+			{
+				this.add("message "+target.name+" fell for the feint! (placeholder)");
+			}
+			if (target.side !== source.side)
+			{
+				target.side.removeSideCondition('QuickGuard');
+				target.side.removeSideCondition('WideGuard');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3660,7 +3668,7 @@ exports.BattleMovedex = {
 				pokemon.lockMove('Fly');
 			},
 			onSourceModifyMove: function(move) {
-
+				
 				if (move.target === 'foeSide') return;
 				// warning: does not work the same way as Bounce
 				if (move.id === 'Gust' || move.id === 'Twister')
@@ -4028,7 +4036,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
-
+			
 			if (source.side.sideConditions['futureMove'].positions[source.position])
 			{
 				return false;
@@ -4339,34 +4347,8 @@ exports.BattleMovedex = {
 		name: "Grudge",
 		pp: 5,
 		priority: 0,
-		volatileStatus: 'Grudge',
-		effect: {
-			onStart: function(pokemon) {
-				this.add('message '+pokemon.name+' wants its target to bear a grudge! (placeholder)');
-			},
-			onFaint: function(target, source, effect) {
-				this.debug('Grudge detected fainted pokemon');
-				if (!source || !effect) return;
-				if (effect.effectType === 'Move' && target.lastMove === 'Grudge')
-				{
-					for (var i in source.moveset)
-					{
-						if (source.moveset[i].id === source.lastMove)
-						{
-							source.moveset[i].pp = 0;
-							this.add('message '+source.name+'\'s '+this.getMove(source.moveset[i].id).name+' lost all its PP due to the grudge! (placeholder)');
-						}
-					}
-				}
-			},
-			onBeforeMovePriority: -10,
-			onBeforeMove: function(pokemon) {
-				this.debug('removing Grudge before attack');
-				pokemon.removeVolatile('Grudge');
-			}
-		},
 		secondary: false,
-		target: "self",
+		target: "normal",
 		type: "Ghost"
 	},
 	"GuardSplit": {
@@ -4398,7 +4380,7 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
-
+			
 			for (var i in {def:1,spd:1})
 			{
 				targetBoosts[i] = target.baseBoosts[i];
@@ -4407,10 +4389,10 @@ exports.BattleMovedex = {
 			{
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
-
+			
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
-
+			
 			this.add('message Defensive boosts swapped. (placeholder; graphics will be incorrect)');
 		},
 		secondary: false,
@@ -4794,16 +4776,16 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
-
+			
 			for (var i in target.baseBoosts)
 			{
 				targetBoosts[i] = target.baseBoosts[i];
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
-
+			
 			target.setBoost(sourceBoosts);
 			source.setBoost(targetBoosts);
-
+			
 			this.add('message Swapped. (placeholder; graphics will be incorrect)');
 		},
 		secondary: false,
@@ -5631,13 +5613,6 @@ exports.BattleMovedex = {
 				{
 					pokemon.disabledMoves[foeMoves[f].move] = true;
 				}
-			},
-			onFoeBeforeMove: function(attacker, defender, move) {
-				if (attacker.disabledMoves[move.id])
-				{
-					this.add('message '+attacker.name+' can\'t use '+move.name+' due to Imprison! (placeholder)');
-					return false;
-				}
 			}
 		},
 		secondary: false,
@@ -5649,20 +5624,12 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 30,
 		category: "Special",
-		desc: "Inflicts damage and renders the target's Berry unusable. Berries that would activate in response to Incinerate, such as the Occa Berry, will be destroyed before their effect takes place. It also hits all opponents in double and all adjacent opponents in triple battles.",
+		desc: "Inflicts damage and renders the target's Berry unusable. Berries that would activate in response to Devastate, such as the Occa Berry, will be destroyed before their effect takes place. It also hits all opponents in double and all adjacent opponents in triple battles.",
 		shortDesc: "Removes the target's Berry.",
 		id: "Incinerate",
 		name: "Incinerate",
 		pp: 15,
 		priority: 0,
-		onHit: function(pokemon) {
-			var item = pokemon.getItem();
-			if (item.isBerry)
-			{
-				this.add('message '+pokemon.name+'\'s '+item.name+' was burnt up by Incinerate! (placeholder)');
-				pokemon.item = '';
-			}
-		},
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -5888,15 +5855,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		isContact: true,
 		priority: 0,
-		onHit: function(target, source) {
-			/*if (source.moveset.length === 1) return false; // Last Resort fails unless the user knows at least 2 moves
-			for (var i in source.moveset)
-			{
-				if (!source.moveset[i].used && source.moveset[i].move !== source.lastMove) return false;
-			}*/
-			this.debug('Last Resort is not implemented yet');
-			return false;
-		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -7717,7 +7675,7 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
-
+			
 			for (var i in {atk:1,spa:1})
 			{
 				targetBoosts[i] = target.baseBoosts[i];
@@ -7726,10 +7684,10 @@ exports.BattleMovedex = {
 			{
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
-
+			
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
-
+			
 			this.add('message Offensive boosts swapped. (placeholder; graphics will be incorrect)');
 		},
 		secondary: false,
@@ -7915,14 +7873,14 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			var targetBoosts = {};
-
+			
 			for (var i in target.baseBoosts)
 			{
 				targetBoosts[i] = target.baseBoosts[i];
 			}
-
+			
 			source.setBoost(targetBoosts);
-
+			
 			this.add('message Copied. (placeholder; graphics will be incorrect)');
 		},
 		secondary: false,
@@ -8197,15 +8155,17 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(target) {
-				this.add('r-volatile '+target.id+' protect');
+				this.add('message Quick Guard protected '+target.name+'\'s team! (placeholder)');
 			},
 			onHitPriority: 1,
 			onHit: function(target, source, effect) {
-				if (effect && (effect.id === 'Feint' || effect.priority <= 0))
+				// Quick Guard only blocks moves with a natural positive priority
+				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
+				if (effect && (effect.id === 'Feint' || this.getMove(effect.id).priority <= 0))
 				{
 					return;
 				}
-				this.add('r-volatile '+target.id+' protect');
+				this.add('message Quick Guard protected '+target.name+'! (placeholder)');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove)
 				{
@@ -9997,10 +9957,6 @@ exports.BattleMovedex = {
 		num: 265,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function(pokemon, target) {
-			if (target.status === 'par') return 120;
-			return 60;	
-		},
 		category: "Physical",
 		desc: "If the target is paralyzed, power is doubled but the target will be cured.",
 		shortDesc: "Double power if foe is paralyzed. Cures paralysis.",
@@ -10009,9 +9965,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		isContact: true,
 		priority: 0,
-		afterMoveCallback: function(pokemon, target) {
-			if (target.status === 'par') target.cureStatus();
-		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10315,12 +10268,8 @@ exports.BattleMovedex = {
 	},
 	"SpitUp": {
 		num: 255,
-		accuracy: 100,
+		accuracy: true,
 		basePower: false,
-		basePowerCallback: function(pokemon) {
-			if (!pokemon.volatiles['Stockpile'] || !pokemon.volatiles['Stockpile'].layers) return false;
-			return pokemon.volatiles['Stockpile'].layers * 100;
-		},
 		category: "Special",
 		desc: "Power increases with user's Stockpile count; fails with zero Stockpiles.",
 		shortDesc: "Varies in power depending on Stockpile uses.",
@@ -10328,15 +10277,6 @@ exports.BattleMovedex = {
 		name: "Spit Up",
 		pp: 10,
 		priority: 0,
-		onHit: function(target, pokemon) {
-			if (!pokemon.volatiles['Stockpile'] || !pokemon.volatiles['Stockpile'].layers) return false;
-		},
-		onMoveFail: function(pokemon) {
-			pokemon.removeVolatile('Stockpile');
-		},
-		afterMoveCallback: function(pokemon) {
-			pokemon.removeVolatile('Stockpile');
-		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10470,28 +10410,20 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		priority: 0,
-		onHit: function(pokemon) {
-			if (pokemon.volatiles['Stockpile'] && pokemon.volatiles['Stockpile'].layers >= 3) return false;
-		},
 		volatileStatus: 'Stockpile',
 		effect: {
 			onStart: function(target) {
-				this.add('r-volatile '+target.id+' Stockpile'); // target.name + ' stockpiled 1!'
+				this.add('r-volatile '+target.id+' Stockpile');
 				this.effectData.layers = 1;
 				this.boost({def:1, spd:1});
 			},
 			onRestart: function(target) {
 				if (this.effectData.layers < 3)
 				{
-					this.add('r-volatile '+target.id+' Stockpile'); // target.name + ' stockpiled '+this.effectData.layers+'!'
+					this.add('r-volatile '+target.id+' Stockpile');
 					this.effectData.layers++;
 					this.boost({def:1, spd:1});
 				}
-			},
-			onEnd: function(target) {
-				var layers = this.effectData.layers * -1;
-				this.effectData.layers = 0;
-				this.boost({def:layers, spd:layers});
 			}
 		},
 		secondary: false,
@@ -10945,14 +10877,8 @@ exports.BattleMovedex = {
 		name: "Swallow",
 		pp: 10,
 		priority: 0,
-		onHit: function(pokemon) {
-			if (!pokemon.volatiles['Stockpile'] || !pokemon.volatiles['Stockpile'].layers) return false;
-			var healAmount = [4,2,1]
-			this.heal(pokemon.maxhp / healAmount[pokemon.volatiles['Stockpile'].layers]);
-			pokemon.removeVolatile('Stockpile');
-		},
 		secondary: false,
-		target: "self",
+		target: "normal",
 		type: "Normal"
 	},
 	"SweetKiss": {
@@ -11797,22 +11723,6 @@ exports.BattleMovedex = {
 		num: 376,
 		accuracy: true,
 		basePower: false,
-		basePowerCallback: function(pokemon) {
-			var move = pokemon.getMoveData(pokemon.lastMove); // Account for calling Trump Card via other moves
-			switch (move.pp)
-			{
-				case 0:
-					return 200;
-				case 1:
-					return 80;
-				case 2:
-					return 60;
-				case 3:
-					return 50;
-				default:
-					return 40;
-			}
-		},
 		category: "Special",
 		desc: "This move's base power increases as its remaining PP decreases.",
 		shortDesc: "Power increases as PP decreases.",
@@ -12047,10 +11957,6 @@ exports.BattleMovedex = {
 		num: 358,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function(pokemon, target) {
-			if (target.status === 'slp') return 120;
-			return 60;	
-		},
 		category: "Physical",
 		desc: "If the target is asleep, power is doubled but the target will awaken.",
 		shortDesc: "Double power if foe is asleep. Wakes foe.",
@@ -12059,9 +11965,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		isContact: true,
 		priority: 0,
-		afterMoveCallback: function(pokemon, target) {
-			if (target.status === 'slp') target.cureStatus();
-		},
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
