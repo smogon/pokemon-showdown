@@ -1578,7 +1578,7 @@ exports.BattleAbilities = {
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
 			if (this.weather === 'Sandstorm')
-			{	
+			{
 				this.debug('sand veil - decreasing accuracy');
 				move.accuracy *= 0.8;
 			}
@@ -1763,7 +1763,7 @@ exports.BattleAbilities = {
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
 			if (this.weather === 'Hail')
-			{	
+			{
 				this.debug('snow cloak - decreasing accuracy');
 				move.accuracy *= 0.8;
 			}
@@ -2327,8 +2327,8 @@ exports.BattleAbilities = {
 		rating: -1,
 		num: "161"
 	},
-	
-	
+
+
 	// CAP
 	"Mountaineer": {
 		desc: "This Pokémon avoids all Rock-type attacks and hazards when switching in.",

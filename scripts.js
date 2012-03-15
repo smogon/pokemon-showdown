@@ -38,7 +38,7 @@ exports.BattleScripts = {
 	runMove: function(move, pokemon, target) {
 		move = this.getMove(move);
 		this.setActiveMove(move, pokemon, target);
-		
+
 		if (pokemon.movedThisTurn || pokemon.runBeforeMove(target, move))
 		{
 			this.debug(''+pokemon.id+' move interrupted; movedThisTurn: '+pokemon.movedThisTurn);
@@ -67,7 +67,7 @@ exports.BattleScripts = {
 		};
 		move = this.runEvent('ModifyMove',pokemon,target,move,move);
 		if (!move) return false;
-		
+
 		var attrs = '';
 		var moveRoll = Math.random()*100;
 		var missed = false;
@@ -138,7 +138,7 @@ exports.BattleScripts = {
 		{
 			move.basePower = 102;
 		}
-		
+
 		pokemon.lastDamage = 0;
 		if (!move.multihit)
 		{
@@ -171,9 +171,9 @@ exports.BattleScripts = {
 			}
 			this.add('r-hit-count '+target.id+' '+i);
 		}
-		
+
 		target.gotHit(move, damage, pokemon);
-		
+
 		if (move.recoil && pokemon.lastDamage)
 		{
 			this.damage(pokemon.lastDamage * move.recoil[0] / move.recoil[1], pokemon, target, 'recoil');
@@ -291,7 +291,7 @@ exports.BattleScripts = {
 				hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
 			}
 		}
-		
+
 		if (hitResult === 0)
 		{
 			target = null;
@@ -304,7 +304,7 @@ exports.BattleScripts = {
 			}
 			return false;
 		}
-		
+
 		if (target)
 		{
 			var damage = this.getDamage(pokemon, target, moveData);
@@ -410,7 +410,7 @@ exports.BattleScripts = {
 	},
 	randomTeam: function(side) {
 		var battle = this;
-		
+
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
@@ -420,22 +420,22 @@ exports.BattleScripts = {
 			}
 		}
 		keys = shuffle(keys);
-		
+
 		var PotD = this.getEffect('PotD');
 		var ruleset = this.getFormat().ruleset;
-		
+
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++)
 		{
 			var template = this.getTemplate(keys[i]);
-			
+
 			if (!template || !template.name || !template.types) continue;
 			if (template.tier === 'CAP' && Math.random()*3>1) continue;
-			
+
 			if (i===1 && ruleset && ruleset[0]==='PotD' && PotD && PotD.onPotD)
 			{
 				template = this.getTemplate(PotD.onPotD);
 			}
-			
+
 			if (template.species === 'Magikarp')
 			{
 				template.viablemoves = ["Magikarp'sRevenge", "Splash", "Bounce"];
@@ -444,7 +444,7 @@ exports.BattleScripts = {
 			{
 				template.viablemoves = ["Present", "Bestow"];
 			}
-			
+
 			var moveKeys = shuffle(objectKeys(template.viablemoves));
 			var moves = [];
 			var ability = '';
@@ -465,15 +465,15 @@ exports.BattleScripts = {
 				spd: 31,
 				spe: 31
 			};
-			
+
 			var hasType = {};
 			hasType[template.types[0]] = true;
 			if (template.types[1]) hasType[template.types[1]] = true;
-			
+
 			var hasMove = {};
 			var counter = {};
 			var setupType = '';
-			
+
 			var j=0;
 			do
 			{
@@ -484,7 +484,7 @@ exports.BattleScripts = {
 					moves.push(moveid);
 					j++;
 				}
-				
+
 				hasMove = {};
 				counter = {
 					Physical: 0, Special: 0, Status: 0, damage: 0,
@@ -550,7 +550,7 @@ exports.BattleScripts = {
 						counter['mixedSetup']++;
 					}
 				}
-				
+
 				if (counter['mixedSetup'])
 				{
 					setupType = 'Mixed';
@@ -563,18 +563,18 @@ exports.BattleScripts = {
 				{
 					setupType = 'Physical';
 				}
-				
+
 				for (var k=0; k<moves.length; k++)
 				{
 					var moveid = moves[k];
 					var move = this.getMove(moveid);
 					var rejected = false;
 					var isSetup = false;
-					
+
 					switch (moveid)
 					{
 					// not very useful without their supporting moves
-					
+
 					case 'SleepTalk':
 						if (!hasMove['Rest']) rejected = true;
 						if (hasMove['Trick'] || hasMove['Protect'] || hasMove['Substitute'] || hasMove['BellyDrum']) rejected = true;
@@ -582,9 +582,9 @@ exports.BattleScripts = {
 					case 'Endure':
 						if (!hasMove['Flail'] && !hasMove['Endeavor'] && !hasMove['Reversal']) rejected = true;
 						break;
-					
+
 					// we only need to set up once
-					
+
 					case 'SwordsDance': case 'DragonDance': case 'Coil': case 'Curse': case 'BulkUp':
 						if (!counter['Physical'] && !hasMove['BatonPass']) rejected = true;
 						if (setupType !== 'Physical' || counter['physicalSetup'] > 1) rejected = true;
@@ -600,7 +600,7 @@ exports.BattleScripts = {
 						if (setupType !== 'Mixed' || counter['mixedSetup'] > 1) rejected = true;
 						isSetup = true;
 						break;
-					
+
 					// bad after setup
 					case 'SeismicToss': case 'NightShade': case 'SuperFang':
 						if (setupType) rejected = true;
@@ -608,9 +608,9 @@ exports.BattleScripts = {
 					case 'KnockOff': case 'Protect': case 'PerishSong': case 'MagicCoat':
 						if (setupType) rejected = true;
 						break;
-					
+
 					// bit redundant to have both
-					
+
 					case 'FireBlast':
 						if (hasMove['Eruption'] || hasMove['Overheat']) rejected = true;
 						break;
@@ -666,7 +666,7 @@ exports.BattleScripts = {
 					case 'Psychic':
 						if (hasMove['Psyshock']) rejected = true;
 						break;
-					
+
 					case 'Yawn':
 						if (hasMove['GrassWhistle']) rejected = true;
 						break;
@@ -716,25 +716,25 @@ exports.BattleScripts = {
 					{
 						rejected = true;
 					}
-					
+
 					var todoMoves = {
 						BeatUp:1,
 						Disable:1
 					};
 					if (todoMoves[move.id]) rejected = true;
-					
+
 					if (rejected && j<moveKeys.length)
 					{
 						moves.splice(k,1);
 						break;
 					}
 				}
-				
+
 			} while (moves.length<4 && j<moveKeys.length);
-			
+
 			// any moveset modification goes here
 			//moves[0] = 'Safeguard';
-			
+
 			{
 				var abilities = [template.abilities['0']];
 				if (template.abilities['1'])
@@ -753,7 +753,7 @@ exports.BattleScripts = {
 				{
 					var ability0 = this.getAbility(abilities[0]);
 					var ability1 = this.getAbility(abilities[1]);
-					
+
 					if (ability0.rating <= ability1.rating)
 					{
 						if (Math.random()*2<1)
@@ -768,7 +768,7 @@ exports.BattleScripts = {
 							ability = toId(abilities[1]);
 						}
 					}
-					
+
 					var rejectAbility = false;
 					if (ability === 'Contrary' && !counter['Contrary'])
 					{
@@ -794,7 +794,7 @@ exports.BattleScripts = {
 					{
 						rejectAbility = true;
 					}
-					
+
 					if (rejectAbility)
 					{
 						if (ability === toId(abilities[1])) // or not
@@ -811,7 +811,7 @@ exports.BattleScripts = {
 						ability = 'Guts';
 					}
 				}
-				
+
 				if (hasMove['GyroBall'])
 				{
 					ivs.spe = 0;
@@ -824,7 +824,7 @@ exports.BattleScripts = {
 					//evs.hp += evs.spe;
 					evs.spe = 0;
 				}
-				
+
 				item = 'FocusSash';
 				if (template.species === 'Giratina-O')
 				{
@@ -1036,10 +1036,10 @@ exports.BattleScripts = {
 				{
 					item = 'FocusSash';
 				}
-				
+
 				// this is the "REALLY can't think of a good item" cutoff
 				// why not always Leftovers? Because it's boring. :P
-				
+
 				else if (hasType['Flying'] || ability === 'Levitate')
 				{
 					item = 'Leftovers';
@@ -1068,13 +1068,13 @@ exports.BattleScripts = {
 				{
 					item = 'Leftovers';
 				}
-				
+
 				if (item === 'Leftovers' && hasType['Poison'])
 				{
 					item = 'BlackSludge';
 				}
 			}
-			
+
 			var levelScale = {
 				LC: 95,
 				Limbo: 95,
@@ -1102,12 +1102,12 @@ exports.BattleScripts = {
 			};
 			var level = levelScale[template.tier] || 90;
 			if (customScale[template.name]) level = customScale[template.name];
-			
+
 			if (template.name === 'Chandelure' && ability === 'ShadowTag') level = 70;
 			if (template.name === 'Serperior' && ability === 'Contrary') level = 75;
 			if (template.name === 'Rotom-S' && item === 'Balloon') level = 95;
 			if (template.name === 'Magikarp' && hasMove['Magikarp\'sRevenge']) level = 85;
-			
+
 			pokemon.push({
 				name: template.name,
 				moves: moves,

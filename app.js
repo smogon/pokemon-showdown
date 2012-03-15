@@ -74,6 +74,17 @@ Users = require('./users.js');
 getUser = Users.getUser;
 parseCommand = require('./chat-commands.js').parseCommand;
 
+var tournamentBuilder = require('./tournament-builder.js');
+TournamentBuilder = tournamentBuilder.TournamentBuilder;
+TournamentBuilderBattle = tournamentBuilder.TournamentBuilderBattle;
+TournamentBuilderTree = tournamentBuilder.TournamentBuilderTree;
+TournamentBuilderTreeNode = tournamentBuilder.TournamentBuilderTreeNode;
+TournamentBuilderTreeNodeType = tournamentBuilder.TournamentBuilderTreeNodeType;
+TournamentBuilderTreeNodeBattleData = tournamentBuilder.TournamentBuilderTreeNodeBattleData;
+TournamentBuilderTreeNodeBattleDataBattleStatus = tournamentBuilder.TournamentBuilderTreeNodeBattleDataBattleStatus;
+Tournament = require('./tournament.js').Tournament;
+currentTournaments = new Array();
+
 lockdown = false;
 
 function reloadEngine()
@@ -102,9 +113,19 @@ function reloadEngine()
 	BattleTools = require('./tools.js').BattleTools;
 
 	Tools = new BattleTools();
+	
+	tournamentBuilder = require('./tournament-builder.js');
+    TournamentBuilder = tournamentBuilder.TournamentBuilder;
+    TournamentBuilderBattle = tournamentBuilder.TournamentBuilderBattle;
+    TournamentBuilderTree = tournamentBuilder.TournamentBuilderTree;
+    TournamentBuilderTreeNode = tournamentBuilder.TournamentBuilderTreeNode;
+    TournamentBuilderTreeNodeType = tournamentBuilder.TournamentBuilderTreeNodeType;
+    TournamentBuilderTreeNodeBattleData = tournamentBuilder.TournamentBuilderTreeNodeBattleData;
+    TournamentBuilderTreeNodeBattleDataBattleStatus = tournamentBuilder.TournamentBuilderTreeNodeBattleDataBattleStatus;
+    Tournament = require('./tournament.js').Tournament;
 }
 
-function Room(roomid, format, p1, p2, parentid, ranked)
+function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 {
 	var selfR = this;
 	
@@ -116,6 +137,16 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	this.users = {};
 	this.format = format;
 	console.log("NEW BATTLE");
+	
+	this.isTournamentBattle = false;
+	this.tournamentName;
+	this.tournamentBattleId;
+	if (tournament)
+	{
+	    this.isTournamentBattle = true;
+	    this.tournamentName = tournament.name;
+	    this.tournamentBattleId = tournament.battleId;
+	}
 	
 	var formatid = toId(format);
 	
@@ -221,6 +252,21 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			
 			selfR.ranked = false;
 		}
+		if (selfR.battle.ended && selfR.isTournamentBattle)
+		{
+		    // The tournament still exists, I hope
+		    if (currentTournaments[selfR.tournamentName] !== undefined)
+		        currentTournaments[selfR.tournamentName].tournament.setBattleWinner(selfR.tournamentBattleId, getUser(selfR.battle.winner));
+
+		    else
+		    {
+		        selfR.p1.emit("tournament challenge", { action: "tournament disappeared", name: selfR.tournamentName });
+		        selfR.p2.emit("tournament challenge", { action: "tournament disappeared", name: selfR.tournamentName });
+	            selfR.p1.isTournamentChallenging = false;
+	            selfR.p2.isTournamentChallenging = false;
+		    }
+	        selfR.isTournamentBattle = false;
+	    }
 		
 		update.room = roomid;
 		var hasUsers = false;
@@ -766,7 +812,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 				}
 				catch (e)
 				{
-					selfR.battle.add('chat '+toId(user.name)+' << error: '+e.message);
+					selfR.battle.add('chat '+toId(user.name)+' << error: '+e+': '+e.message);
 					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
 				}
 			}
@@ -1266,7 +1312,7 @@ function Lobby(roomid)
 				{
 					selfR.log.push({
 						name: user.getIdentity(),
-						message: '<< error: '+e.message
+						message: '<< error: '+e+': '+e.message
 					});
 					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
 				}
@@ -1306,14 +1352,14 @@ getRoom = function(roomid)
 	}
 	return rooms[roomid];
 }
-newRoom = function(roomid, format, p1, p2, parent, ranked)
+newRoom = function(roomid, format, p1, p2, parent, ranked, tournament)
 {
 	if (roomid && roomid.id) return roomid;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid])
 	{
 		console.log("NEW ROOM: "+roomid);
-		rooms[roomid] = new Room(roomid, format, p1, p2, parent, ranked);
+		rooms[roomid] = new Room(roomid, format, p1, p2, parent, ranked, tournament);
 	}
 	return rooms[roomid];
 }
@@ -1451,6 +1497,13 @@ io.sockets.on('connection', function (socket) {
 			youUser.rejectChallengeFrom(data.userid);
 			break;
 		}
+	});
+	socket.on('tournament challenge', function(data) {
+		var user = resolveUser(you, socket);
+		if (!user) return;
+		if (!data.name || !data.action || data.id === undefined) return;
+		if (currentTournaments[data.name] === undefined) return;
+		currentTournaments[data.name].tournament.handleTournamentChallengePacket(user, data.action, data.id);
 	});
 	socket.on('decision', function(data) {
 		var youUser = resolveUser(you, socket);

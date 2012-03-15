@@ -107,12 +107,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		return true;
 		break;
-		
+
 	case 'register':
 		socket.emit('console', 'You must have a beta key to register.');
 		return true;
 		break;
-		
+
 	case 'avatar':
 		if (!target) return parseCommand(user, 'avatars', '', room, socket);
 		var avatar = parseInt(target);
@@ -121,14 +121,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			socket.emit('console', 'Invalid avatar.');
 			return true;
 		}
-		
+
 		user.avatar = avatar;
 		socket.emit('console', 'Avatar changed to:');
 		socket.emit('console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" />'});
-		
+
 		return true;
 		break;
-		
+
 	case 'rooms':
 		var targetUser = user;
 		if (target)
@@ -147,7 +147,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				if (!first) output += ' | ';
 				first = false;
-				
+
 				output += '<a href="/'+i+'" onclick="return selectTab(\''+i+'\');">'+i+'</a>';
 			}
 			if (!output)
@@ -161,7 +161,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		return true;
 		break;
-		
+
 	case 'altcheck':
 	case 'alt':
 	case 'alts':
@@ -180,17 +180,17 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			var alts = targetUser.getAlts();
 			var altGroup = targetUser.getAltGroup();
-			
+
 			socket.emit('console', 'User: '+targetUser.name);
-			
+
 			if (!user.canMod(altGroup))
 			{
 				return true;
 			}
-			
+
 			var output = '';
 			for (var i in targetUser.prevNames)
 			{
@@ -198,13 +198,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				output += targetUser.prevNames[i];
 			}
 			if (output) socket.emit('console', 'Previous names: '+output);
-			
+
 			for (var j=0; j<alts.length; j++)
 			{
 				var targetAlt = getUser(alts[j]);
 				if (!targetAlt || !user.canMod(targetAlt.group)) continue;
 				if (!targetAlt.named && !targetAlt.connected) continue;
-				
+
 				socket.emit('console', 'Alt: '+targetAlt.name);
 				output = '';
 				for (var i in targetAlt.prevNames)
@@ -219,7 +219,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/alts - Access denied.');
 		return true;
 		break;
-		
+
 	case 'whois':
 		var targetUser = user;
 		if (target)
@@ -262,14 +262,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				if (!first) output += ' | ';
 				first = false;
-				
+
 				output += '<a href="/'+i+'" onclick="return selectTab(\''+i+'\');">'+i+'</a>';
 			}
 			socket.emit('console', {rawMessage: output});
 		}
 		return true;
 		break;
-		
+
 	case 'ban':
 	case 'b':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -286,18 +286,18 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			room.add(""+targetUser.name+" was banned by "+user.name+".");
 			var alts = targetUser.getAlts();
 			if (alts.length) room.add(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
-			
+
 			targetUser.ban();
 			return true;
 		}
 		socket.emit('console', '/ban - Access denied.');
 		return true;
 		break;
-		
+
 	case 'banredirect':
 	case 'br':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -315,7 +315,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			if (targets[1].substr(0,2) == '~~')
 			{
 				targets[1] = '/'+targets[1];
@@ -324,9 +324,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				targets[1] = 'http://'+targets[1];
 			}
-			
+
 			room.add(''+targetUser.name+' was banned by '+user.name+' and redirected to: '+targets[1]);
-			
+
 			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
 			targetUser.ban();
 			return true;
@@ -334,7 +334,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/banredirect - Access denied.');
 		return true;
 		break;
-		
+
 	case 'redirect':
 	case 'redir':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -352,7 +352,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			if (targets[1].substr(0,2) == '~~')
 			{
 				targets[1] = '/'+targets[1];
@@ -361,7 +361,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				targets[1] = 'http://'+targets[1];
 			}
-			
+
 			room.add(''+targetUser.name+' was redirected by '+user.name+' to: '+targets[1]);
 			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
 			return true;
@@ -369,14 +369,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/redirect - Access denied.');
 		return true;
 		break;
-		
+
 	case 'unban':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
 		{
 			var targetid = toUserid(target);
 			var success = false;
-			
+
 			for (var ip in bannedIps)
 			{
 				if (bannedIps[ip] === targetid)
@@ -398,7 +398,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/unban - Access denied.');
 		return true;
 		break;
-		
+
 	case 'unbanall':
 		if (user.isMod())
 		{
@@ -410,7 +410,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/unbanall - Access denied.');
 		return true;
 		break;
-		
+
 	case 'reply':
 	case 'r':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -421,7 +421,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		return parseCommand(user, 'msg', ''+(user.lastPM||'')+', '+target, room, socket);
 		break;
-		
+
 	case 'msg':
 	case 'pm':
 	case 'whisper':
@@ -446,7 +446,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
-		
+
 		var message = {
 			name: user.getIdentity(),
 			pm: targetUser.getIdentity(),
@@ -458,7 +458,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		user.lastPM = targets[0].userid;
 		return true;
 		break;
-		
+
 	case 'ip':
 	case 'getip':
 		if (!target)
@@ -482,7 +482,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/ip - Access denied.');
 		return true;
 		break;
-		
+
 	case 'mute':
 	case 'm':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -499,18 +499,18 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			room.add(''+targetUser.name+' was muted by '+user.name+'.');
 			var alts = targetUser.getAlts();
 			if (alts.length) room.add(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
-			
+
 			targetUser.muted = true;
 			for (var i=0; i<alts.length; i++)
 			{
 				var targetAlt = getUser(alts[i]);
 				if (targetAlt) targetAlt.muted = true;
 			}
-			
+
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
@@ -533,11 +533,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			room.add(''+targetUser.name+"'s IP was muted by "+user.name+'.');
 			var alts = targetUser.getAlts();
 			if (alts.length) room.add(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
-			
+
 			targetUser.muted = true;
 			mutedIps[targetUser.ip] = targetUser.userid;
 			for (var i=0; i<alts.length; i++)
@@ -545,14 +545,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				var targetAlt = getUser(alts[i]);
 				if (targetAlt) targetAlt.muted = true;
 			}
-			
+
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
 		socket.emit('console', '/mute - Access denied.');
 		return true;
 		break;
-		
+
 	case 'unmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
@@ -561,7 +561,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			var targetUser = getUser(target);
 
 			var success = false;
-			
+
 			for (var ip in mutedIps)
 			{
 				if (mutedIps[ip] === targetid)
@@ -587,10 +587,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 					socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 					return true;
 				}
-				
+
 				room.add(''+targetUser.name+' was unmuted by '+user.name+'.');
 			}
-			
+
 			targetUser.muted = false;
 			rooms.lobby.usersChanged = true;
 			return true;
@@ -598,7 +598,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/unmute - Access denied.');
 		return true;
 		break;
-	
+
 	case 'voice':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
@@ -614,9 +614,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			room.add(''+targetUser.name+' was voiced by '+user.name+'.');
-			
+
 			targetUser.group = '+';
 			rooms.lobby.usersChanged = true;
 			return true;
@@ -624,7 +624,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/voice - Access denied.');
 		return true;
 		break;
-		
+
 	case 'devoice':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod())
@@ -640,9 +640,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			room.add(''+targetUser.name+' was devoiced by '+user.name+'.');
-			
+
 			targetUser.group = ' ';
 			rooms.lobby.usersChanged = true;
 			return true;
@@ -650,7 +650,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/devoice - Access denied.');
 		return true;
 		break;
-		
+
 	case 'mod':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod() && (user.group === '&' || user.group === '@'))
@@ -666,7 +666,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			if (targetUser.group === '@' || targetUser.group === '&')
 			{
 				room.add(''+targetUser.name+' was demoted to moderator by '+user.name+'.');
@@ -682,7 +682,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/mod - Access denied.');
 		return true;
 		break;
-	
+
 	case 'demod':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod() && (user.group === '&' || user.group === '@'))
@@ -698,9 +698,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			room.add(''+targetUser.name+' was demoted to voice by '+user.name+'.');
-			
+
 			if (targetUser.group === '%')
 			{
 				targetUser.group = '+';
@@ -711,7 +711,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/demod - Access denied.');
 		return true;
 		break;
-	
+
 	case 'admin':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod() && (user.group === '&' || user.group === '@'))
@@ -727,7 +727,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			if (targetUser.group === '&')
 			{
 				room.add(''+targetUser.name+' was demoted to admin by '+user.name+'.');
@@ -743,7 +743,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/admin - Access denied.');
 		return true;
 		break;
-	
+
 	case 'deadmin':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.isMod() && (user.group === '&' || user.group === '@'))
@@ -759,9 +759,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 				return true;
 			}
-			
+
 			room.add(''+targetUser.name+' was demoted to moderator by '+user.name+'.');
-			
+
 			if (targetUser.group === '@')
 			{
 				targetUser.group = '%';
@@ -772,7 +772,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', 'Access denied.');
 		return true;
 		break;
-	
+
 	case 'sysop':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.group === '&')
@@ -783,7 +783,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+target+' not found.');
 				return true;
 			}
-			
+
 			room.add(''+targetUser.name+' was promoted to sysop by '+user.name+'.');
 			targetUser.group = '&';
 			rooms.lobby.usersChanged = true;
@@ -792,7 +792,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', 'Access denied.');
 		return true;
 		break;
-	
+
 	case 'desysop':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.group === '&')
@@ -803,7 +803,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'User '+target+' not found.');
 				return true;
 			}
-			
+
 			if (targetUser.group === '&')
 			{
 				room.add(''+targetUser.name+' was demoted to admin by '+user.name+'.');
@@ -819,7 +819,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', 'Access denied.');
 		return true;
 		break;
-	
+
 	case 'modchat':
 		if (!target)
 		{
@@ -871,7 +871,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/modchat - Access denied.');
 		return true;
 		break;
-	
+
 	case 'announce':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.group === '&' || user.group === '@')
@@ -883,7 +883,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/announce - Access denied.');
 		return true;
 		break;
-	
+
 	case 'hotpatch':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (user.group === '&')
@@ -903,11 +903,22 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				BattleLearnsets = require('./learnsets.js').BattleLearnsets;
 				BattleTools = require('./tools.js').BattleTools;
 				Tools = new BattleTools();
-				sim = require('./simulator.js');
 
+				sim = require('./simulator.js');
 				BattlePokemon = sim.BattlePokemon;
 				BattleSide = sim.BattleSide;
 				Battle = sim.Battle;
+
+				tournamentBuilder = require('./tournament-builder.js');
+                TournamentBuilder = tournamentBuilder.TournamentBuilder;
+                TournamentBuilderBattle = tournamentBuilder.TournamentBuilderBattle;
+                TournamentBuilderTree = tournamentBuilder.TournamentBuilderTree;
+                TournamentBuilderTreeNode = tournamentBuilder.TournamentBuilderTreeNode;
+                TournamentBuilderTreeNodeType = tournamentBuilder.TournamentBuilderTreeNodeType;
+                TournamentBuilderTreeNodeBattleData = tournamentBuilder.TournamentBuilderTreeNodeBattleData;
+                TournamentBuilderTreeNodeBattleDataBattleStatus = tournamentBuilder.TournamentBuilderTreeNodeBattleDataBattleStatus;
+                Tournament = require('./tournament.js').Tournament;
+
 				socket.emit('console', 'The game engine has been hot-patched.');
 				return true;
 			}
@@ -941,7 +952,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		socket.emit('console', '/hotpatch - Access denied.');
 		return true;
 		break;
-	
+
 	case 'rating':
 	case 'ranking':
 	case 'rank':
@@ -955,9 +966,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				try
 				{
 					var data = JSON.parse(body);
-					
+
 					socket.emit('console', 'User: '+target);
-					
+
 					if (!data.length)
 					{
 						socket.emit('console', 'has not played a ladder game yet');
@@ -979,13 +990,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		});
 		return true;
 		break;
-		
+
 	case 'nick':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		user.rename(target);
 		return true;
 		break;
-		
+
 	case 'forcerename':
 	case 'fr':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -1016,8 +1027,262 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		return true;
 		break;
-	
+
+	// TOURNAMENT COMMANDS
+
+	case 'tour':
+	case 'tournament':
+	case 'starttour':
+	case 'starttournament':
+		if (user.group === '+' || user.isMod())
+		{
+		    if (!target) return parseCommand(user, '?', cmd, room, socket);
+    		var args = splitArgs(target);
+    		if (args.length < 3)
+    		    return parseCommand(user, '?', cmd, room, socket);
+		    if (args[0].length < 2)
+	        {
+		        socket.emit('console', "/" + cmd + " - Tournament name too short.");
+		        return true;
+	        }
+            if (currentTournaments[args[0]] !== undefined)
+            {
+                socket.emit('console', "/" + cmd + " - That tournament name already is in use.");
+                return true;
+            }
+	        switch (args[1])
+	        {
+	            case "BalancedHackmons" :
+	            case "OU" :
+	            case "UU" :
+	            case "RU" :
+	            case "NU" :
+	                break;
+
+                default :
+                {
+                    socket.emit('console', "/" + cmd + " - Invalid metagame.");
+                    return true;
+                }
+	        }
+
+	        try
+	        {
+	            var tournament = new Object();
+	            tournament.tournament = new Tournament(args[0], args[1], rooms, rooms.lobby, parseInt(args[2]));
+	            tournament.host = user;
+	            currentTournaments[args[0]] = tournament;
+            } catch (e)
+            {
+                switch (e)
+                {
+                    case "MaxParticipantsTooLowException" :
+                        socket.emit('console', "/" + cmd + " - The maximum number of participants must be at least 2.");
+                        break;
+
+                    default :
+                        throw e;
+                }
+            }
+		}
+		else
+		    socket.emit('console', "/" + cmd + " - Access denied.");
+	    return true;
+
+    case 'deletetour':
+    case 'deletetournament':
+    case 'endtour':
+    case 'endtournament':
+        // Fallthrough
+
+    case 'toursetmaxparticipants':
+    case 'tournamentsetmaxparticipants':
+        // Fallthrough
+
+    case 'tourstartautopilot':
+    case 'tournamentstartautopilot':
+        // Fallthrough
+
+    case 'tourstopautopilot':
+    case 'tournamentstopautopilot':
+        // Fallthrough
+
+    case 'tourstartnextbattle':
+    case 'tournamentstartnextbattle':
+        // Fallthrough
+
+    case 'toursetactionondraw':
+    case 'tournamentsetactionondraw':
+        // Fallthrough
+
+    case 'tourrebuildtree':
+    case 'tournamentrebuildtree':
+		if (user.group !== '+' && !user.isMod())
+		{
+		    socket.emit('console', "/" + cmd + " - Access denied.");
+		    return true;
+	    }
+        var isPriviledged = true;
+	    // Fallthrough
+
+    case 'join':
+    case 'jointournament':
+        // Fallthrough
+
+    case 'leave':
+    case 'leavetournament':
+        // Fallthrough
+
+    case 'tourgettree':
+    case 'tournamentgettree':
+        // Fallthrough
+
+    case 'tourgetwinner':
+    case 'tournamentgetwinner':
+        if (!target) return parseCommand(user, '?', cmd, room, socket);
+        var args = splitArgs(target);
+        if (args.length < 1)
+		    return parseCommand(user, '?', cmd, room, socket);
+	    if (args[0].length < 2)
+        {
+	        socket.emit('console', "/" + cmd + " - Tournament name too short.");
+	        return true;
+        }
+        if (currentTournaments[args[0]] === undefined)
+        {
+	        socket.emit('console', "/" + cmd + " - No such tournament.");
+	        return true;
+        }
+        if (isPriviledged && !user.canMod(currentTournaments[args[0]].host))
+        {
+            socket.emit('console', "/" + cmd + " - You cannot moderate this tournament.");
+            return true;
+        }
+        switch (cmd)
+        {
+            case "deletetour" :
+            case "deletetournament" :
+            case "endtour" :
+            case "endtournament" :
+	            delete currentTournaments[args[0]];
+	            for (var r in rooms)
+	                rooms[r].addRaw("The tournament named \"" + args[0] + "\" has ended.");
+	            break;
+
+            case "toursetmaxparticipants" :
+            case "tournamentsetmaxparticipants" :
+                if (args.length < 2)
+		            return parseCommand(user, '?', cmd, room, socket);
+                currentTournaments[args[0]].tournament.setMaxParticipants(args[1], socket);
+                break;
+
+            case "tourstartautopilot" :
+            case "tournamentstartautopilot" :
+                currentTournaments[args[0]].tournament.startAutopilot(socket);
+                break;
+
+            case "tourstopautopilot" :
+            case "tournamentstopautopilot" :
+                currentTournaments[args[0]].tournament.stopAutopilot(socket);
+                break;
+
+            case "tourstartnextbattle" :
+            case "tournamentstartnextbattle" :
+                currentTournaments[args[0]].tournament.startNextBattle(socket);
+                break;
+
+            case "toursetactionondraw" :
+            case "tournamentsetactionondraw" :
+                if (args.length < 2)
+		            return parseCommand(user, '?', cmd, room, socket);
+	            currentTournaments[args[0]].tournament.setActionOnDraw(args[1], socket);
+	            break;
+
+            case "tourrebuildtree" :
+            case "tournamentrebuildtree" :
+                currentTournaments[args[0]].tournament.rebuildTree(socket);
+                break;
+
+            case "join" :
+            case "jointournament" :
+                currentTournaments[args[0]].tournament.addParticipant(user, socket);
+                break;
+
+            case "leave" :
+            case "leavetournament" :
+                currentTournaments[args[0]].tournament.removeParticipant(user, socket);
+                break;
+
+            case "tourgettree" :
+            case "tournamentgettree" :
+                currentTournaments[args[0]].tournament.getTree(socket, socket);
+                break;
+
+            case "tourgetwinner" :
+            case "tournamentgetwinner" :
+                currentTournaments[args[0]].tournament.getWinner(socket, socket);
+                break;
+        }
+        return true;
+
 	// INFORMATIONAL COMMANDS
+
+    case 'gettours':
+    case '!gettours':
+    case 'gettournaments':
+    case '!gettournaments':
+	    showOrBroadcastStart(user, cmd, room, socket, message);
+        if (Object.keys(currentTournaments).length === 0)
+            showOrBroadcast(user, cmd, room, socket, "There are currently no tournaments running.");
+        else
+        {
+            for (var t in currentTournaments)
+            {
+                var output = currentTournaments[t].tournament.getMetagame() + ": ";
+                output += t;
+                output += " (" + currentTournaments[t].tournament.getParticipants().length + "/" + currentTournaments[t].tournament.getMaxParticipants() + ")";
+                if (currentTournaments[t].tournament.getParticipants().length >= currentTournaments[t].tournament.getMaxParticipants())
+                    output += " [FULL]";
+                if (currentTournaments[t].tournament.getParticipants().length > currentTournaments[t].tournament.getMaxParticipants())
+                    output += " [GLITCHED. PLEASE REPORT TO A MODERATOR]";
+                if (currentTournaments[t].tournament.getIsJoiningLocked())
+                    output += " [IN PROGRESS/LOCKED]";
+                if (output[output.length - 1] !== ']')
+                    output += " [OPEN]";
+                output += " (Host: " + currentTournaments[t].host.getIdentity() + ")";
+		        showOrBroadcast(user, cmd, room, socket, output);
+            }
+        }
+        return true;
+
+    case 'tourgetparticipants':
+    case '!tourgetparticipants':
+    case 'tournamentgetparticipants':
+    case '!tournamentgetparticipants':
+	    showOrBroadcastStart(user, cmd, room, socket, message);
+        if (!target) return parseCommand(user, '?', "tourgetparticipants", room, socket);
+        var args = splitArgs(target);
+        if (args.length < 1)
+		    return parseCommand(user, '?', "tourgetparticipants", room, socket);
+	    if (args[0].length < 2)
+        {
+	        showOrBroadcast(user, cmd, room, socket, "Tournament name too short.");
+	        return true;
+        }
+        if (currentTournaments[args[0]] === undefined)
+        {
+	        showOrBroadcast(user, cmd, room, socket, "No such tournament.");
+	        return true;
+        }
+        var participants = currentTournaments[args[0]].tournament.getParticipants();
+        for (var p in participants)
+        {
+            var output = participants[p].getIdentity();
+            if (!participants[p].connected)
+                output += " [NOT ONLINE]";
+            showOrBroadcast(user, cmd, room, socket, output);
+        }
+	    return true;
 
 	case 'data':
 	case '!data':
@@ -1028,7 +1293,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			socket.emit('console', {rawMessage: '<code>!data</code> can only be used in the lobby.'});
 			return true;
 		}
-		
+
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		var dataMessages = getDataMessage(target);
 		for (var i=0; i<dataMessages.length; i++)
@@ -1044,7 +1309,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		return true;
 		break;
-		
+
 	case 'groups':
 	case '!groups':
 		showOrBroadcastStart(user, cmd, room, socket, message);
@@ -1057,7 +1322,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'</div>');
 		return true;
 		break;
-		
+
 	case 'opensource':
 	case '!opensource':
 		showOrBroadcastStart(user, cmd, room, socket, message);
@@ -1065,7 +1330,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'<div style="border:1px solid #6688AA;padding:2px 4px">Showdown is open source:<br />- Language: JavaScript<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master" target="_blank">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown" target="_blank">Source code</a></div>');
 		return true;
 		break;
-		
+
 	case 'avatars':
 	case '!avatars':
 		showOrBroadcastStart(user, cmd, room, socket, message);
@@ -1073,7 +1338,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'<div style="border:1px solid #6688AA;padding:2px 4px">Want a custom avatar?<br />- <a href="/sprites/trainers/" target="_blank">How to change your avatar</a></div>');
 		return true;
 		break;
-		
+
 	case 'intro':
 	case 'introduction':
 	case '!intro':
@@ -1087,7 +1352,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'</div>');
 		return true;
 		break;
-		
+
 	case 'rules':
 	case 'rule':
 	case '!rules':
@@ -1099,7 +1364,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'</div>');
 		return true;
 		break;
-	
+
 	// Battle commands
 
 	case 'reset':
@@ -1146,7 +1411,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 
 	// Admin commands
-		
+
 	case 'forcewin':
 		if (user.group === '&' && room.battle)
 		{
@@ -1158,16 +1423,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			target = getUser(target);
 			if (target) target = target.userid;
 			else target = '';
-			
+
 			if (target) room.battle.win(target);
-			
+
 			return true;
 		}
 		break;
-		
+
 	case 'potd':
 		if (user.group !== '&' && user.group !== '@') return true;
-		
+
 		BattleFormats.PotD.onPotD = target;
 		if (target)
 		{
@@ -1177,10 +1442,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			room.add('The Pokemon of the Day was removed by '+user.name+'.');
 		}
-		
+
 		return true;
 		break;
-	
+
 	case 'lockdown':
 		if (user.group === '&')
 		{
@@ -1192,7 +1457,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		return true;
 		break;
-		
+
 	case 'endlockdown':
 		if (user.group === '&')
 		{
@@ -1204,7 +1469,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		return true;
 		break;
-		
+
 	case 'loadbanlist':
 		if (user.group === '&')
 		{
@@ -1310,6 +1575,78 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			socket.emit('console', '/intro - Provides an introduction to competitive pokemon.');
 			socket.emit('console', '!intro - Show everyone that information. Requires: + % @ &');
 		}
+		if (target === 'all' || target === 'gettours' || target === 'gettournaments')
+		{
+		    matched = true;
+		    socket.emit('console', '/getTours OR /getTournaments - Gets the currently running tournaments.');
+		    socket.emit('console', '!getTours OR !getTournaments - Show everyone that information. Requires: + % @ &');
+		}
+		if (target === 'all' || target === 'tourgetparticipants' || target === 'tournamentgetparticipants')
+		{
+		    matched = true;
+		    socket.emit('console', '/tourGetParticipants OR /tournamentGetParticipants [name] - Get the participants of the tournament named [name].');
+		    socket.emit('console', '!tourGetParticipants OR !tournamentGetParticipants [name] - Show everyone that information. Requires: + % @ &');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'tour' || target === 'tournament' || target === 'starttour' || target === 'starttournament')
+		{
+		    matched = true;
+		    socket.emit('console', '/tour OR /tournament OR /startTour OR /startTournament [name], [metagame], [maximum participants] - Starts a new tournament. Requires: + % @ &');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'join' || target === 'jointournament')
+		{
+		    matched = true;
+		    socket.emit('console', '/join OR /joinTournament [name] - Join the tournament named [name].');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'leave' || target === 'leavetournament')
+		{
+		    matched = true;
+		    socket.emit('console', '/leave OR /leaveTournament [name] - Leave the tournament named [name].');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'tourgettree' || target === 'tournamentgettree')
+		{
+		    matched = true;
+		    socket.emit('console', '/tourGetTree OR /tournamentGetTree [name] - Gets the current tree for the tournament named [name]');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'toursetmaxparticipants' || target === 'tournamentsetmaxparticipants')
+		{
+		    matched = true;
+		    socket.emit('console', '/tourSetMaxParticipants OR /tournamentSetMaxParticipants [name], [maximum participants] - Sets the maximum number of participants for tournament [name]. Requires: + % @ &');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'tourstartautopilot' || target === 'tournamentstartautopilot')
+		{
+		    matched = true;
+		    socket.emit('console', '/tourStartAutopilot OR /tournamentStartAutopilot [name] - Starts the autopilot for tournament [name] and locks joining and leaving it. Requires: + % @ &');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'tourstopautopilot' || target === 'tournamentstopautopilot')
+		{
+		    matched = true;
+		    socket.emit('console', '/tourStopAutopilot OR /tournamentStopAutopilot [name] - Stops the autopilot for tournament [name] but does not unlock it. Requires: + % @ &');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'tourstartnextbattle' || target === 'tournamentstartnextbattle')
+		{
+		    matched = true;
+		    socket.emit('console', '/tourStartNextBattle OR /tournamentStartNextBattle [name] - Starts the next battle of tournament [name] and locks joining and leaving it. Requires: + % @ &');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'toursetactionondraw' || target === 'tournamentsetactionondraw')
+		{
+		    matched = true;
+		    socket.emit('console', '/tourSetActionOnDraw OR /tournamentSetActionOnDraw [name], [action] - Sets the action (rematch OR bye) on a battle that draws in tournament [name] (Default: rematch). Requires: + % @ &');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'tourgetwinner' || target === 'tournamentgetwinner')
+		{
+		    matched = true;
+		    socket.emit('console', '/tourGetWinner OR /tournamentGetWinner [name] - Gets the winner of the tournament named [name].');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'tourrebuildtree' || target === 'tournamentrebuildtree')
+		{
+		    matched = true;
+		    socket.emit('console', '/tourRebuildTree OR /tournamentRebuildTree [name] - Rebuilds the tournament tree for tournament [name], allowing reuse of the tournament without adding or removing users. Requires: + % @ &');
+		}
+		if (target === 'all' || target === 'tournaments' || target === 'deletetour' || target === 'deletetournament' || target === 'endtour' || target === 'endtournament')
+		{
+		    matched = true;
+		    socket.emit('console', '/deleteTour OR /deleteTournament OR /endTour OR /endTournament [name] - Deletes the tournament named [name]. Requires: + % @ &');
+		}
 		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts')
 		{
 			matched = true;
@@ -1412,10 +1749,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!target)
 		{
 			socket.emit('console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
-			socket.emit('console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
+			socket.emit('console', 'TOURNAMENT COMMANDS: /tournament, /joinTournament, /leaveTournament, /tournamentGetTree, /tournamentSetMaxParticipants, /tournamentStartAutopilot, /tournamentStopAutopilot, /tournamentStartNextBattle, /tournamentSetActionOnDraw, /tournamentGetWinner, /tournamentRebuildTree, /deleteTournament');
+			socket.emit('console', 'INFORMATIONAL COMMANDS: /getTournaments, /tournamentGetParticipants, /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
 			if (user.isMod()) socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
 			if (user.isMod()) socket.emit('console', 'ADMIN COMMANDS: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
+			socket.emit('console', 'All command parameters are case-sensitive, while the command itself is not.');
 			socket.emit('console', 'For details on all commands, use /help all');
+			socket.emit('console', 'For details on all tournament commands, use /help tournaments');
 			if (user.isMod()) socket.emit('console', 'For details on all moderator commands, use /help %');
 			socket.emit('console', 'For details of a specific command, use something like: /help ban');
 		}
@@ -1432,7 +1772,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	{
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -1584,6 +1924,15 @@ function splitTarget(target)
 		targetUser = null;
 	}
 	return [targetUser, target.substr(commaIndex+1).trim(), target.substr(0, commaIndex)];
+}
+
+function splitArgs(args)
+{
+    args = args.replace(/\s+/gm, " "); // Normalise spaces
+    var result = args.split(',');
+    for (var r in result)
+        result[r] = result[r].trim();
+    return result;
 }
 
 exports.parseCommand = parseCommandLocal;

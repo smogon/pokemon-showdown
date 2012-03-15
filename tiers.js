@@ -2036,7 +2036,7 @@ exports.BattleTiers = {
 	"Zweilous": {
 		tier: "Limbo"
 	},
-	
+
 	// CAP
 	"Syclant": {
 		isNonstandard: true,
@@ -2091,5 +2091,5 @@ exports.BattleTiers = {
 		isNonstandard: true,
 		tier: "G5CAP"
 	}
-	
+
 }
