@@ -1050,9 +1050,9 @@ exports.BattleMovedex = {
 				pokemon.lockMove('Bounce');
 			},
 			onSourceModifyMove: function(move) {
-				
+
 				// warning: does not work the same way as Fly
-				
+
 				if (move.target === 'foeSide') return;
 				if (move.id === 'Gust' || move.id === 'Twister' || move.id === 'Thunder')
 				{
@@ -2156,7 +2156,7 @@ exports.BattleMovedex = {
 					// but EQ has static base power, and
 					// it's faster to do this here than in
 					// onFoeBasePower
-					
+
 					// TODO: Magnitude
 					move.basePower *= 2;
 					return;
@@ -2336,7 +2336,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
-			
+
 			if (source.side.sideConditions['futureMove'].positions[source.position])
 			{
 				return false;
@@ -3668,7 +3668,7 @@ exports.BattleMovedex = {
 				pokemon.lockMove('Fly');
 			},
 			onSourceModifyMove: function(move) {
-				
+
 				if (move.target === 'foeSide') return;
 				// warning: does not work the same way as Bounce
 				if (move.id === 'Gust' || move.id === 'Twister')
@@ -4036,7 +4036,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
-			
+
 			if (source.side.sideConditions['futureMove'].positions[source.position])
 			{
 				return false;
@@ -4380,7 +4380,7 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
-			
+
 			for (var i in {def:1,spd:1})
 			{
 				targetBoosts[i] = target.baseBoosts[i];
@@ -4389,10 +4389,10 @@ exports.BattleMovedex = {
 			{
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
-			
+
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
-			
+
 			this.add('message Defensive boosts swapped. (placeholder; graphics will be incorrect)');
 		},
 		secondary: false,
@@ -4776,16 +4776,16 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
-			
+
 			for (var i in target.baseBoosts)
 			{
 				targetBoosts[i] = target.baseBoosts[i];
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
-			
+
 			target.setBoost(sourceBoosts);
 			source.setBoost(targetBoosts);
-			
+
 			this.add('message Swapped. (placeholder; graphics will be incorrect)');
 		},
 		secondary: false,
@@ -7675,7 +7675,7 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
-			
+
 			for (var i in {atk:1,spa:1})
 			{
 				targetBoosts[i] = target.baseBoosts[i];
@@ -7684,10 +7684,10 @@ exports.BattleMovedex = {
 			{
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
-			
+
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
-			
+
 			this.add('message Offensive boosts swapped. (placeholder; graphics will be incorrect)');
 		},
 		secondary: false,
@@ -7873,14 +7873,14 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			var targetBoosts = {};
-			
+
 			for (var i in target.baseBoosts)
 			{
 				targetBoosts[i] = target.baseBoosts[i];
 			}
-			
+
 			source.setBoost(targetBoosts);
-			
+
 			this.add('message Copied. (placeholder; graphics will be incorrect)');
 		},
 		secondary: false,
