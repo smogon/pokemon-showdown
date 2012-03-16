@@ -6391,7 +6391,6 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemonPriority: -100,
 			onModifyPokemon: function(pokemon) {
-				//Set Pokemon to ignore items
 				pokemon.ignore['Item'] = true;
 			},
 			onEnd: function() {
