@@ -2619,17 +2619,22 @@ function Battle(roomid, format, ranked)
 			if (decision.pokemon)
 			{
 				decision.pokemon.beingCalledBack = true;
-				if (!selfB.runEvent('SwitchOut', decision.pokemon))
+				var lastMove = selfB.getMove(decision.pokemon.lastMove);
+				if (!(lastMove.batonPass || (lastMove.self && lastMove.self.batonPass)))
 				{
-					// Warning: DO NOT interrupt a switch-out
-					// if you just want to trap a pokemon.
-					// To trap a pokemon and prevent it from switching out,
-					// (e.g. Mean Look, Magnet Pull) use the 'trapped' flag
-					// instead.
-					
-					// Note: Nothing in BW or earlier interrupts
-					// a switch-out.
-					break;
+					// Don't run any event handlers if Baton Pass was used.
+					if (!selfB.runEvent('SwitchOut', decision.pokemon))
+					{
+						// Warning: DO NOT interrupt a switch-out
+						// if you just want to trap a pokemon.
+						// To trap a pokemon and prevent it from switching out,
+						// (e.g. Mean Look, Magnet Pull) use the 'trapped' flag
+						// instead.
+						
+						// Note: Nothing in BW or earlier interrupts
+						// a switch-out.
+						break;
+					}
 				}
 			}
 			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted)
