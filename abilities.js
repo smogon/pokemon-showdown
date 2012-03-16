@@ -520,6 +520,7 @@ exports.BattleAbilities = {
 			}
 		},
 		effect: {
+			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function(target) {
 				this.add('r-volatile '+target.id+' flash-fire');
 			},
