@@ -1373,12 +1373,12 @@ function Battle(roomid, format, ranked)
 		}
 		if (target.ignore && target.ignore[effect.effectType])
 		{
-			selfB.debug(eventid+' handler suppressed by Klutz.');
+			selfB.debug(eventid+' handler suppressed by Klutz or Magic Room');
 			return true;
 		}
 		if (target.ignore && target.ignore[effect.effectType+'Target'])
 		{
-			selfB.debug(eventid+' handler suppressed by Air Lock.');
+			selfB.debug(eventid+' handler suppressed by Air Lock');
 			return true;
 		}
 		
@@ -1474,7 +1474,7 @@ function Battle(roomid, format, ranked)
 			}
 			else if (statuses[i].thing.ignore && statuses[i].thing.ignore[status.effectType])
 			{
-				selfB.debug(eventid+' handler suppressed by Klutz');
+				selfB.debug(eventid+' handler suppressed by Klutz or Magic Room');
 				continue;
 			}
 			else if (target.ignore && target.ignore[status.effectType+'Target'])
