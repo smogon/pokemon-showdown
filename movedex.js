@@ -6393,12 +6393,6 @@ exports.BattleMovedex = {
 			onModifyPokemon: function(pokemon) {
 				//Set Pokemon to ignore items
 				pokemon.ignore['Item'] = true;
-				//If Pokemon is already choicelocked, we must remove it so it can choose freely
-				if (pokemon.volatiles['choicelock'])
-				{
-					this.debug('Magic Room removing choicelock on '+pokemon);
-					pokemon.removeVolatile('choicelock');
-				}
 			},
 			onEnd: function() {
 				this.add('pseudo-weather-end MagicRoom');
