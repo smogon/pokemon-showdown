@@ -6366,6 +6366,37 @@ exports.BattleMovedex = {
 		name: "Magic Room",
 		pp: 10,
 		priority: -7,
+		onHit: function(target, source, effect) {
+			if (this.pseudoWeather['MagicRoom'])
+			{
+				this.removePseudoWeather('MagicRoom', source, effect);
+			}
+			else
+			{
+				this.addPseudoWeather('MagicRoom', source, effect);
+			}
+		},
+		effect: {
+			duration: 5,
+			/*durationCallback: function(target, source, effect) {
+				// Persistent isn't updated for BW moves
+				if (source && source.ability === 'Persistent')
+				{
+					return 7;
+				}
+				return 5;
+			},*/
+			onStart: function(target, source) {
+				this.add('r-pseudo-weather '+source.id+' MagicRoom');
+			},
+			onModifyPokemonPriority: -100,
+			onModifyPokemon: function(pokemon) {
+				pokemon.ignore['Item'] = true;
+			},
+			onEnd: function() {
+				this.add('pseudo-weather-end MagicRoom');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
