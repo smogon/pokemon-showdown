@@ -1156,7 +1156,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	        socket.emit('console', "/" + cmd + " - No such tournament.");
 	        return true;
         }
-        if (isPriviledged && !user.canMod(currentTournaments[args[0]].host))
+        if (isPriviledged && user !== currentTournaments[args[0]].host && !user.canMod(currentTournaments[args[0]].host))
         {
             socket.emit('console', "/" + cmd + " - You cannot moderate this tournament.");
             return true;
@@ -1169,7 +1169,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
             case "endtournament" :
 	            delete currentTournaments[args[0]];
 	            for (var r in rooms)
-	                rooms[r].addRaw("The tournament named \"" + args[0] + "\" has ended.");
+	                rooms[r].addRaw("<div class=\"tournament-message\">The tournament named \"" + args[0] + "\" has ended.</div>");
 	            break;
 
             case "toursetmaxparticipants" :
