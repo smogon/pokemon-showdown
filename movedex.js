@@ -599,16 +599,16 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
-			if (!pokemon.lastHitBy || !pokemon.lastHitBy.thisTurn)
+			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.thisTurn)
 			{
 				return 60;
 			}
-			var move = this.getMove(pokemon.lastHitBy.move);
+			var move = this.getMove(pokemon.lastAttackedBy.move);
 			if (move.category === 'Status')
 			{
 				return 60;
 			}
-			this.debug('Boosted for getting hit by '+pokemon.lastHitBy.move);
+			this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
 			return 120;
 		},
 		category: "Physical",
@@ -1736,9 +1736,9 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: false,
 		damageCallback: function(pokemon) {
-			if (pokemon.lastHitBy && pokemon.lastHitBy.thisTurn && this.getMove(pokemon.lastHitBy.move).category === 'Physical')
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Physical')
 			{
-				return 2 * pokemon.lastHitBy.damage;
+				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('r-failed '+pokemon.id);
 			return false;
@@ -3760,7 +3760,7 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
-			if (pokemon.lastHitBy && pokemon.lastHitBy.damage && pokemon.lastHitBy.thisTurn)
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.damage && pokemon.lastAttackedBy.thisTurn)
 			{
 				this.add('flinch '+pokemon.id);
 				return true;
@@ -6628,9 +6628,9 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: false,
 		damageCallback: function(pokemon) {
-			if (pokemon.lastHitBy && pokemon.lastHitBy.thisTurn)
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn)
 			{
-				return 1.5 * pokemon.lastHitBy.damage;
+				return 1.5 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('r-failed '+pokemon.id);
 			return false;
@@ -6836,9 +6836,9 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: false,
 		damageCallback: function(pokemon) {
-			if (pokemon.lastHitBy && pokemon.lastHitBy.thisTurn && this.getMove(pokemon.lastHitBy.move).category === 'Special')
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Special')
 			{
-				return 2 * pokemon.lastHitBy.damage;
+				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('r-failed '+pokemon.id);
 			return false;
@@ -8629,9 +8629,9 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
-			if (pokemon.lastHitBy && pokemon.lastHitBy.thisTurn)
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn)
 			{
-				this.debug('Boosted for getting hit by '+pokemon.lastHitBy.move);
+				this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
 				return 120;
 			}
 			return 60;
