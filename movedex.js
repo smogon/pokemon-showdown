@@ -8157,6 +8157,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
+			onSwitchOutPriority: 10,
 			onSwitchOut: function(pokemon) {
 				this.debug('Pursuit start');
 				var sources = this.effectData.sources;
