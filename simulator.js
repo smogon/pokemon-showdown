@@ -89,7 +89,7 @@ function BattlePokemon(set, side)
 	this.position = 0;
 	this.lastMove = '';
 	this.lastDamage = 0;
-	this.lastHitBy = null;
+	this.lastAttackedBy = null;
 	this.movedThisTurn = false;
 	this.newlySwitched = false;
 	this.beingCalledBack = false;
@@ -344,11 +344,11 @@ function BattlePokemon(set, side)
 		}
 		return success;
 	};
-	this.gotHit = function(move, damage, source) {
+	this.gotAttacked = function(move, damage, source) {
 		if (!damage) damage = 0;
 		move = selfB.getMove(move);
 		source.lastDamage = damage;
-		selfP.lastHitBy = {
+		selfP.lastAttackedBy = {
 			pokemon: source,
 			damage: damage,
 			move: move.id,
@@ -533,7 +533,7 @@ function BattlePokemon(set, side)
 		selfP.switchFlag = false;
 		selfP.lastMove = '';
 		selfP.lastDamage = 0;
-		selfP.lastHitBy = null;
+		selfP.lastAttackedBy = null;
 		selfP.movedThisTurn = false;
 		selfP.newlySwitched = true;
 		selfP.beingCalledBack = false;
@@ -1373,12 +1373,12 @@ function Battle(roomid, format, ranked)
 		}
 		if (target.ignore && target.ignore[effect.effectType])
 		{
-			selfB.debug(eventid+' handler suppressed by Klutz.');
+			selfB.debug(eventid+' handler suppressed by Klutz or Magic Room');
 			return true;
 		}
 		if (target.ignore && target.ignore[effect.effectType+'Target'])
 		{
-			selfB.debug(eventid+' handler suppressed by Air Lock.');
+			selfB.debug(eventid+' handler suppressed by Air Lock');
 			return true;
 		}
 		
@@ -1474,7 +1474,7 @@ function Battle(roomid, format, ranked)
 			}
 			else if (statuses[i].thing.ignore && statuses[i].thing.ignore[status.effectType])
 			{
-				selfB.debug(eventid+' handler suppressed by Klutz');
+				selfB.debug(eventid+' handler suppressed by Klutz or Magic Room');
 				continue;
 			}
 			else if (target.ignore && target.ignore[status.effectType+'Target'])
@@ -1967,9 +1967,9 @@ function Battle(roomid, format, ranked)
 				if (!pokemon) continue;
 				pokemon.movedThisTurn = false;
 				pokemon.newlySwitched = false;
-				if (pokemon.lastHitBy)
+				if (pokemon.lastAttackedBy)
 				{
-					pokemon.lastHitBy.thisTurn = false;
+					pokemon.lastAttackedBy.thisTurn = false;
 				}
 				pokemon.activeTurns++;
 			}
@@ -2619,17 +2619,22 @@ function Battle(roomid, format, ranked)
 			if (decision.pokemon)
 			{
 				decision.pokemon.beingCalledBack = true;
-				if (!selfB.runEvent('SwitchOut', decision.pokemon))
+				var lastMove = selfB.getMove(decision.pokemon.lastMove);
+				if (!(lastMove.batonPass || (lastMove.self && lastMove.self.batonPass)))
 				{
-					// Warning: DO NOT interrupt a switch-out
-					// if you just want to trap a pokemon.
-					// To trap a pokemon and prevent it from switching out,
-					// (e.g. Mean Look, Magnet Pull) use the 'trapped' flag
-					// instead.
-					
-					// Note: Nothing in BW or earlier interrupts
-					// a switch-out.
-					break;
+					// Don't run any event handlers if Baton Pass was used.
+					if (!selfB.runEvent('SwitchOut', decision.pokemon))
+					{
+						// Warning: DO NOT interrupt a switch-out
+						// if you just want to trap a pokemon.
+						// To trap a pokemon and prevent it from switching out,
+						// (e.g. Mean Look, Magnet Pull) use the 'trapped' flag
+						// instead.
+						
+						// Note: Nothing in BW or earlier interrupts
+						// a switch-out.
+						break;
+					}
 				}
 			}
 			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted)

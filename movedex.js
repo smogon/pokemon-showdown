@@ -599,16 +599,16 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
-			if (!pokemon.lastHitBy || !pokemon.lastHitBy.thisTurn)
+			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.thisTurn)
 			{
 				return 60;
 			}
-			var move = this.getMove(pokemon.lastHitBy.move);
+			var move = this.getMove(pokemon.lastAttackedBy.move);
 			if (move.category === 'Status')
 			{
 				return 60;
 			}
-			this.debug('Boosted for getting hit by '+pokemon.lastHitBy.move);
+			this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
 			return 120;
 		},
 		category: "Physical",
@@ -1736,9 +1736,9 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: false,
 		damageCallback: function(pokemon) {
-			if (pokemon.lastHitBy && pokemon.lastHitBy.thisTurn && this.getMove(pokemon.lastHitBy.move).category === 'Physical')
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Physical')
 			{
-				return 2 * pokemon.lastHitBy.damage;
+				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('r-failed '+pokemon.id);
 			return false;
@@ -3760,7 +3760,7 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
-			if (pokemon.lastHitBy && pokemon.lastHitBy.damage && pokemon.lastHitBy.thisTurn)
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.damage && pokemon.lastAttackedBy.thisTurn)
 			{
 				this.add('flinch '+pokemon.id);
 				return true;
@@ -6366,6 +6366,37 @@ exports.BattleMovedex = {
 		name: "Magic Room",
 		pp: 10,
 		priority: -7,
+		onHit: function(target, source, effect) {
+			if (this.pseudoWeather['MagicRoom'])
+			{
+				this.removePseudoWeather('MagicRoom', source, effect);
+			}
+			else
+			{
+				this.addPseudoWeather('MagicRoom', source, effect);
+			}
+		},
+		effect: {
+			duration: 5,
+			/*durationCallback: function(target, source, effect) {
+				// Persistent isn't updated for BW moves
+				if (source && source.ability === 'Persistent')
+				{
+					return 7;
+				}
+				return 5;
+			},*/
+			onStart: function(target, source) {
+				this.add('r-pseudo-weather '+source.id+' MagicRoom');
+			},
+			onModifyPokemonPriority: -100,
+			onModifyPokemon: function(pokemon) {
+				pokemon.ignore['Item'] = true;
+			},
+			onEnd: function() {
+				this.add('pseudo-weather-end MagicRoom');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -6628,9 +6659,9 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: false,
 		damageCallback: function(pokemon) {
-			if (pokemon.lastHitBy && pokemon.lastHitBy.thisTurn)
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn)
 			{
-				return 1.5 * pokemon.lastHitBy.damage;
+				return 1.5 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('r-failed '+pokemon.id);
 			return false;
@@ -6836,9 +6867,9 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: false,
 		damageCallback: function(pokemon) {
-			if (pokemon.lastHitBy && pokemon.lastHitBy.thisTurn && this.getMove(pokemon.lastHitBy.move).category === 'Special')
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Special')
 			{
-				return 2 * pokemon.lastHitBy.damage;
+				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('r-failed '+pokemon.id);
 			return false;
@@ -8088,6 +8119,7 @@ exports.BattleMovedex = {
 		id: "Punishment",
 		name: "Punishment",
 		pp: 5,
+		isContact: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -8603,6 +8635,7 @@ exports.BattleMovedex = {
 		id: "Retaliate",
 		name: "Retaliate",
 		pp: 5,
+		isContact: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -8630,9 +8663,9 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
-			if (pokemon.lastHitBy && pokemon.lastHitBy.thisTurn)
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn)
 			{
-				this.debug('Boosted for getting hit by '+pokemon.lastHitBy.move);
+				this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
 				return 120;
 			}
 			return 60;
@@ -9763,6 +9796,7 @@ exports.BattleMovedex = {
 		id: "SkyDrop",
 		name: "Sky Drop",
 		pp: 10,
+		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {

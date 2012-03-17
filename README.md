@@ -17,6 +17,10 @@ After this, start Node:
     cd <location of PS>
     node app.js
 
+You can also specify a port:
+
+    node app.js 8000
+
 Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT/`
 
 Replace `SERVER` with your server domain or IP, and `PORT` with the server's port. You can leave off `:PORT` if it is 8000 (the default).
