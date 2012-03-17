@@ -64,7 +64,6 @@ exports.BattleScripts = {
 		move = this.getMoveCopy(move);
 
 		this.setActiveMove(move, pokemon, target);
-		var damage = 0;
 		var canTargetFainted = {
 			all: 1, foeSide: 1
 		};
@@ -142,6 +141,7 @@ exports.BattleScripts = {
 			move.basePower = 102;
 		}
 		
+		var damage = 0;
 		pokemon.lastDamage = 0;
 		if (!move.multihit)
 		{
@@ -169,13 +169,14 @@ exports.BattleScripts = {
 			hits = Math.floor(hits);
 			for (var i=0; i<hits && target.hp; i++)
 			{
-				damage = BattleScripts.moveHit.call(this, target, pokemon, move);
-				if (damage === false) return true;
+				var moveDamage = BattleScripts.moveHit.call(this, target, pokemon, move);
+				if (moveDamage === false) return true;
+				damage += (moveDamage || 0);
 			}
 			this.add('r-hit-count '+target.id+' '+i);
 		}
 		
-		target.gotHit(move, damage, pokemon);
+		target.gotAttacked(move, damage, pokemon);
 		
 		if (move.recoil && pokemon.lastDamage)
 		{
