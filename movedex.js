@@ -8119,6 +8119,7 @@ exports.BattleMovedex = {
 		id: "Punishment",
 		name: "Punishment",
 		pp: 5,
+		isContact: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -8633,6 +8634,7 @@ exports.BattleMovedex = {
 		id: "Retaliate",
 		name: "Retaliate",
 		pp: 5,
+		isContact: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -9793,6 +9795,7 @@ exports.BattleMovedex = {
 		id: "SkyDrop",
 		name: "Sky Drop",
 		pp: 10,
+		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
