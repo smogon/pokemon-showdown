@@ -89,7 +89,7 @@ function BattlePokemon(set, side)
 	this.position = 0;
 	this.lastMove = '';
 	this.lastDamage = 0;
-	this.lastHitBy = null;
+	this.lastAttackedBy = null;
 	this.movedThisTurn = false;
 	this.newlySwitched = false;
 	this.beingCalledBack = false;
@@ -344,11 +344,11 @@ function BattlePokemon(set, side)
 		}
 		return success;
 	};
-	this.gotHit = function(move, damage, source) {
+	this.gotAttacked = function(move, damage, source) {
 		if (!damage) damage = 0;
 		move = selfB.getMove(move);
 		source.lastDamage = damage;
-		selfP.lastHitBy = {
+		selfP.lastAttackedBy = {
 			pokemon: source,
 			damage: damage,
 			move: move.id,
@@ -533,7 +533,7 @@ function BattlePokemon(set, side)
 		selfP.switchFlag = false;
 		selfP.lastMove = '';
 		selfP.lastDamage = 0;
-		selfP.lastHitBy = null;
+		selfP.lastAttackedBy = null;
 		selfP.movedThisTurn = false;
 		selfP.newlySwitched = true;
 		selfP.beingCalledBack = false;
@@ -1967,9 +1967,9 @@ function Battle(roomid, format, ranked)
 				if (!pokemon) continue;
 				pokemon.movedThisTurn = false;
 				pokemon.newlySwitched = false;
-				if (pokemon.lastHitBy)
+				if (pokemon.lastAttackedBy)
 				{
-					pokemon.lastHitBy.thisTurn = false;
+					pokemon.lastAttackedBy.thisTurn = false;
 				}
 				pokemon.activeTurns++;
 			}
