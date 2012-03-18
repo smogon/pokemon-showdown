@@ -2,6 +2,7 @@
 
 function Tournament(name, metagame, rooms, lobby, maxParticipants)
 {
+    throw Exception("Test exception");
     // Private variables and constructor. (A bit of the constructor is also at the very end of this function)
     // "Real" javascript private variables are too annoying, so we just make them public and hope no-one edits them ;)
     this.name_ = name;

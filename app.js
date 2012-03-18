@@ -1384,8 +1384,9 @@ Function.prototype.trace = function()
 {
     var trace = [];
     var current = this;
-    while(current)
+    while (current)
     {
+        console.log("Tracing back one call");
         trace.push(current.signature());
         current = current.caller;
     }
