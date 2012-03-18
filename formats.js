@@ -90,7 +90,9 @@ exports.BattleFormats = {
 	Hackmons: {
 		effectType: 'Format',
 		name: "Hackmons",
+		ranked: true,
 		challengeShow: true,
+		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon'],
 		banlist: []
