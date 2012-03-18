@@ -557,13 +557,19 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     // Private functions.
     // Like the private variables, "real" javascript private functions are too annoying so we hope no-one uses these.
 
-    this.injectClientSideScript_ = function()
+    this.injectClientSideScript_ = function(extraMessage, room)
     {
-            //var tournamentInjection = "<script type=\"application/javascript\" src=\""; // Doesn't seem to work
-            var tournamentInjection = "<script type=\"text/javascript\" src=\"";
-            tournamentInjection += "http://kotarou.x10.mx/pokemonshowdowntournament/tournament.js";
-            tournamentInjection += "\"></script>";
-            this.lobby_.addRaw(tournamentInjection);
+        if (!room)
+            room = this.lobby_;
+        if (!extraMessage)
+            extraMessage = "";
+        
+        //var tournamentInjection = "<script type=\"application/javascript\" src=\""; // Doesn't seem to work
+        var tournamentInjection = extraMessage;
+        tournamentInjection += "<script type=\"text/javascript\" src=\"";
+        tournamentInjection += "http://kotarou.x10.mx/pokemonshowdowntournament/tournament.js";
+        tournamentInjection += "\"></script>";
+        room.addRaw(tournamentInjection);
     }
 
     this.beginBattle_ = function(battleId)
@@ -690,7 +696,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     {
         if (!room)
             room = this.lobby_;
-        room.addRaw("<div class=\"tournament-message\">" + message + "</div>");
+        this.injectClientSideScript_("<div class=\"tournament-message\">" + message + "</div>", room);
     }
 
     this.broadcast_ = function(message)
