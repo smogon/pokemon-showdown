@@ -321,6 +321,10 @@ function BattlePokemon(set, side)
 		move = selfB.getMove(move);
 		var ppData = selfP.getMoveData(move);
 		var success = false;
+		if (ppData)
+		{
+			ppData.used = true;
+		}
 		if (ppData && ppData.pp)
 		{
 			if (amount)
