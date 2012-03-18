@@ -650,7 +650,18 @@ function User(name, person, token)
 							delete selfP.roomCount[room.id];
 						}
 					}
-					delete selfP.people[i].rooms[room.id];
+					if (!selfP.people[i])
+					{
+						// race condition? This should never happen, but it does.
+						fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
+							this.write("\npeople="+JSON.stringify(selfP.people)+"\ni="+i+"\n\n")
+							this.end();
+						});
+					}
+					else
+					{
+						delete selfP.people[i].rooms[room.id];
+					}
 				}
 				if (socket)
 				{
