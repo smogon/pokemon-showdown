@@ -88,7 +88,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             return true;
         } catch (e)
         {
-            switch (e.name)
+            switch (e.message)
             {
                 case "JoinLockedException" :
                     errorSocket.emit("console", "Leaving is locked because the tournament has already started.");
@@ -136,7 +136,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             this.broadcast_("The maximum number of participants for the tournament named \"" + this.name_ + "\" has been set to " + maxParticipants + ".");
         } catch (e)
         {
-            switch (e.name)
+            switch (e.message)
             {
                 case "MaxParticipantsTooLowException" :
                     errorSocket.emit("console", "The maximum number of participants must be at least 2.");
@@ -249,7 +249,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             setTimeout(function(self, battle) { self.startNextBattleWorker(battle); }, 1000, this, battle); // Give one second for the script to be injected
         } catch (e)
         {
-            switch (e.name)
+            switch (e.message)
             {
                 case "ParticipantsTooLowException" :
                     errorSocket.emit("console", "There are less than two participants currently, so the tournament tree cannot be built.");
@@ -404,7 +404,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
                 outputSocket.emit("console", "\"" + winnerUser.getIdentity() + "\" won the tournament named \"" + this.name_ + "\".");
         } catch (e)
         {
-            switch (e.name)
+            switch (e.message)
             {
                 case "FinalsNotFinishedException" :
                     errorSocket.emit("console", "The finals have not started or finished yet.");
@@ -533,7 +533,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             setTimeout(function(outputSocket, name, tree) { outputSocket.emit("tournament challenge", { action: "receive tree", name: name, tree: tree }); }, 1000, outputSocket, this.name_, this.publicTournamentTreeCache_);
         } catch (e)
         {
-            switch (e.name)
+            switch (e.message)
             {
                 case "ParticipantsTooLowException" :
                     errorSocket.emit("console", "There are less than two participants currently, so the tree cannot be built.");
@@ -556,7 +556,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             this.writeMessage_("The tournament tree for the tournament named \"" + this.name_ + "\" has been (re)built!");
         } catch (e)
         {
-            switch (e.name)
+            switch (e.message)
             {
                 case "JoinLockedException" :
                     errorSocket.emit("console", "Tree rebuilding is locked because the tournament is currently in progress.");

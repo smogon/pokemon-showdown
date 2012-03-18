@@ -1074,7 +1074,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	            currentTournaments[args[0]] = tournament;
             } catch (e)
             {
-                switch (e.name)
+                switch (e.message)
                 {
                     case "MaxParticipantsTooLowException" :
                         socket.emit('console', "/" + cmd + " - The maximum number of participants must be at least 2.");
