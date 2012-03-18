@@ -1379,12 +1379,13 @@ function resolveUser(you, socket)
 	return you.user;
 }
 
-Exception = function(name)
+Exception = function(name, message)
 {
     this.name = name;
-    this.stack = name + ":\n" + new Error().stack;
-    this.toString = function() { return name; }
+    this.message = message || "";
 }
+Exception.prototype = new Error();
+Exception.prototype.constructor = Exception;
 
 if (config.crashguard)
 {
