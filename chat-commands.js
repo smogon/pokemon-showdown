@@ -1034,7 +1034,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case 'tournament':
 	case 'starttour':
 	case 'starttournament':
-	    throw { stack: "test" };
+	    throw Exception("test", "123");
 		if (user.group === '+' || user.isMod())
 		{
 		    if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -1972,6 +1972,14 @@ function splitArgs(args)
     for (var r in result)
         result[r] = result[r].trim();
     return result;
+}
+
+function Exception(name, message)
+{
+    this.name = name || "Exception";
+    this.message = message || "";
+    this.stack = (new Error()).stack;
+    this.toString = function() { return message ? name + ": " + message : name; }
 }
 
 exports.parseCommand = parseCommandLocal;

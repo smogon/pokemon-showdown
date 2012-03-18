@@ -1379,14 +1379,6 @@ function resolveUser(you, socket)
 	return you.user;
 }
 
-Exception = function(name, message)
-{
-    this.name = name || "Exception";
-    this.message = message || "";
-    this.stack = (new Error()).stack;
-    this.toString = function() { return message ? name + ": " + message : name; }
-}
-
 if (config.crashguard)
 {
 	// graceful crash - allow current battles to finish before restarting
