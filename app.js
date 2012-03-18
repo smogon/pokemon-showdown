@@ -1403,7 +1403,7 @@ Function.prototype.signature = function()
         }
     };
     if (this.arguments)
-        for (var x=0; x<this .arguments.length; x++)
+        for (var x=0; x < this.arguments.length; x++)
             signature.params.push(this.arguments[x]);
     return signature;
 }
@@ -1412,7 +1412,7 @@ Function.prototype.getName = function()
     if (this.name)
         return this.name;
     var definition = this.toString().split("\n")[0];
-    var exp = /^function ([^\s(]+).+/|>;
+    var exp = /^function ([^\s(]+).+/;
     if (exp.test(definition))
         return definition.split("\n")[0].replace(exp, "$1") || "anonymous";
     return "anonymous";
