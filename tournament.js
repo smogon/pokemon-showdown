@@ -331,9 +331,18 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
                 battle.aTeamConfirmed = true;
                 battle.bTeamConfirmed = true;
                 this.setBattleWinner_(battleId, otherUser);
-			    this.currentBattles_[battleId] = undefined;
+                this.currentBattles_[battleId] = undefined;
                 otherUser.emit("tournament challenge", { action: "opponent forfeit", name: this.name_ });
                 break;
+
+            case "forfeit no teams" :
+                battle.aTeamConfirmed = true;
+                battle.bTeamConfirmed = true;
+                this.setBattleWinner_(battleId, otherUser);
+                this.currentBattles_[battleId] = undefined;
+                otherUser.emit("tournament challenge", { action: "opponent forfeit no teams", name: this.name_ });
+                break;
+
         }
     }
 
