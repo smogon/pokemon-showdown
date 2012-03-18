@@ -1034,7 +1034,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case 'tournament':
 	case 'starttour':
 	case 'starttournament':
-	    throw Exception("test", "hi");
+	    throw { stack: "test" };
 		if (user.group === '+' || user.isMod())
 		{
 		    if (!target) return parseCommand(user, '?', cmd, room, socket);
