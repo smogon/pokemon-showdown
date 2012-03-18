@@ -1381,11 +1381,11 @@ function resolveUser(you, socket)
 
 Exception = function(name, message)
 {
+    this.constructor.prototype.__proto__ = Error.prototype;
+    Error.captureStackTrace(this, this.constructor);
     this.name = name;
     this.message = message || "";
 }
-Exception.prototype = new Error();
-Exception.prototype.constructor = Exception;
 
 if (config.crashguard)
 {
