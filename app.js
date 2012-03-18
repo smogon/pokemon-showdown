@@ -1382,9 +1382,7 @@ function resolveUser(you, socket)
 Exception = function(name)
 {
     this.name = name;
-    console.log("before");
     this.stack = name + ":\n" + new Error().stack;
-    console.log("after");
     this.toString = function() { return name; }
 }
 

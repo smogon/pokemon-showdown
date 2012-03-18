@@ -1034,6 +1034,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case 'tournament':
 	case 'starttour':
 	case 'starttournament':
+	    throw Exception("test");
 		if (user.group === '+' || user.isMod())
 		{
 		    if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -1273,8 +1274,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
                 output += " (" + currentTournaments[t].tournament.getParticipants().length + "/" + currentTournaments[t].tournament.getMaxParticipants() + ")";
                 if (currentTournaments[t].tournament.getParticipants().length >= currentTournaments[t].tournament.getMaxParticipants())
                     output += " [FULL]";
-                if (currentTournaments[t].tournament.getParticipants().length > currentTournaments[t].tournament.getMaxParticipants())
-                    output += " [GLITCHED. PLEASE REPORT TO A MODERATOR]";
                 if (currentTournaments[t].tournament.getIsJoiningLocked())
                     output += " [IN PROGRESS/LOCKED]";
                 if (output[output.length - 1] !== ']')
