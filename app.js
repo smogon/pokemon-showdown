@@ -1379,7 +1379,7 @@ function resolveUser(you, socket)
 	return you.user;
 }
 
-Exception = function(name, message)
+Exceptionasd = function(name, message)
 {
     this.constructor.prototype.__proto__ = Error.prototype;
     Error.captureStackTrace(this, this.constructor);
