@@ -342,7 +342,6 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
                 this.currentBattles_[battleId] = undefined;
                 otherUser.emit("tournament challenge", { action: "opponent forfeit no teams", name: this.name_ });
                 break;
-
         }
     }
 
