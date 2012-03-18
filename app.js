@@ -1379,13 +1379,13 @@ function resolveUser(you, socket)
 	return you.user;
 }
 
-Exceptionasd = function(name, message)
+Exception = function(name, message)
 {
-    this.constructor.prototype.__proto__ = Error.prototype;
     Error.captureStackTrace(this, this.constructor);
     this.name = name;
     this.message = message || "";
 }
+Exception.constructor.prototype.__proto__ = Error.prototype;
 
 if (config.crashguard)
 {
