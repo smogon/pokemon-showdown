@@ -571,7 +571,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             room = this.lobby_;
         if (!extraMessage)
             extraMessage = "";
-        
+
         //var tournamentInjection = "<script type=\"application/javascript\" src=\""; // Doesn't seem to work
         var tournamentInjection = extraMessage;
         tournamentInjection += "<script type=\"text/javascript\" src=\"";
