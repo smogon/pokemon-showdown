@@ -24,9 +24,9 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.autopilotTimer_;
 
     if (!name || name.length < 2)
-        throw Exception("NameTooShortException");
+        throw Error("NameTooShortException");
     if (!rooms || !lobby || lobby.type !== "lobby")
-        throw Exception("InvalidArgumentsException");
+        throw Error("InvalidArgumentsException");
 
     // Public functions
 
@@ -43,7 +43,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.addParticipant = function(user, errorSocket, isNotYourself)
     {
         if (!user || !user.getIdentity || !errorSocket)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         try
         {
             this.tournamentBuilder_.addParticipant(user);
@@ -52,7 +52,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             return true;
         } catch (e)
         {
-            switch (e)
+            switch (e.message)
             {
                 case "JoinLockedException" :
                     errorSocket.emit("console", "Joining is locked because the tournament has already started.");
@@ -79,7 +79,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.removeParticipant = function(user, errorSocket, isNotYourself)
     {
         if (!user || !user.getIdentity || !errorSocket)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         try
         {
             this.tournamentBuilder_.removeParticipant(user);
@@ -88,7 +88,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             return true;
         } catch (e)
         {
-            switch (e)
+            switch (e.name)
             {
                 case "JoinLockedException" :
                     errorSocket.emit("console", "Leaving is locked because the tournament has already started.");
@@ -126,7 +126,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.setMaxParticipants = function(maxParticipants, errorSocket)
     {
         if (!errorSocket)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         try
         {
             var removedParticipants = this.tournamentBuilder_.setMaxParticipants(maxParticipants);
@@ -136,7 +136,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             this.broadcast_("The maximum number of participants for the tournament named \"" + this.name_ + "\" has been set to " + maxParticipants + ".");
         } catch (e)
         {
-            switch (e)
+            switch (e.name)
             {
                 case "MaxParticipantsTooLowException" :
                     errorSocket.emit("console", "The maximum number of participants must be at least 2.");
@@ -212,7 +212,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.startNextBattle = function(errorSocket)
     {
         if (!errorSocket)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         try
         {
             var isFirstBattle = !this.getIsJoiningLocked();
@@ -249,7 +249,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             setTimeout(function(self, battle) { self.startNextBattleWorker(battle); }, 1000, this, battle); // Give one second for the script to be injected
         } catch (e)
         {
-            switch (e)
+            switch (e.name)
             {
                 case "ParticipantsTooLowException" :
                     errorSocket.emit("console", "There are less than two participants currently, so the tournament tree cannot be built.");
@@ -295,7 +295,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.handleTournamentChallengePacket = function(user, action, battleId)
     {
         if (!user || !action || battleId === undefined)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         if (this.currentBattles_[battleId] === undefined)
             return;
         var battle = this.currentBattles_[battleId];
@@ -359,7 +359,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.setBattleWinner = function(battleId, winner)
     {
         if (this.currentBattles_[battleId] === undefined)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         var battle = this.currentBattles_[battleId];
         if (winner !== battle.a && winner !== battle.b && this.actionOnDraw_ === "rematch")
         {
@@ -384,7 +384,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.setActionOnDraw = function(action, errorSocket)
     {
         if (!action)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         if (action !== "rematch" && action !== "bye")
             errorSocket.emit("console", "The action must be either \"rematch\" or \"bye\".");
         else
@@ -394,7 +394,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.getWinner = function(outputSocket, errorSocket)
     {
         if (!outputSocket || !errorSocket)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         try
         {
             var winnerUser = this.tournamentBuilder_.getWinner();
@@ -404,7 +404,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
                 outputSocket.emit("console", "\"" + winnerUser.getIdentity() + "\" won the tournament named \"" + this.name_ + "\".");
         } catch (e)
         {
-            switch (e)
+            switch (e.name)
             {
                 case "FinalsNotFinishedException" :
                     errorSocket.emit("console", "The finals have not started or finished yet.");
@@ -419,7 +419,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.getTree = function(outputSocket, errorSocket)
     {
         if (!outputSocket)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         try
         {
             if (this.isNeedRebuildPublicTournamentTreeCache_)
@@ -533,7 +533,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             setTimeout(function(outputSocket, name, tree) { outputSocket.emit("tournament challenge", { action: "receive tree", name: name, tree: tree }); }, 1000, outputSocket, this.name_, this.publicTournamentTreeCache_);
         } catch (e)
         {
-            switch (e)
+            switch (e.name)
             {
                 case "ParticipantsTooLowException" :
                     errorSocket.emit("console", "There are less than two participants currently, so the tree cannot be built.");
@@ -548,7 +548,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.rebuildTree = function(errorSocket)
     {
         if (!errorSocket)
-            throw Exception("InvalidArgumentsException");
+            throw Error("InvalidArgumentsException");
         try
         {
             this.tournamentBuilder_.rebuildTournamentTree();
@@ -556,7 +556,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             this.writeMessage_("The tournament tree for the tournament named \"" + this.name_ + "\" has been (re)built!");
         } catch (e)
         {
-            switch (e)
+            switch (e.name)
             {
                 case "JoinLockedException" :
                     errorSocket.emit("console", "Tree rebuilding is locked because the tournament is currently in progress.");
