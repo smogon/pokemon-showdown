@@ -24,9 +24,9 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.autopilotTimer_;
 
     if (!name || name.length < 2)
-        throw "NameTooShortException";
+        throw Exception("NameTooShortException");
     if (!rooms || !lobby || lobby.type !== "lobby")
-        throw "InvalidArgumentsException";
+        throw Exception("InvalidArgumentsException");
 
     // Public functions
 
@@ -43,7 +43,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.addParticipant = function(user, errorSocket, isNotYourself)
     {
         if (!user || !user.getIdentity || !errorSocket)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         try
         {
             this.tournamentBuilder_.addParticipant(user);
@@ -79,7 +79,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.removeParticipant = function(user, errorSocket, isNotYourself)
     {
         if (!user || !user.getIdentity || !errorSocket)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         try
         {
             this.tournamentBuilder_.removeParticipant(user);
@@ -126,7 +126,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.setMaxParticipants = function(maxParticipants, errorSocket)
     {
         if (!errorSocket)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         try
         {
             var removedParticipants = this.tournamentBuilder_.setMaxParticipants(maxParticipants);
@@ -212,7 +212,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.startNextBattle = function(errorSocket)
     {
         if (!errorSocket)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         try
         {
             var isFirstBattle = !this.getIsJoiningLocked();
@@ -295,7 +295,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.handleTournamentChallengePacket = function(user, action, battleId)
     {
         if (!user || !action || battleId === undefined)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         if (this.currentBattles_[battleId] === undefined)
             return;
         var battle = this.currentBattles_[battleId];
@@ -359,7 +359,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.setBattleWinner = function(battleId, winner)
     {
         if (this.currentBattles_[battleId] === undefined)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         var battle = this.currentBattles_[battleId];
         if (winner !== battle.a && winner !== battle.b && this.actionOnDraw_ === "rematch")
         {
@@ -384,7 +384,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.setActionOnDraw = function(action, errorSocket)
     {
         if (!action)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         if (action !== "rematch" && action !== "bye")
             errorSocket.emit("console", "The action must be either \"rematch\" or \"bye\".");
         else
@@ -394,7 +394,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.getWinner = function(outputSocket, errorSocket)
     {
         if (!outputSocket || !errorSocket)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         try
         {
             var winnerUser = this.tournamentBuilder_.getWinner();
@@ -419,7 +419,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.getTree = function(outputSocket, errorSocket)
     {
         if (!outputSocket)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         try
         {
             if (this.isNeedRebuildPublicTournamentTreeCache_)
@@ -548,7 +548,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     this.rebuildTree = function(errorSocket)
     {
         if (!errorSocket)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
         try
         {
             this.tournamentBuilder_.rebuildTournamentTree();

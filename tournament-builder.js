@@ -50,7 +50,7 @@ function TournamentBuilder(maxParticipants)
     this.isTournamentTreeBuilt_ = false;
 
     if (maxParticipants < 2)
-        throw "MaxParticipantsTooLowException";
+        throw Exception("MaxParticipantsTooLowException");
 
     // Public functions
 
@@ -72,7 +72,7 @@ function TournamentBuilder(maxParticipants)
         this.testJoinNotLocked_();
 
         if (maxParticipants < 2)
-            throw "MaxParticipantsTooLowException";
+            throw Exception("MaxParticipantsTooLowException");
 
         this.maxParticipants_ = maxParticipants;
         if (this.participants_.length <= maxParticipants)
@@ -163,7 +163,7 @@ function TournamentBuilder(maxParticipants)
     this.getNextBattle = function()
     {
         if (this.isEnded_)
-            throw "NoRemainingBattlesException";
+            throw Exception("NoRemainingBattlesException");
 
         if (!this.isTournamentTreeBuilt_)
             this.buildTournamentTree_();
@@ -252,11 +252,11 @@ function TournamentBuilder(maxParticipants)
                     this.setBattleStatus(battle, TournamentBuilderTreeNodeBattleDataBattleStatus.A_WIN);
                 this.isJoiningLocked_ = false;
                 this.isEnded_ = true;
-                throw "FinalsDefaultWinNonException";
+                throw Exception("FinalsDefaultWinNonException");
             }
 
             if (rootNode.battle.status !== TournamentBuilderTreeNodeBattleDataBattleStatus.NOT_STARTED)
-                throw "NoRemainingBattlesException";
+                throw Exception("NoRemainingBattlesException");
 
             var result = new TournamentBuilderBattle();
             result.a = this.getParticipantOfNode_(rootNode.battle.childAOffset);
@@ -269,7 +269,7 @@ function TournamentBuilder(maxParticipants)
             if (e == "NoRemainingBattlesException"||
                 e == "FinalsDefaultWinNonException")
                 throw e;
-            throw "NoAvailableBattlesException";
+            throw Exception("NoAvailableBattlesException");
         }
     }
 
@@ -291,7 +291,7 @@ function TournamentBuilder(maxParticipants)
 
         if (battle.offset >= this.tournamentTree_.nodeStorage.length ||
             this.tournamentTree_.nodeStorage[battle.offset].type !== TournamentBuilderTreeNodeType.BATTLE)
-            throw "InvalidArgumentsException";
+            throw Exception("InvalidArgumentsException");
 
         var battleNode = this.tournamentTree_.nodeStorage[battle.offset].battle;
         battleNode.status = status;
@@ -334,11 +334,11 @@ function TournamentBuilder(maxParticipants)
     this.getWinner = function()
     {
         if (!this.isTournamentTreeBuilt_)
-            throw "FinalsNotFinishedException";
+            throw Exception("FinalsNotFinishedException");
 
         var rootNode = this.tournamentTree_.nodeStorage[this.tournamentTree_.rootNodeOffset];
         if (!this.isEnded_)
-            throw "FinalsNotFinishedException";
+            throw Exception("FinalsNotFinishedException");
         return rootNode.battle.winner;
     }
 
@@ -357,16 +357,16 @@ function TournamentBuilder(maxParticipants)
     {
         var result = this.getOffsetToParticipantNoThrow_(participant);
         if (result === -1)
-            throw "UserNotFoundException";
+            throw Exception("UserNotFoundException");
         return result;
     }
 
     this.addParticipant_ = function(participant)
     {
         if (this.getOffsetToParticipantNoThrow_(participant) !== -1)
-            throw "UserAlreadyParticipatingException";
+            throw Exception("UserAlreadyParticipatingException");
         if (this.participants_.length >= this.maxParticipants_)
-            throw "TournamentFullException";
+            throw Exception("TournamentFullException");
         this.isTournamentTreeBuilt_ = false;
         this.isEnded_ = false;
         this.participants_.push(participant);
@@ -383,7 +383,7 @@ function TournamentBuilder(maxParticipants)
     this.testJoinNotLocked_ = function()
     {
         if (this.isJoiningLocked_)
-            throw "JoinLockedException";
+            throw Exception("JoinLockedException");
     }
 
     this.getParticipantOfNode_ = function(nodeOffset)
@@ -396,7 +396,7 @@ function TournamentBuilder(maxParticipants)
             if (node.battle.status === TournamentBuilderTreeNodeBattleDataBattleStatus.NOT_STARTED ||
                 node.battle.status === TournamentBuilderTreeNodeBattleDataBattleStatus.WAITING ||
                 node.battle.status === TournamentBuilderTreeNodeBattleDataBattleStatus.PENDING)
-                throw "BattleNotFinishedException";
+                throw Exception("BattleNotFinishedException");
             return node.battle.winner;
         }
     }
@@ -410,7 +410,7 @@ function TournamentBuilder(maxParticipants)
 
         var participantCount = this.participants_.length;
         if (participantCount < 2)
-            throw "ParticipantsTooLowException";
+            throw Exception("ParticipantsTooLowException");
 
         // First calculate how many byes we need
         var stages = Math.floor(Math.log(participantCount) / Math.log(2));
