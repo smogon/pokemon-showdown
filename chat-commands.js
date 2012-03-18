@@ -1095,8 +1095,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
     case 'endtournament':
         // Fallthrough
 
-    case 'toursetmaxparticipants':
-    case 'tournamentsetmaxparticipants':
+    case 'toursetsize':
+    case 'tournamentsetsize':
         // Fallthrough
 
     case 'tourstartautopilot':
@@ -1177,8 +1177,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	                rooms[r].addRaw("<div class=\"tournament-message\">The tournament named \"" + args[0] + "\" has ended.</div>");
 	            break;
 
-            case "toursetmaxparticipants" :
-            case "tournamentsetmaxparticipants" :
+            case "toursetsize" :
+            case "tournamentsetsize" :
                 if (args.length < 2)
 		            return parseCommand(user, '?', cmd, room, socket);
                 currentTournaments[args[0]].tournament.setMaxParticipants(args[1], socket);
@@ -1218,8 +1218,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
                 var targetUser = getUser(args[1]);
                 if (!targetUser)
                     socket.emit("console", "No such user exists.");
-                else
-                    currentTournaments[args[0]].tournament.removeParticipant(targetUser, socket);
+                else if (currentTournaments[args[0]].tournament.removeParticipant(targetUser, socket, true))
+                    targetUser.emit("console", "You have been kicked from the tournament named \"" + args[0] + "\".");
                 break;
 
             case "tourforcejoin" :
@@ -1229,8 +1229,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
                 var targetUser = getUser(args[1]);
                 if (!targetUser)
                     socket.emit("console", "No such user exists.");
-                else
-                    currentTournaments[args[0]].tournament.addParticipant(targetUser, socket);
+                else if (currentTournaments[args[0]].tournament.addParticipant(targetUser, socket, true))
+                    targetUser.emit("console", "You have been forced to join the tournament named \"" + args[0] + "\".");
                 break;
 
             case "join" :
@@ -1647,10 +1647,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		    matched = true;
 		    socket.emit('console', '/tourGetTree OR /tournamentGetTree [name] - Gets the current tree for the tournament named [name]');
 		}
-		if (target === 'all' || target === 'tournaments' || target === 'toursetmaxparticipants' || target === 'tournamentsetmaxparticipants')
+		if (target === 'all' || target === 'tournaments' || target === 'toursetsize' || target === 'tournamentsetsize')
 		{
 		    matched = true;
-		    socket.emit('console', '/tourSetMaxParticipants OR /tournamentSetMaxParticipants [name], [maximum participants] - Sets the maximum number of participants for tournament [name]. Requires: + % @ &');
+		    socket.emit('console', '/tourSetSize OR /tournamentSetSize [name], [maximum participants] - Sets the maximum number of participants for tournament [name]. Requires: + % @ &');
 		}
 		if (target === 'all' || target === 'tournaments' || target === 'tourstartautopilot' || target === 'tournamentstartautopilot')
 		{
@@ -1789,7 +1789,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!target)
 		{
 			socket.emit('console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
-			socket.emit('console', 'TOURNAMENT COMMANDS: /tournament, /joinTournament, /leaveTournament, /tournamentKick, /tournamentForceJoin, /tournamentGetTree, /tournamentSetMaxParticipants, /tournamentStartAutopilot, /tournamentStopAutopilot, /tournamentStartNextBattle, /tournamentSetActionOnDraw, /tournamentGetWinner, /tournamentRebuildTree, /deleteTournament');
+			socket.emit('console', 'TOURNAMENT COMMANDS: /tournament, /joinTournament, /leaveTournament, /tournamentKick, /tournamentForceJoin, /tournamentGetTree, /tournamentSetSize, /tournamentStartAutopilot, /tournamentStopAutopilot, /tournamentStartNextBattle, /tournamentSetActionOnDraw, /tournamentGetWinner, /tournamentRebuildTree, /deleteTournament');
 			socket.emit('console', 'INFORMATIONAL COMMANDS: /getTournaments, /tournamentGetParticipants, /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
 			if (user.isMod()) socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
 			if (user.isMod()) socket.emit('console', 'ADMIN COMMANDS: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');

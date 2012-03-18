@@ -40,7 +40,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
         return this.metagame_;
     }
 
-    this.addParticipant = function(user, errorSocket)
+    this.addParticipant = function(user, errorSocket, isNotYourself)
     {
         if (!user || !user.getIdentity || !errorSocket)
             throw "InvalidArgumentsException";
@@ -49,6 +49,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             this.tournamentBuilder_.addParticipant(user);
             this.isNeedRebuildPublicTournamentTreeCache_ = true;
             this.writeMessage_(user.getIdentity() + " has joined the tournament named \"" + this.name_ + "\"!");
+            return true;
         } catch (e)
         {
             switch (e)
@@ -58,7 +59,10 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
                     break;
 
                 case "UserAlreadyParticipatingException" :
-                    errorSocket.emit("console", "You are already participating in the tournament.");
+                    if (isNotYourself)
+                        errorSocket.emit("console", "The user is already participating in the tournament.");
+                    else
+                        errorSocket.emit("console", "You are already participating in the tournament.");
                     break;
 
                 case "TournamentFullException" :
@@ -69,9 +73,10 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
                     throw e;
             }
         }
+        return false;
     }
 
-    this.removeParticipant = function(user, errorSocket)
+    this.removeParticipant = function(user, errorSocket, isNotYourself)
     {
         if (!user || !user.getIdentity || !errorSocket)
             throw "InvalidArgumentsException";
@@ -80,6 +85,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             this.tournamentBuilder_.removeParticipant(user);
             this.isNeedRebuildPublicTournamentTreeCache_ = true;
             this.writeMessage_(user.getIdentity() + " has left the tournament named \"" + this.name_ + "\".");
+            return true;
         } catch (e)
         {
             switch (e)
@@ -89,13 +95,17 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
                     break;
 
                 case "UserNotFoundException" :
-                    errorSocket.emit("console", "You are currently not in the tournament.");
+                    if (isNotYourself)
+                        errorSocket.emit("console", "The user is currently not in the tournament.");
+                    else
+                        errorSocket.emit("console", "You are currently not in the tournament.");
                     break;
 
                 default :
                     throw e;
             }
         }
+        return false;
     }
 
     this.getParticipants = function()
