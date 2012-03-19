@@ -574,7 +574,6 @@ function BattlePokemon(set, side)
 			source: source,
 			effect: effect
 		});
-		selfP.side.pokemonLeft--;
 		return d;
 	};
 	this.damage = function(d, source, effect) {
@@ -2449,9 +2448,13 @@ function Battle(roomid, format, ranked)
 		while (selfB.faintQueue.length)
 		{
 			var faintData = selfB.faintQueue.shift();
-			selfB.add('faint '+faintData.target.id);
-			selfB.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
-			faintData.target.fainted = true;
+			if (!faintData.target.fainted)
+			{
+				selfB.add('faint '+faintData.target.id);
+				selfB.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
+				faintData.target.fainted = true;
+				faintData.target.side.pokemonLeft--;
+			}
 		}
 		if (!selfB.allySide.pokemonLeft && !selfB.foeSide.pokemonLeft)
 		{
