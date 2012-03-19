@@ -240,6 +240,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
                     this.tournamentBuilder_.setBattleStatus(battle, TournamentBuilderTreeNodeBattleDataBattleStatus.DRAW);
                     this.writeMessage_("A game in the tournament named \"" + this.name_ + "\" was drawed because both " + battle.a.getIdentity() + " and " + battle.b.getIdentity() + " are offline.");
                 }
+                this.isNeedRebuildPublicTournamentTreeCache_ = true;
                 return;
             }
 
@@ -257,6 +258,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
 
                 case "FinalsDefaultWinNonException" :
                     this.broadcast_("The finals for the tournament named \"" + this.name_ + "\" was skipped because either side had a draw.");
+                    this.isNeedRebuildPublicTournamentTreeCache_ = true;
                     break;
 
                 case "NoRemainingBattlesException" :
@@ -312,18 +314,18 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
         {
             case "accept" :
                 var problems = Tools.validateTeam(user.team, this.metagame_);
-			    if (problems)
-			    {
-				    user.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-				    return;
-			    }
-			    if (!otherUser.connected)
-			    {
+                if (problems)
+                {
+                    user.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+                    return;
+                }
+                if (!otherUser.connected)
+                {
                     this.setBattleWinner_(battleId, user);
-				    user.emit('message', "Your opponent is no longer online. You have won the battle by default.");
-				    this.currentBattles_[battleId] = undefined;
-				    return;
-			    }
+                    user.emit('message', "Your opponent is no longer online. You have won the battle by default.");
+                    this.currentBattles_[battleId] = undefined;
+                    return;
+                }
                 if (user === battle.a)
                     battle.aTeamConfirmed = true;
                 else
@@ -625,7 +627,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
         }
         else
             return;
-	    this.currentBattles_[battleId] = undefined;
+        this.currentBattles_[battleId] = undefined;
     }
 
     this.startBattle_ = function(battleId)
