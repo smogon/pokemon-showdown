@@ -514,10 +514,16 @@ exports.BattleMovedex = {
 			}
 		},
 		effect: {
-			onStart: function() {
-				this.add("message Attract started (placeholder).");
+			onStart: function(pokemon, source) {
+				this.add("message "+pokemon.name+" fell in love! (placeholder).");
 			},
 			onBeforeMove: function(pokemon) {
+				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['Attract'])
+				{
+					this.debug('Removing Attract volatile on '+pokemon);
+					pokemon.removeVolatile('Attract');
+					return;
+				}
 				if (Math.random()*2 < 1)
 				{
 					this.add('cant-move '+pokemon.id+' attract');
