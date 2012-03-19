@@ -151,6 +151,7 @@ function TournamentBuilder(maxParticipants)
     {
         this.testJoinNotLocked_();
         this.buildTournamentTree_();
+        this.isEnded_ = false;
     }
 
     // getNextBattle() gets the next available battle in a TournamentBuilderBattle structure.
