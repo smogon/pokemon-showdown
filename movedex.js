@@ -514,10 +514,16 @@ exports.BattleMovedex = {
 			}
 		},
 		effect: {
-			onStart: function() {
-				this.add("message Attract started (placeholder).");
+			onStart: function(pokemon, source) {
+				this.add("message "+pokemon.name+" fell in love! (placeholder).");
 			},
 			onBeforeMove: function(pokemon) {
+				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['Attract'])
+				{
+					this.debug('Removing Attract volatile on '+pokemon);
+					pokemon.removeVolatile('Attract');
+					return;
+				}
 				if (Math.random()*2 < 1)
 				{
 					this.add('cant-move '+pokemon.id+' attract');
@@ -995,7 +1001,7 @@ exports.BattleMovedex = {
 	},
 	"BoneRush": {
 		num: 198,
-		accuracy: 80,
+		accuracy: 90,
 		basePower: 25,
 		category: "Physical",
 		desc: "Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times. If the user of this move has Skill Link, this move will always strike five times.",
@@ -7592,7 +7598,7 @@ exports.BattleMovedex = {
 	},
 	"PoisonGas": {
 		num: 139,
-		accuracy: 90,
+		accuracy: 80,
 		basePower: 0,
 		category: "Status",
 		desc: "Poisons the target.",
@@ -9216,7 +9222,7 @@ exports.BattleMovedex = {
 	},
 	"ScaryFace": {
 		num: 184,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Speed by 2 stages.",
