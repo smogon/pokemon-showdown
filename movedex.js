@@ -9473,6 +9473,17 @@ exports.BattleMovedex = {
 				move.accuracy = 0;
 			}
 		},
+		onHit: function(target, source) {
+			if (target.removeVolatile('Protect'))
+			{
+				this.add("message Shadow Force broke down the barrier! (placeholder)");
+			}
+			if (target.side !== source.side)
+			{
+				target.side.removeSideCondition('QuickGuard');
+				target.side.removeSideCondition('WideGuard');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
