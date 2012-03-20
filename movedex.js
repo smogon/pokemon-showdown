@@ -1924,6 +1924,7 @@ exports.BattleMovedex = {
 		name: "Curse",
 		pp: 10,
 		isViable: true,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			if (source.hasType('Ghost'))
@@ -2342,6 +2343,7 @@ exports.BattleMovedex = {
 		name: "Doom Desire",
 		pp: 5,
 		isViable: true,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
@@ -3267,6 +3269,7 @@ exports.BattleMovedex = {
 		id: "Feint",
 		name: "Feint",
 		pp: 10,
+		ignoresProtect: true,
 		priority: 2,
 		onHit: function(target, source) {
 			if (target.removeVolatile('Protect'))
@@ -4042,6 +4045,7 @@ exports.BattleMovedex = {
 		id: "FutureSight",
 		name: "Future Sight",
 		pp: 10,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
@@ -7906,8 +7910,9 @@ exports.BattleMovedex = {
 			},
 			onHitPriority: 1,
 			onHit: function(target, source, effect) {
-				if (effect && (effect.id === 'Feint' || effect.id === 'RolePlay'))
+				if (effect && effect.ignoresProtect)
 				{
+					this.debug("Move ignores protect/detect");
 					return;
 				}
 				this.add('r-volatile '+target.id+' protect');
@@ -8923,6 +8928,7 @@ exports.BattleMovedex = {
 		id: "RolePlay",
 		name: "Role Play",
 		pp: 10,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			if (target.ability === 'Multitype' || target.ability === 'WonderGuard' || target.ability === source.ability)
@@ -9447,6 +9453,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		isContact: true,
+		ignoresProtect: true,
 		priority: 0,
 		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
