@@ -98,6 +98,9 @@ function BattleTools()
 	 *
 	 * If you really want to, use:
 	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id) 
+	 * 
+	 * @param  move    Move ID, move object, or movecopy object describing move to copy
+	 * @return         movecopy object
 	 */
 	this.getMoveCopy = function(move) {
 		if (move && move.isCopy) return move;
