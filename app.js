@@ -707,7 +707,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		var cmd = '', target = '';
 		if (message.length > 511)
 		{
-			socket.emit('message', "Your message is too long.");
+			socket.emit('message', "Your message is too long:\n\n"+message);
 			return;
 		}
 		if (message.substr(0,2) === '//')
