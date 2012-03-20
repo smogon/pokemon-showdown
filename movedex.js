@@ -180,6 +180,7 @@ exports.BattleMovedex = {
 		id: "AfterYou",
 		name: "After You",
 		pp: 15,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function() {
 			return false; // After You will always fail when used in a single battle
