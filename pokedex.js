@@ -44,7 +44,8 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Necturna": {
         "name": "Necturna",
@@ -76,7 +77,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "F",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Syclant": {
         "name": "Syclant",
@@ -120,7 +122,8 @@ exports.BattlePokedex = {
             "TailGlow": "Tail Glow",
             "FocusBlast": "Focus Blast"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Revenankh": {
         "name": "Revenankh",
@@ -152,7 +155,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Pyroak": {
         "name": "Pyroak",
@@ -184,7 +188,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Fidgit": {
         "name": "Fidgit",
@@ -216,7 +221,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Stratagem": {
         "name": "Stratagem",
@@ -259,7 +265,8 @@ exports.BattlePokedex = {
             "VacuumWave": "Vacuum Wave",
             "CalmMind": "Calm Mind"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Arghonaut": {
         "name": "Arghonaut",
@@ -291,7 +298,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Kitsunoh": {
         "name": "Kitsunoh",
@@ -323,7 +331,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Cyclohm": {
         "name": "Cyclohm",
@@ -355,7 +364,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Colossoil": {
         "name": "Colossoil",
@@ -398,7 +408,8 @@ exports.BattlePokedex = {
             "SuckerPunch": "Sucker Punch",
             "StoneEdge": "Stone Edge"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Krilowatt": {
         "name": "Krilowatt",
@@ -430,7 +441,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Voodoom": {
         "name": "Voodoom",
@@ -462,7 +474,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Bulbasaur": {
         "name": "Bulbasaur",
@@ -504,7 +517,10 @@ exports.BattlePokedex = {
                 "w": 34,
                 "h": 39
             }
-        }
+        },
+        "nexto": [
+            "Ivysaur"
+        ]
     },
     "Ivysaur": {
         "name": "Ivysaur",
@@ -546,7 +562,10 @@ exports.BattlePokedex = {
                 "w": 59,
                 "h": 47
             }
-        }
+        },
+        "nexto": [
+            "Venusaur"
+        ]
     },
     "Venusaur": {
         "name": "Venusaur",
@@ -604,7 +623,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "BodySlam": "Body Slam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Charmander": {
         "name": "Charmander",
@@ -652,7 +672,10 @@ exports.BattlePokedex = {
             "BrickBreak": "Brick Break",
             "ThunderPunch": "ThunderPunch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Charmeleon"
+        ]
     },
     "Charmeleon": {
         "name": "Charmeleon",
@@ -693,7 +716,10 @@ exports.BattlePokedex = {
                 "w": 69,
                 "h": 62
             }
-        }
+        },
+        "nexto": [
+            "Charizard"
+        ]
     },
     "Charizard": {
         "name": "Charizard",
@@ -759,7 +785,8 @@ exports.BattlePokedex = {
             "DragonDance": "Dragon Dance",
             "SwordsDance": "Swords Dance"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Squirtle": {
         "name": "Squirtle",
@@ -810,7 +837,10 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "RapidSpin": "Rapid Spin"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Wartortle"
+        ]
     },
     "Wartortle": {
         "name": "Wartortle",
@@ -851,7 +881,10 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 64
             }
-        }
+        },
+        "nexto": [
+            "Blastoise"
+        ]
     },
     "Blastoise": {
         "name": "Blastoise",
@@ -907,7 +940,8 @@ exports.BattlePokedex = {
             "HydroPump": "Hydro Pump",
             "AquaJet": "Aqua Jet"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Caterpie": {
         "name": "Caterpie",
@@ -948,7 +982,10 @@ exports.BattlePokedex = {
                 "w": 40,
                 "h": 37
             }
-        }
+        },
+        "nexto": [
+            "Metapod"
+        ]
     },
     "Metapod": {
         "name": "Metapod",
@@ -989,7 +1026,10 @@ exports.BattlePokedex = {
                 "w": 45,
                 "h": 45
             }
-        }
+        },
+        "nexto": [
+            "Butterfree"
+        ]
     },
     "Butterfree": {
         "name": "Butterfree",
@@ -1039,7 +1079,8 @@ exports.BattlePokedex = {
             "BugBuzz": "Bug Buzz",
             "Protect": "Protect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Weedle": {
         "name": "Weedle",
@@ -1081,7 +1122,10 @@ exports.BattlePokedex = {
                 "w": 42,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Kakuna"
+        ]
     },
     "Kakuna": {
         "name": "Kakuna",
@@ -1130,7 +1174,10 @@ exports.BattlePokedex = {
             "StringShot": "String Shot",
             "BugBite": "Bug Bite"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Beedrill"
+        ]
     },
     "Beedrill": {
         "name": "Beedrill",
@@ -1187,7 +1234,8 @@ exports.BattlePokedex = {
             "Endeavor": "Endeavor",
             "Endure": "Endure"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Pidgey": {
         "name": "Pidgey",
@@ -1229,7 +1277,10 @@ exports.BattlePokedex = {
                 "w": 47,
                 "h": 48
             }
-        }
+        },
+        "nexto": [
+            "Pidgeotto"
+        ]
     },
     "Pidgeotto": {
         "name": "Pidgeotto",
@@ -1271,7 +1322,10 @@ exports.BattlePokedex = {
                 "w": 97,
                 "h": 97
             }
-        }
+        },
+        "nexto": [
+            "Pidgeot"
+        ]
     },
     "Pidgeot": {
         "name": "Pidgeot",
@@ -1321,7 +1375,8 @@ exports.BattlePokedex = {
             "Pursuit": "Pursuit",
             "QuickAttack": "Quick Attack"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rattata": {
         "name": "Rattata",
@@ -1358,7 +1413,10 @@ exports.BattlePokedex = {
                 "w": 55,
                 "h": 54
             }
-        }
+        },
+        "nexto": [
+            "Raticate"
+        ]
     },
     "Raticate": {
         "name": "Raticate",
@@ -1414,7 +1472,8 @@ exports.BattlePokedex = {
             "HyperFang": "Hyper Fang",
             "Bite": "Bite"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Spearow": {
         "name": "Spearow",
@@ -1452,7 +1511,10 @@ exports.BattlePokedex = {
                 "w": 51,
                 "h": 49
             }
-        }
+        },
+        "nexto": [
+            "Fearow"
+        ]
     },
     "Fearow": {
         "name": "Fearow",
@@ -1502,7 +1564,8 @@ exports.BattlePokedex = {
             "BatonPass": "Baton Pass",
             "Agility": "Agility"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Ekans": {
         "name": "Ekans",
@@ -1553,7 +1616,10 @@ exports.BattlePokedex = {
             "AquaTail": "Aqua Tail",
             "Coil": "Coil"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Arbok"
+        ]
     },
     "Arbok": {
         "name": "Arbok",
@@ -1605,7 +1671,8 @@ exports.BattlePokedex = {
             "RockSlide": "Rock Slide",
             "Coil": "Coil"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Pikachu": {
         "name": "Pikachu",
@@ -1655,7 +1722,10 @@ exports.BattlePokedex = {
             "GrassKnot": "Grass Knot",
             "FocusPunch": "Focus Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Raichu"
+        ]
     },
     "Raichu": {
         "name": "Raichu",
@@ -1704,7 +1774,8 @@ exports.BattlePokedex = {
             "Encore": "Encore",
             "FocusBlast": "Focus Blast"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Sandshrew": {
         "name": "Sandshrew",
@@ -1745,7 +1816,10 @@ exports.BattlePokedex = {
                 "w": 43,
                 "h": 40
             }
-        }
+        },
+        "nexto": [
+            "Sandslash"
+        ]
     },
     "Sandslash": {
         "name": "Sandslash",
@@ -1798,7 +1872,8 @@ exports.BattlePokedex = {
             "StealthRock": "Stealth Rock",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "NidoranF": {
         "name": "Nidoran F",
@@ -1839,7 +1914,10 @@ exports.BattlePokedex = {
                 "w": 35,
                 "h": 38
             }
-        }
+        },
+        "nexto": [
+            "Nidorina"
+        ]
     },
     "Nidorina": {
         "name": "Nidorina",
@@ -1880,7 +1958,10 @@ exports.BattlePokedex = {
                 "w": 55,
                 "h": 48
             }
-        }
+        },
+        "nexto": [
+            "Nidoqueen"
+        ]
     },
     "Nidoqueen": {
         "name": "Nidoqueen",
@@ -1942,7 +2023,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "IcePunch": "Ice Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "NidoranM": {
         "name": "Nidoran M",
@@ -1983,7 +2065,10 @@ exports.BattlePokedex = {
                 "w": 39,
                 "h": 45
             }
-        }
+        },
+        "nexto": [
+            "Nidorino"
+        ]
     },
     "Nidorino": {
         "name": "Nidorino",
@@ -2024,7 +2109,10 @@ exports.BattlePokedex = {
                 "w": 59,
                 "h": 59
             }
-        }
+        },
+        "nexto": [
+            "Nidoking"
+        ]
     },
     "Nidoking": {
         "name": "Nidoking",
@@ -2081,7 +2169,8 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "FireBlast": "Fire Blast"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Clefairy": {
         "name": "Clefairy",
@@ -2122,7 +2211,10 @@ exports.BattlePokedex = {
                 "w": 56,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Clefable"
+        ]
     },
     "Clefable": {
         "name": "Clefable",
@@ -2189,7 +2281,8 @@ exports.BattlePokedex = {
             "BellyDrum": "Belly Drum",
             "FirePunch": "Fire Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Vulpix": {
         "name": "Vulpix",
@@ -2230,7 +2323,10 @@ exports.BattlePokedex = {
                 "w": 64,
                 "h": 54
             }
-        }
+        },
+        "nexto": [
+            "Ninetales"
+        ]
     },
     "Ninetales": {
         "name": "Ninetales",
@@ -2283,7 +2379,8 @@ exports.BattlePokedex = {
             "DarkPulse": "Dark Pulse",
             "HiddenPower": "Hidden Power Electric"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Jigglypuff": {
         "name": "Jigglypuff",
@@ -2324,7 +2421,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 50
             }
-        }
+        },
+        "nexto": [
+            "Wigglytuff"
+        ]
     },
     "Wigglytuff": {
         "name": "Wigglytuff",
@@ -2391,7 +2491,8 @@ exports.BattlePokedex = {
             "Return": "Return",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Zubat": {
         "name": "Zubat",
@@ -2429,7 +2530,10 @@ exports.BattlePokedex = {
                 "w": 74,
                 "h": 55
             }
-        }
+        },
+        "nexto": [
+            "Golbat"
+        ]
     },
     "Golbat": {
         "name": "Golbat",
@@ -2467,7 +2571,10 @@ exports.BattlePokedex = {
                 "w": 97,
                 "h": 98
             }
-        }
+        },
+        "nexto": [
+            "Crobat"
+        ]
     },
     "Oddish": {
         "name": "Oddish",
@@ -2509,7 +2616,10 @@ exports.BattlePokedex = {
                 "w": 41,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Gloom"
+        ]
     },
     "Gloom": {
         "name": "Gloom",
@@ -2551,7 +2661,11 @@ exports.BattlePokedex = {
                 "w": 51,
                 "h": 49
             }
-        }
+        },
+        "nexto": [
+            "Vileplume",
+            "Bellossom"
+        ]
     },
     "Vileplume": {
         "name": "Vileplume",
@@ -2602,7 +2716,8 @@ exports.BattlePokedex = {
             "LeechSeed": "Leech Seed",
             "SleepPowder": "Sleep Powder"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Paras": {
         "name": "Paras",
@@ -2650,7 +2765,10 @@ exports.BattlePokedex = {
             "Agility": "Agility",
             "X-Scissor": "X-Scissor"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Parasect"
+        ]
     },
     "Parasect": {
         "name": "Parasect",
@@ -2701,7 +2819,8 @@ exports.BattlePokedex = {
             "StunSpore": "Stun Spore",
             "Aromatherapy": "Aromatherapy"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Venonat": {
         "name": "Venonat",
@@ -2739,7 +2858,10 @@ exports.BattlePokedex = {
                 "w": 59,
                 "h": 61
             }
-        }
+        },
+        "nexto": [
+            "Venomoth"
+        ]
     },
     "Venomoth": {
         "name": "Venomoth",
@@ -2792,7 +2914,8 @@ exports.BattlePokedex = {
             "ToxicSpikes": "Toxic Spikes",
             "StunSpore": "Stun Spore"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Diglett": {
         "name": "Diglett",
@@ -2844,7 +2967,10 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "RockSlide": "Rock Slide"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Dugtrio"
+        ]
     },
     "Dugtrio": {
         "name": "Dugtrio",
@@ -2895,7 +3021,8 @@ exports.BattlePokedex = {
             "Pursuit": "Pursuit",
             "AerialAce": "Aerial Ace"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Meowth": {
         "name": "Meowth",
@@ -2936,7 +3063,10 @@ exports.BattlePokedex = {
                 "w": 60,
                 "h": 67
             }
-        }
+        },
+        "nexto": [
+            "Persian"
+        ]
     },
     "Persian": {
         "name": "Persian",
@@ -2994,7 +3124,8 @@ exports.BattlePokedex = {
             "NightSlash": "Night Slash",
             "RainDance": "Rain Dance"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Psyduck": {
         "name": "Psyduck",
@@ -3031,7 +3162,10 @@ exports.BattlePokedex = {
                 "w": 49,
                 "h": 54
             }
-        }
+        },
+        "nexto": [
+            "Golduck"
+        ]
     },
     "Golduck": {
         "name": "Golduck",
@@ -3085,7 +3219,8 @@ exports.BattlePokedex = {
             "CrossChop": "Cross Chop",
             "Hypnosis": "Hypnosis"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mankey": {
         "name": "Mankey",
@@ -3134,7 +3269,10 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "Punishment": "Punishment"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Primeape"
+        ]
     },
     "Primeape": {
         "name": "Primeape",
@@ -3191,7 +3329,8 @@ exports.BattlePokedex = {
             "Reversal": "Reversal",
             "Taunt": "Taunt"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Growlithe": {
         "name": "Growlithe",
@@ -3239,7 +3378,10 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Ice",
             "Reversal": "Reversal"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Arcanine"
+        ]
     },
     "Arcanine": {
         "name": "Arcanine",
@@ -3298,7 +3440,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "Roar": "Roar"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Poliwag": {
         "name": "Poliwag",
@@ -3339,7 +3482,10 @@ exports.BattlePokedex = {
                 "w": 54,
                 "h": 35
             }
-        }
+        },
+        "nexto": [
+            "Poliwhirl"
+        ]
     },
     "Poliwhirl": {
         "name": "Poliwhirl",
@@ -3380,7 +3526,11 @@ exports.BattlePokedex = {
                 "w": 80,
                 "h": 58
             }
-        }
+        },
+        "nexto": [
+            "Poliwrath",
+            "Politoed"
+        ]
     },
     "Poliwrath": {
         "name": "Poliwrath",
@@ -3438,7 +3588,8 @@ exports.BattlePokedex = {
             "RockSlide": "Rock Slide",
             "BellyDrum": "Belly Drum"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Abra": {
         "name": "Abra",
@@ -3490,7 +3641,10 @@ exports.BattlePokedex = {
             "LightScreen": "Light Screen",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Kadabra"
+        ]
     },
     "Kadabra": {
         "name": "Kadabra",
@@ -3531,7 +3685,10 @@ exports.BattlePokedex = {
                 "w": 83,
                 "h": 67
             }
-        }
+        },
+        "nexto": [
+            "Alakazam"
+        ]
     },
     "Alakazam": {
         "name": "Alakazam",
@@ -3588,7 +3745,8 @@ exports.BattlePokedex = {
             "Reflect": "Reflect",
             "LightScreen": "Light Screen"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Machop": {
         "name": "Machop",
@@ -3640,7 +3798,10 @@ exports.BattlePokedex = {
             "CloseCombat": "Close Combat",
             "BulkUp": "Bulk Up"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Machoke"
+        ]
     },
     "Machoke": {
         "name": "Machoke",
@@ -3689,7 +3850,10 @@ exports.BattlePokedex = {
             "Protect": "Protect",
             "RockSlide": "Rock Slide"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Machamp"
+        ]
     },
     "Machamp": {
         "name": "Machamp",
@@ -3744,7 +3908,8 @@ exports.BattlePokedex = {
             "CloseCombat": "Close Combat",
             "ThunderPunch": "ThunderPunch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Bellsprout": {
         "name": "Bellsprout",
@@ -3782,7 +3947,10 @@ exports.BattlePokedex = {
                 "w": 56,
                 "h": 55
             }
-        }
+        },
+        "nexto": [
+            "Weepinbell"
+        ]
     },
     "Weepinbell": {
         "name": "Weepinbell",
@@ -3820,7 +3988,10 @@ exports.BattlePokedex = {
                 "w": 69,
                 "h": 50
             }
-        }
+        },
+        "nexto": [
+            "Victreebel"
+        ]
     },
     "Victreebel": {
         "name": "Victreebel",
@@ -3871,7 +4042,8 @@ exports.BattlePokedex = {
             "LeafStorm": "Leaf Storm",
             "KnockOff": "Knock Off"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Tentacool": {
         "name": "Tentacool",
@@ -3909,7 +4081,10 @@ exports.BattlePokedex = {
                 "w": 67,
                 "h": 73
             }
-        }
+        },
+        "nexto": [
+            "Tentacruel"
+        ]
     },
     "Tentacruel": {
         "name": "Tentacruel",
@@ -3961,7 +4136,8 @@ exports.BattlePokedex = {
             "PoisonJab": "Poison Jab",
             "HydroPump": "Hydro Pump"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Geodude": {
         "name": "Geodude",
@@ -3999,7 +4175,10 @@ exports.BattlePokedex = {
                 "w": 75,
                 "h": 58
             }
-        }
+        },
+        "nexto": [
+            "Graveler"
+        ]
     },
     "Graveler": {
         "name": "Graveler",
@@ -4037,7 +4216,10 @@ exports.BattlePokedex = {
                 "w": 77,
                 "h": 57
             }
-        }
+        },
+        "nexto": [
+            "Golem"
+        ]
     },
     "Golem": {
         "name": "Golem",
@@ -4091,7 +4273,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Ponyta": {
         "name": "Ponyta",
@@ -4141,7 +4324,10 @@ exports.BattlePokedex = {
             "QuickAttack": "Quick Attack",
             "Agility": "Agility"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Rapidash"
+        ]
     },
     "Rapidash": {
         "name": "Rapidash",
@@ -4198,7 +4384,8 @@ exports.BattlePokedex = {
             "Agility": "Agility",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Slowpoke": {
         "name": "Slowpoke",
@@ -4245,7 +4432,11 @@ exports.BattlePokedex = {
             "Protect": "Protect",
             "TrickRoom": "Trick Room"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Slowbro",
+            "Slowking"
+        ]
     },
     "Slowbro": {
         "name": "Slowbro",
@@ -4301,7 +4492,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Electric",
             "FireBlast": "Fire Blast"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Magnemite": {
         "name": "Magnemite",
@@ -4339,7 +4531,10 @@ exports.BattlePokedex = {
                 "w": 47,
                 "h": 40
             }
-        }
+        },
+        "nexto": [
+            "Magneton"
+        ]
     },
     "Magneton": {
         "name": "Magneton",
@@ -4388,7 +4583,10 @@ exports.BattlePokedex = {
             "Explosion": "Explosion",
             "FlashCannon": "Flash Cannon"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Magnezone"
+        ]
     },
     "Farfetch'd": {
         "name": "Farfetch'd",
@@ -4426,7 +4624,8 @@ exports.BattlePokedex = {
                 "w": 45,
                 "h": 49
             }
-        }
+        },
+        "nexto": []
     },
     "Doduo": {
         "name": "Doduo",
@@ -4468,7 +4667,10 @@ exports.BattlePokedex = {
                 "w": 63,
                 "h": 59
             }
-        }
+        },
+        "nexto": [
+            "Dodrio"
+        ]
     },
     "Dodrio": {
         "name": "Dodrio",
@@ -4521,7 +4723,8 @@ exports.BattlePokedex = {
             "Roost": "Roost",
             "Taunt": "Taunt"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Seel": {
         "name": "Seel",
@@ -4562,7 +4765,10 @@ exports.BattlePokedex = {
                 "w": 61,
                 "h": 43
             }
-        }
+        },
+        "nexto": [
+            "Dewgong"
+        ]
     },
     "Dewgong": {
         "name": "Dewgong",
@@ -4614,7 +4820,8 @@ exports.BattlePokedex = {
             "AquaJet": "Aqua Jet",
             "Encore": "Encore"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Grimer": {
         "name": "Grimer",
@@ -4651,7 +4858,10 @@ exports.BattlePokedex = {
                 "w": 66,
                 "h": 48
             }
-        }
+        },
+        "nexto": [
+            "Muk"
+        ]
     },
     "Muk": {
         "name": "Muk",
@@ -4708,7 +4918,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shellder": {
         "name": "Shellder",
@@ -4745,7 +4956,10 @@ exports.BattlePokedex = {
                 "w": 52,
                 "h": 43
             }
-        }
+        },
+        "nexto": [
+            "Cloyster"
+        ]
     },
     "Cloyster": {
         "name": "Cloyster",
@@ -4795,7 +5009,8 @@ exports.BattlePokedex = {
             "IcicleSpear": "Icicle Spear",
             "ShellSmash": "Shell Smash"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Gastly": {
         "name": "Gastly",
@@ -4833,7 +5048,10 @@ exports.BattlePokedex = {
                 "w": 91,
                 "h": 80
             }
-        }
+        },
+        "nexto": [
+            "Haunter"
+        ]
     },
     "Haunter": {
         "name": "Haunter",
@@ -4882,7 +5100,10 @@ exports.BattlePokedex = {
             "Explosion": "Explosion",
             "PainSplit": "Pain Split"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Gengar"
+        ]
     },
     "Gengar": {
         "name": "Gengar",
@@ -4935,7 +5156,8 @@ exports.BattlePokedex = {
             "FocusPunch": "Focus Punch",
             "IcyWind": "Icy Wind"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Onix": {
         "name": "Onix",
@@ -4977,7 +5199,10 @@ exports.BattlePokedex = {
                 "w": 100,
                 "h": 73
             }
-        }
+        },
+        "nexto": [
+            "Steelix"
+        ]
     },
     "Drowzee": {
         "name": "Drowzee",
@@ -5014,7 +5239,10 @@ exports.BattlePokedex = {
                 "w": 65,
                 "h": 63
             }
-        }
+        },
+        "nexto": [
+            "Hypno"
+        ]
     },
     "Hypno": {
         "name": "Hypno",
@@ -5069,7 +5297,8 @@ exports.BattlePokedex = {
             "FirePunch": "Fire Punch",
             "BellyDrum": "Belly Drum"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Krabby": {
         "name": "Krabby",
@@ -5121,7 +5350,10 @@ exports.BattlePokedex = {
             "BrickBreak": "Brick Break",
             "Superpower": "Superpower"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Kingler"
+        ]
     },
     "Kingler": {
         "name": "Kingler",
@@ -5176,7 +5408,8 @@ exports.BattlePokedex = {
             "Flail": "Flail",
             "Endure": "Endure"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Voltorb": {
         "name": "Voltorb",
@@ -5217,7 +5450,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 33
             }
-        }
+        },
+        "nexto": [
+            "Electrode"
+        ]
     },
     "Electrode": {
         "name": "Electrode",
@@ -5267,7 +5503,8 @@ exports.BattlePokedex = {
             "Thunderbolt": "Thunderbolt",
             "HiddenPower": "Hidden Power Ice"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Exeggcute": {
         "name": "Exeggcute",
@@ -5309,7 +5546,10 @@ exports.BattlePokedex = {
                 "w": 57,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Exeggutor"
+        ]
     },
     "Exeggutor": {
         "name": "Exeggutor",
@@ -5365,7 +5605,8 @@ exports.BattlePokedex = {
             "LightScreen": "Light Screen",
             "TrickRoom": "Trick Room"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Cubone": {
         "name": "Cubone",
@@ -5406,7 +5647,10 @@ exports.BattlePokedex = {
                 "w": 55,
                 "h": 43
             }
-        }
+        },
+        "nexto": [
+            "Marowak"
+        ]
     },
     "Marowak": {
         "name": "Marowak",
@@ -5455,7 +5699,8 @@ exports.BattlePokedex = {
             "FirePunch": "Fire Punch",
             "ThunderPunch": "ThunderPunch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Hitmonlee": {
         "name": "Hitmonlee",
@@ -5485,7 +5730,7 @@ exports.BattlePokedex = {
         "weightkg": 49.8,
         "nfe": false,
         "gender": "M",
-        "prevo": "",
+        "prevo": "Tyrogue",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -5507,7 +5752,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "RockSlide": "Rock Slide"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Hitmonchan": {
         "name": "Hitmonchan",
@@ -5560,7 +5806,8 @@ exports.BattlePokedex = {
             "Agility": "Agility",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Lickitung": {
         "name": "Lickitung",
@@ -5610,7 +5857,10 @@ exports.BattlePokedex = {
             "Protect": "Protect",
             "ShadowBall": "Shadow Ball"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Lickilicky"
+        ]
     },
     "Koffing": {
         "name": "Koffing",
@@ -5663,7 +5913,10 @@ exports.BattlePokedex = {
             "Will-O-Wisp": "Will-O-Wisp",
             "PainSplit": "Pain Split"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Weezing"
+        ]
     },
     "Weezing": {
         "name": "Weezing",
@@ -5714,7 +5967,8 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "Explosion": "Explosion"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rhyhorn": {
         "name": "Rhyhorn",
@@ -5765,7 +6019,10 @@ exports.BattlePokedex = {
             "RockBlast": "Rock Blast",
             "StealthRock": "Stealth Rock"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Rhydon"
+        ]
     },
     "Rhydon": {
         "name": "Rhydon",
@@ -5803,7 +6060,10 @@ exports.BattlePokedex = {
                 "w": 86,
                 "h": 74
             }
-        }
+        },
+        "nexto": [
+            "Rhyperior"
+        ]
     },
     "Chansey": {
         "name": "Chansey",
@@ -5855,7 +6115,10 @@ exports.BattlePokedex = {
             "Softboiled": "Softboiled",
             "StealthRock": "Stealth Rock"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Blissey"
+        ]
     },
     "Tangela": {
         "name": "Tangela",
@@ -5896,7 +6159,10 @@ exports.BattlePokedex = {
                 "w": 51,
                 "h": 44
             }
-        }
+        },
+        "nexto": [
+            "Tangrowth"
+        ]
     },
     "Kangaskhan": {
         "name": "Kangaskhan",
@@ -5949,7 +6215,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "FocusPunch": "Focus Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Horsea": {
         "name": "Horsea",
@@ -5995,7 +6262,10 @@ exports.BattlePokedex = {
             "Surf": "Surf",
             "Agility": "Agility"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Seadra"
+        ]
     },
     "Seadra": {
         "name": "Seadra",
@@ -6032,7 +6302,10 @@ exports.BattlePokedex = {
                 "w": 65,
                 "h": 62
             }
-        }
+        },
+        "nexto": [
+            "Kingdra"
+        ]
     },
     "Goldeen": {
         "name": "Goldeen",
@@ -6081,7 +6354,10 @@ exports.BattlePokedex = {
             "RainDance": "Rain Dance",
             "Psybeam": "Psybeam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Seaking"
+        ]
     },
     "Seaking": {
         "name": "Seaking",
@@ -6135,7 +6411,8 @@ exports.BattlePokedex = {
             "Endure": "Endure",
             "RainDance": "Rain Dance"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Staryu": {
         "name": "Staryu",
@@ -6181,7 +6458,10 @@ exports.BattlePokedex = {
             "Surf": "Surf",
             "RapidSpin": "Rapid Spin"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Starmie"
+        ]
     },
     "Starmie": {
         "name": "Starmie",
@@ -6229,7 +6509,8 @@ exports.BattlePokedex = {
             "RapidSpin": "Rapid Spin",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mr.Mime": {
         "name": "Mr. Mime",
@@ -6270,7 +6551,8 @@ exports.BattlePokedex = {
                 "w": 56,
                 "h": 53
             }
-        }
+        },
+        "nexto": []
     },
     "Scyther": {
         "name": "Scyther",
@@ -6326,7 +6608,10 @@ exports.BattlePokedex = {
             "Reversal": "Reversal",
             "Endure": "Endure"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Scizor"
+        ]
     },
     "Jynx": {
         "name": "Jynx",
@@ -6380,7 +6665,8 @@ exports.BattlePokedex = {
             "GrassKnot": "Grass Knot",
             "Taunt": "Taunt"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Electabuzz": {
         "name": "Electabuzz",
@@ -6430,7 +6716,10 @@ exports.BattlePokedex = {
             "FocusBlast": "Focus Blast",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Electivire"
+        ]
     },
     "Magmar": {
         "name": "Magmar",
@@ -6471,7 +6760,10 @@ exports.BattlePokedex = {
                 "w": 71,
                 "h": 62
             }
-        }
+        },
+        "nexto": [
+            "Magmortar"
+        ]
     },
     "Pinsir": {
         "name": "Pinsir",
@@ -6525,7 +6817,8 @@ exports.BattlePokedex = {
             "Flail": "Flail",
             "Endure": "Endure"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Tauros": {
         "name": "Tauros",
@@ -6579,7 +6872,8 @@ exports.BattlePokedex = {
             "Endeavor": "Endeavor",
             "Payback": "Payback"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Magikarp": {
         "name": "Magikarp",
@@ -6616,7 +6910,10 @@ exports.BattlePokedex = {
                 "w": 56,
                 "h": 68
             }
-        }
+        },
+        "nexto": [
+            "Gyarados"
+        ]
     },
     "Gyarados": {
         "name": "Gyarados",
@@ -6668,7 +6965,8 @@ exports.BattlePokedex = {
             "Payback": "Payback",
             "IceFang": "Ice Fang"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Lapras": {
         "name": "Lapras",
@@ -6732,7 +7030,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Grass",
             "Psychic": "Psychic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Ditto": {
         "name": "Ditto",
@@ -6777,7 +7076,8 @@ exports.BattlePokedex = {
         "viablemoves": {
             "Transform": "Transform"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Eevee": {
         "name": "Eevee",
@@ -6826,7 +7126,16 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Ground",
             "BatonPass": "Baton Pass"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Vaporeon",
+            "Jolteon",
+            "Flareon",
+            "Espeon",
+            "Umbreon",
+            "Leafeon",
+            "Glaceon"
+        ]
     },
     "Vaporeon": {
         "name": "Vaporeon",
@@ -6856,7 +7165,7 @@ exports.BattlePokedex = {
         "weightkg": 29,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Eevee",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -6883,7 +7192,8 @@ exports.BattlePokedex = {
             "AquaRing": "Aqua Ring",
             "Roar": "Roar"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Jolteon": {
         "name": "Jolteon",
@@ -6913,7 +7223,7 @@ exports.BattlePokedex = {
         "weightkg": 24.5,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Eevee",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -6935,7 +7245,8 @@ exports.BattlePokedex = {
             "Yawn": "Yawn",
             "Protect": "Protect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Flareon": {
         "name": "Flareon",
@@ -6965,7 +7276,7 @@ exports.BattlePokedex = {
         "weightkg": 25,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Eevee",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -6983,7 +7294,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Porygon": {
         "name": "Porygon",
@@ -7024,7 +7336,10 @@ exports.BattlePokedex = {
                 "w": 64,
                 "h": 50
             }
-        }
+        },
+        "nexto": [
+            "Porygon2"
+        ]
     },
     "Omanyte": {
         "name": "Omanyte",
@@ -7077,7 +7392,10 @@ exports.BattlePokedex = {
             "ToxicSpikes": "Toxic Spikes",
             "Protect": "Protect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Omastar"
+        ]
     },
     "Omastar": {
         "name": "Omastar",
@@ -7130,7 +7448,8 @@ exports.BattlePokedex = {
             "EarthPower": "Earth Power",
             "AncientPower": "AncientPower"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Kabuto": {
         "name": "Kabuto",
@@ -7168,7 +7487,10 @@ exports.BattlePokedex = {
                 "w": 39,
                 "h": 41
             }
-        }
+        },
+        "nexto": [
+            "Kabutops"
+        ]
     },
     "Kabutops": {
         "name": "Kabutops",
@@ -7221,7 +7543,8 @@ exports.BattlePokedex = {
             "LowKick": "Low Kick",
             "X-Scissor": "X-Scissor"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Aerodactyl": {
         "name": "Aerodactyl",
@@ -7270,7 +7593,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "Whirlwind": "Whirlwind"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Snorlax": {
         "name": "Snorlax",
@@ -7325,7 +7649,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "Whirlwind": "Whirlwind"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Articuno": {
         "name": "Articuno",
@@ -7383,7 +7708,8 @@ exports.BattlePokedex = {
             "Agility": "Agility",
             "HiddenPower": "Hidden Power Ground"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Zapdos": {
         "name": "Zapdos",
@@ -7440,7 +7766,8 @@ exports.BattlePokedex = {
             "BatonPass": "Baton Pass",
             "Agility": "Agility"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Moltres": {
         "name": "Moltres",
@@ -7498,7 +7825,8 @@ exports.BattlePokedex = {
             "MorningSun": "Morning Sun",
             "Roar": "Roar"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Dratini": {
         "name": "Dratini",
@@ -7553,7 +7881,10 @@ exports.BattlePokedex = {
             "Protect": "Protect",
             "IceBeam": "Ice Beam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Dragonair"
+        ]
     },
     "Dragonair": {
         "name": "Dragonair",
@@ -7594,7 +7925,10 @@ exports.BattlePokedex = {
                 "w": 65,
                 "h": 76
             }
-        }
+        },
+        "nexto": [
+            "Dragonite"
+        ]
     },
     "Dragonite": {
         "name": "Dragonite",
@@ -7655,7 +7989,8 @@ exports.BattlePokedex = {
             "FirePunch": "Fire Punch",
             "Waterfall": "Waterfall"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mewtwo": {
         "name": "Mewtwo",
@@ -7716,7 +8051,8 @@ exports.BattlePokedex = {
             "Toxic": "Toxic",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mew": {
         "name": "Mew",
@@ -7777,7 +8113,8 @@ exports.BattlePokedex = {
             "Softboiled": "Softboiled",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Chikorita": {
         "name": "Chikorita",
@@ -7818,7 +8155,10 @@ exports.BattlePokedex = {
                 "w": 43,
                 "h": 61
             }
-        }
+        },
+        "nexto": [
+            "Bayleef"
+        ]
     },
     "Bayleef": {
         "name": "Bayleef",
@@ -7859,7 +8199,10 @@ exports.BattlePokedex = {
                 "w": 55,
                 "h": 78
             }
-        }
+        },
+        "nexto": [
+            "Meganium"
+        ]
     },
     "Meganium": {
         "name": "Meganium",
@@ -7913,7 +8256,8 @@ exports.BattlePokedex = {
             "Flail": "Flail",
             "SeedBomb": "Seed Bomb"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Cyndaquil": {
         "name": "Cyndaquil",
@@ -7962,7 +8306,10 @@ exports.BattlePokedex = {
             "FireBlast": "Fire Blast",
             "Flamethrower": "Flamethrower"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Quilava"
+        ]
     },
     "Quilava": {
         "name": "Quilava",
@@ -8003,7 +8350,10 @@ exports.BattlePokedex = {
                 "w": 65,
                 "h": 55
             }
-        }
+        },
+        "nexto": [
+            "Typhlosion"
+        ]
     },
     "Typhlosion": {
         "name": "Typhlosion",
@@ -8057,7 +8407,8 @@ exports.BattlePokedex = {
             "SolarBeam": "SolarBeam",
             "Overheat": "Overheat"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Totodile": {
         "name": "Totodile",
@@ -8111,7 +8462,10 @@ exports.BattlePokedex = {
             "DragonDance": "Dragon Dance",
             "AquaTail": "Aqua Tail"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Croconaw"
+        ]
     },
     "Croconaw": {
         "name": "Croconaw",
@@ -8152,7 +8506,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 60
             }
-        }
+        },
+        "nexto": [
+            "Feraligatr"
+        ]
     },
     "Feraligatr": {
         "name": "Feraligatr",
@@ -8206,7 +8563,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "Flail": "Flail"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Sentret": {
         "name": "Sentret",
@@ -8247,7 +8605,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 65
             }
-        }
+        },
+        "nexto": [
+            "Furret"
+        ]
     },
     "Furret": {
         "name": "Furret",
@@ -8302,7 +8663,8 @@ exports.BattlePokedex = {
             "Pursuit": "Pursuit",
             "U-turn": "U-turn"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Hoothoot": {
         "name": "Hoothoot",
@@ -8344,7 +8706,10 @@ exports.BattlePokedex = {
                 "w": 53,
                 "h": 58
             }
-        }
+        },
+        "nexto": [
+            "Noctowl"
+        ]
     },
     "Noctowl": {
         "name": "Noctowl",
@@ -8395,7 +8760,8 @@ exports.BattlePokedex = {
             "Reflect": "Reflect",
             "PsychoShift": "Psycho Shift"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Ledyba": {
         "name": "Ledyba",
@@ -8456,7 +8822,10 @@ exports.BattlePokedex = {
             "ThunderPunch": "ThunderPunch",
             "HiddenPower": "Hidden Power Ground"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Ledian"
+        ]
     },
     "Ledian": {
         "name": "Ledian",
@@ -8506,7 +8875,8 @@ exports.BattlePokedex = {
             "Encore": "Encore",
             "Roost": "Roost"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Spinarak": {
         "name": "Spinarak",
@@ -8544,7 +8914,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 32
             }
-        }
+        },
+        "nexto": [
+            "Ariados"
+        ]
     },
     "Ariados": {
         "name": "Ariados",
@@ -8594,7 +8967,8 @@ exports.BattlePokedex = {
             "PoisonJab": "Poison Jab",
             "Pursuit": "Pursuit"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Crobat": {
         "name": "Crobat",
@@ -8648,7 +9022,8 @@ exports.BattlePokedex = {
             "CrossPoison": "Cross Poison",
             "Pursuit": "Pursuit"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Chinchou": {
         "name": "Chinchou",
@@ -8702,7 +9077,10 @@ exports.BattlePokedex = {
             "Discharge": "Discharge",
             "ConfuseRay": "Confuse Ray"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Lanturn"
+        ]
     },
     "Lanturn": {
         "name": "Lanturn",
@@ -8762,7 +9140,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "ChargeBeam": "Charge Beam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Pichu": {
         "name": "Pichu",
@@ -8803,7 +9182,10 @@ exports.BattlePokedex = {
                 "w": 61,
                 "h": 58
             }
-        }
+        },
+        "nexto": [
+            "Pikachu"
+        ]
     },
     "Cleffa": {
         "name": "Cleffa",
@@ -8844,7 +9226,10 @@ exports.BattlePokedex = {
                 "w": 41,
                 "h": 35
             }
-        }
+        },
+        "nexto": [
+            "Clefairy"
+        ]
     },
     "Igglybuff": {
         "name": "Igglybuff",
@@ -8885,7 +9270,10 @@ exports.BattlePokedex = {
                 "w": 66,
                 "h": 56
             }
-        }
+        },
+        "nexto": [
+            "Jigglypuff"
+        ]
     },
     "Togepi": {
         "name": "Togepi",
@@ -8926,7 +9314,10 @@ exports.BattlePokedex = {
                 "w": 38,
                 "h": 40
             }
-        }
+        },
+        "nexto": [
+            "Togetic"
+        ]
     },
     "Togetic": {
         "name": "Togetic",
@@ -8968,7 +9359,10 @@ exports.BattlePokedex = {
                 "w": 38,
                 "h": 74
             }
-        }
+        },
+        "nexto": [
+            "Togekiss"
+        ]
     },
     "Natu": {
         "name": "Natu",
@@ -9010,7 +9404,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 40
             }
-        }
+        },
+        "nexto": [
+            "Xatu"
+        ]
     },
     "Xatu": {
         "name": "Xatu",
@@ -9069,7 +9466,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mareep": {
         "name": "Mareep",
@@ -9121,7 +9519,10 @@ exports.BattlePokedex = {
             "PowerGem": "Power Gem",
             "SignalBeam": "Signal Beam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Flaaffy"
+        ]
     },
     "Flaaffy": {
         "name": "Flaaffy",
@@ -9162,7 +9563,10 @@ exports.BattlePokedex = {
                 "w": 47,
                 "h": 54
             }
-        }
+        },
+        "nexto": [
+            "Ampharos"
+        ]
     },
     "Ampharos": {
         "name": "Ampharos",
@@ -9222,7 +9626,8 @@ exports.BattlePokedex = {
             "Thunder": "Thunder",
             "Safeguard": "Safeguard"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Bellossom": {
         "name": "Bellossom",
@@ -9252,7 +9657,7 @@ exports.BattlePokedex = {
         "weightkg": 5.8,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Gloom",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -9284,7 +9689,8 @@ exports.BattlePokedex = {
             "DrainPunch": "Drain Punch",
             "Return": "Return"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Marill": {
         "name": "Marill",
@@ -9325,7 +9731,10 @@ exports.BattlePokedex = {
                 "w": 54,
                 "h": 36
             }
-        }
+        },
+        "nexto": [
+            "Azumarill"
+        ]
     },
     "Azumarill": {
         "name": "Azumarill",
@@ -9381,7 +9790,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Sudowoodo": {
         "name": "Sudowoodo",
@@ -9435,7 +9845,8 @@ exports.BattlePokedex = {
             "Toxic": "Toxic",
             "RockPolish": "Rock Polish"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Politoed": {
         "name": "Politoed",
@@ -9465,7 +9876,7 @@ exports.BattlePokedex = {
         "weightkg": 33.9,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Poliwhirl",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -9495,7 +9906,8 @@ exports.BattlePokedex = {
             "BodySlam": "Body Slam",
             "Bounce": "Bounce"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Hoppip": {
         "name": "Hoppip",
@@ -9533,7 +9945,10 @@ exports.BattlePokedex = {
                 "w": 66,
                 "h": 71
             }
-        }
+        },
+        "nexto": [
+            "Skiploom"
+        ]
     },
     "Skiploom": {
         "name": "Skiploom",
@@ -9571,7 +9986,10 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Jumpluff"
+        ]
     },
     "Jumpluff": {
         "name": "Jumpluff",
@@ -9621,7 +10039,8 @@ exports.BattlePokedex = {
             "Reflect": "Reflect",
             "SunnyDay": "Sunny Day"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Aipom": {
         "name": "Aipom",
@@ -9674,7 +10093,10 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Fighting",
             "ShadowBall": "Shadow Ball"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Ambipom"
+        ]
     },
     "Sunkern": {
         "name": "Sunkern",
@@ -9711,7 +10133,10 @@ exports.BattlePokedex = {
                 "w": 33,
                 "h": 45
             }
-        }
+        },
+        "nexto": [
+            "Sunflora"
+        ]
     },
     "Sunflora": {
         "name": "Sunflora",
@@ -9764,7 +10189,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "LeechSeed": "Leech Seed"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Yanma": {
         "name": "Yanma",
@@ -9802,7 +10228,10 @@ exports.BattlePokedex = {
                 "w": 91,
                 "h": 63
             }
-        }
+        },
+        "nexto": [
+            "Yanmega"
+        ]
     },
     "Wooper": {
         "name": "Wooper",
@@ -9840,7 +10269,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 38
             }
-        }
+        },
+        "nexto": [
+            "Quagsire"
+        ]
     },
     "Quagsire": {
         "name": "Quagsire",
@@ -9889,7 +10321,8 @@ exports.BattlePokedex = {
             "Yawn": "Yawn",
             "Curse": "Curse"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Espeon": {
         "name": "Espeon",
@@ -9919,7 +10352,7 @@ exports.BattlePokedex = {
         "weightkg": 26.5,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Eevee",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -9945,7 +10378,8 @@ exports.BattlePokedex = {
             "LightScreen": "Light Screen",
             "Wish": "Wish"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Umbreon": {
         "name": "Umbreon",
@@ -9975,7 +10409,7 @@ exports.BattlePokedex = {
         "weightkg": 27,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Eevee",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -9995,7 +10429,8 @@ exports.BattlePokedex = {
             "Yawn": "Yawn",
             "Protect": "Protect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Murkrow": {
         "name": "Murkrow",
@@ -10040,7 +10475,10 @@ exports.BattlePokedex = {
             "HeatWave": "Heat Wave",
             "HiddenPower": "Hidden Power Grass"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Honchkrow"
+        ]
     },
     "Slowking": {
         "name": "Slowking",
@@ -10071,7 +10509,7 @@ exports.BattlePokedex = {
         "weightkg": 79.5,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Slowpoke",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -10102,7 +10540,8 @@ exports.BattlePokedex = {
             "ZenHeadbutt": "Zen Headbutt",
             "Avalanche": "Avalanche"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Misdreavus": {
         "name": "Misdreavus",
@@ -10143,7 +10582,10 @@ exports.BattlePokedex = {
                 "w": 46,
                 "h": 64
             }
-        }
+        },
+        "nexto": [
+            "Mismagius"
+        ]
     },
     "Unown": {
         "name": "Unown",
@@ -10184,7 +10626,8 @@ exports.BattlePokedex = {
         "viablemoves": {
             "HiddenPower": "Hidden Power Psychic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Wobbuffet": {
         "name": "Wobbuffet",
@@ -10229,7 +10672,8 @@ exports.BattlePokedex = {
             "Safeguard": "Safeguard",
             "Tickle": "Tickle"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Girafarig": {
         "name": "Girafarig",
@@ -10293,7 +10737,8 @@ exports.BattlePokedex = {
             "Wish": "Wish",
             "LightScreen": "Light Screen"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Pineco": {
         "name": "Pineco",
@@ -10334,7 +10779,10 @@ exports.BattlePokedex = {
                 "w": 39,
                 "h": 58
             }
-        }
+        },
+        "nexto": [
+            "Forretress"
+        ]
     },
     "Forretress": {
         "name": "Forretress",
@@ -10387,7 +10835,8 @@ exports.BattlePokedex = {
             "Explosion": "Explosion",
             "VoltSwitch": "Volt Switch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Dunsparce": {
         "name": "Dunsparce",
@@ -10446,7 +10895,8 @@ exports.BattlePokedex = {
             "ChargeBeam": "Charge Beam",
             "Glare": "Glare"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Gligar": {
         "name": "Gligar",
@@ -10505,7 +10955,10 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "Sand-Attack": "Sand-Attack"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Gliscor"
+        ]
     },
     "Steelix": {
         "name": "Steelix",
@@ -10562,7 +11015,8 @@ exports.BattlePokedex = {
             "Torment": "Torment",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Snubbull": {
         "name": "Snubbull",
@@ -10603,7 +11057,10 @@ exports.BattlePokedex = {
                 "w": 45,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Granbull"
+        ]
     },
     "Granbull": {
         "name": "Granbull",
@@ -10658,7 +11115,8 @@ exports.BattlePokedex = {
             "Toxic": "Toxic",
             "Reflect": "Reflect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Qwilfish": {
         "name": "Qwilfish",
@@ -10713,7 +11171,8 @@ exports.BattlePokedex = {
             "DestinyBond": "Destiny Bond",
             "PainSplit": "Pain Split"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Scizor": {
         "name": "Scizor",
@@ -10771,7 +11230,8 @@ exports.BattlePokedex = {
             "Agility": "Agility",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shuckle": {
         "name": "Shuckle",
@@ -10828,7 +11288,8 @@ exports.BattlePokedex = {
             "Wrap": "Wrap",
             "Bide": "Bide"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Heracross": {
         "name": "Heracross",
@@ -10886,7 +11347,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Sneasel": {
         "name": "Sneasel",
@@ -10938,7 +11400,10 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "Bite": "Bite"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Weavile"
+        ]
     },
     "Teddiursa": {
         "name": "Teddiursa",
@@ -10979,7 +11444,10 @@ exports.BattlePokedex = {
                 "w": 31,
                 "h": 38
             }
-        }
+        },
+        "nexto": [
+            "Ursaring"
+        ]
     },
     "Ursaring": {
         "name": "Ursaring",
@@ -11034,7 +11502,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "HammerArm": "Hammer Arm"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Slugma": {
         "name": "Slugma",
@@ -11071,7 +11540,10 @@ exports.BattlePokedex = {
                 "w": 45,
                 "h": 44
             }
-        }
+        },
+        "nexto": [
+            "Magcargo"
+        ]
     },
     "Magcargo": {
         "name": "Magcargo",
@@ -11119,7 +11591,8 @@ exports.BattlePokedex = {
             "Toxic": "Toxic",
             "Will-O-Wisp": "Will-O-Wisp"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Swinub": {
         "name": "Swinub",
@@ -11161,7 +11634,10 @@ exports.BattlePokedex = {
                 "w": 34,
                 "h": 26
             }
-        }
+        },
+        "nexto": [
+            "Piloswine"
+        ]
     },
     "Piloswine": {
         "name": "Piloswine",
@@ -11203,7 +11679,10 @@ exports.BattlePokedex = {
                 "w": 52,
                 "h": 56
             }
-        }
+        },
+        "nexto": [
+            "Mamoswine"
+        ]
     },
     "Corsola": {
         "name": "Corsola",
@@ -11258,7 +11737,8 @@ exports.BattlePokedex = {
             "Return": "Return",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Remoraid": {
         "name": "Remoraid",
@@ -11295,7 +11775,10 @@ exports.BattlePokedex = {
                 "w": 50,
                 "h": 47
             }
-        }
+        },
+        "nexto": [
+            "Octillery"
+        ]
     },
     "Octillery": {
         "name": "Octillery",
@@ -11342,7 +11825,8 @@ exports.BattlePokedex = {
             "WaterSpout": "Water Spout",
             "Waterfall": "Waterfall"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Delibird": {
         "name": "Delibird",
@@ -11384,7 +11868,8 @@ exports.BattlePokedex = {
                 "w": 52,
                 "h": 56
             }
-        }
+        },
+        "nexto": []
     },
     "Mantine": {
         "name": "Mantine",
@@ -11435,7 +11920,8 @@ exports.BattlePokedex = {
             "SignalBeam": "Signal Beam",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Skarmory": {
         "name": "Skarmory",
@@ -11482,7 +11968,8 @@ exports.BattlePokedex = {
             "StealthRock": "Stealth Rock",
             "Taunt": "Taunt"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Houndour": {
         "name": "Houndour",
@@ -11536,7 +12023,10 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "NastyPlot": "Nasty Plot"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Houndoom"
+        ]
     },
     "Houndoom": {
         "name": "Houndoom",
@@ -11588,7 +12078,8 @@ exports.BattlePokedex = {
             "BeatUp": "Beat Up",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Kingdra": {
         "name": "Kingdra",
@@ -11647,7 +12138,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Electric",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Phanpy": {
         "name": "Phanpy",
@@ -11688,7 +12180,10 @@ exports.BattlePokedex = {
                 "w": 49,
                 "h": 37
             }
-        }
+        },
+        "nexto": [
+            "Donphan"
+        ]
     },
     "Donphan": {
         "name": "Donphan",
@@ -11736,7 +12231,8 @@ exports.BattlePokedex = {
             "Roar": "Roar",
             "SeedBomb": "Seed Bomb"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Porygon2": {
         "name": "Porygon2",
@@ -11791,7 +12287,10 @@ exports.BattlePokedex = {
             "TriAttack": "Tri Attack",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Porygon-Z"
+        ]
     },
     "Stantler": {
         "name": "Stantler",
@@ -11847,7 +12346,8 @@ exports.BattlePokedex = {
             "ZenHeadbutt": "Zen Headbutt",
             "SuckerPunch": "Sucker Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Smeargle": {
         "name": "Smeargle",
@@ -11908,7 +12408,8 @@ exports.BattlePokedex = {
             "SpiderWeb": "Spider Web",
             "Taunt": "Taunt"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Tyrogue": {
         "name": "Tyrogue",
@@ -11949,7 +12450,12 @@ exports.BattlePokedex = {
                 "w": 40,
                 "h": 47
             }
-        }
+        },
+        "nexto": [
+            "Hitmonlee",
+            "Hitmonchan",
+            "Hitmontop"
+        ]
     },
     "Hitmontop": {
         "name": "Hitmontop",
@@ -11979,7 +12485,7 @@ exports.BattlePokedex = {
         "weightkg": 48,
         "nfe": false,
         "gender": "M",
-        "prevo": "",
+        "prevo": "Tyrogue",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -12006,7 +12512,8 @@ exports.BattlePokedex = {
             "LowKick": "Low Kick",
             "Pursuit": "Pursuit"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Smoochum": {
         "name": "Smoochum",
@@ -12055,7 +12562,10 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Ground",
             "IceBeam": "Ice Beam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Jynx"
+        ]
     },
     "Elekid": {
         "name": "Elekid",
@@ -12108,7 +12618,10 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Grass",
             "Psychic": "Psychic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Electabuzz"
+        ]
     },
     "Magby": {
         "name": "Magby",
@@ -12160,7 +12673,10 @@ exports.BattlePokedex = {
             "FireBlast": "Fire Blast",
             "CrossChop": "Cross Chop"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Magmar"
+        ]
     },
     "Miltank": {
         "name": "Miltank",
@@ -12214,7 +12730,8 @@ exports.BattlePokedex = {
             "ZenHeadbutt": "Zen Headbutt",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Blissey": {
         "name": "Blissey",
@@ -12269,7 +12786,8 @@ exports.BattlePokedex = {
             "CalmMind": "Calm Mind",
             "Thunder": "Thunder"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Raikou": {
         "name": "Raikou",
@@ -12320,7 +12838,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Entei": {
         "name": "Entei",
@@ -12381,7 +12900,8 @@ exports.BattlePokedex = {
             "Return": "Return",
             "IronHead": "Iron Head"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Suicune": {
         "name": "Suicune",
@@ -12434,7 +12954,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "Roar": "Roar"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Larvitar": {
         "name": "Larvitar",
@@ -12481,7 +13002,10 @@ exports.BattlePokedex = {
             "DragonDance": "Dragon Dance",
             "RockSlide": "Rock Slide"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Pupitar"
+        ]
     },
     "Pupitar": {
         "name": "Pupitar",
@@ -12519,7 +13043,10 @@ exports.BattlePokedex = {
                 "w": 57,
                 "h": 56
             }
-        }
+        },
+        "nexto": [
+            "Tyranitar"
+        ]
     },
     "Tyranitar": {
         "name": "Tyranitar",
@@ -12579,7 +13106,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Lugia": {
         "name": "Lugia",
@@ -12636,7 +13164,8 @@ exports.BattlePokedex = {
             "EarthPower": "Earth Power",
             "HiddenPower": "Hidden Power Fighting"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Ho-Oh": {
         "name": "Ho-Oh",
@@ -12691,7 +13220,8 @@ exports.BattlePokedex = {
             "LightScreen": "Light Screen",
             "Recover": "Recover"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Celebi": {
         "name": "Celebi",
@@ -12757,7 +13287,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "PerishSong": "Perish Song"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Treecko": {
         "name": "Treecko",
@@ -12798,7 +13329,10 @@ exports.BattlePokedex = {
                 "w": 46,
                 "h": 63
             }
-        }
+        },
+        "nexto": [
+            "Grovyle"
+        ]
     },
     "Grovyle": {
         "name": "Grovyle",
@@ -12839,7 +13373,10 @@ exports.BattlePokedex = {
                 "w": 75,
                 "h": 77
             }
-        }
+        },
+        "nexto": [
+            "Sceptile"
+        ]
     },
     "Sceptile": {
         "name": "Sceptile",
@@ -12900,7 +13437,8 @@ exports.BattlePokedex = {
             "GrassKnot": "Grass Knot",
             "Protect": "Protect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Torchic": {
         "name": "Torchic",
@@ -12941,7 +13479,10 @@ exports.BattlePokedex = {
                 "w": 31,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Combusken"
+        ]
     },
     "Combusken": {
         "name": "Combusken",
@@ -12983,7 +13524,10 @@ exports.BattlePokedex = {
                 "w": 71,
                 "h": 65
             }
-        }
+        },
+        "nexto": [
+            "Blaziken"
+        ]
     },
     "Blaziken": {
         "name": "Blaziken",
@@ -13038,7 +13582,8 @@ exports.BattlePokedex = {
             "VacuumWave": "Vacuum Wave",
             "Agility": "Agility"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mudkip": {
         "name": "Mudkip",
@@ -13079,7 +13624,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 52
             }
-        }
+        },
+        "nexto": [
+            "Marshtomp"
+        ]
     },
     "Marshtomp": {
         "name": "Marshtomp",
@@ -13121,7 +13669,10 @@ exports.BattlePokedex = {
                 "w": 50,
                 "h": 59
             }
-        }
+        },
+        "nexto": [
+            "Swampert"
+        ]
     },
     "Swampert": {
         "name": "Swampert",
@@ -13180,7 +13731,8 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "AquaTail": "Aqua Tail"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Poochyena": {
         "name": "Poochyena",
@@ -13221,7 +13773,10 @@ exports.BattlePokedex = {
                 "w": 53,
                 "h": 44
             }
-        }
+        },
+        "nexto": [
+            "Mightyena"
+        ]
     },
     "Mightyena": {
         "name": "Mightyena",
@@ -13273,7 +13828,8 @@ exports.BattlePokedex = {
             "Facade": "Facade",
             "MeFirst": "Me First"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Zigzagoon": {
         "name": "Zigzagoon",
@@ -13322,7 +13878,10 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "SeedBomb": "Seed Bomb"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Linoone"
+        ]
     },
     "Linoone": {
         "name": "Linoone",
@@ -13371,7 +13930,8 @@ exports.BattlePokedex = {
             "Return": "Return",
             "ShadowClaw": "Shadow Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Wurmple": {
         "name": "Wurmple",
@@ -13412,7 +13972,11 @@ exports.BattlePokedex = {
                 "w": 40,
                 "h": 47
             }
-        }
+        },
+        "nexto": [
+            "Silcoon",
+            "Cascoon"
+        ]
     },
     "Silcoon": {
         "name": "Silcoon",
@@ -13453,7 +14017,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 45
             }
-        }
+        },
+        "nexto": [
+            "Beautifly"
+        ]
     },
     "Beautifly": {
         "name": "Beautifly",
@@ -13508,7 +14075,8 @@ exports.BattlePokedex = {
             "QuiverDance": "Quiver Dance",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Cascoon": {
         "name": "Cascoon",
@@ -13538,7 +14106,7 @@ exports.BattlePokedex = {
         "weightkg": 11.5,
         "nfe": true,
         "gender": "",
-        "prevo": "",
+        "prevo": "Wurmple",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -13549,7 +14117,10 @@ exports.BattlePokedex = {
                 "w": 54,
                 "h": 39
             }
-        }
+        },
+        "nexto": [
+            "Dustox"
+        ]
     },
     "Dustox": {
         "name": "Dustox",
@@ -13602,7 +14173,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Fire",
             "QuiverDance": "Quiver Dance"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Lotad": {
         "name": "Lotad",
@@ -13644,7 +14216,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 41
             }
-        }
+        },
+        "nexto": [
+            "Lombre"
+        ]
     },
     "Lombre": {
         "name": "Lombre",
@@ -13686,7 +14261,10 @@ exports.BattlePokedex = {
                 "w": 46,
                 "h": 53
             }
-        }
+        },
+        "nexto": [
+            "Ludicolo"
+        ]
     },
     "Ludicolo": {
         "name": "Ludicolo",
@@ -13748,7 +14326,8 @@ exports.BattlePokedex = {
             "Protect": "Protect",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Seedot": {
         "name": "Seedot",
@@ -13789,7 +14368,10 @@ exports.BattlePokedex = {
                 "w": 35,
                 "h": 37
             }
-        }
+        },
+        "nexto": [
+            "Nuzleaf"
+        ]
     },
     "Nuzleaf": {
         "name": "Nuzleaf",
@@ -13831,7 +14413,10 @@ exports.BattlePokedex = {
                 "w": 46,
                 "h": 56
             }
-        }
+        },
+        "nexto": [
+            "Shiftry"
+        ]
     },
     "Shiftry": {
         "name": "Shiftry",
@@ -13891,7 +14476,8 @@ exports.BattlePokedex = {
             "LowKick": "Low Kick",
             "SuckerPunch": "Sucker Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Taillow": {
         "name": "Taillow",
@@ -13944,7 +14530,10 @@ exports.BattlePokedex = {
             "Return": "Return",
             "HiddenPower": "Hidden Power Ground"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Swellow"
+        ]
     },
     "Swellow": {
         "name": "Swellow",
@@ -14000,7 +14589,8 @@ exports.BattlePokedex = {
             "Endeavor": "Endeavor",
             "Agility": "Agility"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Wingull": {
         "name": "Wingull",
@@ -14042,7 +14632,10 @@ exports.BattlePokedex = {
                 "w": 63,
                 "h": 43
             }
-        }
+        },
+        "nexto": [
+            "Pelipper"
+        ]
     },
     "Pelipper": {
         "name": "Pelipper",
@@ -14094,7 +14687,8 @@ exports.BattlePokedex = {
             "IceBeam": "Ice Beam",
             "HiddenPower": "Hidden Power Grass"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Ralts": {
         "name": "Ralts",
@@ -14135,7 +14729,10 @@ exports.BattlePokedex = {
                 "w": 26,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Kirlia"
+        ]
     },
     "Kirlia": {
         "name": "Kirlia",
@@ -14176,7 +14773,11 @@ exports.BattlePokedex = {
                 "w": 37,
                 "h": 63
             }
-        }
+        },
+        "nexto": [
+            "Gardevoir",
+            "Gallade"
+        ]
     },
     "Gardevoir": {
         "name": "Gardevoir",
@@ -14235,7 +14836,8 @@ exports.BattlePokedex = {
             "LightScreen": "Light Screen",
             "Memento": "Memento"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Surskit": {
         "name": "Surskit",
@@ -14291,7 +14893,10 @@ exports.BattlePokedex = {
             "Endure": "Endure",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Masquerain"
+        ]
     },
     "Masquerain": {
         "name": "Masquerain",
@@ -14342,7 +14947,8 @@ exports.BattlePokedex = {
             "BugBuzz": "Bug Buzz",
             "Roost": "Roost"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shroomish": {
         "name": "Shroomish",
@@ -14393,7 +14999,10 @@ exports.BattlePokedex = {
             "SludgeBomb": "Sludge Bomb",
             "StunSpore": "Stun Spore"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Breloom"
+        ]
     },
     "Breloom": {
         "name": "Breloom",
@@ -14449,7 +15058,8 @@ exports.BattlePokedex = {
             "MachPunch": "Mach Punch",
             "BulletSeed": "Bullet Seed"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Slakoth": {
         "name": "Slakoth",
@@ -14490,7 +15100,10 @@ exports.BattlePokedex = {
                 "w": 51,
                 "h": 36
             }
-        }
+        },
+        "nexto": [
+            "Vigoroth"
+        ]
     },
     "Vigoroth": {
         "name": "Vigoroth",
@@ -14548,7 +15161,10 @@ exports.BattlePokedex = {
             "Reversal": "Reversal",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Slaking"
+        ]
     },
     "Slaking": {
         "name": "Slaking",
@@ -14600,7 +15216,8 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "ThunderPunch": "ThunderPunch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Nincada": {
         "name": "Nincada",
@@ -14642,7 +15259,11 @@ exports.BattlePokedex = {
                 "w": 52,
                 "h": 29
             }
-        }
+        },
+        "nexto": [
+            "Ninjask",
+            "Shedinja"
+        ]
     },
     "Ninjask": {
         "name": "Ninjask",
@@ -14694,7 +15315,8 @@ exports.BattlePokedex = {
             "Protect": "Protect",
             "SunnyDay": "Sunny Day"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shedinja": {
         "name": "Shedinja",
@@ -14725,7 +15347,7 @@ exports.BattlePokedex = {
         "weightkg": 1.2,
         "nfe": false,
         "gender": "N",
-        "prevo": "",
+        "prevo": "Nincada",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -14749,7 +15371,8 @@ exports.BattlePokedex = {
             "BatonPass": "Baton Pass",
             "HealBlock": "Heal Block"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Whismur": {
         "name": "Whismur",
@@ -14790,7 +15413,10 @@ exports.BattlePokedex = {
                 "w": 37,
                 "h": 41
             }
-        }
+        },
+        "nexto": [
+            "Loudred"
+        ]
     },
     "Loudred": {
         "name": "Loudred",
@@ -14831,7 +15457,10 @@ exports.BattlePokedex = {
                 "w": 56,
                 "h": 62
             }
-        }
+        },
+        "nexto": [
+            "Exploud"
+        ]
     },
     "Exploud": {
         "name": "Exploud",
@@ -14885,7 +15514,8 @@ exports.BattlePokedex = {
             "Howl": "Howl",
             "FireBlast": "Fire Blast"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Makuhita": {
         "name": "Makuhita",
@@ -14926,7 +15556,10 @@ exports.BattlePokedex = {
                 "w": 60,
                 "h": 61
             }
-        }
+        },
+        "nexto": [
+            "Hariyama"
+        ]
     },
     "Hariyama": {
         "name": "Hariyama",
@@ -14988,7 +15621,8 @@ exports.BattlePokedex = {
             "FakeOut": "Fake Out",
             "LowKick": "Low Kick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Azurill": {
         "name": "Azurill",
@@ -15029,7 +15663,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 66
             }
-        }
+        },
+        "nexto": [
+            "Marill"
+        ]
     },
     "Nosepass": {
         "name": "Nosepass",
@@ -15070,7 +15707,10 @@ exports.BattlePokedex = {
                 "w": 40,
                 "h": 47
             }
-        }
+        },
+        "nexto": [
+            "Probopass"
+        ]
     },
     "Skitty": {
         "name": "Skitty",
@@ -15111,7 +15751,10 @@ exports.BattlePokedex = {
                 "w": 54,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Delcatty"
+        ]
     },
     "Delcatty": {
         "name": "Delcatty",
@@ -15172,7 +15815,8 @@ exports.BattlePokedex = {
             "Payback": "Payback",
             "FaintAttack": "Faint Attack"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Sableye": {
         "name": "Sableye",
@@ -15230,7 +15874,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Fire",
             "ShadowBall": "Shadow Ball"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mawile": {
         "name": "Mawile",
@@ -15288,7 +15933,8 @@ exports.BattlePokedex = {
             "Endure": "Endure",
             "Sing": "Sing"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Aron": {
         "name": "Aron",
@@ -15338,7 +15984,10 @@ exports.BattlePokedex = {
             "IronHead": "Iron Head",
             "Superpower": "Superpower"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Lairon"
+        ]
     },
     "Lairon": {
         "name": "Lairon",
@@ -15380,7 +16029,10 @@ exports.BattlePokedex = {
                 "w": 68,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Aggron"
+        ]
     },
     "Aggron": {
         "name": "Aggron",
@@ -15435,7 +16087,8 @@ exports.BattlePokedex = {
             "RockPolish": "Rock Polish",
             "Earthquake": "Earthquake"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Meditite": {
         "name": "Meditite",
@@ -15477,7 +16130,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Medicham"
+        ]
     },
     "Medicham": {
         "name": "Medicham",
@@ -15530,7 +16186,8 @@ exports.BattlePokedex = {
             "Reversal": "Reversal",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Electrike": {
         "name": "Electrike",
@@ -15580,7 +16237,10 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "ChargeBeam": "Charge Beam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Manectric"
+        ]
     },
     "Manectric": {
         "name": "Manectric",
@@ -15630,7 +16290,8 @@ exports.BattlePokedex = {
             "Overheat": "Overheat",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Plusle": {
         "name": "Plusle",
@@ -15683,7 +16344,8 @@ exports.BattlePokedex = {
             "Counter": "Counter",
             "QuickAttack": "Quick Attack"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Minun": {
         "name": "Minun",
@@ -15736,7 +16398,8 @@ exports.BattlePokedex = {
             "Counter": "Counter",
             "QuickAttack": "Quick Attack"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Volbeat": {
         "name": "Volbeat",
@@ -15793,7 +16456,8 @@ exports.BattlePokedex = {
             "AerialAce": "Aerial Ace",
             "FocusPunch": "Focus Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Illumise": {
         "name": "Illumise",
@@ -15851,7 +16515,8 @@ exports.BattlePokedex = {
             "U-turn": "U-turn",
             "LightScreen": "Light Screen"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Roselia": {
         "name": "Roselia",
@@ -15893,7 +16558,10 @@ exports.BattlePokedex = {
                 "w": 60,
                 "h": 58
             }
-        }
+        },
+        "nexto": [
+            "Roserade"
+        ]
     },
     "Gulpin": {
         "name": "Gulpin",
@@ -15934,7 +16602,10 @@ exports.BattlePokedex = {
                 "w": 34,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Swalot"
+        ]
     },
     "Swalot": {
         "name": "Swalot",
@@ -15986,7 +16657,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Carvanha": {
         "name": "Carvanha",
@@ -16028,7 +16700,10 @@ exports.BattlePokedex = {
                 "w": 53,
                 "h": 55
             }
-        }
+        },
+        "nexto": [
+            "Sharpedo"
+        ]
     },
     "Sharpedo": {
         "name": "Sharpedo",
@@ -16086,7 +16761,8 @@ exports.BattlePokedex = {
             "HydroPump": "Hydro Pump",
             "DarkPulse": "Dark Pulse"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Wailmer": {
         "name": "Wailmer",
@@ -16136,7 +16812,10 @@ exports.BattlePokedex = {
             "HydroPump": "Hydro Pump",
             "Selfdestruct": "Selfdestruct"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Wailord"
+        ]
     },
     "Wailord": {
         "name": "Wailord",
@@ -16194,7 +16873,8 @@ exports.BattlePokedex = {
             "Earthquake": "Earthquake",
             "Double-Edge": "Double-Edge"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Numel": {
         "name": "Numel",
@@ -16236,7 +16916,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 53
             }
-        }
+        },
+        "nexto": [
+            "Camerupt"
+        ]
     },
     "Camerupt": {
         "name": "Camerupt",
@@ -16296,7 +16979,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Torkoal": {
         "name": "Torkoal",
@@ -16350,7 +17034,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Spoink": {
         "name": "Spoink",
@@ -16391,7 +17076,10 @@ exports.BattlePokedex = {
                 "w": 36,
                 "h": 64
             }
-        }
+        },
+        "nexto": [
+            "Grumpig"
+        ]
     },
     "Grumpig": {
         "name": "Grumpig",
@@ -16449,7 +17137,8 @@ exports.BattlePokedex = {
             "Reflect": "Reflect",
             "ThunderWave": "Thunder Wave"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Spinda": {
         "name": "Spinda",
@@ -16511,7 +17200,8 @@ exports.BattlePokedex = {
             "Counter": "Counter",
             "FocusPunch": "Focus Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Trapinch": {
         "name": "Trapinch",
@@ -16561,7 +17251,10 @@ exports.BattlePokedex = {
             "Toxic": "Toxic",
             "RockSlide": "Rock Slide"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Vibrava"
+        ]
     },
     "Vibrava": {
         "name": "Vibrava",
@@ -16603,7 +17296,10 @@ exports.BattlePokedex = {
                 "w": 63,
                 "h": 62
             }
-        }
+        },
+        "nexto": [
+            "Flygon"
+        ]
     },
     "Flygon": {
         "name": "Flygon",
@@ -16658,7 +17354,8 @@ exports.BattlePokedex = {
             "Roost": "Roost",
             "DracoMeteor": "Draco Meteor"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Cacnea": {
         "name": "Cacnea",
@@ -16713,7 +17410,10 @@ exports.BattlePokedex = {
             "DarkPulse": "Dark Pulse",
             "NeedleArm": "Needle Arm"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Cacturne"
+        ]
     },
     "Cacturne": {
         "name": "Cacturne",
@@ -16768,7 +17468,8 @@ exports.BattlePokedex = {
             "Protect": "Protect",
             "LeechSeed": "Leech Seed"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Swablu": {
         "name": "Swablu",
@@ -16810,7 +17511,10 @@ exports.BattlePokedex = {
                 "w": 74,
                 "h": 53
             }
-        }
+        },
+        "nexto": [
+            "Altaria"
+        ]
     },
     "Altaria": {
         "name": "Altaria",
@@ -16868,7 +17572,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "Safeguard": "Safeguard"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Zangoose": {
         "name": "Zangoose",
@@ -16917,7 +17622,8 @@ exports.BattlePokedex = {
             "QuickAttack": "Quick Attack",
             "ShadowClaw": "Shadow Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Seviper": {
         "name": "Seviper",
@@ -16975,7 +17681,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "Coil": "Coil"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Lunatone": {
         "name": "Lunatone",
@@ -17032,7 +17739,8 @@ exports.BattlePokedex = {
             "RockPolish": "Rock Polish",
             "Explosion": "Explosion"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Solrock": {
         "name": "Solrock",
@@ -17086,7 +17794,8 @@ exports.BattlePokedex = {
             "StealthRock": "Stealth Rock",
             "ZenHeadbutt": "Zen Headbutt"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Barboach": {
         "name": "Barboach",
@@ -17141,7 +17850,10 @@ exports.BattlePokedex = {
             "IceBeam": "Ice Beam",
             "HiddenPower": "Hidden Power Rock"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Whiscash"
+        ]
     },
     "Whiscash": {
         "name": "Whiscash",
@@ -17194,7 +17906,8 @@ exports.BattlePokedex = {
             "ZenHeadbutt": "Zen Headbutt",
             "AquaTail": "Aqua Tail"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Corphish": {
         "name": "Corphish",
@@ -17235,7 +17948,10 @@ exports.BattlePokedex = {
                 "w": 57,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Crawdaunt"
+        ]
     },
     "Crawdaunt": {
         "name": "Crawdaunt",
@@ -17292,7 +18008,8 @@ exports.BattlePokedex = {
             "IceBeam": "Ice Beam",
             "HiddenPower": "Hidden Power Grass"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Baltoy": {
         "name": "Baltoy",
@@ -17334,7 +18051,10 @@ exports.BattlePokedex = {
                 "w": 40,
                 "h": 39
             }
-        }
+        },
+        "nexto": [
+            "Claydol"
+        ]
     },
     "Claydol": {
         "name": "Claydol",
@@ -17394,7 +18114,8 @@ exports.BattlePokedex = {
             "Earthquake": "Earthquake",
             "StoneEdge": "Stone Edge"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Lileep": {
         "name": "Lileep",
@@ -17436,7 +18157,10 @@ exports.BattlePokedex = {
                 "w": 54,
                 "h": 57
             }
-        }
+        },
+        "nexto": [
+            "Cradily"
+        ]
     },
     "Cradily": {
         "name": "Cradily",
@@ -17494,7 +18218,8 @@ exports.BattlePokedex = {
             "SwordsDance": "Swords Dance",
             "StoneEdge": "Stone Edge"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Anorith": {
         "name": "Anorith",
@@ -17536,7 +18261,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Armaldo"
+        ]
     },
     "Armaldo": {
         "name": "Armaldo",
@@ -17593,7 +18321,8 @@ exports.BattlePokedex = {
             "AquaTail": "Aqua Tail",
             "Superpower": "Superpower"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Feebas": {
         "name": "Feebas",
@@ -17634,7 +18363,10 @@ exports.BattlePokedex = {
                 "w": 40,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Milotic"
+        ]
     },
     "Milotic": {
         "name": "Milotic",
@@ -17688,7 +18420,8 @@ exports.BattlePokedex = {
             "HydroPump": "Hydro Pump",
             "Hypnosis": "Hypnosis"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Castform": {
         "name": "Castform",
@@ -17744,7 +18477,8 @@ exports.BattlePokedex = {
             "Hail": "Hail",
             "Blizzard": "Blizzard"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Kecleon": {
         "name": "Kecleon",
@@ -17802,7 +18536,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "FirePunch": "Fire Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shuppet": {
         "name": "Shuppet",
@@ -17843,7 +18578,10 @@ exports.BattlePokedex = {
                 "w": 41,
                 "h": 62
             }
-        }
+        },
+        "nexto": [
+            "Banette"
+        ]
     },
     "Banette": {
         "name": "Banette",
@@ -17891,7 +18629,8 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "ShadowClaw": "Shadow Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Duskull": {
         "name": "Duskull",
@@ -17932,7 +18671,10 @@ exports.BattlePokedex = {
                 "w": 59,
                 "h": 47
             }
-        }
+        },
+        "nexto": [
+            "Dusclops"
+        ]
     },
     "Dusclops": {
         "name": "Dusclops",
@@ -17973,7 +18715,10 @@ exports.BattlePokedex = {
                 "w": 76,
                 "h": 73
             }
-        }
+        },
+        "nexto": [
+            "Dusknoir"
+        ]
     },
     "Tropius": {
         "name": "Tropius",
@@ -18030,7 +18775,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "SolarBeam": "SolarBeam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Chimecho": {
         "name": "Chimecho",
@@ -18087,7 +18833,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Ground",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Absol": {
         "name": "Absol",
@@ -18137,7 +18884,8 @@ exports.BattlePokedex = {
             "PsychoCut": "Psycho Cut",
             "Pursuit": "Pursuit"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Wynaut": {
         "name": "Wynaut",
@@ -18187,7 +18935,10 @@ exports.BattlePokedex = {
             "Safeguard": "Safeguard",
             "DestinyBond": "Destiny Bond"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Wobbuffet"
+        ]
     },
     "Snorunt": {
         "name": "Snorunt",
@@ -18228,7 +18979,11 @@ exports.BattlePokedex = {
                 "w": 35,
                 "h": 38
             }
-        }
+        },
+        "nexto": [
+            "Glalie",
+            "Froslass"
+        ]
     },
     "Glalie": {
         "name": "Glalie",
@@ -18285,7 +19040,8 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "Blizzard": "Blizzard"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Spheal": {
         "name": "Spheal",
@@ -18327,7 +19083,10 @@ exports.BattlePokedex = {
                 "w": 41,
                 "h": 37
             }
-        }
+        },
+        "nexto": [
+            "Sealeo"
+        ]
     },
     "Sealeo": {
         "name": "Sealeo",
@@ -18369,7 +19128,10 @@ exports.BattlePokedex = {
                 "w": 62,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Walrein"
+        ]
     },
     "Walrein": {
         "name": "Walrein",
@@ -18421,7 +19183,8 @@ exports.BattlePokedex = {
             "SuperFang": "Super Fang",
             "Blizzard": "Blizzard"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Clamperl": {
         "name": "Clamperl",
@@ -18473,7 +19236,11 @@ exports.BattlePokedex = {
             "ConfuseRay": "Confuse Ray",
             "Brine": "Brine"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Huntail",
+            "Gorebyss"
+        ]
     },
     "Huntail": {
         "name": "Huntail",
@@ -18525,7 +19292,8 @@ exports.BattlePokedex = {
             "Crunch": "Crunch",
             "SuckerPunch": "Sucker Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Gorebyss": {
         "name": "Gorebyss",
@@ -18555,7 +19323,7 @@ exports.BattlePokedex = {
         "weightkg": 22.6,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Clamperl",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -18578,7 +19346,8 @@ exports.BattlePokedex = {
             "Agility": "Agility",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Relicanth": {
         "name": "Relicanth",
@@ -18632,7 +19401,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "RockPolish": "Rock Polish"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Luvdisc": {
         "name": "Luvdisc",
@@ -18690,7 +19460,8 @@ exports.BattlePokedex = {
             "Endure": "Endure",
             "Waterfall": "Waterfall"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Bagon": {
         "name": "Bagon",
@@ -18731,7 +19502,10 @@ exports.BattlePokedex = {
                 "w": 41,
                 "h": 50
             }
-        }
+        },
+        "nexto": [
+            "Shelgon"
+        ]
     },
     "Shelgon": {
         "name": "Shelgon",
@@ -18779,7 +19553,10 @@ exports.BattlePokedex = {
             "BrickBreak": "Brick Break",
             "DragonClaw": "Dragon Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Salamence"
+        ]
     },
     "Salamence": {
         "name": "Salamence",
@@ -18830,7 +19607,8 @@ exports.BattlePokedex = {
             "Flamethrower": "Flamethrower",
             "DracoMeteor": "Draco Meteor"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Beldum": {
         "name": "Beldum",
@@ -18872,7 +19650,10 @@ exports.BattlePokedex = {
                 "w": 45,
                 "h": 44
             }
-        }
+        },
+        "nexto": [
+            "Metang"
+        ]
     },
     "Metang": {
         "name": "Metang",
@@ -18914,7 +19695,10 @@ exports.BattlePokedex = {
                 "w": 75,
                 "h": 59
             }
-        }
+        },
+        "nexto": [
+            "Metagross"
+        ]
     },
     "Metagross": {
         "name": "Metagross",
@@ -18972,7 +19756,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Fire",
             "GrassKnot": "Grass Knot"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Regirock": {
         "name": "Regirock",
@@ -19025,7 +19810,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Regice": {
         "name": "Regice",
@@ -19083,7 +19869,8 @@ exports.BattlePokedex = {
             "Earthquake": "Earthquake",
             "ThunderPunch": "ThunderPunch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Registeel": {
         "name": "Registeel",
@@ -19138,7 +19925,8 @@ exports.BattlePokedex = {
             "RainDance": "Rain Dance",
             "Explosion": "Explosion"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Latias": {
         "name": "Latias",
@@ -19193,7 +19981,8 @@ exports.BattlePokedex = {
             "Protect": "Protect",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Latios": {
         "name": "Latios",
@@ -19249,7 +20038,8 @@ exports.BattlePokedex = {
             "Memento": "Memento",
             "DragonDance": "Dragon Dance"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Kyogre": {
         "name": "Kyogre",
@@ -19305,7 +20095,8 @@ exports.BattlePokedex = {
             "ThunderWave": "Thunder Wave",
             "HydroPump": "Hydro Pump"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Groudon": {
         "name": "Groudon",
@@ -19361,7 +20152,8 @@ exports.BattlePokedex = {
             "FirePunch": "Fire Punch",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rayquaza": {
         "name": "Rayquaza",
@@ -19418,7 +20210,8 @@ exports.BattlePokedex = {
             "FireBlast": "Fire Blast",
             "BrickBreak": "Brick Break"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Jirachi": {
         "name": "Jirachi",
@@ -19483,7 +20276,8 @@ exports.BattlePokedex = {
             "LightScreen": "Light Screen",
             "DoomDesire": "Doom Desire"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Deoxys-A": {
         "name": "Deoxys-A",
@@ -19536,7 +20330,8 @@ exports.BattlePokedex = {
             "Thunder": "Thunder",
             "HiddenPower": "Hidden Power Fire"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Deoxys-D": {
         "name": "Deoxys-D",
@@ -19586,7 +20381,8 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "Agility": "Agility"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Deoxys": {
         "name": "Deoxys",
@@ -19617,7 +20413,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Deoxys-S": {
         "name": "Deoxys-S",
@@ -19674,7 +20471,8 @@ exports.BattlePokedex = {
             "Recover": "Recover",
             "KnockOff": "Knock Off"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Turtwig": {
         "name": "Turtwig",
@@ -19729,7 +20527,10 @@ exports.BattlePokedex = {
             "EarthPower": "Earth Power",
             "HiddenPower": "Hidden Power Fire"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Grotle"
+        ]
     },
     "Grotle": {
         "name": "Grotle",
@@ -19770,7 +20571,10 @@ exports.BattlePokedex = {
                 "w": 59,
                 "h": 62
             }
-        }
+        },
+        "nexto": [
+            "Torterra"
+        ]
     },
     "Torterra": {
         "name": "Torterra",
@@ -19832,7 +20636,8 @@ exports.BattlePokedex = {
             "Crunch": "Crunch",
             "Return": "Return"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Chimchar": {
         "name": "Chimchar",
@@ -19880,7 +20685,10 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Grass",
             "StealthRock": "Stealth Rock"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Monferno"
+        ]
     },
     "Monferno": {
         "name": "Monferno",
@@ -19930,7 +20738,10 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "VacuumWave": "Vacuum Wave"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Infernape"
+        ]
     },
     "Infernape": {
         "name": "Infernape",
@@ -19995,7 +20806,8 @@ exports.BattlePokedex = {
             "FlareBlitz": "Flare Blitz",
             "ShadowClaw": "Shadow Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Piplup": {
         "name": "Piplup",
@@ -20046,7 +20858,10 @@ exports.BattlePokedex = {
             "IceBeam": "Ice Beam",
             "Yawn": "Yawn"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Prinplup"
+        ]
     },
     "Prinplup": {
         "name": "Prinplup",
@@ -20087,7 +20902,10 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 60
             }
-        }
+        },
+        "nexto": [
+            "Empoleon"
+        ]
     },
     "Empoleon": {
         "name": "Empoleon",
@@ -20149,7 +20967,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "HiddenPower": "Hidden Power Electric"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Starly": {
         "name": "Starly",
@@ -20191,7 +21010,10 @@ exports.BattlePokedex = {
                 "w": 38,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Staravia"
+        ]
     },
     "Staravia": {
         "name": "Staravia",
@@ -20233,7 +21055,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 52
             }
-        }
+        },
+        "nexto": [
+            "Staraptor"
+        ]
     },
     "Staraptor": {
         "name": "Staraptor",
@@ -20287,7 +21112,8 @@ exports.BattlePokedex = {
             "Roost": "Roost",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Bidoof": {
         "name": "Bidoof",
@@ -20328,7 +21154,10 @@ exports.BattlePokedex = {
                 "w": 50,
                 "h": 45
             }
-        }
+        },
+        "nexto": [
+            "Bibarel"
+        ]
     },
     "Bibarel": {
         "name": "Bibarel",
@@ -20389,7 +21218,8 @@ exports.BattlePokedex = {
             "Superpower": "Superpower",
             "AquaTail": "Aqua Tail"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Kricketot": {
         "name": "Kricketot",
@@ -20430,7 +21260,10 @@ exports.BattlePokedex = {
                 "w": 47,
                 "h": 48
             }
-        }
+        },
+        "nexto": [
+            "Kricketune"
+        ]
     },
     "Kricketune": {
         "name": "Kricketune",
@@ -20482,7 +21315,8 @@ exports.BattlePokedex = {
             "Return": "Return",
             "Endeavor": "Endeavor"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shinx": {
         "name": "Shinx",
@@ -20523,7 +21357,10 @@ exports.BattlePokedex = {
                 "w": 54,
                 "h": 39
             }
-        }
+        },
+        "nexto": [
+            "Luxio"
+        ]
     },
     "Luxio": {
         "name": "Luxio",
@@ -20564,7 +21401,10 @@ exports.BattlePokedex = {
                 "w": 63,
                 "h": 54
             }
-        }
+        },
+        "nexto": [
+            "Luxray"
+        ]
     },
     "Luxray": {
         "name": "Luxray",
@@ -20621,7 +21461,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Budew": {
         "name": "Budew",
@@ -20663,7 +21504,10 @@ exports.BattlePokedex = {
                 "w": 29,
                 "h": 56
             }
-        }
+        },
+        "nexto": [
+            "Roselia"
+        ]
     },
     "Roserade": {
         "name": "Roserade",
@@ -20720,7 +21564,8 @@ exports.BattlePokedex = {
             "SludgeBomb": "Sludge Bomb",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Cranidos": {
         "name": "Cranidos",
@@ -20772,7 +21617,10 @@ exports.BattlePokedex = {
             "Crunch": "Crunch",
             "SwordsDance": "Swords Dance"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Rampardos"
+        ]
     },
     "Rampardos": {
         "name": "Rampardos",
@@ -20828,7 +21676,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "HeadSmash": "Head Smash"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shieldon": {
         "name": "Shieldon",
@@ -20879,7 +21728,10 @@ exports.BattlePokedex = {
             "StoneEdge": "Stone Edge",
             "MagnetRise": "Magnet Rise"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Bastiodon"
+        ]
     },
     "Bastiodon": {
         "name": "Bastiodon",
@@ -20937,7 +21789,8 @@ exports.BattlePokedex = {
             "MetalBurst": "Metal Burst",
             "Earthquake": "Earthquake"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Burmy": {
         "name": "Burmy",
@@ -20974,7 +21827,13 @@ exports.BattlePokedex = {
                 "w": 69,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Mothim",
+            "Wormadam",
+            "Wormadam-G",
+            "Wormadam-S"
+        ]
     },
     "Wormadam": {
         "name": "Wormadam",
@@ -21019,7 +21878,8 @@ exports.BattlePokedex = {
             "EnergyBall": "Energy Ball",
             "HiddenPower": "Hidden Power Ice"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Wormadam-G": {
         "name": "Wormadam-G",
@@ -21050,7 +21910,7 @@ exports.BattlePokedex = {
         "weightkg": 6.5,
         "nfe": false,
         "gender": "F",
-        "prevo": "",
+        "prevo": "Burmy",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -21066,7 +21926,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Wormadam-S": {
         "name": "Wormadam-S",
@@ -21097,7 +21958,7 @@ exports.BattlePokedex = {
         "weightkg": 6.5,
         "nfe": false,
         "gender": "F",
-        "prevo": "",
+        "prevo": "Burmy",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -21116,7 +21977,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Fighting",
             "ShadowBall": "Shadow Ball"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mothim": {
         "name": "Mothim",
@@ -21147,7 +22009,7 @@ exports.BattlePokedex = {
         "weightkg": 23.3,
         "nfe": false,
         "gender": "M",
-        "prevo": "",
+        "prevo": "Burmy",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -21169,7 +22031,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Fighting",
             "QuiverDance": "Quiver Dance"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Combee": {
         "name": "Combee",
@@ -21211,7 +22074,10 @@ exports.BattlePokedex = {
                 "w": 67,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Vespiquen"
+        ]
     },
     "Vespiquen": {
         "name": "Vespiquen",
@@ -21263,7 +22129,8 @@ exports.BattlePokedex = {
             "AerialAce": "Aerial Ace",
             "HiddenPower": "Hidden Power Fighting"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Pachirisu": {
         "name": "Pachirisu",
@@ -21312,7 +22179,8 @@ exports.BattlePokedex = {
             "Toxic": "Toxic",
             "U-turn": "U-turn"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Buizel": {
         "name": "Buizel",
@@ -21353,7 +22221,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 49
             }
-        }
+        },
+        "nexto": [
+            "Floatzel"
+        ]
     },
     "Floatzel": {
         "name": "Floatzel",
@@ -21409,7 +22280,8 @@ exports.BattlePokedex = {
             "Surf": "Surf",
             "IceBeam": "Ice Beam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Cherubi": {
         "name": "Cherubi",
@@ -21450,7 +22322,10 @@ exports.BattlePokedex = {
                 "w": 37,
                 "h": 39
             }
-        }
+        },
+        "nexto": [
+            "Cherrim"
+        ]
     },
     "Cherrim": {
         "name": "Cherrim",
@@ -21500,7 +22375,8 @@ exports.BattlePokedex = {
             "GrassWhistle": "GrassWhistle",
             "SolarBeam": "SolarBeam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shellos": {
         "name": "Shellos",
@@ -21541,7 +22417,10 @@ exports.BattlePokedex = {
                 "w": 35,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Gastrodon"
+        ]
     },
     "Gastrodon": {
         "name": "Gastrodon",
@@ -21598,7 +22477,8 @@ exports.BattlePokedex = {
             "Amnesia": "Amnesia",
             "Counter": "Counter"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Ambipom": {
         "name": "Ambipom",
@@ -21652,7 +22532,8 @@ exports.BattlePokedex = {
             "NastyPlot": "Nasty Plot",
             "BatonPass": "Baton Pass"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Drifloon": {
         "name": "Drifloon",
@@ -21707,7 +22588,10 @@ exports.BattlePokedex = {
             "Explosion": "Explosion",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Drifblim"
+        ]
     },
     "Drifblim": {
         "name": "Drifblim",
@@ -21763,7 +22647,8 @@ exports.BattlePokedex = {
             "Acrobatics": "Acrobatics",
             "Explosion": "Explosion"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Buneary": {
         "name": "Buneary",
@@ -21804,7 +22689,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 67
             }
-        }
+        },
+        "nexto": [
+            "Lopunny"
+        ]
     },
     "Lopunny": {
         "name": "Lopunny",
@@ -21864,7 +22752,8 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "LowKick": "Low Kick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mismagius": {
         "name": "Mismagius",
@@ -21922,7 +22811,8 @@ exports.BattlePokedex = {
             "PerishSong": "Perish Song",
             "Protect": "Protect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Honchkrow": {
         "name": "Honchkrow",
@@ -21971,7 +22861,8 @@ exports.BattlePokedex = {
             "Superpower": "Superpower",
             "HeatWave": "Heat Wave"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Glameow": {
         "name": "Glameow",
@@ -22021,7 +22912,10 @@ exports.BattlePokedex = {
             "QuickAttack": "Quick Attack",
             "ShadowClaw": "Shadow Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Purugly"
+        ]
     },
     "Purugly": {
         "name": "Purugly",
@@ -22072,7 +22966,8 @@ exports.BattlePokedex = {
             "IronTail": "Iron Tail",
             "SuckerPunch": "Sucker Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Chingling": {
         "name": "Chingling",
@@ -22113,7 +23008,10 @@ exports.BattlePokedex = {
                 "w": 41,
                 "h": 61
             }
-        }
+        },
+        "nexto": [
+            "Chimecho"
+        ]
     },
     "Stunky": {
         "name": "Stunky",
@@ -22155,7 +23053,10 @@ exports.BattlePokedex = {
                 "w": 57,
                 "h": 53
             }
-        }
+        },
+        "nexto": [
+            "Skuntank"
+        ]
     },
     "Skuntank": {
         "name": "Skuntank",
@@ -22205,7 +23106,8 @@ exports.BattlePokedex = {
             "SuckerPunch": "Sucker Punch",
             "Crunch": "Crunch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Bronzor": {
         "name": "Bronzor",
@@ -22260,7 +23162,10 @@ exports.BattlePokedex = {
             "GyroBall": "Gyro Ball",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Bronzong"
+        ]
     },
     "Bronzong": {
         "name": "Bronzong",
@@ -22317,7 +23222,8 @@ exports.BattlePokedex = {
             "RainDance": "Rain Dance",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Bonsly": {
         "name": "Bonsly",
@@ -22358,7 +23264,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 57
             }
-        }
+        },
+        "nexto": [
+            "Sudowoodo"
+        ]
     },
     "MimeJr.": {
         "name": "Mime Jr.",
@@ -22399,7 +23308,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 64
             }
-        }
+        },
+        "nexto": [
+            "Mr.Mime"
+        ]
     },
     "Happiny": {
         "name": "Happiny",
@@ -22440,7 +23352,10 @@ exports.BattlePokedex = {
                 "w": 29,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Chansey"
+        ]
     },
     "Chatot": {
         "name": "Chatot",
@@ -22494,7 +23409,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "Agility": "Agility"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Spiritomb": {
         "name": "Spiritomb",
@@ -22553,7 +23469,8 @@ exports.BattlePokedex = {
             "CalmMind": "Calm Mind",
             "Curse": "Curse"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Gible": {
         "name": "Gible",
@@ -22606,7 +23523,10 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "DragonClaw": "Dragon Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Gabite"
+        ]
     },
     "Gabite": {
         "name": "Gabite",
@@ -22648,7 +23568,10 @@ exports.BattlePokedex = {
                 "w": 75,
                 "h": 62
             }
-        }
+        },
+        "nexto": [
+            "Garchomp"
+        ]
     },
     "Garchomp": {
         "name": "Garchomp",
@@ -22701,7 +23624,8 @@ exports.BattlePokedex = {
             "FireFang": "Fire Fang",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Munchlax": {
         "name": "Munchlax",
@@ -22752,7 +23676,10 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "Protect": "Protect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Snorlax"
+        ]
     },
     "Riolu": {
         "name": "Riolu",
@@ -22793,7 +23720,10 @@ exports.BattlePokedex = {
                 "w": 41,
                 "h": 50
             }
-        }
+        },
+        "nexto": [
+            "Lucario"
+        ]
     },
     "Lucario": {
         "name": "Lucario",
@@ -22854,7 +23784,8 @@ exports.BattlePokedex = {
             "Counter": "Counter",
             "Payback": "Payback"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Hippopotas": {
         "name": "Hippopotas",
@@ -22907,7 +23838,10 @@ exports.BattlePokedex = {
             "Toxic": "Toxic",
             "Protect": "Protect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Hippowdon"
+        ]
     },
     "Hippowdon": {
         "name": "Hippowdon",
@@ -22962,7 +23896,8 @@ exports.BattlePokedex = {
             "FireFang": "Fire Fang",
             "Stockpile": "Stockpile"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Skorupi": {
         "name": "Skorupi",
@@ -23004,7 +23939,10 @@ exports.BattlePokedex = {
                 "w": 70,
                 "h": 45
             }
-        }
+        },
+        "nexto": [
+            "Drapion"
+        ]
     },
     "Drapion": {
         "name": "Drapion",
@@ -23062,7 +24000,8 @@ exports.BattlePokedex = {
             "KnockOff": "Knock Off",
             "Rest": "Rest"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Croagunk": {
         "name": "Croagunk",
@@ -23116,7 +24055,10 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "FocusPunch": "Focus Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Toxicroak"
+        ]
     },
     "Toxicroak": {
         "name": "Toxicroak",
@@ -23179,7 +24121,8 @@ exports.BattlePokedex = {
             "LowKick": "Low Kick",
             "ThunderPunch": "ThunderPunch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Carnivine": {
         "name": "Carnivine",
@@ -23234,7 +24177,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "SludgeBomb": "Sludge Bomb"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Finneon": {
         "name": "Finneon",
@@ -23275,7 +24219,10 @@ exports.BattlePokedex = {
                 "w": 72,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Lumineon"
+        ]
     },
     "Lumineon": {
         "name": "Lumineon",
@@ -23324,7 +24271,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Grass",
             "Blizzard": "Blizzard"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mantyke": {
         "name": "Mantyke",
@@ -23375,7 +24323,10 @@ exports.BattlePokedex = {
             "RainDance": "Rain Dance",
             "Surf": "Surf"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Mantine"
+        ]
     },
     "Snover": {
         "name": "Snover",
@@ -23432,7 +24383,10 @@ exports.BattlePokedex = {
             "WoodHammer": "Wood Hammer",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": [
+            "Abomasnow"
+        ]
     },
     "Abomasnow": {
         "name": "Abomasnow",
@@ -23491,7 +24445,8 @@ exports.BattlePokedex = {
             "GrassKnot": "Grass Knot",
             "EnergyBall": "Energy Ball"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Weavile": {
         "name": "Weavile",
@@ -23545,7 +24500,8 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "Counter": "Counter"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Magnezone": {
         "name": "Magnezone",
@@ -23603,7 +24559,8 @@ exports.BattlePokedex = {
             "Thunder": "Thunder",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Lickilicky": {
         "name": "Lickilicky",
@@ -23663,7 +24620,8 @@ exports.BattlePokedex = {
             "Curse": "Curse",
             "Rest": "Rest"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rhyperior": {
         "name": "Rhyperior",
@@ -23722,7 +24680,8 @@ exports.BattlePokedex = {
             "Avalanche": "Avalanche",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Tangrowth": {
         "name": "Tangrowth",
@@ -23777,7 +24736,8 @@ exports.BattlePokedex = {
             "KnockOff": "Knock Off",
             "GrassKnot": "Grass Knot"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Electivire": {
         "name": "Electivire",
@@ -23831,7 +24791,8 @@ exports.BattlePokedex = {
             "Meditate": "Meditate",
             "LowKick": "Low Kick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Magmortar": {
         "name": "Magmortar",
@@ -23882,7 +24843,8 @@ exports.BattlePokedex = {
             "FocusBlast": "Focus Blast",
             "Overheat": "Overheat"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Togekiss": {
         "name": "Togekiss",
@@ -23941,7 +24903,8 @@ exports.BattlePokedex = {
             "Encore": "Encore",
             "Wish": "Wish"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Yanmega": {
         "name": "Yanmega",
@@ -23991,7 +24954,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Ground",
             "U-turn": "U-turn"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Leafeon": {
         "name": "Leafeon",
@@ -24049,7 +25013,8 @@ exports.BattlePokedex = {
             "Yawn": "Yawn",
             "Protect": "Protect"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Glaceon": {
         "name": "Glaceon",
@@ -24079,7 +25044,7 @@ exports.BattlePokedex = {
         "weightkg": 25.9,
         "nfe": false,
         "gender": "",
-        "prevo": "",
+        "prevo": "Eevee",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -24103,7 +25068,8 @@ exports.BattlePokedex = {
             "BatonPass": "Baton Pass",
             "Avalanche": "Avalanche"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Gliscor": {
         "name": "Gliscor",
@@ -24160,7 +25126,8 @@ exports.BattlePokedex = {
             "BatonPass": "Baton Pass",
             "RockPolish": "Rock Polish"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mamoswine": {
         "name": "Mamoswine",
@@ -24211,7 +25178,8 @@ exports.BattlePokedex = {
             "StealthRock": "Stealth Rock",
             "Endeavor": "Endeavor"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Porygon-Z": {
         "name": "Porygon-Z",
@@ -24258,7 +25226,8 @@ exports.BattlePokedex = {
             "Agility": "Agility",
             "NastyPlot": "Nasty Plot"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Gallade": {
         "name": "Gallade",
@@ -24289,7 +25258,7 @@ exports.BattlePokedex = {
         "weightkg": 52,
         "nfe": false,
         "gender": "M",
-        "prevo": "",
+        "prevo": "Kirlia",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -24309,7 +25278,8 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Probopass": {
         "name": "Probopass",
@@ -24365,7 +25335,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Grass",
             "Explosion": "Explosion"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Dusknoir": {
         "name": "Dusknoir",
@@ -24424,7 +25395,8 @@ exports.BattlePokedex = {
             "SuckerPunch": "Sucker Punch",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Froslass": {
         "name": "Froslass",
@@ -24455,7 +25427,7 @@ exports.BattlePokedex = {
         "weightkg": 26.6,
         "nfe": false,
         "gender": "F",
-        "prevo": "",
+        "prevo": "Snorunt",
         "jp": false,
         "sprite": {
             "bwani": {
@@ -24480,7 +25452,8 @@ exports.BattlePokedex = {
             "ShadowBall": "Shadow Ball",
             "HiddenPower": "Hidden Power Fire"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rotom": {
         "name": "Rotom",
@@ -24540,7 +25513,8 @@ exports.BattlePokedex = {
             "Reflect": "Reflect",
             "LightScreen": "Light Screen"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rotom-C": {
         "name": "Rotom-C",
@@ -24597,7 +25571,8 @@ exports.BattlePokedex = {
             "SleepTalk": "Sleep Talk",
             "ChargeBeam": "Charge Beam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rotom-F": {
         "name": "Rotom-F",
@@ -24652,7 +25627,8 @@ exports.BattlePokedex = {
             "ChargeBeam": "Charge Beam",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rotom-H": {
         "name": "Rotom-H",
@@ -24709,7 +25685,8 @@ exports.BattlePokedex = {
             "Rest": "Rest",
             "SleepTalk": "Sleep Talk"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rotom-S": {
         "name": "Rotom-S",
@@ -24767,7 +25744,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "ChargeBeam": "Charge Beam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Rotom-W": {
         "name": "Rotom-W",
@@ -24829,7 +25807,8 @@ exports.BattlePokedex = {
             "Reflect": "Reflect",
             "ChargeBeam": "Charge Beam"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Uxie": {
         "name": "Uxie",
@@ -24886,7 +25865,8 @@ exports.BattlePokedex = {
             "Trick": "Trick",
             "KnockOff": "Knock Off"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Mesprit": {
         "name": "Mesprit",
@@ -24947,7 +25927,8 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "TrickRoom": "Trick Room"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Azelf": {
         "name": "Azelf",
@@ -25007,7 +25988,8 @@ exports.BattlePokedex = {
             "IcePunch": "Ice Punch",
             "FirePunch": "Fire Punch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Dialga": {
         "name": "Dialga",
@@ -25071,7 +26053,8 @@ exports.BattlePokedex = {
             "StoneEdge": "Stone Edge",
             "DragonClaw": "Dragon Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Palkia": {
         "name": "Palkia",
@@ -25130,7 +26113,8 @@ exports.BattlePokedex = {
             "DragonClaw": "Dragon Claw",
             "BulkUp": "Bulk Up"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Heatran": {
         "name": "Heatran",
@@ -25194,7 +26178,8 @@ exports.BattlePokedex = {
             "Roar": "Roar",
             "MetalSound": "Metal Sound"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Regigigas": {
         "name": "Regigigas",
@@ -25246,7 +26231,8 @@ exports.BattlePokedex = {
             "KnockOff": "Knock Off",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Giratina": {
         "name": "Giratina",
@@ -25296,7 +26282,8 @@ exports.BattlePokedex = {
             "CalmMind": "Calm Mind",
             "ShadowBall": "Shadow Ball"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Giratina-O": {
         "name": "Giratina-O",
@@ -25353,7 +26340,8 @@ exports.BattlePokedex = {
             "ShadowForce": "Shadow Force",
             "ShadowClaw": "Shadow Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Cresselia": {
         "name": "Cresselia",
@@ -25410,7 +26398,8 @@ exports.BattlePokedex = {
             "LunarDance": "Lunar Dance",
             "Toxic": "Toxic"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Phione": {
         "name": "Phione",
@@ -25462,7 +26451,8 @@ exports.BattlePokedex = {
             "U-turn": "U-turn",
             "HiddenPower": "Hidden Power Electric"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Manaphy": {
         "name": "Manaphy",
@@ -25513,7 +26503,8 @@ exports.BattlePokedex = {
             "Toxic": "Toxic",
             "CalmMind": "Calm Mind"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Darkrai": {
         "name": "Darkrai",
@@ -25563,7 +26554,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "Trick": "Trick"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shaymin": {
         "name": "Shaymin",
@@ -25614,7 +26606,8 @@ exports.BattlePokedex = {
             "Protect": "Protect",
             "Substitute": "Substitute"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shaymin-S": {
         "name": "Shaymin-S",
@@ -25666,7 +26659,8 @@ exports.BattlePokedex = {
             "LeechSeed": "Leech Seed",
             "Growth": "Growth"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Arceus": {
         "name": "Arceus",
@@ -25703,7 +26697,8 @@ exports.BattlePokedex = {
                 "w": 71,
                 "h": 83
             }
-        }
+        },
+        "nexto": []
     },
     "Arceus-Bug": {
         "name": "Arceus-Bug",
@@ -25734,7 +26729,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Dark": {
         "name": "Arceus-Dark",
@@ -25765,7 +26761,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Dragon": {
         "name": "Arceus-Dragon",
@@ -25796,7 +26793,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Electric": {
         "name": "Arceus-Electric",
@@ -25827,7 +26825,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Fighting": {
         "name": "Arceus-Fighting",
@@ -25858,7 +26857,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Fire": {
         "name": "Arceus-Fire",
@@ -25889,7 +26889,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Flying": {
         "name": "Arceus-Flying",
@@ -25920,7 +26921,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Ghost": {
         "name": "Arceus-Ghost",
@@ -25951,7 +26953,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Grass": {
         "name": "Arceus-Grass",
@@ -25982,7 +26985,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Ground": {
         "name": "Arceus-Ground",
@@ -26013,7 +27017,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Ice": {
         "name": "Arceus-Ice",
@@ -26044,7 +27049,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Poison": {
         "name": "Arceus-Poison",
@@ -26075,7 +27081,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Psychic": {
         "name": "Arceus-Psychic",
@@ -26106,7 +27113,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Rock": {
         "name": "Arceus-Rock",
@@ -26137,7 +27145,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Steel": {
         "name": "Arceus-Steel",
@@ -26168,7 +27177,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Arceus-Water": {
         "name": "Arceus-Water",
@@ -26199,7 +27209,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Victini": {
         "name": "Victini",
@@ -26241,7 +27252,8 @@ exports.BattlePokedex = {
                 "w": 50,
                 "h": 59
             }
-        }
+        },
+        "nexto": []
     },
     "Snivy": {
         "name": "Snivy",
@@ -26282,7 +27294,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 41
             }
-        }
+        },
+        "nexto": [
+            "Servine"
+        ]
     },
     "Servine": {
         "name": "Servine",
@@ -26323,7 +27338,10 @@ exports.BattlePokedex = {
                 "w": 59,
                 "h": 60
             }
-        }
+        },
+        "nexto": [
+            "Serperior"
+        ]
     },
     "Serperior": {
         "name": "Serperior",
@@ -26375,7 +27393,8 @@ exports.BattlePokedex = {
             "Synthesis": "Synthesis",
             "Taunt": "Taunt"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Tepig": {
         "name": "Tepig",
@@ -26416,7 +27435,10 @@ exports.BattlePokedex = {
                 "w": 38,
                 "h": 47
             }
-        }
+        },
+        "nexto": [
+            "Pignite"
+        ]
     },
     "Pignite": {
         "name": "Pignite",
@@ -26458,7 +27480,10 @@ exports.BattlePokedex = {
                 "w": 59,
                 "h": 61
             }
-        }
+        },
+        "nexto": [
+            "Emboar"
+        ]
     },
     "Emboar": {
         "name": "Emboar",
@@ -26500,7 +27525,8 @@ exports.BattlePokedex = {
                 "w": 94,
                 "h": 80
             }
-        }
+        },
+        "nexto": []
     },
     "Oshawott": {
         "name": "Oshawott",
@@ -26541,7 +27567,10 @@ exports.BattlePokedex = {
                 "w": 33,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Dewott"
+        ]
     },
     "Dewott": {
         "name": "Dewott",
@@ -26582,7 +27611,10 @@ exports.BattlePokedex = {
                 "w": 34,
                 "h": 56
             }
-        }
+        },
+        "nexto": [
+            "Samurott"
+        ]
     },
     "Samurott": {
         "name": "Samurott",
@@ -26623,7 +27655,8 @@ exports.BattlePokedex = {
                 "w": 88,
                 "h": 80
             }
-        }
+        },
+        "nexto": []
     },
     "Patrat": {
         "name": "Patrat",
@@ -26664,7 +27697,10 @@ exports.BattlePokedex = {
                 "w": 50,
                 "h": 45
             }
-        }
+        },
+        "nexto": [
+            "Watchog"
+        ]
     },
     "Watchog": {
         "name": "Watchog",
@@ -26705,7 +27741,8 @@ exports.BattlePokedex = {
                 "w": 62,
                 "h": 69
             }
-        }
+        },
+        "nexto": []
     },
     "Lillipup": {
         "name": "Lillipup",
@@ -26746,7 +27783,10 @@ exports.BattlePokedex = {
                 "w": 45,
                 "h": 48
             }
-        }
+        },
+        "nexto": [
+            "Herdier"
+        ]
     },
     "Herdier": {
         "name": "Herdier",
@@ -26787,7 +27827,10 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 58
             }
-        }
+        },
+        "nexto": [
+            "Stoutland"
+        ]
     },
     "Stoutland": {
         "name": "Stoutland",
@@ -26828,7 +27871,8 @@ exports.BattlePokedex = {
                 "w": 74,
                 "h": 71
             }
-        }
+        },
+        "nexto": []
     },
     "Purrloin": {
         "name": "Purrloin",
@@ -26869,7 +27913,10 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Liepard"
+        ]
     },
     "Liepard": {
         "name": "Liepard",
@@ -26910,7 +27957,8 @@ exports.BattlePokedex = {
                 "w": 82,
                 "h": 72
             }
-        }
+        },
+        "nexto": []
     },
     "Pansage": {
         "name": "Pansage",
@@ -26951,7 +27999,10 @@ exports.BattlePokedex = {
                 "w": 49,
                 "h": 52
             }
-        }
+        },
+        "nexto": [
+            "Simisage"
+        ]
     },
     "Simisage": {
         "name": "Simisage",
@@ -26992,7 +28043,8 @@ exports.BattlePokedex = {
                 "w": 61,
                 "h": 75
             }
-        }
+        },
+        "nexto": []
     },
     "Pansear": {
         "name": "Pansear",
@@ -27033,7 +28085,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Simisear"
+        ]
     },
     "Simisear": {
         "name": "Simisear",
@@ -27074,7 +28129,8 @@ exports.BattlePokedex = {
                 "w": 73,
                 "h": 61
             }
-        }
+        },
+        "nexto": []
     },
     "Panpour": {
         "name": "Panpour",
@@ -27115,7 +28171,10 @@ exports.BattlePokedex = {
                 "w": 47,
                 "h": 47
             }
-        }
+        },
+        "nexto": [
+            "Simipour"
+        ]
     },
     "Simipour": {
         "name": "Simipour",
@@ -27156,7 +28215,8 @@ exports.BattlePokedex = {
                 "w": 59,
                 "h": 62
             }
-        }
+        },
+        "nexto": []
     },
     "Munna": {
         "name": "Munna",
@@ -27197,7 +28257,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Musharna"
+        ]
     },
     "Musharna": {
         "name": "Musharna",
@@ -27228,7 +28291,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "Munna",
-        "jp": false
+        "jp": false,
+        "nexto": []
     },
     "Pidove": {
         "name": "Pidove",
@@ -27270,7 +28334,10 @@ exports.BattlePokedex = {
                 "w": 36,
                 "h": 39
             }
-        }
+        },
+        "nexto": [
+            "Tranquill"
+        ]
     },
     "Tranquill": {
         "name": "Tranquill",
@@ -27312,7 +28379,10 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 60
             }
-        }
+        },
+        "nexto": [
+            "Unfezant"
+        ]
     },
     "Unfezant": {
         "name": "Unfezant",
@@ -27354,7 +28424,8 @@ exports.BattlePokedex = {
                 "w": 76,
                 "h": 79
             }
-        }
+        },
+        "nexto": []
     },
     "Blitzle": {
         "name": "Blitzle",
@@ -27395,7 +28466,10 @@ exports.BattlePokedex = {
                 "w": 49,
                 "h": 63
             }
-        }
+        },
+        "nexto": [
+            "Zebstrika"
+        ]
     },
     "Zebstrika": {
         "name": "Zebstrika",
@@ -27436,7 +28510,8 @@ exports.BattlePokedex = {
                 "w": 72,
                 "h": 74
             }
-        }
+        },
+        "nexto": []
     },
     "Roggenrola": {
         "name": "Roggenrola",
@@ -27477,7 +28552,10 @@ exports.BattlePokedex = {
                 "w": 24,
                 "h": 38
             }
-        }
+        },
+        "nexto": [
+            "Boldore"
+        ]
     },
     "Boldore": {
         "name": "Boldore",
@@ -27518,7 +28596,10 @@ exports.BattlePokedex = {
                 "w": 55,
                 "h": 52
             }
-        }
+        },
+        "nexto": [
+            "Gigalith"
+        ]
     },
     "Gigalith": {
         "name": "Gigalith",
@@ -27559,7 +28640,8 @@ exports.BattlePokedex = {
                 "w": 75,
                 "h": 76
             }
-        }
+        },
+        "nexto": []
     },
     "Woobat": {
         "name": "Woobat",
@@ -27601,7 +28683,10 @@ exports.BattlePokedex = {
                 "w": 91,
                 "h": 52
             }
-        }
+        },
+        "nexto": [
+            "Swoobat"
+        ]
     },
     "Swoobat": {
         "name": "Swoobat",
@@ -27643,7 +28728,8 @@ exports.BattlePokedex = {
                 "w": 110,
                 "h": 102
             }
-        }
+        },
+        "nexto": []
     },
     "Drilbur": {
         "name": "Drilbur",
@@ -27684,7 +28770,10 @@ exports.BattlePokedex = {
                 "w": 61,
                 "h": 44
             }
-        }
+        },
+        "nexto": [
+            "Excadrill"
+        ]
     },
     "Excadrill": {
         "name": "Excadrill",
@@ -27736,7 +28825,8 @@ exports.BattlePokedex = {
             "Return": "Return",
             "RapidSpin": "Rapid Spin"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Audino": {
         "name": "Audino",
@@ -27777,7 +28867,8 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 53
             }
-        }
+        },
+        "nexto": []
     },
     "Timburr": {
         "name": "Timburr",
@@ -27818,7 +28909,10 @@ exports.BattlePokedex = {
                 "w": 71,
                 "h": 83
             }
-        }
+        },
+        "nexto": [
+            "Gurdurr"
+        ]
     },
     "Gurdurr": {
         "name": "Gurdurr",
@@ -27859,7 +28953,10 @@ exports.BattlePokedex = {
                 "w": 72,
                 "h": 74
             }
-        }
+        },
+        "nexto": [
+            "Conkeldurr"
+        ]
     },
     "Conkeldurr": {
         "name": "Conkeldurr",
@@ -27908,7 +29005,8 @@ exports.BattlePokedex = {
             "BulkUp": "Bulk Up",
             "StoneEdge": "Stone Edge"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Tympole": {
         "name": "Tympole",
@@ -27949,7 +29047,10 @@ exports.BattlePokedex = {
                 "w": 40,
                 "h": 49
             }
-        }
+        },
+        "nexto": [
+            "Palpitoad"
+        ]
     },
     "Palpitoad": {
         "name": "Palpitoad",
@@ -27991,7 +29092,10 @@ exports.BattlePokedex = {
                 "w": 41,
                 "h": 54
             }
-        }
+        },
+        "nexto": [
+            "Seismitoad"
+        ]
     },
     "Seismitoad": {
         "name": "Seismitoad",
@@ -28033,7 +29137,8 @@ exports.BattlePokedex = {
                 "w": 89,
                 "h": 64
             }
-        }
+        },
+        "nexto": []
     },
     "Throh": {
         "name": "Throh",
@@ -28083,7 +29188,8 @@ exports.BattlePokedex = {
             "StoneEdge": "Stone Edge",
             "Taunt": "Taunt"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Sawk": {
         "name": "Sawk",
@@ -28124,7 +29230,8 @@ exports.BattlePokedex = {
                 "w": 56,
                 "h": 66
             }
-        }
+        },
+        "nexto": []
     },
     "Sewaddle": {
         "name": "Sewaddle",
@@ -28166,7 +29273,10 @@ exports.BattlePokedex = {
                 "w": 33,
                 "h": 41
             }
-        }
+        },
+        "nexto": [
+            "Swadloon"
+        ]
     },
     "Swadloon": {
         "name": "Swadloon",
@@ -28208,7 +29318,10 @@ exports.BattlePokedex = {
                 "w": 50,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Leavanny"
+        ]
     },
     "Leavanny": {
         "name": "Leavanny",
@@ -28250,7 +29363,8 @@ exports.BattlePokedex = {
                 "w": 46,
                 "h": 77
             }
-        }
+        },
+        "nexto": []
     },
     "Venipede": {
         "name": "Venipede",
@@ -28292,7 +29406,10 @@ exports.BattlePokedex = {
                 "w": 53,
                 "h": 35
             }
-        }
+        },
+        "nexto": [
+            "Whirlipede"
+        ]
     },
     "Whirlipede": {
         "name": "Whirlipede",
@@ -28334,7 +29451,10 @@ exports.BattlePokedex = {
                 "w": 66,
                 "h": 65
             }
-        }
+        },
+        "nexto": [
+            "Scolipede"
+        ]
     },
     "Scolipede": {
         "name": "Scolipede",
@@ -28376,7 +29496,8 @@ exports.BattlePokedex = {
                 "w": 99,
                 "h": 88
             }
-        }
+        },
+        "nexto": []
     },
     "Cottonee": {
         "name": "Cottonee",
@@ -28417,7 +29538,10 @@ exports.BattlePokedex = {
                 "w": 50,
                 "h": 54
             }
-        }
+        },
+        "nexto": [
+            "Whimsicott"
+        ]
     },
     "Whimsicott": {
         "name": "Whimsicott",
@@ -28467,7 +29591,8 @@ exports.BattlePokedex = {
             "U-turn": "U-turn",
             "CottonGuard": "Cotton Guard"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Petilil": {
         "name": "Petilil",
@@ -28508,7 +29633,10 @@ exports.BattlePokedex = {
                 "w": 37,
                 "h": 52
             }
-        }
+        },
+        "nexto": [
+            "Lilligant"
+        ]
     },
     "Lilligant": {
         "name": "Lilligant",
@@ -28558,7 +29686,8 @@ exports.BattlePokedex = {
             "HealingWish": "Healing Wish",
             "PetalDance": "Petal Dance"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Basculin": {
         "name": "Basculin",
@@ -28595,7 +29724,8 @@ exports.BattlePokedex = {
                 "w": 52,
                 "h": 48
             }
-        }
+        },
+        "nexto": []
     },
     "Sandile": {
         "name": "Sandile",
@@ -28637,7 +29767,10 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 39
             }
-        }
+        },
+        "nexto": [
+            "Krokorok"
+        ]
     },
     "Krokorok": {
         "name": "Krokorok",
@@ -28679,7 +29812,10 @@ exports.BattlePokedex = {
                 "w": 62,
                 "h": 64
             }
-        }
+        },
+        "nexto": [
+            "Krookodile"
+        ]
     },
     "Krookodile": {
         "name": "Krookodile",
@@ -28721,7 +29857,8 @@ exports.BattlePokedex = {
                 "w": 85,
                 "h": 75
             }
-        }
+        },
+        "nexto": []
     },
     "Darumaka": {
         "name": "Darumaka",
@@ -28762,7 +29899,10 @@ exports.BattlePokedex = {
                 "w": 38,
                 "h": 43
             }
-        }
+        },
+        "nexto": [
+            "Darmanitan"
+        ]
     },
     "Darmanitan": {
         "name": "Darmanitan",
@@ -28811,7 +29951,8 @@ exports.BattlePokedex = {
             "U-turn": "U-turn",
             "Earthquake": "Earthquake"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Darmanitan-D": {
         "name": "Darmanitan-D",
@@ -28853,7 +29994,8 @@ exports.BattlePokedex = {
                 "w": 57,
                 "h": 64
             }
-        }
+        },
+        "nexto": []
     },
     "Maractus": {
         "name": "Maractus",
@@ -28894,7 +30036,8 @@ exports.BattlePokedex = {
                 "w": 80,
                 "h": 71
             }
-        }
+        },
+        "nexto": []
     },
     "Dwebble": {
         "name": "Dwebble",
@@ -28936,7 +30079,10 @@ exports.BattlePokedex = {
                 "w": 44,
                 "h": 35
             }
-        }
+        },
+        "nexto": [
+            "Crustle"
+        ]
     },
     "Crustle": {
         "name": "Crustle",
@@ -28978,7 +30124,8 @@ exports.BattlePokedex = {
                 "w": 80,
                 "h": 65
             }
-        }
+        },
+        "nexto": []
     },
     "Scraggy": {
         "name": "Scraggy",
@@ -29020,7 +30167,10 @@ exports.BattlePokedex = {
                 "w": 34,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Scrafty"
+        ]
     },
     "Scrafty": {
         "name": "Scrafty",
@@ -29072,7 +30222,8 @@ exports.BattlePokedex = {
             "StoneEdge": "Stone Edge",
             "ZenHeadbutt": "Zen Headbutt"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Sigilyph": {
         "name": "Sigilyph",
@@ -29122,7 +30273,8 @@ exports.BattlePokedex = {
             "Roost": "Roost",
             "StoredPower": "Stored Power"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Yamask": {
         "name": "Yamask",
@@ -29163,7 +30315,10 @@ exports.BattlePokedex = {
                 "w": 63,
                 "h": 52
             }
-        }
+        },
+        "nexto": [
+            "Cofagrigus"
+        ]
     },
     "Cofagrigus": {
         "name": "Cofagrigus",
@@ -29204,7 +30359,8 @@ exports.BattlePokedex = {
                 "w": 105,
                 "h": 90
             }
-        }
+        },
+        "nexto": []
     },
     "Tirtouga": {
         "name": "Tirtouga",
@@ -29246,7 +30402,10 @@ exports.BattlePokedex = {
                 "w": 57,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Carracosta"
+        ]
     },
     "Carracosta": {
         "name": "Carracosta",
@@ -29288,7 +30447,8 @@ exports.BattlePokedex = {
                 "w": 85,
                 "h": 64
             }
-        }
+        },
+        "nexto": []
     },
     "Archen": {
         "name": "Archen",
@@ -29330,7 +30490,10 @@ exports.BattlePokedex = {
                 "w": 63,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Archeops"
+        ]
     },
     "Archeops": {
         "name": "Archeops",
@@ -29388,7 +30551,8 @@ exports.BattlePokedex = {
             "FocusBlast": "Focus Blast",
             "HiddenPower": "Hidden Power Fire"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Trubbish": {
         "name": "Trubbish",
@@ -29429,7 +30593,10 @@ exports.BattlePokedex = {
                 "w": 60,
                 "h": 43
             }
-        }
+        },
+        "nexto": [
+            "Garbodor"
+        ]
     },
     "Garbodor": {
         "name": "Garbodor",
@@ -29470,7 +30637,8 @@ exports.BattlePokedex = {
                 "w": 101,
                 "h": 84
             }
-        }
+        },
+        "nexto": []
     },
     "Zorua": {
         "name": "Zorua",
@@ -29511,7 +30679,10 @@ exports.BattlePokedex = {
                 "w": 45,
                 "h": 48
             }
-        }
+        },
+        "nexto": [
+            "Zoroark"
+        ]
     },
     "Zoroark": {
         "name": "Zoroark",
@@ -29560,7 +30731,8 @@ exports.BattlePokedex = {
             "FocusBlast": "Focus Blast",
             "NastyPlot": "Nasty Plot"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Minccino": {
         "name": "Minccino",
@@ -29601,7 +30773,10 @@ exports.BattlePokedex = {
                 "w": 65,
                 "h": 55
             }
-        }
+        },
+        "nexto": [
+            "Cinccino"
+        ]
     },
     "Cinccino": {
         "name": "Cinccino",
@@ -29642,7 +30817,8 @@ exports.BattlePokedex = {
                 "w": 70,
                 "h": 60
             }
-        }
+        },
+        "nexto": []
     },
     "Gothita": {
         "name": "Gothita",
@@ -29683,7 +30859,10 @@ exports.BattlePokedex = {
                 "w": 34,
                 "h": 40
             }
-        }
+        },
+        "nexto": [
+            "Gothorita"
+        ]
     },
     "Gothorita": {
         "name": "Gothorita",
@@ -29724,7 +30903,10 @@ exports.BattlePokedex = {
                 "w": 51,
                 "h": 59
             }
-        }
+        },
+        "nexto": [
+            "Gothitelle"
+        ]
     },
     "Gothitelle": {
         "name": "Gothitelle",
@@ -29765,7 +30947,8 @@ exports.BattlePokedex = {
                 "w": 71,
                 "h": 74
             }
-        }
+        },
+        "nexto": []
     },
     "Solosis": {
         "name": "Solosis",
@@ -29806,7 +30989,10 @@ exports.BattlePokedex = {
                 "w": 38,
                 "h": 36
             }
-        }
+        },
+        "nexto": [
+            "Duosion"
+        ]
     },
     "Duosion": {
         "name": "Duosion",
@@ -29847,7 +31033,10 @@ exports.BattlePokedex = {
                 "w": 67,
                 "h": 67
             }
-        }
+        },
+        "nexto": [
+            "Reuniclus"
+        ]
     },
     "Reuniclus": {
         "name": "Reuniclus",
@@ -29896,7 +31085,8 @@ exports.BattlePokedex = {
             "FocusBlast": "Focus Blast",
             "ShadowBall": "Shadow Ball"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Ducklett": {
         "name": "Ducklett",
@@ -29938,7 +31128,10 @@ exports.BattlePokedex = {
                 "w": 39,
                 "h": 42
             }
-        }
+        },
+        "nexto": [
+            "Swanna"
+        ]
     },
     "Swanna": {
         "name": "Swanna",
@@ -29980,7 +31173,8 @@ exports.BattlePokedex = {
                 "w": 93,
                 "h": 68
             }
-        }
+        },
+        "nexto": []
     },
     "Vanillite": {
         "name": "Vanillite",
@@ -30021,7 +31215,10 @@ exports.BattlePokedex = {
                 "w": 56,
                 "h": 49
             }
-        }
+        },
+        "nexto": [
+            "Vanillish"
+        ]
     },
     "Vanillish": {
         "name": "Vanillish",
@@ -30062,7 +31259,10 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 61
             }
-        }
+        },
+        "nexto": [
+            "Vanilluxe"
+        ]
     },
     "Vanilluxe": {
         "name": "Vanilluxe",
@@ -30103,7 +31303,8 @@ exports.BattlePokedex = {
                 "w": 60,
                 "h": 75
             }
-        }
+        },
+        "nexto": []
     },
     "Deerling": {
         "name": "Deerling",
@@ -30141,7 +31342,10 @@ exports.BattlePokedex = {
                 "w": 36,
                 "h": 50
             }
-        }
+        },
+        "nexto": [
+            "Sawsbuck"
+        ]
     },
     "Sawsbuck": {
         "name": "Sawsbuck",
@@ -30179,7 +31383,8 @@ exports.BattlePokedex = {
                 "w": 45,
                 "h": 78
             }
-        }
+        },
+        "nexto": []
     },
     "Emolga": {
         "name": "Emolga",
@@ -30221,7 +31426,8 @@ exports.BattlePokedex = {
                 "w": 92,
                 "h": 76
             }
-        }
+        },
+        "nexto": []
     },
     "Karrablast": {
         "name": "Karrablast",
@@ -30262,7 +31468,10 @@ exports.BattlePokedex = {
                 "w": 33,
                 "h": 55
             }
-        }
+        },
+        "nexto": [
+            "Escavalier"
+        ]
     },
     "Escavalier": {
         "name": "Escavalier",
@@ -30304,7 +31513,8 @@ exports.BattlePokedex = {
                 "w": 82,
                 "h": 77
             }
-        }
+        },
+        "nexto": []
     },
     "Foongus": {
         "name": "Foongus",
@@ -30346,7 +31556,10 @@ exports.BattlePokedex = {
                 "w": 36,
                 "h": 35
             }
-        }
+        },
+        "nexto": [
+            "Amoonguss"
+        ]
     },
     "Amoonguss": {
         "name": "Amoonguss",
@@ -30388,7 +31601,8 @@ exports.BattlePokedex = {
                 "w": 67,
                 "h": 60
             }
-        }
+        },
+        "nexto": []
     },
     "Frillish": {
         "name": "Frillish",
@@ -30430,7 +31644,10 @@ exports.BattlePokedex = {
                 "w": 66,
                 "h": 72
             }
-        }
+        },
+        "nexto": [
+            "Jellicent"
+        ]
     },
     "Jellicent": {
         "name": "Jellicent",
@@ -30482,7 +31699,8 @@ exports.BattlePokedex = {
             "IceBeam": "Ice Beam",
             "Will-O-Wisp": "Will-O-Wisp"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Alomomola": {
         "name": "Alomomola",
@@ -30523,7 +31741,8 @@ exports.BattlePokedex = {
                 "w": 40,
                 "h": 89
             }
-        }
+        },
+        "nexto": []
     },
     "Joltik": {
         "name": "Joltik",
@@ -30565,7 +31784,10 @@ exports.BattlePokedex = {
                 "w": 42,
                 "h": 35
             }
-        }
+        },
+        "nexto": [
+            "Galvantula"
+        ]
     },
     "Galvantula": {
         "name": "Galvantula",
@@ -30616,7 +31838,8 @@ exports.BattlePokedex = {
             "HiddenPower": "Hidden Power Water",
             "VoltSwitch": "Volt Switch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Ferroseed": {
         "name": "Ferroseed",
@@ -30658,7 +31881,10 @@ exports.BattlePokedex = {
                 "w": 35,
                 "h": 43
             }
-        }
+        },
+        "nexto": [
+            "Ferrothorn"
+        ]
     },
     "Ferrothorn": {
         "name": "Ferrothorn",
@@ -30709,7 +31935,8 @@ exports.BattlePokedex = {
             "ThunderWave": "Thunder Wave",
             "Spikes": "Spikes"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Klink": {
         "name": "Klink",
@@ -30750,7 +31977,10 @@ exports.BattlePokedex = {
                 "w": 43,
                 "h": 41
             }
-        }
+        },
+        "nexto": [
+            "Klang"
+        ]
     },
     "Klang": {
         "name": "Klang",
@@ -30791,7 +32021,10 @@ exports.BattlePokedex = {
                 "w": 54,
                 "h": 56
             }
-        }
+        },
+        "nexto": [
+            "Klinklang"
+        ]
     },
     "Klinklang": {
         "name": "Klinklang",
@@ -30839,7 +32072,8 @@ exports.BattlePokedex = {
             "Return": "Return",
             "VoltSwitch": "Volt Switch"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Tynamo": {
         "name": "Tynamo",
@@ -30880,7 +32114,10 @@ exports.BattlePokedex = {
                 "w": 57,
                 "h": 20
             }
-        }
+        },
+        "nexto": [
+            "Eelektrik"
+        ]
     },
     "Eelektrik": {
         "name": "Eelektrik",
@@ -30911,7 +32148,10 @@ exports.BattlePokedex = {
         "nfe": true,
         "gender": "",
         "prevo": "Tynamo",
-        "jp": false
+        "jp": false,
+        "nexto": [
+            "Eelektross"
+        ]
     },
     "Eelektross": {
         "name": "Eelektross",
@@ -30951,7 +32191,8 @@ exports.BattlePokedex = {
             "U-turn": "U-turn",
             "Flamethrower": "Flamethrower"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Elgyem": {
         "name": "Elgyem",
@@ -30992,7 +32233,10 @@ exports.BattlePokedex = {
                 "w": 31,
                 "h": 51
             }
-        }
+        },
+        "nexto": [
+            "Beheeyem"
+        ]
     },
     "Beheeyem": {
         "name": "Beheeyem",
@@ -31033,7 +32277,8 @@ exports.BattlePokedex = {
                 "w": 41,
                 "h": 66
             }
-        }
+        },
+        "nexto": []
     },
     "Litwick": {
         "name": "Litwick",
@@ -31075,7 +32320,10 @@ exports.BattlePokedex = {
                 "w": 33,
                 "h": 45
             }
-        }
+        },
+        "nexto": [
+            "Lampent"
+        ]
     },
     "Lampent": {
         "name": "Lampent",
@@ -31117,7 +32365,10 @@ exports.BattlePokedex = {
                 "w": 86,
                 "h": 62
             }
-        }
+        },
+        "nexto": [
+            "Chandelure"
+        ]
     },
     "Chandelure": {
         "name": "Chandelure",
@@ -31159,7 +32410,8 @@ exports.BattlePokedex = {
                 "w": 92,
                 "h": 90
             }
-        }
+        },
+        "nexto": []
     },
     "Axew": {
         "name": "Axew",
@@ -31200,7 +32452,10 @@ exports.BattlePokedex = {
                 "w": 37,
                 "h": 46
             }
-        }
+        },
+        "nexto": [
+            "Fraxure"
+        ]
     },
     "Fraxure": {
         "name": "Fraxure",
@@ -31241,7 +32496,10 @@ exports.BattlePokedex = {
                 "w": 72,
                 "h": 63
             }
-        }
+        },
+        "nexto": [
+            "Haxorus"
+        ]
     },
     "Haxorus": {
         "name": "Haxorus",
@@ -31294,7 +32552,8 @@ exports.BattlePokedex = {
             "DragonClaw": "Dragon Claw",
             "RockSlide": "Rock Slide"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Cubchoo": {
         "name": "Cubchoo",
@@ -31335,7 +32594,10 @@ exports.BattlePokedex = {
                 "w": 33,
                 "h": 37
             }
-        }
+        },
+        "nexto": [
+            "Beartic"
+        ]
     },
     "Beartic": {
         "name": "Beartic",
@@ -31376,7 +32638,8 @@ exports.BattlePokedex = {
                 "w": 74,
                 "h": 74
             }
-        }
+        },
+        "nexto": []
     },
     "Cryogonal": {
         "name": "Cryogonal",
@@ -31417,7 +32680,8 @@ exports.BattlePokedex = {
                 "w": 78,
                 "h": 86
             }
-        }
+        },
+        "nexto": []
     },
     "Shelmet": {
         "name": "Shelmet",
@@ -31458,7 +32722,10 @@ exports.BattlePokedex = {
                 "w": 48,
                 "h": 40
             }
-        }
+        },
+        "nexto": [
+            "Accelgor"
+        ]
     },
     "Accelgor": {
         "name": "Accelgor",
@@ -31499,7 +32766,8 @@ exports.BattlePokedex = {
                 "w": 60,
                 "h": 78
             }
-        }
+        },
+        "nexto": []
     },
     "Stunfisk": {
         "name": "Stunfisk",
@@ -31541,7 +32809,8 @@ exports.BattlePokedex = {
                 "w": 77,
                 "h": 33
             }
-        }
+        },
+        "nexto": []
     },
     "Mienfoo": {
         "name": "Mienfoo",
@@ -31572,7 +32841,10 @@ exports.BattlePokedex = {
         "nfe": true,
         "gender": "",
         "prevo": "",
-        "jp": false
+        "jp": false,
+        "nexto": [
+            "Mienshao"
+        ]
     },
     "Mienshao": {
         "name": "Mienshao",
@@ -31619,7 +32891,8 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "BrickBreak": "Brick Break"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Druddigon": {
         "name": "Druddigon",
@@ -31660,7 +32933,8 @@ exports.BattlePokedex = {
                 "w": 93,
                 "h": 82
             }
-        }
+        },
+        "nexto": []
     },
     "Golett": {
         "name": "Golett",
@@ -31702,7 +32976,10 @@ exports.BattlePokedex = {
                 "w": 56,
                 "h": 59
             }
-        }
+        },
+        "nexto": [
+            "Golurk"
+        ]
     },
     "Golurk": {
         "name": "Golurk",
@@ -31744,7 +33021,8 @@ exports.BattlePokedex = {
                 "w": 78,
                 "h": 80
             }
-        }
+        },
+        "nexto": []
     },
     "Pawniard": {
         "name": "Pawniard",
@@ -31786,7 +33064,10 @@ exports.BattlePokedex = {
                 "w": 43,
                 "h": 45
             }
-        }
+        },
+        "nexto": [
+            "Bisharp"
+        ]
     },
     "Bisharp": {
         "name": "Bisharp",
@@ -31828,7 +33109,8 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 75
             }
-        }
+        },
+        "nexto": []
     },
     "Bouffalant": {
         "name": "Bouffalant",
@@ -31869,7 +33151,8 @@ exports.BattlePokedex = {
                 "w": 89,
                 "h": 55
             }
-        }
+        },
+        "nexto": []
     },
     "Rufflet": {
         "name": "Rufflet",
@@ -31911,7 +33194,10 @@ exports.BattlePokedex = {
                 "w": 35,
                 "h": 56
             }
-        }
+        },
+        "nexto": [
+            "Braviary"
+        ]
     },
     "Braviary": {
         "name": "Braviary",
@@ -31953,7 +33239,8 @@ exports.BattlePokedex = {
                 "w": 91,
                 "h": 119
             }
-        }
+        },
+        "nexto": []
     },
     "Vullaby": {
         "name": "Vullaby",
@@ -31995,7 +33282,10 @@ exports.BattlePokedex = {
                 "w": 58,
                 "h": 61
             }
-        }
+        },
+        "nexto": [
+            "Mandibuzz"
+        ]
     },
     "Mandibuzz": {
         "name": "Mandibuzz",
@@ -32037,7 +33327,8 @@ exports.BattlePokedex = {
                 "w": 54,
                 "h": 72
             }
-        }
+        },
+        "nexto": []
     },
     "Heatmor": {
         "name": "Heatmor",
@@ -32078,7 +33369,8 @@ exports.BattlePokedex = {
                 "w": 102,
                 "h": 59
             }
-        }
+        },
+        "nexto": []
     },
     "Durant": {
         "name": "Durant",
@@ -32120,7 +33412,8 @@ exports.BattlePokedex = {
                 "w": 53,
                 "h": 36
             }
-        }
+        },
+        "nexto": []
     },
     "Deino": {
         "name": "Deino",
@@ -32162,7 +33455,10 @@ exports.BattlePokedex = {
                 "w": 45,
                 "h": 50
             }
-        }
+        },
+        "nexto": [
+            "Zweilous"
+        ]
     },
     "Zweilous": {
         "name": "Zweilous",
@@ -32204,7 +33500,10 @@ exports.BattlePokedex = {
                 "w": 66,
                 "h": 67
             }
-        }
+        },
+        "nexto": [
+            "Hydreigon"
+        ]
     },
     "Hydreigon": {
         "name": "Hydreigon",
@@ -32254,7 +33553,8 @@ exports.BattlePokedex = {
             "FocusBlast": "Focus Blast",
             "DarkPulse": "Dark Pulse"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Larvesta": {
         "name": "Larvesta",
@@ -32296,7 +33596,10 @@ exports.BattlePokedex = {
                 "w": 52,
                 "h": 47
             }
-        }
+        },
+        "nexto": [
+            "Volcarona"
+        ]
     },
     "Volcarona": {
         "name": "Volcarona",
@@ -32338,7 +33641,8 @@ exports.BattlePokedex = {
                 "w": 91,
                 "h": 71
             }
-        }
+        },
+        "nexto": []
     },
     "Cobalion": {
         "name": "Cobalion",
@@ -32380,7 +33684,8 @@ exports.BattlePokedex = {
                 "w": 60,
                 "h": 81
             }
-        }
+        },
+        "nexto": []
     },
     "Terrakion": {
         "name": "Terrakion",
@@ -32422,7 +33727,8 @@ exports.BattlePokedex = {
                 "w": 86,
                 "h": 58
             }
-        }
+        },
+        "nexto": []
     },
     "Virizion": {
         "name": "Virizion",
@@ -32464,7 +33770,8 @@ exports.BattlePokedex = {
                 "w": 60,
                 "h": 70
             }
-        }
+        },
+        "nexto": []
     },
     "Tornadus": {
         "name": "Tornadus",
@@ -32505,7 +33812,8 @@ exports.BattlePokedex = {
                 "w": 102,
                 "h": 99
             }
-        }
+        },
+        "nexto": []
     },
     "Thundurus": {
         "name": "Thundurus",
@@ -32560,7 +33868,8 @@ exports.BattlePokedex = {
             "VoltSwitch": "Volt Switch",
             "HammerArm": "Hammer Arm"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Reshiram": {
         "name": "Reshiram",
@@ -32602,7 +33911,8 @@ exports.BattlePokedex = {
                 "w": 101,
                 "h": 89
             }
-        }
+        },
+        "nexto": []
     },
     "Zekrom": {
         "name": "Zekrom",
@@ -32644,7 +33954,8 @@ exports.BattlePokedex = {
                 "w": 107,
                 "h": 92
             }
-        }
+        },
+        "nexto": []
     },
     "Landorus": {
         "name": "Landorus",
@@ -32697,7 +34008,8 @@ exports.BattlePokedex = {
             "Substitute": "Substitute",
             "HammerArm": "Hammer Arm"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Kyurem": {
         "name": "Kyurem",
@@ -32739,7 +34051,8 @@ exports.BattlePokedex = {
                 "w": 80,
                 "h": 73
             }
-        }
+        },
+        "nexto": []
     },
     "Keldeo": {
         "name": "Keldeo",
@@ -32796,7 +34109,8 @@ exports.BattlePokedex = {
             "AquaTail": "Aqua Tail",
             "X-Scissor": "X-Scissor"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Meloetta": {
         "name": "Meloetta",
@@ -32846,7 +34160,8 @@ exports.BattlePokedex = {
             "GrassKnot": "Grass Knot",
             "ShadowClaw": "Shadow Claw"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Meloetta-S": {
         "name": "Meloetta-S",
@@ -32888,7 +34203,8 @@ exports.BattlePokedex = {
                 "w": 40,
                 "h": 75
             }
-        }
+        },
+        "nexto": []
     },
     "Genesect": {
         "name": "Genesect",
@@ -32941,7 +34257,8 @@ exports.BattlePokedex = {
             "U-turn": "U-turn",
             "Explosion": "Explosion"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     },
     "Shimama": {
         "name": "Shimama",
@@ -32972,7 +34289,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "F",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Zeburaika": {
         "name": "Zeburaika",
@@ -33003,7 +34321,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "F",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Otamaro": {
         "name": "Otamaro",
@@ -33034,7 +34353,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Gamagaru": {
         "name": "Gamagaru",
@@ -33066,7 +34386,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Gamageroge": {
         "name": "Gamageroge",
@@ -33098,7 +34419,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Marakacchi": {
         "name": "Marakacchi",
@@ -33129,7 +34451,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Shikijika": {
         "name": "Shikijika",
@@ -33161,7 +34484,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Mebukijika": {
         "name": "Mebukijika",
@@ -33193,7 +34517,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Emonga": {
         "name": "Emonga",
@@ -33225,7 +34550,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Pururiru": {
         "name": "Pururiru",
@@ -33257,7 +34583,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "F",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Burungeru": {
         "name": "Burungeru",
@@ -33289,7 +34616,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Shibishirasu": {
         "name": "Shibishirasu",
@@ -33320,7 +34648,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Shibibiiru": {
         "name": "Shibibiiru",
@@ -33351,7 +34680,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Shibirudon": {
         "name": "Shibirudon",
@@ -33382,7 +34712,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "M",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Hitomoshi": {
         "name": "Hitomoshi",
@@ -33414,7 +34745,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Ranpuraa": {
         "name": "Ranpuraa",
@@ -33446,7 +34778,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Shandera": {
         "name": "Shandera",
@@ -33478,7 +34811,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Furiijio": {
         "name": "Furiijio",
@@ -33509,7 +34843,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "N",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Baffuron": {
         "name": "Baffuron",
@@ -33540,7 +34875,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Kuitaran": {
         "name": "Kuitaran",
@@ -33571,7 +34907,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Sazandora": {
         "name": "Sazandora",
@@ -33603,7 +34940,8 @@ exports.BattlePokedex = {
         "nfe": false,
         "gender": "",
         "prevo": "",
-        "jp": true
+        "jp": true,
+        "nexto": []
     },
     "Birijion": {
         "viablemoves": {
@@ -33619,6 +34957,7 @@ exports.BattlePokedex = {
             "Taunt": "Taunt",
             "GigaDrain": "Giga Drain"
         },
-        "viable": true
+        "viable": true,
+        "nexto": []
     }
 };
