@@ -180,7 +180,6 @@ exports.BattleMovedex = {
 		id: "AfterYou",
 		name: "After You",
 		pp: 15,
-		ignoresProtect: true,
 		priority: 0,
 		onHit: function() {
 			return false; // After You will always fail when used in a single battle
@@ -1670,7 +1669,8 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(pokemon) {
-			if (!this.lastMove || this.lastMove === 'Copycat')
+			var noCopycat = {Copycat:1, MirrorMove:1, DragonTail:1, CircleThrow:1};
+			if (!this.lastMove || noCopycat[this.lastMove])
 			{
 				return false;
 			}
@@ -1925,7 +1925,6 @@ exports.BattleMovedex = {
 		name: "Curse",
 		pp: 10,
 		isViable: true,
-		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			if (source.hasType('Ghost'))
@@ -2344,7 +2343,6 @@ exports.BattleMovedex = {
 		name: "Doom Desire",
 		pp: 5,
 		isViable: true,
-		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
@@ -3270,9 +3268,18 @@ exports.BattleMovedex = {
 		id: "Feint",
 		name: "Feint",
 		pp: 10,
-		ignoresProtect: true,
-		removesProtect: true,
 		priority: 2,
+		onHit: function(target, source) {
+			if (target.removeVolatile('Protect'))
+			{
+				this.add("message "+target.name+" fell for the feint! (placeholder)");
+			}
+			if (target.side !== source.side)
+			{
+				target.side.removeSideCondition('QuickGuard');
+				target.side.removeSideCondition('WideGuard');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -4036,7 +4043,6 @@ exports.BattleMovedex = {
 		id: "FutureSight",
 		name: "Future Sight",
 		pp: 10,
-		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
@@ -7901,21 +7907,8 @@ exports.BattleMovedex = {
 			},
 			onHitPriority: 1,
 			onHit: function(target, source, effect) {
-				if (effect && effect.ignoresProtect)
+				if (effect && (effect.id === 'Feint' || effect.id === 'RolePlay'))
 				{
-					this.debug("Move ignores protect/detect");
-					if (effect.removesProtect)
-					{
-						if (target.removeVolatile('Protect'))
-						{
-							this.add("message "+effect.name+" broke down the barrier! (placeholder)");
-						}
-						if (target.side !== source.side)
-						{
-							target.side.removeSideCondition('QuickGuard');
-							target.side.removeSideCondition('WideGuard');
-						}
-					}
 					return;
 				}
 				this.add('r-volatile '+target.id+' protect');
@@ -8931,7 +8924,6 @@ exports.BattleMovedex = {
 		id: "RolePlay",
 		name: "Role Play",
 		pp: 10,
-		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			if (target.ability === 'Multitype' || target.ability === 'WonderGuard' || target.ability === source.ability)
@@ -9456,8 +9448,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		isContact: true,
-		ignoresProtect: true,
-		removesProtect: true,
 		priority: 0,
 		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
