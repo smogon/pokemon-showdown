@@ -752,7 +752,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     }
 
     // The "bit of the constructor"
-    this.broadcast_("A new " + metagame + " tournament named \"" + name + "\" has been created. Maximum participants: " + maxParticipants + ".");
+    this.broadcast_("A new " + (BattleFormats[metagame] ? BattleFormats[metagame].name : metagame) + " tournament named \"" + name + "\" has been created. Maximum participants: " + maxParticipants + ".");
 }
 
 function stob(s)

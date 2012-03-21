@@ -1258,7 +1258,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
         {
             for (var t in currentTournaments)
             {
-                var output = currentTournaments[t].tournament.getMetagame() + ": ";
+                var output = BattleFormats[currentTournaments[t].tournament.getMetagame()].name + ": ";
                 output += t;
                 output += " (" + currentTournaments[t].tournament.getParticipants().length + "/" + currentTournaments[t].tournament.getMaxParticipants() + ")";
                 if (currentTournaments[t].tournament.getParticipants().length >= currentTournaments[t].tournament.getMaxParticipants())
