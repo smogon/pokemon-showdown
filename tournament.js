@@ -2,8 +2,12 @@
 
 function Tournament(name, metagame, rooms, lobby, maxParticipants)
 {
-    if (maxParticipants === NaN)
+    if (!maxParticipants)
         maxParticipants = 0;
+    if (!name || name.length < 2)
+        throw Error("NameTooShortException");
+    if (!rooms || !lobby || lobby.type !== "lobby")
+        throw Error("InvalidArgumentsException");
 
     // Private variables and constructor. (A bit of the constructor is also at the very end of this function)
     // "Real" javascript private variables are too annoying, so we just make them public and hope no-one edits them ;)
@@ -25,11 +29,6 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
 
     this.isAutopiloting_ = false;
     this.autopilotTimer_;
-
-    if (!name || name.length < 2)
-        throw Error("NameTooShortException");
-    if (!rooms || !lobby || lobby.type !== "lobby")
-        throw Error("InvalidArgumentsException");
 
     // Public functions
 
@@ -130,6 +129,8 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     {
         if (!errorSocket)
             throw Error("InvalidArgumentsException");
+        if (!maxParticipants)
+            maxParticipants = 0;
         try
         {
             var removedParticipants = this.tournamentBuilder_.setMaxParticipants(maxParticipants);
