@@ -561,11 +561,10 @@ function User(name, person, token)
 			}
 		}
 		bannedIps[selfP.ip] = selfP.userid;
-		selfP.emit('message', 'You were banned.');
 		selfP.destroy();
 	};
 	this.destroy = function() {
-		// banned!
+		// Disconnects a user from the server
 		var person = null;
 		selfP.connected = false;
 		for (var i=0; i<selfP.people.length; i++)
@@ -573,7 +572,6 @@ function User(name, person, token)
 			console.log('DESTROY: '+selfP.userid);
 			person = selfP.people[i];
 			person.user = null;
-			person.socket.emit('console', 'You were banned.');
 			for (var j in person.rooms)
 			{
 				selfP.leaveRoom(person.rooms[j], person);
