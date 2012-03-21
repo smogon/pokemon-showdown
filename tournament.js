@@ -159,6 +159,28 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
             errorSocket.emit("console", "Autopilot is already running for this tournament.");
             return;
         }
+
+        // First check for anything that might stop autopilot in the first iteration
+        if (this.tournamentBuilder_.getIsEnded())
+        {
+            errorSocket.emit("console", "The tournament has already ended. Please rebuild the tree if you wish to reuse the tournament.");
+            return;
+        }
+        try
+        {
+            this.tournamentBuilder_.getTournamentTreeCopy();
+        } catch (e)
+        {
+            if (e.message === "ParticipantsTooLowException")
+            {
+                errorSocket.emit("console", "There are less than two participants currently, so the tournament tree cannot be built.");
+                return;
+            }
+            else
+                throw e;
+        }
+
+        // Make a fake error socket and start the autopilot
         var fakeErrorSocket =
         {
             lobby_: this.lobby_,

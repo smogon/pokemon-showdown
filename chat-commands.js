@@ -1050,21 +1050,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
                 socket.emit('console', "/" + cmd + " - That tournament name already is in use.");
                 return true;
             }
-	        switch (args[1])
+	        if (args[1] === "RandomBattle" || !BattleFormats[args[1]] || !BattleFormats[args[1]].ranked)
 	        {
-	            case "BalancedHackmons" :
-	            case "OU" :
-	            case "UU" :
-	            case "RU" :
-	            case "NU" :
-	                break;
-
-                default :
-                {
-                    socket.emit('console', "/" + cmd + " - Invalid metagame.");
-                    return true;
-                }
-	        }
+                socket.emit('console', "/" + cmd + " - Invalid metagame.");
+                return true;
+            }
 
 	        try
 	        {

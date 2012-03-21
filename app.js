@@ -113,7 +113,7 @@ function reloadEngine()
 	BattleTools = require('./tools.js').BattleTools;
 
 	Tools = new BattleTools();
-	
+
 	tournamentBuilder = require('./tournament-builder.js');
     TournamentBuilder = tournamentBuilder.TournamentBuilder;
     TournamentBuilderBattle = tournamentBuilder.TournamentBuilderBattle;
@@ -128,16 +128,16 @@ function reloadEngine()
 function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 {
 	var selfR = this;
-	
+
 	format = ''+(format||'');
-	
+
 	this.type = 'room';
 	this.id = roomid;
 	this.i = {};
 	this.users = {};
 	this.format = format;
 	console.log("NEW BATTLE");
-	
+
 	this.isTournamentBattle = false;
 	this.tournamentName;
 	this.tournamentBattleId;
@@ -147,9 +147,9 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 	    this.tournamentName = tournament.name;
 	    this.tournamentBattleId = tournament.battleId;
 	}
-	
+
 	var formatid = toId(format);
-	
+
 	if (ranked && BattleFormats[formatid] && BattleFormats[formatid].ranked)
 	{
 		ranked = {
@@ -162,31 +162,31 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 	{
 		ranked = false;
 	}
-	
+
 	this.ranked = ranked;
 	this.battle = new Battle(selfR.id, format, ranked);
 	this.resetTimer = null;
 	this.destroyTimer = null;
 	this.graceTime = 0;
-	
+
 	this.parentid = parentid||'';
 	this.p1 = p1 || '';
 	this.p2 = p2 || '';
-	
+
 	this.sideTicksLeft = [8, 8];
 	this.sideFreeTicks = [0, 0];
 	this.inactiveTicksLeft = 0;
-	
+
 	this.active = false;
-	
+
 	this.update = function(excludeUser) {
 		update = selfR.battle.getUpdates();
 		if (!update) return;
-		
+
 		if (selfR.battle.ended && selfR.ranked)
 		{
 			var p1score = 0.5;
-			
+
 			if (selfR.battle.winner === selfR.ranked.p1)
 			{
 				p1score = 1;
@@ -195,14 +195,14 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 			{
 				p1score = 0;
 			}
-			
+
 			var p1 = selfR.ranked.p1;
 			if (getUser(selfR.ranked.p1)) p1 = getUser(selfR.ranked.p1).name;
 			var p2 = selfR.ranked.p2;
 			if (getUser(selfR.ranked.p2)) p2 = getUser(selfR.ranked.p2).name;
-			
+
 			update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.ranked.format)+'&servertoken=[token]');
-			
+
 			if (!selfR.ranked.p1 || !selfR.ranked.p2)
 			{
 				update.updates.push('message ERROR: Ladder not updated: a player does not exist');
@@ -249,7 +249,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 					JSON.stringify(logData)
 				);
 			}
-			
+
 			selfR.ranked = false;
 		}
 		if (selfR.battle.ended && selfR.isTournamentBattle)
@@ -267,7 +267,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 		    }
 	        selfR.isTournamentBattle = false;
 	    }
-		
+
 		update.room = roomid;
 		var hasUsers = false;
 		for (var i in selfR.users)
@@ -276,7 +276,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 			if (selfR.users[i] === excludeUser) continue;
 			selfR.users[i].emit('update', update);
 		}
-		
+
 		// empty rooms time out after ten minutes
 		if (!hasUsers)
 		{
@@ -332,19 +332,19 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 	{
 		clearTimeout(selfR.resetTimer);
 		selfR.resetTimer = null;
-		
+
 		if (lockdown)
 		{
 			selfR.add('The battle was not restarted because the server is preparing to shut down.');
 			return;
 		}
-		
+
 		selfR.battle.add('RESET');
 		selfR.update();
-		
+
 		if (selfR.battle.allySide && selfR.battle.allySide.user) delete selfR.battle.allySide.user.sides[selfR.id];
 		if (selfR.battle.foeSide && selfR.battle.foeSide.user) delete selfR.battle.foeSide.user.sides[selfR.id];
-		
+
 		console.log("NEW BATTLE (reset)");
 		selfR.battle = new Battle(selfR.id, selfR.format, false);
 		selfR.active = selfR.battle.active;
@@ -379,7 +379,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 	{
 		var forfeitSide = -1;
 		if (!selfR.battle || selfR.battle.ended || !selfR.battle.started) return false;
-		
+
 		if (side === selfR.battle.sides[0]) forfeitSide = 0;
 		else if (side === selfR.battle.sides[1]) forfeitSide = 1;
 		else if (side === 0) forfeitSide = 0;
@@ -387,9 +387,9 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 		else if (side === selfR.battle.sides[0].user) forfeitSide = 0;
 		else if (side === selfR.battle.sides[1].user) forfeitSide = 1;
 		else return false;
-		
+
 		if (!message) message = ' forfeited.';
-		
+
 		selfR.battle.add('message '+selfR.battle.sides[forfeitSide].name+message);
 		selfR.battle.win(selfR.battle.sides[forfeitSide].foe);
 		selfR.active = selfR.battle.active;
@@ -400,17 +400,17 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 	{
 		clearTimeout(selfR.resetTimer);
 		selfR.resetTimer = null;
-		
+
 		var action = 'be kicked';
 		if (selfR.ranked)
 		{
 			action = 'forfeit';
 		}
-		
+
 		var inactiveSide = selfR.getInactiveSide();
-		
+
 		if (!selfR.battle || selfR.battle.ended || !selfR.battle.started) return false;
-		
+
 		if (inactiveSide == -1)
 		{
 			selfR.battle.add('message Both players are inactive, so neither player was kicked.');
@@ -423,7 +423,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 			selfR.update();
 			return;
 		}
-		
+
 		// now to see how much time we have left
 		if (selfR.inactiveTicksLeft)
 		{
@@ -444,7 +444,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 			selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
 			return;
 		}
-		
+
 		if (selfR.battle.ranked)
 		{
 			selfR.forfeit(inactiveSide,' lost because of their inactivity.');
@@ -463,7 +463,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 				selfR.battle.add('message There are already empty slots; no kicks are necessary.');
 			}
 		}
-		
+
 		if (selfR.parentid)
 		{
 			getRoom(selfR.parentid).updateRooms();
@@ -479,10 +479,10 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 			return;
 		}
 		var elapsedTime = getTime() - selfR.graceTime;
-		
+
 		// tickTime is in chunks of 30
 		var tickTime = 1;
-		
+
 		if (elapsedTime < 60000)
 		{
 			tickTime = 6;
@@ -516,31 +516,31 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 			selfR.update();
 			return;
 		}
-		
+
 		selfR.inactiveAtrrib = '';
 		if (user) selfR.inactiveAtrrib = ' (requested by '+user.name+')';
-		
+
 		var action = 'be kicked';
 		if (selfR.ranked)
 		{
 			action = 'forfeit';
 		}
-				
+
 		// a tick is 30 seconds
-		
+
 		var elapsedTicks = Math.floor((getTime() - selfR.graceTime) / 30000);
 		tickTime = 6 - elapsedTicks;
 		if (tickTime < 1)
 		{
 			tickTime = 1;
 		}
-		
+
 		if (tickTime > 2 && (!selfR.battle.allySide.user || !selfR.battle.foeSide.user))
 		{
 			// if a player has left, don't wait longer than 2 ticks (60 seconds)
 			tickTime = 2;
 		}
-		
+
 		if (elapsedTicks >= 8) selfR.sideTicksLeft[inactiveSide]--;
 		if (elapsedTicks >= 6) selfR.sideTicksLeft[inactiveSide]--;
 		if (elapsedTicks >= 4) selfR.sideTicksLeft[inactiveSide]--;
@@ -551,7 +551,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 			tickTime = selfR.sideTicksLeft[inactiveSide];
 			if (tickTime < 2) tickTime = 2;
 		}
-		
+
 		selfR.inactiveTicksLeft = tickTime;
 		var message = 'Inactive players will '+action+' in '+(tickTime*30)+' seconds.'+selfR.inactiveAtrrib;
 		if (elapsedTicks < 1 && tickTime >= 2 && selfR.sideTicksLeft[inactiveSide] > -4)
@@ -599,7 +599,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 	this.battleEndRestart = function() {
 		selfR.add('Rematch support has been temporarily disabled. Please challenge this user again in the lobby.');
 		return;
-		
+
 		if (selfR.resetTimer) return;
 		if (selfR.battle.ended)
 		{
@@ -624,15 +624,15 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 	this.join = function(user) {
 		if (!user) return false;
 		if (selfR.users[user.userid]) return user;
-		
+
 		selfR.users[user.userid] = user;
-		
+
 		if (user.named)
 		{
 			selfR.battle.add('join '+user.name);
 			selfR.update(user);
 		}
-		
+
 		var initdata = {
 			name: user.name,
 			userid: user.userid,
@@ -644,7 +644,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 			battlelog: selfR.battle.log
 		};
 		user.emit('init', initdata);
-		
+
 		return user;
 	};
 	this.rename = function(user, oldid, joining) {
@@ -678,12 +678,12 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 				return;
 			}
 		}
-		
+
 		selfR.cancelReset();
 		selfR.battle.join(user, slot);
 		selfR.active = selfR.battle.active;
 		selfR.update();
-		
+
 		if (selfR.parentid)
 		{
 			getRoom(selfR.parentid).updateRooms();
@@ -697,7 +697,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 		}
 		selfR.active = selfR.battle.active;
 		selfR.update();
-		
+
 		if (selfR.parentid)
 		{
 			getRoom(selfR.parentid).updateRooms();
@@ -774,7 +774,7 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 				target = '';
 			}
 		}
-		
+
 		if (parseCommand(user, cmd, target, selfR, socket, message))
 		{
 			// do nothing
@@ -827,10 +827,10 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 		}
 		selfR.update();
 	};
-	
+
 	this.destroy = function() {
 		// deallocate ourself
-		
+
 		// remove references to ourself
 		for (var i in selfR.users)
 		{
@@ -838,23 +838,23 @@ function Room(roomid, format, p1, p2, parentid, ranked, tournament)
 			delete selfR.users[i];
 		}
 		selfR.users = null;
-		
+
 		// deallocate children and get rid of references to them
 		if (selfR.battle)
 		{
 			selfR.battle.destroy();
 		}
 		selfR.battle = null;
-		
+
 		if (selfR.resetTimer)
 		{
 			clearTimeout(selfR.resetTimer);
 		}
 		selfR.resetTimer = null;
-		
+
 		// get rid of some possibly-circular references
 		delete rooms[selfR.id];
-		
+
 		selfR = null;
 	}
 }
@@ -871,10 +871,10 @@ function Lobby(roomid)
 	this.rooms = [];
 	this.numRooms = 0;
 	this.searchers = [];
-	
+
 	this.usersChanged = true;
 	this.roomsChanged = true;
-	
+
 	// Never do any other file IO synchronously
 	// but this is okay to prevent race conditions as we start up PS
 	this.numRooms = 0;
@@ -883,7 +883,7 @@ function Lobby(roomid)
 		parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
 	}
 	catch (e) {} // file doesn't exist [yet]
-	
+
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
 		var update = {room: roomid};
 		var i = since;
@@ -979,14 +979,14 @@ function Lobby(roomid)
 			user.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
 			return;
 		}
-		
+
 		var problems = Tools.validateTeam(user.team, format);
 		if (problems)
 		{
 			user.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 			return;
 		}
-		
+
 		for (var i=0; i<selfR.searchers.length; i++)
 		{
 			var search = selfR.searchers[i];
@@ -1107,7 +1107,7 @@ function Lobby(roomid)
 	this.join = function(user) {
 		if (!user) return false; // ???
 		if (selfR.users[user.userid]) return user;
-		
+
 		selfR.users[user.userid] = user;
 		if (user.named && config.reportjoins)
 		{
@@ -1118,7 +1118,7 @@ function Lobby(roomid)
 		{
 			selfR.emit('console', {name: user.getIdentity(), action: 'join', silent: 1});
 		}
-		
+
 		var initdata = {
 			name: user.name,
 			userid: user.userid,
@@ -1133,7 +1133,7 @@ function Lobby(roomid)
 			searcher: selfR.searchers.length,
 		}
 		user.emit('init', initdata);
-		
+
 		return user;
 	};
 	this.rename = function(user, oldid, joining) {
@@ -1176,7 +1176,7 @@ function Lobby(roomid)
 		var newRoom;
 		p1 = getUser(p1);
 		p2 = getUser(p2);
-		
+
 		if (p1 === p2)
 		{
 			selfR.cancelSearch(p1, true);
@@ -1184,7 +1184,7 @@ function Lobby(roomid)
 			p1.emit('message', 'You can\'t battle your own account. Please use Private Browsing to battle yourself.');
 			return;
 		}
-		
+
 		if (lockdown)
 		{
 			selfR.cancelSearch(p1, true);
@@ -1194,7 +1194,7 @@ function Lobby(roomid)
 			selfR.update();
 			return;
 		}
-		
+
 		//console.log('BATTLE START BETWEEN: '+p1.userid+' '+p2.userid);
 		var i = selfR.numRooms+1;
 		var formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g,'');
@@ -1284,7 +1284,7 @@ function Lobby(roomid)
 				target = '';
 			}
 		}
-		
+
 		if (parseCommand(user, cmd, target, selfR, socket, message))
 		{
 			// do nothing
@@ -1398,7 +1398,7 @@ if (config.crashguard)
 io.sockets.on('connection', function (socket) {
 	var you = null;
 	console.log('INIT SOCKET: '+socket.id);
-	
+
 	if (socket.handshake && socket.handshake.address && socket.handshake.address.address)
 	{
 		if (bannedIps[socket.handshake.address.address])
@@ -1407,7 +1407,7 @@ io.sockets.on('connection', function (socket) {
 			return;
 		}
 	}
-	
+
 	socket.on('join', function(data) {
 		if (!you)
 		{
@@ -1449,7 +1449,7 @@ io.sockets.on('connection', function (socket) {
 		if (!youUser) return;
 		getRoom(data.room).joinBattle(youUser);
 	});
-	
+
 	socket.on('command', function(data) {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;

@@ -90,9 +90,9 @@ exports.BattleFormats = {
 	LCUbers: {
 		effectType: 'Format',
 		name: "LC Ubers",
-//		ranked: true,
+		ranked: true,
 		challengeShow: true,
-//		searchShow: true,
+		searchShow: true,
 //		isTeambuilderFormat: true, // I don't know, so left out for now
 		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview', 'LCUbersBans'],
 		banlist: []
@@ -335,7 +335,7 @@ exports.BattleFormats = {
         banlist: [
             // Items
             'BerryJuice',
-            
+
             // Moves (Generated from http://209.85.62.24/114/106/0/p69834/LC_illegal_movesets.txt)
             'Aipom+DoubleHit+MegaPunch',
             'Aipom+DoubleHit+MegaKick',
@@ -1505,19 +1505,19 @@ exports.BattleFormats = {
         validateSet: function(set) {
             var pokemon = this.getTemplate(set.species);
             var problems = [];
-            
+
             if (pokemon.prevo !== "")
                 problems.push(set.species + " is not the lowest evolution.");
             if (pokemon.nexto.length === 0)
                 problems.push(set.species + " is unable to evolve.");
-                
+
             if (set.level !== 5)
                 problems.push(set.species + " is not level 5.");
-            
+
             return problems;
         }
     },
-    LCUbersBans: {
+    LCBans: {
         effectType: 'Banlist',
         banlist: [
             'Carvanha',

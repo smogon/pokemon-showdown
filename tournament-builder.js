@@ -100,6 +100,13 @@ function TournamentBuilder(maxParticipants)
         return this.isJoiningLocked_;
     }
 
+    // getIsEnded() gets whether the current tournament has ended. This gets reset to false every time a user joins or leaves and when the tree is rebuilt.
+    // Returns a boolean value.
+    this.getIsEnded = function()
+    {
+        return this.isEnded_;
+    }
+
     // addParticipant(participant) adds a user to the tournament.
     //  participant = An object representing a user to be added to the tournament. The class does not care what the object is.
     // Returns nothing.
