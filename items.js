@@ -2798,6 +2798,13 @@ exports.BattleItems = {
 		id: "ZoomLens",
 		name: "Zoom Lens",
 		spritenum: 574,
+		onModifyMove: function(move, user, target) {
+			if (typeof move.accuracy === 'number' && !this.willMove(target))
+			{
+				this.debug('Zoom Lens boosting accuracy');
+				move.accuracy *= 1.2;
+			}
+		},
 		desc: "Raises accuracy by 20% if the holder moves after the target."
 	}
 };
