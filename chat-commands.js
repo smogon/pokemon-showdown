@@ -474,12 +474,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			socket.emit('console', 'Your IP is: '+user.ip);
 			return true;
 		}
-		if (user.group === '&' || user.group === '@' || user.group === '%')
+		if (user.isMod())
 		{
 			var targetUser = getUser(target);
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
+			}
+			else if (!user.canMod(targetUser.group))
+			{
+				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
 			}
 			else
 			{
