@@ -1669,7 +1669,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(pokemon) {
-			var noCopycat = {Copycat:1, MirrorMove:1, DragonTail:1, CircleThrow:1};
+			var noCopycat = {Counter:1, MirrorCoat:1, Protect:1, Detect:1, Endure:1, DestinyBond:1, FollowMe:1, RagePowder:1, Snatch:1, HelpingHand:1, Thief:1, Covet:1, Trick:1, Switcheroo:1, Feint:1, FocusPunch:1, Transform:1, Bestow:1, DragonTail:1, CircleThrow:1};
 			if (!this.lastMove || noCopycat[this.lastMove])
 			{
 				return false;
