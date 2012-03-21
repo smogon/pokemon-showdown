@@ -2,7 +2,7 @@
 
 function Tournament(name, metagame, rooms, lobby, maxParticipants)
 {
-    if (!maxParticipants)
+    if (!maxParticipants || !(maxParticipants = parseInt(maxParticipants)))
         maxParticipants = 0;
     if (!name || name.length < 2)
         throw Error("NameTooShortException");
@@ -129,7 +129,7 @@ function Tournament(name, metagame, rooms, lobby, maxParticipants)
     {
         if (!errorSocket)
             throw Error("InvalidArgumentsException");
-        if (!maxParticipants)
+        if (!maxParticipants || !(maxParticipants = parseInt(maxParticipants)))
             maxParticipants = 0;
         try
         {
