@@ -1501,7 +1501,7 @@ exports.BattleFormats = {
             'Zigzagoon+ExtremeSpeed+BellyDrum',
             'Zubat+AirSlash+Double-Edge',
             'Zubat+AirSlash+Mimic'
-        ];
+        ],
         validateSet: function(set) {
             var pokemon = this.getTemplate(set.species);
             var problems = [];
@@ -1527,6 +1527,6 @@ exports.BattleFormats = {
             'Tangela',
             'Vulpix',
             'Yanma'
-        ];
+        ]
     }
 };
