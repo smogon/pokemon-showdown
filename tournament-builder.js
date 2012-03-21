@@ -194,8 +194,8 @@ function TournamentBuilder(maxParticipants)
                     if (this.getParticipantOfNode_(currentNode.battle.childAOffset) === null ||
                         this.getParticipantOfNode_(currentNode.battle.childBOffset) === null)
                     {
-                        if (this.getParticipantOfNode_(currentNode.battle.childAOffset) == null &&
-                            this.getParticipantOfNode_(currentNode.battle.childBOffset) == null)
+                        if (this.getParticipantOfNode_(currentNode.battle.childAOffset) === null &&
+                            this.getParticipantOfNode_(currentNode.battle.childBOffset) === null)
                         {
                             // Double bye game
                             currentNode.battle.status = TournamentBuilderTreeNodeBattleDataBattleStatus.DRAW;
