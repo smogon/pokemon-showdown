@@ -1369,7 +1369,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (target === '%' || target === 'ban' || target === 'b')
 		{
 			matched = true;
-			socket.emit('console', '/ban OR /b [username] - Kick user from all rooms and ban user\'s IP address. Requires: % @ &');
+			socket.emit('console', '/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: % @ &');
 		}
 		if (target === '%' || target === 'unban')
 		{
@@ -1458,7 +1458,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			socket.emit('console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
 			socket.emit('console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
-			if (user.isMod()) socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
+			if (user.isMod()) socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /forcerenameto, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
 			if (user.isMod()) socket.emit('console', 'ADMIN COMMANDS: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
 			socket.emit('console', 'For details on all commands, use /help all');
 			if (user.isMod()) socket.emit('console', 'For details on all moderator commands, use /help %');
