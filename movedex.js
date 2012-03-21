@@ -180,6 +180,7 @@ exports.BattleMovedex = {
 		id: "AfterYou",
 		name: "After You",
 		pp: 15,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function() {
 			return false; // After You will always fail when used in a single battle
@@ -514,10 +515,16 @@ exports.BattleMovedex = {
 			}
 		},
 		effect: {
-			onStart: function() {
-				this.add("message Attract started (placeholder).");
+			onStart: function(pokemon, source) {
+				this.add("message "+pokemon.name+" fell in love! (placeholder).");
 			},
 			onBeforeMove: function(pokemon) {
+				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['Attract'])
+				{
+					this.debug('Removing Attract volatile on '+pokemon);
+					pokemon.removeVolatile('Attract');
+					return;
+				}
 				if (Math.random()*2 < 1)
 				{
 					this.add('cant-move '+pokemon.id+' attract');
@@ -995,7 +1002,7 @@ exports.BattleMovedex = {
 	},
 	"BoneRush": {
 		num: 198,
-		accuracy: 80,
+		accuracy: 90,
 		basePower: 25,
 		category: "Physical",
 		desc: "Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times. If the user of this move has Skill Link, this move will always strike five times.",
@@ -1918,6 +1925,7 @@ exports.BattleMovedex = {
 		name: "Curse",
 		pp: 10,
 		isViable: true,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			if (source.hasType('Ghost'))
@@ -2336,6 +2344,7 @@ exports.BattleMovedex = {
 		name: "Doom Desire",
 		pp: 5,
 		isViable: true,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
@@ -3261,18 +3270,9 @@ exports.BattleMovedex = {
 		id: "Feint",
 		name: "Feint",
 		pp: 10,
+		ignoresProtect: true,
+		removesProtect: true,
 		priority: 2,
-		onHit: function(target, source) {
-			if (target.removeVolatile('Protect'))
-			{
-				this.add("message "+target.name+" fell for the feint! (placeholder)");
-			}
-			if (target.side !== source.side)
-			{
-				target.side.removeSideCondition('QuickGuard');
-				target.side.removeSideCondition('WideGuard');
-			}
-		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -4036,6 +4036,7 @@ exports.BattleMovedex = {
 		id: "FutureSight",
 		name: "Future Sight",
 		pp: 10,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
@@ -7592,7 +7593,7 @@ exports.BattleMovedex = {
 	},
 	"PoisonGas": {
 		num: 139,
-		accuracy: 90,
+		accuracy: 80,
 		basePower: 0,
 		category: "Status",
 		desc: "Poisons the target.",
@@ -7900,8 +7901,21 @@ exports.BattleMovedex = {
 			},
 			onHitPriority: 1,
 			onHit: function(target, source, effect) {
-				if (effect && (effect.id === 'Feint' || effect.id === 'RolePlay'))
+				if (effect && effect.ignoresProtect)
 				{
+					this.debug("Move ignores protect/detect");
+					if (effect.removesProtect)
+					{
+						if (target.removeVolatile('Protect'))
+						{
+							this.add("message "+effect.name+" broke down the barrier! (placeholder)");
+						}
+						if (target.side !== source.side)
+						{
+							target.side.removeSideCondition('QuickGuard');
+							target.side.removeSideCondition('WideGuard');
+						}
+					}
 					return;
 				}
 				this.add('r-volatile '+target.id+' protect');
@@ -8917,6 +8931,7 @@ exports.BattleMovedex = {
 		id: "RolePlay",
 		name: "Role Play",
 		pp: 10,
+		ignoresProtect: true,
 		priority: 0,
 		onHit: function(target, source) {
 			if (target.ability === 'Multitype' || target.ability === 'WonderGuard' || target.ability === source.ability)
@@ -9216,7 +9231,7 @@ exports.BattleMovedex = {
 	},
 	"ScaryFace": {
 		num: 184,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Speed by 2 stages.",
@@ -9441,6 +9456,8 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		isContact: true,
+		ignoresProtect: true,
+		removesProtect: true,
 		priority: 0,
 		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
