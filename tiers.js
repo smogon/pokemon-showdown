@@ -1113,7 +1113,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"Metapod": {
-		tier: "NFE
+		tier: "NFE"
 	},
 	"Mew": {
 		tier: "UU"
@@ -1197,7 +1197,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Nidorina": {
-		tier: "NFE
+		tier: "NFE"
 	},
 	"Nidorino": {
 		tier: "NFE"
