@@ -1202,7 +1202,7 @@ function Lobby(roomid)
 		if (!user.named || !message || !message.trim || !message.trim().length) return;
 		if (message.length > 255)
 		{
-			socket.emit('message', "Your message is too long.");
+			socket.emit('message', "Your message is too long:\n\n"+message);
 			return;
 		}
 		var cmd = '', target = '';
