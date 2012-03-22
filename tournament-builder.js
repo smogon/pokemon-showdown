@@ -222,6 +222,7 @@ function TournamentBuilder(maxParticipants)
                         }
                         if (nodesToScanOffsets.length === 0 || nodesToScanOffsets[nodesToScanOffsets.length - 1] !== currentNode.parentOffset)
                             nodesToScanOffsets.push(currentNode.parentOffset);
+                        console.log(currentNodeOffset + " default win for tournament.");
                         continue;
                     }
 
@@ -246,6 +247,7 @@ function TournamentBuilder(maxParticipants)
             if (this.getParticipantOfNode_(rootNode.battle.childAOffset) === null ||
                 this.getParticipantOfNode_(rootNode.battle.childBOffset) === null)
             {
+                console.log("Default win for finals tournament.");
                 var battle = new TournamentBuilderBattle();
                 battle.offset = this.tournamentTree_.rootNodeOffset;
                 if (this.getParticipantOfNode_(rootNode.battle.childAOffset) === null &&
