@@ -1192,8 +1192,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
-		desc: "The user eats the target's held berry and, if applicable, receives its benefits. Jaboca Berry will be removed without damaging the user, but Tanga Berry will still activate and reduce this move's power. The target can still recover its held berry by using Recycle.",
-		shortDesc: "User steals the effect of the foe's Berry",
+		desc: "The user eats the target's held berry and, if applicable, receives its benefits. Jaboca Berry will be removed without damaging the user, but Tanga Berry will still activate and reduce this move's power.",
+		shortDesc: "User steals and eats the foe's Berry",
 		id: "BugBite",
 		name: "Bug Bite",
 		pp: 20,
@@ -4469,9 +4469,6 @@ exports.BattleMovedex = {
 			for (var i in {def:1,spd:1})
 			{
 				targetBoosts[i] = target.baseBoosts[i];
-			}
-			for (var i in {def:1,spd:1})
-			{
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
 
@@ -7616,8 +7613,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
-		desc: "The user eats the target's held berry and, if applicable, receives its benefits. Jaboca Berry will be removed without damaging the user, but Coba Berry will still activate and reduce this move's power. The target can still recover its held berry by using Recycle.",
-		shortDesc: "User steals the effect of the foe's Berry.",
+		desc: "The user eats the target's held berry and, if applicable, receives its benefits. Jaboca Berry will be removed without damaging the user, but Coba Berry will still activate and reduce this move's power.",
+		shortDesc: "User steals and eats the foe's Berry.",
 		id: "Pluck",
 		name: "Pluck",
 		pp: 20,
@@ -8528,8 +8525,14 @@ exports.BattleMovedex = {
 		name: "Recycle",
 		pp: 10,
 		priority: 0,
+		onHit: function(pokemon) {
+			if (!pokemon.item && pokemon.lastItem) {
+				pokemon.setItem(pokemon.lastItem);
+				this.add("message "+pokemon.name+" found one "+pokemon.getItem().name+"! (placeholder)");
+			} else return false;
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"Reflect": {
@@ -8587,7 +8590,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function(target, source) {
-			source.addVolatile("ReflectType", target)
+			source.addVolatile("ReflectType", target);
 		},
 		effect: {
 			onStart: function(target, source) {
