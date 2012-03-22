@@ -170,6 +170,7 @@ function BattleTools()
 			if (!item.id) item.id = id;
 			if (!item.category) item.category = 'Effect';
 			if (!item.effectType) item.effectType = 'Item';
+			if (item.isBerry) item.fling = { basePower: 10 };
 		}
 		return item;
 	};

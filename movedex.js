@@ -3640,8 +3640,13 @@ exports.BattleMovedex = {
 	},
 	"Fling": {
 		num: 374,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
+		basePowerCallback: function(pokemon) {
+			if (!pokemon.volatiles['Fling']) return false;
+			var item = this.getItem(pokemon.volatiles['Fling'].flingItem);
+			return item.fling.basePower;
+		},
 		category: "Physical",
 		desc: "The user's held item is thrown at the target. Base power and additional effects vary depending on the thrown item. Note that the target will instantly benefit from the effects of thrown berries. The held item is gone for the rest of the battle unless Recycle is used; the item will return to the original holder after wireless battles but will be permanently lost if it is thrown during in-game battles.",
 		shortDesc: "Throws the user's item at the foe. Power varies.",
@@ -3649,6 +3654,50 @@ exports.BattleMovedex = {
 		name: "Fling",
 		pp: 10,
 		priority: 0,
+		beforeMoveCallback: function(pokemon) {
+			if (pokemon.ignore['Item']) return;
+			var item = pokemon.getItem();
+			if (item.id && item.fling)
+			{
+				pokemon.addVolatile('Fling');
+				pokemon.setItem('');
+			}
+		},
+		effect: {
+			duration: 1,
+			onStart: function(pokemon) {
+				this.effectData.flingItem = pokemon.item;
+			},
+			onFoeAfterDamage: function(damage, foe) {
+				var item = this.getItem(this.effectData.flingItem);
+				if (foe.ability === 'ShieldDust') // this should be handled in Shield Dust, but hack it for now
+				{
+					this.debug('Shield Dust blocking secondary effect of Fling');
+					return;
+				}
+				if (item.isBerry)
+				{
+					this.singleEvent('Eat', item, null, foe, null, null);
+				}
+				else if (item.fling.status)
+				{
+					foe.trySetStatus(item.fling.status);
+				}
+				else if (item.fling.volatileStatus)
+				{
+					foe.addVolatile(item.fling.volatileStatus);
+				}
+				else if (item.fling.effect)
+				{
+					item.fling.effect(foe);
+				}
+			}
+		},
+		onHit: function(target, source, move) {
+			if (!source.volatiles['Fling']) return false;
+			var item = this.getItem(source.volatiles['Fling'].flingItem);
+			this.add("message "+source.name+" flung its "+item.name+"! (placeholder)");
+		},
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -8470,7 +8519,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "The user's lost item is recovered. Items lost to Bug Bite, Fling, Natural Gift and Pluck will be recovered if the user of Recycle was the item's original holder; items lost to Trick, Switcheroo, Thief, Covet or Knock Off cannot be recovered.",
+		desc: "The user's lost item is recovered. Items lost to Fling or Natural Gift will be recovered if the user of Recycle was the item's original holder; items lost to Trick, Switcheroo, Thief, Covet, Knock Off, Bug Bite, or Pluck cannot be recovered.",
 		shortDesc: "Restores a used item.",
 		id: "Recycle",
 		name: "Recycle",
