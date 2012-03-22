@@ -1193,7 +1193,7 @@ exports.BattleMovedex = {
 		basePower: 60,
 		category: "Physical",
 		desc: "The user eats the target's held berry and, if applicable, receives its benefits. Jaboca Berry will be removed without damaging the user, but Tanga Berry will still activate and reduce this move's power.",
-		shortDesc: "User steals and eats the foe's Berry",
+		shortDesc: "User steals and eats the foe's Berry.",
 		id: "BugBite",
 		name: "Bug Bite",
 		pp: 20,
