@@ -3,6 +3,9 @@ exports.BattleItems = {
 		id: "AbsorbBulb",
 		name: "Absorb Bulb",
 		spritenum: 2,
+		fling: {
+			basePower: 30
+		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.type === 'Water' && target.useItem())
 			{
@@ -15,6 +18,9 @@ exports.BattleItems = {
 		id: "AdamantOrb",
 		name: "Adamant Orb",
 		spritenum: 4,
+		fling: {
+			basePower: 60
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && user.template.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon'))
 			{
@@ -50,6 +56,9 @@ exports.BattleItems = {
 		name: "Air Balloon",
 		spritenum: 6,
 		desc: "Makes the holder immune to Ground-type attacks. Disappears when holder is hit.",
+		fling: {
+			basePower: 10
+		},
 		onStart: function(target) {
 			this.add('r-volatile '+target.id+' balloon');
 		},
@@ -96,6 +105,9 @@ exports.BattleItems = {
 		id: "ArmorFossil",
 		name: "Armor Fossil",
 		spritenum: 12,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be revived into Shieldon."
 	},
 	"AspearBerry": {
@@ -156,6 +168,9 @@ exports.BattleItems = {
 		id: "BerryJuice",
 		name: "Berry Juice",
 		spritenum: 22,
+		fling: {
+			basePower: 30
+		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/2) {
 				if (pokemon.useItem()) {
@@ -169,18 +184,27 @@ exports.BattleItems = {
 		id: "BigRoot",
 		name: "Big Root",
 		spritenum: 29,
+		fling: {
+			basePower: 10
+		},
 		desc: "Increases HP gained from draining moves by 30%."
 	},
 	"BindingBand": {
 		id: "BindingBand",
 		name: "Binding Band",
 		spritenum: 31,
+		fling: {
+			basePower: 30
+		},
 		desc: "Increases power of multi-turn trapping moves."
 	},
 	"BlackBelt": {
 		id: "BlackBelt",
 		name: "Black Belt",
 		spritenum: 32,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Fighting')
 			{
@@ -193,6 +217,9 @@ exports.BattleItems = {
 		id: "BlackSludge",
 		name: "Black Sludge",
 		spritenum: 34,
+		fling: {
+			basePower: 30
+		},
 		onResidualPriority: 50-5.2,
 		onResidual: function(pokemon) {
 			if (pokemon.hasType('Poison'))
@@ -210,6 +237,9 @@ exports.BattleItems = {
 		id: "BlackGlasses",
 		name: "BlackGlasses",
 		spritenum: 35,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Dark')
 			{
@@ -233,6 +263,9 @@ exports.BattleItems = {
 		id: "BrightPowder",
 		name: "BrightPowder",
 		spritenum: 51,
+		fling: {
+			basePower: 10
+		},
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
 			this.debug('brightpowder - decreasing accuracy');
@@ -261,6 +294,9 @@ exports.BattleItems = {
 		id: "BurnDrive",
 		name: "Burn Drive",
 		spritenum: 54,
+		fling: {
+			basePower: 70
+		},
 		onDrive: 'Fire',
 		desc: "Changes the type of Techno Blast to Fire."
 	},
@@ -268,6 +304,9 @@ exports.BattleItems = {
 		id: "CellBattery",
 		name: "Cell Battery",
 		spritenum: 60,
+		fling: {
+			basePower: 30
+		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.type === 'Electric' && target.useItem())
 			{
@@ -280,6 +319,9 @@ exports.BattleItems = {
 		id: "Charcoal",
 		name: "Charcoal",
 		spritenum: 61,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Fire')
 			{
@@ -378,6 +420,9 @@ exports.BattleItems = {
 		id: "ChillDrive",
 		name: "Chill Drive",
 		spritenum: 67,
+		fling: {
+			basePower: 70
+		},
 		onDrive: 'Ice',
 		desc: "Changes the type of Techno Blast to Ice."
 	},
@@ -385,6 +430,9 @@ exports.BattleItems = {
 		id: "ChoiceBand",
 		name: "Choice Band",
 		spritenum: 68,
+		fling: {
+			basePower: 10
+		},
 		onStart: function(pokemon) {
 			if (pokemon.volatiles['choicelock'])
 			{
@@ -399,12 +447,15 @@ exports.BattleItems = {
 			stats.atk *= 1.5;
 		},
 		isChoice: true,
-		desc: "\"Hold item which raises Attack 50%, but locks holder into one move.\""
+		desc: "Hold item which raises Attack 50%, but locks holder into one move."
 	},
 	"ChoiceScarf": {
 		id: "ChoiceScarf",
 		name: "Choice Scarf",
 		spritenum: 69,
+		fling: {
+			basePower: 10
+		},
 		onStart: function(pokemon) {
 			if (pokemon.volatiles['choicelock'])
 			{
@@ -419,12 +470,15 @@ exports.BattleItems = {
 			stats.spe *= 1.5;
 		},
 		isChoice: true,
-		desc: "\"Hold item which raises Speed 50%, but locks holder into one move.\""
+		desc: "Hold item which raises Speed 50%, but locks holder into one move."
 	},
 	"ChoiceSpecs": {
 		id: "ChoiceSpecs",
 		name: "Choice Specs",
 		spritenum: 70,
+		fling: {
+			basePower: 10
+		},
 		onStart: function(pokemon) {
 			if (pokemon.volatiles['choicelock'])
 			{
@@ -439,7 +493,7 @@ exports.BattleItems = {
 			stats.spa *= 1.5;
 		},
 		isChoice: true,
-		desc: "\"Hold item which raises Special Attack 50%, but locks holder into one move.\""
+		desc: "Hold item which raises Special Attack 50%, but locks holder into one move."
 	},
 	"ChopleBerry": {
 		id: "ChopleBerry",
@@ -465,6 +519,9 @@ exports.BattleItems = {
 		id: "ClawFossil",
 		name: "Claw Fossil",
 		spritenum: 72,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be revived into Anorith."
 	},
 	"CobaBerry": {
@@ -522,6 +579,9 @@ exports.BattleItems = {
 		id: "CoverFossil",
 		name: "Cover Fossil",
 		spritenum: 85,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be revived into Tirtouga."
 	},
 	"CustapBerry": {
@@ -589,6 +649,9 @@ exports.BattleItems = {
 		id: "DampRock",
 		name: "Damp Rock",
 		spritenum: 88,
+		fling: {
+			basePower: 60
+		},
 		desc: "Rain Dance lasts 8 turns."
 	},
 	"DarkGem": {
@@ -612,6 +675,9 @@ exports.BattleItems = {
 		id: "DeepSeaScale",
 		name: "DeepSeaScale",
 		spritenum: 93,
+		fling: {
+			basePower: 30
+		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.template.species === 'Clamperl')
 			{
@@ -624,6 +690,9 @@ exports.BattleItems = {
 		id: "DeepSeaTooth",
 		name: "DeepSeaTooth",
 		spritenum: 94,
+		fling: {
+			basePower: 90
+		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.template.species === 'Clamperl')
 			{
@@ -636,18 +705,27 @@ exports.BattleItems = {
 		id: "DestinyKnot",
 		name: "Destiny Knot",
 		spritenum: 95,
-		desc: "\"If the holder becomes infatuated, so does the enemy.\""
+		fling: {
+			basePower: 10
+		},
+		desc: "If the holder becomes infatuated, so does the enemy."
 	},
 	"DomeFossil": {
 		id: "DomeFossil",
 		name: "Dome Fossil",
 		spritenum: 102,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be revived into Kabuto."
 	},
 	"DouseDrive": {
 		id: "DouseDrive",
 		name: "Douse Drive",
 		spritenum: 103,
+		fling: {
+			basePower: 70
+		},
 		onDrive: 'Water',
 		desc: "Changes the type of Techno Blast to Water."
 	},
@@ -655,6 +733,9 @@ exports.BattleItems = {
 		id: "DracoPlate",
 		name: "Draco Plate",
 		spritenum: 105,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Dragon',
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Dragon')
@@ -668,6 +749,9 @@ exports.BattleItems = {
 		id: "DragonFang",
 		name: "Dragon Fang",
 		spritenum: 106,
+		fling: {
+			basePower: 70
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Dragon')
 			{
@@ -697,6 +781,9 @@ exports.BattleItems = {
 		id: "DreadPlate",
 		name: "Dread Plate",
 		spritenum: 110,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Dark',
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Dark')
@@ -721,6 +808,9 @@ exports.BattleItems = {
 		id: "EarthPlate",
 		name: "Earth Plate",
 		spritenum: 117,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Ground',
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Ground')
@@ -734,6 +824,9 @@ exports.BattleItems = {
 		id: "EjectButton",
 		name: "Eject Button",
 		spritenum: 118,
+		fling: {
+			basePower: 30
+		},
 		onAfterMoveSecondary: function(target, source, move) {
 			if (source && source !== target && move)
 			{
@@ -750,6 +843,9 @@ exports.BattleItems = {
 		id: "Electirizer",
 		name: "Electirizer",
 		spritenum: 119,
+		fling: {
+			basePower: 80
+		},
 		desc: "Evolves Electabuzz into Electivire."
 	},
 	"ElectricGem": {
@@ -773,6 +869,9 @@ exports.BattleItems = {
 		id: "EnergyPowder",
 		name: "EnergyPowder",
 		spritenum: 123,
+		fling: {
+			basePower: 30
+		},
 		desc: "Restores 50 HP to one Pokemon but tastes bitter."
 	},
 	"EnigmaBerry": {
@@ -808,6 +907,9 @@ exports.BattleItems = {
 		id: "Eviolite",
 		name: "Eviolite",
 		spritenum: 130,
+		fling: {
+			basePower: 40
+		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.template.nfe)
 			{
@@ -821,6 +923,9 @@ exports.BattleItems = {
 		id: "ExpertBelt",
 		name: "Expert Belt",
 		spritenum: 132,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && this.getEffectiveness(move.type, target) > 0)
 			{
@@ -889,6 +994,9 @@ exports.BattleItems = {
 		id: "FistPlate",
 		name: "Fist Plate",
 		spritenum: 143,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Fighting',
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Fighting')
@@ -902,6 +1010,10 @@ exports.BattleItems = {
 		id: "FlameOrb",
 		name: "Flame Orb",
 		spritenum: 145,
+		fling: {
+			basePower: 30,
+			status: 'brn'
+		},
 		onResidualPriority: -26.2,
 		onResidual: function(pokemon) {
 			if (!pokemon.status)
@@ -916,6 +1028,9 @@ exports.BattleItems = {
 		id: "FlamePlate",
 		name: "Flame Plate",
 		spritenum: 146,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Fire',
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Fire')
@@ -929,6 +1044,9 @@ exports.BattleItems = {
 		id: "FloatStone",
 		name: "Float Stone",
 		spritenum: 147,
+		fling: {
+			basePower: 30
+		},
 		onModifyPokemon: function(pokemon) {
 			pokemon.weightkg /= 2;
 		},
@@ -955,6 +1073,9 @@ exports.BattleItems = {
 		id: "FocusBand",
 		name: "Focus Band",
 		spritenum: 150,
+		fling: {
+			basePower: 10
+		},
 		onDamage: function(damage, target, source, effect) {
 			if (Math.random()*10 < 1 && damage >= target.hp && effect && effect.effectType === 'Move')
 			{
@@ -968,6 +1089,9 @@ exports.BattleItems = {
 		id: "FocusSash",
 		name: "Focus Sash",
 		spritenum: 151,
+		fling: {
+			basePower: 10
+		},
 		onDamage: function(damage, target, source, effect) {
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move')
 			{
@@ -983,6 +1107,9 @@ exports.BattleItems = {
 		id: "FullIncense",
 		name: "Full Incense",
 		spritenum: 155,
+		fling: {
+			basePower: 10
+		},
 		desc: "Makes the holder move last. Allows breeding of Munchlax."
 	},
 	"GanlonBerry": {
@@ -1053,12 +1180,18 @@ exports.BattleItems = {
 		id: "GripClaw",
 		name: "Grip Claw",
 		spritenum: 179,
+		fling: {
+			basePower: 90
+		},
 		desc: "Partial trapping moves last 5 turns."
 	},
 	"GriseousOrb": {
 		id: "GriseousOrb",
 		name: "Griseous Orb",
 		spritenum: 180,
+		fling: {
+			basePower: 60
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (user.template.species === 'Giratina' && (move.type === 'Ghost' || move.type === 'Dragon'))
 			{
@@ -1108,6 +1241,9 @@ exports.BattleItems = {
 		id: "HardStone",
 		name: "Hard Stone",
 		spritenum: 187,
+		fling: {
+			basePower: 100
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Rock')
 			{
@@ -1120,12 +1256,18 @@ exports.BattleItems = {
 		id: "HeatRock",
 		name: "Heat Rock",
 		spritenum: 193,
+		fling: {
+			basePower: 60
+		},
 		desc: "Sunny Day lasts 8 turns."
 	},
 	"HelixFossil": {
 		id: "HelixFossil",
 		name: "Helix Fossil",
 		spritenum: 195,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be revived into Omanyte."
 	},
 	"HondewBerry": {
@@ -1182,6 +1324,9 @@ exports.BattleItems = {
 		id: "IciclePlate",
 		name: "Icicle Plate",
 		spritenum: 220,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Ice',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ice')
@@ -1195,12 +1340,18 @@ exports.BattleItems = {
 		id: "IcyRock",
 		name: "Icy Rock",
 		spritenum: 221,
+		fling: {
+			basePower: 40
+		},
 		desc: "Hail lasts 8 turns."
 	},
 	"InsectPlate": {
 		id: "InsectPlate",
 		name: "Insect Plate",
 		spritenum: 223,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Bug',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Bug')
@@ -1214,6 +1365,9 @@ exports.BattleItems = {
 		id: "IronBall",
 		name: "Iron Ball",
 		spritenum: 224,
+		fling: {
+			basePower: 130
+		},
 		onModifyPokemon: function(pokemon) {
 			pokemon.negateImmunity['Ground'] = true;
 		},
@@ -1226,6 +1380,9 @@ exports.BattleItems = {
 		id: "IronPlate",
 		name: "Iron Plate",
 		spritenum: 225,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Steel',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Steel')
@@ -1254,7 +1411,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "\"If hit by a physical attack, the attacker takes 12.5% damage. Unobtainable in BW. One-time use.\""
+		desc: "If hit by a physical attack, the attacker takes 12.5% damage. Unobtainable in BW. One-time use."
 	},
 	"KasibBerry": {
 		id: "KasibBerry",
@@ -1311,13 +1468,20 @@ exports.BattleItems = {
 		id: "King'sRock",
 		name: "King's Rock",
 		spritenum: 236,
+		fling: {
+			basePower: 30,
+			volatileStatus: 'flinch'
+		},
 		desc: "Certain moves have a 10% flinch rate."
 	},
 	"LaggingTail": {
 		id: "LaggingTail",
 		name: "Lagging Tail",
 		spritenum: 237,
-		desc: ""
+		fling: {
+			basePower: 10
+		},
+		desc: "The holder will go last within its move's priority bracket, regardless of Speed."
 	},
 	"LansatBerry": {
 		id: "LansatBerry",
@@ -1342,6 +1506,9 @@ exports.BattleItems = {
 		id: "LaxIncense",
 		name: "Lax Incense",
 		spritenum: 240,
+		fling: {
+			basePower: 10
+		},
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
 			this.debug('Lax Incense - decreasing accuracy');
@@ -1353,6 +1520,9 @@ exports.BattleItems = {
 		id: "Leftovers",
 		name: "Leftovers",
 		spritenum: 242,
+		fling: {
+			basePower: 10
+		},
 		onResidualPriority: 50-5.2,
 		onResidual: function(pokemon) {
 			this.heal(pokemon.maxhp/16);
@@ -1424,8 +1594,11 @@ exports.BattleItems = {
 		id: "LifeOrb",
 		name: "Life Orb",
 		spritenum: 249,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user) {
-			this.debug('LO boost')
+			this.debug('LO boost');
 			user.addVolatile('LifeOrb');
 			return basePower * 1.3;
 		},
@@ -1445,6 +1618,10 @@ exports.BattleItems = {
 		id: "LightBall",
 		name: "Light Ball",
 		spritenum: 251,
+		fling: {
+			basePower: 30,
+			status: 'par'
+		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.template.species === 'Pikachu')
 			{
@@ -1458,6 +1635,9 @@ exports.BattleItems = {
 		id: "LightClay",
 		name: "Light Clay",
 		spritenum: 252,
+		fling: {
+			basePower: 30
+		},
 		// implemented in the corresponding thing
 		desc: "If the holder uses either Light Screen or Reflect, the two moves will stay on the field for eight turns instead of five."
 	},
@@ -1465,6 +1645,9 @@ exports.BattleItems = {
 		id: "LuckyPunch",
 		name: "Lucky Punch",
 		spritenum: 261,
+		fling: {
+			basePower: 40
+		},
 		onModifyMove: function(move, user) {
 			if (user.template.species === 'Chansey') {
 				move.critRatio += 2;
@@ -1496,6 +1679,9 @@ exports.BattleItems = {
 		id: "LustrousOrb",
 		name: "Lustrous Orb",
 		spritenum: 265,
+		fling: {
+			basePower: 60
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && user.template.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon'))
 			{
@@ -1508,6 +1694,9 @@ exports.BattleItems = {
 		id: "MachoBrace",
 		name: "Macho Brace",
 		spritenum: 269,
+		fling: {
+			basePower: 60
+		},
 		onModifyStats: function(stats, pokemon) {
 			stats.spe /= 2;
 		},
@@ -1517,6 +1706,9 @@ exports.BattleItems = {
 		id: "Magnet",
 		name: "Magnet",
 		spritenum: 273,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Electric')
 			{
@@ -1562,6 +1754,9 @@ exports.BattleItems = {
 		id: "MeadowPlate",
 		name: "Meadow Plate",
 		spritenum: 282,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Grass',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Grass')
@@ -1575,6 +1770,23 @@ exports.BattleItems = {
 		id: "MentalHerb",
 		name: "Mental Herb",
 		spritenum: 285,
+		fling: {
+			basePower: 10,
+			effect: function(pokemon) {
+				var conditions = ['Attract','Taunt','Encore','Torment','Disable'];
+				for (var i=0; i<conditions.length; i++)
+				{
+					if (pokemon.volatiles[conditions[i]])
+					{
+						for (var j=0; j<conditions.length; j++)
+						{
+							pokemon.removeVolatile(conditions[j]);
+						}
+						return;
+					}
+				}
+			}
+		},
 		onUpdate: function(pokemon) {
 			var conditions = ['Attract','Taunt','Encore','Torment','Disable'];
 			for (var i=0; i<conditions.length; i++)
@@ -1596,6 +1808,9 @@ exports.BattleItems = {
 		id: "MetalCoat",
 		name: "Metal Coat",
 		spritenum: 286,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Steel')
 			{
@@ -1607,6 +1822,9 @@ exports.BattleItems = {
 	"MetalPowder": {
 		id: "MetalPowder",
 		name: "Metal Powder",
+		fling: {
+			basePower: 10
+		},
 		spritenum: 287,
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.template.species === 'Ditto')
@@ -1621,6 +1839,9 @@ exports.BattleItems = {
 		id: "Metronome",
 		name: "Metronome",
 		spritenum: 289,
+		fling: {
+			basePower: 30
+		},
 		desc: "Boost the power of attacks used consecutively."
 	},
 	"MicleBerry": {
@@ -1638,6 +1859,9 @@ exports.BattleItems = {
 		id: "MindPlate",
 		name: "Mind Plate",
 		spritenum: 291,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Psychic',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Psychic')
@@ -1650,6 +1874,9 @@ exports.BattleItems = {
 	"MiracleSeed": {
 		id: "MiracleSeed",
 		name: "Miracle Seed",
+		fling: {
+			basePower: 30
+		},
 		spritenum: 292,
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Grass')
@@ -1663,6 +1890,9 @@ exports.BattleItems = {
 		id: "MuscleBand",
 		name: "Muscle Band",
 		spritenum: 297,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.category === 'Physical')
 			{
@@ -1675,6 +1905,9 @@ exports.BattleItems = {
 		id: "MysticWater",
 		name: "Mystic Water",
 		spritenum: 300,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Water')
 			{
@@ -1698,6 +1931,9 @@ exports.BattleItems = {
 		id: "NeverMeltIce",
 		name: "NeverMeltIce",
 		spritenum: 305,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ice')
 			{
@@ -1758,6 +1994,9 @@ exports.BattleItems = {
 		id: "OddIncense",
 		name: "Odd Incense",
 		spritenum: 312,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Psychic')
 			{
@@ -1770,6 +2009,9 @@ exports.BattleItems = {
 		id: "OldAmber",
 		name: "Old Amber",
 		spritenum: 314,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be revived into Aerodactyl."
 	},
 	"OranBerry": {
@@ -1919,12 +2161,19 @@ exports.BattleItems = {
 		id: "PlumeFossil",
 		name: "Plume Fossil",
 		spritenum: 339,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be revived into Archen."
 	},
 	"PoisonBarb": {
 		id: "PoisonBarb",
 		name: "Poison Barb",
 		spritenum: 343,
+		fling: {
+			basePower: 70,
+			status: 'psn'
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Poison')
 			{
@@ -1974,6 +2223,9 @@ exports.BattleItems = {
 		},
 		name: "Power Herb",
 		spritenum: 358,
+		fling: {
+			basePower: 10
+		},
 		desc: "Moves with a charge turn activate instantly."
 	},
 	"PsychicGem": {
@@ -2008,12 +2260,18 @@ exports.BattleItems = {
 		id: "QuickClaw",
 		name: "Quick Claw",
 		spritenum: 373,
+		fling: {
+			basePower: 80
+		},
 		desc: "Gives the user a 20% chance to go first."
 	},
 	"QuickPowder": {
 		id: "QuickPowder",
 		name: "Quick Powder",
 		spritenum: 374,
+		fling: {
+			basePower: 10
+		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.template.species === 'Ditto')
 			{
@@ -2037,6 +2295,9 @@ exports.BattleItems = {
 		id: "RareBone",
 		name: "Rare Bone",
 		spritenum: 379,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be Flung for 100 BP."
 	},
 	"RawstBerry": {
@@ -2066,6 +2327,9 @@ exports.BattleItems = {
 		id: "RazorClaw",
 		name: "Razor Claw",
 		spritenum: 382,
+		fling: {
+			basePower: 80
+		},
 		onModifyMove: function(move) {
 			move.critRatio++;
 		},
@@ -2075,6 +2339,10 @@ exports.BattleItems = {
 		id: "RazorFang",
 		name: "Razor Fang",
 		spritenum: 383,
+		fling: {
+			basePower: 30,
+			volatileStatus: 'flinch'
+		},
 		desc: "Certain moves have a 10% flinch rate. Evolves Gligar into Gliscor."
 	},
 	"RazzBerry": {
@@ -2092,6 +2360,9 @@ exports.BattleItems = {
 		id: "RedCard",
 		name: "Red Card",
 		spritenum: 387,
+		fling: {
+			basePower: 10
+		},
 		onAfterMoveSecondary: function(target, source, move) {
 			if (source && source !== target && move && move.isContact)
 			{
@@ -2148,6 +2419,9 @@ exports.BattleItems = {
 		id: "RockIncense",
 		name: "Rock Incense",
 		spritenum: 416,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Rock')
 			{
@@ -2160,6 +2434,9 @@ exports.BattleItems = {
 		id: "RockyHelmet",
 		name: "Rocky Helmet",
 		spritenum: 417,
+		fling: {
+			basePower: 60
+		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact)
 			{
@@ -2172,12 +2449,18 @@ exports.BattleItems = {
 		id: "RootFossil",
 		name: "Root Fossil",
 		spritenum: 418,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be revived into Lileep."
 	},
 	"RoseIncense": {
 		id: "RoseIncense",
 		name: "Rose Incense",
 		spritenum: 419,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Grass')
 			{
@@ -2230,6 +2513,9 @@ exports.BattleItems = {
 		id: "ScopeLens",
 		name: "Scope Lens",
 		spritenum: 429,
+		fling: {
+			basePower: 30
+		},
 		onModifyMove: function(move) {
 			move.critRatio++;
 		},
@@ -2239,6 +2525,9 @@ exports.BattleItems = {
 		id: "SeaIncense",
 		name: "Sea Incense",
 		spritenum: 430,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Water')
 			{
@@ -2251,6 +2540,9 @@ exports.BattleItems = {
 		id: "SharpBeak",
 		name: "Sharp Beak",
 		spritenum: 436,
+		fling: {
+			basePower: 50
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move && move.type === 'Flying')
 			{
@@ -2263,6 +2555,9 @@ exports.BattleItems = {
 		id: "ShedShell",
 		name: "Shed Shell",
 		spritenum: 437,
+		fling: {
+			basePower: 10
+		},
 		onModifyPokemonPriority: -10,
 		onModifyPokemon: function(pokemon) {
 			pokemon.trapped = false;
@@ -2273,6 +2568,9 @@ exports.BattleItems = {
 		id: "ShellBell",
 		name: "Shell Bell",
 		spritenum: 438,
+		fling: {
+			basePower: 30
+		},
 		onAfterMoveSelf: function(source, target) {
 			this.heal(source.lastDamage/8, source);
 		},
@@ -2282,6 +2580,9 @@ exports.BattleItems = {
 		id: "ShockDrive",
 		name: "Shock Drive",
 		spritenum: 442,
+		fling: {
+			basePower: 70
+		},
 		onDrive: 'Electric',
 		desc: "Changes the type of Techno Blast to Electric."
 	},
@@ -2309,6 +2610,9 @@ exports.BattleItems = {
 		id: "SilkScarf",
 		name: "Silk Scarf",
 		spritenum: 444,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Normal')
 			{
@@ -2321,6 +2625,9 @@ exports.BattleItems = {
 		id: "SilverPowder",
 		name: "SilverPowder",
 		spritenum: 447,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Bug')
 			{
@@ -2352,12 +2659,18 @@ exports.BattleItems = {
 		id: "SkullFossil",
 		name: "Skull Fossil",
 		spritenum: 449,
+		fling: {
+			basePower: 100
+		},
 		desc: "Can be revived into Cranidos."
 	},
 	"SkyPlate": {
 		id: "SkyPlate",
 		name: "Sky Plate",
 		spritenum: 450,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Flying',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Flying')
@@ -2371,12 +2684,18 @@ exports.BattleItems = {
 		id: "SmoothRock",
 		name: "Smooth Rock",
 		spritenum: 453,
+		fling: {
+			basePower: 10
+		},
 		desc: "Makes sandstorm last 8 turns."
 	},
 	"SoftSand": {
 		id: "SoftSand",
 		name: "Soft Sand",
 		spritenum: 456,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ground')
 			{
@@ -2389,6 +2708,9 @@ exports.BattleItems = {
 		id: "SoulDew",
 		name: "Soul Dew",
 		spritenum: 459,
+		fling: {
+			basePower: 30
+		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.template.species === 'Latios' || pokemon.template.species === 'Latias')
 			{
@@ -2402,6 +2724,9 @@ exports.BattleItems = {
 		id: "SpellTag",
 		name: "Spell Tag",
 		spritenum: 461,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ghost')
 			{
@@ -2425,6 +2750,9 @@ exports.BattleItems = {
 		id: "SplashPlate",
 		name: "Splash Plate",
 		spritenum: 463,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Water',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Water')
@@ -2438,6 +2766,9 @@ exports.BattleItems = {
 		id: "SpookyPlate",
 		name: "Spooky Plate",
 		spritenum: 464,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Ghost',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Ghost')
@@ -2500,6 +2831,9 @@ exports.BattleItems = {
 	"Stick": {
 		id: "Stick",
 		name: "Stick",
+		fling: {
+			basePower: 60
+		},
 		spritenum: 475,
 		onModifyMove: function(move, user) {
 			if (user.template.species === 'Farfetch\'d') {
@@ -2512,6 +2846,9 @@ exports.BattleItems = {
 		id: "StickyBarb",
 		name: "Sticky Barb",
 		spritenum: 476,
+		fling: {
+			basePower: 80
+		},
 		onResidualPriority: -26.2,
 		onResidual: function(pokemon) {
 			this.damage(pokemon.maxhp/8);
@@ -2530,6 +2867,9 @@ exports.BattleItems = {
 		id: "StonePlate",
 		name: "Stone Plate",
 		spritenum: 477,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Rock',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Rock')
@@ -2574,6 +2914,9 @@ exports.BattleItems = {
 		id: "ThickClub",
 		name: "Thick Club",
 		spritenum: 491,
+		fling: {
+			basePower: 90
+		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak')
 			{
@@ -2586,6 +2929,10 @@ exports.BattleItems = {
 		id: "ToxicOrb",
 		name: "Toxic Orb",
 		spritenum: 515,
+		fling: {
+			basePower: 30,
+			status: 'tox'
+		},
 		onResidualPriority: -26.2,
 		onResidual: function(pokemon) {
 			if (!pokemon.status && !pokemon.hasType('Steel'))
@@ -2600,6 +2947,9 @@ exports.BattleItems = {
 		id: "ToxicPlate",
 		name: "Toxic Plate",
 		spritenum: 516,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Poison',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Poison')
@@ -2613,6 +2963,9 @@ exports.BattleItems = {
 		id: "TwistedSpoon",
 		name: "TwistedSpoon",
 		spritenum: 520,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Psychic')
 			{
@@ -2673,6 +3026,9 @@ exports.BattleItems = {
 		id: "WaveIncense",
 		name: "Wave Incense",
 		spritenum: 531,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Water')
 			{
@@ -2696,6 +3052,26 @@ exports.BattleItems = {
 		id: "WhiteHerb",
 		name: "White Herb",
 		spritenum: 535,
+		fling: {
+			basePower: 10,
+			effect: function(pokemon) {
+				var activate = false;
+				var boosts = {};
+				for (var i in pokemon.baseBoosts)
+				{
+					if (pokemon.baseBoosts[i] < 0)
+					{
+						activate = true;
+						boosts[i] = 0;
+					}
+				}
+				if (activate)
+				{
+					pokemon.setBoost(boosts);
+					this.add('residual '+pokemon.id+' item-restore WhiteHerb');
+				}
+			}
+		},
 		onUpdate: function(pokemon) {
 			var activate = false;
 			var boosts = {};
@@ -2719,6 +3095,9 @@ exports.BattleItems = {
 		id: "WideLens",
 		name: "Wide Lens",
 		spritenum: 537,
+		fling: {
+			basePower: 10
+		},
 		onModifyMove: function(move) {
 			if (typeof move.accuracy === 'number')
 			{
@@ -2753,6 +3132,9 @@ exports.BattleItems = {
 		id: "WiseGlasses",
 		name: "Wise Glasses",
 		spritenum: 539,
+		fling: {
+			basePower: 10
+		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.category === 'Special')
 			{
@@ -2785,6 +3167,9 @@ exports.BattleItems = {
 		id: "ZapPlate",
 		name: "Zap Plate",
 		spritenum: 572,
+		fling: {
+			basePower: 90
+		},
 		onPlate: 'Electric',
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Electric')
@@ -2798,6 +3183,9 @@ exports.BattleItems = {
 		id: "ZoomLens",
 		name: "Zoom Lens",
 		spritenum: 574,
+		fling: {
+			basePower: 10
+		},
 		onModifyMove: function(move, user, target) {
 			if (typeof move.accuracy === 'number' && !this.willMove(target))
 			{
