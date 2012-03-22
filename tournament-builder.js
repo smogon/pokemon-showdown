@@ -222,7 +222,6 @@ function TournamentBuilder(maxParticipants)
                         }
                         if (nodesToScanOffsets.length === 0 || nodesToScanOffsets[nodesToScanOffsets.length - 1] !== currentNode.parentOffset)
                             nodesToScanOffsets.push(currentNode.parentOffset);
-                        console.log(currentNodeOffset + " default win for tournament.");
                         continue;
                     }
 
@@ -247,7 +246,6 @@ function TournamentBuilder(maxParticipants)
             if (this.getParticipantOfNode_(rootNode.battle.childAOffset) === null ||
                 this.getParticipantOfNode_(rootNode.battle.childBOffset) === null)
             {
-                console.log("Default win for finals tournament.");
                 var battle = new TournamentBuilderBattle();
                 battle.offset = this.tournamentTree_.rootNodeOffset;
                 if (this.getParticipantOfNode_(rootNode.battle.childAOffset) === null &&
@@ -276,8 +274,8 @@ function TournamentBuilder(maxParticipants)
             return result;
         } catch (e)
         {
-            if (e == "NoRemainingBattlesException"||
-                e == "FinalsDefaultWinNonException")
+            if (e.message === "NoRemainingBattlesException"||
+                e.message === "FinalsDefaultWinNonException")
                 throw e;
             throw Error("NoAvailableBattlesException");
         }
@@ -327,7 +325,7 @@ function TournamentBuilder(maxParticipants)
                 break;
         }
 
-        if (battle.offset == this.tournamentTree_.rootNodeOffset)
+        if (battle.offset === this.tournamentTree_.rootNodeOffset)
             if (status === TournamentBuilderTreeNodeBattleDataBattleStatus.A_WIN ||
                 status === TournamentBuilderTreeNodeBattleDataBattleStatus.B_WIN ||
                 status === TournamentBuilderTreeNodeBattleDataBattleStatus.DRAW)
