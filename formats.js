@@ -878,7 +878,7 @@ exports.BattleFormats = {
             'Meowth+Feint+Double-Edge',
             'Meowth+Feint+Mimic',
             'Meowth+Feint+DefenseCurl',
-            'Meowth+Feint+Nightmare',
+            'Meowth+Feint+Nightmare',
             'Meowth+PetalDance+Bite',
             'Meowth+PetalDance+FakeOut',
             'Meowth+PetalDance+FurySwipes',
