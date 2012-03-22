@@ -269,16 +269,18 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		return true;
 		break;
-		
+	
 	case 'ban':
 	case 'b':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		var targets = splitTarget(target);
+		var targetUser = targets[0];
+		
 		if (user.isMod())
 		{
-			var targetUser = getUser(target);
 			if (!targetUser)
 			{
-				socket.emit('console', 'User '+target+' not found.');
+				socket.emit('console', 'User '+targets[2]+' not found.');
 				return true;
 			}
 			if (!user.canMod(targetUser.group))
@@ -288,6 +290,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			
 			room.add(""+targetUser.name+" was banned by "+user.name+".");
+			targetUser.emit('message', user.name+' has banned you. '+targets[1]);
 			var alts = targetUser.getAlts();
 			if (alts.length) room.add(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
 			
@@ -446,6 +449,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
+		if (user.muted && !targetUser.isMod()) 
+		{
+			socket.emit('console', 'You can only private message users marked by %, @, or & when muted.');
+			return true;
+		}
 		
 		var message = {
 			name: user.getIdentity(),
@@ -490,12 +498,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case 'mute':
 	case 'm':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		var targets = splitTarget(target);
+		var targetUser = targets[0];
+		
 		if (user.isMod())
 		{
-			var targetUser = getUser(target);
 			if (!targetUser)
 			{
-				socket.emit('console', 'User '+target+' not found.');
+				socket.emit('console', 'User '+targets[2]+' not found.');
 				return true;
 			}
 			if (!user.canMod(targetUser.group))
@@ -505,6 +515,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			
 			room.add(''+targetUser.name+' was muted by '+user.name+'.');
+			targetUser.emit('message', user.name+' has muted you. '+targets[1]);
 			var alts = targetUser.getAlts();
 			if (alts.length) room.add(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 			
@@ -986,15 +997,41 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		});
 		return true;
 		break;
-		
+	
 	case 'nick':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		user.rename(target);
 		return true;
 		break;
-		
+	
 	case 'forcerename':
 	case 'fr':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		var targets = splitTarget(target);
+		var targetUser = targets[0];
+		if (!targetUser)
+		{
+			socket.emit('console', 'User '+targets[2]+' not found.');
+			return true;
+		}
+		if (targetUser && user.canMod(targetUser.group))
+		{
+			if (targetUser.userid === toUserid(targets[2]))
+			{
+				room.add(''+targetUser.name+' was forced to choose a new name by '+user.name+'.');
+				targetUser.resetName();
+				targetUser.emit('nameTaken', {reason: user.name+" has forced you to change your name. "+targets[1]});
+			}
+			else
+			{
+				socket.emit('console', "User "+targetUser.name+" is no longer using that name.");
+			}
+		}
+		return true;
+		break;
+	
+	case 'forcerenameto':
+	case 'frt':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
 		var targetUser = targets[0];
@@ -1014,7 +1051,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				room.add(''+targetUser.name+' was forced to choose a new name by '+user.name+'.');
 				targetUser.resetName();
-				targetUser.emit('nameTaken', {reason: "Please choose a different name."});
+				targetUser.emit('nameTaken', {reason: user.name+" has forced you to change your name."});
 			}
 			else
 			{
@@ -1320,18 +1357,23 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts')
 		{
 			matched = true;
-			socket.emit('console', '/alts [username] - Get a user\'s alts. Requires: % @ &');
+			socket.emit('console', '/alts OR /altcheck OR /alt OR /getalts [username] - Get a user\'s alts. Requires: % @ &');
 		}
 		if (target === '%' || target === 'forcerename' || target === 'fr')
 		{
 			matched = true;
-			socket.emit('console', '/forcerename OR /fr [username] - Force a user to choose a new name. Requires: % @ &');
-			socket.emit('console', '/forcerename OR /fr [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: % @ &');
+			socket.emit('console', '/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: % @ &');
+		}
+		if (target === '%' || target === 'forcerenameto' || target === 'frt')
+		{
+			matched = true;
+			socket.emit('console', '/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: % @ &');
+			socket.emit('console', '/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: % @ &');
 		}
 		if (target === '%' || target === 'ban' || target === 'b')
 		{
 			matched = true;
-			socket.emit('console', '/ban OR /b [username] - Kick user from all rooms and ban user\'s IP address. Requires: % @ &');
+			socket.emit('console', '/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: % @ &');
 		}
 		if (target === '%' || target === 'unban')
 		{
@@ -1346,7 +1388,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (target === '%' || target === 'mute' || target === 'm')
 		{
 			matched = true;
-			socket.emit('console', '/mute OR /m [username] - Mute user. Requires: % @ &');
+			socket.emit('console', '/mute OR /m [username], [reason] - Mute user with reason. Requires: % @ &');
 		}
 		if (target === '%' || target === 'unmute')
 		{
@@ -1420,7 +1462,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			socket.emit('console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
 			socket.emit('console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
-			if (user.isMod()) socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
+			if (user.isMod()) socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /forcerenameto, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
 			if (user.isMod()) socket.emit('console', 'ADMIN COMMANDS: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
 			socket.emit('console', 'For details on all commands, use /help all');
 			if (user.isMod()) socket.emit('console', 'For details on all moderator commands, use /help %');
