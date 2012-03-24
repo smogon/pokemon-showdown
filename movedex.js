@@ -7125,12 +7125,25 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "All Electric-type moves are 50% weaker until the user switches out.",
-		shortDesc: "Electric-type attacks do 50% less damage.",
+		desc: "All Electric-type moves are weakened by two-thirds until the user switches out.",
+		shortDesc: "Electric-type attacks do 1/3 damage.",
 		id: "MudSport",
 		name: "Mud Sport",
 		pp: 15,
 		priority: 0,
+		volatileStatus: 'MudSport',
+		onTryHit: function(pokemon) {
+			if (pokemon.volatiles['MudSport']) return false;
+		},
+		effect: {
+			noCopy: true,
+			onStart: function() {
+				this.add("message Electricity's power was weakened! (placeholder)");
+			},
+			onAnyBasePower: function(basePower, user, target, move) {
+				if (move.type === 'Electric') return basePower / 3;
+			}
+		},
 		secondary: false,
 		target: "all",
 		type: "Ground"
@@ -12251,12 +12264,25 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "All Fire-type moves are 50% weaker until the user switches out.",
-		shortDesc: "Fire-type moves do 50% less damage.",
+		desc: "All Fire-type moves are weakened by two-thirds until the user switches out.",
+		shortDesc: "Fire-type moves do 1/3 damage.",
 		id: "WaterSport",
 		name: "Water Sport",
 		pp: 15,
 		priority: 0,
+		volatileStatus: 'WaterSport',
+		onTryHit: function(pokemon) {
+			if (pokemon.volatiles['WaterSport']) return false;
+		},
+		effect: {
+			noCopy: true,
+			onStart: function() {
+				this.add("message Fire's power was weakened! (placeholder)");
+			},
+			onAnyBasePower: function(basePower, user, target, move) {
+				if (move.type === 'Fire') return basePower / 3;
+			}
+		},
 		secondary: false,
 		target: "all",
 		type: "Water"
