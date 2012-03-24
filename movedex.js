@@ -410,7 +410,7 @@ exports.BattleMovedex = {
 		name: "Assist",
 		pp: 20,
 		priority: 0,
-		onTryHit: function(target) {
+		onHit: function(target) {
 			var moves = [];
 			for (var j=0; j<target.side.pokemon.length; j++)
 			{
@@ -1666,7 +1666,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		priority: 0,
-		onTryHit: function(pokemon) {
+		onHit: function(pokemon) {
 			var noCopycat = {Counter:1, MirrorCoat:1, Protect:1, Detect:1, Endure:1, DestinyBond:1, FollowMe:1, RagePowder:1, Snatch:1, HelpingHand:1, Thief:1, Covet:1, Trick:1, Switcheroo:1, Feint:1, FocusPunch:1, Transform:1, Bestow:1, DragonTail:1, CircleThrow:1};
 			if (!this.lastMove || noCopycat[this.lastMove])
 			{
@@ -2126,6 +2126,8 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
+		},
+		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
 		},
 		secondary: false,
@@ -2996,6 +2998,8 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
+		},
+		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
 		},
 		effect: {
@@ -6557,7 +6561,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		priority: 0,
-		onTryHit: function(target, pokemon) {
+		onHit: function(target, pokemon) {
 			var decision = this.willMove(target);
 			if (decision)
 			{
@@ -6806,7 +6810,7 @@ exports.BattleMovedex = {
 		name: "Metronome",
 		pp: 10,
 		priority: 0,
-		onTryHit: function(target) {
+		onHit: function(target) {
 			var moves = [];
 			for (var i in exports.BattleMovedex)
 			{
@@ -6955,6 +6959,8 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
+		},
+		onHit: function(target) {
 			this.useMove(this.lastMove, source);
 		},
 		secondary: false,
@@ -7215,7 +7221,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		priority: 0,
-		onTryHit: function(target) {
+		onHit: function(target) {
 			this.useMove('Earthquake', target);
 		},
 		secondary: false,
@@ -7943,6 +7949,8 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
+		},
+		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
 		},
 		effect: {
@@ -8099,6 +8107,8 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
+		},
+		onHit: function(target, pokemon) {
 			this.add('r-psycho-shift '+pokemon.id+' '+target.id);
 			pokemon.setStatus('');
 		},
@@ -8288,6 +8298,8 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
+		},
+		onHit: function(side, source) {
 			source.addVolatile('stall');
 		},
 		effect: {
@@ -8670,10 +8682,13 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onTryHit: function(target) {
-			if (target.hp >= target.maxhp || !target.setStatus('slp'))
+			if (target.hp >= target.maxhp)
 			{
 				return false;
 			}
+		},
+		onHit: function(target) {
+			if (!target.setStatus('slp')) return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
 			target.heal(target.maxhp);
@@ -8981,6 +8996,8 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
+		},
+		onHit: function(target, source) {
 			if (source.setAbility(target.ability))
 			{
 				this.add('message '+source.name+' copied '+target.name+'\'s '+source.ability+'! (placeholder)');
@@ -9710,6 +9727,8 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
+		},
+		onHit: function(pokemon) {
 			if (pokemon.setAbility('Simple'))
 			{
 				this.add('message Ability changed to Simple. (placeholder)');
@@ -9763,12 +9782,14 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onTryHit: function(target, source) {
-			var targetAbility = target.ability;
-			var sourceAbility = source.ability;
-			if (targetAbility === 'WonderGuard' || sourceAbility === 'WonderGuard')
+			if (target.ability === 'WonderGuard' || source.ability === 'WonderGuard')
 			{
 				return false;
 			}
+		},
+		onHit: function(target, source) {
+			var targetAbility = target.ability;
+			var sourceAbility = source.ability;
 			if (!target.setAbility(sourceAbility) || !source.setAbility(targetAbility))
 			{
 				target.ability = targetAbility;
@@ -9998,6 +10019,8 @@ exports.BattleMovedex = {
 		sleepUsable: true,
 		onTryHit: function(target) {
 			if (target.status !== 'slp') return false;
+		},
+		onHit: function(target) {
 			var moves = [];
 			for (var i=0; i<target.moveset.length; i++)
 			{
@@ -10840,6 +10863,8 @@ exports.BattleMovedex = {
 				this.add('message Not enough energy! (placeholder)');
 				return null;
 			}
+		},
+		onHit: function(target) {
 			target.damage(target.maxhp/4);
 		},
 		effect: {
