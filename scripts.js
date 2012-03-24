@@ -66,7 +66,7 @@ exports.BattleScripts = {
 		var canTargetFainted = {
 			all: 1, foeSide: 1
 		};
-		this.singleEvent('ModifyMove', move, null, pokemon, target, move);
+		this.singleEvent('ModifyMove', move, null, move, pokemon, target);
 		move = this.runEvent('ModifyMove',pokemon,target,move,move);
 		if (!move) return false;
 		
@@ -216,20 +216,7 @@ exports.BattleScripts = {
 		}
 		if (moveData.affectedByImmunities)
 		{
-			var type = move.type;
-			if (move.typeCallback)
-			{
-				if (typeof move.typeCallback === 'string')
-				{
-					type = move.typeCallback;
-				}
-				else
-				{
-					type = move.typeCallback.call(this, pokemon, target);
-				}
-				move.type = type;
-			}
-			if (!target.runImmunity(type, true))
+			if (!target.runImmunity(move.type, true))
 			{
 				this.singleEvent('MoveFail', move, null, target, pokemon, move);
 				if (move.selfdestruct)
