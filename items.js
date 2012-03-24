@@ -828,7 +828,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onAfterMoveSecondary: function(target, source, move) {
-			if (source && source !== target && move && source.lastDamage)
+			if (source && source !== target && move && move.category !== 'Status')
 			{
 				if (target.useItem())
 				{
