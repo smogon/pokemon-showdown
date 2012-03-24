@@ -12772,12 +12772,12 @@ exports.BattleMovedex = {
 				return null;
 			}
 		},
+		onHit: function(target, source) {
+			this.setWeather('RainDance');
+			source.addVolatile('MagicCoat');
+			source.addVolatile('AquaRing');
+		},
 		self: {
-			onHit: function(target, source) {
-				this.setWeather('RainDance');
-				target.addVolatile('MagicCoat');
-				target.addVolatile('AquaRing');
-			},
 			volatileStatus: 'mustRecharge'
 		},
 		secondary: {
