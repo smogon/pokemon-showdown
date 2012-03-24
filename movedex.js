@@ -5717,7 +5717,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 30,
 		category: "Special",
-		desc: "Inflicts damage and renders the target's Berry unusable. Berries that would activate in response to Incinerate, such as the Occa Berry, will be destroyed before their effect takes place. It also hits all opponents in double and all adjacent opponents in triple battles.",
+		desc: "Inflicts damage and renders the target's Berry unusable. It also hits all opponents in double and all adjacent opponents in triple battles.",
 		shortDesc: "Removes the target's Berry.",
 		id: "Incinerate",
 		name: "Incinerate",
@@ -7821,9 +7821,6 @@ exports.BattleMovedex = {
 			for (var i in {atk:1,spa:1})
 			{
 				targetBoosts[i] = target.baseBoosts[i];
-			}
-			for (var i in {atk:1,spa:1})
-			{
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
 			
@@ -9732,7 +9729,9 @@ exports.BattleMovedex = {
 			if (pokemon.setAbility('Simple'))
 			{
 				this.add('message Ability changed to Simple. (placeholder)');
+				return;
 			}
+			return false;
 		},
 		secondary: false,
 		target: "normal",
@@ -12575,7 +12574,9 @@ exports.BattleMovedex = {
 				{
 					pokemon.cureStatus();
 				}
+				return;
 			}
+			return false;
 		},
 		affectedByImmunities: true,
 		secondary: false,
