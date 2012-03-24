@@ -10023,7 +10023,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Does nothing if the user is awake. If the user asleep, it randomly performs one of its attacks. Rest will fail if it is selected. Sleep Talk's generated attacks do not cost PP, but it cannot generate moves with 0 PP, itself, Assist, Bide, Chatter, Copycat, Disabled attacks, Focus Punch, Me First, Metronome, Mirror Move, Uproar, or attacks with a charge-up turn like Fly or Skull Bash. (Moves with a recharge turn like Hyper Beam can be generated.)",
+		desc: "Does nothing if the user is awake. If the user asleep, it randomly performs one of its attacks. Rest will fail if it is selected. Sleep Talk's generated attacks do not cost PP, but it cannot generate itself, Assist, Bide, Chatter, Copycat, Focus Punch, Me First, Metronome, Mimic, Mirror Move, Nature Power, Sketch, Uproar, or attacks with a charge-up turn like Fly or Skull Bash. (Moves with a recharge turn like Hyper Beam can be generated.)",
 		shortDesc: "User must be asleep. Uses a random move.",
 		id: "SleepTalk",
 		name: "Sleep Talk",
@@ -10031,18 +10031,18 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		sleepUsable: true,
-		onTryHit: function(target) {
-			if (target.status !== 'slp') return false;
+		onTryHit: function(pokemon) {
+			if (pokemon.status !== 'slp') return false;
 		},
-		onHit: function(target) {
+		onHit: function(pokemon) {
 			var moves = [];
-			for (var i=0; i<target.moveset.length; i++)
+			for (var i=0; i<pokemon.moveset.length; i++)
 			{
-				var move = target.moveset[i].id;
+				var move = pokemon.moveset[i].id;
 				var NoSleepTalk = {
-					Assist:1, Bide:1, Bounce:1, Chatter:1, Copycat:1, Dig:1, Dive:1, Fly:1, FocusPunch:1, MeFirst:1, Metronome:1, MirrorMove:1, ShadowForce:1, SkullBash:1, SkyAttack:1, SkyDrop:1, SleepTalk:1, SolarBeam:1, RazorWind:1, Uproar:1
+					Assist:1, Bide:1, Chatter:1, Copycat:1, FocusPunch:1, MeFirst:1, Metronome:1, Mimic:1, MirrorMove:1, NaturePower:1, Sketch:1, SleepTalk:1, Uproar:1
 				};
-				if (move && !NoSleepTalk[move])
+				if (move && !(NoSleepTalk[move] || this.getMove(move).isTwoTurnMove))
 				{
 					moves.push(move);
 				}
@@ -10053,7 +10053,7 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
-			this.useMove(move, target);
+			this.useMove(move, pokemon);
 		},
 		secondary: false,
 		target: "self",
