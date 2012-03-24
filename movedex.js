@@ -1114,12 +1114,10 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
-		self: {
-			onHit: function(pokemon) {
-				// will shatter screens through sub
-				pokemon.side.foe.removeSideCondition('Reflect');
-				pokemon.side.foe.removeSideCondition('LightScreen');
-			}
+		onHit: function(pokemon) {
+			// will shatter screens through sub
+			pokemon.side.removeSideCondition('Reflect');
+			pokemon.side.removeSideCondition('LightScreen');
 		},
 		priority: 0,
 		secondary: false,
