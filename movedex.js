@@ -8420,27 +8420,29 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		onHit: function(target, pokemon) {
-			if (pokemon.removeVolatile('LeechSeed'))
-			{
-				this.add('r-blow-away '+pokemon.id+' LeechSeed');
-			}
-			if (pokemon.side.removeSideCondition('Spikes'))
-			{
-				this.add('r-blow-away '+pokemon.id+' Spikes');
-			}
-			if (pokemon.side.removeSideCondition('ToxicSpikes'))
-			{
-				this.add('r-blow-away '+pokemon.id+' ToxicSpikes');
-			}
-			if (pokemon.side.removeSideCondition('StealthRock'))
-			{
-				this.add('r-blow-away '+pokemon.id+' StealthRock');
-			}
-			if (pokemon.volatiles['partiallyTrapped'])
-			{
-				this.add('r-blow-away '+pokemon.id+' '+pokemon.volatiles['partiallyTrapped'].sourceEffect.id);
-				delete pokemon.volatiles['partiallyTrapped'];
+		self: {
+			onHit: function(pokemon) {
+				if (pokemon.removeVolatile('LeechSeed'))
+				{
+					this.add('r-blow-away '+pokemon.id+' LeechSeed');
+				}
+				if (pokemon.side.removeSideCondition('Spikes'))
+				{
+					this.add('r-blow-away '+pokemon.id+' Spikes');
+				}
+				if (pokemon.side.removeSideCondition('ToxicSpikes'))
+				{
+					this.add('r-blow-away '+pokemon.id+' ToxicSpikes');
+				}
+				if (pokemon.side.removeSideCondition('StealthRock'))
+				{
+					this.add('r-blow-away '+pokemon.id+' StealthRock');
+				}
+				if (pokemon.volatiles['partiallyTrapped'])
+				{
+					this.add('r-blow-away '+pokemon.id+' '+pokemon.volatiles['partiallyTrapped'].sourceEffect.id);
+					delete pokemon.volatiles['partiallyTrapped'];
+				}
 			}
 		},
 		secondary: false,
@@ -10786,8 +10788,10 @@ exports.BattleMovedex = {
 		onModifyMove: function(move) {
 			move.type = '???';
 		},
-		onHit: function(target, source) {
-			this.damage(source.maxhp/4, source, source, 'struggle-recoil');
+		self: {
+			onHit: function(source) {
+				this.damage(source.maxhp/4, source, source, 'struggle-recoil');
+			}
 		},
 		secondary: false,
 		target: "normal",
@@ -12795,12 +12799,12 @@ exports.BattleMovedex = {
 				return null;
 			}
 		},
-		onHit: function(target, source) {
-			this.setWeather('RainDance');
-			source.addVolatile('MagicCoat');
-			source.addVolatile('AquaRing');
-		},
 		self: {
+			onHit: function(source) {
+				this.setWeather('RainDance');
+				source.addVolatile('MagicCoat');
+				source.addVolatile('AquaRing');
+			},
 			volatileStatus: 'mustRecharge'
 		},
 		secondary: {
