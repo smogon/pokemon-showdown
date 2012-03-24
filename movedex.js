@@ -7884,19 +7884,7 @@ exports.BattleMovedex = {
 	"Present": {
 		num: 217,
 		accuracy: true,
-		basePower: false,
-		basePowerCallback: function() {
-			var rand = Math.random() * 8;
-			if (rand < 1)
-			{
-				return 120;
-			}
-			else if (rand < 4)
-			{
-				return 80;
-			}
-			return 40;
-		},
+		basePower: 0,
 		category: "Physical",
 		desc: "Randomly either attacks with a variable power, between 40 base power and 120 base power, or heals the target by 80 HP.",
 		shortDesc: "Does variable damage, or heals foe for 80 HP.",
@@ -7904,11 +7892,23 @@ exports.BattleMovedex = {
 		name: "Present",
 		pp: 15,
 		priority: 0,
-		onTryHit: function(target, source) {
-			if (Math.random() * 10 < 2)
+		onModifyMove: function(move, pokemon, target) {
+			var rand = Math.random() * 10;
+			if (rand < 2)
 			{
-				this.heal(80, target);
-				return null;
+				move.heal = [80, target.maxhp];
+			}
+			else if (rand < 6)
+			{
+				move.basePower = 40;
+			}
+			else if (rand < 9)
+			{
+				move.basePower = 80;
+			}
+			else
+			{
+				move.basePower = 120;
 			}
 		},
 		secondary: false,
