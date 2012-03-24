@@ -388,7 +388,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
-		onHit: function(side, source) {
+		onHitSide: function(side, source) {
 			for (var i=0; i<side.pokemon.length; i++)
 			{
 				side.pokemon[i].status = '';
@@ -4633,7 +4633,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		isViable: true,
 		priority: 0,
-		onFieldHit: function() {
+		onHitField: function() {
 			this.add('r-haze');
 			for (var i=0; i<this.sides.length; i++)
 			{
@@ -4714,7 +4714,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
-		onHit: function(side, source) {
+		onHitSide: function(side, source) {
 			for (var i=0; i<side.pokemon.length; i++)
 			{
 				side.pokemon[i].status = '';
@@ -7132,8 +7132,8 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		volatileStatus: 'MudSport',
-		onTryHit: function(pokemon) {
-			if (pokemon.volatiles['MudSport']) return false;
+		onTryHitField: function(target, source) {
+			if (source.volatiles['MudSport']) return false;
 		},
 		effect: {
 			noCopy: true,
@@ -7569,8 +7569,8 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
-		onFieldHit: function(target) {
-			this.add('r-perish-song '+target.id);
+		onHitField: function(target, source) {
+			this.add('r-perish-song '+source.id);
 			for (var i=0; i<this.sides.length; i++)
 			{
 				for (var j=0; j<this.sides[i].active.length; j++)
@@ -8297,7 +8297,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 3,
 		sideCondition: 'QuickGuard',
-		onTryHit: function(side, source) {
+		onTryHitSide: function(side, source) {
 			if (!this.willAct())
 			{
 				return false;
@@ -8313,7 +8313,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		onHit: function(side, source) {
+		onHitSide: function(side, source) {
 			source.addVolatile('stall');
 		},
 		effect: {
@@ -11445,7 +11445,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		isBounceable: true,
 		priority: 0,
-		onFieldHit: function(target, source) {
+		onHitField: function(target, source) {
 			for (var i=0; i<this.sides.length; i++)
 			{
 				for (var j=0; j<this.sides[i].active.length; j++)
@@ -11882,7 +11882,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: -7,
-		onFieldHit: function(target, source, effect) {
+		onHitField: function(target, source, effect) {
 			if (this.pseudoWeather['TrickRoom'])
 			{
 				this.removePseudoWeather('TrickRoom', source, effect);
@@ -12274,8 +12274,8 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		volatileStatus: 'WaterSport',
-		onTryHit: function(pokemon) {
-			if (pokemon.volatiles['WaterSport']) return false;
+		onTryHitField: function(target, source) {
+			if (source.volatiles['WaterSport']) return false;
 		},
 		effect: {
 			noCopy: true,
