@@ -1427,8 +1427,8 @@ exports.BattleMovedex = {
 		name: "Chatter",
 		pp: 20,
 		priority: 0,
-		onSecondaryHit: function(target, source) {
-			if (source.template.species !== 'Chatot') return false;
+		onModifyMove: function(move, pokemon) {
+			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
 		},
 		secondary: {
 			chance: 31,
