@@ -4633,7 +4633,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		isViable: true,
 		priority: 0,
-		onHit: function() {
+		onFieldHit: function() {
 			this.add('r-haze');
 			for (var i=0; i<this.sides.length; i++)
 			{
@@ -6427,7 +6427,7 @@ exports.BattleMovedex = {
 		name: "Magic Room",
 		pp: 10,
 		priority: -7,
-		onHit: function(target, source, effect) {
+		onFieldHit: function(target, source, effect) {
 			if (this.pseudoWeather['MagicRoom'])
 			{
 				this.removePseudoWeather('MagicRoom', source, effect);
@@ -7556,7 +7556,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
-		onHit: function(target) {
+		onFieldHit: function(target) {
 			this.add('r-perish-song '+target.id);
 			for (var i=0; i<this.sides.length; i++)
 			{
@@ -11429,7 +11429,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		isBounceable: true,
 		priority: 0,
-		onHit: function(target, source) {
+		onFieldHit: function(target, source) {
 			for (var i=0; i<this.sides.length; i++)
 			{
 				for (var j=0; j<this.sides[i].active.length; j++)
@@ -11866,7 +11866,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: -7,
-		onHit: function(target, source, effect) {
+		onFieldHit: function(target, source, effect) {
 			if (this.pseudoWeather['TrickRoom'])
 			{
 				this.removePseudoWeather('TrickRoom', source, effect);
@@ -12481,7 +12481,7 @@ exports.BattleMovedex = {
 		name: "Wonder Room",
 		pp: 10,
 		priority: -7,
-		onHit: function(target, source, effect) {
+		onFieldHit: function(target, source, effect) {
 			if (this.pseudoWeather['WonderRoom'])
 			{
 				this.removePseudoWeather('WonderRoom', source, effect);
