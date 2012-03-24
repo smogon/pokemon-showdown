@@ -1462,6 +1462,8 @@ function Battle(roomid, format, ranked)
 					CriticalHit: 1,
 					ModifyPokemon: 1,
 					ModifyStats: 1,
+					TryHit: 1,
+					Hit: 1,
 					FieldHit: 1,
 					Boost: 1,
 					DragOut: 1
