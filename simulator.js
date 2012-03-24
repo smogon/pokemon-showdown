@@ -2271,17 +2271,6 @@ function Battle(roomid, format, ranked)
 		if (!move.type) move.type = '???';
 		var type = move.type;
 		// '???' is typeless damage: used for Struggle and Confusion etc
-		if (move.typeCallback)
-		{
-			if (typeof move.typeCallback === 'string')
-			{
-				type = move.typeCallback;
-			}
-			else
-			{
-				type = move.typeCallback.call(selfB, pokemon, target, basePower);
-			}
-		}
 		
 		var basePower = move.basePower;
 		if (move.basePowerCallback)

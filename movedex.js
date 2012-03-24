@@ -5040,12 +5040,12 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		priority: 0,
+		onModifyMove: function(move, pokemon) {
+			move.type = pokemon.hpType || 'Dark';
+		},
 		secondary: false,
 		target: "normal",
-		type: "Normal",
-		typeCallback: function(pokemon) {
-			return pokemon.hpType || 'Dark';
-		}
+		type: "Normal"
 	},
 	"HiddenPowerBug": {
 		accuracy: 100,
@@ -5852,12 +5852,12 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
+		onModifyMove: function(move, pokemon) {
+			move.type = this.runEvent('Plate', pokemon, null, 'Judgment', 'Normal');
+		},
 		secondary: false,
 		target: "normal",
-		type: "Normal",
-		typeCallback: function(pokemon) {
-			return this.runEvent('Plate', pokemon, null, 'Judgment', 'Normal');
-		}
+		type: "Normal"
 	},
 	"JumpKick": {
 		num: 26,
@@ -7170,7 +7170,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
-			if (pokemon.volatiles['NaturalGift']) return this.effectData.basePower;
+			if (pokemon.volatiles['NaturalGift']) return pokemon.volatiles['NaturalGift'].basePower;
 			return false;
 		},
 		category: "Physical",
@@ -7185,10 +7185,13 @@ exports.BattleMovedex = {
 			if (item.id && item.naturalGift)
 			{
 				pokemon.addVolatile('NaturalGift');
-				this.effectData.basePower = item.naturalGift.basePower;
-				this.effectData.type = item.naturalGift.type;
+				pokemon.volatiles['NaturalGift'].basePower = item.naturalGift.basePower;
+				pokemon.volatiles['NaturalGift'].type = item.naturalGift.type;
 				pokemon.setItem('');
 			}
+		},
+		onModifyMove: function(move, pokemon) {
+			if (pokemon.volatiles['NaturalGift']) move.type = pokemon.volatiles['NaturalGift'].type;
 		},
 		onHit: function(target, source) {
 			return !!source.volatiles['NaturalGift'];
@@ -7198,11 +7201,7 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "normal",
-		type: "Normal",
-		typeCallback: function(pokemon) {
-			if (pokemon.volatiles['NaturalGift']) return this.effectData.type;
-			return 'Normal';
-		}
+		type: "Normal"
 	},
 	"NaturePower": {
 		num: 267,
@@ -10750,6 +10749,9 @@ exports.BattleMovedex = {
 		pp: 1,
 		isContact: true,
 		priority: 0,
+		onModifyMove: function(move) {
+			move.type = '???';
+		},
 		self: {
 			onHit: function(source) {
 				this.damage(source.maxhp/4, source, source, 'struggle-recoil');
@@ -10757,8 +10759,7 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "normal",
-		type: "Normal",
-		typeCallback: '???'
+		type: "Normal"
 	},
 	"StruggleBug": {
 		num: 522,
@@ -11382,12 +11383,12 @@ exports.BattleMovedex = {
 		name: "Techno Blast",
 		pp: 5,
 		priority: 0,
+		onModifyMove: function(move, pokemon) {
+			move.type = this.runEvent('Drive', pokemon, null, 'TechnoBlast', 'Normal');
+		},
 		secondary: false,
 		target: "normal",
-		type: "Normal",
-		typeCallback: function(pokemon) {
-			return this.runEvent('Drive', pokemon, null, 'TechnoBlast', 'Normal');
-		}
+		type: "Normal"
 	},
 	"TeeterDance": {
 		num: 298,
