@@ -66,7 +66,7 @@ exports.BattleScripts = {
 		var canTargetFainted = {
 			all: 1, foeSide: 1
 		};
-		this.singleEvent('ModifyMove', move, null, move, pokemon, target);
+		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 		move = this.runEvent('ModifyMove',pokemon,target,move,move);
 		if (!move) return false;
 		
