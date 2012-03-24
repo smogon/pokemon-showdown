@@ -2344,6 +2344,9 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
+		onModifyMove: function(move) {
+			move.basePower = 0; // Doom Desire doesn't hit directly
+		},
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
 			
@@ -2363,7 +2366,6 @@ exports.BattleMovedex = {
 				}
 			};
 			this.add('message Doom Desire started. (placeholder)');
-			return null;
 		},
 		secondary: false,
 		target: "normal",
@@ -4097,6 +4099,9 @@ exports.BattleMovedex = {
 		name: "Future Sight",
 		pp: 10,
 		priority: 0,
+		onModifyMove: function(move) {
+			move.basePower = 0; // Future Sight doesn't hit directly
+		},
 		onHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
 			
@@ -4116,7 +4121,6 @@ exports.BattleMovedex = {
 				}
 			};
 			this.add('message Future Sight started. (placeholder)');
-			return null;
 		},
 		secondary: false,
 		target: "normal",
