@@ -10242,6 +10242,9 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		sleepUsable: true,
+		onTryHit: function(target, source) {
+			if (source.status !== 'slp') return false;
+		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
