@@ -249,9 +249,11 @@ exports.BattleScripts = {
 		//   targets. Choosing these event targets ensures that the correct
 		//   side or field is hit.
 		//
-		//   It is the `TryHitSide` event handler's responsibility to only use
-		//   `target.side`, never `target`, and it is the `TryHitField` event
-		//   handler's responsibility to never use `target`.
+		//   It is the `TryHitField` event handler's responsibility to never
+		//   use `target`.
+		//   It is the `TryFieldHit` event handler's responsibility to read
+		//   move.target and react accordingly.
+		//   An exception is `TryHitSide`, which is passed the target side.
 		
 		// Note 2:
 		//   In case you didn't notice, FieldHit and HitField mean different things.
@@ -263,7 +265,7 @@ exports.BattleScripts = {
 		
 		if (move.target === 'all' && !isSelf)
 		{
-			hitResult = this.singleEvent('TryHitField', moveData, {}, target.side, pokemon, move);
+			hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
 		}
 		else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf)
 		{
@@ -394,7 +396,7 @@ exports.BattleScripts = {
 			//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
 			if (move.target === 'all' && !isSelf)
 			{
-				hitResult = this.singleEvent('HitField', moveData, {}, target.side, pokemon, move);
+				hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
 			}
 			else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf)
 			{
