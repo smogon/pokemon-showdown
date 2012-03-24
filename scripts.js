@@ -275,6 +275,11 @@ exports.BattleScripts = {
 		{
 			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 		}
+		if (!hitResult)
+		{
+			if (hitResult === false) this.add('r-failed '+target.id);
+			return false;
+		}
 		// only run the hit events for the hit itself, not the secondary or self hits
 		if (!isSelf && !isSecondary)
 		{
@@ -302,10 +307,7 @@ exports.BattleScripts = {
 		}
 		else if (!hitResult)
 		{
-			if (hitResult === false)
-			{
-				this.add('r-failed '+target.id);
-			}
+			if (hitResult === false) this.add('r-failed '+target.id);
 			return false;
 		}
 		
