@@ -8413,29 +8413,27 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		self: {
-			onHit: function(pokemon) {
-				if (pokemon.removeVolatile('LeechSeed'))
-				{
-					this.add('r-blow-away '+pokemon.id+' LeechSeed');
-				}
-				if (pokemon.side.removeSideCondition('Spikes'))
-				{
-					this.add('r-blow-away '+pokemon.id+' Spikes');
-				}
-				if (pokemon.side.removeSideCondition('ToxicSpikes'))
-				{
-					this.add('r-blow-away '+pokemon.id+' ToxicSpikes');
-				}
-				if (pokemon.side.removeSideCondition('StealthRock'))
-				{
-					this.add('r-blow-away '+pokemon.id+' StealthRock');
-				}
-				if (pokemon.volatiles['partiallyTrapped'])
-				{
-					this.add('r-blow-away '+pokemon.id+' '+pokemon.volatiles['partiallyTrapped'].sourceEffect.id);
-					delete pokemon.volatiles['partiallyTrapped'];
-				}
+		onHit: function(target, pokemon) {
+			if (pokemon.removeVolatile('LeechSeed'))
+			{
+				this.add('r-blow-away '+pokemon.id+' LeechSeed');
+			}
+			if (pokemon.side.removeSideCondition('Spikes'))
+			{
+				this.add('r-blow-away '+pokemon.id+' Spikes');
+			}
+			if (pokemon.side.removeSideCondition('ToxicSpikes'))
+			{
+				this.add('r-blow-away '+pokemon.id+' ToxicSpikes');
+			}
+			if (pokemon.side.removeSideCondition('StealthRock'))
+			{
+				this.add('r-blow-away '+pokemon.id+' StealthRock');
+			}
+			if (pokemon.volatiles['partiallyTrapped'])
+			{
+				this.add('r-blow-away '+pokemon.id+' '+pokemon.volatiles['partiallyTrapped'].sourceEffect.id);
+				delete pokemon.volatiles['partiallyTrapped'];
 			}
 		},
 		secondary: false,
