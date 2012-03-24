@@ -120,7 +120,7 @@ exports.BattleScripts = {
 		{
 			this.add('r-miss '+pokemon.id);
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
-			if (move.selfdestruct)
+			if (move.selfdestruct && move.target === 'adjacent')
 			{
 				this.faint(pokemon, pokemon, move);
 			}
@@ -130,7 +130,7 @@ exports.BattleScripts = {
 		{
 			this.add('r-no-target');
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
-			if (move.selfdestruct)
+			if (move.selfdestruct && move.target === 'adjacent')
 			{
 				this.faint(pokemon, pokemon, move);
 			}
@@ -214,19 +214,6 @@ exports.BattleScripts = {
 		{
 			move.affectedByImmunities = (move.category !== 'Status');
 		}
-		if (moveData.affectedByImmunities)
-		{
-			if (!target.runImmunity(move.type, true))
-			{
-				this.singleEvent('MoveFail', move, null, target, pokemon, move);
-				if (move.selfdestruct)
-				{
-					this.faint(pokemon, pokemon, move);
-				}
-				return false;
-			}
-		}
-
 		// TryHit events:
 		//   STEP 1: we see if the move will succeed at all:
 		//   - TryHit, TryHitSide, and TryHitField are run on the move,
@@ -309,6 +296,19 @@ exports.BattleScripts = {
 		{
 			if (hitResult === false) this.add('r-failed '+target.id);
 			return false;
+		}
+		
+		if (moveData.affectedByImmunities)
+		{
+			if (!target.runImmunity(move.type, true))
+			{
+				this.singleEvent('MoveFail', move, null, target, pokemon, move);
+				if (move.selfdestruct && move.target === 'adjacent')
+				{
+					this.faint(pokemon, pokemon, move);
+				}
+				return false;
+			}
 		}
 		
 		if (target)
