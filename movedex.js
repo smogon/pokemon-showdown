@@ -10776,10 +10776,8 @@ exports.BattleMovedex = {
 		onModifyMove: function(move) {
 			move.type = '???';
 		},
-		self: {
-			onHit: function(source) {
-				this.damage(source.maxhp/4, source, source, 'struggle-recoil');
-			}
+		onHit: function(target, source) {
+			this.damage(source.maxhp/4, source, source, 'struggle-recoil');
 		},
 		secondary: false,
 		target: "normal",
