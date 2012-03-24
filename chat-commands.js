@@ -716,11 +716,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			room.add(''+targetUser.name+' was demoted to voice by '+user.name+'.');
 			
-			if (targetUser.group === '%')
-			{
 				targetUser.group = '+';
 				rooms.lobby.usersChanged = true;
-			}
 			return true;
 		}
 		socket.emit('console', '/demod - Access denied.');
