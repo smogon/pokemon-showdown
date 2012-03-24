@@ -381,6 +381,10 @@ exports.BattleScripts = {
 				{
 					hitResult = this.singleEvent('Hit', moveData, {}, target.side, pokemon, move);
 				}
+				else if (move.target === 'all')
+				{
+					hitResult = this.singleEvent('FieldHit', moveData, {}, target, pokemon, move);
+				}
 				if (!hitResult && !didSomething)
 				{
 					this.add('r-failed '+target.id);
