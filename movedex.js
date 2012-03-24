@@ -6387,7 +6387,7 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				this.add('r-turnstatus '+target.id+' magic-coat');
 			},
-			onAllyFieldHit: function(target, source, move) {
+			onAllyTryFieldHit: function(target, source, move) {
 				if (target === source) return;
 				if (typeof move.isBounceable === 'undefined')
 				{
