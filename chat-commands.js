@@ -449,7 +449,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
-		if (user.muted && !targetUser.isMod()) 
+		if (user.muted && !targetUser.isMod())
 		{
 			socket.emit('console', 'You can only private message users marked by %, @, or & when muted.');
 			return true;

@@ -97,8 +97,8 @@ function BattleTools()
 	 *     moveCopy === Tools.getMoveCopy(moveCopy)
 	 *
 	 * If you really want to, use:
-	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id) 
-	 * 
+	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id)
+	 *
 	 * @param  move    Move ID, move object, or movecopy object describing move to copy
 	 * @return         movecopy object
 	 */
@@ -442,7 +442,7 @@ function BattleTools()
 			
 			var ability = selfT.getAbility(set.ability).name;
 			if (ability !== template.abilities['0'] &&
-			    ability !== template.abilities['1'] && 
+			    ability !== template.abilities['1'] &&
 			    ability !== template.abilities['DW'])
 			{
 				problems.push(set.name+" ("+set.species+") can't have "+set.ability+".");
