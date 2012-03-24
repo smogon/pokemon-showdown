@@ -4380,12 +4380,8 @@ exports.BattleMovedex = {
 		pp: 40,
 		isViable: true,
 		priority: 0,
-		onHit: function(target) {
-			if (this.weather === 'SunnyDay')
-			{
-				this.boost({atk:2, spa:2});
-				return null;
-			}
+		onModifyMove: function(move) {
+			if (this.weather === 'SunnyDay') move.boosts = {atk: 2, spa: 2};
 		},
 		boosts: {
 			atk: 1,
