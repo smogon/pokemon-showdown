@@ -1913,7 +1913,10 @@ exports.BattleAbilities = {
 		num: "1"
 	},
 	"StickyHold": {
-		desc: "Opponents cannot remove items from this Pokemon. [Field Effect]\u00a0Pokemon hooked by a fishing rod are easier to catch.",
+		desc: "Opponents cannot remove items from this Pokemon.",
+		onTakeItem: function(item, pokemon, source) {
+			if (source && source !== pokemon) return false;
+		},
 		id: "StickyHold",
 		name: "Sticky Hold",
 		rating: 1,
