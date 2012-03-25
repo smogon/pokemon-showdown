@@ -914,7 +914,7 @@ function BattlePokemon(set, side)
 		{
 			return false;
 		}
-		if (!type)
+		if (!type || type === '???')
 		{
 			return true;
 		}
