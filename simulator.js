@@ -1454,6 +1454,7 @@ function Battle(roomid, format, ranked)
 					BasePower: 1,
 					Immunity: 1,
 					Damage: 1,
+					SubDamage: 1,
 					Heal: 1,
 					TakeItem: 1,
 					UseItem: 1,
