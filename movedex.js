@@ -10949,14 +10949,6 @@ exports.BattleMovedex = {
 		num: 389,
 		accuracy: 100,
 		basePower: 80,
-		basePowerCallback: function(pokemon, target) {
-			decision = this.willMove(target);
-			if (decision && decision.choice === 'move' && decision.move.category !== 'Status')
-			{
-				return 80;
-			}
-			return false;
-		},
 		category: "Physical",
 		desc: "Almost always goes first, but fails if the target doesn't select a move that will damage the user. The move also fails if the target uses an attack with higher priority or if the target is faster and uses an attack with the same priority.",
 		shortDesc: "Usually goes first. Fails if foe doesn't attack.",
@@ -10966,6 +10958,13 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 1,
+		onTryHit: function(pokemon, target) {
+			decision = this.willMove(target);
+			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status')
+			{
+				return false;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Dark"
