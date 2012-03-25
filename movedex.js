@@ -1922,24 +1922,18 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
-		onHit: function(target, source) {
-			if (source.hasType('Ghost'))
+		volatileStatus: 'Curse',
+		onModifyMove: function(move, source, target) {
+			if (!source.hasType('Ghost'))
 			{
-				source.damage(source.maxhp/2);
-				target.addVolatile('Curse');
-			}
-			else
-			{
-				this.boost({
-					atk: 1,
-					def: 1,
-					spe: -1
-				}, source);
+				delete move.volatileStatus;
+				move.self = { boosts: {atk:1,def:1,spe:-1} };
 			}
 		},
 		effect: {
-			onStart: function(pokemon) {
-				this.add('message Cursed! (placeholder)');
+			onStart: function(pokemon, source) {
+				this.add('message '+ source.name + ' cut its own HP and laid a curse on ' + pokemon.name + '! (placeholder)');
+				this.damage(source.maxhp/2, source, source);
 			},
 			onResidualPriority: 50-10,
 			onResidual: function(pokemon) {
@@ -10901,7 +10895,7 @@ exports.BattleMovedex = {
 						this.add('r-sub-block '+target.id+' '+move.id);
 						return null;
 					}
-					if (SubBlocked[move.id] || (move.id === 'Curse' && source.hasType('Ghost')))
+					if (SubBlocked[move.id])
 					{
 						this.add('r-sub-block '+target.id+' '+move.id);
 						return null;
