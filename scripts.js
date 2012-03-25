@@ -217,13 +217,13 @@ exports.BattleScripts = {
 		
 		// TryHit events:
 		//   STEP 1: we see if the move will succeed at all:
-		//   - TryHit, TryHitSide, and TryHitField are run on the move,
+		//   - TryHit, TryHitSide, or TryHitField are run on the move,
 		//     depending on move target
 		//   == primary hit line ==
 		//   Everything after this only happens on the primary hit (not on
 		//   secondary or self-hits)
 		//   STEP 2: we see if anything blocks the move from hitting:
-		//   - TryHitField is run on the target
+		//   - TryFieldHit is run on the target
 		//   STEP 3: we see if anything blocks the move from hitting the target:
 		//   - If the move's target is a pokemon, TryHit is run on that pokemon
 		
