@@ -1216,6 +1216,9 @@ exports.BattleAbilities = {
 				pokemon.types = [type];
 			}
 		},
+		onTakeItem: function(item) {
+			if (item.onPlate) return false;
+		},
 		id: "Multitype",
 		name: "Multitype",
 		rating: 5,
