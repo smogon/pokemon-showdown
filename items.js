@@ -2853,7 +2853,7 @@ exports.BattleItems = {
 		onResidual: function(pokemon) {
 			this.damage(pokemon.maxhp/8);
 		},
-		onAfterMoveSecondary: function(target, source, move) {
+		onHit: function(target, source, move) {
 			if (source && source !== target && !source.item && move && move.isContact)
 			{
 				var barb = target.takeItem();
