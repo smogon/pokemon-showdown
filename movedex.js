@@ -1894,7 +1894,7 @@ exports.BattleMovedex = {
 	"CrushGrip": {
 		num: 462,
 		accuracy: true,
-		basePower: 1,
+		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			return parseInt(120*target.hp/target.maxhp);
 		},
@@ -12626,7 +12626,7 @@ exports.BattleMovedex = {
 	"WringOut": {
 		num: 378,
 		accuracy: true,
-		basePower: 1,
+		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			return parseInt(120*target.hp/target.maxhp);
 		},
