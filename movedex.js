@@ -1,7 +1,7 @@
 exports.BattleMovedex = {
 	"Absorb": {
 		num: 71,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 20,
 		category: "Special",
 		desc: "Restores the user's HP by 1/2 of the damage inflicted on the target.",
