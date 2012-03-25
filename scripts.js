@@ -206,7 +206,7 @@ exports.BattleScripts = {
 	moveHit: function(target, pokemon, move, moveData, isSecondary, isSelf) {
 		move = this.getMoveCopy(move);
 
-		this.setActiveMove(move, pokemon, target);
+		if (!isSecondary && !isSelf) this.setActiveMove(move, pokemon, target);
 		var hitResult = true;
 		if (!moveData) moveData = move;
 
@@ -214,6 +214,7 @@ exports.BattleScripts = {
 		{
 			move.affectedByImmunities = (move.category !== 'Status');
 		}
+		
 		// TryHit events:
 		//   STEP 1: we see if the move will succeed at all:
 		//   - TryHit, TryHitSide, and TryHitField are run on the move,
@@ -250,52 +251,55 @@ exports.BattleScripts = {
 		//   TryFieldHit, but only  moves with a target of "all" (e.g.
 		//   Haze) trigger TryHitField.
 		
-		if (move.target === 'all' && !isSelf)
+		if (target)
 		{
-			hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
-		}
-		else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf)
-		{
-			hitResult = this.singleEvent('TryHitSide', moveData, {}, target.side, pokemon, move);
-		}
-		else
-		{
-			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
-		}
-		if (!hitResult)
-		{
-			if (hitResult === false) this.add('r-failed '+target.id);
-			return false;
-		}
-		// only run the hit events for the hit itself, not the secondary or self hits
-		if (!isSelf && !isSecondary)
-		{
-			if (move.target !== 'all' && move.target !== 'foeSide' && move.target !== 'allySide')
+			if (move.target === 'all' && !isSelf)
 			{
-				hitResult = this.runEvent('TryHit', target, pokemon, move);
-				if (!hitResult)
-				{
-					if (hitResult === false) this.add('r-failed '+target.id);
-					if (hitResult !== 0) // special Substitute hit flag
-					{
-						return false;
-					}
-				}
+				hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
 			}
-			if (!this.runEvent('TryFieldHit', target, pokemon, move))
+			else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf)
 			{
+				hitResult = this.singleEvent('TryHitSide', moveData, {}, target.side, pokemon, move);
+			}
+			else
+			{
+				hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+			}
+			if (!hitResult)
+			{
+				if (hitResult === false) this.add('r-failed '+target.id);
 				return false;
 			}
-		}
-		
-		if (hitResult === 0)
-		{
-			target = null;
-		}
-		else if (!hitResult)
-		{
-			if (hitResult === false) this.add('r-failed '+target.id);
-			return false;
+			// only run the hit events for the hit itself, not the secondary or self hits
+			if (!isSelf && !isSecondary)
+			{
+				if (move.target !== 'all' && move.target !== 'foeSide' && move.target !== 'allySide')
+				{
+					hitResult = this.runEvent('TryHit', target, pokemon, move);
+					if (!hitResult)
+					{
+						if (hitResult === false) this.add('r-failed '+target.id);
+						if (hitResult !== 0) // special Substitute hit flag
+						{
+							return false;
+						}
+					}
+				}
+				if (!this.runEvent('TryFieldHit', target, pokemon, move))
+				{
+					return false;
+				}
+			}
+			
+			if (hitResult === 0)
+			{
+				target = null;
+			}
+			else if (!hitResult)
+			{
+				if (hitResult === false) this.add('r-failed '+target.id);
+				return false;
+			}
 		}
 		
 		if (target)
@@ -413,7 +417,7 @@ exports.BattleScripts = {
 		{
 			BattleScripts.moveHit.call(this, pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
-		if (moveData.secondaries && target)
+		if (moveData.secondaries)
 		{
 			var secondaryRoll;
 			for (var i = 0; i < moveData.secondaries.length; i++)
