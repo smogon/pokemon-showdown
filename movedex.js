@@ -10141,7 +10141,7 @@ exports.BattleMovedex = {
 		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
 			if (target.status === 'par') return 120;
-			return 60;	
+			return 60;
 		},
 		category: "Physical",
 		desc: "If the target is paralyzed, power is doubled but the target will be cured.",
@@ -10151,7 +10151,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isContact: true,
 		priority: 0,
-		afterMoveCallback: function(pokemon, target) {
+		onHit: function(target) {
 			if (target.status === 'par') target.cureStatus();
 		},
 		secondary: false,
@@ -12200,7 +12200,7 @@ exports.BattleMovedex = {
 		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
 			if (target.status === 'slp') return 120;
-			return 60;	
+			return 60;
 		},
 		category: "Physical",
 		desc: "If the target is asleep, power is doubled but the target will awaken.",
@@ -12210,7 +12210,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isContact: true,
 		priority: 0,
-		afterMoveCallback: function(pokemon, target) {
+		onHit: function(target) {
 			if (target.status === 'slp') target.cureStatus();
 		},
 		secondary: false,
