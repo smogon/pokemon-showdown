@@ -91,6 +91,7 @@ function BattlePokemon(set, side)
 	this.lastDamage = 0;
 	this.lastAttackedBy = null;
 	this.movedThisTurn = false;
+	this.usedItemThisTurn = false;
 	this.newlySwitched = false;
 	this.beingCalledBack = false;
 	this.isActive = false;
@@ -736,6 +737,7 @@ function BattlePokemon(set, side)
 			selfP.lastItem = selfP.item;
 			selfP.item = '';
 			selfP.itemData = {id: '', target: selfP};
+			selfP.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
@@ -760,6 +762,7 @@ function BattlePokemon(set, side)
 			selfP.lastItem = selfP.item;
 			selfP.item = '';
 			selfP.itemData = {id: '', target: selfP};
+			selfP.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
@@ -787,6 +790,7 @@ function BattlePokemon(set, side)
 		{
 			selfB.singleEvent('Start', item, selfP.itemData, selfP, source, effect);
 		}
+		if (selfP.lastItem) selfP.usedItemThisTurn = true;
 		return true;
 	};
 	this.getItem = function() {
@@ -1972,6 +1976,7 @@ function Battle(roomid, format, ranked)
 				var pokemon = selfB.sides[i].active[j];
 				if (!pokemon) continue;
 				pokemon.movedThisTurn = false;
+				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
 				if (pokemon.lastAttackedBy)
 				{
