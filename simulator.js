@@ -2241,6 +2241,14 @@ function Battle(roomid, format, ranked)
 			category: 'Physical'
 		};
 		
+		if (move.affectedByImmunities)
+		{
+			if (!target.runImmunity(move.type, true))
+			{
+				return false;
+			}
+		}
+		
 		if (move.ohko)
 		{
 			if (target.level > pokemon.level)
