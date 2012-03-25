@@ -10906,6 +10906,7 @@ exports.BattleMovedex = {
 						this.add('r-sub-block '+target.id+' '+move.id);
 						return null;
 					}
+					return;
 				}
 				var damage = this.getDamage(source, target, move);
 				if (!damage)
