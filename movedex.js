@@ -1776,7 +1776,7 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
-			var yourItem = target.takeItem();
+			var yourItem = target.takeItem(source);
 			if (!yourItem)
 			{
 				return false;
@@ -5715,12 +5715,11 @@ exports.BattleMovedex = {
 		name: "Incinerate",
 		pp: 15,
 		priority: 0,
-		onHit: function(pokemon) {
+		onHit: function(pokemon, source) {
 			var item = pokemon.getItem();
-			if (item.isBerry)
+			if (item.isBerry && pokemon.takeItem(source))
 			{
 				this.add('message '+pokemon.name+'\'s '+item.name+' was burnt up by Incinerate! (placeholder)');
-				pokemon.item = '';
 			}
 		},
 		secondary: false,
@@ -5925,8 +5924,8 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		onHit: function(target) {
-			item = target.takeItem();
+		onHit: function(target, source) {
+			item = target.takeItem(source);
 			if (item)
 			{
 				this.add('message Knocked off '+item.name+'.  (placeholder)');
@@ -11161,7 +11160,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target, source) {
-			var yourItem = target.takeItem();
+			var yourItem = target.takeItem(source);
 			var myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem))
 			{
@@ -11502,7 +11501,7 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
-			var yourItem = target.takeItem();
+			var yourItem = target.takeItem(source);
 			if (!yourItem)
 			{
 				return false;
@@ -11842,7 +11841,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target, source) {
-			var yourItem = target.takeItem();
+			var yourItem = target.takeItem(source);
 			var myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem))
 			{
