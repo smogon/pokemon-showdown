@@ -767,11 +767,12 @@ function BattlePokemon(set, side)
 		}
 		return false;
 	};
-	this.takeItem = function() {
+	this.takeItem = function(source) {
 		if (!selfP.hp || !selfP.isActive) return false;
 		if (!selfP.item) return false;
+		if (!source) source = selfP;
 		var item = selfP.getItem();
-		if (selfB.runEvent('TakeItem', selfP, null, null, item))
+		if (selfB.runEvent('TakeItem', selfP, source, null, item))
 		{
 			selfP.lastItem = '';
 			selfP.item = '';
