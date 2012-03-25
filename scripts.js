@@ -104,7 +104,11 @@ exports.BattleScripts = {
 				}
 			}
 		}
-		if (move.ohko) accuracy = 30; // bypasses accuracy modifiers
+		if (move.ohko) // bypasses accuracy modifiers
+		{
+			accuracy = 30;
+			if (pokemon.level > target.level) accuracy += (pokemon.level - target.level);
+		}
 		if (move.alwaysHit) accuracy = true; // bypasses ohko accuracy modifiers
 		if (accuracy !== true && moveRoll >= accuracy)
 		{
@@ -309,7 +313,7 @@ exports.BattleScripts = {
 			if (damage === false || damage === null)
 			{
 				this.singleEvent('MoveFail', move, null, target, pokemon, move);
-				return false
+				return false;
 			}
 			if (hitResult === 'noFaint' && damage >= target.hp)
 			{
