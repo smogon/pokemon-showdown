@@ -129,8 +129,8 @@ function BattlePokemon(set, side)
 			this.baseMoveset.push({
 				move: moveid,
 				id: move.id,
-				pp: move.pp * 8/5,
-				maxpp: move.pp * 8/5,
+				pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
 				disabled: false,
 				used: false
 			});
