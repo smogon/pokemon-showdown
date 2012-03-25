@@ -766,7 +766,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 				}
 				catch (e)
 				{
-					selfR.battle.add('chat '+toId(user.name)+' << error: '+e+': '+e.message);
+					selfR.battle.add('chat '+toId(user.name)+' << error: '+e);
 					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
 				}
 			}
@@ -1266,7 +1266,7 @@ function Lobby(roomid)
 				{
 					selfR.log.push({
 						name: user.getIdentity(),
-						message: '<< error: '+e+': '+e.message
+						message: '<< error: '+e;
 					});
 					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
 				}
