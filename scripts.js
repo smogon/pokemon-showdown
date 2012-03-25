@@ -1125,7 +1125,7 @@ exports.BattleScripts = {
 			
 			var levelScale = {
 				LC: 95,
-				Limbo: 95,
+				NFE: 95,
 				'LC Uber': 90,
 				NU: 90,
 				RU: 85,
