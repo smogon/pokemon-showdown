@@ -298,24 +298,15 @@ exports.BattleScripts = {
 			return false;
 		}
 		
-		if (moveData.affectedByImmunities)
-		{
-			if (!target.runImmunity(move.type, true))
-			{
-				this.singleEvent('MoveFail', move, null, target, pokemon, move);
-				if (move.selfdestruct && move.target === 'adjacent')
-				{
-					this.faint(pokemon, pokemon, move);
-				}
-				return false;
-			}
-		}
-		
 		if (target)
 		{
 			var didSomething = false;
 			var damage = this.getDamage(pokemon, target, moveData);
-			if (damage === false || damage === null) return false;
+			if (damage === false || damage === null)
+			{
+				this.singleEvent('MoveFail', move, null, target, pokemon, move);
+				return false
+			}
 			if (hitResult === 'noFaint' && damage >= target.hp)
 			{
 				damage = target.hp - 1;
