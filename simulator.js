@@ -2260,6 +2260,7 @@ function Battle(roomid, format, ranked)
 		{
 			if (target.level > pokemon.level)
 			{
+				this.add('r-failed '+target.id);
 				return false;
 			}
 			return target.maxhp;
