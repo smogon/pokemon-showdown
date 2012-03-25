@@ -6960,7 +6960,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		onHit: function(target) {
+		onHit: function(target, source) {
 			this.useMove(this.lastMove, source);
 		},
 		secondary: false,
