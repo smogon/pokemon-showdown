@@ -10962,7 +10962,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 1,
-		onTryHit: function(pokemon, target) {
+		onTryHit: function(target) {
 			decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status')
 			{
