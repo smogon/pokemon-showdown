@@ -828,7 +828,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onAfterMoveSecondary: function(target, source, move) {
-			if (source && source !== target && move)
+			if (source && source !== target && move && move.category !== 'Status')
 			{
 				if (target.useItem())
 				{
@@ -2364,7 +2364,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onAfterMoveSecondary: function(target, source, move) {
-			if (source && source !== target && move && move.isContact)
+			if (source && source !== target && move && move.category !== 'Status')
 			{
 				if (target.useItem()) // This order is correct - the item is used up even against a pokemon with Ingrain or that otherwise can't be forced out
 				{

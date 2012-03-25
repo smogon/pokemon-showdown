@@ -914,7 +914,7 @@ function BattlePokemon(set, side)
 		{
 			return false;
 		}
-		if (!type)
+		if (!type || type === '???')
 		{
 			return true;
 		}
@@ -1454,6 +1454,7 @@ function Battle(roomid, format, ranked)
 					BasePower: 1,
 					Immunity: 1,
 					Damage: 1,
+					SubDamage: 1,
 					Heal: 1,
 					TakeItem: 1,
 					UseItem: 1,
@@ -1464,7 +1465,7 @@ function Battle(roomid, format, ranked)
 					ModifyStats: 1,
 					TryHit: 1,
 					Hit: 1,
-					FieldHit: 1,
+					TryFieldHit: 1,
 					Boost: 1,
 					DragOut: 1
 				};
@@ -2241,6 +2242,14 @@ function Battle(roomid, format, ranked)
 			category: 'Physical'
 		};
 		
+		if (move.affectedByImmunities)
+		{
+			if (!target.runImmunity(move.type, true))
+			{
+				return false;
+			}
+		}
+		
 		if (move.ohko)
 		{
 			if (target.level > pokemon.level)
@@ -2271,17 +2280,6 @@ function Battle(roomid, format, ranked)
 		if (!move.type) move.type = '???';
 		var type = move.type;
 		// '???' is typeless damage: used for Struggle and Confusion etc
-		if (move.typeCallback)
-		{
-			if (typeof move.typeCallback === 'string')
-			{
-				type = move.typeCallback;
-			}
-			else
-			{
-				type = move.typeCallback.call(selfB, pokemon, target, basePower);
-			}
-		}
 		
 		var basePower = move.basePower;
 		if (move.basePowerCallback)

@@ -222,7 +222,7 @@ exports.BattleAbilities = {
 	"ColorChange": {
 		desc: "This Pokemon's type changes according to the type of the last move that hit this Pokemon.",
 		onAfterMoveSecondary: function(target, source, effect) {
-			if (effect && effect.effectType === 'Move' && target.lastDamage)
+			if (effect && effect.effectType === 'Move' && effect.category !== 'Status')
 			{
 				target.addVolatile('ColorChange', source, effect);
 			}
@@ -1019,7 +1019,7 @@ exports.BattleAbilities = {
 		desc: "It can reflect the effect of status moves.",
 		id: "MagicBounce",
 		name: "Magic Bounce",
-		onAllyFieldHit: function(target, source, move) {
+		onAllyTryFieldHit: function(target, source, move) {
 			if (target === source) return;
 			if (typeof move.isBounceable === 'undefined')
 			{
@@ -2370,7 +2370,7 @@ exports.BattleAbilities = {
 		desc: "It can reflect the effect of status moves when switching in.",
 		id: "Rebound",
 		name: "Rebound",
-		onAllyFieldHit: function(target, source, move) {
+		onAllyTryFieldHit: function(target, source, move) {
 			if (target === source) return;
 			if (this.effectData.target.activeTurns) return;
 			if (typeof move.isBounceable === 'undefined')
