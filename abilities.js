@@ -2211,7 +2211,10 @@ exports.BattleAbilities = {
 		num: "84"
 	},
 	"Unnerve": {
-		desc: "Opposing Pok\u00e9mon can't eat their Berries. ",
+		desc: "Opposing Pokemon can't eat their Berries.",
+		onStart: function(pokemon) {
+			this.add('message '+pokemon.name+' makes '+pokemon.side.foe.name+'\'s team too nervous to eat Berries!');
+		},
 		onFoeEatItem: false,
 		id: "Unnerve",
 		name: "Unnerve",
