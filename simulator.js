@@ -91,6 +91,7 @@ function BattlePokemon(set, side)
 	this.lastDamage = 0;
 	this.lastAttackedBy = null;
 	this.movedThisTurn = false;
+	this.usedItemThisTurn = false;
 	this.newlySwitched = false;
 	this.beingCalledBack = false;
 	this.isActive = false;
@@ -129,8 +130,8 @@ function BattlePokemon(set, side)
 			this.baseMoveset.push({
 				move: moveid,
 				id: move.id,
-				pp: move.pp * 8/5,
-				maxpp: move.pp * 8/5,
+				pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
 				disabled: false,
 				used: false
 			});
@@ -736,6 +737,7 @@ function BattlePokemon(set, side)
 			selfP.lastItem = selfP.item;
 			selfP.item = '';
 			selfP.itemData = {id: '', target: selfP};
+			selfP.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
@@ -760,15 +762,17 @@ function BattlePokemon(set, side)
 			selfP.lastItem = selfP.item;
 			selfP.item = '';
 			selfP.itemData = {id: '', target: selfP};
+			selfP.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
 	};
-	this.takeItem = function() {
+	this.takeItem = function(source) {
 		if (!selfP.hp || !selfP.isActive) return false;
 		if (!selfP.item) return false;
+		if (!source) source = selfP;
 		var item = selfP.getItem();
-		if (selfB.runEvent('TakeItem', selfP, null, null, item))
+		if (selfB.runEvent('TakeItem', selfP, source, null, item))
 		{
 			selfP.lastItem = '';
 			selfP.item = '';
@@ -787,6 +791,7 @@ function BattlePokemon(set, side)
 		{
 			selfB.singleEvent('Start', item, selfP.itemData, selfP, source, effect);
 		}
+		if (selfP.lastItem) selfP.usedItemThisTurn = true;
 		return true;
 	};
 	this.getItem = function() {
@@ -1972,6 +1977,7 @@ function Battle(roomid, format, ranked)
 				var pokemon = selfB.sides[i].active[j];
 				if (!pokemon) continue;
 				pokemon.movedThisTurn = false;
+				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
 				if (pokemon.lastAttackedBy)
 				{
@@ -2254,6 +2260,7 @@ function Battle(roomid, format, ranked)
 		{
 			if (target.level > pokemon.level)
 			{
+				this.add('r-failed '+target.id);
 				return false;
 			}
 			return target.maxhp;

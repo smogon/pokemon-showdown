@@ -401,7 +401,7 @@ exports.BattleMovedex = {
 	},
 	"Assist": {
 		num: 274,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user performs a random move from any of the Pokemon on its team. Assist cannot generate itself, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
@@ -600,7 +600,7 @@ exports.BattleMovedex = {
 	},
 	"Avalanche": {
 		num: 419,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
 			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.thisTurn)
@@ -682,7 +682,7 @@ exports.BattleMovedex = {
 	},
 	"BeatUp": {
 		num: 251,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		category: "Physical",
 		desc: "Each healthy (i.e. not fainted nor inflicted with a status condition) Pokemon in your party contributes a typeless 10 base power hit determined solely by their base Attack and Defense stats.",
@@ -902,7 +902,7 @@ exports.BattleMovedex = {
 	},
 	"Block": {
 		num: 335,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "As long as the user remains in battle, the target cannot switch out unless it is holding Shed Shell or uses Baton Pass or U-Turn. The target will still be trapped if the user switches out by using Baton Pass.",
@@ -1126,7 +1126,7 @@ exports.BattleMovedex = {
 	},
 	"Brine": {
 		num: 362,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 65,
 		basePowerCallback: function(pokemon, target) {
 			if (target.hp * 2 < target.maxhp) return 130;
@@ -1639,7 +1639,7 @@ exports.BattleMovedex = {
 	},
 	"Conversion2": {
 		num: 176,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's type changes to one that resists the type of the last attack that hit the user. In double battles, this situation holds even when the user is last hit by an attack from its partner.",
@@ -1736,7 +1736,7 @@ exports.BattleMovedex = {
 	},
 	"Counter": {
 		num: 68,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		damageCallback: function(pokemon) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Physical')
@@ -1776,7 +1776,7 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
-			var yourItem = target.takeItem();
+			var yourItem = target.takeItem(source);
 			if (!yourItem)
 			{
 				return false;
@@ -1893,8 +1893,8 @@ exports.BattleMovedex = {
 	},
 	"CrushGrip": {
 		num: 462,
-		accuracy: true,
-		basePower: 1,
+		accuracy: 100,
+		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			return parseInt(120*target.hp/target.maxhp);
 		},
@@ -2542,7 +2542,7 @@ exports.BattleMovedex = {
 	},
 	"DragonRage": {
 		num: 82,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		damage: 40,
 		category: "Special",
@@ -2771,7 +2771,7 @@ exports.BattleMovedex = {
 	},
 	"ElectroBall": {
 		num: 486,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			var targetSpeed = target.stats.spe;
@@ -2938,7 +2938,7 @@ exports.BattleMovedex = {
 	},
 	"Endeavor": {
 		num: 283,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		damageCallback: function(pokemon,target) {
 			if (target.hp > pokemon.hp)
@@ -3034,7 +3034,7 @@ exports.BattleMovedex = {
 	},
 	"Entrainment": {
 		num: 494,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		category: "Status",
 		desc: "Copies the user's ability onto the target.",
@@ -3065,7 +3065,7 @@ exports.BattleMovedex = {
 	},
 	"Eruption": {
 		num: 284,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
 			return parseInt(150*pokemon.hp/pokemon.maxhp);
@@ -3136,7 +3136,7 @@ exports.BattleMovedex = {
 	},
 	"Facade": {
 		num: 263,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 70,
 		basePowerCallback: function(pokemon) {
 			if (pokemon.status)
@@ -3305,7 +3305,7 @@ exports.BattleMovedex = {
 	},
 	"FinalGambit": {
 		num: 515,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		damageCallback: function(pokemon) {
 			return pokemon.hp;
@@ -3421,7 +3421,7 @@ exports.BattleMovedex = {
 	},
 	"Fissure": {
 		num: 90,
-		accuracy: true,
+		accuracy: 30,
 		basePower: false,
 		category: "Physical",
 		desc: "The target faints; doesn't work on higher-leveled Pokemon.",
@@ -3437,7 +3437,7 @@ exports.BattleMovedex = {
 	},
 	"Flail": {
 		num: 175,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			var hpPercent = pokemon.hpPercent(pokemon.hp);
@@ -3830,7 +3830,7 @@ exports.BattleMovedex = {
 	},
 	"FollowMe": {
 		num: 266,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes first. For the rest of the turn, all attacks from the opponent's team that target the user's team are redirected toward the user. In double battles, the user's teammate will not be protected from attacks that have more than one intended target.",
@@ -3864,7 +3864,7 @@ exports.BattleMovedex = {
 	},
 	"Foresight": {
 		num: 193,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Until the target faints or switches, the user's Accuracy modifiers and the target's Evasion modifiers are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.",
@@ -4393,7 +4393,7 @@ exports.BattleMovedex = {
 	},
 	"Grudge": {
 		num: 288,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The target's next move is set to 0 PP if it directly KOs the user.",
@@ -4479,7 +4479,7 @@ exports.BattleMovedex = {
 	},
 	"Guillotine": {
 		num: 12,
-		accuracy: true,
+		accuracy: 30,
 		basePower: false,
 		category: "Physical",
 		desc: "The target faints; doesn't work on higher-leveled Pokemon.",
@@ -4530,7 +4530,7 @@ exports.BattleMovedex = {
 	},
 	"GyroBall": {
 		num: 360,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			var targetSpeed = target.stats.spe;
@@ -4872,7 +4872,7 @@ exports.BattleMovedex = {
 	},
 	"HeatCrash": {
 		num: 535,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			var targetWeight = target.weightkg;
@@ -4929,7 +4929,7 @@ exports.BattleMovedex = {
 	},
 	"HeavySlam": {
 		num: 484,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			var targetWeight = target.weightkg;
@@ -4967,7 +4967,7 @@ exports.BattleMovedex = {
 	},
 	"HelpingHand": {
 		num: 270,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Always goes first. In double battles, the power of the user's partner's attacks is increased by 1.5x for that turn; does nothing in single battles.",
@@ -5023,7 +5023,7 @@ exports.BattleMovedex = {
 	},
 	"HiddenPower": {
 		num: 237,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon) {
 			return pokemon.hpPower || 70;
@@ -5310,7 +5310,7 @@ exports.BattleMovedex = {
 	},
 	"HornDrill": {
 		num: 32,
-		accuracy: true,
+		accuracy: 30,
 		basePower: false,
 		category: "Physical",
 		desc: "The target faints; doesn't work on higher-leveled Pokemon.",
@@ -5671,7 +5671,7 @@ exports.BattleMovedex = {
 	},
 	"Imprison": {
 		num: 286,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Until the user faints or switches out, the opponent cannot select any moves that it has in common with the user. In double battles, this move affects both opponents.",
@@ -5715,12 +5715,11 @@ exports.BattleMovedex = {
 		name: "Incinerate",
 		pp: 15,
 		priority: 0,
-		onHit: function(pokemon) {
+		onHit: function(pokemon, source) {
 			var item = pokemon.getItem();
-			if (item.isBerry)
+			if (item.isBerry && pokemon.takeItem(source))
 			{
 				this.add('message '+pokemon.name+'\'s '+item.name+' was burnt up by Incinerate! (placeholder)');
-				pokemon.item = '';
 			}
 		},
 		secondary: false,
@@ -5925,8 +5924,8 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 0,
-		onHit: function(target) {
-			item = target.takeItem();
+		onHit: function(target, source) {
+			item = target.takeItem(source);
 			if (item)
 			{
 				this.add('message Knocked off '+item.name+'.  (placeholder)');
@@ -6184,17 +6183,25 @@ exports.BattleMovedex = {
 	},
 	"Lock-On": {
 		num: 199,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "This move ensures that the user's next attack will hit against its current target. This effect can be Baton Passed to another Pokemon. Lock-On fails against Pokemon in the middle of using Protect, Detect, Dig Fly, Bounce or Dive, as well as Pokemon behind a Substitute. If the target uses Protect or Detect during its next turn, the user's next move has a [100 Varmove's normal accuracy]% chance to hit through Protect or Detect. OHKO moves do not benefit from this trait.",
+		desc: "This move ensures that the user's next attack will hit against its current target. This effect can be Baton Passed to another Pokemon. Lock-On fails against Pokemon in the middle of using Protect, Detect, Dig, Fly, Bounce or Dive, as well as Pokemon behind a Substitute. If the target uses Protect or Detect during its next turn, the user's next move has a [100 Varmove's normal accuracy]% chance to hit through Protect or Detect. OHKO moves do not benefit from this trait.",
 		shortDesc: "User's next move will not miss.",
 		id: "Lock-On",
 		name: "Lock-On",
 		pp: 5,
 		priority: 0,
+		volatileStatus: 'Lock-On',
+		effect: {
+			duration: 2,
+			onModifyMove: function(move) {
+				move.accuracy = true;
+				move.alwaysHit = true;
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"LovelyKiss": {
@@ -6216,7 +6223,7 @@ exports.BattleMovedex = {
 	},
 	"LowKick": {
 		num: 67,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			var targetWeight = target.weightkg;
@@ -6528,7 +6535,7 @@ exports.BattleMovedex = {
 	},
 	"Magnitude": {
 		num: 222,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		category: "Physical",
 		desc: "Deals variable damage, between 10 base power and 130 base power, as well as double damage against Digging Pokemon.",
@@ -6579,7 +6586,7 @@ exports.BattleMovedex = {
 	},
 	"MeanLook": {
 		num: 212,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "As long as the user remains in battle, the target cannot switch out unless it is holding Shed Shell or uses Baton Pass or U-Turn. The target will still be trapped if the user switches out by using Baton Pass.",
@@ -6705,7 +6712,7 @@ exports.BattleMovedex = {
 	},
 	"MetalBurst": {
 		num: 368,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		damageCallback: function(pokemon) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn)
@@ -6848,7 +6855,7 @@ exports.BattleMovedex = {
 	},
 	"Mimic": {
 		num: 102,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "This move is temporarily replaced by the target's last move; the replacement move will have 5 PP and become part of the user's moveset until the user switches out or the battle ends. Mimic copies attacks even if they miss or the user has immunity toward their type; it cannot copy itself, Struggle, Transform, Sketch, Metronome or moves that the user already knows, and it will fail if the target has yet to use a move.",
@@ -6863,17 +6870,18 @@ exports.BattleMovedex = {
 	},
 	"MindReader": {
 		num: 170,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "This move ensures that the user's next attack will hit against its current target. This effect can be Baton Passed to another Pokemon. Mind Reader fails against Pokemon in the middle of using Protect, Detect, Dig Fly, Bounce or Dive, as well as Pokemon behind a Substitute. If the target uses Protect or Detect during its next turn, the user's next move has a [100 Varmove's normal accuracy]% chance to hit through Protect or Detect. OHKO moves do not benefit from this trait.",
+		desc: "This move ensures that the user's next attack will hit against its current target. This effect can be Baton Passed to another Pokemon. Mind Reader fails against Pokemon in the middle of using Protect, Detect, Dig, Fly, Bounce or Dive, as well as Pokemon behind a Substitute. If the target uses Protect or Detect during its next turn, the user's next move has a [100 Varmove's normal accuracy]% chance to hit through Protect or Detect. OHKO moves do not benefit from this trait.",
 		shortDesc: "The user's next move will always hit.",
 		id: "MindReader",
 		name: "Mind Reader",
 		pp: 5,
 		priority: 0,
+		volatileStatus: 'Lock-On',
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"Minimize": {
@@ -6913,7 +6921,7 @@ exports.BattleMovedex = {
 	},
 	"MirrorCoat": {
 		num: 243,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		damageCallback: function(pokemon) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Special')
@@ -6952,7 +6960,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		onHit: function(target) {
+		onHit: function(target, source) {
 			this.useMove(this.lastMove, source);
 		},
 		secondary: false,
@@ -7290,7 +7298,7 @@ exports.BattleMovedex = {
 	},
 	"NightShade": {
 		num: 101,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		damage: 'level',
 		category: "Special",
@@ -7380,7 +7388,7 @@ exports.BattleMovedex = {
 	},
 	"OdorSleuth": {
 		num: 316,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Until the target faints or switches, the user's Accuracy modifiers and the target's Evasion modifiers are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.",
@@ -7463,7 +7471,7 @@ exports.BattleMovedex = {
 	},
 	"PainSplit": {
 		num: 220,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Calculates the average of the user's current HP and the target's HP; the HP of both Pokemon is set to this average. Pokemon can be healed by Pain Split even under the effects of Heal Block.",
@@ -7500,7 +7508,7 @@ exports.BattleMovedex = {
 	},
 	"Payback": {
 		num: 371,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 50,
 		basePowerCallback: function(pokemon, target) {
 			if (target.newlySwitched)
@@ -7888,7 +7896,7 @@ exports.BattleMovedex = {
 	},
 	"Present": {
 		num: 217,
-		accuracy: true,
+		accuracy: 90,
 		basePower: 0,
 		category: "Physical",
 		desc: "Randomly either attacks with a variable power, between 40 base power and 120 base power, or heals the target by 80 HP.",
@@ -8154,7 +8162,7 @@ exports.BattleMovedex = {
 	},
 	"Psywave": {
 		num: 149,
-		accuracy: true,
+		accuracy: 80,
 		basePower: false,
 		damageCallback: function(pokemon) {
 			return parseInt((Math.random()*11 + 5) * pokemon.level / 10);
@@ -8172,7 +8180,7 @@ exports.BattleMovedex = {
 	},
 	"Punishment": {
 		num: 386,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
 			return 60 + 20 * target.positiveBoosts();
@@ -8243,7 +8251,7 @@ exports.BattleMovedex = {
 	},
 	"Quash": {
 		num: 511,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		category: "Status",
 		desc: "The target of Quash will act last in that turn, provided it has not yet acted.",
@@ -8529,7 +8537,7 @@ exports.BattleMovedex = {
 	},
 	"Recycle": {
 		num: 278,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's lost item is recovered. Items lost to Fling or Natural Gift will be recovered if the user of Recycle was the item's original holder; items lost to Trick, Switcheroo, Thief, Covet, Knock Off, Bug Bite, or Pluck cannot be recovered.",
@@ -8759,7 +8767,7 @@ exports.BattleMovedex = {
 	},
 	"Reversal": {
 		num: 179,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			var hpPercent = pokemon.hpPercent(pokemon.hp);
@@ -8984,7 +8992,7 @@ exports.BattleMovedex = {
 	},
 	"RolePlay": {
 		num: 272,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's own ability is overwritten with the target's ability; does nothing if the target's ability is Multitype or Wonder Guard.",
@@ -9435,7 +9443,7 @@ exports.BattleMovedex = {
 	},
 	"SeismicToss": {
 		num: 69,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		damage: 'level',
 		category: "Physical",
@@ -9595,7 +9603,7 @@ exports.BattleMovedex = {
 	},
 	"SheerCold": {
 		num: 329,
-		accuracy: true,
+		accuracy: 30,
 		basePower: false,
 		category: "Special",
 		desc: "The target faints; doesn't work on higher-leveled Pokemon.",
@@ -9714,7 +9722,7 @@ exports.BattleMovedex = {
 	},
 	"SimpleBeam": {
 		num: 493,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		category: "Status",
 		desc: "Changes the foe's ability to Simple.",
@@ -9768,6 +9776,7 @@ exports.BattleMovedex = {
 		id: "Sketch",
 		name: "Sketch",
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		onTryHit: false,
 		secondary: false,
@@ -9776,7 +9785,7 @@ exports.BattleMovedex = {
 	},
 	"SkillSwap": {
 		num: 285,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user exchanges abilities with the target; does not work if Wonder Guard is the ability of either the user or the target.",
@@ -10142,7 +10151,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isContact: true,
 		priority: 0,
-		afterMoveCallback: function(pokemon, target) {
+		onHit: function(target) {
 			if (target.status === 'par') target.cureStatus();
 		},
 		secondary: false,
@@ -10207,7 +10216,7 @@ exports.BattleMovedex = {
 	},
 	"Snatch": {
 		num: 289,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes first. Until the end of the turn, the user will steal a supporting move from another Pokemon (including teammates). In double battles, Snatch only steals the first applicable move performed by another Pokemon before wearing off.",
@@ -10244,7 +10253,7 @@ exports.BattleMovedex = {
 	},
 	"Soak": {
 		num: 487,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		category: "Status",
 		desc: "Changes the target's type to water.",
@@ -10325,7 +10334,7 @@ exports.BattleMovedex = {
 	},
 	"SonicBoom": {
 		num: 49,
-		accuracy: true,
+		accuracy: 90,
 		basePower: false,
 		damage: 20,
 		category: "Special",
@@ -10378,7 +10387,7 @@ exports.BattleMovedex = {
 	},
 	"SpiderWeb": {
 		num: 169,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "As long as the user remains in battle, the target cannot switch out unless it is holding Shed Shell or uses Baton Pass or U-Turn. The target will still be trapped if the user switches out by using Baton Pass.",
@@ -10676,7 +10685,7 @@ exports.BattleMovedex = {
 	},
 	"StoredPower": {
 		num: 500,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 20,
 		basePowerCallback: function(pokemon) {
 			return 20 + 20 * pokemon.positiveBoosts();
@@ -10773,10 +10782,11 @@ exports.BattleMovedex = {
 		basePower: 50,
 		category: "Physical",
 		desc: "Used automatically when all of the user's other moves have run out of PP or are otherwise inaccessible. The user receives recoil damage equal to 1/4 of its max HP. Struggle is classified as a typeless move and will hit any Pokemon for normal damage.",
-		shortDesc: "User loses 25% of its map HP as recoil.",
+		shortDesc: "User loses 25% of its max HP as recoil.",
 		id: "Struggle",
 		name: "Struggle",
 		pp: 1,
+		noPPBoosts: true,
 		isContact: true,
 		priority: 0,
 		onModifyMove: function(move) {
@@ -10952,7 +10962,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		isContact: true,
 		priority: 1,
-		onTryHit: function(pokemon, target) {
+		onTryHit: function(target) {
 			decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status')
 			{
@@ -10982,7 +10992,7 @@ exports.BattleMovedex = {
 	},
 	"SuperFang": {
 		num: 162,
-		accuracy: true,
+		accuracy: 90,
 		basePower: false,
 		damageCallback: function(pokemon, target) {
 			return target.hp/2;
@@ -11159,7 +11169,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target, source) {
-			var yourItem = target.takeItem();
+			var yourItem = target.takeItem(source);
 			var myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem))
 			{
@@ -11500,7 +11510,7 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
-			var yourItem = target.takeItem();
+			var yourItem = target.takeItem(source);
 			if (!yourItem)
 			{
 				return false;
@@ -11840,7 +11850,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target, source) {
-			var yourItem = target.takeItem();
+			var yourItem = target.takeItem(source);
 			var myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem))
 			{
@@ -11959,6 +11969,7 @@ exports.BattleMovedex = {
 		id: "TrumpCard",
 		name: "Trump Card",
 		pp: 5,
+		noPPBoosts: true,
 		isContact: true,
 		priority: 0,
 		secondary: false,
@@ -12199,7 +12210,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isContact: true,
 		priority: 0,
-		afterMoveCallback: function(pokemon, target) {
+		onHit: function(target) {
 			if (target.status === 'slp') target.cureStatus();
 		},
 		secondary: false,
@@ -12256,7 +12267,7 @@ exports.BattleMovedex = {
 	},
 	"WaterSport": {
 		num: 346,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "All Fire-type moves are weakened by two-thirds until the user switches out.",
@@ -12284,7 +12295,7 @@ exports.BattleMovedex = {
 	},
 	"WaterSpout": {
 		num: 323,
-		accuracy: true,
+		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
 			return parseInt(150*pokemon.hp/pokemon.maxhp);
@@ -12323,7 +12334,7 @@ exports.BattleMovedex = {
 	},
 	"WeatherBall": {
 		num: 311,
-		accuracy: true,
+		accuracy: 100,
 		basePower: 50,
 		category: "Special",
 		desc: "Base power is 50; Base power doubles and move's type changes during weather effects: becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and Rock-type during Sandstorm.",
@@ -12623,8 +12634,8 @@ exports.BattleMovedex = {
 	},
 	"WringOut": {
 		num: 378,
-		accuracy: true,
-		basePower: 1,
+		accuracy: 100,
+		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			return parseInt(120*target.hp/target.maxhp);
 		},
@@ -12659,7 +12670,7 @@ exports.BattleMovedex = {
 	},
 	"Yawn": {
 		num: 281,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "If the target stays in battle, it falls asleep at the end of the next turn.",

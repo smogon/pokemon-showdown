@@ -1216,6 +1216,9 @@ exports.BattleAbilities = {
 				pokemon.types = [type];
 			}
 		},
+		onTakeItem: function(item) {
+			if (item.onPlate) return false;
+		},
 		id: "Multitype",
 		name: "Multitype",
 		rating: 5,
@@ -1315,6 +1318,18 @@ exports.BattleAbilities = {
 	},
 	"Pickup": {
 		desc: "If an opponent uses a consumable item, Pickup will give the Pokemon the item used, if it is not holding an item. If multiple Pickup Pokemon are in play, one will pick up a copy of the used Berry, and may or may not use it immediately. Works on Berries, Jewels, Bulb, Focus Sash, Herbs, Rechargeable Battery, Red Card, and anything that is thrown with Fling",
+		onResidualPriority: -26.1,
+		onResidual: function(pokemon) {
+			var foe = pokemon.side.foe.randomActive();
+			if (!pokemon.item && foe.lastItem && foe.usedItemThisTurn && foe.lastItem !== 'AirBalloon' && foe.lastItem !== 'EjectButton')
+			{
+				pokemon.setItem(foe.lastItem);
+				foe.lastItem = '';
+				var item = pokemon.getItem();
+				this.add('message '+pokemon.name+' picked up one '+item.name+'! (placeholder)');
+				if (item.isBerry) pokemon.update();
+			}
+		},
 		id: "Pickup",
 		name: "Pickup",
 		rating: 0,
@@ -1898,7 +1913,10 @@ exports.BattleAbilities = {
 		num: "1"
 	},
 	"StickyHold": {
-		desc: "Opponents cannot remove items from this Pokemon. [Field Effect]\u00a0Pokemon hooked by a fishing rod are easier to catch.",
+		desc: "Opponents cannot remove items from this Pokemon.",
+		onTakeItem: function(item, pokemon, source) {
+			if (source && source !== pokemon) return false;
+		},
 		id: "StickyHold",
 		name: "Sticky Hold",
 		rating: 1,

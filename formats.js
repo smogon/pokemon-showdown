@@ -10,14 +10,14 @@ exports.BattleFormats = {
 		ranked: true,
 		challengeShow: true,
 		searchShow: true,
-		ruleset: ['Pokemon','PotD', 'SleepClause']
+		ruleset: ['PotD', 'Pokemon', 'SleepClause']
 	},
 	UnrankedRandomBattle: {
 		effectType: 'Format',
 		name: "Unranked Random Battle",
 		team: 'random',
 		searchShow: true,
-		ruleset: ['Pokemon','PotD', 'SleepClause']
+		ruleset: ['PotD', 'Pokemon', 'SleepClause']
 	},
 	OU: {
 		effectType: 'Format',

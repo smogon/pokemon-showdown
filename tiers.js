@@ -522,7 +522,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Eelektrik": {
-		tier: "NU"
+		tier: "NFE"
 	},
 	"Eelektross": {
 		tier: "NU"

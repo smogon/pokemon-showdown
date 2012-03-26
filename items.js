@@ -1538,8 +1538,8 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Fighting"
 		},
-		onAfterMoveSelf: function(pokemon, target, move) {
-			move = pokemon.getMoveData(move);
+		onUpdate: function(pokemon) {
+			var move = pokemon.getMoveData(pokemon.lastMove);
 			if (move && move.pp === 0)
 			{
 				pokemon.addVolatile('LeppaBerry');
@@ -2853,7 +2853,7 @@ exports.BattleItems = {
 		onResidual: function(pokemon) {
 			this.damage(pokemon.maxhp/8);
 		},
-		onAfterMoveSecondary: function(target, source, move) {
+		onHit: function(target, source, move) {
 			if (source && source !== target && !source.item && move && move.isContact)
 			{
 				var barb = target.takeItem();
