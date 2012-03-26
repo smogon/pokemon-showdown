@@ -142,7 +142,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.add('r-hurt-confusion '+pokemon.id+'');
-			this.damage(this.getDamage(pokemon,pokemon,40), pokemon, pokemon, {id:'confusion', effectType:'Move'});
+			this.damage(this.getDamage(pokemon,pokemon,40), pokemon, pokemon, {id:'confusion', effectType:'Move', type:'???'});
 			return false;
 		}
 	},
