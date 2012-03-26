@@ -1277,6 +1277,7 @@ exports.BattleAbilities = {
 	},
 	"Oblivious": {
 		desc: "This Pokemon cannot become attracted to another Pokemon.",
+		onAttract: false,
 		id: "Oblivious",
 		name: "Oblivious",
 		rating: 0.5,
