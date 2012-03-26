@@ -91,6 +91,7 @@ function BattlePokemon(set, side)
 	this.lastDamage = 0;
 	this.lastAttackedBy = null;
 	this.movedThisTurn = false;
+	this.usedItemThisTurn = false;
 	this.newlySwitched = false;
 	this.beingCalledBack = false;
 	this.isActive = false;
@@ -129,8 +130,8 @@ function BattlePokemon(set, side)
 			this.baseMoveset.push({
 				move: moveid,
 				id: move.id,
-				pp: move.pp * 8/5,
-				maxpp: move.pp * 8/5,
+				pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
 				disabled: false,
 				used: false
 			});
@@ -736,6 +737,7 @@ function BattlePokemon(set, side)
 			selfP.lastItem = selfP.item;
 			selfP.item = '';
 			selfP.itemData = {id: '', target: selfP};
+			selfP.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
@@ -760,15 +762,17 @@ function BattlePokemon(set, side)
 			selfP.lastItem = selfP.item;
 			selfP.item = '';
 			selfP.itemData = {id: '', target: selfP};
+			selfP.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
 	};
-	this.takeItem = function() {
+	this.takeItem = function(source) {
 		if (!selfP.hp || !selfP.isActive) return false;
 		if (!selfP.item) return false;
+		if (!source) source = selfP;
 		var item = selfP.getItem();
-		if (selfB.runEvent('TakeItem', selfP, null, null, item))
+		if (selfB.runEvent('TakeItem', selfP, source, null, item))
 		{
 			selfP.lastItem = '';
 			selfP.item = '';
@@ -787,6 +791,7 @@ function BattlePokemon(set, side)
 		{
 			selfB.singleEvent('Start', item, selfP.itemData, selfP, source, effect);
 		}
+		if (selfP.lastItem) selfP.usedItemThisTurn = true;
 		return true;
 	};
 	this.getItem = function() {
@@ -914,7 +919,7 @@ function BattlePokemon(set, side)
 		{
 			return false;
 		}
-		if (!type)
+		if (!type || type === '???')
 		{
 			return true;
 		}
@@ -1454,6 +1459,7 @@ function Battle(roomid, format, ranked)
 					BasePower: 1,
 					Immunity: 1,
 					Damage: 1,
+					SubDamage: 1,
 					Heal: 1,
 					TakeItem: 1,
 					UseItem: 1,
@@ -1462,7 +1468,9 @@ function Battle(roomid, format, ranked)
 					CriticalHit: 1,
 					ModifyPokemon: 1,
 					ModifyStats: 1,
-					FieldHit: 1,
+					TryHit: 1,
+					Hit: 1,
+					TryFieldHit: 1,
 					Boost: 1,
 					DragOut: 1
 				};
@@ -1969,6 +1977,7 @@ function Battle(roomid, format, ranked)
 				var pokemon = selfB.sides[i].active[j];
 				if (!pokemon) continue;
 				pokemon.movedThisTurn = false;
+				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
 				if (pokemon.lastAttackedBy)
 				{
@@ -2239,10 +2248,19 @@ function Battle(roomid, format, ranked)
 			category: 'Physical'
 		};
 		
+		if (move.affectedByImmunities)
+		{
+			if (!target.runImmunity(move.type, true))
+			{
+				return false;
+			}
+		}
+		
 		if (move.ohko)
 		{
 			if (target.level > pokemon.level)
 			{
+				this.add('r-failed '+target.id);
 				return false;
 			}
 			return target.maxhp;
@@ -2269,17 +2287,6 @@ function Battle(roomid, format, ranked)
 		if (!move.type) move.type = '???';
 		var type = move.type;
 		// '???' is typeless damage: used for Struggle and Confusion etc
-		if (move.typeCallback)
-		{
-			if (typeof move.typeCallback === 'string')
-			{
-				type = move.typeCallback;
-			}
-			else
-			{
-				type = move.typeCallback.call(selfB, pokemon, target, basePower);
-			}
-		}
 		
 		var basePower = move.basePower;
 		if (move.basePowerCallback)
