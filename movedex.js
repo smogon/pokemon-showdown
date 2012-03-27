@@ -3042,10 +3042,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, source) {
 			if (target === source) return false;
-			if (target.ability === 'Multitype' || target.ability === 'Truant' || target.ability === 'ZenMode' || target.ability === source.ability)
-			{
-				return false;
-			}
+			var disallowedAbilities = {Trace:1, Forecast:1, Multitype:1, FlowerGift:1, Illusion:1, Imposter:1, ZenMode:1, WonderGuard:1};
+			if (target.ability === 'Multitype' || target.ability === 'Truant' || target.ability === source.ability || disallowedAbilities[source.ability]) return false;
 		},
 		onHit: function(target, source) {
 			if (target.setAbility(source.ability))
