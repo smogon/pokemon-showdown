@@ -503,18 +503,13 @@ exports.BattleMovedex = {
 		pp: 15,
 		isBounceable: true,
 		priority: 0,
-		onHit: function(target, source) {
-			if ((target.gender === 'M' && source.gender === 'F') ||
-				(target.gender === 'F' && source.gender === 'M')) {
-				return target.addVolatile('Attract');
-			} else {
-				return false;
-			}
+		onHit: function(target) {
+			if (target.addVolatile('Attract')) this.add("message "+target.name+" fell in love! (placeholder).");
+			else return false;
 		},
 		effect: {
 			onStart: function(pokemon, source) {
-				if (!this.runEvent('Attract', pokemon, source)) return false;
-				this.add("message "+pokemon.name+" fell in love! (placeholder).");
+				return (((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) && this.runEvent('Attract', pokemon, source));
 			},
 			onBeforeMove: function(pokemon) {
 				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['Attract'])
