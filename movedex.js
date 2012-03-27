@@ -3226,8 +3226,8 @@ exports.BattleMovedex = {
 		name: "False Swipe",
 		pp: 40,
 		isContact: true,
+		noFaint: true,
 		priority: 0,
-		hitCallback: function(){ return 'noFaint'; },
 		secondary: false,
 		target: "normal",
 		type: "Normal"
