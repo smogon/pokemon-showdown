@@ -69,6 +69,28 @@ function connectUser(name, socket, token, room)
 	return person;
 }
 
+var usergroups = {};
+function importUsergroups() {
+	fs.readFile('config/usergroups.csv', function(err, data) {
+		if (err) return;
+		data = (''+data).split("\n");
+		usergroups = {};
+		for (var i = 0; i < data.length; i++) {
+			if (!data[i]) continue;
+			var row = data[i].split(",");
+			usergroups[toUserid(row[0])] = (row[1]||' ')+row[0];
+		}
+	});
+}
+function exportUsergroups() {
+	var buffer = '';
+	for (var i in usergroups) {
+		buffer += usergroups[i].substr(1).replace(/,/g,'') + ',' + usergroups[i].substr(0,1) + "\n";
+	}
+	fs.writeFile('config/usergroups.csv', buffer);
+}
+importUsergroups();
+
 function User(name, person, token)
 {
 	var selfP = this;
@@ -356,6 +378,10 @@ function User(name, person, token)
 					catch(e)
 					{
 					}
+					if (usergroups[userid])
+					{
+						group = usergroups[userid].substr(0,1);
+					}
 				}
 				if (users[userid] && users[userid] !== selfP)
 				{
@@ -478,6 +504,15 @@ function User(name, person, token)
 		}
 		if (!selfP.connected) str += ' (DISCONNECTED)';
 		return str;
+	};
+	this.setGroup = function(group) {
+		selfP.group = group.substr(0,1);
+		if (!selfP.group || selfP.group === ' ') {
+			delete usergroups[selfP.userid];
+		} else {
+			usergroups[selfP.userid] = (selfP.group||' ')+selfP.name;
+		}
+		exportUsergroups();
 	};
 	this.disconnect = function(socket) {
 		var person = null;

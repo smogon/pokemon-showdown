@@ -632,7 +632,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			room.add(''+targetUser.name+' was voiced by '+user.name+'.');
 			
-			targetUser.group = '+';
+			targetUser.setGroup('+');
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
@@ -658,7 +658,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			room.add(''+targetUser.name+' was devoiced by '+user.name+'.');
 			
-			targetUser.group = ' ';
+			targetUser.setGroup(' ');
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
@@ -690,7 +690,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				room.add(''+targetUser.name+' was promoted to moderator by '+user.name+'.');
 			}
-			targetUser.group = '%';
+			targetUser.setGroup('%');
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
@@ -718,7 +718,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			if (targetUser.group === '%')
 			{
-				targetUser.group = '+';
+				targetUser.setGroup('+');
 				rooms.lobby.usersChanged = true;
 			}
 			return true;
@@ -751,7 +751,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				room.add(''+targetUser.name+' was promoted to admin by '+user.name+'.');
 			}
-			targetUser.group = '@';
+			targetUser.setGroup('@');
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
@@ -779,7 +779,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			if (targetUser.group === '@')
 			{
-				targetUser.group = '%';
+				targetUser.setGroup('%');
 				rooms.lobby.usersChanged = true;
 			}
 			return true;
@@ -800,7 +800,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			
 			room.add(''+targetUser.name+' was promoted to sysop by '+user.name+'.');
-			targetUser.group = '&';
+			targetUser.setGroup('&');
 			rooms.lobby.usersChanged = true;
 			return true;
 		}
@@ -822,7 +822,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (targetUser.group === '&')
 			{
 				room.add(''+targetUser.name+' was demoted to admin by '+user.name+'.');
-				targetUser.group = '@';
+				targetUser.setGroup('@');
 				rooms.lobby.usersChanged = true;
 			}
 			else
