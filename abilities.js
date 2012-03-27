@@ -291,6 +291,15 @@ exports.BattleAbilities = {
 	},
 	"CuteCharm": {
 		desc: "If an opponent of the opposite gender directly attacks this Pokemon, there is a 30% chance that the opponent will become Attracted to this Pokemon.",
+		onAfterDamage: function(damage, target, source, move) {
+			if (move && move.isContact)
+			{
+				if (Math.random() * 10 < 3)
+				{
+					if (source.addVolatile('Attract', target)) this.add('message '+target.name+'\'s Cute Charm infatuated '+source.name+'! (placeholder)');
+				}
+			}
+		},
 		id: "CuteCharm",
 		name: "Cute Charm",
 		rating: 2,
