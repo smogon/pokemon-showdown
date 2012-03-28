@@ -667,6 +667,7 @@ exports.BattleAbilities = {
 		desc: "Has a 30% chance of curing an adjacent ally's status ailment at the end of each turn in Double and Triple Battles.",
 		id: "Healer",
 		name: "Healer",
+		onResidualPriority: -5.1,
 		rating: 0,
 		num: "131"
 	},
@@ -734,7 +735,8 @@ exports.BattleAbilities = {
 	},
 	"Hydration": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, it recovers from poison, paralysis, burn, sleep and freeze at the end of the turn.",
-		onWeather: function(pokemon) {
+		onResidualPriority: -5.1,
+		onResidual: function(pokemon) {
 			if (pokemon.status && this.weather === 'RainDance')
 			{
 				this.debug('hydration');
@@ -1686,6 +1688,7 @@ exports.BattleAbilities = {
 	},
 	"ShedSkin": {
 		desc: "After each turn, this Pokemon has a 33% chance to heal itself from poison (including Toxic), paralysis, burn, freeze or sleep (including self-induced Rest).",
+		onResidualPriority: -5.1,
 		onResidual: function(pokemon) {
 			if (pokemon.status && Math.random()*3 < 1)
 			{
