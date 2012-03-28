@@ -1207,6 +1207,7 @@ exports.BattleMovedex = {
 		name: "Bug Buzz",
 		pp: 10,
 		isViable: true,
+		isSoundBased: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -1419,6 +1420,7 @@ exports.BattleMovedex = {
 		id: "Chatter",
 		name: "Chatter",
 		pp: 20,
+		isSoundBased: true,
 		priority: 0,
 		onModifyMove: function(move, pokemon) {
 			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
@@ -2746,6 +2748,7 @@ exports.BattleMovedex = {
 		id: "EchoedVoice",
 		name: "Echoed Voice",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -4301,6 +4304,7 @@ exports.BattleMovedex = {
 		id: "GrassWhistle",
 		name: "GrassWhistle",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		status: 'slp',
 		affectedByImmunities: true,
@@ -4355,6 +4359,7 @@ exports.BattleMovedex = {
 		id: "Growl",
 		name: "Growl",
 		pp: 40,
+		isSoundBased: true,
 		priority: 0,
 		boosts: {
 			atk: -1
@@ -4696,6 +4701,7 @@ exports.BattleMovedex = {
 		name: "Heal Bell",
 		pp: 5,
 		isViable: true,
+		isSoundBased: true, // though it isn't affected by Soundproof
 		priority: 0,
 		onHitSide: function(side, source) {
 			for (var i=0; i<side.pokemon.length; i++)
@@ -5458,6 +5464,7 @@ exports.BattleMovedex = {
 		name: "Hyper Voice",
 		pp: 10,
 		isViable: true,
+		isSoundBased: true,
 		priority: 0,
 		secondary: false,
 		target: "foes",
@@ -6762,6 +6769,7 @@ exports.BattleMovedex = {
 		name: "Metal Sound",
 		pp: 40,
 		priority: 0,
+		isSoundBased: true,
 		boosts: {
 			spd: -2
 		},
@@ -7559,6 +7567,7 @@ exports.BattleMovedex = {
 		name: "Perish Song",
 		pp: 5,
 		isViable: true,
+		isSoundBased: true,
 		priority: 0,
 		onHitField: function(target, source) {
 			this.add('r-perish-song '+source.id);
@@ -7566,7 +7575,8 @@ exports.BattleMovedex = {
 			{
 				for (var j=0; j<this.sides[i].active.length; j++)
 				{
-					this.sides[i].active[j].addVolatile('PerishSong');
+					if (this.sides[i].active[j].runImmunity('sound')) this.sides[i].active[j].addVolatile('PerishSong');
+					else this.add('message '+this.sides[i].active[j].name+' is immune to Perish Song due to Soundproof, the graphics are incorrect');
 				}
 			}
 		},
@@ -8651,6 +8661,7 @@ exports.BattleMovedex = {
 		name: "Relic Song",
 		pp: 10,
 		isViable: true,
+		isSoundBased: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -8812,6 +8823,7 @@ exports.BattleMovedex = {
 		name: "Roar",
 		pp: 20,
 		isViable: true,
+		isSoundBased: true,
 		priority: -6,
 		forceSwitch: true,
 		notSubBlocked: true,
@@ -9141,6 +9153,7 @@ exports.BattleMovedex = {
 		id: "Round",
 		name: "Round",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -9338,6 +9351,7 @@ exports.BattleMovedex = {
 		id: "Screech",
 		name: "Screech",
 		pp: 40,
+		isSoundBased: true,
 		priority: 0,
 		boosts: {
 			def: -2
@@ -9755,6 +9769,7 @@ exports.BattleMovedex = {
 		id: "Sing",
 		name: "Sing",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		status: 'slp',
 		secondary: false,
@@ -10199,6 +10214,7 @@ exports.BattleMovedex = {
 		id: "Snarl",
 		name: "Snarl",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		secondary: {
 			chance: 100,
@@ -10234,6 +10250,7 @@ exports.BattleMovedex = {
 		id: "Snore",
 		name: "Snore",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		sleepUsable: true,
 		onTryHit: function(target, source) {
@@ -11038,6 +11055,7 @@ exports.BattleMovedex = {
 		id: "Supersonic",
 		name: "Supersonic",
 		pp: 20,
+		isSoundBased: true,
 		priority: 0,
 		volatileStatus: 'confusion',
 		secondary: false,
@@ -12053,6 +12071,7 @@ exports.BattleMovedex = {
 		id: "Uproar",
 		name: "Uproar",
 		pp: 10,
+		isSoundBased: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
