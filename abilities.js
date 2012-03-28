@@ -880,7 +880,7 @@ exports.BattleAbilities = {
 				else
 				{
 					this.add('r-intimidate '+pokemon.id+' '+foeactive[i].id);
-					this.boost({atk: -1}, foeactive[i]);
+					this.boost({atk: -1}, foeactive[i], pokemon);
 				}
 			}
 		},
