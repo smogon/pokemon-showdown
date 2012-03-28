@@ -11924,6 +11924,10 @@ exports.BattleMovedex = {
 		num: 167,
 		accuracy: 90,
 		basePower: 10,
+		basePowerCallback: function(pokemon) {
+			pokemon.addVolatile('TripleKick');
+			return 10 * pokemon.volatiles['TripleKick'].hit;
+		},
 		category: "Physical",
 		desc: "Attacks three times in one turn, adding 10 BP for each kick. If a kick misses, the move ends instantly; if one of the kicks breaks a target's Substitute, the real Pokemon will take damage for the remaining kicks.",
 		shortDesc: "Hits 3 times with power increasing each hit.",
@@ -11933,6 +11937,15 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		multihit: [3,3],
+		effect: {
+			duration: 1,
+			onStart: function() {
+				this.effectData.hit = 1;
+			},
+			onRestart: function() {
+				this.effectData.hit++;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
