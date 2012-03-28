@@ -739,6 +739,7 @@ exports.BattleMovedex = {
 			}
 			if (!target.setItem(yourItem))
 			{
+				source.item = yourItem;
 				return false;
 			}
 			this.add('r-trick-get '+target.id+' '+yourItem.id);
@@ -11167,6 +11168,8 @@ exports.BattleMovedex = {
 			var myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem))
 			{
+				if (yourItem) target.item = yourItem;
+				if (myItem) source.item = myItem;
 				return false;
 			}
 			this.add('r-trick '+source.id+' '+target.id);
@@ -11848,6 +11851,8 @@ exports.BattleMovedex = {
 			var myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem))
 			{
+				if (yourItem) target.item = yourItem;
+				if (myItem) source.item = myItem;
 				return false;
 			}
 			this.add('r-trick '+source.id+' '+target.id);
