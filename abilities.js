@@ -337,7 +337,7 @@ exports.BattleAbilities = {
 	},
 	"Defiant": {
 		desc: "Raises the user's Attack stat by two stages when a stat is lowered, including the Attack stat. This does not include self-induced stat drops like those from Close Combat.",
-		onAfterBoost: function(boost, target, source) {
+		onAfterEachBoost: function(boost, target, source) {
 			if (!source || target === source)
 			{
 				return;
