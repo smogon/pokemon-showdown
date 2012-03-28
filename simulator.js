@@ -2074,6 +2074,7 @@ function Battle(roomid, format, rated)
 					}
 					break;
 				}
+				selfB.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}
 		}
 		for (var i in boost)
@@ -2102,6 +2103,7 @@ function Battle(roomid, format, rated)
 					}
 					break;
 				}
+				selfB.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}
 		}
 		selfB.runEvent('AfterBoost', target, source, effect, boost);
