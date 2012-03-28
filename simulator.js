@@ -2257,6 +2257,14 @@ function Battle(roomid, format, rated)
 				return false;
 			}
 		}
+
+		if (move.isSoundBased)
+		{
+			if (!target.runImmunity('sound', true))
+			{
+				return false;
+			}
+		}
 		
 		if (move.ohko)
 		{
