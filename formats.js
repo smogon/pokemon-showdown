@@ -7,14 +7,14 @@ exports.BattleFormats = {
 		name: "Random Battle",
 		team: 'random',
 		searchDefault: true,
-		ranked: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'SleepClause']
 	},
-	UnrankedRandomBattle: {
+	UnratedRandomBattle: {
 		effectType: 'Format',
-		name: "Unranked Random Battle",
+		name: "Unrated Random Battle",
 		team: 'random',
 		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'SleepClause']
@@ -23,7 +23,7 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "OU",
 		challengeDefault: true,
-		ranked: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
@@ -33,7 +33,7 @@ exports.BattleFormats = {
 	CAP: {
 		effectType: 'Format',
 		name: "CAP",
-		ranked: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
@@ -43,14 +43,14 @@ exports.BattleFormats = {
 	CAPNecturnaPlaytest: {
 		effectType: 'Format',
 		name: "CAP Necturna Playtest",
-		ranked: true,
+		rated: true,
 		ruleset: ['CAPPokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
 		banlist: ['Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
 	},
 	Ubers: {
 		effectType: 'Format',
 		name: "Ubers",
-		ranked: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
@@ -60,7 +60,7 @@ exports.BattleFormats = {
 	UU: {
 		effectType: 'Format',
 		name: "UU",
-		ranked: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
@@ -70,7 +70,7 @@ exports.BattleFormats = {
 	RU: {
 		effectType: 'Format',
 		name: "RU",
-		ranked: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
@@ -80,7 +80,7 @@ exports.BattleFormats = {
 	NU: {
 		effectType: 'Format',
 		name: "NU",
-		ranked: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
@@ -90,7 +90,7 @@ exports.BattleFormats = {
 	Hackmons: {
 		effectType: 'Format',
 		name: "Hackmons",
-		ranked: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
@@ -100,7 +100,7 @@ exports.BattleFormats = {
 	BalancedHackmons: {
 		effectType: 'Format',
 		name: "Balanced Hackmons",
-		ranked: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		teambuilderFormat: 'Hackmons',
