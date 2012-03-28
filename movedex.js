@@ -503,17 +503,13 @@ exports.BattleMovedex = {
 		pp: 15,
 		isBounceable: true,
 		priority: 0,
-		onHit: function(target, source) {
-			if ((target.gender === 'M' && source.gender === 'F') ||
-				(target.gender === 'F' && source.gender === 'M')) {
-				target.addVolatile('Attract');
-			} else {
-				return false;
-			}
+		onHit: function(target) {
+			if (target.addVolatile('Attract')) this.add("message "+target.name+" fell in love! (placeholder).");
+			else return false;
 		},
 		effect: {
 			onStart: function(pokemon, source) {
-				this.add("message "+pokemon.name+" fell in love! (placeholder).");
+				return (((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) && this.runEvent('Attract', pokemon, source));
 			},
 			onBeforeMove: function(pokemon) {
 				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['Attract'])
@@ -3046,10 +3042,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, source) {
 			if (target === source) return false;
-			if (target.ability === 'Multitype' || target.ability === 'Truant' || target.ability === 'ZenMode' || target.ability === source.ability)
-			{
-				return false;
-			}
+			var disallowedAbilities = {Trace:1, Forecast:1, Multitype:1, FlowerGift:1, Illusion:1, Imposter:1, ZenMode:1, WonderGuard:1};
+			if (target.ability === 'Multitype' || target.ability === 'Truant' || target.ability === source.ability || disallowedAbilities[source.ability]) return false;
 		},
 		onHit: function(target, source) {
 			if (target.setAbility(source.ability))
@@ -3230,8 +3224,8 @@ exports.BattleMovedex = {
 		name: "False Swipe",
 		pp: 40,
 		isContact: true,
+		noFaint: true,
 		priority: 0,
-		hitCallback: function(){ return 'noFaint'; },
 		secondary: false,
 		target: "normal",
 		type: "Normal"

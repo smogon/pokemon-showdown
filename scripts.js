@@ -315,7 +315,7 @@ exports.BattleScripts = {
 				this.singleEvent('MoveFail', move, null, target, pokemon, move);
 				return false;
 			}
-			if (hitResult === 'noFaint' && damage >= target.hp)
+			if (move.noFaint && damage >= target.hp)
 			{
 				damage = target.hp - 1;
 			}
