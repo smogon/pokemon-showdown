@@ -6811,7 +6811,7 @@ exports.BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				var NoMetronome = {
-					Assist:1, Chatter:1, Copycat:1, Counter:1, Covet:1, DestinyBond:1, Detect:1, Endure:1, Feint:1, FocusPunch:1, FollowMe:1, HelpingHand:1, MeFirst:1, Metronome:1, Mimic:1, MirrorCoat:1, MirrorMove:1, Protect:1, QuickGuard:1, Sketch:1, SleepTalk:1, Snatch:1, Struggle:1, Switcheroo:1, Thief:1, Trick:1, WideGuard:1
+					AfterYou:1, Assist:1, Bestow:1, Chatter:1, Copycat:1, Counter:1, Covet:1, DestinyBond:1, Detect:1, Endure:1, Feint:1, FocusPunch:1, FollowMe:1, FreezeShock:1, HelpingHand:1, IceBurn:1, MeFirst:1, Metronome:1, Mimic:1, MirrorCoat:1, MirrorMove:1, NaturePower:1, "NaturePower(Wifi)":1, Protect:1, Quash:1, QuickGuard:1, RagePowder:1, RelicSong:1, SecretSword:1, Sketch:1, SleepTalk:1, Snatch:1, Snarl:1, Snore:1, Struggle:1, Switcheroo:1, TechnoBlast:1, Thief:1, Transform:1, Trick:1, "V-create":1, WideGuard:1
 				};
 				if (!NoMetronome[move.id])
 				{
