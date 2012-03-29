@@ -2137,21 +2137,28 @@ function Battle(roomid, format, rated)
 			this.debug('pokemon.damage said zero');
 			return 0;
 		}
-		if (effect.effectType === 'Move')
+		var id = effect.id;
+		if (id === 'tox') id = 'psn';
+		switch (id)
 		{
-			selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth());
-		}
-		else
-		{
-			var id = effect.id;
-			var partiallytrapped = '';
-			if (id === 'tox') id = 'psn';
-			if (id === 'partiallytrapped')
-			{
-				id = selfB.getEffect(selfB.effectData.sourceEffect).id;
-				partiallytrapped = '[partiallytrapped]';
-			}
-			selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+id, partiallytrapped);
+			case 'brn':
+			case 'psn':
+			case 'sandstorm':
+			case 'hail':
+			case 'recoil':
+			case 'lifeorb':
+			case 'stealthrock':
+			case 'spikes':
+				selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+id);
+				break;
+			case 'partiallytrapped':
+				selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+selfB.getEffect(selfB.effectData.sourceEffect).id, '[partiallytrapped]');
+				break;
+			default:
+				if (effect.effectType === 'Ability' || effect.effectType === 'Item')
+					selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+id);
+				else selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth());
+				break;
 		}
 		if (target.fainted) selfB.faint(target);
 		else
