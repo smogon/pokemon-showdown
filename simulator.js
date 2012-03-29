@@ -2907,7 +2907,7 @@ function Battle(roomid, format, rated)
 		selfB.log.push(activity);
 	};
 	this.debug = function(activity) {
-		selfB.add('[DEBUG] '+activity);
+		selfB.add('| debug | '+activity);
 	};
 	this.join = function(user, slot) {
 		if (selfB.allySide && selfB.allySide.user && selfB.foeSide && selfB.foeSide.user) return false;
