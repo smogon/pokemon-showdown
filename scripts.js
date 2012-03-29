@@ -342,7 +342,7 @@ exports.BattleScripts = {
 					this.add('r-failed '+target.id);
 					return false;
 				}
-				this.add('r-heal '+target.id+' '+target.hpPercent(d)+target.getHealth());
+				this.add('-heal',target.fullname,target.hpPercent(d)+target.getHealth());
 				didSomething = true;
 			}
 			if (moveData.status)
