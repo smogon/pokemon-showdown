@@ -1981,7 +1981,7 @@ function Battle(roomid, format, rated)
 				pokemon.activeTurns++;
 			}
 		}
-		selfB.add('turn '+selfB.turn);
+		selfB.add('| turn | '+selfB.turn);
 		selfB.callback('move');
 	};
 	this.midTurn = false;
