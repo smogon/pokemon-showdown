@@ -583,7 +583,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		
 		if (user.named)
 		{
-			selfR.battle.add('| join '+user.name);
+			selfR.battle.add('| join | '+user.name);
 			selfR.update(user);
 		}
 		
