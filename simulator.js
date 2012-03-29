@@ -2141,23 +2141,18 @@ function Battle(roomid, format, rated)
 		if (id === 'tox') id = 'psn';
 		switch (id)
 		{
-			case 'brn':
-			case 'psn':
-			case 'sandstorm':
-			case 'hail':
-			case 'recoil':
-			case 'lifeorb':
-			case 'stealthrock':
-			case 'spikes':
-				selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+id);
-				break;
 			case 'partiallytrapped':
 				selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+selfB.getEffect(selfB.effectData.sourceEffect).id, '[partiallytrapped]');
 				break;
 			default:
-				if (effect.effectType === 'Ability' || effect.effectType === 'Item')
+				if (effect.effectType === 'Move')
+				{
+					selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth());
+				}
+				else
+				{
 					selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+id);
-				else selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth());
+				}
 				break;
 		}
 		if (target.fainted) selfB.faint(target);
