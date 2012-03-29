@@ -2183,26 +2183,16 @@ function Battle(roomid, format, rated)
 		if (target.hp >= target.maxhp) return 0;
 		damage = target.heal(damage, source, effect);
 		switch (effect.id) {
-		case 'drain':
-			selfB.add('r-drain '+source.id+' '+target.id+' '+target.hpPercent(damage)+' '+target.getHealth());
-			break;
-		case 'AquaRing':
-			selfB.add('residual '+target.id+' heal aqua-ring '+target.hpPercent(damage)+target.getHealth());
-			break;
 		case 'LeechSeed':
 			break;
 		default:
-			if (effect.effectType === 'Ability')
+			if (effect.effectType === 'Move')
 			{
-				selfB.add('residual '+target.id+' ability-heal '+effect.id+' '+target.hpPercent(damage)+target.getHealth());
-			}
-			else if (effect.effectType === 'Item')
-			{
-				selfB.add('residual '+target.id+' item-heal '+effect.id+' '+target.hpPercent(damage)+target.getHealth());
+				selfB.add('-heal',target.fullname,target.hpPercent(damage)+target.getHealth());
 			}
 			else
 			{
-				selfB.add('r-heal '+target.id+' '+target.hpPercent(damage)+target.getHealth());
+				selfB.add('-heal',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+id);
 			}
 			break;
 		}
