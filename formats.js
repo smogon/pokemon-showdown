@@ -222,7 +222,7 @@ exports.BattleFormats = {
 		onStart: function() {
 			if (this.effect.onPotD)
 			{
-				this.add('| rule | Pokemon of the Day: '+this.effect.onPotD);
+				this.add('rule', 'Pokemon of the Day: '+this.effect.onPotD);
 			}
 		}
 	},
@@ -245,7 +245,7 @@ exports.BattleFormats = {
 	haxclause: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('| rule | Hax Clause');
+			this.add('rule', 'Hax Clause');
 		},
 		onModifyMovePriority: -100,
 		onModifyMove: function(move) {
@@ -263,7 +263,7 @@ exports.BattleFormats = {
 	speciesclause: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('| rule | Species Clause');
+			this.add('rule', 'Species Clause');
 		},
 		validateTeam: function(team, format) {
 			var speciesTable = {};
@@ -279,7 +279,7 @@ exports.BattleFormats = {
 	sleepclause: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('| rule | Sleep Clause');
+			this.add('rule', 'Sleep Clause');
 		},
 		onSetStatus: function(status, target, source) {
 			if (source && source.side === target.side)
@@ -307,7 +307,7 @@ exports.BattleFormats = {
 	freezeclause: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('| rule | Freeze Clause');
+			this.add('rule', 'Freeze Clause');
 		}
 	}
 };
