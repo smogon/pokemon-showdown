@@ -1270,6 +1270,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 1,
 		secondary: false,
 		target: "normal",
@@ -1559,6 +1560,7 @@ exports.BattleMovedex = {
 		name: "Comet Punch",
 		pp: 15,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		multihit: [2,5],
 		secondary: false,
@@ -2315,6 +2317,7 @@ exports.BattleMovedex = {
 		name: "Dizzy Punch",
 		pp: 10,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -2604,6 +2607,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		drain: [1,2],
 		secondary: false,
@@ -2693,6 +2697,7 @@ exports.BattleMovedex = {
 		name: "DynamicPunch",
 		pp: 5,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 100,
@@ -3393,6 +3398,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3801,6 +3807,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: -3,
 		beforeTurnCallback: function(pokemon) {
 			pokemon.addVolatile('FocusPunch');
@@ -4581,6 +4588,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		self: {
 			boosts: {
@@ -5591,6 +5599,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -6361,6 +6370,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 1,
 		secondary: false,
 		target: "normal",
@@ -6669,6 +6679,7 @@ exports.BattleMovedex = {
 		name: "Mega Punch",
 		pp: 20,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -6789,6 +6800,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -9569,6 +9581,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -9954,6 +9967,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -11617,6 +11631,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
