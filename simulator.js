@@ -2181,7 +2181,7 @@ function Battle(roomid, format, rated)
 			}
 			else
 			{
-				selfB.add('r-damage '+target.id+' '+target.hpPercent(damage)+target.getHealth());
+				selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth());
 			}
 		}
 		if (target.fainted) selfB.faint(target);
