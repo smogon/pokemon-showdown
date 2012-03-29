@@ -71,6 +71,8 @@ function BattlePokemon(set, side)
 	var genders = {M:'M',F:'F'};
 	this.gender = this.template.gender || genders[set.gender] || (Math.random()*2<1?'M':'F');
 	if (this.gender === 'N') this.gender = '';
+	
+	this.fullname = this.side.id + ': ' + this.name;
 	this.details = this.species + (this.level==100?'':', L'+this.level) + (this.gender===''?'':', '+this.gender);
 	
 	this.baseFullid = this.fullid;
@@ -975,7 +977,7 @@ function BattleSide(user, battle, n)
 	this.foe = null;
 	this.sideConditions = {};
 	
-	this.id = (n?'foe':'ally');
+	this.id = (n?'p2':'p1');
 	
 	this.team = BattleScripts.getTeam.call(selfB, selfS);
 	for (var i=0; i<this.team.length && i<6; i++)
