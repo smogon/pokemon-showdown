@@ -1794,7 +1794,7 @@ function Battle(roomid, format, rated)
 			selfB.win();
 			return;
 		}
-		selfB.add('callback decision');
+		selfB.add('| callback | decision');
 		selfB.curCallback = type;
 	};
 	this.win = function(side) {
