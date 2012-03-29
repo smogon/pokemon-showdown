@@ -2606,7 +2606,7 @@ function Battle(roomid, format, rated)
 		switch (decision.choice)
 		{
 		case 'start':
-			selfB.add('start');
+			selfB.add('| start');
 			selfB.switchIn(selfB.allySide.pokemon[0]);
 			selfB.switchIn(selfB.foeSide.pokemon[0]);
 			selfB.midTurn = true;
@@ -2933,8 +2933,7 @@ function Battle(roomid, format, rated)
 				selfB.sides[1] = selfB.foeSide;
 				user.sides[selfB.roomid] = selfB.foeSide;
 			}
-			selfB.add('foe-player '+selfB.foeSide.name);
-			selfB.add('foe-avatar '+selfB.foeSide.user.avatar);
+			selfB.add('| player | p2 | '+selfB.foeSide.name+' | '+selfB.foeSide.user.avatar);
 		}
 		else
 		{
@@ -2951,8 +2950,7 @@ function Battle(roomid, format, rated)
 				selfB.sides[0] = selfB.allySide;
 				user.sides[selfB.roomid] = selfB.allySide;
 			}
-			selfB.add('player '+selfB.allySide.name);
-			selfB.add('avatar '+selfB.allySide.user.avatar);
+			selfB.add('| player | p1 | '+selfB.allySide.name+' | '+selfB.allySide.user.avatar);
 		}
 		selfB.start();
 		return true;
@@ -2962,14 +2960,12 @@ function Battle(roomid, format, rated)
 		if (user.sides[selfB.roomid] === selfB.allySide)
 		{
 			user.sides[selfB.roomid].name = user.name;
-			selfB.add('player '+selfB.allySide.name);
-			selfB.add('avatar '+user.avatar);
+			selfB.add('| player | p1 | '+selfB.allySide.name+' | '+user.avatar);
 		}
 		if (user.sides[selfB.roomid] === selfB.foeSide)
 		{
 			user.sides[selfB.roomid].name = user.name;
-			selfB.add('foe-player '+selfB.foeSide.name);
-			selfB.add('foe-avatar '+user.avatar);
+			selfB.add('| player | p2 | '+selfB.foeSide.name+' | '+user.avatar);
 		}
 	};
 	this.leave = function(user) {
