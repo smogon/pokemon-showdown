@@ -1,7 +1,7 @@
 Showdown
 ========================================================================
 
-Showdown is a simulator of Pokemon battles. It currently only supports Generation 5 (Pokemon Black and Pokemon White).
+Showdown is a simulator of Pokemon battles. It currently only supports singles battles in Generation 5 (Pokemon Black and Pokemon White).
 
 Installing
 ------------------------------------------------------------------------
