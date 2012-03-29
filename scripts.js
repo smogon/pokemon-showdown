@@ -119,7 +119,7 @@ exports.BattleScripts = {
 		{
 			attrs = ' | [notarget]';
 		}
-		this.add('| move | p1: '+pokemon.name+' | '+move.name+' | p2: '+target.name+attrs);
+		this.add('| move | '+pokemon.fullname+' | '+move.name+' | '+target.fullname+attrs);
 		if (missed)
 		{
 			this.add('r-miss '+pokemon.id);
