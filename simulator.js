@@ -2011,10 +2011,10 @@ function Battle(roomid, format, rated)
 		selfB.allySide.foe = selfB.foeSide;
 		
 		var format = selfB.getFormat();
-		selfB.add('tier '+format.name);
+		selfB.add('| tier | '+format.name);
 		if (selfB.rated)
 		{
-			selfB.add('rated');
+			selfB.add('| rated');
 		}
 		if (format && format.ruleset)
 		{
