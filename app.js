@@ -689,19 +689,15 @@ function Room(roomid, format, p1, p2, parentid, rated)
 	this.add = function(message) {
 		if (message.rawMessage)
 		{
-			selfR.battle.add('chatmsg-raw '+message.rawMessage);
-		}
-		else if (message.act)
-		{
-			selfR.battle.add('chat-me '+message.name.substr(1)+' '+message.message);
+			selfR.battle.add('| chatmsg-raw | '+message.rawMessage);
 		}
 		else
 		{
-			selfR.battle.add('chatmsg '+message);
+			selfR.battle.add('| chatmsg | '+message);
 		}
 	};
 	this.addRaw = function(message) {
-		selfR.battle.add('chatmsg-raw '+message);
+		selfR.battle.add('| chatmsg-raw | '+message);
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
@@ -762,22 +758,22 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			{
 				try
 				{
-					selfR.battle.add('chat '+toId(user.name)+' << '+eval(cmd));
+					selfR.battle.add('| chat | '+toId(user.name)+' | << '+eval(cmd));
 				}
 				catch (e)
 				{
-					selfR.battle.add('chat '+toId(user.name)+' << error: '+e.message);
+					selfR.battle.add('| chat | '+toId(user.name)+' | << error: '+e.message);
 					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
 				}
 			}
 			else
 			{
-				selfR.battle.add('chat '+toId(user.name)+' << Access denied. To use the developer console, you must be: &');
+				selfR.battle.add('| chat | '+toId(user.name)+' | << Access denied. To use the developer console, you must be: &');
 			}
 		}
 		else
 		{
-			selfR.battle.add('chat '+toId(user.name)+' '+message);
+			selfR.battle.add('| chat | '+toId(user.name)+' | '+message);
 		}
 		selfR.update();
 	};
