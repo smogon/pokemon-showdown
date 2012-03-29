@@ -12,8 +12,9 @@ function clampIntRange(num, min, max)
 function toId(text)
 {
 	text = text || '';
+	if (typeof text === 'number') text = ''+text;
 	if (typeof text !== 'string') return ''; //???
-	return text.replace(/ /g, '');
+	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 function shuffle(array) {
     var tmp, current, top = array.length;
