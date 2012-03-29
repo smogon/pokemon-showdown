@@ -538,7 +538,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		selfR.battle.decision(user, choice, data);
 		if (selfR.battle.ended)
 		{
-			selfR.battle.add('callback restart');
+			selfR.battle.add('| callback | restart');
 		}
 		if (selfR.active !== selfR.battle.active)
 		{
