@@ -269,6 +269,15 @@ function User(name, person, token)
 	 * @param auth    Make sure this account will identify as registered
 	 */
 	this.rename = function(name, token, auth) {
+		for (var i in selfP.roomCount)
+		{
+			var room = getRoom(i);
+			if (room.rated && (selfP.userid === room.rated.p1 || selfP.userid === room.rated.p2))
+			{
+				selfP.emit('message', "You can't change your name right now because you're in the middle of a rated battle.");
+				return false;
+			}
+		}
 		if (!name) name = '';
 		name = name.trim();
 		if (name.length > 18) name = name.substr(0,18);
@@ -338,7 +347,7 @@ function User(name, person, token)
 					if (userid === "serei") avatar = 172;
 					else if (userid === "hobsgoblin") avatar = 52;
 					else if (userid === "etherealsol") avatar = 1001;
-					else if (userid === "elitefourlorelei") avatar = 1002;
+					else if (userid === "ataraxia") avatar = 1002;
 					else if (userid === "verbatim") avatar = 1003;
 					else if (userid === "mortygymleader") avatar = 144;
 					else if (userid === "leadermorty") avatar = 144;

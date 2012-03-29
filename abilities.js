@@ -337,7 +337,7 @@ exports.BattleAbilities = {
 	},
 	"Defiant": {
 		desc: "Raises the user's Attack stat by two stages when a stat is lowered, including the Attack stat. This does not include self-induced stat drops like those from Close Combat.",
-		onAfterBoost: function(boost, target, source) {
+		onAfterEachBoost: function(boost, target, source) {
 			if (!source || target === source)
 			{
 				return;
@@ -667,6 +667,7 @@ exports.BattleAbilities = {
 		desc: "Has a 30% chance of curing an adjacent ally's status ailment at the end of each turn in Double and Triple Battles.",
 		id: "Healer",
 		name: "Healer",
+		onResidualPriority: -5.1,
 		rating: 0,
 		num: "131"
 	},
@@ -734,7 +735,8 @@ exports.BattleAbilities = {
 	},
 	"Hydration": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, it recovers from poison, paralysis, burn, sleep and freeze at the end of the turn.",
-		onWeather: function(pokemon) {
+		onResidualPriority: -5.1,
+		onResidual: function(pokemon) {
 			if (pokemon.status && this.weather === 'RainDance')
 			{
 				this.debug('hydration');
@@ -878,7 +880,7 @@ exports.BattleAbilities = {
 				else
 				{
 					this.add('r-intimidate '+pokemon.id+' '+foeactive[i].id);
-					this.boost({atk: -1}, foeactive[i]);
+					this.boost({atk: -1}, foeactive[i], pokemon);
 				}
 			}
 		},
@@ -1686,6 +1688,7 @@ exports.BattleAbilities = {
 	},
 	"ShedSkin": {
 		desc: "After each turn, this Pokemon has a 33% chance to heal itself from poison (including Toxic), paralysis, burn, freeze or sleep (including self-induced Rest).",
+		onResidualPriority: -5.1,
 		onResidual: function(pokemon) {
 			if (pokemon.status && Math.random()*3 < 1)
 			{
@@ -1859,7 +1862,10 @@ exports.BattleAbilities = {
 		num: "116"
 	},
 	"Soundproof": {
-		desc: "This Pokemon is immune to the effects of the sound-related moves Bug Buzz, Chatter, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Roar, Roar of Time, Sing, Sonicboom, Supersonic, Screech, Snore and Uproar.",
+		desc: "This Pokemon is immune to the effects of the sound-related moves Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar.",
+		onImmunity: function(type) {
+			if (type === 'sound') return false;
+		},
 		id: "Soundproof",
 		name: "Soundproof",
 		rating: 2,
