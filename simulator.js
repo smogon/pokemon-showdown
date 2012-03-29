@@ -2192,7 +2192,7 @@ function Battle(roomid, format, rated)
 			}
 			else
 			{
-				selfB.add('-heal',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+id);
+				selfB.add('-heal',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+effect.id);
 			}
 			break;
 		}
@@ -2424,7 +2424,7 @@ function Battle(roomid, format, rated)
 			var faintData = selfB.faintQueue.shift();
 			if (!faintData.target.fainted)
 			{
-				selfB.add('faint '+faintData.target.id);
+				selfB.add('faint',faintData.target.fullname);
 				selfB.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
 				faintData.target.fainted = true;
 				faintData.target.side.pokemonLeft--;
