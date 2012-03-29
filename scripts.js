@@ -489,6 +489,7 @@ exports.BattleScripts = {
 				if (i===1) template = potd;
 				else if (template.species === potd.species) continue; // No thanks, I've already got one
 			}
+			if (!template || !template.name || !template.types) continue;
 			
 			if (template.species === 'Magikarp')
 			{
