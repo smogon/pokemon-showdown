@@ -1,6 +1,6 @@
 exports.BattleItems = {
-	"AbsorbBulb": {
-		id: "AbsorbBulb",
+	"absorbbulb": {
+		id: "absorbbulb",
 		name: "Absorb Bulb",
 		spritenum: 2,
 		fling: {
@@ -14,8 +14,8 @@ exports.BattleItems = {
 		},
 		desc: "Boosts Special Attack of holder if hit by a Water-type attack. One-time use."
 	},
-	"AdamantOrb": {
-		id: "AdamantOrb",
+	"adamantorb": {
+		id: "adamantorb",
 		name: "Adamant Orb",
 		spritenum: 4,
 		fling: {
@@ -29,8 +29,8 @@ exports.BattleItems = {
 		},
 		desc: "Hold item which raises power of Dialga's STAB moves 20%."
 	},
-	"AguavBerry": {
-		id: "AguavBerry",
+	"aguavberry": {
+		id: "aguavberry",
 		name: "Aguav Berry",
 		spritenum: 5,
 		isBerry: true,
@@ -51,8 +51,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
 	},
-	"AirBalloon": {
-		id: "AirBalloon",
+	"airballoon": {
+		id: "airballoon",
 		name: "Air Balloon",
 		spritenum: 6,
 		desc: "Makes the holder immune to Ground-type attacks. Disappears when holder is hit.",
@@ -82,8 +82,8 @@ exports.BattleItems = {
 			}
 		}
 	},
-	"ApicotBerry": {
-		id: "ApicotBerry",
+	"apicotberry": {
+		id: "apicotberry",
 		name: "Apicot Berry",
 		spritenum: 10,
 		isBerry: true,
@@ -101,8 +101,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises Special Defense by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
 	},
-	"ArmorFossil": {
-		id: "ArmorFossil",
+	"armorfossil": {
+		id: "armorfossil",
 		name: "Armor Fossil",
 		spritenum: 12,
 		fling: {
@@ -110,8 +110,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be revived into Shieldon."
 	},
-	"AspearBerry": {
-		id: "AspearBerry",
+	"aspearberry": {
+		id: "aspearberry",
 		name: "Aspear Berry",
 		spritenum: 13,
 		isBerry: true,
@@ -133,8 +133,8 @@ exports.BattleItems = {
 		},
 		desc: "Cures freeze. One-time use."
 	},
-	"BabiriBerry": {
-		id: "BabiriBerry",
+	"babiriberry": {
+		id: "babiriberry",
 		name: "Babiri Berry",
 		spritenum: 17,
 		isBerry: true,
@@ -153,8 +153,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Steel-type attack by 50%. Consumed after use."
 	},
-	"BelueBerry": {
-		id: "BelueBerry",
+	"belueberry": {
+		id: "belueberry",
 		name: "Belue Berry",
 		spritenum: 21,
 		isBerry: true,
@@ -164,8 +164,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"BerryJuice": {
-		id: "BerryJuice",
+	"berryjuice": {
+		id: "berryjuice",
 		name: "Berry Juice",
 		spritenum: 22,
 		fling: {
@@ -180,8 +180,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 20 HP when at 50% HP or less. One-time use."
 	},
-	"BigRoot": {
-		id: "BigRoot",
+	"bigroot": {
+		id: "bigroot",
 		name: "Big Root",
 		spritenum: 29,
 		fling: {
@@ -189,8 +189,8 @@ exports.BattleItems = {
 		},
 		desc: "Increases HP gained from draining moves by 30%."
 	},
-	"BindingBand": {
-		id: "BindingBand",
+	"bindingband": {
+		id: "bindingband",
 		name: "Binding Band",
 		spritenum: 31,
 		fling: {
@@ -198,8 +198,8 @@ exports.BattleItems = {
 		},
 		desc: "Increases power of multi-turn trapping moves."
 	},
-	"BlackBelt": {
-		id: "BlackBelt",
+	"blackbelt": {
+		id: "blackbelt",
 		name: "Black Belt",
 		spritenum: 32,
 		fling: {
@@ -213,8 +213,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Fighting-type moves 20%."
 	},
-	"BlackSludge": {
-		id: "BlackSludge",
+	"blacksludge": {
+		id: "blacksludge",
 		name: "Black Sludge",
 		spritenum: 34,
 		fling: {
@@ -233,8 +233,8 @@ exports.BattleItems = {
 		},
 		desc: "Recovers 1\/16 HP each turn for Poison types. Damages all other types."
 	},
-	"BlackGlasses": {
-		id: "BlackGlasses",
+	"blackglasses": {
+		id: "blackglasses",
 		name: "BlackGlasses",
 		spritenum: 35,
 		fling: {
@@ -248,8 +248,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Dark-type moves 20%."
 	},
-	"BlukBerry": {
-		id: "BlukBerry",
+	"blukberry": {
+		id: "blukberry",
 		name: "Bluk Berry",
 		spritenum: 44,
 		isBerry: true,
@@ -259,8 +259,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"BrightPowder": {
-		id: "BrightPowder",
+	"brightpowder": {
+		id: "brightpowder",
 		name: "BrightPowder",
 		spritenum: 51,
 		fling: {
@@ -273,8 +273,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises evasion 10%."
 	},
-	"BugGem": {
-		id: "BugGem",
+	"buggem": {
+		id: "buggem",
 		name: "Bug Gem",
 		spritenum: 53,
 		isGem: true,
@@ -290,8 +290,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Bug-type move by 50%. One-time use."
 	},
-	"BurnDrive": {
-		id: "BurnDrive",
+	"burndrive": {
+		id: "burndrive",
 		name: "Burn Drive",
 		spritenum: 54,
 		fling: {
@@ -300,8 +300,8 @@ exports.BattleItems = {
 		onDrive: 'Fire',
 		desc: "Changes the type of Techno Blast to Fire."
 	},
-	"CellBattery": {
-		id: "CellBattery",
+	"cellbattery": {
+		id: "cellbattery",
 		name: "Cell Battery",
 		spritenum: 60,
 		fling: {
@@ -315,8 +315,8 @@ exports.BattleItems = {
 		},
 		desc: "Boosts Attack of holder if hit by an Electric-type attack. One-time use."
 	},
-	"Charcoal": {
-		id: "Charcoal",
+	"charcoal": {
+		id: "charcoal",
 		name: "Charcoal",
 		spritenum: 61,
 		fling: {
@@ -330,8 +330,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Fire-type moves 20%."
 	},
-	"ChartiBerry": {
-		id: "ChartiBerry",
+	"chartiberry": {
+		id: "chartiberry",
 		name: "Charti Berry",
 		spritenum: 62,
 		isBerry: true,
@@ -350,8 +350,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Rock-type attack by 50%. Consumed after use."
 	},
-	"CheriBerry": {
-		id: "CheriBerry",
+	"cheriberry": {
+		id: "cheriberry",
 		name: "Cheri Berry",
 		spritenum: 63,
 		isBerry: true,
@@ -373,8 +373,8 @@ exports.BattleItems = {
 		},
 		desc: "Cures paralysis. One-time use."
 	},
-	"ChestoBerry": {
-		id: "ChestoBerry",
+	"chestoberry": {
+		id: "chestoberry",
 		name: "Chesto Berry",
 		spritenum: 65,
 		isBerry: true,
@@ -396,8 +396,8 @@ exports.BattleItems = {
 		},
 		desc: "Cures sleep. One-time use."
 	},
-	"ChilanBerry": {
-		id: "ChilanBerry",
+	"chilanberry": {
+		id: "chilanberry",
 		name: "Chilan Berry",
 		spritenum: 66,
 		isBerry: true,
@@ -416,8 +416,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a Normal-type attack by 50%. Consumed after use."
 	},
-	"ChillDrive": {
-		id: "ChillDrive",
+	"chilldrive": {
+		id: "chilldrive",
 		name: "Chill Drive",
 		spritenum: 67,
 		fling: {
@@ -426,8 +426,8 @@ exports.BattleItems = {
 		onDrive: 'Ice',
 		desc: "Changes the type of Techno Blast to Ice."
 	},
-	"ChoiceBand": {
-		id: "ChoiceBand",
+	"choiceband": {
+		id: "choiceband",
 		name: "Choice Band",
 		spritenum: 68,
 		fling: {
@@ -449,8 +449,8 @@ exports.BattleItems = {
 		isChoice: true,
 		desc: "Hold item which raises Attack 50%, but locks holder into one move."
 	},
-	"ChoiceScarf": {
-		id: "ChoiceScarf",
+	"choicescarf": {
+		id: "choicescarf",
 		name: "Choice Scarf",
 		spritenum: 69,
 		fling: {
@@ -472,8 +472,8 @@ exports.BattleItems = {
 		isChoice: true,
 		desc: "Hold item which raises Speed 50%, but locks holder into one move."
 	},
-	"ChoiceSpecs": {
-		id: "ChoiceSpecs",
+	"choicespecs": {
+		id: "choicespecs",
 		name: "Choice Specs",
 		spritenum: 70,
 		fling: {
@@ -495,8 +495,8 @@ exports.BattleItems = {
 		isChoice: true,
 		desc: "Hold item which raises Special Attack 50%, but locks holder into one move."
 	},
-	"ChopleBerry": {
-		id: "ChopleBerry",
+	"chopleberry": {
+		id: "chopleberry",
 		name: "Chople Berry",
 		spritenum: 71,
 		isBerry: true,
@@ -515,8 +515,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Fighting-type attack by 50%. Consumed after use."
 	},
-	"ClawFossil": {
-		id: "ClawFossil",
+	"clawfossil": {
+		id: "clawfossil",
 		name: "Claw Fossil",
 		spritenum: 72,
 		fling: {
@@ -524,8 +524,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be revived into Anorith."
 	},
-	"CobaBerry": {
-		id: "CobaBerry",
+	"cobaberry": {
+		id: "cobaberry",
 		name: "Coba Berry",
 		spritenum: 76,
 		isBerry: true,
@@ -544,8 +544,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Flying-type attack by 50%. Consumed after use."
 	},
-	"ColburBerry": {
-		id: "ColburBerry",
+	"colburberry": {
+		id: "colburberry",
 		name: "Colbur Berry",
 		spritenum: 78,
 		isBerry: true,
@@ -564,8 +564,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Dark-type attack by 50%. Consumed after use."
 	},
-	"CornnBerry": {
-		id: "CornnBerry",
+	"cornnberry": {
+		id: "cornnberry",
 		name: "Cornn Berry",
 		spritenum: 81,
 		isBerry: true,
@@ -575,8 +575,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"CoverFossil": {
-		id: "CoverFossil",
+	"coverfossil": {
+		id: "coverfossil",
 		name: "Cover Fossil",
 		spritenum: 85,
 		fling: {
@@ -584,8 +584,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be revived into Tirtouga."
 	},
-	"CustapBerry": {
-		id: "CustapBerry",
+	"custapberry": {
+		id: "custapberry",
 		name: "Custap Berry",
 		spritenum: 86,
 		/* onBeforeTurn: function(pokemon) {
@@ -645,8 +645,8 @@ exports.BattleItems = {
 		},
 		desc: "Activates at 25% HP. Next move used goes first. Unobtainable in BW. One-time use."
 	},
-	"DampRock": {
-		id: "DampRock",
+	"damprock": {
+		id: "damprock",
 		name: "Damp Rock",
 		spritenum: 88,
 		fling: {
@@ -654,8 +654,8 @@ exports.BattleItems = {
 		},
 		desc: "Rain Dance lasts 8 turns."
 	},
-	"DarkGem": {
-		id: "DarkGem",
+	"darkgem": {
+		id: "darkgem",
 		name: "Dark Gem",
 		spritenum: 89,
 		isGem: true,
@@ -671,8 +671,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Dark-type move by 50%. One-time use."
 	},
-	"DeepSeaScale": {
-		id: "DeepSeaScale",
+	"deepseascale": {
+		id: "deepseascale",
 		name: "DeepSeaScale",
 		spritenum: 93,
 		fling: {
@@ -686,8 +686,8 @@ exports.BattleItems = {
 		},
 		desc: "Doubles Clamperl's Special Defence. Evolves Clamperl into Gorebyss."
 	},
-	"DeepSeaTooth": {
-		id: "DeepSeaTooth",
+	"deepseatooth": {
+		id: "deepseatooth",
 		name: "DeepSeaTooth",
 		spritenum: 94,
 		fling: {
@@ -701,8 +701,8 @@ exports.BattleItems = {
 		},
 		desc: "Doubles Clamperl's Special Attack. Evolves Clamperl into Huntail."
 	},
-	"DestinyKnot": {
-		id: "DestinyKnot",
+	"destinyknot": {
+		id: "destinyknot",
 		name: "Destiny Knot",
 		spritenum: 95,
 		fling: {
@@ -710,8 +710,8 @@ exports.BattleItems = {
 		},
 		desc: "If the holder becomes infatuated, so does the enemy."
 	},
-	"DomeFossil": {
-		id: "DomeFossil",
+	"domefossil": {
+		id: "domefossil",
 		name: "Dome Fossil",
 		spritenum: 102,
 		fling: {
@@ -719,8 +719,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be revived into Kabuto."
 	},
-	"DouseDrive": {
-		id: "DouseDrive",
+	"dousedrive": {
+		id: "dousedrive",
 		name: "Douse Drive",
 		spritenum: 103,
 		fling: {
@@ -729,8 +729,8 @@ exports.BattleItems = {
 		onDrive: 'Water',
 		desc: "Changes the type of Techno Blast to Water."
 	},
-	"DracoPlate": {
-		id: "DracoPlate",
+	"dracoplate": {
+		id: "dracoplate",
 		name: "Draco Plate",
 		spritenum: 105,
 		fling: {
@@ -745,8 +745,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Dragon-type moves 20%. Pokemon with Multitype become Dragon-type."
 	},
-	"DragonFang": {
-		id: "DragonFang",
+	"dragonfang": {
+		id: "dragonfang",
 		name: "Dragon Fang",
 		spritenum: 106,
 		fling: {
@@ -760,8 +760,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Dragon-type moves 20%."
 	},
-	"DragonGem": {
-		id: "DragonGem",
+	"dragongem": {
+		id: "dragongem",
 		name: "Dragon Gem",
 		spritenum: 107,
 		isGem: true,
@@ -777,8 +777,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Dragon-type move by 50%. One-time use."
 	},
-	"DreadPlate": {
-		id: "DreadPlate",
+	"dreadplate": {
+		id: "dreadplate",
 		name: "Dread Plate",
 		spritenum: 110,
 		fling: {
@@ -793,8 +793,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of the holder's Dark-type moves 20%. Pokemon with Multitype become Dark-type."
 	},
-	"DurinBerry": {
-		id: "DurinBerry",
+	"durinberry": {
+		id: "durinberry",
 		name: "Durin Berry",
 		spritenum: 114,
 		isBerry: true,
@@ -804,8 +804,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"EarthPlate": {
-		id: "EarthPlate",
+	"earthplate": {
+		id: "earthplate",
 		name: "Earth Plate",
 		spritenum: 117,
 		fling: {
@@ -820,8 +820,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Ground-type moves 20%. Pokemon with Multitype become Ground-type."
 	},
-	"EjectButton": {
-		id: "EjectButton",
+	"ejectbutton": {
+		id: "ejectbutton",
 		name: "Eject Button",
 		spritenum: 118,
 		fling: {
@@ -839,8 +839,8 @@ exports.BattleItems = {
 		},
 		desc: "When the holder is hit, it immediately switches out. One-time use."
 	},
-	"Electirizer": {
-		id: "Electirizer",
+	"electirizer": {
+		id: "electirizer",
 		name: "Electirizer",
 		spritenum: 119,
 		fling: {
@@ -848,8 +848,8 @@ exports.BattleItems = {
 		},
 		desc: "Evolves Electabuzz into Electivire."
 	},
-	"ElectricGem": {
-		id: "ElectricGem",
+	"electricgem": {
+		id: "electricgem",
 		name: "Electric Gem",
 		spritenum: 120,
 		isGem: true,
@@ -865,8 +865,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Electric-type move by 50%. One-time use."
 	},
-	"EnergyPowder": {
-		id: "EnergyPowder",
+	"energypowder": {
+		id: "energypowder",
 		name: "EnergyPowder",
 		spritenum: 123,
 		fling: {
@@ -874,8 +874,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 50 HP to one Pokemon but tastes bitter."
 	},
-	"EnigmaBerry": {
-		id: "EnigmaBerry",
+	"enigmaberry": {
+		id: "enigmaberry",
 		name: "Enigma Berry",
 		spritenum: 124,
 		isBerry: true,
@@ -903,8 +903,8 @@ exports.BattleItems = {
 		},
 		desc: "Heals 25% HP after being hit by a super effective attack. One-time use."
 	},
-	"Eviolite": {
-		id: "Eviolite",
+	"eviolite": {
+		id: "eviolite",
 		name: "Eviolite",
 		spritenum: 130,
 		fling: {
@@ -919,8 +919,8 @@ exports.BattleItems = {
 		},
 		desc: "Boosts Defense and Special Defense of holder by 50% if it is an NFE Pokemon."
 	},
-	"ExpertBelt": {
-		id: "ExpertBelt",
+	"expertbelt": {
+		id: "expertbelt",
 		name: "Expert Belt",
 		spritenum: 132,
 		fling: {
@@ -934,8 +934,8 @@ exports.BattleItems = {
 		},
 		desc: "Super effective attacks are 20% stronger."
 	},
-	"FightingGem": {
-		id: "FightingGem",
+	"fightinggem": {
+		id: "fightinggem",
 		name: "Fighting Gem",
 		spritenum: 139,
 		isGem: true,
@@ -951,8 +951,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Fighting-type move by 50%. One-time use."
 	},
-	"FigyBerry": {
-		id: "FigyBerry",
+	"figyberry": {
+		id: "figyberry",
 		name: "Figy Berry",
 		spritenum: 140,
 		isBerry: true,
@@ -973,8 +973,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
 	},
-	"FireGem": {
-		id: "FireGem",
+	"firegem": {
+		id: "firegem",
 		name: "Fire Gem",
 		spritenum: 141,
 		isGem: true,
@@ -990,8 +990,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Fire-type move by 50%. One-time use."
 	},
-	"FistPlate": {
-		id: "FistPlate",
+	"fistplate": {
+		id: "fistplate",
 		name: "Fist Plate",
 		spritenum: 143,
 		fling: {
@@ -1006,8 +1006,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Fighting-type moves 20%. Pokemon with Multitype become Fighting-type."
 	},
-	"FlameOrb": {
-		id: "FlameOrb",
+	"flameorb": {
+		id: "flameorb",
 		name: "Flame Orb",
 		spritenum: 145,
 		fling: {
@@ -1024,8 +1024,8 @@ exports.BattleItems = {
 		},
 		desc: "Burns the holder."
 	},
-	"FlamePlate": {
-		id: "FlamePlate",
+	"flameplate": {
+		id: "flameplate",
 		name: "Flame Plate",
 		spritenum: 146,
 		fling: {
@@ -1040,8 +1040,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Fire-type moves 20%. Pokemon with Multitype become Fire-type."
 	},
-	"FloatStone": {
-		id: "FloatStone",
+	"floatstone": {
+		id: "floatstone",
 		name: "Float Stone",
 		spritenum: 147,
 		fling: {
@@ -1052,8 +1052,8 @@ exports.BattleItems = {
 		},
 		desc: "The weight of the holder is halved."
 	},
-	"FlyingGem": {
-		id: "FlyingGem",
+	"flyinggem": {
+		id: "flyinggem",
 		name: "Flying Gem",
 		spritenum: 149,
 		isGem: true,
@@ -1069,8 +1069,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Flying-type move by 50%. One-time use."
 	},
-	"FocusBand": {
-		id: "FocusBand",
+	"focusband": {
+		id: "focusband",
 		name: "Focus Band",
 		spritenum: 150,
 		fling: {
@@ -1085,8 +1085,8 @@ exports.BattleItems = {
 		},
 		desc: "Gives a 10% chance of surviving a hit with at least 1 HP."
 	},
-	"FocusSash": {
-		id: "FocusSash",
+	"focussash": {
+		id: "focussash",
 		name: "Focus Sash",
 		spritenum: 151,
 		fling: {
@@ -1103,8 +1103,8 @@ exports.BattleItems = {
 		},
 		desc: "The holder always survives one attack at full HP. One-time use."
 	},
-	"FullIncense": {
-		id: "FullIncense",
+	"fullincense": {
+		id: "fullincense",
 		name: "Full Incense",
 		spritenum: 155,
 		fling: {
@@ -1112,8 +1112,8 @@ exports.BattleItems = {
 		},
 		desc: "Makes the holder move last. Allows breeding of Munchlax."
 	},
-	"GanlonBerry": {
-		id: "GanlonBerry",
+	"ganlonberry": {
+		id: "ganlonberry",
 		name: "Ganlon Berry",
 		spritenum: 158,
 		isBerry: true,
@@ -1131,8 +1131,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises Defense by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
 	},
-	"GhostGem": {
-		id: "GhostGem",
+	"ghostgem": {
+		id: "ghostgem",
 		name: "Ghost Gem",
 		spritenum: 161,
 		isGem: true,
@@ -1148,8 +1148,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Ghost-type move by 50%. One-time use."
 	},
-	"GrassGem": {
-		id: "GrassGem",
+	"grassgem": {
+		id: "grassgem",
 		name: "Grass Gem",
 		spritenum: 172,
 		isGem: true,
@@ -1165,8 +1165,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Grass-type move by 50%. One-time use."
 	},
-	"GrepaBerry": {
-		id: "GrepaBerry",
+	"grepaberry": {
+		id: "grepaberry",
 		name: "Grepa Berry",
 		spritenum: 178,
 		isBerry: true,
@@ -1176,8 +1176,8 @@ exports.BattleItems = {
 		},
 		desc: "Increases happiness, but lowers Special Defense EVs by 10."
 	},
-	"GripClaw": {
-		id: "GripClaw",
+	"gripclaw": {
+		id: "gripclaw",
 		name: "Grip Claw",
 		spritenum: 179,
 		fling: {
@@ -1185,8 +1185,8 @@ exports.BattleItems = {
 		},
 		desc: "Partial trapping moves last 5 turns."
 	},
-	"GriseousOrb": {
-		id: "GriseousOrb",
+	"griseousorb": {
+		id: "griseousorb",
 		name: "Griseous Orb",
 		spritenum: 180,
 		fling: {
@@ -1200,8 +1200,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the Base Power of Giratina's STAB moves 20% and transforms Giratina into Giratina-O when held. Cannot be removed or given to Giratina in battle."
 	},
-	"GroundGem": {
-		id: "GroundGem",
+	"groundgem": {
+		id: "groundgem",
 		name: "Ground Gem",
 		spritenum: 182,
 		isGem: true,
@@ -1217,8 +1217,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Ground-type move by 50%. One-time use."
 	},
-	"HabanBerry": {
-		id: "HabanBerry",
+	"habanberry": {
+		id: "habanberry",
 		name: "Haban Berry",
 		spritenum: 185,
 		isBerry: true,
@@ -1237,8 +1237,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Dragon-type attack by 50%. Consumed after use."
 	},
-	"HardStone": {
-		id: "HardStone",
+	"hardstone": {
+		id: "hardstone",
 		name: "Hard Stone",
 		spritenum: 187,
 		fling: {
@@ -1252,8 +1252,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Rock-type moves 20%."
 	},
-	"HeatRock": {
-		id: "HeatRock",
+	"heatrock": {
+		id: "heatrock",
 		name: "Heat Rock",
 		spritenum: 193,
 		fling: {
@@ -1261,8 +1261,8 @@ exports.BattleItems = {
 		},
 		desc: "Sunny Day lasts 8 turns."
 	},
-	"HelixFossil": {
-		id: "HelixFossil",
+	"helixfossil": {
+		id: "helixfossil",
 		name: "Helix Fossil",
 		spritenum: 195,
 		fling: {
@@ -1270,8 +1270,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be revived into Omanyte."
 	},
-	"HondewBerry": {
-		id: "HondewBerry",
+	"hondewberry": {
+		id: "hondewberry",
 		name: "Hondew Berry",
 		spritenum: 213,
 		isBerry: true,
@@ -1281,8 +1281,8 @@ exports.BattleItems = {
 		},
 		desc: "Increases happiness, but lowers Special Attack EVs by 10."
 	},
-	"IapapaBerry": {
-		id: "IapapaBerry",
+	"iapapaberry": {
+		id: "iapapaberry",
 		name: "Iapapa Berry",
 		spritenum: 217,
 		isBerry: true,
@@ -1303,8 +1303,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
 	},
-	"IceGem": {
-		id: "IceGem",
+	"icegem": {
+		id: "icegem",
 		name: "Ice Gem",
 		spritenum: 218,
 		isGem: true,
@@ -1320,8 +1320,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Ice-type move by 50%. One-time use."
 	},
-	"IciclePlate": {
-		id: "IciclePlate",
+	"icicleplate": {
+		id: "icicleplate",
 		name: "Icicle Plate",
 		spritenum: 220,
 		fling: {
@@ -1336,8 +1336,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Ice-type moves 20%. Pokemon with Multitype become Ice-type."
 	},
-	"IcyRock": {
-		id: "IcyRock",
+	"icyrock": {
+		id: "icyrock",
 		name: "Icy Rock",
 		spritenum: 221,
 		fling: {
@@ -1345,8 +1345,8 @@ exports.BattleItems = {
 		},
 		desc: "Hail lasts 8 turns."
 	},
-	"InsectPlate": {
-		id: "InsectPlate",
+	"insectplate": {
+		id: "insectplate",
 		name: "Insect Plate",
 		spritenum: 223,
 		fling: {
@@ -1361,8 +1361,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Bug-type moves 20%. Pokemon with Multitype become Bug-type."
 	},
-	"IronBall": {
-		id: "IronBall",
+	"ironball": {
+		id: "ironball",
 		name: "Iron Ball",
 		spritenum: 224,
 		fling: {
@@ -1376,8 +1376,8 @@ exports.BattleItems = {
 		},
 		desc: "Reduces Speed 50% and removes holder's Ground-type immunity."
 	},
-	"IronPlate": {
-		id: "IronPlate",
+	"ironplate": {
+		id: "ironplate",
 		name: "Iron Plate",
 		spritenum: 225,
 		fling: {
@@ -1392,8 +1392,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Steel-type moves 20%. Pokemon with Multitype become Steel-type."
 	},
-	"JabocaBerry": {
-		id: "JabocaBerry",
+	"jabocaberry": {
+		id: "jabocaberry",
 		name: "Jaboca Berry",
 		spritenum: 230,
 		isBerry: true,
@@ -1413,8 +1413,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "If hit by a physical attack, the attacker takes 12.5% damage. Unobtainable in BW. One-time use."
 	},
-	"KasibBerry": {
-		id: "KasibBerry",
+	"kasibberry": {
+		id: "kasibberry",
 		name: "Kasib Berry",
 		spritenum: 233,
 		isBerry: true,
@@ -1433,8 +1433,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Ghost-type attack by 50%. Consumed after use."
 	},
-	"KebiaBerry": {
-		id: "KebiaBerry",
+	"kebiaberry": {
+		id: "kebiaberry",
 		name: "Kebia Berry",
 		spritenum: 234,
 		isBerry: true,
@@ -1453,8 +1453,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Poison-type attack by 50%. Consumed after use."
 	},
-	"KelpsyBerry": {
-		id: "KelpsyBerry",
+	"kelpsyberry": {
+		id: "kelpsyberry",
 		name: "Kelpsy Berry",
 		spritenum: 235,
 		isBerry: true,
@@ -1464,8 +1464,8 @@ exports.BattleItems = {
 		},
 		desc: "Increases happiness, but lowers Attack EVs by 10."
 	},
-	"King'sRock": {
-		id: "King'sRock",
+	"kingsrock": {
+		id: "kingsrock",
 		name: "King's Rock",
 		spritenum: 236,
 		fling: {
@@ -1474,8 +1474,8 @@ exports.BattleItems = {
 		},
 		desc: "Certain moves have a 10% flinch rate."
 	},
-	"LaggingTail": {
-		id: "LaggingTail",
+	"laggingtail": {
+		id: "laggingtail",
 		name: "Lagging Tail",
 		spritenum: 237,
 		fling: {
@@ -1483,8 +1483,8 @@ exports.BattleItems = {
 		},
 		desc: "The holder will go last within its move's priority bracket, regardless of Speed."
 	},
-	"LansatBerry": {
-		id: "LansatBerry",
+	"lansatberry": {
+		id: "lansatberry",
 		name: "Lansat Berry",
 		spritenum: 238,
 		isBerry: true,
@@ -1502,8 +1502,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises critical hit rate by two stages when at 25% HP or less. One-time use."
 	},
-	"LaxIncense": {
-		id: "LaxIncense",
+	"laxincense": {
+		id: "laxincense",
 		name: "Lax Incense",
 		spritenum: 240,
 		fling: {
@@ -1516,8 +1516,8 @@ exports.BattleItems = {
 		},
 		desc: "Hold item which raises evasion 5%. Allows breeding of Wynaut."
 	},
-	"Leftovers": {
-		id: "Leftovers",
+	"leftovers": {
+		id: "leftovers",
 		name: "Leftovers",
 		spritenum: 242,
 		fling: {
@@ -1529,8 +1529,8 @@ exports.BattleItems = {
 		},
 		desc: "Heals 1\/16 HP each turn."
 	},
-	"LeppaBerry": {
-		id: "LeppaBerry",
+	"leppaberry": {
+		id: "leppaberry",
 		name: "Leppa Berry",
 		spritenum: 244,
 		isBerry: true,
@@ -1571,8 +1571,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 10 PP to a move that has run out of PP. One-time use."
 	},
-	"LiechiBerry": {
-		id: "LiechiBerry",
+	"liechiberry": {
+		id: "liechiberry",
 		name: "Liechi Berry",
 		spritenum: 248,
 		isBerry: true,
@@ -1590,8 +1590,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises Attack by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
 	},
-	"LifeOrb": {
-		id: "LifeOrb",
+	"lifeorb": {
+		id: "lifeorb",
 		name: "Life Orb",
 		spritenum: 249,
 		fling: {
@@ -1614,8 +1614,8 @@ exports.BattleItems = {
 		},
 		desc: "\"Boosts power by 30%, user takes 10% recoil each turn it attacks.\""
 	},
-	"LightBall": {
-		id: "LightBall",
+	"lightball": {
+		id: "lightball",
 		name: "Light Ball",
 		spritenum: 251,
 		fling: {
@@ -1631,8 +1631,8 @@ exports.BattleItems = {
 		},
 		desc: "Doubles Pikachu's Attack and Special Attack."
 	},
-	"LightClay": {
-		id: "LightClay",
+	"lightclay": {
+		id: "lightclay",
 		name: "Light Clay",
 		spritenum: 252,
 		fling: {
@@ -1641,8 +1641,8 @@ exports.BattleItems = {
 		// implemented in the corresponding thing
 		desc: "If the holder uses either Light Screen or Reflect, the two moves will stay on the field for eight turns instead of five."
 	},
-	"LuckyPunch": {
-		id: "LuckyPunch",
+	"luckypunch": {
+		id: "luckypunch",
 		name: "Lucky Punch",
 		spritenum: 261,
 		fling: {
@@ -1655,8 +1655,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises Chansey's critical hit ratio two stages."
 	},
-	"LumBerry": {
-		id: "LumBerry",
+	"lumberry": {
+		id: "lumberry",
 		name: "Lum Berry",
 		spritenum: 262,
 		isBerry: true,
@@ -1675,8 +1675,8 @@ exports.BattleItems = {
 		},
 		desc: "Cures status. Consumed after use."
 	},
-	"LustrousOrb": {
-		id: "LustrousOrb",
+	"lustrousorb": {
+		id: "lustrousorb",
 		name: "Lustrous Orb",
 		spritenum: 265,
 		fling: {
@@ -1690,8 +1690,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Palkia's STAB moves 20%."
 	},
-	"MachoBrace": {
-		id: "MachoBrace",
+	"machobrace": {
+		id: "machobrace",
 		name: "Macho Brace",
 		spritenum: 269,
 		fling: {
@@ -1702,8 +1702,8 @@ exports.BattleItems = {
 		},
 		desc: "Reduces Speed 50%. Doubles EVs gained."
 	},
-	"Magnet": {
-		id: "Magnet",
+	"magnet": {
+		id: "magnet",
 		name: "Magnet",
 		spritenum: 273,
 		fling: {
@@ -1717,8 +1717,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Electric-type moves 20%."
 	},
-	"MagoBerry": {
-		id: "MagoBerry",
+	"magoberry": {
+		id: "magoberry",
 		name: "Mago Berry",
 		spritenum: 274,
 		isBerry: true,
@@ -1739,8 +1739,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
 	},
-	"MagostBerry": {
-		id: "MagostBerry",
+	"magostberry": {
+		id: "magostberry",
 		name: "Magost Berry",
 		spritenum: 275,
 		isBerry: true,
@@ -1750,8 +1750,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"MeadowPlate": {
-		id: "MeadowPlate",
+	"meadowplate": {
+		id: "meadowplate",
 		name: "Meadow Plate",
 		spritenum: 282,
 		fling: {
@@ -1766,8 +1766,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Grass-type moves 20%. Pokemon with Multitype become Grass-type."
 	},
-	"MentalHerb": {
-		id: "MentalHerb",
+	"mentalherb": {
+		id: "mentalherb",
 		name: "Mental Herb",
 		spritenum: 285,
 		fling: {
@@ -1804,8 +1804,8 @@ exports.BattleItems = {
 		},
 		desc: "Cures certain conditions. One-time use."
 	},
-	"MetalCoat": {
-		id: "MetalCoat",
+	"metalcoat": {
+		id: "metalcoat",
 		name: "Metal Coat",
 		spritenum: 286,
 		fling: {
@@ -1819,8 +1819,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Steel-type moves 20%. Evolves Onix and Scyther."
 	},
-	"MetalPowder": {
-		id: "MetalPowder",
+	"metalpowder": {
+		id: "metalpowder",
 		name: "Metal Powder",
 		fling: {
 			basePower: 10
@@ -1835,8 +1835,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises Ditto's Defense and Special Defense by 50%."
 	},
-	"Metronome": {
-		id: "Metronome",
+	"metronome": {
+		id: "metronome",
 		name: "Metronome",
 		spritenum: 289,
 		fling: {
@@ -1844,8 +1844,8 @@ exports.BattleItems = {
 		},
 		desc: "Boost the power of attacks used consecutively."
 	},
-	"MicleBerry": {
-		id: "MicleBerry",
+	"micleberry": {
+		id: "micleberry",
 		name: "Micle Berry",
 		spritenum: 290,
 		isBerry: true,
@@ -1855,8 +1855,8 @@ exports.BattleItems = {
 		},
 		desc: "Activates at 25% HP. Next move used will always hit. Unobtainable in BW. One-time use."
 	},
-	"MindPlate": {
-		id: "MindPlate",
+	"mindplate": {
+		id: "mindplate",
 		name: "Mind Plate",
 		spritenum: 291,
 		fling: {
@@ -1871,8 +1871,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Psychic-type moves 20%. Pokemon with Multitype become Psychic-type."
 	},
-	"MiracleSeed": {
-		id: "MiracleSeed",
+	"miracleseed": {
+		id: "miracleseed",
 		name: "Miracle Seed",
 		fling: {
 			basePower: 30
@@ -1886,8 +1886,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Grass-type moves 20%."
 	},
-	"MuscleBand": {
-		id: "MuscleBand",
+	"muscleband": {
+		id: "muscleband",
 		name: "Muscle Band",
 		spritenum: 297,
 		fling: {
@@ -1901,8 +1901,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of physical moves 10%."
 	},
-	"MysticWater": {
-		id: "MysticWater",
+	"mysticwater": {
+		id: "mysticwater",
 		name: "Mystic Water",
 		spritenum: 300,
 		fling: {
@@ -1916,8 +1916,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Water-type moves 20%."
 	},
-	"NanabBerry": {
-		id: "NanabBerry",
+	"nanabberry": {
+		id: "nanabberry",
 		name: "Nanab Berry",
 		spritenum: 302,
 		isBerry: true,
@@ -1927,8 +1927,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"NeverMeltIce": {
-		id: "NeverMeltIce",
+	"nevermeltice": {
+		id: "nevermeltice",
 		name: "NeverMeltIce",
 		spritenum: 305,
 		fling: {
@@ -1942,8 +1942,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Ice-type moves 20%."
 	},
-	"NomelBerry": {
-		id: "NomelBerry",
+	"nomelberry": {
+		id: "nomelberry",
 		name: "Nomel Berry",
 		spritenum: 306,
 		isBerry: true,
@@ -1953,8 +1953,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"NormalGem": {
-		id: "NormalGem",
+	"normalgem": {
+		id: "normalgem",
 		name: "Normal Gem",
 		spritenum: 307,
 		isGem: true,
@@ -1970,8 +1970,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Normal-type move by 50%. One-time use."
 	},
-	"OccaBerry": {
-		id: "OccaBerry",
+	"occaberry": {
+		id: "occaberry",
 		name: "Occa Berry",
 		spritenum: 311,
 		isBerry: true,
@@ -1990,8 +1990,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Fire-type attack by 50%. Consumed after use."
 	},
-	"OddIncense": {
-		id: "OddIncense",
+	"oddincense": {
+		id: "oddincense",
 		name: "Odd Incense",
 		spritenum: 312,
 		fling: {
@@ -2005,8 +2005,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Psychic-type moves 20%. Allows breeding of Mime Jr."
 	},
-	"OldAmber": {
-		id: "OldAmber",
+	"oldamber": {
+		id: "oldamber",
 		name: "Old Amber",
 		spritenum: 314,
 		fling: {
@@ -2014,8 +2014,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be revived into Aerodactyl."
 	},
-	"OranBerry": {
-		id: "OranBerry",
+	"oranberry": {
+		id: "oranberry",
 		name: "Oran Berry",
 		spritenum: 319,
 		isBerry: true,
@@ -2033,8 +2033,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 10 HP when at 50% HP or less. One-time use."
 	},
-	"PamtreBerry": {
-		id: "PamtreBerry",
+	"pamtreberry": {
+		id: "pamtreberry",
 		name: "Pamtre Berry",
 		spritenum: 323,
 		isBerry: true,
@@ -2044,8 +2044,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"PasshoBerry": {
-		id: "PasshoBerry",
+	"passhoberry": {
+		id: "passhoberry",
 		name: "Passho Berry",
 		spritenum: 329,
 		isBerry: true,
@@ -2064,8 +2064,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Water-type attack by 50%. Consumed after use."
 	},
-	"PayapaBerry": {
-		id: "PayapaBerry",
+	"payapaberry": {
+		id: "payapaberry",
 		name: "Payapa Berry",
 		spritenum: 330,
 		isBerry: true,
@@ -2084,8 +2084,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Psychic-type attack by 50%. Consumed after use."
 	},
-	"PechaBerry": {
-		id: "PechaBerry",
+	"pechaberry": {
+		id: "pechaberry",
 		name: "Pecha Berry",
 		spritenum: 333,
 		isBerry: true,
@@ -2107,8 +2107,8 @@ exports.BattleItems = {
 		},
 		desc: "Cures poison. One-time use."
 	},
-	"PersimBerry": {
-		id: "PersimBerry",
+	"persimberry": {
+		id: "persimberry",
 		name: "Persim Berry",
 		spritenum: 334,
 		isBerry: true,
@@ -2127,8 +2127,8 @@ exports.BattleItems = {
 		},
 		desc: "Cures confusion. One-time use."
 	},
-	"PetayaBerry": {
-		id: "PetayaBerry",
+	"petayaberry": {
+		id: "petayaberry",
 		name: "Petaya Berry",
 		spritenum: 335,
 		isBerry: true,
@@ -2146,8 +2146,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises Special Attack by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
 	},
-	"PinapBerry": {
-		id: "PinapBerry",
+	"pinapberry": {
+		id: "pinapberry",
 		name: "Pinap Berry",
 		spritenum: 337,
 		isBerry: true,
@@ -2157,8 +2157,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"PlumeFossil": {
-		id: "PlumeFossil",
+	"plumefossil": {
+		id: "plumefossil",
 		name: "Plume Fossil",
 		spritenum: 339,
 		fling: {
@@ -2166,8 +2166,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be revived into Archen."
 	},
-	"PoisonBarb": {
-		id: "PoisonBarb",
+	"poisonbarb": {
+		id: "poisonbarb",
 		name: "Poison Barb",
 		spritenum: 343,
 		fling: {
@@ -2182,8 +2182,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Poison-type moves 20%."
 	},
-	"PoisonGem": {
-		id: "PoisonGem",
+	"poisongem": {
+		id: "poisongem",
 		name: "Poison Gem",
 		spritenum: 344,
 		isGem: true,
@@ -2199,8 +2199,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Poison-type move by 50%. One-time use."
 	},
-	"PomegBerry": {
-		id: "PomegBerry",
+	"pomegberry": {
+		id: "pomegberry",
 		name: "Pomeg Berry",
 		spritenum: 351,
 		isBerry: true,
@@ -2210,8 +2210,8 @@ exports.BattleItems = {
 		},
 		desc: "Increases happiness, but lowers HP EVs by 10."
 	},
-	"PowerHerb": {
-		id: "PowerHerb",
+	"powerherb": {
+		id: "powerherb",
 		onBeforeMovePriority: -10,
 		onBeforeMove: function(pokemon, target, move) {
 			if (move.isTwoTurnMove && pokemon.useItem())
@@ -2228,8 +2228,8 @@ exports.BattleItems = {
 		},
 		desc: "Moves with a charge turn activate instantly."
 	},
-	"PsychicGem": {
-		id: "PsychicGem",
+	"psychicgem": {
+		id: "psychicgem",
 		name: "Psychic Gem",
 		spritenum: 369,
 		isGem: true,
@@ -2245,8 +2245,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Psychic-type move by 50%. One-time use."
 	},
-	"QualotBerry": {
-		id: "QualotBerry",
+	"qualotberry": {
+		id: "qualotberry",
 		name: "Qualot Berry",
 		spritenum: 371,
 		isBerry: true,
@@ -2256,8 +2256,8 @@ exports.BattleItems = {
 		},
 		desc: "Increases happiness, but lowers Defense EVs by 10."
 	},
-	"QuickClaw": {
-		id: "QuickClaw",
+	"quickclaw": {
+		id: "quickclaw",
 		name: "Quick Claw",
 		spritenum: 373,
 		fling: {
@@ -2265,8 +2265,8 @@ exports.BattleItems = {
 		},
 		desc: "Gives the user a 20% chance to go first."
 	},
-	"QuickPowder": {
-		id: "QuickPowder",
+	"quickpowder": {
+		id: "quickpowder",
 		name: "Quick Powder",
 		spritenum: 374,
 		fling: {
@@ -2280,8 +2280,8 @@ exports.BattleItems = {
 		},
 		desc: "Doubles Ditto's Speed."
 	},
-	"RabutaBerry": {
-		id: "RabutaBerry",
+	"rabutaberry": {
+		id: "rabutaberry",
 		name: "Rabuta Berry",
 		spritenum: 375,
 		isBerry: true,
@@ -2291,8 +2291,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"RareBone": {
-		id: "RareBone",
+	"rarebone": {
+		id: "rarebone",
 		name: "Rare Bone",
 		spritenum: 379,
 		fling: {
@@ -2300,8 +2300,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be Flung for 100 BP."
 	},
-	"RawstBerry": {
-		id: "RawstBerry",
+	"rawstberry": {
+		id: "rawstberry",
 		name: "Rawst Berry",
 		spritenum: 381,
 		isBerry: true,
@@ -2323,8 +2323,8 @@ exports.BattleItems = {
 		},
 		desc: "Cures burn. One-time use."
 	},
-	"RazorClaw": {
-		id: "RazorClaw",
+	"razorclaw": {
+		id: "razorclaw",
 		name: "Razor Claw",
 		spritenum: 382,
 		fling: {
@@ -2335,8 +2335,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises critical hit rate one stage. Evolves Sneasel into Weavile."
 	},
-	"RazorFang": {
-		id: "RazorFang",
+	"razorfang": {
+		id: "razorfang",
 		name: "Razor Fang",
 		spritenum: 383,
 		fling: {
@@ -2345,8 +2345,8 @@ exports.BattleItems = {
 		},
 		desc: "Certain moves have a 10% flinch rate. Evolves Gligar into Gliscor."
 	},
-	"RazzBerry": {
-		id: "RazzBerry",
+	"razzberry": {
+		id: "razzberry",
 		name: "Razz Berry",
 		spritenum: 384,
 		isBerry: true,
@@ -2356,8 +2356,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"RedCard": {
-		id: "RedCard",
+	"redcard": {
+		id: "redcard",
 		name: "Red Card",
 		spritenum: 387,
 		fling: {
@@ -2378,8 +2378,8 @@ exports.BattleItems = {
 		},
 		desc: "The opponent is forced out immediately if it attacks the holder. One-time use."
 	},
-	"RindoBerry": {
-		id: "RindoBerry",
+	"rindoberry": {
+		id: "rindoberry",
 		name: "Rindo Berry",
 		spritenum: 409,
 		isBerry: true,
@@ -2398,8 +2398,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Grass-type attack by 50%."
 	},
-	"RockGem": {
-		id: "RockGem",
+	"rockgem": {
+		id: "rockgem",
 		name: "Rock Gem",
 		spritenum: 415,
 		isGem: true,
@@ -2415,8 +2415,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Rock-type move by 50%. One-time use."
 	},
-	"RockIncense": {
-		id: "RockIncense",
+	"rockincense": {
+		id: "rockincense",
 		name: "Rock Incense",
 		spritenum: 416,
 		fling: {
@@ -2430,8 +2430,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Rock-type moves 20%. Allows breeding of Bonsly."
 	},
-	"RockyHelmet": {
-		id: "RockyHelmet",
+	"rockyhelmet": {
+		id: "rockyhelmet",
 		name: "Rocky Helmet",
 		spritenum: 417,
 		fling: {
@@ -2445,8 +2445,8 @@ exports.BattleItems = {
 		},
 		desc: "Deals 1\/6 damage when the opponent makes contact."
 	},
-	"RootFossil": {
-		id: "RootFossil",
+	"rootfossil": {
+		id: "rootfossil",
 		name: "Root Fossil",
 		spritenum: 418,
 		fling: {
@@ -2454,8 +2454,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be revived into Lileep."
 	},
-	"RoseIncense": {
-		id: "RoseIncense",
+	"roseincense": {
+		id: "roseincense",
 		name: "Rose Incense",
 		spritenum: 419,
 		fling: {
@@ -2469,8 +2469,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Grass-type moves 20%. Allows breeding of Budew."
 	},
-	"RowapBerry": {
-		id: "RowapBerry",
+	"rowapberry": {
+		id: "rowapberry",
 		name: "Rowap Berry",
 		spritenum: 420,
 		isBerry: true,
@@ -2490,8 +2490,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "If hit by a special attack, the attacker takes 12.5% damage. Unobtainable in BW. One-time use."
 	},
-	"SalacBerry": {
-		id: "SalacBerry",
+	"salacberry": {
+		id: "salacberry",
 		name: "Salac Berry",
 		spritenum: 426,
 		isBerry: true,
@@ -2509,8 +2509,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises Speed by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
 	},
-	"ScopeLens": {
-		id: "ScopeLens",
+	"scopelens": {
+		id: "scopelens",
 		name: "Scope Lens",
 		spritenum: 429,
 		fling: {
@@ -2521,8 +2521,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises critical hit rate one stage."
 	},
-	"SeaIncense": {
-		id: "SeaIncense",
+	"seaincense": {
+		id: "seaincense",
 		name: "Sea Incense",
 		spritenum: 430,
 		fling: {
@@ -2536,8 +2536,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Water-type moves 20%. Allows breeding of Azurill."
 	},
-	"SharpBeak": {
-		id: "SharpBeak",
+	"sharpbeak": {
+		id: "sharpbeak",
 		name: "Sharp Beak",
 		spritenum: 436,
 		fling: {
@@ -2551,8 +2551,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Flying-type moves 20%."
 	},
-	"ShedShell": {
-		id: "ShedShell",
+	"shedshell": {
+		id: "shedshell",
 		name: "Shed Shell",
 		spritenum: 437,
 		fling: {
@@ -2564,8 +2564,8 @@ exports.BattleItems = {
 		},
 		desc: "Allows holder to switch out even when trapped."
 	},
-	"ShellBell": {
-		id: "ShellBell",
+	"shellbell": {
+		id: "shellbell",
 		name: "Shell Bell",
 		spritenum: 438,
 		fling: {
@@ -2576,8 +2576,8 @@ exports.BattleItems = {
 		},
 		desc: "Heals holder 1\/8 of damage dealt."
 	},
-	"ShockDrive": {
-		id: "ShockDrive",
+	"shockdrive": {
+		id: "shockdrive",
 		name: "Shock Drive",
 		spritenum: 442,
 		fling: {
@@ -2586,8 +2586,8 @@ exports.BattleItems = {
 		onDrive: 'Electric',
 		desc: "Changes the type of Techno Blast to Electric."
 	},
-	"ShucaBerry": {
-		id: "ShucaBerry",
+	"shucaberry": {
+		id: "shucaberry",
 		name: "Shuca Berry",
 		spritenum: 443,
 		isBerry: true,
@@ -2606,8 +2606,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Ground-type attack by 50%. Consumed after use."
 	},
-	"SilkScarf": {
-		id: "SilkScarf",
+	"silkscarf": {
+		id: "silkscarf",
 		name: "Silk Scarf",
 		spritenum: 444,
 		fling: {
@@ -2621,8 +2621,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Normal-type moves 20%."
 	},
-	"SilverPowder": {
-		id: "SilverPowder",
+	"silverpowder": {
+		id: "silverpowder",
 		name: "SilverPowder",
 		spritenum: 447,
 		fling: {
@@ -2636,8 +2636,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Bug-type moves 20%."
 	},
-	"SitrusBerry": {
-		id: "SitrusBerry",
+	"sitrusberry": {
+		id: "sitrusberry",
 		name: "Sitrus Berry",
 		spritenum: 448,
 		isBerry: true,
@@ -2655,8 +2655,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 25% max HP when at 50% HP or less. One-time use."
 	},
-	"SkullFossil": {
-		id: "SkullFossil",
+	"skullfossil": {
+		id: "skullfossil",
 		name: "Skull Fossil",
 		spritenum: 449,
 		fling: {
@@ -2664,8 +2664,8 @@ exports.BattleItems = {
 		},
 		desc: "Can be revived into Cranidos."
 	},
-	"SkyPlate": {
-		id: "SkyPlate",
+	"skyplate": {
+		id: "skyplate",
 		name: "Sky Plate",
 		spritenum: 450,
 		fling: {
@@ -2680,8 +2680,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Flying-type moves 20%. Pokemon with Multitype become Flying-type."
 	},
-	"SmoothRock": {
-		id: "SmoothRock",
+	"smoothrock": {
+		id: "smoothrock",
 		name: "Smooth Rock",
 		spritenum: 453,
 		fling: {
@@ -2689,8 +2689,8 @@ exports.BattleItems = {
 		},
 		desc: "Makes sandstorm last 8 turns."
 	},
-	"SoftSand": {
-		id: "SoftSand",
+	"softsand": {
+		id: "softsand",
 		name: "Soft Sand",
 		spritenum: 456,
 		fling: {
@@ -2704,8 +2704,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Ground-type moves 20%."
 	},
-	"SoulDew": {
-		id: "SoulDew",
+	"souldew": {
+		id: "souldew",
 		name: "Soul Dew",
 		spritenum: 459,
 		fling: {
@@ -2720,8 +2720,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises Special Attack and Special Defense by 50% if the holder is Latias or Latios. Unobtainable in BW."
 	},
-	"SpellTag": {
-		id: "SpellTag",
+	"spelltag": {
+		id: "spelltag",
 		name: "Spell Tag",
 		spritenum: 461,
 		fling: {
@@ -2735,8 +2735,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Ghost-type moves 20%."
 	},
-	"SpelonBerry": {
-		id: "SpelonBerry",
+	"spelonberry": {
+		id: "spelonberry",
 		name: "Spelon Berry",
 		spritenum: 462,
 		isBerry: true,
@@ -2746,8 +2746,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"SplashPlate": {
-		id: "SplashPlate",
+	"splashplate": {
+		id: "splashplate",
 		name: "Splash Plate",
 		spritenum: 463,
 		fling: {
@@ -2762,8 +2762,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Water-type moves 20%. Pokemon with Multitype become Water-type."
 	},
-	"SpookyPlate": {
-		id: "SpookyPlate",
+	"spookyplate": {
+		id: "spookyplate",
 		name: "Spooky Plate",
 		spritenum: 464,
 		fling: {
@@ -2778,8 +2778,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Ghost-type moves 20%. Pokemon with Multitype become Ghost-type."
 	},
-	"StarfBerry": {
-		id: "StarfBerry",
+	"starfberry": {
+		id: "starfberry",
 		name: "Starf Berry",
 		spritenum: 472,
 		isBerry: true,
@@ -2811,8 +2811,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises a random stat by two stages when at 25% HP or less. One-time use."
 	},
-	"SteelGem": {
-		id: "SteelGem",
+	"steelgem": {
+		id: "steelgem",
 		name: "Steel Gem",
 		spritenum: 473,
 		isGem: true,
@@ -2828,8 +2828,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Steel-type move by 50%. One-time use."
 	},
-	"Stick": {
-		id: "Stick",
+	"stick": {
+		id: "stick",
 		name: "Stick",
 		fling: {
 			basePower: 60
@@ -2842,8 +2842,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises Farfetch'd's critical hit rate two stages."
 	},
-	"StickyBarb": {
-		id: "StickyBarb",
+	"stickybarb": {
+		id: "stickybarb",
 		name: "Sticky Barb",
 		spritenum: 476,
 		fling: {
@@ -2863,8 +2863,8 @@ exports.BattleItems = {
 		},
 		desc: "Causes damage to holder and attaches to attacker upon contact."
 	},
-	"StonePlate": {
-		id: "StonePlate",
+	"stoneplate": {
+		id: "stoneplate",
 		name: "Stone Plate",
 		spritenum: 477,
 		fling: {
@@ -2879,8 +2879,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises base power of Rock-type moves 20%. Pokemon with Multitype become Rock-type."
 	},
-	"TamatoBerry": {
-		id: "TamatoBerry",
+	"tamatoberry": {
+		id: "tamatoberry",
 		name: "Tamato Berry",
 		spritenum: 486,
 		isBerry: true,
@@ -2890,8 +2890,8 @@ exports.BattleItems = {
 		},
 		desc: "Increases happiness, but lowers Speed EVs by 10."
 	},
-	"TangaBerry": {
-		id: "TangaBerry",
+	"tangaberry": {
+		id: "tangaberry",
 		name: "Tanga Berry",
 		spritenum: 487,
 		isBerry: true,
@@ -2910,8 +2910,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Bug-type attack by 50%. Consumed after use."
 	},
-	"ThickClub": {
-		id: "ThickClub",
+	"thickclub": {
+		id: "thickclub",
 		name: "Thick Club",
 		spritenum: 491,
 		fling: {
@@ -2925,8 +2925,8 @@ exports.BattleItems = {
 		},
 		desc: "Doubles Cubone's and Marowak's Attack."
 	},
-	"ToxicOrb": {
-		id: "ToxicOrb",
+	"toxicorb": {
+		id: "toxicorb",
 		name: "Toxic Orb",
 		spritenum: 515,
 		fling: {
@@ -2943,8 +2943,8 @@ exports.BattleItems = {
 		},
 		desc: "Poisons the holder."
 	},
-	"ToxicPlate": {
-		id: "ToxicPlate",
+	"toxicplate": {
+		id: "toxicplate",
 		name: "Toxic Plate",
 		spritenum: 516,
 		fling: {
@@ -2959,8 +2959,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Poison-type moves 20%. Pokemon with Multitype become Poison-type."
 	},
-	"TwistedSpoon": {
-		id: "TwistedSpoon",
+	"twistedspoon": {
+		id: "twistedspoon",
 		name: "TwistedSpoon",
 		spritenum: 520,
 		fling: {
@@ -2974,8 +2974,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Psychic-type moves 20%."
 	},
-	"WacanBerry": {
-		id: "WacanBerry",
+	"wacanberry": {
+		id: "wacanberry",
 		name: "Wacan Berry",
 		spritenum: 526,
 		isBerry: true,
@@ -2994,8 +2994,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Electric-type attack by 50%. Consumed after use."
 	},
-	"WaterGem": {
-		id: "WaterGem",
+	"watergem": {
+		id: "watergem",
 		name: "Water Gem",
 		spritenum: 528,
 		isGem: true,
@@ -3011,8 +3011,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises the power of a Water-type move by 50%. One-time use."
 	},
-	"WatmelBerry": {
-		id: "WatmelBerry",
+	"watmelberry": {
+		id: "watmelberry",
 		name: "Watmel Berry",
 		spritenum: 530,
 		isBerry: true,
@@ -3022,8 +3022,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"WaveIncense": {
-		id: "WaveIncense",
+	"waveincense": {
+		id: "waveincense",
 		name: "Wave Incense",
 		spritenum: 531,
 		fling: {
@@ -3037,8 +3037,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Water-type moves 20%. Allows breeding of Mantyke."
 	},
-	"WepearBerry": {
-		id: "WepearBerry",
+	"wepearberry": {
+		id: "wepearberry",
 		name: "Wepear Berry",
 		spritenum: 533,
 		isBerry: true,
@@ -3048,8 +3048,8 @@ exports.BattleItems = {
 		},
 		desc: "No use. Unobtainable in BW."
 	},
-	"WhiteHerb": {
-		id: "WhiteHerb",
+	"whiteherb": {
+		id: "whiteherb",
 		name: "White Herb",
 		spritenum: 535,
 		fling: {
@@ -3091,8 +3091,8 @@ exports.BattleItems = {
 		},
 		desc: "Removes stat decreases. Consumed after use."
 	},
-	"WideLens": {
-		id: "WideLens",
+	"widelens": {
+		id: "widelens",
 		name: "Wide Lens",
 		spritenum: 537,
 		fling: {
@@ -3106,8 +3106,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises accuracy 10%."
 	},
-	"WikiBerry": {
-		id: "WikiBerry",
+	"wikiberry": {
+		id: "wikiberry",
 		name: "Wiki Berry",
 		spritenum: 538,
 		isBerry: true,
@@ -3128,8 +3128,8 @@ exports.BattleItems = {
 		},
 		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
 	},
-	"WiseGlasses": {
-		id: "WiseGlasses",
+	"wiseglasses": {
+		id: "wiseglasses",
 		name: "Wise Glasses",
 		spritenum: 539,
 		fling: {
@@ -3143,8 +3143,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises damage from special moves 10%."
 	},
-	"YacheBerry": {
-		id: "YacheBerry",
+	"yacheberry": {
+		id: "yacheberry",
 		name: "Yache Berry",
 		spritenum: 567,
 		isBerry: true,
@@ -3163,8 +3163,8 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Ice-type attack by 50%. Consumed after use."
 	},
-	"ZapPlate": {
-		id: "ZapPlate",
+	"zapplate": {
+		id: "zapplate",
 		name: "Zap Plate",
 		spritenum: 572,
 		fling: {
@@ -3179,8 +3179,8 @@ exports.BattleItems = {
 		},
 		desc: "Raises power of Electric moves 20%. Pokemon with Multitype become Electric-type."
 	},
-	"ZoomLens": {
-		id: "ZoomLens",
+	"zoomlens": {
+		id: "zoomlens",
 		name: "Zoom Lens",
 		spritenum: 574,
 		fling: {

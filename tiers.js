@@ -1,2095 +1,2095 @@
 exports.BattleTiers = {
-	"Abomasnow": {
-		tier: "BL"
+	"abomasnow": {
+		tier: "bl"
 	},
-	"Abra": {
-		tier: "LC"
+	"abra": {
+		tier: "lc"
 	},
-	"Absol": {
-		tier: "NU"
+	"absol": {
+		tier: "nu"
 	},
-	"Accelgor": {
-		tier: "RU"
+	"accelgor": {
+		tier: "ru"
 	},
-	"Aerodactyl": {
-		tier: "RU"
+	"aerodactyl": {
+		tier: "ru"
 	},
-	"Aggron": {
-		tier: "RU"
+	"aggron": {
+		tier: "ru"
 	},
-	"Aipom": {
-		tier: "LC"
+	"aipom": {
+		tier: "lc"
 	},
-	"Alakazam": {
-		tier: "OU"
+	"alakazam": {
+		tier: "ou"
 	},
-	"Alomomola": {
-		tier: "NU"
+	"alomomola": {
+		tier: "nu"
 	},
-	"Altaria": {
-		tier: "NU"
+	"altaria": {
+		tier: "nu"
 	},
-	"Ambipom": {
-		tier: "UU"
+	"ambipom": {
+		tier: "uu"
 	},
-	"Amoonguss": {
-		tier: "NU"
+	"amoonguss": {
+		tier: "nu"
 	},
-	"Ampharos": {
-		tier: "NU"
+	"ampharos": {
+		tier: "nu"
 	},
-	"Anorith": {
-		tier: "LC"
+	"anorith": {
+		tier: "lc"
 	},
-	"Arbok": {
-		tier: "NU"
+	"arbok": {
+		tier: "nu"
 	},
-	"Arcanine": {
-		tier: "UU"
+	"arcanine": {
+		tier: "uu"
 	},
-	"Arceus": {
-		tier: "Uber"
+	"arceus": {
+		tier: "uber"
 	},
-	"Arceus-Bug": {
-		tier: "Uber"
+	"arceusbug": {
+		tier: "uber"
 	},
-	"Arceus-Dark": {
-		tier: "Uber"
+	"arceusdark": {
+		tier: "uber"
 	},
-	"Arceus-Dragon": {
-		tier: "Uber"
+	"arceusdragon": {
+		tier: "uber"
 	},
-	"Arceus-Electric": {
-		tier: "Uber"
+	"arceuselectric": {
+		tier: "uber"
 	},
-	"Arceus-Fighting": {
-		tier: "Uber"
+	"arceusfighting": {
+		tier: "uber"
 	},
-	"Arceus-Fire": {
-		tier: "Uber"
+	"arceusfire": {
+		tier: "uber"
 	},
-	"Arceus-Flying": {
-		tier: "Uber"
+	"arceusflying": {
+		tier: "uber"
 	},
-	"Arceus-Ghost": {
-		tier: "Uber"
+	"arceusghost": {
+		tier: "uber"
 	},
-	"Arceus-Grass": {
-		tier: "Uber"
+	"arceusgrass": {
+		tier: "uber"
 	},
-	"Arceus-Ground": {
-		tier: "Uber"
+	"arceusground": {
+		tier: "uber"
 	},
-	"Arceus-Ice": {
-		tier: "Uber"
+	"arceusice": {
+		tier: "uber"
 	},
-	"Arceus-Poison": {
-		tier: "Uber"
+	"arceuspoison": {
+		tier: "uber"
 	},
-	"Arceus-Psychic": {
-		tier: "Uber"
+	"arceuspsychic": {
+		tier: "uber"
 	},
-	"Arceus-Rock": {
-		tier: "Uber"
+	"arceusrock": {
+		tier: "uber"
 	},
-	"Arceus-Steel": {
-		tier: "Uber"
+	"arceussteel": {
+		tier: "uber"
 	},
-	"Arceus-Water": {
-		tier: "Uber"
+	"arceuswater": {
+		tier: "uber"
 	},
-	"Archen": {
-		tier: "LC"
+	"archen": {
+		tier: "lc"
 	},
-	"Archeops": {
-		tier: "RU"
+	"archeops": {
+		tier: "ru"
 	},
-	"Ariados": {
-		tier: "NU"
+	"ariados": {
+		tier: "nu"
 	},
-	"Armaldo": {
-		tier: "NU"
+	"armaldo": {
+		tier: "nu"
 	},
-	"Aron": {
-		tier: "LC"
+	"aron": {
+		tier: "lc"
 	},
-	"Articuno": {
-		tier: "NU"
+	"articuno": {
+		tier: "nu"
 	},
-	"Audino": {
-		tier: "NU"
+	"audino": {
+		tier: "nu"
 	},
-	"Axew": {
-		tier: "LC"
+	"axew": {
+		tier: "lc"
 	},
-	"Azelf": {
-		tier: "UU"
+	"azelf": {
+		tier: "uu"
 	},
-	"Azumarill": {
-		tier: "UU"
+	"azumarill": {
+		tier: "uu"
 	},
-	"Azurill": {
-		tier: "LC"
+	"azurill": {
+		tier: "lc"
 	},
-	"Bagon": {
-		tier: "LC"
+	"bagon": {
+		tier: "lc"
 	},
-	"Baltoy": {
-		tier: "LC"
+	"baltoy": {
+		tier: "lc"
 	},
-	"Banette": {
-		tier: "NU"
+	"banette": {
+		tier: "nu"
 	},
-	"Barboach": {
-		tier: "LC"
+	"barboach": {
+		tier: "lc"
 	},
-	"Basculin": {
-		tier: "NU"
+	"basculin": {
+		tier: "nu"
 	},
-	"Bastiodon": {
-		tier: "NU"
+	"bastiodon": {
+		tier: "nu"
 	},
-	"Bayleef": {
-		tier: "NFE"
+	"bayleef": {
+		tier: "nfe"
 	},
-	"Beartic": {
-		tier: "NU"
+	"beartic": {
+		tier: "nu"
 	},
-	"Beautifly": {
-		tier: "NU"
+	"beautifly": {
+		tier: "nu"
 	},
-	"Beedrill": {
-		tier: "NU"
+	"beedrill": {
+		tier: "nu"
 	},
-	"Beheeyem": {
-		tier: "NU"
+	"beheeyem": {
+		tier: "nu"
 	},
-	"Beldum": {
-		tier: "LC"
+	"beldum": {
+		tier: "lc"
 	},
-	"Bellossom": {
-		tier: "NU"
+	"bellossom": {
+		tier: "nu"
 	},
-	"Bellsprout": {
-		tier: "LC"
+	"bellsprout": {
+		tier: "lc"
 	},
-	"Bibarel": {
-		tier: "NU"
+	"bibarel": {
+		tier: "nu"
 	},
-	"Bidoof": {
-		tier: "LC"
+	"bidoof": {
+		tier: "lc"
 	},
-	"Bisharp": {
-		tier: "UU"
+	"bisharp": {
+		tier: "uu"
 	},
-	"Blastoise": {
-		tier: "UU"
+	"blastoise": {
+		tier: "uu"
 	},
-	"Blaziken": {
-		tier: "Uber"
+	"blaziken": {
+		tier: "uber"
 	},
-	"Blissey": {
-		tier: "OU"
+	"blissey": {
+		tier: "ou"
 	},
-	"Blitzle": {
-		tier: "LC"
+	"blitzle": {
+		tier: "lc"
 	},
-	"Boldore": {
-		tier: "NFE"
+	"boldore": {
+		tier: "nfe"
 	},
-	"Bonsly": {
-		tier: "LC"
+	"bonsly": {
+		tier: "lc"
 	},
-	"Bouffalant": {
-		tier: "RU"
+	"bouffalant": {
+		tier: "ru"
 	},
-	"Braviary": {
-		tier: "NU"
+	"braviary": {
+		tier: "nu"
 	},
-	"Breloom": {
-		tier: "OU"
+	"breloom": {
+		tier: "ou"
 	},
-	"Bronzong": {
-		tier: "UU"
+	"bronzong": {
+		tier: "uu"
 	},
-	"Bronzor": {
-		tier: "LC"
+	"bronzor": {
+		tier: "lc"
 	},
-	"Budew": {
-		tier: "LC"
+	"budew": {
+		tier: "lc"
 	},
-	"Buizel": {
-		tier: "LC"
+	"buizel": {
+		tier: "lc"
 	},
-	"Bulbasaur": {
-		tier: "LC"
+	"bulbasaur": {
+		tier: "lc"
 	},
-	"Buneary": {
-		tier: "LC"
+	"buneary": {
+		tier: "lc"
 	},
-	"Burmy": {
-		tier: "LC"
+	"burmy": {
+		tier: "lc"
 	},
-	"Butterfree": {
-		tier: "NU"
+	"butterfree": {
+		tier: "nu"
 	},
-	"Cacnea": {
-		tier: "LC"
+	"cacnea": {
+		tier: "lc"
 	},
-	"Cacturne": {
-		tier: "NU"
+	"cacturne": {
+		tier: "nu"
 	},
-	"Camerupt": {
-		tier: "NU"
+	"camerupt": {
+		tier: "nu"
 	},
-	"Carnivine": {
-		tier: "NU"
+	"carnivine": {
+		tier: "nu"
 	},
-	"Carracosta": {
-		tier: "NU"
+	"carracosta": {
+		tier: "nu"
 	},
-	"Carvanha": {
-		tier: "LC Uber"
+	"carvanha": {
+		tier: "lcuber"
 	},
-	"Cascoon": {
-		tier: "NFE"
+	"cascoon": {
+		tier: "nfe"
 	},
-	"Castform": {
-		tier: "NU"
+	"castform": {
+		tier: "nu"
 	},
-	"Caterpie": {
-		tier: "LC"
+	"caterpie": {
+		tier: "lc"
 	},
-	"Celebi": {
-		tier: "OU"
+	"celebi": {
+		tier: "ou"
 	},
-	"Chandelure": {
-		tier: "UU"
+	"chandelure": {
+		tier: "uu"
 	},
-	"Chansey": {
-		tier: "OU"
+	"chansey": {
+		tier: "ou"
 	},
-	"Charizard": {
-		tier: "RU"
+	"charizard": {
+		tier: "ru"
 	},
-	"Charmander": {
-		tier: "LC"
+	"charmander": {
+		tier: "lc"
 	},
-	"Charmeleon": {
-		tier: "NFE"
+	"charmeleon": {
+		tier: "nfe"
 	},
-	"Chatot": {
-		tier: "NU"
+	"chatot": {
+		tier: "nu"
 	},
-	"Cherrim": {
-		tier: "NU"
+	"cherrim": {
+		tier: "nu"
 	},
-	"Cherubi": {
-		tier: "LC"
+	"cherubi": {
+		tier: "lc"
 	},
-	"Chikorita": {
-		tier: "LC"
+	"chikorita": {
+		tier: "lc"
 	},
-	"Chimchar": {
-		tier: "LC"
+	"chimchar": {
+		tier: "lc"
 	},
-	"Chimecho": {
-		tier: "NU"
+	"chimecho": {
+		tier: "nu"
 	},
-	"Chinchou": {
-		tier: "LC"
+	"chinchou": {
+		tier: "lc"
 	},
-	"Chingling": {
-		tier: "LC"
+	"chingling": {
+		tier: "lc"
 	},
-	"Cinccino": {
-		tier: "NU"
+	"cinccino": {
+		tier: "nu"
 	},
-	"Clamperl": {
-		tier: "LC"
+	"clamperl": {
+		tier: "lc"
 	},
-	"Claydol": {
-		tier: "RU"
+	"claydol": {
+		tier: "ru"
 	},
-	"Clefable": {
-		tier: "RU"
+	"clefable": {
+		tier: "ru"
 	},
-	"Clefairy": {
-		tier: "NFE"
+	"clefairy": {
+		tier: "nfe"
 	},
-	"Cleffa": {
-		tier: "LC"
+	"cleffa": {
+		tier: "lc"
 	},
-	"Cloyster": {
-		tier: "OU"
+	"cloyster": {
+		tier: "ou"
 	},
-	"Cobalion": {
-		tier: "UU"
+	"cobalion": {
+		tier: "uu"
 	},
-	"Cofagrigus": {
-		tier: "RU"
+	"cofagrigus": {
+		tier: "ru"
 	},
-	"Combee": {
-		tier: "LC"
+	"combee": {
+		tier: "lc"
 	},
-	"Combusken": {
-		tier: "NU"
+	"combusken": {
+		tier: "nu"
 	},
-	"Conkeldurr": {
-		tier: "OU"
+	"conkeldurr": {
+		tier: "ou"
 	},
-	"Corphish": {
-		tier: "LC"
+	"corphish": {
+		tier: "lc"
 	},
-	"Corsola": {
-		tier: "NU"
+	"corsola": {
+		tier: "nu"
 	},
-	"Cottonee": {
-		tier: "LC"
+	"cottonee": {
+		tier: "lc"
 	},
-	"Cradily": {
-		tier: "NU"
+	"cradily": {
+		tier: "nu"
 	},
-	"Cranidos": {
-		tier: "LC"
+	"cranidos": {
+		tier: "lc"
 	},
-	"Crawdaunt": {
-		tier: "RU"
+	"crawdaunt": {
+		tier: "ru"
 	},
-	"Cresselia": {
-		tier: "BL2"
+	"cresselia": {
+		tier: "bl2"
 	},
-	"Croagunk": {
-		tier: "LC"
+	"croagunk": {
+		tier: "lc"
 	},
-	"Crobat": {
-		tier: "UU"
+	"crobat": {
+		tier: "uu"
 	},
-	"Croconaw": {
-		tier: "NFE"
+	"croconaw": {
+		tier: "nfe"
 	},
-	"Crustle": {
-		tier: "RU"
+	"crustle": {
+		tier: "ru"
 	},
-	"Cryogonal": {
-		tier: "NU"
+	"cryogonal": {
+		tier: "nu"
 	},
-	"Cubchoo": {
-		tier: "LC"
+	"cubchoo": {
+		tier: "lc"
 	},
-	"Cubone": {
-		tier: "LC"
+	"cubone": {
+		tier: "lc"
 	},
-	"Cyndaquil": {
-		tier: "LC"
+	"cyndaquil": {
+		tier: "lc"
 	},
-	"Darkrai": {
-		tier: "Uber"
+	"darkrai": {
+		tier: "uber"
 	},
-	"Darmanitan": {
-		tier: "UU"
+	"darmanitan": {
+		tier: "uu"
 	},
-	"Darmanitan-D": {
-		tier: "Illegal"
+	"darmanitand": {
+		tier: "illegal"
 	},
-	"Darumaka": {
-		tier: "LC"
+	"darumaka": {
+		tier: "lc"
 	},
-	"Deerling": {
-		tier: "LC"
+	"deerling": {
+		tier: "lc"
 	},
-	"Deino": {
-		tier: "LC"
+	"deino": {
+		tier: "lc"
 	},
-	"Delcatty": {
-		tier: "NU"
+	"delcatty": {
+		tier: "nu"
 	},
-	"Delibird": {
-		tier: "NU"
+	"delibird": {
+		tier: "nu"
 	},
-	"Deoxys": {
-		tier: "Uber"
+	"deoxys": {
+		tier: "uber"
 	},
-	"Deoxys-A": {
-		tier: "Uber"
+	"deoxysa": {
+		tier: "uber"
 	},
-	"Deoxys-D": {
-		tier: "UU"
+	"deoxysd": {
+		tier: "uu"
 	},
-	"Deoxys-S": {
-		tier: "Uber"
+	"deoxyss": {
+		tier: "uber"
 	},
-	"Dewgong": {
-		tier: "NU"
+	"dewgong": {
+		tier: "nu"
 	},
-	"Dewott": {
-		tier: "NFE"
+	"dewott": {
+		tier: "nfe"
 	},
-	"Dialga": {
-		tier: "Uber"
+	"dialga": {
+		tier: "uber"
 	},
-	"Diglett": {
-		tier: "LC"
+	"diglett": {
+		tier: "lc"
 	},
-	"Ditto": {
-		tier: "NU"
+	"ditto": {
+		tier: "nu"
 	},
-	"Dodrio": {
-		tier: "NU"
+	"dodrio": {
+		tier: "nu"
 	},
-	"Doduo": {
-		tier: "LC"
+	"doduo": {
+		tier: "lc"
 	},
-	"Donphan": {
-		tier: "OU"
+	"donphan": {
+		tier: "ou"
 	},
-	"Dragonair": {
-		tier: "NU"
+	"dragonair": {
+		tier: "nu"
 	},
-	"Dragonite": {
-		tier: "OU"
+	"dragonite": {
+		tier: "ou"
 	},
-	"Drapion": {
-		tier: "RU"
+	"drapion": {
+		tier: "ru"
 	},
-	"Dratini": {
-		tier: "LC"
+	"dratini": {
+		tier: "lc"
 	},
-	"Drifblim": {
-		tier: "NU"
+	"drifblim": {
+		tier: "nu"
 	},
-	"Drifloon": {
-		tier: "LC"
+	"drifloon": {
+		tier: "lc"
 	},
-	"Drilbur": {
-		tier: "LC"
+	"drilbur": {
+		tier: "lc"
 	},
-	"Drowzee": {
-		tier: "LC"
+	"drowzee": {
+		tier: "lc"
 	},
-	"Druddigon": {
-		tier: "RU"
+	"druddigon": {
+		tier: "ru"
 	},
-	"Ducklett": {
-		tier: "LC"
+	"ducklett": {
+		tier: "lc"
 	},
-	"Dugtrio": {
-		tier: "OU"
+	"dugtrio": {
+		tier: "ou"
 	},
-	"Dunsparce": {
-		tier: "NU"
+	"dunsparce": {
+		tier: "nu"
 	},
-	"Duosion": {
-		tier: "NU"
+	"duosion": {
+		tier: "nu"
 	},
-	"Durant": {
-		tier: "BL2"
+	"durant": {
+		tier: "bl2"
 	},
-	"Dusclops": {
-		tier: "UU"
+	"dusclops": {
+		tier: "uu"
 	},
-	"Dusknoir": {
-		tier: "RU"
+	"dusknoir": {
+		tier: "ru"
 	},
-	"Duskull": {
-		tier: "LC"
+	"duskull": {
+		tier: "lc"
 	},
-	"Dustox": {
-		tier: "NU"
+	"dustox": {
+		tier: "nu"
 	},
-	"Dwebble": {
-		tier: "LC"
+	"dwebble": {
+		tier: "lc"
 	},
-	"Eevee": {
-		tier: "LC"
+	"eevee": {
+		tier: "lc"
 	},
-	"Ekans": {
-		tier: "LC"
+	"ekans": {
+		tier: "lc"
 	},
-	"Electabuzz": {
-		tier: "NU"
+	"electabuzz": {
+		tier: "nu"
 	},
-	"Electivire": {
-		tier: "RU"
+	"electivire": {
+		tier: "ru"
 	},
-	"Electrike": {
-		tier: "LC"
+	"electrike": {
+		tier: "lc"
 	},
-	"Electrode": {
-		tier: "NU"
+	"electrode": {
+		tier: "nu"
 	},
-	"Elekid": {
-		tier: "LC"
+	"elekid": {
+		tier: "lc"
 	},
-	"Eelektrik": {
-		tier: "NFE"
+	"eelektrik": {
+		tier: "nfe"
 	},
-	"Eelektross": {
-		tier: "NU"
+	"eelektross": {
+		tier: "nu"
 	},
-	"Elgyem": {
-		tier: "LC"
+	"elgyem": {
+		tier: "lc"
 	},
-	"Emboar": {
-		tier: "NU"
+	"emboar": {
+		tier: "nu"
 	},
-	"Emolga": {
-		tier: "NU"
+	"emolga": {
+		tier: "nu"
 	},
-	"Empoleon": {
-		tier: "UU"
+	"empoleon": {
+		tier: "uu"
 	},
-	"Entei": {
-		tier: "RU"
+	"entei": {
+		tier: "ru"
 	},
-	"Escavalier": {
-		tier: "UU"
+	"escavalier": {
+		tier: "uu"
 	},
-	"Espeon": {
-		tier: "OU"
+	"espeon": {
+		tier: "ou"
 	},
-	"Excadrill": {
-		tier: "Uber"
+	"excadrill": {
+		tier: "uber"
 	},
-	"Exeggcute": {
-		tier: "LC"
+	"exeggcute": {
+		tier: "lc"
 	},
-	"Exeggutor": {
-		tier: "NU"
+	"exeggutor": {
+		tier: "nu"
 	},
-	"Exploud": {
-		tier: "NU"
+	"exploud": {
+		tier: "nu"
 	},
-	"Farfetch'd": {
-		tier: "NU"
+	"farfetchd": {
+		tier: "nu"
 	},
-	"Fearow": {
-		tier: "NU"
+	"fearow": {
+		tier: "nu"
 	},
-	"Feebas": {
-		tier: "LC"
+	"feebas": {
+		tier: "lc"
 	},
-	"Feraligatr": {
-		tier: "RU"
+	"feraligatr": {
+		tier: "ru"
 	},
-	"Ferroseed": {
-		tier: "RU"
+	"ferroseed": {
+		tier: "ru"
 	},
-	"Ferrothorn": {
-		tier: "OU"
+	"ferrothorn": {
+		tier: "ou"
 	},
-	"Finneon": {
-		tier: "LC"
+	"finneon": {
+		tier: "lc"
 	},
-	"Flaaffy": {
-		tier: "NU"
+	"flaaffy": {
+		tier: "nu"
 	},
-	"Flareon": {
-		tier: "NU"
+	"flareon": {
+		tier: "nu"
 	},
-	"Floatzel": {
-		tier: "NU"
+	"floatzel": {
+		tier: "nu"
 	},
-	"Flygon": {
-		tier: "UU"
+	"flygon": {
+		tier: "uu"
 	},
-	"Foongus": {
-		tier: "LC"
+	"foongus": {
+		tier: "lc"
 	},
-	"Forretress": {
-		tier: "OU"
+	"forretress": {
+		tier: "ou"
 	},
-	"Fraxure": {
-		tier: "NU"
+	"fraxure": {
+		tier: "nu"
 	},
-	"Frillish": {
-		tier: "LC"
+	"frillish": {
+		tier: "lc"
 	},
-	"Froslass": {
-		tier: "UU"
+	"froslass": {
+		tier: "uu"
 	},
-	"Furret": {
-		tier: "NU"
+	"furret": {
+		tier: "nu"
 	},
-	"Gabite": {
-		tier: "NU"
+	"gabite": {
+		tier: "nu"
 	},
-	"Gallade": {
-		tier: "RU"
+	"gallade": {
+		tier: "ru"
 	},
-	"Galvantula": {
-		tier: "RU"
+	"galvantula": {
+		tier: "ru"
 	},
-	"Garbodor": {
-		tier: "NU"
+	"garbodor": {
+		tier: "nu"
 	},
-	"Garchomp": {
-		tier: "Uber"
+	"garchomp": {
+		tier: "uber"
 	},
-	"Gardevoir": {
-		tier: "NU"
+	"gardevoir": {
+		tier: "nu"
 	},
-	"Gastly": {
-		tier: "LC"
+	"gastly": {
+		tier: "lc"
 	},
-	"Gastrodon": {
-		tier: "OU"
+	"gastrodon": {
+		tier: "ou"
 	},
-	"Genesect": {
-		tier: "Unreleased"
+	"genesect": {
+		tier: "unreleased"
 	},
-	"Gengar": {
-		tier: "OU"
+	"gengar": {
+		tier: "ou"
 	},
-	"Geodude": {
-		tier: "LC"
+	"geodude": {
+		tier: "lc"
 	},
-	"Gible": {
-		tier: "LC"
+	"gible": {
+		tier: "lc"
 	},
-	"Gigalith": {
-		tier: "NU"
+	"gigalith": {
+		tier: "nu"
 	},
-	"Girafarig": {
-		tier: "NU"
+	"girafarig": {
+		tier: "nu"
 	},
-	"Giratina": {
-		tier: "Uber"
+	"giratina": {
+		tier: "uber"
 	},
-	"Giratina-O": {
-		tier: "Uber"
+	"giratinao": {
+		tier: "uber"
 	},
-	"Glaceon": {
-		tier: "NU"
+	"glaceon": {
+		tier: "nu"
 	},
-	"Glalie": {
-		tier: "NU"
+	"glalie": {
+		tier: "nu"
 	},
-	"Glameow": {
-		tier: "LC"
+	"glameow": {
+		tier: "lc"
 	},
-	"Gligar": {
-		tier: "RU"
+	"gligar": {
+		tier: "ru"
 	},
-	"Gliscor": {
-		tier: "OU"
+	"gliscor": {
+		tier: "ou"
 	},
-	"Gloom": {
-		tier: "NFE"
+	"gloom": {
+		tier: "nfe"
 	},
-	"Golbat": {
-		tier: "NU"
+	"golbat": {
+		tier: "nu"
 	},
-	"Goldeen": {
-		tier: "LC"
+	"goldeen": {
+		tier: "lc"
 	},
-	"Golduck": {
-		tier: "NU"
+	"golduck": {
+		tier: "nu"
 	},
-	"Golem": {
-		tier: "NU"
+	"golem": {
+		tier: "nu"
 	},
-	"Golett": {
-		tier: "LC"
+	"golett": {
+		tier: "lc"
 	},
-	"Golurk": {
-		tier: "RU"
+	"golurk": {
+		tier: "ru"
 	},
-	"Gorebyss": {
-		tier: "NU"
+	"gorebyss": {
+		tier: "nu"
 	},
-	"Gothita": {
-		tier: "LC"
+	"gothita": {
+		tier: "lc"
 	},
-	"Gothitelle": {
-		tier: "NU"
+	"gothitelle": {
+		tier: "nu"
 	},
-	"Gothorita": {
-		tier: "NFE"
+	"gothorita": {
+		tier: "nfe"
 	},
-	"Granbull": {
-		tier: "NU"
+	"granbull": {
+		tier: "nu"
 	},
-	"Graveler": {
-		tier: "NFE"
+	"graveler": {
+		tier: "nfe"
 	},
-	"Grimer": {
-		tier: "LC"
+	"grimer": {
+		tier: "lc"
 	},
-	"Grotle": {
-		tier: "NFE"
+	"grotle": {
+		tier: "nfe"
 	},
-	"Groudon": {
-		tier: "Uber"
+	"groudon": {
+		tier: "uber"
 	},
-	"Grovyle": {
-		tier: "NFE"
+	"grovyle": {
+		tier: "nfe"
 	},
-	"Growlithe": {
-		tier: "LC"
+	"growlithe": {
+		tier: "lc"
 	},
-	"Grumpig": {
-		tier: "NU"
+	"grumpig": {
+		tier: "nu"
 	},
-	"Gulpin": {
-		tier: "LC"
+	"gulpin": {
+		tier: "lc"
 	},
-	"Gurdurr": {
-		tier: "NU"
+	"gurdurr": {
+		tier: "nu"
 	},
-	"Gyarados": {
-		tier: "OU"
+	"gyarados": {
+		tier: "ou"
 	},
-	"Happiny": {
-		tier: "LC"
+	"happiny": {
+		tier: "lc"
 	},
-	"Hariyama": {
-		tier: "RU"
+	"hariyama": {
+		tier: "ru"
 	},
-	"Haunter": {
-		tier: "NU"
+	"haunter": {
+		tier: "nu"
 	},
-	"Haxorus": {
-		tier: "OU"
+	"haxorus": {
+		tier: "ou"
 	},
-	"Heatmor": {
-		tier: "NU"
+	"heatmor": {
+		tier: "nu"
 	},
-	"Heatran": {
-		tier: "OU"
+	"heatran": {
+		tier: "ou"
 	},
-	"Heracross": {
-		tier: "UU"
+	"heracross": {
+		tier: "uu"
 	},
-	"Herdier": {
-		tier: "NFE"
+	"herdier": {
+		tier: "nfe"
 	},
-	"Hippopotas": {
-		tier: "UU"
+	"hippopotas": {
+		tier: "uu"
 	},
-	"Hippowdon": {
-		tier: "BL"
+	"hippowdon": {
+		tier: "bl"
 	},
-	"Hitmonchan": {
-		tier: "RU"
+	"hitmonchan": {
+		tier: "ru"
 	},
-	"Hitmonlee": {
-		tier: "RU"
+	"hitmonlee": {
+		tier: "ru"
 	},
-	"Hitmontop": {
-		tier: "UU"
+	"hitmontop": {
+		tier: "uu"
 	},
-	"Ho-Oh": {
-		tier: "Uber"
+	"hooh": {
+		tier: "uber"
 	},
-	"Honchkrow": {
-		tier: "RU"
+	"honchkrow": {
+		tier: "ru"
 	},
-	"Hoothoot": {
-		tier: "LC"
+	"hoothoot": {
+		tier: "lc"
 	},
-	"Hoppip": {
-		tier: "LC"
+	"hoppip": {
+		tier: "lc"
 	},
-	"Horsea": {
-		tier: "LC"
+	"horsea": {
+		tier: "lc"
 	},
-	"Houndoom": {
-		tier: "UU"
+	"houndoom": {
+		tier: "uu"
 	},
-	"Houndour": {
-		tier: "LC"
+	"houndour": {
+		tier: "lc"
 	},
-	"Huntail": {
-		tier: "NU"
+	"huntail": {
+		tier: "nu"
 	},
-	"Hydreigon": {
-		tier: "OU"
+	"hydreigon": {
+		tier: "ou"
 	},
-	"Hypno": {
-		tier: "NU"
+	"hypno": {
+		tier: "nu"
 	},
-	"Igglybuff": {
-		tier: "LC"
+	"igglybuff": {
+		tier: "lc"
 	},
-	"Illumise": {
-		tier: "NU"
+	"illumise": {
+		tier: "nu"
 	},
-	"Infernape": {
-		tier: "OU"
+	"infernape": {
+		tier: "ou"
 	},
-	"Ivysaur": {
-		tier: "NFE"
+	"ivysaur": {
+		tier: "nfe"
 	},
-	"Jellicent": {
-		tier: "OU"
+	"jellicent": {
+		tier: "ou"
 	},
-	"Jigglypuff": {
-		tier: "NFE"
+	"jigglypuff": {
+		tier: "nfe"
 	},
-	"Jirachi": {
-		tier: "OU"
+	"jirachi": {
+		tier: "ou"
 	},
-	"Jolteon": {
-		tier: "OU"
+	"jolteon": {
+		tier: "ou"
 	},
-	"Joltik": {
-		tier: "LC"
+	"joltik": {
+		tier: "lc"
 	},
-	"Jumpluff": {
-		tier: "NU"
+	"jumpluff": {
+		tier: "nu"
 	},
-	"Jynx": {
-		tier: "NU"
+	"jynx": {
+		tier: "nu"
 	},
-	"Kabuto": {
-		tier: "LC"
+	"kabuto": {
+		tier: "lc"
 	},
-	"Kabutops": {
-		tier: "RU"
+	"kabutops": {
+		tier: "ru"
 	},
-	"Kadabra": {
-		tier: "NU"
+	"kadabra": {
+		tier: "nu"
 	},
-	"Kakuna": {
-		tier: "NFE"
+	"kakuna": {
+		tier: "nfe"
 	},
-	"Kangaskhan": {
-		tier: "NU"
+	"kangaskhan": {
+		tier: "nu"
 	},
-	"Karrablast": {
-		tier: "LC"
+	"karrablast": {
+		tier: "lc"
 	},
-	"Kecleon": {
-		tier: "NU"
+	"kecleon": {
+		tier: "nu"
 	},
-	"Keldeo": {
-		tier: "Unreleased"
+	"keldeo": {
+		tier: "unreleased"
 	},
-	"Kingdra": {
-		tier: "UU"
+	"kingdra": {
+		tier: "uu"
 	},
-	"Kingler": {
-		tier: "NU"
+	"kingler": {
+		tier: "nu"
 	},
-	"Kirlia": {
-		tier: "NFE"
+	"kirlia": {
+		tier: "nfe"
 	},
-	"Klang": {
-		tier: "NFE"
+	"klang": {
+		tier: "nfe"
 	},
-	"Klink": {
-		tier: "LC"
+	"klink": {
+		tier: "lc"
 	},
-	"Klinklang": {
-		tier: "RU"
+	"klinklang": {
+		tier: "ru"
 	},
-	"Koffing": {
-		tier: "LC"
+	"koffing": {
+		tier: "lc"
 	},
-	"Krabby": {
-		tier: "LC"
+	"krabby": {
+		tier: "lc"
 	},
-	"Kricketot": {
-		tier: "LC"
+	"kricketot": {
+		tier: "lc"
 	},
-	"Kricketune": {
-		tier: "NU"
+	"kricketune": {
+		tier: "nu"
 	},
-	"Krokorok": {
-		tier: "NFE"
+	"krokorok": {
+		tier: "nfe"
 	},
-	"Krookodile": {
-		tier: "UU"
+	"krookodile": {
+		tier: "uu"
 	},
-	"Kyogre": {
-		tier: "Uber"
+	"kyogre": {
+		tier: "uber"
 	},
-	"Kyurem": {
-		tier: "BL"
+	"kyurem": {
+		tier: "bl"
 	},
-	"Lairon": {
-		tier: "NU"
+	"lairon": {
+		tier: "nu"
 	},
-	"Lampent": {
-		tier: "NU"
+	"lampent": {
+		tier: "nu"
 	},
-	"Landorus": {
-		tier: "OU"
+	"landorus": {
+		tier: "ou"
 	},
-	"Lanturn": {
-		tier: "RU"
+	"lanturn": {
+		tier: "ru"
 	},
-	"Lapras": {
-		tier: "NU"
+	"lapras": {
+		tier: "nu"
 	},
-	"Larvesta": {
-		tier: "LC"
+	"larvesta": {
+		tier: "lc"
 	},
-	"Larvitar": {
-		tier: "LC"
+	"larvitar": {
+		tier: "lc"
 	},
-	"Latias": {
-		tier: "OU"
+	"latias": {
+		tier: "ou"
 	},
-	"Latios": {
-		tier: "OU"
+	"latios": {
+		tier: "ou"
 	},
-	"Leafeon": {
-		tier: "NU"
+	"leafeon": {
+		tier: "nu"
 	},
-	"Leavanny": {
-		tier: "NU"
+	"leavanny": {
+		tier: "nu"
 	},
-	"Ledian": {
-		tier: "NU"
+	"ledian": {
+		tier: "nu"
 	},
-	"Ledyba": {
-		tier: "LC"
+	"ledyba": {
+		tier: "lc"
 	},
-	"Lickilicky": {
-		tier: "NU"
+	"lickilicky": {
+		tier: "nu"
 	},
-	"Lickitung": {
-		tier: "LC"
+	"lickitung": {
+		tier: "lc"
 	},
-	"Liepard": {
-		tier: "NU"
+	"liepard": {
+		tier: "nu"
 	},
-	"Lileep": {
-		tier: "LC"
+	"lileep": {
+		tier: "lc"
 	},
-	"Lilligant": {
-		tier: "RU"
+	"lilligant": {
+		tier: "ru"
 	},
-	"Lillipup": {
-		tier: "LC"
+	"lillipup": {
+		tier: "lc"
 	},
-	"Linoone": {
-		tier: "NU"
+	"linoone": {
+		tier: "nu"
 	},
-	"Litwick": {
-		tier: "LC"
+	"litwick": {
+		tier: "lc"
 	},
-	"Lombre": {
-		tier: "NFE"
+	"lombre": {
+		tier: "nfe"
 	},
-	"Lopunny": {
-		tier: "NU"
+	"lopunny": {
+		tier: "nu"
 	},
-	"Lotad": {
-		tier: "LC"
+	"lotad": {
+		tier: "lc"
 	},
-	"Loudred": {
-		tier: "NFE"
+	"loudred": {
+		tier: "nfe"
 	},
-	"Lucario": {
-		tier: "OU"
+	"lucario": {
+		tier: "ou"
 	},
-	"Ludicolo": {
-		tier: "RU"
+	"ludicolo": {
+		tier: "ru"
 	},
-	"Lugia": {
-		tier: "Uber"
+	"lugia": {
+		tier: "uber"
 	},
-	"Lumineon": {
-		tier: "NU"
+	"lumineon": {
+		tier: "nu"
 	},
-	"Lunatone": {
-		tier: "NU"
+	"lunatone": {
+		tier: "nu"
 	},
-	"Luvdisc": {
-		tier: "NU"
+	"luvdisc": {
+		tier: "nu"
 	},
-	"Luxio": {
-		tier: "NFE"
+	"luxio": {
+		tier: "nfe"
 	},
-	"Luxray": {
-		tier: "NU"
+	"luxray": {
+		tier: "nu"
 	},
-	"Machamp": {
-		tier: "UU"
+	"machamp": {
+		tier: "uu"
 	},
-	"Machoke": {
-		tier: "NU"
+	"machoke": {
+		tier: "nu"
 	},
-	"Machop": {
-		tier: "LC"
+	"machop": {
+		tier: "lc"
 	},
-	"Magby": {
-		tier: "LC"
+	"magby": {
+		tier: "lc"
 	},
-	"Magcargo": {
-		tier: "NU"
+	"magcargo": {
+		tier: "nu"
 	},
-	"Magikarp": {
-		tier: "LC"
+	"magikarp": {
+		tier: "lc"
 	},
-	"Magmar": {
-		tier: "NFE"
+	"magmar": {
+		tier: "nfe"
 	},
-	"Magmortar": {
-		tier: "NU"
+	"magmortar": {
+		tier: "nu"
 	},
-	"Magnemite": {
-		tier: "LC"
+	"magnemite": {
+		tier: "lc"
 	},
-	"Magneton": {
-		tier: "RU"
+	"magneton": {
+		tier: "ru"
 	},
-	"Magnezone": {
-		tier: "OU"
+	"magnezone": {
+		tier: "ou"
 	},
-	"Makuhita": {
-		tier: "LC"
+	"makuhita": {
+		tier: "lc"
 	},
-	"Mamoswine": {
-		tier: "OU"
+	"mamoswine": {
+		tier: "ou"
 	},
-	"Manaphy": {
-		tier: "Uber"
+	"manaphy": {
+		tier: "uber"
 	},
-	"Mandibuzz": {
-		tier: "RU"
+	"mandibuzz": {
+		tier: "ru"
 	},
-	"Manectric": {
-		tier: "RU"
+	"manectric": {
+		tier: "ru"
 	},
-	"Mankey": {
-		tier: "LC"
+	"mankey": {
+		tier: "lc"
 	},
-	"Mantine": {
-		tier: "NU"
+	"mantine": {
+		tier: "nu"
 	},
-	"Mantyke": {
-		tier: "LC"
+	"mantyke": {
+		tier: "lc"
 	},
-	"Maractus": {
-		tier: "NU"
+	"maractus": {
+		tier: "nu"
 	},
-	"Mareep": {
-		tier: "LC"
+	"mareep": {
+		tier: "lc"
 	},
-	"Marill": {
-		tier: "NFE"
+	"marill": {
+		tier: "nfe"
 	},
-	"Marowak": {
-		tier: "NU"
+	"marowak": {
+		tier: "nu"
 	},
-	"Marshtomp": {
-		tier: "NFE"
+	"marshtomp": {
+		tier: "nfe"
 	},
-	"Masquerain": {
-		tier: "NU"
+	"masquerain": {
+		tier: "nu"
 	},
-	"Mawile": {
-		tier: "NU"
+	"mawile": {
+		tier: "nu"
 	},
-	"Medicham": {
-		tier: "RU"
+	"medicham": {
+		tier: "ru"
 	},
-	"Meditite": {
-		tier: "LC Uber"
+	"meditite": {
+		tier: "lcuber"
 	},
-	"Meganium": {
-		tier: "NU"
+	"meganium": {
+		tier: "nu"
 	},
-	"Meloetta": {
-		tier: "Unreleased"
+	"meloetta": {
+		tier: "unreleased"
 	},
-	"Meloetta-S": {
-		tier: "Illegal"
+	"meloettas": {
+		tier: "illegal"
 	},
-	"Meowth": {
-		tier: "LC"
+	"meowth": {
+		tier: "lc"
 	},
-	"Mesprit": {
-		tier: "NU"
+	"mesprit": {
+		tier: "nu"
 	},
-	"Metagross": {
-		tier: "OU"
+	"metagross": {
+		tier: "ou"
 	},
-	"Metang": {
-		tier: "NU"
+	"metang": {
+		tier: "nu"
 	},
-	"Metapod": {
-		tier: "NFE"
+	"metapod": {
+		tier: "nfe"
 	},
-	"Mew": {
-		tier: "UU"
+	"mew": {
+		tier: "uu"
 	},
-	"Mewtwo": {
-		tier: "Uber"
+	"mewtwo": {
+		tier: "uber"
 	},
-	"Mienfoo": {
-		tier: "LC"
+	"mienfoo": {
+		tier: "lc"
 	},
-	"Mienshao": {
-		tier: "OU"
+	"mienshao": {
+		tier: "ou"
 	},
-	"Mightyena": {
-		tier: "NU"
+	"mightyena": {
+		tier: "nu"
 	},
-	"Milotic": {
-		tier: "UU"
+	"milotic": {
+		tier: "uu"
 	},
-	"Miltank": {
-		tier: "NU"
+	"miltank": {
+		tier: "nu"
 	},
-	"MimeJr.": {
-		tier: "LC"
+	"mimejr": {
+		tier: "lc"
 	},
-	"Minccino": {
-		tier: "LC"
+	"minccino": {
+		tier: "lc"
 	},
-	"Minun": {
-		tier: "NU"
+	"minun": {
+		tier: "nu"
 	},
-	"Misdreavus": {
-		tier: "LC"
+	"misdreavus": {
+		tier: "lc"
 	},
-	"Mismagius": {
-		tier: "UU"
+	"mismagius": {
+		tier: "uu"
 	},
-	"Moltres": {
-		tier: "RU"
+	"moltres": {
+		tier: "ru"
 	},
-	"Monferno": {
-		tier: "NU"
+	"monferno": {
+		tier: "nu"
 	},
-	"Mothim": {
-		tier: "NU"
+	"mothim": {
+		tier: "nu"
 	},
-	"Mr.Mime": {
-		tier: "NU"
+	"mrmime": {
+		tier: "nu"
 	},
-	"Mudkip": {
-		tier: "LC"
+	"mudkip": {
+		tier: "lc"
 	},
-	"Muk": {
-		tier: "NU"
+	"muk": {
+		tier: "nu"
 	},
-	"Munchlax": {
-		tier: "RU"
+	"munchlax": {
+		tier: "ru"
 	},
-	"Munna": {
-		tier: "LC"
+	"munna": {
+		tier: "lc"
 	},
-	"Murkrow": {
-		tier: "LC"
+	"murkrow": {
+		tier: "lc"
 	},
-	"Musharna": {
-		tier: "NU"
+	"musharna": {
+		tier: "nu"
 	},
-	"Natu": {
-		tier: "LC"
+	"natu": {
+		tier: "lc"
 	},
-	"Nidoking": {
-		tier: "UU"
+	"nidoking": {
+		tier: "uu"
 	},
-	"Nidoqueen": {
-		tier: "UU"
+	"nidoqueen": {
+		tier: "uu"
 	},
-	"NidoranF": {
-		tier: "LC"
+	"nidoranf": {
+		tier: "lc"
 	},
-	"NidoranM": {
-		tier: "LC"
+	"nidoranm": {
+		tier: "lc"
 	},
-	"Nidorina": {
-		tier: "NFE"
+	"nidorina": {
+		tier: "nfe"
 	},
-	"Nidorino": {
-		tier: "NFE"
+	"nidorino": {
+		tier: "nfe"
 	},
-	"Nincada": {
-		tier: "LC"
+	"nincada": {
+		tier: "lc"
 	},
-	"Ninetales": {
-		tier: "OU"
+	"ninetales": {
+		tier: "ou"
 	},
-	"Ninjask": {
-		tier: "NU"
+	"ninjask": {
+		tier: "nu"
 	},
-	"Noctowl": {
-		tier: "NU"
+	"noctowl": {
+		tier: "nu"
 	},
-	"Nosepass": {
-		tier: "LC"
+	"nosepass": {
+		tier: "lc"
 	},
-	"Numel": {
-		tier: "LC"
+	"numel": {
+		tier: "lc"
 	},
-	"Nuzleaf": {
-		tier: "NFE"
+	"nuzleaf": {
+		tier: "nfe"
 	},
-	"Octillery": {
-		tier: "NU"
+	"octillery": {
+		tier: "nu"
 	},
-	"Oddish": {
-		tier: "LC"
+	"oddish": {
+		tier: "lc"
 	},
-	"Omanyte": {
-		tier: "LC"
+	"omanyte": {
+		tier: "lc"
 	},
-	"Omastar": {
-		tier: "RU"
+	"omastar": {
+		tier: "ru"
 	},
-	"Onix": {
-		tier: "LC"
+	"onix": {
+		tier: "lc"
 	},
-	"Oshawott": {
-		tier: "LC"
+	"oshawott": {
+		tier: "lc"
 	},
-	"Pachirisu": {
-		tier: "NU"
+	"pachirisu": {
+		tier: "nu"
 	},
-	"Palkia": {
-		tier: "Uber"
+	"palkia": {
+		tier: "uber"
 	},
-	"Palpitoad": {
-		tier: "NFE"
+	"palpitoad": {
+		tier: "nfe"
 	},
-	"Panpour": {
-		tier: "LC"
+	"panpour": {
+		tier: "lc"
 	},
-	"Pansage": {
-		tier: "LC"
+	"pansage": {
+		tier: "lc"
 	},
-	"Pansear": {
-		tier: "LC"
+	"pansear": {
+		tier: "lc"
 	},
-	"Paras": {
-		tier: "LC"
+	"paras": {
+		tier: "lc"
 	},
-	"Parasect": {
-		tier: "NU"
+	"parasect": {
+		tier: "nu"
 	},
-	"Patrat": {
-		tier: "LC"
+	"patrat": {
+		tier: "lc"
 	},
-	"Pawniard": {
-		tier: "LC"
+	"pawniard": {
+		tier: "lc"
 	},
-	"Pelipper": {
-		tier: "NU"
+	"pelipper": {
+		tier: "nu"
 	},
-	"Persian": {
-		tier: "NU"
+	"persian": {
+		tier: "nu"
 	},
-	"Petilil": {
-		tier: "LC"
+	"petilil": {
+		tier: "lc"
 	},
-	"Phanpy": {
-		tier: "LC"
+	"phanpy": {
+		tier: "lc"
 	},
-	"Phione": {
-		tier: "NU"
+	"phione": {
+		tier: "nu"
 	},
-	"Pichu": {
-		tier: "LC"
+	"pichu": {
+		tier: "lc"
 	},
-	"Pidgeot": {
-		tier: "NU"
+	"pidgeot": {
+		tier: "nu"
 	},
-	"Pidgeotto": {
-		tier: "NFE"
+	"pidgeotto": {
+		tier: "nfe"
 	},
-	"Pidgey": {
-		tier: "LC"
+	"pidgey": {
+		tier: "lc"
 	},
-	"Pidove": {
-		tier: "LC"
+	"pidove": {
+		tier: "lc"
 	},
-	"Pignite": {
-		tier: "NFE"
+	"pignite": {
+		tier: "nfe"
 	},
-	"Pikachu": {
-		tier: "NU"
+	"pikachu": {
+		tier: "nu"
 	},
-	"Piloswine": {
-		tier: "NU"
+	"piloswine": {
+		tier: "nu"
 	},
-	"Pineco": {
-		tier: "LC"
+	"pineco": {
+		tier: "lc"
 	},
-	"Pinsir": {
-		tier: "NU"
+	"pinsir": {
+		tier: "nu"
 	},
-	"Piplup": {
-		tier: "LC"
+	"piplup": {
+		tier: "lc"
 	},
-	"Plusle": {
-		tier: "NU"
+	"plusle": {
+		tier: "nu"
 	},
-	"Politoed": {
-		tier: "OU"
+	"politoed": {
+		tier: "ou"
 	},
-	"Poliwag": {
-		tier: "LC"
+	"poliwag": {
+		tier: "lc"
 	},
-	"Poliwhirl": {
-		tier: "NFE"
+	"poliwhirl": {
+		tier: "nfe"
 	},
-	"Poliwrath": {
-		tier: "RU"
+	"poliwrath": {
+		tier: "ru"
 	},
-	"Ponyta": {
-		tier: "LC"
+	"ponyta": {
+		tier: "lc"
 	},
-	"Poochyena": {
-		tier: "LC"
+	"poochyena": {
+		tier: "lc"
 	},
-	"Porygon": {
-		tier: "LC"
+	"porygon": {
+		tier: "lc"
 	},
-	"Porygon-Z": {
-		tier: "BL2"
+	"porygonz": {
+		tier: "bl2"
 	},
-	"Porygon2": {
-		tier: "UU"
+	"porygon2": {
+		tier: "uu"
 	},
-	"Primeape": {
-		tier: "RU"
+	"primeape": {
+		tier: "ru"
 	},
-	"Prinplup": {
-		tier: "NFE"
+	"prinplup": {
+		tier: "nfe"
 	},
-	"Probopass": {
-		tier: "NU"
+	"probopass": {
+		tier: "nu"
 	},
-	"Psyduck": {
-		tier: "LC"
+	"psyduck": {
+		tier: "lc"
 	},
-	"Pupitar": {
-		tier: "NFE"
+	"pupitar": {
+		tier: "nfe"
 	},
-	"Purrloin": {
-		tier: "LC"
+	"purrloin": {
+		tier: "lc"
 	},
-	"Purugly": {
-		tier: "NU"
+	"purugly": {
+		tier: "nu"
 	},
-	"Quagsire": {
-		tier: "NU"
+	"quagsire": {
+		tier: "nu"
 	},
-	"Quilava": {
-		tier: "NFE"
+	"quilava": {
+		tier: "nfe"
 	},
-	"Qwilfish": {
-		tier: "RU"
+	"qwilfish": {
+		tier: "ru"
 	},
-	"Raichu": {
-		tier: "NU"
+	"raichu": {
+		tier: "nu"
 	},
-	"Raikou": {
-		tier: "UU"
+	"raikou": {
+		tier: "uu"
 	},
-	"Ralts": {
-		tier: "LC"
+	"ralts": {
+		tier: "lc"
 	},
-	"Rampardos": {
-		tier: "NU"
+	"rampardos": {
+		tier: "nu"
 	},
-	"Rapidash": {
-		tier: "NU"
+	"rapidash": {
+		tier: "nu"
 	},
-	"Raticate": {
-		tier: "NU"
+	"raticate": {
+		tier: "nu"
 	},
-	"Rattata": {
-		tier: "LC"
+	"rattata": {
+		tier: "lc"
 	},
-	"Rayquaza": {
-		tier: "Uber"
+	"rayquaza": {
+		tier: "uber"
 	},
-	"Regice": {
-		tier: "NU"
+	"regice": {
+		tier: "nu"
 	},
-	"Regigigas": {
-		tier: "NU"
+	"regigigas": {
+		tier: "nu"
 	},
-	"Regirock": {
-		tier: "NU"
+	"regirock": {
+		tier: "nu"
 	},
-	"Registeel": {
-		tier: "UU"
+	"registeel": {
+		tier: "uu"
 	},
-	"Relicanth": {
-		tier: "NU"
+	"relicanth": {
+		tier: "nu"
 	},
-	"Remoraid": {
-		tier: "LC"
+	"remoraid": {
+		tier: "lc"
 	},
-	"Reshiram": {
-		tier: "Uber"
+	"reshiram": {
+		tier: "uber"
 	},
-	"Reuniclus": {
-		tier: "OU"
+	"reuniclus": {
+		tier: "ou"
 	},
-	"Rhydon": {
-		tier: "RU"
+	"rhydon": {
+		tier: "ru"
 	},
-	"Rhyhorn": {
-		tier: "LC"
+	"rhyhorn": {
+		tier: "lc"
 	},
-	"Rhyperior": {
-		tier: "UU"
+	"rhyperior": {
+		tier: "uu"
 	},
-	"Riolu": {
-		tier: "LC"
+	"riolu": {
+		tier: "lc"
 	},
-	"Roggenrola": {
-		tier: "LC"
+	"roggenrola": {
+		tier: "lc"
 	},
-	"Roselia": {
-		tier: "RU"
+	"roselia": {
+		tier: "ru"
 	},
-	"Roserade": {
-		tier: "UU"
+	"roserade": {
+		tier: "uu"
 	},
-	"Rotom": {
-		tier: "RU"
+	"rotom": {
+		tier: "ru"
 	},
-	"Rotom-C": {
-		tier: "RU"
+	"rotomc": {
+		tier: "ru"
 	},
-	"Rotom-F": {
-		tier: "NU"
+	"rotomf": {
+		tier: "nu"
 	},
-	"Rotom-H": {
-		tier: "UU"
+	"rotomh": {
+		tier: "uu"
 	},
-	"Rotom-S": {
-		tier: "NU"
+	"rotoms": {
+		tier: "nu"
 	},
-	"Rotom-W": {
-		tier: "OU"
+	"rotomw": {
+		tier: "ou"
 	},
-	"Rufflet": {
-		tier: "LC"
+	"rufflet": {
+		tier: "lc"
 	},
-	"Sableye": {
-		tier: "UU"
+	"sableye": {
+		tier: "uu"
 	},
-	"Salamence": {
-		tier: "OU"
+	"salamence": {
+		tier: "ou"
 	},
-	"Samurott": {
-		tier: "NU"
+	"samurott": {
+		tier: "nu"
 	},
-	"Sandile": {
-		tier: "LC"
+	"sandile": {
+		tier: "lc"
 	},
-	"Sandshrew": {
-		tier: "LC"
+	"sandshrew": {
+		tier: "lc"
 	},
-	"Sandslash": {
-		tier: "RU"
+	"sandslash": {
+		tier: "ru"
 	},
-	"Sawk": {
-		tier: "NU"
+	"sawk": {
+		tier: "nu"
 	},
-	"Sawsbuck": {
-		tier: "RU"
+	"sawsbuck": {
+		tier: "ru"
 	},
-	"Sceptile": {
-		tier: "RU"
+	"sceptile": {
+		tier: "ru"
 	},
-	"Scizor": {
-		tier: "OU"
+	"scizor": {
+		tier: "ou"
 	},
-	"Scolipede": {
-		tier: "RU"
+	"scolipede": {
+		tier: "ru"
 	},
-	"Scrafty": {
-		tier: "OU"
+	"scrafty": {
+		tier: "ou"
 	},
-	"Scraggy": {
-		tier: "LC"
+	"scraggy": {
+		tier: "lc"
 	},
-	"Scyther": {
-		tier: "RU"
+	"scyther": {
+		tier: "ru"
 	},
-	"Seadra": {
-		tier: "NU"
+	"seadra": {
+		tier: "nu"
 	},
-	"Seaking": {
-		tier: "NU"
+	"seaking": {
+		tier: "nu"
 	},
-	"Sealeo": {
-		tier: "NFE"
+	"sealeo": {
+		tier: "nfe"
 	},
-	"Seedot": {
-		tier: "LC"
+	"seedot": {
+		tier: "lc"
 	},
-	"Seel": {
-		tier: "LC"
+	"seel": {
+		tier: "lc"
 	},
-	"Seismitoad": {
-		tier: "NU"
+	"seismitoad": {
+		tier: "nu"
 	},
-	"Sentret": {
-		tier: "LC"
+	"sentret": {
+		tier: "lc"
 	},
-	"Serperior": {
-		tier: "NU"
+	"serperior": {
+		tier: "nu"
 	},
-	"Servine": {
-		tier: "NFE"
+	"servine": {
+		tier: "nfe"
 	},
-	"Seviper": {
-		tier: "NU"
+	"seviper": {
+		tier: "nu"
 	},
-	"Sewaddle": {
-		tier: "LC"
+	"sewaddle": {
+		tier: "lc"
 	},
-	"Sharpedo": {
-		tier: "RU"
+	"sharpedo": {
+		tier: "ru"
 	},
-	"Shaymin": {
-		tier: "UU"
+	"shaymin": {
+		tier: "uu"
 	},
-	"Shaymin-S": {
-		tier: "Uber"
+	"shaymins": {
+		tier: "uber"
 	},
-	"Shedinja": {
-		tier: "NU"
+	"shedinja": {
+		tier: "nu"
 	},
-	"Shelgon": {
-		tier: "NU"
+	"shelgon": {
+		tier: "nu"
 	},
-	"Shellder": {
-		tier: "LC"
+	"shellder": {
+		tier: "lc"
 	},
-	"Shellos": {
-		tier: "LC"
+	"shellos": {
+		tier: "lc"
 	},
-	"Shelmet": {
-		tier: "LC"
+	"shelmet": {
+		tier: "lc"
 	},
-	"Shieldon": {
-		tier: "LC"
+	"shieldon": {
+		tier: "lc"
 	},
-	"Shiftry": {
-		tier: "NU"
+	"shiftry": {
+		tier: "nu"
 	},
-	"Shinx": {
-		tier: "LC"
+	"shinx": {
+		tier: "lc"
 	},
-	"Shroomish": {
-		tier: "LC"
+	"shroomish": {
+		tier: "lc"
 	},
-	"Shuckle": {
-		tier: "NU"
+	"shuckle": {
+		tier: "nu"
 	},
-	"Shuppet": {
-		tier: "LC"
+	"shuppet": {
+		tier: "lc"
 	},
-	"Sigilyph": {
-		tier: "RU"
+	"sigilyph": {
+		tier: "ru"
 	},
-	"Silcoon": {
-		tier: "NFE"
+	"silcoon": {
+		tier: "nfe"
 	},
-	"Simipour": {
-		tier: "NU"
+	"simipour": {
+		tier: "nu"
 	},
-	"Simisage": {
-		tier: "NU"
+	"simisage": {
+		tier: "nu"
 	},
-	"Simisear": {
-		tier: "NU"
+	"simisear": {
+		tier: "nu"
 	},
-	"Skarmory": {
-		tier: "OU"
+	"skarmory": {
+		tier: "ou"
 	},
-	"Skiploom": {
-		tier: "NFE"
+	"skiploom": {
+		tier: "nfe"
 	},
-	"Skitty": {
-		tier: "LC"
+	"skitty": {
+		tier: "lc"
 	},
-	"Skorupi": {
-		tier: "LC"
+	"skorupi": {
+		tier: "lc"
 	},
-	"Skuntank": {
-		tier: "NU"
+	"skuntank": {
+		tier: "nu"
 	},
-	"Slaking": {
-		tier: "NU"
+	"slaking": {
+		tier: "nu"
 	},
-	"Slakoth": {
-		tier: "LC"
+	"slakoth": {
+		tier: "lc"
 	},
-	"Slowbro": {
-		tier: "UU"
+	"slowbro": {
+		tier: "uu"
 	},
-	"Slowking": {
-		tier: "RU"
+	"slowking": {
+		tier: "ru"
 	},
-	"Slowpoke": {
-		tier: "LC"
+	"slowpoke": {
+		tier: "lc"
 	},
-	"Slugma": {
-		tier: "LC"
+	"slugma": {
+		tier: "lc"
 	},
-	"Smeargle": {
-		tier: "RU"
+	"smeargle": {
+		tier: "ru"
 	},
-	"Smoochum": {
-		tier: "LC"
+	"smoochum": {
+		tier: "lc"
 	},
-	"Sneasel": {
-		tier: "LC Uber"
+	"sneasel": {
+		tier: "lcuber"
 	},
-	"Snivy": {
-		tier: "LC"
+	"snivy": {
+		tier: "lc"
 	},
-	"Snorlax": {
-		tier: "UU"
+	"snorlax": {
+		tier: "uu"
 	},
-	"Snorunt": {
-		tier: "LC"
+	"snorunt": {
+		tier: "lc"
 	},
-	"Snover": {
-		tier: "BL"
+	"snover": {
+		tier: "bl"
 	},
-	"Snubbull": {
-		tier: "LC"
+	"snubbull": {
+		tier: "lc"
 	},
-	"Solosis": {
-		tier: "LC"
+	"solosis": {
+		tier: "lc"
 	},
-	"Solrock": {
-		tier: "NU"
+	"solrock": {
+		tier: "nu"
 	},
-	"Spearow": {
-		tier: "LC"
+	"spearow": {
+		tier: "lc"
 	},
-	"Spheal": {
-		tier: "LC"
+	"spheal": {
+		tier: "lc"
 	},
-	"Spinarak": {
-		tier: "LC"
+	"spinarak": {
+		tier: "lc"
 	},
-	"Spinda": {
-		tier: "NU"
+	"spinda": {
+		tier: "nu"
 	},
-	"Spiritomb": {
-		tier: "RU"
+	"spiritomb": {
+		tier: "ru"
 	},
-	"Spoink": {
-		tier: "LC"
+	"spoink": {
+		tier: "lc"
 	},
-	"Squirtle": {
-		tier: "LC"
+	"squirtle": {
+		tier: "lc"
 	},
-	"Stantler": {
-		tier: "NU"
+	"stantler": {
+		tier: "nu"
 	},
-	"Staraptor": {
-		tier: "BL"
+	"staraptor": {
+		tier: "bl"
 	},
-	"Staravia": {
-		tier: "NFE"
+	"staravia": {
+		tier: "nfe"
 	},
-	"Starly": {
-		tier: "LC"
+	"starly": {
+		tier: "lc"
 	},
-	"Starmie": {
-		tier: "OU"
+	"starmie": {
+		tier: "ou"
 	},
-	"Staryu": {
-		tier: "LC"
+	"staryu": {
+		tier: "lc"
 	},
-	"Steelix": {
-		tier: "RU"
+	"steelix": {
+		tier: "ru"
 	},
-	"Stoutland": {
-		tier: "UU"
+	"stoutland": {
+		tier: "uu"
 	},
-	"Stunfisk": {
-		tier: "NU"
+	"stunfisk": {
+		tier: "nu"
 	},
-	"Stunky": {
-		tier: "LC"
+	"stunky": {
+		tier: "lc"
 	},
-	"Sudowoodo": {
-		tier: "NU"
+	"sudowoodo": {
+		tier: "nu"
 	},
-	"Suicune": {
-		tier: "UU"
+	"suicune": {
+		tier: "uu"
 	},
-	"Sunflora": {
-		tier: "NU"
+	"sunflora": {
+		tier: "nu"
 	},
-	"Sunkern": {
-		tier: "LC"
+	"sunkern": {
+		tier: "lc"
 	},
-	"Surskit": {
-		tier: "LC"
+	"surskit": {
+		tier: "lc"
 	},
-	"Swablu": {
-		tier: "LC"
+	"swablu": {
+		tier: "lc"
 	},
-	"Swadloon": {
-		tier: "NFE"
+	"swadloon": {
+		tier: "nfe"
 	},
-	"Swalot": {
-		tier: "NU"
+	"swalot": {
+		tier: "nu"
 	},
-	"Swampert": {
-		tier: "UU"
+	"swampert": {
+		tier: "uu"
 	},
-	"Swanna": {
-		tier: "NU"
+	"swanna": {
+		tier: "nu"
 	},
-	"Swellow": {
-		tier: "NU"
+	"swellow": {
+		tier: "nu"
 	},
-	"Swinub": {
-		tier: "LC"
+	"swinub": {
+		tier: "lc"
 	},
-	"Swoobat": {
-		tier: "NU"
+	"swoobat": {
+		tier: "nu"
 	},
-	"Taillow": {
-		tier: "LC"
+	"taillow": {
+		tier: "lc"
 	},
-	"Tangela": {
-		tier: "NU"
+	"tangela": {
+		tier: "nu"
 	},
-	"Tangrowth": {
-		tier: "RU"
+	"tangrowth": {
+		tier: "ru"
 	},
-	"Tauros": {
-		tier: "NU"
+	"tauros": {
+		tier: "nu"
 	},
-	"Teddiursa": {
-		tier: "LC"
+	"teddiursa": {
+		tier: "lc"
 	},
-	"Tentacool": {
-		tier: "LC"
+	"tentacool": {
+		tier: "lc"
 	},
-	"Tentacruel": {
-		tier: "OU"
+	"tentacruel": {
+		tier: "ou"
 	},
-	"Tepig": {
-		tier: "LC"
+	"tepig": {
+		tier: "lc"
 	},
-	"Terrakion": {
-		tier: "OU"
+	"terrakion": {
+		tier: "ou"
 	},
-	"Throh": {
-		tier: "NU"
+	"throh": {
+		tier: "nu"
 	},
-	"Thundurus": {
-		tier: "Uber"
+	"thundurus": {
+		tier: "uber"
 	},
-	"Timburr": {
-		tier: "LC"
+	"timburr": {
+		tier: "lc"
 	},
-	"Tirtouga": {
-		tier: "LC"
+	"tirtouga": {
+		tier: "lc"
 	},
-	"Togekiss": {
-		tier: "UU"
+	"togekiss": {
+		tier: "uu"
 	},
-	"Togepi": {
-		tier: "LC"
+	"togepi": {
+		tier: "lc"
 	},
-	"Togetic": {
-		tier: "NU"
+	"togetic": {
+		tier: "nu"
 	},
-	"Torchic": {
-		tier: "LC"
+	"torchic": {
+		tier: "lc"
 	},
-	"Torkoal": {
-		tier: "NU"
+	"torkoal": {
+		tier: "nu"
 	},
-	"Tornadus": {
-		tier: "OU"
+	"tornadus": {
+		tier: "ou"
 	},
-	"Torterra": {
-		tier: "NU"
+	"torterra": {
+		tier: "nu"
 	},
-	"Totodile": {
-		tier: "LC"
+	"totodile": {
+		tier: "lc"
 	},
-	"Toxicroak": {
-		tier: "OU"
+	"toxicroak": {
+		tier: "ou"
 	},
-	"Tranquill": {
-		tier: "NFE"
+	"tranquill": {
+		tier: "nfe"
 	},
-	"Trapinch": {
-		tier: "LC"
+	"trapinch": {
+		tier: "lc"
 	},
-	"Treecko": {
-		tier: "LC"
+	"treecko": {
+		tier: "lc"
 	},
-	"Tropius": {
-		tier: "NU"
+	"tropius": {
+		tier: "nu"
 	},
-	"Trubbish": {
-		tier: "LC"
+	"trubbish": {
+		tier: "lc"
 	},
-	"Turtwig": {
-		tier: "LC"
+	"turtwig": {
+		tier: "lc"
 	},
-	"Tympole": {
-		tier: "LC"
+	"tympole": {
+		tier: "lc"
 	},
-	"Tynamo": {
-		tier: "LC"
+	"tynamo": {
+		tier: "lc"
 	},
-	"Typhlosion": {
-		tier: "RU"
+	"typhlosion": {
+		tier: "ru"
 	},
-	"Tyranitar": {
-		tier: "OU"
+	"tyranitar": {
+		tier: "ou"
 	},
-	"Tyrogue": {
-		tier: "LC"
+	"tyrogue": {
+		tier: "lc"
 	},
-	"Umbreon": {
-		tier: "UU"
+	"umbreon": {
+		tier: "uu"
 	},
-	"Unfezant": {
-		tier: "NU"
+	"unfezant": {
+		tier: "nu"
 	},
-	"Unown": {
-		tier: "NU"
+	"unown": {
+		tier: "nu"
 	},
-	"Ursaring": {
-		tier: "NU"
+	"ursaring": {
+		tier: "nu"
 	},
-	"Uxie": {
-		tier: "RU"
+	"uxie": {
+		tier: "ru"
 	},
-	"Vanillish": {
-		tier: "NFE"
+	"vanillish": {
+		tier: "nfe"
 	},
-	"Vanillite": {
-		tier: "LC"
+	"vanillite": {
+		tier: "lc"
 	},
-	"Vanilluxe": {
-		tier: "NU"
+	"vanilluxe": {
+		tier: "nu"
 	},
-	"Vaporeon": {
-		tier: "OU"
+	"vaporeon": {
+		tier: "ou"
 	},
-	"Venipede": {
-		tier: "LC"
+	"venipede": {
+		tier: "lc"
 	},
-	"Venomoth": {
-		tier: "BL2"
+	"venomoth": {
+		tier: "bl2"
 	},
-	"Venonat": {
-		tier: "LC"
+	"venonat": {
+		tier: "lc"
 	},
-	"Venusaur": {
-		tier: "OU"
+	"venusaur": {
+		tier: "ou"
 	},
-	"Vespiquen": {
-		tier: "NU"
+	"vespiquen": {
+		tier: "nu"
 	},
-	"Vibrava": {
-		tier: "NFE"
+	"vibrava": {
+		tier: "nfe"
 	},
-	"Victini": {
-		tier: "UU"
+	"victini": {
+		tier: "uu"
 	},
-	"Victreebel": {
-		tier: "NU"
+	"victreebel": {
+		tier: "nu"
 	},
-	"Vigoroth": {
-		tier: "NU"
+	"vigoroth": {
+		tier: "nu"
 	},
-	"Vileplume": {
-		tier: "NU"
+	"vileplume": {
+		tier: "nu"
 	},
-	"Virizion": {
-		tier: "OU"
+	"virizion": {
+		tier: "ou"
 	},
-	"Volbeat": {
-		tier: "NU"
+	"volbeat": {
+		tier: "nu"
 	},
-	"Volcarona": {
-		tier: "OU"
+	"volcarona": {
+		tier: "ou"
 	},
-	"Voltorb": {
-		tier: "LC"
+	"voltorb": {
+		tier: "lc"
 	},
-	"Vullaby": {
-		tier: "LC"
+	"vullaby": {
+		tier: "lc"
 	},
-	"Vulpix": {
-		tier: "LC Uber"
+	"vulpix": {
+		tier: "lcuber"
 	},
-	"Wailmer": {
-		tier: "LC"
+	"wailmer": {
+		tier: "lc"
 	},
-	"Wailord": {
-		tier: "NU"
+	"wailord": {
+		tier: "nu"
 	},
-	"Walrein": {
-		tier: "NU"
+	"walrein": {
+		tier: "nu"
 	},
-	"Wartortle": {
-		tier: "NU"
+	"wartortle": {
+		tier: "nu"
 	},
-	"Watchog": {
-		tier: "NU"
+	"watchog": {
+		tier: "nu"
 	},
-	"Weavile": {
-		tier: "UU"
+	"weavile": {
+		tier: "uu"
 	},
-	"Weedle": {
-		tier: "LC"
+	"weedle": {
+		tier: "lc"
 	},
-	"Weepinbell": {
-		tier: "NFE"
+	"weepinbell": {
+		tier: "nfe"
 	},
-	"Weezing": {
-		tier: "NU"
+	"weezing": {
+		tier: "nu"
 	},
-	"Whimsicott": {
-		tier: "RU"
+	"whimsicott": {
+		tier: "ru"
 	},
-	"Whirlipede": {
-		tier: "NU"
+	"whirlipede": {
+		tier: "nu"
 	},
-	"Whiscash": {
-		tier: "NU"
+	"whiscash": {
+		tier: "nu"
 	},
-	"Whismur": {
-		tier: "LC"
+	"whismur": {
+		tier: "lc"
 	},
-	"Wigglytuff": {
-		tier: "NU"
+	"wigglytuff": {
+		tier: "nu"
 	},
-	"Wingull": {
-		tier: "LC"
+	"wingull": {
+		tier: "lc"
 	},
-	"Wobbuffet": {
-		tier: "BL"
+	"wobbuffet": {
+		tier: "bl"
 	},
-	"Woobat": {
-		tier: "LC"
+	"woobat": {
+		tier: "lc"
 	},
-	"Wooper": {
-		tier: "LC"
+	"wooper": {
+		tier: "lc"
 	},
-	"Wormadam": {
-		tier: "NU"
+	"wormadam": {
+		tier: "nu"
 	},
-	"Wormadam-G": {
-		tier: "NU"
+	"wormadamg": {
+		tier: "nu"
 	},
-	"Wormadam-S": {
-		tier: "NU"
+	"wormadams": {
+		tier: "nu"
 	},
-	"Wurmple": {
-		tier: "LC"
+	"wurmple": {
+		tier: "lc"
 	},
-	"Wynaut": {
-		tier: "LC"
+	"wynaut": {
+		tier: "lc"
 	},
-	"Xatu": {
-		tier: "UU"
+	"xatu": {
+		tier: "uu"
 	},
-	"Yamask": {
-		tier: "LC"
+	"yamask": {
+		tier: "lc"
 	},
-	"Yanma": {
-		tier: "LC Uber"
+	"yanma": {
+		tier: "lcuber"
 	},
-	"Yanmega": {
-		tier: "BL2"
+	"yanmega": {
+		tier: "bl2"
 	},
-	"Zangoose": {
-		tier: "NU"
+	"zangoose": {
+		tier: "nu"
 	},
-	"Zapdos": {
-		tier: "UU"
+	"zapdos": {
+		tier: "uu"
 	},
-	"Zebstrika": {
-		tier: "NU"
+	"zebstrika": {
+		tier: "nu"
 	},
-	"Zekrom": {
-		tier: "Uber"
+	"zekrom": {
+		tier: "uber"
 	},
-	"Zigzagoon": {
-		tier: "LC"
+	"zigzagoon": {
+		tier: "lc"
 	},
-	"Zoroark": {
-		tier: "UU"
+	"zoroark": {
+		tier: "uu"
 	},
-	"Zorua": {
-		tier: "LC"
+	"zorua": {
+		tier: "lc"
 	},
-	"Zubat": {
-		tier: "LC"
+	"zubat": {
+		tier: "lc"
 	},
-	"Zweilous": {
-		tier: "NU"
+	"zweilous": {
+		tier: "nu"
 	},
 	
 	// CAP
-	"Syclant": {
+	"syclant": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Revenankh": {
+	"revenankh": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Pyroak": {
+	"pyroak": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Fidgit": {
+	"fidgit": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Stratagem": {
+	"stratagem": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Arghonaut": {
+	"arghonaut": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Kitsunoh": {
+	"kitsunoh": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Cyclohm": {
+	"cyclohm": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Colossoil": {
+	"colossoil": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Krilowatt": {
+	"krilowatt": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
-	"Voodoom": {
+	"voodoom": {
 		isNonstandard: true,
-		tier: "G4CAP"
+		tier: "g4cap"
 	},
 
-	"Tomohawk": {
+	"tomohawk": {
 		isNonstandard: true,
-		tier: "G5CAP"
+		tier: "g5cap"
 	},
-	"Necturna": {
+	"necturna": {
 		isNonstandard: true,
-		tier: "G5CAP"
+		tier: "g5cap"
 	}
 	
 }
