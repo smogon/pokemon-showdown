@@ -113,13 +113,13 @@ exports.BattleScripts = {
 		if (accuracy !== true && moveRoll >= accuracy)
 		{
 			missed = true;
-			attrs = '[miss]';
+			attrs = ' | [miss]';
 		}
 		if (target.fainted && !canTargetFainted[move.target])
 		{
-			attrs = '[notarget]';
+			attrs = ' | [notarget]';
 		}
-		this.add('| move | p1: '+pokemon.name+' | '+move.name+' | p2: '+target.name+' | '+attrs);
+		this.add('| move | p1: '+pokemon.name+' | '+move.name+' | p2: '+target.name+attrs);
 		if (missed)
 		{
 			this.add('r-miss '+pokemon.id);
