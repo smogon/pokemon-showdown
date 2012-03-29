@@ -2137,52 +2137,21 @@ function Battle(roomid, format, rated)
 			this.debug('pokemon.damage said zero');
 			return 0;
 		}
-		switch (effect.id) {
-		case 'brn':
-			selfB.add('residual '+target.id+' burn '+target.hpPercent(damage)+target.getHealth());
-			break;
-		case 'psn':
-		case 'tox':
-			selfB.add('residual '+target.id+' poison '+target.hpPercent(damage)+target.getHealth());
-			break;
-		case 'Sandstorm':
-			selfB.add('residual '+target.id+' sandstorm '+target.hpPercent(damage)+target.getHealth());
-			break;
-		case 'Hail':
-			selfB.add('residual '+target.id+' hail '+target.hpPercent(damage)+target.getHealth());
-			break;
-		case 'recoil':
-			selfB.add('r-recoil '+target.id+' '+target.hpPercent(damage)+target.getHealth());
-			break;
-		case 'LifeOrb':
-			selfB.add('r-life-orb-recoil '+target.id+' '+target.hpPercent(damage)+target.getHealth());
-			break;
-		case 'partiallyTrapped':
-			var sourceEffect = selfB.getEffect(selfB.effectData.sourceEffect);
-			selfB.add('residual '+target.id+' damage '+sourceEffect.id+' '+target.hpPercent(damage)+target.getHealth());
-			break;
-		case 'StealthRock':
-			selfB.add('stealth-rock-damage '+target.id+' '+target.hpPercent(damage)+target.getHealth());
-			break;
-		case 'Spikes':
-			selfB.add('spikes-damage '+target.id+' '+target.hpPercent(damage)+target.getHealth());
-			break;
-		case 'LeechSeed':
-			// handled in heal step
-			break;
-		default:
-			if (effect.effectType === 'Ability')
+		if (effect.effectType === 'Move')
+		{
+			selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth());
+		}
+		else
+		{
+			var id = effect.id;
+			var partiallytrapped = '';
+			if (id === 'tox') id = 'psn';
+			if (id === 'partiallytrapped')
 			{
-				selfB.add('residual '+target.id+' ability-damage '+effect.id+' '+target.hpPercent(damage)+target.getHealth());
+				id = selfB.getEffect(selfB.effectData.sourceEffect).id;
+				partiallytrapped = '[partiallytrapped]';
 			}
-			else if (effect.effectType === 'Item')
-			{
-				selfB.add('residual '+target.id+' item-damage '+effect.id+' '+target.hpPercent(damage)+target.getHealth());
-			}
-			else
-			{
-				selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth());
-			}
+			selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+id, partiallytrapped);
 		}
 		if (target.fainted) selfB.faint(target);
 		else
