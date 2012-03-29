@@ -168,7 +168,7 @@ exports.BattleStatuses = {
 			pokemon.trapped = true;
 		}
 	},
-	partiallyTrapped: {
+	partiallytrapped: {
 		duration: 5,
 		durationCallback: function(target, source) {
 			if (source.item === 'GripClaw') return 5;
@@ -240,7 +240,7 @@ exports.BattleStatuses = {
 			}
 		}
 	},
-	mustRecharge: {
+	mustrecharge: {
 		duration: 2,
 		onBeforeMove: function(pokemon) {
 			this.add('cant-move '+pokemon.id+' must-recharge');
@@ -250,7 +250,7 @@ exports.BattleStatuses = {
 			pokemon.lockMove('recharge');
 		}
 	},
-	futureMove: {
+	futuremove: {
 		// this is a side condition
 		onStart: function(side) {
 			this.effectData.positions = [];
@@ -315,7 +315,7 @@ exports.BattleStatuses = {
 	
 	// weather is implemented here since it's so important to the game
 	
-	RainDance: {
+	raindance: {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function(source, effect) {
@@ -372,7 +372,7 @@ exports.BattleStatuses = {
 			this.add('weather none');
 		}
 	},
-	SunnyDay: {
+	sunnyday: {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function(source, effect) {
@@ -432,7 +432,7 @@ exports.BattleStatuses = {
 			this.add('weather none');
 		}
 	},
-	Sandstorm: {
+	sandstorm: {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function(source, effect) {
@@ -482,7 +482,7 @@ exports.BattleStatuses = {
 			this.add('weather none');
 		}
 	},
-	Hail: {
+	hail: {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function(source, effect) {

@@ -2,7 +2,7 @@ exports.BattleFormats = {
 	
 	// formats
 	
-	RandomBattle: {
+	randombattle: {
 		effectType: 'Format',
 		name: "Random Battle",
 		team: 'random',
@@ -12,14 +12,14 @@ exports.BattleFormats = {
 		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'SleepClause']
 	},
-	UnratedRandomBattle: {
+	unratedrandombattle: {
 		effectType: 'Format',
 		name: "Unrated Random Battle",
 		team: 'random',
 		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'SleepClause']
 	},
-	OU: {
+	ou: {
 		effectType: 'Format',
 		name: "OU",
 		challengeDefault: true,
@@ -30,7 +30,7 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
 		banlist: ['Uber', 'Drizzle ++ SwiftSwim']
 	},
-	CAP: {
+	cap: {
 		effectType: 'Format',
 		name: "CAP",
 		rated: true,
@@ -40,14 +40,14 @@ exports.BattleFormats = {
 		ruleset: ['CAPPokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
 		banlist: ['Uber', 'Drizzle ++ SwiftSwim']
 	},
-	CAPNecturnaPlaytest: {
+	capnecturnaplaytest: {
 		effectType: 'Format',
 		name: "CAP Necturna Playtest",
 		rated: true,
 		ruleset: ['CAPPokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
 		banlist: ['Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
 	},
-	Ubers: {
+	ubers: {
 		effectType: 'Format',
 		name: "Ubers",
 		rated: true,
@@ -57,7 +57,7 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
 		banlist: []
 	},
-	UU: {
+	uu: {
 		effectType: 'Format',
 		name: "UU",
 		rated: true,
@@ -67,7 +67,7 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
 		banlist: ['Uber','OU','BL', 'SnowWarning','Drought']
 	},
-	RU: {
+	ru: {
 		effectType: 'Format',
 		name: "RU",
 		rated: true,
@@ -77,7 +77,7 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
 		banlist: ['Uber','OU','BL','UU','BL2', 'SnowWarning','Drought', 'ShellSmash + BatonPass']
 	},
-	NU: {
+	nu: {
 		effectType: 'Format',
 		name: "NU",
 		rated: true,
@@ -87,7 +87,7 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
 		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'SnowWarning','Drought', 'ShellSmash + BatonPass']
 	},
-	Hackmons: {
+	hackmons: {
 		effectType: 'Format',
 		name: "Hackmons",
 		rated: true,
@@ -97,7 +97,7 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon'],
 		banlist: []
 	},
-	BalancedHackmons: {
+	balancedhackmons: {
 		effectType: 'Format',
 		name: "Balanced Hackmons",
 		rated: true,
@@ -107,12 +107,12 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon'],
 		banlist: ['OHKO', 'WonderGuard']
 	},
-	Haxmons: {
+	haxmons: {
 		effectType: 'Format',
 		name: "Haxmons",
 		ruleset: ['HaxClause', 'TeamPreview']
 	},
-	DebugMode: {
+	debugmode: {
 		effectType: 'Format',
 		name: "Debug Mode",
 		challengeShow: true,
