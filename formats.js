@@ -123,7 +123,7 @@ exports.BattleFormats = {
 	
 	// rules
 	
-	Standard: {
+	standard: {
 		effectType: 'Banlist',
 		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam', 'Legal'],
 		validateSet: function(set) {
@@ -144,7 +144,7 @@ exports.BattleFormats = {
 			set.moves = moves;
 		}
 	},
-	Pokemon: {
+	pokemon: {
 		effectType: 'Banlist',
 		validateSet: function(set, format) {
 			var item = this.getItem(set.item);
@@ -205,18 +205,18 @@ exports.BattleFormats = {
 			return problems;
 		}
 	},
-	CAPPokemon: {
+	cappokemon: {
 		effectType: 'Rule',
 		validateSet: function(set, format) {
 			// don't return
 			this.getEffect('Pokemon').validateSet.call(this, set, format);
 		}
 	},
-	Legal: {
+	legal: {
 		effectType: 'Banlist',
 		banlist: ['Crobat+BraveBird+Hypnosis']
 	},
-	PotD: {
+	potd: {
 		effectType: 'Rule',
 		onPotD: '',
 		onStart: function() {
@@ -226,7 +226,7 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	TeamPreview: {
+	teampreview: {
 		onStartPriority: -10,
 		onStart: function() {
 			for (var i=0; i<this.sides[0].pokemon.length; i++)
@@ -242,7 +242,7 @@ exports.BattleFormats = {
 			this.callback('team-preview');
 		}
 	},
-	HaxClause: {
+	haxclause: {
 		effectType: 'Rule',
 		onStart: function() {
 			this.add('| rule | Hax Clause');
@@ -260,7 +260,7 @@ exports.BattleFormats = {
 			move.willCrit = true;
 		}
 	},
-	SpeciesClause: {
+	speciesclause: {
 		effectType: 'Rule',
 		onStart: function() {
 			this.add('| rule | Species Clause');
@@ -276,7 +276,7 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	SleepClause: {
+	sleepclause: {
 		effectType: 'Rule',
 		onStart: function() {
 			this.add('| rule | Sleep Clause');
@@ -304,7 +304,7 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	FreezeClause: {
+	freezeclause: {
 		effectType: 'Rule',
 		onStart: function() {
 			this.add('| rule | Freeze Clause');
