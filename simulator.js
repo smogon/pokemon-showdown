@@ -71,11 +71,7 @@ function BattlePokemon(set, side)
 	var genders = {M:'M',F:'F'};
 	this.gender = this.template.gender || genders[set.gender] || (Math.random()*2<1?'M':'F');
 	if (this.gender === 'N') this.gender = '';
-	this.detailString = '['+(this.gender?this.gender+'|':'')+'L'+this.level+']';
-	
-	this.fullid = side.id+'-'+this.name+this.detailString+(this.species===this.name?'':'('+this.species+')');
-	
-	this.tpid = side.id+'-'+this.species+this.detailString;
+	this.details = this.species + (this.level==100?'':', L'+this.level) + (this.gender===''?'':', '+this.gender);
 	
 	this.baseFullid = this.fullid;
 	this.id = toId(this.fullid);
@@ -893,10 +889,9 @@ function BattlePokemon(set, side)
 		//var hpp = floor(48*selfP.hp/selfP.maxhp) || 1;
 		var hpp = floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
 		if (!selfP.hp) hpp = 0;
-		var status = selfP.status;
-		if (status==='tox') status = 'toxic';
-		if (!status) status = 'none';
-		return ' ('+hpp+'/100|'+status+')';
+		var status = '';
+		if (selfP.status) status = ' '+selfP.status;
+		return ' ('+hpp+'/100'+status+')';
 	};
 	this.lockMove = function(moveid) {
 		// shortcut function for locking a pokemon into a move
@@ -1870,7 +1865,7 @@ function Battle(roomid, format, rated)
 		var side = pokemon.side;
 		if (side.active[0] && !side.active[0].fainted)
 		{
-			selfB.add('switch-out '+side.active[0].id);
+			//selfB.add('switch-out '+side.active[0].id);
 		}
 		if (side.active[0])
 		{
@@ -1896,8 +1891,7 @@ function Battle(roomid, format, rated)
 		{
 			pokemon.moveset[m].used = false;
 		}
-		selfB.add('pokemon '+side.active[0].fullid);
-		selfB.add('switch-in '+side.active[0].id+side.active[0].getHealth());
+		selfB.add('| switch | '+side.active[0].fullname+' | '+side.active[0].details+' |'+side.active[0].getHealth());
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
@@ -1959,8 +1953,7 @@ function Battle(roomid, format, rated)
 		{
 			pokemon.moveset[m].used = false;
 		}
-		selfB.add('pokemon '+side.active[0].fullid);
-		selfB.add('drag-in '+side.active[0].id);
+		selfB.add('| drag | '+side.active[0].fullname+' | '+side.active[0].details+' |'+side.active[0].getHealth());
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
