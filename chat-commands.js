@@ -81,22 +81,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		return true;
 		break;
 
-	case 'me':
-		if (!target)
-		{
-			return true;
-		}
-		if (canTalk(user, room, socket))
-		{
-			room.add({
-				name: user.getIdentity(),
-				act: 1,
-				message: target
-			});
-		}
-		return true;
-		break;
-
 	case 'forfeit':
 	case 'concede':
 	case 'surrender':
