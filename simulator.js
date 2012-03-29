@@ -2928,7 +2928,7 @@ function Battle(roomid, format, rated)
 				selfB.sides[1] = selfB.foeSide;
 				user.sides[selfB.roomid] = selfB.foeSide;
 			}
-			selfB.add('| player | '+selfB.foeSide.id+' | '+selfB.foeSide.name+' | '+selfB.foeSide.user.avatar);
+			selfB.add('| player | p2 | '+selfB.foeSide.name+' | '+selfB.foeSide.user.avatar);
 		}
 		else
 		{
@@ -2945,18 +2945,22 @@ function Battle(roomid, format, rated)
 				selfB.sides[0] = selfB.allySide;
 				user.sides[selfB.roomid] = selfB.allySide;
 			}
-			selfB.add('| player | '+selfB.allySide.id+' | '+selfB.allySide.name+' | '+selfB.allySide.user.avatar);
+			selfB.add('| player | p1 | '+selfB.allySide.name+' | '+selfB.allySide.user.avatar);
 		}
 		selfB.start();
 		return true;
 	};
 	this.rename = function(user) {
 		if (!user || !user.sides[selfB.roomid]) return;
-		var side = user.sides[selfB.roomid];
-		if (side === selfB.allySide || side === selfB.foeSide)
+		if (user.sides[selfB.roomid] === selfB.allySide)
 		{
-			side.name = user.name;
-			selfB.add('| player | '+side.id+' | '+side.name+' | '+user.avatar);
+			user.sides[selfB.roomid].name = user.name;
+			selfB.add('| player | p1 | '+selfB.allySide.name+' | '+user.avatar);
+		}
+		if (user.sides[selfB.roomid] === selfB.foeSide)
+		{
+			user.sides[selfB.roomid].name = user.name;
+			selfB.add('| player | p2 | '+selfB.foeSide.name+' | '+user.avatar);
 		}
 	};
 	this.leave = function(user) {
