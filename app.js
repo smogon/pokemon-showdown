@@ -604,7 +604,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 	this.rename = function(user, oldid, joining) {
 		if (joining)
 		{
-			selfR.battle.add('join '+user.name);
+			selfR.battle.add('| join | '+user.name);
 		}
 		if (user.sides[selfR.id])
 		{
@@ -674,7 +674,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			return;
 		}
 		delete selfR.users[user.userid];
-		selfR.battle.add('leave '+user.name);
+		selfR.battle.add('| leave | '+user.name);
 		selfR.update();
 	};
 	this.isEmpty = function() {
