@@ -91,7 +91,7 @@ function BattleTools()
 			if (!move.id) move.id = id;
 			if (!move.name) move.name = name;
 			if (!move.fullname) move.fullname = 'move: '+name;
-			if (!move.toString) move.toString = selfT.effectToString;
+			move.toString = selfT.effectToString;
 			if (!move.critRatio) move.critRatio = 1;
 			if (!move.baseType) move.baseType = move.type;
 			if (!move.effectType) move.effectType = 'Move';
@@ -162,9 +162,8 @@ function BattleTools()
 			}
 			if (!effect.id) effect.id = id;
 			if (!effect.name) effect.name = name;
-			if (!effect.toString) effect.toString = selfT.effectToString;
 			if (!effect.fullname) effect.fullname = name;
-			if (!effect.toString) effect.toString = selfT.effectToString;
+			effect.toString = selfT.effectToString;
 			if (!effect.category) effect.category = 'Effect';
 			if (!effect.effectType) effect.effectType = 'Effect';
 		}
@@ -182,9 +181,8 @@ function BattleTools()
 			}
 			if (!item.id) item.id = id;
 			if (!item.name) item.name = name;
-			if (!item.toString) item.toString = selfT.effectToString;
 			if (!item.fullname) item.fullname = 'item: '+name;
-			if (!item.toString) item.toString = selfT.effectToString;
+			item.toString = selfT.effectToString;
 			if (!item.category) item.category = 'Effect';
 			if (!item.effectType) item.effectType = 'Item';
 			if (item.isBerry) item.fling = { basePower: 10 };
@@ -203,9 +201,8 @@ function BattleTools()
 			}
 			if (!ability.id) ability.id = id;
 			if (!ability.name) ability.name = name;
-			if (!ability.toString) ability.toString = selfT.effectToString;
 			if (!ability.fullname) ability.fullname = 'ability: '+name;
-			if (!ability.toString) ability.toString = selfT.effectToString;
+			ability.toString = selfT.effectToString;
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
 		}

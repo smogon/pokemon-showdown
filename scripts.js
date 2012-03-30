@@ -114,16 +114,16 @@ exports.BattleScripts = {
 		if (accuracy !== true && moveRoll >= accuracy)
 		{
 			missed = true;
-			attrs = '[miss]';
+			attrs = '| [miss]';
 		}
 		if (target.fainted && !canTargetFainted[move.target])
 		{
-			attrs = '[notarget]';
+			attrs = '| [notarget]';
 		}
-		this.add('move', pokemon.fullname, move.name, target.fullname, attrs);
+		this.add('move', pokemon, move, target+attrs);
 		if (missed)
 		{
-			this.add('-miss', pokemon.fullname);
+			this.add('-miss', pokemon);
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent')
 			{
@@ -178,7 +178,7 @@ exports.BattleScripts = {
 				if (moveDamage === false) return true;
 				damage += (moveDamage || 0);
 			}
-			this.add('-hitcount', target.fullname, i);
+			this.add('-hitcount', target, i);
 		}
 		
 		target.gotAttacked(move, damage, pokemon);
@@ -272,7 +272,7 @@ exports.BattleScripts = {
 			}
 			if (!hitResult)
 			{
-				if (hitResult === false) this.add('r-failed '+target.id);
+				if (hitResult === false) this.add('-fail', target);
 				return false;
 			}
 			// only run the hit events for the hit itself, not the secondary or self hits
@@ -283,7 +283,7 @@ exports.BattleScripts = {
 					hitResult = this.runEvent('TryHit', target, pokemon, move);
 					if (!hitResult)
 					{
-						if (hitResult === false) this.add('r-failed '+target.id);
+						if (hitResult === false) this.add('-fail', target);
 						if (hitResult !== 0) // special Substitute hit flag
 						{
 							return false;
@@ -302,7 +302,7 @@ exports.BattleScripts = {
 			}
 			else if (!hitResult)
 			{
-				if (hitResult === false) this.add('r-failed '+target.id);
+				if (hitResult === false) this.add('-fail', target);
 				return false;
 			}
 		}
@@ -328,7 +328,7 @@ exports.BattleScripts = {
 			}
 			else if (damage === false && typeof hitResult === 'undefined')
 			{
-				this.add('r-failed '+target.id);
+				this.add('-fail', target);
 			}
 			if (moveData.boosts && !target.fainted)
 			{
@@ -339,10 +339,10 @@ exports.BattleScripts = {
 				var d = target.heal(target.maxhp * moveData.heal[0] / moveData.heal[1]);
 				if (!d)
 				{
-					this.add('r-failed '+target.id);
+					this.add('-fail', target);
 					return false;
 				}
-				this.add('-heal',target.fullname,target.hpPercent(d)+target.getHealth());
+				this.add('-heal', target, target.hpChange(d));
 				didSomething = true;
 			}
 			if (moveData.status)
@@ -354,7 +354,7 @@ exports.BattleScripts = {
 				else if (!isSecondary)
 				{
 					// already-status
-					this.add('r-status '+target.id+' '+target.status);
+					this.add('-status', target, target.status);
 				}
 				didSomething = true;
 			}
@@ -414,7 +414,7 @@ exports.BattleScripts = {
 			}
 			if (!hitResult && !didSomething)
 			{
-				if (hitResult === false) this.add('r-failed '+target.id);
+				if (hitResult === false) this.add('-fail', target);
 				return false;
 			}
 		}

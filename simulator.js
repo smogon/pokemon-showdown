@@ -663,7 +663,7 @@ function BattlePokemon(set, side)
 		// unlike clearStatus, gives cure message
 		if (selfP.status)
 		{
-			selfB.add('-curestatus',selfP.fullname,selfP.status);
+			selfB.add('-curestatus', selfP, selfP.status);
 			selfP.setStatus('');
 		}
 	};
@@ -729,7 +729,7 @@ function BattlePokemon(set, side)
 		var item = selfP.getItem();
 		if (selfB.runEvent('UseItem', selfP, null, null, item) && selfB.runEvent('EatItem', selfP, null, null, item))
 		{
-			selfB.add('-enditem',selfP.fullname,item.name,'[eat]');
+			selfB.add('-enditem', selfP, item, '[eat]');
 			
 			selfB.singleEvent('Eat', item, selfP.itemData, selfP, source, sourceEffect);
 			
@@ -749,12 +749,12 @@ function BattlePokemon(set, side)
 		var item = selfP.getItem();
 		if (selfB.runEvent('UseItem', selfP, null, null, item))
 		{
-			var effect = '';
-			if (item.isGem) effect = ' | [from] gem';
+			var fromEffect = '';
+			if (item.isGem) fromEffect = ' | [from] gem';
 			switch (item.id)
 			{
 			default:
-				selfB.add('-enditem',selfP.fullname,item.name+effect);
+				selfB.add('-enditem', selfP, item+fromEffect);
 				break;
 			}
 			
@@ -889,7 +889,7 @@ function BattlePokemon(set, side)
 		//return floor(floor(d*48/selfP.maxhp + 0.5)*100/48);
 		return floor(d*100/selfP.maxhp + 0.5);
 	};
-	this.getHealth = function(health) {
+	this.getHealth = function() {
 		if (selfP.fainted) return ' (0)';
 		//var hpp = floor(48*selfP.hp/selfP.maxhp) || 1;
 		var hpp = floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
@@ -897,6 +897,9 @@ function BattlePokemon(set, side)
 		var status = '';
 		if (selfP.status) status = ' '+selfP.status;
 		return ' ('+hpp+'/100'+status+')';
+	};
+	this.hpChange = function(d) {
+		return ''+selfP.hpPercent(d)+selfP.getHealth();
 	};
 	this.lockMove = function(moveid) {
 		// shortcut function for locking a pokemon into a move
@@ -929,7 +932,7 @@ function BattlePokemon(set, side)
 			selfB.debug('natural immunity');
 			if (message)
 			{
-				selfB.add('-immune', selfP.fullname, '[msg]');
+				selfB.add('-immune', selfP);
 			}
 			return false;
 		}
@@ -939,7 +942,7 @@ function BattlePokemon(set, side)
 			selfB.debug('artificial immunity');
 			if (message && immunity !== null)
 			{
-				selfB.add('-immune', selfP.fullname, '[msg]');
+				selfB.add('-immune', selfP);
 			}
 			return false;
 		}
@@ -1752,7 +1755,7 @@ function Battle(roomid, format, rated)
 		}
 		else if (type==='team-preview')
 		{
-			selfB.add('team-preview');
+			selfB.add('teampreview');
 			selfB.allySide.decision = null;
 			selfB.allySide.emitUpdate({request: {teamPreview: true, side: selfB.allySide.getData()}});
 			selfB.foeSide.decision = null;
@@ -1854,11 +1857,11 @@ function Battle(roomid, format, rated)
 		selfB.add('');
 		if (winSide)
 		{
-			selfB.add('win '+winSide.name);
+			selfB.add('win', winSide.name);
 		}
 		else
 		{
-			selfB.add('win');
+			selfB.add('tie');
 		}
 		selfB.ended = true;
 		selfB.active = false;
@@ -1896,7 +1899,7 @@ function Battle(roomid, format, rated)
 		{
 			pokemon.moveset[m].used = false;
 		}
-		selfB.add('switch', side.active[0].fullname, side.active[0].details, side.active[0].getHealth());
+		selfB.add('switch', side.active[0], side.active[0].details, side.active[0].getHealth());
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
@@ -1958,7 +1961,7 @@ function Battle(roomid, format, rated)
 		{
 			pokemon.moveset[m].used = false;
 		}
-		selfB.add('drag', side.active[0].fullname, side.active[0].details, side.active[0].getHealth());
+		selfB.add('drag', side.active[0], side.active[0].details, side.active[0].getHealth());
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
@@ -2060,11 +2063,11 @@ function Battle(roomid, format, rated)
 				default:
 					if (effect.effectType === 'Move')
 					{
-						selfB.add('-boost',target.fullname,i,boost[i]);
+						selfB.add('-boost', target, i, boost[i]);
 					}
 					else
 					{
-						selfB.add('-boost',target.fullname,i,boost[i],'[from] '+effect.name);
+						selfB.add('-boost', target, i, boost[i], '[from] '+effect.fullname);
 					}
 					break;
 				}
@@ -2079,17 +2082,14 @@ function Battle(roomid, format, rated)
 			{
 				switch (effect.id)
 				{
-				case 'Intimidate':
-					selfB.add('-unboost',target.fullname,i,(-boost[i]));
-					break;
 				default:
 					if (effect.effectType === 'Move')
 					{
-						selfB.add('-unboost',target.fullname,i,(-boost[i]));
+						selfB.add('-unboost', target, i, -boost[i]);
 					}
 					else
 					{
-						selfB.add('-unboost',target.fullname,i,(-boost[i]),'[from] '+effect.name);
+						selfB.add('-unboost', target, i, -boost[i], '[from] '+effect.fullname);
 					}
 					break;
 				}
@@ -2131,21 +2131,21 @@ function Battle(roomid, format, rated)
 			this.debug('pokemon.damage said zero');
 			return 0;
 		}
-		var name = effect.name;
+		var name = effect.fullname;
 		if (name === 'tox') name = 'psn';
-		switch (name)
+		switch (effect.id)
 		{
 			case 'partiallytrapped':
-				selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+selfB.getEffect(selfB.effectData.sourceEffect).name, '[partiallytrapped]');
+				selfB.add('-damage', target, target.hpChange(damage), '[from] '+selfB.effectData.sourceEffect.fullname, '[partiallytrapped]');
 				break;
 			default:
 				if (effect.effectType === 'Move')
 				{
-					selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth());
+					selfB.add('-damage', target, target.hpChange(damage));
 				}
 				else
 				{
-					selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+name);
+					selfB.add('-damage', target, target.hpChange(damage), '[from] '+name);
 				}
 				break;
 		}
@@ -2182,11 +2182,11 @@ function Battle(roomid, format, rated)
 		default:
 			if (effect.effectType === 'Move')
 			{
-				selfB.add('-heal',target.fullname,target.hpPercent(damage)+target.getHealth());
+				selfB.add('-heal', target, target.hpChange(damage));
 			}
 			else
 			{
-				selfB.add('-heal',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+effect.id);
+				selfB.add('-heal', target, target.hpChange(damage), '[from] '+effect.fullname);
 			}
 			break;
 		}
@@ -2221,7 +2221,7 @@ function Battle(roomid, format, rated)
 		{
 			if (target.level > pokemon.level)
 			{
-				this.add('-failed', target.fullname);
+				this.add('-failed', target);
 				return false;
 			}
 			return target.maxhp;
@@ -2328,7 +2328,7 @@ function Battle(roomid, format, rated)
 		var totalTypeMod = selfB.getEffectiveness(type, target);
 		if (totalTypeMod > 0)
 		{
-			if (!suppressMessages) selfB.add('-supereffective', target.fullname);
+			if (!suppressMessages) selfB.add('-supereffective', target);
 			baseDamage *= 2;
 			if (totalTypeMod >= 2)
 			{
@@ -2337,7 +2337,7 @@ function Battle(roomid, format, rated)
 		}
 		if (totalTypeMod < 0)
 		{
-			if (!suppressMessages) selfB.add('-resisted', target.fullname);
+			if (!suppressMessages) selfB.add('-resisted', target);
 			baseDamage /= 2;
 			if (totalTypeMod <= -2)
 			{
@@ -2347,7 +2347,7 @@ function Battle(roomid, format, rated)
 		// crit
 		if (move.crit)
 		{
-			if (!suppressMessages) selfB.add('-crit', target.fullname);
+			if (!suppressMessages) selfB.add('-crit', target);
 			baseDamage *= (move.critModifier || 2);
 		}
 		// randomizer
@@ -2418,7 +2418,7 @@ function Battle(roomid, format, rated)
 			var faintData = selfB.faintQueue.shift();
 			if (!faintData.target.fainted)
 			{
-				selfB.add('faint',faintData.target.fullname);
+				selfB.add('faint', faintData.target);
 				selfB.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
 				faintData.target.fainted = true;
 				faintData.target.side.pokemonLeft--;
@@ -2927,14 +2927,14 @@ function Battle(roomid, format, rated)
 		{
 			delete user.sides[selfB.roomid];
 			selfB.foeSide.user = null;
-			selfB.add('foe-player ');
+			selfB.add('player', 'p2');
 			selfB.active = false;
 		}
 		else if (selfB.allySide === user.sides[selfB.roomid])
 		{
 			delete user.sides[selfB.roomid];
 			selfB.allySide.user = null;
-			selfB.add('player ');
+			selfB.add('player', 'p1');
 			selfB.active = false;
 		}
 		return true;
