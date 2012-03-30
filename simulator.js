@@ -2326,7 +2326,7 @@ function Battle(roomid, format, rated)
 		var totalTypeMod = selfB.getEffectiveness(type, target);
 		if (totalTypeMod > 0)
 		{
-			if (!suppressMessages) selfB.add('-supereffective');
+			if (!suppressMessages) selfB.add('-supereffective', target.fullname);
 			baseDamage *= 2;
 			if (totalTypeMod >= 2)
 			{
@@ -2335,7 +2335,7 @@ function Battle(roomid, format, rated)
 		}
 		if (totalTypeMod < 0)
 		{
-			if (!suppressMessages) selfB.add('-resisted');
+			if (!suppressMessages) selfB.add('-resisted', target.fullname);
 			baseDamage /= 2;
 			if (totalTypeMod <= -2)
 			{
@@ -2345,7 +2345,7 @@ function Battle(roomid, format, rated)
 		// crit
 		if (move.crit)
 		{
-			if (!suppressMessages) selfB.add('-crit');
+			if (!suppressMessages) selfB.add('-crit', target.fullname);
 			baseDamage *= (move.critModifier || 2);
 		}
 		// randomizer
