@@ -2227,7 +2227,7 @@ function Battle(roomid, format, rated)
 		{
 			if (target.level > pokemon.level)
 			{
-				this.add('r-failed '+target.id);
+				this.add('-failed', target.fullname);
 				return false;
 			}
 			return target.maxhp;
@@ -2334,7 +2334,7 @@ function Battle(roomid, format, rated)
 		var totalTypeMod = selfB.getEffectiveness(type, target);
 		if (totalTypeMod > 0)
 		{
-			if (!suppressMessages) selfB.add('r-super-effective');
+			if (!suppressMessages) selfB.add('-supereffective');
 			baseDamage *= 2;
 			if (totalTypeMod >= 2)
 			{
@@ -2343,7 +2343,7 @@ function Battle(roomid, format, rated)
 		}
 		if (totalTypeMod < 0)
 		{
-			if (!suppressMessages) selfB.add('r-resisted');
+			if (!suppressMessages) selfB.add('-resisted');
 			baseDamage /= 2;
 			if (totalTypeMod <= -2)
 			{
@@ -2353,7 +2353,7 @@ function Battle(roomid, format, rated)
 		// crit
 		if (move.crit)
 		{
-			if (!suppressMessages) selfB.add('r-crit');
+			if (!suppressMessages) selfB.add('-crit');
 			baseDamage *= (move.critModifier || 2);
 		}
 		// randomizer
