@@ -132,7 +132,7 @@ function BattlePokemon(set, side)
 				disabled: false,
 				used: false
 			});
-			this.moves.push(moveid);
+			this.moves.push(toId(move.name));
 		}
 	}
 	
