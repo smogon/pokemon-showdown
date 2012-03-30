@@ -10948,13 +10948,13 @@ exports.BattleMovedex = {
 				{
 					return damage;
 				}
-				if (damage > target.volatiles['Substitute'].hp)
+				if (damage > target.volatiles['substitute'].hp)
 				{
-					damage = target.volatiles['Substitute'].hp;
+					damage = target.volatiles['substitute'].hp;
 				}
 				target.volatiles['Substitute'].hp -= damage;
 				source.lastDamage = damage;
-				if (target.volatiles['Substitute'].hp <= 0)
+				if (target.volatiles['substitute'].hp <= 0)
 				{
 					target.removeVolatile('Substitute');
 					this.runEvent('AfterSubDamage', target, source, move, damage);
