@@ -2056,17 +2056,13 @@ function Battle(roomid, format, rated)
 				switch (effect.id)
 				{
 				default:
-					if (effect.effectType === 'Ability')
+					if (effect.effectType === 'Move')
 					{
-						selfB.add('r-ability-boost '+target.id+' '+i+' '+boost[i]+' '+effect.id);
-					}
-					else if (effect.effectType === 'Item')
-					{
-						selfB.add('r-item-boost '+target.id+' '+i+' '+boost[i]+' '+effect.id);
+						selfB.add('-boost',target.fullname,i,boost[i]);
 					}
 					else
 					{
-						selfB.add('r-boost '+target.id+' '+i+' '+boost[i]);
+						selfB.add('-boost',target.fullname,i,boost[i],'[from] '+effect.name);
 					}
 					break;
 				}
@@ -2082,20 +2078,16 @@ function Battle(roomid, format, rated)
 				switch (effect.id)
 				{
 				case 'Intimidate':
-					selfB.add('r-unboost '+target.id+' '+i+' '+(-boost[i]));
+					selfB.add('-unboost',target.fullname,i,(-boost[i]));
 					break;
 				default:
-					if (effect.effectType === 'Ability')
+					if (effect.effectType === 'Move')
 					{
-						selfB.add('r-ability-unboost '+target.id+' '+i+' '+(-boost[i])+' '+effect.id);
-					}
-					else if (effect.effectType === 'Item')
-					{
-						selfB.add('r-item-unboost '+target.id+' '+i+' '+(-boost[i])+' '+effect.id);
+						selfB.add('-unboost',target.fullname,i,(-boost[i]));
 					}
 					else
 					{
-						selfB.add('r-unboost '+target.id+' '+i+' '+(-boost[i]));
+						selfB.add('-unboost',target.fullname,i,(-boost[i]),'[from] '+effect.name);
 					}
 					break;
 				}
