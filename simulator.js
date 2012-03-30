@@ -729,7 +729,7 @@ function BattlePokemon(set, side)
 		var item = selfP.getItem();
 		if (selfB.runEvent('UseItem', selfP, null, null, item) && selfB.runEvent('EatItem', selfP, null, null, item))
 		{
-			selfB.add('r-eat '+selfP.id+' '+item.id);
+			selfB.add('-enditem',selfP.fullname,item.name,'[eat]');
 			
 			selfB.singleEvent('Eat', item, selfP.itemData, selfP, source, sourceEffect);
 			
@@ -749,10 +749,12 @@ function BattlePokemon(set, side)
 		var item = selfP.getItem();
 		if (selfB.runEvent('UseItem', selfP, null, null, item))
 		{
+			var effect = '';
+			if (item.isGem) effect = ' | [from] gem';
 			switch (item.id)
 			{
 			default:
-				selfB.add('residual '+selfP.id+' item-activate '+item.id);
+				selfB.add('-enditem',selfP.fullname,item.name+effect);
 				break;
 			}
 			
