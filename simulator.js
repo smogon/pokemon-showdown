@@ -76,9 +76,8 @@ function BattlePokemon(set, side)
 	this.fullname = this.side.id + ': ' + this.name;
 	this.details = this.species + (this.level==100?'':', L'+this.level) + (this.gender===''?'':', '+this.gender);
 	
-	this.baseFullid = this.fullid;
-	this.id = toId(this.fullid);
-	this.baseId = this.id;
+	this.id = this.fullname; // shouldn't really be used anywhere
+	this.illusion = null;
 	
 	this.fainted = false;
 	this.lastItem = '';
@@ -224,12 +223,12 @@ function BattlePokemon(set, side)
 	this.hp = this.hp || this.maxhp;
 	
 	this.toString = function() {
+		if (selfP.illusion) return selfP.illusion.fullname;
 		return selfP.fullname;
 	};
 	
 	this.update = function(init) {
-		selfP.id = selfP.baseId;
-		selfP.fullid = selfP.baseFullid;
+		selfP.illusion = null;
 		selfP.baseStats = selfP.template.baseStats;
 		// reset for Light Metal etc
 		selfP.weightkg = selfP.template.weightkg;
@@ -459,7 +458,7 @@ function BattlePokemon(set, side)
 		{
 			pokemon = baseTemplate;
 			baseTemplate = pokemon.template;
-			if (pokemon.fainted || pokemon.id !== pokemon.baseId || pokemon.volatiles['Substitute'])
+			if (pokemon.fainted || pokemon.illusion || pokemon.volatiles['Substitute'])
 			{
 				return false;
 			}
@@ -1010,8 +1009,9 @@ function BattleSide(user, battle, n)
 			data.pokemon.push({
 				name: pokemon.name,
 				species: pokemon.species,
-				id: pokemon.baseId,
+				id: pokemon.id,
 				status: pokemon.status,
+				details: pokemon.details,
 				level: pokemon.level,
 				gender: pokemon.gender,
 				fainted: pokemon.fainted,
@@ -1699,12 +1699,12 @@ function Battle(roomid, format, rated)
 		for (var i=0; i<selfB.allySide.pokemon.length; i++)
 		{
 			var pokemon = selfB.allySide.pokemon[i];
-			if (pokemon.baseId === id) return pokemon;
+			if (pokemon.id === id) return pokemon;
 		}
 		for (var i=0; i<selfB.foeSide.pokemon.length; i++)
 		{
 			var pokemon = selfB.foeSide.pokemon[i];
-			if (pokemon.baseId === id) return pokemon;
+			if (pokemon.id === id) return pokemon;
 		}
 		return null;
 	};
