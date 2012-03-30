@@ -2129,12 +2129,12 @@ function Battle(roomid, format, rated)
 			this.debug('pokemon.damage said zero');
 			return 0;
 		}
-		var id = effect.id;
-		if (id === 'tox') id = 'psn';
-		switch (id)
+		var name = effect.name;
+		if (name === 'tox') name = 'psn';
+		switch (name)
 		{
 			case 'partiallytrapped':
-				selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+selfB.getEffect(selfB.effectData.sourceEffect).id, '[partiallytrapped]');
+				selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+selfB.getEffect(selfB.effectData.sourceEffect).name, '[partiallytrapped]');
 				break;
 			default:
 				if (effect.effectType === 'Move')
@@ -2143,7 +2143,7 @@ function Battle(roomid, format, rated)
 				}
 				else
 				{
-					selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+id);
+					selfB.add('-damage',target.fullname,target.hpPercent(damage)+target.getHealth(),'[from] '+name);
 				}
 				break;
 		}
