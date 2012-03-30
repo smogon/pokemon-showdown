@@ -17,6 +17,9 @@ function clone(object) {
 function BattleTools()
 {
 	var selfT = this;
+	this.effectToString = function() {
+		return this.name;
+	};
 	this.getImmunity = function(type, target) {
 		for (var i=0; i<target.types.length; i++)
 		{
@@ -47,9 +50,10 @@ function BattleTools()
 		return totalTypeMod;
 	};
 	this.getTemplate = function(template) {
-		if (!template || !template.id)
+		if (!template || typeof template === 'string')
 		{
-			var id = toId(template);
+			var name = (template||'').trim();
+			var id = toId(name);
 			if (id === config.shadowBannedPokemon) id = 'Venusaur';
 			template = {};
 			if (id && BattlePokedex[id])
@@ -69,9 +73,10 @@ function BattleTools()
 		return template;
 	};
 	this.getMove = function(move) {
-		if (!move || !move.id)
+		if (!move || typeof move === 'string')
 		{
-			var id = toId(move);
+			var name = (move||'').trim();
+			var id = toId(name);
 			move = {};
 			if (id.substr(0,12) === 'HiddenPower[')
 			{
@@ -83,8 +88,11 @@ function BattleTools()
 			{
 				move = BattleMovedex[id];
 			}
-			if (!move.critRatio) move.critRatio = 1;
 			if (!move.id) move.id = id;
+			if (!move.name) move.name = name;
+			if (!move.fullname) move.fullname = 'move: '+name;
+			if (!move.toString) move.toString = selfT.effectToString;
+			if (!move.critRatio) move.critRatio = 1;
 			if (!move.baseType) move.baseType = move.type;
 			if (!move.effectType) move.effectType = 'Move';
 			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
@@ -116,7 +124,7 @@ function BattleTools()
 	this.getEffect = function(effect) {
 		if (!effect || typeof effect === 'string')
 		{
-			var name = effect;
+			var name = (effect||'').trim();
 			var id = toId(name);
 			effect = {};
 			if (id && BattleStatuses[id])
@@ -154,6 +162,9 @@ function BattleTools()
 			}
 			if (!effect.id) effect.id = id;
 			if (!effect.name) effect.name = name;
+			if (!effect.toString) effect.toString = selfT.effectToString;
+			if (!effect.fullname) effect.fullname = name;
+			if (!effect.toString) effect.toString = selfT.effectToString;
 			if (!effect.category) effect.category = 'Effect';
 			if (!effect.effectType) effect.effectType = 'Effect';
 		}
@@ -162,13 +173,18 @@ function BattleTools()
 	this.getItem = function(item) {
 		if (!item || typeof item === 'string')
 		{
-			var id = toId(item);
+			var name = (item||'').trim();
+			var id = toId(name);
 			item = {};
 			if (id && BattleItems[id])
 			{
 				item = BattleItems[id];
 			}
 			if (!item.id) item.id = id;
+			if (!item.name) item.name = name;
+			if (!item.toString) item.toString = selfT.effectToString;
+			if (!item.fullname) item.fullname = 'item: '+name;
+			if (!item.toString) item.toString = selfT.effectToString;
 			if (!item.category) item.category = 'Effect';
 			if (!item.effectType) item.effectType = 'Item';
 			if (item.isBerry) item.fling = { basePower: 10 };
@@ -178,13 +194,18 @@ function BattleTools()
 	this.getAbility = function(ability) {
 		if (!ability || typeof ability === 'string')
 		{
-			var id = toId(ability);
+			var name = (ability||'').trim();
+			var id = toId(name);
 			ability = {};
 			if (id && BattleAbilities[id])
 			{
 				ability = BattleAbilities[id];
 			}
 			if (!ability.id) ability.id = id;
+			if (!ability.name) ability.name = name;
+			if (!ability.toString) ability.toString = selfT.effectToString;
+			if (!ability.fullname) ability.fullname = 'ability: '+name;
+			if (!ability.toString) ability.toString = selfT.effectToString;
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
 		}
