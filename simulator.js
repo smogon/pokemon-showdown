@@ -226,7 +226,7 @@ function BattlePokemon(set, side)
 	this.hp = this.hp || this.maxhp;
 	
 	this.toString = function() {
-		return 'Pokemon: '+selfP.id;
+		return selfP.fullname;
 	};
 	
 	this.update = function(init) {
@@ -995,7 +995,7 @@ function BattleSide(user, battle, n)
 	}
 	
 	this.toString = function() {
-		return 'Side: '+selfS.name;
+		return selfS.id+': '+selfS.name;
 	};
 	
 	this.getData = function() {

@@ -10896,7 +10896,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'Substitute',
 		onTryHit: function(target) {
-			if (target.volatiles['Substitute'])
+			if (target.volatiles['substitute'])
 			{
 				this.add('r-sub '+target.id+' already');
 				return null;
@@ -10952,7 +10952,7 @@ exports.BattleMovedex = {
 				{
 					damage = target.volatiles['substitute'].hp;
 				}
-				target.volatiles['Substitute'].hp -= damage;
+				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0)
 				{
