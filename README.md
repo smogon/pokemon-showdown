@@ -1,7 +1,7 @@
 Showdown
 ========================================================================
 
-Showdown is a simulator of Pokemon battles. It currently only supports Generation 5 (Pokemon Black and Pokemon White).
+Showdown is a simulator of Pokemon battles. It currently only supports singles battles in Generation 5 (Pokemon Black and Pokemon White).
 
 Installing
 ------------------------------------------------------------------------
@@ -25,11 +25,9 @@ Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT/`
 
 Replace `SERVER` with your server domain or IP, and `PORT` with the server's port. You can leave off `:PORT` if it is 8000 (the default).
 
-Yes, you can test even if you are behind a NAT without port forwarding: `http://play.pokemonshowdown.com/~~localhost/` will connect to your local machine.
+Yes, you can test even if you are behind a NAT without port forwarding: `http://play.pokemonshowdown.com/~~localhost/` will connect to your local machine. Some browser setups might prevent this sort of connection, however (NoScript, for instance). If you can't get connecting locally to work in Firefox, try Chrome.
 
-Currently, this workflow works for testing Pokemon Showdown and testing your patches before submitting pull requests, but it ends up with somewhat ugly URLs. I'll make it easier to host your own server in the future, when we're closer to leaving beta.
-
-The reason your server is visited through `play.pokemonshowdown.com` is to ensure that your server itself will not see any user's password in any form.
+The reason your server is visited through `play.pokemonshowdown.com` is to make it more difficult for servers to see a user's password in any form, by handling logins globally. I realize that you might want your own login server and client hosted outside the `pokemonshowdown.com` domain, and I'll look more deeply into how to facilitate that when we're closer to leaving beta.
 
 Browser support
 ------------------------------------------------------------------------

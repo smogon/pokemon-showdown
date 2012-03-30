@@ -104,7 +104,7 @@ function reloadEngine()
 	Tools = new BattleTools();
 }
 
-function Room(roomid, format, p1, p2, parentid, ranked)
+function Room(roomid, format, p1, p2, parentid, rated)
 {
 	var selfR = this;
 	
@@ -119,9 +119,9 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	
 	var formatid = toId(format);
 	
-	if (ranked && BattleFormats[formatid] && BattleFormats[formatid].ranked)
+	if (rated && BattleFormats[formatid] && BattleFormats[formatid].rated)
 	{
-		ranked = {
+		rated = {
 			p1: p1.userid,
 			p2: p2.userid,
 			format: format
@@ -129,11 +129,11 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	}
 	else
 	{
-		ranked = false;
+		rated = false;
 	}
 	
-	this.ranked = ranked;
-	this.battle = new Battle(selfR.id, format, ranked);
+	this.rated = rated;
+	this.battle = new Battle(selfR.id, format, rated);
 	this.resetTimer = null;
 	this.destroyTimer = null;
 	this.graceTime = 0;
@@ -152,27 +152,27 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		update = selfR.battle.getUpdates();
 		if (!update) return;
 		
-		if (selfR.battle.ended && selfR.ranked)
+		if (selfR.battle.ended && selfR.rated)
 		{
 			var p1score = 0.5;
 			
-			if (selfR.battle.winner === selfR.ranked.p1)
+			if (selfR.battle.winner === selfR.rated.p1)
 			{
 				p1score = 1;
 			}
-			else if (selfR.battle.winner === selfR.ranked.p2)
+			else if (selfR.battle.winner === selfR.rated.p2)
 			{
 				p1score = 0;
 			}
 			
-			var p1 = selfR.ranked.p1;
-			if (getUser(selfR.ranked.p1)) p1 = getUser(selfR.ranked.p1).name;
-			var p2 = selfR.ranked.p2;
-			if (getUser(selfR.ranked.p2)) p2 = getUser(selfR.ranked.p2).name;
+			var p1 = selfR.rated.p1;
+			if (getUser(selfR.rated.p1)) p1 = getUser(selfR.rated.p1).name;
+			var p2 = selfR.rated.p2;
+			if (getUser(selfR.rated.p2)) p2 = getUser(selfR.rated.p2).name;
 			
-			update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.ranked.format)+'&servertoken=[token]');
+			update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken=[token]');
 			
-			if (!selfR.ranked.p1 || !selfR.ranked.p2)
+			if (!selfR.rated.p1 || !selfR.rated.p2)
 			{
 				update.updates.push('message ERROR: Ladder not updated: a player does not exist');
 			}
@@ -185,7 +185,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 				}
 				// update rankings
 				request({
-					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.ranked.format)+'&servertoken='+servertoken+'&nocache='+getTime(),
+					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken='+servertoken+'&nocache='+getTime(),
 				}, function(error, response, body) {
 					if (body)
 					{
@@ -219,7 +219,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 				);
 			}
 			
-			selfR.ranked = false;
+			selfR.rated = false;
 		}
 		
 		update.room = roomid;
@@ -356,7 +356,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		selfR.resetTimer = null;
 		
 		var action = 'be kicked';
-		if (selfR.ranked)
+		if (selfR.rated)
 		{
 			action = 'forfeit';
 		}
@@ -399,7 +399,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			return;
 		}
 		
-		if (selfR.battle.ranked)
+		if (selfR.battle.rated)
 		{
 			selfR.forfeit(inactiveSide,' lost because of their inactivity.');
 		}
@@ -427,7 +427,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		if (selfR.resetTimer) return;
 		if (!selfR.battle.started) return; // no point
 		if (user) attrib = ' (requested by '+user.name+')';
-		if (selfR.ranked)
+		if (selfR.rated)
 		{
 			selfR.battle.add('message The battle cannot be restarted because it is a rated battle'+attrib+'.');
 			return;
@@ -463,7 +463,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 			user.emit('console', {room:selfR.id, message: 'The inactivity timer is already counting down.'});
 				return;
 		}
-		if ((!selfR.battle.allySide.user || !selfR.battle.foeSide.user) && !selfR.ranked)
+		if ((!selfR.battle.allySide.user || !selfR.battle.foeSide.user) && !selfR.rated)
 		{
 			selfR.battle.add('message This isn\'t a rated battle; victory doesn\'t mean anything.');
 			selfR.battle.add('message Do you just want to see the text "you win"? Okay. You win.');
@@ -475,7 +475,7 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 		if (user) selfR.inactiveAtrrib = ' (requested by '+user.name+')';
 		
 		var action = 'be kicked';
-		if (selfR.ranked)
+		if (selfR.rated)
 		{
 			action = 'forfeit';
 		}
@@ -617,13 +617,13 @@ function Room(roomid, format, p1, p2, parentid, ranked)
 	};
 	this.joinBattle = function(user) {
 		var slot = 0;
-		if (selfR.ranked)
+		if (selfR.rated)
 		{
-			if (selfR.ranked.p1 === user.userid)
+			if (selfR.rated.p1 === user.userid)
 			{
 				slot = 1;
 			}
-			else if (selfR.ranked.p2 === user.userid)
+			else if (selfR.rated.p2 === user.userid)
 			{
 				slot = 2;
 			}
@@ -1126,7 +1126,7 @@ function Lobby(roomid)
 			selfR.emit('console', {name: user.getIdentity(), action: 'leave', silent: 1});
 		}
 	};
-	this.startBattle = function(p1, p2, format, ranked) {
+	this.startBattle = function(p1, p2, format, rated) {
 		var newRoom;
 		p1 = getUser(p1);
 		p2 = getUser(p2);
@@ -1157,7 +1157,7 @@ function Lobby(roomid)
 			i++;
 		}
 		selfR.numRooms = i;
-		newRoom = selfR.addRoom('battle-'+formaturlid+i, format, p1, p2, selfR.id, ranked);
+		newRoom = selfR.addRoom('battle-'+formaturlid+i, format, p1, p2, selfR.id, rated);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
 		newRoom.joinBattle(p1);
@@ -1177,8 +1177,8 @@ function Lobby(roomid)
 			selfR.update();
 		}
 	};
-	this.addRoom = function(room, format, p1, p2, parent, ranked) {
-		room = newRoom(room, format, p1, p2, parent, ranked);
+	this.addRoom = function(room, format, p1, p2, parent, rated) {
+		room = newRoom(room, format, p1, p2, parent, rated);
 		if (typeof room.i[selfR.id] !== 'undefined') return;
 		room.i[selfR.id] = selfR.rooms.length;
 		selfR.rooms.push(room);
@@ -1306,14 +1306,14 @@ getRoom = function(roomid)
 	}
 	return rooms[roomid];
 }
-newRoom = function(roomid, format, p1, p2, parent, ranked)
+newRoom = function(roomid, format, p1, p2, parent, rated)
 {
 	if (roomid && roomid.id) return roomid;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid])
 	{
 		console.log("NEW ROOM: "+roomid);
-		rooms[roomid] = new Room(roomid, format, p1, p2, parent, ranked);
+		rooms[roomid] = new Room(roomid, format, p1, p2, parent, rated);
 	}
 	return rooms[roomid];
 }

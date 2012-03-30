@@ -503,17 +503,13 @@ exports.BattleMovedex = {
 		pp: 15,
 		isBounceable: true,
 		priority: 0,
-		onHit: function(target, source) {
-			if ((target.gender === 'M' && source.gender === 'F') ||
-				(target.gender === 'F' && source.gender === 'M')) {
-				target.addVolatile('Attract');
-			} else {
-				return false;
-			}
+		onHit: function(target) {
+			if (target.addVolatile('Attract')) this.add("message "+target.name+" fell in love! (placeholder).");
+			else return false;
 		},
 		effect: {
 			onStart: function(pokemon, source) {
-				this.add("message "+pokemon.name+" fell in love! (placeholder).");
+				return (((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) && this.runEvent('Attract', pokemon, source));
 			},
 			onBeforeMove: function(pokemon) {
 				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['Attract'])
@@ -743,6 +739,7 @@ exports.BattleMovedex = {
 			}
 			if (!target.setItem(yourItem))
 			{
+				source.item = yourItem;
 				return false;
 			}
 			this.add('r-trick-get '+target.id+' '+yourItem.id);
@@ -1210,6 +1207,7 @@ exports.BattleMovedex = {
 		name: "Bug Buzz",
 		pp: 10,
 		isViable: true,
+		isSoundBased: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -1272,6 +1270,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 1,
 		secondary: false,
 		target: "normal",
@@ -1422,6 +1421,7 @@ exports.BattleMovedex = {
 		id: "Chatter",
 		name: "Chatter",
 		pp: 20,
+		isSoundBased: true,
 		priority: 0,
 		onModifyMove: function(move, pokemon) {
 			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
@@ -1560,6 +1560,7 @@ exports.BattleMovedex = {
 		name: "Comet Punch",
 		pp: 15,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		multihit: [2,5],
 		secondary: false,
@@ -1665,7 +1666,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(pokemon) {
-			var noCopycat = {Counter:1, MirrorCoat:1, Protect:1, Detect:1, Endure:1, DestinyBond:1, FollowMe:1, RagePowder:1, Snatch:1, HelpingHand:1, Thief:1, Covet:1, Trick:1, Switcheroo:1, Feint:1, FocusPunch:1, Transform:1, Bestow:1, DragonTail:1, CircleThrow:1};
+			var noCopycat = {Copycat:1, Assist:1, Sketch:1, Mimic:1, Counter:1, MirrorCoat:1, Protect:1, Detect:1, Endure:1, DestinyBond:1, FollowMe:1, RagePowder:1, Snatch:1, HelpingHand:1, Thief:1, Covet:1, Trick:1, Switcheroo:1, Feint:1, FocusPunch:1, Transform:1, Bestow:1, DragonTail:1, CircleThrow:1};
 			if (!this.lastMove || noCopycat[this.lastMove])
 			{
 				return false;
@@ -2316,6 +2317,7 @@ exports.BattleMovedex = {
 		name: "Dizzy Punch",
 		pp: 10,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -2605,6 +2607,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		drain: [1,2],
 		secondary: false,
@@ -2694,6 +2697,7 @@ exports.BattleMovedex = {
 		name: "DynamicPunch",
 		pp: 5,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 100,
@@ -2749,6 +2753,7 @@ exports.BattleMovedex = {
 		id: "EchoedVoice",
 		name: "Echoed Voice",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -3046,10 +3051,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, source) {
 			if (target === source) return false;
-			if (target.ability === 'Multitype' || target.ability === 'Truant' || target.ability === 'ZenMode' || target.ability === source.ability)
-			{
-				return false;
-			}
+			var disallowedAbilities = {Trace:1, Forecast:1, Multitype:1, FlowerGift:1, Illusion:1, Imposter:1, ZenMode:1, WonderGuard:1};
+			if (target.ability === 'Multitype' || target.ability === 'Truant' || target.ability === source.ability || disallowedAbilities[source.ability]) return false;
 		},
 		onHit: function(target, source) {
 			if (target.setAbility(source.ability))
@@ -3230,8 +3233,8 @@ exports.BattleMovedex = {
 		name: "False Swipe",
 		pp: 40,
 		isContact: true,
+		noFaint: true,
 		priority: 0,
-		hitCallback: function(){ return 'noFaint'; },
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3395,6 +3398,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3803,6 +3807,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: -3,
 		beforeTurnCallback: function(pokemon) {
 			pokemon.addVolatile('FocusPunch');
@@ -4306,6 +4311,7 @@ exports.BattleMovedex = {
 		id: "GrassWhistle",
 		name: "GrassWhistle",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		status: 'slp',
 		affectedByImmunities: true,
@@ -4360,6 +4366,7 @@ exports.BattleMovedex = {
 		id: "Growl",
 		name: "Growl",
 		pp: 40,
+		isSoundBased: true,
 		priority: 0,
 		boosts: {
 			atk: -1
@@ -4581,6 +4588,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		self: {
 			boosts: {
@@ -4701,6 +4709,7 @@ exports.BattleMovedex = {
 		name: "Heal Bell",
 		pp: 5,
 		isViable: true,
+		isSoundBased: true, // though it isn't affected by Soundproof
 		priority: 0,
 		onHitSide: function(side, source) {
 			for (var i=0; i<side.pokemon.length; i++)
@@ -5463,6 +5472,7 @@ exports.BattleMovedex = {
 		name: "Hyper Voice",
 		pp: 10,
 		isViable: true,
+		isSoundBased: true,
 		priority: 0,
 		secondary: false,
 		target: "foes",
@@ -5589,6 +5599,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -6359,6 +6370,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 1,
 		secondary: false,
 		target: "normal",
@@ -6667,6 +6679,7 @@ exports.BattleMovedex = {
 		name: "Mega Punch",
 		pp: 20,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -6767,6 +6780,7 @@ exports.BattleMovedex = {
 		name: "Metal Sound",
 		pp: 40,
 		priority: 0,
+		isSoundBased: true,
 		boosts: {
 			spd: -2
 		},
@@ -6786,6 +6800,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -6817,7 +6832,7 @@ exports.BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				var NoMetronome = {
-					Assist:1, Chatter:1, Copycat:1, Counter:1, Covet:1, DestinyBond:1, Detect:1, Endure:1, Feint:1, FocusPunch:1, FollowMe:1, HelpingHand:1, MeFirst:1, Metronome:1, Mimic:1, MirrorCoat:1, MirrorMove:1, Protect:1, QuickGuard:1, Sketch:1, SleepTalk:1, Snatch:1, Struggle:1, Switcheroo:1, Thief:1, Trick:1, WideGuard:1
+					AfterYou:1, Assist:1, Bestow:1, Chatter:1, Copycat:1, Counter:1, Covet:1, DestinyBond:1, Detect:1, Endure:1, Feint:1, FocusPunch:1, FollowMe:1, FreezeShock:1, HelpingHand:1, IceBurn:1, MeFirst:1, Metronome:1, Mimic:1, MirrorCoat:1, MirrorMove:1, NaturePower:1, "NaturePower(Wifi)":1, Protect:1, Quash:1, QuickGuard:1, RagePowder:1, RelicSong:1, SecretSword:1, Sketch:1, SleepTalk:1, Snatch:1, Snarl:1, Snore:1, Struggle:1, Switcheroo:1, TechnoBlast:1, Thief:1, Transform:1, Trick:1, "V-create":1, WideGuard:1
 				};
 				if (!NoMetronome[move.id])
 				{
@@ -7564,6 +7579,7 @@ exports.BattleMovedex = {
 		name: "Perish Song",
 		pp: 5,
 		isViable: true,
+		isSoundBased: true,
 		priority: 0,
 		onHitField: function(target, source) {
 			this.add('r-perish-song '+source.id);
@@ -7571,7 +7587,8 @@ exports.BattleMovedex = {
 			{
 				for (var j=0; j<this.sides[i].active.length; j++)
 				{
-					this.sides[i].active[j].addVolatile('PerishSong');
+					if (this.sides[i].active[j].runImmunity('sound')) this.sides[i].active[j].addVolatile('PerishSong');
+					else this.add('message '+this.sides[i].active[j].name+' is immune to Perish Song due to Soundproof, the graphics are incorrect');
 				}
 			}
 		},
@@ -8656,6 +8673,7 @@ exports.BattleMovedex = {
 		name: "Relic Song",
 		pp: 10,
 		isViable: true,
+		isSoundBased: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -8817,6 +8835,7 @@ exports.BattleMovedex = {
 		name: "Roar",
 		pp: 20,
 		isViable: true,
+		isSoundBased: true,
 		priority: -6,
 		forceSwitch: true,
 		notSubBlocked: true,
@@ -9146,6 +9165,7 @@ exports.BattleMovedex = {
 		id: "Round",
 		name: "Round",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -9343,6 +9363,7 @@ exports.BattleMovedex = {
 		id: "Screech",
 		name: "Screech",
 		pp: 40,
+		isSoundBased: true,
 		priority: 0,
 		boosts: {
 			def: -2
@@ -9560,6 +9581,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -9760,6 +9782,7 @@ exports.BattleMovedex = {
 		id: "Sing",
 		name: "Sing",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		status: 'slp',
 		secondary: false,
@@ -9944,6 +9967,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -10204,6 +10228,7 @@ exports.BattleMovedex = {
 		id: "Snarl",
 		name: "Snarl",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		secondary: {
 			chance: 100,
@@ -10239,6 +10264,7 @@ exports.BattleMovedex = {
 		id: "Snore",
 		name: "Snore",
 		pp: 15,
+		isSoundBased: true,
 		priority: 0,
 		sleepUsable: true,
 		onTryHit: function(target, source) {
@@ -11043,6 +11069,7 @@ exports.BattleMovedex = {
 		id: "Supersonic",
 		name: "Supersonic",
 		pp: 20,
+		isSoundBased: true,
 		priority: 0,
 		volatileStatus: 'confusion',
 		secondary: false,
@@ -11173,6 +11200,8 @@ exports.BattleMovedex = {
 			var myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem))
 			{
+				if (yourItem) target.item = yourItem;
+				if (myItem) source.item = myItem;
 				return false;
 			}
 			this.add('r-trick '+source.id+' '+target.id);
@@ -11602,6 +11631,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		isContact: true,
+		isPunchAttack: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -11854,6 +11884,8 @@ exports.BattleMovedex = {
 			var myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem))
 			{
+				if (yourItem) target.item = yourItem;
+				if (myItem) source.item = myItem;
 				return false;
 			}
 			this.add('r-trick '+source.id+' '+target.id);
@@ -11930,6 +11962,10 @@ exports.BattleMovedex = {
 		num: 167,
 		accuracy: 90,
 		basePower: 10,
+		basePowerCallback: function(pokemon) {
+			pokemon.addVolatile('TripleKick');
+			return 10 * pokemon.volatiles['TripleKick'].hit;
+		},
 		category: "Physical",
 		desc: "Attacks three times in one turn, adding 10 BP for each kick. If a kick misses, the move ends instantly; if one of the kicks breaks a target's Substitute, the real Pokemon will take damage for the remaining kicks.",
 		shortDesc: "Hits 3 times with power increasing each hit.",
@@ -11939,6 +11975,15 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		multihit: [3,3],
+		effect: {
+			duration: 1,
+			onStart: function() {
+				this.effectData.hit = 1;
+			},
+			onRestart: function() {
+				this.effectData.hit++;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -12041,6 +12086,7 @@ exports.BattleMovedex = {
 		id: "Uproar",
 		name: "Uproar",
 		pp: 10,
+		isSoundBased: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",

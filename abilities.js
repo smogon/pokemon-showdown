@@ -109,7 +109,7 @@ exports.BattleAbilities = {
 		num: "107"
 	},
 	"ArenaTrap": {
-		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they are part Flying-type, have the Levitate ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn. Flying-type and Levitate Pokemon cannot escape if they are holding Iron Ball or Gravity is in effect. Levitate Pokemon also cannot escape if their ability is disabled through other means, such as Skill Swap or Gastro Acid. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon battles is doubled.",
+		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they are part Flying-type, have the Levitate ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn. Flying-type and Levitate Pokemon cannot escape if they are holding Iron Ball or Gravity is in effect. Levitate Pokemon also cannot escape if their ability is disabled through other means, such as Skill Swap or Gastro Acid.",
 		shortDesc: "Prevents foe from switching unless it is immune to Ground.",
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.runImmunity('Ground', false))
@@ -151,7 +151,7 @@ exports.BattleAbilities = {
 		num: "4"
 	},
 	"BigPecks": {
-		desc: "Prevents the Pok\u00e9mon's Defense stat from being reduced.",
+		desc: "Prevents the Pokemon's Defense stat from being reduced.",
 		shortDesc: "Prevents the enemy from lowering this Pokemon's Defense.",
 		onBoost: function(boost, target, source) {
 			if (source && target === source) return;
@@ -258,7 +258,7 @@ exports.BattleAbilities = {
 		num: "16"
 	},
 	"Compoundeyes": {
-		desc: "The accuracy of this Pokemon's moves receives a 30% increase; for example, a 75% accurate move becomes 97.5% accurate. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon holding an item increases.",
+		desc: "The accuracy of this Pokemon's moves receives a 30% increase; for example, a 75% accurate move becomes 97.5% accurate.",
 		onModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
 			this.debug('compoundeyes - enhancing accuracy');
@@ -283,14 +283,23 @@ exports.BattleAbilities = {
 		num: "126"
 	},
 	"CursedBody": {
-		desc: "30% chance of disabling one of the opponent's moves when attacked. This works even if the attacker is behind a Substitute, but will not activate if the Pok\u00e9mon with Cursed Body is behind a Substitute.",
+		desc: "30% chance of disabling one of the opponent's moves when attacked. This works even if the attacker is behind a Substitute, but will not activate if the Pokemon with Cursed Body is behind a Substitute.",
 		id: "CursedBody",
 		name: "Cursed Body",
 		rating: 2,
 		num: "130"
 	},
 	"CuteCharm": {
-		desc: "If an opponent of the opposite gender\u00a0directly attacks\u00a0this Pokemon, there is a 30% chance that the opponent will become Attracted to this Pokemon. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon of the opposite gender appearing increases to 66.7%.",
+		desc: "If an opponent of the opposite gender directly attacks this Pokemon, there is a 30% chance that the opponent will become Attracted to this Pokemon.",
+		onAfterDamage: function(damage, target, source, move) {
+			if (move && move.isContact)
+			{
+				if (Math.random() * 10 < 3)
+				{
+					if (source.addVolatile('Attract', target)) this.add('message '+target.name+'\'s Cute Charm infatuated '+source.name+'! (placeholder)');
+				}
+			}
+		},
 		id: "CuteCharm",
 		name: "Cute Charm",
 		rating: 2,
@@ -328,7 +337,7 @@ exports.BattleAbilities = {
 	},
 	"Defiant": {
 		desc: "Raises the user's Attack stat by two stages when a stat is lowered, including the Attack stat. This does not include self-induced stat drops like those from Close Combat.",
-		onAfterBoost: function(boost, target, source) {
+		onAfterEachBoost: function(boost, target, source) {
 			if (!source || target === source)
 			{
 				return;
@@ -440,7 +449,7 @@ exports.BattleAbilities = {
 		num: "48"
 	},
 	"EffectSpore": {
-		desc: "If an opponent\u00a0directly attacks\u00a0this Pokemon, there is a 30% chance that the opponent will become either poisoned, paralyzed or put to sleep. There is an equal chance to inflict each status.",
+		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become either poisoned, paralyzed or put to sleep. There is an equal chance to inflict each status.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact)
 			{
@@ -482,7 +491,7 @@ exports.BattleAbilities = {
 		num: "111"
 	},
 	"FlameBody": {
-		desc: "If an opponent\u00a0directly attacks\u00a0this Pokemon, there is a 30% chance that the opponent will become burned. [Field Effect]\u00a0Pokemon Eggs hatch in half the time.",
+		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become burned.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact)
 			{
@@ -658,6 +667,7 @@ exports.BattleAbilities = {
 		desc: "Has a 30% chance of curing an adjacent ally's status ailment at the end of each turn in Double and Triple Battles.",
 		id: "Healer",
 		name: "Healer",
+		onResidualPriority: -5.1,
 		rating: 0,
 		num: "131"
 	},
@@ -681,7 +691,7 @@ exports.BattleAbilities = {
 		num: "85"
 	},
 	"HeavyMetal": {
-		desc: "The user's weight is doubled. This increases user's base power of Heavy Bomber, as well as damage taken from the opponent's Low Kick and Grass Knot, due to these moves being calculate by the target's weight.",
+		desc: "The user's weight is doubled. This increases user's base power of Heavy Slam and Heat Crash, as well as damage taken from the opponent's Low Kick and Grass Knot, due to these moves being calculated by the target's weight.",
 		onModifyPokemon: function(pokemon) {
 			pokemon.weightkg *= 2;
 		},
@@ -708,14 +718,14 @@ exports.BattleAbilities = {
 		num: "37"
 	},
 	"Hustle": {
-		desc: "This Pokemon's Attack receives a 50% boost but its Physical attacks receive a 20% drop in Accuracy. For example, a 100% accurate move would become an 80% accurate move. The accuracy of moves that never miss, such as Aerial Ace, remains unaffected. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon battles decreases.",
+		desc: "This Pokemon's Attack receives a 50% boost but its Physical attacks receive a 20% drop in Accuracy. For example, a 100% accurate move would become an 80% accurate move. The accuracy of moves that never miss, such as Aerial Ace, remains unaffected.",
 		onModifyStats: function(stats) {
 			stats.atk *= 1.5;
 		},
 		onModifyMove: function(move) {
 			if (move.category === 'Physical' && typeof move.accuracy === 'number')
 			{
-				move.accuracy *= .8;
+				move.accuracy *= 0.8;
 			}
 		},
 		id: "Hustle",
@@ -725,7 +735,8 @@ exports.BattleAbilities = {
 	},
 	"Hydration": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, it recovers from poison, paralysis, burn, sleep and freeze at the end of the turn.",
-		onWeather: function(pokemon) {
+		onResidualPriority: -5.1,
+		onResidual: function(pokemon) {
 			if (pokemon.status && this.weather === 'RainDance')
 			{
 				this.debug('hydration');
@@ -775,7 +786,7 @@ exports.BattleAbilities = {
 		num: "35"
 	},
 	"Illusion": {
-		desc: "Illusion will change the appearance of the Pok\u00e9mon to a different species. This is dependent on the last Pok\u00e9mon in the player's party. Along with the species itself, Illusion is broken when the user is damaged, but is not broken by Substitute, weather conditions, status ailments, or entry hazards. Illusion will replicate the type of Pok\u00e9 Ball, the species name, and the gender of the Pok\u00e9mon it is masquerading as.",
+		desc: "Illusion will change the appearance of the Pokemon to a different species. This is dependent on the last Pokemon in the player's party. Along with the species itself, Illusion is broken when the user is damaged, but is not broken by Substitute, weather conditions, status ailments, or entry hazards. Illusion will replicate the type of Poke Ball, the species name, and the gender of the Pokemon it is masquerading as.",
 		onModifyPokemon: function(pokemon) {
 			if (!pokemon.volatiles['Illusion'])
 			{
@@ -815,7 +826,7 @@ exports.BattleAbilities = {
 		num: "17"
 	},
 	"Imposter": {
-		desc: "As soon as the user comes into battle, it Transforms into its opponent, copying the opponent's stats exactly, with the exception of HP. Eccentric copies all stat changes on the target originating from moves and abilities such as Swords Dance and Inweak-kneedate, but not from items such as Choice Specs. Eccentric will not Transform the user if the opponent is an Illusion or if the opponent is behind a Substitute.",
+		desc: "As soon as the user comes into battle, it Transforms into its opponent, copying the opponent's stats exactly, with the exception of HP. Imposter copies all stat changes on the target originating from moves and abilities such as Swords Dance and Intimidate, but not from items such as Choice Specs. Imposter will not Transform the user if the opponent is an Illusion or if the opponent is behind a Substitute.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
 			if (pokemon.transformInto(target))
@@ -855,7 +866,7 @@ exports.BattleAbilities = {
 		num: "15"
 	},
 	"Intimidate": {
-		desc: "When this Pokemon enters the field, the Attack stat of each of its opponents lowers by one stage. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon battles, whose level is at least 5 levels less than that of this Pokemon, halves.",
+		desc: "When this Pokemon enters the field, the Attack stat of each of its opponents lowers by one stage.",
 		onStart: function(pokemon) {
 			var foeactive = pokemon.side.foe.active;
 			for (var i=0; i<foeactive.length; i++)
@@ -869,7 +880,7 @@ exports.BattleAbilities = {
 				else
 				{
 					this.add('r-intimidate '+pokemon.id+' '+foeactive[i].id);
-					this.boost({atk: -1}, foeactive[i]);
+					this.boost({atk: -1}, foeactive[i], pokemon);
 				}
 			}
 		},
@@ -879,7 +890,7 @@ exports.BattleAbilities = {
 		num: "22"
 	},
 	"IronBarbs": {
-		desc: "All moves that make contact with the Pok\u00e9mon with Iron Barbs will damage the user by 1/8 of their maximum HP after damage is dealt.",
+		desc: "All moves that make contact with the Pokemon with Iron Barbs will damage the user by 1/8 of their maximum HP after damage is dealt.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact)
 			{
@@ -892,7 +903,7 @@ exports.BattleAbilities = {
 		num: "160"
 	},
 	"IronFist": {
-		desc: "This Pokemon receives a 20% power boost for the following attacks: Bullet Punch, Comet Punch, Dizzy Punch, Drain Punch, Dynamicpunch, Fire Punch, Focus Punch, Hammer Arm, Ice Punch, Mach Punch, Mega Punch, Meteor Mash, Shadow Punch, Sky Uppercut, and Thunderpunch. Sucker Punch, which is known Ambush in Japan, is\u00a0not boosted.",
+		desc: "This Pokemon receives a 20% power boost for the following attacks: Bullet Punch, Comet Punch, Dizzy Punch, Drain Punch, Dynamicpunch, Fire Punch, Focus Punch, Hammer Arm, Ice Punch, Mach Punch, Mega Punch, Meteor Mash, Shadow Punch, Sky Uppercut, and Thunderpunch. Sucker Punch, which is known Ambush in Japan, is not boosted.",
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (move.isPunchAttack)
 			{
@@ -906,7 +917,7 @@ exports.BattleAbilities = {
 		num: "89"
 	},
 	"Justified": {
-		desc: "Will raise the user's Attack stat one level when hit by any Dark-type moves. Unlike other abilities with immunity to certain typed moves, the user will still receive damage from the attack. Righteous Heart will raise Attack one level for each hit of a multi-hit move like Beat Up.",
+		desc: "Will raise the user's Attack stat one level when hit by any Dark-type moves. Unlike other abilities with immunity to certain typed moves, the user will still receive damage from the attack. Justified will raise Attack one level for each hit of a multi-hit move like Beat Up.",
 		onAfterDamage: function(damage, target, source, effect) {
 			if (effect && effect.type === 'Dark')
 			{
@@ -919,7 +930,7 @@ exports.BattleAbilities = {
 		num: "154"
 	},
 	"KeenEye": {
-		desc: "This Pokemon's Accuracy cannot be lowered. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of low-leveled wild Pokemon battles decreases.",
+		desc: "This Pokemon's Accuracy cannot be lowered.",
 		onBoost: function(boost, target, source) {
 			if (source && target === source) return;
 			if (boost['accuracy'] && boost['accuracy'] < 0)
@@ -933,7 +944,7 @@ exports.BattleAbilities = {
 		num: "51"
 	},
 	"Klutz": {
-		desc: "This Pokemon ignores both the positive and negative effects of its held item, other than the speed-halving effects of Iron Ball and the seven EV training items.",
+		desc: "This Pokemon ignores both the positive and negative effects of its held item, other than the speed-halving effects of Iron Ball.",
 		onModifyPokemon: function(pokemon) {
 			pokemon.ignore['Item'] = true;
 		},
@@ -967,7 +978,7 @@ exports.BattleAbilities = {
 		num: "26"
 	},
 	"LightMetal": {
-		desc: "The user's weight is halved. This decreases the damage taken from Low Kick and Grass Knot, and also lowers user's base power of Heavy Bomber, due these moves being calculated by the target and user's weight.",
+		desc: "The user's weight is halved. This decreases the damage taken from Low Kick and Grass Knot, and also lowers user's base power of Heavy Slam and Heat Crash, due these moves being calculated by the target and user's weight.",
 		onModifyPokemon: function(pokemon) {
 			pokemon.weightkg /= 2;
 		},
@@ -977,7 +988,7 @@ exports.BattleAbilities = {
 		num: "135"
 	},
 	"Lightningrod": {
-		desc: "During double battles, this Pokemon draws\u00a0any\u00a0single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment. The user is immune to Electric and its Special Attack is increased one stage when hit by one.",
+		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment. The user is immune to Electric and its Special Attack is increased one stage when hit by one.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'Electric')
 			{
@@ -1016,7 +1027,7 @@ exports.BattleAbilities = {
 		num: "64"
 	},
 	"MagicBounce": {
-		desc: "It can reflect the effect of status moves.",
+		desc: "Non-damaging moves are reflected back at the user.",
 		id: "MagicBounce",
 		name: "Magic Bounce",
 		onAllyTryFieldHit: function(target, source, move) {
@@ -1062,7 +1073,7 @@ exports.BattleAbilities = {
 		num: "98"
 	},
 	"MagmaArmor": {
-		desc: "This Pokemon cannot become frozen. [Field Effect]\u00a0Pokemon Eggs hatch in half the time",
+		desc: "This Pokemon cannot become frozen.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'frz') return false;
 		},
@@ -1072,7 +1083,7 @@ exports.BattleAbilities = {
 		num: "40"
 	},
 	"MagnetPull": {
-		desc: "When this Pokemon enters the field, Steel-type opponents cannot switch out nor flee the battle unless they are holding Shed Shell or use the attacks U-Turn or Baton Pass. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of encountering a Steel-type Pokemon increases by 50%.",
+		desc: "When this Pokemon enters the field, Steel-type opponents cannot switch out nor flee the battle unless they are holding Shed Shell or use the attacks U-Turn or Baton Pass.",
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.hasType('Steel'))
 			{
@@ -1129,7 +1140,7 @@ exports.BattleAbilities = {
 		num: "104"
 	},
 	"Moody": {
-		desc: "Causes the Pok\u00e9mon to raise one of its stats by two stages, while another stat is lowered by one stage at the end of each turn. These stats include accuracy and evasion.",
+		desc: "Causes the Pokemon to raise one of its stats by two stages, while another stat is lowered by one stage at the end of each turn. These stats include accuracy and evasion.",
 		onResidualPriority: -26.1,
 		onResidual: function(pokemon) {
 			var stats = [], i = '';
@@ -1181,7 +1192,7 @@ exports.BattleAbilities = {
 		num: "78"
 	},
 	"Moxie": {
-		desc: "When a Pok\u00e9mon with Moxie faints another Pok\u00e9mon, its Attack rises by one stage.",
+		desc: "When a Pokemon with Moxie faints another Pokemon, its Attack rises by one stage.",
 		onSourceFaint: function(target, source, effect) {
 			if (effect && effect.effectType === 'Move')
 			{
@@ -1208,7 +1219,7 @@ exports.BattleAbilities = {
 		num: "136"
 	},
 	"Multitype": {
-		desc: "This Pokemon changes its type to match its\u00a0corresponding held Plate; this ability only works for Arceus, prevents the removal of Arceus' held item and cannot be Skill Swapped, Role Played or Traced.",
+		desc: "This Pokemon changes its type to match its corresponding held Plate; this ability only works for Arceus, prevents the removal of Arceus' held item and cannot be Skill Swapped, Role Played or Traced.",
 		onModifyPokemon: function(pokemon) {
 			var type = this.runEvent('Plate', pokemon);
 			if (type && type !== true)
@@ -1251,7 +1262,7 @@ exports.BattleAbilities = {
 		num: "30"
 	},
 	"NoGuard": {
-		desc: "Both this Pokemon and the opponent will have 100% accuracy for any attack. [Field Effect]\u00a0If Pokemon is in the lead slot, wild encounters will increase.",
+		desc: "Every attack used by or against this Pokemon will always hit.",
 		onModifyMove: function(move) {
 			move.accuracy = true;
 			move.alwaysHit = true;
@@ -1277,13 +1288,14 @@ exports.BattleAbilities = {
 	},
 	"Oblivious": {
 		desc: "This Pokemon cannot become attracted to another Pokemon.",
+		onAttract: false,
 		id: "Oblivious",
 		name: "Oblivious",
 		rating: 0.5,
 		num: "12"
 	},
 	"Overcoat": {
-		desc: "In battle, the Pok\u00e9mon does not take damage from weather conditions like Sandstorm or Hail.",
+		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'Sandstorm' || type === 'Hail') return false;
 		},
@@ -1317,7 +1329,7 @@ exports.BattleAbilities = {
 		num: "20"
 	},
 	"Pickup": {
-		desc: "If an opponent uses a consumable item, Pickup will give the Pokemon the item used, if it is not holding an item. If multiple Pickup Pokemon are in play, one will pick up a copy of the used Berry, and may or may not use it immediately. Works on Berries, Jewels, Bulb, Focus Sash, Herbs, Rechargeable Battery, Red Card, and anything that is thrown with Fling",
+		desc: "If an opponent uses a consumable item, Pickup will give the Pokemon the item used, if it is not holding an item. If multiple Pickup Pokemon are in play, one will pick up a copy of the used Berry, and may or may not use it immediately. Works on Berries, Gems, Absorb Bulb, Focus Sash, Herbs, Cell Battery, Red Card, and anything that is thrown with Fling.",
 		onResidualPriority: -26.1,
 		onResidual: function(pokemon) {
 			var foe = pokemon.side.foe.randomActive();
@@ -1336,7 +1348,7 @@ exports.BattleAbilities = {
 		num: "53"
 	},
 	"Pickpocket": {
-		desc: "Steals attacking Pok\u00e9mon's held item on contact.",
+		desc: "Steals attacking Pokemon's held item on contact.",
 		id: "Pickpocket",
 		name: "Pickpocket",
 		rating: 1,
@@ -1350,7 +1362,7 @@ exports.BattleAbilities = {
 		num: "57"
 	},
 	"PoisonHeal": {
-		desc: "If this Pokemon become poisoned or Toxic Poisoned, it will\u00a0recover\u00a0one-eighth of its max HP after each turn. However, this Pokemon will continue to lose health as the player walks on the overworld screen.",
+		desc: "If this Pokemon becomes poisoned or Toxic Poisoned, it will recover one-eighth of its max HP after each turn.",
 		onDamage: function(damage, target, source, effect) {
 			if (effect.id === 'psn' || effect.id === 'tox')
 			{
@@ -1364,7 +1376,7 @@ exports.BattleAbilities = {
 		num: "90"
 	},
 	"PoisonPoint": {
-		desc: "If an opponent\u00a0directly attacks\u00a0this Pokemon, there is a 30% chance that the opponent will become poisoned.",
+		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become poisoned.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact)
 			{
@@ -1413,7 +1425,7 @@ exports.BattleAbilities = {
 		num: "158"
 	},
 	"Pressure": {
-		desc: "When an opponent uses a move that affects this Pokemon, an additional PP is required for the opponent to use that move. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon battles is halved.",
+		desc: "When an opponent uses a move that affects this Pokemon, an additional PP is required for the opponent to use that move.",
 		onStart: function(pokemon) {
 			this.add('message '+pokemon.name+' has Pressure. (placeholder)');
 		},
@@ -1437,7 +1449,7 @@ exports.BattleAbilities = {
 		num: "74"
 	},
 	"QuickFeet": {
-		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed, asleep (including self-induced Rest) or frozen, its Speed stat receives a 50% boost; the paralysis status' Speed drop is also ignored. [Field Effect]\u00a0If Pokemon is in lead slot, wild encounters decrease.",
+		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed, asleep (including self-induced Rest) or frozen, its Speed stat receives a 50% boost; the paralysis status' Speed drop is also ignored.",
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.status)
 			{
@@ -1532,7 +1544,7 @@ exports.BattleAbilities = {
 		num: "69"
 	},
 	"RoughSkin": {
-		desc: "Causes recoil damage equal to 1/8 of the opponent's max HP if an opponent\u00a0directly attacks.",
+		desc: "Causes recoil damage equal to 1/8 of the opponent's max HP if an opponent directly attacks.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact)
 			{
@@ -1572,7 +1584,7 @@ exports.BattleAbilities = {
 		num: "159"
 	},
 	"SandRush": {
-		desc: "Doubles Speed in a Sandstorm, and makes the Pok\u00e9mon immune to Sandstorm damage.",
+		desc: "Doubles Speed in a Sandstorm, and makes the Pokemon immune to Sandstorm damage.",
 		onModifyStats: function(stats, pokemon) {
 			if (this.weather === 'Sandstorm')
 			{
@@ -1599,7 +1611,7 @@ exports.BattleAbilities = {
 		num: "45"
 	},
 	"SandVeil": {
-		desc: "If active while Sandstorm is in effect, this Pokemon's Evasion receives a 20% boost; if this Pokemon has a typing that would normally take damage from Sandstorm, this Pokemon is also immune to Sandstorm's damage. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon battles during a Sandstorm is halved.",
+		desc: "If active while Sandstorm is in effect, this Pokemon's Evasion receives a 20% boost; if this Pokemon has a typing that would normally take damage from Sandstorm, this Pokemon is also immune to Sandstorm's damage.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'Sandstorm') return false;
 		},
@@ -1617,7 +1629,7 @@ exports.BattleAbilities = {
 		num: "8"
 	},
 	"SapSipper": {
-		desc: "When a Pok\u00e9mon with Sap Sipper is hit with a Grass-type attack, its attack is increased by one level, and the move itself has no effect. If hit by a multi-hit attack like Bullet Seed, it will increase attack by one stage for each hit. The only Grass-type move that will not activate Sap Sipper is Aromatherapy.",
+		desc: "When a Pokemon with Sap Sipper is hit with a Grass-type attack, its attack is increased by one level, and the move itself has no effect. If hit by a multi-hit attack like Bullet Seed, it will increase attack by one stage for each hit. The only Grass-type move that will not activate Sap Sipper is Aromatherapy.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'Grass')
 			{
@@ -1676,6 +1688,7 @@ exports.BattleAbilities = {
 	},
 	"ShedSkin": {
 		desc: "After each turn, this Pokemon has a 33% chance to heal itself from poison (including Toxic), paralysis, burn, freeze or sleep (including self-induced Rest).",
+		onResidualPriority: -5.1,
 		onResidual: function(pokemon) {
 			if (pokemon.status && Math.random()*3 < 1)
 			{
@@ -1689,7 +1702,7 @@ exports.BattleAbilities = {
 		num: "61"
 	},
 	"SheerForce": {
-		desc: "Raises the base power of all moves that have any secondary effects by 30%, but the secondary effects are ignored. However, this ability is not applied to moves that have a negative effect on the user, such as recoil, two-turn moves, and stat reduction after using certain moves. If a Pok\u00e9mon with Sheer Force is holding a Life Orb and uses an attack that would be boosted by Sheer Force, then the move gains both boosts but the user receives no recoil damage.",
+		desc: "Raises the base power of all moves that have any secondary effects by 30%, but the secondary effects are ignored. However, this ability is not applied to moves that have a negative effect on the user, such as recoil, two-turn moves, and stat reduction after using certain moves. If a Pokemon with Sheer Force is holding a Life Orb and uses an attack that would be boosted by Sheer Force, then the move gains both boosts but the user receives no recoil damage.",
 		onModifyMove: function(move) {
 			if (move.secondaries)
 			{
@@ -1777,7 +1790,7 @@ exports.BattleAbilities = {
 		num: "112"
 	},
 	"Sniper": {
-		desc: "When this Pokemon lands a Critical Hit, the base power of its attack tripled rather than doubled.",
+		desc: "When this Pokemon lands a Critical Hit, the base power of its attack is tripled rather than doubled.",
 		onModifyMove: function(move) {
 			move.critModifier = 3;
 		},
@@ -1839,7 +1852,7 @@ exports.BattleAbilities = {
 		onFoeBasePower: function(basePower, attacker, defender, move) {
 			if (this.getEffectiveness(move.type, defender) > 0)
 			{
-				this.debug('Sold Rock neutralize');
+				this.debug('Solid Rock neutralize');
 				return basePower * 3/4;
 			}
 		},
@@ -1849,14 +1862,17 @@ exports.BattleAbilities = {
 		num: "116"
 	},
 	"Soundproof": {
-		desc: "This Pokemon is immune to the effects of the sound-related moves Bug Buzz, Chatter, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Roar, Roar of Time, Sing, Sonicboom, Supersonic, Screech, Snore and Uproar.",
+		desc: "This Pokemon is immune to the effects of the sound-related moves Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar.",
+		onImmunity: function(type) {
+			if (type === 'sound') return false;
+		},
 		id: "Soundproof",
 		name: "Soundproof",
 		rating: 2,
 		num: "43"
 	},
 	"SpeedBoost": {
-		desc: "While this Pokemon is active, its Speed increased by one stage at the end of every turn; the six stage maximum for stat boosts is still in effect.",
+		desc: "While this Pokemon is active, its Speed increases by one stage at the end of every turn; the six stage maximum for stat boosts is still in effect.",
 		onResidualPriority: -26.1,
 		onResidual: function(pokemon) {
 			if (pokemon.activeTurns)
@@ -1870,7 +1886,7 @@ exports.BattleAbilities = {
 		num: "3"
 	},
 	"Stall": {
-		desc: "When all active Pokemon use moves that have the same priority value, this Pokemon always attacks last. See the\u00a0priority\u00a0page for more information.",
+		desc: "This Pokemon attacks last in its priority bracket.",
 		onModifyMove: function(move) {
 			move.priority -= 0.1;
 		},
@@ -1880,7 +1896,7 @@ exports.BattleAbilities = {
 		num: "100"
 	},
 	"Static": {
-		desc: "If an opponent\u00a0directly attacks\u00a0this Pokemon, there is a 30% chance that the opponent will become paralyzed. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of encountering an Electric-type Pokemon increases by 50%.",
+		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become paralyzed.",
 		onAfterDamage: function(damage, target, source, effect) {
 			if (effect && effect.isContact)
 			{
@@ -1906,7 +1922,7 @@ exports.BattleAbilities = {
 		num: "80"
 	},
 	"Stench": {
-		desc: "When this Pokemon is in the first slot of the player's party, it halves the rate of wild encounters.",
+		desc: "Damaging moves have a 10% chance to flinch.",
 		id: "Stench",
 		name: "Stench",
 		rating: 0,
@@ -1923,7 +1939,7 @@ exports.BattleAbilities = {
 		num: "60"
 	},
 	"StormDrain": {
-		desc: "During double battles, this Pokemon draws\u00a0any\u00a0single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball. The user is immune to Water and its Special Attack is increased one stage when hit by one.",
+		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball. The user is immune to Water and its Special Attack is increased one stage when hit by one.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'Water')
 			{
@@ -1937,7 +1953,7 @@ exports.BattleAbilities = {
 		num: "114"
 	},
 	"Sturdy": {
-		desc: "The one-hit KO moves Fissure, Guillotine, Horn Drill and Sheer Cold do not affect this Pokemon.",
+		desc: "This Pokemon is immune to OHKO moves, and will survive with 1 HP if hit by an attack which would KO it while at full health.",
 		onDamagePriority: -100,
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.ohko)
@@ -1957,7 +1973,7 @@ exports.BattleAbilities = {
 		num: "5"
 	},
 	"SuctionCups": {
-		desc: "Roar and Whirlwind do not affect this Pokemon. [Field Effect]\u00a0Pokemon hooked by a fishing rod are easier to catch.",
+		desc: "This Pokemon cannot be forced out.",
 		onDragOut: false,
 		id: "SuctionCups",
 		name: "Suction Cups",
@@ -1975,7 +1991,7 @@ exports.BattleAbilities = {
 		num: "105"
 	},
 	"Swarm": {
-		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Bug-type attacks receive a 50% boost in power. [Field Effect]\u00a0Pokemon cries are heard more often.",
+		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Bug-type attacks receive a 50% boost in power.",
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp/3)
 			{
@@ -2002,7 +2018,7 @@ exports.BattleAbilities = {
 		num: "33"
 	},
 	"Synchronize": {
-		desc: "If an opponent burns, poisons or paralyzes this Pokemon, the same condition inflicts the opponent. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of encountering a Pokemon with the same nature increases by 50%",
+		desc: "If an opponent burns, poisons or paralyzes this Pokemon, it receives the same condition.",
 		onAfterSetStatus: function(status, target, source) {
 			if (!source || source === target) return;
 			if (status.id === 'slp' || status.id === 'frz') return;
@@ -2042,7 +2058,7 @@ exports.BattleAbilities = {
 		num: "101"
 	},
 	"Telepathy": {
-		desc: "If a Pok\u00e9mon has Telepathy, it will not take damage from its teammates' moves in double and triple battles.",
+		desc: "If a Pokemon has Telepathy, it will not take damage from its teammates' moves in double and triple battles.",
 		id: "Telepathy",
 		name: "Telepathy",
 		rating: 0,
@@ -2211,7 +2227,10 @@ exports.BattleAbilities = {
 		num: "84"
 	},
 	"Unnerve": {
-		desc: "Opposing Pok\u00e9mon can't eat their Berries. ",
+		desc: "Opposing Pokemon can't eat their Berries.",
+		onStart: function(pokemon) {
+			this.add('message '+pokemon.name+' makes '+pokemon.side.foe.name+'\'s team too nervous to eat Berries!');
+		},
 		onFoeEatItem: false,
 		id: "Unnerve",
 		name: "Unnerve",
@@ -2219,7 +2238,7 @@ exports.BattleAbilities = {
 		num: "127"
 	},
 	"VictoryStar": {
-		desc: "Raises every friendly Pok\u00e9mon's Accuracy, including this Pok\u00e9mon's, by 10% (multiplied).",
+		desc: "Raises every friendly Pokemon's Accuracy, including this Pokemon's, by 10% (multiplied).",
 		onAllyModifyMove: function(move) {
 			if (typeof move.accuracy === 'number')
 			{
@@ -2232,7 +2251,7 @@ exports.BattleAbilities = {
 		num: "162"
 	},
 	"VitalSpirit": {
-		desc: "This Pokemon cannot be put to sleep; this includes both opponent-induced sleep as well as user-induced sleep via Rest. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of high-levelled wild Pokemon battles decreases by 50%.",
+		desc: "This Pokemon cannot be put to sleep; this includes both opponent-induced sleep as well as user-induced sleep via Rest.",
 		onImmunity: function(type) {
 			if (type === 'slp') return false;
 		},
@@ -2242,7 +2261,7 @@ exports.BattleAbilities = {
 		num: "72"
 	},
 	"VoltAbsorb": {
-		desc: "When an Electric-type attack hits this Pokemon, it recovers health equal to the damage that it would have taken; this Pokemon can recover up to 25% of its max HP in this way.",
+		desc: "When an Electric-type attack hits this Pokemon, it recovers 25% of its max HP.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'Electric')
 			{
@@ -2257,7 +2276,7 @@ exports.BattleAbilities = {
 		num: "10"
 	},
 	"WaterAbsorb": {
-		desc: "When a Water-type attack hits this Pokemon, it recovers health equal to the damage that it would have taken; this Pokemon can recover up to 25% of its max HP in this way.",
+		desc: "When a Water-type attack hits this Pokemon, it recovers 25% of its max HP.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'Water')
 			{
@@ -2282,7 +2301,7 @@ exports.BattleAbilities = {
 		num: "41"
 	},
 	"WeakArmor": {
-		desc: "Causes physical moves to lower the Pok\u00e9mon's Defense and increase its Speed stat by one stage.",
+		desc: "Causes physical moves to lower the Pokemon's Defense and increase its Speed stat by one stage.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.category === 'Physical')
 			{
@@ -2355,14 +2374,13 @@ exports.BattleAbilities = {
 		num: "147"
 	},
 	"ZenMode": {
-		desc: "When Hihidaruma's HP drops to below half, it will change into its Daruma Mode at the end of the turn. If it loses its ability, or recovers HP to above half while in its Daruma mode, it will change back. This ability only works on Hihidaruma, even if it is copied by Role Play, Befriend, or swapped with Skill Swap.",
+		desc: "When Darmanitan's HP drops to below half, it will enter Zen Mode at the end of the turn. If it loses its ability, or recovers HP to above half while in Zen mode, it will change back. This ability only works on Darmanitan, even if it is copied by Role Play, Entrainment, or swapped with Skill Swap.",
 		onResidualPriority: -27,
 		id: "ZenMode",
 		name: "Zen Mode",
 		rating: -1,
 		num: "161"
 	},
-	
 	
 	// CAP
 	"Mountaineer": {

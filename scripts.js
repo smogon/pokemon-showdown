@@ -315,7 +315,7 @@ exports.BattleScripts = {
 				this.singleEvent('MoveFail', move, null, target, pokemon, move);
 				return false;
 			}
-			if (hitResult === 'noFaint' && damage >= target.hp)
+			if (move.noFaint && damage >= target.hp)
 			{
 				damage = target.hp - 1;
 			}
@@ -483,10 +483,13 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 			if (template.tier === 'CAP' && Math.random()*3>1) continue;
 			
-			if (i===1 && ruleset && ruleset[0]==='PotD' && PotD && PotD.onPotD)
+			if (ruleset && ruleset[0]==='PotD' && PotD && PotD.onPotD)
 			{
-				template = this.getTemplate(PotD.onPotD);
+				var potd = this.getTemplate(PotD.onPotD);
+				if (i===1) template = potd;
+				else if (template.species === potd.species) continue; // No thanks, I've already got one
 			}
+			if (!template || !template.name || !template.types) continue;
 			
 			if (template.species === 'Magikarp')
 			{

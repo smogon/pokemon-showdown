@@ -1118,7 +1118,7 @@ function BattleSide(user, battle, n)
 	};
 }
 
-function Battle(roomid, format, ranked)
+function Battle(roomid, format, rated)
 {
 	var selfB = this;
 	this.log = [];
@@ -1130,7 +1130,7 @@ function Battle(roomid, format, ranked)
 	this.curCallback = '';
 	this.roomid = roomid;
 	
-	this.ranked = ranked;
+	this.rated = rated;
 	
 	this.weather = '';
 	this.weatherData = {id:''};
@@ -1836,12 +1836,12 @@ function Battle(roomid, format, ranked)
 			winSide = selfB.foeSide;
 			selfB.winner = side;
 		}
-		else if (selfB.ranked && side === selfB.ranked.p1)
+		else if (selfB.rated && side === selfB.rated.p1)
 		{
 			winSide = selfB.allySide;
 			selfB.winner = side;
 		}
-		else if (selfB.ranked && side === selfB.ranked.p2)
+		else if (selfB.rated && side === selfB.rated.p2)
 		{
 			winSide = selfB.foeSide;
 			selfB.winner = side;
@@ -2017,7 +2017,7 @@ function Battle(roomid, format, ranked)
 		
 		var format = selfB.getFormat();
 		selfB.add('tier '+format.name);
-		if (selfB.ranked)
+		if (selfB.rated)
 		{
 			selfB.add('rated');
 		}
@@ -2074,6 +2074,7 @@ function Battle(roomid, format, ranked)
 					}
 					break;
 				}
+				selfB.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}
 		}
 		for (var i in boost)
@@ -2102,6 +2103,7 @@ function Battle(roomid, format, ranked)
 					}
 					break;
 				}
+				selfB.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}
 		}
 		selfB.runEvent('AfterBoost', target, source, effect, boost);
@@ -2251,6 +2253,14 @@ function Battle(roomid, format, ranked)
 		if (move.affectedByImmunities)
 		{
 			if (!target.runImmunity(move.type, true))
+			{
+				return false;
+			}
+		}
+
+		if (move.isSoundBased)
+		{
+			if (!target.runImmunity('sound', true))
 			{
 				return false;
 			}
