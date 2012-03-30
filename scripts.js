@@ -123,7 +123,7 @@ exports.BattleScripts = {
 		this.add('move', pokemon.fullname, move.name, target.fullname, attrs);
 		if (missed)
 		{
-			this.add('r-miss '+pokemon.id);
+			this.add('-miss', pokemon.fullname);
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent')
 			{
@@ -133,7 +133,7 @@ exports.BattleScripts = {
 		}
 		if (target.fainted && !canTargetFainted[move.target])
 		{
-			this.add('r-no-target');
+			this.add('-notarget');
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent')
 			{
@@ -178,7 +178,7 @@ exports.BattleScripts = {
 				if (moveDamage === false) return true;
 				damage += (moveDamage || 0);
 			}
-			this.add('r-hit-count '+target.id+' '+i);
+			this.add('-hitcount', target.fullname, i);
 		}
 		
 		target.gotAttacked(move, damage, pokemon);
