@@ -120,14 +120,12 @@ function BattlePokemon(set, side)
 		for (var i=0; i<this.set.moves.length; i++)
 		{
 			var move = selfB.getMove(this.set.moves[i]);
-			var moveid = move.id;
 			if (move.id === 'HiddenPower')
 			{
 				this.hpType = move.type;
-				moveid += move.type;
 			}
 			this.baseMoveset.push({
-				move: moveid,
+				move: move.name,
 				id: move.id,
 				pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
 				maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
@@ -379,7 +377,7 @@ function BattlePokemon(set, side)
 		{
 			moves = [{
 				move: 'Struggle',
-				id: 'Struggle',
+				id: 'struggle',
 				pp: 1,
 				maxpp: 1,
 				disabled: false
@@ -487,7 +485,7 @@ function BattlePokemon(set, side)
 			{
 				var moveData = pokemon.moveset[i];
 				selfP.moveset.push({
-					move: toId(moveData.move),
+					move: selfB.getMove(moveData.id).name,
 					id: moveData.id,
 					pp: 5,
 					maxpp: moveData.maxpp,
