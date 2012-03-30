@@ -663,7 +663,7 @@ function BattlePokemon(set, side)
 		// unlike clearStatus, gives cure message
 		if (selfP.status)
 		{
-			selfB.add('r-cure-status '+selfP.id+' '+selfP.status);
+			selfB.add('-curestatus',selfP.fullname,selfP.status);
 			selfP.setStatus('');
 		}
 	};
