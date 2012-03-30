@@ -512,7 +512,7 @@ exports.BattleMovedex = {
 				return (((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) && this.runEvent('Attract', pokemon, source));
 			},
 			onBeforeMove: function(pokemon) {
-				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['Attract'])
+				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['attract'])
 				{
 					this.debug('Removing Attract volatile on '+pokemon);
 					pokemon.removeVolatile('Attract');
@@ -2341,11 +2341,11 @@ exports.BattleMovedex = {
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
 			
-			if (source.side.sideConditions['futureMove'].positions[source.position])
+			if (source.side.sideConditions['futuremove'].positions[source.position])
 			{
 				return false;
 			}
-			source.side.sideConditions['futureMove'].positions[source.position] = {
+			source.side.sideConditions['futuremove'].positions[source.position] = {
 				duration: 3,
 				move: 'DoomDesire',
 				targetPosition: target.position,
@@ -2896,7 +2896,7 @@ exports.BattleMovedex = {
 				{
 					// it failed
 					this.add('r-failed '+target.id);
-					delete target.volatiles['Encore'];
+					delete target.volatiles['encore'];
 					return;
 				}
 				this.effectData.move = target.lastMove;
@@ -3643,8 +3643,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
-			if (!pokemon.volatiles['Fling']) return false;
-			var item = this.getItem(pokemon.volatiles['Fling'].flingItem);
+			if (!pokemon.volatiles['fling']) return false;
+			var item = this.getItem(pokemon.volatiles['fling'].flingItem);
 			return item.fling.basePower;
 		},
 		category: "Physical",
@@ -3694,8 +3694,8 @@ exports.BattleMovedex = {
 			}
 		},
 		onTryHit: function(target, source, move) {
-			if (!source.volatiles['Fling']) return false;
-			var item = this.getItem(source.volatiles['Fling'].flingItem);
+			if (!source.volatiles['fling']) return false;
+			var item = this.getItem(source.volatiles['fling'].flingItem);
 			this.add("message "+source.name+" flung its "+item.name+"! (placeholder)");
 		},
 		secondary: false,
@@ -4097,11 +4097,11 @@ exports.BattleMovedex = {
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futureMove');
 			
-			if (source.side.sideConditions['futureMove'].positions[source.position])
+			if (source.side.sideConditions['futuremove'].positions[source.position])
 			{
 				return false;
 			}
-			source.side.sideConditions['futureMove'].positions[source.position] = {
+			source.side.sideConditions['futuremove'].positions[source.position] = {
 				duration: 3,
 				move: 'FutureSight',
 				targetPosition: target.position,
@@ -6087,7 +6087,7 @@ exports.BattleMovedex = {
 			},
 			onResidualPriority: 50-8,
 			onResidual: function(pokemon) {
-				var target = pokemon.side.foe.active[pokemon.volatiles['LeechSeed'].sourcePosition];
+				var target = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!target || target.fainted)
 				{
 					this.debug('Nothing to leech into');
@@ -6435,7 +6435,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -7,
 		onFieldHit: function(target, source, effect) {
-			if (this.pseudoWeather['MagicRoom'])
+			if (this.pseudoWeather['magicroom'])
 			{
 				this.removePseudoWeather('MagicRoom', source, effect);
 			}
@@ -7144,7 +7144,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'MudSport',
 		onTryHitField: function(target, source) {
-			if (source.volatiles['MudSport']) return false;
+			if (source.volatiles['mudsport']) return false;
 		},
 		effect: {
 			noCopy: true,
@@ -7204,7 +7204,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
-			if (pokemon.volatiles['NaturalGift']) return pokemon.volatiles['NaturalGift'].basePower;
+			if (pokemon.volatiles['naturalgift']) return pokemon.volatiles['naturalgift'].basePower;
 			return false;
 		},
 		category: "Physical",
@@ -7219,16 +7219,16 @@ exports.BattleMovedex = {
 			if (item.id && item.naturalGift)
 			{
 				pokemon.addVolatile('NaturalGift');
-				pokemon.volatiles['NaturalGift'].basePower = item.naturalGift.basePower;
-				pokemon.volatiles['NaturalGift'].type = item.naturalGift.type;
+				pokemon.volatiles['naturalgift'].basePower = item.naturalGift.basePower;
+				pokemon.volatiles['naturalgift'].type = item.naturalGift.type;
 				pokemon.setItem('');
 			}
 		},
 		onModifyMove: function(move, pokemon) {
-			if (pokemon.volatiles['NaturalGift']) move.type = pokemon.volatiles['NaturalGift'].type;
+			if (pokemon.volatiles['naturalgift']) move.type = pokemon.volatiles['naturalgift'].type;
 		},
 		onHit: function(target, source) {
-			return !!source.volatiles['NaturalGift'];
+			return !!source.volatiles['naturalgift'];
 		},
 		effect: {
 			duration: 1
@@ -7599,7 +7599,7 @@ exports.BattleMovedex = {
 				target.faint();
 			},
 			onResidual: function(pokemon) {
-				var duration = pokemon.volatiles['PerishSong'].duration;
+				var duration = pokemon.volatiles['perishsong'].duration;
 				this.add('r-volatile '+pokemon.id+' perish'+duration);
 			}
 		},
@@ -8238,11 +8238,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		beforeTurnCallback: function(pokemon, target) {
 			target.side.addSideCondition('Pursuit', pokemon);
-			if (!target.side.sideConditions['Pursuit'].sources)
+			if (!target.side.sideConditions['pursuit'].sources)
 			{
-				target.side.sideConditions['Pursuit'].sources = [];
+				target.side.sideConditions['pursuit'].sources = [];
 			}
-			target.side.sideConditions['Pursuit'].sources.push(pokemon);
+			target.side.sideConditions['pursuit'].sources.push(pokemon);
 		},
 		effect: {
 			duration: 1,
@@ -8253,7 +8253,7 @@ exports.BattleMovedex = {
 				this.add('residual '+pokemon.id+' switch-out');
 				for (var i=0; i<sources.length; i++)
 				{
-					if (sources[i].movedThisTurn || sources[i].status === 'slp' || sources[i].status === 'frz' || sources[i].volatiles['Truant'])
+					if (sources[i].movedThisTurn || sources[i].status === 'slp' || sources[i].status === 'frz' || sources[i].volatiles['truant'])
 					{
 						continue;
 					}
@@ -8457,10 +8457,10 @@ exports.BattleMovedex = {
 				{
 					this.add('r-blow-away '+pokemon.id+' StealthRock');
 				}
-				if (pokemon.volatiles['partiallyTrapped'])
+				if (pokemon.volatiles['partiallytrapped'])
 				{
-					this.add('r-blow-away '+pokemon.id+' '+pokemon.volatiles['partiallyTrapped'].sourceEffect.id);
-					delete pokemon.volatiles['partiallyTrapped'];
+					this.add('r-blow-away '+pokemon.id+' '+pokemon.volatiles['partiallytrapped'].sourceEffect.id);
+					delete pokemon.volatiles['partiallytrapped'];
 				}
 			}
 		},
@@ -9098,7 +9098,7 @@ exports.BattleMovedex = {
 				if (move.id !== 'Rollout')
 				{
 					// don't lock
-					delete target.volatiles['Rollout'];
+					delete target.volatiles['rollout'];
 				}
 			},
 			onModifyPokemon: function(pokemon) {
@@ -10489,8 +10489,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
-			if (!pokemon.volatiles['Stockpile'] || !pokemon.volatiles['Stockpile'].layers) return false;
-			return pokemon.volatiles['Stockpile'].layers * 100;
+			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
+			return pokemon.volatiles['stockpile'].layers * 100;
 		},
 		category: "Special",
 		desc: "Power increases with user's Stockpile count; fails with zero Stockpiles.",
@@ -10500,7 +10500,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onTryHit: function(target, pokemon) {
-			if (!pokemon.volatiles['Stockpile'] || !pokemon.volatiles['Stockpile'].layers) return false;
+			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
 		},
 		onMoveFail: function(pokemon) {
 			pokemon.removeVolatile('Stockpile');
@@ -10642,7 +10642,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onTryHit: function(pokemon) {
-			if (pokemon.volatiles['Stockpile'] && pokemon.volatiles['Stockpile'].layers >= 3) return false;
+			if (pokemon.volatiles['stockpile'] && pokemon.volatiles['stockpile'].layers >= 3) return false;
 		},
 		volatileStatus: 'Stockpile',
 		effect: {
@@ -10674,7 +10674,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback: function(pokemon, target) {
-			if (target.volatiles['Minimize']) return 130;
+			if (target.volatiles['minimize']) return 130;
 			return 65;
 		},
 		category: "Physical",
@@ -10750,7 +10750,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback: function(pokemon, target) {
-			if (target.volatiles['Minimize']) return 130;
+			if (target.volatiles['minimize']) return 130;
 			return 65;
 		},
 		category: "Physical",
@@ -11123,11 +11123,11 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onTryHit: function(pokemon) {
-			if (!pokemon.volatiles['Stockpile'] || !pokemon.volatiles['Stockpile'].layers) return false;
+			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
 		},
 		onHit: function(pokemon) {
 			var healAmount = [4,2,1]
-			this.heal(pokemon.maxhp / healAmount[pokemon.volatiles['Stockpile'].layers]);
+			this.heal(pokemon.maxhp / healAmount[pokemon.volatiles['stockpile'].layers]);
 			pokemon.removeVolatile('Stockpile');
 		},
 		secondary: false,
@@ -11792,7 +11792,7 @@ exports.BattleMovedex = {
 			onSwitchIn: function(pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
 				if (!pokemon.runImmunity('Poison')) return;
-				if (pokemon.volatiles['Substitute']) return;
+				if (pokemon.volatiles['substitute']) return;
 				if (pokemon.hasType('Poison'))
 				{
 					this.add('r-absorb-spikes '+pokemon.id+' ToxicSpikes');
@@ -11917,7 +11917,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: -7,
 		onHitField: function(target, source, effect) {
-			if (this.pseudoWeather['TrickRoom'])
+			if (this.pseudoWeather['trickroom'])
 			{
 				this.removePseudoWeather('TrickRoom', source, effect);
 			}
@@ -11964,7 +11964,7 @@ exports.BattleMovedex = {
 		basePower: 10,
 		basePowerCallback: function(pokemon) {
 			pokemon.addVolatile('TripleKick');
-			return 10 * pokemon.volatiles['TripleKick'].hit;
+			return 10 * pokemon.volatiles['triplekick'].hit;
 		},
 		category: "Physical",
 		desc: "Attacks three times in one turn, adding 10 BP for each kick. If a kick misses, the move ends instantly; if one of the kicks breaks a target's Substitute, the real Pokemon will take damage for the remaining kicks.",
@@ -12324,7 +12324,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'WaterSport',
 		onTryHitField: function(target, source) {
-			if (source.volatiles['WaterSport']) return false;
+			if (source.volatiles['watersport']) return false;
 		},
 		effect: {
 			noCopy: true,
@@ -12560,7 +12560,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -7,
 		onFieldHit: function(target, source, effect) {
-			if (this.pseudoWeather['WonderRoom'])
+			if (this.pseudoWeather['wonderroom'])
 			{
 				this.removePseudoWeather('WonderRoom', source, effect);
 			}
