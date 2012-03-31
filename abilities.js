@@ -88,11 +88,10 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
 		shortDesc: "Raises Attack to +6 (4x) if struck by a critical hit.",
 		onCriticalHit: function(target) {
-			if (!target.volatiles['Substitute'])
+			if (!target.volatiles['substitute'])
 			{
 				target.setBoost({atk: 6});
-				this.add('residual ability-activate '+target.id+' AngerPoint');
-				this.add('r-boost '+target.id+' atk 12');
+				this.add('-setboost',target,'atk',12,'[from] ability: Anger Point');
 			}
 		},
 		id: "angerpoint",
@@ -182,7 +181,7 @@ exports.BattleAbilities = {
 	"chlorophyll": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its speed is temporarily doubled.",
 		onModifyStats: function(stats) {
-			if (this.weather === 'SunnyDay')
+			if (this.weather === 'sunnyday')
 			{
 				stats.spe *= 2;
 			}
@@ -224,7 +223,7 @@ exports.BattleAbilities = {
 		onAfterMoveSecondary: function(target, source, effect) {
 			if (effect && effect.effectType === 'Move' && effect.category !== 'Status')
 			{
-				target.addVolatile('ColorChange', source, effect);
+				target.addVolatile('colorchange', source, effect);
 			}
 		},
 		effect: {
@@ -232,7 +231,7 @@ exports.BattleAbilities = {
 				this.effectData.type = 'Normal';
 				if (effect && effect.type && effect.type !== 'Normal')
 				{
-					this.add('residual '+target.id+' ability-activate ColorChange '+effect.type);
+					this.add('-type',target,effect.type,'[from] ability: Color Change');
 					this.effectData.type = effect.type;
 				}
 				else
@@ -243,7 +242,7 @@ exports.BattleAbilities = {
 			onRestart: function(target, source, effect) {
 				if (effect && effect.type && effect.type !== this.effectData.type)
 				{
-					this.add('residual '+target.id+' ability-activate ColorChange '+effect.type);
+					this.add('-type',target,effect.type,'[from] ability: Color Change');
 					this.effectData.type = effect.type;
 				}
 			},
@@ -296,7 +295,7 @@ exports.BattleAbilities = {
 			{
 				if (Math.random() * 10 < 3)
 				{
-					if (source.addVolatile('Attract', target)) this.add('message '+target.name+'\'s Cute Charm infatuated '+source.name+'! (placeholder)');
+					if (source.addVolatile('attract', target)) this.add('message',target.name+'\'s Cute Charm infatuated '+source.name+'! (placeholder)');
 				}
 			}
 		},
@@ -309,7 +308,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, no Pokemon on the field can use Selfdestruct or Explosion.",
 		id: "damp",
 		onAnyDamage: function(damage, target, source, effect) {
-			if (effect && effect.id === 'Aftermath')
+			if (effect && effect.id === 'aftermath')
 			{
 				return false;
 			}
@@ -372,7 +371,6 @@ exports.BattleAbilities = {
 				totaldef += foeactive[i].stats.def;
 				totalspd += foeactive[i].stats.spd;
 			}
-			this.add('residual '+pokemon.id+' ability-activate Download');
 			if (totaldef >= totalspd)
 			{
 				this.boost({spa:1});
@@ -390,7 +388,7 @@ exports.BattleAbilities = {
 	"drizzle": {
 		desc: "When this Pokemon enters the battlefield, it causes a permanent Rain Dance that can only be stopped by Air Lock, Cloud Nine or another weather condition.",
 		onStart: function(source) {
-			this.setWeather('RainDance');
+			this.setWeather('raindance');
 			this.weatherData.duration = 0;
 		},
 		id: "drizzle",
@@ -401,7 +399,7 @@ exports.BattleAbilities = {
 	"drought": {
 		desc: "When this Pokemon enters the battlefield, it causes a permanent Sunny Day that can only be stopped by Air Lock, Cloud Nine or another weather condition.",
 		onStart: function(source) {
-			this.setWeather('SunnyDay');
+			this.setWeather('sunnyday');
 			this.weatherData.duration = 0;
 		},
 		id: "drought",
@@ -414,8 +412,7 @@ exports.BattleAbilities = {
 		onImmunity: function(type, pokemon) {
 			if (type === 'Water')
 			{
-				var d = pokemon.heal(pokemon.maxhp/4);
-				this.add('r-ability-heal '+pokemon.id+' DrySkin '+d+pokemon.getHealth());
+				this.heal(pokemon.maxhp/4);
 				return null;
 			}
 		},
@@ -426,11 +423,11 @@ exports.BattleAbilities = {
 			}
 		},
 		onWeather: function(target, source, effect) {
-			if (effect.id === 'RainDance')
+			if (effect.id === 'raindance')
 			{
 				this.heal(target.maxhp/8);
 			}
-			else if (effect.id === 'SunnyDay')
+			else if (effect.id === 'sunnyday')
 			{
 				this.damage(target.maxhp/8);
 			}
@@ -524,14 +521,14 @@ exports.BattleAbilities = {
 		onImmunity: function(type, pokemon) {
 			if (type === 'Fire')
 			{
-				pokemon.addVolatile('FlashFire');
+				pokemon.addVolatile('flashfire');
 				return null;
 			}
 		},
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function(target) {
-				this.add('r-volatile '+target.id+' flash-fire');
+				this.add('-start',target,'ability: Flash Fire');
 			},
 			onBasePower: function(basePower, attacker, defender, move) {
 				if (move.type === 'Fire')
@@ -549,7 +546,7 @@ exports.BattleAbilities = {
 	"flowergift": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its Attack and Special Defense stats (as well as its partner's stats in double battles) receive a 50% boost.",
 		onModifyStats: function(stats, pokemon) {
-			if (this.weather === 'SunnyDay')
+			if (this.weather === 'sunnyday')
 			{
 				stats.atk *= 1.5;
 				stats.spd *= 1.5;
@@ -564,15 +561,15 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's type changes according to the current weather conditions: it becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and remains its regular type otherwise.",
 		onModifyPokemon: function(pokemon) {
 			if (pokemon.species !== 'Castform') return;
-			if (this.weather === 'SunnyDay')
+			if (this.weather === 'sunnyday')
 			{
 				pokemon.types = ['Fire'];
 			}
-			if (this.weather === 'RainDance')
+			if (this.weather === 'raindance')
 			{
 				pokemon.types = ['Water'];
 			}
-			if (this.weather === 'Hail')
+			if (this.weather === 'hail')
 			{
 				pokemon.types = ['Ice'];
 			}
@@ -595,7 +592,7 @@ exports.BattleAbilities = {
 					var move = this.getMove(targets[i].moveset[j].move);
 					var bp = move.basePower;
 					if (move.ohko) bp = 160;
-					if (move.id === 'Counter' || move.id === 'MetalBurst' || move.id === 'MirrorCoat') bp = 120;
+					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
 					if (!bp && move.category !== 'Status') bp = 80;
 					if (bp > warnBp)
 					{
@@ -610,7 +607,7 @@ exports.BattleAbilities = {
 			}
 			if (!warnMoves.length) return;
 			var warnMove = warnMoves[Math.floor(Math.random()*warnMoves.length)];
-			this.add('message '+pokemon.name+'\'s Forewarn alerted it to '+warnMove[0].name+'!');
+			this.add('-message',pokemon.name+'\'s Forewarn alerted it to '+warnMove[0].name+'! (placeholder)');
 		},
 		id: "forewarn",
 		name: "Forewarn",
@@ -628,7 +625,7 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, it identifies the opponent's held item; in double battles, the held item of an unrevealed, randomly selected opponent is identified.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			this.add('message Frisk found '+target.item+'. (placeholder)');
+			this.add('message','Frisk found '+target.item+'. (placeholder)');
 		},
 		id: "frisk",
 		name: "Frisk",
@@ -737,7 +734,7 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon is active while Rain Dance is in effect, it recovers from poison, paralysis, burn, sleep and freeze at the end of the turn.",
 		onResidualPriority: -5.1,
 		onResidual: function(pokemon) {
-			if (pokemon.status && this.weather === 'RainDance')
+			if (pokemon.status && this.weather === 'raindance')
 			{
 				this.debug('hydration');
 				pokemon.cureStatus();
@@ -788,7 +785,7 @@ exports.BattleAbilities = {
 	"illusion": {
 		desc: "Illusion will change the appearance of the Pokemon to a different species. This is dependent on the last Pokemon in the player's party. Along with the species itself, Illusion is broken when the user is damaged, but is not broken by Substitute, weather conditions, status ailments, or entry hazards. Illusion will replicate the type of Poke Ball, the species name, and the gender of the Pokemon it is masquerading as.",
 		onModifyPokemon: function(pokemon) {
-			if (!pokemon.volatiles['Illusion'])
+			if (!pokemon.volatiles['illusion'])
 			{
 				for (i=pokemon.side.pokemon.length-1; i>pokemon.position; i--)
 				{
@@ -803,11 +800,10 @@ exports.BattleAbilities = {
 			if (effect && effect.effectType === 'Move')
 			{
 				this.debug('illusion cleared');
-				pokemon.addVolatile('Illusion');
+				pokemon.addVolatile('illusion');
 				pokemon.id = pokemon.baseId;
 				pokemon.fullid = pokemon.baseFullid;
-				this.add('pokemon '+pokemon.fullid);
-				this.add('replace '+pokemon.id);
+				this.add('replace',pokemon,pokemon.details,pokemon.getHealth());
 			}
 		},
 		id: "illusion",
@@ -831,7 +827,7 @@ exports.BattleAbilities = {
 			var target = pokemon.side.foe.randomActive();
 			if (pokemon.transformInto(target))
 			{
-				this.add('r-transform '+pokemon.id+' '+target.id);
+				this.add('-start',pokemon,'transform','[of] '+target);
 			}
 		},
 		id: "imposter",
@@ -872,14 +868,14 @@ exports.BattleAbilities = {
 			for (var i=0; i<foeactive.length; i++)
 			{
 				if (!foeactive[i]) continue;
-				if (foeactive[i].volatiles['Substitute'])
+				if (foeactive[i].volatiles['substitute'])
 				{
 					// does it give a message?
-					this.add('r-sub-block '+foeactive[i].id+' Intimidate');
+					this.add('-start',foeactive[i],'substitute','[block] ability: Intimidate','[of] '+pokemon);
 				}
 				else
 				{
-					this.add('r-intimidate '+pokemon.id+' '+foeactive[i].id);
+					this.add('-ability',pokemon,'Intimidate','[of] '+foeactive[i]);
 					this.boost({atk: -1}, foeactive[i], pokemon);
 				}
 			}
@@ -956,7 +952,7 @@ exports.BattleAbilities = {
 	"leafguard": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, it cannot become poisoned, burned, paralyzed or put to sleep (other than user-induced Rest). Leaf Guard does not heal status effects that existed before Sunny Day came into effect.",
 		onSetStatus: function(pokemon) {
-			if (this.weather === 'SunnyDay')
+			if (this.weather === 'sunnyday')
 			{
 				this.debug('interrupting setstatus');
 				return false;
@@ -1016,7 +1012,7 @@ exports.BattleAbilities = {
 		id: "liquidooze",
 		onSourceHeal: function(damage, target, source, effect) {
 			this.debug("Heal is occurring: "+target+" <- "+source+" :: "+effect.id);
-			var canOoze = {drain: 1, LeechSeed: 1};
+			var canOoze = {drain: 1, leechseed: 1};
 			if (canOoze[effect.id]) {
 				this.damage(damage);
 				return 0;
@@ -1048,7 +1044,7 @@ exports.BattleAbilities = {
 			{
 				var newMove = this.getMoveCopy(move.id);
 				newMove.hasBounced = true;
-				this.add('r-bounce-back '+source.id+' MagicBounce '+move.id+' '+target.id);
+				this.add('-ability',target,'Magic Bounce','[bounce] '+newMove,'[of] '+source);
 				this.moveHit(source, target, newMove);
 				return null;
 			}
@@ -1118,7 +1114,7 @@ exports.BattleAbilities = {
 	"moldbreaker": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Herbivore, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
 		onStart: function(pokemon) {
-			this.add('message '+pokemon.name+' has Mold Breaker. (placeholder)');
+			this.add('-message',pokemon.name+' has Mold Breaker. (placeholder)');
 		},
 		onAllyModifyPokemonPriority: 100,
 		onAllyModifyPokemon: function(pokemon) {
@@ -1242,9 +1238,9 @@ exports.BattleAbilities = {
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact)
 			{
-				if (source.ability !== 'WonderGuard' && source.setAbility('Mummy'))
+				if (source.ability !== 'wonderguard' && source.setAbility('mummy'))
 				{
-					this.add("message "+source.name+"'s ability became Mummy! (placeholder)");
+					this.add("-message",source.name+"'s ability became Mummy! (placeholder)");
 				}
 			}
 		},
@@ -1333,12 +1329,12 @@ exports.BattleAbilities = {
 		onResidualPriority: -26.1,
 		onResidual: function(pokemon) {
 			var foe = pokemon.side.foe.randomActive();
-			if (!pokemon.item && foe.lastItem && foe.usedItemThisTurn && foe.lastItem !== 'AirBalloon' && foe.lastItem !== 'EjectButton')
+			if (!pokemon.item && foe.lastItem && foe.usedItemThisTurn && foe.lastItem !== 'airballoon' && foe.lastItem !== 'ejectbutton')
 			{
 				pokemon.setItem(foe.lastItem);
 				foe.lastItem = '';
 				var item = pokemon.getItem();
-				this.add('message '+pokemon.name+' picked up one '+item.name+'! (placeholder)');
+				this.add('-message',pokemon.name+' picked up one '+item.name+'! (placeholder)');
 				if (item.isBerry) pokemon.update();
 			}
 		},
@@ -1427,7 +1423,7 @@ exports.BattleAbilities = {
 	"pressure": {
 		desc: "When an opponent uses a move that affects this Pokemon, an additional PP is required for the opponent to use that move.",
 		onStart: function(pokemon) {
-			this.add('message '+pokemon.name+' has Pressure. (placeholder)');
+			this.add('-ability', pokemon, 'Pressure');
 		},
 		onSourceDeductPP: function(pp, target, source) {
 			if (target === source) return;
@@ -1464,7 +1460,7 @@ exports.BattleAbilities = {
 	"raindish": {
 		desc: "If active while Rain Dance is in effect, this Pokemon recovers one-sixteenth of its max HP after each turn.",
 		onWeather: function(target, source, effect) {
-			if (effect.id === 'RainDance')
+			if (effect.id === 'raindance')
 			{
 				this.heal(target.maxhp/16);
 			}
@@ -1566,7 +1562,7 @@ exports.BattleAbilities = {
 	"sandforce": {
 		desc: "Raises the power of Rock, Ground, and Steel-type moves by 30% while a Sandstorm is in effect. It also gives the user immunity to damage from Sandstorm.",
 		onBasePower: function(basePower, attacker, defender, move) {
-			if (this.weather === 'Sandstorm')
+			if (this.weather === 'sandstorm')
 			{
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel')
 				{
@@ -1576,7 +1572,7 @@ exports.BattleAbilities = {
 			}
 		},
 		onImmunity: function(type, pokemon) {
-			if (type === 'Sandstorm') return false;
+			if (type === 'sandstorm') return false;
 		},
 		id: "sandforce",
 		name: "Sand Force",
@@ -1586,13 +1582,13 @@ exports.BattleAbilities = {
 	"sandrush": {
 		desc: "Doubles Speed in a Sandstorm, and makes the Pokemon immune to Sandstorm damage.",
 		onModifyStats: function(stats, pokemon) {
-			if (this.weather === 'Sandstorm')
+			if (this.weather === 'sandstorm')
 			{
 				stats.spe *= 2;
 			}
 		},
 		onImmunity: function(type, pokemon) {
-			if (type === 'Sandstorm') return false;
+			if (type === 'sandstorm') return false;
 		},
 		id: "sandrush",
 		name: "Sand Rush",
@@ -1602,7 +1598,7 @@ exports.BattleAbilities = {
 	"sandstream": {
 		desc: "When this Pokemon enters the battlefield, it causes a permanent Sandstorm that can only be stopped by Air Lock, Cloud Nine or another weather condition.",
 		onStart: function(source) {
-			this.setWeather('Sandstorm');
+			this.setWeather('sandstorm');
 			this.weatherData.duration = 0;
 		},
 		id: "sandstream",
@@ -1613,11 +1609,11 @@ exports.BattleAbilities = {
 	"sandveil": {
 		desc: "If active while Sandstorm is in effect, this Pokemon's Evasion receives a 20% boost; if this Pokemon has a typing that would normally take damage from Sandstorm, this Pokemon is also immune to Sandstorm's damage.",
 		onImmunity: function(type, pokemon) {
-			if (type === 'Sandstorm') return false;
+			if (type === 'sandstorm') return false;
 		},
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
-			if (this.weather === 'Sandstorm')
+			if (this.weather === 'sandstorm')
 			{
 				this.debug('sand veil - decreasing accuracy');
 				move.accuracy *= 0.8;
@@ -1676,7 +1672,7 @@ exports.BattleAbilities = {
 	"shadowtag": {
 		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they have the same ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn.",
 		onFoeModifyPokemon: function(pokemon) {
-			if (pokemon.ability !== 'ShadowTag')
+			if (pokemon.ability !== 'shadowtag')
 			{
 				pokemon.trapped = true;
 			}
@@ -1769,19 +1765,19 @@ exports.BattleAbilities = {
 	"slowstart": {
 		desc: "After this Pokemon switches into the battle, its Attack and Speed stats are halved for five turns; for example, if this Pokemon has an Attack stat of 400, it will effectively have an Attack stat of 200 until the effects of Slow Start wear off.",
 		onStart: function(pokemon) {
-			pokemon.addVolatile('SlowStart');
+			pokemon.addVolatile('slowstart');
 		},
 		effect: {
 			duration: 5,
 			onStart: function(target) {
-				this.add('message Slow Start!');
+				this.add('-message', target.name+' can\'t get it going because of its Slow Start! (placeholder)');
 			},
 			onModifyStats: function(stats) {
 				stats.atk /= 2;
 				stats.spe /= 2;
 			},
 			onEnd: function(target) {
-				this.add('message Slow Start ended.');
+				this.add('-message', 'Slow Start ended. (placeholder)');
 			}
 		},
 		id: "slowstart",
@@ -1802,11 +1798,11 @@ exports.BattleAbilities = {
 	"snowcloak": {
 		desc: "If active while Hail is in effect, this Pokemon's Evasion receives a 20% boost; if this Pokemon has a typing that would normally take damage from Hail, this Pokemon is also immune to Hail's damage.",
 		onImmunity: function(type, pokemon) {
-			if (type === 'Hail') return false;
+			if (type === 'hail') return false;
 		},
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
-			if (this.weather === 'Hail')
+			if (this.weather === 'hail')
 			{
 				this.debug('snow cloak - decreasing accuracy');
 				move.accuracy *= 0.8;
@@ -1820,7 +1816,7 @@ exports.BattleAbilities = {
 	"snowwarning": {
 		desc: "When this Pokemon enters the battlefield, it causes a permanent Hail that can only be stopped by Air Lock, Cloud Nine or another weather condition.",
 		onStart: function(source) {
-			this.setWeather('Hail');
+			this.setWeather('hail');
 			this.weatherData.duration = 0;
 		},
 		id: "snowwarning",
@@ -1831,13 +1827,13 @@ exports.BattleAbilities = {
 	"solarpower": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its Special Attack temporarily receives a 50% boost but this Pokemon also receives damage equal to one-eighth of its max HP after each turn.",
 		onModifyStats: function(stats, pokemon) {
-			if (this.weather === 'SunnyDay')
+			if (this.weather === 'sunnyday')
 			{
 				stats.spa *= 1.5;
 			}
 		},
 		onWeather: function(target, source, effect) {
-			if (effect.id === 'SunnyDay')
+			if (effect.id === 'sunnyday')
 			{
 				this.damage(target.maxhp/8);
 			}
@@ -1958,12 +1954,12 @@ exports.BattleAbilities = {
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.ohko)
 			{
-				this.add('r-sturdy '+target.id);
+				this.add('-ability',target,'Sturdy');
 				return 0;
 			}
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move')
 			{
-				this.add('r-sturdy '+target.id);
+				this.add('-ability',target,'Sturdy');
 				return target.hp - 1;
 			}
 		},
@@ -2007,7 +2003,7 @@ exports.BattleAbilities = {
 	"swiftswim": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, its speed is temporarily doubled.",
 		onModifyStats: function(stats, pokemon) {
-			if (this.weather === 'RainDance')
+			if (this.weather === 'raindance')
 			{
 				stats.spe *= 2;
 			}
@@ -2067,7 +2063,7 @@ exports.BattleAbilities = {
 	"teravolt": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
 		onStart: function(pokemon) {
-			this.add('message '+pokemon.name+' has Teravolt. (placeholder)');
+			this.add('-message', pokemon.name+' has Teravolt. (placeholder)');
 		},
 		onAllyModifyPokemon: function(pokemon) {
 			if (this.activePokemon === this.effectData.target && pokemon !== this.activePokemon)
@@ -2147,10 +2143,10 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
 			var abilityid = target.ability;
-			if (abilityid === 'Trace') return;
+			if (abilityid === 'trace') return;
 			if (pokemon.setAbility(abilityid))
 			{
-				this.add('r-trace '+pokemon.id+' '+target.id+' '+abilityid);
+				this.add('-ability',pokemon,abilityid,'[from] ability: Trace','[of] '+target);
 			}
 		},
 		id: "trace",
@@ -2160,13 +2156,13 @@ exports.BattleAbilities = {
 	},
 	"truant": {
 		desc: "After this Pokemon is switched into battle, it skips every other turn.",
-		onBeforeMove: function(pokemon) {
-			if (pokemon.removeVolatile('Truant'))
+		onBeforeMove: function(pokemon, target, move) {
+			if (pokemon.removeVolatile('truant'))
 			{
-				this.add('cant-move '+pokemon.id+' truant');
+				this.add('cant',pokemon,'ability: Truant', move);
 				return false;
 			}
-			pokemon.addVolatile('Truant');
+			pokemon.addVolatile('truant');
 		},
 		effect: {
 			duration: 2
@@ -2179,7 +2175,7 @@ exports.BattleAbilities = {
 	"turboblaze": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
 		onStart: function(pokemon) {
-			this.add('message '+pokemon.name+' has Turboblaze. (placeholder)');
+			this.add('-message',pokemon.name+' has Turboblaze. (placeholder)');
 		},
 		onAllyModifyPokemon: function(pokemon) {
 			if (this.activePokemon === this.effectData.target && pokemon !== this.activePokemon)
@@ -2229,7 +2225,7 @@ exports.BattleAbilities = {
 	"unnerve": {
 		desc: "Opposing Pokemon can't eat their Berries.",
 		onStart: function(pokemon) {
-			this.add('message '+pokemon.name+' makes '+pokemon.side.foe.name+'\'s team too nervous to eat Berries!');
+			this.add('-message',pokemon.name+' makes '+pokemon.side.foe.name+'\'s team too nervous to eat Berries! (placeholder)');
 		},
 		onFoeEatItem: false,
 		id: "unnerve",
@@ -2266,7 +2262,7 @@ exports.BattleAbilities = {
 			if (type === 'Electric')
 			{
 				var d = pokemon.heal(pokemon.maxhp/4);
-				this.add('r-ability-heal '+pokemon.id+' VoltAbsorb '+d+pokemon.getHealth());
+				this.add('-heal',pokemon,d+pokemon.getHealth(),'[from] ability: Volt Absorb');
 				return null;
 			}
 		},
@@ -2281,7 +2277,7 @@ exports.BattleAbilities = {
 			if (type === 'Water')
 			{
 				var d = pokemon.heal(pokemon.maxhp/4);
-				this.add('r-ability-heal '+pokemon.id+' WaterAbsorb '+d+pokemon.getHealth());
+				this.add('-heal',pokemon,d+pokemon.getHealth(),'[from] ability: Water Absorb');
 				return null;
 			}
 		},
@@ -2339,7 +2335,7 @@ exports.BattleAbilities = {
 			this.debug('Wonder Guard immunity: '+effect.id);
 			if (this.getEffectiveness(effect.type, target) <= 0)
 			{
-				this.add('r-immune '+target.id);
+				this.add('-immune',target,'[msg]');
 				return null;
 			}
 		},
@@ -2349,7 +2345,7 @@ exports.BattleAbilities = {
 			this.debug('Wonder Guard immunity: '+effect.id);
 			if (this.getEffectiveness(effect.type, target) <= 0)
 			{
-				this.add('r-immune '+target.id);
+				this.add('-immune',target,'[msg]');
 				return null;
 			}
 		},
@@ -2386,7 +2382,7 @@ exports.BattleAbilities = {
 	"mountaineer": {
 		desc: "This Pokémon avoids all Rock-type attacks and hazards when switching in.",
 		onDamage: function(damage, target, source, effect) {
-			if (effect && effect.id === 'StealthRock')
+			if (effect && effect.id === 'stealthrock')
 			{
 				return false;
 			}
@@ -2417,14 +2413,14 @@ exports.BattleAbilities = {
 			{
 				return;
 			}
-			if (this.pseudoWeather['MagicBounce'])
+			if (this.pseudoWeather['magicbounce'])
 			{
 				return;
 			}
 			if (move.isBounceable)
 			{
-				this.addPseudoWeather('MagicBounce');
-				this.add('r-bounce-back '+source.id+' Rebound '+move.id+' '+target.id);
+				this.addPseudoWeather('magicbounce');
+				this.add('-message', source.name + '\'s ' + move.move + ' was bounced back by Rebound! (placeholder)');
 				this.moveHit(source, source, move);
 				return null;
 			}
