@@ -1007,14 +1007,9 @@ function BattleSide(user, battle, n)
 		{
 			var pokemon = selfS.pokemon[i];
 			data.pokemon.push({
-				name: pokemon.name,
-				species: pokemon.species,
-				id: pokemon.id,
-				status: pokemon.status,
+				ident: pokemon.fullname,
 				details: pokemon.details,
-				level: pokemon.level,
-				gender: pokemon.gender,
-				fainted: pokemon.fainted,
+				condition: pokemon.getHealth(),
 				active: (pokemon.position < pokemon.side.active.length),
 				moves: pokemon.moves,
 				ability: pokemon.ability,
