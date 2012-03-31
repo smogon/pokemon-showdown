@@ -141,7 +141,7 @@ exports.BattleScripts = {
 			}
 			return true;
 		}
-		if (move.id === 'Return' || move.id === 'Frustration')
+		if (move.id === 'return' || move.id === 'frustration')
 		{
 			move.basePower = 102;
 		}
