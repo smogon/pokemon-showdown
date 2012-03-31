@@ -60,7 +60,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onStart: function(target) {
-			this.add('r-volatile '+target.id+' balloon');
+			this.add('-item', target, 'Air Balloon');
 		},
 		onImmunity: function(type) {
 			if (type === 'Ground') return false;
@@ -69,7 +69,7 @@ exports.BattleItems = {
 			this.debug('effect: '+effect.id);
 			if (effect.effectType === 'Move')
 			{
-				this.add('r-volatile '+target.id+' balloon end');
+				this.add('-enditem', target, 'Air Balloon');
 				target.setItem('');
 			}
 		},
@@ -77,7 +77,7 @@ exports.BattleItems = {
 			this.debug('effect: '+effect.id);
 			if (effect.effectType === 'Move')
 			{
-				this.add('r-volatile '+target.id+' balloon end');
+				this.add('-enditem', target, 'Air Balloon');
 				target.setItem('');
 			}
 		}
@@ -92,7 +92,7 @@ exports.BattleItems = {
 			type: "Ground"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4|| (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4|| (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				pokemon.eatItem();
 			}
 		},
@@ -627,19 +627,19 @@ exports.BattleItems = {
 			type: "Ghost"
 		},
 		onResidual: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony'))
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony'))
 			{
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.addVolatile('CustapBerry');
+			pokemon.addVolatile('custapberry');
 		},
 		effect: {
 			duration: 2,
 			onModifyPriority: function(priority, pokemon) {
-				this.add('r-custap '+pokemon.id);
-				pokemon.removeVolatile('CustapBerry');
+				this.add('-enditem', pokemon, 'Custap Berry');
+				pokemon.removeVolatile('custapberry');
 				return priority + 0.1;
 			}
 		},
@@ -832,7 +832,7 @@ exports.BattleItems = {
 			{
 				if (target.useItem())
 				{
-					this.add("message "+target.name+" is switched out with the Eject Button! (placeholder)");
+					this.add("-message",target.name+" is switched out with the Eject Button! (placeholder)");
 					target.switchFlag = true;
 				}
 			}
@@ -886,7 +886,7 @@ exports.BattleItems = {
 		onSourceBasePower: function(basePower, user, target, move) {
 			if (move && this.getEffectiveness(move.type, target) >= 2)
 			{
-				target.addVolatile('EnigmaBerry');
+				target.addVolatile('enigmaberry');
 			}
 		},
 		effect: {
@@ -894,7 +894,7 @@ exports.BattleItems = {
 			onUpdate: function(target) {
 				if (target.eatItem())
 				{
-					target.removeVolatile('EnigmaBerry');
+					target.removeVolatile('enigmaberry');
 				}
 			}
 		},
@@ -1018,7 +1018,7 @@ exports.BattleItems = {
 		onResidual: function(pokemon) {
 			if (!pokemon.status)
 			{
-				this.add('residual '+pokemon.id+' item-activate FlameOrb');
+				this.add('-item',pokemon,'Flame Orb');
 				pokemon.trySetStatus('brn');
 			}
 		},
@@ -1079,7 +1079,7 @@ exports.BattleItems = {
 		onDamage: function(damage, target, source, effect) {
 			if (Math.random()*10 < 1 && damage >= target.hp && effect && effect.effectType === 'Move')
 			{
-				this.add("message "+target.name+" held on using its Focus Band! (placeholder)");
+				this.add("-message",target.name+" held on using its Focus Band! (placeholder)");
 				return target.hp - 1;
 			}
 		},
@@ -1122,7 +1122,7 @@ exports.BattleItems = {
 			type: "Ice"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				pokemon.eatItem();
 			}
 		},
@@ -1493,12 +1493,12 @@ exports.BattleItems = {
 			type: "Flying"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.addVolatile('FocusEnergy');
+			pokemon.addVolatile('focusenergy');
 		},
 		desc: "Raises critical hit rate by two stages when at 25% HP or less. One-time use."
 	},
@@ -1542,17 +1542,17 @@ exports.BattleItems = {
 			var move = pokemon.getMoveData(pokemon.lastMove);
 			if (move && move.pp === 0)
 			{
-				pokemon.addVolatile('LeppaBerry');
-				pokemon.volatiles['LeppaBerry'].move = move;
+				pokemon.addVolatile('leppaberry');
+				pokemon.volatiles['leppaberry'].move = move;
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
 			var move;
-			if (pokemon.volatiles['LeppaBerry'])
+			if (pokemon.volatiles['leppaberry'])
 			{
-				move = pokemon.volatiles['LeppaBerry'].move;
-				pokemon.removeVolatile('LeppaBerry');
+				move = pokemon.volatiles['leppaberry'].move;
+				pokemon.removeVolatile('leppaberry');
 			}
 			else
 			{
@@ -1567,7 +1567,7 @@ exports.BattleItems = {
 			}
 			move.pp += 10;
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
-			this.add("message "+pokemon.name+" restored "+move.move+"'s PP using its Leppa Berry! (placeholder)");
+			this.add("-message",pokemon.name+" restored "+move.move+"'s PP using its Leppa Berry! (placeholder)");
 		},
 		desc: "Restores 10 PP to a move that has run out of PP. One-time use."
 	},
@@ -1581,7 +1581,7 @@ exports.BattleItems = {
 			type: "Grass"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				pokemon.eatItem();
 			}
 		},
@@ -1599,20 +1599,20 @@ exports.BattleItems = {
 		},
 		onBasePower: function(basePower, user) {
 			this.debug('LO boost');
-			user.addVolatile('LifeOrb');
+			user.addVolatile('lifeorb');
 			return basePower * 1.3;
 		},
 		effect: {
 			duration: 1,
 			onAfterMoveSecondarySelf: function(source, target, move) {
-				if (move && move.effectType === 'Move' && source && source.volatiles['LifeOrb'])
+				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb'])
 				{
-					this.damage(source.maxhp/10, source, source, this.getItem('LifeOrb'));
-					source.removeVolatile('LifeOrb');
+					this.damage(source.maxhp/10, source, source, this.getItem('lifeorb'));
+					source.removeVolatile('lifeorb');
 				}
 			}
 		},
-		desc: "\"Boosts power by 30%, user takes 10% recoil each turn it attacks.\""
+		desc: "Boosts power by 30%, user takes 10% recoil each turn it attacks."
 	},
 	"lightball": {
 		id: "lightball",
@@ -1773,7 +1773,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10,
 			effect: function(pokemon) {
-				var conditions = ['Attract','Taunt','Encore','Torment','Disable'];
+				var conditions = ['attract','taunt','encore','torment','disable'];
 				for (var i=0; i<conditions.length; i++)
 				{
 					if (pokemon.volatiles[conditions[i]])
@@ -1788,7 +1788,7 @@ exports.BattleItems = {
 			}
 		},
 		onUpdate: function(pokemon) {
-			var conditions = ['Attract','Taunt','Encore','Torment','Disable'];
+			var conditions = ['attract','taunt','encore','torment','disable'];
 			for (var i=0; i<conditions.length; i++)
 			{
 				if (pokemon.volatiles[conditions[i]])
@@ -2137,7 +2137,7 @@ exports.BattleItems = {
 			type: "Poison"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				pokemon.eatItem();
 			}
 		},
@@ -2217,7 +2217,7 @@ exports.BattleItems = {
 			if (move.isTwoTurnMove && pokemon.useItem())
 			{
 				this.debug('power herb - remove charge turn for '+move.id);
-				this.add('prepare-move '+pokemon.id+' '+move.id);
+				this.add('-prepare',pokemon,move,target);
 				pokemon.addVolatile(move.id);
 			}
 		},
@@ -2370,7 +2370,7 @@ exports.BattleItems = {
 				{
 					if (this.runEvent('DragOut', source, target, move))
 					{
-						this.add("message "+target.name+" held up its Red Card against "+source.name+"! (placeholder)");
+						this.add("-message",target.name+" held up its Red Card against "+source.name+"! (placeholder)");
 						this.dragIn(source.side);
 					}
 				}
@@ -2500,7 +2500,7 @@ exports.BattleItems = {
 			type: "Fighting"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				pokemon.eatItem();
 			}
 		},
@@ -2788,7 +2788,7 @@ exports.BattleItems = {
 			type: "Psychic"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				pokemon.eatItem();
 			}
 		},
@@ -2937,7 +2937,7 @@ exports.BattleItems = {
 		onResidual: function(pokemon) {
 			if (!pokemon.status && !pokemon.hasType('Steel'))
 			{
-				this.add('residual '+pokemon.id+' item-activate ToxicOrb');
+				this.add('-item',pokemon,'Toxic Orb');
 				pokemon.trySetStatus('tox');
 			}
 		},
@@ -3068,7 +3068,6 @@ exports.BattleItems = {
 				if (activate)
 				{
 					pokemon.setBoost(boosts);
-					this.add('residual '+pokemon.id+' item-restore WhiteHerb');
 				}
 			}
 		},
@@ -3086,7 +3085,6 @@ exports.BattleItems = {
 			if (activate && pokemon.useItem())
 			{
 				pokemon.setBoost(boosts);
-				this.add('residual '+pokemon.id+' item-restore WhiteHerb');
 			}
 		},
 		desc: "Removes stat decreases. Consumed after use."
