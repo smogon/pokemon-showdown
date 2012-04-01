@@ -1044,7 +1044,7 @@ exports.BattleAbilities = {
 			{
 				var newMove = this.getMoveCopy(move.id);
 				newMove.hasBounced = true;
-				this.add('-ability',target,'Magic Bounce','[bounce] '+newMove,'[of] '+source);
+				this.add('-activate',target,'ability: Magic Bounce','[bounce] '+newMove,'[of] '+source);
 				this.moveHit(source, target, newMove);
 				return null;
 			}
