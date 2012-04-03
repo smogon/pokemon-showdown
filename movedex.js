@@ -4482,7 +4482,7 @@ exports.BattleMovedex = {
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
 			
-			this.add('-activate', target, 'move: Guard Swap', '[of] '+source);
+			this.add('-swapboost', target, source, 'def, spd', '[from] move: Guard Swap');
 		},
 		secondary: false,
 		target: "normal",
@@ -4876,7 +4876,7 @@ exports.BattleMovedex = {
 			target.setBoost(sourceBoosts);
 			source.setBoost(targetBoosts);
 			
-			this.add('-activate', target, 'move: Heart Swap', '[of] '+source);
+			this.add('-swapboost', target, source, '[from] move: Heart Swap');
 		},
 		secondary: false,
 		target: "normal",
@@ -7860,7 +7860,7 @@ exports.BattleMovedex = {
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
 			
-			this.add('message Offensive boosts swapped. (placeholder; graphics will be incorrect)'); // TODO
+			this.add('-swapboost', target, source, 'atk, spa', '[from] move: Power Swap');
 		},
 		secondary: false,
 		target: "normal",
