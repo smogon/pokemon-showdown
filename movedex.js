@@ -6535,13 +6535,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onStart: function(target) {
-				this.add('message Magnet Rise started. (placeholder)'); // TODO
+				this.add('-start', target, 'Magnet Rise');
 			},
 			onImmunity: function(type) {
 				if (type === 'Ground') return false;
 			},
 			onEnd: function(target) {
-				this.add('message Magnet Rise ended. (placeholder)');
+				this.add('-end', target, 'Magnet Rise');
 			}
 		},
 		secondary: false,
@@ -7368,7 +7368,7 @@ exports.BattleMovedex = {
 				{
 					return false;
 				}
-				this.add('message Afflicted by Nightmare! (placeholder)'); // TODO
+				this.add('-start', pokemon, 'Nightmare');
 			},
 			onResidualPriority: 50-9,
 			onResidual: function(pokemon) {
@@ -7880,10 +7880,12 @@ exports.BattleMovedex = {
 		volatileStatus: 'powertrick',
 		effect: {
 			onStart: function(pokemon) {
-				this.add('message Attack and Defense swapped. (placeholder)'); // TODO
+				this.add('-start', pokemon, 'Power Trick');
+			},
+			onEnd: function(pokemon) {
+				this.add('-end', pokemon, 'Power Trick');
 			},
 			onRestart: function(pokemon) {
-				this.add('message Attack and Defense swapped. (placeholder)');
 				pokemon.removeVolatile('PowerTrick');
 			},
 			onModifyStatsPriority: -100,
