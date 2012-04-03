@@ -7988,7 +7988,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(target) {
-				this.add('-singleturn',target,'move: Protect');
+				this.add('-singleturn', target, 'Protect');
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, effect) {
@@ -7996,7 +7996,7 @@ exports.BattleMovedex = {
 				{
 					return;
 				}
-				this.add('r-volatile '+target.id+' protect'); // TODO
+				this.add('-activate', target.id, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove)
 				{
@@ -8057,7 +8057,7 @@ exports.BattleMovedex = {
 			
 			source.setBoost(targetBoosts);
 			
-			this.add('message Copied. (placeholder; graphics will be incorrect)'); // TODO
+			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
 		secondary: false,
 		target: "normal",
@@ -8347,7 +8347,7 @@ exports.BattleMovedex = {
 				{
 					return;
 				}
-				this.add('message Quick Guard protected '+target.name+'! (placeholder)'); // TODO
+				this.add('-activate', target, 'Quick Guard');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove)
 				{
@@ -8448,7 +8448,7 @@ exports.BattleMovedex = {
 			onHit: function(pokemon) {
 				if (pokemon.removeVolatile('leechseed'))
 				{
-					this.add('-end', pokemon, 'move: Leech Seed', '[from] move: Rapid Spin'); // TODO - BUG IN BATTLE.JS
+					this.add('-end', pokemon, 'move: Leech Seed', '[from] move: Rapid Spin');
 				}
 				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
 				for (var i in sideConditions)
@@ -8457,7 +8457,7 @@ exports.BattleMovedex = {
 				}
 				if (pokemon.volatiles['partiallytrapped'])
 				{
-					this.add('r-blow-away '+pokemon.id+' '+pokemon.volatiles['partiallytrapped'].sourceEffect.id); // TODO
+					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.id, '[from] move: Rapid Spin', '[partiallytrapped]');
 					delete pokemon.volatiles['partiallytrapped'];
 				}
 			}
@@ -9830,7 +9830,7 @@ exports.BattleMovedex = {
 				source.ability = sourceAbility;
 				return false;
 			}
-			this.add('message Skill Swapped. (placeholder)'); // TODO
+			this.add('-message', 'Skill Swapped. (placeholder)'); // TODO
 		},
 		secondary: false,
 		target: "normal",
@@ -9851,7 +9851,7 @@ exports.BattleMovedex = {
 		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('skullbash')) return;
-			this.add('message '+pokemon.name+' lowered its head! (placeholder)'); // TODO
+			this.add('-message', pokemon.name+' lowered its head! (placeholder)'); // TODO
 			pokemon.addVolatile('skullbash');
 			return true;
 		},
@@ -9912,10 +9912,10 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon) {
+		beforeMoveCallback: function(pokemon, target) {
 			if (pokemon.removeVolatile('skydrop')) return;
 			pokemon.addVolatile('skydrop');
-			this.add('prepare-move '+pokemon.id+' SkyDrop'); // TODO
+			this.add('-prepare', pokemon, 'Sky Drop', target); // TODO
 			return true;
 		},
 		effect: {
