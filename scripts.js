@@ -120,7 +120,9 @@ exports.BattleScripts = {
 		{
 			attrs = '| [notarget]';
 		}
-		this.add('move', pokemon, move, target+attrs);
+		var movename = move.name;
+		if (move.id === 'hiddenpower') move.name = 'Hidden Power';
+		this.add('move', pokemon, movename, target+attrs);
 		if (missed)
 		{
 			this.add('-miss', pokemon);
