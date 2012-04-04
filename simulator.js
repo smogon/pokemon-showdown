@@ -454,7 +454,7 @@ function BattlePokemon(set, side)
 	};
 	this.transformInto = function(baseTemplate) {
 		var pokemon = null;
-		if (baseTemplate.template)
+		if (baseTemplate && baseTemplate.template)
 		{
 			pokemon = baseTemplate;
 			baseTemplate = pokemon.template;
@@ -463,11 +463,11 @@ function BattlePokemon(set, side)
 				return false;
 			}
 		}
-		else if (!baseTemplate.abilities)
+		else if (!baseTemplate || !baseTemplate.abilities)
 		{
 			baseTemplate = selfB.getTemplate(baseTemplate);
 		}
-		if (pokemon && pokemon.transformed)
+		if (!baseTemplate.abilities || pokemon && pokemon.transformed)
 		{
 			return false;
 		}
