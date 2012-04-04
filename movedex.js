@@ -708,7 +708,7 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
-			target.damage(target.maxhp/2);
+			this.directDamage(target.maxhp/2);
 			target.setBoost({atk: 6});
 			this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
 		},
@@ -1938,7 +1938,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(pokemon, source) {
 				this.add('-start', pokemon, 'move: Curse', '[of] '+source);
-				this.damage(source.maxhp/2, source, source);
+				this.directDamage(source.maxhp/2, source, source);
 			},
 			onResidualPriority: 50-10,
 			onResidual: function(pokemon) {
@@ -7996,7 +7996,7 @@ exports.BattleMovedex = {
 				{
 					return;
 				}
-				this.add('-activate', target.id, 'Protect');
+				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove)
 				{
@@ -8707,17 +8707,14 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
-		onTryHit: function(target) {
-			if (target.hp >= target.maxhp)
-			{
-				return false;
-			}
-		},
 		onHit: function(target) {
 			if (!target.setStatus('slp')) return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
-			target.heal(target.maxhp);
+			if (!this.heal(target.maxhp))
+			{
+				return false;
+			}
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
 		secondary: false,
@@ -10818,7 +10815,7 @@ exports.BattleMovedex = {
 		},
 		self: {
 			onHit: function(source) {
-				this.damage(source.maxhp/4, source, source, 'struggle-recoil');
+				this.directDamage(source.maxhp/4, source, source, 'strugglerecoil');
 			}
 		},
 		secondary: false,
@@ -10906,7 +10903,7 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function(target) {
-			target.damage(target.maxhp/4);
+			this.directDamage(target.maxhp/4);
 		},
 		effect: {
 			onStart: function(target) {

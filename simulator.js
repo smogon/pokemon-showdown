@@ -2153,6 +2153,30 @@ function Battle(roomid, format, rated)
 		}
 		return damage;
 	};
+	this.directDamage = function(damage, target, source, effect) {
+		if (selfB.event)
+		{
+			if (!target) target = selfB.event.target;
+			if (!source) source = selfB.event.source;
+			if (!effect) effect = selfB.effect;
+		}
+		if (!target || !target.hp) return 0;
+		if (!damage) return 0;
+		damage = clampIntRange(damage, 1);
+		
+		damage = target.damage(damage, source, effect);
+		switch (effect.id)
+		{
+		case 'strugglerecoil':
+			selfB.add('-damage', target, target.hpChange(damage), '[from] recoil');
+			break;
+		default:
+			selfB.add('-damage', target, target.hpChange(damage));
+			break;
+		}
+		if (target.fainted) selfB.faint(target);
+		return damage;
+	};
 	this.heal = function(damage, target, source, effect) {
 		if (selfB.event)
 		{
@@ -2170,7 +2194,9 @@ function Battle(roomid, format, rated)
 		if (target.hp >= target.maxhp) return 0;
 		damage = target.heal(damage, source, effect);
 		switch (effect.id) {
-		case 'LeechSeed':
+		case 'leechseed':
+			break;
+		case 'rest':
 			break;
 		default:
 			if (effect.effectType === 'Move')
