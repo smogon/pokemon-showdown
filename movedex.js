@@ -5942,7 +5942,7 @@ exports.BattleMovedex = {
 			item = target.takeItem(source);
 			if (item)
 			{
-				this.add('-enditem', target, item.name, '[from] move: Knock Off');
+				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] '+source);
 			}
 		},
 		secondary: false,
