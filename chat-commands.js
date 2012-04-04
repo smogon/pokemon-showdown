@@ -1196,7 +1196,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case 'potd':
 		if (user.group !== '&' && user.group !== '@') return true;
 		
-		BattleFormats.PotD.onPotD = target;
+		BattleFormats.potd.onPotD = target;
 		if (target)
 		{
 			room.add('The Pokemon of the Day was changed to '+target+' by '+user.name+'.');
