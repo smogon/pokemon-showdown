@@ -8684,11 +8684,11 @@ exports.BattleMovedex = {
 			}
 			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta'))
 			{
-				this.add('-formechange ', pokemon, 'Meloetta');
+				this.add('-formechange', pokemon, 'Meloetta');
 			}
 			else if (pokemon.transformInto('Meloetta-Pirouette'))
 			{
-				this.add('-formechange ', pokemon, 'Meloetta-Pirouette');
+				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
 			}
 			// renderer takes care of this for us
 		},
