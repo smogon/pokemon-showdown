@@ -285,8 +285,8 @@ exports.BattleStatuses = {
 				}
 				
 				this.add('message '+move.name+' hit! (placeholder)');
-				target.removeVolatile('protect');
-				target.removevolatile('endure');
+				target.removeVolatile('Protect');
+				target.removeVolatile('Endure');
 				
 				this.moveHit(target, posData.source, move, posData.moveData);
 				
