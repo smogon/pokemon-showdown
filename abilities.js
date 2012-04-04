@@ -792,18 +792,17 @@ exports.BattleAbilities = {
 					if (!pokemon.side.pokemon[i]) continue;
 					if (!pokemon.side.pokemon[i].fainted) break;
 				}
-				pokemon.id = pokemon.side.pokemon[i].id;
-				pokemon.fullid = pokemon.side.pokemon[i].fullid;
+				pokemon.illusion = pokemon.side.pokemon[i];
 			}
 		},
 		onDamage: function(damage, pokemon, source, effect) {
 			if (effect && effect.effectType === 'Move')
 			{
 				this.debug('illusion cleared');
-				pokemon.addVolatile('illusion');
-				pokemon.id = pokemon.baseId;
-				pokemon.fullid = pokemon.baseFullid;
-				this.add('replace',pokemon,pokemon.details,pokemon.getHealth());
+				//pokemon.addVolatile('illusion');
+				pokemon.setAbility('');
+				pokemon.illusion = null;
+				this.add('replace', pokemon, pokemon.details, pokemon.getHealth());
 			}
 		},
 		id: "illusion",
