@@ -8682,13 +8682,13 @@ exports.BattleMovedex = {
 			{
 				return;
 			}
-			if (pokemon.template.species==='Meloetta-S' && pokemon.transformInto('Meloetta'))
+			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta'))
 			{
-				//this.add('r-transform '+pokemon.id+' Meloetta');
+				this.add('-formechange ', pokemon, 'Meloetta');
 			}
-			else if (pokemon.transformInto('Meloetta-S'))
+			else if (pokemon.transformInto('Meloetta-Pirouette'))
 			{
-				//this.add('r-transform '+pokemon.id+' Meloetta-S');
+				this.add('-formechange ', pokemon, 'Meloetta-Pirouette');
 			}
 			// renderer takes care of this for us
 		},

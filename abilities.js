@@ -545,11 +545,24 @@ exports.BattleAbilities = {
 	},
 	"flowergift": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its Attack and Special Defense stats (as well as its partner's stats in double battles) receive a 50% boost.",
+		onStart: function(pokemon) {
+			delete this.effectData.forme;
+		},
 		onModifyStats: function(stats, pokemon) {
 			if (this.weather === 'sunnyday')
 			{
 				stats.atk *= 1.5;
 				stats.spd *= 1.5;
+				if (pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunny')
+				{
+					this.effectData.forme = 'Sunny';
+					this.add('-formechange', pokemon, 'Cherrim-Sunny');
+				}
+			}
+			else if (pokemon.speciesid === 'cherrim' && this.effectData.forme)
+			{
+				delete this.effectData.forme;
+				this.add('-formechange', pokemon, 'Cherrim');
 			}
 		},
 		id: "flowergift",
@@ -559,19 +572,35 @@ exports.BattleAbilities = {
 	},
 	"forecast": {
 		desc: "This Pokemon's type changes according to the current weather conditions: it becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and remains its regular type otherwise.",
+		onStart: function(pokemon) {
+			delete this.effectData.forme;
+		},
 		onModifyPokemon: function(pokemon) {
 			if (pokemon.species !== 'Castform') return;
 			if (this.weather === 'sunnyday')
 			{
 				pokemon.types = ['Fire'];
 			}
-			if (this.weather === 'raindance')
+			else if (this.weather === 'raindance')
 			{
 				pokemon.types = ['Water'];
 			}
-			if (this.weather === 'hail')
+			else if (this.weather === 'hail')
 			{
 				pokemon.types = ['Ice'];
+			}
+			if ((this.effectData.forme||'Normal') != pokemon.types[0])
+			{
+				this.effectData.forme = pokemon.types[0];
+				if (pokemon.types[0] === 'Normal')
+				{
+					delete this.effectData.forme;
+					this.add('-formechange', pokemon, 'Castform');
+				}
+				else
+				{
+					this.add('-formechange', pokemon, 'Castform-'+this.effectData.forme);
+				}
 			}
 		},
 		id: "forecast",
