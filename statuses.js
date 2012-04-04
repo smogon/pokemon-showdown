@@ -2,7 +2,7 @@ exports.BattleStatuses = {
 	brn: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('r-status '+target.id+' brn');
+			this.add('-status', target.id, 'brn');
 		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.ability !== 'Guts')
@@ -18,7 +18,7 @@ exports.BattleStatuses = {
 	par: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('r-status '+target.id+' par');
+			this.add('-status', target.id, 'par');
 		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.ability !== 'QuickFeet')
@@ -30,7 +30,7 @@ exports.BattleStatuses = {
 		onBeforeMove: function(pokemon) {
 			if (Math.random()*4 < 1)
 			{
-				this.add('cant-move '+pokemon.id+' fully-paralyzed');
+				this.add('cant', pokemon.id, 'par');
 				return false;
 			}
 		}
@@ -38,7 +38,7 @@ exports.BattleStatuses = {
 	slp: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('r-status '+target.id+' slp');
+			this.add('-status', target.id, 'slp');
 			// 1-3 turns
 			this.effectData.startTime = 2+parseInt(Math.random()*3);
 			this.effectData.time = this.effectData.startTime;
@@ -59,11 +59,11 @@ exports.BattleStatuses = {
 			pokemon.statusData.time--;
 			if (!pokemon.statusData.time)
 			{
-				this.add('r-cure-status '+pokemon.id+' slp');
+				this.add('-curestatus', pokemon.id, 'slp');
 				pokemon.setStatus('');
 				return;
 			}
-			this.add('residual '+pokemon.id+' slp');
+			this.add('cant', pokemon.id, 'slp');
 			if (move.sleepUsable)
 			{
 				return;
@@ -74,23 +74,23 @@ exports.BattleStatuses = {
 	frz: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('r-status '+target.id+' frz');
+			this.add('-status', target.id, 'frz');
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
 			if (Math.random()*5 < 1 || move.thawsUser)
 			{
-				this.add('r-cure-status '+pokemon.id+' frz');
+				this.add('-curestatus', pokemon.id, 'frz');
 				pokemon.setStatus('');
 				return;
 			}
-			this.add('cant-move '+pokemon.id+' frozen');
+			this.add('cant', pokemon.id, 'frz');
 			return false;
 		},
 		onHit: function(target, source, move) {
 			if (move.type === 'Fire' || move.id === 'Scald')
 			{
-				this.add('r-cure-status '+target.id+' frz');
+				this.add('-curestatus', target.id, 'frz');
 				target.setStatus('');
 			}
 		}
@@ -98,7 +98,7 @@ exports.BattleStatuses = {
 	psn: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('r-status '+target.id+' psn');
+			this.add('-status', target.id, 'psn');
 		},
 		onResidualPriority: 50-9,
 		onResidual: function(pokemon) {
@@ -108,7 +108,7 @@ exports.BattleStatuses = {
 	tox: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('r-status '+target.id+' toxic');
+			this.add('-status', target.id, 'tox');
 			this.effectData.stage = 0;
 		},
 		onSwitchIn: function() {
@@ -123,11 +123,11 @@ exports.BattleStatuses = {
 		// this is a volatile status
 		noCopy: true, // doesn't get copied by Baton Pass
 		onStart: function(target) {
-			this.add('r-volatile '+target.id+' confused');
+			this.add('-start', target.id, 'confusion');
 			this.effectData.time = 2 + parseInt(Math.random()*4);
 		},
 		onEnd: function(target) {
-			this.add('r-volatile '+target.id+' confused end');
+			this.add('-end', target.id, 'confusion');
 		},
 		onBeforeMove: function(pokemon) {
 			pokemon.volatiles.confusion.time--;
@@ -136,12 +136,11 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
-			this.add('residual '+pokemon.id+' confused');
+			this.add('-activate', pokemon.id, 'confusion');
 			if (Math.random()*2 < 1)
 			{
 				return;
 			}
-			this.add('r-hurt-confusion '+pokemon.id+'');
 			this.damage(this.getDamage(pokemon,pokemon,40), pokemon, pokemon, {id:'confusion', effectType:'Move', type:'???'});
 			return false;
 		}
@@ -153,7 +152,7 @@ exports.BattleStatuses = {
 			{
 				return;
 			}
-			this.add('flinch '+pokemon.id);
+			this.add('cant', pokemon, 'flinch');
 			return false;
 		}
 	},
@@ -184,7 +183,7 @@ exports.BattleStatuses = {
 			this.damage(pokemon.maxhp/16);
 		},
 		onEnd: function(pokemon) {
-			this.add('message '+this.effectData.sourceEffect.id+' ended');
+			this.add('-end', pokemon, this.effectData.sourceEffect.id, '[partiallytrapped]');
 		},
 		onModifyPokemon: function(pokemon) {
 			pokemon.trapped = true;
@@ -204,7 +203,7 @@ exports.BattleStatuses = {
 			}
 		},
 		onEnd: function(target) {
-			this.add('r-calm '+target.id);
+			this.add('-end', target, 'rampage');
 			target.addVolatile('confusion');
 		},
 		onModifyPokemon: function(pokemon) {
@@ -243,7 +242,7 @@ exports.BattleStatuses = {
 	mustrecharge: {
 		duration: 2,
 		onBeforeMove: function(pokemon) {
-			this.add('cant-move '+pokemon.id+' must-recharge');
+			this.add('cant', pokemon, 'recharge');
 			return false;
 		},
 		onModifyPokemon: function(pokemon) {
@@ -280,7 +279,7 @@ exports.BattleStatuses = {
 				var move = this.getMove(posData.move);
 				if (target.fainted)
 				{
-					this.add('hint '+move.name+' did not hit because the target is fainted.');
+					this.add('hint', ''+move.name+' did not hit because the target is fainted.');
 					this.effectData.positions[i] = null;
 					continue;
 				}
@@ -356,11 +355,11 @@ exports.BattleStatuses = {
 			if (effect && effect.effectType === 'Ability')
 			{
 				this.effectData.duration = 0;
-				this.add('r-weather '+source.id+' rain');
+				this.add('-weather', 'RainDance', '[from] ability: Drizzle', '[of] '+source);
 			}
 			else
 			{
-				this.add('weather rain');
+				this.add('-weather', 'RainDance');
 			}
 		},
 		onResidualPriority: 50-1,
@@ -413,11 +412,11 @@ exports.BattleStatuses = {
 			if (effect && effect.effectType === 'Ability')
 			{
 				this.effectData.duration = 0;
-				this.add('r-weather '+source.id+' sun');
+				this.add('-weather', 'SunnyDay', '[from] ability: Drought', '[of] '+source);
 			}
 			else
 			{
-				this.add('weather sun');
+				this.add('-weather', 'SunnyDay');
 			}
 		},
 		onImmunity: function(type) {
@@ -463,11 +462,11 @@ exports.BattleStatuses = {
 			if (effect && effect.effectType === 'Ability')
 			{
 				this.effectData.duration = 0;
-				this.add('r-weather '+source.id+' sandstorm');
+				this.add('-weather', 'Sandstorm', '[from] ability: Sand Stream', '[of] '+source);
 			}
 			else
 			{
-				this.add('weather sandstorm');
+				this.add('-weather', 'Sandstorm');
 			}
 		},
 		onResidualPriority: 50-1,
@@ -496,11 +495,11 @@ exports.BattleStatuses = {
 			if (effect && effect.effectType === 'Ability')
 			{
 				this.effectData.duration = 0;
-				this.add('r-weather '+source.id+' hail');
+				this.add('-weather', 'Hail', '[from] ability: Snow Warning', '[of] '+source);
 			}
 			else
 			{
-				this.add('weather hail');
+				this.add('-weather', 'Hail');
 			}
 		},
 		onModifyPokemon: function(move) {
