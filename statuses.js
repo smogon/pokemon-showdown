@@ -364,11 +364,11 @@ exports.BattleStatuses = {
 		},
 		onResidualPriority: 50-1,
 		onResidual: function() {
-			this.add('weather rain');
+			this.add('-weather', 'RainDance', '[upkeep]');
 			this.eachEvent('Weather');
 		},
 		onEnd: function() {
-			this.add('weather none');
+			this.add('-weather', 'none');
 		}
 	},
 	sunnyday: {
@@ -424,11 +424,11 @@ exports.BattleStatuses = {
 		},
 		onResidualPriority: 50-1,
 		onResidual: function() {
-			this.add('weather sun');
+			this.add('-weather', 'SunnyDay', '[upkeep]');
 			this.eachEvent('Weather');
 		},
 		onEnd: function() {
-			this.add('weather none');
+			this.add('-weather', 'none');
 		}
 	},
 	sandstorm: {
@@ -471,14 +471,14 @@ exports.BattleStatuses = {
 		},
 		onResidualPriority: 50-1,
 		onResidual: function() {
-			this.add('weather sandstorm');
+			this.add('-weather', 'Sandstorm', '[upkeep]');
 			this.eachEvent('Weather');
 		},
 		onWeather: function(target) {
 			this.damage(target.maxhp/16);
 		},
 		onEnd: function() {
-			this.add('weather none');
+			this.add('-weather', 'none');
 		}
 	},
 	hail: {
@@ -530,14 +530,14 @@ exports.BattleStatuses = {
 		},
 		onResidualPriority: 50-1,
 		onResidual: function() {
-			this.add('weather hail');
+			this.add('-weather', 'Hail', '[upkeep]');
 			this.eachEvent('Weather');
 		},
 		onWeather: function(target) {
 			this.damage(target.maxhp/16);
 		},
 		onEnd: function() {
-			this.add('weather none');
+			this.add('-weather', 'none');
 		}
 	}
 };
