@@ -5,7 +5,7 @@ exports.BattleStatuses = {
 			this.add('-status', target.id, 'brn');
 		},
 		onModifyStats: function(stats, pokemon) {
-			if (pokemon.ability !== 'Guts')
+			if (pokemon.ability !== 'guts')
 			{
 				stats.atk /= 2;
 			}
@@ -21,7 +21,7 @@ exports.BattleStatuses = {
 			this.add('-status', target.id, 'par');
 		},
 		onModifyStats: function(stats, pokemon) {
-			if (pokemon.ability !== 'QuickFeet')
+			if (pokemon.ability !== 'quickfeet')
 			{
 				stats.spe /= 4;
 			}
@@ -88,7 +88,7 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onHit: function(target, source, move) {
-			if (move.type === 'Fire' || move.id === 'Scald')
+			if (move.type === 'Fire' || move.id === 'scald')
 			{
 				this.add('-curestatus', target.id, 'frz');
 				target.setStatus('');
@@ -177,7 +177,7 @@ exports.BattleStatuses = {
 		onResidual: function(pokemon) {
 			if (this.effectData.source && !this.effectData.source.isActive)
 			{
-				pokemon.removeVolatile('partiallyTrapped');
+				pokemon.removeVolatile('partiallytrapped');
 				return;
 			}
 			this.damage(pokemon.maxhp/16);
@@ -285,8 +285,8 @@ exports.BattleStatuses = {
 				}
 				
 				this.add('message '+move.name+' hit! (placeholder)');
-				target.removeVolatile('Protect');
-				target.removeVolatile('Endure');
+				target.removeVolatile('protect');
+				target.removevolatile('endure');
 				
 				this.moveHit(target, posData.source, move, posData.moveData);
 				
@@ -294,7 +294,7 @@ exports.BattleStatuses = {
 			}
 			if (finished)
 			{
-				side.removeSideCondition('futureMove');
+				side.removeSideCondition('futuremove');
 			}
 		}
 	},
@@ -318,7 +318,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function(source, effect) {
-			if (source && source.item === 'DampRock')
+			if (source && source.item === 'damprock')
 			{
 				return 8;
 			}
@@ -337,16 +337,16 @@ exports.BattleStatuses = {
 			}
 		},
 		onModifyMove: function(move) {
-			if (move.id === 'Thunder' || move.id === 'Hurricane')
+			if (move.id === 'thunder' || move.id === 'hurricane')
 			{
 				move.accuracy = true;
 			}
-			if (move.id === 'WeatherBall')
+			if (move.id === 'weatherball')
 			{
 				move.type = 'Water';
 				move.basePower = 100;
 			}
-			if (move.id === 'Moonlight' || move.id === 'MorningSun' || move.id === 'Synthesis')
+			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
 			{
 				move.heal = [1,4];
 			}
@@ -375,7 +375,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function(source, effect) {
-			if (source && source.item === 'HeatRock')
+			if (source && source.item === 'heatrock')
 			{
 				return 8;
 			}
@@ -398,12 +398,12 @@ exports.BattleStatuses = {
 			{
 				move.accuracy = 50;
 			}
-			if (move.id === 'WeatherBall')
+			if (move.id === 'weatherball')
 			{
 				move.type = 'Fire';
 				move.basePower = 100;
 			}
-			if (move.id === 'Moonlight' || move.id === 'MorningSun' || move.id === 'Synthesis')
+			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
 			{
 				move.heal = [2,3];
 			}
@@ -435,7 +435,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function(source, effect) {
-			if (source && source.item === 'SmoothRock')
+			if (source && source.item === 'smoothrock')
 			{
 				return 8;
 			}
@@ -448,12 +448,12 @@ exports.BattleStatuses = {
 			}
 		},
 		onModifyMove: function(move) {
-			if (move.id === 'WeatherBall')
+			if (move.id === 'weatherball')
 			{
 				move.type = 'Rock';
 				move.basePower = 100;
 			}
-			if (move.id === 'Moonlight' || move.id === 'MorningSun' || move.id === 'Synthesis')
+			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
 			{
 				move.heal = [1,4];
 			}
@@ -485,7 +485,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function(source, effect) {
-			if (source && source.item === 'IcyRock')
+			if (source && source.item === 'icyrock')
 			{
 				return 8;
 			}
@@ -503,27 +503,27 @@ exports.BattleStatuses = {
 			}
 		},
 		onModifyPokemon: function(move) {
-			if (move.id === 'WeatherBall')
+			if (move.id === 'weatherball')
 			{
 				move.type = 'Ice';
 				move.basePower = 100;
 			}
-			if (move.id === 'Moonlight' || move.id === 'MorningSun' || move.id === 'Synthesis')
+			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
 			{
 				move.heal = [1,4];
 			}
 		},
 		onModifyMove: function(move) {
-			if (move.id === 'Blizzard')
+			if (move.id === 'blizzard')
 			{
 				move.accuracy = true;
 			}
-			if (move.id === 'WeatherBall')
+			if (move.id === 'weatherball')
 			{
 				move.type = 'Ice';
 				move.basePower = 100;
 			}
-			if (move.id === 'Moonlight' || move.id === 'MorningSun' || move.id === 'Synthesis')
+			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
 			{
 				move.heal = [1,4];
 			}
