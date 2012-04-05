@@ -546,7 +546,7 @@ exports.BattleScripts = {
 				hasMove = {};
 				counter = {
 					Physical: 0, Special: 0, Status: 0, damage: 0,
-					Technician: 0, SkillLink: 0, Contrary: 0,
+					technician: 0, skilllink: 0, contrary: 0,
 					recoil: 0, inaccurate: 0,
 					physicalSetup: 0, specialSetup: 0, mixedSetup: 0
 				};
@@ -565,11 +565,11 @@ exports.BattleScripts = {
 					}
 					if (move.basePower && move.basePower <= 60)
 					{
-						counter['Technician']++;
+						counter['technician']++;
 					}
 					if (move.multihit && move.multihit[1] === 5)
 					{
-						counter['SkillLink']++;
+						counter['skilllink']++;
 					}
 					if (move.recoil)
 					{
@@ -580,20 +580,20 @@ exports.BattleScripts = {
 						counter['inaccurate']++;
 					}
 					var ContraryMove = {
-						LeafStorm: 1, Overheat: 1, CloseCombat: 1, Superpower: 1, 'V-create': 1
+						leafstorm: 1, overheat: 1, closecombat: 1, superpower: 1, vcreate: 1
 					};
 					if (ContraryMove[move.id])
 					{
-						counter['Contrary']++;
+						counter['contrary']++;
 					}
 					var PhysicalSetup = {
-						SwordsDance:1, DragonDance:1, Coil:1, BulkUp:1, Curse:1
+						swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1
 					};
 					var SpecialSetup = {
-						NastyPlot:1, TailGlow:1, QuiverDance:1, CalmMind:1
+						nastyplot:1, tailglow:1, quiverdance:1, calmmind:1
 					};
 					var MixedSetup = {
-						Growth:1, WorkUp:1, ShellSmash:1
+						growth:1, workup:1, shellsmash:1
 					};
 					if (PhysicalSetup[move.id])
 					{
@@ -755,7 +755,7 @@ exports.BattleScripts = {
 					}
 					var SetupException = {
 						Overheat:1, DracoMeteor:1, LeafStorm:1,
-						VoltSwitch:1, 'U-turn':1,
+						VoltSwitch:1, Uturn:1,
 						SuckerPunch:1, ExtremeSpeed:1
 					};
 					if (move.category === 'Special' && setupType === 'Physical' && !SetupException[move.id])
@@ -828,27 +828,27 @@ exports.BattleScripts = {
 					}
 					
 					var rejectAbility = false;
-					if (ability === 'Contrary' && !counter['Contrary'])
+					if (ability === 'contrary' && !counter['contrary'])
 					{
 						rejectAbility = true;
 					}
-					if (ability === 'Technician' && !counter['Technician'])
+					if (ability === 'technician' && !counter['technician'])
 					{
 						rejectAbility = true;
 					}
-					if (ability === 'SkillLink' && !counter['SkillLink'])
+					if (ability === 'skilllink' && !counter['skilllink'])
 					{
 						rejectAbility = true;
 					}
-					if ((ability === 'RockHead' || ability === 'Reckless') && !counter['recoil'])
+					if ((ability === 'rockhead' || ability === 'reckless') && !counter['recoil'])
 					{
 						rejectAbility = true;
 					}
-					if ((ability === 'NoGuard' || ability === 'CompoundEyes') && !counter['inaccurate'])
+					if ((ability === 'noguard' || ability === 'compoundeyes') && !counter['inaccurate'])
 					{
 						rejectAbility = true;
 					}
-					if (ability === 'Moody')
+					if (ability === 'moody')
 					{
 						rejectAbility = true;
 					}
