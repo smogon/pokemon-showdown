@@ -540,7 +540,6 @@ function BattlePokemon(set, side)
 		selfP.beingCalledBack = false;
 		selfP.update(init);
 	};
-	if (!this.id) this.id = (side.n?'foe':'ally')+'-'+toId(this.name);
 	
 	this.hasType = function (type) {
 		if (!type) return false;
@@ -1993,8 +1992,8 @@ function Battle(roomid, format, rated)
 			return;
 		}
 		
-		selfB.foeSide.emitUpdate({midBattle: selfB.started, side: 'foe', sideData: selfB.foeSide.getData()});
-		selfB.allySide.emitUpdate({midBattle: selfB.started, side: 'ally', sideData: selfB.allySide.getData()});
+		selfB.foeSide.emitUpdate({midBattle: selfB.started, side: 'p2', sideData: selfB.foeSide.getData()});
+		selfB.allySide.emitUpdate({midBattle: selfB.started, side: 'p1', sideData: selfB.allySide.getData()});
 		
 		if (selfB.started)
 		{
