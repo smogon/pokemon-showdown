@@ -691,9 +691,9 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		{
 			selfR.battle.add('chatmsg-raw', message.rawMessage);
 		}
-		else if (message.user)
+		else if (message.name)
 		{
-			selfR.battle.add('chat', message.user, message.message);
+			selfR.battle.add('chat', message.name.substr(1), message.message);
 		}
 		else
 		{
@@ -725,6 +725,20 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			else
 			{
 				cmd = message.substr(1);
+				target = '';
+			}
+		}
+		else if (message.substr(0,1) === '!')
+		{
+			var spaceIndex = message.indexOf(' ');
+			if (spaceIndex > 0)
+			{
+				cmd = message.substr(0, spaceIndex);
+				target = message.substr(spaceIndex+1);
+			}
+			else
+			{
+				cmd = message;
 				target = '';
 			}
 		}
