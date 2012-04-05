@@ -8448,16 +8448,16 @@ exports.BattleMovedex = {
 			onHit: function(pokemon) {
 				if (pokemon.removeVolatile('leechseed'))
 				{
-					this.add('-end', pokemon, 'move: Leech Seed', '[from] move: Rapid Spin');
+					this.add('-end', pokemon, 'move: Leech Seed', '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
 				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
 				for (var i in sideConditions)
 				{
-					if (pokemon.side.removeSideCondition(i)) this.add('-sideend', pokemon.side, i, '[from] move: Rapid Spin');
+					if (pokemon.side.removeSideCondition(i)) this.add('-sideend', pokemon.side, i, '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
 				if (pokemon.volatiles['partiallytrapped'])
 				{
-					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.id, '[from] move: Rapid Spin', '[partiallytrapped]');
+					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.id, '[from] move: Rapid Spin', '[of] '+pokemon, '[partiallytrapped]');
 					delete pokemon.volatiles['partiallytrapped'];
 				}
 			}
