@@ -231,11 +231,11 @@ exports.BattleFormats = {
 		onStart: function() {
 			for (var i=0; i<this.sides[0].pokemon.length; i++)
 			{
-				this.add('pokemon '+this.sides[0].pokemon[i].tpid);
+				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details);
 			}
 			for (var i=0; i<this.sides[1].pokemon.length; i++)
 			{
-				this.add('pokemon '+this.sides[1].pokemon[i].tpid);
+				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details);
 			}
 		},
 		onTeamPreview: function() {
