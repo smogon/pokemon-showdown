@@ -2680,10 +2680,6 @@ function Battle(roomid, format, rated)
 		selfB.add('');
 		if (selfB.curCallback)
 		{
-			if (selfB.curCallback === 'team-preview')
-			{
-				selfB.add('team-preview-end');
-			}
 			selfB.curCallback = '';
 		}
 		

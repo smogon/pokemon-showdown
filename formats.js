@@ -229,6 +229,7 @@ exports.BattleFormats = {
 	teampreview: {
 		onStartPriority: -10,
 		onStart: function() {
+			this.add('clearpoke');
 			for (var i=0; i<this.sides[0].pokemon.length; i++)
 			{
 				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details);
