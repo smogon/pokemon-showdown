@@ -59,6 +59,7 @@ function BattleTools()
 			if (id && BattlePokedex[id])
 			{
 				template = BattlePokedex[id];
+				template.exists = true;
 			}
 			if (BattleTiers[id])
 			{
@@ -87,6 +88,7 @@ function BattleTools()
 			if (id && BattleMovedex[id])
 			{
 				move = BattleMovedex[id];
+				move.exists = true;
 			}
 			if (!move.id) move.id = id;
 			if (!move.name) move.name = name;
@@ -178,6 +180,7 @@ function BattleTools()
 			if (id && BattleItems[id])
 			{
 				item = BattleItems[id];
+				item.exists = true;
 			}
 			if (!item.id) item.id = id;
 			if (!item.name) item.name = name;
@@ -198,6 +201,7 @@ function BattleTools()
 			if (id && BattleAbilities[id])
 			{
 				ability = BattleAbilities[id];
+				ability.exists = true;
 			}
 			if (!ability.id) ability.id = id;
 			if (!ability.name) ability.name = name;

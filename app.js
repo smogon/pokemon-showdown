@@ -691,6 +691,10 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		{
 			selfR.battle.add('chatmsg-raw', message.rawMessage);
 		}
+		else if (message.user)
+		{
+			selfR.battle.add('chat', message.user, message.message);
+		}
 		else
 		{
 			selfR.battle.add('chatmsg', message);
@@ -753,7 +757,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 					allyPokemon = allySide.active[0];
 				}
 			}
-			selfR.battle.add('chat '+toId(user.name)+' >> '+cmd);
+			selfR.battle.add('chat', toId(user.name), '>> '+cmd);
 			if (user.group === '&')
 			{
 				try

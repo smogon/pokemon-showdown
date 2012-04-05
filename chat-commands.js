@@ -1051,22 +1051,18 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case '!data':
 	case 'stats':
 	case '!stats':
-		if (room.type !== 'lobby' && cmd.substr(0,1) === '!')
-		{
-			socket.emit('console', {rawMessage: '<code>!data</code> can only be used in the lobby.'});
-			return true;
-		}
-		
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		var dataMessages = getDataMessage(target);
 		for (var i=0; i<dataMessages.length; i++)
 		{
+			console.log('DATAMESSAGE: '+JSON.stringify(dataMessages[i]));
 			if (cmd.substr(0,1) !== '!')
 			{
 				socket.emit('console', dataMessages[i]);
 			}
 			else if (user.group !== ' ' && canTalk(user, room))
 			{
+				console.log('ADDING TO: '+room.id);
 				room.add(dataMessages[i]);
 			}
 		}
@@ -1553,7 +1549,7 @@ function showOrBroadcast(user, cmd, room, socket, rawMessage)
 {
 	if (cmd.substr(0,1) !== '!')
 	{
-		socket.emit('console', {rawMessage: rawMessage});
+		socket.emit('console', {rawMessage: rawMessage, room: room.id});
 	}
 	else if (user.group !== ' ' && canTalk(user, room))
 	{
@@ -1569,31 +1565,35 @@ function getDataMessage(target)
 	var ability = Tools.getAbility(target);
 	var atLeastOne = false;
 	var response = [];
-	if (pokemon.name)
+	if (pokemon.exists)
 	{
 		response.push({
-			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.pokemonRow(exports.BattlePokedex['"+pokemon.name.replace(/ /g,'')+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			user: '&server',
+			message: '/data-pokemon '+pokemon.name
 		});
 		atLeastOne = true;
 	}
-	if (ability.name)
+	if (ability.exists)
 	{
 		response.push({
-			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.abilityRow(exports.BattleAbilities['"+ability.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			user: '&server',
+			message: '/data-ability '+ability.name
 		});
 		atLeastOne = true;
 	}
-	if (item.name)
+	if (item.exists)
 	{
 		response.push({
-			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.itemRow(exports.BattleItems['"+item.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			user: '&server',
+			message: '/data-item '+item.name
 		});
 		atLeastOne = true;
 	}
-	if (move.name)
+	if (move.exists)
 	{
 		response.push({
-			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.moveRow(exports.BattleMovedex['"+move.id.replace("'","\\'")+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			user: '&server',
+			message: '/data-move '+move.name
 		});
 		atLeastOne = true;
 	}
