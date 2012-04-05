@@ -1055,14 +1055,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		var dataMessages = getDataMessage(target);
 		for (var i=0; i<dataMessages.length; i++)
 		{
-			console.log('DATAMESSAGE: '+JSON.stringify(dataMessages[i]));
 			if (cmd.substr(0,1) !== '!')
 			{
 				socket.emit('console', dataMessages[i]);
 			}
 			else if (user.group !== ' ' && canTalk(user, room))
 			{
-				console.log('ADDING TO: '+room.id);
 				room.add(dataMessages[i]);
 			}
 		}
@@ -1568,7 +1566,7 @@ function getDataMessage(target)
 	if (pokemon.exists)
 	{
 		response.push({
-			user: '&server',
+			name: '&server',
 			message: '/data-pokemon '+pokemon.name
 		});
 		atLeastOne = true;
@@ -1576,7 +1574,7 @@ function getDataMessage(target)
 	if (ability.exists)
 	{
 		response.push({
-			user: '&server',
+			name: '&server',
 			message: '/data-ability '+ability.name
 		});
 		atLeastOne = true;
@@ -1584,7 +1582,7 @@ function getDataMessage(target)
 	if (item.exists)
 	{
 		response.push({
-			user: '&server',
+			name: '&server',
 			message: '/data-item '+item.name
 		});
 		atLeastOne = true;
@@ -1592,7 +1590,7 @@ function getDataMessage(target)
 	if (move.exists)
 	{
 		response.push({
-			user: '&server',
+			name: '&server',
 			message: '/data-move '+move.name
 		});
 		atLeastOne = true;
