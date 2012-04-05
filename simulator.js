@@ -2195,8 +2195,11 @@ function Battle(roomid, format, rated)
 		damage = target.heal(damage, source, effect);
 		switch (effect.id) {
 		case 'leechseed':
-			break;
 		case 'rest':
+			selfB.add('-heal', target, target.hpChange(damage), '[silent]');
+			break;
+		case 'drain':
+			selfB.add('-heal', target, target.hpChange(damage), '[from] drain', '[of] '+source);
 			break;
 		default:
 			if (effect.effectType === 'Move')
