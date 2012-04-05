@@ -1324,6 +1324,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			matched = true;
 			socket.emit('console', '/whois [username] - Get details on a username: group, and rooms.');
 		}
+		if (target === 'all' || target === 'clear')
+		{
+			matched = true;
+			socket.emit('console', '/clear - Clears chat log');
+		}		
 		if (target === 'all' || target === 'data')
 		{
 			matched = true;
@@ -1460,7 +1465,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		if (!target)
 		{
-			socket.emit('console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
+			socket.emit('console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /clear, /help');
 			socket.emit('console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
 			if (user.isMod()) socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /forcerenameto, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
 			if (user.isMod()) socket.emit('console', 'ADMIN COMMANDS: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
