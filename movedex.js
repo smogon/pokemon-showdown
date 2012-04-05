@@ -10898,7 +10898,7 @@ exports.BattleMovedex = {
 			}
 			if (target.hp <= target.maxhp/4)
 			{
-				this.add('message Not enough energy! (placeholder)'); // TODO
+				this.add('-fail', 'move: Substitute');
 				return null;
 			}
 		},
