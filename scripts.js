@@ -355,8 +355,11 @@ exports.BattleScripts = {
 				}
 				else if (!isSecondary)
 				{
-					// already-status
-					this.add('-status', target, target.status);
+					if (target.status === moveData.status) {
+						this.add('-fail', target, target.status);
+					} else {
+						this.add('-fail', target);
+					}
 				}
 				didSomething = true;
 			}
