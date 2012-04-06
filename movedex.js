@@ -4754,7 +4754,7 @@ exports.BattleMovedex = {
 			onEnd: function(pokemon) {
 				this.add('-end', pokemon, 'move: Heal Block');
 			},
-			onHeal: false
+			onTryHeal: false
 		},
 		secondary: false,
 		target: "foes",
@@ -6096,11 +6096,10 @@ exports.BattleMovedex = {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				var damage = this.damage(pokemon.maxhp/8);
+				var damage = this.damage(pokemon.maxhp/8, pokemon, target);
 				if (damage)
 				{
 					this.heal(damage, target, pokemon);
-					this.add('-sethp', target, target.getHealth(), pokemon, pokemon.hpChange(), '[from] move: Leech Seed', '[of] '+pokemon);
 				}
 			}
 		},
