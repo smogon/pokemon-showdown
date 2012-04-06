@@ -220,7 +220,7 @@ function BattlePokemon(set, side)
 		return selfP.fullname;
 	};
 	this.getDetails = function() {
-		if (selfP.illusion) return selfP.illusion.details + ' | ' + selfP.illusion.getHealth();
+		if (selfP.illusion) return selfP.illusion.details + ' | ' + selfP.getHealth();
 		return selfP.details + ' | ' + selfP.getHealth();
 	};
 	
