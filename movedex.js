@@ -11822,7 +11822,7 @@ exports.BattleMovedex = {
 			{
 				return false;
 			}
-			this.add('-start', pokemon, 'move: Transform', '[of] '+target);
+			this.add('-transform', pokemon, target);
 		},
 		secondary: false,
 		target: "normal",
