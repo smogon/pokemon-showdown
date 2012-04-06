@@ -174,7 +174,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			
 			if (!selfR.rated.p1 || !selfR.rated.p2)
 			{
-				update.updates.push('message ERROR: Ladder not updated: a player does not exist');
+				update.updates.push('| chatmsg | ERROR: Ladder not updated: a player does not exist');
 			}
 			else
 			{
@@ -193,8 +193,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 						{
 							var data = JSON.parse(body);
 							// we don't actually do much with this data
-							selfR.battle.add("[DEBUG] ladder reply: "+body);
-							selfR.battle.add("message Ladder updated.");
+							selfR.add("Ladder updated.");
 							selfR.update();
 						}
 						catch(e)
@@ -344,7 +343,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		
 		if (!message) message = ' forfeited.';
 		
-		selfR.battle.add('message '+selfR.battle.sides[forfeitSide].name+message);
+		selfR.battle.add('-message', selfR.battle.sides[forfeitSide].name+message);
 		selfR.battle.win(selfR.battle.sides[forfeitSide].foe);
 		selfR.active = selfR.battle.active;
 		selfR.update();
@@ -367,13 +366,13 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		
 		if (inactiveSide == -1)
 		{
-			selfR.battle.add('message Both players are inactive, so neither player was kicked.');
+			selfR.add('Both players are inactive, so neither player was kicked.');
 			selfR.update();
 			return;
 		}
 		if (!selfR.battle.curCallback)
 		{
-			selfR.battle.add('message We are experiencing a bug. Please notify a system operator (people with & next to their name).');
+			selfR.add('We are experiencing a bug. Please notify a system operator (people with & next to their name).');
 			selfR.update();
 			return;
 		}
@@ -393,7 +392,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		}
 		if (selfR.inactiveTicksLeft)
 		{
-			selfR.battle.add('message Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
+			selfR.add('Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
 			selfR.update();
 			selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
 			return;
@@ -407,14 +406,14 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		{
 			if (selfR.battle.sides[0].user && selfR.battle.sides[1].user)
 			{
-				selfR.battle.add('message Kicking inactive players.');
+				selfR.add('Kicking inactive players.');
 				selfR.battle.leave(selfR.battle.sides[inactiveSide].user);
 				selfR.active = selfR.battle.active;
 				selfR.update();
 			}
 			else
 			{
-				selfR.battle.add('message There are already empty slots; no kicks are necessary.');
+				selfR.add('There are already empty slots; no kicks are necessary.');
 			}
 		}
 		
@@ -429,7 +428,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		if (user) attrib = ' (requested by '+user.name+')';
 		if (selfR.rated)
 		{
-			selfR.battle.add('message The battle cannot be restarted because it is a rated battle'+attrib+'.');
+			selfR.add('The battle cannot be restarted because it is a rated battle'+attrib+'.');
 			return;
 		}
 		var elapsedTime = getTime() - selfR.graceTime;
@@ -453,7 +452,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		{
 			tickTime = 1;
 		}
-		selfR.battle.add('message The battle will restart if there is no activity for '+(tickTime*30)+' seconds.'+attrib);
+		selfR.add('The battle will restart if there is no activity for '+(tickTime*30)+' seconds.'+attrib);
 		selfR.update();
 		selfR.resetTimer = setTimeout(selfR.reset, tickTime*30*1000);
 	};
@@ -465,8 +464,8 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		}
 		if ((!selfR.battle.allySide.user || !selfR.battle.foeSide.user) && !selfR.rated)
 		{
-			selfR.battle.add('message This isn\'t a rated battle; victory doesn\'t mean anything.');
-			selfR.battle.add('message Do you just want to see the text "you win"? Okay. You win.');
+			selfR.add('This isn\'t a rated battle; victory doesn\'t mean anything.');
+			selfR.add('Do you just want to see the text "you win"? Okay. You win.');
 			selfR.update();
 			return;
 		}
@@ -517,7 +516,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		}
 		else
 		{
-			selfR.battle.add('message '+message);
+			selfR.add(message);
 			selfR.sideFreeTicks[inactiveSide] = 0;
 		}
 		selfR.update();
@@ -526,7 +525,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 	this.cancelReset = function() {
 		if (selfR.resetTimer)
 		{
-			selfR.battle.add('message The restart or kick was interrupted by activity.');
+			selfR.add('The restart or kick was interrupted by activity.');
 			selfR.update();
 			clearTimeout(selfR.resetTimer);
 			selfR.resetTimer = null;
@@ -557,7 +556,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		if (selfR.resetTimer) return;
 		if (selfR.battle.ended)
 		{
-			selfR.battle.add('message A new game will start in 5 seconds.');
+			selfR.add('A new game will start in 5 seconds.');
 			// reset in 5 seconds
 			selfR.resetTimer = setTimeout(selfR.reset, 5000);
 		}
