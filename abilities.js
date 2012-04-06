@@ -831,7 +831,7 @@ exports.BattleAbilities = {
 				//pokemon.addVolatile('illusion');
 				pokemon.setAbility('');
 				pokemon.illusion = null;
-				this.add('replace', pokemon, pokemon.details, pokemon.getHealth());
+				this.add('replace', pokemon, pokemon.getDetails());
 			}
 		},
 		id: "illusion",

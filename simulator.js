@@ -219,6 +219,10 @@ function BattlePokemon(set, side)
 		if (selfP.illusion) return selfP.illusion.fullname;
 		return selfP.fullname;
 	};
+	this.getDetails = function() {
+		if (selfP.illusion) return selfP.illusion.details + ' | ' + selfP.illusion.getHealth();
+		return selfP.details + ' | ' + selfP.getHealth();
+	};
 	
 	this.update = function(init) {
 		selfP.illusion = null;
@@ -1884,7 +1888,7 @@ function Battle(roomid, format, rated)
 		{
 			pokemon.moveset[m].used = false;
 		}
-		selfB.add('switch', side.active[0], side.active[0].details, side.active[0].getHealth());
+		selfB.add('switch', side.active[0], side.active[0].getDetails());
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
@@ -1946,7 +1950,7 @@ function Battle(roomid, format, rated)
 		{
 			pokemon.moveset[m].used = false;
 		}
-		selfB.add('drag', side.active[0], side.active[0].details, side.active[0].getHealth());
+		selfB.add('drag', side.active[0], side.active[0].getDetails());
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
