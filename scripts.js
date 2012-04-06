@@ -114,11 +114,11 @@ exports.BattleScripts = {
 		if (accuracy !== true && moveRoll >= accuracy)
 		{
 			missed = true;
-			attrs = '| [miss]';
+			attrs = ' | [miss]';
 		}
 		if (target.fainted && !canTargetFainted[move.target])
 		{
-			attrs = '| [notarget]';
+			attrs = ' | [notarget]';
 		}
 		var movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
