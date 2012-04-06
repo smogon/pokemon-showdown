@@ -6100,7 +6100,7 @@ exports.BattleMovedex = {
 				if (damage)
 				{
 					this.heal(damage, target, pokemon);
-					this.add('-heal', target, damage, '[from] move: Leech Seed', '[of] '+pokemon);
+					this.add('-sethp', target, target.getHealth(), pokemon, pokemon.hpChange(), '[from] move: Leech Seed', '[of] '+pokemon);
 				}
 			}
 		},
@@ -7503,7 +7503,7 @@ exports.BattleMovedex = {
 			var averagehp = parseInt(target.hp + pokemon.hp) / 2;
 			target.sethp(averagehp);
 			pokemon.sethp(averagehp);
-			this.add('-sethp', '[from] move: Pain Split');
+			this.add('-sethp', target, target.getHealth(), pokemon, pokemon.hpChange(), '[from] move: Pain Split');
 		},
 		secondary: false,
 		target: "normal",
