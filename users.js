@@ -8,15 +8,6 @@ function getTime()
 {
 	return new Date().getTime();
 }
-function toId(text)
-{
-	text = text || '';
-	return text.replace(/ /g, '');
-}
-function toUserid(name)
-{
-	return name.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
 
 function getUser(name)
 {

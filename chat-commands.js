@@ -4,15 +4,6 @@
 
 */
 
-function toId(text)
-{
-	text = text || '';
-	return text.replace(/ /g, '');
-}
-function toUserid(name)
-{
-	return name.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
 function sanitize(str, strEscape)
 {
 	if (!str) str = '';
