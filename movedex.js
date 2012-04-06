@@ -10898,7 +10898,7 @@ exports.BattleMovedex = {
 			}
 			if (target.hp <= target.maxhp/4)
 			{
-				this.add('-fail', 'move: Substitute');
+				this.add('-fail', target, 'move: Substitute');
 				return null;
 			}
 		},
