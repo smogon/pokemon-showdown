@@ -2124,8 +2124,6 @@ function Battle(roomid, format, rated)
 		if (name === 'tox') name = 'psn';
 		switch (effect.id)
 		{
-		case 'leechseed':
-			break;
 		case 'partiallytrapped':
 			selfB.add('-damage', target, target.hpChange(damage), '[from] '+selfB.effectData.sourceEffect.fullname, '[partiallytrapped]');
 			break;
@@ -2133,6 +2131,10 @@ function Battle(roomid, format, rated)
 			if (effect.effectType === 'Move')
 			{
 				selfB.add('-damage', target, target.hpChange(damage));
+			}
+			else if (source && source !== target)
+			{
+				selfB.add('-damage', target, target.hpChange(damage), '[from] '+effect.fullname, '[of] '+source);
 			}
 			else
 			{
@@ -2185,7 +2187,7 @@ function Battle(roomid, format, rated)
 		effect = selfB.getEffect(effect);
 		damage = Math.ceil(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
-		damage = selfB.runEvent('Heal', target, source, effect, damage);
+		damage = selfB.runEvent('TryHeal', target, source, effect, damage);
 		if (!damage) return 0;
 		damage = Math.ceil(damage);
 		if (!target || !target.hp) return 0;
@@ -2193,7 +2195,6 @@ function Battle(roomid, format, rated)
 		damage = target.heal(damage, source, effect);
 		switch (effect.id) {
 		case 'leechseed':
-			break;
 		case 'rest':
 			selfB.add('-heal', target, target.hpChange(damage), '[silent]');
 			break;
@@ -2205,12 +2206,17 @@ function Battle(roomid, format, rated)
 			{
 				selfB.add('-heal', target, target.hpChange(damage));
 			}
+			else if (source && source !== target)
+			{
+				selfB.add('-heal', target, target.hpChange(damage), '[from] '+effect.fullname, '[of] '+source);
+			}
 			else
 			{
 				selfB.add('-heal', target, target.hpChange(damage), '[from] '+effect.fullname);
 			}
 			break;
 		}
+		selfB.runEvent('Heal', target, source, effect, damage);
 		return damage;
 	};
 	this.getDamage = function(pokemon, target, move, suppressMessages) {

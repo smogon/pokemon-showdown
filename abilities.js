@@ -1038,7 +1038,7 @@ exports.BattleAbilities = {
 	"liquidooze": {
 		desc: "When another Pokemon uses Absorb, Drain Punch, Dream Eater, Giga Drain, Leech Life, Leech Seed or Mega Drain against this Pokemon, the attacking Pokemon loses the amount of health that it would have gained.",
 		id: "liquidooze",
-		onSourceHeal: function(damage, target, source, effect) {
+		onSourceTryHeal: function(damage, target, source, effect) {
 			this.debug("Heal is occurring: "+target+" <- "+source+" :: "+effect.id);
 			var canOoze = {drain: 1, leechseed: 1};
 			if (canOoze[effect.id]) {
