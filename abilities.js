@@ -553,13 +553,13 @@ exports.BattleAbilities = {
 			{
 				stats.atk *= 1.5;
 				stats.spd *= 1.5;
-				if (pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunny')
+				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunny')
 				{
 					this.effectData.forme = 'Sunny';
 					this.add('-formechange', pokemon, 'Cherrim-Sunny');
 				}
 			}
-			else if (pokemon.speciesid === 'cherrim' && this.effectData.forme)
+			else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme)
 			{
 				delete this.effectData.forme;
 				this.add('-formechange', pokemon, 'Cherrim');
@@ -589,7 +589,7 @@ exports.BattleAbilities = {
 			{
 				pokemon.types = ['Ice'];
 			}
-			if ((this.effectData.forme||'Normal') != pokemon.types[0])
+			if (pokemon.isActive && (this.effectData.forme||'Normal') != pokemon.types[0])
 			{
 				this.effectData.forme = pokemon.types[0];
 				if (pokemon.types[0] === 'Normal')
