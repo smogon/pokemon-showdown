@@ -769,27 +769,27 @@ function Room(roomid, format, p1, p2, parentid, rated)
 					allyPokemon = allySide.active[0];
 				}
 			}
-			selfR.battle.add('chat', toId(user.name), '>> '+cmd);
+			selfR.battle.add('chat', user.name, '>> '+cmd);
 			if (user.group === '&')
 			{
 				try
 				{
-					selfR.battle.add('chat', toId(user.name), '<< '+eval(cmd));
+					selfR.battle.add('chat', user.name, '<< '+eval(cmd));
 				}
 				catch (e)
 				{
-					selfR.battle.add('chat', toId(user.name), '<< error: '+e.message);
+					selfR.battle.add('chat', user.name, '<< error: '+e.message);
 					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
 				}
 			}
 			else
 			{
-				selfR.battle.add('chat', toId(user.name), '<< Access denied. To use the developer console, you must be: &');
+				selfR.battle.add('chat', user.name, '<< Access denied. To use the developer console, you must be: &');
 			}
 		}
 		else
 		{
-			selfR.battle.add('chat', toId(user.name), message);
+			selfR.battle.add('chat', user.name, message);
 		}
 		selfR.update();
 	};
