@@ -855,7 +855,7 @@ exports.BattleAbilities = {
 			var target = pokemon.side.foe.randomActive();
 			if (pokemon.transformInto(target))
 			{
-				this.add('-start',pokemon,'transform','[of] '+target);
+				this.add('-transform', pokemon, target);
 			}
 		},
 		id: "imposter",
