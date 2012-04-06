@@ -944,6 +944,17 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		return true;
 		break;
 	
+	case 'savelearnsets':
+		if (user.group === '&')
+		{
+			fs.writeFile('learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
+			socket.emit('console', 'learnsets.js saved.');
+			return true;
+		}
+		socket.emit('console', '/savelearnsets - Access denied.');
+		return true;
+		break;
+	
 	case 'rating':
 	case 'ranking':
 	case 'rank':
