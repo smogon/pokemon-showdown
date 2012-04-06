@@ -2120,19 +2120,21 @@ function Battle(roomid, format, rated)
 		if (name === 'tox') name = 'psn';
 		switch (effect.id)
 		{
-			case 'partiallytrapped':
-				selfB.add('-damage', target, target.hpChange(damage), '[from] '+selfB.effectData.sourceEffect.fullname, '[partiallytrapped]');
-				break;
-			default:
-				if (effect.effectType === 'Move')
-				{
-					selfB.add('-damage', target, target.hpChange(damage));
-				}
-				else
-				{
-					selfB.add('-damage', target, target.hpChange(damage), '[from] '+name);
-				}
-				break;
+		case 'leechseed':
+			break;
+		case 'partiallytrapped':
+			selfB.add('-damage', target, target.hpChange(damage), '[from] '+selfB.effectData.sourceEffect.fullname, '[partiallytrapped]');
+			break;
+		default:
+			if (effect.effectType === 'Move')
+			{
+				selfB.add('-damage', target, target.hpChange(damage));
+			}
+			else
+			{
+				selfB.add('-damage', target, target.hpChange(damage), '[from] '+name);
+			}
+			break;
 		}
 		if (target.fainted) selfB.faint(target);
 		else
@@ -2187,6 +2189,7 @@ function Battle(roomid, format, rated)
 		damage = target.heal(damage, source, effect);
 		switch (effect.id) {
 		case 'leechseed':
+			break;
 		case 'rest':
 			selfB.add('-heal', target, target.hpChange(damage), '[silent]');
 			break;
