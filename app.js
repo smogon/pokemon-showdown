@@ -39,15 +39,14 @@ function getTime()
 	return new Date().getTime();
 }
 
-function toId(text)
+toId = function(text)
 {
 	text = text || '';
-	return text.replace(/ /g, '');
-}
-function toUserid(name)
-{
-	return name.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
+	if (typeof text === 'number') text = ''+text;
+	if (typeof text !== 'string') return ''; //???
+	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
+};
+toUserid = toId;
 
 BattlePokedex = require('./pokedex.js').BattlePokedex;
 BattleTiers = require('./tiers.js').BattleTiers;
