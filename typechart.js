@@ -200,7 +200,7 @@ exports.BattleTypeChart = {
   },
   "Ground": {
     "damageTaken": {
-      Sandstorm: 3,
+      sandstorm: 3,
       "Bug": 0,
       "Dark": 0,
       "Dragon": 0,
@@ -223,7 +223,7 @@ exports.BattleTypeChart = {
   },
   "Ice": {
     "damageTaken": {
-      Hail: 3,
+      hail: 3,
       frz: 3,
       "Bug": 0,
       "Dark": 0,
@@ -314,7 +314,7 @@ exports.BattleTypeChart = {
   },
   "Rock": {
     "damageTaken": {
-      Sandstorm: 3,
+      sandstorm: 3,
       "Bug": 0,
       "Dark": 0,
       "Dragon": 0,
@@ -339,7 +339,7 @@ exports.BattleTypeChart = {
     "damageTaken": {
       psn: 3,
       tox: 3,
-      Sandstorm: 3,
+      sandstorm: 3,
       "Bug": 2,
       "Dark": 2,
       "Dragon": 2,
