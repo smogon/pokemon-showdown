@@ -1052,7 +1052,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('Bounce');
+				pokemon.lockMove('bounce');
 			},
 			onSourceModifyMove: function(move) {
 				
