@@ -54,7 +54,11 @@ function BattleTools()
 		{
 			var name = (template||'').trim();
 			var id = toId(name);
-			if (id === config.shadowBannedPokemon) id = 'Venusaur';
+			if (BattleAliases[id])
+			{
+				name = BattleAliases[id];
+				id = toId(name);
+			}
 			template = {};
 			if (id && BattlePokedex[id])
 			{

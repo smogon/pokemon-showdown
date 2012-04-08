@@ -410,13 +410,13 @@ exports.BattleTiers = {
 	"deoxys": {
 		tier: "Uber"
 	},
-	"deoxysa": {
+	"deoxysattack": {
 		tier: "Uber"
 	},
-	"deoxysd": {
+	"deoxysdefense": {
 		tier: "UU"
 	},
-	"deoxyss": {
+	"deoxysspeed": {
 		tier: "Uber"
 	},
 	"dewgong": {
@@ -656,7 +656,7 @@ exports.BattleTiers = {
 	"giratina": {
 		tier: "Uber"
 	},
-	"giratinao": {
+	"giratinaorigin": {
 		tier: "Uber"
 	},
 	"glaceon": {
@@ -1451,19 +1451,19 @@ exports.BattleTiers = {
 	"rotom": {
 		tier: "RU"
 	},
-	"rotomc": {
+	"rotommow": {
 		tier: "RU"
 	},
-	"rotomf": {
+	"rotomfrost": {
 		tier: "NU"
 	},
-	"rotomh": {
+	"rotomheat": {
 		tier: "UU"
 	},
-	"rotoms": {
+	"rotomfan": {
 		tier: "NU"
 	},
-	"rotomw": {
+	"rotomwash": {
 		tier: "OU"
 	},
 	"rufflet": {
@@ -1550,7 +1550,7 @@ exports.BattleTiers = {
 	"shaymin": {
 		tier: "UU"
 	},
-	"shaymins": {
+	"shayminsky": {
 		tier: "Uber"
 	},
 	"shedinja": {
@@ -1985,10 +1985,10 @@ exports.BattleTiers = {
 	"wormadam": {
 		tier: "NU"
 	},
-	"wormadamg": {
+	"wormadamground": {
 		tier: "NU"
 	},
-	"wormadams": {
+	"wormadamsteel": {
 		tier: "NU"
 	},
 	"wurmple": {

@@ -58,6 +58,14 @@ BattleItems = require('./items.js').BattleItems;
 BattleAbilities = require('./abilities.js').BattleAbilities;
 BattleFormats = require('./formats.js').BattleFormats;
 BattleLearnsets = require('./learnsets.js').BattleLearnsets;
+try
+{
+	BattleAliases = require('./aliases.js').BattleAliases;
+}
+catch (e)
+{
+	BattleAliases = {};
+}
 
 var sim = require('./simulator.js');
 
