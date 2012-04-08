@@ -7013,6 +7013,16 @@ exports.BattleMovedex = {
 		name: "Mist",
 		pp: 30,
 		priority: 0,
+		onHitField: function() {
+			this.add('r-haze');
+			for (var i=0; i<this.sides.length; i++)
+			{
+				for (var j=0; j<this.sides[i].active.length; j++)
+				{
+					this.sides[i].active[j].clearBoosts();
+				}
+			}
+		},
 		secondary: false,
 		target: "allies",
 		type: "Ice"
