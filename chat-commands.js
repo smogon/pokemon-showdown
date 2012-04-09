@@ -449,7 +449,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
-		if (user.muted && !targetUser.isMod()) 
+		if (user.muted && !targetUser.isMod())
 		{
 			socket.emit('console', 'You can only private message users marked by %, @, or & when muted.');
 			return true;
@@ -716,11 +716,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			room.add(''+targetUser.name+' was demoted to voice by '+user.name+'.');
 			
-			if (targetUser.group === '%')
-			{
-				targetUser.setGroup('+');
-				rooms.lobby.usersChanged = true;
-			}
+			targetUser.setGroup('+');
+			rooms.lobby.usersChanged = true;
 			return true;
 		}
 		socket.emit('console', '/demod - Access denied.');

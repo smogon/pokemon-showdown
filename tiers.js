@@ -249,7 +249,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"Carvanha": {
-		tier: "LC Uber"
+		tier: "NFE"
 	},
 	"Cascoon": {
 		tier: "NFE"
@@ -389,8 +389,8 @@ exports.BattleTiers = {
 	"Darmanitan": {
 		tier: "UU"
 	},
-	"Darmanitan-D": {
-		tier: "Illegal"
+	"Darmanitan-Z": {
+		tier: "Illegal" // Limbo
 	},
 	"Darumaka": {
 		tier: "LC"
@@ -636,7 +636,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"Genesect": {
-		tier: "Unreleased"
+		tier: "Unreleased" // Limbo
 	},
 	"Gengar": {
 		tier: "OU"
@@ -864,7 +864,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"Keldeo": {
-		tier: "Unreleased"
+		tier: "Unreleased" // Limbo
 	},
 	"Kingdra": {
 		tier: "UU"
@@ -1089,16 +1089,16 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"Meditite": {
-		tier: "LC Uber"
+		tier: "NFE"
 	},
 	"Meganium": {
 		tier: "NU"
 	},
 	"Meloetta": {
-		tier: "Unreleased"
+		tier: "Unreleased" // Limbo
 	},
 	"Meloetta-S": {
-		tier: "Illegal"
+		tier: "Illegal" // Limbo
 	},
 	"Meowth": {
 		tier: "LC"
@@ -1641,7 +1641,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Sneasel": {
-		tier: "LC Uber"
+		tier: "NU"
 	},
 	"Snivy": {
 		tier: "LC"
@@ -1926,7 +1926,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Vulpix": {
-		tier: "LC Uber"
+		tier: "NFE"
 	},
 	"Wailmer": {
 		tier: "LC"
@@ -2004,7 +2004,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"Yanma": {
-		tier: "LC Uber"
+		tier: "NFE"
 	},
 	"Yanmega": {
 		tier: "BL2"
