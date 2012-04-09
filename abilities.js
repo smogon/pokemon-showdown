@@ -654,7 +654,7 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, it identifies the opponent's held item; in double battles, the held item of an unrevealed, randomly selected opponent is identified.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			this.add('message','Frisk found '+target.item+'. (placeholder)');
+			this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] '+pokemon);
 		},
 		id: "frisk",
 		name: "Frisk",
