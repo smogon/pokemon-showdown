@@ -893,6 +893,7 @@ function BattlePokemon(set, side)
 		if (!selfP.hp) hpp = 0;
 		var status = '';
 		if (selfP.status) status = ' '+selfP.status;
+		if (selfP.fainted) status = ' fnt';
 		return ' ('+hpp+'/100'+status+')';
 	};
 	this.hpChange = function(d) {
@@ -1120,8 +1121,8 @@ function Battle(roomid, format, rated)
 	this.log = [];
 	this.turn = 0;
 	this.sides = [null, null];
-	this.allySide = null;
-	this.foeSide = null;
+	this.p1 = null;
+	this.p2 = null;
 	this.lastUpdate = 0;
 	this.curCallback = '';
 	this.roomid = roomid;
@@ -1268,12 +1269,12 @@ function Battle(roomid, format, rated)
 	};
 	
 	this.update = function() {
-		var actives = selfB.allySide.active;
+		var actives = selfB.p1.active;
 		for (var i=0; i<actives.length; i++)
 		{
 			if (actives[i]) actives[i].update();
 		}
-		actives = selfB.foeSide.active;
+		actives = selfB.p2.active;
 		for (var i=0; i<actives.length; i++)
 		{
 			if (actives[i]) actives[i].update();
@@ -1577,8 +1578,8 @@ function Battle(roomid, format, rated)
 			}
 			if (bubbleDown)
 			{
-				statuses = statuses.concat(selfB.getRelevantEffectsInner(selfB.allySide, callbackType,null,null,false,true, getAll));
-				statuses = statuses.concat(selfB.getRelevantEffectsInner(selfB.foeSide, callbackType,null,null,false,true, getAll));
+				statuses = statuses.concat(selfB.getRelevantEffectsInner(selfB.p1, callbackType,null,null,false,true, getAll));
+				statuses = statuses.concat(selfB.getRelevantEffectsInner(selfB.p2, callbackType,null,null,false,true, getAll));
 			}
 			return statuses;
 		}
@@ -1691,76 +1692,76 @@ function Battle(roomid, format, rated)
 	};
 	this.getPokemon = function(id) {
 		if (typeof id !== 'string') id = id.id;
-		for (var i=0; i<selfB.allySide.pokemon.length; i++)
+		for (var i=0; i<selfB.p1.pokemon.length; i++)
 		{
-			var pokemon = selfB.allySide.pokemon[i];
+			var pokemon = selfB.p1.pokemon[i];
 			if (pokemon.id === id) return pokemon;
 		}
-		for (var i=0; i<selfB.foeSide.pokemon.length; i++)
+		for (var i=0; i<selfB.p2.pokemon.length; i++)
 		{
-			var pokemon = selfB.foeSide.pokemon[i];
+			var pokemon = selfB.p2.pokemon[i];
 			if (pokemon.id === id) return pokemon;
 		}
 		return null;
 	};
 	this.callback = function(type) {
-		if (!selfB.allySide.user || !selfB.foeSide.user)
+		if (!selfB.p1.user || !selfB.p2.user)
 		{
 			return;
 		}
 		selfB.update();
 		if (type==='switch')
 		{
-			if (selfB.allySide.active[0].fainted)
+			if (selfB.p1.active[0].fainted)
 			{
-				selfB.allySide.decision = null;
-				selfB.allySide.emitUpdate({request: {forceSwitch: true, side: selfB.allySide.getData()}});
+				selfB.p1.decision = null;
+				selfB.p1.emitUpdate({request: {forceSwitch: true, side: selfB.p1.getData()}});
 			}
 			else
 			{
-				selfB.allySide.decision = true;
-				selfB.allySide.emitUpdate({request: {wait: true}});
+				selfB.p1.decision = true;
+				selfB.p1.emitUpdate({request: {wait: true}});
 			}
-			if (selfB.foeSide.active[0].fainted)
+			if (selfB.p2.active[0].fainted)
 			{
-				selfB.foeSide.decision = null;
-				selfB.foeSide.emitUpdate({request: {forceSwitch: true, side: selfB.foeSide.getData()}});
+				selfB.p2.decision = null;
+				selfB.p2.emitUpdate({request: {forceSwitch: true, side: selfB.p2.getData()}});
 			}
 			else
 			{
-				selfB.foeSide.decision = true;
-				selfB.foeSide.emitUpdate({request: {wait: true}});
+				selfB.p2.decision = true;
+				selfB.p2.emitUpdate({request: {wait: true}});
 			}
 		}
 		else if (type==='switch-ally')
 		{
-			selfB.foeSide.decision = true;
-			selfB.allySide.decision = null;
-			selfB.foeSide.emitUpdate({request: {wait: true}});
-			selfB.allySide.emitUpdate({request: {forceSwitch: true, side: selfB.allySide.getData()}});
+			selfB.p2.decision = true;
+			selfB.p1.decision = null;
+			selfB.p2.emitUpdate({request: {wait: true}});
+			selfB.p1.emitUpdate({request: {forceSwitch: true, side: selfB.p1.getData()}});
 		}
 		else if (type==='switch-foe')
 		{
-			selfB.allySide.decision = true;
-			selfB.allySide.emitUpdate({request: {wait: true}});
-			selfB.foeSide.decision = null;
-			selfB.foeSide.emitUpdate({request: {forceSwitch: true, side: selfB.foeSide.getData()}});
+			selfB.p1.decision = true;
+			selfB.p1.emitUpdate({request: {wait: true}});
+			selfB.p2.decision = null;
+			selfB.p2.emitUpdate({request: {forceSwitch: true, side: selfB.p2.getData()}});
 		}
 		else if (type==='team-preview')
 		{
 			selfB.add('teampreview');
-			selfB.allySide.decision = null;
-			selfB.allySide.emitUpdate({request: {teamPreview: true, side: selfB.allySide.getData()}});
-			selfB.foeSide.decision = null;
-			selfB.foeSide.emitUpdate({request: {teamPreview: true, side: selfB.foeSide.getData()}});
+			selfB.p1.decision = null;
+			selfB.p1.emitUpdate({request: {teamPreview: true, side: selfB.p1.getData()}});
+			selfB.p2.decision = null;
+			selfB.p2.emitUpdate({request: {teamPreview: true, side: selfB.p2.getData()}});
 			selfB.decisionWaiting = true;
 		}
 		else
 		{
 			var moves;
 			var pokemon;
-			selfB.allySide.decision = null;
-			pokemon = selfB.allySide.active[0];
+			selfB.p1.decision = null;
+			pokemon = selfB.p1.active[0];
 			if (!pokemon)
 			{
 				selfB.add('message BATTLE CRASHED.');
@@ -1770,17 +1771,17 @@ function Battle(roomid, format, rated)
 			{
 				moves = [{move: 'recharge'}];
 			}
-			selfB.allySide.emitUpdate({request: {moves: pokemon.getMoves(), trapped: pokemon.trapped, side: pokemon.side.getData()}});
+			selfB.p1.emitUpdate({request: {moves: pokemon.getMoves(), trapped: pokemon.trapped, side: pokemon.side.getData()}});
 			
-			selfB.foeSide.decision = null;
-			pokemon = selfB.foeSide.active[0];
+			selfB.p2.decision = null;
+			pokemon = selfB.p2.active[0];
 			if (pokemon.disabledMoves['recharge'] === false)
 			{
 				moves = [{move: 'recharge'}];
 			}
-			selfB.foeSide.emitUpdate({request: {moves: pokemon.getMoves(), trapped: pokemon.trapped, side: pokemon.side.getData()}});
+			selfB.p2.emitUpdate({request: {moves: pokemon.getMoves(), trapped: pokemon.trapped, side: pokemon.side.getData()}});
 		}
-		if (selfB.foeSide.decision && selfB.allySide.decision)
+		if (selfB.p2.decision && selfB.p1.decision)
 		{
 			if (type !== 'move')
 			{
@@ -1806,40 +1807,40 @@ function Battle(roomid, format, rated)
 		{
 			selfB.winner = '';
 		}
-		else if (side === selfB.allySide)
+		else if (side === selfB.p1)
 		{
 			winSide = side;
-			if (selfB.allySide.user)
+			if (selfB.p1.user)
 			{
-				selfB.winner = selfB.allySide.user.userid;
+				selfB.winner = selfB.p1.user.userid;
 			}
 		}
-		else if (side === selfB.foeSide)
+		else if (side === selfB.p2)
 		{
 			winSide = side;
-			if (selfB.foeSide.user)
+			if (selfB.p2.user)
 			{
-				selfB.winner = selfB.foeSide.user.userid;
+				selfB.winner = selfB.p2.user.userid;
 			}
 		}
-		else if (selfB.allySide.user && side === selfB.allySide.user.userid)
+		else if (selfB.p1.user && side === selfB.p1.user.userid)
 		{
-			winSide = selfB.allySide;
+			winSide = selfB.p1;
 			selfB.winner = side;
 		}
-		else if (selfB.foeSide.user && side === selfB.foeSide.user.userid)
+		else if (selfB.p2.user && side === selfB.p2.user.userid)
 		{
-			winSide = selfB.foeSide;
+			winSide = selfB.p2;
 			selfB.winner = side;
 		}
 		else if (selfB.rated && side === selfB.rated.p1)
 		{
-			winSide = selfB.allySide;
+			winSide = selfB.p1;
 			selfB.winner = side;
 		}
 		else if (selfB.rated && side === selfB.rated.p2)
 		{
-			winSide = selfB.foeSide;
+			winSide = selfB.p2;
 			selfB.winner = side;
 		}
 		else
@@ -1987,14 +1988,14 @@ function Battle(roomid, format, rated)
 	this.start = function() {
 		if (selfB.active) return;
 		
-		if (!selfB.allySide || !selfB.allySide.user || !selfB.foeSide || !selfB.foeSide.user)
+		if (!selfB.p1 || !selfB.p1.user || !selfB.p2 || !selfB.p2.user)
 		{
 			// need two players to start
 			return;
 		}
 		
-		selfB.foeSide.emitUpdate({midBattle: selfB.started, side: 'p2', sideData: selfB.foeSide.getData()});
-		selfB.allySide.emitUpdate({midBattle: selfB.started, side: 'p1', sideData: selfB.allySide.getData()});
+		selfB.p2.emitUpdate({midBattle: selfB.started, side: 'p2', sideData: selfB.p2.getData()});
+		selfB.p1.emitUpdate({midBattle: selfB.started, side: 'p1', sideData: selfB.p1.getData()});
 		
 		if (selfB.started)
 		{
@@ -2006,8 +2007,8 @@ function Battle(roomid, format, rated)
 		selfB.active = true;
 		selfB.activeTurns = 0;
 		selfB.started = true;
-		selfB.foeSide.foe = selfB.allySide;
-		selfB.allySide.foe = selfB.foeSide;
+		selfB.p2.foe = selfB.p1;
+		selfB.p1.foe = selfB.p2;
 		
 		var format = selfB.getFormat();
 		selfB.add('tier', format.name);
@@ -2023,7 +2024,7 @@ function Battle(roomid, format, rated)
 			}
 		}
 		
-		if (!selfB.allySide.pokemon[0] || !selfB.foeSide.pokemon[0])
+		if (!selfB.p1.pokemon[0] || !selfB.p2.pokemon[0])
 		{
 			selfB.add('message Battle not started: One of you has an empty team.');
 			return;
@@ -2405,7 +2406,7 @@ function Battle(roomid, format, rated)
 	this.resolveTarget = function(pokemon, move)
 	{
 		move = selfB.getMove(move);
-		if (move.target === 'self' || move.target === 'all' || move.target === 'allies' || move.target === 'allySide' || move.target === 'ally')
+		if (move.target === 'self' || move.target === 'all' || move.target === 'allies' || move.target === 'p1' || move.target === 'ally')
 		{
 			return pokemon;
 		}
@@ -2434,7 +2435,7 @@ function Battle(roomid, format, rated)
 		BattleScripts.moveHit.call(selfB, target, source, move, a, b);
 	};
 	this.checkFainted = function() {
-		if (selfB.allySide.active[0].fainted || selfB.foeSide.active[0].fainted)
+		if (selfB.p1.active[0].fainted || selfB.p2.active[0].fainted)
 		{
 			selfB.callback('switch');
 			selfB.decisionWaiting = true;
@@ -2457,19 +2458,19 @@ function Battle(roomid, format, rated)
 				faintData.target.side.pokemonLeft--;
 			}
 		}
-		if (!selfB.allySide.pokemonLeft && !selfB.foeSide.pokemonLeft)
+		if (!selfB.p1.pokemonLeft && !selfB.p2.pokemonLeft)
 		{
 			selfB.win();
 			return true;
 		}
-		if (!selfB.allySide.pokemonLeft)
+		if (!selfB.p1.pokemonLeft)
 		{
-			selfB.win(selfB.foeSide);
+			selfB.win(selfB.p2);
 			return true;
 		}
-		if (!selfB.foeSide.pokemonLeft)
+		if (!selfB.p2.pokemonLeft)
 		{
-			selfB.win(selfB.allySide);
+			selfB.win(selfB.p1);
 			return true;
 		}
 		return false;
@@ -2591,8 +2592,8 @@ function Battle(roomid, format, rated)
 		{
 		case 'start':
 			selfB.add('start');
-			selfB.switchIn(selfB.allySide.pokemon[0]);
-			selfB.switchIn(selfB.foeSide.pokemon[0]);
+			selfB.switchIn(selfB.p1.pokemon[0]);
+			selfB.switchIn(selfB.p2.pokemon[0]);
 			selfB.midTurn = true;
 			break;
 		case 'move':
@@ -2668,20 +2669,20 @@ function Battle(roomid, format, rated)
 		selfB.clearActiveMove();
 		if (selfB.faintMessages()) return true;
 		selfB.eachEvent('Update');
-		if (selfB.allySide.active[0].switchFlag)
+		if (selfB.p1.active[0].switchFlag)
 		{
-			selfB.allySide.active[0].switchFlag = false;
-			if (selfB.canSwitch(selfB.allySide))
+			selfB.p1.active[0].switchFlag = false;
+			if (selfB.canSwitch(selfB.p1))
 			{
 				selfB.callback('switch-ally');
 				selfB.decisionWaiting = true;
 				return true;
 			}
 		}
-		if (selfB.foeSide.active[0].switchFlag)
+		if (selfB.p2.active[0].switchFlag)
 		{
-			selfB.foeSide.active[0].switchFlag = false;
-			if (selfB.canSwitch(selfB.foeSide))
+			selfB.p2.active[0].switchFlag = false;
+			if (selfB.canSwitch(selfB.p2))
 			{
 				selfB.callback('switch-foe');
 				selfB.decisionWaiting = true;
@@ -2697,15 +2698,15 @@ function Battle(roomid, format, rated)
 			selfB.curCallback = '';
 		}
 		
-		if (selfB.allySide.decision && selfB.allySide.decision !== true)
+		if (selfB.p1.decision && selfB.p1.decision !== true)
 		{
-			selfB.addQueue(selfB.allySide.decision, true);
-			selfB.allySide.decision = true;
+			selfB.addQueue(selfB.p1.decision, true);
+			selfB.p1.decision = true;
 		}
-		if (selfB.foeSide.decision && selfB.foeSide.decision !== true)
+		if (selfB.p2.decision && selfB.p2.decision !== true)
 		{
-			selfB.addQueue(selfB.foeSide.decision, true);
-			selfB.foeSide.decision = true;
+			selfB.addQueue(selfB.p2.decision, true);
+			selfB.p2.decision = true;
 		}
 		if (!selfB.midTurn)
 		{
@@ -2882,7 +2883,7 @@ function Battle(roomid, format, rated)
 				return;
 			}
 		}
-		if (selfB.allySide.decision && selfB.foeSide.decision)
+		if (selfB.p1.decision && selfB.p2.decision)
 		{
 			selfB.decisionWaiting = false;
 			selfB.go();
@@ -2895,74 +2896,74 @@ function Battle(roomid, format, rated)
 		selfB.add('debug', activity);
 	};
 	this.join = function(user, slot) {
-		if (selfB.allySide && selfB.allySide.user && selfB.foeSide && selfB.foeSide.user) return false;
+		if (selfB.p1 && selfB.p1.user && selfB.p2 && selfB.p2.user) return false;
 		if (!user) return false; // !!!
 		if (user.sides[selfB.roomid]) return false;
-		if (selfB.allySide && selfB.allySide.user || slot === 2)
+		if (selfB.p1 && selfB.p1.user || slot === 2)
 		{
 			if (selfB.started)
 			{
-				user.sides[selfB.roomid] = selfB.foeSide;
-				selfB.foeSide.user = user;
+				user.sides[selfB.roomid] = selfB.p2;
+				selfB.p2.user = user;
 				user.sides[selfB.roomid].name = user.name;
 			}
 			else
 			{
 				console.log("NEW SIDE: "+user.name);
-				selfB.foeSide = new BattleSide(user, selfB, 1);
-				selfB.sides[1] = selfB.foeSide;
-				user.sides[selfB.roomid] = selfB.foeSide;
+				selfB.p2 = new BattleSide(user, selfB, 1);
+				selfB.sides[1] = selfB.p2;
+				user.sides[selfB.roomid] = selfB.p2;
 			}
-			selfB.add('player', 'p2', selfB.foeSide.name, selfB.foeSide.user.avatar);
+			selfB.add('player', 'p2', selfB.p2.name, selfB.p2.user.avatar);
 		}
 		else
 		{
 			if (selfB.started)
 			{
-				user.sides[selfB.roomid] = selfB.allySide;
-				selfB.allySide.user = user;
-				selfB.allySide.name = user.name;
+				user.sides[selfB.roomid] = selfB.p1;
+				selfB.p1.user = user;
+				selfB.p1.name = user.name;
 			}
 			else
 			{
 				console.log("NEW SIDE: "+user.name);
-				selfB.allySide = new BattleSide(user, selfB, 0);
-				selfB.sides[0] = selfB.allySide;
-				user.sides[selfB.roomid] = selfB.allySide;
+				selfB.p1 = new BattleSide(user, selfB, 0);
+				selfB.sides[0] = selfB.p1;
+				user.sides[selfB.roomid] = selfB.p1;
 			}
-			selfB.add('player', 'p1', selfB.allySide.name, selfB.allySide.user.avatar);
+			selfB.add('player', 'p1', selfB.p1.name, selfB.p1.user.avatar);
 		}
 		selfB.start();
 		return true;
 	};
 	this.rename = function(user) {
 		if (!user || !user.sides[selfB.roomid]) return;
-		if (user.sides[selfB.roomid] === selfB.allySide)
+		if (user.sides[selfB.roomid] === selfB.p1)
 		{
 			user.sides[selfB.roomid].name = user.name;
-			selfB.add('player', 'p1', selfB.allySide.name, user.avatar);
+			selfB.add('player', 'p1', selfB.p1.name, user.avatar);
 		}
-		if (user.sides[selfB.roomid] === selfB.foeSide)
+		if (user.sides[selfB.roomid] === selfB.p2)
 		{
 			user.sides[selfB.roomid].name = user.name;
-			selfB.add('player', 'p2', selfB.foeSide.name, user.avatar);
+			selfB.add('player', 'p2', selfB.p2.name, user.avatar);
 		}
 	};
 	this.leave = function(user) {
 		if (!user) return false;
 		if (!user.sides[selfB.roomid]) return false;
 		user.sides[selfB.roomid].emitUpdate({side: 'none'});
-		if (selfB.foeSide === user.sides[selfB.roomid])
+		if (selfB.p2 === user.sides[selfB.roomid])
 		{
 			delete user.sides[selfB.roomid];
-			selfB.foeSide.user = null;
+			selfB.p2.user = null;
 			selfB.add('player', 'p2');
 			selfB.active = false;
 		}
-		else if (selfB.allySide === user.sides[selfB.roomid])
+		else if (selfB.p1 === user.sides[selfB.roomid])
 		{
 			delete user.sides[selfB.roomid];
-			selfB.allySide.user = null;
+			selfB.p1.user = null;
 			selfB.add('player', 'p1');
 			selfB.active = false;
 		}
@@ -3004,8 +3005,8 @@ function Battle(roomid, format, rated)
 			if (selfB.sides[i]) selfB.sides[i].destroy();
 			selfB.sides[i] = null;
 		}
-		selfB.allySide = null;
-		selfB.foeSide = null;
+		selfB.p1 = null;
+		selfB.p2 = null;
 		for (var i=0; i<selfB.queue.length; i++)
 		{
 			delete selfB.queue[i].pokemon;
