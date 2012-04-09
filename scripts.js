@@ -479,7 +479,6 @@ exports.BattleScripts = {
 		}
 		keys = shuffle(keys);
 		
-		var PotD = this.getEffect('PotD');
 		var ruleset = this.getFormat().ruleset;
 		
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++)
@@ -489,9 +488,9 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 			if (template.tier === 'CAP' && Math.random()*3>1) continue;
 			
-			if (ruleset && ruleset[0]==='PotD' && PotD && PotD.onPotD)
+			if (ruleset && ruleset[0]==='PotD')
 			{
-				var potd = this.getTemplate(PotD.onPotD);
+				var potd = this.getTemplate(config.potd);
 				if (i===1) template = potd;
 				else if (template.species === potd.species) continue; // No thanks, I've already got one
 			}
