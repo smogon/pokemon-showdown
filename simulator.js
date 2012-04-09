@@ -2406,7 +2406,7 @@ function Battle(roomid, format, rated)
 	this.resolveTarget = function(pokemon, move)
 	{
 		move = selfB.getMove(move);
-		if (move.target === 'self' || move.target === 'all' || move.target === 'allies' || move.target === 'p1' || move.target === 'ally')
+		if (move.target === 'self' || move.target === 'all' || move.target === 'allies' || move.target === 'allySide' || move.target === 'ally')
 		{
 			return pokemon;
 		}
