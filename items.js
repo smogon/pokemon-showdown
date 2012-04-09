@@ -1018,7 +1018,7 @@ exports.BattleItems = {
 		onResidual: function(pokemon) {
 			if (!pokemon.status)
 			{
-				this.add('-item',pokemon,'Flame Orb');
+				this.add('-activate', pokemon, 'item: Flame Orb');
 				pokemon.trySetStatus('brn');
 			}
 		},
@@ -2937,7 +2937,7 @@ exports.BattleItems = {
 		onResidual: function(pokemon) {
 			if (!pokemon.status && !pokemon.hasType('Steel'))
 			{
-				this.add('-item',pokemon,'Toxic Orb');
+				this.add('-activate', pokemon, 'item: Toxic Orb');
 				pokemon.trySetStatus('tox');
 			}
 		},
