@@ -363,7 +363,7 @@ function BattlePokemon(set, side)
 		for (var i=0; i<selfP.moveset.length; i++)
 		{
 			var move = selfP.moveset[i];
-			if (selfP.disabledMoves[move.move] || !move.pp)
+			if (selfP.disabledMoves[move.id] || !move.pp)
 			{
 				move.disabled = true;
 			}
