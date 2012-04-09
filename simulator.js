@@ -42,15 +42,18 @@ function BattlePokemon(set, side)
 	this.baseSet = set;
 	this.set = this.baseSet;
 	
-	this.name = set.name || set.species || 'Bulbasaur';
-	this.species = set.species || this.name;
-	this.baseTemplate = selfB.getTemplate(this.species);
+	this.baseTemplate = selfB.getTemplate(set.species || set.name);
 	if (!this.baseTemplate.exists)
 	{
 		selfB.debug('Unidentified species: '+this.species);
-		this.species = 'Bulbasaur';
 		this.baseTemplate = selfB.getTemplate(this.species);
 	}
+	this.species = set.baseTemplate.species;
+	else if (set.name === set.species || !set.name || !set.species)
+	{
+		set.name = this.species;
+	}
+	this.name = set.name || set.species || 'Bulbasaur';
 	this.speciesid = toId(this.species);
 	this.template = this.baseTemplate;
 	this.moves = [];
