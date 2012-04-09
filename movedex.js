@@ -11198,16 +11198,16 @@ exports.BattleMovedex = {
 				if (myItem) source.item = myItem;
 				return false;
 			}
-			this.add('-activate', source, 'move: Switcheroo', '[of] '+target);
+			this.add('-activate', source, 'move: Trick', '[of] '+target);
 			if (myItem)
 			{
 				target.setItem(myItem);
-				this.add('-item', target, myItem);
+				this.add('-item', target, myItem, '[from] Trick');
 			}
 			if (yourItem)
 			{
 				source.setItem(yourItem);
-				this.add('-item', source, yourItem);
+				this.add('-item', source, yourItem, '[from] Trick');
 			}
 		},
 		secondary: false,
@@ -11886,12 +11886,12 @@ exports.BattleMovedex = {
 			if (myItem)
 			{
 				target.setItem(myItem);
-				this.add('-item', target, myItem);
+				this.add('-item', target, myItem, '[from] move: Trick');
 			}
 			if (yourItem)
 			{
 				source.setItem(yourItem);
-				this.add('-item', source, yourItem);
+				this.add('-item', source, yourItem, '[from] move: Trick');
 			}
 		},
 		secondary: false,
