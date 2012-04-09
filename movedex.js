@@ -8449,7 +8449,7 @@ exports.BattleMovedex = {
 				{
 					this.add('-end', pokemon, 'move: Leech Seed', '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
-				var sideConditions = {"Spikes":1, "Toxic Spikes":1, "Stealth Rock":1};
+				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
 				for (var i in sideConditions)
 				{
 					if (pokemon.side.removeSideCondition(i)) this.add('-sideend', pokemon.side, i, '[from] move: Rapid Spin', '[of] '+pokemon);
@@ -12514,7 +12514,7 @@ exports.BattleMovedex = {
 				if (!target.fainted)
 				{
 					var source = this.effectData.source;
-					var damage = this.heal(target.maxhp/2, target, target);
+					var damage = this.heal(this.effectData.hp, target, target);
 					if (damage) this.add('-heal', target, target.hpChange(damage), '[from] move: Wish', '[wisher] '+source.name);
 				}
 			}
