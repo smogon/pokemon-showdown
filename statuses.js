@@ -136,12 +136,11 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
-			this.add('-activate', pokemon.id, 'confusion');
 			if (Math.random()*2 < 1)
 			{
 				return;
 			}
-			this.damage(this.getDamage(pokemon,pokemon,40), pokemon, pokemon, {id:'confusion', effectType:'Move', type:'???'});
+			this.damage(this.getDamage(pokemon,pokemon,40));
 			return false;
 		}
 	},
