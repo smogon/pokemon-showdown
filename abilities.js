@@ -636,7 +636,7 @@ exports.BattleAbilities = {
 			}
 			if (!warnMoves.length) return;
 			var warnMove = warnMoves[Math.floor(Math.random()*warnMoves.length)];
-			this.add('-message',pokemon.name+'\'s Forewarn alerted it to '+warnMove[0].name+'! (placeholder)');
+			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
 		},
 		id: "forewarn",
 		name: "Forewarn",
@@ -1982,12 +1982,12 @@ exports.BattleAbilities = {
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.ohko)
 			{
-				this.add('-ability',target,'Sturdy');
+				this.add('-activate',target,'Sturdy');
 				return 0;
 			}
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move')
 			{
-				this.add('-ability',target,'Sturdy');
+				this.add('-activate',target,'Sturdy');
 				return target.hp - 1;
 			}
 		},
@@ -2253,7 +2253,7 @@ exports.BattleAbilities = {
 	"unnerve": {
 		desc: "Opposing Pokemon can't eat their Berries.",
 		onStart: function(pokemon) {
-			this.add('-message',pokemon.name+' makes '+pokemon.side.foe.name+'\'s team too nervous to eat Berries! (placeholder)');
+			this.add('-ability',pokemon,'Unnerve',pokemon.side.foe);
 		},
 		onFoeEatItem: false,
 		id: "unnerve",
@@ -2363,7 +2363,7 @@ exports.BattleAbilities = {
 			this.debug('Wonder Guard immunity: '+effect.id);
 			if (this.getEffectiveness(effect.type, target) <= 0)
 			{
-				this.add('-immune',target,'[msg]');
+				this.add('-activate',target,'ability: Wonder Guard');
 				return null;
 			}
 		},
@@ -2373,7 +2373,7 @@ exports.BattleAbilities = {
 			this.debug('Wonder Guard immunity: '+effect.id);
 			if (this.getEffectiveness(effect.type, target) <= 0)
 			{
-				this.add('-immune',target,'[msg]');
+				this.add('-activate',target,'ability: Wonder Guard');
 				return null;
 			}
 		},
