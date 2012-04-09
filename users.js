@@ -8,6 +8,18 @@ function getTime()
 {
 	return new Date().getTime();
 }
+function sanitizeName(name)
+{
+	name = name.trim();
+	if (name.length > 18) name = name.substr(0,18);
+	var noStartChars = {'&':1,'@':1,'%':1,'+':1,'!':1};
+	while (noStartChars[name.substr(0,1)])
+	{
+		name = name.substr(1);
+	}
+	name = name.replace(/[\|\[\]\,]/g, '');
+	return name;
+}
 
 function getUser(name)
 {
@@ -277,6 +289,7 @@ function User(name, person, token)
 		{
 			name = name.substr(1);
 		}
+		name = name.replace(/[\|\[\]\,]/g, '');
 		var userid = toUserid(name);
 		if (selfP.authenticated) auth = false;
 		
