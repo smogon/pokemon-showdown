@@ -5703,7 +5703,7 @@ exports.BattleMovedex = {
 				var foeMoves = this.effectData.source.moveset;
 				for (var f=0; f<foeMoves.length; f++)
 				{
-					pokemon.disabledMoves[foeMoves[f].id] = true;
+					pokemon.disabledMoves[foeMoves[f].move] = true;
 				}
 			},
 			onFoeBeforeMove: function(attacker, defender, move) {
@@ -6415,7 +6415,7 @@ exports.BattleMovedex = {
 					target.removeVolatile('MagicCoat');
 					var newMove = this.getMoveCopy(move.id);
 					newMove.hasBounced = true;
-					this.add('-activate',target,'move: Magic Coat','[bounce] '+newMove,'[of] '+source);
+					this.add('-activate', target, 'move: Magic Coat', newMove, '[of] '+source);
 					this.moveHit(source, target, newMove);
 					return null;
 				}
