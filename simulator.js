@@ -48,7 +48,7 @@ function BattlePokemon(set, side)
 		selfB.debug('Unidentified species: '+this.species);
 		this.baseTemplate = selfB.getTemplate(this.species);
 	}
-	this.species = set.baseTemplate.species;
+	this.species = this.baseTemplate.species;
 	if (set.name === set.species || !set.name || !set.species)
 	{
 		set.name = this.species;
@@ -459,7 +459,7 @@ function BattlePokemon(set, side)
 		{
 			pokemon = baseTemplate;
 			baseTemplate = pokemon.template;
-			if (pokemon.fainted || pokemon.illusion || pokemon.volatiles['Substitute'])
+			if (pokemon.fainted || pokemon.illusion || pokemon.volatiles['substitute'])
 			{
 				return false;
 			}
