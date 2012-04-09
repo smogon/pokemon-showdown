@@ -6439,11 +6439,11 @@ exports.BattleMovedex = {
 		onFieldHit: function(target, source, effect) {
 			if (this.pseudoWeather['magicroom'])
 			{
-				this.removePseudoWeather('magicroom', source, effect);
+				this.removePseudoWeather('magicroom', source, effect, '[of] '+source);
 			}
 			else
 			{
-				this.addPseudoWeather('magicroom', source, effect);
+				this.addPseudoWeather('magicroom', source, effect, '[of] '+source);
 			}
 		},
 		effect: {
@@ -11913,11 +11913,11 @@ exports.BattleMovedex = {
 		onHitField: function(target, source, effect) {
 			if (this.pseudoWeather['trickroom'])
 			{
-				this.removePseudoWeather('trickroom', source, effect);
+				this.removePseudoWeather('trickroom', source, effect, '[of] '+source);
 			}
 			else
 			{
-				this.addPseudoWeather('trickroom', source, effect);
+				this.addPseudoWeather('trickroom', source, effect, '[of] '+source);
 			}
 		},
 		effect: {
@@ -12556,11 +12556,11 @@ exports.BattleMovedex = {
 		onFieldHit: function(target, source, effect) {
 			if (this.pseudoWeather['wonderroom'])
 			{
-				this.removePseudoWeather('wonderroom', source, effect);
+				this.removePseudoWeather('wonderroom', source, effect, '[of] '+source);
 			}
 			else
 			{
-				this.addPseudoWeather('wonderroom', source, effect);
+				this.addPseudoWeather('wonderroom', source, effect, '[of] '+source);
 			}
 		},
 		effect: {
