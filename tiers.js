@@ -1985,10 +1985,10 @@ exports.BattleTiers = {
 	"wormadam": {
 		tier: "NU"
 	},
-	"wormadamground": {
+	"wormadamsandy": {
 		tier: "NU"
 	},
-	"wormadamsteel": {
+	"wormadamtrash": {
 		tier: "NU"
 	},
 	"wurmple": {
