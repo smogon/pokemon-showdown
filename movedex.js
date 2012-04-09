@@ -12514,8 +12514,8 @@ exports.BattleMovedex = {
 				if (!target.fainted)
 				{
 					var source = this.effectData.source;
-					var damage = this.heal(damage, target, target);
-					this.add('-heal', target, damage, '[from] move: Wish', '[wisher] '+source.name);
+					var damage = this.heal(target.maxhp/2, target, target);
+					if (damage) this.add('-heal', target, target.hpChange(damage), '[from] move: Wish', '[wisher] '+source.name);
 				}
 			}
 		},
