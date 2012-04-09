@@ -49,7 +49,7 @@ function BattlePokemon(set, side)
 		this.baseTemplate = selfB.getTemplate(this.species);
 	}
 	this.species = set.baseTemplate.species;
-	else if (set.name === set.species || !set.name || !set.species)
+	if (set.name === set.species || !set.name || !set.species)
 	{
 		set.name = this.species;
 	}
