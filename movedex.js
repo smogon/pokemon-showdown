@@ -8449,7 +8449,7 @@ exports.BattleMovedex = {
 				{
 					this.add('-end', pokemon, 'move: Leech Seed', '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
-				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
+				var sideConditions = {"Spikes":1, "Toxic Spikes":1, "Stealth Rock":1};
 				for (var i in sideConditions)
 				{
 					if (pokemon.side.removeSideCondition(i)) this.add('-sideend', pokemon.side, i, '[from] move: Rapid Spin', '[of] '+pokemon);
