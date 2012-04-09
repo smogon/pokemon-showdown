@@ -363,7 +363,7 @@ function BattlePokemon(set, side)
 		for (var i=0; i<selfP.moveset.length; i++)
 		{
 			var move = selfP.moveset[i];
-			if (selfP.disabledMoves[move.id] || !move.pp)
+			if (selfP.disabledMoves[move.move] || !move.pp)
 			{
 				move.disabled = true;
 			}
@@ -2204,6 +2204,8 @@ function Battle(roomid, format, rated)
 			break;
 		case 'drain':
 			selfB.add('-heal', target, target.hpChange(damage), '[from] drain', '[of] '+source);
+			break;
+		case 'wish':
 			break;
 		default:
 			if (effect.effectType === 'Move')
