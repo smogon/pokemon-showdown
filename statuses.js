@@ -136,6 +136,7 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
+			this.add('-activate', pokemon.id, 'confusion');
 			if (Math.random()*2 < 1)
 			{
 				return;
