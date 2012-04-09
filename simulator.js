@@ -44,13 +44,14 @@ function BattlePokemon(set, side)
 	
 	this.name = set.name || set.species || 'Bulbasaur';
 	this.species = set.species || this.name;
-	if (!BattlePokedex[toId(this.species)])
+	this.baseTemplate = selfB.getTemplate(this.species);
+	if (!this.baseTemplate.exists)
 	{
 		selfB.debug('Unidentified species: '+this.species);
 		this.species = 'Bulbasaur';
+		this.baseTemplate = selfB.getTemplate(this.species);
 	}
 	this.speciesid = toId(this.species);
-	this.baseTemplate = selfB.getTemplate(this.species);
 	this.template = this.baseTemplate;
 	this.moves = [];
 	this.baseMoves = this.moves;
