@@ -10892,12 +10892,12 @@ exports.BattleMovedex = {
 		onTryHit: function(target) {
 			if (target.volatiles['substitute'])
 			{
-				this.add('-start', target, 'move: Substitute', '[already]');
+				this.add('-fail', target, 'move: Substitute');
 				return null;
 			}
 			if (target.hp <= target.maxhp/4)
 			{
-				this.add('-fail', target, 'move: Substitute');
+				this.add('-fail', target, 'move: Substitute', '[weak]');
 				return null;
 			}
 		},
@@ -10922,12 +10922,12 @@ exports.BattleMovedex = {
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion')
 					{
-						this.add('-start', target, 'move: Substitute', '[block]');
+						this.add('-activate', target, 'move: Substitute', '[block] '+move);
 						return null;
 					}
 					if (SubBlocked[move.id])
 					{
-						this.add('-start', target, 'move: Substitute', '[block]');
+						this.add('-activate', target, 'move: Substitute', '[block] '+move);
 						return null;
 					}
 					return;
@@ -10956,7 +10956,7 @@ exports.BattleMovedex = {
 				}
 				else
 				{
-					this.add('-start', target, 'move: Substitute', '[damage]');
+					this.add('-activate', target, 'move: Substitute', '[damage]');
 					this.runEvent('AfterSubDamage', target, source, move, damage);
 					return 0; // hit
 				}
