@@ -44,7 +44,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
 			}
@@ -174,7 +174,7 @@ exports.BattleItems = {
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/2) {
 				if (pokemon.useItem()) {
-					pokemon.heal(20);
+					this.heal(20);
 				}
 			}
 		},
@@ -899,7 +899,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.heal(pokemon.maxhp/4);
+			this.heal(pokemon.maxhp/4);
 		},
 		desc: "Heals 25% HP after being hit by a super effective attack. One-time use."
 	},
@@ -1296,7 +1296,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
 			}
@@ -1732,7 +1732,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
 			}
@@ -2029,7 +2029,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.heal(10);
+			this.heal(10);
 		},
 		desc: "Restores 10 HP when at 50% HP or less. One-time use."
 	},
@@ -3119,7 +3119,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
 			}
