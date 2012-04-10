@@ -219,8 +219,12 @@ exports.BattleStatuses = {
 		}
 	},
 	choicelock: {
+		onStart: function(pokemon) {
+			this.effectData.move = selfB.activeMove.id;
+			if (!this.effectData.move) return false;
+		},
 		onModifyPokemon: function(pokemon) {
-			if (!pokemon.lastMove || !pokemon.hasMove(pokemon.lastMove))
+			if (!pokemon.hasMove(this.effectData.move))
 			{
 				return;
 			}
@@ -232,7 +236,7 @@ exports.BattleStatuses = {
 			var moves = pokemon.moveset;
 			for (var i=0; i<moves.length; i++)
 			{
-				if (moves[i].id !== pokemon.lastMove)
+				if (moves[i].id !== this.effectData.move)
 				{
 					moves[i].disabled = true;
 				}
