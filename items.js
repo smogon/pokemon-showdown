@@ -1865,7 +1865,7 @@ exports.BattleItems = {
 		effect: {
 			duration: 2,
 			onModifyMove: function(move, pokemon) {
-				//this.add('r-micle '+pokemon.id);
+				this.add('-enditem', pokemon, 'Micle Berry');
 				pokemon.removeVolatile('MicleBerry');
 				move.accuracy = true;
 				move.alwaysHit = true;
