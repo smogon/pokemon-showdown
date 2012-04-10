@@ -11789,7 +11789,7 @@ exports.BattleMovedex = {
 				if (pokemon.volatiles['substitute']) return;
 				if (pokemon.hasType('Poison'))
 				{
-					this.add('-sideend', side, 'move: Toxic Spikes', '[of] '+pokemon);
+					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] '+pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
 				}
 				else if (this.effectData.layers >= 2)
