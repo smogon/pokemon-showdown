@@ -307,6 +307,11 @@ exports.BattleAbilities = {
 	"damp": {
 		desc: "While this Pokemon is active, no Pokemon on the field can use Selfdestruct or Explosion.",
 		id: "damp",
+		onAnyTryHit: function(target, source, effect) {
+			if (effect.id === 'selfdestruct' || effect.id === 'explosion') {
+				return false;
+			}
+		},
 		onAnyDamage: function(damage, target, source, effect) {
 			if (effect && effect.id === 'aftermath')
 			{
