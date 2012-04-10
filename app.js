@@ -788,7 +788,11 @@ function Room(roomid, format, p1, p2, parentid, rated)
 				catch (e)
 				{
 					selfR.battle.add('chat', user.name, '<< error: '+e.message);
-					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
+					var stack = (""+e.stack).split("\n");
+					for (var i=0; i<stack.length; i++)
+					{
+						user.emit('console', '<< '+stack[i]);
+					}
 				}
 			}
 			else
@@ -1289,7 +1293,11 @@ function Lobby(roomid)
 						name: user.getIdentity(),
 						message: '<< error: '+e.message
 					});
-					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
+					var stack = (""+e.stack).split("\n");
+					for (var i=0; i<stack.length; i++)
+					{
+						user.emit('console', '<< '+stack[i]);
+					}
 				}
 			}
 			else
@@ -1363,7 +1371,8 @@ if (config.crashguard)
 			this.write("\n"+err.stack+"\n")
 			this.end();
 		});
-		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+err+'<br />Please restart the server.</div>');
+		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
+		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
 		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		config.modchat = '&&';
 		lockdown = true;
