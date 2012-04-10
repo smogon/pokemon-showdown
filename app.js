@@ -711,7 +711,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
-		if (message.length > 511)
+		if (message.length > 511 && user.group !== '&')
 		{
 			socket.emit('message', "Your message is too long:\n\n"+message);
 			return;
@@ -1221,7 +1221,7 @@ function Lobby(roomid)
 	this.isFull = function() { return false; };
 	this.chat = function(user, message, socket) {
 		if (!user.named || !message || !message.trim || !message.trim().length) return;
-		if (message.length > 255)
+		if (message.length > 255 && user.group !== '&')
 		{
 			socket.emit('message', "Your message is too long:\n\n"+message);
 			return;
