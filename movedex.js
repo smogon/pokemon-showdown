@@ -415,6 +415,7 @@ exports.BattleMovedex = {
 			for (var j=0; j<target.side.pokemon.length; j++)
 			{
 				var pokemon = target.side.pokemon[j];
+				if (pokemon === target) continue;
 				for (var i=0; i<pokemon.moves.length; i++)
 				{
 					var move = pokemon.moves[i];
