@@ -1266,7 +1266,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact)
 			{
-				if (source.ability !== 'wonderguard' && source.setAbility('mummy'))
+				if (source.setAbility('mummy'))
 				{
 					this.add("-message",source.name+"'s ability became Mummy! (placeholder)");
 				}
