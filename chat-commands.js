@@ -4,15 +4,6 @@
 
 */
 
-function toId(text)
-{
-	text = text || '';
-	return text.replace(/ /g, '');
-}
-function toUserid(name)
-{
-	return name.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
 function sanitize(str, strEscape)
 {
 	if (!str) str = '';
@@ -76,22 +67,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				command: 'roomlist',
 				rooms: room.getRoomList(true),
 				room: room.id
-			});
-		}
-		return true;
-		break;
-
-	case 'me':
-		if (!target)
-		{
-			return true;
-		}
-		if (canTalk(user, room, socket))
-		{
-			room.add({
-				name: user.getIdentity(),
-				act: 1,
-				message: target
 			});
 		}
 		return true;
@@ -960,6 +935,17 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		return true;
 		break;
 	
+	case 'savelearnsets':
+		if (user.group === '&')
+		{
+			fs.writeFile('learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
+			socket.emit('console', 'learnsets.js saved.');
+			return true;
+		}
+		socket.emit('console', '/savelearnsets - Access denied.');
+		return true;
+		break;
+	
 	case 'rating':
 	case 'ranking':
 	case 'rank':
@@ -1067,12 +1053,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case '!data':
 	case 'stats':
 	case '!stats':
-		if (room.type !== 'lobby' && cmd.substr(0,1) === '!')
-		{
-			socket.emit('console', {rawMessage: '<code>!data</code> can only be used in the lobby.'});
-			return true;
-		}
-		
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		var dataMessages = getDataMessage(target);
 		for (var i=0; i<dataMessages.length; i++)
@@ -1212,7 +1192,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case 'potd':
 		if (user.group !== '&' && user.group !== '@') return true;
 		
-		BattleFormats.PotD.onPotD = target;
+		config.potd = target;
 		if (target)
 		{
 			room.add('The Pokemon of the Day was changed to '+target+' by '+user.name+'.');
@@ -1569,7 +1549,7 @@ function showOrBroadcast(user, cmd, room, socket, rawMessage)
 {
 	if (cmd.substr(0,1) !== '!')
 	{
-		socket.emit('console', {rawMessage: rawMessage});
+		socket.emit('console', {rawMessage: rawMessage, room: room.id});
 	}
 	else if (user.group !== ' ' && canTalk(user, room))
 	{
@@ -1585,31 +1565,35 @@ function getDataMessage(target)
 	var ability = Tools.getAbility(target);
 	var atLeastOne = false;
 	var response = [];
-	if (pokemon.name)
+	if (pokemon.exists)
 	{
 		response.push({
-			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.pokemonRow(exports.BattlePokedex['"+pokemon.name.replace(/ /g,'')+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			name: '&server',
+			message: '/data-pokemon '+pokemon.name
 		});
 		atLeastOne = true;
 	}
-	if (ability.name)
+	if (ability.exists)
 	{
 		response.push({
-			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.abilityRow(exports.BattleAbilities['"+ability.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			name: '&server',
+			message: '/data-ability '+ability.name
 		});
 		atLeastOne = true;
 	}
-	if (item.name)
+	if (item.exists)
 	{
 		response.push({
-			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.itemRow(exports.BattleItems['"+item.id+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			name: '&server',
+			message: '/data-item '+item.name
 		});
 		atLeastOne = true;
 	}
-	if (move.name)
+	if (move.exists)
 	{
 		response.push({
-			evalRawMessage: "'<ul class=\"utilichart\">'+Chart.moveRow(exports.BattleMovedex['"+move.id.replace("'","\\'")+"'],'',{})+'<li style=\"clear:both\"></li></ul>'"
+			name: '&server',
+			message: '/data-move '+move.name
 		});
 		atLeastOne = true;
 	}

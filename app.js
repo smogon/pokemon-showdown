@@ -39,15 +39,14 @@ function getTime()
 	return new Date().getTime();
 }
 
-function toId(text)
+toId = function(text)
 {
 	text = text || '';
-	return text.replace(/ /g, '');
-}
-function toUserid(name)
-{
-	return name.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
+	if (typeof text === 'number') text = ''+text;
+	if (typeof text !== 'string') return ''; //???
+	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
+};
+toUserid = toId;
 
 BattlePokedex = require('./pokedex.js').BattlePokedex;
 BattleTiers = require('./tiers.js').BattleTiers;
@@ -59,6 +58,14 @@ BattleItems = require('./items.js').BattleItems;
 BattleAbilities = require('./abilities.js').BattleAbilities;
 BattleFormats = require('./formats.js').BattleFormats;
 BattleLearnsets = require('./learnsets.js').BattleLearnsets;
+try
+{
+	BattleAliases = require('./aliases.js').BattleAliases;
+}
+catch (e)
+{
+	BattleAliases = {};
+}
 
 var sim = require('./simulator.js');
 
@@ -174,7 +181,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			
 			if (!selfR.rated.p1 || !selfR.rated.p2)
 			{
-				update.updates.push('message ERROR: Ladder not updated: a player does not exist');
+				update.updates.push('| chatmsg | ERROR: Ladder not updated: a player does not exist');
 			}
 			else
 			{
@@ -193,8 +200,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 						{
 							var data = JSON.parse(body);
 							// we don't actually do much with this data
-							selfR.battle.add("[DEBUG] ladder reply: "+body);
-							selfR.battle.add("message Ladder updated.");
+							selfR.add("Ladder updated.");
 							selfR.update();
 						}
 						catch(e)
@@ -209,10 +215,10 @@ function Room(roomid, format, p1, p2, parentid, rated)
 				var logData = {
 					p1score: p1score,
 					turns: selfR.battle.turn,
-					p1: selfR.battle.allySide.name,
-					p2: selfR.battle.foeSide.name,
-					p1team: selfR.battle.allySide.team,
-					p2team: selfR.battle.foeSide.team
+					p1: selfR.battle.p1.name,
+					p2: selfR.battle.p2.name,
+					p1team: selfR.battle.p1.team,
+					p2team: selfR.battle.p2.team
 				};
 				fs.writeFile('logs/'+selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'')+'/'+selfR.id+'.log.json',
 					JSON.stringify(logData)
@@ -296,8 +302,8 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		selfR.battle.add('RESET');
 		selfR.update();
 		
-		if (selfR.battle.allySide && selfR.battle.allySide.user) delete selfR.battle.allySide.user.sides[selfR.id];
-		if (selfR.battle.foeSide && selfR.battle.foeSide.user) delete selfR.battle.foeSide.user.sides[selfR.id];
+		if (selfR.battle.p1 && selfR.battle.p1.user) delete selfR.battle.p1.user.sides[selfR.id];
+		if (selfR.battle.p2 && selfR.battle.p2.user) delete selfR.battle.p2.user.sides[selfR.id];
 		
 		console.log("NEW BATTLE (reset)");
 		selfR.battle = new Battle(selfR.id, selfR.format, false);
@@ -310,19 +316,19 @@ function Room(roomid, format, p1, p2, parentid, rated)
 	this.getInactiveSide = function()
 	{
 		var inactiveSide = -1;
-		if (!selfR.battle.allySide.user && selfR.battle.foeSide.user)
+		if (!selfR.battle.p1.user && selfR.battle.p2.user)
 		{
 			inactiveSide = 0;
 		}
-		else if (selfR.battle.allySide.user && !selfR.battle.foeSide.user)
+		else if (selfR.battle.p1.user && !selfR.battle.p2.user)
 		{
 			inactiveSide = 1;
 		}
-		else if (!selfR.battle.allySide.decision && selfR.battle.foeSide.decision)
+		else if (!selfR.battle.p1.decision && selfR.battle.p2.decision)
 		{
 			inactiveSide = 0;
 		}
-		else if (selfR.battle.allySide.decision && !selfR.battle.foeSide.decision)
+		else if (selfR.battle.p1.decision && !selfR.battle.p2.decision)
 		{
 			inactiveSide = 1;
 		}
@@ -344,7 +350,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		
 		if (!message) message = ' forfeited.';
 		
-		selfR.battle.add('message '+selfR.battle.sides[forfeitSide].name+message);
+		selfR.battle.add('-message', selfR.battle.sides[forfeitSide].name+message);
 		selfR.battle.win(selfR.battle.sides[forfeitSide].foe);
 		selfR.active = selfR.battle.active;
 		selfR.update();
@@ -367,13 +373,13 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		
 		if (inactiveSide == -1)
 		{
-			selfR.battle.add('message Both players are inactive, so neither player was kicked.');
+			selfR.add('Both players are inactive, so neither player was kicked.');
 			selfR.update();
 			return;
 		}
 		if (!selfR.battle.curCallback)
 		{
-			selfR.battle.add('message We are experiencing a bug. Please notify a system operator (people with & next to their name).');
+			selfR.add('We are experiencing a bug. Please notify a system operator (people with & next to their name).');
 			selfR.update();
 			return;
 		}
@@ -393,7 +399,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		}
 		if (selfR.inactiveTicksLeft)
 		{
-			selfR.battle.add('message Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
+			selfR.add('Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
 			selfR.update();
 			selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
 			return;
@@ -407,14 +413,14 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		{
 			if (selfR.battle.sides[0].user && selfR.battle.sides[1].user)
 			{
-				selfR.battle.add('message Kicking inactive players.');
+				selfR.add('Kicking inactive players.');
 				selfR.battle.leave(selfR.battle.sides[inactiveSide].user);
 				selfR.active = selfR.battle.active;
 				selfR.update();
 			}
 			else
 			{
-				selfR.battle.add('message There are already empty slots; no kicks are necessary.');
+				selfR.add('There are already empty slots; no kicks are necessary.');
 			}
 		}
 		
@@ -429,7 +435,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		if (user) attrib = ' (requested by '+user.name+')';
 		if (selfR.rated)
 		{
-			selfR.battle.add('message The battle cannot be restarted because it is a rated battle'+attrib+'.');
+			selfR.add('The battle cannot be restarted because it is a rated battle'+attrib+'.');
 			return;
 		}
 		var elapsedTime = getTime() - selfR.graceTime;
@@ -453,7 +459,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		{
 			tickTime = 1;
 		}
-		selfR.battle.add('message The battle will restart if there is no activity for '+(tickTime*30)+' seconds.'+attrib);
+		selfR.add('The battle will restart if there is no activity for '+(tickTime*30)+' seconds.'+attrib);
 		selfR.update();
 		selfR.resetTimer = setTimeout(selfR.reset, tickTime*30*1000);
 	};
@@ -463,10 +469,10 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			user.emit('console', {room:selfR.id, message: 'The inactivity timer is already counting down.'});
 				return;
 		}
-		if ((!selfR.battle.allySide.user || !selfR.battle.foeSide.user) && !selfR.rated)
+		if ((!selfR.battle.p1.user || !selfR.battle.p2.user) && !selfR.rated)
 		{
-			selfR.battle.add('message This isn\'t a rated battle; victory doesn\'t mean anything.');
-			selfR.battle.add('message Do you just want to see the text "you win"? Okay. You win.');
+			selfR.add('This isn\'t a rated battle; victory doesn\'t mean anything.');
+			selfR.add('Do you just want to see the text "you win"? Okay. You win.');
 			selfR.update();
 			return;
 		}
@@ -489,7 +495,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			tickTime = 1;
 		}
 		
-		if (tickTime > 2 && (!selfR.battle.allySide.user || !selfR.battle.foeSide.user))
+		if (tickTime > 2 && (!selfR.battle.p1.user || !selfR.battle.p2.user))
 		{
 			// if a player has left, don't wait longer than 2 ticks (60 seconds)
 			tickTime = 2;
@@ -517,7 +523,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		}
 		else
 		{
-			selfR.battle.add('message '+message);
+			selfR.add(message);
 			selfR.sideFreeTicks[inactiveSide] = 0;
 		}
 		selfR.update();
@@ -526,7 +532,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 	this.cancelReset = function() {
 		if (selfR.resetTimer)
 		{
-			selfR.battle.add('message The restart or kick was interrupted by activity.');
+			selfR.add('The restart or kick was interrupted by activity.');
 			selfR.update();
 			clearTimeout(selfR.resetTimer);
 			selfR.resetTimer = null;
@@ -538,7 +544,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		selfR.battle.decision(user, choice, data);
 		if (selfR.battle.ended)
 		{
-			selfR.battle.add('callback restart');
+			selfR.battle.add('callback', 'restart');
 		}
 		if (selfR.active !== selfR.battle.active)
 		{
@@ -557,7 +563,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		if (selfR.resetTimer) return;
 		if (selfR.battle.ended)
 		{
-			selfR.battle.add('message A new game will start in 5 seconds.');
+			selfR.add('A new game will start in 5 seconds.');
 			// reset in 5 seconds
 			selfR.resetTimer = setTimeout(selfR.reset, 5000);
 		}
@@ -583,7 +589,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		
 		if (user.named)
 		{
-			selfR.battle.add('join '+user.name);
+			selfR.battle.add('join', user.name);
 			selfR.update(user);
 		}
 		
@@ -604,7 +610,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 	this.rename = function(user, oldid, joining) {
 		if (joining)
 		{
-			selfR.battle.add('join '+user.name);
+			selfR.battle.add('join', user.name);
 		}
 		if (user.sides[selfR.id])
 		{
@@ -674,38 +680,38 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			return;
 		}
 		delete selfR.users[user.userid];
-		selfR.battle.add('leave '+user.name);
+		selfR.battle.add('leave', user.name);
 		selfR.update();
 	};
 	this.isEmpty = function() {
-		if (selfR.battle.allySide && selfR.battle.allySide.user) return false;
-		if (selfR.battle.foeSide && selfR.battle.foeSide.user) return false;
+		if (selfR.battle.p1 && selfR.battle.p1.user) return false;
+		if (selfR.battle.p2 && selfR.battle.p2.user) return false;
 		return true;
 	};
 	this.isFull = function() {
-		if (selfR.battle.allySide && selfR.battle.allySide.user && selfR.battle.foeSide && selfR.battle.foeSide.user) return true;
+		if (selfR.battle.p1 && selfR.battle.p1.user && selfR.battle.p2 && selfR.battle.p2.user) return true;
 		return false;
 	};
 	this.add = function(message) {
 		if (message.rawMessage)
 		{
-			selfR.battle.add('chatmsg-raw '+message.rawMessage);
+			selfR.battle.add('chatmsg-raw', message.rawMessage);
 		}
-		else if (message.act)
+		else if (message.name)
 		{
-			selfR.battle.add('chat-me '+message.name.substr(1)+' '+message.message);
+			selfR.battle.add('chat', message.name.substr(1), message.message);
 		}
 		else
 		{
-			selfR.battle.add('chatmsg '+message);
+			selfR.battle.add('chatmsg', message);
 		}
 	};
 	this.addRaw = function(message) {
-		selfR.battle.add('chatmsg-raw '+message);
+		selfR.battle.add('chatmsg-raw', message);
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
-		if (message.length > 511)
+		if (message.length > 511 && user.group !== '&')
 		{
 			socket.emit('message', "Your message is too long:\n\n"+message);
 			return;
@@ -728,6 +734,20 @@ function Room(roomid, format, p1, p2, parentid, rated)
 				target = '';
 			}
 		}
+		else if (message.substr(0,1) === '!')
+		{
+			var spaceIndex = message.indexOf(' ');
+			if (spaceIndex > 0)
+			{
+				cmd = message.substr(0, spaceIndex);
+				target = message.substr(spaceIndex+1);
+			}
+			else
+			{
+				cmd = message;
+				target = '';
+			}
+		}
 		
 		if (parseCommand(user, cmd, target, selfR, socket, message))
 		{
@@ -739,45 +759,50 @@ function Room(roomid, format, p1, p2, parentid, rated)
 
 			var room = selfR;
 			var battle = selfR.battle;
-			var foeSide;
-			var allySide;
-			var foePokemon;
-			var allyPokemon;
+			var selfB = battle;
+			var p2;
+			var p1;
+			var p2active;
+			var p1active;
 			var me = user;
 			if (battle)
 			{
-				foeSide = battle.foeSide;
-				allySide = battle.allySide;
-				if (foeSide)
+				p2 = battle.p2;
+				p1 = battle.p1;
+				if (p2)
 				{
-					foePokemon = foeSide.active[0];
+					p2active = p2.active[0];
 				}
-				if (allySide)
+				if (p1)
 				{
-					allyPokemon = allySide.active[0];
+					p1active = p1.active[0];
 				}
 			}
-			selfR.battle.add('chat '+toId(user.name)+' >> '+cmd);
+			selfR.battle.add('chat', user.name, '>> '+cmd);
 			if (user.group === '&')
 			{
 				try
 				{
-					selfR.battle.add('chat '+toId(user.name)+' << '+eval(cmd));
+					selfR.battle.add('chat', user.name, '<< '+eval(cmd));
 				}
 				catch (e)
 				{
-					selfR.battle.add('chat '+toId(user.name)+' << error: '+e.message);
-					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
+					selfR.battle.add('chat', user.name, '<< error: '+e.message);
+					var stack = (""+e.stack).split("\n");
+					for (var i=0; i<stack.length; i++)
+					{
+						user.emit('console', '<< '+stack[i]);
+					}
 				}
 			}
 			else
 			{
-				selfR.battle.add('chat '+toId(user.name)+' << Access denied. To use the developer console, you must be: &');
+				selfR.battle.add('chat', user.name, '<< Access denied. To use the developer console, you must be: &');
 			}
 		}
 		else
 		{
-			selfR.battle.add('chat '+toId(user.name)+' '+message);
+			selfR.battle.add('chat', user.name, message);
 		}
 		selfR.update();
 	};
@@ -1200,7 +1225,7 @@ function Lobby(roomid)
 	this.isFull = function() { return false; };
 	this.chat = function(user, message, socket) {
 		if (!user.named || !message || !message.trim || !message.trim().length) return;
-		if (message.length > 255)
+		if (message.length > 255 && user.group !== '&')
 		{
 			socket.emit('message', "Your message is too long:\n\n"+message);
 			return;
@@ -1268,7 +1293,11 @@ function Lobby(roomid)
 						name: user.getIdentity(),
 						message: '<< error: '+e.message
 					});
-					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
+					var stack = (""+e.stack).split("\n");
+					for (var i=0; i<stack.length; i++)
+					{
+						user.emit('console', '<< '+stack[i]);
+					}
 				}
 			}
 			else
@@ -1342,7 +1371,8 @@ if (config.crashguard)
 			this.write("\n"+err.stack+"\n")
 			this.end();
 		});
-		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+err+'<br />Please restart the server.</div>');
+		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
+		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
 		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		config.modchat = '&&';
 		lockdown = true;

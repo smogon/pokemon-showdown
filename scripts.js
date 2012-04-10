@@ -1,8 +1,9 @@
 function toId(text)
 {
 	text = text || '';
+	if (typeof text === 'number') text = ''+text;
 	if (typeof text !== 'string') return ''; //???
-	return text.replace(/ /g, '');
+	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 function clone(object) {
   var newObj = (object instanceof Array) ? [] : {};
@@ -113,16 +114,18 @@ exports.BattleScripts = {
 		if (accuracy !== true && moveRoll >= accuracy)
 		{
 			missed = true;
-			attrs = ' miss';
+			attrs = ' | [miss]';
 		}
 		if (target.fainted && !canTargetFainted[move.target])
 		{
-			attrs = ' no-target';
+			attrs = ' | [notarget]';
 		}
-		this.add('move '+pokemon.id+' '+move.id+' ??'+attrs);
+		var movename = move.name;
+		if (move.id === 'hiddenpower') movename = 'Hidden Power';
+		this.add('move', pokemon, movename, target+attrs);
 		if (missed)
 		{
-			this.add('r-miss '+pokemon.id);
+			this.add('-miss', pokemon);
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent')
 			{
@@ -132,7 +135,7 @@ exports.BattleScripts = {
 		}
 		if (target.fainted && !canTargetFainted[move.target])
 		{
-			this.add('r-no-target');
+			this.add('-notarget');
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent')
 			{
@@ -140,7 +143,7 @@ exports.BattleScripts = {
 			}
 			return true;
 		}
-		if (move.id === 'Return' || move.id === 'Frustration')
+		if (move.id === 'return' || move.id === 'frustration')
 		{
 			move.basePower = 102;
 		}
@@ -177,7 +180,7 @@ exports.BattleScripts = {
 				if (moveDamage === false) return true;
 				damage += (moveDamage || 0);
 			}
-			this.add('r-hit-count '+target.id+' '+i);
+			this.add('-hitcount', target, i);
 		}
 		
 		target.gotAttacked(move, damage, pokemon);
@@ -271,7 +274,7 @@ exports.BattleScripts = {
 			}
 			if (!hitResult)
 			{
-				if (hitResult === false) this.add('r-failed '+target.id);
+				if (hitResult === false) this.add('-fail', target);
 				return false;
 			}
 			// only run the hit events for the hit itself, not the secondary or self hits
@@ -282,7 +285,7 @@ exports.BattleScripts = {
 					hitResult = this.runEvent('TryHit', target, pokemon, move);
 					if (!hitResult)
 					{
-						if (hitResult === false) this.add('r-failed '+target.id);
+						if (hitResult === false) this.add('-fail', target);
 						if (hitResult !== 0) // special Substitute hit flag
 						{
 							return false;
@@ -301,7 +304,7 @@ exports.BattleScripts = {
 			}
 			else if (!hitResult)
 			{
-				if (hitResult === false) this.add('r-failed '+target.id);
+				if (hitResult === false) this.add('-fail', target);
 				return false;
 			}
 		}
@@ -327,7 +330,7 @@ exports.BattleScripts = {
 			}
 			else if (damage === false && typeof hitResult === 'undefined')
 			{
-				this.add('r-failed '+target.id);
+				this.add('-fail', target);
 			}
 			if (moveData.boosts && !target.fainted)
 			{
@@ -338,10 +341,10 @@ exports.BattleScripts = {
 				var d = target.heal(target.maxhp * moveData.heal[0] / moveData.heal[1]);
 				if (!d)
 				{
-					this.add('r-failed '+target.id);
+					this.add('-fail', target);
 					return false;
 				}
-				this.add('r-heal '+target.id+' '+target.hpPercent(d)+target.getHealth());
+				this.add('-heal', target, target.hpChange(d));
 				didSomething = true;
 			}
 			if (moveData.status)
@@ -352,8 +355,11 @@ exports.BattleScripts = {
 				}
 				else if (!isSecondary)
 				{
-					// already-status
-					this.add('r-status '+target.id+' '+target.status);
+					if (target.status === moveData.status) {
+						this.add('-fail', target, target.status);
+					} else {
+						this.add('-fail', target);
+					}
 				}
 				didSomething = true;
 			}
@@ -413,7 +419,7 @@ exports.BattleScripts = {
 			}
 			if (!hitResult && !didSomething)
 			{
-				if (hitResult === false) this.add('r-failed '+target.id);
+				if (hitResult === false) this.add('-fail', target);
 				return false;
 			}
 		}
@@ -473,7 +479,6 @@ exports.BattleScripts = {
 		}
 		keys = shuffle(keys);
 		
-		var PotD = this.getEffect('PotD');
 		var ruleset = this.getFormat().ruleset;
 		
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++)
@@ -483,9 +488,9 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 			if (template.tier === 'CAP' && Math.random()*3>1) continue;
 			
-			if (ruleset && ruleset[0]==='PotD' && PotD && PotD.onPotD)
+			if (ruleset && ruleset[0]==='PotD')
 			{
-				var potd = this.getTemplate(PotD.onPotD);
+				var potd = this.getTemplate(config.potd);
 				if (i===1) template = potd;
 				else if (template.species === potd.species) continue; // No thanks, I've already got one
 			}
@@ -493,11 +498,11 @@ exports.BattleScripts = {
 			
 			if (template.species === 'Magikarp')
 			{
-				template.viablemoves = ["Magikarp'sRevenge", "Splash", "Bounce"];
+				template.viablemoves = ["magikarpsrevenge", "splash", "bounce"];
 			}
 			if (template.species === 'Delibird')
 			{
-				template.viablemoves = ["Present", "Bestow"];
+				template.viablemoves = ["present", "bestow"];
 			}
 			
 			var moveKeys = shuffle(objectKeys(template.viablemoves));
@@ -543,14 +548,14 @@ exports.BattleScripts = {
 				hasMove = {};
 				counter = {
 					Physical: 0, Special: 0, Status: 0, damage: 0,
-					Technician: 0, SkillLink: 0, Contrary: 0,
+					technician: 0, skilllink: 0, contrary: 0,
 					recoil: 0, inaccurate: 0,
-					physicalSetup: 0, specialSetup: 0, mixedSetup: 0
+					physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 				};
 				for (var k=0; k<moves.length; k++)
 				{
-					var moveid = moves[k];
-					var move = this.getMove(moveid);
+					var move = this.getMove(moves[k]);
+					var moveid = move.id;
 					hasMove[moveid] = true;
 					if (move.damage || move.damageCallback)
 					{
@@ -562,11 +567,11 @@ exports.BattleScripts = {
 					}
 					if (move.basePower && move.basePower <= 60)
 					{
-						counter['Technician']++;
+						counter['technician']++;
 					}
 					if (move.multihit && move.multihit[1] === 5)
 					{
-						counter['SkillLink']++;
+						counter['skilllink']++;
 					}
 					if (move.recoil)
 					{
@@ -577,44 +582,44 @@ exports.BattleScripts = {
 						counter['inaccurate']++;
 					}
 					var ContraryMove = {
-						LeafStorm: 1, Overheat: 1, CloseCombat: 1, Superpower: 1, 'V-create': 1
+						leafstorm: 1, overheat: 1, closecombat: 1, superpower: 1, vcreate: 1
 					};
 					if (ContraryMove[move.id])
 					{
-						counter['Contrary']++;
+						counter['contrary']++;
 					}
 					var PhysicalSetup = {
-						SwordsDance:1, DragonDance:1, Coil:1, BulkUp:1, Curse:1
+						swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1
 					};
 					var SpecialSetup = {
-						NastyPlot:1, TailGlow:1, QuiverDance:1, CalmMind:1
+						nastyplot:1, tailglow:1, quiverdance:1, calmmind:1
 					};
 					var MixedSetup = {
-						Growth:1, WorkUp:1, ShellSmash:1
+						growth:1, workup:1, shellsmash:1
 					};
 					if (PhysicalSetup[move.id])
 					{
-						counter['physicalSetup']++;
+						counter['physicalsetup']++;
 					}
 					if (SpecialSetup[move.id])
 					{
-						counter['specialSetup']++;
+						counter['specialsetup']++;
 					}
 					if (MixedSetup[move.id])
 					{
-						counter['mixedSetup']++;
+						counter['mixedsetup']++;
 					}
 				}
 				
-				if (counter['mixedSetup'])
+				if (counter['mixedsetup'])
 				{
 					setupType = 'Mixed';
 				}
-				else if (counter['specialSetup'])
+				else if (counter['specialsetup'])
 				{
 					setupType = 'Special';
 				}
-				else if (counter['physicalSetup'])
+				else if (counter['physicalsetup'])
 				{
 					setupType = 'Physical';
 				}
@@ -630,116 +635,116 @@ exports.BattleScripts = {
 					{
 					// not very useful without their supporting moves
 					
-					case 'SleepTalk':
-						if (!hasMove['Rest']) rejected = true;
-						if (hasMove['Trick'] || hasMove['Protect'] || hasMove['Substitute'] || hasMove['BellyDrum']) rejected = true;
+					case 'sleeptalk':
+						if (!hasMove['rest']) rejected = true;
+						if (hasMove['trick'] || hasMove['protect'] || hasMove['substitute'] || hasMove['bellydrum']) rejected = true;
 						break;
-					case 'Endure':
-						if (!hasMove['Flail'] && !hasMove['Endeavor'] && !hasMove['Reversal']) rejected = true;
+					case 'endure':
+						if (!hasMove['flail'] && !hasMove['endeavor'] && !hasMove['reversal']) rejected = true;
 						break;
 					
 					// we only need to set up once
 					
-					case 'SwordsDance': case 'DragonDance': case 'Coil': case 'Curse': case 'BulkUp':
-						if (!counter['Physical'] && !hasMove['BatonPass']) rejected = true;
-						if (setupType !== 'Physical' || counter['physicalSetup'] > 1) rejected = true;
+					case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup':
+						if (!counter['Physical'] && !hasMove['batonpass']) rejected = true;
+						if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 						isSetup = true;
 						break;
-					case 'NastyPlot': case 'TailGlow': case 'QuiverDance': case 'CalmMind':
-						if (!counter['Special'] && !hasMove['BatonPass']) rejected = true;
-						if (setupType !== 'Special' || counter['specialSetup'] > 1) rejected = true;
+					case 'nastyplot': case 'tailglow': case 'quiverdance': case 'calmmind':
+						if (!counter['Special'] && !hasMove['batonpass']) rejected = true;
+						if (setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
 						isSetup = true;
 						break;
-					case 'ShellSmash': case 'Growth': case 'WorkUp':
-						if (!counter['Special'] && !counter['Physical'] && !hasMove['BatonPass']) rejected = true;
-						if (setupType !== 'Mixed' || counter['mixedSetup'] > 1) rejected = true;
+					case 'shellsmash': case 'growth': case 'workup':
+						if (!counter['Special'] && !counter['Physical'] && !hasMove['batonpass']) rejected = true;
+						if (setupType !== 'Mixed' || counter['mixedsetup'] > 1) rejected = true;
 						isSetup = true;
 						break;
 					
 					// bad after setup
-					case 'SeismicToss': case 'NightShade': case 'SuperFang':
+					case 'seismictoss': case 'nightshade': case 'superfang':
 						if (setupType) rejected = true;
 						break;
-					case 'KnockOff': case 'Protect': case 'PerishSong': case 'MagicCoat':
+					case 'knockoff': case 'protect': case 'perishsong': case 'magiccoat':
 						if (setupType) rejected = true;
 						break;
 					
 					// bit redundant to have both
 					
-					case 'FireBlast':
-						if (hasMove['Eruption'] || hasMove['Overheat']) rejected = true;
+					case 'fireblast':
+						if (hasMove['eruption'] || hasMove['overheat'] || hasMove['flamethrower']) rejected = true;
 						break;
-					case 'Flamethrower':
-						if (hasMove['LavaPlume'] || hasMove['FireBlast'] || hasMove['Overheat']) rejected = true;
+					case 'flamethrower':
+						if (hasMove['lavaplume'] || hasMove['fireblast'] || hasMove['overheat']) rejected = true;
 						break;
-					case 'IceBeam':
-						if (hasMove['Blizzard']) rejected = true;
+					case 'icebeam':
+						if (hasMove['blizzard']) rejected = true;
 						break;
-					case 'Surf':
-						if (hasMove['Scald'] || hasMove['HydroPump']) rejected = true;
+					case 'surf':
+						if (hasMove['scald'] || hasMove['hydropump']) rejected = true;
 						break;
-					case 'EnergyBall':
-					case 'GrassKnot':
-					case 'PetalDance':
-						if (hasMove['GigaDrain']) rejected = true;
+					case 'energyball':
+					case 'grassknot':
+					case 'petaldance':
+						if (hasMove['gigadrain']) rejected = true;
 						break;
-					case 'SeedBomb':
-						if (hasMove['NeedleArm']) rejected = true;
+					case 'seedbomb':
+						if (hasMove['needlearm']) rejected = true;
 						break;
-					case 'FlareBlitz':
-						if (hasMove['FirePunch']) rejected = true;
+					case 'flareblitz':
+						if (hasMove['firepunch']) rejected = true;
 						break;
-					case 'Thunderbolt':
-						if (hasMove['Discharge'] || hasMove['VoltSwitch'] || hasMove['Thunder']) rejected = true;
+					case 'thunderbolt':
+						if (hasMove['discharge'] || hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
 						break;
-					case 'Discharge':
-						if (hasMove['VoltSwitch'] || hasMove['Thunder']) rejected = true;
+					case 'discharge':
+						if (hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
 						break;
-					case 'RockSlide':
-						if (hasMove['StoneEdge']) rejected = true;
+					case 'rockslide':
+						if (hasMove['stoneedge']) rejected = true;
 						break;
-					case 'DragonClaw':
-						if (hasMove['Outrage'] || hasMove['DragonTail']) rejected = true;
+					case 'dragonclaw':
+						if (hasMove['outrage'] || hasMove['dragontail']) rejected = true;
 						break;
-					case 'AncientPower':
-						if (hasMove['PaleoWave']) rejected = true;
+					case 'ancientpower':
+						if (hasMove['paleowave']) rejected = true;
 						break;
-					case 'DragonPulse':
-						if (hasMove['DracoMeteor']) rejected = true;
+					case 'dragonpulse':
+						if (hasMove['dracometeor']) rejected = true;
 						break;
-					case 'Return':
-						if (hasMove['BodySlam']) rejected = true;
-						if (hasMove['Flail']) rejected = true;
-						if (hasMove['Facade']) rejected = true;
+					case 'return':
+						if (hasMove['bodyslam']) rejected = true;
+						if (hasMove['flail']) rejected = true;
+						if (hasMove['facade']) rejected = true;
 						break;
-					case 'Flail':
-						if (hasMove['Facade']) rejected = true;
+					case 'flail':
+						if (hasMove['facade']) rejected = true;
 						break;
-					case 'PoisonJab':
-						if (hasMove['GunkShot']) rejected = true;
+					case 'poisonjab':
+						if (hasMove['gunkshot']) rejected = true;
 						break;
-					case 'Psychic':
-						if (hasMove['Psyshock']) rejected = true;
+					case 'psychic':
+						if (hasMove['psyshock']) rejected = true;
 						break;
 					
-					case 'Yawn':
-						if (hasMove['GrassWhistle']) rejected = true;
+					case 'yawn':
+						if (hasMove['grasswhistle']) rejected = true;
 						break;
-					case 'Rest':
-						if (hasMove['MorningSun']) rejected = true;
+					case 'rest':
+						if (hasMove['morningsun']) rejected = true;
 						break;
-					case 'Softboiled':
-						if (hasMove['Wish']) rejected = true;
+					case 'softboiled':
+						if (hasMove['wish']) rejected = true;
 						break;
-					case 'PerishSong':
-						if (hasMove['Roar'] || hasMove['Whirlwind'] || hasMove['Haze']) rejected = true;
+					case 'perishsong':
+						if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 						break;
-					case 'Whirlwind':
-						// outclasses Roar because Soundproof
-						if (hasMove['Roar'] || hasMove['Haze']) rejected = true;
+					case 'roar':
+						// Whirlwind outclasses Roar because Soundproof
+						if (hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 						break;
-					case 'Roost':
-						if (hasMove['Recover']) rejected = true;
+					case 'roost':
+						if (hasMove['recover']) rejected = true;
 						break;
 					}
 					if (k===3)
@@ -751,9 +756,9 @@ exports.BattleScripts = {
 						}
 					}
 					var SetupException = {
-						Overheat:1, DracoMeteor:1, LeafStorm:1,
-						VoltSwitch:1, 'U-turn':1,
-						SuckerPunch:1, ExtremeSpeed:1
+						overheat:1, dracometeor:1, leafstorm:1,
+						voltswitch:1, uturn:1,
+						suckerpunch:1, extremespeed:1
 					};
 					if (move.category === 'Special' && setupType === 'Physical' && !SetupException[move.id])
 					{
@@ -773,8 +778,7 @@ exports.BattleScripts = {
 					}
 					
 					var todoMoves = {
-						BeatUp:1,
-						Disable:1
+						beatup:1
 					};
 					if (todoMoves[move.id]) rejected = true;
 					
@@ -803,45 +807,45 @@ exports.BattleScripts = {
 				abilities.sort(function(a,b){
 					return battle.getAbility(b).rating - battle.getAbility(a).rating;
 				});
-				ability = toId(abilities[0]);
+				var ability0 = this.getAbility(abilities[0]);
+				var ability1 = this.getAbility(abilities[1]);
+				var ability = ability0.name;
 				if (abilities[1])
 				{
-					var ability0 = this.getAbility(abilities[0]);
-					var ability1 = this.getAbility(abilities[1]);
 					
 					if (ability0.rating <= ability1.rating)
 					{
 						if (Math.random()*2<1)
 						{
-							ability = toId(abilities[1]);
+							ability = ability1.name;
 						}
 					}
 					else if (ability0.rating - 0.6 <= ability1.rating)
 					{
 						if (Math.random()*3<1)
 						{
-							ability = toId(abilities[1]);
+							ability = ability1.name;
 						}
 					}
 					
 					var rejectAbility = false;
-					if (ability === 'Contrary' && !counter['Contrary'])
+					if (ability === 'Contrary' && !counter['contrary'])
 					{
 						rejectAbility = true;
 					}
-					if (ability === 'Technician' && !counter['Technician'])
+					if (ability === 'Technician' && !counter['technician'])
 					{
 						rejectAbility = true;
 					}
-					if (ability === 'SkillLink' && !counter['SkillLink'])
+					if (ability === 'Skill Link' && !counter['skilllink'])
 					{
 						rejectAbility = true;
 					}
-					if ((ability === 'RockHead' || ability === 'Reckless') && !counter['recoil'])
+					if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil'])
 					{
 						rejectAbility = true;
 					}
-					if ((ability === 'NoGuard' || ability === 'CompoundEyes') && !counter['inaccurate'])
+					if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate'])
 					{
 						rejectAbility = true;
 					}
@@ -852,43 +856,43 @@ exports.BattleScripts = {
 					
 					if (rejectAbility)
 					{
-						if (ability === toId(abilities[1])) // or not
+						if (ability === ability1.name) // or not
 						{
-							ability = toId(abilities[0]);
+							ability = ability0.name;
 						}
 						else
 						{
-							ability = toId(abilities[1]);
+							ability = ability1.name;
 						}
 					}
-					if ((abilities[1] === 'Guts' || abilities[0] === 'Guts' || abilities[3] === 'Guts') && ability !== 'QuickFeet' && hasMove['Facade'])
+					if ((abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts') && ability !== 'Quick Feet' && hasMove['facade'])
 					{
 						ability = 'Guts';
 					}
 				}
 				
-				if (hasMove['GyroBall'])
+				if (hasMove['gyroball'])
 				{
 					ivs.spe = 0;
 					//evs.atk += evs.spe;
 					evs.spe = 0;
 				}
-				else if (hasMove['TrickRoom'])
+				else if (hasMove['trickroom'])
 				{
 					ivs.spe = 0;
 					//evs.hp += evs.spe;
 					evs.spe = 0;
 				}
 				
-				item = 'FocusSash';
+				item = 'Focus Sash';
 				if (template.species === 'Giratina-O')
 				{
-					item = 'GriseousOrb';
+					item = 'Griseous Orb';
 				}
-				else if (template.species === 'Rotom-S')
+				else if (template.species === 'Rotom-Fan')
 				{
 					// this is just to amuse myself
-					item = 'AirBalloon';
+					item = 'Air Balloon';
 				}
 				else if (template.species === 'Delibird')
 				{
@@ -897,115 +901,115 @@ exports.BattleScripts = {
 				}
 				else if (ability === 'Imposter')
 				{
-					item = 'ChoiceScarf';
+					item = 'Choice Scarf';
 				}
-				else if (hasMove["Magikarp'sRevenge"])
+				else if (hasMove["magikarpsrevenge"])
 				{
-					item = 'ChoiceBand';
+					item = 'Choice Band';
 				}
-				else if (ability === 'WonderGuard')
+				else if (ability === 'Wonder Guard')
 				{
-					item = 'FocusSash';
+					item = 'Focus Sash';
 				}
 				else if (template.species === 'Unown')
 				{
-					item = 'ChoiceSpecs';
+					item = 'Choice Specs';
 				}
-				else if (hasMove['Trick'] && hasMove['GyroBall'] && (ability === 'Levitate' || hasType['Flying']))
+				else if (hasMove['trick'] && hasMove['gyroball'] && (ability === 'Levitate' || hasType['Flying']))
 				{
-					item = 'MachoBrace';
+					item = 'Macho Brace';
 				}
-				else if (hasMove['Trick'] && hasMove['GyroBall'])
+				else if (hasMove['trick'] && hasMove['gyroball'])
 				{
-					item = 'IronBall';
+					item = 'Iron Ball';
 				}
-				else if (counter.Physical >= 3 && (hasMove['Trick'] || hasMove['Switcheroo']))
+				else if (counter.Physical >= 3 && (hasMove['trick'] || hasMove['switcheroo']))
 				{
-					item = 'ChoiceBand';
+					item = 'Choice Band';
 				}
-				else if (counter.Special >= 3 && (hasMove['Trick'] || hasMove['Switcheroo']))
+				else if (counter.Special >= 3 && (hasMove['trick'] || hasMove['switcheroo']))
 				{
-					item = 'ChoiceSpecs';
+					item = 'Choice Specs';
 				}
-				else if (counter.Status <= 1 && (hasMove['Trick'] || hasMove['Switcheroo']))
+				else if (counter.Status <= 1 && (hasMove['trick'] || hasMove['switcheroo']))
 				{
-					item = 'ChoiceScarf';
+					item = 'Choice Scarf';
 				}
-				else if (hasMove['Rest'] && !hasMove['SleepTalk'])
+				else if (hasMove['rest'] && !hasMove['sleeptalk'])
 				{
-					item = 'ChestoBerry';
+					item = 'Chesto Berry';
 				}
-				else if (hasMove['NaturalGift'])
+				else if (hasMove['naturalgift'])
 				{
-					item = 'LiechiBerry';
+					item = 'Liechi Berry';
 				}
 				else if (template.species === 'Cubone' || template.species === 'Marowak')
 				{
-					item = 'ThickClub';
+					item = 'Thick Club';
 				}
 				else if (template.species === 'Pikachu')
 				{
-					item = 'LightBall';
+					item = 'Light Ball';
 				}
 				else if (template.species === 'Clamperl')
 				{
 					item = 'DeepSeaTooth';
 				}
-				else if (hasMove['Reflect'] && hasMove['LightScreen'])
+				else if (hasMove['reflect'] && hasMove['lightscreen'])
 				{
-					item = 'LightClay';
+					item = 'Light Clay';
 				}
-				else if (hasMove['Acrobatics'])
+				else if (hasMove['acrobatics'])
 				{
-					item = 'FlyingGem';
+					item = 'Flying Gem';
 				}
-				else if (hasMove['ShellSmash'])
+				else if (hasMove['shellsmash'])
 				{
-					item = 'WhiteHerb';
+					item = 'White Herb';
 				}
-				else if (ability === 'PoisonHeal')
+				else if (ability === 'Poison Heal')
 				{
-					item = 'ToxicOrb';
+					item = 'Toxic Orb';
 				}
-				else if (hasMove['RainDance'])
+				else if (hasMove['raindance'])
 				{
-					item = 'DampRock';
+					item = 'Damp Rock';
 				}
-				else if (hasMove['SunnyDay'])
+				else if (hasMove['sunnyday'])
 				{
-					item = 'HeatRock';
+					item = 'Heat Rock';
 				}
-				else if (hasMove['Sandstorm']) // lol
+				else if (hasMove['sandstorm']) // lol
 				{
-					item = 'SmoothRock';
+					item = 'Smooth Rock';
 				}
-				else if (hasMove['Hail']) // lol
+				else if (hasMove['hail']) // lol
 				{
-					item = 'IcyRock';
+					item = 'Icy Rock';
 				}
-				else if (ability === 'MagicGuard' && hasMove['PsychoShift'])
+				else if (ability === 'Magic Guard' && hasMove['psychoshift'])
 				{
-					item = 'FlameOrb';
+					item = 'Flame Orb';
 				}
-				else if (ability === 'SheerForce' || ability === 'MagicGuard')
+				else if (ability === 'Sheer Force' || ability === 'Magic Guard')
 				{
-					item = 'LifeOrb';
+					item = 'Life Orb';
 				}
-				else if (hasMove['Trick'] || hasMove['Switcheroo'])
+				else if (hasMove['trick'] || hasMove['switcheroo'])
 				{
-					item = 'ChoiceScarf';
+					item = 'Choice Scarf';
 				}
 				else if (ability === 'Guts')
 				{
-					if (hasMove['DrainPunch'])
+					if (hasMove['drainpunch'])
 					{
-						item = 'FlameOrb';
+						item = 'Flame Orb';
 					}
 					else
 					{
-						item = 'ToxicOrb';
+						item = 'Toxic Orb';
 					}
-					if ((hasMove['Return'] || hasMove['HyperFang']) && !hasMove['Facade'])
+					if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade'])
 					{
 						// lol no
 						for (var j=0; j<moves.length; j++)
@@ -1018,57 +1022,57 @@ exports.BattleScripts = {
 						}
 					}
 				}
-				else if (ability === 'MarvelScale' && hasMove['PsychoShift'])
+				else if (ability === 'Marvel Scale' && hasMove['psychoshift'])
 				{
 					item = 'FlameOrb';
 				}
-				else if (hasMove['Reflect'] || hasMove['LightScreen'])
+				else if (hasMove['reflect'] || hasMove['lightscreen'])
 				{
 					// less priority than if you'd had both
-					item = 'LightClay';
+					item = 'Light Clay';
 				}
-				else if (counter.Physical >= 4 && !hasMove['FakeOut'] && !hasMove['SuckerPunch'])
+				else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'])
 				{
 					if (Math.random()*3 > 1)
 					{
-						item = 'ChoiceBand';
+						item = 'Choice Band';
 					}
 					else
 					{
-						item = 'ExpertBelt';
+						item = 'Expert Belt';
 					}
 				}
 				else if (counter.Special >= 4)
 				{
 					if (Math.random()*3 > 1)
 					{
-						item = 'ChoiceSpecs';
+						item = 'Choice Specs';
 					}
 					else
 					{
-						item = 'ExpertBelt';
+						item = 'Expert Belt';
 					}
 				}
 				else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate')
 				{
-					item = 'AirBalloon';
+					item = 'Air Balloon';
 				}
-				else if (hasMove['Eruption'] || hasMove['WaterSpout'])
+				else if (hasMove['eruption'] || hasMove['waterspout'])
 				{
-					item = 'ChoiceScarf';
+					item = 'Choice Scarf';
 				}
-				else if (hasMove['Substitute'] || hasMove['Detect'] || hasMove['Protect'])
+				else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'])
 				{
 					item = 'Leftovers';
 				}
-				else if ((hasMove['Flail'] || hasMove['Reversal']) && !hasMove['Endure'])
+				else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'])
 				{
-					item = 'FocusSash';
+					item = 'Focus Sash';
 				}
-				else if (ability === 'IronBarbs')
+				else if (ability === 'Iron Barbs')
 				{
 					// only Iron Barbs for now
-					item = 'RockyHelmet';
+					item = 'Rocky Helmet';
 				}
 				else if ((template.baseStats.hp+75)*(template.baseStats.def+template.baseStats.spd+175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress')
 				{
@@ -1077,19 +1081,19 @@ exports.BattleScripts = {
 				}
 				else if (counter.Physical + counter.Special >= 3 && setupType)
 				{
-					item = 'LifeOrb';
+					item = 'Life Orb';
 				}
 				else if (counter.Special >= 3 && setupType)
 				{
-					item = 'LifeOrb';
+					item = 'Life Orb';
 				}
 				else if (counter.Physical + counter.Special >= 4)
 				{
-					item = 'ExpertBelt';
+					item = 'Expert Belt';
 				}
 				else if (i===0)
 				{
-					item = 'FocusSash';
+					item = 'Focus Sash';
 				}
 				
 				// this is the "REALLY can't think of a good item" cutoff
@@ -1101,15 +1105,15 @@ exports.BattleScripts = {
 				}
 				else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate')
 				{
-					item = 'AirBalloon';
+					item = 'Air Balloon';
 				}
 				else if (hasType['Poison'])
 				{
-					item = 'BlackSludge';
+					item = 'Black Sludge';
 				}
 				else if (counter.Status <= 1)
 				{
-					item = 'LifeOrb';
+					item = 'Life Orb';
 				}
 				/* else if ((template.baseStats.hp+75)*(template.baseStats.def+template.baseStats.spd+175) > 50000)
 				{
@@ -1117,7 +1121,7 @@ exports.BattleScripts = {
 				}
 				else if (this.getEffectiveness('Ground', template) >= 0)
 				{
-					item = 'AirBalloon';
+					item = 'Air Balloon';
 				} */
 				else
 				{
@@ -1126,7 +1130,7 @@ exports.BattleScripts = {
 				
 				if (item === 'Leftovers' && hasType['Poison'])
 				{
-					item = 'BlackSludge';
+					item = 'Black Sludge';
 				}
 			}
 			
@@ -1158,10 +1162,10 @@ exports.BattleScripts = {
 			var level = levelScale[template.tier] || 90;
 			if (customScale[template.name]) level = customScale[template.name];
 			
-			if (template.name === 'Chandelure' && ability === 'ShadowTag') level = 70;
+			if (template.name === 'Chandelure' && ability === 'Shadow Tag') level = 70;
 			if (template.name === 'Serperior' && ability === 'Contrary') level = 75;
-			if (template.name === 'Rotom-S' && item === 'Balloon') level = 95;
-			if (template.name === 'Magikarp' && hasMove['Magikarp\'sRevenge']) level = 85;
+			if (template.name === 'Rotom-Fan' && item === 'Air Balloon') level = 95;
+			if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 85;
 			
 			pokemon.push({
 				name: template.name,
