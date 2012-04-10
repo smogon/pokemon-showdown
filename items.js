@@ -1853,6 +1853,24 @@ exports.BattleItems = {
 			basePower: 80,
 			type: "Rock"
 		},
+		onResidual: function(pokemon) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony'))
+			{
+				pokemon.eatItem();
+			}
+		},
+		onEat: function(pokemon) {
+			pokemon.addVolatile('MicleBerry');
+		},
+		effect: {
+			duration: 2,
+			onModifyMove: function(move, pokemon) {
+				//this.add('r-micle '+pokemon.id);
+				pokemon.removeVolatile('MicleBerry');
+				move.accuracy = true;
+				move.alwaysHit = true;
+			}
+		},
 		desc: "Activates at 25% HP. Next move used will always hit. Unobtainable in BW. One-time use."
 	},
 	"mindplate": {
