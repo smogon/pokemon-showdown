@@ -71,7 +71,7 @@ function BattlePokemon(set, side)
 	if (this.gender === 'N') this.gender = '';
 	
 	this.fullname = this.side.id + ': ' + this.name;
-	this.details = this.species + (this.level==100?'':', L'+this.level) + (this.gender===''?'':', '+this.gender);
+	this.details = this.species + (this.level==100?'':', L'+this.level) + (this.gender===''?'':', '+this.gender) + (this.set.shiny?', shiny':'');
 	
 	this.id = this.fullname; // shouldn't really be used anywhere
 	this.illusion = null;
