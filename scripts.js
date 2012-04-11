@@ -95,11 +95,11 @@ exports.BattleScripts = {
 			}
 			if (!move.ignoreEvasion)
 			{
-				if (target.boosts.evasion > 0)
+				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion)
 				{
 					accuracy /= boostTable[target.boosts.evasion];
 				}
-				else
+				else if (target.boosts.evasion < 0)
 				{
 					accuracy *= boostTable[-target.boosts.evasion];
 				}
