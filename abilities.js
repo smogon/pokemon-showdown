@@ -687,13 +687,23 @@ exports.BattleAbilities = {
 		num: "62"
 	},
 	"harvest": {
-		desc: "When the user uses a held Berry, it is restored at the end of the turn.",
-		id: "harvest",
-		name: "Harvest",
-		onResidualPriority: -26.1,
-		rating: 4,
-		num: "139"
-	},
+        	desc: "When the user uses a held Berry, it is restored at the end of the turn.",
+        	id: "harvest",
+        	name: "Harvest",
+        	onResidualPriority: -26.1,
+        	onResidual: function(pokemon) {
+            	if ((this.weather === 'sunnyday') || (Math.random() * 2 < 1))
+            	{
+                	if (!pokemon.item && this.getItem(pokemon.lastItem).isBerry)
+                	{
+                    		pokemon.setItem(pokemon.lastItem);
+                    		this.add("-item", pokemon, pokemon.item, '[from] ability: Harvest');
+                	}
+            	}
+        },
+        rating: 4,
+        num: "139"
+    },
 	"healer": {
 		desc: "Has a 30% chance of curing an adjacent ally's status ailment at the end of each turn in Double and Triple Battles.",
 		id: "healer",
