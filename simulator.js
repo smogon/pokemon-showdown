@@ -887,13 +887,12 @@ function BattlePokemon(set, side)
 		return floor(d*100/selfP.maxhp + 0.5);
 	};
 	this.getHealth = function() {
-		if (selfP.fainted) return ' (0)';
+		if (selfP.fainted) return ' (0 fnt)';
 		//var hpp = floor(48*selfP.hp/selfP.maxhp) || 1;
 		var hpp = floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
 		if (!selfP.hp) hpp = 0;
 		var status = '';
 		if (selfP.status) status = ' '+selfP.status;
-		if (selfP.fainted) status = ' fnt';
 		return ' ('+hpp+'/100'+status+')';
 	};
 	this.hpChange = function(d) {
