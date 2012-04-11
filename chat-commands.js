@@ -1112,6 +1112,18 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		return true;
 		break;
 		
+	case 'cap':
+	case '!cap':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">An introduction to CAP:<br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=48782" target="_blank">The CAP encyclopedia</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3464513" target="_blank">CAP metagame discussion</a><br />' +
+			'- <a href="http://www.smogon.com/cap/" target="_blank">The CAP website (somewhat outdated)</a>' +
+			'</div>');
+		return true;
+		break;
+		
 	case 'rules':
 	case 'rule':
 	case '!rules':
