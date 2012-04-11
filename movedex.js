@@ -3887,7 +3887,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'foresight',
 		effect: {
 			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'move: Foresight');
+				this.add('-start', pokemon, 'Foresight');
 			},
 			onModifyPokemon: function(pokemon) {
 				if (pokemon.hasType('Ghost'))
@@ -6933,6 +6933,22 @@ exports.BattleMovedex = {
 		pp: 40,
 		isBounceable: true,
 		priority: 0,
+		volatileStatus: 'miracleeye',
+		effect: {
+			onStart: function(pokemon) {
+				this.add('-start', pokemon, 'Miracle Eye');
+			},
+			onModifyPokemon: function(pokemon) {
+				if (pokemon.hasType('Dark'))
+				{
+					pokemon.negateImmunity['Psychic'] = true;
+				}
+			},
+			onSourceModifyMove: function(move) {
+				move.ignoreAccuracy = true;
+				move.ignoreEvasion = true;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -7416,6 +7432,23 @@ exports.BattleMovedex = {
 		pp: 40,
 		isBounceable: true,
 		priority: 0,
+		volatileStatus: 'odorsleuth',
+		effect: {
+			onStart: function(pokemon) {
+				this.add('-start', pokemon, 'Odor Sleuth');
+			},
+			onModifyPokemon: function(pokemon) {
+				if (pokemon.hasType('Ghost'))
+				{
+					pokemon.negateImmunity['Normal'] = true;
+					pokemon.negateImmunity['Fighting'] = true;
+				}
+			},
+			onSourceModifyMove: function(move) {
+				move.ignoreAccuracy = true;
+				move.ignoreEvasion = true;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
