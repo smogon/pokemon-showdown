@@ -3877,7 +3877,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Until the target faints or switches, the user's Accuracy modifiers and the target's Evasion modifiers are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.",
+		desc: "Until the target faints or switches, if the target has positive Evasion boosts, they are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.",
 		shortDesc: "Blocks evasion mods. Fighting, Normal hits Ghost.",
 		id: "foresight",
 		name: "Foresight",
@@ -3887,7 +3887,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'foresight',
 		effect: {
 			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'move: Foresight');
+				this.add('-start', pokemon, 'Foresight');
 			},
 			onModifyPokemon: function(pokemon) {
 				if (pokemon.hasType('Ghost'))
@@ -3897,8 +3897,7 @@ exports.BattleMovedex = {
 				}
 			},
 			onSourceModifyMove: function(move) {
-				move.ignoreAccuracy = true;
-				move.ignoreEvasion = true;
+				move.ignorePositiveEvasion = true;
 			}
 		},
 		secondary: false,
@@ -6926,13 +6925,25 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Until the target faints or switches, the user's Accuracy modifiers and the target's Evasion modifiers are ignored. Dark-type targets also lose their immunity against Psychic-type moves.",
-		shortDesc: "The user's next move will always hit.",
+		desc: "Until the target faints or switches, if the target has positive Evasion boosts, they are ignored. Dark-type targets also lose their immunity against Psychic-type moves.",
+		shortDesc: "Blocks evasion mods. Psychic hits Dark.",
 		id: "miracleeye",
 		name: "Miracle Eye",
 		pp: 40,
 		isBounceable: true,
 		priority: 0,
+		volatileStatus: 'miracleeye',
+		effect: {
+			onStart: function(pokemon) {
+				this.add('-start', pokemon, 'Miracle Eye');
+			},
+			onModifyPokemon: function(pokemon) {
+				if (pokemon.hasType('Dark')) pokemon.negateImmunity['Psychic'] = true;
+			},
+			onSourceModifyMove: function(move, source, target) {
+				move.ignorePositiveEvasion = true;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -7409,13 +7420,14 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Until the target faints or switches, the user's Accuracy modifiers and the target's Evasion modifiers are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.",
+		desc: "Until the target faints or switches, if the target has positive Evasion boosts, they are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.",
 		shortDesc: "Blocks Evasion mods. Fight, Normal can hit Ghost.",
 		id: "odorsleuth",
 		name: "Odor Sleuth",
 		pp: 40,
 		isBounceable: true,
 		priority: 0,
+		volatileStatus: 'foresight',
 		secondary: false,
 		target: "normal",
 		type: "Normal"
