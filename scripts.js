@@ -1173,7 +1173,8 @@ exports.BattleScripts = {
 				ability: ability,
 				evs: evs,
 				item: item,
-				level: level
+				level: level,
+				shiny: (Math.random()*1024<=1)
 			});
 			pokemonLeft++;
 		}
