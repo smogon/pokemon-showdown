@@ -4806,6 +4806,9 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
+		onTryHit: function(pokemon) {
+			if (pokemon.side.pokemonLeft <= 1) return false;
+		},
 		selfdestruct: true,
 		sideCondition: 'healingwish',
 		effect: {
@@ -6334,6 +6337,9 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
+		onTryHit: function(pokemon) {
+			if (pokemon.side.pokemonLeft <= 1) return false;
+		},
 		selfdestruct: true,
 		sideCondition: 'healingwish',
 		secondary: false,
