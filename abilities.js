@@ -1336,7 +1336,7 @@ exports.BattleAbilities = {
 	"overcoat": {
 		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail.",
 		onImmunity: function(type, pokemon) {
-			if (type === 'Sandstorm' || type === 'Hail') return false;
+			if (type === 'sandstorm' || type === 'hail') return false;
 		},
 		id: "overcoat",
 		name: "Overcoat",
