@@ -5706,7 +5706,7 @@ exports.BattleMovedex = {
 				var foeMoves = this.effectData.source.moveset;
 				for (var f=0; f<foeMoves.length; f++)
 				{
-					pokemon.disabledMoves[foeMoves[f].move] = true;
+					pokemon.disabledMoves[foeMoves[f].id] = true;
 				}
 			},
 			onFoeBeforeMove: function(attacker, defender, move) {
