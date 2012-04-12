@@ -281,8 +281,9 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Bug')
 			{
-				if (user.useItem())
+				if (user.useItem(user, move))
 				{
+					selfB.add('-enditem', selfP, 'Bug Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -664,6 +665,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Dark Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -770,6 +772,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Dragon Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -858,6 +861,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Electric Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -944,6 +948,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Fighting Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -983,6 +988,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Fire Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1062,6 +1068,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Flying Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1141,6 +1148,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Ghost Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1158,6 +1166,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Grass Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1210,6 +1219,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Ground Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1313,6 +1323,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Ice Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1981,6 +1992,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Normal Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -2210,6 +2222,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Poison Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -2256,6 +2269,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Psychic Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -2426,6 +2440,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Rock Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -2839,6 +2854,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Steel Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -3022,6 +3038,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					selfB.add('-enditem', selfP, 'Water Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
