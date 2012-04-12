@@ -1512,9 +1512,9 @@ exports.BattleItems = {
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
 			this.debug('Lax Incense - decreasing accuracy');
-			move.accuracy *= 0.95;
+			move.accuracy *= 0.9;
 		},
-		desc: "Hold item which raises evasion 5%. Allows breeding of Wynaut."
+		desc: "Hold item which raises evasion 10%. Allows breeding of Wynaut."
 	},
 	"leftovers": {
 		id: "leftovers",
