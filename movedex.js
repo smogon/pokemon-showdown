@@ -331,7 +331,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'aquaring',
 		effect: {
 			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'move: Aqua Ring');
+				this.add('-start', pokemon, 'Aqua Ring');
 			},
 			onResidualPriority: 50-6,
 			onResidual: function(pokemon) {
@@ -505,7 +505,7 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		priority: 0,
 		onHit: function(target) {
-			if (target.addVolatile('attract')) this.add("-start", target, "move: Attract");
+			if (target.addVolatile('attract')) this.add("-start", target, "Attract");
 			else return false;
 		},
 		effect: {
@@ -521,7 +521,7 @@ exports.BattleMovedex = {
 				}
 				if (Math.random()*2 < 1)
 				{
-					this.add('cant', pokemon, 'move: Attract', move);
+					this.add('cant', pokemon, 'Attract', move);
 					return false;
 				}
 			}
@@ -582,7 +582,7 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'move: Autotomize');
+				this.add('-start', pokemon, 'Autotomize');
 			},
 			onModifyPokemon: function(pokemon) {
 				pokemon.weightkg /= 2;
@@ -766,7 +766,7 @@ exports.BattleMovedex = {
 			duration: 3,
 			onStart: function(pokemon) {
 				this.effectData.totalDamage = 0;
-				this.add('-start', pokemon, 'move: Bide');
+				this.add('-start', pokemon, 'Bide');
 			},
 			onDamage: function(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
@@ -792,7 +792,7 @@ exports.BattleMovedex = {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					this.add('-end', pokemon, 'move: Bide');
+					this.add('-end', pokemon, 'Bide');
 					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
 					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage*2});
 					return false;
@@ -1938,7 +1938,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			onStart: function(pokemon, source) {
-				this.add('-start', pokemon, 'move: Curse', '[of] '+source);
+				this.add('-start', pokemon, 'Curse', '[of] '+source);
 				this.directDamage(source.maxhp/2, source, source);
 			},
 			onResidualPriority: 50-10,
@@ -2216,7 +2216,7 @@ exports.BattleMovedex = {
 						}
 						else
 						{
-							this.add('-start', pokemon, 'move: Disable');
+							this.add('-start', pokemon, 'Disable');
 							this.effectData.move = pokemon.lastMove;
 							return;
 						}
@@ -2231,7 +2231,7 @@ exports.BattleMovedex = {
 			onBeforeMove: function(attacker, defender, move) {
 				if (move.id === this.effectData.move)
 				{
-					this.add('cant', attacker, 'move: Disable', move);
+					this.add('cant', attacker, 'Disable', move);
 					return false;
 				}
 			},
@@ -2361,7 +2361,7 @@ exports.BattleMovedex = {
 					type: 'Steel'
 				}
 			};
-			this.add('-start', source, 'move: Doom Desire');
+			this.add('-start', source, 'Doom Desire');
 			return null;
 		},
 		secondary: false,
@@ -2848,10 +2848,10 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'move: Embargo');
+				this.add('-start', pokemon, 'Embargo');
 			},
 			onEnd: function(pokemon) {
-				this.add('-message', 'Embargo ended. (placeholder)');
+				this.add('-end', pokemon, 'Embargo');
 			},
 			onModifyPokemon: function(pokemon)
 			{
@@ -2905,7 +2905,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.effectData.move = target.lastMove;
-				this.add('-start',target,'move: Encore');
+				this.add('-start', target, 'Encore');
 				var decision = this.willMove(target);
 				if (decision)
 				{
@@ -2914,7 +2914,7 @@ exports.BattleMovedex = {
 				}
 			},
 			onEnd: function(target) {
-				this.add('-end',target,'move: Encore');
+				this.add('-end', target, 'Encore');
 			},
 			onModifyPokemon: function(pokemon) {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move))
@@ -5706,7 +5706,7 @@ exports.BattleMovedex = {
 				var foeMoves = this.effectData.source.moveset;
 				for (var f=0; f<foeMoves.length; f++)
 				{
-					pokemon.disabledMoves[foeMoves[f].id] = true;
+					pokemon.disabledMoves[foeMoves[f].move] = true;
 				}
 			},
 			onFoeBeforeMove: function(attacker, defender, move) {
@@ -7169,7 +7169,7 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onStart: function(pokemon) {
-				this.add("-start", pokemon, 'move: Mud Sport');
+				this.add("-start", pokemon, 'Mud Sport');
 			},
 			onAnyBasePower: function(basePower, user, target, move) {
 				if (move.type === 'Electric') return basePower / 3;
@@ -8355,7 +8355,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(target) {
-				this.add('-singleturn', target, 'move: Quick Guard');
+				this.add('-singleturn', target, 'Quick Guard');
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, effect) {
@@ -8466,7 +8466,7 @@ exports.BattleMovedex = {
 			onHit: function(pokemon) {
 				if (pokemon.removeVolatile('leechseed'))
 				{
-					this.add('-end', pokemon, 'move: Leech Seed', '[from] move: Rapid Spin', '[of] '+pokemon);
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
 				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
 				for (var i in sideConditions)
@@ -8622,10 +8622,10 @@ exports.BattleMovedex = {
 				}
 			},
 			onStart: function(side) {
-				this.add('-sidestart',side,'move: Reflect');
+				this.add('-sidestart',side,'Reflect');
 			},
 			onEnd: function(side) {
-				this.add('-sideend',side,'move: Reflect');
+				this.add('-sideend',side,'Reflect');
 			}
 		},
 		secondary: false,
@@ -9252,10 +9252,10 @@ exports.BattleMovedex = {
 				}
 			},
 			onStart: function(side) {
-				this.add('-sidestart', side, 'move: Safeguard');
+				this.add('-sidestart', side, 'Safeguard');
 			},
 			onEnd: function(side) {
-				this.add('-sideend', side, 'move: Safeguard');
+				this.add('-sideend', side, 'Safeguard');
 			}
 		},
 		secondary: false,
@@ -10477,13 +10477,13 @@ exports.BattleMovedex = {
 		effect: {
 			// this is a side condition
 			onStart: function(side) {
-				this.add('-sidestart',side,'move: Spikes');
+				this.add('-sidestart', side, 'Spikes');
 				this.effectData.layers = 1;
 			},
 			onRestart: function(side) {
 				if (this.effectData.layers < 3)
 				{
-					this.add('-sidestart',side,'move: Spikes');
+					this.add('-sidestart', side, 'Spikes');
 					this.effectData.layers++;
 				}
 			},
