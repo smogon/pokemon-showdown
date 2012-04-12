@@ -270,7 +270,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"charizard": {
-		tier: "RU"
+		tier: "NU"
 	},
 	"charmander": {
 		tier: "LC"
@@ -309,7 +309,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"claydol": {
-		tier: "RU"
+		tier: "UU"
 	},
 	"clefable": {
 		tier: "RU"
@@ -414,7 +414,7 @@ exports.BattleTiers = {
 		tier: "Uber"
 	},
 	"deoxysdefense": {
-		tier: "UU"
+		tier: "BL"
 	},
 	"deoxysspeed": {
 		tier: "Uber"
@@ -669,7 +669,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"gligar": {
-		tier: "RU"
+		tier: "UU"
 	},
 	"gliscor": {
 		tier: "OU"
@@ -783,7 +783,7 @@ exports.BattleTiers = {
 		tier: "Uber"
 	},
 	"honchkrow": {
-		tier: "RU"
+		tier: "UU"
 	},
 	"hoothoot": {
 		tier: "LC"
@@ -987,7 +987,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"ludicolo": {
-		tier: "RU"
+		tier: "NU"
 	},
 	"lugia": {
 		tier: "Uber"
@@ -1104,7 +1104,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"mesprit": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"metagross": {
 		tier: "OU"
@@ -1491,7 +1491,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"sawsbuck": {
-		tier: "RU"
+		tier: "NU"
 	},
 	"sceptile": {
 		tier: "RU"
@@ -1545,7 +1545,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"sharpedo": {
-		tier: "RU"
+		tier: "UU"
 	},
 	"shaymin": {
 		tier: "UU"
@@ -2007,7 +2007,7 @@ exports.BattleTiers = {
 		tier: "LC Uber"
 	},
 	"yanmega": {
-		tier: "BL2"
+		tier: "UU"
 	},
 	"zangoose": {
 		tier: "NU"
