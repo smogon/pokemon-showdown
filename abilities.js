@@ -806,13 +806,13 @@ exports.BattleAbilities = {
 	"icebody": {
 		desc: "If active while Hail is in effect, this Pokemon recovers one-sixteenth of its max HP after each turn. If a non-Ice-type Pokemon receives this ability through Skill Swap, Role Play or the Trace ability, it will not take damage from Hail.",
 		onWeather: function(target, source, effect) {
-			if (effect.id === 'Hail')
+			if (effect.id === 'hail')
 			{
 				this.heal(target.maxhp/16);
 			}
 		},
 		onImmunity: function(type, pokemon) {
-			if (type === 'Hail') return false;
+			if (type === 'hail') return false;
 		},
 		id: "icebody",
 		name: "Ice Body",
