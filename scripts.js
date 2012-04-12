@@ -885,7 +885,7 @@ exports.BattleScripts = {
 				}
 				
 				item = 'Focus Sash';
-				if (template.species === 'Giratina-O')
+				if (template.species === 'Giratina-Origin')
 				{
 					item = 'Griseous Orb';
 				}
