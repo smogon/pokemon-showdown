@@ -1289,6 +1289,21 @@ function Battle(roomid, format, rated)
 		b.priority = b.priority || 0;
 		b.subPriority = b.subPriority || 0;
 		b.speed = b.speed || 0;
+		if (typeof a.order === 'number' || typeof b.order === 'number')
+		{
+			if (typeof a.order !== 'number')
+			{
+				return -(1);
+			}
+			if (typeof b.order !== 'number')
+			{
+				return -(-1);
+			}
+			if (b.order - a.order)
+			{
+				return -(b.order - a.order);
+			}
+		}
 		if (b.priority - a.priority)
 		{
 			return b.priority - a.priority;
@@ -1297,9 +1312,9 @@ function Battle(roomid, format, rated)
 		{
 			return b.speed - a.speed;
 		}
-		if (b.subPriority - a.subPriority)
+		if (b.subOrder - a.subOrder)
 		{
-			return b.subPriority - a.subPriority;
+			return -(b.subOrder - a.subOrder);
 		}
 		return Math.random()-0.5;
 	};
@@ -1524,28 +1539,26 @@ function Battle(roomid, format, rated)
 		return relayVar;
 	};
 	this.resolveLastPriority = function(statuses, callbackType) {
+		var order = false;
 		var priority = 0;
-		var subPriority = 0;
+		var subOrder = 0;
 		var status = statuses[statuses.length-1].status;
+		if (status[callbackType+'Order'])
+		{
+			order = status[callbackType+'Order'];
+		}
 		if (status[callbackType+'Priority'])
 		{
 			priority = status[callbackType+'Priority'];
 		}
-		else if (status[callbackType+'Order'])
-		{
-			priority = -status[callbackType+'Order'];
-		}
-		if (status[callbackType+'SubPriority'])
-		{
-			subPriority = status[callbackType+'SubPriority'];
-		}
 		else if (status[callbackType+'SubOrder'])
 		{
-			subPriority = -status[callbackType+'SubOrder'];
+			subOrder = -status[callbackType+'SubOrder'];
 		}
 		
+		statuses[statuses.length-1].order = order;
 		statuses[statuses.length-1].priority = priority;
-		statuses[statuses.length-1].subPriority = subPriority;
+		statuses[statuses.length-1].subOrder = subOrder;
 	};
 	// bubbles up to parents
 	this.getRelevantEffects = function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
