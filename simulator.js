@@ -2226,6 +2226,19 @@ function Battle(roomid, format, rated)
 		selfB.runEvent('Heal', target, source, effect, damage);
 		return damage;
 	};
+	this.modify = function(value, numerator, denominator) {
+		// You can also use:
+		// modify(value, [numerator, denominator])
+		// modify(value, fraction) - assuming you trust JavaScript's floating-point handler
+		if (!denominator) denominator = 1;
+		if (numerator && numerator.length)
+		{
+			denominator = numerator[1];
+			numerator = numerator[0];
+		}
+		var modifier = Math.floor(numerator*4096/denominator);
+		return Math.round(value * modifier / 4096);
+	};
 	this.getDamage = function(pokemon, target, move, suppressMessages) {
 		if (typeof move === 'string') move = selfB.getMove(move);
 		
@@ -2347,7 +2360,23 @@ function Battle(roomid, format, rated)
 		}
 		
 		//int(int(int(2*L/5+2)*A*P/D)/50);
-		var baseDamage = floor(floor(floor(2*level/5+2) * basePower * attack/defense)/50);
+		var baseDamage = floor(floor(floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
+		
+		// multi-target modifier (doubles only)
+		// weather modifier (TODO: relocate here)
+		// crit
+		if (move.crit)
+		{
+			if (!suppressMessages) selfB.add('-crit', target);
+			baseDamage = selfB.modify(baseDamage, move.critModifier || 2);
+		}
+		
+		// randomizer
+		// this is not a modifier
+		// gen 1-2
+		//var randFactor = floor(Math.random()*39)+217;
+		//baseDamage *= floor(randFactor * 100 / 255) / 100;
+		baseDamage *= Math.round((100 - floor(Math.random() * 16)) / 100);
 		
 		// STAB
 		if (type !== '???' && pokemon.hasType(type))
@@ -2356,7 +2385,7 @@ function Battle(roomid, format, rated)
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
 			// (On second thought, it might be easier to get a Missingno.)
-			baseDamage *= (move.stab || 1.5);
+			baseDamage = selfB.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
 		var totalTypeMod = selfB.getEffectiveness(type, target);
@@ -2378,19 +2407,7 @@ function Battle(roomid, format, rated)
 				baseDamage /= 2;
 			}
 		}
-		// crit
-		if (move.crit)
-		{
-			if (!suppressMessages) selfB.add('-crit', target);
-			baseDamage *= (move.critModifier || 2);
-		}
-		// randomizer
-		
-		// gen 1-2
-		//var randFactor = floor(Math.random()*39)+217;
-		//baseDamage *= floor(randFactor * 100 / 255) / 100;
-		
-		baseDamage *= (85 + floor(Math.random() * 16)) / 100;
+		baseDamage = Math.round(baseDamage);
 		
 		if (basePower && !floor(baseDamage))
 		{
