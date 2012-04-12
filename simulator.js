@@ -746,12 +746,13 @@ function BattlePokemon(set, side)
 		var item = selfP.getItem();
 		if (selfB.runEvent('UseItem', selfP, null, null, item))
 		{
-			var fromEffect = '';
-			if (item.isGem) fromEffect = ' | [from] gem';
 			switch (item.id)
 			{
 			default:
-				selfB.add('-enditem', selfP, item+fromEffect);
+				if (!item.isGem)
+				{
+					selfB.add('-enditem', selfP, item);
+				}
 				break;
 			}
 			
