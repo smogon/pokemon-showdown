@@ -591,7 +591,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	
 	case 'voice':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (user.isMod())
+		if (user.isMod() && user.group !== '%')
 		{
 			var targetUser = getUser(target);
 			if (!targetUser)
@@ -617,7 +617,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		
 	case 'devoice':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (user.isMod())
+		if (user.isMod() && user.group !== '%')
 		{
 			var targetUser = getUser(target);
 			if (!targetUser)
