@@ -3120,6 +3120,7 @@ exports.BattleItems = {
 			if (activate && pokemon.useItem())
 			{
 				pokemon.setBoost(boosts);
+				this.add('-restoreboost', pokemon, '[silent]');
 			}
 		},
 		desc: "Removes stat decreases. Consumed after use."
