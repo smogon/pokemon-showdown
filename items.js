@@ -220,7 +220,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		onResidualPriority: 50-5.2,
+		onResidualOrder: 5,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (pokemon.hasType('Poison'))
 			{
@@ -1020,7 +1021,8 @@ exports.BattleItems = {
 			basePower: 30,
 			status: 'brn'
 		},
-		onResidualPriority: -26.2,
+		onResidualOrder: 26,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (!pokemon.status)
 			{
@@ -1534,7 +1536,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onResidualPriority: 50-5.2,
+		onResidualOrder: 5,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			this.heal(pokemon.maxhp/16);
 		},
@@ -2883,7 +2886,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 80
 		},
-		onResidualPriority: -26.2,
+		onResidualOrder: 26,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			this.damage(pokemon.maxhp/8);
 		},
@@ -2967,7 +2971,8 @@ exports.BattleItems = {
 			basePower: 30,
 			status: 'tox'
 		},
-		onResidualPriority: -26.2,
+		onResidualOrder: 26,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (!pokemon.status && !pokemon.hasType('Steel'))
 			{
