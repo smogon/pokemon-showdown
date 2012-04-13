@@ -1,3 +1,6 @@
+// Run this with streamline (_node) like so:
+//  _node pokedex-gen._js > ../pokedex.js
+
 var customPokemonPath = "../data/custom-pokemon.json";
 
 var assert = require("assert").ok;
