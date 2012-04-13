@@ -12,6 +12,36 @@ function sanitize(str, strEscape)
 	return str;
 }
 
+/**
+ * `parseCommand`. This is the function most of you are interested in,
+ * apparently.
+ *
+ * `message` is exactly what the user typed in.
+ * If the user typed in a command, `cmd` and `target` are the command (with "/"
+ * omitted) and command target. Otherwise, they're both the empty string.
+ *
+ * For instance, say a user types in "/foo":
+ * cmd === "/foo", target === "", message === "/foo bar baz"
+ *
+ * Or, say a user types in "/foo bar baz":
+ * cmd === "foo", target === "bar baz", message === "/foo bar baz"
+ *
+ * Or, say a user types in "!foo bar baz":
+ * cmd === "!foo", target === "bar baz", message === "!foo bar baz"
+ *
+ * Or, say a user types in "foo bar baz":
+ * cmd === "", target === "", message === "foo bar baz"
+ *
+ * `user` and `socket` are the user and socket that sent the message,
+ * and `room` is the room that sent the message.
+ *
+ * Deal with the message however you wish:
+ *   return; will output the message normally: "user: message"
+ *   return false; will supress the message output.
+ *   returning a string will replace the message with that string,
+ *     then output it normally.
+ *
+ */
 function parseCommandLocal(user, cmd, target, room, socket, message)
 {
 	cmd = cmd.toLowerCase();
