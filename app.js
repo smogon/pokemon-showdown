@@ -758,7 +758,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		{
 			// do nothing
 		}
-		if (message.substr(0,3) === '>> ')
+		else if (message.substr(0,3) === '>> ')
 		{
 			var cmd = message.substr(3);
 
