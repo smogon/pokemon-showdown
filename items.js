@@ -1494,6 +1494,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onModifyPriority: function(priority) {
+			return priority - 0.1;
+		},
 		desc: "The holder will go last within its move's priority bracket, regardless of Speed."
 	},
 	"lansatberry": {
