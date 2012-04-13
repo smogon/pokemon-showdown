@@ -1,0 +1,572 @@
+[
+	{
+		"name": "Missingno.",
+		"id": "missingno",
+		"species": "Missingno.",
+		"speciesid": "missingno",
+		"basespecies": "Missingno.",
+		"spriteid": "missingno",
+		"forme": "",
+		"num": 0,
+		"types": ["Normal","Normal"],
+		"tier": "",
+		"baseStats": {
+			"hp": 33,
+			"atk": 136,
+			"def": 0,
+			"spa": 6,
+			"spd": 6,
+			"spe": 29
+		},
+		"abilities": {
+			"0": "Download",
+			"1": "Normalize",
+			"DW": "Truant"
+		},
+		"heightm": 1.27,
+		"weightkg": 37.2,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Tomohawk",
+		"id": "tomohawk",
+		"species": "Tomohawk",
+		"speciesid": "tomohawk",
+		"basespecies": "Tomohawk",
+		"spriteid": "tomohawk",
+		"forme": "",
+		"num": -1,
+		"types": ["Flying", "Fighting"],
+		"tier": "G5CAP",
+		"baseStats":
+		{
+			"hp": 105,
+			"atk": 60,
+			"def": 90,
+			"spa": 115,
+			"spd": 80,
+			"spe": 85
+		},
+		"abilities":
+		{
+			"0": "Intimidate",
+			"1": "Prankster",
+			"DW": "Justified"
+		},
+		"heightm": 1.27,
+		"weightkg": 37.2,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves":
+		{
+			"substitute": "Substitute",
+			"aurasphere": "Aura Sphere",
+			"hurricane": "Hurricane",
+			"roost": "Roost",
+			"taunt": "Taunt",
+			"toxic": "Toxic"
+		},
+		"viable": true,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Necturna",
+		"id": "necturna",
+		"species": "Necturna",
+		"speciesid": "necturna",
+		"basespecies": "Necturna",
+		"spriteid": "necturna",
+		"forme": "",
+		"num": -2,
+		"types": ["Grass", "Ghost"],
+		"tier": "G5CAP",
+		"baseStats":
+		{
+			"hp": 64,
+			"atk": 120,
+			"def": 100,
+			"spa": 85,
+			"spd": 120,
+			"spe": 81
+		},
+		"abilities":
+		{
+			"0": "Forewarn",
+			"DW": "Telepathy"
+		},
+		"heightm": 1.5,
+		"weightkg": 35,
+		"nfe": false,
+		"genderRatio": {"m": 0, "f": 1},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves": {},
+		"viable": false,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Syclant",
+		"id": "syclant",
+		"species": "Syclant",
+		"speciesid": "syclant",
+		"basespecies": "Syclant",
+		"spriteid": "syclant",
+		"forme": "",
+		"num": -51,
+		"types": ["Ice", "Bug"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 70,
+			"atk": 116,
+			"def": 70,
+			"spa": 114,
+			"spd": 64,
+			"spe": 121
+		},
+		"abilities":
+		{
+			"0": "Compoundeyes",
+			"1": "Mountaineer"
+		},
+		"heightm": 1.27,
+		"weightkg": 52,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves":
+		{
+			"spikes": "Spikes",
+			"superpower": "Superpower",
+			"iceshard": "Ice Shard",
+			"blizzard": "Blizzard",
+			"taunt": "Taunt",
+			"earthpower": "Earth Power",
+			"bugbuzz": "Bug Buzz",
+			"tailglow": "Tail Glow",
+			"focusblast": "Focus Blast"
+		},
+		"viable": true,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Revenankh",
+		"id": "revenankh",
+		"species": "Revenankh",
+		"speciesid": "revenankh",
+		"basespecies": "Revenankh",
+		"spriteid": "revenankh",
+		"forme": "",
+		"num": -52,
+		"types": ["Ghost", "Fighting"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 90,
+			"atk": 105,
+			"def": 90,
+			"spa": 65,
+			"spd": 110,
+			"spe": 65
+		},
+		"abilities":
+		{
+			"0": "Shed Skin",
+			"1": "Air Lock"
+		},
+		"heightm": 1.27,
+		"weightkg": 44,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves": {},
+		"viable": false,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Pyroak",
+		"id": "pyroak",
+		"species": "Pyroak",
+		"speciesid": "pyroak",
+		"basespecies": "Pyroak",
+		"spriteid": "pyroak",
+		"forme": "",
+		"num": -53,
+		"types": ["Fire", "Grass"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 120,
+			"atk": 70,
+			"def": 105,
+			"spa": 95,
+			"spd": 90,
+			"spe": 60
+		},
+		"abilities":
+		{
+			"0": "Rock Head",
+			"1": "Battle Armor"
+		},
+		"heightm": 1.27,
+		"weightkg": 168,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves": {},
+		"viable": false,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Fidgit",
+		"id": "fidgit",
+		"species": "Fidgit",
+		"speciesid": "fidgit",
+		"basespecies": "Fidgit",
+		"spriteid": "fidgit",
+		"forme": "",
+		"num": -54,
+		"types": ["Poison", "Ground"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 95,
+			"atk": 76,
+			"def": 109,
+			"spa": 90,
+			"spd": 80,
+			"spe": 105
+		},
+		"abilities":
+		{
+			"0": "Persistent",
+			"1": "Vital Spirit"
+		},
+		"heightm": 1.27,
+		"weightkg": 53,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves": {},
+		"viable": false,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Stratagem",
+		"id": "stratagem",
+		"species": "Stratagem",
+		"speciesid": "stratagem",
+		"basespecies": "Stratagem",
+		"spriteid": "stratagem",
+		"forme": "",
+		"num": -55,
+		"types":
+		[
+			"Rock"
+		],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 90,
+			"atk": 60,
+			"def": 65,
+			"spa": 120,
+			"spd": 70,
+			"spe": 130
+		},
+		"abilities":
+		{
+			"0": "Levitate",
+			"1": "Technician"
+		},
+		"heightm": 1.27,
+		"weightkg": 45,
+		"nfe": false,
+		"genderRatio": {"m": 0, "f": 0},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves":
+		{
+			"trick": "Trick",
+			"stealthrock": "Stealth Rock",
+			"ancientpower": "AncientPower",
+			"paleowave": "Paleo Wave",
+			"fireblast": "Fire Blast",
+			"earthpower": "Earth Power",
+			"gigadrain": "Giga Drain",
+			"vacuumwave": "Vacuum Wave",
+			"calmmind": "Calm Mind"
+		},
+		"viable": true,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Arghonaut",
+		"id": "arghonaut",
+		"species": "Arghonaut",
+		"speciesid": "arghonaut",
+		"basespecies": "Arghonaut",
+		"spriteid": "arghonaut",
+		"forme": "",
+		"num": -56,
+		"types": ["Water", "Fighting"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 105,
+			"atk": 110,
+			"def": 95,
+			"spa": 70,
+			"spd": 100,
+			"spe": 75
+		},
+		"abilities":
+		{
+			"0": "Unaware"
+		},
+		"heightm": 1.27,
+		"weightkg": 151,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves": {},
+		"viable": false,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Kitsunoh",
+		"id": "kitsunoh",
+		"species": "Kitsunoh",
+		"speciesid": "kitsunoh",
+		"basespecies": "Kitsunoh",
+		"spriteid": "kitsunoh",
+		"forme": "",
+		"num": -57,
+		"types": ["Steel", "Ghost"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 80,
+			"atk": 103,
+			"def": 85,
+			"spa": 55,
+			"spd": 80,
+			"spe": 110
+		},
+		"abilities":
+		{
+			"0": "Frisk",
+			"1": "Limber"
+		},
+		"heightm": 1.27,
+		"weightkg": 51,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves": {},
+		"viable": false,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Cyclohm",
+		"id": "cyclohm",
+		"species": "Cyclohm",
+		"speciesid": "cyclohm",
+		"basespecies": "Cyclohm",
+		"spriteid": "cyclohm",
+		"forme": "",
+		"num": -58,
+		"types": ["Electric", "Dragon"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 108,
+			"atk": 60,
+			"def": 118,
+			"spa": 112,
+			"spd": 70,
+			"spe": 80
+		},
+		"abilities":
+		{
+			"0": "Shield Dust",
+			"1": "Static"
+		},
+		"heightm": 1.27,
+		"weightkg": 59,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves": {},
+		"viable": false,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Colossoil",
+		"id": "colossoil",
+		"species": "Colossoil",
+		"speciesid": "colossoil",
+		"basespecies": "Colossoil",
+		"spriteid": "colossoil",
+		"forme": "",
+		"num": -59,
+		"types": ["Dark", "Ground"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 133,
+			"atk": 122,
+			"def": 72,
+			"spa": 71,
+			"spd": 72,
+			"spe": 95
+		},
+		"abilities":
+		{
+			"0": "Rebound",
+			"1": "Guts"
+		},
+		"heightm": 1.27,
+		"weightkg": 683.6,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves":
+		{
+			"rapidspin": "Rapid Spin",
+			"crunch": "Crunch",
+			"earthquake": "Earthquake",
+			"encore": "Encore",
+			"taunt": "Taunt",
+			"uturn": "U-turn",
+			"suckerpunch": "Sucker Punch",
+			"stoneedge": "Stone Edge"
+		},
+		"viable": true,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Krilowatt",
+		"id": "krilowatt",
+		"species": "Krilowatt",
+		"speciesid": "krilowatt",
+		"basespecies": "Krilowatt",
+		"spriteid": "krilowatt",
+		"forme": "",
+		"num": -60,
+		"types": ["Electric", "Water"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 151,
+			"atk": 84,
+			"def": 73,
+			"spa": 83,
+			"spd": 74,
+			"spe": 105
+		},
+		"abilities":
+		{
+			"0": "Trace",
+			"1": "Magic Guard"
+		},
+		"heightm": 1.27,
+		"weightkg": 10.6,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves": {},
+		"viable": false,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	},
+	{
+		"name": "Voodoom",
+		"id": "voodoom",
+		"species": "Voodoom",
+		"speciesid": "voodoom",
+		"basespecies": "Voodoom",
+		"spriteid": "voodoom",
+		"forme": "",
+		"num": -61,
+		"types": ["Fighting", "Dark"],
+		"tier": "G4CAP",
+		"baseStats":
+		{
+			"hp": 90,
+			"atk": 85,
+			"def": 80,
+			"spa": 105,
+			"spd": 80,
+			"spe": 110
+		},
+		"abilities":
+		{
+			"0": "Volt Absorb",
+			"1": "Lightningrod"
+		},
+		"heightm": 1.27,
+		"weightkg": 75.5,
+		"nfe": false,
+		"genderRatio": {"m": 0.5, "f": 0.5},
+		"prevo": "",
+		"evos": [],
+		"colour": "",
+		"viablemoves": {},
+		"viable": false,
+		"isNonstandard": true,
+		"otherFormes": [],
+		"isDefaultForme": true
+	}
+]

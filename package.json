@@ -4,7 +4,12 @@
   "dependencies": {
     "long-stack-traces": ">=0.1.2",
     "request": ">=2.1.1",
-    "socket.io": ">=0.8.7"
+    "socket.io": ">=0.8.7",
+    "url": "0.x.x",
+    "libxmljs": "0.x.x",
+    "sqlite-fts": "0.x.x",
+    "streamline": "0.x.x",
+    "zlib": "1.x.x"
   },
   "scripts": {"start": "node app.js"},
   "bin": "./app.js",
