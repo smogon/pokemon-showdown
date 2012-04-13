@@ -455,12 +455,12 @@ function BattleTools()
 		{
 			problems.push(set.name+"'s item "+set.item+" is banned.");
 		}
-		if (banlistTable['Unreleased'] && setHas['SoulDew'])
+		if (banlistTable['Unreleased'] && setHas['souldew'])
 		{
 			problems.push(set.name+"'s item "+set.item+" is unreleased.");
 		}
 		setHas[toId(set.ability)] = true;
-		if (banlistTable['Rule:Standard'])
+		if (banlistTable['Rule:standard'])
 		{
 			var totalEV = 0;
 			for (var k in set.evs)
@@ -518,7 +518,7 @@ function BattleTools()
 				problems.push(set.name+"'s move "+set.moves[i]+" is an OHKO move, which is banned.");
 			}
 			
-			if (banlistTable['Rule:Standard'])
+			if (banlistTable['Rule:standard'])
 			{
 				var lset = selfT.checkLearnset(move, template);
 				if (!lset)
