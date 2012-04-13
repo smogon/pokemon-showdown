@@ -12387,6 +12387,10 @@ exports.BattleMovedex = {
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
+		basePowerCallback: function() {
+			if (this.weather) return 100;
+			return 50;
+		},
 		category: "Special",
 		desc: "Base power is 50; Base power doubles and move's type changes during weather effects: becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and Rock-type during Sandstorm.",
 		shortDesc: "Changes type depending on the weather.",
@@ -12395,8 +12399,23 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
-		// This move's weather effects are implemented in the
-		// weather structure, not here.
+		onModifyMove: function(move) {
+			switch (this.weather)
+			{
+			case 'sunnyday':
+				move.type = 'Fire';
+				break;
+			case 'raindance':
+				move.type = 'Water';
+				break;
+			case 'sandstorm':
+				move.type = 'Rock';
+				break;
+			case 'hail':
+				move.type = 'Ice';
+				break;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
