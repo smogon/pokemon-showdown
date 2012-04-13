@@ -749,11 +749,16 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			}
 		}
 		
-		if (parseCommand(user, cmd, target, selfR, socket, message))
+		var parsedMessage = parseCommand(user, cmd, target, selfR, socket, message);
+		if (typeof parsedMessage === 'string')
+		{
+			message = parsedMessage;
+		}
+		if (parsedMessage === false)
 		{
 			// do nothing
 		}
-		else if (message.substr(0,3) === '>> ')
+		if (message.substr(0,3) === '>> ')
 		{
 			var cmd = message.substr(3);
 
@@ -1264,7 +1269,9 @@ function Lobby(roomid)
 			}
 		}
 		
-		if (parseCommand(user, cmd, target, selfR, socket, message))
+		var parsedMessage = parseCommand(user, cmd, target, selfR, socket, message);
+		if (typeof parsedMessage === 'string') message = parsedMessage;
+		if (parsedMessage === false)
 		{
 			// do nothing
 		}
