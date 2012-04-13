@@ -270,7 +270,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"charizard": {
-		tier: "RU"
+		tier: "NU"
 	},
 	"charmander": {
 		tier: "LC"
@@ -309,7 +309,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"claydol": {
-		tier: "RU"
+		tier: "UU"
 	},
 	"clefable": {
 		tier: "RU"
@@ -410,13 +410,13 @@ exports.BattleTiers = {
 	"deoxys": {
 		tier: "Uber"
 	},
-	"deoxysa": {
+	"deoxysattack": {
 		tier: "Uber"
 	},
-	"deoxysd": {
-		tier: "UU"
+	"deoxysdefense": {
+		tier: "BL"
 	},
-	"deoxyss": {
+	"deoxysspeed": {
 		tier: "Uber"
 	},
 	"dewgong": {
@@ -656,7 +656,7 @@ exports.BattleTiers = {
 	"giratina": {
 		tier: "Uber"
 	},
-	"giratinao": {
+	"giratinaorigin": {
 		tier: "Uber"
 	},
 	"glaceon": {
@@ -669,7 +669,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"gligar": {
-		tier: "RU"
+		tier: "UU"
 	},
 	"gliscor": {
 		tier: "OU"
@@ -783,7 +783,7 @@ exports.BattleTiers = {
 		tier: "Uber"
 	},
 	"honchkrow": {
-		tier: "RU"
+		tier: "UU"
 	},
 	"hoothoot": {
 		tier: "LC"
@@ -987,7 +987,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"ludicolo": {
-		tier: "RU"
+		tier: "NU"
 	},
 	"lugia": {
 		tier: "Uber"
@@ -1104,7 +1104,7 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"mesprit": {
-		tier: "NU"
+		tier: "RU"
 	},
 	"metagross": {
 		tier: "OU"
@@ -1451,19 +1451,19 @@ exports.BattleTiers = {
 	"rotom": {
 		tier: "RU"
 	},
-	"rotomc": {
+	"rotommow": {
 		tier: "RU"
 	},
-	"rotomf": {
+	"rotomfrost": {
 		tier: "NU"
 	},
-	"rotomh": {
+	"rotomheat": {
 		tier: "UU"
 	},
-	"rotoms": {
+	"rotomfan": {
 		tier: "NU"
 	},
-	"rotomw": {
+	"rotomwash": {
 		tier: "OU"
 	},
 	"rufflet": {
@@ -1491,7 +1491,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"sawsbuck": {
-		tier: "RU"
+		tier: "NU"
 	},
 	"sceptile": {
 		tier: "RU"
@@ -1545,12 +1545,12 @@ exports.BattleTiers = {
 		tier: "LC"
 	},
 	"sharpedo": {
-		tier: "RU"
+		tier: "UU"
 	},
 	"shaymin": {
 		tier: "UU"
 	},
-	"shaymins": {
+	"shayminsky": {
 		tier: "Uber"
 	},
 	"shedinja": {
@@ -1985,10 +1985,10 @@ exports.BattleTiers = {
 	"wormadam": {
 		tier: "NU"
 	},
-	"wormadamg": {
+	"wormadamsandy": {
 		tier: "NU"
 	},
-	"wormadams": {
+	"wormadamtrash": {
 		tier: "NU"
 	},
 	"wurmple": {
@@ -2007,7 +2007,7 @@ exports.BattleTiers = {
 		tier: "NFE"
 	},
 	"yanmega": {
-		tier: "BL2"
+		tier: "UU"
 	},
 	"zangoose": {
 		tier: "NU"

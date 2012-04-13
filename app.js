@@ -58,6 +58,14 @@ BattleItems = require('./items.js').BattleItems;
 BattleAbilities = require('./abilities.js').BattleAbilities;
 BattleFormats = require('./formats.js').BattleFormats;
 BattleLearnsets = require('./learnsets.js').BattleLearnsets;
+try
+{
+	BattleAliases = require('./aliases.js').BattleAliases;
+}
+catch (e)
+{
+	BattleAliases = {};
+}
 
 var sim = require('./simulator.js');
 
@@ -169,7 +177,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			var p2 = selfR.rated.p2;
 			if (getUser(selfR.rated.p2)) p2 = getUser(selfR.rated.p2).name;
 			
-			update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken=[token]');
+			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken=[token]');
 			
 			if (!selfR.rated.p1 || !selfR.rated.p2)
 			{
@@ -207,10 +215,10 @@ function Room(roomid, format, p1, p2, parentid, rated)
 				var logData = {
 					p1score: p1score,
 					turns: selfR.battle.turn,
-					p1: selfR.battle.allySide.name,
-					p2: selfR.battle.foeSide.name,
-					p1team: selfR.battle.allySide.team,
-					p2team: selfR.battle.foeSide.team
+					p1: selfR.battle.p1.name,
+					p2: selfR.battle.p2.name,
+					p1team: selfR.battle.p1.team,
+					p2team: selfR.battle.p2.team
 				};
 				fs.writeFile('logs/'+selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'')+'/'+selfR.id+'.log.json',
 					JSON.stringify(logData)
@@ -294,8 +302,8 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		selfR.battle.add('RESET');
 		selfR.update();
 		
-		if (selfR.battle.allySide && selfR.battle.allySide.user) delete selfR.battle.allySide.user.sides[selfR.id];
-		if (selfR.battle.foeSide && selfR.battle.foeSide.user) delete selfR.battle.foeSide.user.sides[selfR.id];
+		if (selfR.battle.p1 && selfR.battle.p1.user) delete selfR.battle.p1.user.sides[selfR.id];
+		if (selfR.battle.p2 && selfR.battle.p2.user) delete selfR.battle.p2.user.sides[selfR.id];
 		
 		console.log("NEW BATTLE (reset)");
 		selfR.battle = new Battle(selfR.id, selfR.format, false);
@@ -308,19 +316,19 @@ function Room(roomid, format, p1, p2, parentid, rated)
 	this.getInactiveSide = function()
 	{
 		var inactiveSide = -1;
-		if (!selfR.battle.allySide.user && selfR.battle.foeSide.user)
+		if (!selfR.battle.p1.user && selfR.battle.p2.user)
 		{
 			inactiveSide = 0;
 		}
-		else if (selfR.battle.allySide.user && !selfR.battle.foeSide.user)
+		else if (selfR.battle.p1.user && !selfR.battle.p2.user)
 		{
 			inactiveSide = 1;
 		}
-		else if (!selfR.battle.allySide.decision && selfR.battle.foeSide.decision)
+		else if (!selfR.battle.p1.decision && selfR.battle.p2.decision)
 		{
 			inactiveSide = 0;
 		}
-		else if (selfR.battle.allySide.decision && !selfR.battle.foeSide.decision)
+		else if (selfR.battle.p1.decision && !selfR.battle.p2.decision)
 		{
 			inactiveSide = 1;
 		}
@@ -461,7 +469,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			user.emit('console', {room:selfR.id, message: 'The inactivity timer is already counting down.'});
 				return;
 		}
-		if ((!selfR.battle.allySide.user || !selfR.battle.foeSide.user) && !selfR.rated)
+		if ((!selfR.battle.p1.user || !selfR.battle.p2.user) && !selfR.rated)
 		{
 			selfR.add('This isn\'t a rated battle; victory doesn\'t mean anything.');
 			selfR.add('Do you just want to see the text "you win"? Okay. You win.');
@@ -487,7 +495,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			tickTime = 1;
 		}
 		
-		if (tickTime > 2 && (!selfR.battle.allySide.user || !selfR.battle.foeSide.user))
+		if (tickTime > 2 && (!selfR.battle.p1.user || !selfR.battle.p2.user))
 		{
 			// if a player has left, don't wait longer than 2 ticks (60 seconds)
 			tickTime = 2;
@@ -676,12 +684,12 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		selfR.update();
 	};
 	this.isEmpty = function() {
-		if (selfR.battle.allySide && selfR.battle.allySide.user) return false;
-		if (selfR.battle.foeSide && selfR.battle.foeSide.user) return false;
+		if (selfR.battle.p1 && selfR.battle.p1.user) return false;
+		if (selfR.battle.p2 && selfR.battle.p2.user) return false;
 		return true;
 	};
 	this.isFull = function() {
-		if (selfR.battle.allySide && selfR.battle.allySide.user && selfR.battle.foeSide && selfR.battle.foeSide.user) return true;
+		if (selfR.battle.p1 && selfR.battle.p1.user && selfR.battle.p2 && selfR.battle.p2.user) return true;
 		return false;
 	};
 	this.add = function(message) {
@@ -703,7 +711,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
-		if (message.length > 511)
+		if (message.length > 511 && user.group !== '&')
 		{
 			socket.emit('message', "Your message is too long:\n\n"+message);
 			return;
@@ -741,32 +749,38 @@ function Room(roomid, format, p1, p2, parentid, rated)
 			}
 		}
 		
-		if (parseCommand(user, cmd, target, selfR, socket, message))
+		var parsedMessage = parseCommand(user, cmd, target, selfR, socket, message);
+		if (typeof parsedMessage === 'string')
+		{
+			message = parsedMessage;
+		}
+		if (parsedMessage === false)
 		{
 			// do nothing
 		}
-		else if (message.substr(0,3) === '>> ')
+		if (message.substr(0,3) === '>> ')
 		{
 			var cmd = message.substr(3);
 
 			var room = selfR;
 			var battle = selfR.battle;
-			var foeSide;
-			var allySide;
-			var foePokemon;
-			var allyPokemon;
+			var selfB = battle;
+			var p2;
+			var p1;
+			var p2active;
+			var p1active;
 			var me = user;
 			if (battle)
 			{
-				foeSide = battle.foeSide;
-				allySide = battle.allySide;
-				if (foeSide)
+				p2 = battle.p2;
+				p1 = battle.p1;
+				if (p2)
 				{
-					foePokemon = foeSide.active[0];
+					p2active = p2.active[0];
 				}
-				if (allySide)
+				if (p1)
 				{
-					allyPokemon = allySide.active[0];
+					p1active = p1.active[0];
 				}
 			}
 			selfR.battle.add('chat', user.name, '>> '+cmd);
@@ -779,7 +793,11 @@ function Room(roomid, format, p1, p2, parentid, rated)
 				catch (e)
 				{
 					selfR.battle.add('chat', user.name, '<< error: '+e);
-					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
+					var stack = (""+e.stack).split("\n");
+					for (var i=0; i<stack.length; i++)
+					{
+						user.emit('console', '<< '+stack[i]);
+					}
 				}
 			}
 			else
@@ -1212,7 +1230,7 @@ function Lobby(roomid)
 	this.isFull = function() { return false; };
 	this.chat = function(user, message, socket) {
 		if (!user.named || !message || !message.trim || !message.trim().length) return;
-		if (message.length > 255)
+		if (message.length > 255 && user.group !== '&')
 		{
 			socket.emit('message', "Your message is too long:\n\n"+message);
 			return;
@@ -1251,7 +1269,9 @@ function Lobby(roomid)
 			}
 		}
 		
-		if (parseCommand(user, cmd, target, selfR, socket, message))
+		var parsedMessage = parseCommand(user, cmd, target, selfR, socket, message);
+		if (typeof parsedMessage === 'string') message = parsedMessage;
+		if (parsedMessage === false)
 		{
 			// do nothing
 		}
@@ -1280,7 +1300,11 @@ function Lobby(roomid)
 						name: user.getIdentity(),
 						message: '<< error: '+e
 					});
-					user.emit('console', '<< error details: '+JSON.stringify(e.stack));
+					var stack = (""+e.stack).split("\n");
+					for (var i=0; i<stack.length; i++)
+					{
+						user.emit('console', '<< '+stack[i]);
+					}
 				}
 			}
 			else
@@ -1354,7 +1378,8 @@ if (config.crashguard)
 			this.write("\n"+err.stack+"\n")
 			this.end();
 		});
-		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+err+'<br />Please restart the server.</div>');
+		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
+		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
 		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		config.modchat = '&&';
 		lockdown = true;

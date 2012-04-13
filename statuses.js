@@ -10,7 +10,7 @@ exports.BattleStatuses = {
 				stats.atk /= 2;
 			}
 		},
-		onResidualPriority: 50-9,
+		onResidualOrder: 9,
 		onResidual: function(pokemon) {
 			this.damage(pokemon.maxhp/8);
 		}
@@ -100,7 +100,7 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target.id, 'psn');
 		},
-		onResidualPriority: 50-9,
+		onResidualOrder: 9,
 		onResidual: function(pokemon) {
 			this.damage(pokemon.maxhp/8);
 		}
@@ -141,7 +141,7 @@ exports.BattleStatuses = {
 			{
 				return;
 			}
-			this.damage(this.getDamage(pokemon,pokemon,40), pokemon, pokemon, {id:'confusion', effectType:'Move', type:'???'});
+			this.damage(this.getDamage(pokemon,pokemon,40));
 			return false;
 		}
 	},
@@ -173,7 +173,7 @@ exports.BattleStatuses = {
 			if (source.item === 'GripClaw') return 5;
 			return Math.floor(4 + Math.random()*2);
 		},
-		onResidualPriority: 50-11,
+		onResidualOrder: 11,
 		onResidual: function(pokemon) {
 			if (this.effectData.source && !this.effectData.source.isActive)
 			{
@@ -219,8 +219,12 @@ exports.BattleStatuses = {
 		}
 	},
 	choicelock: {
+		onStart: function(pokemon) {
+			this.effectData.move = this.activeMove.id;
+			if (!this.effectData.move) return false;
+		},
 		onModifyPokemon: function(pokemon) {
-			if (!pokemon.lastMove || !pokemon.hasMove(pokemon.lastMove))
+			if (!pokemon.hasMove(this.effectData.move))
 			{
 				return;
 			}
@@ -232,7 +236,7 @@ exports.BattleStatuses = {
 			var moves = pokemon.moveset;
 			for (var i=0; i<moves.length; i++)
 			{
-				if (moves[i].id !== pokemon.lastMove)
+				if (moves[i].id !== this.effectData.move)
 				{
 					moves[i].disabled = true;
 				}
@@ -258,7 +262,7 @@ exports.BattleStatuses = {
 				this.effectData.positions[i] = null;
 			}
 		},
-		onResidualPriority: 50-3,
+		onResidualOrder: 3,
 		onResidual: function(side) {
 			var finished = true;
 			for (var i=0; i<side.active.length; i++)
@@ -362,7 +366,7 @@ exports.BattleStatuses = {
 				this.add('-weather', 'RainDance');
 			}
 		},
-		onResidualPriority: 50-1,
+		onResidualOrder: 1,
 		onResidual: function() {
 			this.add('-weather', 'RainDance', '[upkeep]');
 			this.eachEvent('Weather');
@@ -422,7 +426,7 @@ exports.BattleStatuses = {
 		onImmunity: function(type) {
 			if (type === 'frz') return false;
 		},
-		onResidualPriority: 50-1,
+		onResidualOrder: 1,
 		onResidual: function() {
 			this.add('-weather', 'SunnyDay', '[upkeep]');
 			this.eachEvent('Weather');
@@ -469,7 +473,7 @@ exports.BattleStatuses = {
 				this.add('-weather', 'Sandstorm');
 			}
 		},
-		onResidualPriority: 50-1,
+		onResidualOrder: 1,
 		onResidual: function() {
 			this.add('-weather', 'Sandstorm', '[upkeep]');
 			this.eachEvent('Weather');
@@ -528,7 +532,7 @@ exports.BattleStatuses = {
 				move.heal = [1,4];
 			}
 		},
-		onResidualPriority: 50-1,
+		onResidualOrder: 1,
 		onResidual: function() {
 			this.add('-weather', 'Hail', '[upkeep]');
 			this.eachEvent('Weather');
