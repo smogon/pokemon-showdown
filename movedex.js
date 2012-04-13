@@ -8464,11 +8464,11 @@ exports.BattleMovedex = {
 				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
 				for (var i in sideConditions)
 				{
-					if (pokemon.side.removeSideCondition(i)) this.add('-sideend', pokemon.side, i, '[from] move: Rapid Spin', '[of] '+pokemon);
+					if (pokemon.side.removeSideCondition(i)) this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
 				if (pokemon.volatiles['partiallytrapped'])
 				{
-					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.id, '[from] move: Rapid Spin', '[of] '+pokemon, '[partiallytrapped]');
+					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.name, '[from] move: Rapid Spin', '[of] '+pokemon, '[partiallytrapped]');
 					delete pokemon.volatiles['partiallytrapped'];
 				}
 			}

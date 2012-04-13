@@ -136,22 +136,27 @@ function BattleTools()
 			if (id && BattleStatuses[id])
 			{
 				effect = BattleStatuses[id];
+				effect.name = effect.name || BattleStatuses[id].name;
 			}
 			else if (id && BattleMovedex[id] && BattleMovedex[id].effect)
 			{
 				effect = BattleMovedex[id].effect;
+				effect.name = effect.name || BattleMovedex[id].name;
 			}
 			else if (id && BattleAbilities[id] && BattleAbilities[id].effect)
 			{
 				effect = BattleAbilities[id].effect;
+				effect.name = effect.name || BattleAbilities[id].name;
 			}
 			else if (id && BattleItems[id] && BattleItems[id].effect)
 			{
 				effect = BattleItems[id].effect;
+				effect.name = effect.name || BattleItems[id].name;
 			}
 			else if (id && BattleFormats[id])
 			{
 				effect = BattleFormats[id];
+				effect.name = effect.name || BattleFormats[id].name;
 				if (!effect.effectType) effect.effectType = 'Format';
 			}
 			else if (id === 'recoil')
