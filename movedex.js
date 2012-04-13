@@ -8145,17 +8145,15 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
-		onTryHit: function(target, pokemon) {
-			if (!pokemon.status || target.status)
-			{
-				return false;
-			}
-		},
 		onHit: function(target, pokemon) {
-			if (target.trySetStatus(pokemon.status))
+			if (pokemon.status && !target.status && target.trySetStatus(pokemon.status))
 			{
 				this.add('-curestatus', pokemon, '[from] move: Psycho Shift', '[of] '+target);
 				pokemon.setStatus('');
+			}
+			else
+			{
+				return false;
 			}
 		},
 		secondary: false,
