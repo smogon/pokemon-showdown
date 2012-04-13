@@ -202,6 +202,10 @@ exports.BattleFormats = {
 					problems.push(move.name+' is not a real move.');
 				}
 			}
+			if (set.moves && set.moves.length > 4)
+			{
+				problems.push((set.name||set.species) + ' has more than four moves.');
+			}
 			return problems;
 		}
 	},

@@ -95,11 +95,11 @@ exports.BattleScripts = {
 			}
 			if (!move.ignoreEvasion)
 			{
-				if (target.boosts.evasion > 0)
+				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion)
 				{
 					accuracy /= boostTable[target.boosts.evasion];
 				}
-				else
+				else if (target.boosts.evasion < 0)
 				{
 					accuracy *= boostTable[-target.boosts.evasion];
 				}
@@ -479,7 +479,6 @@ exports.BattleScripts = {
 		}
 		keys = shuffle(keys);
 		
-		var PotD = this.getEffect('PotD');
 		var ruleset = this.getFormat().ruleset;
 		
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++)
@@ -489,9 +488,9 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 			if (template.tier === 'CAP' && Math.random()*3>1) continue;
 			
-			if (ruleset && ruleset[0]==='PotD' && PotD && PotD.onPotD)
+			if (ruleset && ruleset[0]==='PotD')
 			{
-				var potd = this.getTemplate(PotD.onPotD);
+				var potd = this.getTemplate(config.potd);
 				if (i===1) template = potd;
 				else if (template.species === potd.species) continue; // No thanks, I've already got one
 			}
@@ -857,16 +856,16 @@ exports.BattleScripts = {
 					
 					if (rejectAbility)
 					{
-						if (ability === toId(abilities[1])) // or not
+						if (ability === ability1.name) // or not
 						{
-							ability = toId(abilities[0]);
+							ability = ability0.name;
 						}
 						else
 						{
-							ability = toId(abilities[1]);
+							ability = ability1.name;
 						}
 					}
-					if ((abilities[1] === 'Guts' || abilities[0] === 'Guts' || abilities[3] === 'Guts') && ability !== 'Quick Feet' && hasMove['facade'])
+					if ((abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts') && ability !== 'Quick Feet' && hasMove['facade'])
 					{
 						ability = 'Guts';
 					}
@@ -886,7 +885,7 @@ exports.BattleScripts = {
 				}
 				
 				item = 'Focus Sash';
-				if (template.species === 'Giratina-O')
+				if (template.species === 'Giratina-Origin')
 				{
 					item = 'Griseous Orb';
 				}
@@ -1165,7 +1164,7 @@ exports.BattleScripts = {
 			
 			if (template.name === 'Chandelure' && ability === 'Shadow Tag') level = 70;
 			if (template.name === 'Serperior' && ability === 'Contrary') level = 75;
-			if (template.name === 'Rotom-S' && item === 'Balloon') level = 95;
+			if (template.name === 'Rotom-Fan' && item === 'Air Balloon') level = 95;
 			if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 85;
 			
 			pokemon.push({
@@ -1174,7 +1173,8 @@ exports.BattleScripts = {
 				ability: ability,
 				evs: evs,
 				item: item,
-				level: level
+				level: level,
+				shiny: (Math.random()*1024<=1)
 			});
 			pokemonLeft++;
 		}
