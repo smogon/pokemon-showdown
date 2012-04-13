@@ -17,11 +17,15 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	cmd = cmd.toLowerCase();
 	switch (cmd)
 	{
+	case 'me':
+		return '/me '+target;
+		break;
+		
 	case 'command':
 		if (target.command === 'userdetails')
 		{
 			var targetUser = getUser(target.userid);
-			if (!targetUser || !room) return true;
+			if (!targetUser || !room) return false;
 			var roomList = {};
 			for (var i in targetUser.roomCount)
 			{
@@ -62,14 +66,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		}
 		if (target.command === 'roomlist')
 		{
-			if (!room || !room.getRoomList) return true;
+			if (!room || !room.getRoomList) return false;
 			socket.emit('command', {
 				command: 'roomlist',
 				rooms: room.getRoomList(true),
 				room: room.id
 			});
 		}
-		return true;
+		return false;
 		break;
 
 	case 'forfeit':
@@ -80,12 +84,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			socket.emit('console', "You can't forfeit this battle.");
 		}
-		return true;
+		return false;
 		break;
 		
 	case 'register':
 		socket.emit('console', 'You must have a beta key to register.');
-		return true;
+		return false;
 		break;
 		
 	case 'avatar':
@@ -94,14 +98,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!avatar || avatar > 263 || avatar < 1)
 		{
 			socket.emit('console', 'Invalid avatar.');
-			return true;
+			return false;
 		}
 		
 		user.avatar = avatar;
 		socket.emit('console', 'Avatar changed to:');
 		socket.emit('console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" />'});
 		
-		return true;
+		return false;
 		break;
 		
 	case 'rooms':
@@ -134,7 +138,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', {rawMessage: ""+targetUser.name+" is in: "+output});
 			}
 		}
-		return true;
+		return false;
 		break;
 		
 	case 'altcheck':
@@ -148,12 +152,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			var alts = targetUser.getAlts();
@@ -163,7 +167,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			if (!user.canMod(altGroup))
 			{
-				return true;
+				return false;
 			}
 			
 			var output = '';
@@ -189,10 +193,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				}
 				if (output) socket.emit('console', 'Previous names: '+output);
 			}
-			return true;
+			return false;
 		}
 		socket.emit('console', '/alts - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'whois':
@@ -242,7 +246,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			socket.emit('console', {rawMessage: output});
 		}
-		return true;
+		return false;
 		break;
 	
 	case 'ban':
@@ -256,12 +260,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+targets[2]+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			room.add(""+targetUser.name+" was banned by "+user.name+".");
@@ -270,10 +274,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (alts.length) room.add(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
 			
 			targetUser.ban();
-			return true;
+			return false;
 		}
 		socket.emit('console', '/ban - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'banredirect':
@@ -286,12 +290,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+targets[2]+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			if (targets[1].substr(0,2) == '~~')
@@ -307,10 +311,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
 			targetUser.ban();
-			return true;
+			return false;
 		}
 		socket.emit('console', '/banredirect - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'redirect':
@@ -323,12 +327,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+targets[2]+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group) && user !== targetUser)
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			if (targets[1].substr(0,2) == '~~')
@@ -342,10 +346,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			room.add(''+targetUser.name+' was redirected by '+user.name+' to: '+targets[1]);
 			targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
-			return true;
+			return false;
 		}
 		socket.emit('console', '/redirect - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'unban':
@@ -371,10 +375,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				socket.emit('console', 'User '+target+' is not banned.');
 			}
-			return true;
+			return false;
 		}
 		socket.emit('console', '/unban - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'unbanall':
@@ -383,10 +387,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			room.add('All bans have been lifted by '+user.name+'.');
 			bannedIps = {};
 			mutedIps = {};
-			return true;
+			return false;
 		}
 		socket.emit('console', '/unbanall - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'reply':
@@ -395,7 +399,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!user.lastPM)
 		{
 			socket.emit('console', 'No one has PMed you yet.');
-			return true;
+			return false;
 		}
 		return parseCommand(user, 'msg', ''+(user.lastPM||'')+', '+target, room, socket);
 		break;
@@ -427,7 +431,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (user.muted && !targetUser.isMod()) 
 		{
 			socket.emit('console', 'You can only private message users marked by %, @, or & when muted.');
-			return true;
+			return false;
 		}
 		
 		var message = {
@@ -439,7 +443,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		targets[0].emit('console', message);
 		targets[0].lastPM = user.userid;
 		user.lastPM = targets[0].userid;
-		return true;
+		return false;
 		break;
 		
 	case 'ip':
@@ -447,7 +451,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!target)
 		{
 			socket.emit('console', 'Your IP is: '+user.ip);
-			return true;
+			return false;
 		}
 		if (user.isMod())
 		{
@@ -464,10 +468,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				socket.emit('console', 'User '+targetUser.name+' has IP: '+targetUser.ip);
 			}
-			return true;
+			return false;
 		}
 		socket.emit('console', '/ip - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'mute':
@@ -481,12 +485,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+targets[2]+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			room.add(''+targetUser.name+' was muted by '+user.name+'.');
@@ -502,10 +506,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			
 			rooms.lobby.usersChanged = true;
-			return true;
+			return false;
 		}
 		socket.emit('console', '/mute - Access denied.');
-		return true;
+		return false;
 		break;
 
 	case 'ipmute':
@@ -516,12 +520,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			room.add(''+targetUser.name+"'s IP was muted by "+user.name+'.');
@@ -537,10 +541,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			
 			rooms.lobby.usersChanged = true;
-			return true;
+			return false;
 		}
 		socket.emit('console', '/mute - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'unmute':
@@ -568,14 +572,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser && !success)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			else if (targetUser)
 			{
 				if (!user.canMod(targetUser.group))
 				{
 					socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-					return true;
+					return false;
 				}
 				
 				room.add(''+targetUser.name+' was unmuted by '+user.name+'.');
@@ -583,10 +587,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			targetUser.muted = false;
 			rooms.lobby.usersChanged = true;
-			return true;
+			return false;
 		}
 		socket.emit('console', '/unmute - Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'voice':
@@ -597,22 +601,22 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group) || user.group === '+')
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			room.add(''+targetUser.name+' was voiced by '+user.name+'.');
 			
 			targetUser.setGroup('+');
 			rooms.lobby.usersChanged = true;
-			return true;
+			return false;
 		}
 		socket.emit('console', '/voice - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'devoice':
@@ -623,22 +627,22 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group) || user.group === '+')
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			room.add(''+targetUser.name+' was devoiced by '+user.name+'.');
 			
 			targetUser.setGroup(' ');
 			rooms.lobby.usersChanged = true;
-			return true;
+			return false;
 		}
 		socket.emit('console', '/devoice - Access denied.');
-		return true;
+		return false;
 		break;
 		
 	case 'mod':
@@ -649,12 +653,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			if (targetUser.group === '@' || targetUser.group === '&')
@@ -667,10 +671,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			targetUser.setGroup('%');
 			rooms.lobby.usersChanged = true;
-			return true;
+			return false;
 		}
 		socket.emit('console', '/mod - Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'demod':
@@ -681,12 +685,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			room.add(''+targetUser.name+' was demoted to voice by '+user.name+'.');
@@ -696,10 +700,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				targetUser.setGroup('+');
 				rooms.lobby.usersChanged = true;
 			}
-			return true;
+			return false;
 		}
 		socket.emit('console', '/demod - Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'admin':
@@ -710,12 +714,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			if (targetUser.group === '&')
@@ -728,10 +732,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			targetUser.setGroup('@');
 			rooms.lobby.usersChanged = true;
-			return true;
+			return false;
 		}
 		socket.emit('console', '/admin - Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'deadmin':
@@ -742,12 +746,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			if (!user.canMod(targetUser.group))
 			{
 				socket.emit('console', 'User '+targetUser.name+' is out of your jurisdiction.');
-				return true;
+				return false;
 			}
 			
 			room.add(''+targetUser.name+' was demoted to moderator by '+user.name+'.');
@@ -757,10 +761,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				targetUser.setGroup('%');
 				rooms.lobby.usersChanged = true;
 			}
-			return true;
+			return false;
 		}
 		socket.emit('console', 'Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'sysop':
@@ -771,16 +775,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			
 			room.add(''+targetUser.name+' was promoted to sysop by '+user.name+'.');
 			targetUser.setGroup('&');
 			rooms.lobby.usersChanged = true;
-			return true;
+			return false;
 		}
 		socket.emit('console', 'Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'desysop':
@@ -791,7 +795,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!targetUser)
 			{
 				socket.emit('console', 'User '+target+' not found.');
-				return true;
+				return false;
 			}
 			
 			if (targetUser.group === '&')
@@ -804,17 +808,17 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			{
 				socket.emit('console', ''+targetUser.name+' is not a sysop.');
 			}
-			return true;
+			return false;
 		}
 		socket.emit('console', 'Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'modchat':
 		if (!target)
 		{
 			socket.emit('console', 'Moderated chat is currently set to: '+config.modchat);
-			return true;
+			return false;
 		}
 		if (user.group === '&' || user.group === '@')
 		{
@@ -839,7 +843,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				break;
 			default:
 				socket.emit('console', 'That moderated chat setting is unrecognized.');
-				return true;
+				return false;
 				break;
 			}
 			if (config.modchat === true)
@@ -856,10 +860,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				if (modchat === '&') modchat = '&amp;';
 				room.addRaw('<div style="background-color:#AA6655;color:white;padding:2px 4px"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
 			}
-			return true;
+			return false;
 		}
 		socket.emit('console', '/modchat - Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'announce':
@@ -868,10 +872,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
 			room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>'+target+'</b></div>');
-			return true;
+			return false;
 		}
 		socket.emit('console', '/announce - Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'hotpatch':
@@ -901,7 +905,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				BattleSide = sim.BattleSide;
 				Battle = sim.Battle;
 				socket.emit('console', 'The game engine has been hot-patched.');
-				return true;
+				return false;
 			}
 			else if (target === 'data')
 			{
@@ -919,20 +923,20 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				BattleTools = require('./tools.js').BattleTools;
 				Tools = new BattleTools();
 				socket.emit('console', 'Game resources have been hot-patched.');
-				return true;
+				return false;
 			}
 			else if (target === 'chat')
 			{
 				for (var i in require.cache) delete require.cache[i];
 				parseCommand = require('./chat-commands.js').parseCommand;
 				socket.emit('console', 'Chat commands have been hot-patched.');
-				return true;
+				return false;
 			}
 			socket.emit('console', 'Your hot-patch command was unrecognized.');
-			return true;
+			return false;
 		}
 		socket.emit('console', '/hotpatch - Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'savelearnsets':
@@ -940,10 +944,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			fs.writeFile('learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
 			socket.emit('console', 'learnsets.js saved.');
-			return true;
+			return false;
 		}
 		socket.emit('console', '/savelearnsets - Access denied.');
-		return true;
+		return false;
 		break;
 	
 	case 'rating':
@@ -981,13 +985,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'Error');
 			}
 		});
-		return true;
+		return false;
 		break;
 	
 	case 'nick':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		user.rename(target);
-		return true;
+		return false;
 		break;
 	
 	case 'forcerename':
@@ -998,7 +1002,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!targetUser)
 		{
 			socket.emit('console', 'User '+targets[2]+' not found.');
-			return true;
+			return false;
 		}
 		if (targetUser && user.canMod(targetUser.group))
 		{
@@ -1013,7 +1017,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', "User "+targetUser.name+" is no longer using that name.");
 			}
 		}
-		return true;
+		return false;
 		break;
 	
 	case 'forcerenameto':
@@ -1024,7 +1028,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		if (!targetUser)
 		{
 			socket.emit('console', 'User '+targets[2]+' not found.');
-			return true;
+			return false;
 		}
 		if (targetUser && user.canMod(targetUser.group))
 		{
@@ -1044,7 +1048,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', "User "+targetUser.name+" is no longer using that name.");
 			}
 		}
-		return true;
+		return false;
 		break;
 	
 	// INFORMATIONAL COMMANDS
@@ -1066,7 +1070,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				room.add(dataMessages[i]);
 			}
 		}
-		return true;
+		return false;
 		break;
 		
 	case 'groups':
@@ -1079,7 +1083,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'@ <b>Administrator</b> - The above, and they can promote moderators and enable moderated chat<br />' +
 			'&amp; <b>System operator</b> - They can do anything, like change what this message says'+
 			'</div>');
-		return true;
+		return false;
 		break;
 		
 	case 'opensource':
@@ -1087,7 +1091,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
 			'<div style="border:1px solid #6688AA;padding:2px 4px">Showdown is open source:<br />- Language: JavaScript<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master" target="_blank">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown" target="_blank">Source code</a></div>');
-		return true;
+		return false;
 		break;
 		
 	case 'avatars':
@@ -1095,7 +1099,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
 			'<div style="border:1px solid #6688AA;padding:2px 4px">Want a custom avatar?<br />- <a href="/sprites/trainers/" target="_blank">How to change your avatar</a></div>');
-		return true;
+		return false;
 		break;
 		
 	case 'intro':
@@ -1109,7 +1113,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'- <a href="http://www.smogon.com/bw/articles/bw_tiers" target="_blank">What do "OU", "UU", etc mean?</a><br />' +
 			'- <a href="http://www.smogon.com/bw/banlist/" target="_blank">What are the rules for each format? What is "Sleep Clause"?</a>' +
 			'</div>');
-		return true;
+		return false;
 		break;
 		
 	case 'cap':
@@ -1121,7 +1125,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3464513" target="_blank">CAP metagame discussion</a><br />' +
 			'- <a href="http://www.smogon.com/cap/" target="_blank">The CAP website (somewhat outdated)</a>' +
 			'</div>');
-		return true;
+		return false;
 		break;
 		
 	case 'rules':
@@ -1133,7 +1137,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			'<div style="border:1px solid #6688AA;padding:2px 4px">We follow Smogon\'s simulator rules:<br />' +
 			'- <a href="http://www.smogon.com/sim/rules" target="_blank">Smogon\'s simulator rules</a><br />' +
 			'</div>');
-		return true;
+		return false;
 		break;
 	
 	// Battle commands
@@ -1145,7 +1149,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		//   selfR.battleEndRestart(user);
 		// but are currently unused
 		socket.emit('console', 'This functionality is no longer available.');
-		return true;
+		return false;
 
 	case 'kickinactive':
 		if (room.requestKickInactive)
@@ -1156,7 +1160,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			socket.emit('console', 'You can only kick inactive players from inside a room.');
 		}
-		return true;
+		return false;
 
 	case 'forcereset':
 		if (user.group !== '@' && user.group !== '&')
@@ -1171,14 +1175,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			socket.emit('console', 'You can only force-reset from inside a room.');
 		}
-		return true;
+		return false;
 
 	case 'a':
 		if (user.group === '&')
 		{
 			// secret sysop command
 			room.battle.add(target);
-			return true;
+			return false;
 		}
 
 	// Admin commands
@@ -1189,7 +1193,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			if (!target)
 			{
 				room.battle.win('');
-				return true;
+				return false;
 			}
 			target = getUser(target);
 			if (target) target = target.userid;
@@ -1197,12 +1201,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			
 			if (target) room.battle.win(target);
 			
-			return true;
+			return false;
 		}
 		break;
 		
 	case 'potd':
-		if (user.group !== '&' && user.group !== '@') return true;
+		if (user.group !== '&' && user.group !== '@') return false;
 		
 		config.potd = target;
 		if (target)
@@ -1214,7 +1218,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			room.add('The Pokemon of the Day was removed by '+user.name+'.');
 		}
 		
-		return true;
+		return false;
 		break;
 	
 	case 'lockdown':
@@ -1226,7 +1230,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				rooms[id].addRaw('<div style="background-color:#AA5544;color:white;padding:2px 4px"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>');
 			}
 		}
-		return true;
+		return false;
 		break;
 		
 	case 'endlockdown':
@@ -1238,7 +1242,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				rooms[id].addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>The server shutdown was canceled.</b></div>');
 			}
 		}
-		return true;
+		return false;
 		break;
 		
 	case 'loadbanlist':
@@ -1255,7 +1259,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				socket.emit('console', 'banned '+i+' ips');
 			});
 		}
-		return true;
+		return false;
 		break;
 
 	case 'crashfixed':
@@ -1265,7 +1269,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			config.modchat = false;
 			rooms.lobby.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
 		}
-		return true;
+		return false;
 		break;
 
 	case 'help':
@@ -1464,17 +1468,37 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 		{
 			socket.emit('console', 'The command "/'+target+'" was not found. Try /help for general help');
 		}
-		return true;
+		return false;
 		break;
+	
+	// There is no default case.
+	
+	// If a user types "/text" and there is no command "/text", it will be displayed:
+	// no error message will be given about unrecognized commands.
+	
+	// This is intentional: Some people like to say things like "/shrug" - this
+	// means they don't need to manually escape it like "//shrug" - we will
+	// do it automatically for them
 	}
 
 	// chat moderation
 	if (!canTalk(user, room, socket))
 	{
-		return true;
+		return false;
 	}
 	
-	return false;
+	if (message.substr(0,1) === '/' && message.substr(0,2) !== '//')
+	{
+		// To the client, "/text" has special meaning, so "//" is used to
+		// escape "/" at the beginning of a message
+		
+		// For instance: "/me did blah" will show as "* USER did blah", and
+		// "//me did blah" will show as "/me did blah"
+		
+		// Here, we are automatically escaping unrecognized commands.
+		return '/'+message;
+	}
+	return;
 }
 
 /**
