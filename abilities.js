@@ -3,39 +3,39 @@
 Ratings and how they work:
 
 -2: Extremely detrimental
-      The sort of ability that relegates Pokemon with Uber-level BSTs
-      into NU.
-    ex. Slow Start, Truant
+	  The sort of ability that relegates Pokemon with Uber-level BSTs
+	  into NU.
+	ex. Slow Start, Truant
 
 -1: Detrimental
-      An ability that does more harm than good.
-    ex. Defeatist, Klutz
+	  An ability that does more harm than good.
+	ex. Defeatist, Klutz
 
  0: Useless
-      An ability with no net effect on a Pokemon during a battle.
-    ex. Pickup, Illuminate
+	  An ability with no net effect on a Pokemon during a battle.
+	ex. Pickup, Illuminate
 
  1: Ineffective
-      An ability that has a minimal effect. Should never be chosen over
-      any other ability.
-    ex. Pressure, Damp
+	  An ability that has a minimal effect. Should never be chosen over
+	  any other ability.
+	ex. Pressure, Damp
 
  2: Situationally useful
-      An ability that can be useful in certain situations.
-    ex. Blaze, Insomnia
+	  An ability that can be useful in certain situations.
+	ex. Blaze, Insomnia
 
  3: Useful
-      An ability that is generally useful.
-    ex. Volt Absorb, Iron Fist
+	  An ability that is generally useful.
+	ex. Volt Absorb, Iron Fist
 
  4: Very useful
-      One of the most popular abilities. The difference between 3 and 4
-      can be ambiguous.
-    ex. Technician, Intimidate
+	  One of the most popular abilities. The difference between 3 and 4
+	  can be ambiguous.
+	ex. Technician, Intimidate
 
  5: Essential
-      The sort of ability that defines metagames.
-    ex. Drizzle, Magnet Pull
+	  The sort of ability that defines metagames.
+	ex. Drizzle, Magnet Pull
 
 */
 
@@ -124,7 +124,8 @@ exports.BattleAbilities = {
 	"baddreams": {
 		desc: "If asleep, each of this Pokemon's opponents receives damage equal to one-eighth of its max HP.",
 		shortDesc: "Deals 12.5% damage to sleeping opponents per turn.",
-		onResidualPriority: -26.1,
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			for (var i=0; i<pokemon.side.foe.active.length; i++)
 			{
@@ -687,28 +688,30 @@ exports.BattleAbilities = {
 		num: "62"
 	},
 	"harvest": {
-        	desc: "When the user uses a held Berry, it is restored at the end of the turn.",
-        	id: "harvest",
-        	name: "Harvest",
-        	onResidualPriority: -26.1,
-        	onResidual: function(pokemon) {
-            	if ((this.weather === 'sunnyday') || (Math.random() * 2 < 1))
-            	{
-                	if (!pokemon.item && this.getItem(pokemon.lastItem).isBerry)
-                	{
-                    		pokemon.setItem(pokemon.lastItem);
-                    		this.add("-item", pokemon, pokemon.item, '[from] ability: Harvest');
-                	}
-            	}
-        },
-        rating: 4,
-        num: "139"
-    },
+			desc: "When the user uses a held Berry, it is restored at the end of the turn.",
+			id: "harvest",
+			name: "Harvest",
+			onResidualOrder: 26,
+			onResidualSubOrder: 1,
+			onResidual: function(pokemon) {
+				if ((this.weather === 'sunnyday') || (Math.random() * 2 < 1))
+				{
+					if (!pokemon.item && this.getItem(pokemon.lastItem).isBerry)
+					{
+							pokemon.setItem(pokemon.lastItem);
+							this.add("-item", pokemon, pokemon.item, '[from] ability: Harvest');
+					}
+				}
+		},
+		rating: 4,
+		num: "139"
+	},
 	"healer": {
 		desc: "Has a 30% chance of curing an adjacent ally's status ailment at the end of each turn in Double and Triple Battles.",
 		id: "healer",
 		name: "Healer",
-		onResidualPriority: -5.1,
+		onResidualOrder: 5,
+		onResidualSubOrder: 1,
 		rating: 0,
 		num: "131"
 	},
@@ -776,7 +779,8 @@ exports.BattleAbilities = {
 	},
 	"hydration": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, it recovers from poison, paralysis, burn, sleep and freeze at the end of the turn.",
-		onResidualPriority: -5.1,
+		onResidualOrder: 5,
+		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			if (pokemon.status && this.weather === 'raindance')
 			{
@@ -1180,7 +1184,8 @@ exports.BattleAbilities = {
 	},
 	"moody": {
 		desc: "Causes the Pokemon to raise one of its stats by two stages, while another stat is lowered by one stage at the end of each turn. These stats include accuracy and evasion.",
-		onResidualPriority: -26.1,
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			var stats = [], i = '';
 			var boost = {};
@@ -1369,7 +1374,8 @@ exports.BattleAbilities = {
 	},
 	"pickup": {
 		desc: "If an opponent uses a consumable item, Pickup will give the Pokemon the item used, if it is not holding an item. If multiple Pickup Pokemon are in play, one will pick up a copy of the used Berry, and may or may not use it immediately. Works on Berries, Gems, Absorb Bulb, Focus Sash, Herbs, Cell Battery, Red Card, and anything that is thrown with Fling.",
-		onResidualPriority: -26.1,
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			var foe = pokemon.side.foe.randomActive();
 			if (!pokemon.item && foe.lastItem && foe.usedItemThisTurn && foe.lastItem !== 'airballoon' && foe.lastItem !== 'ejectbutton')
@@ -1727,7 +1733,8 @@ exports.BattleAbilities = {
 	},
 	"shedskin": {
 		desc: "After each turn, this Pokemon has a 33% chance to heal itself from poison (including Toxic), paralysis, burn, freeze or sleep (including self-induced Rest).",
-		onResidualPriority: -5.1,
+		onResidualOrder: 5,
+		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			if (pokemon.status && Math.random()*3 < 1)
 			{
@@ -1912,7 +1919,8 @@ exports.BattleAbilities = {
 	},
 	"speedboost": {
 		desc: "While this Pokemon is active, its Speed increases by one stage at the end of every turn; the six stage maximum for stat boosts is still in effect.",
-		onResidualPriority: -26.1,
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			if (pokemon.activeTurns)
 			{
@@ -2414,7 +2422,7 @@ exports.BattleAbilities = {
 	},
 	"zenmode": {
 		desc: "When Darmanitan's HP drops to below half, it will enter Zen Mode at the end of the turn. If it loses its ability, or recovers HP to above half while in Zen mode, it will change back. This ability only works on Darmanitan, even if it is copied by Role Play, Entrainment, or swapped with Skill Swap.",
-		onResidualPriority: -27,
+		onResidualOrder: 27,
 		id: "zenmode",
 		name: "Zen Mode",
 		rating: -1,

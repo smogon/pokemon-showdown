@@ -333,7 +333,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'Aqua Ring');
 			},
-			onResidualPriority: 50-6,
+			onResidualOrder: 6,
 			onResidual: function(pokemon) {
 				this.heal(pokemon.maxhp/16);
 			}
@@ -1941,7 +1941,7 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'Curse', '[of] '+source);
 				this.directDamage(source.maxhp/2, source, source);
 			},
-			onResidualPriority: 50-10,
+			onResidualOrder: 10,
 			onResidual: function(pokemon) {
 				this.damage(pokemon.maxhp/4);
 			}
@@ -5778,7 +5778,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'move: Ingrain');
 			},
-			onResidualPriority: 50-7,
+			onResidualOrder: 7,
 			onResidual: function(pokemon) {
 				this.heal(pokemon.maxhp/16);
 			},
@@ -6091,7 +6091,7 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
-			onResidualPriority: 50-8,
+			onResidualOrder: 8,
 			onResidual: function(pokemon) {
 				var target = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!target || target.fainted)
@@ -7364,7 +7364,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'nightmare',
 		effect: {
-			onResidualPriority: 50-9,
+			onResidualOrder: 9,
 			onStart: function(pokemon) {
 				if (pokemon.status !== 'slp')
 				{
@@ -7372,7 +7372,7 @@ exports.BattleMovedex = {
 				}
 				this.add('-start', pokemon, 'Nightmare');
 			},
-			onResidualPriority: 50-9,
+			onResidualOrder: 9,
 			onResidual: function(pokemon) {
 				if (pokemon.status !== 'slp')
 				{
@@ -12507,7 +12507,7 @@ exports.BattleMovedex = {
 			onStart: function(side, source) {
 				this.effectData.hp = source.maxhp/2;
 			},
-			onResidualPriority: 50-4,
+			onResidualOrder: 4,
 			onEnd: function(side) {
 				var target = side.active[this.effectData.sourcePosition];
 				if (!target.fainted)
