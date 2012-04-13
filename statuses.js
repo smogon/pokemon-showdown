@@ -350,10 +350,6 @@ exports.BattleStatuses = {
 				move.type = 'Water';
 				move.basePower = 100;
 			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
-			}
 		},
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability')
@@ -407,10 +403,6 @@ exports.BattleStatuses = {
 				move.type = 'Fire';
 				move.basePower = 100;
 			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [2,3];
-			}
 		},
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability')
@@ -456,10 +448,6 @@ exports.BattleStatuses = {
 			{
 				move.type = 'Rock';
 				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
 			}
 		},
 		onStart: function(battle, source, effect) {
@@ -512,10 +500,6 @@ exports.BattleStatuses = {
 				move.type = 'Ice';
 				move.basePower = 100;
 			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
-			}
 		},
 		onModifyMove: function(move) {
 			if (move.id === 'blizzard')
@@ -526,10 +510,6 @@ exports.BattleStatuses = {
 			{
 				move.type = 'Ice';
 				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
 			}
 		},
 		onResidualOrder: 1,

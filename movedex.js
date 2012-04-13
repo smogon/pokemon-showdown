@@ -7070,6 +7070,10 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		heal: [1,2],
+		onModifyMove: function(move) {
+			if (this.weather === 'sunnyday') move.heal = [2,3];
+			else if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') move.heal = [1,4];
+		},
 		secondary: false,
 		target: "self",
 		type: "Normal"
@@ -7087,6 +7091,10 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		heal: [1,2],
+		onModifyMove: function(move) {
+			if (this.weather === 'sunnyday') move.heal = [2,3];
+			else if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') move.heal = [1,4];
+		},
 		secondary: false,
 		target: "self",
 		type: "Normal"
@@ -11263,6 +11271,10 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		heal: [1,2],
+		onModifyMove: function(move) {
+			if (this.weather === 'sunnyday') move.heal = [2,3];
+			else if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') move.heal = [1,4];
+		},
 		secondary: false,
 		target: "self",
 		type: "Grass"
