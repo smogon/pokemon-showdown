@@ -1,10 +1,11 @@
 // Run this with streamline (_node) like so:
 //  _node pokedex-gen._js > ../pokedex.js
+//      or
+//  ../node_modules/.bin/_node pokedex-gen._js > ../pokedex.js
 
 var customPokemonPath = "../data/custom-pokemon.json";
 
 var assert = require("assert").ok;
-var getSmogonDex = require("./get-smogondex._js").getSmogonDex;
 var getVeekunDatabase = require("./veekun-database._js").getVeekunDatabase;
 
 function main(argv, _)
@@ -12,6 +13,7 @@ function main(argv, _)
 	var veekunDatabase = getVeekunDatabase(_);
 	var languageId = veekunDatabase.getLanguageId("en", _); // Don't change the language! Bad things will happen if you do
 	var formeIds = veekunDatabase.getAllFormeIds(_);
+	
 	console.warn("Starting to output.");
 	writeLine("exports.BattlePokedex =");
 	writeLine("{", 1);

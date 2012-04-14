@@ -473,7 +473,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var prop in BattlePokedex) {
-			if (BattlePokedex.hasOwnProperty(prop) && BattlePokedex[prop].viable) {
+			if (BattlePokedex.hasOwnProperty(prop) && TeambuilderData.hasOwnProperty(prop) && TeambuilderData[prop].viable) {
 				keys.push(prop);
 			}
 		}
