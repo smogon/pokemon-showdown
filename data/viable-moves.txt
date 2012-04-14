@@ -179,10 +179,9 @@ Dratini: Dragon Dance, Outrage, Waterfall, Fire Blast, ExtremeSpeed, Draco Meteo
 Dragonair: Dragon Dance, Outrage, Waterfall, Fire Blast, ExtremeSpeed, Draco Meteor, Substitute, Aqua Tail
 Dragonite: Dragon Dance, Outrage, Fire Punch, ExtremeSpeed, Dragon Claw, Earthquake, Roost, Waterfall, Substitute, Roost, Thunder Wave, Dragon Tail, Hurricane, Superpower, Fire Blast, Draco Meteor
 Mewtwo: Psystrike, Aura Sphere, Fire Blast, Ice Beam, Calm Mind, Substitute, Recover, Thunderbolt, Grass Knot
-Mew: Taunt, Will-O-Wisp, Roost, Psychic, Nasty Plot, Aura Sphere, Shadow Ball, Fire Blast, Swords Dance, Superpower, Zen Headbutt, Calm Mind, Baton Pass, Rock Polish, Substitute, Toxic, Explosion, Ice Beam, Thunderbolt, Earthquake, U-turn, Stealth Rock, Transform 
+Mew: Taunt, Will-O-Wisp, Roost, Psychic, Nasty Plot, Aura Sphere, Shadow Ball, Fire Blast, Swords Dance, Superpower, Zen Headbutt, Calm Mind, Baton Pass, Rock Polish, Substitute, Toxic, Explosion, Ice Beam, Thunderbolt, Earthquake, U-turn, Stealth Rock, Transform
 Chikorita: Reflect, Light Screen, Safeguard, Aromatherapy, Grasswhistle, Leech Seed, Seed Bomb, Toxic, Leaf Storm, Giga Drain, Synthesis
 Bayleef: Reflect, Light Screen, Safeguard, Aromatherapy, Grasswhistle, Leech Seed, Seed Bomb, Toxic, Leaf Storm, Giga Drain, Synthesis
- 
 Meganium: Reflect, Light Screen, Safeguard, Aromatherapy, Grasswhistle, Leech Seed, Seed Bomb, Toxic, Leaf Storm, Body Slam, Giga Drain, Synthesis, Dragon Tail
 Cyndaquil: Eruption, Fire Blast, Flamethrower, Hidden Power Grass, Nature Power
 Quilava: Eruption, Fire Blast, Flamethrower, Hidden Power Grass, Nature Power
@@ -204,7 +203,7 @@ Togepi: Wish, Protect, Fire Blast, Toxic, Thunder Wave
 Togetic: Wish, Protect, Fire Blast, Toxic, Thunder Wave
 Togekiss: Wish, Roost, Thunder Wave, Nasty Plot, Air Slash, Aura Sphere, Baton Pass
 Natu: FeatherDance, Roost, Toxic, Reflect, Light Screen, U-turn, Wish, Psychic, Night Shade, U-turn, Heat Wave, Trick
-Xatu: Thunder Wave, Toxic, Roost, Psychic, Night Shade, U-turn, Reflect, Light Screen, Wish, Calm Mind, 
+Xatu: Thunder Wave, Toxic, Roost, Psychic, Night Shade, U-turn, Reflect, Light Screen, Wish, Calm Mind
 Mareep: Reflect, Light Screen, Thunderbolt, Discharge, Thunder Wave, Toxic, Hidden Power Ice, Cotton Guard
 Flaffy: Reflect, Light Screen, Thunderbolt, Discharge, Thunder Wave, Toxic, Hidden Power Ice, Cotton Guard
 Ampharos: Volt Switch, Focus Blast, Hidden Power Ice, Hidden Power Grass, Thunderbolt, Heal Bell, Toxic, Reflect, Light Screen, Agility, Substitute, Cotton Guard, Rain Dance, Thunder
@@ -212,7 +211,7 @@ Azurill: Waterfall, Return, Double-Edge, Encore, Toxic, Substitute
 Marill: Waterfall, Return, Double-Edge, Encore, Toxic, Substitute, Aqua Jet, Superpower, Ice Punch
 Azumarill: Waterfall, Aqua Jet, Return, Double-Edge, Ice Punch, Superpower, Substitute, Toxic
 Bonsly: Rock Polish, Rock Slide, Brick Break, Double-Edge, Substitute, Toxic, Stealth Rock, Sucker Punch
-Sudowoodo: Hammer Arm, Stone Edge, Rock Slide, Earthquake, Low Kick, Superpower, Sucker Punch, Wood Hammer, Rock Polish, Explosion, Stealth Rock 
+Sudowoodo: Hammer Arm, Stone Edge, Rock Slide, Earthquake, Low Kick, Superpower, Sucker Punch, Wood Hammer, Rock Polish, Explosion, Stealth Rock
 Hoppip: Encore, Sleep Powder, Sunny Day, U-turn, Memento, Toxic, Leech Seed, Substitute, Protect
 Skiploom: Encore, Sleep Powder, Sunny Day, U-turn, Memento, Toxic, Leech Seed, Substitute, Protect
 Jumpluff: Encore, Sleep Powder, Sunny Day, U-turn, Memento, Toxic, Leech Seed, Substitute, Giga Drain, Seed Bomb, Reflect, Synthesis
@@ -231,7 +230,7 @@ Mismagius: Nasty Plot, Substitute, Calm Mind, Will-O-Wisp, Taunt, Heal Bell, Sha
 Unown: Hidden Power Psychic
 Wynaut: Destiny Bond, Counter, Mirror Coat, Encore
 Wobbuffet: Destiny Bond, Counter, Mirror Coat, Encore
-Girafarig: Psychic, Crunch, Thunderbolt, Calm Mind, Baton Pass, Agility, Charge Beam, Light Screen, Reflect, Thunder Wave, Toxic 
+Girafarig: Psychic, Crunch, Thunderbolt, Calm Mind, Baton Pass, Agility, Charge Beam, Light Screen, Reflect, Thunder Wave, Toxic
 Pineco: Explosion, Rapid Spin, Toxic Spikes, Spikes, Bug Bite, Stealth Rock, Toxic
 Forretress: Explosion, Rapid Spin, Toxic Spikes, Spikes, Bug Bite, Earthquake, Volt Switch, Stealth Rock
 Dunsparce: Coil, Rock Slide, Bite, Headbutt, Glare, Thunder Wave, Body Slam
@@ -348,7 +347,7 @@ Sharpedo: Protect, Hydro Pump, Ice Beam, Crunch, Earthquake, Waterfall, Hidden P
 Wailmer: Water Spout, Surf, Hydro Pump, Ice Beam, Hidden Power Grass, Hidden Power Electric
 Wailord: Water Spout, Surf, Hydro Pump, Ice Beam, Hidden Power Grass, Hidden Power Electric
 Numel: Stockpile, Lava Plume, Rest, Sleep Talk, Flame Charge, Earth Power, Fire Blast, Hidden Power Grass
-Camerupt: Rock Polish, Fire Blast, Earth Power, Stone Edge, Lava Plume, Toxic, Earthquake 
+Camerupt: Rock Polish, Fire Blast, Earth Power, Stone Edge, Lava Plume, Toxic, Earthquake
 Torkoal: Rapid Spin, Stealth Rock, Yawn, Lava Plume, Earth Power, Toxic, Will-O-Wisp
 Spoink: Psychic, Reflect, Light Screen, Thunder Wave, Trick, Heal Bell
 Grumpig: Calm Mind, Psychic, Focus Blast, Shadow Ball, Reflect, Light Screen, Thunder Wave, Trick, Taunt, Heal Bell
