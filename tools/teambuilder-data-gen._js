@@ -13,7 +13,7 @@ function main(argv, _)
 {
 	var viableMoves = getViableMoves();
 	var smogonDex = getSmogonDex(_);
-	
+
 	console.warn("Starting to output.");
 	writeLine("exports.TeambuilderData =");
 	writeLine("{", 1);
