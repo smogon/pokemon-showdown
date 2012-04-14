@@ -6094,7 +6094,7 @@ exports.BattleMovedex = {
 			onResidualOrder: 8,
 			onResidual: function(pokemon) {
 				var target = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
-				if (!target || target.fainted)
+				if (!target || target.fainted || target.hp <= 0)
 				{
 					this.debug('Nothing to leech into');
 					return;
@@ -7070,6 +7070,10 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		heal: [1,2],
+		onModifyMove: function(move) {
+			if (this.weather === 'sunnyday') move.heal = [2,3];
+			else if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') move.heal = [1,4];
+		},
 		secondary: false,
 		target: "self",
 		type: "Normal"
@@ -7087,6 +7091,10 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		heal: [1,2],
+		onModifyMove: function(move) {
+			if (this.weather === 'sunnyday') move.heal = [2,3];
+			else if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') move.heal = [1,4];
+		},
 		secondary: false,
 		target: "self",
 		type: "Normal"
@@ -8137,15 +8145,16 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
-		onTryHit: function(target, pokemon) {
-			if (!pokemon.status || target.status || !target.setStatus(pokemon.status))
+		onHit: function(target, pokemon) {
+			if (pokemon.status && !target.status && target.trySetStatus(pokemon.status))
+			{
+				this.add('-curestatus', pokemon, '[from] move: Psycho Shift', '[of] '+target);
+				pokemon.setStatus('');
+			}
+			else
 			{
 				return false;
 			}
-		},
-		onHit: function(target, pokemon) {
-			this.add('-curestatus', pokemon, '[from] move: Psycho Shift', '[of] '+target);
-			pokemon.setStatus('');
 		},
 		secondary: false,
 		target: "normal",
@@ -8456,11 +8465,11 @@ exports.BattleMovedex = {
 				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
 				for (var i in sideConditions)
 				{
-					if (pokemon.side.removeSideCondition(i)) this.add('-sideend', pokemon.side, i, '[from] move: Rapid Spin', '[of] '+pokemon);
+					if (pokemon.side.removeSideCondition(i)) this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
 				if (pokemon.volatiles['partiallytrapped'])
 				{
-					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.id, '[from] move: Rapid Spin', '[of] '+pokemon, '[partiallytrapped]');
+					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.name, '[from] move: Rapid Spin', '[of] '+pokemon, '[partiallytrapped]');
 					delete pokemon.volatiles['partiallytrapped'];
 				}
 			}
@@ -11263,6 +11272,10 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		heal: [1,2],
+		onModifyMove: function(move) {
+			if (this.weather === 'sunnyday') move.heal = [2,3];
+			else if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') move.heal = [1,4];
+		},
 		secondary: false,
 		target: "self",
 		type: "Grass"
@@ -12375,6 +12388,10 @@ exports.BattleMovedex = {
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
+		basePowerCallback: function() {
+			if (this.weather) return 100;
+			return 50;
+		},
 		category: "Special",
 		desc: "Base power is 50; Base power doubles and move's type changes during weather effects: becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and Rock-type during Sandstorm.",
 		shortDesc: "Changes type depending on the weather.",
@@ -12383,8 +12400,23 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
-		// This move's weather effects are implemented in the
-		// weather structure, not here.
+		onModifyMove: function(move) {
+			switch (this.weather)
+			{
+			case 'sunnyday':
+				move.type = 'Fire';
+				break;
+			case 'raindance':
+				move.type = 'Water';
+				break;
+			case 'sandstorm':
+				move.type = 'Rock';
+				break;
+			case 'hail':
+				move.type = 'Ice';
+				break;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"

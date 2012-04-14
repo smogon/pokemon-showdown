@@ -758,7 +758,7 @@ function Room(roomid, format, p1, p2, parentid, rated)
 		{
 			// do nothing
 		}
-		if (message.substr(0,3) === '>> ')
+		else if (message.substr(0,3) === '>> ')
 		{
 			var cmd = message.substr(3);
 
@@ -1400,6 +1400,7 @@ io.sockets.on('connection', function (socket) {
 	}
 	
 	socket.on('join', function(data) {
+		if (typeof data.room !== 'string') return;
 		if (!you)
 		{
 			you = Users.connectUser(data.name, socket, data.token, data.room);
@@ -1413,29 +1414,34 @@ io.sockets.on('connection', function (socket) {
 		}
 	});
 	socket.on('rename', function(data) {
+		data.name = ''+data.name;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		youUser.rename(data.name, data.token, data.auth);
 	});
 	socket.on('chat', function(message) {
+		if (typeof message.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		if (!message) return;
 		getRoom(message.room).chat(youUser, message.message, socket);
 	});
 	socket.on('leave', function(data) {
+		if (typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		if (!data) return;
 		youUser.leaveRoom(getRoom(data.room), socket);
 	});
 	socket.on('leaveBattle', function(data) {
+		if (typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		if (!data) return;
 		getRoom(data.room).leaveBattle(youUser);
 	});
 	socket.on('joinBattle', function(data) {
+		if (typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		getRoom(data.room).joinBattle(youUser);
@@ -1458,6 +1464,7 @@ io.sockets.on('connection', function (socket) {
 		switch (data.act)
 		{
 		case 'make':
+			if (typeof data.format !== 'string') data.format = 'debugmode';
 			var problems = Tools.validateTeam(youUser.team, data.format);
 			if (problems)
 			{
@@ -1474,7 +1481,8 @@ io.sockets.on('connection', function (socket) {
 			youUser.cancelChallengeTo(data.userid);
 			break;
 		case 'accept':
-			var format = 'DebugMode';
+			if (typeof data.userid !== 'string') return;
+			var format = 'debugmode';
 			if (youUser.challengesFrom[data.userid]) format = youUser.challengesFrom[data.userid].format;
 			var problems = Tools.validateTeam(youUser.team, format);
 			if (problems)
@@ -1485,6 +1493,7 @@ io.sockets.on('connection', function (socket) {
 			youUser.acceptChallengeFrom(data.userid);
 			break;
 		case 'reject':
+			if (typeof data.userid !== 'string') return;
 			youUser.rejectChallengeFrom(data.userid);
 			break;
 		}
@@ -1504,10 +1513,7 @@ io.sockets.on('connection', function (socket) {
 		case 'search':
 			if (data.search)
 			{
-				/* if (data.name)
-				{
-					youUser.rename(data.name, data.token);
-				} */
+				if (typeof data.format !== 'string') return;
 				if (room.searchBattle) room.searchBattle(youUser, data.format);
 			}
 			else

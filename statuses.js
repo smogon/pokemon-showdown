@@ -345,15 +345,6 @@ exports.BattleStatuses = {
 			{
 				move.accuracy = true;
 			}
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Water';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
-			}
 		},
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability')
@@ -402,15 +393,6 @@ exports.BattleStatuses = {
 			{
 				move.accuracy = 50;
 			}
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Fire';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [2,3];
-			}
 		},
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability')
@@ -449,17 +431,6 @@ exports.BattleStatuses = {
 			if (pokemon.hasType('Rock'))
 			{
 				stats.spd *= 3/2;
-			}
-		},
-		onModifyMove: function(move) {
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Rock';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
 			}
 		},
 		onStart: function(battle, source, effect) {
@@ -506,30 +477,10 @@ exports.BattleStatuses = {
 				this.add('-weather', 'Hail');
 			}
 		},
-		onModifyPokemon: function(move) {
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Ice';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
-			}
-		},
 		onModifyMove: function(move) {
 			if (move.id === 'blizzard')
 			{
 				move.accuracy = true;
-			}
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Ice';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
 			}
 		},
 		onResidualOrder: 1,
