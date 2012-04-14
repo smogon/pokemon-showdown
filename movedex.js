@@ -11735,12 +11735,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'torment',
 		effect: {
-			duration: 3,
 			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'move: Torment');
+				this.add('-start', pokemon, 'Torment');
 			},
 			onEnd: function(pokemon) {
-				this.add('-end', pokemon, 'move: Torment');
+				this.add('-end', pokemon, 'Torment');
 			},
 			onModifyPokemon: function(pokemon) {
 				pokemon.disabledMoves[pokemon.lastMove] = true;
