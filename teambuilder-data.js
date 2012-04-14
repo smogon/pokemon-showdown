@@ -17,7 +17,7 @@ exports.TeambuilderData =
 			"roost": "Roost",
 			"taunt": "Taunt",
 			"toxic": "Toxic",
-		}
+		},
 		isNonstandard: true,
 	},
 	necturna:
@@ -40,7 +40,7 @@ exports.TeambuilderData =
 			"bugbuzz": "Bug Buzz",
 			"tailglow": "Tail Glow",
 			"focusblast": "Focus Blast",
-		}
+		},
 		isNonstandard: true,
 	},
 	revenankh:
@@ -73,7 +73,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"vacuumwave": "Vacuum Wave",
 			"calmmind": "Calm Mind",
-		}
+		},
 		isNonstandard: true,
 	},
 	arghonaut:
@@ -105,7 +105,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"suckerpunch": "Sucker Punch",
 			"stoneedge": "Stone Edge",
-		}
+		},
 		isNonstandard: true,
 	},
 	krilowatt:
@@ -135,7 +135,7 @@ exports.TeambuilderData =
 			"woodhammer": "Wood Hammer",
 			"grassknot": "Grass Knot",
 			"focusblast": "Focus Blast",
-		}
+		},
 	},
 	abra:
 	{
@@ -150,7 +150,7 @@ exports.TeambuilderData =
 			"shadowball": "Shadow Ball",
 			"encore": "Encore",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	absol:
 	{
@@ -165,7 +165,7 @@ exports.TeambuilderData =
 			"superpower": "Superpower",
 			"pursuit": "Pursuit",
 			"megahorn": "Megahorn",
-		}
+		},
 	},
 	accelgor:
 	{
@@ -180,7 +180,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"hiddenpowerrock": "Hidden Power Rock",
 			"encore": "Encore",
-		}
+		},
 	},
 	aerodactyl:
 	{
@@ -197,7 +197,7 @@ exports.TeambuilderData =
 			"roost": "Roost",
 			"firefang": "Fire Fang",
 			"honeclaws": "Hone Claws",
-		}
+		},
 	},
 	aggron:
 	{
@@ -216,7 +216,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"focuspunch": "Focus Punch",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 	aipom:
 	{
@@ -233,7 +233,7 @@ exports.TeambuilderData =
 			"nastyplot": "Nasty Plot",
 			"workup": "Work Up",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	alakazam:
 	{
@@ -248,7 +248,7 @@ exports.TeambuilderData =
 			"shadowball": "Shadow Ball",
 			"encore": "Encore",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	alomomola:
 	{
@@ -261,7 +261,7 @@ exports.TeambuilderData =
 			"waterfall": "Waterfall",
 			"toxic": "Toxic",
 			"scald": "Scald",
-		}
+		},
 	},
 	altaria:
 	{
@@ -275,7 +275,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"roost": "Roost",
 			"fireblast": "Fire Blast",
-		}
+		},
 	},
 	ambipom:
 	{
@@ -293,7 +293,7 @@ exports.TeambuilderData =
 			"nastyplot": "Nasty Plot",
 			"workup": "Work Up",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	amoonguss:
 	{
@@ -307,7 +307,7 @@ exports.TeambuilderData =
 			"clearsmog": "Clear Smog",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	ampharos:
 	{
@@ -329,7 +329,7 @@ exports.TeambuilderData =
 			"cottonguard": "Cotton Guard",
 			"raindance": "Rain Dance",
 			"thunder": "Thunder",
-		}
+		},
 	},
 	anorith:
 	{
@@ -344,7 +344,7 @@ exports.TeambuilderData =
 			"rockslide": "Rock Slide",
 			"swordsdance": "Swords Dance",
 			"rockpolish": "Rock Polish",
-		}
+		},
 	},
 	arbok:
 	{
@@ -362,7 +362,7 @@ exports.TeambuilderData =
 			"crunch": "Crunch",
 			"earthquake": "Earthquake",
 			"rest": "Rest",
-		}
+		},
 	},
 	arcanine:
 	{
@@ -380,7 +380,7 @@ exports.TeambuilderData =
 			"morningsun": "Morning Sun",
 			"willowisp": "Will-O-Wisp",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	arceusbug:
 	{
@@ -396,7 +396,7 @@ exports.TeambuilderData =
 			"calmmind": "Calm Mind",
 			"judgment": "Judgment",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	arceusdark:
 	{
@@ -410,7 +410,7 @@ exports.TeambuilderData =
 			"refresh": "Refresh",
 			"roar": "Roar",
 			"return": "Return",
-		}
+		},
 	},
 	arceusdragon:
 	{
@@ -427,7 +427,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"recover": "Recover",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	arceuselectric:
 	{
@@ -445,7 +445,7 @@ exports.TeambuilderData =
 			"darkpulse": "Dark Pulse",
 			"recover": "Recover",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	arceusfire:
 	{
@@ -458,7 +458,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"thunderbolt": "Thunderbolt",
 			"recover": "Recover",
-		}
+		},
 	},
 	arceusflying:
 	{
@@ -473,7 +473,7 @@ exports.TeambuilderData =
 			"swordsdance": "Swords Dance",
 			"fly": "Fly",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	arceusghost:
 	{
@@ -493,7 +493,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"willowisp": "Will-O-Wisp",
 			"roar": "Roar",
-		}
+		},
 	},
 	arceusgrass:
 	{
@@ -509,7 +509,7 @@ exports.TeambuilderData =
 			"recover": "Recover",
 			"stealthrock": "Stealth Rock",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 	arceusground:
 	{
@@ -525,7 +525,7 @@ exports.TeambuilderData =
 			"judgment": "Judgment",
 			"icebeam": "Ice Beam",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	arceusice:
 	{
@@ -540,7 +540,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"focusblast": "Focus Blast",
 			"recover": "Recover",
-		}
+		},
 	},
 	arceus:
 	{
@@ -553,7 +553,7 @@ exports.TeambuilderData =
 			"shadowclaw": "Shadow Claw",
 			"earthquake": "Earthquake",
 			"recover": "Recover",
-		}
+		},
 	},
 	arceusunknown:
 	{
@@ -574,7 +574,7 @@ exports.TeambuilderData =
 			"willowisp": "Will-O-Wisp",
 			"icebeam": "Ice Beam",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	arceuspsychic:
 	{
@@ -587,7 +587,7 @@ exports.TeambuilderData =
 			"focusblast": "Focus Blast",
 			"recover": "Recover",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	arceusrock:
 	{
@@ -604,7 +604,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"fireblast": "Fire Blast",
 			"grassknot": "Grass Knot",
-		}
+		},
 	},
 	arceussteel:
 	{
@@ -621,7 +621,7 @@ exports.TeambuilderData =
 			"swordsdance": "Swords Dance",
 			"ironhead": "Iron Head",
 			"extremespeed": "ExtremeSpeed",
-		}
+		},
 	},
 	arceuswater:
 	{
@@ -642,7 +642,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"fireblast": "Fire Blast",
 			"thunderbolt": "Thunderbolt",
-		}
+		},
 	},
 	archen:
 	{
@@ -656,7 +656,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"uturn": "U-turn",
 			"pluck": "Pluck",
-		}
+		},
 	},
 	archeops:
 	{
@@ -671,7 +671,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"pluck": "Pluck",
 			"headsmash": "Head Smash",
-		}
+		},
 	},
 	ariados:
 	{
@@ -687,7 +687,7 @@ exports.TeambuilderData =
 			"crosspoison": "Cross Poison",
 			"batonpass": "Baton Pass",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	armaldo:
 	{
@@ -704,7 +704,7 @@ exports.TeambuilderData =
 			"rockpolish": "Rock Polish",
 			"earthquake": "Earthquake",
 			"superpower": "Superpower",
-		}
+		},
 	},
 	aron:
 	{
@@ -718,7 +718,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"superpower": "Superpower",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	articuno:
 	{
@@ -732,7 +732,7 @@ exports.TeambuilderData =
 			"healbell": "Heal Bell",
 			"toxic": "Toxic",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	audino:
 	{
@@ -748,7 +748,7 @@ exports.TeambuilderData =
 			"reflect": "Reflect",
 			"lightscreen": "Light Screen",
 			"return": "Return",
-		}
+		},
 	},
 	axew:
 	{
@@ -763,7 +763,7 @@ exports.TeambuilderData =
 			"dualchop": "Dual Chop",
 			"dragonclaw": "Dragon Claw",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	azelf:
 	{
@@ -782,7 +782,7 @@ exports.TeambuilderData =
 			"taunt": "Taunt",
 			"stealthrock": "Stealth Rock",
 			"explosion": "Explosion",
-		}
+		},
 	},
 	azumarill:
 	{
@@ -798,7 +798,7 @@ exports.TeambuilderData =
 			"superpower": "Superpower",
 			"substitute": "Substitute",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	azurill:
 	{
@@ -812,7 +812,7 @@ exports.TeambuilderData =
 			"encore": "Encore",
 			"toxic": "Toxic",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	bagon:
 	{
@@ -826,7 +826,7 @@ exports.TeambuilderData =
 			"crunch": "Crunch",
 			"rockslide": "Rock Slide",
 			"dragonclaw": "Dragon Claw",
-		}
+		},
 	},
 	baltoy:
 	{
@@ -842,7 +842,7 @@ exports.TeambuilderData =
 			"lightscreen": "Light Screen",
 			"icebeam": "Ice Beam",
 			"rapidspin": "Rapid Spin",
-		}
+		},
 	},
 	banette:
 	{
@@ -855,7 +855,7 @@ exports.TeambuilderData =
 			"taunt": "Taunt",
 			"shadowclaw": "Shadow Claw",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	barboach:
 	{
@@ -869,7 +869,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"bounce": "Bounce",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	basculin:
 	{
@@ -882,7 +882,7 @@ exports.TeambuilderData =
 			"doubleedge": "Double-Edge",
 			"crunch": "Crunch",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	basculinbluestriped:
 	{
@@ -901,7 +901,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"toxic": "Toxic",
 			"roar": "Roar",
-		}
+		},
 	},
 	bayleef:
 	{
@@ -920,7 +920,7 @@ exports.TeambuilderData =
 			"leafstorm": "Leaf Storm",
 			"gigadrain": "Giga Drain",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	beartic:
 	{
@@ -935,7 +935,7 @@ exports.TeambuilderData =
 			"swordsdance": "Swords Dance",
 			"toxic": "Toxic",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	beautifly:
 	{
@@ -949,7 +949,7 @@ exports.TeambuilderData =
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"hiddenpowerrock": "Hidden Power Rock",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	beedrill:
 	{
@@ -966,7 +966,7 @@ exports.TeambuilderData =
 			"brickbreak": "Brick Break",
 			"pursuit": "Pursuit",
 			"nightslash": "Night Slash",
-		}
+		},
 	},
 	beheeyem:
 	{
@@ -981,7 +981,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"calmmind": "Calm Mind",
 			"recover": "Recover",
-		}
+		},
 	},
 	beldum:
 	{
@@ -993,7 +993,7 @@ exports.TeambuilderData =
 			"zenheadbutt": "Zen Headbutt",
 			"headbutt": "Headbutt",
 			"irondefense": "Iron Defense",
-		}
+		},
 	},
 	bellossom:
 	{
@@ -1016,7 +1016,7 @@ exports.TeambuilderData =
 			"leafstorm": "Leaf Storm",
 			"swordsdance": "Swords Dance",
 			"drainpunch": "Drain Punch",
-		}
+		},
 	},
 	bellsprout:
 	{
@@ -1035,7 +1035,7 @@ exports.TeambuilderData =
 			"suckerpunch": "Sucker Punch",
 			"seedbomb": "Seed Bomb",
 			"return": "Return",
-		}
+		},
 	},
 	bibarel:
 	{
@@ -1048,7 +1048,7 @@ exports.TeambuilderData =
 			"curse": "Curse",
 			"quickattack": "Quick Attack",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	bidoof:
 	{
@@ -1061,7 +1061,7 @@ exports.TeambuilderData =
 			"curse": "Curse",
 			"quickattack": "Quick Attack",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	bisharp:
 	{
@@ -1076,7 +1076,7 @@ exports.TeambuilderData =
 			"ironhead": "Iron Head",
 			"brickbreak": "Brick Break",
 			"nightslash": "Night Slash",
-		}
+		},
 	},
 	blastoise:
 	{
@@ -1092,7 +1092,7 @@ exports.TeambuilderData =
 			"aquajet": "Aqua Jet",
 			"toxic": "Toxic",
 			"dragontail": "Dragon Tail",
-		}
+		},
 	},
 	blaziken:
 	{
@@ -1109,7 +1109,7 @@ exports.TeambuilderData =
 			"hiddenpowerice": "Hidden Power Ice",
 			"fireblast": "Fire Blast",
 			"focusblast": "Focus Blast",
-		}
+		},
 	},
 	blissey:
 	{
@@ -1128,7 +1128,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"flamethrower": "Flamethrower",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	blitzle:
 	{
@@ -1140,7 +1140,7 @@ exports.TeambuilderData =
 			"thunderbolt": "Thunderbolt",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"wildcharge": "Wild Charge",
-		}
+		},
 	},
 	boldore:
 	{
@@ -1156,7 +1156,7 @@ exports.TeambuilderData =
 			"explosion": "Explosion",
 			"return": "Return",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	bonsly:
 	{
@@ -1172,7 +1172,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"stealthrock": "Stealth Rock",
 			"suckerpunch": "Sucker Punch",
-		}
+		},
 	},
 	bouffalant:
 	{
@@ -1187,7 +1187,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"swordsdance": "Swords Dance",
 			"taunt": "Taunt",
-		}
+		},
 	},
 	braviary:
 	{
@@ -1202,7 +1202,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"rockslide": "Rock Slide",
 			"bbulkup": "B Bulk Up",
-		}
+		},
 	},
 	breloom:
 	{
@@ -1221,7 +1221,7 @@ exports.TeambuilderData =
 			"bulletseed": "Bullet Seed",
 			"stoneedge": "Stone Edge",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	bronzong:
 	{
@@ -1240,7 +1240,7 @@ exports.TeambuilderData =
 			"trickroom": "Trick Room",
 			"explosion": "Explosion",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	bronzor:
 	{
@@ -1258,7 +1258,7 @@ exports.TeambuilderData =
 			"trickroom": "Trick Room",
 			"explosion": "Explosion",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	budew:
 	{
@@ -1272,7 +1272,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"stunspore": "Stun Spore",
 			"rest": "Rest",
-		}
+		},
 	},
 	buizel:
 	{
@@ -1289,7 +1289,7 @@ exports.TeambuilderData =
 			"agility": "Agility",
 			"batonpass": "Baton Pass",
 			"icepunch": "Ice Punch",
-		}
+		},
 	},
 	bulbasaur:
 	{
@@ -1309,7 +1309,7 @@ exports.TeambuilderData =
 			"powerwhip": "Power Whip",
 			"leechseed": "Leech Seed",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	buneary:
 	{
@@ -1328,7 +1328,7 @@ exports.TeambuilderData =
 			"batonpass": "Baton Pass",
 			"icepunch": "Ice Punch",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	burmy:
 	{
@@ -1340,7 +1340,7 @@ exports.TeambuilderData =
 			"hiddenpowerfire": "Hidden Power Fire",
 			"protect": "Protect",
 			"stringshot": "String Shot",
-		}
+		},
 	},
 	burmysandy:
 	{
@@ -1365,7 +1365,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"stunspore": "Stun Spore",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	cacnea:
 	{
@@ -1379,7 +1379,7 @@ exports.TeambuilderData =
 			"suckerpunch": "Sucker Punch",
 			"seedbomb": "Seed Bomb",
 			"drainpunch": "Drain Punch",
-		}
+		},
 	},
 	cacturne:
 	{
@@ -1393,7 +1393,7 @@ exports.TeambuilderData =
 			"suckerpunch": "Sucker Punch",
 			"seedbomb": "Seed Bomb",
 			"drainpunch": "Drain Punch",
-		}
+		},
 	},
 	camerupt:
 	{
@@ -1408,7 +1408,7 @@ exports.TeambuilderData =
 			"lavaplume": "Lava Plume",
 			"toxic": "Toxic",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	carnivine:
 	{
@@ -1422,7 +1422,7 @@ exports.TeambuilderData =
 			"sleeppowder": "Sleep Powder",
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
-		}
+		},
 	},
 	carracosta:
 	{
@@ -1437,7 +1437,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"stealthrock": "Stealth Rock",
 			"curse": "Curse",
-		}
+		},
 	},
 	carvanha:
 	{
@@ -1452,7 +1452,7 @@ exports.TeambuilderData =
 			"crunch": "Crunch",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"aquajet": "Aqua Jet",
-		}
+		},
 	},
 	cascoon:
 	{
@@ -1464,7 +1464,7 @@ exports.TeambuilderData =
 			"poisonsting": "Poison Sting",
 			"stringshot": "String Shot",
 			"tackle": "Tackle",
-		}
+		},
 	},
 	castform:
 	{
@@ -1477,7 +1477,7 @@ exports.TeambuilderData =
 			"weatherball": "Weather Ball",
 			"thunderbolt": "Thunderbolt",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	castformsunny:
 	{
@@ -1501,7 +1501,7 @@ exports.TeambuilderData =
 			"stringshot": "String Shot",
 			"tackle": "Tackle",
 			"snore": "Snore",
-		}
+		},
 	},
 	celebi:
 	{
@@ -1520,7 +1520,7 @@ exports.TeambuilderData =
 			"earthpower": "Earth Power",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	chandelure:
 	{
@@ -1536,7 +1536,7 @@ exports.TeambuilderData =
 			"overheat": "Overheat",
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"hiddenpowerground": "Hidden Power Ground",
-		}
+		},
 	},
 	chansey:
 	{
@@ -1553,7 +1553,7 @@ exports.TeambuilderData =
 			"counter": "Counter",
 			"thunderwave": "Thunder Wave",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	charizard:
 	{
@@ -1576,7 +1576,7 @@ exports.TeambuilderData =
 			"flareblitz": "Flare Blitz",
 			"thunderpunch": "ThunderPunch",
 			"brickbreak": "Brick Break",
-		}
+		},
 	},
 	charmander:
 	{
@@ -1593,7 +1593,7 @@ exports.TeambuilderData =
 			"flareblitz": "Flare Blitz",
 			"thunderpunch": "ThunderPunch",
 			"brickbreak": "Brick Break",
-		}
+		},
 	},
 	charmeleon:
 	{
@@ -1610,7 +1610,7 @@ exports.TeambuilderData =
 			"flareblitz": "Flare Blitz",
 			"thunderpunch": "ThunderPunch",
 			"brickbreak": "Brick Break",
-		}
+		},
 	},
 	chatot:
 	{
@@ -1623,7 +1623,7 @@ exports.TeambuilderData =
 			"heatwave": "Heat Wave",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	cherrim:
 	{
@@ -1636,7 +1636,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"weatherball": "Weather Ball",
 			"hiddenpowerrock": "Hidden Power Rock",
-		}
+		},
 	},
 	cherrimsunshine:
 	{
@@ -1653,7 +1653,7 @@ exports.TeambuilderData =
 			"weatherball": "Weather Ball",
 			"hiddenpowerrock": "Hidden Power Rock",
 			"gigadrain": "Giga Drain",
-		}
+		},
 	},
 	chikorita:
 	{
@@ -1672,7 +1672,7 @@ exports.TeambuilderData =
 			"leafstorm": "Leaf Storm",
 			"gigadrain": "Giga Drain",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	chimchar:
 	{
@@ -1684,7 +1684,7 @@ exports.TeambuilderData =
 			"overheat": "Overheat",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"fakeout": "Fake Out",
-		}
+		},
 	},
 	chimecho:
 	{
@@ -1702,7 +1702,7 @@ exports.TeambuilderData =
 			"shadowball": "Shadow Ball",
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"healingwish": "Healing Wish",
-		}
+		},
 	},
 	chinchou:
 	{
@@ -1723,7 +1723,7 @@ exports.TeambuilderData =
 			"healbell": "Heal Bell",
 			"discharge": "Discharge",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	chingling:
 	{
@@ -1737,7 +1737,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"wish": "Wish",
 			"psychic": "Psychic",
-		}
+		},
 	},
 	cinccino:
 	{
@@ -1753,7 +1753,7 @@ exports.TeambuilderData =
 			"aquatail": "Aqua Tail",
 			"bulletseed": "Bullet Seed",
 			"rockblast": "Rock Blast",
-		}
+		},
 	},
 	clamperl:
 	{
@@ -1767,7 +1767,7 @@ exports.TeambuilderData =
 			"hiddenpowergrass": "Hidden Power Grass",
 			"hiddenpowerelectric": "Hidden Power Electric",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	claydol:
 	{
@@ -1781,7 +1781,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"earthquake": "Earthquake",
 			"rapidspin": "Rapid Spin",
-		}
+		},
 	},
 	clefable:
 	{
@@ -1806,7 +1806,7 @@ exports.TeambuilderData =
 			"calmmind": "Calm Mind",
 			"stealthrock": "Stealth Rock",
 			"grassknot": "Grass Knot",
-		}
+		},
 	},
 	clefairy:
 	{
@@ -1826,7 +1826,7 @@ exports.TeambuilderData =
 			"softboiled": "Softboiled",
 			"aromatherapy": "Aromatherapy",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	cleffa:
 	{
@@ -1844,7 +1844,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"softboiled": "Softboiled",
 			"aromatherapy": "Aromatherapy",
-		}
+		},
 	},
 	cloyster:
 	{
@@ -1861,7 +1861,7 @@ exports.TeambuilderData =
 			"rapidspin": "Rapid Spin",
 			"spikes": "Spikes",
 			"toxicspikes": "Toxic Spikes",
-		}
+		},
 	},
 	cobalion:
 	{
@@ -1882,7 +1882,7 @@ exports.TeambuilderData =
 			"flashcannon": "Flash Cannon",
 			"thunderwave": "Thunder Wave",
 			"sacredsword": "Sacred Sword",
-		}
+		},
 	},
 	cofagrigus:
 	{
@@ -1897,7 +1897,7 @@ exports.TeambuilderData =
 			"willowisp": "Will-O-Wisp",
 			"haze": "Haze",
 			"rest": "Rest",
-		}
+		},
 	},
 	combee:
 	{
@@ -1909,7 +1909,7 @@ exports.TeambuilderData =
 			"aircutter": "Air Cutter",
 			"endeavor": "Endeavor",
 			"mudslap": "Mud-Slap",
-		}
+		},
 	},
 	combusken:
 	{
@@ -1926,7 +1926,7 @@ exports.TeambuilderData =
 			"hiddenpowerice": "Hidden Power Ice",
 			"fireblast": "Fire Blast",
 			"focusblast": "Focus Blast",
-		}
+		},
 	},
 	conkeldurr:
 	{
@@ -1942,7 +1942,7 @@ exports.TeambuilderData =
 			"facade": "Facade",
 			"hammerarm": "Hammer Arm",
 			"superpower": "Superpower",
-		}
+		},
 	},
 	corphish:
 	{
@@ -1956,7 +1956,7 @@ exports.TeambuilderData =
 			"crunch": "Crunch",
 			"superpower": "Superpower",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	corsola:
 	{
@@ -1971,7 +1971,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"reflect": "Reflect",
 			"mirrorcoat": "Mirror Coat",
-		}
+		},
 	},
 	cottonee:
 	{
@@ -1988,7 +1988,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"stunspore": "Stun Spore",
 			"memento": "Memento",
-		}
+		},
 	},
 	cradily:
 	{
@@ -2004,7 +2004,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"curse": "Curse",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	cranidos:
 	{
@@ -2020,7 +2020,7 @@ exports.TeambuilderData =
 			"rockpolish": "Rock Polish",
 			"crunch": "Crunch",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	crawdaunt:
 	{
@@ -2034,7 +2034,7 @@ exports.TeambuilderData =
 			"crunch": "Crunch",
 			"superpower": "Superpower",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	cresselia:
 	{
@@ -2053,7 +2053,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
 			"calmmind": "Calm Mind",
-		}
+		},
 	},
 	croagunk:
 	{
@@ -2067,7 +2067,7 @@ exports.TeambuilderData =
 			"drainpunch": "Drain Punch",
 			"taunt": "Taunt",
 			"darkpulse": "Dark Pulse",
-		}
+		},
 	},
 	crobat:
 	{
@@ -2088,7 +2088,7 @@ exports.TeambuilderData =
 			"acrobatics": "Acrobatics",
 			"heatwave": "Heat Wave",
 			"superfang": "Super Fang",
-		}
+		},
 	},
 	croconaw:
 	{
@@ -2104,7 +2104,7 @@ exports.TeambuilderData =
 			"dragondance": "Dragon Dance",
 			"swordsdance": "Swords Dance",
 			"return": "Return",
-		}
+		},
 	},
 	crustle:
 	{
@@ -2119,7 +2119,7 @@ exports.TeambuilderData =
 			"rockblast": "Rock Blast",
 			"xscissor": "X-Scissor",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	cryogonal:
 	{
@@ -2133,7 +2133,7 @@ exports.TeambuilderData =
 			"haze": "Haze",
 			"reflect": "Reflect",
 			"hiddenpowerelectric": "Hidden Power Electric",
-		}
+		},
 	},
 	cubchoo:
 	{
@@ -2146,7 +2146,7 @@ exports.TeambuilderData =
 			"hiddenpowergrass": "Hidden Power Grass",
 			"toxic": "Toxic",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	cubone:
 	{
@@ -2161,7 +2161,7 @@ exports.TeambuilderData =
 			"swordsdance": "Swords Dance",
 			"firepunch": "Fire Punch",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	cyndaquil:
 	{
@@ -2174,7 +2174,7 @@ exports.TeambuilderData =
 			"flamethrower": "Flamethrower",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"naturepower": "Nature Power",
-		}
+		},
 	},
 	darkrai:
 	{
@@ -2188,7 +2188,7 @@ exports.TeambuilderData =
 			"nastyplot": "Nasty Plot",
 			"substitute": "Substitute",
 			"trick": "Trick",
-		}
+		},
 	},
 	darmanitan:
 	{
@@ -2202,7 +2202,7 @@ exports.TeambuilderData =
 			"rockslide": "Rock Slide",
 			"earthquake": "Earthquake",
 			"superpower": "Superpower",
-		}
+		},
 	},
 	darmanitanzen:
 	{
@@ -2219,7 +2219,7 @@ exports.TeambuilderData =
 			"firepunch": "Fire Punch",
 			"rockslide": "Rock Slide",
 			"superpower": "Superpower",
-		}
+		},
 	},
 	deerling:
 	{
@@ -2235,7 +2235,7 @@ exports.TeambuilderData =
 			"jumpkick": "Jump Kick",
 			"naturepower": "Nature Power",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	deerlingsummer:
 	{
@@ -2260,7 +2260,7 @@ exports.TeambuilderData =
 			"firefang": "Fire Fang",
 			"dragontail": "Dragon Tail",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 	delcatty:
 	{
@@ -2274,7 +2274,7 @@ exports.TeambuilderData =
 			"thunderwave": "Thunder Wave",
 			"fakeout": "Fake Out",
 			"wish": "Wish",
-		}
+		},
 	},
 	delibird:
 	{
@@ -2286,7 +2286,7 @@ exports.TeambuilderData =
 			"iceshard": "Ice Shard",
 			"icepunch": "Ice Punch",
 			"aerialace": "Aerial Ace",
-		}
+		},
 	},
 	deoxys:
 	{
@@ -2300,7 +2300,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"thunderbolt": "Thunderbolt",
 			"firepunch": "Fire Punch",
-		}
+		},
 	},
 	deoxysattack:
 	{
@@ -2314,7 +2314,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"thunderbolt": "Thunderbolt",
 			"firepunch": "Fire Punch",
-		}
+		},
 	},
 	deoxysdefense:
 	{
@@ -2330,7 +2330,7 @@ exports.TeambuilderData =
 			"agility": "Agility",
 			"seismictoss": "Seismic Toss",
 			"magiccoat": "Magic Coat",
-		}
+		},
 	},
 	deoxysspeed:
 	{
@@ -2349,7 +2349,7 @@ exports.TeambuilderData =
 			"magiccoat": "Magic Coat",
 			"trick": "Trick",
 			"shadowball": "Shadow Ball",
-		}
+		},
 	},
 	dewgong:
 	{
@@ -2366,7 +2366,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"rest": "Rest",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	dewott:
 	{
@@ -2379,7 +2379,7 @@ exports.TeambuilderData =
 			"aquajet": "Aqua Jet",
 			"xscissor": "X-Scissor",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	dialga:
 	{
@@ -2402,7 +2402,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
 			"dragonclaw": "Dragon Claw",
-		}
+		},
 	},
 	diglett:
 	{
@@ -2415,7 +2415,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"suckerpunch": "Sucker Punch",
 			"reversal": "Reversal",
-		}
+		},
 	},
 	ditto:
 	{
@@ -2434,7 +2434,7 @@ exports.TeambuilderData =
 			"taunt": "Taunt",
 			"quickattack": "Quick Attack",
 			"pursuit": "Pursuit",
-		}
+		},
 	},
 	doduo:
 	{
@@ -2449,7 +2449,7 @@ exports.TeambuilderData =
 			"taunt": "Taunt",
 			"quickattack": "Quick Attack",
 			"pursuit": "Pursuit",
-		}
+		},
 	},
 	donphan:
 	{
@@ -2466,7 +2466,7 @@ exports.TeambuilderData =
 			"headsmash": "Head Smash",
 			"seedbomb": "Seed Bomb",
 			"superpower": "Superpower",
-		}
+		},
 	},
 	dragonair:
 	{
@@ -2482,7 +2482,7 @@ exports.TeambuilderData =
 			"dracometeor": "Draco Meteor",
 			"substitute": "Substitute",
 			"aquatail": "Aqua Tail",
-		}
+		},
 	},
 	dragonite:
 	{
@@ -2505,7 +2505,7 @@ exports.TeambuilderData =
 			"superpower": "Superpower",
 			"fireblast": "Fire Blast",
 			"dracometeor": "Draco Meteor",
-		}
+		},
 	},
 	drapion:
 	{
@@ -2525,7 +2525,7 @@ exports.TeambuilderData =
 			"poisonjab": "Poison Jab",
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
-		}
+		},
 	},
 	dratini:
 	{
@@ -2541,7 +2541,7 @@ exports.TeambuilderData =
 			"dracometeor": "Draco Meteor",
 			"substitute": "Substitute",
 			"aquatail": "Aqua Tail",
-		}
+		},
 	},
 	drifblim:
 	{
@@ -2563,7 +2563,7 @@ exports.TeambuilderData =
 			"explosion": "Explosion",
 			"destinybond": "Destiny Bond",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	drilbur:
 	{
@@ -2578,7 +2578,7 @@ exports.TeambuilderData =
 			"shadowclaw": "Shadow Claw",
 			"return": "Return",
 			"xscissor": "X-Scissor",
-		}
+		},
 	},
 	drowzee:
 	{
@@ -2598,7 +2598,7 @@ exports.TeambuilderData =
 			"trickroom": "Trick Room",
 			"calmmind": "Calm Mind",
 			"barrier": "Barrier",
-		}
+		},
 	},
 	druddigon:
 	{
@@ -2614,7 +2614,7 @@ exports.TeambuilderData =
 			"dragontail": "Dragon Tail",
 			"substitute": "Substitute",
 			"glare": "Glare",
-		}
+		},
 	},
 	ducklett:
 	{
@@ -2632,7 +2632,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	dugtrio:
 	{
@@ -2645,7 +2645,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"suckerpunch": "Sucker Punch",
 			"reversal": "Reversal",
-		}
+		},
 	},
 	dunsparce:
 	{
@@ -2660,7 +2660,7 @@ exports.TeambuilderData =
 			"glare": "Glare",
 			"thunderwave": "Thunder Wave",
 			"bodyslam": "Body Slam",
-		}
+		},
 	},
 	duosion:
 	{
@@ -2677,7 +2677,7 @@ exports.TeambuilderData =
 			"shadowball": "Shadow Ball",
 			"trickroom": "Trick Room",
 			"psyshock": "Psyshock",
-		}
+		},
 	},
 	durant:
 	{
@@ -2691,7 +2691,7 @@ exports.TeambuilderData =
 			"stoneedge": "Stone Edge",
 			"batonpass": "Baton Pass",
 			"thunderfang": "Thunder Fang",
-		}
+		},
 	},
 	dusclops:
 	{
@@ -2705,7 +2705,7 @@ exports.TeambuilderData =
 			"painsplit": "Pain Split",
 			"substitute": "Substitute",
 			"seismictoss": "Seismic Toss",
-		}
+		},
 	},
 	dusknoir:
 	{
@@ -2720,7 +2720,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"earthquake": "Earthquake",
 			"focuspunch": "Focus Punch",
-		}
+		},
 	},
 	duskull:
 	{
@@ -2734,7 +2734,7 @@ exports.TeambuilderData =
 			"painsplit": "Pain Split",
 			"substitute": "Substitute",
 			"nightshade": "Night Shade",
-		}
+		},
 	},
 	dustox:
 	{
@@ -2748,7 +2748,7 @@ exports.TeambuilderData =
 			"bugbuzz": "Bug Buzz",
 			"protect": "Protect",
 			"sludgebomb": "Sludge Bomb",
-		}
+		},
 	},
 	dwebble:
 	{
@@ -2763,7 +2763,7 @@ exports.TeambuilderData =
 			"rockblast": "Rock Blast",
 			"xscissor": "X-Scissor",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	eelektrik:
 	{
@@ -2778,7 +2778,7 @@ exports.TeambuilderData =
 			"wildcharge": "Wild Charge",
 			"hiddenpowerice": "Hidden Power Ice",
 			"discharge": "Discharge",
-		}
+		},
 	},
 	eelektross:
 	{
@@ -2795,7 +2795,7 @@ exports.TeambuilderData =
 			"wildcharge": "Wild Charge",
 			"hiddenpowerice": "Hidden Power Ice",
 			"discharge": "Discharge",
-		}
+		},
 	},
 	eevee:
 	{
@@ -2811,7 +2811,7 @@ exports.TeambuilderData =
 			"yawn": "Yawn",
 			"protect": "Protect",
 			"wish": "Wish",
-		}
+		},
 	},
 	ekans:
 	{
@@ -2829,7 +2829,7 @@ exports.TeambuilderData =
 			"crunch": "Crunch",
 			"earthquake": "Earthquake",
 			"rest": "Rest",
-		}
+		},
 	},
 	electabuzz:
 	{
@@ -2843,7 +2843,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"hiddenpowerice": "Hidden Power Ice",
 			"focusblast": "Focus Blast",
-		}
+		},
 	},
 	electivire:
 	{
@@ -2858,7 +2858,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"flamethrower": "Flamethrower",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	electrike:
 	{
@@ -2872,7 +2872,7 @@ exports.TeambuilderData =
 			"overheat": "Overheat",
 			"switcheroo": "Switcheroo",
 			"flamethrower": "Flamethrower",
-		}
+		},
 	},
 	electrode:
 	{
@@ -2888,7 +2888,7 @@ exports.TeambuilderData =
 			"hiddenpowerwater": "Hidden Power Water",
 			"raindance": "Rain Dance",
 			"thunder": "Thunder",
-		}
+		},
 	},
 	elekid:
 	{
@@ -2901,7 +2901,7 @@ exports.TeambuilderData =
 			"voltswitch": "Volt Switch",
 			"substitute": "Substitute",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	elgyem:
 	{
@@ -2914,7 +2914,7 @@ exports.TeambuilderData =
 			"thunderbolt": "Thunderbolt",
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	emboar:
 	{
@@ -2929,7 +2929,7 @@ exports.TeambuilderData =
 			"headsmash": "Head Smash",
 			"earthquake": "Earthquake",
 			"fireblast": "Fire Blast",
-		}
+		},
 	},
 	emolga:
 	{
@@ -2944,7 +2944,7 @@ exports.TeambuilderData =
 			"thunderbolt": "Thunderbolt",
 			"airslash": "Air Slash",
 			"roost": "Roost",
-		}
+		},
 	},
 	empoleon:
 	{
@@ -2962,7 +2962,7 @@ exports.TeambuilderData =
 			"agility": "Agility",
 			"grassknot": "Grass Knot",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	entei:
 	{
@@ -2977,7 +2977,7 @@ exports.TeambuilderData =
 			"flamecharge": "Flame Charge",
 			"stoneedge": "Stone Edge",
 			"hiddenpowergrass": "Hidden Power Grass",
-		}
+		},
 	},
 	escavalier:
 	{
@@ -2992,7 +2992,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"swordsdance": "Swords Dance",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	espeon:
 	{
@@ -3010,7 +3010,7 @@ exports.TeambuilderData =
 			"morningsun": "Morning Sun",
 			"storedpower": "Stored Power",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	excadrill:
 	{
@@ -3025,7 +3025,7 @@ exports.TeambuilderData =
 			"shadowclaw": "Shadow Claw",
 			"return": "Return",
 			"xscissor": "X-Scissor",
-		}
+		},
 	},
 	exeggcute:
 	{
@@ -3043,7 +3043,7 @@ exports.TeambuilderData =
 			"solarbeam": "SolarBeam",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	exeggutor:
 	{
@@ -3062,7 +3062,7 @@ exports.TeambuilderData =
 			"solarbeam": "SolarBeam",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	exploud:
 	{
@@ -3078,7 +3078,7 @@ exports.TeambuilderData =
 			"hammerarm": "Hammer Arm",
 			"return": "Return",
 			"focusblast": "Focus Blast",
-		}
+		},
 	},
 	farfetchd:
 	{
@@ -3091,7 +3091,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"leafblade": "Leaf Blade",
 			"roost": "Roost",
-		}
+		},
 	},
 	fearow:
 	{
@@ -3107,7 +3107,7 @@ exports.TeambuilderData =
 			"pursuit": "Pursuit",
 			"drillrun": "Drill Run",
 			"roost": "Roost",
-		}
+		},
 	},
 	feebas:
 	{
@@ -3121,7 +3121,7 @@ exports.TeambuilderData =
 			"lightscreen": "Light Screen",
 			"scald": "Scald",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	feraligatr:
 	{
@@ -3139,7 +3139,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"earthquake": "Earthquake",
 			"superpower": "Superpower",
-		}
+		},
 	},
 	ferroseed:
 	{
@@ -3154,7 +3154,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"thunderwave": "Thunder Wave",
 			"gyroball": "Gyro Ball",
-		}
+		},
 	},
 	ferrothorn:
 	{
@@ -3170,7 +3170,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"gyroball": "Gyro Ball",
 			"bulldoze": "Bulldoze",
-		}
+		},
 	},
 	finneon:
 	{
@@ -3184,7 +3184,7 @@ exports.TeambuilderData =
 			"hiddenpowerelectric": "Hidden Power Electric",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	flaaffy:
 	{
@@ -3202,7 +3202,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"roar": "Roar",
 			"healbell": "Heal Bell",
-		}
+		},
 	},
 	floatzel:
 	{
@@ -3220,7 +3220,7 @@ exports.TeambuilderData =
 			"batonpass": "Baton Pass",
 			"icepunch": "Ice Punch",
 			"crunch": "Crunch",
-		}
+		},
 	},
 	flygon:
 	{
@@ -3237,7 +3237,7 @@ exports.TeambuilderData =
 			"dragontail": "Dragon Tail",
 			"stoneedge": "Stone Edge",
 			"firepunch": "Fire Punch",
-		}
+		},
 	},
 	foongus:
 	{
@@ -3251,7 +3251,7 @@ exports.TeambuilderData =
 			"clearsmog": "Clear Smog",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	forretress:
 	{
@@ -3267,7 +3267,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"voltswitch": "Volt Switch",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	fraxure:
 	{
@@ -3281,7 +3281,7 @@ exports.TeambuilderData =
 			"outrage": "Outrage",
 			"dualchop": "Dual Chop",
 			"dragonclaw": "Dragon Claw",
-		}
+		},
 	},
 	frillish:
 	{
@@ -3296,7 +3296,7 @@ exports.TeambuilderData =
 			"nightshade": "Night Shade",
 			"toxic": "Toxic",
 			"shadowball": "Shadow Ball",
-		}
+		},
 	},
 	froslass:
 	{
@@ -3311,7 +3311,7 @@ exports.TeambuilderData =
 			"shadowball": "Shadow Ball",
 			"substitute": "Substitute",
 			"thunderbolt": "Thunderbolt",
-		}
+		},
 	},
 	furret:
 	{
@@ -3326,7 +3326,7 @@ exports.TeambuilderData =
 			"icepunch": "Ice Punch",
 			"firepunch": "Fire Punch",
 			"thunderpunch": "ThunderPunch",
-		}
+		},
 	},
 	gabite:
 	{
@@ -3341,7 +3341,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"stoneedge": "Stone Edge",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	gallade:
 	{
@@ -3357,7 +3357,7 @@ exports.TeambuilderData =
 			"bulkup": "Bulk Up",
 			"drainpunch": "Drain Punch",
 			"icepunch": "Ice Punch",
-		}
+		},
 	},
 	galvantula:
 	{
@@ -3370,7 +3370,7 @@ exports.TeambuilderData =
 			"energyball": "Energy Ball",
 			"bugbuzz": "Bug Buzz",
 			"voltswitch": "Volt Switch",
-		}
+		},
 	},
 	garbodor:
 	{
@@ -3383,7 +3383,7 @@ exports.TeambuilderData =
 			"gunkshot": "Gunk Shot",
 			"clearsmog": "Clear Smog",
 			"bodyslam": "Body Slam",
-		}
+		},
 	},
 	garchomp:
 	{
@@ -3397,7 +3397,7 @@ exports.TeambuilderData =
 			"stoneedge": "Stone Edge",
 			"firefang": "Fire Fang",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	gardevoir:
 	{
@@ -3415,7 +3415,7 @@ exports.TeambuilderData =
 			"thunderbolt": "Thunderbolt",
 			"substitute": "Substitute",
 			"protect": "Protect",
-		}
+		},
 	},
 	gastly:
 	{
@@ -3434,7 +3434,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"willowisp": "Will-O-Wisp",
 			"trick": "Trick",
-		}
+		},
 	},
 	gastrodon:
 	{
@@ -3449,7 +3449,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"recover": "Recover",
 			"surf": "Surf",
-		}
+		},
 	},
 	gastrodoneast:
 	{
@@ -3467,7 +3467,7 @@ exports.TeambuilderData =
 			"flamethrower": "Flamethrower",
 			"thunderbolt": "Thunderbolt",
 			"rockpolish": "Rock Polish",
-		}
+		},
 	},
 	genesectdouse:
 	{
@@ -3502,7 +3502,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"willowisp": "Will-O-Wisp",
 			"trick": "Trick",
-		}
+		},
 	},
 	geodude:
 	{
@@ -3517,7 +3517,7 @@ exports.TeambuilderData =
 			"hammerarm": "Hammer Arm",
 			"rockpolish": "Rock Polish",
 			"firepunch": "Fire Punch",
-		}
+		},
 	},
 	gible:
 	{
@@ -3532,7 +3532,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"stoneedge": "Stone Edge",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	gigalith:
 	{
@@ -3548,7 +3548,7 @@ exports.TeambuilderData =
 			"autotomize": "Autotomize",
 			"return": "Return",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	girafarig:
 	{
@@ -3567,7 +3567,7 @@ exports.TeambuilderData =
 			"reflect": "Reflect",
 			"thunderwave": "Thunder Wave",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	giratina:
 	{
@@ -3583,7 +3583,7 @@ exports.TeambuilderData =
 			"calmmind": "Calm Mind",
 			"dragonpulse": "Dragon Pulse",
 			"shadowball": "Shadow Ball",
-		}
+		},
 	},
 	giratinaorigin:
 	{
@@ -3602,7 +3602,7 @@ exports.TeambuilderData =
 			"shadowball": "Shadow Ball",
 			"aurasphere": "Aura Sphere",
 			"outrage": "Outrage",
-		}
+		},
 	},
 	glaceon:
 	{
@@ -3616,7 +3616,7 @@ exports.TeambuilderData =
 			"wish": "Wish",
 			"protect": "Protect",
 			"healbell": "Heal Bell",
-		}
+		},
 	},
 	glalie:
 	{
@@ -3630,7 +3630,7 @@ exports.TeambuilderData =
 			"crunch": "Crunch",
 			"explosion": "Explosion",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	glameow:
 	{
@@ -3644,7 +3644,7 @@ exports.TeambuilderData =
 			"hypnosis": "Hypnosis",
 			"quickattack": "Quick Attack",
 			"return": "Return",
-		}
+		},
 	},
 	gligar:
 	{
@@ -3664,7 +3664,7 @@ exports.TeambuilderData =
 			"acrobatics": "Acrobatics",
 			"aquatail": "Aqua Tail",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	gliscor:
 	{
@@ -3682,7 +3682,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"toxic": "Toxic",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	gloom:
 	{
@@ -3700,7 +3700,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"leechseed": "Leech Seed",
-		}
+		},
 	},
 	golbat:
 	{
@@ -3721,7 +3721,7 @@ exports.TeambuilderData =
 			"acrobatics": "Acrobatics",
 			"heatwave": "Heat Wave",
 			"superfang": "Super Fang",
-		}
+		},
 	},
 	goldeen:
 	{
@@ -3734,7 +3734,7 @@ exports.TeambuilderData =
 			"megahorn": "Megahorn",
 			"return": "Return",
 			"agility": "Agility",
-		}
+		},
 	},
 	golduck:
 	{
@@ -3750,7 +3750,7 @@ exports.TeambuilderData =
 			"encore": "Encore",
 			"raindance": "Rain Dance",
 			"focusblast": "Focus Blast",
-		}
+		},
 	},
 	golem:
 	{
@@ -3765,7 +3765,7 @@ exports.TeambuilderData =
 			"hammerarm": "Hammer Arm",
 			"rockpolish": "Rock Polish",
 			"firepunch": "Fire Punch",
-		}
+		},
 	},
 	golett:
 	{
@@ -3780,7 +3780,7 @@ exports.TeambuilderData =
 			"hammerarm": "Hammer Arm",
 			"dynamicpunch": "DynamicPunch",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	golurk:
 	{
@@ -3795,7 +3795,7 @@ exports.TeambuilderData =
 			"hammerarm": "Hammer Arm",
 			"dynamicpunch": "DynamicPunch",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	gorebyss:
 	{
@@ -3809,7 +3809,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	gothita:
 	{
@@ -3825,7 +3825,7 @@ exports.TeambuilderData =
 			"calmmind": "Calm Mind",
 			"reflect": "Reflect",
 			"lightscreen": "Light Screen",
-		}
+		},
 	},
 	gothitelle:
 	{
@@ -3843,7 +3843,7 @@ exports.TeambuilderData =
 			"lightscreen": "Light Screen",
 			"taunt": "Taunt",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	gothorita:
 	{
@@ -3859,7 +3859,7 @@ exports.TeambuilderData =
 			"calmmind": "Calm Mind",
 			"reflect": "Reflect",
 			"lightscreen": "Light Screen",
-		}
+		},
 	},
 	granbull:
 	{
@@ -3877,7 +3877,7 @@ exports.TeambuilderData =
 			"healbell": "Heal Bell",
 			"superfang": "Super Fang",
 			"icepunch": "Ice Punch",
-		}
+		},
 	},
 	graveler:
 	{
@@ -3892,7 +3892,7 @@ exports.TeambuilderData =
 			"hammerarm": "Hammer Arm",
 			"rockpolish": "Rock Polish",
 			"firepunch": "Fire Punch",
-		}
+		},
 	},
 	grimer:
 	{
@@ -3911,7 +3911,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"icepunch": "Ice Punch",
 			"firepunch": "Fire Punch",
-		}
+		},
 	},
 	grotle:
 	{
@@ -3926,7 +3926,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	groudon:
 	{
@@ -3941,7 +3941,7 @@ exports.TeambuilderData =
 			"swordsdance": "Swords Dance",
 			"rockpolish": "Rock Polish",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 	grovyle:
 	{
@@ -3955,7 +3955,7 @@ exports.TeambuilderData =
 			"leafstorm": "Leaf Storm",
 			"hiddenpowerice": "Hidden Power Ice",
 			"hiddenpowerrock": "Hidden Power Rock",
-		}
+		},
 	},
 	growlithe:
 	{
@@ -3972,7 +3972,7 @@ exports.TeambuilderData =
 			"morningsun": "Morning Sun",
 			"willowisp": "Will-O-Wisp",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	grumpig:
 	{
@@ -3990,7 +3990,7 @@ exports.TeambuilderData =
 			"trick": "Trick",
 			"taunt": "Taunt",
 			"healbell": "Heal Bell",
-		}
+		},
 	},
 	gulpin:
 	{
@@ -4005,7 +4005,7 @@ exports.TeambuilderData =
 			"painsplit": "Pain Split",
 			"yawn": "Yawn",
 			"encore": "Encore",
-		}
+		},
 	},
 	gurdurr:
 	{
@@ -4019,7 +4019,7 @@ exports.TeambuilderData =
 			"payback": "Payback",
 			"stoneedge": "Stone Edge",
 			"facade": "Facade",
-		}
+		},
 	},
 	gyarados:
 	{
@@ -4038,7 +4038,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"thunderwave": "Thunder Wave",
 			"icefang": "Ice Fang",
-		}
+		},
 	},
 	happiny:
 	{
@@ -4051,7 +4051,7 @@ exports.TeambuilderData =
 			"thunderwave": "Thunder Wave",
 			"counter": "Counter",
 			"endeavor": "Endeavor",
-		}
+		},
 	},
 	hariyama:
 	{
@@ -4067,7 +4067,7 @@ exports.TeambuilderData =
 			"icepunch": "Ice Punch",
 			"stoneedge": "Stone Edge",
 			"bulkup": "Bulk Up",
-		}
+		},
 	},
 	haunter:
 	{
@@ -4086,7 +4086,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"willowisp": "Will-O-Wisp",
 			"trick": "Trick",
-		}
+		},
 	},
 	haxorus:
 	{
@@ -4101,7 +4101,7 @@ exports.TeambuilderData =
 			"dualchop": "Dual Chop",
 			"dragonclaw": "Dragon Claw",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	heatmor:
 	{
@@ -4114,7 +4114,7 @@ exports.TeambuilderData =
 			"focusblast": "Focus Blast",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	heatran:
 	{
@@ -4137,7 +4137,7 @@ exports.TeambuilderData =
 			"overheat": "Overheat",
 			"taunt": "Taunt",
 			"magmastorm": "Magma Storm",
-		}
+		},
 	},
 	heracross:
 	{
@@ -4155,7 +4155,7 @@ exports.TeambuilderData =
 			"pursuit": "Pursuit",
 			"substitute": "Substitute",
 			"bulkup": "Bulk Up",
-		}
+		},
 	},
 	herdier:
 	{
@@ -4168,7 +4168,7 @@ exports.TeambuilderData =
 			"firefang": "Fire Fang",
 			"crunch": "Crunch",
 			"icefang": "Ice Fang",
-		}
+		},
 	},
 	hippopotas:
 	{
@@ -4182,7 +4182,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"protect": "Protect",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	hippowdon:
 	{
@@ -4198,7 +4198,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"icefang": "Ice Fang",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	hitmonchan:
 	{
@@ -4213,7 +4213,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"closecombat": "Close Combat",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	hitmonlee:
 	{
@@ -4231,7 +4231,7 @@ exports.TeambuilderData =
 			"closecombat": "Close Combat",
 			"earthquake": "Earthquake",
 			"blazekick": "Blaze Kick",
-		}
+		},
 	},
 	hitmontop:
 	{
@@ -4249,7 +4249,7 @@ exports.TeambuilderData =
 			"stoneedge": "Stone Edge",
 			"toxic": "Toxic",
 			"bulletpunch": "Bullet Punch",
-		}
+		},
 	},
 	hooh:
 	{
@@ -4264,7 +4264,7 @@ exports.TeambuilderData =
 			"roost": "Roost",
 			"whirlwind": "Whirlwind",
 			"flamecharge": "Flame Charge",
-		}
+		},
 	},
 	honchkrow:
 	{
@@ -4283,7 +4283,7 @@ exports.TeambuilderData =
 			"hiddenpowergrass": "Hidden Power Grass",
 			"heatwave": "Heat Wave",
 			"pursuit": "Pursuit",
-		}
+		},
 	},
 	hoothoot:
 	{
@@ -4300,7 +4300,7 @@ exports.TeambuilderData =
 			"whirlwind": "Whirlwind",
 			"nightshade": "Night Shade",
 			"magiccoat": "Magic Coat",
-		}
+		},
 	},
 	hoppip:
 	{
@@ -4317,7 +4317,7 @@ exports.TeambuilderData =
 			"leechseed": "Leech Seed",
 			"substitute": "Substitute",
 			"protect": "Protect",
-		}
+		},
 	},
 	horsea:
 	{
@@ -4331,7 +4331,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	houndoom:
 	{
@@ -4346,7 +4346,7 @@ exports.TeambuilderData =
 			"suckerpunch": "Sucker Punch",
 			"fireblast": "Fire Blast",
 			"hiddenpowerfighting": "Hidden Power Fighting",
-		}
+		},
 	},
 	houndour:
 	{
@@ -4362,7 +4362,7 @@ exports.TeambuilderData =
 			"darkpulse": "Dark Pulse",
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"nastyplot": "Nasty Plot",
-		}
+		},
 	},
 	huntail:
 	{
@@ -4376,7 +4376,7 @@ exports.TeambuilderData =
 			"hydropump": "Hydro Pump",
 			"batonpass": "Baton Pass",
 			"suckerpunch": "Sucker Punch",
-		}
+		},
 	},
 	hydreigon:
 	{
@@ -4404,7 +4404,7 @@ exports.TeambuilderData =
 			"bellydrum": "Belly Drum",
 			"zenheadbutt": "Zen Headbutt",
 			"firepunch": "Fire Punch",
-		}
+		},
 	},
 	igglybuff:
 	{
@@ -4419,7 +4419,7 @@ exports.TeambuilderData =
 			"healbell": "Heal Bell",
 			"seismictoss": "Seismic Toss",
 			"counter": "Counter",
-		}
+		},
 	},
 	illumise:
 	{
@@ -4432,7 +4432,7 @@ exports.TeambuilderData =
 			"wish": "Wish",
 			"bugbuzz": "Bug Buzz",
 			"encore": "Encore",
-		}
+		},
 	},
 	infernape:
 	{
@@ -4452,7 +4452,7 @@ exports.TeambuilderData =
 			"flareblitz": "Flare Blitz",
 			"hiddenpowerice": "Hidden Power Ice",
 			"thunderpunch": "ThunderPunch",
-		}
+		},
 	},
 	ivysaur:
 	{
@@ -4472,7 +4472,7 @@ exports.TeambuilderData =
 			"powerwhip": "Power Whip",
 			"leechseed": "Leech Seed",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	jellicent:
 	{
@@ -4492,7 +4492,7 @@ exports.TeambuilderData =
 			"seismictoss": "Seismic Toss",
 			"counter": "Counter",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	jirachi:
 	{
@@ -4510,7 +4510,7 @@ exports.TeambuilderData =
 			"psychic": "Psychic",
 			"thunderbolt": "Thunderbolt",
 			"icepunch": "Ice Punch",
-		}
+		},
 	},
 	jolteon:
 	{
@@ -4525,7 +4525,7 @@ exports.TeambuilderData =
 			"chargebeam": "Charge Beam",
 			"batonpass": "Baton Pass",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	joltik:
 	{
@@ -4538,7 +4538,7 @@ exports.TeambuilderData =
 			"hiddenpowerice": "Hidden Power Ice",
 			"energyball": "Energy Ball",
 			"voltswitch": "Volt Switch",
-		}
+		},
 	},
 	jumpluff:
 	{
@@ -4558,7 +4558,7 @@ exports.TeambuilderData =
 			"seedbomb": "Seed Bomb",
 			"reflect": "Reflect",
 			"synthesis": "Synthesis",
-		}
+		},
 	},
 	jynx:
 	{
@@ -4575,7 +4575,7 @@ exports.TeambuilderData =
 			"lovelykiss": "Lovely Kiss",
 			"substitute": "Substitute",
 			"grassknot": "Grass Knot",
-		}
+		},
 	},
 	kabuto:
 	{
@@ -4590,7 +4590,7 @@ exports.TeambuilderData =
 			"honeclaws": "Hone Claws",
 			"waterfall": "Waterfall",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	kabutops:
 	{
@@ -4609,7 +4609,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"superpower": "Superpower",
 			"lowkick": "Low Kick",
-		}
+		},
 	},
 	kadabra:
 	{
@@ -4624,7 +4624,7 @@ exports.TeambuilderData =
 			"shadowball": "Shadow Ball",
 			"encore": "Encore",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	kakuna:
 	{
@@ -4636,7 +4636,7 @@ exports.TeambuilderData =
 			"bugbite": "Bug Bite",
 			"stringshot": "String Shot",
 			"poisonsting": "Poison Sting",
-		}
+		},
 	},
 	kangaskhan:
 	{
@@ -4654,7 +4654,7 @@ exports.TeambuilderData =
 			"focuspunch": "Focus Punch",
 			"circlethrow": "Circle Throw",
 			"wish": "Wish",
-		}
+		},
 	},
 	karrablast:
 	{
@@ -4666,7 +4666,7 @@ exports.TeambuilderData =
 			"megahorn": "Megahorn",
 			"return": "Return",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	kecleon:
 	{
@@ -4679,7 +4679,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"thunderwave": "Thunder Wave",
 			"suckerpunch": "Sucker Punch",
-		}
+		},
 	},
 	keldeo:
 	{
@@ -4693,7 +4693,7 @@ exports.TeambuilderData =
 			"hiddenpowerghost": "Hidden Power Ghost",
 			"hiddenpowerelectric": "Hidden Power Electric",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	kingdra:
 	{
@@ -4710,7 +4710,7 @@ exports.TeambuilderData =
 			"waterfall": "Waterfall",
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
-		}
+		},
 	},
 	kingler:
 	{
@@ -4725,7 +4725,7 @@ exports.TeambuilderData =
 			"rockslide": "Rock Slide",
 			"substitute": "Substitute",
 			"xscissor": "X-Scissor",
-		}
+		},
 	},
 	kirlia:
 	{
@@ -4737,7 +4737,7 @@ exports.TeambuilderData =
 			"destinybond": "Destiny Bond",
 			"hypnosis": "Hypnosis",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	klang:
 	{
@@ -4749,7 +4749,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"geargrind": "Gear Grind",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	klink:
 	{
@@ -4761,7 +4761,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"geargrind": "Gear Grind",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	klinklang:
 	{
@@ -4773,7 +4773,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"geargrind": "Gear Grind",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	koffing:
 	{
@@ -4790,7 +4790,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
 			"thunderbolt": "Thunderbolt",
-		}
+		},
 	},
 	krabby:
 	{
@@ -4805,7 +4805,7 @@ exports.TeambuilderData =
 			"rockslide": "Rock Slide",
 			"substitute": "Substitute",
 			"xscissor": "X-Scissor",
-		}
+		},
 	},
 	kricketot:
 	{
@@ -4817,7 +4817,7 @@ exports.TeambuilderData =
 			"mudslap": "Mud-Slap",
 			"uproar": "Uproar",
 			"strugglebug": "Struggle Bug",
-		}
+		},
 	},
 	kricketune:
 	{
@@ -4831,7 +4831,7 @@ exports.TeambuilderData =
 			"brickbreak": "Brick Break",
 			"return": "Return",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	krokorok:
 	{
@@ -4845,7 +4845,7 @@ exports.TeambuilderData =
 			"crunch": "Crunch",
 			"firefang": "Fire Fang",
 			"honeclaws": "Hone Claws",
-		}
+		},
 	},
 	krookodile:
 	{
@@ -4861,7 +4861,7 @@ exports.TeambuilderData =
 			"taunt": "Taunt",
 			"firefang": "Fire Fang",
 			"honeclaws": "Hone Claws",
-		}
+		},
 	},
 	kyogre:
 	{
@@ -4874,7 +4874,7 @@ exports.TeambuilderData =
 			"thunder": "Thunder",
 			"icebeam": "Ice Beam",
 			"calmmind": "Calm Mind",
-		}
+		},
 	},
 	kyurem:
 	{
@@ -4889,7 +4889,7 @@ exports.TeambuilderData =
 			"focusblast": "Focus Blast",
 			"outrage": "Outrage",
 			"hiddenpowerfire": "Hidden Power Fire",
-		}
+		},
 	},
 	lairon:
 	{
@@ -4903,7 +4903,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"superpower": "Superpower",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	lampent:
 	{
@@ -4919,7 +4919,7 @@ exports.TeambuilderData =
 			"overheat": "Overheat",
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"hiddenpowerground": "Hidden Power Ground",
-		}
+		},
 	},
 	landorus:
 	{
@@ -4936,7 +4936,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"hammerarm": "Hammer Arm",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	lanturn:
 	{
@@ -4957,7 +4957,7 @@ exports.TeambuilderData =
 			"healbell": "Heal Bell",
 			"discharge": "Discharge",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	lapras:
 	{
@@ -4979,7 +4979,7 @@ exports.TeambuilderData =
 			"sleeptalk": "Sleep Talk",
 			"curse": "Curse",
 			"iceshard": "Ice Shard",
-		}
+		},
 	},
 	larvesta:
 	{
@@ -4993,7 +4993,7 @@ exports.TeambuilderData =
 			"zenheadbutt": "Zen Headbutt",
 			"morningsun": "Morning Sun",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	larvitar:
 	{
@@ -5006,7 +5006,7 @@ exports.TeambuilderData =
 			"rockpolish": "Rock Polish",
 			"crunch": "Crunch",
 			"dragondance": "Dragon Dance",
-		}
+		},
 	},
 	latias:
 	{
@@ -5020,7 +5020,7 @@ exports.TeambuilderData =
 			"roost": "Roost",
 			"calmmind": "Calm Mind",
 			"wish": "Wish",
-		}
+		},
 	},
 	latios:
 	{
@@ -5034,7 +5034,7 @@ exports.TeambuilderData =
 			"hiddenpowerfire": "Hidden Power Fire",
 			"psyshock": "Psyshock",
 			"roost": "Roost",
-		}
+		},
 	},
 	leafeon:
 	{
@@ -5051,7 +5051,7 @@ exports.TeambuilderData =
 			"roar": "Roar",
 			"healbell": "Heal Bell",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	leavanny:
 	{
@@ -5064,7 +5064,7 @@ exports.TeambuilderData =
 			"xscissor": "X-Scissor",
 			"return": "Return",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	ledian:
 	{
@@ -5082,7 +5082,7 @@ exports.TeambuilderData =
 			"bugbuzz": "Bug Buzz",
 			"swordsdance": "Swords Dance",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	ledyba:
 	{
@@ -5100,7 +5100,7 @@ exports.TeambuilderData =
 			"bugbuzz": "Bug Buzz",
 			"swordsdance": "Swords Dance",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	lickilicky:
 	{
@@ -5120,7 +5120,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"healbell": "Heal Bell",
 			"explosion": "Explosion",
-		}
+		},
 	},
 	lickitung:
 	{
@@ -5139,7 +5139,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"toxic": "Toxic",
 			"healbell": "Heal Bell",
-		}
+		},
 	},
 	liepard:
 	{
@@ -5155,7 +5155,7 @@ exports.TeambuilderData =
 			"suckerpunch": "Sucker Punch",
 			"return": "Return",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 	lileep:
 	{
@@ -5169,7 +5169,7 @@ exports.TeambuilderData =
 			"hiddenpowerfire": "Hidden Power Fire",
 			"gigadrain": "Giga Drain",
 			"stockpile": "Stockpile",
-		}
+		},
 	},
 	lilligant:
 	{
@@ -5185,7 +5185,7 @@ exports.TeambuilderData =
 			"hiddenpowerrock": "Hidden Power Rock",
 			"healingwish": "Healing Wish",
 			"aromatherapy": "Aromatherapy",
-		}
+		},
 	},
 	lillipup:
 	{
@@ -5198,7 +5198,7 @@ exports.TeambuilderData =
 			"firefang": "Fire Fang",
 			"crunch": "Crunch",
 			"icefang": "Ice Fang",
-		}
+		},
 	},
 	linoone:
 	{
@@ -5211,7 +5211,7 @@ exports.TeambuilderData =
 			"seedbomb": "Seed Bomb",
 			"substitute": "Substitute",
 			"shadowclaw": "Shadow Claw",
-		}
+		},
 	},
 	litwick:
 	{
@@ -5227,7 +5227,7 @@ exports.TeambuilderData =
 			"overheat": "Overheat",
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"hiddenpowerground": "Hidden Power Ground",
-		}
+		},
 	},
 	lombre:
 	{
@@ -5240,7 +5240,7 @@ exports.TeambuilderData =
 			"scald": "Scald",
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
-		}
+		},
 	},
 	lopunny:
 	{
@@ -5261,7 +5261,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"thunderwave": "Thunder Wave",
 			"healingwish": "Healing Wish",
-		}
+		},
 	},
 	lotad:
 	{
@@ -5274,7 +5274,7 @@ exports.TeambuilderData =
 			"scald": "Scald",
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
-		}
+		},
 	},
 	loudred:
 	{
@@ -5286,7 +5286,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"shadowball": "Shadow Ball",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	lucario:
 	{
@@ -5305,7 +5305,7 @@ exports.TeambuilderData =
 			"darkpulse": "Dark Pulse",
 			"vacuumwave": "Vacuum Wave",
 			"hijumpkick": "Hi Jump Kick",
-		}
+		},
 	},
 	ludicolo:
 	{
@@ -5322,7 +5322,7 @@ exports.TeambuilderData =
 			"leechseed": "Leech Seed",
 			"substitute": "Substitute",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	lugia:
 	{
@@ -5337,7 +5337,7 @@ exports.TeambuilderData =
 			"whirlwind": "Whirlwind",
 			"reflect": "Reflect",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	lumineon:
 	{
@@ -5351,7 +5351,7 @@ exports.TeambuilderData =
 			"hiddenpowerelectric": "Hidden Power Electric",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	lunatone:
 	{
@@ -5367,7 +5367,7 @@ exports.TeambuilderData =
 			"calmmind": "Calm Mind",
 			"icebeam": "Ice Beam",
 			"hiddenpowerrock": "Hidden Power Rock",
-		}
+		},
 	},
 	luvdisc:
 	{
@@ -5380,7 +5380,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"toxic": "Toxic",
 			"sweetkiss": "Sweet Kiss",
-		}
+		},
 	},
 	luxio:
 	{
@@ -5392,7 +5392,7 @@ exports.TeambuilderData =
 			"icefang": "Ice Fang",
 			"firefang": "Fire Fang",
 			"crunch": "Crunch",
-		}
+		},
 	},
 	luxray:
 	{
@@ -5407,7 +5407,7 @@ exports.TeambuilderData =
 			"superpower": "Superpower",
 			"voltswitch": "Volt Switch",
 			"hiddenpowergrass": "Hidden Power Grass",
-		}
+		},
 	},
 	machamp:
 	{
@@ -5421,7 +5421,7 @@ exports.TeambuilderData =
 			"icepunch": "Ice Punch",
 			"substitute": "Substitute",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	machoke:
 	{
@@ -5435,7 +5435,7 @@ exports.TeambuilderData =
 			"icepunch": "Ice Punch",
 			"substitute": "Substitute",
 			"rockslide": "Rock Slide",
-		}
+		},
 	},
 	machop:
 	{
@@ -5449,7 +5449,7 @@ exports.TeambuilderData =
 			"icepunch": "Ice Punch",
 			"substitute": "Substitute",
 			"rockslide": "Rock Slide",
-		}
+		},
 	},
 	magby:
 	{
@@ -5464,7 +5464,7 @@ exports.TeambuilderData =
 			"crosschop": "Cross Chop",
 			"thunderpunch": "ThunderPunch",
 			"overheat": "Overheat",
-		}
+		},
 	},
 	magcargo:
 	{
@@ -5486,7 +5486,7 @@ exports.TeambuilderData =
 			"shellsmash": "Shell Smash",
 			"fireblast": "Fire Blast",
 			"earthpower": "Earth Power",
-		}
+		},
 	},
 	magikarp:
 	{
@@ -5498,7 +5498,7 @@ exports.TeambuilderData =
 			"flail": "Flail",
 			"tackle": "Tackle",
 			"magikarpsrevenge": "Magikarp's Revenge",
-		}
+		},
 	},
 	magmar:
 	{
@@ -5514,7 +5514,7 @@ exports.TeambuilderData =
 			"thunderpunch": "ThunderPunch",
 			"overheat": "Overheat",
 			"focusblast": "Focus Blast",
-		}
+		},
 	},
 	magmortar:
 	{
@@ -5528,7 +5528,7 @@ exports.TeambuilderData =
 			"hiddenpowergrass": "Hidden Power Grass",
 			"thunderbolt": "Thunderbolt",
 			"overheat": "Overheat",
-		}
+		},
 	},
 	magnemite:
 	{
@@ -5544,7 +5544,7 @@ exports.TeambuilderData =
 			"flashcannon": "Flash Cannon",
 			"hiddenpowerice": "Hidden Power Ice",
 			"voltswitch": "Volt Switch",
-		}
+		},
 	},
 	magneton:
 	{
@@ -5560,7 +5560,7 @@ exports.TeambuilderData =
 			"flashcannon": "Flash Cannon",
 			"hiddenpowerice": "Hidden Power Ice",
 			"voltswitch": "Volt Switch",
-		}
+		},
 	},
 	magnezone:
 	{
@@ -5576,7 +5576,7 @@ exports.TeambuilderData =
 			"flashcannon": "Flash Cannon",
 			"hiddenpowerice": "Hidden Power Ice",
 			"voltswitch": "Volt Switch",
-		}
+		},
 	},
 	makuhita:
 	{
@@ -5591,7 +5591,7 @@ exports.TeambuilderData =
 			"closecombat": "Close Combat",
 			"icepunch": "Ice Punch",
 			"bulkup": "Bulk Up",
-		}
+		},
 	},
 	mamoswine:
 	{
@@ -5607,7 +5607,7 @@ exports.TeambuilderData =
 			"superpower": "Superpower",
 			"stealthrock": "Stealth Rock",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	manaphy:
 	{
@@ -5621,7 +5621,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"grassknot": "Grass Knot",
 			"calmmind": "Calm Mind",
-		}
+		},
 	},
 	mandibuzz:
 	{
@@ -5641,7 +5641,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"bravebird": "Brave Bird",
-		}
+		},
 	},
 	manectric:
 	{
@@ -5655,7 +5655,7 @@ exports.TeambuilderData =
 			"overheat": "Overheat",
 			"switcheroo": "Switcheroo",
 			"flamethrower": "Flamethrower",
-		}
+		},
 	},
 	mankey:
 	{
@@ -5668,7 +5668,7 @@ exports.TeambuilderData =
 			"icepunch": "Ice Punch",
 			"rockslide": "Rock Slide",
 			"punishment": "Punishment",
-		}
+		},
 	},
 	mantine:
 	{
@@ -5686,7 +5686,7 @@ exports.TeambuilderData =
 			"sleeptalk": "Sleep Talk",
 			"scald": "Scald",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	mantyke:
 	{
@@ -5704,7 +5704,7 @@ exports.TeambuilderData =
 			"sleeptalk": "Sleep Talk",
 			"scald": "Scald",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	maractus:
 	{
@@ -5719,7 +5719,7 @@ exports.TeambuilderData =
 			"hiddenpowerfire": "Hidden Power Fire",
 			"toxic": "Toxic",
 			"solarbeam": "SolarBeam",
-		}
+		},
 	},
 	mareep:
 	{
@@ -5735,7 +5735,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"hiddenpowerice": "Hidden Power Ice",
 			"cottonguard": "Cotton Guard",
-		}
+		},
 	},
 	marill:
 	{
@@ -5752,7 +5752,7 @@ exports.TeambuilderData =
 			"aquajet": "Aqua Jet",
 			"superpower": "Superpower",
 			"icepunch": "Ice Punch",
-		}
+		},
 	},
 	marowak:
 	{
@@ -5767,7 +5767,7 @@ exports.TeambuilderData =
 			"swordsdance": "Swords Dance",
 			"firepunch": "Fire Punch",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	marshtomp:
 	{
@@ -5782,7 +5782,7 @@ exports.TeambuilderData =
 			"icepunch": "Ice Punch",
 			"rockslide": "Rock Slide",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	masquerain:
 	{
@@ -5797,7 +5797,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"batonpass": "Baton Pass",
 			"roost": "Roost",
-		}
+		},
 	},
 	mawile:
 	{
@@ -5812,7 +5812,7 @@ exports.TeambuilderData =
 			"batonpass": "Baton Pass",
 			"substitute": "Substitute",
 			"irondefense": "Iron Defense",
-		}
+		},
 	},
 	medicham:
 	{
@@ -5828,7 +5828,7 @@ exports.TeambuilderData =
 			"trick": "Trick",
 			"fakeout": "Fake Out",
 			"bulletpunch": "Bullet Punch",
-		}
+		},
 	},
 	meditite:
 	{
@@ -5844,7 +5844,7 @@ exports.TeambuilderData =
 			"fakeout": "Fake Out",
 			"bulletpunch": "Bullet Punch",
 			"drainpunch": "Drain Punch",
-		}
+		},
 	},
 	meganium:
 	{
@@ -5865,7 +5865,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"synthesis": "Synthesis",
 			"dragontail": "Dragon Tail",
-		}
+		},
 	},
 	meloetta:
 	{
@@ -5881,7 +5881,7 @@ exports.TeambuilderData =
 			"psychic": "Psychic",
 			"thunderbolt": "Thunderbolt",
 			"hypervoice": "Hyper Voice",
-		}
+		},
 	},
 	meloettapirouette:
 	{
@@ -5903,7 +5903,7 @@ exports.TeambuilderData =
 			"hypnosis": "Hypnosis",
 			"waterpulse": "Water Pulse",
 			"thunderbolt": "Thunderbolt",
-		}
+		},
 	},
 	mesprit:
 	{
@@ -5923,7 +5923,7 @@ exports.TeambuilderData =
 			"raindance": "Rain Dance",
 			"trickroom": "Trick Room",
 			"sunnyday": "Sunny Day",
-		}
+		},
 	},
 	metagross:
 	{
@@ -5938,7 +5938,7 @@ exports.TeambuilderData =
 			"zenheadbutt": "Zen Headbutt",
 			"bulletpunch": "Bullet Punch",
 			"trick": "Trick",
-		}
+		},
 	},
 	metang:
 	{
@@ -5950,7 +5950,7 @@ exports.TeambuilderData =
 			"meteormash": "Meteor Mash",
 			"toxic": "Toxic",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	metapod:
 	{
@@ -5962,7 +5962,7 @@ exports.TeambuilderData =
 			"bugbite": "Bug Bite",
 			"stringshot": "String Shot",
 			"tackle": "Tackle",
-		}
+		},
 	},
 	mew:
 	{
@@ -5993,7 +5993,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"stealthrock": "Stealth Rock",
 			"transform": "Transform",
-		}
+		},
 	},
 	mewtwo:
 	{
@@ -6010,7 +6010,7 @@ exports.TeambuilderData =
 			"recover": "Recover",
 			"thunderbolt": "Thunderbolt",
 			"grassknot": "Grass Knot",
-		}
+		},
 	},
 	mienfoo:
 	{
@@ -6029,7 +6029,7 @@ exports.TeambuilderData =
 			"fakeout": "Fake Out",
 			"substitute": "Substitute",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	mienshao:
 	{
@@ -6046,7 +6046,7 @@ exports.TeambuilderData =
 			"swordsdance": "Swords Dance",
 			"batonpass": "Baton Pass",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	mightyena:
 	{
@@ -6060,7 +6060,7 @@ exports.TeambuilderData =
 			"firefang": "Fire Fang",
 			"howl": "Howl",
 			"return": "Return",
-		}
+		},
 	},
 	milotic:
 	{
@@ -6077,7 +6077,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
 			"hiddenpowergrass": "Hidden Power Grass",
-		}
+		},
 	},
 	miltank:
 	{
@@ -6093,7 +6093,7 @@ exports.TeambuilderData =
 			"firepunch": "Fire Punch",
 			"earthquake": "Earthquake",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	mimejr:
 	{
@@ -6113,7 +6113,7 @@ exports.TeambuilderData =
 			"thunderbolt": "Thunderbolt",
 			"taunt": "Taunt",
 			"encore": "Encore",
-		}
+		},
 	},
 	minccino:
 	{
@@ -6127,7 +6127,7 @@ exports.TeambuilderData =
 			"knockoff": "Knock Off",
 			"uturn": "U-turn",
 			"aquatail": "Aqua Tail",
-		}
+		},
 	},
 	minun:
 	{
@@ -6140,7 +6140,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"batonpass": "Baton Pass",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	misdreavus:
 	{
@@ -6159,7 +6159,7 @@ exports.TeambuilderData =
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"painsplit": "Pain Split",
 			"hiddenpowerground": "Hidden Power Ground",
-		}
+		},
 	},
 	mismagius:
 	{
@@ -6178,7 +6178,7 @@ exports.TeambuilderData =
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"painsplit": "Pain Split",
 			"hiddenpowerground": "Hidden Power Ground",
-		}
+		},
 	},
 	moltres:
 	{
@@ -6198,7 +6198,7 @@ exports.TeambuilderData =
 			"sunnyday": "Sunny Day",
 			"solarbeam": "SolarBeam",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	monferno:
 	{
@@ -6211,7 +6211,7 @@ exports.TeambuilderData =
 			"hiddenpowergrass": "Hidden Power Grass",
 			"fakeout": "Fake Out",
 			"vacuumwave": "Vacuum Wave",
-		}
+		},
 	},
 	mothim:
 	{
@@ -6224,7 +6224,7 @@ exports.TeambuilderData =
 			"airslash": "Air Slash",
 			"gigadrain": "Giga Drain",
 			"roost": "Roost",
-		}
+		},
 	},
 	mrmime:
 	{
@@ -6244,7 +6244,7 @@ exports.TeambuilderData =
 			"thunderbolt": "Thunderbolt",
 			"taunt": "Taunt",
 			"encore": "Encore",
-		}
+		},
 	},
 	mudkip:
 	{
@@ -6257,7 +6257,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"superpower": "Superpower",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	muk:
 	{
@@ -6276,7 +6276,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"icepunch": "Ice Punch",
 			"firepunch": "Fire Punch",
-		}
+		},
 	},
 	munchlax:
 	{
@@ -6293,7 +6293,7 @@ exports.TeambuilderData =
 			"firepunch": "Fire Punch",
 			"icepunch": "Ice Punch",
 			"whirlwind": "Whirlwind",
-		}
+		},
 	},
 	munna:
 	{
@@ -6313,7 +6313,7 @@ exports.TeambuilderData =
 			"reflect": "Reflect",
 			"lightscreen": "Light Screen",
 			"magiccoat": "Magic Coat",
-		}
+		},
 	},
 	murkrow:
 	{
@@ -6330,7 +6330,7 @@ exports.TeambuilderData =
 			"pursuit": "Pursuit",
 			"darkpulse": "Dark Pulse",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 	musharna:
 	{
@@ -6349,7 +6349,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"reflect": "Reflect",
 			"lightscreen": "Light Screen",
-		}
+		},
 	},
 	natu:
 	{
@@ -6368,7 +6368,7 @@ exports.TeambuilderData =
 			"nightshade": "Night Shade",
 			"heatwave": "Heat Wave",
 			"trick": "Trick",
-		}
+		},
 	},
 	nidoking:
 	{
@@ -6383,7 +6383,7 @@ exports.TeambuilderData =
 			"sludgewave": "Sludge Wave",
 			"focusblast": "Focus Blast",
 			"shadowball": "Shadow Ball",
-		}
+		},
 	},
 	nidoqueen:
 	{
@@ -6400,7 +6400,7 @@ exports.TeambuilderData =
 			"sludgewave": "Sludge Wave",
 			"dragontail": "Dragon Tail",
 			"focusblast": "Focus Blast",
-		}
+		},
 	},
 	nidoranf:
 	{
@@ -6413,7 +6413,7 @@ exports.TeambuilderData =
 			"poisonjab": "Poison Jab",
 			"honeclaws": "Hone Claws",
 			"doublekick": "Double Kick",
-		}
+		},
 	},
 	nidoranm:
 	{
@@ -6426,7 +6426,7 @@ exports.TeambuilderData =
 			"headsmash": "Head Smash",
 			"honeclaws": "Hone Claws",
 			"shadowclaw": "Shadow Claw",
-		}
+		},
 	},
 	nidorina:
 	{
@@ -6440,7 +6440,7 @@ exports.TeambuilderData =
 			"honeclaws": "Hone Claws",
 			"doublekick": "Double Kick",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	nidorino:
 	{
@@ -6453,7 +6453,7 @@ exports.TeambuilderData =
 			"headsmash": "Head Smash",
 			"honeclaws": "Hone Claws",
 			"shadowclaw": "Shadow Claw",
-		}
+		},
 	},
 	nincada:
 	{
@@ -6465,7 +6465,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"aerialace": "Aerial Ace",
 			"nightslash": "Night Slash",
-		}
+		},
 	},
 	ninetales:
 	{
@@ -6481,7 +6481,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"toxic": "Toxic",
 			"hypnosis": "Hypnosis",
-		}
+		},
 	},
 	ninjask:
 	{
@@ -6494,7 +6494,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"protect": "Protect",
 			"xscissor": "X-Scissor",
-		}
+		},
 	},
 	noctowl:
 	{
@@ -6510,7 +6510,7 @@ exports.TeambuilderData =
 			"reflect": "Reflect",
 			"lightscreen": "Light Screen",
 			"magiccoat": "Magic Coat",
-		}
+		},
 	},
 	nosepass:
 	{
@@ -6523,7 +6523,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"stealthrock": "Stealth Rock",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 	numel:
 	{
@@ -6539,7 +6539,7 @@ exports.TeambuilderData =
 			"earthpower": "Earth Power",
 			"fireblast": "Fire Blast",
 			"hiddenpowergrass": "Hidden Power Grass",
-		}
+		},
 	},
 	nuzleaf:
 	{
@@ -6552,7 +6552,7 @@ exports.TeambuilderData =
 			"seedbomb": "Seed Bomb",
 			"explosion": "Explosion",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	octillery:
 	{
@@ -6567,7 +6567,7 @@ exports.TeambuilderData =
 			"chargebeam": "Charge Beam",
 			"substiute": "Substiute",
 			"waterspout": "Water Spout",
-		}
+		},
 	},
 	oddish:
 	{
@@ -6585,7 +6585,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"leechseed": "Leech Seed",
-		}
+		},
 	},
 	omanyte:
 	{
@@ -6602,7 +6602,7 @@ exports.TeambuilderData =
 			"toxicspikes": "Toxic Spikes",
 			"stealthrock": "Stealth Rock",
 			"hydropump": "Hydro Pump",
-		}
+		},
 	},
 	omastar:
 	{
@@ -6619,7 +6619,7 @@ exports.TeambuilderData =
 			"toxicspikes": "Toxic Spikes",
 			"stealthrock": "Stealth Rock",
 			"hydropump": "Hydro Pump",
-		}
+		},
 	},
 	onix:
 	{
@@ -6632,7 +6632,7 @@ exports.TeambuilderData =
 			"stoneedge": "Stone Edge",
 			"dragontail": "Dragon Tail",
 			"curse": "Curse",
-		}
+		},
 	},
 	oshawott:
 	{
@@ -6645,7 +6645,7 @@ exports.TeambuilderData =
 			"aquajet": "Aqua Jet",
 			"xscissor": "X-Scissor",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	pachirisu:
 	{
@@ -6658,7 +6658,7 @@ exports.TeambuilderData =
 			"superfang": "Super Fang",
 			"toxic": "Toxic",
 			"voltswitch": "Volt Switch",
-		}
+		},
 	},
 	palkia:
 	{
@@ -6673,7 +6673,7 @@ exports.TeambuilderData =
 			"thunderbolt": "Thunderbolt",
 			"outrage": "Outrage",
 			"fireblast": "Fire Blast",
-		}
+		},
 	},
 	palpitoad:
 	{
@@ -6687,7 +6687,7 @@ exports.TeambuilderData =
 			"earthpower": "Earth Power",
 			"hiddenpowerelectric": "Hidden Power Electric",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	panpour:
 	{
@@ -6700,7 +6700,7 @@ exports.TeambuilderData =
 			"hiddenpowergrass": "Hidden Power Grass",
 			"substitute": "Substitute",
 			"surf": "Surf",
-		}
+		},
 	},
 	pansage:
 	{
@@ -6714,7 +6714,7 @@ exports.TeambuilderData =
 			"energyball": "Energy Ball",
 			"nastyplot": "Nasty Plot",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	pansear:
 	{
@@ -6729,7 +6729,7 @@ exports.TeambuilderData =
 			"sunnyday": "Sunny Day",
 			"solarbeam": "SolarBeam",
 			"overheat": "Overheat",
-		}
+		},
 	},
 	paras:
 	{
@@ -6744,7 +6744,7 @@ exports.TeambuilderData =
 			"synthesis": "Synthesis",
 			"leechseed": "Leech Seed",
 			"aromatherapy": "Aromatherapy",
-		}
+		},
 	},
 	parasect:
 	{
@@ -6759,7 +6759,7 @@ exports.TeambuilderData =
 			"synthesis": "Synthesis",
 			"leechseed": "Leech Seed",
 			"aromatherapy": "Aromatherapy",
-		}
+		},
 	},
 	patrat:
 	{
@@ -6773,7 +6773,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"hypnosis": "Hypnosis",
 			"return": "Return",
-		}
+		},
 	},
 	pawniard:
 	{
@@ -6788,7 +6788,7 @@ exports.TeambuilderData =
 			"ironhead": "Iron Head",
 			"brickbreak": "Brick Break",
 			"nightslash": "Night Slash",
-		}
+		},
 	},
 	pelipper:
 	{
@@ -6806,7 +6806,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"toxic": "Toxic",
 			"roost": "Roost",
-		}
+		},
 	},
 	persian:
 	{
@@ -6825,7 +6825,7 @@ exports.TeambuilderData =
 			"waterpulse": "Water Pulse",
 			"thunderbolt": "Thunderbolt",
 			"switcheroo": "Switcheroo",
-		}
+		},
 	},
 	petilil:
 	{
@@ -6838,7 +6838,7 @@ exports.TeambuilderData =
 			"solarbeam": "SolarBeam",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	phanpy:
 	{
@@ -6853,7 +6853,7 @@ exports.TeambuilderData =
 			"knockoff": "Knock Off",
 			"seedbomb": "Seed Bomb",
 			"superpower": "Superpower",
-		}
+		},
 	},
 	phione:
 	{
@@ -6868,7 +6868,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"icebeam": "Ice Beam",
 			"surf": "Surf",
-		}
+		},
 	},
 	pichu:
 	{
@@ -6883,7 +6883,7 @@ exports.TeambuilderData =
 			"irontail": "Iron Tail",
 			"toxic": "Toxic",
 			"thunderpunch": "ThunderPunch",
-		}
+		},
 	},
 	pichuspikyeared:
 	{
@@ -6903,7 +6903,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"workup": "Work Up",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	pidgeotto:
 	{
@@ -6919,7 +6919,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"workup": "Work Up",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	pidgey:
 	{
@@ -6935,7 +6935,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"workup": "Work Up",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	pidove:
 	{
@@ -6948,7 +6948,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"detect": "Detect",
 			"roost": "Roost",
-		}
+		},
 	},
 	pignite:
 	{
@@ -6961,7 +6961,7 @@ exports.TeambuilderData =
 			"wildcharge": "Wild Charge",
 			"superpower": "Superpower",
 			"headsmash": "Head Smash",
-		}
+		},
 	},
 	pikachu:
 	{
@@ -6977,7 +6977,7 @@ exports.TeambuilderData =
 			"extremespeed": "ExtremeSpeed",
 			"encore": "Encore",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	piloswine:
 	{
@@ -6992,7 +6992,7 @@ exports.TeambuilderData =
 			"superpower": "Superpower",
 			"toxic": "Toxic",
 			"endeavor": "Endeavor",
-		}
+		},
 	},
 	pineco:
 	{
@@ -7007,7 +7007,7 @@ exports.TeambuilderData =
 			"bugbite": "Bug Bite",
 			"stealthrock": "Stealth Rock",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	pinsir:
 	{
@@ -7023,7 +7023,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"stoneedge": "Stone Edge",
 			"quickattack": "Quick Attack",
-		}
+		},
 	},
 	piplup:
 	{
@@ -7038,7 +7038,7 @@ exports.TeambuilderData =
 			"hiddenpowerelectric": "Hidden Power Electric",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"yawn": "Yawn",
-		}
+		},
 	},
 	plusle:
 	{
@@ -7051,7 +7051,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"batonpass": "Baton Pass",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	politoed:
 	{
@@ -7070,7 +7070,7 @@ exports.TeambuilderData =
 			"surf": "Surf",
 			"hydropump": "Hydro Pump",
 			"hiddenpowergrass": "Hidden Power Grass",
-		}
+		},
 	},
 	poliwag:
 	{
@@ -7088,7 +7088,7 @@ exports.TeambuilderData =
 			"hynosis": "Hynosis",
 			"waterfall": "Waterfall",
 			"return": "Return",
-		}
+		},
 	},
 	poliwhirl:
 	{
@@ -7106,7 +7106,7 @@ exports.TeambuilderData =
 			"hynosis": "Hynosis",
 			"waterfall": "Waterfall",
 			"return": "Return",
-		}
+		},
 	},
 	poliwrath:
 	{
@@ -7124,7 +7124,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
 			"icepunch": "Ice Punch",
-		}
+		},
 	},
 	ponyta:
 	{
@@ -7142,7 +7142,7 @@ exports.TeambuilderData =
 			"hypnosis": "Hypnosis",
 			"return": "Return",
 			"flamecharge": "Flame Charge",
-		}
+		},
 	},
 	poochyena:
 	{
@@ -7155,7 +7155,7 @@ exports.TeambuilderData =
 			"firefang": "Fire Fang",
 			"suckerpunch": "Sucker Punch",
 			"return": "Return",
-		}
+		},
 	},
 	porygon:
 	{
@@ -7173,7 +7173,7 @@ exports.TeambuilderData =
 			"discharge": "Discharge",
 			"trickroom": "Trick Room",
 			"trick": "Trick",
-		}
+		},
 	},
 	porygonz:
 	{
@@ -7191,7 +7191,7 @@ exports.TeambuilderData =
 			"trick": "Trick",
 			"nastyplot": "Nasty Plot",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	porygon2:
 	{
@@ -7209,7 +7209,7 @@ exports.TeambuilderData =
 			"discharge": "Discharge",
 			"trickroom": "Trick Room",
 			"trick": "Trick",
-		}
+		},
 	},
 	primeape:
 	{
@@ -7224,7 +7224,7 @@ exports.TeambuilderData =
 			"punishment": "Punishment",
 			"earthquake": "Earthquake",
 			"encore": "Encore",
-		}
+		},
 	},
 	prinplup:
 	{
@@ -7239,7 +7239,7 @@ exports.TeambuilderData =
 			"hiddenpowerelectric": "Hidden Power Electric",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"yawn": "Yawn",
-		}
+		},
 	},
 	probopass:
 	{
@@ -7258,7 +7258,7 @@ exports.TeambuilderData =
 			"crosschop": "Cross Chop",
 			"encore": "Encore",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	pupitar:
 	{
@@ -7271,7 +7271,7 @@ exports.TeambuilderData =
 			"rockpolish": "Rock Polish",
 			"crunch": "Crunch",
 			"dragondance": "Dragon Dance",
-		}
+		},
 	},
 	purrloin:
 	{
@@ -7283,7 +7283,7 @@ exports.TeambuilderData =
 			"nightslash": "Night Slash",
 			"toxic": "Toxic",
 			"fakeout": "Fake Out",
-		}
+		},
 	},
 	purugly:
 	{
@@ -7298,7 +7298,7 @@ exports.TeambuilderData =
 			"quickattack": "Quick Attack",
 			"return": "Return",
 			"shadowclaw": "Shadow Claw",
-		}
+		},
 	},
 	quagsire:
 	{
@@ -7315,7 +7315,7 @@ exports.TeambuilderData =
 			"stoneedge": "Stone Edge",
 			"stockpile": "Stockpile",
 			"yawn": "Yawn",
-		}
+		},
 	},
 	quilava:
 	{
@@ -7328,7 +7328,7 @@ exports.TeambuilderData =
 			"flamethrower": "Flamethrower",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"naturepower": "Nature Power",
-		}
+		},
 	},
 	qwilfish:
 	{
@@ -7345,7 +7345,7 @@ exports.TeambuilderData =
 			"thunderwave": "Thunder Wave",
 			"taunt": "Taunt",
 			"destinybond": "Destiny Bond",
-		}
+		},
 	},
 	raichu:
 	{
@@ -7360,7 +7360,7 @@ exports.TeambuilderData =
 			"hiddenpowerice": "Hidden Power Ice",
 			"focusblast": "Focus Blast",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	raikou:
 	{
@@ -7374,7 +7374,7 @@ exports.TeambuilderData =
 			"aurasphere": "Aura Sphere",
 			"calmmind": "Calm Mind",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	ralts:
 	{
@@ -7386,7 +7386,7 @@ exports.TeambuilderData =
 			"destinybond": "Destiny Bond",
 			"hypnosis": "Hypnosis",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	rampardos:
 	{
@@ -7402,7 +7402,7 @@ exports.TeambuilderData =
 			"rockpolish": "Rock Polish",
 			"crunch": "Crunch",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	rapidash:
 	{
@@ -7421,7 +7421,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"flamecharge": "Flame Charge",
 			"megahorn": "Megahorn",
-		}
+		},
 	},
 	raticate:
 	{
@@ -7435,7 +7435,7 @@ exports.TeambuilderData =
 			"wildcharge": "Wild Charge",
 			"suckerpunch": "Sucker Punch",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	rattata:
 	{
@@ -7449,7 +7449,7 @@ exports.TeambuilderData =
 			"wildcharge": "Wild Charge",
 			"suckerpunch": "Sucker Punch",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	rayquaza:
 	{
@@ -7465,7 +7465,7 @@ exports.TeambuilderData =
 			"swordsdance": "Swords Dance",
 			"dracometeor": "Draco Meteor",
 			"dragonclaw": "Dragon Claw",
-		}
+		},
 	},
 	regice:
 	{
@@ -7479,7 +7479,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	regigigas:
 	{
@@ -7496,7 +7496,7 @@ exports.TeambuilderData =
 			"firepunch": "Fire Punch",
 			"toxic": "Toxic",
 			"confuseray": "Confuse Ray",
-		}
+		},
 	},
 	regirock:
 	{
@@ -7514,7 +7514,7 @@ exports.TeambuilderData =
 			"sleeptalk": "Sleep Talk",
 			"rockslide": "Rock Slide",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	registeel:
 	{
@@ -7529,7 +7529,7 @@ exports.TeambuilderData =
 			"thunderwave": "Thunder Wave",
 			"toxic": "Toxic",
 			"seismictoss": "Seismic Toss",
-		}
+		},
 	},
 	relicanth:
 	{
@@ -7543,7 +7543,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"doubleedge": "Double-Edge",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	remoraid:
 	{
@@ -7560,7 +7560,7 @@ exports.TeambuilderData =
 			"seedbomb": "Seed Bomb",
 			"return": "Return",
 			"rockblast": "Rock Blast",
-		}
+		},
 	},
 	reshiram:
 	{
@@ -7574,7 +7574,7 @@ exports.TeambuilderData =
 			"flamethrower": "Flamethrower",
 			"flamecharge": "Flame Charge",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	reuniclus:
 	{
@@ -7591,7 +7591,7 @@ exports.TeambuilderData =
 			"shadowball": "Shadow Ball",
 			"trickroom": "Trick Room",
 			"psyshock": "Psyshock",
-		}
+		},
 	},
 	rhydon:
 	{
@@ -7609,7 +7609,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"toxic": "Toxic",
 			"rockblast": "Rock Blast",
-		}
+		},
 	},
 	rhyhorn:
 	{
@@ -7627,7 +7627,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"toxic": "Toxic",
 			"rockblast": "Rock Blast",
-		}
+		},
 	},
 	rhyperior:
 	{
@@ -7645,7 +7645,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"toxic": "Toxic",
 			"rockblast": "Rock Blast",
-		}
+		},
 	},
 	riolu:
 	{
@@ -7657,7 +7657,7 @@ exports.TeambuilderData =
 			"roar": "Roar",
 			"copycat": "Copycat",
 			"sunnyday": "Sunny Day",
-		}
+		},
 	},
 	roggenrola:
 	{
@@ -7673,7 +7673,7 @@ exports.TeambuilderData =
 			"explosion": "Explosion",
 			"return": "Return",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	roselia:
 	{
@@ -7687,7 +7687,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"stunspore": "Stun Spore",
 			"rest": "Rest",
-		}
+		},
 	},
 	roserade:
 	{
@@ -7705,7 +7705,7 @@ exports.TeambuilderData =
 			"synthesis": "Synthesis",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"aromatherapy": "Aromatherapy",
-		}
+		},
 	},
 	rotom:
 	{
@@ -7727,7 +7727,7 @@ exports.TeambuilderData =
 			"sleeptalk": "Sleep Talk",
 			"trick": "Trick",
 			"chargebeam": "Charge Beam",
-		}
+		},
 	},
 	rotommow:
 	{
@@ -7751,7 +7751,7 @@ exports.TeambuilderData =
 			"chargebeam": "Charge Beam",
 			"raindance": "Rain Dance",
 			"thunder": "Thunder",
-		}
+		},
 	},
 	rotomfrost:
 	{
@@ -7773,7 +7773,7 @@ exports.TeambuilderData =
 			"trick": "Trick",
 			"blizzard": "Blizzard",
 			"chargebeam": "Charge Beam",
-		}
+		},
 	},
 	rotomheat:
 	{
@@ -7794,7 +7794,7 @@ exports.TeambuilderData =
 			"overheat": "Overheat",
 			"trick": "Trick",
 			"chargebeam": "Charge Beam",
-		}
+		},
 	},
 	rotomfan:
 	{
@@ -7818,7 +7818,7 @@ exports.TeambuilderData =
 			"airslash": "Air Slash",
 			"confuseray": "Confuse Ray",
 			"chargebeam": "Charge Beam",
-		}
+		},
 	},
 	rotomwash:
 	{
@@ -7841,7 +7841,7 @@ exports.TeambuilderData =
 			"chargebeam": "Charge Beam",
 			"raindance": "Rain Dance",
 			"thunder": "Thunder",
-		}
+		},
 	},
 	rufflet:
 	{
@@ -7855,7 +7855,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"substitute": "Substitute",
 			"bulkup": "Bulk Up",
-		}
+		},
 	},
 	sableye:
 	{
@@ -7870,7 +7870,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"nightshade": "Night Shade",
 			"seismictoss": "Seismic Toss",
-		}
+		},
 	},
 	salamence:
 	{
@@ -7885,7 +7885,7 @@ exports.TeambuilderData =
 			"roost": "Roost",
 			"dragondance": "Dragon Dance",
 			"dragonclaw": "Dragon Claw",
-		}
+		},
 	},
 	samurott:
 	{
@@ -7902,7 +7902,7 @@ exports.TeambuilderData =
 			"hydropump": "Hydro Pump",
 			"grassknot": "Grass Knot",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	sandile:
 	{
@@ -7916,7 +7916,7 @@ exports.TeambuilderData =
 			"crunch": "Crunch",
 			"firefang": "Fire Fang",
 			"honeclaws": "Hone Claws",
-		}
+		},
 	},
 	sandshrew:
 	{
@@ -7932,7 +7932,7 @@ exports.TeambuilderData =
 			"xscissor": "X-Scissor",
 			"stealthrock": "Stealth Rock",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	sandslash:
 	{
@@ -7948,7 +7948,7 @@ exports.TeambuilderData =
 			"xscissor": "X-Scissor",
 			"stealthrock": "Stealth Rock",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	sawk:
 	{
@@ -7962,7 +7962,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"reversal": "Reversal",
 			"bulkup": "Bulk Up",
-		}
+		},
 	},
 	sawsbuck:
 	{
@@ -7979,7 +7979,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"synthesis": "Synthesis",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	sawsbucksummer:
 	{
@@ -8007,7 +8007,7 @@ exports.TeambuilderData =
 			"focusblast": "Focus Blast",
 			"synthesis": "Synthesis",
 			"hiddenpowerrock": "Hidden Power Rock",
-		}
+		},
 	},
 	scizor:
 	{
@@ -8023,7 +8023,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"batonpass": "Baton Pass",
 			"pursuit": "Pursuit",
-		}
+		},
 	},
 	scolipede:
 	{
@@ -8038,7 +8038,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"swordsdance": "Swords Dance",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	scrafty:
 	{
@@ -8054,7 +8054,7 @@ exports.TeambuilderData =
 			"bulkup": "Bulk Up",
 			"crunch": "Crunch",
 			"zenheadbutt": "Zen Headbutt",
-		}
+		},
 	},
 	scraggy:
 	{
@@ -8070,7 +8070,7 @@ exports.TeambuilderData =
 			"bulkup": "Bulk Up",
 			"crunch": "Crunch",
 			"zenheadbutt": "Zen Headbutt",
-		}
+		},
 	},
 	scyther:
 	{
@@ -8086,7 +8086,7 @@ exports.TeambuilderData =
 			"aerialace": "Aerial Ace",
 			"batonpass": "Baton Pass",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	seadra:
 	{
@@ -8099,7 +8099,7 @@ exports.TeambuilderData =
 			"agility": "Agility",
 			"substitute": "Substitute",
 			"hiddenpowergrass": "Hidden Power Grass",
-		}
+		},
 	},
 	seaking:
 	{
@@ -8112,7 +8112,7 @@ exports.TeambuilderData =
 			"megahorn": "Megahorn",
 			"return": "Return",
 			"agility": "Agility",
-		}
+		},
 	},
 	sealeo:
 	{
@@ -8125,7 +8125,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"surf": "Surf",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	seedot:
 	{
@@ -8138,7 +8138,7 @@ exports.TeambuilderData =
 			"seedbomb": "Seed Bomb",
 			"explosion": "Explosion",
 			"foulplay": "Foul Play",
-		}
+		},
 	},
 	seel:
 	{
@@ -8155,7 +8155,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"rest": "Rest",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	seismitoad:
 	{
@@ -8170,7 +8170,7 @@ exports.TeambuilderData =
 			"hiddenpowerelectric": "Hidden Power Electric",
 			"raindance": "Rain Dance",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	sentret:
 	{
@@ -8183,7 +8183,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"uturn": "U-turn",
 			"suckerpunch": "Sucker Punch",
-		}
+		},
 	},
 	serperior:
 	{
@@ -8204,7 +8204,7 @@ exports.TeambuilderData =
 			"coil": "Coil",
 			"leafblade": "Leaf Blade",
 			"dragontail": "Dragon Tail",
-		}
+		},
 	},
 	servine:
 	{
@@ -8221,7 +8221,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	seviper:
 	{
@@ -8236,7 +8236,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"suckerpunch": "Sucker Punch",
 			"aquatail": "Aqua Tail",
-		}
+		},
 	},
 	sewaddle:
 	{
@@ -8251,7 +8251,7 @@ exports.TeambuilderData =
 			"bugbuzz": "Bug Buzz",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	sharpedo:
 	{
@@ -8267,7 +8267,7 @@ exports.TeambuilderData =
 			"waterfall": "Waterfall",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"aquajet": "Aqua Jet",
-		}
+		},
 	},
 	shaymin:
 	{
@@ -8284,7 +8284,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	shayminsky:
 	{
@@ -8299,7 +8299,7 @@ exports.TeambuilderData =
 			"hiddenpowerfire": "Hidden Power Fire",
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
-		}
+		},
 	},
 	shedinja:
 	{
@@ -8312,7 +8312,7 @@ exports.TeambuilderData =
 			"xscissor": "X-Scissor",
 			"shadowsneak": "Shadow Sneak",
 			"suckerpunch": "Sucker Punch",
-		}
+		},
 	},
 	shelgon:
 	{
@@ -8324,7 +8324,7 @@ exports.TeambuilderData =
 			"brickbreak": "Brick Break",
 			"dragonclaw": "Dragon Claw",
 			"dragondance": "Dragon Dance",
-		}
+		},
 	},
 	shellder:
 	{
@@ -8338,7 +8338,7 @@ exports.TeambuilderData =
 			"rockblast": "Rock Blast",
 			"iciclespear": "Icicle Spear",
 			"rapidspin": "Rapid Spin",
-		}
+		},
 	},
 	shellos:
 	{
@@ -8352,7 +8352,7 @@ exports.TeambuilderData =
 			"recover": "Recover",
 			"yawn": "Yawn",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	shelloseast:
 	{
@@ -8372,7 +8372,7 @@ exports.TeambuilderData =
 			"recover": "Recover",
 			"toxic": "Toxic",
 			"bugbuzz": "Bug Buzz",
-		}
+		},
 	},
 	shieldon:
 	{
@@ -8387,7 +8387,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"toxic": "Toxic",
 			"roar": "Roar",
-		}
+		},
 	},
 	shiftry:
 	{
@@ -8403,7 +8403,7 @@ exports.TeambuilderData =
 			"nastyplot": "Nasty Plot",
 			"gigadrain": "Giga Drain",
 			"darkpulse": "Dark Pulse",
-		}
+		},
 	},
 	shinx:
 	{
@@ -8415,7 +8415,7 @@ exports.TeambuilderData =
 			"icefang": "Ice Fang",
 			"firefang": "Fire Fang",
 			"crunch": "Crunch",
-		}
+		},
 	},
 	shroomish:
 	{
@@ -8430,7 +8430,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"toxic": "Toxic",
 			"stunspore": "Stun Spore",
-		}
+		},
 	},
 	shuckle:
 	{
@@ -8442,7 +8442,7 @@ exports.TeambuilderData =
 			"acupressure": "Acupressure",
 			"powersplit": "Power Split",
 			"rest": "Rest",
-		}
+		},
 	},
 	shuppet:
 	{
@@ -8455,7 +8455,7 @@ exports.TeambuilderData =
 			"taunt": "Taunt",
 			"shadowsneak": "Shadow Sneak",
 			"suckerpunch": "Sucker Punch",
-		}
+		},
 	},
 	sigilyph:
 	{
@@ -8467,7 +8467,7 @@ exports.TeambuilderData =
 			"roost": "Roost",
 			"storedpower": "Stored Power",
 			"psychoshift": "Psycho Shift",
-		}
+		},
 	},
 	silcoon:
 	{
@@ -8479,7 +8479,7 @@ exports.TeambuilderData =
 			"poisonsting": "Poison Sting",
 			"stringshot": "String Shot",
 			"tackle": "Tackle",
-		}
+		},
 	},
 	simipour:
 	{
@@ -8493,7 +8493,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"surf": "Surf",
 			"grassknot": "Grass Knot",
-		}
+		},
 	},
 	simisage:
 	{
@@ -8509,7 +8509,7 @@ exports.TeambuilderData =
 			"focusblast": "Focus Blast",
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
-		}
+		},
 	},
 	simisear:
 	{
@@ -8525,7 +8525,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"flamethrower": "Flamethrower",
 			"overheat": "Overheat",
-		}
+		},
 	},
 	skarmory:
 	{
@@ -8539,7 +8539,7 @@ exports.TeambuilderData =
 			"roost": "Roost",
 			"spikes": "Spikes",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	skiploom:
 	{
@@ -8556,7 +8556,7 @@ exports.TeambuilderData =
 			"leechseed": "Leech Seed",
 			"substitute": "Substitute",
 			"protect": "Protect",
-		}
+		},
 	},
 	skitty:
 	{
@@ -8569,7 +8569,7 @@ exports.TeambuilderData =
 			"zenheadbutt": "Zen Headbutt",
 			"thunderwave": "Thunder Wave",
 			"fakeout": "Fake Out",
-		}
+		},
 	},
 	skorupi:
 	{
@@ -8582,7 +8582,7 @@ exports.TeambuilderData =
 			"crosspoison": "Cross Poison",
 			"toxic": "Toxic",
 			"protect": "Protect",
-		}
+		},
 	},
 	skuntank:
 	{
@@ -8597,7 +8597,7 @@ exports.TeambuilderData =
 			"explosion": "Explosion",
 			"taunt": "Taunt",
 			"poisonjab": "Poison Jab",
-		}
+		},
 	},
 	slaking:
 	{
@@ -8614,7 +8614,7 @@ exports.TeambuilderData =
 			"retaliate": "Retaliate",
 			"gigaimpact": "Giga Impact",
 			"hammerarm": "Hammer Arm",
-		}
+		},
 	},
 	slakoth:
 	{
@@ -8630,7 +8630,7 @@ exports.TeambuilderData =
 			"thunderpunch": "ThunderPunch",
 			"suckerpunch": "Sucker Punch",
 			"gigaimpact": "Giga Impact",
-		}
+		},
 	},
 	slowbro:
 	{
@@ -8651,7 +8651,7 @@ exports.TeambuilderData =
 			"slackoff": "Slack Off",
 			"trickroom": "Trick Room",
 			"trick": "Trick",
-		}
+		},
 	},
 	slowking:
 	{
@@ -8673,7 +8673,7 @@ exports.TeambuilderData =
 			"trickroom": "Trick Room",
 			"trick": "Trick",
 			"nastyplot": "Nasty Plot",
-		}
+		},
 	},
 	slowpoke:
 	{
@@ -8690,7 +8690,7 @@ exports.TeambuilderData =
 			"slackoff": "Slack Off",
 			"trickroom": "Trick Room",
 			"trick": "Trick",
-		}
+		},
 	},
 	slugma:
 	{
@@ -8707,7 +8707,7 @@ exports.TeambuilderData =
 			"reflect": "Reflect",
 			"lightscreen": "Light Screen",
 			"memento": "Memento",
-		}
+		},
 	},
 	smeargle:
 	{
@@ -8720,7 +8720,7 @@ exports.TeambuilderData =
 			"stealthrock": "Stealth Rock",
 			"uturn": "U-turn",
 			"counter": "Counter",
-		}
+		},
 	},
 	smoochum:
 	{
@@ -8736,7 +8736,7 @@ exports.TeambuilderData =
 			"nastyplot": "Nasty Plot",
 			"substitute": "Substitute",
 			"grassknot": "Grass Knot",
-		}
+		},
 	},
 	sneasel:
 	{
@@ -8750,7 +8750,7 @@ exports.TeambuilderData =
 			"lowkick": "Low Kick",
 			"pursuit": "Pursuit",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	snivy:
 	{
@@ -8767,7 +8767,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	snorlax:
 	{
@@ -8788,7 +8788,7 @@ exports.TeambuilderData =
 			"pursuit": "Pursuit",
 			"toxic": "Toxic",
 			"whirlwind": "Whirlwind",
-		}
+		},
 	},
 	snorunt:
 	{
@@ -8802,7 +8802,7 @@ exports.TeambuilderData =
 			"iceshard": "Ice Shard",
 			"crunch": "Crunch",
 			"shadowball": "Shadow Ball",
-		}
+		},
 	},
 	snover:
 	{
@@ -8815,7 +8815,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"leechseed": "Leech Seed",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	snubbull:
 	{
@@ -8829,7 +8829,7 @@ exports.TeambuilderData =
 			"closecombat": "Close Combat",
 			"brickbreak": "Brick Break",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	solosis:
 	{
@@ -8846,7 +8846,7 @@ exports.TeambuilderData =
 			"shadowball": "Shadow Ball",
 			"trickroom": "Trick Room",
 			"psyshock": "Psyshock",
-		}
+		},
 	},
 	solrock:
 	{
@@ -8862,7 +8862,7 @@ exports.TeambuilderData =
 			"batonpass": "Baton Pass",
 			"willowisp": "Will-O-Wisp",
 			"rockpolish": "Rock Polish",
-		}
+		},
 	},
 	spearow:
 	{
@@ -8876,7 +8876,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"quickattack": "Quick Attack",
 			"pursuit": "Pursuit",
-		}
+		},
 	},
 	spheal:
 	{
@@ -8889,7 +8889,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"surf": "Surf",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	spinarak:
 	{
@@ -8905,7 +8905,7 @@ exports.TeambuilderData =
 			"crosspoison": "Cross Poison",
 			"batonpass": "Baton Pass",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	spinda:
 	{
@@ -8919,7 +8919,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"return": "Return",
 			"superpower": "Superpower",
-		}
+		},
 	},
 	spiritomb:
 	{
@@ -8937,7 +8937,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
 			"painsplit": "Pain Split",
-		}
+		},
 	},
 	spoink:
 	{
@@ -8951,7 +8951,7 @@ exports.TeambuilderData =
 			"thunderwave": "Thunder Wave",
 			"trick": "Trick",
 			"healbell": "Heal Bell",
-		}
+		},
 	},
 	squirtle:
 	{
@@ -8966,7 +8966,7 @@ exports.TeambuilderData =
 			"scald": "Scald",
 			"aquajet": "Aqua Jet",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	stantler:
 	{
@@ -8980,7 +8980,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"thunderwave": "Thunder Wave",
 			"suckerpunch": "Sucker Punch",
-		}
+		},
 	},
 	staraptor:
 	{
@@ -8996,7 +8996,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"roost": "Roost",
 			"doubleedge": "Double-Edge",
-		}
+		},
 	},
 	staravia:
 	{
@@ -9008,7 +9008,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"uturn": "U-turn",
 			"pursuit": "Pursuit",
-		}
+		},
 	},
 	starly:
 	{
@@ -9020,7 +9020,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"uturn": "U-turn",
 			"pursuit": "Pursuit",
-		}
+		},
 	},
 	starmie:
 	{
@@ -9035,7 +9035,7 @@ exports.TeambuilderData =
 			"recover": "Recover",
 			"psychic": "Psychic",
 			"trick": "Trick",
-		}
+		},
 	},
 	staryu:
 	{
@@ -9048,7 +9048,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"rapidspin": "Rapid Spin",
 			"recover": "Recover",
-		}
+		},
 	},
 	steelix:
 	{
@@ -9067,7 +9067,7 @@ exports.TeambuilderData =
 			"icefang": "Ice Fang",
 			"firefang": "Fire Fang",
 			"ironhead": "Iron Head",
-		}
+		},
 	},
 	stoutland:
 	{
@@ -9082,7 +9082,7 @@ exports.TeambuilderData =
 			"icefang": "Ice Fang",
 			"pursuit": "Pursuit",
 			"howl": "Howl",
-		}
+		},
 	},
 	stunfisk:
 	{
@@ -9100,7 +9100,7 @@ exports.TeambuilderData =
 			"surf": "Surf",
 			"sludgewave": "Sludge Wave",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	stunky:
 	{
@@ -9114,7 +9114,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"explosion": "Explosion",
 			"taunt": "Taunt",
-		}
+		},
 	},
 	sudowoodo:
 	{
@@ -9133,7 +9133,7 @@ exports.TeambuilderData =
 			"rockpolish": "Rock Polish",
 			"explosion": "Explosion",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	suicune:
 	{
@@ -9150,7 +9150,7 @@ exports.TeambuilderData =
 			"sleeptalk": "Sleep Talk",
 			"roar": "Roar",
 			"calmmind": "Calm Mind",
-		}
+		},
 	},
 	sunflora:
 	{
@@ -9165,7 +9165,7 @@ exports.TeambuilderData =
 			"hiddenpowerfire": "Hidden Power Fire",
 			"hiddenpowerrock": "Hidden Power Rock",
 			"earthpower": "Earth Power",
-		}
+		},
 	},
 	sunkern:
 	{
@@ -9180,7 +9180,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"toxic": "Toxic",
 			"earthpower": "Earth Power",
-		}
+		},
 	},
 	surskit:
 	{
@@ -9193,7 +9193,7 @@ exports.TeambuilderData =
 			"hiddenpowerfire": "Hidden Power Fire",
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"gigadrain": "Giga Drain",
-		}
+		},
 	},
 	swablu:
 	{
@@ -9205,7 +9205,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"cottonguard": "Cotton Guard",
 			"hypervoice": "Hyper Voice",
-		}
+		},
 	},
 	swadloon:
 	{
@@ -9220,7 +9220,7 @@ exports.TeambuilderData =
 			"bugbuzz": "Bug Buzz",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"hiddenpowerice": "Hidden Power Ice",
-		}
+		},
 	},
 	swalot:
 	{
@@ -9235,7 +9235,7 @@ exports.TeambuilderData =
 			"painsplit": "Pain Split",
 			"yawn": "Yawn",
 			"encore": "Encore",
-		}
+		},
 	},
 	swampert:
 	{
@@ -9250,7 +9250,7 @@ exports.TeambuilderData =
 			"roar": "Roar",
 			"superpower": "Superpower",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	swanna:
 	{
@@ -9269,7 +9269,7 @@ exports.TeambuilderData =
 			"hiddenpowergrass": "Hidden Power Grass",
 			"bravebird": "Brave Bird",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	swellow:
 	{
@@ -9282,7 +9282,7 @@ exports.TeambuilderData =
 			"quickattack": "Quick Attack",
 			"uturn": "U-turn",
 			"protect": "Protect",
-		}
+		},
 	},
 	swinub:
 	{
@@ -9297,7 +9297,7 @@ exports.TeambuilderData =
 			"superpower": "Superpower",
 			"toxic": "Toxic",
 			"endeavor": "Endeavor",
-		}
+		},
 	},
 	swoobat:
 	{
@@ -9314,7 +9314,7 @@ exports.TeambuilderData =
 			"lightscreen": "Light Screen",
 			"roost": "Roost",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	taillow:
 	{
@@ -9327,7 +9327,7 @@ exports.TeambuilderData =
 			"quickattack": "Quick Attack",
 			"uturn": "U-turn",
 			"protect": "Protect",
-		}
+		},
 	},
 	tangela:
 	{
@@ -9353,7 +9353,7 @@ exports.TeambuilderData =
 			"earthquake": "Earthquake",
 			"focusblast": "Focus Blast",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	tauros:
 	{
@@ -9368,7 +9368,7 @@ exports.TeambuilderData =
 			"rockslide": "Rock Slide",
 			"workup": "Work Up",
 			"pursuit": "Pursuit",
-		}
+		},
 	},
 	teddiursa:
 	{
@@ -9382,7 +9382,7 @@ exports.TeambuilderData =
 			"closecombat": "Close Combat",
 			"firepunch": "Fire Punch",
 			"crunch": "Crunch",
-		}
+		},
 	},
 	tentacool:
 	{
@@ -9399,7 +9399,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"toxic": "Toxic",
 			"hydropump": "Hydro Pump",
-		}
+		},
 	},
 	tentacruel:
 	{
@@ -9416,7 +9416,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"toxic": "Toxic",
 			"hydropump": "Hydro Pump",
-		}
+		},
 	},
 	tepig:
 	{
@@ -9429,7 +9429,7 @@ exports.TeambuilderData =
 			"wildcharge": "Wild Charge",
 			"superpower": "Superpower",
 			"headsmash": "Head Smash",
-		}
+		},
 	},
 	terrakion:
 	{
@@ -9445,7 +9445,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"xscissor": "X-Scissor",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	throh:
 	{
@@ -9458,7 +9458,7 @@ exports.TeambuilderData =
 			"payback": "Payback",
 			"rest": "Rest",
 			"stoneedge": "Stone Edge",
-		}
+		},
 	},
 	thundurus:
 	{
@@ -9475,7 +9475,7 @@ exports.TeambuilderData =
 			"hammerarm": "Hammer Arm",
 			"grassknot": "Grass Knot",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	timburr:
 	{
@@ -9489,7 +9489,7 @@ exports.TeambuilderData =
 			"payback": "Payback",
 			"stoneedge": "Stone Edge",
 			"facade": "Facade",
-		}
+		},
 	},
 	tirtouga:
 	{
@@ -9502,7 +9502,7 @@ exports.TeambuilderData =
 			"waterfall": "Waterfall",
 			"stoneedge": "Stone Edge",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	togekiss:
 	{
@@ -9517,7 +9517,7 @@ exports.TeambuilderData =
 			"airslash": "Air Slash",
 			"aurasphere": "Aura Sphere",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	togepi:
 	{
@@ -9530,7 +9530,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"toxic": "Toxic",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 	togetic:
 	{
@@ -9543,7 +9543,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"toxic": "Toxic",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 	torchic:
 	{
@@ -9556,7 +9556,7 @@ exports.TeambuilderData =
 			"batonpass": "Baton Pass",
 			"substitute": "Substitute",
 			"hiddenpowergrass": "Hidden Power Grass",
-		}
+		},
 	},
 	torkoal:
 	{
@@ -9571,7 +9571,7 @@ exports.TeambuilderData =
 			"earthpower": "Earth Power",
 			"toxic": "Toxic",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	tornadus:
 	{
@@ -9592,7 +9592,7 @@ exports.TeambuilderData =
 			"tailwind": "Tailwind",
 			"substitute": "Substitute",
 			"grassknot": "Grass Knot",
-		}
+		},
 	},
 	torterra:
 	{
@@ -9608,7 +9608,7 @@ exports.TeambuilderData =
 			"stoneedge": "Stone Edge",
 			"synthesis": "Synthesis",
 			"leechseed": "Leech Seed",
-		}
+		},
 	},
 	totodile:
 	{
@@ -9624,7 +9624,7 @@ exports.TeambuilderData =
 			"dragondance": "Dragon Dance",
 			"swordsdance": "Swords Dance",
 			"return": "Return",
-		}
+		},
 	},
 	toxicroak:
 	{
@@ -9640,7 +9640,7 @@ exports.TeambuilderData =
 			"swordsdance": "Swords Dance",
 			"crosschop": "Cross Chop",
 			"icepunch": "Ice Punch",
-		}
+		},
 	},
 	tranquill:
 	{
@@ -9653,7 +9653,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"detect": "Detect",
 			"roost": "Roost",
-		}
+		},
 	},
 	trapinch:
 	{
@@ -9666,7 +9666,7 @@ exports.TeambuilderData =
 			"rockslide": "Rock Slide",
 			"crunch": "Crunch",
 			"quickattack": "Quick Attack",
-		}
+		},
 	},
 	treecko:
 	{
@@ -9681,7 +9681,7 @@ exports.TeambuilderData =
 			"hiddenpowerice": "Hidden Power Ice",
 			"hiddenpowerrock": "Hidden Power Rock",
 			"endeavor": "Endeavor",
-		}
+		},
 	},
 	tropius:
 	{
@@ -9697,7 +9697,7 @@ exports.TeambuilderData =
 			"hiddenpowerfire": "Hidden Power Fire",
 			"roost": "Roost",
 			"leafstorm": "Leaf Storm",
-		}
+		},
 	},
 	trubbish:
 	{
@@ -9709,7 +9709,7 @@ exports.TeambuilderData =
 			"toxicspikes": "Toxic Spikes",
 			"spikes": "Spikes",
 			"explosion": "Explosion",
-		}
+		},
 	},
 	turtwig:
 	{
@@ -9724,7 +9724,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"leechseed": "Leech Seed",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	tympole:
 	{
@@ -9738,7 +9738,7 @@ exports.TeambuilderData =
 			"earthpower": "Earth Power",
 			"hiddenpowerelectric": "Hidden Power Electric",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	tynamo:
 	{
@@ -9750,7 +9750,7 @@ exports.TeambuilderData =
 			"chargebeam": "Charge Beam",
 			"thunderwave": "Thunder Wave",
 			"tackle": "Tackle",
-		}
+		},
 	},
 	typhlosion:
 	{
@@ -9768,7 +9768,7 @@ exports.TeambuilderData =
 			"sunnyday": "Sunny Day",
 			"solarbeam": "SolarBeam",
 			"willowisp": "Will-O-Wisp",
-		}
+		},
 	},
 	tyranitar:
 	{
@@ -9787,7 +9787,7 @@ exports.TeambuilderData =
 			"dragondance": "Dragon Dance",
 			"lowkick": "Low Kick",
 			"rockslide": "Rock Slide",
-		}
+		},
 	},
 	tyrogue:
 	{
@@ -9802,7 +9802,7 @@ exports.TeambuilderData =
 			"machpunch": "Mach Punch",
 			"toxic": "Toxic",
 			"counter": "Counter.",
-		}
+		},
 	},
 	umbreon:
 	{
@@ -9818,7 +9818,7 @@ exports.TeambuilderData =
 			"healbell": "Heal Bell",
 			"toxic": "Toxic",
 			"batonpass": "Baton Pass",
-		}
+		},
 	},
 	unfezant:
 	{
@@ -9834,7 +9834,7 @@ exports.TeambuilderData =
 			"hypnosis": "Hypnosis",
 			"taunt": "Taunt",
 			"wish": "Wish",
-		}
+		},
 	},
 	unown:
 	{
@@ -9960,7 +9960,7 @@ exports.TeambuilderData =
 			"closecombat": "Close Combat",
 			"firepunch": "Fire Punch",
 			"crunch": "Crunch",
-		}
+		},
 	},
 	uxie:
 	{
@@ -9986,7 +9986,7 @@ exports.TeambuilderData =
 			"thunderbolt": "Thunderbolt",
 			"raindance": "Rain Dance",
 			"sunnyday": "Sunny Day",
-		}
+		},
 	},
 	vanillish:
 	{
@@ -10001,7 +10001,7 @@ exports.TeambuilderData =
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"autotomize": "Autotomize",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	vanillite:
 	{
@@ -10016,7 +10016,7 @@ exports.TeambuilderData =
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"autotomize": "Autotomize",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	vanilluxe:
 	{
@@ -10031,7 +10031,7 @@ exports.TeambuilderData =
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"autotomize": "Autotomize",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	vaporeon:
 	{
@@ -10053,7 +10053,7 @@ exports.TeambuilderData =
 			"hiddenpowergrass": "Hidden Power Grass",
 			"rest": "Rest",
 			"raindance": "Rain Dance",
-		}
+		},
 	},
 	venipede:
 	{
@@ -10065,7 +10065,7 @@ exports.TeambuilderData =
 			"bugbite": "Bug Bite",
 			"spikes": "Spikes",
 			"poisonjab": "Poison Jab",
-		}
+		},
 	},
 	venomoth:
 	{
@@ -10082,7 +10082,7 @@ exports.TeambuilderData =
 			"sludgebomb": "Sludge Bomb",
 			"gigadrain": "Giga Drain",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	venonat:
 	{
@@ -10098,7 +10098,7 @@ exports.TeambuilderData =
 			"bugbite": "Bug Bite",
 			"stunspore": "Stun Spore",
 			"gigadrain": "Giga Drain",
-		}
+		},
 	},
 	venusaur:
 	{
@@ -10119,7 +10119,7 @@ exports.TeambuilderData =
 			"leechseed": "Leech Seed",
 			"synthesis": "Synthesis",
 			"earthquake": "Earthquake",
-		}
+		},
 	},
 	vespiquen:
 	{
@@ -10134,7 +10134,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"defendorder": "Defend Order",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	vibrava:
 	{
@@ -10147,7 +10147,7 @@ exports.TeambuilderData =
 			"outrage": "Outrage",
 			"roost": "Roost",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	victini:
 	{
@@ -10165,7 +10165,7 @@ exports.TeambuilderData =
 			"focusblast": "Focus Blast",
 			"fireblast": "Fire Blast",
 			"thunder": "Thunder",
-		}
+		},
 	},
 	victreebel:
 	{
@@ -10184,7 +10184,7 @@ exports.TeambuilderData =
 			"suckerpunch": "Sucker Punch",
 			"powerwhip": "Power Whip",
 			"return": "Return",
-		}
+		},
 	},
 	vigoroth:
 	{
@@ -10198,7 +10198,7 @@ exports.TeambuilderData =
 			"firepunch": "Fire Punch",
 			"suckerpunch": "Sucker Punch",
 			"slackoff": "Slack Off",
-		}
+		},
 	},
 	vileplume:
 	{
@@ -10217,7 +10217,7 @@ exports.TeambuilderData =
 			"hiddenpowerfire": "Hidden Power Fire",
 			"leechseed": "Leech Seed",
 			"aromatherapy": "Aromatherapy",
-		}
+		},
 	},
 	virizion:
 	{
@@ -10235,7 +10235,7 @@ exports.TeambuilderData =
 			"gigadrain": "Giga Drain",
 			"workup": "Work Up",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	volbeat:
 	{
@@ -10249,7 +10249,7 @@ exports.TeambuilderData =
 			"bugbuzz": "Bug Buzz",
 			"thunderwave": "Thunder Wave",
 			"encore": "Encore",
-		}
+		},
 	},
 	volcarona:
 	{
@@ -10264,7 +10264,7 @@ exports.TeambuilderData =
 			"morningsun": "Morning Sun",
 			"hiddenpowerrock": "Hidden Power Rock",
 			"hurricane": "Hurricane",
-		}
+		},
 	},
 	voltorb:
 	{
@@ -10280,7 +10280,7 @@ exports.TeambuilderData =
 			"hiddenpowerwater": "Hidden Power Water",
 			"raindance": "Rain Dance",
 			"thunder": "Thunder",
-		}
+		},
 	},
 	vullaby:
 	{
@@ -10300,7 +10300,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"hiddenpowerfire": "Hidden Power Fire",
 			"bravebird": "Brave Bird",
-		}
+		},
 	},
 	vulpix:
 	{
@@ -10316,7 +10316,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"toxic": "Toxic",
 			"hypnosis": "Hypnosis",
-		}
+		},
 	},
 	wailmer:
 	{
@@ -10330,7 +10330,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"hiddenpowerelectric": "Hidden Power Electric",
-		}
+		},
 	},
 	wailord:
 	{
@@ -10344,7 +10344,7 @@ exports.TeambuilderData =
 			"icebeam": "Ice Beam",
 			"hiddenpowergrass": "Hidden Power Grass",
 			"hiddenpowerelectric": "Hidden Power Electric",
-		}
+		},
 	},
 	walrein:
 	{
@@ -10358,7 +10358,7 @@ exports.TeambuilderData =
 			"surf": "Surf",
 			"icebeam": "Ice Beam",
 			"roar": "Roar",
-		}
+		},
 	},
 	wartortle:
 	{
@@ -10373,7 +10373,7 @@ exports.TeambuilderData =
 			"scald": "Scald",
 			"aquajet": "Aqua Jet",
 			"toxic": "Toxic",
-		}
+		},
 	},
 	watchog:
 	{
@@ -10387,7 +10387,7 @@ exports.TeambuilderData =
 			"substitute": "Substitute",
 			"hypnosis": "Hypnosis",
 			"return": "Return",
-		}
+		},
 	},
 	weavile:
 	{
@@ -10401,7 +10401,7 @@ exports.TeambuilderData =
 			"lowkick": "Low Kick",
 			"pursuit": "Pursuit",
 			"swordsdance": "Swords Dance",
-		}
+		},
 	},
 	weedle:
 	{
@@ -10413,7 +10413,7 @@ exports.TeambuilderData =
 			"stringshot": "String Shot",
 			"poisonsting": "Poison Sting",
 			"snore": "Snore",
-		}
+		},
 	},
 	weepinbell:
 	{
@@ -10432,7 +10432,7 @@ exports.TeambuilderData =
 			"suckerpunch": "Sucker Punch",
 			"seedbomb": "Seed Bomb",
 			"return": "Return",
-		}
+		},
 	},
 	weezing:
 	{
@@ -10449,7 +10449,7 @@ exports.TeambuilderData =
 			"rest": "Rest",
 			"sleeptalk": "Sleep Talk",
 			"thunderbolt": "Thunderbolt",
-		}
+		},
 	},
 	whimsicott:
 	{
@@ -10466,7 +10466,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"stunspore": "Stun Spore",
 			"memento": "Memento",
-		}
+		},
 	},
 	whirlipede:
 	{
@@ -10478,7 +10478,7 @@ exports.TeambuilderData =
 			"bugbite": "Bug Bite",
 			"spikes": "Spikes",
 			"poisonjab": "Poison Jab",
-		}
+		},
 	},
 	whiscash:
 	{
@@ -10492,7 +10492,7 @@ exports.TeambuilderData =
 			"return": "Return",
 			"stoneedge": "Stone Edge",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	whismur:
 	{
@@ -10504,7 +10504,7 @@ exports.TeambuilderData =
 			"fireblast": "Fire Blast",
 			"shadowball": "Shadow Ball",
 			"icebeam": "Ice Beam",
-		}
+		},
 	},
 	wigglytuff:
 	{
@@ -10520,7 +10520,7 @@ exports.TeambuilderData =
 			"seismictoss": "Seismic Toss",
 			"counter": "Counter",
 			"stealthrock": "Stealth Rock",
-		}
+		},
 	},
 	wingull:
 	{
@@ -10535,7 +10535,7 @@ exports.TeambuilderData =
 			"uturn": "U-turn",
 			"airslash": "Air Slash",
 			"hurricane": "Hurricane",
-		}
+		},
 	},
 	wobbuffet:
 	{
@@ -10547,7 +10547,7 @@ exports.TeambuilderData =
 			"counter": "Counter",
 			"mirrorcoat": "Mirror Coat",
 			"encore": "Encore",
-		}
+		},
 	},
 	woobat:
 	{
@@ -10560,7 +10560,7 @@ exports.TeambuilderData =
 			"airslash": "Air Slash",
 			"hiddenpowerground": "Hidden Power Ground",
 			"agility": "Agility",
-		}
+		},
 	},
 	wooper:
 	{
@@ -10579,7 +10579,7 @@ exports.TeambuilderData =
 			"hiddenpowerrock": "Hidden Power Rock",
 			"toxic": "Toxic",
 			"psychic": "Psychic",
-		}
+		},
 	},
 	wormadamsandy:
 	{
@@ -10592,7 +10592,7 @@ exports.TeambuilderData =
 			"bugbite": "Bug Bite",
 			"protect": "Protect",
 			"suckerpunch": "Sucker Punch",
-		}
+		},
 	},
 	wormadamtrash:
 	{
@@ -10604,7 +10604,7 @@ exports.TeambuilderData =
 			"toxic": "Toxic",
 			"ironhead": "Iron Head",
 			"protect": "Protect",
-		}
+		},
 	},
 	wurmple:
 	{
@@ -10616,7 +10616,7 @@ exports.TeambuilderData =
 			"poisonsting": "Poison Sting",
 			"stringshot": "String Shot",
 			"tackle": "Tackle",
-		}
+		},
 	},
 	wynaut:
 	{
@@ -10628,7 +10628,7 @@ exports.TeambuilderData =
 			"counter": "Counter",
 			"mirrorcoat": "Mirror Coat",
 			"encore": "Encore",
-		}
+		},
 	},
 	xatu:
 	{
@@ -10647,7 +10647,7 @@ exports.TeambuilderData =
 			"wish": "Wish",
 			"calmmind": "Calm Mind",
 			"": "",
-		}
+		},
 	},
 	yamask:
 	{
@@ -10662,7 +10662,7 @@ exports.TeambuilderData =
 			"willowisp": "Will-O-Wisp",
 			"haze": "Haze",
 			"rest": "Rest",
-		}
+		},
 	},
 	yanma:
 	{
@@ -10678,7 +10678,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"roost": "Roost",
 			"gigadrain": "Giga Drain",
-		}
+		},
 	},
 	yanmega:
 	{
@@ -10693,7 +10693,7 @@ exports.TeambuilderData =
 			"protect": "Protect",
 			"roost": "Roost",
 			"gigadrain": "Giga Drain",
-		}
+		},
 	},
 	zangoose:
 	{
@@ -10706,7 +10706,7 @@ exports.TeambuilderData =
 			"closecombat": "Close Combat",
 			"nightslash": "Night Slash",
 			"quickattack": "Quick Attack",
-		}
+		},
 	},
 	zapdos:
 	{
@@ -10724,7 +10724,7 @@ exports.TeambuilderData =
 			"batonpass": "Baton Pass",
 			"agility": "Agility",
 			"discharge": "Discharge",
-		}
+		},
 	},
 	zebstrika:
 	{
@@ -10737,7 +10737,7 @@ exports.TeambuilderData =
 			"hiddenpowergrass": "Hidden Power Grass",
 			"overheat": "Overheat",
 			"wildcharge": "Wild Charge",
-		}
+		},
 	},
 	zekrom:
 	{
@@ -10754,7 +10754,7 @@ exports.TeambuilderData =
 			"dracometeor": "Draco Meteor",
 			"focusblast": "Focus Blast",
 			"hiddenpowerfire": "Hidden Power Fire",
-		}
+		},
 	},
 	zigzagoon:
 	{
@@ -10766,7 +10766,7 @@ exports.TeambuilderData =
 			"extremespeed": "ExtremeSpeed",
 			"seedbomb": "Seed Bomb",
 			"substitute": "Substitute",
-		}
+		},
 	},
 	zoroark:
 	{
@@ -10779,7 +10779,7 @@ exports.TeambuilderData =
 			"focusblast": "Focus Blast",
 			"flamethrower": "Flamethrower",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	zorua:
 	{
@@ -10792,7 +10792,7 @@ exports.TeambuilderData =
 			"darkpulse": "Dark Pulse",
 			"hiddenpowerfighting": "Hidden Power Fighting",
 			"uturn": "U-turn",
-		}
+		},
 	},
 	zubat:
 	{
@@ -10813,7 +10813,7 @@ exports.TeambuilderData =
 			"acrobatics": "Acrobatics",
 			"heatwave": "Heat Wave",
 			"superfang": "Super Fang",
-		}
+		},
 	},
 	zweilous:
 	{
@@ -10826,6 +10826,6 @@ exports.TeambuilderData =
 			"firefang": "Fire Fang",
 			"dragontail": "Dragon Tail",
 			"thunderwave": "Thunder Wave",
-		}
+		},
 	},
 };

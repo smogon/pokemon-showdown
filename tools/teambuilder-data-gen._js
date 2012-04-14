@@ -78,7 +78,7 @@ function outputPokemon(pokemon)
 		writeLine("{", 1);
 		for (var v in pokemon.viablemoves)
 			writeLine("\"" + v + "\": " + JSON.stringify(pokemon.viablemoves[v]) + ",");
-		writeLine("}", -1);
+		writeLine("},", -1);
 	}
 	if (pokemon.isNonstandard)
 		writeLine("isNonstandard: true,");
