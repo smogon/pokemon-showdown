@@ -154,7 +154,7 @@ function BattlePokemon(set, side)
 			spe: 31
 		};
 	}
-	var stats = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+	var stats = { hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
 	for (var i in stats)
 	{
 		if (!this.set.evs[i]) this.set.evs[i] = 0;
@@ -168,6 +168,18 @@ function BattlePokemon(set, side)
 	{
 		this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
 	}
+
+	var hpTypeX = 0, hpPowerX = 0;
+	var i = 1;
+	for (var s in stats)
+	{
+		hpTypeX += i * (this.set.ivs[s] % 2);
+		hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
+		i *= 2;
+	}
+	var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
+	this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
+	this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
 	
 	this.stats = {
 		hp: 0,
