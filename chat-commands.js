@@ -54,6 +54,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 	case 'command':
 		if (target.command === 'userdetails')
 		{
+			target.userid = ''+target.userid;
 			var targetUser = getUser(target.userid);
 			if (!targetUser || !room) return false;
 			var roomList = {};
