@@ -351,7 +351,7 @@ function BattleTools()
 		{
 			return false;
 		}
-		if (!team)
+		if (!team || !Array.isArray(team))
 		{
 			if (format.canUseRandomTeam)
 			{
@@ -434,6 +434,7 @@ function BattleTools()
 		set.name = (''+set.name).trim();
 		set.item = ''+set.item;
 		set.ability = ''+set.ability;
+		if (!Array.isArray(set.moves)) set.moves = [];
 		
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
@@ -514,9 +515,11 @@ function BattleTools()
 		{
 			problems.push(set.name+" has no moves.");
 		}
-		else for (var i=0; i<set.moves.length; i++)
+		else for (var i=0; i<set.moves.length && i<24; i++)
 		{
+			// Yes, we're looping up to 24, 
 			if (!set.moves[i]) continue;
+			set.moves[i] = ''+set.moves[i];
 			var move = selfT.getMove(set.moves[i]);
 			setHas[move.id] = true;
 			if (banlistTable[move.id])
