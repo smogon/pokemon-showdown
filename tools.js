@@ -363,6 +363,10 @@ function BattleTools()
 		{
 			return ["Your team has no pokemon."];
 		}
+		if (team.length>6)
+		{
+			return ["Your team has more than 6 pokemon."];
+		}
 		var teamHas = {};
 		for (var i=0; i<team.length; i++)
 		{
@@ -425,6 +429,12 @@ function BattleTools()
 		{
 			return ["This is not a pokemon."];
 		}
+		
+		set.species = (''+set.species).trim();
+		set.name = (''+set.name).trim();
+		set.item = ''+set.item;
+		set.ability = ''+set.ability;
+		
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
 		var template = selfT.getTemplate(set.species);
