@@ -892,6 +892,9 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
+		onModifyMove: function(move) {
+			if (this.weather === 'hail') move.accuracy = true;
+		},
 		secondary: {
 			chance: 10,
 			status: 'frz'
@@ -5389,6 +5392,10 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
+		onModifyMove: function(move) {
+			if (this.weather === 'raindance') move.accuracy = true;
+			else if (this.weather === 'sunnyday') move.accuracy = 50;
+		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'confusion'
@@ -11592,6 +11599,10 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
+		onModifyMove: function(move) {
+			if (this.weather === 'raindance') move.accuracy = true;
+			else if (this.weather === 'sunnyday') move.accuracy = 50;
+		},
 		secondary: {
 			chance: 30,
 			status: 'par'

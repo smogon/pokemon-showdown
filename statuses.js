@@ -340,12 +340,6 @@ exports.BattleStatuses = {
 				return basePower * .5;
 			}
 		},
-		onModifyMove: function(move) {
-			if (move.id === 'thunder' || move.id === 'hurricane')
-			{
-				move.accuracy = true;
-			}
-		},
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability')
 			{
@@ -386,12 +380,6 @@ exports.BattleStatuses = {
 			{
 				this.debug('Sunny Day water suppress');
 				return basePower * .5;
-			}
-		},
-		onModifyMove: function(move) {
-			if (move.id === 'Thunder' || move.id === 'Hurricane')
-			{
-				move.accuracy = 50;
 			}
 		},
 		onStart: function(battle, source, effect) {
@@ -475,12 +463,6 @@ exports.BattleStatuses = {
 			else
 			{
 				this.add('-weather', 'Hail');
-			}
-		},
-		onModifyMove: function(move) {
-			if (move.id === 'blizzard')
-			{
-				move.accuracy = true;
 			}
 		},
 		onResidualOrder: 1,
