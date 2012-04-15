@@ -4240,7 +4240,6 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		status: 'par',
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
