@@ -1,7 +1,5 @@
-exports.BattlePokedex =
-{
-	missingno:
-	{
+exports.BattlePokedex = {
+	missingno: {
 		num: 0,
 		name: "Missingno.",
 		id: "missingno",
@@ -14,8 +12,7 @@ exports.BattlePokedex =
 		types: ["Normal","Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 33,
 			atk: 136,
 			def: 0,
@@ -23,8 +20,7 @@ exports.BattlePokedex =
 			spd: 6,
 			spe: 29,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Download",
 			1: "Normalize",
 			DW: "Truant",
@@ -38,8 +34,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tomohawk:
-	{
+	tomohawk: {
 		num: -1,
 		name: "Tomohawk",
 		id: "tomohawk",
@@ -52,8 +47,7 @@ exports.BattlePokedex =
 		types: ["Flying","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 60,
 			def: 90,
@@ -61,8 +55,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Prankster",
 			DW: "Justified",
@@ -76,8 +69,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	necturna:
-	{
+	necturna: {
 		num: -2,
 		name: "Necturna",
 		id: "necturna",
@@ -90,8 +82,7 @@ exports.BattlePokedex =
 		types: ["Grass","Ghost"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 64,
 			atk: 120,
 			def: 100,
@@ -99,8 +90,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 81,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Forewarn",
 			DW: "Telepathy",
 		},
@@ -113,8 +103,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	syclant:
-	{
+	syclant: {
 		num: -51,
 		name: "Syclant",
 		id: "syclant",
@@ -127,8 +116,7 @@ exports.BattlePokedex =
 		types: ["Ice","Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 116,
 			def: 70,
@@ -136,8 +124,7 @@ exports.BattlePokedex =
 			spd: 64,
 			spe: 121,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Compoundeyes",
 			1: "Mountaineer",
 		},
@@ -150,8 +137,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	revenankh:
-	{
+	revenankh: {
 		num: -52,
 		name: "Revenankh",
 		id: "revenankh",
@@ -164,8 +150,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 105,
 			def: 90,
@@ -173,8 +158,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			1: "Air Lock",
 		},
@@ -187,8 +171,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pyroak:
-	{
+	pyroak: {
 		num: -53,
 		name: "Pyroak",
 		id: "pyroak",
@@ -201,8 +184,7 @@ exports.BattlePokedex =
 		types: ["Fire","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 70,
 			def: 105,
@@ -210,8 +192,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Battle Armor",
 		},
@@ -224,8 +205,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	fidgit:
-	{
+	fidgit: {
 		num: -54,
 		name: "Fidgit",
 		id: "fidgit",
@@ -238,8 +218,7 @@ exports.BattlePokedex =
 		types: ["Poison","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 76,
 			def: 109,
@@ -247,8 +226,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Persistent",
 			1: "Vital Spirit",
 		},
@@ -261,8 +239,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	stratagem:
-	{
+	stratagem: {
 		num: -55,
 		name: "Stratagem",
 		id: "stratagem",
@@ -275,8 +252,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 60,
 			def: 65,
@@ -284,8 +260,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 130,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 			1: "Technician",
 		},
@@ -298,8 +273,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	arghonaut:
-	{
+	arghonaut: {
 		num: -56,
 		name: "Arghonaut",
 		id: "arghonaut",
@@ -312,8 +286,7 @@ exports.BattlePokedex =
 		types: ["Water","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 110,
 			def: 95,
@@ -321,8 +294,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Unaware",
 		},
 		heightm: 1.27,
@@ -334,8 +306,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kitsunoh:
-	{
+	kitsunoh: {
 		num: -57,
 		name: "Kitsunoh",
 		id: "kitsunoh",
@@ -348,8 +319,7 @@ exports.BattlePokedex =
 		types: ["Steel","Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 103,
 			def: 85,
@@ -357,8 +327,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Frisk",
 			1: "Limber",
 		},
@@ -371,8 +340,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cyclohm:
-	{
+	cyclohm: {
 		num: -58,
 		name: "Cyclohm",
 		id: "cyclohm",
@@ -385,8 +353,7 @@ exports.BattlePokedex =
 		types: ["Electric","Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 108,
 			atk: 60,
 			def: 118,
@@ -394,8 +361,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shield Dust",
 			1: "Static",
 		},
@@ -408,8 +374,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	colossoil:
-	{
+	colossoil: {
 		num: -59,
 		name: "Colossoil",
 		id: "colossoil",
@@ -422,8 +387,7 @@ exports.BattlePokedex =
 		types: ["Dark","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 133,
 			atk: 122,
 			def: 72,
@@ -431,8 +395,7 @@ exports.BattlePokedex =
 			spd: 72,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rebound",
 			1: "Guts",
 		},
@@ -445,8 +408,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	krilowatt:
-	{
+	krilowatt: {
 		num: -60,
 		name: "Krilowatt",
 		id: "krilowatt",
@@ -459,8 +421,7 @@ exports.BattlePokedex =
 		types: ["Electric","Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 151,
 			atk: 84,
 			def: 73,
@@ -468,8 +429,7 @@ exports.BattlePokedex =
 			spd: 74,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Trace",
 			1: "Magic Guard",
 		},
@@ -482,8 +442,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	voodoom:
-	{
+	voodoom: {
 		num: -61,
 		name: "Voodoom",
 		id: "voodoom",
@@ -496,8 +455,7 @@ exports.BattlePokedex =
 		types: ["Fighting","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 85,
 			def: 80,
@@ -505,8 +463,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Volt Absorb",
 			1: "Lightningrod",
 		},
@@ -519,8 +476,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bulbasaur:
-	{
+	bulbasaur: {
 		num: 1,
 		name: "Bulbasaur",
 		id: "bulbasaur",
@@ -533,8 +489,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 49,
 			def: 49,
@@ -542,8 +497,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Chlorophyll",
 		},
@@ -556,8 +510,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ivysaur:
-	{
+	ivysaur: {
 		num: 2,
 		name: "Ivysaur",
 		id: "ivysaur",
@@ -570,8 +523,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 62,
 			def: 63,
@@ -579,8 +531,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Chlorophyll",
 		},
@@ -593,8 +544,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	venusaur:
-	{
+	venusaur: {
 		num: 3,
 		name: "Venusaur",
 		id: "venusaur",
@@ -607,8 +557,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 82,
 			def: 83,
@@ -616,8 +565,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Chlorophyll",
 		},
@@ -630,8 +578,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	charmander:
-	{
+	charmander: {
 		num: 4,
 		name: "Charmander",
 		id: "charmander",
@@ -644,8 +591,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 39,
 			atk: 52,
 			def: 43,
@@ -653,8 +599,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Solar Power",
 		},
@@ -667,8 +612,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	charmeleon:
-	{
+	charmeleon: {
 		num: 5,
 		name: "Charmeleon",
 		id: "charmeleon",
@@ -681,8 +625,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 58,
 			atk: 64,
 			def: 58,
@@ -690,8 +633,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Solar Power",
 		},
@@ -704,8 +646,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	charizard:
-	{
+	charizard: {
 		num: 6,
 		name: "Charizard",
 		id: "charizard",
@@ -718,8 +659,7 @@ exports.BattlePokedex =
 		types: ["Fire","Flying"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 78,
 			atk: 84,
 			def: 78,
@@ -727,8 +667,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Solar Power",
 		},
@@ -741,8 +680,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	squirtle:
-	{
+	squirtle: {
 		num: 7,
 		name: "Squirtle",
 		id: "squirtle",
@@ -755,8 +693,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 44,
 			atk: 48,
 			def: 65,
@@ -764,8 +701,7 @@ exports.BattlePokedex =
 			spd: 64,
 			spe: 43,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Rain Dish",
 		},
@@ -778,8 +714,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	wartortle:
-	{
+	wartortle: {
 		num: 8,
 		name: "Wartortle",
 		id: "wartortle",
@@ -792,8 +727,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 59,
 			atk: 63,
 			def: 80,
@@ -801,8 +735,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 58,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Rain Dish",
 		},
@@ -815,8 +748,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	blastoise:
-	{
+	blastoise: {
 		num: 9,
 		name: "Blastoise",
 		id: "blastoise",
@@ -829,8 +761,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 79,
 			atk: 83,
 			def: 100,
@@ -838,8 +769,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 78,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Rain Dish",
 		},
@@ -852,8 +782,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	caterpie:
-	{
+	caterpie: {
 		num: 10,
 		name: "Caterpie",
 		id: "caterpie",
@@ -866,8 +795,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 30,
 			def: 35,
@@ -875,8 +803,7 @@ exports.BattlePokedex =
 			spd: 20,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shield Dust",
 			DW: "Run Away",
 		},
@@ -889,8 +816,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	metapod:
-	{
+	metapod: {
 		num: 11,
 		name: "Metapod",
 		id: "metapod",
@@ -903,8 +829,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 20,
 			def: 55,
@@ -912,8 +837,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Shed Skin",
 		},
@@ -926,8 +850,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	butterfree:
-	{
+	butterfree: {
 		num: 12,
 		name: "Butterfree",
 		id: "butterfree",
@@ -940,8 +863,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 45,
 			def: 50,
@@ -949,8 +871,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Compoundeyes",
 			DW: "Tinted Lens",
 		},
@@ -963,8 +884,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	weedle:
-	{
+	weedle: {
 		num: 13,
 		name: "Weedle",
 		id: "weedle",
@@ -977,8 +897,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 35,
 			def: 30,
@@ -986,8 +905,7 @@ exports.BattlePokedex =
 			spd: 20,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shield Dust",
 			DW: "Run Away",
 		},
@@ -1000,8 +918,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kakuna:
-	{
+	kakuna: {
 		num: 14,
 		name: "Kakuna",
 		id: "kakuna",
@@ -1014,8 +931,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 25,
 			def: 50,
@@ -1023,8 +939,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Shed Skin",
 		},
@@ -1037,8 +952,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	beedrill:
-	{
+	beedrill: {
 		num: 15,
 		name: "Beedrill",
 		id: "beedrill",
@@ -1051,8 +965,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 80,
 			def: 40,
@@ -1060,8 +973,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			DW: "Sniper",
 		},
@@ -1074,8 +986,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pidgey:
-	{
+	pidgey: {
 		num: 16,
 		name: "Pidgey",
 		id: "pidgey",
@@ -1088,8 +999,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 45,
 			def: 40,
@@ -1097,8 +1007,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 56,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Tangled Feet",
 			DW: "Big Pecks",
@@ -1112,8 +1021,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pidgeotto:
-	{
+	pidgeotto: {
 		num: 17,
 		name: "Pidgeotto",
 		id: "pidgeotto",
@@ -1126,8 +1034,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 63,
 			atk: 60,
 			def: 55,
@@ -1135,8 +1042,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 71,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Tangled Feet",
 			DW: "Big Pecks",
@@ -1150,8 +1056,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pidgeot:
-	{
+	pidgeot: {
 		num: 18,
 		name: "Pidgeot",
 		id: "pidgeot",
@@ -1164,8 +1069,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 83,
 			atk: 80,
 			def: 75,
@@ -1173,8 +1077,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 91,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Tangled Feet",
 			DW: "Big Pecks",
@@ -1188,8 +1091,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	rattata:
-	{
+	rattata: {
 		num: 19,
 		name: "Rattata",
 		id: "rattata",
@@ -1202,8 +1104,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 56,
 			def: 35,
@@ -1211,8 +1112,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 72,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Guts",
 			DW: "Hustle",
@@ -1226,8 +1126,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	raticate:
-	{
+	raticate: {
 		num: 20,
 		name: "Raticate",
 		id: "raticate",
@@ -1240,8 +1139,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 81,
 			def: 60,
@@ -1249,8 +1147,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 97,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Guts",
 			DW: "Hustle",
@@ -1264,8 +1161,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	spearow:
-	{
+	spearow: {
 		num: 21,
 		name: "Spearow",
 		id: "spearow",
@@ -1278,8 +1174,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 60,
 			def: 30,
@@ -1287,8 +1182,7 @@ exports.BattlePokedex =
 			spd: 31,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			DW: "Sniper",
 		},
@@ -1301,8 +1195,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	fearow:
-	{
+	fearow: {
 		num: 22,
 		name: "Fearow",
 		id: "fearow",
@@ -1315,8 +1208,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 90,
 			def: 65,
@@ -1324,8 +1216,7 @@ exports.BattlePokedex =
 			spd: 61,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			DW: "Sniper",
 		},
@@ -1338,8 +1229,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ekans:
-	{
+	ekans: {
 		num: 23,
 		name: "Ekans",
 		id: "ekans",
@@ -1352,8 +1242,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 60,
 			def: 44,
@@ -1361,8 +1250,7 @@ exports.BattlePokedex =
 			spd: 54,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Shed Skin",
 			DW: "Unnerve",
@@ -1376,8 +1264,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	arbok:
-	{
+	arbok: {
 		num: 24,
 		name: "Arbok",
 		id: "arbok",
@@ -1390,8 +1277,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 85,
 			def: 69,
@@ -1399,8 +1285,7 @@ exports.BattlePokedex =
 			spd: 79,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Shed Skin",
 			DW: "Unnerve",
@@ -1414,8 +1299,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pichu:
-	{
+	pichu: {
 		num: 172,
 		name: "Pichu",
 		id: "pichu",
@@ -1428,8 +1312,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 20,
 			atk: 40,
 			def: 15,
@@ -1437,8 +1320,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Lightningrod",
 		},
@@ -1451,8 +1333,7 @@ exports.BattlePokedex =
 		otherFormes: ["pichuspikyeared"],
 		isDefaultForme: true,
 	},
-	pichuspikyeared:
-	{
+	pichuspikyeared: {
 		num: 172,
 		name: "Pichu-Spiky-eared",
 		id: "pichuspikyeared",
@@ -1465,8 +1346,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 20,
 			atk: 40,
 			def: 15,
@@ -1474,8 +1354,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Lightningrod",
 		},
@@ -1488,8 +1367,7 @@ exports.BattlePokedex =
 		otherFormes: ["pichu"],
 		isDefaultForme: false,
 	},
-	pikachu:
-	{
+	pikachu: {
 		num: 25,
 		name: "Pikachu",
 		id: "pikachu",
@@ -1502,8 +1380,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 55,
 			def: 30,
@@ -1511,8 +1388,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Lightningrod",
 		},
@@ -1525,8 +1401,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	raichu:
-	{
+	raichu: {
 		num: 26,
 		name: "Raichu",
 		id: "raichu",
@@ -1539,8 +1414,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 90,
 			def: 55,
@@ -1548,8 +1422,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Lightningrod",
 		},
@@ -1562,8 +1435,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sandshrew:
-	{
+	sandshrew: {
 		num: 27,
 		name: "Sandshrew",
 		id: "sandshrew",
@@ -1576,8 +1448,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 75,
 			def: 85,
@@ -1585,8 +1456,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Veil",
 			DW: "Sand Rush",
 		},
@@ -1599,8 +1469,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sandslash:
-	{
+	sandslash: {
 		num: 28,
 		name: "Sandslash",
 		id: "sandslash",
@@ -1613,8 +1482,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 100,
 			def: 110,
@@ -1622,8 +1490,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Veil",
 			DW: "Sand Rush",
 		},
@@ -1636,8 +1503,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	nidoranf:
-	{
+	nidoranf: {
 		num: 29,
 		name: "Nidoran♀",
 		id: "nidoranf",
@@ -1650,8 +1516,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 47,
 			def: 52,
@@ -1659,8 +1524,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 41,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
 			DW: "Hustle",
@@ -1674,8 +1538,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	nidorina:
-	{
+	nidorina: {
 		num: 30,
 		name: "Nidorina",
 		id: "nidorina",
@@ -1688,8 +1551,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 62,
 			def: 67,
@@ -1697,8 +1559,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 56,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
 			DW: "Hustle",
@@ -1712,8 +1573,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	nidoqueen:
-	{
+	nidoqueen: {
 		num: 31,
 		name: "Nidoqueen",
 		id: "nidoqueen",
@@ -1726,8 +1586,7 @@ exports.BattlePokedex =
 		types: ["Poison","Ground"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 82,
 			def: 87,
@@ -1735,8 +1594,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 76,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
 			DW: "Sheer Force",
@@ -1750,8 +1608,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	nidoranm:
-	{
+	nidoranm: {
 		num: 32,
 		name: "Nidoran♂",
 		id: "nidoranm",
@@ -1764,8 +1621,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 46,
 			atk: 57,
 			def: 40,
@@ -1773,8 +1629,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
 			DW: "Hustle",
@@ -1788,8 +1643,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	nidorino:
-	{
+	nidorino: {
 		num: 33,
 		name: "Nidorino",
 		id: "nidorino",
@@ -1802,8 +1656,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 61,
 			atk: 72,
 			def: 57,
@@ -1811,8 +1664,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
 			DW: "Hustle",
@@ -1826,8 +1678,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	nidoking:
-	{
+	nidoking: {
 		num: 34,
 		name: "Nidoking",
 		id: "nidoking",
@@ -1840,8 +1691,7 @@ exports.BattlePokedex =
 		types: ["Poison","Ground"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 81,
 			atk: 92,
 			def: 77,
@@ -1849,8 +1699,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
 			DW: "Sheer Force",
@@ -1864,8 +1713,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cleffa:
-	{
+	cleffa: {
 		num: 173,
 		name: "Cleffa",
 		id: "cleffa",
@@ -1878,8 +1726,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 25,
 			def: 28,
@@ -1887,8 +1734,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 15,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			1: "Magic Guard",
 			DW: "Friend Guard",
@@ -1902,8 +1748,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	clefairy:
-	{
+	clefairy: {
 		num: 35,
 		name: "Clefairy",
 		id: "clefairy",
@@ -1916,8 +1761,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 45,
 			def: 48,
@@ -1925,8 +1769,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			1: "Magic Guard",
 			DW: "Friend Guard",
@@ -1940,8 +1783,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	clefable:
-	{
+	clefable: {
 		num: 36,
 		name: "Clefable",
 		id: "clefable",
@@ -1954,8 +1796,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 70,
 			def: 73,
@@ -1963,8 +1804,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			1: "Magic Guard",
 			DW: "Unaware",
@@ -1978,8 +1818,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vulpix:
-	{
+	vulpix: {
 		num: 37,
 		name: "Vulpix",
 		id: "vulpix",
@@ -1992,8 +1831,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 38,
 			atk: 41,
 			def: 40,
@@ -2001,8 +1839,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flash Fire",
 			DW: "Drought",
 		},
@@ -2015,8 +1852,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ninetales:
-	{
+	ninetales: {
 		num: 38,
 		name: "Ninetales",
 		id: "ninetales",
@@ -2029,8 +1865,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 73,
 			atk: 76,
 			def: 75,
@@ -2038,8 +1873,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flash Fire",
 			DW: "Drought",
 		},
@@ -2052,8 +1886,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	igglybuff:
-	{
+	igglybuff: {
 		num: 174,
 		name: "Igglybuff",
 		id: "igglybuff",
@@ -2066,8 +1899,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 30,
 			def: 15,
@@ -2075,8 +1907,7 @@ exports.BattlePokedex =
 			spd: 20,
 			spe: 15,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			DW: "Friend Guard",
 		},
@@ -2089,8 +1920,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	jigglypuff:
-	{
+	jigglypuff: {
 		num: 39,
 		name: "Jigglypuff",
 		id: "jigglypuff",
@@ -2103,8 +1933,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 115,
 			atk: 45,
 			def: 20,
@@ -2112,8 +1941,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			DW: "Friend Guard",
 		},
@@ -2126,8 +1954,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	wigglytuff:
-	{
+	wigglytuff: {
 		num: 40,
 		name: "Wigglytuff",
 		id: "wigglytuff",
@@ -2140,8 +1967,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 140,
 			atk: 70,
 			def: 45,
@@ -2149,8 +1975,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			DW: "Frisk",
 		},
@@ -2163,8 +1988,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	zubat:
-	{
+	zubat: {
 		num: 41,
 		name: "Zubat",
 		id: "zubat",
@@ -2177,8 +2001,7 @@ exports.BattlePokedex =
 		types: ["Poison","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 45,
 			def: 35,
@@ -2186,8 +2009,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			DW: "Infiltrator",
 		},
@@ -2200,8 +2022,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	golbat:
-	{
+	golbat: {
 		num: 42,
 		name: "Golbat",
 		id: "golbat",
@@ -2214,8 +2035,7 @@ exports.BattlePokedex =
 		types: ["Poison","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 80,
 			def: 70,
@@ -2223,8 +2043,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			DW: "Infiltrator",
 		},
@@ -2237,8 +2056,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	crobat:
-	{
+	crobat: {
 		num: 169,
 		name: "Crobat",
 		id: "crobat",
@@ -2251,8 +2069,7 @@ exports.BattlePokedex =
 		types: ["Poison","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 90,
 			def: 80,
@@ -2260,8 +2077,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 130,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			DW: "Infiltrator",
 		},
@@ -2274,8 +2090,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	oddish:
-	{
+	oddish: {
 		num: 43,
 		name: "Oddish",
 		id: "oddish",
@@ -2288,8 +2103,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 50,
 			def: 55,
@@ -2297,8 +2111,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			DW: "Run Away",
 		},
@@ -2311,8 +2124,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gloom:
-	{
+	gloom: {
 		num: 44,
 		name: "Gloom",
 		id: "gloom",
@@ -2325,8 +2137,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 65,
 			def: 70,
@@ -2334,8 +2145,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			DW: "Stench",
 		},
@@ -2348,8 +2158,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vileplume:
-	{
+	vileplume: {
 		num: 45,
 		name: "Vileplume",
 		id: "vileplume",
@@ -2362,8 +2171,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 80,
 			def: 85,
@@ -2371,8 +2179,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			DW: "Effect Spore",
 		},
@@ -2385,8 +2192,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bellossom:
-	{
+	bellossom: {
 		num: 182,
 		name: "Bellossom",
 		id: "bellossom",
@@ -2399,8 +2205,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 80,
 			def: 85,
@@ -2408,8 +2213,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			DW: "Healer",
 		},
@@ -2422,8 +2226,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	paras:
-	{
+	paras: {
 		num: 46,
 		name: "Paras",
 		id: "paras",
@@ -2436,8 +2239,7 @@ exports.BattlePokedex =
 		types: ["Bug","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 70,
 			def: 55,
@@ -2445,8 +2247,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Effect Spore",
 			1: "Dry Skin",
 			DW: "Damp",
@@ -2460,8 +2261,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	parasect:
-	{
+	parasect: {
 		num: 47,
 		name: "Parasect",
 		id: "parasect",
@@ -2474,8 +2274,7 @@ exports.BattlePokedex =
 		types: ["Bug","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 95,
 			def: 80,
@@ -2483,8 +2282,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Effect Spore",
 			1: "Dry Skin",
 			DW: "Damp",
@@ -2498,8 +2296,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	venonat:
-	{
+	venonat: {
 		num: 48,
 		name: "Venonat",
 		id: "venonat",
@@ -2512,8 +2309,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 55,
 			def: 50,
@@ -2521,8 +2317,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Compoundeyes",
 			1: "Tinted Lens",
 			DW: "Run Away",
@@ -2536,8 +2331,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	venomoth:
-	{
+	venomoth: {
 		num: 49,
 		name: "Venomoth",
 		id: "venomoth",
@@ -2550,8 +2344,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 65,
 			def: 60,
@@ -2559,8 +2352,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shield Dust",
 			1: "Tinted Lens",
 			DW: "Wonder Skin",
@@ -2574,8 +2366,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	diglett:
-	{
+	diglett: {
 		num: 50,
 		name: "Diglett",
 		id: "diglett",
@@ -2588,8 +2379,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 10,
 			atk: 55,
 			def: 25,
@@ -2597,8 +2387,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Veil",
 			1: "Arena Trap",
 			DW: "Sand Force",
@@ -2612,8 +2401,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dugtrio:
-	{
+	dugtrio: {
 		num: 51,
 		name: "Dugtrio",
 		id: "dugtrio",
@@ -2626,8 +2414,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 80,
 			def: 50,
@@ -2635,8 +2422,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Veil",
 			1: "Arena Trap",
 			DW: "Sand Force",
@@ -2650,8 +2436,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	meowth:
-	{
+	meowth: {
 		num: 52,
 		name: "Meowth",
 		id: "meowth",
@@ -2664,8 +2449,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 45,
 			def: 35,
@@ -2673,8 +2457,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pickup",
 			1: "Technician",
 			DW: "Unnerve",
@@ -2688,8 +2471,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	persian:
-	{
+	persian: {
 		num: 53,
 		name: "Persian",
 		id: "persian",
@@ -2702,8 +2484,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 70,
 			def: 60,
@@ -2711,8 +2492,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 115,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Limber",
 			1: "Technician",
 			DW: "Unnerve",
@@ -2726,8 +2506,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	psyduck:
-	{
+	psyduck: {
 		num: 54,
 		name: "Psyduck",
 		id: "psyduck",
@@ -2740,8 +2519,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 52,
 			def: 48,
@@ -2749,8 +2527,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Damp",
 			1: "Cloud Nine",
 			DW: "Swift Swim",
@@ -2764,8 +2541,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	golduck:
-	{
+	golduck: {
 		num: 55,
 		name: "Golduck",
 		id: "golduck",
@@ -2778,8 +2554,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 82,
 			def: 78,
@@ -2787,8 +2562,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Damp",
 			1: "Cloud Nine",
 			DW: "Swift Swim",
@@ -2802,8 +2576,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mankey:
-	{
+	mankey: {
 		num: 56,
 		name: "Mankey",
 		id: "mankey",
@@ -2816,8 +2589,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 80,
 			def: 35,
@@ -2825,8 +2597,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Vital Spirit",
 			1: "Anger Point",
 			DW: "Defiant",
@@ -2840,8 +2611,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	primeape:
-	{
+	primeape: {
 		num: 57,
 		name: "Primeape",
 		id: "primeape",
@@ -2854,8 +2624,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 105,
 			def: 60,
@@ -2863,8 +2632,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Vital Spirit",
 			1: "Anger Point",
 			DW: "Defiant",
@@ -2878,8 +2646,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	growlithe:
-	{
+	growlithe: {
 		num: 58,
 		name: "Growlithe",
 		id: "growlithe",
@@ -2892,8 +2659,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 70,
 			def: 45,
@@ -2901,8 +2667,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Flash Fire",
 			DW: "Justified",
@@ -2916,8 +2681,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	arcanine:
-	{
+	arcanine: {
 		num: 59,
 		name: "Arcanine",
 		id: "arcanine",
@@ -2930,8 +2694,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 110,
 			def: 80,
@@ -2939,8 +2702,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Flash Fire",
 			DW: "Justified",
@@ -2954,8 +2716,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	poliwag:
-	{
+	poliwag: {
 		num: 60,
 		name: "Poliwag",
 		id: "poliwag",
@@ -2968,8 +2729,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 50,
 			def: 40,
@@ -2977,8 +2737,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Absorb",
 			1: "Damp",
 			DW: "Swift Swim",
@@ -2992,8 +2751,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	poliwhirl:
-	{
+	poliwhirl: {
 		num: 61,
 		name: "Poliwhirl",
 		id: "poliwhirl",
@@ -3006,8 +2764,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 65,
 			def: 65,
@@ -3015,8 +2772,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Absorb",
 			1: "Damp",
 			DW: "Swift Swim",
@@ -3030,8 +2786,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	poliwrath:
-	{
+	poliwrath: {
 		num: 62,
 		name: "Poliwrath",
 		id: "poliwrath",
@@ -3044,8 +2799,7 @@ exports.BattlePokedex =
 		types: ["Water","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 85,
 			def: 95,
@@ -3053,8 +2807,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Absorb",
 			1: "Damp",
 			DW: "Swift Swim",
@@ -3068,8 +2821,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	politoed:
-	{
+	politoed: {
 		num: 186,
 		name: "Politoed",
 		id: "politoed",
@@ -3082,8 +2834,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 75,
 			def: 75,
@@ -3091,8 +2842,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Absorb",
 			1: "Damp",
 			DW: "Drizzle",
@@ -3106,8 +2856,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	abra:
-	{
+	abra: {
 		num: 63,
 		name: "Abra",
 		id: "abra",
@@ -3120,8 +2869,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 25,
 			atk: 20,
 			def: 15,
@@ -3129,8 +2877,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			1: "Inner Focus",
 			DW: "Magic Guard",
@@ -3144,8 +2891,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kadabra:
-	{
+	kadabra: {
 		num: 64,
 		name: "Kadabra",
 		id: "kadabra",
@@ -3158,8 +2904,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 35,
 			def: 30,
@@ -3167,8 +2912,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			1: "Inner Focus",
 			DW: "Magic Guard",
@@ -3182,8 +2926,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	alakazam:
-	{
+	alakazam: {
 		num: 65,
 		name: "Alakazam",
 		id: "alakazam",
@@ -3196,8 +2939,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 50,
 			def: 45,
@@ -3205,8 +2947,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			1: "Inner Focus",
 			DW: "Magic Guard",
@@ -3220,8 +2961,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	machop:
-	{
+	machop: {
 		num: 66,
 		name: "Machop",
 		id: "machop",
@@ -3234,8 +2974,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 80,
 			def: 50,
@@ -3243,8 +2982,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			1: "No Guard",
 			DW: "Steadfast",
@@ -3258,8 +2996,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	machoke:
-	{
+	machoke: {
 		num: 67,
 		name: "Machoke",
 		id: "machoke",
@@ -3272,8 +3009,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 100,
 			def: 70,
@@ -3281,8 +3017,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			1: "No Guard",
 			DW: "Steadfast",
@@ -3296,8 +3031,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	machamp:
-	{
+	machamp: {
 		num: 68,
 		name: "Machamp",
 		id: "machamp",
@@ -3310,8 +3044,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 130,
 			def: 80,
@@ -3319,8 +3052,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			1: "No Guard",
 			DW: "Steadfast",
@@ -3334,8 +3066,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bellsprout:
-	{
+	bellsprout: {
 		num: 69,
 		name: "Bellsprout",
 		id: "bellsprout",
@@ -3348,8 +3079,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 75,
 			def: 35,
@@ -3357,8 +3087,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			DW: "Gluttony",
 		},
@@ -3371,8 +3100,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	weepinbell:
-	{
+	weepinbell: {
 		num: 70,
 		name: "Weepinbell",
 		id: "weepinbell",
@@ -3385,8 +3113,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 90,
 			def: 50,
@@ -3394,8 +3121,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			DW: "Gluttony",
 		},
@@ -3408,8 +3134,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	victreebel:
-	{
+	victreebel: {
 		num: 71,
 		name: "Victreebel",
 		id: "victreebel",
@@ -3422,8 +3147,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 105,
 			def: 65,
@@ -3431,8 +3155,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			DW: "Gluttony",
 		},
@@ -3445,8 +3168,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tentacool:
-	{
+	tentacool: {
 		num: 72,
 		name: "Tentacool",
 		id: "tentacool",
@@ -3459,8 +3181,7 @@ exports.BattlePokedex =
 		types: ["Water","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 40,
 			def: 35,
@@ -3468,8 +3189,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Clear Body",
 			1: "Liquid Ooze",
 			DW: "Rain Dish",
@@ -3483,8 +3203,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tentacruel:
-	{
+	tentacruel: {
 		num: 73,
 		name: "Tentacruel",
 		id: "tentacruel",
@@ -3497,8 +3216,7 @@ exports.BattlePokedex =
 		types: ["Water","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 70,
 			def: 65,
@@ -3506,8 +3224,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Clear Body",
 			1: "Liquid Ooze",
 			DW: "Rain Dish",
@@ -3521,8 +3238,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	geodude:
-	{
+	geodude: {
 		num: 74,
 		name: "Geodude",
 		id: "geodude",
@@ -3535,8 +3251,7 @@ exports.BattlePokedex =
 		types: ["Rock","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 80,
 			def: 100,
@@ -3544,8 +3259,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
 			DW: "Sand Veil",
@@ -3559,8 +3273,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	graveler:
-	{
+	graveler: {
 		num: 75,
 		name: "Graveler",
 		id: "graveler",
@@ -3573,8 +3286,7 @@ exports.BattlePokedex =
 		types: ["Rock","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 95,
 			def: 115,
@@ -3582,8 +3294,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
 			DW: "Sand Veil",
@@ -3597,8 +3308,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	golem:
-	{
+	golem: {
 		num: 76,
 		name: "Golem",
 		id: "golem",
@@ -3611,8 +3321,7 @@ exports.BattlePokedex =
 		types: ["Rock","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 110,
 			def: 130,
@@ -3620,8 +3329,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
 			DW: "Sand Veil",
@@ -3635,8 +3343,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ponyta:
-	{
+	ponyta: {
 		num: 77,
 		name: "Ponyta",
 		id: "ponyta",
@@ -3649,8 +3356,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 85,
 			def: 55,
@@ -3658,8 +3364,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Flash Fire",
 			DW: "Flame Body",
@@ -3673,8 +3378,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	rapidash:
-	{
+	rapidash: {
 		num: 78,
 		name: "Rapidash",
 		id: "rapidash",
@@ -3687,8 +3391,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 100,
 			def: 70,
@@ -3696,8 +3399,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Flash Fire",
 			DW: "Flame Body",
@@ -3711,8 +3413,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	slowpoke:
-	{
+	slowpoke: {
 		num: 79,
 		name: "Slowpoke",
 		id: "slowpoke",
@@ -3725,8 +3426,7 @@ exports.BattlePokedex =
 		types: ["Water","Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 65,
 			def: 65,
@@ -3734,8 +3434,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 15,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Own Tempo",
 			DW: "Regenerator",
@@ -3749,8 +3448,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	slowbro:
-	{
+	slowbro: {
 		num: 80,
 		name: "Slowbro",
 		id: "slowbro",
@@ -3763,8 +3461,7 @@ exports.BattlePokedex =
 		types: ["Water","Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 75,
 			def: 110,
@@ -3772,8 +3469,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Own Tempo",
 			DW: "Regenerator",
@@ -3787,8 +3483,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	slowking:
-	{
+	slowking: {
 		num: 199,
 		name: "Slowking",
 		id: "slowking",
@@ -3801,8 +3496,7 @@ exports.BattlePokedex =
 		types: ["Water","Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 75,
 			def: 80,
@@ -3810,8 +3504,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Own Tempo",
 			DW: "Regenerator",
@@ -3825,8 +3518,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	magnemite:
-	{
+	magnemite: {
 		num: 81,
 		name: "Magnemite",
 		id: "magnemite",
@@ -3839,8 +3531,7 @@ exports.BattlePokedex =
 		types: ["Electric","Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 25,
 			atk: 35,
 			def: 70,
@@ -3848,8 +3539,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Magnet Pull",
 			1: "Sturdy",
 			DW: "Analytic",
@@ -3863,8 +3553,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	magneton:
-	{
+	magneton: {
 		num: 82,
 		name: "Magneton",
 		id: "magneton",
@@ -3877,8 +3566,7 @@ exports.BattlePokedex =
 		types: ["Electric","Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 60,
 			def: 95,
@@ -3886,8 +3574,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Magnet Pull",
 			1: "Sturdy",
 			DW: "Analytic",
@@ -3901,8 +3588,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	magnezone:
-	{
+	magnezone: {
 		num: 462,
 		name: "Magnezone",
 		id: "magnezone",
@@ -3915,8 +3601,7 @@ exports.BattlePokedex =
 		types: ["Electric","Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 70,
 			def: 115,
@@ -3924,8 +3609,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Magnet Pull",
 			1: "Sturdy",
 			DW: "Analytic",
@@ -3939,8 +3623,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	farfetchd:
-	{
+	farfetchd: {
 		num: 83,
 		name: "Farfetch'd",
 		id: "farfetchd",
@@ -3953,8 +3636,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 52,
 			atk: 65,
 			def: 55,
@@ -3962,8 +3644,7 @@ exports.BattlePokedex =
 			spd: 62,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Inner Focus",
 			DW: "Defiant",
@@ -3977,8 +3658,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	doduo:
-	{
+	doduo: {
 		num: 84,
 		name: "Doduo",
 		id: "doduo",
@@ -3991,8 +3671,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 85,
 			def: 45,
@@ -4000,8 +3679,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Early Bird",
 			DW: "Tangled Feet",
@@ -4015,8 +3693,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dodrio:
-	{
+	dodrio: {
 		num: 85,
 		name: "Dodrio",
 		id: "dodrio",
@@ -4029,8 +3706,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 110,
 			def: 70,
@@ -4038,8 +3714,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Early Bird",
 			DW: "Tangled Feet",
@@ -4053,8 +3728,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	seel:
-	{
+	seel: {
 		num: 86,
 		name: "Seel",
 		id: "seel",
@@ -4067,8 +3741,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 45,
 			def: 55,
@@ -4076,8 +3749,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Hydration",
 			DW: "Ice Body",
@@ -4091,8 +3763,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dewgong:
-	{
+	dewgong: {
 		num: 87,
 		name: "Dewgong",
 		id: "dewgong",
@@ -4105,8 +3776,7 @@ exports.BattlePokedex =
 		types: ["Water","Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 70,
 			def: 80,
@@ -4114,8 +3784,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Hydration",
 			DW: "Ice Body",
@@ -4129,8 +3798,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	grimer:
-	{
+	grimer: {
 		num: 88,
 		name: "Grimer",
 		id: "grimer",
@@ -4143,8 +3811,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 80,
 			def: 50,
@@ -4152,8 +3819,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Stench",
 			1: "Sticky Hold",
 			DW: "Poison Touch",
@@ -4167,8 +3833,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	muk:
-	{
+	muk: {
 		num: 89,
 		name: "Muk",
 		id: "muk",
@@ -4181,8 +3846,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 105,
 			def: 75,
@@ -4190,8 +3854,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Stench",
 			1: "Sticky Hold",
 			DW: "Poison Touch",
@@ -4205,8 +3868,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shellder:
-	{
+	shellder: {
 		num: 90,
 		name: "Shellder",
 		id: "shellder",
@@ -4219,8 +3881,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 65,
 			def: 100,
@@ -4228,8 +3889,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shell Armor",
 			1: "Skill Link",
 			DW: "Overcoat",
@@ -4243,8 +3903,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cloyster:
-	{
+	cloyster: {
 		num: 91,
 		name: "Cloyster",
 		id: "cloyster",
@@ -4257,8 +3916,7 @@ exports.BattlePokedex =
 		types: ["Water","Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 95,
 			def: 180,
@@ -4266,8 +3924,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shell Armor",
 			1: "Skill Link",
 			DW: "Overcoat",
@@ -4281,8 +3938,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gastly:
-	{
+	gastly: {
 		num: 92,
 		name: "Gastly",
 		id: "gastly",
@@ -4295,8 +3951,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 35,
 			def: 30,
@@ -4304,8 +3959,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.3,
@@ -4317,8 +3971,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	haunter:
-	{
+	haunter: {
 		num: 93,
 		name: "Haunter",
 		id: "haunter",
@@ -4331,8 +3984,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 50,
 			def: 45,
@@ -4340,8 +3992,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.6,
@@ -4353,8 +4004,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gengar:
-	{
+	gengar: {
 		num: 94,
 		name: "Gengar",
 		id: "gengar",
@@ -4367,8 +4017,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 65,
 			def: 60,
@@ -4376,8 +4025,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.5,
@@ -4389,8 +4037,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	onix:
-	{
+	onix: {
 		num: 95,
 		name: "Onix",
 		id: "onix",
@@ -4403,8 +4050,7 @@ exports.BattlePokedex =
 		types: ["Rock","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 45,
 			def: 160,
@@ -4412,8 +4058,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
 			DW: "Weak Armor",
@@ -4427,8 +4072,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	steelix:
-	{
+	steelix: {
 		num: 208,
 		name: "Steelix",
 		id: "steelix",
@@ -4441,8 +4085,7 @@ exports.BattlePokedex =
 		types: ["Steel","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 85,
 			def: 200,
@@ -4450,8 +4093,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
 			DW: "Sheer Force",
@@ -4465,8 +4107,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	drowzee:
-	{
+	drowzee: {
 		num: 96,
 		name: "Drowzee",
 		id: "drowzee",
@@ -4479,8 +4120,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 48,
 			def: 45,
@@ -4488,8 +4128,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 42,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Insomnia",
 			1: "Forewarn",
 			DW: "Inner Focus",
@@ -4503,8 +4142,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hypno:
-	{
+	hypno: {
 		num: 97,
 		name: "Hypno",
 		id: "hypno",
@@ -4517,8 +4155,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 73,
 			def: 70,
@@ -4526,8 +4163,7 @@ exports.BattlePokedex =
 			spd: 115,
 			spe: 67,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Insomnia",
 			1: "Forewarn",
 			DW: "Inner Focus",
@@ -4541,8 +4177,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	krabby:
-	{
+	krabby: {
 		num: 98,
 		name: "Krabby",
 		id: "krabby",
@@ -4555,8 +4190,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 105,
 			def: 90,
@@ -4564,8 +4198,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hyper Cutter",
 			1: "Shell Armor",
 			DW: "Sheer Force",
@@ -4579,8 +4212,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kingler:
-	{
+	kingler: {
 		num: 99,
 		name: "Kingler",
 		id: "kingler",
@@ -4593,8 +4225,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 130,
 			def: 115,
@@ -4602,8 +4233,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hyper Cutter",
 			1: "Shell Armor",
 			DW: "Sheer Force",
@@ -4617,8 +4247,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	voltorb:
-	{
+	voltorb: {
 		num: 100,
 		name: "Voltorb",
 		id: "voltorb",
@@ -4631,8 +4260,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 30,
 			def: 50,
@@ -4640,8 +4268,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Soundproof",
 			1: "Static",
 			DW: "Aftermath",
@@ -4655,8 +4282,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	electrode:
-	{
+	electrode: {
 		num: 101,
 		name: "Electrode",
 		id: "electrode",
@@ -4669,8 +4295,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 50,
 			def: 70,
@@ -4678,8 +4303,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 140,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Soundproof",
 			1: "Static",
 			DW: "Aftermath",
@@ -4693,8 +4317,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	exeggcute:
-	{
+	exeggcute: {
 		num: 102,
 		name: "Exeggcute",
 		id: "exeggcute",
@@ -4707,8 +4330,7 @@ exports.BattlePokedex =
 		types: ["Grass","Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 40,
 			def: 80,
@@ -4716,8 +4338,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			DW: "Harvest",
 		},
@@ -4730,8 +4351,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	exeggutor:
-	{
+	exeggutor: {
 		num: 103,
 		name: "Exeggutor",
 		id: "exeggutor",
@@ -4744,8 +4364,7 @@ exports.BattlePokedex =
 		types: ["Grass","Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 95,
 			def: 85,
@@ -4753,8 +4372,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			DW: "Harvest",
 		},
@@ -4767,8 +4385,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cubone:
-	{
+	cubone: {
 		num: 104,
 		name: "Cubone",
 		id: "cubone",
@@ -4781,8 +4398,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 50,
 			def: 95,
@@ -4790,8 +4406,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Lightningrod",
 			DW: "Battle Armor",
@@ -4805,8 +4420,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	marowak:
-	{
+	marowak: {
 		num: 105,
 		name: "Marowak",
 		id: "marowak",
@@ -4819,8 +4433,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 80,
 			def: 110,
@@ -4828,8 +4441,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Lightningrod",
 			DW: "Battle Armor",
@@ -4843,8 +4455,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tyrogue:
-	{
+	tyrogue: {
 		num: 236,
 		name: "Tyrogue",
 		id: "tyrogue",
@@ -4857,8 +4468,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 35,
 			def: 35,
@@ -4866,8 +4476,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			1: "Steadfast",
 			DW: "Vital Spirit",
@@ -4881,8 +4490,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hitmonlee:
-	{
+	hitmonlee: {
 		num: 106,
 		name: "Hitmonlee",
 		id: "hitmonlee",
@@ -4895,8 +4503,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 120,
 			def: 53,
@@ -4904,8 +4511,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 87,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Limber",
 			1: "Reckless",
 			DW: "Unburden",
@@ -4919,8 +4525,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hitmonchan:
-	{
+	hitmonchan: {
 		num: 107,
 		name: "Hitmonchan",
 		id: "hitmonchan",
@@ -4933,8 +4538,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 105,
 			def: 79,
@@ -4942,8 +4546,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 76,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Iron Fist",
 			DW: "Inner Focus",
@@ -4957,8 +4560,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hitmontop:
-	{
+	hitmontop: {
 		num: 237,
 		name: "Hitmontop",
 		id: "hitmontop",
@@ -4971,8 +4573,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 95,
 			def: 95,
@@ -4980,8 +4581,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Technician",
 			DW: "Steadfast",
@@ -4995,8 +4595,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lickitung:
-	{
+	lickitung: {
 		num: 108,
 		name: "Lickitung",
 		id: "lickitung",
@@ -5009,8 +4608,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 55,
 			def: 75,
@@ -5018,8 +4616,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Own Tempo",
 			1: "Oblivious",
 			DW: "Cloud Nine",
@@ -5033,8 +4630,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lickilicky:
-	{
+	lickilicky: {
 		num: 463,
 		name: "Lickilicky",
 		id: "lickilicky",
@@ -5047,8 +4643,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 110,
 			atk: 85,
 			def: 95,
@@ -5056,8 +4651,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Own Tempo",
 			1: "Oblivious",
 			DW: "Cloud Nine",
@@ -5071,8 +4665,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	koffing:
-	{
+	koffing: {
 		num: 109,
 		name: "Koffing",
 		id: "koffing",
@@ -5085,8 +4678,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 65,
 			def: 95,
@@ -5094,8 +4686,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.6,
@@ -5107,8 +4698,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	weezing:
-	{
+	weezing: {
 		num: 110,
 		name: "Weezing",
 		id: "weezing",
@@ -5121,8 +4711,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 90,
 			def: 120,
@@ -5130,8 +4719,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.2,
@@ -5143,8 +4731,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	rhyhorn:
-	{
+	rhyhorn: {
 		num: 111,
 		name: "Rhyhorn",
 		id: "rhyhorn",
@@ -5157,8 +4744,7 @@ exports.BattlePokedex =
 		types: ["Ground","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 85,
 			def: 95,
@@ -5166,8 +4752,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Lightningrod",
 			1: "Rock Head",
 			DW: "Reckless",
@@ -5181,8 +4766,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	rhydon:
-	{
+	rhydon: {
 		num: 112,
 		name: "Rhydon",
 		id: "rhydon",
@@ -5195,8 +4779,7 @@ exports.BattlePokedex =
 		types: ["Ground","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 130,
 			def: 120,
@@ -5204,8 +4787,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Lightningrod",
 			1: "Rock Head",
 			DW: "Reckless",
@@ -5219,8 +4801,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	rhyperior:
-	{
+	rhyperior: {
 		num: 464,
 		name: "Rhyperior",
 		id: "rhyperior",
@@ -5233,8 +4814,7 @@ exports.BattlePokedex =
 		types: ["Ground","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 115,
 			atk: 140,
 			def: 130,
@@ -5242,8 +4822,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Lightningrod",
 			1: "Solid Rock",
 			DW: "Reckless",
@@ -5257,8 +4836,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	happiny:
-	{
+	happiny: {
 		num: 440,
 		name: "Happiny",
 		id: "happiny",
@@ -5271,8 +4849,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 5,
 			def: 5,
@@ -5280,8 +4857,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 			1: "Serene Grace",
 			DW: "Friend Guard",
@@ -5295,8 +4871,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	chansey:
-	{
+	chansey: {
 		num: 113,
 		name: "Chansey",
 		id: "chansey",
@@ -5309,8 +4884,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 250,
 			atk: 5,
 			def: 5,
@@ -5318,8 +4892,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 			1: "Serene Grace",
 			DW: "Healer",
@@ -5333,8 +4906,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	blissey:
-	{
+	blissey: {
 		num: 242,
 		name: "Blissey",
 		id: "blissey",
@@ -5347,8 +4919,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 255,
 			atk: 10,
 			def: 10,
@@ -5356,8 +4927,7 @@ exports.BattlePokedex =
 			spd: 135,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 			1: "Serene Grace",
 			DW: "Healer",
@@ -5371,8 +4941,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tangela:
-	{
+	tangela: {
 		num: 114,
 		name: "Tangela",
 		id: "tangela",
@@ -5385,8 +4954,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 55,
 			def: 115,
@@ -5394,8 +4962,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
 			DW: "Regenerator",
@@ -5409,8 +4976,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tangrowth:
-	{
+	tangrowth: {
 		num: 465,
 		name: "Tangrowth",
 		id: "tangrowth",
@@ -5423,8 +4989,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 100,
 			def: 125,
@@ -5432,8 +4997,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
 			DW: "Regenerator",
@@ -5447,8 +5011,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kangaskhan:
-	{
+	kangaskhan: {
 		num: 115,
 		name: "Kangaskhan",
 		id: "kangaskhan",
@@ -5461,8 +5024,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 95,
 			def: 80,
@@ -5470,8 +5032,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Early Bird",
 			1: "Scrappy",
 			DW: "Inner Focus",
@@ -5485,8 +5046,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	horsea:
-	{
+	horsea: {
 		num: 116,
 		name: "Horsea",
 		id: "horsea",
@@ -5499,8 +5059,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 40,
 			def: 70,
@@ -5508,8 +5067,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Sniper",
 			DW: "Damp",
@@ -5523,8 +5081,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	seadra:
-	{
+	seadra: {
 		num: 117,
 		name: "Seadra",
 		id: "seadra",
@@ -5537,8 +5094,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 65,
 			def: 95,
@@ -5546,8 +5102,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Sniper",
 			DW: "Damp",
@@ -5561,8 +5116,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kingdra:
-	{
+	kingdra: {
 		num: 230,
 		name: "Kingdra",
 		id: "kingdra",
@@ -5575,8 +5129,7 @@ exports.BattlePokedex =
 		types: ["Water","Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 95,
 			def: 95,
@@ -5584,8 +5137,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Sniper",
 			DW: "Damp",
@@ -5599,8 +5151,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	goldeen:
-	{
+	goldeen: {
 		num: 118,
 		name: "Goldeen",
 		id: "goldeen",
@@ -5613,8 +5164,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 67,
 			def: 60,
@@ -5622,8 +5172,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 63,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Water Veil",
 			DW: "Lightningrod",
@@ -5637,8 +5186,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	seaking:
-	{
+	seaking: {
 		num: 119,
 		name: "Seaking",
 		id: "seaking",
@@ -5651,8 +5199,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 92,
 			def: 65,
@@ -5660,8 +5207,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 68,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Water Veil",
 			DW: "Lightningrod",
@@ -5675,8 +5221,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	staryu:
-	{
+	staryu: {
 		num: 120,
 		name: "Staryu",
 		id: "staryu",
@@ -5689,8 +5234,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 45,
 			def: 55,
@@ -5698,8 +5242,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Illuminate",
 			1: "Natural Cure",
 			DW: "Analytic",
@@ -5713,8 +5256,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	starmie:
-	{
+	starmie: {
 		num: 121,
 		name: "Starmie",
 		id: "starmie",
@@ -5727,8 +5269,7 @@ exports.BattlePokedex =
 		types: ["Water","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 75,
 			def: 85,
@@ -5736,8 +5277,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 115,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Illuminate",
 			1: "Natural Cure",
 			DW: "Analytic",
@@ -5751,8 +5291,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mimejr:
-	{
+	mimejr: {
 		num: 439,
 		name: "Mime Jr.",
 		id: "mimejr",
@@ -5765,8 +5304,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 20,
 			atk: 25,
 			def: 45,
@@ -5774,8 +5312,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Soundproof",
 			1: "Filter",
 			DW: "Technician",
@@ -5789,8 +5326,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mrmime:
-	{
+	mrmime: {
 		num: 122,
 		name: "Mr. Mime",
 		id: "mrmime",
@@ -5803,8 +5339,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 45,
 			def: 65,
@@ -5812,8 +5347,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Soundproof",
 			1: "Filter",
 			DW: "Technician",
@@ -5827,8 +5361,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	scyther:
-	{
+	scyther: {
 		num: 123,
 		name: "Scyther",
 		id: "scyther",
@@ -5841,8 +5374,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 110,
 			def: 80,
@@ -5850,8 +5382,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Technician",
 			DW: "Steadfast",
@@ -5865,8 +5396,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	scizor:
-	{
+	scizor: {
 		num: 212,
 		name: "Scizor",
 		id: "scizor",
@@ -5879,8 +5409,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 130,
 			def: 100,
@@ -5888,8 +5417,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Technician",
 			DW: "Light Metal",
@@ -5903,8 +5431,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	smoochum:
-	{
+	smoochum: {
 		num: 238,
 		name: "Smoochum",
 		id: "smoochum",
@@ -5917,8 +5444,7 @@ exports.BattlePokedex =
 		types: ["Ice","Psychic"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 30,
 			def: 15,
@@ -5926,8 +5452,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Forewarn",
 			DW: "Hydration",
@@ -5941,8 +5466,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	jynx:
-	{
+	jynx: {
 		num: 124,
 		name: "Jynx",
 		id: "jynx",
@@ -5955,8 +5479,7 @@ exports.BattlePokedex =
 		types: ["Ice","Psychic"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 50,
 			def: 35,
@@ -5964,8 +5487,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Forewarn",
 			DW: "Dry Skin",
@@ -5979,8 +5501,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	elekid:
-	{
+	elekid: {
 		num: 239,
 		name: "Elekid",
 		id: "elekid",
@@ -5993,8 +5514,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 63,
 			def: 37,
@@ -6002,8 +5522,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Vital Spirit",
 		},
@@ -6016,8 +5535,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	electabuzz:
-	{
+	electabuzz: {
 		num: 125,
 		name: "Electabuzz",
 		id: "electabuzz",
@@ -6030,8 +5548,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 83,
 			def: 57,
@@ -6039,8 +5556,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Vital Spirit",
 		},
@@ -6053,8 +5569,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	electivire:
-	{
+	electivire: {
 		num: 466,
 		name: "Electivire",
 		id: "electivire",
@@ -6067,8 +5582,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 123,
 			def: 67,
@@ -6076,8 +5590,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Motor Drive",
 			DW: "Vital Spirit",
 		},
@@ -6090,8 +5603,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	magby:
-	{
+	magby: {
 		num: 240,
 		name: "Magby",
 		id: "magby",
@@ -6104,8 +5616,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 75,
 			def: 37,
@@ -6113,8 +5624,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 83,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flame Body",
 			DW: "Vital Spirit",
 		},
@@ -6127,8 +5637,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	magmar:
-	{
+	magmar: {
 		num: 126,
 		name: "Magmar",
 		id: "magmar",
@@ -6141,8 +5650,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 95,
 			def: 57,
@@ -6150,8 +5658,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 93,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flame Body",
 			DW: "Vital Spirit",
 		},
@@ -6164,8 +5671,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	magmortar:
-	{
+	magmortar: {
 		num: 467,
 		name: "Magmortar",
 		id: "magmortar",
@@ -6178,8 +5684,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 95,
 			def: 67,
@@ -6187,8 +5692,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 83,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flame Body",
 			DW: "Vital Spirit",
 		},
@@ -6201,8 +5705,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pinsir:
-	{
+	pinsir: {
 		num: 127,
 		name: "Pinsir",
 		id: "pinsir",
@@ -6215,8 +5718,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 125,
 			def: 100,
@@ -6224,8 +5726,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hyper Cutter",
 			1: "Mold Breaker",
 			DW: "Moxie",
@@ -6239,8 +5740,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tauros:
-	{
+	tauros: {
 		num: 128,
 		name: "Tauros",
 		id: "tauros",
@@ -6253,8 +5753,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 100,
 			def: 95,
@@ -6262,8 +5761,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Anger Point",
 			DW: "Sheer Force",
@@ -6277,8 +5775,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	magikarp:
-	{
+	magikarp: {
 		num: 129,
 		name: "Magikarp",
 		id: "magikarp",
@@ -6291,8 +5788,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 20,
 			atk: 10,
 			def: 55,
@@ -6300,8 +5796,7 @@ exports.BattlePokedex =
 			spd: 20,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			DW: "Rattled",
 		},
@@ -6314,8 +5809,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gyarados:
-	{
+	gyarados: {
 		num: 130,
 		name: "Gyarados",
 		id: "gyarados",
@@ -6328,8 +5822,7 @@ exports.BattlePokedex =
 		types: ["Water","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 125,
 			def: 79,
@@ -6337,8 +5830,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 81,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			DW: "Moxie",
 		},
@@ -6351,8 +5843,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lapras:
-	{
+	lapras: {
 		num: 131,
 		name: "Lapras",
 		id: "lapras",
@@ -6365,8 +5856,7 @@ exports.BattlePokedex =
 		types: ["Water","Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 130,
 			atk: 85,
 			def: 80,
@@ -6374,8 +5864,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Absorb",
 			1: "Shell Armor",
 			DW: "Hydration",
@@ -6389,8 +5878,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ditto:
-	{
+	ditto: {
 		num: 132,
 		name: "Ditto",
 		id: "ditto",
@@ -6403,8 +5891,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 48,
 			def: 48,
@@ -6412,8 +5899,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Limber",
 			DW: "Imposter",
 		},
@@ -6426,8 +5912,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	eevee:
-	{
+	eevee: {
 		num: 133,
 		name: "Eevee",
 		id: "eevee",
@@ -6440,8 +5925,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 55,
 			def: 50,
@@ -6449,8 +5933,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Adaptability",
 			DW: "Anticipation",
@@ -6464,8 +5947,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vaporeon:
-	{
+	vaporeon: {
 		num: 134,
 		name: "Vaporeon",
 		id: "vaporeon",
@@ -6478,8 +5960,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 130,
 			atk: 65,
 			def: 60,
@@ -6487,8 +5968,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Absorb",
 			DW: "Hydration",
 		},
@@ -6501,8 +5981,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	jolteon:
-	{
+	jolteon: {
 		num: 135,
 		name: "Jolteon",
 		id: "jolteon",
@@ -6515,8 +5994,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 65,
 			def: 60,
@@ -6524,8 +6002,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 130,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Volt Absorb",
 			DW: "Quick Feet",
 		},
@@ -6538,8 +6015,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	flareon:
-	{
+	flareon: {
 		num: 136,
 		name: "Flareon",
 		id: "flareon",
@@ -6552,8 +6028,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 130,
 			def: 60,
@@ -6561,8 +6036,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flash Fire",
 			DW: "Guts",
 		},
@@ -6575,8 +6049,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	espeon:
-	{
+	espeon: {
 		num: 196,
 		name: "Espeon",
 		id: "espeon",
@@ -6589,8 +6062,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 65,
 			def: 60,
@@ -6598,8 +6070,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			DW: "Magic Bounce",
 		},
@@ -6612,8 +6083,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	umbreon:
-	{
+	umbreon: {
 		num: 197,
 		name: "Umbreon",
 		id: "umbreon",
@@ -6626,8 +6096,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 65,
 			def: 110,
@@ -6635,8 +6104,7 @@ exports.BattlePokedex =
 			spd: 130,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			DW: "Inner Focus",
 		},
@@ -6649,8 +6117,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	leafeon:
-	{
+	leafeon: {
 		num: 470,
 		name: "Leafeon",
 		id: "leafeon",
@@ -6663,8 +6130,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 110,
 			def: 130,
@@ -6672,8 +6138,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Leaf Guard",
 			DW: "Chlorophyll",
 		},
@@ -6686,8 +6151,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	glaceon:
-	{
+	glaceon: {
 		num: 471,
 		name: "Glaceon",
 		id: "glaceon",
@@ -6700,8 +6164,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 60,
 			def: 110,
@@ -6709,8 +6172,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Snow Cloak",
 			DW: "Ice Body",
 		},
@@ -6723,8 +6185,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	porygon:
-	{
+	porygon: {
 		num: 137,
 		name: "Porygon",
 		id: "porygon",
@@ -6737,8 +6198,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 60,
 			def: 70,
@@ -6746,8 +6206,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Trace",
 			1: "Download",
 			DW: "Analytic",
@@ -6761,8 +6220,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	porygon2:
-	{
+	porygon2: {
 		num: 233,
 		name: "Porygon2",
 		id: "porygon2",
@@ -6775,8 +6233,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 80,
 			def: 90,
@@ -6784,8 +6241,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Trace",
 			1: "Download",
 			DW: "Analytic",
@@ -6799,8 +6255,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	porygonz:
-	{
+	porygonz: {
 		num: 474,
 		name: "Porygon-Z",
 		id: "porygonz",
@@ -6813,8 +6268,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 80,
 			def: 70,
@@ -6822,8 +6276,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Adaptability",
 			1: "Download",
 			DW: "Analytic",
@@ -6837,8 +6290,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	omanyte:
-	{
+	omanyte: {
 		num: 138,
 		name: "Omanyte",
 		id: "omanyte",
@@ -6851,8 +6303,7 @@ exports.BattlePokedex =
 		types: ["Rock","Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 40,
 			def: 100,
@@ -6860,8 +6311,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Shell Armor",
 			DW: "Weak Armor",
@@ -6875,8 +6325,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	omastar:
-	{
+	omastar: {
 		num: 139,
 		name: "Omastar",
 		id: "omastar",
@@ -6889,8 +6338,7 @@ exports.BattlePokedex =
 		types: ["Rock","Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 60,
 			def: 125,
@@ -6898,8 +6346,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Shell Armor",
 			DW: "Weak Armor",
@@ -6913,8 +6360,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kabuto:
-	{
+	kabuto: {
 		num: 140,
 		name: "Kabuto",
 		id: "kabuto",
@@ -6927,8 +6373,7 @@ exports.BattlePokedex =
 		types: ["Rock","Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 80,
 			def: 90,
@@ -6936,8 +6381,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Battle Armor",
 			DW: "Weak Armor",
@@ -6951,8 +6395,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kabutops:
-	{
+	kabutops: {
 		num: 141,
 		name: "Kabutops",
 		id: "kabutops",
@@ -6965,8 +6408,7 @@ exports.BattlePokedex =
 		types: ["Rock","Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 115,
 			def: 105,
@@ -6974,8 +6416,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Battle Armor",
 			DW: "Weak Armor",
@@ -6989,8 +6430,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	aerodactyl:
-	{
+	aerodactyl: {
 		num: 142,
 		name: "Aerodactyl",
 		id: "aerodactyl",
@@ -7003,8 +6443,7 @@ exports.BattlePokedex =
 		types: ["Rock","Flying"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 105,
 			def: 65,
@@ -7012,8 +6451,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 130,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Pressure",
 			DW: "Unnerve",
@@ -7027,8 +6465,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	munchlax:
-	{
+	munchlax: {
 		num: 446,
 		name: "Munchlax",
 		id: "munchlax",
@@ -7041,8 +6478,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 135,
 			atk: 85,
 			def: 40,
@@ -7050,8 +6486,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 5,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pickup",
 			1: "Thick Fat",
 			DW: "Gluttony",
@@ -7065,8 +6500,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	snorlax:
-	{
+	snorlax: {
 		num: 143,
 		name: "Snorlax",
 		id: "snorlax",
@@ -7079,8 +6513,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 160,
 			atk: 110,
 			def: 65,
@@ -7088,8 +6521,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Immunity",
 			1: "Thick Fat",
 			DW: "Gluttony",
@@ -7103,8 +6535,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	articuno:
-	{
+	articuno: {
 		num: 144,
 		name: "Articuno",
 		id: "articuno",
@@ -7117,8 +6548,7 @@ exports.BattlePokedex =
 		types: ["Ice","Flying"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 85,
 			def: 100,
@@ -7126,8 +6556,7 @@ exports.BattlePokedex =
 			spd: 125,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Snow Cloak",
 		},
@@ -7140,8 +6569,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	zapdos:
-	{
+	zapdos: {
 		num: 145,
 		name: "Zapdos",
 		id: "zapdos",
@@ -7154,8 +6582,7 @@ exports.BattlePokedex =
 		types: ["Electric","Flying"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 90,
 			def: 85,
@@ -7163,8 +6590,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Lightningrod",
 		},
@@ -7177,8 +6603,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	moltres:
-	{
+	moltres: {
 		num: 146,
 		name: "Moltres",
 		id: "moltres",
@@ -7191,8 +6616,7 @@ exports.BattlePokedex =
 		types: ["Fire","Flying"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 100,
 			def: 90,
@@ -7200,8 +6624,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Flame Body",
 		},
@@ -7214,8 +6637,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dratini:
-	{
+	dratini: {
 		num: 147,
 		name: "Dratini",
 		id: "dratini",
@@ -7228,8 +6650,7 @@ exports.BattlePokedex =
 		types: ["Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 41,
 			atk: 64,
 			def: 45,
@@ -7237,8 +6658,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Marvel Scale",
 		},
@@ -7251,8 +6671,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dragonair:
-	{
+	dragonair: {
 		num: 148,
 		name: "Dragonair",
 		id: "dragonair",
@@ -7265,8 +6684,7 @@ exports.BattlePokedex =
 		types: ["Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 61,
 			atk: 84,
 			def: 65,
@@ -7274,8 +6692,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Marvel Scale",
 		},
@@ -7288,8 +6705,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dragonite:
-	{
+	dragonite: {
 		num: 149,
 		name: "Dragonite",
 		id: "dragonite",
@@ -7302,8 +6718,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 91,
 			atk: 134,
 			def: 95,
@@ -7311,8 +6726,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			DW: "Multiscale",
 		},
@@ -7325,8 +6739,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mewtwo:
-	{
+	mewtwo: {
 		num: 150,
 		name: "Mewtwo",
 		id: "mewtwo",
@@ -7339,8 +6752,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 106,
 			atk: 110,
 			def: 90,
@@ -7348,8 +6760,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 130,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Unnerve",
 		},
@@ -7362,8 +6773,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mew:
-	{
+	mew: {
 		num: 151,
 		name: "Mew",
 		id: "mew",
@@ -7376,8 +6786,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 100,
 			def: 100,
@@ -7385,8 +6794,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 		},
 		heightm: 0.4,
@@ -7398,8 +6806,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	chikorita:
-	{
+	chikorita: {
 		num: 152,
 		name: "Chikorita",
 		id: "chikorita",
@@ -7412,8 +6819,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 49,
 			def: 65,
@@ -7421,8 +6827,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Leaf Guard",
 		},
@@ -7435,8 +6840,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bayleef:
-	{
+	bayleef: {
 		num: 153,
 		name: "Bayleef",
 		id: "bayleef",
@@ -7449,8 +6853,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 62,
 			def: 80,
@@ -7458,8 +6861,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Leaf Guard",
 		},
@@ -7472,8 +6874,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	meganium:
-	{
+	meganium: {
 		num: 154,
 		name: "Meganium",
 		id: "meganium",
@@ -7486,8 +6887,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 82,
 			def: 100,
@@ -7495,8 +6895,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Leaf Guard",
 		},
@@ -7509,8 +6908,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cyndaquil:
-	{
+	cyndaquil: {
 		num: 155,
 		name: "Cyndaquil",
 		id: "cyndaquil",
@@ -7523,8 +6921,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 39,
 			atk: 52,
 			def: 43,
@@ -7532,8 +6929,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Flash Fire",
 		},
@@ -7546,8 +6942,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	quilava:
-	{
+	quilava: {
 		num: 156,
 		name: "Quilava",
 		id: "quilava",
@@ -7560,8 +6955,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 58,
 			atk: 64,
 			def: 58,
@@ -7569,8 +6963,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Flash Fire",
 		},
@@ -7583,8 +6976,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	typhlosion:
-	{
+	typhlosion: {
 		num: 157,
 		name: "Typhlosion",
 		id: "typhlosion",
@@ -7597,8 +6989,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 78,
 			atk: 84,
 			def: 78,
@@ -7606,8 +6997,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Flash Fire",
 		},
@@ -7620,8 +7010,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	totodile:
-	{
+	totodile: {
 		num: 158,
 		name: "Totodile",
 		id: "totodile",
@@ -7634,8 +7023,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 65,
 			def: 64,
@@ -7643,8 +7031,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 43,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Sheer Force",
 		},
@@ -7657,8 +7044,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	croconaw:
-	{
+	croconaw: {
 		num: 159,
 		name: "Croconaw",
 		id: "croconaw",
@@ -7671,8 +7057,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 80,
 			def: 80,
@@ -7680,8 +7065,7 @@ exports.BattlePokedex =
 			spd: 63,
 			spe: 58,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Sheer Force",
 		},
@@ -7694,8 +7078,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	feraligatr:
-	{
+	feraligatr: {
 		num: 160,
 		name: "Feraligatr",
 		id: "feraligatr",
@@ -7708,8 +7091,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 105,
 			def: 100,
@@ -7717,8 +7099,7 @@ exports.BattlePokedex =
 			spd: 83,
 			spe: 78,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Sheer Force",
 		},
@@ -7731,8 +7112,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sentret:
-	{
+	sentret: {
 		num: 161,
 		name: "Sentret",
 		id: "sentret",
@@ -7745,8 +7125,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 46,
 			def: 34,
@@ -7754,8 +7133,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Keen Eye",
 			DW: "Frisk",
@@ -7769,8 +7147,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	furret:
-	{
+	furret: {
 		num: 162,
 		name: "Furret",
 		id: "furret",
@@ -7783,8 +7160,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 76,
 			def: 64,
@@ -7792,8 +7168,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Keen Eye",
 			DW: "Frisk",
@@ -7807,8 +7182,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hoothoot:
-	{
+	hoothoot: {
 		num: 163,
 		name: "Hoothoot",
 		id: "hoothoot",
@@ -7821,8 +7195,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 30,
 			def: 30,
@@ -7830,8 +7203,7 @@ exports.BattlePokedex =
 			spd: 56,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Insomnia",
 			1: "Keen Eye",
 			DW: "Tinted Lens",
@@ -7845,8 +7217,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	noctowl:
-	{
+	noctowl: {
 		num: 164,
 		name: "Noctowl",
 		id: "noctowl",
@@ -7859,8 +7230,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 50,
 			def: 50,
@@ -7868,8 +7238,7 @@ exports.BattlePokedex =
 			spd: 96,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Insomnia",
 			1: "Keen Eye",
 			DW: "Tinted Lens",
@@ -7883,8 +7252,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ledyba:
-	{
+	ledyba: {
 		num: 165,
 		name: "Ledyba",
 		id: "ledyba",
@@ -7897,8 +7265,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 20,
 			def: 30,
@@ -7906,8 +7273,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Early Bird",
 			DW: "Rattled",
@@ -7921,8 +7287,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ledian:
-	{
+	ledian: {
 		num: 166,
 		name: "Ledian",
 		id: "ledian",
@@ -7935,8 +7300,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 35,
 			def: 50,
@@ -7944,8 +7308,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Early Bird",
 			DW: "Iron Fist",
@@ -7959,8 +7322,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	spinarak:
-	{
+	spinarak: {
 		num: 167,
 		name: "Spinarak",
 		id: "spinarak",
@@ -7973,8 +7335,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 60,
 			def: 40,
@@ -7982,8 +7343,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Insomnia",
 			DW: "Sniper",
@@ -7997,8 +7357,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ariados:
-	{
+	ariados: {
 		num: 168,
 		name: "Ariados",
 		id: "ariados",
@@ -8011,8 +7370,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 90,
 			def: 70,
@@ -8020,8 +7378,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Insomnia",
 			DW: "Sniper",
@@ -8035,8 +7392,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	chinchou:
-	{
+	chinchou: {
 		num: 170,
 		name: "Chinchou",
 		id: "chinchou",
@@ -8049,8 +7405,7 @@ exports.BattlePokedex =
 		types: ["Water","Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 38,
 			def: 38,
@@ -8058,8 +7413,7 @@ exports.BattlePokedex =
 			spd: 56,
 			spe: 67,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Volt Absorb",
 			1: "Illuminate",
 			DW: "Water Absorb",
@@ -8073,8 +7427,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lanturn:
-	{
+	lanturn: {
 		num: 171,
 		name: "Lanturn",
 		id: "lanturn",
@@ -8087,8 +7440,7 @@ exports.BattlePokedex =
 		types: ["Water","Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 125,
 			atk: 58,
 			def: 58,
@@ -8096,8 +7448,7 @@ exports.BattlePokedex =
 			spd: 76,
 			spe: 67,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Volt Absorb",
 			1: "Illuminate",
 			DW: "Water Absorb",
@@ -8111,8 +7462,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	togepi:
-	{
+	togepi: {
 		num: 175,
 		name: "Togepi",
 		id: "togepi",
@@ -8125,8 +7475,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 20,
 			def: 65,
@@ -8134,8 +7483,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hustle",
 			1: "Serene Grace",
 			DW: "Super Luck",
@@ -8149,8 +7497,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	togetic:
-	{
+	togetic: {
 		num: 176,
 		name: "Togetic",
 		id: "togetic",
@@ -8163,8 +7510,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 40,
 			def: 85,
@@ -8172,8 +7518,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hustle",
 			1: "Serene Grace",
 			DW: "Super Luck",
@@ -8187,8 +7532,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	togekiss:
-	{
+	togekiss: {
 		num: 468,
 		name: "Togekiss",
 		id: "togekiss",
@@ -8201,8 +7545,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 50,
 			def: 95,
@@ -8210,8 +7553,7 @@ exports.BattlePokedex =
 			spd: 115,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hustle",
 			1: "Serene Grace",
 			DW: "Super Luck",
@@ -8225,8 +7567,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	natu:
-	{
+	natu: {
 		num: 177,
 		name: "Natu",
 		id: "natu",
@@ -8239,8 +7580,7 @@ exports.BattlePokedex =
 		types: ["Psychic","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 50,
 			def: 45,
@@ -8248,8 +7588,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			1: "Early Bird",
 			DW: "Magic Bounce",
@@ -8263,8 +7602,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	xatu:
-	{
+	xatu: {
 		num: 178,
 		name: "Xatu",
 		id: "xatu",
@@ -8277,8 +7615,7 @@ exports.BattlePokedex =
 		types: ["Psychic","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 75,
 			def: 70,
@@ -8286,8 +7623,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			1: "Early Bird",
 			DW: "Magic Bounce",
@@ -8301,8 +7637,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mareep:
-	{
+	mareep: {
 		num: 179,
 		name: "Mareep",
 		id: "mareep",
@@ -8315,8 +7650,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 40,
 			def: 40,
@@ -8324,8 +7658,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Plus",
 		},
@@ -8338,8 +7671,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	flaaffy:
-	{
+	flaaffy: {
 		num: 180,
 		name: "Flaaffy",
 		id: "flaaffy",
@@ -8352,8 +7684,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 55,
 			def: 55,
@@ -8361,8 +7692,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Plus",
 		},
@@ -8375,8 +7705,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ampharos:
-	{
+	ampharos: {
 		num: 181,
 		name: "Ampharos",
 		id: "ampharos",
@@ -8389,8 +7718,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 75,
 			def: 75,
@@ -8398,8 +7726,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Plus",
 		},
@@ -8412,8 +7739,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	azurill:
-	{
+	azurill: {
 		num: 298,
 		name: "Azurill",
 		id: "azurill",
@@ -8426,8 +7752,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 20,
 			def: 40,
@@ -8435,8 +7760,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Huge Power",
 			DW: "Sap Sipper",
@@ -8450,8 +7774,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	marill:
-	{
+	marill: {
 		num: 183,
 		name: "Marill",
 		id: "marill",
@@ -8464,8 +7787,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 20,
 			def: 50,
@@ -8473,8 +7795,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Huge Power",
 			DW: "Sap Sipper",
@@ -8488,8 +7809,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	azumarill:
-	{
+	azumarill: {
 		num: 184,
 		name: "Azumarill",
 		id: "azumarill",
@@ -8502,8 +7822,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 50,
 			def: 80,
@@ -8511,8 +7830,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Huge Power",
 			DW: "Sap Sipper",
@@ -8526,8 +7844,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bonsly:
-	{
+	bonsly: {
 		num: 438,
 		name: "Bonsly",
 		id: "bonsly",
@@ -8540,8 +7857,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 80,
 			def: 95,
@@ -8549,8 +7865,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 10,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
 			DW: "Rattled",
@@ -8564,8 +7879,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sudowoodo:
-	{
+	sudowoodo: {
 		num: 185,
 		name: "Sudowoodo",
 		id: "sudowoodo",
@@ -8578,8 +7892,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 100,
 			def: 115,
@@ -8587,8 +7900,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
 			DW: "Rattled",
@@ -8602,8 +7914,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hoppip:
-	{
+	hoppip: {
 		num: 187,
 		name: "Hoppip",
 		id: "hoppip",
@@ -8616,8 +7927,7 @@ exports.BattlePokedex =
 		types: ["Grass","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 35,
 			def: 40,
@@ -8625,8 +7935,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
 			DW: "Infiltrator",
@@ -8640,8 +7949,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	skiploom:
-	{
+	skiploom: {
 		num: 188,
 		name: "Skiploom",
 		id: "skiploom",
@@ -8654,8 +7962,7 @@ exports.BattlePokedex =
 		types: ["Grass","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 45,
 			def: 50,
@@ -8663,8 +7970,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
 			DW: "Infiltrator",
@@ -8678,8 +7984,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	jumpluff:
-	{
+	jumpluff: {
 		num: 189,
 		name: "Jumpluff",
 		id: "jumpluff",
@@ -8692,8 +7997,7 @@ exports.BattlePokedex =
 		types: ["Grass","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 55,
 			def: 70,
@@ -8701,8 +8005,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
 			DW: "Infiltrator",
@@ -8716,8 +8019,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	aipom:
-	{
+	aipom: {
 		num: 190,
 		name: "Aipom",
 		id: "aipom",
@@ -8730,8 +8032,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 70,
 			def: 55,
@@ -8739,8 +8040,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Pickup",
 			DW: "Skill Link",
@@ -8754,8 +8054,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ambipom:
-	{
+	ambipom: {
 		num: 424,
 		name: "Ambipom",
 		id: "ambipom",
@@ -8768,8 +8067,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 100,
 			def: 66,
@@ -8777,8 +8075,7 @@ exports.BattlePokedex =
 			spd: 66,
 			spe: 115,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Technician",
 			1: "Pickup",
 			DW: "Skill Link",
@@ -8792,8 +8089,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sunkern:
-	{
+	sunkern: {
 		num: 191,
 		name: "Sunkern",
 		id: "sunkern",
@@ -8806,8 +8102,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 30,
 			def: 30,
@@ -8815,8 +8110,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Solar Power",
 			DW: "Early Bird",
@@ -8830,8 +8124,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sunflora:
-	{
+	sunflora: {
 		num: 192,
 		name: "Sunflora",
 		id: "sunflora",
@@ -8844,8 +8137,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 75,
 			def: 55,
@@ -8853,8 +8145,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Solar Power",
 			DW: "Early Bird",
@@ -8868,8 +8159,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	yanma:
-	{
+	yanma: {
 		num: 193,
 		name: "Yanma",
 		id: "yanma",
@@ -8882,8 +8172,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 65,
 			def: 45,
@@ -8891,8 +8180,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Speed Boost",
 			1: "Compoundeyes",
 			DW: "Frisk",
@@ -8906,8 +8194,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	yanmega:
-	{
+	yanmega: {
 		num: 469,
 		name: "Yanmega",
 		id: "yanmega",
@@ -8920,8 +8207,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 86,
 			atk: 76,
 			def: 86,
@@ -8929,8 +8215,7 @@ exports.BattlePokedex =
 			spd: 56,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Speed Boost",
 			1: "Tinted Lens",
 			DW: "Frisk",
@@ -8944,8 +8229,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	wooper:
-	{
+	wooper: {
 		num: 194,
 		name: "Wooper",
 		id: "wooper",
@@ -8958,8 +8242,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 45,
 			def: 45,
@@ -8967,8 +8250,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 15,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Damp",
 			1: "Water Absorb",
 			DW: "Unaware",
@@ -8982,8 +8264,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	quagsire:
-	{
+	quagsire: {
 		num: 195,
 		name: "Quagsire",
 		id: "quagsire",
@@ -8996,8 +8277,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 85,
 			def: 85,
@@ -9005,8 +8285,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Damp",
 			1: "Water Absorb",
 			DW: "Unaware",
@@ -9020,8 +8299,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	murkrow:
-	{
+	murkrow: {
 		num: 198,
 		name: "Murkrow",
 		id: "murkrow",
@@ -9034,8 +8312,7 @@ exports.BattlePokedex =
 		types: ["Dark","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 85,
 			def: 42,
@@ -9043,8 +8320,7 @@ exports.BattlePokedex =
 			spd: 42,
 			spe: 91,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Insomnia",
 			1: "Super Luck",
 			DW: "Prankster",
@@ -9058,8 +8334,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	honchkrow:
-	{
+	honchkrow: {
 		num: 430,
 		name: "Honchkrow",
 		id: "honchkrow",
@@ -9072,8 +8347,7 @@ exports.BattlePokedex =
 		types: ["Dark","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 125,
 			def: 52,
@@ -9081,8 +8355,7 @@ exports.BattlePokedex =
 			spd: 52,
 			spe: 71,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Insomnia",
 			1: "Super Luck",
 			DW: "Moxie",
@@ -9096,8 +8369,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	misdreavus:
-	{
+	misdreavus: {
 		num: 200,
 		name: "Misdreavus",
 		id: "misdreavus",
@@ -9110,8 +8382,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 60,
@@ -9119,8 +8390,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.7,
@@ -9132,8 +8402,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mismagius:
-	{
+	mismagius: {
 		num: 429,
 		name: "Mismagius",
 		id: "mismagius",
@@ -9146,8 +8415,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 60,
@@ -9155,8 +8423,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.9,
@@ -9168,8 +8435,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	unown:
-	{
+	unown: {
 		num: 201,
 		name: "Unown",
 		id: "unown",
@@ -9182,8 +8448,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9191,8 +8456,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9204,8 +8468,7 @@ exports.BattlePokedex =
 		otherFormes: ["unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: true,
 	},
-	unownb:
-	{
+	unownb: {
 		num: 201,
 		name: "Unown-B",
 		id: "unownb",
@@ -9218,8 +8481,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9227,8 +8489,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9240,8 +8501,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownc:
-	{
+	unownc: {
 		num: 201,
 		name: "Unown-C",
 		id: "unownc",
@@ -9254,8 +8514,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9263,8 +8522,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9276,8 +8534,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownd:
-	{
+	unownd: {
 		num: 201,
 		name: "Unown-D",
 		id: "unownd",
@@ -9290,8 +8547,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9299,8 +8555,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9312,8 +8567,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unowne:
-	{
+	unowne: {
 		num: 201,
 		name: "Unown-E",
 		id: "unowne",
@@ -9326,8 +8580,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9335,8 +8588,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9348,8 +8600,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownf:
-	{
+	unownf: {
 		num: 201,
 		name: "Unown-F",
 		id: "unownf",
@@ -9362,8 +8613,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9371,8 +8621,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9384,8 +8633,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unowng:
-	{
+	unowng: {
 		num: 201,
 		name: "Unown-G",
 		id: "unowng",
@@ -9398,8 +8646,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9407,8 +8654,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9420,8 +8666,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownh:
-	{
+	unownh: {
 		num: 201,
 		name: "Unown-H",
 		id: "unownh",
@@ -9434,8 +8679,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9443,8 +8687,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9456,8 +8699,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unowni:
-	{
+	unowni: {
 		num: 201,
 		name: "Unown-I",
 		id: "unowni",
@@ -9470,8 +8712,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9479,8 +8720,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9492,8 +8732,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownj:
-	{
+	unownj: {
 		num: 201,
 		name: "Unown-J",
 		id: "unownj",
@@ -9506,8 +8745,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9515,8 +8753,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9528,8 +8765,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownk:
-	{
+	unownk: {
 		num: 201,
 		name: "Unown-K",
 		id: "unownk",
@@ -9542,8 +8778,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9551,8 +8786,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9564,8 +8798,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownl:
-	{
+	unownl: {
 		num: 201,
 		name: "Unown-L",
 		id: "unownl",
@@ -9578,8 +8811,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9587,8 +8819,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9600,8 +8831,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownm:
-	{
+	unownm: {
 		num: 201,
 		name: "Unown-M",
 		id: "unownm",
@@ -9614,8 +8844,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9623,8 +8852,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9636,8 +8864,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownn:
-	{
+	unownn: {
 		num: 201,
 		name: "Unown-N",
 		id: "unownn",
@@ -9650,8 +8877,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9659,8 +8885,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9672,8 +8897,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unowno:
-	{
+	unowno: {
 		num: 201,
 		name: "Unown-O",
 		id: "unowno",
@@ -9686,8 +8910,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9695,8 +8918,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9708,8 +8930,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownp:
-	{
+	unownp: {
 		num: 201,
 		name: "Unown-P",
 		id: "unownp",
@@ -9722,8 +8943,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9731,8 +8951,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9744,8 +8963,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownq:
-	{
+	unownq: {
 		num: 201,
 		name: "Unown-Q",
 		id: "unownq",
@@ -9758,8 +8976,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9767,8 +8984,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9780,8 +8996,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownr:
-	{
+	unownr: {
 		num: 201,
 		name: "Unown-R",
 		id: "unownr",
@@ -9794,8 +9009,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9803,8 +9017,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9816,8 +9029,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unowns:
-	{
+	unowns: {
 		num: 201,
 		name: "Unown-S",
 		id: "unowns",
@@ -9830,8 +9042,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9839,8 +9050,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9852,8 +9062,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownt:
-	{
+	unownt: {
 		num: 201,
 		name: "Unown-T",
 		id: "unownt",
@@ -9866,8 +9075,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9875,8 +9083,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9888,8 +9095,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownu:
-	{
+	unownu: {
 		num: 201,
 		name: "Unown-U",
 		id: "unownu",
@@ -9902,8 +9108,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9911,8 +9116,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9924,8 +9128,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownv:
-	{
+	unownv: {
 		num: 201,
 		name: "Unown-V",
 		id: "unownv",
@@ -9938,8 +9141,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9947,8 +9149,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9960,8 +9161,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownw:
-	{
+	unownw: {
 		num: 201,
 		name: "Unown-W",
 		id: "unownw",
@@ -9974,8 +9174,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -9983,8 +9182,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -9996,8 +9194,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownx:
-	{
+	unownx: {
 		num: 201,
 		name: "Unown-X",
 		id: "unownx",
@@ -10010,8 +9207,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -10019,8 +9215,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -10032,8 +9227,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unowny:
-	{
+	unowny: {
 		num: 201,
 		name: "Unown-Y",
 		id: "unowny",
@@ -10046,8 +9240,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -10055,8 +9248,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -10068,8 +9260,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unownz","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownz:
-	{
+	unownz: {
 		num: 201,
 		name: "Unown-Z",
 		id: "unownz",
@@ -10082,8 +9273,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -10091,8 +9281,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -10104,8 +9293,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownem","unownqm"],
 		isDefaultForme: false,
 	},
-	unownem:
-	{
+	unownem: {
 		num: 201,
 		name: "Unown-!",
 		id: "unownem",
@@ -10118,8 +9306,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -10127,8 +9314,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -10140,8 +9326,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownqm"],
 		isDefaultForme: false,
 	},
-	unownqm:
-	{
+	unownqm: {
 		num: 201,
 		name: "Unown-?",
 		id: "unownqm",
@@ -10154,8 +9339,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 72,
 			def: 48,
@@ -10163,8 +9347,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -10176,8 +9359,7 @@ exports.BattlePokedex =
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem"],
 		isDefaultForme: false,
 	},
-	wynaut:
-	{
+	wynaut: {
 		num: 360,
 		name: "Wynaut",
 		id: "wynaut",
@@ -10190,8 +9372,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 23,
 			def: 48,
@@ -10199,8 +9380,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 23,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shadow Tag",
 			DW: "Telepathy",
 		},
@@ -10213,8 +9393,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	wobbuffet:
-	{
+	wobbuffet: {
 		num: 202,
 		name: "Wobbuffet",
 		id: "wobbuffet",
@@ -10227,8 +9406,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 190,
 			atk: 33,
 			def: 58,
@@ -10236,8 +9414,7 @@ exports.BattlePokedex =
 			spd: 58,
 			spe: 33,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shadow Tag",
 			DW: "Telepathy",
 		},
@@ -10250,8 +9427,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	girafarig:
-	{
+	girafarig: {
 		num: 203,
 		name: "Girafarig",
 		id: "girafarig",
@@ -10264,8 +9440,7 @@ exports.BattlePokedex =
 		types: ["Normal","Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 80,
 			def: 65,
@@ -10273,8 +9448,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			1: "Early Bird",
 			DW: "Sap Sipper",
@@ -10288,8 +9462,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pineco:
-	{
+	pineco: {
 		num: 204,
 		name: "Pineco",
 		id: "pineco",
@@ -10302,8 +9475,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 65,
 			def: 90,
@@ -10311,8 +9483,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 15,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			DW: "Overcoat",
 		},
@@ -10325,8 +9496,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	forretress:
-	{
+	forretress: {
 		num: 205,
 		name: "Forretress",
 		id: "forretress",
@@ -10339,8 +9509,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 90,
 			def: 140,
@@ -10348,8 +9517,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			DW: "Overcoat",
 		},
@@ -10362,8 +9530,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dunsparce:
-	{
+	dunsparce: {
 		num: 206,
 		name: "Dunsparce",
 		id: "dunsparce",
@@ -10376,8 +9543,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 70,
 			def: 70,
@@ -10385,8 +9551,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Serene Grace",
 			1: "Run Away",
 			DW: "Rattled",
@@ -10400,8 +9565,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gligar:
-	{
+	gligar: {
 		num: 207,
 		name: "Gligar",
 		id: "gligar",
@@ -10414,8 +9578,7 @@ exports.BattlePokedex =
 		types: ["Ground","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 75,
 			def: 105,
@@ -10423,8 +9586,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hyper Cutter",
 			1: "Sand Veil",
 			DW: "Immunity",
@@ -10438,8 +9600,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gliscor:
-	{
+	gliscor: {
 		num: 472,
 		name: "Gliscor",
 		id: "gliscor",
@@ -10452,8 +9613,7 @@ exports.BattlePokedex =
 		types: ["Ground","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 95,
 			def: 125,
@@ -10461,8 +9621,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hyper Cutter",
 			1: "Sand Veil",
 			DW: "Poison Heal",
@@ -10476,8 +9635,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	snubbull:
-	{
+	snubbull: {
 		num: 209,
 		name: "Snubbull",
 		id: "snubbull",
@@ -10490,8 +9648,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 80,
 			def: 50,
@@ -10499,8 +9656,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Run Away",
 			DW: "Rattled",
@@ -10514,8 +9670,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	granbull:
-	{
+	granbull: {
 		num: 210,
 		name: "Granbull",
 		id: "granbull",
@@ -10528,8 +9683,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 120,
 			def: 75,
@@ -10537,8 +9691,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Quick Feet",
 			DW: "Rattled",
@@ -10552,8 +9705,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	qwilfish:
-	{
+	qwilfish: {
 		num: 211,
 		name: "Qwilfish",
 		id: "qwilfish",
@@ -10566,8 +9718,7 @@ exports.BattlePokedex =
 		types: ["Water","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 95,
 			def: 75,
@@ -10575,8 +9726,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Swift Swim",
 			DW: "Intimidate",
@@ -10590,8 +9740,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shuckle:
-	{
+	shuckle: {
 		num: 213,
 		name: "Shuckle",
 		id: "shuckle",
@@ -10604,8 +9753,7 @@ exports.BattlePokedex =
 		types: ["Bug","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 20,
 			atk: 10,
 			def: 230,
@@ -10613,8 +9761,7 @@ exports.BattlePokedex =
 			spd: 230,
 			spe: 5,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Gluttony",
 			DW: "Contrary",
@@ -10628,8 +9775,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	heracross:
-	{
+	heracross: {
 		num: 214,
 		name: "Heracross",
 		id: "heracross",
@@ -10642,8 +9788,7 @@ exports.BattlePokedex =
 		types: ["Bug","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 125,
 			def: 75,
@@ -10651,8 +9796,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Guts",
 			DW: "Moxie",
@@ -10666,8 +9810,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sneasel:
-	{
+	sneasel: {
 		num: 215,
 		name: "Sneasel",
 		id: "sneasel",
@@ -10680,8 +9823,7 @@ exports.BattlePokedex =
 		types: ["Dark","Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 95,
 			def: 55,
@@ -10689,8 +9831,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 115,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			1: "Keen Eye",
 			DW: "Pickpocket",
@@ -10704,8 +9845,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	weavile:
-	{
+	weavile: {
 		num: 461,
 		name: "Weavile",
 		id: "weavile",
@@ -10718,8 +9858,7 @@ exports.BattlePokedex =
 		types: ["Dark","Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 120,
 			def: 65,
@@ -10727,8 +9866,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 125,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Pickpocket",
 		},
@@ -10741,8 +9879,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	teddiursa:
-	{
+	teddiursa: {
 		num: 216,
 		name: "Teddiursa",
 		id: "teddiursa",
@@ -10755,8 +9892,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 80,
 			def: 50,
@@ -10764,8 +9900,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pickup",
 			1: "Quick Feet",
 			DW: "Honey Gather",
@@ -10779,8 +9914,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ursaring:
-	{
+	ursaring: {
 		num: 217,
 		name: "Ursaring",
 		id: "ursaring",
@@ -10793,8 +9927,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 130,
 			def: 75,
@@ -10802,8 +9935,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			1: "Quick Feet",
 			DW: "Unnerve",
@@ -10817,8 +9949,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	slugma:
-	{
+	slugma: {
 		num: 218,
 		name: "Slugma",
 		id: "slugma",
@@ -10831,8 +9962,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 40,
 			def: 40,
@@ -10840,8 +9970,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Magma Armor",
 			1: "Flame Body",
 			DW: "Weak Armor",
@@ -10855,8 +9984,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	magcargo:
-	{
+	magcargo: {
 		num: 219,
 		name: "Magcargo",
 		id: "magcargo",
@@ -10869,8 +9997,7 @@ exports.BattlePokedex =
 		types: ["Fire","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 50,
 			def: 120,
@@ -10878,8 +10005,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Magma Armor",
 			1: "Flame Body",
 			DW: "Weak Armor",
@@ -10893,8 +10019,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	swinub:
-	{
+	swinub: {
 		num: 220,
 		name: "Swinub",
 		id: "swinub",
@@ -10907,8 +10032,7 @@ exports.BattlePokedex =
 		types: ["Ice","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 50,
 			def: 40,
@@ -10916,8 +10040,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Snow Cloak",
 			DW: "Thick Fat",
@@ -10931,8 +10054,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	piloswine:
-	{
+	piloswine: {
 		num: 221,
 		name: "Piloswine",
 		id: "piloswine",
@@ -10945,8 +10067,7 @@ exports.BattlePokedex =
 		types: ["Ice","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 100,
 			def: 80,
@@ -10954,8 +10075,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Snow Cloak",
 			DW: "Thick Fat",
@@ -10969,8 +10089,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mamoswine:
-	{
+	mamoswine: {
 		num: 473,
 		name: "Mamoswine",
 		id: "mamoswine",
@@ -10983,8 +10102,7 @@ exports.BattlePokedex =
 		types: ["Ice","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 110,
 			atk: 130,
 			def: 80,
@@ -10992,8 +10110,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Snow Cloak",
 			DW: "Thick Fat",
@@ -11007,8 +10124,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	corsola:
-	{
+	corsola: {
 		num: 222,
 		name: "Corsola",
 		id: "corsola",
@@ -11021,8 +10137,7 @@ exports.BattlePokedex =
 		types: ["Water","Rock"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 55,
 			def: 85,
@@ -11030,8 +10145,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hustle",
 			1: "Natural Cure",
 			DW: "Regenerator",
@@ -11045,8 +10159,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	remoraid:
-	{
+	remoraid: {
 		num: 223,
 		name: "Remoraid",
 		id: "remoraid",
@@ -11059,8 +10172,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 65,
 			def: 35,
@@ -11068,8 +10180,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hustle",
 			1: "Sniper",
 			DW: "Moody",
@@ -11083,8 +10194,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	octillery:
-	{
+	octillery: {
 		num: 224,
 		name: "Octillery",
 		id: "octillery",
@@ -11097,8 +10207,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 105,
 			def: 75,
@@ -11106,8 +10215,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Suction Cups",
 			1: "Sniper",
 			DW: "Moody",
@@ -11121,8 +10229,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	delibird:
-	{
+	delibird: {
 		num: 225,
 		name: "Delibird",
 		id: "delibird",
@@ -11135,8 +10242,7 @@ exports.BattlePokedex =
 		types: ["Ice","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 55,
 			def: 45,
@@ -11144,8 +10250,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Vital Spirit",
 			1: "Hustle",
 			DW: "Insomnia",
@@ -11159,8 +10264,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mantyke:
-	{
+	mantyke: {
 		num: 458,
 		name: "Mantyke",
 		id: "mantyke",
@@ -11173,8 +10277,7 @@ exports.BattlePokedex =
 		types: ["Water","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 20,
 			def: 50,
@@ -11182,8 +10285,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Water Absorb",
 			DW: "Water Veil",
@@ -11197,8 +10299,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mantine:
-	{
+	mantine: {
 		num: 226,
 		name: "Mantine",
 		id: "mantine",
@@ -11211,8 +10312,7 @@ exports.BattlePokedex =
 		types: ["Water","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 40,
 			def: 70,
@@ -11220,8 +10320,7 @@ exports.BattlePokedex =
 			spd: 140,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Water Absorb",
 			DW: "Water Veil",
@@ -11235,8 +10334,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	skarmory:
-	{
+	skarmory: {
 		num: 227,
 		name: "Skarmory",
 		id: "skarmory",
@@ -11249,8 +10347,7 @@ exports.BattlePokedex =
 		types: ["Steel","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 80,
 			def: 140,
@@ -11258,8 +10355,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Sturdy",
 			DW: "Weak Armor",
@@ -11273,8 +10369,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	houndour:
-	{
+	houndour: {
 		num: 228,
 		name: "Houndour",
 		id: "houndour",
@@ -11287,8 +10382,7 @@ exports.BattlePokedex =
 		types: ["Dark","Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 60,
 			def: 30,
@@ -11296,8 +10390,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Early Bird",
 			1: "Flash Fire",
 			DW: "Unnerve",
@@ -11311,8 +10404,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	houndoom:
-	{
+	houndoom: {
 		num: 229,
 		name: "Houndoom",
 		id: "houndoom",
@@ -11325,8 +10417,7 @@ exports.BattlePokedex =
 		types: ["Dark","Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 90,
 			def: 50,
@@ -11334,8 +10425,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Early Bird",
 			1: "Flash Fire",
 			DW: "Unnerve",
@@ -11349,8 +10439,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	phanpy:
-	{
+	phanpy: {
 		num: 231,
 		name: "Phanpy",
 		id: "phanpy",
@@ -11363,8 +10452,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 60,
 			def: 60,
@@ -11372,8 +10460,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pickup",
 			DW: "Sand Veil",
 		},
@@ -11386,8 +10473,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	donphan:
-	{
+	donphan: {
 		num: 232,
 		name: "Donphan",
 		id: "donphan",
@@ -11400,8 +10486,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 120,
 			def: 120,
@@ -11409,8 +10494,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			DW: "Sand Veil",
 		},
@@ -11423,8 +10507,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	stantler:
-	{
+	stantler: {
 		num: 234,
 		name: "Stantler",
 		id: "stantler",
@@ -11437,8 +10520,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 73,
 			atk: 95,
 			def: 62,
@@ -11446,8 +10528,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Frisk",
 			DW: "Sap Sipper",
@@ -11461,8 +10542,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	smeargle:
-	{
+	smeargle: {
 		num: 235,
 		name: "Smeargle",
 		id: "smeargle",
@@ -11475,8 +10555,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 20,
 			def: 35,
@@ -11484,8 +10563,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Own Tempo",
 			1: "Technician",
 			DW: "Moody",
@@ -11499,8 +10577,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	miltank:
-	{
+	miltank: {
 		num: 241,
 		name: "Miltank",
 		id: "miltank",
@@ -11513,8 +10590,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 80,
 			def: 105,
@@ -11522,8 +10598,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Scrappy",
 			DW: "Sap Sipper",
@@ -11537,8 +10612,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	raikou:
-	{
+	raikou: {
 		num: 243,
 		name: "Raikou",
 		id: "raikou",
@@ -11551,8 +10625,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 85,
 			def: 75,
@@ -11560,8 +10633,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 115,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Volt Absorb",
 		},
@@ -11574,8 +10646,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	entei:
-	{
+	entei: {
 		num: 244,
 		name: "Entei",
 		id: "entei",
@@ -11588,8 +10659,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 115,
 			atk: 115,
 			def: 85,
@@ -11597,8 +10667,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Flash Fire",
 		},
@@ -11611,8 +10680,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	suicune:
-	{
+	suicune: {
 		num: 245,
 		name: "Suicune",
 		id: "suicune",
@@ -11625,8 +10693,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 75,
 			def: 115,
@@ -11634,8 +10701,7 @@ exports.BattlePokedex =
 			spd: 115,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Water Absorb",
 		},
@@ -11648,8 +10714,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	larvitar:
-	{
+	larvitar: {
 		num: 246,
 		name: "Larvitar",
 		id: "larvitar",
@@ -11662,8 +10727,7 @@ exports.BattlePokedex =
 		types: ["Rock","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 64,
 			def: 50,
@@ -11671,8 +10735,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 41,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			DW: "Sand Veil",
 		},
@@ -11685,8 +10748,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pupitar:
-	{
+	pupitar: {
 		num: 247,
 		name: "Pupitar",
 		id: "pupitar",
@@ -11699,8 +10761,7 @@ exports.BattlePokedex =
 		types: ["Rock","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 84,
 			def: 70,
@@ -11708,8 +10769,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 51,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Shed Skin",
 		},
@@ -11722,8 +10782,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tyranitar:
-	{
+	tyranitar: {
 		num: 248,
 		name: "Tyranitar",
 		id: "tyranitar",
@@ -11736,8 +10795,7 @@ exports.BattlePokedex =
 		types: ["Rock","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 134,
 			def: 110,
@@ -11745,8 +10803,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 61,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Stream",
 			DW: "Unnerve",
 		},
@@ -11759,8 +10816,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lugia:
-	{
+	lugia: {
 		num: 249,
 		name: "Lugia",
 		id: "lugia",
@@ -11773,8 +10829,7 @@ exports.BattlePokedex =
 		types: ["Psychic","Flying"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 106,
 			atk: 90,
 			def: 130,
@@ -11782,8 +10837,7 @@ exports.BattlePokedex =
 			spd: 154,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Multiscale",
 		},
@@ -11796,8 +10850,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hooh:
-	{
+	hooh: {
 		num: 250,
 		name: "Ho-Oh",
 		id: "hooh",
@@ -11810,8 +10863,7 @@ exports.BattlePokedex =
 		types: ["Fire","Flying"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 106,
 			atk: 130,
 			def: 90,
@@ -11819,8 +10871,7 @@ exports.BattlePokedex =
 			spd: 154,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Regenerator",
 		},
@@ -11833,8 +10884,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	celebi:
-	{
+	celebi: {
 		num: 251,
 		name: "Celebi",
 		id: "celebi",
@@ -11847,8 +10897,7 @@ exports.BattlePokedex =
 		types: ["Psychic","Grass"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 100,
 			def: 100,
@@ -11856,8 +10905,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 		},
 		heightm: 0.6,
@@ -11869,8 +10917,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	treecko:
-	{
+	treecko: {
 		num: 252,
 		name: "Treecko",
 		id: "treecko",
@@ -11883,8 +10930,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 45,
 			def: 35,
@@ -11892,8 +10938,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Unburden",
 		},
@@ -11906,8 +10951,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	grovyle:
-	{
+	grovyle: {
 		num: 253,
 		name: "Grovyle",
 		id: "grovyle",
@@ -11920,8 +10964,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 65,
 			def: 45,
@@ -11929,8 +10972,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Unburden",
 		},
@@ -11943,8 +10985,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sceptile:
-	{
+	sceptile: {
 		num: 254,
 		name: "Sceptile",
 		id: "sceptile",
@@ -11957,8 +10998,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 85,
 			def: 65,
@@ -11966,8 +11006,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Unburden",
 		},
@@ -11980,8 +11019,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	torchic:
-	{
+	torchic: {
 		num: 255,
 		name: "Torchic",
 		id: "torchic",
@@ -11994,8 +11032,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 60,
 			def: 40,
@@ -12003,8 +11040,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Speed Boost",
 		},
@@ -12017,8 +11053,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	combusken:
-	{
+	combusken: {
 		num: 256,
 		name: "Combusken",
 		id: "combusken",
@@ -12031,8 +11066,7 @@ exports.BattlePokedex =
 		types: ["Fire","Fighting"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 85,
 			def: 60,
@@ -12040,8 +11074,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Speed Boost",
 		},
@@ -12054,8 +11087,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	blaziken:
-	{
+	blaziken: {
 		num: 257,
 		name: "Blaziken",
 		id: "blaziken",
@@ -12068,8 +11100,7 @@ exports.BattlePokedex =
 		types: ["Fire","Fighting"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 120,
 			def: 70,
@@ -12077,8 +11108,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Speed Boost",
 		},
@@ -12091,8 +11121,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mudkip:
-	{
+	mudkip: {
 		num: 258,
 		name: "Mudkip",
 		id: "mudkip",
@@ -12105,8 +11134,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 70,
 			def: 50,
@@ -12114,8 +11142,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Damp",
 		},
@@ -12128,8 +11155,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	marshtomp:
-	{
+	marshtomp: {
 		num: 259,
 		name: "Marshtomp",
 		id: "marshtomp",
@@ -12142,8 +11168,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 85,
 			def: 70,
@@ -12151,8 +11176,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Damp",
 		},
@@ -12165,8 +11189,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	swampert:
-	{
+	swampert: {
 		num: 260,
 		name: "Swampert",
 		id: "swampert",
@@ -12179,8 +11202,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 110,
 			def: 90,
@@ -12188,8 +11210,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Damp",
 		},
@@ -12202,8 +11223,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	poochyena:
-	{
+	poochyena: {
 		num: 261,
 		name: "Poochyena",
 		id: "poochyena",
@@ -12216,8 +11236,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 55,
 			def: 35,
@@ -12225,8 +11244,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Quick Feet",
 			DW: "Rattled",
@@ -12240,8 +11258,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mightyena:
-	{
+	mightyena: {
 		num: 262,
 		name: "Mightyena",
 		id: "mightyena",
@@ -12254,8 +11271,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 90,
 			def: 70,
@@ -12263,8 +11279,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Quick Feet",
 			DW: "Moxie",
@@ -12278,8 +11293,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	zigzagoon:
-	{
+	zigzagoon: {
 		num: 263,
 		name: "Zigzagoon",
 		id: "zigzagoon",
@@ -12292,8 +11306,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 38,
 			atk: 30,
 			def: 41,
@@ -12301,8 +11314,7 @@ exports.BattlePokedex =
 			spd: 41,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pickup",
 			1: "Gluttony",
 			DW: "Quick Feet",
@@ -12316,8 +11328,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	linoone:
-	{
+	linoone: {
 		num: 264,
 		name: "Linoone",
 		id: "linoone",
@@ -12330,8 +11341,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 78,
 			atk: 70,
 			def: 61,
@@ -12339,8 +11349,7 @@ exports.BattlePokedex =
 			spd: 61,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pickup",
 			1: "Gluttony",
 			DW: "Quick Feet",
@@ -12354,8 +11363,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	wurmple:
-	{
+	wurmple: {
 		num: 265,
 		name: "Wurmple",
 		id: "wurmple",
@@ -12368,8 +11376,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 45,
 			def: 35,
@@ -12377,8 +11384,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shield Dust",
 			DW: "Run Away",
 		},
@@ -12391,8 +11397,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	silcoon:
-	{
+	silcoon: {
 		num: 266,
 		name: "Silcoon",
 		id: "silcoon",
@@ -12405,8 +11410,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 35,
 			def: 55,
@@ -12414,8 +11418,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 15,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Shed Skin",
 		},
@@ -12428,8 +11431,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	beautifly:
-	{
+	beautifly: {
 		num: 267,
 		name: "Beautifly",
 		id: "beautifly",
@@ -12442,8 +11444,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 70,
 			def: 50,
@@ -12451,8 +11452,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			DW: "Rivalry",
 		},
@@ -12465,8 +11465,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cascoon:
-	{
+	cascoon: {
 		num: 268,
 		name: "Cascoon",
 		id: "cascoon",
@@ -12479,8 +11478,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 35,
 			def: 55,
@@ -12488,8 +11486,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 15,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Shed Skin",
 		},
@@ -12502,8 +11499,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dustox:
-	{
+	dustox: {
 		num: 269,
 		name: "Dustox",
 		id: "dustox",
@@ -12516,8 +11512,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 50,
 			def: 70,
@@ -12525,8 +11520,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shield Dust",
 			DW: "Compoundeyes",
 		},
@@ -12539,8 +11533,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lotad:
-	{
+	lotad: {
 		num: 270,
 		name: "Lotad",
 		id: "lotad",
@@ -12553,8 +11546,7 @@ exports.BattlePokedex =
 		types: ["Water","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 30,
 			def: 30,
@@ -12562,8 +11554,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Rain Dish",
 			DW: "Own Tempo",
@@ -12577,8 +11568,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lombre:
-	{
+	lombre: {
 		num: 271,
 		name: "Lombre",
 		id: "lombre",
@@ -12591,8 +11581,7 @@ exports.BattlePokedex =
 		types: ["Water","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 50,
 			def: 50,
@@ -12600,8 +11589,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Rain Dish",
 			DW: "Own Tempo",
@@ -12615,8 +11603,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ludicolo:
-	{
+	ludicolo: {
 		num: 272,
 		name: "Ludicolo",
 		id: "ludicolo",
@@ -12629,8 +11616,7 @@ exports.BattlePokedex =
 		types: ["Water","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 70,
 			def: 70,
@@ -12638,8 +11624,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Rain Dish",
 			DW: "Own Tempo",
@@ -12653,8 +11638,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	seedot:
-	{
+	seedot: {
 		num: 273,
 		name: "Seedot",
 		id: "seedot",
@@ -12667,8 +11651,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 40,
 			def: 50,
@@ -12676,8 +11659,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Early Bird",
 			DW: "Pickpocket",
@@ -12691,8 +11673,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	nuzleaf:
-	{
+	nuzleaf: {
 		num: 274,
 		name: "Nuzleaf",
 		id: "nuzleaf",
@@ -12705,8 +11686,7 @@ exports.BattlePokedex =
 		types: ["Grass","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 70,
 			def: 40,
@@ -12714,8 +11694,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Early Bird",
 			DW: "Pickpocket",
@@ -12729,8 +11708,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shiftry:
-	{
+	shiftry: {
 		num: 275,
 		name: "Shiftry",
 		id: "shiftry",
@@ -12743,8 +11721,7 @@ exports.BattlePokedex =
 		types: ["Grass","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 100,
 			def: 60,
@@ -12752,8 +11729,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Early Bird",
 			DW: "Pickpocket",
@@ -12767,8 +11743,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	taillow:
-	{
+	taillow: {
 		num: 276,
 		name: "Taillow",
 		id: "taillow",
@@ -12781,8 +11756,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 55,
 			def: 30,
@@ -12790,8 +11764,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			DW: "Scrappy",
 		},
@@ -12804,8 +11777,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	swellow:
-	{
+	swellow: {
 		num: 277,
 		name: "Swellow",
 		id: "swellow",
@@ -12818,8 +11790,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 85,
 			def: 60,
@@ -12827,8 +11798,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 125,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			DW: "Scrappy",
 		},
@@ -12841,8 +11811,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	wingull:
-	{
+	wingull: {
 		num: 278,
 		name: "Wingull",
 		id: "wingull",
@@ -12855,8 +11824,7 @@ exports.BattlePokedex =
 		types: ["Water","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 30,
 			def: 30,
@@ -12864,8 +11832,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			DW: "Rain Dish",
 		},
@@ -12878,8 +11845,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pelipper:
-	{
+	pelipper: {
 		num: 279,
 		name: "Pelipper",
 		id: "pelipper",
@@ -12892,8 +11858,7 @@ exports.BattlePokedex =
 		types: ["Water","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 50,
 			def: 100,
@@ -12901,8 +11866,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			DW: "Rain Dish",
 		},
@@ -12915,8 +11879,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ralts:
-	{
+	ralts: {
 		num: 280,
 		name: "Ralts",
 		id: "ralts",
@@ -12929,8 +11892,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 28,
 			atk: 25,
 			def: 25,
@@ -12938,8 +11900,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			1: "Trace",
 			DW: "Telepathy",
@@ -12953,8 +11914,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kirlia:
-	{
+	kirlia: {
 		num: 281,
 		name: "Kirlia",
 		id: "kirlia",
@@ -12967,8 +11927,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 38,
 			atk: 35,
 			def: 35,
@@ -12976,8 +11935,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			1: "Trace",
 			DW: "Telepathy",
@@ -12991,8 +11949,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gardevoir:
-	{
+	gardevoir: {
 		num: 282,
 		name: "Gardevoir",
 		id: "gardevoir",
@@ -13005,8 +11962,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 68,
 			atk: 65,
 			def: 65,
@@ -13014,8 +11970,7 @@ exports.BattlePokedex =
 			spd: 115,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Synchronize",
 			1: "Trace",
 			DW: "Telepathy",
@@ -13029,8 +11984,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gallade:
-	{
+	gallade: {
 		num: 475,
 		name: "Gallade",
 		id: "gallade",
@@ -13043,8 +11997,7 @@ exports.BattlePokedex =
 		types: ["Psychic","Fighting"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 68,
 			atk: 125,
 			def: 65,
@@ -13052,8 +12005,7 @@ exports.BattlePokedex =
 			spd: 115,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Steadfast",
 			DW: "Justified",
 		},
@@ -13066,8 +12018,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	surskit:
-	{
+	surskit: {
 		num: 283,
 		name: "Surskit",
 		id: "surskit",
@@ -13080,8 +12031,7 @@ exports.BattlePokedex =
 		types: ["Bug","Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 30,
 			def: 32,
@@ -13089,8 +12039,7 @@ exports.BattlePokedex =
 			spd: 52,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			DW: "Rain Dish",
 		},
@@ -13103,8 +12052,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	masquerain:
-	{
+	masquerain: {
 		num: 284,
 		name: "Masquerain",
 		id: "masquerain",
@@ -13117,8 +12065,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 60,
 			def: 62,
@@ -13126,8 +12073,7 @@ exports.BattlePokedex =
 			spd: 82,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			DW: "Unnerve",
 		},
@@ -13140,8 +12086,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shroomish:
-	{
+	shroomish: {
 		num: 285,
 		name: "Shroomish",
 		id: "shroomish",
@@ -13154,8 +12099,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 40,
 			def: 60,
@@ -13163,8 +12107,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Effect Spore",
 			1: "Poison Heal",
 			DW: "Quick Feet",
@@ -13178,8 +12121,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	breloom:
-	{
+	breloom: {
 		num: 286,
 		name: "Breloom",
 		id: "breloom",
@@ -13192,8 +12134,7 @@ exports.BattlePokedex =
 		types: ["Grass","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 130,
 			def: 80,
@@ -13201,8 +12142,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Effect Spore",
 			1: "Poison Heal",
 			DW: "Technician",
@@ -13216,8 +12156,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	slakoth:
-	{
+	slakoth: {
 		num: 287,
 		name: "Slakoth",
 		id: "slakoth",
@@ -13230,8 +12169,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 60,
@@ -13239,8 +12177,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Truant",
 		},
 		heightm: 0.8,
@@ -13252,8 +12189,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vigoroth:
-	{
+	vigoroth: {
 		num: 288,
 		name: "Vigoroth",
 		id: "vigoroth",
@@ -13266,8 +12202,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 80,
 			def: 80,
@@ -13275,8 +12210,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Vital Spirit",
 		},
 		heightm: 1.4,
@@ -13288,8 +12222,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	slaking:
-	{
+	slaking: {
 		num: 289,
 		name: "Slaking",
 		id: "slaking",
@@ -13302,8 +12235,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 150,
 			atk: 160,
 			def: 100,
@@ -13311,8 +12243,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Truant",
 		},
 		heightm: 2,
@@ -13324,8 +12255,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	nincada:
-	{
+	nincada: {
 		num: 290,
 		name: "Nincada",
 		id: "nincada",
@@ -13338,8 +12268,7 @@ exports.BattlePokedex =
 		types: ["Bug","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 31,
 			atk: 45,
 			def: 90,
@@ -13347,8 +12276,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Compoundeyes",
 			DW: "Run Away",
 		},
@@ -13361,8 +12289,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ninjask:
-	{
+	ninjask: {
 		num: 291,
 		name: "Ninjask",
 		id: "ninjask",
@@ -13375,8 +12302,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 61,
 			atk: 90,
 			def: 45,
@@ -13384,8 +12310,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 160,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Speed Boost",
 			DW: "Infiltrator",
 		},
@@ -13398,8 +12323,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shedinja:
-	{
+	shedinja: {
 		num: 292,
 		name: "Shedinja",
 		id: "shedinja",
@@ -13412,8 +12336,7 @@ exports.BattlePokedex =
 		types: ["Bug","Ghost"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 1,
 			atk: 90,
 			def: 45,
@@ -13421,8 +12344,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Wonder Guard",
 			DW: "Wonder Guard",
 		},
@@ -13435,8 +12357,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	whismur:
-	{
+	whismur: {
 		num: 293,
 		name: "Whismur",
 		id: "whismur",
@@ -13449,8 +12370,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 64,
 			atk: 51,
 			def: 23,
@@ -13458,8 +12378,7 @@ exports.BattlePokedex =
 			spd: 23,
 			spe: 28,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Soundproof",
 			DW: "Rattled",
 		},
@@ -13472,8 +12391,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	loudred:
-	{
+	loudred: {
 		num: 294,
 		name: "Loudred",
 		id: "loudred",
@@ -13486,8 +12404,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 84,
 			atk: 71,
 			def: 43,
@@ -13495,8 +12412,7 @@ exports.BattlePokedex =
 			spd: 43,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Soundproof",
 			DW: "Scrappy",
 		},
@@ -13509,8 +12425,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	exploud:
-	{
+	exploud: {
 		num: 295,
 		name: "Exploud",
 		id: "exploud",
@@ -13523,8 +12438,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 104,
 			atk: 91,
 			def: 63,
@@ -13532,8 +12446,7 @@ exports.BattlePokedex =
 			spd: 63,
 			spe: 68,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Soundproof",
 			DW: "Scrappy",
 		},
@@ -13546,8 +12459,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	makuhita:
-	{
+	makuhita: {
 		num: 296,
 		name: "Makuhita",
 		id: "makuhita",
@@ -13560,8 +12472,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 72,
 			atk: 60,
 			def: 30,
@@ -13569,8 +12480,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Guts",
 			DW: "Sheer Force",
@@ -13584,8 +12494,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hariyama:
-	{
+	hariyama: {
 		num: 297,
 		name: "Hariyama",
 		id: "hariyama",
@@ -13598,8 +12507,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 144,
 			atk: 120,
 			def: 60,
@@ -13607,8 +12515,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Guts",
 			DW: "Sheer Force",
@@ -13622,8 +12529,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	nosepass:
-	{
+	nosepass: {
 		num: 299,
 		name: "Nosepass",
 		id: "nosepass",
@@ -13636,8 +12542,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 45,
 			def: 135,
@@ -13645,8 +12550,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Magnet Pull",
 			DW: "Sand Force",
@@ -13660,8 +12564,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	probopass:
-	{
+	probopass: {
 		num: 476,
 		name: "Probopass",
 		id: "probopass",
@@ -13674,8 +12577,7 @@ exports.BattlePokedex =
 		types: ["Rock","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 55,
 			def: 145,
@@ -13683,8 +12585,7 @@ exports.BattlePokedex =
 			spd: 150,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Magnet Pull",
 			DW: "Sand Force",
@@ -13698,8 +12599,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	skitty:
-	{
+	skitty: {
 		num: 300,
 		name: "Skitty",
 		id: "skitty",
@@ -13712,8 +12612,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 45,
 			def: 45,
@@ -13721,8 +12620,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			1: "Normalize",
 			DW: "Wonder Skin",
@@ -13736,8 +12634,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	delcatty:
-	{
+	delcatty: {
 		num: 301,
 		name: "Delcatty",
 		id: "delcatty",
@@ -13750,8 +12647,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 65,
 			def: 65,
@@ -13759,8 +12655,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			1: "Normalize",
 			DW: "Wonder Skin",
@@ -13774,8 +12669,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sableye:
-	{
+	sableye: {
 		num: 302,
 		name: "Sableye",
 		id: "sableye",
@@ -13788,8 +12682,7 @@ exports.BattlePokedex =
 		types: ["Dark","Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 75,
 			def: 75,
@@ -13797,8 +12690,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Stall",
 			DW: "Prankster",
@@ -13812,8 +12704,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mawile:
-	{
+	mawile: {
 		num: 303,
 		name: "Mawile",
 		id: "mawile",
@@ -13826,8 +12717,7 @@ exports.BattlePokedex =
 		types: ["Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 85,
 			def: 85,
@@ -13835,8 +12725,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hyper Cutter",
 			1: "Intimidate",
 			DW: "Sheer Force",
@@ -13850,8 +12739,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	aron:
-	{
+	aron: {
 		num: 304,
 		name: "Aron",
 		id: "aron",
@@ -13864,8 +12752,7 @@ exports.BattlePokedex =
 		types: ["Steel","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 70,
 			def: 100,
@@ -13873,8 +12760,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
 			DW: "Heavy Metal",
@@ -13888,8 +12774,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lairon:
-	{
+	lairon: {
 		num: 305,
 		name: "Lairon",
 		id: "lairon",
@@ -13902,8 +12787,7 @@ exports.BattlePokedex =
 		types: ["Steel","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 90,
 			def: 140,
@@ -13911,8 +12795,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
 			DW: "Heavy Metal",
@@ -13926,8 +12809,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	aggron:
-	{
+	aggron: {
 		num: 306,
 		name: "Aggron",
 		id: "aggron",
@@ -13940,8 +12822,7 @@ exports.BattlePokedex =
 		types: ["Steel","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 110,
 			def: 180,
@@ -13949,8 +12830,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
 			DW: "Heavy Metal",
@@ -13964,8 +12844,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	meditite:
-	{
+	meditite: {
 		num: 307,
 		name: "Meditite",
 		id: "meditite",
@@ -13978,8 +12857,7 @@ exports.BattlePokedex =
 		types: ["Fighting","Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 40,
 			def: 55,
@@ -13987,8 +12865,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pure Power",
 			DW: "Telepathy",
 		},
@@ -14001,8 +12878,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	medicham:
-	{
+	medicham: {
 		num: 308,
 		name: "Medicham",
 		id: "medicham",
@@ -14015,8 +12891,7 @@ exports.BattlePokedex =
 		types: ["Fighting","Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 75,
@@ -14024,8 +12899,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pure Power",
 			DW: "Telepathy",
 		},
@@ -14038,8 +12912,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	electrike:
-	{
+	electrike: {
 		num: 309,
 		name: "Electrike",
 		id: "electrike",
@@ -14052,8 +12925,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 45,
 			def: 40,
@@ -14061,8 +12933,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			1: "Lightningrod",
 			DW: "Minus",
@@ -14076,8 +12947,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	manectric:
-	{
+	manectric: {
 		num: 310,
 		name: "Manectric",
 		id: "manectric",
@@ -14090,8 +12960,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 75,
 			def: 60,
@@ -14099,8 +12968,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			1: "Lightningrod",
 			DW: "Minus",
@@ -14114,8 +12982,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	plusle:
-	{
+	plusle: {
 		num: 311,
 		name: "Plusle",
 		id: "plusle",
@@ -14128,8 +12995,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 50,
 			def: 40,
@@ -14137,8 +13003,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Plus",
 		},
 		heightm: 0.4,
@@ -14150,8 +13015,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	minun:
-	{
+	minun: {
 		num: 312,
 		name: "Minun",
 		id: "minun",
@@ -14164,8 +13028,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 40,
 			def: 50,
@@ -14173,8 +13036,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Minus",
 		},
 		heightm: 0.4,
@@ -14186,8 +13048,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	volbeat:
-	{
+	volbeat: {
 		num: 313,
 		name: "Volbeat",
 		id: "volbeat",
@@ -14200,8 +13061,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 73,
 			def: 55,
@@ -14209,8 +13069,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Illuminate",
 			1: "Swarm",
 			DW: "Prankster",
@@ -14224,8 +13083,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	illumise:
-	{
+	illumise: {
 		num: 314,
 		name: "Illumise",
 		id: "illumise",
@@ -14238,8 +13096,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 47,
 			def: 55,
@@ -14247,8 +13104,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Tinted Lens",
 			DW: "Prankster",
@@ -14262,8 +13118,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	budew:
-	{
+	budew: {
 		num: 406,
 		name: "Budew",
 		id: "budew",
@@ -14276,8 +13131,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 30,
 			def: 35,
@@ -14285,8 +13139,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 			1: "Poison Point",
 			DW: "Leaf Guard",
@@ -14300,8 +13153,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	roselia:
-	{
+	roselia: {
 		num: 315,
 		name: "Roselia",
 		id: "roselia",
@@ -14314,8 +13166,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 60,
 			def: 45,
@@ -14323,8 +13174,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 			1: "Poison Point",
 			DW: "Leaf Guard",
@@ -14338,8 +13188,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	roserade:
-	{
+	roserade: {
 		num: 407,
 		name: "Roserade",
 		id: "roserade",
@@ -14352,8 +13201,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 70,
 			def: 55,
@@ -14361,8 +13209,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 			1: "Poison Point",
 			DW: "Technician",
@@ -14376,8 +13223,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gulpin:
-	{
+	gulpin: {
 		num: 316,
 		name: "Gulpin",
 		id: "gulpin",
@@ -14390,8 +13236,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 43,
 			def: 53,
@@ -14399,8 +13244,7 @@ exports.BattlePokedex =
 			spd: 53,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Liquid Ooze",
 			1: "Sticky Hold",
 			DW: "Gluttony",
@@ -14414,8 +13258,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	swalot:
-	{
+	swalot: {
 		num: 317,
 		name: "Swalot",
 		id: "swalot",
@@ -14428,8 +13271,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 73,
 			def: 83,
@@ -14437,8 +13279,7 @@ exports.BattlePokedex =
 			spd: 83,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Liquid Ooze",
 			1: "Sticky Hold",
 			DW: "Gluttony",
@@ -14452,8 +13293,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	carvanha:
-	{
+	carvanha: {
 		num: 318,
 		name: "Carvanha",
 		id: "carvanha",
@@ -14466,8 +13306,7 @@ exports.BattlePokedex =
 		types: ["Water","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 90,
 			def: 20,
@@ -14475,8 +13314,7 @@ exports.BattlePokedex =
 			spd: 20,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rough Skin",
 			DW: "Speed Boost",
 		},
@@ -14489,8 +13327,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sharpedo:
-	{
+	sharpedo: {
 		num: 319,
 		name: "Sharpedo",
 		id: "sharpedo",
@@ -14503,8 +13340,7 @@ exports.BattlePokedex =
 		types: ["Water","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 120,
 			def: 40,
@@ -14512,8 +13348,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rough Skin",
 			DW: "Speed Boost",
 		},
@@ -14526,8 +13361,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	wailmer:
-	{
+	wailmer: {
 		num: 320,
 		name: "Wailmer",
 		id: "wailmer",
@@ -14540,8 +13374,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 130,
 			atk: 70,
 			def: 35,
@@ -14549,8 +13382,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Veil",
 			1: "Oblivious",
 			DW: "Pressure",
@@ -14564,8 +13396,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	wailord:
-	{
+	wailord: {
 		num: 321,
 		name: "Wailord",
 		id: "wailord",
@@ -14578,8 +13409,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 170,
 			atk: 90,
 			def: 45,
@@ -14587,8 +13417,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Veil",
 			1: "Oblivious",
 			DW: "Pressure",
@@ -14602,8 +13431,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	numel:
-	{
+	numel: {
 		num: 322,
 		name: "Numel",
 		id: "numel",
@@ -14616,8 +13444,7 @@ exports.BattlePokedex =
 		types: ["Fire","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 40,
@@ -14625,8 +13452,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Simple",
 			DW: "Own Tempo",
@@ -14640,8 +13466,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	camerupt:
-	{
+	camerupt: {
 		num: 323,
 		name: "Camerupt",
 		id: "camerupt",
@@ -14654,8 +13479,7 @@ exports.BattlePokedex =
 		types: ["Fire","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 100,
 			def: 70,
@@ -14663,8 +13487,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Magma Armor",
 			1: "Solid Rock",
 			DW: "Anger Point",
@@ -14678,8 +13501,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	torkoal:
-	{
+	torkoal: {
 		num: 324,
 		name: "Torkoal",
 		id: "torkoal",
@@ -14692,8 +13514,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 85,
 			def: 140,
@@ -14701,8 +13522,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "White Smoke",
 			DW: "Shell Armor",
 		},
@@ -14715,8 +13535,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	spoink:
-	{
+	spoink: {
 		num: 325,
 		name: "Spoink",
 		id: "spoink",
@@ -14729,8 +13548,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 25,
 			def: 35,
@@ -14738,8 +13556,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Own Tempo",
 			DW: "Gluttony",
@@ -14753,8 +13570,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	grumpig:
-	{
+	grumpig: {
 		num: 326,
 		name: "Grumpig",
 		id: "grumpig",
@@ -14767,8 +13583,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 45,
 			def: 65,
@@ -14776,8 +13591,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Own Tempo",
 			DW: "Gluttony",
@@ -14791,8 +13605,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	spinda:
-	{
+	spinda: {
 		num: 327,
 		name: "Spinda",
 		id: "spinda",
@@ -14805,8 +13618,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 60,
@@ -14814,8 +13626,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Own Tempo",
 			1: "Tangled Feet",
 			DW: "Contrary",
@@ -14829,8 +13640,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	trapinch:
-	{
+	trapinch: {
 		num: 328,
 		name: "Trapinch",
 		id: "trapinch",
@@ -14843,8 +13653,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 100,
 			def: 45,
@@ -14852,8 +13661,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 10,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hyper Cutter",
 			1: "Arena Trap",
 			DW: "Sheer Force",
@@ -14867,8 +13675,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vibrava:
-	{
+	vibrava: {
 		num: 329,
 		name: "Vibrava",
 		id: "vibrava",
@@ -14881,8 +13688,7 @@ exports.BattlePokedex =
 		types: ["Ground","Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 70,
 			def: 50,
@@ -14890,8 +13696,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 			DW: "Levitate",
 		},
@@ -14904,8 +13709,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	flygon:
-	{
+	flygon: {
 		num: 330,
 		name: "Flygon",
 		id: "flygon",
@@ -14918,8 +13722,7 @@ exports.BattlePokedex =
 		types: ["Ground","Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 100,
 			def: 80,
@@ -14927,8 +13730,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 			DW: "Levitate",
 		},
@@ -14941,8 +13743,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cacnea:
-	{
+	cacnea: {
 		num: 331,
 		name: "Cacnea",
 		id: "cacnea",
@@ -14955,8 +13756,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 85,
 			def: 40,
@@ -14964,8 +13764,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Veil",
 			DW: "Water Absorb",
 		},
@@ -14978,8 +13777,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cacturne:
-	{
+	cacturne: {
 		num: 332,
 		name: "Cacturne",
 		id: "cacturne",
@@ -14992,8 +13790,7 @@ exports.BattlePokedex =
 		types: ["Grass","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 115,
 			def: 60,
@@ -15001,8 +13798,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Veil",
 			DW: "Water Absorb",
 		},
@@ -15015,8 +13811,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	swablu:
-	{
+	swablu: {
 		num: 333,
 		name: "Swablu",
 		id: "swablu",
@@ -15029,8 +13824,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 40,
 			def: 60,
@@ -15038,8 +13832,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 			DW: "Cloud Nine",
 		},
@@ -15052,8 +13845,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	altaria:
-	{
+	altaria: {
 		num: 334,
 		name: "Altaria",
 		id: "altaria",
@@ -15066,8 +13858,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 70,
 			def: 90,
@@ -15075,8 +13866,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 			DW: "Cloud Nine",
 		},
@@ -15089,8 +13879,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	zangoose:
-	{
+	zangoose: {
 		num: 335,
 		name: "Zangoose",
 		id: "zangoose",
@@ -15103,8 +13892,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 73,
 			atk: 115,
 			def: 60,
@@ -15112,8 +13900,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Immunity",
 			DW: "Toxic Boost",
 		},
@@ -15126,8 +13913,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	seviper:
-	{
+	seviper: {
 		num: 336,
 		name: "Seviper",
 		id: "seviper",
@@ -15140,8 +13926,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 73,
 			atk: 100,
 			def: 60,
@@ -15149,8 +13934,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Infiltrator",
 		},
@@ -15163,8 +13947,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lunatone:
-	{
+	lunatone: {
 		num: 337,
 		name: "Lunatone",
 		id: "lunatone",
@@ -15177,8 +13960,7 @@ exports.BattlePokedex =
 		types: ["Rock","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 55,
 			def: 65,
@@ -15186,8 +13968,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1,
@@ -15199,8 +13980,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	solrock:
-	{
+	solrock: {
 		num: 338,
 		name: "Solrock",
 		id: "solrock",
@@ -15213,8 +13993,7 @@ exports.BattlePokedex =
 		types: ["Rock","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 95,
 			def: 85,
@@ -15222,8 +14001,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.2,
@@ -15235,8 +14013,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	barboach:
-	{
+	barboach: {
 		num: 339,
 		name: "Barboach",
 		id: "barboach",
@@ -15249,8 +14026,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 48,
 			def: 43,
@@ -15258,8 +14034,7 @@ exports.BattlePokedex =
 			spd: 41,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Anticipation",
 			DW: "Hydration",
@@ -15273,8 +14048,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	whiscash:
-	{
+	whiscash: {
 		num: 340,
 		name: "Whiscash",
 		id: "whiscash",
@@ -15287,8 +14061,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 110,
 			atk: 78,
 			def: 73,
@@ -15296,8 +14069,7 @@ exports.BattlePokedex =
 			spd: 71,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Oblivious",
 			1: "Anticipation",
 			DW: "Hydration",
@@ -15311,8 +14083,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	corphish:
-	{
+	corphish: {
 		num: 341,
 		name: "Corphish",
 		id: "corphish",
@@ -15325,8 +14096,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 43,
 			atk: 80,
 			def: 65,
@@ -15334,8 +14104,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hyper Cutter",
 			1: "Shell Armor",
 			DW: "Adaptability",
@@ -15349,8 +14118,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	crawdaunt:
-	{
+	crawdaunt: {
 		num: 342,
 		name: "Crawdaunt",
 		id: "crawdaunt",
@@ -15363,8 +14131,7 @@ exports.BattlePokedex =
 		types: ["Water","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 63,
 			atk: 120,
 			def: 85,
@@ -15372,8 +14139,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hyper Cutter",
 			1: "Shell Armor",
 			DW: "Adaptability",
@@ -15387,8 +14153,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	baltoy:
-	{
+	baltoy: {
 		num: 343,
 		name: "Baltoy",
 		id: "baltoy",
@@ -15401,8 +14166,7 @@ exports.BattlePokedex =
 		types: ["Ground","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 40,
 			def: 55,
@@ -15410,8 +14174,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.5,
@@ -15423,8 +14186,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	claydol:
-	{
+	claydol: {
 		num: 344,
 		name: "Claydol",
 		id: "claydol",
@@ -15437,8 +14199,7 @@ exports.BattlePokedex =
 		types: ["Ground","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 70,
 			def: 105,
@@ -15446,8 +14207,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.5,
@@ -15459,8 +14219,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lileep:
-	{
+	lileep: {
 		num: 345,
 		name: "Lileep",
 		id: "lileep",
@@ -15473,8 +14232,7 @@ exports.BattlePokedex =
 		types: ["Rock","Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 66,
 			atk: 41,
 			def: 77,
@@ -15482,8 +14240,7 @@ exports.BattlePokedex =
 			spd: 87,
 			spe: 23,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Suction Cups",
 			DW: "Storm Drain",
 		},
@@ -15496,8 +14253,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cradily:
-	{
+	cradily: {
 		num: 346,
 		name: "Cradily",
 		id: "cradily",
@@ -15510,8 +14266,7 @@ exports.BattlePokedex =
 		types: ["Rock","Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 86,
 			atk: 81,
 			def: 97,
@@ -15519,8 +14274,7 @@ exports.BattlePokedex =
 			spd: 107,
 			spe: 43,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Suction Cups",
 			DW: "Storm Drain",
 		},
@@ -15533,8 +14287,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	anorith:
-	{
+	anorith: {
 		num: 347,
 		name: "Anorith",
 		id: "anorith",
@@ -15547,8 +14300,7 @@ exports.BattlePokedex =
 		types: ["Rock","Bug"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 95,
 			def: 50,
@@ -15556,8 +14308,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Battle Armor",
 			DW: "Swift Swim",
 		},
@@ -15570,8 +14321,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	armaldo:
-	{
+	armaldo: {
 		num: 348,
 		name: "Armaldo",
 		id: "armaldo",
@@ -15584,8 +14334,7 @@ exports.BattlePokedex =
 		types: ["Rock","Bug"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 125,
 			def: 100,
@@ -15593,8 +14342,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Battle Armor",
 			DW: "Swift Swim",
 		},
@@ -15607,8 +14355,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	feebas:
-	{
+	feebas: {
 		num: 349,
 		name: "Feebas",
 		id: "feebas",
@@ -15621,8 +14368,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 20,
 			atk: 15,
 			def: 20,
@@ -15630,8 +14376,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			DW: "Adaptability",
 		},
@@ -15644,8 +14389,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	milotic:
-	{
+	milotic: {
 		num: 350,
 		name: "Milotic",
 		id: "milotic",
@@ -15658,8 +14402,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 60,
 			def: 79,
@@ -15667,8 +14410,7 @@ exports.BattlePokedex =
 			spd: 125,
 			spe: 81,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Marvel Scale",
 			DW: "Cute Charm",
 		},
@@ -15681,8 +14423,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	castform:
-	{
+	castform: {
 		num: 351,
 		name: "Castform",
 		id: "castform",
@@ -15695,8 +14436,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 70,
 			def: 70,
@@ -15704,8 +14444,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Forecast",
 		},
 		heightm: 0.3,
@@ -15717,8 +14456,7 @@ exports.BattlePokedex =
 		otherFormes: ["castformsunny","castformrainy","castformsnowy"],
 		isDefaultForme: true,
 	},
-	castformsunny:
-	{
+	castformsunny: {
 		num: 351,
 		name: "Castform-Sunny",
 		id: "castformsunny",
@@ -15731,8 +14469,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 70,
 			def: 70,
@@ -15740,8 +14477,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Forecast",
 		},
 		heightm: 0.3,
@@ -15753,8 +14489,7 @@ exports.BattlePokedex =
 		otherFormes: ["castform","castformrainy","castformsnowy"],
 		isDefaultForme: false,
 	},
-	castformrainy:
-	{
+	castformrainy: {
 		num: 351,
 		name: "Castform-Rainy",
 		id: "castformrainy",
@@ -15767,8 +14502,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 70,
 			def: 70,
@@ -15776,8 +14510,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Forecast",
 		},
 		heightm: 0.3,
@@ -15789,8 +14522,7 @@ exports.BattlePokedex =
 		otherFormes: ["castform","castformsunny","castformsnowy"],
 		isDefaultForme: false,
 	},
-	castformsnowy:
-	{
+	castformsnowy: {
 		num: 351,
 		name: "Castform-Snowy",
 		id: "castformsnowy",
@@ -15803,8 +14535,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 70,
 			def: 70,
@@ -15812,8 +14543,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Forecast",
 		},
 		heightm: 0.3,
@@ -15825,8 +14555,7 @@ exports.BattlePokedex =
 		otherFormes: ["castform","castformsunny","castformrainy"],
 		isDefaultForme: false,
 	},
-	kecleon:
-	{
+	kecleon: {
 		num: 352,
 		name: "Kecleon",
 		id: "kecleon",
@@ -15839,8 +14568,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 90,
 			def: 70,
@@ -15848,8 +14576,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Color Change",
 		},
 		heightm: 1,
@@ -15861,8 +14588,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shuppet:
-	{
+	shuppet: {
 		num: 353,
 		name: "Shuppet",
 		id: "shuppet",
@@ -15875,8 +14601,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 44,
 			atk: 75,
 			def: 35,
@@ -15884,8 +14609,7 @@ exports.BattlePokedex =
 			spd: 33,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Insomnia",
 			1: "Frisk",
 			DW: "Cursed Body",
@@ -15899,8 +14623,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	banette:
-	{
+	banette: {
 		num: 354,
 		name: "Banette",
 		id: "banette",
@@ -15913,8 +14636,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 64,
 			atk: 115,
 			def: 65,
@@ -15922,8 +14644,7 @@ exports.BattlePokedex =
 			spd: 63,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Insomnia",
 			1: "Frisk",
 			DW: "Cursed Body",
@@ -15937,8 +14658,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	duskull:
-	{
+	duskull: {
 		num: 355,
 		name: "Duskull",
 		id: "duskull",
@@ -15951,8 +14671,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 20,
 			atk: 40,
 			def: 90,
@@ -15960,8 +14679,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.8,
@@ -15973,8 +14691,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dusclops:
-	{
+	dusclops: {
 		num: 356,
 		name: "Dusclops",
 		id: "dusclops",
@@ -15987,8 +14704,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 70,
 			def: 130,
@@ -15996,8 +14712,7 @@ exports.BattlePokedex =
 			spd: 130,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 		},
 		heightm: 1.6,
@@ -16009,8 +14724,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dusknoir:
-	{
+	dusknoir: {
 		num: 477,
 		name: "Dusknoir",
 		id: "dusknoir",
@@ -16023,8 +14737,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 100,
 			def: 135,
@@ -16032,8 +14745,7 @@ exports.BattlePokedex =
 			spd: 135,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 		},
 		heightm: 2.2,
@@ -16045,8 +14757,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tropius:
-	{
+	tropius: {
 		num: 357,
 		name: "Tropius",
 		id: "tropius",
@@ -16059,8 +14770,7 @@ exports.BattlePokedex =
 		types: ["Grass","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 99,
 			atk: 68,
 			def: 83,
@@ -16068,8 +14778,7 @@ exports.BattlePokedex =
 			spd: 87,
 			spe: 51,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Solar Power",
 			DW: "Harvest",
@@ -16083,8 +14792,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	chingling:
-	{
+	chingling: {
 		num: 433,
 		name: "Chingling",
 		id: "chingling",
@@ -16097,8 +14805,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 30,
 			def: 50,
@@ -16106,8 +14813,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.2,
@@ -16119,8 +14825,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	chimecho:
-	{
+	chimecho: {
 		num: 358,
 		name: "Chimecho",
 		id: "chimecho",
@@ -16133,8 +14838,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 50,
 			def: 70,
@@ -16142,8 +14846,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.6,
@@ -16155,8 +14858,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	absol:
-	{
+	absol: {
 		num: 359,
 		name: "Absol",
 		id: "absol",
@@ -16169,8 +14871,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 130,
 			def: 60,
@@ -16178,8 +14879,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			1: "Super Luck",
 			DW: "Justified",
@@ -16193,8 +14893,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	snorunt:
-	{
+	snorunt: {
 		num: 361,
 		name: "Snorunt",
 		id: "snorunt",
@@ -16207,8 +14906,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 50,
 			def: 50,
@@ -16216,8 +14914,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			1: "Ice Body",
 			DW: "Moody",
@@ -16231,8 +14928,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	glalie:
-	{
+	glalie: {
 		num: 362,
 		name: "Glalie",
 		id: "glalie",
@@ -16245,8 +14941,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 80,
 			def: 80,
@@ -16254,8 +14949,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			1: "Ice Body",
 			DW: "Moody",
@@ -16269,8 +14963,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	froslass:
-	{
+	froslass: {
 		num: 478,
 		name: "Froslass",
 		id: "froslass",
@@ -16283,8 +14976,7 @@ exports.BattlePokedex =
 		types: ["Ice","Ghost"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 80,
 			def: 70,
@@ -16292,8 +14984,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Snow Cloak",
 			DW: "Cursed Body",
 		},
@@ -16306,8 +14997,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	spheal:
-	{
+	spheal: {
 		num: 363,
 		name: "Spheal",
 		id: "spheal",
@@ -16320,8 +15010,7 @@ exports.BattlePokedex =
 		types: ["Ice","Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 40,
 			def: 50,
@@ -16329,8 +15018,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Ice Body",
 			DW: "Oblivious",
@@ -16344,8 +15032,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sealeo:
-	{
+	sealeo: {
 		num: 364,
 		name: "Sealeo",
 		id: "sealeo",
@@ -16358,8 +15045,7 @@ exports.BattlePokedex =
 		types: ["Ice","Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 60,
 			def: 70,
@@ -16367,8 +15053,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Ice Body",
 			DW: "Oblivious",
@@ -16382,8 +15067,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	walrein:
-	{
+	walrein: {
 		num: 365,
 		name: "Walrein",
 		id: "walrein",
@@ -16396,8 +15080,7 @@ exports.BattlePokedex =
 		types: ["Ice","Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 110,
 			atk: 80,
 			def: 90,
@@ -16405,8 +15088,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Ice Body",
 			DW: "Oblivious",
@@ -16420,8 +15102,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	clamperl:
-	{
+	clamperl: {
 		num: 366,
 		name: "Clamperl",
 		id: "clamperl",
@@ -16434,8 +15115,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 64,
 			def: 85,
@@ -16443,8 +15123,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 32,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shell Armor",
 			DW: "Rattled",
 		},
@@ -16457,8 +15136,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	huntail:
-	{
+	huntail: {
 		num: 367,
 		name: "Huntail",
 		id: "huntail",
@@ -16471,8 +15149,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 104,
 			def: 105,
@@ -16480,8 +15157,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 52,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			DW: "Water Veil",
 		},
@@ -16494,8 +15170,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gorebyss:
-	{
+	gorebyss: {
 		num: 368,
 		name: "Gorebyss",
 		id: "gorebyss",
@@ -16508,8 +15183,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 84,
 			def: 105,
@@ -16517,8 +15191,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 52,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			DW: "Hydration",
 		},
@@ -16531,8 +15204,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	relicanth:
-	{
+	relicanth: {
 		num: 369,
 		name: "Relicanth",
 		id: "relicanth",
@@ -16545,8 +15217,7 @@ exports.BattlePokedex =
 		types: ["Water","Rock"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 90,
 			def: 130,
@@ -16554,8 +15225,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Rock Head",
 			DW: "Sturdy",
@@ -16569,8 +15239,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	luvdisc:
-	{
+	luvdisc: {
 		num: 370,
 		name: "Luvdisc",
 		id: "luvdisc",
@@ -16583,8 +15252,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 43,
 			atk: 30,
 			def: 55,
@@ -16592,8 +15260,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 97,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			DW: "Hydration",
 		},
@@ -16606,8 +15273,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bagon:
-	{
+	bagon: {
 		num: 371,
 		name: "Bagon",
 		id: "bagon",
@@ -16620,8 +15286,7 @@ exports.BattlePokedex =
 		types: ["Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 75,
 			def: 60,
@@ -16629,8 +15294,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			DW: "Sheer Force",
 		},
@@ -16643,8 +15307,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shelgon:
-	{
+	shelgon: {
 		num: 372,
 		name: "Shelgon",
 		id: "shelgon",
@@ -16657,8 +15320,7 @@ exports.BattlePokedex =
 		types: ["Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 95,
 			def: 100,
@@ -16666,8 +15328,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			DW: "Overcoat",
 		},
@@ -16680,8 +15341,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	salamence:
-	{
+	salamence: {
 		num: 373,
 		name: "Salamence",
 		id: "salamence",
@@ -16694,8 +15354,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 135,
 			def: 80,
@@ -16703,8 +15362,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			DW: "Moxie",
 		},
@@ -16717,8 +15375,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	beldum:
-	{
+	beldum: {
 		num: 374,
 		name: "Beldum",
 		id: "beldum",
@@ -16731,8 +15388,7 @@ exports.BattlePokedex =
 		types: ["Steel","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 55,
 			def: 80,
@@ -16740,8 +15396,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Clear Body",
 			DW: "Light Metal",
 		},
@@ -16754,8 +15409,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	metang:
-	{
+	metang: {
 		num: 375,
 		name: "Metang",
 		id: "metang",
@@ -16768,8 +15422,7 @@ exports.BattlePokedex =
 		types: ["Steel","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 75,
 			def: 100,
@@ -16777,8 +15430,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Clear Body",
 			DW: "Light Metal",
 		},
@@ -16791,8 +15443,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	metagross:
-	{
+	metagross: {
 		num: 376,
 		name: "Metagross",
 		id: "metagross",
@@ -16805,8 +15456,7 @@ exports.BattlePokedex =
 		types: ["Steel","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 135,
 			def: 130,
@@ -16814,8 +15464,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Clear Body",
 			DW: "Light Metal",
 		},
@@ -16828,8 +15477,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	regirock:
-	{
+	regirock: {
 		num: 377,
 		name: "Regirock",
 		id: "regirock",
@@ -16842,8 +15490,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 100,
 			def: 200,
@@ -16851,8 +15498,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Clear Body",
 			DW: "Sturdy",
 		},
@@ -16865,8 +15511,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	regice:
-	{
+	regice: {
 		num: 378,
 		name: "Regice",
 		id: "regice",
@@ -16879,8 +15524,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 50,
 			def: 100,
@@ -16888,8 +15532,7 @@ exports.BattlePokedex =
 			spd: 200,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Clear Body",
 			DW: "Ice Body",
 		},
@@ -16902,8 +15545,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	registeel:
-	{
+	registeel: {
 		num: 379,
 		name: "Registeel",
 		id: "registeel",
@@ -16916,8 +15558,7 @@ exports.BattlePokedex =
 		types: ["Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 75,
 			def: 150,
@@ -16925,8 +15566,7 @@ exports.BattlePokedex =
 			spd: 150,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Clear Body",
 			DW: "Light Metal",
 		},
@@ -16939,8 +15579,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	latias:
-	{
+	latias: {
 		num: 380,
 		name: "Latias",
 		id: "latias",
@@ -16953,8 +15592,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Psychic"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 80,
 			def: 90,
@@ -16962,8 +15600,7 @@ exports.BattlePokedex =
 			spd: 130,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.4,
@@ -16975,8 +15612,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	latios:
-	{
+	latios: {
 		num: 381,
 		name: "Latios",
 		id: "latios",
@@ -16989,8 +15625,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Psychic"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 90,
 			def: 80,
@@ -16998,8 +15633,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 2,
@@ -17011,8 +15645,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kyogre:
-	{
+	kyogre: {
 		num: 382,
 		name: "Kyogre",
 		id: "kyogre",
@@ -17025,8 +15658,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 100,
 			def: 90,
@@ -17034,8 +15666,7 @@ exports.BattlePokedex =
 			spd: 140,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Drizzle",
 		},
 		heightm: 4.5,
@@ -17047,8 +15678,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	groudon:
-	{
+	groudon: {
 		num: 383,
 		name: "Groudon",
 		id: "groudon",
@@ -17061,8 +15691,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 150,
 			def: 140,
@@ -17070,8 +15699,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Drought",
 		},
 		heightm: 3.5,
@@ -17083,8 +15711,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	rayquaza:
-	{
+	rayquaza: {
 		num: 384,
 		name: "Rayquaza",
 		id: "rayquaza",
@@ -17097,8 +15724,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Flying"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 150,
 			def: 90,
@@ -17106,8 +15732,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Air Lock",
 		},
 		heightm: 7,
@@ -17119,8 +15744,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	jirachi:
-	{
+	jirachi: {
 		num: 385,
 		name: "Jirachi",
 		id: "jirachi",
@@ -17133,8 +15757,7 @@ exports.BattlePokedex =
 		types: ["Steel","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 100,
 			def: 100,
@@ -17142,8 +15765,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Serene Grace",
 		},
 		heightm: 0.3,
@@ -17155,8 +15777,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	deoxys:
-	{
+	deoxys: {
 		num: 386,
 		name: "Deoxys",
 		id: "deoxys",
@@ -17169,8 +15790,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 150,
 			def: 50,
@@ -17178,8 +15798,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 150,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 		},
 		heightm: 1.7,
@@ -17191,8 +15810,7 @@ exports.BattlePokedex =
 		otherFormes: ["deoxysattack","deoxysdefense","deoxysspeed"],
 		isDefaultForme: true,
 	},
-	deoxysattack:
-	{
+	deoxysattack: {
 		num: 386,
 		name: "Deoxys-Attack",
 		id: "deoxysattack",
@@ -17205,8 +15823,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 180,
 			def: 20,
@@ -17214,8 +15831,7 @@ exports.BattlePokedex =
 			spd: 20,
 			spe: 150,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 		},
 		heightm: 1.7,
@@ -17227,8 +15843,7 @@ exports.BattlePokedex =
 		otherFormes: ["deoxys","deoxysdefense","deoxysspeed"],
 		isDefaultForme: false,
 	},
-	deoxysdefense:
-	{
+	deoxysdefense: {
 		num: 386,
 		name: "Deoxys-Defense",
 		id: "deoxysdefense",
@@ -17241,8 +15856,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 70,
 			def: 160,
@@ -17250,8 +15864,7 @@ exports.BattlePokedex =
 			spd: 160,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 		},
 		heightm: 1.7,
@@ -17263,8 +15876,7 @@ exports.BattlePokedex =
 		otherFormes: ["deoxys","deoxysattack","deoxysspeed"],
 		isDefaultForme: false,
 	},
-	deoxysspeed:
-	{
+	deoxysspeed: {
 		num: 386,
 		name: "Deoxys-Speed",
 		id: "deoxysspeed",
@@ -17277,8 +15889,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 95,
 			def: 90,
@@ -17286,8 +15897,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 180,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 		},
 		heightm: 1.7,
@@ -17299,8 +15909,7 @@ exports.BattlePokedex =
 		otherFormes: ["deoxys","deoxysattack","deoxysdefense"],
 		isDefaultForme: false,
 	},
-	turtwig:
-	{
+	turtwig: {
 		num: 387,
 		name: "Turtwig",
 		id: "turtwig",
@@ -17313,8 +15922,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 68,
 			def: 64,
@@ -17322,8 +15930,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 31,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Shell Armor",
 		},
@@ -17336,8 +15943,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	grotle:
-	{
+	grotle: {
 		num: 388,
 		name: "Grotle",
 		id: "grotle",
@@ -17350,8 +15956,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 89,
 			def: 85,
@@ -17359,8 +15964,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 36,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Shell Armor",
 		},
@@ -17373,8 +15977,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	torterra:
-	{
+	torterra: {
 		num: 389,
 		name: "Torterra",
 		id: "torterra",
@@ -17387,8 +15990,7 @@ exports.BattlePokedex =
 		types: ["Grass","Ground"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 109,
 			def: 105,
@@ -17396,8 +15998,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 56,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Shell Armor",
 		},
@@ -17410,8 +16011,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	chimchar:
-	{
+	chimchar: {
 		num: 390,
 		name: "Chimchar",
 		id: "chimchar",
@@ -17424,8 +16024,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 44,
 			atk: 58,
 			def: 44,
@@ -17433,8 +16032,7 @@ exports.BattlePokedex =
 			spd: 44,
 			spe: 61,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Iron Fist",
 		},
@@ -17447,8 +16045,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	monferno:
-	{
+	monferno: {
 		num: 391,
 		name: "Monferno",
 		id: "monferno",
@@ -17461,8 +16058,7 @@ exports.BattlePokedex =
 		types: ["Fire","Fighting"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 64,
 			atk: 78,
 			def: 52,
@@ -17470,8 +16066,7 @@ exports.BattlePokedex =
 			spd: 52,
 			spe: 81,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Iron Fist",
 		},
@@ -17484,8 +16079,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	infernape:
-	{
+	infernape: {
 		num: 392,
 		name: "Infernape",
 		id: "infernape",
@@ -17498,8 +16092,7 @@ exports.BattlePokedex =
 		types: ["Fire","Fighting"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 76,
 			atk: 104,
 			def: 71,
@@ -17507,8 +16100,7 @@ exports.BattlePokedex =
 			spd: 71,
 			spe: 108,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Iron Fist",
 		},
@@ -17521,8 +16113,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	piplup:
-	{
+	piplup: {
 		num: 393,
 		name: "Piplup",
 		id: "piplup",
@@ -17535,8 +16126,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 53,
 			atk: 51,
 			def: 53,
@@ -17544,8 +16134,7 @@ exports.BattlePokedex =
 			spd: 56,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Defiant",
 		},
@@ -17558,8 +16147,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	prinplup:
-	{
+	prinplup: {
 		num: 394,
 		name: "Prinplup",
 		id: "prinplup",
@@ -17572,8 +16160,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 64,
 			atk: 66,
 			def: 68,
@@ -17581,8 +16168,7 @@ exports.BattlePokedex =
 			spd: 76,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Defiant",
 		},
@@ -17595,8 +16181,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	empoleon:
-	{
+	empoleon: {
 		num: 395,
 		name: "Empoleon",
 		id: "empoleon",
@@ -17609,8 +16194,7 @@ exports.BattlePokedex =
 		types: ["Water","Steel"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 84,
 			atk: 86,
 			def: 88,
@@ -17618,8 +16202,7 @@ exports.BattlePokedex =
 			spd: 101,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Defiant",
 		},
@@ -17632,8 +16215,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	starly:
-	{
+	starly: {
 		num: 396,
 		name: "Starly",
 		id: "starly",
@@ -17646,8 +16228,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 55,
 			def: 30,
@@ -17655,8 +16236,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			DW: "Keen Eye",
 		},
@@ -17669,8 +16249,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	staravia:
-	{
+	staravia: {
 		num: 397,
 		name: "Staravia",
 		id: "staravia",
@@ -17683,8 +16262,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 75,
 			def: 50,
@@ -17692,8 +16270,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			DW: "Reckless",
 		},
@@ -17706,8 +16283,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	staraptor:
-	{
+	staraptor: {
 		num: 398,
 		name: "Staraptor",
 		id: "staraptor",
@@ -17720,8 +16296,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 120,
 			def: 70,
@@ -17729,8 +16304,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			DW: "Reckless",
 		},
@@ -17743,8 +16317,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bidoof:
-	{
+	bidoof: {
 		num: 399,
 		name: "Bidoof",
 		id: "bidoof",
@@ -17757,8 +16330,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 59,
 			atk: 45,
 			def: 40,
@@ -17766,8 +16338,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 31,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Simple",
 			1: "Unaware",
 			DW: "Moody",
@@ -17781,8 +16352,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bibarel:
-	{
+	bibarel: {
 		num: 400,
 		name: "Bibarel",
 		id: "bibarel",
@@ -17795,8 +16365,7 @@ exports.BattlePokedex =
 		types: ["Normal","Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 79,
 			atk: 85,
 			def: 60,
@@ -17804,8 +16373,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 71,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Simple",
 			1: "Unaware",
 			DW: "Moody",
@@ -17819,8 +16387,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kricketot:
-	{
+	kricketot: {
 		num: 401,
 		name: "Kricketot",
 		id: "kricketot",
@@ -17833,8 +16400,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 37,
 			atk: 25,
 			def: 41,
@@ -17842,8 +16408,7 @@ exports.BattlePokedex =
 			spd: 41,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Run Away",
 		},
@@ -17856,8 +16421,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kricketune:
-	{
+	kricketune: {
 		num: 402,
 		name: "Kricketune",
 		id: "kricketune",
@@ -17870,8 +16434,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 77,
 			atk: 85,
 			def: 51,
@@ -17879,8 +16442,7 @@ exports.BattlePokedex =
 			spd: 51,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			DW: "Technician",
 		},
@@ -17893,8 +16455,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shinx:
-	{
+	shinx: {
 		num: 403,
 		name: "Shinx",
 		id: "shinx",
@@ -17907,8 +16468,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 65,
 			def: 34,
@@ -17916,8 +16476,7 @@ exports.BattlePokedex =
 			spd: 34,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rivalry",
 			1: "Intimidate",
 			DW: "Guts",
@@ -17931,8 +16490,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	luxio:
-	{
+	luxio: {
 		num: 404,
 		name: "Luxio",
 		id: "luxio",
@@ -17945,8 +16503,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 85,
 			def: 49,
@@ -17954,8 +16511,7 @@ exports.BattlePokedex =
 			spd: 49,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rivalry",
 			1: "Intimidate",
 			DW: "Guts",
@@ -17969,8 +16525,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	luxray:
-	{
+	luxray: {
 		num: 405,
 		name: "Luxray",
 		id: "luxray",
@@ -17983,8 +16538,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 120,
 			def: 79,
@@ -17992,8 +16546,7 @@ exports.BattlePokedex =
 			spd: 79,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rivalry",
 			1: "Intimidate",
 			DW: "Guts",
@@ -18007,8 +16560,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cranidos:
-	{
+	cranidos: {
 		num: 408,
 		name: "Cranidos",
 		id: "cranidos",
@@ -18021,8 +16573,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 67,
 			atk: 125,
 			def: 40,
@@ -18030,8 +16581,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 58,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Mold Breaker",
 			DW: "Sheer Force",
 		},
@@ -18044,8 +16594,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	rampardos:
-	{
+	rampardos: {
 		num: 409,
 		name: "Rampardos",
 		id: "rampardos",
@@ -18058,8 +16607,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 97,
 			atk: 165,
 			def: 60,
@@ -18067,8 +16615,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 58,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Mold Breaker",
 			DW: "Sheer Force",
 		},
@@ -18081,8 +16628,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shieldon:
-	{
+	shieldon: {
 		num: 410,
 		name: "Shieldon",
 		id: "shieldon",
@@ -18095,8 +16641,7 @@ exports.BattlePokedex =
 		types: ["Rock","Steel"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 42,
 			def: 118,
@@ -18104,8 +16649,7 @@ exports.BattlePokedex =
 			spd: 88,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			DW: "Soundproof",
 		},
@@ -18118,8 +16662,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bastiodon:
-	{
+	bastiodon: {
 		num: 411,
 		name: "Bastiodon",
 		id: "bastiodon",
@@ -18132,8 +16675,7 @@ exports.BattlePokedex =
 		types: ["Rock","Steel"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 52,
 			def: 168,
@@ -18141,8 +16683,7 @@ exports.BattlePokedex =
 			spd: 138,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			DW: "Soundproof",
 		},
@@ -18155,8 +16696,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	burmy:
-	{
+	burmy: {
 		num: 412,
 		name: "Burmy",
 		id: "burmy",
@@ -18169,8 +16709,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 29,
 			def: 45,
@@ -18178,8 +16717,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 36,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Overcoat",
 		},
@@ -18192,8 +16730,7 @@ exports.BattlePokedex =
 		otherFormes: ["burmysandy","burmytrash"],
 		isDefaultForme: true,
 	},
-	burmysandy:
-	{
+	burmysandy: {
 		num: 412,
 		name: "Burmy-Sandy",
 		id: "burmysandy",
@@ -18206,8 +16743,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 29,
 			def: 45,
@@ -18215,8 +16751,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 36,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Overcoat",
 		},
@@ -18229,8 +16764,7 @@ exports.BattlePokedex =
 		otherFormes: ["burmy","burmytrash"],
 		isDefaultForme: false,
 	},
-	burmytrash:
-	{
+	burmytrash: {
 		num: 412,
 		name: "Burmy-Trash",
 		id: "burmytrash",
@@ -18243,8 +16777,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 29,
 			def: 45,
@@ -18252,8 +16785,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 36,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			DW: "Overcoat",
 		},
@@ -18266,8 +16798,7 @@ exports.BattlePokedex =
 		otherFormes: ["burmy","burmysandy"],
 		isDefaultForme: false,
 	},
-	wormadam:
-	{
+	wormadam: {
 		num: 413,
 		name: "Wormadam",
 		id: "wormadam",
@@ -18280,8 +16811,7 @@ exports.BattlePokedex =
 		types: ["Bug","Grass"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 59,
 			def: 85,
@@ -18289,8 +16819,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 36,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Anticipation",
 			DW: "Overcoat",
 		},
@@ -18303,8 +16832,7 @@ exports.BattlePokedex =
 		otherFormes: ["wormadamsandy","wormadamtrash"],
 		isDefaultForme: true,
 	},
-	wormadamsandy:
-	{
+	wormadamsandy: {
 		num: 413,
 		name: "Wormadam-Sandy",
 		id: "wormadamsandy",
@@ -18317,8 +16845,7 @@ exports.BattlePokedex =
 		types: ["Bug","Ground"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 79,
 			def: 105,
@@ -18326,8 +16853,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 36,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Anticipation",
 			DW: "Overcoat",
 		},
@@ -18340,8 +16866,7 @@ exports.BattlePokedex =
 		otherFormes: ["wormadam","wormadamtrash"],
 		isDefaultForme: false,
 	},
-	wormadamtrash:
-	{
+	wormadamtrash: {
 		num: 413,
 		name: "Wormadam-Trash",
 		id: "wormadamtrash",
@@ -18354,8 +16879,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 69,
 			def: 95,
@@ -18363,8 +16887,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 36,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Anticipation",
 			DW: "Overcoat",
 		},
@@ -18377,8 +16900,7 @@ exports.BattlePokedex =
 		otherFormes: ["wormadam","wormadamsandy"],
 		isDefaultForme: false,
 	},
-	mothim:
-	{
+	mothim: {
 		num: 414,
 		name: "Mothim",
 		id: "mothim",
@@ -18391,8 +16913,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 94,
 			def: 50,
@@ -18400,8 +16921,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 66,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			DW: "Tinted Lens",
 		},
@@ -18414,8 +16934,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	combee:
-	{
+	combee: {
 		num: 415,
 		name: "Combee",
 		id: "combee",
@@ -18428,8 +16947,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 30,
 			def: 42,
@@ -18437,8 +16955,7 @@ exports.BattlePokedex =
 			spd: 42,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Honey Gather",
 			DW: "Hustle",
 		},
@@ -18451,8 +16968,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vespiquen:
-	{
+	vespiquen: {
 		num: 416,
 		name: "Vespiquen",
 		id: "vespiquen",
@@ -18465,8 +16981,7 @@ exports.BattlePokedex =
 		types: ["Bug","Flying"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 80,
 			def: 102,
@@ -18474,8 +16989,7 @@ exports.BattlePokedex =
 			spd: 102,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Unnerve",
 		},
@@ -18488,8 +17002,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pachirisu:
-	{
+	pachirisu: {
 		num: 417,
 		name: "Pachirisu",
 		id: "pachirisu",
@@ -18502,8 +17015,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 45,
 			def: 70,
@@ -18511,8 +17023,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Pickup",
 			DW: "Volt Absorb",
@@ -18526,8 +17037,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	buizel:
-	{
+	buizel: {
 		num: 418,
 		name: "Buizel",
 		id: "buizel",
@@ -18540,8 +17050,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 65,
 			def: 35,
@@ -18549,8 +17058,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			DW: "Water Veil",
 		},
@@ -18563,8 +17071,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	floatzel:
-	{
+	floatzel: {
 		num: 419,
 		name: "Floatzel",
 		id: "floatzel",
@@ -18577,8 +17084,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 105,
 			def: 55,
@@ -18586,8 +17092,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 115,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			DW: "Water Veil",
 		},
@@ -18600,8 +17105,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cherubi:
-	{
+	cherubi: {
 		num: 420,
 		name: "Cherubi",
 		id: "cherubi",
@@ -18614,8 +17118,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 35,
 			def: 45,
@@ -18623,8 +17126,7 @@ exports.BattlePokedex =
 			spd: 53,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 		},
 		heightm: 0.4,
@@ -18636,8 +17138,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cherrim:
-	{
+	cherrim: {
 		num: 421,
 		name: "Cherrim",
 		id: "cherrim",
@@ -18650,8 +17151,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 60,
 			def: 70,
@@ -18659,8 +17159,7 @@ exports.BattlePokedex =
 			spd: 78,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flower Gift",
 		},
 		heightm: 0.5,
@@ -18672,8 +17171,7 @@ exports.BattlePokedex =
 		otherFormes: ["cherrimsunshine"],
 		isDefaultForme: true,
 	},
-	cherrimsunshine:
-	{
+	cherrimsunshine: {
 		num: 421,
 		name: "Cherrim-Sunshine",
 		id: "cherrimsunshine",
@@ -18686,8 +17184,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 60,
 			def: 70,
@@ -18695,8 +17192,7 @@ exports.BattlePokedex =
 			spd: 78,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flower Gift",
 		},
 		heightm: 0.5,
@@ -18708,8 +17204,7 @@ exports.BattlePokedex =
 		otherFormes: ["cherrim"],
 		isDefaultForme: false,
 	},
-	shellos:
-	{
+	shellos: {
 		num: 422,
 		name: "Shellos",
 		id: "shellos",
@@ -18722,8 +17217,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 76,
 			atk: 48,
 			def: 48,
@@ -18731,8 +17225,7 @@ exports.BattlePokedex =
 			spd: 62,
 			spe: 34,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sticky Hold",
 			1: "Storm Drain",
 			DW: "Sand Force",
@@ -18746,8 +17239,7 @@ exports.BattlePokedex =
 		otherFormes: ["shelloseast"],
 		isDefaultForme: true,
 	},
-	shelloseast:
-	{
+	shelloseast: {
 		num: 422,
 		name: "Shellos-East",
 		id: "shelloseast",
@@ -18760,8 +17252,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 76,
 			atk: 48,
 			def: 48,
@@ -18769,8 +17260,7 @@ exports.BattlePokedex =
 			spd: 62,
 			spe: 34,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sticky Hold",
 			1: "Storm Drain",
 			DW: "Sand Force",
@@ -18784,8 +17274,7 @@ exports.BattlePokedex =
 		otherFormes: ["shellos"],
 		isDefaultForme: false,
 	},
-	gastrodon:
-	{
+	gastrodon: {
 		num: 423,
 		name: "Gastrodon",
 		id: "gastrodon",
@@ -18798,8 +17287,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 111,
 			atk: 83,
 			def: 68,
@@ -18807,8 +17295,7 @@ exports.BattlePokedex =
 			spd: 82,
 			spe: 39,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sticky Hold",
 			1: "Storm Drain",
 			DW: "Sand Force",
@@ -18822,8 +17309,7 @@ exports.BattlePokedex =
 		otherFormes: ["gastrodoneast"],
 		isDefaultForme: true,
 	},
-	gastrodoneast:
-	{
+	gastrodoneast: {
 		num: 423,
 		name: "Gastrodon-East",
 		id: "gastrodoneast",
@@ -18836,8 +17322,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 111,
 			atk: 83,
 			def: 68,
@@ -18845,8 +17330,7 @@ exports.BattlePokedex =
 			spd: 82,
 			spe: 39,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sticky Hold",
 			1: "Storm Drain",
 			DW: "Sand Force",
@@ -18860,8 +17344,7 @@ exports.BattlePokedex =
 		otherFormes: ["gastrodon"],
 		isDefaultForme: false,
 	},
-	drifloon:
-	{
+	drifloon: {
 		num: 425,
 		name: "Drifloon",
 		id: "drifloon",
@@ -18874,8 +17357,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 50,
 			def: 34,
@@ -18883,8 +17365,7 @@ exports.BattlePokedex =
 			spd: 44,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Aftermath",
 			1: "Unburden",
 			DW: "Flare Boost",
@@ -18898,8 +17379,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	drifblim:
-	{
+	drifblim: {
 		num: 426,
 		name: "Drifblim",
 		id: "drifblim",
@@ -18912,8 +17392,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 150,
 			atk: 80,
 			def: 44,
@@ -18921,8 +17400,7 @@ exports.BattlePokedex =
 			spd: 54,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Aftermath",
 			1: "Unburden",
 			DW: "Flare Boost",
@@ -18936,8 +17414,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	buneary:
-	{
+	buneary: {
 		num: 427,
 		name: "Buneary",
 		id: "buneary",
@@ -18950,8 +17427,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 66,
 			def: 44,
@@ -18959,8 +17435,7 @@ exports.BattlePokedex =
 			spd: 56,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Klutz",
 			DW: "Limber",
@@ -18974,8 +17449,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lopunny:
-	{
+	lopunny: {
 		num: 428,
 		name: "Lopunny",
 		id: "lopunny",
@@ -18988,8 +17462,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 76,
 			def: 84,
@@ -18997,8 +17470,7 @@ exports.BattlePokedex =
 			spd: 96,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			1: "Klutz",
 			DW: "Limber",
@@ -19012,8 +17484,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	glameow:
-	{
+	glameow: {
 		num: 431,
 		name: "Glameow",
 		id: "glameow",
@@ -19026,8 +17497,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 49,
 			atk: 55,
 			def: 42,
@@ -19035,8 +17505,7 @@ exports.BattlePokedex =
 			spd: 37,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Limber",
 			1: "Own Tempo",
 			DW: "Keen Eye",
@@ -19050,8 +17519,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	purugly:
-	{
+	purugly: {
 		num: 432,
 		name: "Purugly",
 		id: "purugly",
@@ -19064,8 +17532,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 71,
 			atk: 82,
 			def: 64,
@@ -19073,8 +17540,7 @@ exports.BattlePokedex =
 			spd: 59,
 			spe: 112,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Thick Fat",
 			1: "Own Tempo",
 			DW: "Defiant",
@@ -19088,8 +17554,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	stunky:
-	{
+	stunky: {
 		num: 434,
 		name: "Stunky",
 		id: "stunky",
@@ -19102,8 +17567,7 @@ exports.BattlePokedex =
 		types: ["Poison","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 63,
 			atk: 63,
 			def: 47,
@@ -19111,8 +17575,7 @@ exports.BattlePokedex =
 			spd: 41,
 			spe: 74,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Stench",
 			1: "Aftermath",
 			DW: "Keen Eye",
@@ -19126,8 +17589,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	skuntank:
-	{
+	skuntank: {
 		num: 435,
 		name: "Skuntank",
 		id: "skuntank",
@@ -19140,8 +17602,7 @@ exports.BattlePokedex =
 		types: ["Poison","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 103,
 			atk: 93,
 			def: 67,
@@ -19149,8 +17610,7 @@ exports.BattlePokedex =
 			spd: 61,
 			spe: 84,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Stench",
 			1: "Aftermath",
 			DW: "Keen Eye",
@@ -19164,8 +17624,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bronzor:
-	{
+	bronzor: {
 		num: 436,
 		name: "Bronzor",
 		id: "bronzor",
@@ -19178,8 +17637,7 @@ exports.BattlePokedex =
 		types: ["Steel","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 57,
 			atk: 24,
 			def: 86,
@@ -19187,8 +17645,7 @@ exports.BattlePokedex =
 			spd: 86,
 			spe: 23,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 			1: "Heatproof",
 			DW: "Heavy Metal",
@@ -19202,8 +17659,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bronzong:
-	{
+	bronzong: {
 		num: 437,
 		name: "Bronzong",
 		id: "bronzong",
@@ -19216,8 +17672,7 @@ exports.BattlePokedex =
 		types: ["Steel","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 67,
 			atk: 89,
 			def: 116,
@@ -19225,8 +17680,7 @@ exports.BattlePokedex =
 			spd: 116,
 			spe: 33,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 			1: "Heatproof",
 			DW: "Heavy Metal",
@@ -19240,8 +17694,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	chatot:
-	{
+	chatot: {
 		num: 441,
 		name: "Chatot",
 		id: "chatot",
@@ -19254,8 +17707,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 76,
 			atk: 65,
 			def: 45,
@@ -19263,8 +17715,7 @@ exports.BattlePokedex =
 			spd: 42,
 			spe: 91,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Tangled Feet",
 			DW: "Big Pecks",
@@ -19278,8 +17729,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	spiritomb:
-	{
+	spiritomb: {
 		num: 442,
 		name: "Spiritomb",
 		id: "spiritomb",
@@ -19292,8 +17742,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 92,
 			def: 108,
@@ -19301,8 +17750,7 @@ exports.BattlePokedex =
 			spd: 108,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Infiltrator",
 		},
@@ -19315,8 +17763,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gible:
-	{
+	gible: {
 		num: 443,
 		name: "Gible",
 		id: "gible",
@@ -19329,8 +17776,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 58,
 			atk: 70,
 			def: 45,
@@ -19338,8 +17784,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 42,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Veil",
 			DW: "Rough Skin",
 		},
@@ -19352,8 +17797,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gabite:
-	{
+	gabite: {
 		num: 444,
 		name: "Gabite",
 		id: "gabite",
@@ -19366,8 +17810,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 68,
 			atk: 90,
 			def: 65,
@@ -19375,8 +17818,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 82,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Veil",
 			DW: "Rough Skin",
 		},
@@ -19389,8 +17831,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	garchomp:
-	{
+	garchomp: {
 		num: 445,
 		name: "Garchomp",
 		id: "garchomp",
@@ -19403,8 +17844,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 108,
 			atk: 130,
 			def: 95,
@@ -19412,8 +17852,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 102,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Veil",
 			DW: "Rough Skin",
 		},
@@ -19426,8 +17865,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	riolu:
-	{
+	riolu: {
 		num: 447,
 		name: "Riolu",
 		id: "riolu",
@@ -19440,8 +17878,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 70,
 			def: 40,
@@ -19449,8 +17886,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Steadfast",
 			1: "Inner Focus",
 			DW: "Prankster",
@@ -19464,8 +17900,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lucario:
-	{
+	lucario: {
 		num: 448,
 		name: "Lucario",
 		id: "lucario",
@@ -19478,8 +17913,7 @@ exports.BattlePokedex =
 		types: ["Fighting","Steel"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 110,
 			def: 70,
@@ -19487,8 +17921,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Steadfast",
 			1: "Inner Focus",
 			DW: "Justified",
@@ -19502,8 +17935,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hippopotas:
-	{
+	hippopotas: {
 		num: 449,
 		name: "Hippopotas",
 		id: "hippopotas",
@@ -19516,8 +17948,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 68,
 			atk: 72,
 			def: 78,
@@ -19525,8 +17956,7 @@ exports.BattlePokedex =
 			spd: 42,
 			spe: 32,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Stream",
 			DW: "Sand Force",
 		},
@@ -19539,8 +17969,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hippowdon:
-	{
+	hippowdon: {
 		num: 450,
 		name: "Hippowdon",
 		id: "hippowdon",
@@ -19553,8 +17982,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 108,
 			atk: 112,
 			def: 118,
@@ -19562,8 +17990,7 @@ exports.BattlePokedex =
 			spd: 72,
 			spe: 47,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Stream",
 			DW: "Sand Force",
 		},
@@ -19576,8 +18003,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	skorupi:
-	{
+	skorupi: {
 		num: 451,
 		name: "Skorupi",
 		id: "skorupi",
@@ -19590,8 +18016,7 @@ exports.BattlePokedex =
 		types: ["Poison","Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 50,
 			def: 90,
@@ -19599,8 +18024,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Battle Armor",
 			1: "Sniper",
 			DW: "Keen Eye",
@@ -19614,8 +18038,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	drapion:
-	{
+	drapion: {
 		num: 452,
 		name: "Drapion",
 		id: "drapion",
@@ -19628,8 +18051,7 @@ exports.BattlePokedex =
 		types: ["Poison","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 90,
 			def: 110,
@@ -19637,8 +18059,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Battle Armor",
 			1: "Sniper",
 			DW: "Keen Eye",
@@ -19652,8 +18073,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	croagunk:
-	{
+	croagunk: {
 		num: 453,
 		name: "Croagunk",
 		id: "croagunk",
@@ -19666,8 +18086,7 @@ exports.BattlePokedex =
 		types: ["Poison","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 48,
 			atk: 61,
 			def: 40,
@@ -19675,8 +18094,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Anticipation",
 			1: "Dry Skin",
 			DW: "Poison Touch",
@@ -19690,8 +18108,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	toxicroak:
-	{
+	toxicroak: {
 		num: 454,
 		name: "Toxicroak",
 		id: "toxicroak",
@@ -19704,8 +18121,7 @@ exports.BattlePokedex =
 		types: ["Poison","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 83,
 			atk: 106,
 			def: 65,
@@ -19713,8 +18129,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Anticipation",
 			1: "Dry Skin",
 			DW: "Poison Touch",
@@ -19728,8 +18143,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	carnivine:
-	{
+	carnivine: {
 		num: 455,
 		name: "Carnivine",
 		id: "carnivine",
@@ -19742,8 +18156,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 74,
 			atk: 100,
 			def: 72,
@@ -19751,8 +18164,7 @@ exports.BattlePokedex =
 			spd: 72,
 			spe: 46,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.4,
@@ -19764,8 +18176,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	finneon:
-	{
+	finneon: {
 		num: 456,
 		name: "Finneon",
 		id: "finneon",
@@ -19778,8 +18189,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 49,
 			atk: 49,
 			def: 56,
@@ -19787,8 +18197,7 @@ exports.BattlePokedex =
 			spd: 61,
 			spe: 66,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Storm Drain",
 			DW: "Water Veil",
@@ -19802,8 +18211,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lumineon:
-	{
+	lumineon: {
 		num: 457,
 		name: "Lumineon",
 		id: "lumineon",
@@ -19816,8 +18224,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 69,
 			atk: 69,
 			def: 76,
@@ -19825,8 +18232,7 @@ exports.BattlePokedex =
 			spd: 86,
 			spe: 91,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Storm Drain",
 			DW: "Water Veil",
@@ -19840,8 +18246,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	snover:
-	{
+	snover: {
 		num: 459,
 		name: "Snover",
 		id: "snover",
@@ -19854,8 +18259,7 @@ exports.BattlePokedex =
 		types: ["Grass","Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 62,
 			def: 50,
@@ -19863,8 +18267,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Snow Warning",
 			DW: "Soundproof",
 		},
@@ -19877,8 +18280,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	abomasnow:
-	{
+	abomasnow: {
 		num: 460,
 		name: "Abomasnow",
 		id: "abomasnow",
@@ -19891,8 +18293,7 @@ exports.BattlePokedex =
 		types: ["Grass","Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 92,
 			def: 75,
@@ -19900,8 +18301,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Snow Warning",
 			DW: "Soundproof",
 		},
@@ -19914,8 +18314,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	rotom:
-	{
+	rotom: {
 		num: 479,
 		name: "Rotom",
 		id: "rotom",
@@ -19928,8 +18327,7 @@ exports.BattlePokedex =
 		types: ["Electric","Ghost"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 50,
 			def: 77,
@@ -19937,8 +18335,7 @@ exports.BattlePokedex =
 			spd: 77,
 			spe: 91,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.3,
@@ -19950,8 +18347,7 @@ exports.BattlePokedex =
 		otherFormes: ["rotomheat","rotomwash","rotomfrost","rotomfan","rotommow"],
 		isDefaultForme: true,
 	},
-	rotomheat:
-	{
+	rotomheat: {
 		num: 479,
 		name: "Rotom-Heat",
 		id: "rotomheat",
@@ -19964,8 +18360,7 @@ exports.BattlePokedex =
 		types: ["Electric","Fire"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 65,
 			def: 107,
@@ -19973,8 +18368,7 @@ exports.BattlePokedex =
 			spd: 107,
 			spe: 86,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.3,
@@ -19986,8 +18380,7 @@ exports.BattlePokedex =
 		otherFormes: ["rotom","rotomwash","rotomfrost","rotomfan","rotommow"],
 		isDefaultForme: false,
 	},
-	rotomwash:
-	{
+	rotomwash: {
 		num: 479,
 		name: "Rotom-Wash",
 		id: "rotomwash",
@@ -20000,8 +18393,7 @@ exports.BattlePokedex =
 		types: ["Electric","Water"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 65,
 			def: 107,
@@ -20009,8 +18401,7 @@ exports.BattlePokedex =
 			spd: 107,
 			spe: 86,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.3,
@@ -20022,8 +18413,7 @@ exports.BattlePokedex =
 		otherFormes: ["rotom","rotomheat","rotomfrost","rotomfan","rotommow"],
 		isDefaultForme: false,
 	},
-	rotomfrost:
-	{
+	rotomfrost: {
 		num: 479,
 		name: "Rotom-Frost",
 		id: "rotomfrost",
@@ -20036,8 +18426,7 @@ exports.BattlePokedex =
 		types: ["Electric","Ice"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 65,
 			def: 107,
@@ -20045,8 +18434,7 @@ exports.BattlePokedex =
 			spd: 107,
 			spe: 86,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.3,
@@ -20058,8 +18446,7 @@ exports.BattlePokedex =
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfan","rotommow"],
 		isDefaultForme: false,
 	},
-	rotomfan:
-	{
+	rotomfan: {
 		num: 479,
 		name: "Rotom-Fan",
 		id: "rotomfan",
@@ -20072,8 +18459,7 @@ exports.BattlePokedex =
 		types: ["Electric","Flying"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 65,
 			def: 107,
@@ -20081,8 +18467,7 @@ exports.BattlePokedex =
 			spd: 107,
 			spe: 86,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.3,
@@ -20094,8 +18479,7 @@ exports.BattlePokedex =
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotommow"],
 		isDefaultForme: false,
 	},
-	rotommow:
-	{
+	rotommow: {
 		num: 479,
 		name: "Rotom-Mow",
 		id: "rotommow",
@@ -20108,8 +18492,7 @@ exports.BattlePokedex =
 		types: ["Electric","Grass"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 65,
 			def: 107,
@@ -20117,8 +18500,7 @@ exports.BattlePokedex =
 			spd: 107,
 			spe: 86,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.3,
@@ -20130,8 +18512,7 @@ exports.BattlePokedex =
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotomfan"],
 		isDefaultForme: false,
 	},
-	uxie:
-	{
+	uxie: {
 		num: 480,
 		name: "Uxie",
 		id: "uxie",
@@ -20144,8 +18525,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 75,
 			def: 130,
@@ -20153,8 +18533,7 @@ exports.BattlePokedex =
 			spd: 130,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.3,
@@ -20166,8 +18545,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mesprit:
-	{
+	mesprit: {
 		num: 481,
 		name: "Mesprit",
 		id: "mesprit",
@@ -20180,8 +18558,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 105,
 			def: 105,
@@ -20189,8 +18566,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.3,
@@ -20202,8 +18578,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	azelf:
-	{
+	azelf: {
 		num: 482,
 		name: "Azelf",
 		id: "azelf",
@@ -20216,8 +18591,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 125,
 			def: 70,
@@ -20225,8 +18599,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 115,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.3,
@@ -20238,8 +18611,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dialga:
-	{
+	dialga: {
 		num: 483,
 		name: "Dialga",
 		id: "dialga",
@@ -20252,8 +18624,7 @@ exports.BattlePokedex =
 		types: ["Steel","Dragon"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 120,
 			def: 120,
@@ -20261,8 +18632,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Telepathy",
 		},
@@ -20275,8 +18645,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	palkia:
-	{
+	palkia: {
 		num: 484,
 		name: "Palkia",
 		id: "palkia",
@@ -20289,8 +18658,7 @@ exports.BattlePokedex =
 		types: ["Water","Dragon"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 120,
 			def: 100,
@@ -20298,8 +18666,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Telepathy",
 		},
@@ -20312,8 +18679,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	heatran:
-	{
+	heatran: {
 		num: 485,
 		name: "Heatran",
 		id: "heatran",
@@ -20326,8 +18692,7 @@ exports.BattlePokedex =
 		types: ["Fire","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 91,
 			atk: 90,
 			def: 106,
@@ -20335,8 +18700,7 @@ exports.BattlePokedex =
 			spd: 106,
 			spe: 77,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flash Fire",
 			DW: "Flame Body",
 		},
@@ -20349,8 +18713,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	regigigas:
-	{
+	regigigas: {
 		num: 486,
 		name: "Regigigas",
 		id: "regigigas",
@@ -20363,8 +18726,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 110,
 			atk: 160,
 			def: 110,
@@ -20372,8 +18734,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Slow Start",
 		},
 		heightm: 3.7,
@@ -20385,8 +18746,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	giratina:
-	{
+	giratina: {
 		num: 487,
 		name: "Giratina",
 		id: "giratina",
@@ -20399,8 +18759,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Dragon"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 150,
 			atk: 100,
 			def: 120,
@@ -20408,8 +18767,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 			DW: "Telepathy",
 		},
@@ -20422,8 +18780,7 @@ exports.BattlePokedex =
 		otherFormes: ["giratinaorigin"],
 		isDefaultForme: true,
 	},
-	giratinaorigin:
-	{
+	giratinaorigin: {
 		num: 487,
 		name: "Giratina-Origin",
 		id: "giratinaorigin",
@@ -20436,8 +18793,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Dragon"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 150,
 			atk: 120,
 			def: 100,
@@ -20445,8 +18801,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 			DW: "Levitate",
 		},
@@ -20459,8 +18814,7 @@ exports.BattlePokedex =
 		otherFormes: ["giratina"],
 		isDefaultForme: false,
 	},
-	cresselia:
-	{
+	cresselia: {
 		num: 488,
 		name: "Cresselia",
 		id: "cresselia",
@@ -20473,8 +18827,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 70,
 			def: 120,
@@ -20482,8 +18835,7 @@ exports.BattlePokedex =
 			spd: 130,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.5,
@@ -20495,8 +18847,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	phione:
-	{
+	phione: {
 		num: 489,
 		name: "Phione",
 		id: "phione",
@@ -20509,8 +18860,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 80,
 			def: 80,
@@ -20518,8 +18868,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hydration",
 		},
 		heightm: 0.4,
@@ -20531,8 +18880,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	manaphy:
-	{
+	manaphy: {
 		num: 490,
 		name: "Manaphy",
 		id: "manaphy",
@@ -20545,8 +18893,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 100,
 			def: 100,
@@ -20554,8 +18901,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hydration",
 		},
 		heightm: 0.3,
@@ -20567,8 +18913,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	darkrai:
-	{
+	darkrai: {
 		num: 491,
 		name: "Darkrai",
 		id: "darkrai",
@@ -20581,8 +18926,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 90,
 			def: 90,
@@ -20590,8 +18934,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 125,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Bad Dreams",
 		},
 		heightm: 1.5,
@@ -20603,8 +18946,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shaymin:
-	{
+	shaymin: {
 		num: 492,
 		name: "Shaymin",
 		id: "shaymin",
@@ -20617,8 +18959,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 100,
 			def: 100,
@@ -20626,8 +18967,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Natural Cure",
 		},
 		heightm: 0.2,
@@ -20639,8 +18979,7 @@ exports.BattlePokedex =
 		otherFormes: ["shayminsky"],
 		isDefaultForme: true,
 	},
-	shayminsky:
-	{
+	shayminsky: {
 		num: 492,
 		name: "Shaymin-Sky",
 		id: "shayminsky",
@@ -20653,8 +18992,7 @@ exports.BattlePokedex =
 		types: ["Grass","Flying"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 103,
 			def: 75,
@@ -20662,8 +19000,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 127,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Serene Grace",
 		},
 		heightm: 0.4,
@@ -20675,8 +19012,7 @@ exports.BattlePokedex =
 		otherFormes: ["shaymin"],
 		isDefaultForme: false,
 	},
-	arceus:
-	{
+	arceus: {
 		num: 493,
 		name: "Arceus",
 		id: "arceus",
@@ -20689,8 +19025,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -20698,8 +19033,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -20711,8 +19045,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: true,
 	},
-	arceusbug:
-	{
+	arceusbug: {
 		num: 493,
 		name: "Arceus-Bug",
 		id: "arceusbug",
@@ -20725,8 +19058,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -20734,8 +19066,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -20747,8 +19078,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusdark:
-	{
+	arceusdark: {
 		num: 493,
 		name: "Arceus-Dark",
 		id: "arceusdark",
@@ -20761,8 +19091,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -20770,8 +19099,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -20783,8 +19111,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusdragon:
-	{
+	arceusdragon: {
 		num: 493,
 		name: "Arceus-Dragon",
 		id: "arceusdragon",
@@ -20797,8 +19124,7 @@ exports.BattlePokedex =
 		types: ["Dragon"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -20806,8 +19132,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -20819,8 +19144,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceuselectric:
-	{
+	arceuselectric: {
 		num: 493,
 		name: "Arceus-Electric",
 		id: "arceuselectric",
@@ -20833,8 +19157,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -20842,8 +19165,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -20855,8 +19177,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusfighting:
-	{
+	arceusfighting: {
 		num: 493,
 		name: "Arceus-Fighting",
 		id: "arceusfighting",
@@ -20869,8 +19190,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -20878,8 +19198,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -20891,8 +19210,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusfire:
-	{
+	arceusfire: {
 		num: 493,
 		name: "Arceus-Fire",
 		id: "arceusfire",
@@ -20905,8 +19223,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -20914,8 +19231,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -20927,8 +19243,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusflying:
-	{
+	arceusflying: {
 		num: 493,
 		name: "Arceus-Flying",
 		id: "arceusflying",
@@ -20941,8 +19256,7 @@ exports.BattlePokedex =
 		types: ["Flying"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -20950,8 +19264,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -20963,8 +19276,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusghost:
-	{
+	arceusghost: {
 		num: 493,
 		name: "Arceus-Ghost",
 		id: "arceusghost",
@@ -20977,8 +19289,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -20986,8 +19297,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -20999,8 +19309,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusgrass:
-	{
+	arceusgrass: {
 		num: 493,
 		name: "Arceus-Grass",
 		id: "arceusgrass",
@@ -21013,8 +19322,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -21022,8 +19330,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -21035,8 +19342,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusground:
-	{
+	arceusground: {
 		num: 493,
 		name: "Arceus-Ground",
 		id: "arceusground",
@@ -21049,8 +19355,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -21058,8 +19363,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -21071,8 +19375,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusice:
-	{
+	arceusice: {
 		num: 493,
 		name: "Arceus-Ice",
 		id: "arceusice",
@@ -21085,8 +19388,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -21094,8 +19396,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -21107,8 +19408,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceuspoison:
-	{
+	arceuspoison: {
 		num: 493,
 		name: "Arceus-Poison",
 		id: "arceuspoison",
@@ -21121,8 +19421,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -21130,8 +19429,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -21143,8 +19441,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceuspsychic:
-	{
+	arceuspsychic: {
 		num: 493,
 		name: "Arceus-Psychic",
 		id: "arceuspsychic",
@@ -21157,8 +19454,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -21166,8 +19462,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -21179,8 +19474,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusrock:
-	{
+	arceusrock: {
 		num: 493,
 		name: "Arceus-Rock",
 		id: "arceusrock",
@@ -21193,8 +19487,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -21202,8 +19495,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -21215,8 +19507,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceussteel:
-	{
+	arceussteel: {
 		num: 493,
 		name: "Arceus-Steel",
 		id: "arceussteel",
@@ -21229,8 +19520,7 @@ exports.BattlePokedex =
 		types: ["Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -21238,8 +19528,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -21251,8 +19540,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceuswater","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceuswater:
-	{
+	arceuswater: {
 		num: 493,
 		name: "Arceus-Water",
 		id: "arceuswater",
@@ -21265,8 +19553,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -21274,8 +19561,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -21287,8 +19573,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceusunknown"],
 		isDefaultForme: false,
 	},
-	arceusunknown:
-	{
+	arceusunknown: {
 		num: 493,
 		name: "Arceus-???",
 		id: "arceusunknown",
@@ -21301,8 +19586,7 @@ exports.BattlePokedex =
 		types: ["???"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 120,
 			def: 120,
@@ -21310,8 +19594,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 120,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Multitype",
 		},
 		heightm: 3.2,
@@ -21323,8 +19606,7 @@ exports.BattlePokedex =
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater"],
 		isDefaultForme: false,
 	},
-	victini:
-	{
+	victini: {
 		num: 494,
 		name: "Victini",
 		id: "victini",
@@ -21337,8 +19619,7 @@ exports.BattlePokedex =
 		types: ["Psychic","Fire"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 100,
 			def: 100,
@@ -21346,8 +19627,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Victory Star",
 		},
 		heightm: 0.4,
@@ -21359,8 +19639,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	snivy:
-	{
+	snivy: {
 		num: 495,
 		name: "Snivy",
 		id: "snivy",
@@ -21373,8 +19652,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 45,
 			def: 55,
@@ -21382,8 +19660,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 63,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Contrary",
 		},
@@ -21396,8 +19673,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	servine:
-	{
+	servine: {
 		num: 496,
 		name: "Servine",
 		id: "servine",
@@ -21410,8 +19686,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 75,
@@ -21419,8 +19694,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 83,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Contrary",
 		},
@@ -21433,8 +19707,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	serperior:
-	{
+	serperior: {
 		num: 497,
 		name: "Serperior",
 		id: "serperior",
@@ -21447,8 +19720,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 75,
 			def: 95,
@@ -21456,8 +19728,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 113,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overgrow",
 			DW: "Contrary",
 		},
@@ -21470,8 +19741,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tepig:
-	{
+	tepig: {
 		num: 498,
 		name: "Tepig",
 		id: "tepig",
@@ -21484,8 +19754,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 63,
 			def: 45,
@@ -21493,8 +19762,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Thick Fat",
 		},
@@ -21507,8 +19775,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pignite:
-	{
+	pignite: {
 		num: 499,
 		name: "Pignite",
 		id: "pignite",
@@ -21521,8 +19788,7 @@ exports.BattlePokedex =
 		types: ["Fire","Fighting"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 90,
 			atk: 93,
 			def: 55,
@@ -21530,8 +19796,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Thick Fat",
 		},
@@ -21544,8 +19809,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	emboar:
-	{
+	emboar: {
 		num: 500,
 		name: "Emboar",
 		id: "emboar",
@@ -21558,8 +19822,7 @@ exports.BattlePokedex =
 		types: ["Fire","Fighting"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 110,
 			atk: 123,
 			def: 65,
@@ -21567,8 +19830,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Blaze",
 			DW: "Reckless",
 		},
@@ -21581,8 +19843,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	oshawott:
-	{
+	oshawott: {
 		num: 501,
 		name: "Oshawott",
 		id: "oshawott",
@@ -21595,8 +19856,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 55,
 			def: 45,
@@ -21604,8 +19864,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Shell Armor",
 		},
@@ -21618,8 +19877,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dewott:
-	{
+	dewott: {
 		num: 502,
 		name: "Dewott",
 		id: "dewott",
@@ -21632,8 +19890,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 75,
 			def: 60,
@@ -21641,8 +19898,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Shell Armor",
 		},
@@ -21655,8 +19911,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	samurott:
-	{
+	samurott: {
 		num: 503,
 		name: "Samurott",
 		id: "samurott",
@@ -21669,8 +19924,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 100,
 			def: 85,
@@ -21678,8 +19932,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Torrent",
 			DW: "Shell Armor",
 		},
@@ -21692,8 +19945,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	patrat:
-	{
+	patrat: {
 		num: 504,
 		name: "Patrat",
 		id: "patrat",
@@ -21706,8 +19958,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 55,
 			def: 39,
@@ -21715,8 +19966,7 @@ exports.BattlePokedex =
 			spd: 39,
 			spe: 42,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Run Away",
 			1: "Keen Eye",
 			DW: "Analytic",
@@ -21730,8 +19980,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	watchog:
-	{
+	watchog: {
 		num: 505,
 		name: "Watchog",
 		id: "watchog",
@@ -21744,8 +19993,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 85,
 			def: 69,
@@ -21753,8 +20001,7 @@ exports.BattlePokedex =
 			spd: 69,
 			spe: 77,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Illuminate",
 			1: "Keen Eye",
 			DW: "Analytic",
@@ -21768,8 +20015,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lillipup:
-	{
+	lillipup: {
 		num: 506,
 		name: "Lillipup",
 		id: "lillipup",
@@ -21782,8 +20028,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 60,
 			def: 45,
@@ -21791,8 +20036,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Vital Spirit",
 			1: "Pickup",
 			DW: "Run Away",
@@ -21806,8 +20050,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	herdier:
-	{
+	herdier: {
 		num: 507,
 		name: "Herdier",
 		id: "herdier",
@@ -21820,8 +20063,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 80,
 			def: 65,
@@ -21829,8 +20071,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Sand Rush",
 			DW: "Scrappy",
@@ -21844,8 +20085,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	stoutland:
-	{
+	stoutland: {
 		num: 508,
 		name: "Stoutland",
 		id: "stoutland",
@@ -21858,8 +20098,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 100,
 			def: 90,
@@ -21867,8 +20106,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Sand Rush",
 			DW: "Scrappy",
@@ -21882,8 +20120,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	purrloin:
-	{
+	purrloin: {
 		num: 509,
 		name: "Purrloin",
 		id: "purrloin",
@@ -21896,8 +20133,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 41,
 			atk: 50,
 			def: 37,
@@ -21905,8 +20141,7 @@ exports.BattlePokedex =
 			spd: 37,
 			spe: 66,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Limber",
 			1: "Unburden",
 			DW: "Prankster",
@@ -21920,8 +20155,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	liepard:
-	{
+	liepard: {
 		num: 510,
 		name: "Liepard",
 		id: "liepard",
@@ -21934,8 +20168,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 64,
 			atk: 88,
 			def: 50,
@@ -21943,8 +20176,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 106,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Limber",
 			1: "Unburden",
 			DW: "Prankster",
@@ -21958,8 +20190,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pansage:
-	{
+	pansage: {
 		num: 511,
 		name: "Pansage",
 		id: "pansage",
@@ -21972,8 +20203,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 53,
 			def: 48,
@@ -21981,8 +20211,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 64,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Gluttony",
 			DW: "Overgrow",
 		},
@@ -21995,8 +20224,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	simisage:
-	{
+	simisage: {
 		num: 512,
 		name: "Simisage",
 		id: "simisage",
@@ -22009,8 +20237,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 98,
 			def: 63,
@@ -22018,8 +20245,7 @@ exports.BattlePokedex =
 			spd: 63,
 			spe: 101,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Gluttony",
 			DW: "Overgrow",
 		},
@@ -22032,8 +20258,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pansear:
-	{
+	pansear: {
 		num: 513,
 		name: "Pansear",
 		id: "pansear",
@@ -22046,8 +20271,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 53,
 			def: 48,
@@ -22055,8 +20279,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 64,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Gluttony",
 			DW: "Blaze",
 		},
@@ -22069,8 +20292,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	simisear:
-	{
+	simisear: {
 		num: 514,
 		name: "Simisear",
 		id: "simisear",
@@ -22083,8 +20305,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 98,
 			def: 63,
@@ -22092,8 +20313,7 @@ exports.BattlePokedex =
 			spd: 63,
 			spe: 101,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Gluttony",
 			DW: "Blaze",
 		},
@@ -22106,8 +20326,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	panpour:
-	{
+	panpour: {
 		num: 515,
 		name: "Panpour",
 		id: "panpour",
@@ -22120,8 +20339,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 53,
 			def: 48,
@@ -22129,8 +20347,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 64,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Gluttony",
 			DW: "Torrent",
 		},
@@ -22143,8 +20360,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	simipour:
-	{
+	simipour: {
 		num: 516,
 		name: "Simipour",
 		id: "simipour",
@@ -22157,8 +20373,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 98,
 			def: 63,
@@ -22166,8 +20381,7 @@ exports.BattlePokedex =
 			spd: 63,
 			spe: 101,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Gluttony",
 			DW: "Torrent",
 		},
@@ -22180,8 +20394,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	munna:
-	{
+	munna: {
 		num: 517,
 		name: "Munna",
 		id: "munna",
@@ -22194,8 +20407,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 76,
 			atk: 25,
 			def: 45,
@@ -22203,8 +20415,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 24,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Forewarn",
 			1: "Synchronize",
 			DW: "Telepathy",
@@ -22218,8 +20429,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	musharna:
-	{
+	musharna: {
 		num: 518,
 		name: "Musharna",
 		id: "musharna",
@@ -22232,8 +20442,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 116,
 			atk: 55,
 			def: 85,
@@ -22241,8 +20450,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 29,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Forewarn",
 			1: "Synchronize",
 			DW: "Telepathy",
@@ -22256,8 +20464,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pidove:
-	{
+	pidove: {
 		num: 519,
 		name: "Pidove",
 		id: "pidove",
@@ -22270,8 +20477,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 55,
 			def: 50,
@@ -22279,8 +20485,7 @@ exports.BattlePokedex =
 			spd: 30,
 			spe: 43,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Big Pecks",
 			1: "Super Luck",
 			DW: "Rivalry",
@@ -22294,8 +20499,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tranquill:
-	{
+	tranquill: {
 		num: 520,
 		name: "Tranquill",
 		id: "tranquill",
@@ -22308,8 +20512,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 62,
 			atk: 77,
 			def: 62,
@@ -22317,8 +20520,7 @@ exports.BattlePokedex =
 			spd: 42,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Big Pecks",
 			1: "Super Luck",
 			DW: "Rivalry",
@@ -22332,8 +20534,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	unfezant:
-	{
+	unfezant: {
 		num: 521,
 		name: "Unfezant",
 		id: "unfezant",
@@ -22346,8 +20547,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 105,
 			def: 80,
@@ -22355,8 +20555,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 93,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Big Pecks",
 			1: "Super Luck",
 			DW: "Rivalry",
@@ -22370,8 +20569,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	blitzle:
-	{
+	blitzle: {
 		num: 522,
 		name: "Blitzle",
 		id: "blitzle",
@@ -22384,8 +20582,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 60,
 			def: 32,
@@ -22393,8 +20590,7 @@ exports.BattlePokedex =
 			spd: 32,
 			spe: 76,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Lightningrod",
 			1: "Motor Drive",
 			DW: "Sap Sipper",
@@ -22408,8 +20604,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	zebstrika:
-	{
+	zebstrika: {
 		num: 523,
 		name: "Zebstrika",
 		id: "zebstrika",
@@ -22422,8 +20617,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 100,
 			def: 63,
@@ -22431,8 +20625,7 @@ exports.BattlePokedex =
 			spd: 63,
 			spe: 116,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Lightningrod",
 			1: "Motor Drive",
 			DW: "Sap Sipper",
@@ -22446,8 +20639,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	roggenrola:
-	{
+	roggenrola: {
 		num: 524,
 		name: "Roggenrola",
 		id: "roggenrola",
@@ -22460,8 +20652,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 75,
 			def: 85,
@@ -22469,8 +20660,7 @@ exports.BattlePokedex =
 			spd: 25,
 			spe: 15,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			DW: "Sand Force",
 		},
@@ -22483,8 +20673,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	boldore:
-	{
+	boldore: {
 		num: 525,
 		name: "Boldore",
 		id: "boldore",
@@ -22497,8 +20686,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 105,
 			def: 105,
@@ -22506,8 +20694,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			DW: "Sand Force",
 		},
@@ -22520,8 +20707,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gigalith:
-	{
+	gigalith: {
 		num: 526,
 		name: "Gigalith",
 		id: "gigalith",
@@ -22534,8 +20720,7 @@ exports.BattlePokedex =
 		types: ["Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 135,
 			def: 130,
@@ -22543,8 +20728,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			DW: "Sand Force",
 		},
@@ -22557,8 +20741,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	woobat:
-	{
+	woobat: {
 		num: 527,
 		name: "Woobat",
 		id: "woobat",
@@ -22571,8 +20754,7 @@ exports.BattlePokedex =
 		types: ["Psychic","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 45,
 			def: 43,
@@ -22580,8 +20762,7 @@ exports.BattlePokedex =
 			spd: 43,
 			spe: 72,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Unaware",
 			1: "Klutz",
 			DW: "Simple",
@@ -22595,8 +20776,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	swoobat:
-	{
+	swoobat: {
 		num: 528,
 		name: "Swoobat",
 		id: "swoobat",
@@ -22609,8 +20789,7 @@ exports.BattlePokedex =
 		types: ["Psychic","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 67,
 			atk: 57,
 			def: 55,
@@ -22618,8 +20797,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 114,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Unaware",
 			1: "Klutz",
 			DW: "Simple",
@@ -22633,8 +20811,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	drilbur:
-	{
+	drilbur: {
 		num: 529,
 		name: "Drilbur",
 		id: "drilbur",
@@ -22647,8 +20824,7 @@ exports.BattlePokedex =
 		types: ["Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 85,
 			def: 40,
@@ -22656,8 +20832,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 68,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Rush",
 			1: "Sand Force",
 			DW: "Mold Breaker",
@@ -22671,8 +20846,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	excadrill:
-	{
+	excadrill: {
 		num: 530,
 		name: "Excadrill",
 		id: "excadrill",
@@ -22685,8 +20859,7 @@ exports.BattlePokedex =
 		types: ["Ground","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 110,
 			atk: 135,
 			def: 60,
@@ -22694,8 +20867,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 88,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Rush",
 			1: "Sand Force",
 			DW: "Mold Breaker",
@@ -22709,8 +20881,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	audino:
-	{
+	audino: {
 		num: 531,
 		name: "Audino",
 		id: "audino",
@@ -22723,8 +20894,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 103,
 			atk: 60,
 			def: 86,
@@ -22732,8 +20902,7 @@ exports.BattlePokedex =
 			spd: 86,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Healer",
 			1: "Regenerator",
 			DW: "Klutz",
@@ -22747,8 +20916,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	timburr:
-	{
+	timburr: {
 		num: 532,
 		name: "Timburr",
 		id: "timburr",
@@ -22761,8 +20929,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 80,
 			def: 55,
@@ -22770,8 +20937,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			1: "Sheer Force",
 			DW: "Iron Fist",
@@ -22785,8 +20951,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gurdurr:
-	{
+	gurdurr: {
 		num: 533,
 		name: "Gurdurr",
 		id: "gurdurr",
@@ -22799,8 +20964,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 105,
 			def: 85,
@@ -22808,8 +20972,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			1: "Sheer Force",
 			DW: "Iron Fist",
@@ -22823,8 +20986,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	conkeldurr:
-	{
+	conkeldurr: {
 		num: 534,
 		name: "Conkeldurr",
 		id: "conkeldurr",
@@ -22837,8 +20999,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.75,"f":0.25},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 140,
 			def: 95,
@@ -22846,8 +21007,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			1: "Sheer Force",
 			DW: "Iron Fist",
@@ -22861,8 +21021,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tympole:
-	{
+	tympole: {
 		num: 535,
 		name: "Tympole",
 		id: "tympole",
@@ -22875,8 +21034,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 50,
 			def: 40,
@@ -22884,8 +21042,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 64,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Hydration",
 			DW: "Water Absorb",
@@ -22899,8 +21056,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	palpitoad:
-	{
+	palpitoad: {
 		num: 536,
 		name: "Palpitoad",
 		id: "palpitoad",
@@ -22913,8 +21069,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 65,
 			def: 55,
@@ -22922,8 +21077,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 69,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Hydration",
 			DW: "Water Absorb",
@@ -22937,8 +21091,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	seismitoad:
-	{
+	seismitoad: {
 		num: 537,
 		name: "Seismitoad",
 		id: "seismitoad",
@@ -22951,8 +21104,7 @@ exports.BattlePokedex =
 		types: ["Water","Ground"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 85,
 			def: 75,
@@ -22960,8 +21112,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 74,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swift Swim",
 			1: "Poison Touch",
 			DW: "Water Absorb",
@@ -22975,8 +21126,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	throh:
-	{
+	throh: {
 		num: 538,
 		name: "Throh",
 		id: "throh",
@@ -22989,8 +21139,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 120,
 			atk: 100,
 			def: 85,
@@ -22998,8 +21147,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Guts",
 			1: "Inner Focus",
 			DW: "Mold Breaker",
@@ -23013,8 +21161,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sawk:
-	{
+	sawk: {
 		num: 539,
 		name: "Sawk",
 		id: "sawk",
@@ -23027,8 +21174,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 125,
 			def: 75,
@@ -23036,8 +21182,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 85,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Inner Focus",
 			DW: "Mold Breaker",
@@ -23051,8 +21196,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sewaddle:
-	{
+	sewaddle: {
 		num: 540,
 		name: "Sewaddle",
 		id: "sewaddle",
@@ -23065,8 +21209,7 @@ exports.BattlePokedex =
 		types: ["Bug","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 53,
 			def: 70,
@@ -23074,8 +21217,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 42,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Chlorophyll",
 			DW: "Overcoat",
@@ -23089,8 +21231,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	swadloon:
-	{
+	swadloon: {
 		num: 541,
 		name: "Swadloon",
 		id: "swadloon",
@@ -23103,8 +21244,7 @@ exports.BattlePokedex =
 		types: ["Bug","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 63,
 			def: 90,
@@ -23112,8 +21252,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 42,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Leaf Guard",
 			1: "Chlorophyll",
 			DW: "Overcoat",
@@ -23127,8 +21266,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	leavanny:
-	{
+	leavanny: {
 		num: 542,
 		name: "Leavanny",
 		id: "leavanny",
@@ -23141,8 +21279,7 @@ exports.BattlePokedex =
 		types: ["Bug","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 103,
 			def: 80,
@@ -23150,8 +21287,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 92,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Chlorophyll",
 			DW: "Overcoat",
@@ -23165,8 +21301,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	venipede:
-	{
+	venipede: {
 		num: 543,
 		name: "Venipede",
 		id: "venipede",
@@ -23179,8 +21314,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 30,
 			atk: 45,
 			def: 59,
@@ -23188,8 +21322,7 @@ exports.BattlePokedex =
 			spd: 39,
 			spe: 57,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Swarm",
 			DW: "Quick Feet",
@@ -23203,8 +21336,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	whirlipede:
-	{
+	whirlipede: {
 		num: 544,
 		name: "Whirlipede",
 		id: "whirlipede",
@@ -23217,8 +21349,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 55,
 			def: 99,
@@ -23226,8 +21357,7 @@ exports.BattlePokedex =
 			spd: 79,
 			spe: 47,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Swarm",
 			DW: "Quick Feet",
@@ -23241,8 +21371,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	scolipede:
-	{
+	scolipede: {
 		num: 545,
 		name: "Scolipede",
 		id: "scolipede",
@@ -23255,8 +21384,7 @@ exports.BattlePokedex =
 		types: ["Bug","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 90,
 			def: 89,
@@ -23264,8 +21392,7 @@ exports.BattlePokedex =
 			spd: 69,
 			spe: 112,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Poison Point",
 			1: "Swarm",
 			DW: "Quick Feet",
@@ -23279,8 +21406,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cottonee:
-	{
+	cottonee: {
 		num: 546,
 		name: "Cottonee",
 		id: "cottonee",
@@ -23293,8 +21419,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 27,
 			def: 60,
@@ -23302,8 +21427,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 66,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Prankster",
 			1: "Infiltrator",
 			DW: "Chlorophyll",
@@ -23317,8 +21441,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	whimsicott:
-	{
+	whimsicott: {
 		num: 547,
 		name: "Whimsicott",
 		id: "whimsicott",
@@ -23331,8 +21454,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 67,
 			def: 85,
@@ -23340,8 +21462,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 116,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Prankster",
 			1: "Infiltrator",
 			DW: "Chlorophyll",
@@ -23355,8 +21476,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	petilil:
-	{
+	petilil: {
 		num: 548,
 		name: "Petilil",
 		id: "petilil",
@@ -23369,8 +21489,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 35,
 			def: 50,
@@ -23378,8 +21497,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Own Tempo",
 			DW: "Leaf Guard",
@@ -23393,8 +21511,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lilligant:
-	{
+	lilligant: {
 		num: 549,
 		name: "Lilligant",
 		id: "lilligant",
@@ -23407,8 +21524,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 60,
 			def: 75,
@@ -23416,8 +21532,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Own Tempo",
 			DW: "Leaf Guard",
@@ -23431,8 +21546,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	basculin:
-	{
+	basculin: {
 		num: 550,
 		name: "Basculin",
 		id: "basculin",
@@ -23445,8 +21559,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 92,
 			def: 65,
@@ -23454,8 +21567,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 98,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Reckless",
 			1: "Adaptability",
 			DW: "Mold Breaker",
@@ -23469,8 +21581,7 @@ exports.BattlePokedex =
 		otherFormes: ["basculinbluestriped"],
 		isDefaultForme: true,
 	},
-	basculinbluestriped:
-	{
+	basculinbluestriped: {
 		num: 550,
 		name: "Basculin-Blue-Striped",
 		id: "basculinbluestriped",
@@ -23483,8 +21594,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 92,
 			def: 65,
@@ -23492,8 +21602,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 98,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rock Head",
 			1: "Adaptability",
 			DW: "Mold Breaker",
@@ -23507,8 +21616,7 @@ exports.BattlePokedex =
 		otherFormes: ["basculin"],
 		isDefaultForme: false,
 	},
-	sandile:
-	{
+	sandile: {
 		num: 551,
 		name: "Sandile",
 		id: "sandile",
@@ -23521,8 +21629,7 @@ exports.BattlePokedex =
 		types: ["Ground","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 72,
 			def: 35,
@@ -23530,8 +21637,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Moxie",
 			DW: "Anger Point",
@@ -23545,8 +21651,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	krokorok:
-	{
+	krokorok: {
 		num: 552,
 		name: "Krokorok",
 		id: "krokorok",
@@ -23559,8 +21664,7 @@ exports.BattlePokedex =
 		types: ["Ground","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 82,
 			def: 45,
@@ -23568,8 +21672,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 74,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Moxie",
 			DW: "Anger Point",
@@ -23583,8 +21686,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	krookodile:
-	{
+	krookodile: {
 		num: 553,
 		name: "Krookodile",
 		id: "krookodile",
@@ -23597,8 +21699,7 @@ exports.BattlePokedex =
 		types: ["Ground","Dark"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 117,
 			def: 70,
@@ -23606,8 +21707,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 92,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Intimidate",
 			1: "Moxie",
 			DW: "Anger Point",
@@ -23621,8 +21721,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	darumaka:
-	{
+	darumaka: {
 		num: 554,
 		name: "Darumaka",
 		id: "darumaka",
@@ -23635,8 +21734,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 90,
 			def: 45,
@@ -23644,8 +21742,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hustle",
 			DW: "Inner Focus",
 		},
@@ -23658,8 +21755,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	darmanitan:
-	{
+	darmanitan: {
 		num: 555,
 		name: "Darmanitan",
 		id: "darmanitan",
@@ -23672,8 +21768,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 140,
 			def: 55,
@@ -23681,8 +21776,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sheer Force",
 			DW: "Zen Mode",
 		},
@@ -23695,8 +21789,7 @@ exports.BattlePokedex =
 		otherFormes: ["darmanitanzen"],
 		isDefaultForme: true,
 	},
-	darmanitanzen:
-	{
+	darmanitanzen: {
 		num: 555,
 		name: "Darmanitan-Zen",
 		id: "darmanitanzen",
@@ -23709,8 +21802,7 @@ exports.BattlePokedex =
 		types: ["Fire","Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 105,
 			atk: 30,
 			def: 105,
@@ -23718,8 +21810,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sheer Force",
 			DW: "Zen Mode",
 		},
@@ -23732,8 +21823,7 @@ exports.BattlePokedex =
 		otherFormes: ["darmanitan"],
 		isDefaultForme: false,
 	},
-	maractus:
-	{
+	maractus: {
 		num: 556,
 		name: "Maractus",
 		id: "maractus",
@@ -23746,8 +21836,7 @@ exports.BattlePokedex =
 		types: ["Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 86,
 			def: 67,
@@ -23755,8 +21844,7 @@ exports.BattlePokedex =
 			spd: 67,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Absorb",
 			1: "Chlorophyll",
 			DW: "Storm Drain",
@@ -23770,8 +21858,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	dwebble:
-	{
+	dwebble: {
 		num: 557,
 		name: "Dwebble",
 		id: "dwebble",
@@ -23784,8 +21871,7 @@ exports.BattlePokedex =
 		types: ["Bug","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 65,
 			def: 85,
@@ -23793,8 +21879,7 @@ exports.BattlePokedex =
 			spd: 35,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Shell Armor",
 			DW: "Weak Armor",
@@ -23808,8 +21893,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	crustle:
-	{
+	crustle: {
 		num: 558,
 		name: "Crustle",
 		id: "crustle",
@@ -23822,8 +21906,7 @@ exports.BattlePokedex =
 		types: ["Bug","Rock"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 95,
 			def: 125,
@@ -23831,8 +21914,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sturdy",
 			1: "Shell Armor",
 			DW: "Weak Armor",
@@ -23846,8 +21928,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	scraggy:
-	{
+	scraggy: {
 		num: 559,
 		name: "Scraggy",
 		id: "scraggy",
@@ -23860,8 +21941,7 @@ exports.BattlePokedex =
 		types: ["Dark","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 75,
 			def: 70,
@@ -23869,8 +21949,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			1: "Moxie",
 			DW: "Intimidate",
@@ -23884,8 +21963,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	scrafty:
-	{
+	scrafty: {
 		num: 560,
 		name: "Scrafty",
 		id: "scrafty",
@@ -23898,8 +21976,7 @@ exports.BattlePokedex =
 		types: ["Dark","Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 90,
 			def: 115,
@@ -23907,8 +21984,7 @@ exports.BattlePokedex =
 			spd: 115,
 			spe: 58,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Shed Skin",
 			1: "Moxie",
 			DW: "Intimidate",
@@ -23922,8 +21998,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	sigilyph:
-	{
+	sigilyph: {
 		num: 561,
 		name: "Sigilyph",
 		id: "sigilyph",
@@ -23936,8 +22011,7 @@ exports.BattlePokedex =
 		types: ["Psychic","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 72,
 			atk: 58,
 			def: 80,
@@ -23945,8 +22019,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 97,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Wonder Skin",
 			1: "Magic Guard",
 			DW: "Tinted Lens",
@@ -23960,8 +22033,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	yamask:
-	{
+	yamask: {
 		num: 562,
 		name: "Yamask",
 		id: "yamask",
@@ -23974,8 +22046,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 38,
 			atk: 30,
 			def: 85,
@@ -23983,8 +22054,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Mummy",
 		},
 		heightm: 0.5,
@@ -23996,8 +22066,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cofagrigus:
-	{
+	cofagrigus: {
 		num: 563,
 		name: "Cofagrigus",
 		id: "cofagrigus",
@@ -24010,8 +22079,7 @@ exports.BattlePokedex =
 		types: ["Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 58,
 			atk: 50,
 			def: 145,
@@ -24019,8 +22087,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Mummy",
 		},
 		heightm: 1.7,
@@ -24032,8 +22099,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tirtouga:
-	{
+	tirtouga: {
 		num: 564,
 		name: "Tirtouga",
 		id: "tirtouga",
@@ -24046,8 +22112,7 @@ exports.BattlePokedex =
 		types: ["Water","Rock"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 54,
 			atk: 78,
 			def: 103,
@@ -24055,8 +22120,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 22,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Solid Rock",
 			1: "Sturdy",
 			DW: "Swift Swim",
@@ -24070,8 +22134,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	carracosta:
-	{
+	carracosta: {
 		num: 565,
 		name: "Carracosta",
 		id: "carracosta",
@@ -24084,8 +22147,7 @@ exports.BattlePokedex =
 		types: ["Water","Rock"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 74,
 			atk: 108,
 			def: 133,
@@ -24093,8 +22155,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 32,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Solid Rock",
 			1: "Sturdy",
 			DW: "Swift Swim",
@@ -24108,8 +22169,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	archen:
-	{
+	archen: {
 		num: 566,
 		name: "Archen",
 		id: "archen",
@@ -24122,8 +22182,7 @@ exports.BattlePokedex =
 		types: ["Rock","Flying"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 112,
 			def: 45,
@@ -24131,8 +22190,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Defeatist",
 		},
 		heightm: 0.5,
@@ -24144,8 +22202,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	archeops:
-	{
+	archeops: {
 		num: 567,
 		name: "Archeops",
 		id: "archeops",
@@ -24158,8 +22215,7 @@ exports.BattlePokedex =
 		types: ["Rock","Flying"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 140,
 			def: 65,
@@ -24167,8 +22223,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 110,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Defeatist",
 		},
 		heightm: 1.4,
@@ -24180,8 +22235,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	trubbish:
-	{
+	trubbish: {
 		num: 568,
 		name: "Trubbish",
 		id: "trubbish",
@@ -24194,8 +22248,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 50,
 			def: 62,
@@ -24203,8 +22256,7 @@ exports.BattlePokedex =
 			spd: 62,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Stench",
 			1: "Sticky Hold",
 			DW: "Aftermath",
@@ -24218,8 +22270,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	garbodor:
-	{
+	garbodor: {
 		num: 569,
 		name: "Garbodor",
 		id: "garbodor",
@@ -24232,8 +22283,7 @@ exports.BattlePokedex =
 		types: ["Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 95,
 			def: 82,
@@ -24241,8 +22291,7 @@ exports.BattlePokedex =
 			spd: 82,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Stench",
 			1: "Weak Armor",
 			DW: "Aftermath",
@@ -24256,8 +22305,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	zorua:
-	{
+	zorua: {
 		num: 570,
 		name: "Zorua",
 		id: "zorua",
@@ -24270,8 +22318,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 65,
 			def: 40,
@@ -24279,8 +22326,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Illusion",
 		},
 		heightm: 0.7,
@@ -24292,8 +22338,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	zoroark:
-	{
+	zoroark: {
 		num: 571,
 		name: "Zoroark",
 		id: "zoroark",
@@ -24306,8 +22351,7 @@ exports.BattlePokedex =
 		types: ["Dark"],
 		genderRatio: {"m":0.875,"f":0.125},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 105,
 			def: 60,
@@ -24315,8 +22359,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Illusion",
 		},
 		heightm: 1.6,
@@ -24328,8 +22371,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	minccino:
-	{
+	minccino: {
 		num: 572,
 		name: "Minccino",
 		id: "minccino",
@@ -24342,8 +22384,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 50,
 			def: 40,
@@ -24351,8 +22392,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			1: "Technician",
 			DW: "Skill Link",
@@ -24366,8 +22406,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cinccino:
-	{
+	cinccino: {
 		num: 573,
 		name: "Cinccino",
 		id: "cinccino",
@@ -24380,8 +22419,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 95,
 			def: 60,
@@ -24389,8 +22427,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 115,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Cute Charm",
 			1: "Technician",
 			DW: "Skill Link",
@@ -24404,8 +22441,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gothita:
-	{
+	gothita: {
 		num: 574,
 		name: "Gothita",
 		id: "gothita",
@@ -24418,8 +22454,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 30,
 			def: 50,
@@ -24427,8 +22462,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 45,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Frisk",
 			DW: "Shadow Tag",
 		},
@@ -24441,8 +22475,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gothorita:
-	{
+	gothorita: {
 		num: 575,
 		name: "Gothorita",
 		id: "gothorita",
@@ -24455,8 +22488,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 45,
 			def: 70,
@@ -24464,8 +22496,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Frisk",
 			DW: "Shadow Tag",
 		},
@@ -24478,8 +22509,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	gothitelle:
-	{
+	gothitelle: {
 		num: 576,
 		name: "Gothitelle",
 		id: "gothitelle",
@@ -24492,8 +22522,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.25,"f":0.75},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 55,
 			def: 95,
@@ -24501,8 +22530,7 @@ exports.BattlePokedex =
 			spd: 110,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Frisk",
 			DW: "Shadow Tag",
 		},
@@ -24515,8 +22543,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	solosis:
-	{
+	solosis: {
 		num: 577,
 		name: "Solosis",
 		id: "solosis",
@@ -24529,8 +22556,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 30,
 			def: 40,
@@ -24538,8 +22564,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overcoat",
 			1: "Magic Guard",
 			DW: "Regenerator",
@@ -24553,8 +22578,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	duosion:
-	{
+	duosion: {
 		num: 578,
 		name: "Duosion",
 		id: "duosion",
@@ -24567,8 +22591,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 40,
 			def: 50,
@@ -24576,8 +22599,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overcoat",
 			1: "Magic Guard",
 			DW: "Regenerator",
@@ -24591,8 +22613,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	reuniclus:
-	{
+	reuniclus: {
 		num: 579,
 		name: "Reuniclus",
 		id: "reuniclus",
@@ -24605,8 +22626,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 110,
 			atk: 65,
 			def: 75,
@@ -24614,8 +22634,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Overcoat",
 			1: "Magic Guard",
 			DW: "Regenerator",
@@ -24629,8 +22648,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ducklett:
-	{
+	ducklett: {
 		num: 580,
 		name: "Ducklett",
 		id: "ducklett",
@@ -24643,8 +22661,7 @@ exports.BattlePokedex =
 		types: ["Water","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 62,
 			atk: 44,
 			def: 50,
@@ -24652,8 +22669,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Big Pecks",
 			DW: "Hydration",
@@ -24667,8 +22683,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	swanna:
-	{
+	swanna: {
 		num: 581,
 		name: "Swanna",
 		id: "swanna",
@@ -24681,8 +22696,7 @@ exports.BattlePokedex =
 		types: ["Water","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 87,
 			def: 63,
@@ -24690,8 +22704,7 @@ exports.BattlePokedex =
 			spd: 63,
 			spe: 98,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Big Pecks",
 			DW: "Hydration",
@@ -24705,8 +22718,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vanillite:
-	{
+	vanillite: {
 		num: 582,
 		name: "Vanillite",
 		id: "vanillite",
@@ -24719,8 +22731,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 36,
 			atk: 50,
 			def: 50,
@@ -24728,8 +22739,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 44,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Ice Body",
 			DW: "Weak Armor",
 		},
@@ -24742,8 +22752,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vanillish:
-	{
+	vanillish: {
 		num: 583,
 		name: "Vanillish",
 		id: "vanillish",
@@ -24756,8 +22765,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 51,
 			atk: 65,
 			def: 65,
@@ -24765,8 +22773,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 59,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Ice Body",
 			DW: "Weak Armor",
 		},
@@ -24779,8 +22786,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vanilluxe:
-	{
+	vanilluxe: {
 		num: 584,
 		name: "Vanilluxe",
 		id: "vanilluxe",
@@ -24793,8 +22799,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 71,
 			atk: 95,
 			def: 85,
@@ -24802,8 +22807,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 79,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Ice Body",
 			DW: "Weak Armor",
 		},
@@ -24816,8 +22820,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	deerling:
-	{
+	deerling: {
 		num: 585,
 		name: "Deerling",
 		id: "deerling",
@@ -24830,8 +22833,7 @@ exports.BattlePokedex =
 		types: ["Normal","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 50,
@@ -24839,8 +22841,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
 			DW: "Serene Grace",
@@ -24854,8 +22855,7 @@ exports.BattlePokedex =
 		otherFormes: ["deerlingsummer","deerlingautumn","deerlingwinter"],
 		isDefaultForme: true,
 	},
-	deerlingsummer:
-	{
+	deerlingsummer: {
 		num: 585,
 		name: "Deerling-Summer",
 		id: "deerlingsummer",
@@ -24868,8 +22868,7 @@ exports.BattlePokedex =
 		types: ["Normal","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 50,
@@ -24877,8 +22876,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
 			DW: "Serene Grace",
@@ -24892,8 +22890,7 @@ exports.BattlePokedex =
 		otherFormes: ["deerling","deerlingautumn","deerlingwinter"],
 		isDefaultForme: false,
 	},
-	deerlingautumn:
-	{
+	deerlingautumn: {
 		num: 585,
 		name: "Deerling-Autumn",
 		id: "deerlingautumn",
@@ -24906,8 +22903,7 @@ exports.BattlePokedex =
 		types: ["Normal","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 50,
@@ -24915,8 +22911,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
 			DW: "Serene Grace",
@@ -24930,8 +22925,7 @@ exports.BattlePokedex =
 		otherFormes: ["deerling","deerlingsummer","deerlingwinter"],
 		isDefaultForme: false,
 	},
-	deerlingwinter:
-	{
+	deerlingwinter: {
 		num: 585,
 		name: "Deerling-Winter",
 		id: "deerlingwinter",
@@ -24944,8 +22938,7 @@ exports.BattlePokedex =
 		types: ["Normal","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 60,
 			def: 50,
@@ -24953,8 +22946,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 75,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
 			DW: "Serene Grace",
@@ -24968,8 +22960,7 @@ exports.BattlePokedex =
 		otherFormes: ["deerling","deerlingsummer","deerlingautumn"],
 		isDefaultForme: false,
 	},
-	sawsbuck:
-	{
+	sawsbuck: {
 		num: 586,
 		name: "Sawsbuck",
 		id: "sawsbuck",
@@ -24982,8 +22973,7 @@ exports.BattlePokedex =
 		types: ["Normal","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 100,
 			def: 70,
@@ -24991,8 +22981,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
 			DW: "Serene Grace",
@@ -25006,8 +22995,7 @@ exports.BattlePokedex =
 		otherFormes: ["sawsbucksummer","sawsbuckautumn","sawsbuckwinter"],
 		isDefaultForme: true,
 	},
-	sawsbucksummer:
-	{
+	sawsbucksummer: {
 		num: 586,
 		name: "Sawsbuck-Summer",
 		id: "sawsbucksummer",
@@ -25020,8 +23008,7 @@ exports.BattlePokedex =
 		types: ["Normal","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 100,
 			def: 70,
@@ -25029,8 +23016,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
 			DW: "Serene Grace",
@@ -25044,8 +23030,7 @@ exports.BattlePokedex =
 		otherFormes: ["sawsbuck","sawsbuckautumn","sawsbuckwinter"],
 		isDefaultForme: false,
 	},
-	sawsbuckautumn:
-	{
+	sawsbuckautumn: {
 		num: 586,
 		name: "Sawsbuck-Autumn",
 		id: "sawsbuckautumn",
@@ -25058,8 +23043,7 @@ exports.BattlePokedex =
 		types: ["Normal","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 100,
 			def: 70,
@@ -25067,8 +23051,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
 			DW: "Serene Grace",
@@ -25082,8 +23065,7 @@ exports.BattlePokedex =
 		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckwinter"],
 		isDefaultForme: false,
 	},
-	sawsbuckwinter:
-	{
+	sawsbuckwinter: {
 		num: 586,
 		name: "Sawsbuck-Winter",
 		id: "sawsbuckwinter",
@@ -25096,8 +23078,7 @@ exports.BattlePokedex =
 		types: ["Normal","Grass"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 100,
 			def: 70,
@@ -25105,8 +23086,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
 			DW: "Serene Grace",
@@ -25120,8 +23100,7 @@ exports.BattlePokedex =
 		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckautumn"],
 		isDefaultForme: false,
 	},
-	emolga:
-	{
+	emolga: {
 		num: 587,
 		name: "Emolga",
 		id: "emolga",
@@ -25134,8 +23113,7 @@ exports.BattlePokedex =
 		types: ["Electric","Flying"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 75,
 			def: 60,
@@ -25143,8 +23121,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 103,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			DW: "Motor Drive",
 		},
@@ -25157,8 +23134,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	karrablast:
-	{
+	karrablast: {
 		num: 588,
 		name: "Karrablast",
 		id: "karrablast",
@@ -25171,8 +23147,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 75,
 			def: 45,
@@ -25180,8 +23155,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Shed Skin",
 			DW: "No Guard",
@@ -25195,8 +23169,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	escavalier:
-	{
+	escavalier: {
 		num: 589,
 		name: "Escavalier",
 		id: "escavalier",
@@ -25209,8 +23182,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 135,
 			def: 105,
@@ -25218,8 +23190,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Shell Armor",
 			DW: "Overcoat",
@@ -25233,8 +23204,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	foongus:
-	{
+	foongus: {
 		num: 590,
 		name: "Foongus",
 		id: "foongus",
@@ -25247,8 +23217,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 69,
 			atk: 55,
 			def: 45,
@@ -25256,8 +23225,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 15,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Effect Spore",
 			DW: "Regenerator",
 		},
@@ -25270,8 +23238,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	amoonguss:
-	{
+	amoonguss: {
 		num: 591,
 		name: "Amoonguss",
 		id: "amoonguss",
@@ -25284,8 +23251,7 @@ exports.BattlePokedex =
 		types: ["Grass","Poison"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 114,
 			atk: 85,
 			def: 70,
@@ -25293,8 +23259,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Effect Spore",
 			DW: "Regenerator",
 		},
@@ -25307,8 +23272,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	frillish:
-	{
+	frillish: {
 		num: 592,
 		name: "Frillish",
 		id: "frillish",
@@ -25321,8 +23285,7 @@ exports.BattlePokedex =
 		types: ["Water","Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 40,
 			def: 50,
@@ -25330,8 +23293,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Absorb",
 			1: "Cursed Body",
 			DW: "Damp",
@@ -25345,8 +23307,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	jellicent:
-	{
+	jellicent: {
 		num: 593,
 		name: "Jellicent",
 		id: "jellicent",
@@ -25359,8 +23320,7 @@ exports.BattlePokedex =
 		types: ["Water","Ghost"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 60,
 			def: 70,
@@ -25368,8 +23328,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Water Absorb",
 			1: "Cursed Body",
 			DW: "Damp",
@@ -25383,8 +23342,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	alomomola:
-	{
+	alomomola: {
 		num: 594,
 		name: "Alomomola",
 		id: "alomomola",
@@ -25397,8 +23355,7 @@ exports.BattlePokedex =
 		types: ["Water"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 165,
 			atk: 75,
 			def: 80,
@@ -25406,8 +23363,7 @@ exports.BattlePokedex =
 			spd: 45,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Healer",
 			1: "Hydration",
 			DW: "Regenerator",
@@ -25421,8 +23377,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	joltik:
-	{
+	joltik: {
 		num: 595,
 		name: "Joltik",
 		id: "joltik",
@@ -25435,8 +23390,7 @@ exports.BattlePokedex =
 		types: ["Bug","Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 47,
 			def: 50,
@@ -25444,8 +23398,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Compoundeyes",
 			1: "Unnerve",
 			DW: "Swarm",
@@ -25459,8 +23412,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	galvantula:
-	{
+	galvantula: {
 		num: 596,
 		name: "Galvantula",
 		id: "galvantula",
@@ -25473,8 +23425,7 @@ exports.BattlePokedex =
 		types: ["Bug","Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 77,
 			def: 60,
@@ -25482,8 +23433,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 108,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Compoundeyes",
 			1: "Unnerve",
 			DW: "Swarm",
@@ -25497,8 +23447,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ferroseed:
-	{
+	ferroseed: {
 		num: 597,
 		name: "Ferroseed",
 		id: "ferroseed",
@@ -25511,8 +23460,7 @@ exports.BattlePokedex =
 		types: ["Grass","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 44,
 			atk: 50,
 			def: 91,
@@ -25520,8 +23468,7 @@ exports.BattlePokedex =
 			spd: 86,
 			spe: 10,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Iron Barbs",
 		},
 		heightm: 0.6,
@@ -25533,8 +23480,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	ferrothorn:
-	{
+	ferrothorn: {
 		num: 598,
 		name: "Ferrothorn",
 		id: "ferrothorn",
@@ -25547,8 +23493,7 @@ exports.BattlePokedex =
 		types: ["Grass","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 74,
 			atk: 94,
 			def: 131,
@@ -25556,8 +23501,7 @@ exports.BattlePokedex =
 			spd: 116,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Iron Barbs",
 		},
 		heightm: 1,
@@ -25569,8 +23513,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	klink:
-	{
+	klink: {
 		num: 599,
 		name: "Klink",
 		id: "klink",
@@ -25583,8 +23526,7 @@ exports.BattlePokedex =
 		types: ["Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 40,
 			atk: 55,
 			def: 70,
@@ -25592,8 +23534,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Plus",
 			1: "Minus",
 			DW: "Clear Body",
@@ -25607,8 +23548,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	klang:
-	{
+	klang: {
 		num: 600,
 		name: "Klang",
 		id: "klang",
@@ -25621,8 +23561,7 @@ exports.BattlePokedex =
 		types: ["Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 80,
 			def: 95,
@@ -25630,8 +23569,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Plus",
 			1: "Minus",
 			DW: "Clear Body",
@@ -25645,8 +23583,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	klinklang:
-	{
+	klinklang: {
 		num: 601,
 		name: "Klinklang",
 		id: "klinklang",
@@ -25659,8 +23596,7 @@ exports.BattlePokedex =
 		types: ["Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 100,
 			def: 115,
@@ -25668,8 +23604,7 @@ exports.BattlePokedex =
 			spd: 85,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Plus",
 			1: "Minus",
 			DW: "Clear Body",
@@ -25683,8 +23618,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tynamo:
-	{
+	tynamo: {
 		num: 602,
 		name: "Tynamo",
 		id: "tynamo",
@@ -25697,8 +23631,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 35,
 			atk: 55,
 			def: 40,
@@ -25706,8 +23639,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 0.2,
@@ -25719,8 +23651,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	eelektrik:
-	{
+	eelektrik: {
 		num: 603,
 		name: "Eelektrik",
 		id: "eelektrik",
@@ -25733,8 +23664,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 85,
 			def: 70,
@@ -25742,8 +23672,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.2,
@@ -25755,8 +23684,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	eelektross:
-	{
+	eelektross: {
 		num: 604,
 		name: "Eelektross",
 		id: "eelektross",
@@ -25769,8 +23697,7 @@ exports.BattlePokedex =
 		types: ["Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 115,
 			def: 80,
@@ -25778,8 +23705,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 2.1,
@@ -25791,8 +23717,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	elgyem:
-	{
+	elgyem: {
 		num: 605,
 		name: "Elgyem",
 		id: "elgyem",
@@ -25805,8 +23730,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 55,
 			def: 55,
@@ -25814,8 +23738,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 30,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Telepathy",
 			1: "Synchronize",
 			DW: "Analytic",
@@ -25829,8 +23752,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	beheeyem:
-	{
+	beheeyem: {
 		num: 606,
 		name: "Beheeyem",
 		id: "beheeyem",
@@ -25843,8 +23765,7 @@ exports.BattlePokedex =
 		types: ["Psychic"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 75,
 			atk: 75,
 			def: 75,
@@ -25852,8 +23773,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Telepathy",
 			1: "Synchronize",
 			DW: "Analytic",
@@ -25867,8 +23787,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	litwick:
-	{
+	litwick: {
 		num: 607,
 		name: "Litwick",
 		id: "litwick",
@@ -25881,8 +23800,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 30,
 			def: 55,
@@ -25890,8 +23808,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 20,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flash Fire",
 			1: "Flame Body",
 			DW: "Shadow Tag",
@@ -25905,8 +23822,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	lampent:
-	{
+	lampent: {
 		num: 608,
 		name: "Lampent",
 		id: "lampent",
@@ -25919,8 +23835,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 40,
 			def: 60,
@@ -25928,8 +23843,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flash Fire",
 			1: "Flame Body",
 			DW: "Shadow Tag",
@@ -25943,8 +23857,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	chandelure:
-	{
+	chandelure: {
 		num: 609,
 		name: "Chandelure",
 		id: "chandelure",
@@ -25957,8 +23870,7 @@ exports.BattlePokedex =
 		types: ["Ghost","Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 60,
 			atk: 55,
 			def: 90,
@@ -25966,8 +23878,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flash Fire",
 			1: "Flame Body",
 			DW: "Shadow Tag",
@@ -25981,8 +23892,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	axew:
-	{
+	axew: {
 		num: 610,
 		name: "Axew",
 		id: "axew",
@@ -25995,8 +23905,7 @@ exports.BattlePokedex =
 		types: ["Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 46,
 			atk: 87,
 			def: 60,
@@ -26004,8 +23913,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 57,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rivalry",
 			1: "Mold Breaker",
 			DW: "Unnerve",
@@ -26019,8 +23927,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	fraxure:
-	{
+	fraxure: {
 		num: 611,
 		name: "Fraxure",
 		id: "fraxure",
@@ -26033,8 +23940,7 @@ exports.BattlePokedex =
 		types: ["Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 66,
 			atk: 117,
 			def: 70,
@@ -26042,8 +23948,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 67,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rivalry",
 			1: "Mold Breaker",
 			DW: "Unnerve",
@@ -26057,8 +23962,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	haxorus:
-	{
+	haxorus: {
 		num: 612,
 		name: "Haxorus",
 		id: "haxorus",
@@ -26071,8 +23975,7 @@ exports.BattlePokedex =
 		types: ["Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 76,
 			atk: 147,
 			def: 90,
@@ -26080,8 +23983,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 97,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rivalry",
 			1: "Mold Breaker",
 			DW: "Unnerve",
@@ -26095,8 +23997,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cubchoo:
-	{
+	cubchoo: {
 		num: 613,
 		name: "Cubchoo",
 		id: "cubchoo",
@@ -26109,8 +24010,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 70,
 			def: 40,
@@ -26118,8 +24018,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 40,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Snow Cloak",
 			DW: "Rattled",
 		},
@@ -26132,8 +24031,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	beartic:
-	{
+	beartic: {
 		num: 614,
 		name: "Beartic",
 		id: "beartic",
@@ -26146,8 +24044,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 110,
 			def: 80,
@@ -26155,8 +24052,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 50,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Snow Cloak",
 			DW: "Swift Swim",
 		},
@@ -26169,8 +24065,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cryogonal:
-	{
+	cryogonal: {
 		num: 615,
 		name: "Cryogonal",
 		id: "cryogonal",
@@ -26183,8 +24078,7 @@ exports.BattlePokedex =
 		types: ["Ice"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 50,
 			def: 30,
@@ -26192,8 +24086,7 @@ exports.BattlePokedex =
 			spd: 135,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.1,
@@ -26205,8 +24098,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	shelmet:
-	{
+	shelmet: {
 		num: 616,
 		name: "Shelmet",
 		id: "shelmet",
@@ -26219,8 +24111,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 50,
 			atk: 40,
 			def: 85,
@@ -26228,8 +24119,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 25,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hydration",
 			1: "Shell Armor",
 			DW: "Overcoat",
@@ -26243,8 +24133,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	accelgor:
-	{
+	accelgor: {
 		num: 617,
 		name: "Accelgor",
 		id: "accelgor",
@@ -26257,8 +24146,7 @@ exports.BattlePokedex =
 		types: ["Bug"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 80,
 			atk: 70,
 			def: 40,
@@ -26266,8 +24154,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 145,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hydration",
 			1: "Sticky Hold",
 			DW: "Unburden",
@@ -26281,8 +24168,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	stunfisk:
-	{
+	stunfisk: {
 		num: 618,
 		name: "Stunfisk",
 		id: "stunfisk",
@@ -26295,8 +24181,7 @@ exports.BattlePokedex =
 		types: ["Ground","Electric"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 109,
 			atk: 66,
 			def: 84,
@@ -26304,8 +24189,7 @@ exports.BattlePokedex =
 			spd: 99,
 			spe: 32,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Static",
 			1: "Limber",
 			DW: "Sand Veil",
@@ -26319,8 +24203,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mienfoo:
-	{
+	mienfoo: {
 		num: 619,
 		name: "Mienfoo",
 		id: "mienfoo",
@@ -26333,8 +24216,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 85,
 			def: 50,
@@ -26342,8 +24224,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			1: "Regenerator",
 			DW: "Reckless",
@@ -26357,8 +24238,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mienshao:
-	{
+	mienshao: {
 		num: 620,
 		name: "Mienshao",
 		id: "mienshao",
@@ -26371,8 +24251,7 @@ exports.BattlePokedex =
 		types: ["Fighting"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 125,
 			def: 60,
@@ -26380,8 +24259,7 @@ exports.BattlePokedex =
 			spd: 60,
 			spe: 105,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Inner Focus",
 			1: "Regenerator",
 			DW: "Reckless",
@@ -26395,8 +24273,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	druddigon:
-	{
+	druddigon: {
 		num: 621,
 		name: "Druddigon",
 		id: "druddigon",
@@ -26409,8 +24286,7 @@ exports.BattlePokedex =
 		types: ["Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 77,
 			atk: 120,
 			def: 90,
@@ -26418,8 +24294,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 48,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Rough Skin",
 			1: "Sheer Force",
 			DW: "Mold Breaker",
@@ -26433,8 +24308,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	golett:
-	{
+	golett: {
 		num: 622,
 		name: "Golett",
 		id: "golett",
@@ -26447,8 +24321,7 @@ exports.BattlePokedex =
 		types: ["Ground","Ghost"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 59,
 			atk: 74,
 			def: 50,
@@ -26456,8 +24329,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 35,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Iron Fist",
 			1: "Klutz",
 			DW: "No Guard",
@@ -26471,8 +24343,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	golurk:
-	{
+	golurk: {
 		num: 623,
 		name: "Golurk",
 		id: "golurk",
@@ -26485,8 +24356,7 @@ exports.BattlePokedex =
 		types: ["Ground","Ghost"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 89,
 			atk: 124,
 			def: 80,
@@ -26494,8 +24364,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Iron Fist",
 			1: "Klutz",
 			DW: "No Guard",
@@ -26509,8 +24378,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	pawniard:
-	{
+	pawniard: {
 		num: 624,
 		name: "Pawniard",
 		id: "pawniard",
@@ -26523,8 +24391,7 @@ exports.BattlePokedex =
 		types: ["Dark","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 45,
 			atk: 85,
 			def: 70,
@@ -26532,8 +24399,7 @@ exports.BattlePokedex =
 			spd: 40,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Defiant",
 			1: "Inner Focus",
 			DW: "Pressure",
@@ -26547,8 +24413,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bisharp:
-	{
+	bisharp: {
 		num: 625,
 		name: "Bisharp",
 		id: "bisharp",
@@ -26561,8 +24426,7 @@ exports.BattlePokedex =
 		types: ["Dark","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 65,
 			atk: 125,
 			def: 100,
@@ -26570,8 +24434,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 70,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Defiant",
 			1: "Inner Focus",
 			DW: "Pressure",
@@ -26585,8 +24448,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	bouffalant:
-	{
+	bouffalant: {
 		num: 626,
 		name: "Bouffalant",
 		id: "bouffalant",
@@ -26599,8 +24461,7 @@ exports.BattlePokedex =
 		types: ["Normal"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 95,
 			atk: 110,
 			def: 95,
@@ -26608,8 +24469,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 55,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Reckless",
 			1: "Sap Sipper",
 			DW: "Soundproof",
@@ -26623,8 +24483,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	rufflet:
-	{
+	rufflet: {
 		num: 627,
 		name: "Rufflet",
 		id: "rufflet",
@@ -26637,8 +24496,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 83,
 			def: 50,
@@ -26646,8 +24504,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Sheer Force",
 			DW: "Hustle",
@@ -26661,8 +24518,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	braviary:
-	{
+	braviary: {
 		num: 628,
 		name: "Braviary",
 		id: "braviary",
@@ -26675,8 +24531,7 @@ exports.BattlePokedex =
 		types: ["Normal","Flying"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 123,
 			def: 75,
@@ -26684,8 +24539,7 @@ exports.BattlePokedex =
 			spd: 75,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Keen Eye",
 			1: "Sheer Force",
 			DW: "Defiant",
@@ -26699,8 +24553,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	vullaby:
-	{
+	vullaby: {
 		num: 629,
 		name: "Vullaby",
 		id: "vullaby",
@@ -26713,8 +24566,7 @@ exports.BattlePokedex =
 		types: ["Dark","Flying"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 70,
 			atk: 55,
 			def: 75,
@@ -26722,8 +24574,7 @@ exports.BattlePokedex =
 			spd: 65,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Big Pecks",
 			1: "Overcoat",
 			DW: "Weak Armor",
@@ -26737,8 +24588,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	mandibuzz:
-	{
+	mandibuzz: {
 		num: 630,
 		name: "Mandibuzz",
 		id: "mandibuzz",
@@ -26751,8 +24601,7 @@ exports.BattlePokedex =
 		types: ["Dark","Flying"],
 		genderRatio: {"m":0,"f":1},
 		gender: "F",
-		baseStats:
-		{
+		baseStats: {
 			hp: 110,
 			atk: 65,
 			def: 105,
@@ -26760,8 +24609,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 80,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Big Pecks",
 			1: "Overcoat",
 			DW: "Weak Armor",
@@ -26775,8 +24623,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	heatmor:
-	{
+	heatmor: {
 		num: 631,
 		name: "Heatmor",
 		id: "heatmor",
@@ -26789,8 +24636,7 @@ exports.BattlePokedex =
 		types: ["Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 97,
 			def: 66,
@@ -26798,8 +24644,7 @@ exports.BattlePokedex =
 			spd: 66,
 			spe: 65,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Gluttony",
 			1: "Flash Fire",
 			DW: "White Smoke",
@@ -26813,8 +24658,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	durant:
-	{
+	durant: {
 		num: 632,
 		name: "Durant",
 		id: "durant",
@@ -26827,8 +24671,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 58,
 			atk: 109,
 			def: 112,
@@ -26836,8 +24679,7 @@ exports.BattlePokedex =
 			spd: 48,
 			spe: 109,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Swarm",
 			1: "Hustle",
 			DW: "Truant",
@@ -26851,8 +24693,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	deino:
-	{
+	deino: {
 		num: 633,
 		name: "Deino",
 		id: "deino",
@@ -26865,8 +24706,7 @@ exports.BattlePokedex =
 		types: ["Dark","Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 52,
 			atk: 65,
 			def: 50,
@@ -26874,8 +24714,7 @@ exports.BattlePokedex =
 			spd: 50,
 			spe: 38,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hustle",
 		},
 		heightm: 0.8,
@@ -26887,8 +24726,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	zweilous:
-	{
+	zweilous: {
 		num: 634,
 		name: "Zweilous",
 		id: "zweilous",
@@ -26901,8 +24739,7 @@ exports.BattlePokedex =
 		types: ["Dark","Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 72,
 			atk: 85,
 			def: 70,
@@ -26910,8 +24747,7 @@ exports.BattlePokedex =
 			spd: 70,
 			spe: 58,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Hustle",
 		},
 		heightm: 1.4,
@@ -26923,8 +24759,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	hydreigon:
-	{
+	hydreigon: {
 		num: 635,
 		name: "Hydreigon",
 		id: "hydreigon",
@@ -26937,8 +24772,7 @@ exports.BattlePokedex =
 		types: ["Dark","Dragon"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 92,
 			atk: 105,
 			def: 90,
@@ -26946,8 +24780,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 98,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Levitate",
 		},
 		heightm: 1.8,
@@ -26959,8 +24792,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	larvesta:
-	{
+	larvesta: {
 		num: 636,
 		name: "Larvesta",
 		id: "larvesta",
@@ -26973,8 +24805,7 @@ exports.BattlePokedex =
 		types: ["Bug","Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 55,
 			atk: 85,
 			def: 55,
@@ -26982,8 +24813,7 @@ exports.BattlePokedex =
 			spd: 55,
 			spe: 60,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flame Body",
 			DW: "Swarm",
 		},
@@ -26996,8 +24826,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	volcarona:
-	{
+	volcarona: {
 		num: 637,
 		name: "Volcarona",
 		id: "volcarona",
@@ -27010,8 +24839,7 @@ exports.BattlePokedex =
 		types: ["Bug","Fire"],
 		genderRatio: {"m":0.5,"f":0.5},
 		gender: "",
-		baseStats:
-		{
+		baseStats: {
 			hp: 85,
 			atk: 60,
 			def: 65,
@@ -27019,8 +24847,7 @@ exports.BattlePokedex =
 			spd: 105,
 			spe: 100,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Flame Body",
 			DW: "Swarm",
 		},
@@ -27033,8 +24860,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	cobalion:
-	{
+	cobalion: {
 		num: 638,
 		name: "Cobalion",
 		id: "cobalion",
@@ -27047,8 +24873,7 @@ exports.BattlePokedex =
 		types: ["Steel","Fighting"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 91,
 			atk: 90,
 			def: 129,
@@ -27056,8 +24881,7 @@ exports.BattlePokedex =
 			spd: 72,
 			spe: 108,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Justified",
 		},
 		heightm: 2.1,
@@ -27069,8 +24893,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	terrakion:
-	{
+	terrakion: {
 		num: 639,
 		name: "Terrakion",
 		id: "terrakion",
@@ -27083,8 +24906,7 @@ exports.BattlePokedex =
 		types: ["Rock","Fighting"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 91,
 			atk: 129,
 			def: 90,
@@ -27092,8 +24914,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 108,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Justified",
 		},
 		heightm: 1.9,
@@ -27105,8 +24926,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	virizion:
-	{
+	virizion: {
 		num: 640,
 		name: "Virizion",
 		id: "virizion",
@@ -27119,8 +24939,7 @@ exports.BattlePokedex =
 		types: ["Grass","Fighting"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 91,
 			atk: 90,
 			def: 72,
@@ -27128,8 +24947,7 @@ exports.BattlePokedex =
 			spd: 129,
 			spe: 108,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Justified",
 		},
 		heightm: 2,
@@ -27141,8 +24959,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	tornadus:
-	{
+	tornadus: {
 		num: 641,
 		name: "Tornadus",
 		id: "tornadus",
@@ -27155,8 +24972,7 @@ exports.BattlePokedex =
 		types: ["Flying"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 79,
 			atk: 115,
 			def: 70,
@@ -27164,8 +24980,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 111,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Prankster",
 			DW: "Defiant",
 		},
@@ -27178,8 +24993,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	thundurus:
-	{
+	thundurus: {
 		num: 642,
 		name: "Thundurus",
 		id: "thundurus",
@@ -27192,8 +25006,7 @@ exports.BattlePokedex =
 		types: ["Electric","Flying"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 79,
 			atk: 115,
 			def: 70,
@@ -27201,8 +25014,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 111,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Prankster",
 			DW: "Defiant",
 		},
@@ -27215,8 +25027,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	reshiram:
-	{
+	reshiram: {
 		num: 643,
 		name: "Reshiram",
 		id: "reshiram",
@@ -27229,8 +25040,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Fire"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 120,
 			def: 100,
@@ -27238,8 +25048,7 @@ exports.BattlePokedex =
 			spd: 120,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Turboblaze",
 		},
 		heightm: 3.2,
@@ -27251,8 +25060,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	zekrom:
-	{
+	zekrom: {
 		num: 644,
 		name: "Zekrom",
 		id: "zekrom",
@@ -27265,8 +25073,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Electric"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 150,
 			def: 120,
@@ -27274,8 +25081,7 @@ exports.BattlePokedex =
 			spd: 100,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Teravolt",
 		},
 		heightm: 2.9,
@@ -27287,8 +25093,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	landorus:
-	{
+	landorus: {
 		num: 645,
 		name: "Landorus",
 		id: "landorus",
@@ -27301,8 +25106,7 @@ exports.BattlePokedex =
 		types: ["Ground","Flying"],
 		genderRatio: {"m":1,"f":0},
 		gender: "M",
-		baseStats:
-		{
+		baseStats: {
 			hp: 89,
 			atk: 125,
 			def: 90,
@@ -27310,8 +25114,7 @@ exports.BattlePokedex =
 			spd: 80,
 			spe: 101,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Sand Force",
 			DW: "Sheer Force",
 		},
@@ -27324,8 +25127,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	kyurem:
-	{
+	kyurem: {
 		num: 646,
 		name: "Kyurem",
 		id: "kyurem",
@@ -27338,8 +25140,7 @@ exports.BattlePokedex =
 		types: ["Dragon","Ice"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 125,
 			atk: 130,
 			def: 90,
@@ -27347,8 +25148,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 95,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Pressure",
 		},
 		heightm: 3,
@@ -27360,8 +25160,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	keldeo:
-	{
+	keldeo: {
 		num: 647,
 		name: "Keldeo",
 		id: "keldeo",
@@ -27374,8 +25173,7 @@ exports.BattlePokedex =
 		types: ["Water","Fighting"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 91,
 			atk: 72,
 			def: 90,
@@ -27383,8 +25181,7 @@ exports.BattlePokedex =
 			spd: 90,
 			spe: 108,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Justified",
 		},
 		heightm: 1.4,
@@ -27396,8 +25193,7 @@ exports.BattlePokedex =
 		otherFormes: [],
 		isDefaultForme: true,
 	},
-	meloetta:
-	{
+	meloetta: {
 		num: 648,
 		name: "Meloetta",
 		id: "meloetta",
@@ -27410,8 +25206,7 @@ exports.BattlePokedex =
 		types: ["Normal","Psychic"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 77,
 			def: 77,
@@ -27419,8 +25214,7 @@ exports.BattlePokedex =
 			spd: 128,
 			spe: 90,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Serene Grace",
 		},
 		heightm: 0.6,
@@ -27432,8 +25226,7 @@ exports.BattlePokedex =
 		otherFormes: ["meloettapirouette"],
 		isDefaultForme: true,
 	},
-	meloettapirouette:
-	{
+	meloettapirouette: {
 		num: 648,
 		name: "Meloetta-Pirouette",
 		id: "meloettapirouette",
@@ -27446,8 +25239,7 @@ exports.BattlePokedex =
 		types: ["Normal","Fighting"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 100,
 			atk: 128,
 			def: 90,
@@ -27455,8 +25247,7 @@ exports.BattlePokedex =
 			spd: 77,
 			spe: 128,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Serene Grace",
 		},
 		heightm: 0.6,
@@ -27468,8 +25259,7 @@ exports.BattlePokedex =
 		otherFormes: ["meloetta"],
 		isDefaultForme: false,
 	},
-	genesect:
-	{
+	genesect: {
 		num: 649,
 		name: "Genesect",
 		id: "genesect",
@@ -27482,8 +25272,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 71,
 			atk: 120,
 			def: 95,
@@ -27491,8 +25280,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 99,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Download",
 		},
 		heightm: 1.5,
@@ -27504,8 +25292,7 @@ exports.BattlePokedex =
 		otherFormes: ["genesectdouse","genesectshock","genesectburn","genesectchill"],
 		isDefaultForme: true,
 	},
-	genesectdouse:
-	{
+	genesectdouse: {
 		num: 649,
 		name: "Genesect-Douse",
 		id: "genesectdouse",
@@ -27518,8 +25305,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 71,
 			atk: 120,
 			def: 95,
@@ -27527,8 +25313,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 99,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Download",
 		},
 		heightm: 1.5,
@@ -27540,8 +25325,7 @@ exports.BattlePokedex =
 		otherFormes: ["genesect","genesectshock","genesectburn","genesectchill"],
 		isDefaultForme: false,
 	},
-	genesectshock:
-	{
+	genesectshock: {
 		num: 649,
 		name: "Genesect-Shock",
 		id: "genesectshock",
@@ -27554,8 +25338,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 71,
 			atk: 120,
 			def: 95,
@@ -27563,8 +25346,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 99,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Download",
 		},
 		heightm: 1.5,
@@ -27576,8 +25358,7 @@ exports.BattlePokedex =
 		otherFormes: ["genesect","genesectdouse","genesectburn","genesectchill"],
 		isDefaultForme: false,
 	},
-	genesectburn:
-	{
+	genesectburn: {
 		num: 649,
 		name: "Genesect-Burn",
 		id: "genesectburn",
@@ -27590,8 +25371,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 71,
 			atk: 120,
 			def: 95,
@@ -27599,8 +25379,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 99,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Download",
 		},
 		heightm: 1.5,
@@ -27612,8 +25391,7 @@ exports.BattlePokedex =
 		otherFormes: ["genesect","genesectdouse","genesectshock","genesectchill"],
 		isDefaultForme: false,
 	},
-	genesectchill:
-	{
+	genesectchill: {
 		num: 649,
 		name: "Genesect-Chill",
 		id: "genesectchill",
@@ -27626,8 +25404,7 @@ exports.BattlePokedex =
 		types: ["Bug","Steel"],
 		genderRatio: {"m":0,"f":0},
 		gender: "N",
-		baseStats:
-		{
+		baseStats: {
 			hp: 71,
 			atk: 120,
 			def: 95,
@@ -27635,8 +25412,7 @@ exports.BattlePokedex =
 			spd: 95,
 			spe: 99,
 		},
-		abilities:
-		{
+		abilities: {
 			0: "Download",
 		},
 		heightm: 1.5,

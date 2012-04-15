@@ -8,15 +8,13 @@ var customPokemonPath = "../data/custom-pokemon.json";
 var assert = require("assert").ok;
 var getVeekunDatabase = require("./veekun-database._js").getVeekunDatabase;
 
-function main(argv, _)
-{
+function main(argv, _) {
 	var veekunDatabase = getVeekunDatabase(_);
 	var languageId = veekunDatabase.getLanguageId("en", _); // Don't change the language! Bad things will happen if you do
 	var formeIds = veekunDatabase.getAllFormeIds(_);
 	
 	console.warn("Starting to output.");
-	writeLine("exports.BattlePokedex =");
-	writeLine("{", 1);
+	writeLine("exports.BattlePokedex = {", 1);
 	console.warn("Outputting custom pokemon.");
 	outputCustomPokemon();
 	console.warn("Outputting real pokemon.");
@@ -33,17 +31,14 @@ function main(argv, _)
 	veekunDatabase.close(_);
 }
 
-function outputCustomPokemon()
-{
+function outputCustomPokemon() {
 	var customPokemon = JSON.parse(require("fs").readFileSync(customPokemonPath).toString());
 	for (var c = 0; c < customPokemon.length; ++c)
 		outputPokemon(customPokemon[c]);
 }
 
-function convertVeekunPokemon(pokemon, veekunDatabase, _)
-{
-	function toIdForForme(combinedName, forme)
-	{
+function convertVeekunPokemon(pokemon, veekunDatabase, _) {
+	function toIdForForme(combinedName, forme) {
 		switch (combinedName)
 		{
 			case "Unown-!" :
@@ -60,8 +55,7 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _)
 		}
 		return toId(forme);
 	}
-	function toIdForName(combinedName, forme)
-	{
+	function toIdForName(combinedName, forme) {
 		var result = toId(combinedName.replace("♂", "M").replace("♀", "F"));
 		var formeId = toIdForForme(combinedName, forme);
 		if (result.indexOf(formeId) === -1)
@@ -175,8 +169,7 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _)
 	return result;
 }
 
-function outputPokemon(pokemon)
-{
+function outputPokemon(pokemon) {
 	// Work out the formeletter
 	var formeletter = pokemon.forme && !pokemon.isDefaultForme ? pokemon.forme[0] : '';
 	switch (pokemon.id)
@@ -211,8 +204,7 @@ function outputPokemon(pokemon)
 	var nfe = pokemon.evos.length > 0;
 
 	// Start outputting!
-	writeLine(pokemon.id + ":");
-	writeLine("{", 1);
+	writeLine(pokemon.id + ": {", 1);
 
 	writeLine("num: " + JSON.stringify(pokemon.num) + ",");
 	writeLine("name: " + JSON.stringify(pokemon.name) + ",");
@@ -227,14 +219,12 @@ function outputPokemon(pokemon)
 	writeLine("genderRatio: " + JSON.stringify(pokemon.genderRatio) + ",");
 	writeLine("gender: " + JSON.stringify(gender) + ",");
 
-	writeLine("baseStats:");
-	writeLine("{", 1);
+	writeLine("baseStats: {", 1);
 	for (var b in pokemon.baseStats)
 		writeLine(b + ": " + JSON.stringify(pokemon.baseStats[b]) + ",");
 	writeLine("},", -1);
 
-	writeLine("abilities:");
-	writeLine("{", 1);
+	writeLine("abilities: {", 1);
 	for (var a in pokemon.abilities)
 		writeLine(a + ": " + JSON.stringify(pokemon.abilities[a]) + ",");
 	writeLine("},", -1);
@@ -257,8 +247,7 @@ function outputPokemon(pokemon)
 function toId(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ""); }
 
 var currentIndentLevel = 0;
-function writeLine(line, indent)
-{
+function writeLine(line, indent) {
 	if (!indent || typeof indent !== "number")
 		indent = 0;
 

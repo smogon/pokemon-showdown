@@ -9,21 +9,18 @@ var viableMovesPath = "../data/viable-moves.txt";
 var fs = require("fs");
 var getSmogonDex = require("./get-smogondex._js").getSmogonDex;
 
-function main(argv, _)
-{
+function main(argv, _) {
 	var viableMoves = getViableMoves();
 	var smogonDex = getSmogonDex(_);
 
 	console.warn("Starting to output.");
-	writeLine("exports.BattleFormatsData =");
-	writeLine("{", 1);
+	writeLine("exports.BattleFormatsData = {", 1);
 	console.warn("Outputting custom pokemon.");
 	outputCustomPokemon();
 	console.warn("Outputting real pokemon.");
 	for (var s in smogonDex)
 	{
-		var pokemon =
-		{
+		var pokemon = {
 			id: s,
 			tier: smogonDex[s].tier,
 			viable: s in viableMoves
@@ -36,8 +33,7 @@ function main(argv, _)
 	console.warn("Finished outputting.");
 }
 
-function getViableMoves()
-{
+function getViableMoves() {
 	var result = new Object();
 	var lines = fs.readFileSync(viableMovesPath).toString().split("\n");
 	for (var l = 0; l < lines.length; ++l)
@@ -59,26 +55,19 @@ function getViableMoves()
 	return result;
 }
 
-function outputCustomPokemon()
-{
+function outputCustomPokemon() {
 	var customPokemon = JSON.parse(require("fs").readFileSync(customPokemonPath).toString());
 	for (var c = 0; c < customPokemon.length; ++c)
 		outputPokemon(customPokemon[c]);
 }
 
-function outputPokemon(pokemon)
-{
-	writeLine(pokemon.id + ":");
-	writeLine("{", 1);
+function outputPokemon(pokemon) {
+	writeLine(pokemon.id + ": {", 1);
 	writeLine("tier: " + JSON.stringify(pokemon.tier) + ",");
 	if (pokemon.viable)
 	{
 		writeLine("viable: true,");
-		writeLine("viablemoves:");
-		writeLine("{", 1);
-		for (var v in pokemon.viablemoves)
-			writeLine("\"" + v + "\": " + JSON.stringify(pokemon.viablemoves[v]) + ",");
-		writeLine("},", -1);
+		writeLine("viablemoves: " + JSON.stringify(pokemon.viablemoves) + ",");
 	}
 	if (pokemon.isNonstandard)
 		writeLine("isNonstandard: true,");
@@ -86,8 +75,7 @@ function outputPokemon(pokemon)
 }
 
 var currentIndentLevel = 0;
-function writeLine(line, indent)
-{
+function writeLine(line, indent) {
 	if (!indent || typeof indent !== "number")
 		indent = 0;
 

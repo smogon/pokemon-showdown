@@ -4,12 +4,10 @@ var request = require("request");
 var zlib = require("zlib");
 var sqlite = require("sqlite-fts");
 
-function VeekunDatabase(db, _)
-{
+function VeekunDatabase(db, _) {
 	this.db = db,
 
-	this.getAllFormeIds = function(_)
-	{
+	this.getAllFormeIds = function(_) {
 		var dbResult = this.db.execute("SELECT id FROM pokemon_forms ORDER BY \"order\" ASC", _);
 		var result = new Array();
 		for (var r = 0; r < dbResult.length; ++r)
@@ -19,8 +17,7 @@ function VeekunDatabase(db, _)
 
 	// Following functions return either ids or numbers
 
-	this.getPokemonFormes = function(pokemonId, _)
-	{
+	this.getPokemonFormes = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var dbResult = this.db.execute("SELECT id, is_default FROM pokemon WHERE species_id = ?", [speciesId], _);
 		var result = new Array();
@@ -39,8 +36,7 @@ function VeekunDatabase(db, _)
 		return result;
 	},
 
-	this.getPokemonDefaultForme = function(pokemonId, _)
-	{
+	this.getPokemonDefaultForme = function(pokemonId, _) {
 		var formeIds = this.getPokemonFormes(pokemonId, _);
 		for (var f = 0; f < formeIds.length; ++f)
 			if (formeIds[f].isDefault)
@@ -49,8 +45,7 @@ function VeekunDatabase(db, _)
 	},
 
 	this.getIsDefaultFormeCache_ = new Object();
-	this.getIsDefaultForme = function(formeId, _, isOverrideCache)
-	{
+	this.getIsDefaultForme = function(formeId, _, isOverrideCache) {
 		if (!isOverrideCache && this.getIsDefaultFormeCache_[formeId])
 			return this.getIsDefaultFormeCache_[formeId];
 		var dbResult = this.db.execute("SELECT pokemon_id, is_default FROM pokemon_forms WHERE id = ? LIMIT 1", [formeId], _)[0];
@@ -58,13 +53,11 @@ function VeekunDatabase(db, _)
 		return (this.getIsDefaultFormeCache_[formeId] = !!(dbResult.is_default && dbResult2.is_default));
 	},
 
-	this.getIsBattleOnlyForme = function(formeId, _)
-	{
+	this.getIsBattleOnlyForme = function(formeId, _) {
 		return !!this.db.execute("SELECT is_battle_only FROM pokemon_forms WHERE id = ? LIMIT 1", [formeId], _)[0].is_battle_only;
 	},
 
-	this.getPokemonPokedexNumbers = function(pokemonId, _)
-	{
+	this.getPokemonPokedexNumbers = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var dbResult = this.db.execute("SELECT pokedex_id, pokedex_number FROM pokemon_dex_numbers WHERE species_id = ? ORDER BY pokedex_id ASC", [speciesId], _);
 		var results = new Object();
@@ -76,15 +69,13 @@ function VeekunDatabase(db, _)
 		return results;
 	},
 
-	this.getPokemonNationalPokedexNumber = function(pokemonId, _)
-	{
+	this.getPokemonNationalPokedexNumber = function(pokemonId, _) {
 		var nationalPokedexId = 1; // National is always 1
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		return this.db.execute("SELECT pokedex_number FROM pokemon_dex_numbers WHERE species_id = ? AND pokedex_id = ? LIMIT 1", [speciesId, nationalPokedexId], _)[0].pokedex_number;
 	},
 
-	this.getFormeTypes = function(formeId, _)
-	{
+	this.getFormeTypes = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var dbResult = this.db.execute("SELECT type_id FROM pokemon_types WHERE pokemon_id = ? ORDER BY slot ASC", [pokemonId], _);
 		var results = new Array();
@@ -93,8 +84,7 @@ function VeekunDatabase(db, _)
 		return results;
 	},
 
-	this.getFormeBaseStats = function(formeId, _)
-	{
+	this.getFormeBaseStats = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var dbResult = this.db.execute("SELECT stat_id, base_stat FROM pokemon_stats WHERE pokemon_id = ? ORDER BY stat_id ASC", [pokemonId], _);
 		var results = new Object();
@@ -106,8 +96,7 @@ function VeekunDatabase(db, _)
 		return results;
 	},
 
-	this.getFormeAbilities = function(formeId, _)
-	{
+	this.getFormeAbilities = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var dbResult = this.db.execute("SELECT ability_id, is_dream FROM pokemon_abilities WHERE pokemon_id = ? ORDER BY slot ASC", [pokemonId], _);
 		var results = new Array();
@@ -123,8 +112,7 @@ function VeekunDatabase(db, _)
 		return results;
 	},
 
-	this.getPokemonPrevo = function(pokemonId, _)
-	{
+	this.getPokemonPrevo = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var dbResult = this.db.execute("SELECT evolves_from_species_id FROM pokemon_species WHERE id = ? LIMIT 1", [speciesId], _);
 		if (!dbResult[0].evolves_from_species_id)
@@ -132,8 +120,7 @@ function VeekunDatabase(db, _)
 		return this.speciesIdToDefaultFormePokemonId(dbResult[0].evolves_from_species_id, _);
 	},
 
-	this.getPokemonEvos = function(pokemonId, _)
-	{
+	this.getPokemonEvos = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var evoSpeciesIds = this.db.execute("SELECT id FROM pokemon_species WHERE evolves_from_species_id = ?", [speciesId], _);
 		var results = new Array();
@@ -142,8 +129,7 @@ function VeekunDatabase(db, _)
 		return results;
 	},
 
-	this.getFormeMiscInfo = function(formeId, _)
-	{
+	this.getFormeMiscInfo = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var dbResult = this.db.execute("SELECT height, weight FROM pokemon WHERE id = ? LIMIT 1", [pokemonId], _)[0];
 
@@ -175,13 +161,11 @@ function VeekunDatabase(db, _)
 		return result;
 	},
 
-	this.getTypeId = function(typeIdentifier, _)
-	{
+	this.getTypeId = function(typeIdentifier, _) {
 		return this.db.execute("SELECT id FROM types WHERE identifier = ? LIMIT 1", [typeIdentifier], _)[0].id;
 	},
 
-	this.getLanguageId = function(languageName, _)
-	{
+	this.getLanguageId = function(languageName, _) {
 		return this.db.execute("SELECT id FROM languages WHERE identifier = ? LIMIT 1", [languageName], _)[0].id;
 	},
 
@@ -189,8 +173,7 @@ function VeekunDatabase(db, _)
 
 	this.fallbackLanguageId_ = this.getLanguageId("en", _),
 
-	this.getFormeName = function(formeId, languageId, _)
-	{
+	this.getFormeName = function(formeId, languageId, _) {
 		var speciesId = this.formeIdToSpeciesId(formeId, _);
 		var pokemonName = this.getSingleText_("pokemon_species_names", "name", "pokemon_species_id", speciesId, languageId, _);
 		var pokemonNameWithForme = this.getSingleText_("pokemon_form_names", "pokemon_name", "pokemon_form_id", formeId, languageId, _);
@@ -214,21 +197,17 @@ function VeekunDatabase(db, _)
 		return {name: pokemonName, forme: pokemonForme};
 	},
 
-	this.getPokedexName = function(pokedexId, languageId, _)
-	{
+	this.getPokedexName = function(pokedexId, languageId, _) {
 		return this.getSingleText_("pokedex_prose", "name", "pokedex_id", pokedexId, languageId, _);
 	},
-	this.getStatName = function(statId, languageId, _)
-	{
+	this.getStatName = function(statId, languageId, _) {
 		return this.getSingleText_("stat_names", "name", "stat_id", statId, languageId, _);
 	},
-	this.getTypeName = function(typeId, languageId, _)
-	{
+	this.getTypeName = function(typeId, languageId, _) {
 		return this.getSingleText_("type_names", "name", "type_id", typeId, languageId, _);
 	},
 
-	this.getPokemonPokedexDescriptions = function(pokemonId, languageId, _)
-	{
+	this.getPokemonPokedexDescriptions = function(pokemonId, languageId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var dbResult = this.db.execute("SELECT version_id, flavor_text FROM pokemon_species_flavor_text \
 										WHERE species_id = ? AND language_id = ? ORDER BY version_id",
@@ -240,43 +219,35 @@ function VeekunDatabase(db, _)
 		return result;
 	},
 
-	this.getAbilityName = function(abilityId, languageId, _)
-	{
+	this.getAbilityName = function(abilityId, languageId, _) {
 		return this.getSingleText_("ability_names", "name", "ability_id", abilityId, languageId, _);
 	},
-	this.getPokemonGenus = function(pokemonId, languageId, _)
-	{
+	this.getPokemonGenus = function(pokemonId, languageId, _) {
 		return this.getSingleText_("pokemon_species_names", "genus", "pokemon_species_id", this.pokemonIdToSpeciesId(pokemonId, _), languageId, _);
 	},
-	this.getColourName = function(colourId, languageId, _)
-	{
+	this.getColourName = function(colourId, languageId, _) {
 		return this.getSingleText_("pokemon_color_names", "name", "pokemon_color_id", colourId, languageId, _);
 	},
-	this.getShapeName = function(shapeId, languageId, _)
-	{
+	this.getShapeName = function(shapeId, languageId, _) {
 		return this.getSingleText_("pokemon_shape_prose", "awesome_name", "pokemon_shape_id", shapeId, languageId, _);
 	},
-	this.getHabitatName = function(habitatId, languageId, _)
-	{
+	this.getHabitatName = function(habitatId, languageId, _) {
 		return this.getSingleText_("pokemon_habitat_names", "name", "pokemon_habitat_id", habitatId, languageId, _);
 	},
 
 	// id conversion functions
 
 	this.formeIdToPokemonIdCache_ = new Object();
-	this.formeIdToPokemonId = function(formeId, _, isOverrideCache)
-	{
+	this.formeIdToPokemonId = function(formeId, _, isOverrideCache) {
 		if (!isOverrideCache && this.formeIdToPokemonIdCache_[formeId])
 			return this.formeIdToPokemonIdCache_[formeId];
 		return (this.formeIdToPokemonIdCache_[formeId] = this.db.execute("SELECT pokemon_id FROM pokemon_forms WHERE id = ? LIMIT 1", [formeId], _)[0].pokemon_id);
 	},
-	this.formeIdToSpeciesId = function(formeId, _)
-	{
+	this.formeIdToSpeciesId = function(formeId, _) {
 		return this.pokemonIdToSpeciesId(this.formeIdToPokemonId(formeId, _), _);
 	},
 	this.pokemonIdToFormeIdsCache_ = new Object();
-	this.pokemonIdToFormeIds = function(pokemonId, _, isOverrideCache)
-	{
+	this.pokemonIdToFormeIds = function(pokemonId, _, isOverrideCache) {
 		if (!isOverrideCache && this.pokemonIdToFormeIdsCache_[pokemonId])
 			return this.pokemonIdToFormeIdsCache_[pokemonId];
 		var dbResult = this.db.execute("SELECT id FROM pokemon_forms WHERE pokemon_id = ?", [pokemonId], _);
@@ -286,15 +257,13 @@ function VeekunDatabase(db, _)
 		return (this.pokemonIdToFormeIdsCache_[pokemonId] = result);
 	},
 	this.pokemonIdToSpeciesIdCache_ = new Object();
-	this.pokemonIdToSpeciesId = function(pokemonId, _, isOverrideCache)
-	{
+	this.pokemonIdToSpeciesId = function(pokemonId, _, isOverrideCache) {
 		if (!isOverrideCache && this.pokemonIdToSpeciesIdCache_[pokemonId])
 			return this.pokemonIdToSpeciesIdCache_[pokemonId];
 		return (this.pokemonIdToSpeciesIdCache_[pokemonId] = this.db.execute("SELECT species_id FROM pokemon WHERE id = ? LIMIT 1", [pokemonId], _)[0].species_id);
 	},
 	this.speciesIdToPokemonIdsCache_ = new Object();
-	this.speciesIdToPokemonIds = function(speciesId, _, isOverrideCache)
-	{
+	this.speciesIdToPokemonIds = function(speciesId, _, isOverrideCache) {
 		if (!isOverrideCache && this.speciesIdToPokemonIdsCache_[speciesId])
 			return this.speciesIdToPokemonIdsCache_[speciesId];
 		var dbResult = this.db.execute("SELECT id FROM pokemon WHERE species_id = ?", [speciesId], _);
@@ -303,8 +272,7 @@ function VeekunDatabase(db, _)
 			result.push(dbResult[d].id);
 		return (this.speciesIdToPokemonIdsCache_[speciesId] = result);
 	},
-	this.speciesIdToDefaultFormePokemonId = function(speciesId, _)
-	{
+	this.speciesIdToDefaultFormePokemonId = function(speciesId, _) {
 		var pokemonIds = this.speciesIdToPokemonIds(speciesId, _);
 		var results = new Array();
 		for (var p = 0; p < pokemonIds.length; ++p)
@@ -319,8 +287,7 @@ function VeekunDatabase(db, _)
 
 	// Convienience function
 
-	this.getFormeData = function(formeId, languageId, _)
-	{
+	this.getFormeData = function(formeId, languageId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var result = new Object();
 
@@ -427,16 +394,14 @@ function VeekunDatabase(db, _)
 
 	// Close the database
 
-	this.close = function(_)
-	{
+	this.close = function(_) {
 		this.db.close(_);
 	},
 
 	// Lonely private function
 
 	this.singleTextCache_ = new Object();
-	this.getSingleText_ = function(table, textKey, idKey, id, languageId, _, languageIdKeyOverride, isOverrideCache)
-	{
+	this.getSingleText_ = function(table, textKey, idKey, id, languageId, _, languageIdKeyOverride, isOverrideCache) {
 		if (!languageIdKeyOverride)
 			languageIdKeyOverride = "local_language_id";
 
@@ -455,8 +420,7 @@ function VeekunDatabase(db, _)
 	}
 }
 
-exports.getVeekunDatabase = function(_)
-{
+exports.getVeekunDatabase = function(_) {
 	console.warn("Downloading Veekun Database.");
 	var gunzip = zlib.createGunzip();
 	request("http://veekun.com/static/pokedex/downloads/veekun-pokedex.sqlite.gz")

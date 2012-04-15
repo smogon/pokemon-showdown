@@ -2,11 +2,9 @@ var url = require("url");
 var request = require("request");
 var libxml = require("libxmljs");
 
-exports.getSmogonDex = function(_)
-{
+exports.getSmogonDex = function(_) {
 	console.warn("Downloading Smogon Pokedex.");
-	var requestOptions =
-	{
+	var requestOptions = {
 		uri: "http://www.smogon.com/bw/pokemon/",
 		headers: { Cookie: "dexprefs=\"AQAAAA==\"" }
 	};
@@ -118,8 +116,7 @@ exports.getSmogonDex = function(_)
 		var spd = parseInt(cols[8].text().replace(/\s+/g, " ").trim(), 10);
 		var spe = parseInt(cols[9].text().replace(/\s+/g, " ").trim(), 10);
 
-		smogonDex[name] =
-		{
+		smogonDex[name] = {
 			types: types,
 			tier: tier,
 			abilities: abilities,
@@ -138,8 +135,7 @@ exports.getSmogonDex = function(_)
 		switch (name)
 		{
 			case "arceus" :
-				smogonDex["arceusunknown"] =
-				{
+				smogonDex["arceusunknown"] = {
 					types: ["???"],
 					tier: tier,
 					abilities: abilities,
@@ -158,8 +154,7 @@ exports.getSmogonDex = function(_)
 			case "burmy" :
 				var burmyFormes = ["Sandy", "Trash"];
 				for (var b = 0; b < burmyFormes.length; ++b)
-					smogonDex["burmy" + burmyFormes[b].toLowerCase()] =
-					{
+					smogonDex["burmy" + burmyFormes[b].toLowerCase()] = {
 						types: types,
 						tier: tier,
 						abilities: abilities,
@@ -181,8 +176,7 @@ exports.getSmogonDex = function(_)
 									  {name: "Snowy", type: "Ice"},
 									  {name: "Rainy", type: "Water"}];
 				for (var c = 0; c < castformFormes.length; ++c)
-					smogonDex["castform" + castformFormes[c].name.toLowerCase()] =
-					{
+					smogonDex["castform" + castformFormes[c].name.toLowerCase()] = {
 						types: [castformFormes[c].type],
 						tier: tier,
 						abilities: abilities,
@@ -219,8 +213,7 @@ exports.getSmogonDex = function(_)
 			case "genesect" :
 				var genesectFormes = ["Douse", "Shock", "Burn", "Chill"];
 				for (var g = 0; g < genesectFormes.length; ++g)
-					smogonDex["genesect" + genesectFormes[g].toLowerCase()] =
-					{
+					smogonDex["genesect" + genesectFormes[g].toLowerCase()] = {
 						types: types,
 						tier: tier,
 						abilities: abilities,
@@ -237,8 +230,7 @@ exports.getSmogonDex = function(_)
 				break;
 
 			case "pichu" :
-				smogonDex["pichuspikyeared"] =
-				{
+				smogonDex["pichuspikyeared"] = {
 					types: types,
 					tier: tier,
 					abilities: abilities,
@@ -256,8 +248,7 @@ exports.getSmogonDex = function(_)
 
 			case "shellos" :
 			case "gastrodon" :
-				smogonDex[name + "east"] =
-				{
+				smogonDex[name + "east"] = {
 					types: types,
 					tier: tier,
 					abilities: abilities,
@@ -277,8 +268,7 @@ exports.getSmogonDex = function(_)
 			case "deerling" :
 				var seasons = ["Summer", "Autumn", "Winter"];
 				for (var s = 0; s < seasons.length; ++s)
-					smogonDex[name + seasons[s].toLowerCase()] =
-					{
+					smogonDex[name + seasons[s].toLowerCase()] = {
 						types: types,
 						tier: tier,
 						abilities: abilities,
@@ -297,8 +287,7 @@ exports.getSmogonDex = function(_)
 			case "unown" :
 				var unownFormes = ["B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "EM", "QM"];
 				for (var u = 0; u < unownFormes.length; ++u)
-					smogonDex["unown" + unownFormes[u].toLowerCase()] =
-					{
+					smogonDex["unown" + unownFormes[u].toLowerCase()] = {
 						types: types,
 						tier: tier,
 						abilities: abilities,
