@@ -353,7 +353,7 @@ function BattleTools()
 		{
 			return false;
 		}
-		if (!team)
+		if (!team || !Array.isArray(team))
 		{
 			if (format.canUseRandomTeam)
 			{
@@ -364,6 +364,10 @@ function BattleTools()
 		if (!team.length)
 		{
 			return ["Your team has no pokemon."];
+		}
+		if (team.length>6)
+		{
+			return ["Your team has more than 6 pokemon."];
 		}
 		var teamHas = {};
 		for (var i=0; i<team.length; i++)
@@ -427,6 +431,13 @@ function BattleTools()
 		{
 			return ["This is not a pokemon."];
 		}
+		
+		set.species = (''+set.species).trim();
+		set.name = (''+set.name).trim();
+		set.item = ''+set.item;
+		set.ability = ''+set.ability;
+		if (!Array.isArray(set.moves)) set.moves = [];
+		
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
 		var template = selfT.getTemplate(set.species);
@@ -506,34 +517,45 @@ function BattleTools()
 		{
 			problems.push(set.name+" has no moves.");
 		}
-		else for (var i=0; i<set.moves.length; i++)
+		else
 		{
-			if (!set.moves[i]) continue;
-			var move = selfT.getMove(set.moves[i]);
-			setHas[move.id] = true;
-			if (banlistTable[move.id])
-			{
-				problems.push(set.name+"'s move "+set.moves[i]+" is banned.");
-			}
-			else if (move.ohko && banlistTable['OHKO'])
-			{
-				problems.push(set.name+"'s move "+set.moves[i]+" is an OHKO move, which is banned.");
-			}
+			// A limit is imposed here to prevent too much engine strain or
+			// too much layout deformation - to be exact, this is the Debug
+			// Mode limitation.
+			// The usual limit of 4 moves is handled elsewhere - currently
+			// in the cartridge-compliant set validator: formats.js:pokemon
+			set.moves = set.moves.slice(0,24);
 			
-			if (banlistTable['Rule:standard'])
+			for (var i=0; i<set.moves.length; i++)
 			{
-				var lset = selfT.checkLearnset(move, template);
-				if (!lset)
+				if (!set.moves[i]) continue;
+				set.moves[i] = ''+set.moves[i];
+				var move = selfT.getMove(set.moves[i]);
+				setHas[move.id] = true;
+				if (banlistTable[move.id])
 				{
-					problems.push(set.name+" ("+set.species+") can't learn "+move.name);
+					problems.push(set.name+"'s move "+set.moves[i]+" is banned.");
 				}
-				else if (lset === 1)
+				else if (move.ohko && banlistTable['OHKO'])
 				{
-					limit1++;
+					problems.push(set.name+"'s move "+set.moves[i]+" is an OHKO move, which is banned.");
 				}
-				if (limit1 > 1)
+				
+				if (banlistTable['Rule:standard'])
 				{
-					problems.push(set.name+" ("+set.species+") can't Sketch "+move.name+" - it's limited to 1 Sketch move");
+					var lset = selfT.checkLearnset(move, template);
+					if (!lset)
+					{
+						problems.push(set.name+" ("+set.species+") can't learn "+move.name);
+					}
+					else if (lset === 1)
+					{
+						limit1++;
+					}
+					if (limit1 > 1)
+					{
+						problems.push(set.name+" ("+set.species+") can't Sketch "+move.name+" - it's limited to 1 Sketch move");
+					}
 				}
 			}
 		}

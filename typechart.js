@@ -85,7 +85,7 @@ exports.BattleTypeChart = {
       "Steel": 2,
       "Water": 0
     },
-    "HPivs": {"spd":30}
+    "HPivs": {"spa":30}
   },
   "Fighting": {
     "damageTaken": {
