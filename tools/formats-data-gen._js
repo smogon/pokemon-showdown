@@ -27,7 +27,7 @@ function main(argv, _) {
 		};
 		if (pokemon.viable)
 			pokemon.viablemoves = viableMoves[s];
-		outputPokemon(pokemon);
+		outputPokemon(pokemon, ObjectIsLastKey(smogonDex, s));
 	}
 	writeLine("};", -1);
 	console.warn("Finished outputting.");
@@ -61,9 +61,8 @@ function outputCustomPokemon() {
 		outputPokemon(customPokemon[c]);
 }
 
-function outputPokemon(pokemon) {
+function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine(pokemon.id + ": {", 1);
-	writeLine("tier: " + JSON.stringify(pokemon.tier) + ",");
 	if (pokemon.viable)
 	{
 		writeLine("viable: true,");
@@ -71,7 +70,8 @@ function outputPokemon(pokemon) {
 	}
 	if (pokemon.isNonstandard)
 		writeLine("isNonstandard: true,");
-	writeLine("},", -1);
+	writeLine("tier: " + JSON.stringify(pokemon.tier));
+	writeLine("}" + (isNotNeedFinalNewline ? "" : ","), -1);
 }
 
 var currentIndentLevel = 0;
@@ -93,6 +93,10 @@ function writeLine(line, indent) {
 	process.stdout.write(line);
 	process.stdout.write("\n");
 	currentIndentLevel = nextIndentLevel;
+}
+
+function ObjectIsLastKey(object, key) {
+	return Object.keys(object).indexOf(key) === Object.keys(object).length - 1;
 }
 
 main(process.argv, _);

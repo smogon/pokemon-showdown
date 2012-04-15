@@ -18,12 +18,12 @@ exports.BattlePokedex = {
 			def: 0,
 			spa: 6,
 			spd: 6,
-			spe: 29,
+			spe: 29
 		},
 		abilities: {
 			0: "Download",
 			1: "Normalize",
-			DW: "Truant",
+			DW: "Truant"
 		},
 		heightm: 1.27,
 		weightkg: 37.2,
@@ -32,7 +32,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tomohawk: {
 		num: -1,
@@ -53,12 +53,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 115,
 			spd: 80,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Prankster",
-			DW: "Justified",
+			DW: "Justified"
 		},
 		heightm: 1.27,
 		weightkg: 37.2,
@@ -67,7 +67,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	necturna: {
 		num: -2,
@@ -88,11 +88,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 85,
 			spd: 120,
-			spe: 81,
+			spe: 81
 		},
 		abilities: {
 			0: "Forewarn",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 1.5,
 		weightkg: 35,
@@ -101,7 +101,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	syclant: {
 		num: -51,
@@ -122,11 +122,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 114,
 			spd: 64,
-			spe: 121,
+			spe: 121
 		},
 		abilities: {
 			0: "Compoundeyes",
-			1: "Mountaineer",
+			1: "Mountaineer"
 		},
 		heightm: 1.27,
 		weightkg: 52,
@@ -135,7 +135,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	revenankh: {
 		num: -52,
@@ -156,11 +156,11 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 65,
 			spd: 110,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Shed Skin",
-			1: "Air Lock",
+			1: "Air Lock"
 		},
 		heightm: 1.27,
 		weightkg: 44,
@@ -169,7 +169,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pyroak: {
 		num: -53,
@@ -190,11 +190,11 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 95,
 			spd: 90,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Rock Head",
-			1: "Battle Armor",
+			1: "Battle Armor"
 		},
 		heightm: 1.27,
 		weightkg: 168,
@@ -203,7 +203,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	fidgit: {
 		num: -54,
@@ -224,11 +224,11 @@ exports.BattlePokedex = {
 			def: 109,
 			spa: 90,
 			spd: 80,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
 			0: "Persistent",
-			1: "Vital Spirit",
+			1: "Vital Spirit"
 		},
 		heightm: 1.27,
 		weightkg: 53,
@@ -237,7 +237,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	stratagem: {
 		num: -55,
@@ -258,11 +258,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 120,
 			spd: 70,
-			spe: 130,
+			spe: 130
 		},
 		abilities: {
 			0: "Levitate",
-			1: "Technician",
+			1: "Technician"
 		},
 		heightm: 1.27,
 		weightkg: 45,
@@ -271,7 +271,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	arghonaut: {
 		num: -56,
@@ -292,10 +292,10 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 70,
 			spd: 100,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
-			0: "Unaware",
+			0: "Unaware"
 		},
 		heightm: 1.27,
 		weightkg: 151,
@@ -304,7 +304,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kitsunoh: {
 		num: -57,
@@ -325,11 +325,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 55,
 			spd: 80,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
 			0: "Frisk",
-			1: "Limber",
+			1: "Limber"
 		},
 		heightm: 1.27,
 		weightkg: 51,
@@ -338,7 +338,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cyclohm: {
 		num: -58,
@@ -359,11 +359,11 @@ exports.BattlePokedex = {
 			def: 118,
 			spa: 112,
 			spd: 70,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Shield Dust",
-			1: "Static",
+			1: "Static"
 		},
 		heightm: 1.27,
 		weightkg: 59,
@@ -372,7 +372,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	colossoil: {
 		num: -59,
@@ -393,11 +393,11 @@ exports.BattlePokedex = {
 			def: 72,
 			spa: 71,
 			spd: 72,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Rebound",
-			1: "Guts",
+			1: "Guts"
 		},
 		heightm: 1.27,
 		weightkg: 683.6,
@@ -406,7 +406,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	krilowatt: {
 		num: -60,
@@ -427,11 +427,11 @@ exports.BattlePokedex = {
 			def: 73,
 			spa: 83,
 			spd: 74,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
 			0: "Trace",
-			1: "Magic Guard",
+			1: "Magic Guard"
 		},
 		heightm: 1.27,
 		weightkg: 10.6,
@@ -440,7 +440,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	voodoom: {
 		num: -61,
@@ -461,11 +461,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 105,
 			spd: 80,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
 			0: "Volt Absorb",
-			1: "Lightningrod",
+			1: "Lightningrod"
 		},
 		heightm: 1.27,
 		weightkg: 75.5,
@@ -474,7 +474,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bulbasaur: {
 		num: 1,
@@ -495,11 +495,11 @@ exports.BattlePokedex = {
 			def: 49,
 			spa: 65,
 			spd: 65,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Chlorophyll",
+			DW: "Chlorophyll"
 		},
 		heightm: 0.7,
 		weightkg: 6.9,
@@ -508,7 +508,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["ivysaur"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ivysaur: {
 		num: 2,
@@ -529,11 +529,11 @@ exports.BattlePokedex = {
 			def: 63,
 			spa: 80,
 			spd: 80,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Chlorophyll",
+			DW: "Chlorophyll"
 		},
 		heightm: 1,
 		weightkg: 13,
@@ -542,7 +542,7 @@ exports.BattlePokedex = {
 		prevo: "bulbasaur",
 		evos: ["venusaur"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	venusaur: {
 		num: 3,
@@ -563,11 +563,11 @@ exports.BattlePokedex = {
 			def: 83,
 			spa: 100,
 			spd: 100,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Chlorophyll",
+			DW: "Chlorophyll"
 		},
 		heightm: 2,
 		weightkg: 100,
@@ -576,7 +576,7 @@ exports.BattlePokedex = {
 		prevo: "ivysaur",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	charmander: {
 		num: 4,
@@ -597,11 +597,11 @@ exports.BattlePokedex = {
 			def: 43,
 			spa: 60,
 			spd: 50,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Solar Power",
+			DW: "Solar Power"
 		},
 		heightm: 0.6,
 		weightkg: 8.5,
@@ -610,7 +610,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["charmeleon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	charmeleon: {
 		num: 5,
@@ -631,11 +631,11 @@ exports.BattlePokedex = {
 			def: 58,
 			spa: 80,
 			spd: 65,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Solar Power",
+			DW: "Solar Power"
 		},
 		heightm: 1.1,
 		weightkg: 19,
@@ -644,7 +644,7 @@ exports.BattlePokedex = {
 		prevo: "charmander",
 		evos: ["charizard"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	charizard: {
 		num: 6,
@@ -665,11 +665,11 @@ exports.BattlePokedex = {
 			def: 78,
 			spa: 109,
 			spd: 85,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Solar Power",
+			DW: "Solar Power"
 		},
 		heightm: 1.7,
 		weightkg: 90.5,
@@ -678,7 +678,7 @@ exports.BattlePokedex = {
 		prevo: "charmeleon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	squirtle: {
 		num: 7,
@@ -699,11 +699,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 50,
 			spd: 64,
-			spe: 43,
+			spe: 43
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Rain Dish",
+			DW: "Rain Dish"
 		},
 		heightm: 0.5,
 		weightkg: 9,
@@ -712,7 +712,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["wartortle"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	wartortle: {
 		num: 8,
@@ -733,11 +733,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 65,
 			spd: 80,
-			spe: 58,
+			spe: 58
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Rain Dish",
+			DW: "Rain Dish"
 		},
 		heightm: 1,
 		weightkg: 22.5,
@@ -746,7 +746,7 @@ exports.BattlePokedex = {
 		prevo: "squirtle",
 		evos: ["blastoise"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	blastoise: {
 		num: 9,
@@ -767,11 +767,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 85,
 			spd: 105,
-			spe: 78,
+			spe: 78
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Rain Dish",
+			DW: "Rain Dish"
 		},
 		heightm: 1.6,
 		weightkg: 85.5,
@@ -780,7 +780,7 @@ exports.BattlePokedex = {
 		prevo: "wartortle",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	caterpie: {
 		num: 10,
@@ -801,11 +801,11 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 20,
 			spd: 20,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Shield Dust",
-			DW: "Run Away",
+			DW: "Run Away"
 		},
 		heightm: 0.3,
 		weightkg: 2.9,
@@ -814,7 +814,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["metapod"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	metapod: {
 		num: 11,
@@ -835,11 +835,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 25,
 			spd: 25,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Shed Skin",
+			DW: "Shed Skin"
 		},
 		heightm: 0.7,
 		weightkg: 9.9,
@@ -848,7 +848,7 @@ exports.BattlePokedex = {
 		prevo: "caterpie",
 		evos: ["butterfree"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	butterfree: {
 		num: 12,
@@ -869,11 +869,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 80,
 			spd: 80,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Compoundeyes",
-			DW: "Tinted Lens",
+			DW: "Tinted Lens"
 		},
 		heightm: 1.1,
 		weightkg: 32,
@@ -882,7 +882,7 @@ exports.BattlePokedex = {
 		prevo: "metapod",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	weedle: {
 		num: 13,
@@ -903,11 +903,11 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 20,
 			spd: 20,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Shield Dust",
-			DW: "Run Away",
+			DW: "Run Away"
 		},
 		heightm: 0.3,
 		weightkg: 3.2,
@@ -916,7 +916,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["kakuna"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kakuna: {
 		num: 14,
@@ -937,11 +937,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 25,
 			spd: 25,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Shed Skin",
+			DW: "Shed Skin"
 		},
 		heightm: 0.6,
 		weightkg: 10,
@@ -950,7 +950,7 @@ exports.BattlePokedex = {
 		prevo: "weedle",
 		evos: ["beedrill"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	beedrill: {
 		num: 15,
@@ -971,11 +971,11 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 45,
 			spd: 80,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Swarm",
-			DW: "Sniper",
+			DW: "Sniper"
 		},
 		heightm: 1,
 		weightkg: 29.5,
@@ -984,7 +984,7 @@ exports.BattlePokedex = {
 		prevo: "kakuna",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pidgey: {
 		num: 16,
@@ -1005,12 +1005,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 35,
 			spd: 35,
-			spe: 56,
+			spe: 56
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Tangled Feet",
-			DW: "Big Pecks",
+			DW: "Big Pecks"
 		},
 		heightm: 0.3,
 		weightkg: 1.8,
@@ -1019,7 +1019,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["pidgeotto"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pidgeotto: {
 		num: 17,
@@ -1040,12 +1040,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 50,
 			spd: 50,
-			spe: 71,
+			spe: 71
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Tangled Feet",
-			DW: "Big Pecks",
+			DW: "Big Pecks"
 		},
 		heightm: 1.1,
 		weightkg: 30,
@@ -1054,7 +1054,7 @@ exports.BattlePokedex = {
 		prevo: "pidgey",
 		evos: ["pidgeot"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pidgeot: {
 		num: 18,
@@ -1075,12 +1075,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 70,
 			spd: 70,
-			spe: 91,
+			spe: 91
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Tangled Feet",
-			DW: "Big Pecks",
+			DW: "Big Pecks"
 		},
 		heightm: 1.5,
 		weightkg: 39.5,
@@ -1089,7 +1089,7 @@ exports.BattlePokedex = {
 		prevo: "pidgeotto",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rattata: {
 		num: 19,
@@ -1110,12 +1110,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 25,
 			spd: 35,
-			spe: 72,
+			spe: 72
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Guts",
-			DW: "Hustle",
+			DW: "Hustle"
 		},
 		heightm: 0.3,
 		weightkg: 3.5,
@@ -1124,7 +1124,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["raticate"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	raticate: {
 		num: 20,
@@ -1145,12 +1145,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 50,
 			spd: 70,
-			spe: 97,
+			spe: 97
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Guts",
-			DW: "Hustle",
+			DW: "Hustle"
 		},
 		heightm: 0.7,
 		weightkg: 18.5,
@@ -1159,7 +1159,7 @@ exports.BattlePokedex = {
 		prevo: "rattata",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	spearow: {
 		num: 21,
@@ -1180,11 +1180,11 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 31,
 			spd: 31,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Keen Eye",
-			DW: "Sniper",
+			DW: "Sniper"
 		},
 		heightm: 0.3,
 		weightkg: 2,
@@ -1193,7 +1193,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["fearow"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	fearow: {
 		num: 22,
@@ -1214,11 +1214,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 61,
 			spd: 61,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Keen Eye",
-			DW: "Sniper",
+			DW: "Sniper"
 		},
 		heightm: 1.2,
 		weightkg: 38,
@@ -1227,7 +1227,7 @@ exports.BattlePokedex = {
 		prevo: "spearow",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ekans: {
 		num: 23,
@@ -1248,12 +1248,12 @@ exports.BattlePokedex = {
 			def: 44,
 			spa: 40,
 			spd: 54,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Shed Skin",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 2,
 		weightkg: 6.9,
@@ -1262,7 +1262,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["arbok"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	arbok: {
 		num: 24,
@@ -1283,12 +1283,12 @@ exports.BattlePokedex = {
 			def: 69,
 			spa: 65,
 			spd: 79,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Shed Skin",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 3.5,
 		weightkg: 65,
@@ -1297,7 +1297,7 @@ exports.BattlePokedex = {
 		prevo: "ekans",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pichu: {
 		num: 172,
@@ -1318,11 +1318,11 @@ exports.BattlePokedex = {
 			def: 15,
 			spa: 35,
 			spd: 35,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Static",
-			DW: "Lightningrod",
+			DW: "Lightningrod"
 		},
 		heightm: 0.3,
 		weightkg: 2,
@@ -1331,7 +1331,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["pikachu"],
 		otherFormes: ["pichuspikyeared"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pichuspikyeared: {
 		num: 172,
@@ -1352,11 +1352,11 @@ exports.BattlePokedex = {
 			def: 15,
 			spa: 35,
 			spd: 35,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Static",
-			DW: "Lightningrod",
+			DW: "Lightningrod"
 		},
 		heightm: 0.3,
 		weightkg: 2,
@@ -1365,7 +1365,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["pikachu"],
 		otherFormes: ["pichu"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	pikachu: {
 		num: 25,
@@ -1386,11 +1386,11 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 50,
 			spd: 40,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Static",
-			DW: "Lightningrod",
+			DW: "Lightningrod"
 		},
 		heightm: 0.4,
 		weightkg: 6,
@@ -1399,7 +1399,7 @@ exports.BattlePokedex = {
 		prevo: "pichu",
 		evos: ["raichu"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	raichu: {
 		num: 26,
@@ -1420,11 +1420,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 90,
 			spd: 80,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Static",
-			DW: "Lightningrod",
+			DW: "Lightningrod"
 		},
 		heightm: 0.8,
 		weightkg: 30,
@@ -1433,7 +1433,7 @@ exports.BattlePokedex = {
 		prevo: "pikachu",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sandshrew: {
 		num: 27,
@@ -1454,11 +1454,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 20,
 			spd: 30,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Sand Veil",
-			DW: "Sand Rush",
+			DW: "Sand Rush"
 		},
 		heightm: 0.6,
 		weightkg: 12,
@@ -1467,7 +1467,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["sandslash"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sandslash: {
 		num: 28,
@@ -1488,11 +1488,11 @@ exports.BattlePokedex = {
 			def: 110,
 			spa: 45,
 			spd: 55,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Sand Veil",
-			DW: "Sand Rush",
+			DW: "Sand Rush"
 		},
 		heightm: 1,
 		weightkg: 29.5,
@@ -1501,7 +1501,7 @@ exports.BattlePokedex = {
 		prevo: "sandshrew",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	nidoranf: {
 		num: 29,
@@ -1522,12 +1522,12 @@ exports.BattlePokedex = {
 			def: 52,
 			spa: 40,
 			spd: 40,
-			spe: 41,
+			spe: 41
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
-			DW: "Hustle",
+			DW: "Hustle"
 		},
 		heightm: 0.4,
 		weightkg: 7,
@@ -1536,7 +1536,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["nidorina"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	nidorina: {
 		num: 30,
@@ -1557,12 +1557,12 @@ exports.BattlePokedex = {
 			def: 67,
 			spa: 55,
 			spd: 55,
-			spe: 56,
+			spe: 56
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
-			DW: "Hustle",
+			DW: "Hustle"
 		},
 		heightm: 0.8,
 		weightkg: 20,
@@ -1571,7 +1571,7 @@ exports.BattlePokedex = {
 		prevo: "nidoran",
 		evos: ["nidoqueen"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	nidoqueen: {
 		num: 31,
@@ -1592,12 +1592,12 @@ exports.BattlePokedex = {
 			def: 87,
 			spa: 75,
 			spd: 85,
-			spe: 76,
+			spe: 76
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 1.3,
 		weightkg: 60,
@@ -1606,7 +1606,7 @@ exports.BattlePokedex = {
 		prevo: "nidorina",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	nidoranm: {
 		num: 32,
@@ -1627,12 +1627,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 40,
 			spd: 40,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
-			DW: "Hustle",
+			DW: "Hustle"
 		},
 		heightm: 0.5,
 		weightkg: 9,
@@ -1641,7 +1641,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["nidorino"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	nidorino: {
 		num: 33,
@@ -1662,12 +1662,12 @@ exports.BattlePokedex = {
 			def: 57,
 			spa: 55,
 			spd: 55,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
-			DW: "Hustle",
+			DW: "Hustle"
 		},
 		heightm: 0.9,
 		weightkg: 19.5,
@@ -1676,7 +1676,7 @@ exports.BattlePokedex = {
 		prevo: "nidoran",
 		evos: ["nidoking"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	nidoking: {
 		num: 34,
@@ -1697,12 +1697,12 @@ exports.BattlePokedex = {
 			def: 77,
 			spa: 85,
 			spd: 75,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Rivalry",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 1.4,
 		weightkg: 62,
@@ -1711,7 +1711,7 @@ exports.BattlePokedex = {
 		prevo: "nidorino",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cleffa: {
 		num: 173,
@@ -1732,12 +1732,12 @@ exports.BattlePokedex = {
 			def: 28,
 			spa: 45,
 			spd: 55,
-			spe: 15,
+			spe: 15
 		},
 		abilities: {
 			0: "Cute Charm",
 			1: "Magic Guard",
-			DW: "Friend Guard",
+			DW: "Friend Guard"
 		},
 		heightm: 0.3,
 		weightkg: 3,
@@ -1746,7 +1746,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["clefairy"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	clefairy: {
 		num: 35,
@@ -1767,12 +1767,12 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 60,
 			spd: 65,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Cute Charm",
 			1: "Magic Guard",
-			DW: "Friend Guard",
+			DW: "Friend Guard"
 		},
 		heightm: 0.6,
 		weightkg: 7.5,
@@ -1781,7 +1781,7 @@ exports.BattlePokedex = {
 		prevo: "cleffa",
 		evos: ["clefable"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	clefable: {
 		num: 36,
@@ -1802,12 +1802,12 @@ exports.BattlePokedex = {
 			def: 73,
 			spa: 85,
 			spd: 90,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Cute Charm",
 			1: "Magic Guard",
-			DW: "Unaware",
+			DW: "Unaware"
 		},
 		heightm: 1.3,
 		weightkg: 40,
@@ -1816,7 +1816,7 @@ exports.BattlePokedex = {
 		prevo: "clefairy",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vulpix: {
 		num: 37,
@@ -1837,11 +1837,11 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 50,
 			spd: 65,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Flash Fire",
-			DW: "Drought",
+			DW: "Drought"
 		},
 		heightm: 0.6,
 		weightkg: 9.9,
@@ -1850,7 +1850,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["ninetales"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ninetales: {
 		num: 38,
@@ -1871,11 +1871,11 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 81,
 			spd: 100,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Flash Fire",
-			DW: "Drought",
+			DW: "Drought"
 		},
 		heightm: 1.1,
 		weightkg: 19.9,
@@ -1884,7 +1884,7 @@ exports.BattlePokedex = {
 		prevo: "vulpix",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	igglybuff: {
 		num: 174,
@@ -1905,11 +1905,11 @@ exports.BattlePokedex = {
 			def: 15,
 			spa: 40,
 			spd: 20,
-			spe: 15,
+			spe: 15
 		},
 		abilities: {
 			0: "Cute Charm",
-			DW: "Friend Guard",
+			DW: "Friend Guard"
 		},
 		heightm: 0.3,
 		weightkg: 1,
@@ -1918,7 +1918,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["jigglypuff"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	jigglypuff: {
 		num: 39,
@@ -1939,11 +1939,11 @@ exports.BattlePokedex = {
 			def: 20,
 			spa: 45,
 			spd: 25,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Cute Charm",
-			DW: "Friend Guard",
+			DW: "Friend Guard"
 		},
 		heightm: 0.5,
 		weightkg: 5.5,
@@ -1952,7 +1952,7 @@ exports.BattlePokedex = {
 		prevo: "igglybuff",
 		evos: ["wigglytuff"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	wigglytuff: {
 		num: 40,
@@ -1973,11 +1973,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 75,
 			spd: 50,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Cute Charm",
-			DW: "Frisk",
+			DW: "Frisk"
 		},
 		heightm: 1,
 		weightkg: 12,
@@ -1986,7 +1986,7 @@ exports.BattlePokedex = {
 		prevo: "jigglypuff",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	zubat: {
 		num: 41,
@@ -2007,11 +2007,11 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 30,
 			spd: 40,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Inner Focus",
-			DW: "Infiltrator",
+			DW: "Infiltrator"
 		},
 		heightm: 0.8,
 		weightkg: 7.5,
@@ -2020,7 +2020,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["golbat"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	golbat: {
 		num: 42,
@@ -2041,11 +2041,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 65,
 			spd: 75,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Inner Focus",
-			DW: "Infiltrator",
+			DW: "Infiltrator"
 		},
 		heightm: 1.6,
 		weightkg: 55,
@@ -2054,7 +2054,7 @@ exports.BattlePokedex = {
 		prevo: "zubat",
 		evos: ["crobat"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	crobat: {
 		num: 169,
@@ -2075,11 +2075,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 70,
 			spd: 80,
-			spe: 130,
+			spe: 130
 		},
 		abilities: {
 			0: "Inner Focus",
-			DW: "Infiltrator",
+			DW: "Infiltrator"
 		},
 		heightm: 1.8,
 		weightkg: 75,
@@ -2088,7 +2088,7 @@ exports.BattlePokedex = {
 		prevo: "golbat",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	oddish: {
 		num: 43,
@@ -2109,11 +2109,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 75,
 			spd: 65,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Chlorophyll",
-			DW: "Run Away",
+			DW: "Run Away"
 		},
 		heightm: 0.5,
 		weightkg: 5.4,
@@ -2122,7 +2122,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["gloom"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gloom: {
 		num: 44,
@@ -2143,11 +2143,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 85,
 			spd: 75,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Chlorophyll",
-			DW: "Stench",
+			DW: "Stench"
 		},
 		heightm: 0.8,
 		weightkg: 8.6,
@@ -2156,7 +2156,7 @@ exports.BattlePokedex = {
 		prevo: "oddish",
 		evos: ["vileplume","bellossom"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vileplume: {
 		num: 45,
@@ -2177,11 +2177,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 100,
 			spd: 90,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Chlorophyll",
-			DW: "Effect Spore",
+			DW: "Effect Spore"
 		},
 		heightm: 1.2,
 		weightkg: 18.6,
@@ -2190,7 +2190,7 @@ exports.BattlePokedex = {
 		prevo: "gloom",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bellossom: {
 		num: 182,
@@ -2211,11 +2211,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 90,
 			spd: 100,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Chlorophyll",
-			DW: "Healer",
+			DW: "Healer"
 		},
 		heightm: 0.4,
 		weightkg: 5.8,
@@ -2224,7 +2224,7 @@ exports.BattlePokedex = {
 		prevo: "gloom",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	paras: {
 		num: 46,
@@ -2245,12 +2245,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 45,
 			spd: 55,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
 			0: "Effect Spore",
 			1: "Dry Skin",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 0.3,
 		weightkg: 5.4,
@@ -2259,7 +2259,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["parasect"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	parasect: {
 		num: 47,
@@ -2280,12 +2280,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 60,
 			spd: 80,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Effect Spore",
 			1: "Dry Skin",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 1,
 		weightkg: 29.5,
@@ -2294,7 +2294,7 @@ exports.BattlePokedex = {
 		prevo: "paras",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	venonat: {
 		num: 48,
@@ -2315,12 +2315,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 40,
 			spd: 55,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Compoundeyes",
 			1: "Tinted Lens",
-			DW: "Run Away",
+			DW: "Run Away"
 		},
 		heightm: 1,
 		weightkg: 30,
@@ -2329,7 +2329,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["venomoth"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	venomoth: {
 		num: 49,
@@ -2350,12 +2350,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 90,
 			spd: 75,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Shield Dust",
 			1: "Tinted Lens",
-			DW: "Wonder Skin",
+			DW: "Wonder Skin"
 		},
 		heightm: 1.5,
 		weightkg: 12.5,
@@ -2364,7 +2364,7 @@ exports.BattlePokedex = {
 		prevo: "venonat",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	diglett: {
 		num: 50,
@@ -2385,12 +2385,12 @@ exports.BattlePokedex = {
 			def: 25,
 			spa: 35,
 			spd: 45,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Sand Veil",
 			1: "Arena Trap",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 0.2,
 		weightkg: 0.8,
@@ -2399,7 +2399,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["dugtrio"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dugtrio: {
 		num: 51,
@@ -2420,12 +2420,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 50,
 			spd: 70,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
 			0: "Sand Veil",
 			1: "Arena Trap",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 0.7,
 		weightkg: 33.3,
@@ -2434,7 +2434,7 @@ exports.BattlePokedex = {
 		prevo: "diglett",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	meowth: {
 		num: 52,
@@ -2455,12 +2455,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 40,
 			spd: 40,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Pickup",
 			1: "Technician",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 0.4,
 		weightkg: 4.2,
@@ -2469,7 +2469,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["persian"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	persian: {
 		num: 53,
@@ -2490,12 +2490,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 65,
 			spd: 65,
-			spe: 115,
+			spe: 115
 		},
 		abilities: {
 			0: "Limber",
 			1: "Technician",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 1,
 		weightkg: 32,
@@ -2504,7 +2504,7 @@ exports.BattlePokedex = {
 		prevo: "meowth",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	psyduck: {
 		num: 54,
@@ -2525,12 +2525,12 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 65,
 			spd: 50,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Damp",
 			1: "Cloud Nine",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 0.8,
 		weightkg: 19.6,
@@ -2539,7 +2539,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["golduck"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	golduck: {
 		num: 55,
@@ -2560,12 +2560,12 @@ exports.BattlePokedex = {
 			def: 78,
 			spa: 95,
 			spd: 80,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Damp",
 			1: "Cloud Nine",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 1.7,
 		weightkg: 76.6,
@@ -2574,7 +2574,7 @@ exports.BattlePokedex = {
 		prevo: "psyduck",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mankey: {
 		num: 56,
@@ -2595,12 +2595,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 35,
 			spd: 45,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Vital Spirit",
 			1: "Anger Point",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 0.5,
 		weightkg: 28,
@@ -2609,7 +2609,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["primeape"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	primeape: {
 		num: 57,
@@ -2630,12 +2630,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 60,
 			spd: 70,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Vital Spirit",
 			1: "Anger Point",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 1,
 		weightkg: 32,
@@ -2644,7 +2644,7 @@ exports.BattlePokedex = {
 		prevo: "mankey",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	growlithe: {
 		num: 58,
@@ -2665,12 +2665,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 70,
 			spd: 50,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Flash Fire",
-			DW: "Justified",
+			DW: "Justified"
 		},
 		heightm: 0.7,
 		weightkg: 19,
@@ -2679,7 +2679,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["arcanine"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	arcanine: {
 		num: 59,
@@ -2700,12 +2700,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 100,
 			spd: 80,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Flash Fire",
-			DW: "Justified",
+			DW: "Justified"
 		},
 		heightm: 1.9,
 		weightkg: 155,
@@ -2714,7 +2714,7 @@ exports.BattlePokedex = {
 		prevo: "growlithe",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	poliwag: {
 		num: 60,
@@ -2735,12 +2735,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 40,
 			spd: 40,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Water Absorb",
 			1: "Damp",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 0.6,
 		weightkg: 12.4,
@@ -2749,7 +2749,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["poliwhirl"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	poliwhirl: {
 		num: 61,
@@ -2770,12 +2770,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 50,
 			spd: 50,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Water Absorb",
 			1: "Damp",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 1,
 		weightkg: 20,
@@ -2784,7 +2784,7 @@ exports.BattlePokedex = {
 		prevo: "poliwag",
 		evos: ["poliwrath","politoed"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	poliwrath: {
 		num: 62,
@@ -2805,12 +2805,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 70,
 			spd: 90,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Water Absorb",
 			1: "Damp",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 1.3,
 		weightkg: 54,
@@ -2819,7 +2819,7 @@ exports.BattlePokedex = {
 		prevo: "poliwhirl",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	politoed: {
 		num: 186,
@@ -2840,12 +2840,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 90,
 			spd: 100,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Water Absorb",
 			1: "Damp",
-			DW: "Drizzle",
+			DW: "Drizzle"
 		},
 		heightm: 1.1,
 		weightkg: 33.9,
@@ -2854,7 +2854,7 @@ exports.BattlePokedex = {
 		prevo: "poliwhirl",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	abra: {
 		num: 63,
@@ -2875,12 +2875,12 @@ exports.BattlePokedex = {
 			def: 15,
 			spa: 105,
 			spd: 55,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Synchronize",
 			1: "Inner Focus",
-			DW: "Magic Guard",
+			DW: "Magic Guard"
 		},
 		heightm: 0.9,
 		weightkg: 19.5,
@@ -2889,7 +2889,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["kadabra"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kadabra: {
 		num: 64,
@@ -2910,12 +2910,12 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 120,
 			spd: 70,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
 			0: "Synchronize",
 			1: "Inner Focus",
-			DW: "Magic Guard",
+			DW: "Magic Guard"
 		},
 		heightm: 1.3,
 		weightkg: 56.5,
@@ -2924,7 +2924,7 @@ exports.BattlePokedex = {
 		prevo: "abra",
 		evos: ["alakazam"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	alakazam: {
 		num: 65,
@@ -2945,12 +2945,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 135,
 			spd: 85,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
 			0: "Synchronize",
 			1: "Inner Focus",
-			DW: "Magic Guard",
+			DW: "Magic Guard"
 		},
 		heightm: 1.5,
 		weightkg: 48,
@@ -2959,7 +2959,7 @@ exports.BattlePokedex = {
 		prevo: "kadabra",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	machop: {
 		num: 66,
@@ -2980,12 +2980,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 35,
 			spd: 35,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Guts",
 			1: "No Guard",
-			DW: "Steadfast",
+			DW: "Steadfast"
 		},
 		heightm: 0.8,
 		weightkg: 19.5,
@@ -2994,7 +2994,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["machoke"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	machoke: {
 		num: 67,
@@ -3015,12 +3015,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 50,
 			spd: 60,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Guts",
 			1: "No Guard",
-			DW: "Steadfast",
+			DW: "Steadfast"
 		},
 		heightm: 1.5,
 		weightkg: 70.5,
@@ -3029,7 +3029,7 @@ exports.BattlePokedex = {
 		prevo: "machop",
 		evos: ["machamp"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	machamp: {
 		num: 68,
@@ -3050,12 +3050,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 65,
 			spd: 85,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Guts",
 			1: "No Guard",
-			DW: "Steadfast",
+			DW: "Steadfast"
 		},
 		heightm: 1.6,
 		weightkg: 130,
@@ -3064,7 +3064,7 @@ exports.BattlePokedex = {
 		prevo: "machoke",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bellsprout: {
 		num: 69,
@@ -3085,11 +3085,11 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 70,
 			spd: 30,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Chlorophyll",
-			DW: "Gluttony",
+			DW: "Gluttony"
 		},
 		heightm: 0.7,
 		weightkg: 4,
@@ -3098,7 +3098,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["weepinbell"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	weepinbell: {
 		num: 70,
@@ -3119,11 +3119,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 85,
 			spd: 45,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Chlorophyll",
-			DW: "Gluttony",
+			DW: "Gluttony"
 		},
 		heightm: 1,
 		weightkg: 6.4,
@@ -3132,7 +3132,7 @@ exports.BattlePokedex = {
 		prevo: "bellsprout",
 		evos: ["victreebel"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	victreebel: {
 		num: 71,
@@ -3153,11 +3153,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 100,
 			spd: 60,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Chlorophyll",
-			DW: "Gluttony",
+			DW: "Gluttony"
 		},
 		heightm: 1.7,
 		weightkg: 15.5,
@@ -3166,7 +3166,7 @@ exports.BattlePokedex = {
 		prevo: "weepinbell",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tentacool: {
 		num: 72,
@@ -3187,12 +3187,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 50,
 			spd: 100,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Clear Body",
 			1: "Liquid Ooze",
-			DW: "Rain Dish",
+			DW: "Rain Dish"
 		},
 		heightm: 0.9,
 		weightkg: 45.5,
@@ -3201,7 +3201,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["tentacruel"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tentacruel: {
 		num: 73,
@@ -3222,12 +3222,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 80,
 			spd: 120,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Clear Body",
 			1: "Liquid Ooze",
-			DW: "Rain Dish",
+			DW: "Rain Dish"
 		},
 		heightm: 1.6,
 		weightkg: 55,
@@ -3236,7 +3236,7 @@ exports.BattlePokedex = {
 		prevo: "tentacool",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	geodude: {
 		num: 74,
@@ -3257,12 +3257,12 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 30,
 			spd: 30,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
-			DW: "Sand Veil",
+			DW: "Sand Veil"
 		},
 		heightm: 0.4,
 		weightkg: 20,
@@ -3271,7 +3271,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["graveler"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	graveler: {
 		num: 75,
@@ -3292,12 +3292,12 @@ exports.BattlePokedex = {
 			def: 115,
 			spa: 45,
 			spd: 45,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
-			DW: "Sand Veil",
+			DW: "Sand Veil"
 		},
 		heightm: 1,
 		weightkg: 105,
@@ -3306,7 +3306,7 @@ exports.BattlePokedex = {
 		prevo: "geodude",
 		evos: ["golem"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	golem: {
 		num: 76,
@@ -3327,12 +3327,12 @@ exports.BattlePokedex = {
 			def: 130,
 			spa: 55,
 			spd: 65,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
-			DW: "Sand Veil",
+			DW: "Sand Veil"
 		},
 		heightm: 1.4,
 		weightkg: 300,
@@ -3341,7 +3341,7 @@ exports.BattlePokedex = {
 		prevo: "graveler",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ponyta: {
 		num: 77,
@@ -3362,12 +3362,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 65,
 			spd: 65,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Flash Fire",
-			DW: "Flame Body",
+			DW: "Flame Body"
 		},
 		heightm: 1,
 		weightkg: 30,
@@ -3376,7 +3376,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["rapidash"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rapidash: {
 		num: 78,
@@ -3397,12 +3397,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 80,
 			spd: 80,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Flash Fire",
-			DW: "Flame Body",
+			DW: "Flame Body"
 		},
 		heightm: 1.7,
 		weightkg: 95,
@@ -3411,7 +3411,7 @@ exports.BattlePokedex = {
 		prevo: "ponyta",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	slowpoke: {
 		num: 79,
@@ -3432,12 +3432,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 40,
 			spd: 40,
-			spe: 15,
+			spe: 15
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Own Tempo",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 1.2,
 		weightkg: 36,
@@ -3446,7 +3446,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["slowbro","slowking"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	slowbro: {
 		num: 80,
@@ -3467,12 +3467,12 @@ exports.BattlePokedex = {
 			def: 110,
 			spa: 100,
 			spd: 80,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Own Tempo",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 1.6,
 		weightkg: 78.5,
@@ -3481,7 +3481,7 @@ exports.BattlePokedex = {
 		prevo: "slowpoke",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	slowking: {
 		num: 199,
@@ -3502,12 +3502,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 100,
 			spd: 110,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Own Tempo",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 2,
 		weightkg: 79.5,
@@ -3516,7 +3516,7 @@ exports.BattlePokedex = {
 		prevo: "slowpoke",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	magnemite: {
 		num: 81,
@@ -3537,12 +3537,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 95,
 			spd: 55,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Magnet Pull",
 			1: "Sturdy",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 0.3,
 		weightkg: 6,
@@ -3551,7 +3551,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["magneton"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	magneton: {
 		num: 82,
@@ -3572,12 +3572,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 120,
 			spd: 70,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Magnet Pull",
 			1: "Sturdy",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 1,
 		weightkg: 60,
@@ -3586,7 +3586,7 @@ exports.BattlePokedex = {
 		prevo: "magnemite",
 		evos: ["magnezone"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	magnezone: {
 		num: 462,
@@ -3607,12 +3607,12 @@ exports.BattlePokedex = {
 			def: 115,
 			spa: 130,
 			spd: 90,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Magnet Pull",
 			1: "Sturdy",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 1.2,
 		weightkg: 180,
@@ -3621,7 +3621,7 @@ exports.BattlePokedex = {
 		prevo: "magneton",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	farfetchd: {
 		num: 83,
@@ -3642,12 +3642,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 58,
 			spd: 62,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Inner Focus",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 0.8,
 		weightkg: 15,
@@ -3656,7 +3656,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	doduo: {
 		num: 84,
@@ -3677,12 +3677,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 35,
 			spd: 35,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Early Bird",
-			DW: "Tangled Feet",
+			DW: "Tangled Feet"
 		},
 		heightm: 1.4,
 		weightkg: 39.2,
@@ -3691,7 +3691,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["dodrio"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dodrio: {
 		num: 85,
@@ -3712,12 +3712,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 60,
 			spd: 60,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Early Bird",
-			DW: "Tangled Feet",
+			DW: "Tangled Feet"
 		},
 		heightm: 1.8,
 		weightkg: 85.2,
@@ -3726,7 +3726,7 @@ exports.BattlePokedex = {
 		prevo: "doduo",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	seel: {
 		num: 86,
@@ -3747,12 +3747,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 45,
 			spd: 70,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Hydration",
-			DW: "Ice Body",
+			DW: "Ice Body"
 		},
 		heightm: 1.1,
 		weightkg: 90,
@@ -3761,7 +3761,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["dewgong"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dewgong: {
 		num: 87,
@@ -3782,12 +3782,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 70,
 			spd: 95,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Hydration",
-			DW: "Ice Body",
+			DW: "Ice Body"
 		},
 		heightm: 1.7,
 		weightkg: 120,
@@ -3796,7 +3796,7 @@ exports.BattlePokedex = {
 		prevo: "seel",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	grimer: {
 		num: 88,
@@ -3817,12 +3817,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 40,
 			spd: 50,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
 			0: "Stench",
 			1: "Sticky Hold",
-			DW: "Poison Touch",
+			DW: "Poison Touch"
 		},
 		heightm: 0.9,
 		weightkg: 30,
@@ -3831,7 +3831,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["muk"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	muk: {
 		num: 89,
@@ -3852,12 +3852,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 65,
 			spd: 100,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Stench",
 			1: "Sticky Hold",
-			DW: "Poison Touch",
+			DW: "Poison Touch"
 		},
 		heightm: 1.2,
 		weightkg: 30,
@@ -3866,7 +3866,7 @@ exports.BattlePokedex = {
 		prevo: "grimer",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shellder: {
 		num: 90,
@@ -3887,12 +3887,12 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 45,
 			spd: 25,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Shell Armor",
 			1: "Skill Link",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.3,
 		weightkg: 4,
@@ -3901,7 +3901,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["cloyster"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cloyster: {
 		num: 91,
@@ -3922,12 +3922,12 @@ exports.BattlePokedex = {
 			def: 180,
 			spa: 85,
 			spd: 45,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Shell Armor",
 			1: "Skill Link",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 1.5,
 		weightkg: 132.5,
@@ -3936,7 +3936,7 @@ exports.BattlePokedex = {
 		prevo: "shellder",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gastly: {
 		num: 92,
@@ -3957,10 +3957,10 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 100,
 			spd: 35,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.3,
 		weightkg: 0.1,
@@ -3969,7 +3969,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["haunter"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	haunter: {
 		num: 93,
@@ -3990,10 +3990,10 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 115,
 			spd: 55,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.6,
 		weightkg: 0.1,
@@ -4002,7 +4002,7 @@ exports.BattlePokedex = {
 		prevo: "gastly",
 		evos: ["gengar"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gengar: {
 		num: 94,
@@ -4023,10 +4023,10 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 130,
 			spd: 75,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.5,
 		weightkg: 40.5,
@@ -4035,7 +4035,7 @@ exports.BattlePokedex = {
 		prevo: "haunter",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	onix: {
 		num: 95,
@@ -4056,12 +4056,12 @@ exports.BattlePokedex = {
 			def: 160,
 			spa: 30,
 			spd: 45,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 8.8,
 		weightkg: 210,
@@ -4070,7 +4070,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["steelix"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	steelix: {
 		num: 208,
@@ -4091,12 +4091,12 @@ exports.BattlePokedex = {
 			def: 200,
 			spa: 55,
 			spd: 65,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Rock Head",
 			1: "Sturdy",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 9.2,
 		weightkg: 400,
@@ -4105,7 +4105,7 @@ exports.BattlePokedex = {
 		prevo: "onix",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	drowzee: {
 		num: 96,
@@ -4126,12 +4126,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 43,
 			spd: 90,
-			spe: 42,
+			spe: 42
 		},
 		abilities: {
 			0: "Insomnia",
 			1: "Forewarn",
-			DW: "Inner Focus",
+			DW: "Inner Focus"
 		},
 		heightm: 1,
 		weightkg: 32.4,
@@ -4140,7 +4140,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["hypno"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hypno: {
 		num: 97,
@@ -4161,12 +4161,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 73,
 			spd: 115,
-			spe: 67,
+			spe: 67
 		},
 		abilities: {
 			0: "Insomnia",
 			1: "Forewarn",
-			DW: "Inner Focus",
+			DW: "Inner Focus"
 		},
 		heightm: 1.6,
 		weightkg: 75.6,
@@ -4175,7 +4175,7 @@ exports.BattlePokedex = {
 		prevo: "drowzee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	krabby: {
 		num: 98,
@@ -4196,12 +4196,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 25,
 			spd: 25,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Hyper Cutter",
 			1: "Shell Armor",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 0.4,
 		weightkg: 6.5,
@@ -4210,7 +4210,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["kingler"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kingler: {
 		num: 99,
@@ -4231,12 +4231,12 @@ exports.BattlePokedex = {
 			def: 115,
 			spa: 50,
 			spd: 50,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Hyper Cutter",
 			1: "Shell Armor",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 1.3,
 		weightkg: 60,
@@ -4245,7 +4245,7 @@ exports.BattlePokedex = {
 		prevo: "krabby",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	voltorb: {
 		num: 100,
@@ -4266,12 +4266,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 55,
 			spd: 55,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Soundproof",
 			1: "Static",
-			DW: "Aftermath",
+			DW: "Aftermath"
 		},
 		heightm: 0.5,
 		weightkg: 10.4,
@@ -4280,7 +4280,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["electrode"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	electrode: {
 		num: 101,
@@ -4301,12 +4301,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 80,
 			spd: 80,
-			spe: 140,
+			spe: 140
 		},
 		abilities: {
 			0: "Soundproof",
 			1: "Static",
-			DW: "Aftermath",
+			DW: "Aftermath"
 		},
 		heightm: 1.2,
 		weightkg: 66.6,
@@ -4315,7 +4315,7 @@ exports.BattlePokedex = {
 		prevo: "voltorb",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	exeggcute: {
 		num: 102,
@@ -4336,11 +4336,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 60,
 			spd: 45,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Chlorophyll",
-			DW: "Harvest",
+			DW: "Harvest"
 		},
 		heightm: 0.4,
 		weightkg: 2.5,
@@ -4349,7 +4349,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["exeggutor"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	exeggutor: {
 		num: 103,
@@ -4370,11 +4370,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 125,
 			spd: 65,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Chlorophyll",
-			DW: "Harvest",
+			DW: "Harvest"
 		},
 		heightm: 2,
 		weightkg: 120,
@@ -4383,7 +4383,7 @@ exports.BattlePokedex = {
 		prevo: "exeggcute",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cubone: {
 		num: 104,
@@ -4404,12 +4404,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 40,
 			spd: 50,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Rock Head",
 			1: "Lightningrod",
-			DW: "Battle Armor",
+			DW: "Battle Armor"
 		},
 		heightm: 0.4,
 		weightkg: 6.5,
@@ -4418,7 +4418,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["marowak"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	marowak: {
 		num: 105,
@@ -4439,12 +4439,12 @@ exports.BattlePokedex = {
 			def: 110,
 			spa: 50,
 			spd: 80,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Rock Head",
 			1: "Lightningrod",
-			DW: "Battle Armor",
+			DW: "Battle Armor"
 		},
 		heightm: 1,
 		weightkg: 45,
@@ -4453,7 +4453,7 @@ exports.BattlePokedex = {
 		prevo: "cubone",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tyrogue: {
 		num: 236,
@@ -4474,12 +4474,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 35,
 			spd: 35,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Guts",
 			1: "Steadfast",
-			DW: "Vital Spirit",
+			DW: "Vital Spirit"
 		},
 		heightm: 0.7,
 		weightkg: 21,
@@ -4488,7 +4488,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["hitmonlee","hitmonchan","hitmontop"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hitmonlee: {
 		num: 106,
@@ -4509,12 +4509,12 @@ exports.BattlePokedex = {
 			def: 53,
 			spa: 35,
 			spd: 110,
-			spe: 87,
+			spe: 87
 		},
 		abilities: {
 			0: "Limber",
 			1: "Reckless",
-			DW: "Unburden",
+			DW: "Unburden"
 		},
 		heightm: 1.5,
 		weightkg: 49.8,
@@ -4523,7 +4523,7 @@ exports.BattlePokedex = {
 		prevo: "tyrogue",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hitmonchan: {
 		num: 107,
@@ -4544,12 +4544,12 @@ exports.BattlePokedex = {
 			def: 79,
 			spa: 35,
 			spd: 110,
-			spe: 76,
+			spe: 76
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Iron Fist",
-			DW: "Inner Focus",
+			DW: "Inner Focus"
 		},
 		heightm: 1.4,
 		weightkg: 50.2,
@@ -4558,7 +4558,7 @@ exports.BattlePokedex = {
 		prevo: "tyrogue",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hitmontop: {
 		num: 237,
@@ -4579,12 +4579,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 35,
 			spd: 110,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Technician",
-			DW: "Steadfast",
+			DW: "Steadfast"
 		},
 		heightm: 1.4,
 		weightkg: 48,
@@ -4593,7 +4593,7 @@ exports.BattlePokedex = {
 		prevo: "tyrogue",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lickitung: {
 		num: 108,
@@ -4614,12 +4614,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 60,
 			spd: 75,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Own Tempo",
 			1: "Oblivious",
-			DW: "Cloud Nine",
+			DW: "Cloud Nine"
 		},
 		heightm: 1.2,
 		weightkg: 65.5,
@@ -4628,7 +4628,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["lickilicky"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lickilicky: {
 		num: 463,
@@ -4649,12 +4649,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 80,
 			spd: 95,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Own Tempo",
 			1: "Oblivious",
-			DW: "Cloud Nine",
+			DW: "Cloud Nine"
 		},
 		heightm: 1.7,
 		weightkg: 140,
@@ -4663,7 +4663,7 @@ exports.BattlePokedex = {
 		prevo: "lickitung",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	koffing: {
 		num: 109,
@@ -4684,10 +4684,10 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 60,
 			spd: 45,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.6,
 		weightkg: 1,
@@ -4696,7 +4696,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["weezing"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	weezing: {
 		num: 110,
@@ -4717,10 +4717,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 85,
 			spd: 70,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.2,
 		weightkg: 9.5,
@@ -4729,7 +4729,7 @@ exports.BattlePokedex = {
 		prevo: "koffing",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rhyhorn: {
 		num: 111,
@@ -4750,12 +4750,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 30,
 			spd: 30,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
 			0: "Lightningrod",
 			1: "Rock Head",
-			DW: "Reckless",
+			DW: "Reckless"
 		},
 		heightm: 1,
 		weightkg: 115,
@@ -4764,7 +4764,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["rhydon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rhydon: {
 		num: 112,
@@ -4785,12 +4785,12 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 45,
 			spd: 45,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Lightningrod",
 			1: "Rock Head",
-			DW: "Reckless",
+			DW: "Reckless"
 		},
 		heightm: 1.9,
 		weightkg: 120,
@@ -4799,7 +4799,7 @@ exports.BattlePokedex = {
 		prevo: "rhyhorn",
 		evos: ["rhyperior"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rhyperior: {
 		num: 464,
@@ -4820,12 +4820,12 @@ exports.BattlePokedex = {
 			def: 130,
 			spa: 55,
 			spd: 55,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Lightningrod",
 			1: "Solid Rock",
-			DW: "Reckless",
+			DW: "Reckless"
 		},
 		heightm: 2.4,
 		weightkg: 282.8,
@@ -4834,7 +4834,7 @@ exports.BattlePokedex = {
 		prevo: "rhydon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	happiny: {
 		num: 440,
@@ -4855,12 +4855,12 @@ exports.BattlePokedex = {
 			def: 5,
 			spa: 15,
 			spd: 65,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Natural Cure",
 			1: "Serene Grace",
-			DW: "Friend Guard",
+			DW: "Friend Guard"
 		},
 		heightm: 0.6,
 		weightkg: 24.4,
@@ -4869,7 +4869,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["chansey"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	chansey: {
 		num: 113,
@@ -4890,12 +4890,12 @@ exports.BattlePokedex = {
 			def: 5,
 			spa: 35,
 			spd: 105,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Natural Cure",
 			1: "Serene Grace",
-			DW: "Healer",
+			DW: "Healer"
 		},
 		heightm: 1.1,
 		weightkg: 34.6,
@@ -4904,7 +4904,7 @@ exports.BattlePokedex = {
 		prevo: "happiny",
 		evos: ["blissey"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	blissey: {
 		num: 242,
@@ -4925,12 +4925,12 @@ exports.BattlePokedex = {
 			def: 10,
 			spa: 75,
 			spd: 135,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Natural Cure",
 			1: "Serene Grace",
-			DW: "Healer",
+			DW: "Healer"
 		},
 		heightm: 1.5,
 		weightkg: 46.8,
@@ -4939,7 +4939,7 @@ exports.BattlePokedex = {
 		prevo: "chansey",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tangela: {
 		num: 114,
@@ -4960,12 +4960,12 @@ exports.BattlePokedex = {
 			def: 115,
 			spa: 100,
 			spd: 40,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 1,
 		weightkg: 35,
@@ -4974,7 +4974,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["tangrowth"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tangrowth: {
 		num: 465,
@@ -4995,12 +4995,12 @@ exports.BattlePokedex = {
 			def: 125,
 			spa: 110,
 			spd: 50,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 2,
 		weightkg: 128.6,
@@ -5009,7 +5009,7 @@ exports.BattlePokedex = {
 		prevo: "tangela",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kangaskhan: {
 		num: 115,
@@ -5030,12 +5030,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 40,
 			spd: 80,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Early Bird",
 			1: "Scrappy",
-			DW: "Inner Focus",
+			DW: "Inner Focus"
 		},
 		heightm: 2.2,
 		weightkg: 80,
@@ -5044,7 +5044,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	horsea: {
 		num: 116,
@@ -5065,12 +5065,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 70,
 			spd: 25,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Sniper",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 0.4,
 		weightkg: 8,
@@ -5079,7 +5079,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["seadra"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	seadra: {
 		num: 117,
@@ -5100,12 +5100,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 95,
 			spd: 45,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Sniper",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 1.2,
 		weightkg: 25,
@@ -5114,7 +5114,7 @@ exports.BattlePokedex = {
 		prevo: "horsea",
 		evos: ["kingdra"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kingdra: {
 		num: 230,
@@ -5135,12 +5135,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 95,
 			spd: 95,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Sniper",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 1.8,
 		weightkg: 152,
@@ -5149,7 +5149,7 @@ exports.BattlePokedex = {
 		prevo: "seadra",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	goldeen: {
 		num: 118,
@@ -5170,12 +5170,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 35,
 			spd: 50,
-			spe: 63,
+			spe: 63
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Water Veil",
-			DW: "Lightningrod",
+			DW: "Lightningrod"
 		},
 		heightm: 0.6,
 		weightkg: 15,
@@ -5184,7 +5184,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["seaking"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	seaking: {
 		num: 119,
@@ -5205,12 +5205,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 65,
 			spd: 80,
-			spe: 68,
+			spe: 68
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Water Veil",
-			DW: "Lightningrod",
+			DW: "Lightningrod"
 		},
 		heightm: 1.3,
 		weightkg: 39,
@@ -5219,7 +5219,7 @@ exports.BattlePokedex = {
 		prevo: "goldeen",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	staryu: {
 		num: 120,
@@ -5240,12 +5240,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 70,
 			spd: 55,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Illuminate",
 			1: "Natural Cure",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 0.8,
 		weightkg: 34.5,
@@ -5254,7 +5254,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["starmie"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	starmie: {
 		num: 121,
@@ -5275,12 +5275,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 100,
 			spd: 85,
-			spe: 115,
+			spe: 115
 		},
 		abilities: {
 			0: "Illuminate",
 			1: "Natural Cure",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 1.1,
 		weightkg: 80,
@@ -5289,7 +5289,7 @@ exports.BattlePokedex = {
 		prevo: "staryu",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mimejr: {
 		num: 439,
@@ -5310,12 +5310,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 70,
 			spd: 90,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Soundproof",
 			1: "Filter",
-			DW: "Technician",
+			DW: "Technician"
 		},
 		heightm: 0.6,
 		weightkg: 13,
@@ -5324,7 +5324,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["mrmime"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mrmime: {
 		num: 122,
@@ -5345,12 +5345,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 100,
 			spd: 120,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Soundproof",
 			1: "Filter",
-			DW: "Technician",
+			DW: "Technician"
 		},
 		heightm: 1.3,
 		weightkg: 54.5,
@@ -5359,7 +5359,7 @@ exports.BattlePokedex = {
 		prevo: "mimejr",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	scyther: {
 		num: 123,
@@ -5380,12 +5380,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 55,
 			spd: 80,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Technician",
-			DW: "Steadfast",
+			DW: "Steadfast"
 		},
 		heightm: 1.5,
 		weightkg: 56,
@@ -5394,7 +5394,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["scizor"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	scizor: {
 		num: 212,
@@ -5415,12 +5415,12 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 55,
 			spd: 80,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Technician",
-			DW: "Light Metal",
+			DW: "Light Metal"
 		},
 		heightm: 1.8,
 		weightkg: 118,
@@ -5429,7 +5429,7 @@ exports.BattlePokedex = {
 		prevo: "scyther",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	smoochum: {
 		num: 238,
@@ -5450,12 +5450,12 @@ exports.BattlePokedex = {
 			def: 15,
 			spa: 85,
 			spd: 65,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Forewarn",
-			DW: "Hydration",
+			DW: "Hydration"
 		},
 		heightm: 0.4,
 		weightkg: 6,
@@ -5464,7 +5464,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["jynx"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	jynx: {
 		num: 124,
@@ -5485,12 +5485,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 115,
 			spd: 95,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Forewarn",
-			DW: "Dry Skin",
+			DW: "Dry Skin"
 		},
 		heightm: 1.4,
 		weightkg: 40.6,
@@ -5499,7 +5499,7 @@ exports.BattlePokedex = {
 		prevo: "smoochum",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	elekid: {
 		num: 239,
@@ -5520,11 +5520,11 @@ exports.BattlePokedex = {
 			def: 37,
 			spa: 65,
 			spd: 55,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Static",
-			DW: "Vital Spirit",
+			DW: "Vital Spirit"
 		},
 		heightm: 0.6,
 		weightkg: 23.5,
@@ -5533,7 +5533,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["electabuzz"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	electabuzz: {
 		num: 125,
@@ -5554,11 +5554,11 @@ exports.BattlePokedex = {
 			def: 57,
 			spa: 95,
 			spd: 85,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
 			0: "Static",
-			DW: "Vital Spirit",
+			DW: "Vital Spirit"
 		},
 		heightm: 1.1,
 		weightkg: 30,
@@ -5567,7 +5567,7 @@ exports.BattlePokedex = {
 		prevo: "elekid",
 		evos: ["electivire"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	electivire: {
 		num: 466,
@@ -5588,11 +5588,11 @@ exports.BattlePokedex = {
 			def: 67,
 			spa: 95,
 			spd: 85,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Motor Drive",
-			DW: "Vital Spirit",
+			DW: "Vital Spirit"
 		},
 		heightm: 1.8,
 		weightkg: 138.6,
@@ -5601,7 +5601,7 @@ exports.BattlePokedex = {
 		prevo: "electabuzz",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	magby: {
 		num: 240,
@@ -5622,11 +5622,11 @@ exports.BattlePokedex = {
 			def: 37,
 			spa: 70,
 			spd: 55,
-			spe: 83,
+			spe: 83
 		},
 		abilities: {
 			0: "Flame Body",
-			DW: "Vital Spirit",
+			DW: "Vital Spirit"
 		},
 		heightm: 0.7,
 		weightkg: 21.4,
@@ -5635,7 +5635,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["magmar"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	magmar: {
 		num: 126,
@@ -5656,11 +5656,11 @@ exports.BattlePokedex = {
 			def: 57,
 			spa: 100,
 			spd: 85,
-			spe: 93,
+			spe: 93
 		},
 		abilities: {
 			0: "Flame Body",
-			DW: "Vital Spirit",
+			DW: "Vital Spirit"
 		},
 		heightm: 1.3,
 		weightkg: 44.5,
@@ -5669,7 +5669,7 @@ exports.BattlePokedex = {
 		prevo: "magby",
 		evos: ["magmortar"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	magmortar: {
 		num: 467,
@@ -5690,11 +5690,11 @@ exports.BattlePokedex = {
 			def: 67,
 			spa: 125,
 			spd: 95,
-			spe: 83,
+			spe: 83
 		},
 		abilities: {
 			0: "Flame Body",
-			DW: "Vital Spirit",
+			DW: "Vital Spirit"
 		},
 		heightm: 1.6,
 		weightkg: 68,
@@ -5703,7 +5703,7 @@ exports.BattlePokedex = {
 		prevo: "magmar",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pinsir: {
 		num: 127,
@@ -5724,12 +5724,12 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 55,
 			spd: 70,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Hyper Cutter",
 			1: "Mold Breaker",
-			DW: "Moxie",
+			DW: "Moxie"
 		},
 		heightm: 1.5,
 		weightkg: 55,
@@ -5738,7 +5738,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tauros: {
 		num: 128,
@@ -5759,12 +5759,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 40,
 			spd: 70,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Anger Point",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 1.4,
 		weightkg: 88.4,
@@ -5773,7 +5773,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	magikarp: {
 		num: 129,
@@ -5794,11 +5794,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 15,
 			spd: 20,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Swift Swim",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 0.9,
 		weightkg: 10,
@@ -5807,7 +5807,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["gyarados"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gyarados: {
 		num: 130,
@@ -5828,11 +5828,11 @@ exports.BattlePokedex = {
 			def: 79,
 			spa: 60,
 			spd: 100,
-			spe: 81,
+			spe: 81
 		},
 		abilities: {
 			0: "Intimidate",
-			DW: "Moxie",
+			DW: "Moxie"
 		},
 		heightm: 6.5,
 		weightkg: 235,
@@ -5841,7 +5841,7 @@ exports.BattlePokedex = {
 		prevo: "magikarp",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lapras: {
 		num: 131,
@@ -5862,12 +5862,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 85,
 			spd: 95,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Water Absorb",
 			1: "Shell Armor",
-			DW: "Hydration",
+			DW: "Hydration"
 		},
 		heightm: 2.5,
 		weightkg: 220,
@@ -5876,7 +5876,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ditto: {
 		num: 132,
@@ -5897,11 +5897,11 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 48,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
 			0: "Limber",
-			DW: "Imposter",
+			DW: "Imposter"
 		},
 		heightm: 0.3,
 		weightkg: 4,
@@ -5910,7 +5910,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	eevee: {
 		num: 133,
@@ -5931,12 +5931,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 45,
 			spd: 65,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Adaptability",
-			DW: "Anticipation",
+			DW: "Anticipation"
 		},
 		heightm: 0.3,
 		weightkg: 6.5,
@@ -5945,7 +5945,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["vaporeon","jolteon","flareon","espeon","umbreon","leafeon","glaceon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vaporeon: {
 		num: 134,
@@ -5966,11 +5966,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 110,
 			spd: 95,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Water Absorb",
-			DW: "Hydration",
+			DW: "Hydration"
 		},
 		heightm: 1,
 		weightkg: 29,
@@ -5979,7 +5979,7 @@ exports.BattlePokedex = {
 		prevo: "eevee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	jolteon: {
 		num: 135,
@@ -6000,11 +6000,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 110,
 			spd: 95,
-			spe: 130,
+			spe: 130
 		},
 		abilities: {
 			0: "Volt Absorb",
-			DW: "Quick Feet",
+			DW: "Quick Feet"
 		},
 		heightm: 0.8,
 		weightkg: 24.5,
@@ -6013,7 +6013,7 @@ exports.BattlePokedex = {
 		prevo: "eevee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	flareon: {
 		num: 136,
@@ -6034,11 +6034,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 95,
 			spd: 110,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Flash Fire",
-			DW: "Guts",
+			DW: "Guts"
 		},
 		heightm: 0.9,
 		weightkg: 25,
@@ -6047,7 +6047,7 @@ exports.BattlePokedex = {
 		prevo: "eevee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	espeon: {
 		num: 196,
@@ -6068,11 +6068,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 130,
 			spd: 95,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
 			0: "Synchronize",
-			DW: "Magic Bounce",
+			DW: "Magic Bounce"
 		},
 		heightm: 0.9,
 		weightkg: 26.5,
@@ -6081,7 +6081,7 @@ exports.BattlePokedex = {
 		prevo: "eevee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	umbreon: {
 		num: 197,
@@ -6102,11 +6102,11 @@ exports.BattlePokedex = {
 			def: 110,
 			spa: 60,
 			spd: 130,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Synchronize",
-			DW: "Inner Focus",
+			DW: "Inner Focus"
 		},
 		heightm: 1,
 		weightkg: 27,
@@ -6115,7 +6115,7 @@ exports.BattlePokedex = {
 		prevo: "eevee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	leafeon: {
 		num: 470,
@@ -6136,11 +6136,11 @@ exports.BattlePokedex = {
 			def: 130,
 			spa: 60,
 			spd: 65,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Leaf Guard",
-			DW: "Chlorophyll",
+			DW: "Chlorophyll"
 		},
 		heightm: 1,
 		weightkg: 25.5,
@@ -6149,7 +6149,7 @@ exports.BattlePokedex = {
 		prevo: "eevee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	glaceon: {
 		num: 471,
@@ -6170,11 +6170,11 @@ exports.BattlePokedex = {
 			def: 110,
 			spa: 130,
 			spd: 95,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Snow Cloak",
-			DW: "Ice Body",
+			DW: "Ice Body"
 		},
 		heightm: 0.8,
 		weightkg: 25.9,
@@ -6183,7 +6183,7 @@ exports.BattlePokedex = {
 		prevo: "eevee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	porygon: {
 		num: 137,
@@ -6204,12 +6204,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 85,
 			spd: 75,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Trace",
 			1: "Download",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 0.8,
 		weightkg: 36.5,
@@ -6218,7 +6218,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["porygon2"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	porygon2: {
 		num: 233,
@@ -6239,12 +6239,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 105,
 			spd: 95,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Trace",
 			1: "Download",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 0.6,
 		weightkg: 32.5,
@@ -6253,7 +6253,7 @@ exports.BattlePokedex = {
 		prevo: "porygon",
 		evos: ["porygonz"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	porygonz: {
 		num: 474,
@@ -6274,12 +6274,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 135,
 			spd: 75,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Adaptability",
 			1: "Download",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 0.9,
 		weightkg: 34,
@@ -6288,7 +6288,7 @@ exports.BattlePokedex = {
 		prevo: "porygon2",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	omanyte: {
 		num: 138,
@@ -6309,12 +6309,12 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 90,
 			spd: 55,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Shell Armor",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 0.4,
 		weightkg: 7.5,
@@ -6323,7 +6323,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["omastar"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	omastar: {
 		num: 139,
@@ -6344,12 +6344,12 @@ exports.BattlePokedex = {
 			def: 125,
 			spa: 115,
 			spd: 70,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Shell Armor",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 1,
 		weightkg: 35,
@@ -6358,7 +6358,7 @@ exports.BattlePokedex = {
 		prevo: "omanyte",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kabuto: {
 		num: 140,
@@ -6379,12 +6379,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 55,
 			spd: 45,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Battle Armor",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 0.5,
 		weightkg: 11.5,
@@ -6393,7 +6393,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["kabutops"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kabutops: {
 		num: 141,
@@ -6414,12 +6414,12 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 65,
 			spd: 70,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Battle Armor",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 1.3,
 		weightkg: 40.5,
@@ -6428,7 +6428,7 @@ exports.BattlePokedex = {
 		prevo: "kabuto",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	aerodactyl: {
 		num: 142,
@@ -6449,12 +6449,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 60,
 			spd: 75,
-			spe: 130,
+			spe: 130
 		},
 		abilities: {
 			0: "Rock Head",
 			1: "Pressure",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 1.8,
 		weightkg: 59,
@@ -6463,7 +6463,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	munchlax: {
 		num: 446,
@@ -6484,12 +6484,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 40,
 			spd: 85,
-			spe: 5,
+			spe: 5
 		},
 		abilities: {
 			0: "Pickup",
 			1: "Thick Fat",
-			DW: "Gluttony",
+			DW: "Gluttony"
 		},
 		heightm: 0.6,
 		weightkg: 105,
@@ -6498,7 +6498,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["snorlax"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	snorlax: {
 		num: 143,
@@ -6519,12 +6519,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 65,
 			spd: 110,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Immunity",
 			1: "Thick Fat",
-			DW: "Gluttony",
+			DW: "Gluttony"
 		},
 		heightm: 2.1,
 		weightkg: 460,
@@ -6533,7 +6533,7 @@ exports.BattlePokedex = {
 		prevo: "munchlax",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	articuno: {
 		num: 144,
@@ -6554,11 +6554,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 95,
 			spd: 125,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Snow Cloak",
+			DW: "Snow Cloak"
 		},
 		heightm: 1.7,
 		weightkg: 55.4,
@@ -6567,7 +6567,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	zapdos: {
 		num: 145,
@@ -6588,11 +6588,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 125,
 			spd: 90,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Lightningrod",
+			DW: "Lightningrod"
 		},
 		heightm: 1.6,
 		weightkg: 52.6,
@@ -6601,7 +6601,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	moltres: {
 		num: 146,
@@ -6622,11 +6622,11 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 125,
 			spd: 85,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Flame Body",
+			DW: "Flame Body"
 		},
 		heightm: 2,
 		weightkg: 60,
@@ -6635,7 +6635,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dratini: {
 		num: 147,
@@ -6656,11 +6656,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 50,
 			spd: 50,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Marvel Scale",
+			DW: "Marvel Scale"
 		},
 		heightm: 1.8,
 		weightkg: 3.3,
@@ -6669,7 +6669,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["dragonair"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dragonair: {
 		num: 148,
@@ -6690,11 +6690,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 70,
 			spd: 70,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Marvel Scale",
+			DW: "Marvel Scale"
 		},
 		heightm: 4,
 		weightkg: 16.5,
@@ -6703,7 +6703,7 @@ exports.BattlePokedex = {
 		prevo: "dratini",
 		evos: ["dragonite"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dragonite: {
 		num: 149,
@@ -6724,11 +6724,11 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 100,
 			spd: 100,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Inner Focus",
-			DW: "Multiscale",
+			DW: "Multiscale"
 		},
 		heightm: 2.2,
 		weightkg: 210,
@@ -6737,7 +6737,7 @@ exports.BattlePokedex = {
 		prevo: "dragonair",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mewtwo: {
 		num: 150,
@@ -6758,11 +6758,11 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 154,
 			spd: 90,
-			spe: 130,
+			spe: 130
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 2,
 		weightkg: 122,
@@ -6771,7 +6771,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mew: {
 		num: 151,
@@ -6792,10 +6792,10 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 100,
 			spd: 100,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
-			0: "Synchronize",
+			0: "Synchronize"
 		},
 		heightm: 0.4,
 		weightkg: 4,
@@ -6804,7 +6804,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	chikorita: {
 		num: 152,
@@ -6825,11 +6825,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 49,
 			spd: 65,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Leaf Guard",
+			DW: "Leaf Guard"
 		},
 		heightm: 0.9,
 		weightkg: 6.4,
@@ -6838,7 +6838,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["bayleef"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bayleef: {
 		num: 153,
@@ -6859,11 +6859,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 63,
 			spd: 80,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Leaf Guard",
+			DW: "Leaf Guard"
 		},
 		heightm: 1.2,
 		weightkg: 15.8,
@@ -6872,7 +6872,7 @@ exports.BattlePokedex = {
 		prevo: "chikorita",
 		evos: ["meganium"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	meganium: {
 		num: 154,
@@ -6893,11 +6893,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 83,
 			spd: 100,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Leaf Guard",
+			DW: "Leaf Guard"
 		},
 		heightm: 1.8,
 		weightkg: 100.5,
@@ -6906,7 +6906,7 @@ exports.BattlePokedex = {
 		prevo: "bayleef",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cyndaquil: {
 		num: 155,
@@ -6927,11 +6927,11 @@ exports.BattlePokedex = {
 			def: 43,
 			spa: 60,
 			spd: 50,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Flash Fire",
+			DW: "Flash Fire"
 		},
 		heightm: 0.5,
 		weightkg: 7.9,
@@ -6940,7 +6940,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["quilava"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	quilava: {
 		num: 156,
@@ -6961,11 +6961,11 @@ exports.BattlePokedex = {
 			def: 58,
 			spa: 80,
 			spd: 65,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Flash Fire",
+			DW: "Flash Fire"
 		},
 		heightm: 0.9,
 		weightkg: 19,
@@ -6974,7 +6974,7 @@ exports.BattlePokedex = {
 		prevo: "cyndaquil",
 		evos: ["typhlosion"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	typhlosion: {
 		num: 157,
@@ -6995,11 +6995,11 @@ exports.BattlePokedex = {
 			def: 78,
 			spa: 109,
 			spd: 85,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Flash Fire",
+			DW: "Flash Fire"
 		},
 		heightm: 1.7,
 		weightkg: 79.5,
@@ -7008,7 +7008,7 @@ exports.BattlePokedex = {
 		prevo: "quilava",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	totodile: {
 		num: 158,
@@ -7029,11 +7029,11 @@ exports.BattlePokedex = {
 			def: 64,
 			spa: 44,
 			spd: 48,
-			spe: 43,
+			spe: 43
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 0.6,
 		weightkg: 9.5,
@@ -7042,7 +7042,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["croconaw"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	croconaw: {
 		num: 159,
@@ -7063,11 +7063,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 59,
 			spd: 63,
-			spe: 58,
+			spe: 58
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 1.1,
 		weightkg: 25,
@@ -7076,7 +7076,7 @@ exports.BattlePokedex = {
 		prevo: "totodile",
 		evos: ["feraligatr"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	feraligatr: {
 		num: 160,
@@ -7097,11 +7097,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 79,
 			spd: 83,
-			spe: 78,
+			spe: 78
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 2.3,
 		weightkg: 88.8,
@@ -7110,7 +7110,7 @@ exports.BattlePokedex = {
 		prevo: "croconaw",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sentret: {
 		num: 161,
@@ -7131,12 +7131,12 @@ exports.BattlePokedex = {
 			def: 34,
 			spa: 35,
 			spd: 45,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Keen Eye",
-			DW: "Frisk",
+			DW: "Frisk"
 		},
 		heightm: 0.8,
 		weightkg: 6,
@@ -7145,7 +7145,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["furret"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	furret: {
 		num: 162,
@@ -7166,12 +7166,12 @@ exports.BattlePokedex = {
 			def: 64,
 			spa: 45,
 			spd: 55,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Keen Eye",
-			DW: "Frisk",
+			DW: "Frisk"
 		},
 		heightm: 1.8,
 		weightkg: 32.5,
@@ -7180,7 +7180,7 @@ exports.BattlePokedex = {
 		prevo: "sentret",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hoothoot: {
 		num: 163,
@@ -7201,12 +7201,12 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 36,
 			spd: 56,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Insomnia",
 			1: "Keen Eye",
-			DW: "Tinted Lens",
+			DW: "Tinted Lens"
 		},
 		heightm: 0.7,
 		weightkg: 21.2,
@@ -7215,7 +7215,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["noctowl"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	noctowl: {
 		num: 164,
@@ -7236,12 +7236,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 76,
 			spd: 96,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Insomnia",
 			1: "Keen Eye",
-			DW: "Tinted Lens",
+			DW: "Tinted Lens"
 		},
 		heightm: 1.6,
 		weightkg: 40.8,
@@ -7250,7 +7250,7 @@ exports.BattlePokedex = {
 		prevo: "hoothoot",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ledyba: {
 		num: 165,
@@ -7271,12 +7271,12 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 40,
 			spd: 80,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Early Bird",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 1,
 		weightkg: 10.8,
@@ -7285,7 +7285,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["ledian"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ledian: {
 		num: 166,
@@ -7306,12 +7306,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 55,
 			spd: 110,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Early Bird",
-			DW: "Iron Fist",
+			DW: "Iron Fist"
 		},
 		heightm: 1.4,
 		weightkg: 35.6,
@@ -7320,7 +7320,7 @@ exports.BattlePokedex = {
 		prevo: "ledyba",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	spinarak: {
 		num: 167,
@@ -7341,12 +7341,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 40,
 			spd: 40,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Insomnia",
-			DW: "Sniper",
+			DW: "Sniper"
 		},
 		heightm: 0.5,
 		weightkg: 8.5,
@@ -7355,7 +7355,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["ariados"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ariados: {
 		num: 168,
@@ -7376,12 +7376,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 60,
 			spd: 60,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Insomnia",
-			DW: "Sniper",
+			DW: "Sniper"
 		},
 		heightm: 1.1,
 		weightkg: 33.5,
@@ -7390,7 +7390,7 @@ exports.BattlePokedex = {
 		prevo: "spinarak",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	chinchou: {
 		num: 170,
@@ -7411,12 +7411,12 @@ exports.BattlePokedex = {
 			def: 38,
 			spa: 56,
 			spd: 56,
-			spe: 67,
+			spe: 67
 		},
 		abilities: {
 			0: "Volt Absorb",
 			1: "Illuminate",
-			DW: "Water Absorb",
+			DW: "Water Absorb"
 		},
 		heightm: 0.5,
 		weightkg: 12,
@@ -7425,7 +7425,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["lanturn"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lanturn: {
 		num: 171,
@@ -7446,12 +7446,12 @@ exports.BattlePokedex = {
 			def: 58,
 			spa: 76,
 			spd: 76,
-			spe: 67,
+			spe: 67
 		},
 		abilities: {
 			0: "Volt Absorb",
 			1: "Illuminate",
-			DW: "Water Absorb",
+			DW: "Water Absorb"
 		},
 		heightm: 1.2,
 		weightkg: 22.5,
@@ -7460,7 +7460,7 @@ exports.BattlePokedex = {
 		prevo: "chinchou",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	togepi: {
 		num: 175,
@@ -7481,12 +7481,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 40,
 			spd: 65,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Hustle",
 			1: "Serene Grace",
-			DW: "Super Luck",
+			DW: "Super Luck"
 		},
 		heightm: 0.3,
 		weightkg: 1.5,
@@ -7495,7 +7495,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["togetic"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	togetic: {
 		num: 176,
@@ -7516,12 +7516,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 80,
 			spd: 105,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Hustle",
 			1: "Serene Grace",
-			DW: "Super Luck",
+			DW: "Super Luck"
 		},
 		heightm: 0.6,
 		weightkg: 3.2,
@@ -7530,7 +7530,7 @@ exports.BattlePokedex = {
 		prevo: "togepi",
 		evos: ["togekiss"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	togekiss: {
 		num: 468,
@@ -7551,12 +7551,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 120,
 			spd: 115,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Hustle",
 			1: "Serene Grace",
-			DW: "Super Luck",
+			DW: "Super Luck"
 		},
 		heightm: 1.5,
 		weightkg: 38,
@@ -7565,7 +7565,7 @@ exports.BattlePokedex = {
 		prevo: "togetic",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	natu: {
 		num: 177,
@@ -7586,12 +7586,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 70,
 			spd: 45,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Synchronize",
 			1: "Early Bird",
-			DW: "Magic Bounce",
+			DW: "Magic Bounce"
 		},
 		heightm: 0.2,
 		weightkg: 2,
@@ -7600,7 +7600,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["xatu"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	xatu: {
 		num: 178,
@@ -7621,12 +7621,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 95,
 			spd: 70,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Synchronize",
 			1: "Early Bird",
-			DW: "Magic Bounce",
+			DW: "Magic Bounce"
 		},
 		heightm: 1.5,
 		weightkg: 15,
@@ -7635,7 +7635,7 @@ exports.BattlePokedex = {
 		prevo: "natu",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mareep: {
 		num: 179,
@@ -7656,11 +7656,11 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 65,
 			spd: 45,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Static",
-			DW: "Plus",
+			DW: "Plus"
 		},
 		heightm: 0.6,
 		weightkg: 7.8,
@@ -7669,7 +7669,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["flaaffy"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	flaaffy: {
 		num: 180,
@@ -7690,11 +7690,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 80,
 			spd: 60,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Static",
-			DW: "Plus",
+			DW: "Plus"
 		},
 		heightm: 0.8,
 		weightkg: 13.3,
@@ -7703,7 +7703,7 @@ exports.BattlePokedex = {
 		prevo: "mareep",
 		evos: ["ampharos"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ampharos: {
 		num: 181,
@@ -7724,11 +7724,11 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 115,
 			spd: 90,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Static",
-			DW: "Plus",
+			DW: "Plus"
 		},
 		heightm: 1.4,
 		weightkg: 61.5,
@@ -7737,7 +7737,7 @@ exports.BattlePokedex = {
 		prevo: "flaaffy",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	azurill: {
 		num: 298,
@@ -7758,12 +7758,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 20,
 			spd: 40,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Huge Power",
-			DW: "Sap Sipper",
+			DW: "Sap Sipper"
 		},
 		heightm: 0.2,
 		weightkg: 2,
@@ -7772,7 +7772,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["marill"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	marill: {
 		num: 183,
@@ -7793,12 +7793,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 20,
 			spd: 50,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Huge Power",
-			DW: "Sap Sipper",
+			DW: "Sap Sipper"
 		},
 		heightm: 0.4,
 		weightkg: 8.5,
@@ -7807,7 +7807,7 @@ exports.BattlePokedex = {
 		prevo: "azurill",
 		evos: ["azumarill"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	azumarill: {
 		num: 184,
@@ -7828,12 +7828,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 50,
 			spd: 80,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Huge Power",
-			DW: "Sap Sipper",
+			DW: "Sap Sipper"
 		},
 		heightm: 0.8,
 		weightkg: 28.5,
@@ -7842,7 +7842,7 @@ exports.BattlePokedex = {
 		prevo: "marill",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bonsly: {
 		num: 438,
@@ -7863,12 +7863,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 10,
 			spd: 45,
-			spe: 10,
+			spe: 10
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 0.5,
 		weightkg: 15,
@@ -7877,7 +7877,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["sudowoodo"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sudowoodo: {
 		num: 185,
@@ -7898,12 +7898,12 @@ exports.BattlePokedex = {
 			def: 115,
 			spa: 30,
 			spd: 65,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 1.2,
 		weightkg: 38,
@@ -7912,7 +7912,7 @@ exports.BattlePokedex = {
 		prevo: "bonsly",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hoppip: {
 		num: 187,
@@ -7933,12 +7933,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 35,
 			spd: 55,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
-			DW: "Infiltrator",
+			DW: "Infiltrator"
 		},
 		heightm: 0.4,
 		weightkg: 0.5,
@@ -7947,7 +7947,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["skiploom"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	skiploom: {
 		num: 188,
@@ -7968,12 +7968,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 45,
 			spd: 65,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
-			DW: "Infiltrator",
+			DW: "Infiltrator"
 		},
 		heightm: 0.6,
 		weightkg: 1,
@@ -7982,7 +7982,7 @@ exports.BattlePokedex = {
 		prevo: "hoppip",
 		evos: ["jumpluff"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	jumpluff: {
 		num: 189,
@@ -8003,12 +8003,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 55,
 			spd: 85,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Leaf Guard",
-			DW: "Infiltrator",
+			DW: "Infiltrator"
 		},
 		heightm: 0.8,
 		weightkg: 3,
@@ -8017,7 +8017,7 @@ exports.BattlePokedex = {
 		prevo: "skiploom",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	aipom: {
 		num: 190,
@@ -8038,12 +8038,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 40,
 			spd: 55,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Pickup",
-			DW: "Skill Link",
+			DW: "Skill Link"
 		},
 		heightm: 0.8,
 		weightkg: 11.5,
@@ -8052,7 +8052,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["ambipom"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ambipom: {
 		num: 424,
@@ -8073,12 +8073,12 @@ exports.BattlePokedex = {
 			def: 66,
 			spa: 60,
 			spd: 66,
-			spe: 115,
+			spe: 115
 		},
 		abilities: {
 			0: "Technician",
 			1: "Pickup",
-			DW: "Skill Link",
+			DW: "Skill Link"
 		},
 		heightm: 1.2,
 		weightkg: 20.3,
@@ -8087,7 +8087,7 @@ exports.BattlePokedex = {
 		prevo: "aipom",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sunkern: {
 		num: 191,
@@ -8108,12 +8108,12 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 30,
 			spd: 30,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Solar Power",
-			DW: "Early Bird",
+			DW: "Early Bird"
 		},
 		heightm: 0.3,
 		weightkg: 1.8,
@@ -8122,7 +8122,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["sunflora"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sunflora: {
 		num: 192,
@@ -8143,12 +8143,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 105,
 			spd: 85,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Solar Power",
-			DW: "Early Bird",
+			DW: "Early Bird"
 		},
 		heightm: 0.8,
 		weightkg: 8.5,
@@ -8157,7 +8157,7 @@ exports.BattlePokedex = {
 		prevo: "sunkern",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	yanma: {
 		num: 193,
@@ -8178,12 +8178,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 75,
 			spd: 45,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Speed Boost",
 			1: "Compoundeyes",
-			DW: "Frisk",
+			DW: "Frisk"
 		},
 		heightm: 1.2,
 		weightkg: 38,
@@ -8192,7 +8192,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["yanmega"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	yanmega: {
 		num: 469,
@@ -8213,12 +8213,12 @@ exports.BattlePokedex = {
 			def: 86,
 			spa: 116,
 			spd: 56,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Speed Boost",
 			1: "Tinted Lens",
-			DW: "Frisk",
+			DW: "Frisk"
 		},
 		heightm: 1.9,
 		weightkg: 51.5,
@@ -8227,7 +8227,7 @@ exports.BattlePokedex = {
 		prevo: "yanma",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	wooper: {
 		num: 194,
@@ -8248,12 +8248,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 25,
 			spd: 25,
-			spe: 15,
+			spe: 15
 		},
 		abilities: {
 			0: "Damp",
 			1: "Water Absorb",
-			DW: "Unaware",
+			DW: "Unaware"
 		},
 		heightm: 0.4,
 		weightkg: 8.5,
@@ -8262,7 +8262,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["quagsire"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	quagsire: {
 		num: 195,
@@ -8283,12 +8283,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 65,
 			spd: 65,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Damp",
 			1: "Water Absorb",
-			DW: "Unaware",
+			DW: "Unaware"
 		},
 		heightm: 1.4,
 		weightkg: 75,
@@ -8297,7 +8297,7 @@ exports.BattlePokedex = {
 		prevo: "wooper",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	murkrow: {
 		num: 198,
@@ -8318,12 +8318,12 @@ exports.BattlePokedex = {
 			def: 42,
 			spa: 85,
 			spd: 42,
-			spe: 91,
+			spe: 91
 		},
 		abilities: {
 			0: "Insomnia",
 			1: "Super Luck",
-			DW: "Prankster",
+			DW: "Prankster"
 		},
 		heightm: 0.5,
 		weightkg: 2.1,
@@ -8332,7 +8332,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["honchkrow"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	honchkrow: {
 		num: 430,
@@ -8353,12 +8353,12 @@ exports.BattlePokedex = {
 			def: 52,
 			spa: 105,
 			spd: 52,
-			spe: 71,
+			spe: 71
 		},
 		abilities: {
 			0: "Insomnia",
 			1: "Super Luck",
-			DW: "Moxie",
+			DW: "Moxie"
 		},
 		heightm: 0.9,
 		weightkg: 27.3,
@@ -8367,7 +8367,7 @@ exports.BattlePokedex = {
 		prevo: "murkrow",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	misdreavus: {
 		num: 200,
@@ -8388,10 +8388,10 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 85,
 			spd: 85,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.7,
 		weightkg: 1,
@@ -8400,7 +8400,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["mismagius"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mismagius: {
 		num: 429,
@@ -8421,10 +8421,10 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 105,
 			spd: 105,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.9,
 		weightkg: 4.4,
@@ -8433,7 +8433,7 @@ exports.BattlePokedex = {
 		prevo: "misdreavus",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	unown: {
 		num: 201,
@@ -8454,10 +8454,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8466,7 +8466,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	unownb: {
 		num: 201,
@@ -8487,10 +8487,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8499,7 +8499,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownc: {
 		num: 201,
@@ -8520,10 +8520,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8532,7 +8532,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownd: {
 		num: 201,
@@ -8553,10 +8553,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8565,7 +8565,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unowne: {
 		num: 201,
@@ -8586,10 +8586,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8598,7 +8598,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownf: {
 		num: 201,
@@ -8619,10 +8619,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8631,7 +8631,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unowng: {
 		num: 201,
@@ -8652,10 +8652,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8664,7 +8664,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownh: {
 		num: 201,
@@ -8685,10 +8685,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8697,7 +8697,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unowni: {
 		num: 201,
@@ -8718,10 +8718,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8730,7 +8730,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownj: {
 		num: 201,
@@ -8751,10 +8751,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8763,7 +8763,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownk: {
 		num: 201,
@@ -8784,10 +8784,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8796,7 +8796,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownl: {
 		num: 201,
@@ -8817,10 +8817,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8829,7 +8829,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownm: {
 		num: 201,
@@ -8850,10 +8850,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8862,7 +8862,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownn: {
 		num: 201,
@@ -8883,10 +8883,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8895,7 +8895,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unowno: {
 		num: 201,
@@ -8916,10 +8916,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8928,7 +8928,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownp: {
 		num: 201,
@@ -8949,10 +8949,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8961,7 +8961,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownq: {
 		num: 201,
@@ -8982,10 +8982,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -8994,7 +8994,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownr: {
 		num: 201,
@@ -9015,10 +9015,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9027,7 +9027,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unowns: {
 		num: 201,
@@ -9048,10 +9048,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9060,7 +9060,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownt: {
 		num: 201,
@@ -9081,10 +9081,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9093,7 +9093,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownu: {
 		num: 201,
@@ -9114,10 +9114,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9126,7 +9126,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownv: {
 		num: 201,
@@ -9147,10 +9147,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9159,7 +9159,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownw: {
 		num: 201,
@@ -9180,10 +9180,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9192,7 +9192,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownx: {
 		num: 201,
@@ -9213,10 +9213,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9225,7 +9225,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unowny: {
 		num: 201,
@@ -9246,10 +9246,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9258,7 +9258,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unownz","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownz: {
 		num: 201,
@@ -9279,10 +9279,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9291,7 +9291,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownem","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownem: {
 		num: 201,
@@ -9312,10 +9312,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9324,7 +9324,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownqm"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	unownqm: {
 		num: 201,
@@ -9345,10 +9345,10 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 72,
 			spd: 48,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -9357,7 +9357,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	wynaut: {
 		num: 360,
@@ -9378,11 +9378,11 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 23,
 			spd: 48,
-			spe: 23,
+			spe: 23
 		},
 		abilities: {
 			0: "Shadow Tag",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 0.6,
 		weightkg: 14,
@@ -9391,7 +9391,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["wobbuffet"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	wobbuffet: {
 		num: 202,
@@ -9412,11 +9412,11 @@ exports.BattlePokedex = {
 			def: 58,
 			spa: 33,
 			spd: 58,
-			spe: 33,
+			spe: 33
 		},
 		abilities: {
 			0: "Shadow Tag",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 1.3,
 		weightkg: 28.5,
@@ -9425,7 +9425,7 @@ exports.BattlePokedex = {
 		prevo: "wynaut",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	girafarig: {
 		num: 203,
@@ -9446,12 +9446,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 90,
 			spd: 65,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Inner Focus",
 			1: "Early Bird",
-			DW: "Sap Sipper",
+			DW: "Sap Sipper"
 		},
 		heightm: 1.5,
 		weightkg: 41.5,
@@ -9460,7 +9460,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pineco: {
 		num: 204,
@@ -9481,11 +9481,11 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 35,
 			spd: 35,
-			spe: 15,
+			spe: 15
 		},
 		abilities: {
 			0: "Sturdy",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.6,
 		weightkg: 7.2,
@@ -9494,7 +9494,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["forretress"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	forretress: {
 		num: 205,
@@ -9515,11 +9515,11 @@ exports.BattlePokedex = {
 			def: 140,
 			spa: 60,
 			spd: 60,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Sturdy",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 1.2,
 		weightkg: 125.8,
@@ -9528,7 +9528,7 @@ exports.BattlePokedex = {
 		prevo: "pineco",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dunsparce: {
 		num: 206,
@@ -9549,12 +9549,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 65,
 			spd: 65,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Serene Grace",
 			1: "Run Away",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 1.5,
 		weightkg: 14,
@@ -9563,7 +9563,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gligar: {
 		num: 207,
@@ -9584,12 +9584,12 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 35,
 			spd: 65,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Hyper Cutter",
 			1: "Sand Veil",
-			DW: "Immunity",
+			DW: "Immunity"
 		},
 		heightm: 1.1,
 		weightkg: 64.8,
@@ -9598,7 +9598,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["gliscor"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gliscor: {
 		num: 472,
@@ -9619,12 +9619,12 @@ exports.BattlePokedex = {
 			def: 125,
 			spa: 45,
 			spd: 75,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Hyper Cutter",
 			1: "Sand Veil",
-			DW: "Poison Heal",
+			DW: "Poison Heal"
 		},
 		heightm: 2,
 		weightkg: 42.5,
@@ -9633,7 +9633,7 @@ exports.BattlePokedex = {
 		prevo: "gligar",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	snubbull: {
 		num: 209,
@@ -9654,12 +9654,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 40,
 			spd: 40,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Run Away",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 0.6,
 		weightkg: 7.8,
@@ -9668,7 +9668,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["granbull"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	granbull: {
 		num: 210,
@@ -9689,12 +9689,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 60,
 			spd: 60,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Quick Feet",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 1.4,
 		weightkg: 48.7,
@@ -9703,7 +9703,7 @@ exports.BattlePokedex = {
 		prevo: "snubbull",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	qwilfish: {
 		num: 211,
@@ -9724,12 +9724,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 55,
 			spd: 55,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Swift Swim",
-			DW: "Intimidate",
+			DW: "Intimidate"
 		},
 		heightm: 0.5,
 		weightkg: 3.9,
@@ -9738,7 +9738,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shuckle: {
 		num: 213,
@@ -9759,12 +9759,12 @@ exports.BattlePokedex = {
 			def: 230,
 			spa: 10,
 			spd: 230,
-			spe: 5,
+			spe: 5
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Gluttony",
-			DW: "Contrary",
+			DW: "Contrary"
 		},
 		heightm: 0.6,
 		weightkg: 20.5,
@@ -9773,7 +9773,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	heracross: {
 		num: 214,
@@ -9794,12 +9794,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 40,
 			spd: 95,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Guts",
-			DW: "Moxie",
+			DW: "Moxie"
 		},
 		heightm: 1.5,
 		weightkg: 54,
@@ -9808,7 +9808,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sneasel: {
 		num: 215,
@@ -9829,12 +9829,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 35,
 			spd: 75,
-			spe: 115,
+			spe: 115
 		},
 		abilities: {
 			0: "Inner Focus",
 			1: "Keen Eye",
-			DW: "Pickpocket",
+			DW: "Pickpocket"
 		},
 		heightm: 0.9,
 		weightkg: 28,
@@ -9843,7 +9843,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["weavile"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	weavile: {
 		num: 461,
@@ -9864,11 +9864,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 45,
 			spd: 85,
-			spe: 125,
+			spe: 125
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Pickpocket",
+			DW: "Pickpocket"
 		},
 		heightm: 1.1,
 		weightkg: 34,
@@ -9877,7 +9877,7 @@ exports.BattlePokedex = {
 		prevo: "sneasel",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	teddiursa: {
 		num: 216,
@@ -9898,12 +9898,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 50,
 			spd: 50,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Pickup",
 			1: "Quick Feet",
-			DW: "Honey Gather",
+			DW: "Honey Gather"
 		},
 		heightm: 0.6,
 		weightkg: 8.8,
@@ -9912,7 +9912,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["ursaring"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ursaring: {
 		num: 217,
@@ -9933,12 +9933,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 75,
 			spd: 75,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Guts",
 			1: "Quick Feet",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 1.8,
 		weightkg: 125.8,
@@ -9947,7 +9947,7 @@ exports.BattlePokedex = {
 		prevo: "teddiursa",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	slugma: {
 		num: 218,
@@ -9968,12 +9968,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 70,
 			spd: 40,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Magma Armor",
 			1: "Flame Body",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 0.7,
 		weightkg: 35,
@@ -9982,7 +9982,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["magcargo"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	magcargo: {
 		num: 219,
@@ -10003,12 +10003,12 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 80,
 			spd: 80,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Magma Armor",
 			1: "Flame Body",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 0.8,
 		weightkg: 55,
@@ -10017,7 +10017,7 @@ exports.BattlePokedex = {
 		prevo: "slugma",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	swinub: {
 		num: 220,
@@ -10038,12 +10038,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 30,
 			spd: 30,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Snow Cloak",
-			DW: "Thick Fat",
+			DW: "Thick Fat"
 		},
 		heightm: 0.4,
 		weightkg: 6.5,
@@ -10052,7 +10052,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["piloswine"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	piloswine: {
 		num: 221,
@@ -10073,12 +10073,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 60,
 			spd: 60,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Snow Cloak",
-			DW: "Thick Fat",
+			DW: "Thick Fat"
 		},
 		heightm: 1.1,
 		weightkg: 55.8,
@@ -10087,7 +10087,7 @@ exports.BattlePokedex = {
 		prevo: "swinub",
 		evos: ["mamoswine"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mamoswine: {
 		num: 473,
@@ -10108,12 +10108,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 70,
 			spd: 60,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Snow Cloak",
-			DW: "Thick Fat",
+			DW: "Thick Fat"
 		},
 		heightm: 2.5,
 		weightkg: 291,
@@ -10122,7 +10122,7 @@ exports.BattlePokedex = {
 		prevo: "piloswine",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	corsola: {
 		num: 222,
@@ -10143,12 +10143,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 65,
 			spd: 85,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Hustle",
 			1: "Natural Cure",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 0.6,
 		weightkg: 5,
@@ -10157,7 +10157,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	remoraid: {
 		num: 223,
@@ -10178,12 +10178,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 65,
 			spd: 35,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Hustle",
 			1: "Sniper",
-			DW: "Moody",
+			DW: "Moody"
 		},
 		heightm: 0.6,
 		weightkg: 12,
@@ -10192,7 +10192,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["octillery"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	octillery: {
 		num: 224,
@@ -10213,12 +10213,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 105,
 			spd: 75,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Suction Cups",
 			1: "Sniper",
-			DW: "Moody",
+			DW: "Moody"
 		},
 		heightm: 0.9,
 		weightkg: 28.5,
@@ -10227,7 +10227,7 @@ exports.BattlePokedex = {
 		prevo: "remoraid",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	delibird: {
 		num: 225,
@@ -10248,12 +10248,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 65,
 			spd: 45,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Vital Spirit",
 			1: "Hustle",
-			DW: "Insomnia",
+			DW: "Insomnia"
 		},
 		heightm: 0.9,
 		weightkg: 16,
@@ -10262,7 +10262,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mantyke: {
 		num: 458,
@@ -10283,12 +10283,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 60,
 			spd: 120,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Water Absorb",
-			DW: "Water Veil",
+			DW: "Water Veil"
 		},
 		heightm: 1,
 		weightkg: 65,
@@ -10297,7 +10297,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["mantine"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mantine: {
 		num: 226,
@@ -10318,12 +10318,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 80,
 			spd: 140,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Water Absorb",
-			DW: "Water Veil",
+			DW: "Water Veil"
 		},
 		heightm: 2.1,
 		weightkg: 220,
@@ -10332,7 +10332,7 @@ exports.BattlePokedex = {
 		prevo: "mantyke",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	skarmory: {
 		num: 227,
@@ -10353,12 +10353,12 @@ exports.BattlePokedex = {
 			def: 140,
 			spa: 40,
 			spd: 70,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Sturdy",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 1.7,
 		weightkg: 50.5,
@@ -10367,7 +10367,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	houndour: {
 		num: 228,
@@ -10388,12 +10388,12 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 80,
 			spd: 50,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Early Bird",
 			1: "Flash Fire",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 0.6,
 		weightkg: 10.8,
@@ -10402,7 +10402,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["houndoom"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	houndoom: {
 		num: 229,
@@ -10423,12 +10423,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 110,
 			spd: 80,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Early Bird",
 			1: "Flash Fire",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 1.4,
 		weightkg: 35,
@@ -10437,7 +10437,7 @@ exports.BattlePokedex = {
 		prevo: "houndour",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	phanpy: {
 		num: 231,
@@ -10458,11 +10458,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 40,
 			spd: 40,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Pickup",
-			DW: "Sand Veil",
+			DW: "Sand Veil"
 		},
 		heightm: 0.5,
 		weightkg: 33.5,
@@ -10471,7 +10471,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["donphan"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	donphan: {
 		num: 232,
@@ -10492,11 +10492,11 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 60,
 			spd: 60,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Sturdy",
-			DW: "Sand Veil",
+			DW: "Sand Veil"
 		},
 		heightm: 1.1,
 		weightkg: 120,
@@ -10505,7 +10505,7 @@ exports.BattlePokedex = {
 		prevo: "phanpy",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	stantler: {
 		num: 234,
@@ -10526,12 +10526,12 @@ exports.BattlePokedex = {
 			def: 62,
 			spa: 85,
 			spd: 65,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Frisk",
-			DW: "Sap Sipper",
+			DW: "Sap Sipper"
 		},
 		heightm: 1.4,
 		weightkg: 71.2,
@@ -10540,7 +10540,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	smeargle: {
 		num: 235,
@@ -10561,12 +10561,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 20,
 			spd: 45,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Own Tempo",
 			1: "Technician",
-			DW: "Moody",
+			DW: "Moody"
 		},
 		heightm: 1.2,
 		weightkg: 58,
@@ -10575,7 +10575,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	miltank: {
 		num: 241,
@@ -10596,12 +10596,12 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 40,
 			spd: 70,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Scrappy",
-			DW: "Sap Sipper",
+			DW: "Sap Sipper"
 		},
 		heightm: 1.2,
 		weightkg: 75.5,
@@ -10610,7 +10610,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	raikou: {
 		num: 243,
@@ -10631,11 +10631,11 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 115,
 			spd: 100,
-			spe: 115,
+			spe: 115
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Volt Absorb",
+			DW: "Volt Absorb"
 		},
 		heightm: 1.9,
 		weightkg: 178,
@@ -10644,7 +10644,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	entei: {
 		num: 244,
@@ -10665,11 +10665,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 90,
 			spd: 75,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Flash Fire",
+			DW: "Flash Fire"
 		},
 		heightm: 2.1,
 		weightkg: 198,
@@ -10678,7 +10678,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	suicune: {
 		num: 245,
@@ -10699,11 +10699,11 @@ exports.BattlePokedex = {
 			def: 115,
 			spa: 90,
 			spd: 115,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Water Absorb",
+			DW: "Water Absorb"
 		},
 		heightm: 2,
 		weightkg: 187,
@@ -10712,7 +10712,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	larvitar: {
 		num: 246,
@@ -10733,11 +10733,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 45,
 			spd: 50,
-			spe: 41,
+			spe: 41
 		},
 		abilities: {
 			0: "Guts",
-			DW: "Sand Veil",
+			DW: "Sand Veil"
 		},
 		heightm: 0.6,
 		weightkg: 72,
@@ -10746,7 +10746,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["pupitar"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pupitar: {
 		num: 247,
@@ -10767,11 +10767,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 65,
 			spd: 70,
-			spe: 51,
+			spe: 51
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Shed Skin",
+			DW: "Shed Skin"
 		},
 		heightm: 1.2,
 		weightkg: 152,
@@ -10780,7 +10780,7 @@ exports.BattlePokedex = {
 		prevo: "larvitar",
 		evos: ["tyranitar"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tyranitar: {
 		num: 248,
@@ -10801,11 +10801,11 @@ exports.BattlePokedex = {
 			def: 110,
 			spa: 95,
 			spd: 100,
-			spe: 61,
+			spe: 61
 		},
 		abilities: {
 			0: "Sand Stream",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 2,
 		weightkg: 202,
@@ -10814,7 +10814,7 @@ exports.BattlePokedex = {
 		prevo: "pupitar",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lugia: {
 		num: 249,
@@ -10835,11 +10835,11 @@ exports.BattlePokedex = {
 			def: 130,
 			spa: 90,
 			spd: 154,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Multiscale",
+			DW: "Multiscale"
 		},
 		heightm: 5.2,
 		weightkg: 216,
@@ -10848,7 +10848,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hooh: {
 		num: 250,
@@ -10869,11 +10869,11 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 110,
 			spd: 154,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 3.8,
 		weightkg: 199,
@@ -10882,7 +10882,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	celebi: {
 		num: 251,
@@ -10903,10 +10903,10 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 100,
 			spd: 100,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
-			0: "Natural Cure",
+			0: "Natural Cure"
 		},
 		heightm: 0.6,
 		weightkg: 5,
@@ -10915,7 +10915,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	treecko: {
 		num: 252,
@@ -10936,11 +10936,11 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 65,
 			spd: 55,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Unburden",
+			DW: "Unburden"
 		},
 		heightm: 0.5,
 		weightkg: 5,
@@ -10949,7 +10949,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["grovyle"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	grovyle: {
 		num: 253,
@@ -10970,11 +10970,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 85,
 			spd: 65,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Unburden",
+			DW: "Unburden"
 		},
 		heightm: 0.9,
 		weightkg: 21.6,
@@ -10983,7 +10983,7 @@ exports.BattlePokedex = {
 		prevo: "treecko",
 		evos: ["sceptile"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sceptile: {
 		num: 254,
@@ -11004,11 +11004,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 105,
 			spd: 85,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Unburden",
+			DW: "Unburden"
 		},
 		heightm: 1.7,
 		weightkg: 52.2,
@@ -11017,7 +11017,7 @@ exports.BattlePokedex = {
 		prevo: "grovyle",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	torchic: {
 		num: 255,
@@ -11038,11 +11038,11 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 70,
 			spd: 50,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Speed Boost",
+			DW: "Speed Boost"
 		},
 		heightm: 0.4,
 		weightkg: 2.5,
@@ -11051,7 +11051,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["combusken"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	combusken: {
 		num: 256,
@@ -11072,11 +11072,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 85,
 			spd: 60,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Speed Boost",
+			DW: "Speed Boost"
 		},
 		heightm: 0.9,
 		weightkg: 19.5,
@@ -11085,7 +11085,7 @@ exports.BattlePokedex = {
 		prevo: "torchic",
 		evos: ["blaziken"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	blaziken: {
 		num: 257,
@@ -11106,11 +11106,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 110,
 			spd: 70,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Speed Boost",
+			DW: "Speed Boost"
 		},
 		heightm: 1.9,
 		weightkg: 52,
@@ -11119,7 +11119,7 @@ exports.BattlePokedex = {
 		prevo: "combusken",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mudkip: {
 		num: 258,
@@ -11140,11 +11140,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 50,
 			spd: 50,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 0.4,
 		weightkg: 7.6,
@@ -11153,7 +11153,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["marshtomp"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	marshtomp: {
 		num: 259,
@@ -11174,11 +11174,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 60,
 			spd: 70,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 0.7,
 		weightkg: 28,
@@ -11187,7 +11187,7 @@ exports.BattlePokedex = {
 		prevo: "mudkip",
 		evos: ["swampert"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	swampert: {
 		num: 260,
@@ -11208,11 +11208,11 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 85,
 			spd: 90,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 1.5,
 		weightkg: 81.9,
@@ -11221,7 +11221,7 @@ exports.BattlePokedex = {
 		prevo: "marshtomp",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	poochyena: {
 		num: 261,
@@ -11242,12 +11242,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 30,
 			spd: 30,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Quick Feet",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 0.5,
 		weightkg: 13.6,
@@ -11256,7 +11256,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["mightyena"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mightyena: {
 		num: 262,
@@ -11277,12 +11277,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 60,
 			spd: 60,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Quick Feet",
-			DW: "Moxie",
+			DW: "Moxie"
 		},
 		heightm: 1,
 		weightkg: 37,
@@ -11291,7 +11291,7 @@ exports.BattlePokedex = {
 		prevo: "poochyena",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	zigzagoon: {
 		num: 263,
@@ -11312,12 +11312,12 @@ exports.BattlePokedex = {
 			def: 41,
 			spa: 30,
 			spd: 41,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Pickup",
 			1: "Gluttony",
-			DW: "Quick Feet",
+			DW: "Quick Feet"
 		},
 		heightm: 0.4,
 		weightkg: 17.5,
@@ -11326,7 +11326,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["linoone"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	linoone: {
 		num: 264,
@@ -11347,12 +11347,12 @@ exports.BattlePokedex = {
 			def: 61,
 			spa: 50,
 			spd: 61,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Pickup",
 			1: "Gluttony",
-			DW: "Quick Feet",
+			DW: "Quick Feet"
 		},
 		heightm: 0.5,
 		weightkg: 32.5,
@@ -11361,7 +11361,7 @@ exports.BattlePokedex = {
 		prevo: "zigzagoon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	wurmple: {
 		num: 265,
@@ -11382,11 +11382,11 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 20,
 			spd: 30,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Shield Dust",
-			DW: "Run Away",
+			DW: "Run Away"
 		},
 		heightm: 0.3,
 		weightkg: 3.6,
@@ -11395,7 +11395,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["silcoon","cascoon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	silcoon: {
 		num: 266,
@@ -11416,11 +11416,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 25,
 			spd: 25,
-			spe: 15,
+			spe: 15
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Shed Skin",
+			DW: "Shed Skin"
 		},
 		heightm: 0.6,
 		weightkg: 10,
@@ -11429,7 +11429,7 @@ exports.BattlePokedex = {
 		prevo: "wurmple",
 		evos: ["beautifly"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	beautifly: {
 		num: 267,
@@ -11450,11 +11450,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 90,
 			spd: 50,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Swarm",
-			DW: "Rivalry",
+			DW: "Rivalry"
 		},
 		heightm: 1,
 		weightkg: 28.4,
@@ -11463,7 +11463,7 @@ exports.BattlePokedex = {
 		prevo: "silcoon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cascoon: {
 		num: 268,
@@ -11484,11 +11484,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 25,
 			spd: 25,
-			spe: 15,
+			spe: 15
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Shed Skin",
+			DW: "Shed Skin"
 		},
 		heightm: 0.7,
 		weightkg: 11.5,
@@ -11497,7 +11497,7 @@ exports.BattlePokedex = {
 		prevo: "wurmple",
 		evos: ["dustox"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dustox: {
 		num: 269,
@@ -11518,11 +11518,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 50,
 			spd: 90,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Shield Dust",
-			DW: "Compoundeyes",
+			DW: "Compoundeyes"
 		},
 		heightm: 1.2,
 		weightkg: 31.6,
@@ -11531,7 +11531,7 @@ exports.BattlePokedex = {
 		prevo: "cascoon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lotad: {
 		num: 270,
@@ -11552,12 +11552,12 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 40,
 			spd: 50,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Rain Dish",
-			DW: "Own Tempo",
+			DW: "Own Tempo"
 		},
 		heightm: 0.5,
 		weightkg: 2.6,
@@ -11566,7 +11566,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["lombre"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lombre: {
 		num: 271,
@@ -11587,12 +11587,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 60,
 			spd: 70,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Rain Dish",
-			DW: "Own Tempo",
+			DW: "Own Tempo"
 		},
 		heightm: 1.2,
 		weightkg: 32.5,
@@ -11601,7 +11601,7 @@ exports.BattlePokedex = {
 		prevo: "lotad",
 		evos: ["ludicolo"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ludicolo: {
 		num: 272,
@@ -11622,12 +11622,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 90,
 			spd: 100,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Rain Dish",
-			DW: "Own Tempo",
+			DW: "Own Tempo"
 		},
 		heightm: 1.5,
 		weightkg: 55,
@@ -11636,7 +11636,7 @@ exports.BattlePokedex = {
 		prevo: "lombre",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	seedot: {
 		num: 273,
@@ -11657,12 +11657,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 30,
 			spd: 30,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Early Bird",
-			DW: "Pickpocket",
+			DW: "Pickpocket"
 		},
 		heightm: 0.5,
 		weightkg: 4,
@@ -11671,7 +11671,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["nuzleaf"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	nuzleaf: {
 		num: 274,
@@ -11692,12 +11692,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 60,
 			spd: 40,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Early Bird",
-			DW: "Pickpocket",
+			DW: "Pickpocket"
 		},
 		heightm: 1,
 		weightkg: 28,
@@ -11706,7 +11706,7 @@ exports.BattlePokedex = {
 		prevo: "seedot",
 		evos: ["shiftry"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shiftry: {
 		num: 275,
@@ -11727,12 +11727,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 90,
 			spd: 60,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Early Bird",
-			DW: "Pickpocket",
+			DW: "Pickpocket"
 		},
 		heightm: 1.3,
 		weightkg: 59.6,
@@ -11741,7 +11741,7 @@ exports.BattlePokedex = {
 		prevo: "nuzleaf",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	taillow: {
 		num: 276,
@@ -11762,11 +11762,11 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 30,
 			spd: 30,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Guts",
-			DW: "Scrappy",
+			DW: "Scrappy"
 		},
 		heightm: 0.3,
 		weightkg: 2.3,
@@ -11775,7 +11775,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["swellow"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	swellow: {
 		num: 277,
@@ -11796,11 +11796,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 50,
 			spd: 50,
-			spe: 125,
+			spe: 125
 		},
 		abilities: {
 			0: "Guts",
-			DW: "Scrappy",
+			DW: "Scrappy"
 		},
 		heightm: 0.7,
 		weightkg: 19.8,
@@ -11809,7 +11809,7 @@ exports.BattlePokedex = {
 		prevo: "taillow",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	wingull: {
 		num: 278,
@@ -11830,11 +11830,11 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 55,
 			spd: 30,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Keen Eye",
-			DW: "Rain Dish",
+			DW: "Rain Dish"
 		},
 		heightm: 0.6,
 		weightkg: 9.5,
@@ -11843,7 +11843,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["pelipper"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pelipper: {
 		num: 279,
@@ -11864,11 +11864,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 85,
 			spd: 70,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Keen Eye",
-			DW: "Rain Dish",
+			DW: "Rain Dish"
 		},
 		heightm: 1.2,
 		weightkg: 28,
@@ -11877,7 +11877,7 @@ exports.BattlePokedex = {
 		prevo: "wingull",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ralts: {
 		num: 280,
@@ -11898,12 +11898,12 @@ exports.BattlePokedex = {
 			def: 25,
 			spa: 45,
 			spd: 35,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Synchronize",
 			1: "Trace",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 0.4,
 		weightkg: 6.6,
@@ -11912,7 +11912,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["kirlia"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kirlia: {
 		num: 281,
@@ -11933,12 +11933,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 65,
 			spd: 55,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Synchronize",
 			1: "Trace",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 0.8,
 		weightkg: 20.2,
@@ -11947,7 +11947,7 @@ exports.BattlePokedex = {
 		prevo: "ralts",
 		evos: ["gardevoir","gallade"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gardevoir: {
 		num: 282,
@@ -11968,12 +11968,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 125,
 			spd: 115,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Synchronize",
 			1: "Trace",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 1.6,
 		weightkg: 48.4,
@@ -11982,7 +11982,7 @@ exports.BattlePokedex = {
 		prevo: "kirlia",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gallade: {
 		num: 475,
@@ -12003,11 +12003,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 65,
 			spd: 115,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Steadfast",
-			DW: "Justified",
+			DW: "Justified"
 		},
 		heightm: 1.6,
 		weightkg: 52,
@@ -12016,7 +12016,7 @@ exports.BattlePokedex = {
 		prevo: "kirlia",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	surskit: {
 		num: 283,
@@ -12037,11 +12037,11 @@ exports.BattlePokedex = {
 			def: 32,
 			spa: 50,
 			spd: 52,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Swift Swim",
-			DW: "Rain Dish",
+			DW: "Rain Dish"
 		},
 		heightm: 0.5,
 		weightkg: 1.7,
@@ -12050,7 +12050,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["masquerain"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	masquerain: {
 		num: 284,
@@ -12071,11 +12071,11 @@ exports.BattlePokedex = {
 			def: 62,
 			spa: 80,
 			spd: 82,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Intimidate",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 0.8,
 		weightkg: 3.6,
@@ -12084,7 +12084,7 @@ exports.BattlePokedex = {
 		prevo: "surskit",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shroomish: {
 		num: 285,
@@ -12105,12 +12105,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 40,
 			spd: 60,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Effect Spore",
 			1: "Poison Heal",
-			DW: "Quick Feet",
+			DW: "Quick Feet"
 		},
 		heightm: 0.4,
 		weightkg: 4.5,
@@ -12119,7 +12119,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["breloom"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	breloom: {
 		num: 286,
@@ -12140,12 +12140,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 60,
 			spd: 60,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Effect Spore",
 			1: "Poison Heal",
-			DW: "Technician",
+			DW: "Technician"
 		},
 		heightm: 1.2,
 		weightkg: 39.2,
@@ -12154,7 +12154,7 @@ exports.BattlePokedex = {
 		prevo: "shroomish",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	slakoth: {
 		num: 287,
@@ -12175,10 +12175,10 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 35,
 			spd: 35,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
-			0: "Truant",
+			0: "Truant"
 		},
 		heightm: 0.8,
 		weightkg: 24,
@@ -12187,7 +12187,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["vigoroth"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vigoroth: {
 		num: 288,
@@ -12208,10 +12208,10 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 55,
 			spd: 55,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
-			0: "Vital Spirit",
+			0: "Vital Spirit"
 		},
 		heightm: 1.4,
 		weightkg: 46.5,
@@ -12220,7 +12220,7 @@ exports.BattlePokedex = {
 		prevo: "slakoth",
 		evos: ["slaking"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	slaking: {
 		num: 289,
@@ -12241,10 +12241,10 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 95,
 			spd: 65,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
-			0: "Truant",
+			0: "Truant"
 		},
 		heightm: 2,
 		weightkg: 130.5,
@@ -12253,7 +12253,7 @@ exports.BattlePokedex = {
 		prevo: "vigoroth",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	nincada: {
 		num: 290,
@@ -12274,11 +12274,11 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 30,
 			spd: 30,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Compoundeyes",
-			DW: "Run Away",
+			DW: "Run Away"
 		},
 		heightm: 0.5,
 		weightkg: 5.5,
@@ -12287,7 +12287,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["ninjask","shedinja"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ninjask: {
 		num: 291,
@@ -12308,11 +12308,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 50,
 			spd: 50,
-			spe: 160,
+			spe: 160
 		},
 		abilities: {
 			0: "Speed Boost",
-			DW: "Infiltrator",
+			DW: "Infiltrator"
 		},
 		heightm: 0.8,
 		weightkg: 12,
@@ -12321,7 +12321,7 @@ exports.BattlePokedex = {
 		prevo: "nincada",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shedinja: {
 		num: 292,
@@ -12342,11 +12342,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 30,
 			spd: 30,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Wonder Guard",
-			DW: "Wonder Guard",
+			DW: "Wonder Guard"
 		},
 		heightm: 0.8,
 		weightkg: 1.2,
@@ -12355,7 +12355,7 @@ exports.BattlePokedex = {
 		prevo: "nincada",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	whismur: {
 		num: 293,
@@ -12376,11 +12376,11 @@ exports.BattlePokedex = {
 			def: 23,
 			spa: 51,
 			spd: 23,
-			spe: 28,
+			spe: 28
 		},
 		abilities: {
 			0: "Soundproof",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 0.6,
 		weightkg: 16.3,
@@ -12389,7 +12389,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["loudred"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	loudred: {
 		num: 294,
@@ -12410,11 +12410,11 @@ exports.BattlePokedex = {
 			def: 43,
 			spa: 71,
 			spd: 43,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
 			0: "Soundproof",
-			DW: "Scrappy",
+			DW: "Scrappy"
 		},
 		heightm: 1,
 		weightkg: 40.5,
@@ -12423,7 +12423,7 @@ exports.BattlePokedex = {
 		prevo: "whismur",
 		evos: ["exploud"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	exploud: {
 		num: 295,
@@ -12444,11 +12444,11 @@ exports.BattlePokedex = {
 			def: 63,
 			spa: 91,
 			spd: 63,
-			spe: 68,
+			spe: 68
 		},
 		abilities: {
 			0: "Soundproof",
-			DW: "Scrappy",
+			DW: "Scrappy"
 		},
 		heightm: 1.5,
 		weightkg: 84,
@@ -12457,7 +12457,7 @@ exports.BattlePokedex = {
 		prevo: "loudred",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	makuhita: {
 		num: 296,
@@ -12478,12 +12478,12 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 20,
 			spd: 30,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Guts",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 1,
 		weightkg: 86.4,
@@ -12492,7 +12492,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["hariyama"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hariyama: {
 		num: 297,
@@ -12513,12 +12513,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 40,
 			spd: 60,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Guts",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 2.3,
 		weightkg: 253.8,
@@ -12527,7 +12527,7 @@ exports.BattlePokedex = {
 		prevo: "makuhita",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	nosepass: {
 		num: 299,
@@ -12548,12 +12548,12 @@ exports.BattlePokedex = {
 			def: 135,
 			spa: 45,
 			spd: 90,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Magnet Pull",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 1,
 		weightkg: 97,
@@ -12562,7 +12562,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["probopass"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	probopass: {
 		num: 476,
@@ -12583,12 +12583,12 @@ exports.BattlePokedex = {
 			def: 145,
 			spa: 75,
 			spd: 150,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Magnet Pull",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 1.4,
 		weightkg: 340,
@@ -12597,7 +12597,7 @@ exports.BattlePokedex = {
 		prevo: "nosepass",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	skitty: {
 		num: 300,
@@ -12618,12 +12618,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 35,
 			spd: 35,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Cute Charm",
 			1: "Normalize",
-			DW: "Wonder Skin",
+			DW: "Wonder Skin"
 		},
 		heightm: 0.6,
 		weightkg: 11,
@@ -12632,7 +12632,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["delcatty"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	delcatty: {
 		num: 301,
@@ -12653,12 +12653,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 55,
 			spd: 55,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Cute Charm",
 			1: "Normalize",
-			DW: "Wonder Skin",
+			DW: "Wonder Skin"
 		},
 		heightm: 1.1,
 		weightkg: 32.6,
@@ -12667,7 +12667,7 @@ exports.BattlePokedex = {
 		prevo: "skitty",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sableye: {
 		num: 302,
@@ -12688,12 +12688,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 65,
 			spd: 65,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Stall",
-			DW: "Prankster",
+			DW: "Prankster"
 		},
 		heightm: 0.5,
 		weightkg: 11,
@@ -12702,7 +12702,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mawile: {
 		num: 303,
@@ -12723,12 +12723,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 55,
 			spd: 55,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Hyper Cutter",
 			1: "Intimidate",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 0.6,
 		weightkg: 11.5,
@@ -12737,7 +12737,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	aron: {
 		num: 304,
@@ -12758,12 +12758,12 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 40,
 			spd: 40,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
-			DW: "Heavy Metal",
+			DW: "Heavy Metal"
 		},
 		heightm: 0.4,
 		weightkg: 60,
@@ -12772,7 +12772,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["lairon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lairon: {
 		num: 305,
@@ -12793,12 +12793,12 @@ exports.BattlePokedex = {
 			def: 140,
 			spa: 50,
 			spd: 50,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
-			DW: "Heavy Metal",
+			DW: "Heavy Metal"
 		},
 		heightm: 0.9,
 		weightkg: 120,
@@ -12807,7 +12807,7 @@ exports.BattlePokedex = {
 		prevo: "aron",
 		evos: ["aggron"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	aggron: {
 		num: 306,
@@ -12828,12 +12828,12 @@ exports.BattlePokedex = {
 			def: 180,
 			spa: 60,
 			spd: 60,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Rock Head",
-			DW: "Heavy Metal",
+			DW: "Heavy Metal"
 		},
 		heightm: 2.1,
 		weightkg: 360,
@@ -12842,7 +12842,7 @@ exports.BattlePokedex = {
 		prevo: "lairon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	meditite: {
 		num: 307,
@@ -12863,11 +12863,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 40,
 			spd: 55,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Pure Power",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 0.6,
 		weightkg: 11.2,
@@ -12876,7 +12876,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["medicham"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	medicham: {
 		num: 308,
@@ -12897,11 +12897,11 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 60,
 			spd: 75,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Pure Power",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 1.3,
 		weightkg: 31.5,
@@ -12910,7 +12910,7 @@ exports.BattlePokedex = {
 		prevo: "meditite",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	electrike: {
 		num: 309,
@@ -12931,12 +12931,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 65,
 			spd: 40,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Static",
 			1: "Lightningrod",
-			DW: "Minus",
+			DW: "Minus"
 		},
 		heightm: 0.6,
 		weightkg: 15.2,
@@ -12945,7 +12945,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["manectric"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	manectric: {
 		num: 310,
@@ -12966,12 +12966,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 105,
 			spd: 60,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
 			0: "Static",
 			1: "Lightningrod",
-			DW: "Minus",
+			DW: "Minus"
 		},
 		heightm: 1.5,
 		weightkg: 40.2,
@@ -12980,7 +12980,7 @@ exports.BattlePokedex = {
 		prevo: "electrike",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	plusle: {
 		num: 311,
@@ -13001,10 +13001,10 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 85,
 			spd: 75,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
-			0: "Plus",
+			0: "Plus"
 		},
 		heightm: 0.4,
 		weightkg: 4.2,
@@ -13013,7 +13013,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	minun: {
 		num: 312,
@@ -13034,10 +13034,10 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 75,
 			spd: 85,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
-			0: "Minus",
+			0: "Minus"
 		},
 		heightm: 0.4,
 		weightkg: 4.2,
@@ -13046,7 +13046,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	volbeat: {
 		num: 313,
@@ -13067,12 +13067,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 47,
 			spd: 75,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Illuminate",
 			1: "Swarm",
-			DW: "Prankster",
+			DW: "Prankster"
 		},
 		heightm: 0.7,
 		weightkg: 17.7,
@@ -13081,7 +13081,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	illumise: {
 		num: 314,
@@ -13102,12 +13102,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 73,
 			spd: 75,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Tinted Lens",
-			DW: "Prankster",
+			DW: "Prankster"
 		},
 		heightm: 0.6,
 		weightkg: 17.7,
@@ -13116,7 +13116,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	budew: {
 		num: 406,
@@ -13137,12 +13137,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 50,
 			spd: 70,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Natural Cure",
 			1: "Poison Point",
-			DW: "Leaf Guard",
+			DW: "Leaf Guard"
 		},
 		heightm: 0.2,
 		weightkg: 1.2,
@@ -13151,7 +13151,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["roselia"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	roselia: {
 		num: 315,
@@ -13172,12 +13172,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 100,
 			spd: 80,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Natural Cure",
 			1: "Poison Point",
-			DW: "Leaf Guard",
+			DW: "Leaf Guard"
 		},
 		heightm: 0.3,
 		weightkg: 2,
@@ -13186,7 +13186,7 @@ exports.BattlePokedex = {
 		prevo: "budew",
 		evos: ["roserade"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	roserade: {
 		num: 407,
@@ -13207,12 +13207,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 125,
 			spd: 105,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Natural Cure",
 			1: "Poison Point",
-			DW: "Technician",
+			DW: "Technician"
 		},
 		heightm: 0.9,
 		weightkg: 14.5,
@@ -13221,7 +13221,7 @@ exports.BattlePokedex = {
 		prevo: "roselia",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gulpin: {
 		num: 316,
@@ -13242,12 +13242,12 @@ exports.BattlePokedex = {
 			def: 53,
 			spa: 43,
 			spd: 53,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Liquid Ooze",
 			1: "Sticky Hold",
-			DW: "Gluttony",
+			DW: "Gluttony"
 		},
 		heightm: 0.4,
 		weightkg: 10.3,
@@ -13256,7 +13256,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["swalot"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	swalot: {
 		num: 317,
@@ -13277,12 +13277,12 @@ exports.BattlePokedex = {
 			def: 83,
 			spa: 73,
 			spd: 83,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Liquid Ooze",
 			1: "Sticky Hold",
-			DW: "Gluttony",
+			DW: "Gluttony"
 		},
 		heightm: 1.7,
 		weightkg: 80,
@@ -13291,7 +13291,7 @@ exports.BattlePokedex = {
 		prevo: "gulpin",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	carvanha: {
 		num: 318,
@@ -13312,11 +13312,11 @@ exports.BattlePokedex = {
 			def: 20,
 			spa: 65,
 			spd: 20,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Rough Skin",
-			DW: "Speed Boost",
+			DW: "Speed Boost"
 		},
 		heightm: 0.8,
 		weightkg: 20.8,
@@ -13325,7 +13325,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["sharpedo"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sharpedo: {
 		num: 319,
@@ -13346,11 +13346,11 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 95,
 			spd: 40,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Rough Skin",
-			DW: "Speed Boost",
+			DW: "Speed Boost"
 		},
 		heightm: 1.8,
 		weightkg: 88.8,
@@ -13359,7 +13359,7 @@ exports.BattlePokedex = {
 		prevo: "carvanha",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	wailmer: {
 		num: 320,
@@ -13380,12 +13380,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 70,
 			spd: 35,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Water Veil",
 			1: "Oblivious",
-			DW: "Pressure",
+			DW: "Pressure"
 		},
 		heightm: 2,
 		weightkg: 130,
@@ -13394,7 +13394,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["wailord"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	wailord: {
 		num: 321,
@@ -13415,12 +13415,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 90,
 			spd: 45,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Water Veil",
 			1: "Oblivious",
-			DW: "Pressure",
+			DW: "Pressure"
 		},
 		heightm: 14.5,
 		weightkg: 398,
@@ -13429,7 +13429,7 @@ exports.BattlePokedex = {
 		prevo: "wailmer",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	numel: {
 		num: 322,
@@ -13450,12 +13450,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 65,
 			spd: 45,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Simple",
-			DW: "Own Tempo",
+			DW: "Own Tempo"
 		},
 		heightm: 0.7,
 		weightkg: 24,
@@ -13464,7 +13464,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["camerupt"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	camerupt: {
 		num: 323,
@@ -13485,12 +13485,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 105,
 			spd: 75,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Magma Armor",
 			1: "Solid Rock",
-			DW: "Anger Point",
+			DW: "Anger Point"
 		},
 		heightm: 1.9,
 		weightkg: 220,
@@ -13499,7 +13499,7 @@ exports.BattlePokedex = {
 		prevo: "numel",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	torkoal: {
 		num: 324,
@@ -13520,11 +13520,11 @@ exports.BattlePokedex = {
 			def: 140,
 			spa: 85,
 			spd: 70,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "White Smoke",
-			DW: "Shell Armor",
+			DW: "Shell Armor"
 		},
 		heightm: 0.5,
 		weightkg: 80.4,
@@ -13533,7 +13533,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	spoink: {
 		num: 325,
@@ -13554,12 +13554,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 70,
 			spd: 80,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Own Tempo",
-			DW: "Gluttony",
+			DW: "Gluttony"
 		},
 		heightm: 0.7,
 		weightkg: 30.6,
@@ -13568,7 +13568,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["grumpig"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	grumpig: {
 		num: 326,
@@ -13589,12 +13589,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 90,
 			spd: 110,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Own Tempo",
-			DW: "Gluttony",
+			DW: "Gluttony"
 		},
 		heightm: 0.9,
 		weightkg: 71.5,
@@ -13603,7 +13603,7 @@ exports.BattlePokedex = {
 		prevo: "spoink",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	spinda: {
 		num: 327,
@@ -13624,12 +13624,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 60,
 			spd: 60,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Own Tempo",
 			1: "Tangled Feet",
-			DW: "Contrary",
+			DW: "Contrary"
 		},
 		heightm: 1.1,
 		weightkg: 5,
@@ -13638,7 +13638,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	trapinch: {
 		num: 328,
@@ -13659,12 +13659,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 45,
 			spd: 45,
-			spe: 10,
+			spe: 10
 		},
 		abilities: {
 			0: "Hyper Cutter",
 			1: "Arena Trap",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 0.7,
 		weightkg: 15,
@@ -13673,7 +13673,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["vibrava"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vibrava: {
 		num: 329,
@@ -13694,11 +13694,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 50,
 			spd: 50,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Levitate",
-			DW: "Levitate",
+			DW: "Levitate"
 		},
 		heightm: 1.1,
 		weightkg: 15.3,
@@ -13707,7 +13707,7 @@ exports.BattlePokedex = {
 		prevo: "trapinch",
 		evos: ["flygon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	flygon: {
 		num: 330,
@@ -13728,11 +13728,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 80,
 			spd: 80,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Levitate",
-			DW: "Levitate",
+			DW: "Levitate"
 		},
 		heightm: 2,
 		weightkg: 82,
@@ -13741,7 +13741,7 @@ exports.BattlePokedex = {
 		prevo: "vibrava",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cacnea: {
 		num: 331,
@@ -13762,11 +13762,11 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 85,
 			spd: 40,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Sand Veil",
-			DW: "Water Absorb",
+			DW: "Water Absorb"
 		},
 		heightm: 0.4,
 		weightkg: 51.3,
@@ -13775,7 +13775,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["cacturne"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cacturne: {
 		num: 332,
@@ -13796,11 +13796,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 115,
 			spd: 60,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Sand Veil",
-			DW: "Water Absorb",
+			DW: "Water Absorb"
 		},
 		heightm: 1.3,
 		weightkg: 77.4,
@@ -13809,7 +13809,7 @@ exports.BattlePokedex = {
 		prevo: "cacnea",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	swablu: {
 		num: 333,
@@ -13830,11 +13830,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 40,
 			spd: 75,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Natural Cure",
-			DW: "Cloud Nine",
+			DW: "Cloud Nine"
 		},
 		heightm: 0.4,
 		weightkg: 1.2,
@@ -13843,7 +13843,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["altaria"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	altaria: {
 		num: 334,
@@ -13864,11 +13864,11 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 70,
 			spd: 105,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Natural Cure",
-			DW: "Cloud Nine",
+			DW: "Cloud Nine"
 		},
 		heightm: 1.1,
 		weightkg: 20.6,
@@ -13877,7 +13877,7 @@ exports.BattlePokedex = {
 		prevo: "swablu",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	zangoose: {
 		num: 335,
@@ -13898,11 +13898,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 60,
 			spd: 60,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Immunity",
-			DW: "Toxic Boost",
+			DW: "Toxic Boost"
 		},
 		heightm: 1.3,
 		weightkg: 40.3,
@@ -13911,7 +13911,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	seviper: {
 		num: 336,
@@ -13932,11 +13932,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 100,
 			spd: 60,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Infiltrator",
+			DW: "Infiltrator"
 		},
 		heightm: 2.7,
 		weightkg: 52.5,
@@ -13945,7 +13945,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lunatone: {
 		num: 337,
@@ -13966,10 +13966,10 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 95,
 			spd: 85,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1,
 		weightkg: 168,
@@ -13978,7 +13978,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	solrock: {
 		num: 338,
@@ -13999,10 +13999,10 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 55,
 			spd: 65,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.2,
 		weightkg: 154,
@@ -14011,7 +14011,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	barboach: {
 		num: 339,
@@ -14032,12 +14032,12 @@ exports.BattlePokedex = {
 			def: 43,
 			spa: 46,
 			spd: 41,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Anticipation",
-			DW: "Hydration",
+			DW: "Hydration"
 		},
 		heightm: 0.4,
 		weightkg: 1.9,
@@ -14046,7 +14046,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["whiscash"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	whiscash: {
 		num: 340,
@@ -14067,12 +14067,12 @@ exports.BattlePokedex = {
 			def: 73,
 			spa: 76,
 			spd: 71,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Oblivious",
 			1: "Anticipation",
-			DW: "Hydration",
+			DW: "Hydration"
 		},
 		heightm: 0.9,
 		weightkg: 23.6,
@@ -14081,7 +14081,7 @@ exports.BattlePokedex = {
 		prevo: "barboach",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	corphish: {
 		num: 341,
@@ -14102,12 +14102,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 50,
 			spd: 35,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Hyper Cutter",
 			1: "Shell Armor",
-			DW: "Adaptability",
+			DW: "Adaptability"
 		},
 		heightm: 0.6,
 		weightkg: 11.5,
@@ -14116,7 +14116,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["crawdaunt"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	crawdaunt: {
 		num: 342,
@@ -14137,12 +14137,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 90,
 			spd: 55,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Hyper Cutter",
 			1: "Shell Armor",
-			DW: "Adaptability",
+			DW: "Adaptability"
 		},
 		heightm: 1.1,
 		weightkg: 32.8,
@@ -14151,7 +14151,7 @@ exports.BattlePokedex = {
 		prevo: "corphish",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	baltoy: {
 		num: 343,
@@ -14172,10 +14172,10 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 40,
 			spd: 70,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.5,
 		weightkg: 21.5,
@@ -14184,7 +14184,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["claydol"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	claydol: {
 		num: 344,
@@ -14205,10 +14205,10 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 70,
 			spd: 120,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.5,
 		weightkg: 108,
@@ -14217,7 +14217,7 @@ exports.BattlePokedex = {
 		prevo: "baltoy",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lileep: {
 		num: 345,
@@ -14238,11 +14238,11 @@ exports.BattlePokedex = {
 			def: 77,
 			spa: 61,
 			spd: 87,
-			spe: 23,
+			spe: 23
 		},
 		abilities: {
 			0: "Suction Cups",
-			DW: "Storm Drain",
+			DW: "Storm Drain"
 		},
 		heightm: 1,
 		weightkg: 23.8,
@@ -14251,7 +14251,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["cradily"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cradily: {
 		num: 346,
@@ -14272,11 +14272,11 @@ exports.BattlePokedex = {
 			def: 97,
 			spa: 81,
 			spd: 107,
-			spe: 43,
+			spe: 43
 		},
 		abilities: {
 			0: "Suction Cups",
-			DW: "Storm Drain",
+			DW: "Storm Drain"
 		},
 		heightm: 1.5,
 		weightkg: 60.4,
@@ -14285,7 +14285,7 @@ exports.BattlePokedex = {
 		prevo: "lileep",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	anorith: {
 		num: 347,
@@ -14306,11 +14306,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 40,
 			spd: 50,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Battle Armor",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 0.7,
 		weightkg: 12.5,
@@ -14319,7 +14319,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["armaldo"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	armaldo: {
 		num: 348,
@@ -14340,11 +14340,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 70,
 			spd: 80,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Battle Armor",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 1.5,
 		weightkg: 68.2,
@@ -14353,7 +14353,7 @@ exports.BattlePokedex = {
 		prevo: "anorith",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	feebas: {
 		num: 349,
@@ -14374,11 +14374,11 @@ exports.BattlePokedex = {
 			def: 20,
 			spa: 10,
 			spd: 55,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Swift Swim",
-			DW: "Adaptability",
+			DW: "Adaptability"
 		},
 		heightm: 0.6,
 		weightkg: 7.4,
@@ -14387,7 +14387,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["milotic"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	milotic: {
 		num: 350,
@@ -14408,11 +14408,11 @@ exports.BattlePokedex = {
 			def: 79,
 			spa: 100,
 			spd: 125,
-			spe: 81,
+			spe: 81
 		},
 		abilities: {
 			0: "Marvel Scale",
-			DW: "Cute Charm",
+			DW: "Cute Charm"
 		},
 		heightm: 6.2,
 		weightkg: 162,
@@ -14421,7 +14421,7 @@ exports.BattlePokedex = {
 		prevo: "feebas",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	castform: {
 		num: 351,
@@ -14442,10 +14442,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 70,
 			spd: 70,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
-			0: "Forecast",
+			0: "Forecast"
 		},
 		heightm: 0.3,
 		weightkg: 0.8,
@@ -14454,7 +14454,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["castformsunny","castformrainy","castformsnowy"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	castformsunny: {
 		num: 351,
@@ -14475,10 +14475,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 70,
 			spd: 70,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
-			0: "Forecast",
+			0: "Forecast"
 		},
 		heightm: 0.3,
 		weightkg: 0.8,
@@ -14487,7 +14487,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["castform","castformrainy","castformsnowy"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	castformrainy: {
 		num: 351,
@@ -14508,10 +14508,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 70,
 			spd: 70,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
-			0: "Forecast",
+			0: "Forecast"
 		},
 		heightm: 0.3,
 		weightkg: 0.8,
@@ -14520,7 +14520,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["castform","castformsunny","castformsnowy"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	castformsnowy: {
 		num: 351,
@@ -14541,10 +14541,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 70,
 			spd: 70,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
-			0: "Forecast",
+			0: "Forecast"
 		},
 		heightm: 0.3,
 		weightkg: 0.8,
@@ -14553,7 +14553,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["castform","castformsunny","castformrainy"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	kecleon: {
 		num: 352,
@@ -14574,10 +14574,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 60,
 			spd: 120,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
-			0: "Color Change",
+			0: "Color Change"
 		},
 		heightm: 1,
 		weightkg: 22,
@@ -14586,7 +14586,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shuppet: {
 		num: 353,
@@ -14607,12 +14607,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 63,
 			spd: 33,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Insomnia",
 			1: "Frisk",
-			DW: "Cursed Body",
+			DW: "Cursed Body"
 		},
 		heightm: 0.6,
 		weightkg: 2.3,
@@ -14621,7 +14621,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["banette"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	banette: {
 		num: 354,
@@ -14642,12 +14642,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 83,
 			spd: 63,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Insomnia",
 			1: "Frisk",
-			DW: "Cursed Body",
+			DW: "Cursed Body"
 		},
 		heightm: 1.1,
 		weightkg: 12.5,
@@ -14656,7 +14656,7 @@ exports.BattlePokedex = {
 		prevo: "shuppet",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	duskull: {
 		num: 355,
@@ -14677,10 +14677,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 30,
 			spd: 90,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.8,
 		weightkg: 15,
@@ -14689,7 +14689,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["dusclops"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dusclops: {
 		num: 356,
@@ -14710,10 +14710,10 @@ exports.BattlePokedex = {
 			def: 130,
 			spa: 60,
 			spd: 130,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
-			0: "Pressure",
+			0: "Pressure"
 		},
 		heightm: 1.6,
 		weightkg: 30.6,
@@ -14722,7 +14722,7 @@ exports.BattlePokedex = {
 		prevo: "duskull",
 		evos: ["dusknoir"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dusknoir: {
 		num: 477,
@@ -14743,10 +14743,10 @@ exports.BattlePokedex = {
 			def: 135,
 			spa: 65,
 			spd: 135,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
-			0: "Pressure",
+			0: "Pressure"
 		},
 		heightm: 2.2,
 		weightkg: 106.6,
@@ -14755,7 +14755,7 @@ exports.BattlePokedex = {
 		prevo: "dusclops",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tropius: {
 		num: 357,
@@ -14776,12 +14776,12 @@ exports.BattlePokedex = {
 			def: 83,
 			spa: 72,
 			spd: 87,
-			spe: 51,
+			spe: 51
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Solar Power",
-			DW: "Harvest",
+			DW: "Harvest"
 		},
 		heightm: 2,
 		weightkg: 100,
@@ -14790,7 +14790,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	chingling: {
 		num: 433,
@@ -14811,10 +14811,10 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 65,
 			spd: 50,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.2,
 		weightkg: 0.6,
@@ -14823,7 +14823,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["chimecho"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	chimecho: {
 		num: 358,
@@ -14844,10 +14844,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 95,
 			spd: 80,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.6,
 		weightkg: 1,
@@ -14856,7 +14856,7 @@ exports.BattlePokedex = {
 		prevo: "chingling",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	absol: {
 		num: 359,
@@ -14877,12 +14877,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 75,
 			spd: 60,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Pressure",
 			1: "Super Luck",
-			DW: "Justified",
+			DW: "Justified"
 		},
 		heightm: 1.2,
 		weightkg: 47,
@@ -14891,7 +14891,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	snorunt: {
 		num: 361,
@@ -14912,12 +14912,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 50,
 			spd: 50,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Inner Focus",
 			1: "Ice Body",
-			DW: "Moody",
+			DW: "Moody"
 		},
 		heightm: 0.7,
 		weightkg: 16.8,
@@ -14926,7 +14926,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["glalie","froslass"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	glalie: {
 		num: 362,
@@ -14947,12 +14947,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 80,
 			spd: 80,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Inner Focus",
 			1: "Ice Body",
-			DW: "Moody",
+			DW: "Moody"
 		},
 		heightm: 1.5,
 		weightkg: 256.5,
@@ -14961,7 +14961,7 @@ exports.BattlePokedex = {
 		prevo: "snorunt",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	froslass: {
 		num: 478,
@@ -14982,11 +14982,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 80,
 			spd: 70,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
 			0: "Snow Cloak",
-			DW: "Cursed Body",
+			DW: "Cursed Body"
 		},
 		heightm: 1.3,
 		weightkg: 26.6,
@@ -14995,7 +14995,7 @@ exports.BattlePokedex = {
 		prevo: "snorunt",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	spheal: {
 		num: 363,
@@ -15016,12 +15016,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 55,
 			spd: 50,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Ice Body",
-			DW: "Oblivious",
+			DW: "Oblivious"
 		},
 		heightm: 0.8,
 		weightkg: 39.5,
@@ -15030,7 +15030,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["sealeo"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sealeo: {
 		num: 364,
@@ -15051,12 +15051,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 75,
 			spd: 70,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Ice Body",
-			DW: "Oblivious",
+			DW: "Oblivious"
 		},
 		heightm: 1.1,
 		weightkg: 87.6,
@@ -15065,7 +15065,7 @@ exports.BattlePokedex = {
 		prevo: "spheal",
 		evos: ["walrein"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	walrein: {
 		num: 365,
@@ -15086,12 +15086,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 95,
 			spd: 90,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Ice Body",
-			DW: "Oblivious",
+			DW: "Oblivious"
 		},
 		heightm: 1.4,
 		weightkg: 150.6,
@@ -15100,7 +15100,7 @@ exports.BattlePokedex = {
 		prevo: "sealeo",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	clamperl: {
 		num: 366,
@@ -15121,11 +15121,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 74,
 			spd: 55,
-			spe: 32,
+			spe: 32
 		},
 		abilities: {
 			0: "Shell Armor",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 0.4,
 		weightkg: 52.5,
@@ -15134,7 +15134,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["huntail","gorebyss"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	huntail: {
 		num: 367,
@@ -15155,11 +15155,11 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 94,
 			spd: 75,
-			spe: 52,
+			spe: 52
 		},
 		abilities: {
 			0: "Swift Swim",
-			DW: "Water Veil",
+			DW: "Water Veil"
 		},
 		heightm: 1.7,
 		weightkg: 27,
@@ -15168,7 +15168,7 @@ exports.BattlePokedex = {
 		prevo: "clamperl",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gorebyss: {
 		num: 368,
@@ -15189,11 +15189,11 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 114,
 			spd: 75,
-			spe: 52,
+			spe: 52
 		},
 		abilities: {
 			0: "Swift Swim",
-			DW: "Hydration",
+			DW: "Hydration"
 		},
 		heightm: 1.8,
 		weightkg: 22.6,
@@ -15202,7 +15202,7 @@ exports.BattlePokedex = {
 		prevo: "clamperl",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	relicanth: {
 		num: 369,
@@ -15223,12 +15223,12 @@ exports.BattlePokedex = {
 			def: 130,
 			spa: 45,
 			spd: 65,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Rock Head",
-			DW: "Sturdy",
+			DW: "Sturdy"
 		},
 		heightm: 1,
 		weightkg: 23.4,
@@ -15237,7 +15237,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	luvdisc: {
 		num: 370,
@@ -15258,11 +15258,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 40,
 			spd: 65,
-			spe: 97,
+			spe: 97
 		},
 		abilities: {
 			0: "Swift Swim",
-			DW: "Hydration",
+			DW: "Hydration"
 		},
 		heightm: 0.6,
 		weightkg: 8.7,
@@ -15271,7 +15271,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bagon: {
 		num: 371,
@@ -15292,11 +15292,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 40,
 			spd: 30,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Rock Head",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 0.6,
 		weightkg: 42.1,
@@ -15305,7 +15305,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["shelgon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shelgon: {
 		num: 372,
@@ -15326,11 +15326,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 60,
 			spd: 50,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Rock Head",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 1.1,
 		weightkg: 110.5,
@@ -15339,7 +15339,7 @@ exports.BattlePokedex = {
 		prevo: "bagon",
 		evos: ["salamence"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	salamence: {
 		num: 373,
@@ -15360,11 +15360,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 110,
 			spd: 80,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Intimidate",
-			DW: "Moxie",
+			DW: "Moxie"
 		},
 		heightm: 1.5,
 		weightkg: 102.6,
@@ -15373,7 +15373,7 @@ exports.BattlePokedex = {
 		prevo: "shelgon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	beldum: {
 		num: 374,
@@ -15394,11 +15394,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 35,
 			spd: 60,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Clear Body",
-			DW: "Light Metal",
+			DW: "Light Metal"
 		},
 		heightm: 0.6,
 		weightkg: 95.2,
@@ -15407,7 +15407,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["metang"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	metang: {
 		num: 375,
@@ -15428,11 +15428,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 55,
 			spd: 80,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Clear Body",
-			DW: "Light Metal",
+			DW: "Light Metal"
 		},
 		heightm: 1.2,
 		weightkg: 202.5,
@@ -15441,7 +15441,7 @@ exports.BattlePokedex = {
 		prevo: "beldum",
 		evos: ["metagross"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	metagross: {
 		num: 376,
@@ -15462,11 +15462,11 @@ exports.BattlePokedex = {
 			def: 130,
 			spa: 95,
 			spd: 90,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Clear Body",
-			DW: "Light Metal",
+			DW: "Light Metal"
 		},
 		heightm: 1.6,
 		weightkg: 550,
@@ -15475,7 +15475,7 @@ exports.BattlePokedex = {
 		prevo: "metang",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	regirock: {
 		num: 377,
@@ -15496,11 +15496,11 @@ exports.BattlePokedex = {
 			def: 200,
 			spa: 50,
 			spd: 100,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Clear Body",
-			DW: "Sturdy",
+			DW: "Sturdy"
 		},
 		heightm: 1.7,
 		weightkg: 230,
@@ -15509,7 +15509,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	regice: {
 		num: 378,
@@ -15530,11 +15530,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 100,
 			spd: 200,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Clear Body",
-			DW: "Ice Body",
+			DW: "Ice Body"
 		},
 		heightm: 1.8,
 		weightkg: 175,
@@ -15543,7 +15543,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	registeel: {
 		num: 379,
@@ -15564,11 +15564,11 @@ exports.BattlePokedex = {
 			def: 150,
 			spa: 75,
 			spd: 150,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Clear Body",
-			DW: "Light Metal",
+			DW: "Light Metal"
 		},
 		heightm: 1.9,
 		weightkg: 205,
@@ -15577,7 +15577,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	latias: {
 		num: 380,
@@ -15598,10 +15598,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 110,
 			spd: 130,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.4,
 		weightkg: 40,
@@ -15610,7 +15610,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	latios: {
 		num: 381,
@@ -15631,10 +15631,10 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 130,
 			spd: 110,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 2,
 		weightkg: 60,
@@ -15643,7 +15643,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kyogre: {
 		num: 382,
@@ -15664,10 +15664,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 150,
 			spd: 140,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
-			0: "Drizzle",
+			0: "Drizzle"
 		},
 		heightm: 4.5,
 		weightkg: 352,
@@ -15676,7 +15676,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	groudon: {
 		num: 383,
@@ -15697,10 +15697,10 @@ exports.BattlePokedex = {
 			def: 140,
 			spa: 100,
 			spd: 90,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
-			0: "Drought",
+			0: "Drought"
 		},
 		heightm: 3.5,
 		weightkg: 950,
@@ -15709,7 +15709,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rayquaza: {
 		num: 384,
@@ -15730,10 +15730,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 150,
 			spd: 90,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
-			0: "Air Lock",
+			0: "Air Lock"
 		},
 		heightm: 7,
 		weightkg: 206.5,
@@ -15742,7 +15742,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	jirachi: {
 		num: 385,
@@ -15763,10 +15763,10 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 100,
 			spd: 100,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
-			0: "Serene Grace",
+			0: "Serene Grace"
 		},
 		heightm: 0.3,
 		weightkg: 1.1,
@@ -15775,7 +15775,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	deoxys: {
 		num: 386,
@@ -15796,10 +15796,10 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 150,
 			spd: 50,
-			spe: 150,
+			spe: 150
 		},
 		abilities: {
-			0: "Pressure",
+			0: "Pressure"
 		},
 		heightm: 1.7,
 		weightkg: 60.8,
@@ -15808,7 +15808,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["deoxysattack","deoxysdefense","deoxysspeed"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	deoxysattack: {
 		num: 386,
@@ -15829,10 +15829,10 @@ exports.BattlePokedex = {
 			def: 20,
 			spa: 180,
 			spd: 20,
-			spe: 150,
+			spe: 150
 		},
 		abilities: {
-			0: "Pressure",
+			0: "Pressure"
 		},
 		heightm: 1.7,
 		weightkg: 60.8,
@@ -15841,7 +15841,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["deoxys","deoxysdefense","deoxysspeed"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	deoxysdefense: {
 		num: 386,
@@ -15862,10 +15862,10 @@ exports.BattlePokedex = {
 			def: 160,
 			spa: 70,
 			spd: 160,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
-			0: "Pressure",
+			0: "Pressure"
 		},
 		heightm: 1.7,
 		weightkg: 60.8,
@@ -15874,7 +15874,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["deoxys","deoxysattack","deoxysspeed"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	deoxysspeed: {
 		num: 386,
@@ -15895,10 +15895,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 95,
 			spd: 90,
-			spe: 180,
+			spe: 180
 		},
 		abilities: {
-			0: "Pressure",
+			0: "Pressure"
 		},
 		heightm: 1.7,
 		weightkg: 60.8,
@@ -15907,7 +15907,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["deoxys","deoxysattack","deoxysdefense"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	turtwig: {
 		num: 387,
@@ -15928,11 +15928,11 @@ exports.BattlePokedex = {
 			def: 64,
 			spa: 45,
 			spd: 55,
-			spe: 31,
+			spe: 31
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Shell Armor",
+			DW: "Shell Armor"
 		},
 		heightm: 0.4,
 		weightkg: 10.2,
@@ -15941,7 +15941,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["grotle"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	grotle: {
 		num: 388,
@@ -15962,11 +15962,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 55,
 			spd: 65,
-			spe: 36,
+			spe: 36
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Shell Armor",
+			DW: "Shell Armor"
 		},
 		heightm: 1.1,
 		weightkg: 97,
@@ -15975,7 +15975,7 @@ exports.BattlePokedex = {
 		prevo: "turtwig",
 		evos: ["torterra"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	torterra: {
 		num: 389,
@@ -15996,11 +15996,11 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 75,
 			spd: 85,
-			spe: 56,
+			spe: 56
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Shell Armor",
+			DW: "Shell Armor"
 		},
 		heightm: 2.2,
 		weightkg: 310,
@@ -16009,7 +16009,7 @@ exports.BattlePokedex = {
 		prevo: "grotle",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	chimchar: {
 		num: 390,
@@ -16030,11 +16030,11 @@ exports.BattlePokedex = {
 			def: 44,
 			spa: 58,
 			spd: 44,
-			spe: 61,
+			spe: 61
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Iron Fist",
+			DW: "Iron Fist"
 		},
 		heightm: 0.5,
 		weightkg: 6.2,
@@ -16043,7 +16043,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["monferno"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	monferno: {
 		num: 391,
@@ -16064,11 +16064,11 @@ exports.BattlePokedex = {
 			def: 52,
 			spa: 78,
 			spd: 52,
-			spe: 81,
+			spe: 81
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Iron Fist",
+			DW: "Iron Fist"
 		},
 		heightm: 0.9,
 		weightkg: 22,
@@ -16077,7 +16077,7 @@ exports.BattlePokedex = {
 		prevo: "chimchar",
 		evos: ["infernape"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	infernape: {
 		num: 392,
@@ -16098,11 +16098,11 @@ exports.BattlePokedex = {
 			def: 71,
 			spa: 104,
 			spd: 71,
-			spe: 108,
+			spe: 108
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Iron Fist",
+			DW: "Iron Fist"
 		},
 		heightm: 1.2,
 		weightkg: 55,
@@ -16111,7 +16111,7 @@ exports.BattlePokedex = {
 		prevo: "monferno",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	piplup: {
 		num: 393,
@@ -16132,11 +16132,11 @@ exports.BattlePokedex = {
 			def: 53,
 			spa: 61,
 			spd: 56,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 0.4,
 		weightkg: 5.2,
@@ -16145,7 +16145,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["prinplup"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	prinplup: {
 		num: 394,
@@ -16166,11 +16166,11 @@ exports.BattlePokedex = {
 			def: 68,
 			spa: 81,
 			spd: 76,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 0.8,
 		weightkg: 23,
@@ -16179,7 +16179,7 @@ exports.BattlePokedex = {
 		prevo: "piplup",
 		evos: ["empoleon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	empoleon: {
 		num: 395,
@@ -16200,11 +16200,11 @@ exports.BattlePokedex = {
 			def: 88,
 			spa: 111,
 			spd: 101,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 1.7,
 		weightkg: 84.5,
@@ -16213,7 +16213,7 @@ exports.BattlePokedex = {
 		prevo: "prinplup",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	starly: {
 		num: 396,
@@ -16234,11 +16234,11 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 30,
 			spd: 30,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Keen Eye",
-			DW: "Keen Eye",
+			DW: "Keen Eye"
 		},
 		heightm: 0.3,
 		weightkg: 2,
@@ -16247,7 +16247,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["staravia"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	staravia: {
 		num: 397,
@@ -16268,11 +16268,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 40,
 			spd: 40,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Intimidate",
-			DW: "Reckless",
+			DW: "Reckless"
 		},
 		heightm: 0.6,
 		weightkg: 15.5,
@@ -16281,7 +16281,7 @@ exports.BattlePokedex = {
 		prevo: "starly",
 		evos: ["staraptor"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	staraptor: {
 		num: 398,
@@ -16302,11 +16302,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 50,
 			spd: 50,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Intimidate",
-			DW: "Reckless",
+			DW: "Reckless"
 		},
 		heightm: 1.2,
 		weightkg: 24.9,
@@ -16315,7 +16315,7 @@ exports.BattlePokedex = {
 		prevo: "staravia",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bidoof: {
 		num: 399,
@@ -16336,12 +16336,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 35,
 			spd: 40,
-			spe: 31,
+			spe: 31
 		},
 		abilities: {
 			0: "Simple",
 			1: "Unaware",
-			DW: "Moody",
+			DW: "Moody"
 		},
 		heightm: 0.5,
 		weightkg: 20,
@@ -16350,7 +16350,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["bibarel"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bibarel: {
 		num: 400,
@@ -16371,12 +16371,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 55,
 			spd: 60,
-			spe: 71,
+			spe: 71
 		},
 		abilities: {
 			0: "Simple",
 			1: "Unaware",
-			DW: "Moody",
+			DW: "Moody"
 		},
 		heightm: 1,
 		weightkg: 31.5,
@@ -16385,7 +16385,7 @@ exports.BattlePokedex = {
 		prevo: "bidoof",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kricketot: {
 		num: 401,
@@ -16406,11 +16406,11 @@ exports.BattlePokedex = {
 			def: 41,
 			spa: 25,
 			spd: 41,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Run Away",
+			DW: "Run Away"
 		},
 		heightm: 0.3,
 		weightkg: 2.2,
@@ -16419,7 +16419,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["kricketune"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kricketune: {
 		num: 402,
@@ -16440,11 +16440,11 @@ exports.BattlePokedex = {
 			def: 51,
 			spa: 55,
 			spd: 51,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Swarm",
-			DW: "Technician",
+			DW: "Technician"
 		},
 		heightm: 1,
 		weightkg: 25.5,
@@ -16453,7 +16453,7 @@ exports.BattlePokedex = {
 		prevo: "kricketot",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shinx: {
 		num: 403,
@@ -16474,12 +16474,12 @@ exports.BattlePokedex = {
 			def: 34,
 			spa: 40,
 			spd: 34,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Rivalry",
 			1: "Intimidate",
-			DW: "Guts",
+			DW: "Guts"
 		},
 		heightm: 0.5,
 		weightkg: 9.5,
@@ -16488,7 +16488,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["luxio"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	luxio: {
 		num: 404,
@@ -16509,12 +16509,12 @@ exports.BattlePokedex = {
 			def: 49,
 			spa: 60,
 			spd: 49,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Rivalry",
 			1: "Intimidate",
-			DW: "Guts",
+			DW: "Guts"
 		},
 		heightm: 0.9,
 		weightkg: 30.5,
@@ -16523,7 +16523,7 @@ exports.BattlePokedex = {
 		prevo: "shinx",
 		evos: ["luxray"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	luxray: {
 		num: 405,
@@ -16544,12 +16544,12 @@ exports.BattlePokedex = {
 			def: 79,
 			spa: 95,
 			spd: 79,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Rivalry",
 			1: "Intimidate",
-			DW: "Guts",
+			DW: "Guts"
 		},
 		heightm: 1.4,
 		weightkg: 42,
@@ -16558,7 +16558,7 @@ exports.BattlePokedex = {
 		prevo: "luxio",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cranidos: {
 		num: 408,
@@ -16579,11 +16579,11 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 30,
 			spd: 30,
-			spe: 58,
+			spe: 58
 		},
 		abilities: {
 			0: "Mold Breaker",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 0.9,
 		weightkg: 31.5,
@@ -16592,7 +16592,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["rampardos"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rampardos: {
 		num: 409,
@@ -16613,11 +16613,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 65,
 			spd: 50,
-			spe: 58,
+			spe: 58
 		},
 		abilities: {
 			0: "Mold Breaker",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 1.6,
 		weightkg: 102.5,
@@ -16626,7 +16626,7 @@ exports.BattlePokedex = {
 		prevo: "cranidos",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shieldon: {
 		num: 410,
@@ -16647,11 +16647,11 @@ exports.BattlePokedex = {
 			def: 118,
 			spa: 42,
 			spd: 88,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Sturdy",
-			DW: "Soundproof",
+			DW: "Soundproof"
 		},
 		heightm: 0.5,
 		weightkg: 57,
@@ -16660,7 +16660,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["bastiodon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bastiodon: {
 		num: 411,
@@ -16681,11 +16681,11 @@ exports.BattlePokedex = {
 			def: 168,
 			spa: 47,
 			spd: 138,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Sturdy",
-			DW: "Soundproof",
+			DW: "Soundproof"
 		},
 		heightm: 1.3,
 		weightkg: 149.5,
@@ -16694,7 +16694,7 @@ exports.BattlePokedex = {
 		prevo: "shieldon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	burmy: {
 		num: 412,
@@ -16715,11 +16715,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 29,
 			spd: 45,
-			spe: 36,
+			spe: 36
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.2,
 		weightkg: 3.4,
@@ -16728,7 +16728,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
 		otherFormes: ["burmysandy","burmytrash"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	burmysandy: {
 		num: 412,
@@ -16749,11 +16749,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 29,
 			spd: 45,
-			spe: 36,
+			spe: 36
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.2,
 		weightkg: 3.4,
@@ -16762,7 +16762,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
 		otherFormes: ["burmy","burmytrash"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	burmytrash: {
 		num: 412,
@@ -16783,11 +16783,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 29,
 			spd: 45,
-			spe: 36,
+			spe: 36
 		},
 		abilities: {
 			0: "Shed Skin",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.2,
 		weightkg: 3.4,
@@ -16796,7 +16796,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
 		otherFormes: ["burmy","burmysandy"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	wormadam: {
 		num: 413,
@@ -16817,11 +16817,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 79,
 			spd: 105,
-			spe: 36,
+			spe: 36
 		},
 		abilities: {
 			0: "Anticipation",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.5,
 		weightkg: 6.5,
@@ -16830,7 +16830,7 @@ exports.BattlePokedex = {
 		prevo: "burmy",
 		evos: [],
 		otherFormes: ["wormadamsandy","wormadamtrash"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	wormadamsandy: {
 		num: 413,
@@ -16851,11 +16851,11 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 59,
 			spd: 85,
-			spe: 36,
+			spe: 36
 		},
 		abilities: {
 			0: "Anticipation",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.5,
 		weightkg: 6.5,
@@ -16864,7 +16864,7 @@ exports.BattlePokedex = {
 		prevo: "burmy",
 		evos: [],
 		otherFormes: ["wormadam","wormadamtrash"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	wormadamtrash: {
 		num: 413,
@@ -16885,11 +16885,11 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 69,
 			spd: 95,
-			spe: 36,
+			spe: 36
 		},
 		abilities: {
 			0: "Anticipation",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.5,
 		weightkg: 6.5,
@@ -16898,7 +16898,7 @@ exports.BattlePokedex = {
 		prevo: "burmy",
 		evos: [],
 		otherFormes: ["wormadam","wormadamsandy"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	mothim: {
 		num: 414,
@@ -16919,11 +16919,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 94,
 			spd: 50,
-			spe: 66,
+			spe: 66
 		},
 		abilities: {
 			0: "Swarm",
-			DW: "Tinted Lens",
+			DW: "Tinted Lens"
 		},
 		heightm: 0.9,
 		weightkg: 23.3,
@@ -16932,7 +16932,7 @@ exports.BattlePokedex = {
 		prevo: "burmy",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	combee: {
 		num: 415,
@@ -16953,11 +16953,11 @@ exports.BattlePokedex = {
 			def: 42,
 			spa: 30,
 			spd: 42,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Honey Gather",
-			DW: "Hustle",
+			DW: "Hustle"
 		},
 		heightm: 0.3,
 		weightkg: 5.5,
@@ -16966,7 +16966,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["vespiquen"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vespiquen: {
 		num: 416,
@@ -16987,11 +16987,11 @@ exports.BattlePokedex = {
 			def: 102,
 			spa: 80,
 			spd: 102,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 1.2,
 		weightkg: 38.5,
@@ -17000,7 +17000,7 @@ exports.BattlePokedex = {
 		prevo: "combee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pachirisu: {
 		num: 417,
@@ -17021,12 +17021,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 45,
 			spd: 90,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Pickup",
-			DW: "Volt Absorb",
+			DW: "Volt Absorb"
 		},
 		heightm: 0.4,
 		weightkg: 3.9,
@@ -17035,7 +17035,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	buizel: {
 		num: 418,
@@ -17056,11 +17056,11 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 60,
 			spd: 30,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Swift Swim",
-			DW: "Water Veil",
+			DW: "Water Veil"
 		},
 		heightm: 0.7,
 		weightkg: 29.5,
@@ -17069,7 +17069,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["floatzel"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	floatzel: {
 		num: 419,
@@ -17090,11 +17090,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 85,
 			spd: 50,
-			spe: 115,
+			spe: 115
 		},
 		abilities: {
 			0: "Swift Swim",
-			DW: "Water Veil",
+			DW: "Water Veil"
 		},
 		heightm: 1.1,
 		weightkg: 33.5,
@@ -17103,7 +17103,7 @@ exports.BattlePokedex = {
 		prevo: "buizel",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cherubi: {
 		num: 420,
@@ -17124,10 +17124,10 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 62,
 			spd: 53,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
-			0: "Chlorophyll",
+			0: "Chlorophyll"
 		},
 		heightm: 0.4,
 		weightkg: 3.3,
@@ -17136,7 +17136,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["cherrim"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cherrim: {
 		num: 421,
@@ -17157,10 +17157,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 87,
 			spd: 78,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
-			0: "Flower Gift",
+			0: "Flower Gift"
 		},
 		heightm: 0.5,
 		weightkg: 9.3,
@@ -17169,7 +17169,7 @@ exports.BattlePokedex = {
 		prevo: "cherubi",
 		evos: [],
 		otherFormes: ["cherrimsunshine"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cherrimsunshine: {
 		num: 421,
@@ -17190,10 +17190,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 87,
 			spd: 78,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
-			0: "Flower Gift",
+			0: "Flower Gift"
 		},
 		heightm: 0.5,
 		weightkg: 9.3,
@@ -17202,7 +17202,7 @@ exports.BattlePokedex = {
 		prevo: "cherubi",
 		evos: [],
 		otherFormes: ["cherrim"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	shellos: {
 		num: 422,
@@ -17223,12 +17223,12 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 57,
 			spd: 62,
-			spe: 34,
+			spe: 34
 		},
 		abilities: {
 			0: "Sticky Hold",
 			1: "Storm Drain",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 0.3,
 		weightkg: 6.3,
@@ -17237,7 +17237,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["gastrodon","gastrodoneast"],
 		otherFormes: ["shelloseast"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shelloseast: {
 		num: 422,
@@ -17258,12 +17258,12 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 57,
 			spd: 62,
-			spe: 34,
+			spe: 34
 		},
 		abilities: {
 			0: "Sticky Hold",
 			1: "Storm Drain",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 0.3,
 		weightkg: 6.3,
@@ -17272,7 +17272,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["gastrodon","gastrodoneast"],
 		otherFormes: ["shellos"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	gastrodon: {
 		num: 423,
@@ -17293,12 +17293,12 @@ exports.BattlePokedex = {
 			def: 68,
 			spa: 92,
 			spd: 82,
-			spe: 39,
+			spe: 39
 		},
 		abilities: {
 			0: "Sticky Hold",
 			1: "Storm Drain",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 0.9,
 		weightkg: 29.9,
@@ -17307,7 +17307,7 @@ exports.BattlePokedex = {
 		prevo: "shellos",
 		evos: [],
 		otherFormes: ["gastrodoneast"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gastrodoneast: {
 		num: 423,
@@ -17328,12 +17328,12 @@ exports.BattlePokedex = {
 			def: 68,
 			spa: 92,
 			spd: 82,
-			spe: 39,
+			spe: 39
 		},
 		abilities: {
 			0: "Sticky Hold",
 			1: "Storm Drain",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 0.9,
 		weightkg: 29.9,
@@ -17342,7 +17342,7 @@ exports.BattlePokedex = {
 		prevo: "shellos",
 		evos: [],
 		otherFormes: ["gastrodon"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	drifloon: {
 		num: 425,
@@ -17363,12 +17363,12 @@ exports.BattlePokedex = {
 			def: 34,
 			spa: 60,
 			spd: 44,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Aftermath",
 			1: "Unburden",
-			DW: "Flare Boost",
+			DW: "Flare Boost"
 		},
 		heightm: 0.4,
 		weightkg: 1.2,
@@ -17377,7 +17377,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["drifblim"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	drifblim: {
 		num: 426,
@@ -17398,12 +17398,12 @@ exports.BattlePokedex = {
 			def: 44,
 			spa: 90,
 			spd: 54,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Aftermath",
 			1: "Unburden",
-			DW: "Flare Boost",
+			DW: "Flare Boost"
 		},
 		heightm: 1.2,
 		weightkg: 15,
@@ -17412,7 +17412,7 @@ exports.BattlePokedex = {
 		prevo: "drifloon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	buneary: {
 		num: 427,
@@ -17433,12 +17433,12 @@ exports.BattlePokedex = {
 			def: 44,
 			spa: 44,
 			spd: 56,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Klutz",
-			DW: "Limber",
+			DW: "Limber"
 		},
 		heightm: 0.4,
 		weightkg: 5.5,
@@ -17447,7 +17447,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["lopunny"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lopunny: {
 		num: 428,
@@ -17468,12 +17468,12 @@ exports.BattlePokedex = {
 			def: 84,
 			spa: 54,
 			spd: 96,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
 			0: "Cute Charm",
 			1: "Klutz",
-			DW: "Limber",
+			DW: "Limber"
 		},
 		heightm: 1.2,
 		weightkg: 33.3,
@@ -17482,7 +17482,7 @@ exports.BattlePokedex = {
 		prevo: "buneary",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	glameow: {
 		num: 431,
@@ -17503,12 +17503,12 @@ exports.BattlePokedex = {
 			def: 42,
 			spa: 42,
 			spd: 37,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Limber",
 			1: "Own Tempo",
-			DW: "Keen Eye",
+			DW: "Keen Eye"
 		},
 		heightm: 0.5,
 		weightkg: 3.9,
@@ -17517,7 +17517,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["purugly"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	purugly: {
 		num: 432,
@@ -17538,12 +17538,12 @@ exports.BattlePokedex = {
 			def: 64,
 			spa: 64,
 			spd: 59,
-			spe: 112,
+			spe: 112
 		},
 		abilities: {
 			0: "Thick Fat",
 			1: "Own Tempo",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 1,
 		weightkg: 43.8,
@@ -17552,7 +17552,7 @@ exports.BattlePokedex = {
 		prevo: "glameow",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	stunky: {
 		num: 434,
@@ -17573,12 +17573,12 @@ exports.BattlePokedex = {
 			def: 47,
 			spa: 41,
 			spd: 41,
-			spe: 74,
+			spe: 74
 		},
 		abilities: {
 			0: "Stench",
 			1: "Aftermath",
-			DW: "Keen Eye",
+			DW: "Keen Eye"
 		},
 		heightm: 0.4,
 		weightkg: 19.2,
@@ -17587,7 +17587,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["skuntank"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	skuntank: {
 		num: 435,
@@ -17608,12 +17608,12 @@ exports.BattlePokedex = {
 			def: 67,
 			spa: 71,
 			spd: 61,
-			spe: 84,
+			spe: 84
 		},
 		abilities: {
 			0: "Stench",
 			1: "Aftermath",
-			DW: "Keen Eye",
+			DW: "Keen Eye"
 		},
 		heightm: 1,
 		weightkg: 38,
@@ -17622,7 +17622,7 @@ exports.BattlePokedex = {
 		prevo: "stunky",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bronzor: {
 		num: 436,
@@ -17643,12 +17643,12 @@ exports.BattlePokedex = {
 			def: 86,
 			spa: 24,
 			spd: 86,
-			spe: 23,
+			spe: 23
 		},
 		abilities: {
 			0: "Levitate",
 			1: "Heatproof",
-			DW: "Heavy Metal",
+			DW: "Heavy Metal"
 		},
 		heightm: 0.5,
 		weightkg: 60.5,
@@ -17657,7 +17657,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["bronzong"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bronzong: {
 		num: 437,
@@ -17678,12 +17678,12 @@ exports.BattlePokedex = {
 			def: 116,
 			spa: 79,
 			spd: 116,
-			spe: 33,
+			spe: 33
 		},
 		abilities: {
 			0: "Levitate",
 			1: "Heatproof",
-			DW: "Heavy Metal",
+			DW: "Heavy Metal"
 		},
 		heightm: 1.3,
 		weightkg: 187,
@@ -17692,7 +17692,7 @@ exports.BattlePokedex = {
 		prevo: "bronzor",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	chatot: {
 		num: 441,
@@ -17713,12 +17713,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 92,
 			spd: 42,
-			spe: 91,
+			spe: 91
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Tangled Feet",
-			DW: "Big Pecks",
+			DW: "Big Pecks"
 		},
 		heightm: 0.5,
 		weightkg: 1.9,
@@ -17727,7 +17727,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	spiritomb: {
 		num: 442,
@@ -17748,11 +17748,11 @@ exports.BattlePokedex = {
 			def: 108,
 			spa: 92,
 			spd: 108,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Infiltrator",
+			DW: "Infiltrator"
 		},
 		heightm: 1,
 		weightkg: 108,
@@ -17761,7 +17761,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gible: {
 		num: 443,
@@ -17782,11 +17782,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 40,
 			spd: 45,
-			spe: 42,
+			spe: 42
 		},
 		abilities: {
 			0: "Sand Veil",
-			DW: "Rough Skin",
+			DW: "Rough Skin"
 		},
 		heightm: 0.7,
 		weightkg: 20.5,
@@ -17795,7 +17795,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["gabite"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gabite: {
 		num: 444,
@@ -17816,11 +17816,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 50,
 			spd: 55,
-			spe: 82,
+			spe: 82
 		},
 		abilities: {
 			0: "Sand Veil",
-			DW: "Rough Skin",
+			DW: "Rough Skin"
 		},
 		heightm: 1.4,
 		weightkg: 56,
@@ -17829,7 +17829,7 @@ exports.BattlePokedex = {
 		prevo: "gible",
 		evos: ["garchomp"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	garchomp: {
 		num: 445,
@@ -17850,11 +17850,11 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 80,
 			spd: 85,
-			spe: 102,
+			spe: 102
 		},
 		abilities: {
 			0: "Sand Veil",
-			DW: "Rough Skin",
+			DW: "Rough Skin"
 		},
 		heightm: 1.9,
 		weightkg: 95,
@@ -17863,7 +17863,7 @@ exports.BattlePokedex = {
 		prevo: "gabite",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	riolu: {
 		num: 447,
@@ -17884,12 +17884,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 35,
 			spd: 40,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Steadfast",
 			1: "Inner Focus",
-			DW: "Prankster",
+			DW: "Prankster"
 		},
 		heightm: 0.7,
 		weightkg: 20.2,
@@ -17898,7 +17898,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["lucario"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lucario: {
 		num: 448,
@@ -17919,12 +17919,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 115,
 			spd: 70,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Steadfast",
 			1: "Inner Focus",
-			DW: "Justified",
+			DW: "Justified"
 		},
 		heightm: 1.2,
 		weightkg: 54,
@@ -17933,7 +17933,7 @@ exports.BattlePokedex = {
 		prevo: "riolu",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hippopotas: {
 		num: 449,
@@ -17954,11 +17954,11 @@ exports.BattlePokedex = {
 			def: 78,
 			spa: 38,
 			spd: 42,
-			spe: 32,
+			spe: 32
 		},
 		abilities: {
 			0: "Sand Stream",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 0.8,
 		weightkg: 49.5,
@@ -17967,7 +17967,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["hippowdon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hippowdon: {
 		num: 450,
@@ -17988,11 +17988,11 @@ exports.BattlePokedex = {
 			def: 118,
 			spa: 68,
 			spd: 72,
-			spe: 47,
+			spe: 47
 		},
 		abilities: {
 			0: "Sand Stream",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 2,
 		weightkg: 300,
@@ -18001,7 +18001,7 @@ exports.BattlePokedex = {
 		prevo: "hippopotas",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	skorupi: {
 		num: 451,
@@ -18022,12 +18022,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 30,
 			spd: 55,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Battle Armor",
 			1: "Sniper",
-			DW: "Keen Eye",
+			DW: "Keen Eye"
 		},
 		heightm: 0.8,
 		weightkg: 12,
@@ -18036,7 +18036,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["drapion"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	drapion: {
 		num: 452,
@@ -18057,12 +18057,12 @@ exports.BattlePokedex = {
 			def: 110,
 			spa: 60,
 			spd: 75,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Battle Armor",
 			1: "Sniper",
-			DW: "Keen Eye",
+			DW: "Keen Eye"
 		},
 		heightm: 1.3,
 		weightkg: 61.5,
@@ -18071,7 +18071,7 @@ exports.BattlePokedex = {
 		prevo: "skorupi",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	croagunk: {
 		num: 453,
@@ -18092,12 +18092,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 61,
 			spd: 40,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Anticipation",
 			1: "Dry Skin",
-			DW: "Poison Touch",
+			DW: "Poison Touch"
 		},
 		heightm: 0.7,
 		weightkg: 23,
@@ -18106,7 +18106,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["toxicroak"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	toxicroak: {
 		num: 454,
@@ -18127,12 +18127,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 86,
 			spd: 65,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Anticipation",
 			1: "Dry Skin",
-			DW: "Poison Touch",
+			DW: "Poison Touch"
 		},
 		heightm: 1.3,
 		weightkg: 44.4,
@@ -18141,7 +18141,7 @@ exports.BattlePokedex = {
 		prevo: "croagunk",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	carnivine: {
 		num: 455,
@@ -18162,10 +18162,10 @@ exports.BattlePokedex = {
 			def: 72,
 			spa: 90,
 			spd: 72,
-			spe: 46,
+			spe: 46
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.4,
 		weightkg: 27,
@@ -18174,7 +18174,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	finneon: {
 		num: 456,
@@ -18195,12 +18195,12 @@ exports.BattlePokedex = {
 			def: 56,
 			spa: 49,
 			spd: 61,
-			spe: 66,
+			spe: 66
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Storm Drain",
-			DW: "Water Veil",
+			DW: "Water Veil"
 		},
 		heightm: 0.4,
 		weightkg: 7,
@@ -18209,7 +18209,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["lumineon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lumineon: {
 		num: 457,
@@ -18230,12 +18230,12 @@ exports.BattlePokedex = {
 			def: 76,
 			spa: 69,
 			spd: 86,
-			spe: 91,
+			spe: 91
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Storm Drain",
-			DW: "Water Veil",
+			DW: "Water Veil"
 		},
 		heightm: 1.2,
 		weightkg: 24,
@@ -18244,7 +18244,7 @@ exports.BattlePokedex = {
 		prevo: "finneon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	snover: {
 		num: 459,
@@ -18265,11 +18265,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 62,
 			spd: 60,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Snow Warning",
-			DW: "Soundproof",
+			DW: "Soundproof"
 		},
 		heightm: 1,
 		weightkg: 50.5,
@@ -18278,7 +18278,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["abomasnow"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	abomasnow: {
 		num: 460,
@@ -18299,11 +18299,11 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 92,
 			spd: 85,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Snow Warning",
-			DW: "Soundproof",
+			DW: "Soundproof"
 		},
 		heightm: 2.2,
 		weightkg: 135.5,
@@ -18312,7 +18312,7 @@ exports.BattlePokedex = {
 		prevo: "snover",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rotom: {
 		num: 479,
@@ -18333,10 +18333,10 @@ exports.BattlePokedex = {
 			def: 77,
 			spa: 95,
 			spd: 77,
-			spe: 91,
+			spe: 91
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.3,
 		weightkg: 0.3,
@@ -18345,7 +18345,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["rotomheat","rotomwash","rotomfrost","rotomfan","rotommow"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rotomheat: {
 		num: 479,
@@ -18366,10 +18366,10 @@ exports.BattlePokedex = {
 			def: 107,
 			spa: 105,
 			spd: 107,
-			spe: 86,
+			spe: 86
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.3,
 		weightkg: 0.3,
@@ -18378,7 +18378,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["rotom","rotomwash","rotomfrost","rotomfan","rotommow"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	rotomwash: {
 		num: 479,
@@ -18399,10 +18399,10 @@ exports.BattlePokedex = {
 			def: 107,
 			spa: 105,
 			spd: 107,
-			spe: 86,
+			spe: 86
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.3,
 		weightkg: 0.3,
@@ -18411,7 +18411,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["rotom","rotomheat","rotomfrost","rotomfan","rotommow"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	rotomfrost: {
 		num: 479,
@@ -18432,10 +18432,10 @@ exports.BattlePokedex = {
 			def: 107,
 			spa: 105,
 			spd: 107,
-			spe: 86,
+			spe: 86
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.3,
 		weightkg: 0.3,
@@ -18444,7 +18444,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfan","rotommow"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	rotomfan: {
 		num: 479,
@@ -18465,10 +18465,10 @@ exports.BattlePokedex = {
 			def: 107,
 			spa: 105,
 			spd: 107,
-			spe: 86,
+			spe: 86
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.3,
 		weightkg: 0.3,
@@ -18477,7 +18477,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotommow"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	rotommow: {
 		num: 479,
@@ -18498,10 +18498,10 @@ exports.BattlePokedex = {
 			def: 107,
 			spa: 105,
 			spd: 107,
-			spe: 86,
+			spe: 86
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.3,
 		weightkg: 0.3,
@@ -18510,7 +18510,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotomfan"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	uxie: {
 		num: 480,
@@ -18531,10 +18531,10 @@ exports.BattlePokedex = {
 			def: 130,
 			spa: 75,
 			spd: 130,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.3,
 		weightkg: 0.3,
@@ -18543,7 +18543,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mesprit: {
 		num: 481,
@@ -18564,10 +18564,10 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 105,
 			spd: 105,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.3,
 		weightkg: 0.3,
@@ -18576,7 +18576,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	azelf: {
 		num: 482,
@@ -18597,10 +18597,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 125,
 			spd: 70,
-			spe: 115,
+			spe: 115
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.3,
 		weightkg: 0.3,
@@ -18609,7 +18609,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dialga: {
 		num: 483,
@@ -18630,11 +18630,11 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 150,
 			spd: 100,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 5.4,
 		weightkg: 683,
@@ -18643,7 +18643,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	palkia: {
 		num: 484,
@@ -18664,11 +18664,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 150,
 			spd: 120,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 4.2,
 		weightkg: 336,
@@ -18677,7 +18677,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	heatran: {
 		num: 485,
@@ -18698,11 +18698,11 @@ exports.BattlePokedex = {
 			def: 106,
 			spa: 130,
 			spd: 106,
-			spe: 77,
+			spe: 77
 		},
 		abilities: {
 			0: "Flash Fire",
-			DW: "Flame Body",
+			DW: "Flame Body"
 		},
 		heightm: 1.7,
 		weightkg: 430,
@@ -18711,7 +18711,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	regigigas: {
 		num: 486,
@@ -18732,10 +18732,10 @@ exports.BattlePokedex = {
 			def: 110,
 			spa: 80,
 			spd: 110,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
-			0: "Slow Start",
+			0: "Slow Start"
 		},
 		heightm: 3.7,
 		weightkg: 420,
@@ -18744,7 +18744,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	giratina: {
 		num: 487,
@@ -18765,11 +18765,11 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 100,
 			spd: 120,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Pressure",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 4.5,
 		weightkg: 750,
@@ -18778,7 +18778,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["giratinaorigin"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	giratinaorigin: {
 		num: 487,
@@ -18799,11 +18799,11 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 120,
 			spd: 100,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Levitate",
-			DW: "Levitate",
+			DW: "Levitate"
 		},
 		heightm: 6.9,
 		weightkg: 650,
@@ -18812,7 +18812,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["giratina"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	cresselia: {
 		num: 488,
@@ -18833,10 +18833,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 75,
 			spd: 130,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.5,
 		weightkg: 85.6,
@@ -18845,7 +18845,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	phione: {
 		num: 489,
@@ -18866,10 +18866,10 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 80,
 			spd: 80,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
-			0: "Hydration",
+			0: "Hydration"
 		},
 		heightm: 0.4,
 		weightkg: 3.1,
@@ -18878,7 +18878,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	manaphy: {
 		num: 490,
@@ -18899,10 +18899,10 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 100,
 			spd: 100,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
-			0: "Hydration",
+			0: "Hydration"
 		},
 		heightm: 0.3,
 		weightkg: 1.4,
@@ -18911,7 +18911,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	darkrai: {
 		num: 491,
@@ -18932,10 +18932,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 135,
 			spd: 90,
-			spe: 125,
+			spe: 125
 		},
 		abilities: {
-			0: "Bad Dreams",
+			0: "Bad Dreams"
 		},
 		heightm: 1.5,
 		weightkg: 50.5,
@@ -18944,7 +18944,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shaymin: {
 		num: 492,
@@ -18965,10 +18965,10 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 100,
 			spd: 100,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
-			0: "Natural Cure",
+			0: "Natural Cure"
 		},
 		heightm: 0.2,
 		weightkg: 2.1,
@@ -18977,7 +18977,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["shayminsky"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shayminsky: {
 		num: 492,
@@ -18998,10 +18998,10 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 120,
 			spd: 75,
-			spe: 127,
+			spe: 127
 		},
 		abilities: {
-			0: "Serene Grace",
+			0: "Serene Grace"
 		},
 		heightm: 0.4,
 		weightkg: 5.2,
@@ -19010,7 +19010,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["shaymin"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceus: {
 		num: 493,
@@ -19031,10 +19031,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19043,7 +19043,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	arceusbug: {
 		num: 493,
@@ -19064,10 +19064,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19076,7 +19076,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusdark: {
 		num: 493,
@@ -19097,10 +19097,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19109,7 +19109,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusdragon: {
 		num: 493,
@@ -19130,10 +19130,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19142,7 +19142,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceuselectric: {
 		num: 493,
@@ -19163,10 +19163,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19175,7 +19175,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusfighting: {
 		num: 493,
@@ -19196,10 +19196,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19208,7 +19208,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusfire: {
 		num: 493,
@@ -19229,10 +19229,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19241,7 +19241,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusflying: {
 		num: 493,
@@ -19262,10 +19262,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19274,7 +19274,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusghost: {
 		num: 493,
@@ -19295,10 +19295,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19307,7 +19307,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusgrass: {
 		num: 493,
@@ -19328,10 +19328,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19340,7 +19340,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusground: {
 		num: 493,
@@ -19361,10 +19361,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19373,7 +19373,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusice: {
 		num: 493,
@@ -19394,10 +19394,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19406,7 +19406,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceuspoison: {
 		num: 493,
@@ -19427,10 +19427,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19439,7 +19439,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceuspsychic: {
 		num: 493,
@@ -19460,10 +19460,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19472,7 +19472,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusrock: {
 		num: 493,
@@ -19493,10 +19493,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19505,7 +19505,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceussteel: {
 		num: 493,
@@ -19526,10 +19526,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19538,7 +19538,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceuswater","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceuswater: {
 		num: 493,
@@ -19559,10 +19559,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19571,7 +19571,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceusunknown"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	arceusunknown: {
 		num: 493,
@@ -19592,10 +19592,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 120,
-			spe: 120,
+			spe: 120
 		},
 		abilities: {
-			0: "Multitype",
+			0: "Multitype"
 		},
 		heightm: 3.2,
 		weightkg: 320,
@@ -19604,7 +19604,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	victini: {
 		num: 494,
@@ -19625,10 +19625,10 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 100,
 			spd: 100,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
-			0: "Victory Star",
+			0: "Victory Star"
 		},
 		heightm: 0.4,
 		weightkg: 4,
@@ -19637,7 +19637,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	snivy: {
 		num: 495,
@@ -19658,11 +19658,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 45,
 			spd: 55,
-			spe: 63,
+			spe: 63
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Contrary",
+			DW: "Contrary"
 		},
 		heightm: 0.6,
 		weightkg: 8.1,
@@ -19671,7 +19671,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["servine"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	servine: {
 		num: 496,
@@ -19692,11 +19692,11 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 60,
 			spd: 75,
-			spe: 83,
+			spe: 83
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Contrary",
+			DW: "Contrary"
 		},
 		heightm: 0.8,
 		weightkg: 16,
@@ -19705,7 +19705,7 @@ exports.BattlePokedex = {
 		prevo: "snivy",
 		evos: ["serperior"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	serperior: {
 		num: 497,
@@ -19726,11 +19726,11 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 75,
 			spd: 95,
-			spe: 113,
+			spe: 113
 		},
 		abilities: {
 			0: "Overgrow",
-			DW: "Contrary",
+			DW: "Contrary"
 		},
 		heightm: 3.3,
 		weightkg: 63,
@@ -19739,7 +19739,7 @@ exports.BattlePokedex = {
 		prevo: "servine",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tepig: {
 		num: 498,
@@ -19760,11 +19760,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 45,
 			spd: 45,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Thick Fat",
+			DW: "Thick Fat"
 		},
 		heightm: 0.5,
 		weightkg: 9.9,
@@ -19773,7 +19773,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["pignite"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pignite: {
 		num: 499,
@@ -19794,11 +19794,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 70,
 			spd: 55,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Thick Fat",
+			DW: "Thick Fat"
 		},
 		heightm: 1,
 		weightkg: 55.5,
@@ -19807,7 +19807,7 @@ exports.BattlePokedex = {
 		prevo: "tepig",
 		evos: ["emboar"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	emboar: {
 		num: 500,
@@ -19828,11 +19828,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 100,
 			spd: 65,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Blaze",
-			DW: "Reckless",
+			DW: "Reckless"
 		},
 		heightm: 1.6,
 		weightkg: 150,
@@ -19841,7 +19841,7 @@ exports.BattlePokedex = {
 		prevo: "pignite",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	oshawott: {
 		num: 501,
@@ -19862,11 +19862,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 63,
 			spd: 45,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Shell Armor",
+			DW: "Shell Armor"
 		},
 		heightm: 0.5,
 		weightkg: 5.9,
@@ -19875,7 +19875,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["dewott"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dewott: {
 		num: 502,
@@ -19896,11 +19896,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 83,
 			spd: 60,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Shell Armor",
+			DW: "Shell Armor"
 		},
 		heightm: 0.8,
 		weightkg: 24.5,
@@ -19909,7 +19909,7 @@ exports.BattlePokedex = {
 		prevo: "oshawott",
 		evos: ["samurott"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	samurott: {
 		num: 503,
@@ -19930,11 +19930,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 108,
 			spd: 70,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Torrent",
-			DW: "Shell Armor",
+			DW: "Shell Armor"
 		},
 		heightm: 1.5,
 		weightkg: 94.6,
@@ -19943,7 +19943,7 @@ exports.BattlePokedex = {
 		prevo: "dewott",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	patrat: {
 		num: 504,
@@ -19964,12 +19964,12 @@ exports.BattlePokedex = {
 			def: 39,
 			spa: 35,
 			spd: 39,
-			spe: 42,
+			spe: 42
 		},
 		abilities: {
 			0: "Run Away",
 			1: "Keen Eye",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 0.5,
 		weightkg: 11.6,
@@ -19978,7 +19978,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["watchog"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	watchog: {
 		num: 505,
@@ -19999,12 +19999,12 @@ exports.BattlePokedex = {
 			def: 69,
 			spa: 60,
 			spd: 69,
-			spe: 77,
+			spe: 77
 		},
 		abilities: {
 			0: "Illuminate",
 			1: "Keen Eye",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 1.1,
 		weightkg: 27,
@@ -20013,7 +20013,7 @@ exports.BattlePokedex = {
 		prevo: "patrat",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lillipup: {
 		num: 506,
@@ -20034,12 +20034,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 25,
 			spd: 45,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Vital Spirit",
 			1: "Pickup",
-			DW: "Run Away",
+			DW: "Run Away"
 		},
 		heightm: 0.4,
 		weightkg: 4.1,
@@ -20048,7 +20048,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["herdier"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	herdier: {
 		num: 507,
@@ -20069,12 +20069,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 35,
 			spd: 65,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Sand Rush",
-			DW: "Scrappy",
+			DW: "Scrappy"
 		},
 		heightm: 0.9,
 		weightkg: 14.7,
@@ -20083,7 +20083,7 @@ exports.BattlePokedex = {
 		prevo: "lillipup",
 		evos: ["stoutland"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	stoutland: {
 		num: 508,
@@ -20104,12 +20104,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 45,
 			spd: 90,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Sand Rush",
-			DW: "Scrappy",
+			DW: "Scrappy"
 		},
 		heightm: 1.2,
 		weightkg: 61,
@@ -20118,7 +20118,7 @@ exports.BattlePokedex = {
 		prevo: "herdier",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	purrloin: {
 		num: 509,
@@ -20139,12 +20139,12 @@ exports.BattlePokedex = {
 			def: 37,
 			spa: 50,
 			spd: 37,
-			spe: 66,
+			spe: 66
 		},
 		abilities: {
 			0: "Limber",
 			1: "Unburden",
-			DW: "Prankster",
+			DW: "Prankster"
 		},
 		heightm: 0.4,
 		weightkg: 10.1,
@@ -20153,7 +20153,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["liepard"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	liepard: {
 		num: 510,
@@ -20174,12 +20174,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 88,
 			spd: 50,
-			spe: 106,
+			spe: 106
 		},
 		abilities: {
 			0: "Limber",
 			1: "Unburden",
-			DW: "Prankster",
+			DW: "Prankster"
 		},
 		heightm: 1.1,
 		weightkg: 37.5,
@@ -20188,7 +20188,7 @@ exports.BattlePokedex = {
 		prevo: "purrloin",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pansage: {
 		num: 511,
@@ -20209,11 +20209,11 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 53,
 			spd: 48,
-			spe: 64,
+			spe: 64
 		},
 		abilities: {
 			0: "Gluttony",
-			DW: "Overgrow",
+			DW: "Overgrow"
 		},
 		heightm: 0.6,
 		weightkg: 10.5,
@@ -20222,7 +20222,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["simisage"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	simisage: {
 		num: 512,
@@ -20243,11 +20243,11 @@ exports.BattlePokedex = {
 			def: 63,
 			spa: 98,
 			spd: 63,
-			spe: 101,
+			spe: 101
 		},
 		abilities: {
 			0: "Gluttony",
-			DW: "Overgrow",
+			DW: "Overgrow"
 		},
 		heightm: 1.1,
 		weightkg: 30.5,
@@ -20256,7 +20256,7 @@ exports.BattlePokedex = {
 		prevo: "pansage",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pansear: {
 		num: 513,
@@ -20277,11 +20277,11 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 53,
 			spd: 48,
-			spe: 64,
+			spe: 64
 		},
 		abilities: {
 			0: "Gluttony",
-			DW: "Blaze",
+			DW: "Blaze"
 		},
 		heightm: 0.6,
 		weightkg: 11,
@@ -20290,7 +20290,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["simisear"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	simisear: {
 		num: 514,
@@ -20311,11 +20311,11 @@ exports.BattlePokedex = {
 			def: 63,
 			spa: 98,
 			spd: 63,
-			spe: 101,
+			spe: 101
 		},
 		abilities: {
 			0: "Gluttony",
-			DW: "Blaze",
+			DW: "Blaze"
 		},
 		heightm: 1,
 		weightkg: 28,
@@ -20324,7 +20324,7 @@ exports.BattlePokedex = {
 		prevo: "pansear",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	panpour: {
 		num: 515,
@@ -20345,11 +20345,11 @@ exports.BattlePokedex = {
 			def: 48,
 			spa: 53,
 			spd: 48,
-			spe: 64,
+			spe: 64
 		},
 		abilities: {
 			0: "Gluttony",
-			DW: "Torrent",
+			DW: "Torrent"
 		},
 		heightm: 0.6,
 		weightkg: 13.5,
@@ -20358,7 +20358,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["simipour"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	simipour: {
 		num: 516,
@@ -20379,11 +20379,11 @@ exports.BattlePokedex = {
 			def: 63,
 			spa: 98,
 			spd: 63,
-			spe: 101,
+			spe: 101
 		},
 		abilities: {
 			0: "Gluttony",
-			DW: "Torrent",
+			DW: "Torrent"
 		},
 		heightm: 1,
 		weightkg: 29,
@@ -20392,7 +20392,7 @@ exports.BattlePokedex = {
 		prevo: "panpour",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	munna: {
 		num: 517,
@@ -20413,12 +20413,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 67,
 			spd: 55,
-			spe: 24,
+			spe: 24
 		},
 		abilities: {
 			0: "Forewarn",
 			1: "Synchronize",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 0.6,
 		weightkg: 23.3,
@@ -20427,7 +20427,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["musharna"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	musharna: {
 		num: 518,
@@ -20448,12 +20448,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 107,
 			spd: 95,
-			spe: 29,
+			spe: 29
 		},
 		abilities: {
 			0: "Forewarn",
 			1: "Synchronize",
-			DW: "Telepathy",
+			DW: "Telepathy"
 		},
 		heightm: 1.1,
 		weightkg: 60.5,
@@ -20462,7 +20462,7 @@ exports.BattlePokedex = {
 		prevo: "munna",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pidove: {
 		num: 519,
@@ -20483,12 +20483,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 36,
 			spd: 30,
-			spe: 43,
+			spe: 43
 		},
 		abilities: {
 			0: "Big Pecks",
 			1: "Super Luck",
-			DW: "Rivalry",
+			DW: "Rivalry"
 		},
 		heightm: 0.3,
 		weightkg: 2.1,
@@ -20497,7 +20497,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["tranquill"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tranquill: {
 		num: 520,
@@ -20518,12 +20518,12 @@ exports.BattlePokedex = {
 			def: 62,
 			spa: 50,
 			spd: 42,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Big Pecks",
 			1: "Super Luck",
-			DW: "Rivalry",
+			DW: "Rivalry"
 		},
 		heightm: 0.6,
 		weightkg: 15,
@@ -20532,7 +20532,7 @@ exports.BattlePokedex = {
 		prevo: "pidove",
 		evos: ["unfezant"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	unfezant: {
 		num: 521,
@@ -20553,12 +20553,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 65,
 			spd: 55,
-			spe: 93,
+			spe: 93
 		},
 		abilities: {
 			0: "Big Pecks",
 			1: "Super Luck",
-			DW: "Rivalry",
+			DW: "Rivalry"
 		},
 		heightm: 1.2,
 		weightkg: 29,
@@ -20567,7 +20567,7 @@ exports.BattlePokedex = {
 		prevo: "tranquill",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	blitzle: {
 		num: 522,
@@ -20588,12 +20588,12 @@ exports.BattlePokedex = {
 			def: 32,
 			spa: 50,
 			spd: 32,
-			spe: 76,
+			spe: 76
 		},
 		abilities: {
 			0: "Lightningrod",
 			1: "Motor Drive",
-			DW: "Sap Sipper",
+			DW: "Sap Sipper"
 		},
 		heightm: 0.8,
 		weightkg: 29.8,
@@ -20602,7 +20602,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["zebstrika"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	zebstrika: {
 		num: 523,
@@ -20623,12 +20623,12 @@ exports.BattlePokedex = {
 			def: 63,
 			spa: 80,
 			spd: 63,
-			spe: 116,
+			spe: 116
 		},
 		abilities: {
 			0: "Lightningrod",
 			1: "Motor Drive",
-			DW: "Sap Sipper",
+			DW: "Sap Sipper"
 		},
 		heightm: 1.6,
 		weightkg: 79.5,
@@ -20637,7 +20637,7 @@ exports.BattlePokedex = {
 		prevo: "blitzle",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	roggenrola: {
 		num: 524,
@@ -20658,11 +20658,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 25,
 			spd: 25,
-			spe: 15,
+			spe: 15
 		},
 		abilities: {
 			0: "Sturdy",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 0.4,
 		weightkg: 18,
@@ -20671,7 +20671,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["boldore"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	boldore: {
 		num: 525,
@@ -20692,11 +20692,11 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 50,
 			spd: 40,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Sturdy",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 0.9,
 		weightkg: 102,
@@ -20705,7 +20705,7 @@ exports.BattlePokedex = {
 		prevo: "roggenrola",
 		evos: ["gigalith"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gigalith: {
 		num: 526,
@@ -20726,11 +20726,11 @@ exports.BattlePokedex = {
 			def: 130,
 			spa: 60,
 			spd: 70,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
 			0: "Sturdy",
-			DW: "Sand Force",
+			DW: "Sand Force"
 		},
 		heightm: 1.7,
 		weightkg: 260,
@@ -20739,7 +20739,7 @@ exports.BattlePokedex = {
 		prevo: "boldore",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	woobat: {
 		num: 527,
@@ -20760,12 +20760,12 @@ exports.BattlePokedex = {
 			def: 43,
 			spa: 55,
 			spd: 43,
-			spe: 72,
+			spe: 72
 		},
 		abilities: {
 			0: "Unaware",
 			1: "Klutz",
-			DW: "Simple",
+			DW: "Simple"
 		},
 		heightm: 0.4,
 		weightkg: 2.1,
@@ -20774,7 +20774,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["swoobat"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	swoobat: {
 		num: 528,
@@ -20795,12 +20795,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 77,
 			spd: 55,
-			spe: 114,
+			spe: 114
 		},
 		abilities: {
 			0: "Unaware",
 			1: "Klutz",
-			DW: "Simple",
+			DW: "Simple"
 		},
 		heightm: 0.9,
 		weightkg: 10.5,
@@ -20809,7 +20809,7 @@ exports.BattlePokedex = {
 		prevo: "woobat",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	drilbur: {
 		num: 529,
@@ -20830,12 +20830,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 30,
 			spd: 45,
-			spe: 68,
+			spe: 68
 		},
 		abilities: {
 			0: "Sand Rush",
 			1: "Sand Force",
-			DW: "Mold Breaker",
+			DW: "Mold Breaker"
 		},
 		heightm: 0.3,
 		weightkg: 8.5,
@@ -20844,7 +20844,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["excadrill"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	excadrill: {
 		num: 530,
@@ -20865,12 +20865,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 50,
 			spd: 65,
-			spe: 88,
+			spe: 88
 		},
 		abilities: {
 			0: "Sand Rush",
 			1: "Sand Force",
-			DW: "Mold Breaker",
+			DW: "Mold Breaker"
 		},
 		heightm: 0.7,
 		weightkg: 40.4,
@@ -20879,7 +20879,7 @@ exports.BattlePokedex = {
 		prevo: "drilbur",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	audino: {
 		num: 531,
@@ -20900,12 +20900,12 @@ exports.BattlePokedex = {
 			def: 86,
 			spa: 60,
 			spd: 86,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Healer",
 			1: "Regenerator",
-			DW: "Klutz",
+			DW: "Klutz"
 		},
 		heightm: 1.1,
 		weightkg: 31,
@@ -20914,7 +20914,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	timburr: {
 		num: 532,
@@ -20935,12 +20935,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 25,
 			spd: 35,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Guts",
 			1: "Sheer Force",
-			DW: "Iron Fist",
+			DW: "Iron Fist"
 		},
 		heightm: 0.6,
 		weightkg: 12.5,
@@ -20949,7 +20949,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["gurdurr"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gurdurr: {
 		num: 533,
@@ -20970,12 +20970,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 40,
 			spd: 50,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Guts",
 			1: "Sheer Force",
-			DW: "Iron Fist",
+			DW: "Iron Fist"
 		},
 		heightm: 1.2,
 		weightkg: 40,
@@ -20984,7 +20984,7 @@ exports.BattlePokedex = {
 		prevo: "timburr",
 		evos: ["conkeldurr"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	conkeldurr: {
 		num: 534,
@@ -21005,12 +21005,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 55,
 			spd: 65,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Guts",
 			1: "Sheer Force",
-			DW: "Iron Fist",
+			DW: "Iron Fist"
 		},
 		heightm: 1.4,
 		weightkg: 87,
@@ -21019,7 +21019,7 @@ exports.BattlePokedex = {
 		prevo: "gurdurr",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tympole: {
 		num: 535,
@@ -21040,12 +21040,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 50,
 			spd: 40,
-			spe: 64,
+			spe: 64
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Hydration",
-			DW: "Water Absorb",
+			DW: "Water Absorb"
 		},
 		heightm: 0.5,
 		weightkg: 4.5,
@@ -21054,7 +21054,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["palpitoad"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	palpitoad: {
 		num: 536,
@@ -21075,12 +21075,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 65,
 			spd: 55,
-			spe: 69,
+			spe: 69
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Hydration",
-			DW: "Water Absorb",
+			DW: "Water Absorb"
 		},
 		heightm: 0.8,
 		weightkg: 17,
@@ -21089,7 +21089,7 @@ exports.BattlePokedex = {
 		prevo: "tympole",
 		evos: ["seismitoad"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	seismitoad: {
 		num: 537,
@@ -21110,12 +21110,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 85,
 			spd: 75,
-			spe: 74,
+			spe: 74
 		},
 		abilities: {
 			0: "Swift Swim",
 			1: "Poison Touch",
-			DW: "Water Absorb",
+			DW: "Water Absorb"
 		},
 		heightm: 1.5,
 		weightkg: 62,
@@ -21124,7 +21124,7 @@ exports.BattlePokedex = {
 		prevo: "palpitoad",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	throh: {
 		num: 538,
@@ -21145,12 +21145,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 30,
 			spd: 85,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Guts",
 			1: "Inner Focus",
-			DW: "Mold Breaker",
+			DW: "Mold Breaker"
 		},
 		heightm: 1.3,
 		weightkg: 55.5,
@@ -21159,7 +21159,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sawk: {
 		num: 539,
@@ -21180,12 +21180,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 30,
 			spd: 75,
-			spe: 85,
+			spe: 85
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Inner Focus",
-			DW: "Mold Breaker",
+			DW: "Mold Breaker"
 		},
 		heightm: 1.4,
 		weightkg: 51,
@@ -21194,7 +21194,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sewaddle: {
 		num: 540,
@@ -21215,12 +21215,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 40,
 			spd: 60,
-			spe: 42,
+			spe: 42
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Chlorophyll",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.3,
 		weightkg: 2.5,
@@ -21229,7 +21229,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["swadloon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	swadloon: {
 		num: 541,
@@ -21250,12 +21250,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 50,
 			spd: 80,
-			spe: 42,
+			spe: 42
 		},
 		abilities: {
 			0: "Leaf Guard",
 			1: "Chlorophyll",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.5,
 		weightkg: 7.3,
@@ -21264,7 +21264,7 @@ exports.BattlePokedex = {
 		prevo: "sewaddle",
 		evos: ["leavanny"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	leavanny: {
 		num: 542,
@@ -21285,12 +21285,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 70,
 			spd: 70,
-			spe: 92,
+			spe: 92
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Chlorophyll",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 1.2,
 		weightkg: 20.5,
@@ -21299,7 +21299,7 @@ exports.BattlePokedex = {
 		prevo: "swadloon",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	venipede: {
 		num: 543,
@@ -21320,12 +21320,12 @@ exports.BattlePokedex = {
 			def: 59,
 			spa: 30,
 			spd: 39,
-			spe: 57,
+			spe: 57
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Swarm",
-			DW: "Quick Feet",
+			DW: "Quick Feet"
 		},
 		heightm: 0.4,
 		weightkg: 5.3,
@@ -21334,7 +21334,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["whirlipede"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	whirlipede: {
 		num: 544,
@@ -21355,12 +21355,12 @@ exports.BattlePokedex = {
 			def: 99,
 			spa: 40,
 			spd: 79,
-			spe: 47,
+			spe: 47
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Swarm",
-			DW: "Quick Feet",
+			DW: "Quick Feet"
 		},
 		heightm: 1.2,
 		weightkg: 58.5,
@@ -21369,7 +21369,7 @@ exports.BattlePokedex = {
 		prevo: "venipede",
 		evos: ["scolipede"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	scolipede: {
 		num: 545,
@@ -21390,12 +21390,12 @@ exports.BattlePokedex = {
 			def: 89,
 			spa: 55,
 			spd: 69,
-			spe: 112,
+			spe: 112
 		},
 		abilities: {
 			0: "Poison Point",
 			1: "Swarm",
-			DW: "Quick Feet",
+			DW: "Quick Feet"
 		},
 		heightm: 2.5,
 		weightkg: 200.5,
@@ -21404,7 +21404,7 @@ exports.BattlePokedex = {
 		prevo: "whirlipede",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cottonee: {
 		num: 546,
@@ -21425,12 +21425,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 37,
 			spd: 50,
-			spe: 66,
+			spe: 66
 		},
 		abilities: {
 			0: "Prankster",
 			1: "Infiltrator",
-			DW: "Chlorophyll",
+			DW: "Chlorophyll"
 		},
 		heightm: 0.3,
 		weightkg: 0.6,
@@ -21439,7 +21439,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["whimsicott"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	whimsicott: {
 		num: 547,
@@ -21460,12 +21460,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 77,
 			spd: 75,
-			spe: 116,
+			spe: 116
 		},
 		abilities: {
 			0: "Prankster",
 			1: "Infiltrator",
-			DW: "Chlorophyll",
+			DW: "Chlorophyll"
 		},
 		heightm: 0.7,
 		weightkg: 6.6,
@@ -21474,7 +21474,7 @@ exports.BattlePokedex = {
 		prevo: "cottonee",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	petilil: {
 		num: 548,
@@ -21495,12 +21495,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 70,
 			spd: 50,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Own Tempo",
-			DW: "Leaf Guard",
+			DW: "Leaf Guard"
 		},
 		heightm: 0.5,
 		weightkg: 6.6,
@@ -21509,7 +21509,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["lilligant"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lilligant: {
 		num: 549,
@@ -21530,12 +21530,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 110,
 			spd: 75,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Own Tempo",
-			DW: "Leaf Guard",
+			DW: "Leaf Guard"
 		},
 		heightm: 1.1,
 		weightkg: 16.3,
@@ -21544,7 +21544,7 @@ exports.BattlePokedex = {
 		prevo: "petilil",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	basculin: {
 		num: 550,
@@ -21565,12 +21565,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 80,
 			spd: 55,
-			spe: 98,
+			spe: 98
 		},
 		abilities: {
 			0: "Reckless",
 			1: "Adaptability",
-			DW: "Mold Breaker",
+			DW: "Mold Breaker"
 		},
 		heightm: 1,
 		weightkg: 18,
@@ -21579,7 +21579,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["basculinbluestriped"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	basculinbluestriped: {
 		num: 550,
@@ -21600,12 +21600,12 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 80,
 			spd: 55,
-			spe: 98,
+			spe: 98
 		},
 		abilities: {
 			0: "Rock Head",
 			1: "Adaptability",
-			DW: "Mold Breaker",
+			DW: "Mold Breaker"
 		},
 		heightm: 1,
 		weightkg: 18,
@@ -21614,7 +21614,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["basculin"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	sandile: {
 		num: 551,
@@ -21635,12 +21635,12 @@ exports.BattlePokedex = {
 			def: 35,
 			spa: 35,
 			spd: 35,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Moxie",
-			DW: "Anger Point",
+			DW: "Anger Point"
 		},
 		heightm: 0.7,
 		weightkg: 15.2,
@@ -21649,7 +21649,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["krokorok"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	krokorok: {
 		num: 552,
@@ -21670,12 +21670,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 45,
 			spd: 45,
-			spe: 74,
+			spe: 74
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Moxie",
-			DW: "Anger Point",
+			DW: "Anger Point"
 		},
 		heightm: 1,
 		weightkg: 33.4,
@@ -21684,7 +21684,7 @@ exports.BattlePokedex = {
 		prevo: "sandile",
 		evos: ["krookodile"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	krookodile: {
 		num: 553,
@@ -21705,12 +21705,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 65,
 			spd: 70,
-			spe: 92,
+			spe: 92
 		},
 		abilities: {
 			0: "Intimidate",
 			1: "Moxie",
-			DW: "Anger Point",
+			DW: "Anger Point"
 		},
 		heightm: 1.5,
 		weightkg: 96.3,
@@ -21719,7 +21719,7 @@ exports.BattlePokedex = {
 		prevo: "krokorok",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	darumaka: {
 		num: 554,
@@ -21740,11 +21740,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 15,
 			spd: 45,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Hustle",
-			DW: "Inner Focus",
+			DW: "Inner Focus"
 		},
 		heightm: 0.6,
 		weightkg: 37.5,
@@ -21753,7 +21753,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["darmanitan"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	darmanitan: {
 		num: 555,
@@ -21774,11 +21774,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 30,
 			spd: 55,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Sheer Force",
-			DW: "Zen Mode",
+			DW: "Zen Mode"
 		},
 		heightm: 1.3,
 		weightkg: 92.9,
@@ -21787,7 +21787,7 @@ exports.BattlePokedex = {
 		prevo: "darumaka",
 		evos: [],
 		otherFormes: ["darmanitanzen"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	darmanitanzen: {
 		num: 555,
@@ -21808,11 +21808,11 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 140,
 			spd: 105,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Sheer Force",
-			DW: "Zen Mode",
+			DW: "Zen Mode"
 		},
 		heightm: 1.3,
 		weightkg: 92.9,
@@ -21821,7 +21821,7 @@ exports.BattlePokedex = {
 		prevo: "darumaka",
 		evos: [],
 		otherFormes: ["darmanitan"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	maractus: {
 		num: 556,
@@ -21842,12 +21842,12 @@ exports.BattlePokedex = {
 			def: 67,
 			spa: 106,
 			spd: 67,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Water Absorb",
 			1: "Chlorophyll",
-			DW: "Storm Drain",
+			DW: "Storm Drain"
 		},
 		heightm: 1,
 		weightkg: 28,
@@ -21856,7 +21856,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	dwebble: {
 		num: 557,
@@ -21877,12 +21877,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 35,
 			spd: 35,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Shell Armor",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 0.3,
 		weightkg: 14.5,
@@ -21891,7 +21891,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["crustle"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	crustle: {
 		num: 558,
@@ -21912,12 +21912,12 @@ exports.BattlePokedex = {
 			def: 125,
 			spa: 65,
 			spd: 75,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Sturdy",
 			1: "Shell Armor",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 1.4,
 		weightkg: 200,
@@ -21926,7 +21926,7 @@ exports.BattlePokedex = {
 		prevo: "dwebble",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	scraggy: {
 		num: 559,
@@ -21947,12 +21947,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 35,
 			spd: 70,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
 			0: "Shed Skin",
 			1: "Moxie",
-			DW: "Intimidate",
+			DW: "Intimidate"
 		},
 		heightm: 0.6,
 		weightkg: 11.8,
@@ -21961,7 +21961,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["scrafty"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	scrafty: {
 		num: 560,
@@ -21982,12 +21982,12 @@ exports.BattlePokedex = {
 			def: 115,
 			spa: 45,
 			spd: 115,
-			spe: 58,
+			spe: 58
 		},
 		abilities: {
 			0: "Shed Skin",
 			1: "Moxie",
-			DW: "Intimidate",
+			DW: "Intimidate"
 		},
 		heightm: 1.1,
 		weightkg: 30,
@@ -21996,7 +21996,7 @@ exports.BattlePokedex = {
 		prevo: "scraggy",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sigilyph: {
 		num: 561,
@@ -22017,12 +22017,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 103,
 			spd: 80,
-			spe: 97,
+			spe: 97
 		},
 		abilities: {
 			0: "Wonder Skin",
 			1: "Magic Guard",
-			DW: "Tinted Lens",
+			DW: "Tinted Lens"
 		},
 		heightm: 1.4,
 		weightkg: 14,
@@ -22031,7 +22031,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	yamask: {
 		num: 562,
@@ -22052,10 +22052,10 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 55,
 			spd: 65,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
-			0: "Mummy",
+			0: "Mummy"
 		},
 		heightm: 0.5,
 		weightkg: 1.5,
@@ -22064,7 +22064,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["cofagrigus"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cofagrigus: {
 		num: 563,
@@ -22085,10 +22085,10 @@ exports.BattlePokedex = {
 			def: 145,
 			spa: 95,
 			spd: 105,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
-			0: "Mummy",
+			0: "Mummy"
 		},
 		heightm: 1.7,
 		weightkg: 76.5,
@@ -22097,7 +22097,7 @@ exports.BattlePokedex = {
 		prevo: "yamask",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tirtouga: {
 		num: 564,
@@ -22118,12 +22118,12 @@ exports.BattlePokedex = {
 			def: 103,
 			spa: 53,
 			spd: 45,
-			spe: 22,
+			spe: 22
 		},
 		abilities: {
 			0: "Solid Rock",
 			1: "Sturdy",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 0.7,
 		weightkg: 16.5,
@@ -22132,7 +22132,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["carracosta"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	carracosta: {
 		num: 565,
@@ -22153,12 +22153,12 @@ exports.BattlePokedex = {
 			def: 133,
 			spa: 83,
 			spd: 65,
-			spe: 32,
+			spe: 32
 		},
 		abilities: {
 			0: "Solid Rock",
 			1: "Sturdy",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 1.2,
 		weightkg: 81,
@@ -22167,7 +22167,7 @@ exports.BattlePokedex = {
 		prevo: "tirtouga",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	archen: {
 		num: 566,
@@ -22188,10 +22188,10 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 74,
 			spd: 45,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
-			0: "Defeatist",
+			0: "Defeatist"
 		},
 		heightm: 0.5,
 		weightkg: 9.5,
@@ -22200,7 +22200,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["archeops"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	archeops: {
 		num: 567,
@@ -22221,10 +22221,10 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 112,
 			spd: 65,
-			spe: 110,
+			spe: 110
 		},
 		abilities: {
-			0: "Defeatist",
+			0: "Defeatist"
 		},
 		heightm: 1.4,
 		weightkg: 32,
@@ -22233,7 +22233,7 @@ exports.BattlePokedex = {
 		prevo: "archen",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	trubbish: {
 		num: 568,
@@ -22254,12 +22254,12 @@ exports.BattlePokedex = {
 			def: 62,
 			spa: 40,
 			spd: 62,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Stench",
 			1: "Sticky Hold",
-			DW: "Aftermath",
+			DW: "Aftermath"
 		},
 		heightm: 0.6,
 		weightkg: 31,
@@ -22268,7 +22268,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["garbodor"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	garbodor: {
 		num: 569,
@@ -22289,12 +22289,12 @@ exports.BattlePokedex = {
 			def: 82,
 			spa: 60,
 			spd: 82,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Stench",
 			1: "Weak Armor",
-			DW: "Aftermath",
+			DW: "Aftermath"
 		},
 		heightm: 1.9,
 		weightkg: 107.3,
@@ -22303,7 +22303,7 @@ exports.BattlePokedex = {
 		prevo: "trubbish",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	zorua: {
 		num: 570,
@@ -22324,10 +22324,10 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 80,
 			spd: 40,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
-			0: "Illusion",
+			0: "Illusion"
 		},
 		heightm: 0.7,
 		weightkg: 12.5,
@@ -22336,7 +22336,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["zoroark"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	zoroark: {
 		num: 571,
@@ -22357,10 +22357,10 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 120,
 			spd: 60,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
-			0: "Illusion",
+			0: "Illusion"
 		},
 		heightm: 1.6,
 		weightkg: 81.1,
@@ -22369,7 +22369,7 @@ exports.BattlePokedex = {
 		prevo: "zorua",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	minccino: {
 		num: 572,
@@ -22390,12 +22390,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 40,
 			spd: 40,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Cute Charm",
 			1: "Technician",
-			DW: "Skill Link",
+			DW: "Skill Link"
 		},
 		heightm: 0.4,
 		weightkg: 5.8,
@@ -22404,7 +22404,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["cinccino"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cinccino: {
 		num: 573,
@@ -22425,12 +22425,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 65,
 			spd: 60,
-			spe: 115,
+			spe: 115
 		},
 		abilities: {
 			0: "Cute Charm",
 			1: "Technician",
-			DW: "Skill Link",
+			DW: "Skill Link"
 		},
 		heightm: 0.5,
 		weightkg: 7.5,
@@ -22439,7 +22439,7 @@ exports.BattlePokedex = {
 		prevo: "minccino",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gothita: {
 		num: 574,
@@ -22460,11 +22460,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 55,
 			spd: 65,
-			spe: 45,
+			spe: 45
 		},
 		abilities: {
 			0: "Frisk",
-			DW: "Shadow Tag",
+			DW: "Shadow Tag"
 		},
 		heightm: 0.4,
 		weightkg: 5.8,
@@ -22473,7 +22473,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["gothorita"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gothorita: {
 		num: 575,
@@ -22494,11 +22494,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 75,
 			spd: 85,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Frisk",
-			DW: "Shadow Tag",
+			DW: "Shadow Tag"
 		},
 		heightm: 0.7,
 		weightkg: 18,
@@ -22507,7 +22507,7 @@ exports.BattlePokedex = {
 		prevo: "gothita",
 		evos: ["gothitelle"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	gothitelle: {
 		num: 576,
@@ -22528,11 +22528,11 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 95,
 			spd: 110,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Frisk",
-			DW: "Shadow Tag",
+			DW: "Shadow Tag"
 		},
 		heightm: 1.5,
 		weightkg: 44,
@@ -22541,7 +22541,7 @@ exports.BattlePokedex = {
 		prevo: "gothorita",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	solosis: {
 		num: 577,
@@ -22562,12 +22562,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 105,
 			spd: 50,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Overcoat",
 			1: "Magic Guard",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 0.3,
 		weightkg: 1,
@@ -22576,7 +22576,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["duosion"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	duosion: {
 		num: 578,
@@ -22597,12 +22597,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 125,
 			spd: 60,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Overcoat",
 			1: "Magic Guard",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 0.6,
 		weightkg: 8,
@@ -22611,7 +22611,7 @@ exports.BattlePokedex = {
 		prevo: "solosis",
 		evos: ["reuniclus"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	reuniclus: {
 		num: 579,
@@ -22632,12 +22632,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 125,
 			spd: 85,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Overcoat",
 			1: "Magic Guard",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 1,
 		weightkg: 20.1,
@@ -22646,7 +22646,7 @@ exports.BattlePokedex = {
 		prevo: "duosion",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ducklett: {
 		num: 580,
@@ -22667,12 +22667,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 44,
 			spd: 50,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Big Pecks",
-			DW: "Hydration",
+			DW: "Hydration"
 		},
 		heightm: 0.5,
 		weightkg: 5.5,
@@ -22681,7 +22681,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["swanna"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	swanna: {
 		num: 581,
@@ -22702,12 +22702,12 @@ exports.BattlePokedex = {
 			def: 63,
 			spa: 87,
 			spd: 63,
-			spe: 98,
+			spe: 98
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Big Pecks",
-			DW: "Hydration",
+			DW: "Hydration"
 		},
 		heightm: 1.3,
 		weightkg: 24.2,
@@ -22716,7 +22716,7 @@ exports.BattlePokedex = {
 		prevo: "ducklett",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vanillite: {
 		num: 582,
@@ -22737,11 +22737,11 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 65,
 			spd: 60,
-			spe: 44,
+			spe: 44
 		},
 		abilities: {
 			0: "Ice Body",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 0.4,
 		weightkg: 5.7,
@@ -22750,7 +22750,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["vanillish"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vanillish: {
 		num: 583,
@@ -22771,11 +22771,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 80,
 			spd: 75,
-			spe: 59,
+			spe: 59
 		},
 		abilities: {
 			0: "Ice Body",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 1.1,
 		weightkg: 41,
@@ -22784,7 +22784,7 @@ exports.BattlePokedex = {
 		prevo: "vanillite",
 		evos: ["vanilluxe"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vanilluxe: {
 		num: 584,
@@ -22805,11 +22805,11 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 110,
 			spd: 95,
-			spe: 79,
+			spe: 79
 		},
 		abilities: {
 			0: "Ice Body",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 1.3,
 		weightkg: 57.5,
@@ -22818,7 +22818,7 @@ exports.BattlePokedex = {
 		prevo: "vanillish",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	deerling: {
 		num: 585,
@@ -22839,12 +22839,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 40,
 			spd: 50,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
-			DW: "Serene Grace",
+			DW: "Serene Grace"
 		},
 		heightm: 0.6,
 		weightkg: 19.5,
@@ -22853,7 +22853,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["sawsbuck"],
 		otherFormes: ["deerlingsummer","deerlingautumn","deerlingwinter"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	deerlingsummer: {
 		num: 585,
@@ -22874,12 +22874,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 40,
 			spd: 50,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
-			DW: "Serene Grace",
+			DW: "Serene Grace"
 		},
 		heightm: 0.6,
 		weightkg: 19.5,
@@ -22888,7 +22888,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["sawsbuck"],
 		otherFormes: ["deerling","deerlingautumn","deerlingwinter"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	deerlingautumn: {
 		num: 585,
@@ -22909,12 +22909,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 40,
 			spd: 50,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
-			DW: "Serene Grace",
+			DW: "Serene Grace"
 		},
 		heightm: 0.6,
 		weightkg: 19.5,
@@ -22923,7 +22923,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["sawsbuck"],
 		otherFormes: ["deerling","deerlingsummer","deerlingwinter"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	deerlingwinter: {
 		num: 585,
@@ -22944,12 +22944,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 40,
 			spd: 50,
-			spe: 75,
+			spe: 75
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
-			DW: "Serene Grace",
+			DW: "Serene Grace"
 		},
 		heightm: 0.6,
 		weightkg: 19.5,
@@ -22958,7 +22958,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["sawsbuck"],
 		otherFormes: ["deerling","deerlingsummer","deerlingautumn"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	sawsbuck: {
 		num: 586,
@@ -22979,12 +22979,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 60,
 			spd: 70,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
-			DW: "Serene Grace",
+			DW: "Serene Grace"
 		},
 		heightm: 1.9,
 		weightkg: 92.5,
@@ -22993,7 +22993,7 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		evos: [],
 		otherFormes: ["sawsbucksummer","sawsbuckautumn","sawsbuckwinter"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	sawsbucksummer: {
 		num: 586,
@@ -23014,12 +23014,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 60,
 			spd: 70,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
-			DW: "Serene Grace",
+			DW: "Serene Grace"
 		},
 		heightm: 1.9,
 		weightkg: 92.5,
@@ -23028,7 +23028,7 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		evos: [],
 		otherFormes: ["sawsbuck","sawsbuckautumn","sawsbuckwinter"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	sawsbuckautumn: {
 		num: 586,
@@ -23049,12 +23049,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 60,
 			spd: 70,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
-			DW: "Serene Grace",
+			DW: "Serene Grace"
 		},
 		heightm: 1.9,
 		weightkg: 92.5,
@@ -23063,7 +23063,7 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		evos: [],
 		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckwinter"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	sawsbuckwinter: {
 		num: 586,
@@ -23084,12 +23084,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 60,
 			spd: 70,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
 			0: "Chlorophyll",
 			1: "Sap Sipper",
-			DW: "Serene Grace",
+			DW: "Serene Grace"
 		},
 		heightm: 1.9,
 		weightkg: 92.5,
@@ -23098,7 +23098,7 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		evos: [],
 		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckautumn"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	emolga: {
 		num: 587,
@@ -23119,11 +23119,11 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 75,
 			spd: 60,
-			spe: 103,
+			spe: 103
 		},
 		abilities: {
 			0: "Static",
-			DW: "Motor Drive",
+			DW: "Motor Drive"
 		},
 		heightm: 0.4,
 		weightkg: 5,
@@ -23132,7 +23132,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	karrablast: {
 		num: 588,
@@ -23153,12 +23153,12 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 40,
 			spd: 45,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Shed Skin",
-			DW: "No Guard",
+			DW: "No Guard"
 		},
 		heightm: 0.5,
 		weightkg: 5.9,
@@ -23167,7 +23167,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["escavalier"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	escavalier: {
 		num: 589,
@@ -23188,12 +23188,12 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 60,
 			spd: 105,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Shell Armor",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 1,
 		weightkg: 33,
@@ -23202,7 +23202,7 @@ exports.BattlePokedex = {
 		prevo: "karrablast",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	foongus: {
 		num: 590,
@@ -23223,11 +23223,11 @@ exports.BattlePokedex = {
 			def: 45,
 			spa: 55,
 			spd: 55,
-			spe: 15,
+			spe: 15
 		},
 		abilities: {
 			0: "Effect Spore",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 0.2,
 		weightkg: 1,
@@ -23236,7 +23236,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["amoonguss"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	amoonguss: {
 		num: 591,
@@ -23257,11 +23257,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 85,
 			spd: 80,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Effect Spore",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 0.6,
 		weightkg: 10.5,
@@ -23270,7 +23270,7 @@ exports.BattlePokedex = {
 		prevo: "foongus",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	frillish: {
 		num: 592,
@@ -23291,12 +23291,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 65,
 			spd: 85,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Water Absorb",
 			1: "Cursed Body",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 1.2,
 		weightkg: 33,
@@ -23305,7 +23305,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["jellicent"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	jellicent: {
 		num: 593,
@@ -23326,12 +23326,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 85,
 			spd: 105,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Water Absorb",
 			1: "Cursed Body",
-			DW: "Damp",
+			DW: "Damp"
 		},
 		heightm: 2.2,
 		weightkg: 135,
@@ -23340,7 +23340,7 @@ exports.BattlePokedex = {
 		prevo: "frillish",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	alomomola: {
 		num: 594,
@@ -23361,12 +23361,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 40,
 			spd: 45,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Healer",
 			1: "Hydration",
-			DW: "Regenerator",
+			DW: "Regenerator"
 		},
 		heightm: 1.2,
 		weightkg: 31.6,
@@ -23375,7 +23375,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	joltik: {
 		num: 595,
@@ -23396,12 +23396,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 57,
 			spd: 50,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Compoundeyes",
 			1: "Unnerve",
-			DW: "Swarm",
+			DW: "Swarm"
 		},
 		heightm: 0.1,
 		weightkg: 0.6,
@@ -23410,7 +23410,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["galvantula"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	galvantula: {
 		num: 596,
@@ -23431,12 +23431,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 97,
 			spd: 60,
-			spe: 108,
+			spe: 108
 		},
 		abilities: {
 			0: "Compoundeyes",
 			1: "Unnerve",
-			DW: "Swarm",
+			DW: "Swarm"
 		},
 		heightm: 0.8,
 		weightkg: 14.3,
@@ -23445,7 +23445,7 @@ exports.BattlePokedex = {
 		prevo: "joltik",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ferroseed: {
 		num: 597,
@@ -23466,10 +23466,10 @@ exports.BattlePokedex = {
 			def: 91,
 			spa: 24,
 			spd: 86,
-			spe: 10,
+			spe: 10
 		},
 		abilities: {
-			0: "Iron Barbs",
+			0: "Iron Barbs"
 		},
 		heightm: 0.6,
 		weightkg: 18.8,
@@ -23478,7 +23478,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["ferrothorn"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	ferrothorn: {
 		num: 598,
@@ -23499,10 +23499,10 @@ exports.BattlePokedex = {
 			def: 131,
 			spa: 54,
 			spd: 116,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
-			0: "Iron Barbs",
+			0: "Iron Barbs"
 		},
 		heightm: 1,
 		weightkg: 110,
@@ -23511,7 +23511,7 @@ exports.BattlePokedex = {
 		prevo: "ferroseed",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	klink: {
 		num: 599,
@@ -23532,12 +23532,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 45,
 			spd: 60,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Plus",
 			1: "Minus",
-			DW: "Clear Body",
+			DW: "Clear Body"
 		},
 		heightm: 0.3,
 		weightkg: 21,
@@ -23546,7 +23546,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["klang"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	klang: {
 		num: 600,
@@ -23567,12 +23567,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 70,
 			spd: 85,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Plus",
 			1: "Minus",
-			DW: "Clear Body",
+			DW: "Clear Body"
 		},
 		heightm: 0.6,
 		weightkg: 51,
@@ -23581,7 +23581,7 @@ exports.BattlePokedex = {
 		prevo: "klink",
 		evos: ["klinklang"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	klinklang: {
 		num: 601,
@@ -23602,12 +23602,12 @@ exports.BattlePokedex = {
 			def: 115,
 			spa: 70,
 			spd: 85,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
 			0: "Plus",
 			1: "Minus",
-			DW: "Clear Body",
+			DW: "Clear Body"
 		},
 		heightm: 0.6,
 		weightkg: 81,
@@ -23616,7 +23616,7 @@ exports.BattlePokedex = {
 		prevo: "klang",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tynamo: {
 		num: 602,
@@ -23637,10 +23637,10 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 45,
 			spd: 40,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 0.2,
 		weightkg: 0.3,
@@ -23649,7 +23649,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["eelektrik"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	eelektrik: {
 		num: 603,
@@ -23670,10 +23670,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 75,
 			spd: 70,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.2,
 		weightkg: 22,
@@ -23682,7 +23682,7 @@ exports.BattlePokedex = {
 		prevo: "tynamo",
 		evos: ["eelektross"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	eelektross: {
 		num: 604,
@@ -23703,10 +23703,10 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 105,
 			spd: 80,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 2.1,
 		weightkg: 80.5,
@@ -23715,7 +23715,7 @@ exports.BattlePokedex = {
 		prevo: "eelektrik",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	elgyem: {
 		num: 605,
@@ -23736,12 +23736,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 85,
 			spd: 55,
-			spe: 30,
+			spe: 30
 		},
 		abilities: {
 			0: "Telepathy",
 			1: "Synchronize",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 0.5,
 		weightkg: 9,
@@ -23750,7 +23750,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["beheeyem"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	beheeyem: {
 		num: 606,
@@ -23771,12 +23771,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 125,
 			spd: 95,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Telepathy",
 			1: "Synchronize",
-			DW: "Analytic",
+			DW: "Analytic"
 		},
 		heightm: 1,
 		weightkg: 34.5,
@@ -23785,7 +23785,7 @@ exports.BattlePokedex = {
 		prevo: "elgyem",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	litwick: {
 		num: 607,
@@ -23806,12 +23806,12 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 65,
 			spd: 55,
-			spe: 20,
+			spe: 20
 		},
 		abilities: {
 			0: "Flash Fire",
 			1: "Flame Body",
-			DW: "Shadow Tag",
+			DW: "Shadow Tag"
 		},
 		heightm: 0.3,
 		weightkg: 3.1,
@@ -23820,7 +23820,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["lampent"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	lampent: {
 		num: 608,
@@ -23841,12 +23841,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 95,
 			spd: 60,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Flash Fire",
 			1: "Flame Body",
-			DW: "Shadow Tag",
+			DW: "Shadow Tag"
 		},
 		heightm: 0.6,
 		weightkg: 13,
@@ -23855,7 +23855,7 @@ exports.BattlePokedex = {
 		prevo: "litwick",
 		evos: ["chandelure"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	chandelure: {
 		num: 609,
@@ -23876,12 +23876,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 145,
 			spd: 90,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Flash Fire",
 			1: "Flame Body",
-			DW: "Shadow Tag",
+			DW: "Shadow Tag"
 		},
 		heightm: 1,
 		weightkg: 34.3,
@@ -23890,7 +23890,7 @@ exports.BattlePokedex = {
 		prevo: "lampent",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	axew: {
 		num: 610,
@@ -23911,12 +23911,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 30,
 			spd: 40,
-			spe: 57,
+			spe: 57
 		},
 		abilities: {
 			0: "Rivalry",
 			1: "Mold Breaker",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 0.6,
 		weightkg: 18,
@@ -23925,7 +23925,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["fraxure"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	fraxure: {
 		num: 611,
@@ -23946,12 +23946,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 40,
 			spd: 50,
-			spe: 67,
+			spe: 67
 		},
 		abilities: {
 			0: "Rivalry",
 			1: "Mold Breaker",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 1,
 		weightkg: 36,
@@ -23960,7 +23960,7 @@ exports.BattlePokedex = {
 		prevo: "axew",
 		evos: ["haxorus"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	haxorus: {
 		num: 612,
@@ -23981,12 +23981,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 60,
 			spd: 70,
-			spe: 97,
+			spe: 97
 		},
 		abilities: {
 			0: "Rivalry",
 			1: "Mold Breaker",
-			DW: "Unnerve",
+			DW: "Unnerve"
 		},
 		heightm: 1.8,
 		weightkg: 105.5,
@@ -23995,7 +23995,7 @@ exports.BattlePokedex = {
 		prevo: "fraxure",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cubchoo: {
 		num: 613,
@@ -24016,11 +24016,11 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 60,
 			spd: 40,
-			spe: 40,
+			spe: 40
 		},
 		abilities: {
 			0: "Snow Cloak",
-			DW: "Rattled",
+			DW: "Rattled"
 		},
 		heightm: 0.5,
 		weightkg: 8.5,
@@ -24029,7 +24029,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["beartic"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	beartic: {
 		num: 614,
@@ -24050,11 +24050,11 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 70,
 			spd: 80,
-			spe: 50,
+			spe: 50
 		},
 		abilities: {
 			0: "Snow Cloak",
-			DW: "Swift Swim",
+			DW: "Swift Swim"
 		},
 		heightm: 2.6,
 		weightkg: 260,
@@ -24063,7 +24063,7 @@ exports.BattlePokedex = {
 		prevo: "cubchoo",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cryogonal: {
 		num: 615,
@@ -24084,10 +24084,10 @@ exports.BattlePokedex = {
 			def: 30,
 			spa: 95,
 			spd: 135,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.1,
 		weightkg: 148,
@@ -24096,7 +24096,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	shelmet: {
 		num: 616,
@@ -24117,12 +24117,12 @@ exports.BattlePokedex = {
 			def: 85,
 			spa: 40,
 			spd: 65,
-			spe: 25,
+			spe: 25
 		},
 		abilities: {
 			0: "Hydration",
 			1: "Shell Armor",
-			DW: "Overcoat",
+			DW: "Overcoat"
 		},
 		heightm: 0.4,
 		weightkg: 7.7,
@@ -24131,7 +24131,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["accelgor"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	accelgor: {
 		num: 617,
@@ -24152,12 +24152,12 @@ exports.BattlePokedex = {
 			def: 40,
 			spa: 100,
 			spd: 60,
-			spe: 145,
+			spe: 145
 		},
 		abilities: {
 			0: "Hydration",
 			1: "Sticky Hold",
-			DW: "Unburden",
+			DW: "Unburden"
 		},
 		heightm: 0.8,
 		weightkg: 25.3,
@@ -24166,7 +24166,7 @@ exports.BattlePokedex = {
 		prevo: "shelmet",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	stunfisk: {
 		num: 618,
@@ -24187,12 +24187,12 @@ exports.BattlePokedex = {
 			def: 84,
 			spa: 81,
 			spd: 99,
-			spe: 32,
+			spe: 32
 		},
 		abilities: {
 			0: "Static",
 			1: "Limber",
-			DW: "Sand Veil",
+			DW: "Sand Veil"
 		},
 		heightm: 0.7,
 		weightkg: 11,
@@ -24201,7 +24201,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mienfoo: {
 		num: 619,
@@ -24222,12 +24222,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 55,
 			spd: 50,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Inner Focus",
 			1: "Regenerator",
-			DW: "Reckless",
+			DW: "Reckless"
 		},
 		heightm: 0.9,
 		weightkg: 20,
@@ -24236,7 +24236,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["mienshao"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mienshao: {
 		num: 620,
@@ -24257,12 +24257,12 @@ exports.BattlePokedex = {
 			def: 60,
 			spa: 95,
 			spd: 60,
-			spe: 105,
+			spe: 105
 		},
 		abilities: {
 			0: "Inner Focus",
 			1: "Regenerator",
-			DW: "Reckless",
+			DW: "Reckless"
 		},
 		heightm: 1.4,
 		weightkg: 35.5,
@@ -24271,7 +24271,7 @@ exports.BattlePokedex = {
 		prevo: "mienfoo",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	druddigon: {
 		num: 621,
@@ -24292,12 +24292,12 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 60,
 			spd: 90,
-			spe: 48,
+			spe: 48
 		},
 		abilities: {
 			0: "Rough Skin",
 			1: "Sheer Force",
-			DW: "Mold Breaker",
+			DW: "Mold Breaker"
 		},
 		heightm: 1.6,
 		weightkg: 139,
@@ -24306,7 +24306,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	golett: {
 		num: 622,
@@ -24327,12 +24327,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 35,
 			spd: 50,
-			spe: 35,
+			spe: 35
 		},
 		abilities: {
 			0: "Iron Fist",
 			1: "Klutz",
-			DW: "No Guard",
+			DW: "No Guard"
 		},
 		heightm: 1,
 		weightkg: 92,
@@ -24341,7 +24341,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["golurk"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	golurk: {
 		num: 623,
@@ -24362,12 +24362,12 @@ exports.BattlePokedex = {
 			def: 80,
 			spa: 55,
 			spd: 80,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Iron Fist",
 			1: "Klutz",
-			DW: "No Guard",
+			DW: "No Guard"
 		},
 		heightm: 2.8,
 		weightkg: 330,
@@ -24376,7 +24376,7 @@ exports.BattlePokedex = {
 		prevo: "golett",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	pawniard: {
 		num: 624,
@@ -24397,12 +24397,12 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 40,
 			spd: 40,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Defiant",
 			1: "Inner Focus",
-			DW: "Pressure",
+			DW: "Pressure"
 		},
 		heightm: 0.5,
 		weightkg: 10.2,
@@ -24411,7 +24411,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["bisharp"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bisharp: {
 		num: 625,
@@ -24432,12 +24432,12 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 60,
 			spd: 70,
-			spe: 70,
+			spe: 70
 		},
 		abilities: {
 			0: "Defiant",
 			1: "Inner Focus",
-			DW: "Pressure",
+			DW: "Pressure"
 		},
 		heightm: 1.6,
 		weightkg: 70,
@@ -24446,7 +24446,7 @@ exports.BattlePokedex = {
 		prevo: "pawniard",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	bouffalant: {
 		num: 626,
@@ -24467,12 +24467,12 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 40,
 			spd: 95,
-			spe: 55,
+			spe: 55
 		},
 		abilities: {
 			0: "Reckless",
 			1: "Sap Sipper",
-			DW: "Soundproof",
+			DW: "Soundproof"
 		},
 		heightm: 1.6,
 		weightkg: 94.6,
@@ -24481,7 +24481,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	rufflet: {
 		num: 627,
@@ -24502,12 +24502,12 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 37,
 			spd: 50,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Sheer Force",
-			DW: "Hustle",
+			DW: "Hustle"
 		},
 		heightm: 0.5,
 		weightkg: 10.5,
@@ -24516,7 +24516,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["braviary"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	braviary: {
 		num: 628,
@@ -24537,12 +24537,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 57,
 			spd: 75,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Keen Eye",
 			1: "Sheer Force",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 1.5,
 		weightkg: 41,
@@ -24551,7 +24551,7 @@ exports.BattlePokedex = {
 		prevo: "rufflet",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	vullaby: {
 		num: 629,
@@ -24572,12 +24572,12 @@ exports.BattlePokedex = {
 			def: 75,
 			spa: 45,
 			spd: 65,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Big Pecks",
 			1: "Overcoat",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 0.5,
 		weightkg: 9,
@@ -24586,7 +24586,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["mandibuzz"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	mandibuzz: {
 		num: 630,
@@ -24607,12 +24607,12 @@ exports.BattlePokedex = {
 			def: 105,
 			spa: 55,
 			spd: 95,
-			spe: 80,
+			spe: 80
 		},
 		abilities: {
 			0: "Big Pecks",
 			1: "Overcoat",
-			DW: "Weak Armor",
+			DW: "Weak Armor"
 		},
 		heightm: 1.2,
 		weightkg: 39.5,
@@ -24621,7 +24621,7 @@ exports.BattlePokedex = {
 		prevo: "vullaby",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	heatmor: {
 		num: 631,
@@ -24642,12 +24642,12 @@ exports.BattlePokedex = {
 			def: 66,
 			spa: 105,
 			spd: 66,
-			spe: 65,
+			spe: 65
 		},
 		abilities: {
 			0: "Gluttony",
 			1: "Flash Fire",
-			DW: "White Smoke",
+			DW: "White Smoke"
 		},
 		heightm: 1.4,
 		weightkg: 58,
@@ -24656,7 +24656,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	durant: {
 		num: 632,
@@ -24677,12 +24677,12 @@ exports.BattlePokedex = {
 			def: 112,
 			spa: 48,
 			spd: 48,
-			spe: 109,
+			spe: 109
 		},
 		abilities: {
 			0: "Swarm",
 			1: "Hustle",
-			DW: "Truant",
+			DW: "Truant"
 		},
 		heightm: 0.3,
 		weightkg: 33,
@@ -24691,7 +24691,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	deino: {
 		num: 633,
@@ -24712,10 +24712,10 @@ exports.BattlePokedex = {
 			def: 50,
 			spa: 45,
 			spd: 50,
-			spe: 38,
+			spe: 38
 		},
 		abilities: {
-			0: "Hustle",
+			0: "Hustle"
 		},
 		heightm: 0.8,
 		weightkg: 17.3,
@@ -24724,7 +24724,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["zweilous"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	zweilous: {
 		num: 634,
@@ -24745,10 +24745,10 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 65,
 			spd: 70,
-			spe: 58,
+			spe: 58
 		},
 		abilities: {
-			0: "Hustle",
+			0: "Hustle"
 		},
 		heightm: 1.4,
 		weightkg: 50,
@@ -24757,7 +24757,7 @@ exports.BattlePokedex = {
 		prevo: "deino",
 		evos: ["hydreigon"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	hydreigon: {
 		num: 635,
@@ -24778,10 +24778,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 125,
 			spd: 90,
-			spe: 98,
+			spe: 98
 		},
 		abilities: {
-			0: "Levitate",
+			0: "Levitate"
 		},
 		heightm: 1.8,
 		weightkg: 160,
@@ -24790,7 +24790,7 @@ exports.BattlePokedex = {
 		prevo: "zweilous",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	larvesta: {
 		num: 636,
@@ -24811,11 +24811,11 @@ exports.BattlePokedex = {
 			def: 55,
 			spa: 50,
 			spd: 55,
-			spe: 60,
+			spe: 60
 		},
 		abilities: {
 			0: "Flame Body",
-			DW: "Swarm",
+			DW: "Swarm"
 		},
 		heightm: 1.1,
 		weightkg: 28.8,
@@ -24824,7 +24824,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: ["volcarona"],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	volcarona: {
 		num: 637,
@@ -24845,11 +24845,11 @@ exports.BattlePokedex = {
 			def: 65,
 			spa: 135,
 			spd: 105,
-			spe: 100,
+			spe: 100
 		},
 		abilities: {
 			0: "Flame Body",
-			DW: "Swarm",
+			DW: "Swarm"
 		},
 		heightm: 1.6,
 		weightkg: 46,
@@ -24858,7 +24858,7 @@ exports.BattlePokedex = {
 		prevo: "larvesta",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	cobalion: {
 		num: 638,
@@ -24879,10 +24879,10 @@ exports.BattlePokedex = {
 			def: 129,
 			spa: 90,
 			spd: 72,
-			spe: 108,
+			spe: 108
 		},
 		abilities: {
-			0: "Justified",
+			0: "Justified"
 		},
 		heightm: 2.1,
 		weightkg: 250,
@@ -24891,7 +24891,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	terrakion: {
 		num: 639,
@@ -24912,10 +24912,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 72,
 			spd: 90,
-			spe: 108,
+			spe: 108
 		},
 		abilities: {
-			0: "Justified",
+			0: "Justified"
 		},
 		heightm: 1.9,
 		weightkg: 260,
@@ -24924,7 +24924,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	virizion: {
 		num: 640,
@@ -24945,10 +24945,10 @@ exports.BattlePokedex = {
 			def: 72,
 			spa: 90,
 			spd: 129,
-			spe: 108,
+			spe: 108
 		},
 		abilities: {
-			0: "Justified",
+			0: "Justified"
 		},
 		heightm: 2,
 		weightkg: 200,
@@ -24957,7 +24957,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	tornadus: {
 		num: 641,
@@ -24978,11 +24978,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 125,
 			spd: 80,
-			spe: 111,
+			spe: 111
 		},
 		abilities: {
 			0: "Prankster",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 1.5,
 		weightkg: 63,
@@ -24991,7 +24991,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	thundurus: {
 		num: 642,
@@ -25012,11 +25012,11 @@ exports.BattlePokedex = {
 			def: 70,
 			spa: 125,
 			spd: 80,
-			spe: 111,
+			spe: 111
 		},
 		abilities: {
 			0: "Prankster",
-			DW: "Defiant",
+			DW: "Defiant"
 		},
 		heightm: 1.5,
 		weightkg: 61,
@@ -25025,7 +25025,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	reshiram: {
 		num: 643,
@@ -25046,10 +25046,10 @@ exports.BattlePokedex = {
 			def: 100,
 			spa: 150,
 			spd: 120,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
-			0: "Turboblaze",
+			0: "Turboblaze"
 		},
 		heightm: 3.2,
 		weightkg: 330,
@@ -25058,7 +25058,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	zekrom: {
 		num: 644,
@@ -25079,10 +25079,10 @@ exports.BattlePokedex = {
 			def: 120,
 			spa: 120,
 			spd: 100,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
-			0: "Teravolt",
+			0: "Teravolt"
 		},
 		heightm: 2.9,
 		weightkg: 345,
@@ -25091,7 +25091,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	landorus: {
 		num: 645,
@@ -25112,11 +25112,11 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 115,
 			spd: 80,
-			spe: 101,
+			spe: 101
 		},
 		abilities: {
 			0: "Sand Force",
-			DW: "Sheer Force",
+			DW: "Sheer Force"
 		},
 		heightm: 1.5,
 		weightkg: 68,
@@ -25125,7 +25125,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	kyurem: {
 		num: 646,
@@ -25146,10 +25146,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 130,
 			spd: 90,
-			spe: 95,
+			spe: 95
 		},
 		abilities: {
-			0: "Pressure",
+			0: "Pressure"
 		},
 		heightm: 3,
 		weightkg: 325,
@@ -25158,7 +25158,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	keldeo: {
 		num: 647,
@@ -25179,10 +25179,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 129,
 			spd: 90,
-			spe: 108,
+			spe: 108
 		},
 		abilities: {
-			0: "Justified",
+			0: "Justified"
 		},
 		heightm: 1.4,
 		weightkg: 48.5,
@@ -25191,7 +25191,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: [],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	meloetta: {
 		num: 648,
@@ -25212,10 +25212,10 @@ exports.BattlePokedex = {
 			def: 77,
 			spa: 128,
 			spd: 128,
-			spe: 90,
+			spe: 90
 		},
 		abilities: {
-			0: "Serene Grace",
+			0: "Serene Grace"
 		},
 		heightm: 0.6,
 		weightkg: 6.5,
@@ -25224,7 +25224,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["meloettapirouette"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	meloettapirouette: {
 		num: 648,
@@ -25245,10 +25245,10 @@ exports.BattlePokedex = {
 			def: 90,
 			spa: 77,
 			spd: 77,
-			spe: 128,
+			spe: 128
 		},
 		abilities: {
-			0: "Serene Grace",
+			0: "Serene Grace"
 		},
 		heightm: 0.6,
 		weightkg: 6.5,
@@ -25257,7 +25257,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["meloetta"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	genesect: {
 		num: 649,
@@ -25278,10 +25278,10 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 120,
 			spd: 95,
-			spe: 99,
+			spe: 99
 		},
 		abilities: {
-			0: "Download",
+			0: "Download"
 		},
 		heightm: 1.5,
 		weightkg: 82.5,
@@ -25290,7 +25290,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["genesectdouse","genesectshock","genesectburn","genesectchill"],
-		isDefaultForme: true,
+		isDefaultForme: true
 	},
 	genesectdouse: {
 		num: 649,
@@ -25311,10 +25311,10 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 120,
 			spd: 95,
-			spe: 99,
+			spe: 99
 		},
 		abilities: {
-			0: "Download",
+			0: "Download"
 		},
 		heightm: 1.5,
 		weightkg: 82.5,
@@ -25323,7 +25323,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["genesect","genesectshock","genesectburn","genesectchill"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	genesectshock: {
 		num: 649,
@@ -25344,10 +25344,10 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 120,
 			spd: 95,
-			spe: 99,
+			spe: 99
 		},
 		abilities: {
-			0: "Download",
+			0: "Download"
 		},
 		heightm: 1.5,
 		weightkg: 82.5,
@@ -25356,7 +25356,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["genesect","genesectdouse","genesectburn","genesectchill"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	genesectburn: {
 		num: 649,
@@ -25377,10 +25377,10 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 120,
 			spd: 95,
-			spe: 99,
+			spe: 99
 		},
 		abilities: {
-			0: "Download",
+			0: "Download"
 		},
 		heightm: 1.5,
 		weightkg: 82.5,
@@ -25389,7 +25389,7 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["genesect","genesectdouse","genesectshock","genesectchill"],
-		isDefaultForme: false,
+		isDefaultForme: false
 	},
 	genesectchill: {
 		num: 649,
@@ -25410,10 +25410,10 @@ exports.BattlePokedex = {
 			def: 95,
 			spa: 120,
 			spd: 95,
-			spe: 99,
+			spe: 99
 		},
 		abilities: {
-			0: "Download",
+			0: "Download"
 		},
 		heightm: 1.5,
 		weightkg: 82.5,
@@ -25422,6 +25422,6 @@ exports.BattlePokedex = {
 		prevo: "",
 		evos: [],
 		otherFormes: ["genesect","genesectdouse","genesectshock","genesectburn"],
-		isDefaultForme: false,
-	},
+		isDefaultForme: false
+	}
 };

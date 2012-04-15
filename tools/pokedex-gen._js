@@ -22,7 +22,7 @@ function main(argv, _) {
 	{
 		var veekunPokemon = veekunDatabase.getFormeData(formeIds[f], languageId, _);
 		var convertedPokemon = convertVeekunPokemon(veekunPokemon, veekunDatabase, _);
-		outputPokemon(convertedPokemon);
+		outputPokemon(convertedPokemon, f === formeIds.length - 1);
 		if ((f + 1) % 50 === 0)
 			console.warn("Finished outputting " + (f + 1) + " pokemon.");
 	}
@@ -169,7 +169,7 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _) {
 	return result;
 }
 
-function outputPokemon(pokemon) {
+function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	// Work out the formeletter
 	var formeletter = pokemon.forme && !pokemon.isDefaultForme ? pokemon.forme[0] : '';
 	switch (pokemon.id)
@@ -221,12 +221,12 @@ function outputPokemon(pokemon) {
 
 	writeLine("baseStats: {", 1);
 	for (var b in pokemon.baseStats)
-		writeLine(b + ": " + JSON.stringify(pokemon.baseStats[b]) + ",");
+		writeLine(b + ": " + JSON.stringify(pokemon.baseStats[b]) + (ObjectIsLastKey(pokemon.baseStats, b) ? "" : ","));
 	writeLine("},", -1);
 
 	writeLine("abilities: {", 1);
 	for (var a in pokemon.abilities)
-		writeLine(a + ": " + JSON.stringify(pokemon.abilities[a]) + ",");
+		writeLine(a + ": " + JSON.stringify(pokemon.abilities[a]) + (ObjectIsLastKey(pokemon.abilities, a) ? "" : ","));
 	writeLine("},", -1);
 
 	writeLine("heightm: " + JSON.stringify(pokemon.heightm) + ",");
@@ -238,10 +238,9 @@ function outputPokemon(pokemon) {
 	writeLine("prevo: " + JSON.stringify(pokemon.prevo) + ",");
 	writeLine("evos: " + JSON.stringify(pokemon.evos) + ",");
 	writeLine("otherFormes: " + JSON.stringify(pokemon.otherFormes) + ",");
-	writeLine("isDefaultForme: " + JSON.stringify(pokemon.isDefaultForme) + ",");
-	//writeLine("isBattleOnlyForme: " + JSON.stringify(pokemon.isBattleOnlyForme) + ",");
+	writeLine("isDefaultForme: " + JSON.stringify(pokemon.isDefaultForme));
 
-	writeLine("},", -1);
+	writeLine("}" + (isNotNeedFinalNewline ? "" : ","), -1);
 }
 
 function toId(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ""); }
@@ -265,6 +264,10 @@ function writeLine(line, indent) {
 	process.stdout.write(line);
 	process.stdout.write("\n");
 	currentIndentLevel = nextIndentLevel;
+}
+
+function ObjectIsLastKey(object, key) {
+	return Object.keys(object).indexOf(key) === Object.keys(object).length - 1;
 }
 
 main(process.argv);
