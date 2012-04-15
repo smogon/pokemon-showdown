@@ -1,7 +1,7 @@
 // Run this with streamline (_node) like so:
-//  _node teambuilder-data-gen._js > ../teambuilder-data.js
+//  _node formats-data-gen._js > ../formats-data.js
 //      or
-//  ../node_modules/.bin/_node teambuilder-data-gen._js > ../teambuilder-data.js
+//  ../node_modules/.bin/_node formats-data-gen._js > ../formats-data.js
 
 var customPokemonPath = "../data/custom-pokemon.json";
 var viableMovesPath = "../data/viable-moves.txt";
@@ -15,7 +15,7 @@ function main(argv, _)
 	var smogonDex = getSmogonDex(_);
 
 	console.warn("Starting to output.");
-	writeLine("exports.TeambuilderData =");
+	writeLine("exports.BattleFormatsData =");
 	writeLine("{", 1);
 	console.warn("Outputting custom pokemon.");
 	outputCustomPokemon();

@@ -920,10 +920,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				BattleItems = require('./items.js').BattleItems;
 				BattleAbilities = require('./abilities.js').BattleAbilities;
 				BattleFormats = require('./formats.js').BattleFormats;
+				BattleFormatsData = require('./formats-data.js').BattleFormatsData;
 				BattleLearnsets = require('./learnsets.js').BattleLearnsets;
 				BattleTools = require('./tools.js').BattleTools;
 				Tools = new BattleTools();
-				TeambuilderData = require('./teambuilder-data.js').TeambuilderData;
 
 				parseCommand = require('./chat-commands.js').parseCommand;
 
@@ -945,10 +945,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 				BattleItems = require('./items.js').BattleItems;
 				BattleAbilities = require('./abilities.js').BattleAbilities;
 				BattleFormats = require('./formats.js').BattleFormats;
+				BattleFormatsData = require('./formats-data.js').BattleFormatsData;
 				BattleLearnsets = require('./learnsets.js').BattleLearnsets;
 				BattleTools = require('./tools.js').BattleTools;
 				Tools = new BattleTools();
-				TeambuilderData = require('./teambuilder-data.js').TeambuilderData;
 				socket.emit('console', 'Game resources have been hot-patched.');
 				return false;
 			}

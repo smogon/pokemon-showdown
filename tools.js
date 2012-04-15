@@ -65,12 +65,12 @@ function BattleTools()
 				template = BattlePokedex[id];
 				template.exists = true;
 			}
-			if (TeambuilderData[id])
+			if (BattleFormatsData[id])
 			{
-				template.tier = TeambuilderData[id].tier;
-				template.isNonstandard = TeambuilderData[id].isNonstandard;
-				template.viable = TeambuilderData[id].viable;
-				template.viablemoves = TeambuilderData[id].viablemoves;
+				template.tier = BattleFormatsData[id].tier;
+				template.isNonstandard = BattleFormatsData[id].isNonstandard;
+				template.viable = BattleFormatsData[id].viable;
+				template.viablemoves = BattleFormatsData[id].viablemoves;
 			}
 			if (BattleLearnsets[id])
 			{

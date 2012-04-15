@@ -56,8 +56,8 @@ BattleScripts = require('./scripts.js').BattleScripts;
 BattleItems = require('./items.js').BattleItems;
 BattleAbilities = require('./abilities.js').BattleAbilities;
 BattleFormats = require('./formats.js').BattleFormats;
+BattleFormatsData = require('./formats-data.js').BattleFormatsData;
 BattleLearnsets = require('./learnsets.js').BattleLearnsets;
-TeambuilderData = require('./teambuilder-data.js').TeambuilderData;
 try
 {
 	BattleAliases = require('./aliases.js').BattleAliases;
@@ -97,8 +97,8 @@ function reloadEngine()
 	BattleItems = require('./items.js').BattleItems;
 	BattleAbilities = require('./abilities.js').BattleAbilities;
 	BattleFormats = require('./formats.js').BattleFormats;
+	BattleFormatsData = require('./formats-data.js').BattleFormatsData;
 	BattleLearnsets = require('./learnsets.js').BattleLearnsets;
-	TeambuilderData = require('./teambuilder-data.js').TeambuilderData;
 
 	sim = require('./simulator.js');
 

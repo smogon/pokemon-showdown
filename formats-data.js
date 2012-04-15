@@ -1,4 +1,4 @@
-exports.TeambuilderData =
+exports.BattleFormatsData =
 {
 	missingno:
 	{
@@ -10646,7 +10646,6 @@ exports.TeambuilderData =
 			"lightscreen": "Light Screen",
 			"wish": "Wish",
 			"calmmind": "Calm Mind",
-			"": "",
 		},
 	},
 	yamask:
