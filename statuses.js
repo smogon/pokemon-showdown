@@ -114,6 +114,7 @@ exports.BattleStatuses = {
 		onSwitchIn: function() {
 			this.effectData.stage = 0;
 		},
+		onResidualOrder: 9,
 		onResidual: function(pokemon) {
 			this.effectData.stage++;
 			this.damage(pokemon.maxhp*this.effectData.stage/16);
