@@ -122,7 +122,6 @@ exports.BattleStatuses = {
 	},
 	confusion: {
 		// this is a volatile status
-		noCopy: true, // doesn't get copied by Baton Pass
 		onStart: function(target) {
 			this.add('-start', target.id, 'confusion');
 			this.effectData.time = 2 + parseInt(Math.random()*4);
