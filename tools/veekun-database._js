@@ -14,6 +14,14 @@ function VeekunDatabase(db, _) {
 			result.push(dbResult[r].id);
 		return result;
 	},
+	
+	this.getAllGenerations = function(_) {
+		var dbResult = this.db.execute("SELECT id FROM generations", _);
+		var results = new Array();
+		for (var d = 0; d < dbResult.length; ++d)
+			results.push(dbResult[d].id);
+		return results;
+	},
 
 	// Following functions return either ids or numbers
 
@@ -100,13 +108,13 @@ function VeekunDatabase(db, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var dbResult = this.db.execute("SELECT ability_id, is_dream FROM pokemon_abilities WHERE pokemon_id = ? ORDER BY slot ASC", [pokemonId], _);
 		var results = new Array();
-		next:
+	nextAbility:
 		for (var d = 0; d < dbResult.length; ++d)
 		{
 			var result = {id: dbResult[d].ability_id, isDreamWorld: !!dbResult[d].is_dream};
 			for (var r = 0; r < results.length; ++r) // Hack to get around indexOf() only matching object references
 				if (JSON.stringify(result) === JSON.stringify(results[r]))
-					continue next;
+					continue nextAbility;
 			results.push(result);
 		}
 		return results;
@@ -128,6 +136,22 @@ function VeekunDatabase(db, _) {
 			results.push(this.speciesIdToDefaultFormePokemonId(evoSpeciesIds[s].id, _));
 		return results;
 	},
+	
+	this.getFormeLearnset = function(formeId, versionGroupId, _) {
+		var pokemonId = this.formeIdToPokemonId(formeId, _);
+		var dbResult = this.db.execute("SELECT * FROM pokemon_moves \
+										WHERE pokemon_id = ?  AND version_group_id = ? \
+										ORDER BY level,\"order\"",
+									   [pokemonId, versionGroupId], _);
+		var results = new Array();
+		for (var d = 0; d < dbResult.length; ++d)
+			results.push({
+				moveId: dbResult[d].move_id,
+				methodOfLearningId: dbResult[d].pokemon_move_method_id,
+				levelLearnt: dbResult[d].level
+			});
+		return results;
+	}, 
 
 	this.getFormeMiscInfo = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
@@ -164,7 +188,15 @@ function VeekunDatabase(db, _) {
 	this.getTypeId = function(typeIdentifier, _) {
 		return this.db.execute("SELECT id FROM types WHERE identifier = ? LIMIT 1", [typeIdentifier], _)[0].id;
 	},
-
+	
+	this.getVersionGroupIdsForGeneration = function(generation, _) {
+		var dbResult = this.db.execute("SELECT id FROM version_groups WHERE generation_id = ? ORDER BY \"order\"", [generation], _);
+		var results = new Array();
+		for (var d = 0; d < dbResult.length; ++d)
+			results.push(dbResult[d].id);
+		return results;
+	},
+	
 	this.getLanguageId = function(languageName, _) {
 		return this.db.execute("SELECT id FROM languages WHERE identifier = ? LIMIT 1", [languageName], _)[0].id;
 	},
@@ -218,7 +250,13 @@ function VeekunDatabase(db, _) {
 			result[this.getSingleText_("version_names", "name", "version_id", dbResult[d].version_id, languageId, _)] = dbResult[d].flavor_text.replace(/\s+/g, " ").trim();
 		return result;
 	},
-
+	
+	this.getMoveName = function(moveId, languageId, _) {
+		return this.getSingleText_("move_names", "name", "move_id", moveId, languageId, _);
+	},
+	this.getMoveMethodOfLearningName = function(methodOfLearningId, languageId, _) {
+		return this.getSingleText_("pokemon_move_method_prose", "name", "pokemon_move_method_id", methodOfLearningId, languageId, _);
+	},
 	this.getAbilityName = function(abilityId, languageId, _) {
 		return this.getSingleText_("ability_names", "name", "ability_id", abilityId, languageId, _);
 	},
@@ -287,107 +325,186 @@ function VeekunDatabase(db, _) {
 
 	// Convienience function
 
-	this.getFormeData = function(formeId, languageId, _) {
+	this.getFormeData = function(formeId, languageId, _, requestedData) {
+		if (!requestedData)
+			requestedData = {
+				name: true,
+				formes: true,
+				pokedexNumbers: true,
+				pokedexDescriptions: true,
+				types: true,
+				baseStats: true,
+				abilities: true,
+				prevo: true,
+				evos: true,
+				learnset: true,
+				misc: true
+			};
+	
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var result = new Object();
 
 		// Get the pokemon name
-		result.isDefaultForme = this.getIsDefaultForme(formeId, _);
-		result.isBattleOnlyForme = this.getIsBattleOnlyForme(formeId, _);
-		var name = this.getFormeName(formeId, languageId, _);
-		result.name = name.name;
-		result.forme = name.forme;
-		result.combinedName = result.name;
-		if (!result.isDefaultForme)
-			result.combinedName += "-" + result.forme;
+		if (requestedData.name)
+		{
+			result.isDefaultForme = this.getIsDefaultForme(formeId, _);
+			result.isBattleOnlyForme = this.getIsBattleOnlyForme(formeId, _);
+			var name = this.getFormeName(formeId, languageId, _);
+			result.name = name.name;
+			result.forme = name.forme;
+			result.combinedName = result.name;
+			if (!result.isDefaultForme)
+				result.combinedName += "-" + result.forme;
+		}
 
 		// Get the other formes of this pokemon
-		var otherFormeIds = this.getPokemonFormes(pokemonId, _);
-		result.otherFormes = new Array();
-		for (var f = 0; f < otherFormeIds.length; ++f)
-			if (otherFormeIds[f].id !== formeId)
-			{
-				var otherForme = this.getFormeName(otherFormeIds[f].id, languageId, _);
-				otherForme.isDefaultForme = otherFormeIds[f].isDefault;
-				otherForme.isBattleOnlyForme = otherFormeIds[f].isBattleOnly;
-				otherForme.combinedName = result.name;
-				if (!otherForme.isDefaultForme)
-					otherForme.combinedName += "-" + otherForme.forme;
-				result.otherFormes.push(otherForme);
-			}
+		if (requestedData.formes)
+		{
+			var otherFormeIds = this.getPokemonFormes(pokemonId, _);
+			result.otherFormes = new Array();
+			for (var f = 0; f < otherFormeIds.length; ++f)
+				if (otherFormeIds[f].id !== formeId)
+				{
+					var otherForme = this.getFormeName(otherFormeIds[f].id, languageId, _);
+					otherForme.isDefaultForme = otherFormeIds[f].isDefault;
+					otherForme.isBattleOnlyForme = otherFormeIds[f].isBattleOnly;
+					otherForme.combinedName = result.name;
+					if (!otherForme.isDefaultForme)
+						otherForme.combinedName += "-" + otherForme.forme;
+					result.otherFormes.push(otherForme);
+				}
+		}
 
 		// Get pokedex numbers
-		result.nationalPokedexNumber = this.getPokemonNationalPokedexNumber(pokemonId, _);
-		var pokedexNumberIds = this.getPokemonPokedexNumbers(pokemonId, _);
-		result.pokedexNumbers = new Object();
-		for (var p in pokedexNumberIds)
-			result.pokedexNumbers[this.getPokedexName(p, languageId, _)] = pokedexNumberIds[p];
+		if (requestedData.pokedexNumbers)
+		{
+			result.nationalPokedexNumber = this.getPokemonNationalPokedexNumber(pokemonId, _);
+			var pokedexNumberIds = this.getPokemonPokedexNumbers(pokemonId, _);
+			result.pokedexNumbers = new Object();
+			for (var p in pokedexNumberIds)
+				result.pokedexNumbers[this.getPokedexName(p, languageId, _)] = pokedexNumberIds[p];
+		}
+		
+		// Get pokedex descriptions
+		if (requestedData.pokedexDescriptions)
+			result.descriptions = this.getPokemonPokedexDescriptions(pokemonId, languageId, _);
 
 		// Get types
-		var typeIds = this.getFormeTypes(formeId, _);
-		result.types = new Array();
-		for (var t = 0; t < typeIds.length; ++t)
-			result.types.push(this.getTypeName(typeIds[t], languageId, _));
+		if (requestedData.types)
+		{
+			var typeIds = this.getFormeTypes(formeId, _);
+			result.types = new Array();
+			for (var t = 0; t < typeIds.length; ++t)
+				result.types.push(this.getTypeName(typeIds[t], languageId, _));
+		}
 
 		// Get base stats
-		var baseStatIds = this.getFormeBaseStats(formeId, _);
-		result.baseStats = new Object();
-		for (var s in baseStatIds)
-			result.baseStats[this.getStatName(s, languageId, _)] = baseStatIds[s];
+		if (requestedData.baseStats)
+		{
+			var baseStatIds = this.getFormeBaseStats(formeId, _);
+			result.baseStats = new Object();
+			for (var s in baseStatIds)
+				result.baseStats[this.getStatName(s, languageId, _)] = baseStatIds[s];
+		}
 
 		// Get abilities
-		var abilityIds = this.getFormeAbilities(formeId, _);
-		result.abilities = new Array();
-		for (var a = 0; a < abilityIds.length; ++a)
-			result.abilities.push({name: this.getAbilityName(abilityIds[a].id, languageId, _), isDreamWorld: abilityIds[a].isDreamWorld});
+		if (requestedData.abilities)
+		{
+			var abilityIds = this.getFormeAbilities(formeId, _);
+			result.abilities = new Array();
+			for (var a = 0; a < abilityIds.length; ++a)
+				result.abilities.push({name: this.getAbilityName(abilityIds[a].id, languageId, _), isDreamWorld: abilityIds[a].isDreamWorld});
+		}
 
 		// Get the previous evolution
-		var prevoId = this.getPokemonPrevo(pokemonId, _);
-		if (prevoId)
-			result.prevo = this.getFormeName(this.getPokemonDefaultForme(prevoId, _), languageId, _).name
-		else
-			result.prevo = "";
+		if (requestedData.prevo)
+		{
+			var prevoId = this.getPokemonPrevo(pokemonId, _);
+			if (prevoId)
+				result.prevo = this.getFormeName(this.getPokemonDefaultForme(prevoId, _), languageId, _).name
+			else
+				result.prevo = "";
+		}
 
 		// Get the evolutions
-		var evoIds = this.getPokemonEvos(pokemonId, _);
-		result.evos = new Array();
-		for (var e = 0; e < evoIds.length; ++e)
+		if (requestedData.evos)
 		{
-			var evoDefaultFormeId = this.getPokemonDefaultForme(evoIds[e], _);
-			var evoInfo = this.getFormeMiscInfo(evoDefaultFormeId, _);
-			if (evoInfo.isFormesSwitchable)
+			var evoIds = this.getPokemonEvos(pokemonId, _);
+			result.evos = new Array();
+			for (var e = 0; e < evoIds.length; ++e)
 			{
-				var evo = this.getFormeName(evoDefaultFormeId, languageId, _);
-				evo.combinedName = evo.name;
-				result.evos.push(evo);
-			}
-			else
-			{
-				var evoFormeIds = this.getPokemonFormes(evoIds[e], _);
-				for (var f = 0; f < evoFormeIds.length; ++f)
+				var evoDefaultFormeId = this.getPokemonDefaultForme(evoIds[e], _);
+				var evoInfo = this.getFormeMiscInfo(evoDefaultFormeId, _);
+				if (evoInfo.isFormesSwitchable)
 				{
-					if (evoFormeIds[f].isBattleOnly)
-						continue;
-					var evo = this.getFormeName(evoFormeIds[f].id, languageId, _);
+					var evo = this.getFormeName(evoDefaultFormeId, languageId, _);
 					evo.combinedName = evo.name;
-					if (!evoFormeIds[f].isDefault)
-						evo.combinedName += "-" + evo.forme;
 					result.evos.push(evo);
+				}
+				else
+				{
+					var evoFormeIds = this.getPokemonFormes(evoIds[e], _);
+					for (var f = 0; f < evoFormeIds.length; ++f)
+					{
+						if (evoFormeIds[f].isBattleOnly)
+							continue;
+						var evo = this.getFormeName(evoFormeIds[f].id, languageId, _);
+						evo.combinedName = evo.name;
+						if (!evoFormeIds[f].isDefault)
+							evo.combinedName += "-" + evo.forme;
+						result.evos.push(evo);
+					}
+				}
+			}
+		}
+		
+		// Get the pokemon learnset
+		if (requestedData.learnset)
+		{
+			result.learnset = new Object();
+			var generations = this.getAllGenerations(_);
+			for (var g = 0; g < generations.length; ++g)
+			{
+				result.learnset[generations[g]] = new Array();
+				var versionGroupIds = this.getVersionGroupIdsForGeneration(generations[g], _);
+				for (var v = 0; v < versionGroupIds.length; ++v)
+				{
+					var learnset = this.getFormeLearnset(formeId, versionGroupIds[v], _);
+					for (var l = 0; l < learnset.length; ++l)
+					{
+						var move = {
+							name: this.getMoveName(learnset[l].moveId, languageId, _),
+							methodOfLearning: this.getMoveMethodOfLearningName(learnset[l].methodOfLearningId, languageId, _),
+							levelLearnt: learnset[l].levelLearnt
+						};
+						var isAlreadyExists = false;
+						for (var r = 0; r < result.learnset[generations[g]].length; ++r) // Hack to get around indexOf() only matching object references
+							if (JSON.stringify(move) === JSON.stringify(result.learnset[generations[g]][r]))
+							{
+								isAlreadyExists = true;
+								break;
+							}
+						if (!isAlreadyExists)
+							result.learnset[generations[g]].push(move);
+					}
 				}
 			}
 		}
 
 		// Get misc info
-		var miscInfo = this.getFormeMiscInfo(formeId, _);
-		result.heightm = miscInfo.heightm;
-		result.masskg = miscInfo.masskg;
-		result.genus = this.getPokemonGenus(pokemonId, languageId, _);
-		result.colour = this.getColourName(miscInfo.colourId, languageId, _);
-		result.shape = this.getShapeName(miscInfo.shapeId, languageId, _);
-		result.habitat = this.getHabitatName(miscInfo.habitatId, languageId, _);
-		result.isHasGenderAppearanceDifferences = miscInfo.isHasGenderAppearanceDifferences;
-		result.genderRatio = miscInfo.genderRatio;
-		result.isFormesSwitchable = miscInfo.isFormesSwitchable;
+		if (requestedData.misc)
+		{
+			var miscInfo = this.getFormeMiscInfo(formeId, _);
+			result.heightm = miscInfo.heightm;
+			result.masskg = miscInfo.masskg;
+			result.genus = this.getPokemonGenus(pokemonId, languageId, _);
+			result.colour = this.getColourName(miscInfo.colourId, languageId, _);
+			result.shape = this.getShapeName(miscInfo.shapeId, languageId, _);
+			result.habitat = this.getHabitatName(miscInfo.habitatId, languageId, _);
+			result.isHasGenderAppearanceDifferences = miscInfo.isHasGenderAppearanceDifferences;
+			result.genderRatio = miscInfo.genderRatio;
+			result.isFormesSwitchable = miscInfo.isFormesSwitchable;
+		}
 
 		return result;
 	},
@@ -420,12 +537,23 @@ function VeekunDatabase(db, _) {
 	}
 }
 
-exports.getVeekunDatabase = function(_) {
-	console.warn("Downloading Veekun Database.");
-	var gunzip = zlib.createGunzip();
-	request("http://veekun.com/static/pokedex/downloads/veekun-pokedex.sqlite.gz")
-		.pipe(gunzip).pipe(fs.createWriteStream("veekun.sqlite"))
-		.on("close", _);
+exports.getVeekunDatabase = function(_, isForceRedownload) {
+	try {
+		var stat = fs.lstatSync("veekun.sqlite");
+		if (!stat.isFile())
+			isForceRedownload = true;
+	} catch (e) {
+		isForceRedownload = true;
+	}
+	
+	if (isForceRedownload)
+	{
+		console.warn("Downloading Veekun Database.");
+		var gunzip = zlib.createGunzip();
+		request("http://veekun.com/static/pokedex/downloads/veekun-pokedex.sqlite.gz")
+			.pipe(gunzip).pipe(fs.createWriteStream("veekun.sqlite"))
+			.on("close", _);
+	}
 	var db = new sqlite.Database();
 	db.open("veekun.sqlite", _);
 	return new VeekunDatabase(db, _);

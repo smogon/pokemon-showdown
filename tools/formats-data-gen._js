@@ -8,6 +8,10 @@ var viableMovesPath = "../data/viable-moves.txt";
 
 var fs = require("fs");
 var getSmogonDex = require("./get-smogondex._js").getSmogonDex;
+var miscFunctions = require("./misc.js");
+writeLine = miscFunctions.writeLine;
+ObjectIsLastKey = miscFunctions.ObjectIsLastKey;
+toId = miscFunctions.toId;
 
 function main(argv, _) {
 	var viableMoves = getViableMoves();
@@ -41,7 +45,7 @@ function getViableMoves() {
 		var tmp = lines[l].split(":");
 		if (tmp.length !== 2)
 			continue;
-		var pokemon = tmp[0].toLowerCase().replace(/[^a-z0-9]+/g, "");
+		var pokemon = toId(tmp[0]);
 		var viableMoves = tmp[1].replace(/,\s*,/g, ",").split(",");
 		if (!pokemon || viableMoves.length <= 1)
 			continue;
@@ -49,7 +53,7 @@ function getViableMoves() {
 		for (var v = 0; v < viableMoves.length; ++v)
 		{
 			var viableMove = viableMoves[v].trim();
-			result[pokemon][viableMove.toLowerCase().replace(/[^a-z0-9]+/g, "")] = viableMove;
+			result[pokemon][toId(viableMove)] = viableMove;
 		}
 	}
 	return result;
@@ -72,31 +76,6 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 		writeLine("isNonstandard: true,");
 	writeLine("tier: " + JSON.stringify(pokemon.tier));
 	writeLine("}" + (isNotNeedFinalNewline ? "" : ","), -1);
-}
-
-var currentIndentLevel = 0;
-function writeLine(line, indent) {
-	if (!indent || typeof indent !== "number")
-		indent = 0;
-
-	var nextIndentLevel = currentIndentLevel + indent;
-	if (nextIndentLevel < 0)
-		nextIndentLevel = 0;
-
-	if (indent < 0)
-		for (var indentLevel = nextIndentLevel; indentLevel > 0; --indentLevel)
-			process.stdout.write("\t");
-	else
-		for (; currentIndentLevel > 0; --currentIndentLevel)
-			process.stdout.write("\t");
-
-	process.stdout.write(line);
-	process.stdout.write("\n");
-	currentIndentLevel = nextIndentLevel;
-}
-
-function ObjectIsLastKey(object, key) {
-	return Object.keys(object).indexOf(key) === Object.keys(object).length - 1;
 }
 
 main(process.argv, _);

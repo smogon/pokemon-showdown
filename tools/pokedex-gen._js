@@ -7,6 +7,12 @@ var customPokemonPath = "../data/custom-pokemon.json";
 
 var assert = require("assert").ok;
 var getVeekunDatabase = require("./veekun-database._js").getVeekunDatabase;
+var miscFunctions = require("./misc.js");
+writeLine = miscFunctions.writeLine;
+ObjectIsLastKey = miscFunctions.ObjectIsLastKey;
+toId = miscFunctions.toId;
+toIdForForme = miscFunctions.toIdForForme;
+toIdForName = miscFunctions.toIdForName;
 
 function main(argv, _) {
 	var veekunDatabase = getVeekunDatabase(_);
@@ -20,11 +26,21 @@ function main(argv, _) {
 	console.warn("Outputting real pokemon.");
 	for (var f = 0; f < formeIds.length; ++f)
 	{
-		var veekunPokemon = veekunDatabase.getFormeData(formeIds[f], languageId, _);
+		var veekunPokemon = veekunDatabase.getFormeData(formeIds[f], languageId, _, {
+				name: true,
+				formes: true,
+				pokedexNumbers: true,
+				types: true,
+				baseStats: true,
+				abilities: true,
+				prevo: true,
+				evos: true,
+				misc: true
+			});
 		var convertedPokemon = convertVeekunPokemon(veekunPokemon, veekunDatabase, _);
 		outputPokemon(convertedPokemon, f === formeIds.length - 1);
 		if ((f + 1) % 50 === 0)
-			console.warn("Finished outputting " + (f + 1) + " pokemon.");
+			console.warn("Finished outputting " + (f + 1) + "/" + formeIds.length + " pokemon.");
 	}
 	writeLine("};", -1);
 	console.warn("Finished outputting.");
@@ -38,34 +54,6 @@ function outputCustomPokemon() {
 }
 
 function convertVeekunPokemon(pokemon, veekunDatabase, _) {
-	function toIdForForme(combinedName, forme) {
-		switch (combinedName)
-		{
-			case "Unown-!" :
-				return "em";
-
-			case "Unown-?" :
-				return "qm";
-
-			case "Arceus-???" :
-				return "unknown";
-
-			case "Basculin-Blue-Striped" :
-				return "blue";
-		}
-		return toId(forme);
-	}
-	function toIdForName(combinedName, forme) {
-		var result = toId(combinedName.replace("♂", "M").replace("♀", "F"));
-		var formeId = toIdForForme(combinedName, forme);
-		if (result.indexOf(formeId) === -1)
-			if (toId(forme).length === 0)
-				result += formeId;
-			else
-				if(result.indexOf(toId(forme)) !== -1)
-					result.replace(toId(forme), formeId);
-		return result;
-	}
 
 	var result = new Object();
 
@@ -241,33 +229,6 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine("isDefaultForme: " + JSON.stringify(pokemon.isDefaultForme));
 
 	writeLine("}" + (isNotNeedFinalNewline ? "" : ","), -1);
-}
-
-function toId(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ""); }
-
-var currentIndentLevel = 0;
-function writeLine(line, indent) {
-	if (!indent || typeof indent !== "number")
-		indent = 0;
-
-	var nextIndentLevel = currentIndentLevel + indent;
-	if (nextIndentLevel < 0)
-		nextIndentLevel = 0;
-
-	if (indent < 0)
-		for (var indentLevel = nextIndentLevel; indentLevel > 0; --indentLevel)
-			process.stdout.write("\t");
-	else
-		for (; currentIndentLevel > 0; --currentIndentLevel)
-			process.stdout.write("\t");
-
-	process.stdout.write(line);
-	process.stdout.write("\n");
-	currentIndentLevel = nextIndentLevel;
-}
-
-function ObjectIsLastKey(object, key) {
-	return Object.keys(object).indexOf(key) === Object.keys(object).length - 1;
 }
 
 main(process.argv);
