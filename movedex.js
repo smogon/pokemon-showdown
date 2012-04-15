@@ -2198,6 +2198,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'disable',
 		effect: {
 			duration: 4,
+			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function(pokemon) {
 				if (!this.willMove(pokemon)) {
 					this.effectData.duration++;
@@ -2219,7 +2220,7 @@ exports.BattleMovedex = {
 						}
 						else
 						{
-							this.add('-start', pokemon, 'Disable');
+							this.add('-start', pokemon, 'Disable', moves[i].move);
 							this.effectData.move = pokemon.lastMove;
 							return;
 						}
