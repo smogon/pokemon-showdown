@@ -95,11 +95,11 @@ exports.BattleScripts = {
 			}
 			if (!move.ignoreEvasion)
 			{
-				if (target.boosts.evasion > 0)
+				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion)
 				{
 					accuracy /= boostTable[target.boosts.evasion];
 				}
-				else
+				else if (target.boosts.evasion < 0)
 				{
 					accuracy *= boostTable[-target.boosts.evasion];
 				}
@@ -885,7 +885,7 @@ exports.BattleScripts = {
 				}
 				
 				item = 'Focus Sash';
-				if (template.species === 'Giratina-O')
+				if (template.species === 'Giratina-Origin')
 				{
 					item = 'Griseous Orb';
 				}
@@ -1173,7 +1173,8 @@ exports.BattleScripts = {
 				ability: ability,
 				evs: evs,
 				item: item,
-				level: level
+				level: level,
+				shiny: (Math.random()*1024<=1)
 			});
 			pokemonLeft++;
 		}

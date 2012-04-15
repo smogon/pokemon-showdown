@@ -10,7 +10,7 @@ exports.BattleStatuses = {
 				stats.atk /= 2;
 			}
 		},
-		onResidualPriority: 50-9,
+		onResidualOrder: 9,
 		onResidual: function(pokemon) {
 			this.damage(pokemon.maxhp/8);
 		}
@@ -100,7 +100,7 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target.id, 'psn');
 		},
-		onResidualPriority: 50-9,
+		onResidualOrder: 9,
 		onResidual: function(pokemon) {
 			this.damage(pokemon.maxhp/8);
 		}
@@ -114,6 +114,7 @@ exports.BattleStatuses = {
 		onSwitchIn: function() {
 			this.effectData.stage = 0;
 		},
+		onResidualOrder: 9,
 		onResidual: function(pokemon) {
 			this.effectData.stage++;
 			this.damage(pokemon.maxhp*this.effectData.stage/16);
@@ -121,7 +122,6 @@ exports.BattleStatuses = {
 	},
 	confusion: {
 		// this is a volatile status
-		noCopy: true, // doesn't get copied by Baton Pass
 		onStart: function(target) {
 			this.add('-start', target.id, 'confusion');
 			this.effectData.time = 2 + parseInt(Math.random()*4);
@@ -173,7 +173,7 @@ exports.BattleStatuses = {
 			if (source.item === 'GripClaw') return 5;
 			return Math.floor(4 + Math.random()*2);
 		},
-		onResidualPriority: 50-11,
+		onResidualOrder: 11,
 		onResidual: function(pokemon) {
 			if (this.effectData.source && !this.effectData.source.isActive)
 			{
@@ -220,7 +220,7 @@ exports.BattleStatuses = {
 	},
 	choicelock: {
 		onStart: function(pokemon) {
-			this.effectData.move = selfB.activeMove.id;
+			this.effectData.move = this.activeMove.id;
 			if (!this.effectData.move) return false;
 		},
 		onModifyPokemon: function(pokemon) {
@@ -262,7 +262,7 @@ exports.BattleStatuses = {
 				this.effectData.positions[i] = null;
 			}
 		},
-		onResidualPriority: 50-3,
+		onResidualOrder: 3,
 		onResidual: function(side) {
 			var finished = true;
 			for (var i=0; i<side.active.length; i++)
@@ -340,21 +340,6 @@ exports.BattleStatuses = {
 				return basePower * .5;
 			}
 		},
-		onModifyMove: function(move) {
-			if (move.id === 'thunder' || move.id === 'hurricane')
-			{
-				move.accuracy = true;
-			}
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Water';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
-			}
-		},
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability')
 			{
@@ -366,7 +351,7 @@ exports.BattleStatuses = {
 				this.add('-weather', 'RainDance');
 			}
 		},
-		onResidualPriority: 50-1,
+		onResidualOrder: 1,
 		onResidual: function() {
 			this.add('-weather', 'RainDance', '[upkeep]');
 			this.eachEvent('Weather');
@@ -397,21 +382,6 @@ exports.BattleStatuses = {
 				return basePower * .5;
 			}
 		},
-		onModifyMove: function(move) {
-			if (move.id === 'Thunder' || move.id === 'Hurricane')
-			{
-				move.accuracy = 50;
-			}
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Fire';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [2,3];
-			}
-		},
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability')
 			{
@@ -426,7 +396,7 @@ exports.BattleStatuses = {
 		onImmunity: function(type) {
 			if (type === 'frz') return false;
 		},
-		onResidualPriority: 50-1,
+		onResidualOrder: 1,
 		onResidual: function() {
 			this.add('-weather', 'SunnyDay', '[upkeep]');
 			this.eachEvent('Weather');
@@ -451,17 +421,6 @@ exports.BattleStatuses = {
 				stats.spd *= 3/2;
 			}
 		},
-		onModifyMove: function(move) {
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Rock';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
-			}
-		},
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability')
 			{
@@ -473,7 +432,7 @@ exports.BattleStatuses = {
 				this.add('-weather', 'Sandstorm');
 			}
 		},
-		onResidualPriority: 50-1,
+		onResidualOrder: 1,
 		onResidual: function() {
 			this.add('-weather', 'Sandstorm', '[upkeep]');
 			this.eachEvent('Weather');
@@ -506,33 +465,7 @@ exports.BattleStatuses = {
 				this.add('-weather', 'Hail');
 			}
 		},
-		onModifyPokemon: function(move) {
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Ice';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
-			}
-		},
-		onModifyMove: function(move) {
-			if (move.id === 'blizzard')
-			{
-				move.accuracy = true;
-			}
-			if (move.id === 'weatherball')
-			{
-				move.type = 'Ice';
-				move.basePower = 100;
-			}
-			if (move.id === 'moonlight' || move.id === 'morningsun' || move.id === 'synthesis')
-			{
-				move.heal = [1,4];
-			}
-		},
-		onResidualPriority: 50-1,
+		onResidualOrder: 1,
 		onResidual: function() {
 			this.add('-weather', 'Hail', '[upkeep]');
 			this.eachEvent('Weather');

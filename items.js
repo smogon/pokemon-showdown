@@ -220,7 +220,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		onResidualPriority: 50-5.2,
+		onResidualOrder: 5,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (pokemon.hasType('Poison'))
 			{
@@ -281,8 +282,9 @@ exports.BattleItems = {
 		onBasePower: function(basePower, user, target, move) {
 			if (move.type === 'Bug')
 			{
-				if (user.useItem())
+				if (user.useItem(user, move))
 				{
+					this.add('-enditem', user, 'Bug Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -664,6 +666,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Dark Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -770,6 +773,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Dragon Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -858,6 +862,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Electric Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -944,6 +949,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Fighting Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -983,6 +989,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Fire Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1014,7 +1021,8 @@ exports.BattleItems = {
 			basePower: 30,
 			status: 'brn'
 		},
-		onResidualPriority: -26.2,
+		onResidualOrder: 26,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (!pokemon.status)
 			{
@@ -1062,6 +1070,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Flying Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1141,6 +1150,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Ghost Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1158,6 +1168,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Grass Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1210,6 +1221,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Ground Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1313,6 +1325,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Ice Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -1481,6 +1494,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onModifyPriority: function(priority) {
+			return priority - 0.1;
+		},
 		desc: "The holder will go last within its move's priority bracket, regardless of Speed."
 	},
 	"lansatberry": {
@@ -1512,9 +1528,9 @@ exports.BattleItems = {
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
 			this.debug('Lax Incense - decreasing accuracy');
-			move.accuracy *= 0.95;
+			move.accuracy *= 0.9;
 		},
-		desc: "Hold item which raises evasion 5%. Allows breeding of Wynaut."
+		desc: "Hold item which raises evasion 10%. Allows breeding of Wynaut."
 	},
 	"leftovers": {
 		id: "leftovers",
@@ -1523,7 +1539,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onResidualPriority: 50-5.2,
+		onResidualOrder: 5,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			this.heal(pokemon.maxhp/16);
 		},
@@ -1981,6 +1998,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Normal Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -2210,6 +2228,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Poison Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -2256,6 +2275,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Psychic Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -2426,6 +2446,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Rock Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -2839,6 +2860,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Steel Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -2867,7 +2889,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 80
 		},
-		onResidualPriority: -26.2,
+		onResidualOrder: 26,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			this.damage(pokemon.maxhp/8);
 		},
@@ -2951,7 +2974,8 @@ exports.BattleItems = {
 			basePower: 30,
 			status: 'tox'
 		},
-		onResidualPriority: -26.2,
+		onResidualOrder: 26,
+		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (!pokemon.status && !pokemon.hasType('Steel'))
 			{
@@ -3022,6 +3046,7 @@ exports.BattleItems = {
 			{
 				if (user.useItem())
 				{
+					this.add('-enditem', user, 'Water Gem', '[from] gem', '[move] '+move.name);
 					this.debug('gem activate: +50% boost');
 					return basePower * 1.5;
 				}
@@ -3103,6 +3128,7 @@ exports.BattleItems = {
 			if (activate && pokemon.useItem())
 			{
 				pokemon.setBoost(boosts);
+				this.add('-restoreboost', pokemon, '[silent]');
 			}
 		},
 		desc: "Removes stat decreases. Consumed after use."

@@ -202,6 +202,10 @@ exports.BattleFormats = {
 					problems.push(move.name+' is not a real move.');
 				}
 			}
+			if (set.moves && set.moves.length > 4)
+			{
+				problems.push((set.name||set.species) + ' has more than four moves.');
+			}
 			return problems;
 		}
 	},
@@ -297,7 +301,7 @@ exports.BattleFormats = {
 						if (!pokemon.statusData.source ||
 						    pokemon.statusData.source.side !== pokemon.side)
 						{
-							this.add('message Sleep Clause activated.');
+							this.add('message', 'Sleep Clause activated.');
 							return false;
 						}
 					}
