@@ -96,13 +96,13 @@ function BattleTools() {
 	 * Ensure we're working on a copy of a move (and make a copy if we aren't)
 	 *
 	 * Remember: "ensure" - by default, it won't make a copy of a copy:
-	 *	 moveCopy === Tools.getMoveCopy(moveCopy)
+	 *     moveCopy === Tools.getMoveCopy(moveCopy)
 	 *
 	 * If you really want to, use:
-	 *	 moveCopyCopy = Tools.getMoveCopy(moveCopy.id)
+	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id)
 	 *
-	 * @param  move	Move ID, move object, or movecopy object describing move to copy
-	 * @return		 movecopy object
+	 * @param  move    Move ID, move object, or movecopy object describing move to copy
+	 * @return         movecopy object
 	 */
 	this.getMoveCopy = function(move) {
 		if (move && move.isCopy) return move;

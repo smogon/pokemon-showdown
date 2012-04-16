@@ -13,16 +13,16 @@ var app = require('http').createServer()
   , fs = require('fs');
 
 function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
-  function (err, data) {
-	if (err) {
-	  res.writeHead(500);
-	  return res.end('Error loading index.html');
-	}
+	fs.readFile(__dirname + '/index.html',
+	function (err, data) {
+		if (err) {
+			res.writeHead(500);
+			return res.end('Error loading index.html');
+		}
 
-	res.writeHead(200);
-	res.end(data);
-  });
+		res.writeHead(200);
+		res.end(data);
+	});
 }
 
 app.listen(8000); */
@@ -828,15 +828,15 @@ function Lobby(roomid) {
 			}
 		}
 		var newSearch = {
-		 	user: user,
-		 	format: format,
-		 	room: selfR.id,
-		 	team: user.team
+			user: user,
+			format: format,
+			room: selfR.id,
+			team: user.team
 		};
 		var newSearchData = {
-		 	userid: user.userid,
-		 	format: format,
-		 	room: selfR.id
+			userid: user.userid,
+			format: format,
+			room: selfR.id
 		};
 		selfR.searchers.push(newSearch);
 		user.emit('update', {searching: newSearchData, room: selfR.id});
