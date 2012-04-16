@@ -239,9 +239,9 @@ function User(name, person, token) {
 	};
 	/**
 	 *
-	 * @param name    The name you want
+	 * @param name	The name you want
 	 * @param token   Login token
-	 * @param auth    Make sure this account will identify as registered
+	 * @param auth	Make sure this account will identify as registered
 	 */
 	this.rename = function(name, token, auth) {
 		for (var i in selfP.roomCount) {

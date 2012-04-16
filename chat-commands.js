@@ -38,7 +38,7 @@ function sanitize(str, strEscape) {
  *   return; will output the message normally: "user: message"
  *   return false; will supress the message output.
  *   returning a string will replace the message with that string,
- *     then output it normally.
+ *	 then output it normally.
  *
  */
 function parseCommandLocal(user, cmd, target, room, socket, message) {
