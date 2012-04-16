@@ -1056,9 +1056,9 @@ exports.BattleMovedex = {
 				pokemon.lockMove('bounce');
 			},
 			onSourceModifyMove: function(move) {
-				
+
 				// warning: does not work the same way as Fly
-				
+
 				if (move.target === 'foeSide') return;
 				if (move.id === 'gust' || move.id === 'twister' || move.id === 'thunder')
 				{
@@ -2164,7 +2164,7 @@ exports.BattleMovedex = {
 					// but EQ has static base power, and
 					// it's faster to do this here than in
 					// onFoeBasePower
-					
+
 					// TODO: Magnitude
 					move.basePower *= 2;
 					return;
@@ -2345,7 +2345,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
-			
+
 			if (source.side.sideConditions['futuremove'].positions[source.position])
 			{
 				return false;
@@ -3732,7 +3732,7 @@ exports.BattleMovedex = {
 				pokemon.lockMove('fly');
 			},
 			onSourceModifyMove: function(move) {
-				
+
 				if (move.target === 'foeSide') return;
 				// warning: does not work the same way as Bounce
 				if (move.id === 'gust' || move.id === 'twister')
@@ -4100,7 +4100,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
-			
+
 			if (source.side.sideConditions['futuremove'].positions[source.position])
 			{
 				return false;
@@ -4472,16 +4472,16 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
-			
+
 			for (var i in {def:1,spd:1})
 			{
 				targetBoosts[i] = target.baseBoosts[i];
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
-			
+
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
-			
+
 			this.add('-swapboost', target, source, 'def, spd', '[from] move: Guard Swap');
 		},
 		secondary: false,
@@ -4869,16 +4869,16 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
-			
+
 			for (var i in target.baseBoosts)
 			{
 				targetBoosts[i] = target.baseBoosts[i];
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
-			
+
 			target.setBoost(sourceBoosts);
 			source.setBoost(targetBoosts);
-			
+
 			this.add('-swapboost', target, source, '[from] move: Heart Swap');
 		},
 		secondary: false,
@@ -7861,16 +7861,16 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
-			
+
 			for (var i in {atk:1,spa:1})
 			{
 				targetBoosts[i] = target.baseBoosts[i];
 				sourceBoosts[i] = source.baseBoosts[i];
 			}
-			
+
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
-			
+
 			this.add('-swapboost', target, source, 'atk, spa', '[from] move: Power Swap');
 		},
 		secondary: false,
@@ -8060,14 +8060,14 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			var targetBoosts = {};
-			
+
 			for (var i in target.baseBoosts)
 			{
 				targetBoosts[i] = target.baseBoosts[i];
 			}
-			
+
 			source.setBoost(targetBoosts);
-			
+
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
 		secondary: false,

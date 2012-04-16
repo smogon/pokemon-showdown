@@ -53,18 +53,18 @@ runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, t
 	{
 		[BeforeMove] (A)
 		-> false => exit runMove
-		
+
 		display "POKEMON used MOVE!"
-		
+
 		useMove()
 		{
 			[ModifyMove] (A)
-			
+
 			move's [InterruptMove]
-			
+
 			if no targets:
 				display "But there was no target..." and exit useMove()
-			
+
 			moveHit() - once for each hit of multi-hit move, and also once for secondary hits
 			{
 				move's [TryHit], [TryHitSide] or [TryHitField] (A)
@@ -76,9 +76,9 @@ runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, t
 				[Immunity] (A)
 				-> null => exit moveHit()
 				-> false => display "It had no effect!" and exit moveHit()
-				
+
 				move animation
-				
+
 				getDamage()
 				{
 					move's [BasePower]
@@ -119,7 +119,7 @@ runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, t
 						effect's [Start] (A)
 						-> false => remove effect and exit effect()
 				}
-				
+
 				recoil()
 				{
 					call damage()
@@ -128,12 +128,12 @@ runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, t
 				{
 					call heal()
 				}
-				
+
 				if hit:
 					[SelfHit] (A)
 				if secondary hit:
 					[SecondarySelfHit] (A)
-				
+
 				if hit:
 					if secondary roll succeeds:
 						secondary() (S,U)
@@ -141,10 +141,10 @@ runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, t
 							call moveHit()
 						}
 			}
-			
+
 			[AfterMoveSecondary] (S,U)
 			[AfterMoveSecondarySelf] (S)
-			
+
 			[AfterMove]
 		}
 		pp deducted
@@ -162,10 +162,10 @@ runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, t
 			otherwise:
 				effect's [Residual]
 	}
-	
+
 	choose switch-ins for fainted pokemon
 	=> runSwitch() and runAfterSwitch() again
-	
+
 	[Update]
 }
 

@@ -2443,7 +2443,7 @@ exports.BattleAbilities = {
 		rating: -1,
 		num: "161"
 	},
-	
+
 	// CAP
 	"mountaineer": {
 		desc: "This Pokémon avoids all Rock-type attacks and hazards when switching in.",

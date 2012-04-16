@@ -269,15 +269,15 @@ exports.BattleStatuses = {
 			{
 				var posData = this.effectData.positions[i];
 				if (!posData) continue;
-				
+
 				posData.duration--;
-				
+
 				if (posData.duration > 0)
 				{
 					finished = false;
 					continue;
 				}
-				
+
 				// time's up; time to hit! :D
 				var target = side.foe.active[posData.targetPosition];
 				var move = this.getMove(posData.move);
@@ -287,13 +287,13 @@ exports.BattleStatuses = {
 					this.effectData.positions[i] = null;
 					continue;
 				}
-				
+
 				this.add('message '+move.name+' hit! (placeholder)');
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
-				
+
 				this.moveHit(target, posData.source, move, posData.moveData);
-				
+
 				this.effectData.positions[i] = null;
 			}
 			if (finished)
@@ -313,11 +313,11 @@ exports.BattleStatuses = {
 			this.effectData.duration = 2;
 		}
 	},
-	
+
 	// weather
-	
+
 	// weather is implemented here since it's so important to the game
-	
+
 	raindance: {
 		effectType: 'Weather',
 		duration: 5,
