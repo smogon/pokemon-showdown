@@ -5,24 +5,24 @@ function toId(text) {
 	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 function clone(object) {
-  var newObj = (object instanceof Array) ? [] : {};
-  for (var i in object) {
-    if (object[i] && typeof object[i] == "object") {
-      newObj[i] = clone(object[i]);
-    } else newObj[i] = object[i]
-  } return newObj;
+	var newObj = (object instanceof Array) ? [] : {};
+	for (var i in object) {
+		if (object[i] && typeof object[i] == "object") {
+			newObj[i] = clone(object[i]);
+		} else newObj[i] = object[i]
+	} return newObj;
 };
 function shuffle(array) {
-    var tmp, current, top = array.length;
+	var tmp, current, top = array.length;
 
-    if(top) while(--top) {
-        current = Math.floor(Math.random() * (top + 1));
-        tmp = array[current];
-        array[current] = array[top];
-        array[top] = tmp;
-    }
+	if(top) while(--top) {
+		current = Math.floor(Math.random() * (top + 1));
+		tmp = array[current];
+		array[current] = array[top];
+		array[top] = tmp;
+	}
 
-    return array;
+	return array;
 }
 function objectKeys(object) {
 	var keys = [];
