@@ -91,7 +91,7 @@ exports.BattleScripts = {
 				}
 			}
 		}
-		if (move.ohko) // bypasses accuracy modifiers {
+		if (move.ohko) { // bypasses accuracy modifiers
 			accuracy = 30;
 			if (pokemon.level > target.level) accuracy += (pokemon.level - target.level);
 		}
@@ -240,7 +240,7 @@ exports.BattleScripts = {
 					hitResult = this.runEvent('TryHit', target, pokemon, move);
 					if (!hitResult) {
 						if (hitResult === false) this.add('-fail', target);
-						if (hitResult !== 0) // special Substitute hit flag {
+						if (hitResult !== 0) { // special Substitute hit flag
 							return false;
 						}
 					}
@@ -667,7 +667,8 @@ exports.BattleScripts = {
 			} while (moves.length<4 && j<moveKeys.length);
 
 			// any moveset modification goes here
-			//moves[0] = 'Safeguard'; {
+			//moves[0] = 'Safeguard';
+			{
 				var abilities = [template.abilities['0']];
 				if (template.abilities['1']) {
 					abilities.push(template.abilities['1']);
@@ -714,7 +715,7 @@ exports.BattleScripts = {
 					}
 
 					if (rejectAbility) {
-						if (ability === ability1.name) // or not {
+						if (ability === ability1.name) { // or not
 							ability = ability0.name;
 						} else {
 							ability = ability1.name;
@@ -784,9 +785,9 @@ exports.BattleScripts = {
 					item = 'Damp Rock';
 				} else if (hasMove['sunnyday']) {
 					item = 'Heat Rock';
-				} else if (hasMove['sandstorm']) // lol {
+				} else if (hasMove['sandstorm']) { // lol
 					item = 'Smooth Rock';
-				} else if (hasMove['hail']) // lol {
+				} else if (hasMove['hail']) { // lol
 					item = 'Icy Rock';
 				} else if (ability === 'Magic Guard' && hasMove['psychoshift']) {
 					item = 'Flame Orb';
