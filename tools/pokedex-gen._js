@@ -24,8 +24,7 @@ function main(argv, _) {
 	console.warn("Outputting custom pokemon.");
 	outputCustomPokemon();
 	console.warn("Outputting real pokemon.");
-	for (var f = 0; f < formeIds.length; ++f)
-	{
+	for (var f = 0; f < formeIds.length; ++f) {
 		var veekunPokemon = veekunDatabase.getFormeData(formeIds[f], languageId, _, {
 				name: true,
 				formes: true,
@@ -75,8 +74,7 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _) {
 	result.speciesid = result.id;
 	if (result.isDefaultForme)
 		result.spriteid = result.id;
-	else
-	{
+	else {
 		result.spriteid = toId(result.name.replace("-" + pokemon.forme, ""));
 		result.spriteid += "-";
 		result.spriteid += toIdForForme(result.name, pokemon.forme);
@@ -90,11 +88,9 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _) {
 
 	// Convert the base stats to PS! format
 	result.baseStats = new Object();
-	for (var b in pokemon.baseStats)
-	{
+	for (var b in pokemon.baseStats) {
 		var identifier = "";
-		switch (b)
-		{
+		switch (b) {
 			case "HP" :
 				identifier = "hp";
 				break;
@@ -130,16 +126,13 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _) {
 	var abilitiesCount = 0;
 	var dwAbilitiesCount = 0;
 	for (var a = 0; a < pokemon.abilities.length; ++a)
-		if (pokemon.abilities[a].isDreamWorld)
-		{
+		if (pokemon.abilities[a].isDreamWorld) {
 			if (dwAbilitiesCount === 0)
 				result.abilities["DW"] = pokemon.abilities[a].name;
 			else
 				result.abilities["DW" + dwAbilitiesCount] = pokemon.abilities[a].name;
 			++dwAbilitiesCount;
-		}
-		else
-		{
+		} else {
 			result.abilities[abilitiesCount] = pokemon.abilities[a].name;
 			++abilitiesCount;
 		}
@@ -160,8 +153,7 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _) {
 function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	// Work out the formeletter
 	var formeletter = pokemon.forme && !pokemon.isDefaultForme ? pokemon.forme[0] : '';
-	switch (pokemon.id)
-	{
+	switch (pokemon.id) {
 		case "rotommow" :
 			formeletter = 'C';
 			break;

@@ -30,11 +30,9 @@ function VeekunDatabase(db, _) {
 		var dbResult = this.db.execute("SELECT id, is_default FROM pokemon WHERE species_id = ?", [speciesId], _);
 		var result = new Array();
 		var defaults = 0;
-		for (var d = 0; d < dbResult.length; ++d)
-		{
+		for (var d = 0; d < dbResult.length; ++d) {
 			var dbResult2 = this.db.execute("SELECT id, is_default, is_battle_only FROM pokemon_forms WHERE pokemon_id = ?", [dbResult[d].id], _);
-			for (var d2 = 0; d2 < dbResult2.length; ++d2)
-			{
+			for (var d2 = 0; d2 < dbResult2.length; ++d2) {
 				result.push({id: dbResult2[d2].id, isDefault: !!(dbResult[d].is_default && dbResult2[d2].is_default), isBattleOnly: !!dbResult2[d2].is_battle_only});
 				if (dbResult[d].is_default && dbResult2[d2].is_default)
 					++defaults;
@@ -69,8 +67,7 @@ function VeekunDatabase(db, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var dbResult = this.db.execute("SELECT pokedex_id, pokedex_number FROM pokemon_dex_numbers WHERE species_id = ? ORDER BY pokedex_id ASC", [speciesId], _);
 		var results = new Object();
-		for (var d = 0; d < dbResult.length; ++d)
-		{
+		for (var d = 0; d < dbResult.length; ++d) {
 			assert(!results[dbResult[d].pokedex_id]);
 			results[dbResult[d].pokedex_id] = dbResult[d].pokedex_number;
 		}
@@ -96,8 +93,7 @@ function VeekunDatabase(db, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var dbResult = this.db.execute("SELECT stat_id, base_stat FROM pokemon_stats WHERE pokemon_id = ? ORDER BY stat_id ASC", [pokemonId], _);
 		var results = new Object();
-		for (var d = 0; d < dbResult.length; ++d)
-		{
+		for (var d = 0; d < dbResult.length; ++d) {
 			assert(!results[dbResult[d].stat_id]);
 			results[dbResult[d].stat_id] = dbResult[d].base_stat;
 		}
@@ -109,8 +105,7 @@ function VeekunDatabase(db, _) {
 		var dbResult = this.db.execute("SELECT ability_id, is_dream FROM pokemon_abilities WHERE pokemon_id = ? ORDER BY slot ASC", [pokemonId], _);
 		var results = new Array();
 	nextAbility:
-		for (var d = 0; d < dbResult.length; ++d)
-		{
+		for (var d = 0; d < dbResult.length; ++d) {
 			var result = {id: dbResult[d].ability_id, isDreamWorld: !!dbResult[d].is_dream};
 			for (var r = 0; r < results.length; ++r) // Hack to get around indexOf() only matching object references
 				if (JSON.stringify(result) === JSON.stringify(results[r]))
@@ -171,8 +166,7 @@ function VeekunDatabase(db, _) {
 
 		result.isHasGenderAppearanceDifferences = dbResult.has_gender_differences;
 		result.genderRatio = {m: 0, f: 0};
-		if (dbResult.gender_rate >= 0)
-		{
+		if (dbResult.gender_rate >= 0) {
 			assert(dbResult.gender_rate <= 8);
 			result.genderRatio.f = dbResult.gender_rate / 8;
 			result.genderRatio.m = 1 - result.genderRatio.f;
@@ -213,8 +207,7 @@ function VeekunDatabase(db, _) {
 			return {name: pokemonName, forme: ""};
 
 		var positionOfPokemonName = pokemonNameWithForme.indexOf(pokemonName);
-		if (positionOfPokemonName === -1)
-		{
+		if (positionOfPokemonName === -1) {
 			// There aren't any forme names for foreign scripts, so we get the fallback instead
 			var pokemonNameFallback = this.getSingleText_("pokemon_species_names", "name", "pokemon_species_id", speciesId, this.fallbackLanguageId_, _);
 			assert(pokemonNameWithForme.indexOf(pokemonNameFallback) !== -1);
@@ -313,8 +306,7 @@ function VeekunDatabase(db, _) {
 	this.speciesIdToDefaultFormePokemonId = function(speciesId, _) {
 		var pokemonIds = this.speciesIdToPokemonIds(speciesId, _);
 		var results = new Array();
-		for (var p = 0; p < pokemonIds.length; ++p)
-		{
+		for (var p = 0; p < pokemonIds.length; ++p) {
 			var pokemonId = this.formeIdToPokemonId(this.getPokemonDefaultForme(pokemonIds[p], _), _);
 			if (results.indexOf(pokemonId) === -1)
 				results.push(pokemonId);
@@ -345,8 +337,7 @@ function VeekunDatabase(db, _) {
 		var result = new Object();
 
 		// Get the pokemon name
-		if (requestedData.name)
-		{
+		if (requestedData.name) {
 			result.isDefaultForme = this.getIsDefaultForme(formeId, _);
 			result.isBattleOnlyForme = this.getIsBattleOnlyForme(formeId, _);
 			var name = this.getFormeName(formeId, languageId, _);
@@ -358,13 +349,11 @@ function VeekunDatabase(db, _) {
 		}
 
 		// Get the other formes of this pokemon
-		if (requestedData.formes)
-		{
+		if (requestedData.formes) {
 			var otherFormeIds = this.getPokemonFormes(pokemonId, _);
 			result.otherFormes = new Array();
 			for (var f = 0; f < otherFormeIds.length; ++f)
-				if (otherFormeIds[f].id !== formeId)
-				{
+				if (otherFormeIds[f].id !== formeId) {
 					var otherForme = this.getFormeName(otherFormeIds[f].id, languageId, _);
 					otherForme.isDefaultForme = otherFormeIds[f].isDefault;
 					otherForme.isBattleOnlyForme = otherFormeIds[f].isBattleOnly;
@@ -376,8 +365,7 @@ function VeekunDatabase(db, _) {
 		}
 
 		// Get pokedex numbers
-		if (requestedData.pokedexNumbers)
-		{
+		if (requestedData.pokedexNumbers) {
 			result.nationalPokedexNumber = this.getPokemonNationalPokedexNumber(pokemonId, _);
 			var pokedexNumberIds = this.getPokemonPokedexNumbers(pokemonId, _);
 			result.pokedexNumbers = new Object();
@@ -390,8 +378,7 @@ function VeekunDatabase(db, _) {
 			result.descriptions = this.getPokemonPokedexDescriptions(pokemonId, languageId, _);
 
 		// Get types
-		if (requestedData.types)
-		{
+		if (requestedData.types) {
 			var typeIds = this.getFormeTypes(formeId, _);
 			result.types = new Array();
 			for (var t = 0; t < typeIds.length; ++t)
@@ -399,8 +386,7 @@ function VeekunDatabase(db, _) {
 		}
 
 		// Get base stats
-		if (requestedData.baseStats)
-		{
+		if (requestedData.baseStats) {
 			var baseStatIds = this.getFormeBaseStats(formeId, _);
 			result.baseStats = new Object();
 			for (var s in baseStatIds)
@@ -408,8 +394,7 @@ function VeekunDatabase(db, _) {
 		}
 
 		// Get abilities
-		if (requestedData.abilities)
-		{
+		if (requestedData.abilities) {
 			var abilityIds = this.getFormeAbilities(formeId, _);
 			result.abilities = new Array();
 			for (var a = 0; a < abilityIds.length; ++a)
@@ -417,8 +402,7 @@ function VeekunDatabase(db, _) {
 		}
 
 		// Get the previous evolution
-		if (requestedData.prevo)
-		{
+		if (requestedData.prevo) {
 			var prevoId = this.getPokemonPrevo(pokemonId, _);
 			if (prevoId)
 				result.prevo = this.getFormeName(this.getPokemonDefaultForme(prevoId, _), languageId, _).name
@@ -427,25 +411,19 @@ function VeekunDatabase(db, _) {
 		}
 
 		// Get the evolutions
-		if (requestedData.evos)
-		{
+		if (requestedData.evos) {
 			var evoIds = this.getPokemonEvos(pokemonId, _);
 			result.evos = new Array();
-			for (var e = 0; e < evoIds.length; ++e)
-			{
+			for (var e = 0; e < evoIds.length; ++e) {
 				var evoDefaultFormeId = this.getPokemonDefaultForme(evoIds[e], _);
 				var evoInfo = this.getFormeMiscInfo(evoDefaultFormeId, _);
-				if (evoInfo.isFormesSwitchable)
-				{
+				if (evoInfo.isFormesSwitchable) {
 					var evo = this.getFormeName(evoDefaultFormeId, languageId, _);
 					evo.combinedName = evo.name;
 					result.evos.push(evo);
-				}
-				else
-				{
+				} else {
 					var evoFormeIds = this.getPokemonFormes(evoIds[e], _);
-					for (var f = 0; f < evoFormeIds.length; ++f)
-					{
+					for (var f = 0; f < evoFormeIds.length; ++f) {
 						if (evoFormeIds[f].isBattleOnly)
 							continue;
 						var evo = this.getFormeName(evoFormeIds[f].id, languageId, _);
@@ -459,19 +437,15 @@ function VeekunDatabase(db, _) {
 		}
 		
 		// Get the pokemon learnset
-		if (requestedData.learnset)
-		{
+		if (requestedData.learnset) {
 			result.learnset = new Object();
 			var generations = this.getAllGenerations(_);
-			for (var g = 0; g < generations.length; ++g)
-			{
+			for (var g = 0; g < generations.length; ++g) {
 				result.learnset[generations[g]] = new Array();
 				var versionGroupIds = this.getVersionGroupIdsForGeneration(generations[g], _);
-				for (var v = 0; v < versionGroupIds.length; ++v)
-				{
+				for (var v = 0; v < versionGroupIds.length; ++v) {
 					var learnset = this.getFormeLearnset(formeId, versionGroupIds[v], _);
-					for (var l = 0; l < learnset.length; ++l)
-					{
+					for (var l = 0; l < learnset.length; ++l) {
 						var move = {
 							name: this.getMoveName(learnset[l].moveId, languageId, _),
 							methodOfLearning: this.getMoveMethodOfLearningName(learnset[l].methodOfLearningId, languageId, _),
@@ -479,8 +453,7 @@ function VeekunDatabase(db, _) {
 						};
 						var isAlreadyExists = false;
 						for (var r = 0; r < result.learnset[generations[g]].length; ++r) // Hack to get around indexOf() only matching object references
-							if (JSON.stringify(move) === JSON.stringify(result.learnset[generations[g]][r]))
-							{
+							if (JSON.stringify(move) === JSON.stringify(result.learnset[generations[g]][r])) {
 								isAlreadyExists = true;
 								break;
 							}
@@ -492,8 +465,7 @@ function VeekunDatabase(db, _) {
 		}
 
 		// Get misc info
-		if (requestedData.misc)
-		{
+		if (requestedData.misc) {
 			var miscInfo = this.getFormeMiscInfo(formeId, _);
 			result.heightm = miscInfo.heightm;
 			result.masskg = miscInfo.masskg;
@@ -546,8 +518,7 @@ exports.getVeekunDatabase = function(_, isForceRedownload) {
 		isForceRedownload = true;
 	}
 	
-	if (isForceRedownload)
-	{
+	if (isForceRedownload) {
 		console.warn("Downloading Veekun Database.");
 		var gunzip = zlib.createGunzip();
 		request("http://veekun.com/static/pokedex/downloads/veekun-pokedex.sqlite.gz")

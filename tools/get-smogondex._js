@@ -12,8 +12,7 @@ exports.getSmogonDex = function(_) {
 
 	// Check if we are at the latest version
 	var version = smogonDexHtml.get("//*[@id='content']//ul[@class='tabs']/li[last()]/*");
-	if (version.name() === "a")
-	{
+	if (version.name() === "a") {
 		// Nope, so we get the new one
 		requestOptions.uri = url.resolve(requestOptions.uri, version.attr("href").value());
 		smogonDexHtml = libxml.parseHtmlString(request(requestOptions, _).body);
@@ -22,14 +21,12 @@ exports.getSmogonDex = function(_) {
 	// Process each row
 	var smogonDex = new Object();
 	var rows = smogonDexHtml.find("//*[@id='content_wrapper']//tbody[1]//tr");
-	for (var r = 0; r < rows.length; ++r)
-	{
+	for (var r = 0; r < rows.length; ++r) {
 		var cols = rows[r].find("./td");
 
 		var name = cols[0].text().toLowerCase().replace(/[^a-z0-9]+/g, "");
 		// Name conversions. Mostly to expand forme letters
-		switch (name)
-		{
+		switch (name) {
 			case "arceusnormal" :
 				name = "arceus";
 				break;
@@ -120,8 +117,7 @@ exports.getSmogonDex = function(_) {
 			types: types,
 			tier: tier,
 			abilities: abilities,
-			baseStats:
-			{
+			baseStats: {
 				hp: hp,
 				atk: atk,
 				def: def,
@@ -132,15 +128,13 @@ exports.getSmogonDex = function(_) {
 		};
 
 		// Add formes not in the smogon dex
-		switch (name)
-		{
+		switch (name) {
 			case "arceus" :
 				smogonDex["arceusunknown"] = {
 					types: ["???"],
 					tier: tier,
 					abilities: abilities,
-					baseStats:
-					{
+					baseStats: {
 						hp: hp,
 						atk: atk,
 						def: def,
@@ -158,8 +152,7 @@ exports.getSmogonDex = function(_) {
 						types: types,
 						tier: tier,
 						abilities: abilities,
-						baseStats:
-						{
+						baseStats: {
 							hp: hp,
 							atk: atk,
 							def: def,
@@ -180,8 +173,7 @@ exports.getSmogonDex = function(_) {
 						types: [castformFormes[c].type],
 						tier: tier,
 						abilities: abilities,
-						baseStats:
-						{
+						baseStats: {
 							hp: hp,
 							atk: atk,
 							def: def,
@@ -193,13 +185,11 @@ exports.getSmogonDex = function(_) {
 				break;
 
 			case "cherrim" :
-				smogonDex["cherrimsunshine"] =
-				{
+				smogonDex["cherrimsunshine"] = {
 					types: types,
 					tier: tier,
 					abilities: abilities,
-					baseStats:
-					{
+					baseStats: {
 						hp: hp,
 						atk: atk,
 						def: def,
@@ -217,8 +207,7 @@ exports.getSmogonDex = function(_) {
 						types: types,
 						tier: tier,
 						abilities: abilities,
-						baseStats:
-						{
+						baseStats: {
 							hp: hp,
 							atk: atk,
 							def: def,
@@ -234,8 +223,7 @@ exports.getSmogonDex = function(_) {
 					types: types,
 					tier: tier,
 					abilities: abilities,
-					baseStats:
-					{
+					baseStats: {
 						hp: hp,
 						atk: atk,
 						def: def,
@@ -252,8 +240,7 @@ exports.getSmogonDex = function(_) {
 					types: types,
 					tier: tier,
 					abilities: abilities,
-					baseStats:
-					{
+					baseStats: {
 						hp: hp,
 						atk: atk,
 						def: def,
@@ -272,8 +259,7 @@ exports.getSmogonDex = function(_) {
 						types: types,
 						tier: tier,
 						abilities: abilities,
-						baseStats:
-						{
+						baseStats: {
 							hp: hp,
 							atk: atk,
 							def: def,
@@ -291,8 +277,7 @@ exports.getSmogonDex = function(_) {
 						types: types,
 						tier: tier,
 						abilities: abilities,
-						baseStats:
-						{
+						baseStats: {
 							hp: hp,
 							atk: atk,
 							def: def,

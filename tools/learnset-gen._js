@@ -24,8 +24,7 @@ function main(argv, _) {
 	console.warn("Outputting custom pokemon.");
 	outputCustomPokemon();
 	console.warn("Outputting real pokemon.");
-	for (var f = 0; f < formeIds.length; ++f)
-	{
+	for (var f = 0; f < formeIds.length; ++f) {
 		var veekunPokemon = veekunDatabase.getFormeData(formeIds[f], languageId, _, {
 				name: true,
 				learnset: true,
@@ -51,20 +50,17 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _) {
 	result.id = toIdForName(pokemon.combinedName, pokemon.forme);
 	
 	result.learnset = new Object();
-	for (var g in pokemon.learnset)
-	{
+	for (var g in pokemon.learnset) {
 		// g is the generation
 		if (g < 3)
 			continue;
-		for (var l = 0; l < pokemon.learnset[g].length; ++l)
-		{
+		for (var l = 0; l < pokemon.learnset[g].length; ++l) {
 			var move = pokemon.learnset[g][l];
 			move.name = toId(move.name);
 			if (!result.learnset[move.name])
 				result.learnset[move.name] = new Array();
 			var convertedMethodOfLearning = g;
-			switch (move.methodOfLearning)
-			{
+			switch (move.methodOfLearning) {
 				case "Level up" :
 					convertedMethodOfLearning += "L" + move.levelLearnt;
 					break;

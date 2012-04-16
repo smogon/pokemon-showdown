@@ -28,8 +28,7 @@ exports.toId = function(s) {
 }
 
 exports.toIdForForme = function(combinedName, forme) {
-	switch (combinedName)
-	{
+	switch (combinedName) {
 		case "Unown-!" :
 			return "em";
 

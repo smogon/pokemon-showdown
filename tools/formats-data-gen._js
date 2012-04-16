@@ -22,8 +22,7 @@ function main(argv, _) {
 	console.warn("Outputting custom pokemon.");
 	outputCustomPokemon();
 	console.warn("Outputting real pokemon.");
-	for (var s in smogonDex)
-	{
+	for (var s in smogonDex) {
 		var pokemon = {
 			id: s,
 			tier: smogonDex[s].tier,
@@ -40,8 +39,7 @@ function main(argv, _) {
 function getViableMoves() {
 	var result = new Object();
 	var lines = fs.readFileSync(viableMovesPath).toString().split("\n");
-	for (var l = 0; l < lines.length; ++l)
-	{
+	for (var l = 0; l < lines.length; ++l) {
 		var tmp = lines[l].split(":");
 		if (tmp.length !== 2)
 			continue;
@@ -50,8 +48,7 @@ function getViableMoves() {
 		if (!pokemon || viableMoves.length <= 1)
 			continue;
 		result[pokemon] = new Object();
-		for (var v = 0; v < viableMoves.length; ++v)
-		{
+		for (var v = 0; v < viableMoves.length; ++v) {
 			var viableMove = viableMoves[v].trim();
 			result[pokemon][toId(viableMove)] = viableMove;
 		}
@@ -67,8 +64,7 @@ function outputCustomPokemon() {
 
 function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine(pokemon.id + ": {", 1);
-	if (pokemon.viable)
-	{
+	if (pokemon.viable) {
 		writeLine("viable: true,");
 		writeLine("viablemoves: " + JSON.stringify(pokemon.viablemoves) + ",");
 	}
