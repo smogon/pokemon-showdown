@@ -15,13 +15,13 @@ var app = require('http').createServer()
 function handler (req, res) {
   fs.readFile(__dirname + '/index.html',
   function (err, data) {
-	if (err) {
-	  res.writeHead(500);
-	  return res.end('Error loading index.html');
-	}
+    if (err) {
+      res.writeHead(500);
+      return res.end('Error loading index.html');
+    }
 
-	res.writeHead(200);
-	res.end(data);
+    res.writeHead(200);
+    res.end(data);
   });
 }
 

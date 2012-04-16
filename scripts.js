@@ -7,22 +7,22 @@ function toId(text) {
 function clone(object) {
   var newObj = (object instanceof Array) ? [] : {};
   for (var i in object) {
-	if (object[i] && typeof object[i] == "object") {
-	  newObj[i] = clone(object[i]);
-	} else newObj[i] = object[i]
+    if (object[i] && typeof object[i] == "object") {
+      newObj[i] = clone(object[i]);
+    } else newObj[i] = object[i]
   } return newObj;
 };
 function shuffle(array) {
-	var tmp, current, top = array.length;
+    var tmp, current, top = array.length;
 
-	if(top) while(--top) {
-		current = Math.floor(Math.random() * (top + 1));
-		tmp = array[current];
-		array[current] = array[top];
-		array[top] = tmp;
-	}
+    if(top) while(--top) {
+        current = Math.floor(Math.random() * (top + 1));
+        tmp = array[current];
+        array[current] = array[top];
+        array[top] = tmp;
+    }
 
-	return array;
+    return array;
 }
 function objectKeys(object) {
 	var keys = [];
@@ -189,7 +189,7 @@ exports.BattleScripts = {
 		// TryHit events:
 		//   STEP 1: we see if the move will succeed at all:
 		//   - TryHit, TryHitSide, or TryHitField are run on the move,
-		//	 depending on move target
+		//     depending on move target
 		//   == primary hit line ==
 		//   Everything after this only happens on the primary hit (not on
 		//   secondary or self-hits)
@@ -200,9 +200,9 @@ exports.BattleScripts = {
 
 		// Note:
 		//   If the move target is `foeSide`:
-		//	 event target = pokemon 0 on the target side
+		//     event target = pokemon 0 on the target side
 		//   If the move target is `allySide` or `all`:
-		//	 event target = the move user
+		//     event target = the move user
 		//
 		//   This is because events can't accept actual sides or fields as
 		//   targets. Choosing these event targets ensures that the correct
@@ -216,8 +216,8 @@ exports.BattleScripts = {
 
 		// Note 2:
 		//   In case you didn't notice, FieldHit and HitField mean different things.
-		//	 TryFieldHit - something in the field was hit
-		//	 TryHitField - our move has a target of 'all' i.e. the field, and hit
+		//     TryFieldHit - something in the field was hit
+		//     TryHitField - our move has a target of 'all' i.e. the field, and hit
 		//   This is a VERY important distinction: Every move triggers
 		//   TryFieldHit, but only  moves with a target of "all" (e.g.
 		//   Haze) trigger TryHitField.

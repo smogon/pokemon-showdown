@@ -21,7 +21,7 @@ foeBeforeMove(user, target, move) [on target]
 	or Pursuit) do not fire this event.
 
 	examples: [volatile] Flinching, [status] fully paralyzed,
-			  [move] Focus Punch
+	          [move] Focus Punch
 
 basePower(user, target) [on move]
 basePower(user, target, basePower, move) [on user]
@@ -30,7 +30,7 @@ foeBasePower(user, target, basePower, move) [on target]
 	base power.
 
 	examples: [ability] Technician, [foe side condition] Reflect,
-			  [move] Gyro Ball
+	          [move] Gyro Ball
 
 beforeTurn(pokemon) [on pokemon]
 beforeTurn(user) [on move]
@@ -171,7 +171,7 @@ start(placeholder, source) [on weather, on field effect]
 	the switchIn event.
 
 	examples: [volatile] Encore, [side condition] Reflect,
-			  [volatile] Substitute
+	          [volatile] Substitute
 
 restart(pokemon) [on status, on volatile]
 restart(side) [on side condition]
@@ -181,7 +181,7 @@ restart() [on weather, on field effect]
 	Useful for effects that can have multiple "layers".
 
 	examples: [side condition] Toxic Spikes, [side condition] Pursuit,
-			  [volatile] Stockpile
+	          [volatile] Stockpile
 
 end(pokemon) [on status, on volatile, on item, on ability]
 end(side) [on side condition]
@@ -196,14 +196,14 @@ end() [on weather, on field effect]
 	NOTE: NOT fired when a pokemon switches out (see switchOut).
 
 	NOTE: If you return true when an event expires from its duration counter
-		  reaching 0, it will never expire unless you reset its duration. To
-		  extend an effect by one turn, simply set its duration counter to 1
-		  before returning true.
+	      reaching 0, it will never expire unless you reset its duration. To
+	      extend an effect by one turn, simply set its duration counter to 1
+	      before returning true.
 
 	Useful for giving messages that an effect has ended.
 
 	examples: [volatile] Encore, [side condition] Reflect,
-			  [volatile] Substitute
+	          [volatile] Substitute
 
 duration(pokemon, source) [on status, on volatile]
 duration(side) [on side condition]
