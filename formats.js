@@ -150,30 +150,30 @@ exports.BattleFormats = {
 			var problems = [];
 
 			if (set.species === set.name) delete set.name;
-			if (template.num == 493)  { // Arceus
+			if (template.num == 493) { // Arceus
 				if (set.ability === 'Multitype' && item.onPlate) {
 					set.species = 'Arceus-'+item.onPlate;
 				} else {
 					set.species = 'Arceus';
 				}
 			}
-			if (template.num == 487)  { // Giratina
+			if (template.num == 487) { // Giratina
 				if (item.id === 'GriseousOrb') {
 					set.species = 'Giratina-O';
 				} else {
 					set.species = 'Giratina';
 				}
 			}
-			if (template.num == 555)  { // Darmanitan
+			if (template.num == 555) { // Darmanitan
 				set.species = 'Darmanitan';
 			}
-			if (template.num == 648)  { // Meloetta
+			if (template.num == 648) { // Meloetta
 				set.species = 'Meloetta';
 			}
-			if (template.num == 351)  { // Castform
+			if (template.num == 351) { // Castform
 				set.species = 'Castform';
 			}
-			if (template.num == 421)  { // Cherrim
+			if (template.num == 421) { // Cherrim
 				set.species = 'Cherrim';
 			}
 			if (template.isNonstandard) {
