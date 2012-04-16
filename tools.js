@@ -400,8 +400,8 @@ function BattleTools() {
 
 			var ability = selfT.getAbility(set.ability).name;
 			if (ability !== template.abilities['0'] &&
-			    ability !== template.abilities['1'] &&
-			    ability !== template.abilities['DW']) {
+				ability !== template.abilities['1'] &&
+				ability !== template.abilities['DW']) {
 				problems.push(set.name+" ("+set.species+") can't have "+set.ability+".");
 			}
 			if (ability === template.abilities['DW']) {
