@@ -666,13 +666,42 @@ exports.BattleMovedex = {
 		num: 251,
 		accuracy: 100,
 		basePower: false,
+		basePowerCallback: function(pokemon, target) {
+			pokemon.addVolatile('beatup');
+			return 5 + Math.floor(pokemon.side.pokemon[pokemon.volatiles.beatup.index].baseStats.atk / 10);
+		},
 		category: "Physical",
-		desc: "Each healthy (i.e. not fainted nor inflicted with a status condition) Pokemon in your party contributes a typeless 10 base power hit determined solely by their base Attack and Defense stats.",
+		desc: "The user and every other healthy (i.e. not fainted nor inflicted with a status condition) Pokemon in your party each contribute a hit with base power determined by their base Attack stat.",
 		shortDesc: "All healthy allies aid in damaging the foe.",
 		id: "beatup",
 		name: "Beat Up",
 		pp: 10,
 		priority: 0,
+		onModifyMove: function(move, pokemon) {
+			var validpokemon = 1;
+			for (var p in pokemon.side.pokemon)
+			{
+				if (pokemon.side.pokemon[p] === pokemon) continue;
+				if (pokemon.side.pokemon[p] && !pokemon.side.pokemon[p].fainted && !pokemon.side.pokemon[p].status) validpokemon++;
+			}
+			move.multihit = validpokemon;
+		},
+		effect: {
+			duration: 1,
+			onStart: function(pokemon) {
+				this.effectData.index = 0;
+			},
+			onRestart: function(pokemon) {
+				do
+				{
+					this.effectData.index++;
+					if (this.effectData.index >= 6) break;
+				}
+				while (!pokemon.side.pokemon[this.effectData.index] ||
+						pokemon.side.pokemon[this.effectData.index].fainted ||
+						pokemon.side.pokemon[this.effectData.index].status)
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -870,6 +899,9 @@ exports.BattleMovedex = {
 		pp: 5,
 		isViable: true,
 		priority: 0,
+		onModifyMove: function(move) {
+			if (this.weather === 'hail') move.accuracy = true;
+		},
 		secondary: {
 			chance: 10,
 			status: 'frz'
@@ -2157,6 +2189,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'disable',
 		effect: {
 			duration: 4,
+			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function(pokemon) {
 				if (!this.willMove(pokemon)) {
 					this.effectData.duration++;
@@ -2172,7 +2205,7 @@ exports.BattleMovedex = {
 							this.debug('Move out of PP');
 							return false;
 						} else {
-							this.add('-start', pokemon, 'Disable');
+							this.add('-start', pokemon, 'Disable', moves[i].move);
 							this.effectData.move = pokemon.lastMove;
 							return;
 						}
@@ -5269,6 +5302,10 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
+		onModifyMove: function(move) {
+			if (this.weather === 'raindance') move.accuracy = true;
+			else if (this.weather === 'sunnyday') move.accuracy = 50;
+		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'confusion'
@@ -11336,6 +11373,10 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
+		onModifyMove: function(move) {
+			if (this.weather === 'raindance') move.accuracy = true;
+			else if (this.weather === 'sunnyday') move.accuracy = 50;
+		},
 		secondary: {
 			chance: 30,
 			status: 'par'

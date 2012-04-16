@@ -105,6 +105,7 @@ exports.BattleStatuses = {
 		onSwitchIn: function() {
 			this.effectData.stage = 0;
 		},
+		onResidualOrder: 9,
 		onResidual: function(pokemon) {
 			this.effectData.stage++;
 			this.damage(pokemon.maxhp*this.effectData.stage/16);
@@ -112,7 +113,6 @@ exports.BattleStatuses = {
 	},
 	confusion: {
 		// this is a volatile status
-		noCopy: true, // doesn't get copied by Baton Pass
 		onStart: function(target) {
 			this.add('-start', target.id, 'confusion');
 			this.effectData.time = 2 + parseInt(Math.random()*4);
@@ -312,11 +312,6 @@ exports.BattleStatuses = {
 				return basePower * .5;
 			}
 		},
-		onModifyMove: function(move) {
-			if (move.id === 'thunder' || move.id === 'hurricane') {
-				move.accuracy = true;
-			}
-		},
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability') {
 				this.effectData.duration = 0;
@@ -351,11 +346,6 @@ exports.BattleStatuses = {
 			if (move.type === 'Water') {
 				this.debug('Sunny Day water suppress');
 				return basePower * .5;
-			}
-		},
-		onModifyMove: function(move) {
-			if (move.id === 'Thunder' || move.id === 'Hurricane') {
-				move.accuracy = 50;
 			}
 		},
 		onStart: function(battle, source, effect) {
@@ -427,11 +417,6 @@ exports.BattleStatuses = {
 				this.add('-weather', 'Hail', '[from] ability: Snow Warning', '[of] '+source);
 			} else {
 				this.add('-weather', 'Hail');
-			}
-		},
-		onModifyMove: function(move) {
-			if (move.id === 'blizzard') {
-				move.accuracy = true;
 			}
 		},
 		onResidualOrder: 1,
