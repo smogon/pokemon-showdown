@@ -3597,7 +3597,7 @@ exports.BattleMovedex = {
 			},
 			onHit: function(foe) {
 				var item = this.getItem(this.effectData.flingItem);
-				if (foe.ability === 'shielddust') // this should be handled in Shield Dust, but hack it for now {
+				if (foe.ability === 'shielddust')  { // this should be handled in Shield Dust, but hack it for now
 					this.debug('Shield Dust blocking secondary effect of Fling');
 					return;
 				}

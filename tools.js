@@ -31,10 +31,10 @@ function BattleTools() {
 		for (var i=0; i<target.types.length; i++) {
 			if (!BattleTypeChart[target.types[i]]) continue;
 			var typeMod = BattleTypeChart[target.types[i]].damageTaken[type];
-			if (typeMod === 1) // super-effective {
+			if (typeMod === 1)  { // super-effective
 				totalTypeMod++;
 			}
-			if (typeMod === 2) // resist {
+			if (typeMod === 2)  { // resist
 				totalTypeMod--;
 			}
 			// in case of weird situations like Gravity, immunity is
