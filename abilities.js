@@ -200,7 +200,7 @@ exports.BattleAbilities = {
 			{
 				if (boost[i] < 0)
 				{
-					boost[i] = 0;
+					delete boost[i];
 				}
 			}
 		},
