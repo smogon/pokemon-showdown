@@ -4,69 +4,56 @@ var numUsers = 0;
 var people = {};
 var numPeople = 0;
 
-function getTime()
-{
+function getTime() {
 	return new Date().getTime();
 }
-function sanitizeName(name)
-{
+function sanitizeName(name) {
 	name = name.trim();
 	if (name.length > 18) name = name.substr(0,18);
 	var noStartChars = {'&':1,'@':1,'%':1,'+':1,'!':1};
-	while (noStartChars[name.substr(0,1)])
-	{
+	while (noStartChars[name.substr(0,1)]) {
 		name = name.substr(1);
 	}
 	name = name.replace(/[\|\[\]\,]/g, '');
 	return name;
 }
 
-function getUser(name)
-{
+function getUser(name) {
 	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
 	var userid = toUserid(name);
 	var i = 0;
-	while (userid && !users[userid] && i < 1000)
-	{
+	while (userid && !users[userid] && i < 1000) {
 		userid = prevUsers[userid];
 		i++;
 	}
 	return users[userid];
 }
-function searchUser(name)
-{
+function searchUser(name) {
 	var userid = toUserid(name);
-	while (userid && !users[userid])
-	{
+	while (userid && !users[userid]) {
 		userid = prevUsers[userid];
 	}
 	return users[userid];
 }
-function connectUser(name, socket, token, room)
-{
+function connectUser(name, socket, token, room) {
 	var userid = toUserid(name);
 	var user;
 	console.log("NEW PERSON: "+socket.id);
 	var person = new Person(name, socket, true);
 	if (person.banned) return person;
-	if (users[userid])
-	{
+	if (users[userid]) {
 		user = users[userid];
-		if (!user.add(name, person, token))
-		{
+		if (!user.add(name, person, token)) {
 			console.log("NEW USER: [guest] (userid: "+userid+" taken) "+name);
 			user = new User('', person, token);
 			user.rename(name, token);
 		}
-	}
-	else
-	{
+	} else {
 		console.log("NEW USER: [guest] "+name);
 		user = new User(name, person, token);
 	}
-	if (room)
-	{
+	if (room) {
 		user.joinRoom(room, person);
 	}
 	return person;
@@ -94,14 +81,12 @@ function exportUsergroups() {
 }
 importUsergroups();
 
-function User(name, person, token)
-{
+function User(name, person, token) {
 	var selfP = this;
 
 	numUsers++;
 
-	if (!token)
-	{
+	if (!token) {
 		//token = ''+Math.floor(Math.random()*10000);
 		token = ''+person.socket.id;
 	}
@@ -130,19 +115,16 @@ function User(name, person, token)
 
 	this.emit = function(message, data) {
 		var roomid = false;
-		if (data && data.room)
-		{
+		if (data && data.room) {
 			roomid = data.room;
 		}
-		for (var i=0; i<selfP.people.length; i++)
-		{
+		for (var i=0; i<selfP.people.length; i++) {
 			if (roomid && !selfP.people[i].rooms[roomid]) continue;
 			selfP.people[i].socket.emit(message, data);
 		}
 	};
 	this.getIdentity = function() {
-		if (selfP.muted)
-		{
+		if (selfP.muted) {
 			return '!'+selfP.name;
 		}
 		return selfP.group+selfP.name;
@@ -151,8 +133,7 @@ function User(name, person, token)
 		return (selfP.group === '&' || selfP.group === '@' || selfP.group === '%' /* || selfP.group === '+' */ );
 	};
 	this.canMod = function(group) {
-		switch (selfP.group)
-		{
+		switch (selfP.group) {
 		case '&':
 			return true;
 			break;
@@ -172,20 +153,17 @@ function User(name, person, token)
 		// skip the login server
 		var userid = toUserid(name);
 
-		if (users[userid] && users[userid] !== selfP)
-		{
+		if (users[userid] && users[userid] !== selfP) {
 			return false;
 		}
 
 		if (selfP.named) selfP.prevNames[selfP.userid] = selfP.name;
 
-		if (typeof authenticated === 'undefined' && userid === selfP.userid)
-		{
+		if (typeof authenticated === 'undefined' && userid === selfP.userid) {
 			authenticated = selfP.authenticated;
 		}
 
-		if (userid !== selfP.userid)
-		{
+		if (userid !== selfP.userid) {
 			// doing it this way mathematically ensures no cycles
 			delete prevUsers[userid];
 			prevUsers[selfP.userid] = userid;
@@ -198,13 +176,11 @@ function User(name, person, token)
 		users[selfP.userid] = selfP;
 		selfP.authenticated = !!authenticated;
 
-		if (config.localsysop && selfP.ip === '127.0.0.1')
-		{
+		if (config.localsysop && selfP.ip === '127.0.0.1') {
 			selfP.group = '&';
 		}
 
-		for (var i=0; i<selfP.people.length; i++)
-		{
+		for (var i=0; i<selfP.people.length; i++) {
 			selfP.people[i].rename(name, oldid);
 			console.log(''+name+' renaming: socket '+i+' of '+selfP.people.length);
 			selfP.people[i].socket.emit('update', {
@@ -216,8 +192,7 @@ function User(name, person, token)
 		}
 		var joining = !selfP.named;
 		selfP.named = true;
-		for (var i in selfP.roomCount)
-		{
+		for (var i in selfP.roomCount) {
 			getRoom(i).rename(selfP, oldid, joining);
 		}
 		return true;
@@ -228,8 +203,7 @@ function User(name, person, token)
 		if (selfP.userid === userid) return;
 
 		var i = 0;
-		while (users[userid] && users[userid] !== selfP)
-		{
+		while (users[userid] && users[userid] !== selfP) {
 			selfP.guestNum++;
 			name = 'Guest '+selfP.guestNum;
 			userid = toUserid(name);
@@ -247,8 +221,7 @@ function User(name, person, token)
 		users[selfP.userid] = selfP;
 		selfP.authenticated = false;
 
-		for (var i=0; i<selfP.people.length; i++)
-		{
+		for (var i=0; i<selfP.people.length; i++) {
 			selfP.people[i].rename(name, oldid);
 			console.log(''+name+' renaming: socket '+i+' of '+selfP.people.length);
 			selfP.people[i].socket.emit('update', {
@@ -259,8 +232,7 @@ function User(name, person, token)
 			});
 		}
 		selfP.named = false;
-		for (var i in selfP.roomCount)
-		{
+		for (var i in selfP.roomCount) {
 			getRoom(i).rename(selfP, oldid, false);
 		}
 		return true;
@@ -272,11 +244,9 @@ function User(name, person, token)
 	 * @param auth    Make sure this account will identify as registered
 	 */
 	this.rename = function(name, token, auth) {
-		for (var i in selfP.roomCount)
-		{
+		for (var i in selfP.roomCount) {
 			var room = getRoom(i);
-			if (room.rated && (selfP.userid === room.rated.p1 || selfP.userid === room.rated.p2))
-			{
+			if (room.rated && (selfP.userid === room.rated.p1 || selfP.userid === room.rated.p2)) {
 				selfP.emit('message', "You can't change your name right now because you're in the middle of a rated battle.");
 				return false;
 			}
@@ -285,27 +255,22 @@ function User(name, person, token)
 		name = name.trim();
 		if (name.length > 18) name = name.substr(0,18);
 		var noStartChars = {'&':1,'@':1,'%':1,'+':1,'!':1};
-		while (noStartChars[name.substr(0,1)])
-		{
+		while (noStartChars[name.substr(0,1)]) {
 			name = name.substr(1);
 		}
 		name = name.replace(/[\|\[\]\,]/g, '');
 		var userid = toUserid(name);
 		if (selfP.authenticated) auth = false;
 
-		if (!userid)
-		{
+		if (!userid) {
 			// technically it's not "taken", but if your client doesn't warn you
 			// before it gets to this stage it's your own fault
 			selfP.emit('nameTaken', {userid: '', reason: "You did not specify a name."});
 			return false;
-		}
-		else if (userid === selfP.userid && !auth)
-		{
+		} else if (userid === selfP.userid && !auth) {
 			return selfP.forceRename(name, selfP.authenticated);
 		}
-		if (users[userid] && !users[userid].authenticated && users[userid].connected && !auth)
-		{
+		if (users[userid] && !users[userid].authenticated && users[userid].connected && !auth) {
 			selfP.emit('nameTaken', {userid:selfP.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
 			return false;
 		}
@@ -325,18 +290,13 @@ function User(name, person, token)
 			uri: config.loginserver+'action.php?act=verifysessiontoken&servertoken='+loginservertoken+'&userid='+userid+'&token='+token,
 		}, function(error, response, body) {
 			selfP.renamePending = false;
-			if (body)
-			{
+			if (body) {
 				console.log('BODY: "'+body+'"');
 
-				if (users[userid] && !users[userid].authenticated && users[userid].connected)
-				{
-					if (auth)
-					{
+				if (users[userid] && !users[userid].authenticated && users[userid].connected) {
+					if (auth) {
 						if (users[userid] !== selfP) users[userid].resetName();
-					}
-					else
-					{
+					} else {
 						selfP.emit('nameTaken', {userid:selfP.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
 						return false;
 					}
@@ -344,8 +304,7 @@ function User(name, person, token)
 				var group = ' ';
 				var avatar = 0;
 				var authenticated = false;
-				if (body !== '1')
-				{
+				if (body !== '1') {
 					authenticated = true;
 
 					if (userid === "serei") avatar = 172;
@@ -363,11 +322,9 @@ function User(name, person, token)
 					else if (userid === "sharktamer") avatar = 7;
 					else if (userid === "bmelts") avatar = 1004;
 
-					try
-					{
+					try {
 						var data = JSON.parse(body);
-						switch (data.group)
-						{
+						switch (data.group) {
 						case '2':
 							group = '&';
 							break;
@@ -383,42 +340,33 @@ function User(name, person, token)
 						}
 						/* var userdata = JSON.parse(body.userdata);
 						avatar = parseInt(userdata.trainersprite);
-						if (!avatar || avatar > 263 || avatar < 1)
-						{
+						if (!avatar || avatar > 263 || avatar < 1) {
 							avatar = 0;
 						} */
+					} catch(e) {
 					}
-					catch(e)
-					{
-					}
-					if (usergroups[userid])
-					{
+					if (usergroups[userid]) {
 						group = usergroups[userid].substr(0,1);
 					}
 				}
-				if (users[userid] && users[userid] !== selfP)
-				{
+				if (users[userid] && users[userid] !== selfP) {
 					// This user already exists; let's merge
 					var user = users[userid];
-					if (selfP === user)
-					{
+					if (selfP === user) {
 						// !!!
 						return true;
 					}
-					for (var i in selfP.roomCount)
-					{
+					for (var i in selfP.roomCount) {
 						getRoom(i).leave(selfP);
 					}
-					for (var i=0; i<selfP.people.length; i++)
-					{
+					for (var i=0; i<selfP.people.length; i++) {
 						console.log(''+selfP.name+' preparing to merge: socket '+i+' of '+selfP.people.length);
 						user.merge(selfP.people[i]);
 					}
 					selfP.roomCount = {};
 					selfP.people = [];
 					selfP.connected = false;
-					if (!selfP.authenticated)
-					{
+					if (!selfP.authenticated) {
 						selfP.group = ' ';
 					}
 
@@ -427,16 +375,13 @@ function User(name, person, token)
 					user.authenticated = authenticated;
 					user.ip = selfP.ip;
 
-					if (userid !== selfP.userid)
-					{
+					if (userid !== selfP.userid) {
 						// doing it this way mathematically ensures no cycles
 						delete prevUsers[userid];
 						prevUsers[selfP.userid] = userid;
 					}
-					for (var i in selfP.prevNames)
-					{
-						if (!user.prevNames[i])
-						{
+					for (var i in selfP.prevNames) {
+						if (!user.prevNames[i]) {
 							user.prevNames[i] = selfP.prevNames[i];
 						}
 					}
@@ -449,15 +394,11 @@ function User(name, person, token)
 				selfP.group = group;
 				if (avatar) selfP.avatar = avatar;
 				return selfP.forceRename(name, authenticated);
-			}
-			else if (tokens[1])
-			{
+			} else if (tokens[1]) {
 				console.log('BODY: ""');
 				// rename failed, but shouldn't
 				selfP.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
-			}
-			else
-			{
+			} else {
 				console.log('BODY: ""');
 				// rename failed
 				selfP.emit('nameTaken', {userid:userid, name:name, token:token, reason: "The name you chose is registered"});
@@ -467,8 +408,7 @@ function User(name, person, token)
 	};
 	this.add = function(name, person, token) {
 		// name is ignored - this is intentional
-		if (person.banned || selfP.token !== token)
-		{
+		if (person.banned || selfP.token !== token) {
 			return false;
 		}
 		selfP.connected = true;
@@ -490,10 +430,8 @@ function User(name, person, token)
 			token: selfP.token
 		});
 		person.user = selfP;
-		for (var i in person.rooms)
-		{
-			if (!selfP.roomCount[i])
-			{
+		for (var i in person.rooms) {
+			if (!selfP.roomCount[i]) {
 				person.rooms[i].join(selfP);
 				selfP.roomCount[i] = 0;
 			}
@@ -502,13 +440,11 @@ function User(name, person, token)
 	};
 	this.debugData = function() {
 		var str = ''+selfP.group+selfP.name+' ('+selfP.userid+')';
-		for (var i=0; i<selfP.people.length; i++)
-		{
+		for (var i=0; i<selfP.people.length; i++) {
 			var person = selfP.people[i];
 			str += ' socket'+i+'[';
 			var first = true;
-			for (var j in person.rooms)
-			{
+			for (var j in person.rooms) {
 				if (first) first=false;
 				else str+=',';
 				str += j;
@@ -529,22 +465,17 @@ function User(name, person, token)
 	};
 	this.disconnect = function(socket) {
 		var person = null;
-		for (var i=0; i<selfP.people.length; i++)
-		{
-			if (selfP.people[i].socket === socket)
-			{
+		for (var i=0; i<selfP.people.length; i++) {
+			if (selfP.people[i].socket === socket) {
 				console.log('DISCONNECT: '+selfP.userid);
-				if (selfP.people.length <= 1)
-				{
+				if (selfP.people.length <= 1) {
 					selfP.connected = false;
-					if (!selfP.authenticated)
-					{
+					if (!selfP.authenticated) {
 						selfP.group = ' ';
 					}
 				}
 				person = selfP.people[i];
-				for (var j in person.rooms)
-				{
+				for (var j in person.rooms) {
 					selfP.leaveRoom(person.rooms[j], socket);
 				}
 				person.user = null;
@@ -552,13 +483,10 @@ function User(name, person, token)
 				break;
 			}
 		}
-		if (!selfP.people.length)
-		{
+		if (!selfP.people.length) {
 			// cleanup
-			for (var i in selfP.roomCount)
-			{
-				if (selfP.roomCount[i] > 0)
-				{
+			for (var i in selfP.roomCount) {
+				if (selfP.roomCount[i] > 0) {
 					// should never happen.
 					console.log('!! room miscount: '+i+' not left');
 					getRoom(i).leave(selfP);
@@ -569,12 +497,9 @@ function User(name, person, token)
 	};
 	this.getAlts = function() {
 		var alts = [];
-		for (var i in users)
-		{
-			if (users[i].ip === selfP.ip && users[i] !== selfP)
-			{
-				if (!users[i].named && !users[i].connected)
-				{
+		for (var i in users) {
+			if (users[i].ip === selfP.ip && users[i] !== selfP) {
+				if (!users[i].named && !users[i].connected) {
 					continue;
 				}
 				alts.push(users[i].name);
@@ -586,12 +511,9 @@ function User(name, person, token)
 		var groupRanks = {'+': 1, '%': 2, '@': 3, '&': 100};
 		var group = selfP.group;
 		var groupRank = (groupRanks[group] || 0);
-		for (var i in users)
-		{
-			if (users[i].ip === selfP.ip && users[i] !== selfP)
-			{
-				if ((groupRanks[users[i].group]||0) > groupRank)
-				{
+		for (var i in users) {
+			if (users[i].ip === selfP.ip && users[i] !== selfP) {
+				if ((groupRanks[users[i].group]||0) > groupRank) {
 					group = users[i].group;
 					groupRank = (groupRanks[group] || 0);
 				}
@@ -601,10 +523,8 @@ function User(name, person, token)
 	};
 	this.ban = function(noRecurse) {
 		// no need to recurse, since the root for-loop already bans everything with your IP
-		if (!noRecurse) for (var i in users)
-		{
-			if (users[i].ip === selfP.ip && users[i] !== selfP)
-			{
+		if (!noRecurse) for (var i in users) {
+			if (users[i].ip === selfP.ip && users[i] !== selfP) {
 				users[i].ban(true);
 			}
 		}
@@ -615,13 +535,11 @@ function User(name, person, token)
 		// Disconnects a user from the server
 		var person = null;
 		selfP.connected = false;
-		for (var i=0; i<selfP.people.length; i++)
-		{
+		for (var i=0; i<selfP.people.length; i++) {
 			console.log('DESTROY: '+selfP.userid);
 			person = selfP.people[i];
 			person.user = null;
-			for (var j in person.rooms)
-			{
+			for (var j in person.rooms) {
 				selfP.leaveRoom(person.rooms[j], person);
 			}
 		}
@@ -632,91 +550,68 @@ function User(name, person, token)
 		room = getRoom(room);
 		var person = null;
 		//console.log('JOIN ROOM: '+selfP.userid+' '+room.id);
-		if (!socket)
-		{
-			for (var i=0; i<selfP.people.length;i++)
-			{
+		if (!socket) {
+			for (var i=0; i<selfP.people.length;i++) {
 				// only join full clients, not pop-out single-room
 				// clients
-				if (selfP.people[i].rooms['lobby'])
-				{
+				if (selfP.people[i].rooms['lobby']) {
 					selfP.joinRoom(room, selfP.people[i]);
 				}
 			}
 			return;
-		}
-		else if (socket.socket)
-		{
+		} else if (socket.socket) {
 			person = socket;
 			socket = person.socket;
 		}
 		if (!socket) return;
-		else
-		{
+		else {
 			var i=0;
 			while (selfP.people[i].socket !== socket) i++;
-			if (selfP.people[i].socket === socket)
-			{
+			if (selfP.people[i].socket === socket) {
 				person = selfP.people[i];
 			}
 		}
-		if (person && !person.rooms[room.id])
-		{
+		if (person && !person.rooms[room.id]) {
 			person.rooms[room.id] = room;
-			if (!selfP.roomCount[room.id])
-			{
+			if (!selfP.roomCount[room.id]) {
 				selfP.roomCount[room.id]=1;
 				room.join(selfP);
-			}
-			else
-			{
+			} else {
 				selfP.roomCount[room.id]++;
 				room.initSocket(selfP, socket);
 			}
-		}
-		else if (person && room.id === 'lobby')
-		{
+		} else if (person && room.id === 'lobby') {
 			person.socket.emit('init', {room: roomid, notFound: true});
 		}
 	};
 	this.leaveRoom = function(room, socket) {
 		room = getRoom(room);
-		for (var i=0; i<selfP.people.length; i++)
-		{
-			if (selfP.people[i] === socket || selfP.people[i].socket === socket || !socket)
-			{
-				if (selfP.people[i].rooms[room.id])
-				{
-					if (selfP.roomCount[room.id])
-					{
+		for (var i=0; i<selfP.people.length; i++) {
+			if (selfP.people[i] === socket || selfP.people[i].socket === socket || !socket) {
+				if (selfP.people[i].rooms[room.id]) {
+					if (selfP.roomCount[room.id]) {
 						selfP.roomCount[room.id]--;
-						if (!selfP.roomCount[room.id])
-						{
+						if (!selfP.roomCount[room.id]) {
 							room.leave(selfP);
 							delete selfP.roomCount[room.id];
 						}
 					}
-					if (!selfP.people[i])
-					{
+					if (!selfP.people[i]) {
 						// race condition? This should never happen, but it does.
 						fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
 							this.write("\npeople="+JSON.stringify(selfP.people)+"\ni="+i+"\n\n")
 							this.end();
 						});
-					}
-					else
-					{
+					} else {
 						delete selfP.people[i].rooms[room.id];
 					}
 				}
-				if (socket)
-				{
+				if (socket) {
 					break;
 				}
 			}
 		}
-		if (!socket && selfP.roomCount[room.id])
-		{
+		if (!socket && selfP.roomCount[room.id]) {
 			room.leave(selfP);
 			delete selfP.roomCount[room.id];
 		}
@@ -735,12 +630,10 @@ function User(name, person, token)
 	};
 	this.makeChallenge = function(user, format, isPrivate) {
 		user = getUser(user);
-		if (!user || selfP.challengeTo)
-		{
+		if (!user || selfP.challengeTo) {
 			return false;
 		}
-		if (getTime() < selfP.lastChallenge + 10000)
-		{
+		if (getTime() < selfP.lastChallenge + 10000) {
 			// 10 seconds ago
 			return false;
 		}
@@ -769,15 +662,12 @@ function User(name, person, token)
 	this.rejectChallengeFrom = function(user) {
 		var userid = toUserid(user);
 		user = getUser(user);
-		if (selfP.challengesFrom[userid])
-		{
+		if (selfP.challengesFrom[userid]) {
 			delete selfP.challengesFrom[userid];
 		}
-		if (user)
-		{
+		if (user) {
 			delete selfP.challengesFrom[user.userid];
-			if (user.challengeTo && user.challengeTo.to === selfP.userid)
-			{
+			if (user.challengeTo && user.challengeTo.to === selfP.userid) {
 				user.challengeTo = null;
 				user.updateChallenges();
 			}
@@ -787,10 +677,8 @@ function User(name, person, token)
 	this.acceptChallengeFrom = function(user) {
 		var userid = toUserid(user);
 		user = getUser(user);
-		if (!user || !user.challengeTo || user.challengeTo.to !== selfP.userid)
-		{
-			if (selfP.challengesFrom[userid])
-			{
+		if (!user || !user.challengeTo || user.challengeTo.to !== selfP.userid) {
+			if (selfP.challengesFrom[userid]) {
 				delete selfP.challengesFrom[userid];
 				selfP.updateChallenges();
 			}
@@ -806,18 +694,14 @@ function User(name, person, token)
 
 	// initialize
 	users[selfP.userid] = selfP;
-	if (person.banned)
-	{
+	if (person.banned) {
 		selfP.destroy();
-	}
-	else if (name)
-	{
+	} else if (name) {
 		selfP.rename(name,token);
 	}
 }
 
-function Person(name, socket, user)
-{
+function Person(name, socket, user) {
 	var selfP = this;
 
 	this.named = true;
@@ -827,12 +711,9 @@ function Person(name, socket, user)
 	this.socket = socket;
 	this.rooms = {};
 
-	this.user = user;
-
-	{
+	this.user = user; {
 		numPeople++;
-		while (people['p'+numPeople])
-		{
+		while (people['p'+numPeople]) {
 			// should never happen
 			numPeople++;
 		}
@@ -846,25 +727,21 @@ function Person(name, socket, user)
 	};
 
 	this.ip = '';
-	if (socket.handshake && socket.handshake.address && socket.handshake.address.address)
-	{
+	if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
 		this.ip = socket.handshake.address.address;
 	}
 
-	if (ipSearch(this.ip,bannedIps))
-	{
+	if (ipSearch(this.ip,bannedIps)) {
 		// gonna kill this
 		this.banned = true;
 		this.user = null;
 	}
 }
 
-function ipSearch(ip, table)
-{
+function ipSearch(ip, table) {
 	if (table[ip]) return true;
 	var dotIndex = ip.lastIndexOf('.');
-	for (var i=0; i<4 && dotIndex > 0; i++)
-	{
+	for (var i=0; i<4 && dotIndex > 0; i++) {
 		ip = ip.substr(0, dotIndex);
 		if (table[ip+'.*']) return true;
 		dotIndex = ip.lastIndexOf('.');

@@ -274,8 +274,7 @@ For instance, here is the Technician ability:
 		Power effectively becomes a move with 90 Base Power.",
 	basePowerCallbackPriority: 10,
 	basePowerCallback: function(pokemon, target, basePower, move) {
-		if (basePower <= 60)
-		{
+		if (basePower <= 60) {
 			return basePower * 1.5;
 		}
 		return basePower;
