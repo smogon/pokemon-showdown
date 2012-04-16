@@ -679,8 +679,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onModifyMove: function(move, pokemon) {
 			var validpokemon = 1;
-			for (var p in pokemon.side.pokemon)
-			{
+			for (var p in pokemon.side.pokemon) {
 				if (pokemon.side.pokemon[p] === pokemon) continue;
 				if (pokemon.side.pokemon[p] && !pokemon.side.pokemon[p].fainted && !pokemon.side.pokemon[p].status) validpokemon++;
 			}
@@ -692,12 +691,10 @@ exports.BattleMovedex = {
 				this.effectData.index = 0;
 			},
 			onRestart: function(pokemon) {
-				do
-				{
+				do {
 					this.effectData.index++;
 					if (this.effectData.index >= 6) break;
-				}
-				while (!pokemon.side.pokemon[this.effectData.index] ||
+				} while (!pokemon.side.pokemon[this.effectData.index] ||
 						pokemon.side.pokemon[this.effectData.index].fainted ||
 						pokemon.side.pokemon[this.effectData.index].status)
 			}
