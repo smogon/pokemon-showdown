@@ -39,7 +39,7 @@ exports.BattleScripts = {
 	runMove: function(move, pokemon, target) {
 		move = this.getMove(move);
 		this.setActiveMove(move, pokemon, target);
-		
+
 		if (pokemon.movedThisTurn || pokemon.runBeforeMove(target, move))
 		{
 			this.debug(''+pokemon.id+' move interrupted; movedThisTurn: '+pokemon.movedThisTurn);
@@ -70,7 +70,7 @@ exports.BattleScripts = {
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 		move = this.runEvent('ModifyMove',pokemon,target,move,move);
 		if (!move) return false;
-		
+
 		var attrs = '';
 		var moveRoll = Math.random()*100;
 		var missed = false;
@@ -147,7 +147,7 @@ exports.BattleScripts = {
 		{
 			move.basePower = 102;
 		}
-		
+
 		var damage = 0;
 		pokemon.lastDamage = 0;
 		if (!move.multihit)
@@ -182,9 +182,9 @@ exports.BattleScripts = {
 			}
 			this.add('-hitcount', target, i);
 		}
-		
+
 		target.gotAttacked(move, damage, pokemon);
-		
+
 		if (move.recoil && pokemon.lastDamage)
 		{
 			this.damage(pokemon.lastDamage * move.recoil[0] / move.recoil[1], pokemon, target, 'recoil');
@@ -221,7 +221,7 @@ exports.BattleScripts = {
 		{
 			move.affectedByImmunities = (move.category !== 'Status');
 		}
-		
+
 		// TryHit events:
 		//   STEP 1: we see if the move will succeed at all:
 		//   - TryHit, TryHitSide, or TryHitField are run on the move,
@@ -233,7 +233,7 @@ exports.BattleScripts = {
 		//   - TryFieldHit is run on the target
 		//   STEP 3: we see if anything blocks the move from hitting the target:
 		//   - If the move's target is a pokemon, TryHit is run on that pokemon
-		
+
 		// Note:
 		//   If the move target is `foeSide`:
 		//     event target = pokemon 0 on the target side
@@ -249,7 +249,7 @@ exports.BattleScripts = {
 		//   It is the `TryFieldHit` event handler's responsibility to read
 		//   move.target and react accordingly.
 		//   An exception is `TryHitSide`, which is passed the target side.
-		
+
 		// Note 2:
 		//   In case you didn't notice, FieldHit and HitField mean different things.
 		//     TryFieldHit - something in the field was hit
@@ -257,7 +257,7 @@ exports.BattleScripts = {
 		//   This is a VERY important distinction: Every move triggers
 		//   TryFieldHit, but only  moves with a target of "all" (e.g.
 		//   Haze) trigger TryHitField.
-		
+
 		if (target)
 		{
 			if (move.target === 'all' && !isSelf)
@@ -297,7 +297,7 @@ exports.BattleScripts = {
 					return false;
 				}
 			}
-			
+
 			if (hitResult === 0)
 			{
 				target = null;
@@ -308,7 +308,7 @@ exports.BattleScripts = {
 				return false;
 			}
 		}
-		
+
 		if (target)
 		{
 			var didSomething = false;
@@ -468,7 +468,7 @@ exports.BattleScripts = {
 	},
 	randomTeam: function(side) {
 		var battle = this;
-		
+
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
@@ -478,16 +478,16 @@ exports.BattleScripts = {
 			}
 		}
 		keys = shuffle(keys);
-		
+
 		var ruleset = this.getFormat().ruleset;
-		
+
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++)
 		{
 			var template = this.getTemplate(keys[i]);
-			
+
 			if (!template || !template.name || !template.types) continue;
 			if (template.tier === 'CAP' && Math.random()*3>1) continue;
-			
+
 			if (ruleset && ruleset[0]==='PotD')
 			{
 				var potd = this.getTemplate(config.potd);
@@ -495,7 +495,7 @@ exports.BattleScripts = {
 				else if (template.species === potd.species) continue; // No thanks, I've already got one
 			}
 			if (!template || !template.name || !template.types) continue;
-			
+
 			if (template.species === 'Magikarp')
 			{
 				template.viablemoves = ["magikarpsrevenge", "splash", "bounce"];
@@ -504,7 +504,7 @@ exports.BattleScripts = {
 			{
 				template.viablemoves = ["present", "bestow"];
 			}
-			
+
 			var moveKeys = shuffle(objectKeys(template.viablemoves));
 			var moves = [];
 			var ability = '';
@@ -525,15 +525,15 @@ exports.BattleScripts = {
 				spd: 31,
 				spe: 31
 			};
-			
+
 			var hasType = {};
 			hasType[template.types[0]] = true;
 			if (template.types[1]) hasType[template.types[1]] = true;
-			
+
 			var hasMove = {};
 			var counter = {};
 			var setupType = '';
-			
+
 			var j=0;
 			do
 			{
@@ -544,7 +544,7 @@ exports.BattleScripts = {
 					moves.push(moveid);
 					j++;
 				}
-				
+
 				hasMove = {};
 				counter = {
 					Physical: 0, Special: 0, Status: 0, damage: 0,
@@ -610,7 +610,7 @@ exports.BattleScripts = {
 						counter['mixedsetup']++;
 					}
 				}
-				
+
 				if (counter['mixedsetup'])
 				{
 					setupType = 'Mixed';
@@ -623,18 +623,18 @@ exports.BattleScripts = {
 				{
 					setupType = 'Physical';
 				}
-				
+
 				for (var k=0; k<moves.length; k++)
 				{
 					var moveid = moves[k];
 					var move = this.getMove(moveid);
 					var rejected = false;
 					var isSetup = false;
-					
+
 					switch (moveid)
 					{
 					// not very useful without their supporting moves
-					
+
 					case 'sleeptalk':
 						if (!hasMove['rest']) rejected = true;
 						if (hasMove['trick'] || hasMove['protect'] || hasMove['substitute'] || hasMove['bellydrum']) rejected = true;
@@ -642,9 +642,9 @@ exports.BattleScripts = {
 					case 'endure':
 						if (!hasMove['flail'] && !hasMove['endeavor'] && !hasMove['reversal']) rejected = true;
 						break;
-					
+
 					// we only need to set up once
-					
+
 					case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup':
 						if (!counter['Physical'] && !hasMove['batonpass']) rejected = true;
 						if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
@@ -660,7 +660,7 @@ exports.BattleScripts = {
 						if (setupType !== 'Mixed' || counter['mixedsetup'] > 1) rejected = true;
 						isSetup = true;
 						break;
-					
+
 					// bad after setup
 					case 'seismictoss': case 'nightshade': case 'superfang':
 						if (setupType) rejected = true;
@@ -668,9 +668,9 @@ exports.BattleScripts = {
 					case 'knockoff': case 'protect': case 'perishsong': case 'magiccoat':
 						if (setupType) rejected = true;
 						break;
-					
+
 					// bit redundant to have both
-					
+
 					case 'fireblast':
 						if (hasMove['eruption'] || hasMove['overheat'] || hasMove['flamethrower']) rejected = true;
 						break;
@@ -726,7 +726,7 @@ exports.BattleScripts = {
 					case 'psychic':
 						if (hasMove['psyshock']) rejected = true;
 						break;
-					
+
 					case 'yawn':
 						if (hasMove['grasswhistle']) rejected = true;
 						break;
@@ -776,24 +776,24 @@ exports.BattleScripts = {
 					{
 						rejected = true;
 					}
-					
+
 					var todoMoves = {
 						beatup:1
 					};
 					if (todoMoves[move.id]) rejected = true;
-					
+
 					if (rejected && j<moveKeys.length)
 					{
 						moves.splice(k,1);
 						break;
 					}
 				}
-				
+
 			} while (moves.length<4 && j<moveKeys.length);
-			
+
 			// any moveset modification goes here
 			//moves[0] = 'Safeguard';
-			
+
 			{
 				var abilities = [template.abilities['0']];
 				if (template.abilities['1'])
@@ -812,7 +812,7 @@ exports.BattleScripts = {
 				var ability = ability0.name;
 				if (abilities[1])
 				{
-					
+
 					if (ability0.rating <= ability1.rating)
 					{
 						if (Math.random()*2<1)
@@ -827,7 +827,7 @@ exports.BattleScripts = {
 							ability = ability1.name;
 						}
 					}
-					
+
 					var rejectAbility = false;
 					if (ability === 'Contrary' && !counter['contrary'])
 					{
@@ -853,7 +853,7 @@ exports.BattleScripts = {
 					{
 						rejectAbility = true;
 					}
-					
+
 					if (rejectAbility)
 					{
 						if (ability === ability1.name) // or not
@@ -870,7 +870,7 @@ exports.BattleScripts = {
 						ability = 'Guts';
 					}
 				}
-				
+
 				if (hasMove['gyroball'])
 				{
 					ivs.spe = 0;
@@ -883,7 +883,7 @@ exports.BattleScripts = {
 					//evs.hp += evs.spe;
 					evs.spe = 0;
 				}
-				
+
 				item = 'Focus Sash';
 				if (template.species === 'Giratina-Origin')
 				{
@@ -1095,10 +1095,10 @@ exports.BattleScripts = {
 				{
 					item = 'Focus Sash';
 				}
-				
+
 				// this is the "REALLY can't think of a good item" cutoff
 				// why not always Leftovers? Because it's boring. :P
-				
+
 				else if (hasType['Flying'] || ability === 'Levitate')
 				{
 					item = 'Leftovers';
@@ -1127,13 +1127,13 @@ exports.BattleScripts = {
 				{
 					item = 'Leftovers';
 				}
-				
+
 				if (item === 'Leftovers' && hasType['Poison'])
 				{
 					item = 'Black Sludge';
 				}
 			}
-			
+
 			var levelScale = {
 				LC: 95,
 				NFE: 95,
@@ -1161,12 +1161,12 @@ exports.BattleScripts = {
 			};
 			var level = levelScale[template.tier] || 90;
 			if (customScale[template.name]) level = customScale[template.name];
-			
+
 			if (template.name === 'Chandelure' && ability === 'Shadow Tag') level = 70;
 			if (template.name === 'Serperior' && ability === 'Contrary') level = 75;
 			if (template.name === 'Rotom-Fan' && item === 'Air Balloon') level = 95;
 			if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 85;
-			
+
 			pokemon.push({
 				name: template.name,
 				moves: moves,

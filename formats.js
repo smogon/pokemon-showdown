@@ -1,7 +1,7 @@
 exports.BattleFormats = {
-	
+
 	// formats
-	
+
 	randombattle: {
 		effectType: 'Format',
 		name: "Random Battle",
@@ -120,9 +120,9 @@ exports.BattleFormats = {
 		// no restrictions, for serious
 		ruleset: []
 	},
-	
+
 	// rules
-	
+
 	standard: {
 		effectType: 'Banlist',
 		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam', 'Legal'],

@@ -112,8 +112,8 @@ function BattleTools()
 	 *     moveCopy === Tools.getMoveCopy(moveCopy)
 	 *
 	 * If you really want to, use:
-	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id) 
-	 * 
+	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id)
+	 *
 	 * @param  move    Move ID, move object, or movecopy object describing move to copy
 	 * @return         movecopy object
 	 */
@@ -241,8 +241,8 @@ function BattleTools()
 		}
 		return type;
 	};
-	
-	
+
+
 	this.checkLearnset = function(move, template) {
 		if (move.id) move = move.id;
 		do
@@ -286,7 +286,7 @@ function BattleTools()
 			if (!format.banlistTable) format.banlistTable = {};
 			if (!format.setBanTable) format.setBanTable = [];
 			if (!format.teamBanTable) format.teamBanTable = [];
-			
+
 			banlistTable = format.banlistTable;
 			if (!subformat) subformat = format;
 			if (subformat.banlist)
@@ -295,7 +295,7 @@ function BattleTools()
 				{
 					// don't revalidate what we already validate
 					if (banlistTable[toId(subformat.banlist[i])]) continue;
-					
+
 					banlistTable[subformat.banlist[i]] = true;
 					banlistTable[toId(subformat.banlist[i])] = true;
 
@@ -330,7 +330,7 @@ function BattleTools()
 				{
 					// don't revalidate what we already validate
 					if (banlistTable['Rule:'+toId(subformat.ruleset[i])]) continue;
-					
+
 					banlistTable['Rule:'+toId(subformat.ruleset[i])] = true;
 
 					var subsubformat = selfT.getEffect(subformat.ruleset[i]);
@@ -376,7 +376,7 @@ function BattleTools()
 				problems = problems.concat(setProblems);
 			}
 		}
-		
+
 		for (var i=0; i<format.teamBanTable.length; i++)
 		{
 			var bannedCombo = '';
@@ -387,7 +387,7 @@ function BattleTools()
 					bannedCombo = false;
 					break;
 				}
-				
+
 				if (j == 0)
 				{
 					bannedCombo += format.teamBanTable[i][j];
@@ -402,7 +402,7 @@ function BattleTools()
 				problems.push("Your team has the combination of "+bannedCombo+", which is banned.");
 			}
 		}
-		
+
 		if (format.ruleset)
 		{
 			for (var i=0; i<format.ruleset.length; i++)
@@ -418,7 +418,7 @@ function BattleTools()
 		{
 			problems = problems.concat(format.validateTeam.call(selfT, team, format)||[]);
 		}
-		
+
 		if (!problems.length) return false;
 		return problems;
 	};
@@ -429,28 +429,28 @@ function BattleTools()
 		{
 			return ["This is not a pokemon."];
 		}
-		
+
 		set.species = (''+set.species).trim();
 		set.name = (''+set.name).trim();
 		set.item = ''+set.item;
 		set.ability = ''+set.ability;
 		if (!Array.isArray(set.moves)) set.moves = [];
-		
+
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
 		var template = selfT.getTemplate(set.species);
 		var source = '';
-		
+
 		var setHas = {};
-		
+
 		if (!template || !template.abilities)
 		{
 			set.species = 'Bulbasaur';
 			template = selfT.getTemplate('Bulbasaur')
 		}
-		
+
 		var banlistTable = selfT.getBanlistTable(format);
-		
+
 		setHas[toId(set.species)] = true;
 		if (banlistTable[toId(set.species)])
 		{
@@ -482,10 +482,10 @@ function BattleTools()
 			{
 				problems.push(set.name+" has more than 510 total EVs.");
 			}
-			
+
 			var ability = selfT.getAbility(set.ability).name;
 			if (ability !== template.abilities['0'] &&
-			    ability !== template.abilities['1'] && 
+			    ability !== template.abilities['1'] &&
 			    ability !== template.abilities['DW'])
 			{
 				problems.push(set.name+" ("+set.species+") can't have "+set.ability+".");
@@ -493,13 +493,13 @@ function BattleTools()
 			if (ability === template.abilities['DW'])
 			{
 				source = 'DW';
-				
+
 				unreleasedDW = {
 					Serperior: 1, Chandelure: 1, Ditto: 1,
 					Breloom: 1, Zapdos: 1, Feraligatr: 1, Gothitelle: 1,
 					'Ho-Oh': 1, Lugia: 1, Raikou: 1, Cinccino: 1
 				};
-				
+
 				if (unreleasedDW[set.species] && banlistTable['Unreleased'])
 				{
 					problems.push(set.name+" ("+set.species+")'s Dream World ability is unreleased.");
@@ -523,7 +523,7 @@ function BattleTools()
 			// The usual limit of 4 moves is handled elsewhere - currently
 			// in the cartridge-compliant set validator: formats.js:pokemon
 			set.moves = set.moves.slice(0,24);
-			
+
 			for (var i=0; i<set.moves.length; i++)
 			{
 				if (!set.moves[i]) continue;
@@ -538,7 +538,7 @@ function BattleTools()
 				{
 					problems.push(set.name+"'s move "+set.moves[i]+" is an OHKO move, which is banned.");
 				}
-				
+
 				if (banlistTable['Rule:standard'])
 				{
 					var lset = selfT.checkLearnset(move, template);
@@ -562,7 +562,7 @@ function BattleTools()
 		{
 			problems.push(set.name+" is in "+template.tier+", which is banned.");
 		}
-		
+
 		if (teamHas)
 		{
 			for (var i in setHas)
@@ -580,7 +580,7 @@ function BattleTools()
 					bannedCombo = false;
 					break;
 				}
-				
+
 				if (j == 0)
 				{
 					bannedCombo += format.setBanTable[i][j];
@@ -595,7 +595,7 @@ function BattleTools()
 				problems.push(set.name+" has the combination of "+bannedCombo+", which is banned.");
 			}
 		}
-		
+
 		if (format.ruleset)
 		{
 			for (var i=0; i<format.ruleset.length; i++)
@@ -611,11 +611,11 @@ function BattleTools()
 		{
 			problems = problems.concat(format.validateSet.call(selfT, set, format)||[]);
 		}
-		
+
 		if (!problems.length) return false;
 		return problems;
 	};
-	
+
 	/* for (var i in BattleScripts)
 	{
 		var script = BattleScripts[i];

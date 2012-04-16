@@ -97,9 +97,9 @@ importUsergroups();
 function User(name, person, token)
 {
 	var selfP = this;
-	
+
 	numUsers++;
-	
+
 	if (!token)
 	{
 		//token = ''+Math.floor(Math.random()*10000);
@@ -113,21 +113,21 @@ function User(name, person, token)
 	this.authenticated = false;
 	this.userid = toUserid(this.name);
 	this.group = ' ';
-	
+
 	var trainersprites = [1, 2, 101, 102, 169, 170];
 	this.avatar = trainersprites[parseInt(Math.random()*trainersprites.length)];
-	
+
 	this.connected = true;
-	
+
 	if (person.user) person.user = this;
 	this.people = [person];
 	this.ip = person.ip;
-	
+
 	this.muted = !!ipSearch(this.ip,mutedIps);
 	this.prevNames = {};
 	this.sides = {};
 	this.roomCount = {};
-	
+
 	this.emit = function(message, data) {
 		var roomid = false;
 		if (data && data.room)
@@ -171,14 +171,14 @@ function User(name, person, token)
 	this.forceRename = function(name, authenticated) {
 		// skip the login server
 		var userid = toUserid(name);
-		
+
 		if (users[userid] && users[userid] !== selfP)
 		{
 			return false;
 		}
-		
+
 		if (selfP.named) selfP.prevNames[selfP.userid] = selfP.name;
-		
+
 		if (typeof authenticated === 'undefined' && userid === selfP.userid)
 		{
 			authenticated = selfP.authenticated;
@@ -190,19 +190,19 @@ function User(name, person, token)
 			delete prevUsers[userid];
 			prevUsers[selfP.userid] = userid;
 		}
-		
+
 		selfP.name = name;
 		var oldid = selfP.userid;
 		delete users[oldid];
 		selfP.userid = userid;
 		users[selfP.userid] = selfP;
 		selfP.authenticated = !!authenticated;
-		
+
 		if (config.localsysop && selfP.ip === '127.0.0.1')
 		{
 			selfP.group = '&';
 		}
-		
+
 		for (var i=0; i<selfP.people.length; i++)
 		{
 			selfP.people[i].rename(name, oldid);
@@ -226,7 +226,7 @@ function User(name, person, token)
 		var name = 'Guest '+selfP.guestNum;
 		var userid = toUserid(name);
 		if (selfP.userid === userid) return;
-		
+
 		var i = 0;
 		while (users[userid] && users[userid] !== selfP)
 		{
@@ -235,18 +235,18 @@ function User(name, person, token)
 			userid = toUserid(name);
 			if (i > 1000) return false;
 		}
-		
+
 		if (selfP.named) selfP.prevNames[selfP.userid] = selfP.name;
 		delete prevUsers[userid];
 		prevUsers[selfP.userid] = userid;
-		
+
 		selfP.name = name;
 		var oldid = selfP.userid;
 		delete users[oldid];
 		selfP.userid = userid;
 		users[selfP.userid] = selfP;
 		selfP.authenticated = false;
-		
+
 		for (var i=0; i<selfP.people.length; i++)
 		{
 			selfP.people[i].rename(name, oldid);
@@ -292,7 +292,7 @@ function User(name, person, token)
 		name = name.replace(/[\|\[\]\,]/g, '');
 		var userid = toUserid(name);
 		if (selfP.authenticated) auth = false;
-		
+
 		if (!userid)
 		{
 			// technically it's not "taken", but if your client doesn't warn you
@@ -311,7 +311,7 @@ function User(name, person, token)
 		}
 		selfP.renamePending = true;
 		// todo: sanitize
-		
+
 		// This is ridiculous spaghetti code because I made a mistake in the authentication protocol earlier
 		// this should hopefully fix it while remaining backwards-compatible
 		var loginservertoken = 'novawave.ca';
@@ -319,7 +319,7 @@ function User(name, person, token)
 		if (token) tokens = token.split('::');
 		if (tokens[1]) loginservertoken = tokens[1];
 		token = tokens[0];
-		
+
 		console.log('POSTING TO SERVER: loginserver/action.php?act=verifysessiontoken&servertoken='+loginservertoken+'&userid='+userid+'&token='+token);
 		request({
 			uri: config.loginserver+'action.php?act=verifysessiontoken&servertoken='+loginservertoken+'&userid='+userid+'&token='+token,
@@ -328,7 +328,7 @@ function User(name, person, token)
 			if (body)
 			{
 				console.log('BODY: "'+body+'"');
-				
+
 				if (users[userid] && !users[userid].authenticated && users[userid].connected)
 				{
 					if (auth)
@@ -347,7 +347,7 @@ function User(name, person, token)
 				if (body !== '1')
 				{
 					authenticated = true;
-					
+
 					if (userid === "serei") avatar = 172;
 					else if (userid === "hobsgoblin") avatar = 52;
 					else if (userid === "etherealsol") avatar = 1001;
@@ -362,7 +362,7 @@ function User(name, person, token)
 					else if (userid === "aeo2") avatar = 166;
 					else if (userid === "sharktamer") avatar = 7;
 					else if (userid === "bmelts") avatar = 1004;
-					
+
 					try
 					{
 						var data = JSON.parse(body);
@@ -421,12 +421,12 @@ function User(name, person, token)
 					{
 						selfP.group = ' ';
 					}
-					
+
 					user.group = group;
 					if (avatar) user.avatar = avatar;
 					user.authenticated = authenticated;
 					user.ip = selfP.ip;
-					
+
 					if (userid !== selfP.userid)
 					{
 						// doing it this way mathematically ensures no cycles
@@ -443,7 +443,7 @@ function User(name, person, token)
 					if (selfP.named) user.prevNames[selfP.userid] = selfP.name;
 					return true;
 				}
-				
+
 				// rename success
 				selfP.token = token;
 				selfP.group = group;
@@ -721,12 +721,12 @@ function User(name, person, token)
 			delete selfP.roomCount[room.id];
 		}
 	};
-	
+
 	// challenges
 	this.challengesFrom = {};
 	this.challengeTo = null;
 	this.lastChallenge = 0;
-	
+
 	this.updateChallenges = function() {
 		selfP.emit('update', {
 			challengesFrom: selfP.challengesFrom,
@@ -803,7 +803,7 @@ function User(name, person, token)
 		user.updateChallenges();
 		return true;
 	};
-	
+
 	// initialize
 	users[selfP.userid] = selfP;
 	if (person.banned)
@@ -819,16 +819,16 @@ function User(name, person, token)
 function Person(name, socket, user)
 {
 	var selfP = this;
-	
+
 	this.named = true;
 	this.name = name;
 	this.userid = toUserid(name);
-	
+
 	this.socket = socket;
 	this.rooms = {};
-	
+
 	this.user = user;
-	
+
 	{
 		numPeople++;
 		while (people['p'+numPeople])
@@ -839,18 +839,18 @@ function Person(name, socket, user)
 		this.id = 'p'+numPeople;
 		people[this.id] = selfP;
 	}
-	
+
 	this.rename = function(name) {
 		selfP.name = name;
 		selfP.userid = toUserid(selfP.name);
 	};
-	
+
 	this.ip = '';
 	if (socket.handshake && socket.handshake.address && socket.handshake.address.address)
 	{
 		this.ip = socket.handshake.address.address;
 	}
-	
+
 	if (ipSearch(this.ip,bannedIps))
 	{
 		// gonna kill this
