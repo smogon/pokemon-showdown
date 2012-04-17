@@ -1206,22 +1206,15 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			socket.emit('console', '/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: % @ &');
 		}
-<<<<<<< HEAD
-		if (target === '%' || target === 'unban') {
-=======
-		if (target === '%' || target === 'redirect' || target === 'redir')
-		{
+		if (target === '%' || target === 'redirect' || target === 'redir') {
 			matched = true;
 			socket.emit('console', '/redirect OR /redir [username], [url] - Redirects user to a different URL. ~~intl and ~~dev are accepted redirects. Requires: % @ &');
 		}
-		if (target === '%' || target === 'banredirect' || target === 'br')
-		{
+		if (target === '%' || target === 'banredirect' || target === 'br') {
 			matched = true;
 			socket.emit('console', '/banredirect OR /br [username], [url] - Band a user and then redirects user to a different URL. Requires: % @ &');
 		}
-		if (target === '%' || target === 'unban')
-		{
->>>>>>> upstream/master
+		if (target === '%' || target === 'unban') {
 			matched = true;
 			socket.emit('console', '/unban [username] - Unban a user. Requires: % @ &');
 		}
