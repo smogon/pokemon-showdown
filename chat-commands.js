@@ -987,9 +987,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
 			'<div style="border:1px solid #6688AA;padding:2px 4px">An introduction to CAP:<br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=48782" target="_blank">The CAP encyclopedia</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3464513" target="_blank">CAP metagame discussion</a><br />' +
-			'- <a href="http://www.smogon.com/cap/" target="_blank">The CAP website (somewhat outdated)</a>' +
+			'- <a href="http://www.smogon.com/cap/" target="_blank">CAP project website and description</a>' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=48782" target="_blank">What Pokemon have been made?</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3464513" target="_blank">Talk about the metagame here</a><br />' +
 			'</div>');
 		return false;
 		break;
@@ -1182,6 +1182,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', '/intro - Provides an introduction to competitive pokemon.');
 			socket.emit('console', '!intro - Show everyone that information. Requires: + % @ &');
 		}
+		if (target === 'all' || target === 'cap') {
+			matched = true;
+			socket.emit('console', '/cap - Provides an introduction to the Create-A-Pokemon project.');
+			socket.emit('console', '!cap - Show everyone that information. Requires: + % @ &');
+		}
 		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
 			socket.emit('console', '/alts OR /altcheck OR /alt OR /getalts [username] - Get a user\'s alts. Requires: % @ &');
@@ -1198,6 +1203,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === '%' || target === 'ban' || target === 'b') {
 			matched = true;
 			socket.emit('console', '/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: % @ &');
+		}
+		if (target === '%' || target === 'redirect' || target === 'redir') {
+			matched = true;
+			socket.emit('console', '/redirect OR /redir [username], [url] - Redirects user to a different URL. ~~intl and ~~dev are accepted redirects. Requires: % @ &');
+		}
+		if (target === '%' || target === 'banredirect' || target === 'br') {
+			matched = true;
+			socket.emit('console', '/banredirect OR /br [username], [url] - Band a user and then redirects user to a different URL. Requires: % @ &');
 		}
 		if (target === '%' || target === 'unban') {
 			matched = true;
