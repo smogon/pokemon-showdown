@@ -6913,6 +6913,24 @@ exports.BattleMovedex = {
 		name: "Mist",
 		pp: 30,
 		priority: 0,
+		sideCondition: 'Mist',
+		effect: {
+			duration: 5,
+			onBoost: function(boost, target, source) {
+				if (source && target === source) return;
+				for (var i in boost) {
+					if (boost[i] < 0) {
+						delete boost[i];
+					}
+				}
+			},
+			onStart: function(side) {
+				this.add('-sidestart', side, 'Mist');
+			},
+			onEnd: function(side) {
+				this.add('-sideend', side, 'Mist');
+			}
+		},
 		secondary: false,
 		target: "allies",
 		type: "Ice"
