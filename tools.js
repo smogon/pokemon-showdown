@@ -1,5 +1,4 @@
-function toId(text)
-{
+function toId(text) {
 	text = text || '';
 	if (typeof text === 'number') text = ''+text;
 	if (typeof text !== 'string') return ''; //???
@@ -14,17 +13,14 @@ function clone(object) {
 	} return newObj;
 };
 
-function BattleTools()
-{
+function BattleTools() {
 	var selfT = this;
 	this.effectToString = function() {
 		return this.name;
 	};
 	this.getImmunity = function(type, target) {
-		for (var i=0; i<target.types.length; i++)
-		{
-			if (BattleTypeChart[target.types[i]] && BattleTypeChart[target.types[i]].damageTaken && BattleTypeChart[target.types[i]].damageTaken[type] === 3)
-			{
+		for (var i=0; i<target.types.length; i++) {
+			if (BattleTypeChart[target.types[i]] && BattleTypeChart[target.types[i]].damageTaken && BattleTypeChart[target.types[i]].damageTaken[type] === 3) {
 				return false;
 			}
 		}
@@ -32,16 +28,13 @@ function BattleTools()
 	};
 	this.getEffectiveness = function(type, target) {
 		var totalTypeMod = 0;
-		for (var i=0; i<target.types.length; i++)
-		{
+		for (var i=0; i<target.types.length; i++) {
 			if (!BattleTypeChart[target.types[i]]) continue;
 			var typeMod = BattleTypeChart[target.types[i]].damageTaken[type];
-			if (typeMod === 1) // super-effective
-			{
+			if (typeMod === 1) { // super-effective
 				totalTypeMod++;
 			}
-			if (typeMod === 2) // resist
-			{
+			if (typeMod === 2) { // resist
 				totalTypeMod--;
 			}
 			// in case of weird situations like Gravity, immunity is
@@ -50,47 +43,39 @@ function BattleTools()
 		return totalTypeMod;
 	};
 	this.getTemplate = function(template) {
-		if (!template || typeof template === 'string')
-		{
+		if (!template || typeof template === 'string') {
 			var name = (template||'').trim();
 			var id = toId(name);
-			if (BattleAliases[id])
-			{
+			if (BattleAliases[id]) {
 				name = BattleAliases[id];
 				id = toId(name);
 			}
 			template = {};
-			if (id && BattlePokedex[id])
-			{
+			if (id && BattlePokedex[id]) {
 				template = BattlePokedex[id];
 				template.exists = true;
 			}
-			if (BattleTiers[id])
-			{
+			if (BattleTiers[id]) {
 				template.tier = BattleTiers[id].tier;
 				template.isNonstandard = BattleTiers[id].isNonstandard;
 			}
-			if (BattleLearnsets[id])
-			{
+			if (BattleLearnsets[id]) {
 				template.learnset = BattleLearnsets[id].learnset;
 			}
 		}
 		return template;
 	};
 	this.getMove = function(move) {
-		if (!move || typeof move === 'string')
-		{
+		if (!move || typeof move === 'string') {
 			var name = (move||'').trim();
 			var id = toId(name);
 			move = {};
-			if (id.substr(0,12) === 'HiddenPower[')
-			{
+			if (id.substr(0,12) === 'HiddenPower[') {
 				var hptype = id.substr(12);
 				hptype = hptype.substr(0,hptype.length-1);
 				id = 'HiddenPower'+hptype;
 			}
-			if (id && BattleMovedex[id])
-			{
+			if (id && BattleMovedex[id]) {
 				move = BattleMovedex[id];
 				move.exists = true;
 			}
@@ -112,8 +97,8 @@ function BattleTools()
 	 *     moveCopy === Tools.getMoveCopy(moveCopy)
 	 *
 	 * If you really want to, use:
-	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id) 
-	 * 
+	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id)
+	 *
 	 * @param  move    Move ID, move object, or movecopy object describing move to copy
 	 * @return         movecopy object
 	 */
@@ -128,45 +113,31 @@ function BattleTools()
 		return BattleScripts.getNature.call(selfT, nature);
 	};
 	this.getEffect = function(effect) {
-		if (!effect || typeof effect === 'string')
-		{
+		if (!effect || typeof effect === 'string') {
 			var name = (effect||'').trim();
 			var id = toId(name);
 			effect = {};
-			if (id && BattleStatuses[id])
-			{
+			if (id && BattleStatuses[id]) {
 				effect = BattleStatuses[id];
 				effect.name = effect.name || BattleStatuses[id].name;
-			}
-			else if (id && BattleMovedex[id] && BattleMovedex[id].effect)
-			{
+			} else if (id && BattleMovedex[id] && BattleMovedex[id].effect) {
 				effect = BattleMovedex[id].effect;
 				effect.name = effect.name || BattleMovedex[id].name;
-			}
-			else if (id && BattleAbilities[id] && BattleAbilities[id].effect)
-			{
+			} else if (id && BattleAbilities[id] && BattleAbilities[id].effect) {
 				effect = BattleAbilities[id].effect;
 				effect.name = effect.name || BattleAbilities[id].name;
-			}
-			else if (id && BattleItems[id] && BattleItems[id].effect)
-			{
+			} else if (id && BattleItems[id] && BattleItems[id].effect) {
 				effect = BattleItems[id].effect;
 				effect.name = effect.name || BattleItems[id].name;
-			}
-			else if (id && BattleFormats[id])
-			{
+			} else if (id && BattleFormats[id]) {
 				effect = BattleFormats[id];
 				effect.name = effect.name || BattleFormats[id].name;
 				if (!effect.effectType) effect.effectType = 'Format';
-			}
-			else if (id === 'recoil')
-			{
+			} else if (id === 'recoil') {
 				effect = {
 					effectType: 'Recoil'
 				};
-			}
-			else if (id === 'drain')
-			{
+			} else if (id === 'drain') {
 				effect = {
 					effectType: 'Drain'
 				};
@@ -181,13 +152,11 @@ function BattleTools()
 		return effect;
 	};
 	this.getItem = function(item) {
-		if (!item || typeof item === 'string')
-		{
+		if (!item || typeof item === 'string') {
 			var name = (item||'').trim();
 			var id = toId(name);
 			item = {};
-			if (id && BattleItems[id])
-			{
+			if (id && BattleItems[id]) {
 				item = BattleItems[id];
 				item.exists = true;
 			}
@@ -202,13 +171,11 @@ function BattleTools()
 		return item;
 	};
 	this.getAbility = function(ability) {
-		if (!ability || typeof ability === 'string')
-		{
+		if (!ability || typeof ability === 'string') {
 			var name = (ability||'').trim();
 			var id = toId(name);
 			ability = {};
-			if (id && BattleAbilities[id])
-			{
+			if (id && BattleAbilities[id]) {
 				ability = BattleAbilities[id];
 				ability.exists = true;
 			}
@@ -222,52 +189,41 @@ function BattleTools()
 		return ability;
 	};
 	this.getType = function(type) {
-		if (!type || typeof type === 'string')
-		{
+		if (!type || typeof type === 'string') {
 			var id = toId(type);
 			type = {};
-			if (id && BattleTypeChart[id])
-			{
+			if (id && BattleTypeChart[id]) {
 				type = BattleTypeChart[id];
 				type.isType = true;
 				type.effectType = 'Type';
 			}
 			if (!type.id) type.id = id;
-			if (!type.effectType)
-			{
+			if (!type.effectType) {
 				// man, this is really meta
 				type.effectType = 'EffectType';
 			}
 		}
 		return type;
 	};
-	
-	
+
+
 	this.checkLearnset = function(move, template) {
 		if (move.id) move = move.id;
-		do
-		{
-			if (!template.learnset || template.learnset[move])
-			{
+		do {
+			if (!template.learnset || template.learnset[move]) {
 				return true;
 			}
-			if (template.learnset['Sketch'])
-			{
+			if (template.learnset['Sketch']) {
 				var lset = template.learnset['Sketch'];
 				if (typeof lset === 'string') lset = [lset];
 				for (var i=0; i<lset.length; i++) if (lset[i].substr(1) !== 'E') return true;
 				return 1;
 			}
-			if (template.species === 'Deoxys-S' || template.species === 'Deoxys-A' || template.species === 'Deoxys-D')
-			{
+			if (template.species === 'Deoxys-S' || template.species === 'Deoxys-A' || template.species === 'Deoxys-D') {
 				template = selfT.getTemplate('Deoxys');
-			}
-			else if (template.species.substr(0,7) === 'Arceus-')
-			{
+			} else if (template.species.substr(0,7) === 'Arceus-') {
 				template = selfT.getTemplate('Arceus');
-			}
-			else
-			{
+			} else {
 				template = selfT.getTemplate(template.prevo);
 			}
 		} while (template && template.species);
@@ -277,46 +233,35 @@ function BattleTools()
 		var banlistTable;
 		if (!depth) depth = 0;
 		if (depth>4) return; // avoid infinite recursion
-		if (format.banlistTable && !subformat)
-		{
+		if (format.banlistTable && !subformat) {
 			banlistTable = format.banlistTable;
-		}
-		else
-		{
+		} else {
 			if (!format.banlistTable) format.banlistTable = {};
 			if (!format.setBanTable) format.setBanTable = [];
 			if (!format.teamBanTable) format.teamBanTable = [];
-			
+
 			banlistTable = format.banlistTable;
 			if (!subformat) subformat = format;
-			if (subformat.banlist)
-			{
-				for (var i=0; i<subformat.banlist.length; i++)
-				{
+			if (subformat.banlist) {
+				for (var i=0; i<subformat.banlist.length; i++) {
 					// don't revalidate what we already validate
 					if (banlistTable[toId(subformat.banlist[i])]) continue;
-					
+
 					banlistTable[subformat.banlist[i]] = true;
 					banlistTable[toId(subformat.banlist[i])] = true;
 
 					var plusPos = subformat.banlist[i].indexOf('+');
-					if (plusPos && plusPos > 0)
-					{
+					if (plusPos && plusPos > 0) {
 						var plusPlusPos = subformat.banlist[i].indexOf('++');
-						if (plusPlusPos && plusPlusPos > 0)
-						{
+						if (plusPlusPos && plusPlusPos > 0) {
 							var complexList = subformat.banlist[i].split('++');
-							for (var j=0; j<complexList.length; j++)
-							{
+							for (var j=0; j<complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}
 							format.teamBanTable.push(complexList);
-						}
-						else
-						{
+						} else {
 							var complexList = subformat.banlist[i].split('+');
-							for (var j=0; j<complexList.length; j++)
-							{
+							for (var j=0; j<complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}
 							format.setBanTable.push(complexList);
@@ -324,18 +269,15 @@ function BattleTools()
 					}
 				}
 			}
-			if (subformat.ruleset)
-			{
-				for (var i=0; i<subformat.ruleset.length; i++)
-				{
+			if (subformat.ruleset) {
+				for (var i=0; i<subformat.ruleset.length; i++) {
 					// don't revalidate what we already validate
 					if (banlistTable['Rule:'+toId(subformat.ruleset[i])]) continue;
-					
+
 					banlistTable['Rule:'+toId(subformat.ruleset[i])] = true;
 
 					var subsubformat = selfT.getEffect(subformat.ruleset[i]);
-					if (subsubformat.ruleset || subsubformat.banlist)
-					{
+					if (subsubformat.ruleset || subsubformat.banlist) {
 						selfT.getBanlistTable(format, subsubformat, depth+1);
 					}
 				}
@@ -347,277 +289,218 @@ function BattleTools()
 		var problems = [];
 		format = selfT.getEffect(format);
 		selfT.getBanlistTable(format);
-		if (format.team === 'random')
-		{
+		if (format.team === 'random') {
 			return false;
 		}
-		if (!team || !Array.isArray(team))
-		{
-			if (format.canUseRandomTeam)
-			{
+		if (!team || !Array.isArray(team)) {
+			if (format.canUseRandomTeam) {
 				return false;
 			}
 			return ["Random teams are not allowed in this format."];
 		}
-		if (!team.length)
-		{
+		if (!team.length) {
 			return ["Your team has no pokemon."];
 		}
-		if (team.length>6)
-		{
+		if (team.length>6) {
 			return ["Your team has more than 6 pokemon."];
 		}
 		var teamHas = {};
-		for (var i=0; i<team.length; i++)
-		{
+		for (var i=0; i<team.length; i++) {
 			var setProblems = selfT.validateSet(team[i], format, teamHas);
-			if (setProblems)
-			{
+			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
 		}
-		
-		for (var i=0; i<format.teamBanTable.length; i++)
-		{
+
+		for (var i=0; i<format.teamBanTable.length; i++) {
 			var bannedCombo = '';
-			for (var j=0; j<format.teamBanTable[i].length; j++)
-			{
-				if (!teamHas[format.teamBanTable[i][j]])
-				{
+			for (var j=0; j<format.teamBanTable[i].length; j++) {
+				if (!teamHas[format.teamBanTable[i][j]]) {
 					bannedCombo = false;
 					break;
 				}
-				
-				if (j == 0)
-				{
+
+				if (j == 0) {
 					bannedCombo += format.teamBanTable[i][j];
-				}
-				else
-				{
+				} else {
 					bannedCombo += ' and '+format.teamBanTable[i][j];
 				}
 			}
-			if (bannedCombo)
-			{
+			if (bannedCombo) {
 				problems.push("Your team has the combination of "+bannedCombo+", which is banned.");
 			}
 		}
-		
-		if (format.ruleset)
-		{
-			for (var i=0; i<format.ruleset.length; i++)
-			{
+
+		if (format.ruleset) {
+			for (var i=0; i<format.ruleset.length; i++) {
 				var subformat = selfT.getEffect(format.ruleset[i]);
-				if (subformat.validateTeam)
-				{
+				if (subformat.validateTeam) {
 					problems = problems.concat(subformat.validateTeam.call(selfT, team, format)||[]);
 				}
 			}
 		}
-		if (format.validateTeam)
-		{
+		if (format.validateTeam) {
 			problems = problems.concat(format.validateTeam.call(selfT, team, format)||[]);
 		}
-		
+
 		if (!problems.length) return false;
 		return problems;
 	};
 	this.validateSet = function(set, format, teamHas) {
 		var problems = [];
 		format = selfT.getEffect(format);
-		if (!set)
-		{
+		if (!set) {
 			return ["This is not a pokemon."];
 		}
-		
+
 		set.species = (''+set.species).trim();
 		set.name = (''+set.name).trim();
 		set.item = ''+set.item;
 		set.ability = ''+set.ability;
 		if (!Array.isArray(set.moves)) set.moves = [];
-		
+
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
 		var template = selfT.getTemplate(set.species);
 		var source = '';
-		
+
 		var setHas = {};
-		
-		if (!template || !template.abilities)
-		{
+
+		if (!template || !template.abilities) {
 			set.species = 'Bulbasaur';
 			template = selfT.getTemplate('Bulbasaur')
 		}
-		
+
 		var banlistTable = selfT.getBanlistTable(format);
-		
+
 		setHas[toId(set.species)] = true;
-		if (banlistTable[toId(set.species)])
-		{
+		if (banlistTable[toId(set.species)]) {
 			problems.push(set.species+' is banned.');
 		}
 		setHas[toId(set.ability)] = true;
-		if (banlistTable[toId(set.ability)])
-		{
+		if (banlistTable[toId(set.ability)]) {
 			problems.push(set.name+"'s ability "+set.ability+" is banned.");
 		}
 		setHas[toId(set.item)] = true;
-		if (banlistTable[toId(set.item)])
-		{
+		if (banlistTable[toId(set.item)]) {
 			problems.push(set.name+"'s item "+set.item+" is banned.");
 		}
-		if (banlistTable['Unreleased'] && setHas['souldew'])
-		{
+		if (banlistTable['Unreleased'] && setHas['souldew']) {
 			problems.push(set.name+"'s item "+set.item+" is unreleased.");
 		}
 		setHas[toId(set.ability)] = true;
-		if (banlistTable['Rule:standard'])
-		{
+		if (banlistTable['Rule:standard']) {
 			var totalEV = 0;
-			for (var k in set.evs)
-			{
+			for (var k in set.evs) {
 				totalEV += set.evs[k];
 			}
-			if (totalEV > 510)
-			{
+			if (totalEV > 510) {
 				problems.push(set.name+" has more than 510 total EVs.");
 			}
-			
+
 			var ability = selfT.getAbility(set.ability).name;
 			if (ability !== template.abilities['0'] &&
-			    ability !== template.abilities['1'] && 
-			    ability !== template.abilities['DW'])
-			{
+				ability !== template.abilities['1'] &&
+				ability !== template.abilities['DW']) {
 				problems.push(set.name+" ("+set.species+") can't have "+set.ability+".");
 			}
-			if (ability === template.abilities['DW'])
-			{
+			if (ability === template.abilities['DW']) {
 				source = 'DW';
-				
+
 				unreleasedDW = {
 					Serperior: 1, Chandelure: 1, Ditto: 1,
 					Breloom: 1, Zapdos: 1, Feraligatr: 1, Gothitelle: 1,
 					'Ho-Oh': 1, Lugia: 1, Raikou: 1, Cinccino: 1
 				};
-				
-				if (unreleasedDW[set.species] && banlistTable['Unreleased'])
-				{
+
+				if (unreleasedDW[set.species] && banlistTable['Unreleased']) {
 					problems.push(set.name+" ("+set.species+")'s Dream World ability is unreleased.");
-				}
-				else if (template.num >= 494 && set.species !== 'Darmanitan' && set.species !== 'Munna')
-				{
+				} else if (template.num >= 494 && set.species !== 'Darmanitan' && set.species !== 'Munna') {
 					problems.push(set.name+" ("+set.species+")'s Dream World ability is unreleased.");
 				}
 			}
 		}
 		var limit1 = 0;
-		if (!set.moves || !set.moves.length)
-		{
+		if (!set.moves || !set.moves.length) {
 			problems.push(set.name+" has no moves.");
-		}
-		else
-		{
+		} else {
 			// A limit is imposed here to prevent too much engine strain or
 			// too much layout deformation - to be exact, this is the Debug
 			// Mode limitation.
 			// The usual limit of 4 moves is handled elsewhere - currently
 			// in the cartridge-compliant set validator: formats.js:pokemon
 			set.moves = set.moves.slice(0,24);
-			
-			for (var i=0; i<set.moves.length; i++)
-			{
+
+			for (var i=0; i<set.moves.length; i++) {
 				if (!set.moves[i]) continue;
 				set.moves[i] = ''+set.moves[i];
 				var move = selfT.getMove(set.moves[i]);
 				setHas[move.id] = true;
-				if (banlistTable[move.id])
-				{
+				if (banlistTable[move.id]) {
 					problems.push(set.name+"'s move "+set.moves[i]+" is banned.");
-				}
-				else if (move.ohko && banlistTable['OHKO'])
-				{
+				} else if (move.ohko && banlistTable['OHKO']) {
 					problems.push(set.name+"'s move "+set.moves[i]+" is an OHKO move, which is banned.");
 				}
-				
-				if (banlistTable['Rule:standard'])
-				{
+
+				if (banlistTable['Rule:standard']) {
 					var lset = selfT.checkLearnset(move, template);
-					if (!lset)
-					{
+					if (!lset) {
 						problems.push(set.name+" ("+set.species+") can't learn "+move.name);
-					}
-					else if (lset === 1)
-					{
+					} else if (lset === 1) {
 						limit1++;
 					}
-					if (limit1 > 1)
-					{
+					if (limit1 > 1) {
 						problems.push(set.name+" ("+set.species+") can't Sketch "+move.name+" - it's limited to 1 Sketch move");
 					}
 				}
 			}
 		}
 		setHas[toId(template.tier)] = true;
-		if (banlistTable[template.tier])
-		{
+		if (banlistTable[template.tier]) {
 			problems.push(set.name+" is in "+template.tier+", which is banned.");
 		}
-		
-		if (teamHas)
-		{
-			for (var i in setHas)
-			{
+
+		if (teamHas) {
+			for (var i in setHas) {
 				teamHas[i] = true;
 			}
 		}
-		for (var i=0; i<format.setBanTable.length; i++)
-		{
+		for (var i=0; i<format.setBanTable.length; i++) {
 			var bannedCombo = '';
-			for (var j=0; j<format.setBanTable[i].length; j++)
-			{
-				if (!setHas[format.setBanTable[i][j]])
-				{
+			for (var j=0; j<format.setBanTable[i].length; j++) {
+				if (!setHas[format.setBanTable[i][j]]) {
 					bannedCombo = false;
 					break;
 				}
-				
-				if (j == 0)
-				{
+
+				if (j == 0) {
 					bannedCombo += format.setBanTable[i][j];
-				}
-				else
-				{
+				} else {
 					bannedCombo += ' and '+format.setBanTable[i][j];
 				}
 			}
-			if (bannedCombo)
-			{
+			if (bannedCombo) {
 				problems.push(set.name+" has the combination of "+bannedCombo+", which is banned.");
 			}
 		}
-		
-		if (format.ruleset)
-		{
-			for (var i=0; i<format.ruleset.length; i++)
-			{
+
+		if (format.ruleset) {
+			for (var i=0; i<format.ruleset.length; i++) {
 				var subformat = selfT.getEffect(format.ruleset[i]);
-				if (subformat.validateSet)
-				{
+				if (subformat.validateSet) {
 					problems = problems.concat(subformat.validateSet.call(selfT, set, format)||[]);
 				}
 			}
 		}
-		if (format.validateSet)
-		{
+		if (format.validateSet) {
 			problems = problems.concat(format.validateSet.call(selfT, set, format)||[]);
 		}
-		
+
 		if (!problems.length) return false;
 		return problems;
 	};
-	
-	/* for (var i in BattleScripts)
-	{
+
+	/* for (var i in BattleScripts) {
 		var script = BattleScripts[i];
 		this[i] = function() {
 			return script.apply(selfT, arguments);
