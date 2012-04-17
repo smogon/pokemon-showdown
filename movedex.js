@@ -586,16 +586,12 @@ exports.BattleMovedex = {
 		num: 419,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function(pokemon, target) {
-			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.thisTurn) {
-				return 60;
+		basePowerCallback: function(pokemon, source) {
+			if (source.lastDamage > 0 && pokemon.lastAttackedBy.thisTurn) {
+				this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
+				return 120;
 			}
-			var move = this.getMove(pokemon.lastAttackedBy.move);
-			if (move.category === 'Status') {
-				return 60;
-			}
-			this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
-			return 120;
+			return 60;
 		},
 		category: "Physical",
 		desc: "Base power is 60. Almost always goes last, even after another Pokemon's Focus Punch; this move's base power doubles if the user is damaged before its turn.",
@@ -8621,8 +8617,8 @@ exports.BattleMovedex = {
 		num: 279,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function(pokemon, target) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
+		basePowerCallback: function(pokemon, source) {
+			if (source.lastDamage > 0 && pokemon.lastAttackedBy.thisTurn) {
 				this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
 				return 120;
 			}
