@@ -1,7 +1,7 @@
 exports.BattleFormats = {
-	
+
 	// formats
-	
+
 	randombattle: {
 		effectType: 'Format',
 		name: "Random Battle",
@@ -120,20 +120,18 @@ exports.BattleFormats = {
 		// no restrictions, for serious
 		ruleset: []
 	},
-	
+
 	// rules
-	
+
 	standard: {
 		effectType: 'Banlist',
 		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam', 'Legal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
 			var moves = [];
-			if (set.moves)
-			{
+			if (set.moves) {
 				var hasMove = {};
-				for (var i=0; i<set.moves.length; i++)
-				{
+				for (var i=0; i<set.moves.length; i++) {
 					var move = this.getMove(set.moves[i]);
 					var moveid = move.id;
 					if (hasMove[moveid]) continue;
@@ -152,58 +150,42 @@ exports.BattleFormats = {
 			var problems = [];
 
 			if (set.species === set.name) delete set.name;
-			if (template.num == 493) // Arceus
-			{
-				if (set.ability === 'Multitype' && item.onPlate)
-				{
+			if (template.num == 493) { // Arceus
+				if (set.ability === 'Multitype' && item.onPlate) {
 					set.species = 'Arceus-'+item.onPlate;
-				}
-				else
-				{
+				} else {
 					set.species = 'Arceus';
 				}
 			}
-			if (template.num == 487) // Giratina
-			{
-				if (item.id === 'GriseousOrb')
-				{
+			if (template.num == 487) { // Giratina
+				if (item.id === 'GriseousOrb') {
 					set.species = 'Giratina-O';
-				}
-				else
-				{
+				} else {
 					set.species = 'Giratina';
 				}
 			}
-			if (template.num == 555) // Darmanitan
-			{
+			if (template.num == 555) { // Darmanitan
 				set.species = 'Darmanitan';
 			}
-			if (template.num == 648) // Meloetta
-			{
+			if (template.num == 648) { // Meloetta
 				set.species = 'Meloetta';
 			}
-			if (template.num == 351) // Castform
-			{
+			if (template.num == 351) { // Castform
 				set.species = 'Castform';
 			}
-			if (template.num == 421) // Cherrim
-			{
+			if (template.num == 421) { // Cherrim
 				set.species = 'Cherrim';
 			}
-			if (template.isNonstandard)
-			{
+			if (template.isNonstandard) {
 				problems.push(set.species+' is not a real pokemon.');
 			}
-			if (set.moves) for (var i=0; i<set.moves.length; i++)
-			{
+			if (set.moves) for (var i=0; i<set.moves.length; i++) {
 				var move = this.getMove(set.moves[i]);
-				if (move.isNonstandard)
-				{
+				if (move.isNonstandard) {
 					problems.push(move.name+' is not a real move.');
 				}
 			}
-			if (set.moves && set.moves.length > 4)
-			{
+			if (set.moves && set.moves.length > 4) {
 				problems.push((set.name||set.species) + ' has more than four moves.');
 			}
 			return problems;
@@ -224,8 +206,7 @@ exports.BattleFormats = {
 		effectType: 'Rule',
 		onPotD: '',
 		onStart: function() {
-			if (this.effect.onPotD)
-			{
+			if (this.effect.onPotD) {
 				this.add('rule', 'Pokemon of the Day: '+this.effect.onPotD);
 			}
 		}
@@ -234,12 +215,10 @@ exports.BattleFormats = {
 		onStartPriority: -10,
 		onStart: function() {
 			this.add('clearpoke');
-			for (var i=0; i<this.sides[0].pokemon.length; i++)
-			{
+			for (var i=0; i<this.sides[0].pokemon.length; i++) {
 				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details);
 			}
-			for (var i=0; i<this.sides[1].pokemon.length; i++)
-			{
+			for (var i=0; i<this.sides[1].pokemon.length; i++) {
 				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details);
 			}
 		},
@@ -254,12 +233,10 @@ exports.BattleFormats = {
 		},
 		onModifyMovePriority: -100,
 		onModifyMove: function(move) {
-			if (move.secondary)
-			{
+			if (move.secondary) {
 				move.secondary.chance = 100;
 			}
-			if (move.accuracy !== true && move.accuracy <= 99)
-			{
+			if (move.accuracy !== true && move.accuracy <= 99) {
 				move.accuracy = 0;
 			}
 			move.willCrit = true;
@@ -287,20 +264,15 @@ exports.BattleFormats = {
 			this.add('rule', 'Sleep Clause');
 		},
 		onSetStatus: function(status, target, source) {
-			if (source && source.side === target.side)
-			{
+			if (source && source.side === target.side) {
 				return;
 			}
-			if (status.id === 'slp')
-			{
-				for (var i=0; i<target.side.pokemon.length; i++)
-				{
+			if (status.id === 'slp') {
+				for (var i=0; i<target.side.pokemon.length; i++) {
 					var pokemon = target.side.pokemon[i];
-					if (pokemon.status === 'slp')
-					{
+					if (pokemon.status === 'slp') {
 						if (!pokemon.statusData.source ||
-						    pokemon.statusData.source.side !== pokemon.side)
-						{
+							pokemon.statusData.source.side !== pokemon.side) {
 							this.add('message', 'Sleep Clause activated.');
 							return false;
 						}
