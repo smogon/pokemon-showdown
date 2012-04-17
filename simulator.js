@@ -1523,6 +1523,7 @@ function Battle(roomid, format, rated) {
 		return null;
 	};
 	this.callback = function(type) {
+		selfB.curCallback = type;
 		if (!selfB.p1.user || !selfB.p2.user) {
 			return;
 		}
@@ -1592,7 +1593,6 @@ function Battle(roomid, format, rated) {
 			return;
 		}
 		selfB.add('callback', 'decision');
-		selfB.curCallback = type;
 	};
 	this.win = function(side) {
 		var winSide = false;
