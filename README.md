@@ -14,12 +14,12 @@ Copy `config/config-example.js` into `config/config.js`, and edit as you please.
 
 After this, start Node:
 
-    cd <location of PS>
-    node app.js
+	cd <location of PS>
+	node app.js
 
 You can also specify a port:
 
-    node app.js 8000
+	node app.js 8000
 
 Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT/`
 
