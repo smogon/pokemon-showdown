@@ -41,17 +41,17 @@ exports.toIdForForme = function(combinedName, forme) {
 		case "Basculin-Blue-Striped" :
 			return "blue";
 	}
-	return toId(forme);
+	return exports.toId(forme);
 }
 
 exports.toIdForName = function(combinedName, forme) {
-	var result = toId(combinedName.replace("♂", "M").replace("♀", "F"));
-	var formeId = toIdForForme(combinedName, forme);
+	var result = exports.toId(combinedName.replace("♂", "M").replace("♀", "F"));
+	var formeId = exports.toIdForForme(combinedName, forme);
 	if (result.indexOf(formeId) === -1)
-		if (toId(forme).length === 0)
+		if (exports.toId(forme).length === 0)
 			result += formeId;
 		else
-			if(result.indexOf(toId(forme)) !== -1)
-				result.replace(toId(forme), formeId);
+			if(result.indexOf(exports.toId(forme)) !== -1)
+				result.replace(exports.toId(forme), formeId);
 	return result;
 }

@@ -27,7 +27,7 @@ function main(argv, _) {
 	for (var f = 0; f < formeIds.length; ++f) {
 		var veekunPokemon = veekunDatabase.getFormeData(formeIds[f], languageId, _, {
 				name: true,
-				formes: true,
+				otherformes: true,
 				pokedexNumbers: true,
 				types: true,
 				baseStats: true,
@@ -53,7 +53,6 @@ function outputCustomPokemon() {
 }
 
 function convertVeekunPokemon(pokemon, veekunDatabase, _) {
-
 	var result = new Object();
 
 	// Copy some stuff

@@ -79,6 +79,13 @@ function VeekunDatabase(db, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		return this.db.execute("SELECT pokedex_number FROM pokemon_dex_numbers WHERE species_id = ? AND pokedex_id = ? LIMIT 1", [speciesId, nationalPokedexId], _)[0].pokedex_number;
 	},
+	
+	this.getPokemonIdFromNationalPokedexNumber = function(nationalPokedexNumber, _) {
+		var nationalPokedexId = 1; // National is always 1
+		return this.speciesIdToDefaultFormePokemonId(this.db.execute("SELECT species_id FROM pokemon_dex_numbers \
+																	  WHERE pokedex_number = ? AND pokedex_id = ? LIMIT 1",
+																	 [nationalPokedexNumber, nationalPokedexId], _)[0].species_id, _);
+	},
 
 	this.getFormeTypes = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
@@ -321,7 +328,7 @@ function VeekunDatabase(db, _) {
 		if (!requestedData)
 			requestedData = {
 				name: true,
-				formes: true,
+				otherFormes: true,
 				pokedexNumbers: true,
 				pokedexDescriptions: true,
 				types: true,
@@ -349,7 +356,7 @@ function VeekunDatabase(db, _) {
 		}
 
 		// Get the other formes of this pokemon
-		if (requestedData.formes) {
+		if (requestedData.otherFormes) {
 			var otherFormeIds = this.getPokemonFormes(pokemonId, _);
 			result.otherFormes = new Array();
 			for (var f = 0; f < otherFormeIds.length; ++f)
