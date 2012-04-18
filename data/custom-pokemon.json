@@ -67,12 +67,12 @@
 		"colour": "",
 		"viablemoves":
 		{
-			"substitute": "Substitute",
-			"aurasphere": "Aura Sphere",
-			"hurricane": "Hurricane",
-			"roost": "Roost",
-			"taunt": "Taunt",
-			"toxic": "Toxic"
+			"substitute": 1,
+			"aurasphere": 1,
+			"hurricane": 1,
+			"roost": 1,
+			"taunt": 1,
+			"toxic": 1
 		},
 		"viable": true,
 		"isNonstandard": true,
@@ -111,8 +111,6 @@
 		"prevo": "",
 		"evos": [],
 		"colour": "",
-		"viablemoves": {},
-		"viable": false,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true
@@ -151,15 +149,15 @@
 		"colour": "",
 		"viablemoves":
 		{
-			"spikes": "Spikes",
-			"superpower": "Superpower",
-			"iceshard": "Ice Shard",
-			"blizzard": "Blizzard",
-			"taunt": "Taunt",
-			"earthpower": "Earth Power",
-			"bugbuzz": "Bug Buzz",
-			"tailglow": "Tail Glow",
-			"focusblast": "Focus Blast"
+			"spikes": 1,
+			"superpower": 1,
+			"iceshard": 1,
+			"blizzard": 1,
+			"taunt": 1,
+			"earthpower": 1,
+			"bugbuzz": 1,
+			"tailglow": 1,
+			"focusblast": 1
 		},
 		"viable": true,
 		"isNonstandard": true,
@@ -198,8 +196,6 @@
 		"prevo": "",
 		"evos": [],
 		"colour": "",
-		"viablemoves": {},
-		"viable": false,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true
@@ -236,8 +232,6 @@
 		"prevo": "",
 		"evos": [],
 		"colour": "",
-		"viablemoves": {},
-		"viable": false,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true
@@ -274,8 +268,6 @@
 		"prevo": "",
 		"evos": [],
 		"colour": "",
-		"viablemoves": {},
-		"viable": false,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true
@@ -317,15 +309,15 @@
 		"colour": "",
 		"viablemoves":
 		{
-			"trick": "Trick",
-			"stealthrock": "Stealth Rock",
-			"ancientpower": "AncientPower",
-			"paleowave": "Paleo Wave",
-			"fireblast": "Fire Blast",
-			"earthpower": "Earth Power",
-			"gigadrain": "Giga Drain",
-			"vacuumwave": "Vacuum Wave",
-			"calmmind": "Calm Mind"
+			"trick": 1,
+			"stealthrock": 1,
+			"ancientpower": 1,
+			"paleowave": 1,
+			"fireblast": 1,
+			"earthpower": 1,
+			"gigadrain": 1,
+			"vacuumwave": 1,
+			"calmmind": 1
 		},
 		"viable": true,
 		"isNonstandard": true,
@@ -363,8 +355,6 @@
 		"prevo": "",
 		"evos": [],
 		"colour": "",
-		"viablemoves": {},
-		"viable": false,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true
@@ -401,8 +391,6 @@
 		"prevo": "",
 		"evos": [],
 		"colour": "",
-		"viablemoves": {},
-		"viable": false,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true
@@ -439,8 +427,6 @@
 		"prevo": "",
 		"evos": [],
 		"colour": "",
-		"viablemoves": {},
-		"viable": false,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true
@@ -479,14 +465,14 @@
 		"colour": "",
 		"viablemoves":
 		{
-			"rapidspin": "Rapid Spin",
-			"crunch": "Crunch",
-			"earthquake": "Earthquake",
-			"encore": "Encore",
-			"taunt": "Taunt",
-			"uturn": "U-turn",
-			"suckerpunch": "Sucker Punch",
-			"stoneedge": "Stone Edge"
+			"rapidspin": 1,
+			"crunch": 1,
+			"earthquake": 1,
+			"encore": 1,
+			"taunt": 1,
+			"uturn": 1,
+			"suckerpunch": 1,
+			"stoneedge": 1
 		},
 		"viable": true,
 		"isNonstandard": true,
@@ -525,8 +511,6 @@
 		"prevo": "",
 		"evos": [],
 		"colour": "",
-		"viablemoves": {},
-		"viable": false,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true
@@ -563,8 +547,6 @@
 		"prevo": "",
 		"evos": [],
 		"colour": "",
-		"viablemoves": {},
-		"viable": false,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true

@@ -50,7 +50,7 @@ function getViableMoves() {
 		result[pokemon] = new Object();
 		for (var v = 0; v < viableMoves.length; ++v) {
 			var viableMove = viableMoves[v].trim();
-			result[pokemon][toId(viableMove)] = viableMove;
+			result[pokemon][toId(viableMove)] = 1;
 		}
 	}
 	return result;

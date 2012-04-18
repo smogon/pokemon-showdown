@@ -5,7 +5,7 @@ exports.BattleFormatsData = {
 	},
 	tomohawk: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","aurasphere":"Aura Sphere","hurricane":"Hurricane","roost":"Roost","taunt":"Taunt","toxic":"Toxic"},
+		viablemoves: {"substitute":1,"aurasphere":1,"hurricane":1,"roost":1,"taunt":1,"toxic":1},
 		isNonstandard: true,
 		tier: "G5CAP"
 	},
@@ -15,7 +15,7 @@ exports.BattleFormatsData = {
 	},
 	syclant: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","superpower":"Superpower","iceshard":"Ice Shard","blizzard":"Blizzard","taunt":"Taunt","earthpower":"Earth Power","bugbuzz":"Bug Buzz","tailglow":"Tail Glow","focusblast":"Focus Blast"},
+		viablemoves: {"spikes":1,"superpower":1,"iceshard":1,"blizzard":1,"taunt":1,"earthpower":1,"bugbuzz":1,"tailglow":1,"focusblast":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
@@ -33,7 +33,7 @@ exports.BattleFormatsData = {
 	},
 	stratagem: {
 		viable: true,
-		viablemoves: {"trick":"Trick","stealthrock":"Stealth Rock","ancientpower":"AncientPower","paleowave":"Paleo Wave","fireblast":"Fire Blast","earthpower":"Earth Power","gigadrain":"Giga Drain","vacuumwave":"Vacuum Wave","calmmind":"Calm Mind"},
+		viablemoves: {"trick":1,"stealthrock":1,"ancientpower":1,"paleowave":1,"fireblast":1,"earthpower":1,"gigadrain":1,"vacuumwave":1,"calmmind":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
@@ -51,7 +51,7 @@ exports.BattleFormatsData = {
 	},
 	colossoil: {
 		viable: true,
-		viablemoves: {"rapidspin":"Rapid Spin","crunch":"Crunch","earthquake":"Earthquake","encore":"Encore","taunt":"Taunt","uturn":"U-turn","suckerpunch":"Sucker Punch","stoneedge":"Stone Edge"},
+		viablemoves: {"rapidspin":1,"crunch":1,"earthquake":1,"encore":1,"taunt":1,"uturn":1,"suckerpunch":1,"stoneedge":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
@@ -65,97 +65,97 @@ exports.BattleFormatsData = {
 	},
 	abomasnow: {
 		viable: true,
-		viablemoves: {"blizzard":"Blizzard","iceshard":"Ice Shard","gigadrain":"Giga Drain","hiddenpowerfire":"Hidden Power Fire","waterpulse":"Water Pulse","leechseed":"Leech Seed","substitute":"Substitute","swordsdance":"Swords Dance","woodhammer":"Wood Hammer","grassknot":"Grass Knot","focusblast":"Focus Blast"},
+		viablemoves: {"blizzard":1,"iceshard":1,"gigadrain":1,"hiddenpowerfire":1,"waterpulse":1,"leechseed":1,"substitute":1,"swordsdance":1,"woodhammer":1,"grassknot":1,"focusblast":1},
 		tier: "BL"
 	},
 	abra: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","psychic":"Psychic","psyshock":"Psyshock","hiddenpowerfighting":"Hidden Power Fighting","shadowball":"Shadow Ball","encore":"Encore","substitute":"Substitute"},
+		viablemoves: {"calmmind":1,"psychic":1,"psyshock":1,"hiddenpowerfighting":1,"shadowball":1,"encore":1,"substitute":1},
 		tier: "LC"
 	},
 	absol: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","suckerpunch":"Sucker Punch","nightslash":"Night Slash","psychocut":"Psycho Cut","superpower":"Superpower","pursuit":"Pursuit","megahorn":"Megahorn"},
+		viablemoves: {"swordsdance":1,"suckerpunch":1,"nightslash":1,"psychocut":1,"superpower":1,"pursuit":1,"megahorn":1},
 		tier: "NU"
 	},
 	accelgor: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","yawn":"Yawn","bugbuzz":"Bug Buzz","focusblast":"Focus Blast","gigadrain":"Giga Drain","hiddenpowerrock":"Hidden Power Rock","encore":"Encore"},
+		viablemoves: {"spikes":1,"yawn":1,"bugbuzz":1,"focusblast":1,"gigadrain":1,"hiddenpowerrock":1,"encore":1},
 		tier: "RU"
 	},
 	aerodactyl: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","taunt":"Taunt","stoneedge":"Stone Edge","rockslide":"Rock Slide","earthquake":"Earthquake","aquatail":"Aqua Tail","roost":"Roost","firefang":"Fire Fang","honeclaws":"Hone Claws"},
+		viablemoves: {"stealthrock":1,"taunt":1,"stoneedge":1,"rockslide":1,"earthquake":1,"aquatail":1,"roost":1,"firefang":1,"honeclaws":1},
 		tier: "RU"
 	},
 	aggron: {
 		viable: true,
-		viablemoves: {"rockpolish":"Rock Polish","headsmash":"Head Smash","earthquake":"Earthquake","superpower":"Superpower","heavyslam":"Heavy Slam","aquatail":"Aqua Tail","icepunch":"Ice Punch","stealthrock":"Stealth Rock","substitute":"Substitute","focuspunch":"Focus Punch","thunderwave":"Thunder Wave"},
+		viablemoves: {"rockpolish":1,"headsmash":1,"earthquake":1,"superpower":1,"heavyslam":1,"aquatail":1,"icepunch":1,"stealthrock":1,"substitute":1,"focuspunch":1,"thunderwave":1},
 		tier: "RU"
 	},
 	aipom: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","return":"Return","brickbreak":"Brick Break","seedbomb":"Seed Bomb","shadowclaw":"Shadow Claw","uturn":"U-turn","nastyplot":"Nasty Plot","workup":"Work Up","batonpass":"Baton Pass"},
+		viablemoves: {"fakeout":1,"return":1,"brickbreak":1,"seedbomb":1,"shadowclaw":1,"uturn":1,"nastyplot":1,"workup":1,"batonpass":1},
 		tier: "LC"
 	},
 	alakazam: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","psychic":"Psychic","psyshock":"Psyshock","focusblast":"Focus Blast","shadowball":"Shadow Ball","encore":"Encore","substitute":"Substitute"},
+		viablemoves: {"calmmind":1,"psychic":1,"psyshock":1,"focusblast":1,"shadowball":1,"encore":1,"substitute":1},
 		tier: "OU"
 	},
 	alomomola: {
 		viable: true,
-		viablemoves: {"wish":"Wish","protect":"Protect","waterfall":"Waterfall","toxic":"Toxic","scald":"Scald"},
+		viablemoves: {"wish":1,"protect":1,"waterfall":1,"toxic":1,"scald":1},
 		tier: "NU"
 	},
 	altaria: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","outrage":"Outrage","dragonclaw":"Dragon Claw","earthquake":"Earthquake","roost":"Roost","fireblast":"Fire Blast"},
+		viablemoves: {"dragondance":1,"outrage":1,"dragonclaw":1,"earthquake":1,"roost":1,"fireblast":1},
 		tier: "NU"
 	},
 	ambipom: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","return":"Return","lowkick":"Low Kick","pursuit":"Pursuit","uturn":"U-turn","lowsweep":"Low Sweep","switcheroo":"Switcheroo","nastyplot":"Nasty Plot","workup":"Work Up","batonpass":"Baton Pass"},
+		viablemoves: {"fakeout":1,"return":1,"lowkick":1,"pursuit":1,"uturn":1,"lowsweep":1,"switcheroo":1,"nastyplot":1,"workup":1,"batonpass":1},
 		tier: "UU"
 	},
 	amoonguss: {
 		viable: true,
-		viablemoves: {"spore":"Spore","stunspore":"Stun Spore","gigadrain":"Giga Drain","clearsmog":"Clear Smog","hiddenpowerfire":"Hidden Power Fire","synthesis":"Synthesis"},
+		viablemoves: {"spore":1,"stunspore":1,"gigadrain":1,"clearsmog":1,"hiddenpowerfire":1,"synthesis":1},
 		tier: "NU"
 	},
 	ampharos: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","focusblast":"Focus Blast","hiddenpowerice":"Hidden Power Ice","hiddenpowergrass":"Hidden Power Grass","thunderbolt":"Thunderbolt","healbell":"Heal Bell","toxic":"Toxic","reflect":"Reflect","lightscreen":"Light Screen","agility":"Agility","substitute":"Substitute","cottonguard":"Cotton Guard","raindance":"Rain Dance","thunder":"Thunder"},
+		viablemoves: {"voltswitch":1,"focusblast":1,"hiddenpowerice":1,"hiddenpowergrass":1,"thunderbolt":1,"healbell":1,"toxic":1,"reflect":1,"lightscreen":1,"agility":1,"substitute":1,"cottonguard":1,"raindance":1,"thunder":1},
 		tier: "NU"
 	},
 	anorith: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","brickbreak":"Brick Break","toxic":"Toxic","xscissor":"X-Scissor","rockslide":"Rock Slide","swordsdance":"Swords Dance","rockpolish":"Rock Polish"},
+		viablemoves: {"stealthrock":1,"brickbreak":1,"toxic":1,"xscissor":1,"rockslide":1,"swordsdance":1,"rockpolish":1},
 		tier: "LC"
 	},
 	arbok: {
 		viable: true,
-		viablemoves: {"coil":"Coil","gunkshot":"Gunk Shot","seedbomb":"Seed Bomb","glare":"Glare","suckerpunch":"Sucker Punch","aquatail":"Aqua Tail","poisonjab":"Poison Jab","crunch":"Crunch","earthquake":"Earthquake","rest":"Rest"},
+		viablemoves: {"coil":1,"gunkshot":1,"seedbomb":1,"glare":1,"suckerpunch":1,"aquatail":1,"poisonjab":1,"crunch":1,"earthquake":1,"rest":1},
 		tier: "NU"
 	},
 	arcanine: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","fireblast":"Fire Blast","wildcharge":"Wild Charge","hiddenpowergrass":"Hidden Power Grass","hiddenpowerice":"Hidden Power Ice","extremespeed":"ExtremeSpeed","closecombat":"Close Combat","morningsun":"Morning Sun","willowisp":"Will-O-Wisp","toxic":"Toxic"},
+		viablemoves: {"flareblitz":1,"fireblast":1,"wildcharge":1,"hiddenpowergrass":1,"hiddenpowerice":1,"extremespeed":1,"closecombat":1,"morningsun":1,"willowisp":1,"toxic":1},
 		tier: "UU"
 	},
 	arceusbug: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","xscissor":"X-Scissor","stoneedge":"Stone Edge","earthquake":"Earthquake","recover":"Recover","calmmind":"Calm Mind","judgment":"Judgment","icebeam":"Ice Beam"},
+		viablemoves: {"swordsdance":1,"xscissor":1,"stoneedge":1,"earthquake":1,"recover":1,"calmmind":1,"judgment":1,"icebeam":1},
 		tier: "Uber"
 	},
 	arceusdark: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","judgment":"Judgment","recover":"Recover","refresh":"Refresh","roar":"Roar","return":"Return"},
+		viablemoves: {"calmmind":1,"judgment":1,"recover":1,"refresh":1,"roar":1,"return":1},
 		tier: "Uber"
 	},
 	arceusdragon: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","outrage":"Outrage","extremespeed":"ExtremeSpeed","earthquake":"Earthquake","calmmind":"Calm Mind","judgment":"Judgment","fireblast":"Fire Blast","recover":"Recover","substitute":"Substitute"},
+		viablemoves: {"swordsdance":1,"outrage":1,"extremespeed":1,"earthquake":1,"calmmind":1,"judgment":1,"fireblast":1,"recover":1,"substitute":1},
 		tier: "Uber"
 	},
 	arceuselectric: {
@@ -163,42 +163,42 @@ exports.BattleFormatsData = {
 	},
 	arceusfighting: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","judgment":"Judgment","icebeam":"Ice Beam","darkpulse":"Dark Pulse","recover":"Recover","willowisp":"Will-O-Wisp"},
+		viablemoves: {"calmmind":1,"judgment":1,"icebeam":1,"darkpulse":1,"recover":1,"willowisp":1},
 		tier: "Uber"
 	},
 	arceusfire: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","flamethrower":"Flamethrower","fireblast":"Fire Blast","thunderbolt":"Thunderbolt","recover":"Recover"},
+		viablemoves: {"calmmind":1,"flamethrower":1,"fireblast":1,"thunderbolt":1,"recover":1},
 		tier: "Uber"
 	},
 	arceusflying: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","judgment":"Judgment","earthpower":"Earth Power","recover":"Recover","swordsdance":"Swords Dance","fly":"Fly","earthquake":"Earthquake"},
+		viablemoves: {"calmmind":1,"judgment":1,"earthpower":1,"recover":1,"swordsdance":1,"fly":1,"earthquake":1},
 		tier: "Uber"
 	},
 	arceusghost: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","judgment":"Judgment","focusblast":"Focus Blast","flamethrower":"Flamethrower","recover":"Recover","swordsdance":"Swords Dance","shadowforce":"Shadow Force","shadowclaw":"Shadow Claw","brickbreak":"Brick Break","stealthrock":"Stealth Rock","willowisp":"Will-O-Wisp","roar":"Roar"},
+		viablemoves: {"calmmind":1,"judgment":1,"focusblast":1,"flamethrower":1,"recover":1,"swordsdance":1,"shadowforce":1,"shadowclaw":1,"brickbreak":1,"stealthrock":1,"willowisp":1,"roar":1},
 		tier: "Uber"
 	},
 	arceusgrass: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","grassknot":"Grass Knot","icebeam":"Ice Beam","judgment":"Judgment","earthpower":"Earth Power","recover":"Recover","stealthrock":"Stealth Rock","thunderwave":"Thunder Wave"},
+		viablemoves: {"calmmind":1,"grassknot":1,"icebeam":1,"judgment":1,"earthpower":1,"recover":1,"stealthrock":1,"thunderwave":1},
 		tier: "Uber"
 	},
 	arceusground: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","earthquake":"Earthquake","stoneedge":"Stone Edge","recover":"Recover","calmmind":"Calm Mind","judgment":"Judgment","icebeam":"Ice Beam","willowisp":"Will-O-Wisp"},
+		viablemoves: {"swordsdance":1,"earthquake":1,"stoneedge":1,"recover":1,"calmmind":1,"judgment":1,"icebeam":1,"willowisp":1},
 		tier: "Uber"
 	},
 	arceusice: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","judgment":"Judgment","icebeam":"Ice Beam","thunderbolt":"Thunderbolt","fireblast":"Fire Blast","focusblast":"Focus Blast","recover":"Recover"},
+		viablemoves: {"calmmind":1,"judgment":1,"icebeam":1,"thunderbolt":1,"fireblast":1,"focusblast":1,"recover":1},
 		tier: "Uber"
 	},
 	arceus: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","extremespeed":"ExtremeSpeed","shadowclaw":"Shadow Claw","earthquake":"Earthquake","recover":"Recover"},
+		viablemoves: {"swordsdance":1,"extremespeed":1,"shadowclaw":1,"earthquake":1,"recover":1},
 		tier: "Uber"
 	},
 	arceusunknown: {
@@ -206,107 +206,107 @@ exports.BattleFormatsData = {
 	},
 	arceuspoison: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","judgment":"Judgment","sludgebomb":"Sludge Bomb","focusblast":"Focus Blast","fireblast":"Fire Blast","recover":"Recover","willowisp":"Will-O-Wisp","icebeam":"Ice Beam","stealthrock":"Stealth Rock"},
+		viablemoves: {"calmmind":1,"judgment":1,"sludgebomb":1,"focusblast":1,"fireblast":1,"recover":1,"willowisp":1,"icebeam":1,"stealthrock":1},
 		tier: "Uber"
 	},
 	arceuspsychic: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","psyshock":"Psyshock","focusblast":"Focus Blast","recover":"Recover","willowisp":"Will-O-Wisp"},
+		viablemoves: {"calmmind":1,"psyshock":1,"focusblast":1,"recover":1,"willowisp":1},
 		tier: "Uber"
 	},
 	arceusrock: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","judgment":"Judgment","recover":"Recover","willowisp":"Will-O-Wisp","swordsdance":"Swords Dance","stoneedge":"Stone Edge","earthquake":"Earthquake","fireblast":"Fire Blast","grassknot":"Grass Knot"},
+		viablemoves: {"calmmind":1,"judgment":1,"recover":1,"willowisp":1,"swordsdance":1,"stoneedge":1,"earthquake":1,"fireblast":1,"grassknot":1},
 		tier: "Uber"
 	},
 	arceussteel: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","judgment":"Judgment","recover":"Recover","roar":"Roar","thunderbolt":"Thunderbolt","willowisp":"Will-O-Wisp","swordsdance":"Swords Dance","ironhead":"Iron Head","extremespeed":"ExtremeSpeed"},
+		viablemoves: {"calmmind":1,"judgment":1,"recover":1,"roar":1,"thunderbolt":1,"willowisp":1,"swordsdance":1,"ironhead":1,"extremespeed":1},
 		tier: "Uber"
 	},
 	arceuswater: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","waterfall":"Waterfall","extremespeed":"ExtremeSpeed","dragonclaw":"Dragon Claw","brickbreak":"Brick Break","recover":"Recover","calmmind":"Calm Mind","judgment":"Judgment","surf":"Surf","spacialrend":"Spacial Rend","icebeam":"Ice Beam","fireblast":"Fire Blast","thunderbolt":"Thunderbolt"},
+		viablemoves: {"swordsdance":1,"waterfall":1,"extremespeed":1,"dragonclaw":1,"brickbreak":1,"recover":1,"calmmind":1,"judgment":1,"surf":1,"spacialrend":1,"icebeam":1,"fireblast":1,"thunderbolt":1},
 		tier: "Uber"
 	},
 	archen: {
 		viable: true,
-		viablemoves: {"acrobatics":"Acrobatics","stoneedge":"Stone Edge","rockslide":"Rock Slide","earthquake":"Earthquake","uturn":"U-turn","pluck":"Pluck"},
+		viablemoves: {"acrobatics":1,"stoneedge":1,"rockslide":1,"earthquake":1,"uturn":1,"pluck":1},
 		tier: "LC"
 	},
 	archeops: {
 		viable: true,
-		viablemoves: {"acrobatics":"Acrobatics","stoneedge":"Stone Edge","rockslide":"Rock Slide","earthquake":"Earthquake","uturn":"U-turn","pluck":"Pluck","headsmash":"Head Smash"},
+		viablemoves: {"acrobatics":1,"stoneedge":1,"rockslide":1,"earthquake":1,"uturn":1,"pluck":1,"headsmash":1},
 		tier: "RU"
 	},
 	ariados: {
 		viable: true,
-		viablemoves: {"agility":"Agility","toxic":"Toxic","bugbite":"Bug Bite","toxicspikes":"Toxic Spikes","poisonjab":"Poison Jab","crosspoison":"Cross Poison","batonpass":"Baton Pass","swordsdance":"Swords Dance"},
+		viablemoves: {"agility":1,"toxic":1,"bugbite":1,"toxicspikes":1,"poisonjab":1,"crosspoison":1,"batonpass":1,"swordsdance":1},
 		tier: "NU"
 	},
 	armaldo: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","stoneedge":"Stone Edge","brickbreak":"Brick Break","toxic":"Toxic","xscissor":"X-Scissor","swordsdance":"Swords Dance","rockpolish":"Rock Polish","earthquake":"Earthquake","superpower":"Superpower"},
+		viablemoves: {"stealthrock":1,"stoneedge":1,"brickbreak":1,"toxic":1,"xscissor":1,"swordsdance":1,"rockpolish":1,"earthquake":1,"superpower":1},
 		tier: "NU"
 	},
 	aron: {
 		viable: true,
-		viablemoves: {"rockpolish":"Rock Polish","headsmash":"Head Smash","ironhead":"Iron Head","earthquake":"Earthquake","superpower":"Superpower","stealthrock":"Stealth Rock"},
+		viablemoves: {"rockpolish":1,"headsmash":1,"ironhead":1,"earthquake":1,"superpower":1,"stealthrock":1},
 		tier: "LC"
 	},
 	articuno: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","roost":"Roost","whirlwind":"Whirlwind","healbell":"Heal Bell","toxic":"Toxic","substitute":"Substitute"},
+		viablemoves: {"icebeam":1,"roost":1,"whirlwind":1,"healbell":1,"toxic":1,"substitute":1},
 		tier: "NU"
 	},
 	audino: {
 		viable: true,
-		viablemoves: {"wish":"Wish","protect":"Protect","healbell":"Heal Bell","toxic":"Toxic","thunderwave":"Thunder Wave","reflect":"Reflect","lightscreen":"Light Screen","return":"Return"},
+		viablemoves: {"wish":1,"protect":1,"healbell":1,"toxic":1,"thunderwave":1,"reflect":1,"lightscreen":1,"return":1},
 		tier: "NU"
 	},
 	axew: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","protect":"Protect","dig":"Dig","outrage":"Outrage","dualchop":"Dual Chop","dragonclaw":"Dragon Claw","swordsdance":"Swords Dance"},
+		viablemoves: {"dragondance":1,"protect":1,"dig":1,"outrage":1,"dualchop":1,"dragonclaw":1,"swordsdance":1},
 		tier: "LC"
 	},
 	azelf: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","psychic":"Psychic","fireblast":"Fire Blast","grassknot":"Grass Knot","thunderbolt":"Thunderbolt","icepunch":"Ice Punch","uturn":"U-turn","trick":"Trick","taunt":"Taunt","stealthrock":"Stealth Rock","explosion":"Explosion"},
+		viablemoves: {"nastyplot":1,"psychic":1,"fireblast":1,"grassknot":1,"thunderbolt":1,"icepunch":1,"uturn":1,"trick":1,"taunt":1,"stealthrock":1,"explosion":1},
 		tier: "UU"
 	},
 	azumarill: {
 		viable: true,
-		viablemoves: {"waterfall":"Waterfall","aquajet":"Aqua Jet","return":"Return","doubleedge":"Double-Edge","icepunch":"Ice Punch","superpower":"Superpower","substitute":"Substitute","toxic":"Toxic"},
+		viablemoves: {"waterfall":1,"aquajet":1,"return":1,"doubleedge":1,"icepunch":1,"superpower":1,"substitute":1,"toxic":1},
 		tier: "UU"
 	},
 	azurill: {
 		viable: true,
-		viablemoves: {"waterfall":"Waterfall","return":"Return","doubleedge":"Double-Edge","encore":"Encore","toxic":"Toxic","substitute":"Substitute"},
+		viablemoves: {"waterfall":1,"return":1,"doubleedge":1,"encore":1,"toxic":1,"substitute":1},
 		tier: "LC"
 	},
 	bagon: {
 		viable: true,
-		viablemoves: {"outrage":"Outrage","dragondance":"Dragon Dance","firefang":"Fire Fang","crunch":"Crunch","rockslide":"Rock Slide","dragonclaw":"Dragon Claw"},
+		viablemoves: {"outrage":1,"dragondance":1,"firefang":1,"crunch":1,"rockslide":1,"dragonclaw":1},
 		tier: "LC"
 	},
 	baltoy: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","earthquake":"Earthquake","toxic":"Toxic","psychic":"Psychic","reflect":"Reflect","lightscreen":"Light Screen","icebeam":"Ice Beam","rapidspin":"Rapid Spin"},
+		viablemoves: {"stealthrock":1,"earthquake":1,"toxic":1,"psychic":1,"reflect":1,"lightscreen":1,"icebeam":1,"rapidspin":1},
 		tier: "LC"
 	},
 	banette: {
 		viable: true,
-		viablemoves: {"trickroom":"Trick Room","destinybond":"Destiny Bond","taunt":"Taunt","shadowclaw":"Shadow Claw","willowisp":"Will-O-Wisp"},
+		viablemoves: {"trickroom":1,"destinybond":1,"taunt":1,"shadowclaw":1,"willowisp":1},
 		tier: "NU"
 	},
 	barboach: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","waterfall":"Waterfall","earthquake":"Earthquake","return":"Return","bounce":"Bounce","substitute":"Substitute"},
+		viablemoves: {"dragondance":1,"waterfall":1,"earthquake":1,"return":1,"bounce":1,"substitute":1},
 		tier: "LC"
 	},
 	basculin: {
 		viable: true,
-		viablemoves: {"waterfall":"Waterfall","aquajet":"Aqua Jet","doubleedge":"Double-Edge","crunch":"Crunch","toxic":"Toxic"},
+		viablemoves: {"waterfall":1,"aquajet":1,"doubleedge":1,"crunch":1,"toxic":1},
 		tier: "NU"
 	},
 	basculinbluestriped: {
@@ -314,142 +314,142 @@ exports.BattleFormatsData = {
 	},
 	bastiodon: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","metalburst":"Metal Burst","fireblast":"Fire Blast","icebeam":"Ice Beam","earthquake":"Earthquake","toxic":"Toxic","roar":"Roar"},
+		viablemoves: {"stealthrock":1,"metalburst":1,"fireblast":1,"icebeam":1,"earthquake":1,"toxic":1,"roar":1},
 		tier: "NU"
 	},
 	bayleef: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","safeguard":"Safeguard","aromatherapy":"Aromatherapy","grasswhistle":"Grasswhistle","leechseed":"Leech Seed","seedbomb":"Seed Bomb","toxic":"Toxic","leafstorm":"Leaf Storm","gigadrain":"Giga Drain","synthesis":"Synthesis"},
+		viablemoves: {"reflect":1,"lightscreen":1,"safeguard":1,"aromatherapy":1,"grasswhistle":1,"leechseed":1,"seedbomb":1,"toxic":1,"leafstorm":1,"gigadrain":1,"synthesis":1},
 		tier: "NFE"
 	},
 	beartic: {
 		viable: true,
-		viablemoves: {"iciclecrash":"Icicle Crash","superpower":"Superpower","nightslash":"Night Slash","stoneedge":"Stone Edge","swordsdance":"Swords Dance","toxic":"Toxic","substitute":"Substitute"},
+		viablemoves: {"iciclecrash":1,"superpower":1,"nightslash":1,"stoneedge":1,"swordsdance":1,"toxic":1,"substitute":1},
 		tier: "NU"
 	},
 	beautifly: {
 		viable: true,
-		viablemoves: {"quiverdance":"Quiver Dance","bugbuzz":"Bug Buzz","psychic":"Psychic","hiddenpowerfighting":"Hidden Power Fighting","hiddenpowerrock":"Hidden Power Rock","substitute":"Substitute"},
+		viablemoves: {"quiverdance":1,"bugbuzz":1,"psychic":1,"hiddenpowerfighting":1,"hiddenpowerrock":1,"substitute":1},
 		tier: "NU"
 	},
 	beedrill: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","xscissor":"X-Scissor","swordsdance":"Swords Dance","uturn":"U-turn","endeavor":"Endeavor","poisonjab":"Poison Jab","brickbreak":"Brick Break","pursuit":"Pursuit","nightslash":"Night Slash"},
+		viablemoves: {"toxicspikes":1,"xscissor":1,"swordsdance":1,"uturn":1,"endeavor":1,"poisonjab":1,"brickbreak":1,"pursuit":1,"nightslash":1},
 		tier: "NU"
 	},
 	beheeyem: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","psychic":"Psychic","thunderbolt":"Thunderbolt","hiddenpowerfighting":"Hidden Power Fighting","substitute":"Substitute","calmmind":"Calm Mind","recover":"Recover"},
+		viablemoves: {"nastyplot":1,"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"substitute":1,"calmmind":1,"recover":1},
 		tier: "NU"
 	},
 	beldum: {
 		viable: true,
-		viablemoves: {"ironhead":"Iron Head","zenheadbutt":"Zen Headbutt","headbutt":"Headbutt","irondefense":"Iron Defense"},
+		viablemoves: {"ironhead":1,"zenheadbutt":1,"headbutt":1,"irondefense":1},
 		tier: "LC"
 	},
 	bellossom: {
 		viable: true,
-		viablemoves: {"gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","synthesis":"Synthesis","sunnyday":"Sunny Day","solarbeam":"SolarBeam","sleeppowder":"Sleep Powder","stunspore":"Stun Spore","toxic":"Toxic","hiddenpowerfire":"Hidden Power Fire","leechseed":"Leech Seed","aromatherapy":"Aromatherapy","leafblade":"Leaf Blade","leafstorm":"Leaf Storm","swordsdance":"Swords Dance","drainpunch":"Drain Punch"},
+		viablemoves: {"gigadrain":1,"sludgebomb":1,"synthesis":1,"sunnyday":1,"solarbeam":1,"sleeppowder":1,"stunspore":1,"toxic":1,"hiddenpowerfire":1,"leechseed":1,"aromatherapy":1,"leafblade":1,"leafstorm":1,"swordsdance":1,"drainpunch":1},
 		tier: "NU"
 	},
 	bellsprout: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","sleeppowder":"Sleep Powder","sunnyday":"Sunny Day","growth":"Growth","solarbeam":"SolarBeam","gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","weatherball":"Weather Ball","suckerpunch":"Sucker Punch","seedbomb":"Seed Bomb","return":"Return"},
+		viablemoves: {"swordsdance":1,"sleeppowder":1,"sunnyday":1,"growth":1,"solarbeam":1,"gigadrain":1,"sludgebomb":1,"weatherball":1,"suckerpunch":1,"seedbomb":1,"return":1},
 		tier: "LC"
 	},
 	bibarel: {
 		viable: true,
-		viablemoves: {"return":"Return","waterfall":"Waterfall","curse":"Curse","quickattack":"Quick Attack","stealthrock":"Stealth Rock"},
+		viablemoves: {"return":1,"waterfall":1,"curse":1,"quickattack":1,"stealthrock":1},
 		tier: "NU"
 	},
 	bidoof: {
 		viable: true,
-		viablemoves: {"return":"Return","aquatail":"Aqua Tail","curse":"Curse","quickattack":"Quick Attack","stealthrock":"Stealth Rock"},
+		viablemoves: {"return":1,"aquatail":1,"curse":1,"quickattack":1,"stealthrock":1},
 		tier: "LC"
 	},
 	bisharp: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","substitute":"Substitute","suckerpunch":"Sucker Punch","taunt":"Taunt","ironhead":"Iron Head","brickbreak":"Brick Break","nightslash":"Night Slash"},
+		viablemoves: {"swordsdance":1,"substitute":1,"suckerpunch":1,"taunt":1,"ironhead":1,"brickbreak":1,"nightslash":1},
 		tier: "UU"
 	},
 	blastoise: {
 		viable: true,
-		viablemoves: {"surf":"Surf","icebeam":"Ice Beam","hydropump":"Hydro Pump","rapidspin":"Rapid Spin","scald":"Scald","aquajet":"Aqua Jet","toxic":"Toxic","dragontail":"Dragon Tail"},
+		viablemoves: {"surf":1,"icebeam":1,"hydropump":1,"rapidspin":1,"scald":1,"aquajet":1,"toxic":1,"dragontail":1},
 		tier: "UU"
 	},
 	blaziken: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","hijumpkick":"Hi Jump Kick","protect":"Protect","swordsdance":"Swords Dance","substitute":"Substitute","batonpass":"Baton Pass","hiddenpowerice":"Hidden Power Ice","fireblast":"Fire Blast","focusblast":"Focus Blast"},
+		viablemoves: {"flareblitz":1,"hijumpkick":1,"protect":1,"swordsdance":1,"substitute":1,"batonpass":1,"hiddenpowerice":1,"fireblast":1,"focusblast":1},
 		tier: "Uber"
 	},
 	blissey: {
 		viable: true,
-		viablemoves: {"wish":"Wish","softboiled":"Softboiled","protect":"Protect","toxic":"Toxic","aromatherapy":"Aromatherapy","seismictoss":"Seismic Toss","counter":"Counter","thunderwave":"Thunder Wave","stealthrock":"Stealth Rock","flamethrower":"Flamethrower","icebeam":"Ice Beam"},
+		viablemoves: {"wish":1,"softboiled":1,"protect":1,"toxic":1,"aromatherapy":1,"seismictoss":1,"counter":1,"thunderwave":1,"stealthrock":1,"flamethrower":1,"icebeam":1},
 		tier: "OU"
 	},
 	blitzle: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","thunderbolt":"Thunderbolt","hiddenpowergrass":"Hidden Power Grass","wildcharge":"Wild Charge"},
+		viablemoves: {"voltswitch":1,"thunderbolt":1,"hiddenpowergrass":1,"wildcharge":1},
 		tier: "LC"
 	},
 	boldore: {
 		viable: true,
-		viablemoves: {"autotomize":"Autotomize","stoneedge":"Stone Edge","stealthrock":"Stealth Rock","rockblast":"Rock Blast","earthquake":"Earthquake","explosion":"Explosion","return":"Return","substitute":"Substitute"},
+		viablemoves: {"autotomize":1,"stoneedge":1,"stealthrock":1,"rockblast":1,"earthquake":1,"explosion":1,"return":1,"substitute":1},
 		tier: "NFE"
 	},
 	bonsly: {
 		viable: true,
-		viablemoves: {"rockpolish":"Rock Polish","rockslide":"Rock Slide","brickbreak":"Brick Break","doubleedge":"Double-Edge","substitute":"Substitute","toxic":"Toxic","stealthrock":"Stealth Rock","suckerpunch":"Sucker Punch"},
+		viablemoves: {"rockpolish":1,"rockslide":1,"brickbreak":1,"doubleedge":1,"substitute":1,"toxic":1,"stealthrock":1,"suckerpunch":1},
 		tier: "LC"
 	},
 	bouffalant: {
 		viable: true,
-		viablemoves: {"headcharge":"Head Charge","earthquake":"Earthquake","stoneedge":"Stone Edge","megahorn":"Megahorn","substitute":"Substitute","swordsdance":"Swords Dance","taunt":"Taunt"},
+		viablemoves: {"headcharge":1,"earthquake":1,"stoneedge":1,"megahorn":1,"substitute":1,"swordsdance":1,"taunt":1},
 		tier: "RU"
 	},
 	braviary: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","superpower":"Superpower","return":"Return","uturn":"U-turn","substitute":"Substitute","rockslide":"Rock Slide","bbulkup":"B Bulk Up"},
+		viablemoves: {"bravebird":1,"superpower":1,"return":1,"uturn":1,"substitute":1,"rockslide":1,"bbulkup":1},
 		tier: "NU"
 	},
 	breloom: {
 		viable: true,
-		viablemoves: {"spore":"Spore","substitute":"Substitute","leechseed":"Leech Seed","protect":"Protect","focuspunch":"Focus Punch","machpunch":"Mach Punch","lowsweep":"Low Sweep","seedbomb":"Seed Bomb","bulletseed":"Bullet Seed","stoneedge":"Stone Edge","swordsdance":"Swords Dance"},
+		viablemoves: {"spore":1,"substitute":1,"leechseed":1,"protect":1,"focuspunch":1,"machpunch":1,"lowsweep":1,"seedbomb":1,"bulletseed":1,"stoneedge":1,"swordsdance":1},
 		tier: "OU"
 	},
 	bronzong: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","psychic":"Psychic","earthquake":"Earthquake","toxic":"Toxic","hiddenpowerice":"Hidden Power Ice","hypnosis":"Hypnosis","reflect":"Reflect","lightscreen":"Light Screen","trickroom":"Trick Room","explosion":"Explosion","raindance":"Rain Dance"},
+		viablemoves: {"stealthrock":1,"psychic":1,"earthquake":1,"toxic":1,"hiddenpowerice":1,"hypnosis":1,"reflect":1,"lightscreen":1,"trickroom":1,"explosion":1,"raindance":1},
 		tier: "UU"
 	},
 	bronzor: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","psychic":"Psychic","toxic":"Toxic","hypnosis":"Hypnosis","reflect":"Reflect","lightscreen":"Light Screen","hiddenpowerice":"Hidden Power Ice","trickroom":"Trick Room","explosion":"Explosion","raindance":"Rain Dance"},
+		viablemoves: {"stealthrock":1,"psychic":1,"toxic":1,"hypnosis":1,"reflect":1,"lightscreen":1,"hiddenpowerice":1,"trickroom":1,"explosion":1,"raindance":1},
 		tier: "LC"
 	},
 	budew: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","toxicspikes":"Toxic Spikes","sleeppowder":"Sleep Powder","gigadrain":"Giga Drain","stunspore":"Stun Spore","rest":"Rest"},
+		viablemoves: {"spikes":1,"toxicspikes":1,"sleeppowder":1,"gigadrain":1,"stunspore":1,"rest":1},
 		tier: "LC"
 	},
 	buizel: {
 		viable: true,
-		viablemoves: {"waterfall":"Waterfall","return":"Return","aquajet":"Aqua Jet","switcheroo":"Switcheroo","brickbreak":"Brick Break","bulkup":"Bulk Up","agility":"Agility","batonpass":"Baton Pass","icepunch":"Ice Punch"},
+		viablemoves: {"waterfall":1,"return":1,"aquajet":1,"switcheroo":1,"brickbreak":1,"bulkup":1,"agility":1,"batonpass":1,"icepunch":1},
 		tier: "LC"
 	},
 	bulbasaur: {
 		viable: true,
-		viablemoves: {"sleeppowder":"Sleep Powder","gigadrain":"Giga Drain","growth":"Growth","hiddenpowerfire":"Hidden Power Fire","sunnyday":"Sunny Day","solarbeam":"SolarBeam","hiddenpowerice":"Hidden Power Ice","sludgebomb":"Sludge Bomb","swordsdance":"Swords Dance","powerwhip":"Power Whip","leechseed":"Leech Seed","synthesis":"Synthesis"},
+		viablemoves: {"sleeppowder":1,"gigadrain":1,"growth":1,"hiddenpowerfire":1,"sunnyday":1,"solarbeam":1,"hiddenpowerice":1,"sludgebomb":1,"swordsdance":1,"powerwhip":1,"leechseed":1,"synthesis":1},
 		tier: "LC"
 	},
 	buneary: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","return":"Return","switcheroo":"Switcheroo","thunderpunch":"ThunderPunch","jumpkick":"Jump Kick","quickattack":"Quick Attack","firepunch":"Fire Punch","circlethrow":"Circle Throw","batonpass":"Baton Pass","icepunch":"Ice Punch","substitute":"Substitute"},
+		viablemoves: {"fakeout":1,"return":1,"switcheroo":1,"thunderpunch":1,"jumpkick":1,"quickattack":1,"firepunch":1,"circlethrow":1,"batonpass":1,"icepunch":1,"substitute":1},
 		tier: "LC"
 	},
 	burmy: {
 		viable: true,
-		viablemoves: {"bugbite":"Bug Bite","hiddenpowerfire":"Hidden Power Fire","protect":"Protect","stringshot":"String Shot"},
+		viablemoves: {"bugbite":1,"hiddenpowerfire":1,"protect":1,"stringshot":1},
 		tier: "LC"
 	},
 	burmysandy: {
@@ -460,47 +460,47 @@ exports.BattleFormatsData = {
 	},
 	butterfree: {
 		viable: true,
-		viablemoves: {"quiverdance":"Quiver Dance","roost":"Roost","bugbuzz":"Bug Buzz","airslash":"Air Slash","substitute":"Substitute","sleeppowder":"Sleep Powder","gigadrain":"Giga Drain","stunspore":"Stun Spore","uturn":"U-turn"},
+		viablemoves: {"quiverdance":1,"roost":1,"bugbuzz":1,"airslash":1,"substitute":1,"sleeppowder":1,"gigadrain":1,"stunspore":1,"uturn":1},
 		tier: "NU"
 	},
 	cacnea: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","swordsdance":"Swords Dance","spikes":"Spikes","suckerpunch":"Sucker Punch","seedbomb":"Seed Bomb","drainpunch":"Drain Punch"},
+		viablemoves: {"substitute":1,"swordsdance":1,"spikes":1,"suckerpunch":1,"seedbomb":1,"drainpunch":1},
 		tier: "LC"
 	},
 	cacturne: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","swordsdance":"Swords Dance","spikes":"Spikes","suckerpunch":"Sucker Punch","seedbomb":"Seed Bomb","drainpunch":"Drain Punch"},
+		viablemoves: {"substitute":1,"swordsdance":1,"spikes":1,"suckerpunch":1,"seedbomb":1,"drainpunch":1},
 		tier: "NU"
 	},
 	camerupt: {
 		viable: true,
-		viablemoves: {"rockpolish":"Rock Polish","fireblast":"Fire Blast","earthpower":"Earth Power","stoneedge":"Stone Edge","lavaplume":"Lava Plume","toxic":"Toxic","earthquake":"Earthquake"},
+		viablemoves: {"rockpolish":1,"fireblast":1,"earthpower":1,"stoneedge":1,"lavaplume":1,"toxic":1,"earthquake":1},
 		tier: "NU"
 	},
 	carnivine: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","powerwhip":"Power Whip","return":"Return","sleeppowder":"Sleep Powder","substitute":"Substitute","leechseed":"Leech Seed"},
+		viablemoves: {"swordsdance":1,"powerwhip":1,"return":1,"sleeppowder":1,"substitute":1,"leechseed":1},
 		tier: "NU"
 	},
 	carracosta: {
 		viable: true,
-		viablemoves: {"shellsmash":"Shell Smash","aquajet":"Aqua Jet","waterfall":"Waterfall","stoneedge":"Stone Edge","earthquake":"Earthquake","stealthrock":"Stealth Rock","curse":"Curse"},
+		viablemoves: {"shellsmash":1,"aquajet":1,"waterfall":1,"stoneedge":1,"earthquake":1,"stealthrock":1,"curse":1},
 		tier: "NU"
 	},
 	carvanha: {
 		viable: true,
-		viablemoves: {"protect":"Protect","hydropump":"Hydro Pump","icebeam":"Ice Beam","waterfall":"Waterfall","crunch":"Crunch","hiddenpowergrass":"Hidden Power Grass","aquajet":"Aqua Jet"},
+		viablemoves: {"protect":1,"hydropump":1,"icebeam":1,"waterfall":1,"crunch":1,"hiddenpowergrass":1,"aquajet":1},
 		tier: "NFE"
 	},
 	cascoon: {
 		viable: true,
-		viablemoves: {"bugbite":"Bug Bite","poisonsting":"Poison Sting","stringshot":"String Shot","tackle":"Tackle"},
+		viablemoves: {"bugbite":1,"poisonsting":1,"stringshot":1,"tackle":1},
 		tier: "NFE"
 	},
 	castform: {
 		viable: true,
-		viablemoves: {"sunnyday":"Sunny Day","raindance":"Rain Dance","weatherball":"Weather Ball","thunderbolt":"Thunderbolt","icebeam":"Ice Beam"},
+		viablemoves: {"sunnyday":1,"raindance":1,"weatherball":1,"thunderbolt":1,"icebeam":1},
 		tier: "NU"
 	},
 	castformsunny: {
@@ -514,47 +514,47 @@ exports.BattleFormatsData = {
 	},
 	caterpie: {
 		viable: true,
-		viablemoves: {"bugbite":"Bug Bite","stringshot":"String Shot","tackle":"Tackle","snore":"Snore"},
+		viablemoves: {"bugbite":1,"stringshot":1,"tackle":1,"snore":1},
 		tier: "LC"
 	},
 	celebi: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","psychic":"Psychic","gigadrain":"Giga Drain","grassknot":"Grass Knot","recover":"Recover","healbell":"Heal Bell","batonpass":"Baton Pass","stealthrock":"Stealth Rock","earthpower":"Earth Power","hiddenpowerfire":"Hidden Power Fire","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"nastyplot":1,"psychic":1,"gigadrain":1,"grassknot":1,"recover":1,"healbell":1,"batonpass":1,"stealthrock":1,"earthpower":1,"hiddenpowerfire":1,"hiddenpowerice":1},
 		tier: "OU"
 	},
 	chandelure: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","protect":"Protect","shadowball":"Shadow Ball","energyball":"Energy Ball","fireblast":"Fire Blast","overheat":"Overheat","hiddenpowerfighting":"Hidden Power Fighting","hiddenpowerground":"Hidden Power Ground"},
+		viablemoves: {"calmmind":1,"protect":1,"shadowball":1,"energyball":1,"fireblast":1,"overheat":1,"hiddenpowerfighting":1,"hiddenpowerground":1},
 		tier: "UU"
 	},
 	chansey: {
 		viable: true,
-		viablemoves: {"wish":"Wish","softboiled":"Softboiled","protect":"Protect","toxic":"Toxic","aromatherapy":"Aromatherapy","seismictoss":"Seismic Toss","counter":"Counter","thunderwave":"Thunder Wave","stealthrock":"Stealth Rock"},
+		viablemoves: {"wish":1,"softboiled":1,"protect":1,"toxic":1,"aromatherapy":1,"seismictoss":1,"counter":1,"thunderwave":1,"stealthrock":1},
 		tier: "OU"
 	},
 	charizard: {
 		viable: true,
-		viablemoves: {"flamethrower":"Flamethrower","fireblast":"Fire Blast","substitute":"Substitute","airslash":"Air Slash","dragonpulse":"Dragon Pulse","hiddenpowergrass":"Hidden Power Grass","solarbeam":"SolarBeam","dragondance":"Dragon Dance","swordsdance":"Swords Dance","bellydrum":"Belly Drum","roost":"Roost","earthquake":"Earthquake","flareblitz":"Flare Blitz","thunderpunch":"ThunderPunch","brickbreak":"Brick Break"},
+		viablemoves: {"flamethrower":1,"fireblast":1,"substitute":1,"airslash":1,"dragonpulse":1,"hiddenpowergrass":1,"solarbeam":1,"dragondance":1,"swordsdance":1,"bellydrum":1,"roost":1,"earthquake":1,"flareblitz":1,"thunderpunch":1,"brickbreak":1},
 		tier: "NU"
 	},
 	charmander: {
 		viable: true,
-		viablemoves: {"flamethrower":"Flamethrower","fireblast":"Fire Blast","dragonpulse":"Dragon Pulse","hiddenpowergrass":"Hidden Power Grass","dragondance":"Dragon Dance","swordsdance":"Swords Dance","flareblitz":"Flare Blitz","thunderpunch":"ThunderPunch","brickbreak":"Brick Break"},
+		viablemoves: {"flamethrower":1,"fireblast":1,"dragonpulse":1,"hiddenpowergrass":1,"dragondance":1,"swordsdance":1,"flareblitz":1,"thunderpunch":1,"brickbreak":1},
 		tier: "LC"
 	},
 	charmeleon: {
 		viable: true,
-		viablemoves: {"flamethrower":"Flamethrower","fireblast":"Fire Blast","dragonpulse":"Dragon Pulse","hiddenpowergrass":"Hidden Power Grass","dragondance":"Dragon Dance","swordsdance":"Swords Dance","flareblitz":"Flare Blitz","thunderpunch":"ThunderPunch","brickbreak":"Brick Break"},
+		viablemoves: {"flamethrower":1,"fireblast":1,"dragonpulse":1,"hiddenpowergrass":1,"dragondance":1,"swordsdance":1,"flareblitz":1,"thunderpunch":1,"brickbreak":1},
 		tier: "NFE"
 	},
 	chatot: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","hypervoice":"Hyper Voice","heatwave":"Heat Wave","hiddenpowergrass":"Hidden Power Grass","substitute":"Substitute"},
+		viablemoves: {"nastyplot":1,"hypervoice":1,"heatwave":1,"hiddenpowergrass":1,"substitute":1},
 		tier: "NU"
 	},
 	cherrim: {
 		viable: true,
-		viablemoves: {"sunnyday":"Sunny Day","solarbeam":"SolarBeam","gigadrain":"Giga Drain","weatherball":"Weather Ball","hiddenpowerrock":"Hidden Power Rock"},
+		viablemoves: {"sunnyday":1,"solarbeam":1,"gigadrain":1,"weatherball":1,"hiddenpowerrock":1},
 		tier: "NU"
 	},
 	cherrimsunshine: {
@@ -562,177 +562,177 @@ exports.BattleFormatsData = {
 	},
 	cherubi: {
 		viable: true,
-		viablemoves: {"sunnyday":"Sunny Day","solarbeam":"SolarBeam","weatherball":"Weather Ball","hiddenpowerrock":"Hidden Power Rock","gigadrain":"Giga Drain"},
+		viablemoves: {"sunnyday":1,"solarbeam":1,"weatherball":1,"hiddenpowerrock":1,"gigadrain":1},
 		tier: "LC"
 	},
 	chikorita: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","safeguard":"Safeguard","aromatherapy":"Aromatherapy","grasswhistle":"Grasswhistle","leechseed":"Leech Seed","seedbomb":"Seed Bomb","toxic":"Toxic","leafstorm":"Leaf Storm","gigadrain":"Giga Drain","synthesis":"Synthesis"},
+		viablemoves: {"reflect":1,"lightscreen":1,"safeguard":1,"aromatherapy":1,"grasswhistle":1,"leechseed":1,"seedbomb":1,"toxic":1,"leafstorm":1,"gigadrain":1,"synthesis":1},
 		tier: "LC"
 	},
 	chimchar: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","overheat":"Overheat","hiddenpowergrass":"Hidden Power Grass","fakeout":"Fake Out"},
+		viablemoves: {"stealthrock":1,"overheat":1,"hiddenpowergrass":1,"fakeout":1},
 		tier: "LC"
 	},
 	chimecho: {
 		viable: true,
-		viablemoves: {"hypnosis":"Hypnosis","toxic":"Toxic","wish":"Wish","psychic":"Psychic","thunderwave":"Thunder Wave","recover":"Recover","calmmind":"Calm Mind","shadowball":"Shadow Ball","hiddenpowerfighting":"Hidden Power Fighting","healingwish":"Healing Wish"},
+		viablemoves: {"hypnosis":1,"toxic":1,"wish":1,"psychic":1,"thunderwave":1,"recover":1,"calmmind":1,"shadowball":1,"hiddenpowerfighting":1,"healingwish":1},
 		tier: "NU"
 	},
 	chinchou: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","thunderbolt":"Thunderbolt","hiddenpowergrass":"Hidden Power Grass","hiddenpowerfire":"Hidden Power Fire","hydropump":"Hydro Pump","icebeam":"Ice Beam","surf":"Surf","thunderwave":"Thunder Wave","scald":"Scald","agility":"Agility","healbell":"Heal Bell","discharge":"Discharge","raindance":"Rain Dance"},
+		viablemoves: {"voltswitch":1,"thunderbolt":1,"hiddenpowergrass":1,"hiddenpowerfire":1,"hydropump":1,"icebeam":1,"surf":1,"thunderwave":1,"scald":1,"agility":1,"healbell":1,"discharge":1,"raindance":1},
 		tier: "LC"
 	},
 	chingling: {
 		viable: true,
-		viablemoves: {"hypnosis":"Hypnosis","reflect":"Reflect","lightscreen":"Light Screen","toxic":"Toxic","wish":"Wish","psychic":"Psychic"},
+		viablemoves: {"hypnosis":1,"reflect":1,"lightscreen":1,"toxic":1,"wish":1,"psychic":1},
 		tier: "LC"
 	},
 	cinccino: {
 		viable: true,
-		viablemoves: {"return":"Return","tailslap":"Tail Slap","wakeupslap":"Wake-Up Slap","knockoff":"Knock Off","uturn":"U-turn","aquatail":"Aqua Tail","bulletseed":"Bullet Seed","rockblast":"Rock Blast"},
+		viablemoves: {"return":1,"tailslap":1,"wakeupslap":1,"knockoff":1,"uturn":1,"aquatail":1,"bulletseed":1,"rockblast":1},
 		tier: "NU"
 	},
 	clamperl: {
 		viable: true,
-		viablemoves: {"shellsmash":"Shell Smash","icebeam":"Ice Beam","surf":"Surf","hiddenpowergrass":"Hidden Power Grass","hiddenpowerelectric":"Hidden Power Electric","substitute":"Substitute"},
+		viablemoves: {"shellsmash":1,"icebeam":1,"surf":1,"hiddenpowergrass":1,"hiddenpowerelectric":1,"substitute":1},
 		tier: "LC"
 	},
 	claydol: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","toxic":"Toxic","psychic":"Psychic","icebeam":"Ice Beam","earthquake":"Earthquake","rapidspin":"Rapid Spin"},
+		viablemoves: {"stealthrock":1,"toxic":1,"psychic":1,"icebeam":1,"earthquake":1,"rapidspin":1},
 		tier: "UU"
 	},
 	clefable: {
 		viable: true,
-		viablemoves: {"fireblast":"Fire Blast","thunderbolt":"Thunderbolt","icebeam":"Ice Beam","seismictoss":"Seismic Toss","wish":"Wish","protect":"Protect","softboiled":"Softboiled","healingwish":"Healing Wish","doubleedge":"Double-Edge","facade":"Facade","meteormash":"Meteor Mash","aromatherapy":"Aromatherapy","bellydrum":"Belly Drum","trick":"Trick","calmmind":"Calm Mind","stealthrock":"Stealth Rock","grassknot":"Grass Knot"},
+		viablemoves: {"fireblast":1,"thunderbolt":1,"icebeam":1,"seismictoss":1,"wish":1,"protect":1,"softboiled":1,"healingwish":1,"doubleedge":1,"facade":1,"meteormash":1,"aromatherapy":1,"bellydrum":1,"trick":1,"calmmind":1,"stealthrock":1,"grassknot":1},
 		tier: "RU"
 	},
 	clefairy: {
 		viable: true,
-		viablemoves: {"healingwish":"Healing Wish","reflect":"Reflect","thunderwave":"Thunder Wave","lightscreen":"Light Screen","toxic":"Toxic","fireblast":"Fire Blast","encore":"Encore","wish":"Wish","protect":"Protect","softboiled":"Softboiled","aromatherapy":"Aromatherapy","stealthrock":"Stealth Rock"},
+		viablemoves: {"healingwish":1,"reflect":1,"thunderwave":1,"lightscreen":1,"toxic":1,"fireblast":1,"encore":1,"wish":1,"protect":1,"softboiled":1,"aromatherapy":1,"stealthrock":1},
 		tier: "NFE"
 	},
 	cleffa: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","thunderwave":"Thunder Wave","lightscreen":"Light Screen","toxic":"Toxic","fireblast":"Fire Blast","encore":"Encore","wish":"Wish","protect":"Protect","softboiled":"Softboiled","aromatherapy":"Aromatherapy"},
+		viablemoves: {"reflect":1,"thunderwave":1,"lightscreen":1,"toxic":1,"fireblast":1,"encore":1,"wish":1,"protect":1,"softboiled":1,"aromatherapy":1},
 		tier: "LC"
 	},
 	cloyster: {
 		viable: true,
-		viablemoves: {"shellsmash":"Shell Smash","hydropump":"Hydro Pump","razorshell":"Razor Shell","rockblast":"Rock Blast","iciclespear":"Icicle Spear","iceshard":"Ice Shard","rapidspin":"Rapid Spin","spikes":"Spikes","toxicspikes":"Toxic Spikes"},
+		viablemoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"iceshard":1,"rapidspin":1,"spikes":1,"toxicspikes":1},
 		tier: "OU"
 	},
 	cobalion: {
 		viable: true,
-		viablemoves: {"closecombat":"Close Combat","taunt":"Taunt","ironhead":"Iron Head","swordsdance":"Swords Dance","substitute":"Substitute","stoneedge":"Stone Edge","calmmind":"Calm Mind","focusblast":"Focus Blast","voltswitch":"Volt Switch","hiddenpowerice":"Hidden Power Ice","flashcannon":"Flash Cannon","thunderwave":"Thunder Wave","sacredsword":"Sacred Sword"},
+		viablemoves: {"closecombat":1,"taunt":1,"ironhead":1,"swordsdance":1,"substitute":1,"stoneedge":1,"calmmind":1,"focusblast":1,"voltswitch":1,"hiddenpowerice":1,"flashcannon":1,"thunderwave":1,"sacredsword":1},
 		tier: "UU"
 	},
 	cofagrigus: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","trickroom":"Trick Room","shadowball":"Shadow Ball","hiddenpowerfighting":"Hidden Power Fighting","willowisp":"Will-O-Wisp","haze":"Haze","rest":"Rest"},
+		viablemoves: {"nastyplot":1,"trickroom":1,"shadowball":1,"hiddenpowerfighting":1,"willowisp":1,"haze":1,"rest":1},
 		tier: "RU"
 	},
 	combee: {
 		viable: true,
-		viablemoves: {"bugbite":"Bug Bite","aircutter":"Air Cutter","endeavor":"Endeavor","mudslap":"Mud-Slap"},
+		viablemoves: {"bugbite":1,"aircutter":1,"endeavor":1,"mudslap":1},
 		tier: "LC"
 	},
 	combusken: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","skyuppercut":"Sky Uppercut","protect":"Protect","swordsdance":"Swords Dance","substitute":"Substitute","batonpass":"Baton Pass","hiddenpowerice":"Hidden Power Ice","fireblast":"Fire Blast","focusblast":"Focus Blast"},
+		viablemoves: {"flareblitz":1,"skyuppercut":1,"protect":1,"swordsdance":1,"substitute":1,"batonpass":1,"hiddenpowerice":1,"fireblast":1,"focusblast":1},
 		tier: "NU"
 	},
 	conkeldurr: {
 		viable: true,
-		viablemoves: {"bulkup":"Bulk Up","machpunch":"Mach Punch","drainpunch":"Drain Punch","payback":"Payback","stoneedge":"Stone Edge","facade":"Facade","hammerarm":"Hammer Arm","superpower":"Superpower"},
+		viablemoves: {"bulkup":1,"machpunch":1,"drainpunch":1,"payback":1,"stoneedge":1,"facade":1,"hammerarm":1,"superpower":1},
 		tier: "OU"
 	},
 	corphish: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","waterfall":"Waterfall","return":"Return","crunch":"Crunch","superpower":"Superpower","swordsdance":"Swords Dance"},
+		viablemoves: {"dragondance":1,"waterfall":1,"return":1,"crunch":1,"superpower":1,"swordsdance":1},
 		tier: "LC"
 	},
 	corsola: {
 		viable: true,
-		viablemoves: {"recover":"Recover","toxic":"Toxic","powergem":"Power Gem","scald":"Scald","stealthrock":"Stealth Rock","reflect":"Reflect","mirrorcoat":"Mirror Coat"},
+		viablemoves: {"recover":1,"toxic":1,"powergem":1,"scald":1,"stealthrock":1,"reflect":1,"mirrorcoat":1},
 		tier: "NU"
 	},
 	cottonee: {
 		viable: true,
-		viablemoves: {"encore":"Encore","taunt":"Taunt","substitute":"Substitute","leechseed":"Leech Seed","thunderwave":"Thunder Wave","uturn":"U-turn","toxic":"Toxic","stunspore":"Stun Spore","memento":"Memento"},
+		viablemoves: {"encore":1,"taunt":1,"substitute":1,"leechseed":1,"thunderwave":1,"uturn":1,"toxic":1,"stunspore":1,"memento":1},
 		tier: "LC"
 	},
 	cradily: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","recover":"Recover","stockpile":"Stockpile","seedbomb":"Seed Bomb","rockslide":"Rock Slide","earthquake":"Earthquake","curse":"Curse","swordsdance":"Swords Dance"},
+		viablemoves: {"stealthrock":1,"recover":1,"stockpile":1,"seedbomb":1,"rockslide":1,"earthquake":1,"curse":1,"swordsdance":1},
 		tier: "NU"
 	},
 	cranidos: {
 		viable: true,
-		viablemoves: {"headsmash":"Head Smash","stoneedge":"Stone Edge","earthquake":"Earthquake","zenheadbutt":"Zen Headbutt","firepunch":"Fire Punch","rockpolish":"Rock Polish","crunch":"Crunch","substitute":"Substitute"},
+		viablemoves: {"headsmash":1,"stoneedge":1,"earthquake":1,"zenheadbutt":1,"firepunch":1,"rockpolish":1,"crunch":1,"substitute":1},
 		tier: "LC"
 	},
 	crawdaunt: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","waterfall":"Waterfall","return":"Return","crunch":"Crunch","superpower":"Superpower","swordsdance":"Swords Dance"},
+		viablemoves: {"dragondance":1,"waterfall":1,"return":1,"crunch":1,"superpower":1,"swordsdance":1},
 		tier: "RU"
 	},
 	cresselia: {
 		viable: true,
-		viablemoves: {"moonlight":"Moonlight","psychic":"Psychic","icebeam":"Ice Beam","thunderwave":"Thunder Wave","toxic":"Toxic","reflect":"Reflect","lightscreen":"Light Screen","lunardance":"Lunar Dance","rest":"Rest","sleeptalk":"Sleep Talk","calmmind":"Calm Mind"},
+		viablemoves: {"moonlight":1,"psychic":1,"icebeam":1,"thunderwave":1,"toxic":1,"reflect":1,"lightscreen":1,"lunardance":1,"rest":1,"sleeptalk":1,"calmmind":1},
 		tier: "BL2"
 	},
 	croagunk: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","vacuumwave":"Vacuum Wave","suckerpunch":"Sucker Punch","drainpunch":"Drain Punch","taunt":"Taunt","darkpulse":"Dark Pulse"},
+		viablemoves: {"fakeout":1,"vacuumwave":1,"suckerpunch":1,"drainpunch":1,"taunt":1,"darkpulse":1},
 		tier: "LC"
 	},
 	crobat: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","roost":"Roost","toxic":"Toxic","taunt":"Taunt","nastyplot":"Nasty Plot","gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","airslash":"Air Slash","uturn":"U-turn","whirlwind":"Whirlwind","acrobatics":"Acrobatics","heatwave":"Heat Wave","superfang":"Super Fang"},
+		viablemoves: {"bravebird":1,"roost":1,"toxic":1,"taunt":1,"nastyplot":1,"gigadrain":1,"sludgebomb":1,"airslash":1,"uturn":1,"whirlwind":1,"acrobatics":1,"heatwave":1,"superfang":1},
 		tier: "UU"
 	},
 	croconaw: {
 		viable: true,
-		viablemoves: {"aquajet":"Aqua Jet","waterfall":"Waterfall","crunch":"Crunch","icepunch":"Ice Punch","superpower":"Superpower","dragondance":"Dragon Dance","swordsdance":"Swords Dance","return":"Return"},
+		viablemoves: {"aquajet":1,"waterfall":1,"crunch":1,"icepunch":1,"superpower":1,"dragondance":1,"swordsdance":1,"return":1},
 		tier: "NFE"
 	},
 	crustle: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","spikes":"Spikes","shellsmash":"Shell Smash","earthquake":"Earthquake","rockblast":"Rock Blast","xscissor":"X-Scissor","stoneedge":"Stone Edge"},
+		viablemoves: {"stealthrock":1,"spikes":1,"shellsmash":1,"earthquake":1,"rockblast":1,"xscissor":1,"stoneedge":1},
 		tier: "RU"
 	},
 	cryogonal: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","recover":"Recover","toxic":"Toxic","haze":"Haze","reflect":"Reflect","hiddenpowerelectric":"Hidden Power Electric"},
+		viablemoves: {"icebeam":1,"recover":1,"toxic":1,"haze":1,"reflect":1,"hiddenpowerelectric":1},
 		tier: "NU"
 	},
 	cubchoo: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","surf":"Surf","hiddenpowergrass":"Hidden Power Grass","toxic":"Toxic","substitute":"Substitute"},
+		viablemoves: {"icebeam":1,"surf":1,"hiddenpowergrass":1,"toxic":1,"substitute":1},
 		tier: "LC"
 	},
 	cubone: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","bonemerang":"Bonemerang","doubleedge":"Double-Edge","stoneedge":"Stone Edge","swordsdance":"Swords Dance","firepunch":"Fire Punch","earthquake":"Earthquake"},
+		viablemoves: {"substitute":1,"bonemerang":1,"doubleedge":1,"stoneedge":1,"swordsdance":1,"firepunch":1,"earthquake":1},
 		tier: "LC"
 	},
 	cyndaquil: {
 		viable: true,
-		viablemoves: {"eruption":"Eruption","fireblast":"Fire Blast","flamethrower":"Flamethrower","hiddenpowergrass":"Hidden Power Grass","naturepower":"Nature Power"},
+		viablemoves: {"eruption":1,"fireblast":1,"flamethrower":1,"hiddenpowergrass":1,"naturepower":1},
 		tier: "LC"
 	},
 	darkrai: {
 		viable: true,
-		viablemoves: {"darkvoid":"Dark Void","darkpulse":"Dark Pulse","focusblast":"Focus Blast","nastyplot":"Nasty Plot","substitute":"Substitute","trick":"Trick"},
+		viablemoves: {"darkvoid":1,"darkpulse":1,"focusblast":1,"nastyplot":1,"substitute":1,"trick":1},
 		tier: "Uber"
 	},
 	darmanitan: {
 		viable: true,
-		viablemoves: {"uturn":"U-turn","flareblitz":"Flare Blitz","firepunch":"Fire Punch","rockslide":"Rock Slide","earthquake":"Earthquake","superpower":"Superpower"},
+		viablemoves: {"uturn":1,"flareblitz":1,"firepunch":1,"rockslide":1,"earthquake":1,"superpower":1},
 		tier: "UU"
 	},
 	darmanitanzen: {
@@ -740,12 +740,12 @@ exports.BattleFormatsData = {
 	},
 	darumaka: {
 		viable: true,
-		viablemoves: {"uturn":"U-turn","flareblitz":"Flare Blitz","firepunch":"Fire Punch","rockslide":"Rock Slide","superpower":"Superpower"},
+		viablemoves: {"uturn":1,"flareblitz":1,"firepunch":1,"rockslide":1,"superpower":1},
 		tier: "LC"
 	},
 	deerling: {
 		viable: true,
-		viablemoves: {"workup":"Work Up","agility":"Agility","batonpass":"Baton Pass","substitute":"Substitute","roost":"Roost","jumpkick":"Jump Kick","naturepower":"Nature Power","synthesis":"Synthesis"},
+		viablemoves: {"workup":1,"agility":1,"batonpass":1,"substitute":1,"roost":1,"jumpkick":1,"naturepower":1,"synthesis":1},
 		tier: "LC"
 	},
 	deerlingsummer: {
@@ -759,57 +759,57 @@ exports.BattleFormatsData = {
 	},
 	deino: {
 		viable: true,
-		viablemoves: {"outrage":"Outrage","crunch":"Crunch","firefang":"Fire Fang","dragontail":"Dragon Tail","thunderwave":"Thunder Wave"},
+		viablemoves: {"outrage":1,"crunch":1,"firefang":1,"dragontail":1,"thunderwave":1},
 		tier: "LC"
 	},
 	delcatty: {
 		viable: true,
-		viablemoves: {"return":"Return","suckerpunch":"Sucker Punch","zenheadbutt":"Zen Headbutt","thunderwave":"Thunder Wave","fakeout":"Fake Out","wish":"Wish"},
+		viablemoves: {"return":1,"suckerpunch":1,"zenheadbutt":1,"thunderwave":1,"fakeout":1,"wish":1},
 		tier: "NU"
 	},
 	delibird: {
 		viable: true,
-		viablemoves: {"rapidspin":"Rapid Spin","iceshard":"Ice Shard","icepunch":"Ice Punch","aerialace":"Aerial Ace"},
+		viablemoves: {"rapidspin":1,"iceshard":1,"icepunch":1,"aerialace":1},
 		tier: "NU"
 	},
 	deoxys: {
 		viable: true,
-		viablemoves: {"psychoboost":"Psycho Boost","superpower":"Superpower","extremespeed":"ExtremeSpeed","icebeam":"Ice Beam","thunderbolt":"Thunderbolt","firepunch":"Fire Punch"},
+		viablemoves: {"psychoboost":1,"superpower":1,"extremespeed":1,"icebeam":1,"thunderbolt":1,"firepunch":1},
 		tier: "Uber"
 	},
 	deoxysattack: {
 		viable: true,
-		viablemoves: {"psychoboost":"Psycho Boost","superpower":"Superpower","extremespeed":"ExtremeSpeed","icebeam":"Ice Beam","thunderbolt":"Thunderbolt","firepunch":"Fire Punch"},
+		viablemoves: {"psychoboost":1,"superpower":1,"extremespeed":1,"icebeam":1,"thunderbolt":1,"firepunch":1},
 		tier: "Uber"
 	},
 	deoxysdefense: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","stealthrock":"Stealth Rock","recover":"Recover","taunt":"Taunt","toxic":"Toxic","agility":"Agility","seismictoss":"Seismic Toss","magiccoat":"Magic Coat"},
+		viablemoves: {"spikes":1,"stealthrock":1,"recover":1,"taunt":1,"toxic":1,"agility":1,"seismictoss":1,"magiccoat":1},
 		tier: "BL"
 	},
 	deoxysspeed: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","stealthrock":"Stealth Rock","superpower":"Superpower","icebeam":"Ice Beam","psychoboost":"Psycho Boost","taunt":"Taunt","lightscreen":"Light Screen","reflect":"Reflect","magiccoat":"Magic Coat","trick":"Trick","shadowball":"Shadow Ball"},
+		viablemoves: {"spikes":1,"stealthrock":1,"superpower":1,"icebeam":1,"psychoboost":1,"taunt":1,"lightscreen":1,"reflect":1,"magiccoat":1,"trick":1,"shadowball":1},
 		tier: "Uber"
 	},
 	dewgong: {
 		viable: true,
-		viablemoves: {"surf":"Surf","icebeam":"Ice Beam","brine":"Brine","aquajet":"Aqua Jet","iceshard":"Ice Shard","raindance":"Rain Dance","protect":"Protect","rest":"Rest","toxic":"Toxic"},
+		viablemoves: {"surf":1,"icebeam":1,"brine":1,"aquajet":1,"iceshard":1,"raindance":1,"protect":1,"rest":1,"toxic":1},
 		tier: "NU"
 	},
 	dewott: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","waterfall":"Waterfall","aquajet":"Aqua Jet","xscissor":"X-Scissor","substitute":"Substitute"},
+		viablemoves: {"swordsdance":1,"waterfall":1,"aquajet":1,"xscissor":1,"substitute":1},
 		tier: "NFE"
 	},
 	dialga: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","dracometeor":"Draco Meteor","dragonpulse":"Dragon Pulse","flamethrower":"Flamethrower","roar":"Roar","dragontail":"Dragon Tail","thunderbolt":"Thunderbolt","outrage":"Outrage","brickbreak":"Brick Break","bulkup":"Bulk Up","fireblast":"Fire Blast","aurasphere":"Aura Sphere","rest":"Rest","sleeptalk":"Sleep Talk","dragonclaw":"Dragon Claw"},
+		viablemoves: {"stealthrock":1,"dracometeor":1,"dragonpulse":1,"flamethrower":1,"roar":1,"dragontail":1,"thunderbolt":1,"outrage":1,"brickbreak":1,"bulkup":1,"fireblast":1,"aurasphere":1,"rest":1,"sleeptalk":1,"dragonclaw":1},
 		tier: "Uber"
 	},
 	diglett: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","rockslide":"Rock Slide","stealthrock":"Stealth Rock","suckerpunch":"Sucker Punch","reversal":"Reversal"},
+		viablemoves: {"earthquake":1,"rockslide":1,"stealthrock":1,"suckerpunch":1,"reversal":1},
 		tier: "LC"
 	},
 	ditto: {
@@ -817,37 +817,37 @@ exports.BattleFormatsData = {
 	},
 	dodrio: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","frustration":"Frustration","doubleedge":"Double-Edge","roost":"Roost","taunt":"Taunt","quickattack":"Quick Attack","pursuit":"Pursuit"},
+		viablemoves: {"bravebird":1,"frustration":1,"doubleedge":1,"roost":1,"taunt":1,"quickattack":1,"pursuit":1},
 		tier: "NU"
 	},
 	doduo: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","frustration":"Frustration","doubleedge":"Double-Edge","roost":"Roost","taunt":"Taunt","quickattack":"Quick Attack","pursuit":"Pursuit"},
+		viablemoves: {"bravebird":1,"frustration":1,"doubleedge":1,"roost":1,"taunt":1,"quickattack":1,"pursuit":1},
 		tier: "LC"
 	},
 	donphan: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","rapidspin":"Rapid Spin","iceshard":"Ice Shard","earthquake":"Earthquake","assurance":"Assurance","stoneedge":"Stone Edge","headsmash":"Head Smash","seedbomb":"Seed Bomb","superpower":"Superpower"},
+		viablemoves: {"stealthrock":1,"rapidspin":1,"iceshard":1,"earthquake":1,"assurance":1,"stoneedge":1,"headsmash":1,"seedbomb":1,"superpower":1},
 		tier: "OU"
 	},
 	dragonair: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","outrage":"Outrage","waterfall":"Waterfall","fireblast":"Fire Blast","extremespeed":"ExtremeSpeed","dracometeor":"Draco Meteor","substitute":"Substitute","aquatail":"Aqua Tail"},
+		viablemoves: {"dragondance":1,"outrage":1,"waterfall":1,"fireblast":1,"extremespeed":1,"dracometeor":1,"substitute":1,"aquatail":1},
 		tier: "NU"
 	},
 	dragonite: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","outrage":"Outrage","firepunch":"Fire Punch","extremespeed":"ExtremeSpeed","dragonclaw":"Dragon Claw","earthquake":"Earthquake","roost":"Roost","waterfall":"Waterfall","substitute":"Substitute","thunderwave":"Thunder Wave","dragontail":"Dragon Tail","hurricane":"Hurricane","superpower":"Superpower","fireblast":"Fire Blast","dracometeor":"Draco Meteor"},
+		viablemoves: {"dragondance":1,"outrage":1,"firepunch":1,"extremespeed":1,"dragonclaw":1,"earthquake":1,"roost":1,"waterfall":1,"substitute":1,"thunderwave":1,"dragontail":1,"hurricane":1,"superpower":1,"fireblast":1,"dracometeor":1},
 		tier: "OU"
 	},
 	drapion: {
 		viable: true,
-		viablemoves: {"crunch":"Crunch","whirlwind":"Whirlwind","toxicspikes":"Toxic Spikes","taunt":"Taunt","pursuit":"Pursuit","earthquake":"Earthquake","icefang":"Ice Fang","aquatail":"Aqua Tail","swordsdance":"Swords Dance","poisonjab":"Poison Jab","rest":"Rest","sleeptalk":"Sleep Talk"},
+		viablemoves: {"crunch":1,"whirlwind":1,"toxicspikes":1,"taunt":1,"pursuit":1,"earthquake":1,"icefang":1,"aquatail":1,"swordsdance":1,"poisonjab":1,"rest":1,"sleeptalk":1},
 		tier: "RU"
 	},
 	dratini: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","outrage":"Outrage","waterfall":"Waterfall","fireblast":"Fire Blast","extremespeed":"ExtremeSpeed","dracometeor":"Draco Meteor","substitute":"Substitute","aquatail":"Aqua Tail"},
+		viablemoves: {"dragondance":1,"outrage":1,"waterfall":1,"fireblast":1,"extremespeed":1,"dracometeor":1,"substitute":1,"aquatail":1},
 		tier: "LC"
 	},
 	drifblim: {
@@ -855,207 +855,207 @@ exports.BattleFormatsData = {
 	},
 	drifloon: {
 		viable: true,
-		viablemoves: {"acrobatics":"Acrobatics","shadowball":"Shadow Ball","substitute":"Substitute","calmmind":"Calm Mind","hypnosis":"Hypnosis","hiddenpowerfighting":"Hidden Power Fighting","thunderbolt":"Thunderbolt","explosion":"Explosion","destinybond":"Destiny Bond","willowisp":"Will-O-Wisp"},
+		viablemoves: {"acrobatics":1,"shadowball":1,"substitute":1,"calmmind":1,"hypnosis":1,"hiddenpowerfighting":1,"thunderbolt":1,"explosion":1,"destinybond":1,"willowisp":1},
 		tier: "LC"
 	},
 	drilbur: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","rapidspin":"Rapid Spin","earthquake":"Earthquake","rockslide":"Rock Slide","shadowclaw":"Shadow Claw","return":"Return","xscissor":"X-Scissor"},
+		viablemoves: {"swordsdance":1,"rapidspin":1,"earthquake":1,"rockslide":1,"shadowclaw":1,"return":1,"xscissor":1},
 		tier: "LC"
 	},
 	drowzee: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","seismictoss":"Seismic Toss","thunderwave":"Thunder Wave","wish":"Wish","protect":"Protect","healbell":"Heal Bell","toxic":"Toxic","nastyplot":"Nasty Plot","shadowball":"Shadow Ball","trickroom":"Trick Room","calmmind":"Calm Mind","barrier":"Barrier"},
+		viablemoves: {"psychic":1,"seismictoss":1,"thunderwave":1,"wish":1,"protect":1,"healbell":1,"toxic":1,"nastyplot":1,"shadowball":1,"trickroom":1,"calmmind":1,"barrier":1},
 		tier: "LC"
 	},
 	druddigon: {
 		viable: true,
-		viablemoves: {"outrage":"Outrage","superpower":"Superpower","earthquake":"Earthquake","suckerpunch":"Sucker Punch","dragonclaw":"Dragon Claw","dragontail":"Dragon Tail","substitute":"Substitute","glare":"Glare"},
+		viablemoves: {"outrage":1,"superpower":1,"earthquake":1,"suckerpunch":1,"dragonclaw":1,"dragontail":1,"substitute":1,"glare":1},
 		tier: "RU"
 	},
 	ducklett: {
 		viable: true,
-		viablemoves: {"scald":"Scald","airslash":"Air Slash","roost":"Roost","featherdance":"FeatherDance","substitute":"Substitute","hurricane":"Hurricane","surf":"Surf","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","raindance":"Rain Dance"},
+		viablemoves: {"scald":1,"airslash":1,"roost":1,"featherdance":1,"substitute":1,"hurricane":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"raindance":1},
 		tier: "LC"
 	},
 	dugtrio: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","stoneedge":"Stone Edge","stealthrock":"Stealth Rock","suckerpunch":"Sucker Punch","reversal":"Reversal"},
+		viablemoves: {"earthquake":1,"stoneedge":1,"stealthrock":1,"suckerpunch":1,"reversal":1},
 		tier: "OU"
 	},
 	dunsparce: {
 		viable: true,
-		viablemoves: {"coil":"Coil","rockslide":"Rock Slide","bite":"Bite","headbutt":"Headbutt","glare":"Glare","thunderwave":"Thunder Wave","bodyslam":"Body Slam"},
+		viablemoves: {"coil":1,"rockslide":1,"bite":1,"headbutt":1,"glare":1,"thunderwave":1,"bodyslam":1},
 		tier: "NU"
 	},
 	duosion: {
 		viable: true,
-		viablemoves: {"trick":"Trick","calmmind":"Calm Mind","recover":"Recover","psychic":"Psychic","focusblast":"Focus Blast","hiddenpowerfire":"Hidden Power Fire","shadowball":"Shadow Ball","trickroom":"Trick Room","psyshock":"Psyshock"},
+		viablemoves: {"trick":1,"calmmind":1,"recover":1,"psychic":1,"focusblast":1,"hiddenpowerfire":1,"shadowball":1,"trickroom":1,"psyshock":1},
 		tier: "NU"
 	},
 	durant: {
 		viable: true,
-		viablemoves: {"honeclaws":"Hone Claws","ironhead":"Iron Head","xscissor":"X-Scissor","stoneedge":"Stone Edge","batonpass":"Baton Pass","thunderfang":"Thunder Fang"},
+		viablemoves: {"honeclaws":1,"ironhead":1,"xscissor":1,"stoneedge":1,"batonpass":1,"thunderfang":1},
 		tier: "BL2"
 	},
 	dusclops: {
 		viable: true,
-		viablemoves: {"willowisp":"Will-O-Wisp","shadowsneak":"Shadow Sneak","icebeam":"Ice Beam","painsplit":"Pain Split","substitute":"Substitute","seismictoss":"Seismic Toss"},
+		viablemoves: {"willowisp":1,"shadowsneak":1,"icebeam":1,"painsplit":1,"substitute":1,"seismictoss":1},
 		tier: "UU"
 	},
 	dusknoir: {
 		viable: true,
-		viablemoves: {"willowisp":"Will-O-Wisp","shadowsneak":"Shadow Sneak","icebeam":"Ice Beam","painsplit":"Pain Split","substitute":"Substitute","earthquake":"Earthquake","focuspunch":"Focus Punch"},
+		viablemoves: {"willowisp":1,"shadowsneak":1,"icebeam":1,"painsplit":1,"substitute":1,"earthquake":1,"focuspunch":1},
 		tier: "RU"
 	},
 	duskull: {
 		viable: true,
-		viablemoves: {"willowisp":"Will-O-Wisp","shadowsneak":"Shadow Sneak","icebeam":"Ice Beam","painsplit":"Pain Split","substitute":"Substitute","nightshade":"Night Shade"},
+		viablemoves: {"willowisp":1,"shadowsneak":1,"icebeam":1,"painsplit":1,"substitute":1,"nightshade":1},
 		tier: "LC"
 	},
 	dustox: {
 		viable: true,
-		viablemoves: {"toxic":"Toxic","roost":"Roost","whirlwind":"Whirlwind","bugbuzz":"Bug Buzz","protect":"Protect","sludgebomb":"Sludge Bomb"},
+		viablemoves: {"toxic":1,"roost":1,"whirlwind":1,"bugbuzz":1,"protect":1,"sludgebomb":1},
 		tier: "NU"
 	},
 	dwebble: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","spikes":"Spikes","shellsmash":"Shell Smash","earthquake":"Earthquake","rockblast":"Rock Blast","xscissor":"X-Scissor","stoneedge":"Stone Edge"},
+		viablemoves: {"stealthrock":1,"spikes":1,"shellsmash":1,"earthquake":1,"rockblast":1,"xscissor":1,"stoneedge":1},
 		tier: "LC"
 	},
 	eelektrik: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","uturn":"U-turn","voltswitch":"Volt Switch","acidspray":"Acid Spray","wildcharge":"Wild Charge","hiddenpowerice":"Hidden Power Ice","discharge":"Discharge"},
+		viablemoves: {"thunderbolt":1,"uturn":1,"voltswitch":1,"acidspray":1,"wildcharge":1,"hiddenpowerice":1,"discharge":1},
 		tier: "NFE"
 	},
 	eelektross: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","flamethrower":"Flamethrower","grassknot":"Grass Knot","uturn":"U-turn","voltswitch":"Volt Switch","acidspray":"Acid Spray","wildcharge":"Wild Charge","hiddenpowerice":"Hidden Power Ice","discharge":"Discharge"},
+		viablemoves: {"thunderbolt":1,"flamethrower":1,"grassknot":1,"uturn":1,"voltswitch":1,"acidspray":1,"wildcharge":1,"hiddenpowerice":1,"discharge":1},
 		tier: "NU"
 	},
 	eevee: {
 		viable: true,
-		viablemoves: {"quickattack":"Quick Attack","return":"Return","bite":"Bite","batonpass":"Baton Pass","irontail":"Iron Tail","yawn":"Yawn","protect":"Protect","wish":"Wish"},
+		viablemoves: {"quickattack":1,"return":1,"bite":1,"batonpass":1,"irontail":1,"yawn":1,"protect":1,"wish":1},
 		tier: "LC"
 	},
 	ekans: {
 		viable: true,
-		viablemoves: {"coil":"Coil","gunkshot":"Gunk Shot","seedbomb":"Seed Bomb","glare":"Glare","suckerpunch":"Sucker Punch","aquatail":"Aqua Tail","poisonjab":"Poison Jab","crunch":"Crunch","earthquake":"Earthquake","rest":"Rest"},
+		viablemoves: {"coil":1,"gunkshot":1,"seedbomb":1,"glare":1,"suckerpunch":1,"aquatail":1,"poisonjab":1,"crunch":1,"earthquake":1,"rest":1},
 		tier: "LC"
 	},
 	electabuzz: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","crosschop":"Cross Chop","voltswitch":"Volt Switch","substitute":"Substitute","hiddenpowerice":"Hidden Power Ice","focusblast":"Focus Blast"},
+		viablemoves: {"thunderbolt":1,"crosschop":1,"voltswitch":1,"substitute":1,"hiddenpowerice":1,"focusblast":1},
 		tier: "NU"
 	},
 	electivire: {
 		viable: true,
-		viablemoves: {"wildcharge":"Wild Charge","crosschop":"Cross Chop","icepunch":"Ice Punch","voltswitch":"Volt Switch","substitute":"Substitute","flamethrower":"Flamethrower","earthquake":"Earthquake"},
+		viablemoves: {"wildcharge":1,"crosschop":1,"icepunch":1,"voltswitch":1,"substitute":1,"flamethrower":1,"earthquake":1},
 		tier: "RU"
 	},
 	electrike: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","thunderbolt":"Thunderbolt","hiddenpowerice":"Hidden Power Ice","overheat":"Overheat","switcheroo":"Switcheroo","flamethrower":"Flamethrower"},
+		viablemoves: {"voltswitch":1,"thunderbolt":1,"hiddenpowerice":1,"overheat":1,"switcheroo":1,"flamethrower":1},
 		tier: "LC"
 	},
 	electrode: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","thunderbolt":"Thunderbolt","taunt":"Taunt","substitute":"Substitute","hiddenpowerice":"Hidden Power Ice","hiddenpowerwater":"Hidden Power Water","raindance":"Rain Dance","thunder":"Thunder"},
+		viablemoves: {"voltswitch":1,"thunderbolt":1,"taunt":1,"substitute":1,"hiddenpowerice":1,"hiddenpowerwater":1,"raindance":1,"thunder":1},
 		tier: "NU"
 	},
 	elekid: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","crosschop":"Cross Chop","voltswitch":"Volt Switch","substitute":"Substitute","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"thunderbolt":1,"crosschop":1,"voltswitch":1,"substitute":1,"hiddenpowerice":1},
 		tier: "LC"
 	},
 	elgyem: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","psychic":"Psychic","thunderbolt":"Thunderbolt","hiddenpowerfighting":"Hidden Power Fighting","substitute":"Substitute"},
+		viablemoves: {"nastyplot":1,"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"substitute":1},
 		tier: "LC"
 	},
 	emboar: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","superpower":"Superpower","flamecharge":"Flame Charge","wildcharge":"Wild Charge","headsmash":"Head Smash","earthquake":"Earthquake","fireblast":"Fire Blast"},
+		viablemoves: {"flareblitz":1,"superpower":1,"flamecharge":1,"wildcharge":1,"headsmash":1,"earthquake":1,"fireblast":1},
 		tier: "NU"
 	},
 	emolga: {
 		viable: true,
-		viablemoves: {"agility":"Agility","chargebeam":"Charge Beam","batonpass":"Baton Pass","substitute":"Substitute","thunderbolt":"Thunderbolt","airslash":"Air Slash","roost":"Roost"},
+		viablemoves: {"agility":1,"chargebeam":1,"batonpass":1,"substitute":1,"thunderbolt":1,"airslash":1,"roost":1},
 		tier: "NU"
 	},
 	empoleon: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","hydropump":"Hydro Pump","scald":"Scald","icebeam":"Ice Beam","hiddenpowerelectric":"Hidden Power Electric","hiddenpowerfire":"Hidden Power Fire","yawn":"Yawn","agility":"Agility","grassknot":"Grass Knot","toxic":"Toxic"},
+		viablemoves: {"stealthrock":1,"hydropump":1,"scald":1,"icebeam":1,"hiddenpowerelectric":1,"hiddenpowerfire":1,"yawn":1,"agility":1,"grassknot":1,"toxic":1},
 		tier: "UU"
 	},
 	entei: {
 		viable: true,
-		viablemoves: {"extremespeed":"ExtremeSpeed","flareblitz":"Flare Blitz","ironhead":"Iron Head","howl":"Howl","flamecharge":"Flame Charge","stoneedge":"Stone Edge","hiddenpowergrass":"Hidden Power Grass"},
+		viablemoves: {"extremespeed":1,"flareblitz":1,"ironhead":1,"howl":1,"flamecharge":1,"stoneedge":1,"hiddenpowergrass":1},
 		tier: "RU"
 	},
 	escavalier: {
 		viable: true,
-		viablemoves: {"megahorn":"Megahorn","pursuit":"Pursuit","ironhead":"Iron Head","knockoff":"Knock Off","return":"Return","swordsdance":"Swords Dance","substitute":"Substitute"},
+		viablemoves: {"megahorn":1,"pursuit":1,"ironhead":1,"knockoff":1,"return":1,"swordsdance":1,"substitute":1},
 		tier: "UU"
 	},
 	espeon: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","psyshock":"Psyshock","substitute":"Substitute","wish":"Wish","shadowball":"Shadow Ball","hiddenpowerfighting":"Hidden Power Fighting","calmmind":"Calm Mind","morningsun":"Morning Sun","storedpower":"Stored Power","batonpass":"Baton Pass"},
+		viablemoves: {"psychic":1,"psyshock":1,"substitute":1,"wish":1,"shadowball":1,"hiddenpowerfighting":1,"calmmind":1,"morningsun":1,"storedpower":1,"batonpass":1},
 		tier: "OU"
 	},
 	excadrill: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","rapidspin":"Rapid Spin","earthquake":"Earthquake","rockslide":"Rock Slide","shadowclaw":"Shadow Claw","return":"Return","xscissor":"X-Scissor"},
+		viablemoves: {"swordsdance":1,"rapidspin":1,"earthquake":1,"rockslide":1,"shadowclaw":1,"return":1,"xscissor":1},
 		tier: "Uber"
 	},
 	exeggcute: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","leechseed":"Leech Seed","gigadrain":"Giga Drain","psychic":"Psychic","sleeppowder":"Sleep Powder","stunspore":"Stun Spore","sunnyday":"Sunny Day","solarbeam":"SolarBeam","hiddenpowerfire":"Hidden Power Fire","synthesis":"Synthesis"},
+		viablemoves: {"substitute":1,"leechseed":1,"gigadrain":1,"psychic":1,"sleeppowder":1,"stunspore":1,"sunnyday":1,"solarbeam":1,"hiddenpowerfire":1,"synthesis":1},
 		tier: "LC"
 	},
 	exeggutor: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","leechseed":"Leech Seed","gigadrain":"Giga Drain","leafstorm":"Leaf Storm","psychic":"Psychic","sleeppowder":"Sleep Powder","stunspore":"Stun Spore","sunnyday":"Sunny Day","solarbeam":"SolarBeam","hiddenpowerfire":"Hidden Power Fire","synthesis":"Synthesis"},
+		viablemoves: {"substitute":1,"leechseed":1,"gigadrain":1,"leafstorm":1,"psychic":1,"sleeppowder":1,"stunspore":1,"sunnyday":1,"solarbeam":1,"hiddenpowerfire":1,"synthesis":1},
 		tier: "NU"
 	},
 	exploud: {
 		viable: true,
-		viablemoves: {"hypervoice":"Hyper Voice","overheat":"Overheat","shadowball":"Shadow Ball","icebeam":"Ice Beam","surf":"Surf","hammerarm":"Hammer Arm","return":"Return","focusblast":"Focus Blast"},
+		viablemoves: {"hypervoice":1,"overheat":1,"shadowball":1,"icebeam":1,"surf":1,"hammerarm":1,"return":1,"focusblast":1},
 		tier: "NU"
 	},
 	farfetchd: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","swordsdance":"Swords Dance","return":"Return","leafblade":"Leaf Blade","roost":"Roost"},
+		viablemoves: {"bravebird":1,"swordsdance":1,"return":1,"leafblade":1,"roost":1},
 		tier: "NU"
 	},
 	fearow: {
 		viable: true,
-		viablemoves: {"return":"Return","drillpeck":"Drill Peck","doubleedge":"Double-Edge","uturn":"U-turn","quickattack":"Quick Attack","pursuit":"Pursuit","drillrun":"Drill Run","roost":"Roost"},
+		viablemoves: {"return":1,"drillpeck":1,"doubleedge":1,"uturn":1,"quickattack":1,"pursuit":1,"drillrun":1,"roost":1},
 		tier: "NU"
 	},
 	feebas: {
 		viable: true,
-		viablemoves: {"mirrorcoat":"Mirror Coat","confuseray":"Confuse Ray","hypnosis":"Hypnosis","lightscreen":"Light Screen","scald":"Scald","toxic":"Toxic"},
+		viablemoves: {"mirrorcoat":1,"confuseray":1,"hypnosis":1,"lightscreen":1,"scald":1,"toxic":1},
 		tier: "LC"
 	},
 	feraligatr: {
 		viable: true,
-		viablemoves: {"aquajet":"Aqua Jet","waterfall":"Waterfall","crunch":"Crunch","icepunch":"Ice Punch","lowkick":"Low Kick","dragondance":"Dragon Dance","swordsdance":"Swords Dance","return":"Return","earthquake":"Earthquake","superpower":"Superpower"},
+		viablemoves: {"aquajet":1,"waterfall":1,"crunch":1,"icepunch":1,"lowkick":1,"dragondance":1,"swordsdance":1,"return":1,"earthquake":1,"superpower":1},
 		tier: "RU"
 	},
 	ferroseed: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","stealthrock":"Stealth Rock","leechseed":"Leech Seed","bulletseed":"Bullet Seed","protect":"Protect","thunderwave":"Thunder Wave","gyroball":"Gyro Ball"},
+		viablemoves: {"spikes":1,"stealthrock":1,"leechseed":1,"bulletseed":1,"protect":1,"thunderwave":1,"gyroball":1},
 		tier: "RU"
 	},
 	ferrothorn: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","stealthrock":"Stealth Rock","leechseed":"Leech Seed","powerwhip":"Power Whip","thunderwave":"Thunder Wave","protect":"Protect","gyroball":"Gyro Ball","bulldoze":"Bulldoze"},
+		viablemoves: {"spikes":1,"stealthrock":1,"leechseed":1,"powerwhip":1,"thunderwave":1,"protect":1,"gyroball":1,"bulldoze":1},
 		tier: "OU"
 	},
 	finneon: {
 		viable: true,
-		viablemoves: {"surf":"Surf","uturn":"U-turn","icebeam":"Ice Beam","hiddenpowerelectric":"Hidden Power Electric","hiddenpowergrass":"Hidden Power Grass","raindance":"Rain Dance"},
+		viablemoves: {"surf":1,"uturn":1,"icebeam":1,"hiddenpowerelectric":1,"hiddenpowergrass":1,"raindance":1},
 		tier: "LC"
 	},
 	flaaffy: {
@@ -1063,87 +1063,87 @@ exports.BattleFormatsData = {
 	},
 	flareon: {
 		viable: true,
-		viablemoves: {"wish":"Wish","protect":"Protect","lavaplume":"Lava Plume","toxic":"Toxic","roar":"Roar","healbell":"Heal Bell"},
+		viablemoves: {"wish":1,"protect":1,"lavaplume":1,"toxic":1,"roar":1,"healbell":1},
 		tier: "NU"
 	},
 	floatzel: {
 		viable: true,
-		viablemoves: {"waterfall":"Waterfall","return":"Return","aquajet":"Aqua Jet","switcheroo":"Switcheroo","brickbreak":"Brick Break","bulkup":"Bulk Up","agility":"Agility","batonpass":"Baton Pass","icepunch":"Ice Punch","crunch":"Crunch"},
+		viablemoves: {"waterfall":1,"return":1,"aquajet":1,"switcheroo":1,"brickbreak":1,"bulkup":1,"agility":1,"batonpass":1,"icepunch":1,"crunch":1},
 		tier: "NU"
 	},
 	flygon: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","outrage":"Outrage","dragonclaw":"Dragon Claw","uturn":"U-turn","roost":"Roost","substitute":"Substitute","dragontail":"Dragon Tail","stoneedge":"Stone Edge","firepunch":"Fire Punch"},
+		viablemoves: {"earthquake":1,"outrage":1,"dragonclaw":1,"uturn":1,"roost":1,"substitute":1,"dragontail":1,"stoneedge":1,"firepunch":1},
 		tier: "UU"
 	},
 	foongus: {
 		viable: true,
-		viablemoves: {"spore":"Spore","stunspore":"Stun Spore","gigadrain":"Giga Drain","clearsmog":"Clear Smog","hiddenpowerfire":"Hidden Power Fire","synthesis":"Synthesis"},
+		viablemoves: {"spore":1,"stunspore":1,"gigadrain":1,"clearsmog":1,"hiddenpowerfire":1,"synthesis":1},
 		tier: "LC"
 	},
 	forretress: {
 		viable: true,
-		viablemoves: {"explosion":"Explosion","rapidspin":"Rapid Spin","toxicspikes":"Toxic Spikes","spikes":"Spikes","bugbite":"Bug Bite","earthquake":"Earthquake","voltswitch":"Volt Switch","stealthrock":"Stealth Rock"},
+		viablemoves: {"explosion":1,"rapidspin":1,"toxicspikes":1,"spikes":1,"bugbite":1,"earthquake":1,"voltswitch":1,"stealthrock":1},
 		tier: "OU"
 	},
 	fraxure: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","taunt":"Taunt","swordsdance":"Swords Dance","outrage":"Outrage","dualchop":"Dual Chop","dragonclaw":"Dragon Claw"},
+		viablemoves: {"dragondance":1,"taunt":1,"swordsdance":1,"outrage":1,"dualchop":1,"dragonclaw":1},
 		tier: "NU"
 	},
 	frillish: {
 		viable: true,
-		viablemoves: {"scald":"Scald","surf":"Surf","willowisp":"Will-O-Wisp","recover":"Recover","nightshade":"Night Shade","toxic":"Toxic","shadowball":"Shadow Ball"},
+		viablemoves: {"scald":1,"surf":1,"willowisp":1,"recover":1,"nightshade":1,"toxic":1,"shadowball":1},
 		tier: "LC"
 	},
 	froslass: {
 		viable: true,
-		viablemoves: {"taunt":"Taunt","icebeam":"Ice Beam","spikes":"Spikes","destinybond":"Destiny Bond","shadowball":"Shadow Ball","substitute":"Substitute","thunderbolt":"Thunderbolt"},
+		viablemoves: {"taunt":1,"icebeam":1,"spikes":1,"destinybond":1,"shadowball":1,"substitute":1,"thunderbolt":1},
 		tier: "UU"
 	},
 	furret: {
 		viable: true,
-		viablemoves: {"return":"Return","uturn":"U-turn","suckerpunch":"Sucker Punch","trick":"Trick","icepunch":"Ice Punch","firepunch":"Fire Punch","thunderpunch":"ThunderPunch"},
+		viablemoves: {"return":1,"uturn":1,"suckerpunch":1,"trick":1,"icepunch":1,"firepunch":1,"thunderpunch":1},
 		tier: "NU"
 	},
 	gabite: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","outrage":"Outrage","dragonclaw":"Dragon Claw","earthquake":"Earthquake","fireblast":"Fire Blast","stoneedge":"Stone Edge","stealthrock":"Stealth Rock"},
+		viablemoves: {"substitute":1,"outrage":1,"dragonclaw":1,"earthquake":1,"fireblast":1,"stoneedge":1,"stealthrock":1},
 		tier: "NU"
 	},
 	gallade: {
 		viable: true,
-		viablemoves: {"closecombat":"Close Combat","trick":"Trick","stoneedge":"Stone Edge","shadowsneak":"Shadow Sneak","swordsdance":"Swords Dance","bulkup":"Bulk Up","drainpunch":"Drain Punch","icepunch":"Ice Punch"},
+		viablemoves: {"closecombat":1,"trick":1,"stoneedge":1,"shadowsneak":1,"swordsdance":1,"bulkup":1,"drainpunch":1,"icepunch":1},
 		tier: "RU"
 	},
 	galvantula: {
 		viable: true,
-		viablemoves: {"thunder":"Thunder","hiddenpowerice":"Hidden Power Ice","energyball":"Energy Ball","bugbuzz":"Bug Buzz","voltswitch":"Volt Switch"},
+		viablemoves: {"thunder":1,"hiddenpowerice":1,"energyball":1,"bugbuzz":1,"voltswitch":1},
 		tier: "RU"
 	},
 	garbodor: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","toxicspikes":"Toxic Spikes","gunkshot":"Gunk Shot","clearsmog":"Clear Smog","bodyslam":"Body Slam"},
+		viablemoves: {"spikes":1,"toxicspikes":1,"gunkshot":1,"clearsmog":1,"bodyslam":1},
 		tier: "NU"
 	},
 	garchomp: {
 		viable: true,
-		viablemoves: {"outrage":"Outrage","dragonclaw":"Dragon Claw","earthquake":"Earthquake","stoneedge":"Stone Edge","firefang":"Fire Fang","swordsdance":"Swords Dance"},
+		viablemoves: {"outrage":1,"dragonclaw":1,"earthquake":1,"stoneedge":1,"firefang":1,"swordsdance":1},
 		tier: "Uber"
 	},
 	gardevoir: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","focusblast":"Focus Blast","shadowball":"Shadow Ball","trick":"Trick","calmmind":"Calm Mind","willowisp":"Will-O-Wisp","wish":"Wish","thunderbolt":"Thunderbolt","substitute":"Substitute","protect":"Protect"},
+		viablemoves: {"psychic":1,"focusblast":1,"shadowball":1,"trick":1,"calmmind":1,"willowisp":1,"wish":1,"thunderbolt":1,"substitute":1,"protect":1},
 		tier: "NU"
 	},
 	gastly: {
 		viable: true,
-		viablemoves: {"shadowball":"Shadow Ball","sludgebomb":"Sludge Bomb","hiddenpowerfighting":"Hidden Power Fighting","thunderbolt":"Thunderbolt","substitute":"Substitute","disable":"Disable","painsplit":"Pain Split","hypnosis":"Hypnosis","gigadrain":"Giga Drain","willowisp":"Will-O-Wisp","trick":"Trick"},
+		viablemoves: {"shadowball":1,"sludgebomb":1,"hiddenpowerfighting":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"willowisp":1,"trick":1},
 		tier: "LC"
 	},
 	gastrodon: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","earthpower":"Earth Power","icebeam":"Ice Beam","scald":"Scald","toxic":"Toxic","recover":"Recover","surf":"Surf"},
+		viablemoves: {"earthquake":1,"earthpower":1,"icebeam":1,"scald":1,"toxic":1,"recover":1,"surf":1},
 		tier: "OU"
 	},
 	gastrodoneast: {
@@ -1151,7 +1151,7 @@ exports.BattleFormatsData = {
 	},
 	genesect: {
 		viable: true,
-		viablemoves: {"uturn":"U-turn","bugbuzz":"Bug Buzz","icebeam":"Ice Beam","flamethrower":"Flamethrower","thunderbolt":"Thunderbolt","rockpolish":"Rock Polish"},
+		viablemoves: {"uturn":1,"bugbuzz":1,"icebeam":1,"flamethrower":1,"thunderbolt":1,"rockpolish":1},
 		tier: "Limbo"
 	},
 	genesectdouse: {
@@ -1168,277 +1168,277 @@ exports.BattleFormatsData = {
 	},
 	gengar: {
 		viable: true,
-		viablemoves: {"shadowball":"Shadow Ball","sludgebomb":"Sludge Bomb","focusblast":"Focus Blast","thunderbolt":"Thunderbolt","substitute":"Substitute","disable":"Disable","painsplit":"Pain Split","hypnosis":"Hypnosis","gigadrain":"Giga Drain","willowisp":"Will-O-Wisp","trick":"Trick"},
+		viablemoves: {"shadowball":1,"sludgebomb":1,"focusblast":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"willowisp":1,"trick":1},
 		tier: "OU"
 	},
 	geodude: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","earthquake":"Earthquake","stoneedge":"Stone Edge","suckerpunch":"Sucker Punch","hammerarm":"Hammer Arm","rockpolish":"Rock Polish","firepunch":"Fire Punch"},
+		viablemoves: {"stealthrock":1,"earthquake":1,"stoneedge":1,"suckerpunch":1,"hammerarm":1,"rockpolish":1,"firepunch":1},
 		tier: "LC"
 	},
 	gible: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","outrage":"Outrage","dragonclaw":"Dragon Claw","earthquake":"Earthquake","fireblast":"Fire Blast","stoneedge":"Stone Edge","stealthrock":"Stealth Rock"},
+		viablemoves: {"substitute":1,"outrage":1,"dragonclaw":1,"earthquake":1,"fireblast":1,"stoneedge":1,"stealthrock":1},
 		tier: "LC"
 	},
 	gigalith: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","rockblast":"Rock Blast","earthquake":"Earthquake","explosion":"Explosion","stoneedge":"Stone Edge","autotomize":"Autotomize","return":"Return","substitute":"Substitute"},
+		viablemoves: {"stealthrock":1,"rockblast":1,"earthquake":1,"explosion":1,"stoneedge":1,"autotomize":1,"return":1,"substitute":1},
 		tier: "NU"
 	},
 	girafarig: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","crunch":"Crunch","thunderbolt":"Thunderbolt","calmmind":"Calm Mind","batonpass":"Baton Pass","agility":"Agility","chargebeam":"Charge Beam","lightscreen":"Light Screen","reflect":"Reflect","thunderwave":"Thunder Wave","toxic":"Toxic"},
+		viablemoves: {"psychic":1,"crunch":1,"thunderbolt":1,"calmmind":1,"batonpass":1,"agility":1,"chargebeam":1,"lightscreen":1,"reflect":1,"thunderwave":1,"toxic":1},
 		tier: "NU"
 	},
 	giratina: {
 		viable: true,
-		viablemoves: {"rest":"Rest","sleeptalk":"Sleep Talk","dragontail":"Dragon Tail","roar":"Roar","willowisp":"Will-O-Wisp","calmmind":"Calm Mind","dragonpulse":"Dragon Pulse","shadowball":"Shadow Ball"},
+		viablemoves: {"rest":1,"sleeptalk":1,"dragontail":1,"roar":1,"willowisp":1,"calmmind":1,"dragonpulse":1,"shadowball":1},
 		tier: "Uber"
 	},
 	giratinaorigin: {
 		viable: true,
-		viablemoves: {"dracometeor":"Draco Meteor","shadowsneak":"Shadow Sneak","dragontail":"Dragon Tail","hiddenpowerfire":"Hidden Power Fire","willowisp":"Will-O-Wisp","calmmind":"Calm Mind","substitute":"Substitute","dragonpulse":"Dragon Pulse","shadowball":"Shadow Ball","aurasphere":"Aura Sphere","outrage":"Outrage"},
+		viablemoves: {"dracometeor":1,"shadowsneak":1,"dragontail":1,"hiddenpowerfire":1,"willowisp":1,"calmmind":1,"substitute":1,"dragonpulse":1,"shadowball":1,"aurasphere":1,"outrage":1},
 		tier: "Uber"
 	},
 	glaceon: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","hiddenpowerground":"Hidden Power Ground","shadowball":"Shadow Ball","wish":"Wish","protect":"Protect","healbell":"Heal Bell"},
+		viablemoves: {"icebeam":1,"hiddenpowerground":1,"shadowball":1,"wish":1,"protect":1,"healbell":1},
 		tier: "NU"
 	},
 	glalie: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","icebeam":"Ice Beam","iceshard":"Ice Shard","crunch":"Crunch","explosion":"Explosion","earthquake":"Earthquake"},
+		viablemoves: {"spikes":1,"icebeam":1,"iceshard":1,"crunch":1,"explosion":1,"earthquake":1},
 		tier: "NU"
 	},
 	glameow: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","uturn":"U-turn","suckerpunch":"Sucker Punch","hypnosis":"Hypnosis","quickattack":"Quick Attack","return":"Return"},
+		viablemoves: {"fakeout":1,"uturn":1,"suckerpunch":1,"hypnosis":1,"quickattack":1,"return":1},
 		tier: "LC"
 	},
 	gligar: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","toxic":"Toxic","roost":"Roost","taunt":"Taunt","swordsdance":"Swords Dance","earthquake":"Earthquake","uturn":"U-turn","aerialace":"Aerial Ace","stoneedge":"Stone Edge","acrobatics":"Acrobatics","aquatail":"Aqua Tail","substitute":"Substitute"},
+		viablemoves: {"stealthrock":1,"toxic":1,"roost":1,"taunt":1,"swordsdance":1,"earthquake":1,"uturn":1,"aerialace":1,"stoneedge":1,"acrobatics":1,"aquatail":1,"substitute":1},
 		tier: "UU"
 	},
 	gliscor: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","acrobatics":"Acrobatics","earthquake":"Earthquake","roost":"Roost","substitute":"Substitute","taunt":"Taunt","icefang":"Ice Fang","protect":"Protect","toxic":"Toxic","stealthrock":"Stealth Rock"},
+		viablemoves: {"swordsdance":1,"acrobatics":1,"earthquake":1,"roost":1,"substitute":1,"taunt":1,"icefang":1,"protect":1,"toxic":1,"stealthrock":1},
 		tier: "OU"
 	},
 	gloom: {
 		viable: true,
-		viablemoves: {"gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","synthesis":"Synthesis","sunnyday":"Sunny Day","solarbeam":"SolarBeam","sleeppowder":"Sleep Powder","stunspore":"Stun Spore","toxic":"Toxic","hiddenpowerfire":"Hidden Power Fire","leechseed":"Leech Seed"},
+		viablemoves: {"gigadrain":1,"sludgebomb":1,"synthesis":1,"sunnyday":1,"solarbeam":1,"sleeppowder":1,"stunspore":1,"toxic":1,"hiddenpowerfire":1,"leechseed":1},
 		tier: "NFE"
 	},
 	golbat: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","roost":"Roost","toxic":"Toxic","taunt":"Taunt","nastyplot":"Nasty Plot","gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","airslash":"Air Slash","uturn":"U-turn","whirlwind":"Whirlwind","acrobatics":"Acrobatics","heatwave":"Heat Wave","superfang":"Super Fang"},
+		viablemoves: {"bravebird":1,"roost":1,"toxic":1,"taunt":1,"nastyplot":1,"gigadrain":1,"sludgebomb":1,"airslash":1,"uturn":1,"whirlwind":1,"acrobatics":1,"heatwave":1,"superfang":1},
 		tier: "NU"
 	},
 	goldeen: {
 		viable: true,
-		viablemoves: {"raindance":"Rain Dance","waterfall":"Waterfall","megahorn":"Megahorn","return":"Return","agility":"Agility"},
+		viablemoves: {"raindance":1,"waterfall":1,"megahorn":1,"return":1,"agility":1},
 		tier: "LC"
 	},
 	golduck: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","surf":"Surf","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","crosschop":"Cross Chop","encore":"Encore","raindance":"Rain Dance","focusblast":"Focus Blast"},
+		viablemoves: {"hydropump":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"crosschop":1,"encore":1,"raindance":1,"focusblast":1},
 		tier: "NU"
 	},
 	golem: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","earthquake":"Earthquake","stoneedge":"Stone Edge","suckerpunch":"Sucker Punch","hammerarm":"Hammer Arm","rockpolish":"Rock Polish","firepunch":"Fire Punch"},
+		viablemoves: {"stealthrock":1,"earthquake":1,"stoneedge":1,"suckerpunch":1,"hammerarm":1,"rockpolish":1,"firepunch":1},
 		tier: "NU"
 	},
 	golett: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","focuspunch":"Focus Punch","earthquake":"Earthquake","shadowpunch":"Shadow Punch","hammerarm":"Hammer Arm","dynamicpunch":"DynamicPunch","stoneedge":"Stone Edge"},
+		viablemoves: {"substitute":1,"focuspunch":1,"earthquake":1,"shadowpunch":1,"hammerarm":1,"dynamicpunch":1,"stoneedge":1},
 		tier: "LC"
 	},
 	golurk: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","focuspunch":"Focus Punch","earthquake":"Earthquake","shadowpunch":"Shadow Punch","hammerarm":"Hammer Arm","dynamicpunch":"DynamicPunch","stoneedge":"Stone Edge"},
+		viablemoves: {"substitute":1,"focuspunch":1,"earthquake":1,"shadowpunch":1,"hammerarm":1,"dynamicpunch":1,"stoneedge":1},
 		tier: "RU"
 	},
 	gorebyss: {
 		viable: true,
-		viablemoves: {"shellsmash":"Shell Smash","batonpass":"Baton Pass","hydropump":"Hydro Pump","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","substitute":"Substitute"},
+		viablemoves: {"shellsmash":1,"batonpass":1,"hydropump":1,"icebeam":1,"hiddenpowergrass":1,"substitute":1},
 		tier: "NU"
 	},
 	gothita: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","thunderbolt":"Thunderbolt","hiddenpowerfighting":"Hidden Power Fighting","shadowball":"Shadow Ball","substitute":"Substitute","calmmind":"Calm Mind","reflect":"Reflect","lightscreen":"Light Screen"},
+		viablemoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1},
 		tier: "LC"
 	},
 	gothitelle: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","thunderbolt":"Thunderbolt","hiddenpowerfighting":"Hidden Power Fighting","shadowball":"Shadow Ball","substitute":"Substitute","calmmind":"Calm Mind","reflect":"Reflect","lightscreen":"Light Screen","taunt":"Taunt","toxic":"Toxic"},
+		viablemoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1,"taunt":1,"toxic":1},
 		tier: "NU"
 	},
 	gothorita: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","thunderbolt":"Thunderbolt","hiddenpowerfighting":"Hidden Power Fighting","shadowball":"Shadow Ball","substitute":"Substitute","calmmind":"Calm Mind","reflect":"Reflect","lightscreen":"Light Screen"},
+		viablemoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1},
 		tier: "NFE"
 	},
 	granbull: {
 		viable: true,
-		viablemoves: {"thunderwave":"Thunder Wave","return":"Return","crunch":"Crunch","closecombat":"Close Combat","brickbreak":"Brick Break","toxic":"Toxic","substitute":"Substitute","healbell":"Heal Bell","superfang":"Super Fang","icepunch":"Ice Punch"},
+		viablemoves: {"thunderwave":1,"return":1,"crunch":1,"closecombat":1,"brickbreak":1,"toxic":1,"substitute":1,"healbell":1,"superfang":1,"icepunch":1},
 		tier: "NU"
 	},
 	graveler: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","earthquake":"Earthquake","stoneedge":"Stone Edge","suckerpunch":"Sucker Punch","hammerarm":"Hammer Arm","rockpolish":"Rock Polish","firepunch":"Fire Punch"},
+		viablemoves: {"stealthrock":1,"earthquake":1,"stoneedge":1,"suckerpunch":1,"hammerarm":1,"rockpolish":1,"firepunch":1},
 		tier: "NFE"
 	},
 	grimer: {
 		viable: true,
-		viablemoves: {"curse":"Curse","gunkshot":"Gunk Shot","poisonjab":"Poison Jab","shadowsneak":"Shadow Sneak","payback":"Payback","substitute":"Substitute","brickbreak":"Brick Break","focuspunch":"Focus Punch","rest":"Rest","icepunch":"Ice Punch","firepunch":"Fire Punch"},
+		viablemoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"substitute":1,"brickbreak":1,"focuspunch":1,"rest":1,"icepunch":1,"firepunch":1},
 		tier: "LC"
 	},
 	grotle: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","stealthrock":"Stealth Rock","seedbomb":"Seed Bomb","substitute":"Substitute","leechseed":"Leech Seed","toxic":"Toxic"},
+		viablemoves: {"reflect":1,"lightscreen":1,"stealthrock":1,"seedbomb":1,"substitute":1,"leechseed":1,"toxic":1},
 		tier: "NFE"
 	},
 	groudon: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","dragontail":"Dragon Tail","stealthrock":"Stealth Rock","stoneedge":"Stone Edge","swordsdance":"Swords Dance","rockpolish":"Rock Polish","thunderwave":"Thunder Wave"},
+		viablemoves: {"earthquake":1,"dragontail":1,"stealthrock":1,"stoneedge":1,"swordsdance":1,"rockpolish":1,"thunderwave":1},
 		tier: "Uber"
 	},
 	grovyle: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","leechseed":"Leech Seed","gigadrain":"Giga Drain","leafstorm":"Leaf Storm","hiddenpowerice":"Hidden Power Ice","hiddenpowerrock":"Hidden Power Rock"},
+		viablemoves: {"substitute":1,"leechseed":1,"gigadrain":1,"leafstorm":1,"hiddenpowerice":1,"hiddenpowerrock":1},
 		tier: "NFE"
 	},
 	growlithe: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","fireblast":"Fire Blast","wildcharge":"Wild Charge","hiddenpowergrass":"Hidden Power Grass","hiddenpowerice":"Hidden Power Ice","closecombat":"Close Combat","morningsun":"Morning Sun","willowisp":"Will-O-Wisp","toxic":"Toxic"},
+		viablemoves: {"flareblitz":1,"fireblast":1,"wildcharge":1,"hiddenpowergrass":1,"hiddenpowerice":1,"closecombat":1,"morningsun":1,"willowisp":1,"toxic":1},
 		tier: "LC"
 	},
 	grumpig: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","psychic":"Psychic","focusblast":"Focus Blast","shadowball":"Shadow Ball","reflect":"Reflect","lightscreen":"Light Screen","thunderwave":"Thunder Wave","trick":"Trick","taunt":"Taunt","healbell":"Heal Bell"},
+		viablemoves: {"calmmind":1,"psychic":1,"focusblast":1,"shadowball":1,"reflect":1,"lightscreen":1,"thunderwave":1,"trick":1,"taunt":1,"healbell":1},
 		tier: "NU"
 	},
 	gulpin: {
 		viable: true,
-		viablemoves: {"stockpile":"Stockpile","sludgebomb":"Sludge Bomb","icebeam":"Ice Beam","toxic":"Toxic","painsplit":"Pain Split","yawn":"Yawn","encore":"Encore"},
+		viablemoves: {"stockpile":1,"sludgebomb":1,"icebeam":1,"toxic":1,"painsplit":1,"yawn":1,"encore":1},
 		tier: "LC"
 	},
 	gurdurr: {
 		viable: true,
-		viablemoves: {"bulkup":"Bulk Up","machpunch":"Mach Punch","drainpunch":"Drain Punch","payback":"Payback","stoneedge":"Stone Edge","facade":"Facade"},
+		viablemoves: {"bulkup":1,"machpunch":1,"drainpunch":1,"payback":1,"stoneedge":1,"facade":1},
 		tier: "NU"
 	},
 	gyarados: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","waterfall":"Waterfall","earthquake":"Earthquake","bounce":"Bounce","rest":"Rest","sleeptalk":"Sleep Talk","dragontail":"Dragon Tail","stoneedge":"Stone Edge","substitute":"Substitute","thunderwave":"Thunder Wave","icefang":"Ice Fang"},
+		viablemoves: {"dragondance":1,"waterfall":1,"earthquake":1,"bounce":1,"rest":1,"sleeptalk":1,"dragontail":1,"stoneedge":1,"substitute":1,"thunderwave":1,"icefang":1},
 		tier: "OU"
 	},
 	happiny: {
 		viable: true,
-		viablemoves: {"aromatherapy":"Aromatherapy","toxic":"Toxic","thunderwave":"Thunder Wave","counter":"Counter","endeavor":"Endeavor"},
+		viablemoves: {"aromatherapy":1,"toxic":1,"thunderwave":1,"counter":1,"endeavor":1},
 		tier: "LC"
 	},
 	hariyama: {
 		viable: true,
-		viablemoves: {"crosschop":"Cross Chop","toxic":"Toxic","whirlwind":"Whirlwind","bulletpunch":"Bullet Punch","closecombat":"Close Combat","icepunch":"Ice Punch","stoneedge":"Stone Edge","bulkup":"Bulk Up"},
+		viablemoves: {"crosschop":1,"toxic":1,"whirlwind":1,"bulletpunch":1,"closecombat":1,"icepunch":1,"stoneedge":1,"bulkup":1},
 		tier: "RU"
 	},
 	haunter: {
 		viable: true,
-		viablemoves: {"shadowball":"Shadow Ball","sludgebomb":"Sludge Bomb","hiddenpowerfighting":"Hidden Power Fighting","thunderbolt":"Thunderbolt","substitute":"Substitute","disable":"Disable","painsplit":"Pain Split","hypnosis":"Hypnosis","gigadrain":"Giga Drain","willowisp":"Will-O-Wisp","trick":"Trick"},
+		viablemoves: {"shadowball":1,"sludgebomb":1,"hiddenpowerfighting":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"willowisp":1,"trick":1},
 		tier: "NU"
 	},
 	haxorus: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","taunt":"Taunt","swordsdance":"Swords Dance","outrage":"Outrage","dualchop":"Dual Chop","dragonclaw":"Dragon Claw","earthquake":"Earthquake"},
+		viablemoves: {"dragondance":1,"taunt":1,"swordsdance":1,"outrage":1,"dualchop":1,"dragonclaw":1,"earthquake":1},
 		tier: "OU"
 	},
 	heatmor: {
 		viable: true,
-		viablemoves: {"fireblast":"Fire Blast","suckerpunch":"Sucker Punch","focusblast":"Focus Blast","hiddenpowergrass":"Hidden Power Grass","substitute":"Substitute"},
+		viablemoves: {"fireblast":1,"suckerpunch":1,"focusblast":1,"hiddenpowergrass":1,"substitute":1},
 		tier: "NU"
 	},
 	heatran: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","fireblast":"Fire Blast","lavaplume":"Lava Plume","willowisp":"Will-O-Wisp","stealthrock":"Stealth Rock","earthpower":"Earth Power","hiddenpowergrass":"Hidden Power Grass","hiddenpowerice":"Hidden Power Ice","dragonpulse":"Dragon Pulse","protect":"Protect","toxic":"Toxic","roar":"Roar","overheat":"Overheat","taunt":"Taunt","magmastorm":"Magma Storm"},
+		viablemoves: {"substitute":1,"fireblast":1,"lavaplume":1,"willowisp":1,"stealthrock":1,"earthpower":1,"hiddenpowergrass":1,"hiddenpowerice":1,"dragonpulse":1,"protect":1,"toxic":1,"roar":1,"overheat":1,"taunt":1,"magmastorm":1},
 		tier: "OU"
 	},
 	heracross: {
 		viable: true,
-		viablemoves: {"closecombat":"Close Combat","megahorn":"Megahorn","stoneedge":"Stone Edge","nightslash":"Night Slash","swordsdance":"Swords Dance","facade":"Facade","earthquake":"Earthquake","pursuit":"Pursuit","substitute":"Substitute","bulkup":"Bulk Up"},
+		viablemoves: {"closecombat":1,"megahorn":1,"stoneedge":1,"nightslash":1,"swordsdance":1,"facade":1,"earthquake":1,"pursuit":1,"substitute":1,"bulkup":1},
 		tier: "UU"
 	},
 	herdier: {
 		viable: true,
-		viablemoves: {"return":"Return","wildcharge":"Wild Charge","firefang":"Fire Fang","crunch":"Crunch","icefang":"Ice Fang"},
+		viablemoves: {"return":1,"wildcharge":1,"firefang":1,"crunch":1,"icefang":1},
 		tier: "NFE"
 	},
 	hippopotas: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","slackoff":"Slack Off","roar":"Roar","stealthrock":"Stealth Rock","protect":"Protect","toxic":"Toxic"},
+		viablemoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1},
 		tier: "UU"
 	},
 	hippowdon: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","slackoff":"Slack Off","roar":"Roar","stealthrock":"Stealth Rock","protect":"Protect","toxic":"Toxic","icefang":"Ice Fang","stoneedge":"Stone Edge"},
+		viablemoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1,"icefang":1,"stoneedge":1},
 		tier: "BL"
 	},
 	hitmonchan: {
 		viable: true,
-		viablemoves: {"bulkup":"Bulk Up","drainpunch":"Drain Punch","icepunch":"Ice Punch","machpunch":"Mach Punch","substitute":"Substitute","closecombat":"Close Combat","stoneedge":"Stone Edge"},
+		viablemoves: {"bulkup":1,"drainpunch":1,"icepunch":1,"machpunch":1,"substitute":1,"closecombat":1,"stoneedge":1},
 		tier: "RU"
 	},
 	hitmonlee: {
 		viable: true,
-		viablemoves: {"hijumpkick":"Hi Jump Kick","suckerpunch":"Sucker Punch","stoneedge":"Stone Edge","doubleedge":"Double-Edge","machpunch":"Mach Punch","substitute":"Substitute","fakeout":"Fake Out","closecombat":"Close Combat","earthquake":"Earthquake","blazekick":"Blaze Kick"},
+		viablemoves: {"hijumpkick":1,"suckerpunch":1,"stoneedge":1,"doubleedge":1,"machpunch":1,"substitute":1,"fakeout":1,"closecombat":1,"earthquake":1,"blazekick":1},
 		tier: "RU"
 	},
 	hitmontop: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","suckerpunch":"Sucker Punch","machpunch":"Mach Punch","bulkup":"Bulk Up","hijumpkick":"Hi Jump Kick","rapidspin":"Rapid Spin","closecombat":"Close Combat","stoneedge":"Stone Edge","toxic":"Toxic","bulletpunch":"Bullet Punch"},
+		viablemoves: {"fakeout":1,"suckerpunch":1,"machpunch":1,"bulkup":1,"hijumpkick":1,"rapidspin":1,"closecombat":1,"stoneedge":1,"toxic":1,"bulletpunch":1},
 		tier: "UU"
 	},
 	hooh: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","sacredfire":"Sacred Fire","bravebird":"Brave Bird","earthquake":"Earthquake","roost":"Roost","whirlwind":"Whirlwind","flamecharge":"Flame Charge"},
+		viablemoves: {"substitute":1,"sacredfire":1,"bravebird":1,"earthquake":1,"roost":1,"whirlwind":1,"flamecharge":1},
 		tier: "Uber"
 	},
 	honchkrow: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","superpower":"Superpower","taunt":"Taunt","suckerpunch":"Sucker Punch","bravebird":"Brave Bird","roost":"Roost","nightslash":"Night Slash","drillpeck":"Drill Peck","hiddenpowergrass":"Hidden Power Grass","heatwave":"Heat Wave","pursuit":"Pursuit"},
+		viablemoves: {"substitute":1,"superpower":1,"taunt":1,"suckerpunch":1,"bravebird":1,"roost":1,"nightslash":1,"drillpeck":1,"hiddenpowergrass":1,"heatwave":1,"pursuit":1},
 		tier: "UU"
 	},
 	hoothoot: {
 		viable: true,
-		viablemoves: {"hypnosis":"Hypnosis","reflect":"Reflect","toxic":"Toxic","roost":"Roost","lightscreen":"Light Screen","airslash":"Air Slash","whirlwind":"Whirlwind","nightshade":"Night Shade","magiccoat":"Magic Coat"},
+		viablemoves: {"hypnosis":1,"reflect":1,"toxic":1,"roost":1,"lightscreen":1,"airslash":1,"whirlwind":1,"nightshade":1,"magiccoat":1},
 		tier: "LC"
 	},
 	hoppip: {
 		viable: true,
-		viablemoves: {"encore":"Encore","sleeppowder":"Sleep Powder","sunnyday":"Sunny Day","uturn":"U-turn","memento":"Memento","toxic":"Toxic","leechseed":"Leech Seed","substitute":"Substitute","protect":"Protect"},
+		viablemoves: {"encore":1,"sleeppowder":1,"sunnyday":1,"uturn":1,"memento":1,"toxic":1,"leechseed":1,"substitute":1,"protect":1},
 		tier: "LC"
 	},
 	horsea: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","icebeam":"Ice Beam","agility":"Agility","substitute":"Substitute","hiddenpowergrass":"Hidden Power Grass","raindance":"Rain Dance"},
+		viablemoves: {"hydropump":1,"icebeam":1,"agility":1,"substitute":1,"hiddenpowergrass":1,"raindance":1},
 		tier: "LC"
 	},
 	houndoom: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","crunch":"Crunch","pursuit":"Pursuit","darkpulse":"Dark Pulse","suckerpunch":"Sucker Punch","fireblast":"Fire Blast","hiddenpowerfighting":"Hidden Power Fighting"},
+		viablemoves: {"nastyplot":1,"crunch":1,"pursuit":1,"darkpulse":1,"suckerpunch":1,"fireblast":1,"hiddenpowerfighting":1},
 		tier: "UU"
 	},
 	houndour: {
 		viable: true,
-		viablemoves: {"crunch":"Crunch","pursuit":"Pursuit","suckerpunch":"Sucker Punch","fireblast":"Fire Blast","substitute":"Substitute","darkpulse":"Dark Pulse","hiddenpowerfighting":"Hidden Power Fighting","nastyplot":"Nasty Plot"},
+		viablemoves: {"crunch":1,"pursuit":1,"suckerpunch":1,"fireblast":1,"substitute":1,"darkpulse":1,"hiddenpowerfighting":1,"nastyplot":1},
 		tier: "LC"
 	},
 	huntail: {
 		viable: true,
-		viablemoves: {"shellsmash":"Shell Smash","crunch":"Crunch","return":"Return","hydropump":"Hydro Pump","batonpass":"Baton Pass","suckerpunch":"Sucker Punch"},
+		viablemoves: {"shellsmash":1,"crunch":1,"return":1,"hydropump":1,"batonpass":1,"suckerpunch":1},
 		tier: "NU"
 	},
 	hydreigon: {
@@ -1446,27 +1446,27 @@ exports.BattleFormatsData = {
 	},
 	hypno: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","seismictoss":"Seismic Toss","thunderwave":"Thunder Wave","wish":"Wish","protect":"Protect","healbell":"Heal Bell","toxic":"Toxic","nastyplot":"Nasty Plot","shadowball":"Shadow Ball","trickroom":"Trick Room","batonpass":"Baton Pass","calmmind":"Calm Mind","barrier":"Barrier","bellydrum":"Belly Drum","zenheadbutt":"Zen Headbutt","firepunch":"Fire Punch"},
+		viablemoves: {"psychic":1,"seismictoss":1,"thunderwave":1,"wish":1,"protect":1,"healbell":1,"toxic":1,"nastyplot":1,"shadowball":1,"trickroom":1,"batonpass":1,"calmmind":1,"barrier":1,"bellydrum":1,"zenheadbutt":1,"firepunch":1},
 		tier: "NU"
 	},
 	igglybuff: {
 		viable: true,
-		viablemoves: {"wish":"Wish","thunderwave":"Thunder Wave","reflect":"Reflect","lightscreen":"Light Screen","healbell":"Heal Bell","seismictoss":"Seismic Toss","counter":"Counter"},
+		viablemoves: {"wish":1,"thunderwave":1,"reflect":1,"lightscreen":1,"healbell":1,"seismictoss":1,"counter":1},
 		tier: "LC"
 	},
 	illumise: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","batonpass":"Baton Pass","wish":"Wish","bugbuzz":"Bug Buzz","encore":"Encore"},
+		viablemoves: {"substitute":1,"batonpass":1,"wish":1,"bugbuzz":1,"encore":1},
 		tier: "NU"
 	},
 	infernape: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","fireblast":"Fire Blast","closecombat":"Close Combat","uturn":"U-turn","grassknot":"Grass Knot","stoneedge":"Stone Edge","machpunch":"Mach Punch","swordsdance":"Swords Dance","nastyplot":"Nasty Plot","flareblitz":"Flare Blitz","hiddenpowerice":"Hidden Power Ice","thunderpunch":"ThunderPunch"},
+		viablemoves: {"stealthrock":1,"fireblast":1,"closecombat":1,"uturn":1,"grassknot":1,"stoneedge":1,"machpunch":1,"swordsdance":1,"nastyplot":1,"flareblitz":1,"hiddenpowerice":1,"thunderpunch":1},
 		tier: "OU"
 	},
 	ivysaur: {
 		viable: true,
-		viablemoves: {"sleeppowder":"Sleep Powder","gigadrain":"Giga Drain","growth":"Growth","sunnyday":"Sunny Day","solarbeam":"SolarBeam","hiddenpowerfire":"Hidden Power Fire","hiddenpowerice":"Hidden Power Ice","sludgebomb":"Sludge Bomb","swordsdance":"Swords Dance","powerwhip":"Power Whip","leechseed":"Leech Seed","synthesis":"Synthesis"},
+		viablemoves: {"sleeppowder":1,"gigadrain":1,"growth":1,"sunnyday":1,"solarbeam":1,"hiddenpowerfire":1,"hiddenpowerice":1,"sludgebomb":1,"swordsdance":1,"powerwhip":1,"leechseed":1,"synthesis":1},
 		tier: "NFE"
 	},
 	jellicent: {
@@ -1474,457 +1474,457 @@ exports.BattleFormatsData = {
 	},
 	jigglypuff: {
 		viable: true,
-		viablemoves: {"wish":"Wish","thunderwave":"Thunder Wave","reflect":"Reflect","lightscreen":"Light Screen","healbell":"Heal Bell","seismictoss":"Seismic Toss","counter":"Counter","stealthrock":"Stealth Rock"},
+		viablemoves: {"wish":1,"thunderwave":1,"reflect":1,"lightscreen":1,"healbell":1,"seismictoss":1,"counter":1,"stealthrock":1},
 		tier: "NFE"
 	},
 	jirachi: {
 		viable: true,
-		viablemoves: {"ironhead":"Iron Head","firepunch":"Fire Punch","thunderwave":"Thunder Wave","stealthrock":"Stealth Rock","wish":"Wish","uturn":"U-turn","calmmind":"Calm Mind","psychic":"Psychic","thunderbolt":"Thunderbolt","icepunch":"Ice Punch"},
+		viablemoves: {"ironhead":1,"firepunch":1,"thunderwave":1,"stealthrock":1,"wish":1,"uturn":1,"calmmind":1,"psychic":1,"thunderbolt":1,"icepunch":1},
 		tier: "OU"
 	},
 	jolteon: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","voltswitch":"Volt Switch","hiddenpowergrass":"Hidden Power Grass","hiddenpowerice":"Hidden Power Ice","chargebeam":"Charge Beam","batonpass":"Baton Pass","substitute":"Substitute"},
+		viablemoves: {"thunderbolt":1,"voltswitch":1,"hiddenpowergrass":1,"hiddenpowerice":1,"chargebeam":1,"batonpass":1,"substitute":1},
 		tier: "OU"
 	},
 	joltik: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","bugbuzz":"Bug Buzz","hiddenpowerice":"Hidden Power Ice","energyball":"Energy Ball","voltswitch":"Volt Switch"},
+		viablemoves: {"thunderbolt":1,"bugbuzz":1,"hiddenpowerice":1,"energyball":1,"voltswitch":1},
 		tier: "LC"
 	},
 	jumpluff: {
 		viable: true,
-		viablemoves: {"encore":"Encore","sleeppowder":"Sleep Powder","sunnyday":"Sunny Day","uturn":"U-turn","memento":"Memento","toxic":"Toxic","leechseed":"Leech Seed","substitute":"Substitute","gigadrain":"Giga Drain","seedbomb":"Seed Bomb","reflect":"Reflect","synthesis":"Synthesis"},
+		viablemoves: {"encore":1,"sleeppowder":1,"sunnyday":1,"uturn":1,"memento":1,"toxic":1,"leechseed":1,"substitute":1,"gigadrain":1,"seedbomb":1,"reflect":1,"synthesis":1},
 		tier: "NU"
 	},
 	jynx: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","psychic":"Psychic","focusblast":"Focus Blast","trick":"Trick","shadowball":"Shadow Ball","nastyplot":"Nasty Plot","lovelykiss":"Lovely Kiss","substitute":"Substitute","grassknot":"Grass Knot"},
+		viablemoves: {"icebeam":1,"psychic":1,"focusblast":1,"trick":1,"shadowball":1,"nastyplot":1,"lovelykiss":1,"substitute":1,"grassknot":1},
 		tier: "NU"
 	},
 	kabuto: {
 		viable: true,
-		viablemoves: {"aquajet":"Aqua Jet","rockslide":"Rock Slide","rapidspin":"Rapid Spin","stealthrock":"Stealth Rock","honeclaws":"Hone Claws","waterfall":"Waterfall","toxic":"Toxic"},
+		viablemoves: {"aquajet":1,"rockslide":1,"rapidspin":1,"stealthrock":1,"honeclaws":1,"waterfall":1,"toxic":1},
 		tier: "LC"
 	},
 	kabutops: {
 		viable: true,
-		viablemoves: {"aquajet":"Aqua Jet","stoneedge":"Stone Edge","rapidspin":"Rapid Spin","stealthrock":"Stealth Rock","swordsdance":"Swords Dance","waterfall":"Waterfall","raindance":"Rain Dance","toxic":"Toxic","substitute":"Substitute","superpower":"Superpower","lowkick":"Low Kick"},
+		viablemoves: {"aquajet":1,"stoneedge":1,"rapidspin":1,"stealthrock":1,"swordsdance":1,"waterfall":1,"raindance":1,"toxic":1,"substitute":1,"superpower":1,"lowkick":1},
 		tier: "RU"
 	},
 	kadabra: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","psychic":"Psychic","psyshock":"Psyshock","hiddenpowerfighting":"Hidden Power Fighting","shadowball":"Shadow Ball","encore":"Encore","substitute":"Substitute"},
+		viablemoves: {"calmmind":1,"psychic":1,"psyshock":1,"hiddenpowerfighting":1,"shadowball":1,"encore":1,"substitute":1},
 		tier: "NU"
 	},
 	kakuna: {
 		viable: true,
-		viablemoves: {"irondefense":"Iron Defense","bugbite":"Bug Bite","stringshot":"String Shot","poisonsting":"Poison Sting"},
+		viablemoves: {"irondefense":1,"bugbite":1,"stringshot":1,"poisonsting":1},
 		tier: "NFE"
 	},
 	kangaskhan: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","return":"Return","hammerarm":"Hammer Arm","doubleedge":"Double-Edge","suckerpunch":"Sucker Punch","earthquake":"Earthquake","substitute":"Substitute","focuspunch":"Focus Punch","circlethrow":"Circle Throw","wish":"Wish"},
+		viablemoves: {"fakeout":1,"return":1,"hammerarm":1,"doubleedge":1,"suckerpunch":1,"earthquake":1,"substitute":1,"focuspunch":1,"circlethrow":1,"wish":1},
 		tier: "NU"
 	},
 	karrablast: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","megahorn":"Megahorn","return":"Return","substitute":"Substitute"},
+		viablemoves: {"swordsdance":1,"megahorn":1,"return":1,"substitute":1},
 		tier: "LC"
 	},
 	kecleon: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","recover":"Recover","return":"Return","thunderwave":"Thunder Wave","suckerpunch":"Sucker Punch"},
+		viablemoves: {"stealthrock":1,"recover":1,"return":1,"thunderwave":1,"suckerpunch":1},
 		tier: "NU"
 	},
 	keldeo: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","secretsword":"Secret Sword","calmmind":"Calm Mind","hiddenpowerghost":"Hidden Power Ghost","hiddenpowerelectric":"Hidden Power Electric","substitute":"Substitute"},
+		viablemoves: {"hydropump":1,"secretsword":1,"calmmind":1,"hiddenpowerghost":1,"hiddenpowerelectric":1,"substitute":1},
 		tier: "Limbo"
 	},
 	kingdra: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","icebeam":"Ice Beam","dragondance":"Dragon Dance","substitute":"Substitute","outrage":"Outrage","dracometeor":"Draco Meteor","waterfall":"Waterfall","rest":"Rest","sleeptalk":"Sleep Talk"},
+		viablemoves: {"hydropump":1,"icebeam":1,"dragondance":1,"substitute":1,"outrage":1,"dracometeor":1,"waterfall":1,"rest":1,"sleeptalk":1},
 		tier: "UU"
 	},
 	kingler: {
 		viable: true,
-		viablemoves: {"crabhammer":"Crabhammer","return":"Return","swordsdance":"Swords Dance","agility":"Agility","rockslide":"Rock Slide","substitute":"Substitute","xscissor":"X-Scissor"},
+		viablemoves: {"crabhammer":1,"return":1,"swordsdance":1,"agility":1,"rockslide":1,"substitute":1,"xscissor":1},
 		tier: "NU"
 	},
 	kirlia: {
 		viable: true,
-		viablemoves: {"trickroom":"Trick Room","destinybond":"Destiny Bond","hypnosis":"Hypnosis","willowisp":"Will-O-Wisp"},
+		viablemoves: {"trickroom":1,"destinybond":1,"hypnosis":1,"willowisp":1},
 		tier: "NFE"
 	},
 	klang: {
 		viable: true,
-		viablemoves: {"shiftgear":"Shift Gear","return":"Return","geargrind":"Gear Grind","substitute":"Substitute"},
+		viablemoves: {"shiftgear":1,"return":1,"geargrind":1,"substitute":1},
 		tier: "NFE"
 	},
 	klink: {
 		viable: true,
-		viablemoves: {"shiftgear":"Shift Gear","return":"Return","geargrind":"Gear Grind","substitute":"Substitute"},
+		viablemoves: {"shiftgear":1,"return":1,"geargrind":1,"substitute":1},
 		tier: "LC"
 	},
 	klinklang: {
 		viable: true,
-		viablemoves: {"shiftgear":"Shift Gear","return":"Return","geargrind":"Gear Grind","substitute":"Substitute"},
+		viablemoves: {"shiftgear":1,"return":1,"geargrind":1,"substitute":1},
 		tier: "RU"
 	},
 	koffing: {
 		viable: true,
-		viablemoves: {"painsplit":"Pain Split","sludgebomb":"Sludge Bomb","willowisp":"Will-O-Wisp","fireblast":"Fire Blast","toxic":"Toxic","clearsmog":"Clear Smog","rest":"Rest","sleeptalk":"Sleep Talk","thunderbolt":"Thunderbolt"},
+		viablemoves: {"painsplit":1,"sludgebomb":1,"willowisp":1,"fireblast":1,"toxic":1,"clearsmog":1,"rest":1,"sleeptalk":1,"thunderbolt":1},
 		tier: "LC"
 	},
 	krabby: {
 		viable: true,
-		viablemoves: {"crabhammer":"Crabhammer","return":"Return","swordsdance":"Swords Dance","agility":"Agility","rockslide":"Rock Slide","substitute":"Substitute","xscissor":"X-Scissor"},
+		viablemoves: {"crabhammer":1,"return":1,"swordsdance":1,"agility":1,"rockslide":1,"substitute":1,"xscissor":1},
 		tier: "LC"
 	},
 	kricketot: {
 		viable: true,
-		viablemoves: {"endeavor":"Endeavor","mudslap":"Mud-Slap","uproar":"Uproar","strugglebug":"Struggle Bug"},
+		viablemoves: {"endeavor":1,"mudslap":1,"uproar":1,"strugglebug":1},
 		tier: "LC"
 	},
 	kricketune: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","xscissor":"X-Scissor","nightslash":"Night Slash","brickbreak":"Brick Break","return":"Return","toxic":"Toxic"},
+		viablemoves: {"swordsdance":1,"xscissor":1,"nightslash":1,"brickbreak":1,"return":1,"toxic":1},
 		tier: "NU"
 	},
 	krokorok: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","stoneedge":"Stone Edge","pursuit":"Pursuit","crunch":"Crunch","firefang":"Fire Fang","honeclaws":"Hone Claws"},
+		viablemoves: {"earthquake":1,"stoneedge":1,"pursuit":1,"crunch":1,"firefang":1,"honeclaws":1},
 		tier: "NFE"
 	},
 	krookodile: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","stoneedge":"Stone Edge","pursuit":"Pursuit","crunch":"Crunch","bulkup":"Bulk Up","taunt":"Taunt","firefang":"Fire Fang","honeclaws":"Hone Claws"},
+		viablemoves: {"earthquake":1,"stoneedge":1,"pursuit":1,"crunch":1,"bulkup":1,"taunt":1,"firefang":1,"honeclaws":1},
 		tier: "UU"
 	},
 	kyogre: {
 		viable: true,
-		viablemoves: {"waterspout":"Water Spout","surf":"Surf","thunder":"Thunder","icebeam":"Ice Beam","calmmind":"Calm Mind"},
+		viablemoves: {"waterspout":1,"surf":1,"thunder":1,"icebeam":1,"calmmind":1},
 		tier: "Uber"
 	},
 	kyurem: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","icebeam":"Ice Beam","dracometeor":"Draco Meteor","dragonpulse":"Dragon Pulse","focusblast":"Focus Blast","outrage":"Outrage","hiddenpowerfire":"Hidden Power Fire"},
+		viablemoves: {"substitute":1,"icebeam":1,"dracometeor":1,"dragonpulse":1,"focusblast":1,"outrage":1,"hiddenpowerfire":1},
 		tier: "BL"
 	},
 	lairon: {
 		viable: true,
-		viablemoves: {"rockpolish":"Rock Polish","headsmash":"Head Smash","ironhead":"Iron Head","earthquake":"Earthquake","superpower":"Superpower","stealthrock":"Stealth Rock"},
+		viablemoves: {"rockpolish":1,"headsmash":1,"ironhead":1,"earthquake":1,"superpower":1,"stealthrock":1},
 		tier: "NU"
 	},
 	lampent: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","protect":"Protect","shadowball":"Shadow Ball","energyball":"Energy Ball","fireblast":"Fire Blast","overheat":"Overheat","hiddenpowerfighting":"Hidden Power Fighting","hiddenpowerground":"Hidden Power Ground"},
+		viablemoves: {"calmmind":1,"protect":1,"shadowball":1,"energyball":1,"fireblast":1,"overheat":1,"hiddenpowerfighting":1,"hiddenpowerground":1},
 		tier: "NU"
 	},
 	landorus: {
 		viable: true,
-		viablemoves: {"smackdown":"Smack Down","stoneedge":"Stone Edge","earthquake":"Earthquake","swordsdance":"Swords Dance","rockpolish":"Rock Polish","hiddenpowerice":"Hidden Power Ice","uturn":"U-turn","hammerarm":"Hammer Arm","substitute":"Substitute"},
+		viablemoves: {"smackdown":1,"stoneedge":1,"earthquake":1,"swordsdance":1,"rockpolish":1,"hiddenpowerice":1,"uturn":1,"hammerarm":1,"substitute":1},
 		tier: "OU"
 	},
 	lanturn: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","thunderbolt":"Thunderbolt","hiddenpowergrass":"Hidden Power Grass","hiddenpowerfire":"Hidden Power Fire","hydropump":"Hydro Pump","icebeam":"Ice Beam","surf":"Surf","thunderwave":"Thunder Wave","scald":"Scald","agility":"Agility","healbell":"Heal Bell","discharge":"Discharge","raindance":"Rain Dance"},
+		viablemoves: {"voltswitch":1,"thunderbolt":1,"hiddenpowergrass":1,"hiddenpowerfire":1,"hydropump":1,"icebeam":1,"surf":1,"thunderwave":1,"scald":1,"agility":1,"healbell":1,"discharge":1,"raindance":1},
 		tier: "RU"
 	},
 	lapras: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","thunderbolt":"Thunderbolt","healbell":"Heal Bell","toxic":"Toxic","surf":"Surf","dragondance":"Dragon Dance","substitute":"Substitute","waterfall":"Waterfall","return":"Return","avalanche":"Avalanche","rest":"Rest","sleeptalk":"Sleep Talk","curse":"Curse","iceshard":"Ice Shard"},
+		viablemoves: {"icebeam":1,"thunderbolt":1,"healbell":1,"toxic":1,"surf":1,"dragondance":1,"substitute":1,"waterfall":1,"return":1,"avalanche":1,"rest":1,"sleeptalk":1,"curse":1,"iceshard":1},
 		tier: "NU"
 	},
 	larvesta: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","uturn":"U-turn","wildcharge":"Wild Charge","zenheadbutt":"Zen Headbutt","morningsun":"Morning Sun","willowisp":"Will-O-Wisp"},
+		viablemoves: {"flareblitz":1,"uturn":1,"wildcharge":1,"zenheadbutt":1,"morningsun":1,"willowisp":1},
 		tier: "LC"
 	},
 	larvitar: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","stoneedge":"Stone Edge","rockpolish":"Rock Polish","crunch":"Crunch","dragondance":"Dragon Dance"},
+		viablemoves: {"earthquake":1,"stoneedge":1,"rockpolish":1,"crunch":1,"dragondance":1},
 		tier: "LC"
 	},
 	latias: {
 		viable: true,
-		viablemoves: {"dragonpulse":"Dragon Pulse","surf":"Surf","hiddenpowerfire":"Hidden Power Fire","roost":"Roost","calmmind":"Calm Mind","wish":"Wish"},
+		viablemoves: {"dragonpulse":1,"surf":1,"hiddenpowerfire":1,"roost":1,"calmmind":1,"wish":1},
 		tier: "OU"
 	},
 	latios: {
 		viable: true,
-		viablemoves: {"dracometeor":"Draco Meteor","dragonpulse":"Dragon Pulse","surf":"Surf","hiddenpowerfire":"Hidden Power Fire","psyshock":"Psyshock","roost":"Roost"},
+		viablemoves: {"dracometeor":1,"dragonpulse":1,"surf":1,"hiddenpowerfire":1,"psyshock":1,"roost":1},
 		tier: "OU"
 	},
 	leafeon: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","leafblade":"Leaf Blade","substitute":"Substitute","return":"Return","xscissor":"X-Scissor","yawn":"Yawn","roar":"Roar","healbell":"Heal Bell","batonpass":"Baton Pass"},
+		viablemoves: {"swordsdance":1,"leafblade":1,"substitute":1,"return":1,"xscissor":1,"yawn":1,"roar":1,"healbell":1,"batonpass":1},
 		tier: "NU"
 	},
 	leavanny: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","leafblade":"Leaf Blade","xscissor":"X-Scissor","return":"Return","batonpass":"Baton Pass"},
+		viablemoves: {"swordsdance":1,"leafblade":1,"xscissor":1,"return":1,"batonpass":1},
 		tier: "NU"
 	},
 	ledian: {
 		viable: true,
-		viablemoves: {"roost":"Roost","agility":"Agility","lightscreen":"Light Screen","safeguard":"Safeguard","encore":"Encore","reflect":"Reflect","knockoff":"Knock Off","bugbuzz":"Bug Buzz","swordsdance":"Swords Dance","batonpass":"Baton Pass"},
+		viablemoves: {"roost":1,"agility":1,"lightscreen":1,"safeguard":1,"encore":1,"reflect":1,"knockoff":1,"bugbuzz":1,"swordsdance":1,"batonpass":1},
 		tier: "NU"
 	},
 	ledyba: {
 		viable: true,
-		viablemoves: {"roost":"Roost","agility":"Agility","lightscreen":"Light Screen","safeguard":"Safeguard","encore":"Encore","reflect":"Reflect","knockoff":"Knock Off","bugbuzz":"Bug Buzz","swordsdance":"Swords Dance","batonpass":"Baton Pass"},
+		viablemoves: {"roost":1,"agility":1,"lightscreen":1,"safeguard":1,"encore":1,"reflect":1,"knockoff":1,"bugbuzz":1,"swordsdance":1,"batonpass":1},
 		tier: "LC"
 	},
 	lickilicky: {
 		viable: true,
-		viablemoves: {"wish":"Wish","protect":"Protect","dragontail":"Dragon Tail","curse":"Curse","bodyslam":"Body Slam","return":"Return","powerwhip":"Power Whip","swordsdance":"Swords Dance","earthquake":"Earthquake","toxic":"Toxic","healbell":"Heal Bell","explosion":"Explosion"},
+		viablemoves: {"wish":1,"protect":1,"dragontail":1,"curse":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1,"explosion":1},
 		tier: "NU"
 	},
 	lickitung: {
 		viable: true,
-		viablemoves: {"wish":"Wish","protect":"Protect","dragontail":"Dragon Tail","curse":"Curse","bodyslam":"Body Slam","return":"Return","powerwhip":"Power Whip","swordsdance":"Swords Dance","earthquake":"Earthquake","toxic":"Toxic","healbell":"Heal Bell"},
+		viablemoves: {"wish":1,"protect":1,"dragontail":1,"curse":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1},
 		tier: "LC"
 	},
 	liepard: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","hiddenpowerdark":"Hidden Power Dark","snarl":"Snarl","grassknot":"Grass Knot","fakeout":"Fake Out","suckerpunch":"Sucker Punch","return":"Return","thunderwave":"Thunder Wave"},
+		viablemoves: {"nastyplot":1,"hiddenpowerdark":1,"snarl":1,"grassknot":1,"fakeout":1,"suckerpunch":1,"return":1,"thunderwave":1},
 		tier: "NU"
 	},
 	lileep: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","recover":"Recover","ancientpower":"AncientPower","hiddenpowerfire":"Hidden Power Fire","gigadrain":"Giga Drain","stockpile":"Stockpile"},
+		viablemoves: {"stealthrock":1,"recover":1,"ancientpower":1,"hiddenpowerfire":1,"gigadrain":1,"stockpile":1},
 		tier: "LC"
 	},
 	lilligant: {
 		viable: true,
-		viablemoves: {"quiverdance":"Quiver Dance","gigadrain":"Giga Drain","sleeppowder":"Sleep Powder","hiddenpowerice":"Hidden Power Ice","hiddenpowerfire":"Hidden Power Fire","hiddenpowerrock":"Hidden Power Rock","healingwish":"Healing Wish","aromatherapy":"Aromatherapy"},
+		viablemoves: {"quiverdance":1,"gigadrain":1,"sleeppowder":1,"hiddenpowerice":1,"hiddenpowerfire":1,"hiddenpowerrock":1,"healingwish":1,"aromatherapy":1},
 		tier: "RU"
 	},
 	lillipup: {
 		viable: true,
-		viablemoves: {"return":"Return","wildcharge":"Wild Charge","firefang":"Fire Fang","crunch":"Crunch","icefang":"Ice Fang"},
+		viablemoves: {"return":1,"wildcharge":1,"firefang":1,"crunch":1,"icefang":1},
 		tier: "LC"
 	},
 	linoone: {
 		viable: true,
-		viablemoves: {"bellydrum":"Belly Drum","extremespeed":"ExtremeSpeed","seedbomb":"Seed Bomb","substitute":"Substitute","shadowclaw":"Shadow Claw"},
+		viablemoves: {"bellydrum":1,"extremespeed":1,"seedbomb":1,"substitute":1,"shadowclaw":1},
 		tier: "NU"
 	},
 	litwick: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","protect":"Protect","shadowball":"Shadow Ball","energyball":"Energy Ball","fireblast":"Fire Blast","overheat":"Overheat","hiddenpowerfighting":"Hidden Power Fighting","hiddenpowerground":"Hidden Power Ground"},
+		viablemoves: {"calmmind":1,"protect":1,"shadowball":1,"energyball":1,"fireblast":1,"overheat":1,"hiddenpowerfighting":1,"hiddenpowerground":1},
 		tier: "LC"
 	},
 	lombre: {
 		viable: true,
-		viablemoves: {"gigadrain":"Giga Drain","icebeam":"Ice Beam","scald":"Scald","substitute":"Substitute","leechseed":"Leech Seed"},
+		viablemoves: {"gigadrain":1,"icebeam":1,"scald":1,"substitute":1,"leechseed":1},
 		tier: "NFE"
 	},
 	lopunny: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","return":"Return","switcheroo":"Switcheroo","thunderpunch":"ThunderPunch","jumpkick":"Jump Kick","quickattack":"Quick Attack","firepunch":"Fire Punch","circlethrow":"Circle Throw","batonpass":"Baton Pass","icepunch":"Ice Punch","substitute":"Substitute","thunderwave":"Thunder Wave","healingwish":"Healing Wish"},
+		viablemoves: {"fakeout":1,"return":1,"switcheroo":1,"thunderpunch":1,"jumpkick":1,"quickattack":1,"firepunch":1,"circlethrow":1,"batonpass":1,"icepunch":1,"substitute":1,"thunderwave":1,"healingwish":1},
 		tier: "NU"
 	},
 	lotad: {
 		viable: true,
-		viablemoves: {"gigadrain":"Giga Drain","icebeam":"Ice Beam","scald":"Scald","substitute":"Substitute","leechseed":"Leech Seed"},
+		viablemoves: {"gigadrain":1,"icebeam":1,"scald":1,"substitute":1,"leechseed":1},
 		tier: "LC"
 	},
 	loudred: {
 		viable: true,
-		viablemoves: {"hypervoice":"Hyper Voice","fireblast":"Fire Blast","shadowball":"Shadow Ball","icebeam":"Ice Beam"},
+		viablemoves: {"hypervoice":1,"fireblast":1,"shadowball":1,"icebeam":1},
 		tier: "NFE"
 	},
 	lucario: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","closecombat":"Close Combat","crunch":"Crunch","extremespeed":"ExtremeSpeed","icepunch":"Ice Punch","bulletpunch":"Bullet Punch","nastyplot":"Nasty Plot","aurasphere":"Aura Sphere","darkpulse":"Dark Pulse","vacuumwave":"Vacuum Wave","hijumpkick":"Hi Jump Kick"},
+		viablemoves: {"swordsdance":1,"closecombat":1,"crunch":1,"extremespeed":1,"icepunch":1,"bulletpunch":1,"nastyplot":1,"aurasphere":1,"darkpulse":1,"vacuumwave":1,"hijumpkick":1},
 		tier: "OU"
 	},
 	ludicolo: {
 		viable: true,
-		viablemoves: {"raindance":"Rain Dance","hydropump":"Hydro Pump","surf":"Surf","gigadrain":"Giga Drain","icebeam":"Ice Beam","scald":"Scald","leechseed":"Leech Seed","substitute":"Substitute","toxic":"Toxic"},
+		viablemoves: {"raindance":1,"hydropump":1,"surf":1,"gigadrain":1,"icebeam":1,"scald":1,"leechseed":1,"substitute":1,"toxic":1},
 		tier: "NU"
 	},
 	lugia: {
 		viable: true,
-		viablemoves: {"toxic":"Toxic","dragontail":"Dragon Tail","roost":"Roost","substitute":"Substitute","whirlwind":"Whirlwind","reflect":"Reflect","icebeam":"Ice Beam"},
+		viablemoves: {"toxic":1,"dragontail":1,"roost":1,"substitute":1,"whirlwind":1,"reflect":1,"icebeam":1},
 		tier: "Uber"
 	},
 	lumineon: {
 		viable: true,
-		viablemoves: {"surf":"Surf","uturn":"U-turn","icebeam":"Ice Beam","hiddenpowerelectric":"Hidden Power Electric","hiddenpowergrass":"Hidden Power Grass","raindance":"Rain Dance"},
+		viablemoves: {"surf":1,"uturn":1,"icebeam":1,"hiddenpowerelectric":1,"hiddenpowergrass":1,"raindance":1},
 		tier: "NU"
 	},
 	lunatone: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","earthpower":"Earth Power","stealthrock":"Stealth Rock","rockpolish":"Rock Polish","batonpass":"Baton Pass","calmmind":"Calm Mind","icebeam":"Ice Beam","hiddenpowerrock":"Hidden Power Rock"},
+		viablemoves: {"psychic":1,"earthpower":1,"stealthrock":1,"rockpolish":1,"batonpass":1,"calmmind":1,"icebeam":1,"hiddenpowerrock":1},
 		tier: "NU"
 	},
 	luvdisc: {
 		viable: true,
-		viablemoves: {"raindance":"Rain Dance","surf":"Surf","icebeam":"Ice Beam","toxic":"Toxic","sweetkiss":"Sweet Kiss"},
+		viablemoves: {"raindance":1,"surf":1,"icebeam":1,"toxic":1,"sweetkiss":1},
 		tier: "NU"
 	},
 	luxio: {
 		viable: true,
-		viablemoves: {"wildcharge":"Wild Charge","icefang":"Ice Fang","firefang":"Fire Fang","crunch":"Crunch"},
+		viablemoves: {"wildcharge":1,"icefang":1,"firefang":1,"crunch":1},
 		tier: "NFE"
 	},
 	luxray: {
 		viable: true,
-		viablemoves: {"wildcharge":"Wild Charge","icefang":"Ice Fang","firefang":"Fire Fang","crunch":"Crunch","superpower":"Superpower","voltswitch":"Volt Switch","hiddenpowergrass":"Hidden Power Grass"},
+		viablemoves: {"wildcharge":1,"icefang":1,"firefang":1,"crunch":1,"superpower":1,"voltswitch":1,"hiddenpowergrass":1},
 		tier: "NU"
 	},
 	machamp: {
 		viable: true,
-		viablemoves: {"dynamicpunch":"DynamicPunch","payback":"Payback","bulkup":"Bulk Up","icepunch":"Ice Punch","substitute":"Substitute","stoneedge":"Stone Edge"},
+		viablemoves: {"dynamicpunch":1,"payback":1,"bulkup":1,"icepunch":1,"substitute":1,"stoneedge":1},
 		tier: "UU"
 	},
 	machoke: {
 		viable: true,
-		viablemoves: {"dynamicpunch":"DynamicPunch","payback":"Payback","bulkup":"Bulk Up","icepunch":"Ice Punch","substitute":"Substitute","rockslide":"Rock Slide"},
+		viablemoves: {"dynamicpunch":1,"payback":1,"bulkup":1,"icepunch":1,"substitute":1,"rockslide":1},
 		tier: "NU"
 	},
 	machop: {
 		viable: true,
-		viablemoves: {"dynamicpunch":"DynamicPunch","payback":"Payback","bulkup":"Bulk Up","icepunch":"Ice Punch","substitute":"Substitute","rockslide":"Rock Slide"},
+		viablemoves: {"dynamicpunch":1,"payback":1,"bulkup":1,"icepunch":1,"substitute":1,"rockslide":1},
 		tier: "LC"
 	},
 	magby: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","substitute":"Substitute","fireblast":"Fire Blast","hiddenpowergrass":"Hidden Power Grass","crosschop":"Cross Chop","thunderpunch":"ThunderPunch","overheat":"Overheat"},
+		viablemoves: {"flareblitz":1,"substitute":1,"fireblast":1,"hiddenpowergrass":1,"crosschop":1,"thunderpunch":1,"overheat":1},
 		tier: "LC"
 	},
 	magcargo: {
 		viable: true,
-		viablemoves: {"stockpile":"Stockpile","recover":"Recover","lavaplume":"Lava Plume","willowisp":"Will-O-Wisp","toxic":"Toxic","hiddenpowergrass":"Hidden Power Grass","reflect":"Reflect","lightscreen":"Light Screen","memento":"Memento","hiddenpowerrock":"Hidden Power Rock","stealthrock":"Stealth Rock","shellsmash":"Shell Smash","fireblast":"Fire Blast","earthpower":"Earth Power"},
+		viablemoves: {"stockpile":1,"recover":1,"lavaplume":1,"willowisp":1,"toxic":1,"hiddenpowergrass":1,"reflect":1,"lightscreen":1,"memento":1,"hiddenpowerrock":1,"stealthrock":1,"shellsmash":1,"fireblast":1,"earthpower":1},
 		tier: "NU"
 	},
 	magikarp: {
 		viable: true,
-		viablemoves: {"bounce":"Bounce","flail":"Flail","tackle":"Tackle","magikarpsrevenge":"Magikarp's Revenge"},
+		viablemoves: {"bounce":1,"flail":1,"tackle":1,"magikarpsrevenge":1},
 		tier: "LC"
 	},
 	magmar: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","substitute":"Substitute","fireblast":"Fire Blast","hiddenpowergrass":"Hidden Power Grass","crosschop":"Cross Chop","thunderpunch":"ThunderPunch","overheat":"Overheat","focusblast":"Focus Blast"},
+		viablemoves: {"flareblitz":1,"substitute":1,"fireblast":1,"hiddenpowergrass":1,"crosschop":1,"thunderpunch":1,"overheat":1,"focusblast":1},
 		tier: "NFE"
 	},
 	magmortar: {
 		viable: true,
-		viablemoves: {"fireblast":"Fire Blast","substitute":"Substitute","focusblast":"Focus Blast","hiddenpowergrass":"Hidden Power Grass","thunderbolt":"Thunderbolt","overheat":"Overheat"},
+		viablemoves: {"fireblast":1,"substitute":1,"focusblast":1,"hiddenpowergrass":1,"thunderbolt":1,"overheat":1},
 		tier: "NU"
 	},
 	magnemite: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","thunderwave":"Thunder Wave","magnetrise":"Magnet Rise","substitute":"Substitute","chargebeam":"Charge Beam","flashcannon":"Flash Cannon","hiddenpowerice":"Hidden Power Ice","voltswitch":"Volt Switch"},
+		viablemoves: {"thunderbolt":1,"thunderwave":1,"magnetrise":1,"substitute":1,"chargebeam":1,"flashcannon":1,"hiddenpowerice":1,"voltswitch":1},
 		tier: "LC"
 	},
 	magneton: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","thunderwave":"Thunder Wave","magnetrise":"Magnet Rise","substitute":"Substitute","chargebeam":"Charge Beam","flashcannon":"Flash Cannon","hiddenpowerice":"Hidden Power Ice","voltswitch":"Volt Switch"},
+		viablemoves: {"thunderbolt":1,"thunderwave":1,"magnetrise":1,"substitute":1,"chargebeam":1,"flashcannon":1,"hiddenpowerice":1,"voltswitch":1},
 		tier: "RU"
 	},
 	magnezone: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","thunderwave":"Thunder Wave","magnetrise":"Magnet Rise","substitute":"Substitute","chargebeam":"Charge Beam","flashcannon":"Flash Cannon","hiddenpowerice":"Hidden Power Ice","voltswitch":"Volt Switch"},
+		viablemoves: {"thunderbolt":1,"thunderwave":1,"magnetrise":1,"substitute":1,"chargebeam":1,"flashcannon":1,"hiddenpowerice":1,"voltswitch":1},
 		tier: "OU"
 	},
 	makuhita: {
 		viable: true,
-		viablemoves: {"crosschop":"Cross Chop","toxic":"Toxic","whirlwind":"Whirlwind","bulletpunch":"Bullet Punch","closecombat":"Close Combat","icepunch":"Ice Punch","bulkup":"Bulk Up"},
+		viablemoves: {"crosschop":1,"toxic":1,"whirlwind":1,"bulletpunch":1,"closecombat":1,"icepunch":1,"bulkup":1},
 		tier: "LC"
 	},
 	mamoswine: {
 		viable: true,
-		viablemoves: {"iceshard":"Ice Shard","earthquake":"Earthquake","endeavor":"Endeavor","iciclecrash":"Icicle Crash","stoneedge":"Stone Edge","superpower":"Superpower","stealthrock":"Stealth Rock","substitute":"Substitute"},
+		viablemoves: {"iceshard":1,"earthquake":1,"endeavor":1,"iciclecrash":1,"stoneedge":1,"superpower":1,"stealthrock":1,"substitute":1},
 		tier: "OU"
 	},
 	manaphy: {
 		viable: true,
-		viablemoves: {"tailglow":"Tail Glow","rest":"Rest","surf":"Surf","icebeam":"Ice Beam","grassknot":"Grass Knot","calmmind":"Calm Mind"},
+		viablemoves: {"tailglow":1,"rest":1,"surf":1,"icebeam":1,"grassknot":1,"calmmind":1},
 		tier: "Uber"
 	},
 	mandibuzz: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","airslash":"Air Slash","knockoff":"Knock Off","roost":"Roost","taunt":"Taunt","whirlwind":"Whirlwind","toxic":"Toxic","darkpulse":"Dark Pulse","punishment":"Punishment","uturn":"U-turn","hiddenpowerfire":"Hidden Power Fire","bravebird":"Brave Bird"},
+		viablemoves: {"nastyplot":1,"airslash":1,"knockoff":1,"roost":1,"taunt":1,"whirlwind":1,"toxic":1,"darkpulse":1,"punishment":1,"uturn":1,"hiddenpowerfire":1,"bravebird":1},
 		tier: "RU"
 	},
 	manectric: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","thunderbolt":"Thunderbolt","hiddenpowerice":"Hidden Power Ice","overheat":"Overheat","switcheroo":"Switcheroo","flamethrower":"Flamethrower"},
+		viablemoves: {"voltswitch":1,"thunderbolt":1,"hiddenpowerice":1,"overheat":1,"switcheroo":1,"flamethrower":1},
 		tier: "RU"
 	},
 	mankey: {
 		viable: true,
-		viablemoves: {"closecombat":"Close Combat","uturn":"U-turn","icepunch":"Ice Punch","rockslide":"Rock Slide","punishment":"Punishment"},
+		viablemoves: {"closecombat":1,"uturn":1,"icepunch":1,"rockslide":1,"punishment":1},
 		tier: "LC"
 	},
 	mantine: {
 		viable: true,
-		viablemoves: {"raindance":"Rain Dance","hydropump":"Hydro Pump","surf":"Surf","hiddenpowergrass":"Hidden Power Grass","hiddenpowerflying":"Hidden Power Flying","icebeam":"Ice Beam","rest":"Rest","sleeptalk":"Sleep Talk","scald":"Scald","toxic":"Toxic"},
+		viablemoves: {"raindance":1,"hydropump":1,"surf":1,"hiddenpowergrass":1,"hiddenpowerflying":1,"icebeam":1,"rest":1,"sleeptalk":1,"scald":1,"toxic":1},
 		tier: "NU"
 	},
 	mantyke: {
 		viable: true,
-		viablemoves: {"raindance":"Rain Dance","hydropump":"Hydro Pump","surf":"Surf","hiddenpowergrass":"Hidden Power Grass","hiddenpowerflying":"Hidden Power Flying","icebeam":"Ice Beam","rest":"Rest","sleeptalk":"Sleep Talk","scald":"Scald","toxic":"Toxic"},
+		viablemoves: {"raindance":1,"hydropump":1,"surf":1,"hiddenpowergrass":1,"hiddenpowerflying":1,"icebeam":1,"rest":1,"sleeptalk":1,"scald":1,"toxic":1},
 		tier: "LC"
 	},
 	maractus: {
 		viable: true,
-		viablemoves: {"sunnyday":"Sunny Day","spikes":"Spikes","gigadrain":"Giga Drain","leechseed":"Leech Seed","hiddenpowerfire":"Hidden Power Fire","toxic":"Toxic","solarbeam":"SolarBeam"},
+		viablemoves: {"sunnyday":1,"spikes":1,"gigadrain":1,"leechseed":1,"hiddenpowerfire":1,"toxic":1,"solarbeam":1},
 		tier: "NU"
 	},
 	mareep: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","thunderbolt":"Thunderbolt","discharge":"Discharge","thunderwave":"Thunder Wave","toxic":"Toxic","hiddenpowerice":"Hidden Power Ice","cottonguard":"Cotton Guard"},
+		viablemoves: {"reflect":1,"lightscreen":1,"thunderbolt":1,"discharge":1,"thunderwave":1,"toxic":1,"hiddenpowerice":1,"cottonguard":1},
 		tier: "LC"
 	},
 	marill: {
 		viable: true,
-		viablemoves: {"waterfall":"Waterfall","return":"Return","doubleedge":"Double-Edge","encore":"Encore","toxic":"Toxic","substitute":"Substitute","aquajet":"Aqua Jet","superpower":"Superpower","icepunch":"Ice Punch"},
+		viablemoves: {"waterfall":1,"return":1,"doubleedge":1,"encore":1,"toxic":1,"substitute":1,"aquajet":1,"superpower":1,"icepunch":1},
 		tier: "NFE"
 	},
 	marowak: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","bonemerang":"Bonemerang","doubleedge":"Double-Edge","stoneedge":"Stone Edge","swordsdance":"Swords Dance","firepunch":"Fire Punch","earthquake":"Earthquake"},
+		viablemoves: {"substitute":1,"bonemerang":1,"doubleedge":1,"stoneedge":1,"swordsdance":1,"firepunch":1,"earthquake":1},
 		tier: "NU"
 	},
 	marshtomp: {
 		viable: true,
-		viablemoves: {"waterfall":"Waterfall","earthquake":"Earthquake","return":"Return","superpower":"Superpower","icepunch":"Ice Punch","rockslide":"Rock Slide","stealthrock":"Stealth Rock"},
+		viablemoves: {"waterfall":1,"earthquake":1,"return":1,"superpower":1,"icepunch":1,"rockslide":1,"stealthrock":1},
 		tier: "NFE"
 	},
 	masquerain: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","bugbuzz":"Bug Buzz","airslash":"Air Slash","quiverdance":"Quiver Dance","substitute":"Substitute","batonpass":"Baton Pass","roost":"Roost"},
+		viablemoves: {"hydropump":1,"bugbuzz":1,"airslash":1,"quiverdance":1,"substitute":1,"batonpass":1,"roost":1},
 		tier: "NU"
 	},
 	mawile: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","ironhead":"Iron Head","firefang":"Fire Fang","crunch":"Crunch","batonpass":"Baton Pass","substitute":"Substitute","irondefense":"Iron Defense"},
+		viablemoves: {"swordsdance":1,"ironhead":1,"firefang":1,"crunch":1,"batonpass":1,"substitute":1,"irondefense":1},
 		tier: "NU"
 	},
 	medicham: {
 		viable: true,
-		viablemoves: {"hijumpkick":"Hi Jump Kick","drainpunch":"Drain Punch","psychocut":"Psycho Cut","icepunch":"Ice Punch","thunderpunch":"ThunderPunch","trick":"Trick","fakeout":"Fake Out","bulletpunch":"Bullet Punch"},
+		viablemoves: {"hijumpkick":1,"drainpunch":1,"psychocut":1,"icepunch":1,"thunderpunch":1,"trick":1,"fakeout":1,"bulletpunch":1},
 		tier: "RU"
 	},
 	meditite: {
 		viable: true,
-		viablemoves: {"hijumpkick":"Hi Jump Kick","psychocut":"Psycho Cut","icepunch":"Ice Punch","thunderpunch":"ThunderPunch","trick":"Trick","fakeout":"Fake Out","bulletpunch":"Bullet Punch","drainpunch":"Drain Punch"},
+		viablemoves: {"hijumpkick":1,"psychocut":1,"icepunch":1,"thunderpunch":1,"trick":1,"fakeout":1,"bulletpunch":1,"drainpunch":1},
 		tier: "NFE"
 	},
 	meganium: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","safeguard":"Safeguard","aromatherapy":"Aromatherapy","grasswhistle":"Grasswhistle","leechseed":"Leech Seed","seedbomb":"Seed Bomb","toxic":"Toxic","leafstorm":"Leaf Storm","bodyslam":"Body Slam","gigadrain":"Giga Drain","synthesis":"Synthesis","dragontail":"Dragon Tail"},
+		viablemoves: {"reflect":1,"lightscreen":1,"safeguard":1,"aromatherapy":1,"grasswhistle":1,"leechseed":1,"seedbomb":1,"toxic":1,"leafstorm":1,"bodyslam":1,"gigadrain":1,"synthesis":1,"dragontail":1},
 		tier: "NU"
 	},
 	meloetta: {
 		viable: true,
-		viablemoves: {"relicsong":"Relic Song","closecombat":"Close Combat","return":"Return","shadowclaw":"Shadow Claw","calmmind":"Calm Mind","psychic":"Psychic","thunderbolt":"Thunderbolt","hypervoice":"Hyper Voice"},
+		viablemoves: {"relicsong":1,"closecombat":1,"return":1,"shadowclaw":1,"calmmind":1,"psychic":1,"thunderbolt":1,"hypervoice":1},
 		tier: "Limbo"
 	},
 	meloettapirouette: {
@@ -1932,317 +1932,317 @@ exports.BattleFormatsData = {
 	},
 	meowth: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","uturn":"U-turn","bite":"Bite","taunt":"Taunt","return":"Return","nastyplot":"Nasty Plot","swift":"Swift","hypnosis":"Hypnosis","waterpulse":"Water Pulse","thunderbolt":"Thunderbolt"},
+		viablemoves: {"fakeout":1,"uturn":1,"bite":1,"taunt":1,"return":1,"nastyplot":1,"swift":1,"hypnosis":1,"waterpulse":1,"thunderbolt":1},
 		tier: "LC"
 	},
 	mesprit: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","psychic":"Psychic","thunderbolt":"Thunderbolt","icebeam":"Ice Beam","substitute":"Substitute","healingwish":"Healing Wish","uturn":"U-turn","trick":"Trick","stealthrock":"Stealth Rock","raindance":"Rain Dance","trickroom":"Trick Room","sunnyday":"Sunny Day"},
+		viablemoves: {"calmmind":1,"psychic":1,"thunderbolt":1,"icebeam":1,"substitute":1,"healingwish":1,"uturn":1,"trick":1,"stealthrock":1,"raindance":1,"trickroom":1,"sunnyday":1},
 		tier: "RU"
 	},
 	metagross: {
 		viable: true,
-		viablemoves: {"meteormash":"Meteor Mash","earthquake":"Earthquake","agility":"Agility","stealthrock":"Stealth Rock","zenheadbutt":"Zen Headbutt","bulletpunch":"Bullet Punch","trick":"Trick"},
+		viablemoves: {"meteormash":1,"earthquake":1,"agility":1,"stealthrock":1,"zenheadbutt":1,"bulletpunch":1,"trick":1},
 		tier: "OU"
 	},
 	metang: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","meteormash":"Meteor Mash","toxic":"Toxic","earthquake":"Earthquake"},
+		viablemoves: {"stealthrock":1,"meteormash":1,"toxic":1,"earthquake":1},
 		tier: "NU"
 	},
 	metapod: {
 		viable: true,
-		viablemoves: {"irondefense":"Iron Defense","bugbite":"Bug Bite","stringshot":"String Shot","tackle":"Tackle"},
+		viablemoves: {"irondefense":1,"bugbite":1,"stringshot":1,"tackle":1},
 		tier: "NFE"
 	},
 	mew: {
 		viable: true,
-		viablemoves: {"taunt":"Taunt","willowisp":"Will-O-Wisp","roost":"Roost","psychic":"Psychic","nastyplot":"Nasty Plot","aurasphere":"Aura Sphere","shadowball":"Shadow Ball","fireblast":"Fire Blast","swordsdance":"Swords Dance","superpower":"Superpower","zenheadbutt":"Zen Headbutt","calmmind":"Calm Mind","batonpass":"Baton Pass","rockpolish":"Rock Polish","substitute":"Substitute","toxic":"Toxic","explosion":"Explosion","icebeam":"Ice Beam","thunderbolt":"Thunderbolt","earthquake":"Earthquake","uturn":"U-turn","stealthrock":"Stealth Rock","transform":"Transform"},
+		viablemoves: {"taunt":1,"willowisp":1,"roost":1,"psychic":1,"nastyplot":1,"aurasphere":1,"shadowball":1,"fireblast":1,"swordsdance":1,"superpower":1,"zenheadbutt":1,"calmmind":1,"batonpass":1,"rockpolish":1,"substitute":1,"toxic":1,"explosion":1,"icebeam":1,"thunderbolt":1,"earthquake":1,"uturn":1,"stealthrock":1,"transform":1},
 		tier: "UU"
 	},
 	mewtwo: {
 		viable: true,
-		viablemoves: {"psystrike":"Psystrike","aurasphere":"Aura Sphere","fireblast":"Fire Blast","icebeam":"Ice Beam","calmmind":"Calm Mind","substitute":"Substitute","recover":"Recover","thunderbolt":"Thunderbolt","grassknot":"Grass Knot"},
+		viablemoves: {"psystrike":1,"aurasphere":1,"fireblast":1,"icebeam":1,"calmmind":1,"substitute":1,"recover":1,"thunderbolt":1,"grassknot":1},
 		tier: "Uber"
 	},
 	mienfoo: {
 		viable: true,
-		viablemoves: {"uturn":"U-turn","drainpunch":"Drain Punch","knockoff":"Knock Off","payback":"Payback","stoneedge":"Stone Edge","swordsdance":"Swords Dance","batonpass":"Baton Pass","hijumpkick":"Hi Jump Kick","fakeout":"Fake Out","substitute":"Substitute","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"uturn":1,"drainpunch":1,"knockoff":1,"payback":1,"stoneedge":1,"swordsdance":1,"batonpass":1,"hijumpkick":1,"fakeout":1,"substitute":1,"hiddenpowerice":1},
 		tier: "LC"
 	},
 	mienshao: {
 		viable: true,
-		viablemoves: {"uturn":"U-turn","fakeout":"Fake Out","hijumpkick":"Hi Jump Kick","stoneedge":"Stone Edge","hiddenpowerice":"Hidden Power Ice","grassknot":"Grass Knot","swordsdance":"Swords Dance","batonpass":"Baton Pass","substitute":"Substitute"},
+		viablemoves: {"uturn":1,"fakeout":1,"hijumpkick":1,"stoneedge":1,"hiddenpowerice":1,"grassknot":1,"swordsdance":1,"batonpass":1,"substitute":1},
 		tier: "OU"
 	},
 	mightyena: {
 		viable: true,
-		viablemoves: {"suckerpunch":"Sucker Punch","crunch":"Crunch","icefang":"Ice Fang","firefang":"Fire Fang","howl":"Howl","return":"Return"},
+		viablemoves: {"suckerpunch":1,"crunch":1,"icefang":1,"firefang":1,"howl":1,"return":1},
 		tier: "NU"
 	},
 	milotic: {
 		viable: true,
-		viablemoves: {"recover":"Recover","scald":"Scald","hypnosis":"Hypnosis","toxic":"Toxic","icebeam":"Ice Beam","dragontail":"Dragon Tail","rest":"Rest","sleeptalk":"Sleep Talk","hiddenpowergrass":"Hidden Power Grass"},
+		viablemoves: {"recover":1,"scald":1,"hypnosis":1,"toxic":1,"icebeam":1,"dragontail":1,"rest":1,"sleeptalk":1,"hiddenpowergrass":1},
 		tier: "UU"
 	},
 	miltank: {
 		viable: true,
-		viablemoves: {"milkdrink":"Milk Drink","stealthrock":"Stealth Rock","bodyslam":"Body Slam","healbell":"Heal Bell","curse":"Curse","firepunch":"Fire Punch","earthquake":"Earthquake","toxic":"Toxic"},
+		viablemoves: {"milkdrink":1,"stealthrock":1,"bodyslam":1,"healbell":1,"curse":1,"firepunch":1,"earthquake":1,"toxic":1},
 		tier: "NU"
 	},
 	mimejr: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","calmmind":"Calm Mind","batonpass":"Baton Pass","barrier":"Barrier","psychic":"Psychic","hiddenpowerfighting":"Hidden Power Fighting","healingwish":"Healing Wish","nastyplot":"Nasty Plot","shadowball":"Shadow Ball","thunderbolt":"Thunderbolt","taunt":"Taunt","encore":"Encore"},
+		viablemoves: {"substitute":1,"calmmind":1,"batonpass":1,"barrier":1,"psychic":1,"hiddenpowerfighting":1,"healingwish":1,"nastyplot":1,"shadowball":1,"thunderbolt":1,"taunt":1,"encore":1},
 		tier: "LC"
 	},
 	minccino: {
 		viable: true,
-		viablemoves: {"return":"Return","tailslap":"Tail Slap","wakeupslap":"Wake-Up Slap","knockoff":"Knock Off","uturn":"U-turn","aquatail":"Aqua Tail"},
+		viablemoves: {"return":1,"tailslap":1,"wakeupslap":1,"knockoff":1,"uturn":1,"aquatail":1},
 		tier: "LC"
 	},
 	minun: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","thunderbolt":"Thunderbolt","substitute":"Substitute","batonpass":"Baton Pass","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"nastyplot":1,"thunderbolt":1,"substitute":1,"batonpass":1,"hiddenpowerice":1},
 		tier: "NU"
 	},
 	misdreavus: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","substitute":"Substitute","calmmind":"Calm Mind","willowisp":"Will-O-Wisp","taunt":"Taunt","healbell":"Heal Bell","shadowball":"Shadow Ball","thunderbolt":"Thunderbolt","hiddenpowerfighting":"Hidden Power Fighting","painsplit":"Pain Split","hiddenpowerground":"Hidden Power Ground"},
+		viablemoves: {"nastyplot":1,"substitute":1,"calmmind":1,"willowisp":1,"taunt":1,"healbell":1,"shadowball":1,"thunderbolt":1,"hiddenpowerfighting":1,"painsplit":1,"hiddenpowerground":1},
 		tier: "NU"
 	},
 	mismagius: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","substitute":"Substitute","calmmind":"Calm Mind","willowisp":"Will-O-Wisp","taunt":"Taunt","healbell":"Heal Bell","shadowball":"Shadow Ball","thunderbolt":"Thunderbolt","hiddenpowerfighting":"Hidden Power Fighting","painsplit":"Pain Split","hiddenpowerground":"Hidden Power Ground"},
+		viablemoves: {"nastyplot":1,"substitute":1,"calmmind":1,"willowisp":1,"taunt":1,"healbell":1,"shadowball":1,"thunderbolt":1,"hiddenpowerfighting":1,"painsplit":1,"hiddenpowerground":1},
 		tier: "UU"
 	},
 	moltres: {
 		viable: true,
-		viablemoves: {"fireblast":"Fire Blast","hiddenpowergrass":"Hidden Power Grass","airslash":"Air Slash","roost":"Roost","substitute":"Substitute","toxic":"Toxic","flamethrower":"Flamethrower","overheat":"Overheat","uturn":"U-turn","sunnyday":"Sunny Day","solarbeam":"SolarBeam","willowisp":"Will-O-Wisp"},
+		viablemoves: {"fireblast":1,"hiddenpowergrass":1,"airslash":1,"roost":1,"substitute":1,"toxic":1,"flamethrower":1,"overheat":1,"uturn":1,"sunnyday":1,"solarbeam":1,"willowisp":1},
 		tier: "RU"
 	},
 	monferno: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","overheat":"Overheat","hiddenpowergrass":"Hidden Power Grass","fakeout":"Fake Out","vacuumwave":"Vacuum Wave"},
+		viablemoves: {"stealthrock":1,"overheat":1,"hiddenpowergrass":1,"fakeout":1,"vacuumwave":1},
 		tier: "NU"
 	},
 	mothim: {
 		viable: true,
-		viablemoves: {"quiverdance":"Quiver Dance","bugbuzz":"Bug Buzz","airslash":"Air Slash","gigadrain":"Giga Drain","roost":"Roost"},
+		viablemoves: {"quiverdance":1,"bugbuzz":1,"airslash":1,"gigadrain":1,"roost":1},
 		tier: "NU"
 	},
 	mrmime: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","calmmind":"Calm Mind","batonpass":"Baton Pass","barrier":"Barrier","psychic":"Psychic","hiddenpowerfighting":"Hidden Power Fighting","healingwish":"Healing Wish","nastyplot":"Nasty Plot","shadowball":"Shadow Ball","thunderbolt":"Thunderbolt","taunt":"Taunt","encore":"Encore"},
+		viablemoves: {"substitute":1,"calmmind":1,"batonpass":1,"barrier":1,"psychic":1,"hiddenpowerfighting":1,"healingwish":1,"nastyplot":1,"shadowball":1,"thunderbolt":1,"taunt":1,"encore":1},
 		tier: "NU"
 	},
 	mudkip: {
 		viable: true,
-		viablemoves: {"waterfall":"Waterfall","rockslide":"Rock Slide","return":"Return","superpower":"Superpower","icebeam":"Ice Beam"},
+		viablemoves: {"waterfall":1,"rockslide":1,"return":1,"superpower":1,"icebeam":1},
 		tier: "LC"
 	},
 	muk: {
 		viable: true,
-		viablemoves: {"curse":"Curse","gunkshot":"Gunk Shot","poisonjab":"Poison Jab","shadowsneak":"Shadow Sneak","payback":"Payback","substitute":"Substitute","brickbreak":"Brick Break","focuspunch":"Focus Punch","rest":"Rest","icepunch":"Ice Punch","firepunch":"Fire Punch"},
+		viablemoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"substitute":1,"brickbreak":1,"focuspunch":1,"rest":1,"icepunch":1,"firepunch":1},
 		tier: "NU"
 	},
 	munchlax: {
 		viable: true,
-		viablemoves: {"rest":"Rest","curse":"Curse","sleeptalk":"Sleep Talk","bodyslam":"Body Slam","earthquake":"Earthquake","return":"Return","firepunch":"Fire Punch","icepunch":"Ice Punch","whirlwind":"Whirlwind"},
+		viablemoves: {"rest":1,"curse":1,"sleeptalk":1,"bodyslam":1,"earthquake":1,"return":1,"firepunch":1,"icepunch":1,"whirlwind":1},
 		tier: "RU"
 	},
 	munna: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","hiddenpowerfighting":"Hidden Power Fighting","hypnosis":"Hypnosis","calmmind":"Calm Mind","moonlight":"Moonlight","shadowball":"Shadow Ball","thunderwave":"Thunder Wave","batonpass":"Baton Pass","substitute":"Substitute","reflect":"Reflect","lightscreen":"Light Screen","magiccoat":"Magic Coat"},
+		viablemoves: {"psychic":1,"hiddenpowerfighting":1,"hypnosis":1,"calmmind":1,"moonlight":1,"shadowball":1,"thunderwave":1,"batonpass":1,"substitute":1,"reflect":1,"lightscreen":1,"magiccoat":1},
 		tier: "LC"
 	},
 	murkrow: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","suckerpunch":"Sucker Punch","bravebird":"Brave Bird","heatwave":"Heat Wave","hiddenpowergrass":"Hidden Power Grass","roost":"Roost","pursuit":"Pursuit","darkpulse":"Dark Pulse","thunderwave":"Thunder Wave"},
+		viablemoves: {"substitute":1,"suckerpunch":1,"bravebird":1,"heatwave":1,"hiddenpowergrass":1,"roost":1,"pursuit":1,"darkpulse":1,"thunderwave":1},
 		tier: "NU"
 	},
 	musharna: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","thunderwave":"Thunder Wave","moonlight":"Moonlight","psychic":"Psychic","trickroom":"Trick Room","shadowball":"Shadow Ball","hiddenpowerfighting":"Hidden Power Fighting","batonpass":"Baton Pass","substitute":"Substitute","reflect":"Reflect","lightscreen":"Light Screen"},
+		viablemoves: {"calmmind":1,"thunderwave":1,"moonlight":1,"psychic":1,"trickroom":1,"shadowball":1,"hiddenpowerfighting":1,"batonpass":1,"substitute":1,"reflect":1,"lightscreen":1},
 		tier: "NU"
 	},
 	natu: {
 		viable: true,
-		viablemoves: {"featherdance":"FeatherDance","roost":"Roost","toxic":"Toxic","reflect":"Reflect","lightscreen":"Light Screen","uturn":"U-turn","wish":"Wish","psychic":"Psychic","nightshade":"Night Shade","heatwave":"Heat Wave","trick":"Trick"},
+		viablemoves: {"featherdance":1,"roost":1,"toxic":1,"reflect":1,"lightscreen":1,"uturn":1,"wish":1,"psychic":1,"nightshade":1,"heatwave":1,"trick":1},
 		tier: "NU"
 	},
 	nidoking: {
 		viable: true,
-		viablemoves: {"fireblast":"Fire Blast","thunderbolt":"Thunderbolt","icebeam":"Ice Beam","earthpower":"Earth Power","sludgewave":"Sludge Wave","focusblast":"Focus Blast","shadowball":"Shadow Ball"},
+		viablemoves: {"fireblast":1,"thunderbolt":1,"icebeam":1,"earthpower":1,"sludgewave":1,"focusblast":1,"shadowball":1},
 		tier: "UU"
 	},
 	nidoqueen: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","stealthrock":"Stealth Rock","fireblast":"Fire Blast","thunderbolt":"Thunderbolt","icebeam":"Ice Beam","earthpower":"Earth Power","sludgewave":"Sludge Wave","dragontail":"Dragon Tail","focusblast":"Focus Blast"},
+		viablemoves: {"toxicspikes":1,"stealthrock":1,"fireblast":1,"thunderbolt":1,"icebeam":1,"earthpower":1,"sludgewave":1,"dragontail":1,"focusblast":1},
 		tier: "UU"
 	},
 	nidoranf: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","crunch":"Crunch","poisonjab":"Poison Jab","honeclaws":"Hone Claws","doublekick":"Double Kick"},
+		viablemoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1,"doublekick":1},
 		tier: "LC"
 	},
 	nidoranm: {
 		viable: true,
-		viablemoves: {"suckerpunch":"Sucker Punch","poisonjab":"Poison Jab","headsmash":"Head Smash","honeclaws":"Hone Claws","shadowclaw":"Shadow Claw"},
+		viablemoves: {"suckerpunch":1,"poisonjab":1,"headsmash":1,"honeclaws":1,"shadowclaw":1},
 		tier: "LC"
 	},
 	nidorina: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","crunch":"Crunch","poisonjab":"Poison Jab","honeclaws":"Hone Claws","doublekick":"Double Kick","icebeam":"Ice Beam"},
+		viablemoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1,"doublekick":1,"icebeam":1},
 		tier: "NFE"
 	},
 	nidorino: {
 		viable: true,
-		viablemoves: {"suckerpunch":"Sucker Punch","poisonjab":"Poison Jab","headsmash":"Head Smash","honeclaws":"Hone Claws","shadowclaw":"Shadow Claw"},
+		viablemoves: {"suckerpunch":1,"poisonjab":1,"headsmash":1,"honeclaws":1,"shadowclaw":1},
 		tier: "NFE"
 	},
 	nincada: {
 		viable: true,
-		viablemoves: {"xscissor":"X-Scissor","toxic":"Toxic","aerialace":"Aerial Ace","nightslash":"Night Slash"},
+		viablemoves: {"xscissor":1,"toxic":1,"aerialace":1,"nightslash":1},
 		tier: "LC"
 	},
 	ninetales: {
 		viable: true,
-		viablemoves: {"flamethrower":"Flamethrower","fireblast":"Fire Blast","willowisp":"Will-O-Wisp","solarbeam":"SolarBeam","nastyplot":"Nasty Plot","substitute":"Substitute","toxic":"Toxic","hypnosis":"Hypnosis"},
+		viablemoves: {"flamethrower":1,"fireblast":1,"willowisp":1,"solarbeam":1,"nastyplot":1,"substitute":1,"toxic":1,"hypnosis":1},
 		tier: "OU"
 	},
 	ninjask: {
 		viable: true,
-		viablemoves: {"batonpass":"Baton Pass","swordsdance":"Swords Dance","substitute":"Substitute","protect":"Protect","xscissor":"X-Scissor"},
+		viablemoves: {"batonpass":1,"swordsdance":1,"substitute":1,"protect":1,"xscissor":1},
 		tier: "NU"
 	},
 	noctowl: {
 		viable: true,
-		viablemoves: {"roost":"Roost","whirlwind":"Whirlwind","airslash":"Air Slash","nightshade":"Night Shade","toxic":"Toxic","reflect":"Reflect","lightscreen":"Light Screen","magiccoat":"Magic Coat"},
+		viablemoves: {"roost":1,"whirlwind":1,"airslash":1,"nightshade":1,"toxic":1,"reflect":1,"lightscreen":1,"magiccoat":1},
 		tier: "NU"
 	},
 	nosepass: {
 		viable: true,
-		viablemoves: {"stoneedge":"Stone Edge","firepunch":"Fire Punch","toxic":"Toxic","stealthrock":"Stealth Rock","thunderwave":"Thunder Wave"},
+		viablemoves: {"stoneedge":1,"firepunch":1,"toxic":1,"stealthrock":1,"thunderwave":1},
 		tier: "LC"
 	},
 	numel: {
 		viable: true,
-		viablemoves: {"stockpile":"Stockpile","lavaplume":"Lava Plume","rest":"Rest","sleeptalk":"Sleep Talk","flamecharge":"Flame Charge","earthpower":"Earth Power","fireblast":"Fire Blast","hiddenpowergrass":"Hidden Power Grass"},
+		viablemoves: {"stockpile":1,"lavaplume":1,"rest":1,"sleeptalk":1,"flamecharge":1,"earthpower":1,"fireblast":1,"hiddenpowergrass":1},
 		tier: "LC"
 	},
 	nuzleaf: {
 		viable: true,
-		viablemoves: {"foulplay":"Foul Play","naturepower":"Nature Power","seedbomb":"Seed Bomb","explosion":"Explosion","swordsdance":"Swords Dance"},
+		viablemoves: {"foulplay":1,"naturepower":1,"seedbomb":1,"explosion":1,"swordsdance":1},
 		tier: "NFE"
 	},
 	octillery: {
 		viable: true,
-		viablemoves: {"surf":"Surf","fireblast":"Fire Blast","icebeam":"Ice Beam","energyball":"Energy Ball","chargebeam":"Charge Beam","substiute":"Substiute","waterspout":"Water Spout"},
+		viablemoves: {"surf":1,"fireblast":1,"icebeam":1,"energyball":1,"chargebeam":1,"substiute":1,"waterspout":1},
 		tier: "NU"
 	},
 	oddish: {
 		viable: true,
-		viablemoves: {"gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","synthesis":"Synthesis","sunnyday":"Sunny Day","solarbeam":"SolarBeam","sleeppowder":"Sleep Powder","stunspore":"Stun Spore","toxic":"Toxic","hiddenpowerfire":"Hidden Power Fire","leechseed":"Leech Seed"},
+		viablemoves: {"gigadrain":1,"sludgebomb":1,"synthesis":1,"sunnyday":1,"solarbeam":1,"sleeppowder":1,"stunspore":1,"toxic":1,"hiddenpowerfire":1,"leechseed":1},
 		tier: "LC"
 	},
 	omanyte: {
 		viable: true,
-		viablemoves: {"shellsmash":"Shell Smash","surf":"Surf","icebeam":"Ice Beam","earthpower":"Earth Power","hiddenpowerelectric":"Hidden Power Electric","spikes":"Spikes","toxicspikes":"Toxic Spikes","stealthrock":"Stealth Rock","hydropump":"Hydro Pump"},
+		viablemoves: {"shellsmash":1,"surf":1,"icebeam":1,"earthpower":1,"hiddenpowerelectric":1,"spikes":1,"toxicspikes":1,"stealthrock":1,"hydropump":1},
 		tier: "LC"
 	},
 	omastar: {
 		viable: true,
-		viablemoves: {"shellsmash":"Shell Smash","surf":"Surf","icebeam":"Ice Beam","earthpower":"Earth Power","hiddenpowerelectric":"Hidden Power Electric","spikes":"Spikes","toxicspikes":"Toxic Spikes","stealthrock":"Stealth Rock","hydropump":"Hydro Pump"},
+		viablemoves: {"shellsmash":1,"surf":1,"icebeam":1,"earthpower":1,"hiddenpowerelectric":1,"spikes":1,"toxicspikes":1,"stealthrock":1,"hydropump":1},
 		tier: "RU"
 	},
 	onix: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","earthquake":"Earthquake","stoneedge":"Stone Edge","dragontail":"Dragon Tail","curse":"Curse"},
+		viablemoves: {"stealthrock":1,"earthquake":1,"stoneedge":1,"dragontail":1,"curse":1},
 		tier: "LC"
 	},
 	oshawott: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","waterfall":"Waterfall","aquajet":"Aqua Jet","xscissor":"X-Scissor","substitute":"Substitute"},
+		viablemoves: {"swordsdance":1,"waterfall":1,"aquajet":1,"xscissor":1,"substitute":1},
 		tier: "LC"
 	},
 	pachirisu: {
 		viable: true,
-		viablemoves: {"lightscreen":"Light Screen","discharge":"Discharge","superfang":"Super Fang","toxic":"Toxic","voltswitch":"Volt Switch"},
+		viablemoves: {"lightscreen":1,"discharge":1,"superfang":1,"toxic":1,"voltswitch":1},
 		tier: "NU"
 	},
 	palkia: {
 		viable: true,
-		viablemoves: {"spacialrend":"Spacial Rend","dracometeor":"Draco Meteor","surf":"Surf","hydropump":"Hydro Pump","thunderbolt":"Thunderbolt","outrage":"Outrage","fireblast":"Fire Blast"},
+		viablemoves: {"spacialrend":1,"dracometeor":1,"surf":1,"hydropump":1,"thunderbolt":1,"outrage":1,"fireblast":1},
 		tier: "Uber"
 	},
 	palpitoad: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","surf":"Surf","sludgewave":"Sludge Wave","earthpower":"Earth Power","hiddenpowerelectric":"Hidden Power Electric","raindance":"Rain Dance"},
+		viablemoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"raindance":1},
 		tier: "NFE"
 	},
 	panpour: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","hydropump":"Hydro Pump","hiddenpowergrass":"Hidden Power Grass","substitute":"Substitute","surf":"Surf"},
+		viablemoves: {"nastyplot":1,"hydropump":1,"hiddenpowergrass":1,"substitute":1,"surf":1},
 		tier: "LC"
 	},
 	pansage: {
 		viable: true,
-		viablemoves: {"leafstorm":"Leaf Storm","hiddenpowerfire":"Hidden Power Fire","hiddenpowerice":"Hidden Power Ice","energyball":"Energy Ball","nastyplot":"Nasty Plot","substitute":"Substitute"},
+		viablemoves: {"leafstorm":1,"hiddenpowerfire":1,"hiddenpowerice":1,"energyball":1,"nastyplot":1,"substitute":1},
 		tier: "LC"
 	},
 	pansear: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","fireblast":"Fire Blast","hiddenpowerelectric":"Hidden Power Electric","hiddenpowerground":"Hidden Power Ground","sunnyday":"Sunny Day","solarbeam":"SolarBeam","overheat":"Overheat"},
+		viablemoves: {"nastyplot":1,"fireblast":1,"hiddenpowerelectric":1,"hiddenpowerground":1,"sunnyday":1,"solarbeam":1,"overheat":1},
 		tier: "LC"
 	},
 	paras: {
 		viable: true,
-		viablemoves: {"spore":"Spore","stunspore":"Stun Spore","xscissor":"X-Scissor","seedbomb":"Seed Bomb","synthesis":"Synthesis","leechseed":"Leech Seed","aromatherapy":"Aromatherapy"},
+		viablemoves: {"spore":1,"stunspore":1,"xscissor":1,"seedbomb":1,"synthesis":1,"leechseed":1,"aromatherapy":1},
 		tier: "LC"
 	},
 	parasect: {
 		viable: true,
-		viablemoves: {"spore":"Spore","stunspore":"Stun Spore","xscissor":"X-Scissor","seedbomb":"Seed Bomb","synthesis":"Synthesis","leechseed":"Leech Seed","aromatherapy":"Aromatherapy"},
+		viablemoves: {"spore":1,"stunspore":1,"xscissor":1,"seedbomb":1,"synthesis":1,"leechseed":1,"aromatherapy":1},
 		tier: "NU"
 	},
 	patrat: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","workup":"Work Up","batonpass":"Baton Pass","substitute":"Substitute","hypnosis":"Hypnosis","return":"Return"},
+		viablemoves: {"swordsdance":1,"workup":1,"batonpass":1,"substitute":1,"hypnosis":1,"return":1},
 		tier: "LC"
 	},
 	pawniard: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","substitute":"Substitute","suckerpunch":"Sucker Punch","taunt":"Taunt","ironhead":"Iron Head","brickbreak":"Brick Break","nightslash":"Night Slash"},
+		viablemoves: {"swordsdance":1,"substitute":1,"suckerpunch":1,"taunt":1,"ironhead":1,"brickbreak":1,"nightslash":1},
 		tier: "LC"
 	},
 	pelipper: {
 		viable: true,
-		viablemoves: {"scald":"Scald","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","raindance":"Rain Dance","uturn":"U-turn","airslash":"Air Slash","hurricane":"Hurricane","substitute":"Substitute","toxic":"Toxic","roost":"Roost"},
+		viablemoves: {"scald":1,"icebeam":1,"hiddenpowergrass":1,"raindance":1,"uturn":1,"airslash":1,"hurricane":1,"substitute":1,"toxic":1,"roost":1},
 		tier: "NU"
 	},
 	persian: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","uturn":"U-turn","bite":"Bite","taunt":"Taunt","return":"Return","nastyplot":"Nasty Plot","swift":"Swift","hypnosis":"Hypnosis","waterpulse":"Water Pulse","thunderbolt":"Thunderbolt","switcheroo":"Switcheroo"},
+		viablemoves: {"fakeout":1,"uturn":1,"bite":1,"taunt":1,"return":1,"nastyplot":1,"swift":1,"hypnosis":1,"waterpulse":1,"thunderbolt":1,"switcheroo":1},
 		tier: "NU"
 	},
 	petilil: {
 		viable: true,
-		viablemoves: {"sunnyday":"Sunny Day","sleeppowder":"Sleep Powder","solarbeam":"SolarBeam","hiddenpowerfire":"Hidden Power Fire","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"sunnyday":1,"sleeppowder":1,"solarbeam":1,"hiddenpowerfire":1,"hiddenpowerice":1},
 		tier: "LC"
 	},
 	phanpy: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","earthquake":"Earthquake","iceshard":"Ice Shard","headsmash":"Head Smash","knockoff":"Knock Off","seedbomb":"Seed Bomb","superpower":"Superpower"},
+		viablemoves: {"stealthrock":1,"earthquake":1,"iceshard":1,"headsmash":1,"knockoff":1,"seedbomb":1,"superpower":1},
 		tier: "LC"
 	},
 	phione: {
 		viable: true,
-		viablemoves: {"raindance":"Rain Dance","scald":"Scald","rest":"Rest","toxic":"Toxic","uturn":"U-turn","icebeam":"Ice Beam","surf":"Surf"},
+		viablemoves: {"raindance":1,"scald":1,"rest":1,"toxic":1,"uturn":1,"icebeam":1,"surf":1},
 		tier: "NU"
 	},
 	pichu: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","volttackle":"Volt Tackle","encore":"Encore","return":"Return","irontail":"Iron Tail","toxic":"Toxic","thunderpunch":"ThunderPunch"},
+		viablemoves: {"fakeout":1,"volttackle":1,"encore":1,"return":1,"irontail":1,"toxic":1,"thunderpunch":1},
 		tier: "LC"
 	},
 	pichuspikyeared: {
@@ -2250,112 +2250,112 @@ exports.BattleFormatsData = {
 	},
 	pidgeot: {
 		viable: true,
-		viablemoves: {"whirlwind":"Whirlwind","roost":"Roost","bravebird":"Brave Bird","heatwave":"Heat Wave","hurricane":"Hurricane","return":"Return","workup":"Work Up","uturn":"U-turn"},
+		viablemoves: {"whirlwind":1,"roost":1,"bravebird":1,"heatwave":1,"hurricane":1,"return":1,"workup":1,"uturn":1},
 		tier: "NU"
 	},
 	pidgeotto: {
 		viable: true,
-		viablemoves: {"whirlwind":"Whirlwind","roost":"Roost","bravebird":"Brave Bird","heatwave":"Heat Wave","hurricane":"Hurricane","return":"Return","workup":"Work Up","uturn":"U-turn"},
+		viablemoves: {"whirlwind":1,"roost":1,"bravebird":1,"heatwave":1,"hurricane":1,"return":1,"workup":1,"uturn":1},
 		tier: "NFE"
 	},
 	pidgey: {
 		viable: true,
-		viablemoves: {"whirlwind":"Whirlwind","roost":"Roost","bravebird":"Brave Bird","heatwave":"Heat Wave","hurricane":"Hurricane","return":"Return","workup":"Work Up","uturn":"U-turn"},
+		viablemoves: {"whirlwind":1,"roost":1,"bravebird":1,"heatwave":1,"hurricane":1,"return":1,"workup":1,"uturn":1},
 		tier: "LC"
 	},
 	pidove: {
 		viable: true,
-		viablemoves: {"pluck":"Pluck","uturn":"U-turn","return":"Return","detect":"Detect","roost":"Roost"},
+		viablemoves: {"pluck":1,"uturn":1,"return":1,"detect":1,"roost":1},
 		tier: "LC"
 	},
 	pignite: {
 		viable: true,
-		viablemoves: {"flamecharge":"Flame Charge","flareblitz":"Flare Blitz","wildcharge":"Wild Charge","superpower":"Superpower","headsmash":"Head Smash"},
+		viablemoves: {"flamecharge":1,"flareblitz":1,"wildcharge":1,"superpower":1,"headsmash":1},
 		tier: "NFE"
 	},
 	pikachu: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","volttackle":"Volt Tackle","grassknot":"Grass Knot","hiddenpowerice":"Hidden Power Ice","brickbreak":"Brick Break","extremespeed":"ExtremeSpeed","encore":"Encore","substitute":"Substitute"},
+		viablemoves: {"thunderbolt":1,"volttackle":1,"grassknot":1,"hiddenpowerice":1,"brickbreak":1,"extremespeed":1,"encore":1,"substitute":1},
 		tier: "NU"
 	},
 	piloswine: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","iciclecrash":"Icicle Crash","iceshard":"Ice Shard","stealthrock":"Stealth Rock","superpower":"Superpower","toxic":"Toxic","endeavor":"Endeavor"},
+		viablemoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"stealthrock":1,"superpower":1,"toxic":1,"endeavor":1},
 		tier: "NU"
 	},
 	pineco: {
 		viable: true,
-		viablemoves: {"explosion":"Explosion","rapidspin":"Rapid Spin","toxicspikes":"Toxic Spikes","spikes":"Spikes","bugbite":"Bug Bite","stealthrock":"Stealth Rock","toxic":"Toxic"},
+		viablemoves: {"explosion":1,"rapidspin":1,"toxicspikes":1,"spikes":1,"bugbite":1,"stealthrock":1,"toxic":1},
 		tier: "LC"
 	},
 	pinsir: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","xscissor":"X-Scissor","earthquake":"Earthquake","closecombat":"Close Combat","stealthrock":"Stealth Rock","substitute":"Substitute","stoneedge":"Stone Edge","quickattack":"Quick Attack"},
+		viablemoves: {"swordsdance":1,"xscissor":1,"earthquake":1,"closecombat":1,"stealthrock":1,"substitute":1,"stoneedge":1,"quickattack":1},
 		tier: "NU"
 	},
 	piplup: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","hydropump":"Hydro Pump","scald":"Scald","icebeam":"Ice Beam","hiddenpowerelectric":"Hidden Power Electric","hiddenpowerfire":"Hidden Power Fire","yawn":"Yawn"},
+		viablemoves: {"stealthrock":1,"hydropump":1,"scald":1,"icebeam":1,"hiddenpowerelectric":1,"hiddenpowerfire":1,"yawn":1},
 		tier: "LC"
 	},
 	plusle: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","thunderbolt":"Thunderbolt","substitute":"Substitute","batonpass":"Baton Pass","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"nastyplot":1,"thunderbolt":1,"substitute":1,"batonpass":1,"hiddenpowerice":1},
 		tier: "NU"
 	},
 	politoed: {
 		viable: true,
-		viablemoves: {"scald":"Scald","hypnosis":"Hypnosis","toxic":"Toxic","encore":"Encore","perishsong":"Perish Song","protect":"Protect","icebeam":"Ice Beam","focusblast":"Focus Blast","surf":"Surf","hydropump":"Hydro Pump","hiddenpowergrass":"Hidden Power Grass"},
+		viablemoves: {"scald":1,"hypnosis":1,"toxic":1,"encore":1,"perishsong":1,"protect":1,"icebeam":1,"focusblast":1,"surf":1,"hydropump":1,"hiddenpowergrass":1},
 		tier: "OU"
 	},
 	poliwag: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","surf":"Surf","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","encore":"Encore","raindance":"Rain Dance","bellydrum":"Belly Drum","hynosis":"Hynosis","waterfall":"Waterfall","return":"Return"},
+		viablemoves: {"hydropump":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"encore":1,"raindance":1,"bellydrum":1,"hynosis":1,"waterfall":1,"return":1},
 		tier: "LC"
 	},
 	poliwhirl: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","surf":"Surf","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","encore":"Encore","raindance":"Rain Dance","bellydrum":"Belly Drum","hynosis":"Hynosis","waterfall":"Waterfall","return":"Return"},
+		viablemoves: {"hydropump":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"encore":1,"raindance":1,"bellydrum":1,"hynosis":1,"waterfall":1,"return":1},
 		tier: "NFE"
 	},
 	poliwrath: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","circlethrow":"Circle Throw","focuspunch":"Focus Punch","bulkup":"Bulk Up","encore":"Encore","waterfall":"Waterfall","toxic":"Toxic","rest":"Rest","sleeptalk":"Sleep Talk","icepunch":"Ice Punch"},
+		viablemoves: {"substitute":1,"circlethrow":1,"focuspunch":1,"bulkup":1,"encore":1,"waterfall":1,"toxic":1,"rest":1,"sleeptalk":1,"icepunch":1},
 		tier: "RU"
 	},
 	ponyta: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","wildcharge":"Wild Charge","fireblast":"Fire Blast","hiddenpowergrass":"Hidden Power Grass","solarbeam":"SolarBeam","sunnyday":"Sunny Day","morningsun":"Morning Sun","hypnosis":"Hypnosis","return":"Return","flamecharge":"Flame Charge"},
+		viablemoves: {"flareblitz":1,"wildcharge":1,"fireblast":1,"hiddenpowergrass":1,"solarbeam":1,"sunnyday":1,"morningsun":1,"hypnosis":1,"return":1,"flamecharge":1},
 		tier: "LC"
 	},
 	poochyena: {
 		viable: true,
-		viablemoves: {"howl":"Howl","crunch":"Crunch","firefang":"Fire Fang","suckerpunch":"Sucker Punch","return":"Return"},
+		viablemoves: {"howl":1,"crunch":1,"firefang":1,"suckerpunch":1,"return":1},
 		tier: "LC"
 	},
 	porygon: {
 		viable: true,
-		viablemoves: {"triattack":"Tri Attack","thunderbolt":"Thunderbolt","icebeam":"Ice Beam","recover":"Recover","chargebeam":"Charge Beam","toxic":"Toxic","thunderwave":"Thunder Wave","discharge":"Discharge","trickroom":"Trick Room","trick":"Trick"},
+		viablemoves: {"triattack":1,"thunderbolt":1,"icebeam":1,"recover":1,"chargebeam":1,"toxic":1,"thunderwave":1,"discharge":1,"trickroom":1,"trick":1},
 		tier: "LC"
 	},
 	porygonz: {
 		viable: true,
-		viablemoves: {"triattack":"Tri Attack","thunderbolt":"Thunderbolt","icebeam":"Ice Beam","darkpulse":"Dark Pulse","hiddenpowerfighting":"Hidden Power Fighting","chargebeam":"Charge Beam","agility":"Agility","trick":"Trick","nastyplot":"Nasty Plot","substitute":"Substitute"},
+		viablemoves: {"triattack":1,"thunderbolt":1,"icebeam":1,"darkpulse":1,"hiddenpowerfighting":1,"chargebeam":1,"agility":1,"trick":1,"nastyplot":1,"substitute":1},
 		tier: "BL2"
 	},
 	porygon2: {
 		viable: true,
-		viablemoves: {"triattack":"Tri Attack","thunderbolt":"Thunderbolt","icebeam":"Ice Beam","recover":"Recover","chargebeam":"Charge Beam","toxic":"Toxic","thunderwave":"Thunder Wave","discharge":"Discharge","trickroom":"Trick Room","trick":"Trick"},
+		viablemoves: {"triattack":1,"thunderbolt":1,"icebeam":1,"recover":1,"chargebeam":1,"toxic":1,"thunderwave":1,"discharge":1,"trickroom":1,"trick":1},
 		tier: "UU"
 	},
 	primeape: {
 		viable: true,
-		viablemoves: {"closecombat":"Close Combat","uturn":"U-turn","icepunch":"Ice Punch","stoneedge":"Stone Edge","punishment":"Punishment","earthquake":"Earthquake","encore":"Encore"},
+		viablemoves: {"closecombat":1,"uturn":1,"icepunch":1,"stoneedge":1,"punishment":1,"earthquake":1,"encore":1},
 		tier: "RU"
 	},
 	prinplup: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","hydropump":"Hydro Pump","scald":"Scald","icebeam":"Ice Beam","hiddenpowerelectric":"Hidden Power Electric","hiddenpowerfire":"Hidden Power Fire","yawn":"Yawn"},
+		viablemoves: {"stealthrock":1,"hydropump":1,"scald":1,"icebeam":1,"hiddenpowerelectric":1,"hiddenpowerfire":1,"yawn":1},
 		tier: "NFE"
 	},
 	probopass: {
@@ -2363,227 +2363,227 @@ exports.BattleFormatsData = {
 	},
 	psyduck: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","surf":"Surf","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","crosschop":"Cross Chop","encore":"Encore","raindance":"Rain Dance"},
+		viablemoves: {"hydropump":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"crosschop":1,"encore":1,"raindance":1},
 		tier: "LC"
 	},
 	pupitar: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","stoneedge":"Stone Edge","rockpolish":"Rock Polish","crunch":"Crunch","dragondance":"Dragon Dance"},
+		viablemoves: {"earthquake":1,"stoneedge":1,"rockpolish":1,"crunch":1,"dragondance":1},
 		tier: "NFE"
 	},
 	purrloin: {
 		viable: true,
-		viablemoves: {"suckerpunch":"Sucker Punch","nightslash":"Night Slash","toxic":"Toxic","fakeout":"Fake Out"},
+		viablemoves: {"suckerpunch":1,"nightslash":1,"toxic":1,"fakeout":1},
 		tier: "LC"
 	},
 	purugly: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","uturn":"U-turn","suckerpunch":"Sucker Punch","hypnosis":"Hypnosis","quickattack":"Quick Attack","return":"Return","shadowclaw":"Shadow Claw"},
+		viablemoves: {"fakeout":1,"uturn":1,"suckerpunch":1,"hypnosis":1,"quickattack":1,"return":1,"shadowclaw":1},
 		tier: "NU"
 	},
 	quagsire: {
 		viable: true,
-		viablemoves: {"recover":"Recover","earthquake":"Earthquake","waterfall":"Waterfall","scald":"Scald","toxic":"Toxic","curse":"Curse","stoneedge":"Stone Edge","stockpile":"Stockpile","yawn":"Yawn"},
+		viablemoves: {"recover":1,"earthquake":1,"waterfall":1,"scald":1,"toxic":1,"curse":1,"stoneedge":1,"stockpile":1,"yawn":1},
 		tier: "NU"
 	},
 	quilava: {
 		viable: true,
-		viablemoves: {"eruption":"Eruption","fireblast":"Fire Blast","flamethrower":"Flamethrower","hiddenpowergrass":"Hidden Power Grass","naturepower":"Nature Power"},
+		viablemoves: {"eruption":1,"fireblast":1,"flamethrower":1,"hiddenpowergrass":1,"naturepower":1},
 		tier: "NFE"
 	},
 	qwilfish: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","waterfall":"Waterfall","spikes":"Spikes","swordsdance":"Swords Dance","poisonjab":"Poison Jab","painsplit":"Pain Split","thunderwave":"Thunder Wave","taunt":"Taunt","destinybond":"Destiny Bond"},
+		viablemoves: {"toxicspikes":1,"waterfall":1,"spikes":1,"swordsdance":1,"poisonjab":1,"painsplit":1,"thunderwave":1,"taunt":1,"destinybond":1},
 		tier: "RU"
 	},
 	raichu: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","encore":"Encore","thunderbolt":"Thunderbolt","grassknot":"Grass Knot","hiddenpowerice":"Hidden Power Ice","focusblast":"Focus Blast","substitute":"Substitute"},
+		viablemoves: {"nastyplot":1,"encore":1,"thunderbolt":1,"grassknot":1,"hiddenpowerice":1,"focusblast":1,"substitute":1},
 		tier: "NU"
 	},
 	raikou: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","thunderbolt":"Thunderbolt","hiddenpowerice":"Hidden Power Ice","aurasphere":"Aura Sphere","calmmind":"Calm Mind","substitute":"Substitute"},
+		viablemoves: {"voltswitch":1,"thunderbolt":1,"hiddenpowerice":1,"aurasphere":1,"calmmind":1,"substitute":1},
 		tier: "UU"
 	},
 	ralts: {
 		viable: true,
-		viablemoves: {"trickroom":"Trick Room","destinybond":"Destiny Bond","hypnosis":"Hypnosis","willowisp":"Will-O-Wisp"},
+		viablemoves: {"trickroom":1,"destinybond":1,"hypnosis":1,"willowisp":1},
 		tier: "LC"
 	},
 	rampardos: {
 		viable: true,
-		viablemoves: {"headsmash":"Head Smash","stoneedge":"Stone Edge","earthquake":"Earthquake","zenheadbutt":"Zen Headbutt","firepunch":"Fire Punch","rockpolish":"Rock Polish","crunch":"Crunch","substitute":"Substitute"},
+		viablemoves: {"headsmash":1,"stoneedge":1,"earthquake":1,"zenheadbutt":1,"firepunch":1,"rockpolish":1,"crunch":1,"substitute":1},
 		tier: "NU"
 	},
 	rapidash: {
 		viable: true,
-		viablemoves: {"flareblitz":"Flare Blitz","wildcharge":"Wild Charge","fireblast":"Fire Blast","hiddenpowergrass":"Hidden Power Grass","solarbeam":"SolarBeam","sunnyday":"Sunny Day","morningsun":"Morning Sun","hypnosis":"Hypnosis","return":"Return","flamecharge":"Flame Charge","megahorn":"Megahorn"},
+		viablemoves: {"flareblitz":1,"wildcharge":1,"fireblast":1,"hiddenpowergrass":1,"solarbeam":1,"sunnyday":1,"morningsun":1,"hypnosis":1,"return":1,"flamecharge":1,"megahorn":1},
 		tier: "NU"
 	},
 	raticate: {
 		viable: true,
-		viablemoves: {"facade":"Facade","flamewheel":"Flame Wheel","crunch":"Crunch","wildcharge":"Wild Charge","suckerpunch":"Sucker Punch","uturn":"U-turn"},
+		viablemoves: {"facade":1,"flamewheel":1,"crunch":1,"wildcharge":1,"suckerpunch":1,"uturn":1},
 		tier: "NU"
 	},
 	rattata: {
 		viable: true,
-		viablemoves: {"facade":"Facade","flamewheel":"Flame Wheel","crunch":"Crunch","wildcharge":"Wild Charge","suckerpunch":"Sucker Punch","uturn":"U-turn"},
+		viablemoves: {"facade":1,"flamewheel":1,"crunch":1,"wildcharge":1,"suckerpunch":1,"uturn":1},
 		tier: "LC"
 	},
 	rayquaza: {
 		viable: true,
-		viablemoves: {"outrage":"Outrage","vcreate":"V-Create","extremespeed":"ExtremeSpeed","earthquake":"Earthquake","dragondance":"Dragon Dance","swordsdance":"Swords Dance","dracometeor":"Draco Meteor","dragonclaw":"Dragon Claw"},
+		viablemoves: {"outrage":1,"vcreate":1,"extremespeed":1,"earthquake":1,"dragondance":1,"swordsdance":1,"dracometeor":1,"dragonclaw":1},
 		tier: "Uber"
 	},
 	regice: {
 		viable: true,
-		viablemoves: {"thunderwave":"Thunder Wave","icebeam":"Ice Beam","thunderbolt":"Thunderbolt","rest":"Rest","sleeptalk":"Sleep Talk","toxic":"Toxic"},
+		viablemoves: {"thunderwave":1,"icebeam":1,"thunderbolt":1,"rest":1,"sleeptalk":1,"toxic":1},
 		tier: "NU"
 	},
 	regigigas: {
 		viable: true,
-		viablemoves: {"thunderwave":"Thunder Wave","substitute":"Substitute","return":"Return","drainpunch":"Drain Punch","earthquake":"Earthquake","rockpolish":"Rock Polish","firepunch":"Fire Punch","toxic":"Toxic","confuseray":"Confuse Ray"},
+		viablemoves: {"thunderwave":1,"substitute":1,"return":1,"drainpunch":1,"earthquake":1,"rockpolish":1,"firepunch":1,"toxic":1,"confuseray":1},
 		tier: "NU"
 	},
 	regirock: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","thunderwave":"Thunder Wave","stoneedge":"Stone Edge","earthquake":"Earthquake","drainpunch":"Drain Punch","curse":"Curse","rest":"Rest","sleeptalk":"Sleep Talk","rockslide":"Rock Slide","toxic":"Toxic"},
+		viablemoves: {"stealthrock":1,"thunderwave":1,"stoneedge":1,"earthquake":1,"drainpunch":1,"curse":1,"rest":1,"sleeptalk":1,"rockslide":1,"toxic":1},
 		tier: "NU"
 	},
 	registeel: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","ironhead":"Iron Head","curse":"Curse","rest":"Rest","thunderwave":"Thunder Wave","toxic":"Toxic","seismictoss":"Seismic Toss"},
+		viablemoves: {"stealthrock":1,"ironhead":1,"curse":1,"rest":1,"thunderwave":1,"toxic":1,"seismictoss":1},
 		tier: "UU"
 	},
 	relicanth: {
 		viable: true,
-		viablemoves: {"rockpolish":"Rock Polish","headsmash":"Head Smash","waterfall":"Waterfall","earthquake":"Earthquake","doubleedge":"Double-Edge","stealthrock":"Stealth Rock"},
+		viablemoves: {"rockpolish":1,"headsmash":1,"waterfall":1,"earthquake":1,"doubleedge":1,"stealthrock":1},
 		tier: "NU"
 	},
 	remoraid: {
 		viable: true,
-		viablemoves: {"waterspout":"Water Spout","surf":"Surf","fireblast":"Fire Blast","hiddenpowerground":"Hidden Power Ground","hiddenpowergrass":"Hidden Power Grass","icebeam":"Ice Beam","seedbomb":"Seed Bomb","return":"Return","rockblast":"Rock Blast"},
+		viablemoves: {"waterspout":1,"surf":1,"fireblast":1,"hiddenpowerground":1,"hiddenpowergrass":1,"icebeam":1,"seedbomb":1,"return":1,"rockblast":1},
 		tier: "LC"
 	},
 	reshiram: {
 		viable: true,
-		viablemoves: {"blueflare":"Blue Flare","dracometeor":"Draco Meteor","dragonpulse":"Dragon Pulse","flamethrower":"Flamethrower","flamecharge":"Flame Charge","stoneedge":"Stone Edge"},
+		viablemoves: {"blueflare":1,"dracometeor":1,"dragonpulse":1,"flamethrower":1,"flamecharge":1,"stoneedge":1},
 		tier: "Uber"
 	},
 	reuniclus: {
 		viable: true,
-		viablemoves: {"trick":"Trick","calmmind":"Calm Mind","recover":"Recover","psychic":"Psychic","focusblast":"Focus Blast","hiddenpowerfire":"Hidden Power Fire","shadowball":"Shadow Ball","trickroom":"Trick Room","psyshock":"Psyshock"},
+		viablemoves: {"trick":1,"calmmind":1,"recover":1,"psychic":1,"focusblast":1,"hiddenpowerfire":1,"shadowball":1,"trickroom":1,"psyshock":1},
 		tier: "OU"
 	},
 	rhydon: {
 		viable: true,
-		viablemoves: {"stoneedge":"Stone Edge","earthquake":"Earthquake","substitute":"Substitute","swordsdance":"Swords Dance","rockpolish":"Rock Polish","aquatail":"Aqua Tail","megahorn":"Megahorn","stealthrock":"Stealth Rock","toxic":"Toxic","rockblast":"Rock Blast"},
+		viablemoves: {"stoneedge":1,"earthquake":1,"substitute":1,"swordsdance":1,"rockpolish":1,"aquatail":1,"megahorn":1,"stealthrock":1,"toxic":1,"rockblast":1},
 		tier: "RU"
 	},
 	rhyhorn: {
 		viable: true,
-		viablemoves: {"stoneedge":"Stone Edge","earthquake":"Earthquake","substitute":"Substitute","swordsdance":"Swords Dance","rockpolish":"Rock Polish","aquatail":"Aqua Tail","megahorn":"Megahorn","stealthrock":"Stealth Rock","toxic":"Toxic","rockblast":"Rock Blast"},
+		viablemoves: {"stoneedge":1,"earthquake":1,"substitute":1,"swordsdance":1,"rockpolish":1,"aquatail":1,"megahorn":1,"stealthrock":1,"toxic":1,"rockblast":1},
 		tier: "LC"
 	},
 	rhyperior: {
 		viable: true,
-		viablemoves: {"stoneedge":"Stone Edge","earthquake":"Earthquake","substitute":"Substitute","swordsdance":"Swords Dance","rockpolish":"Rock Polish","aquatail":"Aqua Tail","megahorn":"Megahorn","stealthrock":"Stealth Rock","toxic":"Toxic","rockblast":"Rock Blast"},
+		viablemoves: {"stoneedge":1,"earthquake":1,"substitute":1,"swordsdance":1,"rockpolish":1,"aquatail":1,"megahorn":1,"stealthrock":1,"toxic":1,"rockblast":1},
 		tier: "UU"
 	},
 	riolu: {
 		viable: true,
-		viablemoves: {"circlethrow":"Circle Throw","roar":"Roar","copycat":"Copycat","sunnyday":"Sunny Day"},
+		viablemoves: {"circlethrow":1,"roar":1,"copycat":1,"sunnyday":1},
 		tier: "LC"
 	},
 	roggenrola: {
 		viable: true,
-		viablemoves: {"autotomize":"Autotomize","stoneedge":"Stone Edge","stealthrock":"Stealth Rock","rockblast":"Rock Blast","earthquake":"Earthquake","explosion":"Explosion","return":"Return","substitute":"Substitute"},
+		viablemoves: {"autotomize":1,"stoneedge":1,"stealthrock":1,"rockblast":1,"earthquake":1,"explosion":1,"return":1,"substitute":1},
 		tier: "LC"
 	},
 	roselia: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","toxicspikes":"Toxic Spikes","sleeppowder":"Sleep Powder","gigadrain":"Giga Drain","stunspore":"Stun Spore","rest":"Rest"},
+		viablemoves: {"spikes":1,"toxicspikes":1,"sleeppowder":1,"gigadrain":1,"stunspore":1,"rest":1},
 		tier: "RU"
 	},
 	roserade: {
 		viable: true,
-		viablemoves: {"sludgebomb":"Sludge Bomb","gigadrain":"Giga Drain","sleeppowder":"Sleep Powder","leafstorm":"Leaf Storm","spikes":"Spikes","toxicspikes":"Toxic Spikes","rest":"Rest","synthesis":"Synthesis","hiddenpowerfire":"Hidden Power Fire","aromatherapy":"Aromatherapy"},
+		viablemoves: {"sludgebomb":1,"gigadrain":1,"sleeppowder":1,"leafstorm":1,"spikes":1,"toxicspikes":1,"rest":1,"synthesis":1,"hiddenpowerfire":1,"aromatherapy":1},
 		tier: "UU"
 	},
 	rotom: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","discharge":"Discharge","voltswitch":"Volt Switch","shadowball":"Shadow Ball","substitute":"Substitute","painsplit":"Pain Split","hiddenpowerice":"Hidden Power Ice","hiddenpowerfighting":"Hidden Power Fighting","hiddenpowerground":"Hidden Power Ground","willowisp":"Will-O-Wisp","rest":"Rest","sleeptalk":"Sleep Talk","trick":"Trick","chargebeam":"Charge Beam"},
+		viablemoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"shadowball":1,"substitute":1,"painsplit":1,"hiddenpowerice":1,"hiddenpowerfighting":1,"hiddenpowerground":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"chargebeam":1},
 		tier: "RU"
 	},
 	rotommow: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","discharge":"Discharge","voltswitch":"Volt Switch","shadowball":"Shadow Ball","thunderwave":"Thunder Wave","substitute":"Substitute","painsplit":"Pain Split","hiddenpowerice":"Hidden Power Ice","willowisp":"Will-O-Wisp","rest":"Rest","sleeptalk":"Sleep Talk","trick":"Trick","leafstorm":"Leaf Storm","chargebeam":"Charge Beam","raindance":"Rain Dance","thunder":"Thunder"},
+		viablemoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"shadowball":1,"thunderwave":1,"substitute":1,"painsplit":1,"hiddenpowerice":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"leafstorm":1,"chargebeam":1,"raindance":1,"thunder":1},
 		tier: "RU"
 	},
 	rotomfrost: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","discharge":"Discharge","voltswitch":"Volt Switch","thunderwave":"Thunder Wave","substitute":"Substitute","painsplit":"Pain Split","hiddenpowerfighting":"Hidden Power Fighting","hiddenpowerground":"Hidden Power Ground","willowisp":"Will-O-Wisp","rest":"Rest","sleeptalk":"Sleep Talk","trick":"Trick","blizzard":"Blizzard","chargebeam":"Charge Beam"},
+		viablemoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"thunderwave":1,"substitute":1,"painsplit":1,"hiddenpowerfighting":1,"hiddenpowerground":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"blizzard":1,"chargebeam":1},
 		tier: "NU"
 	},
 	rotomheat: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","discharge":"Discharge","voltswitch":"Volt Switch","thunderwave":"Thunder Wave","substitute":"Substitute","painsplit":"Pain Split","hiddenpowerice":"Hidden Power Ice","willowisp":"Will-O-Wisp","rest":"Rest","sleeptalk":"Sleep Talk","overheat":"Overheat","trick":"Trick","chargebeam":"Charge Beam"},
+		viablemoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"thunderwave":1,"substitute":1,"painsplit":1,"hiddenpowerice":1,"willowisp":1,"rest":1,"sleeptalk":1,"overheat":1,"trick":1,"chargebeam":1},
 		tier: "UU"
 	},
 	rotomfan: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","discharge":"Discharge","voltswitch":"Volt Switch","shadowball":"Shadow Ball","thunderwave":"Thunder Wave","substitute":"Substitute","painsplit":"Pain Split","hiddenpowerfighting":"Hidden Power Fighting","hiddenpowerground":"Hidden Power Ground","willowisp":"Will-O-Wisp","rest":"Rest","sleeptalk":"Sleep Talk","trick":"Trick","airslash":"Air Slash","confuseray":"Confuse Ray","chargebeam":"Charge Beam"},
+		viablemoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"shadowball":1,"thunderwave":1,"substitute":1,"painsplit":1,"hiddenpowerfighting":1,"hiddenpowerground":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"airslash":1,"confuseray":1,"chargebeam":1},
 		tier: "NU"
 	},
 	rotomwash: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","discharge":"Discharge","voltswitch":"Volt Switch","thunderwave":"Thunder Wave","substitute":"Substitute","painsplit":"Pain Split","hiddenpowerice":"Hidden Power Ice","willowisp":"Will-O-Wisp","rest":"Rest","sleeptalk":"Sleep Talk","trick":"Trick","hydropump":"Hydro Pump","chargebeam":"Charge Beam","raindance":"Rain Dance","thunder":"Thunder"},
+		viablemoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"thunderwave":1,"substitute":1,"painsplit":1,"hiddenpowerice":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"hydropump":1,"chargebeam":1,"raindance":1,"thunder":1},
 		tier: "OU"
 	},
 	rufflet: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","rockslide":"Rock Slide","return":"Return","uturn":"U-turn","substitute":"Substitute","bulkup":"Bulk Up"},
+		viablemoves: {"bravebird":1,"rockslide":1,"return":1,"uturn":1,"substitute":1,"bulkup":1},
 		tier: "LC"
 	},
 	sableye: {
 		viable: true,
-		viablemoves: {"recover":"Recover","willowisp":"Will-O-Wisp","taunt":"Taunt","trick":"Trick","toxic":"Toxic","nightshade":"Night Shade","seismictoss":"Seismic Toss"},
+		viablemoves: {"recover":1,"willowisp":1,"taunt":1,"trick":1,"toxic":1,"nightshade":1,"seismictoss":1},
 		tier: "UU"
 	},
 	salamence: {
 		viable: true,
-		viablemoves: {"outrage":"Outrage","fireblast":"Fire Blast","earthquake":"Earthquake","dracometeor":"Draco Meteor","roost":"Roost","dragondance":"Dragon Dance","dragonclaw":"Dragon Claw"},
+		viablemoves: {"outrage":1,"fireblast":1,"earthquake":1,"dracometeor":1,"roost":1,"dragondance":1,"dragonclaw":1},
 		tier: "OU"
 	},
 	samurott: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","aquajet":"Aqua Jet","waterfall":"Waterfall","megahorn":"Megahorn","substitute":"Substitute","taunt":"Taunt","hydropump":"Hydro Pump","grassknot":"Grass Knot","icebeam":"Ice Beam"},
+		viablemoves: {"swordsdance":1,"aquajet":1,"waterfall":1,"megahorn":1,"substitute":1,"taunt":1,"hydropump":1,"grassknot":1,"icebeam":1},
 		tier: "NU"
 	},
 	sandile: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","stoneedge":"Stone Edge","pursuit":"Pursuit","crunch":"Crunch","firefang":"Fire Fang","honeclaws":"Hone Claws"},
+		viablemoves: {"earthquake":1,"stoneedge":1,"pursuit":1,"crunch":1,"firefang":1,"honeclaws":1},
 		tier: "LC"
 	},
 	sandshrew: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","stoneedge":"Stone Edge","swordsdance":"Swords Dance","rapidspin":"Rapid Spin","nightslash":"Night Slash","xscissor":"X-Scissor","stealthrock":"Stealth Rock","toxic":"Toxic"},
+		viablemoves: {"earthquake":1,"stoneedge":1,"swordsdance":1,"rapidspin":1,"nightslash":1,"xscissor":1,"stealthrock":1,"toxic":1},
 		tier: "LC"
 	},
 	sandslash: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","stoneedge":"Stone Edge","swordsdance":"Swords Dance","rapidspin":"Rapid Spin","nightslash":"Night Slash","xscissor":"X-Scissor","stealthrock":"Stealth Rock","toxic":"Toxic"},
+		viablemoves: {"earthquake":1,"stoneedge":1,"swordsdance":1,"rapidspin":1,"nightslash":1,"xscissor":1,"stealthrock":1,"toxic":1},
 		tier: "RU"
 	},
 	sawk: {
 		viable: true,
-		viablemoves: {"closecombat":"Close Combat","earthquake":"Earthquake","stoneedge":"Stone Edge","toxic":"Toxic","reversal":"Reversal","bulkup":"Bulk Up"},
+		viablemoves: {"closecombat":1,"earthquake":1,"stoneedge":1,"toxic":1,"reversal":1,"bulkup":1},
 		tier: "NU"
 	},
 	sawsbuck: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","hornleech":"Horn Leech","jumpkick":"Jump Kick","naturepower":"Nature Power","return":"Return","doubleedge":"Double-Edge","substitute":"Substitute","synthesis":"Synthesis","batonpass":"Baton Pass"},
+		viablemoves: {"swordsdance":1,"hornleech":1,"jumpkick":1,"naturepower":1,"return":1,"doubleedge":1,"substitute":1,"synthesis":1,"batonpass":1},
 		tier: "NU"
 	},
 	sawsbucksummer: {
@@ -2597,122 +2597,122 @@ exports.BattleFormatsData = {
 	},
 	sceptile: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","leechseed":"Leech Seed","gigadrain":"Giga Drain","leafstorm":"Leaf Storm","hiddenpowerice":"Hidden Power Ice","focusblast":"Focus Blast","synthesis":"Synthesis","hiddenpowerrock":"Hidden Power Rock"},
+		viablemoves: {"substitute":1,"leechseed":1,"gigadrain":1,"leafstorm":1,"hiddenpowerice":1,"focusblast":1,"synthesis":1,"hiddenpowerrock":1},
 		tier: "RU"
 	},
 	scizor: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","roost":"Roost","bulletpunch":"Bullet Punch","bugbite":"Bug Bite","superpower":"Superpower","uturn":"U-turn","batonpass":"Baton Pass","pursuit":"Pursuit"},
+		viablemoves: {"swordsdance":1,"roost":1,"bulletpunch":1,"bugbite":1,"superpower":1,"uturn":1,"batonpass":1,"pursuit":1},
 		tier: "OU"
 	},
 	scolipede: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","toxicspikes":"Toxic Spikes","megahorn":"Megahorn","rockslide":"Rock Slide","earthquake":"Earthquake","swordsdance":"Swords Dance","batonpass":"Baton Pass"},
+		viablemoves: {"spikes":1,"toxicspikes":1,"megahorn":1,"rockslide":1,"earthquake":1,"swordsdance":1,"batonpass":1},
 		tier: "RU"
 	},
 	scrafty: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","icepunch":"Ice Punch","hijumpkick":"Hi Jump Kick","drainpunch":"Drain Punch","rest":"Rest","bulkup":"Bulk Up","crunch":"Crunch","zenheadbutt":"Zen Headbutt"},
+		viablemoves: {"dragondance":1,"icepunch":1,"hijumpkick":1,"drainpunch":1,"rest":1,"bulkup":1,"crunch":1,"zenheadbutt":1},
 		tier: "OU"
 	},
 	scraggy: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","icepunch":"Ice Punch","hijumpkick":"Hi Jump Kick","drainpunch":"Drain Punch","rest":"Rest","bulkup":"Bulk Up","crunch":"Crunch","zenheadbutt":"Zen Headbutt"},
+		viablemoves: {"dragondance":1,"icepunch":1,"hijumpkick":1,"drainpunch":1,"rest":1,"bulkup":1,"crunch":1,"zenheadbutt":1},
 		tier: "LC"
 	},
 	scyther: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","roost":"Roost","bugbite":"Bug Bite","quickattack":"Quick Attack","brickbreak":"Brick Break","aerialace":"Aerial Ace","batonpass":"Baton Pass","uturn":"U-turn"},
+		viablemoves: {"swordsdance":1,"roost":1,"bugbite":1,"quickattack":1,"brickbreak":1,"aerialace":1,"batonpass":1,"uturn":1},
 		tier: "RU"
 	},
 	seadra: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","icebeam":"Ice Beam","agility":"Agility","substitute":"Substitute","hiddenpowergrass":"Hidden Power Grass"},
+		viablemoves: {"hydropump":1,"icebeam":1,"agility":1,"substitute":1,"hiddenpowergrass":1},
 		tier: "NU"
 	},
 	seaking: {
 		viable: true,
-		viablemoves: {"raindance":"Rain Dance","waterfall":"Waterfall","megahorn":"Megahorn","return":"Return","agility":"Agility"},
+		viablemoves: {"raindance":1,"waterfall":1,"megahorn":1,"return":1,"agility":1},
 		tier: "NU"
 	},
 	sealeo: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","protect":"Protect","toxic":"Toxic","surf":"Surf","icebeam":"Ice Beam"},
+		viablemoves: {"substitute":1,"protect":1,"toxic":1,"surf":1,"icebeam":1},
 		tier: "NFE"
 	},
 	seedot: {
 		viable: true,
-		viablemoves: {"leechseed":"Leech Seed","naturepower":"Nature Power","seedbomb":"Seed Bomb","explosion":"Explosion","foulplay":"Foul Play"},
+		viablemoves: {"leechseed":1,"naturepower":1,"seedbomb":1,"explosion":1,"foulplay":1},
 		tier: "LC"
 	},
 	seel: {
 		viable: true,
-		viablemoves: {"surf":"Surf","icebeam":"Ice Beam","brine":"Brine","aquajet":"Aqua Jet","iceshard":"Ice Shard","raindance":"Rain Dance","protect":"Protect","rest":"Rest","toxic":"Toxic"},
+		viablemoves: {"surf":1,"icebeam":1,"brine":1,"aquajet":1,"iceshard":1,"raindance":1,"protect":1,"rest":1,"toxic":1},
 		tier: "LC"
 	},
 	seismitoad: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","surf":"Surf","sludgewave":"Sludge Wave","earthpower":"Earth Power","hiddenpowerelectric":"Hidden Power Electric","raindance":"Rain Dance","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"raindance":1,"hiddenpowerice":1},
 		tier: "NU"
 	},
 	sentret: {
 		viable: true,
-		viablemoves: {"return":"Return","trick":"Trick","toxic":"Toxic","uturn":"U-turn","suckerpunch":"Sucker Punch"},
+		viablemoves: {"return":1,"trick":1,"toxic":1,"uturn":1,"suckerpunch":1},
 		tier: "LC"
 	},
 	serperior: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","taunt":"Taunt","leafstorm":"Leaf Storm","gigadrain":"Giga Drain","hiddenpowerfire":"Hidden Power Fire","substitute":"Substitute","leechseed":"Leech Seed","hiddenpowerrock":"Hidden Power Rock","calmmind":"Calm Mind","coil":"Coil","leafblade":"Leaf Blade","dragontail":"Dragon Tail"},
+		viablemoves: {"reflect":1,"lightscreen":1,"taunt":1,"leafstorm":1,"gigadrain":1,"hiddenpowerfire":1,"substitute":1,"leechseed":1,"hiddenpowerrock":1,"calmmind":1,"coil":1,"leafblade":1,"dragontail":1},
 		tier: "NU"
 	},
 	servine: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","taunt":"Taunt","leafstorm":"Leaf Storm","gigadrain":"Giga Drain","hiddenpowerfire":"Hidden Power Fire","substitute":"Substitute","leechseed":"Leech Seed","toxic":"Toxic"},
+		viablemoves: {"reflect":1,"lightscreen":1,"taunt":1,"leafstorm":1,"gigadrain":1,"hiddenpowerfire":1,"substitute":1,"leechseed":1,"toxic":1},
 		tier: "NFE"
 	},
 	seviper: {
 		viable: true,
-		viablemoves: {"sludgebomb":"Sludge Bomb","flamethrower":"Flamethrower","gigadrain":"Giga Drain","switcheroo":"Switcheroo","earthquake":"Earthquake","suckerpunch":"Sucker Punch","aquatail":"Aqua Tail"},
+		viablemoves: {"sludgebomb":1,"flamethrower":1,"gigadrain":1,"switcheroo":1,"earthquake":1,"suckerpunch":1,"aquatail":1},
 		tier: "NU"
 	},
 	sewaddle: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","sunnyday":"Sunny Day","solarbeam":"SolarBeam","energyball":"Energy Ball","bugbuzz":"Bug Buzz","hiddenpowerfire":"Hidden Power Fire","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"calmmind":1,"sunnyday":1,"solarbeam":1,"energyball":1,"bugbuzz":1,"hiddenpowerfire":1,"hiddenpowerice":1},
 		tier: "LC"
 	},
 	sharpedo: {
 		viable: true,
-		viablemoves: {"protect":"Protect","hydropump":"Hydro Pump","icebeam":"Ice Beam","crunch":"Crunch","earthquake":"Earthquake","waterfall":"Waterfall","hiddenpowergrass":"Hidden Power Grass","aquajet":"Aqua Jet"},
+		viablemoves: {"protect":1,"hydropump":1,"icebeam":1,"crunch":1,"earthquake":1,"waterfall":1,"hiddenpowergrass":1,"aquajet":1},
 		tier: "UU"
 	},
 	shaymin: {
 		viable: true,
-		viablemoves: {"seedflare":"Seed Flare","earthpower":"Earth Power","airslash":"Air Slash","hiddenpowerfire":"Hidden Power Fire","rest":"Rest","synthesis":"Synthesis","substitute":"Substitute","leechseed":"Leech Seed","toxic":"Toxic"},
+		viablemoves: {"seedflare":1,"earthpower":1,"airslash":1,"hiddenpowerfire":1,"rest":1,"synthesis":1,"substitute":1,"leechseed":1,"toxic":1},
 		tier: "UU"
 	},
 	shayminsky: {
 		viable: true,
-		viablemoves: {"seedflare":"Seed Flare","earthpower":"Earth Power","airslash":"Air Slash","hiddenpowerice":"Hidden Power Ice","hiddenpowerfire":"Hidden Power Fire","substitute":"Substitute","leechseed":"Leech Seed"},
+		viablemoves: {"seedflare":1,"earthpower":1,"airslash":1,"hiddenpowerice":1,"hiddenpowerfire":1,"substitute":1,"leechseed":1},
 		tier: "Uber"
 	},
 	shedinja: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","willowisp":"Will-O-Wisp","xscissor":"X-Scissor","shadowsneak":"Shadow Sneak","suckerpunch":"Sucker Punch"},
+		viablemoves: {"swordsdance":1,"willowisp":1,"xscissor":1,"shadowsneak":1,"suckerpunch":1},
 		tier: "NU"
 	},
 	shelgon: {
 		viable: true,
-		viablemoves: {"outrage":"Outrage","brickbreak":"Brick Break","dragonclaw":"Dragon Claw","dragondance":"Dragon Dance"},
+		viablemoves: {"outrage":1,"brickbreak":1,"dragonclaw":1,"dragondance":1},
 		tier: "NU"
 	},
 	shellder: {
 		viable: true,
-		viablemoves: {"shellsmash":"Shell Smash","hydropump":"Hydro Pump","razorshell":"Razor Shell","rockblast":"Rock Blast","iciclespear":"Icicle Spear","rapidspin":"Rapid Spin"},
+		viablemoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"rapidspin":1},
 		tier: "LC"
 	},
 	shellos: {
 		viable: true,
-		viablemoves: {"surf":"Surf","scald":"Scald","clearsmog":"Clear Smog","recover":"Recover","yawn":"Yawn","toxic":"Toxic"},
+		viablemoves: {"surf":1,"scald":1,"clearsmog":1,"recover":1,"yawn":1,"toxic":1},
 		tier: "LC"
 	},
 	shelloseast: {
@@ -2720,322 +2720,322 @@ exports.BattleFormatsData = {
 	},
 	shelmet: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","yawn":"Yawn","substitute":"Substitute","acidarmor":"Acid Armor","batonpass":"Baton Pass","recover":"Recover","toxic":"Toxic","bugbuzz":"Bug Buzz"},
+		viablemoves: {"spikes":1,"yawn":1,"substitute":1,"acidarmor":1,"batonpass":1,"recover":1,"toxic":1,"bugbuzz":1},
 		tier: "LC"
 	},
 	shieldon: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","metalburst":"Metal Burst","fireblast":"Fire Blast","icebeam":"Ice Beam","earthquake":"Earthquake","toxic":"Toxic","roar":"Roar"},
+		viablemoves: {"stealthrock":1,"metalburst":1,"fireblast":1,"icebeam":1,"earthquake":1,"toxic":1,"roar":1},
 		tier: "LC"
 	},
 	shiftry: {
 		viable: true,
-		viablemoves: {"hiddenpowerfire":"Hidden Power Fire","swordsdance":"Swords Dance","seedbomb":"Seed Bomb","suckerpunch":"Sucker Punch","naturepower":"Nature Power","nastyplot":"Nasty Plot","gigadrain":"Giga Drain","darkpulse":"Dark Pulse"},
+		viablemoves: {"hiddenpowerfire":1,"swordsdance":1,"seedbomb":1,"suckerpunch":1,"naturepower":1,"nastyplot":1,"gigadrain":1,"darkpulse":1},
 		tier: "NU"
 	},
 	shinx: {
 		viable: true,
-		viablemoves: {"wildcharge":"Wild Charge","icefang":"Ice Fang","firefang":"Fire Fang","crunch":"Crunch"},
+		viablemoves: {"wildcharge":1,"icefang":1,"firefang":1,"crunch":1},
 		tier: "LC"
 	},
 	shroomish: {
 		viable: true,
-		viablemoves: {"spore":"Spore","substitute":"Substitute","leechseed":"Leech Seed","gigadrain":"Giga Drain","protect":"Protect","toxic":"Toxic","stunspore":"Stun Spore"},
+		viablemoves: {"spore":1,"substitute":1,"leechseed":1,"gigadrain":1,"protect":1,"toxic":1,"stunspore":1},
 		tier: "LC"
 	},
 	shuckle: {
 		viable: true,
-		viablemoves: {"rollout":"Rollout","acupressure":"Acupressure","powersplit":"Power Split","rest":"Rest"},
+		viablemoves: {"rollout":1,"acupressure":1,"powersplit":1,"rest":1},
 		tier: "NU"
 	},
 	shuppet: {
 		viable: true,
-		viablemoves: {"trickroom":"Trick Room","destinybond":"Destiny Bond","taunt":"Taunt","shadowsneak":"Shadow Sneak","suckerpunch":"Sucker Punch"},
+		viablemoves: {"trickroom":1,"destinybond":1,"taunt":1,"shadowsneak":1,"suckerpunch":1},
 		tier: "LC"
 	},
 	sigilyph: {
 		viable: true,
-		viablemoves: {"cosmicpower":"Cosmic Power","roost":"Roost","storedpower":"Stored Power","psychoshift":"Psycho Shift"},
+		viablemoves: {"cosmicpower":1,"roost":1,"storedpower":1,"psychoshift":1},
 		tier: "RU"
 	},
 	silcoon: {
 		viable: true,
-		viablemoves: {"bugbite":"Bug Bite","poisonsting":"Poison Sting","stringshot":"String Shot","tackle":"Tackle"},
+		viablemoves: {"bugbite":1,"poisonsting":1,"stringshot":1,"tackle":1},
 		tier: "NFE"
 	},
 	simipour: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","hydropump":"Hydro Pump","icebeam":"Ice Beam","substitute":"Substitute","surf":"Surf","grassknot":"Grass Knot"},
+		viablemoves: {"nastyplot":1,"hydropump":1,"icebeam":1,"substitute":1,"surf":1,"grassknot":1},
 		tier: "NU"
 	},
 	simisage: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","leafstorm":"Leaf Storm","hiddenpowerfire":"Hidden Power Fire","hiddenpowerice":"Hidden Power Ice","energyball":"Energy Ball","focusblast":"Focus Blast","substitute":"Substitute","leechseed":"Leech Seed"},
+		viablemoves: {"nastyplot":1,"leafstorm":1,"hiddenpowerfire":1,"hiddenpowerice":1,"energyball":1,"focusblast":1,"substitute":1,"leechseed":1},
 		tier: "NU"
 	},
 	simisear: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","fireblast":"Fire Blast","focusblast":"Focus Blast","grassknot":"Grass Knot","hiddenpowerground":"Hidden Power Ground","substitute":"Substitute","flamethrower":"Flamethrower","overheat":"Overheat"},
+		viablemoves: {"nastyplot":1,"fireblast":1,"focusblast":1,"grassknot":1,"hiddenpowerground":1,"substitute":1,"flamethrower":1,"overheat":1},
 		tier: "NU"
 	},
 	skarmory: {
 		viable: true,
-		viablemoves: {"taunt":"Taunt","whirlwind":"Whirlwind","bravebird":"Brave Bird","roost":"Roost","spikes":"Spikes","stealthrock":"Stealth Rock"},
+		viablemoves: {"taunt":1,"whirlwind":1,"bravebird":1,"roost":1,"spikes":1,"stealthrock":1},
 		tier: "OU"
 	},
 	skiploom: {
 		viable: true,
-		viablemoves: {"encore":"Encore","sleeppowder":"Sleep Powder","sunnyday":"Sunny Day","uturn":"U-turn","memento":"Memento","toxic":"Toxic","leechseed":"Leech Seed","substitute":"Substitute","protect":"Protect"},
+		viablemoves: {"encore":1,"sleeppowder":1,"sunnyday":1,"uturn":1,"memento":1,"toxic":1,"leechseed":1,"substitute":1,"protect":1},
 		tier: "NFE"
 	},
 	skitty: {
 		viable: true,
-		viablemoves: {"return":"Return","suckerpunch":"Sucker Punch","zenheadbutt":"Zen Headbutt","thunderwave":"Thunder Wave","fakeout":"Fake Out"},
+		viablemoves: {"return":1,"suckerpunch":1,"zenheadbutt":1,"thunderwave":1,"fakeout":1},
 		tier: "LC"
 	},
 	skorupi: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","xscissor":"X-Scissor","crosspoison":"Cross Poison","toxic":"Toxic","protect":"Protect"},
+		viablemoves: {"toxicspikes":1,"xscissor":1,"crosspoison":1,"toxic":1,"protect":1},
 		tier: "LC"
 	},
 	skuntank: {
 		viable: true,
-		viablemoves: {"pursuit":"Pursuit","suckerpunch":"Sucker Punch","crunch":"Crunch","fireblast":"Fire Blast","explosion":"Explosion","taunt":"Taunt","poisonjab":"Poison Jab"},
+		viablemoves: {"pursuit":1,"suckerpunch":1,"crunch":1,"fireblast":1,"explosion":1,"taunt":1,"poisonjab":1},
 		tier: "NU"
 	},
 	slaking: {
 		viable: true,
-		viablemoves: {"return":"Return","earthquake":"Earthquake","pursuit":"Pursuit","firepunch":"Fire Punch","suckerpunch":"Sucker Punch","doubleedge":"Double-Edge","retaliate":"Retaliate","gigaimpact":"Giga Impact","hammerarm":"Hammer Arm"},
+		viablemoves: {"return":1,"earthquake":1,"pursuit":1,"firepunch":1,"suckerpunch":1,"doubleedge":1,"retaliate":1,"gigaimpact":1,"hammerarm":1},
 		tier: "NU"
 	},
 	slakoth: {
 		viable: true,
-		viablemoves: {"return":"Return","pursuit":"Pursuit","hammerarm":"Hammer Arm","icepunch":"Ice Punch","firepunch":"Fire Punch","thunderpunch":"ThunderPunch","suckerpunch":"Sucker Punch","gigaimpact":"Giga Impact"},
+		viablemoves: {"return":1,"pursuit":1,"hammerarm":1,"icepunch":1,"firepunch":1,"thunderpunch":1,"suckerpunch":1,"gigaimpact":1},
 		tier: "LC"
 	},
 	slowbro: {
 		viable: true,
-		viablemoves: {"scald":"Scald","surf":"Surf","fireblast":"Fire Blast","icebeam":"Ice Beam","psychic":"Psychic","grassknot":"Grass Knot","psyshock":"Psyshock","calmmind":"Calm Mind","thunderwave":"Thunder Wave","toxic":"Toxic","slackoff":"Slack Off","trickroom":"Trick Room","trick":"Trick"},
+		viablemoves: {"scald":1,"surf":1,"fireblast":1,"icebeam":1,"psychic":1,"grassknot":1,"psyshock":1,"calmmind":1,"thunderwave":1,"toxic":1,"slackoff":1,"trickroom":1,"trick":1},
 		tier: "UU"
 	},
 	slowking: {
 		viable: true,
-		viablemoves: {"scald":"Scald","surf":"Surf","fireblast":"Fire Blast","icebeam":"Ice Beam","psychic":"Psychic","grassknot":"Grass Knot","psyshock":"Psyshock","calmmind":"Calm Mind","thunderwave":"Thunder Wave","toxic":"Toxic","slackoff":"Slack Off","trickroom":"Trick Room","trick":"Trick","nastyplot":"Nasty Plot"},
+		viablemoves: {"scald":1,"surf":1,"fireblast":1,"icebeam":1,"psychic":1,"grassknot":1,"psyshock":1,"calmmind":1,"thunderwave":1,"toxic":1,"slackoff":1,"trickroom":1,"trick":1,"nastyplot":1},
 		tier: "RU"
 	},
 	slowpoke: {
 		viable: true,
-		viablemoves: {"scald":"Scald","fireblast":"Fire Blast","aquatail":"Aqua Tail","zenheadbutt":"Zen Headbutt","thunderwave":"Thunder Wave","toxic":"Toxic","slackoff":"Slack Off","trickroom":"Trick Room","trick":"Trick"},
+		viablemoves: {"scald":1,"fireblast":1,"aquatail":1,"zenheadbutt":1,"thunderwave":1,"toxic":1,"slackoff":1,"trickroom":1,"trick":1},
 		tier: "LC"
 	},
 	slugma: {
 		viable: true,
-		viablemoves: {"stockpile":"Stockpile","recover":"Recover","lavaplume":"Lava Plume","willowisp":"Will-O-Wisp","toxic":"Toxic","hiddenpowergrass":"Hidden Power Grass","reflect":"Reflect","lightscreen":"Light Screen","memento":"Memento"},
+		viablemoves: {"stockpile":1,"recover":1,"lavaplume":1,"willowisp":1,"toxic":1,"hiddenpowergrass":1,"reflect":1,"lightscreen":1,"memento":1},
 		tier: "LC"
 	},
 	smeargle: {
 		viable: true,
-		viablemoves: {"spore":"Spore","spikes":"Spikes","stealthrock":"Stealth Rock","uturn":"U-turn","counter":"Counter"},
+		viablemoves: {"spore":1,"spikes":1,"stealthrock":1,"uturn":1,"counter":1},
 		tier: "RU"
 	},
 	smoochum: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","psychic":"Psychic","hiddenpowerfighting":"Hidden Power Fighting","trick":"Trick","shadowball":"Shadow Ball","nastyplot":"Nasty Plot","substitute":"Substitute","grassknot":"Grass Knot"},
+		viablemoves: {"icebeam":1,"psychic":1,"hiddenpowerfighting":1,"trick":1,"shadowball":1,"nastyplot":1,"substitute":1,"grassknot":1},
 		tier: "LC"
 	},
 	sneasel: {
 		viable: true,
-		viablemoves: {"iceshard":"Ice Shard","icepunch":"Ice Punch","nightslash":"Night Slash","lowkick":"Low Kick","pursuit":"Pursuit","swordsdance":"Swords Dance"},
+		viablemoves: {"iceshard":1,"icepunch":1,"nightslash":1,"lowkick":1,"pursuit":1,"swordsdance":1},
 		tier: "NU"
 	},
 	snivy: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","taunt":"Taunt","leafstorm":"Leaf Storm","gigadrain":"Giga Drain","hiddenpowerfire":"Hidden Power Fire","substitute":"Substitute","leechseed":"Leech Seed","toxic":"Toxic"},
+		viablemoves: {"reflect":1,"lightscreen":1,"taunt":1,"leafstorm":1,"gigadrain":1,"hiddenpowerfire":1,"substitute":1,"leechseed":1,"toxic":1},
 		tier: "LC"
 	},
 	snorlax: {
 		viable: true,
-		viablemoves: {"rest":"Rest","curse":"Curse","sleeptalk":"Sleep Talk","bodyslam":"Body Slam","earthquake":"Earthquake","return":"Return","firepunch":"Fire Punch","icepunch":"Ice Punch","crunch":"Crunch","selfdestruct":"Selfdestruct","pursuit":"Pursuit","toxic":"Toxic","whirlwind":"Whirlwind"},
+		viablemoves: {"rest":1,"curse":1,"sleeptalk":1,"bodyslam":1,"earthquake":1,"return":1,"firepunch":1,"icepunch":1,"crunch":1,"selfdestruct":1,"pursuit":1,"toxic":1,"whirlwind":1},
 		tier: "UU"
 	},
 	snorunt: {
 		viable: true,
-		viablemoves: {"spikes":"Spikes","icebeam":"Ice Beam","hiddenpowerground":"Hidden Power Ground","iceshard":"Ice Shard","crunch":"Crunch","shadowball":"Shadow Ball"},
+		viablemoves: {"spikes":1,"icebeam":1,"hiddenpowerground":1,"iceshard":1,"crunch":1,"shadowball":1},
 		tier: "LC"
 	},
 	snover: {
 		viable: true,
-		viablemoves: {"blizzard":"Blizzard","iceshard":"Ice Shard","gigadrain":"Giga Drain","leechseed":"Leech Seed","substitute":"Substitute"},
+		viablemoves: {"blizzard":1,"iceshard":1,"gigadrain":1,"leechseed":1,"substitute":1},
 		tier: "BL"
 	},
 	snubbull: {
 		viable: true,
-		viablemoves: {"thunderwave":"Thunder Wave","return":"Return","crunch":"Crunch","closecombat":"Close Combat","brickbreak":"Brick Break","toxic":"Toxic"},
+		viablemoves: {"thunderwave":1,"return":1,"crunch":1,"closecombat":1,"brickbreak":1,"toxic":1},
 		tier: "LC"
 	},
 	solosis: {
 		viable: true,
-		viablemoves: {"trick":"Trick","calmmind":"Calm Mind","recover":"Recover","psychic":"Psychic","focusblast":"Focus Blast","hiddenpowerfire":"Hidden Power Fire","shadowball":"Shadow Ball","trickroom":"Trick Room","psyshock":"Psyshock"},
+		viablemoves: {"trick":1,"calmmind":1,"recover":1,"psychic":1,"focusblast":1,"hiddenpowerfire":1,"shadowball":1,"trickroom":1,"psyshock":1},
 		tier: "LC"
 	},
 	solrock: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","explosion":"Explosion","stoneedge":"Stone Edge","zenheadbutt":"Zen Headbutt","earthquake":"Earthquake","batonpass":"Baton Pass","willowisp":"Will-O-Wisp","rockpolish":"Rock Polish"},
+		viablemoves: {"stealthrock":1,"explosion":1,"stoneedge":1,"zenheadbutt":1,"earthquake":1,"batonpass":1,"willowisp":1,"rockpolish":1},
 		tier: "NU"
 	},
 	spearow: {
 		viable: true,
-		viablemoves: {"return":"Return","drillpeck":"Drill Peck","doubleedge":"Double-Edge","uturn":"U-turn","quickattack":"Quick Attack","pursuit":"Pursuit"},
+		viablemoves: {"return":1,"drillpeck":1,"doubleedge":1,"uturn":1,"quickattack":1,"pursuit":1},
 		tier: "LC"
 	},
 	spheal: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","protect":"Protect","toxic":"Toxic","surf":"Surf","icebeam":"Ice Beam"},
+		viablemoves: {"substitute":1,"protect":1,"toxic":1,"surf":1,"icebeam":1},
 		tier: "LC"
 	},
 	spinarak: {
 		viable: true,
-		viablemoves: {"agility":"Agility","toxic":"Toxic","bugbite":"Bug Bite","toxicspikes":"Toxic Spikes","poisonjab":"Poison Jab","crosspoison":"Cross Poison","batonpass":"Baton Pass","swordsdance":"Swords Dance"},
+		viablemoves: {"agility":1,"toxic":1,"bugbite":1,"toxicspikes":1,"poisonjab":1,"crosspoison":1,"batonpass":1,"swordsdance":1},
 		tier: "LC"
 	},
 	spinda: {
 		viable: true,
-		viablemoves: {"wish":"Wish","toxic":"Toxic","protect":"Protect","substitute":"Substitute","return":"Return","superpower":"Superpower"},
+		viablemoves: {"wish":1,"toxic":1,"protect":1,"substitute":1,"return":1,"superpower":1},
 		tier: "NU"
 	},
 	spiritomb: {
 		viable: true,
-		viablemoves: {"shadowsneak":"Shadow Sneak","suckerpunch":"Sucker Punch","pursuit":"Pursuit","trick":"Trick","willowisp":"Will-O-Wisp","calmmind":"Calm Mind","darkpulse":"Dark Pulse","rest":"Rest","sleeptalk":"Sleep Talk","painsplit":"Pain Split"},
+		viablemoves: {"shadowsneak":1,"suckerpunch":1,"pursuit":1,"trick":1,"willowisp":1,"calmmind":1,"darkpulse":1,"rest":1,"sleeptalk":1,"painsplit":1},
 		tier: "RU"
 	},
 	spoink: {
 		viable: true,
-		viablemoves: {"psychic":"Psychic","reflect":"Reflect","lightscreen":"Light Screen","thunderwave":"Thunder Wave","trick":"Trick","healbell":"Heal Bell"},
+		viablemoves: {"psychic":1,"reflect":1,"lightscreen":1,"thunderwave":1,"trick":1,"healbell":1},
 		tier: "LC"
 	},
 	squirtle: {
 		viable: true,
-		viablemoves: {"surf":"Surf","icebeam":"Ice Beam","hydropump":"Hydro Pump","rapidspin":"Rapid Spin","scald":"Scald","aquajet":"Aqua Jet","toxic":"Toxic"},
+		viablemoves: {"surf":1,"icebeam":1,"hydropump":1,"rapidspin":1,"scald":1,"aquajet":1,"toxic":1},
 		tier: "LC"
 	},
 	stantler: {
 		viable: true,
-		viablemoves: {"return":"Return","megahorn":"Megahorn","jumpkick":"Jump Kick","earthquake":"Earthquake","thunderwave":"Thunder Wave","suckerpunch":"Sucker Punch"},
+		viablemoves: {"return":1,"megahorn":1,"jumpkick":1,"earthquake":1,"thunderwave":1,"suckerpunch":1},
 		tier: "NU"
 	},
 	staraptor: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","closecombat":"Close Combat","return":"Return","uturn":"U-turn","quickattack":"Quick Attack","substitute":"Substitute","roost":"Roost","doubleedge":"Double-Edge"},
+		viablemoves: {"bravebird":1,"closecombat":1,"return":1,"uturn":1,"quickattack":1,"substitute":1,"roost":1,"doubleedge":1},
 		tier: "BL"
 	},
 	staravia: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","return":"Return","uturn":"U-turn","pursuit":"Pursuit"},
+		viablemoves: {"bravebird":1,"return":1,"uturn":1,"pursuit":1},
 		tier: "NFE"
 	},
 	starly: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","return":"Return","uturn":"U-turn","pursuit":"Pursuit"},
+		viablemoves: {"bravebird":1,"return":1,"uturn":1,"pursuit":1},
 		tier: "LC"
 	},
 	starmie: {
 		viable: true,
-		viablemoves: {"surf":"Surf","thunderbolt":"Thunderbolt","icebeam":"Ice Beam","rapidspin":"Rapid Spin","recover":"Recover","psychic":"Psychic","trick":"Trick"},
+		viablemoves: {"surf":1,"thunderbolt":1,"icebeam":1,"rapidspin":1,"recover":1,"psychic":1,"trick":1},
 		tier: "OU"
 	},
 	staryu: {
 		viable: true,
-		viablemoves: {"surf":"Surf","thunderbolt":"Thunderbolt","icebeam":"Ice Beam","rapidspin":"Rapid Spin","recover":"Recover"},
+		viablemoves: {"surf":1,"thunderbolt":1,"icebeam":1,"rapidspin":1,"recover":1},
 		tier: "LC"
 	},
 	steelix: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","earthquake":"Earthquake","gyroball":"Gyro Ball","curse":"Curse","dragontail":"Dragon Tail","roar":"Roar","toxic":"Toxic","stoneedge":"Stone Edge","icefang":"Ice Fang","firefang":"Fire Fang","ironhead":"Iron Head"},
+		viablemoves: {"stealthrock":1,"earthquake":1,"gyroball":1,"curse":1,"dragontail":1,"roar":1,"toxic":1,"stoneedge":1,"icefang":1,"firefang":1,"ironhead":1},
 		tier: "RU"
 	},
 	stoutland: {
 		viable: true,
-		viablemoves: {"return":"Return","wildcharge":"Wild Charge","firefang":"Fire Fang","crunch":"Crunch","icefang":"Ice Fang","pursuit":"Pursuit","howl":"Howl"},
+		viablemoves: {"return":1,"wildcharge":1,"firefang":1,"crunch":1,"icefang":1,"pursuit":1,"howl":1},
 		tier: "UU"
 	},
 	stunfisk: {
 		viable: true,
-		viablemoves: {"discharge":"Discharge","thunderbolt":"Thunderbolt","earthpower":"Earth Power","scald":"Scald","toxic":"Toxic","rest":"Rest","sleeptalk":"Sleep Talk","surf":"Surf","sludgewave":"Sludge Wave","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"discharge":1,"thunderbolt":1,"earthpower":1,"scald":1,"toxic":1,"rest":1,"sleeptalk":1,"surf":1,"sludgewave":1,"hiddenpowerice":1},
 		tier: "NU"
 	},
 	stunky: {
 		viable: true,
-		viablemoves: {"pursuit":"Pursuit","suckerpunch":"Sucker Punch","crunch":"Crunch","fireblast":"Fire Blast","explosion":"Explosion","taunt":"Taunt"},
+		viablemoves: {"pursuit":1,"suckerpunch":1,"crunch":1,"fireblast":1,"explosion":1,"taunt":1},
 		tier: "LC"
 	},
 	sudowoodo: {
 		viable: true,
-		viablemoves: {"hammerarm":"Hammer Arm","stoneedge":"Stone Edge","rockslide":"Rock Slide","earthquake":"Earthquake","lowkick":"Low Kick","superpower":"Superpower","suckerpunch":"Sucker Punch","woodhammer":"Wood Hammer","rockpolish":"Rock Polish","explosion":"Explosion","stealthrock":"Stealth Rock"},
+		viablemoves: {"hammerarm":1,"stoneedge":1,"rockslide":1,"earthquake":1,"lowkick":1,"superpower":1,"suckerpunch":1,"woodhammer":1,"rockpolish":1,"explosion":1,"stealthrock":1},
 		tier: "NU"
 	},
 	suicune: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","icebeam":"Ice Beam","scald":"Scald","hiddenpowergrass":"Hidden Power Grass","hiddenpowerelectric":"Hidden Power Electric","rest":"Rest","sleeptalk":"Sleep Talk","roar":"Roar","calmmind":"Calm Mind"},
+		viablemoves: {"hydropump":1,"icebeam":1,"scald":1,"hiddenpowergrass":1,"hiddenpowerelectric":1,"rest":1,"sleeptalk":1,"roar":1,"calmmind":1},
 		tier: "UU"
 	},
 	sunflora: {
 		viable: true,
-		viablemoves: {"sunnyday":"Sunny Day","leafstorm":"Leaf Storm","energyball":"Energy Ball","solarbeam":"SolarBeam","hiddenpowerfire":"Hidden Power Fire","hiddenpowerrock":"Hidden Power Rock","earthpower":"Earth Power"},
+		viablemoves: {"sunnyday":1,"leafstorm":1,"energyball":1,"solarbeam":1,"hiddenpowerfire":1,"hiddenpowerrock":1,"earthpower":1},
 		tier: "NU"
 	},
 	sunkern: {
 		viable: true,
-		viablemoves: {"sunnyday":"Sunny Day","energyball":"Energy Ball","solarbeam":"SolarBeam","hiddenpowerfire":"Hidden Power Fire","substitute":"Substitute","toxic":"Toxic","earthpower":"Earth Power"},
+		viablemoves: {"sunnyday":1,"energyball":1,"solarbeam":1,"hiddenpowerfire":1,"substitute":1,"toxic":1,"earthpower":1},
 		tier: "LC"
 	},
 	surskit: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","signalbeam":"Signal Beam","hiddenpowerfire":"Hidden Power Fire","hiddenpowerfighting":"Hidden Power Fighting","gigadrain":"Giga Drain"},
+		viablemoves: {"hydropump":1,"signalbeam":1,"hiddenpowerfire":1,"hiddenpowerfighting":1,"gigadrain":1},
 		tier: "LC"
 	},
 	swablu: {
 		viable: true,
-		viablemoves: {"roost":"Roost","toxic":"Toxic","cottonguard":"Cotton Guard","hypervoice":"Hyper Voice"},
+		viablemoves: {"roost":1,"toxic":1,"cottonguard":1,"hypervoice":1},
 		tier: "LC"
 	},
 	swadloon: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","sunnyday":"Sunny Day","solarbeam":"SolarBeam","energyball":"Energy Ball","bugbuzz":"Bug Buzz","hiddenpowerfire":"Hidden Power Fire","hiddenpowerice":"Hidden Power Ice"},
+		viablemoves: {"calmmind":1,"sunnyday":1,"solarbeam":1,"energyball":1,"bugbuzz":1,"hiddenpowerfire":1,"hiddenpowerice":1},
 		tier: "NFE"
 	},
 	swalot: {
 		viable: true,
-		viablemoves: {"stockpile":"Stockpile","sludgebomb":"Sludge Bomb","icebeam":"Ice Beam","toxic":"Toxic","painsplit":"Pain Split","yawn":"Yawn","encore":"Encore"},
+		viablemoves: {"stockpile":1,"sludgebomb":1,"icebeam":1,"toxic":1,"painsplit":1,"yawn":1,"encore":1},
 		tier: "NU"
 	},
 	swampert: {
 		viable: true,
-		viablemoves: {"waterfall":"Waterfall","earthquake":"Earthquake","icepunch":"Ice Punch","stealthrock":"Stealth Rock","roar":"Roar","superpower":"Superpower","stoneedge":"Stone Edge"},
+		viablemoves: {"waterfall":1,"earthquake":1,"icepunch":1,"stealthrock":1,"roar":1,"superpower":1,"stoneedge":1},
 		tier: "UU"
 	},
 	swanna: {
 		viable: true,
-		viablemoves: {"scald":"Scald","airslash":"Air Slash","roost":"Roost","featherdance":"FeatherDance","substitute":"Substitute","hurricane":"Hurricane","surf":"Surf","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","bravebird":"Brave Bird","raindance":"Rain Dance"},
+		viablemoves: {"scald":1,"airslash":1,"roost":1,"featherdance":1,"substitute":1,"hurricane":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"bravebird":1,"raindance":1},
 		tier: "NU"
 	},
 	swellow: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","facade":"Facade","quickattack":"Quick Attack","uturn":"U-turn","protect":"Protect"},
+		viablemoves: {"bravebird":1,"facade":1,"quickattack":1,"uturn":1,"protect":1},
 		tier: "NU"
 	},
 	swinub: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","iciclecrash":"Icicle Crash","iceshard":"Ice Shard","stealthrock":"Stealth Rock","superpower":"Superpower","toxic":"Toxic","endeavor":"Endeavor"},
+		viablemoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"stealthrock":1,"superpower":1,"toxic":1,"endeavor":1},
 		tier: "LC"
 	},
 	swoobat: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","psychic":"Psychic","airslash":"Air Slash","hiddenpowerground":"Hidden Power Ground","agility":"Agility","reflect":"Reflect","lightscreen":"Light Screen","roost":"Roost","uturn":"U-turn"},
+		viablemoves: {"calmmind":1,"psychic":1,"airslash":1,"hiddenpowerground":1,"agility":1,"reflect":1,"lightscreen":1,"roost":1,"uturn":1},
 		tier: "NU"
 	},
 	taillow: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","facade":"Facade","quickattack":"Quick Attack","uturn":"U-turn","protect":"Protect"},
+		viablemoves: {"bravebird":1,"facade":1,"quickattack":1,"uturn":1,"protect":1},
 		tier: "LC"
 	},
 	tangela: {
@@ -3043,167 +3043,167 @@ exports.BattleFormatsData = {
 	},
 	tangrowth: {
 		viable: true,
-		viablemoves: {"gigadrain":"Giga Drain","sleeppowder":"Sleep Powder","hiddenpowerrock":"Hidden Power Rock","hiddenpowerice":"Hidden Power Ice","hiddenpowerfire":"Hidden Power Fire","leechseed":"Leech Seed","knockoff":"Knock Off","leafstorm":"Leaf Storm","stunspore":"Stun Spore","sludgebomb":"Sludge Bomb","powerwhip":"Power Whip","earthquake":"Earthquake","focusblast":"Focus Blast","swordsdance":"Swords Dance"},
+		viablemoves: {"gigadrain":1,"sleeppowder":1,"hiddenpowerrock":1,"hiddenpowerice":1,"hiddenpowerfire":1,"leechseed":1,"knockoff":1,"leafstorm":1,"stunspore":1,"sludgebomb":1,"powerwhip":1,"earthquake":1,"focusblast":1,"swordsdance":1},
 		tier: "RU"
 	},
 	tauros: {
 		viable: true,
-		viablemoves: {"return":"Return","substitute":"Substitute","earthquake":"Earthquake","zenheadbutt":"Zen Headbutt","rockslide":"Rock Slide","workup":"Work Up","pursuit":"Pursuit"},
+		viablemoves: {"return":1,"substitute":1,"earthquake":1,"zenheadbutt":1,"rockslide":1,"workup":1,"pursuit":1},
 		tier: "NU"
 	},
 	teddiursa: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","protect":"Protect","facade":"Facade","closecombat":"Close Combat","firepunch":"Fire Punch","crunch":"Crunch"},
+		viablemoves: {"swordsdance":1,"protect":1,"facade":1,"closecombat":1,"firepunch":1,"crunch":1},
 		tier: "LC"
 	},
 	tentacool: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","rapidspin":"Rapid Spin","scald":"Scald","sludgebomb":"Sludge Bomb","icebeam":"Ice Beam","knockoff":"Knock Off","gigadrain":"Giga Drain","toxic":"Toxic","hydropump":"Hydro Pump"},
+		viablemoves: {"toxicspikes":1,"rapidspin":1,"scald":1,"sludgebomb":1,"icebeam":1,"knockoff":1,"gigadrain":1,"toxic":1,"hydropump":1},
 		tier: "LC"
 	},
 	tentacruel: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","rapidspin":"Rapid Spin","scald":"Scald","sludgebomb":"Sludge Bomb","icebeam":"Ice Beam","knockoff":"Knock Off","gigadrain":"Giga Drain","toxic":"Toxic","hydropump":"Hydro Pump"},
+		viablemoves: {"toxicspikes":1,"rapidspin":1,"scald":1,"sludgebomb":1,"icebeam":1,"knockoff":1,"gigadrain":1,"toxic":1,"hydropump":1},
 		tier: "OU"
 	},
 	tepig: {
 		viable: true,
-		viablemoves: {"flamecharge":"Flame Charge","flareblitz":"Flare Blitz","wildcharge":"Wild Charge","superpower":"Superpower","headsmash":"Head Smash"},
+		viablemoves: {"flamecharge":1,"flareblitz":1,"wildcharge":1,"superpower":1,"headsmash":1},
 		tier: "LC"
 	},
 	terrakion: {
 		viable: true,
-		viablemoves: {"stoneedge":"Stone Edge","closecombat":"Close Combat","quickattack":"Quick Attack","swordsdance":"Swords Dance","rockpolish":"Rock Polish","substitute":"Substitute","xscissor":"X-Scissor","earthquake":"Earthquake"},
+		viablemoves: {"stoneedge":1,"closecombat":1,"quickattack":1,"swordsdance":1,"rockpolish":1,"substitute":1,"xscissor":1,"earthquake":1},
 		tier: "OU"
 	},
 	throh: {
 		viable: true,
-		viablemoves: {"bulkup":"Bulk Up","circlethrow":"Circle Throw","payback":"Payback","rest":"Rest","stoneedge":"Stone Edge"},
+		viablemoves: {"bulkup":1,"circlethrow":1,"payback":1,"rest":1,"stoneedge":1},
 		tier: "NU"
 	},
 	thundurus: {
 		viable: true,
-		viablemoves: {"thunderwave":"Thunder Wave","nastyplot":"Nasty Plot","thunderbolt":"Thunderbolt","hiddenpowerice":"Hidden Power Ice","focusblast":"Focus Blast","taunt":"Taunt","hammerarm":"Hammer Arm","grassknot":"Grass Knot","substitute":"Substitute"},
+		viablemoves: {"thunderwave":1,"nastyplot":1,"thunderbolt":1,"hiddenpowerice":1,"focusblast":1,"taunt":1,"hammerarm":1,"grassknot":1,"substitute":1},
 		tier: "Uber"
 	},
 	timburr: {
 		viable: true,
-		viablemoves: {"machpunch":"Mach Punch","bulkup":"Bulk Up","drainpunch":"Drain Punch","payback":"Payback","stoneedge":"Stone Edge","facade":"Facade"},
+		viablemoves: {"machpunch":1,"bulkup":1,"drainpunch":1,"payback":1,"stoneedge":1,"facade":1},
 		tier: "LC"
 	},
 	tirtouga: {
 		viable: true,
-		viablemoves: {"shellsmash":"Shell Smash","aquajet":"Aqua Jet","waterfall":"Waterfall","stoneedge":"Stone Edge","earthquake":"Earthquake"},
+		viablemoves: {"shellsmash":1,"aquajet":1,"waterfall":1,"stoneedge":1,"earthquake":1},
 		tier: "LC"
 	},
 	togekiss: {
 		viable: true,
-		viablemoves: {"wish":"Wish","roost":"Roost","thunderwave":"Thunder Wave","nastyplot":"Nasty Plot","airslash":"Air Slash","aurasphere":"Aura Sphere","batonpass":"Baton Pass"},
+		viablemoves: {"wish":1,"roost":1,"thunderwave":1,"nastyplot":1,"airslash":1,"aurasphere":1,"batonpass":1},
 		tier: "UU"
 	},
 	togepi: {
 		viable: true,
-		viablemoves: {"wish":"Wish","protect":"Protect","fireblast":"Fire Blast","toxic":"Toxic","thunderwave":"Thunder Wave"},
+		viablemoves: {"wish":1,"protect":1,"fireblast":1,"toxic":1,"thunderwave":1},
 		tier: "LC"
 	},
 	togetic: {
 		viable: true,
-		viablemoves: {"wish":"Wish","protect":"Protect","fireblast":"Fire Blast","toxic":"Toxic","thunderwave":"Thunder Wave"},
+		viablemoves: {"wish":1,"protect":1,"fireblast":1,"toxic":1,"thunderwave":1},
 		tier: "NU"
 	},
 	torchic: {
 		viable: true,
-		viablemoves: {"fireblast":"Fire Blast","protect":"Protect","batonpass":"Baton Pass","substitute":"Substitute","hiddenpowergrass":"Hidden Power Grass"},
+		viablemoves: {"fireblast":1,"protect":1,"batonpass":1,"substitute":1,"hiddenpowergrass":1},
 		tier: "LC"
 	},
 	torkoal: {
 		viable: true,
-		viablemoves: {"rapidspin":"Rapid Spin","stealthrock":"Stealth Rock","yawn":"Yawn","lavaplume":"Lava Plume","earthpower":"Earth Power","toxic":"Toxic","willowisp":"Will-O-Wisp"},
+		viablemoves: {"rapidspin":1,"stealthrock":1,"yawn":1,"lavaplume":1,"earthpower":1,"toxic":1,"willowisp":1},
 		tier: "NU"
 	},
 	tornadus: {
 		viable: true,
-		viablemoves: {"raindance":"Rain Dance","hurricane":"Hurricane","airslash":"Air Slash","uturn":"U-turn","bulkup":"Bulk Up","acrobatics":"Acrobatics","brickbreak":"Brick Break","hammerarm":"Hammer Arm","focusblast":"Focus Blast","taunt":"Taunt","tailwind":"Tailwind","substitute":"Substitute","grassknot":"Grass Knot"},
+		viablemoves: {"raindance":1,"hurricane":1,"airslash":1,"uturn":1,"bulkup":1,"acrobatics":1,"brickbreak":1,"hammerarm":1,"focusblast":1,"taunt":1,"tailwind":1,"substitute":1,"grassknot":1},
 		tier: "OU"
 	},
 	torterra: {
 		viable: true,
-		viablemoves: {"rockpolish":"Rock Polish","stealthrock":"Stealth Rock","earthquake":"Earthquake","woodhammer":"Wood Hammer","seedbomb":"Seed Bomb","stoneedge":"Stone Edge","synthesis":"Synthesis","leechseed":"Leech Seed"},
+		viablemoves: {"rockpolish":1,"stealthrock":1,"earthquake":1,"woodhammer":1,"seedbomb":1,"stoneedge":1,"synthesis":1,"leechseed":1},
 		tier: "NU"
 	},
 	totodile: {
 		viable: true,
-		viablemoves: {"aquajet":"Aqua Jet","waterfall":"Waterfall","crunch":"Crunch","icepunch":"Ice Punch","superpower":"Superpower","dragondance":"Dragon Dance","swordsdance":"Swords Dance","return":"Return"},
+		viablemoves: {"aquajet":1,"waterfall":1,"crunch":1,"icepunch":1,"superpower":1,"dragondance":1,"swordsdance":1,"return":1},
 		tier: "LC"
 	},
 	toxicroak: {
 		viable: true,
-		viablemoves: {"fakeout":"Fake Out","suckerpunch":"Sucker Punch","drainpunch":"Drain Punch","bulkup":"Bulk Up","substitute":"Substitute","swordsdance":"Swords Dance","crosschop":"Cross Chop","icepunch":"Ice Punch"},
+		viablemoves: {"fakeout":1,"suckerpunch":1,"drainpunch":1,"bulkup":1,"substitute":1,"swordsdance":1,"crosschop":1,"icepunch":1},
 		tier: "OU"
 	},
 	tranquill: {
 		viable: true,
-		viablemoves: {"pluck":"Pluck","uturn":"U-turn","return":"Return","detect":"Detect","roost":"Roost"},
+		viablemoves: {"pluck":1,"uturn":1,"return":1,"detect":1,"roost":1},
 		tier: "NFE"
 	},
 	trapinch: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","substitute":"Substitute","rockslide":"Rock Slide","crunch":"Crunch","quickattack":"Quick Attack"},
+		viablemoves: {"earthquake":1,"substitute":1,"rockslide":1,"crunch":1,"quickattack":1},
 		tier: "LC"
 	},
 	treecko: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","leechseed":"Leech Seed","gigadrain":"Giga Drain","leafstorm":"Leaf Storm","hiddenpowerice":"Hidden Power Ice","hiddenpowerrock":"Hidden Power Rock","endeavor":"Endeavor"},
+		viablemoves: {"substitute":1,"leechseed":1,"gigadrain":1,"leafstorm":1,"hiddenpowerice":1,"hiddenpowerrock":1,"endeavor":1},
 		tier: "LC"
 	},
 	tropius: {
 		viable: true,
-		viablemoves: {"leechseed":"Leech Seed","substitute":"Substitute","airslash":"Air Slash","gigadrain":"Giga Drain","earthquake":"Earthquake","hiddenpowerfire":"Hidden Power Fire","roost":"Roost","leafstorm":"Leaf Storm"},
+		viablemoves: {"leechseed":1,"substitute":1,"airslash":1,"gigadrain":1,"earthquake":1,"hiddenpowerfire":1,"roost":1,"leafstorm":1},
 		tier: "NU"
 	},
 	trubbish: {
 		viable: true,
-		viablemoves: {"clearsmog":"Clear Smog","toxicspikes":"Toxic Spikes","spikes":"Spikes","explosion":"Explosion"},
+		viablemoves: {"clearsmog":1,"toxicspikes":1,"spikes":1,"explosion":1},
 		tier: "LC"
 	},
 	turtwig: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","stealthrock":"Stealth Rock","seedbomb":"Seed Bomb","substitute":"Substitute","leechseed":"Leech Seed","toxic":"Toxic"},
+		viablemoves: {"reflect":1,"lightscreen":1,"stealthrock":1,"seedbomb":1,"substitute":1,"leechseed":1,"toxic":1},
 		tier: "LC"
 	},
 	tympole: {
 		viable: true,
-		viablemoves: {"hydropump":"Hydro Pump","surf":"Surf","sludgewave":"Sludge Wave","earthpower":"Earth Power","hiddenpowerelectric":"Hidden Power Electric","raindance":"Rain Dance"},
+		viablemoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"raindance":1},
 		tier: "LC"
 	},
 	tynamo: {
 		viable: true,
-		viablemoves: {"spark":"Spark","chargebeam":"Charge Beam","thunderwave":"Thunder Wave","tackle":"Tackle"},
+		viablemoves: {"spark":1,"chargebeam":1,"thunderwave":1,"tackle":1},
 		tier: "LC"
 	},
 	typhlosion: {
 		viable: true,
-		viablemoves: {"eruption":"Eruption","fireblast":"Fire Blast","flamethrower":"Flamethrower","hiddenpowergrass":"Hidden Power Grass","naturepower":"Nature Power","hiddenpowerrock":"Hidden Power Rock","focusblast":"Focus Blast","sunnyday":"Sunny Day","solarbeam":"SolarBeam","willowisp":"Will-O-Wisp"},
+		viablemoves: {"eruption":1,"fireblast":1,"flamethrower":1,"hiddenpowergrass":1,"naturepower":1,"hiddenpowerrock":1,"focusblast":1,"sunnyday":1,"solarbeam":1,"willowisp":1},
 		tier: "RU"
 	},
 	tyranitar: {
 		viable: true,
-		viablemoves: {"crunch":"Crunch","stoneedge":"Stone Edge","pursuit":"Pursuit","superpower":"Superpower","fireblast":"Fire Blast","icebeam":"Ice Beam","stealthrock":"Stealth Rock","aquatail":"Aqua Tail","dragondance":"Dragon Dance","lowkick":"Low Kick","rockslide":"Rock Slide"},
+		viablemoves: {"crunch":1,"stoneedge":1,"pursuit":1,"superpower":1,"fireblast":1,"icebeam":1,"stealthrock":1,"aquatail":1,"dragondance":1,"lowkick":1,"rockslide":1},
 		tier: "OU"
 	},
 	tyrogue: {
 		viable: true,
-		viablemoves: {"hijumpkick":"Hi Jump Kick","rapidspin":"Rapid Spin","fakeout":"Fake Out","bulletpunch":"Bullet Punch","machpunch":"Mach Punch","toxic":"Toxic","counter":"Counter."},
+		viablemoves: {"hijumpkick":1,"rapidspin":1,"fakeout":1,"bulletpunch":1,"machpunch":1,"toxic":1,"counter":1},
 		tier: "LC"
 	},
 	umbreon: {
 		viable: true,
-		viablemoves: {"curse":"Curse","payback":"Payback","moonlight":"Moonlight","wish":"Wish","protect":"Protect","healbell":"Heal Bell","toxic":"Toxic","batonpass":"Baton Pass"},
+		viablemoves: {"curse":1,"payback":1,"moonlight":1,"wish":1,"protect":1,"healbell":1,"toxic":1,"batonpass":1},
 		tier: "UU"
 	},
 	unfezant: {
 		viable: true,
-		viablemoves: {"pluck":"Pluck","uturn":"U-turn","return":"Return","detect":"Detect","roost":"Roost","hypnosis":"Hypnosis","taunt":"Taunt","wish":"Wish"},
+		viablemoves: {"pluck":1,"uturn":1,"return":1,"detect":1,"roost":1,"hypnosis":1,"taunt":1,"wish":1},
 		tier: "NU"
 	},
 	unown: {
@@ -3292,197 +3292,197 @@ exports.BattleFormatsData = {
 	},
 	ursaring: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","protect":"Protect","facade":"Facade","closecombat":"Close Combat","firepunch":"Fire Punch","crunch":"Crunch"},
+		viablemoves: {"swordsdance":1,"protect":1,"facade":1,"closecombat":1,"firepunch":1,"crunch":1},
 		tier: "NU"
 	},
 	uxie: {
 		viable: true,
-		viablemoves: {"reflect":"Reflect","lightscreen":"Light Screen","uturn":"U-turn","memento":"Memento","yawn":"Yawn","psychic":"Psychic","thunderwave":"Thunder Wave","healbell":"Heal Bell","substitute":"Substitute","stealthrock":"Stealth Rock","trick":"Trick","toxic":"Toxic","trickroom":"Trick Room","calmmind":"Calm Mind","gigadrain":"Giga Drain","thunderbolt":"Thunderbolt","raindance":"Rain Dance","sunnyday":"Sunny Day"},
+		viablemoves: {"reflect":1,"lightscreen":1,"uturn":1,"memento":1,"yawn":1,"psychic":1,"thunderwave":1,"healbell":1,"substitute":1,"stealthrock":1,"trick":1,"toxic":1,"trickroom":1,"calmmind":1,"gigadrain":1,"thunderbolt":1,"raindance":1,"sunnyday":1},
 		tier: "RU"
 	},
 	vanillish: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","flashcannon":"Flash Cannon","waterpulse":"Water Pulse","hiddenpowergrass":"Hidden Power Grass","hiddenpowerfighting":"Hidden Power Fighting","autotomize":"Autotomize","substitute":"Substitute"},
+		viablemoves: {"icebeam":1,"flashcannon":1,"waterpulse":1,"hiddenpowergrass":1,"hiddenpowerfighting":1,"autotomize":1,"substitute":1},
 		tier: "NFE"
 	},
 	vanillite: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","flashcannon":"Flash Cannon","waterpulse":"Water Pulse","hiddenpowergrass":"Hidden Power Grass","hiddenpowerfighting":"Hidden Power Fighting","autotomize":"Autotomize","substitute":"Substitute"},
+		viablemoves: {"icebeam":1,"flashcannon":1,"waterpulse":1,"hiddenpowergrass":1,"hiddenpowerfighting":1,"autotomize":1,"substitute":1},
 		tier: "LC"
 	},
 	vanilluxe: {
 		viable: true,
-		viablemoves: {"icebeam":"Ice Beam","flashcannon":"Flash Cannon","waterpulse":"Water Pulse","hiddenpowergrass":"Hidden Power Grass","hiddenpowerfighting":"Hidden Power Fighting","autotomize":"Autotomize","substitute":"Substitute"},
+		viablemoves: {"icebeam":1,"flashcannon":1,"waterpulse":1,"hiddenpowergrass":1,"hiddenpowerfighting":1,"autotomize":1,"substitute":1},
 		tier: "NU"
 	},
 	vaporeon: {
 		viable: true,
-		viablemoves: {"wish":"Wish","protect":"Protect","scald":"Scald","roar":"Roar","icebeam":"Ice Beam","toxic":"Toxic","batonpass":"Baton Pass","substitute":"Substitute","acidarmor":"Acid Armor","surf":"Surf","hydropump":"Hydro Pump","hiddenpowergrass":"Hidden Power Grass","rest":"Rest","raindance":"Rain Dance"},
+		viablemoves: {"wish":1,"protect":1,"scald":1,"roar":1,"icebeam":1,"toxic":1,"batonpass":1,"substitute":1,"acidarmor":1,"surf":1,"hydropump":1,"hiddenpowergrass":1,"rest":1,"raindance":1},
 		tier: "OU"
 	},
 	venipede: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","bugbite":"Bug Bite","spikes":"Spikes","poisonjab":"Poison Jab"},
+		viablemoves: {"toxicspikes":1,"bugbite":1,"spikes":1,"poisonjab":1},
 		tier: "LC"
 	},
 	venomoth: {
 		viable: true,
-		viablemoves: {"sleeppowder":"Sleep Powder","roost":"Roost","toxicspikes":"Toxic Spikes","quiverdance":"Quiver Dance","batonpass":"Baton Pass","bugbuzz":"Bug Buzz","sludgebomb":"Sludge Bomb","gigadrain":"Giga Drain","substitute":"Substitute"},
+		viablemoves: {"sleeppowder":1,"roost":1,"toxicspikes":1,"quiverdance":1,"batonpass":1,"bugbuzz":1,"sludgebomb":1,"gigadrain":1,"substitute":1},
 		tier: "BL2"
 	},
 	venonat: {
 		viable: true,
-		viablemoves: {"sleeppowder":"Sleep Powder","morningsun":"Morning Sun","toxicspikes":"Toxic Spikes","sludgebomb":"Sludge Bomb","signalbeam":"Signal Beam","bugbite":"Bug Bite","stunspore":"Stun Spore","gigadrain":"Giga Drain"},
+		viablemoves: {"sleeppowder":1,"morningsun":1,"toxicspikes":1,"sludgebomb":1,"signalbeam":1,"bugbite":1,"stunspore":1,"gigadrain":1},
 		tier: "LC"
 	},
 	venusaur: {
 		viable: true,
-		viablemoves: {"sleeppowder":"Sleep Powder","gigadrain":"Giga Drain","growth":"Growth","sunnyday":"Sunny Day","solarbeam":"SolarBeam","hiddenpowerfire":"Hidden Power Fire","hiddenpowerice":"Hidden Power Ice","sludgebomb":"Sludge Bomb","swordsdance":"Swords Dance","powerwhip":"Power Whip","leechseed":"Leech Seed","synthesis":"Synthesis","earthquake":"Earthquake"},
+		viablemoves: {"sleeppowder":1,"gigadrain":1,"growth":1,"sunnyday":1,"solarbeam":1,"hiddenpowerfire":1,"hiddenpowerice":1,"sludgebomb":1,"swordsdance":1,"powerwhip":1,"leechseed":1,"synthesis":1,"earthquake":1},
 		tier: "OU"
 	},
 	vespiquen: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","roost":"Roost","toxic":"Toxic","attackorder":"Attack Order","protect":"Protect","defendorder":"Defend Order","uturn":"U-turn"},
+		viablemoves: {"substitute":1,"roost":1,"toxic":1,"attackorder":1,"protect":1,"defendorder":1,"uturn":1},
 		tier: "NU"
 	},
 	vibrava: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","earthquake":"Earthquake","outrage":"Outrage","roost":"Roost","uturn":"U-turn"},
+		viablemoves: {"substitute":1,"earthquake":1,"outrage":1,"roost":1,"uturn":1},
 		tier: "NFE"
 	},
 	victini: {
 		viable: true,
-		viablemoves: {"vcreate":"V-create","fusionbolt":"Fusion Bolt","uturn":"U-turn","brickbreak":"Brick Break","zenheadbutt":"Zen Headbutt","psychic":"Psychic","grassknot":"Grass Knot","focusblast":"Focus Blast","fireblast":"Fire Blast","thunder":"Thunder"},
+		viablemoves: {"vcreate":1,"fusionbolt":1,"uturn":1,"brickbreak":1,"zenheadbutt":1,"psychic":1,"grassknot":1,"focusblast":1,"fireblast":1,"thunder":1},
 		tier: "UU"
 	},
 	victreebel: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","sleeppowder":"Sleep Powder","sunnyday":"Sunny Day","growth":"Growth","solarbeam":"SolarBeam","gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","weatherball":"Weather Ball","suckerpunch":"Sucker Punch","powerwhip":"Power Whip","return":"Return"},
+		viablemoves: {"swordsdance":1,"sleeppowder":1,"sunnyday":1,"growth":1,"solarbeam":1,"gigadrain":1,"sludgebomb":1,"weatherball":1,"suckerpunch":1,"powerwhip":1,"return":1},
 		tier: "NU"
 	},
 	vigoroth: {
 		viable: true,
-		viablemoves: {"bulkup":"Bulk Up","return":"Return","earthquake":"Earthquake","firepunch":"Fire Punch","suckerpunch":"Sucker Punch","slackoff":"Slack Off"},
+		viablemoves: {"bulkup":1,"return":1,"earthquake":1,"firepunch":1,"suckerpunch":1,"slackoff":1},
 		tier: "NU"
 	},
 	vileplume: {
 		viable: true,
-		viablemoves: {"gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","synthesis":"Synthesis","sunnyday":"Sunny Day","solarbeam":"SolarBeam","sleeppowder":"Sleep Powder","stunspore":"Stun Spore","toxic":"Toxic","hiddenpowerfire":"Hidden Power Fire","leechseed":"Leech Seed","aromatherapy":"Aromatherapy"},
+		viablemoves: {"gigadrain":1,"sludgebomb":1,"synthesis":1,"sunnyday":1,"solarbeam":1,"sleeppowder":1,"stunspore":1,"toxic":1,"hiddenpowerfire":1,"leechseed":1,"aromatherapy":1},
 		tier: "NU"
 	},
 	virizion: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","calmmind":"Calm Mind","closecombat":"Close Combat","focusblast":"Focus Blast","hiddenpowerice":"Hidden Power Ice","stoneedge":"Stone Edge","leafblade":"Leaf Blade","gigadrain":"Giga Drain","workup":"Work Up","substitute":"Substitute"},
+		viablemoves: {"swordsdance":1,"calmmind":1,"closecombat":1,"focusblast":1,"hiddenpowerice":1,"stoneedge":1,"leafblade":1,"gigadrain":1,"workup":1,"substitute":1},
 		tier: "OU"
 	},
 	volbeat: {
 		viable: true,
-		viablemoves: {"tailglow":"Tail Glow","batonpass":"Baton Pass","substitute":"Substitute","bugbuzz":"Bug Buzz","thunderwave":"Thunder Wave","encore":"Encore"},
+		viablemoves: {"tailglow":1,"batonpass":1,"substitute":1,"bugbuzz":1,"thunderwave":1,"encore":1},
 		tier: "NU"
 	},
 	volcarona: {
 		viable: true,
-		viablemoves: {"quiverdance":"Quiver Dance","fierydance":"Fiery Dance","fireblast":"Fire Blast","bugbuzz":"Bug Buzz","morningsun":"Morning Sun","hiddenpowerrock":"Hidden Power Rock","hurricane":"Hurricane"},
+		viablemoves: {"quiverdance":1,"fierydance":1,"fireblast":1,"bugbuzz":1,"morningsun":1,"hiddenpowerrock":1,"hurricane":1},
 		tier: "OU"
 	},
 	voltorb: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","thunderbolt":"Thunderbolt","taunt":"Taunt","substitute":"Substitute","hiddenpowerice":"Hidden Power Ice","hiddenpowerwater":"Hidden Power Water","raindance":"Rain Dance","thunder":"Thunder"},
+		viablemoves: {"voltswitch":1,"thunderbolt":1,"taunt":1,"substitute":1,"hiddenpowerice":1,"hiddenpowerwater":1,"raindance":1,"thunder":1},
 		tier: "LC"
 	},
 	vullaby: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","airslash":"Air Slash","knockoff":"Knock Off","roost":"Roost","taunt":"Taunt","whirlwind":"Whirlwind","toxic":"Toxic","darkpulse":"Dark Pulse","punishment":"Punishment","uturn":"U-turn","hiddenpowerfire":"Hidden Power Fire","bravebird":"Brave Bird"},
+		viablemoves: {"nastyplot":1,"airslash":1,"knockoff":1,"roost":1,"taunt":1,"whirlwind":1,"toxic":1,"darkpulse":1,"punishment":1,"uturn":1,"hiddenpowerfire":1,"bravebird":1},
 		tier: "LC"
 	},
 	vulpix: {
 		viable: true,
-		viablemoves: {"flamethrower":"Flamethrower","fireblast":"Fire Blast","willowisp":"Will-O-Wisp","solarbeam":"SolarBeam","nastyplot":"Nasty Plot","substitute":"Substitute","toxic":"Toxic","hypnosis":"Hypnosis"},
+		viablemoves: {"flamethrower":1,"fireblast":1,"willowisp":1,"solarbeam":1,"nastyplot":1,"substitute":1,"toxic":1,"hypnosis":1},
 		tier: "NFE"
 	},
 	wailmer: {
 		viable: true,
-		viablemoves: {"waterspout":"Water Spout","surf":"Surf","hydropump":"Hydro Pump","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","hiddenpowerelectric":"Hidden Power Electric"},
+		viablemoves: {"waterspout":1,"surf":1,"hydropump":1,"icebeam":1,"hiddenpowergrass":1,"hiddenpowerelectric":1},
 		tier: "LC"
 	},
 	wailord: {
 		viable: true,
-		viablemoves: {"waterspout":"Water Spout","surf":"Surf","hydropump":"Hydro Pump","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","hiddenpowerelectric":"Hidden Power Electric"},
+		viablemoves: {"waterspout":1,"surf":1,"hydropump":1,"icebeam":1,"hiddenpowergrass":1,"hiddenpowerelectric":1},
 		tier: "NU"
 	},
 	walrein: {
 		viable: true,
-		viablemoves: {"substitute":"Substitute","protect":"Protect","toxic":"Toxic","surf":"Surf","icebeam":"Ice Beam","roar":"Roar"},
+		viablemoves: {"substitute":1,"protect":1,"toxic":1,"surf":1,"icebeam":1,"roar":1},
 		tier: "NU"
 	},
 	wartortle: {
 		viable: true,
-		viablemoves: {"surf":"Surf","icebeam":"Ice Beam","hydropump":"Hydro Pump","rapidspin":"Rapid Spin","scald":"Scald","aquajet":"Aqua Jet","toxic":"Toxic"},
+		viablemoves: {"surf":1,"icebeam":1,"hydropump":1,"rapidspin":1,"scald":1,"aquajet":1,"toxic":1},
 		tier: "NU"
 	},
 	watchog: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","workup":"Work Up","batonpass":"Baton Pass","substitute":"Substitute","hypnosis":"Hypnosis","return":"Return"},
+		viablemoves: {"swordsdance":1,"workup":1,"batonpass":1,"substitute":1,"hypnosis":1,"return":1},
 		tier: "NU"
 	},
 	weavile: {
 		viable: true,
-		viablemoves: {"iceshard":"Ice Shard","icepunch":"Ice Punch","nightslash":"Night Slash","lowkick":"Low Kick","pursuit":"Pursuit","swordsdance":"Swords Dance"},
+		viablemoves: {"iceshard":1,"icepunch":1,"nightslash":1,"lowkick":1,"pursuit":1,"swordsdance":1},
 		tier: "UU"
 	},
 	weedle: {
 		viable: true,
-		viablemoves: {"bugbite":"Bug Bite","stringshot":"String Shot","poisonsting":"Poison Sting","snore":"Snore"},
+		viablemoves: {"bugbite":1,"stringshot":1,"poisonsting":1,"snore":1},
 		tier: "LC"
 	},
 	weepinbell: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","sleeppowder":"Sleep Powder","sunnyday":"Sunny Day","growth":"Growth","solarbeam":"SolarBeam","gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","weatherball":"Weather Ball","suckerpunch":"Sucker Punch","seedbomb":"Seed Bomb","return":"Return"},
+		viablemoves: {"swordsdance":1,"sleeppowder":1,"sunnyday":1,"growth":1,"solarbeam":1,"gigadrain":1,"sludgebomb":1,"weatherball":1,"suckerpunch":1,"seedbomb":1,"return":1},
 		tier: "NFE"
 	},
 	weezing: {
 		viable: true,
-		viablemoves: {"painsplit":"Pain Split","sludgebomb":"Sludge Bomb","willowisp":"Will-O-Wisp","fireblast":"Fire Blast","toxic":"Toxic","clearsmog":"Clear Smog","rest":"Rest","sleeptalk":"Sleep Talk","thunderbolt":"Thunderbolt"},
+		viablemoves: {"painsplit":1,"sludgebomb":1,"willowisp":1,"fireblast":1,"toxic":1,"clearsmog":1,"rest":1,"sleeptalk":1,"thunderbolt":1},
 		tier: "NU"
 	},
 	whimsicott: {
 		viable: true,
-		viablemoves: {"encore":"Encore","taunt":"Taunt","substitute":"Substitute","leechseed":"Leech Seed","thunderwave":"Thunder Wave","uturn":"U-turn","toxic":"Toxic","stunspore":"Stun Spore","memento":"Memento"},
+		viablemoves: {"encore":1,"taunt":1,"substitute":1,"leechseed":1,"thunderwave":1,"uturn":1,"toxic":1,"stunspore":1,"memento":1},
 		tier: "RU"
 	},
 	whirlipede: {
 		viable: true,
-		viablemoves: {"toxicspikes":"Toxic Spikes","bugbite":"Bug Bite","spikes":"Spikes","poisonjab":"Poison Jab"},
+		viablemoves: {"toxicspikes":1,"bugbite":1,"spikes":1,"poisonjab":1},
 		tier: "NU"
 	},
 	whiscash: {
 		viable: true,
-		viablemoves: {"dragondance":"Dragon Dance","waterfall":"Waterfall","earthquake":"Earthquake","return":"Return","stoneedge":"Stone Edge","substitute":"Substitute"},
+		viablemoves: {"dragondance":1,"waterfall":1,"earthquake":1,"return":1,"stoneedge":1,"substitute":1},
 		tier: "NU"
 	},
 	whismur: {
 		viable: true,
-		viablemoves: {"hypervoice":"Hyper Voice","fireblast":"Fire Blast","shadowball":"Shadow Ball","icebeam":"Ice Beam"},
+		viablemoves: {"hypervoice":1,"fireblast":1,"shadowball":1,"icebeam":1},
 		tier: "LC"
 	},
 	wigglytuff: {
 		viable: true,
-		viablemoves: {"wish":"Wish","thunderwave":"Thunder Wave","reflect":"Reflect","lightscreen":"Light Screen","healbell":"Heal Bell","seismictoss":"Seismic Toss","counter":"Counter","stealthrock":"Stealth Rock"},
+		viablemoves: {"wish":1,"thunderwave":1,"reflect":1,"lightscreen":1,"healbell":1,"seismictoss":1,"counter":1,"stealthrock":1},
 		tier: "NU"
 	},
 	wingull: {
 		viable: true,
-		viablemoves: {"scald":"Scald","icebeam":"Ice Beam","hiddenpowergrass":"Hidden Power Grass","raindance":"Rain Dance","uturn":"U-turn","airslash":"Air Slash","hurricane":"Hurricane"},
+		viablemoves: {"scald":1,"icebeam":1,"hiddenpowergrass":1,"raindance":1,"uturn":1,"airslash":1,"hurricane":1},
 		tier: "LC"
 	},
 	wobbuffet: {
 		viable: true,
-		viablemoves: {"destinybond":"Destiny Bond","counter":"Counter","mirrorcoat":"Mirror Coat","encore":"Encore"},
+		viablemoves: {"destinybond":1,"counter":1,"mirrorcoat":1,"encore":1},
 		tier: "BL"
 	},
 	woobat: {
 		viable: true,
-		viablemoves: {"calmmind":"Calm Mind","psychic":"Psychic","airslash":"Air Slash","hiddenpowerground":"Hidden Power Ground","agility":"Agility"},
+		viablemoves: {"calmmind":1,"psychic":1,"airslash":1,"hiddenpowerground":1,"agility":1},
 		tier: "LC"
 	},
 	wooper: {
@@ -3490,92 +3490,92 @@ exports.BattleFormatsData = {
 	},
 	wormadam: {
 		viable: true,
-		viablemoves: {"leafstorm":"Leaf Storm","gigadrain":"Giga Drain","signalbeam":"Signal Beam","hiddenpowerice":"Hidden Power Ice","hiddenpowerrock":"Hidden Power Rock","toxic":"Toxic","psychic":"Psychic"},
+		viablemoves: {"leafstorm":1,"gigadrain":1,"signalbeam":1,"hiddenpowerice":1,"hiddenpowerrock":1,"toxic":1,"psychic":1},
 		tier: "NU"
 	},
 	wormadamsandy: {
 		viable: true,
-		viablemoves: {"earthquake":"Earthquake","toxic":"Toxic","bugbite":"Bug Bite","protect":"Protect","suckerpunch":"Sucker Punch"},
+		viablemoves: {"earthquake":1,"toxic":1,"bugbite":1,"protect":1,"suckerpunch":1},
 		tier: "NU"
 	},
 	wormadamtrash: {
 		viable: true,
-		viablemoves: {"stealthrock":"Stealth Rock","toxic":"Toxic","ironhead":"Iron Head","protect":"Protect"},
+		viablemoves: {"stealthrock":1,"toxic":1,"ironhead":1,"protect":1},
 		tier: "NU"
 	},
 	wurmple: {
 		viable: true,
-		viablemoves: {"bugbite":"Bug Bite","poisonsting":"Poison Sting","stringshot":"String Shot","tackle":"Tackle"},
+		viablemoves: {"bugbite":1,"poisonsting":1,"stringshot":1,"tackle":1},
 		tier: "LC"
 	},
 	wynaut: {
 		viable: true,
-		viablemoves: {"destinybond":"Destiny Bond","counter":"Counter","mirrorcoat":"Mirror Coat","encore":"Encore"},
+		viablemoves: {"destinybond":1,"counter":1,"mirrorcoat":1,"encore":1},
 		tier: "LC"
 	},
 	xatu: {
 		viable: true,
-		viablemoves: {"thunderwave":"Thunder Wave","toxic":"Toxic","roost":"Roost","psychic":"Psychic","nightshade":"Night Shade","uturn":"U-turn","reflect":"Reflect","lightscreen":"Light Screen","wish":"Wish","calmmind":"Calm Mind"},
+		viablemoves: {"thunderwave":1,"toxic":1,"roost":1,"psychic":1,"nightshade":1,"uturn":1,"reflect":1,"lightscreen":1,"wish":1,"calmmind":1},
 		tier: "UU"
 	},
 	yamask: {
 		viable: true,
-		viablemoves: {"nastyplot":"Nasty Plot","trickroom":"Trick Room","shadowball":"Shadow Ball","hiddenpowerfighting":"Hidden Power Fighting","willowisp":"Will-O-Wisp","haze":"Haze","rest":"Rest"},
+		viablemoves: {"nastyplot":1,"trickroom":1,"shadowball":1,"hiddenpowerfighting":1,"willowisp":1,"haze":1,"rest":1},
 		tier: "LC"
 	},
 	yanma: {
 		viable: true,
-		viablemoves: {"bugbuzz":"Bug Buzz","airslash":"Air Slash","hiddenpowerground":"Hidden Power Ground","uturn":"U-turn","hypnosis":"Hypnosis","protect":"Protect","roost":"Roost","gigadrain":"Giga Drain"},
+		viablemoves: {"bugbuzz":1,"airslash":1,"hiddenpowerground":1,"uturn":1,"hypnosis":1,"protect":1,"roost":1,"gigadrain":1},
 		tier: "NFE"
 	},
 	yanmega: {
 		viable: true,
-		viablemoves: {"bugbuzz":"Bug Buzz","airslash":"Air Slash","hiddenpowerground":"Hidden Power Ground","uturn":"U-turn","protect":"Protect","roost":"Roost","gigadrain":"Giga Drain"},
+		viablemoves: {"bugbuzz":1,"airslash":1,"hiddenpowerground":1,"uturn":1,"protect":1,"roost":1,"gigadrain":1},
 		tier: "UU"
 	},
 	zangoose: {
 		viable: true,
-		viablemoves: {"swordsdance":"Swords Dance","return":"Return","closecombat":"Close Combat","nightslash":"Night Slash","quickattack":"Quick Attack"},
+		viablemoves: {"swordsdance":1,"return":1,"closecombat":1,"nightslash":1,"quickattack":1},
 		tier: "NU"
 	},
 	zapdos: {
 		viable: true,
-		viablemoves: {"thunderbolt":"Thunderbolt","heatwave":"Heat Wave","hiddenpowergrass":"Hidden Power Grass","hiddenpowerice":"Hidden Power Ice","roost":"Roost","toxic":"Toxic","substitute":"Substitute","batonpass":"Baton Pass","agility":"Agility","discharge":"Discharge"},
+		viablemoves: {"thunderbolt":1,"heatwave":1,"hiddenpowergrass":1,"hiddenpowerice":1,"roost":1,"toxic":1,"substitute":1,"batonpass":1,"agility":1,"discharge":1},
 		tier: "UU"
 	},
 	zebstrika: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","thunderbolt":"Thunderbolt","hiddenpowergrass":"Hidden Power Grass","overheat":"Overheat","wildcharge":"Wild Charge"},
+		viablemoves: {"voltswitch":1,"thunderbolt":1,"hiddenpowergrass":1,"overheat":1,"wildcharge":1},
 		tier: "NU"
 	},
 	zekrom: {
 		viable: true,
-		viablemoves: {"voltswitch":"Volt Switch","outrage":"Outrage","dragonclaw":"Dragon Claw","boltstrike":"Bolt Strike","honeclaws":"Hone Claws","substitute":"Substitute","dracometeor":"Draco Meteor","focusblast":"Focus Blast","hiddenpowerfire":"Hidden Power Fire"},
+		viablemoves: {"voltswitch":1,"outrage":1,"dragonclaw":1,"boltstrike":1,"honeclaws":1,"substitute":1,"dracometeor":1,"focusblast":1,"hiddenpowerfire":1},
 		tier: "Uber"
 	},
 	zigzagoon: {
 		viable: true,
-		viablemoves: {"bellydrum":"Belly Drum","extremespeed":"ExtremeSpeed","seedbomb":"Seed Bomb","substitute":"Substitute"},
+		viablemoves: {"bellydrum":1,"extremespeed":1,"seedbomb":1,"substitute":1},
 		tier: "LC"
 	},
 	zoroark: {
 		viable: true,
-		viablemoves: {"suckerpunch":"Sucker Punch","darkpulse":"Dark Pulse","focusblast":"Focus Blast","flamethrower":"Flamethrower","uturn":"U-turn"},
+		viablemoves: {"suckerpunch":1,"darkpulse":1,"focusblast":1,"flamethrower":1,"uturn":1},
 		tier: "UU"
 	},
 	zorua: {
 		viable: true,
-		viablemoves: {"suckerpunch":"Sucker Punch","extrasensory":"Extrasensory","darkpulse":"Dark Pulse","hiddenpowerfighting":"Hidden Power Fighting","uturn":"U-turn"},
+		viablemoves: {"suckerpunch":1,"extrasensory":1,"darkpulse":1,"hiddenpowerfighting":1,"uturn":1},
 		tier: "LC"
 	},
 	zubat: {
 		viable: true,
-		viablemoves: {"bravebird":"Brave Bird","roost":"Roost","toxic":"Toxic","taunt":"Taunt","nastyplot":"Nasty Plot","gigadrain":"Giga Drain","sludgebomb":"Sludge Bomb","airslash":"Air Slash","uturn":"U-turn","whirlwind":"Whirlwind","acrobatics":"Acrobatics","heatwave":"Heat Wave","superfang":"Super Fang"},
+		viablemoves: {"bravebird":1,"roost":1,"toxic":1,"taunt":1,"nastyplot":1,"gigadrain":1,"sludgebomb":1,"airslash":1,"uturn":1,"whirlwind":1,"acrobatics":1,"heatwave":1,"superfang":1},
 		tier: "LC"
 	},
 	zweilous: {
 		viable: true,
-		viablemoves: {"outrage":"Outrage","crunch":"Crunch","firefang":"Fire Fang","dragontail":"Dragon Tail","thunderwave":"Thunder Wave"},
+		viablemoves: {"outrage":1,"crunch":1,"firefang":1,"dragontail":1,"thunderwave":1},
 		tier: "NU"
 	}
 };
