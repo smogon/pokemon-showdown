@@ -486,6 +486,7 @@ function BattlePokemon(set, side) {
 		selfP.lastMove = '';
 		selfP.lastDamage = 0;
 		selfP.lastAttackedBy = null;
+		selfP.lastItem = '';
 		selfP.movedThisTurn = false;
 		selfP.newlySwitched = true;
 		selfP.beingCalledBack = false;
