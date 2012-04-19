@@ -3,7 +3,7 @@ exports.BattleTiers = {
 		tier: "BL"
 	},
 	"abra": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"absol": {
 		tier: "NU"
@@ -18,7 +18,7 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"aipom": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"alakazam": {
 		tier: "OU"
@@ -39,7 +39,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"anorith": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"arbok": {
 		tier: "NU"
@@ -99,7 +99,7 @@ exports.BattleTiers = {
 		tier: "Uber"
 	},
 	"archen": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"archeops": {
 		tier: "RU"
@@ -111,7 +111,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"aron": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"articuno": {
 		tier: "NU"
@@ -120,7 +120,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"axew": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"azelf": {
 		tier: "UU"
@@ -129,19 +129,19 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"azurill": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"bagon": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"baltoy": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"banette": {
 		tier: "NU"
 	},
 	"barboach": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"basculin": {
 		tier: "NU"
@@ -150,7 +150,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"bayleef": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"beartic": {
 		tier: "NU"
@@ -165,19 +165,19 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"beldum": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"bellossom": {
 		tier: "NU"
 	},
 	"bellsprout": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"bibarel": {
 		tier: "NU"
 	},
 	"bidoof": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"bisharp": {
 		tier: "UU"
@@ -192,13 +192,13 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"blitzle": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"boldore": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"bonsly": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"bouffalant": {
 		tier: "RU"
@@ -213,28 +213,28 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"bronzor": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"budew": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"buizel": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"bulbasaur": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"buneary": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"burmy": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"butterfree": {
 		tier: "NU"
 	},
 	"cacnea": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"cacturne": {
 		tier: "NU"
@@ -249,16 +249,16 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"carvanha": {
-		tier: "LC Uber"
+		tier: "NU"
 	},
 	"cascoon": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"castform": {
 		tier: "NU"
 	},
 	"caterpie": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"celebi": {
 		tier: "OU"
@@ -273,10 +273,10 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"charmander": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"charmeleon": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"chatot": {
 		tier: "NU"
@@ -285,28 +285,28 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"cherubi": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"chikorita": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"chimchar": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"chimecho": {
 		tier: "NU"
 	},
 	"chinchou": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"chingling": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"cinccino": {
 		tier: "NU"
 	},
 	"clamperl": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"claydol": {
 		tier: "UU"
@@ -315,10 +315,10 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"clefairy": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"cleffa": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"cloyster": {
 		tier: "OU"
@@ -330,7 +330,7 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"combee": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"combusken": {
 		tier: "NU"
@@ -339,19 +339,19 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"corphish": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"corsola": {
 		tier: "NU"
 	},
 	"cottonee": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"cradily": {
 		tier: "NU"
 	},
 	"cranidos": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"crawdaunt": {
 		tier: "RU"
@@ -360,13 +360,13 @@ exports.BattleTiers = {
 		tier: "BL2"
 	},
 	"croagunk": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"crobat": {
 		tier: "UU"
 	},
 	"croconaw": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"crustle": {
 		tier: "RU"
@@ -375,13 +375,13 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"cubchoo": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"cubone": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"cyndaquil": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"darkrai": {
 		tier: "Uber"
@@ -393,13 +393,13 @@ exports.BattleTiers = {
 		tier: "Illegal"
 	},
 	"darumaka": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"deerling": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"deino": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"delcatty": {
 		tier: "NU"
@@ -423,13 +423,13 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"dewott": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"dialga": {
 		tier: "Uber"
 	},
 	"diglett": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"ditto": {
 		tier: "NU"
@@ -438,7 +438,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"doduo": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"donphan": {
 		tier: "OU"
@@ -453,25 +453,25 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"dratini": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"drifblim": {
 		tier: "NU"
 	},
 	"drifloon": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"drilbur": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"drowzee": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"druddigon": {
 		tier: "RU"
 	},
 	"ducklett": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"dugtrio": {
 		tier: "OU"
@@ -492,19 +492,19 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"duskull": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"dustox": {
 		tier: "NU"
 	},
 	"dwebble": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"eevee": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"ekans": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"electabuzz": {
 		tier: "NU"
@@ -513,22 +513,22 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"electrike": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"electrode": {
 		tier: "NU"
 	},
 	"elekid": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"eelektrik": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"eelektross": {
 		tier: "NU"
 	},
 	"elgyem": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"emboar": {
 		tier: "NU"
@@ -552,7 +552,7 @@ exports.BattleTiers = {
 		tier: "Uber"
 	},
 	"exeggcute": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"exeggutor": {
 		tier: "NU"
@@ -567,7 +567,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"feebas": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"feraligatr": {
 		tier: "RU"
@@ -579,7 +579,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"finneon": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"flaaffy": {
 		tier: "NU"
@@ -594,7 +594,7 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"foongus": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"forretress": {
 		tier: "OU"
@@ -603,7 +603,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"frillish": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"froslass": {
 		tier: "UU"
@@ -630,7 +630,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"gastly": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"gastrodon": {
 		tier: "OU"
@@ -642,10 +642,10 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"geodude": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"gible": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"gigalith": {
 		tier: "NU"
@@ -666,7 +666,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"glameow": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"gligar": {
 		tier: "UU"
@@ -675,13 +675,13 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"gloom": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"golbat": {
 		tier: "NU"
 	},
 	"goldeen": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"golduck": {
 		tier: "NU"
@@ -690,7 +690,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"golett": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"golurk": {
 		tier: "RU"
@@ -699,40 +699,40 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"gothita": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"gothitelle": {
 		tier: "NU"
 	},
 	"gothorita": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"granbull": {
 		tier: "NU"
 	},
 	"graveler": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"grimer": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"grotle": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"groudon": {
 		tier: "Uber"
 	},
 	"grovyle": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"growlithe": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"grumpig": {
 		tier: "NU"
 	},
 	"gulpin": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"gurdurr": {
 		tier: "NU"
@@ -741,7 +741,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"happiny": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"hariyama": {
 		tier: "RU"
@@ -762,7 +762,7 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"herdier": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"hippopotas": {
 		tier: "UU"
@@ -786,19 +786,19 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"hoothoot": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"hoppip": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"horsea": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"houndoom": {
 		tier: "UU"
 	},
 	"houndour": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"huntail": {
 		tier: "NU"
@@ -810,7 +810,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"igglybuff": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"illumise": {
 		tier: "NU"
@@ -819,13 +819,13 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"ivysaur": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"jellicent": {
 		tier: "OU"
 	},
 	"jigglypuff": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"jirachi": {
 		tier: "OU"
@@ -834,7 +834,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"joltik": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"jumpluff": {
 		tier: "NU"
@@ -843,7 +843,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"kabuto": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"kabutops": {
 		tier: "RU"
@@ -852,13 +852,13 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"kakuna": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"kangaskhan": {
 		tier: "NU"
 	},
 	"karrablast": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"kecleon": {
 		tier: "NU"
@@ -873,31 +873,31 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"kirlia": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"klang": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"klink": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"klinklang": {
 		tier: "RU"
 	},
 	"koffing": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"krabby": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"kricketot": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"kricketune": {
 		tier: "NU"
 	},
 	"krokorok": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"krookodile": {
 		tier: "UU"
@@ -924,10 +924,10 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"larvesta": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"larvitar": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"latias": {
 		tier: "OU"
@@ -945,43 +945,43 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"ledyba": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"lickilicky": {
 		tier: "NU"
 	},
 	"lickitung": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"liepard": {
 		tier: "NU"
 	},
 	"lileep": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"lilligant": {
 		tier: "RU"
 	},
 	"lillipup": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"linoone": {
 		tier: "NU"
 	},
 	"litwick": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"lombre": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"lopunny": {
 		tier: "NU"
 	},
 	"lotad": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"loudred": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"lucario": {
 		tier: "OU"
@@ -1002,7 +1002,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"luxio": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"luxray": {
 		tier: "NU"
@@ -1014,25 +1014,25 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"machop": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"magby": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"magcargo": {
 		tier: "NU"
 	},
 	"magikarp": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"magmar": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"magmortar": {
 		tier: "NU"
 	},
 	"magnemite": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"magneton": {
 		tier: "RU"
@@ -1041,7 +1041,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"makuhita": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"mamoswine": {
 		tier: "OU"
@@ -1056,28 +1056,28 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"mankey": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"mantine": {
 		tier: "NU"
 	},
 	"mantyke": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"maractus": {
 		tier: "NU"
 	},
 	"mareep": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"marill": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"marowak": {
 		tier: "NU"
 	},
 	"marshtomp": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"masquerain": {
 		tier: "NU"
@@ -1089,7 +1089,7 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"meditite": {
-		tier: "LC Uber"
+		tier: "NU"
 	},
 	"meganium": {
 		tier: "NU"
@@ -1101,7 +1101,7 @@ exports.BattleTiers = {
 		tier: "Illegal"
 	},
 	"meowth": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"mesprit": {
 		tier: "RU"
@@ -1113,7 +1113,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"metapod": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"mew": {
 		tier: "UU"
@@ -1122,7 +1122,7 @@ exports.BattleTiers = {
 		tier: "Uber"
 	},
 	"mienfoo": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"mienshao": {
 		tier: "OU"
@@ -1137,16 +1137,16 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"mimejr": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"minccino": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"minun": {
 		tier: "NU"
 	},
 	"misdreavus": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"mismagius": {
 		tier: "UU"
@@ -1164,7 +1164,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"mudkip": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"muk": {
 		tier: "NU"
@@ -1173,16 +1173,16 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"munna": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"murkrow": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"musharna": {
 		tier: "NU"
 	},
 	"natu": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"nidoking": {
 		tier: "UU"
@@ -1191,19 +1191,19 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"nidoranf": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"nidoranm": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"nidorina": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"nidorino": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"nincada": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"ninetales": {
 		tier: "OU"
@@ -1215,31 +1215,31 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"nosepass": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"numel": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"nuzleaf": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"octillery": {
 		tier: "NU"
 	},
 	"oddish": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"omanyte": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"omastar": {
 		tier: "RU"
 	},
 	"onix": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"oshawott": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pachirisu": {
 		tier: "NU"
@@ -1248,28 +1248,28 @@ exports.BattleTiers = {
 		tier: "Uber"
 	},
 	"palpitoad": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"panpour": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pansage": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pansear": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"paras": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"parasect": {
 		tier: "NU"
 	},
 	"patrat": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pawniard": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pelipper": {
 		tier: "NU"
@@ -1278,31 +1278,31 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"petilil": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"phanpy": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"phione": {
 		tier: "NU"
 	},
 	"pichu": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pidgeot": {
 		tier: "NU"
 	},
 	"pidgeotto": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"pidgey": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pidove": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pignite": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"pikachu": {
 		tier: "NU"
@@ -1311,13 +1311,13 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"pineco": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pinsir": {
 		tier: "NU"
 	},
 	"piplup": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"plusle": {
 		tier: "NU"
@@ -1326,22 +1326,22 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"poliwag": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"poliwhirl": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"poliwrath": {
 		tier: "RU"
 	},
 	"ponyta": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"poochyena": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"porygon": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"porygonz": {
 		tier: "BL2"
@@ -1353,19 +1353,19 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"prinplup": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"probopass": {
 		tier: "NU"
 	},
 	"psyduck": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"pupitar": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"purrloin": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"purugly": {
 		tier: "NU"
@@ -1374,7 +1374,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"quilava": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"qwilfish": {
 		tier: "RU"
@@ -1386,7 +1386,7 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"ralts": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"rampardos": {
 		tier: "NU"
@@ -1398,7 +1398,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"rattata": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"rayquaza": {
 		tier: "Uber"
@@ -1419,7 +1419,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"remoraid": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"reshiram": {
 		tier: "Uber"
@@ -1431,16 +1431,16 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"rhyhorn": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"rhyperior": {
 		tier: "UU"
 	},
 	"riolu": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"roggenrola": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"roselia": {
 		tier: "RU"
@@ -1467,7 +1467,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"rufflet": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"sableye": {
 		tier: "UU"
@@ -1479,10 +1479,10 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"sandile": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"sandshrew": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"sandslash": {
 		tier: "RU"
@@ -1506,7 +1506,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"scraggy": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"scyther": {
 		tier: "RU"
@@ -1518,31 +1518,31 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"sealeo": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"seedot": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"seel": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"seismitoad": {
 		tier: "NU"
 	},
 	"sentret": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"serperior": {
 		tier: "NU"
 	},
 	"servine": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"seviper": {
 		tier: "NU"
 	},
 	"sewaddle": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"sharpedo": {
 		tier: "UU"
@@ -1560,37 +1560,37 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"shellder": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"shellos": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"shelmet": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"shieldon": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"shiftry": {
 		tier: "NU"
 	},
 	"shinx": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"shroomish": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"shuckle": {
 		tier: "NU"
 	},
 	"shuppet": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"sigilyph": {
 		tier: "RU"
 	},
 	"silcoon": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"simipour": {
 		tier: "NU"
@@ -1605,13 +1605,13 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"skiploom": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"skitty": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"skorupi": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"skuntank": {
 		tier: "NU"
@@ -1620,7 +1620,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"slakoth": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"slowbro": {
 		tier: "UU"
@@ -1629,49 +1629,49 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"slowpoke": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"slugma": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"smeargle": {
 		tier: "RU"
 	},
 	"smoochum": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"sneasel": {
-		tier: "LC Uber"
+		tier: "NU"
 	},
 	"snivy": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"snorlax": {
 		tier: "UU"
 	},
 	"snorunt": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"snover": {
 		tier: "BL"
 	},
 	"snubbull": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"solosis": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"solrock": {
 		tier: "NU"
 	},
 	"spearow": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"spheal": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"spinarak": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"spinda": {
 		tier: "NU"
@@ -1680,10 +1680,10 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"spoink": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"squirtle": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"stantler": {
 		tier: "NU"
@@ -1692,16 +1692,16 @@ exports.BattleTiers = {
 		tier: "BL"
 	},
 	"staravia": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"starly": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"starmie": {
 		tier: "OU"
 	},
 	"staryu": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"steelix": {
 		tier: "RU"
@@ -1713,7 +1713,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"stunky": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"sudowoodo": {
 		tier: "NU"
@@ -1725,16 +1725,16 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"sunkern": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"surskit": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"swablu": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"swadloon": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"swalot": {
 		tier: "NU"
@@ -1749,13 +1749,13 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"swinub": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"swoobat": {
 		tier: "NU"
 	},
 	"taillow": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"tangela": {
 		tier: "NU"
@@ -1767,16 +1767,16 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"teddiursa": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"tentacool": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"tentacruel": {
 		tier: "OU"
 	},
 	"tepig": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"terrakion": {
 		tier: "OU"
@@ -1788,22 +1788,22 @@ exports.BattleTiers = {
 		tier: "Uber"
 	},
 	"timburr": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"tirtouga": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"togekiss": {
 		tier: "UU"
 	},
 	"togepi": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"togetic": {
 		tier: "NU"
 	},
 	"torchic": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"torkoal": {
 		tier: "NU"
@@ -1815,34 +1815,34 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"totodile": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"toxicroak": {
 		tier: "OU"
 	},
 	"tranquill": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"trapinch": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"treecko": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"tropius": {
 		tier: "NU"
 	},
 	"trubbish": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"turtwig": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"tympole": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"tynamo": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"typhlosion": {
 		tier: "RU"
@@ -1851,7 +1851,7 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"tyrogue": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"umbreon": {
 		tier: "UU"
@@ -1869,10 +1869,10 @@ exports.BattleTiers = {
 		tier: "RU"
 	},
 	"vanillish": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"vanillite": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"vanilluxe": {
 		tier: "NU"
@@ -1881,13 +1881,13 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"venipede": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"venomoth": {
 		tier: "BL2"
 	},
 	"venonat": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"venusaur": {
 		tier: "OU"
@@ -1896,7 +1896,7 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"vibrava": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"victini": {
 		tier: "UU"
@@ -1920,16 +1920,16 @@ exports.BattleTiers = {
 		tier: "OU"
 	},
 	"voltorb": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"vullaby": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"vulpix": {
-		tier: "LC Uber"
+		tier: "NU"
 	},
 	"wailmer": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"wailord": {
 		tier: "NU"
@@ -1947,10 +1947,10 @@ exports.BattleTiers = {
 		tier: "UU"
 	},
 	"weedle": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"weepinbell": {
-		tier: "NFE"
+		tier: "NU"
 	},
 	"weezing": {
 		tier: "NU"
@@ -1965,22 +1965,22 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"whismur": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"wigglytuff": {
 		tier: "NU"
 	},
 	"wingull": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"wobbuffet": {
 		tier: "BL"
 	},
 	"woobat": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"wooper": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"wormadam": {
 		tier: "NU"
@@ -1992,19 +1992,19 @@ exports.BattleTiers = {
 		tier: "NU"
 	},
 	"wurmple": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"wynaut": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"xatu": {
 		tier: "UU"
 	},
 	"yamask": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"yanma": {
-		tier: "LC Uber"
+		tier: "NU"
 	},
 	"yanmega": {
 		tier: "UU"
@@ -2022,16 +2022,16 @@ exports.BattleTiers = {
 		tier: "Uber"
 	},
 	"zigzagoon": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"zoroark": {
 		tier: "UU"
 	},
 	"zorua": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"zubat": {
-		tier: "LC"
+		tier: "NU"
 	},
 	"zweilous": {
 		tier: "NU"
@@ -2091,5 +2091,4 @@ exports.BattleTiers = {
 		isNonstandard: true,
 		tier: "G5CAP"
 	}
-
 }
