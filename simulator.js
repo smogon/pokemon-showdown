@@ -1595,6 +1595,9 @@ function Battle(roomid, format, rated) {
 		}
 		selfB.add('callback', 'decision');
 	};
+	this.tie = function() {
+		selfB.win();
+	};
 	this.win = function(side) {
 		var winSide = false;
 		if (selfB.ended) {
