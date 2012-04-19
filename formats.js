@@ -10,14 +10,14 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		ruleset: ['PotD', 'Pokemon', 'SleepClause']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	unratedrandombattle: {
 		effectType: 'Format',
 		name: "Unrated Random Battle",
 		team: 'random',
 		searchShow: true,
-		ruleset: ['PotD', 'Pokemon', 'SleepClause']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	ou: {
 		effectType: 'Format',
@@ -27,8 +27,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
-		banlist: ['Uber', 'Drizzle ++ SwiftSwim']
+		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim']
 	},
 	cap: {
 		effectType: 'Format',
@@ -37,15 +37,15 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['CAPPokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
-		banlist: ['Uber', 'Drizzle ++ SwiftSwim']
+		ruleset: ['CAP Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim']
 	},
 	capnecturnaplaytest: {
 		effectType: 'Format',
 		name: "CAP Necturna Playtest",
 		rated: true,
-		ruleset: ['CAPPokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
-		banlist: ['Uber','G4CAP','Tomohawk','ShadowStrike','PaleoWave']
+		ruleset: ['CAP Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber','G4CAP','Tomohawk','ShadowStrike','Paleo Wave']
 	},
 	ubers: {
 		effectType: 'Format',
@@ -54,7 +54,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
+		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
 		banlist: []
 	},
 	uu: {
@@ -64,8 +64,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
-		banlist: ['Uber','OU','BL', 'SnowWarning','Drought']
+		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber','OU','BL', 'Snow Warning','Drought']
 	},
 	ru: {
 		effectType: 'Format',
@@ -74,8 +74,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
-		banlist: ['Uber','OU','BL','UU','BL2', 'SnowWarning','Drought', 'ShellSmash + BatonPass']
+		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber','OU','BL','UU','BL2', 'Snow Warning','Drought', 'Shell Smash + Baton Pass']
 	},
 	nu: {
 		effectType: 'Format',
@@ -84,8 +84,18 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview'],
-		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'SnowWarning','Drought', 'ShellSmash + BatonPass']
+		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'Snow Warning','Drought', 'Shell Smash + Baton Pass']
+	},
+	lc: {
+		effectType: 'Format',
+		name: "LC",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma']
 	},
 	hackmons: {
 		effectType: 'Format',
@@ -103,14 +113,14 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		teambuilderFormat: 'Hackmons',
+		isTeambuilderFormat: true,
 		ruleset: ['Pokemon'],
-		banlist: ['OHKO', 'WonderGuard']
+		banlist: ['OHKO', 'Wonder Guard']
 	},
 	haxmons: {
 		effectType: 'Format',
 		name: "Haxmons",
-		ruleset: ['HaxClause', 'TeamPreview']
+		ruleset: ['Hax Clause', 'Team Preview']
 	},
 	debugmode: {
 		effectType: 'Format',
@@ -224,6 +234,22 @@ exports.BattleFormats = {
 		},
 		onTeamPreview: function() {
 			this.callback('team-preview');
+		}
+	},
+	littlecup: {
+		effectType: 'Rule',
+		validateSet: function(set) {
+			var template = this.getTemplate(set.species || set.name)
+			
+			if (template.prevo) {
+				return [set.species+" isn't the first in its evolution family."];
+			}
+			if (!template.nfe) {
+				return [set.species+" doesn't have an evolution family."];
+			}
+			if (!set.level || set.level > 5) {
+				set.level = 5;
+			}
 		}
 	},
 	haxclause: {
