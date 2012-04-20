@@ -81,7 +81,6 @@ exports.modchat = false;
 //     - announce: /announce command.
 //     - modchat: Set modchat.
 //     - potd: Set PotD.
-//     - forcereset: /forcereset command.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
 exports.groupsranking = [' ', '+', '%', '@', '&'];
@@ -95,7 +94,6 @@ exports.groups = {
 		inherit: '%',
 		jurisdiction: '@u',
 		promote: 'u',
-		forcereset: true,
 		forcewin: true,
 		ban: true,
 		mute: true,

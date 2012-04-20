@@ -794,16 +794,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		return false;
 
-	case 'forcereset':
-		if (!user.can('forcereset')) {
-			socket.emit('console', '/forcereset - Access denied.');
-		} else if (room.reset) {
-			room.reset();
-		} else {
-			socket.emit('console', 'You can only force-reset from inside a room.');
-		}
-		return false;
-
 	case 'a':
 		if (user.can('battlemessage')) {
 			// secret sysop command
