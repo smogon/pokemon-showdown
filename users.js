@@ -158,6 +158,8 @@ function User(name, person, token) {
 					Array.prototype.splice.apply(jurisdiction, groupsToAdd);
 				}
 				return jurisdiction;
+			} else if (curGroup[permission] === false) {
+				return false;
 			}
 			if (!curGroup['inherit']) return false;
 			var nextGroup = config.groups[curGroup['inherit']];
@@ -174,7 +176,14 @@ function User(name, person, token) {
 		if (jurisdiction.indexOf(targetUser.group) !== -1) return true;
 		return false;
 	};
-	this.getNextGroup = function(isDown) {
+	// Special permission check is needed for promoting and demoting
+	this.checkPromotePermission = function(targetUser, targetGroupSymbol) {
+		if (!selfP.can('promote', targetUser)) return false;
+		var fakeUser = {group:targetGroupSymbol};
+		if (!selfP.can('promote', fakeUser)) return false;
+		return true;
+	};
+	this.getNextGroupSymbol = function(isDown) {
 		var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(selfP.group) + (isDown ? -1 : 1)];
 		if (!nextGroupRank) {
 			if (isDown) {
