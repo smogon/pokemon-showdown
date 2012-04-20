@@ -68,7 +68,7 @@ function importUsergroups() {
 		for (var i = 0; i < data.length; i++) {
 			if (!data[i]) continue;
 			var row = data[i].split(",");
-			usergroups[toUserid(row[0])] = (row[1]||' ')+row[0];
+			usergroups[toUserid(row[0])] = (row[1]||config.groupsranking[0])+row[0];
 		}
 	});
 }
@@ -97,7 +97,7 @@ function User(name, person, token) {
 	this.renamePending = false;
 	this.authenticated = false;
 	this.userid = toUserid(this.name);
-	this.group = ' ';
+	this.group = config.groupsranking[0];
 
 	var trainersprites = [1, 2, 101, 102, 169, 170];
 	this.avatar = trainersprites[parseInt(Math.random()*trainersprites.length)];
@@ -346,7 +346,7 @@ function User(name, person, token) {
 						return false;
 					}
 				}
-				var group = ' ';
+				var group = config.groupsranking[0];
 				var avatar = 0;
 				var authenticated = false;
 				if (body !== '1') {
@@ -412,7 +412,7 @@ function User(name, person, token) {
 					selfP.people = [];
 					selfP.connected = false;
 					if (!selfP.authenticated) {
-						selfP.group = ' ';
+						selfP.group = config.groupsranking[0];
 					}
 
 					user.group = group;
@@ -501,10 +501,10 @@ function User(name, person, token) {
 	};
 	this.setGroup = function(group) {
 		selfP.group = group.substr(0,1);
-		if (!selfP.group || selfP.group === ' ') {
+		if (!selfP.group || selfP.group === config.groupsranking[0]) {
 			delete usergroups[selfP.userid];
 		} else {
-			usergroups[selfP.userid] = (selfP.group||' ')+selfP.name;
+			usergroups[selfP.userid] = selfP.group+selfP.name;
 		}
 		exportUsergroups();
 	};
@@ -516,7 +516,7 @@ function User(name, person, token) {
 				if (selfP.people.length <= 1) {
 					selfP.connected = false;
 					if (!selfP.authenticated) {
-						selfP.group = ' ';
+						selfP.group = config.groupsranking[0];
 					}
 				}
 				person = selfP.people[i];
