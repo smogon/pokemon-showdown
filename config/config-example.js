@@ -94,9 +94,12 @@ exports.groups = {
 		name: "Admin",
 		inherit: '%',
 		jurisdiction: '@u',
-		promote: true,
+		promote: 'u',
 		forcereset: true,
 		forcewin: true,
+		ban: true,
+		mute: true,
+		forcerename: true,
 		forcerenameto: true,
 		announce: true,
 		modchat: true
