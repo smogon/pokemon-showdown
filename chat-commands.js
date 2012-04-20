@@ -488,17 +488,23 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'promote':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		var targetUser = getUser(target);
+		var targets = splitTarget(target);
+		var targetUser = getUser(targets[0]);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
 		}
-		if (!user.checkPromotePermission(targetUser, targetUser.getNextGroupSymbol())) {
+		var nextGroup = targets[1] ? targets[1] : targetUser.getNextGroupSymbol(true);
+		if (!config.groups[nextGroup]) {
+			socket.emit('console', 'Group \'' + nextGroup + '\' does not exist.');
+			return false;
+		}
+		if (!user.checkPromotePermission(targetUser, nextGroup)) {
 			socket.emit('console', '/promote - Access denied.');
 			return false;
 		}
 
-		targetUser.setGroup(targetUser.getNextGroupSymbol());
+		targetUser.setGroup(nextGroup);
 		rooms.lobby.usersChanged = true;
 		var groupName = config.groups[targetUser.group].name;
 		if (!groupName) groupName = targetUser.group;
@@ -508,17 +514,24 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'demote':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		var targetUser = getUser(target);
+		var targets = splitTarget(target);
+		var targetUser = getUser(targets[0]);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
 		}
-		if (!user.checkPromotePermission(targetUser, targetUser.getNextGroupSymbol(true))) {
+		var nextGroup = target.indexOf(',') !== -1 ? targets[1] : targetUser.getNextGroupSymbol(true);
+		if (!nextGroup) nextGroup = config.groupsranking[0];
+		if (!config.groups[nextGroup]) {
+			socket.emit('console', 'Group \'' + nextGroup + '\' does not exist.');
+			return false;
+		}
+		if (!user.checkPromotePermission(targetUser, nextGroup)) {
 			socket.emit('console', '/demote - Access denied.');
 			return false;
 		}
 
-		targetUser.setGroup(targetUser.getNextGroupSymbol(true));
+		targetUser.setGroup(nextGroup);
 		rooms.lobby.usersChanged = true;
 		var groupName = config.groups[targetUser.group].name;
 		if (!groupName) groupName = targetUser.group;
@@ -1046,11 +1059,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === '@' || target === 'promote') {
 			matched = true;
-			socket.emit('console', '/promote [username] - Promotes the user to the next ranked group. Requires: @ &');
+			socket.emit('console', '/promote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: @ &');
 		}
 		if (target === '@' || target === 'demote') {
 			matched = true;
-			socket.emit('console', '/demote [username] - Demotes the user to the previous ranked group. Requires: @ &');
+			socket.emit('console', '/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: @ &');
 		}
 		if (target === '@' || target === 'announce') {
 			matched = true;
