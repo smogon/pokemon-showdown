@@ -68,7 +68,8 @@ exports.modchat = false;
 //     - lockdown: /lockdown and /endlockdown commands.
 //     - hotpatch: /hotpatch, /crashfixed and /savelearnsets commands.
 //     - ignorelimits: Ignore limits such as chat message length.
-//     - promote: Promoting to and demoting from the groups specified.
+//     - promote: Promoting and demoting. Will only work if the target user's current
+//                  group and target group are both in jurisdiction.
 //     - ban: Banning and unbanning.
 //     - mute: Muting and unmuting.
 //     - receivemutedpms: Receive PMs from muted users.

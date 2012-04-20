@@ -470,10 +470,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
 		}
-		// Hack-ish method to check if it is possible to promote someone to a rank
-		var fakeUser = {group:targetUser.getNextGroup()};
-		if (user.can('promote', fakeUser)) {
-			targetUser.setGroup(targetUser.getNextGroup());
+		if (user.checkPromotePermission(targetUser, targetUser.getNextGroupSymbol())) {
+			targetUser.setGroup(targetUser.getNextGroupSymbol());
 			rooms.lobby.usersChanged = true;
 			var groupName = config.groups[targetUser.group].name;
 			if (!groupName) groupName = targetUser.group;
@@ -490,13 +488,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
 		}
-		var nextGroup = targetUser.getNextGroup(true);
-		if (user.can('promote', targetUser)) {
-			targetUser.setGroup(nextGroup);
+		if (user.checkPromotePermission(targetUser, targetUser.getNextGroupSymbol(true))) {
+			targetUser.setGroup(targetUser.getNextGroupSymbol(true));
 			rooms.lobby.usersChanged = true;
 			var groupName = config.groups[targetUser.group].name;
 			if (!groupName) groupName = targetUser.group;
-			room.add(''+targetUser.name+' was demoted to ' + (groupName ? groupName : 'a regular user') + ' by '+user.name+'.');
+			room.add(''+targetUser.name+' was demoted to ' + (groupName.trim() ? groupName : 'a regular user') + ' by '+user.name+'.');
 			return false;
 		}
 		socket.emit('console', '/demote - Access denied.');
@@ -769,7 +766,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case '!rule':
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
-			'<div style="border:1px solid #6688AA;padding:2px 4px">Please follow the rules:' +
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Please follow the rules:<br />' +
 			'- <a href="http://pokemonshowdown.com/rules" target="_blank">Rules</a><br />' +
 			'</div>');
 		return false;
