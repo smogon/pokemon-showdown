@@ -1064,6 +1064,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onModifyPriority: function(priority) {
+			return priority - 0.1;
+		},
 		desc: "Makes the holder move last. Allows breeding of Munchlax."
 	},
 	"ganlonberry": {
