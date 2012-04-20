@@ -91,6 +91,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			});
 		}
 		return false;
+		break;
 
 	case 'forfeit':
 	case 'concede':
@@ -100,10 +101,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', "You can't forfeit this battle.");
 		}
 		return false;
+		break;
 
 	case 'register':
 		socket.emit('console', 'You must win a rated battle to register.');
 		return false;
+		break;
 
 	case 'avatar':
 		if (!target) return parseCommand(user, 'avatars', '', room, socket);
@@ -118,6 +121,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		socket.emit('console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" />'});
 
 		return false;
+		break;
 
 	case 'rooms':
 		var targetUser = user;
@@ -140,6 +144,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 		}
 		return false;
+		break;
 
 	case 'altcheck':
 	case 'alt':
@@ -184,6 +189,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			if (output) socket.emit('console', 'Previous names: '+output);
 		}
 		return false;
+		break;
 
 	case 'whois':
 		var targetUser = user;
@@ -214,6 +220,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', {rawMessage: output});
 		}
 		return false;
+		break;
 
 	case 'ban':
 	case 'b':
@@ -236,6 +243,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		targetUser.ban();
 		return false;
+		break;
 
 	case 'banredirect':
 	case 'br':
@@ -262,6 +270,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
 		targetUser.ban();
 		return false;
+		break;
 
 	case 'redirect':
 	case 'redir':
@@ -286,6 +295,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		room.add(''+targetUser.name+' was redirected by '+user.name+' to: '+targets[1]);
 		targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
 		return false;
+		break;
 
 	case 'unban':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -309,6 +319,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'User '+target+' is not banned.');
 		}
 		return false;
+		break;
 
 	case 'unbanall':
 		if (user.can('ban')) {
@@ -319,6 +330,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		bannedIps = {};
 		mutedIps = {};
 		return false;
+		break;
 
 	case 'reply':
 	case 'r':
@@ -328,6 +340,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 		return parseCommand(user, 'msg', ''+(user.lastPM||'')+', '+target, room, socket);
+		break;
 
 	case 'msg':
 	case 'pm':
@@ -364,6 +377,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targets[0].lastPM = user.userid;
 		user.lastPM = targets[0].userid;
 		return false;
+		break;
 
 	case 'ip':
 	case 'getip':
@@ -382,6 +396,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		socket.emit('console', 'User '+targetUser.name+' has IP: '+targetUser.ip);
 		return false;
+		break;
 
 	case 'mute':
 	case 'm':
@@ -410,6 +425,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		rooms.lobby.usersChanged = true;
 		return false;
+		break;
 
 	case 'ipmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -436,6 +452,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		rooms.lobby.usersChanged = true;
 		return false;
+		break;
 
 	case 'unmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -467,6 +484,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		rooms.lobby.usersChanged = true;
 		room.add(''+targetUser.name+' was unmuted by '+user.name+'.');
 		return false;
+		break;
 
 	case 'promote':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -486,6 +504,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (!groupName) groupName = targetUser.group;
 		room.add(''+targetUser.name+' was promoted to ' + groupName + ' by '+user.name+'.');
 		return false;
+		break;
 
 	case 'demote':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -505,6 +524,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (!groupName) groupName = targetUser.group;
 		room.add(''+targetUser.name+' was demoted to ' + (groupName.trim() ? groupName : 'a regular user') + ' by '+user.name+'.');
 		return false;
+		break;
 
 	case 'modchat':
 		if (!target) {
@@ -545,6 +565,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			room.addRaw('<div style="background-color:#AA6655;color:white;padding:2px 4px"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
 		}
 		return false;
+		break;
 
 	case 'announce':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -555,6 +576,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
 		room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>'+target+'</b></div>');
 		return false;
+		break;
 
 	case 'hotpatch':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -610,6 +632,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		socket.emit('console', 'Your hot-patch command was unrecognized.');
 		return false;
+		break;
 
 	case 'savelearnsets':
 		if (user.can('hotpatch')) {
@@ -619,6 +642,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		fs.writeFile('learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
 		socket.emit('console', 'learnsets.js saved.');
 		return false;
+		break;
 
 	case 'rating':
 	case 'ranking':
@@ -647,11 +671,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 		});
 		return false;
+		break;
 
 	case 'nick':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		user.rename(target);
 		return false;
+		break;
 
 	case 'forcerename':
 	case 'fr':
@@ -675,6 +701,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', "User "+targetUser.name+" is no longer using that name.");
 		}
 		return false;
+		break;
 
 	case 'forcerenameto':
 	case 'frt':
@@ -701,6 +728,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', "User "+targetUser.name+" is no longer using that name.");
 		}
 		return false;
+		break;
 
 	// INFORMATIONAL COMMANDS
 
@@ -718,6 +746,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 		}
 		return false;
+		break;
 
 	case 'groups':
 	case '!groups':
@@ -730,6 +759,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'&amp; <b>System operator</b> - They can do anything, like change what this message says'+
 			'</div>');
 		return false;
+		break;
 
 	case 'opensource':
 	case '!opensource':
@@ -737,6 +767,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcast(user, cmd, room, socket,
 			'<div style="border:1px solid #6688AA;padding:2px 4px">Showdown\'s server is open source:<br />- Language: JavaScript<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master" target="_blank">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown" target="_blank">Source code</a></div>');
 		return false;
+		break;
 
 	case 'avatars':
 	case '!avatars':
@@ -744,6 +775,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcast(user, cmd, room, socket,
 			'<div style="border:1px solid #6688AA;padding:2px 4px">Want a custom avatar?<br />- <a href="/sprites/trainers/" target="_blank">How to change your avatar</a></div>');
 		return false;
+		break;
 
 	case 'intro':
 	case 'introduction':
@@ -757,6 +789,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'- <a href="http://www.smogon.com/bw/banlist/" target="_blank">What are the rules for each format? What is "Sleep Clause"?</a>' +
 			'</div>');
 		return false;
+		break;
 
 	case 'cap':
 	case '!cap':
@@ -768,6 +801,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3464513" target="_blank">Talk about the metagame here</a>' +
 			'</div>');
 		return false;
+		break;
 
 	case 'rules':
 	case 'rule':
@@ -779,6 +813,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'- <a href="http://pokemonshowdown.com/rules" target="_blank">Rules</a><br />' +
 			'</div>');
 		return false;
+		break;
 
 	// Battle commands
 
@@ -790,6 +825,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		// but are currently unused
 		socket.emit('console', 'This functionality is no longer available.');
 		return false;
+		break;
 
 	case 'kickinactive':
 		if (room.requestKickInactive) {
@@ -798,6 +834,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'You can only kick inactive players from inside a room.');
 		}
 		return false;
+		break;
 
 	case 'a':
 		if (user.can('battlemessage')) {
@@ -838,6 +875,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			room.add('The Pokemon of the Day was removed by '+user.name+'.');
 		}
 		return false;
+		break;
 
 	case 'lockdown':
 		if (!user.can('lockdown')) {
@@ -850,6 +888,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			rooms[id].addRaw('<div style="background-color:#AA5544;color:white;padding:2px 4px"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>');
 		}
 		return false;
+		break;
 
 	case 'endlockdown':
 		if (!user.can('lockdown')) {
@@ -862,6 +901,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			rooms[id].addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>The server shutdown was canceled.</b></div>');
 		}
 		return false;
+		break;
 
 	case 'loadbanlist':
 		if (!user.can('hotpatch')) {
@@ -879,6 +919,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'banned '+i+' ips');
 		});
 		return false;
+		break;
 
 	case 'crashfixed':
 		if (!user.can('hotpatch')) {
@@ -890,6 +931,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		config.modchat = false;
 		rooms.lobby.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
 		return false;
+		break;
 
 	case 'help':
 	case 'commands':
