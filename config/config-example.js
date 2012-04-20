@@ -46,3 +46,79 @@ exports.reportbattles = true;
 //   This should only be enabled temporarily, when you're dealing with
 //   huge influxes of spammy users.
 exports.modchat = false;
+
+// permissions and groups:
+//   Each entry in `groupsranking' specifies the ranking of the groups.
+//   Each entry in `groups' is a seperate group. Some of the members are "special"
+//     while the rest is just a normal permission.
+//   The special members are as follows:
+//     - name: Specifies the human-readable name for the group.
+//     - root: If this is true, the group can do anything.
+//     - inherit: The group uses the group specified's permissions if it cannot
+//                  find the permission in the current group. Never make the graph
+//                  produced using this member have any cycles, or the server won't run.
+//     - jurisdiction: The default jurisdiction for targeted permissions where one isn't
+//                       explictly specified. "Targeted permissions" are permissions
+//                       that might affect another user, such as `ban' or `promote'.
+//                       's' is a special group where it means the user itself only
+//                       and 'u' is another special group where it means all groups
+//                       lower in rank than the current group.
+//   All the possible permissions are as follows:
+//     - console: Developer console (>>).
+//     - lockdown: /lockdown and /endlockdown commands.
+//     - hotpatch: /hotpatch, /crashfixed and /savelearnsets commands.
+//     - ignorelimits: Ignore limits such as chat message length.
+//     - promote: Promoting to and demoting from the groups specified.
+//     - ban: Banning and unbanning.
+//     - mute: Muting and unmuting.
+//     - receivemutedpms: Receive PMs from muted users.
+//     - forcerename: /fr command.
+//     - forcerenameto: /frt command.
+//     - redirect: /redir command.
+//     - ip: IP checking.
+//     - alts: Alt checking.
+//     - broadcast: Broadcast informational commands.
+//     - announce: /announce command.
+//     - modchat: Set modchat.
+//     - potd: Set PotD.
+//     - forcereset: /forcereset command.
+//     - forcewin: /forcewin command.
+//     - battlemessage: /a command.
+exports.groupsranking = [' ', '+', '%', '@', '&'];
+exports.groups = {
+	'&': {
+		name: "System Operator",
+		root: true
+	},
+	'@': {
+		name: "Admin",
+		inherit: '%',
+		jurisdiction: '@u',
+		promote: true,
+		forcereset: true,
+		forcewin: true,
+		forcerenameto: true,
+		announce: true,
+		modchat: true
+	},
+	'%': {
+		name: "Moderator",
+		inherit: '+',
+		jurisdiction: 'su',
+		ban: 'u',
+		mute: 'u',
+		forcerename: 'u',
+		redirect: true,
+		receivemutedpms: true
+	},
+	'+': {
+		name: "Voiced",
+		inherit: ' ',
+		broadcast: true
+	},
+	' ': {
+		jurisdiction: 's',
+		ip: true,
+		alts: true
+	}
+};

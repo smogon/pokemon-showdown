@@ -129,25 +129,61 @@ function User(name, person, token) {
 		}
 		return selfP.group+selfP.name;
 	};
-	this.isMod = function() {
-		return (selfP.group === '&' || selfP.group === '@' || selfP.group === '%' /* || selfP.group === '+' */ );
-	};
-	this.canMod = function(group) {
-		switch (selfP.group) {
-		case '&':
-			return true;
-			break;
-		case '@':
-			return (group !== '&');
-			break;
-		case '%':
-			return (group === '+' || group === ' ');
-			break;
-		case '+':
-			//return (group === ' ');
-			break;
+	this.can = function(permission, targetUser) {
+		var group = config.groups[selfP.group];
+		if (!group) return false;
+
+		function permissionLookup(permission, curGroup) {
+			// Finds the permission taking in account for inheritance
+			if (!curGroup) curGroup = group;
+			if (curGroup[permission]) {
+				var jurisdiction;
+				if (typeof curGroup[permission] === 'string') {
+					jurisdiction = curGroup[permission];
+				} else {
+					jurisdiction = permissionLookup('jurisdiction', group);
+					if (!jurisdiction) jurisdiction = true;
+				}
+				if (jurisdiction === true) return true;
+				if (typeof jurisdiction === 'string') jurisdiction = jurisdiction.split('');
+
+				// Expand the special group 'u'
+				if (jurisdiction.indexOf('u') !== -1) {
+					var groupRank = config.groupsranking.indexOf(selfP.group);
+					var groupsToAdd = [];
+					if (groupRank !== -1) {
+						groupsToAdd = config.groupsranking.slice(0, groupRank);
+					}
+					groupsToAdd.unshift(jurisdiction.indexOf('u'), 1);
+					Array.prototype.splice.apply(jurisdiction, groupsToAdd);
+				}
+				return jurisdiction;
+			}
+			if (!curGroup['inherit']) return false;
+			var nextGroup = config.groups[curGroup['inherit']];
+			if (!nextGroup) return false;
+			return permissionLookup(permission, nextGroup);
 		}
+
+		if (permissionLookup('root')) return true;
+		var jurisdiction = permissionLookup(permission);
+		if (!jurisdiction) return false;
+		if (!targetUser) return true;
+		if (targetUser && typeof jurisdiction === 'boolean') return false;
+		if (targetUser === selfP && jurisdiction.indexOf('s') !== -1) return true;
+		if (jurisdiction.indexOf(targetUser.group) !== -1) return true;
 		return false;
+	};
+	this.getNextGroup = function(isDown) {
+		var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(selfP.group) + (isDown ? -1 : 1)];
+		if (!nextGroupRank) {
+			if (isDown) {
+				return config.groupsranking[0];
+			} else {
+				return config.groupsranking[config.groupsranking.length - 1];
+			}
+		}
+		return nextGroupRank;
 	};
 	this.forceRename = function(name, authenticated) {
 		// skip the login server
@@ -507,19 +543,18 @@ function User(name, person, token) {
 		}
 		return alts;
 	};
-	this.getAltGroup = function() {
-		var groupRanks = {'+': 1, '%': 2, '@': 3, '&': 100};
-		var group = selfP.group;
-		var groupRank = (groupRanks[group] || 0);
+	this.getHighestRankedAlt = function() {
+		var result = selfP;
+		var groupRank = config.groupsranking.indexOf(selfP.group);
 		for (var i in users) {
 			if (users[i].ip === selfP.ip && users[i] !== selfP) {
-				if ((groupRanks[users[i].group]||0) > groupRank) {
-					group = users[i].group;
-					groupRank = (groupRanks[group] || 0);
+				if (config.groupsranking.indexOf(users[i].group) > groupRank) {
+					result = users[i];
+					groupRank = config.groupsranking.indexOf(users[i].group);
 				}
 			}
 		}
-		return group;
+		return result;
 	};
 	this.ban = function(noRecurse) {
 		// no need to recurse, since the root for-loop already bans everything with your IP
