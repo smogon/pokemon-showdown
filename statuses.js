@@ -157,7 +157,7 @@ exports.BattleStatuses = {
 	partiallytrapped: {
 		duration: 5,
 		durationCallback: function(target, source) {
-			if (source.item === 'GripClaw') return 5;
+			if (source.item === 'gripclaw') return 5;
 			return Math.floor(4 + Math.random()*2);
 		},
 		onResidualOrder: 11,
@@ -166,7 +166,11 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('partiallytrapped');
 				return;
 			}
-			this.damage(pokemon.maxhp/16);
+			if (this.effectData.source.item === 'bindingband') {
+				this.damage(pokemon.maxhp/8);
+			} else {
+				this.damage(pokemon.maxhp/16);
+			}
 		},
 		onEnd: function(pokemon) {
 			this.add('-end', pokemon, this.effectData.sourceEffect.id, '[partiallytrapped]');
