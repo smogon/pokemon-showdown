@@ -496,7 +496,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			rooms.lobby.usersChanged = true;
 			var groupName = config.groups[targetUser.group].name;
 			if (!groupName) groupName = targetUser.group;
-			room.add(''+targetUser.name+' was demoted to ' + groupName + ' by '+user.name+'.');
+			room.add(''+targetUser.name+' was demoted to ' + (groupName ? groupName : 'a regular user') + ' by '+user.name+'.');
 			return false;
 		}
 		socket.emit('console', '/demote - Access denied.');
@@ -725,7 +725,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case '!opensource':
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
-			'<div style="border:1px solid #6688AA;padding:2px 4px">Showdown is open source:<br />- Language: JavaScript<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master" target="_blank">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown" target="_blank">Source code</a></div>');
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Showdown\'s server is open source:<br />- Language: JavaScript<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master" target="_blank">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown" target="_blank">Source code</a></div>');
 		return false;
 		break;
 
@@ -769,8 +769,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case '!rule':
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
-			'<div style="border:1px solid #6688AA;padding:2px 4px">We follow Smogon\'s simulator rules:<br />' +
-			'- <a href="http://www.smogon.com/sim/rules" target="_blank">Smogon\'s simulator rules</a><br />' +
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Please follow the rules:' +
+			'- <a href="http://pokemonshowdown.com/rules" target="_blank">Rules</a><br />' +
 			'</div>');
 		return false;
 		break;
