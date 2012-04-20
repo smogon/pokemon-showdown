@@ -494,7 +494,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
 		}
-		var nextGroup = targets[1] ? targets[1] : targetUser.getNextGroupSymbol(true);
+		var nextGroup = targets[1] ? targets[1] : targetUser.getNextGroupSymbol();
 		if (!config.groups[nextGroup]) {
 			socket.emit('console', 'Group \'' + nextGroup + '\' does not exist.');
 			return false;
