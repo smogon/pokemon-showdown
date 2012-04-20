@@ -27,7 +27,7 @@ exports.potd = '';
 exports.crashguard = true;
 
 // local sysop - automatically promote users who connect from
-//   127.0.0.1 to sysop
+//   127.0.0.1 to the highest ranking group (Usually &, or sysop)
 exports.localsysop = false;
 
 // report joins and leaves - shows messages like "<USERNAME> joined"
