@@ -698,7 +698,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		for (var i=0; i<dataMessages.length; i++) {
 			if (cmd.substr(0,1) !== '!') {
 				socket.emit('console', dataMessages[i]);
-			} else if (user.group !== ' ' && canTalk(user, room)) {
+			} else if (user.can('broadcast') && canTalk(user, room)) {
 				room.add(dataMessages[i]);
 			}
 		}
@@ -980,37 +980,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			socket.emit('console', '/unmute [username] - Remove mute from user. Requires: % @ &');
 		}
-		if (target === '%' || target === 'voice') {
+		if (target === '@' || target === 'promote') {
 			matched = true;
-			socket.emit('console', '/voice [username] - Change user\'s group to +. Requires: % @ &');
+			socket.emit('console', '/promote [username] - Promotes the user to the next ranked group. Requires: @ &');
 		}
-		if (target === '%' || target === 'devoice') {
+		if (target === '@' || target === 'demote') {
 			matched = true;
-			socket.emit('console', '/devoice [username] - Remove user\'s group. Requires: % @ &');
-		}
-		if (target === '@' || target === 'mod') {
-			matched = true;
-			socket.emit('console', '/mod [username] - Change user\'s group to %. Requires: @ &');
-		}
-		if (target === '@' || target === 'demod') {
-			matched = true;
-			socket.emit('console', '/demod [username] - Change user\'s group from % to +. Requires: @ &');
-		}
-		if (target === '@' || target === 'admin') {
-			matched = true;
-			socket.emit('console', '/admin [username] - Change user\'s group to @. Requires: @ &');
-		}
-		if (target === '@' || target === 'deadmin') {
-			matched = true;
-			socket.emit('console', '/deadmin [username] - Change user\'s group from @ to %. Requires: @ &');
-		}
-		if (target === '&' || target === 'sysop') {
-			matched = true;
-			socket.emit('console', '/sysop [username] - Change user\'s group to &. Requires: &');
-		}
-		if (target === '&' || target === 'desysop') {
-			matched = true;
-			socket.emit('console', '/desysop [username] - Change user\'s group from & to @. Requires: &');
+			socket.emit('console', '/demote [username] - Demotes the user to the previous ranked group. Requires: @ &');
 		}
 		if (target === '@' || target === 'announce') {
 			matched = true;
@@ -1036,8 +1012,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
 			socket.emit('console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
-				socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /forcerenameto, /ban, /unban, /unbanall, /mute, /unmute, /voice, /devoice');
-				socket.emit('console', 'ADMIN COMMANDS: /ip, /mod, /demod, /admin, /deadmin, /sysop, /desysop');
+				socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /forcerenameto, /ban, /unban, /unbanall, /mute, /unmute');
+				socket.emit('console', 'ADMIN COMMANDS: /ip, /promote, /demote');
 				socket.emit('console', 'For details on all moderator commands, use /help %');
 			}
 			socket.emit('console', 'For details of a specific command, use something like: /help data');
