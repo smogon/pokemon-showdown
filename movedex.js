@@ -6441,6 +6441,31 @@ exports.BattleMovedex = {
 		num: 222,
 		accuracy: 100,
 		basePower: false,
+		damageCallback: function(pokemon) {
+			var i = Math.floor(Math.random()*100);
+			if (i < 5) {
+				this.add('-message', 'Magnitude 4! (placeholder)');
+				return 10;
+			} else if (i < 15) {
+				this.add('-message', 'Magnitude 5! (placeholder)');
+				return 30;
+			} else if (i < 35) {
+				this.add('-message', 'Magnitude 6! (placeholder)');
+				return 50;
+			} else if (i < 65) {
+				this.add('-message', 'Magnitude 7! (placeholder)');
+				return 70;
+			} else if (i < 85) {
+				this.add('-message', 'Magnitude 8! (placeholder)');
+				return 90;
+			} else if (i < 95) {
+				this.add('-message', 'Magnitude 9! (placeholder)');
+				return 110;
+			} else {
+				this.add('-message', 'Magnitude 10! (placeholder)');
+				return 150;
+			}
+		},
 		category: "Physical",
 		desc: "Deals variable damage, between 10 base power and 130 base power, as well as double damage against Digging Pokemon.",
 		shortDesc: "Damage varies. Double power against Dig.",
