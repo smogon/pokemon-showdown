@@ -10,8 +10,7 @@ function getTime() {
 function sanitizeName(name) {
 	name = name.trim();
 	if (name.length > 18) name = name.substr(0,18);
-	var noStartChars = {'&':1,'@':1,'%':1,'+':1,'!':1};
-	while (noStartChars[name.substr(0,1)]) {
+	while (config.groups[name.substr(0,1)]) {
 		name = name.substr(1);
 	}
 	name = name.replace(/[\|\[\]\,]/g, '');
@@ -222,7 +221,7 @@ function User(name, person, token) {
 		selfP.authenticated = !!authenticated;
 
 		if (config.localsysop && selfP.ip === '127.0.0.1') {
-			selfP.group = '&';
+			selfP.group = config.groupsranking[config.groupsranking.length - 1];
 		}
 
 		for (var i=0; i<selfP.people.length; i++) {
@@ -297,13 +296,7 @@ function User(name, person, token) {
 			}
 		}
 		if (!name) name = '';
-		name = name.trim();
-		if (name.length > 18) name = name.substr(0,18);
-		var noStartChars = {'&':1,'@':1,'%':1,'+':1,'!':1};
-		while (noStartChars[name.substr(0,1)]) {
-			name = name.substr(1);
-		}
-		name = name.replace(/[\|\[\]\,]/g, '');
+		name = sanitizeName(name);
 		var userid = toUserid(name);
 		if (selfP.authenticated) auth = false;
 
