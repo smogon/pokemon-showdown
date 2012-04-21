@@ -1100,14 +1100,26 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
-	// There is no default case.
+	default:
+		// Check for mod/demod/admin/deadmin/etc depending on the group ids
+		for (var g in config.groups) {
+			if (cmd === config.groups[g].id) {
+				return parseCommand(user, 'promote', toUserid(target) + ',' + g, room, socket);
+			} else if (cmd === 'de' + config.groups[g].id) {
+				var nextGroup = config.groupsranking[config.groupsranking.indexOf(g) - 1];
+				if (!nextGroup) nextGroup = config.groupsranking[0];
+				return parseCommand(user, 'demote', toUserid(target) + ',' + nextGroup, room, socket);
+			}
+		}
 
-	// If a user types "/text" and there is no command "/text", it will be displayed:
-	// no error message will be given about unrecognized commands.
+		// There is no default case for unrecognised commands
 
-	// This is intentional: Some people like to say things like "/shrug" - this
-	// means they don't need to manually escape it like "//shrug" - we will
-	// do it automatically for them
+		// If a user types "/text" and there is no command "/text", it will be displayed:
+		// no error message will be given about unrecognized commands.
+
+		// This is intentional: Some people like to say things like "/shrug" - this
+		// means they don't need to manually escape it like "//shrug" - we will
+		// do it automatically for them
 	}
 
 	// chat moderation
