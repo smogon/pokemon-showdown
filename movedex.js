@@ -9099,6 +9099,12 @@ exports.BattleMovedex = {
 					return false;
 				}
 			},
+			onTryHit: function(target, source, move) {
+				if (move && move.id === 'yawn') {
+					this.debug('blocking yawn');
+					return false;
+				}
+			},
 			onStart: function(side) {
 				this.add('-sidestart', side, 'Safeguard');
 			},
@@ -12537,7 +12543,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'yawn',
 		onTryHit: function(target) {
-			if (target.status) {
+			if (target.status || !target.runImmunity('slp')) {
 				return false;
 			}
 		},

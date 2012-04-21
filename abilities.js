@@ -919,6 +919,12 @@ exports.BattleAbilities = {
 				return false;
 			}
 		},
+		onTryHit: function(target, source, move) {
+			if (this.weather === 'sunnyday' && move && move.id === 'yawn') {
+				this.debug('blocking yawn');
+				return false;
+			}
+		},
 		id: "leafguard",
 		name: "Leaf Guard",
 		rating: 3,
