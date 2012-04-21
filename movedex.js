@@ -2148,16 +2148,14 @@ exports.BattleMovedex = {
 			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
-				if (move.id === 'earthquake') {
+				if (move.id === 'earthquake' || move.id === 'magnitude') {
 					// should not normally be done in ModifyMove event,
-					// but EQ has static base power, and
-					// it's faster to do this here than in
+					// but it's faster to do this here than in
 					// onFoeBasePower
-
-					// TODO: Magnitude
-					move.basePower *= 2;
+					if (!move.basePowerModifier) move.basePowerModifier = 1;
+					move.basePowerModifier *= 2;
 					return;
-				} else if (move.id === 'magnitude' || move.id === 'fissure') {
+				} else if (move.id === 'fissure') {
 					return;
 				}
 				move.accuracy = 0;
