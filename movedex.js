@@ -3957,6 +3957,12 @@ exports.BattleMovedex = {
 		num: 210,
 		accuracy: 95,
 		basePower: 20,
+		basePowerCallback: function(pokemon) {
+			if (!pokemon.volatiles.furycutter) {
+				pokemon.addVolatile('furycutter');
+			}
+			return 20 * pokemon.volatiles.furycutter.multiplier;
+		},
 		category: "Physical",
 		desc: "The base power of this move doubles with each consecutive hit; however, power is capped at a maximum 160 BP and remains there for any subsequent uses. If this move misses, base power will be reset to 10 BP on the next turn. The user can also select other attacks without resetting this move's power; it will continue to double after each use until it either misses or reaches the 160 BP cap.",
 		shortDesc: "Power doubles with each hit, up to 160.",
@@ -3965,6 +3971,21 @@ exports.BattleMovedex = {
 		pp: 20,
 		isContact: true,
 		priority: 0,
+		onHit: function(target, source) {
+			source.addVolatile('furycutter');
+		},
+		effect: {
+			duration: 2,
+			onStart: function() {
+				this.effectData.multiplier = 1;
+			},
+			onRestart: function() {
+				if (this.effectData.multiplier < 8) {
+					this.effectData.multiplier <<= 1;
+				}
+				this.effectData.duration = 2;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Bug"
