@@ -2038,10 +2038,10 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability (except Multitype). This ability remains with this Pokemon until it leaves the field.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			var abilityid = target.ability;
-			if (abilityid === 'trace') return;
-			if (pokemon.setAbility(abilityid)) {
-				this.add('-ability',pokemon,abilityid,'[from] ability: Trace','[of] '+target);
+			var ability = this.getAbility(target.ability);
+			if (ability.id === 'trace') return;
+			if (pokemon.setAbility(ability)) {
+				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
 			}
 		},
 		id: "trace",
