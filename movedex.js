@@ -797,7 +797,7 @@ exports.BattleMovedex = {
 					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage*2});
 					return false;
 				}
-				this.add('-message', 'Storing energy. (placeholder)');
+				this.add('-message', pokemon.name+' is storing energy! (placeholder)');
 				return false;
 			}
 		},
@@ -2206,7 +2206,7 @@ exports.BattleMovedex = {
 				return false;
 			},
 			onEnd: function(pokemon) {
-				this.add('-message', 'Disable ended. (placeholder)');
+				this.add('-message', pokemon.name+' is no longer disabled! (placeholder)');
 			},
 			onBeforeMove: function(attacker, defender, move) {
 				if (move.id === this.effectData.move) {
@@ -9736,7 +9736,7 @@ exports.BattleMovedex = {
 				source.ability = sourceAbility;
 				return false;
 			}
-			this.add('-message', 'Skill Swapped. (placeholder)'); // TODO
+			this.add('-message', source.name+' swapped Abilities with its target! (placeholder)'); // TODO
 		},
 		secondary: false,
 		target: "normal",
@@ -9757,7 +9757,7 @@ exports.BattleMovedex = {
 		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('skullbash')) return;
-			this.add('-message', pokemon.name+' lowered its head! (placeholder)'); // TODO
+			this.add('-message', pokemon.name+' tucked in its head! (placeholder)'); // TODO
 			pokemon.addVolatile('skullbash');
 			return true;
 		},
