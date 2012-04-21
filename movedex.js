@@ -6441,7 +6441,7 @@ exports.BattleMovedex = {
 		num: 222,
 		accuracy: 100,
 		basePower: false,
-		damageCallback: function(pokemon) {
+		basePowerCallback: function(pokemon) {
 			var i = Math.floor(Math.random()*100);
 			if (i < 5) {
 				this.add('-message', 'Magnitude 4! (placeholder)');
