@@ -52,6 +52,7 @@ exports.modchat = false;
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
 //     while the rest is just a normal permission.
 //   The special members are as follows:
+//     - id: Specifies an id for the group.
 //     - name: Specifies the human-readable name for the group.
 //     - root: If this is true, the group can do anything.
 //     - inherit: The group uses the group specified's permissions if it cannot
@@ -87,10 +88,12 @@ exports.modchat = false;
 exports.groupsranking = [' ', '+', '%', '@', '&'];
 exports.groups = {
 	'&': {
+		id: "sysop",
 		name: "System Operator",
 		root: true
 	},
 	'@': {
+		id: "admin",
 		name: "Admin",
 		inherit: '%',
 		jurisdiction: '@u',
@@ -104,6 +107,7 @@ exports.groups = {
 		modchat: true
 	},
 	'%': {
+		id: "mod",
 		name: "Moderator",
 		inherit: '+',
 		jurisdiction: 'su',
@@ -114,6 +118,7 @@ exports.groups = {
 		receivemutedpms: true
 	},
 	'+': {
+		id: "voice",
 		name: "Voiced",
 		inherit: ' ',
 		broadcast: true
