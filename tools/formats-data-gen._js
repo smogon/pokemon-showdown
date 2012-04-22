@@ -92,7 +92,6 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 			var eventPokemon = new Object();
 			eventPokemon.generation = serebiiEventPokemon.generation;
 			eventPokemon.level = serebiiEventPokemon.level;
-			eventPokemon.formeLetter = serebiiEventPokemon.formeLetter;
 			eventPokemon.gender = serebiiEventPokemon.gender;
 			eventPokemon.nature = serebiiEventPokemon.nature;
 			
