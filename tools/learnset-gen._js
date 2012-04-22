@@ -79,8 +79,15 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _) {
 					convertedMethodOfLearning += "M";
 					break;
 				
+				case "Stadium: Surfing Pikachu" :
+				case "Colosseum: Purification" :
+				case "XD: Shadow" :
+				case "XD: Purification" :
+					convertedMethodOfLearning += "X"; // Placeholder
+					break;
+				
 				default :
-					convertedMethodOfLearning += "S";
+					console.warn("Unknown method of move learning: \"" + move.methodOfLearning + "\".");
 					break;
 			}
 			if (result.learnset[move.name].indexOf(convertedMethodOfLearning) === -1)
