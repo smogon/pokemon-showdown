@@ -1,6 +1,7 @@
 var url = require("url");
 var request = require("request");
 var libxml = require("libxmljs");
+var toId = require("./misc.js").toId;
 
 exports.getSerebiiEventdex = function(_) {
 	console.warn("Downloading Serebii Eventdex.");
@@ -84,7 +85,7 @@ exports.getSerebiiEventdex = function(_) {
 			var abilitiesHtml = columnsHtml[1].find("./table/tr[3]/td[2]/a");
 			var abilities = new Array();
 			for (var a = 0; a < abilitiesHtml.length; ++a)
-				abilities.push(abilitiesHtml[a].text());
+				abilities.push(toId(abilitiesHtml[a].text()));
 
 			// The third column contains the nature
 			var nature = columnsHtml[2].childNodes()[0].text().replace(/^(.*?) Nature\.$/, "$1");
@@ -94,12 +95,10 @@ exports.getSerebiiEventdex = function(_) {
 			var moves = new Array();
 			for (var m = 0; m < movesHtml.length; ++m)
 				if (movesHtml[m].text().trim().length > 0)
-					moves.push(movesHtml[m].text().trim());
+					moves.push(toId(movesHtml[m].text()));
 
 			// Combine the results
-			if (!results[nationalPokedexNumber])
-				results[nationalPokedexNumber] = new Array();
-			results[nationalPokedexNumber].push({
+			var result = {
 					generation: generation,
 					level: level,
 					formeLetter: formeLetter.toUpperCase(),
@@ -107,7 +106,20 @@ exports.getSerebiiEventdex = function(_) {
 					abilities: abilities,
 					nature: nature,
 					moves: moves
-				});
+				};
+
+			// Check if there is already an entry for this pokemon
+			if (!results[nationalPokedexNumber])
+				results[nationalPokedexNumber] = new Array();
+			var isDuplicate = false;
+			for (var r = 0; r < results[nationalPokedexNumber].length; ++r) {
+				if (JSON.stringify(results[nationalPokedexNumber][r]) === JSON.stringify(result)) {
+					isDuplicate = true;
+					break;
+				}
+			}
+			if (!isDuplicate)
+				results[nationalPokedexNumber].push(result);
 		}
 	}
 	return results;

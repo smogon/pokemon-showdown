@@ -83,7 +83,6 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 
 	if (veekunPokemon.nationalPokedexNumber in serebiiEventdex) {
 		result.eventPokemon = new Array();
-	nextEventPokemon:
 		for (var e = 0; e < serebiiEventdex[veekunPokemon.nationalPokedexNumber].length; ++e) {
 			var serebiiEventPokemon = serebiiEventdex[veekunPokemon.nationalPokedexNumber][e];
 			if (serebiiEventPokemon.generation < 3)
@@ -94,19 +93,9 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 			eventPokemon.level = serebiiEventPokemon.level;
 			eventPokemon.gender = serebiiEventPokemon.gender;
 			eventPokemon.nature = serebiiEventPokemon.nature;
+			eventPokemon.abilities = serebiiEventPokemon.abilities;
+			eventPokemon.moves = serebiiEventPokemon.moves;
 
-			eventPokemon.abilities = new Array();
-			for (var a = 0; a < serebiiEventPokemon.abilities.length; ++a)
-				eventPokemon.abilities.push(toId(serebiiEventPokemon.abilities[a]));
-
-			eventPokemon.moves = new Array();
-			for (var m = 0; m < serebiiEventPokemon.moves.length; ++m)
-				eventPokemon.moves.push(toId(serebiiEventPokemon.moves[m]));
-
-			// Make sure there are no duplicates
-			for (var r = 0; r < result.eventPokemon.length; ++r)
-				if (JSON.stringify(result.eventPokemon[r]) === JSON.stringify(eventPokemon))
-					continue nextEventPokemon;
 			result.eventPokemon.push(eventPokemon);
 		}
 	}
