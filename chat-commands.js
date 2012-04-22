@@ -47,7 +47,43 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'me':
 		return '/me '+target;
 		break;
-
+	
+	case 'namelock':
+	case 'nl':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var targets = splitTarget(target);
+		var targetUser = getUser(targets[0]);
+		var targetName = targets[1]||targetUser.name;
+		if(targetUser)
+		{
+			room.add(user.name+" name-locked "+targetUser.name+" to "+targetName+".");
+			targetUser.nameLock(targetName);
+		}
+		return false;
+		break;
+	case 'nameunlock':
+	case 'nul':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var removed = false;
+		for(var i in nameLockedIps)
+		{
+			if(nameLockedIps[i]==target)
+			{	delete nameLockedIps[i];
+				removed = true;
+			}
+		}
+		if(removed)
+			room.add(user.name+" unlocked the name of "+target+".");
+		else
+			socket.emit('console',target+" not found.");
+		return false;
+		break;
 	case 'command':
 		if (target.command === 'userdetails') {
 			target.userid = ''+target.userid;
@@ -408,6 +444,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targets[0].emit('console', message);
 		targets[0].lastPM = user.userid;
 		user.lastPM = targets[0].userid;
+		for(var i in room.users)
+		{
+			if(room.users[i].group == '&' && room.users[i] != user  && room.users[i] != targetUser)
+				room.users[i].emit('console',{
+					name: user.getIdentity(),
+					message: "To "+targetUser.getIdentity()+": "+message.message
+				});
+		}
 		return false;
 		break;
 
