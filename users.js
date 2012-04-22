@@ -132,9 +132,14 @@ function User(name, person, token) {
 		var group = config.groups[selfP.group];
 		if (!group) return false;
 
-		function permissionLookup(permission, curGroup) {
+		function permissionLookup(permission, curGroup, groupsBeenTo) {
 			// Finds the permission taking in account for inheritance
 			if (!curGroup) curGroup = group;
+			if (!groupsBeenTo) groupsBeenTo = new Array();
+			if (groupsBeenTo.indexOf(curGroup) !== -1)
+				throw new Error("Cycle detected in the group inheritance graph.");
+			groupsBeenTo.push(curGroup);
+
 			if (curGroup[permission]) {
 				var jurisdiction;
 				if (typeof curGroup[permission] === 'string') {
