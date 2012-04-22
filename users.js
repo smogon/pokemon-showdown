@@ -10,8 +10,7 @@ function getTime() {
 function sanitizeName(name) {
 	name = name.trim();
 	if (name.length > 18) name = name.substr(0,18);
-	var noStartChars = {'&':1,'@':1,'%':1,'+':1,'!':1};
-	while (noStartChars[name.substr(0,1)]) {
+	while (config.groups[name.substr(0,1)]) {
 		name = name.substr(1);
 	}
 	name = name.replace(/[\|\[\]\,]/g, '');
@@ -68,7 +67,7 @@ function importUsergroups() {
 		for (var i = 0; i < data.length; i++) {
 			if (!data[i]) continue;
 			var row = data[i].split(",");
-			usergroups[toUserid(row[0])] = (row[1]||' ')+row[0];
+			usergroups[toUserid(row[0])] = (row[1]||config.groupsranking[0])+row[0];
 		}
 	});
 }
@@ -97,7 +96,7 @@ function User(name, person, token) {
 	this.renamePending = false;
 	this.authenticated = false;
 	this.userid = toUserid(this.name);
-	this.group = ' ';
+	this.group = config.groupsranking[0];
 
 	var trainersprites = [1, 2, 101, 102, 169, 170];
 	this.avatar = trainersprites[parseInt(Math.random()*trainersprites.length)];
@@ -129,25 +128,75 @@ function User(name, person, token) {
 		}
 		return selfP.group+selfP.name;
 	};
-	this.isMod = function() {
-		return (selfP.group === '&' || selfP.group === '@' || selfP.group === '%' /* || selfP.group === '+' */ );
-	};
-	this.canMod = function(group) {
-		switch (selfP.group) {
-		case '&':
-			return true;
-			break;
-		case '@':
-			return (group !== '&');
-			break;
-		case '%':
-			return (group === '+' || group === ' ');
-			break;
-		case '+':
-			//return (group === ' ');
-			break;
+	this.can = function(permission, targetUser) {
+		var group = config.groups[selfP.group];
+		if (!group) return false;
+
+		function permissionLookup(permission, curGroup, groupsBeenTo) {
+			// Finds the permission taking in account for inheritance
+			if (!curGroup) curGroup = group;
+			if (!groupsBeenTo) groupsBeenTo = new Array();
+			if (groupsBeenTo.indexOf(curGroup) !== -1)
+				throw new Error("Cycle detected in the group inheritance graph.");
+			groupsBeenTo.push(curGroup);
+
+			if (curGroup[permission]) {
+				var jurisdiction;
+				if (typeof curGroup[permission] === 'string') {
+					jurisdiction = curGroup[permission];
+				} else {
+					jurisdiction = permissionLookup('jurisdiction', group);
+					if (!jurisdiction) jurisdiction = true;
+				}
+				if (jurisdiction === true) return true;
+				if (typeof jurisdiction === 'string') jurisdiction = jurisdiction.split('');
+
+				// Expand the special group 'u'
+				if (jurisdiction.indexOf('u') !== -1) {
+					var groupRank = config.groupsranking.indexOf(selfP.group);
+					var groupsToAdd = [];
+					if (groupRank !== -1) {
+						groupsToAdd = config.groupsranking.slice(0, groupRank);
+					}
+					groupsToAdd.unshift(jurisdiction.indexOf('u'), 1);
+					Array.prototype.splice.apply(jurisdiction, groupsToAdd);
+				}
+				return jurisdiction;
+			} else if (curGroup[permission] === false) {
+				return false;
+			}
+			if (!curGroup['inherit']) return false;
+			var nextGroup = config.groups[curGroup['inherit']];
+			if (!nextGroup) return false;
+			return permissionLookup(permission, nextGroup);
 		}
+
+		if (permissionLookup('root')) return true;
+		var jurisdiction = permissionLookup(permission);
+		if (!jurisdiction) return false;
+		if (!targetUser) return true;
+		if (targetUser && typeof jurisdiction === 'boolean') return false;
+		if (targetUser === selfP && jurisdiction.indexOf('s') !== -1) return true;
+		if (jurisdiction.indexOf(targetUser.group) !== -1) return true;
 		return false;
+	};
+	// Special permission check is needed for promoting and demoting
+	this.checkPromotePermission = function(targetUser, targetGroupSymbol) {
+		if (!selfP.can('promote', targetUser)) return false;
+		var fakeUser = {group:targetGroupSymbol};
+		if (!selfP.can('promote', fakeUser)) return false;
+		return true;
+	};
+	this.getNextGroupSymbol = function(isDown) {
+		var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(selfP.group) + (isDown ? -1 : 1)];
+		if (!nextGroupRank) {
+			if (isDown) {
+				return config.groupsranking[0];
+			} else {
+				return config.groupsranking[config.groupsranking.length - 1];
+			}
+		}
+		return nextGroupRank;
 	};
 	this.forceRename = function(name, authenticated) {
 		// skip the login server
@@ -177,7 +226,7 @@ function User(name, person, token) {
 		selfP.authenticated = !!authenticated;
 
 		if (config.localsysop && selfP.ip === '127.0.0.1') {
-			selfP.group = '&';
+			selfP.group = config.groupsranking[config.groupsranking.length - 1];
 		}
 
 		for (var i=0; i<selfP.people.length; i++) {
@@ -252,13 +301,7 @@ function User(name, person, token) {
 			}
 		}
 		if (!name) name = '';
-		name = name.trim();
-		if (name.length > 18) name = name.substr(0,18);
-		var noStartChars = {'&':1,'@':1,'%':1,'+':1,'!':1};
-		while (noStartChars[name.substr(0,1)]) {
-			name = name.substr(1);
-		}
-		name = name.replace(/[\|\[\]\,]/g, '');
+		name = sanitizeName(name);
 		var userid = toUserid(name);
 		if (selfP.authenticated) auth = false;
 
@@ -301,7 +344,7 @@ function User(name, person, token) {
 						return false;
 					}
 				}
-				var group = ' ';
+				var group = config.groupsranking[0];
 				var avatar = 0;
 				var authenticated = false;
 				if (body !== '1') {
@@ -367,7 +410,7 @@ function User(name, person, token) {
 					selfP.people = [];
 					selfP.connected = false;
 					if (!selfP.authenticated) {
-						selfP.group = ' ';
+						selfP.group = config.groupsranking[0];
 					}
 
 					user.group = group;
@@ -456,10 +499,10 @@ function User(name, person, token) {
 	};
 	this.setGroup = function(group) {
 		selfP.group = group.substr(0,1);
-		if (!selfP.group || selfP.group === ' ') {
+		if (!selfP.group || selfP.group === config.groupsranking[0]) {
 			delete usergroups[selfP.userid];
 		} else {
-			usergroups[selfP.userid] = (selfP.group||' ')+selfP.name;
+			usergroups[selfP.userid] = selfP.group+selfP.name;
 		}
 		exportUsergroups();
 	};
@@ -471,7 +514,7 @@ function User(name, person, token) {
 				if (selfP.people.length <= 1) {
 					selfP.connected = false;
 					if (!selfP.authenticated) {
-						selfP.group = ' ';
+						selfP.group = config.groupsranking[0];
 					}
 				}
 				person = selfP.people[i];
@@ -507,19 +550,18 @@ function User(name, person, token) {
 		}
 		return alts;
 	};
-	this.getAltGroup = function() {
-		var groupRanks = {'+': 1, '%': 2, '@': 3, '&': 100};
-		var group = selfP.group;
-		var groupRank = (groupRanks[group] || 0);
+	this.getHighestRankedAlt = function() {
+		var result = selfP;
+		var groupRank = config.groupsranking.indexOf(selfP.group);
 		for (var i in users) {
 			if (users[i].ip === selfP.ip && users[i] !== selfP) {
-				if ((groupRanks[users[i].group]||0) > groupRank) {
-					group = users[i].group;
-					groupRank = (groupRanks[group] || 0);
+				if (config.groupsranking.indexOf(users[i].group) > groupRank) {
+					result = users[i];
+					groupRank = config.groupsranking.indexOf(users[i].group);
 				}
 			}
 		}
-		return group;
+		return result;
 	};
 	this.ban = function(noRecurse) {
 		// no need to recurse, since the root for-loop already bans everything with your IP
