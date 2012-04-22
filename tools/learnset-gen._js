@@ -7,6 +7,7 @@ var customPokemonPath = "../data/custom-pokemon.json";
 
 var assert = require("assert").ok;
 var getVeekunDatabase = require("./veekun-database._js").getVeekunDatabase;
+var getSerebiiEventdex = require("./get-serebii-eventdex._js").getSerebiiEventdex;
 var miscFunctions = require("./misc.js");
 writeLine = miscFunctions.writeLine;
 ObjectIsLastKey = miscFunctions.ObjectIsLastKey;
@@ -16,9 +17,10 @@ toIdForName = miscFunctions.toIdForName;
 
 function main(argv, _) {
 	var veekunDatabase = getVeekunDatabase(_);
+	var serebiiEventdex = getSerebiiEventdex(_);
 	var languageId = veekunDatabase.getLanguageId("en", _); // Don't change the language! Bad things will happen if you do
 	var formeIds = veekunDatabase.getAllFormeIds(_);
-	
+
 	console.warn("Starting to output.");
 	writeLine("exports.BattleLearnsets = {", 1);
 	console.warn("Outputting custom pokemon.");
@@ -27,9 +29,10 @@ function main(argv, _) {
 	for (var f = 0; f < formeIds.length; ++f) {
 		var veekunPokemon = veekunDatabase.getFormeData(formeIds[f], languageId, _, {
 				name: true,
+				pokedexNumbers: true,
 				learnset: true,
 			});
-		var convertedPokemon = convertVeekunPokemon(veekunPokemon, veekunDatabase, _);
+		var convertedPokemon = convertData(veekunPokemon, serebiiEventdex);
 		outputPokemon(convertedPokemon, f === formeIds.length - 1);
 		if ((f + 1) % 50 === 0)
 			console.warn("Finished outputting " + (f + 1) + "/" + formeIds.length + " pokemon.");
@@ -45,17 +48,18 @@ function outputCustomPokemon() {
 		outputPokemon(customPokemon[c]);
 }
 
-function convertVeekunPokemon(pokemon, veekunDatabase, _) {
+function convertData(veekunPokemon, serebiiEventdex) {
 	var result = new Object();
-	result.id = toIdForName(pokemon.combinedName, pokemon.forme);
-	
+	result.id = toIdForName(veekunPokemon.combinedName, veekunPokemon.forme);
+
 	result.learnset = new Object();
-	for (var g in pokemon.learnset) {
+	for (var g in veekunPokemon.learnset) {
 		// g is the generation
 		if (g < 3)
 			continue;
-		for (var l = 0; l < pokemon.learnset[g].length; ++l) {
-			var move = pokemon.learnset[g][l];
+
+		for (var l = 0; l < veekunPokemon.learnset[g].length; ++l) {
+			var move = veekunPokemon.learnset[g][l];
 			move.name = toId(move.name);
 			if (!result.learnset[move.name])
 				result.learnset[move.name] = new Array();
@@ -64,34 +68,52 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _) {
 				case "Level up" :
 					convertedMethodOfLearning += "L" + move.levelLearnt;
 					break;
-				
+
 				case "Egg" :
 				case "Volt Tackle Pichu" :
 					convertedMethodOfLearning += "E";
 					break;
-				
+
 				case "Tutor" :
 				case "Rotom Form" :
 					convertedMethodOfLearning += "T";
 					break;
-				
+
 				case "Machine" :
 					convertedMethodOfLearning += "M";
 					break;
-				
+
 				case "Stadium: Surfing Pikachu" :
 				case "Colosseum: Purification" :
 				case "XD: Shadow" :
 				case "XD: Purification" :
 					convertedMethodOfLearning += "X"; // Placeholder
 					break;
-				
+
 				default :
 					console.warn("Unknown method of move learning: \"" + move.methodOfLearning + "\".");
+					convertedMethodOfLearning += "?";
 					break;
 			}
 			if (result.learnset[move.name].indexOf(convertedMethodOfLearning) === -1)
 				result.learnset[move.name].push(convertedMethodOfLearning);
+		}
+	}
+
+	// Event moves
+	if (veekunPokemon.nationalPokedexNumber in serebiiEventdex) {
+		var eventPokemon = serebiiEventdex[veekunPokemon.nationalPokedexNumber];
+		for (var e = 0; e < eventPokemon.length; ++e) {
+			if (eventPokemon[e].generation < 3) continue;
+			for (var m = 0; m < eventPokemon[e].moves.length; ++m) {
+				var move = toId(eventPokemon[e].moves[m]);
+				var methodOfLearning = eventPokemon[e].generation + "S";
+
+				if (!result.learnset[move])
+					result.learnset[move] = new Array();
+				if (result.learnset[move].indexOf(methodOfLearning) === -1)
+					result.learnset[move].push(methodOfLearning);
+			}
 		}
 	}
 

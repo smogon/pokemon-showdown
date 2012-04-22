@@ -75,12 +75,12 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 	}
 	else
 		result.tier = smogonDex[result.id].tier;
-	
+
 	if (result.id in viableMoves) {
 		result.viable = true;
 		result.viablemoves = viableMoves[result.id];
 	}
-	
+
 	if (veekunPokemon.nationalPokedexNumber in serebiiEventdex) {
 		result.eventPokemon = new Array();
 	nextEventPokemon:
@@ -88,21 +88,21 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 			var serebiiEventPokemon = serebiiEventdex[veekunPokemon.nationalPokedexNumber][e];
 			if (serebiiEventPokemon.generation < 3)
 				continue;
-			
+
 			var eventPokemon = new Object();
 			eventPokemon.generation = serebiiEventPokemon.generation;
 			eventPokemon.level = serebiiEventPokemon.level;
 			eventPokemon.gender = serebiiEventPokemon.gender;
 			eventPokemon.nature = serebiiEventPokemon.nature;
-			
+
 			eventPokemon.abilities = new Array();
 			for (var a = 0; a < serebiiEventPokemon.abilities.length; ++a)
 				eventPokemon.abilities.push(toId(serebiiEventPokemon.abilities[a]));
-				
+
 			eventPokemon.moves = new Array();
 			for (var m = 0; m < serebiiEventPokemon.moves.length; ++m)
 				eventPokemon.moves.push(toId(serebiiEventPokemon.moves[m]));
-			
+
 			// Make sure there are no duplicates
 			for (var r = 0; r < result.eventPokemon.length; ++r)
 				if (JSON.stringify(result.eventPokemon[r]) === JSON.stringify(eventPokemon))

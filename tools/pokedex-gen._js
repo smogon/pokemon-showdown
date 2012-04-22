@@ -18,7 +18,7 @@ function main(argv, _) {
 	var veekunDatabase = getVeekunDatabase(_);
 	var languageId = veekunDatabase.getLanguageId("en", _); // Don't change the language! Bad things will happen if you do
 	var formeIds = veekunDatabase.getAllFormeIds(_);
-	
+
 	console.warn("Starting to output.");
 	writeLine("exports.BattlePokedex = {", 1);
 	console.warn("Outputting custom pokemon.");
