@@ -3572,7 +3572,7 @@ exports.BattleFormatsData = {
 		viable: true,
 		viablemoves: {"vcreate":1,"fusionbolt":1,"uturn":1,"brickbreak":1,"zenheadbutt":1,"psychic":1,"grassknot":1,"focusblast":1,"fireblast":1,"thunder":1},
 		eventPokemon: [
-			{"generation":5,"level":15,"gender":"N/A","nature":"??","abilities":["victorystar"],"moves":["incinerate","quickattack","endure","confusion"]},
+			{"generation":5,"level":15,"gender":"N/A","nature":"Any","abilities":["victorystar"],"moves":["incinerate","quickattack","endure","confusion"]},
 			{"generation":5,"level":50,"gender":"N/A","nature":"Any","abilities":["victorystar"],"moves":["vcreate","fusionflare","fusionbolt","searingshot"]}
 		],
 		tier: "UU"

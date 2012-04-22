@@ -89,6 +89,9 @@ exports.getSerebiiEventdex = function(_) {
 
 			// The third column contains the nature
 			var nature = columnsHtml[2].childNodes()[0].text().replace(/^(.*?) Nature\.$/, "$1");
+			if (nature === "??")
+				// Change unknown nature data to any nature
+				nature = "Any";
 
 			// The fourth columns contains the moves
 			var movesHtml = columnsHtml[3].find("./table/tr");
