@@ -486,6 +486,7 @@ function BattlePokemon(set, side) {
 		selfP.lastMove = '';
 		selfP.lastDamage = 0;
 		selfP.lastAttackedBy = null;
+		selfP.lastItem = '';
 		selfP.movedThisTurn = false;
 		selfP.newlySwitched = true;
 		selfP.beingCalledBack = false;
@@ -1593,6 +1594,9 @@ function Battle(roomid, format, rated) {
 			return;
 		}
 		selfB.add('callback', 'decision');
+	};
+	this.tie = function() {
+		selfB.win();
 	};
 	this.win = function(side) {
 		var winSide = false;

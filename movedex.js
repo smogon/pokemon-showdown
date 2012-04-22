@@ -586,16 +586,12 @@ exports.BattleMovedex = {
 		num: 419,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function(pokemon, target) {
-			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.thisTurn) {
-				return 60;
+		basePowerCallback: function(pokemon, source) {
+			if (source.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
+				this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
+				return 120;
 			}
-			var move = this.getMove(pokemon.lastAttackedBy.move);
-			if (move.category === 'Status') {
-				return 60;
-			}
-			this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
-			return 120;
+			return 60;
 		},
 		category: "Physical",
 		desc: "Base power is 60. Almost always goes last, even after another Pokemon's Focus Punch; this move's base power doubles if the user is damaged before its turn.",
@@ -2152,16 +2148,14 @@ exports.BattleMovedex = {
 			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
-				if (move.id === 'earthquake') {
+				if (move.id === 'earthquake' || move.id === 'magnitude') {
 					// should not normally be done in ModifyMove event,
-					// but EQ has static base power, and
-					// it's faster to do this here than in
+					// but it's faster to do this here than in
 					// onFoeBasePower
-
-					// TODO: Magnitude
-					move.basePower *= 2;
+					if (!move.basePowerModifier) move.basePowerModifier = 1;
+					move.basePowerModifier *= 2;
 					return;
-				} else if (move.id === 'magnitude' || move.id === 'fissure') {
+				} else if (move.id === 'fissure') {
 					return;
 				}
 				move.accuracy = 0;
@@ -5419,6 +5413,19 @@ exports.BattleMovedex = {
 		num: 301,
 		accuracy: 90,
 		basePower: 30,
+		basePowerCallback: function(pokemon, target) {
+			var bp = 30;
+			var bpTable = [30, 60, 120, 240, 480];
+			if (pokemon.volatiles.iceball && pokemon.volatiles.iceball.hitCount) {
+				bp = (bpTable[pokemon.volatiles.iceball.hitCount] || 480);
+			}
+			pokemon.addVolatile('iceball');
+			if (pokemon.volatiles.defensecurl) {
+				bp *= 2;
+			}
+			this.debug("Ice Ball bp: "+bp);
+			return bp;
+		},
 		category: "Physical",
 		desc: "The user attacks uncontrollably for five turns; this move's power doubles after each turn and also if Defense Curl was used beforehand. Its power resets after five turns have ended or if the attack misses.",
 		shortDesc: "Doubles in power with each hit. Repeats for 5 turns.",
@@ -5427,6 +5434,34 @@ exports.BattleMovedex = {
 		pp: 20,
 		isContact: true,
 		priority: 0,
+		effect: {
+			duration: 2,
+			onStart: function() {
+				this.effectData.hitCount = 1;
+			},
+			onRestart: function() {
+				this.effectData.hitCount++;
+				if (this.effectData.hitCount < 5) {
+					this.effectData.duration = 2;
+				}
+			},
+			onResidual: function(target) {
+				var move = this.getMove(target.lastMove);
+				if (move.id !== 'iceball') {
+					// don't lock
+					delete target.volatiles['iceball'];
+				}
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.lockMove("iceball");
+			},
+			onBeforeTurn: function(pokemon) {
+				if (pokemon.lastMove === 'iceball') {
+					this.debug('Forcing into Ice Ball');
+					this.changeDecision(pokemon, {move: 'iceball'});
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Ice"
@@ -6445,6 +6480,31 @@ exports.BattleMovedex = {
 		num: 222,
 		accuracy: 100,
 		basePower: false,
+		basePowerCallback: function(pokemon) {
+			var i = Math.floor(Math.random()*100);
+			if (i < 5) {
+				this.add('-message', 'Magnitude 4! (placeholder)');
+				return 10;
+			} else if (i < 15) {
+				this.add('-message', 'Magnitude 5! (placeholder)');
+				return 30;
+			} else if (i < 35) {
+				this.add('-message', 'Magnitude 6! (placeholder)');
+				return 50;
+			} else if (i < 65) {
+				this.add('-message', 'Magnitude 7! (placeholder)');
+				return 70;
+			} else if (i < 85) {
+				this.add('-message', 'Magnitude 8! (placeholder)');
+				return 90;
+			} else if (i < 95) {
+				this.add('-message', 'Magnitude 9! (placeholder)');
+				return 110;
+			} else {
+				this.add('-message', 'Magnitude 10! (placeholder)');
+				return 150;
+			}
+		},
 		category: "Physical",
 		desc: "Deals variable damage, between 10 base power and 130 base power, as well as double damage against Digging Pokemon.",
 		shortDesc: "Damage varies. Double power against Dig.",
@@ -8621,8 +8681,8 @@ exports.BattleMovedex = {
 		num: 279,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function(pokemon, target) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
+		basePowerCallback: function(pokemon, source) {
+			if (source.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
 				this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
 				return 120;
 			}
@@ -9077,6 +9137,12 @@ exports.BattleMovedex = {
 			onSetStatus: function(status, target, source) {
 				if (source === target || (source && source.ability !== 'infiltrator')) {
 					this.debug('interrupting setstatus');
+					return false;
+				}
+			},
+			onTryHit: function(target, source, move) {
+				if (move && move.id === 'yawn') {
+					this.debug('blocking yawn');
 					return false;
 				}
 			},
@@ -11594,7 +11660,6 @@ exports.BattleMovedex = {
 			onSwitchIn: function(pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
 				if (!pokemon.runImmunity('Poison')) return;
-				if (pokemon.volatiles['substitute']) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] '+pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
@@ -12519,7 +12584,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'yawn',
 		onTryHit: function(target) {
-			if (target.status) {
+			if (target.status || !target.runImmunity('slp')) {
 				return false;
 			}
 		},
