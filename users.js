@@ -326,11 +326,22 @@ function User(name, person, token) {
 				var authenticated = false;
 				if (body !== '1') {
 					authenticated = true;
-					if(userid === 'n')
-					{
-						avatar = 209;
-						group = '&';
-					}
+					if (userid === "serei") avatar = 172;
+					else if (userid === "hobsgoblin") avatar = 52;
+					else if (userid === "etherealsol") avatar = 1001;
+					else if (userid === "ataraxia") avatar = 1002;
+					else if (userid === "verbatim") avatar = 1003;
+					else if (userid === "mortygymleader") avatar = 144;
+					else if (userid === "leadermorty") avatar = 144;
+					else if (userid === "leaderjasmine") avatar = 146;
+					else if (userid === "championcynthia") avatar = 260;
+					else if (userid === "aeo") avatar = 167;
+					else if (userid === "aeo1") avatar = 167;
+					else if (userid === "aeo2") avatar = 166;
+					else if (userid === "sharktamer") avatar = 7;
+					else if (userid === "bmelts") avatar = 1004;
+					else if (userid === "n") avatar = 209;
+					
 					try {
 						var data = JSON.parse(body);
 						switch (data.group) {
@@ -405,7 +416,7 @@ function User(name, person, token) {
 				return selfP.forceRename(name, authenticated);
 			} else if (tokens[1]) {
 				console.log('BODY: ""');
-				console.log("rename failed, but shouldn't.");
+				// rename failed, but shouldn't
 				selfP.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
 			} else {
 				console.log('BODY: ""');
