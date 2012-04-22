@@ -107,12 +107,11 @@ function convertData(veekunPokemon, serebiiEventdex) {
 			if (eventPokemon[e].generation < 3) continue;
 			for (var m = 0; m < eventPokemon[e].moves.length; ++m) {
 				var move = toId(eventPokemon[e].moves[m]);
-				var methodOfLearning = eventPokemon[e].generation + "S";
+				var methodOfLearning = eventPokemon[e].generation + "S" + e;
 
 				if (!result.learnset[move])
 					result.learnset[move] = new Array();
-				if (result.learnset[move].indexOf(methodOfLearning) === -1)
-					result.learnset[move].push(methodOfLearning);
+				result.learnset[move].push(methodOfLearning);
 			}
 		}
 	}
