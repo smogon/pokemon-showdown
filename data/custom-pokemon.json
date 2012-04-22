@@ -28,6 +28,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],
@@ -64,6 +65,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"viablemoves":
 		{
@@ -110,6 +112,7 @@
 		"genderRatio": {"m": 0, "f": 1},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],
@@ -146,6 +149,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"viablemoves":
 		{
@@ -195,6 +199,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],
@@ -231,6 +236,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],
@@ -267,6 +273,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],
@@ -306,6 +313,7 @@
 		"genderRatio": {"m": 0, "f": 0},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"viablemoves":
 		{
@@ -354,6 +362,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],
@@ -390,6 +399,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],
@@ -426,6 +436,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],
@@ -462,6 +473,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"viablemoves":
 		{
@@ -510,6 +522,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],
@@ -546,6 +559,7 @@
 		"genderRatio": {"m": 0.5, "f": 0.5},
 		"prevo": "",
 		"evos": [],
+		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"isNonstandard": true,
 		"otherFormes": [],

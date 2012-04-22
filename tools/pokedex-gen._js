@@ -27,16 +27,17 @@ function main(argv, _) {
 	for (var f = 0; f < formeIds.length; ++f) {
 		var veekunPokemon = veekunDatabase.getFormeData(formeIds[f], languageId, _, {
 				name: true,
-				otherformes: true,
+				otherFormes: true,
 				pokedexNumbers: true,
 				types: true,
 				baseStats: true,
 				abilities: true,
 				prevo: true,
 				evos: true,
+				eggGroups: true,
 				misc: true
 			});
-		var convertedPokemon = convertVeekunPokemon(veekunPokemon, veekunDatabase, _);
+		var convertedPokemon = convertVeekunPokemon(veekunPokemon);
 		outputPokemon(convertedPokemon, f === formeIds.length - 1);
 		if ((f + 1) % 50 === 0)
 			console.warn("Finished outputting " + (f + 1) + "/" + formeIds.length + " pokemon.");
@@ -52,7 +53,7 @@ function outputCustomPokemon() {
 		outputPokemon(customPokemon[c]);
 }
 
-function convertVeekunPokemon(pokemon, veekunDatabase, _) {
+function convertVeekunPokemon(pokemon) {
 	var result = new Object();
 
 	// Copy some stuff
@@ -63,6 +64,7 @@ function convertVeekunPokemon(pokemon, veekunDatabase, _) {
 	result.forme = pokemon.forme;
 	result.isDefaultForme = pokemon.isDefaultForme;
 	result.isBattleOnlyForme = pokemon.isBattleOnlyForme;
+	result.eggGroups = pokemon.eggGroups;
 	result.genderRatio = pokemon.genderRatio;
 	result.heightm = pokemon.heightm;
 	result.weightkg = pokemon.masskg;
@@ -216,6 +218,7 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine("nfe: " + JSON.stringify(nfe) + ",");
 	writeLine("prevo: " + JSON.stringify(pokemon.prevo) + ",");
 	writeLine("evos: " + JSON.stringify(pokemon.evos) + ",");
+	writeLine("eggGroups: " + JSON.stringify(pokemon.eggGroups) + ",");
 	writeLine("otherFormes: " + JSON.stringify(pokemon.otherFormes) + ",");
 	writeLine("isDefaultForme: " + JSON.stringify(pokemon.isDefaultForme));
 

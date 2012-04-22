@@ -132,10 +132,10 @@ function VeekunDatabase(db, _) {
 
 	this.getPokemonEvos = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
-		var evoSpeciesIds = this.db.execute("SELECT id FROM pokemon_species WHERE evolves_from_species_id = ?", [speciesId], _);
+		var dbResult = this.db.execute("SELECT id FROM pokemon_species WHERE evolves_from_species_id = ?", [speciesId], _);
 		var results = new Array();
-		for (var s = 0; s < evoSpeciesIds.length; ++s)
-			results.push(this.speciesIdToDefaultFormePokemonId(evoSpeciesIds[s].id, _));
+		for (var d = 0; d < dbResult.length; ++d)
+			results.push(this.speciesIdToDefaultFormePokemonId(dbResult[d].id, _));
 		return results;
 	},
 
@@ -153,7 +153,16 @@ function VeekunDatabase(db, _) {
 				levelLearnt: dbResult[d].level
 			});
 		return results;
-	}, 
+	},
+
+	this.getPokemonEggGroups = function(pokemonId, _) {
+		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
+		var dbResult = this.db.execute("SELECT egg_group_id FROM pokemon_egg_groups WHERE species_id = ?", [speciesId], _);
+		var results = new Array();
+		for (var d = 0; d < dbResult.length; ++d)
+			results.push(dbResult[d].egg_group_id);
+		return results;
+	},
 
 	this.getFormeMiscInfo = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
@@ -237,6 +246,9 @@ function VeekunDatabase(db, _) {
 	},
 	this.getTypeName = function(typeId, languageId, _) {
 		return this.getSingleText_("type_names", "name", "type_id", typeId, languageId, _);
+	},
+	this.getEggGroupName = function(eggGroupId, languageId, _) {
+		return this.getSingleText_("egg_group_prose", "name", "egg_group_id", eggGroupId, languageId, _);
 	},
 
 	this.getPokemonPokedexDescriptions = function(pokemonId, languageId, _) {
@@ -337,6 +349,7 @@ function VeekunDatabase(db, _) {
 				prevo: true,
 				evos: true,
 				learnset: true,
+				eggGroups: true,
 				misc: true
 			};
 
@@ -469,6 +482,14 @@ function VeekunDatabase(db, _) {
 					}
 				}
 			}
+		}
+
+		// Get egg groups
+		if (requestedData.eggGroups) {
+			var eggGroupIds = this.getPokemonEggGroups(pokemonId, _);
+			result.eggGroups = new Array();
+			for (var e = 0; e < eggGroupIds.length; ++e)
+				result.eggGroups.push(this.getEggGroupName(eggGroupIds[e], languageId, _));
 		}
 
 		// Get misc info

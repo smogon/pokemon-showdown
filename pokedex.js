@@ -31,6 +31,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -66,6 +67,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -100,6 +102,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -134,6 +137,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -168,6 +172,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -202,6 +207,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -236,6 +242,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -270,6 +277,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -303,6 +311,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -337,6 +346,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -371,6 +381,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -405,6 +416,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -439,6 +451,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -473,6 +486,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -507,6 +521,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["ivysaur"],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -541,6 +556,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "bulbasaur",
 		evos: ["venusaur"],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -575,6 +591,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "ivysaur",
 		evos: [],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -609,6 +626,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["charmeleon"],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -643,6 +661,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "charmander",
 		evos: ["charizard"],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -677,6 +696,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "charmeleon",
 		evos: [],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -711,6 +731,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["wartortle"],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -745,6 +766,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "squirtle",
 		evos: ["blastoise"],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -779,6 +801,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "wartortle",
 		evos: [],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -813,6 +836,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["metapod"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -847,6 +871,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "caterpie",
 		evos: ["butterfree"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -881,6 +906,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "metapod",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -915,6 +941,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["kakuna"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -949,6 +976,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "weedle",
 		evos: ["beedrill"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -983,6 +1011,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "kakuna",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1018,6 +1047,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["pidgeotto"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1053,6 +1083,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "pidgey",
 		evos: ["pidgeot"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1088,6 +1119,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "pidgeotto",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1123,6 +1155,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["raticate"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1158,6 +1191,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "rattata",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1192,6 +1226,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["fearow"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1226,6 +1261,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "spearow",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1261,6 +1297,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["arbok"],
+		eggGroups: ["Ground","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1296,6 +1333,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "ekans",
 		evos: [],
+		eggGroups: ["Ground","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1330,6 +1368,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["pikachu"],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["pichuspikyeared"],
 		isDefaultForme: true
 	},
@@ -1364,6 +1403,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["pikachu"],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["pichu"],
 		isDefaultForme: false
 	},
@@ -1398,6 +1438,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "pichu",
 		evos: ["raichu"],
+		eggGroups: ["Ground","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1432,6 +1473,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "pikachu",
 		evos: [],
+		eggGroups: ["Ground","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1466,6 +1508,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["sandslash"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1500,6 +1543,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "sandshrew",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1535,6 +1579,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["nidorina"],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1570,6 +1615,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "nidoran",
 		evos: ["nidoqueen"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1605,6 +1651,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "nidorina",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1640,6 +1687,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["nidorino"],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1675,6 +1723,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "nidoran",
 		evos: ["nidoking"],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1710,6 +1759,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "nidorino",
 		evos: [],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1745,6 +1795,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["clefairy"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1780,6 +1831,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "cleffa",
 		evos: ["clefable"],
+		eggGroups: ["Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1815,6 +1867,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "clefairy",
 		evos: [],
+		eggGroups: ["Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1849,6 +1902,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["ninetales"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1883,6 +1937,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "vulpix",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1917,6 +1972,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["jigglypuff"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1951,6 +2007,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "igglybuff",
 		evos: ["wigglytuff"],
+		eggGroups: ["Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -1985,6 +2042,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "jigglypuff",
 		evos: [],
+		eggGroups: ["Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2019,6 +2077,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["golbat"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2053,6 +2112,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "zubat",
 		evos: ["crobat"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2087,6 +2147,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "golbat",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2121,6 +2182,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["gloom"],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2155,6 +2217,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "oddish",
 		evos: ["vileplume","bellossom"],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2189,6 +2252,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "gloom",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2223,6 +2287,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "gloom",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2258,6 +2323,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["parasect"],
+		eggGroups: ["Bug","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2293,6 +2359,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "paras",
 		evos: [],
+		eggGroups: ["Bug","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2328,6 +2395,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["venomoth"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2363,6 +2431,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "venonat",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2398,6 +2467,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["dugtrio"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2433,6 +2503,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "diglett",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2468,6 +2539,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["persian"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2503,6 +2575,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "meowth",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2538,6 +2611,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["golduck"],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2573,6 +2647,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "psyduck",
 		evos: [],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2608,6 +2683,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["primeape"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2643,6 +2719,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "mankey",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2678,6 +2755,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["arcanine"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2713,6 +2791,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "growlithe",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2748,6 +2827,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["poliwhirl"],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2783,6 +2863,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "poliwag",
 		evos: ["poliwrath","politoed"],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2818,6 +2899,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "poliwhirl",
 		evos: [],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2853,6 +2935,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "poliwhirl",
 		evos: [],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2888,6 +2971,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["kadabra"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2923,6 +3007,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "abra",
 		evos: ["alakazam"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2958,6 +3043,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "kadabra",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -2993,6 +3079,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["machoke"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3028,6 +3115,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "machop",
 		evos: ["machamp"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3063,6 +3151,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "machoke",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3097,6 +3186,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["weepinbell"],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3131,6 +3221,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "bellsprout",
 		evos: ["victreebel"],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3165,6 +3256,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "weepinbell",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3200,6 +3292,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["tentacruel"],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3235,6 +3328,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "tentacool",
 		evos: [],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3270,6 +3364,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["graveler"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3305,6 +3400,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "geodude",
 		evos: ["golem"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3340,6 +3436,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "graveler",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3375,6 +3472,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["rapidash"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3410,6 +3508,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "ponyta",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3445,6 +3544,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["slowbro","slowking"],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3480,6 +3580,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "slowpoke",
 		evos: [],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3515,6 +3616,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "slowpoke",
 		evos: [],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3550,6 +3652,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["magneton"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3585,6 +3688,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "magnemite",
 		evos: ["magnezone"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3620,6 +3724,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "magneton",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3655,6 +3760,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Flying","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3690,6 +3796,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["dodrio"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3725,6 +3832,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "doduo",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3760,6 +3868,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["dewgong"],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3795,6 +3904,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "seel",
 		evos: [],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3830,6 +3940,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["muk"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3865,6 +3976,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "grimer",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3900,6 +4012,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["cloyster"],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3935,6 +4048,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "shellder",
 		evos: [],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -3968,6 +4082,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["haunter"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4001,6 +4116,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "gastly",
 		evos: ["gengar"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4034,6 +4150,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "haunter",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4069,6 +4186,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["steelix"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4104,6 +4222,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "onix",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4139,6 +4258,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["hypno"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4174,6 +4294,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "drowzee",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4209,6 +4330,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["kingler"],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4244,6 +4366,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "krabby",
 		evos: [],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4279,6 +4402,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["electrode"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4314,6 +4438,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "voltorb",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4348,6 +4473,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["exeggutor"],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4382,6 +4508,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "exeggcute",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4417,6 +4544,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["marowak"],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4452,6 +4580,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "cubone",
 		evos: [],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4487,6 +4616,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["hitmonlee","hitmonchan","hitmontop"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4522,6 +4652,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "tyrogue",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4557,6 +4688,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "tyrogue",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4592,6 +4724,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "tyrogue",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4627,6 +4760,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["lickilicky"],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4662,6 +4796,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "lickitung",
 		evos: [],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4695,6 +4830,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["weezing"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4728,6 +4864,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "koffing",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4763,6 +4900,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["rhydon"],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4798,6 +4936,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "rhyhorn",
 		evos: ["rhyperior"],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4833,6 +4972,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "rhydon",
 		evos: [],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4868,6 +5008,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["chansey"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4903,6 +5044,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "happiny",
 		evos: ["blissey"],
+		eggGroups: ["Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4938,6 +5080,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "chansey",
 		evos: [],
+		eggGroups: ["Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -4973,6 +5116,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["tangrowth"],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5008,6 +5152,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "tangela",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5043,6 +5188,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5078,6 +5224,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["seadra"],
+		eggGroups: ["Water 1","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5113,6 +5260,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "horsea",
 		evos: ["kingdra"],
+		eggGroups: ["Water 1","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5148,6 +5296,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "seadra",
 		evos: [],
+		eggGroups: ["Water 1","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5183,6 +5332,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["seaking"],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5218,6 +5368,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "goldeen",
 		evos: [],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5253,6 +5404,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["starmie"],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5288,6 +5440,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "staryu",
 		evos: [],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5323,6 +5476,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["mrmime"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5358,6 +5512,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "mimejr",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5393,6 +5548,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["scizor"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5428,6 +5584,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "scyther",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5463,6 +5620,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["jynx"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5498,6 +5656,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "smoochum",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5532,6 +5691,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["electabuzz"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5566,6 +5726,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "elekid",
 		evos: ["electivire"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5600,6 +5761,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "electabuzz",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5634,6 +5796,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["magmar"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5668,6 +5831,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "magby",
 		evos: ["magmortar"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5702,6 +5866,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "magmar",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5737,6 +5902,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5772,6 +5938,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5806,6 +5973,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["gyarados"],
+		eggGroups: ["Water 2","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5840,6 +6008,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "magikarp",
 		evos: [],
+		eggGroups: ["Water 2","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5875,6 +6044,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5909,6 +6079,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ditto"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5944,6 +6115,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["vaporeon","jolteon","flareon","espeon","umbreon","leafeon","glaceon"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -5978,6 +6150,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "eevee",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6012,6 +6185,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "eevee",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6046,6 +6220,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "eevee",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6080,6 +6255,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "eevee",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6114,6 +6290,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "eevee",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6148,6 +6325,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "eevee",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6182,6 +6360,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "eevee",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6217,6 +6396,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["porygon2"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6252,6 +6432,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "porygon",
 		evos: ["porygonz"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6287,6 +6468,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "porygon2",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6322,6 +6504,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["omastar"],
+		eggGroups: ["Water 1","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6357,6 +6540,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "omanyte",
 		evos: [],
+		eggGroups: ["Water 1","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6392,6 +6576,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["kabutops"],
+		eggGroups: ["Water 1","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6427,6 +6612,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "kabuto",
 		evos: [],
+		eggGroups: ["Water 1","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6462,6 +6648,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6497,6 +6684,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["snorlax"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6532,6 +6720,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "munchlax",
 		evos: [],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6566,6 +6755,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6600,6 +6790,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6634,6 +6825,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6668,6 +6860,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["dragonair"],
+		eggGroups: ["Water 1","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6702,6 +6895,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "dratini",
 		evos: ["dragonite"],
+		eggGroups: ["Water 1","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6736,6 +6930,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "dragonair",
 		evos: [],
+		eggGroups: ["Water 1","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6770,6 +6965,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6803,6 +6999,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6837,6 +7034,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["bayleef"],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6871,6 +7069,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "chikorita",
 		evos: ["meganium"],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6905,6 +7104,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "bayleef",
 		evos: [],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6939,6 +7139,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["quilava"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -6973,6 +7174,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "cyndaquil",
 		evos: ["typhlosion"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7007,6 +7209,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "quilava",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7041,6 +7244,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["croconaw"],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7075,6 +7279,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "totodile",
 		evos: ["feraligatr"],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7109,6 +7314,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "croconaw",
 		evos: [],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7144,6 +7350,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["furret"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7179,6 +7386,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "sentret",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7214,6 +7422,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["noctowl"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7249,6 +7458,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "hoothoot",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7284,6 +7494,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["ledian"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7319,6 +7530,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "ledyba",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7354,6 +7566,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["ariados"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7389,6 +7602,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "spinarak",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7424,6 +7638,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["lanturn"],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7459,6 +7674,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "chinchou",
 		evos: [],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7494,6 +7710,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["togetic"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7529,6 +7746,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "togepi",
 		evos: ["togekiss"],
+		eggGroups: ["Flying","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7564,6 +7782,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "togetic",
 		evos: [],
+		eggGroups: ["Flying","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7599,6 +7818,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["xatu"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7634,6 +7854,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "natu",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7668,6 +7889,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["flaaffy"],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7702,6 +7924,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "mareep",
 		evos: ["ampharos"],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7736,6 +7959,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "flaaffy",
 		evos: [],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7771,6 +7995,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["marill"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7806,6 +8031,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "azurill",
 		evos: ["azumarill"],
+		eggGroups: ["Water 1","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7841,6 +8067,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "marill",
 		evos: [],
+		eggGroups: ["Water 1","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7876,6 +8103,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["sudowoodo"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7911,6 +8139,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "bonsly",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7946,6 +8175,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["skiploom"],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -7981,6 +8211,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "hoppip",
 		evos: ["jumpluff"],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8016,6 +8247,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "skiploom",
 		evos: [],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8051,6 +8283,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["ambipom"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8086,6 +8319,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "aipom",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8121,6 +8355,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["sunflora"],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8156,6 +8391,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "sunkern",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8191,6 +8427,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["yanmega"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8226,6 +8463,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "yanma",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8261,6 +8499,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["quagsire"],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8296,6 +8535,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "wooper",
 		evos: [],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8331,6 +8571,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["honchkrow"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8366,6 +8607,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "murkrow",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8399,6 +8641,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["mismagius"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8432,6 +8675,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "misdreavus",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -8465,6 +8709,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: true
 	},
@@ -8498,6 +8743,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8531,6 +8777,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8564,6 +8811,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8597,6 +8845,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8630,6 +8879,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8663,6 +8913,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8696,6 +8947,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8729,6 +8981,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8762,6 +9015,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8795,6 +9049,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8828,6 +9083,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8861,6 +9117,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8894,6 +9151,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8927,6 +9185,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8960,6 +9219,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -8993,6 +9253,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9026,6 +9287,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9059,6 +9321,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9092,6 +9355,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9125,6 +9389,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9158,6 +9423,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownw","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9191,6 +9457,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownx","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9224,6 +9491,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unowny","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9257,6 +9525,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unownz","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9290,6 +9559,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownem","unownqm"],
 		isDefaultForme: false
 	},
@@ -9323,6 +9593,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownqm"],
 		isDefaultForme: false
 	},
@@ -9356,6 +9627,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem"],
 		isDefaultForme: false
 	},
@@ -9390,6 +9662,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["wobbuffet"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9424,6 +9697,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "wynaut",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9459,6 +9733,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9493,6 +9768,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["forretress"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9527,6 +9803,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "pineco",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9562,6 +9839,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9597,6 +9875,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["gliscor"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9632,6 +9911,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "gligar",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9667,6 +9947,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["granbull"],
+		eggGroups: ["Ground","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9702,6 +9983,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "snubbull",
 		evos: [],
+		eggGroups: ["Ground","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9737,6 +10019,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9772,6 +10055,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9807,6 +10091,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9842,6 +10127,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["weavile"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9876,6 +10162,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "sneasel",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9911,6 +10198,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["ursaring"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9946,6 +10234,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "teddiursa",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -9981,6 +10270,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["magcargo"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10016,6 +10306,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "slugma",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10051,6 +10342,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["piloswine"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10086,6 +10378,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "swinub",
 		evos: ["mamoswine"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10121,6 +10414,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "piloswine",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10156,6 +10450,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 1","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10191,6 +10486,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["octillery"],
+		eggGroups: ["Water 1","Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10226,6 +10522,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "remoraid",
 		evos: [],
+		eggGroups: ["Water 1","Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10261,6 +10558,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10296,6 +10594,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["mantine"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10331,6 +10630,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "mantyke",
 		evos: [],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10366,6 +10666,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10401,6 +10702,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["houndoom"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10436,6 +10738,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "houndour",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10470,6 +10773,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["donphan"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10504,6 +10808,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "phanpy",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10539,6 +10844,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10574,6 +10880,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10609,6 +10916,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10643,6 +10951,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10677,6 +10986,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10711,6 +11021,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10745,6 +11056,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["pupitar"],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10779,6 +11091,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "larvitar",
 		evos: ["tyranitar"],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10813,6 +11126,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "pupitar",
 		evos: [],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10847,6 +11161,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10881,6 +11196,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10914,6 +11230,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10948,6 +11265,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["grovyle"],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -10982,6 +11300,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "treecko",
 		evos: ["sceptile"],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11016,6 +11335,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "grovyle",
 		evos: [],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11050,6 +11370,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["combusken"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11084,6 +11405,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "torchic",
 		evos: ["blaziken"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11118,6 +11440,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "combusken",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11152,6 +11475,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["marshtomp"],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11186,6 +11510,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "mudkip",
 		evos: ["swampert"],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11220,6 +11545,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "marshtomp",
 		evos: [],
+		eggGroups: ["Monster","Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11255,6 +11581,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["mightyena"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11290,6 +11617,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "poochyena",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11325,6 +11653,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["linoone"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11360,6 +11689,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "zigzagoon",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11394,6 +11724,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["silcoon","cascoon"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11428,6 +11759,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "wurmple",
 		evos: ["beautifly"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11462,6 +11794,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "silcoon",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11496,6 +11829,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "wurmple",
 		evos: ["dustox"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11530,6 +11864,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "cascoon",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11565,6 +11900,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["lombre"],
+		eggGroups: ["Water 1","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11600,6 +11936,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "lotad",
 		evos: ["ludicolo"],
+		eggGroups: ["Water 1","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11635,6 +11972,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "lombre",
 		evos: [],
+		eggGroups: ["Water 1","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11670,6 +12008,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["nuzleaf"],
+		eggGroups: ["Ground","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11705,6 +12044,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "seedot",
 		evos: ["shiftry"],
+		eggGroups: ["Ground","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11740,6 +12080,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "nuzleaf",
 		evos: [],
+		eggGroups: ["Ground","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11774,6 +12115,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["swellow"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11808,6 +12150,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "taillow",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11842,6 +12185,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["pelipper"],
+		eggGroups: ["Water 1","Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11876,6 +12220,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "wingull",
 		evos: [],
+		eggGroups: ["Water 1","Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11911,6 +12256,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["kirlia"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11946,6 +12292,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "ralts",
 		evos: ["gardevoir","gallade"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -11981,6 +12328,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "kirlia",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12015,6 +12363,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "kirlia",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12049,6 +12398,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["masquerain"],
+		eggGroups: ["Water 1","Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12083,6 +12433,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "surskit",
 		evos: [],
+		eggGroups: ["Water 1","Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12118,6 +12469,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["breloom"],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12153,6 +12505,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "shroomish",
 		evos: [],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12186,6 +12539,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["vigoroth"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12219,6 +12573,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "slakoth",
 		evos: ["slaking"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12252,6 +12607,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "vigoroth",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12286,6 +12642,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["ninjask","shedinja"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12320,6 +12677,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "nincada",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12354,6 +12712,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "nincada",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12388,6 +12747,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["loudred"],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12422,6 +12782,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "whismur",
 		evos: ["exploud"],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12456,6 +12817,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "loudred",
 		evos: [],
+		eggGroups: ["Monster","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12491,6 +12853,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["hariyama"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12526,6 +12889,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "makuhita",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12561,6 +12925,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["probopass"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12596,6 +12961,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "nosepass",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12631,6 +12997,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["delcatty"],
+		eggGroups: ["Ground","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12666,6 +13033,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "skitty",
 		evos: [],
+		eggGroups: ["Ground","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12701,6 +13069,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12736,6 +13105,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12771,6 +13141,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["lairon"],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12806,6 +13177,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "aron",
 		evos: ["aggron"],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12841,6 +13213,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "lairon",
 		evos: [],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12875,6 +13248,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["medicham"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12909,6 +13283,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "meditite",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12944,6 +13319,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["manectric"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -12979,6 +13355,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "electrike",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13012,6 +13389,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13045,6 +13423,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13080,6 +13459,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Bug","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13115,6 +13495,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Bug","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13150,6 +13531,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["roselia"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13185,6 +13567,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "budew",
 		evos: ["roserade"],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13220,6 +13603,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "roselia",
 		evos: [],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13255,6 +13639,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["swalot"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13290,6 +13675,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "gulpin",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13324,6 +13710,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["sharpedo"],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13358,6 +13745,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "carvanha",
 		evos: [],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13393,6 +13781,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["wailord"],
+		eggGroups: ["Ground","Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13428,6 +13817,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "wailmer",
 		evos: [],
+		eggGroups: ["Ground","Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13463,6 +13853,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["camerupt"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13498,6 +13889,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "numel",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13532,6 +13924,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13567,6 +13960,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["grumpig"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13602,6 +13996,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "spoink",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13637,6 +14032,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13672,6 +14068,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["vibrava"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13706,6 +14103,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "trapinch",
 		evos: ["flygon"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13740,6 +14138,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "vibrava",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13774,6 +14173,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["cacturne"],
+		eggGroups: ["Plant","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13808,6 +14208,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "cacnea",
 		evos: [],
+		eggGroups: ["Plant","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13842,6 +14243,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["altaria"],
+		eggGroups: ["Flying","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13876,6 +14278,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "swablu",
 		evos: [],
+		eggGroups: ["Flying","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13910,6 +14313,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13944,6 +14348,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -13977,6 +14382,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14010,6 +14416,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14045,6 +14452,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["whiscash"],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14080,6 +14488,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "barboach",
 		evos: [],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14115,6 +14524,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["crawdaunt"],
+		eggGroups: ["Water 1","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14150,6 +14560,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "corphish",
 		evos: [],
+		eggGroups: ["Water 1","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14183,6 +14594,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["claydol"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14216,6 +14628,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "baltoy",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14250,6 +14663,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["cradily"],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14284,6 +14698,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "lileep",
 		evos: [],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14318,6 +14733,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["armaldo"],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14352,6 +14768,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "anorith",
 		evos: [],
+		eggGroups: ["Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14386,6 +14803,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["milotic"],
+		eggGroups: ["Water 1","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14420,6 +14838,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "feebas",
 		evos: [],
+		eggGroups: ["Water 1","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14453,6 +14872,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Fairy","Indeterminate"],
 		otherFormes: ["castformsunny","castformrainy","castformsnowy"],
 		isDefaultForme: true
 	},
@@ -14486,6 +14906,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Fairy","Indeterminate"],
 		otherFormes: ["castform","castformrainy","castformsnowy"],
 		isDefaultForme: false
 	},
@@ -14519,6 +14940,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Fairy","Indeterminate"],
 		otherFormes: ["castform","castformsunny","castformsnowy"],
 		isDefaultForme: false
 	},
@@ -14552,6 +14974,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Fairy","Indeterminate"],
 		otherFormes: ["castform","castformsunny","castformrainy"],
 		isDefaultForme: false
 	},
@@ -14585,6 +15008,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14620,6 +15044,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["banette"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14655,6 +15080,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "shuppet",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14688,6 +15114,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["dusclops"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14721,6 +15148,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "duskull",
 		evos: ["dusknoir"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14754,6 +15182,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "dusclops",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14789,6 +15218,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14822,6 +15252,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["chimecho"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14855,6 +15286,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "chingling",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14890,6 +15322,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14925,6 +15358,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["glalie","froslass"],
+		eggGroups: ["Fairy","Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14960,6 +15394,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "snorunt",
 		evos: [],
+		eggGroups: ["Fairy","Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -14994,6 +15429,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "snorunt",
 		evos: [],
+		eggGroups: ["Fairy","Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15029,6 +15465,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["sealeo"],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15064,6 +15501,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "spheal",
 		evos: ["walrein"],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15099,6 +15537,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "sealeo",
 		evos: [],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15133,6 +15572,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["huntail","gorebyss"],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15167,6 +15607,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "clamperl",
 		evos: [],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15201,6 +15642,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "clamperl",
 		evos: [],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15236,6 +15678,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 1","Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15270,6 +15713,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15304,6 +15748,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["shelgon"],
+		eggGroups: ["Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15338,6 +15783,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "bagon",
 		evos: ["salamence"],
+		eggGroups: ["Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15372,6 +15818,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "shelgon",
 		evos: [],
+		eggGroups: ["Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15406,6 +15853,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["metang"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15440,6 +15888,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "beldum",
 		evos: ["metagross"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15474,6 +15923,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "metang",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15508,6 +15958,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15542,6 +15993,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15576,6 +16028,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15609,6 +16062,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15642,6 +16096,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15675,6 +16130,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15708,6 +16164,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15741,6 +16198,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15774,6 +16232,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15807,6 +16266,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["deoxysattack","deoxysdefense","deoxysspeed"],
 		isDefaultForme: true
 	},
@@ -15840,6 +16300,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["deoxys","deoxysdefense","deoxysspeed"],
 		isDefaultForme: false
 	},
@@ -15873,6 +16334,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["deoxys","deoxysattack","deoxysspeed"],
 		isDefaultForme: false
 	},
@@ -15906,6 +16368,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["deoxys","deoxysattack","deoxysdefense"],
 		isDefaultForme: false
 	},
@@ -15940,6 +16403,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["grotle"],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -15974,6 +16438,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "turtwig",
 		evos: ["torterra"],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16008,6 +16473,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "grotle",
 		evos: [],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16042,6 +16508,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["monferno"],
+		eggGroups: ["Ground","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16076,6 +16543,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "chimchar",
 		evos: ["infernape"],
+		eggGroups: ["Ground","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16110,6 +16578,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "monferno",
 		evos: [],
+		eggGroups: ["Ground","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16144,6 +16613,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["prinplup"],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16178,6 +16648,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "piplup",
 		evos: ["empoleon"],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16212,6 +16683,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "prinplup",
 		evos: [],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16246,6 +16718,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["staravia"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16280,6 +16753,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "starly",
 		evos: ["staraptor"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16314,6 +16788,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "staravia",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16349,6 +16824,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["bibarel"],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16384,6 +16860,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "bidoof",
 		evos: [],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16418,6 +16895,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["kricketune"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16452,6 +16930,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "kricketot",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16487,6 +16966,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["luxio"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16522,6 +17002,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "shinx",
 		evos: ["luxray"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16557,6 +17038,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "luxio",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16591,6 +17073,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["rampardos"],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16625,6 +17108,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "cranidos",
 		evos: [],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16659,6 +17143,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["bastiodon"],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16693,6 +17178,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "shieldon",
 		evos: [],
+		eggGroups: ["Monster"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16727,6 +17213,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
+		eggGroups: ["Bug"],
 		otherFormes: ["burmysandy","burmytrash"],
 		isDefaultForme: true
 	},
@@ -16761,6 +17248,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
+		eggGroups: ["Bug"],
 		otherFormes: ["burmy","burmytrash"],
 		isDefaultForme: false
 	},
@@ -16795,6 +17283,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
+		eggGroups: ["Bug"],
 		otherFormes: ["burmy","burmysandy"],
 		isDefaultForme: false
 	},
@@ -16829,6 +17318,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "burmy",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: ["wormadamsandy","wormadamtrash"],
 		isDefaultForme: true
 	},
@@ -16863,6 +17353,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "burmy",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: ["wormadam","wormadamtrash"],
 		isDefaultForme: false
 	},
@@ -16897,6 +17388,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "burmy",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: ["wormadam","wormadamsandy"],
 		isDefaultForme: false
 	},
@@ -16931,6 +17423,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "burmy",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16965,6 +17458,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["vespiquen"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -16999,6 +17493,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "combee",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17034,6 +17529,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17068,6 +17564,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["floatzel"],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17102,6 +17599,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "buizel",
 		evos: [],
+		eggGroups: ["Water 1","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17135,6 +17633,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["cherrim"],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17168,6 +17667,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "cherubi",
 		evos: [],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: ["cherrimsunshine"],
 		isDefaultForme: true
 	},
@@ -17201,6 +17701,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "cherubi",
 		evos: [],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: ["cherrim"],
 		isDefaultForme: false
 	},
@@ -17236,6 +17737,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["gastrodon","gastrodoneast"],
+		eggGroups: ["Water 1","Indeterminate"],
 		otherFormes: ["shelloseast"],
 		isDefaultForme: true
 	},
@@ -17271,6 +17773,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["gastrodon","gastrodoneast"],
+		eggGroups: ["Water 1","Indeterminate"],
 		otherFormes: ["shellos"],
 		isDefaultForme: false
 	},
@@ -17306,6 +17809,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "shellos",
 		evos: [],
+		eggGroups: ["Water 1","Indeterminate"],
 		otherFormes: ["gastrodoneast"],
 		isDefaultForme: true
 	},
@@ -17341,6 +17845,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "shellos",
 		evos: [],
+		eggGroups: ["Water 1","Indeterminate"],
 		otherFormes: ["gastrodon"],
 		isDefaultForme: false
 	},
@@ -17376,6 +17881,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["drifblim"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17411,6 +17917,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "drifloon",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17446,6 +17953,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["lopunny"],
+		eggGroups: ["Ground","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17481,6 +17989,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "buneary",
 		evos: [],
+		eggGroups: ["Ground","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17516,6 +18025,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["purugly"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17551,6 +18061,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "glameow",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17586,6 +18097,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["skuntank"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17621,6 +18133,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "stunky",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17656,6 +18169,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["bronzong"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17691,6 +18205,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "bronzor",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17726,6 +18241,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17760,6 +18276,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17794,6 +18311,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["gabite"],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17828,6 +18346,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "gible",
 		evos: ["garchomp"],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17862,6 +18381,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "gabite",
 		evos: [],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17897,6 +18417,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["lucario"],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17932,6 +18453,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "riolu",
 		evos: [],
+		eggGroups: ["Ground","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -17966,6 +18488,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["hippowdon"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18000,6 +18523,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "hippopotas",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18035,6 +18559,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["drapion"],
+		eggGroups: ["Bug","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18070,6 +18595,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "skorupi",
 		evos: [],
+		eggGroups: ["Bug","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18105,6 +18631,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["toxicroak"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18140,6 +18667,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "croagunk",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18173,6 +18701,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18208,6 +18737,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["lumineon"],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18243,6 +18773,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "finneon",
 		evos: [],
+		eggGroups: ["Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18277,6 +18808,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["abomasnow"],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18311,6 +18843,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "snover",
 		evos: [],
+		eggGroups: ["Monster","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18344,6 +18877,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotomheat","rotomwash","rotomfrost","rotomfan","rotommow"],
 		isDefaultForme: true
 	},
@@ -18377,6 +18911,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomwash","rotomfrost","rotomfan","rotommow"],
 		isDefaultForme: false
 	},
@@ -18410,6 +18945,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomheat","rotomfrost","rotomfan","rotommow"],
 		isDefaultForme: false
 	},
@@ -18443,6 +18979,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfan","rotommow"],
 		isDefaultForme: false
 	},
@@ -18476,6 +19013,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotommow"],
 		isDefaultForme: false
 	},
@@ -18509,6 +19047,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotomfan"],
 		isDefaultForme: false
 	},
@@ -18542,6 +19081,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18575,6 +19115,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18608,6 +19149,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18642,6 +19184,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18676,6 +19219,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18710,6 +19254,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18743,6 +19288,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18777,6 +19323,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["giratinaorigin"],
 		isDefaultForme: true
 	},
@@ -18811,6 +19358,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["giratina"],
 		isDefaultForme: false
 	},
@@ -18844,6 +19392,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18877,6 +19426,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 1","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18910,6 +19460,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 1","Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18943,6 +19494,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -18976,6 +19528,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["shayminsky"],
 		isDefaultForme: true
 	},
@@ -19009,6 +19562,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["shaymin"],
 		isDefaultForme: false
 	},
@@ -19042,6 +19596,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: true
 	},
@@ -19075,6 +19630,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19108,6 +19664,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19141,6 +19698,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19174,6 +19732,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19207,6 +19766,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19240,6 +19800,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19273,6 +19834,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19306,6 +19868,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19339,6 +19902,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19372,6 +19936,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19405,6 +19970,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19438,6 +20004,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19471,6 +20038,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceusrock","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19504,6 +20072,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceussteel","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19537,6 +20106,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceuswater","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19570,6 +20140,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceusunknown"],
 		isDefaultForme: false
 	},
@@ -19603,6 +20174,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater"],
 		isDefaultForme: false
 	},
@@ -19636,6 +20208,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19670,6 +20243,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["servine"],
+		eggGroups: ["Ground","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19704,6 +20278,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "snivy",
 		evos: ["serperior"],
+		eggGroups: ["Ground","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19738,6 +20313,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "servine",
 		evos: [],
+		eggGroups: ["Ground","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19772,6 +20348,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["pignite"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19806,6 +20383,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "tepig",
 		evos: ["emboar"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19840,6 +20418,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "pignite",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19874,6 +20453,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["dewott"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19908,6 +20488,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "oshawott",
 		evos: ["samurott"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19942,6 +20523,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "dewott",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -19977,6 +20559,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["watchog"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20012,6 +20595,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "patrat",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20047,6 +20631,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["herdier"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20082,6 +20667,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "lillipup",
 		evos: ["stoutland"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20117,6 +20703,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "herdier",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20152,6 +20739,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["liepard"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20187,6 +20775,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "purrloin",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20221,6 +20810,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["simisage"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20255,6 +20845,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "pansage",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20289,6 +20880,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["simisear"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20323,6 +20915,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "pansear",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20357,6 +20950,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["simipour"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20391,6 +20985,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "panpour",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20426,6 +21021,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["musharna"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20461,6 +21057,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "munna",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20496,6 +21093,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["tranquill"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20531,6 +21129,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "pidove",
 		evos: ["unfezant"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20566,6 +21165,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "tranquill",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20601,6 +21201,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["zebstrika"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20636,6 +21237,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "blitzle",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20670,6 +21272,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["boldore"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20704,6 +21307,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "roggenrola",
 		evos: ["gigalith"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20738,6 +21342,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "boldore",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20773,6 +21378,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["swoobat"],
+		eggGroups: ["Flying","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20808,6 +21414,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "woobat",
 		evos: [],
+		eggGroups: ["Flying","Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20843,6 +21450,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["excadrill"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20878,6 +21486,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "drilbur",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20913,6 +21522,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Fairy"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20948,6 +21558,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["gurdurr"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -20983,6 +21594,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "timburr",
 		evos: ["conkeldurr"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21018,6 +21630,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "gurdurr",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21053,6 +21666,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["palpitoad"],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21088,6 +21702,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "tympole",
 		evos: ["seismitoad"],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21123,6 +21738,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "palpitoad",
 		evos: [],
+		eggGroups: ["Water 1"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21158,6 +21774,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21193,6 +21810,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21228,6 +21846,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["swadloon"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21263,6 +21882,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "sewaddle",
 		evos: ["leavanny"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21298,6 +21918,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "swadloon",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21333,6 +21954,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["whirlipede"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21368,6 +21990,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "venipede",
 		evos: ["scolipede"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21403,6 +22026,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "whirlipede",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21438,6 +22062,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["whimsicott"],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21473,6 +22098,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "cottonee",
 		evos: [],
+		eggGroups: ["Fairy","Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21508,6 +22134,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["lilligant"],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21543,6 +22170,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "petilil",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21578,6 +22206,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 2"],
 		otherFormes: ["basculinbluestriped"],
 		isDefaultForme: true
 	},
@@ -21613,6 +22242,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 2"],
 		otherFormes: ["basculin"],
 		isDefaultForme: false
 	},
@@ -21648,6 +22278,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["krokorok"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21683,6 +22314,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "sandile",
 		evos: ["krookodile"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21718,6 +22350,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "krokorok",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21752,6 +22385,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["darmanitan"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21786,6 +22420,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "darumaka",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: ["darmanitanzen"],
 		isDefaultForme: true
 	},
@@ -21820,6 +22455,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "darumaka",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: ["darmanitan"],
 		isDefaultForme: false
 	},
@@ -21855,6 +22491,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21890,6 +22527,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["crustle"],
+		eggGroups: ["Bug","Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21925,6 +22563,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "dwebble",
 		evos: [],
+		eggGroups: ["Bug","Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21960,6 +22599,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["scrafty"],
+		eggGroups: ["Ground","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -21995,6 +22635,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "scraggy",
 		evos: [],
+		eggGroups: ["Ground","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22030,6 +22671,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22063,6 +22705,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["cofagrigus"],
+		eggGroups: ["Mineral","Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22096,6 +22739,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "yamask",
 		evos: [],
+		eggGroups: ["Mineral","Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22131,6 +22775,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["carracosta"],
+		eggGroups: ["Water 1","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22166,6 +22811,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "tirtouga",
 		evos: [],
+		eggGroups: ["Water 1","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22199,6 +22845,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["archeops"],
+		eggGroups: ["Flying","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22232,6 +22879,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "archen",
 		evos: [],
+		eggGroups: ["Flying","Water 3"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22267,6 +22915,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["garbodor"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22302,6 +22951,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "trubbish",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22335,6 +22985,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["zoroark"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22368,6 +23019,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "zorua",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22403,6 +23055,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["cinccino"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22438,6 +23091,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "minccino",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22472,6 +23126,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["gothorita"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22506,6 +23161,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "gothita",
 		evos: ["gothitelle"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22540,6 +23196,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "gothorita",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22575,6 +23232,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["duosion"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22610,6 +23268,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "solosis",
 		evos: ["reuniclus"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22645,6 +23304,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "duosion",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22680,6 +23340,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["swanna"],
+		eggGroups: ["Water 1","Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22715,6 +23376,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "ducklett",
 		evos: [],
+		eggGroups: ["Water 1","Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22749,6 +23411,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["vanillish"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22783,6 +23446,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "vanillite",
 		evos: ["vanilluxe"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22817,6 +23481,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "vanillish",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -22852,6 +23517,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["sawsbuck"],
+		eggGroups: ["Ground"],
 		otherFormes: ["deerlingsummer","deerlingautumn","deerlingwinter"],
 		isDefaultForme: true
 	},
@@ -22887,6 +23553,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["sawsbuck"],
+		eggGroups: ["Ground"],
 		otherFormes: ["deerling","deerlingautumn","deerlingwinter"],
 		isDefaultForme: false
 	},
@@ -22922,6 +23589,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["sawsbuck"],
+		eggGroups: ["Ground"],
 		otherFormes: ["deerling","deerlingsummer","deerlingwinter"],
 		isDefaultForme: false
 	},
@@ -22957,6 +23625,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["sawsbuck"],
+		eggGroups: ["Ground"],
 		otherFormes: ["deerling","deerlingsummer","deerlingautumn"],
 		isDefaultForme: false
 	},
@@ -22992,6 +23661,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "deerling",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: ["sawsbucksummer","sawsbuckautumn","sawsbuckwinter"],
 		isDefaultForme: true
 	},
@@ -23027,6 +23697,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "deerling",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: ["sawsbuck","sawsbuckautumn","sawsbuckwinter"],
 		isDefaultForme: false
 	},
@@ -23062,6 +23733,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "deerling",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckwinter"],
 		isDefaultForme: false
 	},
@@ -23097,6 +23769,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "deerling",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckautumn"],
 		isDefaultForme: false
 	},
@@ -23131,6 +23804,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23166,6 +23840,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["escavalier"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23201,6 +23876,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "karrablast",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23235,6 +23911,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["amoonguss"],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23269,6 +23946,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "foongus",
 		evos: [],
+		eggGroups: ["Plant"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23304,6 +23982,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["jellicent"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23339,6 +24018,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "frillish",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23374,6 +24054,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 1","Water 2"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23409,6 +24090,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["galvantula"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23444,6 +24126,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "joltik",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23477,6 +24160,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["ferrothorn"],
+		eggGroups: ["Plant","Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23510,6 +24194,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "ferroseed",
 		evos: [],
+		eggGroups: ["Plant","Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23545,6 +24230,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["klang"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23580,6 +24266,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "klink",
 		evos: ["klinklang"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23615,6 +24302,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "klang",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23648,6 +24336,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["eelektrik"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23681,6 +24370,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "tynamo",
 		evos: ["eelektross"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23714,6 +24404,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "eelektrik",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23749,6 +24440,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["beheeyem"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23784,6 +24476,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "elgyem",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23819,6 +24512,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["lampent"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23854,6 +24548,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "litwick",
 		evos: ["chandelure"],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23889,6 +24584,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "lampent",
 		evos: [],
+		eggGroups: ["Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23924,6 +24620,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["fraxure"],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23959,6 +24656,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "axew",
 		evos: ["haxorus"],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -23994,6 +24692,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "fraxure",
 		evos: [],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24028,6 +24727,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["beartic"],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24062,6 +24762,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "cubchoo",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24095,6 +24796,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24130,6 +24832,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["accelgor"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24165,6 +24868,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "shelmet",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24200,6 +24904,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Water 1","Indeterminate"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24235,6 +24940,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["mienshao"],
+		eggGroups: ["Ground","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24270,6 +24976,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "mienfoo",
 		evos: [],
+		eggGroups: ["Ground","Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24305,6 +25012,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Monster","Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24340,6 +25048,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["golurk"],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24375,6 +25084,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "golett",
 		evos: [],
+		eggGroups: ["Mineral"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24410,6 +25120,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["bisharp"],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24445,6 +25156,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "pawniard",
 		evos: [],
+		eggGroups: ["Humanshape"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24480,6 +25192,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24515,6 +25228,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["braviary"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24550,6 +25264,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "rufflet",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24585,6 +25300,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["mandibuzz"],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24620,6 +25336,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "vullaby",
 		evos: [],
+		eggGroups: ["Flying"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24655,6 +25372,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Ground"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24690,6 +25408,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24723,6 +25442,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["zweilous"],
+		eggGroups: ["Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24756,6 +25476,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "deino",
 		evos: ["hydreigon"],
+		eggGroups: ["Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24789,6 +25510,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "zweilous",
 		evos: [],
+		eggGroups: ["Dragon"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24823,6 +25545,7 @@ exports.BattlePokedex = {
 		nfe: true,
 		prevo: "",
 		evos: ["volcarona"],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24857,6 +25580,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "larvesta",
 		evos: [],
+		eggGroups: ["Bug"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24890,6 +25614,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24923,6 +25648,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24956,6 +25682,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -24990,6 +25717,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -25024,6 +25752,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -25057,6 +25786,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -25090,6 +25820,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -25124,6 +25855,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -25157,6 +25889,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -25190,6 +25923,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: [],
 		isDefaultForme: true
 	},
@@ -25223,6 +25957,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["meloettapirouette"],
 		isDefaultForme: true
 	},
@@ -25256,6 +25991,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["meloetta"],
 		isDefaultForme: false
 	},
@@ -25289,6 +26025,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["genesectdouse","genesectshock","genesectburn","genesectchill"],
 		isDefaultForme: true
 	},
@@ -25322,6 +26059,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["genesect","genesectshock","genesectburn","genesectchill"],
 		isDefaultForme: false
 	},
@@ -25355,6 +26093,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["genesect","genesectdouse","genesectburn","genesectchill"],
 		isDefaultForme: false
 	},
@@ -25388,6 +26127,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["genesect","genesectdouse","genesectshock","genesectchill"],
 		isDefaultForme: false
 	},
@@ -25421,6 +26161,7 @@ exports.BattlePokedex = {
 		nfe: false,
 		prevo: "",
 		evos: [],
+		eggGroups: ["No Eggs"],
 		otherFormes: ["genesect","genesectdouse","genesectshock","genesectburn"],
 		isDefaultForme: false
 	}
