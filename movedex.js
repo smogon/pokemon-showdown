@@ -1777,16 +1777,17 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			if (source.item) {
-				return false;
+				return;
 			}
 			var yourItem = target.takeItem(source);
 			if (!yourItem) {
-				return false;
+				return;
 			}
 			if (!source.setItem(yourItem)) {
-				return false;
+				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+				return;
 			}
-			this.add('-item',source,yourItem.name,'[from] move: Bestow');
+			this.add('-item', source, yourItem, '[from] move: Covet');
 		},
 		secondary: false,
 		target: "normal",
@@ -11428,16 +11429,17 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			if (source.item) {
-				return false;
+				return;
 			}
 			var yourItem = target.takeItem(source);
 			if (!yourItem) {
-				return false;
+				return;
 			}
 			if (!source.setItem(yourItem)) {
-				return false;
+				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+				return;
 			}
-			this.add('-item', source, yourItem);
+			this.add('-item', source, yourItem, '[from] move: Thief');
 		},
 		secondary: false,
 		target: "normal",
