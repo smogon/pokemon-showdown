@@ -78,6 +78,12 @@ exports.BattleAbilities = {
 	"analytic": {
 		desc: "If the user moves last, the power of that move is increased by 30%.",
 		shortDesc: "Raises the power of all moves by 30% if the Pokemon moves last.",
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (!defender.newlySwitched && !this.willMove(defender)) {
+				this.debug('Analytic boost');
+				return basePower * 1.3;
+			}
+		},
 		id: "analytic",
 		name: "Analytic",
 		rating: 1,
