@@ -919,6 +919,12 @@ exports.BattleAbilities = {
 				return false;
 			}
 		},
+		onTryHit: function(target, source, move) {
+			if (this.weather === 'sunnyday' && move && move.id === 'yawn') {
+				this.debug('blocking yawn');
+				return false;
+			}
+		},
 		id: "leafguard",
 		name: "Leaf Guard",
 		rating: 3,
@@ -1067,7 +1073,7 @@ exports.BattleAbilities = {
 	"moldbreaker": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Herbivore, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
 		onStart: function(pokemon) {
-			this.add('-message',pokemon.name+' has Mold Breaker. (placeholder)');
+			this.add('-message', pokemon.name+' breaks the mold! (placeholder)');
 		},
 		onAllyModifyPokemonPriority: 100,
 		onAllyModifyPokemon: function(pokemon) {
@@ -1965,7 +1971,7 @@ exports.BattleAbilities = {
 	"teravolt": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
 		onStart: function(pokemon) {
-			this.add('-message', pokemon.name+' has Teravolt. (placeholder)');
+			this.add('-message', pokemon.name+' is radiating a bursting aura! (placeholder)');
 		},
 		onAllyModifyPokemon: function(pokemon) {
 			if (this.activePokemon === this.effectData.target && pokemon !== this.activePokemon) {
@@ -2038,10 +2044,10 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability (except Multitype). This ability remains with this Pokemon until it leaves the field.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			var abilityid = target.ability;
-			if (abilityid === 'trace') return;
-			if (pokemon.setAbility(abilityid)) {
-				this.add('-ability',pokemon,abilityid,'[from] ability: Trace','[of] '+target);
+			var ability = this.getAbility(target.ability);
+			if (ability.id === 'trace') return;
+			if (pokemon.setAbility(ability)) {
+				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
 			}
 		},
 		id: "trace",
@@ -2069,7 +2075,7 @@ exports.BattleAbilities = {
 	"turboblaze": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
 		onStart: function(pokemon) {
-			this.add('-message',pokemon.name+' has Turboblaze. (placeholder)');
+			this.add('-message', pokemon.name+' is radiating a blazing aura! (placeholder)');
 		},
 		onAllyModifyPokemon: function(pokemon) {
 			if (this.activePokemon === this.effectData.target && pokemon !== this.activePokemon) {

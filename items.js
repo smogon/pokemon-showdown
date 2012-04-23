@@ -190,6 +190,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		// implemented in statuses
 		desc: "Increases power of multi-turn trapping moves."
 	},
 	"blackbelt": {
@@ -1063,6 +1064,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onModifyPriority: function(priority) {
+			return priority - 0.1;
+		},
 		desc: "Makes the holder move last. Allows breeding of Munchlax."
 	},
 	"ganlonberry": {
@@ -1134,6 +1138,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 90
 		},
+		// implemented in statuses
 		desc: "Partial trapping moves last 5 turns."
 	},
 	"griseousorb": {
