@@ -6294,7 +6294,30 @@ exports.BattleMovedex = {
 			if (pokemon.side.pokemonLeft <= 1) return false;
 		},
 		selfdestruct: true,
-		sideCondition: 'healingwish',
+		sideCondition: 'lunardance',
+		effect: {
+			duration: 2,
+			onStart: function(side) {
+				this.debug('Lunar Dance started on '+side.name);
+			},
+			onSwitchInPriority: 1,
+			onSwitchIn: function(target) {
+				if (target.position != this.effectData.sourcePosition) {
+					return;
+				}
+				if (!target.fainted) {
+					var source = this.effectData.source;
+					var damage = target.heal(target.maxhp);
+					target.setStatus('');
+					for (var m in target.moveset) {
+						target.moveset[m].pp = target.moveset[m].maxpp;
+					}
+					this.add('-message',target.name+' became cloaked in mystical moonlight! (placeholder)');
+					this.add('-heal',target,target.getHealth(),'[from] move: Lunar Dance','[silent]'); // remove [silent] once the message is implemented clientside
+					target.side.removeSideCondition('lunardance');
+				}
+			}
+		},
 		secondary: false,
 		target: "self",
 		type: "Psychic"
