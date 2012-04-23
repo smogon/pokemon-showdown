@@ -59,9 +59,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var targetName = targets[1]||targetUser.name;
 		if(targetUser)
 		{
-			room.add(user.name+" name-locked "+targetUser.name+" to "+targetName+".");
-			targetUser.nameLock(targetName);
+			var oldname = targetUser.name;
+			if(targetUser.forceRename(targetName,false))
+				targetUser.nameLock(targetName,true);
+			if(targetUser.nameLocked())
+				room.add(user.name+" name-locked "+oldname+" to "+targetName+".");
+			else
+				socket.emit('console',oldname+" can't be name-locked."); 
 		}
+		else
+			socket.emit('console',targets[0]+" not found.");
 		return false;
 		break;
 	case 'nameunlock':
@@ -78,8 +85,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				removed = true;
 			}
 		}
-		if(removed)
+		if(removed) {
 			room.add(user.name+" unlocked the name of "+target+".");
+			user.forceRename(user.name,user.authenticated);
+		}
 		else
 			socket.emit('console',target+" not found.");
 		return false;

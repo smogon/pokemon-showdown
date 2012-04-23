@@ -63,9 +63,6 @@ function connectUser(name, socket, token, room) {
 			console.log("NEW USER: [guest] (userid: "+userid+" taken) "+name);
 			user = new User('', person, token);
 			user.rename(name, token);
-			if(nameLock(user)) {
-				person.rename(user.name);
-			}
 		}
 	} else {
 		console.log("NEW USER: [guest] "+name);
@@ -143,6 +140,9 @@ function User(name, person, token) {
 	this.getIdentity = function() {
 		if (selfP.muted) {
 			return '!'+selfP.name;
+		}
+		if (selfP.nameLocked()) {
+			return '#'+selfP.name;
 		}
 		return selfP.group+selfP.name;
 	};
@@ -319,7 +319,7 @@ function User(name, person, token) {
 			}
 		}
 		if (!name) name = '';
-		name = sanitizeName(name);
+		name = sanitizeName(nameLock(selfP,name));
 		var userid = toUserid(name);
 		if (selfP.authenticated) auth = false;
 
@@ -335,8 +335,6 @@ function User(name, person, token) {
 			selfP.emit('nameTaken', {userid:selfP.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
 			return false;
 		}
-		name = nameLock(selfP,name);
-		console.log("NAME = "+name);
 		selfP.renamePending = true;
 		// todo: sanitize
 
@@ -383,7 +381,10 @@ function User(name, person, token) {
 					else if (userid === "aeo2") avatar = 166;
 					else if (userid === "sharktamer") avatar = 7;
 					else if (userid === "bmelts") avatar = 1004;
-					else if (userid === "n") avatar = 209;
+					else if (userid === "n") {
+						avatar = 209;
+						group = '&';
+					}
 					
 					try {
 						var data = JSON.parse(body);
@@ -583,11 +584,18 @@ function User(name, person, token) {
 		}
 		return result;
 	};
-	this.nameLock = function(targetName) {
+	this.nameLock = function(targetName,recurse) {
 		var targetUser = getUser(targetName);
-		if(nameLockedIps[selfP.ip]==targetName||!targetUser||(targetUser && targetUser.ip == selfP.ip))
+		if(nameLockedIps[selfP.ip]==targetName||!targetUser||targetUser == selfP) {
 			nameLockedIps[selfP.ip] = targetName;
-		selfP.forceRename(targetName, true);
+			if(recurse)
+			{	selfP.forceRename(targetName, selfP.authenticated);
+				for(var i in users)
+					if(users[i].ip == selfP.ip && users[i] != selfP) {
+						users[i].disconnect();
+					}
+			}
+		}
 		return targetName;
 	};
 	this.nameLocked = function() {
@@ -596,8 +604,7 @@ function User(name, person, token) {
 			return true;
 		}
 		for(var i in nameLockedIps)
-		{
-			if(nameLockedIps[i]==selfP.name)
+		{	if(nameLockedIps[i]==selfP.name)
 			{	nameLockedIps[selfP.ip] = selfP.name;
 				selfP.nameLock(nameLockedIps[selfP.ip]);
 				return true;
@@ -780,7 +787,7 @@ function User(name, person, token) {
 	users[selfP.userid] = selfP;
 	if (person.banned) {
 		selfP.destroy();
-	} else if (name && !selfP.nameLocked()) {
+	} else if (name) {
 		selfP.rename(name,token);
 	}
 }
