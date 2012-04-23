@@ -545,7 +545,10 @@ function User(name, person, token) {
 		var targetUser = getUser(targetName);
 		if(nameLockedIps[selfP.ip]==targetName||!targetUser||(targetUser && targetUser.ip == selfP.ip))
 			nameLockedIps[selfP.ip] = targetName;
-		selfP.forceRename(targetName, true);
+		for(var i in users)
+			if(users[i].ip == selfP.ip && users[i].name != selfP.name)
+				users[i].destroy();
+		selfP.forceRename(targetName, false);
 		return targetName;
 	};
 	this.nameLocked = function() {
