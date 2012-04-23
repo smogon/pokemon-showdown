@@ -403,10 +403,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'You can only private message users marked by %, @, or & when muted.');
 			return false;
 		}
-		if (user.ip == targetUser.ip) {
-			socket.emit('console','You cannot talk to yourself.');
-			return false;
-		}
+
 		var message = {
 			name: user.getIdentity(),
 			pm: targetUser.getIdentity(),
