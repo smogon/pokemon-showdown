@@ -220,7 +220,7 @@ exports.BattleAbilities = {
 			onStart: function(target, source, effect) {
 				this.effectData.type = 'Normal';
 				if (effect && effect.type && effect.type !== 'Normal') {
-					this.add('-type',target,effect.type,'[from] ability: Color Change');
+					this.add('-message', target.name+'\'s Color Change made it the '+effect.type+' type! (placeholder)');
 					this.effectData.type = effect.type;
 				} else {
 					return false;
@@ -228,7 +228,7 @@ exports.BattleAbilities = {
 			},
 			onRestart: function(target, source, effect) {
 				if (effect && effect.type && effect.type !== this.effectData.type) {
-					this.add('-type',target,effect.type,'[from] ability: Color Change');
+					this.add('-message', target.name+'\'s Color Change made it the '+effect.type+' type! (placeholder)');
 					this.effectData.type = effect.type;
 				}
 			},
