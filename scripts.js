@@ -915,6 +915,7 @@ exports.BattleScripts = {
 				moves: moves,
 				ability: ability,
 				evs: evs,
+				ivs: ivs,
 				item: item,
 				level: level,
 				shiny: (Math.random()*1024<=1)
