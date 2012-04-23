@@ -8581,7 +8581,8 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(target, source) {
 				this.effectData.types = source.types;
-				this.add("message Type reflected. (Placeholder)"); // TODO
+				this.add("-message", target.name+"'s type changed to match "+source.name+"'s! (placeholder)");
+				//this.add("-start", target, "Reflect Type", "[of] "+source);
 			},
 			onModifyPokemon: function(pokemon) {
 				pokemon.types = this.effectData.types;
