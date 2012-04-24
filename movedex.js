@@ -1,11 +1,11 @@
 exports.BattleMovedex = {
-	"absorb": {
+	absorb: {
 		num: 71,
 		accuracy: 100,
 		basePower: 20,
 		category: "Special",
 		desc: "Restores the user's HP by 1/2 of the damage inflicted on the target.",
-		shortDesc: "Leeches 50% of the damage dealt.",
+		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "absorb",
 		name: "Absorb",
 		pp: 25,
@@ -15,13 +15,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"acid": {
+	acid: {
 		num: 51,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower Sp. Defense by 1.",
+		shortDesc: "10% chance to lower the foe(s) Sp. Def by 1.",
 		id: "acid",
 		name: "Acid",
 		pp: 30,
@@ -35,13 +35,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Poison"
 	},
-	"acidarmor": {
+	acidarmor: {
 		num: 151,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Boosts Defense by 2.",
+		shortDesc: "Boosts the user's Defense by 2.",
 		id: "acidarmor",
 		name: "Acid Armor",
 		pp: 40,
@@ -54,13 +54,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Poison"
 	},
-	"acidspray": {
+	acidspray: {
 		num: 491,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "Lowers the target's Special Defense by two stages.",
-		shortDesc: "Lowers foe's Sp. Defense by 2.",
+		shortDesc: "Lowers the target's Sp. Def by 2.",
 		id: "acidspray",
 		name: "Acid Spray",
 		pp: 20,
@@ -75,7 +75,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"acrobatics": {
+	acrobatics: {
 		num: 512,
 		accuracy: 100,
 		basePower: 55,
@@ -88,7 +88,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Acrobat allows the user to hit any target that is not in their attack range in a triple battle. The power is also doubled if the user has no held item.",
-		shortDesc: "Double power if user has no held item.",
+		shortDesc: "Power doubles if the user has no held item.",
 		id: "acrobatics",
 		name: "Acrobatics",
 		pp: 15,
@@ -99,13 +99,13 @@ exports.BattleMovedex = {
 		target: "any",
 		type: "Flying"
 	},
-	"acupressure": {
+	acupressure: {
 		num: 367,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "One of the user's stats, including Accuracy or Evasion, is randomly selected and boosted by 2 stages. A stat which is already at max will not be selected. User can also select its partner in 2v2 battles to randomly boost one of its stats.",
-		shortDesc: "Boosts a random stat by 2.",
+		shortDesc: "Boosts a random stat of the user or an ally by 2.",
 		id: "acupressure",
 		name: "Acupressure",
 		pp: 30,
@@ -130,13 +130,13 @@ exports.BattleMovedex = {
 		target: "ally",
 		type: "Normal"
 	},
-	"aerialace": {
+	aerialace: {
 		num: 332,
 		accuracy: true,
 		basePower: 60,
 		category: "Physical",
 		desc: "Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig, Fly, Dive or Bounce.",
-		shortDesc: "Ignores accuracy modifiers.",
+		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "aerialace",
 		name: "Aerial Ace",
 		pp: 20,
@@ -147,13 +147,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"aeroblast": {
+	aeroblast: {
 		num: 177,
 		accuracy: 95,
 		basePower: 100,
 		category: "Special",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a high critical hit rate.",
+		shortDesc: "High critical hit ratio.",
 		id: "aeroblast",
 		name: "Aeroblast",
 		pp: 5,
@@ -164,13 +164,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"afteryou": {
+	afteryou: {
 		num: 495,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "After this move is used, the target will attack first, ignoring priority.",
-		shortDesc: "The target moves immediately after this move is used.",
+		shortDesc: "The target makes its move right after the user.",
 		id: "afteryou",
 		name: "After You",
 		pp: 15,
@@ -180,13 +180,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"agility": {
+	agility: {
 		num: 97,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Speed by 2 stages.",
-		shortDesc: "Boosts Speed by 2.",
+		shortDesc: "Boosts the user's Speed by 2.",
 		id: "agility",
 		name: "Agility",
 		pp: 30,
@@ -199,13 +199,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"aircutter": {
+	aircutter: {
 		num: 314,
 		accuracy: 95,
 		basePower: 55,
 		category: "Special",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a higher critical hit ratio",
+		shortDesc: "High critical hit ratio. Hits adjacent foes.",
 		id: "aircutter",
 		name: "Air Cutter",
 		pp: 25,
@@ -215,13 +215,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Flying"
 	},
-	"airslash": {
+	airslash: {
 		num: 403,
 		accuracy: 95,
 		basePower: 75,
 		category: "Special",
 		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to flinch foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "airslash",
 		name: "Air Slash",
 		pp: 20,
@@ -234,13 +234,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"allyswitch": {
+	allyswitch: {
 		num: 502,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "User switches places with a random ally.",
-		shortDesc: "Switches position with random ally",
+		shortDesc: "Switches position with the ally on the far side.",
 		id: "allyswitch",
 		name: "Ally Switch",
 		pp: 15,
@@ -249,13 +249,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"amnesia": {
+	amnesia: {
 		num: 133,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Defense by 2 stages.",
-		shortDesc: "Boosts Sp. Defense by 2.",
+		shortDesc: "Boosts the user's Sp. Def by 2.",
 		id: "amnesia",
 		name: "Amnesia",
 		pp: 20,
@@ -268,7 +268,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"ancientpower": {
+	ancientpower: {
 		num: 246,
 		accuracy: 100,
 		basePower: 60,
@@ -294,7 +294,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"aquajet": {
+	aquajet: {
 		num: 453,
 		accuracy: 100,
 		basePower: 40,
@@ -311,13 +311,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"aquaring": {
+	aquaring: {
 		num: 392,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user recovers 1/16 of its max HP per turn until it faints or switches out; this can be Baton Passed to another Pokemon.",
-		shortDesc: "User recovers 1/16th max HP each turn.",
+		shortDesc: "User recovers 1/16 max HP per turn.",
 		id: "aquaring",
 		name: "Aqua Ring",
 		pp: 20,
@@ -336,7 +336,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Water"
 	},
-	"aquatail": {
+	aquatail: {
 		num: 401,
 		accuracy: 90,
 		basePower: 90,
@@ -353,7 +353,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"armthrust": {
+	armthrust: {
 		num: 292,
 		accuracy: 100,
 		basePower: 15,
@@ -370,13 +370,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"aromatherapy": {
+	aromatherapy: {
 		num: 312,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Every Pokemon in the user's party is cured of status conditions. Lists every Pokemon that was healed, and what status condition was cured. ",
-		shortDesc: "Cures status on the user's team.",
+		shortDesc: "Cures the user's party of all status conditions.",
 		id: "aromatherapy",
 		name: "Aromatherapy",
 		pp: 5,
@@ -392,13 +392,13 @@ exports.BattleMovedex = {
 		target: "allySide",
 		type: "Grass"
 	},
-	"assist": {
+	assist: {
 		num: 274,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user performs a random move from any of the Pokemon on its team. Assist cannot generate itself, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
-		shortDesc: "Uses a random move from the user's team.",
+		shortDesc: "Uses a random move known by a team member.",
 		id: "assist",
 		name: "Assist",
 		pp: 20,
@@ -429,13 +429,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"assurance": {
+	assurance: {
 		num: 372,
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
 		desc: "Base power doubles if, since the beginning of the current turn, the target has taken residual damage from any factors such as recoil, Spikes, Stealth Rock or the effects of holding Life Orb.",
-		shortDesc: "Power doubles if foe was damaged this turn.",
+		shortDesc: "Power doubles if target was damaged this turn.",
 		id: "assurance",
 		name: "Assurance",
 		pp: 10,
@@ -445,13 +445,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"astonish": {
+	astonish: {
 		num: 310,
 		accuracy: 100,
 		basePower: 30,
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to flinch the foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "astonish",
 		name: "Astonish",
 		pp: 15,
@@ -464,13 +464,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"attackorder": {
+	attackorder: {
 		num: 454,
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a higher critical hit rate.",
+		shortDesc: "High critical hit ratio.",
 		id: "attackorder",
 		name: "Attack Order",
 		pp: 15,
@@ -481,13 +481,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"attract": {
+	attract: {
 		num: 213,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Infatuates Pokemon of the opposite gender, even if they have a Substitute, causing a 50% chance for the target's attack to fail.",
-		shortDesc: "Targets of the opposite gender are infatuated.",
+		shortDesc: "A target of the opposite gender gets infatuated.",
 		id: "attract",
 		name: "Attract",
 		pp: 15,
@@ -517,13 +517,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"aurasphere": {
+	aurasphere: {
 		num: 396,
 		accuracy: true,
 		basePower: 90,
 		category: "Special",
 		desc: "Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig, Fly, Dive or Bounce.",
-		shortDesc: "Ignores accuracy Modifiers.",
+		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "aurasphere",
 		name: "Aura Sphere",
 		pp: 20,
@@ -533,13 +533,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"aurorabeam": {
+	aurorabeam: {
 		num: 62,
 		accuracy: 100,
 		basePower: 65,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Attack by 1 stage.",
-		shortDesc: "10% chance to lower foe's Attack by 1.",
+		shortDesc: "10% chance to lower the foe's Attack by 1.",
 		id: "aurorabeam",
 		name: "Aurora Beam",
 		pp: 20,
@@ -553,13 +553,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"autotomize": {
+	autotomize: {
 		num: 475,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Raises the user's Speed by two stages.",
-		shortDesc: "Boosts Speed by 2. Halves weight.",
+		shortDesc: "Boosts the user's Speed by 2 and halves weight.",
 		id: "autotomize",
 		name: "Autotomize",
 		pp: 15,
@@ -582,7 +582,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Steel"
 	},
-	"avalanche": {
+	avalanche: {
 		num: 419,
 		accuracy: 100,
 		basePower: 60,
@@ -595,7 +595,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Base power is 60. Almost always goes last, even after another Pokemon's Focus Punch; this move's base power doubles if the user is damaged before its turn.",
-		shortDesc: "Doubles in power if user is damaged by foe.",
+		shortDesc: "Power doubles if user is damaged by the target.",
 		id: "avalanche",
 		name: "Avalanche",
 		pp: 10,
@@ -606,7 +606,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"barrage": {
+	barrage: {
 		num: 140,
 		accuracy: 85,
 		basePower: 15,
@@ -622,13 +622,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"barrier": {
+	barrier: {
 		num: 112,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Boosts Defense by 2.",
+		shortDesc: "Boosts the user's Defense by 2.",
 		id: "barrier",
 		name: "Barrier",
 		pp: 30,
@@ -641,7 +641,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"batonpass": {
+	batonpass: {
 		num: 226,
 		accuracy: true,
 		basePower: 0,
@@ -658,7 +658,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"beatup": {
+	beatup: {
 		num: 251,
 		accuracy: 100,
 		basePower: false,
@@ -668,7 +668,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "The user and every other healthy (i.e. not fainted nor inflicted with a status condition) Pokemon in your party each contribute a hit with base power determined by their base Attack stat.",
-		shortDesc: "All healthy allies aid in damaging the foe.",
+		shortDesc: "All healthy allies aid in damaging the target.",
 		id: "beatup",
 		name: "Beat Up",
 		pp: 10,
@@ -699,7 +699,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"bellydrum": {
+	bellydrum: {
 		num: 187,
 		accuracy: true,
 		basePower: 0,
@@ -723,7 +723,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"bestow": {
+	bestow: {
 		num: 516,
 		accuracy: true,
 		basePower: false,
@@ -752,7 +752,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"bide": {
+	bide: {
 		num: 117,
 		accuracy: true,
 		basePower: false,
@@ -805,13 +805,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"bind": {
+	bind: {
 		num: 20,
 		accuracy: 85,
 		basePower: 15,
 		category: "Physical",
 		desc: "Traps the target for 5-6 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it is holding Shed Shell or uses Baton Pass or U-Turn.",
-		shortDesc: "Traps and damages over 5-6 turns.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "bind",
 		name: "Bind",
 		pp: 20,
@@ -822,13 +822,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"bite": {
+	bite: {
 		num: 44,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to flinch the foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "bite",
 		name: "Bite",
 		pp: 25,
@@ -841,7 +841,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"blastburn": {
+	blastburn: {
 		num: 307,
 		accuracy: 90,
 		basePower: 150,
@@ -859,13 +859,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"blazekick": {
+	blazekick: {
 		num: 299,
 		accuracy: 90,
 		basePower: 85,
 		category: "Physical",
 		desc: "Has a high critical hit ratio and a 10% chance to burn the target.",
-		shortDesc: "Has a high critical hit rate. 10% chance to burn.",
+		shortDesc: "High critical hit ratio. 10% chance to burn.",
 		id: "blazekick",
 		name: "Blaze Kick",
 		pp: 10,
@@ -880,13 +880,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"blizzard": {
+	blizzard: {
 		num: 59,
 		accuracy: 70,
 		basePower: 120,
 		category: "Special",
 		desc: "Has a 10% chance to freeze the target. During Hail, this move will never miss under normal circumstances and has a 30% chance to hit through a target's Protect or Detect.",
-		shortDesc: "10% chance to freeze the foe.",
+		shortDesc: "10% chance to freeze the foe(s).",
 		id: "blizzard",
 		name: "Blizzard",
 		pp: 5,
@@ -902,7 +902,7 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Ice"
 	},
-	"block": {
+	block: {
 		num: 335,
 		accuracy: true,
 		basePower: 0,
@@ -922,13 +922,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"blueflare": {
+	blueflare: {
 		num: 551,
 		accuracy: 85,
 		basePower: 130,
 		category: "Special",
 		desc: "Has a 20% chance to burn the target.",
-		shortDesc: "20% chance to burn foe.",
+		shortDesc: "20% chance to burn the target.",
 		id: "blueflare",
 		name: "Blue Flare",
 		pp: 5,
@@ -941,13 +941,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"bodyslam": {
+	bodyslam: {
 		num: 34,
 		accuracy: 100,
 		basePower: 85,
 		category: "Physical",
 		desc: "Has a 30% chance to paralyze the target.",
-		shortDesc: "30% chance to paralyze foe.",
+		shortDesc: "30% chance to paralyze the target.",
 		id: "bodyslam",
 		name: "Body Slam",
 		pp: 15,
@@ -961,13 +961,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"boltstrike": {
+	boltstrike: {
 		num: 550,
 		accuracy: 85,
 		basePower: 130,
 		category: "Physical",
 		desc: "Has a 20% chance to paralyze the target.",
-		shortDesc: "20% chance to paralyze foe.",
+		shortDesc: "20% chance to paralyze the target.",
 		id: "boltstrike",
 		name: "Bolt Strike",
 		pp: 5,
@@ -981,13 +981,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"boneclub": {
+	boneclub: {
 		num: 125,
 		accuracy: 85,
 		basePower: 65,
 		category: "Physical",
 		desc: "Has a 10% chance to make the target flinch.",
-		shortDesc: "10% chance to flinch foe.",
+		shortDesc: "10% chance to flinch the target.",
 		id: "boneclub",
 		name: "Bone Club",
 		pp: 20,
@@ -999,7 +999,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"bonerush": {
+	bonerush: {
 		num: 198,
 		accuracy: 90,
 		basePower: 25,
@@ -1016,7 +1016,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"bonemerang": {
+	bonemerang: {
 		num: 155,
 		accuracy: 90,
 		basePower: 50,
@@ -1033,13 +1033,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"bounce": {
+	bounce: {
 		num: 340,
 		accuracy: 85,
 		basePower: 85,
 		category: "Physical",
 		desc: "On the first turn, the user bounces into the air, becoming uncontrollable, and evades most attacks. Gust, Twister, Thunder and Sky Uppercut have normal accuracy against a mid-air Pokemon, with Gust and Twister also gaining doubled power. The user may also be hit in mid-air if it was previously targeted by Lock-On or Mind Reader or if it is attacked by a Pokemon with No Guard. On the second turn, the user descends and has a 30% chance to paralyze the target.",
-		shortDesc: "Bounces turn 1. Attacks turn 2. 30% paralyze.",
+		shortDesc: "Bounces turn 1. Hits turn 2. 30% paralyze.",
 		id: "bounce",
 		name: "Bounce",
 		pp: 5,
@@ -1083,13 +1083,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"bravebird": {
+	bravebird: {
 		num: 413,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
 		desc: "The user receives 1/3 recoil damage.",
-		shortDesc: "Has 1/3 recoil damage.",
+		shortDesc: "Has 1/3 recoil.",
 		id: "bravebird",
 		name: "Brave Bird",
 		pp: 15,
@@ -1101,7 +1101,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"brickbreak": {
+	brickbreak: {
 		num: 280,
 		accuracy: 100,
 		basePower: 75,
@@ -1123,7 +1123,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"brine": {
+	brine: {
 		num: 362,
 		accuracy: 100,
 		basePower: 65,
@@ -1133,7 +1133,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Base power is 65, doubles if the target is at least 50% below full health.",
-		shortDesc: "Power doubles if foe's HP is 50% or less.",
+		shortDesc: "Power doubles if the target's HP is 50% or less.",
 		id: "brine",
 		name: "Brine",
 		pp: 10,
@@ -1142,13 +1142,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"bubble": {
+	bubble: {
 		num: 145,
 		accuracy: 100,
 		basePower: 20,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "10% chance to lower foe's Speed by 1.",
+		shortDesc: "10% chance to lower the foe(s) Speed by 1.",
 		id: "bubble",
 		name: "Bubble",
 		pp: 30,
@@ -1162,13 +1162,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Water"
 	},
-	"bubblebeam": {
+	bubblebeam: {
 		num: 61,
 		accuracy: 100,
 		basePower: 65,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "10% chance to lower foe's Speed by 1.",
+		shortDesc: "10% chance to lower the target's Speed by 1.",
 		id: "bubblebeam",
 		name: "BubbleBeam",
 		pp: 20,
@@ -1182,13 +1182,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"bugbite": {
+	bugbite: {
 		num: 450,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "The user eats the target's held berry and, if applicable, receives its benefits. Jaboca Berry will be removed without damaging the user, but Tanga Berry will still activate and reduce this move's power.",
-		shortDesc: "User steals and eats the foe's Berry.",
+		shortDesc: "User steals and eats the target's Berry.",
 		id: "bugbite",
 		name: "Bug Bite",
 		pp: 20,
@@ -1198,13 +1198,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"bugbuzz": {
+	bugbuzz: {
 		num: 405,
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower opponent's Sp. Def. by 1.",
+		shortDesc: "10% chance to lower the target's Sp. Def. by 1.",
 		id: "bugbuzz",
 		name: "Bug Buzz",
 		pp: 10,
@@ -1220,13 +1220,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"bulkup": {
+	bulkup: {
 		num: 339,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and Defense by 1 stage each.",
-		shortDesc: "Boosts Attack and Defense by 1.",
+		shortDesc: "Boosts the user's Attack and Defense by 1.",
 		id: "bulkup",
 		name: "Bulk Up",
 		pp: 20,
@@ -1240,13 +1240,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Fighting"
 	},
-	"bulldoze": {
+	bulldoze: {
 		num: 523,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "Has a 100% chance to lower the target's Speed by one level.",
-		shortDesc: "Lowers target's Speed by one.",
+		shortDesc: "Lowers adjacent Pokemon's Speed by 1.",
 		id: "bulldoze",
 		name: "Bulldoze",
 		pp: 20,
@@ -1260,7 +1260,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"bulletpunch": {
+	bulletpunch: {
 		num: 418,
 		accuracy: 100,
 		basePower: 40,
@@ -1278,7 +1278,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"bulletseed": {
+	bulletseed: {
 		num: 331,
 		accuracy: 100,
 		basePower: 25,
@@ -1295,13 +1295,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"calmmind": {
+	calmmind: {
 		num: 347,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack and Special Defense by 1 stage each.",
-		shortDesc: "Boosts Sp. Attack and Sp. Defense by 1.",
+		shortDesc: "Boosts the user's Sp. Atk and Sp. Def by 1.",
 		id: "calmmind",
 		name: "Calm Mind",
 		pp: 20,
@@ -1315,13 +1315,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"camouflage": {
+	camouflage: {
 		num: 293,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's type changes according to the current terrain. It becomes Grass-type in tall grass and very tall grass (as well as in puddles), Water-type while surfing on any body of water, Rock-type while inside any caves or on any rocky terrain, Ground-type on beach sand, desert sand and dirt roads, Ice-type in snow, and Normal-type everywhere else. The user will always become Normal-type during Wi-Fi battles. ",
-		shortDesc: "Changes user's type based on terrain.",
+		shortDesc: "Changes user's type based on terrain. (Ground)",
 		id: "camouflage",
 		name: "Camouflage",
 		pp: 20,
@@ -1339,13 +1339,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"captivate": {
+	captivate: {
 		num: 445,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Special Attack by 2 stages if the target is the opposite gender of the user. Fails if either Pokemon is genderless.",
-		shortDesc: "Lowers an opposite gender foe's Sp. Attack by 2.",
+		shortDesc: "Lowers the foe(s) Sp. Atk by 2 if opposite gender.",
 		id: "captivate",
 		name: "Captivate",
 		pp: 20,
@@ -1357,13 +1357,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"charge": {
+	charge: {
 		num: 268,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Doubles the power of the user's Electric attacks on the next turn and increases the user's Special Defense by 1 stage.",
-		shortDesc: "Boosts Electric 1 turn. Boosts Sp. Defense by 1.",
+		shortDesc: "Boosts next Electric move and user's Sp. Def by 1.",
 		id: "charge",
 		name: "Charge",
 		pp: 20,
@@ -1375,13 +1375,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Electric"
 	},
-	"chargebeam": {
+	chargebeam: {
 		num: 451,
 		accuracy: 90,
 		basePower: 50,
 		category: "Special",
 		desc: "Has a 70% chance to raise the user's Special Attack by 1 stage.",
-		shortDesc: "70% chance to boost user's Sp. Attack by 1.",
+		shortDesc: "70% chance to boost the user's Sp. Atk by 1.",
 		id: "chargebeam",
 		name: "Charge Beam",
 		pp: 10,
@@ -1398,13 +1398,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"charm": {
+	charm: {
 		num: 204,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack by 2 stages.",
-		shortDesc: "Lowers target's Attack by 2.",
+		shortDesc: "Lowers the target's Attack by 2.",
 		id: "charm",
 		name: "Charm",
 		pp: 20,
@@ -1416,13 +1416,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"chatter": {
+	chatter: {
 		num: 448,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
 		desc: "Has a 1%, 11% or 31% chance to confuse the target if its user is Chatot. The confusion rate increases directly with the volume of a sound recorded using the DS's microphone; Chatot's default cry has a 1% chance to confuse its target and is replaced by the player's recordings. This move cannot be randomly generated by moves such as Metronome and it cannot be copied with Sketch. If another Pokemon uses Transform to turn into Chatot, its Chatter cannot cause confusion.",
-		shortDesc: "31% chance to confuse the foe.",
+		shortDesc: "31% chance to confuse the target.",
 		id: "chatter",
 		name: "Chatter",
 		pp: 20,
@@ -1438,13 +1438,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"chipaway": {
+	chipaway: {
 		num: 498,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Ignores the target's stat modifiers.",
-		shortDesc: "Ignores the foe's stat modifiers.",
+		shortDesc: "Ignores the target's stat modifiers.",
 		id: "chipaway",
 		name: "Chip Away",
 		pp: 20,
@@ -1456,13 +1456,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"circlethrow": {
+	circlethrow: {
 		num: 509,
 		accuracy: 90,
 		basePower: 60,
 		category: "Physical",
 		desc: "Forces the target to switch to a random Pokemon. Fails if target is behind a Substitute.",
-		shortDesc: "Forces foe to switch to a random Pokemon.",
+		shortDesc: "Forces the target to switch to a random ally.",
 		id: "circlethrow",
 		name: "Circle Throw",
 		pp: 10,
@@ -1473,13 +1473,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"clamp": {
+	clamp: {
 		num: 128,
 		accuracy: 85,
 		basePower: 35,
 		category: "Physical",
 		desc: "Traps the target for 5-6 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it is holding Shed Shell or uses Baton Pass or U-Turn.",
-		shortDesc: "Traps and damages over 5-6 turns.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "clamp",
 		name: "Clamp",
 		pp: 10,
@@ -1490,13 +1490,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"clearsmog": {
+	clearsmog: {
 		num: 499,
 		accuracy: true,
 		basePower: 50,
 		category: "Special",
 		desc: "Removes all of the target's stat changes.",
-		shortDesc: "Eliminates all stat changes.",
+		shortDesc: "Eliminates the target's stat changes.",
 		id: "clearsmog",
 		name: "Clear Smog",
 		pp: 15,
@@ -1510,13 +1510,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"closecombat": {
+	closecombat: {
 		num: 370,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
 		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
-		shortDesc: "Lowers the user's Defense and Sp. Defense by 1.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 		id: "closecombat",
 		name: "Close Combat",
 		pp: 5,
@@ -1533,13 +1533,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"coil": {
+	coil: {
 		num: 489,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Raises the user's Attack, Defense, and accuracy by one stage.",
-		shortDesc: "Boosts Attack, Defense, and Accuracy by 1.",
+		shortDesc: "Boosts user's Attack, Defense, and Accuracy by 1.",
 		id: "coil",
 		name: "Coil",
 		pp: 20,
@@ -1554,7 +1554,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Poison"
 	},
-	"cometpunch": {
+	cometpunch: {
 		num: 4,
 		accuracy: 85,
 		basePower: 18,
@@ -1572,7 +1572,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"confuseray": {
+	confuseray: {
 		num: 109,
 		accuracy: 100,
 		basePower: 0,
@@ -1589,13 +1589,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"confusion": {
+	confusion: {
 		num: 93,
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
 		desc: "Has a 10% chance to confuse the target.",
-		shortDesc: "10% chance to confuse foe.",
+		shortDesc: "10% chance to confuse the target.",
 		id: "confusion",
 		name: "Confusion",
 		pp: 25,
@@ -1607,13 +1607,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"constrict": {
+	constrict: {
 		num: 132,
 		accuracy: 100,
 		basePower: 10,
 		category: "Physical",
 		desc: "Has a 10% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "10% chance to lower foe's Speed by 1.",
+		shortDesc: "10% chance to lower the target's Speed by 1.",
 		id: "constrict",
 		name: "Constrict",
 		pp: 35,
@@ -1628,13 +1628,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"conversion": {
+	conversion: {
 		num: 160,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's type changes to match the type of one of its four attacks. This move fails if the user cannot change its type under this condition.",
-		shortDesc: "Changes user's type to same as 1 move.",
+		shortDesc: "Changes user's type to match a known move.",
 		id: "conversion",
 		name: "Conversion",
 		pp: 30,
@@ -1643,13 +1643,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"conversion2": {
+	conversion2: {
 		num: 176,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's type changes to one that resists the type of the last attack that hit the user. In double battles, this situation holds even when the user is last hit by an attack from its partner.",
-		shortDesc: "Changes user's type to resist last attack.",
+		shortDesc: "Changes user's type to resist target's last move.",
 		id: "conversion2",
 		name: "Conversion 2",
 		pp: 30,
@@ -1658,7 +1658,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"copycat": {
+	copycat: {
 		num: 383,
 		accuracy: true,
 		basePower: 0,
@@ -1681,13 +1681,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"cosmicpower": {
+	cosmicpower: {
 		num: 322,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense and Special Defense by 1 stage each.",
-		shortDesc: "Boosts Defense and Sp. Defense by 1.",
+		shortDesc: "Boosts the user's Defense and Sp. Def by 1.",
 		id: "cosmicpower",
 		name: "Cosmic Power",
 		pp: 20,
@@ -1701,13 +1701,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"cottonguard": {
+	cottonguard: {
 		num: 538,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Raises the user's Defense by three stages.",
-		shortDesc: "Boosts user's Defense by 3.",
+		shortDesc: "Boosts the user's Defense by 3.",
 		id: "cottonguard",
 		name: "Cotton Guard",
 		pp: 10,
@@ -1720,13 +1720,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Grass"
 	},
-	"cottonspore": {
+	cottonspore: {
 		num: 178,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Speed by 2 stages.",
-		shortDesc: "Lowers target's Speed by 2.",
+		shortDesc: "Lowers the target's Speed by 2.",
 		id: "cottonspore",
 		name: "Cotton Spore",
 		pp: 40,
@@ -1739,7 +1739,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"counter": {
+	counter: {
 		num: 68,
 		accuracy: 100,
 		basePower: false,
@@ -1763,13 +1763,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"covet": {
+	covet: {
 		num: 343,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "Steals the target's held item unless the user is already holding an item or the target has Sticky Hold or Multitype. Recycle cannot recover the stolen item.",
-		shortDesc: "Steals the target's item.",
+		shortDesc: "If the user has no item, it steals the target's.",
 		id: "covet",
 		name: "Covet",
 		pp: 40,
@@ -1793,13 +1793,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"crabhammer": {
+	crabhammer: {
 		num: 152,
 		accuracy: 90,
 		basePower: 90,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a high critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "crabhammer",
 		name: "Crabhammer",
 		pp: 10,
@@ -1811,13 +1811,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"crosschop": {
+	crosschop: {
 		num: 238,
 		accuracy: 80,
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a high critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "crosschop",
 		name: "Cross Chop",
 		pp: 5,
@@ -1829,13 +1829,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"crosspoison": {
+	crosspoison: {
 		num: 440,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a high critical hit ratio and a 10% chance to poison the target.",
-		shortDesc: "Has high critical hit rate. 10% chance to poison.",
+		shortDesc: "High critical hit ratio. 10% chance to poison.",
 		id: "crosspoison",
 		name: "Cross Poison",
 		pp: 20,
@@ -1850,13 +1850,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"crunch": {
+	crunch: {
 		num: 242,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
 		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "20% chance to lower foe's Defense by 1",
+		shortDesc: "20% chance to lower the target's Defense by 1.",
 		id: "crunch",
 		name: "Crunch",
 		pp: 15,
@@ -1872,13 +1872,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"crushclaw": {
+	crushclaw: {
 		num: 306,
 		accuracy: 95,
 		basePower: 75,
 		category: "Physical",
 		desc: "Has a 50% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "50% chance to lower the foe's Defense by 1",
+		shortDesc: "50% chance to lower the target's Defense by 1",
 		id: "crushclaw",
 		name: "Crush Claw",
 		pp: 10,
@@ -1893,7 +1893,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"crushgrip": {
+	crushgrip: {
 		num: 462,
 		accuracy: 100,
 		basePower: false,
@@ -1902,7 +1902,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Base power decreases as the target's HP decreases.",
-		shortDesc: "Power depends on the foe's remaining HP",
+		shortDesc: "More power the more HP the target has left.",
 		id: "crushgrip",
 		name: "Crush Grip",
 		pp: 5,
@@ -1912,7 +1912,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"curse": {
+	curse: {
 		num: 174,
 		accuracy: true,
 		basePower: 0,
@@ -1945,7 +1945,7 @@ exports.BattleMovedex = {
 		target: "anyFoe",
 		type: "Ghost"
 	},
-	"cut": {
+	cut: {
 		num: 15,
 		accuracy: 95,
 		basePower: 50,
@@ -1961,13 +1961,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"darkpulse": {
+	darkpulse: {
 		num: 399,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 20% chance to make the target flinch.",
-		shortDesc: "20% chance to flinch the foe.",
+		shortDesc: "20% chance to flinch the target.",
 		id: "darkpulse",
 		name: "Dark Pulse",
 		pp: 15,
@@ -1980,13 +1980,13 @@ exports.BattleMovedex = {
 		target: "any",
 		type: "Dark"
 	},
-	"darkvoid": {
+	darkvoid: {
 		num: 464,
 		accuracy: 80,
 		basePower: 0,
 		category: "Status",
 		desc: "Puts the target to sleep. In double battles, this move will put both opponents to sleep.",
-		shortDesc: "Puts the target to sleep.",
+		shortDesc: "Puts the foe(s) to sleep.",
 		id: "darkvoid",
 		name: "Dark Void",
 		pp: 10,
@@ -1997,13 +1997,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Dark"
 	},
-	"defendorder": {
+	defendorder: {
 		num: 455,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense and Special Defense by 1 stage each.",
-		shortDesc: "Boosts user's Defense and Sp. Defense by 1.",
+		shortDesc: "Boosts the user's Defense and Sp. Def by 1.",
 		id: "defendorder",
 		name: "Defend Order",
 		pp: 10,
@@ -2017,13 +2017,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Bug"
 	},
-	"defensecurl": {
+	defensecurl: {
 		num: 111,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 1 stage; after one use of this move, the user's starting base power is doubled for every use of Rollout or Ice Ball.",
-		shortDesc: "Boosts user's Defense by 1.",
+		shortDesc: "Boosts the user's Defense by 1.",
 		id: "defensecurl",
 		name: "Defense Curl",
 		pp: 40,
@@ -2036,13 +2036,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"defog": {
+	defog: {
 		num: 432,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Evasion by 1 stage and removes Reflect, Light Screen, Safeguard, Mist, Spikes, Stealth Rock and Toxic Spikes from the target's side of the field.",
-		shortDesc: "Lowers target's evasion by 1. Removes field effects.",
+		shortDesc: "Removes target's hazards, lowers Evasion by 1.",
 		id: "defog",
 		name: "Defog",
 		pp: 15,
@@ -2055,13 +2055,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"destinybond": {
+	destinybond: {
 		num: 194,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Causes an opponent to faint if its next attack KOs the user.",
-		shortDesc: "If the user faints, the target faints too.",
+		shortDesc: "If an opponent knocks out the user, it also faints.",
 		id: "destinybond",
 		name: "Destiny Bond",
 		pp: 5,
@@ -2087,13 +2087,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Ghost"
 	},
-	"detect": {
+	detect: {
 		num: 197,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes first. The user is protected from all attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure. If a Pokemon has No Guard, or used Lock-On or Mind Reader against the user during the previous turn, its attack has a [100 Varmove's normal accuracy]% chance to hit through Detect; OHKO moves do not benefit from this effect. Blizzard has a 30% to hit through this move during Hail, as does Thunder during Rain Dance.",
-		shortDesc: "Prevents moves from affecting user for a turn.",
+		shortDesc: "Prevents moves from affecting the user for a turn.",
 		id: "detect",
 		name: "Detect",
 		pp: 5,
@@ -2123,7 +2123,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Fighting"
 	},
-	"dig": {
+	dig: {
 		num: 91,
 		accuracy: 100,
 		basePower: 80,
@@ -2166,13 +2166,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"disable": {
+	disable: {
 		num: 50,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "The target cannot choose its last move for 4-7 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.",
-		shortDesc: "Disables target's last move for 4-7 turns.",
+		shortDesc: "For 4 turns, disables the target's last move used.",
 		id: "disable",
 		name: "Disable",
 		pp: 20,
@@ -2228,13 +2228,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"discharge": {
+	discharge: {
 		num: 435,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 30% chance to paralyze the target.",
-		shortDesc: "30% chance to paralyze foe.",
+		shortDesc: "30% chance to paralyze adjacent Pokemon.",
 		id: "discharge",
 		name: "Discharge",
 		pp: 15,
@@ -2247,7 +2247,7 @@ exports.BattleMovedex = {
 		target: "adjacent",
 		type: "Electric"
 	},
-	"dive": {
+	dive: {
 		num: 291,
 		accuracy: 100,
 		basePower: 80,
@@ -2288,13 +2288,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"dizzypunch": {
+	dizzypunch: {
 		num: 146,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a 20% chance to confuse the target.",
-		shortDesc: "20% chance to confuse foe.",
+		shortDesc: "20% chance to confuse the target.",
 		id: "dizzypunch",
 		name: "Dizzy Punch",
 		pp: 10,
@@ -2308,7 +2308,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"doomdesire": {
+	doomdesire: {
 		num: 353,
 		accuracy: 100,
 		basePower: 140,
@@ -2344,7 +2344,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"doubleedge": {
+	doubleedge: {
 		num: 38,
 		accuracy: 100,
 		basePower: 120,
@@ -2362,7 +2362,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"doublehit": {
+	doublehit: {
 		num: 458,
 		accuracy: 90,
 		basePower: 35,
@@ -2379,7 +2379,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"doublekick": {
+	doublekick: {
 		num: 24,
 		accuracy: 100,
 		basePower: 30,
@@ -2396,7 +2396,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"doubleslap": {
+	doubleslap: {
 		num: 3,
 		accuracy: 85,
 		basePower: 15,
@@ -2413,13 +2413,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"doubleteam": {
+	doubleteam: {
 		num: 104,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Evasion by 1 stage.",
-		shortDesc: "Boosts user's Evasion by 1 stage.",
+		shortDesc: "Boosts the user's Evasion by 1.",
 		id: "doubleteam",
 		name: "Double Team",
 		pp: 15,
@@ -2431,13 +2431,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"dracometeor": {
+	dracometeor: {
 		num: 434,
 		accuracy: 90,
 		basePower: 140,
 		category: "Special",
 		desc: "Lowers the user's Special Attack by 2 stages after use.",
-		shortDesc: "Lowers user's Sp. Attack by 2.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "dracometeor",
 		name: "Draco Meteor",
 		pp: 5,
@@ -2452,13 +2452,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"dragonbreath": {
+	dragonbreath: {
 		num: 225,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
 		desc: "Has a 30% chance to paralyze the target.",
-		shortDesc: "30% chance to paralyze foe.",
+		shortDesc: "30% chance to paralyze the target.",
 		id: "dragonbreath",
 		name: "DragonBreath",
 		pp: 20,
@@ -2470,7 +2470,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"dragonclaw": {
+	dragonclaw: {
 		num: 337,
 		accuracy: 100,
 		basePower: 80,
@@ -2487,13 +2487,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"dragondance": {
+	dragondance: {
 		num: 349,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and Speed by 1 stage each.",
-		shortDesc: "Boosts Attack and Speed by 1.",
+		shortDesc: "Boosts the user's Attack and Speed by 1.",
 		id: "dragondance",
 		name: "Dragon Dance",
 		pp: 20,
@@ -2507,7 +2507,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Dragon"
 	},
-	"dragonpulse": {
+	dragonpulse: {
 		num: 406,
 		accuracy: 100,
 		basePower: 90,
@@ -2523,7 +2523,7 @@ exports.BattleMovedex = {
 		target: "any",
 		type: "Dragon"
 	},
-	"dragonrage": {
+	dragonrage: {
 		num: 82,
 		accuracy: 100,
 		basePower: false,
@@ -2539,13 +2539,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"dragonrush": {
+	dragonrush: {
 		num: 407,
 		accuracy: 75,
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a 20% chance to make the target flinch.",
-		shortDesc: "20% chance to flinch the foe.",
+		shortDesc: "20% chance to flinch the target.",
 		id: "dragonrush",
 		name: "Dragon Rush",
 		pp: 10,
@@ -2559,13 +2559,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"dragontail": {
+	dragontail: {
 		num: 525,
 		accuracy: 90,
 		basePower: 60,
 		category: "Physical",
 		desc: "Forces the target to switch to a random Pokemon. Fails if target is behind a Substitute.",
-		shortDesc: "Forces foe to switch to a random Pokemon.",
+		shortDesc: "Forces the target to switch to a random ally.",
 		id: "dragontail",
 		name: "Dragon Tail",
 		pp: 10,
@@ -2576,13 +2576,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"drainpunch": {
+	drainpunch: {
 		num: 409,
 		accuracy: 100,
 		basePower: 75,
 		category: "Physical",
 		desc: "Restores the user's HP by 1/2 of the damage inflicted on the target.",
-		shortDesc: "Leeches 50% of the damage dealt.",
+		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "drainpunch",
 		name: "Drain Punch",
 		pp: 10,
@@ -2595,13 +2595,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"dreameater": {
+	dreameater: {
 		num: 138,
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
 		desc: "Restores the user's HP by 1/2 of the damage inflicted on the target but only works on a sleeping target.",
-		shortDesc: "Foe must be asleep. Leech 50% of damage dealt.",
+		shortDesc: "User gains 1/2 HP inflicted. Sleeping target only.",
 		id: "dreameater",
 		name: "Dream Eater",
 		pp: 15,
@@ -2614,7 +2614,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"drillpeck": {
+	drillpeck: {
 		num: 65,
 		accuracy: 100,
 		basePower: 80,
@@ -2631,13 +2631,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"drillrun": {
+	drillrun: {
 		num: 529,
 		accuracy: 95,
 		basePower: 80,
 		category: "Physical",
 		desc: "Has an increased chance for a critical hit.",
-		shortDesc: "Has a higher critical hit rate.",
+		shortDesc: "High critical hit ratio.",
 		id: "drillrun",
 		name: "Drill Run",
 		pp: 10,
@@ -2649,7 +2649,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"dualchop": {
+	dualchop: {
 		num: 530,
 		accuracy: 90,
 		basePower: 40,
@@ -2667,7 +2667,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"dynamicpunch": {
+	dynamicpunch: {
 		num: 223,
 		accuracy: 50,
 		basePower: 100,
@@ -2687,13 +2687,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"earthpower": {
+	earthpower: {
 		num: 414,
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower foe's Sp. Def. by 1.",
+		shortDesc: "10% chance to lower the target's Sp. Def. by 1.",
 		id: "earthpower",
 		name: "Earth Power",
 		pp: 10,
@@ -2708,13 +2708,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"earthquake": {
+	earthquake: {
 		num: 89,
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
 		desc: "Power doubles when performed against Pokemon using Dig.",
-		shortDesc: "Hits foes using Dig with double power.",
+		shortDesc: "Hits adjacent Pokemon. Power doubles on Dig.",
 		id: "earthquake",
 		name: "Earthquake",
 		pp: 10,
@@ -2724,7 +2724,7 @@ exports.BattleMovedex = {
 		target: "adjacent",
 		type: "Ground"
 	},
-	"echoedvoice": {
+	echoedvoice: {
 		num: 497,
 		accuracy: 100,
 		basePower: 40,
@@ -2740,7 +2740,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"eggbomb": {
+	eggbomb: {
 		num: 121,
 		accuracy: 75,
 		basePower: 100,
@@ -2755,7 +2755,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"electroball": {
+	electroball: {
 		num: 486,
 		accuracy: 100,
 		basePower: false,
@@ -2775,7 +2775,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Inflicts more damage the faster the user is than target.",
-		shortDesc: "More power the faster the user is than foe.",
+		shortDesc: "More power the faster the user is than the target.",
 		id: "electroball",
 		name: "Electro Ball",
 		pp: 10,
@@ -2785,13 +2785,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"electroweb": {
+	electroweb: {
 		num: 527,
 		accuracy: 95,
 		basePower: 55,
 		category: "Special",
 		desc: "Lowers the target's Speed by one level.",
-		shortDesc: "Lowers foe's Speed by 1.",
+		shortDesc: "Lowers the foe(s) Speed by 1.",
 		id: "electroweb",
 		name: "Electroweb",
 		pp: 15,
@@ -2805,13 +2805,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"embargo": {
+	embargo: {
 		num: 373,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Prevents the target from using its held item for five turns. During in-game battles, trainers also cannot use any items from their bag on a Pokemon under the effects of Embargo.",
-		shortDesc: "The target can't use its item for 5 turns.",
+		shortDesc: "For 5 turns, the target can't use any items.",
 		id: "embargo",
 		name: "Embargo",
 		pp: 15,
@@ -2834,13 +2834,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"ember": {
+	ember: {
 		num: 52,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the foe.",
+		shortDesc: "10% chance to burn the target.",
 		id: "ember",
 		name: "Ember",
 		pp: 25,
@@ -2852,13 +2852,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"encore": {
+	encore: {
 		num: 227,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "The target is forced to use its last attack for the next 3 turns. The effects of this move will end immediately if the target runs out of PP for the repeated attack. In double battles, a Pokemon who has received an Encore will target a random opponent with single-target attacks.",
-		shortDesc: "Target repeats its last move for 3 turns.",
+		shortDesc: "The target repeats its last move for 3 turns.",
 		id: "encore",
 		name: "Encore",
 		pp: 5,
@@ -2911,7 +2911,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"endeavor": {
+	endeavor: {
 		num: 283,
 		accuracy: 100,
 		basePower: false,
@@ -2923,7 +2923,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Inflicts damage equal to the target's current HP - the user's current HP.",
-		shortDesc: "Lowers foe's HP to the user's HP.",
+		shortDesc: "Lowers the target's HP to the user's HP.",
 		id: "endeavor",
 		name: "Endeavor",
 		pp: 5,
@@ -2934,13 +2934,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"endure": {
+	endure: {
 		num: 203,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes first. The user is left with at least 1 HP following any attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure.",
-		shortDesc: "The user always survives with at least 1 HP.",
+		shortDesc: "The user survives the next hit with at least 1 HP.",
 		id: "endure",
 		name: "Endure",
 		pp: 10,
@@ -2981,13 +2981,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"energyball": {
+	energyball: {
 		num: 412,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower the foe's Sp. Def. by 1.",
+		shortDesc: "10% chance to lower the target's Sp. Def. by 1.",
 		id: "energyball",
 		name: "Energy Ball",
 		pp: 10,
@@ -3002,13 +3002,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"entrainment": {
+	entrainment: {
 		num: 494,
 		accuracy: 100,
 		basePower: false,
 		category: "Status",
 		desc: "Copies the user's ability onto the target.",
-		shortDesc: "Target's ability becomes the same as the user's.",
+		shortDesc: "The target's Ability changes to match the user's.",
 		id: "entrainment",
 		name: "Entrainment",
 		pp: 15,
@@ -3030,7 +3030,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"eruption": {
+	eruption: {
 		num: 284,
 		accuracy: 100,
 		basePower: false,
@@ -3039,7 +3039,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Base power decreases as the user's HP decreases.",
-		shortDesc: "Does less damage as the user's HP decreases.",
+		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 		id: "eruption",
 		name: "Eruption",
 		pp: 5,
@@ -3049,13 +3049,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Fire"
 	},
-	"explosion": {
+	explosion: {
 		num: 153,
 		accuracy: 100,
 		basePower: 250,
 		category: "Physical",
 		desc: "Causes the user to faint.",
-		shortDesc: "The user faints.",
+		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		id: "explosion",
 		name: "Explosion",
 		pp: 5,
@@ -3065,13 +3065,13 @@ exports.BattleMovedex = {
 		target: "adjacent",
 		type: "Normal"
 	},
-	"extrasensory": {
+	extrasensory: {
 		num: 326,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 10% chance to make the target flinch.",
-		shortDesc: "10% chance to flinch the foe.",
+		shortDesc: "10% chance to flinch the target.",
 		id: "extrasensory",
 		name: "Extrasensory",
 		pp: 30,
@@ -3084,7 +3084,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"extremespeed": {
+	extremespeed: {
 		num: 245,
 		accuracy: 100,
 		basePower: 80,
@@ -3101,7 +3101,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"facade": {
+	facade: {
 		num: 263,
 		accuracy: 100,
 		basePower: 70,
@@ -3113,7 +3113,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Power doubles if the user is inflicted with a status effect (burn, paralysis poison, or sleep).",
-		shortDesc: "Has 140 power when user is inflicted by a status.",
+		shortDesc: "Power doubles when user is inflicted by a status.",
 		id: "facade",
 		name: "Facade",
 		pp: 20,
@@ -3124,13 +3124,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"faintattack": {
+	faintattack: {
 		num: 185,
 		accuracy: true,
 		basePower: 60,
 		category: "Physical",
 		desc: "Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig, Fly, Dive or Bounce.",
-		shortDesc: "Ignores accuracy and evasion modifiers.",
+		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "faintattack",
 		name: "Faint Attack",
 		pp: 20,
@@ -3140,13 +3140,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"fakeout": {
+	fakeout: {
 		num: 252,
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
 		desc: "If this is the user's first move after being sent or switched into battle, the target flinches; this move fails otherwise and against targets with Inner Focus.",
-		shortDesc: "Attacks first and flinches foe. First turn out only.",
+		shortDesc: "Hits first. First turn out only. The target flinches.",
 		id: "fakeout",
 		name: "Fake Out",
 		pp: 10,
@@ -3166,13 +3166,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"faketears": {
+	faketears: {
 		num: 313,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Special Defense by 2 stages.",
-		shortDesc: "Lowers target's Sp. Defense by 2.",
+		shortDesc: "Lowers the target's Sp. Def by 2.",
 		id: "faketears",
 		name: "Fake Tears",
 		pp: 20,
@@ -3184,13 +3184,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"falseswipe": {
+	falseswipe: {
 		num: 206,
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
 		desc: "Leaves the target with at least 1 HP.",
-		shortDesc: "Always leaves the foe with at least 1 HP.",
+		shortDesc: "Always leaves the target with at least 1 HP.",
 		id: "falseswipe",
 		name: "False Swipe",
 		pp: 40,
@@ -3201,13 +3201,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"featherdance": {
+	featherdance: {
 		num: 297,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack by 2 stages.",
-		shortDesc: "Lowers target's Attack by 2.",
+		shortDesc: "Lowers the target's Attack by 2.",
 		id: "featherdance",
 		name: "FeatherDance",
 		pp: 15,
@@ -3219,7 +3219,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"feint": {
+	feint: {
 		num: 364,
 		accuracy: 100,
 		basePower: 30,
@@ -3243,13 +3243,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"fierydance": {
+	fierydance: {
 		num: 552,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 50% chance to raise the user's Special Attack by one level.",
-		shortDesc: "50% chance to boost user's Sp. Attack by 1.",
+		shortDesc: "50% chance to boost the user's Sp. Atk by 1.",
 		id: "fierydance",
 		name: "Fiery Dance",
 		pp: 10,
@@ -3266,7 +3266,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"finalgambit": {
+	finalgambit: {
 		num: 515,
 		accuracy: 100,
 		basePower: false,
@@ -3275,7 +3275,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Inflicts damage equal to the user's remaining HP. User faints.",
-		shortDesc: "Damages user and foe for user's current HP.",
+		shortDesc: "Does damage equal to the user's HP. User faints.",
 		id: "finalgambit",
 		name: "Final Gambit",
 		pp: 5,
@@ -3286,13 +3286,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"fireblast": {
+	fireblast: {
 		num: 126,
 		accuracy: 85,
 		basePower: 120,
 		category: "Special",
 		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn foe.",
+		shortDesc: "10% chance to burn the target.",
 		id: "fireblast",
 		name: "Fire Blast",
 		pp: 5,
@@ -3305,7 +3305,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"firefang": {
+	firefang: {
 		num: 424,
 		accuracy: 95,
 		basePower: 65,
@@ -3329,13 +3329,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"firepledge": {
+	firepledge: {
 		num: 519,
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
 		desc: "If it is followed on the same turn by Grass Oath, it will cause all foes to take damage at the end of every turn for four turns. If it follows Water Oath on the same turn, it will double the probability of secondary effects taking place for four turns. This effect does not stack with Serene Grace.",
-		shortDesc: "Use with Grass and Water Pledge for added effect.",
+		shortDesc: "Use with Grass or Water Pledge for added effect.",
 		id: "firepledge",
 		name: "Fire Pledge",
 		pp: 10,
@@ -3344,13 +3344,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"firepunch": {
+	firepunch: {
 		num: 7,
 		accuracy: 100,
 		basePower: 75,
 		category: "Physical",
 		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn foe.",
+		shortDesc: "10% chance to burn the target.",
 		id: "firepunch",
 		name: "Fire Punch",
 		pp: 15,
@@ -3365,13 +3365,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"firespin": {
+	firespin: {
 		num: 83,
 		accuracy: 85,
 		basePower: 35,
 		category: "Special",
 		desc: "Traps the target for 5-6 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it is holding Shed Shell or uses Baton Pass or it uses U-Turn.",
-		shortDesc: "Traps and damages over 5-6 turns.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "firespin",
 		name: "Fire Spin",
 		pp: 15,
@@ -3381,13 +3381,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"fissure": {
+	fissure: {
 		num: 90,
 		accuracy: 30,
 		basePower: false,
 		category: "Physical",
 		desc: "The target faints; doesn't work on higher-leveled Pokemon.",
-		shortDesc: "Will OHKO the foe.",
+		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		id: "fissure",
 		name: "Fissure",
 		pp: 5,
@@ -3397,7 +3397,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"flail": {
+	flail: {
 		num: 175,
 		accuracy: 100,
 		basePower: false,
@@ -3422,7 +3422,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Base power increases as the user's HP decreases.",
-		shortDesc: "Does more damage as user's HP decreases.",
+		shortDesc: "More power the less HP the user has left.",
 		id: "flail",
 		name: "Flail",
 		pp: 15,
@@ -3433,13 +3433,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"flameburst": {
+	flameburst: {
 		num: 481,
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
 		desc: "Deals 1/8 damage to pokemon next to the target.",
-		shortDesc: "Damages Pokemon next to the foe as well.",
+		shortDesc: "Damages Pokemon next to the target as well.",
 		id: "flameburst",
 		name: "Flame Burst",
 		pp: 15,
@@ -3448,13 +3448,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"flamecharge": {
+	flamecharge: {
 		num: 488,
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
 		desc: "Inflicts regular damage. Raises the user's Speed by one stage.",
-		shortDesc: "Boosts user's Speed by 1.",
+		shortDesc: "Boosts the user's Speed by 1.",
 		id: "flamecharge",
 		name: "Flame Charge",
 		pp: 20,
@@ -3472,13 +3472,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"flamewheel": {
+	flamewheel: {
 		num: 172,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "Has a 10% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.",
-		shortDesc: "10% chance to burn foe. Thaws the user.",
+		shortDesc: "10% chance to burn the target. Thaws user.",
 		id: "flamewheel",
 		name: "Flame Wheel",
 		pp: 25,
@@ -3492,13 +3492,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"flamethrower": {
+	flamethrower: {
 		num: 53,
 		accuracy: 100,
 		basePower: 95,
 		category: "Special",
 		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the foe.",
+		shortDesc: "10% chance to burn the target.",
 		id: "flamethrower",
 		name: "Flamethrower",
 		pp: 15,
@@ -3511,7 +3511,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"flareblitz": {
+	flareblitz: {
 		num: 394,
 		accuracy: 100,
 		basePower: 120,
@@ -3533,13 +3533,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"flash": {
+	flash: {
 		num: 148,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Accuracy by 1 stage.",
-		shortDesc: "Lowers target's Accuracy by 1.",
+		shortDesc: "Lowers the target's Accuracy by 1.",
 		id: "flash",
 		name: "Flash",
 		pp: 20,
@@ -3551,13 +3551,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"flashcannon": {
+	flashcannon: {
 		num: 430,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower opponent's Sp. Def. by 1.",
+		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
 		id: "flashcannon",
 		name: "Flash Cannon",
 		pp: 10,
@@ -3572,13 +3572,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"flatter": {
+	flatter: {
 		num: 260,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Confuses the target and raises its Special Attack by 1 stage.",
-		shortDesc: "Confuses target. Boosts target's Sp. Attack by 1.",
+		shortDesc: "Boosts the target's Sp. Atk by 1 and confuses it.",
 		id: "flatter",
 		name: "Flatter",
 		pp: 15,
@@ -3591,7 +3591,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"fling": {
+	fling: {
 		num: 374,
 		accuracy: 100,
 		basePower: false,
@@ -3602,7 +3602,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "The user's held item is thrown at the target. Base power and additional effects vary depending on the thrown item. Note that the target will instantly benefit from the effects of thrown berries. The held item is gone for the rest of the battle unless Recycle is used; the item will return to the original holder after wireless battles but will be permanently lost if it is thrown during in-game battles.",
-		shortDesc: "Throws the user's item at the foe. Power varies.",
+		shortDesc: "Flings the user's item at the target. Power varies.",
 		id: "fling",
 		name: "Fling",
 		pp: 10,
@@ -3646,7 +3646,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"fly": {
+	fly: {
 		num: 19,
 		accuracy: 95,
 		basePower: 90,
@@ -3691,13 +3691,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"focusblast": {
+	focusblast: {
 		num: 411,
 		accuracy: 70,
 		basePower: 120,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower foe's Sp. Def. by 1.",
+		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
 		id: "focusblast",
 		name: "Focus Blast",
 		pp: 5,
@@ -3712,13 +3712,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"focusenergy": {
+	focusenergy: {
 		num: 116,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's chance for a Critical Hit by two domains.",
-		shortDesc: "Boosts Critical Hit by 2",
+		shortDesc: "Boosts the user's critical hit ratio by 2.",
 		id: "focusenergy",
 		name: "Focus Energy",
 		pp: 30,
@@ -3736,7 +3736,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"focuspunch": {
+	focuspunch: {
 		num: 264,
 		accuracy: 100,
 		basePower: 150,
@@ -3772,13 +3772,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"followme": {
+	followme: {
 		num: 266,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes first. For the rest of the turn, all attacks from the opponent's team that target the user's team are redirected toward the user. In double battles, the user's teammate will not be protected from attacks that have more than one intended target.",
-		shortDesc: "All moves target the user.",
+		shortDesc: "The foes' moves target the user on the turn used.",
 		id: "followme",
 		name: "Follow Me",
 		pp: 20,
@@ -3787,13 +3787,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"forcepalm": {
+	forcepalm: {
 		num: 395,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "Has a 30% chance to paralyze the target.",
-		shortDesc: "30% chance to paralyze the foe.",
+		shortDesc: "30% chance to paralyze the target.",
 		id: "forcepalm",
 		name: "Force Palm",
 		pp: 10,
@@ -3806,13 +3806,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"foresight": {
+	foresight: {
 		num: 193,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Until the target faints or switches, if the target has positive Evasion boosts, they are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.",
-		shortDesc: "Blocks evasion mods. Fighting, Normal hits Ghost.",
+		shortDesc: "Blocks Evasion mods. Fighting, Normal hit Ghost.",
 		id: "foresight",
 		name: "Foresight",
 		pp: 40,
@@ -3837,13 +3837,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"foulplay": {
+	foulplay: {
 		num: 492,
 		accuracy: 100,
 		basePower: 95,
 		category: "Physical",
 		desc: "It uses the target's Attack stat to calculate damage.",
-		shortDesc: "Uses foe's Attack stat in damage calculation.",
+		shortDesc: "Uses target's Attack stat in damage calculation.",
 		id: "foulplay",
 		name: "Foul Play",
 		pp: 15,
@@ -3854,13 +3854,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"freezeshock": {
+	freezeshock: {
 		num: 553,
 		accuracy: 90,
 		basePower: 140,
 		category: "Physical",
 		desc: "Charges for a turn before attacking. Has a 30% chance to paralyze the target.",
-		shortDesc: "Hits the turn after being used. 30% paralyze opponent.",
+		shortDesc: "Charges turn 1. Hits turn 2. 30% paralyze.",
 		id: "freezeshock",
 		name: "Freeze Shock",
 		pp: 5,
@@ -3885,7 +3885,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"frenzyplant": {
+	frenzyplant: {
 		num: 338,
 		accuracy: 90,
 		basePower: 150,
@@ -3903,7 +3903,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"frostbreath": {
+	frostbreath: {
 		num: 524,
 		accuracy: 90,
 		basePower: 40,
@@ -3920,7 +3920,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"frustration": {
+	frustration: {
 		num: 218,
 		accuracy: 100,
 		basePower: false,
@@ -3937,7 +3937,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"furyattack": {
+	furyattack: {
 		num: 31,
 		accuracy: 85,
 		basePower: 15,
@@ -3954,7 +3954,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"furycutter": {
+	furycutter: {
 		num: 210,
 		accuracy: 95,
 		basePower: 20,
@@ -3991,7 +3991,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"furyswipes": {
+	furyswipes: {
 		num: 154,
 		accuracy: 80,
 		basePower: 18,
@@ -4008,7 +4008,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"fusionbolt": {
+	fusionbolt: {
 		num: 559,
 		accuracy: 100,
 		basePower: 100,
@@ -4024,7 +4024,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"fusionflare": {
+	fusionflare: {
 		num: 558,
 		accuracy: 100,
 		basePower: 100,
@@ -4041,13 +4041,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"futuresight": {
+	futuresight: {
 		num: 248,
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
 		desc: "This move, even if the user and/or the target switch out, will strike the active target at the end of the second turn after its use. Only one instance of Future Sight or Doom Desire may be active at a time.",
-		shortDesc: "Deals damage at the end of the turn after 3 turns.",
+		shortDesc: "Hits two turns after being used.",
 		id: "futuresight",
 		name: "Future Sight",
 		pp: 10,
@@ -4076,13 +4076,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"gastroacid": {
+	gastroacid: {
 		num: 380,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Negates the target's ability as long as it remains in battle.",
-		shortDesc: "Nullifies the foe's ability",
+		shortDesc: "Nullifies the target's Ability",
 		id: "gastroacid",
 		name: "Gastro Acid",
 		pp: 10,
@@ -4104,7 +4104,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"geargrind": {
+	geargrind: {
 		num: 544,
 		accuracy: 85,
 		basePower: 50,
@@ -4122,13 +4122,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"gigadrain": {
+	gigadrain: {
 		num: 202,
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
 		desc: "Restores the user's HP by 1/2 of the damage inflicted on the target.",
-		shortDesc: "Leeches 50% of the damage dealt.",
+		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "gigadrain",
 		name: "Giga Drain",
 		pp: 10,
@@ -4139,7 +4139,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"gigaimpact": {
+	gigaimpact: {
 		num: 416,
 		accuracy: 90,
 		basePower: 150,
@@ -4158,13 +4158,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"glaciate": {
+	glaciate: {
 		num: 549,
 		accuracy: 95,
 		basePower: 65,
 		category: "Special",
 		desc: "Glaciate inflicts damage and lowers the target's Speed stat by one stage. Glaciate hits all opponents in double battles and all adjacent opponents in triple battles.",
-		shortDesc: "Lowers foe's Speed by 1.",
+		shortDesc: "Lowers the foe(s) Speed by 1.",
 		id: "glaciate",
 		name: "Glaciate",
 		pp: 10,
@@ -4178,7 +4178,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"glare": {
+	glare: {
 		num: 137,
 		accuracy: 90,
 		basePower: 0,
@@ -4195,7 +4195,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"grassknot": {
+	grassknot: {
 		num: 447,
 		accuracy: 100,
 		basePower: false,
@@ -4225,7 +4225,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Base power increases as the target's weight increases.",
-		shortDesc: "Deals damage based on the foe's weight.",
+		shortDesc: "More power the heavier the target.",
 		id: "grassknot",
 		name: "Grass Knot",
 		pp: 20,
@@ -4236,13 +4236,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"grasspledge": {
+	grasspledge: {
 		num: 520,
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
 		desc: "If it is followed on the same turn by Water Oath, it will decrease the speed of all foes by half for four turns. If it follows Fire Oath on the same turn, it will cause all foes to take damage at the end of every turn for four turns.",
-		shortDesc: "Use with Fire and Water Pledge for added effect.",
+		shortDesc: "Use with Fire or Water Pledge for added effect.",
 		id: "grasspledge",
 		name: "Grass Pledge",
 		pp: 10,
@@ -4251,7 +4251,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"grasswhistle": {
+	grasswhistle: {
 		num: 320,
 		accuracy: 55,
 		basePower: 0,
@@ -4269,13 +4269,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"gravity": {
+	gravity: {
 		num: 356,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The immunities provided by Magnet Rise, Levitate and the Flying-type are negated for all active Pokemon for five turns; these Pokemon will be affected by Ground-type moves, Arena Trap, Spikes and Toxic Spikes. Pokemon in the middle of using Bounce or Fly when Gravity is activated will immediately return to the ground, and Bounce, Fly, Hi Jump Kick, Jump Kick and Splash cannot be used until Gravity wears off.",
-		shortDesc: "For 5 turns, negates Ground immunities.",
+		shortDesc: "For 5 turns, negates all Ground immunities.",
 		id: "gravity",
 		name: "Gravity",
 		pp: 5,
@@ -4305,13 +4305,13 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Psychic"
 	},
-	"growl": {
+	growl: {
 		num: 45,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack by 1 stage.",
-		shortDesc: "Lowers target's Attack by 1.",
+		shortDesc: "Lowers the foe(s) Attack by 1.",
 		id: "growl",
 		name: "Growl",
 		pp: 40,
@@ -4324,13 +4324,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Normal"
 	},
-	"growth": {
+	growth: {
 		num: 74,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sun, Growth raises Attack and SpAttk two stages each. ",
-		shortDesc: "Boosts Attack and Sp. Attack by 1.",
+		shortDesc: "Boosts the user's Attack and Sp. Atk by 1.",
 		id: "growth",
 		name: "Growth",
 		pp: 40,
@@ -4347,13 +4347,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"grudge": {
+	grudge: {
 		num: 288,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The target's next move is set to 0 PP if it directly KOs the user.",
-		shortDesc: "If the user faints, the target's attack loses all PP",
+		shortDesc: "If the user faints, the attack used loses all its PP.",
 		id: "grudge",
 		name: "Grudge",
 		pp: 5,
@@ -4385,13 +4385,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Ghost"
 	},
-	"guardsplit": {
+	guardsplit: {
 		num: 470,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Averages Defense and Special Defense with the target.",
-		shortDesc: "Averages Def and SpD of the user and foe.",
+		shortDesc: "Averages Defense and Sp. Def stats with target.",
 		id: "guardsplit",
 		name: "Guard Split",
 		pp: 10,
@@ -4400,13 +4400,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"guardswap": {
+	guardswap: {
 		num: 385,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user swaps Defense and Special Defense modifiers with its target.",
-		shortDesc: "Swaps user's Def/SpD stages with target's.",
+		shortDesc: "Swaps Defense and Sp. Def changes with target.",
 		id: "guardswap",
 		name: "Guard Swap",
 		pp: 10,
@@ -4429,13 +4429,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"guillotine": {
+	guillotine: {
 		num: 12,
 		accuracy: 30,
 		basePower: false,
 		category: "Physical",
 		desc: "The target faints; doesn't work on higher-leveled Pokemon.",
-		shortDesc: "Will OHKO the foe.",
+		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		id: "guillotine",
 		name: "Guillotine",
 		pp: 5,
@@ -4446,13 +4446,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"gunkshot": {
+	gunkshot: {
 		num: 441,
 		accuracy: 70,
 		basePower: 120,
 		category: "Physical",
 		desc: "Has a 30% chance to poison the target.",
-		shortDesc: "30% chance to poison the foe.",
+		shortDesc: "30% chance to poison the target.",
 		id: "gunkshot",
 		name: "Gunk Shot",
 		pp: 5,
@@ -4465,13 +4465,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"gust": {
+	gust: {
 		num: 16,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "Power doubles if the target is in mid-air via Fly or Bounce.",
-		shortDesc: "No additional effect.",
+		shortDesc: "Power doubles during Fly, Bounce, and Sky Drop.",
 		id: "gust",
 		name: "Gust",
 		pp: 35,
@@ -4480,7 +4480,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"gyroball": {
+	gyroball: {
 		num: 360,
 		accuracy: 100,
 		basePower: false,
@@ -4494,7 +4494,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Power is determined from the speeds of the user and the target; stat modifiers are taken into account. Max power, 150 BP, is achieved when the user is much slower than the target.",
-		shortDesc: "Deals more damage the slower user is than foe.",
+		shortDesc: "More power the slower the user than the target.",
 		id: "gyroball",
 		name: "Gyro Ball",
 		pp: 5,
@@ -4505,13 +4505,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"hail": {
+	hail: {
 		num: 258,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Cancels all other weather moves. For 5 turns: Blizzard never misses and has a 30% chance to hit through Protect and Detect, each active Pokemon, even when protected by a Substitute, loses 1/16 of its max HP unless it is an Ice-type, the power of Solarbeam is halved, and the healing power of Morning Sun, Synthesis and Moonlight is halved. The effects of Hail will last for eight turns if its user is holding Icy Rock.",
-		shortDesc: "Summons hail for 5 turns.",
+		shortDesc: "For 5 turns, hail crashes down.",
 		id: "hail",
 		name: "Hail",
 		pp: 10,
@@ -4521,13 +4521,13 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Ice"
 	},
-	"hammerarm": {
+	hammerarm: {
 		num: 359,
 		accuracy: 90,
 		basePower: 100,
 		category: "Physical",
 		desc: "Lowers the user's Speed by 1 stage.",
-		shortDesc: "Lowers user's Speed by 1.",
+		shortDesc: "Lowers the user's Speed by 1.",
 		id: "hammerarm",
 		name: "Hammer Arm",
 		pp: 10,
@@ -4544,13 +4544,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"harden": {
+	harden: {
 		num: 106,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 1 stage.",
-		shortDesc: "Boosts user's Defense by 1.",
+		shortDesc: "Boosts the user's Defense by 1.",
 		id: "harden",
 		name: "Harden",
 		pp: 30,
@@ -4562,7 +4562,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"haze": {
+	haze: {
 		num: 114,
 		accuracy: true,
 		basePower: 0,
@@ -4586,13 +4586,13 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Ice"
 	},
-	"headcharge": {
+	headcharge: {
 		num: 543,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
 		desc: "User receives 1/4 the damage it inflicts in recoil.",
-		shortDesc: "Has 25% recoil.",
+		shortDesc: "Has 1/4 recoil.",
 		id: "headcharge",
 		name: "Head Charge",
 		pp: 15,
@@ -4604,13 +4604,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"headsmash": {
+	headsmash: {
 		num: 457,
 		accuracy: 80,
 		basePower: 150,
 		category: "Physical",
 		desc: "The user receives 1/2 recoil damage.",
-		shortDesc: "Has 50% recoil.",
+		shortDesc: "Has 1/2 recoil.",
 		id: "headsmash",
 		name: "Head Smash",
 		pp: 5,
@@ -4622,13 +4622,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"headbutt": {
+	headbutt: {
 		num: 29,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to flinch the foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "headbutt",
 		name: "Headbutt",
 		pp: 15,
@@ -4641,13 +4641,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"healbell": {
+	healbell: {
 		num: 215,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Every Pokemon in the user's party is cured of status conditions. Allied Pokemon who have Soundproof are not affected.",
-		shortDesc: "Cures status ailments on the user's team.",
+		shortDesc: "Cures the user's party of all status conditions.",
 		id: "healbell",
 		name: "Heal Bell",
 		pp: 5,
@@ -4664,13 +4664,13 @@ exports.BattleMovedex = {
 		target: "allySide",
 		type: "Normal"
 	},
-	"healblock": {
+	healblock: {
 		num: 377,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "For five turns, or until switching out, the target(s) will not be healed by Absorb, Aqua Ring, Drain Punch, Dream Eater, Giga Drain, Heal Order, Ingrain, Leech Life, Leech Seed, Mega Drain, Milk Drink, Moonlight, Morning Sun, Recover, Rest, Roost, Slack Off, Softboiled, Swallow, Synthesis or Wish, but any additional effects from these moves, such as damaging another target, will still occur. Healing caused from held items or Pain Split will not be prevented.",
-		shortDesc: "Prevents opponents from healing for 5 turns.",
+		shortDesc: "For 5 turns, the foe(s) is prevented from healing.",
 		id: "healblock",
 		name: "Heal Block",
 		pp: 15,
@@ -4697,13 +4697,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Psychic"
 	},
-	"healorder": {
+	healorder: {
 		num: 456,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores 1/2 of the user's max HP.",
-		shortDesc: "Heals the user by 50% its max HP.",
+		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "healorder",
 		name: "Heal Order",
 		pp: 10,
@@ -4714,13 +4714,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Bug"
 	},
-	"healpulse": {
+	healpulse: {
 		num: 505,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Restores half the target's max HP.",
-		shortDesc: "Heals the target by 50% its max HP",
+		shortDesc: "Heals the target by 50% of its max HP.",
 		id: "healpulse",
 		name: "Heal Pulse",
 		pp: 10,
@@ -4731,13 +4731,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"healingwish": {
+	healingwish: {
 		num: 361,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user sacrifices itself so that its replacement will be cured of status conditions and have its HP fully restored upon entering the field. This move fails if the user is the only non-fainted Pokemon on its team.",
-		shortDesc: "Faints the user, but heals the replacement.",
+		shortDesc: "User faints. Replacement is fully healed.",
 		id: "healingwish",
 		name: "Healing Wish",
 		pp: 10,
@@ -4771,13 +4771,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"heartstamp": {
+	heartstamp: {
 		num: 531,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to flinch the foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "heartstamp",
 		name: "Heart Stamp",
 		pp: 25,
@@ -4790,13 +4790,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"heartswap": {
+	heartswap: {
 		num: 391,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user swaps stat modifiers with the target.",
-		shortDesc: "Switches user's stat changes with target's.",
+		shortDesc: "Swaps all stat changes with target.",
 		id: "heartswap",
 		name: "Heart Swap",
 		pp: 10,
@@ -4819,7 +4819,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"heatcrash": {
+	heatcrash: {
 		num: 535,
 		accuracy: 100,
 		basePower: false,
@@ -4842,7 +4842,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Deals varying damage depending on the weight of both the user and the target. The heavier the user is in comparison to its target, the more damage will be inflicted. The base power varies as follows: 120 base power, if the target's weight is less than or equal to 1/5 (20%) of the user's weight. 100 base power, if the target's weight is greater than 1/5 (20%) of the user's weight and less than or equal to 1/4 (25%) of user's weight. 80 base power, if the target's weight is greater than 1/4 (25%) of the user's weight and less than or equal to 1/2 (50%) of user's weight. 60 base power, if the target's weight is greater than 1/3 (33.3%) of the user's weight and less than or equal to 1/2 of user's weight (50%). 40 base power, if the target's weight is greater than 1/2 (50%) of the user's weight.",
-		shortDesc: "More power for heavier user, lighter foe.",
+		shortDesc: "More power the heavier the user than the target.",
 		id: "heatcrash",
 		name: "Heat Crash",
 		pp: 10,
@@ -4853,13 +4853,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"heatwave": {
+	heatwave: {
 		num: 257,
 		accuracy: 90,
 		basePower: 100,
 		category: "Special",
 		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the foe.",
+		shortDesc: "10% chance to burn the foe(s).",
 		id: "heatwave",
 		name: "Heat Wave",
 		pp: 10,
@@ -4872,7 +4872,7 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Fire"
 	},
-	"heavyslam": {
+	heavyslam: {
 		num: 484,
 		accuracy: 100,
 		basePower: false,
@@ -4895,7 +4895,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Heavy Bomber deals varying damage depending on the weight of both the user and the target. The heavier the user is in comparison to its target, the more damage will be inflicted. The base power varies as follows: 120 base power, if the target's weight is less than or equal to 1/5 (20%) of the user's weight. 100 base power, if the target's weight is greater than 1/5 (20%) of the user's weight and less than or equal to 1/4 (25%) of user's weight. 80 base power, if the target's weight is greater than 1/4 (25%) of the user's weight and less than or equal to 1/2 (50%) of user's weight. 60 base power, if the target's weight is greater than 1/3 (33.3%) of the user's weight and less than or equal to 1/2 of user's weight (50%). 40 base power, if the target's weight is greater than 1/2 (50%) of the user's weight.",
-		shortDesc: "More power for heavier user, lighter foe.",
+		shortDesc: "More power the heavier the user than the target.",
 		id: "heavyslam",
 		name: "Heavy Slam",
 		pp: 10,
@@ -4906,13 +4906,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"helpinghand": {
+	helpinghand: {
 		num: 270,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Always goes first. In double battles, the power of the user's partner's attacks is increased by 1.5x for that turn; does nothing in single battles.",
-		shortDesc: "Increases power of ally's moves 50%",
+		shortDesc: "Increases the power of an ally's move by 50%.",
 		id: "helpinghand",
 		name: "Helping Hand",
 		pp: 20,
@@ -4921,7 +4921,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"hex": {
+	hex: {
 		num: 506,
 		accuracy: 100,
 		basePower: 50,
@@ -4931,7 +4931,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Inflicts more damage if the target has a major status ailment.",
-		shortDesc: "Double power if foe has a status ailment.",
+		shortDesc: "Power doubles if the target has a status ailment.",
 		id: "hex",
 		name: "Hex",
 		pp: 10,
@@ -4940,13 +4940,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"hijumpkick": {
+	hijumpkick: {
 		num: 136,
 		accuracy: 90,
 		basePower: 130,
 		category: "Physical",
 		desc: "If this attack misses the target, the user half of its max health in recoil damage.",
-		shortDesc: "User takes 50% recoil if attack misses.",
+		shortDesc: "User is hurt by 50% of its max HP if it misses.",
 		id: "hijumpkick",
 		name: "Hi Jump Kick",
 		pp: 10,
@@ -4962,7 +4962,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"hiddenpower": {
+	hiddenpower: {
 		num: 237,
 		accuracy: 100,
 		basePower: 0,
@@ -4971,7 +4971,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Varies in power and type depending on the user's IVs; maximum 70 BP.",
-		shortDesc: "Varies in power and types based on user's IVs.",
+		shortDesc: "Varies in power and type based on the user's IVs.",
 		id: "hiddenpower",
 		name: "Hidden Power",
 		pp: 15,
@@ -4984,7 +4984,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"hiddenpowerbug": {
+	hiddenpowerbug: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -4998,7 +4998,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"hiddenpowerdark": {
+	hiddenpowerdark: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5012,7 +5012,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"hiddenpowerdragon": {
+	hiddenpowerdragon: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5026,7 +5026,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"hiddenpowerelectric": {
+	hiddenpowerelectric: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5041,7 +5041,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"hiddenpowerfighting": {
+	hiddenpowerfighting: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5056,7 +5056,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"hiddenpowerfire": {
+	hiddenpowerfire: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5071,7 +5071,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"hiddenpowerflying": {
+	hiddenpowerflying: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5085,7 +5085,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"hiddenpowerghost": {
+	hiddenpowerghost: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5099,7 +5099,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"hiddenpowergrass": {
+	hiddenpowergrass: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5114,7 +5114,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"hiddenpowerground": {
+	hiddenpowerground: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5128,7 +5128,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"hiddenpowerice": {
+	hiddenpowerice: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5143,7 +5143,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"hiddenpowerpoison": {
+	hiddenpowerpoison: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5157,7 +5157,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"hiddenpowerpsychic": {
+	hiddenpowerpsychic: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5171,7 +5171,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"hiddenpowerrock": {
+	hiddenpowerrock: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5185,7 +5185,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"hiddenpowersteel": {
+	hiddenpowersteel: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5199,7 +5199,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"hiddenpowerwater": {
+	hiddenpowerwater: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -5213,13 +5213,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"honeclaws": {
+	honeclaws: {
 		num: 468,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Raises the user's Attack and Accuracy by one stage.",
-		shortDesc: "Boosts Attack and Accuracy by 1.",
+		shortDesc: "Boosts the user's Attack and Accuracy by 1.",
 		id: "honeclaws",
 		name: "Hone Claws",
 		pp: 15,
@@ -5233,7 +5233,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Dark"
 	},
-	"hornattack": {
+	hornattack: {
 		num: 30,
 		accuracy: 100,
 		basePower: 65,
@@ -5249,13 +5249,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"horndrill": {
+	horndrill: {
 		num: 32,
 		accuracy: 30,
 		basePower: false,
 		category: "Physical",
 		desc: "The target faints; doesn't work on higher-leveled Pokemon.",
-		shortDesc: "Will OHKO the foe.",
+		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		id: "horndrill",
 		name: "Horn Drill",
 		pp: 5,
@@ -5266,13 +5266,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"hornleech": {
+	hornleech: {
 		num: 532,
 		accuracy: 100,
 		basePower: 75,
 		category: "Physical",
 		desc: "Heals the user by half the damage inflicted.",
-		shortDesc: "Leeches 50% of the damage dealt.",
+		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "hornleech",
 		name: "Horn Leech",
 		pp: 10,
@@ -5284,7 +5284,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"howl": {
+	howl: {
 		num: 336,
 		accuracy: true,
 		basePower: 0,
@@ -5303,13 +5303,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"hurricane": {
+	hurricane: {
 		num: 542,
 		accuracy: 70,
 		basePower: 120,
 		category: "Special",
 		desc: "Has a 30% chance to confuse the target. Has 100% accuracy during rain.",
-		shortDesc: "30% chance to confuse the target.",
+		shortDesc: "30% chance to confuse target. Can't miss in rain.",
 		id: "hurricane",
 		name: "Hurricane",
 		pp: 10,
@@ -5326,13 +5326,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"hydrocannon": {
+	hydrocannon: {
 		num: 308,
 		accuracy: 90,
 		basePower: 150,
 		category: "Special",
 		desc: "The user recharges during its next turn; as a result, until the end of the next turn, the user becomes uncontrollable.",
-		shortDesc: "The user cannot attack next turn.",
+		shortDesc: "User cannot move next turn.",
 		id: "hydrocannon",
 		name: "Hydro Cannon",
 		pp: 5,
@@ -5344,7 +5344,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"hydropump": {
+	hydropump: {
 		num: 56,
 		accuracy: 80,
 		basePower: 120,
@@ -5360,13 +5360,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"hyperbeam": {
+	hyperbeam: {
 		num: 63,
 		accuracy: 90,
 		basePower: 150,
 		category: "Special",
 		desc: "The user recharges during its next turn; as a result, until the end of the next turn, the user becomes uncontrollable.",
-		shortDesc: "The user cannot attack next turn.",
+		shortDesc: "User cannot move next turn.",
 		id: "hyperbeam",
 		name: "Hyper Beam",
 		pp: 5,
@@ -5378,13 +5378,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"hyperfang": {
+	hyperfang: {
 		num: 158,
 		accuracy: 90,
 		basePower: 80,
 		category: "Physical",
 		desc: "Has a 10% chance to make the target flinch.",
-		shortDesc: "10% chance to flinch the foe.",
+		shortDesc: "10% chance to flinch the target.",
 		id: "hyperfang",
 		name: "Hyper Fang",
 		pp: 15,
@@ -5397,13 +5397,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"hypervoice": {
+	hypervoice: {
 		num: 304,
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
 		desc: "Deals damage with no additional effect.",
-		shortDesc: "No additional effect.",
+		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "hypervoice",
 		name: "Hyper Voice",
 		pp: 10,
@@ -5414,7 +5414,7 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Normal"
 	},
-	"hypnosis": {
+	hypnosis: {
 		num: 95,
 		accuracy: 60,
 		basePower: 0,
@@ -5431,7 +5431,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"iceball": {
+	iceball: {
 		num: 301,
 		accuracy: 90,
 		basePower: 30,
@@ -5450,7 +5450,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "The user attacks uncontrollably for five turns; this move's power doubles after each turn and also if Defense Curl was used beforehand. Its power resets after five turns have ended or if the attack misses.",
-		shortDesc: "Doubles in power with each hit. Repeats for 5 turns.",
+		shortDesc: "Power doubles with each hit. Repeats for 5 turns.",
 		id: "iceball",
 		name: "Ice Ball",
 		pp: 20,
@@ -5488,7 +5488,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"icebeam": {
+	icebeam: {
 		num: 58,
 		accuracy: 100,
 		basePower: 95,
@@ -5507,13 +5507,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"iceburn": {
+	iceburn: {
 		num: 554,
 		accuracy: 90,
 		basePower: 140,
 		category: "Special",
 		desc: "Charges for a turn before attacking. Has a 30% chance to burn the target.",
-		shortDesc: "Charges turn 1. Attacks turn 2. 30% burn chance.",
+		shortDesc: "Charges turn 1. Hits turn 2. 30% burn.",
 		id: "iceburn",
 		name: "Ice Burn",
 		pp: 5,
@@ -5538,13 +5538,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"icefang": {
+	icefang: {
 		num: 423,
 		accuracy: 95,
 		basePower: 65,
 		category: "Physical",
 		desc: "Has a 10% chance to freeze the target. Has 10% chance to make the target flinch. Both effects can occur from a single use.",
-		shortDesc: "10% chance to flinch. 10% chance to freeze.",
+		shortDesc: "10% chance to freeze. 10% chance to flinch.",
 		id: "icefang",
 		name: "Ice Fang",
 		pp: 15,
@@ -5562,13 +5562,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"icepunch": {
+	icepunch: {
 		num: 8,
 		accuracy: 100,
 		basePower: 75,
 		category: "Physical",
 		desc: "Has a 10% chance to freeze the target.",
-		shortDesc: "10% chance to freeze the foe.",
+		shortDesc: "10% chance to freeze the target.",
 		id: "icepunch",
 		name: "Ice Punch",
 		pp: 15,
@@ -5583,7 +5583,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"iceshard": {
+	iceshard: {
 		num: 420,
 		accuracy: 100,
 		basePower: 40,
@@ -5599,13 +5599,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"iciclecrash": {
+	iciclecrash: {
 		num: 556,
 		accuracy: 90,
 		basePower: 85,
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to flinch the foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "iciclecrash",
 		name: "Icicle Crash",
 		pp: 10,
@@ -5618,13 +5618,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"iciclespear": {
+	iciclespear: {
 		num: 333,
 		accuracy: 100,
 		basePower: 25,
 		category: "Physical",
 		desc: "Attacks 2-5 times in one turn; if one of these attacks breaks a target's Substitute, the target will take damage for the rest of the hits. This move has a 3/8 chance to hit twice, a 3/8 chance to hit three times, a 1/8 chance to hit four times and a 1/8 chance to hit five times. If the user of this move has Skill Link, this move will always strike five times.",
-		shortDesc: "Hits 2-5 times.",
+		shortDesc: "Hits 2-5 times in one turn.",
 		id: "iciclespear",
 		name: "Icicle Spear",
 		pp: 30,
@@ -5635,13 +5635,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"icywind": {
+	icywind: {
 		num: 196,
 		accuracy: 95,
 		basePower: 55,
 		category: "Special",
 		desc: "Lowers the target's Speed by 1 stage.",
-		shortDesc: "Lowers foe's Speed by 1.",
+		shortDesc: "Lowers the foe(s) Speed by 1.",
 		id: "icywind",
 		name: "Icy Wind",
 		pp: 15,
@@ -5655,13 +5655,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Ice"
 	},
-	"imprison": {
+	imprison: {
 		num: 286,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Until the user faints or switches out, the opponent cannot select any moves that it has in common with the user. In double battles, this move affects both opponents.",
-		shortDesc: "No foe can use any of the user's moves.",
+		shortDesc: "No foe can use any move known by the user.",
 		id: "imprison",
 		name: "Imprison",
 		pp: 10,
@@ -5688,13 +5688,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"incinerate": {
+	incinerate: {
 		num: 510,
 		accuracy: 100,
 		basePower: 30,
 		category: "Special",
 		desc: "Inflicts damage and renders the target's Berry unusable. It also hits all opponents in double and all adjacent opponents in triple battles.",
-		shortDesc: "Removes the target's Berry.",
+		shortDesc: "Destroys the foe(s) Berry.",
 		id: "incinerate",
 		name: "Incinerate",
 		pp: 15,
@@ -5709,13 +5709,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"inferno": {
+	inferno: {
 		num: 517,
 		accuracy: 50,
 		basePower: 100,
 		category: "Special",
 		desc: "Has a 100% chance to burn the target.",
-		shortDesc: "Burns the foe.",
+		shortDesc: "Burns the target.",
 		id: "inferno",
 		name: "Inferno",
 		pp: 5,
@@ -5727,13 +5727,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"ingrain": {
+	ingrain: {
 		num: 275,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user recovers 1/16 of its max HP after each turn, but it cannot be switched out or forced to switch out. If a Flying-type Pokemon or a Pokemon with Levitate comes under the effect of Ingrain, it will no longer have immunity from Ground-type attacks.",
-		shortDesc: "Heals user 1/16 max HP per turn. Traps user.",
+		shortDesc: "User recovers 1/16 max HP per turn. Traps user.",
 		id: "ingrain",
 		name: "Ingrain",
 		pp: 20,
@@ -5757,13 +5757,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Grass"
 	},
-	"irondefense": {
+	irondefense: {
 		num: 334,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Boosts Defense by 2.",
+		shortDesc: "Boosts the user's Defense by 2.",
 		id: "irondefense",
 		name: "Iron Defense",
 		pp: 15,
@@ -5776,13 +5776,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Steel"
 	},
-	"ironhead": {
+	ironhead: {
 		num: 442,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to flinch foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "ironhead",
 		name: "Iron Head",
 		pp: 15,
@@ -5796,13 +5796,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"irontail": {
+	irontail: {
 		num: 231,
 		accuracy: 75,
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a 30% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "10% chance to lower foe's Defense by 1.",
+		shortDesc: "10% chance to lower the target's Defense by 1.",
 		id: "irontail",
 		name: "Iron Tail",
 		pp: 15,
@@ -5818,13 +5818,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"judgment": {
+	judgment: {
 		num: 449,
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
 		desc: "This move's type changes according to the user's held plate.",
-		shortDesc: "Type will change depending on the type of Plate.",
+		shortDesc: "Type varies based on the held Plate.",
 		id: "judgment",
 		name: "Judgment",
 		pp: 10,
@@ -5837,13 +5837,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"jumpkick": {
+	jumpkick: {
 		num: 26,
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
 		desc: "If this attack misses the target, the user half of its max health in recoil damage.",
-		shortDesc: "User takes 50% recoil if attack misses.",
+		shortDesc: "User is hurt by 50% of its max HP if it misses.",
 		id: "jumpkick",
 		name: "Jump Kick",
 		pp: 10,
@@ -5859,13 +5859,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"karatechop": {
+	karatechop: {
 		num: 2,
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a high critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "karatechop",
 		name: "Karate Chop",
 		pp: 25,
@@ -5876,7 +5876,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"kinesis": {
+	kinesis: {
 		num: 134,
 		accuracy: 80,
 		basePower: 0,
@@ -5894,13 +5894,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"knockoff": {
+	knockoff: {
 		num: 282,
 		accuracy: 100,
 		basePower: 20,
 		category: "Physical",
 		desc: "Disables the target's held item unless it has Sticky Hold or Multitype. Items lost to this move cannot be recovered by using Recycle.",
-		shortDesc: "Removes the foe's held item.",
+		shortDesc: "Removes the target's held item.",
 		id: "knockoff",
 		name: "Knock Off",
 		pp: 20,
@@ -5917,13 +5917,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"lastresort": {
+	lastresort: {
 		num: 387,
 		accuracy: 100,
 		basePower: 140,
 		category: "Physical",
 		desc: "Fails until each other move in the user's moveset has been performed at least once; the user must also know at least one other move.",
-		shortDesc: "Can only be used if all other moves have been tried.",
+		shortDesc: "Fails unless each known move has been used.",
 		id: "lastresort",
 		name: "Last Resort",
 		pp: 5,
@@ -5941,13 +5941,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"lavaplume": {
+	lavaplume: {
 		num: 436,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 30% chance to burn the target.",
-		shortDesc: "30% chance to burn the foe.",
+		shortDesc: "30% chance to burn adjacent Pokemon.",
 		id: "lavaplume",
 		name: "Lava Plume",
 		pp: 15,
@@ -5960,13 +5960,13 @@ exports.BattleMovedex = {
 		target: "adjacent",
 		type: "Fire"
 	},
-	"leafblade": {
+	leafblade: {
 		num: 348,
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a higher critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "leafblade",
 		name: "Leaf Blade",
 		pp: 15,
@@ -5978,13 +5978,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"leafstorm": {
+	leafstorm: {
 		num: 437,
 		accuracy: 90,
 		basePower: 140,
 		category: "Special",
 		desc: "Lowers the user's Special Attack by 2 stages after use.",
-		shortDesc: "Lowers the user's Sp. Attack by 2.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "leafstorm",
 		name: "Leaf Storm",
 		pp: 5,
@@ -5999,13 +5999,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"leaftornado": {
+	leaftornado: {
 		num: 536,
 		accuracy: 90,
 		basePower: 65,
 		category: "Special",
 		desc: "Has a 50% chance to lower the target's Accuracy by one level.",
-		shortDesc: "30% chance to lower foe's accuracy by 1.",
+		shortDesc: "50% chance to lower the target's Accuracy by 1.",
 		id: "leaftornado",
 		name: "Leaf Tornado",
 		pp: 10,
@@ -6019,13 +6019,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"leechlife": {
+	leechlife: {
 		num: 141,
 		accuracy: 100,
 		basePower: 20,
 		category: "Physical",
 		desc: "Restores the user's HP by 1/2 of the damage inflicted on the target.",
-		shortDesc: "Leeches 50% of the damage dealt.",
+		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "leechlife",
 		name: "Leech Life",
 		pp: 15,
@@ -6036,13 +6036,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"leechseed": {
+	leechseed: {
 		num: 73,
 		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		desc: "The user steals 1/8 of the target's max HP until the target is switched out, is KO'ed, or uses Rapid Spin; does not work against Grass-type Pokemon or Pokemon behind Substitutes.",
-		shortDesc: "Leeches 1/8 target's HP every turn.",
+		shortDesc: "1/8 of target's HP is restored to user every turn.",
 		id: "leechseed",
 		name: "Leech Seed",
 		pp: 10,
@@ -6078,13 +6078,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"leer": {
+	leer: {
 		num: 43,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Defense by 1 stage.",
-		shortDesc: "Lowers target's Defense one stage.",
+		shortDesc: "Lowers the foe(s) Defense by 1.",
 		id: "leer",
 		name: "Leer",
 		pp: 30,
@@ -6096,13 +6096,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Normal"
 	},
-	"lick": {
+	lick: {
 		num: 122,
 		accuracy: 100,
 		basePower: 20,
 		category: "Physical",
 		desc: "Has a 30% chance to paralyze the target.",
-		shortDesc: "30% chance to paralyze foe.",
+		shortDesc: "30% chance to paralyze the target.",
 		id: "lick",
 		name: "Lick",
 		pp: 30,
@@ -6115,13 +6115,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"lightscreen": {
+	lightscreen: {
 		num: 113,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "All Pokemon in the user's party receive 1/2 damage from Special attacks for 5 turns. Light Screen will be removed from the user's field if an opponent's Pokemon uses Brick Break. It will also last for eight turns if its user is holding Light Clay. In double battles, both Pokemon are shielded, but damage protection is reduced from 1/2 to 1/3.",
-		shortDesc: "Doubles allies' Sp. Defense for 5 turns.",
+		shortDesc: "For 5 turns, allies' Sp. Def is raised by 2 (or 4/3).",
 		id: "lightscreen",
 		name: "Light Screen",
 		pp: 30,
@@ -6155,13 +6155,13 @@ exports.BattleMovedex = {
 		target: "allies",
 		type: "Psychic"
 	},
-	"lockon": {
+	lockon: {
 		num: 199,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "This move ensures that the user's next attack will hit against its current target. This effect can be Baton Passed to another Pokemon. Lock-On fails against Pokemon in the middle of using Protect, Detect, Dig, Fly, Bounce or Dive, as well as Pokemon behind a Substitute. If the target uses Protect or Detect during its next turn, the user's next move has a [100 Varmove's normal accuracy]% chance to hit through Protect or Detect. OHKO moves do not benefit from this trait.",
-		shortDesc: "User's next move will not miss.",
+		shortDesc: "User's next move will not miss the target.",
 		id: "lockon",
 		name: "Lock-On",
 		pp: 5,
@@ -6178,7 +6178,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"lovelykiss": {
+	lovelykiss: {
 		num: 142,
 		accuracy: 75,
 		basePower: 0,
@@ -6195,7 +6195,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"lowkick": {
+	lowkick: {
 		num: 67,
 		accuracy: 100,
 		basePower: false,
@@ -6220,7 +6220,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Base power increases as the target's weight increases.",
-		shortDesc: "Damage is based on foe's weight.",
+		shortDesc: "More power the heavier the target.",
 		id: "lowkick",
 		name: "Low Kick",
 		pp: 20,
@@ -6231,13 +6231,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"lowsweep": {
+	lowsweep: {
 		num: 490,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "Lowers the target's Speed by one level.",
-		shortDesc: "Lowers foe's Speed by 1.",
+		shortDesc: "Lowers the target's Speed by 1.",
 		id: "lowsweep",
 		name: "Low Sweep",
 		pp: 20,
@@ -6252,13 +6252,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"luckychant": {
+	luckychant: {
 		num: 381,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Critical hits are prevented against every Pokemon on the user's team, even if the user is switched out, for five turns.",
-		shortDesc: "Prevents critical hits for 5 turns.",
+		shortDesc: "For 5 turns, shields user's party from critical hits.",
 		id: "luckychant",
 		name: "Lucky Chant",
 		pp: 30,
@@ -6278,13 +6278,13 @@ exports.BattleMovedex = {
 		target: "allies",
 		type: "Normal"
 	},
-	"lunardance": {
+	lunardance: {
 		num: 461,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user sacrifices itself so that its replacement will be cured of status conditions and have its HP and PP fully restored upon entering the field. This move fails if the user is the only non-fainted Pokemon on its team.",
-		shortDesc: "Faints the user. The replacement is healed fully.",
+		shortDesc: "User faints. Replacement is fully healed, with PP.",
 		id: "lunardance",
 		name: "Lunar Dance",
 		pp: 10,
@@ -6322,13 +6322,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"lusterpurge": {
+	lusterpurge: {
 		num: 295,
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
 		desc: "Has a 50% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "50% chance to lower the foe's Sp. Def. by 1.",
+		shortDesc: "50% chance to lower the target's Sp. Def by 1.",
 		id: "lusterpurge",
 		name: "Luster Purge",
 		pp: 5,
@@ -6342,13 +6342,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"machpunch": {
+	machpunch: {
 		num: 183,
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
 		desc: "Usually goes first.",
-		shortDesc: "The user always attacks first.",
+		shortDesc: "Usually goes first.",
 		id: "machpunch",
 		name: "Mach Punch",
 		pp: 30,
@@ -6360,7 +6360,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"magiccoat": {
+	magiccoat: {
 		num: 277,
 		accuracy: true,
 		basePower: 0,
@@ -6403,13 +6403,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"magicroom": {
+	magicroom: {
 		num: 478,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Held items have no effect for the next five turns.",
-		shortDesc: "Held items have no effect for 5 turns.",
+		shortDesc: "For 5 turns, all held items have no effect.",
 		id: "magicroom",
 		name: "Magic Room",
 		pp: 10,
@@ -6445,13 +6445,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"magicalleaf": {
+	magicalleaf: {
 		num: 345,
 		accuracy: true,
 		basePower: 60,
 		category: "Special",
 		desc: "Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig, Fly, Dive or Bounce.",
-		shortDesc: "Ignores accuracy modifiers.",
+		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "magicalleaf",
 		name: "Magical Leaf",
 		pp: 20,
@@ -6460,13 +6460,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"magmastorm": {
+	magmastorm: {
 		num: 463,
 		accuracy: 75,
 		basePower: 120,
 		category: "Special",
 		desc: "Traps the target for 5-6 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it is holding Shed Shell or uses Baton Pass or U-Turn.",
-		shortDesc: "Traps and damages over 5-6 turns.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "magmastorm",
 		name: "Magma Storm",
 		pp: 5,
@@ -6477,13 +6477,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"magnetbomb": {
+	magnetbomb: {
 		num: 443,
 		accuracy: true,
 		basePower: 60,
 		category: "Physical",
 		desc: "Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig, Fly, Dive or Bounce.",
-		shortDesc: "Ignores accuracy modifiers.",
+		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "magnetbomb",
 		name: "Magnet Bomb",
 		pp: 20,
@@ -6492,13 +6492,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"magnetrise": {
+	magnetrise: {
 		num: 393,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user receives immunity against Ground-type attacks for five turns.",
-		shortDesc: "5 turns. User becomes immune to Ground.",
+		shortDesc: "For 5 turns, the user is immune to Ground moves.",
 		id: "magnetrise",
 		name: "Magnet Rise",
 		pp: 10,
@@ -6521,7 +6521,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Electric"
 	},
-	"magnitude": {
+	magnitude: {
 		num: 222,
 		accuracy: 100,
 		basePower: false,
@@ -6552,7 +6552,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Deals variable damage, between 10 base power and 130 base power, as well as double damage against Digging Pokemon.",
-		shortDesc: "Damage varies. Double power against Dig.",
+		shortDesc: "Hits adjacent Pokemon. Power varies; 2x on Dig.",
 		id: "magnitude",
 		name: "Magnitude",
 		pp: 30,
@@ -6561,13 +6561,13 @@ exports.BattleMovedex = {
 		target: "adjacent",
 		type: "Ground"
 	},
-	"mefirst": {
+	mefirst: {
 		num: 382,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "This move fails if it goes last; if the target selects a damaging move for its turn, the user copies the move and performs it with 1.5x power. In a double battle, a move copied by Me First that targets a single Pokemon will hit a random opponent; Me First cannot target the user's teammate.",
-		shortDesc: "Copies the foe at 1.5x power. Must be faster.",
+		shortDesc: "Copies a foe at 1.5x power. User must be faster.",
 		id: "mefirst",
 		name: "Me First",
 		pp: 20,
@@ -6595,7 +6595,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"meanlook": {
+	meanlook: {
 		num: 212,
 		accuracy: true,
 		basePower: 0,
@@ -6615,13 +6615,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"meditate": {
+	meditate: {
 		num: 96,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack by 1 stage.",
-		shortDesc: "Boosts user's Attack by 1.",
+		shortDesc: "Boosts the user's Attack by 1.",
 		id: "meditate",
 		name: "Meditate",
 		pp: 40,
@@ -6634,13 +6634,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"megadrain": {
+	megadrain: {
 		num: 72,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "Restores the user's HP by 1/2 of the damage inflicted on the target.",
-		shortDesc: "Leeches 50% of the damage dealt.",
+		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "megadrain",
 		name: "Mega Drain",
 		pp: 15,
@@ -6650,7 +6650,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"megakick": {
+	megakick: {
 		num: 25,
 		accuracy: 75,
 		basePower: 120,
@@ -6667,7 +6667,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"megapunch": {
+	megapunch: {
 		num: 5,
 		accuracy: 85,
 		basePower: 80,
@@ -6684,7 +6684,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"megahorn": {
+	megahorn: {
 		num: 224,
 		accuracy: 85,
 		basePower: 120,
@@ -6701,13 +6701,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"memento": {
+	memento: {
 		num: 262,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "The user sacrifices itself to lower the target's Attack and Special Attack by 2 stages each.",
-		shortDesc: "User faints. Lowers Attack and Sp. Attack by 2",
+		shortDesc: "Lowers target's Attack, Sp. Atk by 2. User faints.",
 		id: "memento",
 		name: "Memento",
 		pp: 10,
@@ -6722,7 +6722,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"metalburst": {
+	metalburst: {
 		num: 368,
 		accuracy: 100,
 		basePower: false,
@@ -6735,7 +6735,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Fails unless the user goes last; if an opponent strikes with a Physical or a Special attack before the user's turn, the user retaliates for 1.5x the damage it had endured.",
-		shortDesc: "Counters foe's attack with 1.5x damage.",
+		shortDesc: "The foe takes 1.5x the damage it did to the user.",
 		id: "metalburst",
 		name: "Metal Burst",
 		pp: 10,
@@ -6744,13 +6744,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"metalclaw": {
+	metalclaw: {
 		num: 232,
 		accuracy: 95,
 		basePower: 50,
 		category: "Physical",
 		desc: "Has a 10% chance to raise the user's Attack by 1 stage.",
-		shortDesc: "10% chance to boost user's Attack by 1.",
+		shortDesc: "10% chance to boost the user's Attack by 1.",
 		id: "metalclaw",
 		name: "Metal Claw",
 		pp: 35,
@@ -6767,13 +6767,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"metalsound": {
+	metalsound: {
 		num: 319,
 		accuracy: 85,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Special Defense by 2 stages.",
-		shortDesc: "Lowers opponent's Sp. Defense by 2.",
+		shortDesc: "Lowers the target's Sp. Def by 2.",
 		id: "metalsound",
 		name: "Metal Sound",
 		pp: 40,
@@ -6786,13 +6786,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"meteormash": {
+	meteormash: {
 		num: 309,
 		accuracy: 85,
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a 20% chance to raise the user's Attack by 1 stage.",
-		shortDesc: "20% chance to boost user's Attack by 1.",
+		shortDesc: "20% chance to boost the user's Attack by 1.",
 		id: "meteormash",
 		name: "Meteor Mash",
 		pp: 10,
@@ -6811,7 +6811,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"metronome": {
+	metronome: {
 		num: 118,
 		accuracy: true,
 		basePower: 0,
@@ -6846,13 +6846,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"milkdrink": {
+	milkdrink: {
 		num: 208,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores 1/2 of the user's max HP.",
-		shortDesc: "Heals 50% of the user's max HP.",
+		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "milkdrink",
 		name: "Milk Drink",
 		pp: 10,
@@ -6863,13 +6863,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"mimic": {
+	mimic: {
 		num: 102,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "This move is temporarily replaced by the target's last move; the replacement move will have 5 PP and become part of the user's moveset until the user switches out or the battle ends. Mimic copies attacks even if they miss or the user has immunity toward their type; it cannot copy itself, Struggle, Transform, Sketch, Metronome or moves that the user already knows, and it will fail if the target has yet to use a move.",
-		shortDesc: "Copies the last move used by the target.",
+		shortDesc: "The last move the target used replaces this one.",
 		id: "mimic",
 		name: "Mimic",
 		pp: 10,
@@ -6878,13 +6878,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"mindreader": {
+	mindreader: {
 		num: 170,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "This move ensures that the user's next attack will hit against its current target. This effect can be Baton Passed to another Pokemon. Mind Reader fails against Pokemon in the middle of using Protect, Detect, Dig, Fly, Bounce or Dive, as well as Pokemon behind a Substitute. If the target uses Protect or Detect during its next turn, the user's next move has a [100 Varmove's normal accuracy]% chance to hit through Protect or Detect. OHKO moves do not benefit from this trait.",
-		shortDesc: "The user's next move will always hit.",
+		shortDesc: "User's next move will not miss the target.",
 		id: "mindreader",
 		name: "Mind Reader",
 		pp: 5,
@@ -6894,13 +6894,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"minimize": {
+	minimize: {
 		num: 107,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Evasion by 2 stages; however, Stomp and Steamroller gain doubled power against Minimized Pokemon.",
-		shortDesc: "Boosts evasion by 2.",
+		shortDesc: "Boosts the user's Evasion by 2.",
 		id: "minimize",
 		name: "Minimize",
 		pp: 20,
@@ -6913,13 +6913,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"miracleeye": {
+	miracleeye: {
 		num: 357,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Until the target faints or switches, if the target has positive Evasion boosts, they are ignored. Dark-type targets also lose their immunity against Psychic-type moves.",
-		shortDesc: "Blocks evasion mods. Psychic hits Dark.",
+		shortDesc: "Blocks Evasion mods. Psychic hits Dark.",
 		id: "miracleeye",
 		name: "Miracle Eye",
 		pp: 40,
@@ -6941,7 +6941,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"mirrorcoat": {
+	mirrorcoat: {
 		num: 243,
 		accuracy: 100,
 		basePower: false,
@@ -6954,7 +6954,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Almost always goes last; if an opponent strikes with a Special attack before the user's turn, the user retaliates for twice the damage it had endured. In double battles, this attack targets the last opponent to hit the user with a Special attack and cannot hit the user's teammate.",
-		shortDesc: "Counters special attack with double damage.",
+		shortDesc: "If hit by special attack, returns double damage.",
 		id: "mirrorcoat",
 		name: "Mirror Coat",
 		pp: 20,
@@ -6964,7 +6964,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"mirrormove": {
+	mirrormove: {
 		num: 119,
 		accuracy: true,
 		basePower: 0,
@@ -6987,13 +6987,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"mirrorshot": {
+	mirrorshot: {
 		num: 429,
 		accuracy: 85,
 		basePower: 65,
 		category: "Special",
 		desc: "Has a 30% chance to lower the target's Accuracy by 1 stage.",
-		shortDesc: "30% chance to lower foe's Accuracy by 1.",
+		shortDesc: "30% chance to lower the target's Accuracy by 1.",
 		id: "mirrorshot",
 		name: "Mirror Shot",
 		pp: 10,
@@ -7007,13 +7007,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"mist": {
+	mist: {
 		num: 54,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Protects every Pokemon on the user's team from negative stat modifiers caused by other Pokemon (including teammates), but not by itself, for five turns. The team's Accuracy and Evasion stats are also protected. Moves that cause negative stat modifiers as a secondary effect, such as Psychic, still deal their regular damage.",
-		shortDesc: "Prevents moves that lower stats from working.",
+		shortDesc: "For 5 turns, protects user's party from stat drops.",
 		id: "mist",
 		name: "Mist",
 		pp: 30,
@@ -7040,13 +7040,13 @@ exports.BattleMovedex = {
 		target: "allies",
 		type: "Ice"
 	},
-	"mistball": {
+	mistball: {
 		num: 296,
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
 		desc: "Has a 50% chance to lower the target's Special Attack by 1 stage.",
-		shortDesc: "50% chance to lower foe's Sp. Attack by 1.",
+		shortDesc: "50% chance to lower the target's Sp. Atk by 1.",
 		id: "mistball",
 		name: "Mist Ball",
 		pp: 5,
@@ -7060,13 +7060,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"moonlight": {
+	moonlight: {
 		num: 236,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores a fraction of the user's max HP depending on the weather: 2/3 during Sunny Day, 1/2 during regular weather and 1/4 during Rain Dance, Hail and Sandstorm.",
-		shortDesc: "Heals user variably depending on the Weather.",
+		shortDesc: "Heals the user by a weather-dependent amount.",
 		id: "moonlight",
 		name: "Moonlight",
 		pp: 5,
@@ -7081,13 +7081,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"morningsun": {
+	morningsun: {
 		num: 234,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores a fraction of the user's max HP depending on the weather: 2/3 during Sunny Day, 1/2 during regular weather and 1/4 during Rain Dance, Hail and Sandstorm.",
-		shortDesc: "Heals user variably depending on the Weather.",
+		shortDesc: "Heals the user by a weather-dependent amount.",
 		id: "morningsun",
 		name: "Morning Sun",
 		pp: 5,
@@ -7102,13 +7102,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"mudslap": {
+	mudslap: {
 		num: 189,
 		accuracy: 100,
 		basePower: 20,
 		category: "Special",
 		desc: "Has a 100% chance to lower the target's Accuracy by 1 stage.",
-		shortDesc: "Lowers foe's accuracy by 1.",
+		shortDesc: "Lowers the target's Accuracy by 1.",
 		id: "mudslap",
 		name: "Mud-Slap",
 		pp: 10,
@@ -7122,13 +7122,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"mudbomb": {
+	mudbomb: {
 		num: 426,
 		accuracy: 85,
 		basePower: 65,
 		category: "Special",
 		desc: "Has a 30% chance to lower the target's Accuracy by 1 stage.",
-		shortDesc: "30% chance to lower foe's accuracy by 1.",
+		shortDesc: "30% chance to lower the target's Accuracy by 1.",
 		id: "mudbomb",
 		name: "Mud Bomb",
 		pp: 10,
@@ -7142,13 +7142,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"mudshot": {
+	mudshot: {
 		num: 341,
 		accuracy: 95,
 		basePower: 55,
 		category: "Special",
 		desc: "Lowers the target's Speed by 1 stage.",
-		shortDesc: "Lowers foe's Speed by 1.",
+		shortDesc: "Lowers the target's Speed by 1.",
 		id: "mudshot",
 		name: "Mud Shot",
 		pp: 15,
@@ -7162,13 +7162,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"mudsport": {
+	mudsport: {
 		num: 300,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "All Electric-type moves are weakened by two-thirds until the user switches out.",
-		shortDesc: "Electric-type attacks do 1/3 damage.",
+		shortDesc: "Weakens Electric-type attacks to 1/3 their power.",
 		id: "mudsport",
 		name: "Mud Sport",
 		pp: 15,
@@ -7190,13 +7190,13 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Ground"
 	},
-	"muddywater": {
+	muddywater: {
 		num: 330,
 		accuracy: 85,
 		basePower: 95,
 		category: "Special",
 		desc: "Lowers the target's Accuracy by 1 stage.",
-		shortDesc: "30% chance to lower foe's Accuracy by 1.",
+		shortDesc: "30% chance to lower the foe(s) Accuracy by 1.",
 		id: "muddywater",
 		name: "Muddy Water",
 		pp: 10,
@@ -7211,13 +7211,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Water"
 	},
-	"nastyplot": {
+	nastyplot: {
 		num: 417,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack by 2 stages.",
-		shortDesc: "Boosts user's Sp. Attack by 2.",
+		shortDesc: "Boosts the user's Sp. Atk by 2.",
 		id: "nastyplot",
 		name: "Nasty Plot",
 		pp: 20,
@@ -7230,7 +7230,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Dark"
 	},
-	"naturalgift": {
+	naturalgift: {
 		num: 363,
 		accuracy: 100,
 		basePower: false,
@@ -7267,13 +7267,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"naturepower": {
+	naturepower: {
 		num: 267,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "The user generates another move depending on the battle's current terrain. It generates Seed Bomb in any type of grass (as well as in puddles), Hydro Pump while surfing on top of water, Rock Slide on any rocky outdoor terrain and inside of caves, Earthquake on beach sand, desert sand and dirt paths (as well as Wifi), Blizzard in snow, and Tri Attack everywhere else. In Battle Revolution, the move generates Tri Attack at Courtyard, Main Street and Neon, Seed Bomb at Sunny Park and Waterfall, Hydro Pump at Gateway, Rock Slide at Crystal, Magma and Stargazer and Earthquake at Sunset.",
-		shortDesc: "Attack changes based on terrain.",
+		shortDesc: "Attack changes based on terrain. (Earthquake)",
 		id: "naturepower",
 		name: "Nature Power",
 		pp: 20,
@@ -7286,13 +7286,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"needlearm": {
+	needlearm: {
 		num: 302,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to flinch the foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "needlearm",
 		name: "Needle Arm",
 		pp: 15,
@@ -7305,13 +7305,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"nightdaze": {
+	nightdaze: {
 		num: 539,
 		accuracy: 95,
 		basePower: 85,
 		category: "Special",
 		desc: "Has a 40% chance to lower the target's Accuracy by one level.",
-		shortDesc: "40% chance to lower foe's accuracy by 1.",
+		shortDesc: "40% chance to lower the target's Accuracy by 1.",
 		id: "nightdaze",
 		name: "Night Daze",
 		pp: 10,
@@ -7326,7 +7326,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"nightshade": {
+	nightshade: {
 		num: 101,
 		accuracy: 100,
 		basePower: false,
@@ -7343,13 +7343,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"nightslash": {
+	nightslash: {
 		num: 400,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a higher critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "nightslash",
 		name: "Night Slash",
 		pp: 15,
@@ -7361,13 +7361,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"nightmare": {
+	nightmare: {
 		num: 171,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "This move only works on a sleeping target; as long as the target remains asleep and in battle, 1/4 of its max HP is sapped after each turn.",
-		shortDesc: "Cuts 1/4 of sleeping target's max HP per turn.",
+		shortDesc: "A sleeping target is hurt by 1/4 max HP per turn.",
 		id: "nightmare",
 		name: "Nightmare",
 		pp: 15,
@@ -7394,13 +7394,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"octazooka": {
+	octazooka: {
 		num: 190,
 		accuracy: 85,
 		basePower: 65,
 		category: "Special",
 		desc: "Has a 50% chance to lower the target's Accuracy by 1 stage.",
-		shortDesc: "50% chance to lower foe's Accuracy by 1.",
+		shortDesc: "50% chance to lower the target's Accuracy by 1.",
 		id: "octazooka",
 		name: "Octazooka",
 		pp: 10,
@@ -7414,13 +7414,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"odorsleuth": {
+	odorsleuth: {
 		num: 316,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Until the target faints or switches, if the target has positive Evasion boosts, they are ignored. Ghost-type targets also lose their immunities against Normal-type and Fighting-type moves.",
-		shortDesc: "Blocks Evasion mods. Fight, Normal can hit Ghost.",
+		shortDesc: "Blocks Evasion mods. Fighting, Normal hit Ghost.",
 		id: "odorsleuth",
 		name: "Odor Sleuth",
 		pp: 40,
@@ -7431,7 +7431,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"ominouswind": {
+	ominouswind: {
 		num: 466,
 		accuracy: 100,
 		basePower: 60,
@@ -7457,7 +7457,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"outrage": {
+	outrage: {
 		num: 200,
 		accuracy: 100,
 		basePower: 120,
@@ -7477,13 +7477,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"overheat": {
+	overheat: {
 		num: 315,
 		accuracy: 90,
 		basePower: 140,
 		category: "Special",
 		desc: "Lowers the user's Special Attack by 2 stages after use.",
-		shortDesc: "Lowers user's Sp. Attack by 2.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "overheat",
 		name: "Overheat",
 		pp: 5,
@@ -7498,7 +7498,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"painsplit": {
+	painsplit: {
 		num: 220,
 		accuracy: true,
 		basePower: 0,
@@ -7520,7 +7520,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"payday": {
+	payday: {
 		num: 6,
 		accuracy: 100,
 		basePower: 40,
@@ -7535,7 +7535,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"payback": {
+	payback: {
 		num: 371,
 		accuracy: 100,
 		basePower: 50,
@@ -7553,7 +7553,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Base power is 50; power doubles if the target goes before the user.",
-		shortDesc: "Power doubles if the foe goes first.",
+		shortDesc: "Power doubles if the user moves after the target.",
 		id: "payback",
 		name: "Payback",
 		pp: 10,
@@ -7564,7 +7564,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"peck": {
+	peck: {
 		num: 64,
 		accuracy: 100,
 		basePower: 35,
@@ -7580,7 +7580,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"perishsong": {
+	perishsong: {
 		num: 195,
 		accuracy: true,
 		basePower: 0,
@@ -7617,7 +7617,7 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Normal"
 	},
-	"petaldance": {
+	petaldance: {
 		num: 80,
 		accuracy: 100,
 		basePower: 120,
@@ -7637,7 +7637,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"pinmissile": {
+	pinmissile: {
 		num: 42,
 		accuracy: 85,
 		basePower: 14,
@@ -7653,13 +7653,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"pluck": {
+	pluck: {
 		num: 365,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
 		desc: "The user eats the target's held berry and, if applicable, receives its benefits. Jaboca Berry will be removed without damaging the user, but Coba Berry will still activate and reduce this move's power.",
-		shortDesc: "User steals and eats the foe's Berry.",
+		shortDesc: "User steals and eats the target's Berry.",
 		id: "pluck",
 		name: "Pluck",
 		pp: 20,
@@ -7669,13 +7669,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"poisonfang": {
+	poisonfang: {
 		num: 305,
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
 		desc: "Has a 30% chance to inflict Toxic poison on the target.",
-		shortDesc: "30% chance to inflict Toxic on the opponent.",
+		shortDesc: "30% chance to badly poison the target.",
 		id: "poisonfang",
 		name: "Poison Fang",
 		pp: 15,
@@ -7688,13 +7688,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"poisongas": {
+	poisongas: {
 		num: 139,
 		accuracy: 80,
 		basePower: 0,
 		category: "Status",
 		desc: "Poisons the target.",
-		shortDesc: "Poisons the target.",
+		shortDesc: "Poisons the foe(s).",
 		id: "poisongas",
 		name: "Poison Gas",
 		pp: 40,
@@ -7704,13 +7704,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"poisonjab": {
+	poisonjab: {
 		num: 398,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
 		desc: "Has a 30% chance to poison the target.",
-		shortDesc: "30% chance to poison foe.",
+		shortDesc: "30% chance to poison the target.",
 		id: "poisonjab",
 		name: "Poison Jab",
 		pp: 20,
@@ -7724,7 +7724,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"poisonpowder": {
+	poisonpowder: {
 		num: 77,
 		accuracy: 75,
 		basePower: 0,
@@ -7741,13 +7741,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"poisonsting": {
+	poisonsting: {
 		num: 40,
 		accuracy: 100,
 		basePower: 15,
 		category: "Physical",
 		desc: "Has a 30% chance to poison the target.",
-		shortDesc: "30% chance to poison foe.",
+		shortDesc: "30% chance to poison the target.",
 		id: "poisonsting",
 		name: "Poison Sting",
 		pp: 35,
@@ -7759,13 +7759,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"poisontail": {
+	poisontail: {
 		num: 342,
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
 		desc: "Has a high critical hit ratio and a 10% chance to poison the target.",
-		shortDesc: "Has a high crit rate. 10% chance to poison.",
+		shortDesc: "High critical hit ratio. 10% chance to poison.",
 		id: "poisontail",
 		name: "Poison Tail",
 		pp: 25,
@@ -7779,7 +7779,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"pound": {
+	pound: {
 		num: 1,
 		accuracy: 100,
 		basePower: 40,
@@ -7795,13 +7795,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"powdersnow": {
+	powdersnow: {
 		num: 181,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "Has a 10% chance to freeze the target.",
-		shortDesc: "10% chance to freeze the foe.",
+		shortDesc: "10% chance to freeze the foe(s).",
 		id: "powdersnow",
 		name: "Powder Snow",
 		pp: 25,
@@ -7813,7 +7813,7 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Ice"
 	},
-	"powergem": {
+	powergem: {
 		num: 408,
 		accuracy: 100,
 		basePower: 70,
@@ -7828,13 +7828,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"powersplit": {
+	powersplit: {
 		num: 471,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Averages Attack and Special Attack with the target.",
-		shortDesc: "Averages Attack and Sp. Attack with the target.",
+		shortDesc: "Averages Attack and Sp. Atk stats with target.",
 		id: "powersplit",
 		name: "Power Split",
 		pp: 10,
@@ -7843,13 +7843,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"powerswap": {
+	powerswap: {
 		num: 384,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user swaps Attack and Special Attack modifiers with its target.",
-		shortDesc: "Switches Atk and SpA boosts with target's.",
+		shortDesc: "Swaps Attack and Sp. Atk changes with target.",
 		id: "powerswap",
 		name: "Power Swap",
 		pp: 10,
@@ -7872,7 +7872,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"powertrick": {
+	powertrick: {
 		num: 379,
 		accuracy: true,
 		basePower: 0,
@@ -7905,13 +7905,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"powerwhip": {
+	powerwhip: {
 		num: 438,
 		accuracy: 85,
 		basePower: 120,
 		category: "Physical",
 		desc: "Deals damage with no additional effect.",
-		shortDesc: "No additional effects.",
+		shortDesc: "No additional effect.",
 		id: "powerwhip",
 		name: "Power Whip",
 		pp: 10,
@@ -7922,13 +7922,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"present": {
+	present: {
 		num: 217,
 		accuracy: 90,
 		basePower: 0,
 		category: "Physical",
 		desc: "Randomly either attacks with a variable power, between 40 base power and 120 base power, or heals the target by 80 HP.",
-		shortDesc: "Does variable damage, or heals foe for 80 HP.",
+		shortDesc: "40, 80, 120 power, or may heal target by 80 HP.",
 		id: "present",
 		name: "Present",
 		pp: 15,
@@ -7949,13 +7949,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"protect": {
+	protect: {
 		num: 182,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes first. The user is protected from all attacks for one turn, but the move's success rate halves with each consecutive use of Protect, Detect or Endure. If a Pokemon has No Guard, or used Lock-On or Mind Reader against the user during the previous turn, its attack has a [100 Varmove's normal accuracy]% chance to hit through Protect; OHKO moves do not benefit from this effect. Blizzard has a 30% to hit through this move during Hail, as does Thunder during Rain Dance.",
-		shortDesc: "Prevents moves from affecting user for a turn.",
+		shortDesc: "Prevents moves from affecting the user for a turn.",
 		id: "protect",
 		name: "Protect",
 		pp: 10,
@@ -8009,13 +8009,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"psybeam": {
+	psybeam: {
 		num: 60,
 		accuracy: 100,
 		basePower: 65,
 		category: "Special",
 		desc: "Has a 10% chance to confuse the target.",
-		shortDesc: "10% chance to confuse the foe.",
+		shortDesc: "10% chance to confuse the target.",
 		id: "psybeam",
 		name: "Psybeam",
 		pp: 20,
@@ -8027,13 +8027,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"psychup": {
+	psychup: {
 		num: 244,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user copies all six of the target's current stat modifiers.",
-		shortDesc: "Copies the target's stat boosts.",
+		shortDesc: "Copies the target's stat changes.",
 		id: "psychup",
 		name: "Psych Up",
 		pp: 10,
@@ -8053,13 +8053,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"psychic": {
+	psychic: {
 		num: 94,
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
 		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower foe's Sp. Def. by 1.",
+		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
 		id: "psychic",
 		name: "Psychic",
 		pp: 10,
@@ -8074,13 +8074,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"psychoboost": {
+	psychoboost: {
 		num: 354,
 		accuracy: 90,
 		basePower: 140,
 		category: "Special",
 		desc: "Lowers the user's Special Attack by 2 stages after use.",
-		shortDesc: "Lowers user's Sp. Attack by 2.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "psychoboost",
 		name: "Psycho Boost",
 		pp: 5,
@@ -8095,13 +8095,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"psychocut": {
+	psychocut: {
 		num: 427,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a higher critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "psychocut",
 		name: "Psycho Cut",
 		pp: 20,
@@ -8112,13 +8112,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"psychoshift": {
+	psychoshift: {
 		num: 375,
 		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		desc: "The user is cured of status effects by passing them to a healthy target.",
-		shortDesc: "Transfers status ailments to the opponent.",
+		shortDesc: "Transfers the user's status ailment to the target.",
 		id: "psychoshift",
 		name: "Psycho Shift",
 		pp: 10,
@@ -8136,14 +8136,14 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"psyshock": {
+	psyshock: {
 		num: 473,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		defensiveCategory: "Physical",
 		desc: "Inflicts damage based on the target's Defense, not Special Defense.",
-		shortDesc: "Damage is based on foe's Defense stat.",
+		shortDesc: "Damages target based on Defense, not Sp. Def.",
 		id: "psyshock",
 		name: "Psyshock",
 		pp: 10,
@@ -8153,14 +8153,14 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"psystrike": {
+	psystrike: {
 		num: 540,
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
 		defensiveCategory: "Physical",
 		desc: "Inflicts damage based on the target's Defense, not Special Defense.",
-		shortDesc: "Damage is based on foe's Defense stat.",
+		shortDesc: "Damages target based on Defense, not Sp. Def.",
 		id: "psystrike",
 		name: "Psystrike",
 		pp: 10,
@@ -8170,7 +8170,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"psywave": {
+	psywave: {
 		num: 149,
 		accuracy: 80,
 		basePower: false,
@@ -8188,7 +8188,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"punishment": {
+	punishment: {
 		num: 386,
 		accuracy: 100,
 		basePower: 60,
@@ -8197,7 +8197,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Does more damage to foes with stat boosts.",
-		shortDesc: "+20 power for each of foe's stat boosts.",
+		shortDesc: "+20 power for each of the target's stat boosts.",
 		id: "punishment",
 		name: "Punishment",
 		pp: 5,
@@ -8207,7 +8207,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"pursuit": {
+	pursuit: {
 		num: 228,
 		accuracy: 100,
 		basePower: 40,
@@ -8221,7 +8221,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "If the target switches out on the current turn, this move strikes with doubled power before the switch. Baton Passers still escape safely. When a faster Pokemon uses Pursuit against a U-Turner, the U-Turner is hit for normal damage; when a slower Pokemon uses Pursuit against a U-Turner, the U-Turner makes its attack, then is hit by Pursuit for double power, and switches out.",
-		shortDesc: "Doubles power if foe is switching.",
+		shortDesc: "Power doubles if the target is switching out.",
 		id: "pursuit",
 		name: "Pursuit",
 		pp: 20,
@@ -8255,7 +8255,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"quash": {
+	quash: {
 		num: 511,
 		accuracy: 100,
 		basePower: false,
@@ -8270,7 +8270,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"quickattack": {
+	quickattack: {
 		num: 98,
 		accuracy: 100,
 		basePower: 40,
@@ -8287,13 +8287,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"quickguard": {
+	quickguard: {
 		num: 501,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Prevents priority attacks from working.",
-		shortDesc: "Prevents priority attacks from working.",
+		shortDesc: "Protects allies from priority attacks for one turn.",
 		id: "quickguard",
 		name: "Quick Guard",
 		pp: 15,
@@ -8341,13 +8341,13 @@ exports.BattleMovedex = {
 		target: "allySide",
 		type: "Fighting"
 	},
-	"quiverdance": {
+	quiverdance: {
 		num: 483,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Raises the user's Special Attack, Special Defense, and Speed by one stage.",
-		shortDesc: "Boosts Sp. Attack, Sp. Defense and Speed by 1.",
+		shortDesc: "Boosts the user's Sp. Atk, Sp. Def, Speed by 1.",
 		id: "quiverdance",
 		name: "Quiver Dance",
 		pp: 20,
@@ -8362,13 +8362,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Bug"
 	},
-	"rage": {
+	rage: {
 		num: 99,
 		accuracy: 100,
 		basePower: 20,
 		category: "Physical",
 		desc: "The user's Attack rises by 1 stage if attacked before its next move.",
-		shortDesc: "Boosts user's Attack by 1 if hit.",
+		shortDesc: "Boosts the user's Attack by 1 if hit during use.",
 		id: "rage",
 		name: "Rage",
 		pp: 20,
@@ -8378,13 +8378,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"ragepowder": {
+	ragepowder: {
 		num: 476,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "All moves target the user.",
-		shortDesc: "All moves target the user.",
+		shortDesc: "The foes' moves target the user on the turn used.",
 		id: "ragepowder",
 		name: "Rage Powder",
 		pp: 20,
@@ -8393,13 +8393,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"raindance": {
+	raindance: {
 		num: 240,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Cancels all other weather moves. For 5 turns: the power of Water attacks is increased by 50%, the power of Fire attacks is decreased by 50%, Thunder never misses and has a 30% chance to hit through Protect and Detect, the power of Solarbeam is halved, and the healing power of Morning Sun, Synthesis and Moonlight is decreased from 1/2 to 1/4 of the user's max HP. The effects of Rain Dance will last for eight turns if its user is holding Damp Rock.",
-		shortDesc: "Summons rain for five turns.",
+		shortDesc: "For 5 turns, heavy rain powers Water moves.",
 		id: "raindance",
 		name: "Rain Dance",
 		pp: 5,
@@ -8410,13 +8410,13 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Water"
 	},
-	"rapidspin": {
+	rapidspin: {
 		num: 229,
 		accuracy: 100,
 		basePower: 20,
 		category: "Physical",
 		desc: "Removes Spikes, Stealth Rock, Toxic Spikes and Leech Seed from the user's side of the field; also frees the user from Bind, Clamp, Fire Spin, Magma Storm, Sand Tomb, Whirlpool and Wrap. These effects do not occur if the move misses or is used against Ghost-type Pokemon.",
-		shortDesc: "Removes Leech Seed and entry hazards.",
+		shortDesc: "Frees user from hazards, partial trap, Leech Seed.",
 		id: "rapidspin",
 		name: "Rapid Spin",
 		pp: 40,
@@ -8442,13 +8442,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"razorleaf": {
+	razorleaf: {
 		num: 75,
 		accuracy: 95,
 		basePower: 55,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a higher critical hit ratio.",
+		shortDesc: "High critical hit ratio. Hits adjacent foes.",
 		id: "razorleaf",
 		name: "Razor Leaf",
 		pp: 25,
@@ -8458,13 +8458,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Grass"
 	},
-	"razorshell": {
+	razorshell: {
 		num: 534,
 		accuracy: 95,
 		basePower: 75,
 		category: "Physical",
 		desc: "Has a 50% chance to lower the target's Defense by one level.",
-		shortDesc: "50% chance to lower foe's Defense by 1.",
+		shortDesc: "50% chance to lower the target's Defense by 1.",
 		id: "razorshell",
 		name: "Razor Shell",
 		pp: 10,
@@ -8480,13 +8480,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"razorwind": {
+	razorwind: {
 		num: 13,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "The user prepares on turn one, becoming uncontrollable, and then attacks on turn two. Has a high critical hit ratio.",
-		shortDesc: "Charges turn 1. Attacks turn 2. High crit rate.",
+		shortDesc: "Charges, then hits foe(s) turn 2. High crit ratio.",
 		id: "razorwind",
 		name: "Razor Wind",
 		pp: 10,
@@ -8509,13 +8509,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Normal"
 	},
-	"recover": {
+	recover: {
 		num: 105,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores 1/2 of the user's max HP.",
-		shortDesc: "Heals 50% of the user's max HP.",
+		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "recover",
 		name: "Recover",
 		pp: 10,
@@ -8526,13 +8526,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"recycle": {
+	recycle: {
 		num: 278,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's lost item is recovered. Items lost to Fling or Natural Gift will be recovered if the user of Recycle was the item's original holder; items lost to Trick, Switcheroo, Thief, Covet, Knock Off, Bug Bite, or Pluck cannot be recovered.",
-		shortDesc: "Restores a used item.",
+		shortDesc: "Restores the item the user last used.",
 		id: "recycle",
 		name: "Recycle",
 		pp: 10,
@@ -8547,13 +8547,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"reflect": {
+	reflect: {
 		num: 115,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "All Pokemon in the user's party receive 1/2 damage from Physical attacks for 5 turns. Reflect will be removed from the user's field if an opponent's Pokemon uses Brick Break. It will also last for eight turns if its user is holding Light Clay. In double battles, both Pokemon are shielded, but damage protection is reduced from 1/2 to 1/3.",
-		shortDesc: "Doubles allies' Defense for 5 turns.",
+		shortDesc: "For 5 turns, allies' Defense is raised by 2 (or 4/3).",
 		id: "reflect",
 		name: "Reflect",
 		pp: 20,
@@ -8587,7 +8587,7 @@ exports.BattleMovedex = {
 		target: "allies",
 		type: "Psychic"
 	},
-	"reflecttype": {
+	reflecttype: {
 		num: 513,
 		accuracy: true,
 		basePower: false,
@@ -8615,7 +8615,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"refresh": {
+	refresh: {
 		num: 287,
 		accuracy: true,
 		basePower: 0,
@@ -8634,13 +8634,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"relicsong": {
+	relicsong: {
 		num: 547,
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
 		desc: "has a 10% chance of putting the target to sleep. Ancient Song hits all opponents in double battles and hits all adjacent opponents in triple battles. When used by Meloetta in battle, it will also cause it to change between its Voice and Step Formes.",
-		shortDesc: "10% sleep chance. Changes Meloetta formes.",
+		shortDesc: "10% chance to sleep foe(s). Meloetta transforms.",
 		id: "relicsong",
 		name: "Relic Song",
 		pp: 10,
@@ -8665,13 +8665,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"rest": {
+	rest: {
 		num: 156,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user is cured of status effects (not confusion), and recovers full HP, but falls asleep for 2 turns. Pokemon who have Early Bird will wake up one turn early.",
-		shortDesc: "User restores all HP and sleeps 2 turns.",
+		shortDesc: "User sleeps 2 turns and restores HP and status.",
 		id: "rest",
 		name: "Rest",
 		pp: 10,
@@ -8690,13 +8690,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	"retaliate": {
+	retaliate: {
 		num: 514,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Power doubles if the user's teammate fainted last turn.",
-		shortDesc: "Power doubles if ally fainted last turn.",
+		shortDesc: "Power doubles if an ally fainted last turn.",
 		id: "retaliate",
 		name: "Retaliate",
 		pp: 5,
@@ -8706,13 +8706,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"return": {
+	return: {
 		num: 216,
 		accuracy: 100,
 		basePower: false,
 		category: "Physical",
 		desc: "Power increases as user's happiness increases; maximum 102 BP.",
-		shortDesc: "Up to 102 power at max happiness.",
+		shortDesc: "Max 102 power at maximum Happiness.",
 		id: "return",
 		name: "Return",
 		pp: 20,
@@ -8723,7 +8723,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"revenge": {
+	revenge: {
 		num: 279,
 		accuracy: 100,
 		basePower: 60,
@@ -8736,7 +8736,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Almost always goes last, even after another Pokemon's Focus Punch; this move's base power doubles if the user is damaged before its turn.",
-		shortDesc: "Doubles in power if user is damaged by opponent.",
+		shortDesc: "Power doubles if user is damaged by the target.",
 		id: "revenge",
 		name: "Revenge",
 		pp: 10,
@@ -8746,7 +8746,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"reversal": {
+	reversal: {
 		num: 179,
 		accuracy: 100,
 		basePower: false,
@@ -8771,7 +8771,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Base power increases as the user's HP decreases.",
-		shortDesc: "Does more damage as user's HP decreases.",
+		shortDesc: "More power the less HP the user has left.",
 		id: "reversal",
 		name: "Reversal",
 		pp: 15,
@@ -8782,13 +8782,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"roar": {
+	roar: {
 		num: 46,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles. Has no effect if the target has Suction Cups, Soundproof or used Ingrain.",
-		shortDesc: "Forces the target to switch to a random Pokemon.",
+		shortDesc: "Forces the target to switch to a random ally.",
 		id: "roar",
 		name: "Roar",
 		pp: 20,
@@ -8801,7 +8801,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"roaroftime": {
+	roaroftime: {
 		num: 459,
 		accuracy: 90,
 		basePower: 150,
@@ -8819,7 +8819,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"rockblast": {
+	rockblast: {
 		num: 350,
 		accuracy: 90,
 		basePower: 25,
@@ -8836,13 +8836,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"rockclimb": {
+	rockclimb: {
 		num: 431,
 		accuracy: 85,
 		basePower: 90,
 		category: "Physical",
 		desc: "Has a 20% chance to confuse the target.",
-		shortDesc: "20% chance to confuse the foe.",
+		shortDesc: "20% chance to confuse the target.",
 		id: "rockclimb",
 		name: "Rock Climb",
 		pp: 20,
@@ -8855,13 +8855,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"rockpolish": {
+	rockpolish: {
 		num: 397,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Speed by 2 stages.",
-		shortDesc: "Boosts user's Speed by 2.",
+		shortDesc: "Boosts the user's Speed by 2.",
 		id: "rockpolish",
 		name: "Rock Polish",
 		pp: 20,
@@ -8874,14 +8874,14 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Rock"
 	},
-	"rockslide": {
+	rockslide: {
 		num: 157,
 		accuracy: 90,
 		basePower: 75,
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch.",
 		id: "rockslide",
-		shortDesc: "30% chance to flinch the foe.",
+		shortDesc: "30% chance to flinch the foe(s).",
 		name: "Rock Slide",
 		pp: 10,
 		isViable: true,
@@ -8893,13 +8893,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Rock"
 	},
-	"rocksmash": {
+	rocksmash: {
 		num: 249,
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
 		desc: "Has a 50% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "50% chance to lower the foe's Defense by 1.",
+		shortDesc: "50% chance to lower the target's Defense by 1.",
 		id: "rocksmash",
 		name: "Rock Smash",
 		pp: 15,
@@ -8914,7 +8914,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"rockthrow": {
+	rockthrow: {
 		num: 88,
 		accuracy: 90,
 		basePower: 50,
@@ -8929,13 +8929,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"rocktomb": {
+	rocktomb: {
 		num: 317,
 		accuracy: 80,
 		basePower: 50,
 		category: "Physical",
 		desc: "Lowers the target's Speed by 1 stage.",
-		shortDesc: "Lowers the foe's Speed by 1.",
+		shortDesc: "Lowers the target's Speed by 1.",
 		id: "rocktomb",
 		name: "Rock Tomb",
 		pp: 10,
@@ -8949,7 +8949,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"rockwrecker": {
+	rockwrecker: {
 		num: 439,
 		accuracy: 90,
 		basePower: 150,
@@ -8967,13 +8967,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"roleplay": {
+	roleplay: {
 		num: 272,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's own ability is overwritten with the target's ability; does nothing if the target's ability is Multitype or Wonder Guard.",
-		shortDesc: "Copies the target's ability. Replaces the user's.",
+		shortDesc: "User replaces its Ability with the target's.",
 		id: "roleplay",
 		name: "Role Play",
 		pp: 10,
@@ -8994,13 +8994,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"rollingkick": {
+	rollingkick: {
 		num: 27,
 		accuracy: 85,
 		basePower: 60,
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to flinch the foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "rollingkick",
 		name: "Rolling Kick",
 		pp: 15,
@@ -9013,7 +9013,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"rollout": {
+	rollout: {
 		num: 205,
 		accuracy: 90,
 		basePower: 30,
@@ -9032,7 +9032,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "The user attacks uncontrollably for five turns; this move's power doubles after each turn and also if Defense Curl was used beforehand. Its power resets after five turns have ended or if the attack misses.",
-		shortDesc: "Doubles in power with each hit. Repeats for 5 turns.",
+		shortDesc: "Power doubles with each hit. Repeats for 5 turns.",
 		id: "rollout",
 		name: "Rollout",
 		pp: 20,
@@ -9070,13 +9070,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"roost": {
+	roost: {
 		num: 355,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user recovers 1/2 of its max HP; if it is a Flying-type Pokemon, it also loses its Flying-type classification until the start of the next turn.",
-		shortDesc: "Heals 50% HP. Temporarily removes Flying-type.",
+		shortDesc: "Heals 50% HP. Removes Flying-type 'til turn ends.",
 		id: "roost",
 		name: "Roost",
 		pp: 10,
@@ -9105,13 +9105,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Flying"
 	},
-	"round": {
+	round: {
 		num: 496,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
 		desc: "Canon will damage the entire opposing team in a double or triple battle if it hits. It will double in power if used consecutively by teammates and will be used by teammates directly after the fist user regardless of speed.",
-		shortDesc: "Power doubles if ally uses Round in same turn.",
+		shortDesc: "Power doubles if an ally used Round this turn.",
 		id: "round",
 		name: "Round",
 		pp: 15,
@@ -9121,13 +9121,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"sacredfire": {
+	sacredfire: {
 		num: 221,
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a 50% chance to burn the target; can be used while frozen, which both attacks the target normally and thaws the user.",
-		shortDesc: "50% chance to burn opponent. Thaws the user.",
+		shortDesc: "50% chance to burn the target. Thaws user.",
 		id: "sacredfire",
 		name: "Sacred Fire",
 		pp: 5,
@@ -9141,13 +9141,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"sacredsword": {
+	sacredsword: {
 		num: 533,
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
 		desc: "The stat modifications of the target's Defense and Evasion are ignored when using this attack. However, Sacred Sword does not bypass Reflect.",
-		shortDesc: "Ignores foe's stat changes.",
+		shortDesc: "Ignores the target's stat modifiers.",
 		id: "sacredsword",
 		name: "Sacred Sword",
 		pp: 20,
@@ -9160,13 +9160,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"safeguard": {
+	safeguard: {
 		num: 219,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Protects the user's entire team from status conditions for five turns.",
-		shortDesc: "Protects user's team from status for 5 turns.",
+		shortDesc: "For 5 turns, protects user's party from status.",
 		id: "safeguard",
 		name: "Safeguard",
 		pp: 25,
@@ -9203,13 +9203,13 @@ exports.BattleMovedex = {
 		target: "allies",
 		type: "Normal"
 	},
-	"sandattack": {
+	sandattack: {
 		num: 28,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Accuracy by 1 stage.",
-		shortDesc: "Lowers target's accuracy 1 stage.",
+		shortDesc: "Lowers the target's Accuracy by 1.",
 		id: "sandattack",
 		name: "Sand-Attack",
 		pp: 15,
@@ -9221,13 +9221,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"sandtomb": {
+	sandtomb: {
 		num: 328,
 		accuracy: 85,
 		basePower: 35,
 		category: "Physical",
 		desc: "Traps the target for 5-6 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it is holding Shed Shell or uses Baton Pass or U-Turn.",
-		shortDesc: "Traps and damages foe over 4-5 turns.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "sandtomb",
 		name: "Sand Tomb",
 		pp: 15,
@@ -9237,13 +9237,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ground"
 	},
-	"sandstorm": {
+	sandstorm: {
 		num: 201,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Cancels all other weather moves. For 5 turns: the Special Defense of Rock-type Pokemon is boosted by 50%, each active Pokemon, even when protected by a Substitute, loses 1/16 of its max HP unless it has Sand Veil or is a Ground-, Rock-, or Steel-type, the power of Solarbeam is halved, and the healing power of Morning Sun, Synthesis and Moonlight is halved. The effects of Sandstorm will last for eight turns if its user is holding Smooth Rock.",
-		shortDesc: "Summons a sandstorm for five turns.",
+		shortDesc: "For 5 turns, a sandstorm rages.",
 		id: "sandstorm",
 		name: "Sandstorm",
 		pp: 10,
@@ -9253,13 +9253,13 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Rock"
 	},
-	"scald": {
+	scald: {
 		num: 503,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 30% chance to burn the target.",
-		shortDesc: "30% chance to burn foe. Thaws the user.",
+		shortDesc: "30% chance to burn the target. Thaws user.",
 		id: "scald",
 		name: "Scald",
 		pp: 15,
@@ -9273,7 +9273,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"scaryface": {
+	scaryface: {
 		num: 184,
 		accuracy: 100,
 		basePower: 0,
@@ -9291,7 +9291,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"scratch": {
+	scratch: {
 		num: 10,
 		accuracy: 100,
 		basePower: 40,
@@ -9307,7 +9307,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"screech": {
+	screech: {
 		num: 103,
 		accuracy: 85,
 		basePower: 0,
@@ -9326,13 +9326,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"searingshot": {
+	searingshot: {
 		num: 545,
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
 		desc: "Has a 30% chance to burn the target.",
-		shortDesc: "30% chance to burn the foe.",
+		shortDesc: "30% chance to burn adjacent Pokemon.",
 		id: "searingshot",
 		name: "Searing Shot",
 		pp: 5,
@@ -9345,13 +9345,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"secretpower": {
+	secretpower: {
 		num: 290,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "This move has a 30% chance to inflict a side effect depending on the battle's current terrain. The target may be put to sleep in any type of grass (or in puddles), its Attack may be lowered by 1 stage while surfing on any body of water, its Speed may be lowered by 1 stage while on marshy terrain, its Accuracy may be lowered by 1 stage on beach sand, desert sand and dirt paths (and also in Wifi battles), it may flinch in caves or on rocky outdoor terrain, it may become frozen on snowy terrain and it may become paralyzed everywhere else.",
-		shortDesc: "Effect varies with terrain.",
+		shortDesc: "Effect varies with terrain. (30% paralysis chance)",
 		id: "secretpower",
 		name: "Secret Power",
 		pp: 20,
@@ -9362,14 +9362,14 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"secretsword": {
+	secretsword: {
 		num: 548,
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
 		defensiveCategory: "Physical",
 		desc: "Inflicts damage based on the target's Defense, not Special Defense.",
-		shortDesc: "Damage is based on foe's Defense stat.",
+		shortDesc: "Damages target based on Defense, not Sp. Def.",
 		id: "secretsword",
 		name: "Secret Sword",
 		pp: 10,
@@ -9379,7 +9379,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"seedbomb": {
+	seedbomb: {
 		num: 402,
 		accuracy: 100,
 		basePower: 80,
@@ -9395,13 +9395,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"seedflare": {
+	seedflare: {
 		num: 465,
 		accuracy: 85,
 		basePower: 120,
 		category: "Special",
 		desc: "Has a 40% chance to lower the target's Special Defense by 2 stages.",
-		shortDesc: "40% chance to lower foe's Sp. Def. by 2.",
+		shortDesc: "40% chance to lower the target's Sp. Def by 2.",
 		id: "seedflare",
 		name: "Seed Flare",
 		pp: 5,
@@ -9416,7 +9416,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"seismictoss": {
+	seismictoss: {
 		num: 69,
 		accuracy: 100,
 		basePower: false,
@@ -9434,13 +9434,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"selfdestruct": {
+	selfdestruct: {
 		num: 120,
 		accuracy: 100,
 		basePower: 200,
 		category: "Physical",
 		desc: "Causes the user to faint.",
-		shortDesc: "The user faints afterwards.",
+		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		id: "selfdestruct",
 		name: "Selfdestruct",
 		pp: 5,
@@ -9450,13 +9450,13 @@ exports.BattleMovedex = {
 		target: "adjacent",
 		type: "Normal"
 	},
-	"shadowball": {
+	shadowball: {
 		num: 247,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 20% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower the target's Sp. Def. by 1.",
+		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
 		id: "shadowball",
 		name: "Shadow Ball",
 		pp: 15,
@@ -9471,13 +9471,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"shadowclaw": {
+	shadowclaw: {
 		num: 421,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a higher critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "shadowclaw",
 		name: "Shadow Claw",
 		pp: 15,
@@ -9489,13 +9489,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"shadowforce": {
+	shadowforce: {
 		num: 467,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
 		desc: "The user disappears on the first turn, becoming uncontrollable and evading all attacks, and strikes on the second turn. This move is not stopped by Protect or Detect.",
-		shortDesc: "User disappears on turn 1, strikes on turn 2.",
+		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection.",
 		id: "shadowforce",
 		name: "Shadow Force",
 		pp: 5,
@@ -9523,13 +9523,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"shadowpunch": {
+	shadowpunch: {
 		num: 325,
 		accuracy: true,
 		basePower: 60,
 		category: "Physical",
 		desc: "Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig, Fly, Dive or Bounce.",
-		shortDesc: "Ignores accuracy modifiers.",
+		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "shadowpunch",
 		name: "Shadow Punch",
 		pp: 20,
@@ -9541,7 +9541,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"shadowsneak": {
+	shadowsneak: {
 		num: 425,
 		accuracy: 100,
 		basePower: 40,
@@ -9558,13 +9558,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"sharpen": {
+	sharpen: {
 		num: 159,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack by 1 stage.",
-		shortDesc: "Boost the user's Attack by 1.",
+		shortDesc: "Boosts the user's Attack by 1.",
 		id: "sharpen",
 		name: "Sharpen",
 		pp: 30,
@@ -9577,13 +9577,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"sheercold": {
+	sheercold: {
 		num: 329,
 		accuracy: 30,
 		basePower: false,
 		category: "Special",
 		desc: "The target faints; doesn't work on higher-leveled Pokemon.",
-		shortDesc: "Will OHKO the foe.",
+		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		id: "sheercold",
 		name: "Sheer Cold",
 		pp: 5,
@@ -9593,13 +9593,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
-	"shellsmash": {
+	shellsmash: {
 		num: 504,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Raises Attack, Special Attack and Speed by two stages. Decreases Defense and Special Defense by one stage.",
-		shortDesc: "Boosts Atk, SpA, Spe by 2. Def, SpD down 1.",
+		shortDesc: "Boosts Atk, SpA, Spe by 2. Lowers Def, SpD by 1.",
 		id: "shellsmash",
 		name: "Shell Smash",
 		pp: 15,
@@ -9616,13 +9616,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"shiftgear": {
+	shiftgear: {
 		num: 508,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Gear Change increases the user's Speed by two stages and the user's Attack by one stage.",
-		shortDesc: "Boosts Speed by 2 and Attack by 1.",
+		shortDesc: "Boosts the user's Speed by 2 and Attack by 1.",
 		id: "shiftgear",
 		name: "Shift Gear",
 		pp: 10,
@@ -9636,13 +9636,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Steel"
 	},
-	"shockwave": {
+	shockwave: {
 		num: 351,
 		accuracy: true,
 		basePower: 60,
 		category: "Special",
 		desc: "Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig, Fly, Dive or Bounce.",
-		shortDesc: "Ignores accuracy modifiers.",
+		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "shockwave",
 		name: "Shock Wave",
 		pp: 20,
@@ -9651,13 +9651,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"signalbeam": {
+	signalbeam: {
 		num: 324,
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
 		desc: "Has a 10% chance to confuse the target.",
-		shortDesc: "10% chance to confuse the foe.",
+		shortDesc: "10% chance to confuse the target.",
 		id: "signalbeam",
 		name: "Signal Beam",
 		pp: 15,
@@ -9670,7 +9670,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"silverwind": {
+	silverwind: {
 		num: 318,
 		accuracy: 100,
 		basePower: 60,
@@ -9696,13 +9696,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"simplebeam": {
+	simplebeam: {
 		num: 493,
 		accuracy: 100,
 		basePower: false,
 		category: "Status",
 		desc: "Changes the foe's ability to Simple.",
-		shortDesc: "The target's ability becomes Simple.",
+		shortDesc: "The target's Ability becomes Simple.",
 		id: "simplebeam",
 		name: "Simple Beam",
 		pp: 15,
@@ -9724,7 +9724,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"sing": {
+	sing: {
 		num: 47,
 		accuracy: 55,
 		basePower: 0,
@@ -9741,7 +9741,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"sketch": {
+	sketch: {
 		num: 166,
 		accuracy: true,
 		basePower: 0,
@@ -9758,13 +9758,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"skillswap": {
+	skillswap: {
 		num: 285,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user exchanges abilities with the target; does not work if Wonder Guard is the ability of either the user or the target.",
-		shortDesc: "The user and the target trade abilities.",
+		shortDesc: "The user and the target trade Abilities.",
 		id: "skillswap",
 		name: "Skill Swap",
 		pp: 10,
@@ -9788,13 +9788,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"skullbash": {
+	skullbash: {
 		num: 130,
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
 		desc: "The user prepares on turn one, raising its Defense by 1 stage and becoming uncontrollable, and then attacks on turn two.",
-		shortDesc: "Boosts Def. on turn 1. Attacks on turn 2.",
+		shortDesc: "Boosts user's Defense by 1 on turn 1. Hits turn 2.",
 		id: "skullbash",
 		name: "Skull Bash",
 		pp: 15,
@@ -9820,13 +9820,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"skyattack": {
+	skyattack: {
 		num: 143,
 		accuracy: 90,
 		basePower: 140,
 		category: "Physical",
 		desc: "The user prepares on turn one, becoming uncontrollable, and then attacks on turn two. Also has a 30% chance to make the target flinch.",
-		shortDesc: "Charges turn 1. Hits turn 2. 30% chance to flinch.",
+		shortDesc: "Charges, then hits turn 2. 30% flinch. High crit.",
 		id: "skyattack",
 		name: "Sky Attack",
 		pp: 5,
@@ -9851,7 +9851,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"skydrop": {
+	skydrop: {
 		num: 507,
 		accuracy: 100,
 		basePower: 60,
@@ -9901,13 +9901,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"skyuppercut": {
+	skyuppercut: {
 		num: 327,
 		accuracy: 90,
 		basePower: 85,
 		category: "Physical",
 		desc: "Also hits targets in mid-air via Fly or Bounce.",
-		shortDesc: "Hits Pokemon using Bounce or Fly.",
+		shortDesc: "Can hit Pokemon using Bounce or Fly.",
 		id: "skyuppercut",
 		name: "Sky Uppercut",
 		pp: 15,
@@ -9919,13 +9919,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"slackoff": {
+	slackoff: {
 		num: 303,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores 1/2 of the user's max HP.",
-		shortDesc: "Heals 50% of the user's max HP.",
+		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "slackoff",
 		name: "Slack Off",
 		pp: 10,
@@ -9936,7 +9936,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"slam": {
+	slam: {
 		num: 21,
 		accuracy: 75,
 		basePower: 80,
@@ -9952,13 +9952,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"slash": {
+	slash: {
 		num: 163,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a high critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "slash",
 		name: "Slash",
 		pp: 20,
@@ -9969,7 +9969,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"sleeppowder": {
+	sleeppowder: {
 		num: 79,
 		accuracy: 75,
 		basePower: 0,
@@ -9987,13 +9987,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"sleeptalk": {
+	sleeptalk: {
 		num: 214,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Does nothing if the user is awake. If the user asleep, it randomly performs one of its attacks. Rest will fail if it is selected. Sleep Talk's generated attacks do not cost PP, but it cannot generate itself, Assist, Bide, Chatter, Copycat, Focus Punch, Me First, Metronome, Mimic, Mirror Move, Nature Power, Sketch, Uproar, or attacks with a charge-up turn like Fly or Skull Bash. (Moves with a recharge turn like Hyper Beam can be generated.)",
-		shortDesc: "User must be asleep. Uses a random move.",
+		shortDesc: "User must be asleep. Uses another known move.",
 		id: "sleeptalk",
 		name: "Sleep Talk",
 		pp: 10,
@@ -10025,13 +10025,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"sludge": {
+	sludge: {
 		num: 124,
 		accuracy: 100,
 		basePower: 65,
 		category: "Special",
 		desc: "Has a 30% chance to poison the target.",
-		shortDesc: "30% chance to poison the foe.",
+		shortDesc: "30% chance to poison the target.",
 		id: "sludge",
 		name: "Sludge",
 		pp: 20,
@@ -10043,13 +10043,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"sludgebomb": {
+	sludgebomb: {
 		num: 188,
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
 		desc: "Has a 30% chance to poison the target.",
-		shortDesc: "30% chance to poison the foe.",
+		shortDesc: "30% chance to poison the target.",
 		id: "sludgebomb",
 		name: "Sludge Bomb",
 		pp: 10,
@@ -10062,13 +10062,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"sludgewave": {
+	sludgewave: {
 		num: 482,
 		accuracy: 100,
 		basePower: 95,
 		category: "Special",
 		desc: "Has a 10% chance to poison the target.",
-		shortDesc: "10% chance to poison the foe.",
+		shortDesc: "10% chance to poison adjacent Pokemon.",
 		id: "sludgewave",
 		name: "Sludge Wave",
 		pp: 10,
@@ -10081,13 +10081,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"smackdown": {
+	smackdown: {
 		num: 479,
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
 		desc: "Removes ground type immunity of foe.",
-		shortDesc: "Removes ground type immunity of foe.",
+		shortDesc: "Removes the target's Ground immunity.",
 		id: "smackdown",
 		name: "Smack Down",
 		pp: 15,
@@ -10102,7 +10102,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"smellingsalt": {
+	smellingsalt: {
 		num: 265,
 		accuracy: 100,
 		basePower: 60,
@@ -10112,7 +10112,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "If the target is paralyzed, power is doubled but the target will be cured.",
-		shortDesc: "Double power if foe is paralyzed. Cures paralysis.",
+		shortDesc: "Power doubles if target is paralyzed, and cures it.",
 		id: "smellingsalt",
 		name: "SmellingSalt",
 		pp: 10,
@@ -10125,13 +10125,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"smog": {
+	smog: {
 		num: 123,
 		accuracy: 70,
 		basePower: 20,
 		category: "Special",
 		desc: "Has a 40% chance to poison the target.",
-		shortDesc: "40% chance to poison the foe.",
+		shortDesc: "40% chance to poison the target.",
 		id: "smog",
 		name: "Smog",
 		pp: 20,
@@ -10143,13 +10143,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"smokescreen": {
+	smokescreen: {
 		num: 108,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Accuracy by 1 stage.",
-		shortDesc: "Lowers target's Accuracy by 1.",
+		shortDesc: "Lowers the target's Accuracy by 1.",
 		id: "smokescreen",
 		name: "SmokeScreen",
 		pp: 20,
@@ -10161,13 +10161,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"snarl": {
+	snarl: {
 		num: 555,
 		accuracy: 95,
 		basePower: 55,
 		category: "Special",
 		desc: "Has a 100% chance to lower the target's Special Attack by one level.",
-		shortDesc: "Lowers foe's Sp. Attack by 1.",
+		shortDesc: "Lowers the foe(s) Sp. Atk by 1.",
 		id: "snarl",
 		name: "Snarl",
 		pp: 15,
@@ -10182,13 +10182,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"snatch": {
+	snatch: {
 		num: 289,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes first. Until the end of the turn, the user will steal a supporting move from another Pokemon (including teammates). In double battles, Snatch only steals the first applicable move performed by another Pokemon before wearing off.",
-		shortDesc: "Steals certain support moves.",
+		shortDesc: "User steals certain support moves to use itself.",
 		id: "snatch",
 		name: "Snatch",
 		pp: 10,
@@ -10197,13 +10197,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"snore": {
+	snore: {
 		num: 173,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "Has a 30% chance to make the target flinch; fails if user is awake.",
-		shortDesc: "30% chance to flinch the foe. Only usable asleep.",
+		shortDesc: "User must be asleep. 30% chance to flinch target.",
 		id: "snore",
 		name: "Snore",
 		pp: 15,
@@ -10220,13 +10220,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"soak": {
+	soak: {
 		num: 487,
 		accuracy: 100,
 		basePower: false,
 		category: "Status",
 		desc: "Changes the target's type to water.",
-		shortDesc: "Changes the target's type to water.",
+		shortDesc: "Changes the target's type to Water.",
 		id: "soak",
 		name: "Soak",
 		pp: 20,
@@ -10246,13 +10246,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"softboiled": {
+	softboiled: {
 		num: 135,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores 1/2 of the user's max HP.",
-		shortDesc: "Heals 50% of user's max HP.",
+		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "softboiled",
 		name: "Softboiled",
 		pp: 10,
@@ -10263,7 +10263,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"solarbeam": {
+	solarbeam: {
 		num: 76,
 		accuracy: 100,
 		basePower: 120,
@@ -10276,7 +10276,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "The user prepares on turn one, becoming uncontrollable, and then attacks on turn two. During Sunny Day, this move fires immediately; during Rain Dance, Sandstorm and Hail, this move has half power.",
-		shortDesc: "Charges up turn 1; attacks on turn 2.",
+		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		id: "solarbeam",
 		name: "SolarBeam",
 		pp: 10,
@@ -10300,14 +10300,14 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"sonicboom": {
+	sonicboom: {
 		num: 49,
 		accuracy: 90,
 		basePower: false,
 		damage: 20,
 		category: "Special",
 		desc: "Always deals 20 points of damage.",
-		shortDesc: "Does 20 HP damage.",
+		shortDesc: "Always does 20 HP of damage.",
 		id: "sonicboom",
 		name: "SonicBoom",
 		pp: 20,
@@ -10316,13 +10316,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"spacialrend": {
+	spacialrend: {
 		num: 460,
 		accuracy: 95,
 		basePower: 100,
 		category: "Special",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a higher critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "spacialrend",
 		name: "Spacial Rend",
 		pp: 5,
@@ -10333,13 +10333,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
-	"spark": {
+	spark: {
 		num: 209,
 		accuracy: 100,
 		basePower: 65,
 		category: "Physical",
 		desc: "Has a 30% chance to paralyze the target.",
-		shortDesc: "30% chance to paralyze foe.",
+		shortDesc: "30% chance to paralyze the target.",
 		id: "spark",
 		name: "Spark",
 		pp: 20,
@@ -10353,7 +10353,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"spiderweb": {
+	spiderweb: {
 		num: 169,
 		accuracy: true,
 		basePower: 0,
@@ -10373,7 +10373,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"spikecannon": {
+	spikecannon: {
 		num: 131,
 		accuracy: 100,
 		basePower: 20,
@@ -10389,13 +10389,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"spikes": {
+	spikes: {
 		num: 191,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Damages opponents, unless they are Flying-type or have Levitate, every time they are switched in; hits through Wonder Guard. Can be used up to three times: saps 1/8 of max HP with one layer, 3/16 of max HP with two layers and 1/4 of max HP for three layers.",
-		shortDesc: "Damages foes on switch-in. Max 3 layers.",
+		shortDesc: "Hurts grounded foes on switch-in. Max 3 layers.",
 		id: "spikes",
 		name: "Spikes",
 		pp: 20,
@@ -10425,7 +10425,7 @@ exports.BattleMovedex = {
 		target: "foeSide",
 		type: "Ground"
 	},
-	"spitup": {
+	spitup: {
 		num: 255,
 		accuracy: 100,
 		basePower: false,
@@ -10435,7 +10435,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Power increases with user's Stockpile count; fails with zero Stockpiles.",
-		shortDesc: "Varies in power depending on Stockpile uses.",
+		shortDesc: "More power with more uses of Stockpile.",
 		id: "spitup",
 		name: "Spit Up",
 		pp: 10,
@@ -10453,13 +10453,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"spite": {
+	spite: {
 		num: 180,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "The target's most recent move is reduced by 4 PP; this fails if the target has not yet performed a move, if the target's last move has run out of PP, or if the target can only use Struggle.",
-		shortDesc: "Lowers the PP of the foe's last move by 4.",
+		shortDesc: "Lowers the PP of the target's last move by 4.",
 		id: "spite",
 		name: "Spite",
 		pp: 10,
@@ -10476,7 +10476,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"splash": {
+	splash: {
 		num: 150,
 		accuracy: true,
 		basePower: 0,
@@ -10495,13 +10495,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"spore": {
+	spore: {
 		num: 147,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Puts the target to sleep.",
-		shortDesc: "Puts the target to Sleep.",
+		shortDesc: "Puts the target to sleep.",
 		id: "spore",
 		name: "Spore",
 		pp: 15,
@@ -10513,13 +10513,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"stealthrock": {
+	stealthrock: {
 		num: 446,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Damages opponents every time they switch in until they use Rapid Spin. Saps a fraction of max HP determined by the effectiveness of Rock-type attacks against the opponent's type: 1/32 for 1/4x, 1/16 for 1/2x, 1/8 for 1x, 1/4 for 2x and 1/2 for 4x. For example, Stealth Rock saps 50% of an Ice/Flying Pokemon's max HP when it switches in.",
-		shortDesc: "Rock damage to foes on switch-in.",
+		shortDesc: "Hurts foes on switch-in. Factors Rock weakness.",
 		id: "stealthrock",
 		name: "Stealth Rock",
 		pp: 20,
@@ -10546,13 +10546,13 @@ exports.BattleMovedex = {
 		target: "foeSide",
 		type: "Rock"
 	},
-	"steelwing": {
+	steelwing: {
 		num: 211,
 		accuracy: 90,
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a 10% chance to raise the user's Defense by 1 stage.",
-		shortDesc: "10% chance to raise the user's Defense by 1.",
+		shortDesc: "10% chance to boost the user's Defense by 1.",
 		id: "steelwing",
 		name: "Steel Wing",
 		pp: 25,
@@ -10569,13 +10569,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
-	"stockpile": {
+	stockpile: {
 		num: 254,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Can be used up to three times to power Spit Up or Swallow. Also raises the user's Defense and Special Defense by 1 stage each. Stockpiles and the defensive boosts are lost when these Swallow or Spit Up is used or the user switches out. However, the boosts can be Baton Passed.",
-		shortDesc: "+1 Def, +1 SpD. Max 3 layers.",
+		shortDesc: "Boosts user's Defense, Sp. Def by 1. Max 3 uses.",
 		id: "stockpile",
 		name: "Stockpile",
 		pp: 20,
@@ -10608,7 +10608,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"stomp": {
+	stomp: {
 		num: 23,
 		accuracy: 100,
 		basePower: 65,
@@ -10618,7 +10618,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch; also gains doubled power against Minimized Pokemon.",
-		shortDesc: "30% chance to flinch foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "stomp",
 		name: "Stomp",
 		pp: 20,
@@ -10631,13 +10631,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"stoneedge": {
+	stoneedge: {
 		num: 444,
 		accuracy: 80,
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a high critical hit ratio.",
-		shortDesc: "Has a higher critical hit ratio.",
+		shortDesc: "High critical hit ratio.",
 		id: "stoneedge",
 		name: "Stone Edge",
 		pp: 5,
@@ -10648,7 +10648,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"storedpower": {
+	storedpower: {
 		num: 500,
 		accuracy: 100,
 		basePower: 20,
@@ -10657,7 +10657,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Deals variable damage depending on the stat modifications of the user. When the user has no stat modifications, Assist Power's base power is 20. Its power increases by 20 for each stat boost the user has, and does not decrease in power due to stat drops below 0. It reaches a maximum power of 860, where all stats are maximized.",
-		shortDesc: "+20 power for each of user's stat boosts.",
+		shortDesc: "+20 power for each of the user's stat boosts.",
 		id: "storedpower",
 		name: "Stored Power",
 		pp: 10,
@@ -10667,7 +10667,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"stormthrow": {
+	stormthrow: {
 		num: 480,
 		accuracy: 100,
 		basePower: 40,
@@ -10685,7 +10685,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"steamroller": {
+	steamroller: {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback: function(pokemon, target) {
@@ -10694,7 +10694,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Has a 30% chance to make the target flinch; also gains doubled power against Minimized Pokemon.",
-		shortDesc: "30% chance to flinch foe.",
+		shortDesc: "30% chance to flinch the target.",
 		id: "steamroller",
 		name: "Steamroller",
 		pp: 20,
@@ -10707,7 +10707,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"strength": {
+	strength: {
 		num: 70,
 		accuracy: 100,
 		basePower: 80,
@@ -10723,13 +10723,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"stringshot": {
+	stringshot: {
 		num: 81,
 		accuracy: 95,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Speed by 1 stage.",
-		shortDesc: "Lowers the target's Speed by 1.",
+		shortDesc: "Lowers the foe(s) Speed by 1.",
 		id: "stringshot",
 		name: "String Shot",
 		pp: 40,
@@ -10741,7 +10741,7 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Bug"
 	},
-	"struggle": {
+	struggle: {
 		num: 165,
 		accuracy: true,
 		basePower: 50,
@@ -10766,13 +10766,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"strugglebug": {
+	strugglebug: {
 		num: 522,
 		accuracy: 100,
 		basePower: 30,
 		category: "Special",
 		desc: "Has a 100% chance to lower the target's Special Attack by one level.",
-		shortDesc: "Lowers the foe's Sp. Attack by 1.",
+		shortDesc: "Lowers the foe(s) Sp. Atk by 1.",
 		id: "strugglebug",
 		name: "Struggle Bug",
 		pp: 20,
@@ -10786,7 +10786,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"stunspore": {
+	stunspore: {
 		num: 78,
 		accuracy: 75,
 		basePower: 0,
@@ -10804,7 +10804,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"submission": {
+	submission: {
 		num: 66,
 		accuracy: 80,
 		basePower: 80,
@@ -10821,13 +10821,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"substitute": {
+	substitute: {
 		num: 164,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user takes one-fourth of its maximum HP to create a substitute; this move fails if the user does not have enough HP for this. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat modifiers caused by other Pokemon. The user is still affected by Tickle, Hail, Sandstorm and Attract from behind its Substitute. If a Substitute breaks from a hit during a multistrike move such as Fury Attack, the user takes damage from the remaining strikes.",
-		shortDesc: "Takes 1/4 of max HP to create a Substitute.",
+		shortDesc: "User takes 1/4 its max HP to put in a Substitute.",
 		id: "substitute",
 		name: "Substitute",
 		pp: 10,
@@ -10898,13 +10898,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"suckerpunch": {
+	suckerpunch: {
 		num: 389,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
 		desc: "Almost always goes first, but fails if the target doesn't select a move that will damage the user. The move also fails if the target uses an attack with higher priority or if the target is faster and uses an attack with the same priority.",
-		shortDesc: "Usually goes first. Fails if foe doesn't attack.",
+		shortDesc: "Usually goes first. Fails if target is not attacking.",
 		id: "suckerpunch",
 		name: "Sucker Punch",
 		pp: 5,
@@ -10921,13 +10921,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"sunnyday": {
+	sunnyday: {
 		num: 241,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Cancels all other weather moves. For 5 turns: freezing is prevented, the power of Fire attacks is increased by 50%, the power of Water attacks is decreased by 50%, Solarbeam fires immediately, Thunder becomes 50% accurate, and the healing power of Morning Sun, Synthesis and Moonlight is increased from 1/2 to 2/3 of the user's max HP. The effects of Sunny Day will last for eight turns if its user is holding Heat Rock.",
-		shortDesc: "Summons sunlight for five turns.",
+		shortDesc: "For 5 turns, intense sunlight powers Fire moves.",
 		id: "sunnyday",
 		name: "Sunny Day",
 		pp: 5,
@@ -10938,7 +10938,7 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Fire"
 	},
-	"superfang": {
+	superfang: {
 		num: 162,
 		accuracy: 90,
 		basePower: false,
@@ -10947,7 +10947,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "This move halves the target's current HP.",
-		shortDesc: "Does damage equal to half the foe's current HP.",
+		shortDesc: "Does damage equal to 1/2 target's current HP.",
 		id: "superfang",
 		name: "Super Fang",
 		pp: 10,
@@ -10958,13 +10958,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"superpower": {
+	superpower: {
 		num: 276,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
 		desc: "Lowers the user's Attack and Defense by 1 stage each after use.",
-		shortDesc: "Lowers user's Attack and Defense by 1.",
+		shortDesc: "Lowers the user's Attack and Defense by 1.",
 		id: "superpower",
 		name: "Superpower",
 		pp: 5,
@@ -10981,7 +10981,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"supersonic": {
+	supersonic: {
 		num: 48,
 		accuracy: 55,
 		basePower: 0,
@@ -10998,13 +10998,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"surf": {
+	surf: {
 		num: 57,
 		accuracy: 100,
 		basePower: 95,
 		category: "Special",
 		desc: "Power doubles against a target who is in the middle of using Dive.",
-		shortDesc: "Double damage to foes using Dive.",
+		shortDesc: "Hits adjacent Pokemon. Power doubles on Dive.",
 		id: "surf",
 		name: "Surf",
 		pp: 15,
@@ -11014,13 +11014,13 @@ exports.BattleMovedex = {
 		target: "adjacent",
 		type: "Water"
 	},
-	"swagger": {
+	swagger: {
 		num: 207,
 		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		desc: "Confuses the target and raises its Attack by 2 stages.",
-		shortDesc: "Confuses the target and boosts its Attack by 2.",
+		shortDesc: "Boosts the target's Attack by 2 and confuses it.",
 		id: "swagger",
 		name: "Swagger",
 		pp: 15,
@@ -11033,13 +11033,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"swallow": {
+	swallow: {
 		num: 256,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "This move only works if the user has at least one Stockpile. Restores 1/4 of user's max HP with one Stockpile, 1/2 of user's max HP with two Stockpiles and fully restores the user's HP with three Stockpiles.",
-		shortDesc: "Heals based on number of Stockpiles.",
+		shortDesc: "Heals the user based on uses of Stockpile.",
 		id: "swallow",
 		name: "Swallow",
 		pp: 10,
@@ -11056,7 +11056,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"sweetkiss": {
+	sweetkiss: {
 		num: 186,
 		accuracy: 75,
 		basePower: 0,
@@ -11072,13 +11072,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"sweetscent": {
+	sweetscent: {
 		num: 230,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Evasion by 1 stage.",
-		shortDesc: "Lowers target's Evasion by 1.",
+		shortDesc: "Lowers the foe(s) Evasion by 1.",
 		id: "sweetscent",
 		name: "Sweet Scent",
 		pp: 20,
@@ -11090,13 +11090,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Normal"
 	},
-	"swift": {
+	swift: {
 		num: 129,
 		accuracy: true,
 		basePower: 60,
 		category: "Special",
 		desc: "Ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig, Fly, Dive or Bounce.",
-		shortDesc: "Ignores accuracy modifiers.",
+		shortDesc: "Ignores Accuracy and Evasion modifiers of foes.",
 		id: "swift",
 		name: "Swift",
 		pp: 20,
@@ -11105,13 +11105,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Normal"
 	},
-	"switcheroo": {
+	switcheroo: {
 		num: 415,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Exchanges items with the target unless it has Sticky Hold or Multitype. Items lost to this move cannot be recovered by using Recycle.",
-		shortDesc: "Switches items with target.",
+		shortDesc: "User switches its held item with the target's.",
 		id: "switcheroo",
 		name: "Switcheroo",
 		pp: 10,
@@ -11139,13 +11139,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"swordsdance": {
+	swordsdance: {
 		num: 14,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack by 2 stages.",
-		shortDesc: "Boosts user's Attack by 2.",
+		shortDesc: "Boosts the user's Attack by 2.",
 		id: "swordsdance",
 		name: "Swords Dance",
 		pp: 30,
@@ -11158,13 +11158,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"synchronoise": {
+	synchronoise: {
 		num: 485,
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
 		desc: "Hits any Pokemon that shares a type with the user.",
-		shortDesc: "Only damages foes of the same type as user.",
+		shortDesc: "Hits adjacent Pokemon sharing the user's type.",
 		id: "synchronoise",
 		name: "Synchronoise",
 		pp: 15,
@@ -11176,13 +11176,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"synthesis": {
+	synthesis: {
 		num: 235,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Restores a fraction of the user's max HP depending on the weather: 2/3 during Sunny Day, 1/2 during regular weather and 1/4 during Rain Dance, Hail and Sandstorm.",
-		shortDesc: "Restores health based on the weather.",
+		shortDesc: "Heals the user by a weather-dependent amount.",
 		id: "synthesis",
 		name: "Synthesis",
 		pp: 5,
@@ -11197,7 +11197,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Grass"
 	},
-	"tackle": {
+	tackle: {
 		num: 33,
 		accuracy: 100,
 		basePower: 50,
@@ -11213,13 +11213,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"tailglow": {
+	tailglow: {
 		num: 294,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack by 3 stages.",
-		shortDesc: "Boosts Sp. Attack by 3.",
+		shortDesc: "Boosts the user's Sp. Atk by 3.",
 		id: "tailglow",
 		name: "Tail Glow",
 		pp: 20,
@@ -11232,7 +11232,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Bug"
 	},
-	"tailslap": {
+	tailslap: {
 		num: 541,
 		accuracy: 85,
 		basePower: 25,
@@ -11250,13 +11250,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"tailwhip": {
+	tailwhip: {
 		num: 39,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Defense by 1 stage.",
-		shortDesc: "Lowers target's Defense by 1.",
+		shortDesc: "Lowers the foe(s) Defense by 1.",
 		id: "tailwhip",
 		name: "Tail Whip",
 		pp: 30,
@@ -11268,13 +11268,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Normal"
 	},
-	"tailwind": {
+	tailwind: {
 		num: 366,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Speed is doubled for every Pokemon on the user's team for 4 turns; the turn used to perform Tailwind is included in this total, as are any turns used to switch around Pokemon.",
-		shortDesc: "Doubles Speed of the user's team for 4 turns.",
+		shortDesc: "For 4 turns, allies' Speed is doubled.",
 		id: "tailwind",
 		name: "Tailwind",
 		pp: 30,
@@ -11303,7 +11303,7 @@ exports.BattleMovedex = {
 		target: "allies",
 		type: "Flying"
 	},
-	"takedown": {
+	takedown: {
 		num: 36,
 		accuracy: 85,
 		basePower: 90,
@@ -11320,13 +11320,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"taunt": {
+	taunt: {
 		num: 269,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Prevents the target from using non-damaging moves for 3 turns. Assist, Copycat, Me First, Metronome, Mirror Move and Sleep Talk are prevented during this time, but Bide, Counter, Endeavor, Metal Burst and Mirror Coat are not prevented.",
-		shortDesc: "For 3 turns, target can't use status moves.",
+		shortDesc: "For 3 turns, the target can't use status moves.",
 		id: "taunt",
 		name: "Taunt",
 		pp: 20,
@@ -11364,13 +11364,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"technoblast": {
+	technoblast: {
 		num: 546,
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
 		desc: "The type of Techno Blast depends on the type of Drive held by the user, being Normal-type if there is none held, and Electric, Fire, Ice or Water with the appropriate Drive.",
-		shortDesc: "Type depends on the which Drive is held.",
+		shortDesc: "Type varies based on the held Drive.",
 		id: "technoblast",
 		name: "Techno Blast",
 		pp: 5,
@@ -11382,13 +11382,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"teeterdance": {
+	teeterdance: {
 		num: 298,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Each active Pokemon, except the user, becomes confused.",
-		shortDesc: "Confuses all other Pokemon.",
+		shortDesc: "Confuses adjacent Pokemon.",
 		id: "teeterdance",
 		name: "Teeter Dance",
 		pp: 20,
@@ -11407,13 +11407,13 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Normal"
 	},
-	"telekinesis": {
+	telekinesis: {
 		num: 477,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Makes the target immune to Ground-type moves and makes all moves hit the target regardless of accuracy and evasion. This does not include OHKO moves. It will fail if Gravity is in effect, and if Gravity is used while Telekinesis is in effect Gravity will supersede it.",
-		shortDesc: "Target levitates but can't evade for 3 turns.",
+		shortDesc: "For 3 turns, target floats but moves can't miss it.",
 		id: "telekinesis",
 		name: "Telekinesis",
 		pp: 15,
@@ -11423,7 +11423,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"teleport": {
+	teleport: {
 		num: 100,
 		accuracy: true,
 		basePower: 0,
@@ -11439,13 +11439,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"thief": {
+	thief: {
 		num: 168,
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
 		desc: "Steals the target's held item unless the user is already holding an item or the target has Sticky Hold or Multitype. A stolen item cannot be recovered by using Recycle.",
-		shortDesc: "Steals the foe's held item.",
+		shortDesc: "If the user has no item, it steals the target's.",
 		id: "thief",
 		name: "Thief",
 		pp: 10,
@@ -11469,7 +11469,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"thrash": {
+	thrash: {
 		num: 37,
 		accuracy: 100,
 		basePower: 120,
@@ -11489,13 +11489,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"thunder": {
+	thunder: {
 		num: 87,
 		accuracy: 70,
 		basePower: 120,
 		category: "Special",
 		desc: "Has a 30% chance to paralyze the target. It also has normal accuracy against mid-air Pokemon who have used Fly or Bounce. During Sunny Day, this move has 50% accuracy. During Rain Dance, this move will never miss under normal circumstances and has a 30% chance to hit through a target's Protect or Detect.",
-		shortDesc: "30% chance to paralyze. Always hits in rain.",
+		shortDesc: "30% chance to paralyze target. Can't miss in rain.",
 		id: "thunder",
 		name: "Thunder",
 		pp: 10,
@@ -11512,7 +11512,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"thunderfang": {
+	thunderfang: {
 		num: 422,
 		accuracy: 95,
 		basePower: 65,
@@ -11536,13 +11536,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"thunderpunch": {
+	thunderpunch: {
 		num: 9,
 		accuracy: 100,
 		basePower: 75,
 		category: "Physical",
 		desc: "Has a 10% chance to paralyze the target.",
-		shortDesc: "10% chance to paralyze foe.",
+		shortDesc: "10% chance to paralyze the target.",
 		id: "thunderpunch",
 		name: "ThunderPunch",
 		pp: 15,
@@ -11557,13 +11557,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"thundershock": {
+	thundershock: {
 		num: 84,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "Has a 10% chance to paralyze the target.",
-		shortDesc: "10% chance to paralyze foe.",
+		shortDesc: "10% chance to paralyze the target.",
 		id: "thundershock",
 		name: "ThunderShock",
 		pp: 30,
@@ -11575,13 +11575,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"thunderwave": {
+	thunderwave: {
 		num: 86,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Paralyzes the target. This move activates Motor Drive.",
-		shortDesc: "Paralyzes target.",
+		shortDesc: "Paralyzes the target.",
 		id: "thunderwave",
 		name: "Thunder Wave",
 		pp: 20,
@@ -11593,13 +11593,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"thunderbolt": {
+	thunderbolt: {
 		num: 85,
 		accuracy: 100,
 		basePower: 95,
 		category: "Special",
 		desc: "Has a 10% chance to paralyze the target.",
-		shortDesc: "10% chance to paralyze foe.",
+		shortDesc: "10% chance to paralyze the target.",
 		id: "thunderbolt",
 		name: "Thunderbolt",
 		pp: 15,
@@ -11612,13 +11612,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"tickle": {
+	tickle: {
 		num: 321,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack and Defense by 1 stage each.",
-		shortDesc: "Lowers target's Attack and Defense by 1.",
+		shortDesc: "Lowers the target's Attack and Defense by 1.",
 		id: "tickle",
 		name: "Tickle",
 		pp: 20,
@@ -11631,7 +11631,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"torment": {
+	torment: {
 		num: 259,
 		accuracy: 100,
 		basePower: 0,
@@ -11660,7 +11660,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
-	"toxic": {
+	toxic: {
 		num: 92,
 		accuracy: 90,
 		basePower: 0,
@@ -11678,13 +11678,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"toxicspikes": {
+	toxicspikes: {
 		num: 390,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Opponents will be poisoned as they enter the field until they use Rapid Spin. One layer inflicts regular poison while two layers inflict Toxic; switching in a non-Flying-type Poison Pokemon without Levitate will remove any layers. Flying-type and Levitate Pokemon are only affected if they switch in while Gravity is in effect, Iron Ball is their held item or they are receiving a Baton Passed Ingrain; Steel-type Pokemon and Pokemon who enter with Baton Passed Substitutes are not affected.",
-		shortDesc: "Poisons foes on switch-in. Max 2 layers.",
+		shortDesc: "Poisons grounded foes on switch-in. Max 2 layers.",
 		id: "toxicspikes",
 		name: "Toxic Spikes",
 		pp: 20,
@@ -11721,13 +11721,13 @@ exports.BattleMovedex = {
 		target: "foeSide",
 		type: "Poison"
 	},
-	"transform": {
+	transform: {
 		num: 144,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user morphs into a near-exact copy of the target. Stats, stat modifiers, type, moves, Hidden Power data and appearance are changed; the user's level and HP remain the same and each copied move receives only 5 PP. (If Transform is used by Ditto, the effects of Metal Powder and Quick Powder stop working after transformation.)",
-		shortDesc: "Copies traits of the opponent.",
+		shortDesc: "Copies target's stats, moves, types, and Ability.",
 		id: "transform",
 		name: "Transform",
 		pp: 10,
@@ -11742,13 +11742,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"triattack": {
+	triattack: {
 		num: 161,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 20% chance to burn, paralyze or freeze the target.",
-		shortDesc: "20% chance to paralyze, burn or freeze.",
+		shortDesc: "20% chance to paralyze or burn or freeze target.",
 		id: "triattack",
 		name: "Tri Attack",
 		pp: 10,
@@ -11770,13 +11770,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"trick": {
+	trick: {
 		num: 271,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Exchanges items with the target unless it has Sticky Hold or Multitype. Items lost to this move cannot be recovered by using Recycle.",
-		shortDesc: "Switches items with target.",
+		shortDesc: "User switches its held item with the target's.",
 		id: "trick",
 		name: "Trick",
 		pp: 10,
@@ -11804,13 +11804,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"trickroom": {
+	trickroom: {
 		num: 433,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Always goes last. Attacking order is reversed for all active Pokemon for five turns; the slowest Pokemon moves first and vice versa. Note that move order is still determined by the regular priority categories and the effects of Trick Room apply only when Pokemon have chosen moves with the same priority. Using Trick Room a second time reverses this effect. This effect is also ignored by Stall and held items that may affect the turn order: Full Incense, Lagging Tail and Quick Claw.",
-		shortDesc: "Slower Pokemon move first for 5 turns.",
+		shortDesc: "For 5 turns, slower Pokemon move first.",
 		id: "trickroom",
 		name: "Trick Room",
 		pp: 5,
@@ -11852,7 +11852,7 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Psychic"
 	},
-	"triplekick": {
+	triplekick: {
 		num: 167,
 		accuracy: 90,
 		basePower: 10,
@@ -11862,7 +11862,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Attacks three times in one turn, adding 10 BP for each kick. If a kick misses, the move ends instantly; if one of the kicks breaks a target's Substitute, the real Pokemon will take damage for the remaining kicks.",
-		shortDesc: "Hits 3 times with power increasing each hit.",
+		shortDesc: "Hits 3 times. Each hit can miss, but power rises.",
 		id: "triplekick",
 		name: "Triple Kick",
 		pp: 10,
@@ -11882,7 +11882,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"trumpcard": {
+	trumpcard: {
 		num: 376,
 		accuracy: true,
 		basePower: false,
@@ -11903,7 +11903,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "This move's base power increases as its remaining PP decreases.",
-		shortDesc: "Power increases as PP decreases.",
+		shortDesc: "More power the fewer PP this move has left.",
 		id: "trumpcard",
 		name: "Trump Card",
 		pp: 5,
@@ -11914,13 +11914,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"twineedle": {
+	twineedle: {
 		num: 41,
 		accuracy: 100,
 		basePower: 25,
 		category: "Physical",
 		desc: "Strikes twice; if the first hit breaks the target's Substitute, the real Pokemon will take damage from the second hit. Has a 20% chance to poison the target .",
-		shortDesc: "Hits 2 times with 20% chance to poison each hit.",
+		shortDesc: "Hits 2 times. Each hit has 20% chance to poison.",
 		id: "twineedle",
 		name: "Twineedle",
 		pp: 20,
@@ -11933,13 +11933,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"twister": {
+	twister: {
 		num: 239,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "Has a 20% chance to make the target flinch; power doubles while the target is in mid-air via Fly or Bounce.",
-		shortDesc: "20% chance to flinch the foe.",
+		shortDesc: "20% chance to flinch the foe(s).",
 		id: "twister",
 		name: "Twister",
 		pp: 20,
@@ -11951,13 +11951,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Dragon"
 	},
-	"uturn": {
+	uturn: {
 		num: 369,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		desc: "The user switches out after use, even if it is currently trapped by another Pokemon. When a faster Pokemon uses Pursuit against a U-Turner, the U-Turner is hit for normal damage; when a slower Pokemon uses Pursuit against a U-Turner, the U-Turner makes its attack, then is hit by Pursuit for double power, and switches out.",
-		shortDesc: "User switches out after doing damage.",
+		shortDesc: "User switches out after damaging the target.",
 		id: "uturn",
 		name: "U-turn",
 		pp: 20,
@@ -11969,13 +11969,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"uproar": {
+	uproar: {
 		num: 253,
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
 		desc: "The user causes an Uproar and attacks uncontrollably for 3 turns. During the effects of the Uproar, active Pokemon cannot fall asleep and sleeping Pokemon sent into battle will wake up.",
-		shortDesc: "For 3 turns, Pokemon cannot sleep.",
+		shortDesc: "Lasts 3 turns. Active Pokemon cannot fall asleep.",
 		id: "uproar",
 		name: "Uproar",
 		pp: 10,
@@ -11985,13 +11985,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"vcreate": {
+	vcreate: {
 		num: 557,
 		accuracy: 95,
 		basePower: 180,
 		category: "Physical",
 		desc: "Lowers the user's Defense, Special Defense, and Speed by one stage.",
-		shortDesc: "Losers user's Def, SpD and Speed by 1.",
+		shortDesc: "Lowers the user's Defense, Sp. Def, Speed by 1.",
 		id: "vcreate",
 		name: "V-create",
 		pp: 5,
@@ -12009,7 +12009,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"vacuumwave": {
+	vacuumwave: {
 		num: 410,
 		accuracy: 100,
 		basePower: 40,
@@ -12025,7 +12025,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"venoshock": {
+	venoshock: {
 		num: 474,
 		accuracy: 100,
 		basePower: 65,
@@ -12037,7 +12037,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Inflicts double damage if the target is Poisoned.",
-		shortDesc: "Double power if foe is poisoned.",
+		shortDesc: "Power doubles if the target is poisoned.",
 		id: "venoshock",
 		name: "Venoshock",
 		pp: 10,
@@ -12046,7 +12046,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Poison"
 	},
-	"vicegrip": {
+	vicegrip: {
 		num: 11,
 		accuracy: 100,
 		basePower: 55,
@@ -12062,7 +12062,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"vinewhip": {
+	vinewhip: {
 		num: 22,
 		accuracy: 100,
 		basePower: 35,
@@ -12078,13 +12078,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"vitalthrow": {
+	vitalthrow: {
 		num: 233,
 		accuracy: true,
 		basePower: 70,
 		category: "Physical",
 		desc: "This move usually goes last. It ignores Evasion and Accuracy modifiers and never misses except against Protect, Detect or a target in the middle of Dig, Fly, Dive or Bounce.",
-		shortDesc: "Ignores accuracy modifiers.",
+		shortDesc: "Ignores Accuracy and Evasion mods. Goes last.",
 		id: "vitalthrow",
 		name: "Vital Throw",
 		pp: 10,
@@ -12094,13 +12094,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"voltswitch": {
+	voltswitch: {
 		num: 521,
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
 		desc: "User switches out after doing damage.",
-		shortDesc: "User switches out after doing damage.",
+		shortDesc: "User switches out after damaging the target.",
 		id: "voltswitch",
 		name: "Volt Switch",
 		pp: 20,
@@ -12111,13 +12111,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"volttackle": {
+	volttackle: {
 		num: 344,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
 		desc: "The user receives 1/3 recoil damage; has a 10% chance to paralyze the target.",
-		shortDesc: "1/3 recoil. 10% chance to paralyze foe.",
+		shortDesc: "Has 1/3 recoil. 10% chance to paralyze target.",
 		id: "volttackle",
 		name: "Volt Tackle",
 		pp: 15,
@@ -12132,7 +12132,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"wakeupslap": {
+	wakeupslap: {
 		num: 358,
 		accuracy: 100,
 		basePower: 60,
@@ -12142,7 +12142,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "If the target is asleep, power is doubled but the target will awaken.",
-		shortDesc: "Double power if foe is asleep. Wakes foe.",
+		shortDesc: "Power doubles if target is asleep, and wakes it.",
 		id: "wakeupslap",
 		name: "Wake-Up Slap",
 		pp: 10,
@@ -12155,7 +12155,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
-	"watergun": {
+	watergun: {
 		num: 55,
 		accuracy: 100,
 		basePower: 40,
@@ -12170,13 +12170,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"waterpledge": {
+	waterpledge: {
 		num: 518,
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
 		desc: "If it is followed on the same turn by Fire Oath it will double the probability of secondary effects taking place for four turns. This effect does not stack with Serene Grace.	If it follows Grass Oath on the same turn, it will decrease the speed of all foes by half for four turns.",
-		shortDesc: "Use with Grass and Fire Pledge for added effect.",
+		shortDesc: "Use with Grass or Fire Pledge for added effect.",
 		id: "waterpledge",
 		name: "Water Pledge",
 		pp: 10,
@@ -12185,13 +12185,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"waterpulse": {
+	waterpulse: {
 		num: 352,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
 		desc: "Has a 20% chance to confuse the target.",
-		shortDesc: "20% chance to confuse the foe.",
+		shortDesc: "20% chance to confuse the target.",
 		id: "waterpulse",
 		name: "Water Pulse",
 		pp: 20,
@@ -12203,13 +12203,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"watersport": {
+	watersport: {
 		num: 346,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "All Fire-type moves are weakened by two-thirds until the user switches out.",
-		shortDesc: "Fire-type moves do 1/3 damage.",
+		shortDesc: "Weakens Fire-type attacks to 1/3 their power.",
 		id: "watersport",
 		name: "Water Sport",
 		pp: 15,
@@ -12231,7 +12231,7 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Water"
 	},
-	"waterspout": {
+	waterspout: {
 		num: 323,
 		accuracy: 100,
 		basePower: false,
@@ -12240,7 +12240,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Base power decreases as the user's HP decreases.",
-		shortDesc: "Does less damage as the user's HP decreases.",
+		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 		id: "waterspout",
 		name: "Water Spout",
 		pp: 5,
@@ -12250,13 +12250,13 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Water"
 	},
-	"waterfall": {
+	waterfall: {
 		num: 127,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
 		desc: "Has a 20% chance to make the target flinch.",
-		shortDesc: "20% chance to flinch the foe.",
+		shortDesc: "20% chance to flinch the target.",
 		id: "waterfall",
 		name: "Waterfall",
 		pp: 15,
@@ -12270,7 +12270,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"weatherball": {
+	weatherball: {
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
@@ -12280,7 +12280,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Base power is 50; Base power doubles and move's type changes during weather effects: becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and Rock-type during Sandstorm.",
-		shortDesc: "Changes type depending on the weather.",
+		shortDesc: "Power doubles and type varies in each weather.",
 		id: "weatherball",
 		name: "Weather Ball",
 		pp: 10,
@@ -12306,13 +12306,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"whirlpool": {
+	whirlpool: {
 		num: 250,
 		accuracy: 85,
 		basePower: 35,
 		category: "Special",
 		desc: "Traps the target for 5-6 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it is holding Shed Shell or uses Baton Pass or U-Turn. Base power also doubles when performed against a Pokemon in the middle of using Dive.",
-		shortDesc: "Traps and damages for 4-5 turns.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "whirlpool",
 		name: "Whirlpool",
 		pp: 15,
@@ -12322,13 +12322,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Water"
 	},
-	"whirlwind": {
+	whirlwind: {
 		num: 18,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Almost always goes last; in trainer battles, the target is switched out for a random member of its team. Escapes from wild battles. Has no effect if the target has Suction Cups or used Ingrain.",
-		shortDesc: "Forces target to switch to a random Pokemon.",
+		shortDesc: "Forces the target to switch to a random ally.",
 		id: "whirlwind",
 		name: "Whirlwind",
 		pp: 20,
@@ -12339,13 +12339,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"wideguard": {
+	wideguard: {
 		num: 469,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Protects the user and allies from multi-target attacks.",
-		shortDesc: "Protects the user and allies from multi-target atks.",
+		shortDesc: "Protects allies from multi-target hits for one turn.",
 		id: "wideguard",
 		name: "Wide Guard",
 		pp: 10,
@@ -12354,7 +12354,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"wildcharge": {
+	wildcharge: {
 		num: 528,
 		accuracy: 100,
 		basePower: 90,
@@ -12372,7 +12372,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"willowisp": {
+	willowisp: {
 		num: 261,
 		accuracy: 75,
 		basePower: 0,
@@ -12390,7 +12390,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fire"
 	},
-	"wingattack": {
+	wingattack: {
 		num: 17,
 		accuracy: 100,
 		basePower: 60,
@@ -12406,13 +12406,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	"wish": {
+	wish: {
 		num: 273,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "At the end of the next turn, the active Pokemon from the user's team is healed by 1/2 of the user's HP; this can be any member of the user's team.",
-		shortDesc: "Heals 1/2 the user's HP next turn.",
+		shortDesc: "Next turn, 50% of the user's max HP is restored.",
 		id: "wish",
 		name: "Wish",
 		pp: 10,
@@ -12438,13 +12438,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"withdraw": {
+	withdraw: {
 		num: 110,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 1 stage.",
-		shortDesc: "Raises the user's Defense by 1.",
+		shortDesc: "Boosts the user's Defense by 1.",
 		id: "withdraw",
 		name: "Withdraw",
 		pp: 40,
@@ -12456,13 +12456,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Water"
 	},
-	"wonderroom": {
+	wonderroom: {
 		num: 472,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Swaps the Defense and Special Defense of all Pokemon for the next five turns.",
-		shortDesc: "Swaps Defense and Sp. Defense of all Pokemon.",
+		shortDesc: "For 5 turns, all Defense and Sp. Def stats switch.",
 		id: "wonderroom",
 		name: "Wonder Room",
 		pp: 10,
@@ -12493,13 +12493,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"woodhammer": {
+	woodhammer: {
 		num: 452,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
 		desc: "The user receives 1/3 recoil damage.",
-		shortDesc: "Has 1/3 recoil damage.",
+		shortDesc: "Has 1/3 recoil.",
 		id: "woodhammer",
 		name: "Wood Hammer",
 		pp: 15,
@@ -12511,13 +12511,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"workup": {
+	workup: {
 		num: 526,
 		accuracy: true,
 		basePower: false,
 		category: "Status",
 		desc: "Raises the user's Attack and Special Attack by one stage.",
-		shortDesc: "Boosts Attack and Sp. Attack by 1.",
+		shortDesc: "Boosts the user's Attack and Sp. Atk by 1.",
 		id: "workup",
 		name: "Work Up",
 		pp: 30,
@@ -12531,13 +12531,13 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	"worryseed": {
+	worryseed: {
 		num: 388,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "The target's ability, unless it has Multitype or Truant, is changed to Insomnia until it switches out.",
-		shortDesc: "The target's ability becomes Insomnia.",
+		shortDesc: "The target's Ability becomes Insomnia.",
 		id: "worryseed",
 		name: "Worry Seed",
 		pp: 10,
@@ -12563,13 +12563,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
-	"wrap": {
+	wrap: {
 		num: 35,
 		accuracy: 90,
 		basePower: 15,
 		category: "Physical",
 		desc: "Traps the target for 5-6 turns, causing damage equal to 1/16 of its max HP each turn; this trapped effect can be broken by Rapid Spin. The target can still switch out if it is holding Shed Shell or uses Baton Pass or U-Turn.",
-		shortDesc: "Traps and damages for 4-5 turns.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "wrap",
 		name: "Wrap",
 		pp: 20,
@@ -12580,7 +12580,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"wringout": {
+	wringout: {
 		num: 378,
 		accuracy: 100,
 		basePower: false,
@@ -12589,7 +12589,7 @@ exports.BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Base power decreases as the target's HP decreases.",
-		shortDesc: "Power decreases as the foe's HP decreases.",
+		shortDesc: "More power the more HP the target has left.",
 		id: "wringout",
 		name: "Wring Out",
 		pp: 5,
@@ -12599,7 +12599,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"xscissor": {
+	xscissor: {
 		num: 404,
 		accuracy: 100,
 		basePower: 80,
@@ -12616,7 +12616,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"yawn": {
+	yawn: {
 		num: 281,
 		accuracy: true,
 		basePower: 0,
@@ -12649,13 +12649,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"zapcannon": {
+	zapcannon: {
 		num: 192,
 		accuracy: 50,
 		basePower: 120,
 		category: "Special",
 		desc: "Paralyzes the target.",
-		shortDesc: "Paralyzes the foe.",
+		shortDesc: "Paralyzes the target.",
 		id: "zapcannon",
 		name: "Zap Cannon",
 		pp: 5,
@@ -12667,13 +12667,13 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
-	"zenheadbutt": {
+	zenheadbutt: {
 		num: 428,
 		accuracy: 90,
 		basePower: 80,
 		category: "Physical",
 		desc: "Has a 20% chance to make the target flinch.",
-		shortDesc: "20% chance to flinch foe.",
+		shortDesc: "20% chance to flinch the target.",
 		id: "zenheadbutt",
 		name: "Zen Headbutt",
 		pp: 15,
@@ -12687,12 +12687,12 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
-	"paleowave": {
+	paleowave: {
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
 		desc: "20% chance of lowering target's Attack.",
-		shortDesc: "20% chance of lowering foe's Attack.",
+		shortDesc: "20% chance to lower the target's Attack by 1.",
 		id: "paleowave",
 		name: "Paleo Wave",
 		pp: 15,
@@ -12708,12 +12708,12 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"shadowstrike": {
+	shadowstrike: {
 		accuracy: 95,
 		basePower: 80,
 		category: "Physical",
 		desc: "50% chance of lowering target's Defense.",
-		shortDesc: "50% chance of lowering foe's Defense.",
+		shortDesc: "50% chance to lower the target's Defense by 1.",
 		id: "shadowstrike",
 		name: "ShadowStrike",
 		pp: 10,
@@ -12730,7 +12730,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"magikarpsrevenge": {
+	magikarpsrevenge: {
 		accuracy: true,
 		basePower: 120,
 		category: "Physical",
