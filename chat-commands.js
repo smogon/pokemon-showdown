@@ -422,14 +422,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targets[0].emit('console', message);
 		targets[0].lastPM = user.userid;
 		user.lastPM = targets[0].userid;
-		for(var i in room.users)
-		{
-			if(room.users[i].group == '&' && room.users[i] != user  && room.users[i] != targetUser)
-				room.users[i].emit('console',{
-					name: user.getIdentity(),
-					message: "To "+targetUser.getIdentity()+": "+message.message
-				});
-		}
 		return false;
 		break;
 
