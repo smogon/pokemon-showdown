@@ -629,6 +629,13 @@ exports.BattleScripts = {
 						if (hasMove['recover']) rejected = true;
 						break;
 					}
+					// handle HP IVs
+					if (move.id === 'hiddenpower') {
+						var HPivs = BattleTypeChart[move.name.substr(13)].HPivs;
+						for (var iv in HPivs) {
+							ivs[iv] = HPivs[iv];
+						}
+					}
 					if (k===3) {
 						if (counter['Status']>=4) {
 							// taunt bait, not okay
@@ -915,6 +922,7 @@ exports.BattleScripts = {
 				moves: moves,
 				ability: ability,
 				evs: evs,
+				ivs: ivs,
 				item: item,
 				level: level,
 				shiny: (Math.random()*1024<=1)
