@@ -35,6 +35,22 @@ function searchUser(name) {
 	}
 	return users[userid];
 }
+function nameLock(user,name,ip) {
+	console.log("NAME LOCK: (name: "+user.name+", ip: "+user.ip+")");
+	ip = ip||user.ip;
+	if(nameLockedIps[ip])
+	{
+		return user.nameLock(nameLockedIps[ip]);
+	}
+	for(var i in nameLockedIps)
+	{
+		if((name && nameLockedIps[i]==name)||nameLockedIps[i]==user.name)
+		{	nameLockedIps[ip] = nameLockedIps[i];
+			return user.nameLock(nameLockedIps[ip]);
+		}
+	}
+	return name||user.name;
+}
 function connectUser(name, socket, token, room) {
 	var userid = toUserid(name);
 	var user;
@@ -106,7 +122,6 @@ function User(name, person, token) {
 	if (person.user) person.user = this;
 	this.people = [person];
 	this.ip = person.ip;
-
 	this.muted = !!ipSearch(this.ip,mutedIps);
 	this.prevNames = {};
 	this.sides = {};
@@ -125,6 +140,9 @@ function User(name, person, token) {
 	this.getIdentity = function() {
 		if (selfP.muted) {
 			return '!'+selfP.name;
+		}
+		if (selfP.nameLocked()) {
+			return '#'+selfP.name;
 		}
 		return selfP.group+selfP.name;
 	};
@@ -301,7 +319,7 @@ function User(name, person, token) {
 			}
 		}
 		if (!name) name = '';
-		name = sanitizeName(name);
+		name = sanitizeName(nameLock(selfP,name));
 		var userid = toUserid(name);
 		if (selfP.authenticated) auth = false;
 
@@ -349,7 +367,6 @@ function User(name, person, token) {
 				var authenticated = false;
 				if (body !== '1') {
 					authenticated = true;
-
 					if (userid === "serei") avatar = 172;
 					else if (userid === "hobsgoblin") avatar = 52;
 					else if (userid === "etherealsol") avatar = 1001;
@@ -364,7 +381,8 @@ function User(name, person, token) {
 					else if (userid === "aeo2") avatar = 166;
 					else if (userid === "sharktamer") avatar = 7;
 					else if (userid === "bmelts") avatar = 1004;
-
+					else if (userid === "n") avatar = 209;
+					
 					try {
 						var data = JSON.parse(body);
 						switch (data.group) {
@@ -465,7 +483,7 @@ function User(name, person, token) {
 		var oldid = person.userid;
 		selfP.people.push(person);
 		person.rename(selfP.name, oldid);
-		console.log(''+selfP.name+' merging: socket '+person.socket.id+' of ');
+		console.log(''+selfP.name+' merging: socket '+person.socket.id);
 		person.socket.emit('update', {
 			name: selfP.name,
 			userid: selfP.userid,
@@ -562,6 +580,34 @@ function User(name, person, token) {
 			}
 		}
 		return result;
+	};
+	this.nameLock = function(targetName,recurse) {
+		var targetUser = getUser(targetName);
+		if(nameLockedIps[selfP.ip]==targetName||!targetUser||targetUser == selfP) {
+			nameLockedIps[selfP.ip] = targetName;
+			if(recurse)
+			{	selfP.forceRename(targetName, selfP.authenticated);
+				for(var i in users)
+					if(users[i].ip == selfP.ip && users[i] != selfP) {
+						users[i].disconnect();
+					}
+			}
+		}
+		return targetName;
+	};
+	this.nameLocked = function() {
+		if(nameLockedIps[selfP.ip])
+		{	selfP.nameLock(nameLockedIps[selfP.ip]);
+			return true;
+		}
+		for(var i in nameLockedIps)
+		{	if(nameLockedIps[i]==selfP.name)
+			{	nameLockedIps[selfP.ip] = selfP.name;
+				selfP.nameLock(nameLockedIps[selfP.ip]);
+				return true;
+			}
+		}
+		return false;
 	};
 	this.ban = function(noRecurse) {
 		// no need to recurse, since the root for-loop already bans everything with your IP

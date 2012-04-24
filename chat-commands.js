@@ -46,7 +46,53 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	switch (cmd) {
 	case 'me':
 		return '/me '+target;
-
+		break;
+	
+	case 'namelock':
+	case 'nl':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var targets = splitTarget(target);
+		var targetUser = getUser(targets[0]);
+		var targetName = targets[1]||targetUser.name;
+		if(targetUser)
+		{
+			var oldname = targetUser.name;
+			if(targetUser.forceRename(targetName,false))
+				targetUser.nameLock(targetName,true);
+			if(targetUser.nameLocked())
+				room.add(user.name+" name-locked "+oldname+" to "+targetName+".");
+			else
+				socket.emit('console',oldname+" can't be name-locked."); 
+		}
+		else
+			socket.emit('console',targets[0]+" not found.");
+		return false;
+		break;
+	case 'nameunlock':
+	case 'nul':
+		if(user.group != '&' || !target)
+		{
+			return false;
+		}
+		var removed = false;
+		for(var i in nameLockedIps)
+		{
+			if(nameLockedIps[i]==target)
+			{	delete nameLockedIps[i];
+				removed = true;
+			}
+		}
+		if(removed) {
+			room.add(user.name+" unlocked the name of "+target+".");
+			user.forceRename(user.name,user.authenticated);
+		}
+		else
+			socket.emit('console',target+" not found.");
+		return false;
+		break;
 	case 'command':
 		if (target.command === 'userdetails') {
 			target.userid = ''+target.userid;
