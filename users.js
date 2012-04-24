@@ -381,10 +381,7 @@ function User(name, person, token) {
 					else if (userid === "aeo2") avatar = 166;
 					else if (userid === "sharktamer") avatar = 7;
 					else if (userid === "bmelts") avatar = 1004;
-					else if (userid === "n") {
-						avatar = 209;
-						group = '&';
-					}
+					else if (userid === "n") avatar = 209;
 					
 					try {
 						var data = JSON.parse(body);
