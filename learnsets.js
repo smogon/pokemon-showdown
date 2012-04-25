@@ -10385,7 +10385,7 @@ exports.BattleLearnsets = {
 			dragontail: ["5M"],
 			workup: ["5M"],
 			chipaway: ["5L37"],
-			yawn: ["3S0"],
+			healbell: ["3S0"],
 			wish: ["3S0"]
 		}
 	},
