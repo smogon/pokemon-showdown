@@ -1239,7 +1239,12 @@ exports.BattleAbilities = {
 	},
 	"oblivious": {
 		desc: "This Pokemon cannot become attracted to another Pokemon.",
-		onAttract: false,
+		onImmunity: function(type, pokemon) {
+			if (type === 'attract') {
+				this.add('-immune', pokemon);
+				return false;
+			}
+		},
 		id: "oblivious",
 		name: "Oblivious",
 		rating: 0.5,
