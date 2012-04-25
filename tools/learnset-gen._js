@@ -121,18 +121,27 @@ function convertData(veekunPokemon, serebiiEventdex) {
 
 function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine(pokemon.id + ": {", 1);
+
+	// Alphabetlise the moves
+	var learnsetMoves;
+	if (pokemon.learnset) {
+		learnsetMoves = Object.keys(pokemon.learnset).sort();
+	} else {
+		learnsetMoves = new Array();
+	}
 	writeLine("learnset: {", 1);
-	for (var l in pokemon.learnset) {
+	for (var l = 0; l < learnsetMoves.length; ++l) {
 		if (l === "hiddenpower") {
 			// Placeholders until we fully remove all the individual hidden power types
 			var hiddenPowerTypes = ["bug", "dark", "dragon", "electric", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "poison", "pyschic", "rock", "steel", "water"];
 			for (var h = 0; h < hiddenPowerTypes.length; ++h) {
-				writeLine(l + hiddenPowerTypes[h] + ": " + JSON.stringify(pokemon.learnset[l]) + ",");
+				writeLine(learnsetMoves[l] + hiddenPowerTypes[h] + ": " + JSON.stringify(pokemon.learnset[learnsetMoves[l]]) + ",");
 			}
 		}
-		writeLine(l + ": " + JSON.stringify(pokemon.learnset[l]) + (ObjectIsLastKey(pokemon.learnset, l) ? "" : ","));
+		writeLine(learnsetMoves[l] + ": " + JSON.stringify(pokemon.learnset[learnsetMoves[l]]) + (l + 1 === learnsetMoves.length ? "" : ","));
 	}
 	writeLine("}", -1);
+
 	writeLine("}" + (isNotNeedFinalNewline ? "" : ","), -1);
 }
 
