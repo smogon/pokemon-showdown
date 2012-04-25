@@ -448,9 +448,9 @@ function BattleTools() {
 						problems.push(set.name+" ("+set.species+") can't learn "+move.name);
 					} else if (lset === 1) {
 						limit1++;
-					}
-					if (limit1 > 1) {
-						problems.push(set.name+" ("+set.species+") can't Sketch "+move.name+" - it's limited to 1 Sketch move");
+						if (limit1 > 1) {
+							problems.push(set.name+" ("+set.species+") can't Sketch "+move.name+" - it's limited to 1 Sketch move");
+						}
 					}
 				}
 			}
