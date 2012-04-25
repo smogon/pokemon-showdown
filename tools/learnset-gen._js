@@ -122,8 +122,16 @@ function convertData(veekunPokemon, serebiiEventdex) {
 function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine(pokemon.id + ": {", 1);
 	writeLine("learnset: {", 1);
-	for (var l in pokemon.learnset)
+	for (var l in pokemon.learnset) {
+		if (l === "hiddenpower") {
+			// Placeholders until we fully remove all the individual hidden power types
+			var hiddenPowerTypes = ["bug", "dark", "dragon", "electric", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "poison", "pyschic", "rock", "steel", "water"];
+			for (var h = 0; h < hiddenPowerTypes.length; ++h) {
+				writeLine(l + hiddenPowerTypes[h] + ": " + JSON.stringify(pokemon.learnset[l]) + ",");
+			}
+		}
 		writeLine(l + ": " + JSON.stringify(pokemon.learnset[l]) + (ObjectIsLastKey(pokemon.learnset, l) ? "" : ","));
+	}
 	writeLine("}", -1);
 	writeLine("}" + (isNotNeedFinalNewline ? "" : ","), -1);
 }
