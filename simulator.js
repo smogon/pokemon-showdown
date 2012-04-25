@@ -763,6 +763,7 @@ function BattlePokemon(set, side) {
 			selfB.singleEvent('Restart', status, selfP.volatiles[status.id], selfP, source, sourceEffect);
 			return false;
 		}
+		if (!selfP.runImmunity(status.id)) return false;
 		selfP.volatiles[status.id] = {id: status.id};
 		selfP.volatiles[status.id].target = selfP;
 		if (source) {
