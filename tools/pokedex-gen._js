@@ -80,7 +80,7 @@ function convertVeekunPokemon(pokemon) {
 		result.spriteid += "-";
 		result.spriteid += toIdForForme(result.name, pokemon.forme);
 	}
-	result.prevo = toId(pokemon.prevo);
+	result.prevo = toIdForName(pokemon.prevo, ""); // The prevo is always in it's normal forme
 
 	// Copy the type, modifing Arceus' types to the PS! style
 	result.types = pokemon.types;
