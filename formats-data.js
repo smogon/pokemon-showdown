@@ -804,7 +804,7 @@ exports.BattleFormatsData = {
 		viable: true,
 		viablemoves: {"wish":1,"protect":1,"dragontail":1,"curse":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1},
 		eventPokemon: [
-			{"generation":3,"level":5,"gender":"M/F","nature":"Any","abilities":["owntempo","oblivious"],"moves":["yawn","wish"]}
+			{"generation":3,"level":5,"gender":"M/F","nature":"Any","abilities":["owntempo","oblivious"],"moves":["healbell","wish"]}
 		],
 		tier: "LC"
 	},
