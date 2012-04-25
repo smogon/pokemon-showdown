@@ -216,6 +216,7 @@ function BattleTools() {
 	};
 
 
+	this.validateMoveset = require("./moveset-checker.js").check;
 	this.getBanlistTable = function(format, subformat, depth) {
 		var banlistTable;
 		if (!depth) depth = 0;
