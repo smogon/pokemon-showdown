@@ -601,7 +601,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === 'all') {
 			for (var i in require.cache) delete require.cache[i];
 			BattlePokedex = require('./pokedex.js').BattlePokedex;
-			BattleTiers = require('./tiers.js').BattleTiers;
 			BattleMovedex = require('./movedex.js').BattleMovedex;
 			BattleStatuses = require('./statuses.js').BattleStatuses;
 			BattleTypeChart = require('./typechart.js').BattleTypeChart;
@@ -625,7 +624,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		} else if (target === 'data') {
 			for (var i in require.cache) delete require.cache[i];
 			BattlePokedex = require('./pokedex.js').BattlePokedex;
-			BattleTiers = require('./tiers.js').BattleTiers;
 			BattleMovedex = require('./movedex.js').BattleMovedex;
 			BattleStatuses = require('./statuses.js').BattleStatuses;
 			BattleTypeChart = require('./typechart.js').BattleTypeChart;
