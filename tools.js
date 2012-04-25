@@ -213,13 +213,13 @@ function BattleTools() {
 			if (!template.learnset || template.learnset[move]) {
 				return true;
 			}
-			if (template.learnset['Sketch']) {
-				var lset = template.learnset['Sketch'];
+			if (template.learnset['sketch']) {
+				var lset = template.learnset['sketch'];
 				if (typeof lset === 'string') lset = [lset];
 				for (var i=0; i<lset.length; i++) if (lset[i].substr(1) !== 'E') return true;
 				return 1;
 			}
-			if (template.species === 'Deoxys-S' || template.species === 'Deoxys-A' || template.species === 'Deoxys-D') {
+			if (template.species === 'Deoxys-Speed' || template.species === 'Deoxys-Attack' || template.species === 'Deoxys-Defense') {
 				template = selfT.getTemplate('Deoxys');
 			} else if (template.species.substr(0,7) === 'Arceus-') {
 				template = selfT.getTemplate('Arceus');
