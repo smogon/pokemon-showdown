@@ -1276,7 +1276,10 @@ exports.BattleAbilities = {
 	"owntempo": {
 		desc: "This Pokemon cannot become confused.",
 		onImmunity: function(type, pokemon) {
-			if (type === 'confusion') return false;
+			if (type === 'confusion') {
+				this.add('-message', pokemon.name+' doesn\'t become confused! (placeholder)');
+				return false;
+			}
 		},
 		id: "owntempo",
 		name: "Own Tempo",
