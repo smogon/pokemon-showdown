@@ -100,13 +100,6 @@ exports.getSerebiiEventdex = function(_) {
 				if (movesHtml[m].text().trim().length > 0)
 					moves.push(toId(movesHtml[m].text()));
 
-			// Workaround for an incorrect entry in serebii's eventdex.
-			if (nationalPokedexNumber === 108) { // Lickitung
-				if (moves[0] === "yawn" && moves[1] === "wish") {
-					moves[0] = "healbell";
-				}
-			}
-
 			// Combine the results
 			var result = {
 					generation: generation,
