@@ -1,18 +1,61 @@
 // TODO:
 //   - Check illegal movesets
-//   - Check for sketched moves
 //   - Check for trading between generation restrictions (3->4, 4->5 removes all TM moves)
+//   - Check for event pokemon learning moves from it's prevos
+//   - Find more things that are missing from this list
 
 exports.check = function(pokemon, pokemonData) {
 	for (var m = 0; m < pokemon.moves.length; ++m) {
 		pokemon.moves[m] = pokemon.moves[m].toLowerCase().replace(/[^a-z0-9]+/g, "");
 	}
+
 	var moveCombinations = getBestMoveCombinations(pokemon, pokemonData);
 	if (moveCombinations.length === 0) return new Array(); // Empty moveset, but the error for that is elsewhere
 
 	var problems = new Array();
+
+	// Check if the pokemon can have any sketched moves
+	var sketches = getNumberOfSketches(pokemonData);
+	var isHasUnsketchableMove = false;
+	if (sketches > 0 && moveCombinations[0].invalid.length > 0) {
+		for (var m = 0; m < moveCombinations.length; ++m) {
+			var curSketches = sketches;
+			var isHasEventSketch = false;
+			if (moveCombinations[m].valid.event) {
+				var eventPokemon = Tools.getTemplate(moveCombinations[m].valid.event.data.pokemon).eventPokemon[moveCombinations[m].valid.event.data.id];
+				if (eventPokemon.moves.indexOf('sketch') !== -1) {
+					++curSketches;
+					isHasEventSketch = true;
+				}
+			}
+			var ignoredInvalidMoves = 0;
+			while (curSketches > 0 && ignoredInvalidMoves < moveCombinations[m].invalid.length) {
+				var invalidMove = moveCombinations[m].invalid[ignoredInvalidMoves];
+				if (invalidMove.move === 'struggle' || invalidMove.move === 'chatter') {
+					problems.push(pokemon.name + " (" + pokemon.species + ") can't sketch " + Tools.getMove(invalidMove.move).name + ".");
+					isHasUnsketchableMove = true;
+					++ignoredInvalidMoves;
+					continue;
+				}
+				if (isHasEventSketch) {
+					moveCombinations[m].valid.event.moves.push(invalidMove.move);
+					isHasEventSketch = false;
+				} else {
+					moveCombinations[m].valid.nonEvent.push(invalidMove.move);
+				}
+				moveCombinations[m].invalid.splice(ignoredInvalidMoves, 1);
+				--curSketches;
+			}
+		}
+	}
+
+	// Now check if all it's moves are valid
 	if (moveCombinations[0].invalid.length !== 0) {
-		problems.push(pokemon.name + " (" + pokemon.species + ") doesn't have a valid moveset. (Placeholder)");
+		if (sketches > 0) {
+			if (!isHasUnsketchableMove) problems.push(pokemon.name + " (" + pokemon.species + ") can only sketch a maxiumum of " + sketches + " moves.");
+		} else {
+			problems.push(pokemon.name + " (" + pokemon.species + ") doesn't have a valid moveset. (Placeholder)");
+		}
 	} else {
 		// Make sure the pokemon's nature, ability, gender and level matches any of the applicable events, if any
 		var possibleNatures = new Array();
@@ -300,6 +343,19 @@ function getEventMoveCombinations(eventMoves, pokemonData) {
 		results.push({inSet: inSet, notInSet: notInSet, eventId: allEventIds[i]});
 	}
 	return results;
+}
+
+function getNumberOfSketches(pokemonData) {
+	if (!pokemonData.learnset['sketch'] || pokemonData.learnset['sketch'].length === 0) return 0;
+	// There is no need to check prevos as of when this was written, as all the pokemon
+	// that had sketch was Smeargle and Necturna, both of which don't have prevos
+	var moveData = getMoveData('sketch', pokemonData);
+	var result = 0;
+	if (moveData.isEgg) ++result;
+	if (moveData.isTutor) ++result;
+	if (moveData.isMachine) result = Infinity;
+	if (moveData.levelup.length > 0) result = Infinity;
+	return result;
 }
 
 function getMoveData(move, pokemonData) {
