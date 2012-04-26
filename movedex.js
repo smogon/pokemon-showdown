@@ -499,7 +499,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			onStart: function(pokemon, source) {
-				return (((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) && this.runEvent('Attract', pokemon, source));
+				return ((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M'));
 			},
 			onBeforeMove: function(pokemon, target, move) {
 				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['attract']) {
