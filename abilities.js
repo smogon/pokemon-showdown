@@ -78,6 +78,12 @@ exports.BattleAbilities = {
 	"analytic": {
 		desc: "If the user moves last, the power of that move is increased by 30%.",
 		shortDesc: "Raises the power of all moves by 30% if the Pokemon moves last.",
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (!this.willMove(defender)) {
+				this.debug('Analytic boost');
+				return basePower * 1.3;
+			}
+		},
 		id: "analytic",
 		name: "Analytic",
 		rating: 1,
@@ -220,7 +226,7 @@ exports.BattleAbilities = {
 			onStart: function(target, source, effect) {
 				this.effectData.type = 'Normal';
 				if (effect && effect.type && effect.type !== 'Normal') {
-					this.add('-type',target,effect.type,'[from] ability: Color Change');
+					this.add('-message', target.name+'\'s Color Change made it the '+effect.type+' type! (placeholder)');
 					this.effectData.type = effect.type;
 				} else {
 					return false;
@@ -228,7 +234,7 @@ exports.BattleAbilities = {
 			},
 			onRestart: function(target, source, effect) {
 				if (effect && effect.type && effect.type !== this.effectData.type) {
-					this.add('-type',target,effect.type,'[from] ability: Color Change');
+					this.add('-message', target.name+'\'s Color Change made it the '+effect.type+' type! (placeholder)');
 					this.effectData.type = effect.type;
 				}
 			},
@@ -1233,7 +1239,12 @@ exports.BattleAbilities = {
 	},
 	"oblivious": {
 		desc: "This Pokemon cannot become attracted to another Pokemon.",
-		onAttract: false,
+		onImmunity: function(type, pokemon) {
+			if (type === 'attract') {
+				this.add('-immune', pokemon);
+				return false;
+			}
+		},
 		id: "oblivious",
 		name: "Oblivious",
 		rating: 0.5,
@@ -1265,7 +1276,10 @@ exports.BattleAbilities = {
 	"owntempo": {
 		desc: "This Pokemon cannot become confused.",
 		onImmunity: function(type, pokemon) {
-			if (type === 'confusion') return false;
+			if (type === 'confusion') {
+				this.add('-message', pokemon.name+' doesn\'t become confused! (placeholder)');
+				return false;
+			}
 		},
 		id: "owntempo",
 		name: "Own Tempo",
