@@ -45,12 +45,10 @@ function getViableMoves() {
 	var lines = fs.readFileSync(viableMovesPath).toString().split("\n");
 	for (var l = 0; l < lines.length; ++l) {
 		var tmp = lines[l].split(":");
-		if (tmp.length !== 2)
-			continue;
+		if (tmp.length !== 2) continue;
 		var pokemon = toId(tmp[0]);
 		var viableMoves = tmp[1].replace(/,\s*,/g, ",").split(",");
-		if (!pokemon || viableMoves.length <= 1)
-			continue;
+		if (!pokemon || viableMoves.length <= 1) continue;
 		result[pokemon] = new Object();
 		for (var v = 0; v < viableMoves.length; ++v) {
 			var viableMove = viableMoves[v].trim();
@@ -62,8 +60,9 @@ function getViableMoves() {
 
 function outputCustomPokemon() {
 	var customPokemon = JSON.parse(require("fs").readFileSync(customPokemonPath).toString());
-	for (var c = 0; c < customPokemon.length; ++c)
+	for (var c = 0; c < customPokemon.length; ++c) {
 		outputPokemon(customPokemon[c]);
+	}
 }
 
 function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
@@ -85,8 +84,7 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 		result.eventPokemon = new Array();
 		for (var e = 0; e < serebiiEventdex[veekunPokemon.nationalPokedexNumber].length; ++e) {
 			var serebiiEventPokemon = serebiiEventdex[veekunPokemon.nationalPokedexNumber][e];
-			if (serebiiEventPokemon.generation < 3)
-				continue;
+			if (serebiiEventPokemon.generation < 3) continue;
 
 			var eventPokemon = new Object();
 			eventPokemon.generation = serebiiEventPokemon.generation;
@@ -108,12 +106,14 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 		writeLine("viable: true,");
 		writeLine("viablemoves: " + JSON.stringify(pokemon.viablemoves) + ",");
 	}
-	if (pokemon.isNonstandard)
+	if (pokemon.isNonstandard) {
 		writeLine("isNonstandard: true,");
+	}
 	if (pokemon.eventPokemon) {
 		writeLine("eventPokemon: [", 1);
-		for (var e = 0; e < pokemon.eventPokemon.length; ++e)
+		for (var e = 0; e < pokemon.eventPokemon.length; ++e) {
 			writeLine(JSON.stringify(pokemon.eventPokemon[e]) + (e + 1 === pokemon.eventPokemon.length ? "" : ","));
+		}
 		writeLine("],", -1);
 	}
 	writeLine("tier: " + JSON.stringify(pokemon.tier));

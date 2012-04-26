@@ -10,16 +10,18 @@ function VeekunDatabase(db, _) {
 	this.getAllFormeIds = function(_) {
 		var dbResult = this.db.execute("SELECT id FROM pokemon_forms ORDER BY \"order\" ASC", _);
 		var result = new Array();
-		for (var r = 0; r < dbResult.length; ++r)
+		for (var r = 0; r < dbResult.length; ++r) {
 			result.push(dbResult[r].id);
+		}
 		return result;
 	},
 
 	this.getAllGenerations = function(_) {
 		var dbResult = this.db.execute("SELECT id FROM generations", _);
 		var results = new Array();
-		for (var d = 0; d < dbResult.length; ++d)
+		for (var d = 0; d < dbResult.length; ++d) {
 			results.push(dbResult[d].id);
+		}
 		return results;
 	},
 
@@ -34,8 +36,9 @@ function VeekunDatabase(db, _) {
 			var dbResult2 = this.db.execute("SELECT id, is_default, is_battle_only FROM pokemon_forms WHERE pokemon_id = ?", [dbResult[d].id], _);
 			for (var d2 = 0; d2 < dbResult2.length; ++d2) {
 				result.push({id: dbResult2[d2].id, isDefault: !!(dbResult[d].is_default && dbResult2[d2].is_default), isBattleOnly: !!dbResult2[d2].is_battle_only});
-				if (dbResult[d].is_default && dbResult2[d2].is_default)
+				if (dbResult[d].is_default && dbResult2[d2].is_default) {
 					++defaults;
+				}
 			}
 		}
 		assert(defaults === 1);
@@ -44,16 +47,19 @@ function VeekunDatabase(db, _) {
 
 	this.getPokemonDefaultForme = function(pokemonId, _) {
 		var formeIds = this.getPokemonFormes(pokemonId, _);
-		for (var f = 0; f < formeIds.length; ++f)
-			if (formeIds[f].isDefault)
+		for (var f = 0; f < formeIds.length; ++f) {
+			if (formeIds[f].isDefault) {
 				return formeIds[f].id;
+			}
+		}
 		assert(false);
 	},
 
 	this.getIsDefaultFormeCache_ = new Object();
 	this.getIsDefaultForme = function(formeId, _, isOverrideCache) {
-		if (!isOverrideCache && this.getIsDefaultFormeCache_[formeId])
+		if (!isOverrideCache && this.getIsDefaultFormeCache_[formeId]) {
 			return this.getIsDefaultFormeCache_[formeId];
+		}
 		var dbResult = this.db.execute("SELECT pokemon_id, is_default FROM pokemon_forms WHERE id = ? LIMIT 1", [formeId], _)[0];
 		var dbResult2 = this.db.execute("SELECT is_default FROM pokemon WHERE id = ? LIMIT 1", [dbResult.pokemon_id], _)[0];
 		return (this.getIsDefaultFormeCache_[formeId] = !!(dbResult.is_default && dbResult2.is_default));
@@ -91,8 +97,9 @@ function VeekunDatabase(db, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var dbResult = this.db.execute("SELECT type_id FROM pokemon_types WHERE pokemon_id = ? ORDER BY slot ASC", [pokemonId], _);
 		var results = new Array();
-		for (var d = 0; d < dbResult.length; ++d)
+		for (var d = 0; d < dbResult.length; ++d) {
 			results.push(dbResult[d].type_id);
+		}
 		return results;
 	},
 
@@ -114,9 +121,11 @@ function VeekunDatabase(db, _) {
 	nextAbility:
 		for (var d = 0; d < dbResult.length; ++d) {
 			var result = {id: dbResult[d].ability_id, isDreamWorld: !!dbResult[d].is_dream};
-			for (var r = 0; r < results.length; ++r) // Hack to get around indexOf() only matching object references
-				if (JSON.stringify(result) === JSON.stringify(results[r]))
+			for (var r = 0; r < results.length; ++r) { // Hack to get around indexOf() only matching object references
+				if (JSON.stringify(result) === JSON.stringify(results[r])) {
 					continue nextAbility;
+				}
+			}
 			results.push(result);
 		}
 		return results;
@@ -125,8 +134,7 @@ function VeekunDatabase(db, _) {
 	this.getPokemonPrevo = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var dbResult = this.db.execute("SELECT evolves_from_species_id FROM pokemon_species WHERE id = ? LIMIT 1", [speciesId], _);
-		if (!dbResult[0].evolves_from_species_id)
-			return 0;
+		if (!dbResult[0].evolves_from_species_id) return 0;
 		return this.speciesIdToDefaultFormePokemonId(dbResult[0].evolves_from_species_id, _);
 	},
 
@@ -134,8 +142,9 @@ function VeekunDatabase(db, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var dbResult = this.db.execute("SELECT id FROM pokemon_species WHERE evolves_from_species_id = ?", [speciesId], _);
 		var results = new Array();
-		for (var d = 0; d < dbResult.length; ++d)
+		for (var d = 0; d < dbResult.length; ++d) {
 			results.push(this.speciesIdToDefaultFormePokemonId(dbResult[d].id, _));
+		}
 		return results;
 	},
 
@@ -146,12 +155,13 @@ function VeekunDatabase(db, _) {
 										ORDER BY level,\"order\"",
 									   [pokemonId, versionGroupId], _);
 		var results = new Array();
-		for (var d = 0; d < dbResult.length; ++d)
+		for (var d = 0; d < dbResult.length; ++d) {
 			results.push({
-				moveId: dbResult[d].move_id,
-				methodOfLearningId: dbResult[d].pokemon_move_method_id,
-				levelLearnt: dbResult[d].level
-			});
+					moveId: dbResult[d].move_id,
+					methodOfLearningId: dbResult[d].pokemon_move_method_id,
+					levelLearnt: dbResult[d].level
+				});
+		}
 		return results;
 	},
 
@@ -159,8 +169,9 @@ function VeekunDatabase(db, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var dbResult = this.db.execute("SELECT egg_group_id FROM pokemon_egg_groups WHERE species_id = ?", [speciesId], _);
 		var results = new Array();
-		for (var d = 0; d < dbResult.length; ++d)
+		for (var d = 0; d < dbResult.length; ++d) {
 			results.push(dbResult[d].egg_group_id);
+		}
 		return results;
 	},
 
@@ -202,8 +213,9 @@ function VeekunDatabase(db, _) {
 	this.getVersionGroupIdsForGeneration = function(generation, _) {
 		var dbResult = this.db.execute("SELECT id FROM version_groups WHERE generation_id = ? ORDER BY \"order\"", [generation], _);
 		var results = new Array();
-		for (var d = 0; d < dbResult.length; ++d)
+		for (var d = 0; d < dbResult.length; ++d) {
 			results.push(dbResult[d].id);
+		}
 		return results;
 	},
 
@@ -219,8 +231,9 @@ function VeekunDatabase(db, _) {
 		var speciesId = this.formeIdToSpeciesId(formeId, _);
 		var pokemonName = this.getSingleText_("pokemon_species_names", "name", "pokemon_species_id", speciesId, languageId, _);
 		var pokemonNameWithForme = this.getSingleText_("pokemon_form_names", "pokemon_name", "pokemon_form_id", formeId, languageId, _);
-		if (!pokemonNameWithForme)
+		if (!pokemonNameWithForme) {
 			return {name: pokemonName, forme: ""};
+		}
 
 		var positionOfPokemonName = pokemonNameWithForme.indexOf(pokemonName);
 		if (positionOfPokemonName === -1) {
@@ -232,8 +245,9 @@ function VeekunDatabase(db, _) {
 		}
 
 		assert(positionOfPokemonName !== -1);
-		if (positionOfPokemonName !== 0 && positionOfPokemonName !== (pokemonNameWithForme.length - pokemonName.length))
+		if (positionOfPokemonName !== 0 && positionOfPokemonName !== (pokemonNameWithForme.length - pokemonName.length)) {
 			console.warn("Warning: Pokemon name in wierd position for \"" + pokemonNameWithForme + "\".");
+		}
 		var pokemonForme = pokemonNameWithForme.replace(pokemonName, "").replace(/\s+/g, " ").trim();
 		return {name: pokemonName, forme: pokemonForme};
 	},
@@ -258,8 +272,9 @@ function VeekunDatabase(db, _) {
 									   [speciesId, languageId], _);
 
 		var result = new Object();
-		for (var d = 0; d < dbResult.length; ++d)
+		for (var d = 0; d < dbResult.length; ++d) {
 			result[this.getSingleText_("version_names", "name", "version_id", dbResult[d].version_id, languageId, _)] = dbResult[d].flavor_text.replace(/\s+/g, " ").trim();
+		}
 		return result;
 	},
 
@@ -289,8 +304,9 @@ function VeekunDatabase(db, _) {
 
 	this.formeIdToPokemonIdCache_ = new Object();
 	this.formeIdToPokemonId = function(formeId, _, isOverrideCache) {
-		if (!isOverrideCache && this.formeIdToPokemonIdCache_[formeId])
+		if (!isOverrideCache && this.formeIdToPokemonIdCache_[formeId]) {
 			return this.formeIdToPokemonIdCache_[formeId];
+		}
 		return (this.formeIdToPokemonIdCache_[formeId] = this.db.execute("SELECT pokemon_id FROM pokemon_forms WHERE id = ? LIMIT 1", [formeId], _)[0].pokemon_id);
 	},
 	this.formeIdToSpeciesId = function(formeId, _) {
@@ -298,28 +314,33 @@ function VeekunDatabase(db, _) {
 	},
 	this.pokemonIdToFormeIdsCache_ = new Object();
 	this.pokemonIdToFormeIds = function(pokemonId, _, isOverrideCache) {
-		if (!isOverrideCache && this.pokemonIdToFormeIdsCache_[pokemonId])
+		if (!isOverrideCache && this.pokemonIdToFormeIdsCache_[pokemonId]) {
 			return this.pokemonIdToFormeIdsCache_[pokemonId];
+		}
 		var dbResult = this.db.execute("SELECT id FROM pokemon_forms WHERE pokemon_id = ?", [pokemonId], _);
 		var result = new Array();
-		for (var d = 0; d < dbResult.length; ++d)
+		for (var d = 0; d < dbResult.length; ++d) {
 			result.push(dbResult[d].id);
+		}
 		return (this.pokemonIdToFormeIdsCache_[pokemonId] = result);
 	},
 	this.pokemonIdToSpeciesIdCache_ = new Object();
 	this.pokemonIdToSpeciesId = function(pokemonId, _, isOverrideCache) {
-		if (!isOverrideCache && this.pokemonIdToSpeciesIdCache_[pokemonId])
+		if (!isOverrideCache && this.pokemonIdToSpeciesIdCache_[pokemonId]) {
 			return this.pokemonIdToSpeciesIdCache_[pokemonId];
+		}
 		return (this.pokemonIdToSpeciesIdCache_[pokemonId] = this.db.execute("SELECT species_id FROM pokemon WHERE id = ? LIMIT 1", [pokemonId], _)[0].species_id);
 	},
 	this.speciesIdToPokemonIdsCache_ = new Object();
 	this.speciesIdToPokemonIds = function(speciesId, _, isOverrideCache) {
-		if (!isOverrideCache && this.speciesIdToPokemonIdsCache_[speciesId])
+		if (!isOverrideCache && this.speciesIdToPokemonIdsCache_[speciesId]) {
 			return this.speciesIdToPokemonIdsCache_[speciesId];
+		}
 		var dbResult = this.db.execute("SELECT id FROM pokemon WHERE species_id = ?", [speciesId], _);
 		var result = new Array();
-		for (var d = 0; d < dbResult.length; ++d)
+		for (var d = 0; d < dbResult.length; ++d) {
 			result.push(dbResult[d].id);
+		}
 		return (this.speciesIdToPokemonIdsCache_[speciesId] = result);
 	},
 	this.speciesIdToDefaultFormePokemonId = function(speciesId, _) {
@@ -327,31 +348,33 @@ function VeekunDatabase(db, _) {
 		var results = new Array();
 		for (var p = 0; p < pokemonIds.length; ++p) {
 			var pokemonId = this.formeIdToPokemonId(this.getPokemonDefaultForme(pokemonIds[p], _), _);
-			if (results.indexOf(pokemonId) === -1)
+			if (results.indexOf(pokemonId) === -1) {
 				results.push(pokemonId);
+			}
 		}
-		assert(results.length === 1)
+		assert(results.length === 1);
 		return results[0];
 	},
 
 	// Convienience function
 
 	this.getFormeData = function(formeId, languageId, _, requestedData) {
-		if (!requestedData)
+		if (!requestedData) {
 			requestedData = {
-				name: true,
-				otherFormes: true,
-				pokedexNumbers: true,
-				pokedexDescriptions: true,
-				types: true,
-				baseStats: true,
-				abilities: true,
-				prevo: true,
-				evos: true,
-				learnset: true,
-				eggGroups: true,
-				misc: true
-			};
+					name: true,
+					otherFormes: true,
+					pokedexNumbers: true,
+					pokedexDescriptions: true,
+					types: true,
+					baseStats: true,
+					abilities: true,
+					prevo: true,
+					evos: true,
+					learnset: true,
+					eggGroups: true,
+					misc: true
+				};
+		}
 
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
 		var result = new Object();
@@ -364,24 +387,27 @@ function VeekunDatabase(db, _) {
 			result.name = name.name;
 			result.forme = name.forme;
 			result.combinedName = result.name;
-			if (!result.isDefaultForme)
+			if (!result.isDefaultForme) {
 				result.combinedName += "-" + result.forme;
+			}
 		}
 
 		// Get the other formes of this pokemon
 		if (requestedData.otherFormes) {
 			var otherFormeIds = this.getPokemonFormes(pokemonId, _);
 			result.otherFormes = new Array();
-			for (var f = 0; f < otherFormeIds.length; ++f)
+			for (var f = 0; f < otherFormeIds.length; ++f) {
 				if (otherFormeIds[f].id !== formeId) {
 					var otherForme = this.getFormeName(otherFormeIds[f].id, languageId, _);
 					otherForme.isDefaultForme = otherFormeIds[f].isDefault;
 					otherForme.isBattleOnlyForme = otherFormeIds[f].isBattleOnly;
 					otherForme.combinedName = result.name;
-					if (!otherForme.isDefaultForme)
+					if (!otherForme.isDefaultForme) {
 						otherForme.combinedName += "-" + otherForme.forme;
+					}
 					result.otherFormes.push(otherForme);
 				}
+			}
 		}
 
 		// Get pokedex numbers
@@ -389,45 +415,51 @@ function VeekunDatabase(db, _) {
 			result.nationalPokedexNumber = this.getPokemonNationalPokedexNumber(pokemonId, _);
 			var pokedexNumberIds = this.getPokemonPokedexNumbers(pokemonId, _);
 			result.pokedexNumbers = new Object();
-			for (var p in pokedexNumberIds)
+			for (var p in pokedexNumberIds) {
 				result.pokedexNumbers[this.getPokedexName(p, languageId, _)] = pokedexNumberIds[p];
+			}
 		}
 
 		// Get pokedex descriptions
-		if (requestedData.pokedexDescriptions)
+		if (requestedData.pokedexDescriptions) {
 			result.descriptions = this.getPokemonPokedexDescriptions(pokemonId, languageId, _);
+		}
 
 		// Get types
 		if (requestedData.types) {
 			var typeIds = this.getFormeTypes(formeId, _);
 			result.types = new Array();
-			for (var t = 0; t < typeIds.length; ++t)
+			for (var t = 0; t < typeIds.length; ++t) {
 				result.types.push(this.getTypeName(typeIds[t], languageId, _));
+			}
 		}
 
 		// Get base stats
 		if (requestedData.baseStats) {
 			var baseStatIds = this.getFormeBaseStats(formeId, _);
 			result.baseStats = new Object();
-			for (var s in baseStatIds)
+			for (var s in baseStatIds) {
 				result.baseStats[this.getStatName(s, languageId, _)] = baseStatIds[s];
+			}
 		}
 
 		// Get abilities
 		if (requestedData.abilities) {
 			var abilityIds = this.getFormeAbilities(formeId, _);
 			result.abilities = new Array();
-			for (var a = 0; a < abilityIds.length; ++a)
+			for (var a = 0; a < abilityIds.length; ++a) {
 				result.abilities.push({name: this.getAbilityName(abilityIds[a].id, languageId, _), isDreamWorld: abilityIds[a].isDreamWorld});
+			}
 		}
 
 		// Get the previous evolution
 		if (requestedData.prevo) {
 			var prevoId = this.getPokemonPrevo(pokemonId, _);
-			if (prevoId)
+			if (prevoId) {
 				result.prevo = this.getFormeName(this.getPokemonDefaultForme(prevoId, _), languageId, _).name
-			else
+			} else {
 				result.prevo = "";
+			}
 		}
 
 		// Get the evolutions
@@ -444,12 +476,12 @@ function VeekunDatabase(db, _) {
 				} else {
 					var evoFormeIds = this.getPokemonFormes(evoIds[e], _);
 					for (var f = 0; f < evoFormeIds.length; ++f) {
-						if (evoFormeIds[f].isBattleOnly)
-							continue;
+						if (evoFormeIds[f].isBattleOnly) continue;
 						var evo = this.getFormeName(evoFormeIds[f].id, languageId, _);
 						evo.combinedName = evo.name;
-						if (!evoFormeIds[f].isDefault)
+						if (!evoFormeIds[f].isDefault) {
 							evo.combinedName += "-" + evo.forme;
+						}
 						result.evos.push(evo);
 					}
 				}
@@ -477,8 +509,9 @@ function VeekunDatabase(db, _) {
 								isAlreadyExists = true;
 								break;
 							}
-						if (!isAlreadyExists)
+						if (!isAlreadyExists) {
 							result.learnset[generations[g]].push(move);
+						}
 					}
 				}
 			}
@@ -488,8 +521,9 @@ function VeekunDatabase(db, _) {
 		if (requestedData.eggGroups) {
 			var eggGroupIds = this.getPokemonEggGroups(pokemonId, _);
 			result.eggGroups = new Array();
-			for (var e = 0; e < eggGroupIds.length; ++e)
+			for (var e = 0; e < eggGroupIds.length; ++e) {
 				result.eggGroups.push(this.getEggGroupName(eggGroupIds[e], languageId, _));
+			}
 		}
 
 		// Get misc info
@@ -519,29 +553,32 @@ function VeekunDatabase(db, _) {
 
 	this.singleTextCache_ = new Object();
 	this.getSingleText_ = function(table, textKey, idKey, id, languageId, _, languageIdKeyOverride, isOverrideCache) {
-		if (!languageIdKeyOverride)
+		if (!languageIdKeyOverride) {
 			languageIdKeyOverride = "local_language_id";
+		}
 
 		var argumentsHash = JSON.stringify({table: table, textKey: textKey, idKye: idKey, id: id, languageId: languageId, languageIdKeyOverride: languageIdKeyOverride});
-		if (!isOverrideCache && this.singleTextCache_[argumentsHash])
+		if (!isOverrideCache && this.singleTextCache_[argumentsHash]) {
 			return this.singleTextCache_[argumentsHash];
+		}
 
 		var dbResult = this.db.execute("SELECT " + textKey + " FROM " + table + " WHERE " + idKey + " = ? AND " + languageIdKeyOverride + " = ? LIMIT 1", [id, languageId], _);
-		if (dbResult.length === 0)
+		if (dbResult.length === 0) {
 			dbResult = this.db.execute("SELECT " + textKey + " FROM " + table + " WHERE " + idKey + " = ? AND " + languageIdKeyOverride + " = ? LIMIT 1", [id, this.fallbackLanguageId_], _);
+		}
 
-		if (dbResult.length > 0 && dbResult[0][textKey])
+		if (dbResult.length > 0 && dbResult[0][textKey]) {
 			return (this.singleTextCache_[argumentsHash] = dbResult[0][textKey].replace(/\s+/g, " ").trim()); // Normalise spaces
-		else
+		} else {
 			return (this.singleTextCache_[argumentsHash] = "");
+		}
 	}
 }
 
 exports.getVeekunDatabase = function(_, isForceRedownload) {
 	try {
 		var stat = fs.lstatSync("veekun.sqlite");
-		if (!stat.isFile())
-			isForceRedownload = true;
+		if (!stat.isFile()) isForceRedownload = true;
 	} catch (e) {
 		isForceRedownload = true;
 	}

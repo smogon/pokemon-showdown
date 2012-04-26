@@ -1,7 +1,7 @@
 // Run this with streamline (_node) like so:
-//  _node learnset-gen._js > ../learnset.js
+//  _node learnsets-gen._js > ../learnsets.js
 //      or
-//  ../node_modules/.bin/_node learnset-gen._js > ../learnset.js
+//  ../node_modules/.bin/_node learnsets-gen._js > ../learnsets.js
 
 var customPokemonPath = "../data/custom-pokemon.json";
 
@@ -34,8 +34,9 @@ function main(argv, _) {
 			});
 		var convertedPokemon = convertData(veekunPokemon, serebiiEventdex);
 		outputPokemon(convertedPokemon, f === formeIds.length - 1);
-		if ((f + 1) % 50 === 0)
+		if ((f + 1) % 50 === 0) {
 			console.warn("Finished outputting " + (f + 1) + "/" + formeIds.length + " pokemon.");
+		}
 	}
 	writeLine("};", -1);
 	console.warn("Finished outputting.");
@@ -44,8 +45,9 @@ function main(argv, _) {
 
 function outputCustomPokemon() {
 	var customPokemon = JSON.parse(require("fs").readFileSync(customPokemonPath).toString());
-	for (var c = 0; c < customPokemon.length; ++c)
+	for (var c = 0; c < customPokemon.length; ++c) {
 		outputPokemon(customPokemon[c]);
+	}
 }
 
 function convertData(veekunPokemon, serebiiEventdex) {
@@ -55,14 +57,14 @@ function convertData(veekunPokemon, serebiiEventdex) {
 	result.learnset = new Object();
 	for (var g in veekunPokemon.learnset) {
 		// g is the generation
-		if (g < 3)
-			continue;
+		if (g < 3) continue;
 
 		for (var l = 0; l < veekunPokemon.learnset[g].length; ++l) {
 			var move = veekunPokemon.learnset[g][l];
 			move.name = toId(move.name);
-			if (!result.learnset[move.name])
+			if (!result.learnset[move.name]) {
 				result.learnset[move.name] = new Array();
+			}
 			var convertedMethodOfLearning = g;
 			switch (move.methodOfLearning) {
 				case "Level up" :
@@ -95,8 +97,9 @@ function convertData(veekunPokemon, serebiiEventdex) {
 					convertedMethodOfLearning += "?";
 					break;
 			}
-			if (result.learnset[move.name].indexOf(convertedMethodOfLearning) === -1)
+			if (result.learnset[move.name].indexOf(convertedMethodOfLearning) === -1) {
 				result.learnset[move.name].push(convertedMethodOfLearning);
+			}
 		}
 	}
 
@@ -109,8 +112,9 @@ function convertData(veekunPokemon, serebiiEventdex) {
 				var move = toId(eventPokemon[e].moves[m]);
 				var methodOfLearning = eventPokemon[e].generation + "S" + e;
 
-				if (!result.learnset[move])
+				if (!result.learnset[move]) {
 					result.learnset[move] = new Array();
+				}
 				result.learnset[move].push(methodOfLearning);
 			}
 		}

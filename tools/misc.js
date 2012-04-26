@@ -1,18 +1,21 @@
 var currentIndentLevel = 0;
 exports.writeLine = function(line, indent) {
-	if (!indent || typeof indent !== "number")
-		indent = 0;
+	if (!indent || typeof indent !== "number") indent = 0;
 
 	var nextIndentLevel = currentIndentLevel + indent;
-	if (nextIndentLevel < 0)
+	if (nextIndentLevel < 0) {
 		nextIndentLevel = 0;
+	}
 
-	if (indent < 0)
-		for (var indentLevel = nextIndentLevel; indentLevel > 0; --indentLevel)
+	if (indent < 0) {
+		for (var indentLevel = nextIndentLevel; indentLevel > 0; --indentLevel) {
 			process.stdout.write("\t");
-	else
-		for (; currentIndentLevel > 0; --currentIndentLevel)
+		}
+	} else {
+		for (; currentIndentLevel > 0; --currentIndentLevel) {
 			process.stdout.write("\t");
+		}
+	}
 
 	process.stdout.write(line);
 	process.stdout.write("\n");
@@ -47,11 +50,14 @@ exports.toIdForForme = function(combinedName, forme) {
 exports.toIdForName = function(combinedName, forme) {
 	var result = exports.toId(combinedName.replace("♂", "M").replace("♀", "F"));
 	var formeId = exports.toIdForForme(combinedName, forme);
-	if (result.indexOf(formeId) === -1)
-		if (exports.toId(forme).length === 0)
+	if (result.indexOf(formeId) === -1) {
+		if (exports.toId(forme).length === 0) {
 			result += formeId;
-		else
-			if(result.indexOf(exports.toId(forme)) !== -1)
+		} else {
+			if(result.indexOf(exports.toId(forme)) !== -1) {
 				result.replace(exports.toId(forme), formeId);
+			}
+		}
+	}
 	return result;
 }

@@ -1,5 +1,5 @@
 // TODO:
-//   - Check illegal movesets
+//   - Check illegal egg move combinations
 //   - Check for trading between generation restrictions (3->4, 4->5 removes all TM moves)
 //   - Check for event pokemon learning moves from it's prevos
 //   - Find more things that are missing from this list

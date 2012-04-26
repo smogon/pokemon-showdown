@@ -11,8 +11,9 @@ exports.getSerebiiEventdex = function(_) {
 	var indexHtml = libxml.parseHtmlString(request(indexUrl, _).body);
 	var yearsHtml = indexHtml.find("//form[@name='yra']//select/option");
 	var yearsHref = new Array();
-	for (var y = 1; y < yearsHtml.length; ++y)
+	for (var y = 1; y < yearsHtml.length; ++y) {
 		yearsHref.push(yearsHtml[y].attr("value").value());
+	}
 
 	// Get the data for each of the years
 	var results = new Object();
@@ -28,15 +29,17 @@ exports.getSerebiiEventdex = function(_) {
 			// The first column contains the generation, the pokemon, it's level and it's gender
 			var gendersHtml = columnsHtml[0].find("./table/tr[1]//font");
 			var gender = "";
-			if (gendersHtml.length === 0)
+			if (gendersHtml.length === 0) {
 				gender = "N/A";
-			else if (gendersHtml.length === 1)
-				if (gendersHtml[0].text() === "♂")
+			} else if (gendersHtml.length === 1) {
+				if (gendersHtml[0].text() === "♂") {
 					gender = "M";
-				else
+				} else {
 					gender = "F";
-			else
+				}
+			} else {
 				gender = "M/F";
+			}
 
 			var nationalPokedexNumberAndForme = columnsHtml[0].get("./table/tr[2]//img/@src").text().replace(/^.*?([0-9]+)(-([a-z]+))?\.png$/, "$1,$3").split(",");
 			var nationalPokedexNumber = parseInt(nationalPokedexNumberAndForme[0], 10);
@@ -46,15 +49,16 @@ exports.getSerebiiEventdex = function(_) {
 
 			// Fix the forme letter
 			if ((formeLetter === 'm' && gender === "M") ||
-				(formeLetter === 'f' && gender === "F"))
+				(formeLetter === 'f' && gender === "F")) {
 				formeLetter = '';
-			if (formeLetter === 'l' && nationalPokedexNumber === 492) // Shaymin
+			}
+			if (formeLetter === 'l' && nationalPokedexNumber === 492) { // Shaymin
 				formeLetter = '';
+			}
 
 			// Convert the generation
 			var generation;
-			switch (generationLetters)
-			{
+			switch (generationLetters) {
 				case "rb" :
 					generation = 1;
 					break;
@@ -84,21 +88,25 @@ exports.getSerebiiEventdex = function(_) {
 			// The second column contains the ability
 			var abilitiesHtml = columnsHtml[1].find("./table/tr[3]/td[2]/a");
 			var abilities = new Array();
-			for (var a = 0; a < abilitiesHtml.length; ++a)
+			for (var a = 0; a < abilitiesHtml.length; ++a) {
 				abilities.push(toId(abilitiesHtml[a].text()));
+			}
 
 			// The third column contains the nature
 			var nature = columnsHtml[2].childNodes()[0].text().replace(/^(.*?) Nature\.$/, "$1");
-			if (nature === "??")
+			if (nature === "??") {
 				// Change unknown nature data to any nature
 				nature = "Any";
+			}
 
 			// The fourth columns contains the moves
 			var movesHtml = columnsHtml[3].find("./table/tr");
 			var moves = new Array();
-			for (var m = 0; m < movesHtml.length; ++m)
-				if (movesHtml[m].text().trim().length > 0)
+			for (var m = 0; m < movesHtml.length; ++m) {
+				if (movesHtml[m].text().trim().length > 0) {
 					moves.push(toId(movesHtml[m].text()));
+				}
+			}
 
 			// Combine the results
 			var result = {
@@ -112,8 +120,9 @@ exports.getSerebiiEventdex = function(_) {
 				};
 
 			// Check if there is already an entry for this pokemon
-			if (!results[nationalPokedexNumber])
+			if (!results[nationalPokedexNumber]) {
 				results[nationalPokedexNumber] = new Array();
+			}
 			var isDuplicate = false;
 			for (var r = 0; r < results[nationalPokedexNumber].length; ++r) {
 				if (JSON.stringify(results[nationalPokedexNumber][r]) === JSON.stringify(result)) {
@@ -121,8 +130,9 @@ exports.getSerebiiEventdex = function(_) {
 					break;
 				}
 			}
-			if (!isDuplicate)
+			if (!isDuplicate) {
 				results[nationalPokedexNumber].push(result);
+			}
 		}
 	}
 	return results;
