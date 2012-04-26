@@ -499,7 +499,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			onStart: function(pokemon, source) {
-				return ((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M'));
+				return (((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) && this.runEvent('Attract', pokemon, source));
 			},
 			onBeforeMove: function(pokemon, target, move) {
 				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['attract']) {
@@ -1116,7 +1116,7 @@ exports.BattleMovedex = {
 		onTryHit: function(pokemon) {
 			// will shatter screens through sub, before you hit
 			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightScreen');
+			pokemon.side.removeSideCondition('lightscreen');
 		},
 		priority: 0,
 		secondary: false,
@@ -2046,11 +2046,17 @@ exports.BattleMovedex = {
 		id: "defog",
 		name: "Defog",
 		pp: 15,
-		priority: 0,
-		boosts: {
-			evasion: -1
-		},
 		isBounceable: true,
+		priority: 0,
+		onHit: function(pokemon) {
+			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
+			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
+					for (var i in sideConditions) {
+						if (pokemon.side.removeSideCondition(i)) {
+							this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+pokemon);
+						}
+					}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Flying"
@@ -7016,7 +7022,7 @@ exports.BattleMovedex = {
 		name: "Mist",
 		pp: 30,
 		priority: 0,
-		sideCondition: 'Mist',
+		sideCondition: 'mist',
 		effect: {
 			duration: 5,
 			onBoost: function(boost, target, source) {
@@ -8557,7 +8563,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		priority: 0,
-		sideCondition: 'Reflect',
+		sideCondition: 'reflect',
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
@@ -9169,7 +9175,7 @@ exports.BattleMovedex = {
 		name: "Safeguard",
 		pp: 25,
 		priority: 0,
-		sideCondition: 'Safeguard',
+		sideCondition: 'safeguard',
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
