@@ -1063,14 +1063,14 @@ exports.BattleMovedex = {
 				// warning: does not work the same way as Fly
 
 				if (move.target === 'foeSide') return;
-				if (move.id === 'gust' || move.id === 'twister' || move.id === 'thunder') {
+				if (move.id === 'gust' || move.id === 'twister') {
 					// should not normally be done in ModifyMove event,
 					// but these moves have static base power, and
 					// it's faster to do this  here than in
 					// BasePower event
 					move.basePower *= 2;
 					return;
-				} else if (move.id === 'skyuppercut') {
+				} else if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown') {
 					return;
 				}
 				move.accuracy = 0;
@@ -6125,7 +6125,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "All Pokemon in the user's party receive 1/2 damage from Special attacks for 5 turns. Light Screen will be removed from the user's field if an opponent's Pokemon uses Brick Break. It will also last for eight turns if its user is holding Light Clay. In double battles, both Pokemon are shielded, but damage protection is reduced from 1/2 to 1/3.",
-		shortDesc: "For 5 turns, allies' Sp. Def is raised by 2 (or 4/3).",
+		shortDesc: "For 5 turns, foes' Sp. Atk is 1/2 if 1-on-1, or 2/3.",
 		id: "lightscreen",
 		name: "Light Screen",
 		pp: 30,
@@ -8557,7 +8557,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "All Pokemon in the user's party receive 1/2 damage from Physical attacks for 5 turns. Reflect will be removed from the user's field if an opponent's Pokemon uses Brick Break. It will also last for eight turns if its user is holding Light Clay. In double battles, both Pokemon are shielded, but damage protection is reduced from 1/2 to 1/3.",
-		shortDesc: "For 5 turns, allies' Defense is raised by 2 (or 4/3).",
+		shortDesc: "For 5 turns, foes' Attack is 1/2 if 1-on-1, or 2/3.",
 		id: "reflect",
 		name: "Reflect",
 		pp: 20,
