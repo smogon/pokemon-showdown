@@ -221,7 +221,7 @@ function BattleTools() {
 			}
 			if (template.species === 'Deoxys-Speed' || template.species === 'Deoxys-Attack' || template.species === 'Deoxys-Defense') {
 				template = selfT.getTemplate('Deoxys');
-			} else if (template.species.substr(0,7) === 'Arceus-') {
+			} else if (template.species.substr(0,6) === 'Arceus-') {
 				template = selfT.getTemplate('Arceus');
 			} else {
 				template = selfT.getTemplate(template.prevo);
