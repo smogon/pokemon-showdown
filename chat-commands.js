@@ -46,7 +46,52 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	switch (cmd) {
 	case 'me':
 		return '/me '+target;
+		break;
 
+	case 'namelock':
+	case 'nl':
+		if(!user.can('namelock') || !target) {
+			return false;
+		}
+		var targets = splitTarget(target);
+		var targetUser = getUser(targets[0]);
+		var targetName = targets[1]||targetUser.name;
+		if(targetUser && targetName) {
+			var oldname = targetUser.name;
+			targetUser.nameLock(targetName,true);
+			if (targetUser.nameLocked()) {
+				room.add(user.name+" name-locked "+oldname+" to "+targetName+".");
+			} else {
+				socket.emit('console',oldname+" can't be name-locked to "+targetName+".");
+			}
+		} else {
+			socket.emit('console',(target.split(",")[0].trim())+" not found.");
+		}
+		return false;
+		break;
+	case 'nameunlock':
+	case 'unnamelock':
+	case 'nul':
+	case 'unl':
+		if(!user.can('namelock') || !target) {
+			return false;
+		}
+		var removed = false;
+		for (var i in nameLockedIps) {
+			if(nameLockedIps[i]==target) {
+				delete nameLockedIps[i];
+				removed = true;
+			}
+		} if(removed) {
+			if(getUser(target)) {
+				getUser(target).rename(target);
+			}
+			room.add(user.name+" unlocked the name of "+target+".");
+		} else {
+			socket.emit('console',target+" not found.");
+		}
+		return false;
+		break;
 	case 'command':
 		if (target.command === 'userdetails') {
 			target.userid = ''+target.userid;
