@@ -115,7 +115,8 @@ exports.groups = {
 		mute: 'u',
 		forcerename: 'u',
 		redirect: true,
-		receivemutedpms: true
+		receivemutedpms: true,
+		namelock: 'u'
 	},
 	'+': {
 		id: "voice",
