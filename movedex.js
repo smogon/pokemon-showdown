@@ -1063,14 +1063,14 @@ exports.BattleMovedex = {
 				// warning: does not work the same way as Fly
 
 				if (move.target === 'foeSide') return;
-				if (move.id === 'gust' || move.id === 'twister' || move.id === 'thunder') {
+				if (move.id === 'gust' || move.id === 'twister') {
 					// should not normally be done in ModifyMove event,
 					// but these moves have static base power, and
 					// it's faster to do this  here than in
 					// BasePower event
 					move.basePower *= 2;
 					return;
-				} else if (move.id === 'skyuppercut') {
+				} else if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown') {
 					return;
 				}
 				move.accuracy = 0;
