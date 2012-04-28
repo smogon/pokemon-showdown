@@ -52,7 +52,7 @@ exports.check = function(pokemon, pokemonData) {
 	// Now check if all it's moves are valid
 	if (moveCombinations[0].invalid.length !== 0) {
 		if (sketches > 0) {
-			if (!isHasUnsketchableMove) problems.push(pokemon.name + " (" + pokemon.species + ") can only sketch a maxiumum of " + sketches + " moves.");
+			if (!isHasUnsketchableMove) problems.push(pokemon.name + " (" + pokemon.species + ") can only sketch a maximum of " + sketches + " move(s).");
 		} else {
 			problems.push(pokemon.name + " (" + pokemon.species + ") doesn't have a valid moveset. (Placeholder)");
 		}
