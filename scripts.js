@@ -402,10 +402,10 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 
 			if (template.species === 'Magikarp') {
-				template.viablemoves = ["magikarpsrevenge", "splash", "bounce"];
+				template.viablemoves = {"magikarpsrevenge":1, "splash":1, "bounce":1};
 			}
 			if (template.species === 'Delibird') {
-				template.viablemoves = ["present", "bestow"];
+				template.viablemoves = {"present":1, "bestow":1};
 			}
 
 			var moveKeys = shuffle(objectKeys(template.viablemoves));
@@ -885,19 +885,16 @@ exports.BattleScripts = {
 			}
 
 			var levelScale = {
-				LC: 95,
 				NFE: 95,
-				'LC Uber': 90,
 				NU: 90,
 				RU: 85,
 				BL2: 83,
 				UU: 80,
 				BL: 78,
 				OU: 75,
-				CAP: 74,
 				G4CAP: 74,
 				G5CAP: 74,
-				Unreleased: 75,
+				Limbo: 75,
 				Uber: 70
 			};
 			var customScale = {
