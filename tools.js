@@ -43,8 +43,7 @@ function BattleTools() {
 		return totalTypeMod;
 	};
 	this.getTemplate = function(template) {
-		if (!template) return;
-		if (typeof template === 'string') {
+		if (!template || typeof template === 'string') {
 			var name = (template||'').trim();
 			var id = toId(name);
 			if (BattleAliases[id]) {
@@ -70,8 +69,7 @@ function BattleTools() {
 		return template;
 	};
 	this.getMove = function(move) {
-		if (!move) return;
-		if (typeof move === 'string') {
+		if (!move || typeof move === 'string') {
 			var name = (move||'').trim();
 			var id = toId(name);
 			move = {};
@@ -118,8 +116,7 @@ function BattleTools() {
 		return BattleScripts.getNature.call(selfT, nature);
 	};
 	this.getEffect = function(effect) {
-		if (!effect) return;
-		if (typeof effect === 'string') {
+		if (!effect || typeof effect === 'string') {
 			var name = (effect||'').trim();
 			var id = toId(name);
 			effect = {};
@@ -158,8 +155,7 @@ function BattleTools() {
 		return effect;
 	};
 	this.getItem = function(item) {
-		if (!item) return;
-		if (typeof item === 'string') {
+		if (!item || typeof item === 'string') {
 			var name = (item||'').trim();
 			var id = toId(name);
 			item = {};
@@ -178,8 +174,7 @@ function BattleTools() {
 		return item;
 	};
 	this.getAbility = function(ability) {
-		if (!ability) return;
-		if (typeof ability === 'string') {
+		if (!ability || typeof ability === 'string') {
 			var name = (ability||'').trim();
 			var id = toId(name);
 			ability = {};
@@ -197,8 +192,7 @@ function BattleTools() {
 		return ability;
 	};
 	this.getType = function(type) {
-		if (!type) return;
-		if (typeof type === 'string') {
+		if (!type || typeof type === 'string') {
 			var id = toId(type);
 			type = {};
 			if (id && BattleTypeChart[id]) {

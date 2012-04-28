@@ -131,9 +131,8 @@ function getBestMoveCombinations(pokemon, pokemonData) {
 function getMoveCombinationsRecursive(pokemon, pokemonData) {
 	if (pokemonData.prevo) {
 		var prevoData = Tools.getTemplate(pokemonData.prevo);
-		if (!prevoData) {
-			console.warn("Warning: Prevo for " + pokemonData.name + " doesn't exist! Badly formed pokedex.js?");
-			return getMoveCombinations(pokemon, pokemonData);
+		if (!prevoData.exists) {
+			throw new Error("Warning: Prevo for " + pokemonData.name + " doesn't exist! Badly formed pokedex.js?");
 		}
 
 		var prevoMoves = getMoveCombinationsRecursive(pokemon, prevoData);
