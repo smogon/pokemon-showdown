@@ -226,7 +226,7 @@ exports.BattleAbilities = {
 			onStart: function(target, source, effect) {
 				this.effectData.type = 'Normal';
 				if (effect && effect.type && effect.type !== 'Normal') {
-					this.add('-message', target.name+'\'s Color Change made it the '+effect.type+' type! (placeholder)');
+					this.add('-start', target, 'typechange', effect.type, '[from] Color Change');
 					this.effectData.type = effect.type;
 				} else {
 					return false;
@@ -234,7 +234,7 @@ exports.BattleAbilities = {
 			},
 			onRestart: function(target, source, effect) {
 				if (effect && effect.type && effect.type !== this.effectData.type) {
-					this.add('-message', target.name+'\'s Color Change made it the '+effect.type+' type! (placeholder)');
+					this.add('-start', target, 'typechange', effect.type, '[from] Color Change');
 					this.effectData.type = effect.type;
 				}
 			},
@@ -284,7 +284,9 @@ exports.BattleAbilities = {
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact) {
 				if (Math.random() * 10 < 3) {
-					if (source.addVolatile('attract', target)) this.add('message',target.name+'\'s Cute Charm infatuated '+source.name+'! (placeholder)');
+					if (source.addVolatile('attract', target)) {
+						this.add('-start', source, 'Attract', '[from] Cute Charm', '[of] '+target);
+					}
 				}
 			}
 		},
@@ -1079,7 +1081,7 @@ exports.BattleAbilities = {
 	"moldbreaker": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Herbivore, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
 		onStart: function(pokemon) {
-			this.add('-message', pokemon.name+' breaks the mold! (placeholder)');
+			this.add('-ability', pokemon, 'Mold Breaker');
 		},
 		onAllyModifyPokemonPriority: 100,
 		onAllyModifyPokemon: function(pokemon) {
@@ -1195,7 +1197,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
 				if (source.setAbility('mummy')) {
-					this.add("-message",source.name+"'s ability became Mummy! (placeholder)");
+					this.add('-ability', source, 'Mummy', '[from] Mummy');
 				}
 			}
 		},
@@ -1241,13 +1243,13 @@ exports.BattleAbilities = {
 		desc: "This Pokemon cannot become attracted to another Pokemon.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'attract') {
-				this.add('-immune', pokemon);
+				this.add('-immune', pokemon, '[from] Oblivious');
 				return false;
 			}
 		},
 		onTryHit: function(pokemon, target, move) {
 			if (move.id === 'captivate') {
-				this.add('-message', 'It doesn\'t affect '+pokemon.name+'... (placeholder)');
+				this.add('-immune', pokemon, '[msg]', '[from] Oblivious');
 				return null;
 			}
 		},
@@ -1283,7 +1285,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon cannot become confused.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'confusion') {
-				this.add('-message', pokemon.name+' doesn\'t become confused! (placeholder)');
+				this.add('-immune', pokemon, 'confusion');
 				return false;
 			}
 		},
@@ -1302,7 +1304,7 @@ exports.BattleAbilities = {
 				pokemon.setItem(foe.lastItem);
 				foe.lastItem = '';
 				var item = pokemon.getItem();
-				this.add('-message',pokemon.name+' picked up one '+item.name+'! (placeholder)');
+				this.add('-item', pokemon, item, '[from] Pickup');
 				if (item.isBerry) pokemon.update();
 			}
 		},
@@ -1727,14 +1729,14 @@ exports.BattleAbilities = {
 		effect: {
 			duration: 5,
 			onStart: function(target) {
-				this.add('-message', target.name+' can\'t get it going because of its Slow Start! (placeholder)');
+				this.add('-start', target, 'Slow Start');
 			},
 			onModifyStats: function(stats) {
 				stats.atk /= 2;
 				stats.spe /= 2;
 			},
 			onEnd: function(target) {
-				this.add('-message', 'Slow Start ended. (placeholder)');
+				this.add('-end', target, 'Slow Start');
 			}
 		},
 		id: "slowstart",
@@ -2007,7 +2009,7 @@ exports.BattleAbilities = {
 	"teravolt": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
 		onStart: function(pokemon) {
-			this.add('-message', pokemon.name+' is radiating a bursting aura! (placeholder)');
+			this.add('-ability', pokemon, 'Teravolt');
 		},
 		onAllyModifyPokemon: function(pokemon) {
 			if (this.activePokemon === this.effectData.target && pokemon !== this.activePokemon) {
@@ -2111,7 +2113,7 @@ exports.BattleAbilities = {
 	"turboblaze": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
 		onStart: function(pokemon) {
-			this.add('-message', pokemon.name+' is radiating a blazing aura! (placeholder)');
+			this.add('-ability', pokemon, 'Turboblaze');
 		},
 		onAllyModifyPokemon: function(pokemon) {
 			if (this.activePokemon === this.effectData.target && pokemon !== this.activePokemon) {
@@ -2349,7 +2351,7 @@ exports.BattleAbilities = {
 			}
 			if (move.isBounceable) {
 				this.addPseudoWeather('magicbounce');
-				this.add('-message', source.name + '\'s ' + move.move + ' was bounced back by Rebound! (placeholder)');
+				this.add('-activate', target, 'ability: Rebound', move, '[of] '+source);
 				this.moveHit(source, source, move);
 				return null;
 			}
