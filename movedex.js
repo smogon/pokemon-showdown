@@ -1351,8 +1351,10 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		onTryHit: function(pokemon, source) {
-			if ((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) return;
-			else return false;
+			if ((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) {
+				return;
+			}
+			return false;
 		},
 		boosts: {
 			spa: -2
