@@ -440,7 +440,7 @@ exports.BattleScripts = {
 			var j=0;
 			do {
 				while (moves.length<4 && j<moveKeys.length) {
-					var moveid = toId(template.viablemoves[moveKeys[j]]);
+					var moveid = toId(moveKeys[j]);
 					//if (j===0) moveid = 'ChargeBeam';
 					moves.push(moveid);
 					j++;
