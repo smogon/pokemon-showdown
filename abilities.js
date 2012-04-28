@@ -111,8 +111,7 @@ exports.BattleAbilities = {
 			for (var i=0; i<targets.length; i++) {
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
-					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') continue;
-					if (move.category !== 'Status' && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko) {
+					if (move.category !== 'Status' && (this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
 						this.add('-message', pokemon.name+' shuddered! (placeholder)');
 						return;
 					}
