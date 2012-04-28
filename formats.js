@@ -214,8 +214,8 @@ exports.BattleFormats = {
 				}
 			}
 			if (template.num == 487) { // Giratina
-				if (item.id === 'GriseousOrb') {
-					set.species = 'Giratina-O';
+				if (item.id === 'griseousorb') {
+					set.species = 'Giratina-Origin';
 				} else {
 					set.species = 'Giratina';
 				}
