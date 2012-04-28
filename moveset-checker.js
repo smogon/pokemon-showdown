@@ -55,6 +55,9 @@ exports.check = function(pokemon, pokemonData) {
 			if (!isHasUnsketchableMove) problems.push(pokemon.name + " (" + pokemon.species + ") can only sketch a maximum of " + sketches + " move(s).");
 		} else {
 			problems.push(pokemon.name + " (" + pokemon.species + ") doesn't have a valid moveset. (Placeholder)");
+			if (moveCombinations.length > 1) {
+				problems.push("DEBUG: Please send the data for " + pokemon.name + " (" + pokemon.species + ") to kota");
+			}
 		}
 	} else {
 		// Make sure the pokemon's nature, ability, gender and level matches any of the applicable events, if any
