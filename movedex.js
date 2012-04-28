@@ -1063,14 +1063,14 @@ exports.BattleMovedex = {
 				// warning: does not work the same way as Fly
 
 				if (move.target === 'foeSide') return;
-				if (move.id === 'gust' || move.id === 'twister' || move.id === 'thunder') {
+				if (move.id === 'gust' || move.id === 'twister') {
 					// should not normally be done in ModifyMove event,
 					// but these moves have static base power, and
 					// it's faster to do this  here than in
 					// BasePower event
 					move.basePower *= 2;
 					return;
-				} else if (move.id === 'skyuppercut') {
+				} else if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown') {
 					return;
 				}
 				move.accuracy = 0;
@@ -1116,7 +1116,7 @@ exports.BattleMovedex = {
 		onTryHit: function(pokemon) {
 			// will shatter screens through sub, before you hit
 			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightScreen');
+			pokemon.side.removeSideCondition('lightscreen');
 		},
 		priority: 0,
 		secondary: false,
@@ -2046,11 +2046,17 @@ exports.BattleMovedex = {
 		id: "defog",
 		name: "Defog",
 		pp: 15,
-		priority: 0,
-		boosts: {
-			evasion: -1
-		},
 		isBounceable: true,
+		priority: 0,
+		onHit: function(pokemon) {
+			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
+			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
+					for (var i in sideConditions) {
+						if (pokemon.side.removeSideCondition(i)) {
+							this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+pokemon);
+						}
+					}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Flying"
@@ -6119,7 +6125,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "All Pokemon in the user's party receive 1/2 damage from Special attacks for 5 turns. Light Screen will be removed from the user's field if an opponent's Pokemon uses Brick Break. It will also last for eight turns if its user is holding Light Clay. In double battles, both Pokemon are shielded, but damage protection is reduced from 1/2 to 1/3.",
-		shortDesc: "For 5 turns, allies' Sp. Def is raised by 2 (or 4/3).",
+		shortDesc: "For 5 turns, foes' Sp. Atk is 1/2 if 1-on-1, or 2/3.",
 		id: "lightscreen",
 		name: "Light Screen",
 		pp: 30,
@@ -7016,7 +7022,7 @@ exports.BattleMovedex = {
 		name: "Mist",
 		pp: 30,
 		priority: 0,
-		sideCondition: 'Mist',
+		sideCondition: 'mist',
 		effect: {
 			duration: 5,
 			onBoost: function(boost, target, source) {
@@ -8551,13 +8557,13 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "All Pokemon in the user's party receive 1/2 damage from Physical attacks for 5 turns. Reflect will be removed from the user's field if an opponent's Pokemon uses Brick Break. It will also last for eight turns if its user is holding Light Clay. In double battles, both Pokemon are shielded, but damage protection is reduced from 1/2 to 1/3.",
-		shortDesc: "For 5 turns, allies' Defense is raised by 2 (or 4/3).",
+		shortDesc: "For 5 turns, foes' Attack is 1/2 if 1-on-1, or 2/3.",
 		id: "reflect",
 		name: "Reflect",
 		pp: 20,
 		isViable: true,
 		priority: 0,
-		sideCondition: 'Reflect',
+		sideCondition: 'reflect',
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
@@ -9169,7 +9175,7 @@ exports.BattleMovedex = {
 		name: "Safeguard",
 		pp: 25,
 		priority: 0,
-		sideCondition: 'Safeguard',
+		sideCondition: 'safeguard',
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
