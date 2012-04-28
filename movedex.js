@@ -7998,7 +7998,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, effect) {
-				if (effect && (effect.id === 'Feint' || effect.id === 'RolePlay')) {
+				if (effect && (effect.id === 'feint' || effect.id === 'roleplay')) {
+					return;
+				}
+				if (effect && effect.id === 'curse' && !effect.volatileStatus) {
+					// curse targeting self
 					return;
 				}
 				this.add('-activate', target, 'Protect');
