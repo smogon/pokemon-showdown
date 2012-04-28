@@ -104,8 +104,21 @@ exports.BattleAbilities = {
 		num: "83"
 	},
 	"anticipation": {
-		desc: "A warning is displayed if an opposing Pokemon has the moves Selfdestruct, Explosion, Fissure, Guillotine, Horn Drill, Sheer Cold or any move from a type that is considered Super Effective against this Pokemon. Hidden Power, Judgment, Natural Gift and Weather Ball are viewed as Normal-type moves; Counter, Mirror Coat and Metal Burst do not receive warnings.",
+		desc: "A warning is displayed if an opposing Pokemon has the moves Fissure, Guillotine, Horn Drill, Sheer Cold, or any attacking move from a type that is considered super effective against this Pokemon (including Counter, Mirror Coat, and Metal Burst). Hidden Power, Judgment, Natural Gift and Weather Ball are considered Normal-type moves.",
 		shortDesc: "Alerts the Pokemon to super-effective or otherwise dangerous moves.",
+		onStart: function(pokemon) {
+			var targets = pokemon.side.foe.active;
+			for (var i=0; i<targets.length; i++) {
+				for (var j=0; j<targets[i].moveset.length; j++) {
+					var move = this.getMove(targets[i].moveset[j].move);
+					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') continue;
+					if (move.category !== 'Status' && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko) {
+						this.add('-message', pokemon.name+' shuddered! (placeholder)');
+						return;
+					}
+				}
+			}
+		},
 		id: "anticipation",
 		name: "Anticipation",
 		rating: 1,
