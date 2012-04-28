@@ -155,6 +155,15 @@ exports.BattleFormats = {
 			}
 			set.moves = moves;
 
+			// Check for unreleased pokemon
+			switch (template.num) {
+				case 647: // Keldeo
+				case 648: // Meloetta
+				case 649: // Genesect
+					problems.push(set.name+" ("+set.species+") is unreleased.");
+					break;
+			}
+
 			// Check for more than 510 total EVs
 			var totalEV = 0;
 			for (var k in set.evs) totalEV += set.evs[k];
@@ -183,6 +192,7 @@ exports.BattleFormats = {
 				}
 			}
 
+			// Check the pokemon's moveset
 			problems = problems.concat(Tools.validateMoveset(set, template));
 
 			return problems;
