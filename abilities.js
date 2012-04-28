@@ -1245,6 +1245,12 @@ exports.BattleAbilities = {
 				return false;
 			}
 		},
+		onTryHit: function(pokemon, target, move) {
+			if (move.id === 'captivate') {
+				this.add('-message', 'It doesn\'t affect '+pokemon.name+'... (placeholder)');
+				return null;
+			}
+		},
 		id: "oblivious",
 		name: "Oblivious",
 		rating: 0.5,
