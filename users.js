@@ -35,6 +35,19 @@ function searchUser(name) {
 	}
 	return users[userid];
 }
+function nameLock(user,name,ip) {
+	ip = ip||user.ip;
+	var userid = toUserid(name);
+	if(nameLockedIps[ip]) {
+		return user.nameLock(nameLockedIps[ip]);
+	} for(var i in nameLockedIps) {
+		if((userid && toUserid(nameLockedIps[i])==userid)||user.userid==toUserid(nameLockedIps[i])) {
+			nameLockedIps[ip] = nameLockedIps[i];
+			return user.nameLock(nameLockedIps[ip]);
+		}
+	}
+	return name||user.name;
+}
 function connectUser(name, socket, token, room) {
 	var userid = toUserid(name);
 	var user;
@@ -51,6 +64,10 @@ function connectUser(name, socket, token, room) {
 	} else {
 		console.log("NEW USER: [guest] "+name);
 		user = new User(name, person, token);
+		var nameSuggestion = nameLock(user);
+		if(nameSuggestion!=user.name) {
+			user.rename(nameSuggestion);
+		}
 	}
 	if (room) {
 		user.joinRoom(room, person);
@@ -125,6 +142,8 @@ function User(name, person, token) {
 	this.getIdentity = function() {
 		if (selfP.muted) {
 			return '!'+selfP.name;
+		} if(selfP.nameLocked()) {
+			return '#'+selfP.name;
 		}
 		return selfP.group+selfP.name;
 	};
@@ -244,6 +263,7 @@ function User(name, person, token) {
 		for (var i in selfP.roomCount) {
 			getRoom(i).rename(selfP, oldid, joining);
 		}
+		rooms.lobby.usersChanged = true;
 		return true;
 	};
 	this.resetName = function() {
@@ -302,6 +322,9 @@ function User(name, person, token) {
 		}
 		if (!name) name = '';
 		name = sanitizeName(name);
+		console.log("checking name lock for: "+selfP.name+" renaming to "+name);
+		name = nameLock(selfP,name);
+		console.log("returned "+name);
 		var userid = toUserid(name);
 		if (selfP.authenticated) auth = false;
 
@@ -364,6 +387,7 @@ function User(name, person, token) {
 					else if (userid === "aeo2") avatar = 166;
 					else if (userid === "sharktamer") avatar = 7;
 					else if (userid === "bmelts") avatar = 1004;
+					else if (userid === "n") avatar = 209;
 
 					try {
 						var data = JSON.parse(body);
@@ -562,6 +586,34 @@ function User(name, person, token) {
 			}
 		}
 		return result;
+	};
+	this.nameLock = function(targetName,recurse) {
+		var targetUser = getUser(targetName);
+		if(nameLockedIps[selfP.ip]==targetName||!targetUser||targetUser.ip == selfP.ip) {
+			nameLockedIps[selfP.ip] = targetName;
+			if(recurse) {
+				for(var i in users) {
+					if(users[i].ip == selfP.ip && users[i] != selfP) {
+						users[i].destroy();
+					}
+				}
+				selfP.forceRename(targetName,selfP.authenticated);
+			}
+		}
+		return targetName;
+	};
+	this.nameLocked = function() {
+		if(nameLockedIps[selfP.ip]) {
+			selfP.nameLock(nameLockedIps[selfP.ip]);
+			return true;
+		} for(var i in nameLockedIps) {
+			if(nameLockedIps[i]==selfP.name) {
+				nameLockedIps[selfP.ip] = nameLockedIps[i];
+				selfP.nameLock(nameLockedIps[selfP.ip]);
+				return true;
+			}
+		}
+		return false;
 	};
 	this.ban = function(noRecurse) {
 		// no need to recurse, since the root for-loop already bans everything with your IP
@@ -796,3 +848,4 @@ exports.searchUser = searchUser;
 exports.connectUser = connectUser;
 exports.users = users;
 exports.prevUsers = prevUsers;
+exports.importUsergroups = importUsergroups;

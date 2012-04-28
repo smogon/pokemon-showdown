@@ -46,7 +46,75 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	switch (cmd) {
 	case 'me':
 		return '/me '+target;
+		break;
 
+	case 'namelock':
+	case 'nl':
+		if(!target) {
+			return false;
+		}
+		var targets = splitTarget(target);
+		var targetUser = getUser(targets[0]);
+		var targetName = targets[1]||targetUser.name;
+		if(!user.can('namelock',targetUser)) {
+			socket.emit('console','/namelock - access denied.');
+			return false;
+		} else if(targetUser && targetName) {
+			var oldname = targetUser.name;
+			var targetId = toUserid(targetName);
+			var userOfName = Users.users[targetId];
+			var isAlt = false;
+			if(userOfName) {
+				for(var altName in userOfName.getAlts()) {
+					var altUser = Users.users[toUserid(alt)];
+					if(targetId == altUser.userid) {
+						isAlt = true;
+						break;
+					}
+					for(var prevName in altUser.prevNames) {
+						if(targetId == toUserid(prevName)) {
+							isAlt = true;
+							break;
+						}
+					}
+					if(isAlt) break;
+				}
+			}
+			if(!userOfName || oldname == targetName || isAlt)
+				targetUser.nameLock(targetName,true);
+			if (targetUser.nameLocked()) {
+				room.add(user.name+" name-locked "+oldname+" to "+targetName+".");
+				return false;
+			}
+			socket.emit('console',oldname+" can't be name-locked to "+targetName+".");
+		} else {
+			socket.emit('console',(target.split(",")[0].trim())+" not found.");
+		}
+		return false;
+		break;
+	case 'nameunlock':
+	case 'unnamelock':
+	case 'nul':
+	case 'unl':
+		if(!user.can('namelock') || !target) {
+			return false;
+		}
+		var removed = false;
+		for (var i in nameLockedIps) {
+			if(nameLockedIps[i]==target) {
+				delete nameLockedIps[i];
+				removed = true;
+			}
+		} if(removed) {
+			if(getUser(target)) {
+				rooms.lobby.usersChanged = true;
+			}
+			room.add(user.name+" unlocked the name of "+target+".");
+		} else {
+			socket.emit('console',target+" not found.");
+		}
+		return false;
+		break;
 	case 'command':
 		if (target.command === 'userdetails') {
 			target.userid = ''+target.userid;
