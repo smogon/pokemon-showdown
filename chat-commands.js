@@ -50,20 +50,43 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'namelock':
 	case 'nl':
-		if(!user.can('namelock') || !target) {
+		if(!target) {
 			return false;
 		}
 		var targets = splitTarget(target);
 		var targetUser = getUser(targets[0]);
 		var targetName = targets[1]||targetUser.name;
-		if(targetUser && targetName) {
+		if(!user.can('namelock',targetUser)) {
+			socket.emit('console','/namelock - access denied.');
+			return false;
+		} else if(targetUser && targetName) {
 			var oldname = targetUser.name;
-			targetUser.nameLock(targetName,true);
+			var targetId = toUserid(targetName);
+			var userOfName = Users.users[targetId];
+			var isAlt = false;
+			if(userOfName) {
+				for(var altName in userOfName.getAlts()) {
+					var altUser = Users.users[toUserid(alt)];
+					if(targetId == altUser.userid) {
+						isAlt = true;
+						break;
+					}
+					for(var prevName in altUser.prevNames) {
+						if(targetId == toUserid(prevName)) {
+							isAlt = true;
+							break;
+						}
+					}
+					if(isAlt) break;
+				}
+			}
+			if(!userOfName || oldname == targetName || isAlt)
+				targetUser.nameLock(targetName,true);
 			if (targetUser.nameLocked()) {
 				room.add(user.name+" name-locked "+oldname+" to "+targetName+".");
-			} else {
-				socket.emit('console',oldname+" can't be name-locked to "+targetName+".");
+				return false;
 			}
+			socket.emit('console',oldname+" can't be name-locked to "+targetName+".");
 		} else {
 			socket.emit('console',(target.split(",")[0].trim())+" not found.");
 		}
@@ -84,7 +107,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 		} if(removed) {
 			if(getUser(target)) {
-				getUser(target).rename(target);
+				rooms.lobby.usersChanged = true;
 			}
 			room.add(user.name+" unlocked the name of "+target+".");
 		} else {

@@ -263,6 +263,7 @@ function User(name, person, token) {
 		for (var i in selfP.roomCount) {
 			getRoom(i).rename(selfP, oldid, joining);
 		}
+		rooms.lobby.usersChanged = true;
 		return true;
 	};
 	this.resetName = function() {
@@ -847,3 +848,4 @@ exports.searchUser = searchUser;
 exports.connectUser = connectUser;
 exports.users = users;
 exports.prevUsers = prevUsers;
+exports.importUsergroups = importUsergroups;
