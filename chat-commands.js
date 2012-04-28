@@ -429,9 +429,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
-		if (user.muted && !targetUser.can('receivemutedpms')) {
-			// TODO: Remove the hardcoding of groups in this message
-			socket.emit('console', 'You can only private message users marked by %, @, or & when muted.');
+		if (user.muted && !targetUser.can('mute', user)) {
+			socket.emit('console', 'You can only private message moderators (users marked by %, @, or & when muted).');
 			return false;
 		}
 
