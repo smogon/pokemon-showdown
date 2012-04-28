@@ -1307,6 +1307,22 @@ exports.BattleAbilities = {
 	},
 	"pickpocket": {
 		desc: "Steals attacking Pokemon's held item on contact.",
+		onAfterDamage: function(damage, target, source, move) {
+			if (source && source !== target && move && move.isContact) {
+				if (target.item) {
+					return;
+				}
+				var yourItem = source.takeItem(target);
+				if (!yourItem) {
+					return;
+				}
+				if (!target.setItem(yourItem)) {
+					source.item = yourItem.id;
+					return;
+				}
+				this.add('-item', target, yourItem, '[from] ability: Pickpocket');
+			}
+		},
 		id: "pickpocket",
 		name: "Pickpocket",
 		rating: 1,
