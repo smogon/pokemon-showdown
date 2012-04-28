@@ -1350,6 +1350,10 @@ exports.BattleMovedex = {
 		name: "Captivate",
 		pp: 20,
 		priority: 0,
+		onTryHit: function(pokemon, source) {
+			if ((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) return;
+			else return false;
+		},
 		boosts: {
 			spa: -2
 		},
