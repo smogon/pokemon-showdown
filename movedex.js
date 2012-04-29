@@ -10116,6 +10116,19 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'smackdown',
 		effect: {
+			onStart: function(pokemon) {
+				var applies = false;
+				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.ability === 'levitate') applies = true;
+				if (pokemon.removeVolatile('telekinesis')) applies = true;
+				if (pokemon.removeVolatile('magnetrise')) applies = true;
+				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
+					applies = true;
+					pokemon.movedThisTurn = true;
+				}
+				if (!applies) return false;
+				this.add("message", pokemon.name+" fell straight down! (placeholder)");
+			},
+			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
 			}
