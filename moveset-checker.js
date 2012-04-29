@@ -115,9 +115,18 @@ exports.check = function(pokemon, pokemonData) {
 
 function getBestMoveCombinations(pokemon, pokemonData) {
 	var moveCombinations = getMoveCombinationsRecursive(pokemon, pokemonData).sort(function(a, b) {
-			return a.invalid.length - b.invalid.length;
+			// Order by the amount of invalid moves, ascending, then by whether the combination
+			// uses an event move or not, with no event taking priority
+			var result = a.invalid.length - b.invalid.length;
+			if (result === 0) {
+				result = !!a.valid.event - !!b.valid.event;
+			}
+			return result;
 		});
 	if (moveCombinations.length === 0) return new Array();
+
+	// Non-event combinations is always better, and there can only be one of them
+	if (!moveCombinations[0].valid.event) return [moveCombinations[0]];
 
 	var results = new Array();
 	results.push(moveCombinations[0]);
