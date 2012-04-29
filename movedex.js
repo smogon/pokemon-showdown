@@ -11454,6 +11454,23 @@ exports.BattleMovedex = {
 		pp: 15,
 		isBounceable: true,
 		priority: 0,
+		volatileStatus: 'telekinesis',
+		effect: {
+			duration: 3,
+			onStart: function(target) {
+				if (target.hasVolatile('smackdown') || target.hasVolatile('ingrain')) return false;
+				this.add('message', target.name+' was hurled into the air! (placeholder)');
+			},
+			onSourceModifyMove: function(move) {
+				move.accuracy = true;
+			},
+			onImmunity: function(type) {
+				if (type === 'Ground') return false;
+			},
+			onEnd: function(target) {
+				this.add('message', 'Telekinesis ended. (placeholder)');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
