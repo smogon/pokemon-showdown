@@ -147,56 +147,43 @@ function User(name, person, token) {
 		}
 		return selfP.group+selfP.name;
 	};
-	this.can = function(permission, targetUser) {
-		var group = config.groups[selfP.group];
-		if (!group) return false;
+	this.can = function(permission, target) {
+		var group = selfP.group;
+		var groupData = config.groups[group];
+		var checkedGroups = {};
+		while (groupData) {
+			// Cycle checker
+			if (checkedGroups[group]) return false;
+			checkedGroups[group] = true;
 
-		function permissionLookup(permission, curGroup, groupsBeenTo) {
-			// Finds the permission taking in account for inheritance
-			if (!curGroup) curGroup = group;
-			if (!groupsBeenTo) groupsBeenTo = new Array();
-			if (groupsBeenTo.indexOf(curGroup) !== -1)
-				throw new Error("Cycle detected in the group inheritance graph.");
-			groupsBeenTo.push(curGroup);
-
-			if (curGroup[permission]) {
-				var jurisdiction;
-				if (typeof curGroup[permission] === 'string') {
-					jurisdiction = curGroup[permission];
-				} else {
-					jurisdiction = permissionLookup('jurisdiction', group);
-					if (!jurisdiction) jurisdiction = true;
+			if (groupData['root']) {
+				return true;
+			}
+			if (groupData[permission]) {
+				var jurisdiction = groupData[permission];
+				if (!target) {
+					return !!jurisdiction;
 				}
-				if (jurisdiction === true) return true;
-				if (typeof jurisdiction === 'string') jurisdiction = jurisdiction.split('');
-
-				// Expand the special group 'u'
-				if (jurisdiction.indexOf('u') !== -1) {
-					var groupRank = config.groupsranking.indexOf(selfP.group);
-					var groupsToAdd = [];
-					if (groupRank !== -1) {
-						groupsToAdd = config.groupsranking.slice(0, groupRank);
-					}
-					groupsToAdd.unshift(jurisdiction.indexOf('u'), 1);
-					Array.prototype.splice.apply(jurisdiction, groupsToAdd);
+				if (jurisdiction === true && permission !== 'jurisdiction') {
+					return selfP.can('jurisdiction', target);
 				}
-				return jurisdiction;
-			} else if (curGroup[permission] === false) {
+				if (typeof jurisdiction !== 'string') {
+					return !!jurisdiction;
+				}
+				if (jurisdiction.indexOf(target.group) >= 0) {
+					return true;
+				}
+				if (jurisdiction.indexOf('s') >= 0 && target === selfP) {
+					return true;
+				}
+				if (jurisdiction.indexOf('u') >= 0 && config.groupsranking.indexOf(selfP.group) > config.groupsranking.indexOf(target.group)) {
+					return true;
+				}
 				return false;
 			}
-			if (!curGroup['inherit']) return false;
-			var nextGroup = config.groups[curGroup['inherit']];
-			if (!nextGroup) return false;
-			return permissionLookup(permission, nextGroup);
+			group = groupData['inherit'];
+			groupData = config.groups[group];
 		}
-
-		if (permissionLookup('root')) return true;
-		var jurisdiction = permissionLookup(permission);
-		if (!jurisdiction) return false;
-		if (!targetUser) return true;
-		if (targetUser && typeof jurisdiction === 'boolean') return false;
-		if (targetUser === selfP && jurisdiction.indexOf('s') !== -1) return true;
-		if (jurisdiction.indexOf(targetUser.group) !== -1) return true;
 		return false;
 	};
 	// Special permission check is needed for promoting and demoting
