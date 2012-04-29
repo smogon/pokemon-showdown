@@ -4308,6 +4308,13 @@ exports.BattleMovedex = {
 			onModifyPokemon: function(pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
 				pokemon.boosts.evasion -= 2;
+				var disabledMoves = {bounce:1, fly:1, hijumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
+				for (var m in disabledMoves) {
+					pokemon.disabledMoves[m] = true;
+				}
+				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
+					this.add("message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
+				}
 			},
 			onEnd: function() {
 				this.add('-fieldend', 'move: Gravity');
