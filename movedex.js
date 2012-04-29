@@ -6525,6 +6525,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onStart: function(target) {
+				if (target.hasVolatile('smackdown') || target.hasVolatile('ingrain')) return false;
 				this.add('-start', target, 'Magnet Rise');
 			},
 			onImmunity: function(type) {
