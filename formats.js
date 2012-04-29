@@ -178,19 +178,6 @@ exports.BattleFormats = {
 				ability !== template.abilities['DW']) {
 				problems.push(set.name+" ("+set.species+") can't have "+set.ability+".");
 			}
-			if (ability === template.abilities['DW']) {
-				var unreleasedDW = {
-						Serperior: 1, Chandelure: 1, Ditto: 1,
-						Breloom: 1, Zapdos: 1, Feraligatr: 1, Gothitelle: 1,
-						'Ho-Oh': 1, Lugia: 1, Raikou: 1, Cinccino: 1
-					};
-
-				if (unreleasedDW[set.species] && banlistTable['Unreleased']) {
-					problems.push(set.name+" ("+set.species+")'s Dream World ability is unreleased.");
-				} else if (template.num >= 494 && set.species !== 'Darmanitan' && set.species !== 'Munna') {
-					problems.push(set.name+" ("+set.species+")'s Dream World ability is unreleased.");
-				}
-			}
 
 			// Check the pokemon's moveset
 			problems = problems.concat(Tools.validateMoveset(set, template));
