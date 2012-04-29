@@ -2159,9 +2159,21 @@ exports.BattleAbilities = {
 	},
 	"unburden": {
 		desc: "Increases Speed by one level if this Pokemon loses its held item through usage (i.e. Berries) or via Thief, Knock Off, etc.",
-		onModifyStats: function(stats, pokemon) {
-			if (pokemon.lastItem && !pokemon.item) {
-				stats.spe *= 2;
+		onUseItem: function(item, pokemon) {
+			pokemon.addVolatile('unburden');
+		},
+		onTakeItem: function(item, pokemon) {
+			pokemon.addVolatile('unburden');
+		},
+		effect: {
+			onModifyStats: function(stats, pokemon) {
+				if (pokemon.ability !== 'unburden') {
+					pokemon.removeVolatile('unburden');
+					return;
+				}
+				if (!pokemon.item) {
+					stats.spe *= 2;
+				}
 			}
 		},
 		id: "unburden",
