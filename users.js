@@ -587,27 +587,28 @@ function User(name, person, token) {
 		}
 		return result;
 	};
-	this.nameLock = function(targetName,recurse) {
+	this.nameLock = function(targetName, recurse) {
 		var targetUser = getUser(targetName);
-		if(nameLockedIps[selfP.ip]==targetName||!targetUser||targetUser.ip == selfP.ip) {
+		if (nameLockedIps[selfP.ip] === targetName || !targetUser || targetUser.ip === selfP.ip) {
 			nameLockedIps[selfP.ip] = targetName;
-			if(recurse) {
-				for(var i in users) {
-					if(users[i].ip == selfP.ip && users[i] != selfP) {
+			if (recurse) {
+				for (var i in users) {
+					if (users[i].ip === selfP.ip && users[i] !== selfP) {
 						users[i].destroy();
 					}
 				}
-				selfP.forceRename(targetName,selfP.authenticated);
+				selfP.forceRename(targetName, selfP.authenticated);
 			}
 		}
 		return targetName;
 	};
 	this.nameLocked = function() {
-		if(nameLockedIps[selfP.ip]) {
+		if (nameLockedIps[selfP.ip]) {
 			selfP.nameLock(nameLockedIps[selfP.ip]);
 			return true;
-		} for(var i in nameLockedIps) {
-			if(nameLockedIps[i]==selfP.name) {
+		}
+		for (var i in nameLockedIps) {
+			if (nameLockedIps[i] === selfP.name) {
 				nameLockedIps[selfP.ip] = nameLockedIps[i];
 				selfP.nameLock(nameLockedIps[selfP.ip]);
 				return true;
