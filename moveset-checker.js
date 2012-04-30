@@ -405,3 +405,7 @@ function getMoveData(move, pokemonData) {
 	}
 	return result;
 }
+
+// Debugging use
+exports.getBestMoveCombinations = getBestMoveCombinations;
+exports.getMoveCombinationsRecursive = getMoveCombinationsRecursive;
