@@ -181,6 +181,13 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onTryHealPriority: 1,
+		onTryHeal: function(damage, target, source, effect) {
+			var heals = {drain: 1, leechseed: 1, ingrain: 1, aquaring: 1};
+			if (heals[effect.id]) {
+				return damage * 1.3;
+			}
+		},
 		desc: "Increases HP gained from draining moves by 30%."
 	},
 	"bindingband": {
