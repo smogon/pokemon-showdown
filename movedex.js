@@ -1374,6 +1374,22 @@ exports.BattleMovedex = {
 		name: "Charge",
 		pp: 20,
 		priority: 0,
+		volatileStatus: 'charge',
+		onHit: function(pokemon) {
+			this.add('-message', pokemon.name+' began charging power! (placeholder)');
+		},
+		effect: {
+			duration: 2,
+			onRestart: function(pokemon) {
+				this.effectData.duration = 2;
+			},
+			onBasePower: function(basePower, attacker, defender, move) {
+				if (move.type === 'Electric') {
+					this.debug('charge boost');
+					return basePower * 2;
+				}
+			}
+		},
 		boosts: {
 			spd: 1
 		},
