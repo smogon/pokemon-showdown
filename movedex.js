@@ -6541,7 +6541,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onStart: function(target) {
-				if (target.hasVolatile('smackdown') || target.hasVolatile('ingrain')) return false;
+				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
 				this.add('-start', target, 'Magnet Rise');
 			},
 			onImmunity: function(type) {
@@ -11474,7 +11474,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart: function(target) {
-				if (target.hasVolatile('smackdown') || target.hasVolatile('ingrain')) return false;
+				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
 				this.add('message', target.name+' was hurled into the air! (placeholder)');
 			},
 			onSourceModifyMove: function(move) {
