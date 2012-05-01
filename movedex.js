@@ -1350,6 +1350,12 @@ exports.BattleMovedex = {
 		name: "Captivate",
 		pp: 20,
 		priority: 0,
+		onTryHit: function(pokemon, source) {
+			if ((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) {
+				return;
+			}
+			return false;
+		},
 		boosts: {
 			spa: -2
 		},
@@ -1368,6 +1374,22 @@ exports.BattleMovedex = {
 		name: "Charge",
 		pp: 20,
 		priority: 0,
+		volatileStatus: 'charge',
+		onHit: function(pokemon) {
+			this.add('-message', pokemon.name+' began charging power! (placeholder)');
+		},
+		effect: {
+			duration: 2,
+			onRestart: function(pokemon) {
+				this.effectData.duration = 2;
+			},
+			onBasePower: function(basePower, attacker, defender, move) {
+				if (move.type === 'Electric') {
+					this.debug('charge boost');
+					return basePower * 2;
+				}
+			}
+		},
 		boosts: {
 			spd: 1
 		},
@@ -4302,6 +4324,13 @@ exports.BattleMovedex = {
 			onModifyPokemon: function(pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
 				pokemon.boosts.evasion -= 2;
+				var disabledMoves = {bounce:1, fly:1, hijumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
+				for (var m in disabledMoves) {
+					pokemon.disabledMoves[m] = true;
+				}
+				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
+					this.add("message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
+				}
 			},
 			onEnd: function() {
 				this.add('-fieldend', 'move: Gravity');
@@ -6512,6 +6541,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onStart: function(target) {
+				if (target.hasVolatile('smackdown') || target.hasVolatile('ingrain')) return false;
 				this.add('-start', target, 'Magnet Rise');
 			},
 			onImmunity: function(type) {
@@ -7992,7 +8022,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, effect) {
-				if (effect && (effect.id === 'Feint' || effect.id === 'RolePlay')) {
+				if (effect && (effect.id === 'feint' || effect.id === 'roleplay')) {
+					return;
+				}
+				if (effect && effect.id === 'curse' && !effect.volatileStatus) {
+					// curse targeting self
 					return;
 				}
 				this.add('-activate', target, 'Protect');
@@ -10098,6 +10132,19 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'smackdown',
 		effect: {
+			onStart: function(pokemon) {
+				var applies = false;
+				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.ability === 'levitate') applies = true;
+				if (pokemon.removeVolatile('telekinesis')) applies = true;
+				if (pokemon.removeVolatile('magnetrise')) applies = true;
+				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
+					applies = true;
+					pokemon.movedThisTurn = true;
+				}
+				if (!applies) return false;
+				this.add("message", pokemon.name+" fell straight down! (placeholder)");
+			},
+			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
 			}
@@ -11423,6 +11470,23 @@ exports.BattleMovedex = {
 		pp: 15,
 		isBounceable: true,
 		priority: 0,
+		volatileStatus: 'telekinesis',
+		effect: {
+			duration: 3,
+			onStart: function(target) {
+				if (target.hasVolatile('smackdown') || target.hasVolatile('ingrain')) return false;
+				this.add('message', target.name+' was hurled into the air! (placeholder)');
+			},
+			onSourceModifyMove: function(move) {
+				move.accuracy = true;
+			},
+			onImmunity: function(type) {
+				if (type === 'Ground') return false;
+			},
+			onEnd: function(target) {
+				this.add('message', 'Telekinesis ended. (placeholder)');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"

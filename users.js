@@ -35,6 +35,19 @@ function searchUser(name) {
 	}
 	return users[userid];
 }
+function nameLock(user,name,ip) {
+	ip = ip||user.ip;
+	var userid = toUserid(name);
+	if(nameLockedIps[ip]) {
+		return user.nameLock(nameLockedIps[ip]);
+	} for(var i in nameLockedIps) {
+		if((userid && toUserid(nameLockedIps[i])==userid)||user.userid==toUserid(nameLockedIps[i])) {
+			nameLockedIps[ip] = nameLockedIps[i];
+			return user.nameLock(nameLockedIps[ip]);
+		}
+	}
+	return name||user.name;
+}
 function connectUser(name, socket, token, room) {
 	var userid = toUserid(name);
 	var user;
@@ -51,6 +64,10 @@ function connectUser(name, socket, token, room) {
 	} else {
 		console.log("NEW USER: [guest] "+name);
 		user = new User(name, person, token);
+		var nameSuggestion = nameLock(user);
+		if(nameSuggestion!=user.name) {
+			user.rename(nameSuggestion);
+		}
 	}
 	if (room) {
 		user.joinRoom(room, person);
@@ -125,59 +142,48 @@ function User(name, person, token) {
 	this.getIdentity = function() {
 		if (selfP.muted) {
 			return '!'+selfP.name;
+		} if(selfP.nameLocked()) {
+			return '#'+selfP.name;
 		}
 		return selfP.group+selfP.name;
 	};
-	this.can = function(permission, targetUser) {
-		var group = config.groups[selfP.group];
-		if (!group) return false;
+	this.can = function(permission, target) {
+		var group = selfP.group;
+		var groupData = config.groups[group];
+		var checkedGroups = {};
+		while (groupData) {
+			// Cycle checker
+			if (checkedGroups[group]) return false;
+			checkedGroups[group] = true;
 
-		function permissionLookup(permission, curGroup, groupsBeenTo) {
-			// Finds the permission taking in account for inheritance
-			if (!curGroup) curGroup = group;
-			if (!groupsBeenTo) groupsBeenTo = new Array();
-			if (groupsBeenTo.indexOf(curGroup) !== -1)
-				throw new Error("Cycle detected in the group inheritance graph.");
-			groupsBeenTo.push(curGroup);
-
-			if (curGroup[permission]) {
-				var jurisdiction;
-				if (typeof curGroup[permission] === 'string') {
-					jurisdiction = curGroup[permission];
-				} else {
-					jurisdiction = permissionLookup('jurisdiction', group);
-					if (!jurisdiction) jurisdiction = true;
+			if (groupData['root']) {
+				return true;
+			}
+			if (groupData[permission]) {
+				var jurisdiction = groupData[permission];
+				if (!target) {
+					return !!jurisdiction;
 				}
-				if (jurisdiction === true) return true;
-				if (typeof jurisdiction === 'string') jurisdiction = jurisdiction.split('');
-
-				// Expand the special group 'u'
-				if (jurisdiction.indexOf('u') !== -1) {
-					var groupRank = config.groupsranking.indexOf(selfP.group);
-					var groupsToAdd = [];
-					if (groupRank !== -1) {
-						groupsToAdd = config.groupsranking.slice(0, groupRank);
-					}
-					groupsToAdd.unshift(jurisdiction.indexOf('u'), 1);
-					Array.prototype.splice.apply(jurisdiction, groupsToAdd);
+				if (jurisdiction === true && permission !== 'jurisdiction') {
+					return selfP.can('jurisdiction', target);
 				}
-				return jurisdiction;
-			} else if (curGroup[permission] === false) {
+				if (typeof jurisdiction !== 'string') {
+					return !!jurisdiction;
+				}
+				if (jurisdiction.indexOf(target.group) >= 0) {
+					return true;
+				}
+				if (jurisdiction.indexOf('s') >= 0 && target === selfP) {
+					return true;
+				}
+				if (jurisdiction.indexOf('u') >= 0 && config.groupsranking.indexOf(selfP.group) > config.groupsranking.indexOf(target.group)) {
+					return true;
+				}
 				return false;
 			}
-			if (!curGroup['inherit']) return false;
-			var nextGroup = config.groups[curGroup['inherit']];
-			if (!nextGroup) return false;
-			return permissionLookup(permission, nextGroup);
+			group = groupData['inherit'];
+			groupData = config.groups[group];
 		}
-
-		if (permissionLookup('root')) return true;
-		var jurisdiction = permissionLookup(permission);
-		if (!jurisdiction) return false;
-		if (!targetUser) return true;
-		if (targetUser && typeof jurisdiction === 'boolean') return false;
-		if (targetUser === selfP && jurisdiction.indexOf('s') !== -1) return true;
-		if (jurisdiction.indexOf(targetUser.group) !== -1) return true;
 		return false;
 	};
 	// Special permission check is needed for promoting and demoting
@@ -244,6 +250,7 @@ function User(name, person, token) {
 		for (var i in selfP.roomCount) {
 			getRoom(i).rename(selfP, oldid, joining);
 		}
+		rooms.lobby.usersChanged = true;
 		return true;
 	};
 	this.resetName = function() {
@@ -302,6 +309,9 @@ function User(name, person, token) {
 		}
 		if (!name) name = '';
 		name = sanitizeName(name);
+		console.log("checking name lock for: "+selfP.name+" renaming to "+name);
+		name = nameLock(selfP,name);
+		console.log("returned "+name);
 		var userid = toUserid(name);
 		if (selfP.authenticated) auth = false;
 
@@ -364,6 +374,7 @@ function User(name, person, token) {
 					else if (userid === "aeo2") avatar = 166;
 					else if (userid === "sharktamer") avatar = 7;
 					else if (userid === "bmelts") avatar = 1004;
+					else if (userid === "n") avatar = 209;
 
 					try {
 						var data = JSON.parse(body);
@@ -562,6 +573,35 @@ function User(name, person, token) {
 			}
 		}
 		return result;
+	};
+	this.nameLock = function(targetName, recurse) {
+		var targetUser = getUser(targetName);
+		if (nameLockedIps[selfP.ip] === targetName || !targetUser || targetUser.ip === selfP.ip) {
+			nameLockedIps[selfP.ip] = targetName;
+			if (recurse) {
+				for (var i in users) {
+					if (users[i].ip === selfP.ip && users[i] !== selfP) {
+						users[i].destroy();
+					}
+				}
+				selfP.forceRename(targetName, selfP.authenticated);
+			}
+		}
+		return targetName;
+	};
+	this.nameLocked = function() {
+		if (nameLockedIps[selfP.ip]) {
+			selfP.nameLock(nameLockedIps[selfP.ip]);
+			return true;
+		}
+		for (var i in nameLockedIps) {
+			if (nameLockedIps[i] === selfP.name) {
+				nameLockedIps[selfP.ip] = nameLockedIps[i];
+				selfP.nameLock(nameLockedIps[selfP.ip]);
+				return true;
+			}
+		}
+		return false;
 	};
 	this.ban = function(noRecurse) {
 		// no need to recurse, since the root for-loop already bans everything with your IP
@@ -796,3 +836,4 @@ exports.searchUser = searchUser;
 exports.connectUser = connectUser;
 exports.users = users;
 exports.prevUsers = prevUsers;
+exports.importUsergroups = importUsergroups;
