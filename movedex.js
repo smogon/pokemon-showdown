@@ -5784,6 +5784,7 @@ exports.BattleMovedex = {
 				this.heal(pokemon.maxhp/16);
 			},
 			onModifyPokemon: function(pokemon) {
+				pokemon.negateImmunity['Ground'] = true;
 				pokemon.trapped = true;
 			},
 			onDragOut: false
