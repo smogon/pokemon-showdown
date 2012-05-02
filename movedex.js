@@ -10708,7 +10708,7 @@ exports.BattleMovedex = {
 			return 20 + 20 * pokemon.positiveBoosts();
 		},
 		category: "Special",
-		desc: "Deals variable damage depending on the stat modifications of the user. When the user has no stat modifications, Assist Power's base power is 20. Its power increases by 20 for each stat boost the user has, and does not decrease in power due to stat drops below 0. It reaches a maximum power of 860, where all stats are maximized.",
+		desc: "Deals variable damage depending on the stat modifications of the user. When the user has no stat modifications, Stored Power's base power is 20. Its power increases by 20 for each stat boost the user has, and does not decrease in power due to stat drops below 0. It reaches a maximum power of 860, where all stats are maximized.",
 		shortDesc: "+20 power for each of the user's stat boosts.",
 		id: "storedpower",
 		name: "Stored Power",

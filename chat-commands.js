@@ -1108,7 +1108,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === '%' || target === 'banredirect' || target === 'br') {
 			matched = true;
-			socket.emit('console', '/banredirect OR /br [username], [url] - Band a user and then redirects user to a different URL. Requires: % @ &');
+			socket.emit('console', '/banredirect OR /br [username], [url] - Bans a user and then redirects user to a different URL. Requires: % @ &');
 		}
 		if (target === '%' || target === 'unban') {
 			matched = true;
