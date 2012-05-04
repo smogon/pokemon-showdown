@@ -2326,12 +2326,32 @@ exports.BattleAbilities = {
 			if (pokemon.baseTemplate.species !== 'Darmanitan') {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp/2 && pokemon.template.speciesid==='darmanitan' && pokemon.transformInto('Darmanitan-Zen')) {
-				this.add('-formechange', pokemon, 'Darmanitan-Zen');
-			} else if (pokemon.hp > pokemon.maxhp/2 && pokemon.template.speciesid==='darmanitanzen' && pokemon.transformInto('Darmanitan')) {
-				this.add('-formechange', pokemon, 'Darmanitan');
+			if (pokemon.hp <= pokemon.maxhp/2 && pokemon.template.speciesid==='darmanitan'){
+				pokemon.addVolatile('zenmode');
+			} else if (pokemon.hp > pokemon.maxhp/2 && pokemon.template.speciesid==='darmanitanzen') {
+				pokemon.removeVolatile('zenmode');
 			}
-			// renderer takes care of this for us
+		},
+		effect: {
+			onStart: function(pokemon) {
+				if (pokemon.transformInto('Darmanitan-Zen')) {
+					this.add('-formechange', pokemon, 'Darmanitan-Zen');
+				} else {
+					return false;
+				}
+			},
+			onEnd: function(pokemon) {
+				if (pokemon.transformInto('Darmanitan')) {
+					this.add('-formechange', pokemon, 'Darmanitan');
+				} else {
+					return false;
+				}
+			},
+			onUpdate: function(pokemon) {
+				if (pokemon.ability !== 'zenmode') {
+					pokemon.removeVolatile('zenmode');
+				}
+			}
 		},
 		id: "zenmode",
 		name: "Zen Mode",
