@@ -67,6 +67,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			if (userOfName) {
 				for(var altName in userOfName.getAlts()) {
 					var altUser = Users.users[toUserid(altName)];
+					if (!altUser) continue;
 					if (targetId === altUser.userid) {
 						isAlt = true;
 						break;
@@ -1004,6 +1005,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'crashfixed':
+		if (!lockdown) {
+			socket.emit('console', '/crashfixed - There is no active crash.');
+			return false;
+		}
 		if (!user.can('hotpatch')) {
 			socket.emit('console', '/crashfixed - Access denied.');
 			return false;
@@ -1011,7 +1016,22 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		lockdown = false;
 		config.modchat = false;
-		rooms.lobby.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
+		rooms.lobby.addRaw('<div style="background-color:#559955;color:white;padding:2px 4px"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
+		return false;
+		break;
+	case 'crashnoted':
+		if (!lockdown) {
+			socket.emit('console', '/crashnoted - There is no active crash.');
+			return false;
+		}
+		if (!user.can('announce')) {
+			socket.emit('console', '/crashnoted - Access denied.');
+			return false;
+		}
+
+		lockdown = false;
+		config.modchat = false;
+		rooms.lobby.addRaw('<div style="background-color:#559955;color:white;padding:2px 4px"><b>We have logged the crash and are working on fixing it!</b><br />You may resume talking in the lobby and starting new battles.</div>');
 		return false;
 		break;
 
@@ -1108,7 +1128,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === '%' || target === 'banredirect' || target === 'br') {
 			matched = true;
-			socket.emit('console', '/banredirect OR /br [username], [url] - Band a user and then redirects user to a different URL. Requires: % @ &');
+			socket.emit('console', '/banredirect OR /br [username], [url] - Bans a user and then redirects user to a different URL. Requires: % @ &');
 		}
 		if (target === '%' || target === 'unban') {
 			matched = true;
