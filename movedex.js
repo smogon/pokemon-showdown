@@ -9390,13 +9390,16 @@ exports.BattleMovedex = {
 		basePower: 70,
 		category: "Physical",
 		desc: "This move has a 30% chance to inflict a side effect depending on the battle's current terrain. The target may be put to sleep in any type of grass (or in puddles), its Attack may be lowered by 1 stage while surfing on any body of water, its Speed may be lowered by 1 stage while on marshy terrain, its Accuracy may be lowered by 1 stage on beach sand, desert sand and dirt paths (and also in Wifi battles), it may flinch in caves or on rocky outdoor terrain, it may become frozen on snowy terrain and it may become paralyzed everywhere else.",
-		shortDesc: "Effect varies with terrain. (30% paralysis chance)",
+		shortDesc: "Effect varies with terrain. (30% chance to lower accuracy)",
 		id: "secretpower",
 		name: "Secret Power",
 		pp: 20,
 		priority: 0,
 		secondary: {
-			chance: 30
+			chance: 30,
+			boosts: {
+				accuracy: -1
+			}
 		},
 		target: "normal",
 		type: "Normal"
