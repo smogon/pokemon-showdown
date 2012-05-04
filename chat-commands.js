@@ -67,6 +67,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			if (userOfName) {
 				for(var altName in userOfName.getAlts()) {
 					var altUser = Users.users[toUserid(altName)];
+					if (!altUser) continue;
 					if (targetId === altUser.userid) {
 						isAlt = true;
 						break;
