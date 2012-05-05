@@ -438,8 +438,12 @@ function BattlePokemon(set, side) {
 			selfP.moveset = [];
 			for (var i=0; i<pokemon.moveset.length; i++) {
 				var moveData = pokemon.moveset[i];
+				var moveName = moveData.move;
+				if (moveData.id === 'hiddenpower') {
+					moveName = 'Hidden Power '+selfP.hpType;
+				}
 				selfP.moveset.push({
-					move: selfB.getMove(moveData.id).name,
+					move: moveName,
 					id: moveData.id,
 					pp: 5,
 					maxpp: moveData.maxpp,
