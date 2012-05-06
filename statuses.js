@@ -136,6 +136,7 @@ exports.BattleStatuses = {
 	},
 	flinch: {
 		duration: 1,
+		onBeforeMovePriority: 1,
 		onBeforeMove: function(pokemon) {
 			if (!this.runEvent('Flinch', pokemon)) {
 				return;
