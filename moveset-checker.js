@@ -54,10 +54,35 @@ exports.check = function(pokemon, pokemonData) {
 		if (sketches > 0) {
 			if (!isHasUnsketchableMove) problems.push(pokemon.name + " (" + pokemon.species + ") can only sketch a maximum of " + sketches + " move(s).");
 		} else {
-			problems.push(pokemon.name + " (" + pokemon.species + ") doesn't have a valid moveset. (Placeholder)");
-			problems.push("DEBUG: " + JSON.stringify(moveCombinations));
+			for (var i = 0; i < moveCombinations[0].invalid.length; ++i) {
+				var invalidMove = moveCombinations[0].invalid[i];
+				var reason = pokemon.name + " (" + pokemon.species + ") can't learn " + Tools.getMove(invalidMove.move).name;
+				switch (invalidMove.reason) {
+					case "notinlearnset":
+						reason += ".";
+						break;
+
+					case "anotherevent":
+						reason += " because it is from another event.";
+						break;
+
+					case "eggbutevent":
+						reason += " because it is an egg move while an event pokemon is being used.";
+						break;
+
+					case "eggatcurlevelbutevent":
+						reason += " because it is an egg move at the pokemon's level while an event pokemon is being used.";
+						break;
+
+					default:
+						reason = ". (Please notify a mod of this)";
+						break;
+				}
+				problems.push(reason);
+			}
 			if (moveCombinations.length > 1) {
-				problems.push("DEBUG: Please send the data for " + pokemon.name + " (" + pokemon.species + ") to kota");
+				problems.push("DEBUG: " + JSON.stringify(moveCombinations));
+				problems.push("DEBUG: Please send the above data to kota");
 			}
 		}
 	} else {
@@ -155,64 +180,69 @@ nextCombination:
 }
 
 function getMoveCombinationsRecursive(pokemon, pokemonData) {
-	if (pokemonData.prevo) {
-		var prevoData = Tools.getTemplate(pokemonData.prevo);
-		if (!prevoData.exists) {
-			throw new Error("Warning: Prevo for " + pokemonData.name + " doesn't exist! Badly formed pokedex.js?");
-		}
+	if (!pokemonData.prevo) return getMoveCombinations(pokemon, pokemonData);
 
-		var prevoMoves = getMoveCombinationsRecursive(pokemon, prevoData);
-		var results = new Array();
-		for (var m = 0; m < prevoMoves.length; ++m) {
-			var testPokemon = JSON.parse(JSON.stringify(pokemon));
-			testPokemon.moves = new Array();
-			for (var i = 0; i < prevoMoves[m].invalid.length; ++i) {
-				testPokemon.moves.push(prevoMoves[m].invalid[i].move);
-			}
-			var testResults = getMoveCombinations(testPokemon, pokemonData);
-			for (var r = 0; r < testResults.length; ++r) {
-				var result = {
-						valid: {nonEvent: prevoMoves[m].valid.nonEvent.concat(testResults[r].valid.nonEvent)},
-						invalid: new Array()
-					};
-				if (prevoMoves[m].valid.event) {
-					result.valid.event = {
-							moves: prevoMoves[m].valid.event.moves.slice(0),
-							data: prevoMoves[m].valid.event.data
-						};
-					if (testResults[r].valid.event) {
-						for (var re = 0; re < testResults[r].valid.event.moves.length; ++re) {
-							result.invalid.push({move: testResults[r].valid.event.moves[re], reason: "anotherevent"});
-						}
-					}
-				} else if (testResults[r].valid.event) {
-					result.valid.event = {
-							moves: testResults[r].valid.event.moves.slice(0),
-							data: testResults[r].valid.event.data
-						};
-				}
-				for (var ri = 0; ri < testResults[r].invalid.length; ++ri) {
-					var prevoInvalidReason;
-					for (var i = 0; i < prevoMoves[m].invalid.length; ++i) {
-						if (prevoMoves[m].invalid[i].move === testResults[r].invalid[ri].move) {
-							prevoInvalidReason = prevoMoves[m].invalid[i].reason;
-							break;
-						}
-					}
-					//assert(prevoInvalidReason);
-					if (prevoInvalidReason === "notinlearnset" || prevoInvalidReason === "event") {
-						result.invalid.push(testResults[r].invalid[ri]);
-					} else {
-						result.invalid.push({move: testResults[r].invalid[ri].move, reason: prevoInvalidReason});
-					}
-				}
-				results.push(result);
-			}
+	var prevoData = Tools.getTemplate(pokemonData.prevo);
+	var prevoMoves;
+	if (!prevoData.exists) {
+		console.warn("Warning: Prevo for " + pokemonData.name + " doesn't exist! Badly formed pokedex.js?");
+		var prevoMoves = {invalid: new Array()};
+		for (var m = 0; m < pokemon.moves.length; ++m) {
+			prevoMove.invalid.push({move: pokemon.moves[m], reason: "notinlearnset"});
 		}
-		return results;
+		prevoMoves = [prevoMove];
 	} else {
-		return getMoveCombinations(pokemon, pokemonData);
+		prevoMoves = getMoveCombinationsRecursive(pokemon, prevoData);
 	}
+
+	var results = new Array();
+	for (var m = 0; m < prevoMoves.length; ++m) {
+		var testPokemon = JSON.parse(JSON.stringify(pokemon));
+		testPokemon.moves = new Array();
+		for (var i = 0; i < prevoMoves[m].invalid.length; ++i) {
+			testPokemon.moves.push(prevoMoves[m].invalid[i].move);
+		}
+		var testResults = getMoveCombinations(testPokemon, pokemonData);
+		for (var r = 0; r < testResults.length; ++r) {
+			var result = {
+					valid: {nonEvent: prevoMoves[m].valid.nonEvent.concat(testResults[r].valid.nonEvent)},
+					invalid: new Array()
+				};
+			if (prevoMoves[m].valid.event) {
+				result.valid.event = {
+						moves: prevoMoves[m].valid.event.moves.slice(0),
+						data: prevoMoves[m].valid.event.data
+					};
+				if (testResults[r].valid.event) {
+					for (var re = 0; re < testResults[r].valid.event.moves.length; ++re) {
+						result.invalid.push({move: testResults[r].valid.event.moves[re], reason: "anotherevent"});
+					}
+				}
+			} else if (testResults[r].valid.event) {
+				result.valid.event = {
+						moves: testResults[r].valid.event.moves.slice(0),
+						data: testResults[r].valid.event.data
+					};
+			}
+			for (var ri = 0; ri < testResults[r].invalid.length; ++ri) {
+				var prevoInvalidReason;
+				for (var i = 0; i < prevoMoves[m].invalid.length; ++i) {
+					if (prevoMoves[m].invalid[i].move === testResults[r].invalid[ri].move) {
+						prevoInvalidReason = prevoMoves[m].invalid[i].reason;
+						break;
+					}
+				}
+				//assert(prevoInvalidReason);
+				if (prevoInvalidReason === "notinlearnset" || prevoInvalidReason === "event") {
+					result.invalid.push(testResults[r].invalid[ri]);
+				} else {
+					result.invalid.push({move: testResults[r].invalid[ri].move, reason: prevoInvalidReason});
+				}
+			}
+			results.push(result);
+		}
+	}
+	return results;
 }
 
 /* Possible reasons for unlearnable moves:
