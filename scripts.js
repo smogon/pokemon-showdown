@@ -660,11 +660,6 @@ exports.BattleScripts = {
 						rejected = true;
 					}
 
-					var todoMoves = {
-						beatup:1
-					};
-					if (todoMoves[move.id]) rejected = true;
-
 					if (rejected && j<moveKeys.length) {
 						moves.splice(k,1);
 						break;
