@@ -6,7 +6,7 @@
 
 exports.check = function(pokemon, pokemonData) {
 	for (var m = 0; m < pokemon.moves.length; ++m) {
-		pokemon.moves[m] = pokemon.moves[m].toLowerCase().replace(/[^a-z0-9]+/g, "");
+		pokemon.moves[m] = pokemon.moves[m].toLowerCase().replace(/[^a-z0-9]+/g, '');
 	}
 
 	var moveCombinations = getBestMoveCombinations(pokemon, pokemonData);
@@ -58,19 +58,19 @@ exports.check = function(pokemon, pokemonData) {
 				var invalidMove = moveCombinations[0].invalid[i];
 				var reason = pokemon.name + " (" + pokemon.species + ") can't learn " + Tools.getMove(invalidMove.move).name;
 				switch (invalidMove.reason) {
-					case "notinlearnset":
+					case 'notinlearnset':
 						reason += ".";
 						break;
 
-					case "anotherevent":
+					case 'anotherevent':
 						reason += " because it is from another event.";
 						break;
 
-					case "eggbutevent":
+					case 'eggbutevent':
 						reason += " because it is an egg move while an event pokemon is being used.";
 						break;
 
-					case "eggatcurlevelbutevent":
+					case 'eggatcurlevelbutevent':
 						reason += " because it is an egg move at the pokemon's level while an event pokemon is being used.";
 						break;
 
@@ -89,7 +89,7 @@ exports.check = function(pokemon, pokemonData) {
 		// Make sure the pokemon's nature, ability, gender and level matches any of the applicable events, if any
 		var possibleNatures = new Array();
 		var possibleAbilities = new Array();
-		var possibleGenders = "N/A";
+		var possibleGenders = 'N/A';
 		var minLevel = 999;
 		for (var m = 0; m < moveCombinations.length; ++m) {
 			if (!moveCombinations[m].valid.event) continue;
@@ -98,36 +98,36 @@ exports.check = function(pokemon, pokemonData) {
 			possibleAbilities = possibleAbilities.concat(eventPokemon.abilities);
 
 			var gender = eventPokemon.gender;
-			if (possibleGenders === "N/A") {
+			if (possibleGenders === 'N/A') {
 				possibleGenders = gender;
-			} else if (gender === "M/F" ||
-				(possibleGenders === "M" && gender === "F") ||
-				(possibleGenders === "F" && gender === "M")) {
-				possibleGenders = "M/F";
+			} else if (gender === 'M/F' ||
+				(possibleGenders === 'M' && gender === 'F') ||
+				(possibleGenders === 'F' && gender === 'M')) {
+				possibleGenders = 'M/F';
 			}
 			if (eventPokemon.level < minLevel) {
 				minLevel = eventPokemon.level;
 			}
 		}
 		if (minLevel !== 999) {
-			if (possibleNatures.indexOf("Any") === -1 &&
+			if (possibleNatures.indexOf('Any') === -1 &&
 				possibleNatures.indexOf(pokemon.nature) === -1) {
 				problems.push(pokemon.name + " (" + pokemon.species + ") can't have a " + pokemon.nature.toLowerCase() + " nature because it uses an event move and none of the event pokemon have it.");
 			}
-			if (possibleAbilities.indexOf(pokemon.ability.toLowerCase().replace(/[^a-z0-9]+/g, "")) === -1) {
+			if (possibleAbilities.indexOf(pokemon.ability.toLowerCase().replace(/[^a-z0-9]+/g, '')) === -1) {
 				problems.push(pokemon.name + " (" + pokemon.species + ") can't have " + pokemon.ability + " because it uses an event move and none of the event pokemon have it.");
 			}
 			if (!pokemon.gender) {
 				pokemon.gender = possibleGenders;
-				if (pokemon.gender === "M/F") {
-					pokemon.gender = Math.random() > 0.5 ? "M" : "F";
+				if (pokemon.gender === 'M/F') {
+					pokemon.gender = Math.random() > 0.5 ? 'M' : 'F';
 				}
 			}
-			if (possibleGenders === "N/A" && pokemon.gender !== "N" && pokemon.gender !== "N/A") {
+			if (possibleGenders === 'N/A' && pokemon.gender !== 'N' && pokemon.gender !== 'N/A') {
 				problems.push(pokemon.name + " (" + pokemon.species + ") can't have a gender.");
-			} else if (possibleGenders === "M" && pokemon.gender === "F") {
+			} else if (possibleGenders === 'M' && pokemon.gender === 'F') {
 				problems.push(pokemon.name + " (" + pokemon.species + ") must be male because it uses an event move and none of the event pokemon are female.");
-			} else if (possibleGenders === "F" && pokemon.gender === "M") {
+			} else if (possibleGenders === 'F' && pokemon.gender === 'M') {
 				problems.push(pokemon.name + " (" + pokemon.species + ") must be female because it uses an event move and none of the event pokemon are male.");
 			}
 			if (pokemon.level < minLevel) {
@@ -145,7 +145,7 @@ function getBestMoveCombinations(pokemon, pokemonData) {
 nextCombination:
 	for (var m = 0; m < moveCombinations.length; ++m) {
 		for (var i = 0; i < moveCombinations[m].invalid.length; ++i) {
-			if (moveCombinations[m].invalid[i].reason === "event") {
+			if (moveCombinations[m].invalid[i].reason === 'event') {
 				moveCombinations.splice(m, 1);
 				--m;
 				continue nextCombination;
@@ -188,7 +188,7 @@ function getMoveCombinationsRecursive(pokemon, pokemonData) {
 		console.warn("Warning: Prevo for " + pokemonData.name + " doesn't exist! Badly formed pokedex.js?");
 		var prevoMoves = {invalid: new Array()};
 		for (var m = 0; m < pokemon.moves.length; ++m) {
-			prevoMove.invalid.push({move: pokemon.moves[m], reason: "notinlearnset"});
+			prevoMove.invalid.push({move: pokemon.moves[m], reason: 'notinlearnset'});
 		}
 		prevoMoves = [prevoMove];
 	} else {
@@ -215,7 +215,7 @@ function getMoveCombinationsRecursive(pokemon, pokemonData) {
 					};
 				if (testResults[r].valid.event) {
 					for (var re = 0; re < testResults[r].valid.event.moves.length; ++re) {
-						result.invalid.push({move: testResults[r].valid.event.moves[re], reason: "anotherevent"});
+						result.invalid.push({move: testResults[r].valid.event.moves[re], reason: 'anotherevent'});
 					}
 				}
 			} else if (testResults[r].valid.event) {
@@ -233,7 +233,7 @@ function getMoveCombinationsRecursive(pokemon, pokemonData) {
 					}
 				}
 				//assert(prevoInvalidReason);
-				if (prevoInvalidReason === "notinlearnset" || prevoInvalidReason === "event") {
+				if (prevoInvalidReason === 'notinlearnset' || prevoInvalidReason === 'event') {
 					result.invalid.push(testResults[r].invalid[ri]);
 				} else {
 					result.invalid.push({move: testResults[r].invalid[ri].move, reason: prevoInvalidReason});
@@ -246,11 +246,11 @@ function getMoveCombinationsRecursive(pokemon, pokemonData) {
 }
 
 /* Possible reasons for unlearnable moves:
- *   - "notinlearnset"
- *   - "event" (When isIgnoreEvent is set)
- *   - "anotherevent"
- *   - "eggbutevent"
- *   - "eggatcurlevelbutevent"
+ *   - 'notinlearnset'
+ *   - 'event' (When isIgnoreEvent is set)
+ *   - 'anotherevent'
+ *   - 'eggbutevent'
+ *   - 'eggatcurlevelbutevent'
  */
 function getMoveCombinations(pokemon, pokemonData) {
 	var results = new Array();
@@ -275,7 +275,7 @@ function getMoveCombinations(pokemon, pokemonData) {
 				invalid: moves.unlearnable.slice(0)
 			};
 		for (var m = 0; m < eventMoveCombinations[c].notInSet.length; ++m) {
-			result.invalid.push({move: eventMoveCombinations[c].notInSet[m], reason: "anotherevent"});
+			result.invalid.push({move: eventMoveCombinations[c].notInSet[m], reason: 'anotherevent'});
 		}
 		results.push(result);
 	}
@@ -292,7 +292,7 @@ function splitMoves(pokemon, pokemonData, isIgnoreEvent) {
 		if (pokemonData.learnset[moves[m]] && pokemonData.learnset[moves[m]].length > 0) {
 			learnableMoves.push(moves[m]);
 		} else {
-			unlearnableMoves.push({move: moves[m], reason: "notinlearnset"});
+			unlearnableMoves.push({move: moves[m], reason: 'notinlearnset'});
 		}
 	}
 
@@ -314,7 +314,7 @@ function splitMoves(pokemon, pokemonData, isIgnoreEvent) {
 			if (!isIgnoreEvent) {
 				eventMoves.push(learnableMoves[m]);
 			} else {
-				unlearnableMoves.push({move: learnableMoves[m], reason: "event"});
+				unlearnableMoves.push({move: learnableMoves[m], reason: 'event'});
 			}
 		} else {
 			nonEventMoves.push(learnableMoves[m]);
@@ -332,7 +332,7 @@ function splitMoves(pokemon, pokemonData, isIgnoreEvent) {
 				if (learnableMovesData[nonEventMoves[m]].event.length > 0) {
 					eventMoves.push(nonEventMoves[m]);
 				} else {
-					unlearnableMoves.push({move: nonEventMoves[m], reason: "eggbutevent"});
+					unlearnableMoves.push({move: nonEventMoves[m], reason: 'eggbutevent'});
 				}
 				nonEventMoves.splice(m, 1);
 				--m;
@@ -349,7 +349,7 @@ function splitMoves(pokemon, pokemonData, isIgnoreEvent) {
 					if (learnableMovesData[nonEventMoves[m]].event.length > 0) {
 						eventMoves.push(nonEventMoves[m]);
 					} else {
-						unlearnableMoves.push({move: nonEventMoves[m], reason: "eggatcurlevelbutevent"});
+						unlearnableMoves.push({move: nonEventMoves[m], reason: 'eggatcurlevelbutevent'});
 					}
 					nonEventMoves.splice(m, 1);
 					--m;
