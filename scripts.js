@@ -884,6 +884,7 @@ exports.BattleScripts = {
 				NFE: 95,
 				'LC Uber': 90,
 				NU: 90,
+				BL3: 88,
 				RU: 85,
 				BL2: 83,
 				UU: 80,
