@@ -910,7 +910,6 @@ exports.BattleScripts = {
 
 			if (template.name === 'Chandelure' && ability === 'Shadow Tag') level = 70;
 			if (template.name === 'Serperior' && ability === 'Contrary') level = 75;
-			if (template.name === 'Rotom-Fan' && item === 'Air Balloon') level = 95;
 			if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 85;
 
 			pokemon.push({
