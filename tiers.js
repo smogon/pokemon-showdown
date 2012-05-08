@@ -1097,7 +1097,7 @@ exports.BattleTiers = {
 	"meloetta": {
 		tier: "Unreleased"
 	},
-	"meloettas": {
+	"meloettapirouette": {
 		tier: "Illegal"
 	},
 	"meowth": {
