@@ -344,6 +344,9 @@ exports.BattleFormatsData = {
 	ninetales: {
 		viable: true,
 		viablemoves: {"flamethrower":1,"fireblast":1,"willowisp":1,"solarbeam":1,"nastyplot":1,"substitute":1,"toxic":1,"hypnosis":1},
+		eventPokemon: [
+			{"generation":5,"level":50,"gender":"M","nature":"Bold","abilities":["drought"],"moves":["heatwave","solarbeam","psyshock","willowisp"]}
+		],
 		tier: "OU"
 	},
 	igglybuff: {
@@ -961,7 +964,7 @@ exports.BattleFormatsData = {
 	jynx: {
 		viable: true,
 		viablemoves: {"icebeam":1,"psychic":1,"focusblast":1,"trick":1,"shadowball":1,"nastyplot":1,"lovelykiss":1,"substitute":1,"grassknot":1},
-		tier: "NU"
+		tier: "RU"
 	},
 	elekid: {
 		viable: true,
@@ -3206,7 +3209,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":50,"gender":"M","nature":"Modest","abilities":["steadfast"],"moves":["aurasphere","darkpulse","dragonpulse","waterpulse"]},
 			{"generation":4,"level":30,"gender":"M","nature":"Adamant","abilities":["innerfocus"],"moves":["forcepalm","bonerush","sunnyday","blazekick"]},
-			{"generation":5,"level":10,"gender":"M","nature":"Any","abilities":["justified"],"moves":["detect","metalclaw","counter","bulletpunch"]}
+			{"generation":5,"level":10,"gender":"M","nature":"Any","abilities":["justified"],"moves":["detect","metalclaw","counter","bulletpunch"]},
+			{"generation":5,"level":50,"gender":"M","nature":"Naughty","abilities":["justified"],"moves":["bulletpunch","closecombat","stoneedge","shadowclaw"]}
 		],
 		tier: "OU"
 	},
@@ -3853,6 +3857,9 @@ exports.BattleFormatsData = {
 	whimsicott: {
 		viable: true,
 		viablemoves: {"encore":1,"taunt":1,"substitute":1,"leechseed":1,"thunderwave":1,"uturn":1,"toxic":1,"stunspore":1,"memento":1},
+		eventPokemon: [
+			{"generation":5,"level":50,"gender":"F","nature":"Timid","abilities":["prankster"],"moves":["swagger","gigadrain","beatup","helpinghand"]}
+		],
 		tier: "RU"
 	},
 	petilil: {
@@ -4198,6 +4205,9 @@ exports.BattleFormatsData = {
 	chandelure: {
 		viable: true,
 		viablemoves: {"calmmind":1,"protect":1,"shadowball":1,"energyball":1,"fireblast":1,"overheat":1,"hiddenpowerfighting":1,"hiddenpowerground":1},
+		eventPokemon: [
+			{"generation":5,"level":50,"gender":"F","nature":"Modest","abilities":["flashfire"],"moves":["heatwave","shadowball","energyball","psychic"]}
+		],
 		tier: "UU"
 	},
 	axew: {
