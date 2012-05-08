@@ -61,6 +61,8 @@ function BattleTools() {
 				template.viable = BattleFormatsData[id].viable;
 				template.viablemoves = BattleFormatsData[id].viablemoves;
 				template.eventPokemon = BattleFormatsData[id].eventPokemon;
+			} else {
+				template.tier = 'Illegal';
 			}
 			if (BattleLearnsets[id]) {
 				template.learnset = BattleLearnsets[id].learnset;
@@ -335,10 +337,10 @@ function BattleTools() {
 			return ["This is not a pokemon."];
 		}
 
-		set.species = (''+set.species).trim();
-		set.name = (''+set.name).trim();
-		set.item = ''+set.item;
-		set.ability = ''+set.ability;
+		set.species = (''+(set.species||'')).trim();
+		set.name = (''+(set.name||'')).trim();
+		set.item = ''+(set.item||'');
+		set.ability = ''+(set.ability||'');
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		set.species = set.species || set.name || 'Bulbasaur';
@@ -396,7 +398,7 @@ function BattleTools() {
 
 			for (var i=0; i<set.moves.length; i++) {
 				if (!set.moves[i]) continue;
-				set.moves[i] = ''+set.moves[i];
+				set.moves[i] = ''+(set.moves[i]||'');
 				var move = selfT.getMove(set.moves[i]);
 				setHas[move.id] = true;
 				if (banlistTable[move.id]) {

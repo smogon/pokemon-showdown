@@ -576,7 +576,7 @@ function User(name, person, token) {
 	};
 	this.nameLock = function(targetName, recurse) {
 		var targetUser = getUser(targetName);
-		if (nameLockedIps[selfP.ip] === targetName || !targetUser || targetUser.ip === selfP.ip) {
+		if (nameLockedIps[selfP.ip] === targetName || !targetUser.ip || targetUser.ip === selfP.ip) {
 			nameLockedIps[selfP.ip] = targetName;
 			if (recurse) {
 				for (var i in users) {
