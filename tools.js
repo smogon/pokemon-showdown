@@ -58,6 +58,8 @@ function BattleTools() {
 			if (BattleTiers[id]) {
 				template.tier = BattleTiers[id].tier;
 				template.isNonstandard = BattleTiers[id].isNonstandard;
+			} else {
+				template.tier = 'Illegal';
 			}
 			if (BattleLearnsets[id]) {
 				template.learnset = BattleLearnsets[id].learnset;
