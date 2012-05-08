@@ -359,8 +359,8 @@ exports.BattleScripts = {
 				this.dragIn(target.side);
 			}
 		}
-		if (move.selfSwitch || move.batonPass) {
-			pokemon.switchFlag = true;
+		if (move.selfSwitch) {
+			pokemon.switchFlag = move.selfSwitch;
 		}
 		return damage;
 	},

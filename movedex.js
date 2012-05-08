@@ -653,7 +653,7 @@ exports.BattleMovedex = {
 		pp: 40,
 		isViable: true,
 		priority: 0,
-		batonPass: true,
+		selfSwitch: 'copyvolatile',
 		secondary: false,
 		target: "self",
 		type: "Normal"

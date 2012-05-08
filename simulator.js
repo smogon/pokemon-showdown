@@ -1663,9 +1663,11 @@ function Battle(roomid, format, rated) {
 		}
 		pokemon.clearVolatile();
 		var lastMove = null;
-		if (side.active[0]) lastMove = selfB.getMove(side.active[0].lastMove);
-		if (lastMove && (lastMove.batonPass || (lastMove.self && lastMove.self.batonPass))) {
-			pokemon.copyVolatileFrom(side.active[0]);
+		if (side.active[0]) {
+			lastMove = selfB.getMove(side.active[0].lastMove);
+			if (side.active[0].switchFlag === 'copyvolatile') {
+				pokemon.copyVolatileFrom(side.active[0]);
+			}
 		}
 		side.active[0] = pokemon;
 		pokemon.isActive = true;
@@ -2351,19 +2353,21 @@ function Battle(roomid, format, rated) {
 		if (selfB.faintMessages()) return true;
 		selfB.eachEvent('Update');
 		if (selfB.p1.active[0].switchFlag) {
-			selfB.p1.active[0].switchFlag = false;
 			if (selfB.canSwitch(selfB.p1)) {
 				selfB.callback('switch-ally');
 				selfB.decisionWaiting = true;
 				return true;
+			} else {
+				selfB.p1.active[0].switchFlag = false;
 			}
 		}
 		if (selfB.p2.active[0].switchFlag) {
-			selfB.p2.active[0].switchFlag = false;
 			if (selfB.canSwitch(selfB.p2)) {
 				selfB.callback('switch-foe');
 				selfB.decisionWaiting = true;
 				return true;
+			} else {
+				selfB.p2.active[0].switchFlag = false;
 			}
 		}
 		return false;
