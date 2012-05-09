@@ -1115,8 +1115,10 @@ exports.BattleMovedex = {
 		isContact: true,
 		onTryHit: function(pokemon) {
 			// will shatter screens through sub, before you hit
-			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightscreen');
+			if (pokemon.runImmunity('Fighting')) {
+				pokemon.side.removeSideCondition('reflect');
+				pokemon.side.removeSideCondition('lightscreen');
+			}
 		},
 		priority: 0,
 		secondary: false,
