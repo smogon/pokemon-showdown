@@ -45,7 +45,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	cmd = cmd.toLowerCase();
 	switch (cmd) {
 	case 'me':
-		return '/me '+target;
+		if (canTalk(user, room)) {
+			return '/me '+target;
+		}
 		break;
 
 	case 'namelock':
