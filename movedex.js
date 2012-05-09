@@ -6747,6 +6747,7 @@ exports.BattleMovedex = {
 		name: "Memento",
 		pp: 10,
 		isViable: true,
+		isBounceable: false,
 		priority: 0,
 		boosts: {
 			atk: -2,
