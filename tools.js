@@ -387,7 +387,8 @@ function BattleTools() {
 		if (banlistTable[toId(set.item)]) {
 			problems.push(set.name+"'s item "+set.item+" is banned.");
 		}
-		if (banlistTable['Unreleased'] && setHas['souldew']) {
+		var item = selfT.getItem(set.item);
+		if (banlistTable['Unreleased'] && item.isUnreleased) {
 			problems.push(set.name+"'s item "+set.item+" is unreleased.");
 		}
 		setHas[toId(set.ability)] = true;
