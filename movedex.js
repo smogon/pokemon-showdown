@@ -9223,7 +9223,7 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onSetStatus: function(status, target, source, effect) {
-				if (source === target || (source && source.ability !== 'infiltrator') || (effect && effect.id === 'toxicspikes')) {
+				if (source && source !== target && source.ability !== 'infiltrator' || (effect && effect.id === 'toxicspikes')) {
 					this.debug('interrupting setstatus');
 					return false;
 				}
