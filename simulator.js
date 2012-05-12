@@ -296,7 +296,7 @@ function BattlePokemon(set, side) {
 		}
 		return null;
 	};
-	this.deductPP = function(move, amount) {
+	this.deductPP = function(move, amount, source) {
 		move = selfB.getMove(move);
 		var ppData = selfP.getMoveData(move);
 		var success = false;
@@ -304,11 +304,7 @@ function BattlePokemon(set, side) {
 			ppData.used = true;
 		}
 		if (ppData && ppData.pp) {
-			if (amount) {
-				ppData.pp -= amount;
-			} else {
-				ppData.pp -= selfB.runEvent('DeductPP', selfP, selfP, move, 1);
-			}
+			ppData.pp -= selfB.runEvent('DeductPP', selfP, source||selfP, move, amount||1);
 			if (ppData.pp <= 0) {
 				ppData.pp = 0;
 			}
