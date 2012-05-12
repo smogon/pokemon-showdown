@@ -9554,6 +9554,11 @@ exports.BattleMovedex = {
 			this.add('-prepare', pokemon, 'Shadow Force', target);
 			return true;
 		},
+		onTryHit: function(target) {
+			if (target.volatiles['protect']) {
+				target.removeVolatile('protect');
+			}
+		},
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
