@@ -1885,14 +1885,17 @@ exports.BattleAbilities = {
 	"stench": {
 		desc: "Damaging moves have a 10% chance to flinch.",
 		onModifyMove: function(move) {
-			if (!move.secondaries) move.secondaries = [];
-			for (var i=0; i<move.secondaries.length; i++) {
-				if (move.secondaries[i].volatileStatus === 'flinch') return;
+			if (move.basePower && move.basePower > 0) {
+				this.debug('Adding Stench flinch');
+				if (!move.secondaries) move.secondaries = [];
+				for (var i=0; i<move.secondaries.length; i++) {
+					if (move.secondaries[i].volatileStatus === 'flinch') return;
+				}
+				move.secondaries.push({
+					chance: 10,
+					volatileStatus: 'flinch'
+				});
 			}
-			move.secondaries.push({
-				chance: 10,
-				volatileStatus: 'flinch'
-			});
 		},
 		id: "stench",
 		name: "Stench",
