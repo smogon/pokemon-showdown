@@ -1698,11 +1698,9 @@ exports.BattleAbilities = {
 	},
 	"shielddust": {
 		desc: "If the opponent uses a move that has secondary effects that affect this Pokemon in addition to damage, the move's secondary effects will not trigger. (For example, an Ice Beam will lose its 10% chance to freeze this Pokemon.)",
-		onTryHit: function(target, source, move) {
-			if (move.secondaries) {
-				this.debug('Shield Dust remove secondary');
-				delete move.secondaries;
-			}
+		onTrySecondaryHit: function() {
+			this.debug('Shield Dust prevent secondary');
+			return null;
 		},
 		id: "shielddust",
 		name: "Shield Dust",
