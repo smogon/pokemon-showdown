@@ -1332,6 +1332,7 @@ function Battle(roomid, format, rated) {
 					ModifyPokemon: 1,
 					ModifyStats: 1,
 					TryHit: 1,
+					TrySecondaryHit: 1,
 					Hit: 1,
 					TryFieldHit: 1,
 					Boost: 1,

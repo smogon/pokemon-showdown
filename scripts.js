@@ -248,6 +248,8 @@ exports.BattleScripts = {
 				if (!this.runEvent('TryFieldHit', target, pokemon, move)) {
 					return false;
 				}
+			} else if (isSecondary && !moveData.self) {
+				hitResult = this.runEvent('TrySecondaryHit', target, pokemon, moveData);
 			}
 
 			if (hitResult === 0) {
