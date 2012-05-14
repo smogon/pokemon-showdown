@@ -5969,9 +5969,15 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, source) {
 			if (source.moveset.length === 1) return false; // Last Resort fails unless the user knows at least 2 moves
+			var hasLastResort = false; // User must actually have Last Resort for it to succeed
 			for (var i in source.moveset) {
-				if (!source.moveset[i].used && source.moveset[i].move !== source.lastMove) return false;
+				if (source.moveset[i].id === 'lastresort') {
+					hasLastResort = true;
+					continue;
+				}
+				if (!source.moveset[i].used) return false;
 			}
+			return hasLastResort;
 		},
 		secondary: false,
 		target: "normal",
