@@ -3625,11 +3625,6 @@ exports.BattleMovedex = {
 		num: 374,
 		accuracy: 100,
 		basePower: false,
-		basePowerCallback: function(pokemon) {
-			if (!pokemon.volatiles['fling']) return false;
-			var item = this.getItem(pokemon.volatiles['fling'].flingItem);
-			return item.fling.basePower;
-		},
 		category: "Physical",
 		desc: "The user's held item is thrown at the target. Base power and additional effects vary depending on the thrown item. Note that the target will instantly benefit from the effects of thrown berries. The held item is gone for the rest of the battle unless Recycle is used; the item will return to the original holder after wireless battles but will be permanently lost if it is thrown during in-game battles.",
 		shortDesc: "Flings the user's item at the target. Power varies.",
@@ -3640,37 +3635,40 @@ exports.BattleMovedex = {
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.ignore['Item']) return;
 			var item = pokemon.getItem();
-			if (item.id && item.fling) {
+			if (item.fling) {
 				pokemon.addVolatile('fling');
 				pokemon.setItem('');
 			}
 		},
+		onTryHit: function(target, source, move) {
+			if (!source.volatiles['fling']) return false;
+			var item = this.getItem(source.volatiles['fling'].item);
+			this.add("-enditem", source, item.name, '[from] move: Fling');
+		},
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {
-				this.effectData.flingItem = pokemon.item;
+				this.effectData.item = pokemon.item;
 			},
-			onHit: function(foe) {
-				var item = this.getItem(this.effectData.flingItem);
-				if (foe.ability === 'shielddust') { // this should be handled in Shield Dust, but hack it for now
-					this.debug('Shield Dust blocking secondary effect of Fling');
-					return;
-				}
+			onModifyMovePriority: -1,
+			onModifyMove: function(move) {
+				var item = this.getItem(this.effectData.item);
+				move.basePower = item.fling.basePower;
 				if (item.isBerry) {
-					this.singleEvent('Eat', item, null, foe, null, null);
-				} else if (item.fling.status) {
-					foe.trySetStatus(item.fling.status);
-				} else if (item.fling.volatileStatus) {
-					foe.addVolatile(item.fling.volatileStatus);
+					move.onHit = function(foe) {
+						this.singleEvent('Eat', item, null, foe, null, null);
+					};
 				} else if (item.fling.effect) {
-					item.fling.effect(foe);
+					move.onHit = item.fling.effect;
+				} else {
+					if (!move.secondaries) move.secondaries = [];
+					if (item.fling.status) {
+						move.secondaries.push({status: item.fling.status});
+					} else if (item.fling.volatileStatus) {
+						move.secondaries.push({volatileStatus: item.fling.volatileStatus});
+					}
 				}
 			}
-		},
-		onTryHit: function(target, source, move) {
-			if (!source.volatiles['fling']) return false;
-			var item = this.getItem(source.volatiles['fling'].flingItem);
-			this.add("-enditem", source, item.name, '[from] move: Fling');
 		},
 		secondary: false,
 		target: "normal",
