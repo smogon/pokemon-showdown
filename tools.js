@@ -55,6 +55,22 @@ function BattleTools() {
 				template = BattlePokedex[id];
 				template.exists = true;
 			}
+			name = template.species || template.name || name;
+			if (!template.id) template.id = id;
+			if (!template.name) template.name = name;
+			if (!template.speciesid) template.speciesid = id;
+			if (!template.species) template.species = name;
+			if (!template.basespecies) template.basespecies = name;
+			if (!template.forme) template.forme = '';
+			if (!template.formeletter) template.formeletter = '';
+			if (!template.spriteid) template.spriteid = toId(template.basespecies)+(template.basespecies!==name?'-'+toId(template.forme):'');
+			if (!template.prevo) template.prevo = '';
+			if (!template.evos) template.evos = [];
+			if (!template.gender) template.gender = '';
+			if (!template.genderRatio && template.gender === 'M') template.genderRatio = {M:1,F:0};
+			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0,F:1};
+			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0,F:0};
+			if (!template.genderRatio) template.genderRatio = {M:.5,F:.5};
 			if (BattleTiers[id]) {
 				template.tier = BattleTiers[id].tier;
 				template.isNonstandard = BattleTiers[id].isNonstandard;
