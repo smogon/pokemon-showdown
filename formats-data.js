@@ -437,7 +437,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	poliwhirl: {
-		viableMoves: {"hydropump":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"encore":1,"raindance":1,"bellydrum":1,"hynosis":1,"waterfall":1,"return":1},
+		viableMoves: {"hydropump":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"encore":1,"raindance":1,"bellydrum":1,"hypnosis":1,"waterfall":1,"return":1},
 		tier: "NFE"
 	},
 	poliwrath: {
