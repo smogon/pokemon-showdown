@@ -59,8 +59,8 @@ function BattleTools() {
 			if (BattleFormatsData[id]) {
 				template.tier = BattleFormatsData[id].tier;
 				template.isNonstandard = BattleFormatsData[id].isNonstandard;
-				template.viable = BattleFormatsData[id].viable;
-				template.viablemoves = BattleFormatsData[id].viablemoves;
+				template.viableMoves = BattleFormatsData[id].viableMoves;
+				template.requiredItem = BattleFormatsData[id].requiredItem;
 				template.eventPokemon = BattleFormatsData[id].eventPokemon;
 			}
 			if (BattleLearnsets[id]) {

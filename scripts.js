@@ -380,7 +380,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in BattleFormatsData) {
-			if (BattleFormatsData[i].viablemoves) {
+			if (BattleFormatsData[i].viableMoves) {
 				keys.push(i);
 			}
 		}
@@ -402,13 +402,13 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 
 			if (template.species === 'Magikarp') {
-				template.viablemoves = {magikarpsrevenge:1, splash:1, bounce:1};
+				template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
 			}
 			if (template.species === 'Delibird') {
-				template.viablemoves = {present:1, bestow:1};
+				template.viableMoves = {present:1, bestow:1};
 			}
 
-			var moveKeys = shuffle(objectKeys(template.viablemoves));
+			var moveKeys = shuffle(objectKeys(template.viableMoves));
 			var moves = [];
 			var ability = '';
 			var item = '';
