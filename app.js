@@ -82,7 +82,6 @@ function reloadEngine() {
 		delete require.cache[i];
 	}
 	BattlePokedex = require('./pokedex.js').BattlePokedex;
-	BattleTiers = require('./tiers.js').BattleTiers;
 	BattleMovedex = require('./movedex.js').BattleMovedex;
 	BattleStatuses = require('./statuses.js').BattleStatuses;
 	BattleTypeChart = require('./typechart.js').BattleTypeChart;
@@ -90,6 +89,7 @@ function reloadEngine() {
 	BattleItems = require('./items.js').BattleItems;
 	BattleAbilities = require('./abilities.js').BattleAbilities;
 	BattleFormats = require('./formats.js').BattleFormats;
+	BattleFormatsData = require('./formats-data.js').BattleFormatsData;
 	BattleLearnsets = require('./learnsets.js').BattleLearnsets;
 
 	sim = require('./simulator.js');
