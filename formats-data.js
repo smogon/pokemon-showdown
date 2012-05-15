@@ -3685,7 +3685,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	braviary: {
-		viableMoves: {"bravebird":1,"superpower":1,"return":1,"uturn":1,"substitute":1,"rockslide":1,"bbulkup":1},
+		viableMoves: {"bravebird":1,"superpower":1,"return":1,"uturn":1,"substitute":1,"rockslide":1,"bulkup":1},
 		tier: "NU"
 	},
 	vullaby: {
