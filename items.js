@@ -1555,7 +1555,6 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onBasePower: function(basePower, user) {
-			this.debug('LO boost');
 			user.addVolatile('lifeorb');
 			return basePower * 1.3;
 		},
