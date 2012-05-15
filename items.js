@@ -576,6 +576,7 @@ exports.BattleItems = {
 		id: "custapberry",
 		name: "Custap Berry",
 		spritenum: 86,
+		isUnreleased: true,
 		/* onBeforeTurn: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
 				var decision = this.willMove(pokemon);
@@ -1080,6 +1081,7 @@ exports.BattleItems = {
 		id: "ganlonberry",
 		name: "Ganlon Berry",
 		spritenum: 158,
+		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1352,6 +1354,7 @@ exports.BattleItems = {
 		id: "jabocaberry",
 		name: "Jaboca Berry",
 		spritenum: 230,
+		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1528,6 +1531,7 @@ exports.BattleItems = {
 		id: "liechiberry",
 		name: "Liechi Berry",
 		spritenum: 248,
+		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1788,6 +1792,7 @@ exports.BattleItems = {
 		id: "micleberry",
 		name: "Micle Berry",
 		spritenum: 290,
+		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -2078,6 +2083,7 @@ exports.BattleItems = {
 		id: "petayaberry",
 		name: "Petaya Berry",
 		spritenum: 335,
+		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -2406,6 +2412,7 @@ exports.BattleItems = {
 		id: "rowapberry",
 		name: "Rowap Berry",
 		spritenum: 420,
+		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -2425,6 +2432,7 @@ exports.BattleItems = {
 		id: "salacberry",
 		name: "Salac Berry",
 		spritenum: 426,
+		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -2633,6 +2641,7 @@ exports.BattleItems = {
 		id: "souldew",
 		name: "Soul Dew",
 		spritenum: 459,
+		isUnreleased: true,
 		fling: {
 			basePower: 30
 		},

@@ -296,7 +296,7 @@ function BattlePokemon(set, side) {
 		}
 		return null;
 	};
-	this.deductPP = function(move, amount) {
+	this.deductPP = function(move, amount, source) {
 		move = selfB.getMove(move);
 		var ppData = selfP.getMoveData(move);
 		var success = false;
@@ -304,11 +304,7 @@ function BattlePokemon(set, side) {
 			ppData.used = true;
 		}
 		if (ppData && ppData.pp) {
-			if (amount) {
-				ppData.pp -= amount;
-			} else {
-				ppData.pp -= selfB.runEvent('DeductPP', selfP, selfP, move, 1);
-			}
+			ppData.pp -= selfB.runEvent('DeductPP', selfP, source||selfP, move, amount||1);
 			if (ppData.pp <= 0) {
 				ppData.pp = 0;
 			}
@@ -1336,6 +1332,7 @@ function Battle(roomid, format, rated) {
 					ModifyPokemon: 1,
 					ModifyStats: 1,
 					TryHit: 1,
+					TrySecondaryHit: 1,
 					Hit: 1,
 					TryFieldHit: 1,
 					Boost: 1,
@@ -2083,7 +2080,7 @@ function Battle(roomid, format, rated) {
 		// gen 1-2
 		//var randFactor = floor(Math.random()*39)+217;
 		//baseDamage *= floor(randFactor * 100 / 255) / 100;
-		baseDamage *= Math.round((100 - floor(Math.random() * 16)) / 100);
+		baseDamage = Math.round(baseDamage * (100 - floor(Math.random() * 16)) / 100);
 
 		// STAB
 		if (type !== '???' && pokemon.hasType(type)) {
