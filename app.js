@@ -46,7 +46,6 @@ toId = function(text) {
 toUserid = toId;
 
 BattlePokedex = require('./pokedex.js').BattlePokedex;
-BattleTiers = require('./tiers.js').BattleTiers;
 BattleMovedex = require('./movedex.js').BattleMovedex;
 BattleStatuses = require('./statuses.js').BattleStatuses;
 BattleTypeChart = require('./typechart.js').BattleTypeChart;
@@ -54,6 +53,7 @@ BattleScripts = require('./scripts.js').BattleScripts;
 BattleItems = require('./items.js').BattleItems;
 BattleAbilities = require('./abilities.js').BattleAbilities;
 BattleFormats = require('./formats.js').BattleFormats;
+BattleFormatsData = require('./formats-data.js').BattleFormatsData;
 BattleLearnsets = require('./learnsets.js').BattleLearnsets;
 try {
 	BattleAliases = require('./aliases.js').BattleAliases;

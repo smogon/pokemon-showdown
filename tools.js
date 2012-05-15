@@ -56,6 +56,16 @@ function BattleTools() {
 				template.exists = true;
 			}
 			name = template.species || template.name || name;
+			if (BattleFormatsData[id]) {
+				template.tier = BattleFormatsData[id].tier;
+				template.isNonstandard = BattleFormatsData[id].isNonstandard;
+				template.viable = BattleFormatsData[id].viable;
+				template.viablemoves = BattleFormatsData[id].viablemoves;
+				template.eventPokemon = BattleFormatsData[id].eventPokemon;
+			}
+			if (BattleLearnsets[id]) {
+				template.learnset = BattleLearnsets[id].learnset;
+			}
 			if (!template.id) template.id = id;
 			if (!template.name) template.name = name;
 			if (!template.speciesid) template.speciesid = id;
@@ -66,20 +76,13 @@ function BattleTools() {
 			if (!template.spriteid) template.spriteid = toId(template.basespecies)+(template.basespecies!==name?'-'+toId(template.forme):'');
 			if (!template.prevo) template.prevo = '';
 			if (!template.evos) template.evos = [];
+			if (!template.nfe) template.nfe = !!template.evos.length;
 			if (!template.gender) template.gender = '';
 			if (!template.genderRatio && template.gender === 'M') template.genderRatio = {M:1,F:0};
 			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0,F:1};
 			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0,F:0};
 			if (!template.genderRatio) template.genderRatio = {M:.5,F:.5};
-			if (BattleTiers[id]) {
-				template.tier = BattleTiers[id].tier;
-				template.isNonstandard = BattleTiers[id].isNonstandard;
-			} else {
-				template.tier = 'Illegal';
-			}
-			if (BattleLearnsets[id]) {
-				template.learnset = BattleLearnsets[id].learnset;
-			}
+			if (!template.tier) template.tier = 'Illegal';
 		}
 		return template;
 	};
@@ -227,8 +230,10 @@ function BattleTools() {
 
 	this.checkLearnset = function(move, template, lsetData) {
 		lsetData = lsetData || {};
+		var alreadyChecked = {};
 		if (move.id) move = move.id;
 		do {
+			alreadyChecked[template.speciesid] = true;
 			if (template.learnset) {
 				if (template.learnset[move]) {
 					return true;
@@ -240,12 +245,14 @@ function BattleTools() {
 					return 1;
 				}
 			}
-			if (template.basespecies !== template.species) {
+			if (template.speciesid === 'shaymin') {
+				template = selfT.getTemplate('shayminsky');
+			} else if (template.basespecies !== template.species) {
 				template = selfT.getTemplate(template.basespecies);
 			} else {
 				template = selfT.getTemplate(template.prevo);
 			}
-		} while (template && template.species);
+		} while (template && template.species && !alreadyChecked[template.speciesid]);
 		return false;
 	};
 	this.getBanlistTable = function(format, subformat, depth) {

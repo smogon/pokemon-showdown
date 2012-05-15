@@ -27,9 +27,7 @@ function shuffle(array) {
 function objectKeys(object) {
 	var keys = [];
 	for (var prop in object) {
-		if (object.hasOwnProperty(prop)) {
-			keys.push(prop);
-		}
+		keys.push(prop);
 	}
 	return keys;
 }
@@ -381,9 +379,9 @@ exports.BattleScripts = {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		for (var prop in BattlePokedex) {
-			if (BattlePokedex.hasOwnProperty(prop) && BattlePokedex[prop].viable) {
-				keys.push(prop);
+		for (var i in BattleFormatsData) {
+			if (BattleFormatsData[i].viablemoves) {
+				keys.push(i);
 			}
 		}
 		keys = shuffle(keys);
@@ -404,10 +402,10 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 
 			if (template.species === 'Magikarp') {
-				template.viablemoves = ["magikarpsrevenge", "splash", "bounce"];
+				template.viablemoves = {magikarpsrevenge:1, splash:1, bounce:1};
 			}
 			if (template.species === 'Delibird') {
-				template.viablemoves = ["present", "bestow"];
+				template.viablemoves = {present:1, bestow:1};
 			}
 
 			var moveKeys = shuffle(objectKeys(template.viablemoves));
@@ -442,7 +440,7 @@ exports.BattleScripts = {
 			var j=0;
 			do {
 				while (moves.length<4 && j<moveKeys.length) {
-					var moveid = toId(template.viablemoves[moveKeys[j]]);
+					var moveid = toId(moveKeys[j]);
 					//if (j===0) moveid = 'ChargeBeam';
 					moves.push(moveid);
 					j++;
