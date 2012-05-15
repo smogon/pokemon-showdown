@@ -213,14 +213,16 @@ function BattleTools() {
 		lsetData = lsetData || {};
 		if (move.id) move = move.id;
 		do {
-			if (!template.learnset || template.learnset[move]) {
-				return true;
-			}
-			if (template.learnset['sketch']) {
-				var lset = template.learnset['sketch'];
-				if (typeof lset === 'string') lset = [lset];
-				for (var i=0; i<lset.length; i++) if (lset[i].substr(1) !== 'E') return true;
-				return 1;
+			if (template.learnset) {
+				if (template.learnset[move]) {
+					return true;
+				}
+				if (template.learnset['sketch']) {
+					var lset = template.learnset['sketch'];
+					if (typeof lset === 'string') lset = [lset];
+					for (var i=0; i<lset.length; i++) if (lset[i].substr(1) !== 'E') return true;
+					return 1;
+				}
 			}
 			if (template.basespecies !== template.species) {
 				template = selfT.getTemplate(template.basespecies);
