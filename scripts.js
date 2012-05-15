@@ -739,8 +739,8 @@ exports.BattleScripts = {
 				}
 
 				item = 'Focus Sash';
-				if (template.species === 'Giratina-Origin') {
-					item = 'Griseous Orb';
+				if (template.requiredItem) {
+					item = template.requiredItem;
 				} else if (template.species === 'Rotom-Fan') {
 					// this is just to amuse myself
 					item = 'Air Balloon';
