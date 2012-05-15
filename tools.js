@@ -209,7 +209,8 @@ function BattleTools() {
 	};
 
 
-	this.checkLearnset = function(move, template) {
+	this.checkLearnset = function(move, template, lsetData) {
+		lsetData = lsetData || {};
 		if (move.id) move = move.id;
 		do {
 			if (!template.learnset || template.learnset[move]) {
@@ -221,10 +222,8 @@ function BattleTools() {
 				for (var i=0; i<lset.length; i++) if (lset[i].substr(1) !== 'E') return true;
 				return 1;
 			}
-			if (template.species === 'Deoxys-Speed' || template.species === 'Deoxys-Attack' || template.species === 'Deoxys-Defense') {
-				template = selfT.getTemplate('Deoxys');
-			} else if (template.species.substr(0,7) === 'Arceus-') {
-				template = selfT.getTemplate('Arceus');
+			if (template.basespecies !== template.species) {
+				template = selfT.getTemplate(template.basespecies);
 			} else {
 				template = selfT.getTemplate(template.prevo);
 			}
