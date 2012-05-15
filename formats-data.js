@@ -430,7 +430,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	poliwag: {
-		viableMoves: {"hydropump":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"encore":1,"raindance":1,"bellydrum":1,"hynosis":1,"waterfall":1,"return":1},
+		viableMoves: {"hydropump":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"encore":1,"raindance":1,"bellydrum":1,"hypnosis":1,"waterfall":1,"return":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"abilities":["waterabsorb","damp"],"moves":["bubble","sweetkiss"]}
 		],
@@ -1498,7 +1498,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	octillery: {
-		viableMoves: {"surf":1,"fireblast":1,"icebeam":1,"energyball":1,"chargebeam":1,"substiute":1,"waterspout":1},
+		viableMoves: {"surf":1,"fireblast":1,"icebeam":1,"energyball":1,"chargebeam":1,"substitute":1,"waterspout":1},
 		eventPokemon: [
 			{"generation":4,"level":50,"gender":"F","nature":"Serious","abilities":["suctioncups"],"moves":["octazooka","icebeam","signalbeam","hyperbeam"]}
 		],
