@@ -211,7 +211,6 @@ function BattleTools() {
 		return type;
 	};
 
-
 	this.validateMoveset = require("./moveset-checker.js").check;
 	this.getBanlistTable = function(format, subformat, depth) {
 		var banlistTable;
@@ -363,6 +362,14 @@ function BattleTools() {
 		setHas[toId(set.ability)] = true;
 		if (banlistTable[toId(set.ability)]) {
 			problems.push(set.name+"'s ("+set.species+") ability "+set.ability+" is banned.");
+		}
+		setHas[toId(set.item)] = true;
+		if (banlistTable[toId(set.item)]) {
+			problems.push(set.name+"'s ("+set.species+") item "+set.item+" is banned.");
+		}
+		var item = selfT.getItem(set.item);
+		if (banlistTable['Unreleased'] && item.isUnreleased) {
+			problems.push(set.name+"'s ("+set.species+") item "+set.item+" is unreleased.");
 		}
 		if (toId(set.ability) === toId(template.abilities['DW'])) {
 			var unreleasedDW = {

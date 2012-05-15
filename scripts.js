@@ -51,7 +51,7 @@ exports.BattleScripts = {
 			}
 		}
 		pokemon.lastDamage = 0;
-		pokemon.deductPP(move);
+		pokemon.deductPP(move, 1, target);
 		this.useMove(move, pokemon, target);
 		this.runEvent('AfterMove', target, pokemon, move);
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -248,6 +248,8 @@ exports.BattleScripts = {
 				if (!this.runEvent('TryFieldHit', target, pokemon, move)) {
 					return false;
 				}
+			} else if (isSecondary && !moveData.self) {
+				hitResult = this.runEvent('TrySecondaryHit', target, pokemon, moveData);
 			}
 
 			if (hitResult === 0) {

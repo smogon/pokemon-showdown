@@ -1115,8 +1115,10 @@ exports.BattleMovedex = {
 		isContact: true,
 		onTryHit: function(pokemon) {
 			// will shatter screens through sub, before you hit
-			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightscreen');
+			if (pokemon.runImmunity('Fighting')) {
+				pokemon.side.removeSideCondition('reflect');
+				pokemon.side.removeSideCondition('lightscreen');
+			}
 		},
 		priority: 0,
 		secondary: false,
@@ -3623,11 +3625,6 @@ exports.BattleMovedex = {
 		num: 374,
 		accuracy: 100,
 		basePower: false,
-		basePowerCallback: function(pokemon) {
-			if (!pokemon.volatiles['fling']) return false;
-			var item = this.getItem(pokemon.volatiles['fling'].flingItem);
-			return item.fling.basePower;
-		},
 		category: "Physical",
 		desc: "The user's held item is thrown at the target. Base power and additional effects vary depending on the thrown item. Note that the target will instantly benefit from the effects of thrown berries. The held item is gone for the rest of the battle unless Recycle is used; the item will return to the original holder after wireless battles but will be permanently lost if it is thrown during in-game battles.",
 		shortDesc: "Flings the user's item at the target. Power varies.",
@@ -3638,37 +3635,40 @@ exports.BattleMovedex = {
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.ignore['Item']) return;
 			var item = pokemon.getItem();
-			if (item.id && item.fling) {
+			if (item.fling) {
 				pokemon.addVolatile('fling');
 				pokemon.setItem('');
 			}
 		},
+		onTryHit: function(target, source, move) {
+			if (!source.volatiles['fling']) return false;
+			var item = this.getItem(source.volatiles['fling'].item);
+			this.add("-enditem", source, item.name, '[from] move: Fling');
+		},
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {
-				this.effectData.flingItem = pokemon.item;
+				this.effectData.item = pokemon.item;
 			},
-			onHit: function(foe) {
-				var item = this.getItem(this.effectData.flingItem);
-				if (foe.ability === 'shielddust') { // this should be handled in Shield Dust, but hack it for now
-					this.debug('Shield Dust blocking secondary effect of Fling');
-					return;
-				}
+			onModifyMovePriority: -1,
+			onModifyMove: function(move) {
+				var item = this.getItem(this.effectData.item);
+				move.basePower = item.fling.basePower;
 				if (item.isBerry) {
-					this.singleEvent('Eat', item, null, foe, null, null);
-				} else if (item.fling.status) {
-					foe.trySetStatus(item.fling.status);
-				} else if (item.fling.volatileStatus) {
-					foe.addVolatile(item.fling.volatileStatus);
+					move.onHit = function(foe) {
+						this.singleEvent('Eat', item, null, foe, null, null);
+					};
 				} else if (item.fling.effect) {
-					item.fling.effect(foe);
+					move.onHit = item.fling.effect;
+				} else {
+					if (!move.secondaries) move.secondaries = [];
+					if (item.fling.status) {
+						move.secondaries.push({status: item.fling.status});
+					} else if (item.fling.volatileStatus) {
+						move.secondaries.push({volatileStatus: item.fling.volatileStatus});
+					}
 				}
 			}
-		},
-		onTryHit: function(target, source, move) {
-			if (!source.volatiles['fling']) return false;
-			var item = this.getItem(source.volatiles['fling'].flingItem);
-			this.add("-enditem", source, item.name, '[from] move: Fling');
 		},
 		secondary: false,
 		target: "normal",
@@ -5967,9 +5967,15 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, source) {
 			if (source.moveset.length === 1) return false; // Last Resort fails unless the user knows at least 2 moves
+			var hasLastResort = false; // User must actually have Last Resort for it to succeed
 			for (var i in source.moveset) {
-				if (!source.moveset[i].used && source.moveset[i].move !== source.lastMove) return false;
+				if (source.moveset[i].id === 'lastresort') {
+					hasLastResort = true;
+					continue;
+				}
+				if (!source.moveset[i].used) return false;
 			}
+			return hasLastResort;
 		},
 		secondary: false,
 		target: "normal",
@@ -6155,7 +6161,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "All Pokemon in the user's party receive 1/2 damage from Special attacks for 5 turns. Light Screen will be removed from the user's field if an opponent's Pokemon uses Brick Break. It will also last for eight turns if its user is holding Light Clay. In double battles, both Pokemon are shielded, but damage protection is reduced from 1/2 to 1/3.",
-		shortDesc: "For 5 turns, foes' Sp. Atk is 1/2 if 1-on-1, or 2/3.",
+		shortDesc: "For 5 turns, allies' Sp. Def is 2x; 1.5x if not 1vs1.",
 		id: "lightscreen",
 		name: "Light Screen",
 		pp: 30,
@@ -6747,6 +6753,7 @@ exports.BattleMovedex = {
 		name: "Memento",
 		pp: 10,
 		isViable: true,
+		isBounceable: false,
 		priority: 0,
 		boosts: {
 			atk: -2,
@@ -8592,7 +8599,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "All Pokemon in the user's party receive 1/2 damage from Physical attacks for 5 turns. Reflect will be removed from the user's field if an opponent's Pokemon uses Brick Break. It will also last for eight turns if its user is holding Light Clay. In double battles, both Pokemon are shielded, but damage protection is reduced from 1/2 to 1/3.",
-		shortDesc: "For 5 turns, foes' Attack is 1/2 if 1-on-1, or 2/3.",
+		shortDesc: "For 5 turns, allies' Defense is 2x; 1.5x if not 1vs1.",
 		id: "reflect",
 		name: "Reflect",
 		pp: 20,
@@ -9220,7 +9227,7 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onSetStatus: function(status, target, source, effect) {
-				if (source === target || (source && source.ability !== 'infiltrator') || (effect && effect === 'toxicspikes')) {
+				if (source && source !== target && source.ability !== 'infiltrator' || (effect && effect.id === 'toxicspikes')) {
 					this.debug('interrupting setstatus');
 					return false;
 				}
@@ -9390,7 +9397,7 @@ exports.BattleMovedex = {
 		basePower: 70,
 		category: "Physical",
 		desc: "This move has a 30% chance to inflict a side effect depending on the battle's current terrain. The target may be put to sleep in any type of grass (or in puddles), its Attack may be lowered by 1 stage while surfing on any body of water, its Speed may be lowered by 1 stage while on marshy terrain, its Accuracy may be lowered by 1 stage on beach sand, desert sand and dirt paths (and also in Wifi battles), it may flinch in caves or on rocky outdoor terrain, it may become frozen on snowy terrain and it may become paralyzed everywhere else.",
-		shortDesc: "Effect varies with terrain. (30% chance to lower accuracy)",
+		shortDesc: "Effect varies with terrain. (30% Accuracy lower 1)",
 		id: "secretpower",
 		name: "Secret Power",
 		pp: 20,
@@ -9550,6 +9557,11 @@ exports.BattleMovedex = {
 			pokemon.addVolatile('shadowforce');
 			this.add('-prepare', pokemon, 'Shadow Force', target);
 			return true;
+		},
+		onTryHit: function(target) {
+			if (target.volatiles['protect']) {
+				target.removeVolatile('protect');
+			}
 		},
 		effect: {
 			duration: 2,
