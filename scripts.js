@@ -441,9 +441,15 @@ exports.BattleScripts = {
 			do {
 				while (moves.length<4 && j<moveKeys.length) {
 					var moveid = toId(moveKeys[j]);
-					//if (j===0) moveid = 'ChargeBeam';
-					moves.push(moveid);
 					j++;
+					if (moveid.substr(0,11) === 'hiddenpower') {
+						if (!hasMove['hiddenpower']) {
+							hasMove['hiddenpower'] = true;
+						} else {
+							continue;
+						}
+					}
+					moves.push(moveid);
 				}
 
 				hasMove = {};
@@ -477,7 +483,7 @@ exports.BattleScripts = {
 					var ContraryMove = {
 						leafstorm: 1, overheat: 1, closecombat: 1, superpower: 1, vcreate: 1
 					};
-					if (ContraryMove[move.id]) {
+					if (ContraryMove[moveid]) {
 						counter['contrary']++;
 					}
 					var PhysicalSetup = {
@@ -489,13 +495,13 @@ exports.BattleScripts = {
 					var MixedSetup = {
 						growth:1, workup:1, shellsmash:1
 					};
-					if (PhysicalSetup[move.id]) {
+					if (PhysicalSetup[moveid]) {
 						counter['physicalsetup']++;
 					}
-					if (SpecialSetup[move.id]) {
+					if (SpecialSetup[moveid]) {
 						counter['specialsetup']++;
 					}
-					if (MixedSetup[move.id]) {
+					if (MixedSetup[moveid]) {
 						counter['mixedsetup']++;
 					}
 				}
