@@ -60,7 +60,7 @@ function convertVeekunPokemon(pokemon) {
 
 	// Copy some stuff
 	result.num = pokemon.nationalPokedexNumber;
-	result.name = pokemon.combinedName;
+	result.name = pokemon.combinedName.replace("♂", "M").replace("♀", "F");
 	result.species = result.name;
 	result.basespecies = pokemon.name;
 	result.forme = pokemon.forme;

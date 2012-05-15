@@ -1549,9 +1549,9 @@ exports.BattlePokedex = {
 	},
 	nidoranf: {
 		num: 29,
-		name: "Nidoran♀",
+		name: "NidoranF",
 		id: "nidoranf",
-		species: "Nidoran♀",
+		species: "NidoranF",
 		speciesid: "nidoranf",
 		basespecies: "Nidoran♀",
 		forme: "",
@@ -1657,9 +1657,9 @@ exports.BattlePokedex = {
 	},
 	nidoranm: {
 		num: 32,
-		name: "Nidoran♂",
+		name: "NidoranM",
 		id: "nidoranm",
-		species: "Nidoran♂",
+		species: "NidoranM",
 		speciesid: "nidoranm",
 		basespecies: "Nidoran♂",
 		forme: "",
