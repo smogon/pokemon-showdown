@@ -182,9 +182,6 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 		gender = 'F';
 	}
 
-	// Deduce NFE'ness
-	var nfe = pokemon.evos.length > 0;
-
 	// Start outputting!
 	writeLine(pokemon.speciesid + ": {", 1);
 
@@ -194,8 +191,10 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	if (pokemon.baseSpecies && pokemon.baseSpecies !== pokemon.species) {
 		writeLine("baseSpecies: " + JSON.stringify(pokemon.baseSpecies) + ",");
 	}
-	writeLine("forme: " + JSON.stringify(pokemon.forme) + ",");
-	writeLine("formeLetter: " + JSON.stringify(formeLetter) + ",");
+	if (pokemon.forme) {
+		writeLine("forme: " + JSON.stringify(pokemon.forme) + ",");
+		writeLine("formeLetter: " + JSON.stringify(formeLetter) + ",");
+	}
 	writeLine("types: " + JSON.stringify(pokemon.types) + ",");
 	if (pokemon.genderRatio.M !== 0.5) {
 		writeLine("genderRatio: " + JSON.stringify(pokemon.genderRatio) + ",");
@@ -219,7 +218,6 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 
 	writeLine("colour: " + JSON.stringify(pokemon.colour) + ",");
 
-	writeLine("nfe: " + JSON.stringify(nfe) + ",");
 	writeLine("prevo: " + JSON.stringify(pokemon.prevo) + ",");
 	writeLine("evos: " + JSON.stringify(pokemon.evos) + ",");
 	writeLine("eggGroups: " + JSON.stringify(pokemon.eggGroups) + ",");
