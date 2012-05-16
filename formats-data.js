@@ -4,58 +4,67 @@ exports.BattleFormatsData = {
 		tier: ""
 	},
 	tomohawk: {
-		viableMoves: {"substitute":1,"aurasphere":1,"hurricane":1,"roost":1,"taunt":1,"toxic":1},
+		viableMoves: {"substitute":1,"aurasphere":1,"hurricane":1,"airslash":1,"raindance":1,"roost":1,"toxic":1,"batonpass":1,"rapidspin":1,"stealthrock":1},
 		isNonstandard: true,
 		tier: "G5CAP"
 	},
 	necturna: {
+		viableMoves: {"powerwhip":1,"shadowclaw":1,"hornleech":1,"shadowsneak":1,"willowisp":1,"toxicspikes":1,"gigadrain":1,"shadowball":1,"calmmind":1,"stoneedge":1},
 		isNonstandard: true,
 		tier: "G5CAP"
 	},
 	syclant: {
-		viableMoves: {"spikes":1,"superpower":1,"iceshard":1,"blizzard":1,"taunt":1,"earthpower":1,"bugbuzz":1,"tailglow":1,"focusblast":1},
+		viableMoves: {"iceshard":1,"bugbuzz":1,"earthpower":1,"spikes":1,"superpower":1,"tailglow":1,"taunt":1,"hiddenpowerfire":1,"focusblast":1,"uturn":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	revenankh: {
+		viableMoves: {"bulkup":1,"drainpunch":1,"shadowsneak":1,"shadowpunch":1,"powerwhip":1,"rest":1,"moonlight":1,"icepunch":1,"machpunch":1,"trick":1,"earthquake":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	pyroak: {
+		viableMoves: {"woodhammer":1,"flareblitz":1,"leechseed":1,"gigadrain":1,"lavaplume":1,"synthesis":1,"aromatherapy":1,"toxic":1,"flamethrower":1,"fireblast":1,"energyball":1,"grassknot":1,"substitute":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	fidgit: {
+		viableMoves: {"encore":1,"rapidspin":1,"knockoff":1,"copycat":1,"whirlwind":1,"toxicspikes":1,"sludgebomb":1,"earthpower":1,"gravity":1,"tailwind":1,"disable":1,"spikes":1,"wish":1,"taunt":1,"reflect":1,"lightscreen":1,"stealthrock":1,"trickroom":1,"uturn":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	stratagem: {
-		viableMoves: {"trick":1,"stealthrock":1,"ancientpower":1,"paleowave":1,"fireblast":1,"earthpower":1,"gigadrain":1,"vacuumwave":1,"calmmind":1},
+		viableMoves: {"paleowave":1,"calmmind":1,"earthpower":1,"vacuumwave":1,"ancientpower":1,"gigadrain":1,"flamethrower":1,"fireblast":1,"energyball":1,"trick":1,"stealthrock":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	arghonaut: {
+		viableMoves: {"waterfall":1,"bulkup":1,"drainpunch":1,"recover":1,"focuspunch":1,"substitute":1,"icepunch":1,"stoneedge":1,"thunderpunch":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	kitsunoh: {
+		viableMoves: {"shadowstrike":1,"superpower":1,"earthquake":1,"willowisp":1,"taunt":1,"uturn":1,"icepunch":1,"perishsong":1,"thunderpunch":1,"meteormash":1,"substitute":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	cyclohm: {
+		viableMoves: {"thunderbolt":1,"dragonpulse":1,"dracometeor":1,"thunder":1,"hydropump":1,"raindance":1,"slackoff":1,"discharge":1,"fireblast":1,"flamethrower":1,"thunderwave":1,"trickroom":1,"healbell":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	colossoil: {
-		viableMoves: {"rapidspin":1,"crunch":1,"earthquake":1,"encore":1,"taunt":1,"uturn":1,"suckerpunch":1,"stoneedge":1},
+		viableMoves: {"earthquake":1,"crunch":1,"suckerpunch":1,"taunt":1,"encore":1,"rapidspin":1,"stoneedge":1,"uturn":1,"pursuit":1,"fakeout":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	krilowatt: {
+		viableMoves: {"thunderbolt":1,"surf":1,"discharge":1,"earthpower":1,"icebeam":1,"counter":1,"mirrorcoat":1,"hiddenpowergrass":1,"hiddenpowerfire":1,"raindance":1,"thunder":1,"heartswap":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
 	voodoom: {
+		viableMoves: {"darkpulse":1,"aurasphere":1,"painsplit":1,"taunt":1,"hiddenpowerice":1,"closecombat":1,"thunderwave":1,"substitute":1,"batonpass":1,"bulkup":1},
 		isNonstandard: true,
 		tier: "G4CAP"
 	},
