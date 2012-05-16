@@ -135,7 +135,7 @@ exports.BattleFormats = {
 
 	standard: {
 		effectType: 'Banlist',
-		banlist: ['Unreleased', 'Limbo', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam', 'Legal'],
+		banlist: ['Unreleased', 'Limbo', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam', 'Legal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
 			var moves = [];
