@@ -19,15 +19,6 @@ function shuffle(array) {
 
 	return array;
 }
-function objectKeys(object) {
-	var keys = [];
-	for (var prop in object) {
-		if (object.hasOwnProperty(prop)) {
-			keys.push(prop);
-		}
-	}
-	return keys;
-}
 
 function BattlePokemon(set, side) {
 	var selfB = side.battle;

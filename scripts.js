@@ -24,13 +24,6 @@ function shuffle(array) {
 
 	return array;
 }
-function objectKeys(object) {
-	var keys = [];
-	for (var prop in object) {
-		keys.push(prop);
-	}
-	return keys;
-}
 
 exports.BattleScripts = {
 	runMove: function(move, pokemon, target) {
@@ -408,7 +401,7 @@ exports.BattleScripts = {
 				template.viableMoves = {present:1, bestow:1};
 			}
 
-			var moveKeys = shuffle(objectKeys(template.viableMoves));
+			var moveKeys = shuffle(Object.keys(template.viableMoves));
 			var moves = [];
 			var ability = '';
 			var item = '';
