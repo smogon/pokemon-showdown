@@ -180,6 +180,8 @@ nextCombination:
 }
 
 function getMoveCombinationsRecursive(pokemon, pokemonData) {
+	// Shaymin-Sky can learn moves Shaymin can't, but can keep them after reverting back to Shaymin
+	if (pokemonData.speciesid === "shaymin") return getMoveCombinations(pokemon, Tools.getTemplate("shayminsky"));
 	if (!pokemonData.prevo) return getMoveCombinations(pokemon, pokemonData);
 
 	var prevoData = Tools.getTemplate(pokemonData.prevo);
@@ -242,6 +244,7 @@ function getMoveCombinationsRecursive(pokemon, pokemonData) {
 			results.push(result);
 		}
 	}
+
 	return results;
 }
 
