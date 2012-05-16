@@ -170,6 +170,7 @@ exports.BattleAbilities = {
 			if (source && target === source) return;
 			if (boost['def'] && boost['def'] < 0) {
 				boost['def'] = 0;
+				this.add("-message", target.name+"'s Defense was not lowered! (placeholder)");
 			}
 		},
 		id: "bigpecks",
@@ -209,6 +210,7 @@ exports.BattleAbilities = {
 			for (var i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
+					this.add("-message", target.name+"'s stats were not lowered! (placeholder)");
 				}
 			}
 		},
@@ -535,10 +537,12 @@ exports.BattleAbilities = {
 				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunny') {
 					this.effectData.forme = 'Sunny';
 					this.add('-formechange', pokemon, 'Cherrim-Sunny');
+					this.add('-message', pokemon.name+' transformed! (placeholder)');
 				}
 			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
 				delete this.effectData.forme;
 				this.add('-formechange', pokemon, 'Cherrim');
+				this.add('-message', pokemon.name+' transformed! (placeholder)');
 			}
 		},
 		id: "flowergift",
@@ -568,6 +572,7 @@ exports.BattleAbilities = {
 				} else {
 					this.add('-formechange', pokemon, 'Castform-'+this.effectData.forme);
 				}
+				this.add('-message', pokemon.name+' transformed! (placeholder)');
 			}
 		},
 		id: "forecast",
@@ -748,6 +753,7 @@ exports.BattleAbilities = {
 			if (source && target === source) return;
 			if (boost['atk'] && boost['atk'] < 0) {
 				boost['atk'] = 0;
+				this.add("-message", target.name+"'s Attack was not lowered! (placeholder)");
 			}
 		},
 		id: "hypercutter",
@@ -914,6 +920,7 @@ exports.BattleAbilities = {
 			if (source && target === source) return;
 			if (boost['accuracy'] && boost['accuracy'] < 0) {
 				boost['accuracy'] = 0;
+				this.add("-message", target.name+"'s accuracy was not lowered! (placeholder)");
 			}
 		},
 		id: "keeneye",
@@ -935,13 +942,11 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon is active while Sunny Day is in effect, it cannot become poisoned, burned, paralyzed or put to sleep (other than user-induced Rest). Leaf Guard does not heal status effects that existed before Sunny Day came into effect.",
 		onSetStatus: function(pokemon) {
 			if (this.weather === 'sunnyday') {
-				this.debug('interrupting setstatus');
 				return false;
 			}
 		},
 		onTryHit: function(target, source, move) {
 			if (this.weather === 'sunnyday' && move && move.id === 'yawn') {
-				this.debug('blocking yawn');
 				return false;
 			}
 		},
@@ -2281,6 +2286,7 @@ exports.BattleAbilities = {
 			for (var i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
+					this.add("-message", target.name+"'s stats were not lowered! (placeholder)");
 				}
 			}
 		},
@@ -2346,6 +2352,7 @@ exports.BattleAbilities = {
 			onStart: function(pokemon) {
 				if (pokemon.transformInto('Darmanitan-Zen')) {
 					this.add('-formechange', pokemon, 'Darmanitan-Zen');
+					this.add('-message', 'Zen Mode triggered! (placeholder)');
 				} else {
 					return false;
 				}
@@ -2353,6 +2360,7 @@ exports.BattleAbilities = {
 			onEnd: function(pokemon) {
 				if (pokemon.transformInto('Darmanitan')) {
 					this.add('-formechange', pokemon, 'Darmanitan');
+					this.add('-message', 'Zen Mode ended! (placeholder)');
 				} else {
 					return false;
 				}
