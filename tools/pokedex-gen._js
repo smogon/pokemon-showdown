@@ -61,7 +61,7 @@ function convertVeekunPokemon(pokemon) {
 	// Copy some stuff
 	result.num = pokemon.nationalPokedexNumber;
 	result.species = pokemon.combinedName.replace("♂", "M").replace("♀", "F");
-	result.basespecies = pokemon.name.replace("♂", "M").replace("♀", "F");
+	result.baseSpecies = pokemon.name.replace("♂", "M").replace("♀", "F");
 	result.forme = pokemon.forme;
 	result.isDefaultForme = pokemon.isDefaultForme;
 	result.isBattleOnlyForme = pokemon.isBattleOnlyForme;
@@ -152,23 +152,23 @@ function convertVeekunPokemon(pokemon) {
 }
 
 function outputPokemon(pokemon, isNotNeedFinalNewline) {
-	// Work out the formeletter
-	var formeletter = pokemon.forme && !pokemon.isDefaultForme ? pokemon.forme[0] : '';
+	// Work out the forme letter
+	var formeLetter = pokemon.forme && !pokemon.isDefaultForme ? pokemon.forme[0] : '';
 	switch (pokemon.speciesid) {
 		case "rotommow" :
-			formeletter = 'C';
+			formeLetter = 'C';
 			break;
 
 		case "rotomfan" :
-			formeletter = 'S';
+			formeLetter = 'S';
 			break;
 
 		case "wormadamsandy" :
-			formeletter = 'G';
+			formeLetter = 'G';
 			break;
 
 		case "wormadamtrash" :
-			formeletter = 'S';
+			formeLetter = 'S';
 			break;
 	}
 
@@ -191,11 +191,11 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine("num: " + JSON.stringify(pokemon.num) + ",");
 	writeLine("species: " + JSON.stringify(pokemon.species) + ",");
 	writeLine("speciesid: " + JSON.stringify(pokemon.speciesid) + ",");
-	if (pokemon.basespecies && pokemon.basespecies !== pokemon.species) {
-		writeLine("basespecies: " + JSON.stringify(pokemon.basespecies) + ",");
+	if (pokemon.baseSpecies && pokemon.baseSpecies !== pokemon.species) {
+		writeLine("baseSpecies: " + JSON.stringify(pokemon.baseSpecies) + ",");
 	}
 	writeLine("forme: " + JSON.stringify(pokemon.forme) + ",");
-	writeLine("formeletter: " + JSON.stringify(formeletter) + ",");
+	writeLine("formeLetter: " + JSON.stringify(formeLetter) + ",");
 	writeLine("types: " + JSON.stringify(pokemon.types) + ",");
 	if (pokemon.genderRatio.M !== 0.5) {
 		writeLine("genderRatio: " + JSON.stringify(pokemon.genderRatio) + ",");
