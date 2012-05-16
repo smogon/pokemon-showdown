@@ -215,11 +215,14 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 
 	writeLine("heightm: " + JSON.stringify(pokemon.heightm) + ",");
 	writeLine("weightkg: " + JSON.stringify(pokemon.weightkg) + ",");
-
 	writeLine("colour: " + JSON.stringify(pokemon.colour) + ",");
 
-	writeLine("prevo: " + JSON.stringify(pokemon.prevo) + ",");
-	writeLine("evos: " + JSON.stringify(pokemon.evos) + ",");
+	if (pokemon.prevo) {
+		writeLine("prevo: " + JSON.stringify(pokemon.prevo) + ",");
+	}
+	if (pokemon.evos.length > 0) {
+		writeLine("evos: " + JSON.stringify(pokemon.evos) + ",");
+	}
 	writeLine("eggGroups: " + JSON.stringify(pokemon.eggGroups) + ",");
 	if (pokemon.otherFormes.length > 0) {
 		writeLine("otherFormes: " + JSON.stringify(pokemon.otherFormes) + ",");
