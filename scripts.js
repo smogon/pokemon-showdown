@@ -27,9 +27,7 @@ function shuffle(array) {
 function objectKeys(object) {
 	var keys = [];
 	for (var prop in object) {
-		if (object.hasOwnProperty(prop)) {
-			keys.push(prop);
-		}
+		keys.push(prop);
 	}
 	return keys;
 }
@@ -381,9 +379,9 @@ exports.BattleScripts = {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		for (var prop in BattlePokedex) {
-			if (BattlePokedex.hasOwnProperty(prop) && BattleFormatsData.hasOwnProperty(prop) && BattleFormatsData[prop].viable) {
-				keys.push(prop);
+		for (var i in BattleFormatsData) {
+			if (BattleFormatsData[i].viableMoves) {
+				keys.push(i);
 			}
 		}
 		keys = shuffle(keys);
@@ -404,13 +402,13 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 
 			if (template.species === 'Magikarp') {
-				template.viablemoves = {"magikarpsrevenge":1, "splash":1, "bounce":1};
+				template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
 			}
 			if (template.species === 'Delibird') {
-				template.viablemoves = {"present":1, "bestow":1};
+				template.viableMoves = {present:1, bestow:1};
 			}
 
-			var moveKeys = shuffle(objectKeys(template.viablemoves));
+			var moveKeys = shuffle(objectKeys(template.viableMoves));
 			var moves = [];
 			var ability = '';
 			var item = '';
@@ -443,9 +441,15 @@ exports.BattleScripts = {
 			do {
 				while (moves.length<4 && j<moveKeys.length) {
 					var moveid = toId(moveKeys[j]);
-					//if (j===0) moveid = 'ChargeBeam';
-					moves.push(moveid);
 					j++;
+					if (moveid.substr(0,11) === 'hiddenpower') {
+						if (!hasMove['hiddenpower']) {
+							hasMove['hiddenpower'] = true;
+						} else {
+							continue;
+						}
+					}
+					moves.push(moveid);
 				}
 
 				hasMove = {};
@@ -479,7 +483,7 @@ exports.BattleScripts = {
 					var ContraryMove = {
 						leafstorm: 1, overheat: 1, closecombat: 1, superpower: 1, vcreate: 1
 					};
-					if (ContraryMove[move.id]) {
+					if (ContraryMove[moveid]) {
 						counter['contrary']++;
 					}
 					var PhysicalSetup = {
@@ -491,13 +495,13 @@ exports.BattleScripts = {
 					var MixedSetup = {
 						growth:1, workup:1, shellsmash:1
 					};
-					if (PhysicalSetup[move.id]) {
+					if (PhysicalSetup[moveid]) {
 						counter['physicalsetup']++;
 					}
-					if (SpecialSetup[move.id]) {
+					if (SpecialSetup[moveid]) {
 						counter['specialsetup']++;
 					}
-					if (MixedSetup[move.id]) {
+					if (MixedSetup[moveid]) {
 						counter['mixedsetup']++;
 					}
 				}
@@ -741,8 +745,8 @@ exports.BattleScripts = {
 				}
 
 				item = 'Focus Sash';
-				if (template.species === 'Giratina-Origin') {
-					item = 'Griseous Orb';
+				if (template.requiredItem) {
+					item = template.requiredItem;
 				} else if (template.species === 'Rotom-Fan') {
 					// this is just to amuse myself
 					item = 'Air Balloon';

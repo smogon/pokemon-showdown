@@ -55,18 +55,34 @@ function BattleTools() {
 				template = BattlePokedex[id];
 				template.exists = true;
 			}
+			name = template.species || template.name || name;
 			if (BattleFormatsData[id]) {
 				template.tier = BattleFormatsData[id].tier;
 				template.isNonstandard = BattleFormatsData[id].isNonstandard;
-				template.viable = BattleFormatsData[id].viable;
-				template.viablemoves = BattleFormatsData[id].viablemoves;
+				template.viableMoves = BattleFormatsData[id].viableMoves;
+				template.requiredItem = BattleFormatsData[id].requiredItem;
 				template.eventPokemon = BattleFormatsData[id].eventPokemon;
-			} else {
-				template.tier = 'Illegal';
 			}
 			if (BattleLearnsets[id]) {
 				template.learnset = BattleLearnsets[id].learnset;
 			}
+			if (!template.id) template.id = id;
+			if (!template.name) template.name = name;
+			if (!template.speciesid) template.speciesid = id;
+			if (!template.species) template.species = name;
+			if (!template.baseSpecies) template.baseSpecies = name;
+			if (!template.forme) template.forme = '';
+			if (!template.formeLetter) template.formeLetter = '';
+			if (!template.spriteid) template.spriteid = toId(template.baseSpecies)+(template.baseSpecies!==name?'-'+toId(template.forme):'');
+			if (!template.prevo) template.prevo = '';
+			if (!template.evos) template.evos = [];
+			if (!template.nfe) template.nfe = !!template.evos.length;
+			if (!template.gender) template.gender = '';
+			if (!template.genderRatio && template.gender === 'M') template.genderRatio = {M:1,F:0};
+			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0,F:1};
+			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0,F:0};
+			if (!template.genderRatio) template.genderRatio = {M:.5,F:.5};
+			if (!template.tier) template.tier = 'Illegal';
 		}
 		return template;
 	};

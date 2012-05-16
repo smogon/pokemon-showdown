@@ -1676,7 +1676,6 @@ exports.BattleAbilities = {
 		desc: "Raises the base power of all moves that have any secondary effects by 30%, but the secondary effects are ignored. However, this ability is not applied to moves that have a negative effect on the user, such as recoil, two-turn moves, and stat reduction after using certain moves. If a Pokemon with Sheer Force is holding a Life Orb and uses an attack that would be boosted by Sheer Force, then the move gains both boosts but the user receives no recoil damage.",
 		onModifyMove: function(move) {
 			if (move.secondaries) {
-				this.debug('Sheer Force boost');
 				if (!move.basePowerModifier) move.basePowerModifier = 1;
 				move.basePowerModifier *= 13/10;
 				delete move.secondaries;
