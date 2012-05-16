@@ -98,7 +98,7 @@
 		"eggGroups": ["Ground", "Flying"],
 		"colour": "",
 		"genus": "Chieftain",
-		"viablemoves":
+		"viableMoves":
 		{
 			"substitute": 1,
 			"aurasphere": 1,
@@ -309,7 +309,7 @@
 		"eggGroups": ["Bug"],
 		"colour": "",
 		"genus": "",
-		"viablemoves":
+		"viableMoves":
 		{
 			"spikes": 1,
 			"superpower": 1,
@@ -771,7 +771,7 @@
 		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"genus": "",
-		"viablemoves":
+		"viableMoves":
 		{
 			"trick": 1,
 			"stealthrock": 1,
@@ -1230,7 +1230,7 @@
 		"eggGroups": ["Water 2", "Ground"],
 		"colour": "",
 		"genus": "",
-		"viablemoves":
+		"viableMoves":
 		{
 			"rapidspin": 1,
 			"crunch": 1,

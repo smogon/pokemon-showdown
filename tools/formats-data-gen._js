@@ -77,7 +77,7 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 
 	if (result.id in viableMoves) {
 		result.viable = true;
-		result.viablemoves = viableMoves[result.id];
+		result.viableMoves = viableMoves[result.id];
 	}
 
 	if (veekunPokemon.nationalPokedexNumber in serebiiEventdex) {
@@ -104,7 +104,7 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine(pokemon.id + ": {", 1);
 	if (pokemon.viable) {
 		writeLine("viable: true,");
-		writeLine("viablemoves: " + JSON.stringify(pokemon.viablemoves) + ",");
+		writeLine("viableMoves: " + JSON.stringify(pokemon.viableMoves) + ",");
 	}
 	if (pokemon.isNonstandard) {
 		writeLine("isNonstandard: true,");
