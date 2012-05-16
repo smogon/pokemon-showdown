@@ -82,7 +82,7 @@ function BattleTools() {
 			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0,F:1};
 			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0,F:0};
 			if (!template.genderRatio) template.genderRatio = {M:.5,F:.5};
-			if (!template.tier) template.tier = 'Limbo';
+			if (!template.tier) template.tier = 'Illegal';
 		}
 		return template;
 	};
