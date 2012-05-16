@@ -3908,7 +3908,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	darmanitanzen: {
-		tier: "Limbo"
+		tier: "Illegal"
 	},
 	maractus: {
 		viable: true,
@@ -4438,7 +4438,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":15,"gender":"N/A","nature":"Any","abilities":["justified"],"moves":["aquajet","leer","doublekick","bubblebeam"]}
 		],
-		tier: "Limbo"
+		tier: "Unreleased"
 	},
 	meloetta: {
 		viable: true,
@@ -4446,29 +4446,29 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":15,"gender":"N/A","nature":"Any","abilities":["serenegrace"],"moves":["quickattack","confusion","round"]}
 		],
-		tier: "Limbo"
+		tier: "Unreleased"
 	},
 	meloettapirouette: {
 		eventPokemon: [
 			{"generation":5,"level":15,"gender":"N/A","nature":"Any","abilities":["serenegrace"],"moves":["quickattack","confusion","round"]}
 		],
-		tier: "Limbo"
+		tier: "Unreleased"
 	},
 	genesect: {
 		viable: true,
 		viableMoves: {"uturn":1,"bugbuzz":1,"icebeam":1,"flamethrower":1,"thunderbolt":1,"rockpolish":1},
-		tier: "Limbo"
+		tier: "Unreleased"
 	},
 	genesectdouse: {
-		tier: "Limbo"
+		tier: "Unreleased"
 	},
 	genesectshock: {
-		tier: "Limbo"
+		tier: "Unreleased"
 	},
 	genesectburn: {
-		tier: "Limbo"
+		tier: "Unreleased"
 	},
 	genesectchill: {
-		tier: "Limbo"
+		tier: "Unreleased"
 	}
 };

@@ -25,7 +25,32 @@ exports.getSmogonDex = function(_) {
 		var cols = rows[r].find("./td");
 
 		var name = cols[0].text().toLowerCase().replace(/[^a-z0-9]+/g, "");
-		// Name conversions. Mostly to expand forme letters
+
+		var types = cols[1].text().replace(/\s+/g, " ").split("/");
+		for (var t = 0; t < types.length; ++t) {
+			types[t] = types[t].trim();
+		}
+
+		var tier = cols[2].text().replace(/\s+/g, " ").trim();
+
+		var abilitiesArray = cols[3].text().replace(/\s+/g, " ").split("/");
+		var abilities = new Object();
+		for (var a = 0; a < abilitiesArray.length; ++a) {
+			if (a !== 0 && a + 1 === abilitiesArray.length) {
+				abilities["DW"] = abilitiesArray[a].trim();
+			} else {
+				abilities[a] = abilitiesArray[a].trim();
+			}
+		}
+
+		var hp = parseInt(cols[4].text().replace(/\s+/g, " ").trim(), 10);
+		var atk = parseInt(cols[5].text().replace(/\s+/g, " ").trim(), 10);
+		var def = parseInt(cols[6].text().replace(/\s+/g, " ").trim(), 10);
+		var spa = parseInt(cols[7].text().replace(/\s+/g, " ").trim(), 10);
+		var spd = parseInt(cols[8].text().replace(/\s+/g, " ").trim(), 10);
+		var spe = parseInt(cols[9].text().replace(/\s+/g, " ").trim(), 10);
+
+		// Any modifications goes here
 		switch (name) {
 			case "arceusnormal" :
 				name = "arceus";
@@ -37,6 +62,7 @@ exports.getSmogonDex = function(_) {
 
 			case "darmanitanz" :
 				name = "darmanitanzen";
+				tier = "Illegal";
 				break;
 
 			case "deoxysa" :
@@ -51,12 +77,25 @@ exports.getSmogonDex = function(_) {
 				name = "deoxysspeed";
 				break;
 
+			case "genesect" :
+				tier = "Unreleased";
+				break;
+
 			case "giratinao" :
 				name = "giratinaorigin";
 				break;
 
+			case "keldeo" :
+				tier = "Unreleased";
+				break;
+
+			case "meloetta" :
+				tier = "Unreleased";
+				break;
+
 			case "meloettap" :
 				name = "meloettapirouette";
+				tier = "Unreleased"; //"Illegal";
 				break;
 
 			case "rotomc" :
@@ -91,30 +130,6 @@ exports.getSmogonDex = function(_) {
 				name = "wormadamtrash";
 				break;
 		}
-
-		var types = cols[1].text().replace(/\s+/g, " ").split("/");
-		for (var t = 0; t < types.length; ++t) {
-			types[t] = types[t].trim();
-		}
-
-		var tier = cols[2].text().replace(/\s+/g, " ").trim();
-
-		var abilitiesArray = cols[3].text().replace(/\s+/g, " ").split("/");
-		var abilities = new Object();
-		for (var a = 0; a < abilitiesArray.length; ++a) {
-			if (a !== 0 && a + 1 === abilitiesArray.length) {
-				abilities["DW"] = abilitiesArray[a].trim();
-			} else {
-				abilities[a] = abilitiesArray[a].trim();
-			}
-		}
-
-		var hp = parseInt(cols[4].text().replace(/\s+/g, " ").trim(), 10);
-		var atk = parseInt(cols[5].text().replace(/\s+/g, " ").trim(), 10);
-		var def = parseInt(cols[6].text().replace(/\s+/g, " ").trim(), 10);
-		var spa = parseInt(cols[7].text().replace(/\s+/g, " ").trim(), 10);
-		var spd = parseInt(cols[8].text().replace(/\s+/g, " ").trim(), 10);
-		var spe = parseInt(cols[9].text().replace(/\s+/g, " ").trim(), 10);
 
 		smogonDex[name] = {
 			types: types,
