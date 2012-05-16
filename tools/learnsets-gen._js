@@ -52,7 +52,7 @@ function outputCustomPokemon() {
 
 function convertData(veekunPokemon, serebiiEventdex) {
 	var result = new Object();
-	result.id = toIdForName(veekunPokemon.combinedName, veekunPokemon.forme);
+	result.speciesid = toIdForName(veekunPokemon.combinedName, veekunPokemon.forme);
 
 	result.learnset = new Object();
 	for (var g in veekunPokemon.learnset) {
@@ -124,7 +124,7 @@ function convertData(veekunPokemon, serebiiEventdex) {
 }
 
 function outputPokemon(pokemon, isNotNeedFinalNewline) {
-	writeLine(pokemon.id + ": {", 1);
+	writeLine(pokemon.speciesid + ": {", 1);
 
 	// Alphabetlise the moves
 	var learnsetMoves;

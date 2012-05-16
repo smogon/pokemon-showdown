@@ -60,28 +60,18 @@ function convertVeekunPokemon(pokemon) {
 
 	// Copy some stuff
 	result.num = pokemon.nationalPokedexNumber;
-	result.name = pokemon.combinedName.replace("♂", "M").replace("♀", "F");
-	result.species = result.name;
+	result.species = pokemon.combinedName.replace("♂", "M").replace("♀", "F");
 	result.basespecies = pokemon.name.replace("♂", "M").replace("♀", "F");
 	result.forme = pokemon.forme;
 	result.isDefaultForme = pokemon.isDefaultForme;
 	result.isBattleOnlyForme = pokemon.isBattleOnlyForme;
 	result.eggGroups = pokemon.eggGroups;
-	result.genderRatio = pokemon.genderRatio;
 	result.heightm = pokemon.heightm;
 	result.weightkg = pokemon.masskg;
 	result.colour = pokemon.colour;
 
 	// Create some ids
-	result.id = toIdForName(result.name, pokemon.forme);
-	result.speciesid = result.id;
-	if (result.isDefaultForme) {
-		result.spriteid = result.id;
-	} else {
-		result.spriteid = toId(result.name.replace("-" + pokemon.forme, ""));
-		result.spriteid += "-";
-		result.spriteid += toIdForForme(result.name, pokemon.forme);
-	}
+	result.speciesid = toIdForName(result.species, pokemon.forme);
 	result.prevo = toIdForName(pokemon.prevo, ""); // The prevo is always in it's normal forme
 
 	// Copy the type, modifing Arceus' types to the PS! style
@@ -89,6 +79,9 @@ function convertVeekunPokemon(pokemon) {
 	if (pokemon.nationalPokedexNumber === 493) {
 		result.types = [pokemon.forme];
 	}
+
+	// Copy the gender ratio
+	result.genderRatio = {M:pokemon.genderRatio.m, F:pokemon.genderRatio.f};
 
 	// Convert the base stats to PS! format
 	result.baseStats = new Object();
@@ -161,7 +154,7 @@ function convertVeekunPokemon(pokemon) {
 function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	// Work out the formeletter
 	var formeletter = pokemon.forme && !pokemon.isDefaultForme ? pokemon.forme[0] : '';
-	switch (pokemon.id) {
+	switch (pokemon.speciesid) {
 		case "rotommow" :
 			formeletter = 'C';
 			break;
@@ -181,11 +174,11 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 
 	// Work out gender exclusiveness
 	var gender = 'N';
-	if (pokemon.genderRatio.m > 0 && pokemon.genderRatio.f > 0) {
+	if (pokemon.genderRatio.M > 0 && pokemon.genderRatio.F > 0) {
 		gender = '';
-	} else if (pokemon.genderRatio.m > 0) {
+	} else if (pokemon.genderRatio.M > 0) {
 		gender = 'M';
-	} else if (pokemon.genderRatio.f > 0) {
+	} else if (pokemon.genderRatio.F > 0) {
 		gender = 'F';
 	}
 
@@ -193,19 +186,20 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	var nfe = pokemon.evos.length > 0;
 
 	// Start outputting!
-	writeLine(pokemon.id + ": {", 1);
+	writeLine(pokemon.speciesid + ": {", 1);
 
 	writeLine("num: " + JSON.stringify(pokemon.num) + ",");
-	writeLine("name: " + JSON.stringify(pokemon.name) + ",");
-	writeLine("id: " + JSON.stringify(pokemon.id) + ",");
 	writeLine("species: " + JSON.stringify(pokemon.species) + ",");
 	writeLine("speciesid: " + JSON.stringify(pokemon.speciesid) + ",");
-	writeLine("basespecies: " + JSON.stringify(pokemon.basespecies) + ",");
+	if (pokemon.basespecies && pokemon.basespecies !== pokemon.species) {
+		writeLine("basespecies: " + JSON.stringify(pokemon.basespecies) + ",");
+	}
 	writeLine("forme: " + JSON.stringify(pokemon.forme) + ",");
 	writeLine("formeletter: " + JSON.stringify(formeletter) + ",");
-	writeLine("spriteid: " + JSON.stringify(pokemon.spriteid) + ",");
 	writeLine("types: " + JSON.stringify(pokemon.types) + ",");
-	writeLine("genderRatio: " + JSON.stringify(pokemon.genderRatio) + ",");
+	if (pokemon.genderRatio.M !== 0.5) {
+		writeLine("genderRatio: " + JSON.stringify(pokemon.genderRatio) + ",");
+	}
 	writeLine("gender: " + JSON.stringify(gender) + ",");
 
 	writeLine("baseStats: {", 1);
@@ -229,8 +223,10 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine("prevo: " + JSON.stringify(pokemon.prevo) + ",");
 	writeLine("evos: " + JSON.stringify(pokemon.evos) + ",");
 	writeLine("eggGroups: " + JSON.stringify(pokemon.eggGroups) + ",");
-	writeLine("otherFormes: " + JSON.stringify(pokemon.otherFormes) + ",");
-	writeLine("isDefaultForme: " + JSON.stringify(pokemon.isDefaultForme));
+	if (pokemon.otherFormes.length > 0) {
+		writeLine("otherFormes: " + JSON.stringify(pokemon.otherFormes) + ",");
+		writeLine("isDefaultForme: " + JSON.stringify(pokemon.isDefaultForme));
+	}
 
 	writeLine("}" + (isNotNeedFinalNewline ? "" : ","), -1);
 }

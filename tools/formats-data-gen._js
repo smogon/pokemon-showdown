@@ -67,15 +67,15 @@ function outputCustomPokemon() {
 
 function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 	var result = new Object();
-	result.id = toIdForName(veekunPokemon.combinedName, veekunPokemon.forme);
-	if (!(result.id in smogonDex)) {
-		console.warn("Warning: " + result.id + " not in smogondex.");
+	result.speciesid = toIdForName(veekunPokemon.combinedName, veekunPokemon.forme);
+	if (!(result.speciesid in smogonDex)) {
+		console.warn("Warning: " + result.speciesid + " not in smogondex.");
 		result.tier = "";
 	}
 	else
-		result.tier = smogonDex[result.id].tier;
+		result.tier = smogonDex[result.speciesid].tier;
 
-	if (result.id in viableMoves) result.viableMoves = viableMoves[result.id];
+	if (result.speciesid in viableMoves) result.viableMoves = viableMoves[result.speciesid];
 
 	if (veekunPokemon.nationalPokedexNumber in serebiiEventdex) {
 		result.eventPokemon = new Array();
@@ -98,7 +98,7 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 }
 
 function outputPokemon(pokemon, isNotNeedFinalNewline) {
-	writeLine(pokemon.id + ": {", 1);
+	writeLine(pokemon.speciesid + ": {", 1);
 	if (pokemon.viableMoves && (typeof pokemon.viableMoves === "object") && Object.keys(pokemon.viableMoves).length > 0) {
 		writeLine("viableMoves: " + JSON.stringify(pokemon.viableMoves) + ",");
 	}
