@@ -3080,7 +3080,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
-		tier: "Uber"
+		tier: "Illegal"
 	},
 	victini: {
 		viableMoves: {"vcreate":1,"fusionbolt":1,"uturn":1,"brickbreak":1,"zenheadbutt":1,"psychic":1,"grassknot":1,"focusblast":1,"fireblast":1,"thunder":1},

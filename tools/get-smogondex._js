@@ -150,7 +150,7 @@ exports.getSmogonDex = function(_) {
 			case "arceus" :
 				smogonDex["arceusunknown"] = {
 						types: ["???"],
-						tier: tier,
+						tier: "Illegal",
 						abilities: abilities,
 						baseStats: {
 							hp: hp,
