@@ -2867,6 +2867,7 @@ exports.BattleFormatsData = {
 	},
 	giratinaorigin: {
 		viableMoves: {"dracometeor":1,"shadowsneak":1,"dragontail":1,"hiddenpowerfire":1,"willowisp":1,"calmmind":1,"substitute":1,"dragonpulse":1,"shadowball":1,"aurasphere":1,"outrage":1},
+		requiredItem: "Griseous Orb",
 		tier: "Uber"
 	},
 	cresselia: {
@@ -2937,6 +2938,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Insect Plate",
 		tier: "Uber"
 	},
 	arceusdark: {
@@ -2945,6 +2947,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Dread Plate",
 		tier: "Uber"
 	},
 	arceusdragon: {
@@ -2953,6 +2956,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Draco Plate",
 		tier: "Uber"
 	},
 	arceuselectric: {
@@ -2960,6 +2964,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Zap Plate",
 		tier: "Uber"
 	},
 	arceusfighting: {
@@ -2968,6 +2973,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Fist Plate",
 		tier: "Uber"
 	},
 	arceusfire: {
@@ -2976,6 +2982,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Flame Plate",
 		tier: "Uber"
 	},
 	arceusflying: {
@@ -2984,6 +2991,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Sky Plate",
 		tier: "Uber"
 	},
 	arceusghost: {
@@ -2992,6 +3000,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Spooky Plate",
 		tier: "Uber"
 	},
 	arceusgrass: {
@@ -3000,6 +3009,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Meadow Plate",
 		tier: "Uber"
 	},
 	arceusground: {
@@ -3008,6 +3018,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Earth Plate",
 		tier: "Uber"
 	},
 	arceusice: {
@@ -3016,6 +3027,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Icicle Plate",
 		tier: "Uber"
 	},
 	arceuspoison: {
@@ -3024,6 +3036,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Toxic Plate",
 		tier: "Uber"
 	},
 	arceuspsychic: {
@@ -3032,6 +3045,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Mind Plate",
 		tier: "Uber"
 	},
 	arceusrock: {
@@ -3040,6 +3054,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Stone Plate",
 		tier: "Uber"
 	},
 	arceussteel: {
@@ -3048,6 +3063,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Iron Plate",
 		tier: "Uber"
 	},
 	arceuswater: {
@@ -3056,6 +3072,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]},
 			{"generation":5,"level":100,"gender":"N/A","nature":"Any","abilities":["multitype"],"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		requiredItem: "Splash Plate",
 		tier: "Uber"
 	},
 	arceusunknown: {

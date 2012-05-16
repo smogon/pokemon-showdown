@@ -94,6 +94,79 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 			result.eventPokemon.push(eventPokemon);
 		}
 	}
+
+	// Any modifications goes here
+	switch (result.speciesid)
+	{
+		case "arceusbug" :
+			result.requiredItem = "Insect Plate";
+			break;
+
+		case "arceusdark" :
+			result.requiredItem = "Dread Plate";
+			break;
+
+		case "arceusdragon" :
+			result.requiredItem = "Draco Plate";
+			break;
+
+		case "arceuselectric" :
+			result.requiredItem = "Zap Plate";
+			break;
+
+		case "arceusfighting" :
+			result.requiredItem = "Fist Plate";
+			break;
+
+		case "arceusfire" :
+			result.requiredItem = "Flame Plate";
+			break;
+
+		case "arceusflying" :
+			result.requiredItem = "Sky Plate";
+			break;
+
+		case "arceusghost" :
+			result.requiredItem = "Spooky Plate";
+			break;
+
+		case "arceusgrass" :
+			result.requiredItem = "Meadow Plate";
+			break;
+
+		case "arceusground" :
+			result.requiredItem = "Earth Plate";
+			break;
+
+		case "arceusice" :
+			result.requiredItem = "Icicle Plate";
+			break;
+
+		case "arceuspoison" :
+			result.requiredItem = "Toxic Plate";
+			break;
+
+		case "arceuspsychic" :
+			result.requiredItem = "Mind Plate";
+			break;
+
+		case "arceusrock" :
+			result.requiredItem = "Stone Plate";
+			break;
+
+		case "arceussteel" :
+			result.requiredItem = "Iron Plate";
+			break;
+
+		case "arceuswater" :
+			result.requiredItem = "Splash Plate";
+			break;
+
+		case "giratinaorigin" :
+			result.requiredItem = "Griseous Orb";
+			break;
+	}
+
 	return result;
 }
 
@@ -111,6 +184,9 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 			writeLine(JSON.stringify(pokemon.eventPokemon[e]) + (e + 1 === pokemon.eventPokemon.length ? "" : ","));
 		}
 		writeLine("],", -1);
+	}
+	if (pokemon.requiredItem) {
+		writeLine("requiredItem: " + JSON.stringify(pokemon.requiredItem) + ",");
 	}
 	writeLine("tier: " + JSON.stringify(pokemon.tier));
 	writeLine("}" + (isNotNeedFinalNewline ? "" : ","), -1);
