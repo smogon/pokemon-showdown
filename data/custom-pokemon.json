@@ -75,8 +75,7 @@
 		"num": -1,
 		"types": ["Flying", "Fighting"],
 		"tier": "G5CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 105,
 			"atk": 60,
 			"def": 90,
@@ -84,8 +83,7 @@
 			"spd": 80,
 			"spe": 85
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Intimidate",
 			"1": "Prankster",
 			"DW": "Justified"
@@ -98,16 +96,18 @@
 		"eggGroups": ["Ground", "Flying"],
 		"colour": "",
 		"genus": "Chieftain",
-		"viableMoves":
-		{
+		"viableMoves": {
 			"substitute": 1,
 			"aurasphere": 1,
 			"hurricane": 1,
+			"airslash": 1,
+			"raindance": 1,
 			"roost": 1,
-			"taunt": 1,
-			"toxic": 1
+			"toxic": 1,
+			"batonpass": 1,
+			"rapidspin": 1,
+			"stealthrock": 1
 		},
-		"viable": true,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -192,8 +192,7 @@
 		"num": -2,
 		"types": ["Grass", "Ghost"],
 		"tier": "G5CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 64,
 			"atk": 120,
 			"def": 100,
@@ -201,8 +200,7 @@
 			"spd": 120,
 			"spe": 81
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Forewarn",
 			"DW": "Telepathy"
 		},
@@ -215,6 +213,18 @@
 		"eggGroups": ["Plant", "Ground"],
 		"colour": "Black",
 		"genus": "Essence",
+		"viableMoves": {
+			"powerwhip": 1,
+			"shadowclaw": 1,
+			"hornleech": 1,
+			"shadowsneak": 1,
+			"willowisp": 1,
+			"toxicspikes": 1,
+			"gigadrain": 1,
+			"shadowball": 1,
+			"calmmind": 1,
+			"stoneedge": 1
+		},
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -286,8 +296,7 @@
 		"num": -51,
 		"types": ["Ice", "Bug"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 70,
 			"atk": 116,
 			"def": 70,
@@ -295,8 +304,7 @@
 			"spd": 64,
 			"spe": 121
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Compoundeyes",
 			"1": "Mountaineer"
 		},
@@ -309,19 +317,18 @@
 		"eggGroups": ["Bug"],
 		"colour": "",
 		"genus": "",
-		"viableMoves":
-		{
+		"viableMoves": {
+			"iceshard": 1,
+			"bugbuzz": 1,
+			"earthpower": 1,
 			"spikes": 1,
 			"superpower": 1,
-			"iceshard": 1,
-			"blizzard": 1,
-			"taunt": 1,
-			"earthpower": 1,
-			"bugbuzz": 1,
 			"tailglow": 1,
-			"focusblast": 1
+			"taunt": 1,
+			"hiddenpowerfire": 1,
+			"focusblast": 1,
+			"uturn": 1
 		},
-		"viable": true,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -401,8 +408,7 @@
 		"num": -52,
 		"types": ["Ghost", "Fighting"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 90,
 			"atk": 105,
 			"def": 90,
@@ -410,8 +416,7 @@
 			"spd": 110,
 			"spe": 65
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Shed Skin",
 			"1": "Air Lock"
 		},
@@ -424,6 +429,19 @@
 		"eggGroups": ["Indeterminate", "Humanshape"],
 		"colour": "",
 		"genus": "",
+		"viableMoves": {
+			"bulkup": 1,
+			"drainpunch": 1,
+			"shadowsneak": 1,
+			"shadowpunch": 1,
+			"powerwhip": 1,
+			"rest": 1,
+			"moonlight": 1,
+			"icepunch": 1,
+			"machpunch": 1,
+			"trick": 1,
+			"earthquake": 1
+		},
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -516,8 +534,7 @@
 		"num": -53,
 		"types": ["Fire", "Grass"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 120,
 			"atk": 70,
 			"def": 105,
@@ -525,8 +542,7 @@
 			"spd": 90,
 			"spe": 60
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Rock Head",
 			"1": "Battle Armor"
 		},
@@ -539,6 +555,21 @@
 		"eggGroups": ["Monster", "Dragon"],
 		"colour": "",
 		"genus": "",
+		"viableMoves": {
+			"woodhammer": 1,
+			"flareblitz": 1,
+			"leechseed": 1,
+			"gigadrain": 1,
+			"lavaplume": 1,
+			"synthesis": 1,
+			"aromatherapy": 1,
+			"toxic": 1,
+			"flamethrower": 1,
+			"fireblast": 1,
+			"energyball": 1,
+			"grassknot": 1,
+			"substitute": 1
+		},
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -629,8 +660,7 @@
 		"num": -54,
 		"types": ["Poison", "Ground"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 95,
 			"atk": 76,
 			"def": 109,
@@ -638,8 +668,7 @@
 			"spd": 80,
 			"spe": 105
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Persistent",
 			"1": "Vital Spirit"
 		},
@@ -652,6 +681,27 @@
 		"eggGroups": ["Ground"],
 		"colour": "",
 		"genus": "",
+		"viableMoves": {
+			"encore": 1,
+			"rapidspin": 1,
+			"knockoff": 1,
+			"copycat": 1,
+			"whirlwind": 1,
+			"toxicspikes": 1,
+			"sludgebomb": 1,
+			"earthpower": 1,
+			"gravity": 1,
+			"tailwind": 1,
+			"disable": 1,
+			"spikes": 1,
+			"wish": 1,
+			"taunt": 1,
+			"reflect": 1,
+			"lightscreen": 1,
+			"stealthrock": 1,
+			"trickroom": 1,
+			"uturn": 1
+		},
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -748,8 +798,7 @@
 			"Rock"
 		],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 90,
 			"atk": 60,
 			"def": 65,
@@ -757,8 +806,7 @@
 			"spd": 70,
 			"spe": 130
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Levitate",
 			"1": "Technician"
 		},
@@ -771,19 +819,19 @@
 		"eggGroups": ["No Eggs"],
 		"colour": "",
 		"genus": "",
-		"viableMoves":
-		{
-			"trick": 1,
-			"stealthrock": 1,
-			"ancientpower": 1,
+		"viableMoves": {
 			"paleowave": 1,
-			"fireblast": 1,
+			"calmmind": 1,
 			"earthpower": 1,
-			"gigadrain": 1,
 			"vacuumwave": 1,
-			"calmmind": 1
+			"ancientpower": 1,
+			"gigadrain": 1,
+			"flamethrower": 1,
+			"fireblast": 1,
+			"energyball": 1,
+			"trick": 1,
+			"stealthrock": 1
 		},
-		"viable": true,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -862,8 +910,7 @@
 		"num": -56,
 		"types": ["Water", "Fighting"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 105,
 			"atk": 110,
 			"def": 95,
@@ -871,8 +918,7 @@
 			"spd": 100,
 			"spe": 75
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Unaware"
 		},
 		"heightm": 1.7,
@@ -884,6 +930,17 @@
 		"eggGroups": ["Water 1", "Water 3"],
 		"colour": "",
 		"genus": "",
+		"viableMoves": {
+			"waterfall": 1,
+			"bulkup": 1,
+			"drainpunch": 1,
+			"recover": 1,
+			"focuspunch": 1,
+			"substitute": 1,
+			"icepunch": 1,
+			"stoneedge": 1,
+			"thunderpunch": 1
+		},
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -974,8 +1031,7 @@
 		"num": -57,
 		"types": ["Steel", "Ghost"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 80,
 			"atk": 103,
 			"def": 85,
@@ -983,8 +1039,7 @@
 			"spd": 80,
 			"spe": 110
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Frisk",
 			"1": "Limber"
 		},
@@ -997,6 +1052,19 @@
 		"eggGroups": ["Ground"],
 		"colour": "",
 		"genus": "",
+		"viableMoves": {
+			"shadowstrike": 1,
+			"superpower": 1,
+			"earthquake": 1,
+			"willowisp": 1,
+			"taunt": 1,
+			"uturn": 1,
+			"icepunch": 1,
+			"perishsong": 1,
+			"thunderpunch": 1,
+			"meteormash": 1,
+			"substitute": 1
+		},
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -1098,8 +1166,7 @@
 		"num": -58,
 		"types": ["Electric", "Dragon"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 108,
 			"atk": 60,
 			"def": 118,
@@ -1107,8 +1174,7 @@
 			"spd": 70,
 			"spe": 80
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Shield Dust",
 			"1": "Static"
 		},
@@ -1121,6 +1187,21 @@
 		"eggGroups": ["Dragon", "Monster"],
 		"colour": "",
 		"genus": "",
+		"viableMoves": {
+			"thunderbolt": 1,
+			"dragonpulse": 1,
+			"dracometeor": 1,
+			"thunder": 1,
+			"hydropump": 1,
+			"raindance": 1,
+			"slackoff": 1,
+			"discharge": 1,
+			"fireblast": 1,
+			"flamethrower": 1,
+			"thunderwave": 1,
+			"trickroom": 1,
+			"healbell": 1
+		},
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -1207,8 +1288,7 @@
 		"num": -59,
 		"types": ["Dark", "Ground"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 133,
 			"atk": 122,
 			"def": 72,
@@ -1216,8 +1296,7 @@
 			"spd": 72,
 			"spe": 95
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Rebound",
 			"1": "Guts"
 		},
@@ -1230,18 +1309,18 @@
 		"eggGroups": ["Water 2", "Ground"],
 		"colour": "",
 		"genus": "",
-		"viableMoves":
-		{
-			"rapidspin": 1,
-			"crunch": 1,
+		"viableMoves": {
 			"earthquake": 1,
-			"encore": 1,
-			"taunt": 1,
-			"uturn": 1,
+			"crunch": 1,
 			"suckerpunch": 1,
-			"stoneedge": 1
+			"taunt": 1,
+			"encore": 1,
+			"rapidspin": 1,
+			"stoneedge": 1,
+			"uturn": 1,
+			"pursuit": 1,
+			"fakeout": 1
 		},
-		"viable": true,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -1329,8 +1408,7 @@
 		"num": -60,
 		"types": ["Electric", "Water"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 151,
 			"atk": 84,
 			"def": 73,
@@ -1338,8 +1416,7 @@
 			"spd": 74,
 			"spe": 105
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Trace",
 			"1": "Magic Guard"
 		},
@@ -1352,6 +1429,20 @@
 		"eggGroups": ["Water 1", "Fairy"],
 		"colour": "",
 		"genus": "",
+		"viableMoves": {
+			"thunderbolt": 1,
+			"surf": 1,
+			"discharge": 1,
+			"earthpower": 1,
+			"icebeam": 1,
+			"counter": 1,
+			"mirrorcoat": 1,
+			"hiddenpowergrass": 1,
+			"hiddenpowerfire": 1,
+			"raindance": 1,
+			"thunder": 1,
+			"heartswap": 1
+		},
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -1434,8 +1525,7 @@
 		"num": -61,
 		"types": ["Fighting", "Dark"],
 		"tier": "G4CAP",
-		"baseStats":
-		{
+		"baseStats": {
 			"hp": 90,
 			"atk": 85,
 			"def": 80,
@@ -1443,8 +1533,7 @@
 			"spd": 80,
 			"spe": 110
 		},
-		"abilities":
-		{
+		"abilities": {
 			"0": "Volt Absorb",
 			"1": "Lightningrod"
 		},
@@ -1457,6 +1546,18 @@
 		"eggGroups": ["Humanshape", "Ground"],
 		"colour": "",
 		"genus": "",
+		"viableMoves": {
+			"darkpulse": 1,
+			"aurasphere": 1,
+			"painsplit": 1,
+			"taunt": 1,
+			"hiddenpowerice": 1,
+			"closecombat": 1,
+			"thunderwave": 1,
+			"substitute": 1,
+			"batonpass": 1,
+			"bulkup": 1
+		},
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
