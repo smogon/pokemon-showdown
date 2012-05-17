@@ -3795,6 +3795,9 @@ exports.BattleFormatsData = {
 	},
 	meloetta: {
 		viableMoves: {"relicsong":1,"closecombat":1,"return":1,"shadowclaw":1,"calmmind":1,"psychic":1,"thunderbolt":1,"hypervoice":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"abilities":["serenegrace"],"moves":["quickattack","confusion","round"]}
+		],
 		tier: "Unreleased"
 	},
 	meloettapirouette: {
