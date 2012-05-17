@@ -1,18 +1,3 @@
-function toId(text) {
-	text = text || '';
-	if (typeof text === 'number') text = ''+text;
-	if (typeof text !== 'string') return ''; //???
-	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
-function clone(object) {
-	var newObj = (object instanceof Array) ? [] : {};
-	for (var i in object) {
-		if (object[i] && typeof object[i] == "object") {
-			newObj[i] = clone(object[i]);
-		} else newObj[i] = object[i]
-	} return newObj;
-};
-
 function BattleTools() {
 	var selfT = this;
 	this.effectToString = function() {
@@ -126,7 +111,7 @@ function BattleTools() {
 	this.getMoveCopy = function(move) {
 		if (move && move.isCopy) return move;
 		var move = this.getMove(move);
-		var moveCopy = clone(move);
+		var moveCopy = Object.clone(move, true);
 		moveCopy.isCopy = true;
 		return moveCopy;
 	};

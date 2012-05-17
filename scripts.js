@@ -1,30 +1,3 @@
-function toId(text) {
-	text = text || '';
-	if (typeof text === 'number') text = ''+text;
-	if (typeof text !== 'string') return ''; //???
-	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
-function clone(object) {
-	var newObj = (object instanceof Array) ? [] : {};
-	for (var i in object) {
-		if (object[i] && typeof object[i] == "object") {
-			newObj[i] = clone(object[i]);
-		} else newObj[i] = object[i]
-	} return newObj;
-};
-function shuffle(array) {
-	var tmp, current, top = array.length;
-
-	if(top) while(--top) {
-		current = Math.floor(Math.random() * (top + 1));
-		tmp = array[current];
-		array[current] = array[top];
-		array[top] = tmp;
-	}
-
-	return array;
-}
-
 exports.BattleScripts = {
 	runMove: function(move, pokemon, target) {
 		move = this.getMove(move);
@@ -377,7 +350,7 @@ exports.BattleScripts = {
 				keys.push(i);
 			}
 		}
-		keys = shuffle(keys);
+		keys = keys.randomize();
 
 		var ruleset = this.getFormat().ruleset;
 
@@ -401,7 +374,7 @@ exports.BattleScripts = {
 				template.viableMoves = {present:1, bestow:1};
 			}
 
-			var moveKeys = shuffle(Object.keys(template.viableMoves));
+			var moveKeys = Object.keys(template.viableMoves).randomize();
 			var moves = [];
 			var ability = '';
 			var item = '';
@@ -796,7 +769,7 @@ exports.BattleScripts = {
 					item = 'Life Orb';
 				} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
 					// Give Unburden mons a random Gem of the type of one of their damaging moves
-					var shuffledMoves = shuffle(moves);
+					var shuffledMoves = moves.randomize();
 					for (var m in shuffledMoves) {
 						var move = this.getMove(shuffledMoves[m]);
 						if (move.basePower || move.basePowerCallback) {
