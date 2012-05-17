@@ -447,6 +447,7 @@ function BattleTools() {
 			if (item.isUnreleased) {
 				problems.push(set.name+"'s item "+set.item+" is unreleased.");
 			}
+			var ability = selfT.getAbility(set.ability).name;
 			if (ability === template.abilities['DW'] && !template.dreamWorldRelease) {
 				problems.push(set.name+" ("+set.species+")'s Dream World ability is unreleased.");
 			}
