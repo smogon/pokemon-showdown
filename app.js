@@ -1,8 +1,9 @@
-//require("./node_modules/long-stack-traces");
+require('sugar');
 
-request = require('request');
 fs = require('fs');
 path = require('path');
+
+request = require('request');
 
 // Synchronously copy config-example.js over to config.js if it doesn't exist
 if (!path.existsSync('./config/config.js')) {
