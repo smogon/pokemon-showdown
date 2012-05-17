@@ -423,7 +423,7 @@ function BattleTools() {
 			problems.push(set.name+"'s item "+set.item+" is unreleased.");
 		}
 		setHas[toId(set.ability)] = true;
-		if (banlistTable['Rule:standard']) {
+		if (banlistTable['illegal']) {
 			var totalEV = 0;
 			for (var k in set.evs) {
 				totalEV += set.evs[k];
@@ -476,7 +476,7 @@ function BattleTools() {
 					problems.push(set.name+"'s move "+set.moves[i]+" is an OHKO move, which is banned.");
 				}
 
-				if (banlistTable['Rule:standard']) {
+				if (banlistTable['illegal']) {
 					var lset = selfT.checkLearnset(move, template);
 					if (!lset) {
 						problems.push(set.name+" ("+set.species+") can't learn "+move.name);
