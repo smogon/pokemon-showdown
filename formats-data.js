@@ -3481,7 +3481,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	deerling: {
-		viableMoves: {"workup":1,"agility":1,"batonpass":1,"substitute":1,"roost":1,"jumpkick":1,"naturepower":1,"synthesis":1},
+		viableMoves: {"workup":1,"agility":1,"batonpass":1,"substitute":1,"jumpkick":1,"naturepower":1,"synthesis":1},
 		tier: "LC"
 	},
 	deerlingsummer: {
