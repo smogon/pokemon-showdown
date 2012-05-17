@@ -68,6 +68,14 @@ function BattleTools() {
 			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0,F:0};
 			if (!template.genderRatio) template.genderRatio = {M:.5,F:.5};
 			if (!template.tier) template.tier = 'Illegal';
+			if (!template.gen) {
+				if (template.num >= 494) template.gen = 5;
+				else if (template.num >= 387) template.gen = 4;
+				else if (template.num >= 252) template.gen = 3;
+				else if (template.num >= 152) template.gen = 2;
+				else if (template.num >= 1) template.gen = 1;
+				else template.gen = 0;
+			}
 		}
 		return template;
 	};
@@ -93,6 +101,14 @@ function BattleTools() {
 			if (!move.baseType) move.baseType = move.type;
 			if (!move.effectType) move.effectType = 'Move';
 			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
+			if (!move.gen) {
+				if (move.num >= 468) move.gen = 5;
+				else if (move.num >= 355) move.gen = 4;
+				else if (move.num >= 252) move.gen = 3;
+				else if (move.num >= 166) move.gen = 2;
+				else if (move.num >= 1) move.gen = 1;
+				else move.gen = 0;
+			}
 		}
 		return move;
 	};
@@ -191,6 +207,12 @@ function BattleTools() {
 			ability.toString = selfT.effectToString;
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
+			if (!ability.gen) {
+				if (ability.num >= 124) ability.gen = 5;
+				else if (ability.num >= 77) ability.gen = 4;
+				else if (ability.num >= 1) ability.gen = 3;
+				else ability.gen = 0;
+			}
 		}
 		return ability;
 	};

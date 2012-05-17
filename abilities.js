@@ -49,7 +49,7 @@ exports.BattleAbilities = {
 		id: "adaptability",
 		name: "Adaptability",
 		rating: 3.5,
-		num: "91"
+		num: 91
 	},
 	"aftermath": {
 		desc: "If a contact move knocks out this Pokemon, the opponent receives damage equal to one-fourth of its max HP.",
@@ -62,7 +62,7 @@ exports.BattleAbilities = {
 			}
 		},
 		rating: 3,
-		num: "106"
+		num: 106
 	},
 	"airlock": {
 		desc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
@@ -73,7 +73,7 @@ exports.BattleAbilities = {
 		id: "airlock",
 		name: "Air Lock",
 		rating: 3,
-		num: "76"
+		num: 76
 	},
 	"analytic": {
 		desc: "If the user moves last, the power of that move is increased by 30%.",
@@ -87,7 +87,7 @@ exports.BattleAbilities = {
 		id: "analytic",
 		name: "Analytic",
 		rating: 1,
-		num: "??"
+		num: 148
 	},
 	"angerpoint": {
 		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
@@ -101,7 +101,7 @@ exports.BattleAbilities = {
 		id: "angerpoint",
 		name: "Anger Point",
 		rating: 2,
-		num: "83"
+		num: 83
 	},
 	"anticipation": {
 		desc: "A warning is displayed if an opposing Pokemon has the moves Fissure, Guillotine, Horn Drill, Sheer Cold, or any attacking move from a type that is considered super effective against this Pokemon (including Counter, Mirror Coat, and Metal Burst). Hidden Power, Judgment, Natural Gift and Weather Ball are considered Normal-type moves.",
@@ -121,7 +121,7 @@ exports.BattleAbilities = {
 		id: "anticipation",
 		name: "Anticipation",
 		rating: 1,
-		num: "107"
+		num: 107
 	},
 	"arenatrap": {
 		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they are part Flying-type, have the Levitate ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn. Flying-type and Levitate Pokemon cannot escape if they are holding Iron Ball or Gravity is in effect. Levitate Pokemon also cannot escape if their ability is disabled through other means, such as Skill Swap or Gastro Acid.",
@@ -134,7 +134,7 @@ exports.BattleAbilities = {
 		id: "arenatrap",
 		name: "Arena Trap",
 		rating: 5,
-		num: "71"
+		num: 71
 	},
 	"baddreams": {
 		desc: "If asleep, each of this Pokemon's opponents receives damage equal to one-eighth of its max HP.",
@@ -152,7 +152,7 @@ exports.BattleAbilities = {
 		id: "baddreams",
 		name: "Bad Dreams",
 		rating: 2,
-		num: "123"
+		num: 123
 	},
 	"battlearmor": {
 		desc: "Critical Hits cannot strike this Pokemon.",
@@ -161,7 +161,7 @@ exports.BattleAbilities = {
 		id: "battlearmor",
 		name: "Battle Armor",
 		rating: 1,
-		num: "4"
+		num: 4
 	},
 	"bigpecks": {
 		desc: "Prevents the Pokemon's Defense stat from being reduced.",
@@ -176,7 +176,7 @@ exports.BattleAbilities = {
 		id: "bigpecks",
 		name: "Big Pecks",
 		rating: 1,
-		num: "145"
+		num: 145
 	},
 	"blaze": {
 		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Fire-type attacks receive a 50% boost in power.",
@@ -189,7 +189,7 @@ exports.BattleAbilities = {
 		id: "blaze",
 		name: "Blaze",
 		rating: 2,
-		num: "66"
+		num: 66
 	},
 	"chlorophyll": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its speed is temporarily doubled.",
@@ -201,7 +201,7 @@ exports.BattleAbilities = {
 		id: "chlorophyll",
 		name: "Chlorophyll",
 		rating: 3.5,
-		num: "34"
+		num: 34
 	},
 	"clearbody": {
 		desc: "Opponents cannot reduce this Pokemon's stats; they can, however, modify stat changes with Power Swap, Guard Swap and Heart Swap and inflict stat boosts with Swagger and Flatter. This ability does not prevent self-inflicted stat reductions.",
@@ -217,7 +217,7 @@ exports.BattleAbilities = {
 		id: "clearbody",
 		name: "Clear Body",
 		rating: 2,
-		num: "29"
+		num: 29
 	},
 	"cloudnine": {
 		desc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
@@ -227,7 +227,7 @@ exports.BattleAbilities = {
 		id: "cloudnine",
 		name: "Cloud Nine",
 		rating: 3,
-		num: "13"
+		num: 13
 	},
 	"colorchange": {
 		desc: "This Pokemon's type changes according to the type of the last move that hit this Pokemon.",
@@ -260,7 +260,7 @@ exports.BattleAbilities = {
 		id: "colorchange",
 		name: "Color Change",
 		rating: 2,
-		num: "16"
+		num: 16
 	},
 	"compoundeyes": {
 		desc: "The accuracy of this Pokemon's moves receives a 30% increase; for example, a 75% accurate move becomes 97.5% accurate.",
@@ -272,7 +272,7 @@ exports.BattleAbilities = {
 		id: "compoundeyes",
 		name: "Compoundeyes",
 		rating: 3.5,
-		num: "14"
+		num: 14
 	},
 	"contrary": {
 		desc: "Stat changes are inverted.",
@@ -284,14 +284,14 @@ exports.BattleAbilities = {
 		id: "contrary",
 		name: "Contrary",
 		rating: 4,
-		num: "126"
+		num: 126
 	},
 	"cursedbody": {
 		desc: "30% chance of disabling one of the opponent's moves when attacked. This works even if the attacker is behind a Substitute, but will not activate if the Pokemon with Cursed Body is behind a Substitute.",
 		id: "cursedbody",
 		name: "Cursed Body",
 		rating: 2,
-		num: "130"
+		num: 130
 	},
 	"cutecharm": {
 		desc: "If an opponent of the opposite gender directly attacks this Pokemon, there is a 30% chance that the opponent will become Attracted to this Pokemon.",
@@ -307,7 +307,7 @@ exports.BattleAbilities = {
 		id: "cutecharm",
 		name: "Cute Charm",
 		rating: 2,
-		num: "56"
+		num: 56
 	},
 	"damp": {
 		desc: "While this Pokemon is active, no Pokemon on the field can use Selfdestruct or Explosion.",
@@ -324,7 +324,7 @@ exports.BattleAbilities = {
 		},
 		name: "Damp",
 		rating: 1,
-		num: "6"
+		num: 6
 	},
 	"defeatist": {
 		desc: "Attack and Special Attack are halved when HP is less than half.",
@@ -340,7 +340,7 @@ exports.BattleAbilities = {
 		id: "defeatist",
 		name: "Defeatist",
 		rating: -1,
-		num: "129"
+		num: 129
 	},
 	"defiant": {
 		desc: "Raises the user's Attack stat by two stages when a stat is lowered, including the Attack stat. This does not include self-induced stat drops like those from Close Combat.",
@@ -361,7 +361,7 @@ exports.BattleAbilities = {
 		id: "defiant",
 		name: "Defiant",
 		rating: 2,
-		num: "128"
+		num: 128
 	},
 	"download": {
 		desc: "If this Pokemon switches into an opponent with equal Defenses or higher Defense than Special Defense, this Pokemon's Special Attack receives a 50% boost. If this Pokemon switches into an opponent with higher Special Defense than Defense, this Pokemon's Attack receive a 50% boost.",
@@ -383,7 +383,7 @@ exports.BattleAbilities = {
 		id: "download",
 		name: "Download",
 		rating: 4,
-		num: "88"
+		num: 88
 	},
 	"drizzle": {
 		desc: "When this Pokemon enters the battlefield, it causes a permanent Rain Dance that can only be stopped by Air Lock, Cloud Nine or another weather condition.",
@@ -394,7 +394,7 @@ exports.BattleAbilities = {
 		id: "drizzle",
 		name: "Drizzle",
 		rating: 5,
-		num: "2"
+		num: 2
 	},
 	"drought": {
 		desc: "When this Pokemon enters the battlefield, it causes a permanent Sunny Day that can only be stopped by Air Lock, Cloud Nine or another weather condition.",
@@ -405,7 +405,7 @@ exports.BattleAbilities = {
 		id: "drought",
 		name: "Drought",
 		rating: 5,
-		num: "70"
+		num: 70
 	},
 	"dryskin": {
 		desc: "This Pokemon absorbs Water attacks and gains a weakness to Fire attacks. If Sunny Day is in effect, this Pokemon takes damage. If Rain Dance is in effect, this Pokemon recovers health.",
@@ -430,7 +430,7 @@ exports.BattleAbilities = {
 		id: "dryskin",
 		name: "Dry Skin",
 		rating: 3,
-		num: "87"
+		num: 87
 	},
 	"earlybird": {
 		desc: "This Pokemon will remain asleep for half as long as it normally would; this includes both opponent-induced sleep and user-induced sleep via Rest.",
@@ -438,7 +438,7 @@ exports.BattleAbilities = {
 		name: "Early Bird",
 		isHalfSleep: true,
 		rating: 2.5,
-		num: "48"
+		num: 48
 	},
 	"effectspore": {
 		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become either poisoned, paralyzed or put to sleep. There is an equal chance to inflict each status.",
@@ -459,7 +459,7 @@ exports.BattleAbilities = {
 		id: "effectspore",
 		name: "Effect Spore",
 		rating: 2,
-		num: "27"
+		num: 27
 	},
 	"filter": {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
@@ -472,7 +472,7 @@ exports.BattleAbilities = {
 		id: "filter",
 		name: "Filter",
 		rating: 3,
-		num: "111"
+		num: 111
 	},
 	"flamebody": {
 		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become burned.",
@@ -486,7 +486,7 @@ exports.BattleAbilities = {
 		id: "flamebody",
 		name: "Flame Body",
 		rating: 2,
-		num: "49"
+		num: 49
 	},
 	"flareboost": {
 		desc: "When the user with this ability is burned, its Special Attack is raised by 50%.",
@@ -498,7 +498,7 @@ exports.BattleAbilities = {
 		id: "flareboost",
 		name: "Flare Boost",
 		rating: 3,
-		num: "138"
+		num: 138
 	},
 	"flashfire": {
 		desc: "This Pokemon is immune to all Fire-type attacks; additionally, its own Fire-type attacks receive a 50% boost if a Fire-type move hits this Pokemon. Multiple boosts do not occur if this Pokemon is hit with multiple Fire-type attacks.",
@@ -523,7 +523,7 @@ exports.BattleAbilities = {
 		id: "flashfire",
 		name: "Flash Fire",
 		rating: 3,
-		num: "18"
+		num: 18
 	},
 	"flowergift": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its Attack and Special Defense stats (as well as its partner's stats in double battles) receive a 50% boost.",
@@ -548,7 +548,7 @@ exports.BattleAbilities = {
 		id: "flowergift",
 		name: "Flower Gift",
 		rating: 3,
-		num: "122"
+		num: 122
 	},
 	"forecast": {
 		desc: "This Pokemon's type changes according to the current weather conditions: it becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and remains its regular type otherwise.",
@@ -578,7 +578,7 @@ exports.BattleAbilities = {
 		id: "forecast",
 		name: "Forecast",
 		rating: 4,
-		num: "59"
+		num: 59
 	},
 	"forewarn": {
 		desc: "The move with the highest Base Power in the opponent's moveset is revealed.",
@@ -608,14 +608,14 @@ exports.BattleAbilities = {
 		id: "forewarn",
 		name: "Forewarn",
 		rating: 1,
-		num: "108"
+		num: 108
 	},
 	"friendguard": {
 		desc: "Reduces the damage received from an ally in a double or triple battle.",
 		id: "friendguard",
 		name: "Friend Guard",
 		rating: 0,
-		num: "132"
+		num: 132
 	},
 	"frisk": {
 		desc: "When this Pokemon enters the field, it identifies the opponent's held item; in double battles, the held item of an unrevealed, randomly selected opponent is identified.",
@@ -626,14 +626,14 @@ exports.BattleAbilities = {
 		id: "frisk",
 		name: "Frisk",
 		rating: 1.5,
-		num: "119"
+		num: 119
 	},
 	"gluttony": {
 		desc: "This Pokemon consumes its held berry when its health reaches 50% max HP or lower.",
 		id: "gluttony",
 		name: "Gluttony",
 		rating: 1.5,
-		num: "82"
+		num: 82
 	},
 	"guts": {
 		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed or asleep (including self-induced Rest), its Attack stat receives a 50% boost; the burn status' Attack drop is also ignored.",
@@ -645,7 +645,7 @@ exports.BattleAbilities = {
 		id: "guts",
 		name: "Guts",
 		rating: 4,
-		num: "62"
+		num: 62
 	},
 	"harvest": {
 			desc: "When the user uses a held Berry, it is restored at the end of the turn.",
@@ -662,7 +662,7 @@ exports.BattleAbilities = {
 				}
 		},
 		rating: 4,
-		num: "139"
+		num: 139
 	},
 	"healer": {
 		desc: "Has a 30% chance of curing an adjacent ally's status ailment at the end of each turn in Double and Triple Battles.",
@@ -671,7 +671,7 @@ exports.BattleAbilities = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
 		rating: 0,
-		num: "131"
+		num: 131
 	},
 	"heatproof": {
 		desc: "This Pokemon receives half damage from both Fire-type attacks and residual burn damage.",
@@ -688,7 +688,7 @@ exports.BattleAbilities = {
 		id: "heatproof",
 		name: "Heatproof",
 		rating: 2.5,
-		num: "85"
+		num: 85
 	},
 	"heavymetal": {
 		desc: "The user's weight is doubled. This increases user's base power of Heavy Slam and Heat Crash, as well as damage taken from the opponent's Low Kick and Grass Knot, due to these moves being calculated by the target's weight.",
@@ -698,14 +698,14 @@ exports.BattleAbilities = {
 		id: "heavymetal",
 		name: "Heavy Metal",
 		rating: 0,
-		num: "134"
+		num: 134
 	},
 	"honeygather": {
 		desc: "If it is not already holding an item, this Pokemon may find and be holding Honey after a battle.",
 		id: "honeygather",
 		name: "Honey Gather",
 		rating: 0,
-		num: "118"
+		num: 118
 	},
 	"hugepower": {
 		desc: "This Pokemon's Attack stat is doubled. Therefore, if this Pokemon's Attack stat on the status screen is 200, it effectively has an Attack stat of 400; which is then subject to the full range of stat boosts and reductions.",
@@ -715,7 +715,7 @@ exports.BattleAbilities = {
 		id: "hugepower",
 		name: "Huge Power",
 		rating: 5,
-		num: "37"
+		num: 37
 	},
 	"hustle": {
 		desc: "This Pokemon's Attack receives a 50% boost but its Physical attacks receive a 20% drop in Accuracy. For example, a 100% accurate move would become an 80% accurate move. The accuracy of moves that never miss, such as Aerial Ace, remains unaffected.",
@@ -730,7 +730,7 @@ exports.BattleAbilities = {
 		id: "hustle",
 		name: "Hustle",
 		rating: 3,
-		num: "55"
+		num: 55
 	},
 	"hydration": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, it recovers from poison, paralysis, burn, sleep and freeze at the end of the turn.",
@@ -745,7 +745,7 @@ exports.BattleAbilities = {
 		id: "hydration",
 		name: "Hydration",
 		rating: 4,
-		num: "93"
+		num: 93
 	},
 	"hypercutter": {
 		desc: "Opponents cannot reduce this Pokemon's Attack stat; they can, however, modify stat changes with Power Swap or Heart Swap and inflict a stat boost with Swagger. This ability does not prevent self-inflicted stat reductions.",
@@ -759,7 +759,7 @@ exports.BattleAbilities = {
 		id: "hypercutter",
 		name: "Hyper Cutter",
 		rating: 2,
-		num: "52"
+		num: 52
 	},
 	"icebody": {
 		desc: "If active while Hail is in effect, this Pokemon recovers one-sixteenth of its max HP after each turn. If a non-Ice-type Pokemon receives this ability through Skill Swap, Role Play or the Trace ability, it will not take damage from Hail.",
@@ -774,14 +774,14 @@ exports.BattleAbilities = {
 		id: "icebody",
 		name: "Ice Body",
 		rating: 3,
-		num: "115"
+		num: 115
 	},
 	"illuminate": {
 		desc: "When this Pokemon is in the first slot of the player's party, it doubles the rate of wild encounters.",
 		id: "illuminate",
 		name: "Illuminate",
 		rating: 0,
-		num: "35"
+		num: 35
 	},
 	"illusion": {
 		desc: "Illusion will change the appearance of the Pokemon to a different species. This is dependent on the last Pokemon in the player's party. Along with the species itself, Illusion is broken when the user is damaged, but is not broken by Substitute, weather conditions, status ailments, or entry hazards. Illusion will replicate the type of Poke Ball, the species name, and the gender of the Pokemon it is masquerading as.",
@@ -806,7 +806,7 @@ exports.BattleAbilities = {
 		id: "illusion",
 		name: "Illusion",
 		rating: 4.5,
-		num: "149"
+		num: 149
 	},
 	"immunity": {
 		desc: "This Pokemon cannot become poisoned nor Toxic poisoned.",
@@ -816,7 +816,7 @@ exports.BattleAbilities = {
 		id: "immunity",
 		name: "Immunity",
 		rating: 1,
-		num: "17"
+		num: 17
 	},
 	"imposter": {
 		desc: "As soon as the user comes into battle, it Transforms into its opponent, copying the opponent's stats exactly, with the exception of HP. Imposter copies all stat changes on the target originating from moves and abilities such as Swords Dance and Intimidate, but not from items such as Choice Specs. Imposter will not Transform the user if the opponent is an Illusion or if the opponent is behind a Substitute.",
@@ -829,7 +829,7 @@ exports.BattleAbilities = {
 		id: "imposter",
 		name: "Imposter",
 		rating: 5,
-		num: "150"
+		num: 150
 	},
 	"infiltrator": {
 		desc: "Ignores Reflect, Light Screen and Safeguard under effect on the target.",
@@ -837,7 +837,7 @@ exports.BattleAbilities = {
 		id: "infiltrator",
 		name: "Infiltrator",
 		rating: 1,
-		num: "151"
+		num: 151
 	},
 	"innerfocus": {
 		desc: "This Pokemon cannot be made to flinch.",
@@ -845,7 +845,7 @@ exports.BattleAbilities = {
 		id: "innerfocus",
 		name: "Inner Focus",
 		rating: 1,
-		num: "39"
+		num: 39
 	},
 	"insomnia": {
 		desc: "This Pokemon cannot be put to sleep; this includes both opponent-induced sleep as well as user-induced sleep via Rest.",
@@ -855,7 +855,7 @@ exports.BattleAbilities = {
 		id: "insomnia",
 		name: "Insomnia",
 		rating: 2,
-		num: "15"
+		num: 15
 	},
 	"intimidate": {
 		desc: "When this Pokemon enters the field, the Attack stat of each of its opponents lowers by one stage.",
@@ -875,7 +875,7 @@ exports.BattleAbilities = {
 		id: "intimidate",
 		name: "Intimidate",
 		rating: 4,
-		num: "22"
+		num: 22
 	},
 	"ironbarbs": {
 		desc: "All moves that make contact with the Pokemon with Iron Barbs will damage the user by 1/8 of their maximum HP after damage is dealt.",
@@ -887,7 +887,7 @@ exports.BattleAbilities = {
 		id: "ironbarbs",
 		name: "Iron Barbs",
 		rating: 3,
-		num: "160"
+		num: 160
 	},
 	"ironfist": {
 		desc: "This Pokemon receives a 20% power boost for the following attacks: Bullet Punch, Comet Punch, Dizzy Punch, Drain Punch, Dynamicpunch, Fire Punch, Focus Punch, Hammer Arm, Ice Punch, Mach Punch, Mega Punch, Meteor Mash, Shadow Punch, Sky Uppercut, and Thunderpunch. Sucker Punch, which is known Ambush in Japan, is not boosted.",
@@ -900,7 +900,7 @@ exports.BattleAbilities = {
 		id: "ironfist",
 		name: "Iron Fist",
 		rating: 3,
-		num: "89"
+		num: 89
 	},
 	"justified": {
 		desc: "Will raise the user's Attack stat one level when hit by any Dark-type moves. Unlike other abilities with immunity to certain typed moves, the user will still receive damage from the attack. Justified will raise Attack one level for each hit of a multi-hit move like Beat Up.",
@@ -912,7 +912,7 @@ exports.BattleAbilities = {
 		id: "justified",
 		name: "Justified",
 		rating: 2,
-		num: "154"
+		num: 154
 	},
 	"keeneye": {
 		desc: "This Pokemon's Accuracy cannot be lowered.",
@@ -926,7 +926,7 @@ exports.BattleAbilities = {
 		id: "keeneye",
 		name: "Keen Eye",
 		rating: 1,
-		num: "51"
+		num: 51
 	},
 	"klutz": {
 		desc: "This Pokemon ignores both the positive and negative effects of its held item, other than the speed-halving effects of Iron Ball.",
@@ -936,7 +936,7 @@ exports.BattleAbilities = {
 		id: "klutz",
 		name: "Klutz",
 		rating: 1.5,
-		num: "103"
+		num: 103
 	},
 	"leafguard": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, it cannot become poisoned, burned, paralyzed or put to sleep (other than user-induced Rest). Leaf Guard does not heal status effects that existed before Sunny Day came into effect.",
@@ -953,7 +953,7 @@ exports.BattleAbilities = {
 		id: "leafguard",
 		name: "Leaf Guard",
 		rating: 3,
-		num: "102"
+		num: 102
 	},
 	"levitate": {
 		desc: "This Pokemon is immune to Ground-type attacks, Spikes, Toxic Spikes and the Arena Trap ability; it loses these immunities while holding Iron Ball, after using Ingrain or if Gravity is in effect.",
@@ -963,7 +963,7 @@ exports.BattleAbilities = {
 		id: "levitate",
 		name: "Levitate",
 		rating: 3.5,
-		num: "26"
+		num: 26
 	},
 	"lightmetal": {
 		desc: "The user's weight is halved. This decreases the damage taken from Low Kick and Grass Knot, and also lowers user's base power of Heavy Slam and Heat Crash, due these moves being calculated by the target and user's weight.",
@@ -973,7 +973,7 @@ exports.BattleAbilities = {
 		id: "lightmetal",
 		name: "Light Metal",
 		rating: 1,
-		num: "135"
+		num: 135
 	},
 	"lightningrod": {
 		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment. The user is immune to Electric and its Special Attack is increased one stage when hit by one.",
@@ -986,7 +986,7 @@ exports.BattleAbilities = {
 		id: "lightningrod",
 		name: "Lightningrod",
 		rating: 3,
-		num: "32"
+		num: 32
 	},
 	"limber": {
 		desc: "This Pokemon cannot become paralyzed.",
@@ -996,7 +996,7 @@ exports.BattleAbilities = {
 		id: "limber",
 		name: "Limber",
 		rating: 2,
-		num: "7"
+		num: 7
 	},
 	"liquidooze": {
 		desc: "When another Pokemon uses Absorb, Drain Punch, Dream Eater, Giga Drain, Leech Life, Leech Seed or Mega Drain against this Pokemon, the attacking Pokemon loses the amount of health that it would have gained.",
@@ -1011,7 +1011,7 @@ exports.BattleAbilities = {
 		},
 		name: "Liquid Ooze",
 		rating: 1,
-		num: "64"
+		num: 64
 	},
 	"magicbounce": {
 		desc: "Non-damaging moves are reflected back at the user.",
@@ -1040,7 +1040,7 @@ exports.BattleAbilities = {
 			duration: 1
 		},
 		rating: 5,
-		num: "156"
+		num: 156
 	},
 	"magicguard": {
 		desc: "Prevents all damage except from direct attacks.",
@@ -1052,7 +1052,7 @@ exports.BattleAbilities = {
 		id: "magicguard",
 		name: "Magic Guard",
 		rating: 4.5,
-		num: "98"
+		num: 98
 	},
 	"magmaarmor": {
 		desc: "This Pokemon cannot become frozen.",
@@ -1062,7 +1062,7 @@ exports.BattleAbilities = {
 		id: "magmaarmor",
 		name: "Magma Armor",
 		rating: 0.5,
-		num: "40"
+		num: 40
 	},
 	"magnetpull": {
 		desc: "When this Pokemon enters the field, Steel-type opponents cannot switch out nor flee the battle unless they are holding Shed Shell or use the attacks U-Turn or Baton Pass.",
@@ -1074,7 +1074,7 @@ exports.BattleAbilities = {
 		id: "magnetpull",
 		name: "Magnet Pull",
 		rating: 5,
-		num: "42"
+		num: 42
 	},
 	"marvelscale": {
 		desc: "When this Pokemon becomes burned, poisoned (including Toxic), paralyzed, frozen or put to sleep (including self-induced sleep via Rest), its Defense receives a 50% boost.",
@@ -1086,14 +1086,14 @@ exports.BattleAbilities = {
 		id: "marvelscale",
 		name: "Marvel Scale",
 		rating: 3,
-		num: "63"
+		num: 63
 	},
 	"minus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Plus ability.",
 		id: "minus",
 		name: "Minus",
 		rating: 0,
-		num: "58"
+		num: 58
 	},
 	"moldbreaker": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Herbivore, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
@@ -1115,7 +1115,7 @@ exports.BattleAbilities = {
 		id: "moldbreaker",
 		name: "Mold Breaker",
 		rating: 3,
-		num: "104"
+		num: 104
 	},
 	"moody": {
 		desc: "Causes the Pokemon to raise one of its stats by two stages, while another stat is lowered by one stage at the end of each turn. These stats include accuracy and evasion.",
@@ -1148,7 +1148,7 @@ exports.BattleAbilities = {
 		id: "moody",
 		name: "Moody",
 		rating: 5,
-		num: "141"
+		num: 141
 	},
 	"motordrive": {
 		desc: "This Pokemon is immune to all Electric-type attacks, including Thunder Wave, and if an Electric-type attack hits this Pokemon, it receives a one-level Speed boost.",
@@ -1161,7 +1161,7 @@ exports.BattleAbilities = {
 		id: "motordrive",
 		name: "Motor Drive",
 		rating: 3,
-		num: "78"
+		num: 78
 	},
 	"moxie": {
 		desc: "When a Pokemon with Moxie faints another Pokemon, its Attack rises by one stage.",
@@ -1173,7 +1173,7 @@ exports.BattleAbilities = {
 		id: "moxie",
 		name: "Moxie",
 		rating: 4,
-		num: "153"
+		num: 153
 	},
 	"multiscale": {
 		desc: "Lowers damage taken by half when at maximum HP.",
@@ -1186,7 +1186,7 @@ exports.BattleAbilities = {
 		id: "multiscale",
 		name: "Multiscale",
 		rating: 4,
-		num: "136"
+		num: 136
 	},
 	"multitype": {
 		desc: "This Pokemon changes its type to match its corresponding held Plate; this ability only works for Arceus, prevents the removal of Arceus' held item and cannot be Skill Swapped, Role Played or Traced.",
@@ -1205,7 +1205,7 @@ exports.BattleAbilities = {
 		id: "multitype",
 		name: "Multitype",
 		rating: 5,
-		num: "121"
+		num: 121
 	},
 	"mummy": {
 		desc: "When the user is attacked by a contact move, the opposing Pokemon's ability is turned into Mummy as well. Multitype, Wonder Guard and Mummy itself are the only abilities not affected by Mummy. The effect of Mummy is not removed by Mold Breaker, Turboblaze, or Teravolt.",
@@ -1219,7 +1219,7 @@ exports.BattleAbilities = {
 			}
 		},
 		rating: 1,
-		num: "152"
+		num: 152
 	},
 	"naturalcure": {
 		desc: "When this Pokemon switches out of battle, it is cured of poison (including Toxic), paralysis, burn, freeze and sleep (including self-induced Rest).",
@@ -1229,7 +1229,7 @@ exports.BattleAbilities = {
 		id: "naturalcure",
 		name: "Natural Cure",
 		rating: 4,
-		num: "30"
+		num: 30
 	},
 	"noguard": {
 		desc: "Every attack used by or against this Pokemon will always hit.",
@@ -1244,7 +1244,7 @@ exports.BattleAbilities = {
 		id: "noguard",
 		name: "No Guard",
 		rating: 4.1,
-		num: "99"
+		num: 99
 	},
 	"normalize": {
 		desc: "Makes all of this Pokemon's attacks Normal-typed.",
@@ -1254,7 +1254,7 @@ exports.BattleAbilities = {
 		id: "normalize",
 		name: "Normalize",
 		rating: -1,
-		num: "96"
+		num: 96
 	},
 	"oblivious": {
 		desc: "This Pokemon cannot become attracted to another Pokemon.",
@@ -1273,7 +1273,7 @@ exports.BattleAbilities = {
 		id: "oblivious",
 		name: "Oblivious",
 		rating: 0.5,
-		num: "12"
+		num: 12
 	},
 	"overcoat": {
 		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail.",
@@ -1283,7 +1283,7 @@ exports.BattleAbilities = {
 		id: "overcoat",
 		name: "Overcoat",
 		rating: 1,
-		num: "142"
+		num: 142
 	},
 	"overgrow": {
 		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Grass-type attacks receive a 50% boost in power.",
@@ -1296,7 +1296,7 @@ exports.BattleAbilities = {
 		id: "overgrow",
 		name: "Overgrow",
 		rating: 2,
-		num: "65"
+		num: 65
 	},
 	"owntempo": {
 		desc: "This Pokemon cannot become confused.",
@@ -1309,7 +1309,7 @@ exports.BattleAbilities = {
 		id: "owntempo",
 		name: "Own Tempo",
 		rating: 1,
-		num: "20"
+		num: 20
 	},
 	"pickup": {
 		desc: "If an opponent uses a consumable item, Pickup will give the Pokemon the item used, if it is not holding an item. If multiple Pickup Pokemon are in play, one will pick up a copy of the used Berry, and may or may not use it immediately. Works on Berries, Gems, Absorb Bulb, Focus Sash, Herbs, Cell Battery, Red Card, and anything that is thrown with Fling.",
@@ -1328,7 +1328,7 @@ exports.BattleAbilities = {
 		id: "pickup",
 		name: "Pickup",
 		rating: 0,
-		num: "53"
+		num: 53
 	},
 	"pickpocket": {
 		desc: "Steals attacking Pokemon's held item on contact.",
@@ -1351,14 +1351,14 @@ exports.BattleAbilities = {
 		id: "pickpocket",
 		name: "Pickpocket",
 		rating: 1,
-		num: "124"
+		num: 124
 	},
 	"plus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Minus ability.",
 		id: "plus",
 		name: "Plus",
 		rating: 0,
-		num: "57"
+		num: 57
 	},
 	"poisonheal": {
 		desc: "If this Pokemon becomes poisoned or Toxic Poisoned, it will recover one-eighth of its max HP after each turn.",
@@ -1371,7 +1371,7 @@ exports.BattleAbilities = {
 		id: "poisonheal",
 		name: "Poison Heal",
 		rating: 4,
-		num: "90"
+		num: 90
 	},
 	"poisonpoint": {
 		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become poisoned.",
@@ -1385,7 +1385,7 @@ exports.BattleAbilities = {
 		id: "poisonpoint",
 		name: "Poison Point",
 		rating: 2,
-		num: "38"
+		num: 38
 	},
 	"poisontouch": {
 		desc: "The contact-based attacks from a Pokemon with Poison Touch have a 30% chance of poisoning the target.",
@@ -1403,7 +1403,7 @@ exports.BattleAbilities = {
 		id: "poisontouch",
 		name: "Poison Touch",
 		rating: 2,
-		num: "143"
+		num: 143
 	},
 	"prankster": {
 		desc: "Increases the priority of non-damaging moves by 1.",
@@ -1416,7 +1416,7 @@ exports.BattleAbilities = {
 		id: "prankster",
 		name: "Prankster",
 		rating: 4,
-		num: "158"
+		num: 158
 	},
 	"pressure": {
 		desc: "When an opponent uses a move that affects this Pokemon, an additional PP is required for the opponent to use that move.",
@@ -1430,7 +1430,7 @@ exports.BattleAbilities = {
 		id: "pressure",
 		name: "Pressure",
 		rating: 1,
-		num: "46"
+		num: 46
 	},
 	"purepower": {
 		desc: "This Pokemon's Attack stat is doubled. Therefore, if this Pokemon's Attack stat on the status screen is 200, it effectively has an Attack stat of 400; which is then subject to the full range of stat boosts and reductions.",
@@ -1440,7 +1440,7 @@ exports.BattleAbilities = {
 		id: "purepower",
 		name: "Pure Power",
 		rating: 5,
-		num: "74"
+		num: 74
 	},
 	"quickfeet": {
 		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed, asleep (including self-induced Rest) or frozen, its Speed stat receives a 50% boost; the paralysis status' Speed drop is also ignored.",
@@ -1452,7 +1452,7 @@ exports.BattleAbilities = {
 		id: "quickfeet",
 		name: "Quick Feet",
 		rating: 3,
-		num: "95"
+		num: 95
 	},
 	"raindish": {
 		desc: "If active while Rain Dance is in effect, this Pokemon recovers one-sixteenth of its max HP after each turn.",
@@ -1464,7 +1464,7 @@ exports.BattleAbilities = {
 		id: "raindish",
 		name: "Rain Dish",
 		rating: 3,
-		num: "44"
+		num: 44
 	},
 	"rattled": {
 		desc: "Raises the user's Speed one stage when hit by a Dark-, Bug-, or Ghost-type move.",
@@ -1476,7 +1476,7 @@ exports.BattleAbilities = {
 		id: "rattled",
 		name: "Rattled",
 		rating: 2,
-		num: "155"
+		num: 155
 	},
 	"reckless": {
 		desc: "When this Pokemon uses an attack that causes recoil damage, or an attack that has a chance to cause recoil damage such as Jump Kick and Hi Jump Kick, the attacks's power receives a 20% boost.",
@@ -1489,7 +1489,7 @@ exports.BattleAbilities = {
 		id: "reckless",
 		name: "Reckless",
 		rating: 3,
-		num: "120"
+		num: 120
 	},
 	"regenerator": {
 		desc: "Causes the user to restore HP by 1/3 of its maximum when switching out.",
@@ -1499,7 +1499,7 @@ exports.BattleAbilities = {
 		id: "regenerator",
 		name: "Regenerator",
 		rating: 4.5,
-		num: "144"
+		num: 144
 	},
 	"rivalry": {
 		desc: "Increases base power of Physical and Special attacks by 25% if the opponent is the same gender, but decreases base power by 25% if opponent is the opposite gender.",
@@ -1517,7 +1517,7 @@ exports.BattleAbilities = {
 		id: "rivalry",
 		name: "Rivalry",
 		rating: 2.5,
-		num: "79"
+		num: 79
 	},
 	"rockhead": {
 		desc: "This Pokemon does not receive recoil damage unless it uses Struggle, it misses with Jump Kick or Hi Jump Kick or it is holding Life Orb, Jaboca Berry or Rowap Berry.",
@@ -1527,7 +1527,7 @@ exports.BattleAbilities = {
 		id: "rockhead",
 		name: "Rock Head",
 		rating: 3.5,
-		num: "69"
+		num: 69
 	},
 	"roughskin": {
 		desc: "Causes recoil damage equal to 1/8 of the opponent's max HP if an opponent directly attacks.",
@@ -1539,14 +1539,14 @@ exports.BattleAbilities = {
 		id: "roughskin",
 		name: "Rough Skin",
 		rating: 3,
-		num: "24"
+		num: 24
 	},
 	"runaway": {
 		desc: "Unless this Pokemon is under the effects of a trapping move or ability, such as Mean Look or Shadow Tag, it will escape from wild Pokemon battles without fail.",
 		id: "runaway",
 		name: "Run Away",
 		rating: 0,
-		num: "50"
+		num: 50
 	},
 	"sandforce": {
 		desc: "Raises the power of Rock, Ground, and Steel-type moves by 30% while a Sandstorm is in effect. It also gives the user immunity to damage from Sandstorm.",
@@ -1564,7 +1564,7 @@ exports.BattleAbilities = {
 		id: "sandforce",
 		name: "Sand Force",
 		rating: 3,
-		num: "159"
+		num: 159
 	},
 	"sandrush": {
 		desc: "Doubles Speed in a Sandstorm, and makes the Pokemon immune to Sandstorm damage.",
@@ -1579,7 +1579,7 @@ exports.BattleAbilities = {
 		id: "sandrush",
 		name: "Sand Rush",
 		rating: 3.5,
-		num: "146"
+		num: 146
 	},
 	"sandstream": {
 		desc: "When this Pokemon enters the battlefield, it causes a permanent Sandstorm that can only be stopped by Air Lock, Cloud Nine or another weather condition.",
@@ -1590,7 +1590,7 @@ exports.BattleAbilities = {
 		id: "sandstream",
 		name: "Sand Stream",
 		rating: 5,
-		num: "45"
+		num: 45
 	},
 	"sandveil": {
 		desc: "If active while Sandstorm is in effect, this Pokemon's Evasion receives a 20% boost; if this Pokemon has a typing that would normally take damage from Sandstorm, this Pokemon is also immune to Sandstorm's damage.",
@@ -1607,7 +1607,7 @@ exports.BattleAbilities = {
 		id: "sandveil",
 		name: "Sand Veil",
 		rating: 3,
-		num: "8"
+		num: 8
 	},
 	"sapsipper": {
 		desc: "When a Pokemon with Sap Sipper is hit with a Grass-type attack, its attack is increased by one level, and the move itself has no effect. If hit by a multi-hit attack like Bullet Seed, it will increase attack by one stage for each hit. The only Grass-type move that will not activate Sap Sipper is Aromatherapy.",
@@ -1620,7 +1620,7 @@ exports.BattleAbilities = {
 		id: "sapsipper",
 		name: "Sap Sipper",
 		rating: 3,
-		num: "157"
+		num: 157
 	},
 	"scrappy": {
 		desc: "This Pokemon has the ability to hit Ghost-type Pokemon with Normal-type and Fighting-type moves. Effectiveness of these moves takes into account the Ghost-type Pokemon's other weaknesses and resistances.",
@@ -1633,7 +1633,7 @@ exports.BattleAbilities = {
 		id: "scrappy",
 		name: "Scrappy",
 		rating: 3,
-		num: "113"
+		num: 113
 	},
 	"serenegrace": {
 		desc: "The side effects of this Pokemon's attack occur twice as often. For example, if this Pokemon uses Ice Beam, it will have a 20% chance to freeze its target.",
@@ -1648,7 +1648,7 @@ exports.BattleAbilities = {
 		id: "serenegrace",
 		name: "Serene Grace",
 		rating: 4,
-		num: "32"
+		num: 32
 	},
 	"shadowtag": {
 		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they have the same ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn.",
@@ -1660,7 +1660,7 @@ exports.BattleAbilities = {
 		id: "shadowtag",
 		name: "Shadow Tag",
 		rating: 5,
-		num: "23"
+		num: 23
 	},
 	"shedskin": {
 		desc: "After each turn, this Pokemon has a 33% chance to heal itself from poison (including Toxic), paralysis, burn, freeze or sleep (including self-induced Rest).",
@@ -1675,7 +1675,7 @@ exports.BattleAbilities = {
 		id: "shedskin",
 		name: "Shed Skin",
 		rating: 3,
-		num: "61"
+		num: 61
 	},
 	"sheerforce": {
 		desc: "Raises the base power of all moves that have any secondary effects by 30%, but the secondary effects are ignored. However, this ability is not applied to moves that have a negative effect on the user, such as recoil, two-turn moves, and stat reduction after using certain moves. If a Pokemon with Sheer Force is holding a Life Orb and uses an attack that would be boosted by Sheer Force, then the move gains both boosts but the user receives no recoil damage.",
@@ -1690,7 +1690,7 @@ exports.BattleAbilities = {
 		id: "sheerforce",
 		name: "Sheer Force",
 		rating: 4,
-		num: "125"
+		num: 125
 	},
 	"shellarmor": {
 		desc: "Critical Hits cannot strike this Pokemon.",
@@ -1698,7 +1698,7 @@ exports.BattleAbilities = {
 		id: "shellarmor",
 		name: "Shell Armor",
 		rating: 1,
-		num: "75"
+		num: 75
 	},
 	"shielddust": {
 		desc: "If the opponent uses a move that has secondary effects that affect this Pokemon in addition to damage, the move's secondary effects will not trigger. (For example, an Ice Beam will lose its 10% chance to freeze this Pokemon.)",
@@ -1709,7 +1709,7 @@ exports.BattleAbilities = {
 		id: "shielddust",
 		name: "Shield Dust",
 		rating: 2,
-		num: "19"
+		num: 19
 	},
 	"simple": {
 		desc: "This Pokemon doubles all of its positive and negative stat modifiers. For example, if this Pokemon uses Curse, its Attack and Defense stats each receive a two-level increase while its Speed stat receives a two-level decrease.",
@@ -1721,7 +1721,7 @@ exports.BattleAbilities = {
 		id: "simple",
 		name: "Simple",
 		rating: 4,
-		num: "86"
+		num: 86
 	},
 	"skilllink": {
 		desc: "When this Pokemon uses an attack that strikes multiple times in one turn, such as Fury Attack or Spike Cannon, such attacks will always strike for the maximum number of hits.",
@@ -1733,7 +1733,7 @@ exports.BattleAbilities = {
 		id: "skilllink",
 		name: "Skill Link",
 		rating: 4,
-		num: "92"
+		num: 92
 	},
 	"slowstart": {
 		desc: "After this Pokemon switches into the battle, its Attack and Speed stats are halved for five turns; for example, if this Pokemon has an Attack stat of 400, it will effectively have an Attack stat of 200 until the effects of Slow Start wear off.",
@@ -1756,7 +1756,7 @@ exports.BattleAbilities = {
 		id: "slowstart",
 		name: "Slow Start",
 		rating: -2,
-		num: "112"
+		num: 112
 	},
 	"sniper": {
 		desc: "When this Pokemon lands a Critical Hit, the base power of its attack is tripled rather than doubled.",
@@ -1766,7 +1766,7 @@ exports.BattleAbilities = {
 		id: "sniper",
 		name: "Sniper",
 		rating: 1,
-		num: "97"
+		num: 97
 	},
 	"snowcloak": {
 		desc: "If active while Hail is in effect, this Pokemon's Evasion receives a 20% boost; if this Pokemon has a typing that would normally take damage from Hail, this Pokemon is also immune to Hail's damage.",
@@ -1783,7 +1783,7 @@ exports.BattleAbilities = {
 		id: "snowcloak",
 		name: "Snow Cloak",
 		rating: 2,
-		num: "81"
+		num: 81
 	},
 	"snowwarning": {
 		desc: "When this Pokemon enters the battlefield, it causes a permanent Hail that can only be stopped by Air Lock, Cloud Nine or another weather condition.",
@@ -1794,7 +1794,7 @@ exports.BattleAbilities = {
 		id: "snowwarning",
 		name: "Snow Warning",
 		rating: 4.5,
-		num: "117"
+		num: 117
 	},
 	"solarpower": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its Special Attack temporarily receives a 50% boost but this Pokemon also receives damage equal to one-eighth of its max HP after each turn.",
@@ -1811,7 +1811,7 @@ exports.BattleAbilities = {
 		id: "solarpower",
 		name: "Solar Power",
 		rating: 3,
-		num: "94"
+		num: 94
 	},
 	"solidrock": {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
@@ -1824,7 +1824,7 @@ exports.BattleAbilities = {
 		id: "solidrock",
 		name: "Solid Rock",
 		rating: 3,
-		num: "116"
+		num: 116
 	},
 	"soundproof": {
 		desc: "This Pokemon is immune to the effects of the sound-related moves Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar.",
@@ -1834,7 +1834,7 @@ exports.BattleAbilities = {
 		id: "soundproof",
 		name: "Soundproof",
 		rating: 2,
-		num: "43"
+		num: 43
 	},
 	"speedboost": {
 		desc: "While this Pokemon is active, its Speed increases by one stage at the end of every turn; the six stage maximum for stat boosts is still in effect.",
@@ -1848,7 +1848,7 @@ exports.BattleAbilities = {
 		id: "speedboost",
 		name: "Speed Boost",
 		rating: 4.5,
-		num: "3"
+		num: 3
 	},
 	"stall": {
 		desc: "This Pokemon attacks last in its priority bracket.",
@@ -1858,7 +1858,7 @@ exports.BattleAbilities = {
 		id: "stall",
 		name: "Stall",
 		rating: -1,
-		num: "100"
+		num: 100
 	},
 	"static": {
 		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become paralyzed.",
@@ -1872,7 +1872,7 @@ exports.BattleAbilities = {
 		id: "static",
 		name: "Static",
 		rating: 2,
-		num: "9"
+		num: 9
 	},
 	"steadfast": {
 		desc: "If this Pokemon is made to flinch, its Speed receives a one-level boost.",
@@ -1882,7 +1882,7 @@ exports.BattleAbilities = {
 		id: "steadfast",
 		name: "Steadfast",
 		rating: 1,
-		num: "80"
+		num: 80
 	},
 	"stench": {
 		desc: "Damaging moves have a 10% chance to flinch.",
@@ -1902,7 +1902,7 @@ exports.BattleAbilities = {
 		id: "stench",
 		name: "Stench",
 		rating: 0,
-		num: "1"
+		num: 1
 	},
 	"stickyhold": {
 		desc: "Opponents cannot remove items from this Pokemon.",
@@ -1912,7 +1912,7 @@ exports.BattleAbilities = {
 		id: "stickyhold",
 		name: "Sticky Hold",
 		rating: 1,
-		num: "60"
+		num: 60
 	},
 	"stormdrain": {
 		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball. The user is immune to Water and its Special Attack is increased one stage when hit by one.",
@@ -1925,7 +1925,7 @@ exports.BattleAbilities = {
 		id: "stormdrain",
 		name: "Storm Drain",
 		rating: 3,
-		num: "114"
+		num: 114
 	},
 	"sturdy": {
 		desc: "This Pokemon is immune to OHKO moves, and will survive with 1 HP if hit by an attack which would KO it while at full health.",
@@ -1943,7 +1943,7 @@ exports.BattleAbilities = {
 		id: "sturdy",
 		name: "Sturdy",
 		rating: 3,
-		num: "5"
+		num: 5
 	},
 	"suctioncups": {
 		desc: "This Pokemon cannot be forced out.",
@@ -1951,7 +1951,7 @@ exports.BattleAbilities = {
 		id: "suctioncups",
 		name: "Suction Cups",
 		rating: 3,
-		num: "21"
+		num: 21
 	},
 	"superluck": {
 		desc: "Raises the chance of this Pokemon scoring a Critical Hit.",
@@ -1961,7 +1961,7 @@ exports.BattleAbilities = {
 		id: "superluck",
 		name: "Super Luck",
 		rating: 1,
-		num: "105"
+		num: 105
 	},
 	"swarm": {
 		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Bug-type attacks receive a 50% boost in power.",
@@ -1974,7 +1974,7 @@ exports.BattleAbilities = {
 		id: "swarm",
 		name: "Swarm",
 		rating: 2,
-		num: "68"
+		num: 68
 	},
 	"swiftswim": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, its speed is temporarily doubled.",
@@ -1986,7 +1986,7 @@ exports.BattleAbilities = {
 		id: "swiftswim",
 		name: "Swift Swim",
 		rating: 3.5,
-		num: "33"
+		num: 33
 	},
 	"synchronize": {
 		desc: "If an opponent burns, poisons or paralyzes this Pokemon, it receives the same condition.",
@@ -1998,7 +1998,7 @@ exports.BattleAbilities = {
 		id: "synchronize",
 		name: "Synchronize",
 		rating: 3,
-		num: "28"
+		num: 28
 	},
 	"tangledfeet": {
 		desc: "When this Pokemon is confused, its opponent's attacks have a 50% chance of missing.",
@@ -2010,7 +2010,7 @@ exports.BattleAbilities = {
 		id: "tangledfeet",
 		name: "Tangled Feet",
 		rating: 1,
-		num: "77"
+		num: 77
 	},
 	"technician": {
 		desc: "When this Pokemon uses an attack that has 60 Base Power or less, the move's Base Power receives a 50% boost. For example, a move with 60 Base Power effectively becomes a move with 90 Base Power.",
@@ -2024,14 +2024,14 @@ exports.BattleAbilities = {
 		id: "technician",
 		name: "Technician",
 		rating: 4,
-		num: "101"
+		num: 101
 	},
 	"telepathy": {
 		desc: "If a Pokemon has Telepathy, it will not take damage from its teammates' moves in double and triple battles.",
 		id: "telepathy",
 		name: "Telepathy",
 		rating: 0,
-		num: "140"
+		num: 140
 	},
 	"teravolt": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
@@ -2051,7 +2051,7 @@ exports.BattleAbilities = {
 		id: "teravolt",
 		name: "Teravolt",
 		rating: 3,
-		num: "164"
+		num: 164
 	},
 	"thickfat": {
 		desc: "This Pokemon receives halved damage from Ice-type and Fire-type attacks.",
@@ -2064,7 +2064,7 @@ exports.BattleAbilities = {
 		id: "thickfat",
 		name: "Thick Fat",
 		rating: 3,
-		num: "47"
+		num: 47
 	},
 	"tintedlens": {
 		desc: "Doubles the power of moves that are Not Very Effective against opponents.",
@@ -2078,7 +2078,7 @@ exports.BattleAbilities = {
 		id: "tintedlens",
 		name: "Tinted Lens",
 		rating: 4.5,
-		num: "110"
+		num: 110
 	},
 	"torrent": {
 		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Water-type attacks receive a 50% boost in power.",
@@ -2091,7 +2091,7 @@ exports.BattleAbilities = {
 		id: "torrent",
 		name: "Torrent",
 		rating: 2,
-		num: "67"
+		num: 67
 	},
 	"toxicboost": {
 		desc: "When the user is poisoned, its Attack stat is raised by 50%.",
@@ -2103,7 +2103,7 @@ exports.BattleAbilities = {
 		id: "toxicboost",
 		name: "Toxic Boost",
 		rating: 3,
-		num: "137"
+		num: 137
 	},
 	"trace": {
 		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability (except Multitype). This ability remains with this Pokemon until it leaves the field.",
@@ -2118,7 +2118,7 @@ exports.BattleAbilities = {
 		id: "trace",
 		name: "Trace",
 		rating: 3.5,
-		num: "36"
+		num: 36
 	},
 	"truant": {
 		desc: "After this Pokemon is switched into battle, it skips every other turn.",
@@ -2135,7 +2135,7 @@ exports.BattleAbilities = {
 		id: "truant",
 		name: "Truant",
 		rating: -2,
-		num: "54"
+		num: 54
 	},
 	"turboblaze": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
@@ -2155,7 +2155,7 @@ exports.BattleAbilities = {
 		id: "turboblaze",
 		name: "Turboblaze",
 		rating: 3,
-		num: "163"
+		num: 163
 	},
 	"unaware": {
 		desc: "This Pokemon ignores an opponent's stat boosts for Attack, Defense, Special Attack and Special Defense. These boosts will still be calculated if this Pokemon uses Punishment.",
@@ -2170,7 +2170,7 @@ exports.BattleAbilities = {
 			move.ignoreOffensive = true;
 		},
 		rating: 2,
-		num: "109"
+		num: 109
 	},
 	"unburden": {
 		desc: "Increases Speed by one level if this Pokemon loses its held item through usage (i.e. Berries) or via Thief, Knock Off, etc.",
@@ -2194,7 +2194,7 @@ exports.BattleAbilities = {
 		id: "unburden",
 		name: "Unburden",
 		rating: 3.5,
-		num: "84"
+		num: 84
 	},
 	"unnerve": {
 		desc: "Opposing Pokemon can't eat their Berries.",
@@ -2205,7 +2205,7 @@ exports.BattleAbilities = {
 		id: "unnerve",
 		name: "Unnerve",
 		rating: 1,
-		num: "127"
+		num: 127
 	},
 	"victorystar": {
 		desc: "Raises every friendly Pokemon's Accuracy, including this Pokemon's, by 10% (multiplied).",
@@ -2217,7 +2217,7 @@ exports.BattleAbilities = {
 		id: "victorystar",
 		name: "Victory Star",
 		rating: 2,
-		num: "162"
+		num: 162
 	},
 	"vitalspirit": {
 		desc: "This Pokemon cannot be put to sleep; this includes both opponent-induced sleep as well as user-induced sleep via Rest.",
@@ -2227,7 +2227,7 @@ exports.BattleAbilities = {
 		id: "vitalspirit",
 		name: "Vital Spirit",
 		rating: 1,
-		num: "72"
+		num: 72
 	},
 	"voltabsorb": {
 		desc: "When an Electric-type attack hits this Pokemon, it recovers 25% of its max HP.",
@@ -2241,7 +2241,7 @@ exports.BattleAbilities = {
 		id: "voltabsorb",
 		name: "Volt Absorb",
 		rating: 3,
-		num: "10"
+		num: 10
 	},
 	"waterabsorb": {
 		desc: "When a Water-type attack hits this Pokemon, it recovers 25% of its max HP.",
@@ -2255,7 +2255,7 @@ exports.BattleAbilities = {
 		id: "waterabsorb",
 		name: "Water Absorb",
 		rating: 3,
-		num: "11"
+		num: 11
 	},
 	"waterveil": {
 		desc: "This Pokemon cannot become burned.",
@@ -2265,7 +2265,7 @@ exports.BattleAbilities = {
 		id: "waterveil",
 		name: "Water Veil",
 		rating: 1.5,
-		num: "41"
+		num: 41
 	},
 	"weakarmor": {
 		desc: "Causes physical moves to lower the Pokemon's Defense and increase its Speed stat by one stage.",
@@ -2277,7 +2277,7 @@ exports.BattleAbilities = {
 		id: "weakarmor",
 		name: "Weak Armor",
 		rating: 0,
-		num: "133"
+		num: 133
 	},
 	"whitesmoke": {
 		desc: "Opponents cannot reduce this Pokemon's stats; they can, however, modify stat changes with Power Swap, Guard Swap and Heart Swap and inflict stat boosts with Swagger and Flatter. This ability does not prevent self-inflicted stat reductions. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon battles decreases by 50%.",
@@ -2293,7 +2293,7 @@ exports.BattleAbilities = {
 		id: "whitesmoke",
 		name: "White Smoke",
 		rating: 2,
-		num: "73"
+		num: 73
 	},
 	"wonderguard": {
 		desc: "This Pokemon only receives damage from attacks belonging to types that cause Super Effective to this Pokemon. Wonder Guard does not protect a Pokemon from status ailments (burn, freeze, paralysis, poison, sleep, Toxic or any of their side effects or damage), recoil damage nor the moves Beat Up, Bide, Doom Desire, Fire Fang, Future Sight, Hail, Leech Seed, Sandstorm, Spikes, Stealth Rock and Struggle. Wonder Guard cannot be Skill Swapped nor Role Played. Trace, however, does copy Wonder Guard.",
@@ -2319,7 +2319,7 @@ exports.BattleAbilities = {
 		id: "wonderguard",
 		name: "Wonder Guard",
 		rating: 5,
-		num: "25"
+		num: 25
 	},
 	"wonderskin": {
 		desc: "Causes the chance of a status move working to be halved. It does not affect moves that inflict status as a secondary effect like Thunder's chance to paralyze.",
@@ -2333,7 +2333,7 @@ exports.BattleAbilities = {
 		id: "wonderskin",
 		name: "Wonder Skin",
 		rating: 1,
-		num: "147"
+		num: 147
 	},
 	"zenmode": {
 		desc: "When Darmanitan's HP drops to below half, it will enter Zen Mode at the end of the turn. If it loses its ability, or recovers HP to above half while in Zen mode, it will change back. This ability only works on Darmanitan, even if it is copied by Role Play, Entrainment, or swapped with Skill Swap.",
@@ -2374,7 +2374,7 @@ exports.BattleAbilities = {
 		id: "zenmode",
 		name: "Zen Mode",
 		rating: -1,
-		num: "161"
+		num: 161
 	},
 
 	// CAP
@@ -2393,7 +2393,7 @@ exports.BattleAbilities = {
 		id: "mountaineer",
 		name: "Mountaineer",
 		rating: 3.5,
-		num: "-2"
+		num: -2
 	},
 	"rebound": {
 		desc: "It can reflect the effect of status moves when switching in.",
@@ -2422,7 +2422,7 @@ exports.BattleAbilities = {
 			duration: 1
 		},
 		rating: 4.5,
-		num: "-3"
+		num: -3
 	},
 	"persistent": {
 		desc: "Increases the duration of many field effects by two turns when used by this Pokémon.",
@@ -2430,6 +2430,6 @@ exports.BattleAbilities = {
 		name: "Persistent",
 		// implemented in the corresponding move
 		rating: 4,
-		num: "-4"
+		num: -4
 	}
 };
