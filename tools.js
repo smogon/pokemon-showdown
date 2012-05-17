@@ -42,14 +42,10 @@ function BattleTools() {
 			}
 			name = template.species || template.name || name;
 			if (BattleFormatsData[id]) {
-				template.tier = BattleFormatsData[id].tier;
-				template.isNonstandard = BattleFormatsData[id].isNonstandard;
-				template.viableMoves = BattleFormatsData[id].viableMoves;
-				template.requiredItem = BattleFormatsData[id].requiredItem;
-				template.eventPokemon = BattleFormatsData[id].eventPokemon;
+				Object.merge(template, BattleFormatsData[id]);
 			}
 			if (BattleLearnsets[id]) {
-				template.learnset = BattleLearnsets[id].learnset;
+				Object.merge(template, BattleLearnsets[id]);
 			}
 			if (!template.id) template.id = id;
 			if (!template.name) template.name = name;
