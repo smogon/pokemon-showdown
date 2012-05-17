@@ -122,6 +122,17 @@ exports.BattleFormats = {
 		name: "Haxmons",
 		ruleset: ['Hax Clause', 'Team Preview']
 	},
+	glitchmons: {
+		effectType: 'Format',
+		name: "Glitchmons",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon'],
+		banlist: ['Legal'],
+		mimicGlitch: true
+	},
 	debugmode: {
 		effectType: 'Format',
 		name: "Debug Mode",
