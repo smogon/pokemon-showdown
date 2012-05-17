@@ -130,7 +130,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon'],
-		banlist: ['Legal'],
+		banlist: ['Illegal'],
 		mimicGlitch: true
 	},
 	debugmode: {
