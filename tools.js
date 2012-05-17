@@ -236,8 +236,11 @@ function BattleTools() {
 
 
 	this.checkLearnset = function(move, template, lsetData) {
-		lsetData = lsetData || {};
+		lsetData = lsetData || {set:{},format:{}};
+		var set = lsetData.set;
+		var format = lsetData.format;
 		var alreadyChecked = {};
+		var result = false;
 		if (move.id) move = move.id;
 		do {
 			alreadyChecked[template.speciesid] = true;
@@ -249,7 +252,28 @@ function BattleTools() {
 					var lset = template.learnset['sketch'];
 					if (typeof lset === 'string') lset = [lset];
 					for (var i=0; i<lset.length; i++) if (lset[i].substr(1) !== 'E') return true;
-					return 1;
+					result = 1;
+				}
+				if (format.mimicGlitch && template.gen < 5 && template.abilities.DW !== selfT.getAbility(set.ability).name) {
+					var glitchMoves = {metronome:1, copycat:1, transform:1, mimic:1, assist:1};
+					var getGlitch = false;
+					for (var i in glitchMoves) {
+						if (template.learnset[i]) {
+							if (i === 'mimic' && selfT.getAbility(set.ability).gen == 4 && !template.prevo) {
+								// doesn't get the glitch
+							} else {
+								getGlitch = true;
+								break;
+							}
+						}
+					}
+					if (getGlitch) {
+						if (selfT.getMove(move).gen >= 5) {
+							result = 1;
+						} else {
+							return true;
+						}
+					}
 				}
 			}
 			if (template.speciesid === 'shaymin') {
@@ -260,7 +284,7 @@ function BattleTools() {
 				template = selfT.getTemplate(template.prevo);
 			}
 		} while (template && template.species && !alreadyChecked[template.speciesid]);
-		return false;
+		return result;
 	};
 	this.getBanlistTable = function(format, subformat, depth) {
 		var banlistTable;
@@ -465,6 +489,7 @@ function BattleTools() {
 			// in the cartridge-compliant set validator: formats.js:pokemon
 			set.moves = set.moves.slice(0,24);
 
+			var lsetData = {set:set, format:format};
 			for (var i=0; i<set.moves.length; i++) {
 				if (!set.moves[i]) continue;
 				set.moves[i] = ''+(set.moves[i]||'');
@@ -477,7 +502,7 @@ function BattleTools() {
 				}
 
 				if (banlistTable['illegal']) {
-					var lset = selfT.checkLearnset(move, template);
+					var lset = selfT.checkLearnset(move, template, lsetData);
 					if (!lset) {
 						problems.push(set.name+" ("+set.species+") can't learn "+move.name);
 					} else if (lset === 1) {
