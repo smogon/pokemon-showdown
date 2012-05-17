@@ -242,7 +242,11 @@ function BattleTools() {
 			alreadyChecked[template.speciesid] = true;
 			if (template.learnset) {
 				if (template.learnset[move]) {
-					return true;
+					// the combination of DW ability and gen 3-4 exclusive move is illegal
+					if (Tools.getAbility(set.ability).name !== template.abilities.DW) return true;
+					var lset = template.learnset[move];
+					if (typeof lset === 'string') lset = [lset];
+					for (var i=0; i<lset.length; i++) if (lset[i].substr(0,1) === '5') return true;
 				}
 				if (template.learnset['sketch']) {
 					var lset = template.learnset['sketch'];
