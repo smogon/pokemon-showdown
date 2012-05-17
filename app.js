@@ -51,6 +51,8 @@ if (process.argv[2] && parseInt(process.argv[2])) {
 }
 
 var io = require('socket.io').listen(config.port).set('log level', 1);
+console.log("Server started on port "+config.port);
+console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
 
 function getTime() {
 	return new Date().getTime();
