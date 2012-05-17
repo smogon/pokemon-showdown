@@ -358,7 +358,7 @@ exports.BattleScripts = {
 			var template = this.getTemplate(keys[i]);
 
 			if (!template || !template.name || !template.types) continue;
-			if (template.tier === 'CAP' && Math.random()*3>1) continue;
+			if ((template.tier === 'G4CAP' || template.tier === 'G5CAP') && Math.random()*5>1) continue;
 
 			if (ruleset && ruleset[0]==='PotD') {
 				var potd = this.getTemplate(config.potd);
