@@ -80,7 +80,7 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onHit: function(target, source, move) {
-			if ((move.type === 'Fire' && move.category !== 'Status') || move.id === 'scald') {
+			if (move.type === 'Fire' && move.category !== 'Status') {
 				this.add('-curestatus', target.id, 'frz');
 				target.setStatus('');
 			}
