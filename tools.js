@@ -494,6 +494,10 @@ function BattleTools() {
 			problems.push(set.name+" is in "+template.tier+", which is banned.");
 		}
 
+		if (setHas['gliscor'] && setHas['poisonheal'] && setHas['roost']) {
+			problems.push(set.name+" has an illegal move combination.");
+		}
+
 		if (teamHas) {
 			for (var i in setHas) {
 				teamHas[i] = true;
