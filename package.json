@@ -2,7 +2,6 @@
   "name": "Pokemon-Showdown",
   "version": "0.0.1",
   "dependencies": {
-    "long-stack-traces": ">=0.1.2",
     "request": ">=2.1.1",
     "socket.io": ">=0.8.7"
   },
