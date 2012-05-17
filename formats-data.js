@@ -90,7 +90,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","abilities":["blaze"],"moves":["scratch","growl","ember"]},
 			{"generation":4,"level":40,"gender":"M","nature":"Mild","abilities":["blaze"],"moves":["return","hiddenpower","quickattack","howl"]},
-			{"generation":4,"level":40,"gender":"M","nature":"Na�ve","abilities":["blaze"],"moves":["return","hiddenpower","quickattack","howl"]},
+			{"generation":4,"level":40,"gender":"M","nature":"Naive","abilities":["blaze"],"moves":["return","hiddenpower","quickattack","howl"]},
 			{"generation":4,"level":40,"gender":"M","nature":"Naughty","abilities":["blaze"],"moves":["return","hiddenpower","quickattack","howl"]},
 			{"generation":5,"level":10,"gender":"M","abilities":["solarpower"],"moves":["scratch","growl","ember","smokescreen"]},
 			{"generation":4,"level":40,"gender":"M","nature":"Hardy","abilities":["blaze"],"moves":["return","hiddenpower","quickattack","howl"]}
@@ -2072,7 +2072,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"earthquake":1,"outrage":1,"dragonclaw":1,"uturn":1,"roost":1,"substitute":1,"dragontail":1,"stoneedge":1,"firepunch":1},
 		eventPokemon: [
 			{"generation":3,"level":45,"abilities":["levitate"],"moves":["sandtomb","crunch","dragonbreath","screech"]},
-			{"generation":4,"level":50,"gender":"M","nature":"Na�ve","abilities":["levitate"],"moves":["dracometeor","uturn","earthquake","dragonclaw"]}
+			{"generation":4,"level":50,"gender":"M","nature":"Naive","abilities":["levitate"],"moves":["dracometeor","uturn","earthquake","dragonclaw"]}
 		],
 		tier: "UU"
 	},
