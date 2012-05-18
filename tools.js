@@ -260,7 +260,7 @@ function BattleTools() {
 					for (var i=0; i<lset.length; i++) if (lset[i].substr(1) !== 'E') return true;
 					result = 1;
 				}
-				if (format.mimicGlitch && template.gen < 5 && template.abilities.DW !== selfT.getAbility(set.ability).name) {
+				if (format.mimicGlitch && template.gen < 5 && !isDW) {
 					var glitchMoves = {metronome:1, copycat:1, transform:1, mimic:1, assist:1};
 					var getGlitch = false;
 					for (var i in glitchMoves) {
