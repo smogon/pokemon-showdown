@@ -248,7 +248,11 @@ function BattleTools() {
 					result = null; // DW illegality
 					var lset = template.learnset[move];
 					if (typeof lset === 'string') lset = [lset];
-					for (var i=0; i<lset.length; i++) if (lset[i].first() === '5') return true;
+					for (var i=0; i<lset.length; i++) {
+						if (lset[i].substr(0,1) === '5' && (!template.maleOnlyDreamWorld || lset[i] !== '5E')) {
+							return true;
+						}
+					}
 				}
 				if (template.learnset['sketch']) {
 					var lset = template.learnset['sketch'];
