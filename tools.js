@@ -469,16 +469,10 @@ function BattleTools() {
 			if (ability === template.abilities['DW']) {
 				source = 'DW';
 
-				unreleasedDW = {
-					Serperior: 1, Chandelure: 1, Ditto: 1,
-					Breloom: 1, Zapdos: 1, Feraligatr: 1, Gothitelle: 1,
-					'Ho-Oh': 1, Lugia: 1, Raikou: 1, Cinccino: 1
-				};
-
-				if (unreleasedDW[set.species] && banlistTable['Unreleased']) {
+				if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
 					problems.push(name+"'s Dream World ability is unreleased.");
-				} else if (template.num >= 494 && set.species !== 'Darmanitan' && set.species !== 'Munna') {
-					problems.push(name+"'s Dream World ability is unreleased.");
+				} else if (template.maleOnlyDreamWorld) {
+					set.gender = 'M';
 				}
 			}
 		}
