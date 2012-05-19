@@ -1663,8 +1663,42 @@ exports.BattleMovedex = {
 		name: "Conversion",
 		pp: 30,
 		priority: 0,
+		volatileStatus: 'conversion',
+		effect: {
+			onStart: function(pokemon) {
+				var possibleTypes = pokemon.moveset.map(function(val){
+					var move = this.getMove(val.id);
+					if (move.id !== 'conversion' && !pokemon.hasType(move.type)) {
+						return move.type;
+					}
+				}, this).compact();
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes.sample();
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onRestart: function(pokemon) {
+				var possibleTypes = pokemon.moveset.map(function(val){
+					var move = this.getMove(val.id);
+					if (move.id !== 'conversion' && !pokemon.hasType(move.type)) {
+						return move.type;
+					}
+				}, this).compact();
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes.sample();
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.types = [this.effectData.type];
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"conversion2": {
