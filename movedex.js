@@ -565,6 +565,9 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		priority: 0,
+		boosts: {
+			spe: 2
+		},
 		volatileStatus: 'autotomize',
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
@@ -574,9 +577,6 @@ exports.BattleMovedex = {
 			onModifyPokemon: function(pokemon) {
 				pokemon.weightkg /= 2;
 			}
-		},
-		boosts: {
-			spe: 2
 		},
 		secondary: false,
 		target: "self",
@@ -2133,11 +2133,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'destinybond',
 		effect: {
+			onStart: function(pokemon) {
+				this.add('-message', pokemon.name+' is trying to take its foe down with it! (placeholder)');
+			},
 			onFaint: function(target, source, effect) {
-				this.debug('Destiny Bond detected fainted pokemon');
 				if (!source || !effect) return;
-				this.debug('attacker: '+source.id+', bonded with: '+this.effectData.target.id+', lm: '+target.lastMove);
 				if (effect.effectType === 'Move' && target.lastMove === 'destinybond') {
+					this.add('-message', target.name+' took its attacker down with it! (placeholder)');
 					source.faint();
 				}
 			},
@@ -4363,7 +4365,7 @@ exports.BattleMovedex = {
 					pokemon.disabledMoves[m] = true;
 				}
 				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
-					this.add("message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
+					this.add("-message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
 				}
 			},
 			onEnd: function() {
@@ -7102,6 +7104,7 @@ exports.BattleMovedex = {
 				for (var i in boost) {
 					if (boost[i] < 0) {
 						delete boost[i];
+						this.add('-message', target.name+' is protected by the mist! (placeholder)');
 					}
 				}
 			},
@@ -10192,7 +10195,7 @@ exports.BattleMovedex = {
 					pokemon.movedThisTurn = true;
 				}
 				if (!applies) return false;
-				this.add("message", pokemon.name+" fell straight down! (placeholder)");
+				this.add('-message', pokemon.name+' fell straight down! (placeholder)');
 			},
 			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {
