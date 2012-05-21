@@ -362,16 +362,18 @@ exports.BattleScripts = {
 
 			if (ruleset && ruleset[0]==='PotD') {
 				var potd = this.getTemplate(config.potd);
-				if (i===1) template = potd;
-				else if (template.species === potd.species) continue; // No thanks, I've already got one
-			}
-			if (!template || !template.name || !template.types) continue;
-
-			if (template.species === 'Magikarp') {
-				template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
-			}
-			if (template.species === 'Delibird') {
-				template.viableMoves = {present:1, bestow:1};
+				if (i===1) {
+					template = potd;
+					if (!template || !template.name || !template.types) {
+						continue;
+					} else if (template.species === 'Magikarp') {
+						template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
+					} else if (template.species === 'Delibird') {
+						template.viableMoves = {present:1, bestow:1};
+					}
+				} else if (template.species === potd.species) {
+					continue; // No thanks, I've already got one
+				}
 			}
 
 			var moveKeys = Object.keys(template.viableMoves).randomize();
