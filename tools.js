@@ -238,19 +238,27 @@ function BattleTools() {
 		var alreadyChecked = {};
 		var result = false;
 		var isDW = (Tools.getAbility(set.ability).name === template.abilities.DW);
+		var recheck = false;
 		if (move.id) move = move.id;
 		do {
 			alreadyChecked[template.speciesid] = true;
 			if (template.learnset) {
 				if (template.learnset[move]) {
-					// the combination of DW ability and gen 3-4 exclusive move is illegal
-					if (!isDW) return true;
-					result = null; // DW illegality
 					var lset = template.learnset[move];
 					if (typeof lset === 'string') lset = [lset];
-					for (var i=0; i<lset.length; i++) {
-						if (lset[i].substr(0,1) === '5' && (!template.maleOnlyDreamWorld || lset[i] !== '5E')) {
-							return true;
+					if (isDW) {
+						// the combination of DW ability and gen 3-4 exclusive move is illegal
+						result = null; // DW illegality
+						for (var i=0; i<lset.length; i++) {
+							if (lset[i].substr(0,1) === '5' && (!template.maleOnlyDreamWorld || lset[i] !== '5E')) {
+								return true;
+							}
+						}
+					} else {
+						// the combination of non-DW ability and DW exclusive move is illegal
+						result = 0; // DW exclusivity
+						for (var i=0; i<lset.length; i++) {
+							if (lset[i] !== '5D') return true;
 						}
 					}
 				}
@@ -281,6 +289,15 @@ function BattleTools() {
 						}
 					}
 				}
+			}
+			if (Object.keys(template.abilities).length === 1 && BattleFormatsData[template.speciesid].dreamWorldRelease && !recheck) {
+				// Some Pokemon with no DW ability still have DW-exclusive moves (e.g. Gastly, Koffing, Chimecho)
+				isDW = !isDW;
+				recheck = true;
+				alreadyChecked[template.speciesid] = null;
+				continue;
+			} else {
+				recheck = false;
 			}
 			if (template.speciesid === 'shaymin') {
 				template = selfT.getTemplate('shayminsky');
@@ -509,6 +526,8 @@ function BattleTools() {
 						var problem = name+" can't learn "+move.name;
 						if (lset === null) {
 							problem = problem.concat(" if it's from the Dream World.");
+						} else if (lset === 0) {
+							problem = problem.concat(" if it's not from the Dream World.");
 						} else {
 							problem = problem.concat(".");
 						}
