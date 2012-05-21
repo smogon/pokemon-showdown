@@ -698,6 +698,7 @@ exports.BattleFormatsData = {
 	},
 	gastly: {
 		viableMoves: {"shadowball":1,"sludgebomb":1,"hiddenpowerfighting":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"willowisp":1,"trick":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	haunter: {
@@ -706,10 +707,12 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":23,"abilities":["levitate"],"moves":["spite","curse","nightshade","confuseray"]},
 			{"generation":5,"level":30,"abilities":["levitate"],"moves":["confuseray","suckerpunch","shadowpunch","payback"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	gengar: {
 		viableMoves: {"shadowball":1,"sludgebomb":1,"focusblast":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"willowisp":1,"trick":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	onix: {
@@ -1469,10 +1472,12 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","abilities":["levitate"],"moves":["growl","psywave","spite"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	mismagius: {
 		viableMoves: {"nastyplot":1,"substitute":1,"calmmind":1,"willowisp":1,"taunt":1,"healbell":1,"shadowball":1,"thunderbolt":1,"hiddenpowerfighting":1,"painsplit":1,"hiddenpowerground":1},
+		dreamWorldRelease: true,
 		tier: "UU"
 	},
 	unown: {
@@ -2530,14 +2535,17 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":45,"abilities":["levitate"],"moves":["pursuit","curse","willowisp","meanlook"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	dusclops: {
 		viableMoves: {"willowisp":1,"shadowsneak":1,"icebeam":1,"painsplit":1,"substitute":1,"seismictoss":1},
+		dreamWorldRelease: true,
 		tier: "UU"
 	},
 	dusknoir: {
 		viableMoves: {"willowisp":1,"shadowsneak":1,"icebeam":1,"painsplit":1,"substitute":1,"earthquake":1,"focuspunch":1},
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	tropius: {
@@ -2550,6 +2558,7 @@ exports.BattleFormatsData = {
 	},
 	chingling: {
 		viableMoves: {"hypnosis":1,"reflect":1,"lightscreen":1,"toxic":1,"wish":1,"psychic":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	chimecho: {
@@ -2557,6 +2566,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","abilities":["levitate"],"moves":["wrap","growl","astonish"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	absol: {
@@ -3168,6 +3178,7 @@ exports.BattleFormatsData = {
 	},
 	rotom: {
 		viableMoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"shadowball":1,"substitute":1,"painsplit":1,"hiddenpowerice":1,"hiddenpowerfighting":1,"hiddenpowerground":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"chargebeam":1},
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	rotomheat: {
