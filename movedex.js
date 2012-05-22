@@ -1712,6 +1712,56 @@ exports.BattleMovedex = {
 		name: "Conversion 2",
 		pp: 30,
 		priority: 0,
+		onTryHit: function(target, source) {
+			source.addVolatile("conversion2", target);
+		},
+		effect: {
+			onStart: function(pokemon, target, move) {
+				if (!target.lastMove) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				var possibleTypes = [];
+				var attackType = this.getMove(target.lastMove).type;
+				for (var type in BattleTypeChart) {
+					if (pokemon.hasType(type) || target.hasType(type)) continue;
+					var typeCheck = BattleTypeChart[type].damageTaken[attackType];
+					if (typeCheck === 2 || typeCheck === 3) {
+						possibleTypes.push(type);
+					}
+				}
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes.sample();
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onRestart: function(pokemon, target, move) {
+				if (!target.lastMove) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				var possibleTypes = [];
+				var attackType = this.getMove(target.lastMove).type;
+				for (var type in BattleTypeChart) {
+					if (pokemon.hasType(type) || target.hasType(type)) continue;
+					var typeCheck = BattleTypeChart[type].damageTaken[attackType];
+					if (typeCheck === 2 || typeCheck === 3) {
+						possibleTypes.push(type);
+					}
+				}
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes.sample();
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.types = [this.effectData.type];
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8067,7 +8117,7 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, effect) {
-				if (effect && (effect.id === 'feint' || effect.id === 'roleplay')) {
+				if (effect && (effect.id === 'feint' || effect.id === 'roleplay' || effect.id === 'conversion2')) {
 					return;
 				}
 				if (effect && effect.id === 'curse' && !effect.volatileStatus) {
