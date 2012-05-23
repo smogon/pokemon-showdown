@@ -123,7 +123,7 @@ exports.BattleScripts = {
 			this.damage(pokemon.lastDamage * move.recoil[0] / move.recoil[1], pokemon, target, 'recoil');
 		}
 		if (move.drain && pokemon.lastDamage) {
-			this.heal(pokemon.lastDamage * move.drain[0] / move.drain[1], pokemon, target, 'drain');
+			this.heal(Math.ceil(pokemon.lastDamage * move.drain[0] / move.drain[1]), pokemon, target, 'drain');
 		}
 		if (move.selfdestruct) {
 			this.faint(pokemon, pokemon, move);
@@ -245,7 +245,7 @@ exports.BattleScripts = {
 				this.boost(moveData.boosts, target, pokemon, move);
 			}
 			if (moveData.heal && !target.fainted) {
-				var d = target.heal(target.maxhp * moveData.heal[0] / moveData.heal[1]);
+				var d = target.heal(Math.ceil(target.maxhp * moveData.heal[0] / moveData.heal[1]));
 				if (!d) {
 					this.add('-fail', target);
 					return false;
