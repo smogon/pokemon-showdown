@@ -297,8 +297,8 @@ exports.BattleAbilities = {
 		desc: "30% chance of disabling one of the opponent's moves when attacked. This works even if the attacker is behind a Substitute, but will not activate if the Pokemon with Cursed Body is behind a Substitute.",
 		shortDesc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets Disabled.",
 		onAfterDamage: function(damage, target, source, move) {
-			if (source && source.volatiles['disable']) return;
-			if (source && source !== target) {
+			if (!source || source.volatiles['disable']) return;
+			if (source !== target) {
 				if (Math.random() * 10 < 3) {
 					source.addVolatile('disable');
 				}
