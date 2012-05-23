@@ -1898,11 +1898,10 @@ function Battle(roomid, format, rated) {
 			if (!effect) effect = selfB.effect;
 		}
 		effect = selfB.getEffect(effect);
-		damage = Math.ceil(damage);
+		damage = Math.floor(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
 		damage = selfB.runEvent('TryHeal', target, source, effect, damage);
 		if (!damage) return 0;
-		damage = Math.ceil(damage);
 		if (!target || !target.hp) return 0;
 		if (target.hp >= target.maxhp) return 0;
 		damage = target.heal(damage, source, effect);

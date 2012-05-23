@@ -185,7 +185,7 @@ exports.BattleItems = {
 		onTryHeal: function(damage, target, source, effect) {
 			var heals = {drain: 1, leechseed: 1, ingrain: 1, aquaring: 1};
 			if (heals[effect.id]) {
-				return damage * 1.3;
+				return Math.ceil((damage * 1.3) - 0.5); // Big Root rounds half down
 			}
 		},
 		desc: "Increases HP gained from draining moves by 30%."
