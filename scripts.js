@@ -245,7 +245,7 @@ exports.BattleScripts = {
 				this.boost(moveData.boosts, target, pokemon, move);
 			}
 			if (moveData.heal && !target.fainted) {
-				var d = target.heal(Math.ceil(target.maxhp * moveData.heal[0] / moveData.heal[1]));
+				var d = target.heal(Math.round(target.maxhp * moveData.heal[0] / moveData.heal[1]));
 				if (!d) {
 					this.add('-fail', target);
 					return false;
