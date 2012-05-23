@@ -1781,33 +1781,22 @@ function Battle(roomid, format, rated) {
 		}
 		if (!target || !target.hp) return 0;
 		effect = selfB.getEffect(effect);
-		boost = selfB.runEvent('Boost', target, source, effect, boost);
+		boost = selfB.runEvent('Boost', target, source, effect, Object.clone(boost));
 		for (var i in boost) {
 			var currentBoost = {};
 			currentBoost[i] = boost[i];
-			if (boost[i] > 0 && target.boostBy(currentBoost)) {
-				switch (effect.id) {
-				default:
-					if (effect.effectType === 'Move') {
-						selfB.add('-boost', target, i, boost[i]);
-					} else {
-						selfB.add('-boost', target, i, boost[i], '[from] '+effect.fullname);
-					}
-					break;
+			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
+				var msg = '-boost';
+				if (boost[i] < 0) {
+					msg = '-unboost';
+					boost[i] = -boost[i];
 				}
-				selfB.runEvent('AfterEachBoost', target, source, effect, currentBoost);
-			}
-		}
-		for (var i in boost) {
-			var currentBoost = {};
-			currentBoost[i] = boost[i];
-			if (boost[i] < 0 && target.boostBy(currentBoost)) {
 				switch (effect.id) {
 				default:
 					if (effect.effectType === 'Move') {
-						selfB.add('-unboost', target, i, -boost[i]);
+						selfB.add(msg, target, i, boost[i]);
 					} else {
-						selfB.add('-unboost', target, i, -boost[i], '[from] '+effect.fullname);
+						selfB.add(msg, target, i, boost[i], '[from] '+effect.fullname);
 					}
 					break;
 				}
