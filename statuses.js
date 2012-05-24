@@ -1,9 +1,3 @@
-function clampIntRange(num, min, max) {
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (typeof max !== 'undefined' && num > max) num = max;
-	return num;
-}
 exports.BattleStatuses = {
 	brn: {
 		effectType: 'Status',
@@ -116,7 +110,7 @@ exports.BattleStatuses = {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
-			this.damage(clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+			this.damage((pokemon.maxhp/16).clampIntRange(1) * this.effectData.stage);
 		}
 	},
 	confusion: {
