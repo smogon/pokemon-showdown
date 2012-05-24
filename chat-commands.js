@@ -659,6 +659,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 		target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
+		if (target.indexOf("<script") != -1) {
+			//This is a temporary fix to prevent malicious abuse of /announce
+			return false;
+		}
 		room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>'+target+'</b></div>');
 		return false;
 		break;
