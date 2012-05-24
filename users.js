@@ -67,7 +67,7 @@ function connectUser(name, socket, token, room) {
 		console.log("NEW USER: [guest] "+name);
 		user = new User(name, person, token);
 		var nameSuggestion = nameLock(user);
-		if(nameSuggestion!=user.name) {
+		if (nameSuggestion !== user.name) {
 			user.rename(nameSuggestion);
 		}
 	}
@@ -100,10 +100,7 @@ function exportUsergroups() {
 importUsergroups();
 
 function User(name, person, token) {
-	var selfP = this;
-
 	numUsers++;
-
 	if (!token) {
 		//token = ''+Math.floor(Math.random()*10000);
 		token = ''+person.socket.id;
@@ -131,26 +128,41 @@ function User(name, person, token) {
 	this.sides = {};
 	this.roomCount = {};
 
-	this.emit = function(message, data) {
+	// challenges
+	this.challengesFrom = {};
+	this.challengeTo = null;
+	this.lastChallenge = 0;
+
+	// initialize
+	users[this.userid] = this;
+	if (person.banned) {
+		this.destroy();
+	} else if (name) {
+		this.rename(name,token);
+	}
+}
+
+User.prototype = {
+	emit: function(message, data) {
 		var roomid = false;
 		if (data && data.room) {
 			roomid = data.room;
 		}
-		for (var i=0; i<selfP.people.length; i++) {
-			if (roomid && !selfP.people[i].rooms[roomid]) continue;
-			selfP.people[i].socket.emit(message, data);
+		for (var i=0; i<this.people.length; i++) {
+			if (roomid && !this.people[i].rooms[roomid]) continue;
+			this.people[i].socket.emit(message, data);
 		}
-	};
-	this.getIdentity = function() {
-		if (selfP.muted) {
-			return '!'+selfP.name;
-		} if(selfP.nameLocked()) {
-			return '#'+selfP.name;
+	},
+	getIdentity: function() {
+		if (this.muted) {
+			return '!'+this.name;
+		} if(this.nameLocked()) {
+			return '#'+this.name;
 		}
-		return selfP.group+selfP.name;
-	};
-	this.can = function(permission, target) {
-		var group = selfP.group;
+		return this.group+this.name;
+	},
+	can: function(permission, target) {
+		var group = this.group;
 		var groupData = config.groups[group];
 		var checkedGroups = {};
 		while (groupData) {
@@ -167,7 +179,7 @@ function User(name, person, token) {
 					return !!jurisdiction;
 				}
 				if (jurisdiction === true && permission !== 'jurisdiction') {
-					return selfP.can('jurisdiction', target);
+					return this.can('jurisdiction', target);
 				}
 				if (typeof jurisdiction !== 'string') {
 					return !!jurisdiction;
@@ -175,10 +187,10 @@ function User(name, person, token) {
 				if (jurisdiction.indexOf(target.group) >= 0) {
 					return true;
 				}
-				if (jurisdiction.indexOf('s') >= 0 && target === selfP) {
+				if (jurisdiction.indexOf('s') >= 0 && target === this) {
 					return true;
 				}
-				if (jurisdiction.indexOf('u') >= 0 && config.groupsranking.indexOf(selfP.group) > config.groupsranking.indexOf(target.group)) {
+				if (jurisdiction.indexOf('u') >= 0 && config.groupsranking.indexOf(this.group) > config.groupsranking.indexOf(target.group)) {
 					return true;
 				}
 				return false;
@@ -187,16 +199,16 @@ function User(name, person, token) {
 			groupData = config.groups[group];
 		}
 		return false;
-	};
+	},
 	// Special permission check is needed for promoting and demoting
-	this.checkPromotePermission = function(targetUser, targetGroupSymbol) {
-		if (!selfP.can('promote', targetUser)) return false;
+	checkPromotePermission: function(targetUser, targetGroupSymbol) {
+		if (!this.can('promote', targetUser)) return false;
 		var fakeUser = {group:targetGroupSymbol};
-		if (!selfP.can('promote', fakeUser)) return false;
+		if (!this.can('promote', fakeUser)) return false;
 		return true;
-	};
-	this.getNextGroupSymbol = function(isDown) {
-		var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(selfP.group) + (isDown ? -1 : 1)];
+	},
+	getNextGroupSymbol: function(isDown) {
+		var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(this.group) + (isDown ? -1 : 1)];
 		if (!nextGroupRank) {
 			if (isDown) {
 				return config.groupsranking[0];
@@ -205,131 +217,134 @@ function User(name, person, token) {
 			}
 		}
 		return nextGroupRank;
-	};
-	this.forceRename = function(name, authenticated) {
+	},
+	forceRename: function(name, authenticated) {
+		console.log('forceRename on '+name);
 		// skip the login server
 		var userid = name.toUserid();
 
-		if (users[userid] && users[userid] !== selfP) {
+		if (users[userid] && users[userid] !== this) {
 			return false;
 		}
 
-		if (selfP.named) selfP.prevNames[selfP.userid] = selfP.name;
+		if (this.named) this.prevNames[this.userid] = this.name;
 
-		if (typeof authenticated === 'undefined' && userid === selfP.userid) {
-			authenticated = selfP.authenticated;
+		if (typeof authenticated === 'undefined' && userid === this.userid) {
+			authenticated = this.authenticated;
 		}
 
-		if (userid !== selfP.userid) {
+		if (userid !== this.userid) {
 			// doing it this way mathematically ensures no cycles
 			delete prevUsers[userid];
-			prevUsers[selfP.userid] = userid;
+			prevUsers[this.userid] = userid;
 		}
 
-		selfP.name = name;
-		var oldid = selfP.userid;
+		this.name = name;
+		var oldid = this.userid;
 		delete users[oldid];
-		selfP.userid = userid;
-		users[selfP.userid] = selfP;
-		selfP.authenticated = !!authenticated;
+		this.userid = userid;
+		users[this.userid] = this;
+		this.authenticated = !!authenticated;
 
-		if (config.localsysop && selfP.ip === '127.0.0.1') {
-			selfP.group = config.groupsranking[config.groupsranking.length - 1];
+		if (config.localsysop && this.ip === '127.0.0.1') {
+			this.group = config.groupsranking[config.groupsranking.length - 1];
 		}
 
-		for (var i=0; i<selfP.people.length; i++) {
-			selfP.people[i].rename(name, oldid);
-			console.log(''+name+' renaming: socket '+i+' of '+selfP.people.length);
-			selfP.people[i].socket.emit('update', {
+		for (var i=0; i<this.people.length; i++) {
+			this.people[i].rename(name, oldid);
+			console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
+			this.people[i].socket.emit('update', {
 				name: name,
-				userid: selfP.userid,
+				userid: this.userid,
 				named: true,
-				token: token
+				token: this.token
 			});
 		}
-		var joining = !selfP.named;
-		selfP.named = true;
-		for (var i in selfP.roomCount) {
-			getRoom(i).rename(selfP, oldid, joining);
+		var joining = !this.named;
+		this.named = true;
+		for (var i in this.roomCount) {
+			getRoom(i).rename(this, oldid, joining);
 		}
 		rooms.lobby.usersChanged = true;
 		return true;
-	};
-	this.resetName = function() {
-		var name = 'Guest '+selfP.guestNum;
+	},
+	resetName: function() {
+		console.log('resetName');
+		var name = 'Guest '+this.guestNum;
 		var userid = name.toUserid();
-		if (selfP.userid === userid) return;
+		if (this.userid === userid) return;
 
 		var i = 0;
-		while (users[userid] && users[userid] !== selfP) {
-			selfP.guestNum++;
-			name = 'Guest '+selfP.guestNum;
+		while (users[userid] && users[userid] !== this) {
+			this.guestNum++;
+			name = 'Guest '+this.guestNum;
 			userid = name.toUserid();
 			if (i > 1000) return false;
 		}
 
-		if (selfP.named) selfP.prevNames[selfP.userid] = selfP.name;
+		if (this.named) this.prevNames[this.userid] = this.name;
 		delete prevUsers[userid];
-		prevUsers[selfP.userid] = userid;
+		prevUsers[this.userid] = userid;
 
-		selfP.name = name;
-		var oldid = selfP.userid;
+		this.name = name;
+		var oldid = this.userid;
 		delete users[oldid];
-		selfP.userid = userid;
-		users[selfP.userid] = selfP;
-		selfP.authenticated = false;
+		this.userid = userid;
+		users[this.userid] = this;
+		this.authenticated = false;
 
-		for (var i=0; i<selfP.people.length; i++) {
-			selfP.people[i].rename(name, oldid);
-			console.log(''+name+' renaming: socket '+i+' of '+selfP.people.length);
-			selfP.people[i].socket.emit('update', {
+		for (var i=0; i<this.people.length; i++) {
+			this.people[i].rename(name, oldid);
+			console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
+			this.people[i].socket.emit('update', {
 				name: name,
-				userid: selfP.userid,
+				userid: this.userid,
 				named: false,
-				token: token
+				token: this.token
 			});
 		}
-		selfP.named = false;
-		for (var i in selfP.roomCount) {
-			getRoom(i).rename(selfP, oldid, false);
+		this.named = false;
+		for (var i in this.roomCount) {
+			getRoom(i).rename(this, oldid, false);
 		}
 		return true;
-	};
+	},
 	/**
 	 *
 	 * @param name    The name you want
 	 * @param token   Login token
 	 * @param auth    Make sure this account will identify as registered
 	 */
-	this.rename = function(name, token, auth) {
-		for (var i in selfP.roomCount) {
+	rename: function(name, token, auth) {
+		console.log('rename on '+name);
+		for (var i in this.roomCount) {
 			var room = getRoom(i);
-			if (room.rated && (selfP.userid === room.rated.p1 || selfP.userid === room.rated.p2)) {
-				selfP.emit('message', "You can't change your name right now because you're in the middle of a rated battle.");
+			if (room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
+				this.emit('message', "You can't change your name right now because you're in the middle of a rated battle.");
 				return false;
 			}
 		}
 		if (!name) name = '';
 		name = sanitizeName(name);
-		console.log("checking name lock for: "+selfP.name+" renaming to "+name);
-		name = nameLock(selfP,name);
+		console.log("checking name lock for: "+this.name+" renaming to "+name);
+		name = nameLock(this,name);
 		console.log("returned "+name);
 		var userid = name.toUserid();
-		if (selfP.authenticated) auth = false;
+		if (this.authenticated) auth = false;
 
 		if (!userid) {
 			// technically it's not "taken", but if your client doesn't warn you
 			// before it gets to this stage it's your own fault
-			selfP.emit('nameTaken', {userid: '', reason: "You did not specify a name."});
+			this.emit('nameTaken', {userid: '', reason: "You did not specify a name."});
 			return false;
-		} else if (userid === selfP.userid && !auth) {
-			return selfP.forceRename(name, selfP.authenticated);
+		} else if (userid === this.userid && !auth) {
+			return this.forceRename(name, this.authenticated);
 		}
 		if (users[userid] && !users[userid].authenticated && users[userid].connected && !auth) {
-			selfP.emit('nameTaken', {userid:selfP.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
+			this.emit('nameTaken', {userid:this.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
 			return false;
 		}
-		selfP.renamePending = true;
+		this.renamePending = true;
 		// todo: sanitize
 
 		// This is ridiculous spaghetti code because I made a mistake in the authentication protocol earlier
@@ -340,9 +355,11 @@ function User(name, person, token) {
 		if (tokens[1]) loginservertoken = tokens[1];
 		token = tokens[0];
 
+		var selfP = this;
+
 		console.log('POSTING TO SERVER: loginserver/action.php?act=verifysessiontoken&servertoken='+loginservertoken+'&userid='+userid+'&token='+token);
 		request({
-			uri: config.loginserver+'action.php?act=verifysessiontoken&servertoken='+loginservertoken+'&userid='+userid+'&token='+token,
+			uri: config.loginserver+'action.php?act=verifysessiontoken&servertoken='+loginservertoken+'&userid='+userid+'&token='+token
 		}, function(error, response, body) {
 			selfP.renamePending = false;
 			if (body) {
@@ -461,43 +478,43 @@ function User(name, person, token) {
 			}
 			return false;
 		});
-	};
-	this.add = function(name, person, token) {
+	},
+	add: function(name, person, token) {
 		// name is ignored - this is intentional
-		if (person.banned || selfP.token !== token) {
+		if (person.banned || this.token !== token) {
 			return false;
 		}
-		selfP.connected = true;
-		person.user = selfP;
-		selfP.people.push(person);
-		selfP.ip = person.ip;
+		this.connected = true;
+		person.user = this;
+		this.people.push(person);
+		this.ip = person.ip;
 		return person;
-	};
-	this.merge = function(person) {
-		selfP.connected = true;
+	},
+	merge: function(person) {
+		this.connected = true;
 		var oldid = person.userid;
-		selfP.people.push(person);
-		person.rename(selfP.name, oldid);
-		console.log(''+selfP.name+' merging: socket '+person.socket.id+' of ');
+		this.people.push(person);
+		person.rename(this.name, oldid);
+		console.log(''+this.name+' merging: socket '+person.socket.id+' of ');
 		person.socket.emit('update', {
-			name: selfP.name,
-			userid: selfP.userid,
+			name: this.name,
+			userid: this.userid,
 			named: true,
-			token: selfP.token
+			token: this.token
 		});
-		person.user = selfP;
+		person.user = this;
 		for (var i in person.rooms) {
-			if (!selfP.roomCount[i]) {
-				person.rooms[i].join(selfP);
-				selfP.roomCount[i] = 0;
+			if (!this.roomCount[i]) {
+				person.rooms[i].join(this);
+				this.roomCount[i] = 0;
 			}
-			selfP.roomCount[i]++;
+			this.roomCount[i]++;
 		}
-	};
-	this.debugData = function() {
-		var str = ''+selfP.group+selfP.name+' ('+selfP.userid+')';
-		for (var i=0; i<selfP.people.length; i++) {
-			var person = selfP.people[i];
+	},
+	debugData: function() {
+		var str = ''+this.group+this.name+' ('+this.userid+')';
+		for (var i=0; i<this.people.length; i++) {
+			var person = this.people[i];
 			str += ' socket'+i+'[';
 			var first = true;
 			for (var j in person.rooms) {
@@ -507,54 +524,54 @@ function User(name, person, token) {
 			}
 			str += ']';
 		}
-		if (!selfP.connected) str += ' (DISCONNECTED)';
+		if (!this.connected) str += ' (DISCONNECTED)';
 		return str;
-	};
-	this.setGroup = function(group) {
-		selfP.group = group.substr(0,1);
-		if (!selfP.group || selfP.group === config.groupsranking[0]) {
-			delete usergroups[selfP.userid];
+	},
+	setGroup: function(group) {
+		this.group = group.substr(0,1);
+		if (!this.group || this.group === config.groupsranking[0]) {
+			delete usergroups[this.userid];
 		} else {
-			usergroups[selfP.userid] = selfP.group+selfP.name;
+			usergroups[this.userid] = this.group+this.name;
 		}
 		exportUsergroups();
-	};
-	this.disconnect = function(socket) {
+	},
+	disconnect: function(socket) {
 		var person = null;
-		for (var i=0; i<selfP.people.length; i++) {
-			if (selfP.people[i].socket === socket) {
-				console.log('DISCONNECT: '+selfP.userid);
-				if (selfP.people.length <= 1) {
-					selfP.connected = false;
-					if (!selfP.authenticated) {
-						selfP.group = config.groupsranking[0];
+		for (var i=0; i<this.people.length; i++) {
+			if (this.people[i].socket === socket) {
+				console.log('DISCONNECT: '+this.userid);
+				if (this.people.length <= 1) {
+					this.connected = false;
+					if (!this.authenticated) {
+						this.group = config.groupsranking[0];
 					}
 				}
-				person = selfP.people[i];
+				person = this.people[i];
 				for (var j in person.rooms) {
-					selfP.leaveRoom(person.rooms[j], socket);
+					this.leaveRoom(person.rooms[j], socket);
 				}
 				person.user = null;
-				selfP.people.splice(i,1);
+				this.people.splice(i,1);
 				break;
 			}
 		}
-		if (!selfP.people.length) {
+		if (!this.people.length) {
 			// cleanup
-			for (var i in selfP.roomCount) {
-				if (selfP.roomCount[i] > 0) {
+			for (var i in this.roomCount) {
+				if (this.roomCount[i] > 0) {
 					// should never happen.
 					console.log('!! room miscount: '+i+' not left');
-					getRoom(i).leave(selfP);
+					getRoom(i).leave(this);
 				}
 			}
-			selfP.roomCount = {};
+			this.roomCount = {};
 		}
-	};
-	this.getAlts = function() {
+	},
+	getAlts: function() {
 		var alts = [];
 		for (var i in users) {
-			if (users[i].ip === selfP.ip && users[i] !== selfP) {
+			if (users[i].ip === this.ip && users[i] !== this) {
 				if (!users[i].named && !users[i].connected) {
 					continue;
 				}
@@ -562,12 +579,12 @@ function User(name, person, token) {
 			}
 		}
 		return alts;
-	};
-	this.getHighestRankedAlt = function() {
-		var result = selfP;
-		var groupRank = config.groupsranking.indexOf(selfP.group);
+	},
+	getHighestRankedAlt: function() {
+		var result = this;
+		var groupRank = config.groupsranking.indexOf(this.group);
 		for (var i in users) {
-			if (users[i].ip === selfP.ip && users[i] !== selfP) {
+			if (users[i].ip === this.ip && users[i] !== this) {
 				if (config.groupsranking.indexOf(users[i].group) > groupRank) {
 					result = users[i];
 					groupRank = config.groupsranking.indexOf(users[i].group);
@@ -575,72 +592,72 @@ function User(name, person, token) {
 			}
 		}
 		return result;
-	};
-	this.nameLock = function(targetName, recurse) {
+	},
+	nameLock: function(targetName, recurse) {
 		var targetUser = getUser(targetName);
 		if (!targetUser) return targetName;
-		if (nameLockedIps[selfP.ip] === targetName || !targetUser.ip || targetUser.ip === selfP.ip) {
-			nameLockedIps[selfP.ip] = targetName;
+		if (nameLockedIps[this.ip] === targetName || !targetUser.ip || targetUser.ip === this.ip) {
+			nameLockedIps[this.ip] = targetName;
 			if (recurse) {
 				for (var i in users) {
-					if (users[i].ip === selfP.ip && users[i] !== selfP) {
+					if (users[i].ip === this.ip && users[i] !== this) {
 						users[i].destroy();
 					}
 				}
-				selfP.forceRename(targetName, selfP.authenticated);
+				this.forceRename(targetName, this.authenticated);
 			}
 		}
 		return targetName;
-	};
-	this.nameLocked = function() {
-		if (nameLockedIps[selfP.ip]) {
-			selfP.nameLock(nameLockedIps[selfP.ip]);
+	},
+	nameLocked: function() {
+		if (nameLockedIps[this.ip]) {
+			this.nameLock(nameLockedIps[this.ip]);
 			return true;
 		}
 		for (var i in nameLockedIps) {
-			if (nameLockedIps[i] === selfP.name) {
-				nameLockedIps[selfP.ip] = nameLockedIps[i];
-				selfP.nameLock(nameLockedIps[selfP.ip]);
+			if (nameLockedIps[i] === this.name) {
+				nameLockedIps[this.ip] = nameLockedIps[i];
+				this.nameLock(nameLockedIps[this.ip]);
 				return true;
 			}
 		}
 		return false;
-	};
-	this.ban = function(noRecurse) {
+	},
+	ban: function(noRecurse) {
 		// no need to recurse, since the root for-loop already bans everything with your IP
 		if (!noRecurse) for (var i in users) {
-			if (users[i].ip === selfP.ip && users[i] !== selfP) {
+			if (users[i].ip === this.ip && users[i] !== this) {
 				users[i].ban(true);
 			}
 		}
-		bannedIps[selfP.ip] = selfP.userid;
-		selfP.destroy();
-	};
-	this.destroy = function() {
+		bannedIps[this.ip] = this.userid;
+		this.destroy();
+	},
+	destroy: function() {
 		// Disconnects a user from the server
 		var person = null;
-		selfP.connected = false;
-		for (var i=0; i<selfP.people.length; i++) {
-			console.log('DESTROY: '+selfP.userid);
-			person = selfP.people[i];
+		this.connected = false;
+		for (var i=0; i<this.people.length; i++) {
+			console.log('DESTROY: '+this.userid);
+			person = this.people[i];
 			person.user = null;
 			for (var j in person.rooms) {
-				selfP.leaveRoom(person.rooms[j], person);
+				this.leaveRoom(person.rooms[j], person);
 			}
 		}
-		selfP.people = [];
-	};
-	this.joinRoom = function(room, socket) {
+		this.people = [];
+	},
+	joinRoom: function(room, socket) {
 		roomid = room?(room.id||room):'';
 		room = getRoom(room);
 		var person = null;
-		//console.log('JOIN ROOM: '+selfP.userid+' '+room.id);
+		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
 		if (!socket) {
-			for (var i=0; i<selfP.people.length;i++) {
+			for (var i=0; i<this.people.length;i++) {
 				// only join full clients, not pop-out single-room
 				// clients
-				if (selfP.people[i].rooms['lobby']) {
-					selfP.joinRoom(room, selfP.people[i]);
+				if (this.people[i].rooms['lobby']) {
+					this.joinRoom(room, this.people[i]);
 				}
 			}
 			return;
@@ -651,44 +668,44 @@ function User(name, person, token) {
 		if (!socket) return;
 		else {
 			var i=0;
-			while (selfP.people[i].socket !== socket) i++;
-			if (selfP.people[i].socket === socket) {
-				person = selfP.people[i];
+			while (this.people[i].socket !== socket) i++;
+			if (this.people[i].socket === socket) {
+				person = this.people[i];
 			}
 		}
 		if (person && !person.rooms[room.id]) {
 			person.rooms[room.id] = room;
-			if (!selfP.roomCount[room.id]) {
-				selfP.roomCount[room.id]=1;
-				room.join(selfP);
+			if (!this.roomCount[room.id]) {
+				this.roomCount[room.id]=1;
+				room.join(this);
 			} else {
-				selfP.roomCount[room.id]++;
-				room.initSocket(selfP, socket);
+				this.roomCount[room.id]++;
+				room.initSocket(this, socket);
 			}
 		} else if (person && room.id === 'lobby') {
 			person.socket.emit('init', {room: roomid, notFound: true});
 		}
-	};
-	this.leaveRoom = function(room, socket) {
+	},
+	leaveRoom: function(room, socket) {
 		room = getRoom(room);
-		for (var i=0; i<selfP.people.length; i++) {
-			if (selfP.people[i] === socket || selfP.people[i].socket === socket || !socket) {
-				if (selfP.people[i].rooms[room.id]) {
-					if (selfP.roomCount[room.id]) {
-						selfP.roomCount[room.id]--;
-						if (!selfP.roomCount[room.id]) {
-							room.leave(selfP);
-							delete selfP.roomCount[room.id];
+		for (var i=0; i<this.people.length; i++) {
+			if (this.people[i] === socket || this.people[i].socket === socket || !socket) {
+				if (this.people[i].rooms[room.id]) {
+					if (this.roomCount[room.id]) {
+						this.roomCount[room.id]--;
+						if (!this.roomCount[room.id]) {
+							room.leave(this);
+							delete this.roomCount[room.id];
 						}
 					}
-					if (!selfP.people[i]) {
+					if (!this.people[i]) {
 						// race condition? This should never happen, but it does.
 						fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
-							this.write("\npeople="+JSON.stringify(selfP.people)+"\ni="+i+"\n\n")
+							this.write("\npeople="+JSON.stringify(this.people)+"\ni="+i+"\n\n");
 							this.end();
 						});
 					} else {
-						delete selfP.people[i].rooms[room.id];
+						delete this.people[i].rooms[room.id];
 					}
 				}
 				if (socket) {
@@ -696,99 +713,83 @@ function User(name, person, token) {
 				}
 			}
 		}
-		if (!socket && selfP.roomCount[room.id]) {
-			room.leave(selfP);
-			delete selfP.roomCount[room.id];
+		if (!socket && this.roomCount[room.id]) {
+			room.leave(this);
+			delete this.roomCount[room.id];
 		}
-	};
-
-	// challenges
-	this.challengesFrom = {};
-	this.challengeTo = null;
-	this.lastChallenge = 0;
-
-	this.updateChallenges = function() {
-		selfP.emit('update', {
-			challengesFrom: selfP.challengesFrom,
-			challengeTo: selfP.challengeTo,
+	},
+	updateChallenges: function() {
+		this.emit('update', {
+			challengesFrom: this.challengesFrom,
+			challengeTo: this.challengeTo
 		});
-	};
-	this.makeChallenge = function(user, format, isPrivate) {
+	},
+	makeChallenge: function(user, format, isPrivate) {
 		user = getUser(user);
-		if (!user || selfP.challengeTo) {
+		if (!user || this.challengeTo) {
 			return false;
 		}
-		if (getTime() < selfP.lastChallenge + 10000) {
+		if (getTime() < this.lastChallenge + 10000) {
 			// 10 seconds ago
 			return false;
 		}
 		var time = getTime();
 		var challenge = {
 			time: time,
-			from: selfP.userid,
+			from: this.userid,
 			to: user.userid,
 			format: ''+(format||''),
 			isPrivate: !!isPrivate
 		};
-		selfP.lastChallenge = time;
-		selfP.challengeTo = challenge;
-		user.challengesFrom[selfP.userid] = challenge;
-		selfP.updateChallenges();
+		this.lastChallenge = time;
+		this.challengeTo = challenge;
+		user.challengesFrom[this.userid] = challenge;
+		this.updateChallenges();
 		user.updateChallenges();
-	};
-	this.cancelChallengeTo = function() {
-		if (!selfP.challengeTo) return true;
-		var user = getUser(selfP.challengeTo.to);
-		if (user) delete user.challengesFrom[selfP.userid];
-		selfP.challengeTo = null;
-		selfP.updateChallenges();
+	},
+	cancelChallengeTo: function() {
+		if (!this.challengeTo) return true;
+		var user = getUser(this.challengeTo.to);
+		if (user) delete user.challengesFrom[this.userid];
+		this.challengeTo = null;
+		this.updateChallenges();
 		if (user) user.updateChallenges();
-	};
-	this.rejectChallengeFrom = function(user) {
+	},
+	rejectChallengeFrom: function(user) {
 		var userid = user.toUserid();
 		user = getUser(user);
-		if (selfP.challengesFrom[userid]) {
-			delete selfP.challengesFrom[userid];
+		if (this.challengesFrom[userid]) {
+			delete this.challengesFrom[userid];
 		}
 		if (user) {
-			delete selfP.challengesFrom[user.userid];
-			if (user.challengeTo && user.challengeTo.to === selfP.userid) {
+			delete this.challengesFrom[user.userid];
+			if (user.challengeTo && user.challengeTo.to === this.userid) {
 				user.challengeTo = null;
 				user.updateChallenges();
 			}
 		}
-		selfP.updateChallenges();
-	};
-	this.acceptChallengeFrom = function(user) {
+		this.updateChallenges();
+	},
+	acceptChallengeFrom: function(user) {
 		var userid = user.toUserid();
 		user = getUser(user);
-		if (!user || !user.challengeTo || user.challengeTo.to !== selfP.userid) {
-			if (selfP.challengesFrom[userid]) {
-				delete selfP.challengesFrom[userid];
-				selfP.updateChallenges();
+		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid) {
+			if (this.challengesFrom[userid]) {
+				delete this.challengesFrom[userid];
+				this.updateChallenges();
 			}
 			return false;
 		}
-		getRoom('lobby').startBattle(selfP, user, user.challengeTo.format);
-		delete selfP.challengesFrom[user.userid];
+		getRoom('lobby').startBattle(this, user, user.challengeTo.format);
+		delete this.challengesFrom[user.userid];
 		user.challengeTo = null;
-		selfP.updateChallenges();
+		this.updateChallenges();
 		user.updateChallenges();
 		return true;
-	};
-
-	// initialize
-	users[selfP.userid] = selfP;
-	if (person.banned) {
-		selfP.destroy();
-	} else if (name) {
-		selfP.rename(name,token);
 	}
-}
+};
 
 function Person(name, socket, user) {
-	var selfP = this;
-
 	this.named = true;
 	this.name = name;
 	this.userid = name.toUserid();
@@ -796,20 +797,15 @@ function Person(name, socket, user) {
 	this.socket = socket;
 	this.rooms = {};
 
-	this.user = user; {
-		numPeople++;
-		while (people['p'+numPeople]) {
-			// should never happen
-			numPeople++;
-		}
-		this.id = 'p'+numPeople;
-		people[this.id] = selfP;
-	}
+	this.user = user;
 
-	this.rename = function(name) {
-		selfP.name = name;
-		selfP.userid = selfP.name.toUserid();
-	};
+	numPeople++;
+	while (people['p'+numPeople]) {
+		// should never happen
+		numPeople++;
+	}
+	this.id = 'p'+numPeople;
+	people[this.id] = this;
 
 	this.ip = '';
 	if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
@@ -822,6 +818,11 @@ function Person(name, socket, user) {
 		this.user = null;
 	}
 }
+
+Person.prototype.rename = function(name) {
+	this.name = name;
+	this.userid = name.toUserid();
+};
 
 function ipSearch(ip, table) {
 	if (table[ip]) return true;
