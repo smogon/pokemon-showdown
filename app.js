@@ -59,13 +59,30 @@ function getTime() {
 	return new Date().getTime();
 }
 
-toId = function(text) {
-	text = text || '';
-	if (typeof text === 'number') text = ''+text;
-	if (typeof text !== 'string') return ''; //???
-	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
-};
-toUserid = toId;
+// Sugar mixins
+
+String.extend({
+	toId: function() {
+		return this.toLowerCase().replace(/[^a-z0-9]+/g, '');
+	},
+	toUserid: function() {
+		return this.toId();
+	},
+	sanitize: function(strEscape) {
+		var str = this.escapeHTML();
+		if (strEscape) str = str.replace(/'/g, '\\\'');
+		return str;
+	}
+});
+
+Number.extend({
+	clampIntRange: function(min, max) {
+		var num = Math.floor(this);
+		if (num < min) num = min;
+		if (typeof max !== 'undefined' && num > max) num = max;
+		return num;
+	}
+});
 
 BattlePokedex = require('./pokedex.js').BattlePokedex;
 BattleMovedex = require('./movedex.js').BattleMovedex;
@@ -137,7 +154,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 	this.format = format;
 	console.log("NEW BATTLE");
 
-	var formatid = toId(format);
+	var formatid = format.toId();
 
 	if (rated && BattleFormats[formatid] && BattleFormats[formatid].rated) {
 		rated = {
@@ -183,7 +200,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 			var p2 = selfR.rated.p2;
 			if (getUser(selfR.rated.p2)) p2 = getUser(selfR.rated.p2).name;
 
-			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken=[token]');
+			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+selfR.rated.format.toId()+'&servertoken=[token]');
 
 			if (!selfR.rated.p1 || !selfR.rated.p2) {
 				update.updates.push('| chatmsg | ERROR: Ladder not updated: a player does not exist');
@@ -194,7 +211,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 				}
 				// update rankings
 				request({
-					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken='+servertoken+'&nocache='+getTime(),
+					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+selfR.rated.format.toId()+'&servertoken='+servertoken+'&nocache='+getTime(),
 				}, function(error, response, body) {
 					if (body) {
 						try {

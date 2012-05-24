@@ -20,7 +20,7 @@ function sanitizeName(name) {
 function getUser(name) {
 	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
-	var userid = toUserid(name);
+	var userid = name.toUserid();
 	var i = 0;
 	while (userid && !users[userid] && i < 1000) {
 		userid = prevUsers[userid];
@@ -29,27 +29,29 @@ function getUser(name) {
 	return users[userid];
 }
 function searchUser(name) {
-	var userid = toUserid(name);
+	var userid = name.toUserid();
 	while (userid && !users[userid]) {
 		userid = prevUsers[userid];
 	}
 	return users[userid];
 }
 function nameLock(user,name,ip) {
-	ip = ip||user.ip;
-	var userid = toUserid(name);
-	if(nameLockedIps[ip]) {
+	ip = ip || user.ip;
+	var userid;
+	if (name) userid = name.toUserid();
+	if (nameLockedIps[ip]) {
 		return user.nameLock(nameLockedIps[ip]);
-	} for(var i in nameLockedIps) {
-		if((userid && toUserid(nameLockedIps[i])==userid)||user.userid==toUserid(nameLockedIps[i])) {
+	}
+	for (var i in nameLockedIps) {
+		if ((userid && nameLockedIps[i].toUserid() === userid) || user.userid === nameLockedIps[i].toUserid()) {
 			nameLockedIps[ip] = nameLockedIps[i];
 			return user.nameLock(nameLockedIps[ip]);
 		}
 	}
-	return name||user.name;
+	return name || user.name;
 }
 function connectUser(name, socket, token, room) {
-	var userid = toUserid(name);
+	var userid = name.toUserid();
 	var user;
 	console.log("NEW PERSON: "+socket.id);
 	var person = new Person(name, socket, true);
@@ -84,7 +86,7 @@ function importUsergroups() {
 		for (var i = 0; i < data.length; i++) {
 			if (!data[i]) continue;
 			var row = data[i].split(",");
-			usergroups[toUserid(row[0])] = (row[1]||config.groupsranking[0])+row[0];
+			usergroups[row[0].toUserid()] = (row[1]||config.groupsranking[0])+row[0];
 		}
 	});
 }
@@ -112,7 +114,7 @@ function User(name, person, token) {
 	this.named = false;
 	this.renamePending = false;
 	this.authenticated = false;
-	this.userid = toUserid(this.name);
+	this.userid = this.name.toUserid();
 	this.group = config.groupsranking[0];
 
 	var trainersprites = [1, 2, 101, 102, 169, 170];
@@ -206,7 +208,7 @@ function User(name, person, token) {
 	};
 	this.forceRename = function(name, authenticated) {
 		// skip the login server
-		var userid = toUserid(name);
+		var userid = name.toUserid();
 
 		if (users[userid] && users[userid] !== selfP) {
 			return false;
@@ -255,14 +257,14 @@ function User(name, person, token) {
 	};
 	this.resetName = function() {
 		var name = 'Guest '+selfP.guestNum;
-		var userid = toUserid(name);
+		var userid = name.toUserid();
 		if (selfP.userid === userid) return;
 
 		var i = 0;
 		while (users[userid] && users[userid] !== selfP) {
 			selfP.guestNum++;
 			name = 'Guest '+selfP.guestNum;
-			userid = toUserid(name);
+			userid = name.toUserid();
 			if (i > 1000) return false;
 		}
 
@@ -312,7 +314,7 @@ function User(name, person, token) {
 		console.log("checking name lock for: "+selfP.name+" renaming to "+name);
 		name = nameLock(selfP,name);
 		console.log("returned "+name);
-		var userid = toUserid(name);
+		var userid = name.toUserid();
 		if (selfP.authenticated) auth = false;
 
 		if (!userid) {
@@ -743,7 +745,7 @@ function User(name, person, token) {
 		if (user) user.updateChallenges();
 	};
 	this.rejectChallengeFrom = function(user) {
-		var userid = toUserid(user);
+		var userid = user.toUserid();
 		user = getUser(user);
 		if (selfP.challengesFrom[userid]) {
 			delete selfP.challengesFrom[userid];
@@ -758,7 +760,7 @@ function User(name, person, token) {
 		selfP.updateChallenges();
 	};
 	this.acceptChallengeFrom = function(user) {
-		var userid = toUserid(user);
+		var userid = user.toUserid();
 		user = getUser(user);
 		if (!user || !user.challengeTo || user.challengeTo.to !== selfP.userid) {
 			if (selfP.challengesFrom[userid]) {
@@ -789,7 +791,7 @@ function Person(name, socket, user) {
 
 	this.named = true;
 	this.name = name;
-	this.userid = toUserid(name);
+	this.userid = name.toUserid();
 
 	this.socket = socket;
 	this.rooms = {};
@@ -806,7 +808,7 @@ function Person(name, socket, user) {
 
 	this.rename = function(name) {
 		selfP.name = name;
-		selfP.userid = toUserid(selfP.name);
+		selfP.userid = selfP.name.toUserid();
 	};
 
 	this.ip = '';

@@ -4,13 +4,6 @@
 
 */
 
-function sanitize(str, strEscape) {
-	if (!str) str = '';
-	str = str.replace(/&/g,'&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-	if (strEscape) str = str.replace(/'/g, '\\\'');
-	return str;
-}
-
 /**
  * `parseCommand`. This is the function most of you are interested in,
  * apparently.
@@ -63,19 +56,19 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		} else if (targetUser && targetName) {
 			var oldname = targetUser.name;
-			var targetId = toUserid(targetName);
+			var targetId = targetName.toUserid();
 			var userOfName = Users.users[targetId];
 			var isAlt = false;
 			if (userOfName) {
 				for(var altName in userOfName.getAlts()) {
-					var altUser = Users.users[toUserid(altName)];
+					var altUser = Users.users[altName.toUserid()];
 					if (!altUser) continue;
 					if (targetId === altUser.userid) {
 						isAlt = true;
 						break;
 					}
 					for (var prevName in altUser.prevNames) {
-						if (targetId === toUserid(prevName)) {
+						if (targetId === prevName.toUserid()) {
 							isAlt = true;
 							break;
 						}
@@ -377,7 +370,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		var targetid = toUserid(target);
+		var targetid = target.toUserid();
 		var success = false;
 
 		for (var ip in bannedIps) {
@@ -528,7 +521,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'unmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		var targetid = toUserid(target);
+		var targetid = target.toUserid();
 		var targetUser = getUser(target);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
@@ -646,7 +639,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		} else if (!config.modchat) {
 			room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
 		} else {
-			var modchat = sanitize(config.modchat);
+			var modchat = config.modchat.sanitize();
 			room.addRaw('<div style="background-color:#AA6655;color:white;padding:2px 4px"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
 		}
 		return false;
@@ -737,7 +730,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'ranking':
 	case 'rank':
 	case 'ladder':
-		target = toUserid(target) || user.userid;
+		if (target) target = target.toUserid();
+		target = target || user.userid;
 		request({
 			uri: config.loginserver+'action.php?act=ladderget&serverid='+serverid+'&user='+target,
 		}, function(error, response, body) {
@@ -782,7 +776,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		if (targetUser.userid === toUserid(targets[2])) {
+		if (targetUser.userid === targets[2].toUserid()) {
 			room.add(''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : ""));
 			targetUser.resetName();
 			targetUser.emit('nameTaken', {reason: user.name+" has forced you to change your name. "+targets[1]});
@@ -810,7 +804,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		if (targetUser.userid === toUserid(targets[2])) {
+		if (targetUser.userid === targets[2].toUserid()) {
 			room.add(''+targetUser.name+' was forcibly renamed to '+targets[1]+' by '+user.name+'.');
 			targetUser.forceRename(targets[1]);
 		} else {
@@ -1200,11 +1194,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
 		for (var g in config.groups) {
 			if (cmd === config.groups[g].id) {
-				return parseCommand(user, 'promote', toUserid(target) + ',' + g, room, socket);
+				return parseCommand(user, 'promote', target.toUserid() + ',' + g, room, socket);
 			} else if (cmd === 'de' + config.groups[g].id) {
 				var nextGroup = config.groupsranking[config.groupsranking.indexOf(g) - 1];
 				if (!nextGroup) nextGroup = config.groupsranking[0];
-				return parseCommand(user, 'demote', toUserid(target) + ',' + nextGroup, room, socket);
+				return parseCommand(user, 'demote', target.toUserid() + ',' + nextGroup, room, socket);
 			}
 		}
 
