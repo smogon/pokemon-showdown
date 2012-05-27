@@ -2036,7 +2036,8 @@ exports.BattleMovedex = {
 		onModifyMove: function(move, source, target) {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
-				move.self = { boosts: {atk:1,def:1,spe:-1} };
+				move.self = { boosts: {atk:1,def:1,spe:-1}};
+				move.target = "self";
 			}
 		},
 		effect: {
