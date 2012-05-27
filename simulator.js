@@ -2081,22 +2081,22 @@ function Battle(roomid, format, rated) {
 		}
 		return pokemon.side.foe.active[0];
 	};
-	this.runMove = function(move, pokemon, target) {
+	this.runMove = function(move, pokemon, target, battle) {
 		move = selfB.getMove(move);
 		if (!target) {
 			target = selfB.resolveTarget(pokemon, move);
 		}
 
-		BattleScripts.runMove.call(selfB, move, pokemon, target);
+		BattleScripts.runMove.call(selfB, move, pokemon, target, selfB);
 	};
-	this.useMove = function(move, pokemon, target, flags) {
+	this.useMove = function(move, pokemon, target, battle, flags) {
 		move = selfB.getMove(move);
 		if (!target) target = selfB.resolveTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
 
-		BattleScripts.useMove.call(selfB, move, pokemon, target, flags);
+		BattleScripts.useMove.call(selfB, move, pokemon, target, selfB, flags);
 	};
 	this.moveHit = function(target, source, move, a, b) {
 		BattleScripts.moveHit.call(selfB, target, source, move, a, b);
