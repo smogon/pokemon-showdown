@@ -1,5 +1,5 @@
 exports.BattleScripts = {
-	runMove: function(move, pokemon, target, battle) {
+	runMove: function(move, pokemon, target) {
 		move = this.getMove(move);
 		this.setActiveMove(move, pokemon, target);
 
@@ -16,12 +16,12 @@ exports.BattleScripts = {
 		}
 		pokemon.lastDamage = 0;
 		pokemon.deductPP(move, 1, target);
-		this.useMove(move, pokemon, target, battle);
+		this.useMove(move, pokemon, target);
 		this.runEvent('AfterMove', target, pokemon, move);
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
-	useMove: function(move, pokemon, target, battle) {
-		move_original = move;
+	useMove: function(move, pokemon, target) {
+		baseMove = move;
 		move = this.getMoveCopy(move);
 
 		this.setActiveMove(move, pokemon, target);
@@ -30,9 +30,9 @@ exports.BattleScripts = {
 		};
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 		move = this.runEvent('ModifyMove',pokemon,target,move,move);
-		if (move_original.target != move.target) {
+		if (baseMove.target != move.target) {
 			//Target changed in ModifyMove, so we must adjust it here
-			target = battle.resolveTarget(pokemon, move);
+			target = this.resolveTarget(pokemon, move);
 		}
 		if (!move) return false;
 
