@@ -8811,10 +8811,11 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target) {
-			if (!this.heal(target.maxhp)) return false;
+			if (target.hp >= target.maxhp) return false;
 			if (!target.setStatus('slp')) return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
+			this.heal(target.maxhp) //Aeshetic only as the healing happens after you fall asleep in-game
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
 		secondary: false,
