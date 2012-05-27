@@ -8811,12 +8811,10 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target) {
+			if (!this.heal(target.maxhp)) return false;
 			if (!target.setStatus('slp')) return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
-			if (!this.heal(target.maxhp)) {
-				return false;
-			}
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
 		secondary: false,
