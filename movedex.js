@@ -403,27 +403,37 @@ exports.BattleMovedex = {
 		name: "Assist",
 		pp: 20,
 		priority: 0,
-		onHit: function(target) {
+		onHit: function(target, source) {
 			var moves = [];
-			for (var j=0; j<target.side.pokemon.length; j++) {
-				var pokemon = target.side.pokemon[j];
-				if (pokemon === target) continue;
-				for (var i=0; i<pokemon.moves.length; i++) {
-					var move = pokemon.moves[i];
-					var NoAssist = {
-						assist:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, quickguard:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, trick:1, wideguard:1
-					};
-					if (move && !NoAssist[move]) {
-						moves.push(move);
+			if (!source.removeVolatile('transformMove')) {
+				for (var j=0; j<target.side.pokemon.length; j++) {
+					var pokemon = target.side.pokemon[j];
+					if (pokemon === target) continue;
+					for (var i=0; i<pokemon.moves.length; i++) {
+						var move = pokemon.moves[i];
+						var NoAssist = {assist:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, quickguard:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, trick:1, wideguard:1};
+						if (move && !NoAssist[move]) {
+							moves.push(move);
+						}
 					}
 				}
+				var move = '';
+				if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
+				if (!move) return false
+				if (this.getMove(move).isTwoTurnMove) {
+					//This means we need to lock the next use of this move to this transformation
+					this.debug('Added transformMove two-turn flag');
+					source.addVolatile('transformMove');
+					source.nextMove = move;
+					source.transformMove = 'assist';
+				}
+			} else {
+				this.debug('Removed transformMove two-turn flag');
+				var move = source.nextMove;
+				delete source.nextMove;
+				delete source.transformMove;
 			}
-			var move = '';
-			if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
-			if (!move) {
-				return false;
-			}
-			this.useMove(move, target);
+			this.runMove(move, target);
 		},
 		secondary: false,
 		target: "self",
@@ -1056,7 +1066,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('bounce');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('bounce');
+				}
 			},
 			onSourceModifyMove: function(move) {
 
@@ -1778,12 +1794,27 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		priority: 0,
-		onHit: function(pokemon) {
-			var noCopycat = {copycat:1, assist:1, sketch:1, mimic:1, counter:1, mirrorcoat:1, protect:1, detect:1, endure:1, destinybond:1, followme:1, ragepowder:1, snatch:1, helpinghand:1, thief:1, covet:1, trick:1, switcheroo:1, feint:1, focuspunch:1, transform:1, bestow:1, dragontail:1, circlethrow:1};
-			if (!this.lastMove || noCopycat[this.lastMove]) {
-				return false;
+		onHit: function(target, source) {
+			if (!source.removeVolatile('transformMove')) {
+				var noCopycat = {copycat:1, assist:1, sketch:1, mimic:1, counter:1, mirrorcoat:1, protect:1, detect:1, endure:1, destinybond:1, followme:1, ragepowder:1, snatch:1, helpinghand:1, thief:1, covet:1, trick:1, switcheroo:1, feint:1, focuspunch:1, transform:1, bestow:1, dragontail:1, circlethrow:1};
+				var move = this.lastMove;
+				if (!move || noCopycat[move]) {
+					return false;
+				}
+				if (this.getMove(move).isTwoTurnMove) {
+					//This means we need to lock the next use of this move to this transformation
+					this.debug('Added transformMove two-turn flag');
+					source.addVolatile('transformMove');
+					source.nextMove = move;
+					source.transformMove = 'copycat';
+				}
+			} else {
+				this.debug('Removed transformMove two-turn flag');
+				var move = source.nextMove;
+				delete source.nextMove;
+				delete source.transformMove;
 			}
-			this.useMove(this.lastMove, pokemon);
+			this.runMove(move, target);
 		},
 		secondary: false,
 		target: "self",
@@ -2262,7 +2293,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('dig');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('dig');
+				}
 			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
@@ -2386,7 +2423,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('dive');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('dive');
+				}
 			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
@@ -3783,7 +3826,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('fly');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('fly');
+				}
 			},
 			onSourceModifyMove: function(move) {
 
@@ -3990,7 +4039,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('freezeshock');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('freezeshock');
+				}
 			}
 		},
 		secondary: {
@@ -5650,7 +5705,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('iceburn');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('iceburn');
+				}
 			}
 		},
 		secondary: {
@@ -6701,17 +6762,28 @@ exports.BattleMovedex = {
 		pp: 20,
 		isViable: true,
 		priority: 0,
-		onHit: function(target, pokemon) {
-			var decision = this.willMove(target);
-			if (decision) {
+		onHit: function(target, source) {
+			if (!source.removeVolatile('transformMove')) {
+				var decision = this.willMove(target);
+				if (!decision) return false;
 				var move = this.getMove(decision.move);
-				if (move.category !== 'Status') {
-					pokemon.addVolatile('mefirst');
-					this.useMove(move, pokemon);
-					return;
+				if (move.category === 'Status') return false;
+				source.addVolatile('mefirst');
+				
+				if (this.getMove(move).isTwoTurnMove) {
+					//This means we need to lock the next use of this move to this transformation
+					this.debug('Added transformMove two-turn flag');
+					source.addVolatile('transformMove');
+					source.nextMove = move;
+					source.transformMove = 'mefirst';
 				}
+			} else {
+				this.debug('Removed transformMove two-turn flag');
+				var move = source.nextMove;
+				delete source.nextMove;
+				delete source.transformMove;
 			}
-			return false;
+			this.runMove(move, source);
 		},
 		effect: {
 			duration: 1,
@@ -6952,24 +7024,35 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onHit: function(target) {
-			var moves = [];
-			for (var i in exports.BattleMovedex) {
-				var move = exports.BattleMovedex[i];
-				if (i !== move.id) continue;
-				if (move.isNonstandard) continue;
-				var NoMetronome = {
-					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snatch:1, snarl:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, "v-create":1, wideguard:1
-				};
-				if (!NoMetronome[move.id]) {
-					moves.push(move.id);
+			if (!source.removeVolatile('transformMove')) {
+				var moves = [];
+				for (var i in exports.BattleMovedex) {
+					var move = exports.BattleMovedex[i];
+					if (i !== move.id) continue;
+					if (move.isNonstandard) continue;
+					var NoMetronome = {afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snatch:1, snarl:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, "v-create":1, wideguard:1};
+					if (!NoMetronome[move.id]) {
+						moves.push(move.id);
+					}
 				}
+				var move = '';
+				if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
+				if (!move) return false;
+				
+				if (this.getMove(move).isTwoTurnMove) {
+					//This means we need to lock the next use of this move to this transformation
+					this.debug('Added transformMove two-turn flag');
+					source.addVolatile('transformMove');
+					source.nextMove = move;
+					source.transformMove = 'metronome';
+				}
+			} else {
+				this.debug('Removed transformMove two-turn flag');
+				var move = source.nextMove;
+				delete source.nextMove;
+				delete source.transformMove;
 			}
-			var move = '';
-			if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
-			if (!move) {
-				return false;
-			}
-			this.useMove(move, target);
+			this.runMove(move, target);
 		},
 		secondary: false,
 		target: "self",
@@ -7104,13 +7187,29 @@ exports.BattleMovedex = {
 		name: "Mirror Move",
 		pp: 20,
 		priority: 0,
-		onTryHit: function(target) {
-			if (!target.lastMove || target.lastMove === 'mirrormove') {
-				return false;
-			}
-		},
 		onHit: function(target, source) {
-			this.useMove(this.lastMove, source);
+			this.debug('target: '+target.name);
+			this.debug('source: '+source.name);
+			if (!source.removeVolatile('transformMove')) {
+				var NoMirrorMove = {assist:1, sleeptalk:1, metronome:1, mefirst:1, mirrormove:1, copycat:1, encore:1, chatter:1, bide:1, counter:1, doomdesire:1, feint:1, finalgambit:1, focuspunch:1, futuresight:1, mimic:1, mirrorcoat:1, mefirst:1, naturepower:1, spitup:1, struggle:1};
+				if (!target.lastMove || NoMirrorMove[target.lastMove]) {
+					return false;
+				}
+				var move = target.lastMove;
+				if (this.getMove(move).isTwoTurnMove) {
+					//This means we need to lock the next use of this move to this transformation
+					this.debug('Added transformMove two-turn flag');
+					source.addVolatile('transformMove');
+					source.nextMove = move;
+					source.transformMove = 'mirrormove';
+				}
+			} else {
+				this.debug('Removed transformMove two-turn flag');
+				var move = source.nextMove;
+				delete source.nextMove;
+				delete source.transformMove;
+			}
+			this.runMove(move, source);
 		},
 		secondary: false,
 		target: "normal",
@@ -8635,7 +8734,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('razorwind');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('razorwind');
+				}
 			}
 		},
 		critRatio: 2,
@@ -9653,7 +9758,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('shadowforce');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('shadowforce');
+				}
 			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
@@ -9944,7 +10055,7 @@ exports.BattleMovedex = {
 		isTwoTurnMove: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.removeVolatile('skullbash')) return;
-			this.add('-message', pokemon.name+' tucked in its head! (placeholder)'); // TODO
+			this.add('-message', pokemon.name+' tucked in its head! (placeholder)');
 			pokemon.addVolatile('skullbash');
 			return true;
 		},
@@ -9954,7 +10065,13 @@ exports.BattleMovedex = {
 				this.boost({def:1}, pokemon, pokemon, this.getMove('skullbash'));
 			},
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('skullbash');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('skullbash');
+				}
 			}
 		},
 		secondary: false,
@@ -9982,7 +10099,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('skyattack');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('skyattack');
+				}
 			}
 		},
 		secondary: {
@@ -10014,7 +10137,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('skydrop');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('skydrop');
+				}
 			},
 			onSourceModifyPokemon: function(pokemon) {
 				pokemon.lockMove('recharge');
@@ -10148,9 +10277,7 @@ exports.BattleMovedex = {
 			var moves = [];
 			for (var i=0; i<pokemon.moveset.length; i++) {
 				var move = pokemon.moveset[i].id;
-				var NoSleepTalk = {
-					assist:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, sketch:1, sleeptalk:1, uproar:1
-				};
+				var NoSleepTalk = {assist:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, sketch:1, sleeptalk:1, uproar:1};
 				if (move && !(NoSleepTalk[move] || this.getMove(move).isTwoTurnMove)) {
 					moves.push(move);
 				}
@@ -10160,7 +10287,7 @@ exports.BattleMovedex = {
 			if (!move) {
 				return false;
 			}
-			this.useMove(move, pokemon);
+			this.runMove(move, pokemon);
 		},
 		secondary: false,
 		target: "self",
@@ -10447,7 +10574,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('solarbeam');
+				if (pokemon.getVolatile('transformMove')) {
+					//If this was a transformed move, we actually want to lock into the transforming move
+					pokemon.lockMove(pokemon.transformMove);
+				} else {
+					//If this wasn't a transformed move, lock as normal
+					pokemon.lockMove('solarbeam');
+				}
 			}
 		},
 		secondary: false,
