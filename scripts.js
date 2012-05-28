@@ -21,6 +21,7 @@ exports.BattleScripts = {
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	useMove: function(move, pokemon, target) {
+		baseMove = move;
 		move = this.getMoveCopy(move);
 
 		this.setActiveMove(move, pokemon, target);
@@ -29,6 +30,10 @@ exports.BattleScripts = {
 		};
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 		move = this.runEvent('ModifyMove',pokemon,target,move,move);
+		if (baseMove.target !== move.target) {
+			//Target changed in ModifyMove, so we must adjust it here
+			target = this.resolveTarget(pokemon, move);
+		}
 		if (!move) return false;
 
 		var attrs = '';
