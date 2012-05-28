@@ -1975,7 +1975,7 @@ function Battle(roomid, format, rated) {
 		}
 		if (!basePower) return 0;
 
-		move.critRatio = (move.critRatio || 1).clampIntRange(0, 5);
+		move.critRatio = (move.critRatio || 0).clampIntRange(0, 5);
 		var critMult = [0, 16, 8, 4, 3, 2];
 
 		move.crit = move.willCrit || false;
