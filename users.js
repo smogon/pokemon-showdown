@@ -1,3 +1,5 @@
+var THROTTLE_DELAY = 400;
+
 var users = {};
 var prevUsers = {};
 var numUsers = 0;
@@ -784,6 +786,60 @@ var User = (function () {
 		this.updateChallenges();
 		user.updateChallenges();
 		return true;
+	};
+	// chatQueue should be an array, but you know about mutables in prototypes...
+	// P.S. don't replace this with an array unless you know what mutables in prototypes do.
+	User.prototype.chatQueue = null;
+	User.prototype.chatQueueTimeout = null;
+	User.prototype.lastChatMessage = 0;
+	User.prototype.chat = function(message, room, socket) {
+		var now = new Date().getTime();
+		if (this.chatQueueTimeout) {
+			if (!this.chatQueue) this.chatQueue = []; // this should never happen
+			if (this.chatQueue.length > 6) {
+				socket.emit('console', {
+					room: room.id,
+					rawMessage: "<strong style=\"color:red\">Your message was not sent because you've been typing too quickly.</strong>"
+				});
+			} else {
+				this.chatQueue.push([message, room, socket]);
+			}
+		} else if (now < this.lastChatMessage + THROTTLE_DELAY) {
+			this.chatQueue = [[message, room, socket]];
+			// Needs to be a closure so the "this" variable stays correct. I think.
+			var self = this;
+			this.chatQueueTimeout = setTimeout(function() {
+				self.processChatQueue();
+			}, THROTTLE_DELAY);
+		} else {
+			this.lastChatMessage = now;
+			room.chat(this, message, socket);
+		}
+	};
+	User.prototype.destroyChatQueue = function() {
+		// don't call this function unless the user's getting deallocated
+		this.chatQueue = null;
+		if (this.chatQueueTimeout) {
+			clearTimeout(this.chatQueueTimeout);
+			this.chatQueueTimeout = null;
+		}
+	};
+	User.prototype.processChatQueue = function() {
+		if (!this.chatQueue) return; // this should never happen
+		var toChat = this.chatQueue.shift();
+
+		toChat[1].chat(this, toChat[0], toChat[2]);
+
+		if (this.chatQueue.length) {
+			// Needs to be a closure so the "this" variable stays correct. I think.
+			var self = this;
+			this.chatQueueTimeout = setTimeout(function() {
+				self.processChatQueue();
+			}, THROTTLE_DELAY);
+		} else {
+			this.chatQueue = null;
+			this.chatQueueTimeout = null;
+		}
 	};
 	return User;
 })();

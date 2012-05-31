@@ -1234,7 +1234,7 @@ io.sockets.on('connection', function (socket) {
 		if (!youUser) return;
 		if (!message) return;
 		var room = getRoom(message.room);
-		room.chat(youUser, message.message, socket);
+		youUser.chat(message.message, room, socket)
 	});
 	socket.on('leave', function(data) {
 		if (typeof data.room !== 'string') return;
