@@ -418,14 +418,14 @@ function BattleTools() {
 				}
 			}
 		}
-		setHas[toId(set.item)] = true;
-		if (banlistTable[toId(set.item)]) {
+		setHas[set.item.toId()] = true;
+		if (banlistTable[set.item.toId()]) {
 			problems.push(set.name+"'s ("+set.species+") item "+set.item+" is banned.");
 		}
 		if (banlistTable['Unreleased'] && setHas['souldew']) {
 			problems.push(set.name+"'s ("+set.species+") item "+set.item+" is unreleased.");
 		}
-		setHas[toId(set.ability)] = true;
+		setHas[set.ability.toId()] = true;
 		var limit1 = 0;
 		if (!set.moves || !set.moves.length) {
 			problems.push(name+" has no moves.");
