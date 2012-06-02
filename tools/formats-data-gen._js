@@ -365,6 +365,7 @@ var releasedDreamWorldPokemon = {
 	"lombre": "M/F",
 	"lopunny": "M/F",
 	"lotad": "M/F",
+	"lucario": "M",
 	"ludicolo": "M/F",
 	"lumineon": "M/F",
 	"luvdisc": "M/F",
