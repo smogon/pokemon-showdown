@@ -100,6 +100,7 @@
 			"rapidspin": 1,
 			"stealthrock": 1
 		},
+		"dreamWorldRelease": true,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
@@ -213,6 +214,7 @@
 			"calmmind": 1,
 			"stoneedge": 1
 		},
+		"dreamWorldRelease": true,
 		"isNonstandard": true,
 		"otherFormes": [],
 		"isDefaultForme": true,
