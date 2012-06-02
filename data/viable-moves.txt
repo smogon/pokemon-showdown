@@ -659,7 +659,7 @@ Heatmor: Fire Blast, Sucker Punch, Focus Blast, Hidden Power Grass, Substitute
 Durant: Hone Claws, Iron Head, X-Scissor, Stone Edge, Baton Pass, Thunder Fang
 Deino: Outrage, Crunch, Fire Fang, Dragon Tail, Thunder Wave
 Zweilous: Outrage, Crunch, Fire Fang, Dragon Tail, Thunder Wave
-Hydreigon: U-turn, Draco Meteor, Subsitute, Dragon Pulse, Focus Blast, Fire Blast, Surf, Dark Pulse
+Hydreigon: U-turn, Draco Meteor, Substitute, Dragon Pulse, Focus Blast, Fire Blast, Surf, Dark Pulse
 Larvesta: Flare Blitz, U-turn, Wild Charge, Zen Headbutt, Morning Sun, Will-O-Wisp
 Volcarona: Quiver Dance, Fiery Dance, Fire Blast, Bug Buzz, Morning Sun, Hidden Power Rock, Hurricane
 Cobalion: Close Combat, Taunt, Iron Head, Swords Dance, Substitute, Stone Edge, Calm Mind, Focus Blast, Volt Switch, Hidden Power Ice, Flash Cannon, Thunder Wave, Sacred Sword
