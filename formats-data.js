@@ -3116,6 +3116,8 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","abilities":["justified"],"moves":["detect","metalclaw","counter","bulletpunch"]},
 			{"generation":5,"level":50,"gender":"M","nature":"Naughty","abilities":["justified"],"moves":["bulletpunch","closecombat","stoneedge","shadowclaw"]}
 		],
+		dreamWorldRelease: true,
+		maleOnlyDreamWorld: true,
 		tier: "OU"
 	},
 	hippopotas: {
