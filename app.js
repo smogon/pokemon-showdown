@@ -1,11 +1,31 @@
+require('sugar');
+
+fs = require('fs');
+path = require('path');
+
+request = require('request');
+
+// Synchronously copy config-example.js over to config.js if it doesn't exist
+if (!path.existsSync('./config/config.js')) {
+	console.log("config.js doesn't exist - creating one with default settings...");
+	var BUF_LENGTH, buff, bytesRead, fdr, fdw, pos;
+	BUF_LENGTH = 64 * 1024;
+	buff = new Buffer(BUF_LENGTH);
+	fdr = fs.openSync('./config/config-example.js', 'r');
+	fdw = fs.openSync('./config/config.js', 'w');
+	bytesRead = 1;
+	pos = 0;
+	while (bytesRead > 0) {
+		bytesRead = fs.readSync(fdr, buff, 0, BUF_LENGTH, pos);
+		fs.writeSync(fdw, buff, 0, bytesRead);
+		pos += bytesRead;
+	}
+	fs.closeSync(fdr);
+}
+
 config = require('./config/config.js');
 serverid = config.serverid;
 servertoken = config.servertoken;
-
-//require("./node_modules/long-stack-traces");
-
-request = require('request');
-fs = require('fs');
 
 /*
 var app = require('http').createServer()
@@ -32,18 +52,37 @@ if (process.argv[2] && parseInt(process.argv[2])) {
 }
 
 var io = require('socket.io').listen(config.port).set('log level', 1);
+console.log("Server started on port "+config.port);
+console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
 
 function getTime() {
 	return new Date().getTime();
 }
 
-toId = function(text) {
-	text = text || '';
-	if (typeof text === 'number') text = ''+text;
-	if (typeof text !== 'string') return ''; //???
-	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
-};
-toUserid = toId;
+// Sugar mixins
+
+String.extend({
+	toId: function() {
+		return this.toLowerCase().replace(/[^a-z0-9]+/g, '');
+	},
+	toUserid: function() {
+		return this.toId();
+	},
+	sanitize: function(strEscape) {
+		var str = this.escapeHTML();
+		if (strEscape) str = str.replace(/'/g, '\\\'');
+		return str;
+	}
+});
+
+Number.extend({
+	clampIntRange: function(min, max) {
+		var num = Math.floor(this);
+		if (num < min) num = min;
+		if (typeof max !== 'undefined' && num > max) num = max;
+		return num;
+	}
+});
 
 BattlePokedex = require('./pokedex.js').BattlePokedex;
 BattleMovedex = require('./movedex.js').BattleMovedex;
@@ -115,7 +154,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 	this.format = format;
 	console.log("NEW BATTLE");
 
-	var formatid = toId(format);
+	var formatid = format.toId();
 
 	if (rated && BattleFormats[formatid] && BattleFormats[formatid].rated) {
 		rated = {
@@ -161,7 +200,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 			var p2 = selfR.rated.p2;
 			if (getUser(selfR.rated.p2)) p2 = getUser(selfR.rated.p2).name;
 
-			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken=[token]');
+			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+selfR.rated.format.toId()+'&servertoken=[token]');
 
 			if (!selfR.rated.p1 || !selfR.rated.p2) {
 				update.updates.push('| chatmsg | ERROR: Ladder not updated: a player does not exist');
@@ -172,7 +211,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 				}
 				// update rankings
 				request({
-					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken='+servertoken+'&nocache='+getTime(),
+					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+selfR.rated.format.toId()+'&servertoken='+servertoken+'&nocache='+getTime(),
 				}, function(error, response, body) {
 					if (body) {
 						try {
@@ -1195,7 +1234,7 @@ io.sockets.on('connection', function (socket) {
 		if (!youUser) return;
 		if (!message) return;
 		var room = getRoom(message.room);
-		room.chat(youUser, message.message, socket);
+		youUser.chat(message.message, room, socket)
 	});
 	socket.on('leave', function(data) {
 		if (typeof data.room !== 'string') return;

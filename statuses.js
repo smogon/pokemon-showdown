@@ -80,7 +80,7 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onHit: function(target, source, move) {
-			if (move.type === 'Fire' || move.id === 'scald') {
+			if (move.type === 'Fire' && move.category !== 'Status') {
 				this.add('-curestatus', target.id, 'frz');
 				target.setStatus('');
 			}
@@ -107,8 +107,10 @@ exports.BattleStatuses = {
 		},
 		onResidualOrder: 9,
 		onResidual: function(pokemon) {
-			this.effectData.stage++;
-			this.damage(pokemon.maxhp*this.effectData.stage/16);
+			if (this.effectData.stage < 15) {
+				this.effectData.stage++;
+			}
+			this.damage((pokemon.maxhp/16).clampIntRange(1) * this.effectData.stage);
 		}
 	},
 	confusion: {

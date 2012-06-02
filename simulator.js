@@ -1,34 +1,3 @@
-function floor(num) {
-	return Math.floor(num);
-}
-function clampIntRange(num, min, max) {
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (typeof max !== 'undefined' && num > max) num = max;
-	return num;
-}
-function shuffle(array) {
-	var tmp, current, top = array.length;
-
-	if(top) while(--top) {
-		current = Math.floor(Math.random() * (top + 1));
-		tmp = array[current];
-		array[current] = array[top];
-		array[top] = tmp;
-	}
-
-	return array;
-}
-function objectKeys(object) {
-	var keys = [];
-	for (var prop in object) {
-		if (object.hasOwnProperty(prop)) {
-			keys.push(prop);
-		}
-	}
-	return keys;
-}
-
 function BattlePokemon(set, side) {
 	var selfB = side.battle;
 	var selfS = side;
@@ -49,7 +18,7 @@ function BattlePokemon(set, side) {
 		set.name = this.species;
 	}
 	this.name = set.name || set.species || 'Bulbasaur';
-	this.speciesid = toId(this.species);
+	this.speciesid = this.species.toId();
 	this.template = this.baseTemplate;
 	this.moves = [];
 	this.baseMoves = this.moves;
@@ -58,7 +27,7 @@ function BattlePokemon(set, side) {
 	this.baseMoveset = [];
 	this.trapped = false;
 
-	this.level = clampIntRange(set.level || 100, 1, 100);
+	this.level = (set.level || 100).clampIntRange(1, 100);
 	this.hp = 0;
 	this.maxhp = 100;
 	var genders = {M:'M',F:'F'};
@@ -97,9 +66,9 @@ function BattlePokemon(set, side) {
 	this.ignore = {};
 	this.duringMove = false;
 
-	this.baseAbility = toId(set.ability);
+	this.baseAbility = set.ability.toId();
 	this.ability = this.baseAbility;
-	this.item = toId(set.item);
+	this.item = set.item.toId();
 	this.abilityData = {id: this.ability};
 	this.itemData = {id: this.item};
 
@@ -120,7 +89,7 @@ function BattlePokemon(set, side) {
 				disabled: false,
 				used: false
 			});
-			this.moves.push(toId(move.name));
+			this.moves.push(move.name.toId());
 		}
 	}
 
@@ -150,10 +119,10 @@ function BattlePokemon(set, side) {
 		if (!this.set.ivs[i] && this.set.ivs[i] !== 0) this.set.ivs[i] = 31;
 	}
 	for (var i in this.set.evs) {
-		this.set.evs[i] = clampIntRange(this.set.evs[i], 0, 255);
+		this.set.evs[i] = this.set.evs[i].clampIntRange(0, 255);
 	}
 	for (var i in this.set.ivs) {
-		this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
+		this.set.ivs[i] = this.set.ivs[i].clampIntRange(0, 31);
 	}
 
 	var hpTypeX = 0, hpPowerX = 0;
@@ -210,7 +179,7 @@ function BattlePokemon(set, side) {
 	this.bst = this.bst || 10;
 	this.types = this.baseTemplate.types;
 
-	this.stats['hp'] = floor(floor(2*selfP.baseStats['hp']+selfP.set.ivs['hp']+floor(selfP.set.evs['hp']/4)+100)*selfP.level / 100 + 10);
+	this.stats['hp'] = Math.floor(Math.floor(2*selfP.baseStats['hp']+selfP.set.ivs['hp']+Math.floor(selfP.set.evs['hp']/4)+100)*selfP.level / 100 + 10);
 	if (this.baseStats['hp'] === 1) this.stats['hp'] = 1; // shedinja
 	this.unboostedStats['hp'] = this.stats['hp'];
 	this.maxhp = this.stats['hp'];
@@ -252,7 +221,7 @@ function BattlePokemon(set, side) {
 			if (i==='hp') {
 				continue;
 			} else {
-				selfP.unboostedStats[i] = floor(floor(2*stat+selfP.set.ivs[i]+floor(selfP.set.evs[i]/4))*selfP.level / 100 + 5);
+				selfP.unboostedStats[i] = Math.floor(Math.floor(2*stat+selfP.set.ivs[i]+Math.floor(selfP.set.evs[i]/4))*selfP.level / 100 + 5);
 			}
 			selfP.stats[i] = selfP.unboostedStats[i];
 		}
@@ -261,14 +230,14 @@ function BattlePokemon(set, side) {
 		}
 		BattleScripts.natureModify(selfP.stats, selfP.set.nature);
 		for (var i in selfP.stats) {
-			selfP.stats[i] = floor(selfP.stats[i]);
+			selfP.stats[i] = Math.floor(selfP.stats[i]);
 		}
 		if (init) return;
 
 		selfB.runEvent('ModifyStats', selfP, null, null, selfP.stats);
 
 		for (var i in selfP.stats) {
-			selfP.stats[i] = floor(selfP.stats[i]);
+			selfP.stats[i] = Math.floor(selfP.stats[i]);
 			selfP.unboostedStats[i] = selfP.stats[i];
 		}
 
@@ -278,9 +247,9 @@ function BattlePokemon(set, side) {
 			if (selfP.boosts[i] < -6) selfP.boosts[i] = -6;
 			if (i === 'accuracy' || i === 'evasion' || i === 'hp') continue; // hp should never happen
 			if (selfP.boosts[i] >= 0) {
-				selfP.stats[i] = floor(selfP.unboostedStats[i] * boostTable[selfP.boosts[i]]);
+				selfP.stats[i] = Math.floor(selfP.unboostedStats[i] * boostTable[selfP.boosts[i]]);
 			} else {
-				selfP.stats[i] = floor(selfP.unboostedStats[i] / boostTable[-selfP.boosts[i]]);
+				selfP.stats[i] = Math.floor(selfP.unboostedStats[i] / boostTable[-selfP.boosts[i]]);
 			}
 		}
 
@@ -522,7 +491,7 @@ function BattlePokemon(set, side) {
 	this.damage = function(d, source, effect) {
 		if (!selfP.hp) return 0;
 		if (d < 1 && d > 0) d = 1;
-		d = floor(d);
+		d = Math.floor(d);
 		if (isNaN(d)) return 0;
 		if (d <= 0) return 0;
 		selfP.hp -= d;
@@ -534,7 +503,7 @@ function BattlePokemon(set, side) {
 	};
 	this.hasMove = function(moveid) {
 		if (moveid.id) moveid = moveid.id;
-		moveid = toId(moveid);
+		moveid = moveid.toId();
 		for (var i=0; i<selfP.moveset.length; i++) {
 			if (moveid === selfB.getMove(selfP.moveset[i].move).id) {
 				return moveid;
@@ -564,7 +533,7 @@ function BattlePokemon(set, side) {
 	// returns the amount of damage actually healed
 	this.heal = function(d) {
 		if (!selfP.hp) return 0;
-		d = floor(d);
+		d = Math.floor(d);
 		if (isNaN(d)) return 0;
 		if (d <= 0) return 0;
 		if (selfP.hp >= selfP.maxhp) return 0;
@@ -578,7 +547,7 @@ function BattlePokemon(set, side) {
 	// sets HP, returns delta
 	this.sethp = function(d) {
 		if (!selfP.hp) return 0;
-		d = floor(d);
+		d = Math.floor(d);
 		if (isNaN(d)) return;
 		if (d < 1) d = 1;
 		d = d-selfP.hp;
@@ -801,13 +770,13 @@ function BattlePokemon(set, side) {
 		return true;
 	};
 	this.hpPercent = function(d) {
-		//return floor(floor(d*48/selfP.maxhp + 0.5)*100/48);
-		return floor(d*100/selfP.maxhp + 0.5);
+		//return Math.floor(Math.floor(d*48/selfP.maxhp + 0.5)*100/48);
+		return Math.floor(d*100/selfP.maxhp + 0.5);
 	};
 	this.getHealth = function() {
 		if (selfP.fainted) return ' (0 fnt)';
-		//var hpp = floor(48*selfP.hp/selfP.maxhp) || 1;
-		var hpp = floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
+		//var hpp = Math.floor(48*selfP.hp/selfP.maxhp) || 1;
+		var hpp = Math.floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
 		if (!selfP.hp) hpp = 0;
 		var status = '';
 		if (selfP.status) status = ' '+selfP.status;
@@ -926,7 +895,7 @@ function BattleSide(user, battle, n) {
 	};
 
 	this.randomActive = function() {
-		var i = floor(Math.random() * selfS.active.length);
+		var i = Math.floor(Math.random() * selfS.active.length);
 		return selfS.active[i];
 	};
 
@@ -1027,7 +996,7 @@ function Battle(roomid, format, rated) {
 	this.weatherData = {id:''};
 	this.pseudoWeather = {};
 
-	this.format = toId(format);
+	this.format = format.toId();
 	this.formatData = {id:''};
 
 	this.ended = false;
@@ -1697,7 +1666,7 @@ function Battle(roomid, format, rated) {
 		if (!canSwitchIn.length) {
 			return null;
 		}
-		return canSwitchIn[floor(Math.random()*canSwitchIn.length)];
+		return canSwitchIn[Math.floor(Math.random()*canSwitchIn.length)];
 	};
 	this.dragIn = function(side) {
 		var pokemon = selfB.getRandomSwitchable(side);
@@ -1805,33 +1774,22 @@ function Battle(roomid, format, rated) {
 		}
 		if (!target || !target.hp) return 0;
 		effect = selfB.getEffect(effect);
-		boost = selfB.runEvent('Boost', target, source, effect, boost);
+		boost = selfB.runEvent('Boost', target, source, effect, Object.clone(boost));
 		for (var i in boost) {
 			var currentBoost = {};
 			currentBoost[i] = boost[i];
-			if (boost[i] > 0 && target.boostBy(currentBoost)) {
-				switch (effect.id) {
-				default:
-					if (effect.effectType === 'Move') {
-						selfB.add('-boost', target, i, boost[i]);
-					} else {
-						selfB.add('-boost', target, i, boost[i], '[from] '+effect.fullname);
-					}
-					break;
+			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
+				var msg = '-boost';
+				if (boost[i] < 0) {
+					msg = '-unboost';
+					boost[i] = -boost[i];
 				}
-				selfB.runEvent('AfterEachBoost', target, source, effect, currentBoost);
-			}
-		}
-		for (var i in boost) {
-			var currentBoost = {};
-			currentBoost[i] = boost[i];
-			if (boost[i] < 0 && target.boostBy(currentBoost)) {
 				switch (effect.id) {
 				default:
 					if (effect.effectType === 'Move') {
-						selfB.add('-unboost', target, i, -boost[i]);
+						selfB.add(msg, target, i, boost[i]);
 					} else {
-						selfB.add('-unboost', target, i, -boost[i], '[from] '+effect.fullname);
+						selfB.add(msg, target, i, boost[i], '[from] '+effect.fullname);
 					}
 					break;
 				}
@@ -1849,7 +1807,7 @@ function Battle(roomid, format, rated) {
 		if (!target || !target.hp) return 0;
 		effect = selfB.getEffect(effect);
 		if (!damage) return 0;
-		damage = clampIntRange(damage, 1);
+		damage = damage.clampIntRange(1);
 
 		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 			if (effect.effectType === 'Weather' && !target.runImmunity(effect.id)) {
@@ -1862,7 +1820,7 @@ function Battle(roomid, format, rated) {
 				return 0;
 			}
 		}
-		damage = clampIntRange(damage, 1);
+		damage = damage.clampIntRange(1);
 		damage = target.damage(damage, source, effect);
 		if (!damage) {
 			this.debug('pokemon.damage said zero');
@@ -1901,7 +1859,7 @@ function Battle(roomid, format, rated) {
 		}
 		if (!target || !target.hp) return 0;
 		if (!damage) return 0;
-		damage = clampIntRange(damage, 1);
+		damage = damage.clampIntRange(1);
 
 		damage = target.damage(damage, source, effect);
 		switch (effect.id) {
@@ -1922,11 +1880,10 @@ function Battle(roomid, format, rated) {
 			if (!effect) effect = selfB.effect;
 		}
 		effect = selfB.getEffect(effect);
-		damage = Math.ceil(damage);
+		damage = Math.floor(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
 		damage = selfB.runEvent('TryHeal', target, source, effect, damage);
 		if (!damage) return 0;
-		damage = Math.ceil(damage);
 		if (!target || !target.hp) return 0;
 		if (target.hp >= target.maxhp) return 0;
 		damage = target.heal(damage, source, effect);
@@ -2018,7 +1975,7 @@ function Battle(roomid, format, rated) {
 		}
 		if (!basePower) return 0;
 
-		move.critRatio = clampIntRange(move.critRatio, 0, 5);
+		move.critRatio = (move.critRatio || 0).clampIntRange(0, 5);
 		var critMult = [0, 16, 8, 4, 3, 2];
 
 		move.crit = move.willCrit || false;
@@ -2065,7 +2022,7 @@ function Battle(roomid, format, rated) {
 		}
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
-		var baseDamage = floor(floor(floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
+		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
 
 		// multi-target modifier (doubles only)
 		// weather modifier (TODO: relocate here)
@@ -2078,9 +2035,9 @@ function Battle(roomid, format, rated) {
 		// randomizer
 		// this is not a modifier
 		// gen 1-2
-		//var randFactor = floor(Math.random()*39)+217;
-		//baseDamage *= floor(randFactor * 100 / 255) / 100;
-		baseDamage = Math.round(baseDamage * (100 - floor(Math.random() * 16)) / 100);
+		//var randFactor = Math.floor(Math.random()*39)+217;
+		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
+		baseDamage = Math.round(baseDamage * (100 - Math.floor(Math.random() * 16)) / 100);
 
 		// STAB
 		if (type !== '???' && pokemon.hasType(type)) {
@@ -2108,11 +2065,11 @@ function Battle(roomid, format, rated) {
 		}
 		baseDamage = Math.round(baseDamage);
 
-		if (basePower && !floor(baseDamage)) {
+		if (basePower && !Math.floor(baseDamage)) {
 			return 1;
 		}
 
-		return floor(baseDamage);
+		return Math.floor(baseDamage);
 	};
 	this.getTarget = function(decision) {
 		return decision.targetSide.active[decision.targetPosition];
@@ -2455,7 +2412,7 @@ function Battle(roomid, format, rated) {
 			side.decision = decision;
 		} else if (choice === 'switch') {
 			console.log('switching to '+data);
-			data = floor(data);
+			data = Math.floor(data);
 			if (data < 0) data = 0;
 			if (data > side.pokemon.length-1) data = side.pokemon.length-1;
 			var pokemon = side.pokemon[data];

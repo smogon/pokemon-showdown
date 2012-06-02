@@ -122,6 +122,17 @@ exports.BattleFormats = {
 		name: "Haxmons",
 		ruleset: ['Hax Clause', 'Team Preview']
 	},
+	glitchmons: {
+		effectType: 'Format',
+		name: "Glitchmons",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Team Preview'],
+		banlist: ['Illegal', 'Unreleased'],
+		mimicGlitch: true
+	},
 	debugmode: {
 		effectType: 'Format',
 		name: "Debug Mode",
@@ -135,7 +146,7 @@ exports.BattleFormats = {
 
 	standard: {
 		effectType: 'Banlist',
-		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'LaxIncense', 'Minimize', 'DoubleTeam', 'Legal'],
+		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'Lax Incense', 'Minimize', 'Double Team'],
 		validateSet: function(set) {
 			if (!set.name) set.name = set.species;
 			var template = this.getTemplate(set.species);
@@ -154,30 +165,6 @@ exports.BattleFormats = {
 				}
 			}
 			set.moves = moves;
-
-			// Check for unreleased pokemon
-			switch (template.num) {
-				case 647: // Keldeo
-				case 648: // Meloetta
-				case 649: // Genesect
-					problems.push(set.name+" ("+set.species+") is unreleased.");
-					break;
-			}
-
-			// Check for more than 510 total EVs
-			var totalEV = 0;
-			for (var k in set.evs) totalEV += set.evs[k];
-			if (totalEV > 510) {
-				problems.push(set.name+" ("+set.species+") has more than 510 total EVs.");
-			}
-
-			// Check that the ability used is allowed
-			var ability = this.getAbility(set.ability).name;
-			if (ability !== template.abilities['0'] &&
-				ability !== template.abilities['1'] &&
-				ability !== template.abilities['DW']) {
-				problems.push(set.name+" ("+set.species+") can't have "+set.ability+".");
-			}
 
 			// Check the pokemon's moveset
 			problems = problems.concat(Tools.validateMoveset(set, template));

@@ -565,6 +565,9 @@ exports.BattleMovedex = {
 		pp: 15,
 		isViable: true,
 		priority: 0,
+		boosts: {
+			spe: 2
+		},
 		volatileStatus: 'autotomize',
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
@@ -574,9 +577,6 @@ exports.BattleMovedex = {
 			onModifyPokemon: function(pokemon) {
 				pokemon.weightkg /= 2;
 			}
-		},
-		boosts: {
-			spe: 2
 		},
 		secondary: false,
 		target: "self",
@@ -1663,8 +1663,42 @@ exports.BattleMovedex = {
 		name: "Conversion",
 		pp: 30,
 		priority: 0,
+		volatileStatus: 'conversion',
+		effect: {
+			onStart: function(pokemon) {
+				var possibleTypes = pokemon.moveset.map(function(val){
+					var move = this.getMove(val.id);
+					if (move.id !== 'conversion' && !pokemon.hasType(move.type)) {
+						return move.type;
+					}
+				}, this).compact();
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes.sample();
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onRestart: function(pokemon) {
+				var possibleTypes = pokemon.moveset.map(function(val){
+					var move = this.getMove(val.id);
+					if (move.id !== 'conversion' && !pokemon.hasType(move.type)) {
+						return move.type;
+					}
+				}, this).compact();
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes.sample();
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.types = [this.effectData.type];
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"conversion2": {
@@ -1678,6 +1712,56 @@ exports.BattleMovedex = {
 		name: "Conversion 2",
 		pp: 30,
 		priority: 0,
+		onTryHit: function(target, source) {
+			source.addVolatile("conversion2", target);
+		},
+		effect: {
+			onStart: function(pokemon, target, move) {
+				if (!target.lastMove) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				var possibleTypes = [];
+				var attackType = this.getMove(target.lastMove).type;
+				for (var type in BattleTypeChart) {
+					if (pokemon.hasType(type) || target.hasType(type)) continue;
+					var typeCheck = BattleTypeChart[type].damageTaken[attackType];
+					if (typeCheck === 2 || typeCheck === 3) {
+						possibleTypes.push(type);
+					}
+				}
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes.sample();
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onRestart: function(pokemon, target, move) {
+				if (!target.lastMove) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				var possibleTypes = [];
+				var attackType = this.getMove(target.lastMove).type;
+				for (var type in BattleTypeChart) {
+					if (pokemon.hasType(type) || target.hasType(type)) continue;
+					var typeCheck = BattleTypeChart[type].damageTaken[attackType];
+					if (typeCheck === 2 || typeCheck === 3) {
+						possibleTypes.push(type);
+					}
+				}
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes.sample();
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.types = [this.effectData.type];
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -1952,7 +2036,8 @@ exports.BattleMovedex = {
 		onModifyMove: function(move, source, target) {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
-				move.self = { boosts: {atk:1,def:1,spe:-1} };
+				move.self = { boosts: {atk:1,def:1,spe:-1}};
+				move.target = "self";
 			}
 		},
 		effect: {
@@ -2099,11 +2184,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'destinybond',
 		effect: {
+			onStart: function(pokemon) {
+				this.add('-message', pokemon.name+' is trying to take its foe down with it! (placeholder)');
+			},
 			onFaint: function(target, source, effect) {
-				this.debug('Destiny Bond detected fainted pokemon');
 				if (!source || !effect) return;
-				this.debug('attacker: '+source.id+', bonded with: '+this.effectData.target.id+', lm: '+target.lastMove);
 				if (effect.effectType === 'Move' && target.lastMove === 'destinybond') {
+					this.add('-message', target.name+' took its attacker down with it! (placeholder)');
 					source.faint();
 				}
 			},
@@ -4329,7 +4416,7 @@ exports.BattleMovedex = {
 					pokemon.disabledMoves[m] = true;
 				}
 				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
-					this.add("message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
+					this.add("-message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
 				}
 			},
 			onEnd: function() {
@@ -7068,6 +7155,7 @@ exports.BattleMovedex = {
 				for (var i in boost) {
 					if (boost[i] < 0) {
 						delete boost[i];
+						this.add('-message', target.name+' is protected by the mist! (placeholder)');
 					}
 				}
 			},
@@ -8030,7 +8118,7 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, effect) {
-				if (effect && (effect.id === 'feint' || effect.id === 'roleplay')) {
+				if (effect && (effect.id === 'feint' || effect.id === 'roleplay' || effect.id === 'conversion2')) {
 					return;
 				}
 				if (effect && effect.id === 'curse' && !effect.volatileStatus) {
@@ -8724,12 +8812,11 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target) {
+			if (target.hp >= target.maxhp) return false;
 			if (!target.setStatus('slp')) return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
-			if (!this.heal(target.maxhp)) {
-				return false;
-			}
+			this.heal(target.maxhp) //Aeshetic only as the healing happens after you fall asleep in-game
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
 		secondary: false,
@@ -10158,7 +10245,7 @@ exports.BattleMovedex = {
 					pokemon.movedThisTurn = true;
 				}
 				if (!applies) return false;
-				this.add("message", pokemon.name+" fell straight down! (placeholder)");
+				this.add('-message', pokemon.name+' fell straight down! (placeholder)');
 			},
 			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {

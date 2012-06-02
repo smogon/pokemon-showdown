@@ -1,18 +1,3 @@
-function toId(text) {
-	text = text || '';
-	if (typeof text === 'number') text = ''+text;
-	if (typeof text !== 'string') return ''; //???
-	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
-function clone(object) {
-	var newObj = (object instanceof Array) ? [] : {};
-	for (var i in object) {
-		if (object[i] && typeof object[i] == "object") {
-			newObj[i] = clone(object[i]);
-		} else newObj[i] = object[i]
-	} return newObj;
-};
-
 function BattleTools() {
 	var selfT = this;
 	this.effectToString = function() {
@@ -45,10 +30,10 @@ function BattleTools() {
 	this.getTemplate = function(template) {
 		if (!template || typeof template === 'string') {
 			var name = (template||'').trim();
-			var id = toId(name);
+			var id = name.toId();
 			if (BattleAliases[id]) {
 				name = BattleAliases[id];
-				id = toId(name);
+				id = name.toId();
 			}
 			template = {};
 			if (id && BattlePokedex[id]) {
@@ -57,14 +42,10 @@ function BattleTools() {
 			}
 			name = template.species || template.name || name;
 			if (BattleFormatsData[id]) {
-				template.tier = BattleFormatsData[id].tier;
-				template.isNonstandard = BattleFormatsData[id].isNonstandard;
-				template.viableMoves = BattleFormatsData[id].viableMoves;
-				template.requiredItem = BattleFormatsData[id].requiredItem;
-				template.eventPokemon = BattleFormatsData[id].eventPokemon;
+				Object.merge(template, BattleFormatsData[id]);
 			}
 			if (BattleLearnsets[id]) {
-				template.learnset = BattleLearnsets[id].learnset;
+				Object.merge(template, BattleLearnsets[id]);
 			}
 			if (!template.id) template.id = id;
 			if (!template.name) template.name = name;
@@ -73,7 +54,7 @@ function BattleTools() {
 			if (!template.baseSpecies) template.baseSpecies = name;
 			if (!template.forme) template.forme = '';
 			if (!template.formeLetter) template.formeLetter = '';
-			if (!template.spriteid) template.spriteid = toId(template.baseSpecies)+(template.baseSpecies!==name?'-'+toId(template.forme):'');
+			if (!template.spriteid) template.spriteid = template.basespecies.toId()+(template.basespecies!==name?'-'+template.forme.toId():'');
 			if (!template.prevo) template.prevo = '';
 			if (!template.evos) template.evos = [];
 			if (!template.nfe) template.nfe = !!template.evos.length;
@@ -83,13 +64,21 @@ function BattleTools() {
 			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0,F:0};
 			if (!template.genderRatio) template.genderRatio = {M:.5,F:.5};
 			if (!template.tier) template.tier = 'Illegal';
+			if (!template.gen) {
+				if (template.num >= 494) template.gen = 5;
+				else if (template.num >= 387) template.gen = 4;
+				else if (template.num >= 252) template.gen = 3;
+				else if (template.num >= 152) template.gen = 2;
+				else if (template.num >= 1) template.gen = 1;
+				else template.gen = 0;
+			}
 		}
 		return template;
 	};
 	this.getMove = function(move) {
 		if (!move || typeof move === 'string') {
 			var name = (move||'').trim();
-			var id = toId(name);
+			var id = name.toId();
 			move = {};
 			if (id.substr(0,12) === 'HiddenPower[') {
 				var hptype = id.substr(12);
@@ -108,6 +97,14 @@ function BattleTools() {
 			if (!move.baseType) move.baseType = move.type;
 			if (!move.effectType) move.effectType = 'Move';
 			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
+			if (!move.gen) {
+				if (move.num >= 468) move.gen = 5;
+				else if (move.num >= 355) move.gen = 4;
+				else if (move.num >= 252) move.gen = 3;
+				else if (move.num >= 166) move.gen = 2;
+				else if (move.num >= 1) move.gen = 1;
+				else move.gen = 0;
+			}
 		}
 		return move;
 	};
@@ -126,7 +123,7 @@ function BattleTools() {
 	this.getMoveCopy = function(move) {
 		if (move && move.isCopy) return move;
 		var move = this.getMove(move);
-		var moveCopy = clone(move);
+		var moveCopy = Object.clone(move, true);
 		moveCopy.isCopy = true;
 		return moveCopy;
 	};
@@ -136,7 +133,7 @@ function BattleTools() {
 	this.getEffect = function(effect) {
 		if (!effect || typeof effect === 'string') {
 			var name = (effect||'').trim();
-			var id = toId(name);
+			var id = name.toId();
 			effect = {};
 			if (id && BattleStatuses[id]) {
 				effect = BattleStatuses[id];
@@ -175,7 +172,7 @@ function BattleTools() {
 	this.getItem = function(item) {
 		if (!item || typeof item === 'string') {
 			var name = (item||'').trim();
-			var id = toId(name);
+			var id = name.toId();
 			item = {};
 			if (id && BattleItems[id]) {
 				item = BattleItems[id];
@@ -194,7 +191,7 @@ function BattleTools() {
 	this.getAbility = function(ability) {
 		if (!ability || typeof ability === 'string') {
 			var name = (ability||'').trim();
-			var id = toId(name);
+			var id = name.toId();
 			ability = {};
 			if (id && BattleAbilities[id]) {
 				ability = BattleAbilities[id];
@@ -206,12 +203,18 @@ function BattleTools() {
 			ability.toString = selfT.effectToString;
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
+			if (!ability.gen) {
+				if (ability.num >= 124) ability.gen = 5;
+				else if (ability.num >= 77) ability.gen = 4;
+				else if (ability.num >= 1) ability.gen = 3;
+				else ability.gen = 0;
+			}
 		}
 		return ability;
 	};
 	this.getType = function(type) {
 		if (!type || typeof type === 'string') {
-			var id = toId(type);
+			var id = type.toId();
 			type = {};
 			if (id && BattleTypeChart[id]) {
 				type = BattleTypeChart[id];
@@ -244,10 +247,10 @@ function BattleTools() {
 			if (subformat.banlist) {
 				for (var i=0; i<subformat.banlist.length; i++) {
 					// don't revalidate what we already validate
-					if (banlistTable[toId(subformat.banlist[i])]) continue;
+					if (banlistTable[subformat.banlist[i].toId()]) continue;
 
 					banlistTable[subformat.banlist[i]] = true;
-					banlistTable[toId(subformat.banlist[i])] = true;
+					banlistTable[subformat.banlist[i].toId()] = true;
 
 					var plusPos = subformat.banlist[i].indexOf('+');
 					if (plusPos && plusPos > 0) {
@@ -255,13 +258,13 @@ function BattleTools() {
 						if (plusPlusPos && plusPlusPos > 0) {
 							var complexList = subformat.banlist[i].split('++');
 							for (var j=0; j<complexList.length; j++) {
-								complexList[j] = toId(complexList[j]);
+								complexList[j] = complexList[j].toId();
 							}
 							format.teamBanTable.push(complexList);
 						} else {
 							var complexList = subformat.banlist[i].split('+');
 							for (var j=0; j<complexList.length; j++) {
-								complexList[j] = toId(complexList[j]);
+								complexList[j] = complexList[j].toId();
 							}
 							format.setBanTable.push(complexList);
 						}
@@ -271,9 +274,9 @@ function BattleTools() {
 			if (subformat.ruleset) {
 				for (var i=0; i<subformat.ruleset.length; i++) {
 					// don't revalidate what we already validate
-					if (banlistTable['Rule:'+toId(subformat.ruleset[i])]) continue;
+					if (banlistTable['Rule:'+subformat.ruleset[i].toId()]) continue;
 
-					banlistTable['Rule:'+toId(subformat.ruleset[i])] = true;
+					banlistTable['Rule:'+subformat.ruleset[i].toId()] = true;
 
 					var subsubformat = selfT.getEffect(subformat.ruleset[i]);
 					if (subsubformat.ruleset || subsubformat.banlist) {
@@ -360,44 +363,59 @@ function BattleTools() {
 
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
+		var name = set.species;
+		if (set.species !== set.name) name = set.name + " ("+set.species+")";
 		var template = selfT.getTemplate(set.species);
 
 		var setHas = {};
 
 		if (!template || !template.abilities) {
 			set.species = 'Bulbasaur';
-			template = selfT.getTemplate('Bulbasaur')
+			template = selfT.getTemplate('Bulbasaur');
 		}
 
 		var banlistTable = selfT.getBanlistTable(format);
 
-		setHas[toId(set.species)] = true;
-		if (banlistTable[toId(set.species)]) {
+		setHas[set.species.toId()] = true;
+		if (banlistTable[set.species.toId()]) {
 			problems.push(set.species+' is banned.');
 		}
-		setHas[toId(set.ability)] = true;
-		if (banlistTable[toId(set.ability)]) {
-			problems.push(set.name+"'s ("+set.species+") ability "+set.ability+" is banned.");
+		setHas[set.ability.toId()] = true;
+		if (banlistTable[set.ability.toId()]) {
+			problems.push(name+"'s ability "+set.ability+" is banned.");
 		}
-		setHas[toId(set.item)] = true;
-		if (banlistTable[toId(set.item)]) {
-			problems.push(set.name+"'s ("+set.species+") item "+set.item+" is banned.");
+		setHas[set.item.toId()] = true;
+		if (banlistTable[set.item.toId()]) {
+			problems.push(name+"'s item "+set.item+" is banned.");
 		}
 		var item = selfT.getItem(set.item);
 		if (banlistTable['Unreleased'] && item.isUnreleased) {
-			problems.push(set.name+"'s ("+set.species+") item "+set.item+" is unreleased.");
+			problems.push(name+"'s item "+set.item+" is unreleased.");
 		}
-		if (toId(set.ability) === toId(template.abilities['DW'])) {
-			var unreleasedDW = {
-					Serperior: 1, Chandelure: 1, Ditto: 1,
-					Breloom: 1, Zapdos: 1, Feraligatr: 1, Gothitelle: 1,
-					'Ho-Oh': 1, Lugia: 1, Raikou: 1, Cinccino: 1
-				};
+		setHas[set.ability.toId()] = true;
+		if (banlistTable['illegal']) {
+			var totalEV = 0;
+			for (var k in set.evs) {
+				totalEV += set.evs[k];
+			}
+			if (totalEV > 510) {
+				problems.push(name+" has more than 510 total EVs.");
+			}
 
-			if (unreleasedDW[set.species] && banlistTable['Unreleased']) {
-				problems.push(set.name+" ("+set.species+")'s Dream World ability is unreleased.");
-			} else if (template.num >= 494 && set.species !== 'Darmanitan' && set.species !== 'Munna') {
-				problems.push(set.name+" ("+set.species+")'s Dream World ability is unreleased.");
+			var ability = selfT.getAbility(set.ability).name;
+			if (ability !== template.abilities['0'] &&
+				ability !== template.abilities['1'] &&
+				ability !== template.abilities['DW']) {
+				problems.push(name+" can't have "+set.ability+".");
+			}
+			if (ability === template.abilities['DW']) {
+				source = 'DW';
+
+				if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
+					problems.push(name+"'s Dream World ability is unreleased.");
+				} else if (template.maleOnlyDreamWorld) {
+					set.gender = 'M';
+				}
 			}
 		}
 		setHas[toId(set.item)] = true;
@@ -410,7 +428,7 @@ function BattleTools() {
 		setHas[toId(set.ability)] = true;
 		var limit1 = 0;
 		if (!set.moves || !set.moves.length) {
-			problems.push(set.name+" has no moves.");
+			problems.push(name+" has no moves.");
 		} else {
 			// A limit is imposed here to prevent too much engine strain or
 			// too much layout deformation - to be exact, this is the Debug
@@ -419,21 +437,22 @@ function BattleTools() {
 			// in the cartridge-compliant set validator: formats.js:pokemon
 			set.moves = set.moves.slice(0,24);
 
+			var lsetData = {set:set, format:format};
 			for (var i=0; i<set.moves.length; i++) {
 				if (!set.moves[i]) continue;
 				set.moves[i] = ''+(set.moves[i]||'');
 				var move = selfT.getMove(set.moves[i]);
 				setHas[move.id] = true;
 				if (banlistTable[move.id]) {
-					problems.push(set.name+"'s ("+set.species+") move "+set.moves[i]+" is banned.");
+					problems.push(name+"'s move "+set.moves[i]+" is banned.");
 				} else if (move.ohko && banlistTable['OHKO']) {
-					problems.push(set.name+"'s ("+set.species+") move "+set.moves[i]+" is an OHKO move, which is banned.");
+					problems.push(name+"'s move "+set.moves[i]+" is an OHKO move, which is banned.");
 				}
 			}
 		}
-		setHas[toId(template.tier)] = true;
+		setHas[template.tier.toId()] = true;
 		if (banlistTable[template.tier]) {
-			problems.push(set.name+" ("+set.species+") is in "+template.tier+", which is banned.");
+			problems.push(name+" is in "+template.tier+", which is banned.");
 		}
 
 		if (teamHas) {
@@ -456,7 +475,7 @@ function BattleTools() {
 				}
 			}
 			if (bannedCombo) {
-				problems.push(set.name+" ("+set.species+") has the combination of "+bannedCombo+", which is banned.");
+				problems.push(name+" has the combination of "+bannedCombo+", which is banned.");
 			}
 		}
 

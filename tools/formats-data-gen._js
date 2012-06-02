@@ -88,8 +88,12 @@ function convertData(veekunPokemon, smogonDex, viableMoves, serebiiEventdex) {
 			eventPokemon.level = serebiiEventPokemon.level;
 			eventPokemon.gender = serebiiEventPokemon.gender;
 			eventPokemon.nature = serebiiEventPokemon.nature;
+			if (eventPokemon.nature === "Na�ve") eventPokemon.nature = "Naive";
 			eventPokemon.abilities = serebiiEventPokemon.abilities;
 			eventPokemon.moves = serebiiEventPokemon.moves;
+			
+			if (eventPokemon.gender === "M/F") delete eventPokemon.gender;
+			if (eventPokemon.nature === "Any") delete eventPokemon.nature;
 
 			result.eventPokemon.push(eventPokemon);
 		}

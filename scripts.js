@@ -1,37 +1,3 @@
-function toId(text) {
-	text = text || '';
-	if (typeof text === 'number') text = ''+text;
-	if (typeof text !== 'string') return ''; //???
-	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
-function clone(object) {
-	var newObj = (object instanceof Array) ? [] : {};
-	for (var i in object) {
-		if (object[i] && typeof object[i] == "object") {
-			newObj[i] = clone(object[i]);
-		} else newObj[i] = object[i]
-	} return newObj;
-};
-function shuffle(array) {
-	var tmp, current, top = array.length;
-
-	if(top) while(--top) {
-		current = Math.floor(Math.random() * (top + 1));
-		tmp = array[current];
-		array[current] = array[top];
-		array[top] = tmp;
-	}
-
-	return array;
-}
-function objectKeys(object) {
-	var keys = [];
-	for (var prop in object) {
-		keys.push(prop);
-	}
-	return keys;
-}
-
 exports.BattleScripts = {
 	runMove: function(move, pokemon, target) {
 		move = this.getMove(move);
@@ -55,6 +21,7 @@ exports.BattleScripts = {
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	useMove: function(move, pokemon, target) {
+		baseMove = move;
 		move = this.getMoveCopy(move);
 
 		this.setActiveMove(move, pokemon, target);
@@ -63,6 +30,10 @@ exports.BattleScripts = {
 		};
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 		move = this.runEvent('ModifyMove',pokemon,target,move,move);
+		if (baseMove.target !== move.target) {
+			//Target changed in ModifyMove, so we must adjust it here
+			target = this.resolveTarget(pokemon, move);
+		}
 		if (!move) return false;
 
 		var attrs = '';
@@ -157,7 +128,7 @@ exports.BattleScripts = {
 			this.damage(pokemon.lastDamage * move.recoil[0] / move.recoil[1], pokemon, target, 'recoil');
 		}
 		if (move.drain && pokemon.lastDamage) {
-			this.heal(pokemon.lastDamage * move.drain[0] / move.drain[1], pokemon, target, 'drain');
+			this.heal(Math.ceil(pokemon.lastDamage * move.drain[0] / move.drain[1]), pokemon, target, 'drain');
 		}
 		if (move.selfdestruct) {
 			this.faint(pokemon, pokemon, move);
@@ -279,7 +250,7 @@ exports.BattleScripts = {
 				this.boost(moveData.boosts, target, pokemon, move);
 			}
 			if (moveData.heal && !target.fainted) {
-				var d = target.heal(target.maxhp * moveData.heal[0] / moveData.heal[1]);
+				var d = target.heal(Math.round(target.maxhp * moveData.heal[0] / moveData.heal[1]));
 				if (!d) {
 					this.add('-fail', target);
 					return false;
@@ -384,7 +355,7 @@ exports.BattleScripts = {
 				keys.push(i);
 			}
 		}
-		keys = shuffle(keys);
+		keys = keys.randomize();
 
 		var ruleset = this.getFormat().ruleset;
 
@@ -392,23 +363,26 @@ exports.BattleScripts = {
 			var template = this.getTemplate(keys[i]);
 
 			if (!template || !template.name || !template.types) continue;
-			if (template.tier === 'CAP' && Math.random()*3>1) continue;
+			if ((template.tier === 'G4CAP' || template.tier === 'G5CAP') && Math.random()*5>1) continue;
+			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
 
 			if (ruleset && ruleset[0]==='PotD') {
 				var potd = this.getTemplate(config.potd);
-				if (i===1) template = potd;
-				else if (template.species === potd.species) continue; // No thanks, I've already got one
+				if (i===1) {
+					template = potd;
+					if (!template || !template.name || !template.types) {
+						continue;
+					} else if (template.species === 'Magikarp') {
+						template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
+					} else if (template.species === 'Delibird') {
+						template.viableMoves = {present:1, bestow:1};
+					}
+				} else if (template.species === potd.species) {
+					continue; // No thanks, I've already got one
+				}
 			}
-			if (!template || !template.name || !template.types) continue;
 
-			if (template.species === 'Magikarp') {
-				template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
-			}
-			if (template.species === 'Delibird') {
-				template.viableMoves = {present:1, bestow:1};
-			}
-
-			var moveKeys = shuffle(objectKeys(template.viableMoves));
+			var moveKeys = Object.keys(template.viableMoves).randomize();
 			var moves = [];
 			var ability = '';
 			var item = '';
@@ -440,7 +414,7 @@ exports.BattleScripts = {
 			var j=0;
 			do {
 				while (moves.length<4 && j<moveKeys.length) {
-					var moveid = toId(moveKeys[j]);
+					var moveid = moveKeys[j].toId();
 					j++;
 					if (moveid.substr(0,11) === 'hiddenpower') {
 						if (!hasMove['hiddenpower']) {
@@ -803,7 +777,7 @@ exports.BattleScripts = {
 					item = 'Life Orb';
 				} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
 					// Give Unburden mons a random Gem of the type of one of their damaging moves
-					var shuffledMoves = shuffle(moves);
+					var shuffledMoves = moves.randomize();
 					for (var m in shuffledMoves) {
 						var move = this.getMove(shuffledMoves[m]);
 						if (move.basePower || move.basePowerCallback) {
