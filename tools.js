@@ -54,7 +54,7 @@ function BattleTools() {
 			if (!template.baseSpecies) template.baseSpecies = name;
 			if (!template.forme) template.forme = '';
 			if (!template.formeLetter) template.formeLetter = '';
-			if (!template.spriteid) template.spriteid = template.basespecies.toId()+(template.basespecies!==name?'-'+template.forme.toId():'');
+			if (!template.spriteid) template.spriteid = template.baseSpecies.toId()+(template.baseSpecies!==name?'-'+template.forme.toId():'');
 			if (!template.prevo) template.prevo = '';
 			if (!template.evos) template.evos = [];
 			if (!template.nfe) template.nfe = !!template.evos.length;
