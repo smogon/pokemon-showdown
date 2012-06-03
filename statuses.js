@@ -271,9 +271,13 @@ exports.BattleStatuses = {
 					continue;
 				}
 
-				this.add('message '+move.name+' hit! (placeholder)');
+				this.add('-message', ''+move.name+' hit! (placeholder)');
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
+
+				if (typeof posData.moveData.affectedByImmunities === 'undefined') {
+					posData.moveData.affectedByImmunities = true;
+				}
 
 				this.moveHit(target, posData.source, move, posData.moveData);
 
