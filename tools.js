@@ -238,6 +238,7 @@ function BattleTools() {
 		var alreadyChecked = {};
 		var result = false;
 		var isDW = (Tools.getAbility(set.ability).name === template.abilities.DW);
+		var isMaleOnly = template.maleOnlyDreamWorld;
 		var recheck = false;
 		if (move.id) move = move.id;
 		do {
@@ -247,10 +248,13 @@ function BattleTools() {
 					var lset = template.learnset[move];
 					if (typeof lset === 'string') lset = [lset];
 					if (isDW) {
-						// the combination of DW ability and gen 3-4 exclusive move is illegal
 						result = null; // DW illegality
+						if (isMaleOnly && !template.maleOnlyDreamWorld) { // the pokemon is released, but not its prevo(s)
+							return result;
+						}
+						// the combination of DW ability and gen 3-4 exclusive move is illegal
 						for (var i=0; i<lset.length; i++) {
-							if (lset[i].substr(0,1) === '5' && (!template.maleOnlyDreamWorld || lset[i] !== '5E')) {
+							if (lset[i].substr(0,1) === '5' && (!isMaleOnly || lset[i] !== '5E')) {
 								return true;
 							}
 						}
