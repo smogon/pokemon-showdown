@@ -211,7 +211,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 				}
 				// update rankings
 				request({
-					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+selfR.rated.format.toId()+'&servertoken='+servertoken+'&nocache='+getTime(),
+					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+selfR.rated.format.toId()+'&servertoken='+servertoken+'&nocache='+getTime()
 				}, function(error, response, body) {
 					if (body) {
 						try {
@@ -343,7 +343,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 		selfR.active = selfR.battle.active;
 		selfR.update();
 		return true;
-	}
+	};
 	this.kickInactive = function() {
 		clearTimeout(selfR.resetTimer);
 		selfR.resetTimer = null;
@@ -400,7 +400,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 		if (selfR.parentid) {
 			getRoom(selfR.parentid).updateRooms();
 		}
-	}
+	};
 	this.requestReset = function(user) {
 		if (selfR.resetTimer) return;
 		if (!selfR.battle.started) return; // no point
@@ -738,7 +738,7 @@ function Room(roomid, format, p1, p2, parentid, rated) {
 		delete rooms[selfR.id];
 
 		selfR = null;
-	}
+	};
 }
 
 function Lobby(roomid) {
@@ -947,8 +947,8 @@ function Lobby(roomid) {
 			users: selfR.getUserList(),
 			roomType: 'lobby',
 			log: selfR.log.slice(-100),
-			searcher: selfR.searchers.length,
-		}
+			searcher: selfR.searchers.length
+		};
 		socket.emit('init', initdata);
 	};
 	this.join = function(user) {
@@ -974,8 +974,8 @@ function Lobby(roomid) {
 			users: selfR.getUserList(),
 			roomType: 'lobby',
 			log: selfR.log.slice(-100),
-			searcher: selfR.searchers.length,
-		}
+			searcher: selfR.searchers.length
+		};
 		user.emit('init', initdata);
 
 		return user;
@@ -1159,7 +1159,7 @@ getRoom = function(roomid) {
 		return rooms.lobby;
 	}
 	return rooms[roomid];
-}
+};
 newRoom = function(roomid, format, p1, p2, parent, rated) {
 	if (roomid && roomid.id) return roomid;
 	if (!roomid) roomid = 'default';
@@ -1168,7 +1168,7 @@ newRoom = function(roomid, format, p1, p2, parent, rated) {
 		rooms[roomid] = new Room(roomid, format, p1, p2, parent, rated);
 	}
 	return rooms[roomid];
-}
+};
 
 mutedIps = {
 };
@@ -1190,7 +1190,7 @@ if (config.crashguard) {
 	process.on('uncaughtException', function (err) {
 		console.log("\n"+err.stack+"\n");
 		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
-			this.write("\n"+err.stack+"\n")
+			this.write("\n"+err.stack+"\n");
 			this.end();
 		});
 		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
@@ -1235,7 +1235,7 @@ io.sockets.on('connection', function (socket) {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		var room = getRoom(message.room);
-		youUser.chat(message.message, room, socket)
+		youUser.chat(message.message, room, socket);
 	});
 	socket.on('leave', function(data) {
 		if (!data || typeof data.room !== 'string') return;
