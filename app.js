@@ -1213,7 +1213,7 @@ io.sockets.on('connection', function (socket) {
 	}
 
 	socket.on('join', function(data) {
-		if (typeof data.room !== 'string') return;
+		if (!data || typeof data.room !== 'string' || typeof data.name !== 'string') return;
 		if (!you) {
 			you = Users.connectUser(data.name, socket, data.token, data.room);
 			console.log('JOIN: '+data.name+' => '+you.name+' ['+data.token+']');
@@ -1224,36 +1224,34 @@ io.sockets.on('connection', function (socket) {
 		}
 	});
 	socket.on('rename', function(data) {
+		if (!data) return;
 		data.name = ''+data.name;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		youUser.rename(data.name, data.token, data.auth);
 	});
 	socket.on('chat', function(message) {
-		if (typeof message.room !== 'string') return;
+		if (!message || typeof message.room !== 'string' || typeof message.message !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		if (!message) return;
 		var room = getRoom(message.room);
 		youUser.chat(message.message, room, socket)
 	});
 	socket.on('leave', function(data) {
-		if (typeof data.room !== 'string') return;
+		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		if (!data) return;
 		youUser.leaveRoom(getRoom(data.room), socket);
 	});
 	socket.on('leaveBattle', function(data) {
-		if (typeof data.room !== 'string') return;
+		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		if (!data) return;
 		var room = getRoom(data.room);
 		if (room.leaveBattle) room.leaveBattle(youUser);
 	});
 	socket.on('joinBattle', function(data) {
-		if (typeof data.room !== 'string') return;
+		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		var room = getRoom(data.room);
@@ -1261,7 +1259,7 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('command', function(data) {
-		if (typeof data.room !== 'string') return;
+		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		parseCommand(youUser, 'command', data, getRoom(data.room), socket);
@@ -1272,13 +1270,13 @@ io.sockets.on('connection', function (socket) {
 		youUser.disconnect(socket);
 	});
 	socket.on('challenge', function(data) {
+		if (!data || typeof data.userid !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		console.log('CHALLENGE: '+youUser.name+' => '+data.userid+' ('+data.act+')');
 		switch (data.act) {
 		case 'make':
 			if (typeof data.format !== 'string') data.format = 'debugmode';
-			if (typeof data.userid !== 'string') return;
 			var problems = Tools.validateTeam(youUser.team, data.format);
 			if (problems) {
 				socket.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
@@ -1293,7 +1291,6 @@ io.sockets.on('connection', function (socket) {
 			youUser.cancelChallengeTo(data.userid);
 			break;
 		case 'accept':
-			if (typeof data.userid !== 'string') return;
 			var format = 'debugmode';
 			if (youUser.challengesFrom[data.userid]) format = youUser.challengesFrom[data.userid].format;
 			var problems = Tools.validateTeam(youUser.team, format);
@@ -1304,12 +1301,12 @@ io.sockets.on('connection', function (socket) {
 			youUser.acceptChallengeFrom(data.userid);
 			break;
 		case 'reject':
-			if (typeof data.userid !== 'string') return;
 			youUser.rejectChallengeFrom(data.userid);
 			break;
 		}
 	});
 	socket.on('decision', function(data) {
+		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		var room = getRoom(data.room);
@@ -1331,6 +1328,7 @@ io.sockets.on('connection', function (socket) {
 		}
 	});
 	socket.on('saveTeam', function(data) {
+		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		youUser.team = data.team;
