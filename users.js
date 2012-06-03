@@ -411,8 +411,6 @@ var User = (function () {
 							group = '@';
 							break;
 						}
-						userid = data.userid;
-						name = data.username;
 						/* var userdata = JSON.parse(body.userdata);
 						avatar = parseInt(userdata.trainersprite);
 						if (!avatar || avatar > 263 || avatar < 1) {
