@@ -839,10 +839,12 @@ exports.BattleFormatsData = {
 	},
 	happiny: {
 		viableMoves: {"aromatherapy":1,"toxic":1,"thunderwave":1,"counter":1,"endeavor":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	chansey: {
 		viableMoves: {"wish":1,"softboiled":1,"protect":1,"toxic":1,"aromatherapy":1,"seismictoss":1,"counter":1,"thunderwave":1,"stealthrock":1},
+		dreamWorldRelease: true,
 		eventPokemon: [
 			{"generation":3,"level":5,"gender":"F","abilities":["naturalcure","serenegrace"],"moves":["sweetscent","wish"]},
 			{"generation":3,"level":10,"gender":"F","abilities":["naturalcure","serenegrace"],"moves":["pound","growl","tailwhip","refresh"]}
@@ -851,6 +853,7 @@ exports.BattleFormatsData = {
 	},
 	blissey: {
 		viableMoves: {"wish":1,"softboiled":1,"protect":1,"toxic":1,"aromatherapy":1,"seismictoss":1,"counter":1,"thunderwave":1,"stealthrock":1,"flamethrower":1,"icebeam":1},
+		dreamWorldRelease: true,
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"F","abilities":["healer"],"moves":["pound","growl","tailwhip","refresh"]}
 		],
@@ -1114,6 +1117,7 @@ exports.BattleFormatsData = {
 	},
 	porygon: {
 		viableMoves: {"triattack":1,"thunderbolt":1,"icebeam":1,"recover":1,"chargebeam":1,"toxic":1,"thunderwave":1,"discharge":1,"trickroom":1,"trick":1},
+		dreamWorldRelease: true,
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"N/A","abilities":["analytic"],"moves":["tackle","conversion","sharpen","psybeam"]}
 		],
@@ -1121,10 +1125,12 @@ exports.BattleFormatsData = {
 	},
 	porygon2: {
 		viableMoves: {"triattack":1,"thunderbolt":1,"icebeam":1,"recover":1,"chargebeam":1,"toxic":1,"thunderwave":1,"discharge":1,"trickroom":1,"trick":1},
+		dreamWorldRelease: true,
 		tier: "UU"
 	},
 	porygonz: {
 		viableMoves: {"triattack":1,"thunderbolt":1,"icebeam":1,"darkpulse":1,"hiddenpowerfighting":1,"chargebeam":1,"agility":1,"trick":1,"nastyplot":1,"substitute":1},
+		dreamWorldRelease: true,
 		tier: "BL2"
 	},
 	omanyte: {
