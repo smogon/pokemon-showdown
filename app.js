@@ -1270,13 +1270,14 @@ io.sockets.on('connection', function (socket) {
 		youUser.disconnect(socket);
 	});
 	socket.on('challenge', function(data) {
-		if (!data || typeof data.userid !== 'string') return;
+		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		console.log('CHALLENGE: '+youUser.name+' => '+data.userid+' ('+data.act+')');
 		switch (data.act) {
 		case 'make':
 			if (typeof data.format !== 'string') data.format = 'debugmode';
+			if (typeof data.userid !== 'string') return;
 			var problems = Tools.validateTeam(youUser.team, data.format);
 			if (problems) {
 				socket.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
@@ -1291,6 +1292,7 @@ io.sockets.on('connection', function (socket) {
 			youUser.cancelChallengeTo(data.userid);
 			break;
 		case 'accept':
+			if (typeof data.userid !== 'string') return;
 			var format = 'debugmode';
 			if (youUser.challengesFrom[data.userid]) format = youUser.challengesFrom[data.userid].format;
 			var problems = Tools.validateTeam(youUser.team, format);
@@ -1301,6 +1303,7 @@ io.sockets.on('connection', function (socket) {
 			youUser.acceptChallengeFrom(data.userid);
 			break;
 		case 'reject':
+			if (typeof data.userid !== 'string') return;
 			youUser.rejectChallengeFrom(data.userid);
 			break;
 		}
