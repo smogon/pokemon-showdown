@@ -266,7 +266,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'User '+target+' not found.');
 		} else {
 			socket.emit('console', 'User: '+targetUser.name);
-			if (config.groups[targetUser.group].name) {
+			if (config.groups[targetUser.group] && config.groups[targetUser.group].name) {
 				socket.emit('console', 'Group: ' + config.groups[targetUser.group].name + ' (' + targetUser.group + ')');
 			}
 			if (!targetUser.authenticated) {
