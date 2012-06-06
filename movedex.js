@@ -10927,7 +10927,7 @@ exports.BattleMovedex = {
 		basePower: 30,
 		category: "Special",
 		desc: "Has a 100% chance to lower the target's Special Attack by one level.",
-		shortDesc: "100% chance to lowers the foe(s) Sp. Atk by 1.",
+		shortDesc: "100% chance to lower the foe(s) Sp. Atk by 1.",
 		id: "strugglebug",
 		name: "Struggle Bug",
 		pp: 20,
