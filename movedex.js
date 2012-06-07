@@ -1066,13 +1066,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('bounce');
-				}
+				pokemon.lockMove('bounce');
 			},
 			onSourceModifyMove: function(move) {
 
@@ -2293,13 +2287,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('dig');
-				}
+				pokemon.lockMove('dig');
 			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
@@ -2423,13 +2411,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('dive');
-				}
+				pokemon.lockMove('dive');
 			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
@@ -3826,13 +3808,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('fly');
-				}
+				pokemon.lockMove('fly');
 			},
 			onSourceModifyMove: function(move) {
 
@@ -4039,13 +4015,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('freezeshock');
-				}
+				pokemon.lockMove('freezeshock');
 			}
 		},
 		secondary: {
@@ -5705,13 +5675,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('iceburn');
-				}
+				pokemon.lockMove('iceburn');
 			}
 		},
 		secondary: {
@@ -8734,13 +8698,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('razorwind');
-				}
+				pokemon.lockMove('razorwind');
 			}
 		},
 		critRatio: 2,
@@ -9758,13 +9716,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('shadowforce');
-				}
+				pokemon.lockMove('shadowforce');
 			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
@@ -10065,13 +10017,7 @@ exports.BattleMovedex = {
 				this.boost({def:1}, pokemon, pokemon, this.getMove('skullbash'));
 			},
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('skullbash');
-				}
+				pokemon.lockMove('skullbash');
 			}
 		},
 		secondary: false,
@@ -10099,13 +10045,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('skyattack');
-				}
+				pokemon.lockMove('skyattack');
 			}
 		},
 		secondary: {
@@ -10137,13 +10077,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('skydrop');
-				}
+				pokemon.lockMove('skydrop');
 			},
 			onSourceModifyPokemon: function(pokemon) {
 				pokemon.lockMove('recharge');
@@ -10574,13 +10508,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getVolatile('transformMove')) {
-					//If this was a transformed move, we actually want to lock into the transforming move
-					pokemon.lockMove(pokemon.transformMove);
-				} else {
-					//If this wasn't a transformed move, lock as normal
-					pokemon.lockMove('solarbeam');
-				}
+				pokemon.lockMove('solarbeam');
 			}
 		},
 		secondary: false,
