@@ -461,7 +461,7 @@ exports.BattleScripts = {
 						counter['contrary']++;
 					}
 					var PhysicalSetup = {
-						swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1
+						swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1, bellydrum:1
 					};
 					var SpecialSetup = {
 						nastyplot:1, tailglow:1, quiverdance:1, calmmind:1
@@ -507,7 +507,7 @@ exports.BattleScripts = {
 
 					// we only need to set up once
 
-					case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup':
+					case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup': case 'bellydrum':
 						if (!counter['Physical'] && !hasMove['batonpass']) rejected = true;
 						if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 						isSetup = true;
