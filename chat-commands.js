@@ -104,7 +104,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 		}
 		if (removed) {
-			if (getUser(target)) {
+			if (Users.get(target)) {
 				rooms.lobby.usersChanged = true;
 			}
 			room.add(user.name+" unlocked the name of "+target+".");
@@ -116,12 +116,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'command':
 		if (target.command === 'userdetails') {
 			target.userid = ''+target.userid;
-			var targetUser = getUser(target.userid);
+			var targetUser = Users.get(target.userid);
 			if (!targetUser || !room) return false;
 			var roomList = {};
 			for (var i in targetUser.roomCount) {
 				if (i==='lobby') continue;
-				var targetRoom = getRoom(i);
+				var targetRoom = Rooms.get(i);
 				if (!targetRoom) continue;
 				var roomData = {};
 				if (targetRoom.battle && targetRoom.battle.sides[0] && targetRoom.battle.sides[1]) {
@@ -191,7 +191,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'rooms':
 		var targetUser = user;
-		if (target) targetUser = getUser(target);
+		if (target) targetUser = Users.get(target);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
 		} else {
@@ -217,7 +217,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'alts':
 	case 'getalts':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		var targetUser = getUser(target);
+		var targetUser = Users.get(target);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
@@ -243,7 +243,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (output) socket.emit('console', 'Previous names: '+output);
 
 		for (var j=0; j<alts.length; j++) {
-			var targetAlt = getUser(alts[j]);
+			var targetAlt = Users.get(alts[j]);
 			if (!targetAlt.named && !targetAlt.connected) continue;
 
 			socket.emit('console', 'Alt: '+targetAlt.name);
@@ -260,7 +260,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'whois':
 		var targetUser = user;
 		if (target) {
-			targetUser = getUser(target);
+			targetUser = Users.get(target);
 		}
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
@@ -450,7 +450,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'Your IP is: '+user.ip);
 			return false;
 		}
-		var targetUser = getUser(target);
+		var targetUser = Users.get(target);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
@@ -484,7 +484,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		targetUser.muted = true;
 		for (var i=0; i<alts.length; i++) {
-			var targetAlt = getUser(alts[i]);
+			var targetAlt = Users.get(alts[i]);
 			if (targetAlt) targetAlt.muted = true;
 		}
 
@@ -494,7 +494,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'ipmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		var targetUser = getUser(target);
+		var targetUser = Users.get(target);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
@@ -511,7 +511,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targetUser.muted = true;
 		mutedIps[targetUser.ip] = targetUser.userid;
 		for (var i=0; i<alts.length; i++) {
-			var targetAlt = getUser(alts[i]);
+			var targetAlt = Users.get(alts[i]);
 			if (targetAlt) targetAlt.muted = true;
 		}
 
@@ -522,7 +522,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'unmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targetid = target.toUserid();
-		var targetUser = getUser(target);
+		var targetUser = Users.get(target);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
@@ -554,7 +554,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'promote':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
-		var targetUser = getUser(targets[0]);
+		var targetUser = Users.get(targets[0]);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
@@ -580,7 +580,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'demote':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
-		var targetUser = getUser(targets[0]);
+		var targetUser = Users.get(targets[0]);
 		if (!targetUser) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
@@ -936,7 +936,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				room.battle.win('');
 				return false;
 			}
-			target = getUser(target);
+			target = Users.get(target);
 			if (target) target = target.userid;
 			else target = '';
 
@@ -1326,9 +1326,9 @@ function getDataMessage(target) {
 function splitTarget(target) {
 	var commaIndex = target.indexOf(',');
 	if (commaIndex < 0) {
-		return [getUser(target), '', target];
+		return [Users.get(target), '', target];
 	}
-	var targetUser = getUser(target.substr(0, commaIndex));
+	var targetUser = Users.get(target.substr(0, commaIndex));
 	if (!targetUser || !targetUser.connected) {
 		targetUser = null;
 	}

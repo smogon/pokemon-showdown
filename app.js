@@ -53,10 +53,6 @@ var io = require('socket.io').listen(config.port).set('log level', 1);
 console.log("Server started on port "+config.port);
 console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
 
-function getTime() {
-	return new Date().getTime();
-}
-
 // Sugar mixins
 
 String.extend({
@@ -109,36 +105,11 @@ BattleTools = require('./tools.js').BattleTools;
 Tools = new BattleTools();
 
 Users = require('./users.js');
-getUser = Users.getUser;
 parseCommand = require('./chat-commands.js').parseCommand;
 
 Rooms = require('./rooms.js');
-BattleRoom = Rooms.BattleRoom;
-LobbyRoom = Rooms.LobbyRoom;
 
 lockdown = false;
-
-rooms = {};
-console.log("NEW LOBBY: lobby");
-rooms.lobby = new LobbyRoom('lobby');
-
-getRoom = function(roomid) {
-	if (roomid && roomid.id) return roomid;
-	if (!roomid) roomid = 'default';
-	if (!rooms[roomid]) {
-		return rooms.lobby;
-	}
-	return rooms[roomid];
-};
-newRoom = function(roomid, format, p1, p2, parent, rated) {
-	if (roomid && roomid.id) return roomid;
-	if (!roomid) roomid = 'default';
-	if (!rooms[roomid]) {
-		console.log("NEW ROOM: "+roomid);
-		rooms[roomid] = new BattleRoom(roomid, format, p1, p2, parent, rated);
-	}
-	return rooms[roomid];
-};
 
 mutedIps = {
 };
@@ -164,8 +135,8 @@ if (config.crashguard) {
 			this.end();
 		});
 		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
-		rooms.lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
-		rooms.lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
+		Rooms.lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
+		Rooms.lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		config.modchat = 'crash';
 		lockdown = true;
 	});
@@ -204,27 +175,27 @@ io.sockets.on('connection', function (socket) {
 		if (!message || typeof message.room !== 'string' || typeof message.message !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = getRoom(message.room);
+		var room = Rooms.get(message.room);
 		youUser.chat(message.message, room, socket);
 	});
 	socket.on('leave', function(data) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		youUser.leaveRoom(getRoom(data.room), socket);
+		youUser.leaveRoom(Rooms.get(data.room), socket);
 	});
 	socket.on('leaveBattle', function(data) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = getRoom(data.room);
+		var room = Rooms.get(data.room);
 		if (room.leaveBattle) room.leaveBattle(youUser);
 	});
 	socket.on('joinBattle', function(data) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = getRoom(data.room);
+		var room = Rooms.get(data.room);
 		if (room.joinBattle) room.joinBattle(youUser);
 	});
 
@@ -232,7 +203,7 @@ io.sockets.on('connection', function (socket) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		parseCommand(youUser, 'command', data, getRoom(data.room), socket);
+		parseCommand(youUser, 'command', data, Rooms.get(data.room), socket);
 	});
 	socket.on('disconnect', function() {
 		var youUser = resolveUser(you, socket);
@@ -253,7 +224,7 @@ io.sockets.on('connection', function (socket) {
 				socket.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 				return;
 			}
-			if (!getUser(data.userid) || !getUser(data.userid).connected) {
+			if (!Users.get(data.userid) || !Users.get(data.userid).connected) {
 				socket.emit('message', "The user '"+data.userid+"' was not found.");
 			}
 			youUser.makeChallenge(data.userid, data.format);
@@ -282,7 +253,7 @@ io.sockets.on('connection', function (socket) {
 		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = getRoom(data.room);
+		var room = Rooms.get(data.room);
 		switch (data.choice) {
 		case 'move':
 		case 'switch':

@@ -52,22 +52,22 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			}
 
 			var p1 = selfR.rated.p1;
-			if (getUser(selfR.rated.p1)) p1 = getUser(selfR.rated.p1).name;
+			if (Users.get(selfR.rated.p1)) p1 = Users.get(selfR.rated.p1).name;
 			var p2 = selfR.rated.p2;
-			if (getUser(selfR.rated.p2)) p2 = getUser(selfR.rated.p2).name;
+			if (Users.get(selfR.rated.p2)) p2 = Users.get(selfR.rated.p2).name;
 
 			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+selfR.rated.format.toId()+'&servertoken=[token]');
 
 			if (!selfR.rated.p1 || !selfR.rated.p2) {
 				update.updates.push('| chatmsg | ERROR: Ladder not updated: a player does not exist');
 			} else {
-				var winner = getUser(selfR.battle.winner);
+				var winner = Users.get(selfR.battle.winner);
 				if (winner && !winner.authenticated) {
 					winner.emit('console', {rawMessage: '<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>Register an account to protect your ladder rating!</b><br /><button onclick="overlay(\'register\',{ifuserid:\''+winner.userid+'\'});return false"><b>Register</b></button></div>'});
 				}
 				// update rankings
 				request({
-					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+selfR.rated.format.toId()+'&servertoken='+config.servertoken+'&nocache='+getTime()
+					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+selfR.rated.format.toId()+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
 				}, function(error, response, body) {
 					if (body) {
 						try {
@@ -265,7 +265,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			selfR.add('The battle cannot be restarted because it is a rated battle'+attrib+'.');
 			return;
 		}
-		var elapsedTime = getTime() - selfR.graceTime;
+		var elapsedTime = new Date().getTime() - selfR.graceTime;
 
 		// tickTime is in chunks of 30
 		var tickTime = 1;
@@ -305,7 +305,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 
 		// a tick is 30 seconds
 
-		var elapsedTicks = Math.floor((getTime() - selfR.graceTime) / 30000);
+		var elapsedTicks = Math.floor((new Date().getTime() - selfR.graceTime) / 30000);
 		tickTime = 6 - elapsedTicks;
 		if (tickTime < 1) {
 			tickTime = 1;
@@ -347,7 +347,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			clearTimeout(selfR.resetTimer);
 			selfR.resetTimer = null;
 		}
-		selfR.graceTime = getTime();
+		selfR.graceTime = new Date().getTime();
 	};
 	this.decision = function(user, choice, data) {
 		selfR.cancelReset();
@@ -864,8 +864,8 @@ function LobbyRoom(roomid) {
 	};
 	this.startBattle = function(p1, p2, format, rated) {
 		var newRoom;
-		p1 = getUser(p1);
-		p2 = getUser(p2);
+		p1 = Users.get(p1);
+		p2 = Users.get(p2);
 
 		if (p1 === p2) {
 			selfR.cancelSearch(p1, true);
@@ -1002,5 +1002,32 @@ function LobbyRoom(roomid) {
 	};
 }
 
+getRoom = function(roomid) {
+	if (roomid && roomid.id) return roomid;
+	if (!roomid) roomid = 'default';
+	if (!rooms[roomid]) {
+		return rooms.lobby;
+	}
+	return rooms[roomid];
+};
+newRoom = function(roomid, format, p1, p2, parent, rated) {
+	if (roomid && roomid.id) return roomid;
+	if (!roomid) roomid = 'default';
+	if (!rooms[roomid]) {
+		console.log("NEW ROOM: "+roomid);
+		rooms[roomid] = new BattleRoom(roomid, format, p1, p2, parent, rated);
+	}
+	return rooms[roomid];
+};
+
+rooms = {};
+console.log("NEW LOBBY: lobby");
+rooms.lobby = new LobbyRoom('lobby');
+
 exports.BattleRoom = BattleRoom;
 exports.LobbyRoom = LobbyRoom;
+
+exports.get = getRoom;
+exports.create = newRoom;
+exports.rooms = rooms;
+exports.lobby = rooms.lobby;

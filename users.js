@@ -6,9 +6,6 @@ var numUsers = 0;
 var people = {};
 var numPeople = 0;
 
-function getTime() {
-	return new Date().getTime();
-}
 function sanitizeName(name) {
 	name = name.trim();
 	if (name.length > 18) name = name.substr(0,18);
@@ -265,7 +262,7 @@ var User = (function () {
 		var joining = !this.named;
 		this.named = true;
 		for (var i in this.roomCount) {
-			getRoom(i).rename(this, oldid, joining);
+			Rooms.get(i).rename(this, oldid, joining);
 		}
 		rooms.lobby.usersChanged = true;
 		return true;
@@ -306,7 +303,7 @@ var User = (function () {
 		}
 		this.named = false;
 		for (var i in this.roomCount) {
-			getRoom(i).rename(this, oldid, false);
+			Rooms.get(i).rename(this, oldid, false);
 		}
 		return true;
 	};
@@ -318,7 +315,7 @@ var User = (function () {
 	 */
 	User.prototype.rename = function(name, token, auth) {
 		for (var i in this.roomCount) {
-			var room = getRoom(i);
+			var room = Rooms.get(i);
 			if (room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
 				this.emit('message', "You can't change your name right now because you're in the middle of a rated battle.");
 				return false;
@@ -430,7 +427,7 @@ var User = (function () {
 						return true;
 					}
 					for (var i in selfP.roomCount) {
-						getRoom(i).leave(selfP);
+						Rooms.get(i).leave(selfP);
 					}
 					for (var i=0; i<selfP.people.length; i++) {
 						console.log(''+selfP.name+' preparing to merge: socket '+i+' of '+selfP.people.length);
@@ -562,7 +559,7 @@ var User = (function () {
 				if (this.roomCount[i] > 0) {
 					// should never happen.
 					console.log('!! room miscount: '+i+' not left');
-					getRoom(i).leave(this);
+					Rooms.get(i).leave(this);
 				}
 			}
 			this.roomCount = {};
@@ -649,7 +646,7 @@ var User = (function () {
 	};
 	User.prototype.joinRoom = function(room, socket) {
 		roomid = room?(room.id||room):'';
-		room = getRoom(room);
+		room = Rooms.get(room);
 		var person = null;
 		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
 		if (!socket) {
@@ -687,7 +684,7 @@ var User = (function () {
 		}
 	};
 	User.prototype.leaveRoom = function(room, socket) {
-		room = getRoom(room);
+		room = Rooms.get(room);
 		for (var i=0; i<this.people.length; i++) {
 			if (this.people[i] === socket || this.people[i].socket === socket || !socket) {
 				if (this.people[i].rooms[room.id]) {
@@ -729,11 +726,11 @@ var User = (function () {
 		if (!user || this.challengeTo) {
 			return false;
 		}
-		if (getTime() < this.lastChallenge + 10000) {
+		if (new Date().getTime() < this.lastChallenge + 10000) {
 			// 10 seconds ago
 			return false;
 		}
-		var time = getTime();
+		var time = new Date().getTime();
 		var challenge = {
 			time: time,
 			from: this.userid,
@@ -780,7 +777,7 @@ var User = (function () {
 			}
 			return false;
 		}
-		getRoom('lobby').startBattle(this, user, user.challengeTo.format);
+		Rooms.get('lobby').startBattle(this, user, user.challengeTo.format);
 		delete this.challengesFrom[user.userid];
 		user.challengeTo = null;
 		this.updateChallenges();
@@ -893,7 +890,7 @@ function ipSearch(ip, table) {
 	return false;
 }
 
-exports.getUser = getUser;
+exports.get = getUser;
 exports.searchUser = searchUser;
 exports.connectUser = connectUser;
 exports.users = users;
