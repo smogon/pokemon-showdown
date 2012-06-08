@@ -30,10 +30,10 @@ function BattleTools() {
 	this.getTemplate = function(template) {
 		if (!template || typeof template === 'string') {
 			var name = (template||'').trim();
-			var id = name.toId();
+			var id = toId(name);
 			if (BattleAliases[id]) {
 				name = BattleAliases[id];
-				id = name.toId();
+				id = toId(name);
 			}
 			template = {};
 			if (id && BattlePokedex[id]) {
@@ -54,7 +54,7 @@ function BattleTools() {
 			if (!template.basespecies) template.basespecies = name;
 			if (!template.forme) template.forme = '';
 			if (!template.formeletter) template.formeletter = '';
-			if (!template.spriteid) template.spriteid = template.basespecies.toId()+(template.basespecies!==name?'-'+template.forme.toId():'');
+			if (!template.spriteid) template.spriteid = toId(template.basespecies)+(template.basespecies!==name?'-'+toId(template.forme):'');
 			if (!template.prevo) template.prevo = '';
 			if (!template.evos) template.evos = [];
 			if (!template.nfe) template.nfe = !!template.evos.length;
@@ -78,7 +78,7 @@ function BattleTools() {
 	this.getMove = function(move) {
 		if (!move || typeof move === 'string') {
 			var name = (move||'').trim();
-			var id = name.toId();
+			var id = toId(name);
 			move = {};
 			if (id.substr(0,12) === 'HiddenPower[') {
 				var hptype = id.substr(12);
@@ -133,7 +133,7 @@ function BattleTools() {
 	this.getEffect = function(effect) {
 		if (!effect || typeof effect === 'string') {
 			var name = (effect||'').trim();
-			var id = name.toId();
+			var id = toId(name);
 			effect = {};
 			if (id && BattleStatuses[id]) {
 				effect = BattleStatuses[id];
@@ -172,7 +172,7 @@ function BattleTools() {
 	this.getItem = function(item) {
 		if (!item || typeof item === 'string') {
 			var name = (item||'').trim();
-			var id = name.toId();
+			var id = toId(name);
 			item = {};
 			if (id && BattleItems[id]) {
 				item = BattleItems[id];
@@ -191,7 +191,7 @@ function BattleTools() {
 	this.getAbility = function(ability) {
 		if (!ability || typeof ability === 'string') {
 			var name = (ability||'').trim();
-			var id = name.toId();
+			var id = toId(name);
 			ability = {};
 			if (id && BattleAbilities[id]) {
 				ability = BattleAbilities[id];
@@ -214,7 +214,7 @@ function BattleTools() {
 	};
 	this.getType = function(type) {
 		if (!type || typeof type === 'string') {
-			var id = type.toId();
+			var id = toId(type);
 			type = {};
 			if (id && BattleTypeChart[id]) {
 				type = BattleTypeChart[id];
@@ -329,10 +329,10 @@ function BattleTools() {
 			if (subformat.banlist) {
 				for (var i=0; i<subformat.banlist.length; i++) {
 					// don't revalidate what we already validate
-					if (banlistTable[subformat.banlist[i].toId()]) continue;
+					if (banlistTable[toId(subformat.banlist[i])]) continue;
 
 					banlistTable[subformat.banlist[i]] = true;
-					banlistTable[subformat.banlist[i].toId()] = true;
+					banlistTable[toId(subformat.banlist[i])] = true;
 
 					var plusPos = subformat.banlist[i].indexOf('+');
 					if (plusPos && plusPos > 0) {
@@ -340,13 +340,13 @@ function BattleTools() {
 						if (plusPlusPos && plusPlusPos > 0) {
 							var complexList = subformat.banlist[i].split('++');
 							for (var j=0; j<complexList.length; j++) {
-								complexList[j] = complexList[j].toId();
+								complexList[j] = toId(complexList[j]);
 							}
 							format.teamBanTable.push(complexList);
 						} else {
 							var complexList = subformat.banlist[i].split('+');
 							for (var j=0; j<complexList.length; j++) {
-								complexList[j] = complexList[j].toId();
+								complexList[j] = toId(complexList[j]);
 							}
 							format.setBanTable.push(complexList);
 						}
@@ -356,9 +356,9 @@ function BattleTools() {
 			if (subformat.ruleset) {
 				for (var i=0; i<subformat.ruleset.length; i++) {
 					// don't revalidate what we already validate
-					if (banlistTable['Rule:'+subformat.ruleset[i].toId()]) continue;
+					if (banlistTable['Rule:'+toId(subformat.ruleset[i])]) continue;
 
-					banlistTable['Rule:'+subformat.ruleset[i].toId()] = true;
+					banlistTable['Rule:'+toId(subformat.ruleset[i])] = true;
 
 					var subsubformat = selfT.getEffect(subformat.ruleset[i]);
 					if (subsubformat.ruleset || subsubformat.banlist) {
@@ -459,23 +459,23 @@ function BattleTools() {
 
 		var banlistTable = selfT.getBanlistTable(format);
 
-		setHas[set.species.toId()] = true;
-		if (banlistTable[set.species.toId()]) {
+		setHas[toId(set.species)] = true;
+		if (banlistTable[toId(set.species)]) {
 			problems.push(set.species+' is banned.');
 		}
-		setHas[set.ability.toId()] = true;
-		if (banlistTable[set.ability.toId()]) {
+		setHas[toId(set.ability)] = true;
+		if (banlistTable[toId(set.ability)]) {
 			problems.push(name+"'s ability "+set.ability+" is banned.");
 		}
-		setHas[set.item.toId()] = true;
-		if (banlistTable[set.item.toId()]) {
+		setHas[toId(set.item)] = true;
+		if (banlistTable[toId(set.item)]) {
 			problems.push(name+"'s item "+set.item+" is banned.");
 		}
 		var item = selfT.getItem(set.item);
 		if (banlistTable['Unreleased'] && item.isUnreleased) {
 			problems.push(name+"'s item "+set.item+" is unreleased.");
 		}
-		setHas[set.ability.toId()] = true;
+		setHas[toId(set.ability)] = true;
 		if (banlistTable['illegal']) {
 			var totalEV = 0;
 			for (var k in set.evs) {
@@ -545,7 +545,7 @@ function BattleTools() {
 				}
 			}
 		}
-		setHas[template.tier.toId()] = true;
+		setHas[toId(template.tier)] = true;
 		if (banlistTable[template.tier]) {
 			problems.push(name+" is in "+template.tier+", which is banned.");
 		}
