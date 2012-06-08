@@ -84,18 +84,18 @@ Number.extend({
 	}
 });
 
-BattlePokedex = require('./pokedex.js').BattlePokedex;
-BattleMovedex = require('./movedex.js').BattleMovedex;
-BattleStatuses = require('./statuses.js').BattleStatuses;
-BattleTypeChart = require('./typechart.js').BattleTypeChart;
-BattleScripts = require('./scripts.js').BattleScripts;
-BattleItems = require('./items.js').BattleItems;
-BattleAbilities = require('./abilities.js').BattleAbilities;
-BattleFormats = require('./formats.js').BattleFormats;
-BattleFormatsData = require('./formats-data.js').BattleFormatsData;
-BattleLearnsets = require('./learnsets.js').BattleLearnsets;
+BattlePokedex = require('./data/pokedex.js').BattlePokedex;
+BattleMovedex = require('./data/moves.js').BattleMovedex;
+BattleStatuses = require('./data/statuses.js').BattleStatuses;
+BattleTypeChart = require('./data/typechart.js').BattleTypeChart;
+BattleScripts = require('./data/scripts.js').BattleScripts;
+BattleItems = require('./data/items.js').BattleItems;
+BattleAbilities = require('./data/abilities.js').BattleAbilities;
+BattleFormats = require('./data/formats.js').BattleFormats;
+BattleFormatsData = require('./data/formats-data.js').BattleFormatsData;
+BattleLearnsets = require('./data/learnsets.js').BattleLearnsets;
 try {
-	BattleAliases = require('./aliases.js').BattleAliases;
+	BattleAliases = require('./data/aliases.js').BattleAliases || {};
 } catch (e) {
 	BattleAliases = {};
 }
@@ -115,32 +115,6 @@ getUser = Users.getUser;
 parseCommand = require('./chat-commands.js').parseCommand;
 
 lockdown = false;
-
-function reloadEngine() {
-	for (var i in require.cache) {
-		delete require.cache[i];
-	}
-	BattlePokedex = require('./pokedex.js').BattlePokedex;
-	BattleMovedex = require('./movedex.js').BattleMovedex;
-	BattleStatuses = require('./statuses.js').BattleStatuses;
-	BattleTypeChart = require('./typechart.js').BattleTypeChart;
-	BattleScripts = require('./scripts.js').BattleScripts;
-	BattleItems = require('./items.js').BattleItems;
-	BattleAbilities = require('./abilities.js').BattleAbilities;
-	BattleFormats = require('./formats.js').BattleFormats;
-	BattleFormatsData = require('./formats-data.js').BattleFormatsData;
-	BattleLearnsets = require('./learnsets.js').BattleLearnsets;
-
-	sim = require('./simulator.js');
-
-	BattlePokemon = sim.BattlePokemon;
-	BattleSide = sim.BattleSide;
-	Battle = sim.Battle;
-
-	BattleTools = require('./tools.js').BattleTools;
-
-	Tools = new BattleTools();
-}
 
 function Room(roomid, format, p1, p2, parentid, rated) {
 	var selfR = this;
