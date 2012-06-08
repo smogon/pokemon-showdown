@@ -791,6 +791,8 @@ function BattlePokemon(set, side) {
 		// actually, you can do nearly everything in effect script
 		if (!moveid || (!selfP.hasMove(moveid) && moveid !== 'recharge')) return;
 		if (moveid === 'recharge') selfP.disabledMoves['recharge'] = false;
+		//If this was a transformed move, we actually want to lock into the transforming move
+		if (selfP.getVolatile('transformMove')) moveid = selfP.transformMove;
 		var moves = selfP.moveset;
 		for (var i=0; i<moves.length; i++) {
 			if (moves[i].id !== moveid) {
