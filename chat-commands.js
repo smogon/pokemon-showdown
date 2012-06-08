@@ -669,16 +669,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		if (target === 'all') {
 			for (var i in require.cache) delete require.cache[i];
-			BattlePokedex = require('./pokedex.js').BattlePokedex;
-			BattleMovedex = require('./movedex.js').BattleMovedex;
-			BattleStatuses = require('./statuses.js').BattleStatuses;
-			BattleTypeChart = require('./typechart.js').BattleTypeChart;
-			BattleScripts = require('./scripts.js').BattleScripts;
-			BattleItems = require('./items.js').BattleItems;
-			BattleAbilities = require('./abilities.js').BattleAbilities;
-			BattleFormats = require('./formats.js').BattleFormats;
-			BattleFormatsData = require('./formats-data.js').BattleFormatsData;
-			BattleLearnsets = require('./learnsets.js').BattleLearnsets;
+			BattlePokedex = require('./data/pokedex.js').BattlePokedex;
+			BattleMovedex = require('./data/moves.js').BattleMovedex;
+			BattleStatuses = require('./data/statuses.js').BattleStatuses;
+			BattleTypeChart = require('./data/typechart.js').BattleTypeChart;
+			BattleScripts = require('./data/scripts.js').BattleScripts;
+			BattleItems = require('./data/items.js').BattleItems;
+			BattleAbilities = require('./data/abilities.js').BattleAbilities;
+			BattleFormats = require('./data/formats.js').BattleFormats;
+			BattleFormatsData = require('./data/formats-data.js').BattleFormatsData;
+			BattleLearnsets = require('./data/learnsets.js').BattleLearnsets;
 			BattleTools = require('./tools.js').BattleTools;
 			Tools = new BattleTools();
 
@@ -692,16 +692,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		} else if (target === 'data') {
 			for (var i in require.cache) delete require.cache[i];
-			BattlePokedex = require('./pokedex.js').BattlePokedex;
-			BattleMovedex = require('./movedex.js').BattleMovedex;
-			BattleStatuses = require('./statuses.js').BattleStatuses;
-			BattleTypeChart = require('./typechart.js').BattleTypeChart;
-			BattleScripts = require('./scripts.js').BattleScripts;
-			BattleItems = require('./items.js').BattleItems;
-			BattleAbilities = require('./abilities.js').BattleAbilities;
-			BattleFormats = require('./formats.js').BattleFormats;
-			BattleFormatsData = require('./formats-data.js').BattleFormatsData;
-			BattleLearnsets = require('./learnsets.js').BattleLearnsets;
+			BattlePokedex = require('./data/pokedex.js').BattlePokedex;
+			BattleMovedex = require('./data/moves.js').BattleMovedex;
+			BattleStatuses = require('./data/statuses.js').BattleStatuses;
+			BattleTypeChart = require('./data/typechart.js').BattleTypeChart;
+			BattleScripts = require('./data/scripts.js').BattleScripts;
+			BattleItems = require('./data/items.js').BattleItems;
+			BattleAbilities = require('./data/abilities.js').BattleAbilities;
+			BattleFormats = require('./data/formats.js').BattleFormats;
+			BattleFormatsData = require('./data/formats-data.js').BattleFormatsData;
+			BattleLearnsets = require('./data/learnsets.js').BattleLearnsets;
 			BattleTools = require('./tools.js').BattleTools;
 			Tools = new BattleTools();
 			socket.emit('console', 'Game resources have been hot-patched.');
@@ -721,7 +721,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', '/savelearnsets - Access denied.');
 			return false;
 		}
-		fs.writeFile('learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
+		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
 		socket.emit('console', 'learnsets.js saved.');
 		return false;
 		break;
