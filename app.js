@@ -53,30 +53,45 @@ var io = require('socket.io').listen(config.port).set('log level', 1);
 console.log("Server started on port "+config.port);
 console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
 
-// Sugar mixins
+/**
+ * Converts anything to an ID. An ID must have only lowercase alphanumeric
+ * characters.
+ * If a string is passed, it will be converted to lowercase and
+ * non-alphanumeric characters will be stripped.
+ * If an object with an ID is passed, its ID will be returned.
+ * Otherwise, an empty string will be returned.
+ */
+toId = function(text) {
+	text = (''+(text||''));
+	if (typeof text === 'number') text = ''+text;
+	if (text && text.id) text = text.id;
+	if (typeof text !== 'string') return ''; //???
+	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
+};
+toUserid = toId;
 
-String.extend({
-	toId: function() {
-		return this.toLowerCase().replace(/[^a-z0-9]+/g, '');
-	},
-	toUserid: function() {
-		return this.toId();
-	},
-	sanitize: function(strEscape) {
-		var str = this.escapeHTML();
-		if (strEscape) str = str.replace(/'/g, '\\\'');
-		return str;
-	}
-});
+/**
+ * Escapes a string for HTML
+ * If strEscape is true, escapes it for JavaScript, too
+ */
+sanitize = function(str, strEscape) {
+	str = (''+(str||''));
+	str = str.escapeHTML();
+	if (strEscape) str = str.replace(/'/g, '\\\'');
+	return str;
+};
 
-Number.extend({
-	clampIntRange: function(min, max) {
-		var num = Math.floor(this);
-		if (num < min) num = min;
-		if (typeof max !== 'undefined' && num > max) num = max;
-		return num;
-	}
-});
+/**
+ * Converts any variable to an integer (numbers get floored, non-numbers
+ * become 0). Then clamps it between min and (optionally) max.
+ */
+clampIntRange = function(num, min, max) {
+	if (typeof num !== 'number') num = 0;
+	num = Math.floor(num);
+	if (num < min) num = min;
+	if (typeof max !== 'undefined' && num > max) num = max;
+	return num;
+};
 
 BattlePokedex = require('./data/pokedex.js').BattlePokedex;
 BattleMovedex = require('./data/moves.js').BattleMovedex;

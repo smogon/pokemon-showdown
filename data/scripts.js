@@ -414,7 +414,7 @@ exports.BattleScripts = {
 			var j=0;
 			do {
 				while (moves.length<4 && j<moveKeys.length) {
-					var moveid = moveKeys[j].toId();
+					var moveid = toId(moveKeys[j]);
 					j++;
 					if (moveid.substr(0,11) === 'hiddenpower') {
 						if (!hasMove['hiddenpower']) {

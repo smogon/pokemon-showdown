@@ -18,7 +18,7 @@ function BattlePokemon(set, side) {
 		set.name = this.species;
 	}
 	this.name = set.name || set.species || 'Bulbasaur';
-	this.speciesid = this.species.toId();
+	this.speciesid = toId(this.species);
 	this.template = this.baseTemplate;
 	this.moves = [];
 	this.baseMoves = this.moves;
@@ -27,7 +27,7 @@ function BattlePokemon(set, side) {
 	this.baseMoveset = [];
 	this.trapped = false;
 
-	this.level = (set.level || 100).clampIntRange(1, 100);
+	this.level = clampIntRange(set.level || 100, 1, 100);
 	this.hp = 0;
 	this.maxhp = 100;
 	var genders = {M:'M',F:'F'};
@@ -66,9 +66,9 @@ function BattlePokemon(set, side) {
 	this.ignore = {};
 	this.duringMove = false;
 
-	this.baseAbility = set.ability.toId();
+	this.baseAbility = toId(set.ability);
 	this.ability = this.baseAbility;
-	this.item = set.item.toId();
+	this.item = toId(set.item);
 	this.abilityData = {id: this.ability};
 	this.itemData = {id: this.item};
 
@@ -89,7 +89,7 @@ function BattlePokemon(set, side) {
 				disabled: false,
 				used: false
 			});
-			this.moves.push(move.name.toId());
+			this.moves.push(toId(move.name));
 		}
 	}
 
@@ -119,10 +119,10 @@ function BattlePokemon(set, side) {
 		if (!this.set.ivs[i] && this.set.ivs[i] !== 0) this.set.ivs[i] = 31;
 	}
 	for (var i in this.set.evs) {
-		this.set.evs[i] = this.set.evs[i].clampIntRange(0, 255);
+		this.set.evs[i] = clampIntRange(this.set.evs[i], 0, 255);
 	}
 	for (var i in this.set.ivs) {
-		this.set.ivs[i] = this.set.ivs[i].clampIntRange(0, 31);
+		this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
 	}
 
 	var hpTypeX = 0, hpPowerX = 0;
@@ -503,7 +503,7 @@ function BattlePokemon(set, side) {
 	};
 	this.hasMove = function(moveid) {
 		if (moveid.id) moveid = moveid.id;
-		moveid = moveid.toId();
+		moveid = toId(moveid);
 		for (var i=0; i<selfP.moveset.length; i++) {
 			if (moveid === selfB.getMove(selfP.moveset[i].move).id) {
 				return moveid;
@@ -996,7 +996,7 @@ function Battle(roomid, format, rated) {
 	this.weatherData = {id:''};
 	this.pseudoWeather = {};
 
-	this.format = format.toId();
+	this.format = toId(format);
 	this.formatData = {id:''};
 
 	this.ended = false;
@@ -1807,7 +1807,7 @@ function Battle(roomid, format, rated) {
 		if (!target || !target.hp) return 0;
 		effect = selfB.getEffect(effect);
 		if (!damage) return 0;
-		damage = damage.clampIntRange(1);
+		damage = clampIntRange(damage, 1);
 
 		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 			if (effect.effectType === 'Weather' && !target.runImmunity(effect.id)) {
@@ -1820,7 +1820,7 @@ function Battle(roomid, format, rated) {
 				return 0;
 			}
 		}
-		damage = damage.clampIntRange(1);
+		damage = clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
 		if (!damage) {
 			this.debug('pokemon.damage said zero');
@@ -1859,7 +1859,7 @@ function Battle(roomid, format, rated) {
 		}
 		if (!target || !target.hp) return 0;
 		if (!damage) return 0;
-		damage = damage.clampIntRange(1);
+		damage = clampIntRange(damage, 1);
 
 		damage = target.damage(damage, source, effect);
 		switch (effect.id) {
@@ -1975,7 +1975,7 @@ function Battle(roomid, format, rated) {
 		}
 		if (!basePower) return 0;
 
-		move.critRatio = (move.critRatio || 0).clampIntRange(0, 5);
+		move.critRatio = clampIntRange(move.critRatio, 0, 5);
 		var critMult = [0, 16, 8, 4, 3, 2];
 
 		move.crit = move.willCrit || false;
