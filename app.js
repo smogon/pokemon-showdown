@@ -24,8 +24,6 @@ if (!path.existsSync('./config/config.js')) {
 }
 
 config = require('./config/config.js');
-serverid = config.serverid;
-servertoken = config.servertoken;
 
 /*
 var app = require('http').createServer()
@@ -122,8 +120,7 @@ lockdown = false;
 
 rooms = {};
 console.log("NEW LOBBY: lobby");
-var lobby = new LobbyRoom('lobby');
-rooms.lobby = lobby;
+rooms.lobby = new LobbyRoom('lobby');
 
 getRoom = function(roomid) {
 	if (roomid && roomid.id) return roomid;
@@ -167,8 +164,8 @@ if (config.crashguard) {
 			this.end();
 		});
 		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
-		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
-		lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
+		rooms.lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
+		rooms.lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		config.modchat = 'crash';
 		lockdown = true;
 	});
