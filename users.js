@@ -376,14 +376,13 @@ var User = (function () {
 
 					if (userid === "serei") avatar = 172;
 					else if (userid === "hobsgoblin") avatar = 52;
-					else if (userid === "etherealsol") avatar = 1001;
 					else if (userid === "ataraxia") avatar = 1002;
 					else if (userid === "verbatim") avatar = 1003;
 					else if (userid === "mortygymleader") avatar = 144;
 					else if (userid === "leadermorty") avatar = 144;
 					else if (userid === "leaderjasmine") avatar = 146;
 					else if (userid === "championcynthia") avatar = 260;
-					else if (userid === "aeo") avatar = 167;
+					else if (userid === "aeo" || userid === "zarel") avatar = 167;
 					else if (userid === "aeo1") avatar = 167;
 					else if (userid === "aeo2") avatar = 166;
 					else if (userid === "sharktamer") avatar = 7;
