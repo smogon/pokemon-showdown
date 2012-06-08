@@ -410,10 +410,10 @@ exports.BattleMovedex = {
 				if (pokemon === target) continue;
 				for (var i=0; i<pokemon.moves.length; i++) {
 					var move = pokemon.moves[i];
-					var NoAssist = {
-						assist:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, quickguard:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, trick:1, wideguard:1
+					var noAssist = {
+						assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1
 					};
-					if (move && !NoAssist[move]) {
+					if (move && !noAssist[move]) {
 						moves.push(move);
 					}
 				}
@@ -1779,7 +1779,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(pokemon) {
-			var noCopycat = {copycat:1, assist:1, sketch:1, mimic:1, counter:1, mirrorcoat:1, protect:1, detect:1, endure:1, destinybond:1, followme:1, ragepowder:1, snatch:1, helpinghand:1, thief:1, covet:1, trick:1, switcheroo:1, feint:1, focuspunch:1, transform:1, bestow:1, dragontail:1, circlethrow:1};
+			var noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1};
 			if (!this.lastMove || noCopycat[this.lastMove]) {
 				return false;
 			}
@@ -6957,10 +6957,10 @@ exports.BattleMovedex = {
 				var move = exports.BattleMovedex[i];
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
-				var NoMetronome = {
+				var noMetronome = {
 					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snatch:1, snarl:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, "v-create":1, wideguard:1
 				};
-				if (!NoMetronome[move.id]) {
+				if (!noMetronome[move.id]) {
 					moves.push(move.id);
 				}
 			}
@@ -7105,7 +7105,8 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		onTryHit: function(target) {
-			if (!target.lastMove || target.lastMove === 'mirrormove') {
+			var noMirrorMove = {acupressure:1, afteryou:1, aromatherapy:1, chatter:1, conversion2:1, counter:1, curse:1, doomdesire:1, feint:1, finalgambit:1, focuspunch:1, futuresight:1, gravity:1, guardsplit:1, hail:1, haze:1, healbell:1, healpulse:1, helpinghand:1, lightscreen:1, luckychant:1, mefirst:1, mimic:1, mirrorcoat:1, mirrormove:1, mist:1, mudsport:1, naturepower:1, perishsong:1, powersplit:1, psychup:1, quickguard:1, raindance:1, reflect:1, reflecttype:1, roleplay:1, safeguard:1, sandstorm:1, sketch:1, spikes:1, spitup:1, stealthrock:1, struggle:1, sunnyday:1, tailwind:1, toxicspikes:1, transform:1, watersport:1, wideguard:1};
+			if (!target.lastMove || noMirrorMove[target.lastMove] || this.getMove(target.lastMove).target === 'self') {
 				return false;
 			}
 		},
