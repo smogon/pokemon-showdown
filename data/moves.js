@@ -5925,7 +5925,7 @@ exports.BattleMovedex = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a 30% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "10% chance to lower the target's Defense by 1.",
+		shortDesc: "30% chance to lower the target's Defense by 1.",
 		id: "irontail",
 		name: "Iron Tail",
 		pp: 15,
