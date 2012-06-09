@@ -712,7 +712,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target) {
-			if (target.hp <= target.maxhp/2) {
+			if (target.hp <= target.maxhp/2 || target.maxhp === 1) { // Shedinja clause
 				return false;
 			}
 			this.directDamage(target.maxhp/2);
@@ -10990,7 +10990,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'Substitute',
 		onTryHit: function(target) {
-			if (target.volatiles['substitute']) {
+			if (target.volatiles['substitute'] || target.maxhp === 1) { // Shedinja clause
 				this.add('-fail', target, 'move: Substitute');
 				return null;
 			}
