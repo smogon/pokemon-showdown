@@ -50,6 +50,9 @@ if (process.argv[2] && parseInt(process.argv[2])) {
 }
 
 var io = require('socket.io').listen(config.port).set('log level', 1);
+
+io.set('transports', ['websocket', 'htmlfile', 'xhr-polling']); // temporary hack until https://github.com/LearnBoost/socket.io/issues/609 is fixed
+
 console.log("Server started on port "+config.port);
 console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
 
