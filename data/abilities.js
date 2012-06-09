@@ -920,7 +920,7 @@ exports.BattleAbilities = {
 				if (!foeactive[i]) continue;
 				if (foeactive[i].volatiles['substitute']) {
 					// does it give a message?
-					this.add('-start',foeactive[i],'substitute','[block] ability: Intimidate','[of] '+pokemon);
+					this.add('-activate',foeactive[i],'Substitute','ability: Intimidate','[of] '+pokemon);
 				} else {
 					this.add('-ability',pokemon,'Intimidate','[of] '+foeactive[i]);
 					this.boost({atk: -1}, foeactive[i], pokemon);

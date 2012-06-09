@@ -11017,7 +11017,7 @@ exports.BattleMovedex = {
 						acupressure:1, block:1, dreameater:1, embargo:1, entrainment:1, flatter:1, gastroacid:1, grudge:1, healblock:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, spiderweb:1, sketch:1, swagger:1, switcheroo:1, trick:1, worryseed:1, yawn:1, soak: 1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
-						this.add('-activate', target, 'move: Substitute', '[block] '+move);
+						this.add('-activate', target, 'Substitute', move);
 						return null;
 					}
 					return;
@@ -11040,7 +11040,7 @@ exports.BattleMovedex = {
 					this.runEvent('AfterSubDamage', target, source, move, damage);
 					return 0; // hit
 				} else {
-					this.add('-activate', target, 'move: Substitute', '[damage]');
+					this.add('-activate', target, 'Substitute', '[damage]');
 					this.runEvent('AfterSubDamage', target, source, move, damage);
 					return 0; // hit
 				}
