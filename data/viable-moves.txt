@@ -182,7 +182,6 @@ Mewtwo: Psystrike, Aura Sphere, Fire Blast, Ice Beam, Calm Mind, Substitute, Rec
 Mew: Taunt, Will-O-Wisp, Roost, Psychic, Nasty Plot, Aura Sphere, Shadow Ball, Fire Blast, Swords Dance, Superpower, Zen Headbutt, Calm Mind, Baton Pass, Rock Polish, Substitute, Toxic, Explosion, Ice Beam, Thunderbolt, Earthquake, U-turn, Stealth Rock, Transform
 Chikorita: Reflect, Light Screen, Safeguard, Aromatherapy, Grasswhistle, Leech Seed, Seed Bomb, Toxic, Giga Drain, Synthesis
 Bayleef: Reflect, Light Screen, Safeguard, Aromatherapy, Grasswhistle, Leech Seed, Seed Bomb, Toxic, Giga Drain, Synthesis
-
 Meganium: Reflect, Light Screen, Safeguard, Aromatherapy, Grasswhistle, Leech Seed, Seed Bomb, Toxic, Body Slam, Giga Drain, Synthesis, Dragon Tail
 Cyndaquil: Eruption, Fire Blast, Flamethrower, Hidden Power Grass, Nature Power
 Quilava: Eruption, Fire Blast, Flamethrower, Hidden Power Grass, Nature Power

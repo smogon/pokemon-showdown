@@ -1046,6 +1046,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	ditto: {
+		viableMoves: {"transform":1},
 		tier: "NU"
 	},
 	eevee: {
@@ -1490,6 +1491,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	unown: {
+		viableMoves: {"hiddenpowerpsychic":1},
 		tier: "NU"
 	},
 	unownb: {

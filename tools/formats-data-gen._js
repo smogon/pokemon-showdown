@@ -48,7 +48,7 @@ function getViableMoves() {
 		if (tmp.length !== 2) continue;
 		var pokemon = toId(tmp[0]);
 		var viableMoves = tmp[1].replace(/,\s*,/g, ",").split(",");
-		if (!pokemon || viableMoves.length <= 1) continue;
+		if (!pokemon || viableMoves.length === 0) continue;
 		result[pokemon] = new Object();
 		for (var v = 0; v < viableMoves.length; ++v) {
 			var viableMove = viableMoves[v].trim();
