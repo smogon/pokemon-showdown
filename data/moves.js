@@ -9593,7 +9593,7 @@ exports.BattleMovedex = {
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 20% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
+		shortDesc: "20% chance to lower the target's Sp. Def by 1.",
 		id: "shadowball",
 		name: "Shadow Ball",
 		pp: 15,
