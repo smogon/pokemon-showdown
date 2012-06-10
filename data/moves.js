@@ -11024,7 +11024,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			onStart: function(target) {
-				this.add('-start', target, 'move: Substitute');
+				this.add('-start', target, 'Substitute');
 				this.effectData.hp = parseInt(target.maxhp/4);
 			},
 			onTryHit: function(target, source, move) {
@@ -11066,7 +11066,7 @@ exports.BattleMovedex = {
 				}
 			},
 			onEnd: function(target) {
-				this.add('-end', target, 'move: Substitute');
+				this.add('-end', target, 'Substitute');
 			}
 		},
 		secondary: false,
