@@ -6997,12 +6997,29 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "This move is temporarily replaced by the target's last move; the replacement move will have 5 PP and become part of the user's moveset until the user switches out or the battle ends. Mimic copies attacks even if they miss or the user has immunity toward their type; it cannot copy itself, Struggle, Transform, Sketch, Metronome or moves that the user already knows, and it will fail if the target has yet to use a move.",
+		desc: "This move is temporarily replaced by the target's last move; the replacement move will have full PP and become part of the user's moveset until the user switches out or the battle ends. Mimic copies attacks even if they miss or the user has immunity toward their type; it cannot copy itself, Struggle, Transform, Sketch, Chatter or moves that the user already knows, and it will fail if the target has yet to use a move.",
 		shortDesc: "The last move the target used replaces this one.",
 		id: "mimic",
 		name: "Mimic",
 		pp: 10,
 		priority: 0,
+		onHit: function(target, source) {
+			var disallowedMoves = {transform:1,struggle:1,sketch:1,mimic:1,chatter:1};
+			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
+			var moveslot = source.moves.indexOf('mimic');
+			if (moveslot === -1) return false;
+			var move = Tools.getMove(target.lastMove);
+			source.moveset[moveslot] = {
+				move: move.name,
+				id: move.id,
+				pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				disabled: false,
+				used: false
+			};
+			source.moves[moveslot] = toId(move.name);
+			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
