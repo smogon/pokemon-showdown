@@ -10926,6 +10926,9 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		isContact: true,
 		priority: 0,
+		beforeMoveCallback: function(pokemon) {
+			this.add('-message', pokemon.name+' has no moves left! (placeholder)');
+		},
 		onModifyMove: function(move) {
 			move.type = '???';
 		},
