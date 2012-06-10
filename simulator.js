@@ -1631,13 +1631,13 @@ function Battle(roomid, format, rated) {
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
 		}
-		pokemon.clearVolatile();
 		var lastMove = null;
 		if (side.active[0]) {
 			lastMove = selfB.getMove(side.active[0].lastMove);
 			if (side.active[0].switchFlag === 'copyvolatile') {
 				pokemon.copyVolatileFrom(side.active[0]);
 			}
+			side.active[0].clearVolatile();
 		}
 		side.active[0] = pokemon;
 		pokemon.isActive = true;
@@ -1690,8 +1690,8 @@ function Battle(roomid, format, rated) {
 			oldActive.position = oldpos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
+			oldActive.clearVolatile();
 		}
-		pokemon.clearVolatile();
 		side.active[0] = pokemon;
 		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
