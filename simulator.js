@@ -401,6 +401,7 @@ function BattlePokemon(set, side) {
 			selfP.ability = pokemon.ability;
 			selfP.set = pokemon.set;
 			selfP.moveset = [];
+			selfP.moves = [];
 			for (var i=0; i<pokemon.moveset.length; i++) {
 				var moveData = pokemon.moveset[i];
 				var moveName = moveData.move;
@@ -414,6 +415,7 @@ function BattlePokemon(set, side) {
 					maxpp: moveData.maxpp,
 					disabled: false
 				});
+				selfP.moves.push(toId(moveName));
 			}
 			for (var j in pokemon.baseBoosts) {
 				selfP.baseBoosts[j] = pokemon.baseBoosts[j];
@@ -433,12 +435,14 @@ function BattlePokemon(set, side) {
 			evasion: 0
 		};
 		this.moveset = [];
+		this.moves = [];
 		// we're copying array contents
 		// DO NOT "optimize" it to copy just the pointer
 		// if you don't know what a pointer is, please don't
 		// touch this code
 		for (var i=0; i<this.baseMoveset.length; i++) {
 			this.moveset.push(this.baseMoveset[i]);
+			this.moves.push(toId(this.baseMoveset[i].move));
 		}
 		selfP.transformed = false;
 		selfP.ability = selfP.baseAbility;
