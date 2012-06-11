@@ -1455,6 +1455,7 @@ exports.BattleFormatsData = {
 	},
 	wooper: {
 		viableMoves: {"recover":1,"earthquake":1,"waterfall":1,"scald":1,"toxic":1,"curse":1,"stoneedge":1,"stockpile":1,"yawn":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	quagsire: {
