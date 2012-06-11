@@ -629,6 +629,7 @@ var User = (function () {
 	};
 	User.prototype.destroy = function() {
 		// Disconnects a user from the server
+		this.destroyChatQueue();
 		var person = null;
 		this.connected = false;
 		for (var i=0; i<this.people.length; i++) {
