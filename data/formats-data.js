@@ -4126,7 +4126,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	hydreigon: {
-		viableMoves: {"uturn":1,"dracometeor":1,"subsitute":1,"dragonpulse":1,"focusblast":1,"fireblast":1,"surf":1,"darkpulse":1},
+		viableMoves: {"uturn":1,"dracometeor":1,"substitute":1,"dragonpulse":1,"focusblast":1,"fireblast":1,"surf":1,"darkpulse":1},
 		eventPokemon: [
 			{"generation":5,"level":70,"gender":"M","abilities":["levitate"],"moves":["hypervoice","dragonbreath","flamethrower","focusblast"]}
 		],
