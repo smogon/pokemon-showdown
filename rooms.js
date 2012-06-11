@@ -43,22 +43,24 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		if (!update) return;
 
 		if (selfR.battle.ended && selfR.rated) {
+			var rated = selfR.rated;
+			selfR.rated = false;
 			var p1score = 0.5;
 
-			if (selfR.battle.winner === selfR.rated.p1) {
+			if (selfR.battle.winner === rated.p1) {
 				p1score = 1;
-			} else if (selfR.battle.winner === selfR.rated.p2) {
+			} else if (selfR.battle.winner === rated.p2) {
 				p1score = 0;
 			}
 
-			var p1 = selfR.rated.p1;
-			if (Users.get(selfR.rated.p1)) p1 = Users.get(selfR.rated.p1).name;
-			var p2 = selfR.rated.p2;
-			if (Users.get(selfR.rated.p2)) p2 = Users.get(selfR.rated.p2).name;
+			var p1 = rated.p1;
+			if (Users.get(rated.p1)) p1 = Users.get(rated.p1).name;
+			var p2 = rated.p2;
+			if (Users.get(rated.p2)) p2 = Users.get(rated.p2).name;
 
-			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken=[token]');
+			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken=[token]');
 
-			if (!selfR.rated.p1 || !selfR.rated.p2) {
+			if (!rated.p1 || !rated.p2) {
 				update.updates.push('| chatmsg | ERROR: Ladder not updated: a player does not exist');
 			} else {
 				var winner = Users.get(selfR.battle.winner);
@@ -67,7 +69,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				}
 				// update rankings
 				request({
-					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(selfR.rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
+					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
 				}, function(error, response, body) {
 					if (body) {
 						try {
@@ -93,8 +95,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 					JSON.stringify(logData)
 				);
 			}
-
-			selfR.rated = false;
 		}
 
 		update.room = roomid;
