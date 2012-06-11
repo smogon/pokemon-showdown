@@ -732,7 +732,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'ladder':
 		target = toUserid(target) || user.userid;
 		request({
-			uri: config.loginserver+'action.php?act=ladderget&serverid='+serverid+'&user='+target,
+			uri: config.loginserver+'action.php?act=ladderget&serverid='+config.serverid+'&user='+target,
 		}, function(error, response, body) {
 			if (body) {
 				try {
