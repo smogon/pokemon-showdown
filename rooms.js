@@ -43,7 +43,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		if (!update) return;
 
 		if (selfR.battle.ended && selfR.rated) {
-			selfR.rated = false;
 			var p1score = 0.5;
 
 			if (selfR.battle.winner === selfR.rated.p1) {
