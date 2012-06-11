@@ -93,6 +93,8 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 					JSON.stringify(logData)
 				);
 			}
+
+			selfR.rated = false;
 		}
 
 		update.room = roomid;
