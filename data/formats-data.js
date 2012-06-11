@@ -861,6 +861,7 @@ exports.BattleFormatsData = {
 	},
 	tangela: {
 		viableMoves: {"gigadrain":1,"sleeppowder":1,"hiddenpowerrock":1,"hiddenpowerice":1,"leechseed":1,"knockoff":1,"leafstorm":1,"stunspore":1,"synthesis":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	tangrowth: {
@@ -1593,6 +1594,7 @@ exports.BattleFormatsData = {
 	},
 	girafarig: {
 		viableMoves: {"psychic":1,"crunch":1,"thunderbolt":1,"calmmind":1,"batonpass":1,"agility":1,"lightscreen":1,"reflect":1,"thunderwave":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	pineco: {
@@ -3197,22 +3199,27 @@ exports.BattleFormatsData = {
 	},
 	rotomheat: {
 		viableMoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"substitute":1,"painsplit":1,"hiddenpowerice":1,"willowisp":1,"rest":1,"sleeptalk":1,"overheat":1,"trick":1},
+		dreamWorldRelease: true,
 		tier: "UU"
 	},
 	rotomwash: {
 		viableMoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"thunderwave":1,"substitute":1,"painsplit":1,"hiddenpowerice":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"hydropump":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	rotomfrost: {
 		viableMoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"thunderwave":1,"substitute":1,"painsplit":1,"hiddenpowerfighting":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"blizzard":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	rotomfan: {
 		viableMoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"thunderwave":1,"substitute":1,"painsplit":1,"hiddenpowerfighting":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"airslash":1,"confuseray":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	rotommow: {
 		viableMoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"thunderwave":1,"substitute":1,"painsplit":1,"hiddenpowerice":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1,"leafstorm":1,"chargebeam":1},
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	uxie: {
