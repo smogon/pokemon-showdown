@@ -1016,6 +1016,28 @@ function Battle(roomid, format, rated) {
 		return 'Battle: '+selfS.format;
 	};
 
+	// This function is designed to emulate the on-cartridge PRNG, as described in
+	// http://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
+	// Gen 5 uses a 64-bit initial seed, but the upper 32 bits are just for the IV RNG,
+	// and have no relevance here.
+
+	// This function has three different results, depending on arguments:
+	// - random() returns a real number in [0,1), just like Math.random()
+	// - random(n) returns an integer in [0,n)
+	// - random(m,n) returns an integer in [m,n)
+
+	// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
+
+	this.seed = Math.floor(Math.random() * 0xFFFFFFFF); // use a random initial seed
+
+	this.random = function(m, n) {
+		selfB.seed = (selfB.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
+		var result = selfB.seed >>> 16; // the first 16 bits of the seed are the random value
+		m = Math.floor(m);
+		n = Math.floor(n);
+		return (m ? (n ? (result%(n-m))+m : result%m) : result/0x10000);
+	};
+
 	this.setWeather = function(status, source, sourceEffect) {
 		status = selfB.getEffect(status);
 		if (!sourceEffect && selfB.effect) sourceEffect = selfB.effect;
