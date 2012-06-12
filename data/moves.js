@@ -117,7 +117,7 @@ exports.BattleMovedex = {
 				}
 			}
 			if (stats.length) {
-				var i = stats[parseInt(Math.random()*stats.length)];
+				var i = stats[this.random(stats.length)];
 				var boost = {};
 				boost[i] = 2;
 				this.boost(boost);
@@ -419,7 +419,7 @@ exports.BattleMovedex = {
 				}
 			}
 			var move = '';
-			if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
+			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) {
 				return false;
 			}
@@ -507,7 +507,7 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('attract');
 					return;
 				}
-				if (Math.random()*2 < 1) {
+				if (this.random(2) === 0) {
 					this.add('cant', pokemon, 'Attract', move);
 					return false;
 				}
@@ -1676,7 +1676,7 @@ exports.BattleMovedex = {
 					this.add('-fail', pokemon);
 					return false;
 				}
-				this.effectData.type = possibleTypes.sample();
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
 				this.add('-start', pokemon, 'typechange', this.effectData.type);
 			},
 			onRestart: function(pokemon) {
@@ -1690,7 +1690,7 @@ exports.BattleMovedex = {
 					this.add('-fail', pokemon);
 					return false;
 				}
-				this.effectData.type = possibleTypes.sample();
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
 				this.add('-start', pokemon, 'typechange', this.effectData.type);
 			},
 			onModifyPokemon: function(pokemon) {
@@ -1734,7 +1734,7 @@ exports.BattleMovedex = {
 					this.add('-fail', pokemon);
 					return false;
 				}
-				this.effectData.type = possibleTypes.sample();
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
 				this.add('-start', pokemon, 'typechange', this.effectData.type);
 			},
 			onRestart: function(pokemon, target, move) {
@@ -1755,7 +1755,7 @@ exports.BattleMovedex = {
 					this.add('-fail', pokemon);
 					return false;
 				}
-				this.effectData.type = possibleTypes.sample();
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
 				this.add('-start', pokemon, 'typechange', this.effectData.type);
 			},
 			onModifyPokemon: function(pokemon) {
@@ -2226,11 +2226,11 @@ exports.BattleMovedex = {
 			if (pokemon.volatiles['stall']) {
 				counter = pokemon.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 256) counter = 4294967296; // 2^32
-			this.debug("Success chance: "+Math.round(100/counter)+"%");
-			if (counter > 0 && Math.random()*counter > 1) {
-				return false;
+			if (counter >= 256) {
+				return (this.random()*4294967296 < 1); // 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 			}
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			return (this.random(counter) === 0);
 		},
 		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
@@ -3071,11 +3071,11 @@ exports.BattleMovedex = {
 			if (pokemon.volatiles['stall']) {
 				counter = pokemon.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 256) counter = 4294967296; // 2^32
-			this.debug("Success chance: "+Math.round(100/counter)+"%");
-			if (counter > 0 && Math.random()*counter > 1) {
-				return false;
+			if (counter >= 256) {
+				return (this.random()*4294967296 < 1); // 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 			}
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			return (this.random(counter) === 0);
 		},
 		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
@@ -6652,7 +6652,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
-			var i = Math.floor(Math.random()*100);
+			var i = this.random(100);
 			if (i < 5) {
 				this.add('-message', 'Magnitude 4! (placeholder)');
 				return 10;
@@ -6963,7 +6963,7 @@ exports.BattleMovedex = {
 				}
 			}
 			var move = '';
-			if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
+			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) {
 				return false;
 			}
@@ -8080,7 +8080,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onModifyMove: function(move, pokemon, target) {
-			var rand = Math.random() * 10;
+			var rand = this.random(10);
 			if (rand < 2) {
 				move.heal = [80, target.maxhp];
 			} else if (rand < 6) {
@@ -8117,11 +8117,11 @@ exports.BattleMovedex = {
 			if (pokemon.volatiles['stall']) {
 				counter = pokemon.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 256) counter = 4294967296; // 2^32
-			this.debug("Success chance: "+Math.round(100/counter)+"%");
-			if (counter > 0 && Math.random()*counter > 1) {
-				return false;
+			if (counter >= 256) {
+				return (this.random()*4294967296 < 1); // 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 			}
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			return (this.random(counter) === 0);
 		},
 		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
@@ -8324,7 +8324,7 @@ exports.BattleMovedex = {
 		accuracy: 80,
 		basePower: false,
 		damageCallback: function(pokemon) {
-			return parseInt((Math.random()*11 + 5) * pokemon.level / 10);
+			return (this.random(5,16) / 10) * pokemon.level;
 		},
 		category: "Special",
 		desc: "Randomly inflicts set damage equal to .5x, .6x, .7x, .8x, .9x, 1.0x, 1.1x, 1.2x, 1.3x, 1.4x or 1.5x the user's level.",
@@ -8456,10 +8456,11 @@ exports.BattleMovedex = {
 			if (source.volatiles['stall']) {
 				counter = source.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 256) counter = 4294967296; // 2^32
-			if (counter > 0 && Math.random()*counter > 1) {
-				return false;
+			if (counter >= 256) {
+				return (this.random()*4294967296 < 1); // 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 			}
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			return (this.random(counter) === 0);
 		},
 		onHitSide: function(side, source) {
 			source.addVolatile('stall');
@@ -10171,7 +10172,7 @@ exports.BattleMovedex = {
 				}
 			}
 			var move = '';
-			if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
+			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) {
 				return false;
 			}
@@ -11946,7 +11947,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 20,
 			onHit: function(target, source) {
-				var result = parseInt(Math.random()*3);
+				var result = this.random(3);
 				if (result===0) {
 					target.trySetStatus('brn', source);
 				} else if (result===1) {

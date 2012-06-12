@@ -37,7 +37,7 @@ exports.BattleScripts = {
 		if (!move) return false;
 
 		var attrs = '';
-		var moveRoll = Math.random()*100;
+		var moveRoll = this.random(100);
 		var missed = false;
 		if (pokemon.fainted) {
 			return false;
@@ -104,13 +104,13 @@ exports.BattleScripts = {
 			if (hits.length) {
 				// yes, it's hardcoded... meh
 				if (hits[0] === 2 && hits[1] === 5) {
-					var roll = parseInt(Math.random()*20);
+					var roll = this.random(20);
 					if (roll < 7) hits = 2;
 					else if (roll < 14) hits = 3;
 					else if (roll < 17) hits = 4;
 					else hits = 5;
 				} else {
-					hits = hits[0] + (Math.random()*(hits[1]-hits[0]+1));
+					hits = this.random(hits[0],hits[1]+1);
 				}
 			}
 			hits = Math.floor(hits);
@@ -319,7 +319,7 @@ exports.BattleScripts = {
 		if (moveData.secondaries) {
 			var secondaryRoll;
 			for (var i = 0; i < moveData.secondaries.length; i++) {
-				secondaryRoll = Math.random()*100;
+				secondaryRoll = this.random(100);
 				if (typeof moveData.secondaries[i].chance === 'undefined' || secondaryRoll < moveData.secondaries[i].chance) {
 					BattleScripts.moveHit.call(this, target, pokemon, move, moveData.secondaries[i], true, isSelf);
 				}

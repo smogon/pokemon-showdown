@@ -2007,7 +2007,7 @@ function Battle(roomid, format, rated) {
 		move.crit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined') {
 			if (move.critRatio) {
-				move.crit = (Math.random()*critMult[move.critRatio] < 1);
+				move.crit = (selfB.random(critMult[move.critRatio]) === 0);
 			}
 		}
 		if (move.crit) {
@@ -2063,7 +2063,7 @@ function Battle(roomid, format, rated) {
 		// gen 1-2
 		//var randFactor = Math.floor(Math.random()*39)+217;
 		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
-		baseDamage = Math.round(baseDamage * (100 - Math.floor(Math.random() * 16)) / 100);
+		baseDamage = Math.round(baseDamage * selfB.random(85,101) / 100);
 
 		// STAB
 		if (type !== '???' && pokemon.hasType(type)) {
