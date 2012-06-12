@@ -298,10 +298,10 @@ exports.BattleStatuses = {
 		// Protect, Detect, Endure counter
 		duration: 2,
 		onStart: function() {
-			this.effectData.counter = 1;
+			this.effectData.counter = 2;
 		},
 		onRestart: function() {
-			this.effectData.counter++;
+			this.effectData.counter *= 2;
 			this.effectData.duration = 2;
 		}
 	},
