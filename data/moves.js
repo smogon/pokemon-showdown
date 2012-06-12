@@ -2222,14 +2222,13 @@ exports.BattleMovedex = {
 			if (!this.willAct()) {
 				return false;
 			}
-			var counter = 0;
+			var counter = 1;
 			if (pokemon.volatiles['stall']) {
-				counter = pokemon.volatiles['stall'].counter || 0;
+				counter = pokemon.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 8) counter = 32;
-			var denom = Math.pow(2, counter);
-			this.debug("Success chance: "+Math.round(100*1/denom)+"%");
-			if (counter > 0 && Math.random()*denom > 1) {
+			if (counter >= 256) counter = 4294967296; // 2^32
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			if (counter > 0 && Math.random()*counter > 1) {
 				return false;
 			}
 		},
@@ -3068,14 +3067,13 @@ exports.BattleMovedex = {
 			if (!this.willAct()) {
 				return false;
 			}
-			var counter = 0;
+			var counter = 1;
 			if (pokemon.volatiles['stall']) {
-				counter = pokemon.volatiles['stall'].counter || 0;
+				counter = pokemon.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 8) counter = 32;
-			var denom = Math.pow(2, counter);
-			this.debug("Success chance: "+Math.round(100*1/denom)+"%");
-			if (counter > 0 && Math.random()*denom > 1) {
+			if (counter >= 256) counter = 4294967296; // 2^32
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			if (counter > 0 && Math.random()*counter > 1) {
 				return false;
 			}
 		},
@@ -8115,14 +8113,13 @@ exports.BattleMovedex = {
 			if (!this.willAct()) {
 				return false;
 			}
-			var counter = 0;
+			var counter = 1;
 			if (pokemon.volatiles['stall']) {
-				counter = pokemon.volatiles['stall'].counter || 0;
+				counter = pokemon.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 8) counter = 32;
-			var denom = Math.pow(2, counter);
-			this.debug("Success chance: "+Math.round(100*1/denom)+"%");
-			if (counter > 0 && Math.random()*denom > 1) {
+			if (counter >= 256) counter = 4294967296; // 2^32
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			if (counter > 0 && Math.random()*counter > 1) {
 				return false;
 			}
 		},
@@ -8455,12 +8452,12 @@ exports.BattleMovedex = {
 			if (!this.willAct()) {
 				return false;
 			}
-			var counter = 0;
+			var counter = 1;
 			if (source.volatiles['stall']) {
-				counter = source.volatiles['stall'].counter || 0;
+				counter = source.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 8) counter = 32;
-			if (counter > 0 && Math.random()*Math.pow(2, counter) > 1) {
+			if (counter >= 256) counter = 4294967296; // 2^32
+			if (counter > 0 && Math.random()*counter > 1) {
 				return false;
 			}
 		},
