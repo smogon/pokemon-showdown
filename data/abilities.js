@@ -299,7 +299,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function(damage, target, source, move) {
 			if (!source || source.volatiles['disable']) return;
 			if (source !== target) {
-				if (Math.random() * 10 < 3) {
+				if (this.random(10) < 3) {
 					source.addVolatile('disable');
 				}
 			}
@@ -314,7 +314,7 @@ exports.BattleAbilities = {
 		shortDesc: "30% chance of infatuating Pokemon of the opposite gender if they make contact.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact) {
-				if (Math.random() * 10 < 3) {
+				if (this.random(10) < 3) {
 					if (source.addVolatile('attract', target)) {
 						this.add('-start', source, 'Attract', '[from] Cute Charm', '[of] '+target);
 					}
@@ -470,11 +470,11 @@ exports.BattleAbilities = {
 		shortDesc: "30% chance of poisoning, paralyzing, or causing sleep on Pokemon making contact.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact) {
-				var r = Math.random() * 10;
+				var r = this.random(10);
 				if (r < 3) {
-					if (r < 1) {
+					if (r === 0) {
 						source.trySetStatus('psn', target, move);
-					} else if (r < 2) {
+					} else if (r === 1) {
 						source.trySetStatus('par', target, move);
 					} else {
 						source.trySetStatus('slp', target, move);
@@ -506,7 +506,7 @@ exports.BattleAbilities = {
 		shortDesc: "30% chance of burning a Pokemon making contact with this Pokemon.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact) {
-				if (Math.random() * 10 < 3) {
+				if (this.random(10) < 3) {
 					source.trySetStatus('brn', target, move);
 				}
 			}
@@ -635,7 +635,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (!warnMoves.length) return;
-			var warnMove = warnMoves[Math.floor(Math.random()*warnMoves.length)];
+			var warnMove = warnMoves[this.random(warnMoves.length)];
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
 		},
 		id: "forewarn",
@@ -692,7 +692,7 @@ exports.BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
-			if ((this.weather === 'sunnyday') || (Math.random() * 2 < 1)) {
+			if ((this.weather === 'sunnyday') || (this.random(2) === 0)) {
 				if (!pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
 						pokemon.setItem(pokemon.lastItem);
 						this.add("-item", pokemon, pokemon.item, '[from] ability: Harvest');
@@ -1204,7 +1204,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (stats.length) {
-				i = stats[parseInt(Math.random()*stats.length)];
+				i = stats[this.random(stats.length)];
 				boost[i] = 2;
 			}
 			stats = [];
@@ -1214,7 +1214,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (stats.length) {
-				i = stats[parseInt(Math.random()*stats.length)];
+				i = stats[this.random(stats.length)];
 				boost[i] = -1;
 			}
 			this.boost(boost);
@@ -1468,7 +1468,7 @@ exports.BattleAbilities = {
 		shortDesc: "30% chance of poisoning a Pokemon making contact with this Pokemon.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact) {
-				if (Math.random() * 10 < 3) {
+				if (this.random(10) < 3) {
 					source.trySetStatus('psn', target, move);
 				}
 			}
@@ -1780,7 +1780,7 @@ exports.BattleAbilities = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
-			if (pokemon.status && Math.random()*3 < 1) {
+			if (pokemon.status && this.random(3) === 0) {
 				this.debug('shed skin');
 				pokemon.cureStatus();
 			}
@@ -1992,7 +1992,7 @@ exports.BattleAbilities = {
 		shortDesc: "30% chance of paralyzing a Pokemon making contact with this Pokemon.",
 		onAfterDamage: function(damage, target, source, effect) {
 			if (effect && effect.isContact) {
-				if (Math.random() * 10 < 3) {
+				if (this.random(10) < 3) {
 					source.trySetStatus('par', target, effect);
 				}
 			}

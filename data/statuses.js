@@ -32,7 +32,7 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon) {
-			if (Math.random()*4 < 1) {
+			if (this.random(4) === 0) {
 				this.add('cant', pokemon.id, 'par');
 				return false;
 			}
@@ -43,7 +43,7 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target.id, 'slp');
 			// 1-3 turns
-			this.effectData.startTime = 2+parseInt(Math.random()*3);
+			this.effectData.startTime = this.random(2,5);
 			this.effectData.time = this.effectData.startTime;
 			if (target.getAbility().isHalfSleep) {
 				this.effectData.time = Math.floor(this.effectData.time / 2);
@@ -77,7 +77,7 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
-			if (Math.random()*5 < 1 || move.thawsUser) {
+			if (this.random(5) === 0 || move.thawsUser) {
 				this.add('-curestatus', pokemon.id, 'frz');
 				pokemon.setStatus('');
 				return;
@@ -123,7 +123,7 @@ exports.BattleStatuses = {
 		// this is a volatile status
 		onStart: function(target) {
 			this.add('-start', target.id, 'confusion');
-			this.effectData.time = 2 + parseInt(Math.random()*4);
+			this.effectData.time = this.random(2,6);
 		},
 		onEnd: function(target) {
 			this.add('-end', target.id, 'confusion');
@@ -135,7 +135,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.add('-activate', pokemon.id, 'confusion');
-			if (Math.random()*2 < 1) {
+			if (this.random(2) === 0) {
 				return;
 			}
 			this.damage(this.getDamage(pokemon,pokemon,40));
@@ -167,7 +167,7 @@ exports.BattleStatuses = {
 		duration: 5,
 		durationCallback: function(target, source) {
 			if (source.item === 'gripclaw') return 5;
-			return Math.floor(4 + Math.random()*2);
+			return this.random(4,6);
 		},
 		onResidualOrder: 11,
 		onResidual: function(pokemon) {
@@ -191,7 +191,7 @@ exports.BattleStatuses = {
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		durationCallback: function() {
-			return 2 + parseInt(2*Math.random());
+			return this.random(2,4);
 		},
 		onResidual: function(target) {
 			var move = this.getMove(target.lastMove);

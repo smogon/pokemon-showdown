@@ -1042,7 +1042,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onDamage: function(damage, target, source, effect) {
-			if (Math.random()*10 < 1 && damage >= target.hp && effect && effect.effectType === 'Move') {
+			if (this.random(10) === 0 && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add("-message",target.name+" held on using its Focus Band! (placeholder)");
 				return target.hp - 1;
 			}
@@ -2729,7 +2729,7 @@ exports.BattleItems = {
 				}
 			}
 			if (stats.length) {
-				var i = stats[parseInt(Math.random()*stats.length)];
+				var i = stats[this.random(stats.length)];
 				var boost = {};
 				boost[i] = 2;
 				this.boost(boost);
