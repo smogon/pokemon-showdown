@@ -294,6 +294,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			selfR.update();
 			return;
 		}
+		if (user.name != (selfR.battle.p1.user || selfR.battle.p2.user)) {
+			selfR.add(user.name+' requested that inactive players be kicked, but it isn\'t their battle.');
+			return;
+		}
 
 		selfR.inactiveAtrrib = '';
 		if (user) selfR.inactiveAtrrib = ' (requested by '+user.name+')';
