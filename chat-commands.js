@@ -1216,6 +1216,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 	}
 
+	if (message.match(/\bnimp\.org\b/)) {
+		// spam site
+		// todo: custom banlists
+		return false;
+	}
+
 	if (message.substr(0,1) === '/' && message.substr(0,2) !== '//') {
 		// To the client, "/text" has special meaning, so "//" is used to
 		// escape "/" at the beginning of a message
