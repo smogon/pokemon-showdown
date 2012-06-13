@@ -50,9 +50,7 @@ if (process.argv[2] && parseInt(process.argv[2])) {
 }
 
 var io = require('socket.io').listen(config.port).set('log level', 1);
-
 io.set('transports', ['websocket', 'htmlfile', 'xhr-polling']); // temporary hack until https://github.com/LearnBoost/socket.io/issues/609 is fixed
-
 console.log("Server started on port "+config.port);
 console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
 
@@ -96,20 +94,23 @@ clampIntRange = function(num, min, max) {
 	return num;
 };
 
-BattlePokedex = require('./data/pokedex.js').BattlePokedex;
-BattleMovedex = require('./data/moves.js').BattleMovedex;
-BattleStatuses = require('./data/statuses.js').BattleStatuses;
-BattleTypeChart = require('./data/typechart.js').BattleTypeChart;
-BattleScripts = require('./data/scripts.js').BattleScripts;
-BattleItems = require('./data/items.js').BattleItems;
-BattleAbilities = require('./data/abilities.js').BattleAbilities;
-BattleFormats = require('./data/formats.js').BattleFormats;
-BattleFormatsData = require('./data/formats-data.js').BattleFormatsData;
-BattleLearnsets = require('./data/learnsets.js').BattleLearnsets;
+Data = {};
+Data.base = {};
+
+Data.base['Pokedex'] = BattlePokedex = require('./data/pokedex.js').BattlePokedex;
+Data.base['Movedex'] = BattleMovedex = require('./data/moves.js').BattleMovedex;
+Data.base['Statuses'] = BattleStatuses = require('./data/statuses.js').BattleStatuses;
+Data.base['TypeChart'] = BattleTypeChart = require('./data/typechart.js').BattleTypeChart;
+Data.base['Scripts'] = BattleScripts = require('./data/scripts.js').BattleScripts;
+Data.base['Items'] = BattleItems = require('./data/items.js').BattleItems;
+Data.base['Abilities'] = BattleAbilities = require('./data/abilities.js').BattleAbilities;
+Data.base['Formats'] = BattleFormats = require('./data/formats.js').BattleFormats;
+Data.base['FormatsData'] = BattleFormatsData = require('./data/formats-data.js').BattleFormatsData;
+Data.base['Learnsets'] = BattleLearnsets = require('./data/learnsets.js').BattleLearnsets;
 try {
-	BattleAliases = require('./data/aliases.js').BattleAliases || {};
+	Data.base['Aliases'] = BattleAliases = require('./data/aliases.js').BattleAliases || {};
 } catch (e) {
-	BattleAliases = {};
+	Data.base['Aliases'] = BattleAliases = {};
 }
 
 var sim = require('./simulator.js');
@@ -118,9 +119,7 @@ BattlePokemon = sim.BattlePokemon;
 BattleSide = sim.BattleSide;
 Battle = sim.Battle;
 
-BattleTools = require('./tools.js').BattleTools;
-
-Tools = new BattleTools();
+Tools = require('./tools.js');
 
 Users = require('./users.js');
 parseCommand = require('./chat-commands.js').parseCommand;
