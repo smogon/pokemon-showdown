@@ -699,7 +699,7 @@ exports.BattleScripts = {
 					if (rejectAbility) {
 						if (ability === ability1.name) { // or not
 							ability = ability0.name;
-						} else {
+						} else if (ability1.rating > 0) { // only switch if the alternative doesn't suck
 							ability = ability1.name;
 						}
 					}
