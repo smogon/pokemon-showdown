@@ -1,6 +1,8 @@
 exports.BattleScripts = {
 	runMove: function(move, pokemon, target) {
 		move = this.getMove(move);
+		if (!target) target = this.resolveTarget(pokemon, move);
+
 		this.setActiveMove(move, pokemon, target);
 
 		if (pokemon.movedThisTurn || pokemon.runBeforeMove(target, move)) {
@@ -21,10 +23,16 @@ exports.BattleScripts = {
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	useMove: function(move, pokemon, target) {
+		move = this.getMove(move);
 		baseMove = move;
 		move = this.getMoveCopy(move);
+		if (!target) target = this.resolveTarget(pokemon, move);
+		if (move.target === 'self' || move.target === 'allies') {
+			target = pokemon;
+		}
 
 		this.setActiveMove(move, pokemon, target);
+
 		var canTargetFainted = {
 			all: 1, foeSide: 1
 		};

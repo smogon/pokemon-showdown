@@ -41,6 +41,13 @@ module.exports = (function () {
 			});
 		}
 		this.data = Data[mod];
+
+		// Scripts are Tools specific to a mod; they add to or overwrite base tools
+		// Many Scripts are not meant to be run from Tools directly; rather, they're meant
+		// to be copied into Battle.js using Tools.install and run from there
+		for (var i in this.data.Scripts) {
+			this[i] = this.data.Scripts[i];
+		}
 	}
 
 	var moddedTools = {};
@@ -286,7 +293,7 @@ module.exports = (function () {
 		var format = lsetData.format;
 		var alreadyChecked = {};
 		var result = false;
-		var isDW = (Tools.getAbility(set.ability).name === template.abilities.DW);
+		var isDW = (this.getAbility(set.ability).name === template.abilities.DW);
 		var isMaleOnly = template.maleOnlyDreamWorld;
 		var recheck = false;
 		if (move.id) move = move.id;
@@ -637,6 +644,14 @@ module.exports = (function () {
 
 		if (!problems.length) return false;
 		return problems;
+	};
+	/**
+	 * Install our Tools functions into the battle object
+	 */
+	Tools.prototype.install = function(battle) {
+		for (var i in this) {
+			if (!battle[i]) battle[i] = this[i];
+		}
 	};
 
 	moddedTools.base = new Tools();
