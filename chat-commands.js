@@ -669,18 +669,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		if (target === 'all') {
 			for (var i in require.cache) delete require.cache[i];
-			BattlePokedex = require('./data/pokedex.js').BattlePokedex;
-			BattleMovedex = require('./data/moves.js').BattleMovedex;
-			BattleStatuses = require('./data/statuses.js').BattleStatuses;
-			BattleTypeChart = require('./data/typechart.js').BattleTypeChart;
-			BattleScripts = require('./data/scripts.js').BattleScripts;
-			BattleItems = require('./data/items.js').BattleItems;
-			BattleAbilities = require('./data/abilities.js').BattleAbilities;
-			BattleFormats = require('./data/formats.js').BattleFormats;
-			BattleFormatsData = require('./data/formats-data.js').BattleFormatsData;
-			BattleLearnsets = require('./data/learnsets.js').BattleLearnsets;
-			BattleTools = require('./tools.js').BattleTools;
-			Tools = new BattleTools();
+			Tools = require('./tools.js');
 
 			parseCommand = require('./chat-commands.js').parseCommand;
 
@@ -692,18 +681,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		} else if (target === 'data') {
 			for (var i in require.cache) delete require.cache[i];
-			BattlePokedex = require('./data/pokedex.js').BattlePokedex;
-			BattleMovedex = require('./data/moves.js').BattleMovedex;
-			BattleStatuses = require('./data/statuses.js').BattleStatuses;
-			BattleTypeChart = require('./data/typechart.js').BattleTypeChart;
-			BattleScripts = require('./data/scripts.js').BattleScripts;
-			BattleItems = require('./data/items.js').BattleItems;
-			BattleAbilities = require('./data/abilities.js').BattleAbilities;
-			BattleFormats = require('./data/formats.js').BattleFormats;
-			BattleFormatsData = require('./data/formats-data.js').BattleFormatsData;
-			BattleLearnsets = require('./data/learnsets.js').BattleLearnsets;
-			BattleTools = require('./tools.js').BattleTools;
-			Tools = new BattleTools();
+			Tools = require('./tools.js');
 			socket.emit('console', 'Game resources have been hot-patched.');
 			return false;
 		} else if (target === 'chat') {
