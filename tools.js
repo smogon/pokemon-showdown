@@ -1,28 +1,37 @@
 module.exports = (function () {
 	var dataTypes = ['Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Formats', 'FormatsData', 'Learnsets', 'Aliases'];
+	var dataFiles = {
+		'Pokedex': 'pokedex.js',
+		'Movedex': 'moves.js',
+		'Statuses': 'statuses.js',
+		'TypeChart': 'typechart.js',
+		'Scripts': 'scripts.js',
+		'Items': 'items.js',
+		'Abilities': 'abilities.js',
+		'Formats': 'formats.js',
+		'FormatsData': 'formats-data.js',
+		'Learnsets': 'learnsets.js',
+		'Aliases': 'aliases.js'
+	};
 	function Tools(mod) {
 		if (!mod) mod = 'base';
 		this.currentMod = mod;
 
+		Data[mod] = {
+			mod: mod
+		};
 		if (mod === 'base') {
 			dataTypes.forEach(function(dataType) {
-				Data[mod][dataType] = Data.base[dataType];
+				try {
+					Data[mod][dataType] = require('./data/'+dataFiles[dataType])['Battle'+dataType];
+				} catch (e) {}
+				if (!Data[mod][dataType]) Data[mod][dataType] = {};
 			}, this);
 		} else {
-			try {
-				Data[mod].Pokedex = require('./mods/'+mod+'/pokedex.js').BattlePokedex;
-				Data[mod].Movedex = require('./mods/'+mod+'/moves.js').BattleMovedex;
-				Data[mod].Statuses = require('./mods/'+mod+'/statuses.js').BattleStatuses;
-				Data[mod].TypeChart = require('./mods/'+mod+'/typechart.js').BattleTypeChart;
-				Data[mod].Scripts = require('./mods/'+mod+'/scripts.js').BattleScripts;
-				Data[mod].Items = require('./mods/'+mod+'/items.js').BattleItems;
-				Data[mod].Abilities = require('./mods/'+mod+'/abilities.js').BattleAbilities;
-				Data[mod].Formats = require('./mods/'+mod+'/formats.js').BattleFormats;
-				Data[mod].FormatsData = require('./mods/'+mod+'/formats-data.js').BattleFormatsData;
-				Data[mod].Learnsets = require('./mods/'+mod+'/learnsets.js').BattleLearnsets;
-				Data[mod].Aliases = require('./mods/'+mod+'/aliases.js').BattleAliases;
-			} catch (e) {}
 			dataTypes.forEach(function(dataType) {
+				try {
+					Data[mod][dataType] = require('./mods/'+mod+'/'+dataFiles[dataType])['Battle'+dataType];
+				} catch (e) {}
 				if (!Data[mod][dataType]) Data[mod][dataType] = {};
 				for (var i in Data.base[dataType]) {
 					if (Data[mod][dataType][i] === null) {
@@ -183,9 +192,6 @@ module.exports = (function () {
 		moveCopy.isCopy = true;
 		return moveCopy;
 	};
-	Tools.prototype.getNature = function(nature) {
-		return this.data.Scripts.getNature.call(this, nature);
-	};
 	Tools.prototype.getEffect = function(effect) {
 		if (!effect || typeof effect === 'string') {
 			var name = (effect||'').trim();
@@ -215,6 +221,25 @@ module.exports = (function () {
 				effect = {
 					effectType: 'Drain'
 				};
+			}
+			if (!effect.id) effect.id = id;
+			if (!effect.name) effect.name = name;
+			if (!effect.fullname) effect.fullname = name;
+			effect.toString = this.effectToString;
+			if (!effect.category) effect.category = 'Effect';
+			if (!effect.effectType) effect.effectType = 'Effect';
+		}
+		return effect;
+	};
+	Tools.prototype.getFormat = function(effect) {
+		if (!effect || typeof effect === 'string') {
+			var name = (effect||'').trim();
+			var id = toId(name);
+			effect = {};
+			if (id && this.data.Formats[id]) {
+				effect = this.data.Formats[id];
+				effect.name = effect.name || this.data.Formats[id].name;
+				if (!effect.effectType) effect.effectType = 'Format';
 			}
 			if (!effect.id) effect.id = id;
 			if (!effect.name) effect.name = name;
@@ -274,6 +299,7 @@ module.exports = (function () {
 			type = {};
 			if (id && this.data.TypeChart[id]) {
 				type = this.data.TypeChart[id];
+				type.exists = true;
 				type.isType = true;
 				type.effectType = 'Type';
 			}
@@ -284,6 +310,45 @@ module.exports = (function () {
 			}
 		}
 		return type;
+	};
+	var BattleNatures = {
+		Adamant: {plus:'atk', minus:'spa'},
+		Bashful: {},
+		Bold: {plus:'def', minus:'atk'},
+		Brave: {plus:'atk', minus:'spe'},
+		Calm: {plus:'spd', minus:'atk'},
+		Careful: {plus:'spd', minus:'spa'},
+		Docile: {},
+		Gentle: {plus:'spd', minus:'def'},
+		Hardy: {},
+		Hasty: {plus:'spe', minus:'def'},
+		Impish: {plus:'def', minus:'spa'},
+		Jolly: {plus:'spe', minus:'spa'},
+		Lax: {plus:'def', minus:'spd'},
+		Lonely: {plus:'atk', minus:'def'},
+		Mild: {plus:'spa', minus:'def'},
+		Modest: {plus:'spa', minus:'atk'},
+		Naive: {plus:'spe', minus:'spd'},
+		Naughty: {plus:'atk', minus:'spd'},
+		Quiet: {plus:'spa', minus:'spe'},
+		Quirky: {},
+		Rash: {plus:'spa', minus:'spd'},
+		Relaxed: {plus:'def', minus:'spe'},
+		Sassy: {plus:'spd', minus:'spe'},
+		Serious: {},
+		Timid: {plus:'spe', minus:'atk'},
+	};
+	Tools.prototype.getNature = function(nature) {
+		if (typeof nature === 'string') nature = BattleNatures[nature];
+		if (!nature) nature = {};
+		return nature;
+	};
+	Tools.prototype.natureModify = function(stats, nature) {
+		if (typeof nature === 'string') nature = BattleNatures[nature];
+		if (!nature) return stats;
+		if (nature.plus) stats[nature.plus] *= 1.1;
+		if (nature.minus) stats[nature.minus] *= 0.9;
+		return stats;
 	};
 
 
@@ -416,7 +481,7 @@ module.exports = (function () {
 
 					banlistTable['Rule:'+toId(subformat.ruleset[i])] = true;
 
-					var subsubformat = this.getEffect(subformat.ruleset[i]);
+					var subsubformat = this.getFormat(subformat.ruleset[i]);
 					if (subsubformat.ruleset || subsubformat.banlist) {
 						this.getBanlistTable(format, subsubformat, depth+1);
 					}
@@ -427,7 +492,7 @@ module.exports = (function () {
 	};
 	Tools.prototype.validateTeam = function(team, format) {
 		var problems = [];
-		format = this.getEffect(format);
+		format = this.getFormat(format);
 		this.getBanlistTable(format);
 		if (format.team === 'random') {
 			return false;
@@ -473,7 +538,7 @@ module.exports = (function () {
 
 		if (format.ruleset) {
 			for (var i=0; i<format.ruleset.length; i++) {
-				var subformat = this.getEffect(format.ruleset[i]);
+				var subformat = this.getFormat(format.ruleset[i]);
 				if (subformat.validateTeam) {
 					problems = problems.concat(subformat.validateTeam.call(this, team, format)||[]);
 				}
@@ -488,7 +553,7 @@ module.exports = (function () {
 	};
 	Tools.prototype.validateSet = function(set, format, teamHas) {
 		var problems = [];
-		format = this.getEffect(format);
+		format = this.getFormat(format);
 		if (!set) {
 			return ["This is not a pokemon."];
 		}
@@ -632,7 +697,7 @@ module.exports = (function () {
 
 		if (format.ruleset) {
 			for (var i=0; i<format.ruleset.length; i++) {
-				var subformat = this.getEffect(format.ruleset[i]);
+				var subformat = this.getFormat(format.ruleset[i]);
 				if (subformat.validateSet) {
 					problems = problems.concat(subformat.validateSet.call(this, set, format)||[]);
 				}
@@ -662,6 +727,8 @@ module.exports = (function () {
 			moddedTools[dir] = new Tools(dir);
 		});
 	} catch (e) {}
+
+	moddedTools.base.moddedTools = moddedTools;
 
 	return moddedTools.base;
 })();
