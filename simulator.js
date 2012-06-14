@@ -228,7 +228,7 @@ function BattlePokemon(set, side) {
 		for (var i in selfP.baseBoosts) {
 			selfP.boosts[i] = selfP.baseBoosts[i];
 		}
-		BattleScripts.natureModify(selfP.stats, selfP.set.nature);
+		selfB.natureModify(selfP.stats, selfP.set.nature);
 		for (var i in selfP.stats) {
 			selfP.stats[i] = Math.floor(selfP.stats[i]);
 		}
@@ -864,7 +864,7 @@ function BattleSide(user, battle, n) {
 
 	this.id = (n?'p2':'p1');
 
-	this.team = BattleScripts.getTeam.call(selfB, selfS);
+	this.team = selfB.getTeam(this);
 	for (var i=0; i<this.team.length && i<6; i++) {
 		console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
 		this.pokemon.push(new BattlePokemon(this.team[i], this));
@@ -985,6 +985,10 @@ function BattleSide(user, battle, n) {
 
 function Battle(roomid, format, rated) {
 	var selfB = this;
+
+	// merge in scripts and tools
+	Tools.install(this);
+
 	this.log = [];
 	this.turn = 0;
 	this.sides = [null, null];
@@ -2107,26 +2111,6 @@ function Battle(roomid, format, rated) {
 		}
 		return pokemon.side.foe.active[0];
 	};
-	this.runMove = function(move, pokemon, target) {
-		move = selfB.getMove(move);
-		if (!target) {
-			target = selfB.resolveTarget(pokemon, move);
-		}
-
-		BattleScripts.runMove.call(selfB, move, pokemon, target);
-	};
-	this.useMove = function(move, pokemon, target, flags) {
-		move = selfB.getMove(move);
-		if (!target) target = selfB.resolveTarget(pokemon, move);
-		if (move.target === 'self' || move.target === 'allies') {
-			target = pokemon;
-		}
-
-		BattleScripts.useMove.call(selfB, move, pokemon, target, flags);
-	};
-	this.moveHit = function(target, source, move, a, b) {
-		BattleScripts.moveHit.call(selfB, target, source, move, a, b);
-	};
 	this.checkFainted = function() {
 		if (selfB.p1.active[0].fainted || selfB.p2.active[0].fainted) {
 			selfB.callback('switch');
@@ -2600,13 +2584,6 @@ function Battle(roomid, format, rated) {
 			updates: selfB.log.slice(prevUpdate)
 		};
 	};
-
-	// merge in scripts and tools
-	for (var i in Tools) {
-		if (!this[i]) {
-			this[i] = Tools[i];
-		}
-	}
 
 	this.destroy = function() {
 		// deallocate ourself
