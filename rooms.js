@@ -12,7 +12,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 
 	var formatid = toId(format);
 
-	if (rated && BattleFormats[formatid] && BattleFormats[formatid].rated) {
+	if (rated && Tools.getFormat(formatid).rated) {
 		rated = {
 			p1: p1.userid,
 			p2: p2.userid,

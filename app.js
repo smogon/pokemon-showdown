@@ -95,45 +95,24 @@ clampIntRange = function(num, min, max) {
 };
 
 Data = {};
-Data.base = {};
+Tools = require('./tools.js');
 
-Data.base['Pokedex'] = BattlePokedex = require('./data/pokedex.js').BattlePokedex;
-Data.base['Movedex'] = BattleMovedex = require('./data/moves.js').BattleMovedex;
-Data.base['Statuses'] = BattleStatuses = require('./data/statuses.js').BattleStatuses;
-Data.base['TypeChart'] = BattleTypeChart = require('./data/typechart.js').BattleTypeChart;
-Data.base['Scripts'] = BattleScripts = require('./data/scripts.js').BattleScripts;
-Data.base['Items'] = BattleItems = require('./data/items.js').BattleItems;
-Data.base['Abilities'] = BattleAbilities = require('./data/abilities.js').BattleAbilities;
-Data.base['Formats'] = BattleFormats = require('./data/formats.js').BattleFormats;
-Data.base['FormatsData'] = BattleFormatsData = require('./data/formats-data.js').BattleFormatsData;
-Data.base['Learnsets'] = BattleLearnsets = require('./data/learnsets.js').BattleLearnsets;
-try {
-	Data.base['Aliases'] = BattleAliases = require('./data/aliases.js').BattleAliases || {};
-} catch (e) {
-	Data.base['Aliases'] = BattleAliases = {};
-}
+Users = require('./users.js');
+
+Rooms = require('./rooms.js');
+
+parseCommand = require('./chat-commands.js').parseCommand;
 
 var sim = require('./simulator.js');
-
 BattlePokemon = sim.BattlePokemon;
 BattleSide = sim.BattleSide;
 Battle = sim.Battle;
 
-Tools = require('./tools.js');
-
-Users = require('./users.js');
-parseCommand = require('./chat-commands.js').parseCommand;
-
-Rooms = require('./rooms.js');
-
 lockdown = false;
 
-mutedIps = {
-};
-bannedIps = {
-};
-nameLockedIps = {
-};
+mutedIps = {};
+bannedIps = {};
+nameLockedIps = {};
 
 function resolveUser(you, socket) {
 	if (!you) {

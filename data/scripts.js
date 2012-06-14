@@ -106,7 +106,7 @@ exports.BattleScripts = {
 		var damage = 0;
 		pokemon.lastDamage = 0;
 		if (!move.multihit) {
-			damage = BattleScripts.moveHit.call(this, target, pokemon, move);
+			damage = this.moveHit(target, pokemon, move);
 		} else {
 			var hits = move.multihit;
 			if (hits.length) {
@@ -123,7 +123,7 @@ exports.BattleScripts = {
 			}
 			hits = Math.floor(hits);
 			for (var i=0; i<hits && target.hp; i++) {
-				var moveDamage = BattleScripts.moveHit.call(this, target, pokemon, move);
+				var moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) return true;
 				damage += (moveDamage || 0);
 			}
@@ -322,14 +322,14 @@ exports.BattleScripts = {
 			}
 		}
 		if (moveData.self) {
-			BattleScripts.moveHit.call(this, pokemon, pokemon, move, moveData.self, isSecondary, true);
+			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
 		if (moveData.secondaries) {
 			var secondaryRoll;
 			for (var i = 0; i < moveData.secondaries.length; i++) {
 				secondaryRoll = this.random(100);
 				if (typeof moveData.secondaries[i].chance === 'undefined' || secondaryRoll < moveData.secondaries[i].chance) {
-					BattleScripts.moveHit.call(this, target, pokemon, move, moveData.secondaries[i], true, isSelf);
+					this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
 				}
 			}
 		}
@@ -345,21 +345,19 @@ exports.BattleScripts = {
 	},
 	getTeam: function(side) {
 		if (side.battle.getFormat().team === 'random') {
-			return BattleScripts.randomTeam.call(this, side);
+			return this.randomTeam(side);
 		} else if (side.user && side.user.team && side.user.team !== 'random') {
 			return side.user.team;
 		} else {
-			return BattleScripts.randomTeam.call(this,side);
+			return this.randomTeam(side);
 		}
 	},
 	randomTeam: function(side) {
-		var battle = this;
-
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		for (var i in BattleFormatsData) {
-			if (BattleFormatsData[i].viableMoves) {
+		for (var i in Tools.data.FormatsData) {
+			if (Tools.data.FormatsData[i].viableMoves) {
 				keys.push(i);
 			}
 		}
@@ -619,7 +617,7 @@ exports.BattleScripts = {
 					}
 					// handle HP IVs
 					if (move.id === 'hiddenpower') {
-						var HPivs = BattleTypeChart[move.name.substr(13)].HPivs;
+						var HPivs = Tools.getType(move.name.substr(13)).HPivs;
 						for (var iv in HPivs) {
 							ivs[iv] = HPivs[iv];
 						}
@@ -667,8 +665,8 @@ exports.BattleScripts = {
 					abilities.push(template.abilities['DW']);
 				}
 				abilities.sort(function(a,b){
-					return battle.getAbility(b).rating - battle.getAbility(a).rating;
-				});
+					return this.getAbility(b).rating - this.getAbility(a).rating;
+				}.bind(this));
 				var ability0 = this.getAbility(abilities[0]);
 				var ability1 = this.getAbility(abilities[1]);
 				var ability = ability0.name;
@@ -924,46 +922,6 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	getNature: function(nature) {
-		if (typeof nature === 'string') nature = BattleNatures[nature];
-		if (!nature) nature = {};
-		return nature;
-	},
-	natureModify: function(stats, nature) {
-		if (typeof nature === 'string') nature = BattleNatures[nature];
-		if (!nature) return stats;
-		if (nature.plus) stats[nature.plus] *= 1.1;
-		if (nature.minus) stats[nature.minus] *= 0.9;
-		return stats;
-	}
-};
-
-var BattleNatures = {
-	Adamant: {plus:'atk', minus:'spa'},
-	Bashful: {},
-	Bold: {plus:'def', minus:'atk'},
-	Brave: {plus:'atk', minus:'spe'},
-	Calm: {plus:'spd', minus:'atk'},
-	Careful: {plus:'spd', minus:'spa'},
-	Docile: {},
-	Gentle: {plus:'spd', minus:'def'},
-	Hardy: {},
-	Hasty: {plus:'spe', minus:'def'},
-	Impish: {plus:'def', minus:'spa'},
-	Jolly: {plus:'spe', minus:'spa'},
-	Lax: {plus:'def', minus:'spd'},
-	Lonely: {plus:'atk', minus:'def'},
-	Mild: {plus:'spa', minus:'def'},
-	Modest: {plus:'spa', minus:'atk'},
-	Naive: {plus:'spe', minus:'spd'},
-	Naughty: {plus:'atk', minus:'spd'},
-	Quiet: {plus:'spa', minus:'spe'},
-	Quirky: {},
-	Rash: {plus:'spa', minus:'spd'},
-	Relaxed: {plus:'def', minus:'spe'},
-	Sassy: {plus:'spd', minus:'spe'},
-	Serious: {},
-	Timid: {plus:'spe', minus:'atk'},
 };
 
 var BattleScripts = exports.BattleScripts;
