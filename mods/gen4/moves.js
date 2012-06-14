@@ -40,6 +40,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 85
 	},
+	detect: {
+		inherit: true,
+		//desc: "",
+		priority: 3
+	},
 	disable: {
 		inherit: true,
 		accuracy: 80
@@ -53,6 +58,16 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		pp: 5
+	},
+	extremespeed: {
+		inherit: true,
+		shortDesc: "Usually goes first.",
+		priority: 1
+	},
+	fakeout: {
+		inherit: true,
+		shortDesc: "Usually hits first; first turn out only; target flinch.",
+		priority: 1
 	},
 	feint: {
 		inherit: true,
@@ -133,6 +148,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 55
 	},
+	protect: {
+		inherit: true,
+		//desc: "",
+		priority: 3
+	},
 	rockblast: {
 		inherit: true,
 		accuracy: 80
@@ -176,6 +196,24 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 70,
 		basePower: 15
+	},
+	wish: {
+		inherit: true,
+		//desc: "",
+		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
+		sideCondition: 'Wish',
+		effect: {
+			duration: 2,
+			onResidualOrder: 2,
+			onEnd: function(side) {
+				var target = side.active[this.effectData.sourcePosition];
+				if (!target.fainted) {
+					var source = this.effectData.source;
+					var damage = this.heal(target.maxhp/2, target, target);
+					if (damage) this.add('-heal', target, target.hpChange(damage), '[from] move: Wish', '[wisher] '+source.name);
+				}
+			}
+		}
 	},
 	wrap: {
 		inherit: true,
