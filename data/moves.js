@@ -2322,6 +2322,7 @@ exports.BattleMovedex = {
 				this.debug('Move doesn\'t exist ???');
 				return false;
 			},
+			onResidualOrder: 14,
 			onEnd: function(pokemon) {
 				this.add('-message', pokemon.name+' is no longer disabled! (placeholder)');
 			},
@@ -2939,6 +2940,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'Embargo');
 			},
+			onResidualOrder: 18,
 			onEnd: function(pokemon) {
 				this.add('-end', pokemon, 'Embargo');
 			},
@@ -2999,6 +3001,7 @@ exports.BattleMovedex = {
 					this.changeDecision(target, {move:this.effectData.move});
 				}
 			},
+			onResidualOrder: 13,
 			onEnd: function(target) {
 				this.add('-end', target, 'Encore');
 			},
@@ -4417,8 +4420,9 @@ exports.BattleMovedex = {
 					this.add("-message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
 				}
 			},
+			onResidualOrder: 22,
 			onEnd: function() {
-				this.add('-fieldend', 'move: Gravity');
+				this.add('-message', 'Gravity returned to normal! (placeholder)');
 			}
 		},
 		secondary: false,
@@ -4808,6 +4812,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'move: Heal Block');
 			},
+			onResidualOrder: 17,
 			onEnd: function(pokemon) {
 				this.add('-end', pokemon, 'move: Heal Block');
 			},
@@ -6272,6 +6277,8 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 1,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'move: Light Screen');
 			}
@@ -6394,6 +6401,8 @@ exports.BattleMovedex = {
 				this.add('-sidestart', side, 'move: Lucky Chant'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
 			},
 			onCriticalHit: false,
+			onResidualOrder: 21,
+			onResidualSubOrder: 5,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'move: Lucky Chant'); // "[side.name]'s team's Lucky Chant wore off!"
 			}
@@ -6562,6 +6571,7 @@ exports.BattleMovedex = {
 			onModifyPokemon: function(pokemon) {
 				pokemon.ignore['Item'] = true;
 			},
+			onResidualOrder: 25,
 			onEnd: function() {
 				this.add('-fieldend', 'move: Magic Room', '[of] '+this.effectData.source);
 			}
@@ -6639,6 +6649,7 @@ exports.BattleMovedex = {
 			onImmunity: function(type) {
 				if (type === 'Ground') return false;
 			},
+			onResidualOrder: 15,
 			onEnd: function(target) {
 				this.add('-end', target, 'Magnet Rise');
 			}
@@ -7178,6 +7189,8 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart', side, 'Mist');
 			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 3,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'Mist');
 			}
@@ -8729,6 +8742,7 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart',side,'Reflect');
 			},
+			onResidualOrder: 21,
 			onEnd: function(side) {
 				this.add('-sideend',side,'Reflect');
 			}
@@ -9344,6 +9358,8 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart', side, 'Safeguard');
 			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'Safeguard');
 			}
@@ -11468,6 +11484,8 @@ exports.BattleMovedex = {
 			onModifyStats: function(stats) {
 				stats.spe *= 2;
 			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 4,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'move: Tailwind');
 			}
@@ -11515,6 +11533,7 @@ exports.BattleMovedex = {
 				}
 				this.add('-start', target, 'move: Taunt');
 			},
+			onResidualOrder: 12,
 			onEnd: function(target) {
 				this.add('-end', target, 'move: Taunt');
 			},
@@ -11597,7 +11616,7 @@ exports.BattleMovedex = {
 			duration: 3,
 			onStart: function(target) {
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
-				this.add('message', target.name+' was hurled into the air! (placeholder)');
+				this.add('-message', target.name+' was hurled into the air! (placeholder)');
 			},
 			onSourceModifyMove: function(move) {
 				move.accuracy = true;
@@ -11605,8 +11624,9 @@ exports.BattleMovedex = {
 			onImmunity: function(type) {
 				if (type === 'Ground') return false;
 			},
+			onResidualOrder: 16,
 			onEnd: function(target) {
-				this.add('message', 'Telekinesis ended. (placeholder)');
+				this.add('-message', 'Telekinesis ended. (placeholder)');
 			}
 		},
 		secondary: false,
@@ -12034,6 +12054,7 @@ exports.BattleMovedex = {
 					pokemon.unboostedStats.spe = -pokemon.unboostedStats.spe;
 				}
 			},
+			onResidualOrder: 23,
 			onEnd: function() {
 				this.add('-fieldend', 'move: Trick Room');
 			}
@@ -12675,6 +12696,7 @@ exports.BattleMovedex = {
 				stats.spd = stats.def;
 				stats.def = tmp;
 			},
+			onResidualOrder: 24,
 			onEnd: function() {
 				this.add('-fieldend', 'move: Wonder Room');
 			}
