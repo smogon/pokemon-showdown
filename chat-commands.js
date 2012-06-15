@@ -891,7 +891,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'kickinactive':
 		if (room.requestKickInactive) {
 			room.requestKickInactive(user);
-		} else {
+		}
+	    if (room.p1 !== user.id || room.p2 !== user.id) {
+	    	socket.emit('console', 'You cannot start the inactivity timer if it is not your battle.');
+	    } else {
 			socket.emit('console', 'You can only kick inactive players from inside a room.');
 		}
 		return false;
