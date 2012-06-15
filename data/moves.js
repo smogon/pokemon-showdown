@@ -2987,7 +2987,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart: function(target) {
-				var noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, struggle:1, transform:1}
+				var noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, struggle:1, transform:1};
 				if (!target.lastMove || noEncore[target.lastMove]) {
 					// it failed
 					this.add('-fail',target);
