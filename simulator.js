@@ -1672,6 +1672,7 @@ function Battle(roomid, format, rated) {
 			pokemon.moveset[m].used = false;
 		}
 		selfB.add('switch', side.active[0], side.active[0].getDetails());
+		pokemon.update();
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
@@ -1725,6 +1726,7 @@ function Battle(roomid, format, rated) {
 			pokemon.moveset[m].used = false;
 		}
 		selfB.add('drag', side.active[0], side.active[0].getDetails());
+		pokemon.update();
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
