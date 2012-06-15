@@ -10604,7 +10604,8 @@ exports.BattleMovedex = {
 			onSwitchIn: function(pokemon) {
 				var side = pokemon.side;
 				if (!pokemon.runImmunity('Ground')) return;
-				var damage = this.damage((1+this.effectData.layers)*pokemon.maxhp/16);
+				var damageAmounts = [0,3,4,6]; // 1/8, 1/6, 1/4
+				var damage = this.damage(damageAmounts[this.effectData.layers]*pokemon.maxhp/24);
 			}
 		},
 		secondary: false,
