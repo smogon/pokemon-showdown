@@ -117,6 +117,14 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon'],
 		banlist: ['OHKO', 'Wonder Guard', 'Pure Power', 'Huge Power']
 	},
+	pu: {
+		effectType: 'Format',
+		name: "PU",
+		challengeShow: true,
+		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'Snow Warning','Drought', 'Shell Smash + Baton Pass',
+			"Charizard", "Wartortle", "Raichu", "Vileplume", "Kadabra", "Golem", "Haunter", "Exeggutor", "Marowak", "Weezing", "Tangela", "Jynx", "Pinsir", "Tauros", "Flareon", "Quagsire", "Misdreavus", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Camerupt", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Absol", "Gorebyss", "Regirock", "Torterra", "Luxray", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Magmortar", "Leafeon", "Probopass", "Rotom-S", "Serperior", "Emboar", "Samurott", "Musharna", "Gurdurr", "Sawk", "Garbodor", "Cinccino", "Duosion", "Sawsbuck", "Amoonguss", "Alomomola", "Eelektross", "Cryogonal", "Braviary"]
+	},
 	haxmons: {
 		effectType: 'Format',
 		name: "Haxmons",
@@ -136,6 +144,23 @@ exports.BattleFormats = {
 	debugmode: {
 		effectType: 'Format',
 		name: "Debug Mode",
+		challengeShow: true,
+		canUseRandomTeam: true,
+		// no restrictions, for serious
+		ruleset: []
+	},
+	hackmonsgen4: {
+		mod: 'gen4',
+		effectType: 'Format',
+		name: "Hackmons (Gen 4)",
+		challengeShow: true,
+		ruleset: ['Pokemon'],
+		banlist: []
+	},
+	debugmodegen4: {
+		mod: 'gen4',
+		effectType: 'Format',
+		name: "Debug Mode (Gen 4)",
 		challengeShow: true,
 		canUseRandomTeam: true,
 		// no restrictions, for serious

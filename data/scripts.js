@@ -356,8 +356,8 @@ exports.BattleScripts = {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		for (var i in Tools.data.FormatsData) {
-			if (Tools.data.FormatsData[i].viableMoves) {
+		for (var i in this.data.FormatsData) {
+			if (this.data.FormatsData[i].viableMoves) {
 				keys.push(i);
 			}
 		}
@@ -617,7 +617,7 @@ exports.BattleScripts = {
 					}
 					// handle HP IVs
 					if (move.id === 'hiddenpower') {
-						var HPivs = Tools.getType(move.name.substr(13)).HPivs;
+						var HPivs = this.getType(move.name.substr(13)).HPivs;
 						for (var iv in HPivs) {
 							ivs[iv] = HPivs[iv];
 						}
