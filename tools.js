@@ -14,7 +14,10 @@ module.exports = (function () {
 		'Aliases': 'aliases.js'
 	};
 	function Tools(mod) {
-		if (!mod) mod = 'base';
+		if (!mod) {
+			mod = 'base';
+			this.isBase = true;
+		}
 		this.currentMod = mod;
 
 		Data[mod] = {
@@ -57,10 +60,14 @@ module.exports = (function () {
 		for (var i in this.data.Scripts) {
 			this[i] = this.data.Scripts[i];
 		}
+		if (this.init) this.init();
 	}
 
 	var moddedTools = {};
 	Tools.prototype.mod = function(mod) {
+		if (!moddedTools[mod]) {
+			mod = this.getFormat(mod).mod;
+		}
 		if (!mod) mod = 'base';
 		return moddedTools[mod];
 	};
@@ -212,6 +219,7 @@ module.exports = (function () {
 			} else if (id && this.data.Formats[id]) {
 				effect = this.data.Formats[id];
 				effect.name = effect.name || this.data.Formats[id].name;
+				if (!effect.mod) effect.mod = this.currentMod;
 				if (!effect.effectType) effect.effectType = 'Format';
 			} else if (id === 'recoil') {
 				effect = {
@@ -239,6 +247,7 @@ module.exports = (function () {
 			if (id && this.data.Formats[id]) {
 				effect = this.data.Formats[id];
 				effect.name = effect.name || this.data.Formats[id].name;
+				if (!effect.mod) effect.mod = this.currentMod;
 				if (!effect.effectType) effect.effectType = 'Format';
 			}
 			if (!effect.id) effect.id = id;
@@ -490,9 +499,12 @@ module.exports = (function () {
 		}
 		return banlistTable;
 	};
-	Tools.prototype.validateTeam = function(team, format) {
-		var problems = [];
+	Tools.prototype.validateTeam = function(team, format, forceThisMod) {
 		format = this.getFormat(format);
+		if (!forceThisMod && this.isBase && format.mod !== this.currentMod) {
+			return this.mod(format).validateTeam(team, format, true);
+		}
+		var problems = [];
 		this.getBanlistTable(format);
 		if (format.team === 'random') {
 			return false;
@@ -551,9 +563,12 @@ module.exports = (function () {
 		if (!problems.length) return false;
 		return problems;
 	};
-	Tools.prototype.validateSet = function(set, format, teamHas) {
-		var problems = [];
+	Tools.prototype.validateSet = function(set, format, teamHas, forceThisMod) {
 		format = this.getFormat(format);
+		if (!forceThisMod && this.isBase && format.mod !== this.currentMod) {
+			return this.mod(format).validateSet(set, format, teamHas, true);
+		}
+		var problems = [];
 		if (!set) {
 			return ["This is not a pokemon."];
 		}
