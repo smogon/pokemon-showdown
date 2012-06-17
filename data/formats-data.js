@@ -15,6 +15,11 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "G5CAP"
 	},
+	mollux: {
+		isNonstandard: true,
+		dreamWorldRelease: true,
+		tier: "G5CAP"
+	},
 	syclant: {
 		viableMoves: {"iceshard":1,"bugbuzz":1,"earthpower":1,"spikes":1,"superpower":1,"tailglow":1,"taunt":1,"hiddenpowerfire":1,"focusblast":1,"uturn":1},
 		isNonstandard: true,
