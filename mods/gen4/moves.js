@@ -59,6 +59,10 @@ exports.BattleMovedex = {
 		basePower: 60,
 		pp: 5
 	},
+	explosion: {
+		inherit: true,
+		basePower: 500
+	},
 	extremespeed: {
 		inherit: true,
 		shortDesc: "Usually goes first.",
@@ -165,6 +169,10 @@ exports.BattleMovedex = {
 	scaryface: {
 		inherit: true,
 		accuracy: 90
+	},
+	selfdestruct: {
+		inherit: true,
+		basePower: 400
 	},
 	tackle: {
 		inherit: true,
