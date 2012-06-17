@@ -1723,9 +1723,9 @@ exports.BattleMovedex = {
 				}
 				var possibleTypes = [];
 				var attackType = this.getMove(target.lastMove).type;
-				for (var type in BattleTypeChart) {
+				for (var type in this.data.TypeChart) {
 					if (pokemon.hasType(type) || target.hasType(type)) continue;
-					var typeCheck = BattleTypeChart[type].damageTaken[attackType];
+					var typeCheck = this.data.TypeChart[type].damageTaken[attackType];
 					if (typeCheck === 2 || typeCheck === 3) {
 						possibleTypes.push(type);
 					}
@@ -1744,9 +1744,9 @@ exports.BattleMovedex = {
 				}
 				var possibleTypes = [];
 				var attackType = this.getMove(target.lastMove).type;
-				for (var type in BattleTypeChart) {
+				for (var type in this.data.TypeChart) {
 					if (pokemon.hasType(type) || target.hasType(type)) continue;
-					var typeCheck = BattleTypeChart[type].damageTaken[attackType];
+					var typeCheck = this.data.TypeChart[type].damageTaken[attackType];
 					if (typeCheck === 2 || typeCheck === 3) {
 						possibleTypes.push(type);
 					}
