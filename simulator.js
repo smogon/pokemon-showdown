@@ -987,7 +987,7 @@ function Battle(roomid, format, rated) {
 	var selfB = this;
 
 	// merge in scripts and tools
-	Tools.mod('format').install(this);
+	Tools.mod(format).install(this);
 
 	this.log = [];
 	this.turn = 0;

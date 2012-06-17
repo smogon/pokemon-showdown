@@ -730,7 +730,7 @@ module.exports = (function () {
 	 */
 	Tools.prototype.install = function(battle) {
 		for (var i in this) {
-			if (!battle[i]) battle[i] = this[i];
+			battle[i] = this[i];
 		}
 	};
 
