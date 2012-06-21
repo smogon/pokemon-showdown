@@ -2995,10 +2995,10 @@ exports.BattleMovedex = {
 				}
 				this.effectData.move = target.lastMove;
 				this.add('-start', target, 'Encore');
-				var decision = this.willMove(target);
-				if (decision) {
-					this.effectData.duration++;
+				if (this.willMove(target)) {
 					this.changeDecision(target, {move:this.effectData.move});
+				} else {
+					this.effectData.duration++;
 				}
 			},
 			onResidualOrder: 13,
