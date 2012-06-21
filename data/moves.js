@@ -2987,7 +2987,9 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart: function(target) {
-				if (!target.lastMove) {
+				var noEncore = {encore:1,mimic:1,mirrormove:1,sketch:1,transform:1};
+				var moveIndex = target.moves.indexOf(target.lastMove);
+				if (!target.lastMove || noEncore[target.lastMove] || moveIndex < 0 || target.moveset[moveIndex].pp <= 0) {
 					// it failed
 					this.add('-fail',target);
 					delete target.volatiles['encore'];
@@ -3002,6 +3004,12 @@ exports.BattleMovedex = {
 				}
 			},
 			onResidualOrder: 13,
+			onResidual: function(target) {
+				if (target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) { // early termination if you run out of PP
+					delete target.volatiles.encore;
+					this.add('-end', target, 'Encore');
+				}
+			},
 			onEnd: function(target) {
 				this.add('-end', target, 'Encore');
 			},
