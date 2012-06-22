@@ -3835,10 +3835,12 @@ exports.BattleFormatsData = {
 	},
 	minccino: {
 		viableMoves: {"return":1,"tailslap":1,"wakeupslap":1,"uturn":1,"aquatail":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	cinccino: {
 		viableMoves: {"return":1,"tailslap":1,"wakeupslap":1,"uturn":1,"aquatail":1,"bulletseed":1,"rockblast":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	gothita: {
@@ -3887,6 +3889,7 @@ exports.BattleFormatsData = {
 	},
 	deerling: {
 		viableMoves: {"workup":1,"agility":1,"batonpass":1,"substitute":1,"jumpkick":1,"naturepower":1,"synthesis":1,"return":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	deerlingsummer: {
@@ -3900,6 +3903,7 @@ exports.BattleFormatsData = {
 	},
 	sawsbuck: {
 		viableMoves: {"swordsdance":1,"hornleech":1,"jumpkick":1,"naturepower":1,"return":1,"doubleedge":1,"substitute":1,"synthesis":1,"batonpass":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	sawsbucksummer: {
@@ -4162,6 +4166,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":70,"gender":"M","abilities":["prankster"],"moves":["hurricane","hammerarm","airslash","hiddenpower"]}
 		],
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	tornadustherian: {
@@ -4173,6 +4178,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":70,"gender":"M","abilities":["prankster"],"moves":["thunder","hammerarm","focusblast","wildcharge"]}
 		],
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	thundurustherian: {
@@ -4195,6 +4201,7 @@ exports.BattleFormatsData = {
 	},
 	landorus: {
 		viableMoves: {"stoneedge":1,"earthquake":1,"swordsdance":1,"rockpolish":1,"hiddenpowerice":1,"uturn":1,"substitute":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	landorustherian: {
