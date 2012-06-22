@@ -4166,7 +4166,7 @@ exports.BattleFormatsData = {
 	},
 	tornadustherian: {
 		viableMoves: {"raindance":1,"hurricane":1,"airslash":1,"uturn":1,"bulkup":1,"acrobatics":1,"brickbreak":1,"hammerarm":1,"focusblast":1,"taunt":1,"substitute":1},
-		tier: "Unreleased"
+		tier: "OU"
 	},
 	thundurus: {
 		viableMoves: {"thunderwave":1,"nastyplot":1,"thunderbolt":1,"hiddenpowerice":1,"focusblast":1,"taunt":1,"hammerarm":1,"grassknot":1,"substitute":1},
@@ -4177,7 +4177,7 @@ exports.BattleFormatsData = {
 	},
 	thundurustherian: {
 		viableMoves: {"thunderwave":1,"nastyplot":1,"thunderbolt":1,"hiddenpowerice":1,"focusblast":1,"taunt":1,"hammerarm":1,"grassknot":1,"substitute":1},
-		tier: "Unreleased"
+		tier: "OU"
 	},
 	reshiram: {
 		viableMoves: {"blueflare":1,"dracometeor":1,"dragonpulse":1,"flamethrower":1,"flamecharge":1},
@@ -4199,7 +4199,7 @@ exports.BattleFormatsData = {
 	},
 	landorustherian: {
 		viableMoves: {"stoneedge":1,"earthquake":1,"swordsdance":1,"rockpolish":1,"hiddenpowerice":1,"uturn":1,"substitute":1},
-		tier: "Unreleased"
+		tier: "OU"
 	},
 	kyurem: {
 		viableMoves: {"substitute":1,"icebeam":1,"dracometeor":1,"dragonpulse":1,"focusblast":1,"outrage":1,"hiddenpowerfire":1},
@@ -4207,18 +4207,18 @@ exports.BattleFormatsData = {
 	},
 	kyuremblack: {
 		viableMoves: {"substitute":1,"icebeam":1,"dracometeor":1,"dragonpulse":1,"focusblast":1,"outrage":1,"hiddenpowerfire":1},
-		tier: "Unreleased"
+		tier: "Uber"
 	},
 	kyuremwhite: {
 		viableMoves: {"substitute":1,"icebeam":1,"dracometeor":1,"dragonpulse":1,"focusblast":1,"outrage":1,"hiddenpowerfire":1},
-		tier: "Unreleased"
+		tier: "Uber"
 	},
 	keldeo: {
 		viableMoves: {"hydropump":1,"secretsword":1,"calmmind":1,"hiddenpowerghost":1,"hiddenpowerelectric":1,"substitute":1,"surf":1},
 		eventPokemon: [
 			{"generation":5,"level":15,"abilities":["justified"],"moves":["aquajet","leer","doublekick","bubblebeam"]}
 		],
-		tier: "Unreleased"
+		tier: "OU"
 	},
 	meloetta: {
 		viableMoves: {"relicsong":1,"closecombat":1,"return":1,"calmmind":1,"psychic":1,"thunderbolt":1,"hypervoice":1,"uturn":1},
