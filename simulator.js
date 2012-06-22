@@ -2344,14 +2344,6 @@ function Battle(roomid, format, rated) {
 			selfB.curCallback = '';
 		}
 
-		if (selfB.p1.decision && selfB.p1.decision !== true) {
-			selfB.addQueue(selfB.p1.decision, true);
-			selfB.p1.decision = true;
-		}
-		if (selfB.p2.decision && selfB.p2.decision !== true) {
-			selfB.addQueue(selfB.p2.decision, true);
-			selfB.p2.decision = true;
-		}
 		if (!selfB.midTurn) {
 			selfB.queue.push({choice:'residual', priority: -100});
 			selfB.queue.push({choice:'beforeTurn', priority: 100});
@@ -2393,6 +2385,9 @@ function Battle(roomid, format, rated) {
 		selfB.addQueue(decision);
 	};
 	this.decision = function(user, choice, data, recurse) {
+		if (!selfB.decisionWaiting) {
+			return;
+		}
 		if (!recurse) recurse = 0;
 		if (recurse > 2) {
 			console.log('infinite recursion; breaking');
@@ -2406,12 +2401,15 @@ function Battle(roomid, format, rated) {
 		if (!user.sides[selfB.roomid]) return; // wtf
 		var side = user.sides[selfB.roomid];
 		var decision = {side: side, choice: choice, priority: 0, speed: 0};
-		selfB.cancelDecision(side.active[0]);
+		if (side.decision === true) {
+			// Don't change a decision if it's not your turn
+			return;
+		}
+		// I believe this is outdated code that has no effect besides
+		// exacerbating race conditions
+		//selfB.cancelDecision(side.active[0]);
 		if (choice === 'undo') {
-			if (side.decision !== true) {
-				// Don't undo a decision if it's not your turn
-				side.decision = null;
-			}
+			side.decision = null;
 			return;
 		} else if (choice === 'team') {
 			if (selfB.curCallback !== 'team-preview') {
@@ -2500,6 +2498,14 @@ function Battle(roomid, format, rated) {
 		}
 		if (selfB.p1.decision && selfB.p2.decision) {
 			selfB.decisionWaiting = false;
+			if (selfB.p1.decision !== true) {
+				selfB.addQueue(selfB.p1.decision, true);
+			}
+			if (selfB.p2.decision !== true) {
+				selfB.addQueue(selfB.p2.decision, true);
+			}
+			selfB.p1.decision = true;
+			selfB.p2.decision = true;
 			selfB.go();
 		}
 	};
