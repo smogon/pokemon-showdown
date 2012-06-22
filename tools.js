@@ -424,7 +424,7 @@ module.exports = (function () {
 					}
 				}
 			}
-			if (Object.keys(template.abilities).length === 1 && this.data.FormatsData[template.speciesid].dreamWorldRelease && !recheck) {
+			if (Object.keys(template.abilities).length === 1 && template.dreamWorldRelease && !recheck) {
 				// Some Pokemon with no DW ability still have DW-exclusive moves (e.g. Gastly, Koffing, Chimecho)
 				isDW = !isDW;
 				recheck = true;
