@@ -1544,16 +1544,19 @@ function Battle(roomid, format, rated) {
 				selfB.p2.decision = true;
 				selfB.p2.emitUpdate({request: {wait: true}});
 			}
+			selfB.decisionWaiting = true;
 		} else if (type==='switch-ally') {
 			selfB.p2.decision = true;
 			selfB.p1.decision = null;
 			selfB.p2.emitUpdate({request: {wait: true}});
 			selfB.p1.emitUpdate({request: {forceSwitch: true, side: selfB.p1.getData()}});
+			selfB.decisionWaiting = true;
 		} else if (type==='switch-foe') {
 			selfB.p1.decision = true;
 			selfB.p1.emitUpdate({request: {wait: true}});
 			selfB.p2.decision = null;
 			selfB.p2.emitUpdate({request: {forceSwitch: true, side: selfB.p2.getData()}});
+			selfB.decisionWaiting = true;
 		} else if (type==='team-preview') {
 			selfB.add('teampreview');
 			selfB.p1.decision = null;
@@ -1581,6 +1584,7 @@ function Battle(roomid, format, rated) {
 				moves = [{move: 'recharge'}];
 			}
 			selfB.p2.emitUpdate({request: {moves: pokemon.getMoves(), trapped: pokemon.trapped, side: pokemon.side.getData()}});
+			selfB.decisionWaiting = true;
 		}
 		if (selfB.p2.decision && selfB.p1.decision) {
 			if (type !== 'move') {
@@ -2116,7 +2120,6 @@ function Battle(roomid, format, rated) {
 	this.checkFainted = function() {
 		if (selfB.p1.active[0].fainted || selfB.p2.active[0].fainted) {
 			selfB.callback('switch');
-			selfB.decisionWaiting = true;
 			return true;
 		}
 		return false;
@@ -2321,7 +2324,6 @@ function Battle(roomid, format, rated) {
 		if (selfB.p1.active[0].switchFlag) {
 			if (selfB.canSwitch(selfB.p1)) {
 				selfB.callback('switch-ally');
-				selfB.decisionWaiting = true;
 				return true;
 			} else {
 				selfB.p1.active[0].switchFlag = false;
@@ -2330,7 +2332,6 @@ function Battle(roomid, format, rated) {
 		if (selfB.p2.active[0].switchFlag) {
 			if (selfB.canSwitch(selfB.p2)) {
 				selfB.callback('switch-foe');
-				selfB.decisionWaiting = true;
 				return true;
 			} else {
 				selfB.p2.active[0].switchFlag = false;
