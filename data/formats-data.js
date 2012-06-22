@@ -3639,10 +3639,12 @@ exports.BattleFormatsData = {
 	},
 	drilbur: {
 		viableMoves: {"swordsdance":1,"rapidspin":1,"earthquake":1,"rockslide":1,"shadowclaw":1,"return":1,"xscissor":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	excadrill: {
 		viableMoves: {"swordsdance":1,"rapidspin":1,"earthquake":1,"rockslide":1,"shadowclaw":1,"return":1,"xscissor":1},
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	audino: {
@@ -3933,18 +3935,22 @@ exports.BattleFormatsData = {
 	},
 	foongus: {
 		viableMoves: {"spore":1,"stunspore":1,"gigadrain":1,"clearsmog":1,"hiddenpowerfire":1,"synthesis":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	amoonguss: {
 		viableMoves: {"spore":1,"stunspore":1,"gigadrain":1,"clearsmog":1,"hiddenpowerfire":1,"synthesis":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	frillish: {
 		viableMoves: {"scald":1,"willowisp":1,"recover":1,"toxic":1,"shadowball":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	jellicent: {
 		viableMoves: {"scald":1,"willowisp":1,"recover":1,"toxic":1,"shadowball":1,"icebeam":1,"energyball":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	alomomola: {
