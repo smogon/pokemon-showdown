@@ -394,7 +394,7 @@ var User = (function () {
 						var data = JSON.parse(body);
 						switch (data.group) {
 						case '2':
-							group = '&';
+							group = '~';
 							break;
 						case '3':
 							group = '+';
@@ -404,6 +404,9 @@ var User = (function () {
 							break;
 						case '5':
 							group = '@';
+							break;
+						case '6':
+							group = '&';
 							break;
 						}
 						/* var userdata = JSON.parse(body.userdata);
