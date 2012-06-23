@@ -224,6 +224,11 @@ exports.BattleFormats = {
 			if (template.num == 421) { // Cherrim
 				set.species = 'Cherrim';
 			}
+			if (template.num == 647) { // Keldeo
+				if (set.species === 'Keldeo-Resolution' && set.moves.indexOf('Secret Sword') < 0) {
+					set.species = 'Keldeo';
+				}
+			}
 			if (template.isNonstandard) {
 				problems.push(set.species+' is not a real pokemon.');
 			}

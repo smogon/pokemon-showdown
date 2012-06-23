@@ -4282,6 +4282,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "OU"
 	},
+	keldeoresolution: {
+		tier: "OU"
+	},
 	meloetta: {
 		viableMoves: {"relicsong":1,"closecombat":1,"return":1,"calmmind":1,"psychic":1,"thunderbolt":1,"hypervoice":1,"uturn":1},
 		eventPokemon: [
