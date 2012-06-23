@@ -3209,13 +3209,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","abilities":["poisontouch"],"moves":["mudslap","poisonsting","taunt","poisonjab"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	toxicroak: {
 		viableMoves: {"fakeout":1,"suckerpunch":1,"drainpunch":1,"bulkup":1,"substitute":1,"swordsdance":1,"crosschop":1,"icepunch":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "OU"
 	},
 	carnivine: {
