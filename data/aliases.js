@@ -15,6 +15,8 @@ exports.BattleAliases = {
 	"deoxysdefence": "Deoxys-Defense",
 	"deoxyss": "Deoxys-Speed",
 	"giratinao": "Giratina-Origin",
+	"kyuremb": "Kyurem-Black",
+	"kyuremw": "Kyurem-White",
 	"landorust": "Landorus-Therian",
 	"rotomc": "Rotom-Mow",
 	"rotomf": "Rotom-Frost",
