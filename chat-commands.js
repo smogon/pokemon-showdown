@@ -428,7 +428,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return parseCommand(user, '?', cmd, room, socket);
 		}
 		if (user.muted && !targetUser.can('mute', user)) {
-			socket.emit('console', 'You can only private message moderators (users marked by %, @, or &) when muted.');
+			socket.emit('console', 'You can only private message members of the Moderation Team (users marked by %, @, &, or ~) when muted.');
 			return false;
 		}
 
@@ -1005,7 +1005,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === 'all' || target === 'getip' || target === 'ip') {
 			matched = true;
 			socket.emit('console', '/ip - Get your own IP address.');
-			socket.emit('console', '/ip [username] - Get a user\'s IP address. Requires: % @ &');
+			socket.emit('console', '/ip [username] - Get a user\'s IP address. Requires: @ & ~');
 		}
 		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder') {
 			matched = true;
@@ -1031,92 +1031,92 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === 'all' || target === 'data') {
 			matched = true;
 			socket.emit('console', '/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.');
-			socket.emit('console', '!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ &');
+			socket.emit('console', '!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~');
 		}
 		if (target === 'all' || target === 'groups') {
 			matched = true;
 			socket.emit('console', '/groups - Explains what the + % @ & next to people\'s names mean.');
-			socket.emit('console', '!groups - Show everyone that information. Requires: + % @ &');
+			socket.emit('console', '!groups - Show everyone that information. Requires: + % @ & ~');
 		}
 		if (target === 'all' || target === 'opensource') {
 			matched = true;
 			socket.emit('console', '/opensource - Links to PS\'s source code repository.');
-			socket.emit('console', '!opensource - Show everyone that information. Requires: + % @ &');
+			socket.emit('console', '!opensource - Show everyone that information. Requires: + % @ & ~');
 		}
 		if (target === 'all' || target === 'avatars') {
 			matched = true;
 			socket.emit('console', '/avatars - Explains how to change avatars.');
-			socket.emit('console', '!avatars - Show everyone that information. Requires: + % @ &');
+			socket.emit('console', '!avatars - Show everyone that information. Requires: + % @ & ~');
 		}
 		if (target === 'all' || target === 'intro') {
 			matched = true;
 			socket.emit('console', '/intro - Provides an introduction to competitive pokemon.');
-			socket.emit('console', '!intro - Show everyone that information. Requires: + % @ &');
+			socket.emit('console', '!intro - Show everyone that information. Requires: + % @ & ~');
 		}
 		if (target === 'all' || target === 'cap') {
 			matched = true;
 			socket.emit('console', '/cap - Provides an introduction to the Create-A-Pokemon project.');
-			socket.emit('console', '!cap - Show everyone that information. Requires: + % @ &');
+			socket.emit('console', '!cap - Show everyone that information. Requires: + % @ & ~');
 		}
-		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
+		if (target === '@' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
-			socket.emit('console', '/alts OR /altcheck OR /alt OR /getalts [username] - Get a user\'s alts. Requires: % @ &');
+			socket.emit('console', '/alts OR /altcheck OR /alt OR /getalts [username] - Get a user\'s alts. Requires: @ & ~');
 		}
-		if (target === '%' || target === 'forcerename' || target === 'fr') {
+		if (target === '@' || target === 'forcerename' || target === 'fr') {
 			matched = true;
-			socket.emit('console', '/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: % @ &');
+			socket.emit('console', '/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: @ & ~');
 		}
-		if (target === '%' || target === 'forcerenameto' || target === 'frt') {
+		if (target === '@' || target === 'forcerenameto' || target === 'frt') {
 			matched = true;
-			socket.emit('console', '/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: % @ &');
-			socket.emit('console', '/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: % @ &');
+			socket.emit('console', '/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: @ & ~');
+			socket.emit('console', '/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: @ & ~');
 		}
-		if (target === '%' || target === 'ban' || target === 'b') {
+		if (target === '@' || target === 'ban' || target === 'b') {
 			matched = true;
-			socket.emit('console', '/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: % @ &');
+			socket.emit('console', '/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: @ & ~');
 		}
-		if (target === '%' || target === 'redirect' || target === 'redir') {
+		if (target === '@' || target === 'redirect' || target === 'redir') {
 			matched = true;
-			socket.emit('console', '/redirect OR /redir [username], [url] - Redirects user to a different URL. ~~intl and ~~dev are accepted redirects. Requires: % @ &');
+			socket.emit('console', '/redirect OR /redir [username], [url] - Redirects user to a different URL. ~~intl and ~~dev are accepted redirects. Requires: @ & ~');
 		}
-		if (target === '%' || target === 'banredirect' || target === 'br') {
+		if (target === '@' || target === 'banredirect' || target === 'br') {
 			matched = true;
-			socket.emit('console', '/banredirect OR /br [username], [url] - Bans a user and then redirects user to a different URL. Requires: % @ &');
+			socket.emit('console', '/banredirect OR /br [username], [url] - Bans a user and then redirects user to a different URL. Requires: @ & ~');
 		}
-		if (target === '%' || target === 'unban') {
+		if (target === '@' || target === 'unban') {
 			matched = true;
-			socket.emit('console', '/unban [username] - Unban a user. Requires: % @ &');
+			socket.emit('console', '/unban [username] - Unban a user. Requires: @ & ~');
 		}
-		if (target === '%' || target === 'unbanall') {
+		if (target === '@' || target === 'unbanall') {
 			matched = true;
-			socket.emit('console', '/unbanall - Unban all IP addresses. Requires: % @ &');
+			socket.emit('console', '/unbanall - Unban all IP addresses. Requires: @ & ~');
 		}
 		if (target === '%' || target === 'mute' || target === 'm') {
 			matched = true;
-			socket.emit('console', '/mute OR /m [username], [reason] - Mute user with reason. Requires: % @ &');
+			socket.emit('console', '/mute OR /m [username], [reason] - Mute user with reason. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'unmute') {
 			matched = true;
-			socket.emit('console', '/unmute [username] - Remove mute from user. Requires: % @ &');
+			socket.emit('console', '/unmute [username] - Remove mute from user. Requires: % @ & ~');
 		}
-		if (target === '@' || target === 'promote') {
+		if (target === '&' || target === 'promote') {
 			matched = true;
-			socket.emit('console', '/promote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: @ &');
+			socket.emit('console', '/promote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: & ~');
 		}
-		if (target === '@' || target === 'demote') {
+		if (target === '&' || target === 'demote') {
 			matched = true;
-			socket.emit('console', '/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: @ &');
+			socket.emit('console', '/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: & ~');
 		}
-		if (target === '@' || target === 'announce') {
+		if (target === '&' || target === 'announce') {
 			matched = true;
-			socket.emit('console', '/announce [message] - Make an announcement. Requires: @ &');
+			socket.emit('console', '/announce [message] - Make an announcement. Requires: & ~');
 		}
 		if (target === '@' || target === 'modchat') {
 			matched = true;
-			socket.emit('console', '/modchat [on/off/+/%/@/&] - Set the level of moderated chat. Requires: @ &');
+			socket.emit('console', '/modchat [on/off/+/%/@/&/~] - Set the level of moderated chat. Requires: @ & ~');
 		}
-		if (target === '&' || target === 'hotpatch') {
-			socket.emit('console', 'Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: &');
+		if (target === '~' || target === 'hotpatch') {
+			socket.emit('console', 'Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~');
 			socket.emit('console', 'Hot-patching has greater memory requirements than restarting.');
 			socket.emit('console', '/hotpatch all - reload the game engine, data, and chat commands');
 			socket.emit('console', '/hotpatch data - reload the game data (abilities, moves...)');
@@ -1131,9 +1131,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
 			socket.emit('console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
-				socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerename, /forcerenameto, /ban, /unban, /unbanall, /mute, /unmute');
-				socket.emit('console', 'ADMIN COMMANDS: /ip, /promote, /demote');
-				socket.emit('console', 'For details on all moderator commands, use /help %');
+				socket.emit('console', 'DRIVER COMMANDS: /mute, /unmute, /forcerename')
+				socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerenameto, /ban, /unban, /unbanall, /potd, /namelock, /nameunlock, /ip, /redirect');
+				socket.emit('console', 'STAFF COMMANDS: /promote, /demote, /forcewin');
+				socket.emit('console', 'For details on all moderator commands, use /help @');
 			}
 			socket.emit('console', 'For details of a specific command, use something like: /help data');
 		} else if (!matched) {
