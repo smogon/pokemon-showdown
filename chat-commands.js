@@ -552,6 +552,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'promote':
+	case 'demote':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
 		var targetUser = Users.get(targets[0]);
@@ -559,7 +560,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'User '+target+' not found.');
 			return false;
 		}
-		var nextGroup = targets[1] ? targets[1] : targetUser.getNextGroupSymbol();
+		var nextGroup = targets[1] ? targets[1] : targetUser.getNextGroupSymbol(cmd === 'demote');
 		if (!config.groups[nextGroup]) {
 			socket.emit('console', 'Group \'' + nextGroup + '\' does not exist.');
 			return false;
@@ -569,38 +570,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
+		var isDemotion = (config.groups[nextGroup].rank < config.groups[targetUser.group].rank);
 		targetUser.setGroup(nextGroup);
 		rooms.lobby.usersChanged = true;
 		var groupName = config.groups[targetUser.group].name;
 		if (!groupName) groupName = targetUser.group;
-		room.add(''+targetUser.name+' was promoted to ' + groupName + ' by '+user.name+'.');
-		return false;
-		break;
-
-	case 'demote':
-		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		var targets = splitTarget(target);
-		var targetUser = Users.get(targets[0]);
-		if (!targetUser) {
-			socket.emit('console', 'User '+target+' not found.');
-			return false;
-		}
-		var nextGroup = target.indexOf(',') !== -1 ? targets[1] : targetUser.getNextGroupSymbol(true);
-		if (!nextGroup) nextGroup = config.groupsranking[0];
-		if (!config.groups[nextGroup]) {
-			socket.emit('console', 'Group \'' + nextGroup + '\' does not exist.');
-			return false;
-		}
-		if (!user.checkPromotePermission(targetUser, nextGroup)) {
-			socket.emit('console', '/demote - Access denied.');
-			return false;
-		}
-
-		targetUser.setGroup(nextGroup);
-		rooms.lobby.usersChanged = true;
-		var groupName = config.groups[targetUser.group].name;
-		if (!groupName) groupName = targetUser.group;
-		room.add(''+targetUser.name+' was demoted to ' + (groupName.trim() ? groupName : 'a regular user') + ' by '+user.name+'.');
+		room.add(''+targetUser.name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName || 'a regular user') + ' by '+user.name+'.');
 		return false;
 		break;
 
@@ -814,9 +789,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcast(user, cmd, room, socket,
 			'<div style="border:1px solid #6688AA;padding:2px 4px">' +
 			'+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
-			'% <b>Moderator</b> - The above, and they can also ban/mute users<br />' +
-			'@ <b>Administrator</b> - The above, and they can promote moderators and enable moderated chat<br />' +
-			'&amp; <b>System operator</b> - They can do anything, like change what this message says'+
+			'% <b>Driver</b> - The above, and they can also mute users and run tournaments<br />' +
+			'@ <b>Moderator</b> - The above, and they can ban users and check for alts<br />' +
+			'&amp; <b>Staff</b> - The above, and they can promote moderators and force ties<br />'+
+			'~ <b>Administrator</b> - They can do anything, like change what this message says'+
 			'</div>');
 		return false;
 		break;
@@ -1172,7 +1148,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		for (var g in config.groups) {
 			if (cmd === config.groups[g].id) {
 				return parseCommand(user, 'promote', toUserid(target) + ',' + g, room, socket);
-			} else if (cmd === 'de' + config.groups[g].id) {
+			} else if (cmd === 'de' + config.groups[g].id || cmd === 'un' + config.groups[g].id) {
 				var nextGroup = config.groupsranking[config.groupsranking.indexOf(g) - 1];
 				if (!nextGroup) nextGroup = config.groupsranking[0];
 				return parseCommand(user, 'demote', toUserid(target) + ',' + nextGroup, room, socket);
