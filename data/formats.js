@@ -212,13 +212,6 @@ exports.BattleFormats = {
 					set.species = 'Giratina';
 				}
 			}
-			if (template.num == 647) { // Keldeo
-				if (set.moves.indexOf('Secret Sword') >= 0) {
-					set.species = 'Keldeo-Resolution';
-				} else {
-					set.species = 'Keldeo';
-				}
-			}
 			if (template.num == 555) { // Darmanitan
 				set.species = 'Darmanitan';
 			}
@@ -230,6 +223,11 @@ exports.BattleFormats = {
 			}
 			if (template.num == 421) { // Cherrim
 				set.species = 'Cherrim';
+			}
+			if (template.num == 647) { // Keldeo
+				if (set.species === 'Keldeo-Resolution' && set.moves.indexOf('Secret Sword') < 0) {
+					set.species = 'Keldeo';
+				}
 			}
 			if (template.isNonstandard) {
 				problems.push(set.species+' is not a real pokemon.');
