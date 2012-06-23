@@ -2514,7 +2514,9 @@ function Battle(roomid, format, rated) {
 		selfB.log.push('| '+Array.prototype.slice.call(arguments).join(' | '));
 	};
 	this.debug = function(activity) {
-		selfB.add('debug', activity);
+		if (selfB.getFormat(selfB.format).debug) {
+			selfB.add('debug', activity);
+		}
 	};
 	this.join = function(user, slot) {
 		if (selfB.p1 && selfB.p1.user && selfB.p2 && selfB.p2.user) return false;

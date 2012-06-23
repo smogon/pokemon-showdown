@@ -146,6 +146,7 @@ exports.BattleFormats = {
 		name: "Debug Mode",
 		challengeShow: true,
 		canUseRandomTeam: true,
+		debug: true,
 		// no restrictions, for serious
 		ruleset: []
 	},
@@ -163,6 +164,7 @@ exports.BattleFormats = {
 		name: "Debug Mode (Gen 4)",
 		challengeShow: true,
 		canUseRandomTeam: true,
+		debug: true,
 		// no restrictions, for serious
 		ruleset: []
 	},
