@@ -3190,7 +3190,7 @@ exports.BattleFormatsData = {
 	hippowdon: {
 		viableMoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1,"icefang":1,"stoneedge":1,"stockpile":1},
 		dreamWorldRelease: true,
-		tier: "BL"
+		tier: "UU"
 	},
 	skorupi: {
 		viableMoves: {"toxicspikes":1,"xscissor":1,"poisonjab":1,"protect":1},
