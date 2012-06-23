@@ -573,9 +573,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var isDemotion = (config.groups[nextGroup].rank < config.groups[targetUser.group].rank);
 		targetUser.setGroup(nextGroup);
 		rooms.lobby.usersChanged = true;
-		var groupName = config.groups[targetUser.group].name;
-		if (!groupName) groupName = targetUser.group;
-		room.add(''+targetUser.name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName || 'a regular user') + ' by '+user.name+'.');
+		var groupName = config.groups[targetUser.group].name || targetUser.group || '';
+		room.add(''+targetUser.name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.');
 		return false;
 		break;
 
