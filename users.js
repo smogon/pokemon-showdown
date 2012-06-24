@@ -389,6 +389,7 @@ var User = (function () {
 					else if (userid === "bmelts") avatar = 1004;
 					else if (userid === "n") avatar = 209;
 					else if (userid === "desolate") avatar = 152;
+					else if (userid === "steamroll") avatar = 126;
 
 					try {
 						var data = JSON.parse(body);
