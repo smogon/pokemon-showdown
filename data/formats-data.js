@@ -3815,6 +3815,9 @@ exports.BattleFormatsData = {
 	},
 	crustle: {
 		viableMoves: {"stealthrock":1,"spikes":1,"shellsmash":1,"earthquake":1,"rockblast":1,"xscissor":1,"stoneedge":1},
+		eventPokemon: [
+			{"generation":5,"level":42,"abilities":["sturdy","shellarmor"],"moves":["stealthrock","rockslide","slash","xscissor"]}
+		],
 		tier: "RU"
 	},
 	scraggy: {
@@ -3881,14 +3884,16 @@ exports.BattleFormatsData = {
 	minccino: {
 		viableMoves: {"return":1,"tailslap":1,"wakeupslap":1,"uturn":1,"aquatail":1},
 		eventPokemon: [
-			{"generation":5,"level":20,"abilities":["skilllink"]}
+			{"generation":5,"level":20,"gender":"M","abilities":["skilllink"],moves:["tickle","doubleslap","encore","swift"]}
 		],
 		dreamWorldRelease: true,
+		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	cinccino: {
 		viableMoves: {"return":1,"tailslap":1,"wakeupslap":1,"uturn":1,"aquatail":1,"bulletseed":1,"rockblast":1},
 		dreamWorldRelease: true,
+		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	gothita: {
@@ -3984,6 +3989,9 @@ exports.BattleFormatsData = {
 	},
 	foongus: {
 		viableMoves: {"spore":1,"stunspore":1,"gigadrain":1,"clearsmog":1,"hiddenpowerfire":1,"synthesis":1},
+		eventPokemon: [
+			{"generation":5,"level":29,"abilities":["effectspore"],"moves":["ingrain","faintattack","sweetscent","gigadrain"]}
+		],
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
@@ -4165,10 +4173,15 @@ exports.BattleFormatsData = {
 	},
 	vullaby: {
 		viableMoves: {"knockoff":1,"roost":1,"taunt":1,"whirlwind":1,"toxic":1,"darkpulse":1,"uturn":1,"bravebird":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	mandibuzz: {
 		viableMoves: {"knockoff":1,"roost":1,"taunt":1,"whirlwind":1,"toxic":1,"uturn":1,"bravebird":1,"darkpulse":1},
+		eventPokemon: [
+			{"generation":5,"level":25,"abilities":["weakarmor"],"moves":["pluck","nastyplot","flatter","faintattack"]}
+		],
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	heatmor: {
@@ -4203,6 +4216,9 @@ exports.BattleFormatsData = {
 	},
 	volcarona: {
 		viableMoves: {"quiverdance":1,"fierydance":1,"fireblast":1,"bugbuzz":1,"morningsun":1,"hiddenpowerrock":1},
+		eventPokemon: [
+			{"generation":5,"level":35,"abilities":["flamebody"],"moves":["stringshot","leechlife","gust","firespin"]}
+		],
 		tier: "OU"
 	},
 	cobalion: {
