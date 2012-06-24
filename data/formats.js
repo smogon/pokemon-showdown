@@ -47,6 +47,16 @@ exports.BattleFormats = {
 		ruleset: ['CAP Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
 		banlist: ['Uber','G4CAP','Tomohawk','ShadowStrike','Paleo Wave']
 	},
+	capmolluxplaytest: {
+		mod: 'gen5-bw',
+		effectType: 'Format',
+		name: "CAP Mollux Playtest",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['CAP Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber','G4CAP','Tomohawk','Necturna','ShadowStrike','Paleo Wave','Drizzle ++ Swift Swim']
+	},
 	ubers: {
 		effectType: 'Format',
 		name: "Ubers",
