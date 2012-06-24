@@ -48,7 +48,7 @@ function getViableMoves() {
 		if (tmp.length !== 2) continue;
 		var pokemon = toId(tmp[0]);
 		var viableMoves = tmp[1].replace(/,\s*,/g, ",").split(",");
-		if (!pokemon || viableMoves.length <= 1) continue;
+		if (!pokemon || viableMoves.length === 0) continue;
 		result[pokemon] = new Object();
 		for (var v = 0; v < viableMoves.length; ++v) {
 			var viableMove = viableMoves[v].trim();
@@ -229,6 +229,7 @@ var releasedDreamWorldPokemon = {
 	"bidoof": "M/F",
 	"blastoise": "M",
 	"blaziken": "M",
+	"blissey": "M/F",
 	"bonsly": "M/F",
 	"bronzong": "M/F",
 	"bronzor": "M/F",
@@ -243,6 +244,7 @@ var releasedDreamWorldPokemon = {
 	"carvanha": "M/F",
 	"castform": "M/F",
 	"caterpie": "M/F",
+	"chansey": "M/F",
 	"charizard": "M",
 	"charmander": "M",
 	"charmeleon": "M",
@@ -320,6 +322,7 @@ var releasedDreamWorldPokemon = {
 	"growlithe": "M/F",
 	"grumpig": "M/F",
 	"gyarados": "M/F",
+	"happiny": "M/F",
 	"hariyama": "M/F",
 	"haunter": "M/F",
 	"hippopotas": "M/F",
@@ -365,6 +368,7 @@ var releasedDreamWorldPokemon = {
 	"lombre": "M/F",
 	"lopunny": "M/F",
 	"lotad": "M/F",
+	"lucario": "M",
 	"ludicolo": "M/F",
 	"lumineon": "M/F",
 	"luvdisc": "M/F",
@@ -442,6 +446,9 @@ var releasedDreamWorldPokemon = {
 	"poliwrath": "M/F",
 	"ponyta": "M/F",
 	"poochyena": "M/F",
+	"porygon": "M/F",
+	"porygon2": "M/F",
+	"porygonz": "M/F",
 	"primeape": "M/F",
 	"prinplup": "M",
 	"psyduck": "M/F",
