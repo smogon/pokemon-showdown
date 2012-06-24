@@ -1,7 +1,7 @@
 // Run this with streamline (_node) like so:
-//  _node pokedex-gen._js > ../pokedex.js
+//  _node pokedex-gen._js > ../data/pokedex.js
 //      or
-//  ../node_modules/.bin/_node pokedex-gen._js > ../pokedex.js
+//  ../node_modules/.bin/_node pokedex-gen._js > ../data/pokedex.js
 
 var customPokemonPath = "../data/custom-pokemon.json";
 

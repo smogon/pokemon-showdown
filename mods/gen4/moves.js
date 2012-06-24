@@ -1,0 +1,542 @@
+function clampIntRange(num, min, max) {
+	num = Math.floor(num);
+	if (num < min) num = min;
+	if (typeof max !== 'undefined' && num > max) num = max;
+	return num;
+}
+exports.BattleMovedex = {
+	assist: {
+		inherit: true,
+		desc: "The user performs a random move from any of the Pokemon on its team. Assist cannot generate itself, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
+		onHit: function(target) {
+			var moves = [];
+			for (var j=0; j<target.side.pokemon.length; j++) {
+				var pokemon = target.side.pokemon[j];
+				if (pokemon === target) continue;
+				for (var i=0; i<pokemon.moves.length; i++) {
+					var move = pokemon.moves[i];
+					var noAssist = {
+						assist:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, trick:1
+					};
+					if (move && !noAssist[move]) {
+						moves.push(move);
+					}
+				}
+			}
+			var move = '';
+			if (moves.length) move = moves[this.random(moves.length)];
+			if (!move) {
+				return false;
+			}
+			this.useMove(move, target);
+		}
+	},
+	beatup: {
+		inherit: true,
+		basePower: 10,
+		basePowerCallback: undefined,
+		desc: "Does one hit for the user and each other unfainted non-egg active and non-active Pokemon on the user's side without a status problem."
+	},
+	bind: {
+		inherit: true,
+		accuracy: 75
+	},
+	bonerush: {
+		inherit: true,
+		accuracy: 80
+	},
+	brickbreak: {
+		desc: "Reflect and Light Screen are removed from the target's field even if the attack misses or the target is a Ghost-type.",
+		//shortDesc: "",
+		onTryHit: function(pokemon) {
+			pokemon.side.removeSideCondition('reflect');
+			pokemon.side.removeSideCondition('lightscreen');
+		}
+	},
+	bulletseed: {
+		inherit: true,
+		basePower: 10
+	},
+	clamp: {
+		inherit: true,
+		accuracy: 75,
+		pp: 10
+	},
+	conversion: {
+		inherit: true,
+		//desc: "",
+		onTryHit: function(pokemon) {
+			if (pokemon.ability === 'multitype') return false;
+		},
+		volatileStatus: 'conversion',
+		effect: {
+			onStart: function(pokemon) {
+				var possibleTypes = pokemon.moveset.map(function(val){
+					var move = this.getMove(val.id);
+					var noConversion = {conversion:1, curse:1};
+					if (!noConversion[move.id] && !pokemon.hasType(move.type)) {
+						return move.type;
+					}
+				}, this).compact();
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onRestart: function(pokemon) {
+				var possibleTypes = pokemon.moveset.map(function(val){
+					var move = this.getMove(val.id);
+					if (move.id !== 'conversion' && !pokemon.hasType(move.type)) {
+						return move.type;
+					}
+				}, this).compact();
+				if (!possibleTypes.length) {
+					this.add('-fail', pokemon);
+					return false;
+				}
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
+				this.add('-start', pokemon, 'typechange', this.effectData.type);
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.types = [this.effectData.type];
+			}
+		}
+	},
+	conversion2: {
+		//desc: "",
+		onTryHit: function(target, source) {
+			if (source.ability === 'multitype') return false;
+			source.addVolatile("conversion2", target);
+		}
+	},
+	copycat: {
+		inherit: true,
+		//desc: "",
+		onHit: function(pokemon) {
+			var noCopycat = {assist:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, trick:1};
+			if (!this.lastMove || noCopycat[this.lastMove]) {
+				return false;
+			}
+			this.useMove(this.lastMove, pokemon);
+		}
+	},
+	cottonspore: {
+		inherit: true,
+		accuracy: 85
+	},
+	covet: {
+		inherit: true,
+		basePower: 40
+	},
+	crabhammer: {
+		inherit: true,
+		accuracy: 85
+	},
+	crushgrip: {
+		inherit: true,
+		basePowerCallback: function(pokemon) {
+			return Math.floor(pokemon.hp*120/pokemon.maxhp) + 1;
+		}
+	},
+	curse: {
+		inherit: true,
+		type: "???"
+	},
+	defog: {
+		inherit: true,
+		isBounceable: false
+	},
+	detect: {
+		inherit: true,
+		//desc: "",
+		priority: 3
+	},
+	disable: {
+		inherit: true,
+		accuracy: 80,
+		desc: "The target cannot choose its last move for 4-7 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.",
+		//shortDesc: "",
+		isBounceable: false,
+		volatileStatus: 'disable',
+		effect: {
+			durationCallback: function() {
+				return this.random(4,8);
+			},
+			noCopy: true,
+			onStart: function(pokemon) {
+				if (!this.willMove(pokemon)) {
+					this.effectData.duration++;
+				}
+				if (!pokemon.lastMove) {
+					return false;
+				}
+				var moves = pokemon.moveset;
+				for (var i=0; i<moves.length; i++) {
+					if (moves[i].id === pokemon.lastMove) {
+						if (!moves[i].pp) {
+							return false;
+						} else {
+							this.add('-start', pokemon, 'Disable', moves[i].move);
+							this.effectData.move = pokemon.lastMove;
+							return;
+						}
+					}
+				}
+				return false;
+			},
+			onEnd: function(pokemon) {
+				this.add('-message', pokemon.name+' is no longer disabled! (placeholder)');
+			},
+			onBeforeMove: function(attacker, defender, move) {
+				if (move.id === this.effectData.move) {
+					this.add('cant', attacker, 'Disable', move);
+					return false;
+				}
+			},
+			onModifyPokemon: function(pokemon) {
+				var moves = pokemon.moveset;
+				for (var i=0; i<moves.length; i++) {
+					if (moves[i].id === this.effectData.move) {
+						moves[i].disabled = true;
+					}
+				}
+			}
+		}
+	},
+	doomdesire: {
+		inherit: true,
+		accuracy: 85,
+		basePower: 120,
+		onModifyMove: function(move) {
+			move.type = '???';
+		}
+	},
+	drainpunch: {
+		inherit: true,
+		basePower: 60,
+		pp: 5
+	},
+	embargo: {
+		inherit: true,
+		//desc: "",
+		isBounceable: false,
+		onTryHit: function(pokemon) {
+			if (pokemon.ability === 'multitype' || pokemon.item === 'griseousorb') {
+				return false;
+			}
+		}
+	},
+	encore: {
+		inherit: true,
+		//desc: "",
+		//shortDesc: "",
+		isBounceable: false,
+		volatileStatus: 'encore',
+		effect: {
+			durationCallback: function() {
+				return this.random(4,9);
+			},
+			onStart: function(target) {
+				var noEncore = {encore:1,mimic:1,mirrormove:1,sketch:1,transform:1};
+				var moveIndex = target.moves.indexOf(target.lastMove);
+				if (!target.lastMove || noEncore[target.lastMove] || moveIndex < 0 || target.moveset[moveIndex].pp <= 0) {
+					this.add('-fail',target);
+					delete target.volatiles['encore'];
+					return;
+				}
+				this.effectData.move = target.lastMove;
+				this.add('-start', target, 'Encore');
+				if (this.willMove(target)) {
+					this.changeDecision(target, {move:this.effectData.move});
+				} else {
+					this.effectData.duration++;
+				}
+			},
+			onResidual: function(target) {
+				if (target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) {
+					delete target.volatiles.encore;
+					this.add('-end', target, 'Encore');
+				}
+			},
+			onEnd: function(target) {
+				this.add('-end', target, 'Encore');
+			},
+			onModifyPokemon: function(pokemon) {
+				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
+					return;
+				}
+				for (var i=0; i<pokemon.moveset.length; i++) {
+					if (pokemon.moveset[i].id !== this.effectData.move) {
+						pokemon.moveset[i].disabled = true;
+					}
+				}
+			},
+			onBeforeTurn: function(pokemon) {
+				if (!this.effectData.move) {
+					return;
+				}
+				var decision = this.willMove(pokemon);
+				if (decision) {
+					this.changeDecision(pokemon, {move:this.effectData.move});
+				}
+			}
+		}
+	},
+	explosion: {
+		inherit: true,
+		basePower: 500,
+		//desc: ""
+	},
+	extremespeed: {
+		inherit: true,
+		shortDesc: "Usually goes first.",
+		priority: 1
+	},
+	fakeout: {
+		inherit: true,
+		shortDesc: "Usually hits first; first turn out only; target flinch.",
+		priority: 1
+	},
+	feint: {
+		inherit: true,
+		basePower: 50
+	},
+	firespin: {
+		inherit: true,
+		accuracy: 70,
+		basePower: 15
+	},
+	foresight: {
+		inherit: true,
+		isBounceable: false
+	},
+	furycutter: {
+		inherit: true,
+		basePower: 10
+	},
+	futuresight: {
+		inherit: true,
+		accuracy: 90,
+		basePower: 80,
+		pp: 15,
+		onModifyMove: function(move) {
+			move.type = '???';
+		}
+	},
+	gigadrain: {
+		inherit: true,
+		basePower: 60
+	},
+	glare: {
+		inherit: true,
+		accuracy: 75
+	},
+	growth: {
+		inherit: true,
+		desc: "Raises the user's Special Attack by 1 stage.",
+		shortDesc: "Boosts the user's Sp. Atk by 1.",
+		onModifyMove: undefined,
+		boosts: {
+			spa: 1
+		}
+	},
+	healblock: {
+		inherit: true,
+		isBounceable: false
+	},
+	hijumpkick: {
+		inherit: true,
+		basePower: 100,
+		desc: "If this attack misses the target, the user takes half of the damage it would have dealt in recoil damage.",
+		shortDesc: "User takes half damage it would have dealt if miss.",
+		pp: 20,
+		onMoveFail: function(target, source, move) {
+			var damage = this.getDamage(source, target, move, true);
+			this.damage(clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
+		}
+	},
+	iciclespear: {
+		inherit: true,
+		basePower: 10
+	},
+	jumpkick: {
+		inherit: true,
+		basePower: 85,
+		desc: "If this attack misses the target, the user takes half of the damage it would have dealt in recoil damage.",
+		shortDesc: "User takes half damage it would have dealt if miss.",
+		pp: 25,
+		onMoveFail: function(target, source, move) {
+			var damage = this.getDamage(source, target, move, true);
+			this.damage(clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
+		}
+	},
+	lastresort: {
+		inherit: true,
+		basePower: 130
+	},
+	magmastorm: {
+		inherit: true,
+		accuracy: 70
+	},
+	magnetrise: {
+		volatileStatus: 'magnetrise',
+		effect: {
+			duration: 5,
+			onStart: function(target) {
+				if (target.volatiles['ingrain'] || target.ability === 'levitate') return false;
+				this.add('-start', target, 'Magnet Rise');
+			},
+			onImmunity: function(type) {
+				if (type === 'Ground') return false;
+			},
+			onResidualOrder: 6,
+			onResidualSubOrder: 9,
+			onEnd: function(target) {
+				this.add('-end', target, 'Magnet Rise');
+			}
+		}
+	},
+	miracleeye: {
+		inherit: true,
+		isBounceable: false
+	},
+	odorsleuth: {
+		inherit: true,
+		isBounceable: false
+	},
+	payback: {
+		inherit: true,
+		basePowerCallback: function(pokemon, target) {
+			if (this.willMove(target)) {
+				return 50;
+			}
+			return 100;
+		}
+	},
+	petaldance: {
+		inherit: true,
+		basePower: 90,
+		pp: 20
+	},
+	poisongas: {
+		inherit: true,
+		accuracy: 55
+	},
+	protect: {
+		inherit: true,
+		//desc: "",
+		priority: 3
+	},
+	roar: {
+		inherit: true,
+		isBounceable: false
+	},
+	rockblast: {
+		inherit: true,
+		accuracy: 80
+	},
+	sandtomb: {
+		inherit: true,
+		accuracy: 70,
+		basePower: 15
+	},
+	scaryface: {
+		inherit: true,
+		accuracy: 90
+	},
+	selfdestruct: {
+		inherit: true,
+		basePower: 400,
+		//desc: ""
+	},
+	spikes: {
+		inherit: true,
+		isBounceable: false
+	},
+	spite: {
+		inherit: true,
+		isBounceable: false
+	},
+	stealthrock: {
+		inherit: true,
+		isBounceable: false
+	},
+	tackle: {
+		inherit: true,
+		accuracy: 95,
+		basePower: 35
+	},
+	tailglow: {
+		inherit: true,
+		desc: "Raises the user's Special Attack by 2 stages.",
+		shortDesc: "Boosts the user's Sp. Atk by 2.",
+		boosts: {
+			spa: 2
+		}
+	},
+	taunt: {
+		inherit: true,
+		isBounceable: false
+	},
+	thrash: {
+		inherit: true,
+		basePower: 90,
+		pp: 20
+	},
+	torment: {
+		inherit: true,
+		isBounceable: false
+	},
+	toxic: {
+		inherit: true,
+		accuracy: 85
+	},
+	toxicspikes: {
+		inherit: true,
+		isBounceable: false
+	},
+	uproar: {
+		inherit: true,
+		basePower: 50
+	},
+	whirlpool: {
+		inherit: true,
+		accuracy: 70,
+		basePower: 15
+	},
+	whirlwind: {
+		inherit: true,
+		isBounceable: false
+	},
+	wish: {
+		inherit: true,
+		//desc: "",
+		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
+		sideCondition: 'Wish',
+		effect: {
+			duration: 2,
+			onResidualOrder: 2,
+			onEnd: function(side) {
+				var target = side.active[this.effectData.sourcePosition];
+				if (!target.fainted) {
+					var source = this.effectData.source;
+					var damage = this.heal(target.maxhp/2, target, target);
+					if (damage) this.add('-heal', target, target.hpChange(damage), '[from] move: Wish', '[wisher] '+source.name);
+				}
+			}
+		}
+	},
+	wrap: {
+		inherit: true,
+		accuracy: 85
+	},
+	wringout: {
+		inherit: true,
+		basePowerCallback: function(pokemon) {
+			return Math.floor(pokemon.hp*120/pokemon.maxhp) + 1;
+		}
+	},
+	magikarpsrevenge: null
+};

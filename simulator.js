@@ -18,7 +18,7 @@ function BattlePokemon(set, side) {
 		set.name = this.species;
 	}
 	this.name = set.name || set.species || 'Bulbasaur';
-	this.speciesid = this.species.toId();
+	this.speciesid = toId(this.species);
 	this.template = this.baseTemplate;
 	this.moves = [];
 	this.baseMoves = this.moves;
@@ -27,7 +27,7 @@ function BattlePokemon(set, side) {
 	this.baseMoveset = [];
 	this.trapped = false;
 
-	this.level = (set.level || 100).clampIntRange(1, 100);
+	this.level = clampIntRange(set.level || 100, 1, 100);
 	this.hp = 0;
 	this.maxhp = 100;
 	var genders = {M:'M',F:'F'};
@@ -66,9 +66,9 @@ function BattlePokemon(set, side) {
 	this.ignore = {};
 	this.duringMove = false;
 
-	this.baseAbility = set.ability.toId();
+	this.baseAbility = toId(set.ability);
 	this.ability = this.baseAbility;
-	this.item = set.item.toId();
+	this.item = toId(set.item);
 	this.abilityData = {id: this.ability};
 	this.itemData = {id: this.item};
 
@@ -89,7 +89,7 @@ function BattlePokemon(set, side) {
 				disabled: false,
 				used: false
 			});
-			this.moves.push(move.name.toId());
+			this.moves.push(toId(move.name));
 		}
 	}
 
@@ -119,10 +119,10 @@ function BattlePokemon(set, side) {
 		if (!this.set.ivs[i] && this.set.ivs[i] !== 0) this.set.ivs[i] = 31;
 	}
 	for (var i in this.set.evs) {
-		this.set.evs[i] = this.set.evs[i].clampIntRange(0, 255);
+		this.set.evs[i] = clampIntRange(this.set.evs[i], 0, 255);
 	}
 	for (var i in this.set.ivs) {
-		this.set.ivs[i] = this.set.ivs[i].clampIntRange(0, 31);
+		this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
 	}
 
 	var hpTypeX = 0, hpPowerX = 0;
@@ -228,7 +228,7 @@ function BattlePokemon(set, side) {
 		for (var i in selfP.baseBoosts) {
 			selfP.boosts[i] = selfP.baseBoosts[i];
 		}
-		BattleScripts.natureModify(selfP.stats, selfP.set.nature);
+		selfB.natureModify(selfP.stats, selfP.set.nature);
 		for (var i in selfP.stats) {
 			selfP.stats[i] = Math.floor(selfP.stats[i]);
 		}
@@ -401,6 +401,7 @@ function BattlePokemon(set, side) {
 			selfP.ability = pokemon.ability;
 			selfP.set = pokemon.set;
 			selfP.moveset = [];
+			selfP.moves = [];
 			for (var i=0; i<pokemon.moveset.length; i++) {
 				var moveData = pokemon.moveset[i];
 				var moveName = moveData.move;
@@ -414,6 +415,7 @@ function BattlePokemon(set, side) {
 					maxpp: moveData.maxpp,
 					disabled: false
 				});
+				selfP.moves.push(toId(moveName));
 			}
 			for (var j in pokemon.baseBoosts) {
 				selfP.baseBoosts[j] = pokemon.baseBoosts[j];
@@ -433,12 +435,14 @@ function BattlePokemon(set, side) {
 			evasion: 0
 		};
 		this.moveset = [];
+		this.moves = [];
 		// we're copying array contents
 		// DO NOT "optimize" it to copy just the pointer
 		// if you don't know what a pointer is, please don't
 		// touch this code
 		for (var i=0; i<this.baseMoveset.length; i++) {
 			this.moveset.push(this.baseMoveset[i]);
+			this.moves.push(toId(this.baseMoveset[i].move));
 		}
 		selfP.transformed = false;
 		selfP.ability = selfP.baseAbility;
@@ -503,7 +507,7 @@ function BattlePokemon(set, side) {
 	};
 	this.hasMove = function(moveid) {
 		if (moveid.id) moveid = moveid.id;
-		moveid = moveid.toId();
+		moveid = toId(moveid);
 		for (var i=0; i<selfP.moveset.length; i++) {
 			if (moveid === selfB.getMove(selfP.moveset[i].move).id) {
 				return moveid;
@@ -860,7 +864,7 @@ function BattleSide(user, battle, n) {
 
 	this.id = (n?'p2':'p1');
 
-	this.team = BattleScripts.getTeam.call(selfB, selfS);
+	this.team = selfB.getTeam(this);
 	for (var i=0; i<this.team.length && i<6; i++) {
 		console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
 		this.pokemon.push(new BattlePokemon(this.team[i], this));
@@ -981,6 +985,10 @@ function BattleSide(user, battle, n) {
 
 function Battle(roomid, format, rated) {
 	var selfB = this;
+
+	// merge in scripts and tools
+	Tools.mod(format).install(this);
+
 	this.log = [];
 	this.turn = 0;
 	this.sides = [null, null];
@@ -996,7 +1004,7 @@ function Battle(roomid, format, rated) {
 	this.weatherData = {id:''};
 	this.pseudoWeather = {};
 
-	this.format = format.toId();
+	this.format = toId(format);
 	this.formatData = {id:''};
 
 	this.ended = false;
@@ -1010,6 +1018,28 @@ function Battle(roomid, format, rated) {
 
 	this.toString = function() {
 		return 'Battle: '+selfS.format;
+	};
+
+	// This function is designed to emulate the on-cartridge PRNG, as described in
+	// http://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
+	// Gen 5 uses a 64-bit initial seed, but the upper 32 bits are just for the IV RNG,
+	// and have no relevance here.
+
+	// This function has three different results, depending on arguments:
+	// - random() returns a real number in [0,1), just like Math.random()
+	// - random(n) returns an integer in [0,n)
+	// - random(m,n) returns an integer in [m,n)
+
+	// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
+
+	this.seed = Math.floor(Math.random() * 0xFFFFFFFF); // use a random initial seed
+
+	this.random = function(m, n) {
+		selfB.seed = (selfB.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
+		var result = selfB.seed >>> 16; // the first 16 bits of the seed are the random value
+		m = Math.floor(m);
+		n = Math.floor(n);
+		return (m ? (n ? (result%(n-m))+m : result%m) : result/0x10000);
 	};
 
 	this.setWeather = function(status, source, sourceEffect) {
@@ -1514,16 +1544,19 @@ function Battle(roomid, format, rated) {
 				selfB.p2.decision = true;
 				selfB.p2.emitUpdate({request: {wait: true}});
 			}
+			selfB.decisionWaiting = true;
 		} else if (type==='switch-ally') {
 			selfB.p2.decision = true;
 			selfB.p1.decision = null;
 			selfB.p2.emitUpdate({request: {wait: true}});
 			selfB.p1.emitUpdate({request: {forceSwitch: true, side: selfB.p1.getData()}});
+			selfB.decisionWaiting = true;
 		} else if (type==='switch-foe') {
 			selfB.p1.decision = true;
 			selfB.p1.emitUpdate({request: {wait: true}});
 			selfB.p2.decision = null;
 			selfB.p2.emitUpdate({request: {forceSwitch: true, side: selfB.p2.getData()}});
+			selfB.decisionWaiting = true;
 		} else if (type==='team-preview') {
 			selfB.add('teampreview');
 			selfB.p1.decision = null;
@@ -1551,6 +1584,7 @@ function Battle(roomid, format, rated) {
 				moves = [{move: 'recharge'}];
 			}
 			selfB.p2.emitUpdate({request: {moves: pokemon.getMoves(), trapped: pokemon.trapped, side: pokemon.side.getData()}});
+			selfB.decisionWaiting = true;
 		}
 		if (selfB.p2.decision && selfB.p1.decision) {
 			if (type !== 'move') {
@@ -1627,13 +1661,13 @@ function Battle(roomid, format, rated) {
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
 		}
-		pokemon.clearVolatile();
 		var lastMove = null;
 		if (side.active[0]) {
 			lastMove = selfB.getMove(side.active[0].lastMove);
 			if (side.active[0].switchFlag === 'copyvolatile') {
 				pokemon.copyVolatileFrom(side.active[0]);
 			}
+			side.active[0].clearVolatile();
 		}
 		side.active[0] = pokemon;
 		pokemon.isActive = true;
@@ -1641,6 +1675,7 @@ function Battle(roomid, format, rated) {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
+		pokemon.update();
 		selfB.add('switch', side.active[0], side.active[0].getDetails());
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -1686,14 +1721,15 @@ function Battle(roomid, format, rated) {
 			oldActive.position = oldpos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
+			oldActive.clearVolatile();
 		}
-		pokemon.clearVolatile();
 		side.active[0] = pokemon;
 		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
+		pokemon.update();
 		selfB.add('drag', side.active[0], side.active[0].getDetails());
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -1807,7 +1843,7 @@ function Battle(roomid, format, rated) {
 		if (!target || !target.hp) return 0;
 		effect = selfB.getEffect(effect);
 		if (!damage) return 0;
-		damage = damage.clampIntRange(1);
+		damage = clampIntRange(damage, 1);
 
 		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 			if (effect.effectType === 'Weather' && !target.runImmunity(effect.id)) {
@@ -1820,7 +1856,7 @@ function Battle(roomid, format, rated) {
 				return 0;
 			}
 		}
-		damage = damage.clampIntRange(1);
+		damage = clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
 		if (!damage) {
 			this.debug('pokemon.damage said zero');
@@ -1859,7 +1895,7 @@ function Battle(roomid, format, rated) {
 		}
 		if (!target || !target.hp) return 0;
 		if (!damage) return 0;
-		damage = damage.clampIntRange(1);
+		damage = clampIntRange(damage, 1);
 
 		damage = target.damage(damage, source, effect);
 		switch (effect.id) {
@@ -1975,13 +2011,13 @@ function Battle(roomid, format, rated) {
 		}
 		if (!basePower) return 0;
 
-		move.critRatio = (move.critRatio || 0).clampIntRange(0, 5);
+		move.critRatio = clampIntRange(move.critRatio, 0, 5);
 		var critMult = [0, 16, 8, 4, 3, 2];
 
 		move.crit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined') {
 			if (move.critRatio) {
-				move.crit = (Math.random()*critMult[move.critRatio] < 1);
+				move.crit = (selfB.random(critMult[move.critRatio]) === 0);
 			}
 		}
 		if (move.crit) {
@@ -2037,7 +2073,7 @@ function Battle(roomid, format, rated) {
 		// gen 1-2
 		//var randFactor = Math.floor(Math.random()*39)+217;
 		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
-		baseDamage = Math.round(baseDamage * (100 - Math.floor(Math.random() * 16)) / 100);
+		baseDamage = Math.round(baseDamage * selfB.random(85,101) / 100);
 
 		// STAB
 		if (type !== '???' && pokemon.hasType(type)) {
@@ -2081,30 +2117,9 @@ function Battle(roomid, format, rated) {
 		}
 		return pokemon.side.foe.active[0];
 	};
-	this.runMove = function(move, pokemon, target) {
-		move = selfB.getMove(move);
-		if (!target) {
-			target = selfB.resolveTarget(pokemon, move);
-		}
-
-		BattleScripts.runMove.call(selfB, move, pokemon, target);
-	};
-	this.useMove = function(move, pokemon, target, flags) {
-		move = selfB.getMove(move);
-		if (!target) target = selfB.resolveTarget(pokemon, move);
-		if (move.target === 'self' || move.target === 'allies') {
-			target = pokemon;
-		}
-
-		BattleScripts.useMove.call(selfB, move, pokemon, target, flags);
-	};
-	this.moveHit = function(target, source, move, a, b) {
-		BattleScripts.moveHit.call(selfB, target, source, move, a, b);
-	};
 	this.checkFainted = function() {
 		if (selfB.p1.active[0].fainted || selfB.p2.active[0].fainted) {
 			selfB.callback('switch');
-			selfB.decisionWaiting = true;
 			return true;
 		}
 		return false;
@@ -2309,7 +2324,6 @@ function Battle(roomid, format, rated) {
 		if (selfB.p1.active[0].switchFlag) {
 			if (selfB.canSwitch(selfB.p1)) {
 				selfB.callback('switch-ally');
-				selfB.decisionWaiting = true;
 				return true;
 			} else {
 				selfB.p1.active[0].switchFlag = false;
@@ -2318,7 +2332,6 @@ function Battle(roomid, format, rated) {
 		if (selfB.p2.active[0].switchFlag) {
 			if (selfB.canSwitch(selfB.p2)) {
 				selfB.callback('switch-foe');
-				selfB.decisionWaiting = true;
 				return true;
 			} else {
 				selfB.p2.active[0].switchFlag = false;
@@ -2332,14 +2345,6 @@ function Battle(roomid, format, rated) {
 			selfB.curCallback = '';
 		}
 
-		if (selfB.p1.decision && selfB.p1.decision !== true) {
-			selfB.addQueue(selfB.p1.decision, true);
-			selfB.p1.decision = true;
-		}
-		if (selfB.p2.decision && selfB.p2.decision !== true) {
-			selfB.addQueue(selfB.p2.decision, true);
-			selfB.p2.decision = true;
-		}
 		if (!selfB.midTurn) {
 			selfB.queue.push({choice:'residual', priority: -100});
 			selfB.queue.push({choice:'beforeTurn', priority: 100});
@@ -2381,6 +2386,9 @@ function Battle(roomid, format, rated) {
 		selfB.addQueue(decision);
 	};
 	this.decision = function(user, choice, data, recurse) {
+		if (!selfB.decisionWaiting) {
+			return;
+		}
 		if (!recurse) recurse = 0;
 		if (recurse > 2) {
 			console.log('infinite recursion; breaking');
@@ -2394,12 +2402,15 @@ function Battle(roomid, format, rated) {
 		if (!user.sides[selfB.roomid]) return; // wtf
 		var side = user.sides[selfB.roomid];
 		var decision = {side: side, choice: choice, priority: 0, speed: 0};
-		selfB.cancelDecision(side.active[0]);
+		if (side.decision === true) {
+			// Don't change a decision if it's not your turn
+			return;
+		}
+		// I believe this is outdated code that has no effect besides
+		// exacerbating race conditions
+		//selfB.cancelDecision(side.active[0]);
 		if (choice === 'undo') {
-			if (side.decision !== true) {
-				// Don't undo a decision if it's not your turn
-				side.decision = null;
-			}
+			side.decision = null;
 			return;
 		} else if (choice === 'team') {
 			if (selfB.curCallback !== 'team-preview') {
@@ -2488,6 +2499,14 @@ function Battle(roomid, format, rated) {
 		}
 		if (selfB.p1.decision && selfB.p2.decision) {
 			selfB.decisionWaiting = false;
+			if (selfB.p1.decision !== true) {
+				selfB.addQueue(selfB.p1.decision, true);
+			}
+			if (selfB.p2.decision !== true) {
+				selfB.addQueue(selfB.p2.decision, true);
+			}
+			selfB.p1.decision = true;
+			selfB.p2.decision = true;
 			selfB.go();
 		}
 	};
@@ -2495,7 +2514,9 @@ function Battle(roomid, format, rated) {
 		selfB.log.push('| '+Array.prototype.slice.call(arguments).join(' | '));
 	};
 	this.debug = function(activity) {
-		selfB.add('debug', activity);
+		if (selfB.getFormat(selfB.format).debug) {
+			selfB.add('debug', activity);
+		}
 	};
 	this.join = function(user, slot) {
 		if (selfB.p1 && selfB.p1.user && selfB.p2 && selfB.p2.user) return false;
@@ -2574,13 +2595,6 @@ function Battle(roomid, format, rated) {
 			updates: selfB.log.slice(prevUpdate)
 		};
 	};
-
-	// merge in scripts and tools
-	for (var i in Tools) {
-		if (!this[i]) {
-			this[i] = Tools[i];
-		}
-	}
 
 	this.destroy = function() {
 		// deallocate ourself

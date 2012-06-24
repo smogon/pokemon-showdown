@@ -1,10 +1,10 @@
 // Run this with streamline (_node) like so:
-//  _node formats-data-gen._js > ../formats-data.js
+//  _node formats-data-gen._js > ../data/formats-data.js
 //      or
-//  ../node_modules/.bin/_node formats-data-gen._js > ../formats-data.js
+//  ../node_modules/.bin/_node formats-data-gen._js > ../data/formats-data.js
 
-var customPokemonPath = "../data/custom-pokemon.json";
-var viableMovesPath = "../data/viable-moves.txt";
+var customPokemonPath = "./data/custom-pokemon.json";
+var viableMovesPath = "./data/viable-moves.txt";
 
 var fs = require("fs");
 var getVeekunDatabase = require("./veekun-database._js").getVeekunDatabase;

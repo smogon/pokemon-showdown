@@ -60,7 +60,7 @@ exports.BattleMovedex = {
 		basePower: 40,
 		category: "Special",
 		desc: "Lowers the target's Special Defense by two stages.",
-		shortDesc: "Lowers the target's Sp. Def by 2.",
+		shortDesc: "100% chance to lower the target's Sp. Def by 2.",
 		id: "acidspray",
 		name: "Acid Spray",
 		pp: 20,
@@ -117,7 +117,7 @@ exports.BattleMovedex = {
 				}
 			}
 			if (stats.length) {
-				var i = stats[parseInt(Math.random()*stats.length)];
+				var i = stats[this.random(stats.length)];
 				var boost = {};
 				boost[i] = 2;
 				this.boost(boost);
@@ -410,16 +410,16 @@ exports.BattleMovedex = {
 				if (pokemon === target) continue;
 				for (var i=0; i<pokemon.moves.length; i++) {
 					var move = pokemon.moves[i];
-					var NoAssist = {
-						assist:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, quickguard:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, trick:1, wideguard:1
+					var noAssist = {
+						assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1
 					};
-					if (move && !NoAssist[move]) {
+					if (move && !noAssist[move]) {
 						moves.push(move);
 					}
 				}
 			}
 			var move = '';
-			if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
+			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) {
 				return false;
 			}
@@ -507,7 +507,7 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('attract');
 					return;
 				}
-				if (Math.random()*2 < 1) {
+				if (this.random(2) === 0) {
 					this.add('cant', pokemon, 'Attract', move);
 					return false;
 				}
@@ -712,7 +712,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target) {
-			if (target.hp <= target.maxhp/2) {
+			if (target.hp <= target.maxhp/2 || target.maxhp === 1) { // Shedinja clause
 				return false;
 			}
 			this.directDamage(target.maxhp/2);
@@ -1248,7 +1248,7 @@ exports.BattleMovedex = {
 		basePower: 60,
 		category: "Physical",
 		desc: "Has a 100% chance to lower the target's Speed by one level.",
-		shortDesc: "Lowers adjacent Pokemon's Speed by 1.",
+		shortDesc: "100% chance to lower adjacent Pkmn Speed by 1.",
 		id: "bulldoze",
 		name: "Bulldoze",
 		pp: 20,
@@ -1676,7 +1676,7 @@ exports.BattleMovedex = {
 					this.add('-fail', pokemon);
 					return false;
 				}
-				this.effectData.type = possibleTypes.sample();
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
 				this.add('-start', pokemon, 'typechange', this.effectData.type);
 			},
 			onRestart: function(pokemon) {
@@ -1690,7 +1690,7 @@ exports.BattleMovedex = {
 					this.add('-fail', pokemon);
 					return false;
 				}
-				this.effectData.type = possibleTypes.sample();
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
 				this.add('-start', pokemon, 'typechange', this.effectData.type);
 			},
 			onModifyPokemon: function(pokemon) {
@@ -1723,9 +1723,9 @@ exports.BattleMovedex = {
 				}
 				var possibleTypes = [];
 				var attackType = this.getMove(target.lastMove).type;
-				for (var type in BattleTypeChart) {
+				for (var type in this.data.TypeChart) {
 					if (pokemon.hasType(type) || target.hasType(type)) continue;
-					var typeCheck = BattleTypeChart[type].damageTaken[attackType];
+					var typeCheck = this.data.TypeChart[type].damageTaken[attackType];
 					if (typeCheck === 2 || typeCheck === 3) {
 						possibleTypes.push(type);
 					}
@@ -1734,7 +1734,7 @@ exports.BattleMovedex = {
 					this.add('-fail', pokemon);
 					return false;
 				}
-				this.effectData.type = possibleTypes.sample();
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
 				this.add('-start', pokemon, 'typechange', this.effectData.type);
 			},
 			onRestart: function(pokemon, target, move) {
@@ -1744,9 +1744,9 @@ exports.BattleMovedex = {
 				}
 				var possibleTypes = [];
 				var attackType = this.getMove(target.lastMove).type;
-				for (var type in BattleTypeChart) {
+				for (var type in this.data.TypeChart) {
 					if (pokemon.hasType(type) || target.hasType(type)) continue;
-					var typeCheck = BattleTypeChart[type].damageTaken[attackType];
+					var typeCheck = this.data.TypeChart[type].damageTaken[attackType];
 					if (typeCheck === 2 || typeCheck === 3) {
 						possibleTypes.push(type);
 					}
@@ -1755,7 +1755,7 @@ exports.BattleMovedex = {
 					this.add('-fail', pokemon);
 					return false;
 				}
-				this.effectData.type = possibleTypes.sample();
+				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
 				this.add('-start', pokemon, 'typechange', this.effectData.type);
 			},
 			onModifyPokemon: function(pokemon) {
@@ -1779,7 +1779,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(pokemon) {
-			var noCopycat = {copycat:1, assist:1, sketch:1, mimic:1, counter:1, mirrorcoat:1, protect:1, detect:1, endure:1, destinybond:1, followme:1, ragepowder:1, snatch:1, helpinghand:1, thief:1, covet:1, trick:1, switcheroo:1, feint:1, focuspunch:1, transform:1, bestow:1, dragontail:1, circlethrow:1};
+			var noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1};
 			if (!this.lastMove || noCopycat[this.lastMove]) {
 				return false;
 			}
@@ -2222,16 +2222,15 @@ exports.BattleMovedex = {
 			if (!this.willAct()) {
 				return false;
 			}
-			var counter = 0;
+			var counter = 1;
 			if (pokemon.volatiles['stall']) {
-				counter = pokemon.volatiles['stall'].counter || 0;
+				counter = pokemon.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 8) counter = 32;
-			var denom = Math.pow(2, counter);
-			this.debug("Success chance: "+Math.round(100*1/denom)+"%");
-			if (counter > 0 && Math.random()*denom > 1) {
-				return false;
+			if (counter >= 256) {
+				return (this.random()*4294967296 < 1); // 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 			}
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			return (this.random(counter) === 0);
 		},
 		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
@@ -2323,6 +2322,7 @@ exports.BattleMovedex = {
 				this.debug('Move doesn\'t exist ???');
 				return false;
 			},
+			onResidualOrder: 14,
 			onEnd: function(pokemon) {
 				this.add('-message', pokemon.name+' is no longer disabled! (placeholder)');
 			},
@@ -2790,7 +2790,7 @@ exports.BattleMovedex = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Confuses the target.",
-		shortDesc: "Confuses the target.",
+		shortDesc: "100% chance to confuse the target.",
 		id: "dynamicpunch",
 		name: "DynamicPunch",
 		pp: 5,
@@ -2908,7 +2908,7 @@ exports.BattleMovedex = {
 		basePower: 55,
 		category: "Special",
 		desc: "Lowers the target's Speed by one level.",
-		shortDesc: "Lowers the foe(s) Speed by 1.",
+		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
 		id: "electroweb",
 		name: "Electroweb",
 		pp: 15,
@@ -2940,6 +2940,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'Embargo');
 			},
+			onResidualOrder: 18,
 			onEnd: function(pokemon) {
 				this.add('-end', pokemon, 'Embargo');
 			},
@@ -2986,7 +2987,9 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart: function(target) {
-				if (!target.lastMove) {
+				var noEncore = {encore:1,mimic:1,mirrormove:1,sketch:1,transform:1};
+				var moveIndex = target.moves.indexOf(target.lastMove);
+				if (!target.lastMove || noEncore[target.lastMove] || moveIndex < 0 || target.moveset[moveIndex].pp <= 0) {
 					// it failed
 					this.add('-fail',target);
 					delete target.volatiles['encore'];
@@ -2994,10 +2997,17 @@ exports.BattleMovedex = {
 				}
 				this.effectData.move = target.lastMove;
 				this.add('-start', target, 'Encore');
-				var decision = this.willMove(target);
-				if (decision) {
-					this.effectData.duration++;
+				if (this.willMove(target)) {
 					this.changeDecision(target, {move:this.effectData.move});
+				} else {
+					this.effectData.duration++;
+				}
+			},
+			onResidualOrder: 13,
+			onResidual: function(target) {
+				if (target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) { // early termination if you run out of PP
+					delete target.volatiles.encore;
+					this.add('-end', target, 'Encore');
 				}
 			},
 			onEnd: function(target) {
@@ -3068,16 +3078,15 @@ exports.BattleMovedex = {
 			if (!this.willAct()) {
 				return false;
 			}
-			var counter = 0;
+			var counter = 1;
 			if (pokemon.volatiles['stall']) {
-				counter = pokemon.volatiles['stall'].counter || 0;
+				counter = pokemon.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 8) counter = 32;
-			var denom = Math.pow(2, counter);
-			this.debug("Success chance: "+Math.round(100*1/denom)+"%");
-			if (counter > 0 && Math.random()*denom > 1) {
-				return false;
+			if (counter >= 256) {
+				return (this.random()*4294967296 < 1); // 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 			}
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			return (this.random(counter) === 0);
 		},
 		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
@@ -3571,7 +3580,7 @@ exports.BattleMovedex = {
 		basePower: 50,
 		category: "Physical",
 		desc: "Inflicts regular damage. Raises the user's Speed by one stage.",
-		shortDesc: "Boosts the user's Speed by 1.",
+		shortDesc: "100% chance to boost the user's Speed by 1.",
 		id: "flamecharge",
 		name: "Flame Charge",
 		pp: 20,
@@ -4279,7 +4288,7 @@ exports.BattleMovedex = {
 		basePower: 65,
 		category: "Special",
 		desc: "Glaciate inflicts damage and lowers the target's Speed stat by one stage. Glaciate hits all opponents in double battles and all adjacent opponents in triple battles.",
-		shortDesc: "Lowers the foe(s) Speed by 1.",
+		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
 		id: "glaciate",
 		name: "Glaciate",
 		pp: 10,
@@ -4419,8 +4428,9 @@ exports.BattleMovedex = {
 					this.add("-message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
 				}
 			},
+			onResidualOrder: 22,
 			onEnd: function() {
-				this.add('-fieldend', 'move: Gravity');
+				this.add('-message', 'Gravity returned to normal! (placeholder)');
 			}
 		},
 		secondary: false,
@@ -4810,6 +4820,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'move: Heal Block');
 			},
+			onResidualOrder: 17,
 			onEnd: function(pokemon) {
 				this.add('-end', pokemon, 'move: Heal Block');
 			},
@@ -5763,7 +5774,7 @@ exports.BattleMovedex = {
 		basePower: 55,
 		category: "Special",
 		desc: "Lowers the target's Speed by 1 stage.",
-		shortDesc: "Lowers the foe(s) Speed by 1.",
+		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
 		id: "icywind",
 		name: "Icy Wind",
 		pp: 15,
@@ -5837,7 +5848,7 @@ exports.BattleMovedex = {
 		basePower: 100,
 		category: "Special",
 		desc: "Has a 100% chance to burn the target.",
-		shortDesc: "Burns the target.",
+		shortDesc: "100% chance to burn the target.",
 		id: "inferno",
 		name: "Inferno",
 		pp: 5,
@@ -5925,7 +5936,7 @@ exports.BattleMovedex = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a 30% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "10% chance to lower the target's Defense by 1.",
+		shortDesc: "30% chance to lower the target's Defense by 1.",
 		id: "irontail",
 		name: "Iron Tail",
 		pp: 15,
@@ -6274,6 +6285,8 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 1,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'move: Light Screen');
 			}
@@ -6364,7 +6377,7 @@ exports.BattleMovedex = {
 		basePower: 60,
 		category: "Physical",
 		desc: "Lowers the target's Speed by one level.",
-		shortDesc: "Lowers the target's Speed by 1.",
+		shortDesc: "100% chance to lower the target's Speed by 1.",
 		id: "lowsweep",
 		name: "Low Sweep",
 		pp: 20,
@@ -6396,6 +6409,8 @@ exports.BattleMovedex = {
 				this.add('-sidestart', side, 'move: Lucky Chant'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
 			},
 			onCriticalHit: false,
+			onResidualOrder: 21,
+			onResidualSubOrder: 5,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'move: Lucky Chant'); // "[side.name]'s team's Lucky Chant wore off!"
 			}
@@ -6564,6 +6579,7 @@ exports.BattleMovedex = {
 			onModifyPokemon: function(pokemon) {
 				pokemon.ignore['Item'] = true;
 			},
+			onResidualOrder: 25,
 			onEnd: function() {
 				this.add('-fieldend', 'move: Magic Room', '[of] '+this.effectData.source);
 			}
@@ -6641,6 +6657,7 @@ exports.BattleMovedex = {
 			onImmunity: function(type) {
 				if (type === 'Ground') return false;
 			},
+			onResidualOrder: 15,
 			onEnd: function(target) {
 				this.add('-end', target, 'Magnet Rise');
 			}
@@ -6654,7 +6671,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
-			var i = Math.floor(Math.random()*100);
+			var i = this.random(100);
 			if (i < 5) {
 				this.add('-message', 'Magnitude 4! (placeholder)');
 				return 10;
@@ -6957,15 +6974,15 @@ exports.BattleMovedex = {
 				var move = exports.BattleMovedex[i];
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
-				var NoMetronome = {
+				var noMetronome = {
 					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snatch:1, snarl:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, "v-create":1, wideguard:1
 				};
-				if (!NoMetronome[move.id]) {
+				if (!noMetronome[move.id]) {
 					moves.push(move.id);
 				}
 			}
 			var move = '';
-			if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
+			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) {
 				return false;
 			}
@@ -6997,12 +7014,29 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "This move is temporarily replaced by the target's last move; the replacement move will have 5 PP and become part of the user's moveset until the user switches out or the battle ends. Mimic copies attacks even if they miss or the user has immunity toward their type; it cannot copy itself, Struggle, Transform, Sketch, Metronome or moves that the user already knows, and it will fail if the target has yet to use a move.",
+		desc: "This move is temporarily replaced by the target's last move; the replacement move will have full PP and become part of the user's moveset until the user switches out or the battle ends. Mimic copies attacks even if they miss or the user has immunity toward their type; it cannot copy itself, Struggle, Transform, Sketch, Chatter or moves that the user already knows, and it will fail if the target has yet to use a move.",
 		shortDesc: "The last move the target used replaces this one.",
 		id: "mimic",
 		name: "Mimic",
 		pp: 10,
 		priority: 0,
+		onHit: function(target, source) {
+			var disallowedMoves = {transform:1,struggle:1,sketch:1,mimic:1,chatter:1};
+			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
+			var moveslot = source.moves.indexOf('mimic');
+			if (moveslot === -1) return false;
+			var move = Tools.getMove(target.lastMove);
+			source.moveset[moveslot] = {
+				move: move.name,
+				id: move.id,
+				pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				disabled: false,
+				used: false
+			};
+			source.moves[moveslot] = toId(move.name);
+			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -7099,13 +7133,14 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user performs the last move executed by its target; if applicable, an attack's damage is calculated with the user's stats, level and type(s). This moves fails if the target has not yet used a move. Mirror Move cannot copy Encore, Struggle, global moves affecting all Pokemon on the field (such as Gravity, Hail, Rain Dance, Sandstorm and Sunny Day) moves that can bypass Protect (Acupressure, Doom Desire, Future Sight, Imprison, Perish Song, Psych Up, Role Play and Transform) and moves that do not have a specific target (such as Light Screen, Reflect, Safeguard, Spikes, Stealth Rock and Toxic Spikes).",
-		shortDesc: "Uses the last move targeted at the user.",
+		shortDesc: "User uses the target's last used move against it.",
 		id: "mirrormove",
 		name: "Mirror Move",
 		pp: 20,
 		priority: 0,
 		onTryHit: function(target) {
-			if (!target.lastMove || target.lastMove === 'mirrormove') {
+			var noMirrorMove = {acupressure:1, afteryou:1, aromatherapy:1, chatter:1, conversion2:1, counter:1, curse:1, doomdesire:1, feint:1, finalgambit:1, focuspunch:1, futuresight:1, gravity:1, guardsplit:1, hail:1, haze:1, healbell:1, healpulse:1, helpinghand:1, lightscreen:1, luckychant:1, mefirst:1, mimic:1, mirrorcoat:1, mirrormove:1, mist:1, mudsport:1, naturepower:1, perishsong:1, powersplit:1, psychup:1, quickguard:1, raindance:1, reflect:1, reflecttype:1, roleplay:1, safeguard:1, sandstorm:1, sketch:1, spikes:1, spitup:1, stealthrock:1, struggle:1, sunnyday:1, tailwind:1, toxicspikes:1, transform:1, watersport:1, wideguard:1};
+			if (!target.lastMove || noMirrorMove[target.lastMove] || this.getMove(target.lastMove).target === 'self') {
 				return false;
 			}
 		},
@@ -7162,6 +7197,8 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart', side, 'Mist');
 			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 3,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'Mist');
 			}
@@ -7238,7 +7275,7 @@ exports.BattleMovedex = {
 		basePower: 20,
 		category: "Special",
 		desc: "Has a 100% chance to lower the target's Accuracy by 1 stage.",
-		shortDesc: "Lowers the target's Accuracy by 1.",
+		shortDesc: "100% chance to lower the target's Accuracy by 1.",
 		id: "mudslap",
 		name: "Mud-Slap",
 		pp: 10,
@@ -7278,7 +7315,7 @@ exports.BattleMovedex = {
 		basePower: 55,
 		category: "Special",
 		desc: "Lowers the target's Speed by 1 stage.",
-		shortDesc: "Lowers the target's Speed by 1.",
+		shortDesc: "100% chance to lower the target's Speed by 1.",
 		id: "mudshot",
 		name: "Mud Shot",
 		pp: 15,
@@ -8064,7 +8101,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onModifyMove: function(move, pokemon, target) {
-			var rand = Math.random() * 10;
+			var rand = this.random(10);
 			if (rand < 2) {
 				move.heal = [80, target.maxhp];
 			} else if (rand < 6) {
@@ -8097,16 +8134,15 @@ exports.BattleMovedex = {
 			if (!this.willAct()) {
 				return false;
 			}
-			var counter = 0;
+			var counter = 1;
 			if (pokemon.volatiles['stall']) {
-				counter = pokemon.volatiles['stall'].counter || 0;
+				counter = pokemon.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 8) counter = 32;
-			var denom = Math.pow(2, counter);
-			this.debug("Success chance: "+Math.round(100*1/denom)+"%");
-			if (counter > 0 && Math.random()*denom > 1) {
-				return false;
+			if (counter >= 256) {
+				return (this.random()*4294967296 < 1); // 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 			}
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			return (this.random(counter) === 0);
 		},
 		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
@@ -8309,7 +8345,7 @@ exports.BattleMovedex = {
 		accuracy: 80,
 		basePower: false,
 		damageCallback: function(pokemon) {
-			return parseInt((Math.random()*11 + 5) * pokemon.level / 10);
+			return (this.random(5,16) / 10) * pokemon.level;
 		},
 		category: "Special",
 		desc: "Randomly inflicts set damage equal to .5x, .6x, .7x, .8x, .9x, 1.0x, 1.1x, 1.2x, 1.3x, 1.4x or 1.5x the user's level.",
@@ -8437,14 +8473,15 @@ exports.BattleMovedex = {
 			if (!this.willAct()) {
 				return false;
 			}
-			var counter = 0;
+			var counter = 1;
 			if (source.volatiles['stall']) {
-				counter = source.volatiles['stall'].counter || 0;
+				counter = source.volatiles['stall'].counter || 1;
 			}
-			if (counter >= 8) counter = 32;
-			if (counter > 0 && Math.random()*Math.pow(2, counter) > 1) {
-				return false;
+			if (counter >= 256) {
+				return (this.random()*4294967296 < 1); // 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 			}
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			return (this.random(counter) === 0);
 		},
 		onHitSide: function(side, source) {
 			source.addVolatile('stall');
@@ -8713,6 +8750,7 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart',side,'Reflect');
 			},
+			onResidualOrder: 21,
 			onEnd: function(side) {
 				this.add('-sideend',side,'Reflect');
 			}
@@ -9068,7 +9106,7 @@ exports.BattleMovedex = {
 		basePower: 50,
 		category: "Physical",
 		desc: "Lowers the target's Speed by 1 stage.",
-		shortDesc: "Lowers the target's Speed by 1.",
+		shortDesc: "100% chance to lower the target's Speed by 1.",
 		id: "rocktomb",
 		name: "Rock Tomb",
 		pp: 10,
@@ -9328,6 +9366,8 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart', side, 'Safeguard');
 			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'Safeguard');
 			}
@@ -9592,7 +9632,7 @@ exports.BattleMovedex = {
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 20% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
+		shortDesc: "20% chance to lower the target's Sp. Def by 1.",
 		id: "shadowball",
 		name: "Shadow Ball",
 		pp: 15,
@@ -10156,7 +10196,7 @@ exports.BattleMovedex = {
 				}
 			}
 			var move = '';
-			if (moves.length) move = moves[parseInt(Math.random()*moves.length)];
+			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) {
 				return false;
 			}
@@ -10321,7 +10361,7 @@ exports.BattleMovedex = {
 		basePower: 55,
 		category: "Special",
 		desc: "Has a 100% chance to lower the target's Special Attack by one level.",
-		shortDesc: "Lowers the foe(s) Sp. Atk by 1.",
+		shortDesc: "100% chance to lower the foe(s) Sp. Atk by 1.",
 		id: "snarl",
 		name: "Snarl",
 		pp: 15,
@@ -10572,7 +10612,8 @@ exports.BattleMovedex = {
 			onSwitchIn: function(pokemon) {
 				var side = pokemon.side;
 				if (!pokemon.runImmunity('Ground')) return;
-				var damage = this.damage((1+this.effectData.layers)*pokemon.maxhp/16);
+				var damageAmounts = [0,3,4,6]; // 1/8, 1/6, 1/4
+				var damage = this.damage(damageAmounts[this.effectData.layers]*pokemon.maxhp/24);
 			}
 		},
 		secondary: false,
@@ -10908,6 +10949,9 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		isContact: true,
 		priority: 0,
+		beforeMoveCallback: function(pokemon) {
+			this.add('-message', pokemon.name+' has no moves left! (placeholder)');
+		},
 		onModifyMove: function(move) {
 			move.type = '???';
 		},
@@ -10926,7 +10970,7 @@ exports.BattleMovedex = {
 		basePower: 30,
 		category: "Special",
 		desc: "Has a 100% chance to lower the target's Special Attack by one level.",
-		shortDesc: "Lowers the foe(s) Sp. Atk by 1.",
+		shortDesc: "100% chance to lower the foe(s) Sp. Atk by 1.",
 		id: "strugglebug",
 		name: "Struggle Bug",
 		pp: 20,
@@ -10989,7 +11033,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'Substitute',
 		onTryHit: function(target) {
-			if (target.volatiles['substitute']) {
+			if (target.volatiles['substitute'] || target.maxhp === 1) { // Shedinja clause
 				this.add('-fail', target, 'move: Substitute');
 				return null;
 			}
@@ -11003,7 +11047,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			onStart: function(target) {
-				this.add('-start', target, 'move: Substitute');
+				this.add('-start', target, 'Substitute');
 				this.effectData.hp = parseInt(target.maxhp/4);
 			},
 			onTryHit: function(target, source, move) {
@@ -11016,7 +11060,7 @@ exports.BattleMovedex = {
 						acupressure:1, block:1, dreameater:1, embargo:1, entrainment:1, flatter:1, gastroacid:1, grudge:1, healblock:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, spiderweb:1, sketch:1, swagger:1, switcheroo:1, trick:1, worryseed:1, yawn:1, soak: 1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
-						this.add('-activate', target, 'move: Substitute', '[block] '+move);
+						this.add('-activate', target, 'Substitute', move);
 						return null;
 					}
 					return;
@@ -11039,13 +11083,13 @@ exports.BattleMovedex = {
 					this.runEvent('AfterSubDamage', target, source, move, damage);
 					return 0; // hit
 				} else {
-					this.add('-activate', target, 'move: Substitute', '[damage]');
+					this.add('-activate', target, 'Substitute', '[damage]');
 					this.runEvent('AfterSubDamage', target, source, move, damage);
 					return 0; // hit
 				}
 			},
 			onEnd: function(target) {
-				this.add('-end', target, 'move: Substitute');
+				this.add('-end', target, 'Substitute');
 			}
 		},
 		secondary: false,
@@ -11449,6 +11493,8 @@ exports.BattleMovedex = {
 			onModifyStats: function(stats) {
 				stats.spe *= 2;
 			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 4,
 			onEnd: function(side) {
 				this.add('-sideend', side, 'move: Tailwind');
 			}
@@ -11496,6 +11542,7 @@ exports.BattleMovedex = {
 				}
 				this.add('-start', target, 'move: Taunt');
 			},
+			onResidualOrder: 12,
 			onEnd: function(target) {
 				this.add('-end', target, 'move: Taunt');
 			},
@@ -11578,7 +11625,7 @@ exports.BattleMovedex = {
 			duration: 3,
 			onStart: function(target) {
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
-				this.add('message', target.name+' was hurled into the air! (placeholder)');
+				this.add('-message', target.name+' was hurled into the air! (placeholder)');
 			},
 			onSourceModifyMove: function(move) {
 				move.accuracy = true;
@@ -11586,8 +11633,9 @@ exports.BattleMovedex = {
 			onImmunity: function(type) {
 				if (type === 'Ground') return false;
 			},
+			onResidualOrder: 16,
 			onEnd: function(target) {
-				this.add('message', 'Telekinesis ended. (placeholder)');
+				this.add('-message', 'Telekinesis ended. (placeholder)');
 			}
 		},
 		secondary: false,
@@ -11928,7 +11976,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 20,
 			onHit: function(target, source) {
-				var result = parseInt(Math.random()*3);
+				var result = this.random(3);
 				if (result===0) {
 					target.trySetStatus('brn', source);
 				} else if (result===1) {
@@ -12015,6 +12063,7 @@ exports.BattleMovedex = {
 					pokemon.unboostedStats.spe = -pokemon.unboostedStats.spe;
 				}
 			},
+			onResidualOrder: 23,
 			onEnd: function() {
 				this.add('-fieldend', 'move: Trick Room');
 			}
@@ -12656,6 +12705,7 @@ exports.BattleMovedex = {
 				stats.spd = stats.def;
 				stats.def = tmp;
 			},
+			onResidualOrder: 24,
 			onEnd: function() {
 				this.add('-fieldend', 'move: Wonder Room');
 			}
@@ -12826,7 +12876,7 @@ exports.BattleMovedex = {
 		basePower: 120,
 		category: "Special",
 		desc: "Paralyzes the target.",
-		shortDesc: "Paralyzes the target.",
+		shortDesc: "100% chance to paralyze the target.",
 		id: "zapcannon",
 		name: "Zap Cannon",
 		pp: 5,

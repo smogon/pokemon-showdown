@@ -1,9 +1,9 @@
 // Run this with streamline (_node) like so:
-//  _node learnsets-gen._js > ../learnsets.js
+//  _node learnsets-gen._js > ../data/learnsets.js
 //      or
-//  ../node_modules/.bin/_node learnsets-gen._js > ../learnsets.js
+//  ../node_modules/.bin/_node learnsets-gen._js > ../data/learnsets.js
 
-var customPokemonPath = "../data/custom-pokemon.json";
+var customPokemonPath = "./data/custom-pokemon.json";
 
 var assert = require("assert").ok;
 var getVeekunDatabase = require("./veekun-database._js").getVeekunDatabase;

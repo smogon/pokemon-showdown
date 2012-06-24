@@ -6,9 +6,6 @@ var numUsers = 0;
 var people = {};
 var numPeople = 0;
 
-function getTime() {
-	return new Date().getTime();
-}
 function sanitizeName(name) {
 	name = name.trim();
 	if (name.length > 18) name = name.substr(0,18);
@@ -22,7 +19,7 @@ function sanitizeName(name) {
 function getUser(name) {
 	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
-	var userid = name.toUserid();
+	var userid = toUserid(name);
 	var i = 0;
 	while (userid && !users[userid] && i < 1000) {
 		userid = prevUsers[userid];
@@ -31,29 +28,27 @@ function getUser(name) {
 	return users[userid];
 }
 function searchUser(name) {
-	var userid = name.toUserid();
+	var userid = toUserid(name);
 	while (userid && !users[userid]) {
 		userid = prevUsers[userid];
 	}
 	return users[userid];
 }
 function nameLock(user,name,ip) {
-	ip = ip || user.ip;
-	var userid;
-	if (name) userid = name.toUserid();
-	if (nameLockedIps[ip]) {
+	ip = ip||user.ip;
+	var userid = toUserid(name);
+	if(nameLockedIps[ip]) {
 		return user.nameLock(nameLockedIps[ip]);
-	}
-	for (var i in nameLockedIps) {
-		if ((userid && nameLockedIps[i].toUserid() === userid) || user.userid === nameLockedIps[i].toUserid()) {
+	} for(var i in nameLockedIps) {
+		if((userid && toUserid(nameLockedIps[i])==userid)||user.userid==toUserid(nameLockedIps[i])) {
 			nameLockedIps[ip] = nameLockedIps[i];
 			return user.nameLock(nameLockedIps[ip]);
 		}
 	}
-	return name || user.name;
+	return name||user.name;
 }
 function connectUser(name, socket, token, room) {
-	var userid = name.toUserid();
+	var userid = toUserid(name);
 	var user;
 	console.log("NEW PERSON: "+socket.id);
 	var person = new Person(name, socket, true);
@@ -88,7 +83,7 @@ function importUsergroups() {
 		for (var i = 0; i < data.length; i++) {
 			if (!data[i]) continue;
 			var row = data[i].split(",");
-			usergroups[row[0].toUserid()] = (row[1]||config.groupsranking[0])+row[0];
+			usergroups[toUserid(row[0])] = (row[1]||config.groupsranking[0])+row[0];
 		}
 	});
 }
@@ -115,7 +110,7 @@ var User = (function () {
 		this.named = false;
 		this.renamePending = false;
 		this.authenticated = false;
-		this.userid = this.name.toUserid();
+		this.userid = toUserid(this.name);
 		this.group = config.groupsranking[0];
 
 		var trainersprites = [1, 2, 101, 102, 169, 170];
@@ -223,7 +218,7 @@ var User = (function () {
 	};
 	User.prototype.forceRename = function(name, authenticated) {
 		// skip the login server
-		var userid = name.toUserid();
+		var userid = toUserid(name);
 
 		if (users[userid] && users[userid] !== this) {
 			return false;
@@ -265,21 +260,21 @@ var User = (function () {
 		var joining = !this.named;
 		this.named = true;
 		for (var i in this.roomCount) {
-			getRoom(i).rename(this, oldid, joining);
+			Rooms.get(i).rename(this, oldid, joining);
 		}
 		rooms.lobby.usersChanged = true;
 		return true;
 	};
 	User.prototype.resetName = function() {
 		var name = 'Guest '+this.guestNum;
-		var userid = name.toUserid();
+		var userid = toUserid(name);
 		if (this.userid === userid) return;
 
 		var i = 0;
 		while (users[userid] && users[userid] !== this) {
 			this.guestNum++;
 			name = 'Guest '+this.guestNum;
-			userid = name.toUserid();
+			userid = toUserid(name);
 			if (i > 1000) return false;
 		}
 
@@ -306,7 +301,7 @@ var User = (function () {
 		}
 		this.named = false;
 		for (var i in this.roomCount) {
-			getRoom(i).rename(this, oldid, false);
+			Rooms.get(i).rename(this, oldid, false);
 		}
 		return true;
 	};
@@ -318,7 +313,7 @@ var User = (function () {
 	 */
 	User.prototype.rename = function(name, token, auth) {
 		for (var i in this.roomCount) {
-			var room = getRoom(i);
+			var room = Rooms.get(i);
 			if (room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
 				this.emit('message', "You can't change your name right now because you're in the middle of a rated battle.");
 				return false;
@@ -329,7 +324,7 @@ var User = (function () {
 		console.log("checking name lock for: "+this.name+" renaming to "+name);
 		name = nameLock(this,name);
 		console.log("returned "+name);
-		var userid = name.toUserid();
+		var userid = toUserid(name);
 		if (this.authenticated) auth = false;
 
 		if (!userid) {
@@ -381,25 +376,26 @@ var User = (function () {
 
 					if (userid === "serei") avatar = 172;
 					else if (userid === "hobsgoblin") avatar = 52;
-					else if (userid === "etherealsol") avatar = 1001;
 					else if (userid === "ataraxia") avatar = 1002;
 					else if (userid === "verbatim") avatar = 1003;
 					else if (userid === "mortygymleader") avatar = 144;
 					else if (userid === "leadermorty") avatar = 144;
 					else if (userid === "leaderjasmine") avatar = 146;
 					else if (userid === "championcynthia") avatar = 260;
-					else if (userid === "aeo") avatar = 167;
+					else if (userid === "aeo" || userid === "zarel") avatar = 167;
 					else if (userid === "aeo1") avatar = 167;
 					else if (userid === "aeo2") avatar = 166;
 					else if (userid === "sharktamer") avatar = 7;
 					else if (userid === "bmelts") avatar = 1004;
 					else if (userid === "n") avatar = 209;
+					else if (userid === "desolate") avatar = 152;
+					else if (userid === "steamroll") avatar = 126;
 
 					try {
 						var data = JSON.parse(body);
 						switch (data.group) {
 						case '2':
-							group = '&';
+							group = '~';
 							break;
 						case '3':
 							group = '+';
@@ -409,6 +405,9 @@ var User = (function () {
 							break;
 						case '5':
 							group = '@';
+							break;
+						case '6':
+							group = '&';
 							break;
 						}
 						/* var userdata = JSON.parse(body.userdata);
@@ -430,7 +429,7 @@ var User = (function () {
 						return true;
 					}
 					for (var i in selfP.roomCount) {
-						getRoom(i).leave(selfP);
+						Rooms.get(i).leave(selfP);
 					}
 					for (var i=0; i<selfP.people.length; i++) {
 						console.log(''+selfP.name+' preparing to merge: socket '+i+' of '+selfP.people.length);
@@ -562,7 +561,7 @@ var User = (function () {
 				if (this.roomCount[i] > 0) {
 					// should never happen.
 					console.log('!! room miscount: '+i+' not left');
-					getRoom(i).leave(this);
+					Rooms.get(i).leave(this);
 				}
 			}
 			this.roomCount = {};
@@ -635,6 +634,7 @@ var User = (function () {
 	};
 	User.prototype.destroy = function() {
 		// Disconnects a user from the server
+		this.destroyChatQueue();
 		var person = null;
 		this.connected = false;
 		for (var i=0; i<this.people.length; i++) {
@@ -649,7 +649,7 @@ var User = (function () {
 	};
 	User.prototype.joinRoom = function(room, socket) {
 		roomid = room?(room.id||room):'';
-		room = getRoom(room);
+		room = Rooms.get(room);
 		var person = null;
 		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
 		if (!socket) {
@@ -687,7 +687,7 @@ var User = (function () {
 		}
 	};
 	User.prototype.leaveRoom = function(room, socket) {
-		room = getRoom(room);
+		room = Rooms.get(room);
 		for (var i=0; i<this.people.length; i++) {
 			if (this.people[i] === socket || this.people[i].socket === socket || !socket) {
 				if (this.people[i].rooms[room.id]) {
@@ -729,11 +729,11 @@ var User = (function () {
 		if (!user || this.challengeTo) {
 			return false;
 		}
-		if (getTime() < this.lastChallenge + 10000) {
+		if (new Date().getTime() < this.lastChallenge + 10000) {
 			// 10 seconds ago
 			return false;
 		}
-		var time = getTime();
+		var time = new Date().getTime();
 		var challenge = {
 			time: time,
 			from: this.userid,
@@ -756,7 +756,7 @@ var User = (function () {
 		if (user) user.updateChallenges();
 	};
 	User.prototype.rejectChallengeFrom = function(user) {
-		var userid = user.toUserid();
+		var userid = toUserid(user);
 		user = getUser(user);
 		if (this.challengesFrom[userid]) {
 			delete this.challengesFrom[userid];
@@ -771,7 +771,7 @@ var User = (function () {
 		this.updateChallenges();
 	};
 	User.prototype.acceptChallengeFrom = function(user) {
-		var userid = user.toUserid();
+		var userid = toUserid(user);
 		user = getUser(user);
 		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid) {
 			if (this.challengesFrom[userid]) {
@@ -780,7 +780,7 @@ var User = (function () {
 			}
 			return false;
 		}
-		getRoom('lobby').startBattle(this, user, user.challengeTo.format);
+		Rooms.get('lobby').startBattle(this, user, user.challengeTo.format);
 		delete this.challengesFrom[user.userid];
 		user.challengeTo = null;
 		this.updateChallenges();
@@ -848,7 +848,7 @@ var Person = (function () {
 	function Person(name, socket, user) {
 		this.named = true;
 		this.name = name;
-		this.userid = name.toUserid();
+		this.userid = toUserid(name);
 
 		this.socket = socket;
 		this.rooms = {};
@@ -877,7 +877,7 @@ var Person = (function () {
 
 	Person.prototype.rename = function(name) {
 		this.name = name;
-		this.userid = name.toUserid();
+		this.userid = toUserid(name);
 	};
 	return Person;
 })();
@@ -893,7 +893,7 @@ function ipSearch(ip, table) {
 	return false;
 }
 
-exports.getUser = getUser;
+exports.get = getUser;
 exports.searchUser = searchUser;
 exports.connectUser = connectUser;
 exports.users = users;

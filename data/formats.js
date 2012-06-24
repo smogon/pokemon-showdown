@@ -65,7 +65,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber','OU','BL', 'Snow Warning','Drought']
+		banlist: ['Uber','OU','BL', 'Snow Warning', 'Drought', 'Sand Stream']
 	},
 	ru: {
 		effectType: 'Format',
@@ -75,7 +75,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber','OU','BL','UU','BL2', 'Snow Warning','Drought', 'Shell Smash + Baton Pass']
+		banlist: ['Uber','OU','BL','UU','BL2', 'Snow Warning', 'Drought', 'Sand Stream', 'Shell Smash + Baton Pass']
 	},
 	nu: {
 		effectType: 'Format',
@@ -85,7 +85,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'Snow Warning','Drought', 'Shell Smash + Baton Pass']
+		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'Snow Warning', 'Drought', 'Sand Stream', 'Shell Smash + Baton Pass']
 	},
 	lc: {
 		effectType: 'Format',
@@ -115,7 +115,15 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon'],
-		banlist: ['OHKO', 'Wonder Guard', 'Pure Power', 'Huge Power']
+		banlist: ['OHKO', 'Wonder Guard', 'Pure Power', 'Huge Power', 'Freeze Shock', 'Ice Burn']
+	},
+	pu: {
+		effectType: 'Format',
+		name: "PU",
+		challengeShow: true,
+		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'Snow Warning', 'Drought', 'Sand Stream', 'Shell Smash + Baton Pass',
+			"Charizard", "Wartortle", "Raichu", "Vileplume", "Kadabra", "Golem", "Haunter", "Exeggutor", "Marowak", "Weezing", "Tangela", "Jynx", "Pinsir", "Tauros", "Flareon", "Quagsire", "Misdreavus", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Camerupt", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Absol", "Gorebyss", "Regirock", "Torterra", "Luxray", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Magmortar", "Leafeon", "Probopass", "Rotom-S", "Serperior", "Emboar", "Samurott", "Musharna", "Gurdurr", "Sawk", "Garbodor", "Cinccino", "Duosion", "Sawsbuck", "Amoonguss", "Alomomola", "Eelektross", "Cryogonal", "Braviary"]
 	},
 	haxmons: {
 		effectType: 'Format',
@@ -138,6 +146,25 @@ exports.BattleFormats = {
 		name: "Debug Mode",
 		challengeShow: true,
 		canUseRandomTeam: true,
+		debug: true,
+		// no restrictions, for serious
+		ruleset: []
+	},
+	hackmonsgen4: {
+		mod: 'gen4',
+		effectType: 'Format',
+		name: "Hackmons (Gen 4)",
+		challengeShow: true,
+		ruleset: ['Pokemon'],
+		banlist: []
+	},
+	debugmodegen4: {
+		mod: 'gen4',
+		effectType: 'Format',
+		name: "Debug Mode (Gen 4)",
+		challengeShow: true,
+		canUseRandomTeam: true,
+		debug: true,
 		// no restrictions, for serious
 		ruleset: []
 	},
@@ -206,6 +233,11 @@ exports.BattleFormats = {
 			if (template.num == 421) { // Cherrim
 				set.species = 'Cherrim';
 			}
+			if (template.num == 647) { // Keldeo
+				if (set.species === 'Keldeo-Resolution' && set.moves.indexOf('Secret Sword') < 0) {
+					set.species = 'Keldeo';
+				}
+			}
 			if (template.isNonstandard) {
 				problems.push(set.species+' is not a real pokemon.');
 			}
@@ -251,10 +283,10 @@ exports.BattleFormats = {
 		onStart: function() {
 			this.add('clearpoke');
 			for (var i=0; i<this.sides[0].pokemon.length; i++) {
-				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details);
+				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/Arceus\-[a-zA-Z\?]+/, 'Arceus'));
 			}
 			for (var i=0; i<this.sides[1].pokemon.length; i++) {
-				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details);
+				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/Arceus\-[a-zA-Z\?]+/, 'Arceus'));
 			}
 		},
 		onTeamPreview: function() {
