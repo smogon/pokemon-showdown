@@ -95,7 +95,7 @@ exports.getSmogonDex = function(_) {
 
 			case "meloettap" :
 				name = "meloettapirouette";
-				tier = "Unreleased"; //"Illegal";
+				tier = "Illegal";
 				break;
 
 			case "rotomc" :
@@ -225,7 +225,7 @@ exports.getSmogonDex = function(_) {
 				for (var g = 0; g < genesectFormes.length; ++g) {
 					smogonDex["genesect" + genesectFormes[g].toLowerCase()] = {
 							types: types,
-							tier: tier,
+							tier: "Illegal",
 							abilities: abilities,
 							baseStats: {
 								hp: hp,

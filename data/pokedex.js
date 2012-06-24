@@ -2,9 +2,7 @@ exports.BattlePokedex = {
 	missingno: {
 		num: 0,
 		species: "Missingno.",
-		speciesid: "missingno",
 		types: ["Normal","Normal"],
-		gender: "",
 		baseStats: {
 			hp: 33,
 			atk: 136,
@@ -26,9 +24,7 @@ exports.BattlePokedex = {
 	tomohawk: {
 		num: -1,
 		species: "Tomohawk",
-		speciesid: "tomohawk",
 		types: ["Flying","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 105,
 			atk: 60,
@@ -50,9 +46,7 @@ exports.BattlePokedex = {
 	necturna: {
 		num: -2,
 		species: "Necturna",
-		speciesid: "necturna",
 		types: ["Grass","Ghost"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 64,
@@ -71,12 +65,31 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["Plant","Ground"],
 	},
+	mollux: {
+		num: -3,
+		species: "Mollux",
+		types: ["Fire","Poison"],
+		baseStats: {
+			hp: 95,
+			atk: 45,
+			def: 83,
+			spa: 131,
+			spd: 105,
+			spe: 76
+		},
+		abilities: {
+			0: "Dry Skin",
+			DW: "Illuminate"
+		},
+		heightm: 1.2,
+		weightkg: 41,
+		colour: "Pink",
+		eggGroups: ["Fairy","Ground"],
+	},
 	syclant: {
 		num: -51,
 		species: "Syclant",
-		speciesid: "syclant",
 		types: ["Ice","Bug"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 116,
@@ -97,9 +110,7 @@ exports.BattlePokedex = {
 	revenankh: {
 		num: -52,
 		species: "Revenankh",
-		speciesid: "revenankh",
 		types: ["Ghost","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 105,
@@ -120,9 +131,7 @@ exports.BattlePokedex = {
 	pyroak: {
 		num: -53,
 		species: "Pyroak",
-		speciesid: "pyroak",
 		types: ["Fire","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 120,
 			atk: 70,
@@ -143,9 +152,7 @@ exports.BattlePokedex = {
 	fidgit: {
 		num: -54,
 		species: "Fidgit",
-		speciesid: "fidgit",
 		types: ["Poison","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 76,
@@ -166,9 +173,7 @@ exports.BattlePokedex = {
 	stratagem: {
 		num: -55,
 		species: "Stratagem",
-		speciesid: "stratagem",
 		types: ["Rock"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 90,
@@ -190,9 +195,7 @@ exports.BattlePokedex = {
 	arghonaut: {
 		num: -56,
 		species: "Arghonaut",
-		speciesid: "arghonaut",
 		types: ["Water","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 105,
 			atk: 110,
@@ -212,9 +215,7 @@ exports.BattlePokedex = {
 	kitsunoh: {
 		num: -57,
 		species: "Kitsunoh",
-		speciesid: "kitsunoh",
 		types: ["Steel","Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 103,
@@ -235,9 +236,7 @@ exports.BattlePokedex = {
 	cyclohm: {
 		num: -58,
 		species: "Cyclohm",
-		speciesid: "cyclohm",
 		types: ["Electric","Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 108,
 			atk: 60,
@@ -258,9 +257,7 @@ exports.BattlePokedex = {
 	colossoil: {
 		num: -59,
 		species: "Colossoil",
-		speciesid: "colossoil",
 		types: ["Dark","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 133,
 			atk: 122,
@@ -281,9 +278,7 @@ exports.BattlePokedex = {
 	krilowatt: {
 		num: -60,
 		species: "Krilowatt",
-		speciesid: "krilowatt",
 		types: ["Electric","Water"],
-		gender: "",
 		baseStats: {
 			hp: 151,
 			atk: 84,
@@ -304,9 +299,7 @@ exports.BattlePokedex = {
 	voodoom: {
 		num: -61,
 		species: "Voodoom",
-		speciesid: "voodoom",
 		types: ["Fighting","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 85,
@@ -327,10 +320,8 @@ exports.BattlePokedex = {
 	bulbasaur: {
 		num: 1,
 		species: "Bulbasaur",
-		speciesid: "bulbasaur",
 		types: ["Grass","Poison"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 49,
@@ -352,10 +343,8 @@ exports.BattlePokedex = {
 	ivysaur: {
 		num: 2,
 		species: "Ivysaur",
-		speciesid: "ivysaur",
 		types: ["Grass","Poison"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 62,
@@ -378,10 +367,8 @@ exports.BattlePokedex = {
 	venusaur: {
 		num: 3,
 		species: "Venusaur",
-		speciesid: "venusaur",
 		types: ["Grass","Poison"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 82,
@@ -403,10 +390,8 @@ exports.BattlePokedex = {
 	charmander: {
 		num: 4,
 		species: "Charmander",
-		speciesid: "charmander",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 39,
 			atk: 52,
@@ -428,10 +413,8 @@ exports.BattlePokedex = {
 	charmeleon: {
 		num: 5,
 		species: "Charmeleon",
-		speciesid: "charmeleon",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 58,
 			atk: 64,
@@ -454,10 +437,8 @@ exports.BattlePokedex = {
 	charizard: {
 		num: 6,
 		species: "Charizard",
-		speciesid: "charizard",
 		types: ["Fire","Flying"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 78,
 			atk: 84,
@@ -479,10 +460,8 @@ exports.BattlePokedex = {
 	squirtle: {
 		num: 7,
 		species: "Squirtle",
-		speciesid: "squirtle",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 44,
 			atk: 48,
@@ -504,10 +483,8 @@ exports.BattlePokedex = {
 	wartortle: {
 		num: 8,
 		species: "Wartortle",
-		speciesid: "wartortle",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 59,
 			atk: 63,
@@ -530,10 +507,8 @@ exports.BattlePokedex = {
 	blastoise: {
 		num: 9,
 		species: "Blastoise",
-		speciesid: "blastoise",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 79,
 			atk: 83,
@@ -555,9 +530,7 @@ exports.BattlePokedex = {
 	caterpie: {
 		num: 10,
 		species: "Caterpie",
-		speciesid: "caterpie",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 30,
@@ -579,9 +552,7 @@ exports.BattlePokedex = {
 	metapod: {
 		num: 11,
 		species: "Metapod",
-		speciesid: "metapod",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 20,
@@ -591,8 +562,7 @@ exports.BattlePokedex = {
 			spe: 30
 		},
 		abilities: {
-			0: "Shed Skin",
-			DW: "Shed Skin"
+			0: "Shed Skin"
 		},
 		heightm: 0.7,
 		weightkg: 9.9,
@@ -604,9 +574,7 @@ exports.BattlePokedex = {
 	butterfree: {
 		num: 12,
 		species: "Butterfree",
-		speciesid: "butterfree",
 		types: ["Bug","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 45,
@@ -628,9 +596,7 @@ exports.BattlePokedex = {
 	weedle: {
 		num: 13,
 		species: "Weedle",
-		speciesid: "weedle",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 35,
@@ -652,9 +618,7 @@ exports.BattlePokedex = {
 	kakuna: {
 		num: 14,
 		species: "Kakuna",
-		speciesid: "kakuna",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 25,
@@ -664,8 +628,7 @@ exports.BattlePokedex = {
 			spe: 35
 		},
 		abilities: {
-			0: "Shed Skin",
-			DW: "Shed Skin"
+			0: "Shed Skin"
 		},
 		heightm: 0.6,
 		weightkg: 10,
@@ -677,9 +640,7 @@ exports.BattlePokedex = {
 	beedrill: {
 		num: 15,
 		species: "Beedrill",
-		speciesid: "beedrill",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 80,
@@ -701,9 +662,7 @@ exports.BattlePokedex = {
 	pidgey: {
 		num: 16,
 		species: "Pidgey",
-		speciesid: "pidgey",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 45,
@@ -726,9 +685,7 @@ exports.BattlePokedex = {
 	pidgeotto: {
 		num: 17,
 		species: "Pidgeotto",
-		speciesid: "pidgeotto",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 63,
 			atk: 60,
@@ -752,9 +709,7 @@ exports.BattlePokedex = {
 	pidgeot: {
 		num: 18,
 		species: "Pidgeot",
-		speciesid: "pidgeot",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 83,
 			atk: 80,
@@ -777,9 +732,7 @@ exports.BattlePokedex = {
 	rattata: {
 		num: 19,
 		species: "Rattata",
-		speciesid: "rattata",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 56,
@@ -802,9 +755,7 @@ exports.BattlePokedex = {
 	raticate: {
 		num: 20,
 		species: "Raticate",
-		speciesid: "raticate",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 81,
@@ -827,9 +778,7 @@ exports.BattlePokedex = {
 	spearow: {
 		num: 21,
 		species: "Spearow",
-		speciesid: "spearow",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 60,
@@ -851,9 +800,7 @@ exports.BattlePokedex = {
 	fearow: {
 		num: 22,
 		species: "Fearow",
-		speciesid: "fearow",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 90,
@@ -875,9 +822,7 @@ exports.BattlePokedex = {
 	ekans: {
 		num: 23,
 		species: "Ekans",
-		speciesid: "ekans",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 60,
@@ -900,9 +845,7 @@ exports.BattlePokedex = {
 	arbok: {
 		num: 24,
 		species: "Arbok",
-		speciesid: "arbok",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 85,
@@ -925,9 +868,7 @@ exports.BattlePokedex = {
 	pichu: {
 		num: 172,
 		species: "Pichu",
-		speciesid: "pichu",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 20,
 			atk: 40,
@@ -946,17 +887,14 @@ exports.BattlePokedex = {
 		evos: ["pikachu"],
 		eggGroups: ["No Eggs"],
 		otherFormes: ["pichuspikyeared"],
-		isDefaultForme: true
 	},
 	pichuspikyeared: {
 		num: 172,
 		species: "Pichu-Spiky-eared",
-		speciesid: "pichuspikyeared",
 		baseSpecies: "Pichu",
 		forme: "Spiky-eared",
 		formeLetter: "S",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 20,
 			atk: 40,
@@ -975,14 +913,11 @@ exports.BattlePokedex = {
 		evos: ["pikachu"],
 		eggGroups: ["No Eggs"],
 		otherFormes: ["pichu"],
-		isDefaultForme: false
 	},
 	pikachu: {
 		num: 25,
 		species: "Pikachu",
-		speciesid: "pikachu",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 55,
@@ -1005,9 +940,7 @@ exports.BattlePokedex = {
 	raichu: {
 		num: 26,
 		species: "Raichu",
-		speciesid: "raichu",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 90,
@@ -1029,9 +962,7 @@ exports.BattlePokedex = {
 	sandshrew: {
 		num: 27,
 		species: "Sandshrew",
-		speciesid: "sandshrew",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 75,
@@ -1053,9 +984,7 @@ exports.BattlePokedex = {
 	sandslash: {
 		num: 28,
 		species: "Sandslash",
-		speciesid: "sandslash",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 100,
@@ -1077,9 +1006,7 @@ exports.BattlePokedex = {
 	nidoranf: {
 		num: 29,
 		species: "NidoranF",
-		speciesid: "nidoranf",
 		types: ["Poison"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 55,
@@ -1103,9 +1030,7 @@ exports.BattlePokedex = {
 	nidorina: {
 		num: 30,
 		species: "Nidorina",
-		speciesid: "nidorina",
 		types: ["Poison"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 70,
@@ -1130,9 +1055,7 @@ exports.BattlePokedex = {
 	nidoqueen: {
 		num: 31,
 		species: "Nidoqueen",
-		speciesid: "nidoqueen",
 		types: ["Poison","Ground"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 90,
@@ -1156,9 +1079,7 @@ exports.BattlePokedex = {
 	nidoranm: {
 		num: 32,
 		species: "NidoranM",
-		speciesid: "nidoranm",
 		types: ["Poison"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 46,
@@ -1182,9 +1103,7 @@ exports.BattlePokedex = {
 	nidorino: {
 		num: 33,
 		species: "Nidorino",
-		speciesid: "nidorino",
 		types: ["Poison"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 61,
@@ -1209,9 +1128,7 @@ exports.BattlePokedex = {
 	nidoking: {
 		num: 34,
 		species: "Nidoking",
-		speciesid: "nidoking",
 		types: ["Poison","Ground"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 81,
@@ -1235,10 +1152,8 @@ exports.BattlePokedex = {
 	cleffa: {
 		num: 173,
 		species: "Cleffa",
-		speciesid: "cleffa",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 25,
@@ -1261,10 +1176,8 @@ exports.BattlePokedex = {
 	clefairy: {
 		num: 35,
 		species: "Clefairy",
-		speciesid: "clefairy",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 45,
@@ -1288,10 +1201,8 @@ exports.BattlePokedex = {
 	clefable: {
 		num: 36,
 		species: "Clefable",
-		speciesid: "clefable",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 70,
@@ -1314,10 +1225,8 @@ exports.BattlePokedex = {
 	vulpix: {
 		num: 37,
 		species: "Vulpix",
-		speciesid: "vulpix",
 		types: ["Fire"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 38,
 			atk: 41,
@@ -1339,10 +1248,8 @@ exports.BattlePokedex = {
 	ninetales: {
 		num: 38,
 		species: "Ninetales",
-		speciesid: "ninetales",
 		types: ["Fire"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 73,
 			atk: 76,
@@ -1364,10 +1271,8 @@ exports.BattlePokedex = {
 	igglybuff: {
 		num: 174,
 		species: "Igglybuff",
-		speciesid: "igglybuff",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 30,
@@ -1389,10 +1294,8 @@ exports.BattlePokedex = {
 	jigglypuff: {
 		num: 39,
 		species: "Jigglypuff",
-		speciesid: "jigglypuff",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 115,
 			atk: 45,
@@ -1415,10 +1318,8 @@ exports.BattlePokedex = {
 	wigglytuff: {
 		num: 40,
 		species: "Wigglytuff",
-		speciesid: "wigglytuff",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 140,
 			atk: 70,
@@ -1440,9 +1341,7 @@ exports.BattlePokedex = {
 	zubat: {
 		num: 41,
 		species: "Zubat",
-		speciesid: "zubat",
 		types: ["Poison","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 45,
@@ -1464,9 +1363,7 @@ exports.BattlePokedex = {
 	golbat: {
 		num: 42,
 		species: "Golbat",
-		speciesid: "golbat",
 		types: ["Poison","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 80,
@@ -1489,9 +1386,7 @@ exports.BattlePokedex = {
 	crobat: {
 		num: 169,
 		species: "Crobat",
-		speciesid: "crobat",
 		types: ["Poison","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 90,
@@ -1513,9 +1408,7 @@ exports.BattlePokedex = {
 	oddish: {
 		num: 43,
 		species: "Oddish",
-		speciesid: "oddish",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 50,
@@ -1537,9 +1430,7 @@ exports.BattlePokedex = {
 	gloom: {
 		num: 44,
 		species: "Gloom",
-		speciesid: "gloom",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 65,
@@ -1562,9 +1453,7 @@ exports.BattlePokedex = {
 	vileplume: {
 		num: 45,
 		species: "Vileplume",
-		speciesid: "vileplume",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 80,
@@ -1586,9 +1475,7 @@ exports.BattlePokedex = {
 	bellossom: {
 		num: 182,
 		species: "Bellossom",
-		speciesid: "bellossom",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 80,
@@ -1610,9 +1497,7 @@ exports.BattlePokedex = {
 	paras: {
 		num: 46,
 		species: "Paras",
-		speciesid: "paras",
 		types: ["Bug","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 70,
@@ -1635,9 +1520,7 @@ exports.BattlePokedex = {
 	parasect: {
 		num: 47,
 		species: "Parasect",
-		speciesid: "parasect",
 		types: ["Bug","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 95,
@@ -1660,9 +1543,7 @@ exports.BattlePokedex = {
 	venonat: {
 		num: 48,
 		species: "Venonat",
-		speciesid: "venonat",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 55,
@@ -1685,9 +1566,7 @@ exports.BattlePokedex = {
 	venomoth: {
 		num: 49,
 		species: "Venomoth",
-		speciesid: "venomoth",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 65,
@@ -1710,9 +1589,7 @@ exports.BattlePokedex = {
 	diglett: {
 		num: 50,
 		species: "Diglett",
-		speciesid: "diglett",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 10,
 			atk: 55,
@@ -1735,9 +1612,7 @@ exports.BattlePokedex = {
 	dugtrio: {
 		num: 51,
 		species: "Dugtrio",
-		speciesid: "dugtrio",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 80,
@@ -1760,9 +1635,7 @@ exports.BattlePokedex = {
 	meowth: {
 		num: 52,
 		species: "Meowth",
-		speciesid: "meowth",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 45,
@@ -1785,9 +1658,7 @@ exports.BattlePokedex = {
 	persian: {
 		num: 53,
 		species: "Persian",
-		speciesid: "persian",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 70,
@@ -1810,9 +1681,7 @@ exports.BattlePokedex = {
 	psyduck: {
 		num: 54,
 		species: "Psyduck",
-		speciesid: "psyduck",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 52,
@@ -1835,9 +1704,7 @@ exports.BattlePokedex = {
 	golduck: {
 		num: 55,
 		species: "Golduck",
-		speciesid: "golduck",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 82,
@@ -1860,9 +1727,7 @@ exports.BattlePokedex = {
 	mankey: {
 		num: 56,
 		species: "Mankey",
-		speciesid: "mankey",
 		types: ["Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 80,
@@ -1885,9 +1750,7 @@ exports.BattlePokedex = {
 	primeape: {
 		num: 57,
 		species: "Primeape",
-		speciesid: "primeape",
 		types: ["Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 105,
@@ -1910,10 +1773,8 @@ exports.BattlePokedex = {
 	growlithe: {
 		num: 58,
 		species: "Growlithe",
-		speciesid: "growlithe",
 		types: ["Fire"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 70,
@@ -1936,10 +1797,8 @@ exports.BattlePokedex = {
 	arcanine: {
 		num: 59,
 		species: "Arcanine",
-		speciesid: "arcanine",
 		types: ["Fire"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 110,
@@ -1962,9 +1821,7 @@ exports.BattlePokedex = {
 	poliwag: {
 		num: 60,
 		species: "Poliwag",
-		speciesid: "poliwag",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 50,
@@ -1987,9 +1844,7 @@ exports.BattlePokedex = {
 	poliwhirl: {
 		num: 61,
 		species: "Poliwhirl",
-		speciesid: "poliwhirl",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 65,
@@ -2013,9 +1868,7 @@ exports.BattlePokedex = {
 	poliwrath: {
 		num: 62,
 		species: "Poliwrath",
-		speciesid: "poliwrath",
 		types: ["Water","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 85,
@@ -2038,9 +1891,7 @@ exports.BattlePokedex = {
 	politoed: {
 		num: 186,
 		species: "Politoed",
-		speciesid: "politoed",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 75,
@@ -2063,10 +1914,8 @@ exports.BattlePokedex = {
 	abra: {
 		num: 63,
 		species: "Abra",
-		speciesid: "abra",
 		types: ["Psychic"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 25,
 			atk: 20,
@@ -2089,10 +1938,8 @@ exports.BattlePokedex = {
 	kadabra: {
 		num: 64,
 		species: "Kadabra",
-		speciesid: "kadabra",
 		types: ["Psychic"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 35,
@@ -2116,10 +1963,8 @@ exports.BattlePokedex = {
 	alakazam: {
 		num: 65,
 		species: "Alakazam",
-		speciesid: "alakazam",
 		types: ["Psychic"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 50,
@@ -2142,10 +1987,8 @@ exports.BattlePokedex = {
 	machop: {
 		num: 66,
 		species: "Machop",
-		speciesid: "machop",
 		types: ["Fighting"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 80,
@@ -2168,10 +2011,8 @@ exports.BattlePokedex = {
 	machoke: {
 		num: 67,
 		species: "Machoke",
-		speciesid: "machoke",
 		types: ["Fighting"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 100,
@@ -2195,10 +2036,8 @@ exports.BattlePokedex = {
 	machamp: {
 		num: 68,
 		species: "Machamp",
-		speciesid: "machamp",
 		types: ["Fighting"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 130,
@@ -2221,9 +2060,7 @@ exports.BattlePokedex = {
 	bellsprout: {
 		num: 69,
 		species: "Bellsprout",
-		speciesid: "bellsprout",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 75,
@@ -2245,9 +2082,7 @@ exports.BattlePokedex = {
 	weepinbell: {
 		num: 70,
 		species: "Weepinbell",
-		speciesid: "weepinbell",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 90,
@@ -2270,9 +2105,7 @@ exports.BattlePokedex = {
 	victreebel: {
 		num: 71,
 		species: "Victreebel",
-		speciesid: "victreebel",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 105,
@@ -2294,9 +2127,7 @@ exports.BattlePokedex = {
 	tentacool: {
 		num: 72,
 		species: "Tentacool",
-		speciesid: "tentacool",
 		types: ["Water","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 40,
@@ -2319,9 +2150,7 @@ exports.BattlePokedex = {
 	tentacruel: {
 		num: 73,
 		species: "Tentacruel",
-		speciesid: "tentacruel",
 		types: ["Water","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 70,
@@ -2344,9 +2173,7 @@ exports.BattlePokedex = {
 	geodude: {
 		num: 74,
 		species: "Geodude",
-		speciesid: "geodude",
 		types: ["Rock","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 80,
@@ -2369,9 +2196,7 @@ exports.BattlePokedex = {
 	graveler: {
 		num: 75,
 		species: "Graveler",
-		speciesid: "graveler",
 		types: ["Rock","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 95,
@@ -2395,9 +2220,7 @@ exports.BattlePokedex = {
 	golem: {
 		num: 76,
 		species: "Golem",
-		speciesid: "golem",
 		types: ["Rock","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 110,
@@ -2420,9 +2243,7 @@ exports.BattlePokedex = {
 	ponyta: {
 		num: 77,
 		species: "Ponyta",
-		speciesid: "ponyta",
 		types: ["Fire"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 85,
@@ -2445,9 +2266,7 @@ exports.BattlePokedex = {
 	rapidash: {
 		num: 78,
 		species: "Rapidash",
-		speciesid: "rapidash",
 		types: ["Fire"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 100,
@@ -2470,9 +2289,7 @@ exports.BattlePokedex = {
 	slowpoke: {
 		num: 79,
 		species: "Slowpoke",
-		speciesid: "slowpoke",
 		types: ["Water","Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 65,
@@ -2495,9 +2312,7 @@ exports.BattlePokedex = {
 	slowbro: {
 		num: 80,
 		species: "Slowbro",
-		speciesid: "slowbro",
 		types: ["Water","Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 75,
@@ -2520,9 +2335,7 @@ exports.BattlePokedex = {
 	slowking: {
 		num: 199,
 		species: "Slowking",
-		speciesid: "slowking",
 		types: ["Water","Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 75,
@@ -2545,9 +2358,7 @@ exports.BattlePokedex = {
 	magnemite: {
 		num: 81,
 		species: "Magnemite",
-		speciesid: "magnemite",
 		types: ["Electric","Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 25,
@@ -2571,9 +2382,7 @@ exports.BattlePokedex = {
 	magneton: {
 		num: 82,
 		species: "Magneton",
-		speciesid: "magneton",
 		types: ["Electric","Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -2598,9 +2407,7 @@ exports.BattlePokedex = {
 	magnezone: {
 		num: 462,
 		species: "Magnezone",
-		speciesid: "magnezone",
 		types: ["Electric","Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 70,
@@ -2624,9 +2431,7 @@ exports.BattlePokedex = {
 	farfetchd: {
 		num: 83,
 		species: "Farfetch'd",
-		speciesid: "farfetchd",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 52,
 			atk: 65,
@@ -2648,9 +2453,7 @@ exports.BattlePokedex = {
 	doduo: {
 		num: 84,
 		species: "Doduo",
-		speciesid: "doduo",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 85,
@@ -2673,9 +2476,7 @@ exports.BattlePokedex = {
 	dodrio: {
 		num: 85,
 		species: "Dodrio",
-		speciesid: "dodrio",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 110,
@@ -2698,9 +2499,7 @@ exports.BattlePokedex = {
 	seel: {
 		num: 86,
 		species: "Seel",
-		speciesid: "seel",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 45,
@@ -2723,9 +2522,7 @@ exports.BattlePokedex = {
 	dewgong: {
 		num: 87,
 		species: "Dewgong",
-		speciesid: "dewgong",
 		types: ["Water","Ice"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 70,
@@ -2748,9 +2545,7 @@ exports.BattlePokedex = {
 	grimer: {
 		num: 88,
 		species: "Grimer",
-		speciesid: "grimer",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 80,
@@ -2773,9 +2568,7 @@ exports.BattlePokedex = {
 	muk: {
 		num: 89,
 		species: "Muk",
-		speciesid: "muk",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 105,
 			atk: 105,
@@ -2798,9 +2591,7 @@ exports.BattlePokedex = {
 	shellder: {
 		num: 90,
 		species: "Shellder",
-		speciesid: "shellder",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 65,
@@ -2823,9 +2614,7 @@ exports.BattlePokedex = {
 	cloyster: {
 		num: 91,
 		species: "Cloyster",
-		speciesid: "cloyster",
 		types: ["Water","Ice"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 95,
@@ -2848,9 +2637,7 @@ exports.BattlePokedex = {
 	gastly: {
 		num: 92,
 		species: "Gastly",
-		speciesid: "gastly",
 		types: ["Ghost","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 35,
@@ -2871,9 +2658,7 @@ exports.BattlePokedex = {
 	haunter: {
 		num: 93,
 		species: "Haunter",
-		speciesid: "haunter",
 		types: ["Ghost","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 50,
@@ -2895,9 +2680,7 @@ exports.BattlePokedex = {
 	gengar: {
 		num: 94,
 		species: "Gengar",
-		speciesid: "gengar",
 		types: ["Ghost","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 65,
@@ -2918,9 +2701,7 @@ exports.BattlePokedex = {
 	onix: {
 		num: 95,
 		species: "Onix",
-		speciesid: "onix",
 		types: ["Rock","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 45,
@@ -2943,9 +2724,7 @@ exports.BattlePokedex = {
 	steelix: {
 		num: 208,
 		species: "Steelix",
-		speciesid: "steelix",
 		types: ["Steel","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 85,
@@ -2968,9 +2747,7 @@ exports.BattlePokedex = {
 	drowzee: {
 		num: 96,
 		species: "Drowzee",
-		speciesid: "drowzee",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 48,
@@ -2993,9 +2770,7 @@ exports.BattlePokedex = {
 	hypno: {
 		num: 97,
 		species: "Hypno",
-		speciesid: "hypno",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 73,
@@ -3018,9 +2793,7 @@ exports.BattlePokedex = {
 	krabby: {
 		num: 98,
 		species: "Krabby",
-		speciesid: "krabby",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 105,
@@ -3043,9 +2816,7 @@ exports.BattlePokedex = {
 	kingler: {
 		num: 99,
 		species: "Kingler",
-		speciesid: "kingler",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 130,
@@ -3068,9 +2839,7 @@ exports.BattlePokedex = {
 	voltorb: {
 		num: 100,
 		species: "Voltorb",
-		speciesid: "voltorb",
 		types: ["Electric"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 40,
@@ -3094,9 +2863,7 @@ exports.BattlePokedex = {
 	electrode: {
 		num: 101,
 		species: "Electrode",
-		speciesid: "electrode",
 		types: ["Electric"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 60,
@@ -3120,9 +2887,7 @@ exports.BattlePokedex = {
 	exeggcute: {
 		num: 102,
 		species: "Exeggcute",
-		speciesid: "exeggcute",
 		types: ["Grass","Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 40,
@@ -3144,9 +2909,7 @@ exports.BattlePokedex = {
 	exeggutor: {
 		num: 103,
 		species: "Exeggutor",
-		speciesid: "exeggutor",
 		types: ["Grass","Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 95,
@@ -3168,9 +2931,7 @@ exports.BattlePokedex = {
 	cubone: {
 		num: 104,
 		species: "Cubone",
-		speciesid: "cubone",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 50,
@@ -3193,9 +2954,7 @@ exports.BattlePokedex = {
 	marowak: {
 		num: 105,
 		species: "Marowak",
-		speciesid: "marowak",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 80,
@@ -3218,9 +2977,7 @@ exports.BattlePokedex = {
 	tyrogue: {
 		num: 236,
 		species: "Tyrogue",
-		speciesid: "tyrogue",
 		types: ["Fighting"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 35,
@@ -3244,9 +3001,7 @@ exports.BattlePokedex = {
 	hitmonlee: {
 		num: 106,
 		species: "Hitmonlee",
-		speciesid: "hitmonlee",
 		types: ["Fighting"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 50,
@@ -3270,9 +3025,7 @@ exports.BattlePokedex = {
 	hitmonchan: {
 		num: 107,
 		species: "Hitmonchan",
-		speciesid: "hitmonchan",
 		types: ["Fighting"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 50,
@@ -3296,9 +3049,7 @@ exports.BattlePokedex = {
 	hitmontop: {
 		num: 237,
 		species: "Hitmontop",
-		speciesid: "hitmontop",
 		types: ["Fighting"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 50,
@@ -3322,9 +3073,7 @@ exports.BattlePokedex = {
 	lickitung: {
 		num: 108,
 		species: "Lickitung",
-		speciesid: "lickitung",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 55,
@@ -3347,9 +3096,7 @@ exports.BattlePokedex = {
 	lickilicky: {
 		num: 463,
 		species: "Lickilicky",
-		speciesid: "lickilicky",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 110,
 			atk: 85,
@@ -3372,9 +3119,7 @@ exports.BattlePokedex = {
 	koffing: {
 		num: 109,
 		species: "Koffing",
-		speciesid: "koffing",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 65,
@@ -3395,9 +3140,7 @@ exports.BattlePokedex = {
 	weezing: {
 		num: 110,
 		species: "Weezing",
-		speciesid: "weezing",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 90,
@@ -3418,9 +3161,7 @@ exports.BattlePokedex = {
 	rhyhorn: {
 		num: 111,
 		species: "Rhyhorn",
-		speciesid: "rhyhorn",
 		types: ["Ground","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 85,
@@ -3443,9 +3184,7 @@ exports.BattlePokedex = {
 	rhydon: {
 		num: 112,
 		species: "Rhydon",
-		speciesid: "rhydon",
 		types: ["Ground","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 105,
 			atk: 130,
@@ -3469,9 +3208,7 @@ exports.BattlePokedex = {
 	rhyperior: {
 		num: 464,
 		species: "Rhyperior",
-		speciesid: "rhyperior",
 		types: ["Ground","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 115,
 			atk: 140,
@@ -3494,9 +3231,7 @@ exports.BattlePokedex = {
 	happiny: {
 		num: 440,
 		species: "Happiny",
-		speciesid: "happiny",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 100,
@@ -3520,9 +3255,7 @@ exports.BattlePokedex = {
 	chansey: {
 		num: 113,
 		species: "Chansey",
-		speciesid: "chansey",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 250,
@@ -3547,9 +3280,7 @@ exports.BattlePokedex = {
 	blissey: {
 		num: 242,
 		species: "Blissey",
-		speciesid: "blissey",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 255,
@@ -3573,9 +3304,7 @@ exports.BattlePokedex = {
 	tangela: {
 		num: 114,
 		species: "Tangela",
-		speciesid: "tangela",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 55,
@@ -3598,9 +3327,7 @@ exports.BattlePokedex = {
 	tangrowth: {
 		num: 465,
 		species: "Tangrowth",
-		speciesid: "tangrowth",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 100,
@@ -3623,9 +3350,7 @@ exports.BattlePokedex = {
 	kangaskhan: {
 		num: 115,
 		species: "Kangaskhan",
-		speciesid: "kangaskhan",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 105,
@@ -3648,9 +3373,7 @@ exports.BattlePokedex = {
 	horsea: {
 		num: 116,
 		species: "Horsea",
-		speciesid: "horsea",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 40,
@@ -3673,9 +3396,7 @@ exports.BattlePokedex = {
 	seadra: {
 		num: 117,
 		species: "Seadra",
-		speciesid: "seadra",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 65,
@@ -3699,9 +3420,7 @@ exports.BattlePokedex = {
 	kingdra: {
 		num: 230,
 		species: "Kingdra",
-		speciesid: "kingdra",
 		types: ["Water","Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 95,
@@ -3724,9 +3443,7 @@ exports.BattlePokedex = {
 	goldeen: {
 		num: 118,
 		species: "Goldeen",
-		speciesid: "goldeen",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 67,
@@ -3749,9 +3466,7 @@ exports.BattlePokedex = {
 	seaking: {
 		num: 119,
 		species: "Seaking",
-		speciesid: "seaking",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 92,
@@ -3774,9 +3489,7 @@ exports.BattlePokedex = {
 	staryu: {
 		num: 120,
 		species: "Staryu",
-		speciesid: "staryu",
 		types: ["Water"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 30,
@@ -3800,9 +3513,7 @@ exports.BattlePokedex = {
 	starmie: {
 		num: 121,
 		species: "Starmie",
-		speciesid: "starmie",
 		types: ["Water","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 60,
@@ -3826,9 +3537,7 @@ exports.BattlePokedex = {
 	mimejr: {
 		num: 439,
 		species: "Mime Jr.",
-		speciesid: "mimejr",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 20,
 			atk: 25,
@@ -3851,9 +3560,7 @@ exports.BattlePokedex = {
 	mrmime: {
 		num: 122,
 		species: "Mr. Mime",
-		speciesid: "mrmime",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 45,
@@ -3876,9 +3583,7 @@ exports.BattlePokedex = {
 	scyther: {
 		num: 123,
 		species: "Scyther",
-		speciesid: "scyther",
 		types: ["Bug","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 110,
@@ -3901,9 +3606,7 @@ exports.BattlePokedex = {
 	scizor: {
 		num: 212,
 		species: "Scizor",
-		speciesid: "scizor",
 		types: ["Bug","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 130,
@@ -3926,9 +3629,7 @@ exports.BattlePokedex = {
 	smoochum: {
 		num: 238,
 		species: "Smoochum",
-		speciesid: "smoochum",
 		types: ["Ice","Psychic"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 45,
@@ -3952,9 +3653,7 @@ exports.BattlePokedex = {
 	jynx: {
 		num: 124,
 		species: "Jynx",
-		speciesid: "jynx",
 		types: ["Ice","Psychic"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 65,
@@ -3978,10 +3677,8 @@ exports.BattlePokedex = {
 	elekid: {
 		num: 239,
 		species: "Elekid",
-		speciesid: "elekid",
 		types: ["Electric"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 63,
@@ -4003,10 +3700,8 @@ exports.BattlePokedex = {
 	electabuzz: {
 		num: 125,
 		species: "Electabuzz",
-		speciesid: "electabuzz",
 		types: ["Electric"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 83,
@@ -4029,10 +3724,8 @@ exports.BattlePokedex = {
 	electivire: {
 		num: 466,
 		species: "Electivire",
-		speciesid: "electivire",
 		types: ["Electric"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 123,
@@ -4054,10 +3747,8 @@ exports.BattlePokedex = {
 	magby: {
 		num: 240,
 		species: "Magby",
-		speciesid: "magby",
 		types: ["Fire"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 75,
@@ -4079,10 +3770,8 @@ exports.BattlePokedex = {
 	magmar: {
 		num: 126,
 		species: "Magmar",
-		speciesid: "magmar",
 		types: ["Fire"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 95,
@@ -4105,10 +3794,8 @@ exports.BattlePokedex = {
 	magmortar: {
 		num: 467,
 		species: "Magmortar",
-		speciesid: "magmortar",
 		types: ["Fire"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 95,
@@ -4130,9 +3817,7 @@ exports.BattlePokedex = {
 	pinsir: {
 		num: 127,
 		species: "Pinsir",
-		speciesid: "pinsir",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 125,
@@ -4154,9 +3839,7 @@ exports.BattlePokedex = {
 	tauros: {
 		num: 128,
 		species: "Tauros",
-		speciesid: "tauros",
 		types: ["Normal"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 75,
@@ -4179,9 +3862,7 @@ exports.BattlePokedex = {
 	magikarp: {
 		num: 129,
 		species: "Magikarp",
-		speciesid: "magikarp",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 20,
 			atk: 10,
@@ -4203,9 +3884,7 @@ exports.BattlePokedex = {
 	gyarados: {
 		num: 130,
 		species: "Gyarados",
-		speciesid: "gyarados",
 		types: ["Water","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 125,
@@ -4227,9 +3906,7 @@ exports.BattlePokedex = {
 	lapras: {
 		num: 131,
 		species: "Lapras",
-		speciesid: "lapras",
 		types: ["Water","Ice"],
-		gender: "",
 		baseStats: {
 			hp: 130,
 			atk: 85,
@@ -4251,9 +3928,7 @@ exports.BattlePokedex = {
 	ditto: {
 		num: 132,
 		species: "Ditto",
-		speciesid: "ditto",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -4275,10 +3950,8 @@ exports.BattlePokedex = {
 	eevee: {
 		num: 133,
 		species: "Eevee",
-		speciesid: "eevee",
 		types: ["Normal"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 55,
@@ -4301,10 +3974,8 @@ exports.BattlePokedex = {
 	vaporeon: {
 		num: 134,
 		species: "Vaporeon",
-		speciesid: "vaporeon",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 130,
 			atk: 65,
@@ -4326,10 +3997,8 @@ exports.BattlePokedex = {
 	jolteon: {
 		num: 135,
 		species: "Jolteon",
-		speciesid: "jolteon",
 		types: ["Electric"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 65,
@@ -4351,10 +4020,8 @@ exports.BattlePokedex = {
 	flareon: {
 		num: 136,
 		species: "Flareon",
-		speciesid: "flareon",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 130,
@@ -4376,10 +4043,8 @@ exports.BattlePokedex = {
 	espeon: {
 		num: 196,
 		species: "Espeon",
-		speciesid: "espeon",
 		types: ["Psychic"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 65,
@@ -4401,10 +4066,8 @@ exports.BattlePokedex = {
 	umbreon: {
 		num: 197,
 		species: "Umbreon",
-		speciesid: "umbreon",
 		types: ["Dark"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 65,
@@ -4426,10 +4089,8 @@ exports.BattlePokedex = {
 	leafeon: {
 		num: 470,
 		species: "Leafeon",
-		speciesid: "leafeon",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 110,
@@ -4451,10 +4112,8 @@ exports.BattlePokedex = {
 	glaceon: {
 		num: 471,
 		species: "Glaceon",
-		speciesid: "glaceon",
 		types: ["Ice"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 60,
@@ -4476,9 +4135,7 @@ exports.BattlePokedex = {
 	porygon: {
 		num: 137,
 		species: "Porygon",
-		speciesid: "porygon",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 65,
@@ -4502,9 +4159,7 @@ exports.BattlePokedex = {
 	porygon2: {
 		num: 233,
 		species: "Porygon2",
-		speciesid: "porygon2",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 85,
@@ -4529,9 +4184,7 @@ exports.BattlePokedex = {
 	porygonz: {
 		num: 474,
 		species: "Porygon-Z",
-		speciesid: "porygonz",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 85,
@@ -4555,10 +4208,8 @@ exports.BattlePokedex = {
 	omanyte: {
 		num: 138,
 		species: "Omanyte",
-		speciesid: "omanyte",
 		types: ["Rock","Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 40,
@@ -4581,10 +4232,8 @@ exports.BattlePokedex = {
 	omastar: {
 		num: 139,
 		species: "Omastar",
-		speciesid: "omastar",
 		types: ["Rock","Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 60,
@@ -4607,10 +4256,8 @@ exports.BattlePokedex = {
 	kabuto: {
 		num: 140,
 		species: "Kabuto",
-		speciesid: "kabuto",
 		types: ["Rock","Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 80,
@@ -4633,10 +4280,8 @@ exports.BattlePokedex = {
 	kabutops: {
 		num: 141,
 		species: "Kabutops",
-		speciesid: "kabutops",
 		types: ["Rock","Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 115,
@@ -4659,10 +4304,8 @@ exports.BattlePokedex = {
 	aerodactyl: {
 		num: 142,
 		species: "Aerodactyl",
-		speciesid: "aerodactyl",
 		types: ["Rock","Flying"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 105,
@@ -4684,10 +4327,8 @@ exports.BattlePokedex = {
 	munchlax: {
 		num: 446,
 		species: "Munchlax",
-		speciesid: "munchlax",
 		types: ["Normal"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 135,
 			atk: 85,
@@ -4710,10 +4351,8 @@ exports.BattlePokedex = {
 	snorlax: {
 		num: 143,
 		species: "Snorlax",
-		speciesid: "snorlax",
 		types: ["Normal"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 160,
 			atk: 110,
@@ -4736,9 +4375,7 @@ exports.BattlePokedex = {
 	articuno: {
 		num: 144,
 		species: "Articuno",
-		speciesid: "articuno",
 		types: ["Ice","Flying"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 90,
@@ -4760,9 +4397,7 @@ exports.BattlePokedex = {
 	zapdos: {
 		num: 145,
 		species: "Zapdos",
-		speciesid: "zapdos",
 		types: ["Electric","Flying"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 90,
@@ -4784,9 +4419,7 @@ exports.BattlePokedex = {
 	moltres: {
 		num: 146,
 		species: "Moltres",
-		speciesid: "moltres",
 		types: ["Fire","Flying"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 90,
@@ -4808,9 +4441,7 @@ exports.BattlePokedex = {
 	dratini: {
 		num: 147,
 		species: "Dratini",
-		speciesid: "dratini",
 		types: ["Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 41,
 			atk: 64,
@@ -4832,9 +4463,7 @@ exports.BattlePokedex = {
 	dragonair: {
 		num: 148,
 		species: "Dragonair",
-		speciesid: "dragonair",
 		types: ["Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 61,
 			atk: 84,
@@ -4857,9 +4486,7 @@ exports.BattlePokedex = {
 	dragonite: {
 		num: 149,
 		species: "Dragonite",
-		speciesid: "dragonite",
 		types: ["Dragon","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 91,
 			atk: 134,
@@ -4881,9 +4508,7 @@ exports.BattlePokedex = {
 	mewtwo: {
 		num: 150,
 		species: "Mewtwo",
-		speciesid: "mewtwo",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 106,
@@ -4905,9 +4530,7 @@ exports.BattlePokedex = {
 	mew: {
 		num: 151,
 		species: "Mew",
-		speciesid: "mew",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -4928,10 +4551,8 @@ exports.BattlePokedex = {
 	chikorita: {
 		num: 152,
 		species: "Chikorita",
-		speciesid: "chikorita",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 49,
@@ -4953,10 +4574,8 @@ exports.BattlePokedex = {
 	bayleef: {
 		num: 153,
 		species: "Bayleef",
-		speciesid: "bayleef",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 62,
@@ -4979,10 +4598,8 @@ exports.BattlePokedex = {
 	meganium: {
 		num: 154,
 		species: "Meganium",
-		speciesid: "meganium",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 82,
@@ -5004,10 +4621,8 @@ exports.BattlePokedex = {
 	cyndaquil: {
 		num: 155,
 		species: "Cyndaquil",
-		speciesid: "cyndaquil",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 39,
 			atk: 52,
@@ -5029,10 +4644,8 @@ exports.BattlePokedex = {
 	quilava: {
 		num: 156,
 		species: "Quilava",
-		speciesid: "quilava",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 58,
 			atk: 64,
@@ -5055,10 +4668,8 @@ exports.BattlePokedex = {
 	typhlosion: {
 		num: 157,
 		species: "Typhlosion",
-		speciesid: "typhlosion",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 78,
 			atk: 84,
@@ -5080,10 +4691,8 @@ exports.BattlePokedex = {
 	totodile: {
 		num: 158,
 		species: "Totodile",
-		speciesid: "totodile",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 65,
@@ -5105,10 +4714,8 @@ exports.BattlePokedex = {
 	croconaw: {
 		num: 159,
 		species: "Croconaw",
-		speciesid: "croconaw",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 80,
@@ -5131,10 +4738,8 @@ exports.BattlePokedex = {
 	feraligatr: {
 		num: 160,
 		species: "Feraligatr",
-		speciesid: "feraligatr",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 105,
@@ -5156,9 +4761,7 @@ exports.BattlePokedex = {
 	sentret: {
 		num: 161,
 		species: "Sentret",
-		speciesid: "sentret",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 46,
@@ -5181,9 +4784,7 @@ exports.BattlePokedex = {
 	furret: {
 		num: 162,
 		species: "Furret",
-		speciesid: "furret",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 76,
@@ -5206,9 +4807,7 @@ exports.BattlePokedex = {
 	hoothoot: {
 		num: 163,
 		species: "Hoothoot",
-		speciesid: "hoothoot",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 30,
@@ -5231,9 +4830,7 @@ exports.BattlePokedex = {
 	noctowl: {
 		num: 164,
 		species: "Noctowl",
-		speciesid: "noctowl",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 50,
@@ -5256,9 +4853,7 @@ exports.BattlePokedex = {
 	ledyba: {
 		num: 165,
 		species: "Ledyba",
-		speciesid: "ledyba",
 		types: ["Bug","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 20,
@@ -5281,9 +4876,7 @@ exports.BattlePokedex = {
 	ledian: {
 		num: 166,
 		species: "Ledian",
-		speciesid: "ledian",
 		types: ["Bug","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 35,
@@ -5306,9 +4899,7 @@ exports.BattlePokedex = {
 	spinarak: {
 		num: 167,
 		species: "Spinarak",
-		speciesid: "spinarak",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 60,
@@ -5331,9 +4922,7 @@ exports.BattlePokedex = {
 	ariados: {
 		num: 168,
 		species: "Ariados",
-		speciesid: "ariados",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 90,
@@ -5356,9 +4945,7 @@ exports.BattlePokedex = {
 	chinchou: {
 		num: 170,
 		species: "Chinchou",
-		speciesid: "chinchou",
 		types: ["Water","Electric"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 38,
@@ -5381,9 +4968,7 @@ exports.BattlePokedex = {
 	lanturn: {
 		num: 171,
 		species: "Lanturn",
-		speciesid: "lanturn",
 		types: ["Water","Electric"],
-		gender: "",
 		baseStats: {
 			hp: 125,
 			atk: 58,
@@ -5406,10 +4991,8 @@ exports.BattlePokedex = {
 	togepi: {
 		num: 175,
 		species: "Togepi",
-		speciesid: "togepi",
 		types: ["Normal"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 20,
@@ -5432,10 +5015,8 @@ exports.BattlePokedex = {
 	togetic: {
 		num: 176,
 		species: "Togetic",
-		speciesid: "togetic",
 		types: ["Normal","Flying"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 40,
@@ -5459,10 +5040,8 @@ exports.BattlePokedex = {
 	togekiss: {
 		num: 468,
 		species: "Togekiss",
-		speciesid: "togekiss",
 		types: ["Normal","Flying"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 50,
@@ -5485,9 +5064,7 @@ exports.BattlePokedex = {
 	natu: {
 		num: 177,
 		species: "Natu",
-		speciesid: "natu",
 		types: ["Psychic","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 50,
@@ -5510,9 +5087,7 @@ exports.BattlePokedex = {
 	xatu: {
 		num: 178,
 		species: "Xatu",
-		speciesid: "xatu",
 		types: ["Psychic","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 75,
@@ -5535,9 +5110,7 @@ exports.BattlePokedex = {
 	mareep: {
 		num: 179,
 		species: "Mareep",
-		speciesid: "mareep",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 40,
@@ -5559,9 +5132,7 @@ exports.BattlePokedex = {
 	flaaffy: {
 		num: 180,
 		species: "Flaaffy",
-		speciesid: "flaaffy",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 55,
@@ -5584,9 +5155,7 @@ exports.BattlePokedex = {
 	ampharos: {
 		num: 181,
 		species: "Ampharos",
-		speciesid: "ampharos",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 75,
@@ -5608,10 +5177,8 @@ exports.BattlePokedex = {
 	azurill: {
 		num: 298,
 		species: "Azurill",
-		speciesid: "azurill",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 20,
@@ -5634,9 +5201,7 @@ exports.BattlePokedex = {
 	marill: {
 		num: 183,
 		species: "Marill",
-		speciesid: "marill",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 20,
@@ -5660,9 +5225,7 @@ exports.BattlePokedex = {
 	azumarill: {
 		num: 184,
 		species: "Azumarill",
-		speciesid: "azumarill",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 50,
@@ -5685,9 +5248,7 @@ exports.BattlePokedex = {
 	bonsly: {
 		num: 438,
 		species: "Bonsly",
-		speciesid: "bonsly",
 		types: ["Rock"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 80,
@@ -5710,9 +5271,7 @@ exports.BattlePokedex = {
 	sudowoodo: {
 		num: 185,
 		species: "Sudowoodo",
-		speciesid: "sudowoodo",
 		types: ["Rock"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 100,
@@ -5735,9 +5294,7 @@ exports.BattlePokedex = {
 	hoppip: {
 		num: 187,
 		species: "Hoppip",
-		speciesid: "hoppip",
 		types: ["Grass","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 35,
@@ -5760,9 +5317,7 @@ exports.BattlePokedex = {
 	skiploom: {
 		num: 188,
 		species: "Skiploom",
-		speciesid: "skiploom",
 		types: ["Grass","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 45,
@@ -5786,9 +5341,7 @@ exports.BattlePokedex = {
 	jumpluff: {
 		num: 189,
 		species: "Jumpluff",
-		speciesid: "jumpluff",
 		types: ["Grass","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 55,
@@ -5811,9 +5364,7 @@ exports.BattlePokedex = {
 	aipom: {
 		num: 190,
 		species: "Aipom",
-		speciesid: "aipom",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 70,
@@ -5836,9 +5387,7 @@ exports.BattlePokedex = {
 	ambipom: {
 		num: 424,
 		species: "Ambipom",
-		speciesid: "ambipom",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 100,
@@ -5861,9 +5410,7 @@ exports.BattlePokedex = {
 	sunkern: {
 		num: 191,
 		species: "Sunkern",
-		speciesid: "sunkern",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 30,
@@ -5886,9 +5433,7 @@ exports.BattlePokedex = {
 	sunflora: {
 		num: 192,
 		species: "Sunflora",
-		speciesid: "sunflora",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 75,
@@ -5911,9 +5456,7 @@ exports.BattlePokedex = {
 	yanma: {
 		num: 193,
 		species: "Yanma",
-		speciesid: "yanma",
 		types: ["Bug","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 65,
@@ -5936,9 +5479,7 @@ exports.BattlePokedex = {
 	yanmega: {
 		num: 469,
 		species: "Yanmega",
-		speciesid: "yanmega",
 		types: ["Bug","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 86,
 			atk: 76,
@@ -5961,9 +5502,7 @@ exports.BattlePokedex = {
 	wooper: {
 		num: 194,
 		species: "Wooper",
-		speciesid: "wooper",
 		types: ["Water","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 45,
@@ -5986,9 +5525,7 @@ exports.BattlePokedex = {
 	quagsire: {
 		num: 195,
 		species: "Quagsire",
-		speciesid: "quagsire",
 		types: ["Water","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 85,
@@ -6011,9 +5548,7 @@ exports.BattlePokedex = {
 	murkrow: {
 		num: 198,
 		species: "Murkrow",
-		speciesid: "murkrow",
 		types: ["Dark","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 85,
@@ -6036,9 +5571,7 @@ exports.BattlePokedex = {
 	honchkrow: {
 		num: 430,
 		species: "Honchkrow",
-		speciesid: "honchkrow",
 		types: ["Dark","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 125,
@@ -6061,9 +5594,7 @@ exports.BattlePokedex = {
 	misdreavus: {
 		num: 200,
 		species: "Misdreavus",
-		speciesid: "misdreavus",
 		types: ["Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -6084,9 +5615,7 @@ exports.BattlePokedex = {
 	mismagius: {
 		num: 429,
 		species: "Mismagius",
-		speciesid: "mismagius",
 		types: ["Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -6107,11 +5636,8 @@ exports.BattlePokedex = {
 	unown: {
 		num: 201,
 		species: "Unown",
-		speciesid: "unown",
 		forme: "A",
-		formeLetter: "",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6129,17 +5655,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: true
 	},
 	unownb: {
 		num: 201,
 		species: "Unown-B",
-		speciesid: "unownb",
 		baseSpecies: "Unown",
 		forme: "B",
 		formeLetter: "B",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6157,17 +5680,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownc: {
 		num: 201,
 		species: "Unown-C",
-		speciesid: "unownc",
 		baseSpecies: "Unown",
 		forme: "C",
 		formeLetter: "C",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6185,17 +5705,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownd: {
 		num: 201,
 		species: "Unown-D",
-		speciesid: "unownd",
 		baseSpecies: "Unown",
 		forme: "D",
 		formeLetter: "D",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6213,17 +5730,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unowne: {
 		num: 201,
 		species: "Unown-E",
-		speciesid: "unowne",
 		baseSpecies: "Unown",
 		forme: "E",
 		formeLetter: "E",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6241,17 +5755,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownf: {
 		num: 201,
 		species: "Unown-F",
-		speciesid: "unownf",
 		baseSpecies: "Unown",
 		forme: "F",
 		formeLetter: "F",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6269,17 +5780,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unowng: {
 		num: 201,
 		species: "Unown-G",
-		speciesid: "unowng",
 		baseSpecies: "Unown",
 		forme: "G",
 		formeLetter: "G",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6297,17 +5805,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownh: {
 		num: 201,
 		species: "Unown-H",
-		speciesid: "unownh",
 		baseSpecies: "Unown",
 		forme: "H",
 		formeLetter: "H",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6325,17 +5830,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unowni: {
 		num: 201,
 		species: "Unown-I",
-		speciesid: "unowni",
 		baseSpecies: "Unown",
 		forme: "I",
 		formeLetter: "I",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6353,17 +5855,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownj: {
 		num: 201,
 		species: "Unown-J",
-		speciesid: "unownj",
 		baseSpecies: "Unown",
 		forme: "J",
 		formeLetter: "J",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6381,17 +5880,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownk: {
 		num: 201,
 		species: "Unown-K",
-		speciesid: "unownk",
 		baseSpecies: "Unown",
 		forme: "K",
 		formeLetter: "K",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6409,17 +5905,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownl: {
 		num: 201,
 		species: "Unown-L",
-		speciesid: "unownl",
 		baseSpecies: "Unown",
 		forme: "L",
 		formeLetter: "L",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6437,17 +5930,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownm: {
 		num: 201,
 		species: "Unown-M",
-		speciesid: "unownm",
 		baseSpecies: "Unown",
 		forme: "M",
 		formeLetter: "M",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6465,17 +5955,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownn: {
 		num: 201,
 		species: "Unown-N",
-		speciesid: "unownn",
 		baseSpecies: "Unown",
 		forme: "N",
 		formeLetter: "N",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6493,17 +5980,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unowno: {
 		num: 201,
 		species: "Unown-O",
-		speciesid: "unowno",
 		baseSpecies: "Unown",
 		forme: "O",
 		formeLetter: "O",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6521,17 +6005,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownp: {
 		num: 201,
 		species: "Unown-P",
-		speciesid: "unownp",
 		baseSpecies: "Unown",
 		forme: "P",
 		formeLetter: "P",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6549,17 +6030,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownq: {
 		num: 201,
 		species: "Unown-Q",
-		speciesid: "unownq",
 		baseSpecies: "Unown",
 		forme: "Q",
 		formeLetter: "Q",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6577,17 +6055,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownr: {
 		num: 201,
 		species: "Unown-R",
-		speciesid: "unownr",
 		baseSpecies: "Unown",
 		forme: "R",
 		formeLetter: "R",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6605,17 +6080,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unowns: {
 		num: 201,
 		species: "Unown-S",
-		speciesid: "unowns",
 		baseSpecies: "Unown",
 		forme: "S",
 		formeLetter: "S",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6633,17 +6105,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownt: {
 		num: 201,
 		species: "Unown-T",
-		speciesid: "unownt",
 		baseSpecies: "Unown",
 		forme: "T",
 		formeLetter: "T",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6661,17 +6130,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownu: {
 		num: 201,
 		species: "Unown-U",
-		speciesid: "unownu",
 		baseSpecies: "Unown",
 		forme: "U",
 		formeLetter: "U",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6689,17 +6155,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownv: {
 		num: 201,
 		species: "Unown-V",
-		speciesid: "unownv",
 		baseSpecies: "Unown",
 		forme: "V",
 		formeLetter: "V",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6717,17 +6180,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownw","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownw: {
 		num: 201,
 		species: "Unown-W",
-		speciesid: "unownw",
 		baseSpecies: "Unown",
 		forme: "W",
 		formeLetter: "W",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6745,17 +6205,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownx","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownx: {
 		num: 201,
 		species: "Unown-X",
-		speciesid: "unownx",
 		baseSpecies: "Unown",
 		forme: "X",
 		formeLetter: "X",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6773,17 +6230,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unowny","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unowny: {
 		num: 201,
 		species: "Unown-Y",
-		speciesid: "unowny",
 		baseSpecies: "Unown",
 		forme: "Y",
 		formeLetter: "Y",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6801,17 +6255,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unownz","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownz: {
 		num: 201,
 		species: "Unown-Z",
-		speciesid: "unownz",
 		baseSpecies: "Unown",
 		forme: "Z",
 		formeLetter: "Z",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6829,7 +6280,6 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownem","unownqm"],
-		isDefaultForme: false
 	},
 	unownem: {
 		num: 201,
@@ -6839,7 +6289,6 @@ exports.BattlePokedex = {
 		forme: "!",
 		formeLetter: "!",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6857,7 +6306,6 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownqm"],
-		isDefaultForme: false
 	},
 	unownqm: {
 		num: 201,
@@ -6867,7 +6315,6 @@ exports.BattlePokedex = {
 		forme: "?",
 		formeLetter: "?",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 48,
@@ -6885,14 +6332,11 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem"],
-		isDefaultForme: false
 	},
 	wynaut: {
 		num: 360,
 		species: "Wynaut",
-		speciesid: "wynaut",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 23,
@@ -6914,9 +6358,7 @@ exports.BattlePokedex = {
 	wobbuffet: {
 		num: 202,
 		species: "Wobbuffet",
-		speciesid: "wobbuffet",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 190,
 			atk: 33,
@@ -6938,9 +6380,7 @@ exports.BattlePokedex = {
 	girafarig: {
 		num: 203,
 		species: "Girafarig",
-		speciesid: "girafarig",
 		types: ["Normal","Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 80,
@@ -6962,9 +6402,7 @@ exports.BattlePokedex = {
 	pineco: {
 		num: 204,
 		species: "Pineco",
-		speciesid: "pineco",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 65,
@@ -6986,9 +6424,7 @@ exports.BattlePokedex = {
 	forretress: {
 		num: 205,
 		species: "Forretress",
-		speciesid: "forretress",
 		types: ["Bug","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 90,
@@ -7010,9 +6446,7 @@ exports.BattlePokedex = {
 	dunsparce: {
 		num: 206,
 		species: "Dunsparce",
-		speciesid: "dunsparce",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 70,
@@ -7034,9 +6468,7 @@ exports.BattlePokedex = {
 	gligar: {
 		num: 207,
 		species: "Gligar",
-		speciesid: "gligar",
 		types: ["Ground","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 75,
@@ -7059,9 +6491,7 @@ exports.BattlePokedex = {
 	gliscor: {
 		num: 472,
 		species: "Gliscor",
-		speciesid: "gliscor",
 		types: ["Ground","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 95,
@@ -7084,10 +6514,8 @@ exports.BattlePokedex = {
 	snubbull: {
 		num: 209,
 		species: "Snubbull",
-		speciesid: "snubbull",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 80,
@@ -7110,10 +6538,8 @@ exports.BattlePokedex = {
 	granbull: {
 		num: 210,
 		species: "Granbull",
-		speciesid: "granbull",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 120,
@@ -7136,9 +6562,7 @@ exports.BattlePokedex = {
 	qwilfish: {
 		num: 211,
 		species: "Qwilfish",
-		speciesid: "qwilfish",
 		types: ["Water","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 95,
@@ -7160,9 +6584,7 @@ exports.BattlePokedex = {
 	shuckle: {
 		num: 213,
 		species: "Shuckle",
-		speciesid: "shuckle",
 		types: ["Bug","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 20,
 			atk: 10,
@@ -7184,9 +6606,7 @@ exports.BattlePokedex = {
 	heracross: {
 		num: 214,
 		species: "Heracross",
-		speciesid: "heracross",
 		types: ["Bug","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 125,
@@ -7208,9 +6628,7 @@ exports.BattlePokedex = {
 	sneasel: {
 		num: 215,
 		species: "Sneasel",
-		speciesid: "sneasel",
 		types: ["Dark","Ice"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 95,
@@ -7233,9 +6651,7 @@ exports.BattlePokedex = {
 	weavile: {
 		num: 461,
 		species: "Weavile",
-		speciesid: "weavile",
 		types: ["Dark","Ice"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 120,
@@ -7257,9 +6673,7 @@ exports.BattlePokedex = {
 	teddiursa: {
 		num: 216,
 		species: "Teddiursa",
-		speciesid: "teddiursa",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 80,
@@ -7282,9 +6696,7 @@ exports.BattlePokedex = {
 	ursaring: {
 		num: 217,
 		species: "Ursaring",
-		speciesid: "ursaring",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 130,
@@ -7307,9 +6719,7 @@ exports.BattlePokedex = {
 	slugma: {
 		num: 218,
 		species: "Slugma",
-		speciesid: "slugma",
 		types: ["Fire"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 40,
@@ -7332,9 +6742,7 @@ exports.BattlePokedex = {
 	magcargo: {
 		num: 219,
 		species: "Magcargo",
-		speciesid: "magcargo",
 		types: ["Fire","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 50,
@@ -7357,9 +6765,7 @@ exports.BattlePokedex = {
 	swinub: {
 		num: 220,
 		species: "Swinub",
-		speciesid: "swinub",
 		types: ["Ice","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 50,
@@ -7382,9 +6788,7 @@ exports.BattlePokedex = {
 	piloswine: {
 		num: 221,
 		species: "Piloswine",
-		speciesid: "piloswine",
 		types: ["Ice","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 100,
@@ -7408,9 +6812,7 @@ exports.BattlePokedex = {
 	mamoswine: {
 		num: 473,
 		species: "Mamoswine",
-		speciesid: "mamoswine",
 		types: ["Ice","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 110,
 			atk: 130,
@@ -7433,10 +6835,8 @@ exports.BattlePokedex = {
 	corsola: {
 		num: 222,
 		species: "Corsola",
-		speciesid: "corsola",
 		types: ["Water","Rock"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 55,
@@ -7458,9 +6858,7 @@ exports.BattlePokedex = {
 	remoraid: {
 		num: 223,
 		species: "Remoraid",
-		speciesid: "remoraid",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 65,
@@ -7483,9 +6881,7 @@ exports.BattlePokedex = {
 	octillery: {
 		num: 224,
 		species: "Octillery",
-		speciesid: "octillery",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 105,
@@ -7508,9 +6904,7 @@ exports.BattlePokedex = {
 	delibird: {
 		num: 225,
 		species: "Delibird",
-		speciesid: "delibird",
 		types: ["Ice","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 55,
@@ -7532,9 +6926,7 @@ exports.BattlePokedex = {
 	mantyke: {
 		num: 458,
 		species: "Mantyke",
-		speciesid: "mantyke",
 		types: ["Water","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 20,
@@ -7557,9 +6949,7 @@ exports.BattlePokedex = {
 	mantine: {
 		num: 226,
 		species: "Mantine",
-		speciesid: "mantine",
 		types: ["Water","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 40,
@@ -7582,9 +6972,7 @@ exports.BattlePokedex = {
 	skarmory: {
 		num: 227,
 		species: "Skarmory",
-		speciesid: "skarmory",
 		types: ["Steel","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 80,
@@ -7606,9 +6994,7 @@ exports.BattlePokedex = {
 	houndour: {
 		num: 228,
 		species: "Houndour",
-		speciesid: "houndour",
 		types: ["Dark","Fire"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 60,
@@ -7631,9 +7017,7 @@ exports.BattlePokedex = {
 	houndoom: {
 		num: 229,
 		species: "Houndoom",
-		speciesid: "houndoom",
 		types: ["Dark","Fire"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 90,
@@ -7656,9 +7040,7 @@ exports.BattlePokedex = {
 	phanpy: {
 		num: 231,
 		species: "Phanpy",
-		speciesid: "phanpy",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 60,
@@ -7680,9 +7062,7 @@ exports.BattlePokedex = {
 	donphan: {
 		num: 232,
 		species: "Donphan",
-		speciesid: "donphan",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 120,
@@ -7704,9 +7084,7 @@ exports.BattlePokedex = {
 	stantler: {
 		num: 234,
 		species: "Stantler",
-		speciesid: "stantler",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 73,
 			atk: 95,
@@ -7728,9 +7106,7 @@ exports.BattlePokedex = {
 	smeargle: {
 		num: 235,
 		species: "Smeargle",
-		speciesid: "smeargle",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 20,
@@ -7752,9 +7128,7 @@ exports.BattlePokedex = {
 	miltank: {
 		num: 241,
 		species: "Miltank",
-		speciesid: "miltank",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 95,
@@ -7777,9 +7151,7 @@ exports.BattlePokedex = {
 	raikou: {
 		num: 243,
 		species: "Raikou",
-		speciesid: "raikou",
 		types: ["Electric"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 90,
@@ -7801,9 +7173,7 @@ exports.BattlePokedex = {
 	entei: {
 		num: 244,
 		species: "Entei",
-		speciesid: "entei",
 		types: ["Fire"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 115,
@@ -7825,9 +7195,7 @@ exports.BattlePokedex = {
 	suicune: {
 		num: 245,
 		species: "Suicune",
-		speciesid: "suicune",
 		types: ["Water"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -7849,9 +7217,7 @@ exports.BattlePokedex = {
 	larvitar: {
 		num: 246,
 		species: "Larvitar",
-		speciesid: "larvitar",
 		types: ["Rock","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 64,
@@ -7873,9 +7239,7 @@ exports.BattlePokedex = {
 	pupitar: {
 		num: 247,
 		species: "Pupitar",
-		speciesid: "pupitar",
 		types: ["Rock","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 84,
@@ -7885,8 +7249,7 @@ exports.BattlePokedex = {
 			spe: 51
 		},
 		abilities: {
-			0: "Shed Skin",
-			DW: "Shed Skin"
+			0: "Shed Skin"
 		},
 		heightm: 1.2,
 		weightkg: 152,
@@ -7898,9 +7261,7 @@ exports.BattlePokedex = {
 	tyranitar: {
 		num: 248,
 		species: "Tyranitar",
-		speciesid: "tyranitar",
 		types: ["Rock","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 134,
@@ -7922,9 +7283,7 @@ exports.BattlePokedex = {
 	lugia: {
 		num: 249,
 		species: "Lugia",
-		speciesid: "lugia",
 		types: ["Psychic","Flying"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 106,
@@ -7946,9 +7305,7 @@ exports.BattlePokedex = {
 	hooh: {
 		num: 250,
 		species: "Ho-Oh",
-		speciesid: "hooh",
 		types: ["Fire","Flying"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 106,
@@ -7970,9 +7327,7 @@ exports.BattlePokedex = {
 	celebi: {
 		num: 251,
 		species: "Celebi",
-		speciesid: "celebi",
 		types: ["Psychic","Grass"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -7993,10 +7348,8 @@ exports.BattlePokedex = {
 	treecko: {
 		num: 252,
 		species: "Treecko",
-		speciesid: "treecko",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 45,
@@ -8018,10 +7371,8 @@ exports.BattlePokedex = {
 	grovyle: {
 		num: 253,
 		species: "Grovyle",
-		speciesid: "grovyle",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 65,
@@ -8044,10 +7395,8 @@ exports.BattlePokedex = {
 	sceptile: {
 		num: 254,
 		species: "Sceptile",
-		speciesid: "sceptile",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 85,
@@ -8069,10 +7418,8 @@ exports.BattlePokedex = {
 	torchic: {
 		num: 255,
 		species: "Torchic",
-		speciesid: "torchic",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 60,
@@ -8094,10 +7441,8 @@ exports.BattlePokedex = {
 	combusken: {
 		num: 256,
 		species: "Combusken",
-		speciesid: "combusken",
 		types: ["Fire","Fighting"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 85,
@@ -8120,10 +7465,8 @@ exports.BattlePokedex = {
 	blaziken: {
 		num: 257,
 		species: "Blaziken",
-		speciesid: "blaziken",
 		types: ["Fire","Fighting"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 120,
@@ -8145,10 +7488,8 @@ exports.BattlePokedex = {
 	mudkip: {
 		num: 258,
 		species: "Mudkip",
-		speciesid: "mudkip",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 70,
@@ -8170,10 +7511,8 @@ exports.BattlePokedex = {
 	marshtomp: {
 		num: 259,
 		species: "Marshtomp",
-		speciesid: "marshtomp",
 		types: ["Water","Ground"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 85,
@@ -8196,10 +7535,8 @@ exports.BattlePokedex = {
 	swampert: {
 		num: 260,
 		species: "Swampert",
-		speciesid: "swampert",
 		types: ["Water","Ground"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 110,
@@ -8221,9 +7558,7 @@ exports.BattlePokedex = {
 	poochyena: {
 		num: 261,
 		species: "Poochyena",
-		speciesid: "poochyena",
 		types: ["Dark"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 55,
@@ -8246,9 +7581,7 @@ exports.BattlePokedex = {
 	mightyena: {
 		num: 262,
 		species: "Mightyena",
-		speciesid: "mightyena",
 		types: ["Dark"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 90,
@@ -8271,9 +7604,7 @@ exports.BattlePokedex = {
 	zigzagoon: {
 		num: 263,
 		species: "Zigzagoon",
-		speciesid: "zigzagoon",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 38,
 			atk: 30,
@@ -8296,9 +7627,7 @@ exports.BattlePokedex = {
 	linoone: {
 		num: 264,
 		species: "Linoone",
-		speciesid: "linoone",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 78,
 			atk: 70,
@@ -8321,9 +7650,7 @@ exports.BattlePokedex = {
 	wurmple: {
 		num: 265,
 		species: "Wurmple",
-		speciesid: "wurmple",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 45,
@@ -8345,9 +7672,7 @@ exports.BattlePokedex = {
 	silcoon: {
 		num: 266,
 		species: "Silcoon",
-		speciesid: "silcoon",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 35,
@@ -8357,8 +7682,7 @@ exports.BattlePokedex = {
 			spe: 15
 		},
 		abilities: {
-			0: "Shed Skin",
-			DW: "Shed Skin"
+			0: "Shed Skin"
 		},
 		heightm: 0.6,
 		weightkg: 10,
@@ -8370,9 +7694,7 @@ exports.BattlePokedex = {
 	beautifly: {
 		num: 267,
 		species: "Beautifly",
-		speciesid: "beautifly",
 		types: ["Bug","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 70,
@@ -8394,9 +7716,7 @@ exports.BattlePokedex = {
 	cascoon: {
 		num: 268,
 		species: "Cascoon",
-		speciesid: "cascoon",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 35,
@@ -8406,8 +7726,7 @@ exports.BattlePokedex = {
 			spe: 15
 		},
 		abilities: {
-			0: "Shed Skin",
-			DW: "Shed Skin"
+			0: "Shed Skin"
 		},
 		heightm: 0.7,
 		weightkg: 11.5,
@@ -8419,9 +7738,7 @@ exports.BattlePokedex = {
 	dustox: {
 		num: 269,
 		species: "Dustox",
-		speciesid: "dustox",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 50,
@@ -8443,9 +7760,7 @@ exports.BattlePokedex = {
 	lotad: {
 		num: 270,
 		species: "Lotad",
-		speciesid: "lotad",
 		types: ["Water","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 30,
@@ -8468,9 +7783,7 @@ exports.BattlePokedex = {
 	lombre: {
 		num: 271,
 		species: "Lombre",
-		speciesid: "lombre",
 		types: ["Water","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 50,
@@ -8494,9 +7807,7 @@ exports.BattlePokedex = {
 	ludicolo: {
 		num: 272,
 		species: "Ludicolo",
-		speciesid: "ludicolo",
 		types: ["Water","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 70,
@@ -8519,9 +7830,7 @@ exports.BattlePokedex = {
 	seedot: {
 		num: 273,
 		species: "Seedot",
-		speciesid: "seedot",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 40,
@@ -8544,9 +7853,7 @@ exports.BattlePokedex = {
 	nuzleaf: {
 		num: 274,
 		species: "Nuzleaf",
-		speciesid: "nuzleaf",
 		types: ["Grass","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 70,
@@ -8570,9 +7877,7 @@ exports.BattlePokedex = {
 	shiftry: {
 		num: 275,
 		species: "Shiftry",
-		speciesid: "shiftry",
 		types: ["Grass","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 100,
@@ -8595,9 +7900,7 @@ exports.BattlePokedex = {
 	taillow: {
 		num: 276,
 		species: "Taillow",
-		speciesid: "taillow",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 55,
@@ -8619,9 +7922,7 @@ exports.BattlePokedex = {
 	swellow: {
 		num: 277,
 		species: "Swellow",
-		speciesid: "swellow",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 85,
@@ -8643,9 +7944,7 @@ exports.BattlePokedex = {
 	wingull: {
 		num: 278,
 		species: "Wingull",
-		speciesid: "wingull",
 		types: ["Water","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 30,
@@ -8667,9 +7966,7 @@ exports.BattlePokedex = {
 	pelipper: {
 		num: 279,
 		species: "Pelipper",
-		speciesid: "pelipper",
 		types: ["Water","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 50,
@@ -8691,9 +7988,7 @@ exports.BattlePokedex = {
 	ralts: {
 		num: 280,
 		species: "Ralts",
-		speciesid: "ralts",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 28,
 			atk: 25,
@@ -8716,9 +8011,7 @@ exports.BattlePokedex = {
 	kirlia: {
 		num: 281,
 		species: "Kirlia",
-		speciesid: "kirlia",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 38,
 			atk: 35,
@@ -8742,9 +8035,7 @@ exports.BattlePokedex = {
 	gardevoir: {
 		num: 282,
 		species: "Gardevoir",
-		speciesid: "gardevoir",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 68,
 			atk: 65,
@@ -8767,9 +8058,7 @@ exports.BattlePokedex = {
 	gallade: {
 		num: 475,
 		species: "Gallade",
-		speciesid: "gallade",
 		types: ["Psychic","Fighting"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 68,
@@ -8792,9 +8081,7 @@ exports.BattlePokedex = {
 	surskit: {
 		num: 283,
 		species: "Surskit",
-		speciesid: "surskit",
 		types: ["Bug","Water"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 30,
@@ -8816,9 +8103,7 @@ exports.BattlePokedex = {
 	masquerain: {
 		num: 284,
 		species: "Masquerain",
-		speciesid: "masquerain",
 		types: ["Bug","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 60,
@@ -8840,9 +8125,7 @@ exports.BattlePokedex = {
 	shroomish: {
 		num: 285,
 		species: "Shroomish",
-		speciesid: "shroomish",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 40,
@@ -8865,9 +8148,7 @@ exports.BattlePokedex = {
 	breloom: {
 		num: 286,
 		species: "Breloom",
-		speciesid: "breloom",
 		types: ["Grass","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 130,
@@ -8890,9 +8171,7 @@ exports.BattlePokedex = {
 	slakoth: {
 		num: 287,
 		species: "Slakoth",
-		speciesid: "slakoth",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -8913,9 +8192,7 @@ exports.BattlePokedex = {
 	vigoroth: {
 		num: 288,
 		species: "Vigoroth",
-		speciesid: "vigoroth",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 80,
@@ -8937,9 +8214,7 @@ exports.BattlePokedex = {
 	slaking: {
 		num: 289,
 		species: "Slaking",
-		speciesid: "slaking",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 150,
 			atk: 160,
@@ -8960,9 +8235,7 @@ exports.BattlePokedex = {
 	nincada: {
 		num: 290,
 		species: "Nincada",
-		speciesid: "nincada",
 		types: ["Bug","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 31,
 			atk: 45,
@@ -8984,9 +8257,7 @@ exports.BattlePokedex = {
 	ninjask: {
 		num: 291,
 		species: "Ninjask",
-		speciesid: "ninjask",
 		types: ["Bug","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 61,
 			atk: 90,
@@ -9008,9 +8279,7 @@ exports.BattlePokedex = {
 	shedinja: {
 		num: 292,
 		species: "Shedinja",
-		speciesid: "shedinja",
 		types: ["Bug","Ghost"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 1,
@@ -9021,8 +8290,7 @@ exports.BattlePokedex = {
 			spe: 40
 		},
 		abilities: {
-			0: "Wonder Guard",
-			DW: "Wonder Guard"
+			0: "Wonder Guard"
 		},
 		heightm: 0.8,
 		weightkg: 1.2,
@@ -9033,9 +8301,7 @@ exports.BattlePokedex = {
 	whismur: {
 		num: 293,
 		species: "Whismur",
-		speciesid: "whismur",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 64,
 			atk: 51,
@@ -9057,9 +8323,7 @@ exports.BattlePokedex = {
 	loudred: {
 		num: 294,
 		species: "Loudred",
-		speciesid: "loudred",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 84,
 			atk: 71,
@@ -9082,9 +8346,7 @@ exports.BattlePokedex = {
 	exploud: {
 		num: 295,
 		species: "Exploud",
-		speciesid: "exploud",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 104,
 			atk: 91,
@@ -9106,10 +8368,8 @@ exports.BattlePokedex = {
 	makuhita: {
 		num: 296,
 		species: "Makuhita",
-		speciesid: "makuhita",
 		types: ["Fighting"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 72,
 			atk: 60,
@@ -9132,10 +8392,8 @@ exports.BattlePokedex = {
 	hariyama: {
 		num: 297,
 		species: "Hariyama",
-		speciesid: "hariyama",
 		types: ["Fighting"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 144,
 			atk: 120,
@@ -9158,9 +8416,7 @@ exports.BattlePokedex = {
 	nosepass: {
 		num: 299,
 		species: "Nosepass",
-		speciesid: "nosepass",
 		types: ["Rock"],
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 45,
@@ -9183,9 +8439,7 @@ exports.BattlePokedex = {
 	probopass: {
 		num: 476,
 		species: "Probopass",
-		speciesid: "probopass",
 		types: ["Rock","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 55,
@@ -9208,10 +8462,8 @@ exports.BattlePokedex = {
 	skitty: {
 		num: 300,
 		species: "Skitty",
-		speciesid: "skitty",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 45,
@@ -9234,10 +8486,8 @@ exports.BattlePokedex = {
 	delcatty: {
 		num: 301,
 		species: "Delcatty",
-		speciesid: "delcatty",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 65,
@@ -9260,9 +8510,7 @@ exports.BattlePokedex = {
 	sableye: {
 		num: 302,
 		species: "Sableye",
-		speciesid: "sableye",
 		types: ["Dark","Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 75,
@@ -9284,9 +8532,7 @@ exports.BattlePokedex = {
 	mawile: {
 		num: 303,
 		species: "Mawile",
-		speciesid: "mawile",
 		types: ["Steel"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 85,
@@ -9308,9 +8554,7 @@ exports.BattlePokedex = {
 	aron: {
 		num: 304,
 		species: "Aron",
-		speciesid: "aron",
 		types: ["Steel","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 70,
@@ -9333,9 +8577,7 @@ exports.BattlePokedex = {
 	lairon: {
 		num: 305,
 		species: "Lairon",
-		speciesid: "lairon",
 		types: ["Steel","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 90,
@@ -9359,9 +8601,7 @@ exports.BattlePokedex = {
 	aggron: {
 		num: 306,
 		species: "Aggron",
-		speciesid: "aggron",
 		types: ["Steel","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 110,
@@ -9384,9 +8624,7 @@ exports.BattlePokedex = {
 	meditite: {
 		num: 307,
 		species: "Meditite",
-		speciesid: "meditite",
 		types: ["Fighting","Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 40,
@@ -9408,9 +8646,7 @@ exports.BattlePokedex = {
 	medicham: {
 		num: 308,
 		species: "Medicham",
-		speciesid: "medicham",
 		types: ["Fighting","Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -9432,9 +8668,7 @@ exports.BattlePokedex = {
 	electrike: {
 		num: 309,
 		species: "Electrike",
-		speciesid: "electrike",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 45,
@@ -9457,9 +8691,7 @@ exports.BattlePokedex = {
 	manectric: {
 		num: 310,
 		species: "Manectric",
-		speciesid: "manectric",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 75,
@@ -9482,9 +8714,7 @@ exports.BattlePokedex = {
 	plusle: {
 		num: 311,
 		species: "Plusle",
-		speciesid: "plusle",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 50,
@@ -9504,9 +8734,7 @@ exports.BattlePokedex = {
 	minun: {
 		num: 312,
 		species: "Minun",
-		speciesid: "minun",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 40,
@@ -9526,9 +8754,7 @@ exports.BattlePokedex = {
 	volbeat: {
 		num: 313,
 		species: "Volbeat",
-		speciesid: "volbeat",
 		types: ["Bug"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 65,
@@ -9551,9 +8777,7 @@ exports.BattlePokedex = {
 	illumise: {
 		num: 314,
 		species: "Illumise",
-		speciesid: "illumise",
 		types: ["Bug"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 65,
@@ -9576,9 +8800,7 @@ exports.BattlePokedex = {
 	budew: {
 		num: 406,
 		species: "Budew",
-		speciesid: "budew",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 30,
@@ -9601,9 +8823,7 @@ exports.BattlePokedex = {
 	roselia: {
 		num: 315,
 		species: "Roselia",
-		speciesid: "roselia",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 60,
@@ -9627,9 +8847,7 @@ exports.BattlePokedex = {
 	roserade: {
 		num: 407,
 		species: "Roserade",
-		speciesid: "roserade",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 70,
@@ -9652,9 +8870,7 @@ exports.BattlePokedex = {
 	gulpin: {
 		num: 316,
 		species: "Gulpin",
-		speciesid: "gulpin",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 43,
@@ -9677,9 +8893,7 @@ exports.BattlePokedex = {
 	swalot: {
 		num: 317,
 		species: "Swalot",
-		speciesid: "swalot",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 73,
@@ -9702,9 +8916,7 @@ exports.BattlePokedex = {
 	carvanha: {
 		num: 318,
 		species: "Carvanha",
-		speciesid: "carvanha",
 		types: ["Water","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 90,
@@ -9726,9 +8938,7 @@ exports.BattlePokedex = {
 	sharpedo: {
 		num: 319,
 		species: "Sharpedo",
-		speciesid: "sharpedo",
 		types: ["Water","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 120,
@@ -9750,9 +8960,7 @@ exports.BattlePokedex = {
 	wailmer: {
 		num: 320,
 		species: "Wailmer",
-		speciesid: "wailmer",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 130,
 			atk: 70,
@@ -9775,9 +8983,7 @@ exports.BattlePokedex = {
 	wailord: {
 		num: 321,
 		species: "Wailord",
-		speciesid: "wailord",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 170,
 			atk: 90,
@@ -9800,9 +9006,7 @@ exports.BattlePokedex = {
 	numel: {
 		num: 322,
 		species: "Numel",
-		speciesid: "numel",
 		types: ["Fire","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -9825,9 +9029,7 @@ exports.BattlePokedex = {
 	camerupt: {
 		num: 323,
 		species: "Camerupt",
-		speciesid: "camerupt",
 		types: ["Fire","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 100,
@@ -9850,9 +9052,7 @@ exports.BattlePokedex = {
 	torkoal: {
 		num: 324,
 		species: "Torkoal",
-		speciesid: "torkoal",
 		types: ["Fire"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 85,
@@ -9873,9 +9073,7 @@ exports.BattlePokedex = {
 	spoink: {
 		num: 325,
 		species: "Spoink",
-		speciesid: "spoink",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 25,
@@ -9898,9 +9096,7 @@ exports.BattlePokedex = {
 	grumpig: {
 		num: 326,
 		species: "Grumpig",
-		speciesid: "grumpig",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 45,
@@ -9923,9 +9119,7 @@ exports.BattlePokedex = {
 	spinda: {
 		num: 327,
 		species: "Spinda",
-		speciesid: "spinda",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -9947,9 +9141,7 @@ exports.BattlePokedex = {
 	trapinch: {
 		num: 328,
 		species: "Trapinch",
-		speciesid: "trapinch",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 100,
@@ -9972,9 +9164,7 @@ exports.BattlePokedex = {
 	vibrava: {
 		num: 329,
 		species: "Vibrava",
-		speciesid: "vibrava",
 		types: ["Ground","Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 70,
@@ -9984,8 +9174,7 @@ exports.BattlePokedex = {
 			spe: 70
 		},
 		abilities: {
-			0: "Levitate",
-			DW: "Levitate"
+			0: "Levitate"
 		},
 		heightm: 1.1,
 		weightkg: 15.3,
@@ -9997,9 +9186,7 @@ exports.BattlePokedex = {
 	flygon: {
 		num: 330,
 		species: "Flygon",
-		speciesid: "flygon",
 		types: ["Ground","Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 100,
@@ -10009,8 +9196,7 @@ exports.BattlePokedex = {
 			spe: 100
 		},
 		abilities: {
-			0: "Levitate",
-			DW: "Levitate"
+			0: "Levitate"
 		},
 		heightm: 2,
 		weightkg: 82,
@@ -10021,9 +9207,7 @@ exports.BattlePokedex = {
 	cacnea: {
 		num: 331,
 		species: "Cacnea",
-		speciesid: "cacnea",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 85,
@@ -10045,9 +9229,7 @@ exports.BattlePokedex = {
 	cacturne: {
 		num: 332,
 		species: "Cacturne",
-		speciesid: "cacturne",
 		types: ["Grass","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 115,
@@ -10069,9 +9251,7 @@ exports.BattlePokedex = {
 	swablu: {
 		num: 333,
 		species: "Swablu",
-		speciesid: "swablu",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 40,
@@ -10093,9 +9273,7 @@ exports.BattlePokedex = {
 	altaria: {
 		num: 334,
 		species: "Altaria",
-		speciesid: "altaria",
 		types: ["Dragon","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 70,
@@ -10117,9 +9295,7 @@ exports.BattlePokedex = {
 	zangoose: {
 		num: 335,
 		species: "Zangoose",
-		speciesid: "zangoose",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 73,
 			atk: 115,
@@ -10140,9 +9316,7 @@ exports.BattlePokedex = {
 	seviper: {
 		num: 336,
 		species: "Seviper",
-		speciesid: "seviper",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 73,
 			atk: 100,
@@ -10163,9 +9337,7 @@ exports.BattlePokedex = {
 	lunatone: {
 		num: 337,
 		species: "Lunatone",
-		speciesid: "lunatone",
 		types: ["Rock","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 70,
@@ -10186,9 +9358,7 @@ exports.BattlePokedex = {
 	solrock: {
 		num: 338,
 		species: "Solrock",
-		speciesid: "solrock",
 		types: ["Rock","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 70,
@@ -10209,9 +9379,7 @@ exports.BattlePokedex = {
 	barboach: {
 		num: 339,
 		species: "Barboach",
-		speciesid: "barboach",
 		types: ["Water","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 48,
@@ -10234,9 +9402,7 @@ exports.BattlePokedex = {
 	whiscash: {
 		num: 340,
 		species: "Whiscash",
-		speciesid: "whiscash",
 		types: ["Water","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 110,
 			atk: 78,
@@ -10259,9 +9425,7 @@ exports.BattlePokedex = {
 	corphish: {
 		num: 341,
 		species: "Corphish",
-		speciesid: "corphish",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 43,
 			atk: 80,
@@ -10284,9 +9448,7 @@ exports.BattlePokedex = {
 	crawdaunt: {
 		num: 342,
 		species: "Crawdaunt",
-		speciesid: "crawdaunt",
 		types: ["Water","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 63,
 			atk: 120,
@@ -10309,9 +9471,7 @@ exports.BattlePokedex = {
 	baltoy: {
 		num: 343,
 		species: "Baltoy",
-		speciesid: "baltoy",
 		types: ["Ground","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 40,
@@ -10333,9 +9493,7 @@ exports.BattlePokedex = {
 	claydol: {
 		num: 344,
 		species: "Claydol",
-		speciesid: "claydol",
 		types: ["Ground","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 60,
@@ -10357,10 +9515,8 @@ exports.BattlePokedex = {
 	lileep: {
 		num: 345,
 		species: "Lileep",
-		speciesid: "lileep",
 		types: ["Rock","Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 66,
 			atk: 41,
@@ -10382,10 +9538,8 @@ exports.BattlePokedex = {
 	cradily: {
 		num: 346,
 		species: "Cradily",
-		speciesid: "cradily",
 		types: ["Rock","Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 86,
 			atk: 81,
@@ -10407,10 +9561,8 @@ exports.BattlePokedex = {
 	anorith: {
 		num: 347,
 		species: "Anorith",
-		speciesid: "anorith",
 		types: ["Rock","Bug"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 95,
@@ -10432,10 +9584,8 @@ exports.BattlePokedex = {
 	armaldo: {
 		num: 348,
 		species: "Armaldo",
-		speciesid: "armaldo",
 		types: ["Rock","Bug"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 125,
@@ -10457,9 +9607,7 @@ exports.BattlePokedex = {
 	feebas: {
 		num: 349,
 		species: "Feebas",
-		speciesid: "feebas",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 20,
 			atk: 15,
@@ -10481,9 +9629,7 @@ exports.BattlePokedex = {
 	milotic: {
 		num: 350,
 		species: "Milotic",
-		speciesid: "milotic",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 60,
@@ -10505,9 +9651,7 @@ exports.BattlePokedex = {
 	castform: {
 		num: 351,
 		species: "Castform",
-		speciesid: "castform",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 70,
@@ -10524,17 +9668,14 @@ exports.BattlePokedex = {
 		colour: "White",
 		eggGroups: ["Fairy","Indeterminate"],
 		otherFormes: ["castformsunny","castformrainy","castformsnowy"],
-		isDefaultForme: true
 	},
 	castformsunny: {
 		num: 351,
 		species: "Castform-Sunny",
-		speciesid: "castformsunny",
 		baseSpecies: "Castform",
 		forme: "Sunny",
 		formeLetter: "S",
 		types: ["Fire"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 70,
@@ -10551,17 +9692,14 @@ exports.BattlePokedex = {
 		colour: "White",
 		eggGroups: ["Fairy","Indeterminate"],
 		otherFormes: ["castform","castformrainy","castformsnowy"],
-		isDefaultForme: false
 	},
 	castformrainy: {
 		num: 351,
 		species: "Castform-Rainy",
-		speciesid: "castformrainy",
 		baseSpecies: "Castform",
 		forme: "Rainy",
 		formeLetter: "R",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 70,
@@ -10578,17 +9716,14 @@ exports.BattlePokedex = {
 		colour: "White",
 		eggGroups: ["Fairy","Indeterminate"],
 		otherFormes: ["castform","castformsunny","castformsnowy"],
-		isDefaultForme: false
 	},
 	castformsnowy: {
 		num: 351,
 		species: "Castform-Snowy",
-		speciesid: "castformsnowy",
 		baseSpecies: "Castform",
 		forme: "Snowy",
 		formeLetter: "S",
 		types: ["Ice"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 70,
@@ -10605,14 +9740,11 @@ exports.BattlePokedex = {
 		colour: "White",
 		eggGroups: ["Fairy","Indeterminate"],
 		otherFormes: ["castform","castformsunny","castformrainy"],
-		isDefaultForme: false
 	},
 	kecleon: {
 		num: 352,
 		species: "Kecleon",
-		speciesid: "kecleon",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 90,
@@ -10632,9 +9764,7 @@ exports.BattlePokedex = {
 	shuppet: {
 		num: 353,
 		species: "Shuppet",
-		speciesid: "shuppet",
 		types: ["Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 44,
 			atk: 75,
@@ -10657,9 +9787,7 @@ exports.BattlePokedex = {
 	banette: {
 		num: 354,
 		species: "Banette",
-		speciesid: "banette",
 		types: ["Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 64,
 			atk: 115,
@@ -10682,9 +9810,7 @@ exports.BattlePokedex = {
 	duskull: {
 		num: 355,
 		species: "Duskull",
-		speciesid: "duskull",
 		types: ["Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 20,
 			atk: 40,
@@ -10705,9 +9831,7 @@ exports.BattlePokedex = {
 	dusclops: {
 		num: 356,
 		species: "Dusclops",
-		speciesid: "dusclops",
 		types: ["Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 70,
@@ -10729,9 +9853,7 @@ exports.BattlePokedex = {
 	dusknoir: {
 		num: 477,
 		species: "Dusknoir",
-		speciesid: "dusknoir",
 		types: ["Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 100,
@@ -10752,9 +9874,7 @@ exports.BattlePokedex = {
 	tropius: {
 		num: 357,
 		species: "Tropius",
-		speciesid: "tropius",
 		types: ["Grass","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 99,
 			atk: 68,
@@ -10776,9 +9896,7 @@ exports.BattlePokedex = {
 	chingling: {
 		num: 433,
 		species: "Chingling",
-		speciesid: "chingling",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 30,
@@ -10799,9 +9917,7 @@ exports.BattlePokedex = {
 	chimecho: {
 		num: 358,
 		species: "Chimecho",
-		speciesid: "chimecho",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 50,
@@ -10822,9 +9938,7 @@ exports.BattlePokedex = {
 	absol: {
 		num: 359,
 		species: "Absol",
-		speciesid: "absol",
 		types: ["Dark"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 130,
@@ -10846,9 +9960,7 @@ exports.BattlePokedex = {
 	snorunt: {
 		num: 361,
 		species: "Snorunt",
-		speciesid: "snorunt",
 		types: ["Ice"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 50,
@@ -10871,9 +9983,7 @@ exports.BattlePokedex = {
 	glalie: {
 		num: 362,
 		species: "Glalie",
-		speciesid: "glalie",
 		types: ["Ice"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 80,
@@ -10896,9 +10006,7 @@ exports.BattlePokedex = {
 	froslass: {
 		num: 478,
 		species: "Froslass",
-		speciesid: "froslass",
 		types: ["Ice","Ghost"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 70,
@@ -10921,9 +10029,7 @@ exports.BattlePokedex = {
 	spheal: {
 		num: 363,
 		species: "Spheal",
-		speciesid: "spheal",
 		types: ["Ice","Water"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 40,
@@ -10946,9 +10052,7 @@ exports.BattlePokedex = {
 	sealeo: {
 		num: 364,
 		species: "Sealeo",
-		speciesid: "sealeo",
 		types: ["Ice","Water"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 60,
@@ -10972,9 +10076,7 @@ exports.BattlePokedex = {
 	walrein: {
 		num: 365,
 		species: "Walrein",
-		speciesid: "walrein",
 		types: ["Ice","Water"],
-		gender: "",
 		baseStats: {
 			hp: 110,
 			atk: 80,
@@ -10997,9 +10099,7 @@ exports.BattlePokedex = {
 	clamperl: {
 		num: 366,
 		species: "Clamperl",
-		speciesid: "clamperl",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 64,
@@ -11021,9 +10121,7 @@ exports.BattlePokedex = {
 	huntail: {
 		num: 367,
 		species: "Huntail",
-		speciesid: "huntail",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 104,
@@ -11045,9 +10143,7 @@ exports.BattlePokedex = {
 	gorebyss: {
 		num: 368,
 		species: "Gorebyss",
-		speciesid: "gorebyss",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 84,
@@ -11069,10 +10165,8 @@ exports.BattlePokedex = {
 	relicanth: {
 		num: 369,
 		species: "Relicanth",
-		speciesid: "relicanth",
 		types: ["Water","Rock"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 90,
@@ -11094,10 +10188,8 @@ exports.BattlePokedex = {
 	luvdisc: {
 		num: 370,
 		species: "Luvdisc",
-		speciesid: "luvdisc",
 		types: ["Water"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 43,
 			atk: 30,
@@ -11118,9 +10210,7 @@ exports.BattlePokedex = {
 	bagon: {
 		num: 371,
 		species: "Bagon",
-		speciesid: "bagon",
 		types: ["Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 75,
@@ -11142,9 +10232,7 @@ exports.BattlePokedex = {
 	shelgon: {
 		num: 372,
 		species: "Shelgon",
-		speciesid: "shelgon",
 		types: ["Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 95,
@@ -11167,9 +10255,7 @@ exports.BattlePokedex = {
 	salamence: {
 		num: 373,
 		species: "Salamence",
-		speciesid: "salamence",
 		types: ["Dragon","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 135,
@@ -11191,9 +10277,7 @@ exports.BattlePokedex = {
 	beldum: {
 		num: 374,
 		species: "Beldum",
-		speciesid: "beldum",
 		types: ["Steel","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 40,
@@ -11216,9 +10300,7 @@ exports.BattlePokedex = {
 	metang: {
 		num: 375,
 		species: "Metang",
-		speciesid: "metang",
 		types: ["Steel","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 60,
@@ -11242,9 +10324,7 @@ exports.BattlePokedex = {
 	metagross: {
 		num: 376,
 		species: "Metagross",
-		speciesid: "metagross",
 		types: ["Steel","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 80,
@@ -11267,9 +10347,7 @@ exports.BattlePokedex = {
 	regirock: {
 		num: 377,
 		species: "Regirock",
-		speciesid: "regirock",
 		types: ["Rock"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 80,
@@ -11291,9 +10369,7 @@ exports.BattlePokedex = {
 	regice: {
 		num: 378,
 		species: "Regice",
-		speciesid: "regice",
 		types: ["Ice"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 80,
@@ -11315,9 +10391,7 @@ exports.BattlePokedex = {
 	registeel: {
 		num: 379,
 		species: "Registeel",
-		speciesid: "registeel",
 		types: ["Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 80,
@@ -11339,9 +10413,7 @@ exports.BattlePokedex = {
 	latias: {
 		num: 380,
 		species: "Latias",
-		speciesid: "latias",
 		types: ["Dragon","Psychic"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 80,
@@ -11362,9 +10434,7 @@ exports.BattlePokedex = {
 	latios: {
 		num: 381,
 		species: "Latios",
-		speciesid: "latios",
 		types: ["Dragon","Psychic"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 80,
@@ -11385,9 +10455,7 @@ exports.BattlePokedex = {
 	kyogre: {
 		num: 382,
 		species: "Kyogre",
-		speciesid: "kyogre",
 		types: ["Water"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -11408,9 +10476,7 @@ exports.BattlePokedex = {
 	groudon: {
 		num: 383,
 		species: "Groudon",
-		speciesid: "groudon",
 		types: ["Ground"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -11431,9 +10497,7 @@ exports.BattlePokedex = {
 	rayquaza: {
 		num: 384,
 		species: "Rayquaza",
-		speciesid: "rayquaza",
 		types: ["Dragon","Flying"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 105,
@@ -11454,9 +10518,7 @@ exports.BattlePokedex = {
 	jirachi: {
 		num: 385,
 		species: "Jirachi",
-		speciesid: "jirachi",
 		types: ["Steel","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -11477,11 +10539,8 @@ exports.BattlePokedex = {
 	deoxys: {
 		num: 386,
 		species: "Deoxys",
-		speciesid: "deoxys",
 		forme: "Normal",
-		formeLetter: "",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -11499,17 +10558,14 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["deoxysattack","deoxysdefense","deoxysspeed"],
-		isDefaultForme: true
 	},
 	deoxysattack: {
 		num: 386,
 		species: "Deoxys-Attack",
-		speciesid: "deoxysattack",
 		baseSpecies: "Deoxys",
 		forme: "Attack",
 		formeLetter: "A",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -11527,17 +10583,14 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["deoxys","deoxysdefense","deoxysspeed"],
-		isDefaultForme: false
 	},
 	deoxysdefense: {
 		num: 386,
 		species: "Deoxys-Defense",
-		speciesid: "deoxysdefense",
 		baseSpecies: "Deoxys",
 		forme: "Defense",
 		formeLetter: "D",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -11555,17 +10608,14 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["deoxys","deoxysattack","deoxysspeed"],
-		isDefaultForme: false
 	},
 	deoxysspeed: {
 		num: 386,
 		species: "Deoxys-Speed",
-		speciesid: "deoxysspeed",
 		baseSpecies: "Deoxys",
 		forme: "Speed",
 		formeLetter: "S",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -11583,15 +10633,12 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["deoxys","deoxysattack","deoxysdefense"],
-		isDefaultForme: false
 	},
 	turtwig: {
 		num: 387,
 		species: "Turtwig",
-		speciesid: "turtwig",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 68,
@@ -11613,10 +10660,8 @@ exports.BattlePokedex = {
 	grotle: {
 		num: 388,
 		species: "Grotle",
-		speciesid: "grotle",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 89,
@@ -11639,10 +10684,8 @@ exports.BattlePokedex = {
 	torterra: {
 		num: 389,
 		species: "Torterra",
-		speciesid: "torterra",
 		types: ["Grass","Ground"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 109,
@@ -11664,10 +10707,8 @@ exports.BattlePokedex = {
 	chimchar: {
 		num: 390,
 		species: "Chimchar",
-		speciesid: "chimchar",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 44,
 			atk: 58,
@@ -11689,10 +10730,8 @@ exports.BattlePokedex = {
 	monferno: {
 		num: 391,
 		species: "Monferno",
-		speciesid: "monferno",
 		types: ["Fire","Fighting"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 64,
 			atk: 78,
@@ -11715,10 +10754,8 @@ exports.BattlePokedex = {
 	infernape: {
 		num: 392,
 		species: "Infernape",
-		speciesid: "infernape",
 		types: ["Fire","Fighting"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 76,
 			atk: 104,
@@ -11740,10 +10777,8 @@ exports.BattlePokedex = {
 	piplup: {
 		num: 393,
 		species: "Piplup",
-		speciesid: "piplup",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 53,
 			atk: 51,
@@ -11765,10 +10800,8 @@ exports.BattlePokedex = {
 	prinplup: {
 		num: 394,
 		species: "Prinplup",
-		speciesid: "prinplup",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 64,
 			atk: 66,
@@ -11791,10 +10824,8 @@ exports.BattlePokedex = {
 	empoleon: {
 		num: 395,
 		species: "Empoleon",
-		speciesid: "empoleon",
 		types: ["Water","Steel"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 84,
 			atk: 86,
@@ -11816,9 +10847,7 @@ exports.BattlePokedex = {
 	starly: {
 		num: 396,
 		species: "Starly",
-		speciesid: "starly",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 55,
@@ -11828,8 +10857,7 @@ exports.BattlePokedex = {
 			spe: 60
 		},
 		abilities: {
-			0: "Keen Eye",
-			DW: "Keen Eye"
+			0: "Keen Eye"
 		},
 		heightm: 0.3,
 		weightkg: 2,
@@ -11840,9 +10868,7 @@ exports.BattlePokedex = {
 	staravia: {
 		num: 397,
 		species: "Staravia",
-		speciesid: "staravia",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 75,
@@ -11865,9 +10891,7 @@ exports.BattlePokedex = {
 	staraptor: {
 		num: 398,
 		species: "Staraptor",
-		speciesid: "staraptor",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 120,
@@ -11889,9 +10913,7 @@ exports.BattlePokedex = {
 	bidoof: {
 		num: 399,
 		species: "Bidoof",
-		speciesid: "bidoof",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 59,
 			atk: 45,
@@ -11914,9 +10936,7 @@ exports.BattlePokedex = {
 	bibarel: {
 		num: 400,
 		species: "Bibarel",
-		speciesid: "bibarel",
 		types: ["Normal","Water"],
-		gender: "",
 		baseStats: {
 			hp: 79,
 			atk: 85,
@@ -11939,9 +10959,7 @@ exports.BattlePokedex = {
 	kricketot: {
 		num: 401,
 		species: "Kricketot",
-		speciesid: "kricketot",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 37,
 			atk: 25,
@@ -11963,9 +10981,7 @@ exports.BattlePokedex = {
 	kricketune: {
 		num: 402,
 		species: "Kricketune",
-		speciesid: "kricketune",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 77,
 			atk: 85,
@@ -11987,9 +11003,7 @@ exports.BattlePokedex = {
 	shinx: {
 		num: 403,
 		species: "Shinx",
-		speciesid: "shinx",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 65,
@@ -12012,9 +11026,7 @@ exports.BattlePokedex = {
 	luxio: {
 		num: 404,
 		species: "Luxio",
-		speciesid: "luxio",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 85,
@@ -12038,9 +11050,7 @@ exports.BattlePokedex = {
 	luxray: {
 		num: 405,
 		species: "Luxray",
-		speciesid: "luxray",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 120,
@@ -12063,10 +11073,8 @@ exports.BattlePokedex = {
 	cranidos: {
 		num: 408,
 		species: "Cranidos",
-		speciesid: "cranidos",
 		types: ["Rock"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 67,
 			atk: 125,
@@ -12088,10 +11096,8 @@ exports.BattlePokedex = {
 	rampardos: {
 		num: 409,
 		species: "Rampardos",
-		speciesid: "rampardos",
 		types: ["Rock"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 97,
 			atk: 165,
@@ -12113,10 +11119,8 @@ exports.BattlePokedex = {
 	shieldon: {
 		num: 410,
 		species: "Shieldon",
-		speciesid: "shieldon",
 		types: ["Rock","Steel"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 42,
@@ -12138,10 +11142,8 @@ exports.BattlePokedex = {
 	bastiodon: {
 		num: 411,
 		species: "Bastiodon",
-		speciesid: "bastiodon",
 		types: ["Rock","Steel"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 52,
@@ -12163,11 +11165,8 @@ exports.BattlePokedex = {
 	burmy: {
 		num: 412,
 		species: "Burmy",
-		speciesid: "burmy",
 		forme: "Plant",
-		formeLetter: "",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 29,
@@ -12186,17 +11185,14 @@ exports.BattlePokedex = {
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
 		eggGroups: ["Bug"],
 		otherFormes: ["burmysandy","burmytrash"],
-		isDefaultForme: true
 	},
 	burmysandy: {
 		num: 412,
 		species: "Burmy-Sandy",
-		speciesid: "burmysandy",
 		baseSpecies: "Burmy",
 		forme: "Sandy",
 		formeLetter: "S",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 29,
@@ -12215,17 +11211,14 @@ exports.BattlePokedex = {
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
 		eggGroups: ["Bug"],
 		otherFormes: ["burmy","burmytrash"],
-		isDefaultForme: false
 	},
 	burmytrash: {
 		num: 412,
 		species: "Burmy-Trash",
-		speciesid: "burmytrash",
 		baseSpecies: "Burmy",
 		forme: "Trash",
 		formeLetter: "T",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 29,
@@ -12244,16 +11237,12 @@ exports.BattlePokedex = {
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
 		eggGroups: ["Bug"],
 		otherFormes: ["burmy","burmysandy"],
-		isDefaultForme: false
 	},
 	wormadam: {
 		num: 413,
 		species: "Wormadam",
-		speciesid: "wormadam",
 		forme: "Plant",
-		formeLetter: "",
 		types: ["Bug","Grass"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 60,
@@ -12273,17 +11262,14 @@ exports.BattlePokedex = {
 		prevo: "burmy",
 		eggGroups: ["Bug"],
 		otherFormes: ["wormadamsandy","wormadamtrash"],
-		isDefaultForme: true
 	},
 	wormadamsandy: {
 		num: 413,
 		species: "Wormadam-Sandy",
-		speciesid: "wormadamsandy",
 		baseSpecies: "Wormadam",
 		forme: "Sandy",
 		formeLetter: "G",
 		types: ["Bug","Ground"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 60,
@@ -12303,17 +11289,14 @@ exports.BattlePokedex = {
 		prevo: "burmy",
 		eggGroups: ["Bug"],
 		otherFormes: ["wormadam","wormadamtrash"],
-		isDefaultForme: false
 	},
 	wormadamtrash: {
 		num: 413,
 		species: "Wormadam-Trash",
-		speciesid: "wormadamtrash",
 		baseSpecies: "Wormadam",
 		forme: "Trash",
 		formeLetter: "S",
 		types: ["Bug","Steel"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 60,
@@ -12333,14 +11316,11 @@ exports.BattlePokedex = {
 		prevo: "burmy",
 		eggGroups: ["Bug"],
 		otherFormes: ["wormadam","wormadamsandy"],
-		isDefaultForme: false
 	},
 	mothim: {
 		num: 414,
 		species: "Mothim",
-		speciesid: "mothim",
 		types: ["Bug","Flying"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 70,
@@ -12363,10 +11343,8 @@ exports.BattlePokedex = {
 	combee: {
 		num: 415,
 		species: "Combee",
-		speciesid: "combee",
 		types: ["Bug","Flying"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 30,
@@ -12388,9 +11366,7 @@ exports.BattlePokedex = {
 	vespiquen: {
 		num: 416,
 		species: "Vespiquen",
-		speciesid: "vespiquen",
 		types: ["Bug","Flying"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 70,
@@ -12413,9 +11389,7 @@ exports.BattlePokedex = {
 	pachirisu: {
 		num: 417,
 		species: "Pachirisu",
-		speciesid: "pachirisu",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 45,
@@ -12437,9 +11411,7 @@ exports.BattlePokedex = {
 	buizel: {
 		num: 418,
 		species: "Buizel",
-		speciesid: "buizel",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 65,
@@ -12461,9 +11433,7 @@ exports.BattlePokedex = {
 	floatzel: {
 		num: 419,
 		species: "Floatzel",
-		speciesid: "floatzel",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 105,
@@ -12485,9 +11455,7 @@ exports.BattlePokedex = {
 	cherubi: {
 		num: 420,
 		species: "Cherubi",
-		speciesid: "cherubi",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 35,
@@ -12508,11 +11476,8 @@ exports.BattlePokedex = {
 	cherrim: {
 		num: 421,
 		species: "Cherrim",
-		speciesid: "cherrim",
 		forme: "Overcast",
-		formeLetter: "",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 60,
@@ -12530,17 +11495,14 @@ exports.BattlePokedex = {
 		prevo: "cherubi",
 		eggGroups: ["Fairy","Plant"],
 		otherFormes: ["cherrimsunshine"],
-		isDefaultForme: true
 	},
 	cherrimsunshine: {
 		num: 421,
 		species: "Cherrim-Sunshine",
-		speciesid: "cherrimsunshine",
 		baseSpecies: "Cherrim",
 		forme: "Sunshine",
 		formeLetter: "S",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 60,
@@ -12558,16 +11520,12 @@ exports.BattlePokedex = {
 		prevo: "cherubi",
 		eggGroups: ["Fairy","Plant"],
 		otherFormes: ["cherrim"],
-		isDefaultForme: false
 	},
 	shellos: {
 		num: 422,
 		species: "Shellos",
-		speciesid: "shellos",
 		forme: "West",
-		formeLetter: "",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 76,
 			atk: 48,
@@ -12587,17 +11545,14 @@ exports.BattlePokedex = {
 		evos: ["gastrodon","gastrodoneast"],
 		eggGroups: ["Water 1","Indeterminate"],
 		otherFormes: ["shelloseast"],
-		isDefaultForme: true
 	},
 	shelloseast: {
 		num: 422,
 		species: "Shellos-East",
-		speciesid: "shelloseast",
 		baseSpecies: "Shellos",
 		forme: "East",
 		formeLetter: "E",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 76,
 			atk: 48,
@@ -12617,16 +11572,12 @@ exports.BattlePokedex = {
 		evos: ["gastrodon","gastrodoneast"],
 		eggGroups: ["Water 1","Indeterminate"],
 		otherFormes: ["shellos"],
-		isDefaultForme: false
 	},
 	gastrodon: {
 		num: 423,
 		species: "Gastrodon",
-		speciesid: "gastrodon",
 		forme: "West",
-		formeLetter: "",
 		types: ["Water","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 111,
 			atk: 83,
@@ -12646,17 +11597,14 @@ exports.BattlePokedex = {
 		prevo: "shellos",
 		eggGroups: ["Water 1","Indeterminate"],
 		otherFormes: ["gastrodoneast"],
-		isDefaultForme: true
 	},
 	gastrodoneast: {
 		num: 423,
 		species: "Gastrodon-East",
-		speciesid: "gastrodoneast",
 		baseSpecies: "Gastrodon",
 		forme: "East",
 		formeLetter: "E",
 		types: ["Water","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 111,
 			atk: 83,
@@ -12676,14 +11624,11 @@ exports.BattlePokedex = {
 		prevo: "shellos",
 		eggGroups: ["Water 1","Indeterminate"],
 		otherFormes: ["gastrodon"],
-		isDefaultForme: false
 	},
 	drifloon: {
 		num: 425,
 		species: "Drifloon",
-		speciesid: "drifloon",
 		types: ["Ghost","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 50,
@@ -12706,9 +11651,7 @@ exports.BattlePokedex = {
 	drifblim: {
 		num: 426,
 		species: "Drifblim",
-		speciesid: "drifblim",
 		types: ["Ghost","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 150,
 			atk: 80,
@@ -12731,9 +11674,7 @@ exports.BattlePokedex = {
 	buneary: {
 		num: 427,
 		species: "Buneary",
-		speciesid: "buneary",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 66,
@@ -12756,9 +11697,7 @@ exports.BattlePokedex = {
 	lopunny: {
 		num: 428,
 		species: "Lopunny",
-		speciesid: "lopunny",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 76,
@@ -12781,10 +11720,8 @@ exports.BattlePokedex = {
 	glameow: {
 		num: 431,
 		species: "Glameow",
-		speciesid: "glameow",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 49,
 			atk: 55,
@@ -12807,10 +11744,8 @@ exports.BattlePokedex = {
 	purugly: {
 		num: 432,
 		species: "Purugly",
-		speciesid: "purugly",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 71,
 			atk: 82,
@@ -12833,9 +11768,7 @@ exports.BattlePokedex = {
 	stunky: {
 		num: 434,
 		species: "Stunky",
-		speciesid: "stunky",
 		types: ["Poison","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 63,
 			atk: 63,
@@ -12858,9 +11791,7 @@ exports.BattlePokedex = {
 	skuntank: {
 		num: 435,
 		species: "Skuntank",
-		speciesid: "skuntank",
 		types: ["Poison","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 103,
 			atk: 93,
@@ -12883,9 +11814,7 @@ exports.BattlePokedex = {
 	bronzor: {
 		num: 436,
 		species: "Bronzor",
-		speciesid: "bronzor",
 		types: ["Steel","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 57,
@@ -12909,9 +11838,7 @@ exports.BattlePokedex = {
 	bronzong: {
 		num: 437,
 		species: "Bronzong",
-		speciesid: "bronzong",
 		types: ["Steel","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 67,
@@ -12935,9 +11862,7 @@ exports.BattlePokedex = {
 	chatot: {
 		num: 441,
 		species: "Chatot",
-		speciesid: "chatot",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 76,
 			atk: 65,
@@ -12959,9 +11884,7 @@ exports.BattlePokedex = {
 	spiritomb: {
 		num: 442,
 		species: "Spiritomb",
-		speciesid: "spiritomb",
 		types: ["Ghost","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 92,
@@ -12982,9 +11905,7 @@ exports.BattlePokedex = {
 	gible: {
 		num: 443,
 		species: "Gible",
-		speciesid: "gible",
 		types: ["Dragon","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 58,
 			atk: 70,
@@ -13006,9 +11927,7 @@ exports.BattlePokedex = {
 	gabite: {
 		num: 444,
 		species: "Gabite",
-		speciesid: "gabite",
 		types: ["Dragon","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 68,
 			atk: 90,
@@ -13031,9 +11950,7 @@ exports.BattlePokedex = {
 	garchomp: {
 		num: 445,
 		species: "Garchomp",
-		speciesid: "garchomp",
 		types: ["Dragon","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 108,
 			atk: 130,
@@ -13055,10 +11972,8 @@ exports.BattlePokedex = {
 	riolu: {
 		num: 447,
 		species: "Riolu",
-		speciesid: "riolu",
 		types: ["Fighting"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 70,
@@ -13081,10 +11996,8 @@ exports.BattlePokedex = {
 	lucario: {
 		num: 448,
 		species: "Lucario",
-		speciesid: "lucario",
 		types: ["Fighting","Steel"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 110,
@@ -13107,9 +12020,7 @@ exports.BattlePokedex = {
 	hippopotas: {
 		num: 449,
 		species: "Hippopotas",
-		speciesid: "hippopotas",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 68,
 			atk: 72,
@@ -13131,9 +12042,7 @@ exports.BattlePokedex = {
 	hippowdon: {
 		num: 450,
 		species: "Hippowdon",
-		speciesid: "hippowdon",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 108,
 			atk: 112,
@@ -13155,9 +12064,7 @@ exports.BattlePokedex = {
 	skorupi: {
 		num: 451,
 		species: "Skorupi",
-		speciesid: "skorupi",
 		types: ["Poison","Bug"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 50,
@@ -13180,9 +12087,7 @@ exports.BattlePokedex = {
 	drapion: {
 		num: 452,
 		species: "Drapion",
-		speciesid: "drapion",
 		types: ["Poison","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 90,
@@ -13205,9 +12110,7 @@ exports.BattlePokedex = {
 	croagunk: {
 		num: 453,
 		species: "Croagunk",
-		speciesid: "croagunk",
 		types: ["Poison","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 48,
 			atk: 61,
@@ -13230,9 +12133,7 @@ exports.BattlePokedex = {
 	toxicroak: {
 		num: 454,
 		species: "Toxicroak",
-		speciesid: "toxicroak",
 		types: ["Poison","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 83,
 			atk: 106,
@@ -13255,9 +12156,7 @@ exports.BattlePokedex = {
 	carnivine: {
 		num: 455,
 		species: "Carnivine",
-		speciesid: "carnivine",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 74,
 			atk: 100,
@@ -13277,9 +12176,7 @@ exports.BattlePokedex = {
 	finneon: {
 		num: 456,
 		species: "Finneon",
-		speciesid: "finneon",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 49,
 			atk: 49,
@@ -13302,9 +12199,7 @@ exports.BattlePokedex = {
 	lumineon: {
 		num: 457,
 		species: "Lumineon",
-		speciesid: "lumineon",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 69,
 			atk: 69,
@@ -13327,9 +12222,7 @@ exports.BattlePokedex = {
 	snover: {
 		num: 459,
 		species: "Snover",
-		speciesid: "snover",
 		types: ["Grass","Ice"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 62,
@@ -13351,9 +12244,7 @@ exports.BattlePokedex = {
 	abomasnow: {
 		num: 460,
 		species: "Abomasnow",
-		speciesid: "abomasnow",
 		types: ["Grass","Ice"],
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 92,
@@ -13375,9 +12266,7 @@ exports.BattlePokedex = {
 	rotom: {
 		num: 479,
 		species: "Rotom",
-		speciesid: "rotom",
 		types: ["Electric","Ghost"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -13395,17 +12284,14 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotomheat","rotomwash","rotomfrost","rotomfan","rotommow"],
-		isDefaultForme: true
 	},
 	rotomheat: {
 		num: 479,
 		species: "Rotom-Heat",
-		speciesid: "rotomheat",
 		baseSpecies: "Rotom",
 		forme: "Heat",
 		formeLetter: "H",
 		types: ["Electric","Fire"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -13423,17 +12309,14 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomwash","rotomfrost","rotomfan","rotommow"],
-		isDefaultForme: false
 	},
 	rotomwash: {
 		num: 479,
 		species: "Rotom-Wash",
-		speciesid: "rotomwash",
 		baseSpecies: "Rotom",
 		forme: "Wash",
 		formeLetter: "W",
 		types: ["Electric","Water"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -13451,17 +12334,14 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomheat","rotomfrost","rotomfan","rotommow"],
-		isDefaultForme: false
 	},
 	rotomfrost: {
 		num: 479,
 		species: "Rotom-Frost",
-		speciesid: "rotomfrost",
 		baseSpecies: "Rotom",
 		forme: "Frost",
 		formeLetter: "F",
 		types: ["Electric","Ice"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -13479,17 +12359,14 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfan","rotommow"],
-		isDefaultForme: false
 	},
 	rotomfan: {
 		num: 479,
 		species: "Rotom-Fan",
-		speciesid: "rotomfan",
 		baseSpecies: "Rotom",
 		forme: "Fan",
 		formeLetter: "S",
 		types: ["Electric","Flying"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -13507,17 +12384,14 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotommow"],
-		isDefaultForme: false
 	},
 	rotommow: {
 		num: 479,
 		species: "Rotom-Mow",
-		speciesid: "rotommow",
 		baseSpecies: "Rotom",
 		forme: "Mow",
 		formeLetter: "C",
 		types: ["Electric","Grass"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 50,
@@ -13535,14 +12409,11 @@ exports.BattlePokedex = {
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
 		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotomfan"],
-		isDefaultForme: false
 	},
 	uxie: {
 		num: 480,
 		species: "Uxie",
-		speciesid: "uxie",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 75,
@@ -13563,9 +12434,7 @@ exports.BattlePokedex = {
 	mesprit: {
 		num: 481,
 		species: "Mesprit",
-		speciesid: "mesprit",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 80,
@@ -13586,9 +12455,7 @@ exports.BattlePokedex = {
 	azelf: {
 		num: 482,
 		species: "Azelf",
-		speciesid: "azelf",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 75,
@@ -13609,9 +12476,7 @@ exports.BattlePokedex = {
 	dialga: {
 		num: 483,
 		species: "Dialga",
-		speciesid: "dialga",
 		types: ["Steel","Dragon"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -13633,9 +12498,7 @@ exports.BattlePokedex = {
 	palkia: {
 		num: 484,
 		species: "Palkia",
-		speciesid: "palkia",
 		types: ["Water","Dragon"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 90,
@@ -13657,9 +12520,7 @@ exports.BattlePokedex = {
 	heatran: {
 		num: 485,
 		species: "Heatran",
-		speciesid: "heatran",
 		types: ["Fire","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 91,
 			atk: 90,
@@ -13680,9 +12541,7 @@ exports.BattlePokedex = {
 	regigigas: {
 		num: 486,
 		species: "Regigigas",
-		speciesid: "regigigas",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 110,
@@ -13703,11 +12562,8 @@ exports.BattlePokedex = {
 	giratina: {
 		num: 487,
 		species: "Giratina",
-		speciesid: "giratina",
 		forme: "Altered",
-		formeLetter: "",
 		types: ["Ghost","Dragon"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 150,
@@ -13726,17 +12582,14 @@ exports.BattlePokedex = {
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["giratinaorigin"],
-		isDefaultForme: true
 	},
 	giratinaorigin: {
 		num: 487,
 		species: "Giratina-Origin",
-		speciesid: "giratinaorigin",
 		baseSpecies: "Giratina",
 		forme: "Origin",
 		formeLetter: "O",
 		types: ["Ghost","Dragon"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 150,
@@ -13747,22 +12600,18 @@ exports.BattlePokedex = {
 			spe: 90
 		},
 		abilities: {
-			0: "Levitate",
-			DW: "Levitate"
+			0: "Levitate"
 		},
 		heightm: 6.9,
 		weightkg: 650,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["giratina"],
-		isDefaultForme: false
 	},
 	cresselia: {
 		num: 488,
 		species: "Cresselia",
-		speciesid: "cresselia",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 120,
@@ -13783,9 +12632,7 @@ exports.BattlePokedex = {
 	phione: {
 		num: 489,
 		species: "Phione",
-		speciesid: "phione",
 		types: ["Water"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 80,
@@ -13806,9 +12653,7 @@ exports.BattlePokedex = {
 	manaphy: {
 		num: 490,
 		species: "Manaphy",
-		speciesid: "manaphy",
 		types: ["Water"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -13829,9 +12674,7 @@ exports.BattlePokedex = {
 	darkrai: {
 		num: 491,
 		species: "Darkrai",
-		speciesid: "darkrai",
 		types: ["Dark"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 70,
@@ -13852,11 +12695,8 @@ exports.BattlePokedex = {
 	shaymin: {
 		num: 492,
 		species: "Shaymin",
-		speciesid: "shaymin",
 		forme: "Land",
-		formeLetter: "",
 		types: ["Grass"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -13874,17 +12714,14 @@ exports.BattlePokedex = {
 		colour: "Green",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["shayminsky"],
-		isDefaultForme: true
 	},
 	shayminsky: {
 		num: 492,
 		species: "Shaymin-Sky",
-		speciesid: "shayminsky",
 		baseSpecies: "Shaymin",
 		forme: "Sky",
 		formeLetter: "S",
 		types: ["Grass","Flying"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -13902,16 +12739,12 @@ exports.BattlePokedex = {
 		colour: "Green",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["shaymin"],
-		isDefaultForme: false
 	},
 	arceus: {
 		num: 493,
 		species: "Arceus",
-		speciesid: "arceus",
 		forme: "Normal",
-		formeLetter: "",
 		types: ["Normal"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -13929,17 +12762,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: true
 	},
 	arceusbug: {
 		num: 493,
 		species: "Arceus-Bug",
-		speciesid: "arceusbug",
 		baseSpecies: "Arceus",
 		forme: "Bug",
 		formeLetter: "B",
 		types: ["Bug"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -13957,17 +12787,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusdark: {
 		num: 493,
 		species: "Arceus-Dark",
-		speciesid: "arceusdark",
 		baseSpecies: "Arceus",
 		forme: "Dark",
 		formeLetter: "D",
 		types: ["Dark"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -13985,17 +12812,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusdragon: {
 		num: 493,
 		species: "Arceus-Dragon",
-		speciesid: "arceusdragon",
 		baseSpecies: "Arceus",
 		forme: "Dragon",
 		formeLetter: "D",
 		types: ["Dragon"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14013,17 +12837,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceuselectric: {
 		num: 493,
 		species: "Arceus-Electric",
-		speciesid: "arceuselectric",
 		baseSpecies: "Arceus",
 		forme: "Electric",
 		formeLetter: "E",
 		types: ["Electric"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14041,17 +12862,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusfighting: {
 		num: 493,
 		species: "Arceus-Fighting",
-		speciesid: "arceusfighting",
 		baseSpecies: "Arceus",
 		forme: "Fighting",
 		formeLetter: "F",
 		types: ["Fighting"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14069,17 +12887,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusfire: {
 		num: 493,
 		species: "Arceus-Fire",
-		speciesid: "arceusfire",
 		baseSpecies: "Arceus",
 		forme: "Fire",
 		formeLetter: "F",
 		types: ["Fire"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14097,17 +12912,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusflying: {
 		num: 493,
 		species: "Arceus-Flying",
-		speciesid: "arceusflying",
 		baseSpecies: "Arceus",
 		forme: "Flying",
 		formeLetter: "F",
 		types: ["Flying"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14125,17 +12937,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusghost: {
 		num: 493,
 		species: "Arceus-Ghost",
-		speciesid: "arceusghost",
 		baseSpecies: "Arceus",
 		forme: "Ghost",
 		formeLetter: "G",
 		types: ["Ghost"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14153,17 +12962,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusgrass: {
 		num: 493,
 		species: "Arceus-Grass",
-		speciesid: "arceusgrass",
 		baseSpecies: "Arceus",
 		forme: "Grass",
 		formeLetter: "G",
 		types: ["Grass"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14181,17 +12987,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusground: {
 		num: 493,
 		species: "Arceus-Ground",
-		speciesid: "arceusground",
 		baseSpecies: "Arceus",
 		forme: "Ground",
 		formeLetter: "G",
 		types: ["Ground"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14209,17 +13012,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusice: {
 		num: 493,
 		species: "Arceus-Ice",
-		speciesid: "arceusice",
 		baseSpecies: "Arceus",
 		forme: "Ice",
 		formeLetter: "I",
 		types: ["Ice"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14237,17 +13037,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceuspoison: {
 		num: 493,
 		species: "Arceus-Poison",
-		speciesid: "arceuspoison",
 		baseSpecies: "Arceus",
 		forme: "Poison",
 		formeLetter: "P",
 		types: ["Poison"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14265,17 +13062,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceuspsychic: {
 		num: 493,
 		species: "Arceus-Psychic",
-		speciesid: "arceuspsychic",
 		baseSpecies: "Arceus",
 		forme: "Psychic",
 		formeLetter: "P",
 		types: ["Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14293,17 +13087,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceusrock","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusrock: {
 		num: 493,
 		species: "Arceus-Rock",
-		speciesid: "arceusrock",
 		baseSpecies: "Arceus",
 		forme: "Rock",
 		formeLetter: "R",
 		types: ["Rock"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14321,17 +13112,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceussteel","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceussteel: {
 		num: 493,
 		species: "Arceus-Steel",
-		speciesid: "arceussteel",
 		baseSpecies: "Arceus",
 		forme: "Steel",
 		formeLetter: "S",
 		types: ["Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14349,17 +13137,14 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceuswater","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceuswater: {
 		num: 493,
 		species: "Arceus-Water",
-		speciesid: "arceuswater",
 		baseSpecies: "Arceus",
 		forme: "Water",
 		formeLetter: "W",
 		types: ["Water"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14377,7 +13162,6 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceusunknown"],
-		isDefaultForme: false
 	},
 	arceusunknown: {
 		num: 493,
@@ -14387,7 +13171,6 @@ exports.BattlePokedex = {
 		forme: "???",
 		formeLetter: "?",
 		types: ["???"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 120,
@@ -14405,14 +13188,11 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater"],
-		isDefaultForme: false
 	},
 	victini: {
 		num: 494,
 		species: "Victini",
-		speciesid: "victini",
 		types: ["Psychic","Fire"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -14433,10 +13213,8 @@ exports.BattlePokedex = {
 	snivy: {
 		num: 495,
 		species: "Snivy",
-		speciesid: "snivy",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 45,
@@ -14458,10 +13236,8 @@ exports.BattlePokedex = {
 	servine: {
 		num: 496,
 		species: "Servine",
-		speciesid: "servine",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -14484,10 +13260,8 @@ exports.BattlePokedex = {
 	serperior: {
 		num: 497,
 		species: "Serperior",
-		speciesid: "serperior",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 75,
@@ -14509,10 +13283,8 @@ exports.BattlePokedex = {
 	tepig: {
 		num: 498,
 		species: "Tepig",
-		speciesid: "tepig",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 63,
@@ -14534,10 +13306,8 @@ exports.BattlePokedex = {
 	pignite: {
 		num: 499,
 		species: "Pignite",
-		speciesid: "pignite",
 		types: ["Fire","Fighting"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 90,
 			atk: 93,
@@ -14560,10 +13330,8 @@ exports.BattlePokedex = {
 	emboar: {
 		num: 500,
 		species: "Emboar",
-		speciesid: "emboar",
 		types: ["Fire","Fighting"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 110,
 			atk: 123,
@@ -14585,10 +13353,8 @@ exports.BattlePokedex = {
 	oshawott: {
 		num: 501,
 		species: "Oshawott",
-		speciesid: "oshawott",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 55,
@@ -14610,10 +13376,8 @@ exports.BattlePokedex = {
 	dewott: {
 		num: 502,
 		species: "Dewott",
-		speciesid: "dewott",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 75,
@@ -14636,10 +13400,8 @@ exports.BattlePokedex = {
 	samurott: {
 		num: 503,
 		species: "Samurott",
-		speciesid: "samurott",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 100,
@@ -14661,9 +13423,7 @@ exports.BattlePokedex = {
 	patrat: {
 		num: 504,
 		species: "Patrat",
-		speciesid: "patrat",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 55,
@@ -14686,9 +13446,7 @@ exports.BattlePokedex = {
 	watchog: {
 		num: 505,
 		species: "Watchog",
-		speciesid: "watchog",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 85,
@@ -14711,9 +13469,7 @@ exports.BattlePokedex = {
 	lillipup: {
 		num: 506,
 		species: "Lillipup",
-		speciesid: "lillipup",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 60,
@@ -14736,9 +13492,7 @@ exports.BattlePokedex = {
 	herdier: {
 		num: 507,
 		species: "Herdier",
-		speciesid: "herdier",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 80,
@@ -14762,9 +13516,7 @@ exports.BattlePokedex = {
 	stoutland: {
 		num: 508,
 		species: "Stoutland",
-		speciesid: "stoutland",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 100,
@@ -14787,9 +13539,7 @@ exports.BattlePokedex = {
 	purrloin: {
 		num: 509,
 		species: "Purrloin",
-		speciesid: "purrloin",
 		types: ["Dark"],
-		gender: "",
 		baseStats: {
 			hp: 41,
 			atk: 50,
@@ -14812,9 +13562,7 @@ exports.BattlePokedex = {
 	liepard: {
 		num: 510,
 		species: "Liepard",
-		speciesid: "liepard",
 		types: ["Dark"],
-		gender: "",
 		baseStats: {
 			hp: 64,
 			atk: 88,
@@ -14837,10 +13585,8 @@ exports.BattlePokedex = {
 	pansage: {
 		num: 511,
 		species: "Pansage",
-		speciesid: "pansage",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 53,
@@ -14862,10 +13608,8 @@ exports.BattlePokedex = {
 	simisage: {
 		num: 512,
 		species: "Simisage",
-		speciesid: "simisage",
 		types: ["Grass"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 98,
@@ -14887,10 +13631,8 @@ exports.BattlePokedex = {
 	pansear: {
 		num: 513,
 		species: "Pansear",
-		speciesid: "pansear",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 53,
@@ -14912,10 +13654,8 @@ exports.BattlePokedex = {
 	simisear: {
 		num: 514,
 		species: "Simisear",
-		speciesid: "simisear",
 		types: ["Fire"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 98,
@@ -14937,10 +13677,8 @@ exports.BattlePokedex = {
 	panpour: {
 		num: 515,
 		species: "Panpour",
-		speciesid: "panpour",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 53,
@@ -14962,10 +13700,8 @@ exports.BattlePokedex = {
 	simipour: {
 		num: 516,
 		species: "Simipour",
-		speciesid: "simipour",
 		types: ["Water"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 98,
@@ -14987,9 +13723,7 @@ exports.BattlePokedex = {
 	munna: {
 		num: 517,
 		species: "Munna",
-		speciesid: "munna",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 76,
 			atk: 25,
@@ -15012,9 +13746,7 @@ exports.BattlePokedex = {
 	musharna: {
 		num: 518,
 		species: "Musharna",
-		speciesid: "musharna",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 116,
 			atk: 55,
@@ -15037,9 +13769,7 @@ exports.BattlePokedex = {
 	pidove: {
 		num: 519,
 		species: "Pidove",
-		speciesid: "pidove",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 55,
@@ -15062,9 +13792,7 @@ exports.BattlePokedex = {
 	tranquill: {
 		num: 520,
 		species: "Tranquill",
-		speciesid: "tranquill",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 62,
 			atk: 77,
@@ -15088,9 +13816,7 @@ exports.BattlePokedex = {
 	unfezant: {
 		num: 521,
 		species: "Unfezant",
-		speciesid: "unfezant",
 		types: ["Normal","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 105,
@@ -15113,9 +13839,7 @@ exports.BattlePokedex = {
 	blitzle: {
 		num: 522,
 		species: "Blitzle",
-		speciesid: "blitzle",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 60,
@@ -15138,9 +13862,7 @@ exports.BattlePokedex = {
 	zebstrika: {
 		num: 523,
 		species: "Zebstrika",
-		speciesid: "zebstrika",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 100,
@@ -15163,9 +13885,7 @@ exports.BattlePokedex = {
 	roggenrola: {
 		num: 524,
 		species: "Roggenrola",
-		speciesid: "roggenrola",
 		types: ["Rock"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 75,
@@ -15187,9 +13907,7 @@ exports.BattlePokedex = {
 	boldore: {
 		num: 525,
 		species: "Boldore",
-		speciesid: "boldore",
 		types: ["Rock"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 105,
@@ -15212,9 +13930,7 @@ exports.BattlePokedex = {
 	gigalith: {
 		num: 526,
 		species: "Gigalith",
-		speciesid: "gigalith",
 		types: ["Rock"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 135,
@@ -15236,9 +13952,7 @@ exports.BattlePokedex = {
 	woobat: {
 		num: 527,
 		species: "Woobat",
-		speciesid: "woobat",
 		types: ["Psychic","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 45,
@@ -15261,9 +13975,7 @@ exports.BattlePokedex = {
 	swoobat: {
 		num: 528,
 		species: "Swoobat",
-		speciesid: "swoobat",
 		types: ["Psychic","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 67,
 			atk: 57,
@@ -15286,9 +13998,7 @@ exports.BattlePokedex = {
 	drilbur: {
 		num: 529,
 		species: "Drilbur",
-		speciesid: "drilbur",
 		types: ["Ground"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 85,
@@ -15311,9 +14021,7 @@ exports.BattlePokedex = {
 	excadrill: {
 		num: 530,
 		species: "Excadrill",
-		speciesid: "excadrill",
 		types: ["Ground","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 110,
 			atk: 135,
@@ -15336,9 +14044,7 @@ exports.BattlePokedex = {
 	audino: {
 		num: 531,
 		species: "Audino",
-		speciesid: "audino",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 103,
 			atk: 60,
@@ -15360,10 +14066,8 @@ exports.BattlePokedex = {
 	timburr: {
 		num: 532,
 		species: "Timburr",
-		speciesid: "timburr",
 		types: ["Fighting"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 80,
@@ -15386,10 +14090,8 @@ exports.BattlePokedex = {
 	gurdurr: {
 		num: 533,
 		species: "Gurdurr",
-		speciesid: "gurdurr",
 		types: ["Fighting"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 105,
@@ -15413,10 +14115,8 @@ exports.BattlePokedex = {
 	conkeldurr: {
 		num: 534,
 		species: "Conkeldurr",
-		speciesid: "conkeldurr",
 		types: ["Fighting"],
 		genderRatio: {"M":0.75,"F":0.25},
-		gender: "",
 		baseStats: {
 			hp: 105,
 			atk: 140,
@@ -15439,9 +14139,7 @@ exports.BattlePokedex = {
 	tympole: {
 		num: 535,
 		species: "Tympole",
-		speciesid: "tympole",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 50,
@@ -15464,9 +14162,7 @@ exports.BattlePokedex = {
 	palpitoad: {
 		num: 536,
 		species: "Palpitoad",
-		speciesid: "palpitoad",
 		types: ["Water","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 65,
@@ -15490,9 +14186,7 @@ exports.BattlePokedex = {
 	seismitoad: {
 		num: 537,
 		species: "Seismitoad",
-		speciesid: "seismitoad",
 		types: ["Water","Ground"],
-		gender: "",
 		baseStats: {
 			hp: 105,
 			atk: 85,
@@ -15515,9 +14209,7 @@ exports.BattlePokedex = {
 	throh: {
 		num: 538,
 		species: "Throh",
-		speciesid: "throh",
 		types: ["Fighting"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 120,
@@ -15540,9 +14232,7 @@ exports.BattlePokedex = {
 	sawk: {
 		num: 539,
 		species: "Sawk",
-		speciesid: "sawk",
 		types: ["Fighting"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 75,
@@ -15565,9 +14255,7 @@ exports.BattlePokedex = {
 	sewaddle: {
 		num: 540,
 		species: "Sewaddle",
-		speciesid: "sewaddle",
 		types: ["Bug","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 53,
@@ -15590,9 +14278,7 @@ exports.BattlePokedex = {
 	swadloon: {
 		num: 541,
 		species: "Swadloon",
-		speciesid: "swadloon",
 		types: ["Bug","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 63,
@@ -15616,9 +14302,7 @@ exports.BattlePokedex = {
 	leavanny: {
 		num: 542,
 		species: "Leavanny",
-		speciesid: "leavanny",
 		types: ["Bug","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 103,
@@ -15641,9 +14325,7 @@ exports.BattlePokedex = {
 	venipede: {
 		num: 543,
 		species: "Venipede",
-		speciesid: "venipede",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 30,
 			atk: 45,
@@ -15666,9 +14348,7 @@ exports.BattlePokedex = {
 	whirlipede: {
 		num: 544,
 		species: "Whirlipede",
-		speciesid: "whirlipede",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 55,
@@ -15692,9 +14372,7 @@ exports.BattlePokedex = {
 	scolipede: {
 		num: 545,
 		species: "Scolipede",
-		speciesid: "scolipede",
 		types: ["Bug","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 90,
@@ -15717,9 +14395,7 @@ exports.BattlePokedex = {
 	cottonee: {
 		num: 546,
 		species: "Cottonee",
-		speciesid: "cottonee",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 27,
@@ -15742,9 +14418,7 @@ exports.BattlePokedex = {
 	whimsicott: {
 		num: 547,
 		species: "Whimsicott",
-		speciesid: "whimsicott",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 67,
@@ -15767,9 +14441,7 @@ exports.BattlePokedex = {
 	petilil: {
 		num: 548,
 		species: "Petilil",
-		speciesid: "petilil",
 		types: ["Grass"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 45,
@@ -15793,9 +14465,7 @@ exports.BattlePokedex = {
 	lilligant: {
 		num: 549,
 		species: "Lilligant",
-		speciesid: "lilligant",
 		types: ["Grass"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 70,
@@ -15819,11 +14489,8 @@ exports.BattlePokedex = {
 	basculin: {
 		num: 550,
 		species: "Basculin",
-		speciesid: "basculin",
 		forme: "Red-Striped",
-		formeLetter: "",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 92,
@@ -15842,17 +14509,14 @@ exports.BattlePokedex = {
 		colour: "Green",
 		eggGroups: ["Water 2"],
 		otherFormes: ["basculinbluestriped"],
-		isDefaultForme: true
 	},
 	basculinbluestriped: {
 		num: 550,
 		species: "Basculin-Blue-Striped",
-		speciesid: "basculinbluestriped",
 		baseSpecies: "Basculin",
 		forme: "Blue-Striped",
 		formeLetter: "B",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 92,
@@ -15871,14 +14535,11 @@ exports.BattlePokedex = {
 		colour: "Green",
 		eggGroups: ["Water 2"],
 		otherFormes: ["basculin"],
-		isDefaultForme: false
 	},
 	sandile: {
 		num: 551,
 		species: "Sandile",
-		speciesid: "sandile",
 		types: ["Ground","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 72,
@@ -15901,9 +14562,7 @@ exports.BattlePokedex = {
 	krokorok: {
 		num: 552,
 		species: "Krokorok",
-		speciesid: "krokorok",
 		types: ["Ground","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 82,
@@ -15927,9 +14586,7 @@ exports.BattlePokedex = {
 	krookodile: {
 		num: 553,
 		species: "Krookodile",
-		speciesid: "krookodile",
 		types: ["Ground","Dark"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 117,
@@ -15952,9 +14609,7 @@ exports.BattlePokedex = {
 	darumaka: {
 		num: 554,
 		species: "Darumaka",
-		speciesid: "darumaka",
 		types: ["Fire"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 90,
@@ -15976,11 +14631,8 @@ exports.BattlePokedex = {
 	darmanitan: {
 		num: 555,
 		species: "Darmanitan",
-		speciesid: "darmanitan",
 		forme: "Standard",
-		formeLetter: "",
 		types: ["Fire"],
-		gender: "",
 		baseStats: {
 			hp: 105,
 			atk: 140,
@@ -15999,17 +14651,14 @@ exports.BattlePokedex = {
 		prevo: "darumaka",
 		eggGroups: ["Ground"],
 		otherFormes: ["darmanitanzen"],
-		isDefaultForme: true
 	},
 	darmanitanzen: {
 		num: 555,
 		species: "Darmanitan-Zen",
-		speciesid: "darmanitanzen",
 		baseSpecies: "Darmanitan",
 		forme: "Zen",
 		formeLetter: "Z",
 		types: ["Fire","Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 105,
 			atk: 30,
@@ -16028,14 +14677,11 @@ exports.BattlePokedex = {
 		prevo: "darumaka",
 		eggGroups: ["Ground"],
 		otherFormes: ["darmanitan"],
-		isDefaultForme: false
 	},
 	maractus: {
 		num: 556,
 		species: "Maractus",
-		speciesid: "maractus",
 		types: ["Grass"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 86,
@@ -16057,9 +14703,7 @@ exports.BattlePokedex = {
 	dwebble: {
 		num: 557,
 		species: "Dwebble",
-		speciesid: "dwebble",
 		types: ["Bug","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 65,
@@ -16082,9 +14726,7 @@ exports.BattlePokedex = {
 	crustle: {
 		num: 558,
 		species: "Crustle",
-		speciesid: "crustle",
 		types: ["Bug","Rock"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 95,
@@ -16107,9 +14749,7 @@ exports.BattlePokedex = {
 	scraggy: {
 		num: 559,
 		species: "Scraggy",
-		speciesid: "scraggy",
 		types: ["Dark","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 75,
@@ -16132,9 +14772,7 @@ exports.BattlePokedex = {
 	scrafty: {
 		num: 560,
 		species: "Scrafty",
-		speciesid: "scrafty",
 		types: ["Dark","Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 90,
@@ -16157,9 +14795,7 @@ exports.BattlePokedex = {
 	sigilyph: {
 		num: 561,
 		species: "Sigilyph",
-		speciesid: "sigilyph",
 		types: ["Psychic","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 72,
 			atk: 58,
@@ -16181,9 +14817,7 @@ exports.BattlePokedex = {
 	yamask: {
 		num: 562,
 		species: "Yamask",
-		speciesid: "yamask",
 		types: ["Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 38,
 			atk: 30,
@@ -16204,9 +14838,7 @@ exports.BattlePokedex = {
 	cofagrigus: {
 		num: 563,
 		species: "Cofagrigus",
-		speciesid: "cofagrigus",
 		types: ["Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 58,
 			atk: 50,
@@ -16227,10 +14859,8 @@ exports.BattlePokedex = {
 	tirtouga: {
 		num: 564,
 		species: "Tirtouga",
-		speciesid: "tirtouga",
 		types: ["Water","Rock"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 54,
 			atk: 78,
@@ -16253,10 +14883,8 @@ exports.BattlePokedex = {
 	carracosta: {
 		num: 565,
 		species: "Carracosta",
-		speciesid: "carracosta",
 		types: ["Water","Rock"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 74,
 			atk: 108,
@@ -16279,10 +14907,8 @@ exports.BattlePokedex = {
 	archen: {
 		num: 566,
 		species: "Archen",
-		speciesid: "archen",
 		types: ["Rock","Flying"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 112,
@@ -16303,10 +14929,8 @@ exports.BattlePokedex = {
 	archeops: {
 		num: 567,
 		species: "Archeops",
-		speciesid: "archeops",
 		types: ["Rock","Flying"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 140,
@@ -16327,9 +14951,7 @@ exports.BattlePokedex = {
 	trubbish: {
 		num: 568,
 		species: "Trubbish",
-		speciesid: "trubbish",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 50,
@@ -16352,9 +14974,7 @@ exports.BattlePokedex = {
 	garbodor: {
 		num: 569,
 		species: "Garbodor",
-		speciesid: "garbodor",
 		types: ["Poison"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 95,
@@ -16377,10 +14997,8 @@ exports.BattlePokedex = {
 	zorua: {
 		num: 570,
 		species: "Zorua",
-		speciesid: "zorua",
 		types: ["Dark"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 40,
 			atk: 65,
@@ -16401,10 +15019,8 @@ exports.BattlePokedex = {
 	zoroark: {
 		num: 571,
 		species: "Zoroark",
-		speciesid: "zoroark",
 		types: ["Dark"],
 		genderRatio: {"M":0.875,"F":0.125},
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 105,
@@ -16425,10 +15041,8 @@ exports.BattlePokedex = {
 	minccino: {
 		num: 572,
 		species: "Minccino",
-		speciesid: "minccino",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 50,
@@ -16451,10 +15065,8 @@ exports.BattlePokedex = {
 	cinccino: {
 		num: 573,
 		species: "Cinccino",
-		speciesid: "cinccino",
 		types: ["Normal"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 95,
@@ -16477,10 +15089,8 @@ exports.BattlePokedex = {
 	gothita: {
 		num: 574,
 		species: "Gothita",
-		speciesid: "gothita",
 		types: ["Psychic"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 30,
@@ -16502,10 +15112,8 @@ exports.BattlePokedex = {
 	gothorita: {
 		num: 575,
 		species: "Gothorita",
-		speciesid: "gothorita",
 		types: ["Psychic"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 45,
@@ -16528,10 +15136,8 @@ exports.BattlePokedex = {
 	gothitelle: {
 		num: 576,
 		species: "Gothitelle",
-		speciesid: "gothitelle",
 		types: ["Psychic"],
 		genderRatio: {"M":0.25,"F":0.75},
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 55,
@@ -16553,9 +15159,7 @@ exports.BattlePokedex = {
 	solosis: {
 		num: 577,
 		species: "Solosis",
-		speciesid: "solosis",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 30,
@@ -16578,9 +15182,7 @@ exports.BattlePokedex = {
 	duosion: {
 		num: 578,
 		species: "Duosion",
-		speciesid: "duosion",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 40,
@@ -16604,9 +15206,7 @@ exports.BattlePokedex = {
 	reuniclus: {
 		num: 579,
 		species: "Reuniclus",
-		speciesid: "reuniclus",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 110,
 			atk: 65,
@@ -16629,9 +15229,7 @@ exports.BattlePokedex = {
 	ducklett: {
 		num: 580,
 		species: "Ducklett",
-		speciesid: "ducklett",
 		types: ["Water","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 62,
 			atk: 44,
@@ -16654,9 +15252,7 @@ exports.BattlePokedex = {
 	swanna: {
 		num: 581,
 		species: "Swanna",
-		speciesid: "swanna",
 		types: ["Water","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 87,
@@ -16679,9 +15275,7 @@ exports.BattlePokedex = {
 	vanillite: {
 		num: 582,
 		species: "Vanillite",
-		speciesid: "vanillite",
 		types: ["Ice"],
-		gender: "",
 		baseStats: {
 			hp: 36,
 			atk: 50,
@@ -16703,9 +15297,7 @@ exports.BattlePokedex = {
 	vanillish: {
 		num: 583,
 		species: "Vanillish",
-		speciesid: "vanillish",
 		types: ["Ice"],
-		gender: "",
 		baseStats: {
 			hp: 51,
 			atk: 65,
@@ -16728,9 +15320,7 @@ exports.BattlePokedex = {
 	vanilluxe: {
 		num: 584,
 		species: "Vanilluxe",
-		speciesid: "vanilluxe",
 		types: ["Ice"],
-		gender: "",
 		baseStats: {
 			hp: 71,
 			atk: 95,
@@ -16752,11 +15342,8 @@ exports.BattlePokedex = {
 	deerling: {
 		num: 585,
 		species: "Deerling",
-		speciesid: "deerling",
 		forme: "Spring",
-		formeLetter: "",
 		types: ["Normal","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -16776,17 +15363,14 @@ exports.BattlePokedex = {
 		evos: ["sawsbuck"],
 		eggGroups: ["Ground"],
 		otherFormes: ["deerlingsummer","deerlingautumn","deerlingwinter"],
-		isDefaultForme: true
 	},
 	deerlingsummer: {
 		num: 585,
 		species: "Deerling-Summer",
-		speciesid: "deerlingsummer",
 		baseSpecies: "Deerling",
 		forme: "Summer",
 		formeLetter: "S",
 		types: ["Normal","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -16806,17 +15390,14 @@ exports.BattlePokedex = {
 		evos: ["sawsbuck"],
 		eggGroups: ["Ground"],
 		otherFormes: ["deerling","deerlingautumn","deerlingwinter"],
-		isDefaultForme: false
 	},
 	deerlingautumn: {
 		num: 585,
 		species: "Deerling-Autumn",
-		speciesid: "deerlingautumn",
 		baseSpecies: "Deerling",
 		forme: "Autumn",
 		formeLetter: "A",
 		types: ["Normal","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -16836,17 +15417,14 @@ exports.BattlePokedex = {
 		evos: ["sawsbuck"],
 		eggGroups: ["Ground"],
 		otherFormes: ["deerling","deerlingsummer","deerlingwinter"],
-		isDefaultForme: false
 	},
 	deerlingwinter: {
 		num: 585,
 		species: "Deerling-Winter",
-		speciesid: "deerlingwinter",
 		baseSpecies: "Deerling",
 		forme: "Winter",
 		formeLetter: "W",
 		types: ["Normal","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 60,
@@ -16866,16 +15444,12 @@ exports.BattlePokedex = {
 		evos: ["sawsbuck"],
 		eggGroups: ["Ground"],
 		otherFormes: ["deerling","deerlingsummer","deerlingautumn"],
-		isDefaultForme: false
 	},
 	sawsbuck: {
 		num: 586,
 		species: "Sawsbuck",
-		speciesid: "sawsbuck",
 		forme: "Spring",
-		formeLetter: "",
 		types: ["Normal","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 100,
@@ -16895,17 +15469,14 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		eggGroups: ["Ground"],
 		otherFormes: ["sawsbucksummer","sawsbuckautumn","sawsbuckwinter"],
-		isDefaultForme: true
 	},
 	sawsbucksummer: {
 		num: 586,
 		species: "Sawsbuck-Summer",
-		speciesid: "sawsbucksummer",
 		baseSpecies: "Sawsbuck",
 		forme: "Summer",
 		formeLetter: "S",
 		types: ["Normal","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 100,
@@ -16925,17 +15496,14 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		eggGroups: ["Ground"],
 		otherFormes: ["sawsbuck","sawsbuckautumn","sawsbuckwinter"],
-		isDefaultForme: false
 	},
 	sawsbuckautumn: {
 		num: 586,
 		species: "Sawsbuck-Autumn",
-		speciesid: "sawsbuckautumn",
 		baseSpecies: "Sawsbuck",
 		forme: "Autumn",
 		formeLetter: "A",
 		types: ["Normal","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 100,
@@ -16955,17 +15523,14 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		eggGroups: ["Ground"],
 		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckwinter"],
-		isDefaultForme: false
 	},
 	sawsbuckwinter: {
 		num: 586,
 		species: "Sawsbuck-Winter",
-		speciesid: "sawsbuckwinter",
 		baseSpecies: "Sawsbuck",
 		forme: "Winter",
 		formeLetter: "W",
 		types: ["Normal","Grass"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 100,
@@ -16985,14 +15550,11 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		eggGroups: ["Ground"],
 		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckautumn"],
-		isDefaultForme: false
 	},
 	emolga: {
 		num: 587,
 		species: "Emolga",
-		speciesid: "emolga",
 		types: ["Electric","Flying"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 75,
@@ -17013,9 +15575,7 @@ exports.BattlePokedex = {
 	karrablast: {
 		num: 588,
 		species: "Karrablast",
-		speciesid: "karrablast",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 75,
@@ -17038,9 +15598,7 @@ exports.BattlePokedex = {
 	escavalier: {
 		num: 589,
 		species: "Escavalier",
-		speciesid: "escavalier",
 		types: ["Bug","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 135,
@@ -17063,9 +15621,7 @@ exports.BattlePokedex = {
 	foongus: {
 		num: 590,
 		species: "Foongus",
-		speciesid: "foongus",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 69,
 			atk: 55,
@@ -17087,9 +15643,7 @@ exports.BattlePokedex = {
 	amoonguss: {
 		num: 591,
 		species: "Amoonguss",
-		speciesid: "amoonguss",
 		types: ["Grass","Poison"],
-		gender: "",
 		baseStats: {
 			hp: 114,
 			atk: 85,
@@ -17111,9 +15665,7 @@ exports.BattlePokedex = {
 	frillish: {
 		num: 592,
 		species: "Frillish",
-		speciesid: "frillish",
 		types: ["Water","Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 40,
@@ -17136,9 +15688,7 @@ exports.BattlePokedex = {
 	jellicent: {
 		num: 593,
 		species: "Jellicent",
-		speciesid: "jellicent",
 		types: ["Water","Ghost"],
-		gender: "",
 		baseStats: {
 			hp: 100,
 			atk: 60,
@@ -17161,9 +15711,7 @@ exports.BattlePokedex = {
 	alomomola: {
 		num: 594,
 		species: "Alomomola",
-		speciesid: "alomomola",
 		types: ["Water"],
-		gender: "",
 		baseStats: {
 			hp: 165,
 			atk: 75,
@@ -17185,9 +15733,7 @@ exports.BattlePokedex = {
 	joltik: {
 		num: 595,
 		species: "Joltik",
-		speciesid: "joltik",
 		types: ["Bug","Electric"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 47,
@@ -17210,9 +15756,7 @@ exports.BattlePokedex = {
 	galvantula: {
 		num: 596,
 		species: "Galvantula",
-		speciesid: "galvantula",
 		types: ["Bug","Electric"],
-		gender: "",
 		baseStats: {
 			hp: 70,
 			atk: 77,
@@ -17235,9 +15779,7 @@ exports.BattlePokedex = {
 	ferroseed: {
 		num: 597,
 		species: "Ferroseed",
-		speciesid: "ferroseed",
 		types: ["Grass","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 44,
 			atk: 50,
@@ -17258,9 +15800,7 @@ exports.BattlePokedex = {
 	ferrothorn: {
 		num: 598,
 		species: "Ferrothorn",
-		speciesid: "ferrothorn",
 		types: ["Grass","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 74,
 			atk: 94,
@@ -17281,9 +15821,7 @@ exports.BattlePokedex = {
 	klink: {
 		num: 599,
 		species: "Klink",
-		speciesid: "klink",
 		types: ["Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 40,
@@ -17307,9 +15845,7 @@ exports.BattlePokedex = {
 	klang: {
 		num: 600,
 		species: "Klang",
-		speciesid: "klang",
 		types: ["Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 60,
@@ -17334,9 +15870,7 @@ exports.BattlePokedex = {
 	klinklang: {
 		num: 601,
 		species: "Klinklang",
-		speciesid: "klinklang",
 		types: ["Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 60,
@@ -17360,9 +15894,7 @@ exports.BattlePokedex = {
 	tynamo: {
 		num: 602,
 		species: "Tynamo",
-		speciesid: "tynamo",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 35,
 			atk: 55,
@@ -17383,9 +15915,7 @@ exports.BattlePokedex = {
 	eelektrik: {
 		num: 603,
 		species: "Eelektrik",
-		speciesid: "eelektrik",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 85,
@@ -17407,9 +15937,7 @@ exports.BattlePokedex = {
 	eelektross: {
 		num: 604,
 		species: "Eelektross",
-		speciesid: "eelektross",
 		types: ["Electric"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 115,
@@ -17430,9 +15958,7 @@ exports.BattlePokedex = {
 	elgyem: {
 		num: 605,
 		species: "Elgyem",
-		speciesid: "elgyem",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 55,
@@ -17455,9 +15981,7 @@ exports.BattlePokedex = {
 	beheeyem: {
 		num: 606,
 		species: "Beheeyem",
-		speciesid: "beheeyem",
 		types: ["Psychic"],
-		gender: "",
 		baseStats: {
 			hp: 75,
 			atk: 75,
@@ -17480,9 +16004,7 @@ exports.BattlePokedex = {
 	litwick: {
 		num: 607,
 		species: "Litwick",
-		speciesid: "litwick",
 		types: ["Ghost","Fire"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 30,
@@ -17505,9 +16027,7 @@ exports.BattlePokedex = {
 	lampent: {
 		num: 608,
 		species: "Lampent",
-		speciesid: "lampent",
 		types: ["Ghost","Fire"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 40,
@@ -17531,9 +16051,7 @@ exports.BattlePokedex = {
 	chandelure: {
 		num: 609,
 		species: "Chandelure",
-		speciesid: "chandelure",
 		types: ["Ghost","Fire"],
-		gender: "",
 		baseStats: {
 			hp: 60,
 			atk: 55,
@@ -17556,9 +16074,7 @@ exports.BattlePokedex = {
 	axew: {
 		num: 610,
 		species: "Axew",
-		speciesid: "axew",
 		types: ["Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 46,
 			atk: 87,
@@ -17581,9 +16097,7 @@ exports.BattlePokedex = {
 	fraxure: {
 		num: 611,
 		species: "Fraxure",
-		speciesid: "fraxure",
 		types: ["Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 66,
 			atk: 117,
@@ -17607,9 +16121,7 @@ exports.BattlePokedex = {
 	haxorus: {
 		num: 612,
 		species: "Haxorus",
-		speciesid: "haxorus",
 		types: ["Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 76,
 			atk: 147,
@@ -17632,9 +16144,7 @@ exports.BattlePokedex = {
 	cubchoo: {
 		num: 613,
 		species: "Cubchoo",
-		speciesid: "cubchoo",
 		types: ["Ice"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 70,
@@ -17656,9 +16166,7 @@ exports.BattlePokedex = {
 	beartic: {
 		num: 614,
 		species: "Beartic",
-		speciesid: "beartic",
 		types: ["Ice"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 110,
@@ -17680,9 +16188,7 @@ exports.BattlePokedex = {
 	cryogonal: {
 		num: 615,
 		species: "Cryogonal",
-		speciesid: "cryogonal",
 		types: ["Ice"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 70,
@@ -17703,9 +16209,7 @@ exports.BattlePokedex = {
 	shelmet: {
 		num: 616,
 		species: "Shelmet",
-		speciesid: "shelmet",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 50,
 			atk: 40,
@@ -17728,9 +16232,7 @@ exports.BattlePokedex = {
 	accelgor: {
 		num: 617,
 		species: "Accelgor",
-		speciesid: "accelgor",
 		types: ["Bug"],
-		gender: "",
 		baseStats: {
 			hp: 80,
 			atk: 70,
@@ -17753,9 +16255,7 @@ exports.BattlePokedex = {
 	stunfisk: {
 		num: 618,
 		species: "Stunfisk",
-		speciesid: "stunfisk",
 		types: ["Ground","Electric"],
-		gender: "",
 		baseStats: {
 			hp: 109,
 			atk: 66,
@@ -17777,9 +16277,7 @@ exports.BattlePokedex = {
 	mienfoo: {
 		num: 619,
 		species: "Mienfoo",
-		speciesid: "mienfoo",
 		types: ["Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 85,
@@ -17802,9 +16300,7 @@ exports.BattlePokedex = {
 	mienshao: {
 		num: 620,
 		species: "Mienshao",
-		speciesid: "mienshao",
 		types: ["Fighting"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 125,
@@ -17827,9 +16323,7 @@ exports.BattlePokedex = {
 	druddigon: {
 		num: 621,
 		species: "Druddigon",
-		speciesid: "druddigon",
 		types: ["Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 77,
 			atk: 120,
@@ -17851,9 +16345,7 @@ exports.BattlePokedex = {
 	golett: {
 		num: 622,
 		species: "Golett",
-		speciesid: "golett",
 		types: ["Ground","Ghost"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 59,
@@ -17877,9 +16369,7 @@ exports.BattlePokedex = {
 	golurk: {
 		num: 623,
 		species: "Golurk",
-		speciesid: "golurk",
 		types: ["Ground","Ghost"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 89,
@@ -17903,9 +16393,7 @@ exports.BattlePokedex = {
 	pawniard: {
 		num: 624,
 		species: "Pawniard",
-		speciesid: "pawniard",
 		types: ["Dark","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 45,
 			atk: 85,
@@ -17928,9 +16416,7 @@ exports.BattlePokedex = {
 	bisharp: {
 		num: 625,
 		species: "Bisharp",
-		speciesid: "bisharp",
 		types: ["Dark","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 65,
 			atk: 125,
@@ -17953,9 +16439,7 @@ exports.BattlePokedex = {
 	bouffalant: {
 		num: 626,
 		species: "Bouffalant",
-		speciesid: "bouffalant",
 		types: ["Normal"],
-		gender: "",
 		baseStats: {
 			hp: 95,
 			atk: 110,
@@ -17977,9 +16461,7 @@ exports.BattlePokedex = {
 	rufflet: {
 		num: 627,
 		species: "Rufflet",
-		speciesid: "rufflet",
 		types: ["Normal","Flying"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 70,
@@ -18003,9 +16485,7 @@ exports.BattlePokedex = {
 	braviary: {
 		num: 628,
 		species: "Braviary",
-		speciesid: "braviary",
 		types: ["Normal","Flying"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 100,
@@ -18029,9 +16509,7 @@ exports.BattlePokedex = {
 	vullaby: {
 		num: 629,
 		species: "Vullaby",
-		speciesid: "vullaby",
 		types: ["Dark","Flying"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 70,
@@ -18055,9 +16533,7 @@ exports.BattlePokedex = {
 	mandibuzz: {
 		num: 630,
 		species: "Mandibuzz",
-		speciesid: "mandibuzz",
 		types: ["Dark","Flying"],
-		genderRatio: {"M":0,"F":1},
 		gender: "F",
 		baseStats: {
 			hp: 110,
@@ -18081,9 +16557,7 @@ exports.BattlePokedex = {
 	heatmor: {
 		num: 631,
 		species: "Heatmor",
-		speciesid: "heatmor",
 		types: ["Fire"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 97,
@@ -18105,9 +16579,7 @@ exports.BattlePokedex = {
 	durant: {
 		num: 632,
 		species: "Durant",
-		speciesid: "durant",
 		types: ["Bug","Steel"],
-		gender: "",
 		baseStats: {
 			hp: 58,
 			atk: 109,
@@ -18129,9 +16601,7 @@ exports.BattlePokedex = {
 	deino: {
 		num: 633,
 		species: "Deino",
-		speciesid: "deino",
 		types: ["Dark","Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 52,
 			atk: 65,
@@ -18152,9 +16622,7 @@ exports.BattlePokedex = {
 	zweilous: {
 		num: 634,
 		species: "Zweilous",
-		speciesid: "zweilous",
 		types: ["Dark","Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 72,
 			atk: 85,
@@ -18176,9 +16644,7 @@ exports.BattlePokedex = {
 	hydreigon: {
 		num: 635,
 		species: "Hydreigon",
-		speciesid: "hydreigon",
 		types: ["Dark","Dragon"],
-		gender: "",
 		baseStats: {
 			hp: 92,
 			atk: 105,
@@ -18199,9 +16665,7 @@ exports.BattlePokedex = {
 	larvesta: {
 		num: 636,
 		species: "Larvesta",
-		speciesid: "larvesta",
 		types: ["Bug","Fire"],
-		gender: "",
 		baseStats: {
 			hp: 55,
 			atk: 85,
@@ -18223,9 +16687,7 @@ exports.BattlePokedex = {
 	volcarona: {
 		num: 637,
 		species: "Volcarona",
-		speciesid: "volcarona",
 		types: ["Bug","Fire"],
-		gender: "",
 		baseStats: {
 			hp: 85,
 			atk: 60,
@@ -18247,9 +16709,7 @@ exports.BattlePokedex = {
 	cobalion: {
 		num: 638,
 		species: "Cobalion",
-		speciesid: "cobalion",
 		types: ["Steel","Fighting"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 91,
@@ -18270,9 +16730,7 @@ exports.BattlePokedex = {
 	terrakion: {
 		num: 639,
 		species: "Terrakion",
-		speciesid: "terrakion",
 		types: ["Rock","Fighting"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 91,
@@ -18293,9 +16751,7 @@ exports.BattlePokedex = {
 	virizion: {
 		num: 640,
 		species: "Virizion",
-		speciesid: "virizion",
 		types: ["Grass","Fighting"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 91,
@@ -18316,9 +16772,8 @@ exports.BattlePokedex = {
 	tornadus: {
 		num: 641,
 		species: "Tornadus",
-		speciesid: "tornadus",
+		forme: "Incarnate",
 		types: ["Flying"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 79,
@@ -18336,13 +16791,38 @@ exports.BattlePokedex = {
 		weightkg: 63,
 		colour: "Green",
 		eggGroups: ["No Eggs"],
+		otherFormes: ["tornadustherian"],
+	},
+	tornadustherian: {
+		num: 641,
+		species: "Tornadus-Therian",
+		baseSpecies: "Tornadus",
+		forme: "Therian",
+		formeLetter: "T",
+		types: ["Flying"],
+		gender: "M",
+		baseStats: {
+			hp: 79,
+			atk: 100,
+			def: 80,
+			spa: 110,
+			spd: 90,
+			spe: 121
+		},
+		abilities: {
+			0: "Regenerator"
+		},
+		heightm: 1.4,
+		weightkg: 63,
+		colour: "Green",
+		eggGroups: ["No Eggs"],
+		otherFormes: ["tornadus"],
 	},
 	thundurus: {
 		num: 642,
 		species: "Thundurus",
-		speciesid: "thundurus",
+		forme: "Incarnate",
 		types: ["Electric","Flying"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 79,
@@ -18360,13 +16840,37 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		colour: "Blue",
 		eggGroups: ["No Eggs"],
+		otherFormes: ["thundurustherian"],
+	},
+	thundurustherian: {
+		num: 642,
+		species: "Thundurus-Therian",
+		baseSpecies: "Thundurus",
+		forme: "Therian",
+		formeLetter: "T",
+		types: ["Electric","Flying"],
+		gender: "M",
+		baseStats: {
+			hp: 79,
+			atk: 105,
+			def: 70,
+			spa: 145,
+			spd: 80,
+			spe: 101
+		},
+		abilities: {
+			0: "Volt Absorb"
+		},
+		heightm: 3,
+		weightkg: 61,
+		colour: "Blue",
+		eggGroups: ["No Eggs"],
+		otherFormes: ["thundurus"],
 	},
 	reshiram: {
 		num: 643,
 		species: "Reshiram",
-		speciesid: "reshiram",
 		types: ["Dragon","Fire"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -18387,9 +16891,7 @@ exports.BattlePokedex = {
 	zekrom: {
 		num: 644,
 		species: "Zekrom",
-		speciesid: "zekrom",
 		types: ["Dragon","Electric"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -18410,9 +16912,8 @@ exports.BattlePokedex = {
 	landorus: {
 		num: 645,
 		species: "Landorus",
-		speciesid: "landorus",
+		forme: "Incarnate",
 		types: ["Ground","Flying"],
-		genderRatio: {"M":1,"F":0},
 		gender: "M",
 		baseStats: {
 			hp: 89,
@@ -18430,13 +16931,37 @@ exports.BattlePokedex = {
 		weightkg: 68,
 		colour: "Brown",
 		eggGroups: ["No Eggs"],
+		otherFormes: ["landorustherian"],
+	},
+	landorustherian: {
+		num: 645,
+		species: "Landorus-Therian",
+		baseSpecies: "Landorus",
+		forme: "Therian",
+		formeLetter: "T",
+		types: ["Ground","Flying"],
+		gender: "M",
+		baseStats: {
+			hp: 89,
+			atk: 145,
+			def: 90,
+			spa: 105,
+			spd: 80,
+			spe: 91
+		},
+		abilities: {
+			0: "Intimidate"
+		},
+		heightm: 1.3,
+		weightkg: 68,
+		colour: "Brown",
+		eggGroups: ["No Eggs"],
+		otherFormes: ["landorus"],
 	},
 	kyurem: {
 		num: 646,
 		species: "Kyurem",
-		speciesid: "kyurem",
 		types: ["Dragon","Ice"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 125,
@@ -18453,13 +16978,63 @@ exports.BattlePokedex = {
 		weightkg: 325,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
+		otherFormes: ["kyuremblack","kyuremwhite"],
+	},
+	kyuremblack: {
+		num: 646,
+		species: "Kyurem-Black",
+		baseSpecies: "Kyurem",
+		forme: "Black",
+		formeLetter: "B",
+		types: ["Dragon","Ice"],
+		gender: "N",
+		baseStats: {
+			hp: 125,
+			atk: 170,
+			def: 100,
+			spa: 120,
+			spd: 90,
+			spe: 95
+		},
+		abilities: {
+			0: "Teravolt"
+		},
+		heightm: 3.3,
+		weightkg: 325,
+		colour: "Gray",
+		eggGroups: ["No Eggs"],
+		otherFormes: ["kyurem","kyuremwhite"],
+	},
+	kyuremwhite: {
+		num: 646,
+		species: "Kyurem-White",
+		baseSpecies: "Kyurem",
+		forme: "White",
+		formeLetter: "W",
+		types: ["Dragon","Ice"],
+		gender: "N",
+		baseStats: {
+			hp: 125,
+			atk: 120,
+			def: 90,
+			spa: 170,
+			spd: 100,
+			spe: 95
+		},
+		abilities: {
+			0: "Turboblaze"
+		},
+		heightm: 3.6,
+		weightkg: 325,
+		colour: "Gray",
+		eggGroups: ["No Eggs"],
+		otherFormes: ["kyurem","kyuremblack"],
 	},
 	keldeo: {
 		num: 647,
 		species: "Keldeo",
-		speciesid: "keldeo",
+		forme: "regular",
 		types: ["Water","Fighting"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 91,
@@ -18476,15 +17051,38 @@ exports.BattlePokedex = {
 		weightkg: 48.5,
 		colour: "Yellow",
 		eggGroups: ["No Eggs"],
+		otherFormes: ["keldeoresolution"],
+	},
+	keldeoresolution: {
+		num: 647,
+		species: "Keldeo-resolution",
+		baseSpecies: "Keldeo",
+		forme: "resolution",
+		formeLetter: "r",
+		types: ["Water","Fighting"],
+		gender: "N",
+		baseStats: {
+			hp: 91,
+			atk: 72,
+			def: 90,
+			spa: 129,
+			spd: 90,
+			spe: 108
+		},
+		abilities: {
+			0: "Justified"
+		},
+		heightm: 1.4,
+		weightkg: 48.5,
+		colour: "Yellow",
+		eggGroups: ["No Eggs"],
+		otherFormes: ["keldeo"],
 	},
 	meloetta: {
 		num: 648,
 		species: "Meloetta",
-		speciesid: "meloetta",
 		forme: "Aria",
-		formeLetter: "",
 		types: ["Normal","Psychic"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -18502,17 +17100,14 @@ exports.BattlePokedex = {
 		colour: "White",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["meloettapirouette"],
-		isDefaultForme: true
 	},
 	meloettapirouette: {
 		num: 648,
 		species: "Meloetta-Pirouette",
-		speciesid: "meloettapirouette",
 		baseSpecies: "Meloetta",
 		forme: "Pirouette",
 		formeLetter: "P",
 		types: ["Normal","Fighting"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 100,
@@ -18530,14 +17125,11 @@ exports.BattlePokedex = {
 		colour: "White",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["meloetta"],
-		isDefaultForme: false
 	},
 	genesect: {
 		num: 649,
 		species: "Genesect",
-		speciesid: "genesect",
 		types: ["Bug","Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 71,
@@ -18555,17 +17147,14 @@ exports.BattlePokedex = {
 		colour: "Purple",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["genesectdouse","genesectshock","genesectburn","genesectchill"],
-		isDefaultForme: true
 	},
 	genesectdouse: {
 		num: 649,
 		species: "Genesect-Douse",
-		speciesid: "genesectdouse",
 		baseSpecies: "Genesect",
 		forme: "Douse",
 		formeLetter: "D",
 		types: ["Bug","Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 71,
@@ -18583,17 +17172,14 @@ exports.BattlePokedex = {
 		colour: "Purple",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["genesect","genesectshock","genesectburn","genesectchill"],
-		isDefaultForme: false
 	},
 	genesectshock: {
 		num: 649,
 		species: "Genesect-Shock",
-		speciesid: "genesectshock",
 		baseSpecies: "Genesect",
 		forme: "Shock",
 		formeLetter: "S",
 		types: ["Bug","Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 71,
@@ -18611,17 +17197,14 @@ exports.BattlePokedex = {
 		colour: "Purple",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["genesect","genesectdouse","genesectburn","genesectchill"],
-		isDefaultForme: false
 	},
 	genesectburn: {
 		num: 649,
 		species: "Genesect-Burn",
-		speciesid: "genesectburn",
 		baseSpecies: "Genesect",
 		forme: "Burn",
 		formeLetter: "B",
 		types: ["Bug","Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 71,
@@ -18639,17 +17222,14 @@ exports.BattlePokedex = {
 		colour: "Purple",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["genesect","genesectdouse","genesectshock","genesectchill"],
-		isDefaultForme: false
 	},
 	genesectchill: {
 		num: 649,
 		species: "Genesect-Chill",
-		speciesid: "genesectchill",
 		baseSpecies: "Genesect",
 		forme: "Chill",
 		formeLetter: "C",
 		types: ["Bug","Steel"],
-		genderRatio: {"M":0,"F":0},
 		gender: "N",
 		baseStats: {
 			hp: 71,
@@ -18667,6 +17247,5 @@ exports.BattlePokedex = {
 		colour: "Purple",
 		eggGroups: ["No Eggs"],
 		otherFormes: ["genesect","genesectdouse","genesectshock","genesectburn"],
-		isDefaultForme: false
 	}
 };

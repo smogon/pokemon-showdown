@@ -3,7 +3,7 @@
 //      or
 //  ../node_modules/.bin/_node pokedex-gen._js > ../data/pokedex.js
 
-var customPokemonPath = "../data/custom-pokemon.json";
+var customPokemonPath = "./data/custom-pokemon.json";
 
 var assert = require("assert").ok;
 var getVeekunDatabase = require("./veekun-database._js").getVeekunDatabase;
@@ -182,24 +182,44 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 		gender = 'F';
 	}
 
+	// Ignore the DW ability if it is the same as a normal ability
+	var abilities = JSON.parse(JSON.stringify(pokemon.abilities));
+	if (abilities["DW"]) {
+		var dwAbility = abilities["DW"];
+		delete abilities["DW"];
+		for (var a in abilities) {
+			if (abilities[a] === dwAbility) {
+				dwAbility = "";
+				break;
+			}
+		}
+		if (dwAbility) abilities["DW"] = dwAbility;
+	}
+
 	// Start outputting!
 	writeLine(pokemon.speciesid + ": {", 1);
 
 	writeLine("num: " + JSON.stringify(pokemon.num) + ",");
 	writeLine("species: " + JSON.stringify(pokemon.species) + ",");
-	writeLine("speciesid: " + JSON.stringify(pokemon.speciesid) + ",");
+	if (pokemon.speciesid !== toId(pokemon.species)) {
+		writeLine("speciesid: " + JSON.stringify(pokemon.speciesid) + ",");
+	}
 	if (pokemon.baseSpecies && pokemon.baseSpecies !== pokemon.species) {
 		writeLine("baseSpecies: " + JSON.stringify(pokemon.baseSpecies) + ",");
 	}
 	if (pokemon.forme) {
 		writeLine("forme: " + JSON.stringify(pokemon.forme) + ",");
-		writeLine("formeLetter: " + JSON.stringify(formeLetter) + ",");
+		if (formeLetter !== '') {
+			writeLine("formeLetter: " + JSON.stringify(formeLetter) + ",");
+		}
 	}
 	writeLine("types: " + JSON.stringify(pokemon.types) + ",");
-	if (pokemon.genderRatio.M !== 0.5) {
+	if (gender === '' && pokemon.genderRatio.M !== 0.5) {
 		writeLine("genderRatio: " + JSON.stringify(pokemon.genderRatio) + ",");
 	}
-	writeLine("gender: " + JSON.stringify(gender) + ",");
+	if (gender !== '') {
+		writeLine("gender: " + JSON.stringify(gender) + ",");
+	}
 
 	writeLine("baseStats: {", 1);
 	for (var b in pokemon.baseStats) {
@@ -208,8 +228,8 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine("},", -1);
 
 	writeLine("abilities: {", 1);
-	for (var a in pokemon.abilities) {
-		writeLine(a + ": " + JSON.stringify(pokemon.abilities[a]) + (ObjectIsLastKey(pokemon.abilities, a) ? "" : ","));
+	for (var a in abilities) {
+		writeLine(a + ": " + JSON.stringify(abilities[a]) + (ObjectIsLastKey(abilities, a) ? "" : ","));
 	}
 	writeLine("},", -1);
 
@@ -226,7 +246,7 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	writeLine("eggGroups: " + JSON.stringify(pokemon.eggGroups) + ",");
 	if (pokemon.otherFormes.length > 0) {
 		writeLine("otherFormes: " + JSON.stringify(pokemon.otherFormes) + ",");
-		writeLine("isDefaultForme: " + JSON.stringify(pokemon.isDefaultForme));
+//		writeLine("isDefaultForme: " + JSON.stringify(pokemon.isDefaultForme));
 	}
 
 	writeLine("}" + (isNotNeedFinalNewline ? "" : ","), -1);

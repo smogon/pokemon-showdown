@@ -135,13 +135,6 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	}
 	writeLine("learnset: {", 1);
 	for (var l = 0; l < learnsetMoves.length; ++l) {
-		if (learnsetMoves[l] === "hiddenpower") {
-			// Placeholders until we fully remove all the individual hidden power types
-			var hiddenPowerTypes = ["bug", "dark", "dragon", "electric", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "poison", "pyschic", "rock", "steel", "water"];
-			for (var h = 0; h < hiddenPowerTypes.length; ++h) {
-				writeLine(learnsetMoves[l] + hiddenPowerTypes[h] + ": " + JSON.stringify(pokemon.learnset[learnsetMoves[l]]) + ",");
-			}
-		}
 		writeLine(learnsetMoves[l] + ": " + JSON.stringify(pokemon.learnset[learnsetMoves[l]]) + (l + 1 === learnsetMoves.length ? "" : ","));
 	}
 	writeLine("}", -1);
