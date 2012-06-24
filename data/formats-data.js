@@ -4129,6 +4129,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":1,"abilities":["roughskin","sheerforce"],"moves":["leer","scratch"]}
 		],
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	golett: {
