@@ -46,6 +46,7 @@ exports.BattleMovedex = {
 		accuracy: 80
 	},
 	brickbreak: {
+		inherit: true,
 		desc: "Reflect and Light Screen are removed from the target's field even if the attack misses or the target is a Ghost-type.",
 		//shortDesc: "",
 		onTryHit: function(pokemon) {
@@ -105,6 +106,7 @@ exports.BattleMovedex = {
 		}
 	},
 	conversion2: {
+		inherit: true,
 		//desc: "",
 		onTryHit: function(target, source) {
 			if (source.ability === 'multitype') return false;
@@ -381,6 +383,7 @@ exports.BattleMovedex = {
 		accuracy: 70
 	},
 	magnetrise: {
+		inherit: true,
 		volatileStatus: 'magnetrise',
 		effect: {
 			duration: 5,
