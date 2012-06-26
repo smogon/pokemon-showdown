@@ -2119,10 +2119,12 @@ exports.BattleFormatsData = {
 	},
 	shroomish: {
 		viableMoves: {"spore":1,"substitute":1,"leechseed":1,"gigadrain":1,"protect":1,"toxic":1,"stunspore":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	breloom: {
 		viableMoves: {"spore":1,"substitute":1,"leechseed":1,"protect":1,"focuspunch":1,"machpunch":1,"lowsweep":1,"seedbomb":1,"bulletseed":1,"stoneedge":1,"swordsdance":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	slakoth: {
@@ -3580,22 +3582,27 @@ exports.BattleFormatsData = {
 	},
 	patrat: {
 		viableMoves: {"swordsdance":1,"batonpass":1,"substitute":1,"hypnosis":1,"return":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	watchog: {
 		viableMoves: {"swordsdance":1,"batonpass":1,"substitute":1,"hypnosis":1,"return":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	lillipup: {
 		viableMoves: {"return":1,"wildcharge":1,"firefang":1,"crunch":1,"icefang":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	herdier: {
 		viableMoves: {"return":1,"wildcharge":1,"firefang":1,"crunch":1,"icefang":1},
+		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	stoutland: {
 		viableMoves: {"return":1,"wildcharge":1,"firefang":1,"crunch":1,"icefang":1,"pursuit":1},
+		dreamWorldRelease: true,
 		tier: "UU"
 	},
 	purrloin: {
@@ -3746,10 +3753,12 @@ exports.BattleFormatsData = {
 	},
 	swadloon: {
 		viableMoves: {"calmmind":1,"energyball":1,"bugbuzz":1,"hiddenpowerfire":1,"hiddenpowerice":1,"airslash":1},
+		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	leavanny: {
 		viableMoves: {"swordsdance":1,"leafblade":1,"xscissor":1,"return":1,"batonpass":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	venipede: {
