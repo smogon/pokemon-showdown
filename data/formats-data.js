@@ -177,6 +177,7 @@ exports.BattleFormatsData = {
 	},
 	beedrill: {
 		viableMoves: {"toxicspikes":1,"xscissor":1,"swordsdance":1,"uturn":1,"endeavor":1,"poisonjab":1,"brickbreak":1,"pursuit":1,"nightslash":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	pidgey: {
@@ -438,10 +439,12 @@ exports.BattleFormatsData = {
 	},
 	venonat: {
 		viableMoves: {"sleeppowder":1,"morningsun":1,"toxicspikes":1,"sludgebomb":1,"signalbeam":1,"bugbite":1,"stunspore":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	venomoth: {
 		viableMoves: {"sleeppowder":1,"roost":1,"toxicspikes":1,"quiverdance":1,"batonpass":1,"bugbuzz":1,"sludgebomb":1,"gigadrain":1,"substitute":1},
+		dreamWorldRelease: true,
 		tier: "BL2"
 	},
 	diglett: {
@@ -689,10 +692,12 @@ exports.BattleFormatsData = {
 	grimer: {
 		viableMoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"substitute":1,"brickbreak":1,"focuspunch":1,"rest":1,"icepunch":1,"firepunch":1},
 		tier: "LC"
+		dreamWorldRelease: true,
 	},
 	muk: {
 		viableMoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"substitute":1,"brickbreak":1,"focuspunch":1,"rest":1,"icepunch":1,"firepunch":1},
 		tier: "NU"
+		dreamWorldRelease: true,
 	},
 	shellder: {
 		viableMoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"rapidspin":1},
@@ -1065,6 +1070,7 @@ exports.BattleFormatsData = {
 	},
 	ditto: {
 		viableMoves: {"transform":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	eevee: {
@@ -3607,10 +3613,12 @@ exports.BattleFormatsData = {
 	},
 	purrloin: {
 		viableMoves: {"suckerpunch":1,"nightslash":1,"toxic":1,"fakeout":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	liepard: {
 		viableMoves: {"nastyplot":1,"hiddenpowerdark":1,"snarl":1,"grassknot":1,"suckerpunch":1,"thunderwave":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	pansage: {
@@ -3667,10 +3675,12 @@ exports.BattleFormatsData = {
 	},
 	blitzle: {
 		viableMoves: {"voltswitch":1,"hiddenpowergrass":1,"wildcharge":1,"mefirst":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	zebstrika: {
 		viableMoves: {"voltswitch":1,"hiddenpowergrass":1,"overheat":1,"wildcharge":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	roggenrola: {
@@ -3753,12 +3763,12 @@ exports.BattleFormatsData = {
 	},
 	swadloon: {
 		viableMoves: {"calmmind":1,"energyball":1,"bugbuzz":1,"hiddenpowerfire":1,"hiddenpowerice":1,"airslash":1},
-		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	leavanny: {
 		viableMoves: {"swordsdance":1,"leafblade":1,"xscissor":1,"return":1,"batonpass":1},
 		dreamWorldRelease: true,
+		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	venipede: {
@@ -4153,10 +4163,12 @@ exports.BattleFormatsData = {
 	},
 	mienfoo: {
 		viableMoves: {"uturn":1,"drainpunch":1,"stoneedge":1,"swordsdance":1,"batonpass":1,"hijumpkick":1,"fakeout":1,"substitute":1,"hiddenpowerice":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	mienshao: {
 		viableMoves: {"uturn":1,"fakeout":1,"hijumpkick":1,"stoneedge":1,"hiddenpowerice":1,"drainpunch":1,"swordsdance":1,"batonpass":1,"substitute":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	druddigon: {
@@ -4188,6 +4200,7 @@ exports.BattleFormatsData = {
 	},
 	bouffalant: {
 		viableMoves: {"headcharge":1,"earthquake":1,"stoneedge":1,"megahorn":1,"swordsdance":1},
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	rufflet: {
