@@ -691,13 +691,13 @@ exports.BattleFormatsData = {
 	},
 	grimer: {
 		viableMoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"substitute":1,"brickbreak":1,"focuspunch":1,"rest":1,"icepunch":1,"firepunch":1},
-		tier: "LC"
 		dreamWorldRelease: true,
+		tier: "LC"
 	},
 	muk: {
 		viableMoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"substitute":1,"brickbreak":1,"focuspunch":1,"rest":1,"icepunch":1,"firepunch":1},
-		tier: "NU"
 		dreamWorldRelease: true,
+		tier: "NU"
 	},
 	shellder: {
 		viableMoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"rapidspin":1},
