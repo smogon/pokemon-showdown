@@ -941,10 +941,12 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":50,"abilities":["illuminate","naturalcure"],"moves":["minimize","lightscreen","cosmicpower","hydropump"]},
 			{"generation":3,"level":18,"abilities":["illuminate"],"moves":["tackle","watergun","rapidspin","recover"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	starmie: {
 		viableMoves: {"surf":1,"thunderbolt":1,"icebeam":1,"rapidspin":1,"recover":1,"psychic":1,"trick":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	mimejr: {
@@ -1360,10 +1362,12 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":20,"gender":"F","abilities":["serenegrace"],"moves":["metronome","charm","sweetkiss","yawn"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	togetic: {
 		viableMoves: {"wish":1,"protect":1,"fireblast":1,"toxic":1,"thunderwave":1,"roost":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	togekiss: {
@@ -1372,7 +1376,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","abilities":["superluck"],"moves":["extremespeed","aurasphere","airslash","present"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "UU"
 	},
 	natu: {
@@ -3184,6 +3187,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":30,"gender":"M","nature":"Serious","abilities":["steadfast"],"moves":["aurasphere","shadowclaw","bulletpunch","drainpunch"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	lucario: {
@@ -3195,7 +3199,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"gender":"M","nature":"Naughty","abilities":["justified"],"moves":["bulletpunch","closecombat","stoneedge","shadowclaw"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "OU"
 	},
 	hippopotas: {
@@ -3871,6 +3874,7 @@ exports.BattleFormatsData = {
 	},
 	sigilyph: {
 		viableMoves: {"cosmicpower":1,"roost":1,"storedpower":1,"psychoshift":1},
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	yamask: {
