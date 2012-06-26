@@ -712,7 +712,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target) {
-			if (target.hp <= target.maxhp/2 || target.maxhp === 1) { // Shedinja clause
+			if (target.hp <= target.maxhp/2 || target.boosts.atk >= 6 || target.maxhp === 1) { // Shedinja clause
 				return false;
 			}
 			this.directDamage(target.maxhp/2);
@@ -2989,7 +2989,7 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				var noEncore = {encore:1,mimic:1,mirrormove:1,sketch:1,transform:1};
 				var moveIndex = target.moves.indexOf(target.lastMove);
-				if (!target.lastMove || noEncore[target.lastMove] || moveIndex < 0 || target.moveset[moveIndex].pp <= 0) {
+				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					// it failed
 					this.add('-fail',target);
 					delete target.volatiles['encore'];
@@ -3005,7 +3005,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 13,
 			onResidual: function(target) {
-				if (target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) { // early termination if you run out of PP
+				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) { // early termination if you run out of PP
 					delete target.volatiles.encore;
 					this.add('-end', target, 'Encore');
 				}
