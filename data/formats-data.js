@@ -1882,6 +1882,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["swift","raindance","hydropump","recover"]},
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["recover","hydropump","raindance","swift"]}
 		],
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	hooh: {
@@ -1890,6 +1891,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["swift","sunnyday","fireblast","recover"]},
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["recover","fireblast","sunnyday","swift"]}
 		],
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	celebi: {
@@ -3298,10 +3300,12 @@ exports.BattleFormatsData = {
 	},
 	dialga: {
 		viableMoves: {"stealthrock":1,"dracometeor":1,"dragonpulse":1,"roar":1,"dragontail":1,"thunderbolt":1,"outrage":1,"brickbreak":1,"bulkup":1,"fireblast":1,"aurasphere":1,"rest":1,"sleeptalk":1,"dragonclaw":1},
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	palkia: {
 		viableMoves: {"spacialrend":1,"dracometeor":1,"surf":1,"hydropump":1,"thunderbolt":1,"outrage":1,"fireblast":1},
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	heatran: {
@@ -3320,6 +3324,7 @@ exports.BattleFormatsData = {
 	},
 	giratina: {
 		viableMoves: {"rest":1,"sleeptalk":1,"dragontail":1,"roar":1,"willowisp":1,"calmmind":1,"dragonpulse":1,"shadowball":1},
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	giratinaorigin: {
