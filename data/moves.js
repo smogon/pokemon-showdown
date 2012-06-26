@@ -712,7 +712,7 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		onHit: function(target) {
-			if (target.hp <= target.maxhp/2 || target.maxhp === 1) { // Shedinja clause
+			if (target.hp <= target.maxhp/2 || target.boosts.atk >= 6 || target.maxhp === 1) { // Shedinja clause
 				return false;
 			}
 			this.directDamage(target.maxhp/2);
