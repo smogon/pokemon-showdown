@@ -2429,7 +2429,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({spe:1});
 		},
-		desc: "Raises Speed by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Speed by one stage when at 25% HP or less. One-time use."
 	},
 	"scopelens": {
 		id: "scopelens",
@@ -2624,7 +2624,6 @@ exports.BattleItems = {
 		id: "souldew",
 		name: "Soul Dew",
 		spritenum: 459,
-		isUnreleased: true,
 		fling: {
 			basePower: 30
 		},
