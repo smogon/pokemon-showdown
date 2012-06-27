@@ -1039,6 +1039,7 @@ exports.BattleFormatsData = {
 	},
 	pinsir: {
 		viableMoves: {"swordsdance":1,"xscissor":1,"earthquake":1,"closecombat":1,"stealthrock":1,"substitute":1,"stoneedge":1,"quickattack":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	tauros: {
@@ -4014,6 +4015,7 @@ exports.BattleFormatsData = {
 	},
 	emolga: {
 		viableMoves: {"agility":1,"chargebeam":1,"batonpass":1,"substitute":1,"thunderbolt":1,"airslash":1,"roost":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	karrablast: {
