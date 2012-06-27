@@ -169,10 +169,12 @@ exports.BattleFormatsData = {
 	},
 	weedle: {
 		viableMoves: {"bugbite":1,"stringshot":1,"poisonsting":1,"snore":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	kakuna: {
 		viableMoves: {"irondefense":1,"bugbite":1,"stringshot":1,"poisonsting":1},
+		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	beedrill: {
@@ -2455,7 +2457,6 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":10,"gender":"M","abilities":["immunity"],"moves":["scratch","leer","quickattack","swordsdance"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	seviper: {
@@ -2466,7 +2467,6 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":10,"gender":"M","abilities":["shedskin"],"moves":["wrap","lick","bite"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	lunatone: {
@@ -3671,14 +3671,17 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":1,"gender":"F","nature":"Hardy","abilities":["superluck"],"moves":["gust","quickattack","aircutter"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	tranquill: {
 		viableMoves: {"pluck":1,"uturn":1,"return":1,"detect":1,"roost":1,"wish":1},
+		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	unfezant: {
 		viableMoves: {"pluck":1,"uturn":1,"return":1,"detect":1,"roost":1,"wish":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	blitzle: {
@@ -3706,13 +3709,11 @@ exports.BattleFormatsData = {
 	woobat: {
 		viableMoves: {"calmmind":1,"psychic":1,"airslash":1,"hiddenpowerground":1,"agility":1,"roost":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	swoobat: {
 		viableMoves: {"calmmind":1,"psychic":1,"airslash":1,"hiddenpowerground":1,"agility":1,"roost":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	drilbur: {
@@ -3767,16 +3768,17 @@ exports.BattleFormatsData = {
 	},
 	sewaddle: {
 		viableMoves: {"calmmind":1,"energyball":1,"bugbuzz":1,"hiddenpowerfire":1,"hiddenpowerice":1,"airslash":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	swadloon: {
 		viableMoves: {"calmmind":1,"energyball":1,"bugbuzz":1,"hiddenpowerfire":1,"hiddenpowerice":1,"airslash":1},
+		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	leavanny: {
 		viableMoves: {"swordsdance":1,"leafblade":1,"xscissor":1,"return":1,"batonpass":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	venipede: {
@@ -3958,10 +3960,12 @@ exports.BattleFormatsData = {
 	},
 	ducklett: {
 		viableMoves: {"scald":1,"airslash":1,"roost":1,"hurricane":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"bravebird":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	swanna: {
 		viableMoves: {"scald":1,"airslash":1,"roost":1,"hurricane":1,"surf":1,"icebeam":1,"hiddenpowergrass":1,"bravebird":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	vanillite: {
@@ -4096,10 +4100,12 @@ exports.BattleFormatsData = {
 	},
 	elgyem: {
 		viableMoves: {"nastyplot":1,"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"substitute":1,"calmmind":1,"recover":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	beheeyem: {
 		viableMoves: {"nastyplot":1,"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"substitute":1,"calmmind":1,"recover":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	litwick: {
@@ -4201,10 +4207,12 @@ exports.BattleFormatsData = {
 	},
 	pawniard: {
 		viableMoves: {"swordsdance":1,"substitute":1,"suckerpunch":1,"taunt":1,"ironhead":1,"brickbreak":1,"nightslash":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	bisharp: {
 		viableMoves: {"swordsdance":1,"substitute":1,"suckerpunch":1,"taunt":1,"ironhead":1,"brickbreak":1,"nightslash":1},
+		dreamWorldRelease: true,
 		tier: "UU"
 	},
 	bouffalant: {
@@ -4222,7 +4230,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":25,"gender":"M","abilities":["defiant"],"moves":["wingattack","honeclaws","scaryface","aerialace"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	vullaby: {
