@@ -1686,6 +1686,7 @@ exports.BattleFormatsData = {
 	},
 	heracross: {
 		viableMoves: {"closecombat":1,"megahorn":1,"stoneedge":1,"nightslash":1,"swordsdance":1,"facade":1,"earthquake":1,"pursuit":1},
+		dreamWorldRelease: true,
 		tier: "UU"
 	},
 	sneasel: {
