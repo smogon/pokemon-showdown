@@ -691,13 +691,13 @@ exports.BattleFormatsData = {
 	},
 	grimer: {
 		viableMoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"substitute":1,"brickbreak":1,"focuspunch":1,"rest":1,"icepunch":1,"firepunch":1},
-		tier: "LC"
 		dreamWorldRelease: true,
+		tier: "LC"
 	},
 	muk: {
 		viableMoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"substitute":1,"brickbreak":1,"focuspunch":1,"rest":1,"icepunch":1,"firepunch":1},
-		tier: "NU"
 		dreamWorldRelease: true,
+		tier: "NU"
 	},
 	shellder: {
 		viableMoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"rapidspin":1},
@@ -941,10 +941,12 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":50,"abilities":["illuminate","naturalcure"],"moves":["minimize","lightscreen","cosmicpower","hydropump"]},
 			{"generation":3,"level":18,"abilities":["illuminate"],"moves":["tackle","watergun","rapidspin","recover"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	starmie: {
 		viableMoves: {"surf":1,"thunderbolt":1,"icebeam":1,"rapidspin":1,"recover":1,"psychic":1,"trick":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	mimejr: {
@@ -1360,10 +1362,12 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":20,"gender":"F","abilities":["serenegrace"],"moves":["metronome","charm","sweetkiss","yawn"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	togetic: {
 		viableMoves: {"wish":1,"protect":1,"fireblast":1,"toxic":1,"thunderwave":1,"roost":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	togekiss: {
@@ -1372,7 +1376,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","abilities":["superluck"],"moves":["extremespeed","aurasphere","airslash","present"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "UU"
 	},
 	natu: {
@@ -1882,6 +1885,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["swift","raindance","hydropump","recover"]},
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["recover","hydropump","raindance","swift"]}
 		],
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	hooh: {
@@ -1890,6 +1894,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["swift","sunnyday","fireblast","recover"]},
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["recover","fireblast","sunnyday","swift"]}
 		],
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	celebi: {
@@ -3182,6 +3187,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":30,"gender":"M","nature":"Serious","abilities":["steadfast"],"moves":["aurasphere","shadowclaw","bulletpunch","drainpunch"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	lucario: {
@@ -3193,7 +3199,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"gender":"M","nature":"Naughty","abilities":["justified"],"moves":["bulletpunch","closecombat","stoneedge","shadowclaw"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "OU"
 	},
 	hippopotas: {
@@ -3298,10 +3303,12 @@ exports.BattleFormatsData = {
 	},
 	dialga: {
 		viableMoves: {"stealthrock":1,"dracometeor":1,"dragonpulse":1,"roar":1,"dragontail":1,"thunderbolt":1,"outrage":1,"brickbreak":1,"bulkup":1,"fireblast":1,"aurasphere":1,"rest":1,"sleeptalk":1,"dragonclaw":1},
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	palkia: {
 		viableMoves: {"spacialrend":1,"dracometeor":1,"surf":1,"hydropump":1,"thunderbolt":1,"outrage":1,"fireblast":1},
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	heatran: {
@@ -3320,6 +3327,7 @@ exports.BattleFormatsData = {
 	},
 	giratina: {
 		viableMoves: {"rest":1,"sleeptalk":1,"dragontail":1,"roar":1,"willowisp":1,"calmmind":1,"dragonpulse":1,"shadowball":1},
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	giratinaorigin: {
@@ -3866,6 +3874,7 @@ exports.BattleFormatsData = {
 	},
 	sigilyph: {
 		viableMoves: {"cosmicpower":1,"roost":1,"storedpower":1,"psychoshift":1},
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	yamask: {
