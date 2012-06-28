@@ -3907,10 +3907,12 @@ exports.BattleFormatsData = {
 	},
 	trubbish: {
 		viableMoves: {"clearsmog":1,"toxicspikes":1,"spikes":1,"gunkshot":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	garbodor: {
 		viableMoves: {"spikes":1,"toxicspikes":1,"gunkshot":1,"clearsmog":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	zorua: {
@@ -4024,10 +4026,12 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":30,"abilities":["swarm","shedskin"],"moves":["furyattack","headbutt","falseswipe","bugbuzz"]},
 			{"generation":5,"level":50,"abilities":["swarm","shedskin"],"moves":["megahorn","takedown","xscissor","flail"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	escavalier: {
 		viableMoves: {"megahorn":1,"pursuit":1,"ironhead":1,"knockoff":1,"return":1,"swordsdance":1},
+		dreamWorldRelease: true,
 		tier: "UU"
 	},
 	foongus: {
@@ -4168,10 +4172,12 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":30,"abilities":["hydration","shellarmor"],"moves":["strugglebug","megadrain","yawn","protect"]},
 			{"generation":5,"level":50,"abilities":["hydration","shellarmor"],"moves":["encore","gigadrain","bodyslam","bugbuzz"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	accelgor: {
 		viableMoves: {"spikes":1,"yawn":1,"bugbuzz":1,"focusblast":1,"gigadrain":1,"hiddenpowerrock":1,"encore":1},
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	stunfisk: {
@@ -4250,10 +4256,12 @@ exports.BattleFormatsData = {
 	},
 	heatmor: {
 		viableMoves: {"fireblast":1,"suckerpunch":1,"focusblast":1,"hiddenpowergrass":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	durant: {
 		viableMoves: {"honeclaws":1,"ironhead":1,"xscissor":1,"stoneedge":1,"batonpass":1,"thunderfang":1},
+		dreamWorldRelease: true,
 		tier: "BL2"
 	},
 	deino: {
