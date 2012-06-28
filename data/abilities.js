@@ -650,7 +650,9 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] '+pokemon);
+			if (target.item) {
+				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] '+pokemon);
+			}
 		},
 		id: "frisk",
 		name: "Frisk",
