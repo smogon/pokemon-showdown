@@ -34,6 +34,9 @@
  *     then output it normally.
  *
  */
+
+var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
+
 function parseCommandLocal(user, cmd, target, room, socket, message) {
 	cmd = cmd.toLowerCase();
 	switch (cmd) {
@@ -80,7 +83,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				targetUser.nameLock(targetName, true);
 			}
 			if (targetUser.nameLocked()) {
-				room.add(user.name+" name-locked "+oldname+" to "+targetName+".");
+				logModCommand(room,user.name+" name-locked "+oldname+" to "+targetName+".");
 				return false;
 			}
 			socket.emit('console', oldname+" can't be name-locked to "+targetName+".");
@@ -107,7 +110,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			if (Users.get(target)) {
 				rooms.lobby.usersChanged = true;
 			}
-			room.add(user.name+" unlocked the name of "+target+".");
+			logModCommand(room,user.name+" unlocked the name of "+target+".");
 		} else {
 			socket.emit('console', target+" not found.");
 		}
@@ -302,10 +305,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		room.add(""+targetUser.name+" was banned by "+user.name+"." + (targets[1] ? " (" + targets[1] + ")" : ""));
+		logModCommand(room,""+targetUser.name+" was banned by "+user.name+"." + (targets[1] ? " (" + targets[1] + ")" : ""));
 		targetUser.emit('message', user.name+' has banned you. '+targets[1]);
 		var alts = targetUser.getAlts();
-		if (alts.length) room.add(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
+		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
 
 		targetUser.ban();
 		return false;
@@ -331,7 +334,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			targets[1] = 'http://'+targets[1];
 		}
 
-		room.add(''+targetUser.name+' was banned by '+user.name+' and redirected to: '+targets[1]);
+		logModCommand(room,''+targetUser.name+' was banned by '+user.name+' and redirected to: '+targets[1]);
 
 		targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
 		targetUser.ban();
@@ -358,7 +361,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			targets[1] = 'http://'+targets[1];
 		}
 
-		room.add(''+targetUser.name+' was redirected by '+user.name+' to: '+targets[1]);
+		logModCommand(room,''+targetUser.name+' was redirected by '+user.name+' to: '+targets[1]);
 		targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
 		return false;
 		break;
@@ -380,7 +383,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 		}
 		if (success) {
-			room.add(''+target+' was unbanned by '+user.name+'.');
+			logModCommand(room,''+target+' was unbanned by '+user.name+'.');
 		} else {
 			socket.emit('console', 'User '+target+' is not banned.');
 		}
@@ -392,7 +395,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', '/unbanall - Access denied.');
 			return false;
 		}
-		room.add('All bans and ip mutes have been lifted by '+user.name+'.');
+		logModCommand(room,'All bans and ip mutes have been lifted by '+user.name+'.');
 		bannedIps = {};
 		mutedIps = {};
 		return false;
@@ -477,10 +480,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		room.add(''+targetUser.name+' was muted by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : ""));
+		logModCommand(room,''+targetUser.name+' was muted by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : ""));
 		targetUser.emit('message', user.name+' has muted you. '+targets[1]);
 		var alts = targetUser.getAlts();
-		if (alts.length) room.add(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
+		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 
 		targetUser.muted = true;
 		for (var i=0; i<alts.length; i++) {
@@ -504,9 +507,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		room.add(''+targetUser.name+"'s IP was muted by "+user.name+'.');
+		logModCommand(room,''+targetUser.name+"'s IP was muted by "+user.name+'.');
 		var alts = targetUser.getAlts();
-		if (alts.length) room.add(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
+		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 
 		targetUser.muted = true;
 		mutedIps[targetUser.ip] = targetUser.userid;
@@ -542,12 +545,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		if (success) {
-			room.add(''+(targetUser?targetUser.name:target)+"'s IP was unmuted by "+user.name+'.');
+			logModCommand(room,''+(targetUser?targetUser.name:target)+"'s IP was unmuted by "+user.name+'.');
 		}
 
 		targetUser.muted = false;
 		rooms.lobby.usersChanged = true;
-		room.add(''+targetUser.name+' was unmuted by '+user.name+'.');
+		logModCommand(room,''+targetUser.name+' was unmuted by '+user.name+'.');
 		return false;
 		break;
 
@@ -574,7 +577,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targetUser.setGroup(nextGroup);
 		rooms.lobby.usersChanged = true;
 		var groupName = config.groups[targetUser.group].name || targetUser.group || '';
-		room.add(''+targetUser.name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.');
+		logModCommand(room,''+targetUser.name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.');
 		return false;
 		break;
 
@@ -616,6 +619,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			var modchat = sanitize(config.modchat);
 			room.addRaw('<div style="background-color:#AA6655;color:white;padding:2px 4px"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
 		}
+		logModCommand(room,user.name+' set modchat to '+config.modchat,true);
 		return false;
 		break;
 
@@ -631,6 +635,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 		room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>'+target+'</b></div>');
+		logModCommand(room,user.name+' announced '+target,true);
 		return false;
 		break;
 
@@ -728,7 +733,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		if (targetUser.userid === toUserid(targets[2])) {
-			room.add(''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : ""));
+			logModCommand(room,''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : ""));
 			targetUser.resetName();
 			targetUser.emit('nameTaken', {reason: user.name+" has forced you to change your name. "+targets[1]});
 		} else {
@@ -756,7 +761,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		if (targetUser.userid === toUserid(targets[2])) {
-			room.add(''+targetUser.name+' was forcibly renamed to '+targets[1]+' by '+user.name+'.');
+			logModCommand(room, ''+targetUser.name+' was forcibly renamed to '+targets[1]+' by '+user.name+'.');
 			targetUser.forceRename(targets[1]);
 		} else {
 			socket.emit('console', "User "+targetUser.name+" is no longer using that name.");
@@ -886,13 +891,17 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (user.can('forcewin') && room.battle) {
 			if (!target) {
 				room.battle.win('');
+				logModCommand(room,user.name+' forced a tie.',true);
 				return false;
 			}
 			target = Users.get(target);
 			if (target) target = target.userid;
 			else target = '';
 
-			if (target) room.battle.win(target);
+			if (target) {
+				room.battle.win(target);
+				logModCommand(room,user.name+' forced a win for '+target+'.',true);
+			}
 
 			return false;
 		}
@@ -906,9 +915,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		config.potd = target;
 		if (target) {
-			room.add('The Pokemon of the Day was changed to '+target+' by '+user.name+'.');
+			logModCommand(room, 'The Pokemon of the Day was changed to '+target+' by '+user.name+'.');
 		} else {
-			room.add('The Pokemon of the Day was removed by '+user.name+'.');
+			logModCommand(room, 'The Pokemon of the Day was removed by '+user.name+'.');
 		}
 		return false;
 		break;
@@ -987,7 +996,24 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		rooms.lobby.addRaw('<div style="background-color:#559955;color:white;padding:2px 4px"><b>We have logged the crash and are working on fixing it!</b><br />You may resume talking in the lobby and starting new battles.</div>');
 		return false;
 		break;
-
+	case 'modlog':
+		if (!user.can('mute')) {
+			socket.emit('console', '/modlog - Access denied.');
+			return false;
+		}
+		var lines = parseInt(target, 10);
+		if (!lines) lines = 15;
+		var loglines = [];
+		require('child_process').exec('tail -'+lines+' logs/modlog.txt', function(error, stdout, stderr) {
+			if (error !== null) {
+				socket.emit('console', '/modlog errored, tell Zarel or bmelts.');
+				console.log('/modlog error: '+error+'\n'+stderr);
+				return false;
+			}
+			socket.emit('message', 'Displaying the last '+lines+' lines of the Moderator Log:\n\n'+stdout);
+		});
+		return false;
+		break;
 	case 'help':
 	case 'commands':
 	case 'h':
@@ -1099,6 +1125,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			socket.emit('console', '/unmute [username] - Remove mute from user. Requires: % @ & ~');
 		}
+		if (target === '%' || target === 'modlog') {
+			matched = true;
+			socket.emit('console', '/modlog [n] - Display the last n lines of the moderator log. Defaults to 15. Requires: % @ & ~');
+		}
 		if (target === '&' || target === 'promote') {
 			matched = true;
 			socket.emit('console', '/promote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: & ~');
@@ -1131,7 +1161,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
 			socket.emit('console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
-				socket.emit('console', 'DRIVER COMMANDS: /mute, /unmute, /forcerename')
+				socket.emit('console', 'DRIVER COMMANDS: /mute, /unmute, /forcerename, /modlog')
 				socket.emit('console', 'MODERATOR COMMANDS: /alts, /forcerenameto, /ban, /unban, /unbanall, /potd, /namelock, /nameunlock, /ip, /redirect');
 				socket.emit('console', 'STAFF COMMANDS: /promote, /demote, /forcewin');
 				socket.emit('console', 'For details on all moderator commands, use /help @');
@@ -1292,6 +1322,11 @@ function splitTarget(target) {
 		targetUser = null;
 	}
 	return [targetUser, target.substr(commaIndex+1).trim(), target.substr(0, commaIndex)];
+}
+
+function logModCommand(room, result, noBroadcast) {
+	if (!noBroadcast) room.add(result);
+	modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 }
 
 exports.parseCommand = parseCommandLocal;
