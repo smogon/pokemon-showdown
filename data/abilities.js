@@ -1327,7 +1327,9 @@ exports.BattleAbilities = {
 		desc: "Makes all of this Pokemon's attacks Normal-typed.",
 		shortDesc: "This Pokemon's moves all become Normal-typed.",
 		onModifyMove: function(move) {
-			move.type = 'Normal';
+			if (move.id !== 'struggle') {
+				move.type = 'Normal';
+			}
 		},
 		id: "normalize",
 		name: "Normalize",
