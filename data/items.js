@@ -1149,8 +1149,13 @@ exports.BattleItems = {
 			basePower: 60
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (user.template.species === 'Giratina' && (move.type === 'Ghost' || move.type === 'Dragon')) {
+			if (user.template.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return basePower * 1.2;
+			}
+		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.template.num === 487) || pokemon.template.num === 487) {
+				return false;
 			}
 		},
 		desc: "Raises the Base Power of Giratina's STAB moves 20% and transforms Giratina into Giratina-O when held. Cannot be removed or given to Giratina in battle."
