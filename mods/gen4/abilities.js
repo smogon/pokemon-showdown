@@ -7,14 +7,6 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 1
 	},
-	"shadowtag": {
-		inherit: true,
-		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they are holding Shed Shell or use the moves Baton Pass or U-Turn.",
-		shortDesc: "Prevents foes from switching out normally.",
-		onFoeModifyPokemon: function(pokemon) {
-			pokemon.trapped = true;
-		}
-	},
 	"stench": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",
