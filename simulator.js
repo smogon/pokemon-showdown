@@ -2108,6 +2108,11 @@ function Battle(roomid, format, rated) {
 		return Math.floor(baseDamage);
 	};
 	this.getTarget = function(decision) {
+		if (!decision.targetPosition || !decision.targetSide) {
+			target = selfB.resolveTarget(decision.pokemon, decision.move);
+			decision.targetSide = target.side;
+			decision.targetPosition = target.position;
+		}
 		return decision.targetSide.active[decision.targetPosition];
 	};
 	this.resolveTarget = function(pokemon, move) {
