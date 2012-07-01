@@ -3868,14 +3868,17 @@ exports.BattleFormatsData = {
 	},
 	maractus: {
 		viableMoves: {"spikes":1,"gigadrain":1,"leechseed":1,"hiddenpowerfire":1,"toxic":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	dwebble: {
 		viableMoves: {"stealthrock":1,"spikes":1,"shellsmash":1,"earthquake":1,"rockblast":1,"xscissor":1,"stoneedge":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	crustle: {
 		viableMoves: {"stealthrock":1,"spikes":1,"shellsmash":1,"earthquake":1,"rockblast":1,"xscissor":1,"stoneedge":1},
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	scraggy: {
@@ -3907,10 +3910,12 @@ exports.BattleFormatsData = {
 	},
 	tirtouga: {
 		viableMoves: {"shellsmash":1,"aquajet":1,"waterfall":1,"stoneedge":1,"earthquake":1,"curse":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	carracosta: {
 		viableMoves: {"shellsmash":1,"aquajet":1,"waterfall":1,"stoneedge":1,"earthquake":1,"curse":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	archen: {
@@ -4083,10 +4088,12 @@ exports.BattleFormatsData = {
 	},
 	joltik: {
 		viableMoves: {"thunderbolt":1,"bugbuzz":1,"hiddenpowerice":1,"energyball":1,"voltswitch":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	galvantula: {
 		viableMoves: {"thunder":1,"hiddenpowerice":1,"energyball":1,"bugbuzz":1,"voltswitch":1},
+		dreamWorldRelease: true,
 		tier: "RU"
 	},
 	ferroseed: {
