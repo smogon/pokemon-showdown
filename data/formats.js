@@ -399,7 +399,7 @@ exports.BattleFormats = {
 					if (pokemon.status === 'slp') {
 						if (!pokemon.statusData.source ||
 							pokemon.statusData.source.side !== pokemon.side) {
-							this.add('message', 'Sleep Clause activated.');
+							this.add('-message', 'Sleep Clause activated.');
 							return false;
 						}
 					}
