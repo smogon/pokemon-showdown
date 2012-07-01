@@ -441,6 +441,27 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 80
 	},
+	roost: {
+		inherit: true,
+		//desc: "",
+		effect: {
+			duration: 1,
+			onModifyPokemonPriority: 100,
+			onModifyPokemon: function(pokemon) {
+				if (pokemon.hasType('Flying')) {
+					// don't just delete the type; since
+					// the types array may be a pointer to the
+					// types array in the Pokedex.
+					if (pokemon.types[0] === 'Flying') {
+						pokemon.types = [pokemon.types[1]];
+					} else {
+						pokemon.types = [pokemon.types[0]];
+					}
+				}
+				//pokemon.negateImmunity['Ground'] = 1;
+			}
+		}
+	},
 	sandtomb: {
 		inherit: true,
 		accuracy: 70,
