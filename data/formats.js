@@ -161,7 +161,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
 		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'Snow Warning', 'Drought', 'Sand Stream', 'Shell Smash + Baton Pass',
-			"Charizard", "Wartortle", "Raichu", "Vileplume", "Kadabra", "Golem", "Haunter", "Exeggutor", "Marowak", "Weezing", "Tangela", "Jynx", "Pinsir", "Tauros", "Flareon", "Quagsire", "Misdreavus", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Camerupt", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Absol", "Gorebyss", "Regirock", "Torterra", "Luxray", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Magmortar", "Leafeon", "Probopass", "Rotom-S", "Serperior", "Emboar", "Samurott", "Musharna", "Gurdurr", "Sawk", "Garbodor", "Cinccino", "Duosion", "Sawsbuck", "Amoonguss", "Alomomola", "Eelektross", "Cryogonal", "Braviary"]
+			"Charizard", "Wartortle", "Vileplume", "Kadabra", "Golem", "Haunter", "Exeggutor", "Marowak", "Weezing", "Tangela", "Kangaskhan", "Electabuzz", "Pinsir", "Tauros", "Lapras", "Flareon", "Ampharos", "Jumpluff", "Misdreavus", "Ursaring", "Piloswine", "Miltank", "Linoone", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Camerupt", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Absol", "Gorebyss", "Regirock", "Regice", "Torterra", "Rampardos", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Serperior", "Emboar", "Samurott", "Musharna", "Zebstrika", "Gigalith", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Cinccino", "Sawsbuck", "Amoonguss", "Alomomola", "Golurk", "Braviary"]
 	},
 	haxmons: {
 		effectType: 'Format',
