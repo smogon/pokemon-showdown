@@ -290,7 +290,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message)
 			}
 			
 			room.add(""+targetUser.name+" was banned by "+user.name+".");
-			targetUser.emit('message', user.name+' has banned you. <a href="http://www.smogon.com/forums/announcement.php?f=126&a=204">If you feel you were unfairly banned, you may submit a ban appeal thread here</a>'+targets[1]);
+			targetUser.emit('message', user.name+' has banned you. <a href="http://www.smogon.com/forums/announcement.php?f=126&a=204">If you feel you were unfairly banned, you may submit a ban appeal thread here.</a>'+targets[1]);
 			var alts = targetUser.getAlts();
 			if (alts.length) room.add(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
 			
