@@ -9263,7 +9263,9 @@ exports.BattleMovedex = {
 					// don't just delete the type; since
 					// the types array may be a pointer to the
 					// types array in the Pokedex.
-					if (pokemon.types[0] === 'Flying') {
+					if (typeof pokemon.types[1] === 'undefined') {
+						pokemon.types = ['Normal'];
+					} else if (pokemon.types[0] === 'Flying') {
 						pokemon.types = [pokemon.types[1]];
 					} else {
 						pokemon.types = [pokemon.types[0]];
