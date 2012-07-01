@@ -1895,7 +1895,7 @@ exports.BattleMovedex = {
 				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 				return;
 			}
-			this.add('-item', source, yourItem, '[from] move: Covet');
+			this.add('-item', source, yourItem, '[from] move: Covet', '[of] '+target);
 		},
 		secondary: false,
 		target: "normal",
@@ -2324,7 +2324,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 14,
 			onEnd: function(pokemon) {
-				this.add('-message', pokemon.name+' is no longer disabled! (placeholder)');
+				this.add('-end', pokemon, 'Disable');
 			},
 			onBeforeMove: function(attacker, defender, move) {
 				if (move.id === this.effectData.move) {
@@ -8296,8 +8296,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, pokemon) {
 			if (pokemon.status && !target.status && target.trySetStatus(pokemon.status)) {
-				this.add('-curestatus', pokemon, '[from] move: Psycho Shift', '[of] '+target);
-				pokemon.setStatus('');
+				pokemon.cureStatus();
 			} else {
 				return false;
 			}
@@ -11684,7 +11683,7 @@ exports.BattleMovedex = {
 				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 				return;
 			}
-			this.add('-item', source, yourItem, '[from] move: Thief');
+			this.add('-item', source, yourItem, '[from] move: Thief', '[of] '+target);
 		},
 		secondary: false,
 		target: "normal",
