@@ -1001,16 +1001,31 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			socket.emit('console', '/modlog - Access denied.');
 			return false;
 		}
-		var lines = parseInt(target, 10);
-		if (!lines) lines = 15;
-		var loglines = [];
-		require('child_process').exec('tail -'+lines+' logs/modlog.txt', function(error, stdout, stderr) {
-			if (error !== null) {
+		var lines = parseInt(target || 15, 10);
+		var command = 'tail -'+lines+' ';
+		var filename = 'logs/modlog.txt';
+		if (!lines || lines < 0) { // searching for a word instead
+			command = 'grep -i \''+target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\\$&').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]')+'\' ';
+		}
+		require('child_process').exec(command+filename, function(error, stdout, stderr) {
+			if (error && stderr) {
 				socket.emit('console', '/modlog errored, tell Zarel or bmelts.');
-				console.log('/modlog error: '+error+'\n'+stderr);
+				console.log('/modlog error: '+error);
 				return false;
 			}
-			socket.emit('message', 'Displaying the last '+lines+' lines of the Moderator Log:\n\n'+stdout);
+			if (lines) {
+				if (!stdout) {
+					socket.emit('console', 'The modlog is empty. (Weird.)');
+				} else {
+					socket.emit('message', 'Displaying the last '+lines+' lines of the Moderator Log:\n\n'+stdout);
+				}
+			} else {
+				if (!stdout) {
+					socket.emit('console', 'No moderator actions containing "'+target+'" were found.');
+				} else {
+					socket.emit('message', 'Displaying all logged actions containing "'+target+'":\n\n'+stdout);
+				}
+			}
 		});
 		return false;
 		break;
