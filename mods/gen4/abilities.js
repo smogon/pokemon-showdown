@@ -1,4 +1,13 @@
 exports.BattleAbilities = {
+	"angerpoint": {
+		inherit: true,
+		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
+		shortDesc: "If this Pokemon is hit by a critical hit, its Attack is boosted by 12.",
+		onCriticalHit: function(target) {
+			target.setBoost({atk: 6});
+			this.add('-setboost',target,'atk',12,'[from] ability: Anger Point');
+		}
+	},
 	"pickup": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",
@@ -30,12 +39,22 @@ exports.BattleAbilities = {
 		rating: 0.5,
 		num: 5
 	},
+	"trace": {
+		inherit: true,
+		onModifyPokemon: function(pokemon) {
+			var target = pokemon.side.foe.randomActive();
+			var ability = this.getAbility(target.ability);
+			if (ability.id === 'forecast' || ability.id === 'multitype' || ability.id === 'trace') return;
+			if (pokemon.setAbility(ability)) {
+				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
+			}
+		}
+	},
 	"wonderguard": {
 		inherit: true,
 		onDamage: function(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') return;
 			if (effect.type === '???' || effect.id === 'struggle' || effect.id === 'firefang') return;
-			this.debug('Wonder Guard immunity: '+effect.id);
 			if (this.getEffectiveness(effect.type, target) <= 0) {
 				this.add('-activate',target,'ability: Wonder Guard');
 				return null;
@@ -44,7 +63,6 @@ exports.BattleAbilities = {
 		onSubDamage: function(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') return;
 			if (target.negateImmunity[effect.type] || effect.id === 'firefang') return;
-			this.debug('Wonder Guard immunity: '+effect.id);
 			if (this.getEffectiveness(effect.type, target) <= 0) {
 				this.add('-activate',target,'ability: Wonder Guard');
 				return null;
