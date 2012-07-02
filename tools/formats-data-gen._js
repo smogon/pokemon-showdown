@@ -85,7 +85,7 @@ function convertData(veekunPokemon, smogonDex, viableMoves, dwReleases, serebiiE
 	result.speciesid = toIdForName(veekunPokemon.combinedName, veekunPokemon.forme);
 	if (!(result.speciesid in smogonDex)) {
 		console.warn("Warning: " + result.speciesid + " not in smogondex.");
-		result.tier = "";
+		result.tier = "Limbo";
 	}
 	else
 		result.tier = smogonDex[result.speciesid].tier;

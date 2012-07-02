@@ -85,14 +85,6 @@ exports.getSmogonDex = function(_) {
 				name = "giratinaorigin";
 				break;
 
-			case "keldeo" :
-				tier = "Unreleased";
-				break;
-
-			case "meloetta" :
-				tier = "Unreleased";
-				break;
-
 			case "meloettap" :
 				name = "meloettapirouette";
 				tier = "Illegal";
