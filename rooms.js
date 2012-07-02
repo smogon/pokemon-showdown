@@ -67,6 +67,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				if (winner && !winner.authenticated) {
 					winner.emit('console', {rawMessage: '<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>Register an account to protect your ladder rating!</b><br /><button onclick="overlay(\'register\',{ifuserid:\''+winner.userid+'\'});return false"><b>Register</b></button></div>'});
 				}
+				var p1rating, p2rating;
 				// update rankings
 				request({
 					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
@@ -74,7 +75,8 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 					if (body) {
 						try {
 							var data = JSON.parse(body);
-							// we don't actually do much with this data
+							p1rating = data.p1rating.acre;
+							p2rating = data.p2rating.acre;
 							selfR.add("Ladder updated.");
 							selfR.update();
 						} catch(e) {
@@ -83,17 +85,33 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 					}
 				});
 				fs.writeFile('logs/lastbattle.txt', ''+rooms.lobby.numRooms);
-				var logData = {
-					p1score: p1score,
-					turns: selfR.battle.turn,
-					p1: selfR.battle.p1.name,
-					p2: selfR.battle.p2.name,
-					p1team: selfR.battle.p1.team,
-					p2team: selfR.battle.p2.team
-				};
-				fs.writeFile('logs/'+selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'')+'/'+selfR.id+'.log.json',
-					JSON.stringify(logData)
-				);
+				if (!Tools.getFormat(selfR.format).noLog) {
+					var logData = {
+						p1score: p1score,
+						turns: selfR.battle.turn,
+						p1: selfR.battle.p1.name,
+						p2: selfR.battle.p2.name,
+						p1team: selfR.battle.p1.team,
+						p2team: selfR.battle.p2.team,
+						p1rating: p1rating,
+						p2rating: p2rating
+					};
+					var date = new Date();
+					var logfolder = date.format('{yyyy}-{MM}');
+					var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
+					var curpath = 'logs/'+logfolder;
+					fs.mkdir(curpath, '0755', function() {
+						var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
+						curpath += '/'+tier;
+						fs.mkdir(curpath, '0755', function() {
+							curpath += '/'+logsubfolder;
+							fs.mkdir(curpath, '0755', function() {
+								fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
+							});
+						});
+					}); // asychronicity
+					console.log(JSON.stringify(logData));
+				}
 			}
 		}
 
