@@ -2252,7 +2252,7 @@ exports.BattleAbilities = {
 	"trace": {
 		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability (except Multitype). This ability remains with this Pokemon until it leaves the field.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
-		onModifyPokemon: function(pokemon) {
+		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
 			var ability = this.getAbility(target.ability);
 			if (ability.id === 'flowergift' || ability.id === 'forecast' || ability.id === 'illusion' || ability.id === 'imposter' || ability.id === 'multitype' || ability.id === 'trace' || ability.id === 'wonderguard' || ability.id === 'zenmode') return;
