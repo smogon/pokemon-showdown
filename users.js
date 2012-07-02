@@ -96,6 +96,31 @@ function exportUsergroups() {
 }
 importUsergroups();
 
+var bannedWords = {};
+function importBannedWords() {
+	fs.readFile('config/bannedwords.txt', function(err, data) {
+		if (err) return;
+		data = (''+data).split("\n");
+		bannedWords = {};
+		for (var i = 0; i < data.length; i++) {
+			if (!data[i]) continue;
+			bannedWords[data[i]] = true;
+		}
+	});
+}
+function exportBannedWords() {
+	fs.writeFile('config/bannedwords.txt', Object.keys(bannedWords).join('\n'));
+}
+function addBannedWord(word) {
+	bannedWords[word] = true;
+	exportBannedWords();
+}
+function removeBannedWord(word) {
+	delete bannedWords[word];
+	exportBannedWords();
+}
+importBannedWords();
+
 // User
 var User = (function () {
 	function User(name, person, token) {
@@ -332,8 +357,16 @@ var User = (function () {
 			// before it gets to this stage it's your own fault
 			this.emit('nameTaken', {userid: '', reason: "You did not specify a name."});
 			return false;
-		} else if (userid === this.userid && !auth) {
-			return this.forceRename(name, this.authenticated);
+		} else {
+			for (var w in bannedWords) {
+				if (userid.indexOf(w) >= 0) {
+					this.emit('nameTaken', {userid: '', reason: "That name contains a banned word or phrase."});
+					return false;
+				}
+			}
+			if (userid === this.userid && !auth) {
+				return this.forceRename(name, this.authenticated);
+			}
 		}
 		if (users[userid] && !users[userid].authenticated && users[userid].connected && !auth) {
 			this.emit('nameTaken', {userid:this.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
@@ -899,3 +932,6 @@ exports.connectUser = connectUser;
 exports.users = users;
 exports.prevUsers = prevUsers;
 exports.importUsergroups = importUsergroups;
+exports.addBannedWord = addBannedWord;
+exports.removeBannedWord = removeBannedWord;
+

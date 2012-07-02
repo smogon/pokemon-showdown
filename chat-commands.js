@@ -1029,6 +1029,36 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		});
 		return false;
 		break;
+	case 'banword':
+	case 'bw':
+		if (!user.can('announce')) {
+			socket.emit('console', '/banword - Access denied.');
+			return false;
+		}
+		target = toId(target);
+		if (!target) {
+			socket.emit('console', 'Specify a word or phrase to ban.');
+			return false;
+		}
+		Users.addBannedWord(target);
+		socket.emit('console', 'Added \"'+target+'\" to the list of banned words.');
+		return false;
+		break;
+	case 'unbanword':
+	case 'ubw':
+		if (!user.can('announce')) {
+			socket.emit('console', '/unbanword - Access denied.');
+			return false;
+		}
+		target = toId(target);
+		if (!target) {
+			socket.emit('console', 'Specify a word or phrase to unban.');
+			return false;
+		}
+		Users.removeBannedWord(target);
+		socket.emit('console', 'Removed \"'+target+'\" from the list of banned words.');
+		return false;
+		break;
 	case 'help':
 	case 'commands':
 	case 'h':
