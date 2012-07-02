@@ -11593,18 +11593,11 @@ exports.BattleMovedex = {
 		name: "Teeter Dance",
 		pp: 20,
 		isViable: true,
-		isBounceable: true,
+		isBounceable: false,
 		priority: 0,
-		onHitField: function(target, source) {
-			for (var i=0; i<this.sides.length; i++) {
-				for (var j=0; j<this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j] === source) continue;
-					this.sides[i].active[j].addVolatile('confusion');
-				}
-			}
-		},
+		volatileStatus: 'confusion',
 		secondary: false,
-		target: "all",
+		target: "adjacent",
 		type: "Normal"
 	},
 	"telekinesis": {
