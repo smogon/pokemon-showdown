@@ -94,7 +94,9 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 						p1team: selfR.battle.p1.team,
 						p2team: selfR.battle.p2.team,
 						p1rating: p1rating,
-						p2rating: p2rating
+						p2rating: p2rating,
+						endType: selfR.battle.endType || 'normal',
+						log: selfR.battle.activityQueue
 					};
 					var date = new Date();
 					var logfolder = date.format('{yyyy}-{MM}');
@@ -213,6 +215,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		if (!message) message = ' forfeited.';
 
 		selfR.battle.add('-message', selfR.battle.sides[forfeitSide].name+message);
+		selfR.battle.endType = 'forfeit';
 		selfR.battle.win(selfR.battle.sides[forfeitSide].foe);
 		selfR.active = selfR.battle.active;
 		selfR.update();
