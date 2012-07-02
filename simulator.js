@@ -17,7 +17,7 @@ function BattlePokemon(set, side) {
 	if (set.name === set.species || !set.name || !set.species) {
 		set.name = this.species;
 	}
-	this.name = set.name || set.species || 'Bulbasaur';
+	this.name = (set.name || set.species || 'Bulbasaur').substr(0,20);
 	this.speciesid = toId(this.species);
 	this.template = this.baseTemplate;
 	this.moves = [];
