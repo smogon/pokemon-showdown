@@ -888,7 +888,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	// Admin commands
 
 	case 'forcewin':
+	case 'forcetie':
 		if (user.can('forcewin') && room.battle) {
+			room.battle.endType = 'forced';
 			if (!target) {
 				room.battle.win('');
 				logModCommand(room,user.name+' forced a tie.',true);
