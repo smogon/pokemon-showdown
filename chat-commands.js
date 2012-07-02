@@ -1142,7 +1142,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === '%' || target === 'modlog') {
 			matched = true;
-			socket.emit('console', '/modlog [n] - Display the last n lines of the moderator log. Defaults to 15. Requires: % @ & ~');
+			socket.emit('console', '/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: % @ & ~');
 		}
 		if (target === '&' || target === 'promote') {
 			matched = true;
