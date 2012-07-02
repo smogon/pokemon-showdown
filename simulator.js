@@ -777,14 +777,20 @@ function BattlePokemon(set, side) {
 		//return Math.floor(Math.floor(d*48/selfP.maxhp + 0.5)*100/48);
 		return Math.floor(d*100/selfP.maxhp + 0.5);
 	};
-	this.getHealth = function() {
+	this.getHealth = function(realHp) {
 		if (selfP.fainted) return ' (0 fnt)';
 		//var hpp = Math.floor(48*selfP.hp/selfP.maxhp) || 1;
-		var hpp = Math.floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
-		if (!selfP.hp) hpp = 0;
+		var hpstring;
+		if (realHp) {
+			hpstring = ''+selfP.hp+'/'+selfP.maxhp;
+		} else {
+			var hpp = Math.floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
+			if (!selfP.hp) hpp = 0;
+			hpstring = ''+hpp+'/100';
+		}
 		var status = '';
 		if (selfP.status) status = ' '+selfP.status;
-		return ' ('+hpp+'/100'+status+')';
+		return ' ('+hpstring+status+')';
 	};
 	this.hpChange = function(d) {
 		return ''+selfP.hpPercent(d)+selfP.getHealth();
@@ -888,7 +894,7 @@ function BattleSide(user, battle, n) {
 			data.pokemon.push({
 				ident: pokemon.fullname,
 				details: pokemon.details,
-				condition: pokemon.getHealth(),
+				condition: pokemon.getHealth(true),
 				active: (pokemon.position < pokemon.side.active.length),
 				moves: pokemon.moves,
 				ability: pokemon.ability,
