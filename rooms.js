@@ -885,6 +885,12 @@ function LobbyRoom(roomid) {
 		p1 = Users.get(p1);
 		p2 = Users.get(p2);
 
+		if (!p1 || !p2) {
+			// most likely, a user was banned during the battle start procedure
+			selfR.cancelSearch(p1, true);
+			selfR.cancelSearch(p2, true);
+			return;
+		}
 		if (p1 === p2) {
 			selfR.cancelSearch(p1, true);
 			selfR.cancelSearch(p2, true);
@@ -1030,6 +1036,7 @@ getRoom = function(roomid) {
 };
 newRoom = function(roomid, format, p1, p2, parent, rated) {
 	if (roomid && roomid.id) return roomid;
+	if (!p1 || !p2) return false;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid]) {
 		console.log("NEW ROOM: "+roomid);
