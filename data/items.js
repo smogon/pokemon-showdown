@@ -1149,8 +1149,13 @@ exports.BattleItems = {
 			basePower: 60
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (user.template.species === 'Giratina' && (move.type === 'Ghost' || move.type === 'Dragon')) {
+			if (user.template.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return basePower * 1.2;
+			}
+		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.template.num === 487) || pokemon.template.num === 487) {
+				return false;
 			}
 		},
 		desc: "Raises the Base Power of Giratina's STAB moves 20% and transforms Giratina into Giratina-O when held. Cannot be removed or given to Giratina in battle."
@@ -2429,7 +2434,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({spe:1});
 		},
-		desc: "Raises Speed by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Speed by one stage when at 25% HP or less. One-time use."
 	},
 	"scopelens": {
 		id: "scopelens",
@@ -2624,7 +2629,6 @@ exports.BattleItems = {
 		id: "souldew",
 		name: "Soul Dew",
 		spritenum: 459,
-		isUnreleased: true,
 		fling: {
 			basePower: 30
 		},
