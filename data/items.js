@@ -1074,7 +1074,6 @@ exports.BattleItems = {
 		id: "ganlonberry",
 		name: "Ganlon Berry",
 		spritenum: 158,
-		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1088,7 +1087,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({def:1});
 		},
-		desc: "Raises Defense by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Defense by one stage when at 25% HP or less. One-time use."
 	},
 	"ghostgem": {
 		id: "ghostgem",
