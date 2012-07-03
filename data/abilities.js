@@ -578,26 +578,27 @@ exports.BattleAbilities = {
 	"forecast": {
 		desc: "This Pokemon's type changes according to the current weather conditions: it becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and remains its regular type otherwise.",
 		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
-		onStart: function(pokemon) {
-			delete this.effectData.forme;
-		},
 		onModifyPokemon: function(pokemon) {
-			if (pokemon.species !== 'Castform') return;
-			if (this.weather === 'sunnyday') {
-				pokemon.types = ['Fire'];
-			} else if (this.weather === 'raindance') {
-				pokemon.types = ['Water'];
-			} else if (this.weather === 'hail') {
-				pokemon.types = ['Ice'];
+			if (pokemon.baseTemplate.species !== 'Castform' || pokemon.transformed) return;
+			var forme = null;
+			switch (this.weather) {
+			case 'sunnyday':
+				if (pokemon.template.speciesid !== 'castformsunny') forme = 'Castform-Sunny';
+				break;
+			case 'raindance':
+				if (pokemon.template.speciesid !== 'castformrainy') forme = 'Castform-Rainy';
+				break;
+			case 'hail':
+				if (pokemon.template.speciesid !== 'castformsnowy') forme = 'Castform-Snowy';
+				break;
+			default:
+				if (pokemon.template.speciesid !== 'castform') forme = 'Castform';
+				break;
 			}
-			if (pokemon.isActive && (this.effectData.forme||'Normal') != pokemon.types[0]) {
-				this.effectData.forme = pokemon.types[0];
-				if (pokemon.types[0] === 'Normal') {
-					delete this.effectData.forme;
-					this.add('-formechange', pokemon, 'Castform');
-				} else {
-					this.add('-formechange', pokemon, 'Castform-'+this.effectData.forme);
-				}
+			if (pokemon.isActive && forme) {
+				pokemon.transformInto(forme);
+				pokemon.transformed = false;
+				this.add('-formechange', pokemon, forme);
 				this.add('-message', pokemon.name+' transformed! (placeholder)');
 			}
 		},
