@@ -8826,7 +8826,7 @@ exports.BattleMovedex = {
 			status: 'slp'
 		},
 		onHit: function(target, pokemon) {
-			if (pokemon.baseTemplate.species !== 'Meloetta') {
+			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
 			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta')) {
@@ -8835,6 +8835,7 @@ exports.BattleMovedex = {
 				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
 			}
 			// renderer takes care of this for us
+			pokemon.transformed = false;
 		},
 		target: "normal",
 		type: "Normal"
