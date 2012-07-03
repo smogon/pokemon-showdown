@@ -6211,7 +6211,7 @@ exports.BattleMovedex = {
 		},
 		onTryHit: function(target) {
 			if (target.hasType('Grass')) {
-				this.add('-immune', target.id);
+				this.add('-immune', target.id, '[msg]');
 				return null;
 			}
 		},
@@ -11060,7 +11060,7 @@ exports.BattleMovedex = {
 				}
 				if (move.category === 'Status') {
 					var SubBlocked = {
-						acupressure:1, block:1, embargo:1, entrainment:1, flatter:1, gastroacid:1, grudge:1, healblock:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, spiderweb:1, sketch:1, swagger:1, switcheroo:1, trick:1, worryseed:1, yawn:1, soak: 1
+						acupressure:1, block:1, embargo:1, entrainment:1, flatter:1, gastroacid:1, healblock:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, spiderweb:1, swagger:1, switcheroo:1, trick:1, worryseed:1, yawn:1, soak: 1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
 						this.add('-activate', target, 'Substitute', move);
