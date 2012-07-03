@@ -830,8 +830,9 @@ exports.BattleAbilities = {
 	"illusion": {
 		desc: "Illusion will change the appearance of the Pokemon to a different species. This is dependent on the last Pokemon in the player's party. Along with the species itself, Illusion is broken when the user is damaged, but is not broken by Substitute, weather conditions, status ailments, or entry hazards. Illusion will replicate the type of Poke Ball, the species name, and the gender of the Pokemon it is masquerading as.",
 		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes direct damage.",
-		onModifyPokemon: function(pokemon) {
+		onBeforeSwitchIn: function(pokemon) {
 			if (!pokemon.volatiles['illusion']) {
+				var i;
 				for (i=pokemon.side.pokemon.length-1; i>pokemon.position; i--) {
 					if (!pokemon.side.pokemon[i]) continue;
 					if (!pokemon.side.pokemon[i].fainted) break;

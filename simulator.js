@@ -1658,6 +1658,7 @@ function Battle(roomid, format, rated) {
 		if (side.active[0] && !side.active[0].fainted) {
 			//selfB.add('switch-out '+side.active[0].id);
 		}
+		selfB.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[0]) {
 			var oldActive = side.active[0];
 			var oldpos = pokemon.position;
@@ -1712,6 +1713,7 @@ function Battle(roomid, format, rated) {
 	this.dragIn = function(side) {
 		var pokemon = selfB.getRandomSwitchable(side);
 		if (!pokemon) return false;
+		selfB.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[0]) {
 			var oldActive = side.active[0];
 			var oldpos = pokemon.position;
