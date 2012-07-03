@@ -83,16 +83,26 @@ exports.BattleScripts = {
 		var movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		this.add('move', pokemon, movename, target+attrs);
-		if (missed) {
-			this.add('-miss', pokemon);
+		if (target.fainted && !canTargetFainted[move.target]) {
+			this.add('-notarget');
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent') {
 				this.faint(pokemon, pokemon, move);
 			}
 			return true;
 		}
-		if (target.fainted && !canTargetFainted[move.target]) {
-			this.add('-notarget');
+		if (typeof move.affectedByImmunities === 'undefined') {
+			move.affectedByImmunities = (move.category !== 'Status');
+		}
+		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && !target.runImmunity('sound', true))) {
+			this.singleEvent('MoveFail', move, null, target, pokemon, move);
+			if (move.selfdestruct && move.target === 'adjacent') {
+				this.faint(pokemon, pokemon, move);
+			}
+			return true;
+		}
+		if (missed) {
+			this.add('-miss', pokemon);
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent') {
 				this.faint(pokemon, pokemon, move);
