@@ -1829,6 +1829,9 @@ function Battle(roomid, format, rated) {
 					boost[i] = -boost[i];
 				}
 				switch (effect.id) {
+				case 'intimidate':
+					selfB.add(msg, target, i, boost[i]);
+					break;
 				default:
 					if (effect.effectType === 'Move') {
 						selfB.add(msg, target, i, boost[i]);
