@@ -195,7 +195,6 @@ function BattlePokemon(set, side) {
 	};
 
 	this.update = function(init) {
-		selfP.illusion = null;
 		selfP.baseStats = selfP.template.baseStats;
 		// reset for Light Metal etc
 		selfP.weightkg = selfP.template.weightkg;
@@ -462,6 +461,7 @@ function BattlePokemon(set, side) {
 		selfP.movedThisTurn = false;
 		selfP.newlySwitched = true;
 		selfP.beingCalledBack = false;
+		selfP.illusion = null;
 		selfP.update(init);
 	};
 
