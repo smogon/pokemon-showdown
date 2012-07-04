@@ -578,26 +578,27 @@ exports.BattleAbilities = {
 	"forecast": {
 		desc: "This Pokemon's type changes according to the current weather conditions: it becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and remains its regular type otherwise.",
 		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
-		onStart: function(pokemon) {
-			delete this.effectData.forme;
-		},
 		onModifyPokemon: function(pokemon) {
-			if (pokemon.species !== 'Castform') return;
-			if (this.weather === 'sunnyday') {
-				pokemon.types = ['Fire'];
-			} else if (this.weather === 'raindance') {
-				pokemon.types = ['Water'];
-			} else if (this.weather === 'hail') {
-				pokemon.types = ['Ice'];
+			if (pokemon.baseTemplate.species !== 'Castform' || pokemon.transformed) return;
+			var forme = null;
+			switch (this.weather) {
+			case 'sunnyday':
+				if (pokemon.template.speciesid !== 'castformsunny') forme = 'Castform-Sunny';
+				break;
+			case 'raindance':
+				if (pokemon.template.speciesid !== 'castformrainy') forme = 'Castform-Rainy';
+				break;
+			case 'hail':
+				if (pokemon.template.speciesid !== 'castformsnowy') forme = 'Castform-Snowy';
+				break;
+			default:
+				if (pokemon.template.speciesid !== 'castform') forme = 'Castform';
+				break;
 			}
-			if (pokemon.isActive && (this.effectData.forme||'Normal') != pokemon.types[0]) {
-				this.effectData.forme = pokemon.types[0];
-				if (pokemon.types[0] === 'Normal') {
-					delete this.effectData.forme;
-					this.add('-formechange', pokemon, 'Castform');
-				} else {
-					this.add('-formechange', pokemon, 'Castform-'+this.effectData.forme);
-				}
+			if (pokemon.isActive && forme) {
+				pokemon.transformInto(forme);
+				pokemon.transformed = false;
+				this.add('-formechange', pokemon, forme);
 				this.add('-message', pokemon.name+' transformed! (placeholder)');
 			}
 		},
@@ -830,8 +831,9 @@ exports.BattleAbilities = {
 	"illusion": {
 		desc: "Illusion will change the appearance of the Pokemon to a different species. This is dependent on the last Pokemon in the player's party. Along with the species itself, Illusion is broken when the user is damaged, but is not broken by Substitute, weather conditions, status ailments, or entry hazards. Illusion will replicate the type of Poke Ball, the species name, and the gender of the Pokemon it is masquerading as.",
 		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes direct damage.",
-		onModifyPokemon: function(pokemon) {
+		onBeforeSwitchIn: function(pokemon) {
 			if (!pokemon.volatiles['illusion']) {
+				var i;
 				for (i=pokemon.side.pokemon.length-1; i>pokemon.position; i--) {
 					if (!pokemon.side.pokemon[i]) continue;
 					if (!pokemon.side.pokemon[i].fainted) break;
@@ -2252,8 +2254,9 @@ exports.BattleAbilities = {
 	"trace": {
 		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability (except Multitype). This ability remains with this Pokemon until it leaves the field.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
-		onStart: function(pokemon) {
+		onUpdate: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
+			if (!target || target.fainted) return;
 			var ability = this.getAbility(target.ability);
 			if (ability.id === 'flowergift' || ability.id === 'forecast' || ability.id === 'illusion' || ability.id === 'imposter' || ability.id === 'multitype' || ability.id === 'trace' || ability.id === 'wonderguard' || ability.id === 'zenmode') return;
 			if (pokemon.setAbility(ability)) {

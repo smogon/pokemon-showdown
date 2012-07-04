@@ -2725,7 +2725,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		drain: [1,2],
 		onTryHit: function(target) {
-			if (target.status !== 'slp') return false;
+			if (target.status !== 'slp') {
+				this.add('-immune', target.id, '[msg]');
+				return null;
+			}
 		},
 		secondary: false,
 		target: "normal",
@@ -6208,7 +6211,7 @@ exports.BattleMovedex = {
 		},
 		onTryHit: function(target) {
 			if (target.hasType('Grass')) {
-				this.add('-immune', target.id);
+				this.add('-immune', target.id, '[msg]');
 				return null;
 			}
 		},
@@ -8823,7 +8826,7 @@ exports.BattleMovedex = {
 			status: 'slp'
 		},
 		onHit: function(target, pokemon) {
-			if (pokemon.baseTemplate.species !== 'Meloetta') {
+			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
 			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta')) {
@@ -8832,6 +8835,7 @@ exports.BattleMovedex = {
 				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
 			}
 			// renderer takes care of this for us
+			pokemon.transformed = false;
 		},
 		target: "normal",
 		type: "Normal"
@@ -11056,7 +11060,7 @@ exports.BattleMovedex = {
 				}
 				if (move.category === 'Status') {
 					var SubBlocked = {
-						acupressure:1, block:1, dreameater:1, embargo:1, entrainment:1, flatter:1, gastroacid:1, grudge:1, healblock:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, spiderweb:1, sketch:1, swagger:1, switcheroo:1, trick:1, worryseed:1, yawn:1, soak: 1
+						acupressure:1, block:1, embargo:1, entrainment:1, flatter:1, gastroacid:1, healblock:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, spiderweb:1, swagger:1, switcheroo:1, trick:1, worryseed:1, yawn:1, soak: 1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
 						this.add('-activate', target, 'Substitute', move);
@@ -11593,18 +11597,11 @@ exports.BattleMovedex = {
 		name: "Teeter Dance",
 		pp: 20,
 		isViable: true,
-		isBounceable: true,
+		isBounceable: false,
 		priority: 0,
-		onHitField: function(target, source) {
-			for (var i=0; i<this.sides.length; i++) {
-				for (var j=0; j<this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j] === source) continue;
-					this.sides[i].active[j].addVolatile('confusion');
-				}
-			}
-		},
+		volatileStatus: 'confusion',
 		secondary: false,
-		target: "all",
+		target: "adjacent",
 		type: "Normal"
 	},
 	"telekinesis": {

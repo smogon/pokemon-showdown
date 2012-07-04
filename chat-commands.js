@@ -306,7 +306,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		logModCommand(room,""+targetUser.name+" was banned by "+user.name+"." + (targets[1] ? " (" + targets[1] + ")" : ""));
-		targetUser.emit('message', user.name+' has banned you. '+targets[1]);
+		targetUser.emit('message', user.name+' has banned you.  If you feel that your banning was unjustified you can <a href="http://www.smogon.com/forums/announcement.php?f=126&a=204" target="_blank">appeal the ban</a>. '+targets[1]);
 		var alts = targetUser.getAlts();
 		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
 
@@ -888,7 +888,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	// Admin commands
 
 	case 'forcewin':
+	case 'forcetie':
 		if (user.can('forcewin') && room.battle) {
+			room.battle.endType = 'forced';
 			if (!target) {
 				room.battle.win('');
 				logModCommand(room,user.name+' forced a tie.',true);
