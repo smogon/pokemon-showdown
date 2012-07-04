@@ -3950,13 +3950,11 @@ exports.BattleFormatsData = {
 	minccino: {
 		viableMoves: {"return":1,"tailslap":1,"wakeupslap":1,"uturn":1,"aquatail":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	cinccino: {
 		viableMoves: {"return":1,"tailslap":1,"wakeupslap":1,"uturn":1,"aquatail":1,"bulletseed":1,"rockblast":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	gothita: {
@@ -3973,14 +3971,17 @@ exports.BattleFormatsData = {
 	},
 	solosis: {
 		viableMoves: {"calmmind":1,"recover":1,"psychic":1,"hiddenpowerfighting":1,"shadowball":1,"trickroom":1,"psyshock":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	duosion: {
 		viableMoves: {"calmmind":1,"recover":1,"psychic":1,"hiddenpowerfighting":1,"shadowball":1,"trickroom":1,"psyshock":1},
+		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	reuniclus: {
 		viableMoves: {"calmmind":1,"recover":1,"psychic":1,"focusblast":1,"shadowball":1,"trickroom":1,"psyshock":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	ducklett: {
@@ -4227,6 +4228,7 @@ exports.BattleFormatsData = {
 	},
 	golett: {
 		viableMoves: {"substitute":1,"focuspunch":1,"earthquake":1,"shadowpunch":1,"hammerarm":1,"dynamicpunch":1,"stoneedge":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	golurk: {
@@ -4234,6 +4236,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":70,"abilities":["ironfist"],"moves":["shadowpunch","hyperbeam","gyroball","hammerarm"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	pawniard: {
