@@ -2569,13 +2569,13 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	castformsunny: {
-		tier: "NU"
+		tier: "Illegal"
 	},
 	castformrainy: {
-		tier: "NU"
+		tier: "Illegal"
 	},
 	castformsnowy: {
-		tier: "NU"
+		tier: "Illegal"
 	},
 	kecleon: {
 		viableMoves: {"stealthrock":1,"recover":1,"return":1,"thunderwave":1,"suckerpunch":1},
@@ -3086,7 +3086,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	cherrimsunshine: {
-		tier: "NU"
+		tier: "Illegal"
 	},
 	shellos: {
 		viableMoves: {"scald":1,"clearsmog":1,"recover":1,"toxic":1,"icebeam":1},
