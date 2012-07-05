@@ -188,18 +188,18 @@ exports.BattleFormats = {
 		// no restrictions, for serious
 		ruleset: []
 	},
-	hackmonsgen4: {
+	gen4hackmons: {
 		mod: 'gen4',
 		effectType: 'Format',
-		name: "Hackmons (Gen 4)",
+		name: "[Gen 4] Hackmons",
 		challengeShow: true,
 		ruleset: ['Pokemon'],
 		banlist: []
 	},
-	debugmodegen4: {
+	gen4debugmode: {
 		mod: 'gen4',
 		effectType: 'Format',
-		name: "Debug Mode (Gen 4)",
+		name: "[Gen 4] Debug Mode",
 		challengeShow: true,
 		canUseRandomTeam: true,
 		debug: true,
