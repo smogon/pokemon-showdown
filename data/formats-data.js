@@ -3840,14 +3840,17 @@ exports.BattleFormatsData = {
 	},
 	sandile: {
 		viableMoves: {"earthquake":1,"stoneedge":1,"pursuit":1,"crunch":1,"firefang":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	krokorok: {
 		viableMoves: {"earthquake":1,"stoneedge":1,"pursuit":1,"crunch":1,"firefang":1},
+		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	krookodile: {
 		viableMoves: {"earthquake":1,"stoneedge":1,"pursuit":1,"crunch":1,"bulkup":1,"firefang":1},
+		dreamWorldRelease: true,
 		tier: "UU"
 	},
 	darumaka: {
@@ -4162,14 +4165,17 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":1,"gender":"M","nature":"Naive","abilities":["moldbreaker"],"moves":["scratch","dragonrage"]},
 			{"generation":5,"level":10,"gender":"F","abilities":["moldbreaker"],"moves":["dragonrage","return","endure","dragonclaw"]}
 		],
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	fraxure: {
 		viableMoves: {"dragondance":1,"taunt":1,"swordsdance":1,"outrage":1,"dualchop":1,"dragonclaw":1,"dig":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	haxorus: {
 		viableMoves: {"dragondance":1,"swordsdance":1,"outrage":1,"dualchop":1,"dragonclaw":1,"earthquake":1,"brickbreak":1},
+		dreamWorldRelease: true,
 		tier: "OU"
 	},
 	cubchoo: {
