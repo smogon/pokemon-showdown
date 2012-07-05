@@ -206,6 +206,14 @@ exports.BattleFormats = {
 		// no restrictions, for serious
 		ruleset: []
 	},
+	gennextou: {
+		mod: 'gennext',
+		effectType: 'Format',
+		name: "[Gen NEXT] NEXT-OU",
+		challengeShow: true,
+		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	},
 
 	// rules
 
