@@ -105,7 +105,7 @@ exports.BattleItems = {
 				move.critRatio += 2;
 			}
 		},
-		onModifyPokemon: function(stats, pokemon) {
+		onModifyPokemon: function(pokemon) {
 			if (pokemon.template.species === 'Unown') {
 				// Strange Orb
 				pokemon.stats.spa *= 3;
@@ -115,7 +115,7 @@ exports.BattleItems = {
 		},
 		onFoeBasePower: function(basePower, attacker, defender, move) {
 			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1};
-			if (GossamerWingUsers[pokemon.template.species]) {
+			if (GossamerWingUsers[defender.template.species]) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
 					return basePower / 2;
 				}
@@ -123,7 +123,7 @@ exports.BattleItems = {
 		},
 		onDamage: function(damage, attacker, defender, effect) {
 			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1};
-			if (GossamerWingUsers[pokemon.template.species]) {
+			if (GossamerWingUsers[defender.template.species]) {
 				if (effect && effect.id === 'stealthrock') {
 					return damage / 2;
 				}
