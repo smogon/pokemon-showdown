@@ -1953,8 +1953,11 @@ exports.BattleAbilities = {
 	"soundproof": {
 		desc: "This Pokemon is immune to the effects of the sound-related moves Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar.",
 		shortDesc: "This Pokemon is immune to sound-based moves.",
-		onImmunity: function(type) {
-			if (type === 'sound') return false;
+		onImmunity: function(type, pokemon) {
+			if (type === 'sound') {
+				this.add('-immune', pokemon.id, '[msg]');
+				return null;
+			}
 		},
 		id: "soundproof",
 		name: "Soundproof",
