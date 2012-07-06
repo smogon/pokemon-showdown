@@ -287,7 +287,6 @@ function BattlePokemon(set, side) {
 	this.gotAttacked = function(move, damage, source) {
 		if (!damage) damage = 0;
 		move = selfB.getMove(move);
-		source.lastDamage = damage;
 		selfP.lastAttackedBy = {
 			pokemon: source,
 			damage: damage,
@@ -1873,6 +1872,7 @@ function Battle(roomid, format, rated) {
 			this.debug('pokemon.damage said zero');
 			return 0;
 		}
+		source.lastDamage = damage;
 		var name = effect.fullname;
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
