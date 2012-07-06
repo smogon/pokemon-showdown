@@ -8106,7 +8106,7 @@ exports.BattleMovedex = {
 		onModifyMove: function(move, pokemon, target) {
 			var rand = this.random(10);
 			if (rand < 2) {
-				move.heal = [80, target.maxhp];
+				move.heal = [1,4];
 			} else if (rand < 6) {
 				move.basePower = 40;
 			} else if (rand < 9) {
