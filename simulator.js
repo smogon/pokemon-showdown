@@ -1872,7 +1872,7 @@ function Battle(roomid, format, rated) {
 			this.debug('pokemon.damage said zero');
 			return 0;
 		}
-		source.lastDamage = damage;
+		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
