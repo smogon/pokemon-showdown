@@ -39,7 +39,7 @@ exports.BattleAbilities = {
 	"flowergift": {
 		inherit: true,
 		onModifyMove: function(move) {
-			if (move.id = 'sunnyday') {
+			if (move.id === 'sunnyday') {
 				var weather = move.weather;
 				move.weather = null;
 				move.onHit = function(target, source) {

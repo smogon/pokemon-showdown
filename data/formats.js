@@ -206,7 +206,7 @@ exports.BattleFormats = {
 		// no restrictions, for serious
 		ruleset: []
 	},
-	gennextou: {
+	gennextnextou: {
 		mod: 'gennext',
 		effectType: 'Format',
 		name: "[Gen NEXT] NEXT-OU",

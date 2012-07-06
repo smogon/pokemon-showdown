@@ -87,6 +87,17 @@ exports.BattleMovedex = {
 		priority: 1
 	},
 	/******************************************************************
+	Snore:
+	- base power increased to 100
+
+	Justification:
+	- Sleep Talk needs some competition
+	******************************************************************/
+	snore: {
+		inherit: true,
+		basePower: 100
+	},
+	/******************************************************************
 	Multi-hit moves:
 	- changed to perfect accuracy
 

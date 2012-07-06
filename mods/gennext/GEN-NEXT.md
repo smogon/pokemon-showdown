@@ -15,7 +15,7 @@ Major changes:
 
 - Bug/Flying Quiver Dancers get an item named GossamerWing (select "Stick"
   in the teambuilder). It negates the Flying weaknesses (take half damage from
-  Rock, Ice, and Electric moves, and SR). In addition, they all get Hurricane.
+  Rock, Ice, and Electric moves, and SR).
 
 - Weather-inducing abilities now last for only 5 turns (and are unaffected by
   items). Weather moves have +1 priority. Forecast and Flower Gift will make
@@ -24,7 +24,7 @@ Major changes:
 - Flower Gift has an additional effect: if Sunny Day is used, the next switch-in
   receives +1 Atk, +1 SpD
 
-Minor changes:
+Minor move changes:
 
 - Perfect accuracy moves with a base power of 60 have their base power
   increased to 80
@@ -37,4 +37,17 @@ Minor changes:
 
 - Tri Attack now hits 3 times and has a base power of 30
 
-- Masquerain gets Surf and Sleep Powder
+- Strength now has a 30% chance of raising user's Atk
+
+- Cut now has a 100% chance of lowering foe's Def
+
+- Snore's Base Power is now 100
+
+Minor learnset changes:
+
+- Masquerain gets Surf
+
+- Bug/Flying Quiver Dancers (Butterfree, Beautifly, Masquerain, Mothim) get
+  Hurricane
+
+- Aerodactyl gets Brave Bird
