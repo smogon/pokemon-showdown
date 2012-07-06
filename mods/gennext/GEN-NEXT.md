@@ -43,7 +43,7 @@ Minor move changes:
 
 - Snore's Base Power is now 100
 
-- Relic Song's secondary is now 30% confusion (60% after Serene Grace)
+- Relic Song's secondary is now 40% -1 Atk -1 SpA (80% after Serene Grace)
 
 Minor learnset changes:
 
