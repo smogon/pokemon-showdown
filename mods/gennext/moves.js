@@ -12,7 +12,7 @@ exports.BattleMovedex = {
 	- Giga Drain and Drain Punch, similar 60 base power moves, have
 	  been upgraded
 	******************************************************************/
-	swift: {
+	aerialace: {	
 		inherit: true,
 		basePower: 80
 	},
@@ -20,9 +20,71 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80
 	},
+	shadowpunch: {
+		inherit: true,
+		basePower: 80
+	},
 	shockwave: {
 		inherit: true,
 		basePower: 80
+	},
+	swift: {
+		inherit: true,
+		basePower: 80
+	},
+	/******************************************************************
+	HMs:
+	- shouldn't suck (as much)
+
+	Justification:
+	- there are HMs that don't suck
+
+	Precedent:
+	- Dive! Technically, it was to be in-line with Dig, but still.
+	******************************************************************/
+	strength: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			self: {
+				boosts: {
+					atk: 1
+				}
+			}
+		}
+	},
+	cut: {
+		inherit: true,
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		}
+	},
+	/******************************************************************
+	Weather moves:
+	- have increased priority
+
+	Justification:
+	- several Rain abusers get Prankster, which makes Rain otherwise
+	  overpowered
+	******************************************************************/
+	raindance: {
+		inherit: true,
+		priority: 1
+	},
+	sunnyday: {
+		inherit: true,
+		priority: 1
+	},
+	sandstorm: {
+		inherit: true,
+		priority: 1
+	},
+	hail: {
+		inherit: true,
+		priority: 1
 	},
 	/******************************************************************
 	Multi-hit moves:
@@ -112,14 +174,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: true
 	},
-	tailslap: {
-		inherit: true,
-		accuracy: true
-	},
-	tailslap: {
-		inherit: true,
-		accuracy: true
-	},
 	/******************************************************************
 	Signature moves and other moves with limited distribution:
 	- buffed in various ways
@@ -128,6 +182,7 @@ exports.BattleMovedex = {
 	- more metagame variety is always good
 	******************************************************************/
 	twineedle: {
+		inherit: true,
 		basePower: 50
 	},
 	triattack: {
