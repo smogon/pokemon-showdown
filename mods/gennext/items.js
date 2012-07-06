@@ -15,8 +15,8 @@ exports.BattleItems = {
 			}
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Bug' || move.type === 'Fire') {
-				return basePower * 1.2;
+			if (move.id === 'technoblast') {
+				return basePower * 1.3;
 			}
 		},
 		onDrive: 'Fire',
@@ -38,8 +38,8 @@ exports.BattleItems = {
 			}
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Bug' || move.type === 'Ice') {
-				return basePower * 1.2;
+			if (move.id === 'technoblast') {
+				return basePower * 1.3;
 			}
 		},
 		onDrive: 'Ice',
@@ -61,8 +61,8 @@ exports.BattleItems = {
 			}
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Bug' || move.type === 'Water') {
-				return basePower * 1.2;
+			if (move.id === 'technoblast') {
+				return basePower * 1.3;
 			}
 		},
 		onDrive: 'Water',
@@ -84,11 +84,51 @@ exports.BattleItems = {
 			}
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Bug' || move.type === 'Electric') {
-				return basePower * 1.2;
+			if (move.id === 'technoblast') {
+				return basePower * 1.3;
 			}
 		},
 		onDrive: 'Electric',
 		desc: "Changes Genesect to Genesect-Shock."
-	}
+	},
+	"stick": {
+		id: "stick",
+		name: "Stick",
+		fling: {
+			basePower: 60
+		},
+		spritenum: 475,
+		// The Stick is a stand-in for a number of pokemon-exclusive items
+		// introduced with Gen Next
+		onModifyMove: function(move, user) {
+			if (user.template.species === 'Farfetch\'d') {
+				move.critRatio += 2;
+			}
+		},
+		onModifyPokemon: function(stats, pokemon) {
+			if (pokemon.template.species === 'Unown') {
+				// Strange Orb
+				pokemon.stats.spa *= 3;
+				pokemon.stats.spe *= 2;
+				pokemon.types = [pokemon.hpType];
+			}
+		},
+		onFoeBasePower: function(basePower, attacker, defender, move) {
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1};
+			if (GossamerWingUsers[pokemon.template.species]) {
+				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
+					return basePower / 2;
+				}
+			}
+		},
+		onDamage: function(damage, attacker, defender, effect) {
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1};
+			if (GossamerWingUsers[pokemon.template.species]) {
+				if (effect && effect.id === 'stealthrock') {
+					return damage / 2;
+				}
+			}
+		},
+		desc: "Raises Farfetch'd's critical hit rate two stages."
+	},
 };
