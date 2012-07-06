@@ -212,7 +212,7 @@ exports.BattleFormats = {
 		name: "[Gen NEXT] NEXT-OU",
 		challengeShow: true,
 		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+		banlist: ['Uber', 'Soul Dew', 'Kyurem']
 	},
 
 	// rules

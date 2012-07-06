@@ -43,6 +43,8 @@ Minor move changes:
 
 - Snore's Base Power is now 100
 
+- Relic Song's secondary is now 30% confusion (60% after Serene Grace)
+
 Minor learnset changes:
 
 - Masquerain gets Surf
@@ -51,3 +53,13 @@ Minor learnset changes:
   Hurricane
 
 - Aerodactyl gets Brave Bird
+
+Minor ability changes:
+
+- Compoundeyes now grants 1.5x accuracy
+
+Tier changes:
+
+- DrizzleSwim is no longer banned in OU
+
+- Genesect is released

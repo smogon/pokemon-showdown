@@ -98,6 +98,20 @@ exports.BattleMovedex = {
 		basePower: 100
 	},
 	/******************************************************************
+	Relic Song:
+	- secondary changed to 30% confusion (60% after Serene Grace)
+
+	Justification:
+	- Meloetta-P needs viability
+	******************************************************************/
+	relicsong: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'confusion'
+		},
+	},
+	/******************************************************************
 	Multi-hit moves:
 	- changed to perfect accuracy
 
