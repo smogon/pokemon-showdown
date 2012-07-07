@@ -173,7 +173,7 @@ var User = (function () {
 		}
 		for (var i=0; i<this.people.length; i++) {
 			if (roomid && !this.people[i].rooms[roomid]) continue;
-			this.people[i].socket.emit(message, data);
+			emit(this.people[i].socket, message, data);
 		}
 	};
 	User.prototype.getIdentity = function() {
@@ -275,7 +275,7 @@ var User = (function () {
 		for (var i=0; i<this.people.length; i++) {
 			this.people[i].rename(name, oldid);
 			console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
-			this.people[i].socket.emit('update', {
+			emit(this.people[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
 				named: true,
@@ -317,7 +317,7 @@ var User = (function () {
 		for (var i=0; i<this.people.length; i++) {
 			this.people[i].rename(name, oldid);
 			console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
-			this.people[i].socket.emit('update', {
+			emit(this.people[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
 				named: false,
@@ -528,7 +528,7 @@ var User = (function () {
 		this.people.push(person);
 		person.rename(this.name, oldid);
 		console.log(''+this.name+' merging: socket '+person.socket.id+' of ');
-		person.socket.emit('update', {
+		emit(person.socket, 'update', {
 			name: this.name,
 			userid: this.userid,
 			named: true,
@@ -677,6 +677,7 @@ var User = (function () {
 			for (var j in person.rooms) {
 				this.leaveRoom(person.rooms[j], person);
 			}
+			person.socket.end();
 		}
 		this.people = [];
 	};
@@ -716,7 +717,7 @@ var User = (function () {
 				room.initSocket(this, socket);
 			}
 		} else if (person && room.id === 'lobby') {
-			person.socket.emit('init', {room: roomid, notFound: true});
+			emit(person.socket, 'init', {room: roomid, notFound: true});
 		}
 	};
 	User.prototype.leaveRoom = function(room, socket) {
@@ -830,7 +831,7 @@ var User = (function () {
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
 			if (this.chatQueue.length > 6) {
-				socket.emit('console', {
+				emit(socket, 'console', {
 					room: room.id,
 					rawMessage: "<strong style=\"color:red\">Your message was not sent because you've been typing too quickly.</strong>"
 				});
@@ -897,8 +898,8 @@ var Person = (function () {
 		people[this.id] = this;
 
 		this.ip = '';
-		if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
-			this.ip = socket.handshake.address.address;
+		if (socket.remoteAddress) {
+			this.ip = socket.remoteAddress;
 		}
 
 		if (ipSearch(this.ip,bannedIps)) {

@@ -406,7 +406,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			roomType: 'battle',
 			battlelog: selfR.battle.log
 		};
-		socket.emit('init', initdata);
+		emit(socket, 'init', initdata);
 	};
 	this.join = function(user) {
 		if (!user) return false;
@@ -518,7 +518,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
 		if (message.length > 511 && !user.can('ignorelimits')) {
-			socket.emit('message', "Your message is too long:\n\n"+message);
+			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
 		if (message.substr(0,2) === '//') {
@@ -826,7 +826,7 @@ function LobbyRoom(roomid) {
 			log: selfR.log.slice(-100),
 			searcher: selfR.searchers.length
 		};
-		socket.emit('init', initdata);
+		emit(socket, 'init', initdata);
 	};
 	this.join = function(user) {
 		if (!user) return false; // ???
@@ -958,7 +958,7 @@ function LobbyRoom(roomid) {
 	this.chat = function(user, message, socket) {
 		if (!user.named || !message || !message.trim || !message.trim().length) return;
 		if (message.length > 255 && !user.can('ignorelimits')) {
-			socket.emit('message', "Your message is too long:\n\n"+message);
+			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
 		var cmd = '', target = '';

@@ -47,6 +47,10 @@ exports.reportbattles = true;
 //   huge influxes of spammy users.
 exports.modchat = false;
 
+// protocol - WebSockets ("ws") or Socket.IO ("io").
+//	We recommend using WebSockets unless you have a really compelling reason not to.
+exports.protocol = 'ws';
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
