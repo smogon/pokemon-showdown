@@ -1,6 +1,7 @@
 exports.BattleAliases = {
 	// formes
-	"basculinb": "Basculin-Blue",
+	"basculinb": "Basculin-Blue-Striped",
+	"basculinblue": "Basculin-Blue-Striped",
 	"castformh": "Castform-Snowy",
 	"castformice": "Castform-Snowy",
 	"castformr": "Castform-Rainy",
@@ -44,6 +45,7 @@ exports.BattleAliases = {
 	"meloettaaria": "Meloetta",
 	"basculinr": "Basculin",
 	"basculinred": "Basculin",
+	"basculinredstriped": "Basculin",
 
 	// items
 	"cb": "Choice Band",
