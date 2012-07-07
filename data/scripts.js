@@ -886,6 +886,7 @@ exports.BattleScripts = {
 			}
 
 			var levelScale = {
+				LC: 95,
 				NFE: 95,
 				NU: 90,
 				BL3: 88,
@@ -896,6 +897,7 @@ exports.BattleScripts = {
 				OU: 75,
 				G4CAP: 74,
 				G5CAP: 74,
+				Unreleased: 75,
 				Limbo: 75,
 				Uber: 70
 			};
