@@ -1019,13 +1019,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				if (!stdout) {
 					emit(socket, 'console', 'The modlog is empty. (Weird.)');
 				} else {
-					emit(socket, 'message', 'Displaying the last '+lines+' lines of the Moderator Log:\n\n'+stdout);
+					emit(socket, 'message', 'Displaying the last '+lines+' lines of the Moderator Log:\n\n'+sanitize(stdout));
 				}
 			} else {
 				if (!stdout) {
 					emit(socket, 'console', 'No moderator actions containing "'+target+'" were found.');
 				} else {
-					emit(socket, 'message', 'Displaying all logged actions containing "'+target+'":\n\n'+stdout);
+					emit(socket, 'message', 'Displaying all logged actions containing "'+target+'":\n\n'+sanitize(stdout));
 				}
 			}
 		});
