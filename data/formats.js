@@ -166,6 +166,8 @@ exports.BattleFormats = {
 	haxmons: {
 		effectType: 'Format',
 		name: "Haxmons",
+		challengeShow: true,
+		canUseRandomTeam: true,
 		ruleset: ['Hax Clause', 'Team Preview']
 	},
 	glitchmons: {
