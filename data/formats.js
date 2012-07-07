@@ -221,10 +221,6 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'Lax Incense', 'Minimize', 'Double Team'],
 		validateSet: function(set) {
-			if (!set.name) set.name = set.species;
-			var template = this.getTemplate(set.species);
-			var problems = new Array();
-
 			// limit one of each move in Standard
 			var moves = [];
 			if (set.moves) {
@@ -238,11 +234,6 @@ exports.BattleFormats = {
 				}
 			}
 			set.moves = moves;
-
-			// Check the pokemon's moveset
-			problems = problems.concat(Tools.validateMoveset(set, template));
-
-			return problems;
 		}
 	},
 	standarddw: {
@@ -308,11 +299,6 @@ exports.BattleFormats = {
 			}
 			if (set.moves) for (var i=0; i<set.moves.length; i++) {
 				var move = this.getMove(set.moves[i]);
-				if (!move) {
-					set.moves.splice(i, 1);
-					--i;
-					continue;
-				}
 				if (move.isNonstandard) {
 					problems.push(move.name+' is not a real move.');
 				}
@@ -361,7 +347,7 @@ exports.BattleFormats = {
 	littlecup: {
 		effectType: 'Rule',
 		validateSet: function(set) {
-			var template = this.getTemplate(set.species || set.name)
+			var template = this.getTemplate(set.species || set.name);
 
 			if (template.prevo) {
 				return [set.species+" isn't the first in its evolution family."];

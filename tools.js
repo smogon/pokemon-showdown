@@ -360,6 +360,7 @@ module.exports = (function () {
 		return stats;
 	};
 
+
 	Tools.prototype.checkLearnset = function(move, template, lsetData) {
 		lsetData = lsetData || {set:{},format:{}};
 		var set = lsetData.set;
@@ -636,14 +637,6 @@ module.exports = (function () {
 				}
 			}
 		}
-		setHas[set.item.toId()] = true;
-		if (banlistTable[set.item.toId()]) {
-			problems.push(set.name+"'s ("+set.species+") item "+set.item+" is banned.");
-		}
-		if (banlistTable['Unreleased'] && setHas['souldew']) {
-			problems.push(set.name+"'s ("+set.species+") item "+set.item+" is unreleased.");
-		}
-		setHas[set.ability.toId()] = true;
 		var limit1 = 0;
 		if (!set.moves || !set.moves.length) {
 			problems.push(name+" has no moves.");
