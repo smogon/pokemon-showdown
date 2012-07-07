@@ -885,21 +885,22 @@ exports.BattleScripts = {
 				}
 			}
 
+			// 95-86-82-78-74-70
 			var levelScale = {
 				LC: 95,
 				NFE: 95,
-				'LC Uber': 90,
-				NU: 90,
-				BL3: 88,
-				RU: 85,
-				BL2: 83,
-				UU: 80,
-				BL: 78,
-				OU: 75,
-				CAP: 74,
-				G4CAP: 74,
-				G5CAP: 74,
-				Unreleased: 75,
+				'LC Uber': 86,
+				NU: 86,
+				BL3: 84,
+				RU: 82,
+				BL2: 80,
+				UU: 78,
+				BL: 76,
+				OU: 74,
+				CAP: 73,
+				G4CAP: 73,
+				G5CAP: 73,
+				Unreleased: 73,
 				Uber: 70
 			};
 			var customScale = {
