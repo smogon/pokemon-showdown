@@ -41,9 +41,9 @@ exports.BattleAbilities = {
 	},
 	"trace": {
 		inherit: true,
-		onModifyPokemon: function(pokemon) {
+		onUpdate: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			if (!target) return;
+			if (!target || target.fainted) return;
 			var ability = this.getAbility(target.ability);
 			if (ability.id === 'forecast' || ability.id === 'multitype' || ability.id === 'trace') return;
 			if (pokemon.setAbility(ability)) {

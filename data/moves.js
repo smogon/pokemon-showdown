@@ -8097,8 +8097,8 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 0,
 		category: "Physical",
-		desc: "Randomly either attacks with a variable power, between 40 base power and 120 base power, or heals the target by 80 HP.",
-		shortDesc: "40, 80, 120 power, or may heal target by 80 HP.",
+		desc: "Deals damage or heals one adjacent target. 40% chance for 40 power, 30% chance for 80 power, 10% chance for 120 power, and 20% chance to heal the target by 1/4 of its maximum HP, rounded down. This move must hit to be effective.",
+		shortDesc: "40, 80, 120 power, or heals target by 1/4 max HP.",
 		id: "present",
 		name: "Present",
 		pp: 15,
@@ -8106,7 +8106,7 @@ exports.BattleMovedex = {
 		onModifyMove: function(move, pokemon, target) {
 			var rand = this.random(10);
 			if (rand < 2) {
-				move.heal = [80, target.maxhp];
+				move.heal = [1,4];
 			} else if (rand < 6) {
 				move.basePower = 40;
 			} else if (rand < 9) {
@@ -11063,8 +11063,7 @@ exports.BattleMovedex = {
 						acupressure:1, block:1, embargo:1, entrainment:1, flatter:1, gastroacid:1, healblock:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, spiderweb:1, swagger:1, switcheroo:1, trick:1, worryseed:1, yawn:1, soak: 1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
-						this.add('-activate', target, 'Substitute', move);
-						return null;
+						return false;
 					}
 					return;
 				}

@@ -287,7 +287,6 @@ function BattlePokemon(set, side) {
 	this.gotAttacked = function(move, damage, source) {
 		if (!damage) damage = 0;
 		move = selfB.getMove(move);
-		source.lastDamage = damage;
 		selfP.lastAttackedBy = {
 			pokemon: source,
 			damage: damage,
@@ -1050,8 +1049,8 @@ function Battle(roomid, format, rated) {
 
 	this.setWeather = function(status, source, sourceEffect) {
 		status = selfB.getEffect(status);
-		if (!sourceEffect && selfB.effect) sourceEffect = selfB.effect;
-		if (!source && selfB.event && selfB.event.target) source = selfB.event.target;
+		if (sourceEffect === undefined && selfB.effect) sourceEffect = selfB.effect;
+		if (source === undefined && selfB.event && selfB.event.target) source = selfB.event.target;
 
 		if (selfB.weather === status.id) return false;
 		if (selfB.weather && !status.id) {
@@ -1873,6 +1872,7 @@ function Battle(roomid, format, rated) {
 			this.debug('pokemon.damage said zero');
 			return 0;
 		}
+		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {

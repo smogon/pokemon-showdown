@@ -5,6 +5,7 @@
     "sugar": ">=1.2.5",
     "request": ">=2.1.1",
     "socket.io": ">=0.8.7",
+    "sockjs": ">=0.3.1",
     "url": "0.x.x",
     "libxmljs": "0.x.x",
     "sqlite-fts": "0.x.x",
