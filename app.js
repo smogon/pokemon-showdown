@@ -49,10 +49,19 @@ if (process.argv[2] && parseInt(process.argv[2])) {
 	config.port = parseInt(process.argv[2]);
 }
 
-var io = require('socket.io').listen(config.port).set('log level', 1);
-io.set('transports', ['websocket', 'htmlfile', 'xhr-polling']); // temporary hack until https://github.com/LearnBoost/socket.io/issues/609 is fixed
-console.log("Server started on port "+config.port);
-console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
+if (config.protocol !== 'io') config.protocol = 'ws';
+
+var app;
+var server;
+if (config.protocol === 'ws') {
+	app = require('http').createServer();
+	server = require('sockjs').createServer({sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js", log: function(severity, message) {
+		if (severity === 'error') console.log('ERROR: '+message);
+	}});
+} else {
+	server = require('socket.io').listen(config.port).set('log level', 1);
+	server.set('transports', ['websocket', 'htmlfile', 'xhr-polling']); // temporary hack until https://github.com/LearnBoost/socket.io/issues/609 is fixed
+}
 
 /**
  * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -116,10 +125,30 @@ nameLockedIps = {};
 
 function resolveUser(you, socket) {
 	if (!you) {
-		socket.emit('connectionError', 'There has been a connection error. Please refresh the page.');
+		emit(socket, 'connectionError', 'There has been a connection error. Please refresh the page.');
 		return false;
 	}
 	return you.user;
+}
+
+emit = function(socket, type, data) {
+	if (config.protocol === 'io') {
+		console.log('emitting '+type);
+		socket.emit(type, data);
+	} else {
+		if (typeof data === 'object') data.type = type;
+		else data = {type: type, message: data};
+		socket.write(JSON.stringify(data));
+	}
+};
+
+function randomString(length) {
+	var strArr = [];
+	var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	for (var i=0;i<length;i++) {
+		strArr[i] = chars[Math.floor(Math.random()*chars.length)];
+	}
+	return strArr.join('');
 }
 
 if (config.crashguard) {
@@ -138,75 +167,66 @@ if (config.crashguard) {
 	});
 }
 
-io.sockets.on('connection', function (socket) {
-	var you = null;
-	console.log('INIT SOCKET: '+socket.id);
-
-	if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
-		if (bannedIps[socket.handshake.address.address]) {
-			console.log('IP BANNED: '+socket.handshake.address.address);
-			return;
-		}
-	}
-
-	socket.on('join', function(data) {
+// event functions
+var events = {
+	join: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string' || typeof data.name !== 'string') return;
 		if (!you) {
 			you = Users.connectUser(data.name, socket, data.token, data.room);
 			console.log('JOIN: '+data.name+' => '+you.name+' ['+data.token+']');
+			return you;
 		} else {
 			var youUser = resolveUser(you, socket);
 			if (!youUser) return;
 			youUser.joinRoom(data.room, socket);
 		}
-	});
-	socket.on('rename', function(data) {
+	},
+	rename: function(data, socket, you) {
 		if (!data) return;
 		data.name = ''+data.name;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		youUser.rename(data.name, data.token, data.auth);
-	});
-	socket.on('chat', function(message) {
+	},
+	chat: function(message, socket, you) {
 		if (!message || typeof message.room !== 'string' || typeof message.message !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		var room = Rooms.get(message.room);
 		youUser.chat(message.message, room, socket);
-	});
-	socket.on('leave', function(data) {
+	},
+	leave: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		youUser.leaveRoom(Rooms.get(data.room), socket);
-	});
-	socket.on('leaveBattle', function(data) {
+	},
+	leaveBattle: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		var room = Rooms.get(data.room);
 		if (room.leaveBattle) room.leaveBattle(youUser);
-	});
-	socket.on('joinBattle', function(data) {
+	},
+	joinBattle: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		var room = Rooms.get(data.room);
 		if (room.joinBattle) room.joinBattle(youUser);
-	});
-
-	socket.on('command', function(data) {
+	},
+	command: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		parseCommand(youUser, 'command', data, Rooms.get(data.room), socket);
-	});
-	socket.on('disconnect', function() {
+	},
+	disconnect: function(socket, you) {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		youUser.disconnect(socket);
-	});
-	socket.on('challenge', function(data) {
+	},
+	challenge: function(data, socket, you) {
 		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
@@ -217,11 +237,11 @@ io.sockets.on('connection', function (socket) {
 			if (typeof data.userid !== 'string') return;
 			var problems = Tools.validateTeam(youUser.team, data.format);
 			if (problems) {
-				socket.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+				emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 				return;
 			}
 			if (!Users.get(data.userid) || !Users.get(data.userid).connected) {
-				socket.emit('message', "The user '"+data.userid+"' was not found.");
+				emit(socket, 'message', "The user '"+data.userid+"' was not found.");
 			}
 			youUser.makeChallenge(data.userid, data.format);
 			break;
@@ -234,7 +254,7 @@ io.sockets.on('connection', function (socket) {
 			if (youUser.challengesFrom[data.userid]) format = youUser.challengesFrom[data.userid].format;
 			var problems = Tools.validateTeam(youUser.team, format);
 			if (problems) {
-				socket.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+				emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 				return;
 			}
 			youUser.acceptChallengeFrom(data.userid);
@@ -244,8 +264,8 @@ io.sockets.on('connection', function (socket) {
 			youUser.rejectChallengeFrom(data.userid);
 			break;
 		}
-	});
-	socket.on('decision', function(data) {
+	},
+	decision: function(data, socket, you) {
 		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
@@ -266,12 +286,69 @@ io.sockets.on('connection', function (socket) {
 			}
 			break;
 		}
-	});
-	socket.on('saveTeam', function(data) {
+	},
+	saveTeam: function(data, socket, you) {
 		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		youUser.team = data.team;
 		youUser.emit('update', {team: 'saved', room: 'teambuilder'});
+	}
+};
+
+
+if (config.protocol === 'io') { // Socket.IO
+	server.sockets.on('connection', function (socket) {
+		var you = null;
+		console.log('INIT SOCKET: '+socket.id);
+
+		if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
+			if (bannedIps[socket.handshake.address.address]) {
+				console.log('IP BANNED: '+socket.handshake.address.address);
+				return;
+			}
+			socket.remoteAddress = socket.handshake.address.address; // for compatibility with SockJS semantics
+		}
+		var generator = function(type) {
+			return function(data) {
+				console.log('received '+type);
+				console.log(you);
+				events[type](data, socket, you);
+			};
+		};
+		for (var e in events) {
+			socket.on(e, (function(type) {
+				return function(data) {
+					console.log('received '+type);
+					you = events[type](data, socket, you) || you;
+				};
+			})(e));
+		}
 	});
-});
+} else { // SockJS
+	server.on('connection', function (socket) {
+		var you = null;
+		socket.id = randomString(16); // this sucks
+		console.log('INIT SOCKET: '+socket.id);
+
+		if (bannedIps[socket.remoteAddress]) {
+			console.log('IP BANNED: '+socket.remoteAddress);
+			return;
+		}
+		socket.on('data', function(message) {
+			var data = JSON.parse(message);
+			if (!data) return;
+			if (events[data.type]) you = events[data.type](data, socket, you) || you;
+		});
+		socket.on('close', function() {
+			youUser = resolveUser(you, socket);
+			if (!youUser) return;
+			youUser.disconnect(socket);
+		});
+	});
+	server.installHandlers(app, {});
+	app.listen(config.port);
+}
+
+console.log("Server started on port "+config.port);
+console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
