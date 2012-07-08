@@ -445,7 +445,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		selfR.update();
 		return user;
 	};
-	this.joinBattle = function(user) {
+	this.joinBattle = function(user, team) {
 		var slot = 0;
 		if (selfR.rated) {
 			if (selfR.rated.p1 === user.userid) {
@@ -458,7 +458,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 
 		selfR.cancelReset();
-		selfR.battle.join(user, slot);
+		selfR.battle.join(user, slot, team);
 		selfR.active = selfR.battle.active;
 		selfR.update();
 
@@ -727,7 +727,8 @@ function LobbyRoom(roomid) {
 
 		formatid = toId(formatid);
 
-		var problems = Tools.validateTeam(user.team, formatid);
+		var team = user.team;
+		var problems = Tools.validateTeam(team, formatid);
 		if (problems) {
 			user.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 			return;
@@ -746,7 +747,7 @@ function LobbyRoom(roomid) {
 		var newSearch = {
 			userid: user.userid,
 			formatid: formatid,
-			team: user.team,
+			team: team,
 			rating: 1500
 		};
 		request({
@@ -781,7 +782,8 @@ function LobbyRoom(roomid) {
 				selfR.cancelSearch(searchUser, true);
 				user.emit('update', {searching: false, room: selfR.id});
 				searchUser.team = search.team;
-				selfR.startBattle(searchUser, user, search.formatid, true);
+				user.team = newSearch.team;
+				selfR.startBattle(searchUser, user, search.formatid, true, search.team, newSearch.team);
 				return;
 			}
 		}
@@ -912,7 +914,7 @@ function LobbyRoom(roomid) {
 			selfR.emit('console', {name: user.getIdentity(), action: 'leave', silent: 1});
 		}
 	};
-	this.startBattle = function(p1, p2, format, rated) {
+	this.startBattle = function(p1, p2, format, rated, p1team, p2team) {
 		var newRoom;
 		p1 = Users.get(p1);
 		p2 = Users.get(p2);
@@ -926,7 +928,7 @@ function LobbyRoom(roomid) {
 		if (p1 === p2) {
 			selfR.cancelSearch(p1, true);
 			selfR.cancelSearch(p2, true);
-			p1.emit('message', 'You can\'t battle your own account. Please use Private Browsing to battle yourself.');
+			p1.emit('message', 'You can\'t battle your own account. Please use something like Private Browsing to battle yourself.');
 			return;
 		}
 
@@ -949,8 +951,8 @@ function LobbyRoom(roomid) {
 		newRoom = selfR.addRoom('battle-'+formaturlid+i, format, p1, p2, selfR.id, rated);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
-		newRoom.joinBattle(p1);
-		newRoom.joinBattle(p2);
+		newRoom.joinBattle(p1, p1team);
+		newRoom.joinBattle(p2, p2team);
 		selfR.cancelSearch(p1, true);
 		selfR.cancelSearch(p2, true);
 		selfR.roomsChanged = true;
