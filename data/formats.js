@@ -297,7 +297,7 @@ exports.BattleFormats = {
 				}
 			}
 			if (template.isNonstandard) {
-				problems.push(set.species+' is not a real pokemon.');
+				problems.push(set.species+' is not a real Pokemon.');
 			}
 			if (set.moves) for (var i=0; i<set.moves.length; i++) {
 				var move = this.getMove(set.moves[i]);
