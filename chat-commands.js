@@ -951,7 +951,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'loadbanlist':
-		if (!user.can('hotpatch')) {
+		if (!user.can('announce')) {
 			emit(socket, 'console', '/loadbanlist - Access denied.');
 			return false;
 		}
