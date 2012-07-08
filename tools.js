@@ -570,7 +570,7 @@ module.exports = (function () {
 		}
 		var problems = [];
 		if (!set) {
-			return ["This is not a pokemon."];
+			return ["This is not a Pokemon."];
 		}
 
 		set.species = (''+(set.species||'')).trim();
