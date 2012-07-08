@@ -888,7 +888,7 @@ exports.BattleScripts = {
 			// 95-86-82-78-74-70
 			var levelScale = {
 				LC: 95,
-				NFE: 95,
+				NFE: 90,
 				'LC Uber': 86,
 				NU: 86,
 				BL3: 84,
