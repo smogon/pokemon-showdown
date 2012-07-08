@@ -126,7 +126,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
-		banlist: ['Arceus','Arceus-Fighting','Arceus-Flying','Arceus-Poison','Arceus-Ground','Arceus-Rock','Arceus-Bug','Arceus-Ghost','Arceus-Steel','Arceus-Fire','Arceus-Water','Arceus-Grass','Arceus-Electric','Arceus-Psychic','Arceus-Ice','Arceus-Dragon','Arceus-Dark','Blaziken','Darkrai','Deoxys','Deoxys-Attack','Dialga','Giratina','Giratina-Origin','Groudon','Ho-Oh','Kyogre','Lugia','Mewtwo','Palkia','Rayquaza','Reshiram','Shaymin-Sky','Zekrom']
+		banlist: ['Arceus','Arceus-Bug','Arceus-Dark','Arceus-Dragon','Arceus-Electric','Arceus-Fighting','Arceus-Fire','Arceus-Flying','Arceus-Ghost','Arceus-Grass','Arceus-Ground','Arceus-Ice','Arceus-Poison','Arceus-Psychic','Arceus-Rock','Arceus-Steel','Arceus-Water','Blaziken','Darkrai','Deoxys','Deoxys-Attack','Dialga','Giratina','Giratina-Origin','Groudon','Ho-Oh','Kyogre','Kyurem-Black','Kyurem-White','Lugia','Mewtwo','Palkia','Rayquaza','Reshiram','Shaymin-Sky','Zekrom']
 	},
 	dwuu: {
 		effectType: 'Format',
