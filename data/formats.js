@@ -423,6 +423,20 @@ exports.BattleFormats = {
 		effectType: 'Rule',
 		onStart: function() {
 			this.add('rule', 'Freeze Clause');
+		},
+		onSetStatus: function(status, target, source) {
+			if (source && source.side === target.side) {
+				return;
+			}
+			if (status.id === 'frz') {
+				for (var i=0; i<target.side.pokemon.length; i++) {
+					var pokemon = target.side.pokemon[i];
+					if (pokemon.status === 'frz') {
+						this.add('-message', 'Freeze Clause activated.');
+						return false;
+					}
+				}
+			}
 		}
 	}
 };
