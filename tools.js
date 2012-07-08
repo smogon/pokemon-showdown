@@ -446,7 +446,7 @@ module.exports = (function () {
 	Tools.prototype.getBanlistTable = function(format, subformat, depth) {
 		var banlistTable;
 		if (!depth) depth = 0;
-		if (depth>4) return; // avoid infinite recursion
+		if (depth>8) return; // avoid infinite recursion
 		if (format.banlistTable && !subformat) {
 			banlistTable = format.banlistTable;
 		} else {
@@ -489,6 +489,7 @@ module.exports = (function () {
 					if (banlistTable['Rule:'+toId(subformat.ruleset[i])]) continue;
 
 					banlistTable['Rule:'+toId(subformat.ruleset[i])] = subformat.ruleset[i];
+					if (format.ruleset.indexOf(subformat.ruleset[i]) === -1) format.ruleset.push(subformat.ruleset[i]);
 
 					var subsubformat = this.getFormat(subformat.ruleset[i]);
 					if (subsubformat.ruleset || subsubformat.banlist) {
