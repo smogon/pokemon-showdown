@@ -109,7 +109,7 @@ exports.BattleFormats = {
 	},
 	dwubers: {
 		effectType: 'Format',
-		name: "Dream World Ubers",
+		name: "DW Ubers",
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -120,7 +120,7 @@ exports.BattleFormats = {
 	},
 	dwou: {
 		effectType: 'Format',
-		name: "Dream World OU",
+		name: "DW OU",
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -130,7 +130,7 @@ exports.BattleFormats = {
 	},
 	dwuu: {
 		effectType: 'Format',
-		name: "Dream World UU",
+		name: "DW UU",
 		challengeShow: true,
 		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard DW', 'Team Preview'],
 		banlist: ['Arceus', 'Arceus-Fighting', 'Arceus-Flying', 'Arceus-Poison', 'Arceus-Ground', 'Arceus-Rock', 'Arceus-Bug', 'Arceus-Ghost', 'Arceus-Steel', 'Arceus-Fire', 'Arceus-Water', 'Arceus-Grass', 'Arceus-Electric', 'Arceus-Psychic', 'Arceus-Ice', 'Arceus-Dragon', 'Arceus-Dark', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Zekrom', 'Chandelure', 'Genesect', 'Tyranitar', 'Dragonite', 'Breloom', 'Ferrothorn', 'Politoed', 'Gliscor', 'Ninetales', 'Scizor', 'Excadrill', 'Keldeo', 'Infernape', 'Venusaur', 'Heatran', 'Rotom-Wash', 'Blaziken', 'Garchomp', 'Serperior', 'Gengar', 'Volcarona', 'Forretress', 'Conkeldurr', 'Espeon', 'Cloyster', 'Skarmory', 'Starmie', 'Salamence', 'Gyarados', 'Zapdos', 'Jirachi', 'Latios', 'Chansey', 'Tentacruel', 'Haxorus', 'Landorus', 'Mamoswine', 'Charizard', 'Lucario', 'Jellicent', 'Blissey', 'Terrakion', 'Heracross', 'Scrafty', 'Jolteon', 'Metagross', 'Ditto', 'Hydreigon', 'Thundurus', 'Alakazam', 'Deoxys-Speed', 'Weavile', 'Vaporeon']
