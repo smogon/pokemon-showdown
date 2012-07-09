@@ -96,7 +96,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 						p1rating: p1rating,
 						p2rating: p2rating,
 						endType: selfR.battle.endType || 'normal',
-						log: selfR.battle.activityQueue
+						log: selfR.battle.log
 					};
 					var date = new Date();
 					var logfolder = date.format('{yyyy}-{MM}');
