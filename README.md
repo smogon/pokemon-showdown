@@ -49,7 +49,7 @@ As for older browsers (Firefox 3.6, IE7), I won't go out of my way to support th
 Credits
 ------------------------------------------------------------------------
 
-Pokemon Showdown was created by Guangcong Luo <Zarel>.
+Pokemon Showdown was created by Guangcong Luo [Zarel].
 
 Developers
 
