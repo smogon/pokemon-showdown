@@ -53,11 +53,11 @@ Pokemon Showdown was created by Guangcong Luo <Zarel>.
 
 Developers
 
-- Guangcong Luo <Zarel>
-- Bill Meltsner <bmelts>
+- Guangcong Luo [Zarel]
+- Bill Meltsner [bmelts]
 
 Contributors
 
-- <Marty-D>
-- Cody Thompson <Rising_Dusk>
-- <TheImmortal>
+- [Marty-D]
+- Cody Thompson [Rising_Dusk]
+- [TheImmortal]
