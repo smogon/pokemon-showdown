@@ -60,4 +60,4 @@ Contributors
 
 - [Marty-D]
 - Cody Thompson [Rising_Dusk]
-- [TheImmortal]
+- [The Immortal]
