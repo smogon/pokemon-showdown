@@ -1,7 +1,7 @@
 Showdown
 ========================================================================
 
-Showdown is a simulator of Pokemon battles. It currently only supports singles battles in Generation 5 (Pokemon Black and Pokemon White).
+Showdown is a simulator of Pokemon battles. It currently supports singles battles in Generations 4-5 (HGSS, BW, BW2).
 
 Installing
 ------------------------------------------------------------------------
@@ -35,18 +35,29 @@ Browser support
 Showdown currently supports, in order of preference:
 
  - Chrome
- - Firefox 4+
+ - Firefox
  - Safari
  - Safari for iPhone/iPod/iPad
+ - Opera
  - Firefox for Android
  - IE9+
 
-The built-in Android browser is not supported because of [socket.io bug 651][1], but will be when that bug is fixed. In the meantime, Firefox for Android works.
-
 IE8 has a few teambuilder issues that will be worked out when I have time.
-
-I haven't looked into Opera much, but support for that is planned as long as it doesn't turn out to be too difficult.
 
 As for older browsers (Firefox 3.6, IE7), I won't go out of my way to support them, but if there's a simple fix, you can suggest it to me and I'll implement it.
 
-  [1]: https://github.com/LearnBoost/socket.io/issues/651
+Credits
+------------------------------------------------------------------------
+
+Pokemon Showdown was created by Guangcong Luo <Zarel>.
+
+Developers
+
+- Guangcong Luo <Zarel>
+- Bill Meltsner <bmelts>
+
+Contributors
+
+- <Marty-D>
+- Cody Thompson <Rising_Dusk>
+- <TheImmortal>
