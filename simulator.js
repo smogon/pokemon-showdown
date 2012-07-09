@@ -2438,7 +2438,7 @@ function Battle(roomid, format, rated) {
 			decision.team = data;
 			side.decision = decision;
 		} else if (choice === 'switch') {
-			console.log('switching to '+data);
+			//console.log('switching to '+data);
 			data = Math.floor(data);
 			if (data < 0) data = 0;
 			if (data > side.pokemon.length-1) data = side.pokemon.length-1;
