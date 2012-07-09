@@ -328,6 +328,9 @@ if (config.protocol === 'io') { // Socket.IO
 } else { // SockJS
 	server.on('connection', function (socket) {
 		var you = null;
+		if (!socket) { // WTF
+			return;
+		}
 		socket.id = randomString(16); // this sucks
 		console.log('INIT SOCKET: '+socket.id);
 
