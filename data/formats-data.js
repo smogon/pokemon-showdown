@@ -3393,7 +3393,7 @@ exports.BattleFormatsData = {
 	hippopotas: {
 		viableMoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1},
 		dreamWorldRelease: true,
-		tier: "UU"
+		tier: "LC"
 	},
 	hippowdon: {
 		viableMoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1,"icefang":1,"stoneedge":1,"stockpile":1},
@@ -3441,7 +3441,7 @@ exports.BattleFormatsData = {
 	snover: {
 		viableMoves: {"blizzard":1,"iceshard":1,"gigadrain":1,"leechseed":1,"substitute":1},
 		dreamWorldRelease: true,
-		tier: "UU"
+		tier: "LC"
 	},
 	abomasnow: {
 		viableMoves: {"blizzard":1,"iceshard":1,"gigadrain":1,"leechseed":1,"substitute":1,"focusblast":1,"hiddenpowerfire":1},
