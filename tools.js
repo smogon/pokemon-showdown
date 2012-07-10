@@ -507,7 +507,7 @@ module.exports = (function () {
 		}
 		var problems = [];
 		this.getBanlistTable(format);
-		if (format.team === 'random') {
+		if (format.team === 'random' || format.team === 'cc') {
 			return false;
 		}
 		if (!team || !Array.isArray(team)) {
