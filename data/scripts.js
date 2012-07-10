@@ -508,7 +508,7 @@ exports.BattleScripts = {
 			});
 		}
 
-		console.log(team);
+		//console.log(team);
 		return team;
 	},
 	randomTeam: function(side) {
