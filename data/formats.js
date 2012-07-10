@@ -31,6 +31,7 @@ exports.BattleFormats = {
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	cap: {
+		mod: 'gen5-bw',
 		effectType: 'Format',
 		name: "CAP",
 		rated: true,
@@ -52,8 +53,6 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "CAP Mollux Playtest",
 		rated: true,
-		challengeShow: true,
-		searchShow: true,
 		ruleset: ['CAP'],
 		banlist: ['G4CAP','Tomohawk','Necturna','ShadowStrike','Paleo Wave']
 	},
