@@ -999,6 +999,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 	case 'crashnoted':
+	case 'crashlogged':
 		if (!lockdown) {
 			emit(socket, 'console', '/crashnoted - There is no active crash.');
 			return false;
