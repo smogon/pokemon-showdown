@@ -9960,7 +9960,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onTryHit: function(target, source) {
-			if (target.ability === 'wonderguard' || source.ability === 'wonderguard') {
+			var bannedAbilities = {illusion:1, multitype:1, wonderguard:1};
+			if (bannedAbilities[target.ability] || bannedAbilities[source.ability]) {
 				return false;
 			}
 		},
