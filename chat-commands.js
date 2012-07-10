@@ -1022,6 +1022,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var lines = parseInt(target || 15, 10);
 		var command = 'tail -'+lines+' ';
 		var filename = 'logs/modlog.txt';
+		if (target.match(/^["'].+["']$/)) target = target.substring(1,target.length-1);
 		if (!lines || lines < 0) { // searching for a word instead
 			command = 'grep -i \''+target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\\$&').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]')+'\' ';
 		}
