@@ -2263,6 +2263,9 @@ exports.BattleMovedex = {
 			onModifyPokemon: function(pokemon) {
 				pokemon.lockMove('dig');
 			},
+			onImmunity: function(type, pokemon) {
+				if (type === 'sandstorm' || type === 'hail') return false;
+			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
 				if (move.id === 'earthquake' || move.id === 'magnitude') {
