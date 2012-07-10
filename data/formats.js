@@ -19,6 +19,23 @@ exports.BattleFormats = {
 		searchShow: true,
 		ruleset: ['Random Battle']
 	},
+	challengecup: {
+		effectType: 'Format',
+		name: "Challenge Cup",
+		team: 'cc',
+		searchDefault: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['Pokemon']
+	},
+	unratedchallengecup: {
+		effectType: 'Format',
+		name: "Unrated Challenge Cup",
+		team: 'cc',
+		searchShow: true,
+		ruleset: ['Challenge Cup']
+	},
 	ou: {
 		effectType: 'Format',
 		name: "OU",
