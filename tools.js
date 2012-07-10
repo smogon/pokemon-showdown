@@ -446,7 +446,7 @@ module.exports = (function () {
 	Tools.prototype.getBanlistTable = function(format, subformat, depth) {
 		var banlistTable;
 		if (!depth) depth = 0;
-		if (depth>4) return; // avoid infinite recursion
+		if (depth>8) return; // avoid infinite recursion
 		if (format.banlistTable && !subformat) {
 			banlistTable = format.banlistTable;
 		} else {
@@ -461,8 +461,8 @@ module.exports = (function () {
 					// don't revalidate what we already validate
 					if (banlistTable[toId(subformat.banlist[i])]) continue;
 
-					banlistTable[subformat.banlist[i]] = true;
-					banlistTable[toId(subformat.banlist[i])] = true;
+					banlistTable[subformat.banlist[i]] = subformat.name || true;
+					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
 
 					var plusPos = subformat.banlist[i].indexOf('+');
 					if (plusPos && plusPos > 0) {
@@ -488,7 +488,8 @@ module.exports = (function () {
 					// don't revalidate what we already validate
 					if (banlistTable['Rule:'+toId(subformat.ruleset[i])]) continue;
 
-					banlistTable['Rule:'+toId(subformat.ruleset[i])] = true;
+					banlistTable['Rule:'+toId(subformat.ruleset[i])] = subformat.ruleset[i];
+					if (format.ruleset.indexOf(subformat.ruleset[i]) === -1) format.ruleset.push(subformat.ruleset[i]);
 
 					var subsubformat = this.getFormat(subformat.ruleset[i]);
 					if (subsubformat.ruleset || subsubformat.banlist) {
@@ -544,7 +545,8 @@ module.exports = (function () {
 				}
 			}
 			if (bannedCombo) {
-				problems.push("Your team has the combination of "+bannedCombo+", which is banned.");
+				clause = format.name ? " by "+format.name : '';
+				problems.push("Your team has the combination of "+bannedCombo+", which is banned"+clause+".");
 			}
 		}
 
@@ -570,7 +572,7 @@ module.exports = (function () {
 		}
 		var problems = [];
 		if (!set) {
-			return ["This is not a pokemon."];
+			return ["This is not a Pokemon."];
 		}
 
 		set.species = (''+(set.species||'')).trim();
@@ -595,17 +597,24 @@ module.exports = (function () {
 
 		var banlistTable = this.getBanlistTable(format);
 
-		setHas[toId(set.species)] = true;
-		if (banlistTable[toId(set.species)]) {
-			problems.push(set.species+' is banned.');
+		var check = toId(set.species);
+		var clause = '';
+		setHas[check] = true;
+		if (banlistTable[check]) {
+			clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
+			problems.push(set.species+' is banned'+clause+'.');
 		}
-		setHas[toId(set.ability)] = true;
-		if (banlistTable[toId(set.ability)]) {
-			problems.push(name+"'s ability "+set.ability+" is banned.");
+		check = toId(set.ability);
+		setHas[check] = true;
+		if (banlistTable[check]) {
+			clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
+			problems.push(name+"'s ability "+set.ability+" is banned"+clause+".");
 		}
-		setHas[toId(set.item)] = true;
-		if (banlistTable[toId(set.item)]) {
-			problems.push(name+"'s item "+set.item+" is banned.");
+		check = toId(set.item);
+		setHas[check] = true;
+		if (banlistTable[check]) {
+			clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
+			problems.push(name+"'s item "+set.item+" is banned"+clause+".");
 		}
 		var item = this.getItem(set.item);
 		if (banlistTable['Unreleased'] && item.isUnreleased) {
@@ -653,11 +662,11 @@ module.exports = (function () {
 				if (!set.moves[i]) continue;
 				set.moves[i] = ''+(set.moves[i]||'');
 				var move = this.getMove(set.moves[i]);
-				setHas[move.id] = true;
-				if (banlistTable[move.id]) {
-					problems.push(name+"'s move "+set.moves[i]+" is banned.");
-				} else if (move.ohko && banlistTable['OHKO']) {
-					problems.push(name+"'s move "+set.moves[i]+" is an OHKO move, which is banned.");
+				check = move.id;
+				setHas[check] = true;
+				if (banlistTable[check]) {
+					clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
+					problems.push(name+"'s move "+set.moves[i]+" is banned"+clause+".");
 				}
 
 				if (banlistTable['illegal']) {
@@ -706,7 +715,8 @@ module.exports = (function () {
 				}
 			}
 			if (bannedCombo) {
-				problems.push(name+" has the combination of "+bannedCombo+", which is banned.");
+				clause = format.name ? " by "+format.name : '';
+				problems.push(name+" has the combination of "+bannedCombo+", which is banned"+clause+".");
 			}
 		}
 

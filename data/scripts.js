@@ -83,16 +83,26 @@ exports.BattleScripts = {
 		var movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		this.add('move', pokemon, movename, target+attrs);
-		if (missed) {
-			this.add('-miss', pokemon);
+		if (target.fainted && !canTargetFainted[move.target]) {
+			this.add('-notarget');
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent') {
 				this.faint(pokemon, pokemon, move);
 			}
 			return true;
 		}
-		if (target.fainted && !canTargetFainted[move.target]) {
-			this.add('-notarget');
+		if (typeof move.affectedByImmunities === 'undefined') {
+			move.affectedByImmunities = (move.category !== 'Status');
+		}
+		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && !target.runImmunity('sound', true))) {
+			this.singleEvent('MoveFail', move, null, target, pokemon, move);
+			if (move.selfdestruct && move.target === 'adjacent') {
+				this.faint(pokemon, pokemon, move);
+			}
+			return true;
+		}
+		if (missed) {
+			this.add('-miss', pokemon);
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent') {
 				this.faint(pokemon, pokemon, move);
@@ -343,8 +353,10 @@ exports.BattleScripts = {
 		}
 		return damage;
 	},
-	getTeam: function(side) {
-		if (side.battle.getFormat().team === 'random') {
+	getTeam: function(side, team) {
+		if (team) {
+			return team;
+		} if (side.battle.getFormat().team === 'random') {
 			return this.randomTeam(side);
 		} else if (side.user && side.user.team && side.user.team !== 'random') {
 			return side.user.team;
@@ -875,21 +887,22 @@ exports.BattleScripts = {
 				}
 			}
 
+			// 95-86-82-78-74-70
 			var levelScale = {
 				LC: 95,
-				NFE: 95,
-				'LC Uber': 90,
-				NU: 90,
-				BL3: 88,
-				RU: 85,
-				BL2: 83,
-				UU: 80,
-				BL: 78,
-				OU: 75,
-				CAP: 74,
-				G4CAP: 74,
-				G5CAP: 74,
-				Unreleased: 75,
+				NFE: 90,
+				'LC Uber': 86,
+				NU: 86,
+				BL3: 84,
+				RU: 82,
+				BL2: 80,
+				UU: 78,
+				BL: 76,
+				OU: 74,
+				CAP: 73,
+				G4CAP: 73,
+				G5CAP: 73,
+				Unreleased: 73,
 				Uber: 70
 			};
 			var customScale = {

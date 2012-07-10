@@ -1895,7 +1895,7 @@ exports.BattleMovedex = {
 				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 				return;
 			}
-			this.add('-item', source, yourItem, '[from] move: Covet');
+			this.add('-item', source, yourItem, '[from] move: Covet', '[of] '+target);
 		},
 		secondary: false,
 		target: "normal",
@@ -2324,7 +2324,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 14,
 			onEnd: function(pokemon) {
-				this.add('-message', pokemon.name+' is no longer disabled! (placeholder)');
+				this.add('-end', pokemon, 'Disable');
 			},
 			onBeforeMove: function(attacker, defender, move) {
 				if (move.id === this.effectData.move) {
@@ -2725,7 +2725,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		drain: [1,2],
 		onTryHit: function(target) {
-			if (target.status !== 'slp') return false;
+			if (target.status !== 'slp') {
+				this.add('-immune', target.id, '[msg]');
+				return null;
+			}
 		},
 		secondary: false,
 		target: "normal",
@@ -6208,7 +6211,7 @@ exports.BattleMovedex = {
 		},
 		onTryHit: function(target) {
 			if (target.hasType('Grass')) {
-				this.add('-immune', target.id);
+				this.add('-immune', target.id, '[msg]');
 				return null;
 			}
 		},
@@ -8094,8 +8097,8 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 0,
 		category: "Physical",
-		desc: "Randomly either attacks with a variable power, between 40 base power and 120 base power, or heals the target by 80 HP.",
-		shortDesc: "40, 80, 120 power, or may heal target by 80 HP.",
+		desc: "Deals damage or heals one adjacent target. 40% chance for 40 power, 30% chance for 80 power, 10% chance for 120 power, and 20% chance to heal the target by 1/4 of its maximum HP, rounded down. This move must hit to be effective.",
+		shortDesc: "40, 80, 120 power, or heals target by 1/4 max HP.",
 		id: "present",
 		name: "Present",
 		pp: 15,
@@ -8103,7 +8106,7 @@ exports.BattleMovedex = {
 		onModifyMove: function(move, pokemon, target) {
 			var rand = this.random(10);
 			if (rand < 2) {
-				move.heal = [80, target.maxhp];
+				move.heal = [1,4];
 			} else if (rand < 6) {
 				move.basePower = 40;
 			} else if (rand < 9) {
@@ -8296,8 +8299,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, pokemon) {
 			if (pokemon.status && !target.status && target.trySetStatus(pokemon.status)) {
-				this.add('-curestatus', pokemon, '[from] move: Psycho Shift', '[of] '+target);
-				pokemon.setStatus('');
+				pokemon.cureStatus();
 			} else {
 				return false;
 			}
@@ -8824,7 +8826,7 @@ exports.BattleMovedex = {
 			status: 'slp'
 		},
 		onHit: function(target, pokemon) {
-			if (pokemon.baseTemplate.species !== 'Meloetta') {
+			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
 			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta')) {
@@ -8833,6 +8835,7 @@ exports.BattleMovedex = {
 				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
 			}
 			// renderer takes care of this for us
+			pokemon.transformed = false;
 		},
 		target: "normal",
 		type: "Normal"
@@ -9264,7 +9267,7 @@ exports.BattleMovedex = {
 					// the types array may be a pointer to the
 					// types array in the Pokedex.
 					if (pokemon.types[0] === 'Flying') {
-						pokemon.types = [pokemon.types[1]];
+						pokemon.types = [pokemon.types[1] || 'Normal'];
 					} else {
 						pokemon.types = [pokemon.types[0]];
 					}
@@ -11057,11 +11060,10 @@ exports.BattleMovedex = {
 				}
 				if (move.category === 'Status') {
 					var SubBlocked = {
-						acupressure:1, block:1, dreameater:1, embargo:1, entrainment:1, flatter:1, gastroacid:1, grudge:1, healblock:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, spiderweb:1, sketch:1, swagger:1, switcheroo:1, trick:1, worryseed:1, yawn:1, soak: 1
+						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, trick:1, worryseed:1, yawn:1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
-						this.add('-activate', target, 'Substitute', move);
-						return null;
+						return false;
 					}
 					return;
 				}
@@ -11594,18 +11596,11 @@ exports.BattleMovedex = {
 		name: "Teeter Dance",
 		pp: 20,
 		isViable: true,
-		isBounceable: true,
+		isBounceable: false,
 		priority: 0,
-		onHitField: function(target, source) {
-			for (var i=0; i<this.sides.length; i++) {
-				for (var j=0; j<this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j] === source) continue;
-					this.sides[i].active[j].addVolatile('confusion');
-				}
-			}
-		},
+		volatileStatus: 'confusion',
 		secondary: false,
-		target: "all",
+		target: "adjacent",
 		type: "Normal"
 	},
 	"telekinesis": {
@@ -11682,7 +11677,7 @@ exports.BattleMovedex = {
 				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 				return;
 			}
-			this.add('-item', source, yourItem, '[from] move: Thief');
+			this.add('-item', source, yourItem, '[from] move: Thief', '[of] '+target);
 		},
 		secondary: false,
 		target: "normal",

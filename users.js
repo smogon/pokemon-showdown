@@ -96,6 +96,31 @@ function exportUsergroups() {
 }
 importUsergroups();
 
+var bannedWords = {};
+function importBannedWords() {
+	fs.readFile('config/bannedwords.txt', function(err, data) {
+		if (err) return;
+		data = (''+data).split("\n");
+		bannedWords = {};
+		for (var i = 0; i < data.length; i++) {
+			if (!data[i]) continue;
+			bannedWords[data[i]] = true;
+		}
+	});
+}
+function exportBannedWords() {
+	fs.writeFile('config/bannedwords.txt', Object.keys(bannedWords).join('\n'));
+}
+function addBannedWord(word) {
+	bannedWords[word] = true;
+	exportBannedWords();
+}
+function removeBannedWord(word) {
+	delete bannedWords[word];
+	exportBannedWords();
+}
+importBannedWords();
+
 // User
 var User = (function () {
 	function User(name, person, token) {
@@ -148,7 +173,7 @@ var User = (function () {
 		}
 		for (var i=0; i<this.people.length; i++) {
 			if (roomid && !this.people[i].rooms[roomid]) continue;
-			this.people[i].socket.emit(message, data);
+			emit(this.people[i].socket, message, data);
 		}
 	};
 	User.prototype.getIdentity = function() {
@@ -250,7 +275,7 @@ var User = (function () {
 		for (var i=0; i<this.people.length; i++) {
 			this.people[i].rename(name, oldid);
 			console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
-			this.people[i].socket.emit('update', {
+			emit(this.people[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
 				named: true,
@@ -292,7 +317,7 @@ var User = (function () {
 		for (var i=0; i<this.people.length; i++) {
 			this.people[i].rename(name, oldid);
 			console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
-			this.people[i].socket.emit('update', {
+			emit(this.people[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
 				named: false,
@@ -332,8 +357,16 @@ var User = (function () {
 			// before it gets to this stage it's your own fault
 			this.emit('nameTaken', {userid: '', reason: "You did not specify a name."});
 			return false;
-		} else if (userid === this.userid && !auth) {
-			return this.forceRename(name, this.authenticated);
+		} else {
+			for (var w in bannedWords) {
+				if (userid.indexOf(w) >= 0) {
+					this.emit('nameTaken', {userid: '', reason: "That name contains a banned word or phrase."});
+					return false;
+				}
+			}
+			if (userid === this.userid && !auth) {
+				return this.forceRename(name, this.authenticated);
+			}
 		}
 		if (users[userid] && !users[userid].authenticated && users[userid].connected && !auth) {
 			this.emit('nameTaken', {userid:this.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
@@ -495,7 +528,7 @@ var User = (function () {
 		this.people.push(person);
 		person.rename(this.name, oldid);
 		console.log(''+this.name+' merging: socket '+person.socket.id+' of ');
-		person.socket.emit('update', {
+		emit(person.socket, 'update', {
 			name: this.name,
 			userid: this.userid,
 			named: true,
@@ -644,6 +677,7 @@ var User = (function () {
 			for (var j in person.rooms) {
 				this.leaveRoom(person.rooms[j], person);
 			}
+			person.socket.end();
 		}
 		this.people = [];
 	};
@@ -683,7 +717,7 @@ var User = (function () {
 				room.initSocket(this, socket);
 			}
 		} else if (person && room.id === 'lobby') {
-			person.socket.emit('init', {room: roomid, notFound: true});
+			emit(person.socket, 'init', {room: roomid, notFound: true});
 		}
 	};
 	User.prototype.leaveRoom = function(room, socket) {
@@ -797,7 +831,7 @@ var User = (function () {
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
 			if (this.chatQueue.length > 6) {
-				socket.emit('console', {
+				emit(socket, 'console', {
 					room: room.id,
 					rawMessage: "<strong style=\"color:red\">Your message was not sent because you've been typing too quickly.</strong>"
 				});
@@ -864,8 +898,8 @@ var Person = (function () {
 		people[this.id] = this;
 
 		this.ip = '';
-		if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
-			this.ip = socket.handshake.address.address;
+		if (socket.remoteAddress) {
+			this.ip = socket.remoteAddress;
 		}
 
 		if (ipSearch(this.ip,bannedIps)) {
@@ -899,3 +933,6 @@ exports.connectUser = connectUser;
 exports.users = users;
 exports.prevUsers = prevUsers;
 exports.importUsergroups = importUsergroups;
+exports.addBannedWord = addBannedWord;
+exports.removeBannedWord = removeBannedWord;
+

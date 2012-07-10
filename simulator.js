@@ -17,7 +17,7 @@ function BattlePokemon(set, side) {
 	if (set.name === set.species || !set.name || !set.species) {
 		set.name = this.species;
 	}
-	this.name = set.name || set.species || 'Bulbasaur';
+	this.name = (set.name || set.species || 'Bulbasaur').substr(0,20);
 	this.speciesid = toId(this.species);
 	this.template = this.baseTemplate;
 	this.moves = [];
@@ -195,7 +195,6 @@ function BattlePokemon(set, side) {
 	};
 
 	this.update = function(init) {
-		selfP.illusion = null;
 		selfP.baseStats = selfP.template.baseStats;
 		// reset for Light Metal etc
 		selfP.weightkg = selfP.template.weightkg;
@@ -288,7 +287,6 @@ function BattlePokemon(set, side) {
 	this.gotAttacked = function(move, damage, source) {
 		if (!damage) damage = 0;
 		move = selfB.getMove(move);
-		source.lastDamage = damage;
 		selfP.lastAttackedBy = {
 			pokemon: source,
 			damage: damage,
@@ -462,6 +460,7 @@ function BattlePokemon(set, side) {
 		selfP.movedThisTurn = false;
 		selfP.newlySwitched = true;
 		selfP.beingCalledBack = false;
+		selfP.illusion = null;
 		selfP.update(init);
 	};
 
@@ -777,14 +776,20 @@ function BattlePokemon(set, side) {
 		//return Math.floor(Math.floor(d*48/selfP.maxhp + 0.5)*100/48);
 		return Math.floor(d*100/selfP.maxhp + 0.5);
 	};
-	this.getHealth = function() {
+	this.getHealth = function(realHp) {
 		if (selfP.fainted) return ' (0 fnt)';
 		//var hpp = Math.floor(48*selfP.hp/selfP.maxhp) || 1;
-		var hpp = Math.floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
-		if (!selfP.hp) hpp = 0;
+		var hpstring;
+		if (realHp) {
+			hpstring = ''+selfP.hp+'/'+selfP.maxhp;
+		} else {
+			var hpp = Math.floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
+			if (!selfP.hp) hpp = 0;
+			hpstring = ''+hpp+'/100';
+		}
 		var status = '';
 		if (selfP.status) status = ' '+selfP.status;
-		return ' ('+hpp+'/100'+status+')';
+		return ' ('+hpstring+status+')';
 	};
 	this.hpChange = function(d) {
 		return ''+selfP.hpPercent(d)+selfP.getHealth();
@@ -847,7 +852,7 @@ function BattlePokemon(set, side) {
 	selfP.clearVolatile(true);
 }
 
-function BattleSide(user, battle, n) {
+function BattleSide(user, battle, n, team) {
 	var selfB = battle;
 	var selfS = this;
 
@@ -864,7 +869,7 @@ function BattleSide(user, battle, n) {
 
 	this.id = (n?'p2':'p1');
 
-	this.team = selfB.getTeam(this);
+	this.team = selfB.getTeam(this, team);
 	for (var i=0; i<this.team.length && i<6; i++) {
 		console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
 		this.pokemon.push(new BattlePokemon(this.team[i], this));
@@ -888,7 +893,7 @@ function BattleSide(user, battle, n) {
 			data.pokemon.push({
 				ident: pokemon.fullname,
 				details: pokemon.details,
-				condition: pokemon.getHealth(),
+				condition: pokemon.getHealth(true),
 				active: (pokemon.position < pokemon.side.active.length),
 				moves: pokemon.moves,
 				ability: pokemon.ability,
@@ -1044,8 +1049,8 @@ function Battle(roomid, format, rated) {
 
 	this.setWeather = function(status, source, sourceEffect) {
 		status = selfB.getEffect(status);
-		if (!sourceEffect && selfB.effect) sourceEffect = selfB.effect;
-		if (!source && selfB.event && selfB.event.target) source = selfB.event.target;
+		if (sourceEffect === undefined && selfB.effect) sourceEffect = selfB.effect;
+		if (source === undefined && selfB.event && selfB.event.target) source = selfB.event.target;
 
 		if (selfB.weather === status.id) return false;
 		if (selfB.weather && !status.id) {
@@ -1652,6 +1657,7 @@ function Battle(roomid, format, rated) {
 		if (side.active[0] && !side.active[0].fainted) {
 			//selfB.add('switch-out '+side.active[0].id);
 		}
+		selfB.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[0]) {
 			var oldActive = side.active[0];
 			var oldpos = pokemon.position;
@@ -1675,8 +1681,8 @@ function Battle(roomid, format, rated) {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		pokemon.update();
 		selfB.add('switch', side.active[0], side.active[0].getDetails());
+		pokemon.update();
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
@@ -1706,6 +1712,7 @@ function Battle(roomid, format, rated) {
 	this.dragIn = function(side) {
 		var pokemon = selfB.getRandomSwitchable(side);
 		if (!pokemon) return false;
+		selfB.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[0]) {
 			var oldActive = side.active[0];
 			var oldpos = pokemon.position;
@@ -1729,8 +1736,8 @@ function Battle(roomid, format, rated) {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		pokemon.update();
 		selfB.add('drag', side.active[0], side.active[0].getDetails());
+		pokemon.update();
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
@@ -1821,6 +1828,9 @@ function Battle(roomid, format, rated) {
 					boost[i] = -boost[i];
 				}
 				switch (effect.id) {
+				case 'intimidate':
+					selfB.add(msg, target, i, boost[i]);
+					break;
 				default:
 					if (effect.effectType === 'Move') {
 						selfB.add(msg, target, i, boost[i]);
@@ -1862,6 +1872,7 @@ function Battle(roomid, format, rated) {
 			this.debug('pokemon.damage said zero');
 			return 0;
 		}
+		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
@@ -2108,6 +2119,11 @@ function Battle(roomid, format, rated) {
 		return Math.floor(baseDamage);
 	};
 	this.getTarget = function(decision) {
+		if (!decision.targetPosition || !decision.targetSide) {
+			target = selfB.resolveTarget(decision.pokemon, decision.move);
+			decision.targetSide = target.side;
+			decision.targetPosition = target.position;
+		}
 		return decision.targetSide.active[decision.targetPosition];
 	};
 	this.resolveTarget = function(pokemon, move) {
@@ -2422,7 +2438,7 @@ function Battle(roomid, format, rated) {
 			decision.team = data;
 			side.decision = decision;
 		} else if (choice === 'switch') {
-			console.log('switching to '+data);
+			//console.log('switching to '+data);
 			data = Math.floor(data);
 			if (data < 0) data = 0;
 			if (data > side.pokemon.length-1) data = side.pokemon.length-1;
@@ -2518,7 +2534,7 @@ function Battle(roomid, format, rated) {
 			selfB.add('debug', activity);
 		}
 	};
-	this.join = function(user, slot) {
+	this.join = function(user, slot, team) {
 		if (selfB.p1 && selfB.p1.user && selfB.p2 && selfB.p2.user) return false;
 		if (!user) return false; // !!!
 		if (user.sides[selfB.roomid]) return false;
@@ -2529,7 +2545,7 @@ function Battle(roomid, format, rated) {
 				user.sides[selfB.roomid].name = user.name;
 			} else {
 				console.log("NEW SIDE: "+user.name);
-				selfB.p2 = new BattleSide(user, selfB, 1);
+				selfB.p2 = new BattleSide(user, selfB, 1, team);
 				selfB.sides[1] = selfB.p2;
 				user.sides[selfB.roomid] = selfB.p2;
 			}
@@ -2541,7 +2557,7 @@ function Battle(roomid, format, rated) {
 				selfB.p1.name = user.name;
 			} else {
 				console.log("NEW SIDE: "+user.name);
-				selfB.p1 = new BattleSide(user, selfB, 0);
+				selfB.p1 = new BattleSide(user, selfB, 0, team);
 				selfB.sides[0] = selfB.p1;
 				user.sides[selfB.roomid] = selfB.p1;
 			}

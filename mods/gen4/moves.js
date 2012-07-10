@@ -243,7 +243,7 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				var noEncore = {encore:1,mimic:1,mirrormove:1,sketch:1,transform:1};
 				var moveIndex = target.moves.indexOf(target.lastMove);
-				if (!target.lastMove || noEncore[target.lastMove] || moveIndex < 0 || target.moveset[moveIndex].pp <= 0) {
+				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					this.add('-fail',target);
 					delete target.volatiles['encore'];
 					return;
@@ -257,7 +257,7 @@ exports.BattleMovedex = {
 				}
 			},
 			onResidual: function(target) {
-				if (target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) {
+				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) {
 					delete target.volatiles.encore;
 					this.add('-end', target, 'Encore');
 				}
@@ -277,6 +277,7 @@ exports.BattleMovedex = {
 			},
 			onBeforeTurn: function(pokemon) {
 				if (!this.effectData.move) {
+					// ???
 					return;
 				}
 				var decision = this.willMove(pokemon);
@@ -439,6 +440,27 @@ exports.BattleMovedex = {
 	rockblast: {
 		inherit: true,
 		accuracy: 80
+	},
+	roost: {
+		inherit: true,
+		//desc: "",
+		effect: {
+			duration: 1,
+			onModifyPokemonPriority: 100,
+			onModifyPokemon: function(pokemon) {
+				if (pokemon.hasType('Flying')) {
+					// don't just delete the type; since
+					// the types array may be a pointer to the
+					// types array in the Pokedex.
+					if (pokemon.types[0] === 'Flying') {
+						pokemon.types = [pokemon.types[1]];
+					} else {
+						pokemon.types = [pokemon.types[0]];
+					}
+				}
+				//pokemon.negateImmunity['Ground'] = 1;
+			}
+		}
 	},
 	sandtomb: {
 		inherit: true,
