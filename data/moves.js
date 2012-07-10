@@ -3151,8 +3151,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, source) {
 			if (target === source) return false;
-			var disallowedAbilities = {trace:1, forecast:1, multitype:1, flowergift:1, illusion:1, imposter:1, zenmode:1, wonderguard:1};
-			if (target.ability === 'multitype' || target.ability === 'truant' || target.ability === source.ability || disallowedAbilities[source.ability]) return false;
+			var bannedTargetAbilities = {multitype:1, truant:1};
+			var bannedSourceAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, wonderguard:1, zenmode:1};
+			if (bannedTargetAbilities[target.ability] || bannedSourceAbilities[source.ability] || target.ability === source.ability) {
+				return false;
+			}
 		},
 		onHit: function(target, source) {
 			if (target.setAbility(source.ability)) {
@@ -9159,7 +9162,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onTryHit: function(target, source) {
-			if (target.ability === 'multitype' || target.ability === 'wonderguard' || target.ability === source.ability) {
+			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, wonderguard:1, zenmode:1};
+			if (bannedAbilities[target.ability] || source.ability === 'multitype' || target.ability === source.ability) {
 				return false;
 			}
 		},
@@ -9899,7 +9903,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		priority: 0,
 		onTryHit: function(pokemon) {
-			if (pokemon.ability === 'multitype' || pokemon.ability === 'truant') {
+			var bannedAbilities = {multitype:1, simple:1, truant:1};
+			if (bannedAbilities[pokemon.ability]) {
 				return false;
 			}
 		},
@@ -12767,7 +12772,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		priority: 0,
 		onTryHit: function(pokemon) {
-			if (pokemon.ability === 'multitype' || pokemon.ability === 'truant') {
+			var bannedAbilities = {insomnia:1, multitype:1, truant:1};
+			if (bannedAbilities[pokemon.ability]) {
 				return false;
 			}
 		},
