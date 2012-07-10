@@ -31,7 +31,6 @@ exports.BattleFormats = {
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	cap: {
-		mod: 'gen5-bw',
 		effectType: 'Format',
 		name: "CAP",
 		rated: true,
