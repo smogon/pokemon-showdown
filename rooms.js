@@ -67,6 +67,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				if (winner && !winner.authenticated) {
 					winner.emit('console', {rawMessage: '<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>Register an account to protect your ladder rating!</b><br /><button onclick="overlay(\'register\',{ifuserid:\''+winner.userid+'\'});return false"><b>Register</b></button></div>'});
 				}
+				var p1rating, p2rating;
 				// update rankings
 				request({
 					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
@@ -74,7 +75,8 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 					if (body) {
 						try {
 							var data = JSON.parse(body);
-							// we don't actually do much with this data
+							p1rating = data.p1rating.acre;
+							p2rating = data.p2rating.acre;
 							selfR.add("Ladder updated.");
 							selfR.update();
 						} catch(e) {
@@ -83,17 +85,35 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 					}
 				});
 				fs.writeFile('logs/lastbattle.txt', ''+rooms.lobby.numRooms);
-				var logData = {
-					p1score: p1score,
-					turns: selfR.battle.turn,
-					p1: selfR.battle.p1.name,
-					p2: selfR.battle.p2.name,
-					p1team: selfR.battle.p1.team,
-					p2team: selfR.battle.p2.team
-				};
-				fs.writeFile('logs/'+selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'')+'/'+selfR.id+'.log.json',
-					JSON.stringify(logData)
-				);
+				if (!Tools.getFormat(selfR.format).noLog) {
+					var logData = {
+						p1score: p1score,
+						turns: selfR.battle.turn,
+						p1: selfR.battle.p1.name,
+						p2: selfR.battle.p2.name,
+						p1team: selfR.battle.p1.team,
+						p2team: selfR.battle.p2.team,
+						p1rating: p1rating,
+						p2rating: p2rating,
+						endType: selfR.battle.endType || 'normal',
+						log: selfR.battle.log
+					};
+					var date = new Date();
+					var logfolder = date.format('{yyyy}-{MM}');
+					var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
+					var curpath = 'logs/'+logfolder;
+					fs.mkdir(curpath, '0755', function() {
+						var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
+						curpath += '/'+tier;
+						fs.mkdir(curpath, '0755', function() {
+							curpath += '/'+logsubfolder;
+							fs.mkdir(curpath, '0755', function() {
+								fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
+							});
+						});
+					}); // asychronicity
+					//console.log(JSON.stringify(logData));
+				}
 			}
 		}
 
@@ -195,6 +215,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		if (!message) message = ' forfeited.';
 
 		selfR.battle.add('-message', selfR.battle.sides[forfeitSide].name+message);
+		selfR.battle.endType = 'forfeit';
 		selfR.battle.win(selfR.battle.sides[forfeitSide].foe);
 		selfR.active = selfR.battle.active;
 		selfR.update();
@@ -385,7 +406,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			roomType: 'battle',
 			battlelog: selfR.battle.log
 		};
-		socket.emit('init', initdata);
+		emit(socket, 'init', initdata);
 	};
 	this.join = function(user) {
 		if (!user) return false;
@@ -424,7 +445,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		selfR.update();
 		return user;
 	};
-	this.joinBattle = function(user) {
+	this.joinBattle = function(user, team) {
 		var slot = 0;
 		if (selfR.rated) {
 			if (selfR.rated.p1 === user.userid) {
@@ -437,7 +458,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 
 		selfR.cancelReset();
-		selfR.battle.join(user, slot);
+		selfR.battle.join(user, slot, team);
 		selfR.active = selfR.battle.active;
 		selfR.update();
 
@@ -497,7 +518,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
 		if (message.length > 511 && !user.can('ignorelimits')) {
-			socket.emit('message', "Your message is too long:\n\n"+message);
+			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
 		if (message.substr(0,2) === '//') {
@@ -672,70 +693,101 @@ function LobbyRoom(roomid) {
 		return roomList;
 	};
 	this.cancelSearch = function(user, noUpdate) {
+		var success = false;
 		user.cancelChallengeTo();
 		for (var i=0; i<selfR.searchers.length; i++) {
 			var search = selfR.searchers[i];
-			if (!search.user.connected) {
+			var searchUser = Users.get(search.userid);
+			if (!searchUser.connected) {
 				selfR.searchers.splice(i,1);
 				i--;
 				continue;
 			}
-			if (search.user === user) {
+			if (searchUser === user) {
 				selfR.searchers.splice(i,1);
-				search.user.emit('update', {searching: false, room: selfR.id});
-				if (!noUpdate) {
-					selfR.update();
+				i--;
+				if (!success) {
+					searchUser.emit('update', {searching: false, room: selfR.id});
+					if (!noUpdate) {
+						selfR.update();
+					}
+					success = true;
 				}
-				return true;
+				continue;
 			}
 		}
-		return false;
+		return success;
 	};
-	this.searchBattle = function(user, format) {
+	this.searchBattle = function(user, formatid) {
 		if (!user.connected) return;
 		if (lockdown) {
 			user.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
 			return;
 		}
 
-		var problems = Tools.validateTeam(user.team, format);
+		formatid = toId(formatid);
+
+		var team = user.team;
+		var problems = Tools.validateTeam(team, formatid);
 		if (problems) {
 			user.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 			return;
 		}
 
+		// tell the user they've started searching
+		var newSearchData = {
+			userid: user.userid,
+			format: formatid,
+			room: selfR.id
+		};
+		user.emit('update', {searching: newSearchData, room: selfR.id});
+		selfR.update();
+
+		// get the user's rating before actually starting to search
+		var newSearch = {
+			userid: user.userid,
+			formatid: formatid,
+			team: team,
+			rating: 1500
+		};
+		request({
+			uri: config.loginserver+'action.php?act=ladderformatget&serverid='+config.serverid+'&format='+formatid+'&user='+user.userid,
+		}, function(error, response, body) {
+			if (body) {
+				try {
+					var data = JSON.parse(body);
+					if (data && data.rpr) {
+						newSearch.rating = parseInt(data.rpr,10);
+					}
+				} catch(e) {}
+			}
+			selfR.addSearch(newSearch, user);
+		});
+	};
+	this.addSearch = function(newSearch, user) {
+		if (!user.connected) return;
 		for (var i=0; i<selfR.searchers.length; i++) {
 			var search = selfR.searchers[i];
-			if (!search.user.connected) {
+			var searchUser = Users.get(search.userid);
+			if (!searchUser || !searchUser.connected) {
 				selfR.searchers.splice(i,1);
 				i--;
 				continue;
 			}
-			if (format === search.format) {
-				if (search.user === user) {
+			if (newSearch.formatid === search.formatid && Math.abs(newSearch.rating - search.rating) < 400) {
+				if (searchUser === user) {
 					return;
 				}
-				selfR.searchers.splice(i,1);
-				search.user.emit('update', {searching: false, room: selfR.id});
-				search.user.team = search.team;
-				selfR.startBattle(search.user, user, format, true);
+				selfR.cancelSearch(user, true);
+				selfR.cancelSearch(searchUser, true);
+				user.emit('update', {searching: false, room: selfR.id});
+				searchUser.team = search.team;
+				user.team = newSearch.team;
+				selfR.startBattle(searchUser, user, search.formatid, true, search.team, newSearch.team);
 				return;
 			}
 		}
-		var newSearch = {
-			user: user,
-			format: format,
-			room: selfR.id,
-			team: user.team
-		};
-		var newSearchData = {
-			userid: user.userid,
-			format: format,
-			room: selfR.id
-		};
 		selfR.searchers.push(newSearch);
-		user.emit('update', {searching: newSearchData, room: selfR.id});
-		selfR.update();
 	};
 	this.update = function(excludeUser) {
 		var update = selfR.getUpdate(selfR.lastUpdate, !selfR.usersChanged, !selfR.roomsChanged);
@@ -805,7 +857,7 @@ function LobbyRoom(roomid) {
 			log: selfR.log.slice(-100),
 			searcher: selfR.searchers.length
 		};
-		socket.emit('init', initdata);
+		emit(socket, 'init', initdata);
 	};
 	this.join = function(user) {
 		if (!user) return false; // ???
@@ -862,15 +914,21 @@ function LobbyRoom(roomid) {
 			selfR.emit('console', {name: user.getIdentity(), action: 'leave', silent: 1});
 		}
 	};
-	this.startBattle = function(p1, p2, format, rated) {
+	this.startBattle = function(p1, p2, format, rated, p1team, p2team) {
 		var newRoom;
 		p1 = Users.get(p1);
 		p2 = Users.get(p2);
 
+		if (!p1 || !p2) {
+			// most likely, a user was banned during the battle start procedure
+			selfR.cancelSearch(p1, true);
+			selfR.cancelSearch(p2, true);
+			return;
+		}
 		if (p1 === p2) {
 			selfR.cancelSearch(p1, true);
 			selfR.cancelSearch(p2, true);
-			p1.emit('message', 'You can\'t battle your own account. Please use Private Browsing to battle yourself.');
+			p1.emit('message', 'You can\'t battle your own account. Please use something like Private Browsing to battle yourself.');
 			return;
 		}
 
@@ -893,8 +951,8 @@ function LobbyRoom(roomid) {
 		newRoom = selfR.addRoom('battle-'+formaturlid+i, format, p1, p2, selfR.id, rated);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
-		newRoom.joinBattle(p1);
-		newRoom.joinBattle(p2);
+		newRoom.joinBattle(p1, p1team);
+		newRoom.joinBattle(p2, p2team);
 		selfR.cancelSearch(p1, true);
 		selfR.cancelSearch(p2, true);
 		selfR.roomsChanged = true;
@@ -931,7 +989,7 @@ function LobbyRoom(roomid) {
 	this.chat = function(user, message, socket) {
 		if (!user.named || !message || !message.trim || !message.trim().length) return;
 		if (message.length > 255 && !user.can('ignorelimits')) {
-			socket.emit('message', "Your message is too long:\n\n"+message);
+			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
 		var cmd = '', target = '';
@@ -1012,6 +1070,7 @@ getRoom = function(roomid) {
 };
 newRoom = function(roomid, format, p1, p2, parent, rated) {
 	if (roomid && roomid.id) return roomid;
+	if (!p1 || !p2) return false;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid]) {
 		console.log("NEW ROOM: "+roomid);

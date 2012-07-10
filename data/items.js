@@ -1074,7 +1074,6 @@ exports.BattleItems = {
 		id: "ganlonberry",
 		name: "Ganlon Berry",
 		spritenum: 158,
-		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1088,7 +1087,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({def:1});
 		},
-		desc: "Raises Defense by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Defense by one stage when at 25% HP or less. One-time use."
 	},
 	"ghostgem": {
 		id: "ghostgem",
@@ -1149,8 +1148,13 @@ exports.BattleItems = {
 			basePower: 60
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (user.template.species === 'Giratina' && (move.type === 'Ghost' || move.type === 'Dragon')) {
+			if (user.template.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return basePower * 1.2;
+			}
+		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.template.num === 487) || pokemon.template.num === 487) {
+				return false;
 			}
 		},
 		desc: "Raises the Base Power of Giratina's STAB moves 20% and transforms Giratina into Giratina-O when held. Cannot be removed or given to Giratina in battle."
@@ -2151,6 +2155,11 @@ exports.BattleItems = {
 		id: "powerherb",
 		onBeforeMovePriority: -10,
 		onBeforeMove: function(pokemon, target, move) {
+			// this is a horrible hack; todo: not this
+			// a proper fix is currently blocked by the BH Assist bug
+			if (move.id === 'solarbeam' && this.weather === 'sunnyday') {
+				return;
+			}
 			if (move.isTwoTurnMove && pokemon.useItem()) {
 				this.debug('power herb - remove charge turn for '+move.id);
 				this.add('-prepare',pokemon,move,target);
