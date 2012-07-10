@@ -950,6 +950,21 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'kill':
+		if (!user.can('lockdown')) {
+			emit(socket, 'console', '/lockdown - Access denied.');
+			return false;
+		}
+
+		if (!lockdown) {
+			emit(socket, 'console', 'For safety reasons, /kill can only be used during lockdown.');
+			return false;
+		}
+
+		process.exit();
+		return false;
+		break;
+
 	case 'loadbanlist':
 		if (!user.can('announce')) {
 			emit(socket, 'console', '/loadbanlist - Access denied.');
