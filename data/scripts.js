@@ -109,9 +109,6 @@ exports.BattleScripts = {
 			}
 			return true;
 		}
-		if (move.id === 'return' || move.id === 'frustration') {
-			move.basePower = 102;
-		}
 
 		var damage = 0;
 		pokemon.lastDamage = 0;
@@ -503,7 +500,7 @@ exports.BattleScripts = {
 				ivs: ivs,
 				item: item,
 				level: level,
-				//happiness: happiness,
+				happiness: happiness,
 				shiny: shiny
 			});
 		}

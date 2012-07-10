@@ -4060,6 +4060,9 @@ exports.BattleMovedex = {
 		num: 218,
 		accuracy: 100,
 		basePower: false,
+		basePowerCallback: function(pokemon) {
+			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || 1;
+		},
 		category: "Physical",
 		desc: "Power increases as user's happiness decreases; maximum 102 BP.",
 		shortDesc: "Max 102 power at minimum Happiness.",
@@ -8893,6 +8896,9 @@ exports.BattleMovedex = {
 		num: 216,
 		accuracy: 100,
 		basePower: false,
+		basePowerCallback: function(pokemon) {
+			return Math.floor((pokemon.happiness * 10) / 25) || 1;
+		},
 		category: "Physical",
 		desc: "Power increases as user's happiness increases; maximum 102 BP.",
 		shortDesc: "Max 102 power at maximum Happiness.",
