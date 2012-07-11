@@ -1,3 +1,9 @@
+function clampIntRange(num, min, max) {
+	num = Math.floor(num);
+	if (num < min) num = min;
+	if (typeof max !== 'undefined' && num > max) num = max;
+	return num;
+}
 exports.BattleItems = {
 	"absorbbulb": {
 		id: "absorbbulb",
@@ -225,7 +231,7 @@ exports.BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.maxhp/16);
+				this.heal(clampIntRange(pokemon.maxhp/16, 1));
 			} else {
 				this.damage(pokemon.maxhp/8);
 			}
@@ -1479,7 +1485,7 @@ exports.BattleItems = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			this.heal(pokemon.maxhp/16);
+			this.heal(clampIntRange(pokemon.maxhp/16, 1));
 		},
 		desc: "Heals 1\/16 HP each turn."
 	},
@@ -2501,7 +2507,9 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onAfterMoveSelf: function(source, target) {
-			this.heal(source.lastDamage/8, source);
+			if (source.lastDamage > 0) {
+				this.heal(clampIntRange(source.lastDamage/8, 1), source);
+			}
 		},
 		desc: "Heals holder 1\/8 of damage dealt."
 	},
