@@ -55,6 +55,7 @@ function BattlePokemon(set, side) {
 	this.newlySwitched = false;
 	this.beingCalledBack = false;
 	this.isActive = false;
+	this.isStarted = false; // has this pokemon's Start events run yet?
 
 	this.transformed = false;
 	this.negateImmunity = {};
@@ -1218,7 +1219,7 @@ function Battle(roomid, format, rated) {
 			return Math.random()-0.5;
 		});
 		for (var i=0; i<actives.length; i++) {
-			selfB.runEvent(eventid, actives[i], null, effect, relayVar);
+			if (actives[i].isStarted) selfB.runEvent(eventid, actives[i], null, effect, relayVar);
 		}
 	};
 	this.residualEvent = function(eventid, relayVar) {
@@ -1663,6 +1664,7 @@ function Battle(roomid, format, rated) {
 			var oldActive = side.active[0];
 			var oldpos = pokemon.position;
 			oldActive.isActive = false;
+			oldActive.isStarted = false;
 			pokemon.position = oldActive.position;
 			oldActive.position = oldpos;
 			side.pokemon[pokemon.position] = pokemon;
@@ -2323,6 +2325,7 @@ function Battle(roomid, format, rated) {
 			//decision.pokemon.runSwitchIn();
 			break;
 		case 'runSwitch':
+			decision.pokemon.isStarted = true;
 			selfB.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
 			selfB.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			break;
@@ -2337,7 +2340,9 @@ function Battle(roomid, format, rated) {
 		}
 		selfB.clearActiveMove();
 		if (selfB.faintMessages()) return true;
+
 		selfB.eachEvent('Update');
+
 		if (selfB.p1.active[0].switchFlag) {
 			if (selfB.canSwitch(selfB.p1)) {
 				selfB.callback('switch-ally');
