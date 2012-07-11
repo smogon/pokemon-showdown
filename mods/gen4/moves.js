@@ -553,6 +553,16 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	worryseed: {
+		inherit: true,
+		//desc: "",
+		onTryHit: function(pokemon) {
+			var bannedAbilities = {multitype:1, truant:1};
+			if (bannedAbilities[pokemon.ability]) {
+				return false;
+			}
+		}
+	},
 	wrap: {
 		inherit: true,
 		accuracy: 85
