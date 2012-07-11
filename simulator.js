@@ -2153,6 +2153,8 @@ function Battle(roomid, format, rated) {
 				selfB.add('faint', faintData.target);
 				selfB.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
 				faintData.target.fainted = true;
+				faintData.target.isActive = false;
+				faintData.target.isStarted = false;
 				faintData.target.side.pokemonLeft--;
 			}
 		}
@@ -2172,12 +2174,14 @@ function Battle(roomid, format, rated) {
 	};
 	this.addQueue = function(decision, noSort) {
 		if (decision) {
+			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
+			if (!decision.choice && decision.move) decision.choice = 'move';
 			if (!decision.priority) {
 				var priorities = {
 					'beforeTurn': 100,
 					'beforeTurnMove': 99,
 					'switch': 6,
-					'runSwitch': 5.9,
+					'runSwitch': 6.1,
 					'residual': -100,
 					'team': 102,
 					'start': 101
@@ -2190,6 +2194,8 @@ function Battle(roomid, format, rated) {
 				if (selfB.getMove(decision.move).beforeTurnCallback) {
 					selfB.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move}, true);
 				}
+			} else if (decision.choice === 'switch' && !decision.speed) {
+				if (decision.side.active[0].isActive) decision.speed = decision.side.active[0].stats.spe;
 			}
 			if (decision.move) {
 				var target;
@@ -2207,11 +2213,15 @@ function Battle(roomid, format, rated) {
 					decision.priority = priority;
 				}
 			}
-			if (!decision.side) decision.side = decision.pokemon;
-			if (!decision.choice && decision.move) decision.choice = 'move';
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
 			if (!decision.speed && decision.newPokemon) decision.speed = decision.newPokemon.stats.spe;
 			if (!decision.speed) decision.speed = decision.pokemon.stats.spe;
+
+			if (decision.choice === 'switch' && !decision.side.pokemon[0].isActive) {
+				// if there's no actives, switches happen before activations
+				decision.priority = 6.2;
+			}
+
 			selfB.queue.push(decision);
 		}
 		if (!noSort) {
