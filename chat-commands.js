@@ -701,7 +701,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 						emit(socket, 'console', 'has not played a ladder game yet');
 					} else for (var i=0; i<data.length; i++) {
 						var row = data[i];
-						emit(socket, 'console', row.formatid+': '+Math.round(row.acre)+' (GXE:'+Math.round(row.pgxe,1)+') (W:'+row.w+'/L:'+row.l+'/T:'+row.t+')');
+						emit(socket, 'console', row.formatid+': '+Math.round(row.acre)+' (GXE:'+Math.round(row.pgxe,1)+') (Glicko2:'+Math.round(row.rpr)+','+Math.round(row.rprd)+') (W:'+row.w+'/L:'+row.l+'/T:'+row.t+')');
 					}
 				} catch(e) {
 				}
