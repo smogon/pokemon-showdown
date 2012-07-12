@@ -2207,8 +2207,11 @@ exports.BattleItems = {
 	},
 	"quickclaw": {
 		id: "quickclaw",
-		onModifyPriority: function(priority) {
-			if (this.random(5) === 0) return priority + 0.1;
+		onModifyPriority: function(priority, pokemon) {
+			if (this.random(5) === 0) {
+				this.add('-activate', pokemon, 'item: Quick Claw');
+				return priority + 0.1;
+			}
 		},
 		name: "Quick Claw",
 		spritenum: 373,
