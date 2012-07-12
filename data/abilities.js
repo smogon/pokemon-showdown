@@ -1782,7 +1782,7 @@ exports.BattleAbilities = {
 		onResidual: function(pokemon) {
 			if (pokemon.status && this.random(3) === 0) {
 				this.debug('shed skin');
-				this.add('-message', pokemon.name+'\'s Shed Skin activated! (placeholder)');
+				this.add('-activate', pokemon, 'ability: Shed Skin');
 				pokemon.cureStatus();
 			}
 		},
