@@ -771,7 +771,7 @@ function LobbyRoom(roomid) {
 				i--;
 				continue;
 			}
-			if (newSearch.formatid === search.formatid && Math.abs(newSearch.rating - search.rating) < 400) {
+			if (newSearch.formatid === search.formatid && Math.abs(newSearch.rating - search.rating) < 350) {
 				if (searchUser === user) {
 					return;
 				}
