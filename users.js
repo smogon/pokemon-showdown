@@ -129,6 +129,7 @@ var User = (function () {
 			//token = ''+Math.floor(Math.random()*10000);
 			token = ''+person.socket.id;
 		}
+		this.mmrCache = {};
 		this.token = token;
 		this.guestNum = numUsers;
 		this.name = 'Guest '+numUsers;
@@ -626,6 +627,35 @@ var User = (function () {
 			}
 		}
 		return result;
+	};
+	User.prototype.doWithMMR = function(formatid, callback, that) {
+		var self = this;
+		if (that === undefined) that = this;
+		formatid = toId(formatid);
+		if (this.mmrCache[formatid]) {
+			callback.call(that, this.mmrCache[formatid]);
+			return;
+		}
+		request({
+			uri: config.loginserver+'action.php?act=ladderformatgetmmr&serverid='+config.serverid+'&format='+formatid+'&user='+this.userid,
+		}, function(error, response, body) {
+			var mmr = 1500;
+			if (body) {
+				try {
+					mmr = parseInt(body,10);
+					if (isNaN(mmr)) mmr = 1500;
+				} catch(e) {}
+			}
+			self.mmrCache[formatid] = mmr;
+			callback.call(that, mmr);
+		});
+	};
+	User.prototype.cacheMMR = function(formatid, mmr) {
+		if (typeof mmr === 'number') {
+			this.mmrCache[formatid] = mmr;
+		} else {
+			this.mmrCache[formatid] = (parseInt(mmr.r,10) + parseInt(mmr.rpr,10))/2;
+		}
 	};
 	User.prototype.nameLock = function(targetName, recurse) {
 		var targetUser = getUser(targetName);
