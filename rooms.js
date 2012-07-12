@@ -74,56 +74,72 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
 				}, function(error, response, body) {
 					if (body) {
+						var data;
 						try {
-							var data = JSON.parse(body);
-							p1rating = data.p1rating.acre;
-							p2rating = data.p2rating.acre;
-							//selfR.add("Ladder updated.");
-							selfR.addRaw(sanitize(p1)+'\'s rating: '+Math.round(data.p1rating.oldacre)+' &rarr; <strong>'+Math.round(data.p1rating.acre)+'</strong>');
-							selfR.addRaw(sanitize(p2)+'\'s rating: '+Math.round(data.p2rating.oldacre)+' &rarr; <strong>'+Math.round(data.p2rating.acre)+'</strong>');
-							Users.get(p1).cacheMMR(rated.format, data.p1rating);
-							Users.get(p2).cacheMMR(rated.format, data.p2rating);
-							selfR.update();
-
-							if (!Tools.getFormat(selfR.format).noLog) {
-								var logData = {
-									p1score: p1score,
-									turns: selfR.battle.turn,
-									p1: selfR.battle.p1.name,
-									p2: selfR.battle.p2.name,
-									p1team: selfR.battle.p1.team,
-									p2team: selfR.battle.p2.team,
-									p1rating: p1rating,
-									p2rating: p2rating,
-									endType: selfR.battle.endType || 'normal',
-									log: selfR.battle.log
-								};
-								var date = new Date();
-								var logfolder = date.format('{yyyy}-{MM}');
-								var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
-								var curpath = 'logs/'+logfolder;
-								fs.mkdir(curpath, '0755', function() {
-									var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
-									curpath += '/'+tier;
-									fs.mkdir(curpath, '0755', function() {
-										curpath += '/'+logsubfolder;
-										fs.mkdir(curpath, '0755', function() {
-											fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
-										});
-									});
-								}); // asychronicity
-								//console.log(JSON.stringify(logData));
-							}
+							data = JSON.parse(body);
 						} catch(e) {
+							return;
 						}
-					} else {
+						p1rating = data.p1rating.acre;
+						p2rating = data.p2rating.acre;
+						//selfR.add("Ladder updated.");
+
+						var oldacre = Math.round(data.p1rating.oldacre);
+						var oldrdacre = Math.round(data.p1rating.oldrdacre);
+						var acre = Math.round(data.p1rating.acre);
+						var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'winning':(p1score<.01?'losing':'tying'));
+						if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
+						if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
+						selfR.addRaw(sanitize(p1)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
+
+						var oldacre = Math.round(data.p2rating.oldacre);
+						var oldrdacre = Math.round(data.p2rating.oldrdacre);
+						var acre = Math.round(data.p2rating.acre);
+						var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'losing':(p1score<.01?'winning':'tying'));
+						if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
+						if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
+						selfR.addRaw(sanitize(p2)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
+
+						Users.get(p1).cacheMMR(rated.format, data.p1rating);
+						Users.get(p2).cacheMMR(rated.format, data.p2rating);
+						selfR.update();
+
+						if (!Tools.getFormat(selfR.format).noLog) {
+							var logData = {
+								p1score: p1score,
+								turns: selfR.battle.turn,
+								p1: selfR.battle.p1.name,
+								p2: selfR.battle.p2.name,
+								p1team: selfR.battle.p1.team,
+								p2team: selfR.battle.p2.team,
+								p1rating: p1rating,
+								p2rating: p2rating,
+								endType: selfR.battle.endType || 'normal',
+								log: selfR.battle.log
+							};
+							var date = new Date();
+							var logfolder = date.format('{yyyy}-{MM}');
+							var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
+							var curpath = 'logs/'+logfolder;
+							fs.mkdir(curpath, '0755', function() {
+								var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
+								curpath += '/'+tier;
+								fs.mkdir(curpath, '0755', function() {
+									curpath += '/'+logsubfolder;
+									fs.mkdir(curpath, '0755', function() {
+										fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
+									});
+								});
+							}); // asychronicity
+							//console.log(JSON.stringify(logData));
+						}
 					}
 				});
 				fs.writeFile('logs/lastbattle.txt', ''+rooms.lobby.numRooms);
 			}
 		}
 
-		update.room = roomid;
+		update.room = selfR.id;
 		var hasUsers = false;
 		for (var i in selfR.users) {
 			hasUsers = true;
