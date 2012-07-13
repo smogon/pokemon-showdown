@@ -858,6 +858,11 @@ exports.BattleAbilities = {
 	"immunity": {
 		desc: "This Pokemon cannot become poisoned nor Toxic poisoned.",
 		shortDesc: "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it.",
+		onUpdate: function(pokemon) {
+			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
+				pokemon.cureStatus();
+			}
+		},
 		onImmunity: function(type) {
 			if (type === 'psn') return false;
 		},
@@ -901,6 +906,11 @@ exports.BattleAbilities = {
 	"insomnia": {
 		desc: "This Pokemon cannot be put to sleep; this includes both opponent-induced sleep as well as user-induced sleep via Rest.",
 		shortDesc: "This Pokemon cannot fall asleep. Gaining this Ability while asleep cures it.",
+		onUpdate: function(pokemon) {
+			if (pokemon.status === 'slp') {
+				pokemon.cureStatus();
+			}
+		},
 		onImmunity: function(type, pokemon) {
 			if (type === 'slp') return false;
 		},
@@ -1053,6 +1063,11 @@ exports.BattleAbilities = {
 	"limber": {
 		desc: "This Pokemon cannot become paralyzed.",
 		shortDesc: "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it.",
+		onUpdate: function(pokemon) {
+			if (pokemon.status === 'par') {
+				pokemon.cureStatus();
+			}
+		},
 		onImmunity: function(type, pokemon) {
 			if (type === 'par') return false;
 		},
@@ -1123,6 +1138,11 @@ exports.BattleAbilities = {
 	"magmaarmor": {
 		desc: "This Pokemon cannot become frozen.",
 		shortDesc: "This Pokemon cannot be frozen. Gaining this Ability while frozen cures it.",
+		onUpdate: function(pokemon) {
+			if (pokemon.status === 'frz') {
+				pokemon.cureStatus();
+			}
+		},
 		onImmunity: function(type, pokemon) {
 			if (type === 'frz') return false;
 		},
@@ -1341,6 +1361,12 @@ exports.BattleAbilities = {
 	"oblivious": {
 		desc: "This Pokemon cannot become attracted to another Pokemon.",
 		shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
+		onUpdate: function(pokemon) {
+			if (pokemon.volatiles['attract']) {
+				pokemon.removeVolatile('attract');
+				this.add("-message", pokemon.name+" got over its infatuation. (placeholder)");
+			}
+		},
 		onImmunity: function(type, pokemon) {
 			if (type === 'attract') {
 				this.add('-immune', pokemon, '[from] Oblivious');
@@ -1386,6 +1412,11 @@ exports.BattleAbilities = {
 	"owntempo": {
 		desc: "This Pokemon cannot become confused.",
 		shortDesc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
+		onUpdate: function(pokemon) {
+			if (pokemon.volatiles['confusion']) {
+				pokemon.removeVolatile('confusion');
+			}
+		},
 		onImmunity: function(type, pokemon) {
 			if (type === 'confusion') {
 				this.add('-immune', pokemon, 'confusion');
@@ -2380,6 +2411,11 @@ exports.BattleAbilities = {
 	"vitalspirit": {
 		desc: "This Pokemon cannot be put to sleep; this includes both opponent-induced sleep as well as user-induced sleep via Rest.",
 		shortDesc: "This Pokemon cannot fall asleep. Gaining this Ability while asleep cures it.",
+		onUpdate: function(pokemon) {
+			if (pokemon.status === 'slp') {
+				pokemon.cureStatus();
+			}
+		},
 		onImmunity: function(type) {
 			if (type === 'slp') return false;
 		},
@@ -2421,6 +2457,11 @@ exports.BattleAbilities = {
 	"waterveil": {
 		desc: "This Pokemon cannot become burned.",
 		shortDesc: "This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		onUpdate: function(pokemon) {
+			if (pokemon.status === 'brn') {
+				pokemon.cureStatus();
+			}
+		},
 		onImmunity: function(type, pokemon) {
 			if (type === 'brn') return false;
 		},
