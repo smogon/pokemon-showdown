@@ -4597,7 +4597,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":15,"abilities":["serenegrace"],"moves":["quickattack","confusion","round"]}
 		],
-		tier: "Unreleased"
+		tier: "OU"
 	},
 	meloettapirouette: {
 		tier: "Illegal"
