@@ -45,7 +45,6 @@ exports.BattleScripts = {
 		if (!move) return false;
 
 		var attrs = '';
-		var moveRoll = this.random(100);
 		var missed = false;
 		if (pokemon.fainted) {
 			return false;
@@ -73,7 +72,7 @@ exports.BattleScripts = {
 			if (pokemon.level > target.level) accuracy += (pokemon.level - target.level);
 		}
 		if (move.alwaysHit) accuracy = true; // bypasses ohko accuracy modifiers
-		if (accuracy !== true && moveRoll >= accuracy) {
+		if (accuracy !== true && this.random(100) >= accuracy) {
 			missed = true;
 			attrs = ' | [miss]';
 		}
