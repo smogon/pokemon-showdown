@@ -101,7 +101,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({spd:1});
 		},
-		desc: "Raises Special Defense by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Special Defense by one stage when at 25% HP or less. One-time use."
 	},
 	"armorfossil": {
 		id: "armorfossil",
@@ -582,36 +582,6 @@ exports.BattleItems = {
 		name: "Custap Berry",
 		spritenum: 86,
 		isUnreleased: true,
-		/* onBeforeTurn: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
-				var decision = this.willMove(pokemon);
-				if (!decision) return;
-				this.addQueue({
-					choice: 'event',
-					event: 'Custap',
-					priority: decision.priority + .1,
-					pokemon: decision.pokemon,
-					move: decision.move,
-					target: decision.target
-				});
-			}
-		},
-		onCustap: function(pokemon) {
-			var decision = this.willMove(pokemon);
-			this.debug('custap decision: '+decision);
-			if (decision) {
-				pokemon.eatItem();
-			}
-		},
-		onEat: function(pokemon) {
-			var decision = this.willMove(pokemon);
-			this.debug('custap eaten: '+decision);
-			if (decision) {
-				this.cancelDecision(pokemon);
-				this.add('r-custap '+pokemon.id);
-				this.runDecision(decision);
-			}
-		}, */
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1530,7 +1500,6 @@ exports.BattleItems = {
 		id: "liechiberry",
 		name: "Liechi Berry",
 		spritenum: 248,
-		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1544,7 +1513,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({atk:1});
 		},
-		desc: "Raises Attack by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Attack by one stage when at 25% HP or less. One-time use."
 	},
 	"lifeorb": {
 		id: "lifeorb",
@@ -2080,7 +2049,6 @@ exports.BattleItems = {
 		id: "petayaberry",
 		name: "Petaya Berry",
 		spritenum: 335,
-		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -2094,7 +2062,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({spa:1});
 		},
-		desc: "Raises Special Attack by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Special Attack by one stage when at 25% HP or less. One-time use."
 	},
 	"pinapberry": {
 		id: "pinapberry",
