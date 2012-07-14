@@ -127,7 +127,7 @@ exports.BattleScripts = {
 				}
 			}
 			hits = Math.floor(hits);
-			for (var i=0; i<hits && target.hp; i++) {
+			for (var i=0; i<hits && target.hp && pokemon.hp; i++) {
 				var moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) return true;
 				damage += (moveDamage || 0);
