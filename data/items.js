@@ -1,3 +1,9 @@
+function clampIntRange(num, min, max) {
+	num = Math.floor(num);
+	if (num < min) num = min;
+	if (typeof max !== 'undefined' && num > max) num = max;
+	return num;
+}
 exports.BattleItems = {
 	"absorbbulb": {
 		id: "absorbbulb",
@@ -95,7 +101,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({spd:1});
 		},
-		desc: "Raises Special Defense by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Special Defense by one stage when at 25% HP or less. One-time use."
 	},
 	"armorfossil": {
 		id: "armorfossil",
@@ -225,7 +231,7 @@ exports.BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.maxhp/16);
+				this.heal(clampIntRange(pokemon.maxhp/16, 1));
 			} else {
 				this.damage(pokemon.maxhp/8);
 			}
@@ -576,36 +582,6 @@ exports.BattleItems = {
 		name: "Custap Berry",
 		spritenum: 86,
 		isUnreleased: true,
-		/* onBeforeTurn: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
-				var decision = this.willMove(pokemon);
-				if (!decision) return;
-				this.addQueue({
-					choice: 'event',
-					event: 'Custap',
-					priority: decision.priority + .1,
-					pokemon: decision.pokemon,
-					move: decision.move,
-					target: decision.target
-				});
-			}
-		},
-		onCustap: function(pokemon) {
-			var decision = this.willMove(pokemon);
-			this.debug('custap decision: '+decision);
-			if (decision) {
-				pokemon.eatItem();
-			}
-		},
-		onEat: function(pokemon) {
-			var decision = this.willMove(pokemon);
-			this.debug('custap eaten: '+decision);
-			if (decision) {
-				this.cancelDecision(pokemon);
-				this.add('r-custap '+pokemon.id);
-				this.runDecision(decision);
-			}
-		}, */
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1479,7 +1455,7 @@ exports.BattleItems = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			this.heal(pokemon.maxhp/16);
+			this.heal(clampIntRange(pokemon.maxhp/16, 1));
 		},
 		desc: "Heals 1\/16 HP each turn."
 	},
@@ -1524,7 +1500,6 @@ exports.BattleItems = {
 		id: "liechiberry",
 		name: "Liechi Berry",
 		spritenum: 248,
-		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1538,7 +1513,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({atk:1});
 		},
-		desc: "Raises Attack by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Attack by one stage when at 25% HP or less. One-time use."
 	},
 	"lifeorb": {
 		id: "lifeorb",
@@ -2074,7 +2049,6 @@ exports.BattleItems = {
 		id: "petayaberry",
 		name: "Petaya Berry",
 		spritenum: 335,
-		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -2088,7 +2062,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({spa:1});
 		},
-		desc: "Raises Special Attack by one stage when at 25% HP or less. Unobtainable in BW. One-time use."
+		desc: "Raises Special Attack by one stage when at 25% HP or less. One-time use."
 	},
 	"pinapberry": {
 		id: "pinapberry",
@@ -2201,6 +2175,12 @@ exports.BattleItems = {
 	},
 	"quickclaw": {
 		id: "quickclaw",
+		onModifyPriority: function(priority, pokemon) {
+			if (this.random(5) === 0) {
+				this.add('-activate', pokemon, 'item: Quick Claw');
+				return priority + 0.1;
+			}
+		},
 		name: "Quick Claw",
 		spritenum: 373,
 		fling: {
@@ -2501,7 +2481,9 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onAfterMoveSelf: function(source, target) {
-			this.heal(source.lastDamage/8, source);
+			if (source.lastDamage > 0) {
+				this.heal(clampIntRange(source.lastDamage/8, 1), source);
+			}
 		},
 		desc: "Heals holder 1\/8 of damage dealt."
 	},

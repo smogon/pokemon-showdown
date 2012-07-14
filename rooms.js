@@ -69,55 +69,77 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				}
 				var p1rating, p2rating;
 				// update rankings
+				update.updates.push('| chatmsg | Ladder updating...');
 				request({
 					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
 				}, function(error, response, body) {
 					if (body) {
+						var data;
 						try {
-							var data = JSON.parse(body);
-							p1rating = data.p1rating.acre;
-							p2rating = data.p2rating.acre;
-							selfR.add("Ladder updated.");
-							selfR.update();
+							data = JSON.parse(body);
 						} catch(e) {
+							return;
 						}
-					} else {
+						p1rating = data.p1rating.acre;
+						p2rating = data.p2rating.acre;
+						//selfR.add("Ladder updated.");
+
+						var oldacre = Math.round(data.p1rating.oldacre);
+						var oldrdacre = Math.round(data.p1rating.oldrdacre);
+						var acre = Math.round(data.p1rating.acre);
+						var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'winning':(p1score<.01?'losing':'tying'));
+						if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
+						if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
+						selfR.addRaw(sanitize(p1)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
+
+						var oldacre = Math.round(data.p2rating.oldacre);
+						var oldrdacre = Math.round(data.p2rating.oldrdacre);
+						var acre = Math.round(data.p2rating.acre);
+						var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'losing':(p1score<.01?'winning':'tying'));
+						if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
+						if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
+						selfR.addRaw(sanitize(p2)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
+
+						Users.get(p1).cacheMMR(rated.format, data.p1rating);
+						Users.get(p2).cacheMMR(rated.format, data.p2rating);
+						selfR.update();
+
+						if (!Tools.getFormat(selfR.format).noLog) {
+							var logData = {
+								p1score: p1score,
+								turns: selfR.battle.turn,
+								p1: selfR.battle.p1.name,
+								p2: selfR.battle.p2.name,
+								p1team: selfR.battle.p1.team,
+								p2team: selfR.battle.p2.team,
+								p1rating: p1rating,
+								p2rating: p2rating,
+								endType: selfR.battle.endType || 'normal',
+								log: selfR.battle.log
+							};
+							var date = new Date();
+							var logfolder = date.format('{yyyy}-{MM}');
+							var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
+							var curpath = 'logs/'+logfolder;
+							fs.mkdir(curpath, '0755', function() {
+								var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
+								curpath += '/'+tier;
+								fs.mkdir(curpath, '0755', function() {
+									curpath += '/'+logsubfolder;
+									fs.mkdir(curpath, '0755', function() {
+										fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
+									});
+								});
+							}); // asychronicity
+							//console.log(JSON.stringify(logData));
+						}
 					}
 				});
 				fs.writeFile('logs/lastbattle.txt', ''+rooms.lobby.numRooms);
-				if (!Tools.getFormat(selfR.format).noLog) {
-					var logData = {
-						p1score: p1score,
-						turns: selfR.battle.turn,
-						p1: selfR.battle.p1.name,
-						p2: selfR.battle.p2.name,
-						p1team: selfR.battle.p1.team,
-						p2team: selfR.battle.p2.team,
-						p1rating: p1rating,
-						p2rating: p2rating,
-						endType: selfR.battle.endType || 'normal',
-						log: selfR.battle.activityQueue
-					};
-					var date = new Date();
-					var logfolder = date.format('{yyyy}-{MM}');
-					var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
-					var curpath = 'logs/'+logfolder;
-					fs.mkdir(curpath, '0755', function() {
-						var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
-						curpath += '/'+tier;
-						fs.mkdir(curpath, '0755', function() {
-							curpath += '/'+logsubfolder;
-							fs.mkdir(curpath, '0755', function() {
-								fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
-							});
-						});
-					}); // asychronicity
-					console.log(JSON.stringify(logData));
-				}
 			}
 		}
 
-		update.room = roomid;
+		update.room = selfR.id;
 		var hasUsers = false;
 		for (var i in selfR.users) {
 			hasUsers = true;
@@ -445,7 +467,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		selfR.update();
 		return user;
 	};
-	this.joinBattle = function(user) {
+	this.joinBattle = function(user, team) {
 		var slot = 0;
 		if (selfR.rated) {
 			if (selfR.rated.p1 === user.userid) {
@@ -458,7 +480,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 
 		selfR.cancelReset();
-		selfR.battle.join(user, slot);
+		selfR.battle.join(user, slot, team);
 		selfR.active = selfR.battle.active;
 		selfR.update();
 
@@ -693,70 +715,92 @@ function LobbyRoom(roomid) {
 		return roomList;
 	};
 	this.cancelSearch = function(user, noUpdate) {
+		var success = false;
 		user.cancelChallengeTo();
 		for (var i=0; i<selfR.searchers.length; i++) {
 			var search = selfR.searchers[i];
-			if (!search.user.connected) {
+			var searchUser = Users.get(search.userid);
+			if (!searchUser.connected) {
 				selfR.searchers.splice(i,1);
 				i--;
 				continue;
 			}
-			if (search.user === user) {
+			if (searchUser === user) {
 				selfR.searchers.splice(i,1);
-				search.user.emit('update', {searching: false, room: selfR.id});
-				if (!noUpdate) {
-					selfR.update();
+				i--;
+				if (!success) {
+					searchUser.emit('update', {searching: false, room: selfR.id});
+					if (!noUpdate) {
+						selfR.update();
+					}
+					success = true;
 				}
-				return true;
+				continue;
 			}
 		}
-		return false;
+		return success;
 	};
-	this.searchBattle = function(user, format) {
+	this.searchBattle = function(user, formatid) {
 		if (!user.connected) return;
 		if (lockdown) {
 			user.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
 			return;
 		}
 
-		var problems = Tools.validateTeam(user.team, format);
+		formatid = toId(formatid);
+
+		var team = user.team;
+		var problems = Tools.validateTeam(team, formatid);
 		if (problems) {
 			user.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 			return;
 		}
 
+		// tell the user they've started searching
+		var newSearchData = {
+			userid: user.userid,
+			format: formatid,
+			room: selfR.id
+		};
+		user.emit('update', {searching: newSearchData, room: selfR.id});
+		selfR.update();
+
+		// get the user's rating before actually starting to search
+		var newSearch = {
+			userid: user.userid,
+			formatid: formatid,
+			team: team,
+			rating: 1500
+		};
+		user.doWithMMR(formatid, function(mmr) {
+			newSearch.rating = mmr;
+			selfR.addSearch(newSearch, user);
+		});
+	};
+	this.addSearch = function(newSearch, user) {
+		if (!user.connected) return;
 		for (var i=0; i<selfR.searchers.length; i++) {
 			var search = selfR.searchers[i];
-			if (!search.user.connected) {
+			var searchUser = Users.get(search.userid);
+			if (!searchUser || !searchUser.connected) {
 				selfR.searchers.splice(i,1);
 				i--;
 				continue;
 			}
-			if (format === search.format) {
-				if (search.user === user) {
+			if (newSearch.formatid === search.formatid && Math.abs(newSearch.rating - search.rating) < 350) {
+				if (searchUser === user) {
 					return;
 				}
-				selfR.searchers.splice(i,1);
-				search.user.emit('update', {searching: false, room: selfR.id});
-				search.user.team = search.team;
-				selfR.startBattle(search.user, user, format, true);
+				selfR.cancelSearch(user, true);
+				selfR.cancelSearch(searchUser, true);
+				user.emit('update', {searching: false, room: selfR.id});
+				searchUser.team = search.team;
+				user.team = newSearch.team;
+				selfR.startBattle(searchUser, user, search.formatid, true, search.team, newSearch.team);
 				return;
 			}
 		}
-		var newSearch = {
-			user: user,
-			format: format,
-			room: selfR.id,
-			team: user.team
-		};
-		var newSearchData = {
-			userid: user.userid,
-			format: format,
-			room: selfR.id
-		};
 		selfR.searchers.push(newSearch);
-		user.emit('update', {searching: newSearchData, room: selfR.id});
-		selfR.update();
 	};
 	this.update = function(excludeUser) {
 		var update = selfR.getUpdate(selfR.lastUpdate, !selfR.usersChanged, !selfR.roomsChanged);
@@ -883,7 +927,7 @@ function LobbyRoom(roomid) {
 			selfR.emit('console', {name: user.getIdentity(), action: 'leave', silent: 1});
 		}
 	};
-	this.startBattle = function(p1, p2, format, rated) {
+	this.startBattle = function(p1, p2, format, rated, p1team, p2team) {
 		var newRoom;
 		p1 = Users.get(p1);
 		p2 = Users.get(p2);
@@ -897,7 +941,7 @@ function LobbyRoom(roomid) {
 		if (p1 === p2) {
 			selfR.cancelSearch(p1, true);
 			selfR.cancelSearch(p2, true);
-			p1.emit('message', 'You can\'t battle your own account. Please use Private Browsing to battle yourself.');
+			p1.emit('message', 'You can\'t battle your own account. Please use something like Private Browsing to battle yourself.');
 			return;
 		}
 
@@ -920,8 +964,8 @@ function LobbyRoom(roomid) {
 		newRoom = selfR.addRoom('battle-'+formaturlid+i, format, p1, p2, selfR.id, rated);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
-		newRoom.joinBattle(p1);
-		newRoom.joinBattle(p2);
+		newRoom.joinBattle(p1, p1team);
+		newRoom.joinBattle(p2, p2team);
 		selfR.cancelSearch(p1, true);
 		selfR.cancelSearch(p2, true);
 		selfR.roomsChanged = true;

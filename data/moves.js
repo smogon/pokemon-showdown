@@ -2263,6 +2263,9 @@ exports.BattleMovedex = {
 			onModifyPokemon: function(pokemon) {
 				pokemon.lockMove('dig');
 			},
+			onImmunity: function(type, pokemon) {
+				if (type === 'sandstorm' || type === 'hail') return false;
+			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
 				if (move.id === 'earthquake' || move.id === 'magnitude') {
@@ -2387,6 +2390,9 @@ exports.BattleMovedex = {
 			duration: 2,
 			onModifyPokemon: function(pokemon) {
 				pokemon.lockMove('dive');
+			},
+			onImmunity: function(type, pokemon) {
+				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
@@ -3145,8 +3151,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, source) {
 			if (target === source) return false;
-			var disallowedAbilities = {trace:1, forecast:1, multitype:1, flowergift:1, illusion:1, imposter:1, zenmode:1, wonderguard:1};
-			if (target.ability === 'multitype' || target.ability === 'truant' || target.ability === source.ability || disallowedAbilities[source.ability]) return false;
+			var bannedTargetAbilities = {multitype:1, truant:1};
+			var bannedSourceAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, wonderguard:1, zenmode:1};
+			if (bannedTargetAbilities[target.ability] || bannedSourceAbilities[source.ability] || target.ability === source.ability) {
+				return false;
+			}
 		},
 		onHit: function(target, source) {
 			if (target.setAbility(source.ability)) {
@@ -4051,6 +4060,9 @@ exports.BattleMovedex = {
 		num: 218,
 		accuracy: 100,
 		basePower: false,
+		basePowerCallback: function(pokemon) {
+			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || 1;
+		},
 		category: "Physical",
 		desc: "Power increases as user's happiness decreases; maximum 102 BP.",
 		shortDesc: "Max 102 power at minimum Happiness.",
@@ -8884,6 +8896,9 @@ exports.BattleMovedex = {
 		num: 216,
 		accuracy: 100,
 		basePower: false,
+		basePowerCallback: function(pokemon) {
+			return Math.floor((pokemon.happiness * 10) / 25) || 1;
+		},
 		category: "Physical",
 		desc: "Power increases as user's happiness increases; maximum 102 BP.",
 		shortDesc: "Max 102 power at maximum Happiness.",
@@ -9153,7 +9168,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onTryHit: function(target, source) {
-			if (target.ability === 'multitype' || target.ability === 'wonderguard' || target.ability === source.ability) {
+			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, wonderguard:1, zenmode:1};
+			if (bannedAbilities[target.ability] || source.ability === 'multitype' || target.ability === source.ability) {
 				return false;
 			}
 		},
@@ -9893,7 +9909,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		priority: 0,
 		onTryHit: function(pokemon) {
-			if (pokemon.ability === 'multitype' || pokemon.ability === 'truant') {
+			var bannedAbilities = {multitype:1, simple:1, truant:1};
+			if (bannedAbilities[pokemon.ability]) {
 				return false;
 			}
 		},
@@ -9954,7 +9971,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onTryHit: function(target, source) {
-			if (target.ability === 'wonderguard' || source.ability === 'wonderguard') {
+			var bannedAbilities = {illusion:1, multitype:1, wonderguard:1};
+			if (bannedAbilities[target.ability] || bannedAbilities[source.ability]) {
 				return false;
 			}
 		},
@@ -11060,7 +11078,7 @@ exports.BattleMovedex = {
 				}
 				if (move.category === 'Status') {
 					var SubBlocked = {
-						acupressure:1, block:1, embargo:1, entrainment:1, flatter:1, gastroacid:1, healblock:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, spiderweb:1, swagger:1, switcheroo:1, trick:1, worryseed:1, yawn:1, soak: 1
+						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, trick:1, worryseed:1, yawn:1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
 						return false;
@@ -12760,7 +12778,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		priority: 0,
 		onTryHit: function(pokemon) {
-			if (pokemon.ability === 'multitype' || pokemon.ability === 'truant') {
+			var bannedAbilities = {insomnia:1, multitype:1, truant:1};
+			if (bannedAbilities[pokemon.ability]) {
 				return false;
 			}
 		},

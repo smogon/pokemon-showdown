@@ -701,7 +701,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 						emit(socket, 'console', 'has not played a ladder game yet');
 					} else for (var i=0; i<data.length; i++) {
 						var row = data[i];
-						emit(socket, 'console', row.formatid+': '+Math.round(row.acre)+' (GXE:'+Math.round(row.pgxe,1)+') (W:'+row.w+'/L:'+row.l+'/T:'+row.t+')');
+						emit(socket, 'console', row.formatid+': '+Math.round(row.acre)+' (GXE:'+Math.round(row.pgxe,1)+') (Glicko2:'+Math.round(row.rpr)+','+Math.round(row.rprd)+') (W:'+row.w+'/L:'+row.l+'/T:'+row.t+')');
 					}
 				} catch(e) {
 				}
@@ -950,8 +950,23 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'kill':
+		if (!user.can('lockdown')) {
+			emit(socket, 'console', '/lockdown - Access denied.');
+			return false;
+		}
+
+		if (!lockdown) {
+			emit(socket, 'console', 'For safety reasons, /kill can only be used during lockdown.');
+			return false;
+		}
+
+		process.exit();
+		return false;
+		break;
+
 	case 'loadbanlist':
-		if (!user.can('hotpatch')) {
+		if (!user.can('announce')) {
 			emit(socket, 'console', '/loadbanlist - Access denied.');
 			return false;
 		}
@@ -984,6 +999,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 	case 'crashnoted':
+	case 'crashlogged':
 		if (!lockdown) {
 			emit(socket, 'console', '/crashnoted - There is no active crash.');
 			return false;
@@ -1006,6 +1022,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var lines = parseInt(target || 15, 10);
 		var command = 'tail -'+lines+' ';
 		var filename = 'logs/modlog.txt';
+		if (target.match(/^["'].+["']$/)) target = target.substring(1,target.length-1);
 		if (!lines || lines < 0) { // searching for a word instead
 			command = 'grep -i \''+target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\\$&').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]')+'\' ';
 		}

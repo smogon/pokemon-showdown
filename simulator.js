@@ -33,6 +33,7 @@ function BattlePokemon(set, side) {
 	var genders = {M:'M',F:'F'};
 	this.gender = this.template.gender || genders[set.gender] || (Math.random()*2<1?'M':'F');
 	if (this.gender === 'N') this.gender = '';
+	this.happiness = typeof set.happiness === 'number' ? clampIntRange(set.happiness, 0, 255) : 255;
 
 	this.fullname = this.side.id + ': ' + this.name;
 	this.details = this.species + (this.level==100?'':', L'+this.level) + (this.gender===''?'':', '+this.gender) + (this.set.shiny?', shiny':'');
@@ -54,6 +55,7 @@ function BattlePokemon(set, side) {
 	this.newlySwitched = false;
 	this.beingCalledBack = false;
 	this.isActive = false;
+	this.isStarted = false; // has this pokemon's Start events run yet?
 
 	this.transformed = false;
 	this.negateImmunity = {};
@@ -852,7 +854,7 @@ function BattlePokemon(set, side) {
 	selfP.clearVolatile(true);
 }
 
-function BattleSide(user, battle, n) {
+function BattleSide(user, battle, n, team) {
 	var selfB = battle;
 	var selfS = this;
 
@@ -869,7 +871,7 @@ function BattleSide(user, battle, n) {
 
 	this.id = (n?'p2':'p1');
 
-	this.team = selfB.getTeam(this);
+	this.team = selfB.getTeam(this, team);
 	for (var i=0; i<this.team.length && i<6; i++) {
 		console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
 		this.pokemon.push(new BattlePokemon(this.team[i], this));
@@ -1217,7 +1219,7 @@ function Battle(roomid, format, rated) {
 			return Math.random()-0.5;
 		});
 		for (var i=0; i<actives.length; i++) {
-			selfB.runEvent(eventid, actives[i], null, effect, relayVar);
+			if (actives[i].isStarted) selfB.runEvent(eventid, actives[i], null, effect, relayVar);
 		}
 	};
 	this.residualEvent = function(eventid, relayVar) {
@@ -1662,6 +1664,7 @@ function Battle(roomid, format, rated) {
 			var oldActive = side.active[0];
 			var oldpos = pokemon.position;
 			oldActive.isActive = false;
+			oldActive.isStarted = false;
 			pokemon.position = oldActive.position;
 			oldActive.position = oldpos;
 			side.pokemon[pokemon.position] = pokemon;
@@ -2150,6 +2153,8 @@ function Battle(roomid, format, rated) {
 				selfB.add('faint', faintData.target);
 				selfB.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
 				faintData.target.fainted = true;
+				faintData.target.isActive = false;
+				faintData.target.isStarted = false;
 				faintData.target.side.pokemonLeft--;
 			}
 		}
@@ -2169,12 +2174,14 @@ function Battle(roomid, format, rated) {
 	};
 	this.addQueue = function(decision, noSort) {
 		if (decision) {
+			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
+			if (!decision.choice && decision.move) decision.choice = 'move';
 			if (!decision.priority) {
 				var priorities = {
 					'beforeTurn': 100,
 					'beforeTurnMove': 99,
 					'switch': 6,
-					'runSwitch': 5.9,
+					'runSwitch': 6.1,
 					'residual': -100,
 					'team': 102,
 					'start': 101
@@ -2187,6 +2194,8 @@ function Battle(roomid, format, rated) {
 				if (selfB.getMove(decision.move).beforeTurnCallback) {
 					selfB.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move}, true);
 				}
+			} else if (decision.choice === 'switch' && !decision.speed) {
+				if (decision.side.active[0].isActive) decision.speed = decision.side.active[0].stats.spe;
 			}
 			if (decision.move) {
 				var target;
@@ -2204,11 +2213,15 @@ function Battle(roomid, format, rated) {
 					decision.priority = priority;
 				}
 			}
-			if (!decision.side) decision.side = decision.pokemon;
-			if (!decision.choice && decision.move) decision.choice = 'move';
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
 			if (!decision.speed && decision.newPokemon) decision.speed = decision.newPokemon.stats.spe;
 			if (!decision.speed) decision.speed = decision.pokemon.stats.spe;
+
+			if (decision.choice === 'switch' && !decision.side.pokemon[0].isActive) {
+				// if there's no actives, switches happen before activations
+				decision.priority = 6.2;
+			}
+
 			selfB.queue.push(decision);
 		}
 		if (!noSort) {
@@ -2322,6 +2335,7 @@ function Battle(roomid, format, rated) {
 			//decision.pokemon.runSwitchIn();
 			break;
 		case 'runSwitch':
+			decision.pokemon.isStarted = true;
 			selfB.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
 			selfB.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			break;
@@ -2336,7 +2350,9 @@ function Battle(roomid, format, rated) {
 		}
 		selfB.clearActiveMove();
 		if (selfB.faintMessages()) return true;
+
 		selfB.eachEvent('Update');
+
 		if (selfB.p1.active[0].switchFlag) {
 			if (selfB.canSwitch(selfB.p1)) {
 				selfB.callback('switch-ally');
@@ -2438,7 +2454,7 @@ function Battle(roomid, format, rated) {
 			decision.team = data;
 			side.decision = decision;
 		} else if (choice === 'switch') {
-			console.log('switching to '+data);
+			//console.log('switching to '+data);
 			data = Math.floor(data);
 			if (data < 0) data = 0;
 			if (data > side.pokemon.length-1) data = side.pokemon.length-1;
@@ -2534,7 +2550,7 @@ function Battle(roomid, format, rated) {
 			selfB.add('debug', activity);
 		}
 	};
-	this.join = function(user, slot) {
+	this.join = function(user, slot, team) {
 		if (selfB.p1 && selfB.p1.user && selfB.p2 && selfB.p2.user) return false;
 		if (!user) return false; // !!!
 		if (user.sides[selfB.roomid]) return false;
@@ -2545,7 +2561,7 @@ function Battle(roomid, format, rated) {
 				user.sides[selfB.roomid].name = user.name;
 			} else {
 				console.log("NEW SIDE: "+user.name);
-				selfB.p2 = new BattleSide(user, selfB, 1);
+				selfB.p2 = new BattleSide(user, selfB, 1, team);
 				selfB.sides[1] = selfB.p2;
 				user.sides[selfB.roomid] = selfB.p2;
 			}
@@ -2557,7 +2573,7 @@ function Battle(roomid, format, rated) {
 				selfB.p1.name = user.name;
 			} else {
 				console.log("NEW SIDE: "+user.name);
-				selfB.p1 = new BattleSide(user, selfB, 0);
+				selfB.p1 = new BattleSide(user, selfB, 0, team);
 				selfB.sides[0] = selfB.p1;
 				user.sides[selfB.roomid] = selfB.p1;
 			}

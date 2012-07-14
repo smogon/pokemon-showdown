@@ -17,7 +17,24 @@ exports.BattleFormats = {
 		name: "Unrated Random Battle",
 		team: 'random',
 		searchShow: true,
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
+		ruleset: ['Random Battle']
+	},
+	challengecup: {
+		effectType: 'Format',
+		name: "Challenge Cup",
+		team: 'cc',
+		searchDefault: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['Pokemon']
+	},
+	unratedchallengecup: {
+		effectType: 'Format',
+		name: "Unrated Challenge Cup",
+		team: 'cc',
+		searchShow: true,
+		ruleset: ['Challenge Cup']
 	},
 	ou: {
 		effectType: 'Format',
@@ -27,7 +44,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	cap: {
@@ -37,14 +54,14 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['CAP Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	capnecturnaplaytest: {
 		effectType: 'Format',
 		name: "CAP Necturna Playtest",
 		rated: true,
-		ruleset: ['CAP Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		ruleset: ['CAP Pokemon', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause', 'Standard', 'Team Preview'],
 		banlist: ['Uber','G4CAP','Tomohawk','ShadowStrike','Paleo Wave','Soul Dew']
 	},
 	capmolluxplaytest: {
@@ -52,10 +69,8 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "CAP Mollux Playtest",
 		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		ruleset: ['CAP Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber','G4CAP','Tomohawk','Necturna','ShadowStrike','Paleo Wave','Drizzle ++ Swift Swim']
+		ruleset: ['CAP'],
+		banlist: ['G4CAP','Tomohawk','Necturna','ShadowStrike','Paleo Wave']
 	},
 	ubers: {
 		effectType: 'Format',
@@ -64,7 +79,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: []
 	},
 	uu: {
@@ -74,8 +89,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber','OU','BL', 'Snow Warning', 'Drought', 'Sand Stream', 'Soul Dew']
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'Snow Warning', 'Drought', 'Sand Stream']
 	},
 	ru: {
 		effectType: 'Format',
@@ -84,8 +99,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber','OU','BL','UU','BL2', 'Snow Warning', 'Drought', 'Sand Stream', 'Shell Smash + Baton Pass', 'Soul Dew']
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
 	},
 	nu: {
 		effectType: 'Format',
@@ -94,8 +109,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'Snow Warning', 'Drought', 'Sand Stream', 'Shell Smash + Baton Pass', 'Soul Dew']
+		ruleset: ['RU'],
+		banlist: ['RU','BL3']
 	},
 	lc: {
 		effectType: 'Format',
@@ -104,36 +119,36 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview', 'Little Cup'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
 	},
 	dwubers: {
 		effectType: 'Format',
-		name: "Dream World Ubers",
+		name: "DW Ubers",
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
 		isDWtier: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard DW', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
 		banlist: []
 	},
 	dwou: {
 		effectType: 'Format',
-		name: "Dream World OU",
+		name: "DW OU",
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard DW', 'Team Preview'],
-		banlist: ['Arceus','Arceus-Fighting','Arceus-Flying','Arceus-Poison','Arceus-Ground','Arceus-Rock','Arceus-Bug','Arceus-Ghost','Arceus-Steel','Arceus-Fire','Arceus-Water','Arceus-Grass','Arceus-Electric','Arceus-Psychic','Arceus-Ice','Arceus-Dragon','Arceus-Dark','Blaziken','Darkrai','Deoxys','Deoxys-Attack','Dialga','Giratina','Giratina-Origin','Groudon','Ho-Oh','Kyogre','Lugia','Mewtwo','Palkia','Rayquaza','Reshiram','Shaymin-Sky','Zekrom']
+		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
+		banlist: ['Arceus','Arceus-Bug','Arceus-Dark','Arceus-Dragon','Arceus-Electric','Arceus-Fighting','Arceus-Fire','Arceus-Flying','Arceus-Ghost','Arceus-Grass','Arceus-Ground','Arceus-Ice','Arceus-Poison','Arceus-Psychic','Arceus-Rock','Arceus-Steel','Arceus-Water','Blaziken','Darkrai','Deoxys','Deoxys-Attack','Dialga','Giratina','Giratina-Origin','Groudon','Ho-Oh','Kyogre','Kyurem-Black','Kyurem-White','Lugia','Mewtwo','Palkia','Rayquaza','Reshiram','Shaymin-Sky','Zekrom']
 	},
 	dwuu: {
 		effectType: 'Format',
-		name: "Dream World UU",
+		name: "DW UU",
 		challengeShow: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard DW', 'Team Preview'],
-		banlist: ['Arceus', 'Arceus-Fighting', 'Arceus-Flying', 'Arceus-Poison', 'Arceus-Ground', 'Arceus-Rock', 'Arceus-Bug', 'Arceus-Ghost', 'Arceus-Steel', 'Arceus-Fire', 'Arceus-Water', 'Arceus-Grass', 'Arceus-Electric', 'Arceus-Psychic', 'Arceus-Ice', 'Arceus-Dragon', 'Arceus-Dark', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Zekrom', 'Chandelure', 'Genesect', 'Tyranitar', 'Dragonite', 'Breloom', 'Ferrothorn', 'Politoed', 'Gliscor', 'Ninetales', 'Scizor', 'Excadrill', 'Keldeo', 'Infernape', 'Venusaur', 'Heatran', 'Rotom-Wash', 'Blaziken', 'Garchomp', 'Serperior', 'Gengar', 'Volcarona', 'Forretress', 'Conkeldurr', 'Espeon', 'Cloyster', 'Skarmory', 'Starmie', 'Salamence', 'Gyarados', 'Zapdos', 'Jirachi', 'Latios', 'Chansey', 'Tentacruel', 'Haxorus', 'Landorus', 'Mamoswine', 'Charizard', 'Lucario', 'Jellicent', 'Blissey', 'Terrakion', 'Heracross', 'Scrafty', 'Jolteon', 'Metagross', 'Ditto', 'Hydreigon', 'Thundurus', 'Alakazam', 'Deoxys-Speed', 'Weavile', 'Vaporeon']
+		ruleset: ['DW OU'],
+		banlist: ['Chandelure', 'Genesect', 'Tyranitar', 'Dragonite', 'Breloom', 'Ferrothorn', 'Politoed', 'Gliscor', 'Ninetales', 'Scizor', 'Excadrill', 'Keldeo', 'Infernape', 'Venusaur', 'Heatran', 'Rotom-Wash', 'Garchomp', 'Serperior', 'Gengar', 'Volcarona', 'Forretress', 'Conkeldurr', 'Espeon', 'Cloyster', 'Skarmory', 'Starmie', 'Salamence', 'Gyarados', 'Zapdos', 'Jirachi', 'Latios', 'Tentacruel', 'Haxorus', 'Landorus', 'Mamoswine', 'Charizard', 'Lucario', 'Jellicent', 'Blissey', 'Terrakion', 'Heracross', 'Metagross', 'Ditto', 'Hydreigon', 'Thundurus', 'Alakazam', 'Deoxys-Speed', 'Latias', 'Gastrodon', 'Togekiss', 'Donphan',' Bronzong', 'Manaphy']
 	},
 	hackmons: {
 		effectType: 'Format',
@@ -152,16 +167,15 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon'],
-		banlist: ['OHKO', 'Wonder Guard', 'Pure Power', 'Huge Power', 'Freeze Shock', 'Ice Burn']
+		ruleset: ['Pokemon', 'OHKO Clause'],
+		banlist: ['Wonder Guard', 'Pure Power', 'Huge Power', 'Freeze Shock', 'Ice Burn']
 	},
 	pu: {
 		effectType: 'Format',
 		name: "PU",
 		challengeShow: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber','OU','BL','UU','BL2','RU','BL3', 'Snow Warning', 'Drought', 'Sand Stream', 'Shell Smash + Baton Pass',
-			"Charizard", "Wartortle", "Vileplume", "Kadabra", "Golem", "Haunter", "Exeggutor", "Marowak", "Weezing", "Tangela", "Kangaskhan", "Electabuzz", "Pinsir", "Tauros", "Lapras", "Flareon", "Ampharos", "Jumpluff", "Misdreavus", "Ursaring", "Piloswine", "Miltank", "Linoone", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Camerupt", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Absol", "Gorebyss", "Regirock", "Regice", "Torterra", "Rampardos", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Serperior", "Emboar", "Samurott", "Musharna", "Zebstrika", "Gigalith", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Cinccino", "Sawsbuck", "Amoonguss", "Alomomola", "Golurk", "Braviary"]
+		ruleset: ['NU'],
+		banlist: ["Charizard", "Wartortle", "Vileplume", "Kadabra", "Golem", "Haunter", "Exeggutor", "Marowak", "Weezing", "Tangela", "Kangaskhan", "Electabuzz", "Pinsir", "Tauros", "Lapras", "Flareon", "Ampharos", "Jumpluff", "Misdreavus", "Ursaring", "Piloswine", "Miltank", "Linoone", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Camerupt", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Absol", "Gorebyss", "Regirock", "Regice", "Torterra", "Rampardos", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Serperior", "Emboar", "Samurott", "Musharna", "Zebstrika", "Gigalith", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Cinccino", "Sawsbuck", "Amoonguss", "Alomomola", "Golurk", "Braviary"]
 	},
 	haxmons: {
 		effectType: 'Format',
@@ -213,7 +227,7 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "[Gen NEXT] NEXT-OU",
 		challengeShow: true,
-		ruleset: ['Pokemon', 'Sleep Clause', 'Species Clause', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Kyurem']
 	},
 
@@ -221,7 +235,8 @@ exports.BattleFormats = {
 
 	standard: {
 		effectType: 'Banlist',
-		banlist: ['Unreleased', 'Illegal', 'OHKO', 'Moody', 'BrightPowder', 'Lax Incense', 'Minimize', 'Double Team'],
+		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Moody'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
 			var moves = [];
@@ -240,7 +255,8 @@ exports.BattleFormats = {
 	},
 	standarddw: {
 		effectType: 'Banlist',
-		banlist: ['Illegal', 'OHKO', 'Moody', 'BrightPowder', 'Lax Incense', 'Minimize', 'Double Team'],
+		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause'],
+		banlist: ['Illegal', 'Moody'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
 			var moves = [];
@@ -297,7 +313,7 @@ exports.BattleFormats = {
 				}
 			}
 			if (template.isNonstandard) {
-				problems.push(set.species+' is not a real pokemon.');
+				problems.push(set.species+' is not a real Pokemon.');
 			}
 			if (set.moves) for (var i=0; i<set.moves.length; i++) {
 				var move = this.getMove(set.moves[i]);
@@ -396,6 +412,30 @@ exports.BattleFormats = {
 			}
 		}
 	},
+	ohkoclause: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule', 'OHKO Clause');
+		},
+		validateSet: function(set) {
+			var problems = [];
+			if (set.moves) {
+				for (var i in set.moves) {
+					var move = this.getMove(set.moves[i]);
+					if (move.ohko) problems.push(move.name+' is banned by OHKO Clause.');
+				}
+			}
+			return problems;
+		}
+	},
+	evasionclause: {
+		effectType: 'Banlist',
+		name: 'Evasion Clause',
+		banlist: ['BrightPowder', 'Lax Incense', 'Minimize', 'Double Team'],
+		onStart: function() {
+			this.add('rule', 'Evasion Clause');
+		}
+	},
 	sleepclause: {
 		effectType: 'Rule',
 		onStart: function() {
@@ -423,6 +463,20 @@ exports.BattleFormats = {
 		effectType: 'Rule',
 		onStart: function() {
 			this.add('rule', 'Freeze Clause');
+		},
+		onSetStatus: function(status, target, source) {
+			if (source && source.side === target.side) {
+				return;
+			}
+			if (status.id === 'frz') {
+				for (var i=0; i<target.side.pokemon.length; i++) {
+					var pokemon = target.side.pokemon[i];
+					if (pokemon.status === 'frz') {
+						this.add('-message', 'Freeze Clause activated.');
+						return false;
+					}
+				}
+			}
 		}
 	}
 };
