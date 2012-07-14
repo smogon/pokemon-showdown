@@ -284,7 +284,8 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":30,"gender":"F","abilities":["lightningrod"],"moves":["sing","teeterdance","encore","electroball"]},
 			{"generation":5,"level":50,"abilities":["static"],"moves":["fly","irontail","electroball","quickattack"]},
 			{"generation":5,"level":100,"gender":"F","abilities":["static"],"moves":["thunder","volttackle","grassknot","quickattack"]},
-			{"generation":5,"level":50,"gender":"F","abilities":["static"],"moves":["extremespeed","thunderbolt","grassknot","brickbreak"]}
+			{"generation":5,"level":50,"gender":"F","abilities":["static"],"moves":["extremespeed","thunderbolt","grassknot","brickbreak"]},
+			{"generation":5,"level":100,"abilities":["static"],"moves":["thunder","volttackle","grassknot","quickattack"]}
 		],
 		dreamWorldRelease: true,
 		tier: "NU"
@@ -1394,7 +1395,7 @@ exports.BattleFormatsData = {
 	flaaffy: {
 		viableMoves: {"reflect":1,"lightscreen":1,"thunderbolt":1,"discharge":1,"thunderwave":1,"toxic":1,"hiddenpowerice":1,"cottonguard":1},
 		dreamWorldRelease: true,
-		tier: "NU"
+		tier: "NFE"
 	},
 	ampharos: {
 		viableMoves: {"voltswitch":1,"focusblast":1,"hiddenpowerice":1,"hiddenpowergrass":1,"thunderbolt":1,"healbell":1,"agility":1},
@@ -2915,7 +2916,6 @@ exports.BattleFormatsData = {
 		viableMoves: {"stealthrock":1,"hydropump":1,"scald":1,"icebeam":1,"hiddenpowerelectric":1,"hiddenpowerfire":1,"yawn":1},
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"M","abilities":["defiant"],"moves":["pound","growl","bubble"]},
-			{"generation":5,"level":15,"gender":"M","abilities":["torrent"],"moves":["sing","round","featherdance","peck"]},
 			{"generation":5,"level":15,"abilities":["torrent"],"moves":["hydropump","featherdance","watersport","peck"]}
 		],
 		dreamWorldRelease: true,
@@ -3189,7 +3189,7 @@ exports.BattleFormatsData = {
 	hippopotas: {
 		viableMoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1},
 		dreamWorldRelease: true,
-		tier: "UU"
+		tier: "LC"
 	},
 	hippowdon: {
 		viableMoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1,"icefang":1,"stoneedge":1,"stockpile":1},
@@ -3237,7 +3237,7 @@ exports.BattleFormatsData = {
 	snover: {
 		viableMoves: {"blizzard":1,"iceshard":1,"gigadrain":1,"leechseed":1,"substitute":1},
 		dreamWorldRelease: true,
-		tier: "UU"
+		tier: "LC"
 	},
 	abomasnow: {
 		viableMoves: {"blizzard":1,"iceshard":1,"gigadrain":1,"leechseed":1,"substitute":1,"focusblast":1},
@@ -3900,6 +3900,9 @@ exports.BattleFormatsData = {
 	},
 	gothorita: {
 		viableMoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1,"trick":1},
+		eventPokemon: [
+			{"generation":5,"level":32,"gender":"M","abilities":["shadowtag"],"moves":["faintattack","psyshock","flatter","futuresight"]}
+		],
 		tier: "NFE"
 	},
 	gothitelle: {
@@ -4312,18 +4315,33 @@ exports.BattleFormatsData = {
 	},
 	genesect: {
 		viableMoves: {"uturn":1,"bugbuzz":1,"icebeam":1,"flamethrower":1,"thunderbolt":1,"rockpolish":1},
+		eventPokemon: [
+			{"generation":5,"level":50,"abilities":["download"],"moves":["technoblast"]}
+		],
 		tier: "Unreleased"
 	},
 	genesectdouse: {
+		eventPokemon: [
+			{"generation":5,"level":50,"abilities":["download"],"moves":["technoblast"]}
+		],
 		tier: "Illegal"
 	},
 	genesectshock: {
+		eventPokemon: [
+			{"generation":5,"level":50,"abilities":["download"],"moves":["technoblast"]}
+		],
 		tier: "Illegal"
 	},
 	genesectburn: {
+		eventPokemon: [
+			{"generation":5,"level":50,"abilities":["download"],"moves":["technoblast"]}
+		],
 		tier: "Illegal"
 	},
 	genesectchill: {
+		eventPokemon: [
+			{"generation":5,"level":50,"abilities":["download"],"moves":["technoblast"]}
+		],
 		tier: "Illegal"
 	}
 };
