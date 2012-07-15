@@ -11054,11 +11054,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'Substitute',
 		onTryHit: function(target) {
-			if (target.volatiles['substitute'] || target.maxhp === 1) { // Shedinja clause
+			if (target.volatiles['substitute']) {
 				this.add('-fail', target, 'move: Substitute');
 				return null;
 			}
-			if (target.hp <= target.maxhp/4) {
+			if (target.hp <= target.maxhp/4 || target.maxhp === 1) { // Shedinja clause
 				this.add('-fail', target, 'move: Substitute', '[weak]');
 				return null;
 			}
