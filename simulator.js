@@ -821,7 +821,7 @@ function BattlePokemon(set, side) {
 		if (!selfB.getImmunity(type, selfP)) {
 			selfB.debug('natural immunity');
 			if (message) {
-				selfB.add('-immune', selfP);
+				selfB.add('-immune', selfP, '[msg]');
 			}
 			return false;
 		}
@@ -829,7 +829,7 @@ function BattlePokemon(set, side) {
 		if (!immunity) {
 			selfB.debug('artificial immunity');
 			if (message && immunity !== null) {
-				selfB.add('-immune', selfP);
+				selfB.add('-immune', selfP, '[msg]');
 			}
 			return false;
 		}
