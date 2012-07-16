@@ -1041,8 +1041,10 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifyPriority: function(priority) {
-			return priority - 0.1;
+		onModifyPriority: function(pokemon, priority) {
+			if (pokemon.ability !== 'stall') {
+				return priority - 0.1;
+			}
 		},
 		desc: "Makes the holder move last. Allows breeding of Munchlax."
 	},
@@ -1407,8 +1409,10 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifyPriority: function(priority) {
-			return priority - 0.1;
+		onModifyPriority: function(pokemon, priority) {
+			if (pokemon.ability !== 'stall') {
+				return priority - 0.1;
+			}
 		},
 		desc: "The holder will go last within its move's priority bracket, regardless of Speed."
 	},
