@@ -846,7 +846,7 @@ var User = (function () {
 			}
 			return false;
 		}
-		Rooms.get('lobby').startBattle(this, user, user.challengeTo.format);
+		Rooms.get('lobby').startBattle(this, user, user.challengeTo.format, false, this.team, user.team);
 		delete this.challengesFrom[user.userid];
 		user.challengeTo = null;
 		this.updateChallenges();
