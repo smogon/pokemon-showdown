@@ -2014,8 +2014,8 @@ exports.BattleAbilities = {
 	"stall": {
 		desc: "This Pokemon attacks last in its priority bracket.",
 		shortDesc: "This Pokemon attacks last among Pokemon using the same or greater priority moves.",
-		onModifyMove: function(move) {
-			move.priority -= 0.1;
+		onModifyPriority: function(priority) {
+			return priority - 0.1;
 		},
 		id: "stall",
 		name: "Stall",
