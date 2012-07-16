@@ -73,6 +73,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				request({
 					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
 				}, function(error, response, body) {
+					if (!selfR) {
+						console.log('room expired before ladder update was received');
+						return;
+					}
 					if (body) {
 						var data;
 						try {
