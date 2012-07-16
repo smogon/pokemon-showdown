@@ -349,14 +349,12 @@ exports.BattleScripts = {
 		return damage;
 	},
 	getTeam: function(side, team) {
-		if (team) {
-			return team;
-		} if (side.battle.getFormat().team === 'cc') {
+		if (side.battle.getFormat().team === 'cc') {
 			return this.ChallengeCup(side);
 		} else if (side.battle.getFormat().team === 'random') {
 			return this.randomTeam(side);
-		} else if (side.user && side.user.team && side.user.team !== 'random' && side.user.team !== 'cc') {
-			return side.user.team;
+		} else if (team) {
+			return team;
 		} else {
 			return this.randomTeam(side);
 		}
