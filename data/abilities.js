@@ -391,7 +391,7 @@ exports.BattleAbilities = {
 			var totaldef = 0;
 			var totalspd = 0;
 			for (var i=0; i<foeactive.length; i++) {
-				if (!foeactive[i]) continue;
+				if (!foeactive[i] || foeactive[i].fainted) continue;
 				totaldef += foeactive[i].stats.def;
 				totalspd += foeactive[i].stats.spd;
 			}
@@ -925,7 +925,7 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			var foeactive = pokemon.side.foe.active;
 			for (var i=0; i<foeactive.length; i++) {
-				if (!foeactive[i]) continue;
+				if (!foeactive[i] || foeactive[i].fainted) continue;
 				if (foeactive[i].volatiles['substitute']) {
 					// does it give a message?
 					this.add('-activate',foeactive[i],'Substitute','ability: Intimidate','[of] '+pokemon);
