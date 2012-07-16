@@ -2048,9 +2048,17 @@ function Battle(roomid, format, rated) {
 		}
 		if (!basePower) return 0;
 
+		var level = pokemon.level;
+
+		var oldpokemon;
+		if (move.id === 'foulplay') { // evil hack, kill this with fire as soon as possible
+			selfB.debug('using target\'s attack');
+			oldpokemon = pokemon;
+			pokemon = target;
+		}
+
 		var attack = move.category==='Physical'?pokemon.stats.atk:pokemon.stats.spa;
 		var defense = move.defensiveCategory==='Physical'?target.stats.def:target.stats.spd;
-		var level = pokemon.level;
 
 		if (move.crit) {
 			move.ignoreNegativeOffensive = true;
@@ -2070,6 +2078,8 @@ function Battle(roomid, format, rated) {
 			selfB.debug('Negating (sp)def boost/penalty.');
 			defense = move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd;
 		}
+
+		if (oldpokemon) pokemon = oldpokemon;
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
