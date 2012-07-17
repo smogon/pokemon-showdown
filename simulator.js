@@ -2323,7 +2323,7 @@ function Battle(roomid, format, rated) {
 			if (decision.pokemon) {
 				decision.pokemon.beingCalledBack = true;
 				var lastMove = selfB.getMove(decision.pokemon.lastMove);
-				if (!(lastMove.batonPass || (lastMove.self && lastMove.self.batonPass))) {
+				if (lastMove.selfSwitch !== 'copyvolatile') {
 					// Don't run any event handlers if Baton Pass was used.
 					if (!selfB.runEvent('SwitchOut', decision.pokemon)) {
 						// Warning: DO NOT interrupt a switch-out
