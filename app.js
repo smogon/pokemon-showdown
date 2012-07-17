@@ -252,7 +252,7 @@ var events = {
 		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		console.log('CHALLENGE: '+youUser.name+' => '+data.userid+' ('+data.act+')');
+		//console.log('CHALLENGE: '+youUser.name+' => '+data.userid+' ('+data.act+')');
 		switch (data.act) {
 		case 'make':
 			if (typeof data.format !== 'string') data.format = 'debugmode';
