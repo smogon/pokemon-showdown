@@ -873,7 +873,7 @@ function BattleSide(user, battle, n, team) {
 
 	this.team = selfB.getTeam(this, team);
 	for (var i=0; i<this.team.length && i<6; i++) {
-		console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
+		//console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
 		this.pokemon.push(new BattlePokemon(this.team[i], this));
 	}
 	this.pokemonLeft = this.pokemon.length;
@@ -2570,7 +2570,7 @@ function Battle(roomid, format, rated) {
 				selfB.p2.user = user;
 				user.sides[selfB.roomid].name = user.name;
 			} else {
-				console.log("NEW SIDE: "+user.name);
+				//console.log("NEW SIDE: "+user.name);
 				selfB.p2 = new BattleSide(user, selfB, 1, team);
 				selfB.sides[1] = selfB.p2;
 				user.sides[selfB.roomid] = selfB.p2;
@@ -2582,7 +2582,7 @@ function Battle(roomid, format, rated) {
 				selfB.p1.user = user;
 				selfB.p1.name = user.name;
 			} else {
-				console.log("NEW SIDE: "+user.name);
+				//console.log("NEW SIDE: "+user.name);
 				selfB.p1 = new BattleSide(user, selfB, 0, team);
 				selfB.sides[0] = selfB.p1;
 				user.sides[selfB.roomid] = selfB.p1;
