@@ -1503,7 +1503,7 @@ exports.BattleFormatsData = {
 	natu: {
 		viableMoves: {"thunderwave":1,"roost":1,"toxic":1,"reflect":1,"lightscreen":1,"uturn":1,"wish":1,"psychic":1,"nightshade":1,"uturn":1},
 		eventPokemon: [
-			{"generation":5,"level":22,"abilities":["synchronize","earlybird"],"moves":["batonpass","futuresight","nightshade","aerialace"]}
+			{"generation":3,"level":22,"abilities":["synchronize","earlybird"],"moves":["batonpass","futuresight","nightshade","aerialace"]}
 		],
 		dreamWorldRelease: true,
 		tier: "NU"
