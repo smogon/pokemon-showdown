@@ -275,7 +275,7 @@ var User = (function () {
 
 		for (var i=0; i<this.people.length; i++) {
 			this.people[i].rename(name, oldid);
-			console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
+			//console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
 			emit(this.people[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
@@ -468,7 +468,7 @@ var User = (function () {
 						Rooms.get(i).leave(selfP);
 					}
 					for (var i=0; i<selfP.people.length; i++) {
-						console.log(''+selfP.name+' preparing to merge: socket '+i+' of '+selfP.people.length);
+						//console.log(''+selfP.name+' preparing to merge: socket '+i+' of '+selfP.people.length);
 						user.merge(selfP.people[i]);
 					}
 					selfP.roomCount = {};
@@ -530,7 +530,7 @@ var User = (function () {
 		var oldid = person.userid;
 		this.people.push(person);
 		person.rename(this.name, oldid);
-		console.log(''+this.name+' merging: socket '+person.socket.id+' of ');
+		//console.log(''+this.name+' merging: socket '+person.socket.id+' of ');
 		emit(person.socket, 'update', {
 			name: this.name,
 			userid: this.userid,
