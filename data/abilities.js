@@ -2293,7 +2293,10 @@ exports.BattleAbilities = {
 			var target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
 			var ability = this.getAbility(target.ability);
-			if (ability.id === 'flowergift' || ability.id === 'forecast' || ability.id === 'illusion' || ability.id === 'imposter' || ability.id === 'multitype' || ability.id === 'trace' || ability.id === 'wonderguard' || ability.id === 'zenmode') return;
+			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, zenmode:1};
+			if (bannedAbilities[target.ability]) {
+				return;
+			}
 			if (pokemon.setAbility(ability)) {
 				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
 			}
