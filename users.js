@@ -632,6 +632,10 @@ var User = (function () {
 		var self = this;
 		if (that === undefined) that = this;
 		formatid = toId(formatid);
+
+		// this should relieve login server strain
+		this.mmrCache[formatid] = 1500;
+
 		if (this.mmrCache[formatid]) {
 			callback.call(that, this.mmrCache[formatid]);
 			return;
