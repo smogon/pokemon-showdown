@@ -871,7 +871,7 @@ function LobbyRoom(roomid) {
 			rooms: selfR.getRoomList(),
 			u: selfR.getUserList(),
 			roomType: 'lobby',
-			log: selfR.log.slice(-100),
+			log: selfR.log.slice(-25),
 			searcher: selfR.searchers.length
 		};
 		emit(socket, 'init', initdata);
