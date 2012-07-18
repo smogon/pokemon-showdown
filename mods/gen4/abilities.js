@@ -8,6 +8,19 @@ exports.BattleAbilities = {
 			this.add('-setboost',target,'atk',12,'[from] ability: Anger Point');
 		}
 	},
+	"lightningrod": {
+		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment. The user is immune to Electric.",
+		shortDesc: "This Pokemon draws Electric moves to itself; Electric immunity.",
+		onImmunity: function(type, pokemon) {
+			if (type === 'Electric') {
+				return false;
+			}
+		},
+		id: "lightningrod",
+		name: "Lightningrod",
+		rating: 3,
+		num: 32
+	},
 	"pickup": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",
@@ -24,6 +37,19 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 1
 	},
+	"stormdrain": {
+		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball. The user is immune to Water.",
+		shortDesc: "This Pokemon draws Water moves to itself; Water immunity.",
+		onImmunity: function(type, pokemon) {
+			if (type === 'Water') {
+				return false;
+			}
+		},
+		id: "stormdrain",
+		name: "Storm Drain",
+		rating: 3,
+		num: 114
+	},
 	"sturdy": {
 		desc: "This Pokemon is immune to OHKO moves.",
 		shortDesc: "OHKO moves fail on this Pokemon.",
@@ -39,13 +65,26 @@ exports.BattleAbilities = {
 		rating: 0.5,
 		num: 5
 	},
+	"synchronize": {
+		inherit: true,
+		onAfterSetStatus: function(status, target, source) {
+			if (!source || source === target) return;
+			var status = status.id;
+			if (status === 'slp' || status === 'frz') return;
+			if (status === 'tox') status = 'psn';
+			source.trySetStatus(status);
+		}
+	},
 	"trace": {
 		inherit: true,
 		onUpdate: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
 			var ability = this.getAbility(target.ability);
-			if (ability.id === 'forecast' || ability.id === 'multitype' || ability.id === 'trace') return;
+			var bannedAbilities = {forecast:1, multitype:1, trace:1};
+			if (bannedAbilities[target.ability]) {
+				return;
+			}
 			if (pokemon.setAbility(ability)) {
 				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
 			}
