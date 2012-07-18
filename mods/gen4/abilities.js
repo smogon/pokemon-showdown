@@ -9,14 +9,12 @@ exports.BattleAbilities = {
 		}
 	},
 	"lightningrod": {
-		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment. The user is immune to Electric.",
-		shortDesc: "This Pokemon draws Electric moves to itself; Electric immunity.",
-		onImmunity: function(type) {
-			if (type === 'Electric') return false;
-		},
+		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment.",
+		shortDesc: "This Pokemon draws Electric moves to itself.",
+		// drawing not implemented
 		id: "lightningrod",
 		name: "Lightningrod",
-		rating: 3,
+		rating: 0,
 		num: 32
 	},
 	"pickup": {
@@ -36,14 +34,12 @@ exports.BattleAbilities = {
 		num: 1
 	},
 	"stormdrain": {
-		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball. The user is immune to Water.",
-		shortDesc: "This Pokemon draws Water moves to itself; Water immunity.",
-		onImmunity: function(type) {
-			if (type === 'Water') return false;
-		},
+		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball.",
+		shortDesc: "This Pokemon draws Water moves to itself.",
+		// drawing not implemented
 		id: "stormdrain",
 		name: "Storm Drain",
-		rating: 3,
+		rating: 0,
 		num: 114
 	},
 	"sturdy": {
