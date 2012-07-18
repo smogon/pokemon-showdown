@@ -8419,19 +8419,18 @@ exports.BattleMovedex = {
 			}
 			target.side.sideConditions['pursuit'].sources.push(pokemon);
 		},
+		onTryHit: function(target, pokemon) {
+			target.side.removeSideCondition('pursuit');
+		},
 		effect: {
 			duration: 1,
 			onSwitchOutPriority: 10,
 			onSwitchOut: function(pokemon) {
 				this.debug('Pursuit start');
 				var sources = this.effectData.sources;
-				this.add('-activate', pokemon, 'move: Pursuit');
 				for (var i=0; i<sources.length; i++) {
-					if (sources[i].movedThisTurn || sources[i].status === 'slp' || sources[i].status === 'frz' || sources[i].volatiles['truant']) {
-						continue;
-					}
-					this.useMove('pursuit', sources[i], pokemon);
-					sources[i].deductPP('pursuit');
+					this.runMove('pursuit', sources[i], pokemon);
+					sources[i].movedThisTurn = true;
 				}
 			}
 		},
