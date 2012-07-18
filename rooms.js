@@ -73,6 +73,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				request({
 					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
 				}, function(error, response, body) {
+					if (!selfR) {
+						console.log('room expired before ladder update was received');
+						return;
+					}
 					if (body) {
 						var data;
 						try {
@@ -673,21 +677,21 @@ function LobbyRoom(roomid) {
 			update.logUpdate.push(selfR.log[i]);
 		}
 		if (!omitRoomList) update.rooms = selfR.getRoomList();
-		if (!omitUsers) update.users = selfR.getUserList();
+		if (!omitUsers) update.u = selfR.getUserList();
 		update.searcher = selfR.searchers.length;
 		return update;
 	};
 	this.getUserList = function() {
-		var userList = {list: {}, users: 0, unregistered: 0, guests: 0};
+		var buffer = '';
+		var counter = 0;
 		for (var i in selfR.users) {
+			counter++;
 			if (!selfR.users[i].named) {
-				userList.guests++;
 				continue;
 			}
-			userList.users++;
-			userList.list[selfR.users[i].userid] = selfR.users[i].getIdentity();
+			buffer += ','+selfR.users[i].getIdentity();
 		}
-		return userList;
+		return ''+counter+buffer;
 	};
 	this.getRoomList = function(filter) {
 		var roomList = {};
@@ -865,9 +869,9 @@ function LobbyRoom(roomid) {
 			token: user.token,
 			room: selfR.id,
 			rooms: selfR.getRoomList(),
-			users: selfR.getUserList(),
+			u: selfR.getUserList(),
 			roomType: 'lobby',
-			log: selfR.log.slice(-100),
+			log: selfR.log.slice(-25),
 			searcher: selfR.searchers.length
 		};
 		emit(socket, 'init', initdata);
@@ -892,7 +896,7 @@ function LobbyRoom(roomid) {
 			token: user.token,
 			room: selfR.id,
 			rooms: selfR.getRoomList(),
-			users: selfR.getUserList(),
+			u: selfR.getUserList(),
 			roomType: 'lobby',
 			log: selfR.log.slice(-100),
 			searcher: selfR.searchers.length

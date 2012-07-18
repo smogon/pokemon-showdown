@@ -821,7 +821,7 @@ function BattlePokemon(set, side) {
 		if (!selfB.getImmunity(type, selfP)) {
 			selfB.debug('natural immunity');
 			if (message) {
-				selfB.add('-immune', selfP);
+				selfB.add('-immune', selfP, '[msg]');
 			}
 			return false;
 		}
@@ -829,7 +829,7 @@ function BattlePokemon(set, side) {
 		if (!immunity) {
 			selfB.debug('artificial immunity');
 			if (message && immunity !== null) {
-				selfB.add('-immune', selfP);
+				selfB.add('-immune', selfP, '[msg]');
 			}
 			return false;
 		}
@@ -873,7 +873,7 @@ function BattleSide(user, battle, n, team) {
 
 	this.team = selfB.getTeam(this, team);
 	for (var i=0; i<this.team.length && i<6; i++) {
-		console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
+		//console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
 		this.pokemon.push(new BattlePokemon(this.team[i], this));
 	}
 	this.pokemonLeft = this.pokemon.length;
@@ -2048,9 +2048,17 @@ function Battle(roomid, format, rated) {
 		}
 		if (!basePower) return 0;
 
+		var level = pokemon.level;
+
+		var oldpokemon;
+		if (move.id === 'foulplay') { // evil hack, kill this with fire as soon as possible
+			selfB.debug('using target\'s attack');
+			oldpokemon = pokemon;
+			pokemon = target;
+		}
+
 		var attack = move.category==='Physical'?pokemon.stats.atk:pokemon.stats.spa;
 		var defense = move.defensiveCategory==='Physical'?target.stats.def:target.stats.spd;
-		var level = pokemon.level;
 
 		if (move.crit) {
 			move.ignoreNegativeOffensive = true;
@@ -2070,6 +2078,8 @@ function Battle(roomid, format, rated) {
 			selfB.debug('Negating (sp)def boost/penalty.');
 			defense = move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd;
 		}
+
+		if (oldpokemon) pokemon = oldpokemon;
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
@@ -2313,7 +2323,7 @@ function Battle(roomid, format, rated) {
 			if (decision.pokemon) {
 				decision.pokemon.beingCalledBack = true;
 				var lastMove = selfB.getMove(decision.pokemon.lastMove);
-				if (!(lastMove.batonPass || (lastMove.self && lastMove.self.batonPass))) {
+				if (lastMove.selfSwitch !== 'copyvolatile') {
 					// Don't run any event handlers if Baton Pass was used.
 					if (!selfB.runEvent('SwitchOut', decision.pokemon)) {
 						// Warning: DO NOT interrupt a switch-out
@@ -2560,7 +2570,7 @@ function Battle(roomid, format, rated) {
 				selfB.p2.user = user;
 				user.sides[selfB.roomid].name = user.name;
 			} else {
-				console.log("NEW SIDE: "+user.name);
+				//console.log("NEW SIDE: "+user.name);
 				selfB.p2 = new BattleSide(user, selfB, 1, team);
 				selfB.sides[1] = selfB.p2;
 				user.sides[selfB.roomid] = selfB.p2;
@@ -2572,7 +2582,7 @@ function Battle(roomid, format, rated) {
 				selfB.p1.user = user;
 				selfB.p1.name = user.name;
 			} else {
-				console.log("NEW SIDE: "+user.name);
+				//console.log("NEW SIDE: "+user.name);
 				selfB.p1 = new BattleSide(user, selfB, 0, team);
 				selfB.sides[0] = selfB.p1;
 				user.sides[selfB.roomid] = selfB.p1;

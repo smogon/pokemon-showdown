@@ -8419,6 +8419,9 @@ exports.BattleMovedex = {
 			}
 			target.side.sideConditions['pursuit'].sources.push(pokemon);
 		},
+		onTryHit: function(target, pokemon) {
+			target.side.removeSideCondition('pursuit');
+		},
 		effect: {
 			duration: 1,
 			onSwitchOutPriority: 10,
@@ -8427,11 +8430,8 @@ exports.BattleMovedex = {
 				var sources = this.effectData.sources;
 				this.add('-activate', pokemon, 'move: Pursuit');
 				for (var i=0; i<sources.length; i++) {
-					if (sources[i].movedThisTurn || sources[i].status === 'slp' || sources[i].status === 'frz' || sources[i].volatiles['truant']) {
-						continue;
-					}
-					this.useMove('pursuit', sources[i], pokemon);
-					sources[i].deductPP('pursuit');
+					this.runMove('pursuit', sources[i], pokemon);
+					sources[i].movedThisTurn = true;
 				}
 			}
 		},
@@ -11054,11 +11054,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'Substitute',
 		onTryHit: function(target) {
-			if (target.volatiles['substitute'] || target.maxhp === 1) { // Shedinja clause
+			if (target.volatiles['substitute']) {
 				this.add('-fail', target, 'move: Substitute');
 				return null;
 			}
-			if (target.hp <= target.maxhp/4) {
+			if (target.hp <= target.maxhp/4 || target.maxhp === 1) { // Shedinja clause
 				this.add('-fail', target, 'move: Substitute', '[weak]');
 				return null;
 			}

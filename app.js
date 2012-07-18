@@ -3,7 +3,29 @@ require('sugar');
 fs = require('fs');
 path = require('path');
 
-request = require('request');
+//request = require('request');
+var http = require("http");
+var url = require('url');
+request = function(options, callback) {
+    var req = http.get(url.parse(options.uri), function(res) {
+        var buffer = '';
+        res.setEncoding('utf8');
+
+        res.on('data', function(chunk) {
+            buffer += chunk;
+        });
+
+        res.on('end', function() {
+            callback(null, res.statusCode, buffer);
+        });
+    });
+
+    req.on('error', function(error) {
+        callback(error);
+    });
+
+    req.end();
+}
 
 // Synchronously copy config-example.js over to config.js if it doesn't exist
 if (!path.existsSync('./config/config.js')) {
@@ -229,7 +251,7 @@ var events = {
 		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		console.log('CHALLENGE: '+youUser.name+' => '+data.userid+' ('+data.act+')');
+		//console.log('CHALLENGE: '+youUser.name+' => '+data.userid+' ('+data.act+')');
 		switch (data.act) {
 		case 'make':
 			if (typeof data.format !== 'string') data.format = 'debugmode';

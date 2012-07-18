@@ -275,7 +275,7 @@ var User = (function () {
 
 		for (var i=0; i<this.people.length; i++) {
 			this.people[i].rename(name, oldid);
-			console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
+			//console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
 			emit(this.people[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
@@ -468,7 +468,7 @@ var User = (function () {
 						Rooms.get(i).leave(selfP);
 					}
 					for (var i=0; i<selfP.people.length; i++) {
-						console.log(''+selfP.name+' preparing to merge: socket '+i+' of '+selfP.people.length);
+						//console.log(''+selfP.name+' preparing to merge: socket '+i+' of '+selfP.people.length);
 						user.merge(selfP.people[i]);
 					}
 					selfP.roomCount = {};
@@ -530,7 +530,7 @@ var User = (function () {
 		var oldid = person.userid;
 		this.people.push(person);
 		person.rename(this.name, oldid);
-		console.log(''+this.name+' merging: socket '+person.socket.id+' of ');
+		//console.log(''+this.name+' merging: socket '+person.socket.id+' of ');
 		emit(person.socket, 'update', {
 			name: this.name,
 			userid: this.userid,
@@ -632,6 +632,10 @@ var User = (function () {
 		var self = this;
 		if (that === undefined) that = this;
 		formatid = toId(formatid);
+
+		// this should relieve login server strain
+		this.mmrCache[formatid] = 1500;
+
 		if (this.mmrCache[formatid]) {
 			callback.call(that, this.mmrCache[formatid]);
 			return;
@@ -846,7 +850,7 @@ var User = (function () {
 			}
 			return false;
 		}
-		Rooms.get('lobby').startBattle(this, user, user.challengeTo.format);
+		Rooms.get('lobby').startBattle(this, user, user.challengeTo.format, false, this.team, user.team);
 		delete this.challengesFrom[user.userid];
 		user.challengeTo = null;
 		this.updateChallenges();

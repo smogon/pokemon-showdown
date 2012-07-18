@@ -391,7 +391,7 @@ exports.BattleAbilities = {
 			var totaldef = 0;
 			var totalspd = 0;
 			for (var i=0; i<foeactive.length; i++) {
-				if (!foeactive[i]) continue;
+				if (!foeactive[i] || foeactive[i].fainted) continue;
 				totaldef += foeactive[i].stats.def;
 				totalspd += foeactive[i].stats.spd;
 			}
@@ -925,7 +925,7 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			var foeactive = pokemon.side.foe.active;
 			for (var i=0; i<foeactive.length; i++) {
-				if (!foeactive[i]) continue;
+				if (!foeactive[i] || foeactive[i].fainted) continue;
 				if (foeactive[i].volatiles['substitute']) {
 					// does it give a message?
 					this.add('-activate',foeactive[i],'Substitute','ability: Intimidate','[of] '+pokemon);
@@ -2014,8 +2014,8 @@ exports.BattleAbilities = {
 	"stall": {
 		desc: "This Pokemon attacks last in its priority bracket.",
 		shortDesc: "This Pokemon attacks last among Pokemon using the same or greater priority moves.",
-		onModifyMove: function(move) {
-			move.priority -= 0.1;
+		onModifyPriority: function(priority) {
+			return priority - 0.1;
 		},
 		id: "stall",
 		name: "Stall",
@@ -2293,7 +2293,10 @@ exports.BattleAbilities = {
 			var target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
 			var ability = this.getAbility(target.ability);
-			if (ability.id === 'flowergift' || ability.id === 'forecast' || ability.id === 'illusion' || ability.id === 'imposter' || ability.id === 'multitype' || ability.id === 'trace' || ability.id === 'wonderguard' || ability.id === 'zenmode') return;
+			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, zenmode:1};
+			if (bannedAbilities[target.ability]) {
+				return;
+			}
 			if (pokemon.setAbility(ability)) {
 				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
 			}
@@ -2309,6 +2312,7 @@ exports.BattleAbilities = {
 		onBeforeMove: function(pokemon, target, move) {
 			if (pokemon.removeVolatile('truant')) {
 				this.add('cant',pokemon,'ability: Truant', move);
+				pokemon.movedThisTurn = true;
 				return false;
 			}
 			pokemon.addVolatile('truant');
