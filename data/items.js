@@ -777,10 +777,14 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onHit: function(target, source, move) {
+			if (source && source !== target && move && move.selfSwitch) {
+				move.selfSwitch = false;
+			}
+		},
 		onAfterMoveSecondary: function(target, source, move) {
 			if (source && source !== target && move && move.category !== 'Status') {
 				if (target.useItem()) {
-					this.add("-message",target.name+" is switched out with the Eject Button! (placeholder)");
 					target.switchFlag = true;
 				}
 			}
