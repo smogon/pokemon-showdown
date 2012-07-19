@@ -1047,17 +1047,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('bounce')) return;
-			pokemon.addVolatile('bounce');
-			this.add('-prepare', pokemon, 'Bounce', target);
-			return true;
-		},
 		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('bounce');
-			},
 			onSourceModifyMove: function(move) {
 
 				// warning: does not work the same way as Fly
@@ -2252,17 +2242,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('dig')) return;
-			pokemon.addVolatile('dig');
-			this.add('-prepare',pokemon,'Dig',target);
-			return true;
-		},
 		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('dig');
-			},
 			onImmunity: function(type, pokemon) {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
@@ -2380,17 +2360,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('dive')) return;
-			pokemon.addVolatile('dive');
-			this.add('-prepare', pokemon, 'Dive', target);
-			return true;
-		},
 		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('dive');
-			},
 			onImmunity: function(type, pokemon) {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
@@ -3795,19 +3765,8 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('fly')) return;
-			pokemon.addVolatile('fly');
-			this.add('-prepare',pokemon,'Fly',target);
-			return true;
-		},
 		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('fly');
-			},
 			onSourceModifyMove: function(move) {
-
 				if (move.target === 'foeSide') return;
 				// warning: does not work the same way as Bounce
 				if (move.id === 'gust' || move.id === 'twister') {
@@ -4002,18 +3961,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('freezeshock')) return;
-			this.add('-prepare', pokemon, 'Freeze Shock', target);
-			pokemon.addVolatile('freezeshock');
-			return true;
-		},
-		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('freezeshock');
-			}
-		},
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -5667,18 +5614,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('iceburn')) return;
-			this.add('-prepare', pokemon, 'Ice Burn', target);
-			pokemon.addVolatile('iceburn');
-			return true;
-		},
-		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('iceburn');
-			}
-		},
 		secondary: {
 			chance: 30,
 			status: 'brn'
@@ -8676,18 +8611,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('razorwind')) return;
-			this.add('-prepare', pokemon, 'Razor Wind', target);
-			pokemon.addVolatile('razorwind');
-			return true;
-		},
-		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('razorwind');
-			}
-		},
 		critRatio: 2,
 		secondary: false,
 		target: "foes",
@@ -9697,22 +9620,12 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('shadowforce')) return;
-			pokemon.addVolatile('shadowforce');
-			this.add('-prepare', pokemon, 'Shadow Force', target);
-			return true;
-		},
 		onTryHit: function(target) {
 			if (target.volatiles['protect']) {
 				target.removeVolatile('protect');
 			}
 		},
 		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('shadowforce');
-			},
 			onSourceModifyMove: function(move) {
 				if (move.target === 'foeSide') return;
 				move.accuracy = 0;
@@ -10002,19 +9915,9 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon) {
-			if (pokemon.removeVolatile('skullbash')) return;
-			this.add('-message', pokemon.name+' tucked in its head! (placeholder)'); // TODO
-			pokemon.addVolatile('skullbash');
-			return true;
-		},
 		effect: {
-			duration: 2,
 			onStart: function(pokemon) {
 				this.boost({def:1}, pokemon, pokemon, this.getMove('skullbash'));
-			},
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('skullbash');
 			}
 		},
 		secondary: false,
@@ -10033,18 +9936,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('skyattack')) return;
-			this.add('-prepare', pokemon, 'Sky Attack', target);
-			pokemon.addVolatile('skyattack');
-			return true;
-		},
-		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('skyattack');
-			}
-		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -10065,17 +9956,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('skydrop')) return;
-			pokemon.addVolatile('skydrop');
-			this.add('-prepare', pokemon, 'Sky Drop', target); // TODO
-			return true;
-		},
 		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('skydrop');
-			},
 			onSourceModifyPokemon: function(pokemon) {
 				pokemon.lockMove('recharge');
 			},
@@ -10497,18 +10378,8 @@ exports.BattleMovedex = {
 		isViable: true,
 		priority: 0,
 		isTwoTurnMove: true,
-		beforeMoveCallback: function(pokemon, target) {
-			if (pokemon.removeVolatile('solarbeam')) return;
-			this.add('-prepare', pokemon, 'SolarBeam', target);
-			if (this.weather === 'sunnyday') return;
-			pokemon.addVolatile('solarbeam');
-			return true;
-		},
-		effect: {
-			duration: 2,
-			onModifyPokemon: function(pokemon) {
-				pokemon.lockMove('solarbeam');
-			}
+		onChargeMove: function() {
+			if (this.weather === 'sunnyday') return false; // skip charge turn
 		},
 		secondary: false,
 		target: "normal",
