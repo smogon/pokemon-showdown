@@ -50,7 +50,7 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		if (move.isTwoTurnMove && !pokemon.volatiles.twoturnmove) {
+		if (move.isTwoTurnMove && !pokemon.removeVolatile('twoturnmove')) {
 			var result = pokemon.addVolatile('twoturnmove', pokemon, move);
 			if (result) return; // false means "keep going", e.g. Power Herb activates
 			attrs = ' | [silent]'; // suppress the "X used Y!" message if we're executing the attack in the same turn
