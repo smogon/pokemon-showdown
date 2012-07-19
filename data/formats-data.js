@@ -4373,7 +4373,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	cubchoo: {
-		viableMoves: {"icebeam":1,"surf":1,"hiddenpowergrass":1,"toxic":1},
+		viableMoves: {"icebeam":1,"surf":1,"hiddenpowergrass":1,"superpower":1},
 		eventPokemon: [
 			{"generation":5,"level":15,"abilities":["snowcloak"],"moves":["powdersnow","growl","bide","icywind"]}
 		],
