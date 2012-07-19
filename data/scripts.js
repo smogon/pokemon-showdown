@@ -49,6 +49,13 @@ exports.BattleScripts = {
 		if (pokemon.fainted) {
 			return false;
 		}
+
+		if (move.isTwoTurnMove && !pokemon.volatiles.twoturnmove) {
+			var result = pokemon.addVolatile('twoturnmove', pokemon, move);
+			if (result) return; // false means "keep going", e.g. Power Herb activates
+			attrs = ' | [silent]'; // suppress the "X used Y!" message if we're executing the attack in the same turn
+		}
+
 		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
 		var accuracy = move.accuracy;
 		if (accuracy !== true) {
@@ -73,10 +80,10 @@ exports.BattleScripts = {
 		}
 		if (move.alwaysHit) accuracy = true; // bypasses ohko accuracy modifiers
 		if (target.fainted && !canTargetFainted[move.target]) {
-			attrs = ' | [notarget]';
+			attrs += ' | [notarget]';
 		} else if (accuracy !== true && this.random(100) >= accuracy) {
 			missed = true;
-			attrs = ' | [miss]';
+			attrs += ' | [miss]';
 		}
 		var movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
