@@ -4386,7 +4386,8 @@ exports.BattleMovedex = {
 				for (var m in disabledMoves) {
 					pokemon.disabledMoves[m] = true;
 				}
-				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
+				if (pokemon.volatiles['bounce'] || pokemon.volatiles['fly'] || pokemon.volatiles['skydrop']) {
+					pokemon.removeVolatile('twoturnmove');
 					this.add("-message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
 				}
 			},
