@@ -1,6 +1,10 @@
 // The server port - the port to run Pokemon Showdown under
 exports.port = 8000;
 
+// The setuid user - if you're using a port below 1024, you probably want to run
+//   PS as root and set this to an unprivileged user
+exports.setuid = '';
+
 // The server ID - a unique ID describing this Showdown server
 exports.serverid = 'testserver';
 
