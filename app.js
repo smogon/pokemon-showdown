@@ -1,7 +1,6 @@
 require('sugar');
 
 fs = require('fs');
-path = require('path');
 
 //request = require('request');
 var http = require("http");
@@ -28,7 +27,7 @@ request = function(options, callback) {
 }
 
 // Synchronously copy config-example.js over to config.js if it doesn't exist
-if (!path.existsSync('./config/config.js')) {
+if (!fs.existsSync('./config/config.js')) {
 	console.log("config.js doesn't exist - creating one with default settings...");
 	var BUF_LENGTH, buff, bytesRead, fdr, fdw, pos;
 	BUF_LENGTH = 64 * 1024;
