@@ -13,10 +13,20 @@ exports.serverid = 'testserver';
 //   still be able to login with an unregistered token.
 exports.servertoken = 'exampletoken-382hgraw4jr2tioq';
 
-// login server URL - don't forget the http:// and the trailing slash
+// login server data - don't forget the http:// and the trailing slash
 //   This is the URL of the user database and ladder mentioned earlier.
 //   Don't change this setting - there aren't any other login servers right now
 exports.loginserver = 'http://play.pokemonshowdown.com/';
+exports.loginserverkeyalgo = "RSA-SHA1";
+exports.loginserverpublickey = "-----BEGIN PUBLIC KEY-----\n" +
+	"MIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKCAQEApd1so8v8acgTXNQ/uQ12\n" +
+	"oAoq0Cf27iyg+hS8elJZqkTelqIwA0OWTq4NzMCdrUWkmi+pHoUKy4wLHbD2w9KI\n" +
+	"+kjah5HncXmqb7FK9RVjD8z6C84qFMBvg/VXX16c5CP2h0BC/pSwJfkw0NtOdFZL\n" +
+	"ZhCkLObCjAN367/JGkp7CGP/hnNEm57GX9OUThfSX3t/DhV0cHdRkECsYkrTzZOV\n" +
+	"nsz3uifOjVHiW5PR0KNwQm0ed6Bmg24PK7RJ091aRkT6lvmD1MB5Zl1SIV2l+wF6\n" +
+	"O/G3x63WhR1HrNEM/jr/LVz+QjWuvNv68iSHDV3U62JkG/Yc53An1n/urX4J72DS\n" +
+	"twIBIw==\n" +
+	"-----END PUBLIC KEY-----\n";
 
 // Pokemon of the Day - put a pokemon's name here to make it Pokemon of the Day
 //   The PotD will always be in the #2 slot (not #1 so it won't be a lead)
