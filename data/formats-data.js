@@ -2916,7 +2916,8 @@ exports.BattleFormatsData = {
 		viableMoves: {"stealthrock":1,"hydropump":1,"scald":1,"icebeam":1,"hiddenpowerelectric":1,"hiddenpowerfire":1,"yawn":1},
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"M","abilities":["defiant"],"moves":["pound","growl","bubble"]},
-			{"generation":5,"level":15,"abilities":["torrent"],"moves":["hydropump","featherdance","watersport","peck"]}
+			{"generation":5,"level":15,"abilities":["torrent"],"moves":["hydropump","featherdance","watersport","peck"]},
+			{"generation":5,"level":15,"gender":"M","abilities":["torrent"],"moves":["sing","round","featherdance","peck"]}
 		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
@@ -4089,7 +4090,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	cubchoo: {
-		viableMoves: {"icebeam":1,"surf":1,"hiddenpowergrass":1,"toxic":1},
+		viableMoves: {"icebeam":1,"surf":1,"hiddenpowergrass":1,"superpower":1},
 		eventPokemon: [
 			{"generation":5,"level":15,"abilities":["snowcloak"],"moves":["powdersnow","growl","bide","icywind"]}
 		],

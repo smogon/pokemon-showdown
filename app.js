@@ -1,7 +1,6 @@
 require('sugar');
 
 fs = require('fs');
-path = require('path');
 
 //request = require('request');
 var http = require("http");
@@ -28,7 +27,7 @@ request = function(options, callback) {
 }
 
 // Synchronously copy config-example.js over to config.js if it doesn't exist
-if (!path.existsSync('./config/config.js')) {
+if (!fs.existsSync('./config/config.js')) {
 	console.log("config.js doesn't exist - creating one with default settings...");
 	var BUF_LENGTH, buff, bytesRead, fdr, fdw, pos;
 	BUF_LENGTH = 64 * 1024;
@@ -69,6 +68,9 @@ app.listen(8000); */
 
 if (process.argv[2] && parseInt(process.argv[2])) {
 	config.port = parseInt(process.argv[2]);
+}
+if (process.argv[3]) {
+	config.setuid = process.argv[3];
 }
 
 if (config.protocol !== 'io') config.protocol = 'ws';
@@ -375,4 +377,16 @@ if (config.protocol === 'io') { // Socket.IO
 }
 
 console.log("Server started on port "+config.port);
+
+try {
+	if (config.setuid) {
+		process.setuid(config.setuid);
+		console.log("setuid succeeded, we are now running as "+config.setuid);
+	}
+}
+catch (err) {
+	console.log("ERROR: setuid failed: [%s] Call: [%s]", err.message, err.syscall);
+	process.exit(1);
+}
+
 console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
