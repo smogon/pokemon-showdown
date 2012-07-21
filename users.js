@@ -288,7 +288,7 @@ var User = (function () {
 			});
 		}
 		var joining = !this.named;
-		this.named = true;
+		this.named = (this.userid.substr(0,5) !== 'guest');
 		for (var i in this.roomCount) {
 			Rooms.get(i).rename(this, oldid, joining);
 		}
