@@ -1,6 +1,10 @@
 require('sugar');
 
 fs = require('fs');
+if (!fs.existsSync) {
+	var path = require('path');
+	fs.existsSync = function(loc) { return path.existsSync(loc) };
+}
 
 //request = require('request');
 var http = require("http");
