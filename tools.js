@@ -435,8 +435,8 @@ module.exports = (function () {
 			}
 			if (template.speciesid === 'shaymin') {
 				template = this.getTemplate('shayminsky');
-			} else if (template.basespecies !== template.species && template.basespecies !== 'Kyurem') {
-				template = this.getTemplate(template.basespecies);
+			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem') {
+				template = this.getTemplate(template.baseSpecies);
 			} else {
 				template = this.getTemplate(template.prevo);
 			}
