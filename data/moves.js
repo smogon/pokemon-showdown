@@ -46,6 +46,7 @@ exports.BattleMovedex = {
 		name: "Acid Armor",
 		pp: 40,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			def: 2
@@ -191,6 +192,7 @@ exports.BattleMovedex = {
 		name: "Agility",
 		pp: 30,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			spe: 2
@@ -260,6 +262,7 @@ exports.BattleMovedex = {
 		name: "Amnesia",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			spd: 2
@@ -321,6 +324,7 @@ exports.BattleMovedex = {
 		id: "aquaring",
 		name: "Aqua Ring",
 		pp: 20,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'aquaring',
 		effect: {
@@ -381,6 +385,7 @@ exports.BattleMovedex = {
 		name: "Aromatherapy",
 		pp: 5,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		onHitSide: function(side, source) {
 			for (var i=0; i<side.pokemon.length; i++) {
@@ -564,6 +569,7 @@ exports.BattleMovedex = {
 		name: "Autotomize",
 		pp: 15,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			spe: 2
@@ -633,6 +639,7 @@ exports.BattleMovedex = {
 		name: "Barrier",
 		pp: 30,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			def: 2
@@ -710,6 +717,7 @@ exports.BattleMovedex = {
 		name: "Belly Drum",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		onHit: function(target) {
 			if (target.hp <= target.maxhp/2 || target.boosts.atk >= 6 || target.maxhp === 1) { // Shedinja clause
@@ -1223,6 +1231,7 @@ exports.BattleMovedex = {
 		name: "Bulk Up",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 1,
@@ -1298,6 +1307,7 @@ exports.BattleMovedex = {
 		name: "Calm Mind",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			spa: 1,
@@ -1317,6 +1327,7 @@ exports.BattleMovedex = {
 		id: "camouflage",
 		name: "Camouflage",
 		pp: 20,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'camouflage',
 		effect: {
@@ -1365,6 +1376,7 @@ exports.BattleMovedex = {
 		id: "charge",
 		name: "Charge",
 		pp: 20,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'charge',
 		onHit: function(pokemon) {
@@ -1558,6 +1570,7 @@ exports.BattleMovedex = {
 		name: "Coil",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 1,
@@ -1652,6 +1665,7 @@ exports.BattleMovedex = {
 		id: "conversion",
 		name: "Conversion",
 		pp: 30,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'conversion',
 		effect: {
@@ -1790,6 +1804,7 @@ exports.BattleMovedex = {
 		name: "Cosmic Power",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			def: 1,
@@ -1810,6 +1825,7 @@ exports.BattleMovedex = {
 		name: "Cotton Guard",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			def: 3
@@ -2107,6 +2123,7 @@ exports.BattleMovedex = {
 		name: "Defend Order",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			def: 1,
@@ -2126,6 +2143,7 @@ exports.BattleMovedex = {
 		id: "defensecurl",
 		name: "Defense Curl",
 		pp: 40,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			def: 1
@@ -2516,6 +2534,7 @@ exports.BattleMovedex = {
 		id: "doubleteam",
 		name: "Double Team",
 		pp: 15,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			evasion: 1
@@ -2591,6 +2610,7 @@ exports.BattleMovedex = {
 		name: "Dragon Dance",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 1,
@@ -3817,6 +3837,7 @@ exports.BattleMovedex = {
 		id: "focusenergy",
 		name: "Focus Energy",
 		pp: 30,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'focusenergy',
 		effect: {
@@ -4430,6 +4451,7 @@ exports.BattleMovedex = {
 		name: "Growth",
 		pp: 40,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		onModifyMove: function(move) {
 			if (this.weather === 'sunnyday') move.boosts = {atk: 2, spa: 2};
@@ -4649,6 +4671,7 @@ exports.BattleMovedex = {
 		id: "harden",
 		name: "Harden",
 		pp: 30,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			def: 1
@@ -4747,6 +4770,7 @@ exports.BattleMovedex = {
 		name: "Heal Bell",
 		pp: 5,
 		isViable: true,
+		isSnatchable: true,
 		isSoundBased: true, // though it isn't affected by Soundproof
 		priority: 0,
 		onHitSide: function(side, source) {
@@ -4804,6 +4828,7 @@ exports.BattleMovedex = {
 		name: "Heal Order",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		heal: [1,2],
 		secondary: false,
@@ -4838,6 +4863,7 @@ exports.BattleMovedex = {
 		name: "Healing Wish",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		onTryHit: function(pokemon) {
 			if (pokemon.side.pokemonLeft <= 1) return false;
@@ -5320,6 +5346,7 @@ exports.BattleMovedex = {
 		name: "Hone Claws",
 		pp: 15,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 1,
@@ -5391,6 +5418,7 @@ exports.BattleMovedex = {
 		name: "Howl",
 		pp: 40,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 1
@@ -5749,6 +5777,7 @@ exports.BattleMovedex = {
 		id: "imprison",
 		name: "Imprison",
 		pp: 10,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'imprison',
 		effect: {
@@ -5822,6 +5851,7 @@ exports.BattleMovedex = {
 		name: "Ingrain",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'ingrain',
 		effect: {
@@ -5853,6 +5883,7 @@ exports.BattleMovedex = {
 		name: "Iron Defense",
 		pp: 15,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			def: 2
@@ -6215,6 +6246,7 @@ exports.BattleMovedex = {
 		name: "Light Screen",
 		pp: 30,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		sideCondition: 'lightscreen',
 		effect: {
@@ -6353,6 +6385,8 @@ exports.BattleMovedex = {
 		id: "luckychant",
 		name: "Lucky Chant",
 		pp: 30,
+		isSnatchable: true,
+		priority: 0,
 		sideCondition: 'luckychant',
 		effect: {
 			duration: 5,
@@ -6366,7 +6400,6 @@ exports.BattleMovedex = {
 				this.add('-sideend', side, 'move: Lucky Chant'); // "[side.name]'s team's Lucky Chant wore off!"
 			}
 		},
-		priority: 0,
 		secondary: false,
 		target: "allies",
 		type: "Normal"
@@ -6382,6 +6415,7 @@ exports.BattleMovedex = {
 		name: "Lunar Dance",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		onTryHit: function(pokemon) {
 			if (pokemon.side.pokemonLeft <= 1) return false;
@@ -6597,6 +6631,7 @@ exports.BattleMovedex = {
 		name: "Magnet Rise",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'magnetrise',
 		effect: {
@@ -6722,6 +6757,7 @@ exports.BattleMovedex = {
 		name: "Meditate",
 		pp: 40,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 1
@@ -6954,6 +6990,7 @@ exports.BattleMovedex = {
 		name: "Milk Drink",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		heal: [1,2],
 		secondary: false,
@@ -7018,6 +7055,7 @@ exports.BattleMovedex = {
 		id: "minimize",
 		name: "Minimize",
 		pp: 20,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'minimize',
 		boosts: {
@@ -7132,6 +7170,7 @@ exports.BattleMovedex = {
 		id: "mist",
 		name: "Mist",
 		pp: 30,
+		isSnatchable: true,
 		priority: 0,
 		sideCondition: 'mist',
 		effect: {
@@ -7189,6 +7228,7 @@ exports.BattleMovedex = {
 		name: "Moonlight",
 		pp: 5,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		heal: [1,2],
 		onModifyMove: function(move) {
@@ -7210,6 +7250,7 @@ exports.BattleMovedex = {
 		name: "Morning Sun",
 		pp: 5,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		heal: [1,2],
 		onModifyMove: function(move) {
@@ -7340,6 +7381,7 @@ exports.BattleMovedex = {
 		name: "Nasty Plot",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			spa: 2
@@ -8000,6 +8042,7 @@ exports.BattleMovedex = {
 		id: "powertrick",
 		name: "Power Trick",
 		pp: 10,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'powertrick',
 		effect: {
@@ -8416,6 +8459,7 @@ exports.BattleMovedex = {
 		id: "quickguard",
 		name: "Quick Guard",
 		pp: 15,
+		isSnatchable: true,
 		priority: 3,
 		sideCondition: 'quickguard',
 		onTryHitSide: function(side, source) {
@@ -8472,6 +8516,7 @@ exports.BattleMovedex = {
 		name: "Quiver Dance",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			spa: 1,
@@ -8628,6 +8673,7 @@ exports.BattleMovedex = {
 		name: "Recover",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		heal: [1,2],
 		secondary: false,
@@ -8644,6 +8690,7 @@ exports.BattleMovedex = {
 		id: "recycle",
 		name: "Recycle",
 		pp: 10,
+		isSnatchable: true,
 		priority: 0,
 		onHit: function(pokemon) {
 			if (!pokemon.item && pokemon.lastItem) {
@@ -8666,6 +8713,7 @@ exports.BattleMovedex = {
 		name: "Reflect",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		sideCondition: 'reflect',
 		effect: {
@@ -8735,6 +8783,7 @@ exports.BattleMovedex = {
 		name: "Refresh",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		onHit: function(pokemon) {
 			pokemon.cureStatus();
@@ -8786,6 +8835,7 @@ exports.BattleMovedex = {
 		name: "Rest",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		onHit: function(target) {
 			if (target.hp >= target.maxhp) return false;
@@ -8978,6 +9028,7 @@ exports.BattleMovedex = {
 		name: "Rock Polish",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			spe: 2
@@ -9194,6 +9245,7 @@ exports.BattleMovedex = {
 		name: "Roost",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		heal: [1,2],
 		volatileStatus: 'roost',
@@ -9283,6 +9335,7 @@ exports.BattleMovedex = {
 		id: "safeguard",
 		name: "Safeguard",
 		pp: 25,
+		isSnatchable: true,
 		priority: 0,
 		sideCondition: 'safeguard',
 		effect: {
@@ -9682,6 +9735,7 @@ exports.BattleMovedex = {
 		name: "Sharpen",
 		pp: 30,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 1
@@ -9717,6 +9771,7 @@ exports.BattleMovedex = {
 		name: "Shell Smash",
 		pp: 15,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 2,
@@ -9740,6 +9795,7 @@ exports.BattleMovedex = {
 		name: "Shift Gear",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 1,
@@ -10013,6 +10069,7 @@ exports.BattleMovedex = {
 		name: "Slack Off",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		heal: [1,2],
 		secondary: false,
@@ -10289,8 +10346,24 @@ exports.BattleMovedex = {
 		name: "Snatch",
 		pp: 10,
 		priority: 4,
+		volatileStatus: 'snatch',
+		effect: {
+			duration: 1,
+			onStart: function(pokemon) {
+				this.add('-message', pokemon.name+' waits for a target to make a move! (placeholder)');
+			},
+			onAnyTryHit: function(target, source, move) {
+				if (move && move.isSnatchable) {
+					var snatchUser = this.effectData.source;
+					snatchUser.removeVolatile('snatch');
+					this.add("-message", snatchUser.name+" snatched "+source.name+"'s move! (placeholder)");
+					this.useMove(move.id, snatchUser);
+					return null;
+				}
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Dark"
 	},
 	"snore": {
@@ -10353,6 +10426,7 @@ exports.BattleMovedex = {
 		name: "Softboiled",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		heal: [1,2],
 		secondary: false,
@@ -10667,6 +10741,7 @@ exports.BattleMovedex = {
 		name: "Stockpile",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		onTryHit: function(pokemon) {
 			if (pokemon.volatiles['stockpile'] && pokemon.volatiles['stockpile'].layers >= 3) return false;
@@ -10922,6 +10997,7 @@ exports.BattleMovedex = {
 		name: "Substitute",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		volatileStatus: 'Substitute',
 		onTryHit: function(target) {
@@ -11132,6 +11208,7 @@ exports.BattleMovedex = {
 		id: "swallow",
 		name: "Swallow",
 		pp: 10,
+		isSnatchable: true,
 		priority: 0,
 		onTryHit: function(pokemon) {
 			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
@@ -11239,6 +11316,7 @@ exports.BattleMovedex = {
 		name: "Swords Dance",
 		pp: 30,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 2
@@ -11276,6 +11354,7 @@ exports.BattleMovedex = {
 		name: "Synthesis",
 		pp: 5,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		heal: [1,2],
 		onModifyMove: function(move) {
@@ -11313,6 +11392,7 @@ exports.BattleMovedex = {
 		name: "Tail Glow",
 		pp: 20,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			spa: 3
@@ -11368,6 +11448,7 @@ exports.BattleMovedex = {
 		name: "Tailwind",
 		pp: 30,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		sideCondition: 'tailwind',
 		effect: {
@@ -12453,6 +12534,7 @@ exports.BattleMovedex = {
 		id: "wideguard",
 		name: "Wide Guard",
 		pp: 10,
+		isSnatchable: true,
 		priority: 3,
 		secondary: false,
 		target: "normal",
@@ -12521,6 +12603,7 @@ exports.BattleMovedex = {
 		name: "Wish",
 		pp: 10,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		sideCondition: 'Wish',
 		effect: {
@@ -12552,6 +12635,7 @@ exports.BattleMovedex = {
 		id: "withdraw",
 		name: "Withdraw",
 		pp: 40,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			def: 1
@@ -12627,6 +12711,7 @@ exports.BattleMovedex = {
 		name: "Work Up",
 		pp: 30,
 		isViable: true,
+		isSnatchable: true,
 		priority: 0,
 		boosts: {
 			atk: 1,
