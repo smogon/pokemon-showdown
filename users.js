@@ -485,11 +485,11 @@ var User = (function () {
 		} else if (tokenData) {
 			console.log('BODY: "" authInvalid');
 			// rename failed, but shouldn't
-			selfP.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
+			this.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
 		} else {
 			console.log('BODY: "" nameTaken');
 			// rename failed
-			selfP.emit('nameTaken', {userid:userid, name:name, token:token, reason: "The name you chose is registered"});
+			this.emit('nameTaken', {userid:userid, name:name, token:token, reason: "The name you chose is registered"});
 		}
 		return false;
 	};
