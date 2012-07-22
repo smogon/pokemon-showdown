@@ -721,12 +721,12 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	doduo: {
-		viableMoves: {"bravebird":1,"frustration":1,"doubleedge":1,"roost":1,"quickattack":1,"pursuit":1},
+		viableMoves: {"bravebird":1,"return":1,"doubleedge":1,"roost":1,"quickattack":1,"pursuit":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	dodrio: {
-		viableMoves: {"bravebird":1,"frustration":1,"doubleedge":1,"roost":1,"quickattack":1,"pursuit":1},
+		viableMoves: {"bravebird":1,"return":1,"doubleedge":1,"roost":1,"quickattack":1,"pursuit":1},
 		eventPokemon: [
 			{"generation":3,"level":34,"abilities":["earlybird","runaway"],"moves":["batonpass","drillpeck","agility","triattack"]}
 		],
