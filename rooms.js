@@ -8,7 +8,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	this.i = {};
 	this.users = {};
 	this.format = format;
-	console.log("NEW BATTLE");
+	//console.log("NEW BATTLE");
 
 	var formatid = toId(format);
 
