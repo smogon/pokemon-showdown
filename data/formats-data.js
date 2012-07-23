@@ -3814,13 +3814,12 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	purrloin: {
-		viableMoves: {"suckerpunch":1,"nightslash":1,"toxic":1,"fakeout":1,"trick":1},
-		viableMoves: {"suckerpunch":1,"nightslash":1,"toxic":1,"fakeout":1},
+		viableMoves: {"suckerpunch":1,"darkpulse":1,"encore":1,"toxic":1,"trick":1,"fakeout":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	liepard: {
-		viableMoves: {"nastyplot":1,"hiddenpowerdark":1,"snarl":1,"grassknot":1,"suckerpunch":1,"thunderwave":1,"trick":1},
+		viableMoves: {"nastyplot":1,"darkpulse":1,"encore":1,"hiddenpowerfighting":1,"trick":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
