@@ -2878,19 +2878,22 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon, target) {
 			var targetSpeed = target.stats.spe;
 			var pokemonSpeed = pokemon.stats.spe;
-			if (pokemonSpeed > targetSpeed * 4) {
+			if (pokemonSpeed >= targetSpeed * 4) {
 				return 150;
 			}
-			if (pokemonSpeed > targetSpeed * 3) {
+			if (pokemonSpeed >= targetSpeed * 3) {
 				return 120;
 			}
-			if (pokemonSpeed > targetSpeed * 2) {
+			if (pokemonSpeed >= targetSpeed * 2) {
 				return 80;
 			}
-			return 60;
+			if (pokemonSpeed >= targetSpeed) {
+				return 60;
+			}
+			return 40;
 		},
 		category: "Special",
-		desc: "Deals damage to one adjacent target. The power of this move depends on (user's current Speed / target's current Speed), rounded down. Power is equal to 150 if the result is 4 or more, 120 if 3, 80 if 2, 60 if 1 or less.",
+		desc: "Deals damage to one adjacent target. The power of this move depends on (user's current Speed / target's current Speed), rounded down. Power is equal to 150 if the result is 4 or more, 120 if 3, 80 if 2, 60 if 1, 40 if less than 1.",
 		shortDesc: "More power the faster the user is than the target.",
 		id: "electroball",
 		name: "Electro Ball",
