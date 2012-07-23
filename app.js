@@ -201,7 +201,6 @@ var events = {
 		if (!data || typeof data.room !== 'string' || typeof data.name !== 'string') return;
 		if (!you) {
 			you = Users.connectUser(data.name, socket, data.token, data.room);
-			console.log('JOIN: '+data.name+' => '+you.name+' ['+(''+data.token).substr(0,40)+'] ['+socket.id+']');
 			return you;
 		} else {
 			var youUser = resolveUser(you, socket);
@@ -331,7 +330,7 @@ if (config.protocol === 'io') { // Socket.IO
 
 		if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
 			if (bannedIps[socket.handshake.address.address]) {
-				console.log('IP BANNED: '+socket.handshake.address.address);
+				console.log('CONNECT BLOCKED - IP BANNED: '+socket.handshake.address.address);
 				return;
 			}
 			socket.remoteAddress = socket.handshake.address.address; // for compatibility with SockJS semantics
@@ -362,7 +361,7 @@ if (config.protocol === 'io') { // Socket.IO
 		socket.id = randomString(16); // this sucks
 
 		if (bannedIps[socket.remoteAddress]) {
-			console.log('IP BANNED: '+socket.remoteAddress);
+			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
 			return;
 		}
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');

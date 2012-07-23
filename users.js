@@ -52,19 +52,20 @@ function nameLock(user,name,ip) {
 function connectUser(name, socket, token, room) {
 	var userid = toUserid(name);
 	var user;
-	console.log("NEW PERSON: "+socket.id);
 	var person = new Person(name, socket, true);
 	if (person.banned) return person;
 	if (users[userid]) {
 		user = users[userid];
 		if (!user.add(name, person, token)) {
-			console.log("NEW USER: [guest] (userid: "+userid+" taken) "+name);
+			console.log('JOIN: '+name+' ['+(''+token).substr(0,30)+'] ['+socket.id+']');
 			user = new User('', person, token);
 			user.rename(name, token);
 			user = person.user;
+		} else {
+			console.log('MERGE: '+name+' ['+(''+token).substr(0,30)+'] ['+socket.id+']');
 		}
 	} else {
-		console.log("NEW USER: [guest] "+name);
+		console.log('JOIN: '+name+' ['+(''+token).substr(0,30)+'] ['+socket.id+']');
 		user = new User(name, person, token);
 		var nameSuggestion = nameLock(user);
 		if (nameSuggestion !== user.name) {
