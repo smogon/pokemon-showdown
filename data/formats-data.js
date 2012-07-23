@@ -1270,6 +1270,9 @@ exports.BattleFormatsData = {
 	},
 	omanyte: {
 		viableMoves: {"shellsmash":1,"surf":1,"icebeam":1,"earthpower":1,"hiddenpowerelectric":1,"spikes":1,"toxicspikes":1,"stealthrock":1,"hydropump":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"gender":"M","abilities":["swiftswim"],"moves":["bubblebeam","supersonic","withdraw","bite"]}
+		],
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
@@ -1280,6 +1283,9 @@ exports.BattleFormatsData = {
 	},
 	kabuto: {
 		viableMoves: {"aquajet":1,"rockslide":1,"rapidspin":1,"stealthrock":1,"honeclaws":1,"waterfall":1,"toxic":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"gender":"M","abilities":["battlearmor"],"moves":["confuseray","dig","scratch","harden"]}
+		],
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
@@ -1290,6 +1296,9 @@ exports.BattleFormatsData = {
 	},
 	aerodactyl: {
 		viableMoves: {"stealthrock":1,"taunt":1,"stoneedge":1,"rockslide":1,"earthquake":1,"aquatail":1,"roost":1,"firefang":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"gender":"M","abilities":["pressure"],"moves":["steelwing","icefang","firefang","thunderfang"]}
+		],
 		dreamWorldRelease: true,
 		tier: "RU"
 	},
@@ -2707,6 +2716,9 @@ exports.BattleFormatsData = {
 	},
 	lileep: {
 		viableMoves: {"stealthrock":1,"recover":1,"ancientpower":1,"hiddenpowerfire":1,"gigadrain":1,"stockpile":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"gender":"M","abilities":["suctioncups"],"moves":["recover","rockslide","constrict","acid"]}
+		],
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
@@ -2717,6 +2729,9 @@ exports.BattleFormatsData = {
 	},
 	anorith: {
 		viableMoves: {"stealthrock":1,"brickbreak":1,"toxic":1,"xscissor":1,"rockslide":1,"swordsdance":1,"rockpolish":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"gender":"M","abilities":["battlearmor"],"moves":["harden","mudsport","watergun","crosspoison"]}
+		],
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
@@ -3193,6 +3208,9 @@ exports.BattleFormatsData = {
 	},
 	cranidos: {
 		viableMoves: {"headsmash":1,"rockslide":1,"earthquake":1,"zenheadbutt":1,"firepunch":1,"rockpolish":1,"crunch":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"gender":"M","abilities":["moldbreaker"],"moves":["pursuit","takedown","crunch","headbutt"]}
+		],
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
@@ -3203,6 +3221,9 @@ exports.BattleFormatsData = {
 	},
 	shieldon: {
 		viableMoves: {"stealthrock":1,"metalburst":1,"fireblast":1,"icebeam":1,"protect":1,"toxic":1,"roar":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"gender":"M","abilities":["sturdy"],"moves":["metalsound","takedown","bodyslam","protect"]}
+		],
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
@@ -4107,6 +4128,9 @@ exports.BattleFormatsData = {
 	},
 	tirtouga: {
 		viableMoves: {"shellsmash":1,"aquajet":1,"waterfall":1,"stoneedge":1,"earthquake":1,"stealthrock":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"gender":"M","abilities":["sturdy"],"moves":["bite","protect","aquajet","bodyslam"]}
+		],
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
@@ -4117,6 +4141,9 @@ exports.BattleFormatsData = {
 	},
 	archen: {
 		viableMoves: {"acrobatics":1,"stoneedge":1,"rockslide":1,"earthquake":1,"uturn":1,"pluck":1,"headsmash":1},
+		eventPokemon: [
+			{"generation":5,"level":15,"gender":"M","abilities":["defeatist"],"moves":["headsmash","wingattack","doubleteam","scaryface"]}
+		],
 		tier: "LC"
 	},
 	archeops: {
