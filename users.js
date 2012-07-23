@@ -351,9 +351,7 @@ var User = (function () {
 		}
 		if (!name) name = '';
 		name = sanitizeName(name);
-		console.log("checking name lock for: "+this.name+" renaming to "+name);
 		name = nameLock(this,name);
-		console.log("returned "+name);
 		var userid = toUserid(name);
 		if (this.authenticated) auth = false;
 
@@ -395,7 +393,7 @@ var User = (function () {
 		}
 
 		if (body) {
-			console.log('BODY: "'+body+'"');
+			//console.log('BODY: "'+body+'"');
 
 			if (users[userid] && !users[userid].authenticated && users[userid].connected) {
 				if (auth) {
