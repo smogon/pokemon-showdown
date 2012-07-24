@@ -691,7 +691,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		request({
 			uri: config.loginserver+'action.php?act=ladderget&serverid='+config.serverid+'&user='+target,
 		}, function(error, response, body) {
-			if (body) {
+			if (error) {
+				emit(socket, 'console', 'Your request failed due to a server issue.');
+			} else if (body) {
 				try {
 					var data = JSON.parse(body);
 
