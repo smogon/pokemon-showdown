@@ -9,26 +9,35 @@ if (!fs.existsSync) {
 //request = require('request');
 var http = require("http");
 var url = require('url');
+
 request = function(options, callback) {
-    var req = http.get(url.parse(options.uri), function(res) {
-        var buffer = '';
-        res.setEncoding('utf8');
+	if (request.openRequests > 4) {
+		callback('overflow');
+		return;
+	}
+	var req = http.get(url.parse(options.uri), function(res) {
+		request.openRequests++;
+		var buffer = '';
+		res.setEncoding('utf8');
 
-        res.on('data', function(chunk) {
-            buffer += chunk;
-        });
+		res.on('data', function(chunk) {
+			buffer += chunk;
+		});
 
-        res.on('end', function() {
-            callback(null, res.statusCode, buffer);
-        });
-    });
+		res.on('end', function() {
+			callback(null, res.statusCode, buffer);
+			request.openRequests--;
+		});
+	});
 
-    req.on('error', function(error) {
-        callback(error);
-    });
+	req.on('error', function(error) {
+		callback(error);
+		request.openRequests--;
+	});
 
-    req.end();
+	req.end();
 }
+request.openRequests = 0;
 
 // Synchronously copy config-example.js over to config.js if it doesn't exist
 if (!fs.existsSync('./config/config.js')) {
