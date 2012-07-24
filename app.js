@@ -15,8 +15,8 @@ request = function(options, callback) {
 		callback('overflow');
 		return;
 	}
+	request.openRequests++;
 	var req = http.get(url.parse(options.uri), function(res) {
-		request.openRequests++;
 		var buffer = '';
 		res.setEncoding('utf8');
 
