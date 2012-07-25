@@ -17,6 +17,24 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 32
 	},
+	"magicguard": {
+		//desc: "",
+		shortDesc: "This Pokemon can only be damaged by direct attacks.",
+		onDamage: function(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				return false;
+			}
+		},
+		onSetStatus: function(status, target, source, effect) {
+			if (effect && effect.id === 'toxicspikes') {
+				return false;
+			}
+		},
+		id: "magicguard",
+		name: "Magic Guard",
+		rating: 4.5,
+		num: 98
+	},
 	"pickup": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",
