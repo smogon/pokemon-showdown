@@ -1154,7 +1154,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	magikarp: {
-		viableMoves: {"bounce":1,"flail":1,"tackle":1,"magikarp'srevenge":1},
+		viableMoves: {"bounce":1,"flail":1,"tackle":1,"splash":1},
 		eventPokemon: [
 			{"generation":4,"level":5,"gender":"M","nature":"Relaxed","abilities":["swiftswim"],"moves":["splash"]},
 			{"generation":4,"level":6,"gender":"F","nature":"Rash","abilities":["swiftswim"],"moves":["splash"]},
