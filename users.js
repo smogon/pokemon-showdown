@@ -52,19 +52,20 @@ function nameLock(user,name,ip) {
 function connectUser(name, socket, token, room) {
 	var userid = toUserid(name);
 	var user;
-	console.log("NEW PERSON: "+socket.id);
 	var person = new Person(name, socket, true);
 	if (person.banned) return person;
 	if (users[userid]) {
 		user = users[userid];
 		if (!user.add(name, person, token)) {
-			console.log("NEW USER: [guest] (userid: "+userid+" taken) "+name);
+			console.log('JOIN: '+name+' ['+(''+token).substr(0,30)+'] ['+socket.id+']');
 			user = new User('', person, token);
 			user.rename(name, token);
 			user = person.user;
+		} else {
+			console.log('MERGE: '+name+' ['+(''+token).substr(0,30)+'] ['+socket.id+']');
 		}
 	} else {
-		console.log("NEW USER: [guest] "+name);
+		console.log('JOIN: '+name+' ['+(''+token).substr(0,30)+'] ['+socket.id+']');
 		user = new User(name, person, token);
 		var nameSuggestion = nameLock(user);
 		if (nameSuggestion !== user.name) {
@@ -351,9 +352,7 @@ var User = (function () {
 		}
 		if (!name) name = '';
 		name = sanitizeName(name);
-		console.log("checking name lock for: "+this.name+" renaming to "+name);
 		name = nameLock(this,name);
-		console.log("returned "+name);
 		var userid = toUserid(name);
 		if (this.authenticated) auth = false;
 
@@ -395,7 +394,7 @@ var User = (function () {
 		}
 
 		if (body) {
-			console.log('BODY: "'+body+'"');
+			//console.log('BODY: "'+body+'"');
 
 			if (users[userid] && !users[userid].authenticated && users[userid].connected) {
 				if (auth) {
@@ -485,11 +484,11 @@ var User = (function () {
 		} else if (tokenData) {
 			console.log('BODY: "" authInvalid');
 			// rename failed, but shouldn't
-			selfP.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
+			this.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
 		} else {
 			console.log('BODY: "" nameTaken');
 			// rename failed
-			selfP.emit('nameTaken', {userid:userid, name:name, token:token, reason: "The name you chose is registered"});
+			this.emit('nameTaken', {userid:userid, name:name, token:token, reason: "The name you chose is registered"});
 		}
 		return false;
 	};

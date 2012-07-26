@@ -9,26 +9,35 @@ if (!fs.existsSync) {
 //request = require('request');
 var http = require("http");
 var url = require('url');
+
 request = function(options, callback) {
-    var req = http.get(url.parse(options.uri), function(res) {
-        var buffer = '';
-        res.setEncoding('utf8');
+	if (request.openRequests > 4) {
+		callback('overflow');
+		return;
+	}
+	request.openRequests++;
+	var req = http.get(url.parse(options.uri), function(res) {
+		var buffer = '';
+		res.setEncoding('utf8');
 
-        res.on('data', function(chunk) {
-            buffer += chunk;
-        });
+		res.on('data', function(chunk) {
+			buffer += chunk;
+		});
 
-        res.on('end', function() {
-            callback(null, res.statusCode, buffer);
-        });
-    });
+		res.on('end', function() {
+			callback(null, res.statusCode, buffer);
+			request.openRequests--;
+		});
+	});
 
-    req.on('error', function(error) {
-        callback(error);
-    });
+	req.on('error', function(error) {
+		callback(error);
+		request.openRequests--;
+	});
 
-    req.end();
+	req.end();
 }
+request.openRequests = 0;
 
 // Synchronously copy config-example.js over to config.js if it doesn't exist
 if (!fs.existsSync('./config/config.js')) {
@@ -200,7 +209,6 @@ var events = {
 		if (!data || typeof data.room !== 'string' || typeof data.name !== 'string') return;
 		if (!you) {
 			you = Users.connectUser(data.name, socket, data.token, data.room);
-			console.log('JOIN: '+data.name+' => '+you.name+' ['+data.token+']');
 			return you;
 		} else {
 			var youUser = resolveUser(you, socket);
@@ -327,15 +335,15 @@ var events = {
 if (config.protocol === 'io') { // Socket.IO
 	server.sockets.on('connection', function (socket) {
 		var you = null;
-		console.log('INIT SOCKET: '+socket.id);
 
 		if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
 			if (bannedIps[socket.handshake.address.address]) {
-				console.log('IP BANNED: '+socket.handshake.address.address);
+				console.log('CONNECT BLOCKED - IP BANNED: '+socket.handshake.address.address);
 				return;
 			}
 			socket.remoteAddress = socket.handshake.address.address; // for compatibility with SockJS semantics
 		}
+		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		var generator = function(type) {
 			return function(data) {
 				console.log('received '+type);
@@ -359,12 +367,12 @@ if (config.protocol === 'io') { // Socket.IO
 			return;
 		}
 		socket.id = randomString(16); // this sucks
-		console.log('INIT SOCKET: '+socket.id);
 
 		if (bannedIps[socket.remoteAddress]) {
-			console.log('IP BANNED: '+socket.remoteAddress);
+			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
 			return;
 		}
+		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		socket.on('data', function(message) {
 			var data = JSON.parse(message);
 			if (!data) return;
