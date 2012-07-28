@@ -1,5 +1,4 @@
-/config/config.js
-/config/usergroups.csv
+/config/*
 /logs/*
 /node_modules
 npm-debug.log
