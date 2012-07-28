@@ -386,7 +386,11 @@ var User = (function () {
 			verifier.update(tokenData);
 			if (verifier.verify(config.loginserverpublickey, tokenSig, 'hex')) {
 				var tokenDataSplit = tokenData.split(',');
-				body = tokenDataSplit[1];
+				if (tokenDataSplit[0] === userid) {
+					body = tokenDataSplit[1];
+				} else {
+					console.log('verify userid mismatch: '+tokenData);
+				}
 			} else {
 				console.log('verify failed: '+tokenData);
 				console.log('verify sig: '+tokenSig);
