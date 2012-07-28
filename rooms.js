@@ -76,6 +76,35 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 					if (error) {
 						selfR.addRaw('Error: Ladder server overloaded - ladder could not be updated.');
 						selfR.update();
+						// log the battle anyway
+						if (!Tools.getFormat(selfR.format).noLog) {
+							var logData = {
+								ladderError: true,
+								p1score: p1score,
+								turns: selfR.battle.turn,
+								p1: selfR.battle.p1.name,
+								p2: selfR.battle.p2.name,
+								p1team: selfR.battle.p1.team,
+								p2team: selfR.battle.p2.team,
+								endType: selfR.battle.endType || 'normal',
+								log: selfR.battle.log
+							};
+							var date = new Date();
+							var logfolder = date.format('{yyyy}-{MM}');
+							var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
+							var curpath = 'logs/'+logfolder;
+							fs.mkdir(curpath, '0755', function() {
+								var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
+								curpath += '/'+tier;
+								fs.mkdir(curpath, '0755', function() {
+									curpath += '/'+logsubfolder;
+									fs.mkdir(curpath, '0755', function() {
+										fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
+									});
+								});
+							}); // asychronicity
+							//console.log(JSON.stringify(logData));
+						}
 						return;
 					}
 					if (!selfR) {
