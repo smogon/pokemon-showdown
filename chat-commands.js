@@ -690,6 +690,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		target = toUserid(target) || user.userid;
 		request({
 			uri: config.loginserver+'action.php?act=ladderget&serverid='+config.serverid+'&user='+target,
+			headers: {Connection: 'keep-alive'}
 		}, function(error, response, body) {
 			if (error) {
 				emit(socket, 'console', 'Your request failed due to a server issue.');
