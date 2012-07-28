@@ -78,32 +78,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 						selfR.update();
 						// log the battle anyway
 						if (!Tools.getFormat(selfR.format).noLog) {
-							var logData = {
-								ladderError: true,
-								p1score: p1score,
-								turns: selfR.battle.turn,
-								p1: selfR.battle.p1.name,
-								p2: selfR.battle.p2.name,
-								p1team: selfR.battle.p1.team,
-								p2team: selfR.battle.p2.team,
-								endType: selfR.battle.endType || 'normal',
-								log: selfR.battle.log
-							};
-							var date = new Date();
-							var logfolder = date.format('{yyyy}-{MM}');
-							var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
-							var curpath = 'logs/'+logfolder;
-							fs.mkdir(curpath, '0755', function() {
-								var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
-								curpath += '/'+tier;
-								fs.mkdir(curpath, '0755', function() {
-									curpath += '/'+logsubfolder;
-									fs.mkdir(curpath, '0755', function() {
-										fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
-									});
-								});
-							}); // asychronicity
-							//console.log(JSON.stringify(logData));
+							selfR.logBattle(p1score);
 						}
 						return;
 					}
@@ -143,37 +118,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 						selfR.update();
 
 						if (!Tools.getFormat(selfR.format).noLog) {
-							var logData = {
-								p1score: p1score,
-								turns: selfR.battle.turn,
-								p1: selfR.battle.p1.name,
-								p2: selfR.battle.p2.name,
-								p1team: selfR.battle.p1.team,
-								p2team: selfR.battle.p2.team,
-								p1rating: p1rating,
-								p2rating: p2rating,
-								endType: selfR.battle.endType || 'normal',
-								log: selfR.battle.log
-							};
-							var date = new Date();
-							var logfolder = date.format('{yyyy}-{MM}');
-							var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
-							var curpath = 'logs/'+logfolder;
-							fs.mkdir(curpath, '0755', function() {
-								var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
-								curpath += '/'+tier;
-								fs.mkdir(curpath, '0755', function() {
-									curpath += '/'+logsubfolder;
-									fs.mkdir(curpath, '0755', function() {
-										fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
-									});
-								});
-							}); // asychronicity
-							//console.log(JSON.stringify(logData));
+							selfR.logBattle(p1score, p1rating, p2rating);
 						}
 					}
 				});
-				fs.writeFile('logs/lastbattle.txt', ''+rooms.lobby.numRooms);
 			}
 		}
 
@@ -194,6 +142,37 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			clearTimeout(selfR.destroyTimer);
 			selfR.destroyTimer = null;
 		}
+	};
+	this.logBattle = function(p1score, p1rating, p2rating) {
+		var logData = {
+			p1score: p1score,
+			turns: selfR.battle.turn,
+			p1: selfR.battle.p1.name,
+			p2: selfR.battle.p2.name,
+			p1team: selfR.battle.p1.team,
+			p2team: selfR.battle.p2.team,
+			p1rating: p1rating,
+			p2rating: p2rating,
+			endType: selfR.battle.endType || 'normal',
+			log: selfR.battle.log
+		};
+		if (!p1rating) logData.ladderError = true;
+		var date = new Date();
+		var logfolder = date.format('{yyyy}-{MM}');
+		var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
+		var curpath = 'logs/'+logfolder;
+		fs.mkdir(curpath, '0755', function() {
+			var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
+			curpath += '/'+tier;
+			fs.mkdir(curpath, '0755', function() {
+				curpath += '/'+logsubfolder;
+				fs.mkdir(curpath, '0755', function() {
+					fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
+				});
+			});
+		}); // asychronicity
+		//console.log(JSON.stringify(logData));
+		fs.writeFile('logs/lastbattle.txt', ''+rooms.lobby.numRooms);
 	};
 	this.emit = function(type, message, user) {
 		if (type === 'console' || type === 'update') {
