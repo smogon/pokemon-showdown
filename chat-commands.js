@@ -853,7 +853,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
 			'<div style="border:1px solid #6688AA;padding:2px 4px">Please follow the rules:<br />' +
-			'- <a href="http://pokemonshowdown.com/rules" target="_blank">Rules</a><br />' +
+			'- <a href="http://www.smogon.com/sim/rules" target="_blank">Rules</a><br />' +
 			'</div>');
 		return false;
 		break;
