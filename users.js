@@ -377,24 +377,31 @@ var User = (function () {
 			return false;
 		}
 
-		var body = '';
 		if (token && token.substr(0,1) !== ';') {
 			var tokenSemicolonPos = token.indexOf(';');
 			var tokenData = token.substr(0, tokenSemicolonPos);
 			var tokenSig = token.substr(tokenSemicolonPos+1);
-			var verifier = crypto.createVerify(config.loginserverkeyalgo);
-			verifier.update(tokenData);
-			if (verifier.verify(config.loginserverpublickey, tokenSig, 'hex')) {
-				var tokenDataSplit = tokenData.split(',');
-				if (tokenDataSplit[0] === userid) {
-					body = tokenDataSplit[1];
-				} else {
-					console.log('verify userid mismatch: '+tokenData);
-				}
+
+			this.renamePending = true;
+			Verifier.verify(tokenData, tokenSig, this.finishRename);
+		} else {
+			this.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
+		}
+
+		return false;
+	};
+	User.prototype.finishRename = function(success, tokenData) {
+		var body = '';
+		if (success) {
+			var tokenDataSplit = tokenData.split(',');
+			if (tokenDataSplit[0] === userid) {
+				body = tokenDataSplit[1];
 			} else {
-				console.log('verify failed: '+tokenData);
-				console.log('verify sig: '+tokenSig);
+				console.log('verify userid mismatch: '+tokenData);
 			}
+		} else {
+			console.log('verify failed: '+tokenData);
+			console.log('verify sig: '+tokenSig);
 		}
 
 		if (body) {
@@ -494,7 +501,7 @@ var User = (function () {
 			// rename failed
 			this.emit('nameTaken', {userid:userid, name:name, token:token, reason: "The name you chose is registered"});
 		}
-		return false;
+		this.renamePending = false;
 	};
 	User.prototype.add = function(name, person, token) {
 		// name is ignored - this is intentional
