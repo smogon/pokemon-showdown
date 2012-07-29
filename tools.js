@@ -575,17 +575,20 @@ module.exports = (function () {
 			return ["This is not a Pokemon."];
 		}
 
-		set.species = (''+(set.species||'')).trim();
-		set.name = (''+(set.name||'')).trim();
-		set.item = ''+(set.item||'');
-		set.ability = ''+(set.ability||'');
+		var template = this.getTemplate(string(set.species));
+		set.species = template.species;
+
+		set.name = string(set.name).trim();
+		var item = this.getItem(string(set.item));
+		set.item = item.name;
+		var ability = this.getAbility(string(set.ability));
+		set.ability = ability.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
 		var name = set.species;
 		if (set.species !== set.name) name = set.name + " ("+set.species+")";
-		var template = this.getTemplate(set.species);
 		var source = '';
 
 		var setHas = {};
@@ -616,7 +619,6 @@ module.exports = (function () {
 			clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
 			problems.push(name+"'s item "+set.item+" is banned"+clause+".");
 		}
-		var item = this.getItem(set.item);
 		if (banlistTable['Unreleased'] && item.isUnreleased) {
 			problems.push(name+"'s item "+set.item+" is unreleased.");
 		}
@@ -630,13 +632,12 @@ module.exports = (function () {
 				problems.push(name+" has more than 510 total EVs.");
 			}
 
-			var ability = this.getAbility(set.ability).name;
-			if (ability !== template.abilities['0'] &&
-				ability !== template.abilities['1'] &&
-				ability !== template.abilities['DW']) {
+			if (ability.name !== template.abilities['0'] &&
+				ability.name !== template.abilities['1'] &&
+				ability.name !== template.abilities['DW']) {
 				problems.push(name+" can't have "+set.ability+".");
 			}
-			if (ability === template.abilities['DW']) {
+			if (ability.name === template.abilities['DW']) {
 				source = 'DW';
 
 				if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
@@ -660,8 +661,8 @@ module.exports = (function () {
 			var lsetData = {set:set, format:format};
 			for (var i=0; i<set.moves.length; i++) {
 				if (!set.moves[i]) continue;
-				set.moves[i] = ''+(set.moves[i]||'');
-				var move = this.getMove(set.moves[i]);
+				var move = this.getMove(string(set.moves[i]));
+				set.moves[i] = move.name;
 				check = move.id;
 				setHas[check] = true;
 				if (banlistTable[check]) {
