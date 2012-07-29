@@ -206,6 +206,8 @@ if (config.crashguard) {
 		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
 			this.write("\n"+err.stack+"\n");
 			this.end();
+		}).on("error", function (err) {
+			console.log("\n"+err.stack+"\n");
 		});
 		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
 		Rooms.lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
@@ -348,13 +350,13 @@ if (config.protocol === 'io') { // Socket.IO
 	server.sockets.on('connection', function (socket) {
 		var you = null;
 
-		if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
-			if (bannedIps[socket.handshake.address.address]) {
-				console.log('CONNECT BLOCKED - IP BANNED: '+socket.handshake.address.address);
-				return;
-			}
-			socket.remoteAddress = socket.handshake.address.address; // for compatibility with SockJS semantics
+		socket.remoteAddress = (socket.handshake.headers["x-forwarded-for"]||"").split(",").shift() || socket.handshake.address.address; // for compatibility with SockJS semantics
+
+		if (bannedIps[socket.remoteAddress]) {
+			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
+			return;
 		}
+
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		var generator = function(type) {
 			return function(data) {
@@ -379,6 +381,8 @@ if (config.protocol === 'io') { // Socket.IO
 			return;
 		}
 		socket.id = randomString(16); // this sucks
+
+		socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
 
 		if (bannedIps[socket.remoteAddress]) {
 			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
