@@ -1404,6 +1404,18 @@ exports.BattleItems = {
 			basePower: 30,
 			volatileStatus: 'flinch'
 		},
+		onModifyMove: function(move) {
+			if (move.category !== "Status") {
+				if (!move.secondaries) move.secondaries = [];
+				for (var i=0; i<move.secondaries.length; i++) {
+					if (move.secondaries[i].volatileStatus === 'flinch') return;
+				}
+				move.secondaries.push({
+					chance: 10,
+					volatileStatus: 'flinch'
+				});
+			}
+		},
 		desc: "Certain moves have a 10% flinch rate."
 	},
 	"laggingtail": {
@@ -2263,6 +2275,18 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30,
 			volatileStatus: 'flinch'
+		},
+		onModifyMove: function(move) {
+			if (move.category !== "Status") {
+				if (!move.secondaries) move.secondaries = [];
+				for (var i=0; i<move.secondaries.length; i++) {
+					if (move.secondaries[i].volatileStatus === 'flinch') return;
+				}
+				move.secondaries.push({
+					chance: 10,
+					volatileStatus: 'flinch'
+				});
+			}
 		},
 		desc: "Certain moves have a 10% flinch rate. Evolves Gligar into Gliscor."
 	},
