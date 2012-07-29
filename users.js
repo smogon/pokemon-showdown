@@ -384,7 +384,7 @@ var User = (function () {
 			this.renamePending = name;
 			var self = this;
 			Verifier.verify(tokenData, tokenSig, function(success, tokenData) {
-				self.finishRename(success, tokenData, token);
+				self.finishRename(success, tokenData, token, auth);
 			});
 		} else {
 			this.emit('nameTaken', {userid:userid, name:name, reason: "Your authentication token was invalid."});
@@ -392,7 +392,7 @@ var User = (function () {
 
 		return false;
 	};
-	User.prototype.finishRename = function(success, tokenData, token) {
+	User.prototype.finishRename = function(success, tokenData, token, auth) {
 		var name = this.renamePending;
 		var userid = toUserid(name);
 
