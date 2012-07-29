@@ -687,30 +687,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'ranking':
 	case 'rank':
 	case 'ladder':
-		target = toUserid(target) || user.userid;
-		request({
-			uri: config.loginserver+'action.php?act=ladderget&serverid='+config.serverid+'&user='+target,
-		}, function(error, response, body) {
-			if (error) {
-				emit(socket, 'console', 'Your request failed due to a server issue.');
-			} else if (body) {
-				try {
-					var data = JSON.parse(body);
-
-					emit(socket, 'console', 'User: '+target);
-
-					if (!data.length) {
-						emit(socket, 'console', 'has not played a ladder game yet');
-					} else for (var i=0; i<data.length; i++) {
-						var row = data[i];
-						emit(socket, 'console', row.formatid+': '+Math.round(row.acre)+' (GXE:'+Math.round(row.pgxe,1)+') (Glicko2:'+Math.round(row.rpr)+','+Math.round(row.rprd)+') (W:'+row.w+'/L:'+row.l+'/T:'+row.t+')');
-					}
-				} catch(e) {
-				}
-			} else {
-				emit(socket, 'console', 'Error');
-			}
-		});
+		emit(socket, 'console', 'You are using an old version of Pokemon Showdown. Please reload the page.');
 		return false;
 		break;
 
