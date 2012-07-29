@@ -16,7 +16,8 @@ request = function(options, callback) {
 		return;
 	}
 	request.openRequests++;
-	var req = http.get(url.parse(options.uri), function(res) {
+	if (options.uri) Object.merge(options, url.parse(options.uri));
+	var req = http.get(options, function(res) {
 		var buffer = '';
 		res.setEncoding('utf8');
 
