@@ -93,29 +93,33 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 						} catch(e) {
 							return;
 						}
-						p1rating = data.p1rating.acre;
-						p2rating = data.p2rating.acre;
-						//selfR.add("Ladder updated.");
+						if (data.p1rating && data.p2rating) {
+							p1rating = data.p1rating.acre;
+							p2rating = data.p2rating.acre;
+							//selfR.add("Ladder updated.");
 
-						var oldacre = Math.round(data.p1rating.oldacre);
-						var oldrdacre = Math.round(data.p1rating.oldrdacre);
-						var acre = Math.round(data.p1rating.acre);
-						var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'winning':(p1score<.01?'losing':'tying'));
-						if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
-						if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
-						selfR.addRaw(sanitize(p1)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
+							var oldacre = Math.round(data.p1rating.oldacre);
+							var oldrdacre = Math.round(data.p1rating.oldrdacre);
+							var acre = Math.round(data.p1rating.acre);
+							var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'winning':(p1score<.01?'losing':'tying'));
+							if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
+							if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
+							selfR.addRaw(sanitize(p1)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
 
-						var oldacre = Math.round(data.p2rating.oldacre);
-						var oldrdacre = Math.round(data.p2rating.oldrdacre);
-						var acre = Math.round(data.p2rating.acre);
-						var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'losing':(p1score<.01?'winning':'tying'));
-						if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
-						if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
-						selfR.addRaw(sanitize(p2)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
+							var oldacre = Math.round(data.p2rating.oldacre);
+							var oldrdacre = Math.round(data.p2rating.oldrdacre);
+							var acre = Math.round(data.p2rating.acre);
+							var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'losing':(p1score<.01?'winning':'tying'));
+							if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
+							if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
+							selfR.addRaw(sanitize(p2)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
 
-						Users.get(p1).cacheMMR(rated.format, data.p1rating);
-						Users.get(p2).cacheMMR(rated.format, data.p2rating);
-						selfR.update();
+							Users.get(p1).cacheMMR(rated.format, data.p1rating);
+							Users.get(p2).cacheMMR(rated.format, data.p2rating);
+							selfR.update();
+						} else {
+							selfR.addRaw('There was an error calculating rating changes.');
+						}
 
 						if (!Tools.getFormat(selfR.format).noLog) {
 							selfR.logBattle(p1score, p1rating, p2rating);
