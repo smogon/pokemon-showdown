@@ -1535,7 +1535,7 @@ exports.BattleFormatsData = {
 	flaaffy: {
 		viableMoves: {"reflect":1,"lightscreen":1,"thunderbolt":1,"discharge":1,"thunderwave":1,"toxic":1,"hiddenpowerice":1,"cottonguard":1},
 		dreamWorldRelease: true,
-		tier: "NU"
+		tier: "NFE"
 	},
 	ampharos: {
 		viableMoves: {"voltswitch":1,"focusblast":1,"hiddenpowerice":1,"hiddenpowergrass":1,"thunderbolt":1,"healbell":1},
