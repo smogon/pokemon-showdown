@@ -158,6 +158,8 @@ Users = require('./users.js');
 
 Rooms = require('./rooms.js');
 
+Verifier = require('./verifier.js');
+
 parseCommand = require('./chat-commands.js').parseCommand;
 
 var sim = require('./simulator.js');

@@ -30,6 +30,9 @@ if (!process.send) {
 
 	// This is the child
 
+	var config = require('./config/config.js');
+	var crypto = require('crypto');
+
 	var keyalgo = config.loginserverkeyalgo;
 	var pkey = config.loginserverpublickey;
 

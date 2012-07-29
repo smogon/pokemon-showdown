@@ -6,8 +6,6 @@ var numUsers = 0;
 var people = {};
 var numPeople = 0;
 
-var crypto = require('crypto');
-
 function sanitizeName(name) {
 	name = name.trim();
 	if (name.length > 18) name = name.substr(0,18);
@@ -358,7 +356,8 @@ var User = (function () {
 
 		if (!userid) {
 			// technically it's not "taken", but if your client doesn't warn you
-			// before it gets to this stage it's your own fault
+			// before it gets to this stage it's your own fault for getting a
+			// bad error message
 			this.emit('nameTaken', {userid: '', reason: "You did not specify a name."});
 			return false;
 		} else {
@@ -373,7 +372,7 @@ var User = (function () {
 			}
 		}
 		if (users[userid] && !users[userid].authenticated && users[userid].connected && !auth) {
-			this.emit('nameTaken', {userid:this.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
+			this.emit('nameTaken', {userid:this.userid, reason: "Someone is already using the name \""+users[userid].name+"\"."});
 			return false;
 		}
 
@@ -382,15 +381,21 @@ var User = (function () {
 			var tokenData = token.substr(0, tokenSemicolonPos);
 			var tokenSig = token.substr(tokenSemicolonPos+1);
 
-			this.renamePending = true;
-			Verifier.verify(tokenData, tokenSig, this.finishRename);
+			this.renamePending = name;
+			var self = this;
+			Verifier.verify(tokenData, tokenSig, function(success, tokenData) {
+				self.finishRename(success, tokenData, token);
+			});
 		} else {
-			this.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
+			this.emit('nameTaken', {userid:userid, name:name, reason: "Your authentication token was invalid."});
 		}
 
 		return false;
 	};
-	User.prototype.finishRename = function(success, tokenData) {
+	User.prototype.finishRename = function(success, tokenData, token) {
+		var name = this.renamePending;
+		var userid = toUserid(name);
+
 		var body = '';
 		if (success) {
 			var tokenDataSplit = tokenData.split(',');
@@ -411,7 +416,7 @@ var User = (function () {
 				if (auth) {
 					if (users[userid] !== this) users[userid].resetName();
 				} else {
-					this.emit('nameTaken', {userid:this.userid, token:token, reason: "Someone is already using the name \""+users[userid].name+"\"."});
+					this.emit('nameTaken', {userid:this.userid, reason: "Someone is already using the name \""+users[userid].name+"\"."});
 					return this;
 				}
 			}
@@ -495,11 +500,11 @@ var User = (function () {
 		} else if (tokenData) {
 			console.log('BODY: "" authInvalid');
 			// rename failed, but shouldn't
-			this.emit('nameTaken', {userid:userid, name:name, token:token, reason: "Your authentication token was invalid."});
+			this.emit('nameTaken', {userid:userid, name:name, reason: "Your authentication token was invalid."});
 		} else {
 			console.log('BODY: "" nameTaken');
 			// rename failed
-			this.emit('nameTaken', {userid:userid, name:name, token:token, reason: "The name you chose is registered"});
+			this.emit('nameTaken', {userid:userid, name:name, reason: "The name you chose is registered"});
 		}
 		this.renamePending = false;
 	};
