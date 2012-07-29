@@ -90,10 +90,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 						var data;
 						try {
 							data = JSON.parse(body);
-						} catch(e) {
-							return;
-						}
-						if (data.p1rating && data.p2rating) {
+
 							p1rating = data.p1rating.acre;
 							p2rating = data.p2rating.acre;
 							//selfR.add("Ladder updated.");
@@ -117,8 +114,9 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 							Users.get(p1).cacheMMR(rated.format, data.p1rating);
 							Users.get(p2).cacheMMR(rated.format, data.p2rating);
 							selfR.update();
-						} else {
+						} catch(e) {
 							selfR.addRaw('There was an error calculating rating changes.');
+							selfR.update();
 						}
 
 						if (!Tools.getFormat(selfR.format).noLog) {
