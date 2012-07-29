@@ -129,6 +129,17 @@ sanitize = function(str, strEscape) {
 };
 
 /**
+ * Safely ensures the passed variable is a string
+ * Simply doing ''+str can crash if str.toString crashes or isn't a function
+ * If we're expecting a string and being given anything that isn't a string
+ * or a number, it's safe to assume it's an error, and return ''
+ */
+string = function(str) {
+	if (typeof str === 'string' || typeof str === 'number') return ''+str;
+	return '';
+}
+
+/**
  * Converts any variable to an integer (numbers get floored, non-numbers
  * become 0). Then clamps it between min and (optionally) max.
  */
