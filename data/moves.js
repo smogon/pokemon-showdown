@@ -10253,9 +10253,27 @@ exports.BattleMovedex = {
 		id: "sketch",
 		name: "Sketch",
 		pp: 1,
-		priority: 0,
 		noPPBoosts: true,
-		onTryHit: false,
+		priority: 0,
+		onHit: function(target, source) {
+			var disallowedMoves = {chatter:1,sketch:1,struggle:1};
+			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
+			var moveslot = source.moves.indexOf('sketch');
+			if (moveslot === -1) return false;
+			var move = Tools.getMove(target.lastMove);
+			var sketchedMove = {
+				move: move.name,
+				id: move.id,
+				pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				disabled: false,
+				used: false
+			};
+			source.moveset[moveslot] = sketchedMove;
+			source.baseMoveset[moveslot] = sketchedMove;
+			source.moves[moveslot] = toId(move.name);
+			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
