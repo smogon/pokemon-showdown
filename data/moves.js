@@ -5296,6 +5296,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Bug",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -5310,6 +5311,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Dark",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -5324,6 +5326,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Dragon",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dragon"
@@ -5339,6 +5342,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Electric",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -5354,6 +5358,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Fighting",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -5369,6 +5374,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Fire",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -5383,6 +5389,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Flying",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Flying"
@@ -5397,6 +5404,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Ghost",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -5412,6 +5420,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Grass",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -5426,6 +5435,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Ground",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ground"
@@ -5441,6 +5451,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Ice",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ice"
@@ -5455,6 +5466,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Poison",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Poison"
@@ -5469,6 +5481,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Psychic",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -5483,6 +5496,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Rock",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Rock"
@@ -5497,6 +5511,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Steel",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -5511,6 +5526,7 @@ exports.BattleMovedex = {
 		name: "Hidden Power Water",
 		pp: 15,
 		priority: 0,
+		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
