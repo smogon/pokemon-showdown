@@ -10,7 +10,6 @@ exports.BattleMovedex = {
 		name: "Absorb",
 		pp: 25,
 		priority: 0,
-		isProtectable: true,
 		drain: [1,2],
 		secondary: false,
 		target: "normal",
@@ -27,7 +26,6 @@ exports.BattleMovedex = {
 		name: "Acid",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -69,7 +67,6 @@ exports.BattleMovedex = {
 		name: "Acid Spray",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -99,7 +96,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "any",
 		type: "Flying"
@@ -115,6 +111,7 @@ exports.BattleMovedex = {
 		name: "Acupressure",
 		pp: 30,
 		priority: 0,
+		isNotProtectable: true,
 		onHit: function(target) {
 			var stats = [];
 			for (var i in target.boosts) {
@@ -148,9 +145,8 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"aeroblast": {
@@ -165,10 +161,9 @@ exports.BattleMovedex = {
 		name: "Aeroblast",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"afteryou": {
@@ -182,6 +177,7 @@ exports.BattleMovedex = {
 		name: "After You",
 		pp: 15,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: false, // After You will always fail when used in a single battle
 		secondary: false,
 		target: "normal",
@@ -218,7 +214,6 @@ exports.BattleMovedex = {
 		name: "Air Cutter",
 		pp: 25,
 		priority: 0,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "foes",
@@ -236,12 +231,11 @@ exports.BattleMovedex = {
 		name: "Air Slash",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"allyswitch": {
@@ -256,7 +250,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 1,
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Psychic"
 	},
 	"amnesia": {
@@ -290,7 +284,6 @@ exports.BattleMovedex = {
 		name: "AncientPower",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			self: {
@@ -319,7 +312,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 1,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -363,7 +355,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -380,7 +371,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -458,7 +448,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -475,7 +464,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -495,7 +483,6 @@ exports.BattleMovedex = {
 		name: "Attack Order",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -512,7 +499,6 @@ exports.BattleMovedex = {
 		name: "Attract",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onHit: function(target) {
 			if (target.addVolatile('attract')) this.add("-start", target, "Attract");
@@ -550,9 +536,8 @@ exports.BattleMovedex = {
 		name: "Aura Sphere",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Fighting"
 	},
 	"aurorabeam": {
@@ -566,7 +551,6 @@ exports.BattleMovedex = {
 		name: "Aurora Beam",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -626,7 +610,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -4,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ice"
@@ -642,7 +625,6 @@ exports.BattleMovedex = {
 		name: "Barrage",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -700,7 +682,6 @@ exports.BattleMovedex = {
 		name: "Beat Up",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onModifyMove: function(move, pokemon) {
 			var validpokemon = 1;
 			for (var p in pokemon.side.pokemon) {
@@ -763,7 +744,6 @@ exports.BattleMovedex = {
 		name: "Bestow",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, source) {
 			if (target.item) {
 				return false;
@@ -794,7 +774,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 1,
 		isContact: true,
-		isProtectable: true,
 		volatileStatus: 'bide',
 		effect: {
 			duration: 3,
@@ -848,7 +827,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -866,7 +844,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -885,7 +862,6 @@ exports.BattleMovedex = {
 		name: "Blast Burn",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -906,7 +882,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: {
 			chance: 10,
@@ -927,7 +902,6 @@ exports.BattleMovedex = {
 		name: "Blizzard",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		onModifyMove: function(move) {
 			if (this.weather === 'hail') move.accuracy = true;
 		},
@@ -950,7 +924,6 @@ exports.BattleMovedex = {
 		name: "Block",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onHit: function(target) {
 			target.addVolatile('trapped');
@@ -971,7 +944,6 @@ exports.BattleMovedex = {
 		name: "Blue Flare",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			status: 'brn'
@@ -992,7 +964,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -1013,7 +984,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			status: 'par'
@@ -1032,7 +1002,6 @@ exports.BattleMovedex = {
 		name: "Bone Club",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch'
@@ -1052,7 +1021,6 @@ exports.BattleMovedex = {
 		name: "Bone Rush",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -1070,7 +1038,6 @@ exports.BattleMovedex = {
 		name: "Bonemerang",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -1089,7 +1056,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		effect: {
 			onSourceModifyMove: function(move) {
@@ -1114,7 +1080,7 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'par'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"bravebird": {
@@ -1130,10 +1096,9 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		recoil: [1,3],
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"brickbreak": {
@@ -1149,7 +1114,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onTryHit: function(pokemon) {
 			// will shatter screens through sub, before you hit
 			if (pokemon.runImmunity('Fighting')) {
@@ -1176,7 +1140,6 @@ exports.BattleMovedex = {
 		name: "Brine",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -1192,7 +1155,6 @@ exports.BattleMovedex = {
 		name: "Bubble",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -1213,7 +1175,6 @@ exports.BattleMovedex = {
 		name: "BubbleBeam",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -1235,7 +1196,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -1252,7 +1212,6 @@ exports.BattleMovedex = {
 		name: "Bug Buzz",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		secondary: {
 			chance: 10,
@@ -1295,14 +1254,13 @@ exports.BattleMovedex = {
 		name: "Bulldoze",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
 				spe: -1
 			}
 		},
-		target: "normal",
+		target: "adjacent",
 		type: "Ground"
 	},
 	"bulletpunch": {
@@ -1318,7 +1276,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
@@ -1336,7 +1293,6 @@ exports.BattleMovedex = {
 		name: "Bullet Seed",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -1399,7 +1355,6 @@ exports.BattleMovedex = {
 		name: "Captivate",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		onTryHit: function(pokemon, source) {
 			if ((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) {
 				return;
@@ -1410,7 +1365,7 @@ exports.BattleMovedex = {
 			spa: -2
 		},
 		secondary: false,
-		target: "normal",
+		target: "foes",
 		type: "Normal"
 	},
 	"charge": {
@@ -1460,7 +1415,6 @@ exports.BattleMovedex = {
 		name: "Charge Beam",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 70,
 			self: {
@@ -1483,7 +1437,6 @@ exports.BattleMovedex = {
 		name: "Charm",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			atk: -2
 		},
@@ -1502,7 +1455,6 @@ exports.BattleMovedex = {
 		name: "Chatter",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		onModifyMove: function(move, pokemon) {
 			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
@@ -1511,7 +1463,7 @@ exports.BattleMovedex = {
 			chance: 10,
 			volatileStatus: 'confusion'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"chipaway": {
@@ -1526,7 +1478,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		secondary: false,
@@ -1546,7 +1497,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -6,
 		isContact: true,
-		isProtectable: true,
 		forceSwitch: true,
 		target: "normal",
 		type: "Fighting"
@@ -1563,7 +1513,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -1581,7 +1530,6 @@ exports.BattleMovedex = {
 		name: "Clear Smog",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target) {
 			target.clearBoosts();
 			this.add('-clearboost',target);
@@ -1603,7 +1551,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		self: {
 			boosts: {
 				def: -1,
@@ -1648,7 +1595,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		multihit: [2,5],
 		secondary: false,
@@ -1667,7 +1613,6 @@ exports.BattleMovedex = {
 		name: "Confuse Ray",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "normal",
@@ -1684,7 +1629,6 @@ exports.BattleMovedex = {
 		name: "Confusion",
 		pp: 25,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'confusion'
@@ -1704,7 +1648,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -1775,6 +1718,7 @@ exports.BattleMovedex = {
 		name: "Conversion 2",
 		pp: 30,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target, source) {
 			source.addVolatile("conversion2", target);
 		},
@@ -1904,7 +1848,6 @@ exports.BattleMovedex = {
 		name: "Cotton Spore",
 		pp: 40,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			spe: -2
 		},
@@ -1933,7 +1876,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -5,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -1950,7 +1892,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onHit: function(target, source) {
 			if (source.item) {
 				return;
@@ -1982,7 +1923,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -2001,7 +1941,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -2020,7 +1959,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'psn'
@@ -2042,7 +1980,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -2064,7 +2001,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -2089,7 +2025,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -2106,6 +2041,7 @@ exports.BattleMovedex = {
 		name: "Curse",
 		pp: 10,
 		priority: 0,
+		isNotProtectable: true,
 		volatileStatus: 'curse',
 		onModifyMove: function(move, source, target) {
 			if (!source.hasType('Ghost')) {
@@ -2140,7 +2076,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -2157,7 +2092,6 @@ exports.BattleMovedex = {
 		name: "Dark Pulse",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -2177,7 +2111,6 @@ exports.BattleMovedex = {
 		name: "Dark Void",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		status: 'slp',
 		secondary: false,
 		target: "foes",
@@ -2235,7 +2168,6 @@ exports.BattleMovedex = {
 		name: "Defog",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onHit: function(pokemon) {
 			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
@@ -2331,7 +2263,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		effect: {
 			onImmunity: function(type, pokemon) {
@@ -2367,7 +2298,6 @@ exports.BattleMovedex = {
 		name: "Disable",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'disable',
 		effect: {
@@ -2432,7 +2362,6 @@ exports.BattleMovedex = {
 		name: "Discharge",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -2452,7 +2381,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		effect: {
 			onImmunity: function(type, pokemon) {
@@ -2487,7 +2415,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: {
 			chance: 20,
@@ -2508,9 +2435,9 @@ exports.BattleMovedex = {
 		name: "Doom Desire",
 		pp: 5,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
-
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
 				return false;
 			}
@@ -2545,7 +2472,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		recoil: [1,3],
 		secondary: false,
 		target: "normal",
@@ -2563,7 +2489,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -2581,7 +2506,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -2599,7 +2523,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -2636,7 +2559,6 @@ exports.BattleMovedex = {
 		name: "Draco Meteor",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			boosts: {
 				spa: -2
@@ -2657,7 +2579,6 @@ exports.BattleMovedex = {
 		name: "DragonBreath",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -2678,7 +2599,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dragon"
@@ -2716,7 +2636,6 @@ exports.BattleMovedex = {
 		name: "Dragon Pulse",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "any",
 		type: "Dragon"
@@ -2733,7 +2652,6 @@ exports.BattleMovedex = {
 		name: "Dragon Rage",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dragon"
@@ -2751,7 +2669,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -2772,7 +2689,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -6,
 		isContact: true,
-		isProtectable: true,
 		forceSwitch: true,
 		target: "normal",
 		type: "Dragon"
@@ -2790,7 +2706,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		drain: [1,2],
 		secondary: false,
@@ -2808,7 +2723,6 @@ exports.BattleMovedex = {
 		name: "Dream Eater",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		drain: [1,2],
 		onTryHit: function(target) {
 			if (target.status !== 'slp') {
@@ -2833,9 +2747,8 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"drillrun": {
@@ -2851,7 +2764,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -2870,7 +2782,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -2888,7 +2799,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: {
 			chance: 100,
@@ -2909,7 +2819,6 @@ exports.BattleMovedex = {
 		name: "Earth Power",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -2931,7 +2840,6 @@ exports.BattleMovedex = {
 		name: "Earthquake",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "adjacent",
 		type: "Ground"
@@ -2947,7 +2855,6 @@ exports.BattleMovedex = {
 		name: "Echoed Voice",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		secondary: false,
 		target: "normal",
@@ -2964,7 +2871,6 @@ exports.BattleMovedex = {
 		name: "Egg Bomb",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -2998,7 +2904,6 @@ exports.BattleMovedex = {
 		name: "Electro Ball",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -3014,14 +2919,13 @@ exports.BattleMovedex = {
 		name: "Electroweb",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
 				spe: -1
 			}
 		},
-		target: "normal",
+		target: "foes",
 		type: "Electric"
 	},
 	"embargo": {
@@ -3035,7 +2939,6 @@ exports.BattleMovedex = {
 		name: "Embargo",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'embargo',
 		effect: {
@@ -3066,7 +2969,6 @@ exports.BattleMovedex = {
 		name: "Ember",
 		pp: 25,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -3086,7 +2988,6 @@ exports.BattleMovedex = {
 		name: "Encore",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'encore',
 		effect: {
@@ -3162,7 +3063,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3225,7 +3125,6 @@ exports.BattleMovedex = {
 		name: "Energy Ball",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -3246,7 +3145,6 @@ exports.BattleMovedex = {
 		name: "Entrainment",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onTryHit: function(target, source) {
 			if (target === source) return false;
@@ -3282,7 +3180,6 @@ exports.BattleMovedex = {
 		name: "Eruption",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "foes",
 		type: "Fire"
@@ -3298,7 +3195,6 @@ exports.BattleMovedex = {
 		name: "Explosion",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		selfdestruct: true,
 		secondary: false,
 		target: "adjacent",
@@ -3316,7 +3212,6 @@ exports.BattleMovedex = {
 		name: "Extrasensory",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch'
@@ -3337,7 +3232,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 2,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3361,7 +3255,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3378,7 +3271,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -3396,7 +3288,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		isContact: true,
-		isProtectable: true,
 		onTryHit: function(target, pokemon) {
 			if (pokemon.activeTurns > 1) {
 				this.debug('It\'s not your first turn out.');
@@ -3421,7 +3312,6 @@ exports.BattleMovedex = {
 		name: "Fake Tears",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			spd: -2
 		},
@@ -3441,7 +3331,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		noFaint: true,
 		secondary: false,
 		target: "normal",
@@ -3458,7 +3347,6 @@ exports.BattleMovedex = {
 		name: "FeatherDance",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			atk: -2
 		},
@@ -3502,7 +3390,6 @@ exports.BattleMovedex = {
 		name: "Fiery Dance",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 50,
 			self: {
@@ -3529,7 +3416,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		selfdestruct: true,
 		secondary: false,
 		target: "normal",
@@ -3547,7 +3433,6 @@ exports.BattleMovedex = {
 		name: "Fire Blast",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -3568,7 +3453,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondaries: [ {
 				chance: 10,
 				status: 'brn'
@@ -3591,7 +3475,6 @@ exports.BattleMovedex = {
 		name: "Fire Pledge",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -3609,7 +3492,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: {
 			chance: 10,
@@ -3629,7 +3511,6 @@ exports.BattleMovedex = {
 		name: "Fire Spin",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -3646,7 +3527,6 @@ exports.BattleMovedex = {
 		name: "Fissure",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		ohko: true,
 		secondary: false,
 		target: "normal",
@@ -3684,7 +3564,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3700,7 +3579,6 @@ exports.BattleMovedex = {
 		name: "Flame Burst",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -3718,7 +3596,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -3742,7 +3619,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		thawsUser: true,
 		secondary: {
 			chance: 10,
@@ -3763,7 +3639,6 @@ exports.BattleMovedex = {
 		name: "Flamethrower",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -3784,7 +3659,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		thawsUser: true,
 		recoil: [1,3],
 		secondary: {
@@ -3805,7 +3679,6 @@ exports.BattleMovedex = {
 		name: "Flash",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			accuracy: -1
 		},
@@ -3825,7 +3698,6 @@ exports.BattleMovedex = {
 		name: "Flash Cannon",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -3846,7 +3718,6 @@ exports.BattleMovedex = {
 		name: "Flatter",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'confusion',
 		boosts: {
 			spa: 1
@@ -3866,7 +3737,6 @@ exports.BattleMovedex = {
 		name: "Fling",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		beforeMoveCallback: function(pokemon) {
 			if (pokemon.ignore['Item']) return;
 			var item = pokemon.getItem();
@@ -3921,7 +3791,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		effect: {
 			onSourceModifyMove: function(move) {
@@ -3941,7 +3810,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"focusblast": {
@@ -3956,7 +3825,6 @@ exports.BattleMovedex = {
 		name: "Focus Blast",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -4004,7 +3872,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -3,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		beforeTurnCallback: function(pokemon) {
 			pokemon.addVolatile('focuspunch');
@@ -4040,7 +3907,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 3,
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"forcepalm": {
@@ -4055,7 +3922,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -4074,7 +3940,6 @@ exports.BattleMovedex = {
 		name: "Foresight",
 		pp: 40,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'foresight',
 		effect: {
@@ -4108,7 +3973,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -4124,7 +3988,6 @@ exports.BattleMovedex = {
 		name: "Freeze Shock",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		secondary: {
 			chance: 30,
@@ -4144,7 +4007,6 @@ exports.BattleMovedex = {
 		name: "Frenzy Plant",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -4164,7 +4026,6 @@ exports.BattleMovedex = {
 		name: "Frost Breath",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		willCrit: true,
 		secondary: false,
 		target: "normal",
@@ -4186,7 +4047,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -4203,7 +4063,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -4227,7 +4086,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onHit: function(target, source) {
 			source.addVolatile('furycutter');
 		},
@@ -4259,7 +4117,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -4277,7 +4134,6 @@ exports.BattleMovedex = {
 		name: "Fusion Bolt",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -4294,7 +4150,6 @@ exports.BattleMovedex = {
 		name: "Fusion Flare",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		thawsUser: true,
 		secondary: false,
 		target: "normal",
@@ -4311,9 +4166,9 @@ exports.BattleMovedex = {
 		name: "Future Sight",
 		pp: 10,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
-
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
 				return false;
 			}
@@ -4346,7 +4201,6 @@ exports.BattleMovedex = {
 		name: "Gastro Acid",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onTryHit: function(pokemon) {
 			if (pokemon.ability === 'multitype') {
@@ -4377,7 +4231,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: [2,2],
 		secondary: false,
 		target: "normal",
@@ -4395,7 +4248,6 @@ exports.BattleMovedex = {
 		name: "Giga Drain",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		drain: [1,2],
 		secondary: false,
 		target: "normal",
@@ -4413,7 +4265,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -4432,14 +4283,13 @@ exports.BattleMovedex = {
 		name: "Glaciate",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
 				spe: -1
 			}
 		},
-		target: "normal",
+		target: "foes",
 		type: "Ice"
 	},
 	"glare": {
@@ -4454,7 +4304,6 @@ exports.BattleMovedex = {
 		name: "Glare",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		status: 'par',
 		secondary: false,
 		target: "normal",
@@ -4497,7 +4346,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -4513,7 +4361,6 @@ exports.BattleMovedex = {
 		name: "Grass Pledge",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -4529,7 +4376,6 @@ exports.BattleMovedex = {
 		name: "GrassWhistle",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		status: 'slp',
 		affectedByImmunities: true,
@@ -4593,7 +4439,6 @@ exports.BattleMovedex = {
 		name: "Growl",
 		pp: 40,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		boosts: {
 			atk: -1
@@ -4675,7 +4520,6 @@ exports.BattleMovedex = {
 		name: "Guard Split",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -4691,7 +4535,6 @@ exports.BattleMovedex = {
 		name: "Guard Swap",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
@@ -4722,7 +4565,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		ohko: true,
 		secondary: false,
 		target: "normal",
@@ -4740,7 +4582,6 @@ exports.BattleMovedex = {
 		name: "Gunk Shot",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -4759,9 +4600,8 @@ exports.BattleMovedex = {
 		name: "Gust",
 		pp: 35,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"gyroball": {
@@ -4785,7 +4625,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -4819,7 +4658,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		self: {
 			boosts: {
@@ -4886,7 +4724,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		recoil: [1,4],
 		secondary: false,
 		target: "normal",
@@ -4905,7 +4742,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		recoil: [1,2],
 		secondary: false,
 		target: "normal",
@@ -4923,7 +4759,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -4966,7 +4801,6 @@ exports.BattleMovedex = {
 		name: "Heal Block",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'healblock',
 		effect: {
@@ -5019,7 +4853,6 @@ exports.BattleMovedex = {
 		name: "Heal Pulse",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		heal: [1,2],
 		secondary: false,
@@ -5079,7 +4912,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -5098,7 +4930,6 @@ exports.BattleMovedex = {
 		name: "Heart Swap",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
@@ -5147,7 +4978,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -5164,7 +4994,6 @@ exports.BattleMovedex = {
 		name: "Heat Wave",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -5202,7 +5031,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -5218,8 +5046,9 @@ exports.BattleMovedex = {
 		name: "Helping Hand",
 		pp: 20,
 		priority: 5,
+		isNotProtectable: true,
 		secondary: false,
-		target: "normal",
+		target: "ally",
 		type: "Normal"
 	},
 	"hex": {
@@ -5237,7 +5066,6 @@ exports.BattleMovedex = {
 		name: "Hex",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -5255,7 +5083,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onMoveFail: function(target, source, move) {
 			this.damage(source.maxhp/2, source);
 		},
@@ -5278,7 +5105,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		onModifyMove: function(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
 		},
@@ -5296,7 +5122,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Bug",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -5311,7 +5136,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Dark",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -5326,7 +5150,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Dragon",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dragon"
@@ -5342,7 +5165,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Electric",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -5358,7 +5180,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Fighting",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -5374,7 +5195,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Fire",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -5389,7 +5209,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Flying",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Flying"
@@ -5404,7 +5223,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Ghost",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -5420,7 +5238,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Grass",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -5435,7 +5252,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Ground",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ground"
@@ -5451,7 +5267,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Ice",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ice"
@@ -5466,7 +5281,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Poison",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Poison"
@@ -5481,7 +5295,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Psychic",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -5496,7 +5309,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Rock",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Rock"
@@ -5511,7 +5323,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Steel",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -5526,7 +5337,6 @@ exports.BattleMovedex = {
 		name: "Hidden Power Water",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -5564,7 +5374,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -5581,7 +5390,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		ohko: true,
 		secondary: false,
 		target: "normal",
@@ -5600,7 +5408,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		drain: [1,2],
 		secondary: false,
 		target: "normal",
@@ -5638,7 +5445,6 @@ exports.BattleMovedex = {
 		name: "Hurricane",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onModifyMove: function(move) {
 			if (this.weather === 'raindance') move.accuracy = true;
 			else if (this.weather === 'sunnyday') move.accuracy = 50;
@@ -5647,7 +5453,7 @@ exports.BattleMovedex = {
 			chance: 30,
 			volatileStatus: 'confusion'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"hydrocannon": {
@@ -5661,7 +5467,6 @@ exports.BattleMovedex = {
 		name: "Hydro Cannon",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -5681,7 +5486,6 @@ exports.BattleMovedex = {
 		name: "Hydro Pump",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -5697,7 +5501,6 @@ exports.BattleMovedex = {
 		name: "Hyper Beam",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -5717,7 +5520,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch'
@@ -5737,7 +5539,6 @@ exports.BattleMovedex = {
 		name: "Hyper Voice",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		secondary: false,
 		target: "foes",
@@ -5755,7 +5556,6 @@ exports.BattleMovedex = {
 		name: "Hypnosis",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		status: 'slp',
 		secondary: false,
 		target: "normal",
@@ -5786,7 +5586,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		effect: {
 			duration: 2,
 			onStart: function() {
@@ -5831,7 +5630,6 @@ exports.BattleMovedex = {
 		name: "Ice Beam",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'frz'
@@ -5850,7 +5648,6 @@ exports.BattleMovedex = {
 		name: "Ice Burn",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		secondary: {
 			chance: 30,
@@ -5872,7 +5669,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondaries: [ {
 				chance: 10,
 				status: 'frz'
@@ -5897,7 +5693,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: {
 			chance: 10,
@@ -5918,7 +5713,6 @@ exports.BattleMovedex = {
 		name: "Ice Shard",
 		pp: 30,
 		priority: 1,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ice"
@@ -5935,7 +5729,6 @@ exports.BattleMovedex = {
 		name: "Icicle Crash",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -5955,7 +5748,6 @@ exports.BattleMovedex = {
 		name: "Icicle Spear",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -5972,7 +5764,6 @@ exports.BattleMovedex = {
 		name: "Icy Wind",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -6027,7 +5818,6 @@ exports.BattleMovedex = {
 		name: "Incinerate",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(pokemon, source) {
 			var item = pokemon.getItem();
 			if (item.isBerry && pokemon.takeItem(source)) {
@@ -6035,7 +5825,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "foes",
 		type: "Fire"
 	},
 	"inferno": {
@@ -6049,7 +5839,6 @@ exports.BattleMovedex = {
 		name: "Inferno",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			status: 'brn'
@@ -6122,7 +5911,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -6143,7 +5931,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -6165,7 +5952,6 @@ exports.BattleMovedex = {
 		name: "Judgment",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onModifyMove: function(move, pokemon) {
 			move.type = this.runEvent('Plate', pokemon, null, 'judgment', 'Normal');
 		},
@@ -6186,7 +5972,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onMoveFail: function(target, source, move) {
 			this.damage(source.maxhp/2, source);
 		},
@@ -6206,7 +5991,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -6223,7 +6007,6 @@ exports.BattleMovedex = {
 		name: "Kinesis",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			accuracy: -1
 		},
@@ -6244,7 +6027,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onHit: function(target, source) {
 			item = target.takeItem(source);
 			if (item) {
@@ -6267,7 +6049,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onTryHit: function(target, source) {
 			if (source.moveset.length === 1) return false; // Last Resort fails unless the user knows at least 2 moves
 			var hasLastResort = false; // User must actually have Last Resort for it to succeed
@@ -6296,7 +6077,6 @@ exports.BattleMovedex = {
 		name: "Lava Plume",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'brn'
@@ -6317,7 +6097,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -6335,7 +6114,6 @@ exports.BattleMovedex = {
 		name: "Leaf Storm",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			boosts: {
 				spa: -2
@@ -6356,7 +6134,6 @@ exports.BattleMovedex = {
 		name: "Leaf Tornado",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -6378,7 +6155,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		drain: [1,2],
 		secondary: false,
 		target: "normal",
@@ -6396,7 +6172,6 @@ exports.BattleMovedex = {
 		name: "Leech Seed",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'leechseed',
 		affectedByImmunities: true,
@@ -6438,7 +6213,6 @@ exports.BattleMovedex = {
 		name: "Leer",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			def: -1
 		},
@@ -6458,7 +6232,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -6520,7 +6293,6 @@ exports.BattleMovedex = {
 		name: "Lock-On",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'lockon',
 		effect: {
 			duration: 2,
@@ -6545,7 +6317,6 @@ exports.BattleMovedex = {
 		name: "Lovely Kiss",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		status: 'slp',
 		secondary: false,
 		target: "normal",
@@ -6583,7 +6354,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -6600,7 +6370,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -6695,7 +6464,6 @@ exports.BattleMovedex = {
 		name: "Luster Purge",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -6718,7 +6486,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
@@ -6821,7 +6588,6 @@ exports.BattleMovedex = {
 		name: "Magical Leaf",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -6838,7 +6604,6 @@ exports.BattleMovedex = {
 		name: "Magma Storm",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -6855,7 +6620,6 @@ exports.BattleMovedex = {
 		name: "Magnet Bomb",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -6928,7 +6692,6 @@ exports.BattleMovedex = {
 		name: "Magnitude",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "adjacent",
 		type: "Ground"
@@ -6945,7 +6708,6 @@ exports.BattleMovedex = {
 		name: "Me First",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, pokemon) {
 			var decision = this.willMove(target);
 			if (decision) {
@@ -6980,7 +6742,6 @@ exports.BattleMovedex = {
 		name: "Mean Look",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onHit: function(target) {
 			target.addVolatile('trapped');
@@ -7020,7 +6781,6 @@ exports.BattleMovedex = {
 		name: "Mega Drain",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		drain: [1,2],
 		secondary: false,
 		target: "normal",
@@ -7039,7 +6799,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -7056,7 +6815,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
@@ -7075,7 +6833,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -7092,7 +6849,6 @@ exports.BattleMovedex = {
 		name: "Memento",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: false,
 		boosts: {
 			atk: -2,
@@ -7121,7 +6877,6 @@ exports.BattleMovedex = {
 		name: "Metal Burst",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -7138,7 +6893,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			self: {
@@ -7161,7 +6915,6 @@ exports.BattleMovedex = {
 		name: "Metal Sound",
 		pp: 40,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		boosts: {
 			spd: -2
@@ -7183,7 +6936,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: {
 			chance: 20,
@@ -7260,7 +7012,6 @@ exports.BattleMovedex = {
 		name: "Mimic",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, source) {
 			var disallowedMoves = {transform:1,struggle:1,sketch:1,mimic:1,chatter:1};
 			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
@@ -7293,7 +7044,6 @@ exports.BattleMovedex = {
 		name: "Mind Reader",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'lockon',
 		secondary: false,
 		target: "self",
@@ -7330,7 +7080,6 @@ exports.BattleMovedex = {
 		name: "Miracle Eye",
 		pp: 40,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'miracleeye',
 		effect: {
@@ -7367,7 +7116,6 @@ exports.BattleMovedex = {
 		name: "Mirror Coat",
 		pp: 20,
 		priority: -5,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -7383,6 +7131,7 @@ exports.BattleMovedex = {
 		name: "Mirror Move",
 		pp: 20,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target) {
 			var noMirrorMove = {acupressure:1, afteryou:1, aromatherapy:1, chatter:1, conversion2:1, counter:1, curse:1, doomdesire:1, feint:1, finalgambit:1, focuspunch:1, futuresight:1, gravity:1, guardsplit:1, hail:1, haze:1, healbell:1, healpulse:1, helpinghand:1, lightscreen:1, luckychant:1, mefirst:1, mimic:1, mirrorcoat:1, mirrormove:1, mist:1, mudsport:1, naturepower:1, perishsong:1, powersplit:1, psychup:1, quickguard:1, raindance:1, reflect:1, reflecttype:1, roleplay:1, safeguard:1, sandstorm:1, sketch:1, spikes:1, spitup:1, stealthrock:1, struggle:1, sunnyday:1, tailwind:1, toxicspikes:1, transform:1, watersport:1, wideguard:1};
 			if (!target.lastMove || noMirrorMove[target.lastMove] || this.getMove(target.lastMove).target === 'self') {
@@ -7407,7 +7156,6 @@ exports.BattleMovedex = {
 		name: "Mirror Shot",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -7465,7 +7213,6 @@ exports.BattleMovedex = {
 		name: "Mist Ball",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -7530,7 +7277,6 @@ exports.BattleMovedex = {
 		name: "Mud-Slap",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -7551,7 +7297,6 @@ exports.BattleMovedex = {
 		name: "Mud Bomb",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -7572,7 +7317,6 @@ exports.BattleMovedex = {
 		name: "Mud Shot",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -7622,7 +7366,6 @@ exports.BattleMovedex = {
 		name: "Muddy Water",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -7667,7 +7410,6 @@ exports.BattleMovedex = {
 		name: "Natural Gift",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		beforeMoveCallback: function(pokemon) {
 			var item = pokemon.getItem();
 			if (item.id && item.naturalGift) {
@@ -7721,7 +7463,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -7741,7 +7482,6 @@ exports.BattleMovedex = {
 		name: "Night Daze",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 40,
 			boosts: {
@@ -7764,7 +7504,6 @@ exports.BattleMovedex = {
 		name: "Night Shade",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -7782,7 +7521,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -7799,7 +7537,6 @@ exports.BattleMovedex = {
 		name: "Nightmare",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'nightmare',
 		effect: {
 			onResidualOrder: 9,
@@ -7833,7 +7570,6 @@ exports.BattleMovedex = {
 		name: "Octazooka",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -7854,7 +7590,6 @@ exports.BattleMovedex = {
 		name: "Odor Sleuth",
 		pp: 40,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'foresight',
 		secondary: false,
@@ -7872,7 +7607,6 @@ exports.BattleMovedex = {
 		name: "Ominous Wind",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			self: {
@@ -7901,7 +7635,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'lockedmove'
 		},
@@ -7921,7 +7654,6 @@ exports.BattleMovedex = {
 		name: "Overheat",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			boosts: {
 				spa: -2
@@ -7943,7 +7675,6 @@ exports.BattleMovedex = {
 		name: "Pain Split",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, pokemon) {
 			var averagehp = parseInt(target.hp + pokemon.hp) / 2;
 			target.sethp(averagehp);
@@ -7965,7 +7696,6 @@ exports.BattleMovedex = {
 		name: "Pay Day",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -7995,7 +7725,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -8012,9 +7741,8 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"perishsong": {
@@ -8067,7 +7795,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'lockedmove'
 		},
@@ -8086,7 +7813,6 @@ exports.BattleMovedex = {
 		name: "Pin Missile",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -8104,9 +7830,8 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"poisonfang": {
@@ -8121,7 +7846,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'tox'
@@ -8140,10 +7864,9 @@ exports.BattleMovedex = {
 		name: "Poison Gas",
 		pp: 40,
 		priority: 0,
-		isProtectable: true,
 		status: 'psn',
 		secondary: false,
-		target: "normal",
+		target: "foes",
 		type: "Poison"
 	},
 	"poisonjab": {
@@ -8159,7 +7882,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -8178,7 +7900,6 @@ exports.BattleMovedex = {
 		name: "PoisonPowder",
 		pp: 35,
 		priority: 0,
-		isProtectable: true,
 		status: 'psn',
 		affectedByImmunities: true,
 		secondary: false,
@@ -8196,7 +7917,6 @@ exports.BattleMovedex = {
 		name: "Poison Sting",
 		pp: 35,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -8216,7 +7936,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: {
 			chance: 10,
@@ -8237,7 +7956,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8253,7 +7971,6 @@ exports.BattleMovedex = {
 		name: "Powder Snow",
 		pp: 25,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'frz'
@@ -8272,7 +7989,6 @@ exports.BattleMovedex = {
 		name: "Power Gem",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Rock"
@@ -8288,7 +8004,6 @@ exports.BattleMovedex = {
 		name: "Power Split",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -8304,7 +8019,6 @@ exports.BattleMovedex = {
 		name: "Power Swap",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, source) {
 			var targetBoosts = {};
 			var sourceBoosts = {};
@@ -8370,7 +8084,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -8386,7 +8099,6 @@ exports.BattleMovedex = {
 		name: "Present",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		onModifyMove: function(move, pokemon, target) {
 			var rand = this.random(10);
 			if (rand < 2) {
@@ -8441,20 +8153,19 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, move) {
-				if (move && move.isProtectable) {
-					this.add('-activate', target, 'Protect');
-					var lockedmove = source.getVolatile('lockedmove');
-					if (lockedmove) {
-						// Outrage counter is removed
-						if (source.volatiles['lockedmove'].duration === 1) {
-							source.removeVolatile('lockedmove');
-						} else {
-							delete source.volatiles['lockedmove'];
-						}
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
+				this.add('-activate', target, 'Protect');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is removed
+					if (source.volatiles['lockedmove'].duration === 1) {
+						source.removeVolatile('lockedmove');
+					} else {
+						delete source.volatiles['lockedmove'];
 					}
-					this.singleEvent('MoveFail', move, null, target, source, move);
-					return null;
 				}
+				this.singleEvent('MoveFail', move, null, target, source, move);
+				return null;
 			}
 		},
 		secondary: false,
@@ -8472,7 +8183,6 @@ exports.BattleMovedex = {
 		name: "Psybeam",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'confusion'
@@ -8491,15 +8201,13 @@ exports.BattleMovedex = {
 		name: "Psych Up",
 		pp: 10,
 		priority: 0,
+		isNotProtectable: true,
 		onHit: function(target, source) {
 			var targetBoosts = {};
-
 			for (var i in target.baseBoosts) {
 				targetBoosts[i] = target.baseBoosts[i];
 			}
-
 			source.setBoost(targetBoosts);
-
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
 		secondary: false,
@@ -8518,7 +8226,6 @@ exports.BattleMovedex = {
 		name: "Psychic",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -8540,7 +8247,6 @@ exports.BattleMovedex = {
 		name: "Psycho Boost",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			boosts: {
 				spa: -2
@@ -8562,7 +8268,6 @@ exports.BattleMovedex = {
 		name: "Psycho Cut",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -8580,7 +8285,6 @@ exports.BattleMovedex = {
 		name: "Psycho Shift",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, pokemon) {
 			if (pokemon.status && !target.status && target.trySetStatus(pokemon.status)) {
 				pokemon.cureStatus();
@@ -8605,7 +8309,6 @@ exports.BattleMovedex = {
 		name: "Psyshock",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -8623,7 +8326,6 @@ exports.BattleMovedex = {
 		name: "Psystrike",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -8642,7 +8344,6 @@ exports.BattleMovedex = {
 		name: "Psywave",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -8662,7 +8363,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -8688,7 +8388,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		beforeTurnCallback: function(pokemon, target) {
 			target.side.addSideCondition('pursuit', pokemon);
 			if (!target.side.sideConditions['pursuit'].sources) {
@@ -8726,7 +8425,6 @@ exports.BattleMovedex = {
 		name: "Quash",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -8744,7 +8442,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8839,7 +8536,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8856,7 +8552,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 3,
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Bug"
 	},
 	"raindance": {
@@ -8889,7 +8585,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		self: {
 			onHit: function(pokemon) {
 				if (pokemon.removeVolatile('leechseed') && pokemon.hp) {
@@ -8897,7 +8592,9 @@ exports.BattleMovedex = {
 				}
 				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
 				for (var i in sideConditions) {
-					if (pokemon.side.removeSideCondition(i) && pokemon.hp) this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] '+pokemon);
+					if (pokemon.side.removeSideCondition(i) && pokemon.hp) {
+						this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] '+pokemon);
+					}
 				}
 				if (pokemon.volatiles['partiallytrapped'] && pokemon.hp) {
 					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.name, '[from] move: Rapid Spin', '[of] '+pokemon, '[partiallytrapped]');
@@ -8920,7 +8617,6 @@ exports.BattleMovedex = {
 		name: "Razor Leaf",
 		pp: 25,
 		priority: 0,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "foes",
@@ -8939,7 +8635,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -8960,7 +8655,6 @@ exports.BattleMovedex = {
 		name: "Razor Wind",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		critRatio: 2,
 		secondary: false,
@@ -9060,7 +8754,6 @@ exports.BattleMovedex = {
 		name: "Reflect Type",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, source) {
 			source.addVolatile("reflecttype", target);
 		},
@@ -9110,7 +8803,6 @@ exports.BattleMovedex = {
 		name: "Relic Song",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		secondary: {
 			chance: 10,
@@ -9128,7 +8820,7 @@ exports.BattleMovedex = {
 			// renderer takes care of this for us
 			pokemon.transformed = false;
 		},
-		target: "normal",
+		target: "foes",
 		type: "Normal"
 	},
 	"rest": {
@@ -9168,7 +8860,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -9189,7 +8880,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -9213,7 +8903,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -4,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -9250,7 +8939,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -9267,7 +8955,6 @@ exports.BattleMovedex = {
 		name: "Roar",
 		pp: 20,
 		priority: -6,
-		isProtectable: true,
 		isSoundBased: true,
 		forceSwitch: true,
 		notSubBlocked: true,
@@ -9286,7 +8973,6 @@ exports.BattleMovedex = {
 		name: "Roar of Time",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -9306,7 +8992,6 @@ exports.BattleMovedex = {
 		name: "Rock Blast",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -9324,7 +9009,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion'
@@ -9364,7 +9048,6 @@ exports.BattleMovedex = {
 		name: "Rock Slide",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -9384,7 +9067,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -9405,7 +9087,6 @@ exports.BattleMovedex = {
 		name: "Rock Throw",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Rock"
@@ -9421,7 +9102,6 @@ exports.BattleMovedex = {
 		name: "Rock Tomb",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -9442,7 +9122,6 @@ exports.BattleMovedex = {
 		name: "Rock Wrecker",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -9461,6 +9140,7 @@ exports.BattleMovedex = {
 		name: "Role Play",
 		pp: 10,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target, source) {
 			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, wonderguard:1, zenmode:1};
 			if (bannedAbilities[target.ability] || source.ability === 'multitype' || target.ability === source.ability) {
@@ -9490,7 +9170,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -9523,7 +9202,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		effect: {
 			duration: 2,
 			onStart: function() {
@@ -9603,7 +9281,6 @@ exports.BattleMovedex = {
 		name: "Round",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		secondary: false,
 		target: "normal",
@@ -9621,7 +9298,6 @@ exports.BattleMovedex = {
 		name: "Sacred Fire",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		thawsUser: true,
 		secondary: {
 			chance: 50,
@@ -9643,7 +9319,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		ignoreEvasion: true,
 		ignoreDefensive: true,
 		secondary: false,
@@ -9707,7 +9382,6 @@ exports.BattleMovedex = {
 		name: "Sand-Attack",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			accuracy: -1
 		},
@@ -9726,7 +9400,6 @@ exports.BattleMovedex = {
 		name: "Sand Tomb",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -9760,7 +9433,6 @@ exports.BattleMovedex = {
 		name: "Scald",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		thawsUser: true,
 		secondary: {
 			chance: 30,
@@ -9780,7 +9452,6 @@ exports.BattleMovedex = {
 		name: "Scary Face",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			spe: -2
 		},
@@ -9800,7 +9471,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -9816,7 +9486,6 @@ exports.BattleMovedex = {
 		name: "Screech",
 		pp: 40,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		boosts: {
 			def: -2
@@ -9837,12 +9506,11 @@ exports.BattleMovedex = {
 		name: "Searing Shot",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'brn'
 		},
-		target: "normal",
+		target: "adjacent",
 		type: "Fire"
 	},
 	"secretpower": {
@@ -9856,7 +9524,6 @@ exports.BattleMovedex = {
 		name: "Secret Power",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -9879,7 +9546,6 @@ exports.BattleMovedex = {
 		name: "Secret Sword",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -9896,7 +9562,6 @@ exports.BattleMovedex = {
 		name: "Seed Bomb",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -9913,7 +9578,6 @@ exports.BattleMovedex = {
 		name: "Seed Flare",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 40,
 			boosts: {
@@ -9937,7 +9601,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -9953,7 +9616,6 @@ exports.BattleMovedex = {
 		name: "Selfdestruct",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		selfdestruct: true,
 		secondary: false,
 		target: "adjacent",
@@ -9971,7 +9633,6 @@ exports.BattleMovedex = {
 		name: "Shadow Ball",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -9994,7 +9655,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -10042,7 +9702,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
@@ -10061,7 +9720,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -10097,7 +9755,6 @@ exports.BattleMovedex = {
 		name: "Sheer Cold",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		ohko: true,
 		target: "normal",
@@ -10159,7 +9816,6 @@ exports.BattleMovedex = {
 		name: "Shock Wave",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -10176,7 +9832,6 @@ exports.BattleMovedex = {
 		name: "Signal Beam",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'confusion'
@@ -10195,7 +9850,6 @@ exports.BattleMovedex = {
 		name: "Silver Wind",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			self: {
@@ -10222,7 +9876,6 @@ exports.BattleMovedex = {
 		name: "Simple Beam",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onTryHit: function(pokemon) {
 			var bannedAbilities = {multitype:1, simple:1, truant:1};
@@ -10252,7 +9905,6 @@ exports.BattleMovedex = {
 		name: "Sing",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		status: 'slp',
 		secondary: false,
@@ -10271,6 +9923,7 @@ exports.BattleMovedex = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
+		isNotProtectable: true,
 		onHit: function(target, source) {
 			var disallowedMoves = {chatter:1,sketch:1,struggle:1};
 			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
@@ -10305,7 +9958,6 @@ exports.BattleMovedex = {
 		name: "Skill Swap",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onTryHit: function(target, source) {
 			var bannedAbilities = {illusion:1, multitype:1, wonderguard:1};
 			if (bannedAbilities[target.ability] || bannedAbilities[source.ability]) {
@@ -10338,7 +9990,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		effect: {
 			onStart: function(pokemon) {
@@ -10360,13 +10011,12 @@ exports.BattleMovedex = {
 		name: "Sky Attack",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"skydrop": {
@@ -10381,7 +10031,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		effect: {
 			onSourceModifyPokemon: function(pokemon) {
@@ -10407,7 +10056,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"skyuppercut": {
@@ -10423,7 +10072,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
@@ -10459,7 +10107,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10476,7 +10123,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -10494,7 +10140,6 @@ exports.BattleMovedex = {
 		name: "Sleep Powder",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		status: 'slp',
 		affectedByImmunities: true,
 		secondary: false,
@@ -10550,7 +10195,6 @@ exports.BattleMovedex = {
 		name: "Sludge",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -10570,7 +10214,6 @@ exports.BattleMovedex = {
 		name: "Sludge Bomb",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -10590,12 +10233,11 @@ exports.BattleMovedex = {
 		name: "Sludge Wave",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'psn'
 		},
-		target: "normal",
+		target: "adjacent",
 		type: "Poison"
 	},
 	"smackdown": {
@@ -10609,7 +10251,6 @@ exports.BattleMovedex = {
 		name: "Smack Down",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'smackdown',
 		effect: {
 			onStart: function(pokemon) {
@@ -10649,7 +10290,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onHit: function(target) {
 			if (target.status === 'par') target.cureStatus();
 		},
@@ -10668,7 +10308,6 @@ exports.BattleMovedex = {
 		name: "Smog",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 40,
 			status: 'psn'
@@ -10687,7 +10326,6 @@ exports.BattleMovedex = {
 		name: "SmokeScreen",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			accuracy: -1
 		},
@@ -10706,7 +10344,6 @@ exports.BattleMovedex = {
 		name: "Snarl",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		secondary: {
 			chance: 100,
@@ -10714,7 +10351,7 @@ exports.BattleMovedex = {
 				spa: -1
 			}
 		},
-		target: "normal",
+		target: "foes",
 		type: "Dark"
 	},
 	"snatch": {
@@ -10759,7 +10396,6 @@ exports.BattleMovedex = {
 		name: "Snore",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		sleepUsable: true,
 		onTryHit: function(target, source) {
@@ -10783,7 +10419,6 @@ exports.BattleMovedex = {
 		name: "Soak",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'soak',
 		effect: {
@@ -10836,7 +10471,6 @@ exports.BattleMovedex = {
 		name: "SolarBeam",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isTwoTurnMove: true,
 		onChargeMove: function() {
 			if (this.weather === 'sunnyday') return false; // skip charge turn
@@ -10857,7 +10491,6 @@ exports.BattleMovedex = {
 		name: "SonicBoom",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10874,7 +10507,6 @@ exports.BattleMovedex = {
 		name: "Spacial Rend",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -10893,7 +10525,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -10913,7 +10544,6 @@ exports.BattleMovedex = {
 		name: "Spider Web",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onHit: function(target) {
 			target.addVolatile('trapped');
@@ -10933,7 +10563,6 @@ exports.BattleMovedex = {
 		name: "Spike Cannon",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -10991,7 +10620,6 @@ exports.BattleMovedex = {
 		name: "Spit Up",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onTryHit: function(target, pokemon) {
 			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
 		},
@@ -11016,7 +10644,6 @@ exports.BattleMovedex = {
 		name: "Spite",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onHit: function(target) {
 			if (target.deductPP(target.lastMove, 4)) {
@@ -11045,7 +10672,7 @@ exports.BattleMovedex = {
 			return null;
 		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"spore": {
@@ -11060,7 +10687,6 @@ exports.BattleMovedex = {
 		name: "Spore",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		status: 'slp',
 		affectedByImmunities: true,
 		secondary: false,
@@ -11112,7 +10738,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			self: {
@@ -11180,7 +10805,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -11200,7 +10824,6 @@ exports.BattleMovedex = {
 		name: "Stone Edge",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -11221,7 +10844,6 @@ exports.BattleMovedex = {
 		name: "Stored Power",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -11239,7 +10861,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		willCrit: true,
 		secondary: false,
 		target: "normal",
@@ -11260,7 +10881,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -11280,7 +10900,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -11296,7 +10915,6 @@ exports.BattleMovedex = {
 		name: "String Shot",
 		pp: 40,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			spe: -1
 		},
@@ -11317,7 +10935,6 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		beforeMoveCallback: function(pokemon) {
 			this.add('-message', pokemon.name+' has no moves left! (placeholder)');
 		},
@@ -11344,14 +10961,13 @@ exports.BattleMovedex = {
 		name: "Struggle Bug",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			boosts: {
 				spa: -1
 			}
 		},
-		target: "normal",
+		target: "foes",
 		type: "Bug"
 	},
 	"stunspore": {
@@ -11366,7 +10982,6 @@ exports.BattleMovedex = {
 		name: "Stun Spore",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		status: 'par',
 		affectedByImmunities: true,
 		secondary: false,
@@ -11385,7 +11000,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		recoil: [1,4],
 		secondary: false,
 		target: "normal",
@@ -11481,7 +11095,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 1,
 		isContact: true,
-		isProtectable: true,
 		onTryHit: function(target) {
 			decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status') {
@@ -11525,7 +11138,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -11543,7 +11155,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		self: {
 			boosts: {
 				atk: -1,
@@ -11565,7 +11176,6 @@ exports.BattleMovedex = {
 		name: "Supersonic",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		volatileStatus: 'confusion',
 		secondary: false,
@@ -11584,7 +11194,6 @@ exports.BattleMovedex = {
 		name: "Surf",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "adjacent",
 		type: "Water"
@@ -11600,7 +11209,6 @@ exports.BattleMovedex = {
 		name: "Swagger",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'confusion',
 		boosts: {
 			atk: 2
@@ -11644,7 +11252,6 @@ exports.BattleMovedex = {
 		name: "Sweet Kiss",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "normal",
@@ -11661,7 +11268,6 @@ exports.BattleMovedex = {
 		name: "Sweet Scent",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			evasion: -1
 		},
@@ -11680,7 +11286,6 @@ exports.BattleMovedex = {
 		name: "Swift",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "foes",
 		type: "Normal"
@@ -11697,7 +11302,6 @@ exports.BattleMovedex = {
 		name: "Switcheroo",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, source) {
 			var yourItem = target.takeItem(source);
 			var myItem = source.takeItem();
@@ -11751,12 +11355,11 @@ exports.BattleMovedex = {
 		name: "Synchronoise",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		onTryHit: function(target, source) {
 			return target.hasType(source.types);
 		},
 		secondary: false,
-		target: "normal",
+		target: "adjacent",
 		type: "Psychic"
 	},
 	"synthesis": {
@@ -11793,7 +11396,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -11831,7 +11433,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -11848,7 +11449,6 @@ exports.BattleMovedex = {
 		name: "Tail Whip",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			def: -1
 		},
@@ -11906,7 +11506,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		recoil: [1,4],
 		secondary: false,
 		target: "normal",
@@ -11924,7 +11523,6 @@ exports.BattleMovedex = {
 		name: "Taunt",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'taunt',
 		effect: {
@@ -11969,7 +11567,6 @@ exports.BattleMovedex = {
 		name: "Techno Blast",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		onModifyMove: function(move, pokemon) {
 			move.type = this.runEvent('Drive', pokemon, null, 'technoblast', 'Normal');
 		},
@@ -11989,7 +11586,6 @@ exports.BattleMovedex = {
 		name: "Teeter Dance",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: false,
 		volatileStatus: 'confusion',
 		secondary: false,
@@ -12007,7 +11603,6 @@ exports.BattleMovedex = {
 		name: "Telekinesis",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'telekinesis',
 		effect: {
@@ -12044,7 +11639,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: false,
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Psychic"
 	},
 	"thief": {
@@ -12059,7 +11654,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onHit: function(target, source) {
 			if (source.item) {
 				return;
@@ -12091,7 +11685,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		self: {
 			volatileStatus: 'lockedmove'
 		},
@@ -12111,7 +11704,6 @@ exports.BattleMovedex = {
 		name: "Thunder",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onModifyMove: function(move) {
 			if (this.weather === 'raindance') move.accuracy = true;
 			else if (this.weather === 'sunnyday') move.accuracy = 50;
@@ -12136,7 +11728,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondaries: [ {
 				chance: 10,
 				status: 'par'
@@ -12161,7 +11752,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		isPunchAttack: true,
 		secondary: {
 			chance: 10,
@@ -12181,7 +11771,6 @@ exports.BattleMovedex = {
 		name: "ThunderShock",
 		pp: 30,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'par'
@@ -12201,7 +11790,6 @@ exports.BattleMovedex = {
 		name: "Thunder Wave",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		status: 'par',
 		affectedByImmunities: true,
 		secondary: false,
@@ -12220,7 +11808,6 @@ exports.BattleMovedex = {
 		name: "Thunderbolt",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 10,
 			status: 'par'
@@ -12239,7 +11826,6 @@ exports.BattleMovedex = {
 		name: "Tickle",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		boosts: {
 			atk: -1,
 			def: -1
@@ -12260,7 +11846,6 @@ exports.BattleMovedex = {
 		name: "Torment",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'torment',
 		effect: {
@@ -12290,7 +11875,6 @@ exports.BattleMovedex = {
 		name: "Toxic",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		status: 'tox',
 		affectedByImmunities: true,
 		secondary: false,
@@ -12351,6 +11935,7 @@ exports.BattleMovedex = {
 		name: "Transform",
 		pp: 10,
 		priority: 0,
+		isNotProtectable: true,
 		onHit: function(target, pokemon) {
 			if (!pokemon.transformInto(target)) {
 				return false;
@@ -12373,7 +11958,6 @@ exports.BattleMovedex = {
 		name: "Tri Attack",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			onHit: function(target, source) {
@@ -12402,7 +11986,6 @@ exports.BattleMovedex = {
 		name: "Trick",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onHit: function(target, source) {
 			var yourItem = target.takeItem(source);
 			var myItem = source.takeItem();
@@ -12490,7 +12073,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		multihit: [3,3],
 		effect: {
 			duration: 1,
@@ -12533,7 +12115,6 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -12549,7 +12130,6 @@ exports.BattleMovedex = {
 		name: "Twineedle",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		multihit: [2,2],
 		secondary: {
 			chance: 20,
@@ -12569,7 +12149,6 @@ exports.BattleMovedex = {
 		name: "Twister",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -12590,7 +12169,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		selfSwitch: true,
 		secondary: false,
 		target: "normal",
@@ -12607,7 +12185,6 @@ exports.BattleMovedex = {
 		name: "Uproar",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isSoundBased: true,
 		secondary: false,
 		target: "normal",
@@ -12626,7 +12203,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		self: {
 			boosts: {
 				def: -1,
@@ -12650,7 +12226,6 @@ exports.BattleMovedex = {
 		name: "Vacuum Wave",
 		pp: 30,
 		priority: 1,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -12672,7 +12247,6 @@ exports.BattleMovedex = {
 		name: "Venoshock",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Poison"
@@ -12689,7 +12263,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -12706,7 +12279,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -12723,7 +12295,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -1,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -12740,7 +12311,6 @@ exports.BattleMovedex = {
 		name: "Volt Switch",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		selfSwitch: true,
 		secondary: false,
 		target: "normal",
@@ -12759,7 +12329,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		recoil: [1,3],
 		secondary: {
 			chance: 10,
@@ -12784,7 +12353,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		onHit: function(target) {
 			if (target.status === 'slp') target.cureStatus();
 		},
@@ -12803,7 +12371,6 @@ exports.BattleMovedex = {
 		name: "Water Gun",
 		pp: 25,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -12819,7 +12386,6 @@ exports.BattleMovedex = {
 		name: "Water Pledge",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -12835,12 +12401,11 @@ exports.BattleMovedex = {
 		name: "Water Pulse",
 		pp: 20,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion'
 		},
-		target: "normal",
+		target: "any",
 		type: "Water"
 	},
 	"watersport": {
@@ -12886,7 +12451,6 @@ exports.BattleMovedex = {
 		name: "Water Spout",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: false,
 		target: "foes",
 		type: "Water"
@@ -12904,7 +12468,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -12928,7 +12491,6 @@ exports.BattleMovedex = {
 		name: "Weather Ball",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		onModifyMove: function(move) {
 			switch (this.weather) {
 			case 'sunnyday':
@@ -12960,7 +12522,6 @@ exports.BattleMovedex = {
 		name: "Whirlpool",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -12978,7 +12539,6 @@ exports.BattleMovedex = {
 		name: "Whirlwind",
 		pp: 20,
 		priority: -6,
-		isProtectable: true,
 		forceSwitch: true,
 		secondary: false,
 		target: "normal",
@@ -13013,7 +12573,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		recoil: [1,4],
 		secondary: false,
 		target: "normal",
@@ -13031,7 +12590,6 @@ exports.BattleMovedex = {
 		name: "Will-O-Wisp",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		status: 'brn',
 		affectedByImmunities: true,
 		secondary: false,
@@ -13050,9 +12608,8 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"wish": {
@@ -13158,7 +12715,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		recoil: [1,3],
 		secondary: false,
 		target: "normal",
@@ -13196,7 +12752,6 @@ exports.BattleMovedex = {
 		name: "Worry Seed",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		onTryHit: function(pokemon) {
 			var bannedAbilities = {insomnia:1, multitype:1, truant:1};
@@ -13231,7 +12786,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -13252,7 +12806,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -13270,7 +12823,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -13287,7 +12839,6 @@ exports.BattleMovedex = {
 		name: "Yawn",
 		pp: 10,
 		priority: 0,
-		isProtectable: true,
 		isBounceable: true,
 		volatileStatus: 'yawn',
 		onTryHit: function(target) {
@@ -13320,7 +12871,6 @@ exports.BattleMovedex = {
 		name: "Zap Cannon",
 		pp: 5,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 100,
 			status: 'par'
@@ -13341,7 +12891,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -13361,7 +12910,6 @@ exports.BattleMovedex = {
 		name: "Paleo Wave",
 		pp: 15,
 		priority: 0,
-		isProtectable: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -13384,7 +12932,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -13407,7 +12954,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isProtectable: true,
 		drain: [1,2],
 		onTryHit: function(target, source) {
 			if (source.template.name !== 'Magikarp') {
