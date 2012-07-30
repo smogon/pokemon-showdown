@@ -406,7 +406,6 @@ var User = (function () {
 			}
 		} else {
 			console.log('verify failed: '+tokenData);
-			console.log('verify sig: '+tokenSig);
 		}
 
 		if (body) {
