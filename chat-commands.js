@@ -46,6 +46,23 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		break;
 
+	case '!birkal':
+	case 'birkal':
+		if (canTalk(user, room) && user.can('broadcast') && room.id === 'lobby') {
+			if (cmd === '!birkal') {
+				room.log.push({
+					name: user.getIdentity(),
+					message: '!birkal '+target
+				});
+			}
+			room.log.push({
+				name: ' Birkal',
+				message: '/me '+target
+			});
+			return false;
+		}
+		break;
+
 	case 'namelock':
 	case 'nl':
 		if(!target) {
