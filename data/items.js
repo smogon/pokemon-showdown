@@ -1760,8 +1760,7 @@ exports.BattleItems = {
 		spritenum: 287,
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.template.species === 'Ditto') {
-				stats.def *= 1.5;
-				stats.spd *= 1.5;
+				stats.def *= 2;
 			}
 		},
 		desc: "Raises Ditto's Defense and Special Defense by 50%."
