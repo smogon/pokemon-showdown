@@ -109,9 +109,10 @@ if (config.protocol === 'ws') {
  * Otherwise, an empty string will be returned.
  */
 toId = function(text) {
-	text = (''+(text||''));
 	if (typeof text === 'number') text = ''+text;
 	if (text && text.id) text = text.id;
+	else if (text && text.userid) text = text.userid;
+	text = string(text);
 	if (typeof text !== 'string') return ''; //???
 	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
@@ -162,10 +163,7 @@ Verifier = require('./verifier.js');
 
 parseCommand = require('./chat-commands.js').parseCommand;
 
-var sim = require('./battles.js');
-BattlePokemon = sim.BattlePokemon;
-BattleSide = sim.BattleSide;
-Battle = sim.Battle;
+Simulator = require('./simulator.js');
 
 lockdown = false;
 

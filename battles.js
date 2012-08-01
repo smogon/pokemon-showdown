@@ -1,3 +1,83 @@
+require('sugar');
+
+config = require('./config/config.js');
+
+/**
+ * Converts anything to an ID. An ID must have only lowercase alphanumeric
+ * characters.
+ * If a string is passed, it will be converted to lowercase and
+ * non-alphanumeric characters will be stripped.
+ * If an object with an ID is passed, its ID will be returned.
+ * Otherwise, an empty string will be returned.
+ */
+toId = function(text) {
+	if (typeof text === 'number') text = ''+text;
+	if (text && text.id) text = text.id;
+	text = string(text);
+	if (typeof text !== 'string') return ''; //???
+	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
+};
+toUserid = toId;
+
+/**
+ * Escapes a string for HTML
+ * If strEscape is true, escapes it for JavaScript, too
+ */
+sanitize = function(str, strEscape) {
+	str = (''+(str||''));
+	str = str.escapeHTML();
+	if (strEscape) str = str.replace(/'/g, '\\\'');
+	return str;
+};
+
+/**
+ * Safely ensures the passed variable is a string
+ * Simply doing ''+str can crash if str.toString crashes or isn't a function
+ * If we're expecting a string and being given anything that isn't a string
+ * or a number, it's safe to assume it's an error, and return ''
+ */
+string = function(str) {
+	if (typeof str === 'string' || typeof str === 'number') return ''+str;
+	return '';
+}
+
+/**
+ * Converts any variable to an integer (numbers get floored, non-numbers
+ * become 0). Then clamps it between min and (optionally) max.
+ */
+clampIntRange = function(num, min, max) {
+	if (typeof num !== 'number') num = 0;
+	num = Math.floor(num);
+	if (num < min) num = min;
+	if (typeof max !== 'undefined' && num > max) num = max;
+	return num;
+};
+
+Data = {};
+Tools = require('./tools.js');
+
+var Battles = {};
+
+process.on('message', function(message) {
+	console.log('CHILD MESSAGE RECV: "'+message+'"');
+	var nlIndex = message.indexOf("\n");
+	var more = '';
+	if (nlIndex > 0) {
+		more = message.substr(nlIndex+1);
+		message = message.substr(0, nlIndex);
+	}
+	var data = message.split('|');
+	if (data[1] === 'init') {
+		if (!Battles[data[0]]) {
+			Battles[data[0]] = new Battle(data[0], data[2], data[3]);
+		}
+	} else {
+		if (Battles[data[0]]) {
+			Battles[data[0]].receive(data, more);
+		}
+	}
+});
+
 function BattlePokemon(set, side) {
 	var selfB = side.battle;
 	var selfS = side;
@@ -11,7 +91,7 @@ function BattlePokemon(set, side) {
 	this.baseTemplate = selfB.getTemplate(set.species || set.name);
 	if (!this.baseTemplate.exists) {
 		selfB.debug('Unidentified species: '+this.species);
-		this.baseTemplate = selfB.getTemplate(this.species);
+		this.baseTemplate = selfB.getTemplate('Bulbasaur');
 	}
 	this.species = this.baseTemplate.species;
 	if (set.name === set.species || !set.name || !set.species) {
@@ -192,8 +272,8 @@ function BattlePokemon(set, side) {
 		return selfP.fullname;
 	};
 	this.getDetails = function() {
-		if (selfP.illusion) return selfP.illusion.details + ' | ' + selfP.getHealth();
-		return selfP.details + ' | ' + selfP.getHealth();
+		if (selfP.illusion) return selfP.illusion.details + '|' + selfP.getHealth();
+		return selfP.details + '|' + selfP.getHealth();
 	};
 
 	this.update = function(init) {
@@ -854,14 +934,14 @@ function BattlePokemon(set, side) {
 	selfP.clearVolatile(true);
 }
 
-function BattleSide(user, battle, n, team) {
+function BattleSide(name, battle, n, team) {
 	var selfB = battle;
 	var selfS = this;
 
 	this.battle = battle;
 	this.n = n;
-	this.user = user;
-	this.name = user.name;
+	this.name = name;
+	this.isActive = false;
 	this.pokemon = [];
 	this.pokemonLeft = 0;
 	this.active = [null];
@@ -949,10 +1029,8 @@ function BattleSide(user, battle, n, team) {
 		return true;
 	};
 	this.emitUpdate = function(update) {
-		if (selfS.user) {
-			update.room = selfB.roomid;
-			selfS.user.emit('update', update);
-		}
+		update.room = selfB.id;
+		selfB.send('request', this.id+"\n"+JSON.stringify(update));
 	};
 	this.destroy = function() {
 		// deallocate ourself
@@ -971,15 +1049,8 @@ function BattleSide(user, battle, n, team) {
 		if (selfS.decision) {
 			delete selfS.decision.side;
 			delete selfS.decision.pokemon;
-			delete selfS.decision.user;
 		}
 		selfS.decision = null;
-
-		// make sure no user is referencing us
-		if (selfS.user) {
-			delete selfS.user.sides[selfB.roomid];
-		}
-		selfS.user = null;
 
 		// get rid of some possibly-circular references
 		selfS.battle = null;
@@ -1004,6 +1075,7 @@ function Battle(roomid, format, rated) {
 	this.lastUpdate = 0;
 	this.curCallback = '';
 	this.roomid = roomid;
+	this.id = roomid;
 
 	this.rated = rated;
 
@@ -1532,7 +1604,7 @@ function Battle(roomid, format, rated) {
 	};
 	this.callback = function(type) {
 		selfB.curCallback = type;
-		if (!selfB.p1.user || !selfB.p2.user) {
+		if (!selfB.p1.isActive || !selfB.p2.isActive) {
 			return;
 		}
 		selfB.update();
@@ -1614,37 +1686,16 @@ function Battle(roomid, format, rated) {
 		if (selfB.ended) {
 			return false;
 		}
-		if (!side) {
-			selfB.winner = '';
-		} else if (side === selfB.p1) {
-			winSide = side;
-			if (selfB.p1.user) {
-				selfB.winner = selfB.p1.user.userid;
-			}
-		} else if (side === selfB.p2) {
-			winSide = side;
-			if (selfB.p2.user) {
-				selfB.winner = selfB.p2.user.userid;
-			}
-		} else if (selfB.p1.user && side === selfB.p1.user.userid) {
-			winSide = selfB.p1;
-			selfB.winner = side;
-		} else if (selfB.p2.user && side === selfB.p2.user.userid) {
-			winSide = selfB.p2;
-			selfB.winner = side;
-		} else if (selfB.rated && side === selfB.rated.p1) {
-			winSide = selfB.p1;
-			selfB.winner = side;
-		} else if (selfB.rated && side === selfB.rated.p2) {
-			winSide = selfB.p2;
-			selfB.winner = side;
-		} else {
-			return false;
+		if (side === 'p1' || side === 'p2') {
+			side = selfB[side];
+		} else if (side !== selfB.p1 && side !== selfB.p2) {
+			side = null;
 		}
+		selfB.winner = side?side.name:'';
 
 		selfB.add('');
-		if (winSide) {
-			selfB.add('win', winSide.name);
+		if (side) {
+			selfB.add('win', side.name);
 		} else {
 			selfB.add('tie');
 		}
@@ -1770,7 +1821,7 @@ function Battle(roomid, format, rated) {
 	this.start = function() {
 		if (selfB.active) return;
 
-		if (!selfB.p1 || !selfB.p1.user || !selfB.p2 || !selfB.p2.user) {
+		if (!selfB.p1 || !selfB.p1.isActive || !selfB.p2 || !selfB.p2.isActive) {
 			// need two players to start
 			return;
 		}
@@ -1780,11 +1831,11 @@ function Battle(roomid, format, rated) {
 
 		if (selfB.started) {
 			selfB.callback(selfB.curCallback);
-			selfB.active = true;
+			selfB.isActive = true;
 			selfB.activeTurns = 0;
 			return;
 		}
-		selfB.active = true;
+		selfB.isActive = true;
 		selfB.activeTurns = 0;
 		selfB.started = true;
 		selfB.p2.foe = selfB.p1;
@@ -2306,7 +2357,7 @@ function Battle(roomid, format, rated) {
 			selfB.runEvent(decision.event, decision.pokemon);
 			break;
 		case 'team':
-			var i = parseInt(decision.team[0]);
+			var i = parseInt(decision.team[0], 10);
 			if (i >= 6 || i < 0) return;
 
 			if (i == 0) return;
@@ -2427,7 +2478,7 @@ function Battle(roomid, format, rated) {
 		if (!decision.pokemon) decision.pokemon = pokemon;
 		selfB.addQueue(decision);
 	};
-	this.decision = function(user, choice, data, recurse) {
+	this.decide = function(sideid, choice, data, recurse) {
 		if (!selfB.decisionWaiting) {
 			return;
 		}
@@ -2440,9 +2491,9 @@ function Battle(roomid, format, rated) {
 			selfB.win();
 			return false; // infinite recursion
 		}
-		if (!user) return; // wtf
-		if (!user.sides[selfB.roomid]) return; // wtf
-		var side = user.sides[selfB.roomid];
+		var side = null;
+		if (sideid === 'p1' || sideid === 'p2') side = selfB[sideid];
+		if (!side) return; // wtf
 		var decision = {side: side, choice: choice, priority: 0, speed: 0};
 		if (side.decision === true) {
 			// Don't change a decision if it's not your turn
@@ -2465,7 +2516,7 @@ function Battle(roomid, format, rated) {
 			side.decision = decision;
 		} else if (choice === 'switch') {
 			//console.log('switching to '+data);
-			data = Math.floor(data);
+			data = parseInt(data, 10);
 			if (data < 0) data = 0;
 			if (data > side.pokemon.length-1) data = side.pokemon.length-1;
 			var pokemon = side.pokemon[data];
@@ -2475,27 +2526,27 @@ function Battle(roomid, format, rated) {
 				// todo: wtf
 				if (!side.active[0]) {
 					selfB.debug("The game hasn't started yet");
-					selfB.decision(user, 'move', 'no clue', recurse+1);
+					selfB.decide(sideid, 'move', 'no clue', recurse+1);
 					return;
 				}
 				decision.pokemon = side.active[0];
 				if (side.active[0].trapped && selfB.curCallback === 'move') {
 					// hacker!
 					selfB.debug("Can't switch: The active pokemon is trapped");
-					selfB.decision(user, 'move', 'switch trapped', recurse+1);
+					selfB.decide(sideid, 'move', 'switch trapped', recurse+1);
 					return;
 				}
 				if (decision.pokemon === pokemon) {
 					// no
 					selfB.debug("Can't switch: You can't switch to an active pokemon");
-					selfB.decision(user, 'move', 'null switch', recurse+1);
+					selfB.decide(sideid, 'move', 'null switch', recurse+1);
 					return;
 				}
 				side.decision = decision;
 			} else {
 				selfB.debug("Can't switch: This pokemon doesn't exist");
 				// hacker!
-				selfB.decision(user, 'move', 'pokemon doesnt exist', recurse+1);
+				selfB.decide(sideid, 'move', 'pokemon doesnt exist', recurse+1);
 				return;
 			}
 		}
@@ -2519,7 +2570,7 @@ function Battle(roomid, format, rated) {
 						return;
 					}
 					selfB.debug('Hacking detected, using fainted pokemon\'s move; forcing switch to '+pokemon.id);
-					selfB.decision(user, 'switch', pokemon.id, recurse+1);
+					selfB.decide(sideid, 'switch', pokemon.id, recurse+1);
 				}
 				if (!side.active[0].canUseMove(move)) {
 					var badmove = move;
@@ -2535,7 +2586,7 @@ function Battle(roomid, format, rated) {
 			} else {
 				// hacker!
 				selfB.debug('Move not found: '+data);
-				selfB.decision(user, 'move', 'switch trapped', recurse+1);
+				selfB.decide(sideid, 'move', 'switch trapped', recurse+1);
 				return;
 			}
 		}
@@ -2551,91 +2602,141 @@ function Battle(roomid, format, rated) {
 			selfB.p2.decision = true;
 			selfB.go();
 		}
+
+		{
+			var inactiveSide = -1;
+			if (!selfB.p1.isActive && selfB.p2.isActive) {
+				inactiveSide = 0;
+			} else if (selfB.p1.isActive && !selfB.p2.isActive) {
+				inactiveSide = 1;
+			} else if (!selfB.p1.decision && selfB.p2.decision) {
+				inactiveSide = 0;
+			} else if (selfB.p1.decision && !selfB.p2.decision) {
+				inactiveSide = 1;
+			}
+			if (inactiveSide !== selfB.inactiveSide) {
+				this.send('inactiveside', inactiveSide);
+				selfB.inactiveSide = inactiveSide;
+			}
+		}
 	};
 	this.add = function() {
-		selfB.log.push('| '+Array.prototype.slice.call(arguments).join(' | '));
+		selfB.log.push('|'+Array.prototype.slice.call(arguments).join('|'));
 	};
 	this.debug = function(activity) {
 		if (selfB.getFormat(selfB.format).debug) {
 			selfB.add('debug', activity);
 		}
 	};
-	this.join = function(user, slot, team) {
-		if (selfB.p1 && selfB.p1.user && selfB.p2 && selfB.p2.user) return false;
-		if (!user) return false; // !!!
-		if (user.sides[selfB.roomid]) return false;
-		if (selfB.p1 && selfB.p1.user || slot === 2) {
+
+	// players
+
+	this.join = function(slot, name, avatar, team) {
+		if (selfB.p1 && selfB.p1.isActive && selfB.p2 && selfB.p2.isActive) return false;
+		if (selfB.p1 && selfB.p1.isActive || slot === 'p2') {
 			if (selfB.started) {
-				user.sides[selfB.roomid] = selfB.p2;
-				selfB.p2.user = user;
-				user.sides[selfB.roomid].name = user.name;
+				selfB.p2.name = name;
 			} else {
-				//console.log("NEW SIDE: "+user.name);
-				selfB.p2 = new BattleSide(user, selfB, 1, team);
+				//console.log("NEW SIDE: "+name);
+				selfB.p2 = new BattleSide(name, selfB, 1, team);
 				selfB.sides[1] = selfB.p2;
-				user.sides[selfB.roomid] = selfB.p2;
 			}
-			selfB.add('player', 'p2', selfB.p2.name, selfB.p2.user.avatar);
+			if (avatar) selfB.p2.avatar = avatar;
+			selfB.p2.isActive = true;
+			selfB.add('player', 'p2', selfB.p2.name, avatar);
 		} else {
 			if (selfB.started) {
-				user.sides[selfB.roomid] = selfB.p1;
-				selfB.p1.user = user;
-				selfB.p1.name = user.name;
+				selfB.p1.name = name;
 			} else {
-				//console.log("NEW SIDE: "+user.name);
-				selfB.p1 = new BattleSide(user, selfB, 0, team);
+				//console.log("NEW SIDE: "+name);
+				selfB.p1 = new BattleSide(name, selfB, 0, team);
 				selfB.sides[0] = selfB.p1;
-				user.sides[selfB.roomid] = selfB.p1;
 			}
-			selfB.add('player', 'p1', selfB.p1.name, selfB.p1.user.avatar);
+			if (avatar) selfB.p1.avatar = avatar;
+			selfB.p1.isActive = true;
+			selfB.add('player', 'p1', selfB.p1.name, avatar);
 		}
 		selfB.start();
 		return true;
 	};
-	this.rename = function(user) {
-		if (!user || !user.sides[selfB.roomid]) return;
-		if (user.sides[selfB.roomid] === selfB.p1) {
-			user.sides[selfB.roomid].name = user.name;
-			selfB.add('player', 'p1', selfB.p1.name, user.avatar);
-		}
-		if (user.sides[selfB.roomid] === selfB.p2) {
-			user.sides[selfB.roomid].name = user.name;
-			selfB.add('player', 'p2', selfB.p2.name, user.avatar);
+	this.rename = function(slot, name, avatar) {
+		if (slot === 'p1' || slot === 'p2') {
+			var side = selfB[slot];
+			side.name = name;
+			if (avatar) side.avatar = avatar;
+			selfB.add('player', slot, name, side.avatar);
 		}
 	};
-	this.leave = function(user) {
-		if (!user) return false;
-		if (!user.sides[selfB.roomid]) return false;
-		user.sides[selfB.roomid].emitUpdate({side: 'none'});
-		if (selfB.p2 === user.sides[selfB.roomid]) {
-			delete user.sides[selfB.roomid];
-			selfB.p2.user = null;
-			selfB.add('player', 'p2');
-			selfB.active = false;
-		} else if (selfB.p1 === user.sides[selfB.roomid]) {
-			delete user.sides[selfB.roomid];
-			selfB.p1.user = null;
-			selfB.add('player', 'p1');
+	this.leave = function(slot) {
+		if (slot === 'p1' || slot === 'p2') {
+			var side = selfB[slot];
+			side.emitUpdate({side:'none'});
+			side.isActive = false;
+			selfB.add('player', slot);
 			selfB.active = false;
 		}
 		return true;
 	};
-	this.getUpdates = function() {
-		var prevUpdate = selfB.lastUpdate;
-		if (selfB.lastUpdate === selfB.log.length) return null;
-		selfB.lastUpdate = selfB.log.length;
-		return {
-			prevUpdate: prevUpdate,
-			updates: selfB.log.slice(prevUpdate),
-			active: selfB.active
-		};
+
+	// IPC
+
+	this.send = function(type, data) {
+		if (Array.isArray(data)) data = data.join("\n");
+		process.send(this.id+"\n"+type+"\n"+data);
 	};
-	this.getUpdatesFrom = function(prevUpdate) {
-		if (!prevUpdate) prevUpdate = 0;
-		return {
-			prevUpdate: prevUpdate,
-			updates: selfB.log.slice(prevUpdate)
-		};
+	this.receive = function(data, more) {
+		var logPos = selfB.log.length;
+		var alreadyEnded = selfB.ended;
+		switch (data[1]) {
+		case 'join':
+			var team = null;
+			if (more) team = JSON.stringify(more);
+			this.join(data[2], data[3], data[4], team);
+			break;
+
+		case 'rename':
+			this.rename(data[2], data[3], data[4]);
+			break;
+
+		case 'leave':
+			this.leave(data[2]);
+			break;
+
+		case 'chat':
+			this.add('chat', data[2], more);
+			break;
+
+		case 'win':
+		case 'tie':
+			this.win(data[2]);
+			break;
+
+		case 'move':
+		case 'switch':
+		case 'undo':
+		case 'team':
+			this.decide(data[2], data[1], data[3]);
+			break;
+		}
+
+		if (selfB.log.length > logPos) {
+			if (selfB.ended && !alreadyEnded) {
+				if (selfB.rated) {
+					var log = {
+						turns: selfB.turn,
+						p1: selfB.p1.name,
+						p2: selfB.p2.name,
+						p1team: selfB.p1.team,
+						p2team: selfB.p2.team,
+						log: selfB.log
+					}
+					this.send('log', JSON.stringify('log'));
+				}
+				this.send('winupdate', [selfB.winner].concat(selfB.log.slice(logPos)));
+			} else {
+				this.send('update', selfB.log.slice(logPos));
+			}
+		}
 	};
 
 	this.destroy = function() {
@@ -2651,13 +2752,15 @@ function Battle(roomid, format, rated) {
 		for (var i=0; i<selfB.queue.length; i++) {
 			delete selfB.queue[i].pokemon;
 			delete selfB.queue[i].side;
-			delete selfB.queue[i].user;
 			selfB.queue[i] = null;
 		}
 		selfB.queue = null;
 
 		// in case the garbage collector really sucks, at least deallocate the log
 		selfB.log = null;
+
+		// remove from battle list
+		Battles[selfB.id] = null;
 
 		// get rid of some possibly-circular references
 
@@ -2668,3 +2771,4 @@ function Battle(roomid, format, rated) {
 exports.BattlePokemon = BattlePokemon;
 exports.BattleSide = BattleSide;
 exports.Battle = Battle;
+

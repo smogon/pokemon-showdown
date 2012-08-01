@@ -144,15 +144,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				var targetRoom = Rooms.get(i);
 				if (!targetRoom) continue;
 				var roomData = {};
-				if (targetRoom.battle && targetRoom.battle.sides[0] && targetRoom.battle.sides[1]) {
-					if (targetRoom.battle.sides[0].user && targetRoom.battle.sides[1].user) {
-						roomData.p1 = targetRoom.battle.sides[0].user.getIdentity();
-						roomData.p2 = targetRoom.battle.sides[1].user.getIdentity();
-					} else if (targetRoom.battle.sides[0].user) {
-						roomData.p1 = targetRoom.battle.sides[0].user.getIdentity();
-					} else if (targetRoom.battle.sides[1].user) {
-						roomData.p1 = targetRoom.battle.sides[1].user.getIdentity();
-					}
+				if (targetRoom.battle) {
+					var battle = targetRoom.battle;
+					roomData.p1 = battle.p1?' '+battle.p1:'';
+					roomData.p2 = battle.p2?' '+battle.p2:'';
 				}
 				roomList[i] = roomData;
 			}
