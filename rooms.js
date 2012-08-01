@@ -657,7 +657,7 @@ function LobbyRoom(roomid) {
 			roomList[selfR.rooms[i].id] = roomData;
 
 			total++;
-			if (total >= 8 && !filter) break;
+			if (total >= 6 && !filter) break;
 		}
 		return roomList;
 	};
