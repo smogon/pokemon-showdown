@@ -1,5 +1,6 @@
 require('sugar');
 
+fs = require('fs');
 config = require('./config/config.js');
 
 /**
@@ -2676,7 +2677,7 @@ function Battle(roomid, format, rated) {
 		switch (data[1]) {
 		case 'join':
 			var team = null;
-			if (more) team = JSON.stringify(more);
+			if (more) team = JSON.parse(more);
 			this.join(data[2], data[3], data[4], team);
 			break;
 
@@ -2703,6 +2704,18 @@ function Battle(roomid, format, rated) {
 		case 'team':
 			this.decide(data[2], data[1], data[3]);
 			break;
+
+		case 'eval':
+			var battle = this;
+			var p1 = this.p1;
+			var p2 = this.p2;
+			try {
+				this.send('update', '|chat|server|<<< '+eval(data[2]));
+			} catch (e) {
+				this.send('update', '|chatmsg|<<< error: '+e.message);
+			}
+			return;
+			break;
 		}
 
 		if (selfB.log.length > logPos) {
@@ -2724,19 +2737,21 @@ function Battle(roomid, format, rated) {
 			}
 		}
 
-		var inactiveSide = -1;
-		if (!selfB.p1.isActive && selfB.p2.isActive) {
-			inactiveSide = 0;
-		} else if (selfB.p1.isActive && !selfB.p2.isActive) {
-			inactiveSide = 1;
-		} else if (!selfB.p1.decision && selfB.p2.decision) {
-			inactiveSide = 0;
-		} else if (selfB.p1.decision && !selfB.p2.decision) {
-			inactiveSide = 1;
-		}
-		if (inactiveSide !== selfB.inactiveSide) {
-			this.send('inactiveside', inactiveSide);
-			selfB.inactiveSide = inactiveSide;
+		if (selfB.p1 && selfB.p2) {
+			var inactiveSide = -1;
+			if (!selfB.p1.isActive && selfB.p2.isActive) {
+				inactiveSide = 0;
+			} else if (selfB.p1.isActive && !selfB.p2.isActive) {
+				inactiveSide = 1;
+			} else if (!selfB.p1.decision && selfB.p2.decision) {
+				inactiveSide = 0;
+			} else if (selfB.p1.decision && !selfB.p2.decision) {
+				inactiveSide = 1;
+			}
+			if (inactiveSide !== selfB.inactiveSide) {
+				this.send('inactiveside', inactiveSide);
+				selfB.inactiveSide = inactiveSide;
+			}
 		}
 	};
 

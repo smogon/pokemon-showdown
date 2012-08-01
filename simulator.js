@@ -6,7 +6,7 @@ Battles.on('message', function(message) {
 	var lines = message.split("\n");
 	var sim = Simulators[lines[0]];
 	if (sim) {
-		console.log('MESSAGE RECV: "'+lines[1]+'|'+lines[2]+'"');
+		console.log('MESSAGE RECV: "'+message+'"');
 		sim.receive(lines);
 	}
 });

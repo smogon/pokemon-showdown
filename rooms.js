@@ -68,7 +68,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken=[token]');
 
 			if (!rated.p1 || !rated.p2) {
-				selfR.push('|chatmsg|ERROR: Ladder not updated: a player does not exist');
+				selfR.push('|chatmsg-raw|ERROR: Ladder not updated: a player does not exist');
 			} else {
 				var winner = Users.get(winnerid);
 				if (winner && !winner.authenticated) {
@@ -76,7 +76,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				}
 				var p1rating, p2rating;
 				// update rankings
-				selfR.push('|chatmsg|Ladder updating...');
+				selfR.push('|chatmsg-raw|Ladder updating...');
 				request({
 					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
 				}, function(error, response, body) {
@@ -240,7 +240,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 
 		if (!message) message = ' forfeited.';
 
-		selfR.add('-message', user.name+message);
+		selfR.addCmd('-message', user.name+message);
 		selfR.battle.endType = 'forfeit';
 		selfR.battle.lose(user);
 		selfR.active = selfR.battle.active;
@@ -539,11 +539,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 
 			var room = selfR;
 			var battle = selfR.battle;
-			var selfB = battle;
-			var p2;
-			var p1;
-			var p2active;
-			var p1active;
 			var me = user;
 			selfR.addCmd('chat', user.name, '>> '+cmd);
 			if (user.can('console')) {
@@ -558,6 +553,15 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				}
 			} else {
 				selfR.addCmd('chat', user.name, '<< Access denied.');
+			}
+		} else if (message.substr(0,4) === '>>> ') {
+			var cmd = message.substr(4);
+
+			selfR.addCmd('chat', user.name, '>>> '+cmd);
+			if (user.can('console')) {
+				selfR.battle.send('eval', cmd);
+			} else {
+				selfR.addCmd('chat', user.name, '<<< Access denied.');
 			}
 		} else {
 			selfR.battle.chat(user, message);
@@ -651,8 +655,8 @@ function LobbyRoom(roomid) {
 			if (filter && filter !== room.format && filter !== true) continue;
 			var roomData = {};
 			if (room.active) {
-				roomData.p1 = room.battle.players[0].getIdentity();
-				roomData.p2 = room.battle.players[1].getIdentity();
+				if (room.battle.players[0]) roomData.p1 = room.battle.players[0].getIdentity();
+				if (room.battle.players[1]) roomData.p2 = room.battle.players[1].getIdentity();
 			}
 			roomList[selfR.rooms[i].id] = roomData;
 
