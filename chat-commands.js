@@ -670,7 +670,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 			parseCommand = require('./chat-commands.js').parseCommand;
 
-			sim = require('./simulator.js');
+			sim = require('./battles.js');
 			BattlePokemon = sim.BattlePokemon;
 			BattleSide = sim.BattleSide;
 			Battle = sim.Battle;

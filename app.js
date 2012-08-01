@@ -162,7 +162,7 @@ Verifier = require('./verifier.js');
 
 parseCommand = require('./chat-commands.js').parseCommand;
 
-var sim = require('./simulator.js');
+var sim = require('./battles.js');
 BattlePokemon = sim.BattlePokemon;
 BattleSide = sim.BattleSide;
 Battle = sim.Battle;
