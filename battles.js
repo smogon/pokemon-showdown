@@ -2605,23 +2605,6 @@ function Battle(roomid, format, rated) {
 			selfB.p2.decision = true;
 			selfB.go();
 		}
-
-		{
-			var inactiveSide = -1;
-			if (!selfB.p1.isActive && selfB.p2.isActive) {
-				inactiveSide = 0;
-			} else if (selfB.p1.isActive && !selfB.p2.isActive) {
-				inactiveSide = 1;
-			} else if (!selfB.p1.decision && selfB.p2.decision) {
-				inactiveSide = 0;
-			} else if (selfB.p1.decision && !selfB.p2.decision) {
-				inactiveSide = 1;
-			}
-			if (inactiveSide !== selfB.inactiveSide) {
-				this.send('inactiveside', inactiveSide);
-				selfB.inactiveSide = inactiveSide;
-			}
-		}
 	};
 	this.add = function() {
 		selfB.log.push('|'+Array.prototype.slice.call(arguments).join('|'));
@@ -2739,6 +2722,21 @@ function Battle(roomid, format, rated) {
 			} else {
 				this.send('update', selfB.log.slice(logPos));
 			}
+		}
+
+		var inactiveSide = -1;
+		if (!selfB.p1.isActive && selfB.p2.isActive) {
+			inactiveSide = 0;
+		} else if (selfB.p1.isActive && !selfB.p2.isActive) {
+			inactiveSide = 1;
+		} else if (!selfB.p1.decision && selfB.p2.decision) {
+			inactiveSide = 0;
+		} else if (selfB.p1.decision && !selfB.p2.decision) {
+			inactiveSide = 1;
+		}
+		if (inactiveSide !== selfB.inactiveSide) {
+			this.send('inactiveside', inactiveSide);
+			selfB.inactiveSide = inactiveSide;
 		}
 	};
 
