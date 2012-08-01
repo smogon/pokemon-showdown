@@ -188,6 +188,8 @@ var Simulator = (function(){
 	};
 
 	Simulator.prototype.destroy = function() {
+		this.send('dealloc');
+
 		this.players = null;
 		this.room = null;
 		delete Simulators[this];
