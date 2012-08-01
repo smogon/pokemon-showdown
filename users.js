@@ -153,7 +153,7 @@ var User = (function () {
 
 		this.muted = !!ipSearch(this.ip,mutedIps);
 		this.prevNames = {};
-		this.sides = {};
+		this.battles = {};
 		this.roomCount = {};
 
 		// challenges
