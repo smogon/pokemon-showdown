@@ -70,7 +70,7 @@ var Simulator = (function(){
 	Simulator.prototype.receive = function(lines) {
 		switch (lines[1]) {
 		case 'update':
-			this.active = !this.ended;
+			this.active = !this.ended && this.p1 && this.p2;
 			this.room.push(lines.slice(2));
 			this.room.update();
 			break;
