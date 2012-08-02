@@ -444,6 +444,7 @@ var User = (function () {
 				else if (userid === "v4") avatar = 94;
 				else if (userid === "hawntah") avatar = 161;
 				else if (userid === "greatsage") avatar = 1005;
+				else if (userid === "bojangles") avatar = 1006;
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
