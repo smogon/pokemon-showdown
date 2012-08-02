@@ -1,10 +1,10 @@
 var Battles = require('child_process').fork('battles.js');
 
-var Simulators = {};
+var simulators = {};
 
 Battles.on('message', function(message) {
 	var lines = message.split("\n");
-	var sim = Simulators[lines[0]];
+	var sim = simulators[lines[0]];
 	if (sim) {
 		//console.log('MESSAGE RECV: "'+message+'"');
 		sim.receive(lines);
@@ -15,7 +15,7 @@ var slice = Array.prototype.slice;
 
 var Simulator = (function(){
 	function Simulator(id, format, rated, room) {
-		if (Simulators[id]) {
+		if (simulators[id]) {
 			// ???
 			return;
 		}
@@ -27,7 +27,7 @@ var Simulator = (function(){
 		this.playerids = [null, null];
 		this.playerTable = {};
 
-		Simulators[id] = this;
+		simulators[id] = this;
 
 		this.send('init', this.format, rated?'1':'');
 	}
@@ -192,16 +192,16 @@ var Simulator = (function(){
 
 		this.players = null;
 		this.room = null;
-		delete Simulators[this];
+		delete simulators[this.id];
 	};
 
 	return Simulator;
 })();
 
 exports.Simulator = Simulator;
-exports.Simulators = Simulators;
+exports.simulators = simulators;
 
 exports.create = function(id, format, rated, room) {
-	if (Simulators[id]) return Simulators[id];
+	if (simulators[id]) return simulators[id];
 	return new Simulator(id, format, rated, room);
 }
