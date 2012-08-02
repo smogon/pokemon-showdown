@@ -443,6 +443,7 @@ var User = (function () {
 				else if (userid === "steamroll") avatar = 126;
 				else if (userid === "v4") avatar = 94;
 				else if (userid === "hawntah") avatar = 161;
+				else if (userid === "greatsage") avatar = 1005;
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
