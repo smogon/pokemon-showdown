@@ -6,7 +6,7 @@ Battles.on('message', function(message) {
 	var lines = message.split("\n");
 	var sim = Simulators[lines[0]];
 	if (sim) {
-		console.log('MESSAGE RECV: "'+message+'"');
+		//console.log('MESSAGE RECV: "'+message+'"');
 		sim.receive(lines);
 	}
 });
@@ -36,7 +36,7 @@ var Simulator = (function(){
 
 	Simulator.prototype.started = false;
 	Simulator.prototype.ended = false;
-	Simulator.prototype.active = false;
+	Simulator.prototype.active = true;
 	Simulator.prototype.players = null;
 	Simulator.prototype.playerids = null;
 	Simulator.prototype.playerTable = null;
@@ -70,7 +70,6 @@ var Simulator = (function(){
 	Simulator.prototype.receive = function(lines) {
 		switch (lines[1]) {
 		case 'update':
-			this.started = true;
 			this.active = !this.ended;
 			this.room.push(lines.slice(2));
 			this.room.update();
@@ -123,7 +122,7 @@ var Simulator = (function(){
 		this.players[slot] = (user || null);
 		this.playerids[slot] = (user ? user.userid : null);
 		this.playerTable = {};
-		this.active = (this.started && !this.ended);
+		this.active = !this.ended;
 		for (var i=0, len=this.players.length; i<len; i++) {
 			var player = this.players[i];
 			this['p'+(i+1)] = player?player.name:'';
@@ -159,6 +158,7 @@ var Simulator = (function(){
 		if (!this.started) {
 			teamMessage = "\n"+JSON.stringify(team);
 		}
+		if (this.p1 && this.p2) this.started = true;
 		this.sendFor(user, 'join', user.name, user.avatar+teamMessage);
 		return true;
 	};

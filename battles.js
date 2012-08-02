@@ -78,7 +78,7 @@ Tools = require('./tools.js');
 var Battles = {};
 
 process.on('message', function(message) {
-	console.log('CHILD MESSAGE RECV: "'+message+'"');
+	//console.log('CHILD MESSAGE RECV: "'+message+'"');
 	var nlIndex = message.indexOf("\n");
 	var more = '';
 	if (nlIndex > 0) {
