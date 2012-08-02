@@ -91,7 +91,7 @@ process.on('message', function(message) {
 			Battles[data[0]] = new Battle(data[0], data[2], data[3]);
 		}
 	} else if (data[1] === 'dealloc') {
-		Battles[data[0]].destroy();
+		if (Battles[data[0]]) Battles[data[0]].destroy();
 		delete Battles[data[0]];
 	} else {
 		if (Battles[data[0]]) {
