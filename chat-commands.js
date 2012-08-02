@@ -199,7 +199,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		user.avatar = avatar;
 		emit(socket, 'console', 'Avatar changed to:');
-		emit(socket, 'console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" />'});
+		emit(socket, 'console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" width="80" height="80" />'});
 
 		return false;
 		break;
