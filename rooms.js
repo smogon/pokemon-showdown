@@ -237,14 +237,30 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		if (selfR.battle.players[1] && !selfR.battle.players[0]) return 0;
 		return selfR.battle.inactiveSide;
 	};
-	this.forfeit = function(user, message) {
+	this.forfeit = function(user, message, side) {
 		if (!selfR.battle || selfR.battle.ended || !selfR.battle.started) return false;
 
 		if (!message) message = ' forfeited.';
 
-		selfR.addCmd('-message', user.name+message);
+		if (side === undefined) {
+			if (user && user.userid === selfR.battle.playerids[0]) side = 0;
+			if (user && user.userid === selfR.battle.playerids[1]) side = 1;
+		}
+		if (side === undefined) return false;
+
+		var ids = ['p1', 'p2'];
+		var otherids = ['p2', 'p1'];
+
+		var name = 'An unknown player';
+		if (user) { 
+			name = user.name;
+		} else if (selfR.rated) {
+			name = selfR.rated[ids[side]];
+		}
+
+		selfR.addCmd('-message', name+message);
 		selfR.battle.endType = 'forfeit';
-		selfR.battle.lose(user);
+		selfR.battle.send('win', otherids[side]);
 		selfR.active = selfR.battle.active;
 		selfR.update();
 		return true;
@@ -285,7 +301,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 
 		if (selfR.rated) {
-			selfR.forfeit(inactiveSide,' lost because of their inactivity.');
+			selfR.forfeit(null,' lost because of their inactivity.', inactiveSide);
 		} else {
 			selfR.add('Kicking inactive players is unsupported in non-ladder games.');
 		}
