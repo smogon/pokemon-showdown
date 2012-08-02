@@ -654,7 +654,7 @@ function LobbyRoom(roomid) {
 			if (!room || !room.active) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
 			var roomData = {};
-			if (room.active) {
+			if (room.active && room.battle) {
 				if (room.battle.players[0]) roomData.p1 = room.battle.players[0].getIdentity();
 				if (room.battle.players[1]) roomData.p2 = room.battle.players[1].getIdentity();
 			}
