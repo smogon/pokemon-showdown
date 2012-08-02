@@ -233,6 +233,8 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 	};
 	this.getInactiveSide = function() {
+		if (selfR.battle.players[0] && !selfR.battle.players[1]) return 1;
+		if (selfR.battle.players[1] && !selfR.battle.players[0]) return 0;
 		return selfR.battle.inactiveSide;
 	};
 	this.forfeit = function(user, message) {
