@@ -65,7 +65,7 @@ exports.BattleFormats = {
 		banlist: ['Uber','G4CAP','Tomohawk','ShadowStrike','Paleo Wave','Soul Dew']
 	},
 	capmolluxplaytest: {
-		mod: 'gen5-bw',
+		mod: 'gen5bw',
 		effectType: 'Format',
 		name: "CAP Mollux Playtest",
 		rated: true,
