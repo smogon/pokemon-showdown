@@ -708,7 +708,11 @@ var User = (function () {
 			for (var j in person.rooms) {
 				this.leaveRoom(person.rooms[j], person);
 			}
-			person.socket.end();
+			if (config.protocol === 'io') {
+				person.socket.disconnect();
+			} else {
+				person.socket.end();
+			}
 		}
 		this.people = [];
 	};
