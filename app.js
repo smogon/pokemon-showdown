@@ -270,7 +270,7 @@ var events = {
 		if (!youUser) return;
 		parseCommand(youUser, 'command', data, Rooms.get(data.room), socket);
 	},
-	disconnect: function(socket, you) {
+	disconnect: function(data, socket, you) {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		youUser.disconnect(socket);
