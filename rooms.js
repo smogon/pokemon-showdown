@@ -23,7 +23,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	}
 
 	this.rated = rated;
-	this.battle = new Battle(selfR.id, format, rated);
+	this.battle = Simulator.create(selfR.id, format, rated, this);
 	this.resetTimer = null;
 	this.destroyTimer = null;
 	this.graceTime = 0;
@@ -38,18 +38,25 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 
 	this.active = false;
 
-	this.update = function(excludeUser) {
-		update = selfR.battle.getUpdates();
-		if (!update) return;
-
-		if (selfR.battle.ended && selfR.rated) {
+	this.log = [];
+	this.lastUpdate = 0;
+	this.push = function(message) {
+		if (typeof message === 'string') {
+			this.log.push(message);
+		} else {
+			this.log = this.log.concat(message);
+		}
+	};
+	this.win = function(winner) {
+		if (selfR.rated) {
+			var winnerid = toId(winner);
 			var rated = selfR.rated;
 			selfR.rated = false;
 			var p1score = 0.5;
 
-			if (selfR.battle.winner === rated.p1) {
+			if (winnerid === rated.p1) {
 				p1score = 1;
-			} else if (selfR.battle.winner === rated.p2) {
+			} else if (winnerid === rated.p2) {
 				p1score = 0;
 			}
 
@@ -61,21 +68,25 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken=[token]');
 
 			if (!rated.p1 || !rated.p2) {
-				update.updates.push('| chatmsg | ERROR: Ladder not updated: a player does not exist');
+				selfR.push('|chatmsg-raw|ERROR: Ladder not updated: a player does not exist');
 			} else {
-				var winner = Users.get(selfR.battle.winner);
+				var winner = Users.get(winnerid);
 				if (winner && !winner.authenticated) {
 					winner.emit('console', {rawMessage: '<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>Register an account to protect your ladder rating!</b><br /><button onclick="overlay(\'register\',{ifuserid:\''+winner.userid+'\'});return false"><b>Register</b></button></div>'});
 				}
 				var p1rating, p2rating;
 				// update rankings
-				update.updates.push('| chatmsg | Ladder updating...');
+				selfR.push('|chatmsg-raw|Ladder updating...');
 				request({
 					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
 				}, function(error, response, body) {
 					if (error) {
 						selfR.addRaw('Error: Ladder server overloaded - ladder could not be updated.');
 						selfR.update();
+						// log the battle anyway
+						if (!Tools.getFormat(selfR.format).noLog) {
+							selfR.logBattle(p1score);
+						}
 						return;
 					}
 					if (!selfR) {
@@ -86,67 +97,53 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 						var data;
 						try {
 							data = JSON.parse(body);
+
+							p1rating = data.p1rating.acre;
+							p2rating = data.p2rating.acre;
+							//selfR.add("Ladder updated.");
+
+							var oldacre = Math.round(data.p1rating.oldacre);
+							var oldrdacre = Math.round(data.p1rating.oldrdacre);
+							var acre = Math.round(data.p1rating.acre);
+							var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'winning':(p1score<.01?'losing':'tying'));
+							if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
+							if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
+							selfR.addRaw(sanitize(p1)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
+
+							var oldacre = Math.round(data.p2rating.oldacre);
+							var oldrdacre = Math.round(data.p2rating.oldrdacre);
+							var acre = Math.round(data.p2rating.acre);
+							var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'losing':(p1score<.01?'winning':'tying'));
+							if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
+							if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
+							selfR.addRaw(sanitize(p2)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
+
+							Users.get(p1).cacheMMR(rated.format, data.p1rating);
+							Users.get(p2).cacheMMR(rated.format, data.p2rating);
+							selfR.update();
 						} catch(e) {
-							return;
+							selfR.addRaw('There was an error calculating rating changes.');
+							selfR.update();
 						}
-						p1rating = data.p1rating.acre;
-						p2rating = data.p2rating.acre;
-						//selfR.add("Ladder updated.");
-
-						var oldacre = Math.round(data.p1rating.oldacre);
-						var oldrdacre = Math.round(data.p1rating.oldrdacre);
-						var acre = Math.round(data.p1rating.acre);
-						var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'winning':(p1score<.01?'losing':'tying'));
-						if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
-						if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
-						selfR.addRaw(sanitize(p1)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
-
-						var oldacre = Math.round(data.p2rating.oldacre);
-						var oldrdacre = Math.round(data.p2rating.oldrdacre);
-						var acre = Math.round(data.p2rating.acre);
-						var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'losing':(p1score<.01?'winning':'tying'));
-						if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
-						if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
-						selfR.addRaw(sanitize(p2)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
-
-						Users.get(p1).cacheMMR(rated.format, data.p1rating);
-						Users.get(p2).cacheMMR(rated.format, data.p2rating);
-						selfR.update();
 
 						if (!Tools.getFormat(selfR.format).noLog) {
-							var logData = {
-								p1score: p1score,
-								turns: selfR.battle.turn,
-								p1: selfR.battle.p1.name,
-								p2: selfR.battle.p2.name,
-								p1team: selfR.battle.p1.team,
-								p2team: selfR.battle.p2.team,
-								p1rating: p1rating,
-								p2rating: p2rating,
-								endType: selfR.battle.endType || 'normal',
-								log: selfR.battle.log
-							};
-							var date = new Date();
-							var logfolder = date.format('{yyyy}-{MM}');
-							var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
-							var curpath = 'logs/'+logfolder;
-							fs.mkdir(curpath, '0755', function() {
-								var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
-								curpath += '/'+tier;
-								fs.mkdir(curpath, '0755', function() {
-									curpath += '/'+logsubfolder;
-									fs.mkdir(curpath, '0755', function() {
-										fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
-									});
-								});
-							}); // asychronicity
-							//console.log(JSON.stringify(logData));
+							selfR.logBattle(p1score, p1rating, p2rating);
 						}
 					}
 				});
-				fs.writeFile('logs/lastbattle.txt', ''+rooms.lobby.numRooms);
 			}
 		}
+		selfR.active = false;
+		selfR.update();
+	};
+	this.update = function(excludeUser) {
+		if (selfR.log.length < selfR.lastUpdate) return;
+		var update = {
+			since: selfR.lastUpdate,
+			updates: selfR.log.slice(selfR.lastUpdate),
+			active: selfR.active
+		}
+		selfR.lastUpdate = selfR.log.length;
 
 		update.room = selfR.id;
 		var hasUsers = false;
@@ -165,6 +162,29 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			clearTimeout(selfR.destroyTimer);
 			selfR.destroyTimer = null;
 		}
+	};
+	this.logBattle = function(p1score, p1rating, p2rating) {
+		var logData = selfR.battle.logData;
+		logData.p1rating = p1rating;
+		logData.p2rating = p2rating;
+		logData.endType = selfR.battle.endType;
+		if (!p1rating) logData.ladderError = true;
+		var date = new Date();
+		var logfolder = date.format('{yyyy}-{MM}');
+		var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
+		var curpath = 'logs/'+logfolder;
+		fs.mkdir(curpath, '0755', function() {
+			var tier = selfR.format.toLowerCase().replace(/[^a-z0-9]+/g,'');
+			curpath += '/'+tier;
+			fs.mkdir(curpath, '0755', function() {
+				curpath += '/'+logsubfolder;
+				fs.mkdir(curpath, '0755', function() {
+					fs.writeFile(curpath+'/'+selfR.id+'.log.json', JSON.stringify(logData));
+				});
+			});
+		}); // asychronicity
+		//console.log(JSON.stringify(logData));
+		fs.writeFile('logs/lastbattle.txt', ''+rooms.lobby.numRooms);
 	};
 	this.emit = function(type, message, user) {
 		if (type === 'console' || type === 'update') {
@@ -204,50 +224,43 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			return;
 		}
 
-		selfR.battle.add('RESET');
+		selfR.add('RESET');
 		selfR.update();
 
-		if (selfR.battle.p1 && selfR.battle.p1.user) delete selfR.battle.p1.user.sides[selfR.id];
-		if (selfR.battle.p2 && selfR.battle.p2.user) delete selfR.battle.p2.user.sides[selfR.id];
-
-		console.log("NEW BATTLE (reset)");
-		selfR.battle = new Battle(selfR.id, selfR.format, false);
-		selfR.active = selfR.battle.active;
+		selfR.active = false;
 		if (selfR.parentid) {
 			getRoom(selfR.parentid).updateRooms();
 		}
 	};
 	this.getInactiveSide = function() {
-		var inactiveSide = -1;
-		if (!selfR.battle.p1.user && selfR.battle.p2.user) {
-			inactiveSide = 0;
-		} else if (selfR.battle.p1.user && !selfR.battle.p2.user) {
-			inactiveSide = 1;
-		} else if (!selfR.battle.p1.decision && selfR.battle.p2.decision) {
-			inactiveSide = 0;
-		} else if (selfR.battle.p1.decision && !selfR.battle.p2.decision) {
-			inactiveSide = 1;
-		}
-		return inactiveSide;
+		if (selfR.battle.players[0] && !selfR.battle.players[1]) return 1;
+		if (selfR.battle.players[1] && !selfR.battle.players[0]) return 0;
+		return selfR.battle.inactiveSide;
 	};
-	// side can be a side or user
-	this.forfeit = function(side, message) {
-		var forfeitSide = -1;
+	this.forfeit = function(user, message, side) {
 		if (!selfR.battle || selfR.battle.ended || !selfR.battle.started) return false;
-
-		if (side === selfR.battle.sides[0]) forfeitSide = 0;
-		else if (side === selfR.battle.sides[1]) forfeitSide = 1;
-		else if (side === 0) forfeitSide = 0;
-		else if (side === 1) forfeitSide = 1;
-		else if (side === selfR.battle.sides[0].user) forfeitSide = 0;
-		else if (side === selfR.battle.sides[1].user) forfeitSide = 1;
-		else return false;
 
 		if (!message) message = ' forfeited.';
 
-		selfR.battle.add('-message', selfR.battle.sides[forfeitSide].name+message);
+		if (side === undefined) {
+			if (user && user.userid === selfR.battle.playerids[0]) side = 0;
+			if (user && user.userid === selfR.battle.playerids[1]) side = 1;
+		}
+		if (side === undefined) return false;
+
+		var ids = ['p1', 'p2'];
+		var otherids = ['p2', 'p1'];
+
+		var name = 'An unknown player';
+		if (user) {
+			name = user.name;
+		} else if (selfR.rated) {
+			name = selfR.rated[ids[side]];
+		}
+
+		selfR.addCmd('-message', name+message);
 		selfR.battle.endType = 'forfeit';
-		selfR.battle.win(selfR.battle.sides[forfeitSide].foe);
+		selfR.battle.send('win', otherids[side]);
 		selfR.active = selfR.battle.active;
 		selfR.update();
 		return true;
@@ -270,11 +283,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			selfR.update();
 			return;
 		}
-		if (!selfR.battle.curCallback) {
-			selfR.add('We are experiencing a bug. Please notify a system operator (people with & next to their name).');
-			selfR.update();
-			return;
-		}
 
 		// now to see how much time we have left
 		if (selfR.inactiveTicksLeft) {
@@ -292,17 +300,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			return;
 		}
 
-		if (selfR.battle.rated) {
-			selfR.forfeit(inactiveSide,' lost because of their inactivity.');
+		if (selfR.rated) {
+			selfR.forfeit(null,' lost because of their inactivity.', inactiveSide);
 		} else {
-			if (selfR.battle.sides[0].user && selfR.battle.sides[1].user) {
-				selfR.add('Kicking inactive players.');
-				selfR.battle.leave(selfR.battle.sides[inactiveSide].user);
-				selfR.active = selfR.battle.active;
-				selfR.update();
-			} else {
-				selfR.add('There are already empty slots; no kicks are necessary.');
-			}
+			selfR.add('Kicking inactive players is unsupported in non-ladder games.');
 		}
 
 		if (selfR.parentid) {
@@ -310,37 +311,15 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 	};
 	this.requestReset = function(user) {
-		if (selfR.resetTimer) return;
-		if (!selfR.battle.started) return; // no point
-		if (user) attrib = ' (requested by '+user.name+')';
-		if (selfR.rated) {
-			selfR.add('The battle cannot be restarted because it is a rated battle'+attrib+'.');
-			return;
-		}
-		var elapsedTime = new Date().getTime() - selfR.graceTime;
-
-		// tickTime is in chunks of 30
-		var tickTime = 1;
-
-		if (elapsedTime < 60000) {
-			tickTime = 6;
-		} else if (elapsedTime < 120000) {
-			tickTime = 4;
-		} else if (elapsedTime < 150000) {
-			tickTime = 2;
-		} else {
-			tickTime = 1;
-		}
-		selfR.add('The battle will restart if there is no activity for '+(tickTime*30)+' seconds.'+attrib);
+		selfR.add('Requesting resets is no longer supported.');
 		selfR.update();
-		selfR.resetTimer = setTimeout(selfR.reset, tickTime*30*1000);
 	};
 	this.requestKickInactive = function(user) {
 		if (selfR.resetTimer) {
 			user.emit('console', {room:selfR.id, message: 'The inactivity timer is already counting down.'});
 				return;
 		}
-		if ((!selfR.battle.p1.user || !selfR.battle.p2.user) && !selfR.rated) {
+		if ((!selfR.battle.p1 || !selfR.battle.p2) && !selfR.rated) {
 			selfR.add('This isn\'t a rated battle; victory doesn\'t mean anything.');
 			selfR.add('Do you just want to see the text "you win"? Okay. You win.');
 			selfR.update();
@@ -363,7 +342,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			tickTime = 1;
 		}
 
-		if (tickTime > 2 && (!selfR.battle.p1.user || !selfR.battle.p2.user)) {
+		if (tickTime > 2 && (!selfR.battle.p1 || !selfR.battle.p2)) {
 			// if a player has left, don't wait longer than 2 ticks (60 seconds)
 			tickTime = 2;
 		}
@@ -403,10 +382,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	};
 	this.decision = function(user, choice, data) {
 		selfR.cancelReset();
-		selfR.battle.decision(user, choice, data);
-		if (selfR.battle.ended) {
-			selfR.battle.add('callback', 'restart');
-		}
+		selfR.battle.sendFor(user, choice, data);
 		if (selfR.active !== selfR.battle.active) {
 			selfR.active = selfR.battle.active;
 			if (selfR.parentid) {
@@ -418,13 +394,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	this.battleEndRestart = function() {
 		selfR.add('Rematch support has been temporarily disabled. Please challenge this user again in the lobby.');
 		return;
-
-		if (selfR.resetTimer) return;
-		if (selfR.battle.ended) {
-			selfR.add('A new game will start in 5 seconds.');
-			// reset in 5 seconds
-			selfR.resetTimer = setTimeout(selfR.reset, 5000);
-		}
 	};
 	this.initSocket = function(user, socket) {
 		var initdata = {
@@ -435,7 +404,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			token: user.token,
 			room: selfR.id,
 			roomType: 'battle',
-			battlelog: selfR.battle.log
+			battlelog: selfR.log
 		};
 		emit(socket, 'init', initdata);
 	};
@@ -446,7 +415,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		selfR.users[user.userid] = user;
 
 		if (user.named) {
-			selfR.battle.add('join', user.name);
+			selfR.addCmd('join', user.name);
 			selfR.update(user);
 		}
 
@@ -458,7 +427,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			token: user.token,
 			room: selfR.id,
 			roomType: 'battle',
-			battlelog: selfR.battle.log
+			battlelog: selfR.log
 		};
 		user.emit('init', initdata);
 
@@ -466,10 +435,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	};
 	this.rename = function(user, oldid, joining) {
 		if (joining) {
-			selfR.battle.add('join', user.name);
+			selfR.addCmd('join', user.name);
 		}
-		if (user.sides[selfR.id]) {
-			selfR.battle.rename(user);
+		if (selfR.battle.playerTable[user.userid]) {
+			selfR.battle.rename();
 		}
 		delete selfR.users[oldid];
 		selfR.users[user.userid] = user;
@@ -477,12 +446,12 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		return user;
 	};
 	this.joinBattle = function(user, team) {
-		var slot = 0;
+		var slot = undefined;
 		if (selfR.rated) {
 			if (selfR.rated.p1 === user.userid) {
-				slot = 1;
+				slot = 0;
 			} else if (selfR.rated.p2 === user.userid) {
-				slot = 2;
+				slot = 1;
 			} else {
 				return;
 			}
@@ -499,7 +468,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	};
 	this.leaveBattle = function(user) {
 		if (!user) return; // ...
-		if (user.sides[selfR.id]) {
+		if (user.battles[selfR.id]) {
 			selfR.battle.leave(user);
 		}
 		selfR.active = selfR.battle.active;
@@ -511,7 +480,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	};
 	this.leave = function(user) {
 		if (!user) return; // ...
-		if (user.sides[selfR.id]) {
+		if (user.battles[selfR.id]) {
 			selfR.battle.leave(user);
 			selfR.active = selfR.battle.active;
 			if (selfR.parentid) {
@@ -522,29 +491,32 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			return;
 		}
 		delete selfR.users[user.userid];
-		selfR.battle.add('leave', user.name);
+		selfR.addCmd('leave', user.name);
 		selfR.update();
 	};
 	this.isEmpty = function() {
-		if (selfR.battle.p1 && selfR.battle.p1.user) return false;
-		if (selfR.battle.p2 && selfR.battle.p2.user) return false;
+		if (selfR.battle.p1) return false;
+		if (selfR.battle.p2) return false;
 		return true;
 	};
 	this.isFull = function() {
-		if (selfR.battle.p1 && selfR.battle.p1.user && selfR.battle.p2 && selfR.battle.p2.user) return true;
+		if (selfR.battle.p1 && selfR.battle.p2) return true;
 		return false;
+	};
+	this.addCmd = function() {
+		selfR.log.push('|'+Array.prototype.slice.call(arguments).join('|'));
 	};
 	this.add = function(message) {
 		if (message.rawMessage) {
-			selfR.battle.add('chatmsg-raw', message.rawMessage);
+			selfR.addCmd('chatmsg-raw', message.rawMessage);
 		} else if (message.name) {
-			selfR.battle.add('chat', message.name.substr(1), message.message);
+			selfR.addCmd('chat', message.name.substr(1), message.message);
 		} else {
-			selfR.battle.add('chatmsg', message);
+			selfR.addCmd('chatmsg', message);
 		}
 	};
 	this.addRaw = function(message) {
-		selfR.battle.add('chatmsg-raw', message);
+		selfR.addCmd('chatmsg-raw', message);
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
@@ -585,38 +557,32 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 
 			var room = selfR;
 			var battle = selfR.battle;
-			var selfB = battle;
-			var p2;
-			var p1;
-			var p2active;
-			var p1active;
 			var me = user;
-			if (battle) {
-				p2 = battle.p2;
-				p1 = battle.p1;
-				if (p2) {
-					p2active = p2.active[0];
-				}
-				if (p1) {
-					p1active = p1.active[0];
-				}
-			}
-			selfR.battle.add('chat', user.name, '>> '+cmd);
+			selfR.addCmd('chat', user.name, '>> '+cmd);
 			if (user.can('console')) {
 				try {
-					selfR.battle.add('chat', user.name, '<< '+eval(cmd));
+					selfR.addCmd('chat', user.name, '<< '+eval(cmd));
 				} catch (e) {
-					selfR.battle.add('chat', user.name, '<< error: '+e);
+					selfR.addCmd('chat', user.name, '<< error: '+e);
 					var stack = (""+e.stack).split("\n");
 					for (var i=0; i<stack.length; i++) {
 						user.emit('console', '<< '+stack[i]);
 					}
 				}
 			} else {
-				selfR.battle.add('chat', user.name, '<< Access denied.');
+				selfR.addCmd('chat', user.name, '<< Access denied.');
+			}
+		} else if (message.substr(0,4) === '>>> ') {
+			var cmd = message.substr(4);
+
+			selfR.addCmd('chat', user.name, '>>> '+cmd);
+			if (user.can('console')) {
+				selfR.battle.send('eval', cmd);
+			} else {
+				selfR.addCmd('chat', user.name, '<<< Access denied.');
 			}
 		} else {
-			selfR.battle.add('chat', user.name, message);
+			selfR.battle.chat(user, message);
 		}
 		selfR.update();
 	};
@@ -668,7 +634,7 @@ function LobbyRoom(roomid) {
 	// but this is okay to prevent race conditions as we start up PS
 	this.numRooms = 0;
 	try {
-		parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
+		this.numRooms = parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
 	} catch (e) {} // file doesn't exist [yet]
 
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
@@ -706,20 +672,14 @@ function LobbyRoom(roomid) {
 			if (!room || !room.active) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
 			var roomData = {};
-			if (room.battle && room.battle.sides[0] && room.battle.sides[1]) {
-				if (room.battle.sides[0].user && room.battle.sides[1].user) {
-					roomData.p1 = room.battle.sides[0].user.getIdentity();
-					roomData.p2 = room.battle.sides[1].user.getIdentity();
-				} else if (room.battle.sides[0].user) {
-					roomData.p1 = room.battle.sides[0].user.getIdentity();
-				} else if (room.battle.sides[1].user) {
-					roomData.p1 = room.battle.sides[1].user.getIdentity();
-				}
+			if (room.active && room.battle) {
+				if (room.battle.players[0]) roomData.p1 = room.battle.players[0].getIdentity();
+				if (room.battle.players[1]) roomData.p2 = room.battle.players[1].getIdentity();
 			}
 			roomList[selfR.rooms[i].id] = roomData;
 
 			total++;
-			if (total >= 8 && !filter) break;
+			if (total >= 6 && !filter) break;
 		}
 		return roomList;
 	};

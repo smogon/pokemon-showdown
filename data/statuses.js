@@ -59,8 +59,7 @@ exports.BattleStatuses = {
 		onBeforeMove: function(pokemon, target, move) {
 			pokemon.statusData.time--;
 			if (!pokemon.statusData.time) {
-				this.add('-curestatus', pokemon.id, 'slp');
-				pokemon.setStatus('');
+				pokemon.cureStatus();
 				return;
 			}
 			this.add('cant', pokemon.id, 'slp');
@@ -77,9 +76,8 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
-			if (this.random(5) === 0 || move.thawsUser) {
-				this.add('-curestatus', pokemon.id, 'frz');
-				pokemon.setStatus('');
+			if (move.thawsUser || this.random(5) === 0) {
+				pokemon.cureStatus();
 				return;
 			}
 			this.add('cant', pokemon.id, 'frz');
@@ -87,8 +85,7 @@ exports.BattleStatuses = {
 		},
 		onHit: function(target, source, move) {
 			if (move.type === 'Fire' && move.category !== 'Status') {
-				this.add('-curestatus', target.id, 'frz');
-				target.setStatus('');
+				target.cureStatus();
 			}
 		}
 	},

@@ -46,6 +46,23 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		break;
 
+	case '!birkal':
+	case 'birkal':
+		if (canTalk(user, room) && user.can('broadcast') && room.id === 'lobby') {
+			if (cmd === '!birkal') {
+				room.log.push({
+					name: user.getIdentity(),
+					message: '!birkal '+target
+				});
+			}
+			room.log.push({
+				name: ' Birkal',
+				message: '/me '+target
+			});
+			return false;
+		}
+		break;
+
 	case 'namelock':
 	case 'nl':
 		if(!target) {
@@ -127,15 +144,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				var targetRoom = Rooms.get(i);
 				if (!targetRoom) continue;
 				var roomData = {};
-				if (targetRoom.battle && targetRoom.battle.sides[0] && targetRoom.battle.sides[1]) {
-					if (targetRoom.battle.sides[0].user && targetRoom.battle.sides[1].user) {
-						roomData.p1 = targetRoom.battle.sides[0].user.getIdentity();
-						roomData.p2 = targetRoom.battle.sides[1].user.getIdentity();
-					} else if (targetRoom.battle.sides[0].user) {
-						roomData.p1 = targetRoom.battle.sides[0].user.getIdentity();
-					} else if (targetRoom.battle.sides[1].user) {
-						roomData.p1 = targetRoom.battle.sides[1].user.getIdentity();
-					}
+				if (targetRoom.battle) {
+					var battle = targetRoom.battle;
+					roomData.p1 = battle.p1?' '+battle.p1:'';
+					roomData.p2 = battle.p2?' '+battle.p2:'';
 				}
 				roomList[i] = roomData;
 			}
@@ -187,7 +199,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		user.avatar = avatar;
 		emit(socket, 'console', 'Avatar changed to:');
-		emit(socket, 'console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" />'});
+		emit(socket, 'console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" width="80" height="80" />'});
 
 		return false;
 		break;
@@ -430,10 +442,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
-		if (user.muted && !targetUser.can('mute', user)) {
+		// temporarily disable this because blarajan
+		/* if (user.muted && !targetUser.can('mute', user)) {
 			emit(socket, 'console', 'You can only private message members of the Moderation Team (users marked by %, @, &, or ~) when muted.');
 			return false;
-		}
+		} */
 
 		var message = {
 			name: user.getIdentity(),
@@ -652,7 +665,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 			parseCommand = require('./chat-commands.js').parseCommand;
 
-			sim = require('./simulator.js');
+			sim = require('./battles.js');
 			BattlePokemon = sim.BattlePokemon;
 			BattleSide = sim.BattleSide;
 			Battle = sim.Battle;
@@ -687,30 +700,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'ranking':
 	case 'rank':
 	case 'ladder':
-		target = toUserid(target) || user.userid;
-		request({
-			uri: config.loginserver+'action.php?act=ladderget&serverid='+config.serverid+'&user='+target,
-		}, function(error, response, body) {
-			if (error) {
-				emit(socket, 'console', 'Your request failed due to a server issue.');
-			} else if (body) {
-				try {
-					var data = JSON.parse(body);
-
-					emit(socket, 'console', 'User: '+target);
-
-					if (!data.length) {
-						emit(socket, 'console', 'has not played a ladder game yet');
-					} else for (var i=0; i<data.length; i++) {
-						var row = data[i];
-						emit(socket, 'console', row.formatid+': '+Math.round(row.acre)+' (GXE:'+Math.round(row.pgxe,1)+') (Glicko2:'+Math.round(row.rpr)+','+Math.round(row.rprd)+') (W:'+row.w+'/L:'+row.l+'/T:'+row.t+')');
-					}
-				} catch(e) {
-				}
-			} else {
-				emit(socket, 'console', 'Error');
-			}
-		});
+		emit(socket, 'console', 'You are using an old version of Pokemon Showdown. Please reload the page.');
 		return false;
 		break;
 
@@ -853,7 +843,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
 			'<div style="border:1px solid #6688AA;padding:2px 4px">Please follow the rules:<br />' +
-			'- <a href="http://pokemonshowdown.com/rules" target="_blank">Rules</a><br />' +
+			'- <a href="http://www.smogon.com/sim/rules" target="_blank">Rules</a><br />' +
 			'</div>');
 		return false;
 		break;

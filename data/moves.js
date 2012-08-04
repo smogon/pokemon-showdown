@@ -43,11 +43,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Defense by 2 stages.",
 		shortDesc: "Boosts the user's Defense by 2.",
 		id: "acidarmor",
+		isViable: true,
 		name: "Acid Armor",
 		pp: 40,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			def: 2
 		},
@@ -63,9 +63,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 100% chance to lower its Special Defense by 2 stages.",
 		shortDesc: "100% chance to lower the target's Sp. Def by 2.",
 		id: "acidspray",
+		isViable: true,
 		name: "Acid Spray",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 100,
@@ -91,11 +91,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target. Power doubles if the user has no held item. Makes contact.",
 		shortDesc: "Power doubles if the user has no held item.",
 		id: "acrobatics",
+		isViable: true,
 		name: "Acrobatics",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "any",
 		type: "Flying"
@@ -110,6 +110,8 @@ exports.BattleMovedex = {
 		id: "acupressure",
 		name: "Acupressure",
 		pp: 30,
+		priority: 0,
+		isNotProtectable: true,
 		onHit: function(target) {
 			var stats = [];
 			for (var i in target.boosts) {
@@ -126,7 +128,6 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		priority: 0,
 		secondary: false,
 		target: "ally",
 		type: "Normal"
@@ -139,13 +140,13 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target and ignores Accuracy and Evasion modifiers. Makes contact.",
 		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "aerialace",
+		isViable: true,
 		name: "Aerial Ace",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"aeroblast": {
@@ -156,13 +157,13 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target with a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
 		id: "aeroblast",
+		isViable: true,
 		name: "Aeroblast",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		critRatio: 2,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"afteryou": {
@@ -176,6 +177,7 @@ exports.BattleMovedex = {
 		name: "After You",
 		pp: 15,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: false, // After You will always fail when used in a single battle
 		secondary: false,
 		target: "normal",
@@ -189,11 +191,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Speed by 2 stages.",
 		shortDesc: "Boosts the user's Speed by 2.",
 		id: "agility",
+		isViable: true,
 		name: "Agility",
 		pp: 30,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			spe: 2
 		},
@@ -225,15 +227,15 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target with a 30% chance to flinch it.",
 		shortDesc: "30% chance to flinch the target.",
 		id: "airslash",
+		isViable: true,
 		name: "Air Slash",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"allyswitch": {
@@ -248,7 +250,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 1,
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Psychic"
 	},
 	"amnesia": {
@@ -259,11 +261,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Special Defense by 2 stages.",
 		shortDesc: "Boosts the user's Sp. Def by 2.",
 		id: "amnesia",
+		isViable: true,
 		name: "Amnesia",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			spd: 2
 		},
@@ -305,11 +307,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact. Priority +1.",
 		shortDesc: "Usually goes first.",
 		id: "aquajet",
+		isViable: true,
 		name: "Aqua Jet",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 1,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -324,8 +326,8 @@ exports.BattleMovedex = {
 		id: "aquaring",
 		name: "Aqua Ring",
 		pp: 20,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'aquaring',
 		effect: {
 			onStart: function(pokemon) {
@@ -348,11 +350,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "aquatail",
+		isViable: true,
 		name: "Aqua Tail",
 		pp: 10,
-		isContact: true,
-		isViable: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -367,8 +369,8 @@ exports.BattleMovedex = {
 		id: "armthrust",
 		name: "Arm Thrust",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -382,11 +384,11 @@ exports.BattleMovedex = {
 		desc: "Every Pokemon in the user's party is cured of its major status problem.",
 		shortDesc: "Cures the user's party of all status conditions.",
 		id: "aromatherapy",
+		isViable: true,
 		name: "Aromatherapy",
 		pp: 5,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onHitSide: function(side, source) {
 			for (var i=0; i<side.pokemon.length; i++) {
 				side.pokemon[i].status = '';
@@ -444,8 +446,8 @@ exports.BattleMovedex = {
 		id: "assurance",
 		name: "Assurance",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -460,8 +462,8 @@ exports.BattleMovedex = {
 		id: "astonish",
 		name: "Astonish",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -477,9 +479,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
 		id: "attackorder",
+		isViable: true,
 		name: "Attack Order",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		critRatio: 2,
 		secondary: false,
@@ -496,8 +498,8 @@ exports.BattleMovedex = {
 		id: "attract",
 		name: "Attract",
 		pp: 15,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onHit: function(target) {
 			if (target.addVolatile('attract')) this.add("-start", target, "Attract");
 			else return false;
@@ -530,12 +532,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target and ignores Accuracy and Evasion modifiers.",
 		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "aurasphere",
+		isViable: true,
 		name: "Aura Sphere",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Fighting"
 	},
 	"aurorabeam": {
@@ -566,11 +568,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Speed by 2 stages. If the user's Speed was changed, the user's weight is reduced by 100kg as long as it remains active. This effect is stackable but cannot reduce the user's weight to less than 0.1kg.",
 		shortDesc: "Boosts the user's Speed by 2 and halves weight.",
 		id: "autotomize",
+		isViable: true,
 		name: "Autotomize",
 		pp: 15,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			spe: 2
 		},
@@ -603,11 +605,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Power doubles if the user was hit by that target this turn. Makes contact. Priority -4.",
 		shortDesc: "Power doubles if user is damaged by the target.",
 		id: "avalanche",
+		isViable: true,
 		name: "Avalanche",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: -4,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Ice"
@@ -636,11 +638,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Defense by 2 stages.",
 		shortDesc: "Boosts the user's Defense by 2.",
 		id: "barrier",
+		isViable: true,
 		name: "Barrier",
 		pp: 30,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			def: 2
 		},
@@ -656,9 +658,9 @@ exports.BattleMovedex = {
 		desc: "The user is replaced with another Pokemon in its party. The selected Pokemon has the user's stat stage changes, confusion, and certain move effects transferred to it.",
 		shortDesc: "User switches, passing stat changes and more.",
 		id: "batonpass",
+		isViable: true,
 		name: "Baton Pass",
 		pp: 40,
-		isViable: true,
 		priority: 0,
 		selfSwitch: 'copyvolatile',
 		secondary: false,
@@ -714,11 +716,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack to stage 6 in exchange for the user losing 1/2 of its maximum HP, rounded down. Fails if the user would faint or if its Attack stage is already 6.",
 		shortDesc: "User loses 50% max HP. Maximizes Attack.",
 		id: "bellydrum",
+		isViable: true,
 		name: "Belly Drum",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onHit: function(target) {
 			if (target.hp <= target.maxhp/2 || target.boosts.atk >= 6 || target.maxhp === 1) { // Shedinja clause
 				return false;
@@ -770,8 +772,8 @@ exports.BattleMovedex = {
 		id: "bide",
 		name: "Bide",
 		pp: 10,
-		isContact: true,
 		priority: 1,
+		isContact: true,
 		volatileStatus: 'bide',
 		effect: {
 			duration: 3,
@@ -823,8 +825,8 @@ exports.BattleMovedex = {
 		id: "bind",
 		name: "Bind",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -840,8 +842,8 @@ exports.BattleMovedex = {
 		id: "bite",
 		name: "Bite",
 		pp: 25,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -875,11 +877,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to burn it and a higher chance for a critical hit. Makes contact.",
 		shortDesc: "High critical hit ratio. 10% chance to burn.",
 		id: "blazekick",
+		isViable: true,
 		name: "Blaze Kick",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: {
 			chance: 10,
@@ -896,9 +898,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent foes with a 10% chance to freeze each. If the weather is Hail, this move cannot miss.",
 		shortDesc: "10% chance to freeze the foe(s).",
 		id: "blizzard",
+		isViable: true,
 		name: "Blizzard",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		onModifyMove: function(move) {
 			if (this.weather === 'hail') move.accuracy = true;
@@ -918,11 +920,11 @@ exports.BattleMovedex = {
 		desc: "Prevents one adjacent target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-Turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "The target cannot switch out.",
 		id: "block",
+		isViable: true,
 		name: "Block",
 		pp: 5,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onHit: function(target) {
 			target.addVolatile('trapped');
 		},
@@ -938,9 +940,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to burn it.",
 		shortDesc: "20% chance to burn the target.",
 		id: "blueflare",
+		isViable: true,
 		name: "Blue Flare",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -957,11 +959,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to paralyze it. Makes contact.",
 		shortDesc: "30% chance to paralyze the target.",
 		id: "bodyslam",
+		isViable: true,
 		name: "Body Slam",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -977,11 +979,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to paralyze it. Makes contact.",
 		shortDesc: "20% chance to paralyze the target.",
 		id: "boltstrike",
+		isViable: true,
 		name: "Bolt Strike",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 20,
 			status: 'par'
@@ -1032,9 +1034,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and hits twice. If the first hit breaks the target's Substitute, it will take damage for the second hit.",
 		shortDesc: "Hits 2 times in one turn.",
 		id: "bonemerang",
+		isViable: true,
 		name: "Bonemerang",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		multihit: 2,
 		secondary: false,
@@ -1049,11 +1051,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target with a 30% chance to paralyze it. This attack charges on the first turn and strikes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister. The user cannot make a move between turns. If the user is holding a Power Herb, the move completes in one turn. This move cannot be used while Gravity is in effect. Makes contact.",
 		shortDesc: "Bounces turn 1. Hits turn 2. 30% paralyze.",
 		id: "bounce",
+		isViable: true,
 		name: "Bounce",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		isTwoTurnMove: true,
 		effect: {
 			onSourceModifyMove: function(move) {
@@ -1078,7 +1080,7 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'par'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"bravebird": {
@@ -1089,14 +1091,14 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
 		shortDesc: "Has 1/3 recoil.",
 		id: "bravebird",
+		isViable: true,
 		name: "Brave Bird",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		recoil: [1,3],
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"brickbreak": {
@@ -1107,9 +1109,10 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If this attack does not miss, the effects of Reflect and Light Screen end for the target's side of the field before damage is calculated. Makes contact.",
 		shortDesc: "Destroys screens, unless the target is immune.",
 		id: "brickbreak",
+		isViable: true,
 		name: "Brick Break",
 		pp: 15,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		onTryHit: function(pokemon) {
 			// will shatter screens through sub, before you hit
@@ -1118,7 +1121,6 @@ exports.BattleMovedex = {
 				pokemon.side.removeSideCondition('lightscreen');
 			}
 		},
-		priority: 0,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -1192,8 +1194,8 @@ exports.BattleMovedex = {
 		id: "bugbite",
 		name: "Bug Bite",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -1206,11 +1208,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to lower its Special Defense by 1 stage. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "10% chance to lower the target's Sp. Def. by 1.",
 		id: "bugbuzz",
+		isViable: true,
 		name: "Bug Buzz",
 		pp: 10,
-		isViable: true,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -1228,11 +1230,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack and Defense by 1 stage.",
 		shortDesc: "Boosts the user's Attack and Defense by 1.",
 		id: "bulkup",
+		isViable: true,
 		name: "Bulk Up",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			def: 1
@@ -1258,7 +1260,7 @@ exports.BattleMovedex = {
 				spe: -1
 			}
 		},
-		target: "normal",
+		target: "adjacent",
 		type: "Ground"
 	},
 	"bulletpunch": {
@@ -1269,12 +1271,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist. Priority +1.",
 		shortDesc: "Usually goes first.",
 		id: "bulletpunch",
+		isViable: true,
 		name: "Bullet Punch",
 		pp: 30,
-		isViable: true,
+		priority: 1,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 1,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -1287,9 +1289,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and hits two to five times. Has a 35% chance to hit two or three times, and a 15% chance to hit four or five times. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times.",
 		shortDesc: "Hits 2-5 times in one turn.",
 		id: "bulletseed",
+		isViable: true,
 		name: "Bullet Seed",
 		pp: 30,
-		isViable: true,
 		priority: 0,
 		multihit: [2,5],
 		secondary: false,
@@ -1304,11 +1306,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Special Attack and Special Defense by 1 stage.",
 		shortDesc: "Boosts the user's Sp. Atk and Sp. Def by 1.",
 		id: "calmmind",
+		isViable: true,
 		name: "Calm Mind",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			spa: 1,
 			spd: 1
@@ -1327,8 +1329,8 @@ exports.BattleMovedex = {
 		id: "camouflage",
 		name: "Camouflage",
 		pp: 20,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'camouflage',
 		effect: {
 			onStart: function(pokemon) {
@@ -1363,7 +1365,7 @@ exports.BattleMovedex = {
 			spa: -2
 		},
 		secondary: false,
-		target: "normal",
+		target: "foes",
 		type: "Normal"
 	},
 	"charge": {
@@ -1376,8 +1378,8 @@ exports.BattleMovedex = {
 		id: "charge",
 		name: "Charge",
 		pp: 20,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'charge',
 		onHit: function(pokemon) {
 			this.add('-message', pokemon.name+' began charging power! (placeholder)');
@@ -1409,9 +1411,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 70% chance to raise the user's Special Attack by 1 stage.",
 		shortDesc: "70% chance to boost the user's Sp. Atk by 1.",
 		id: "chargebeam",
+		isViable: true,
 		name: "Charge Beam",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 70,
@@ -1452,8 +1454,8 @@ exports.BattleMovedex = {
 		id: "chatter",
 		name: "Chatter",
 		pp: 20,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		onModifyMove: function(move, pokemon) {
 			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
 		},
@@ -1461,7 +1463,7 @@ exports.BattleMovedex = {
 			chance: 10,
 			volatileStatus: 'confusion'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"chipaway": {
@@ -1474,8 +1476,8 @@ exports.BattleMovedex = {
 		id: "chipaway",
 		name: "Chip Away",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		secondary: false,
@@ -1490,11 +1492,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target used Ingrain previously, has the Ability Suction Cups, or has a Substitute. Makes contact. Priority -6. (Wild battles: The battle ends as long as it is not a double battle and the user's level is not less than the opponent's level.)",
 		shortDesc: "Forces the target to switch to a random ally.",
 		id: "circlethrow",
+		isViable: true,
 		name: "Circle Throw",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: -6,
+		isContact: true,
 		forceSwitch: true,
 		target: "normal",
 		type: "Fighting"
@@ -1509,8 +1511,8 @@ exports.BattleMovedex = {
 		id: "clamp",
 		name: "Clamp",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -1524,9 +1526,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and eliminates all of its stat stage changes.",
 		shortDesc: "Eliminates the target's stat changes.",
 		id: "clearsmog",
+		isViable: true,
 		name: "Clear Smog",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		onHit: function(target) {
 			target.clearBoosts();
@@ -1544,11 +1546,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and lowers the user's Defense and Special Defense by 1 stage. Makes contact.",
 		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 		id: "closecombat",
+		isViable: true,
 		name: "Close Combat",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		self: {
 			boosts: {
 				def: -1,
@@ -1567,11 +1569,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack, Defense, and Accuracy by 1 stage.",
 		shortDesc: "Boosts user's Attack, Defense, and Accuracy by 1.",
 		id: "coil",
+		isViable: true,
 		name: "Coil",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			def: 1,
@@ -1591,9 +1593,9 @@ exports.BattleMovedex = {
 		id: "cometpunch",
 		name: "Comet Punch",
 		pp: 15,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -1607,9 +1609,9 @@ exports.BattleMovedex = {
 		desc: "Causes one adjacent target to become confused. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Confuses the target.",
 		id: "confuseray",
+		isViable: true,
 		name: "Confuse Ray",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		volatileStatus: 'confusion',
 		secondary: false,
@@ -1644,8 +1646,8 @@ exports.BattleMovedex = {
 		id: "constrict",
 		name: "Constrict",
 		pp: 35,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -1665,8 +1667,8 @@ exports.BattleMovedex = {
 		id: "conversion",
 		name: "Conversion",
 		pp: 30,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'conversion',
 		effect: {
 			onStart: function(pokemon) {
@@ -1716,6 +1718,7 @@ exports.BattleMovedex = {
 		name: "Conversion 2",
 		pp: 30,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target, source) {
 			source.addVolatile("conversion2", target);
 		},
@@ -1778,9 +1781,9 @@ exports.BattleMovedex = {
 		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
 		shortDesc: "Uses the last move used in the battle.",
 		id: "copycat",
+		isViable: true,
 		name: "Copycat",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		onHit: function(pokemon) {
 			var noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1};
@@ -1801,11 +1804,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Defense and Special Defense by 1 stage.",
 		shortDesc: "Boosts the user's Defense and Sp. Def by 1.",
 		id: "cosmicpower",
+		isViable: true,
 		name: "Cosmic Power",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			def: 1,
 			spd: 1
@@ -1822,11 +1825,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Defense by 3 stages.",
 		shortDesc: "Boosts the user's Defense by 3.",
 		id: "cottonguard",
+		isViable: true,
 		name: "Cotton Guard",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			def: 3
 		},
@@ -1868,11 +1871,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to the last foe to hit the user with a physical attack this turn. The damage is equal to twice the HP lost by the user from that attack. If that foe's position is no longer in use, damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by a foe's physical attack this turn. Makes contact. Priority -5.",
 		shortDesc: "If hit by physical attack, returns double damage.",
 		id: "counter",
+		isViable: true,
 		name: "Counter",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: -5,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -1887,8 +1890,8 @@ exports.BattleMovedex = {
 		id: "covet",
 		name: "Covet",
 		pp: 40,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		onHit: function(target, source) {
 			if (source.item) {
 				return;
@@ -1915,11 +1918,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit. Makes contact.",
 		shortDesc: "High critical hit ratio.",
 		id: "crabhammer",
+		isViable: true,
 		name: "Crabhammer",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -1933,11 +1936,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit. Makes contact.",
 		shortDesc: "High critical hit ratio.",
 		id: "crosschop",
+		isViable: true,
 		name: "Cross Chop",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -1951,11 +1954,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to poison it and a higher chance for a critical hit. Makes contact.",
 		shortDesc: "High critical hit ratio. 10% chance to poison.",
 		id: "crosspoison",
+		isViable: true,
 		name: "Cross Poison",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 10,
 			status: 'psn'
@@ -1972,11 +1975,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to lower its Defense by 1 stage. Makes contact.",
 		shortDesc: "20% chance to lower the target's Defense by 1.",
 		id: "crunch",
+		isViable: true,
 		name: "Crunch",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -1996,8 +1999,8 @@ exports.BattleMovedex = {
 		id: "crushclaw",
 		name: "Crush Claw",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -2020,8 +2023,8 @@ exports.BattleMovedex = {
 		id: "crushgrip",
 		name: "Crush Grip",
 		pp: 5,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -2034,10 +2037,11 @@ exports.BattleMovedex = {
 		desc: "If the user is not a Ghost-type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost-type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for one adjacent target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected. Ignores a target's Substitute.",
 		shortDesc: "Curses if Ghost, else +1 Atk, +1 Def, -1 Spe.",
 		id: "curse",
+		isViable: true,
 		name: "Curse",
 		pp: 10,
-		isViable: true,
 		priority: 0,
+		isNotProtectable: true,
 		volatileStatus: 'curse',
 		onModifyMove: function(move, source, target) {
 			if (!source.hasType('Ghost')) {
@@ -2070,8 +2074,8 @@ exports.BattleMovedex = {
 		id: "cut",
 		name: "Cut",
 		pp: 30,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -2084,9 +2088,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target with a 20% chance to flinch it.",
 		shortDesc: "20% chance to flinch the target.",
 		id: "darkpulse",
+		isViable: true,
 		name: "Dark Pulse",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -2103,9 +2107,9 @@ exports.BattleMovedex = {
 		desc: "Puts all adjacent foes to sleep. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Puts the foe(s) to sleep.",
 		id: "darkvoid",
+		isViable: true,
 		name: "Dark Void",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		status: 'slp',
 		secondary: false,
@@ -2120,11 +2124,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Defense and Special Defense by 1 stage.",
 		shortDesc: "Boosts the user's Defense and Sp. Def by 1.",
 		id: "defendorder",
+		isViable: true,
 		name: "Defend Order",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			def: 1,
 			spd: 1
@@ -2143,8 +2147,8 @@ exports.BattleMovedex = {
 		id: "defensecurl",
 		name: "Defense Curl",
 		pp: 40,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			def: 1
 		},
@@ -2163,8 +2167,8 @@ exports.BattleMovedex = {
 		id: "defog",
 		name: "Defog",
 		pp: 15,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onHit: function(pokemon) {
 			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
 			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
@@ -2186,9 +2190,9 @@ exports.BattleMovedex = {
 		desc: "Until the user's next turn, if a foe's attack knocks the user out, that foe faints as well, unless the attack was Doom Desire or Future Sight. Ignores a target's Substitute.",
 		shortDesc: "If an opponent knocks out the user, it also faints.",
 		id: "destinybond",
+		isViable: true,
 		name: "Destiny Bond",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		volatileStatus: 'destinybond',
 		effect: {
@@ -2220,9 +2224,9 @@ exports.BattleMovedex = {
 		desc: "The user is protected from most attacks made by other Pokemon during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn. Priority +4.",
 		shortDesc: "Prevents moves from affecting the user for a turn.",
 		id: "detect",
+		isViable: true,
 		name: "Detect",
 		pp: 5,
-		isViable: true,
 		priority: 4,
 		stallingMove: true, // decrease success of repeated use to 50%
 		volatileStatus: 'protect',
@@ -2257,8 +2261,8 @@ exports.BattleMovedex = {
 		id: "dig",
 		name: "Dig",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		isTwoTurnMove: true,
 		effect: {
 			onImmunity: function(type, pokemon) {
@@ -2293,8 +2297,8 @@ exports.BattleMovedex = {
 		id: "disable",
 		name: "Disable",
 		pp: 20,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'disable',
 		effect: {
 			duration: 4,
@@ -2354,9 +2358,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent Pokemon with a 30% chance to paralyze each.",
 		shortDesc: "30% chance to paralyze adjacent Pokemon.",
 		id: "discharge",
+		isViable: true,
 		name: "Discharge",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -2375,8 +2379,8 @@ exports.BattleMovedex = {
 		id: "dive",
 		name: "Dive",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		isTwoTurnMove: true,
 		effect: {
 			onImmunity: function(type, pokemon) {
@@ -2409,9 +2413,9 @@ exports.BattleMovedex = {
 		id: "dizzypunch",
 		name: "Dizzy Punch",
 		pp: 10,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion'
@@ -2427,13 +2431,13 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Future Sight is already in effect for the target's position. This move ignores Protect and Detect.",
 		shortDesc: "Hits two turns after being used.",
 		id: "doomdesire",
+		isViable: true,
 		name: "Doom Desire",
 		pp: 5,
-		isViable: true,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
-
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
 				return false;
 			}
@@ -2463,11 +2467,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
 		shortDesc: "Has 1/3 recoil.",
 		id: "doubleedge",
+		isViable: true,
 		name: "Double-Edge",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		recoil: [1,3],
 		secondary: false,
 		target: "normal",
@@ -2483,8 +2487,8 @@ exports.BattleMovedex = {
 		id: "doublehit",
 		name: "Double Hit",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -2500,8 +2504,8 @@ exports.BattleMovedex = {
 		id: "doublekick",
 		name: "Double Kick",
 		pp: 30,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -2517,8 +2521,8 @@ exports.BattleMovedex = {
 		id: "doubleslap",
 		name: "DoubleSlap",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -2534,8 +2538,8 @@ exports.BattleMovedex = {
 		id: "doubleteam",
 		name: "Double Team",
 		pp: 15,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			evasion: 1
 		},
@@ -2551,9 +2555,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and lowers the user's Special Attack by 2 stages.",
 		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "dracometeor",
+		isViable: true,
 		name: "Draco Meteor",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		self: {
 			boosts: {
@@ -2590,11 +2594,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "dragonclaw",
+		isViable: true,
 		name: "Dragon Claw",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dragon"
@@ -2607,11 +2611,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack and Speed by 1 stage.",
 		shortDesc: "Boosts the user's Attack and Speed by 1.",
 		id: "dragondance",
+		isViable: true,
 		name: "Dragon Dance",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			spe: 1
@@ -2628,9 +2632,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "dragonpulse",
+		isViable: true,
 		name: "Dragon Pulse",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "any",
@@ -2660,11 +2664,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to flinch it. Makes contact.",
 		shortDesc: "20% chance to flinch the target.",
 		id: "dragonrush",
+		isViable: true,
 		name: "Dragon Rush",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -2680,11 +2684,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target used Ingrain previously, has the Ability Suction Cups, or has a Substitute. Makes contact. Priority -6. (Wild battles: The battle ends as long as it is not a double battle and the user's level is not less than the opponent's level.)",
 		shortDesc: "Forces the target to switch to a random ally.",
 		id: "dragontail",
+		isViable: true,
 		name: "Dragon Tail",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: -6,
+		isContact: true,
 		forceSwitch: true,
 		target: "normal",
 		type: "Dragon"
@@ -2697,12 +2701,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "drainpunch",
+		isViable: true,
 		name: "Drain Punch",
 		pp: 10,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		drain: [1,2],
 		secondary: false,
 		target: "normal",
@@ -2738,13 +2742,13 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "drillpeck",
+		isViable: true,
 		name: "Drill Peck",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"drillrun": {
@@ -2755,11 +2759,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit. Makes contact.",
 		shortDesc: "High critical hit ratio.",
 		id: "drillrun",
+		isViable: true,
 		name: "Drill Run",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -2773,11 +2777,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and hits twice. If the first hit breaks the target's Substitute, it will take damage for the second hit. Makes contact.",
 		shortDesc: "Hits 2 times in one turn.",
 		id: "dualchop",
+		isViable: true,
 		name: "Dual Chop",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -2793,9 +2797,9 @@ exports.BattleMovedex = {
 		id: "dynamicpunch",
 		name: "DynamicPunch",
 		pp: 5,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'confusion'
@@ -2811,9 +2815,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to lower its Special Defense by 1 stage.",
 		shortDesc: "10% chance to lower the target's Sp. Def. by 1.",
 		id: "earthpower",
+		isViable: true,
 		name: "Earth Power",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -2832,9 +2836,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent Pokemon. Power doubles against Pokemon using Dig.",
 		shortDesc: "Hits adjacent Pokemon. Power doubles on Dig.",
 		id: "earthquake",
+		isViable: true,
 		name: "Earthquake",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "adjacent",
@@ -2850,8 +2854,8 @@ exports.BattleMovedex = {
 		id: "echoedvoice",
 		name: "Echoed Voice",
 		pp: 15,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -2896,9 +2900,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. The power of this move depends on (user's current Speed / target's current Speed), rounded down. Power is equal to 150 if the result is 4 or more, 120 if 3, 80 if 2, 60 if 1, 40 if less than 1.",
 		shortDesc: "More power the faster the user is than the target.",
 		id: "electroball",
+		isViable: true,
 		name: "Electro Ball",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -2921,7 +2925,7 @@ exports.BattleMovedex = {
 				spe: -1
 			}
 		},
-		target: "normal",
+		target: "foes",
 		type: "Electric"
 	},
 	"embargo": {
@@ -2934,8 +2938,8 @@ exports.BattleMovedex = {
 		id: "embargo",
 		name: "Embargo",
 		pp: 15,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'embargo',
 		effect: {
 			duration: 5,
@@ -2980,11 +2984,11 @@ exports.BattleMovedex = {
 		desc: "For 3 turns, one adjacent target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not moved yet, if the move has 0PP, or if the move is Encore, Mimic, Mirror Move, Sketch, or Transform. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute.",
 		shortDesc: "The target repeats its last move for 3 turns.",
 		id: "encore",
+		isViable: true,
 		name: "Encore",
 		pp: 5,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'encore',
 		effect: {
 			duration: 3,
@@ -3054,11 +3058,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target equal to (target's current HP - user's current HP). Fails if the target's current HP is less than or equal to the user's current HP. Makes contact.",
 		shortDesc: "Lowers the target's HP to the user's HP.",
 		id: "endeavor",
+		isViable: true,
 		name: "Endeavor",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3117,9 +3121,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to lower its Special Defense by 1 stage.",
 		shortDesc: "10% chance to lower the target's Sp. Def. by 1.",
 		id: "energyball",
+		isViable: true,
 		name: "Energy Ball",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3140,8 +3144,8 @@ exports.BattleMovedex = {
 		id: "entrainment",
 		name: "Entrainment",
 		pp: 15,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onTryHit: function(target, source) {
 			if (target === source) return false;
 			var bannedTargetAbilities = {multitype:1, truant:1};
@@ -3172,9 +3176,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent foes. Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
 		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 		id: "eruption",
+		isViable: true,
 		name: "Eruption",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "foes",
@@ -3204,9 +3208,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to flinch it.",
 		shortDesc: "10% chance to flinch the target.",
 		id: "extrasensory",
+		isViable: true,
 		name: "Extrasensory",
 		pp: 30,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3223,11 +3227,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact. Priority +2.",
 		shortDesc: "Nearly always goes first.",
 		id: "extremespeed",
+		isViable: true,
 		name: "ExtremeSpeed",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 2,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3246,11 +3250,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Power doubles if the user is burned, paralyzed, or poisoned. Makes contact.",
 		shortDesc: "Power doubles when user is inflicted by a status.",
 		id: "facade",
+		isViable: true,
 		name: "Facade",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3265,8 +3269,8 @@ exports.BattleMovedex = {
 		id: "faintattack",
 		name: "Faint Attack",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -3279,11 +3283,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 100% chance to flinch it. Fails unless it is the user's first turn on the field. Makes contact. Priority +3.",
 		shortDesc: "Hits first. First turn out only. The target flinches.",
 		id: "fakeout",
+		isViable: true,
 		name: "Fake Out",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 3,
+		isContact: true,
 		onTryHit: function(target, pokemon) {
 			if (pokemon.activeTurns > 1) {
 				this.debug('It\'s not your first turn out.');
@@ -3325,9 +3329,9 @@ exports.BattleMovedex = {
 		id: "falseswipe",
 		name: "False Swipe",
 		pp: 40,
+		priority: 0,
 		isContact: true,
 		noFaint: true,
-		priority: 0,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3382,9 +3386,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 50% chance to raise the user's Special Attack by 1 stage.",
 		shortDesc: "50% chance to boost the user's Sp. Atk by 1.",
 		id: "fierydance",
+		isViable: true,
 		name: "Fiery Dance",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 50,
@@ -3410,8 +3414,8 @@ exports.BattleMovedex = {
 		id: "finalgambit",
 		name: "Final Gambit",
 		pp: 5,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		selfdestruct: true,
 		secondary: false,
 		target: "normal",
@@ -3425,9 +3429,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to burn it.",
 		shortDesc: "10% chance to burn the target.",
 		id: "fireblast",
+		isViable: true,
 		name: "Fire Blast",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3444,11 +3448,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to burn it and a 10% chance to flinch it. Makes contact.",
 		shortDesc: "10% chance to burn. 10% chance to flinch.",
 		id: "firefang",
+		isViable: true,
 		name: "Fire Fang",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondaries: [ {
 				chance: 10,
 				status: 'brn'
@@ -3483,12 +3487,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to burn it. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "10% chance to burn the target.",
 		id: "firepunch",
+		isViable: true,
 		name: "Fire Punch",
 		pp: 15,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -3555,11 +3559,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target based on the amount of HP the user has left. X is equal to (user's current HP * 48 / user's maximum HP), rounded down; the base power of this attack is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1. Makes contact.",
 		shortDesc: "More power the less HP the user has left.",
 		id: "flail",
+		isViable: true,
 		name: "Flail",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3587,11 +3591,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 100% chance to raise the user's Speed by 1 stage. Makes contact.",
 		shortDesc: "100% chance to boost the user's Speed by 1.",
 		id: "flamecharge",
+		isViable: true,
 		name: "Flame Charge",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -3613,9 +3617,9 @@ exports.BattleMovedex = {
 		id: "flamewheel",
 		name: "Flame Wheel",
 		pp: 25,
+		priority: 0,
 		isContact: true,
 		thawsUser: true,
-		priority: 0,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -3631,9 +3635,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to burn it.",
 		shortDesc: "10% chance to burn the target.",
 		id: "flamethrower",
+		isViable: true,
 		name: "Flamethrower",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3650,12 +3654,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to burn it. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. If the user is frozen, it will defrost before using this move. Makes contact.",
 		shortDesc: "Has 1/3 recoil. 10% chance to burn. Thaws user.",
 		id: "flareblitz",
+		isViable: true,
 		name: "Flare Blitz",
 		pp: 15,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		thawsUser: true,
-		priority: 0,
 		recoil: [1,3],
 		secondary: {
 			chance: 10,
@@ -3690,9 +3694,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to lower its Special Defense by 1 stage.",
 		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
 		id: "flashcannon",
+		isViable: true,
 		name: "Flash Cannon",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3785,8 +3789,8 @@ exports.BattleMovedex = {
 		id: "fly",
 		name: "Fly",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		isTwoTurnMove: true,
 		effect: {
 			onSourceModifyMove: function(move) {
@@ -3806,7 +3810,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"focusblast": {
@@ -3817,9 +3821,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to lower its Special Defense by 1 stage.",
 		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
 		id: "focusblast",
+		isViable: true,
 		name: "Focus Blast",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3840,8 +3844,8 @@ exports.BattleMovedex = {
 		id: "focusenergy",
 		name: "Focus Energy",
 		pp: 30,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'focusenergy',
 		effect: {
 			onStart: function(pokemon) {
@@ -3863,12 +3867,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist. Priority -3.",
 		shortDesc: "Fails if the user takes damage before it hits.",
 		id: "focuspunch",
+		isViable: true,
 		name: "Focus Punch",
 		pp: 20,
-		isViable: true,
+		priority: -3,
 		isContact: true,
 		isPunchAttack: true,
-		priority: -3,
 		beforeTurnCallback: function(pokemon) {
 			pokemon.addVolatile('focuspunch');
 		},
@@ -3903,7 +3907,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 3,
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"forcepalm": {
@@ -3916,8 +3920,8 @@ exports.BattleMovedex = {
 		id: "forcepalm",
 		name: "Force Palm",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -3935,8 +3939,8 @@ exports.BattleMovedex = {
 		id: "foresight",
 		name: "Foresight",
 		pp: 40,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'foresight',
 		effect: {
 			onStart: function(pokemon) {
@@ -3964,11 +3968,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Damage is calculated using the target's Attack stat, including stat stage changes. Makes contact.",
 		shortDesc: "Uses target's Attack stat in damage calculation.",
 		id: "foulplay",
+		isViable: true,
 		name: "Foul Play",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -4018,9 +4022,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Abilities Battle Armor or Shell Armor.",
 		shortDesc: "Always results in a critical hit.",
 		id: "frostbreath",
+		isViable: true,
 		name: "Frost Breath",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		willCrit: true,
 		secondary: false,
@@ -4038,11 +4042,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Power is equal to the greater of ((255 - user's Happiness) * 2/5), rounded down, or 1. Makes contact.",
 		shortDesc: "Max 102 power at minimum Happiness.",
 		id: "frustration",
+		isViable: true,
 		name: "Frustration",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -4057,8 +4061,8 @@ exports.BattleMovedex = {
 		id: "furyattack",
 		name: "Fury Attack",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -4080,8 +4084,8 @@ exports.BattleMovedex = {
 		id: "furycutter",
 		name: "Fury Cutter",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		onHit: function(target, source) {
 			source.addVolatile('furycutter');
 		},
@@ -4111,8 +4115,8 @@ exports.BattleMovedex = {
 		id: "furyswipes",
 		name: "Fury Swipes",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -4126,9 +4130,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If this move is successful, the next use of Fusion Flare by any Pokemon this turn will have its power doubled.",
 		shortDesc: "Power doubles if used after Fusion Flare.",
 		id: "fusionbolt",
+		isViable: true,
 		name: "Fusion Bolt",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -4142,11 +4146,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If this move is successful, the next use of Fusion Bolt by any Pokemon this turn will have its power doubled. If the user is frozen, it will defrost before using this move.",
 		shortDesc: "Power doubles if used after Fusion Bolt.",
 		id: "fusionflare",
+		isViable: true,
 		name: "Fusion Flare",
 		pp: 5,
-		isViable: true,
-		thawsUser: true,
 		priority: 0,
+		thawsUser: true,
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -4162,9 +4166,9 @@ exports.BattleMovedex = {
 		name: "Future Sight",
 		pp: 10,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
-
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
 				return false;
 			}
@@ -4196,8 +4200,8 @@ exports.BattleMovedex = {
 		id: "gastroacid",
 		name: "Gastro Acid",
 		pp: 10,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onTryHit: function(pokemon) {
 			if (pokemon.ability === 'multitype') {
 				return false;
@@ -4222,11 +4226,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and hits twice. If the first hit breaks the target's Substitute, it will take damage for the second hit. Makes contact.",
 		shortDesc: "Hits 2 times in one turn.",
 		id: "geargrind",
+		isViable: true,
 		name: "Gear Grind",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: [2,2],
 		secondary: false,
 		target: "normal",
@@ -4240,9 +4244,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "gigadrain",
+		isViable: true,
 		name: "Giga Drain",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		drain: [1,2],
 		secondary: false,
@@ -4259,8 +4263,8 @@ exports.BattleMovedex = {
 		id: "gigaimpact",
 		name: "Giga Impact",
 		pp: 5,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -4285,7 +4289,7 @@ exports.BattleMovedex = {
 				spe: -1
 			}
 		},
-		target: "normal",
+		target: "foes",
 		type: "Ice"
 	},
 	"glare": {
@@ -4296,9 +4300,9 @@ exports.BattleMovedex = {
 		desc: "Paralyzes one adjacent target. Ghost-types are not immune. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Paralyzes the target.",
 		id: "glare",
+		isViable: true,
 		name: "Glare",
 		pp: 30,
-		isViable: true,
 		priority: 0,
 		status: 'par',
 		secondary: false,
@@ -4337,11 +4341,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target based on that target's weight. Power is 20 if less than 10kg, 40 if less than 25kg, 60 if less than 50kg, 80 if less than 100kg, 100 if less than 200kg, and 120 if greater than or equal to 200kg. Makes contact.",
 		shortDesc: "More power the heavier the target.",
 		id: "grassknot",
+		isViable: true,
 		name: "Grass Knot",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -4371,8 +4375,8 @@ exports.BattleMovedex = {
 		id: "grasswhistle",
 		name: "GrassWhistle",
 		pp: 15,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		status: 'slp',
 		affectedByImmunities: true,
 		secondary: false,
@@ -4387,9 +4391,9 @@ exports.BattleMovedex = {
 		desc: "For 5 turns, the Evasion of all active Pokemon is 0.6x. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Hi Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, and the Ability Arena Trap can affect Flying-types or Pokemon with the Ability Levitate. Fails if this move is already in effect.",
 		shortDesc: "For 5 turns, negates all Ground immunities.",
 		id: "gravity",
+		isViable: true,
 		name: "Gravity",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		pseudoWeather: 'gravity',
 		effect: {
@@ -4434,8 +4438,8 @@ exports.BattleMovedex = {
 		id: "growl",
 		name: "Growl",
 		pp: 40,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		boosts: {
 			atk: -1
 		},
@@ -4451,11 +4455,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day, raises the user's Attack and Special Attack by 2 stages.",
 		shortDesc: "Boosts the user's Attack and Sp. Atk by 1.",
 		id: "growth",
+		isViable: true,
 		name: "Growth",
 		pp: 40,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onModifyMove: function(move) {
 			if (this.weather === 'sunnyday') move.boosts = {atk: 2, spa: 2};
 		},
@@ -4559,8 +4563,8 @@ exports.BattleMovedex = {
 		id: "guillotine",
 		name: "Guillotine",
 		pp: 5,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		ohko: true,
 		secondary: false,
 		target: "normal",
@@ -4574,9 +4578,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to poison it.",
 		shortDesc: "30% chance to poison the target.",
 		id: "gunkshot",
+		isViable: true,
 		name: "Gunk Shot",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -4597,7 +4601,7 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"gyroball": {
@@ -4616,11 +4620,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Power is equal to (25 * target's current Speed / user's current Speed), rounded down, + 1, but not more than 150. Makes contact.",
 		shortDesc: "More power the slower the user than the target.",
 		id: "gyroball",
+		isViable: true,
 		name: "Gyro Ball",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -4649,12 +4653,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and lowers the user's Speed by 1 stage. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "Lowers the user's Speed by 1.",
 		id: "hammerarm",
+		isViable: true,
 		name: "Hammer Arm",
 		pp: 10,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		self: {
 			boosts: {
 				spe: -1
@@ -4674,8 +4678,8 @@ exports.BattleMovedex = {
 		id: "harden",
 		name: "Harden",
 		pp: 30,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			def: 1
 		},
@@ -4691,9 +4695,9 @@ exports.BattleMovedex = {
 		desc: "Eliminates any stat stage changes from all active Pokemon.",
 		shortDesc: "Eliminates all stat changes.",
 		id: "haze",
+		isViable: true,
 		name: "Haze",
 		pp: 30,
-		isViable: true,
 		priority: 0,
 		onHitField: function() {
 			this.add('-clearallboost');
@@ -4715,11 +4719,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 1/4 that HP, rounded half up, but not less than 1HP. Makes contact.",
 		shortDesc: "Has 1/4 recoil.",
 		id: "headcharge",
+		isViable: true,
 		name: "Head Charge",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		recoil: [1,4],
 		secondary: false,
 		target: "normal",
@@ -4733,11 +4737,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 1/2 that HP, rounded half up, but not less than 1HP. Makes contact.",
 		shortDesc: "Has 1/2 recoil.",
 		id: "headsmash",
+		isViable: true,
 		name: "Head Smash",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		recoil: [1,2],
 		secondary: false,
 		target: "normal",
@@ -4753,8 +4757,8 @@ exports.BattleMovedex = {
 		id: "headbutt",
 		name: "Headbutt",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -4770,12 +4774,12 @@ exports.BattleMovedex = {
 		desc: "Every Pokemon in the user's party is cured of its major status problem. Although this move is sound-based, Pokemon with the Ability Soundproof are also cured.",
 		shortDesc: "Cures the user's party of all status conditions.",
 		id: "healbell",
+		isViable: true,
 		name: "Heal Bell",
 		pp: 5,
-		isViable: true,
+		priority: 0,
 		isSnatchable: true,
 		isSoundBased: true, // though it isn't affected by Soundproof
-		priority: 0,
 		onHitSide: function(side, source) {
 			for (var i=0; i<side.pokemon.length; i++) {
 				side.pokemon[i].status = '';
@@ -4796,8 +4800,8 @@ exports.BattleMovedex = {
 		id: "healblock",
 		name: "Heal Block",
 		pp: 15,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'healblock',
 		effect: {
 			duration: 5,
@@ -4828,11 +4832,11 @@ exports.BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP, rounded half up.",
 		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "healorder",
+		isViable: true,
 		name: "Heal Order",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		heal: [1,2],
 		secondary: false,
 		target: "self",
@@ -4848,8 +4852,8 @@ exports.BattleMovedex = {
 		id: "healpulse",
 		name: "Heal Pulse",
 		pp: 10,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		heal: [1,2],
 		secondary: false,
 		target: "normal",
@@ -4863,11 +4867,11 @@ exports.BattleMovedex = {
 		desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any major status condition cured. Fails if the user is the last unfainted Pokemon in its party.",
 		shortDesc: "User faints. Replacement is fully healed.",
 		id: "healingwish",
+		isViable: true,
 		name: "Healing Wish",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onTryHit: function(pokemon) {
 			if (pokemon.side.pokemonLeft <= 1) return false;
 		},
@@ -4906,8 +4910,8 @@ exports.BattleMovedex = {
 		id: "heartstamp",
 		name: "Heart Stamp",
 		pp: 25,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -4969,11 +4973,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Makes contact.",
 		shortDesc: "More power the heavier the user than the target.",
 		id: "heatcrash",
+		isViable: true,
 		name: "Heat Crash",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -4986,9 +4990,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent foes with a 10% chance to burn each.",
 		shortDesc: "10% chance to burn the foe(s).",
 		id: "heatwave",
+		isViable: true,
 		name: "Heat Wave",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -5022,11 +5026,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Makes contact.",
 		shortDesc: "More power the heavier the user than the target.",
 		id: "heavyslam",
+		isViable: true,
 		name: "Heavy Slam",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -5042,8 +5046,9 @@ exports.BattleMovedex = {
 		name: "Helping Hand",
 		pp: 20,
 		priority: 5,
+		isNotProtectable: true,
 		secondary: false,
-		target: "normal",
+		target: "ally",
 		type: "Normal"
 	},
 	"hex": {
@@ -5073,14 +5078,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Ability Magic Guard are unaffected by crash damage. This move cannot be used while Gravity is in effect. Makes contact.",
 		shortDesc: "User is hurt by 50% of its max HP if it misses.",
 		id: "hijumpkick",
+		isViable: true,
 		name: "Hi Jump Kick",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		onMoveFail: function(target, source, move) {
-			//var damage = this.getDamage(source, target, move, true);
-			//this.damage(damage/2, source);
 			this.damage(source.maxhp/2, source);
 		},
 		secondary: false,
@@ -5098,9 +5101,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
 		shortDesc: "Varies in power and type based on the user's IVs.",
 		id: "hiddenpower",
+		isViable: true,
 		name: "Hidden Power",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		onModifyMove: function(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
@@ -5158,9 +5161,9 @@ exports.BattleMovedex = {
 		desc: "",
 		shortDesc: "",
 		id: "hiddenpower",
+		isViable: true,
 		name: "Hidden Power Electric",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -5173,9 +5176,9 @@ exports.BattleMovedex = {
 		desc: "",
 		shortDesc: "",
 		id: "hiddenpower",
+		isViable: true,
 		name: "Hidden Power Fighting",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -5188,9 +5191,9 @@ exports.BattleMovedex = {
 		desc: "",
 		shortDesc: "",
 		id: "hiddenpower",
+		isViable: true,
 		name: "Hidden Power Fire",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -5231,9 +5234,9 @@ exports.BattleMovedex = {
 		desc: "",
 		shortDesc: "",
 		id: "hiddenpower",
+		isViable: true,
 		name: "Hidden Power Grass",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -5260,9 +5263,9 @@ exports.BattleMovedex = {
 		desc: "",
 		shortDesc: "",
 		id: "hiddenpower",
+		isViable: true,
 		name: "Hidden Power Ice",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -5346,11 +5349,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack and Accuracy by 1 stage.",
 		shortDesc: "Boosts the user's Attack and Accuracy by 1.",
 		id: "honeclaws",
+		isViable: true,
 		name: "Hone Claws",
 		pp: 15,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			accuracy: 1
@@ -5369,8 +5372,8 @@ exports.BattleMovedex = {
 		id: "hornattack",
 		name: "Horn Attack",
 		pp: 25,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -5385,8 +5388,8 @@ exports.BattleMovedex = {
 		id: "horndrill",
 		name: "Horn Drill",
 		pp: 5,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		ohko: true,
 		secondary: false,
 		target: "normal",
@@ -5400,11 +5403,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Makes contact.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "hornleech",
+		isViable: true,
 		name: "Horn Leech",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		drain: [1,2],
 		secondary: false,
 		target: "normal",
@@ -5418,11 +5421,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack by 1 stage.",
 		shortDesc: "Boosts the user's Attack by 1.",
 		id: "howl",
+		isViable: true,
 		name: "Howl",
 		pp: 40,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 1
 		},
@@ -5438,9 +5441,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent or non-adjacent target with a 30% chance to confuse it. This move can hit a target using Bounce, Fly, or Sky Drop. If the weather is Rain Dance, this move cannot miss. If the weather is Sunny Day, this move's accuracy is 50%.",
 		shortDesc: "30% chance to confuse target. Can't miss in rain.",
 		id: "hurricane",
+		isViable: true,
 		name: "Hurricane",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		onModifyMove: function(move) {
 			if (this.weather === 'raindance') move.accuracy = true;
@@ -5450,7 +5453,7 @@ exports.BattleMovedex = {
 			chance: 30,
 			volatileStatus: 'confusion'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"hydrocannon": {
@@ -5479,9 +5482,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target.",
 		shortDesc: "No additional effect.",
 		id: "hydropump",
+		isViable: true,
 		name: "Hydro Pump",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -5515,8 +5518,8 @@ exports.BattleMovedex = {
 		id: "hyperfang",
 		name: "Hyper Fang",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch'
@@ -5532,11 +5535,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent foes. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "hypervoice",
+		isViable: true,
 		name: "Hyper Voice",
 		pp: 10,
-		isViable: true,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		secondary: false,
 		target: "foes",
 		type: "Normal"
@@ -5549,9 +5552,9 @@ exports.BattleMovedex = {
 		desc: "Puts one adjacent target to sleep. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Puts the target to sleep.",
 		id: "hypnosis",
+		isViable: true,
 		name: "Hypnosis",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		status: 'slp',
 		secondary: false,
@@ -5581,8 +5584,8 @@ exports.BattleMovedex = {
 		id: "iceball",
 		name: "Ice Ball",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		effect: {
 			duration: 2,
 			onStart: function() {
@@ -5623,9 +5626,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to freeze it.",
 		shortDesc: "10% chance to freeze the target.",
 		id: "icebeam",
+		isViable: true,
 		name: "Ice Beam",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -5661,11 +5664,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to freeze it and a 10% chance to flinch it. Makes contact.",
 		shortDesc: "10% chance to freeze. 10% chance to flinch.",
 		id: "icefang",
+		isViable: true,
 		name: "Ice Fang",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondaries: [ {
 				chance: 10,
 				status: 'frz'
@@ -5685,12 +5688,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to freeze it. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "10% chance to freeze the target.",
 		id: "icepunch",
+		isViable: true,
 		name: "Ice Punch",
 		pp: 15,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		secondary: {
 			chance: 10,
 			status: 'frz'
@@ -5706,9 +5709,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Priority +1.",
 		shortDesc: "Usually goes first.",
 		id: "iceshard",
+		isViable: true,
 		name: "Ice Shard",
 		pp: 30,
-		isViable: true,
 		priority: 1,
 		secondary: false,
 		target: "normal",
@@ -5722,9 +5725,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to flinch it.",
 		shortDesc: "30% chance to flinch the target.",
 		id: "iciclecrash",
+		isViable: true,
 		name: "Icicle Crash",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -5741,9 +5744,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and hits two to five times. Has a 35% chance to hit two or three times, and a 15% chance to hit four or five times. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times.",
 		shortDesc: "Hits 2-5 times in one turn.",
 		id: "iciclespear",
+		isViable: true,
 		name: "Icicle Spear",
 		pp: 30,
-		isViable: true,
 		priority: 0,
 		multihit: [2,5],
 		secondary: false,
@@ -5780,8 +5783,8 @@ exports.BattleMovedex = {
 		id: "imprison",
 		name: "Imprison",
 		pp: 10,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'imprison',
 		effect: {
 			onStart: function(target) {
@@ -5822,7 +5825,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "foes",
 		type: "Fire"
 	},
 	"inferno": {
@@ -5851,11 +5854,11 @@ exports.BattleMovedex = {
 		desc: "The user has 1/16 of its maximum HP restored at the end of each turn, but it is prevented from switching out and other Pokemon cannot force the user to switch out. The user can still switch out if it uses Baton Pass, U-Turn, or Volt Switch. If the user leaves the field using Baton Pass, the replacement will remain trapped and still receive the healing effect. During the effect, the user can be hit normally by Ground-type attacks and be affected by Spikes and Toxic Spikes, even if the user is a Flying-type or has the Ability Levitate.",
 		shortDesc: "User recovers 1/16 max HP per turn. Traps user.",
 		id: "ingrain",
+		isViable: true,
 		name: "Ingrain",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'ingrain',
 		effect: {
 			onStart: function(pokemon) {
@@ -5883,11 +5886,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Defense by 2 stages.",
 		shortDesc: "Boosts the user's Defense by 2.",
 		id: "irondefense",
+		isViable: true,
 		name: "Iron Defense",
 		pp: 15,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			def: 2
 		},
@@ -5903,11 +5906,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to flinch it. Makes contact.",
 		shortDesc: "30% chance to flinch the target.",
 		id: "ironhead",
+		isViable: true,
 		name: "Iron Head",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -5923,11 +5926,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to lower its Defense by 1 stage. Makes contact.",
 		shortDesc: "30% chance to lower the target's Defense by 1.",
 		id: "irontail",
+		isViable: true,
 		name: "Iron Tail",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -5945,9 +5948,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. This move's type depends on the user's held Plate.",
 		shortDesc: "Type varies based on the held Plate.",
 		id: "judgment",
+		isViable: true,
 		name: "Judgment",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		onModifyMove: function(move, pokemon) {
 			move.type = this.runEvent('Plate', pokemon, null, 'judgment', 'Normal');
@@ -5964,14 +5967,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Ability Magic Guard are unaffected by crash damage. This move cannot be used while Gravity is in effect. Makes contact.",
 		shortDesc: "User is hurt by 50% of its max HP if it misses.",
 		id: "jumpkick",
+		isViable: true,
 		name: "Jump Kick",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		onMoveFail: function(target, source, move) {
-			//var damage = this.getDamage(source, target, move, true);
-			//this.damage(damage/2, source);
 			this.damage(source.maxhp/2, source);
 		},
 		secondary: false,
@@ -5988,8 +5989,8 @@ exports.BattleMovedex = {
 		id: "karatechop",
 		name: "Karate Chop",
 		pp: 25,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -6021,11 +6022,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
 		shortDesc: "Removes the target's held item.",
 		id: "knockoff",
+		isViable: true,
 		name: "Knock Off",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		onHit: function(target, source) {
 			item = target.takeItem(source);
 			if (item) {
@@ -6046,8 +6047,8 @@ exports.BattleMovedex = {
 		id: "lastresort",
 		name: "Last Resort",
 		pp: 5,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		onTryHit: function(target, source) {
 			if (source.moveset.length === 1) return false; // Last Resort fails unless the user knows at least 2 moves
 			var hasLastResort = false; // User must actually have Last Resort for it to succeed
@@ -6072,9 +6073,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent Pokemon with a 30% chance to burn each.",
 		shortDesc: "30% chance to burn adjacent Pokemon.",
 		id: "lavaplume",
+		isViable: true,
 		name: "Lava Plume",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -6091,11 +6092,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit. Makes contact.",
 		shortDesc: "High critical hit ratio.",
 		id: "leafblade",
+		isViable: true,
 		name: "Leaf Blade",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -6109,9 +6110,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and lowers the user's Special Attack by 2 stages.",
 		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "leafstorm",
+		isViable: true,
 		name: "Leaf Storm",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		self: {
 			boosts: {
@@ -6152,8 +6153,8 @@ exports.BattleMovedex = {
 		id: "leechlife",
 		name: "Leech Life",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		drain: [1,2],
 		secondary: false,
 		target: "normal",
@@ -6167,11 +6168,11 @@ exports.BattleMovedex = {
 		desc: "The Pokemon at the user's position steals 1/8 of one adjacent target's max HP, rounded down, at the end of each turn. If Big Root is held by the recipient, the HP recovered is 1.3x normal, rounded half down. If the target uses Baton Pass, the replacement will continue being leeched. If the target switches out or uses Rapid Spin, the effect ends. Grass-types are unaffected. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "1/8 of target's HP is restored to user every turn.",
 		id: "leechseed",
+		isViable: true,
 		name: "Leech Seed",
 		pp: 10,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'leechseed',
 		affectedByImmunities: true,
 		effect: {
@@ -6229,8 +6230,8 @@ exports.BattleMovedex = {
 		id: "lick",
 		name: "Lick",
 		pp: 30,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -6246,11 +6247,11 @@ exports.BattleMovedex = {
 		desc: "For 5 turns, the user and its party members take 0.5x damage from special attacks, or 0.66x damage if in a double or triple battle. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay.",
 		shortDesc: "For 5 turns, allies' Sp. Def is 2x; 1.5x if not 1vs1.",
 		id: "lightscreen",
+		isViable: true,
 		name: "Light Screen",
 		pp: 30,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		sideCondition: 'lightscreen',
 		effect: {
 			duration: 5,
@@ -6312,9 +6313,9 @@ exports.BattleMovedex = {
 		desc: "Puts one adjacent target to sleep. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Puts the target to sleep.",
 		id: "lovelykiss",
+		isViable: true,
 		name: "Lovely Kiss",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		status: 'slp',
 		secondary: false,
@@ -6348,11 +6349,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target based on that target's weight. Power is 20 if less than 10kg, 40 if less than 25kg, 60 if less than 50kg, 80 if less than 100kg, 100 if less than 200kg, and 120 if greater than or equal to 200kg. Makes contact.",
 		shortDesc: "More power the heavier the target.",
 		id: "lowkick",
+		isViable: true,
 		name: "Low Kick",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -6367,8 +6368,8 @@ exports.BattleMovedex = {
 		id: "lowsweep",
 		name: "Low Sweep",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -6388,8 +6389,8 @@ exports.BattleMovedex = {
 		id: "luckychant",
 		name: "Lucky Chant",
 		pp: 30,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		sideCondition: 'luckychant',
 		effect: {
 			duration: 5,
@@ -6415,11 +6416,11 @@ exports.BattleMovedex = {
 		desc: "The user faints and the Pokemon brought out to replace it has its HP and PP fully restored along with having any major status condition cured. Fails if the user is the last unfainted Pokemon in its party.",
 		shortDesc: "User faints. Replacement is fully healed, with PP.",
 		id: "lunardance",
+		isViable: true,
 		name: "Lunar Dance",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onTryHit: function(pokemon) {
 			if (pokemon.side.pokemonLeft <= 1) return false;
 		},
@@ -6480,12 +6481,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist. Priority +1.",
 		shortDesc: "Usually goes first.",
 		id: "machpunch",
+		isViable: true,
 		name: "Mach Punch",
 		pp: 30,
-		isViable: true,
+		priority: 1,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 1,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -6498,9 +6499,9 @@ exports.BattleMovedex = {
 		desc: "Until the end of the turn, the user is unaffected by certain non-damaging moves directed at it and will instead use such moves against the original user. Spikes, Stealth Rock, and Toxic Spikes can only be reflected once per side, by the leftmost Pokemon under this or the Ability Magic Bounce's effect. If the user has the Ability Soundproof, this move's effect happens before a sound-based move can be nullified. The Abilities Lightningrod and Storm Drain redirect their respective moves before this move takes effect. Priority +4.",
 		shortDesc: "Bounces back certain non-damaging moves.",
 		id: "magiccoat",
+		isViable: true,
 		name: "Magic Coat",
 		pp: 15,
-		isViable: true,
 		priority: 4,
 		volatileStatus: 'magiccoat',
 		effect: {
@@ -6599,9 +6600,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; always five turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-Turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "magmastorm",
+		isViable: true,
 		name: "Magma Storm",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
@@ -6631,11 +6632,11 @@ exports.BattleMovedex = {
 		desc: "For 5 turns, the user is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, and the Ability Arena Trap as long as it remains active. If the user uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, and Iron Ball override this move if the user is under any of their effects. Fails if the user is already under this effect or the effects of Ingrain or Smack Down. This move cannot be used while Gravity is in effect.",
 		shortDesc: "For 5 turns, the user is immune to Ground moves.",
 		id: "magnetrise",
+		isViable: true,
 		name: "Magnet Rise",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'magnetrise',
 		effect: {
 			duration: 5,
@@ -6703,9 +6704,9 @@ exports.BattleMovedex = {
 		desc: "The user selects one adjacent foe and uses the move it chose for use this turn against it, if possible, with 1.5x the power. The move must be a damaging move other than Chatter, Counter, Covet, Focus Punch, Me First, Metal Burst, Mirror Coat, Thief, or Struggle. Fails if the foe moves before the user. Ignores the foe's Substitute for the purpose of copying the move.",
 		shortDesc: "Copies a foe at 1.5x power. User must be faster.",
 		id: "mefirst",
+		isViable: true,
 		name: "Me First",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		onHit: function(target, pokemon) {
 			var decision = this.willMove(target);
@@ -6737,11 +6738,11 @@ exports.BattleMovedex = {
 		desc: "Prevents one adjacent target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-Turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "The target cannot switch out.",
 		id: "meanlook",
+		isViable: true,
 		name: "Mean Look",
 		pp: 5,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onHit: function(target) {
 			target.addVolatile('trapped');
 		},
@@ -6757,11 +6758,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack by 1 stage.",
 		shortDesc: "Boosts the user's Attack by 1.",
 		id: "meditate",
+		isViable: true,
 		name: "Meditate",
 		pp: 40,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 1
 		},
@@ -6793,11 +6794,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "megakick",
+		isViable: true,
 		name: "Mega Kick",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -6812,9 +6813,9 @@ exports.BattleMovedex = {
 		id: "megapunch",
 		name: "Mega Punch",
 		pp: 20,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -6827,11 +6828,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "megahorn",
+		isViable: true,
 		name: "Megahorn",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -6844,11 +6845,11 @@ exports.BattleMovedex = {
 		desc: "Lowers one adjacent target's Attack and Special Attack by 2 stages. The user faints unless this move misses or there is no target. Fails entirely if the target has a Substitute, but does not fail if the target's stats cannot be changed.",
 		shortDesc: "Lowers target's Attack, Sp. Atk by 2. User faints.",
 		id: "memento",
+		isViable: true,
 		name: "Memento",
 		pp: 10,
-		isViable: true,
-		isBounceable: false,
 		priority: 0,
+		isBounceable: false,
 		boosts: {
 			atk: -2,
 			spa: -2
@@ -6890,8 +6891,8 @@ exports.BattleMovedex = {
 		id: "metalclaw",
 		name: "Metal Claw",
 		pp: 35,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 10,
 			self: {
@@ -6930,12 +6931,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to raise the user's Attack by 1 stage. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "20% chance to boost the user's Attack by 1.",
 		id: "meteormash",
+		isViable: true,
 		name: "Meteor Mash",
 		pp: 10,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		secondary: {
 			chance: 20,
 			self: {
@@ -6990,11 +6991,11 @@ exports.BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP, rounded half up. (Field: Can be used to heal an ally by draining 1/5 of the user's maximum HP, rounded down, and restoring that amount to the selected ally. Fails if the user's HP would be reduced to less than 1.)",
 		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "milkdrink",
+		isViable: true,
 		name: "Milk Drink",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		heal: [1,2],
 		secondary: false,
 		target: "self",
@@ -7058,8 +7059,8 @@ exports.BattleMovedex = {
 		id: "minimize",
 		name: "Minimize",
 		pp: 20,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'minimize',
 		boosts: {
 			evasion: 2
@@ -7078,8 +7079,8 @@ exports.BattleMovedex = {
 		id: "miracleeye",
 		name: "Miracle Eye",
 		pp: 40,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'miracleeye',
 		effect: {
 			onStart: function(pokemon) {
@@ -7111,9 +7112,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to the last foe to hit the user with a special attack this turn. The damage is equal to twice the HP lost by the user from that attack. If that foe's position is no longer in use, damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by a foe's special attack this turn. Priority -5.",
 		shortDesc: "If hit by special attack, returns double damage.",
 		id: "mirrorcoat",
+		isViable: true,
 		name: "Mirror Coat",
 		pp: 20,
-		isViable: true,
 		priority: -5,
 		secondary: false,
 		target: "normal",
@@ -7130,6 +7131,7 @@ exports.BattleMovedex = {
 		name: "Mirror Move",
 		pp: 20,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target) {
 			var noMirrorMove = {acupressure:1, afteryou:1, aromatherapy:1, chatter:1, conversion2:1, counter:1, curse:1, doomdesire:1, feint:1, finalgambit:1, focuspunch:1, futuresight:1, gravity:1, guardsplit:1, hail:1, haze:1, healbell:1, healpulse:1, helpinghand:1, lightscreen:1, luckychant:1, mefirst:1, mimic:1, mirrorcoat:1, mirrormove:1, mist:1, mudsport:1, naturepower:1, perishsong:1, powersplit:1, psychup:1, quickguard:1, raindance:1, reflect:1, reflecttype:1, roleplay:1, safeguard:1, sandstorm:1, sketch:1, spikes:1, spitup:1, stealthrock:1, struggle:1, sunnyday:1, tailwind:1, toxicspikes:1, transform:1, watersport:1, wideguard:1};
 			if (!target.lastMove || noMirrorMove[target.lastMove] || this.getMove(target.lastMove).target === 'self') {
@@ -7173,8 +7175,8 @@ exports.BattleMovedex = {
 		id: "mist",
 		name: "Mist",
 		pp: 30,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		sideCondition: 'mist',
 		effect: {
 			duration: 5,
@@ -7228,11 +7230,11 @@ exports.BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		id: "moonlight",
+		isViable: true,
 		name: "Moonlight",
 		pp: 5,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		heal: [1,2],
 		onModifyMove: function(move) {
 			if (this.weather === 'sunnyday') move.heal = [2,3];
@@ -7250,11 +7252,11 @@ exports.BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		id: "morningsun",
+		isViable: true,
 		name: "Morning Sun",
 		pp: 5,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		heal: [1,2],
 		onModifyMove: function(move) {
 			if (this.weather === 'sunnyday') move.heal = [2,3];
@@ -7360,9 +7362,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent foes with a 30% chance to lower their Accuracy by 1 stage each.",
 		shortDesc: "30% chance to lower the foe(s) Accuracy by 1.",
 		id: "muddywater",
+		isViable: true,
 		name: "Muddy Water",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -7381,11 +7383,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Special Attack by 2 stages.",
 		shortDesc: "Boosts the user's Sp. Atk by 2.",
 		id: "nastyplot",
+		isViable: true,
 		name: "Nasty Plot",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			spa: 2
 		},
@@ -7438,9 +7440,9 @@ exports.BattleMovedex = {
 		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles. (In-game: Seed Bomb in grass, Mud Bomb in puddles, Hydro Pump on water, Rock Slide in caves, Earthquake on rocky ground and sand, Blizzard on snow, Ice Beam on ice, and Tri Attack everywhere else.)",
 		shortDesc: "Attack changes based on terrain. (Earthquake)",
 		id: "naturepower",
+		isViable: true,
 		name: "Nature Power",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		onHit: function(target) {
 			this.useMove('earthquake', target);
@@ -7459,8 +7461,8 @@ exports.BattleMovedex = {
 		id: "needlearm",
 		name: "Needle Arm",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -7476,9 +7478,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 40% chance to lower its Accuracy by 1 stage.",
 		shortDesc: "40% chance to lower the target's Accuracy by 1.",
 		id: "nightdaze",
+		isViable: true,
 		name: "Night Daze",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 40,
@@ -7498,9 +7500,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target equal to the user's level.",
 		shortDesc: "Does damage equal to the user's level.",
 		id: "nightshade",
+		isViable: true,
 		name: "Night Shade",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -7514,11 +7516,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit. Makes contact.",
 		shortDesc: "High critical hit ratio.",
 		id: "nightslash",
+		isViable: true,
 		name: "Night Slash",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -7587,8 +7589,8 @@ exports.BattleMovedex = {
 		id: "odorsleuth",
 		name: "Odor Sleuth",
 		pp: 40,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'foresight',
 		secondary: false,
 		target: "normal",
@@ -7628,11 +7630,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent foe at random. The user spends two or three turns locked into this move and becomes confused after the last turn of the effect if it is not already. If the user is prevented from moving or the attack is not successful against the target on the first turn of the effect or the second turn of a three-turn effect, the effect ends without causing confusion. If this move is called by Sleep Talk, the move is used for one turn and does not confuse the user. Makes contact.",
 		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
 		id: "outrage",
+		isViable: true,
 		name: "Outrage",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		self: {
 			volatileStatus: 'lockedmove'
 		},
@@ -7648,9 +7650,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and lowers the user's Special Attack by 2 stages.",
 		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "overheat",
+		isViable: true,
 		name: "Overheat",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		self: {
 			boosts: {
@@ -7669,9 +7671,9 @@ exports.BattleMovedex = {
 		desc: "The user and one adjacent target's HP become the average of their current HP, rounded down, but not more than the maximum HP of either one.",
 		shortDesc: "Shares HP of user and target equally.",
 		id: "painsplit",
+		isViable: true,
 		name: "Pain Split",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		onHit: function(target, pokemon) {
 			var averagehp = parseInt(target.hp + pokemon.hp) / 2;
@@ -7718,11 +7720,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Power doubles if the target moves before the user; power is not doubled if the target switches out. Makes contact.",
 		shortDesc: "Power doubles if the user moves after the target.",
 		id: "payback",
+		isViable: true,
 		name: "Payback",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -7737,10 +7739,10 @@ exports.BattleMovedex = {
 		id: "peck",
 		name: "Peck",
 		pp: 35,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"perishsong": {
@@ -7751,11 +7753,11 @@ exports.BattleMovedex = {
 		desc: "Causes the user and all adjacent and non-adjacent Pokemon to receive a perish count of 4 if it doesn't already have a perish count. At the end of each turn including the turn used, the perish count of all active Pokemon lowers by 1 and Pokemon faint if the number reaches 0. The perish count is removed from Pokemon who switch out. If a Pokemon uses Baton Pass while it has a perish count, the replacement will gain the perish count and continue to count down. Pokemon with the Ability Soundproof are immune. Ignores a target's Substitute.",
 		shortDesc: "All active Pokemon will faint in 3 turns.",
 		id: "perishsong",
+		isViable: true,
 		name: "Perish Song",
 		pp: 5,
-		isViable: true,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		onHitField: function(target, source) {
 			this.add('-fieldactivate', 'move: Perish Song');
 			for (var i=0; i<this.sides.length; i++) {
@@ -7788,11 +7790,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent foe at random. The user spends two or three turns locked into this move and becomes confused after the last turn of the effect if it is not already. If the user is prevented from moving or the attack is not successful against the target on the first turn of the effect or the second turn of a three-turn effect, the effect ends without causing confusion. If this move is called by Sleep Talk, the move is used for one turn and does not confuse the user. Makes contact.",
 		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
 		id: "petaldance",
+		isViable: true,
 		name: "Petal Dance",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		self: {
 			volatileStatus: 'lockedmove'
 		},
@@ -7826,10 +7828,10 @@ exports.BattleMovedex = {
 		id: "pluck",
 		name: "Pluck",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"poisonfang": {
@@ -7842,8 +7844,8 @@ exports.BattleMovedex = {
 		id: "poisonfang",
 		name: "Poison Fang",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'tox'
@@ -7864,7 +7866,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		status: 'psn',
 		secondary: false,
-		target: "normal",
+		target: "foes",
 		type: "Poison"
 	},
 	"poisonjab": {
@@ -7875,11 +7877,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to poison it. Makes contact.",
 		shortDesc: "30% chance to poison the target.",
 		id: "poisonjab",
+		isViable: true,
 		name: "Poison Jab",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -7932,8 +7934,8 @@ exports.BattleMovedex = {
 		id: "poisontail",
 		name: "Poison Tail",
 		pp: 25,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: {
 			chance: 10,
@@ -7952,8 +7954,8 @@ exports.BattleMovedex = {
 		id: "pound",
 		name: "Pound",
 		pp: 35,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8045,8 +8047,8 @@ exports.BattleMovedex = {
 		id: "powertrick",
 		name: "Power Trick",
 		pp: 10,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'powertrick',
 		effect: {
 			onStart: function(pokemon) {
@@ -8077,11 +8079,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "powerwhip",
+		isViable: true,
 		name: "Power Whip",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -8121,9 +8123,9 @@ exports.BattleMovedex = {
 		desc: "The user is protected from most attacks made by other Pokemon during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn. Priority +4.",
 		shortDesc: "Prevents moves from affecting the user for a turn.",
 		id: "protect",
+		isViable: true,
 		name: "Protect",
 		pp: 10,
-		isViable: true,
 		priority: 4,
 		stallingMove: true, // decrease success of repeated use to 50%
 		volatileStatus: 'protect',
@@ -8150,14 +8152,8 @@ exports.BattleMovedex = {
 				this.add('-singleturn', target, 'Protect');
 			},
 			onTryHitPriority: 1,
-			onTryHit: function(target, source, effect) {
-				if (effect && (effect.id === 'feint' || effect.id === 'roleplay' || effect.id === 'conversion2')) {
-					return;
-				}
-				if (effect && effect.id === 'curse' && !effect.volatileStatus) {
-					// curse targeting self
-					return;
-				}
+			onTryHit: function(target, source, move) {
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -8168,7 +8164,7 @@ exports.BattleMovedex = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				this.singleEvent('MoveFail', effect, null, target, source, effect);
+				this.singleEvent('MoveFail', move, null, target, source, move);
 				return null;
 			}
 		},
@@ -8205,15 +8201,13 @@ exports.BattleMovedex = {
 		name: "Psych Up",
 		pp: 10,
 		priority: 0,
+		isNotProtectable: true,
 		onHit: function(target, source) {
 			var targetBoosts = {};
-
 			for (var i in target.baseBoosts) {
 				targetBoosts[i] = target.baseBoosts[i];
 			}
-
 			source.setBoost(targetBoosts);
-
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
 		secondary: false,
@@ -8228,9 +8222,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to lower its Special Defense by 1 stage.",
 		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
 		id: "psychic",
+		isViable: true,
 		name: "Psychic",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -8249,9 +8243,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and lowers the user's Special Attack by 2 stages.",
 		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "psychoboost",
+		isViable: true,
 		name: "Psycho Boost",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		self: {
 			boosts: {
@@ -8270,9 +8264,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
 		id: "psychocut",
+		isViable: true,
 		name: "Psycho Cut",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		critRatio: 2,
 		secondary: false,
@@ -8287,9 +8281,9 @@ exports.BattleMovedex = {
 		desc: "The user's major status problem is transferred to one adjacent target, and the user is cured. Fails if the target already has a major status problem.",
 		shortDesc: "Transfers the user's status ailment to the target.",
 		id: "psychoshift",
+		isViable: true,
 		name: "Psycho Shift",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		onHit: function(target, pokemon) {
 			if (pokemon.status && !target.status && target.trySetStatus(pokemon.status)) {
@@ -8311,9 +8305,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target based on its Defense instead of Special Defense.",
 		shortDesc: "Damages target based on Defense, not Sp. Def.",
 		id: "psyshock",
+		isViable: true,
 		name: "Psyshock",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -8328,9 +8322,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target based on its Defense instead of Special Defense.",
 		shortDesc: "Damages target based on Defense, not Sp. Def.",
 		id: "psystrike",
+		isViable: true,
 		name: "Psystrike",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -8367,8 +8361,8 @@ exports.BattleMovedex = {
 		id: "punishment",
 		name: "Punishment",
 		pp: 5,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -8389,11 +8383,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If an adjacent foe switches out this turn, this move hits that Pokemon before it leaves the field. If the user moves after a foe using U-turn or Volt Switch, but not Baton Pass, it will hit that foe before it leaves the field. Power doubles and no accuracy check is done if the user hits a foe switching out, and the user's turn is over; if a foe faints from this, the replacement Pokemon does not become active until the end of the turn. Makes contact.",
 		shortDesc: "Power doubles if the target is switching out.",
 		id: "pursuit",
+		isViable: true,
 		name: "Pursuit",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		beforeTurnCallback: function(pokemon, target) {
 			target.side.addSideCondition('pursuit', pokemon);
 			if (!target.side.sideConditions['pursuit'].sources) {
@@ -8443,11 +8437,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact. Priority +1.",
 		shortDesc: "Usually goes first.",
 		id: "quickattack",
+		isViable: true,
 		name: "Quick Attack",
 		pp: 30,
-		isViable: true,
-		isContact: true,
 		priority: 1,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8462,8 +8456,8 @@ exports.BattleMovedex = {
 		id: "quickguard",
 		name: "Quick Guard",
 		pp: 15,
-		isSnatchable: true,
 		priority: 3,
+		isSnatchable: true,
 		sideCondition: 'quickguard',
 		onTryHitSide: function(side, source) {
 			if (!this.willAct()) {
@@ -8516,11 +8510,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Special Attack, Special Defense, and Speed by 1 stage.",
 		shortDesc: "Boosts the user's Sp. Atk, Sp. Def, Speed by 1.",
 		id: "quiverdance",
+		isViable: true,
 		name: "Quiver Dance",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			spa: 1,
 			spd: 1,
@@ -8540,8 +8534,8 @@ exports.BattleMovedex = {
 		id: "rage",
 		name: "Rage",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8558,7 +8552,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 3,
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Bug"
 	},
 	"raindance": {
@@ -8569,9 +8563,9 @@ exports.BattleMovedex = {
 		desc: "For 5 turns, the weather becomes Rain Dance. The power of Water-type attacks is 1.5x and the power of Fire-type attacks is 0.5x during the effect. Lasts for 8 turns if the user is holding Damp Rock. Fails if the current weather is Rain Dance.",
 		shortDesc: "For 5 turns, heavy rain powers Water moves.",
 		id: "raindance",
+		isViable: true,
 		name: "Rain Dance",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		weather: 'RainDance',
 		secondary: false,
@@ -8586,21 +8580,23 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If this move is successful and the user has not fainted, the effects of Leech Seed and partial-trapping moves end for the user, and all hazards are removed from the user's side of the field.",
 		shortDesc: "Frees user from hazards, partial trap, Leech Seed.",
 		id: "rapidspin",
+		isViable: true,
 		name: "Rapid Spin",
 		pp: 40,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		self: {
 			onHit: function(pokemon) {
-				if (pokemon.removeVolatile('leechseed')) {
+				if (pokemon.removeVolatile('leechseed') && pokemon.hp) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
 				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
 				for (var i in sideConditions) {
-					if (pokemon.side.removeSideCondition(i)) this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] '+pokemon);
+					if (pokemon.side.removeSideCondition(i) && pokemon.hp) {
+						this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] '+pokemon);
+					}
 				}
-				if (pokemon.volatiles['partiallytrapped']) {
+				if (pokemon.volatiles['partiallytrapped'] && pokemon.hp) {
 					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.name, '[from] move: Rapid Spin', '[of] '+pokemon, '[partiallytrapped]');
 					delete pokemon.volatiles['partiallytrapped'];
 				}
@@ -8634,11 +8630,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 50% chance to lower its Defense by 1 stage. Makes contact.",
 		shortDesc: "50% chance to lower the target's Defense by 1.",
 		id: "razorshell",
+		isViable: true,
 		name: "Razor Shell",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -8673,11 +8669,11 @@ exports.BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP, rounded half up.",
 		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "recover",
+		isViable: true,
 		name: "Recover",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		heal: [1,2],
 		secondary: false,
 		target: "self",
@@ -8693,8 +8689,8 @@ exports.BattleMovedex = {
 		id: "recycle",
 		name: "Recycle",
 		pp: 10,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onHit: function(pokemon) {
 			if (!pokemon.item && pokemon.lastItem) {
 				pokemon.setItem(pokemon.lastItem);
@@ -8713,11 +8709,11 @@ exports.BattleMovedex = {
 		desc: "For 5 turns, the user and its party members take 0.5x damage from physical attacks, or 0.66x damage if in a double or triple battle. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Brick Break removes the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay.",
 		shortDesc: "For 5 turns, allies' Defense is 2x; 1.5x if not 1vs1.",
 		id: "reflect",
+		isViable: true,
 		name: "Reflect",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		sideCondition: 'reflect',
 		effect: {
 			duration: 5,
@@ -8783,11 +8779,11 @@ exports.BattleMovedex = {
 		desc: "The user cures its burn, poison, or paralysis.",
 		shortDesc: "Removes status from the user.",
 		id: "refresh",
+		isViable: true,
 		name: "Refresh",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onHit: function(pokemon) {
 			pokemon.cureStatus();
 		},
@@ -8803,11 +8799,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent foes with a 10% chance to put each to sleep. If this move is successful on at least one foe and the user is a Meloetta, it changes to the Pirouette Forme if it is currently in Aria Forme, or changes to Aria Forme if it is currently in Pirouette Forme. The Pirouette Forme reverts to Aria Forme when Meloetta is not active. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "10% chance to sleep foe(s). Meloetta transforms.",
 		id: "relicsong",
+		isViable: true,
 		name: "Relic Song",
 		pp: 10,
-		isViable: true,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		secondary: {
 			chance: 10,
 			status: 'slp'
@@ -8824,7 +8820,7 @@ exports.BattleMovedex = {
 			// renderer takes care of this for us
 			pokemon.transformed = false;
 		},
-		target: "normal",
+		target: "foes",
 		type: "Normal"
 	},
 	"rest": {
@@ -8835,11 +8831,11 @@ exports.BattleMovedex = {
 		desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any major status problem in the process. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep.",
 		shortDesc: "User sleeps 2 turns and restores HP and status.",
 		id: "rest",
+		isViable: true,
 		name: "Rest",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onHit: function(target) {
 			if (target.hp >= target.maxhp) return false;
 			if (!target.setStatus('slp')) return false;
@@ -8862,8 +8858,8 @@ exports.BattleMovedex = {
 		id: "retaliate",
 		name: "Retaliate",
 		pp: 5,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8879,11 +8875,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Power is equal to the greater of (user's Happiness * 2/5), rounded down, or 1. Makes contact.",
 		shortDesc: "Max 102 power at maximum Happiness.",
 		id: "return",
+		isViable: true,
 		name: "Return",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8905,8 +8901,8 @@ exports.BattleMovedex = {
 		id: "revenge",
 		name: "Revenge",
 		pp: 10,
-		isContact: true,
 		priority: -4,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -8938,11 +8934,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target based on the amount of HP the user has left. X is equal to (user's current HP * 48 / user's maximum HP), rounded down; the base power of this attack is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1. Makes contact.",
 		shortDesc: "More power the less HP the user has left.",
 		id: "reversal",
+		isViable: true,
 		name: "Reversal",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -8955,11 +8951,11 @@ exports.BattleMovedex = {
 		desc: "Causes one adjacent target to be forced to switch out and be replaced with a random unfainted ally. Fails if the target used Ingrain previously or has the Ability Suction Cups. Pokemon with the Ability Soundproof are immune. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute. Priority -6. (Wild battles: The battle ends as long as it is not a double battle and the user's level is not less than the opponent's level.)",
 		shortDesc: "Forces the target to switch to a random ally.",
 		id: "roar",
+		isViable: true,
 		name: "Roar",
 		pp: 20,
-		isViable: true,
-		isSoundBased: true,
 		priority: -6,
+		isSoundBased: true,
 		forceSwitch: true,
 		notSubBlocked: true,
 		secondary: false,
@@ -8992,9 +8988,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and hits two to five times. Has a 35% chance to hit two or three times, and a 15% chance to hit four or five times. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times.",
 		shortDesc: "Hits 2-5 times in one turn.",
 		id: "rockblast",
+		isViable: true,
 		name: "Rock Blast",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		multihit: [2,5],
 		secondary: false,
@@ -9011,8 +9007,8 @@ exports.BattleMovedex = {
 		id: "rockclimb",
 		name: "Rock Climb",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion'
@@ -9028,11 +9024,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Speed by 2 stages.",
 		shortDesc: "Boosts the user's Speed by 2.",
 		id: "rockpolish",
+		isViable: true,
 		name: "Rock Polish",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			spe: 2
 		},
@@ -9046,11 +9042,11 @@ exports.BattleMovedex = {
 		basePower: 75,
 		category: "Physical",
 		desc: "Deals damage to all adjacent foes with a 30% chance to flinch each.",
-		id: "rockslide",
 		shortDesc: "30% chance to flinch the foe(s).",
+		id: "rockslide",
+		isViable: true,
 		name: "Rock Slide",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -9069,8 +9065,8 @@ exports.BattleMovedex = {
 		id: "rocksmash",
 		name: "Rock Smash",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -9144,6 +9140,7 @@ exports.BattleMovedex = {
 		name: "Role Play",
 		pp: 10,
 		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function(target, source) {
 			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, wonderguard:1, zenmode:1};
 			if (bannedAbilities[target.ability] || source.ability === 'multitype' || target.ability === source.ability) {
@@ -9171,8 +9168,8 @@ exports.BattleMovedex = {
 		id: "rollingkick",
 		name: "Rolling Kick",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -9203,8 +9200,8 @@ exports.BattleMovedex = {
 		id: "rollout",
 		name: "Rollout",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		effect: {
 			duration: 2,
 			onStart: function() {
@@ -9245,11 +9242,11 @@ exports.BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP, rounded half up. Until the end of the turn, Flying-type users lose their Flying-type and pure Flying-type users become Normal-type. Does nothing if the user's HP is full.",
 		shortDesc: "Heals 50% HP. Removes Flying-type 'til turn ends.",
 		id: "roost",
+		isViable: true,
 		name: "Roost",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		heal: [1,2],
 		volatileStatus: 'roost',
 		effect: {
@@ -9283,8 +9280,8 @@ exports.BattleMovedex = {
 		id: "round",
 		name: "Round",
 		pp: 15,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -9297,11 +9294,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 50% chance to burn it. If the user is frozen, it will defrost before using this move.",
 		shortDesc: "50% chance to burn the target. Thaws user.",
 		id: "sacredfire",
+		isViable: true,
 		name: "Sacred Fire",
 		pp: 5,
-		isViable: true,
-		thawsUser: true,
 		priority: 0,
+		thawsUser: true,
 		secondary: {
 			chance: 50,
 			status: 'brn'
@@ -9317,11 +9314,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and ignores the target's defensive stat stage changes, including Accuracy and Evasion modifiers. Makes contact.",
 		shortDesc: "Ignores the target's stat modifiers.",
 		id: "sacredsword",
+		isViable: true,
 		name: "Sacred Sword",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		ignoreEvasion: true,
 		ignoreDefensive: true,
 		secondary: false,
@@ -9338,8 +9335,8 @@ exports.BattleMovedex = {
 		id: "safeguard",
 		name: "Safeguard",
 		pp: 25,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		sideCondition: 'safeguard',
 		effect: {
 			duration: 5,
@@ -9432,11 +9429,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to burn it. If the user is frozen, it thaws out just before attacking.",
 		shortDesc: "30% chance to burn the target. Thaws user.",
 		id: "scald",
+		isViable: true,
 		name: "Scald",
 		pp: 15,
-		isViable: true,
-		thawsUser: true,
 		priority: 0,
+		thawsUser: true,
 		secondary: {
 			chance: 30,
 			status: 'brn'
@@ -9472,8 +9469,8 @@ exports.BattleMovedex = {
 		id: "scratch",
 		name: "Scratch",
 		pp: 35,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -9488,8 +9485,8 @@ exports.BattleMovedex = {
 		id: "screech",
 		name: "Screech",
 		pp: 40,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		boosts: {
 			def: -2
 		},
@@ -9505,15 +9502,15 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent Pokemon with a 30% chance to burn each.",
 		shortDesc: "30% chance to burn adjacent Pokemon.",
 		id: "searingshot",
+		isViable: true,
 		name: "Searing Shot",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
 			status: 'brn'
 		},
-		target: "normal",
+		target: "adjacent",
 		type: "Fire"
 	},
 	"secretpower": {
@@ -9545,9 +9542,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target based on its Defense instead of Special Defense.",
 		shortDesc: "Damages target based on Defense, not Sp. Def.",
 		id: "secretsword",
+		isViable: true,
 		name: "Secret Sword",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -9561,9 +9558,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target.",
 		shortDesc: "No additional effect.",
 		id: "seedbomb",
+		isViable: true,
 		name: "Seed Bomb",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -9577,9 +9574,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 40% chance to lower its Special Defense by 2 stages.",
 		shortDesc: "40% chance to lower the target's Sp. Def by 2.",
 		id: "seedflare",
+		isViable: true,
 		name: "Seed Flare",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 40,
@@ -9599,11 +9596,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target equal to the user's level. Makes contact.",
 		shortDesc: "Does damage equal to the user's level.",
 		id: "seismictoss",
+		isViable: true,
 		name: "Seismic Toss",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -9632,9 +9629,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to lower its Special Defense by 1 stage.",
 		shortDesc: "20% chance to lower the target's Sp. Def by 1.",
 		id: "shadowball",
+		isViable: true,
 		name: "Shadow Ball",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -9653,11 +9650,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit. Makes contact.",
 		shortDesc: "High critical hit ratio.",
 		id: "shadowclaw",
+		isViable: true,
 		name: "Shadow Claw",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -9671,11 +9668,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. This attack charges on the first turn and strikes on the second. On the first turn, the user avoids all attacks. The user cannot make a move between turns. If the user is holding a Power Herb, the move completes in one turn. Makes contact.",
 		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection.",
 		id: "shadowforce",
+		isViable: true,
 		name: "Shadow Force",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		isTwoTurnMove: true,
 		onTryHit: function(target) {
 			if (target.volatiles['protect']) {
@@ -9700,12 +9697,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and ignores Accuracy and Evasion modifiers. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "Ignores Accuracy and Evasion modifiers.",
 		id: "shadowpunch",
+		isViable: true,
 		name: "Shadow Punch",
 		pp: 20,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -9718,11 +9715,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact. Priority +1.",
 		shortDesc: "Usually goes first.",
 		id: "shadowsneak",
+		isViable: true,
 		name: "Shadow Sneak",
 		pp: 30,
-		isViable: true,
-		isContact: true,
 		priority: 1,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -9735,11 +9732,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack by 1 stage.",
 		shortDesc: "Boosts the user's Attack by 1.",
 		id: "sharpen",
+		isViable: true,
 		name: "Sharpen",
 		pp: 30,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 1
 		},
@@ -9771,11 +9768,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack, Special Attack, and Speed by 2 stages. Lowers the user's Defense and Special Defense by 1 stage.",
 		shortDesc: "Boosts Atk, SpA, Spe by 2. Lowers Def, SpD by 1.",
 		id: "shellsmash",
+		isViable: true,
 		name: "Shell Smash",
 		pp: 15,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 2,
 			spa: 2,
@@ -9795,11 +9792,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack by 1 stage and its Speed by 2 stages.",
 		shortDesc: "Boosts the user's Speed by 2 and Attack by 1.",
 		id: "shiftgear",
+		isViable: true,
 		name: "Shift Gear",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			spe: 2
@@ -9831,9 +9828,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to confuse it.",
 		shortDesc: "10% chance to confuse the target.",
 		id: "signalbeam",
+		isViable: true,
 		name: "Signal Beam",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -9878,8 +9875,8 @@ exports.BattleMovedex = {
 		id: "simplebeam",
 		name: "Simple Beam",
 		pp: 15,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onTryHit: function(pokemon) {
 			var bannedAbilities = {multitype:1, simple:1, truant:1};
 			if (bannedAbilities[pokemon.ability]) {
@@ -9907,8 +9904,8 @@ exports.BattleMovedex = {
 		id: "sing",
 		name: "Sing",
 		pp: 15,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		status: 'slp',
 		secondary: false,
 		target: "normal",
@@ -9926,7 +9923,26 @@ exports.BattleMovedex = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		onTryHit: false,
+		isNotProtectable: true,
+		onHit: function(target, source) {
+			var disallowedMoves = {chatter:1,sketch:1,struggle:1};
+			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
+			var moveslot = source.moves.indexOf('sketch');
+			if (moveslot === -1) return false;
+			var move = Tools.getMove(target.lastMove);
+			var sketchedMove = {
+				move: move.name,
+				id: move.id,
+				pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+				disabled: false,
+				used: false
+			};
+			source.moveset[moveslot] = sketchedMove;
+			source.baseMoveset[moveslot] = sketchedMove;
+			source.moves[moveslot] = toId(move.name);
+			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -9972,8 +9988,8 @@ exports.BattleMovedex = {
 		id: "skullbash",
 		name: "Skull Bash",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		isTwoTurnMove: true,
 		effect: {
 			onStart: function(pokemon) {
@@ -10000,7 +10016,7 @@ exports.BattleMovedex = {
 			chance: 30,
 			volatileStatus: 'flinch'
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"skydrop": {
@@ -10013,8 +10029,8 @@ exports.BattleMovedex = {
 		id: "skydrop",
 		name: "Sky Drop",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		isTwoTurnMove: true,
 		effect: {
 			onSourceModifyPokemon: function(pokemon) {
@@ -10040,7 +10056,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"skyuppercut": {
@@ -10051,12 +10067,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. This move can hit a target using Bounce, Fly, or Sky Drop. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "Can hit Pokemon using Bounce or Fly.",
 		id: "skyuppercut",
+		isViable: true,
 		name: "Sky Uppercut",
 		pp: 15,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -10069,11 +10085,11 @@ exports.BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP, rounded half up.",
 		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "slackoff",
+		isViable: true,
 		name: "Slack Off",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		heal: [1,2],
 		secondary: false,
 		target: "self",
@@ -10089,8 +10105,8 @@ exports.BattleMovedex = {
 		id: "slam",
 		name: "Slam",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10105,8 +10121,8 @@ exports.BattleMovedex = {
 		id: "slash",
 		name: "Slash",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -10120,9 +10136,9 @@ exports.BattleMovedex = {
 		desc: "Puts one adjacent target to sleep. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Puts the target to sleep.",
 		id: "sleeppowder",
+		isViable: true,
 		name: "Sleep Powder",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		status: 'slp',
 		affectedByImmunities: true,
@@ -10138,9 +10154,9 @@ exports.BattleMovedex = {
 		desc: "One of the user's known moves is selected for use at random. Fails if the user is not asleep. The selected move does not have PP deducted from it, and can currently have 0PP. This move cannot select Assist, Bide, Chatter, Copycat, Focus Punch, Me First, Metronome, Mimic, Mirror Move, Nature Power, Sketch, Sleep Talk, Struggle, Uproar, or any two-turn move.",
 		shortDesc: "User must be asleep. Uses another known move.",
 		id: "sleeptalk",
+		isViable: true,
 		name: "Sleep Talk",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		sleepUsable: true,
 		onTryHit: function(pokemon) {
@@ -10194,9 +10210,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to poison it.",
 		shortDesc: "30% chance to poison the target.",
 		id: "sludgebomb",
+		isViable: true,
 		name: "Sludge Bomb",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -10213,15 +10229,15 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent Pokemon with a 10% chance to poison each.",
 		shortDesc: "10% chance to poison adjacent Pokemon.",
 		id: "sludgewave",
+		isViable: true,
 		name: "Sludge Wave",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
 			status: 'psn'
 		},
-		target: "normal",
+		target: "adjacent",
 		type: "Poison"
 	},
 	"smackdown": {
@@ -10272,8 +10288,8 @@ exports.BattleMovedex = {
 		id: "smellingsalt",
 		name: "SmellingSalt",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		onHit: function(target) {
 			if (target.status === 'par') target.cureStatus();
 		},
@@ -10327,15 +10343,15 @@ exports.BattleMovedex = {
 		id: "snarl",
 		name: "Snarl",
 		pp: 15,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		secondary: {
 			chance: 100,
 			boosts: {
 				spa: -1
 			}
 		},
-		target: "normal",
+		target: "foes",
 		type: "Dark"
 	},
 	"snatch": {
@@ -10379,8 +10395,8 @@ exports.BattleMovedex = {
 		id: "snore",
 		name: "Snore",
 		pp: 15,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		sleepUsable: true,
 		onTryHit: function(target, source) {
 			if (source.status !== 'slp') return false;
@@ -10426,11 +10442,11 @@ exports.BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP, rounded half up. (Field: Can be used to heal an ally by draining 1/5 of the user's maximum HP, rounded down, and restoring that amount to the selected ally. Fails if the user's HP would be reduced to less than 1.)",
 		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "softboiled",
+		isViable: true,
 		name: "Softboiled",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		heal: [1,2],
 		secondary: false,
 		target: "self",
@@ -10451,9 +10467,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		id: "solarbeam",
+		isViable: true,
 		name: "SolarBeam",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		isTwoTurnMove: true,
 		onChargeMove: function() {
@@ -10487,9 +10503,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
 		id: "spacialrend",
+		isViable: true,
 		name: "Spacial Rend",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		critRatio: 2,
 		secondary: false,
@@ -10504,11 +10520,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to paralyze it. Makes contact.",
 		shortDesc: "30% chance to paralyze the target.",
 		id: "spark",
+		isViable: true,
 		name: "Spark",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -10524,11 +10540,11 @@ exports.BattleMovedex = {
 		desc: "Prevents one adjacent target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-Turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "The target cannot switch out.",
 		id: "spiderweb",
+		isViable: true,
 		name: "Spider Web",
 		pp: 10,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onHit: function(target) {
 			target.addVolatile('trapped');
 		},
@@ -10560,11 +10576,11 @@ exports.BattleMovedex = {
 		desc: "Sets up a hazard on the foe's side of the field, damaging each foe that switches in, unless it is a Flying-type or has the Ability Levitate. Can be used up to three times before failing. Foes lose 1/8 of their maximum HP with one layer, 1/6 of their maximum HP with two layers, and 1/4 of their maximum HP with three layers, all rounded down. Can be removed from the foe's side if any foe uses Rapid Spin or is hit by Defog. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Hurts grounded foes on switch-in. Max 3 layers.",
 		id: "spikes",
+		isViable: true,
 		name: "Spikes",
 		pp: 20,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		sideCondition: 'spikes',
 		effect: {
 			// this is a side condition
@@ -10627,8 +10643,8 @@ exports.BattleMovedex = {
 		id: "spite",
 		name: "Spite",
 		pp: 10,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onHit: function(target) {
 			if (target.deductPP(target.lastMove, 4)) {
 				this.add("-activate", target, 'move: Spite', target.lastMove, 4);
@@ -10656,7 +10672,7 @@ exports.BattleMovedex = {
 			return null;
 		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Normal"
 	},
 	"spore": {
@@ -10667,9 +10683,9 @@ exports.BattleMovedex = {
 		desc: "Puts one adjacent target to sleep. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Puts the target to sleep.",
 		id: "spore",
+		isViable: true,
 		name: "Spore",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		status: 'slp',
 		affectedByImmunities: true,
@@ -10685,11 +10701,11 @@ exports.BattleMovedex = {
 		desc: "Sets up a hazard on the foe's side of the field, damaging each foe that switches in. Can be used only once before failing. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock-type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the foe's side if any foe uses Rapid Spin or is hit by Defog. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. (CAP: Pokemon with the Ability Mountaineer are immune.)",
 		shortDesc: "Hurts foes on switch-in. Factors Rock weakness.",
 		id: "stealthrock",
+		isViable: true,
 		name: "Stealth Rock",
 		pp: 20,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		sideCondition: 'stealthrock',
 		effect: {
 			// this is a side condition
@@ -10720,8 +10736,8 @@ exports.BattleMovedex = {
 		id: "steelwing",
 		name: "Steel Wing",
 		pp: 25,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 10,
 			self: {
@@ -10741,11 +10757,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Defense and Special Defense by 1 stage. The user's Stockpile count increases by 1. Fails if the user's Stockpile count is 3.",
 		shortDesc: "Boosts user's Defense, Sp. Def by 1. Max 3 uses.",
 		id: "stockpile",
+		isViable: true,
 		name: "Stockpile",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onTryHit: function(pokemon) {
 			if (pokemon.volatiles['stockpile'] && pokemon.volatiles['stockpile'].layers >= 3) return false;
 		},
@@ -10787,8 +10803,8 @@ exports.BattleMovedex = {
 		id: "stomp",
 		name: "Stomp",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -10804,9 +10820,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
 		id: "stoneedge",
+		isViable: true,
 		name: "Stone Edge",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		critRatio: 2,
 		secondary: false,
@@ -10824,9 +10840,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Power is equal to 20+(X*20), where X is the user's total stat stage changes that are greater than 0.",
 		shortDesc: "+20 power for each of the user's stat boosts.",
 		id: "storedpower",
+		isViable: true,
 		name: "Stored Power",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -10840,11 +10856,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Abilities Battle Armor or Shell Armor. Makes contact.",
 		shortDesc: "Always results in a critical hit.",
 		id: "stormthrow",
+		isViable: true,
 		name: "Storm Throw",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		willCrit: true,
 		secondary: false,
 		target: "normal",
@@ -10863,8 +10879,8 @@ exports.BattleMovedex = {
 		id: "steamroller",
 		name: "Steamroller",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -10882,8 +10898,8 @@ exports.BattleMovedex = {
 		id: "strength",
 		name: "Strength",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10917,8 +10933,8 @@ exports.BattleMovedex = {
 		name: "Struggle",
 		pp: 1,
 		noPPBoosts: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		beforeMoveCallback: function(pokemon) {
 			this.add('-message', pokemon.name+' has no moves left! (placeholder)');
 		},
@@ -10951,7 +10967,7 @@ exports.BattleMovedex = {
 				spa: -1
 			}
 		},
-		target: "normal",
+		target: "foes",
 		type: "Bug"
 	},
 	"stunspore": {
@@ -10962,9 +10978,9 @@ exports.BattleMovedex = {
 		desc: "Paralyzes one adjacent target. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Paralyzes the target.",
 		id: "stunspore",
+		isViable: true,
 		name: "Stun Spore",
 		pp: 30,
-		isViable: true,
 		priority: 0,
 		status: 'par',
 		affectedByImmunities: true,
@@ -10982,8 +10998,8 @@ exports.BattleMovedex = {
 		id: "submission",
 		name: "Submission",
 		pp: 25,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		recoil: [1,4],
 		secondary: false,
 		target: "normal",
@@ -10997,11 +11013,11 @@ exports.BattleMovedex = {
 		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The substitute is removed once enough damage is inflicted on it, or if the user switches out or faints. Baton Pass can be used to transfer the substitute to an ally, and the substitute will keep its remaining HP. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat stage changes caused by other Pokemon. The user still takes normal damage from weather and status effects while behind its substitute. If the substitute breaks during a multi-hit attack, the user will take damage from any remaining hits. This move fails if the user does not have enough HP remaining to create a substitute, or if it already has a substitute.",
 		shortDesc: "User takes 1/4 its max HP to put in a Substitute.",
 		id: "substitute",
+		isViable: true,
 		name: "Substitute",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		volatileStatus: 'Substitute',
 		onTryHit: function(target) {
 			if (target.volatiles['substitute']) {
@@ -11074,11 +11090,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Fails if the target did not select a damaging move for use this turn, or if the target moves before the user. Makes contact. Priority +1.",
 		shortDesc: "Usually goes first. Fails if target is not attacking.",
 		id: "suckerpunch",
+		isViable: true,
 		name: "Sucker Punch",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 1,
+		isContact: true,
 		onTryHit: function(target) {
 			decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status') {
@@ -11097,9 +11113,9 @@ exports.BattleMovedex = {
 		desc: "For 5 turns, the weather becomes Sunny Day. The power of Fire-type attacks is 1.5x and the power of Water-type attacks is 0.5x during the effect. Lasts for 8 turns if the user is holding Heat Rock. Fails if the current weather is Sunny Day.",
 		shortDesc: "For 5 turns, intense sunlight powers Fire moves.",
 		id: "sunnyday",
+		isViable: true,
 		name: "Sunny Day",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		weather: 'sunnyday',
 		secondary: false,
@@ -11117,11 +11133,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target equal to half of its current HP, rounded down, but not less than 1HP. Makes contact.",
 		shortDesc: "Does damage equal to 1/2 target's current HP.",
 		id: "superfang",
+		isViable: true,
 		name: "Super Fang",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -11134,11 +11150,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and lowers the user's Attack and Defense by 1 stage. Makes contact.",
 		shortDesc: "Lowers the user's Attack and Defense by 1.",
 		id: "superpower",
+		isViable: true,
 		name: "Superpower",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		self: {
 			boosts: {
 				atk: -1,
@@ -11159,8 +11175,8 @@ exports.BattleMovedex = {
 		id: "supersonic",
 		name: "Supersonic",
 		pp: 20,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "normal",
@@ -11174,9 +11190,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent Pokemon. Power doubles against Pokemon using Dive. (Field: Can be used to surf on water.)",
 		shortDesc: "Hits adjacent Pokemon. Power doubles on Dive.",
 		id: "surf",
+		isViable: true,
 		name: "Surf",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "adjacent",
@@ -11211,8 +11227,8 @@ exports.BattleMovedex = {
 		id: "swallow",
 		name: "Swallow",
 		pp: 10,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		onTryHit: function(pokemon) {
 			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
 		},
@@ -11282,9 +11298,9 @@ exports.BattleMovedex = {
 		desc: "The user trades its held item with one adjacent target. Fails if either the user or the target is holding a Mail, if neither is holding an item, or if the user is trying to give or take a Griseous Orb, a Plate, or a Drive to or from a Giratina, an Arceus, or a Genesect, respectively. Pokemon with the Ability Sticky Hold are immune.",
 		shortDesc: "User switches its held item with the target's.",
 		id: "switcheroo",
+		isViable: true,
 		name: "Switcheroo",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		onHit: function(target, source) {
 			var yourItem = target.takeItem(source);
@@ -11316,11 +11332,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack by 2 stages.",
 		shortDesc: "Boosts the user's Attack by 2.",
 		id: "swordsdance",
+		isViable: true,
 		name: "Swords Dance",
 		pp: 30,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 2
 		},
@@ -11343,7 +11359,7 @@ exports.BattleMovedex = {
 			return target.hasType(source.types);
 		},
 		secondary: false,
-		target: "normal",
+		target: "adjacent",
 		type: "Psychic"
 	},
 	"synthesis": {
@@ -11354,11 +11370,11 @@ exports.BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		id: "synthesis",
+		isViable: true,
 		name: "Synthesis",
 		pp: 5,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		heal: [1,2],
 		onModifyMove: function(move) {
 			if (this.weather === 'sunnyday') move.heal = [2,3];
@@ -11378,8 +11394,8 @@ exports.BattleMovedex = {
 		id: "tackle",
 		name: "Tackle",
 		pp: 35,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -11392,11 +11408,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Special Attack by 3 stages.",
 		shortDesc: "Boosts the user's Sp. Atk by 3.",
 		id: "tailglow",
+		isViable: true,
 		name: "Tail Glow",
 		pp: 20,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			spa: 3
 		},
@@ -11412,11 +11428,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and hits two to five times. Has a 35% chance to hit two or three times, and a 15% chance to hit four or five times. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times. Makes contact.",
 		shortDesc: "Hits 2-5 times in one turn.",
 		id: "tailslap",
+		isViable: true,
 		name: "Tail Slap",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -11448,11 +11464,11 @@ exports.BattleMovedex = {
 		desc: "For 4 turns, the user and its party members have their Speed doubled. Fails if this move is already in effect for the user's side.",
 		shortDesc: "For 4 turns, allies' Speed is doubled.",
 		id: "tailwind",
+		isViable: true,
 		name: "Tailwind",
 		pp: 30,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		sideCondition: 'tailwind',
 		effect: {
 			duration: 4,
@@ -11488,8 +11504,8 @@ exports.BattleMovedex = {
 		id: "takedown",
 		name: "Take Down",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		recoil: [1,4],
 		secondary: false,
 		target: "normal",
@@ -11503,11 +11519,11 @@ exports.BattleMovedex = {
 		desc: "Prevents one adjacent target from using non-damaging moves for its next three turns. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute.",
 		shortDesc: "For 3 turns, the target can't use status moves.",
 		id: "taunt",
+		isViable: true,
 		name: "Taunt",
 		pp: 20,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'taunt',
 		effect: {
 			duration: 3,
@@ -11566,11 +11582,11 @@ exports.BattleMovedex = {
 		desc: "Causes all adjacent Pokemon to become confused.",
 		shortDesc: "Confuses adjacent Pokemon.",
 		id: "teeterdance",
+		isViable: true,
 		name: "Teeter Dance",
 		pp: 20,
-		isViable: true,
-		isBounceable: false,
 		priority: 0,
+		isBounceable: false,
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "adjacent",
@@ -11586,8 +11602,8 @@ exports.BattleMovedex = {
 		id: "telekinesis",
 		name: "Telekinesis",
 		pp: 15,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'telekinesis',
 		effect: {
 			duration: 3,
@@ -11623,7 +11639,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: false,
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Psychic"
 	},
 	"thief": {
@@ -11636,8 +11652,8 @@ exports.BattleMovedex = {
 		id: "thief",
 		name: "Thief",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		onHit: function(target, source) {
 			if (source.item) {
 				return;
@@ -11664,11 +11680,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent foe at random. The user spends two or three turns locked into this move and becomes confused after the last turn of the effect if it is not already. If the user is prevented from moving or the attack is not successful against the target on the first turn of the effect or the second turn of a three-turn effect, the effect ends without causing confusion. If this move is called by Sleep Talk, the move is used for one turn and does not confuse the user. Makes contact.",
 		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
 		id: "thrash",
+		isViable: true,
 		name: "Thrash",
 		pp: 10,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		self: {
 			volatileStatus: 'lockedmove'
 		},
@@ -11684,9 +11700,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to paralyze it. This move can hit a target using Bounce, Fly, or Sky Drop. If the weather is Rain Dance, this move cannot miss. If the weather is Sunny Day, this move's accuracy is 50%.",
 		shortDesc: "30% chance to paralyze target. Can't miss in rain.",
 		id: "thunder",
+		isViable: true,
 		name: "Thunder",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		onModifyMove: function(move) {
 			if (this.weather === 'raindance') move.accuracy = true;
@@ -11707,11 +11723,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to paralyze it and a 10% chance to flinch it. Makes contact.",
 		shortDesc: "10% chance to paralyze. 10% chance to flinch.",
 		id: "thunderfang",
+		isViable: true,
 		name: "Thunder Fang",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondaries: [ {
 				chance: 10,
 				status: 'par'
@@ -11731,12 +11747,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to paralyze it. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "10% chance to paralyze the target.",
 		id: "thunderpunch",
+		isViable: true,
 		name: "ThunderPunch",
 		pp: 15,
-		isViable: true,
+		priority: 0,
 		isContact: true,
 		isPunchAttack: true,
-		priority: 0,
 		secondary: {
 			chance: 10,
 			status: 'par'
@@ -11770,9 +11786,9 @@ exports.BattleMovedex = {
 		desc: "Paralyzes one adjacent target. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Paralyzes the target.",
 		id: "thunderwave",
+		isViable: true,
 		name: "Thunder Wave",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		status: 'par',
 		affectedByImmunities: true,
@@ -11788,9 +11804,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to paralyze it.",
 		shortDesc: "10% chance to paralyze the target.",
 		id: "thunderbolt",
+		isViable: true,
 		name: "Thunderbolt",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -11826,11 +11842,11 @@ exports.BattleMovedex = {
 		desc: "Prevents one adjacent target from using the same move two turns in a row, starting next turn. This effect lasts until the target leaves the field. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute.",
 		shortDesc: "Target can't use the same move twice in a row.",
 		id: "torment",
+		isViable: true,
 		name: "Torment",
 		pp: 15,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'torment',
 		effect: {
 			onStart: function(pokemon) {
@@ -11855,9 +11871,9 @@ exports.BattleMovedex = {
 		desc: "Badly poisons one adjacent target. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Badly poisons the target.",
 		id: "toxic",
+		isViable: true,
 		name: "Toxic",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		status: 'tox',
 		affectedByImmunities: true,
@@ -11873,11 +11889,11 @@ exports.BattleMovedex = {
 		desc: "Sets up a hazard on the foe's side of the field, poisoning each foe that switches in, unless it is a Flying-type or has the Ability Levitate. Can be used up to two times before failing. Foes become poisoned with one layer and badly poisoned with two layers. Can be removed from the foe's side if any foe uses Rapid Spin, is hit by Defog, or a grounded Poison-type switches in. Safeguard prevents the foe's party from being poisoned on switch-in, but Substitute does not. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Poisons grounded foes on switch-in. Max 2 layers.",
 		id: "toxicspikes",
+		isViable: true,
 		name: "Toxic Spikes",
 		pp: 20,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		sideCondition: 'toxicspikes',
 		effect: {
 			// this is a side condition
@@ -11919,6 +11935,7 @@ exports.BattleMovedex = {
 		name: "Transform",
 		pp: 10,
 		priority: 0,
+		isNotProtectable: true,
 		onHit: function(target, pokemon) {
 			if (!pokemon.transformInto(target)) {
 				return false;
@@ -11937,9 +11954,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to either burn, freeze, or paralyze it.",
 		shortDesc: "20% chance to paralyze or burn or freeze target.",
 		id: "triattack",
+		isViable: true,
 		name: "Tri Attack",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -11965,9 +11982,9 @@ exports.BattleMovedex = {
 		desc: "The user trades its held item with one adjacent target. Fails if either the user or the target is holding a Mail, if neither is holding an item, or if the user is trying to give or take a Griseous Orb, a Plate, or a Drive to or from a Giratina, an Arceus, or a Genesect, respectively. Pokemon with the Ability Sticky Hold are immune.",
 		shortDesc: "User switches its held item with the target's.",
 		id: "trick",
+		isViable: true,
 		name: "Trick",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		onHit: function(target, source) {
 			var yourItem = target.takeItem(source);
@@ -11999,9 +12016,9 @@ exports.BattleMovedex = {
 		desc: "For 5 turns, all active Pokemon with lower Speed will move before those with higher Speed, within their priority brackets. If this move is used during the effect, the effect ends. Priority -7.",
 		shortDesc: "For 5 turns, slower Pokemon move first.",
 		id: "trickroom",
+		isViable: true,
 		name: "Trick Room",
 		pp: 5,
-		isViable: true,
 		priority: -7,
 		onHitField: function(target, source, effect) {
 			if (this.pseudoWeather['trickroom']) {
@@ -12054,8 +12071,8 @@ exports.BattleMovedex = {
 		id: "triplekick",
 		name: "Triple Kick",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		multihit: [3,3],
 		effect: {
 			duration: 1,
@@ -12096,8 +12113,8 @@ exports.BattleMovedex = {
 		name: "Trump Card",
 		pp: 5,
 		noPPBoosts: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -12147,11 +12164,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by another party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button. Makes contact.",
 		shortDesc: "User switches out after damaging the target.",
 		id: "uturn",
+		isViable: true,
 		name: "U-turn",
 		pp: 20,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		selfSwitch: true,
 		secondary: false,
 		target: "normal",
@@ -12167,8 +12184,8 @@ exports.BattleMovedex = {
 		id: "uproar",
 		name: "Uproar",
 		pp: 10,
-		isSoundBased: true,
 		priority: 0,
+		isSoundBased: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -12181,11 +12198,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and lowers the user's Defense, Special Defense, and Speed by 1 stage. Makes contact.",
 		shortDesc: "Lowers the user's Defense, Sp. Def, Speed by 1.",
 		id: "vcreate",
+		isViable: true,
 		name: "V-create",
 		pp: 5,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		self: {
 			boosts: {
 				def: -1,
@@ -12205,9 +12222,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Priority +1.",
 		shortDesc: "Usually goes first.",
 		id: "vacuumwave",
+		isViable: true,
 		name: "Vacuum Wave",
 		pp: 30,
-		isViable: true,
 		priority: 1,
 		secondary: false,
 		target: "normal",
@@ -12244,8 +12261,8 @@ exports.BattleMovedex = {
 		id: "vicegrip",
 		name: "ViceGrip",
 		pp: 30,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -12260,8 +12277,8 @@ exports.BattleMovedex = {
 		id: "vinewhip",
 		name: "Vine Whip",
 		pp: 15,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -12276,8 +12293,8 @@ exports.BattleMovedex = {
 		id: "vitalthrow",
 		name: "Vital Throw",
 		pp: 10,
-		isContact: true,
 		priority: -1,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -12290,9 +12307,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by another party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button.",
 		shortDesc: "User switches out after damaging the target.",
 		id: "voltswitch",
+		isViable: true,
 		name: "Volt Switch",
 		pp: 20,
-		isViable: true,
 		priority: 0,
 		selfSwitch: true,
 		secondary: false,
@@ -12307,11 +12324,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to paralyze it. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
 		shortDesc: "Has 1/3 recoil. 10% chance to paralyze target.",
 		id: "volttackle",
+		isViable: true,
 		name: "Volt Tackle",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		recoil: [1,3],
 		secondary: {
 			chance: 10,
@@ -12334,8 +12351,8 @@ exports.BattleMovedex = {
 		id: "wakeupslap",
 		name: "Wake-Up Slap",
 		pp: 10,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		onHit: function(target) {
 			if (target.status === 'slp') target.cureStatus();
 		},
@@ -12388,7 +12405,7 @@ exports.BattleMovedex = {
 			chance: 20,
 			volatileStatus: 'confusion'
 		},
-		target: "normal",
+		target: "any",
 		type: "Water"
 	},
 	"watersport": {
@@ -12430,9 +12447,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent foes. Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
 		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 		id: "waterspout",
+		isViable: true,
 		name: "Water Spout",
 		pp: 5,
-		isViable: true,
 		priority: 0,
 		secondary: false,
 		target: "foes",
@@ -12446,11 +12463,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to flinch it. Makes contact. (Field: Can be used to climb a waterfall.)",
 		shortDesc: "20% chance to flinch the target.",
 		id: "waterfall",
+		isViable: true,
 		name: "Waterfall",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -12470,9 +12487,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Power doubles during weather effects and this move's type changes to match; Ice-type during Hail, Water-type during Rain Dance, Rock-type during Sandstorm, and Fire-type during Sunny Day.",
 		shortDesc: "Power doubles and type varies in each weather.",
 		id: "weatherball",
+		isViable: true,
 		name: "Weather Ball",
 		pp: 10,
-		isViable: true,
 		priority: 0,
 		onModifyMove: function(move) {
 			switch (this.weather) {
@@ -12518,9 +12535,9 @@ exports.BattleMovedex = {
 		desc: "Causes one adjacent target to be forced to switch out and be replaced with a random unfainted ally. Fails if the target used Ingrain previously or has the Ability Suction Cups. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute. Priority -6. (Wild battles: The battle ends as long as it is not a double battle and the user's level is not less than the opponent's level.)",
 		shortDesc: "Forces the target to switch to a random ally.",
 		id: "whirlwind",
+		isViable: true,
 		name: "Whirlwind",
 		pp: 20,
-		isViable: true,
 		priority: -6,
 		forceSwitch: true,
 		secondary: false,
@@ -12537,8 +12554,8 @@ exports.BattleMovedex = {
 		id: "wideguard",
 		name: "Wide Guard",
 		pp: 10,
-		isSnatchable: true,
 		priority: 3,
+		isSnatchable: true,
 		secondary: false,
 		target: "normal",
 		type: "Rock"
@@ -12551,11 +12568,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 1/4 that HP, rounded half up, but not less than 1HP. Makes contact.",
 		shortDesc: "Has 1/4 recoil.",
 		id: "wildcharge",
+		isViable: true,
 		name: "Wild Charge",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		recoil: [1,4],
 		secondary: false,
 		target: "normal",
@@ -12569,9 +12586,9 @@ exports.BattleMovedex = {
 		desc: "Burns one adjacent target. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Burns the target.",
 		id: "willowisp",
+		isViable: true,
 		name: "Will-O-Wisp",
 		pp: 15,
-		isViable: true,
 		priority: 0,
 		status: 'brn',
 		affectedByImmunities: true,
@@ -12589,10 +12606,10 @@ exports.BattleMovedex = {
 		id: "wingattack",
 		name: "Wing Attack",
 		pp: 35,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"wish": {
@@ -12603,11 +12620,11 @@ exports.BattleMovedex = {
 		desc: "At the end of the next turn, the Pokemon at the user's position has 1/2 of the user's maximum HP restored to it, rounded half up. Fails if this move is already in effect for the user's position.",
 		shortDesc: "Next turn, 50% of the user's max HP is restored.",
 		id: "wish",
+		isViable: true,
 		name: "Wish",
 		pp: 10,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		sideCondition: 'Wish',
 		effect: {
 			duration: 2,
@@ -12638,8 +12655,8 @@ exports.BattleMovedex = {
 		id: "withdraw",
 		name: "Withdraw",
 		pp: 40,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			def: 1
 		},
@@ -12693,11 +12710,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
 		shortDesc: "Has 1/3 recoil.",
 		id: "woodhammer",
+		isViable: true,
 		name: "Wood Hammer",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		recoil: [1,3],
 		secondary: false,
 		target: "normal",
@@ -12711,11 +12728,11 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack and Special Attack by 1 stage.",
 		shortDesc: "Boosts the user's Attack and Sp. Atk by 1.",
 		id: "workup",
+		isViable: true,
 		name: "Work Up",
 		pp: 30,
-		isViable: true,
-		isSnatchable: true,
 		priority: 0,
+		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			spa: 1
@@ -12734,8 +12751,8 @@ exports.BattleMovedex = {
 		id: "worryseed",
 		name: "Worry Seed",
 		pp: 10,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		onTryHit: function(pokemon) {
 			var bannedAbilities = {insomnia:1, multitype:1, truant:1};
 			if (bannedAbilities[pokemon.ability]) {
@@ -12767,8 +12784,8 @@ exports.BattleMovedex = {
 		id: "wrap",
 		name: "Wrap",
 		pp: 20,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -12787,8 +12804,8 @@ exports.BattleMovedex = {
 		id: "wringout",
 		name: "Wring Out",
 		pp: 5,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -12801,11 +12818,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "xscissor",
+		isViable: true,
 		name: "X-Scissor",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -12818,11 +12835,11 @@ exports.BattleMovedex = {
 		desc: "Causes one adjacent target to fall asleep at the end of the next turn. If the target is still on the field and does not have a major status problem at that time, it falls asleep, and this effect cannot be prevented by Safeguard or Substitute. Fails if the target cannot fall asleep or if it already has a major status problem. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Puts the target to sleep after 1 turn.",
 		id: "yawn",
+		isViable: true,
 		name: "Yawn",
 		pp: 10,
-		isViable: true,
-		isBounceable: true,
 		priority: 0,
+		isBounceable: true,
 		volatileStatus: 'yawn',
 		onTryHit: function(target) {
 			if (target.status || !target.runImmunity('slp')) {
@@ -12869,11 +12886,11 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to flinch it. Makes contact.",
 		shortDesc: "20% chance to flinch the target.",
 		id: "zenheadbutt",
+		isViable: true,
 		name: "Zen Headbutt",
 		pp: 15,
-		isViable: true,
-		isContact: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -12888,10 +12905,10 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 20% chance to lower its Attack by 1 stage.",
 		shortDesc: "20% chance to lower the target's Attack by 1.",
 		id: "paleowave",
+		isNonstandard: true,
+		isViable: true,
 		name: "Paleo Wave",
 		pp: 15,
-		isViable: true,
-		isNonstandard: true,
 		priority: 0,
 		secondary: {
 			chance: 20,
@@ -12909,12 +12926,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 50% chance to lower its Defense by 1 stage. Makes contact.",
 		shortDesc: "50% chance to lower the target's Defense by 1.",
 		id: "shadowstrike",
+		isNonstandard: true,
+		isViable: true,
 		name: "ShadowStrike",
 		pp: 10,
-		isViable: true,
-		isContact: true,
-		isNonstandard: true,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -12931,12 +12948,12 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 100% chance to confuse it and lower its Defense and Special Attack by 1 stage. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If this move is successful, the weather changes to Rain Dance for 5 turns unless Rain Dance is already in effect, the user gains the effects of Aqua Ring and Magic Coat, and the user must recharge on the following turn and cannot make a move. Makes contact.",
 		shortDesc: "Does many things turn 1. Can't move turn 2.",
 		id: "magikarpsrevenge",
+		isNonstandard: true,
+		isViable: true,
 		name: "Magikarp's Revenge",
 		pp: 10,
-		isViable: true,
-		isContact: true,
-		isNonstandard: true,
 		priority: 0,
+		isContact: true,
 		drain: [1,2],
 		onTryHit: function(target, source) {
 			if (source.template.name !== 'Magikarp') {

@@ -109,9 +109,10 @@ if (config.protocol === 'ws') {
  * Otherwise, an empty string will be returned.
  */
 toId = function(text) {
-	text = (''+(text||''));
 	if (typeof text === 'number') text = ''+text;
 	if (text && text.id) text = text.id;
+	else if (text && text.userid) text = text.userid;
+	text = string(text);
 	if (typeof text !== 'string') return ''; //???
 	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
@@ -127,6 +128,17 @@ sanitize = function(str, strEscape) {
 	if (strEscape) str = str.replace(/'/g, '\\\'');
 	return str;
 };
+
+/**
+ * Safely ensures the passed variable is a string
+ * Simply doing ''+str can crash if str.toString crashes or isn't a function
+ * If we're expecting a string and being given anything that isn't a string
+ * or a number, it's safe to assume it's an error, and return ''
+ */
+string = function(str) {
+	if (typeof str === 'string' || typeof str === 'number') return ''+str;
+	return '';
+}
 
 /**
  * Converts any variable to an integer (numbers get floored, non-numbers
@@ -147,12 +159,11 @@ Users = require('./users.js');
 
 Rooms = require('./rooms.js');
 
+Verifier = require('./verifier.js');
+
 parseCommand = require('./chat-commands.js').parseCommand;
 
-var sim = require('./simulator.js');
-BattlePokemon = sim.BattlePokemon;
-BattleSide = sim.BattleSide;
-Battle = sim.Battle;
+Simulator = require('./simulator.js');
 
 lockdown = false;
 mutedIps = {};
@@ -194,6 +205,8 @@ if (config.crashguard) {
 		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
 			this.write("\n"+err.stack+"\n");
 			this.end();
+		}).on("error", function (err) {
+			console.log("\n"+err.stack+"\n");
 		});
 		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
 		Rooms.lobby.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
@@ -336,13 +349,13 @@ if (config.protocol === 'io') { // Socket.IO
 	server.sockets.on('connection', function (socket) {
 		var you = null;
 
-		if (socket.handshake && socket.handshake.address && socket.handshake.address.address) {
-			if (bannedIps[socket.handshake.address.address]) {
-				console.log('CONNECT BLOCKED - IP BANNED: '+socket.handshake.address.address);
-				return;
-			}
-			socket.remoteAddress = socket.handshake.address.address; // for compatibility with SockJS semantics
+		socket.remoteAddress = (socket.handshake.headers["x-forwarded-for"]||"").split(",").shift() || socket.handshake.address.address; // for compatibility with SockJS semantics
+
+		if (bannedIps[socket.remoteAddress]) {
+			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
+			return;
 		}
+
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		var generator = function(type) {
 			return function(data) {
@@ -367,6 +380,8 @@ if (config.protocol === 'io') { // Socket.IO
 			return;
 		}
 		socket.id = randomString(16); // this sucks
+
+		socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
 
 		if (bannedIps[socket.remoteAddress]) {
 			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
