@@ -77,10 +77,17 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				var p1rating, p2rating;
 				// update rankings
 				selfR.push('|chatmsg-raw|Ladder updating...');
-				request({
-					uri: config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()
-				}, function(error, response, body) {
-					if (error) {
+				LoginServer.request('ladderupdate', {
+					p1: p1,
+					p2: p2,
+					score: p1score,
+					format: toId(rated.format)
+				}, function(body) {
+					if (!selfR) {
+						console.log('room expired before ladder update was received');
+						return;
+					}
+					if (!body) {
 						selfR.addRaw('Error: Ladder server overloaded - ladder could not be updated.');
 						selfR.update();
 						// log the battle anyway
@@ -88,12 +95,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 							selfR.logBattle(p1score);
 						}
 						return;
-					}
-					if (!selfR) {
-						console.log('room expired before ladder update was received');
-						return;
-					}
-					if (body) {
+					} else {
 						var data;
 						try {
 							data = JSON.parse(body);

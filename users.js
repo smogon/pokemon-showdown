@@ -635,9 +635,10 @@ var User = (function () {
 			callback.call(that, this.mmrCache[formatid]);
 			return;
 		}
-		request({
-			uri: config.loginserver+'action.php?act=ladderformatgetmmr&serverid='+config.serverid+'&format='+formatid+'&user='+this.userid,
-		}, function(error, response, body) {
+		LoginServer.request('ladderformatgetmmr', {
+			format: formatid,
+			user: this.userid
+		}, function(body) {
 			var mmr = 1500;
 			if (body) {
 				try {
