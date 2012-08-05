@@ -14,34 +14,46 @@ if (!fs.existsSync) {
 var http = require("http");
 var url = require('url');
 
-request = function(options, callback) {
-	if (request.openRequests > 4) {
-		callback('overflow');
-		return;
-	}
-	request.openRequests++;
-	var req = http.get(url.parse(options.uri), function(res) {
-		var buffer = '';
-		res.setEncoding('utf8');
+LoginServer = {
+	request: function(action, data, callback) {
+		if (typeof data === 'function') {
+			callback = data;
+			data = null;
+		}
+		if (LoginServer.openRequests > 9) {
+			callback(null, null, 'overflow');
+			return;
+		}
+		LoginServer.openRequests++;
+		var dataString = '';
+		if (data) {
+			for (var i in data) {
+				dataString += '&'+i+'='+encodeURIComponent(''+data[i]);
+			}
+		}
+		var req = http.get(url.parse(config.loginserver+'action.php?act='+action+'&serverid='+config.serverid+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()+dataString), function(res) {
+			var buffer = '';
+			res.setEncoding('utf8');
 
-		res.on('data', function(chunk) {
-			buffer += chunk;
+			res.on('data', function(chunk) {
+				buffer += chunk;
+			});
+
+			res.on('end', function() {
+				callback(buffer, res.statusCode);
+				LoginServer.openRequests--;
+			});
 		});
 
-		res.on('end', function() {
-			callback(null, res.statusCode, buffer);
-			request.openRequests--;
+		req.on('error', function(error) {
+			callback(null, null, error);
+			LoginServer.openRequests--;
 		});
-	});
 
-	req.on('error', function(error) {
-		callback(error);
-		request.openRequests--;
-	});
-
-	req.end();
-}
-request.openRequests = 0;
+		req.end();
+	},
+	openRequests: 0
+};
 
 // Synchronously copy config-example.js over to config.js if it doesn't exist
 if (!fs.existsSync('./config/config.js')) {
