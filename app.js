@@ -1,7 +1,3 @@
-require('nodetime').profile({
-    accountKey: '42437e1e248457af9645471075b01b12c01d8493', 
-    appName: 'Pokemon Showdown'
-});
 require('sugar');
 
 fs = require('fs');
