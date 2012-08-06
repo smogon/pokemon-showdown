@@ -753,6 +753,9 @@ function BattlePokemon(set, side) {
 		var item = selfP.getItem();
 		if (selfB.runEvent('UseItem', selfP, null, null, item)) {
 			switch (item.id) {
+			case 'redcard':
+				selfB.add('-enditem', selfP, item, '[of] '+source);
+				break;
 			default:
 				if (!item.isGem) {
 					selfB.add('-enditem', selfP, item);
