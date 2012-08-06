@@ -635,9 +635,10 @@ var User = (function () {
 			callback.call(that, this.mmrCache[formatid]);
 			return;
 		}
-		request({
-			uri: config.loginserver+'action.php?act=ladderformatgetmmr&serverid='+config.serverid+'&format='+formatid+'&user='+this.userid,
-		}, function(error, response, body) {
+		LoginServer.request('ladderformatgetmmr', {
+			format: formatid,
+			user: this.userid
+		}, function(body) {
 			var mmr = 1500;
 			if (body) {
 				try {
@@ -708,7 +709,11 @@ var User = (function () {
 			for (var j in person.rooms) {
 				this.leaveRoom(person.rooms[j], person);
 			}
-			person.socket.end();
+			if (config.protocol === 'io') {
+				person.socket.disconnect();
+			} else {
+				person.socket.end();
+			}
 		}
 		this.people = [];
 	};

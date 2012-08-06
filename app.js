@@ -1,3 +1,7 @@
+require('nodetime').profile({
+    accountKey: '42437e1e248457af9645471075b01b12c01d8493', 
+    appName: 'Pokemon Showdown'
+});
 require('sugar');
 
 fs = require('fs');
@@ -10,34 +14,46 @@ if (!fs.existsSync) {
 var http = require("http");
 var url = require('url');
 
-request = function(options, callback) {
-	if (request.openRequests > 4) {
-		callback('overflow');
-		return;
-	}
-	request.openRequests++;
-	var req = http.get(url.parse(options.uri), function(res) {
-		var buffer = '';
-		res.setEncoding('utf8');
+LoginServer = {
+	request: function(action, data, callback) {
+		if (typeof data === 'function') {
+			callback = data;
+			data = null;
+		}
+		if (LoginServer.openRequests > 9) {
+			callback(null, null, 'overflow');
+			return;
+		}
+		LoginServer.openRequests++;
+		var dataString = '';
+		if (data) {
+			for (var i in data) {
+				dataString += '&'+i+'='+encodeURIComponent(''+data[i]);
+			}
+		}
+		var req = http.get(url.parse(config.loginserver+'action.php?act='+action+'&serverid='+config.serverid+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()+dataString), function(res) {
+			var buffer = '';
+			res.setEncoding('utf8');
 
-		res.on('data', function(chunk) {
-			buffer += chunk;
+			res.on('data', function(chunk) {
+				buffer += chunk;
+			});
+
+			res.on('end', function() {
+				callback(buffer, res.statusCode);
+				LoginServer.openRequests--;
+			});
 		});
 
-		res.on('end', function() {
-			callback(null, res.statusCode, buffer);
-			request.openRequests--;
+		req.on('error', function(error) {
+			callback(null, null, error);
+			LoginServer.openRequests--;
 		});
-	});
 
-	req.on('error', function(error) {
-		callback(error);
-		request.openRequests--;
-	});
-
-	req.end();
-}
-request.openRequests = 0;
+		req.end();
+	},
+	openRequests: 0
+};
 
 // Synchronously copy config-example.js over to config.js if it doesn't exist
 if (!fs.existsSync('./config/config.js')) {
@@ -180,7 +196,6 @@ function resolveUser(you, socket) {
 
 emit = function(socket, type, data) {
 	if (config.protocol === 'io') {
-		console.log('emitting '+type);
 		socket.emit(type, data);
 	} else {
 		if (typeof data === 'object') data.type = type;
@@ -269,11 +284,6 @@ var events = {
 		if (!youUser) return;
 		parseCommand(youUser, 'command', data, Rooms.get(data.room), socket);
 	},
-	disconnect: function(socket, you) {
-		var youUser = resolveUser(you, socket);
-		if (!youUser) return;
-		youUser.disconnect(socket);
-	},
 	challenge: function(data, socket, you) {
 		if (!data) return;
 		var youUser = resolveUser(you, socket);
@@ -359,7 +369,6 @@ if (config.protocol === 'io') { // Socket.IO
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		var generator = function(type) {
 			return function(data) {
-				console.log('received '+type);
 				console.log(you);
 				events[type](data, socket, you);
 			};
@@ -367,11 +376,15 @@ if (config.protocol === 'io') { // Socket.IO
 		for (var e in events) {
 			socket.on(e, (function(type) {
 				return function(data) {
-					console.log('received '+type);
 					you = events[type](data, socket, you) || you;
 				};
 			})(e));
 		}
+		socket.on('disconnect', function() {
+			youUser = resolveUser(you, socket);
+			if (!youUser) return;
+			youUser.disconnect(socket);
+		});
 	});
 } else { // SockJS
 	server.on('connection', function (socket) {

@@ -2629,7 +2629,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
-		desc: "Deals damage to one adjacent or non-adjacent target. Makes contact.",
+		desc: "Deals damage to one adjacent or non-adjacent target.",
 		shortDesc: "No additional effect.",
 		id: "dragonpulse",
 		isViable: true,
@@ -8381,7 +8381,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. If an adjacent foe switches out this turn, this move hits that Pokemon before it leaves the field. If the user moves after a foe using U-turn or Volt Switch, but not Baton Pass, it will hit that foe before it leaves the field. Power doubles and no accuracy check is done if the user hits a foe switching out, and the user's turn is over; if a foe faints from this, the replacement Pokemon does not become active until the end of the turn. Makes contact.",
-		shortDesc: "Power doubles if the target is switching out.",
+		shortDesc: "Power doubles if a foe is switching out.",
 		id: "pursuit",
 		isViable: true,
 		name: "Pursuit",
@@ -8587,16 +8587,16 @@ exports.BattleMovedex = {
 		isContact: true,
 		self: {
 			onHit: function(pokemon) {
-				if (pokemon.removeVolatile('leechseed') && pokemon.hp) {
+				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
 				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
 				for (var i in sideConditions) {
-					if (pokemon.side.removeSideCondition(i) && pokemon.hp) {
+					if (pokemon.hp && pokemon.side.removeSideCondition(i)) {
 						this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] '+pokemon);
 					}
 				}
-				if (pokemon.volatiles['partiallytrapped'] && pokemon.hp) {
+				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
 					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.name, '[from] move: Rapid Spin', '[of] '+pokemon, '[partiallytrapped]');
 					delete pokemon.volatiles['partiallytrapped'];
 				}
