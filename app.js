@@ -77,7 +77,7 @@ LoginServer = {
 		if (this.openRequests || this.requestTimer || !this.requestQueue.length) return;
 
 		// 100
-		this.requestTimer = setTimeout(this.makeRequests.bind(this), 100);
+		this.requestTimer = setTimeout(this.makeRequests.bind(this), 250);
 	},
 	makeRequests: function() {
 		this.requestTimer = null;
@@ -94,7 +94,7 @@ LoginServer = {
 			delete request.callback;
 		}
 
-		this.openRequests++;
+		this.requestStart(requests.length);
 		var postData = 'serverid='+config.serverid+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()+'&json='+encodeURIComponent(JSON.stringify(requests))+'\n';
 		var requestOptions = url.parse(config.loginserver+'action.php');
 		requestOptions.method = 'post';
@@ -110,7 +110,7 @@ LoginServer = {
 				buffer += chunk;
 			});
 
-			res.on('end', function() {
+			var endReq = self.endReq = function() {
 				console.log('RESPONSE: '+buffer);
 				var data = null;
 				try {
@@ -119,22 +119,38 @@ LoginServer = {
 				for (var i=0,len=requestCallbacks.length; i<len; i++) {
 					requestCallbacks[i](data?data[i]:null, res.statusCode);
 				}
-				LoginServer.openRequests--;
-				self.requestTimerPoke();
-			});
+				self.requestEnd();
+			}.once();
+			res.on('end', endReq);
+			res.on('close', endReq);
 		});
 
 		req.on('error', function(error) {
 			for (var i=0,len=requestCallbacks.length; i<len; i++) {
 				requestCallbacks[i](null, null, error);
 			}
-			LoginServer.openRequests--;
-			self.requestTimerPoke();
+			self.requestEnd();
 		});
 
 		req.write(postData);
 		req.end();
 	},
+	requestStart: function(size) {
+		this.lastRequest = Date.now();
+		this.requestLog += ' | '+size+' requests: ';
+		this.openRequests++;
+	},
+	requestEnd: function() {
+		this.openRequests = 0;
+		this.requestLog += ''+(Date.now() - this.lastRequest).duration();
+		this.requestLog = this.requestLog.substr(-1000);
+		this.requestTimerPoke();
+	},
+	getLog: function() {
+		return this.requestLog + (this.lastRequest?' ('+(Date.now() - this.lastRequest).duration()+' since last request)':'');
+	},
+	requestLog: '',
+	lastRequest: 0,
 	openRequests: 0
 };
 
