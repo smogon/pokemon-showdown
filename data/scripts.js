@@ -393,11 +393,12 @@ exports.BattleScripts = {
 				}
 			}
 			var poke = formes.sample();
+			var template = this.getTemplate(poke);
 
 			//level balance--calculate directly from stats rather than using some silly lookup table
 			var mbstmin = 1307; //sunkern has the lowest modified base stat total, and that total is 807
 
-			var stats = this.getTemplate(poke).baseStats;
+			var stats = template.baseStats;
 
 			//modified base stat total assumes 31 IVs, 85 EVs in every stat
 			var mbst = (stats["hp"]*2+31+21+100)+10;
@@ -426,12 +427,12 @@ exports.BattleScripts = {
 			//random gender--already handled by PS?
 			
 			//random ability (unreleased DW are par for the course)
-			var abilities = [this.getTemplate(poke).abilities['0']];
-			if (this.getTemplate(poke).abilities['1']) {
-				abilities.push(this.getTemplate(poke).abilities['1']);
+			var abilities = [template.abilities['0']];
+			if (template.abilities['1']) {
+				abilities.push(template.abilities['1']);
 			}
-			if (this.getTemplate(poke).abilities['DW']) {
-				abilities.push(this.getTemplate(poke).abilities['DW']);
+			if (template.abilities['DW']) {
+				abilities.push(template.abilities['DW']);
 			}
 			var ability = abilities.sample();
 
@@ -442,8 +443,8 @@ exports.BattleScripts = {
 			var item = Object.keys(this.data.Items).sample();
 
 			//since we're selecting forme at random, we gotta make sure forme/item combo is correct
-			if (this.getTemplate(poke).requiredItem) {
-				item = this.getTemplate(poke).requiredItem;
+			if (template.requiredItem) {
+				item = template.requiredItem;
 			}
 			while ((poke === 'Arceus' && item.indexOf("plate") > -1) || (poke === 'Giratina' && item === 'griseousorb')) {
 				item = Object.keys(this.data.Items).sample();
@@ -478,7 +479,7 @@ exports.BattleScripts = {
 				var y = Math.floor(Math.random()*Math.min(256-evs[x],evpool+1));
 				evs[x]+=y;
 				evpool-=y;
-			}while (evpool > 0);
+			} while (evpool > 0);
 
 			//random happiness--useless, since return/frustration is currently a "cheat"
 			var happiness = Math.floor(Math.random()*256);
@@ -488,7 +489,8 @@ exports.BattleScripts = {
 
 			//four random unique moves from movepool. don't worry about "attacking" or "viable"
 			var moves;
-			var pool = Object.keys(this.getTemplate(poke).learnset);
+			var pool = ['struggle'];
+			if (template.learnset) pool = Object.keys(template.learnset);
 			if (pool.length < 5) {
 				moves = pool;
 			} else {
