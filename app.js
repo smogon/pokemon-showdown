@@ -15,12 +15,12 @@ var http = require("http");
 var url = require('url');
 
 LoginServer = {
-	request: function(action, data, callback) {
+	instantRequest: function(action, data, callback) {
 		if (typeof data === 'function') {
 			callback = data;
 			data = null;
 		}
-		if (LoginServer.openRequests > 9) {
+		if (LoginServer.openRequests > 5) {
 			callback(null, null, 'overflow');
 			return;
 		}
@@ -40,7 +40,11 @@ LoginServer = {
 			});
 
 			res.on('end', function() {
-				callback(buffer, res.statusCode);
+				var data = null;
+				try {
+					var data = JSON.parse(buffer);
+				} catch (e) {}
+				callback(data, res.statusCode);
 				LoginServer.openRequests--;
 			});
 		});
@@ -50,6 +54,85 @@ LoginServer = {
 			LoginServer.openRequests--;
 		});
 
+		req.end();
+	},
+	requestQueue: [],
+	request: function(action, data, callback) {
+		if (typeof data === 'function') {
+			callback = data;
+			data = null;
+		}
+		if (!data) data = {};
+		data.act = action;
+		data.callback = callback;
+		this.requestQueue.push(data);
+		this.requestTimerPoke();
+	},
+	requestTimer: null,
+	requestTimerPoke: function() {
+		// "poke" the request timer, i.e. make sure it knows it should make
+		// a request soon
+
+		// if we already have it going or the request queue is empty no need to do anything
+		if (this.openRequests || this.requestTimer || !this.requestQueue.length) return;
+
+		// 100
+		this.requestTimer = setTimeout(this.makeRequests.bind(this), 100);
+	},
+	makeRequests: function() {
+		this.requestTimer = null;
+		var self = this;
+		var requests = this.requestQueue;
+		this.requestQueue = [];
+
+		if (!requests.length) return;
+
+		var requestCallbacks = [];
+		for (var i=0,len=requests.length; i<len; i++) {
+			var request = requests[i];
+			requestCallbacks[i] = request.callback;
+			delete request.callback;
+		}
+
+		this.openRequests++;
+		var postData = 'serverid='+config.serverid+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()+'&json='+encodeURIComponent(JSON.stringify(requests))+'\n';
+		var requestOptions = url.parse(config.loginserver+'action.php');
+		requestOptions.method = 'post';
+		requestOptions.headers = {
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Length': postData.length
+		};
+		var req = http.request(requestOptions, function(res) {
+			var buffer = '';
+			res.setEncoding('utf8');
+
+			res.on('data', function(chunk) {
+				buffer += chunk;
+			});
+
+			res.on('end', function() {
+				console.log('RESPONSE: '+buffer);
+				var data = null;
+				try {
+					var data = JSON.parse(buffer);
+				} catch (e) {}
+				for (var i=0,len=requestCallbacks.length; i<len; i++) {
+					requestCallbacks[i](data?data[i]:null, res.statusCode);
+				}
+				LoginServer.openRequests--;
+				self.requestTimerPoke();
+			});
+		});
+
+		req.on('error', function(error) {
+			for (var i=0,len=requestCallbacks.length; i<len; i++) {
+				requestCallbacks[i](null, null, error);
+			}
+			LoginServer.openRequests--;
+			self.requestTimerPoke();
+		});
+
+		req.write(postData);
 		req.end();
 	},
 	openRequests: 0
