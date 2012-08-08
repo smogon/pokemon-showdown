@@ -638,13 +638,11 @@ var User = (function () {
 		LoginServer.request('ladderformatgetmmr', {
 			format: formatid,
 			user: this.userid
-		}, function(body) {
+		}, function(data) {
 			var mmr = 1500;
-			if (body) {
-				try {
-					mmr = parseInt(body,10);
-					if (isNaN(mmr)) mmr = 1500;
-				} catch(e) {}
+			if (data) {
+				mmr = parseInt(data,10);
+				if (isNaN(mmr)) mmr = 1500;
 			}
 			self.mmrCache[formatid] = mmr;
 			callback.call(that, mmr);
