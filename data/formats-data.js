@@ -4188,10 +4188,17 @@ exports.BattleFormatsData = {
 	},
 	gothorita: {
 		viableMoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1,"trick":1},
+		eventPokemon: [
+			{"generation":5,"level":32,"gender":"M","abilities":["shadowtag"],"moves":["psyshock","flatter","futuresight","mirrorcoat"]}
+		],
+		dreamWorldRelease: true,
+		maleOnlyDreamWorld: true,
 		tier: "NFE"
 	},
 	gothitelle: {
 		viableMoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1,"trick":1},
+		dreamWorldRelease: true,
+		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	solosis: {
