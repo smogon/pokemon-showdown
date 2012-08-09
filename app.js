@@ -69,6 +69,7 @@ LoginServer = {
 		this.requestTimerPoke();
 	},
 	requestTimer: null,
+	requestTimeoutTimer: null,
 	requestTimerPoke: function() {
 		// "poke" the request timer, i.e. make sure it knows it should make
 		// a request soon
@@ -102,7 +103,27 @@ LoginServer = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Content-Length': postData.length
 		};
-		var req = http.request(requestOptions, function(res) {
+
+		var req = null;
+		var reqError = function(error) {
+			if (self.requestTimeoutTimer) {
+				clearTimeout(self.requestTimeoutTimer);
+				self.requestTimeoutTimer = null;
+			}
+			req.abort();
+			for (var i=0,len=requestCallbacks.length; i<len; i++) {
+				requestCallbacks[i](null, null, error);
+			}
+			self.requestEnd();
+		};
+
+		self.requestTimeoutTimer = setTimeout(reqError, 120000);
+
+		req = http.request(requestOptions, function(res) {
+			if (self.requestTimeoutTimer) {
+				clearTimeout(self.requestTimeoutTimer);
+				self.requestTimeoutTimer = null;
+			}
 			var buffer = '';
 			res.setEncoding('utf8');
 
@@ -110,7 +131,11 @@ LoginServer = {
 				buffer += chunk;
 			});
 
-			var endReq = self.endReq = function() {
+			var endReq = function() {
+				if (self.requestTimeoutTimer) {
+					clearTimeout(self.requestTimeoutTimer);
+					self.requestTimeoutTimer = null;
+				}
 				console.log('RESPONSE: '+buffer);
 				var data = null;
 				try {
@@ -124,18 +149,13 @@ LoginServer = {
 			res.on('end', endReq);
 			res.on('close', endReq);
 
-			setTimeout(function(){
+			self.requestTimeoutTimer = setTimeout(function(){
 				if (res.connection) res.connection.destroy();
 				endReq();
-			}, 180000);
+			}, 120000);
 		});
 
-		req.on('error', function(error) {
-			for (var i=0,len=requestCallbacks.length; i<len; i++) {
-				requestCallbacks[i](null, null, error);
-			}
-			self.requestEnd();
-		});
+		req.on('error', reqError);
 
 		req.write(postData);
 		req.end();
