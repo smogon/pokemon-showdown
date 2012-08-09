@@ -77,7 +77,7 @@ LoginServer = {
 		if (this.openRequests || this.requestTimer || !this.requestQueue.length) return;
 
 		// 100
-		this.requestTimer = setTimeout(this.makeRequests.bind(this), 250);
+		this.requestTimer = setTimeout(this.makeRequests.bind(this), 500);
 	},
 	makeRequests: function() {
 		this.requestTimer = null;
@@ -123,6 +123,11 @@ LoginServer = {
 			}.once();
 			res.on('end', endReq);
 			res.on('close', endReq);
+
+			setTimeout(function(){
+				if (res.connection) res.connection.destroy();
+				endReq();
+			}, 180000);
 		});
 
 		req.on('error', function(error) {
