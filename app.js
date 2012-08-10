@@ -11,12 +11,12 @@ var http = require("http");
 var url = require('url');
 
 LoginServer = {
-	request: function(action, data, callback) {
+	instantRequest: function(action, data, callback) {
 		if (typeof data === 'function') {
 			callback = data;
 			data = null;
 		}
-		if (LoginServer.openRequests > 9) {
+		if (LoginServer.openRequests > 5) {
 			callback(null, null, 'overflow');
 			return;
 		}
@@ -36,7 +36,11 @@ LoginServer = {
 			});
 
 			res.on('end', function() {
-				callback(buffer, res.statusCode);
+				var data = null;
+				try {
+					var data = JSON.parse(buffer);
+				} catch (e) {}
+				callback(data, res.statusCode);
 				LoginServer.openRequests--;
 			});
 		});
@@ -48,6 +52,126 @@ LoginServer = {
 
 		req.end();
 	},
+	requestQueue: [],
+	request: function(action, data, callback) {
+		if (typeof data === 'function') {
+			callback = data;
+			data = null;
+		}
+		if (!data) data = {};
+		data.act = action;
+		data.callback = callback;
+		this.requestQueue.push(data);
+		this.requestTimerPoke();
+	},
+	requestTimer: null,
+	requestTimeoutTimer: null,
+	requestTimerPoke: function() {
+		// "poke" the request timer, i.e. make sure it knows it should make
+		// a request soon
+
+		// if we already have it going or the request queue is empty no need to do anything
+		if (this.openRequests || this.requestTimer || !this.requestQueue.length) return;
+
+		// 100
+		this.requestTimer = setTimeout(this.makeRequests.bind(this), 500);
+	},
+	makeRequests: function() {
+		this.requestTimer = null;
+		var self = this;
+		var requests = this.requestQueue;
+		this.requestQueue = [];
+
+		if (!requests.length) return;
+
+		var requestCallbacks = [];
+		for (var i=0,len=requests.length; i<len; i++) {
+			var request = requests[i];
+			requestCallbacks[i] = request.callback;
+			delete request.callback;
+		}
+
+		this.requestStart(requests.length);
+		var postData = 'serverid='+config.serverid+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()+'&json='+encodeURIComponent(JSON.stringify(requests))+'\n';
+		var requestOptions = url.parse(config.loginserver+'action.php');
+		requestOptions.method = 'post';
+		requestOptions.headers = {
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Length': postData.length
+		};
+
+		var req = null;
+		var reqError = function(error) {
+			if (self.requestTimeoutTimer) {
+				clearTimeout(self.requestTimeoutTimer);
+				self.requestTimeoutTimer = null;
+			}
+			req.abort();
+			for (var i=0,len=requestCallbacks.length; i<len; i++) {
+				requestCallbacks[i](null, null, error);
+			}
+			self.requestEnd();
+		};
+
+		self.requestTimeoutTimer = setTimeout(reqError, 120000);
+
+		req = http.request(requestOptions, function(res) {
+			if (self.requestTimeoutTimer) {
+				clearTimeout(self.requestTimeoutTimer);
+				self.requestTimeoutTimer = null;
+			}
+			var buffer = '';
+			res.setEncoding('utf8');
+
+			res.on('data', function(chunk) {
+				buffer += chunk;
+			});
+
+			var endReq = function() {
+				if (self.requestTimeoutTimer) {
+					clearTimeout(self.requestTimeoutTimer);
+					self.requestTimeoutTimer = null;
+				}
+				console.log('RESPONSE: '+buffer);
+				var data = null;
+				try {
+					var data = JSON.parse(buffer);
+				} catch (e) {}
+				for (var i=0,len=requestCallbacks.length; i<len; i++) {
+					requestCallbacks[i](data?data[i]:null, res.statusCode);
+				}
+				self.requestEnd();
+			}.once();
+			res.on('end', endReq);
+			res.on('close', endReq);
+
+			self.requestTimeoutTimer = setTimeout(function(){
+				if (res.connection) res.connection.destroy();
+				endReq();
+			}, 120000);
+		});
+
+		req.on('error', reqError);
+
+		req.write(postData);
+		req.end();
+	},
+	requestStart: function(size) {
+		this.lastRequest = Date.now();
+		this.requestLog += ' | '+size+' requests: ';
+		this.openRequests++;
+	},
+	requestEnd: function() {
+		this.openRequests = 0;
+		this.requestLog += ''+(Date.now() - this.lastRequest).duration();
+		this.requestLog = this.requestLog.substr(-1000);
+		this.requestTimerPoke();
+	},
+	getLog: function() {
+		return this.requestLog + (this.lastRequest?' ('+(Date.now() - this.lastRequest).duration()+' since last request)':'');
+	},
+	requestLog: '',
+	lastRequest: 0,
 	openRequests: 0
 };
 

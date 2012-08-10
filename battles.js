@@ -753,6 +753,9 @@ function BattlePokemon(set, side) {
 		var item = selfP.getItem();
 		if (selfB.runEvent('UseItem', selfP, null, null, item)) {
 			switch (item.id) {
+			case 'redcard':
+				selfB.add('-enditem', selfP, item, '[of] '+source);
+				break;
 			default:
 				if (!item.isGem) {
 					selfB.add('-enditem', selfP, item);
@@ -2749,7 +2752,7 @@ function Battle(roomid, format, rated) {
 						p2team: selfB.p2.team,
 						log: selfB.log
 					}
-					this.send('log', JSON.stringify('log'));
+					this.send('log', JSON.stringify(log));
 				}
 				this.send('winupdate', [selfB.winner].concat(selfB.log.slice(logPos)));
 			} else {
