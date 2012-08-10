@@ -4646,7 +4646,10 @@ exports.BattleFormatsData = {
 	},
 	genesect: {
 		viableMoves: {"uturn":1,"bugbuzz":1,"icebeam":1,"flamethrower":1,"thunderbolt":1,"rockpolish":1},
-		tier: "Unreleased"
+		eventPokemon: [
+			{"generation":5,"level":50,"abilities":["download"],"moves":["technoblast","magnetbomb","solarbeam","signalbeam"]}
+		],
+		tier: "OU"
 	},
 	genesectdouse: {
 		tier: "Illegal"
