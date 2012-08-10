@@ -38,6 +38,7 @@
 var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
 
 function parseCommandLocal(user, cmd, target, room, socket, message) {
+	if (!room) return;
 	cmd = cmd.toLowerCase();
 	switch (cmd) {
 	case 'me':
