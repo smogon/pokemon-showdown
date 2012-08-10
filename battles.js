@@ -2730,8 +2730,8 @@ function Battle(roomid, format, rated) {
 			var battle = this;
 			var p1 = this.p1;
 			var p2 = this.p2;
-			var p1active = p1?p1.actives[0]:null;
-			var p2active = p2?p2.actives[0]:null;
+			var p1active = p1?p1.active[0]:null;
+			var p2active = p2?p2.active[0]:null;
 			try {
 				this.send('update', '|chat|server|<<< '+eval(data[2]));
 			} catch (e) {
