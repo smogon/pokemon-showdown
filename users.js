@@ -16,12 +16,12 @@ function sanitizeName(name) {
 	return name;
 }
 
-function getUser(name) {
+function getUser(name, exactName) {
 	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
 	var userid = toUserid(name);
 	var i = 0;
-	while (userid && !users[userid] && i < 1000) {
+	while (!exactName && userid && !users[userid] && i < 1000) {
 		userid = prevUsers[userid];
 		i++;
 	}
@@ -79,10 +79,12 @@ function connectUser(name, socket, token, room) {
 
 var usergroups = {};
 function importUsergroups() {
+	// can't just say usergroups = {} because it's exported
+	for (var i in usergroups) delete usergroups[i];
+
 	fs.readFile('config/usergroups.csv', function(err, data) {
 		if (err) return;
 		data = (''+data).split("\n");
-		usergroups = {};
 		for (var i = 0; i < data.length; i++) {
 			if (!data[i]) continue;
 			var row = data[i].split(",");
@@ -228,22 +230,8 @@ var User = (function () {
 		return false;
 	};
 	// Special permission check is needed for promoting and demoting
-	User.prototype.checkPromotePermission = function(targetUser, targetGroupSymbol) {
-		if (!this.can('promote', targetUser)) return false;
-		var fakeUser = {group:targetGroupSymbol};
-		if (!this.can('promote', fakeUser)) return false;
-		return true;
-	};
-	User.prototype.getNextGroupSymbol = function(isDown) {
-		var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(this.group) + (isDown ? -1 : 1)];
-		if (!nextGroupRank) {
-			if (isDown) {
-				return config.groupsranking[0];
-			} else {
-				return config.groupsranking[config.groupsranking.length - 1];
-			}
-		}
-		return nextGroupRank;
+	User.prototype.checkPromotePermission = function(sourceGroup, targetGroup) {
+		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
 	};
 	User.prototype.forceRename = function(name, authenticated) {
 		// skip the login server
@@ -970,4 +958,34 @@ exports.prevUsers = prevUsers;
 exports.importUsergroups = importUsergroups;
 exports.addBannedWord = addBannedWord;
 exports.removeBannedWord = removeBannedWord;
+
+exports.usergroups = usergroups;
+
+exports.getNextGroupSymbol = function(group, isDown) {
+	var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(group) + (isDown ? -1 : 1)];
+	if (!nextGroupRank) {
+		if (isDown) {
+			return config.groupsranking[0];
+		} else {
+			return config.groupsranking[config.groupsranking.length - 1];
+		}
+	}
+	return nextGroupRank;
+};
+
+exports.setOfflineGroup = function(name, group) {
+	var userid = toUserid(name);
+	var user = getUser(userid);
+	if (user) {
+		return user.setGroup(group);
+	}
+	if (!group || group === config.groupsranking[0]) {
+		delete usergroups[userid];
+	} else {
+		var usergroup = usergroups[userid];
+		var name = usergroup ? usergroup.substr(1) : name;
+		usergroups[userid] = group+name;
+	}
+	exportUsergroups();
+};
 
