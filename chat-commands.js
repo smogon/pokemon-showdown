@@ -571,27 +571,33 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'promote':
 	case 'demote':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		var targets = splitTarget(target);
-		var targetUser = Users.get(targets[0]);
-		if (!targetUser) {
-			emit(socket, 'console', 'User '+target+' not found.');
-			return false;
+		var targets = splitTarget(target, true);
+		var targetUser = targets[0];
+		var userid = toUserid(targets[2]);
+
+		var currentGroup = ' ';
+		if (targetUser) {
+			currentGroup = targetUser.group;
+		} else if (Users.usergroups[userid]) {
+			currentGroup = Users.usergroups[userid].substr(0,1);
 		}
-		var nextGroup = targets[1] ? targets[1] : targetUser.getNextGroupSymbol(cmd === 'demote');
+		var name = targetUser ? targetUser.name : targets[2];
+
+		var nextGroup = targets[1] ? targets[1] : Users.getNextGroupSymbol(currentGroup, cmd === 'demote');
 		if (!config.groups[nextGroup]) {
 			emit(socket, 'console', 'Group \'' + nextGroup + '\' does not exist.');
 			return false;
 		}
-		if (!user.checkPromotePermission(targetUser, nextGroup)) {
+		if (!user.checkPromotePermission(currentGroup, nextGroup)) {
 			emit(socket, 'console', '/promote - Access denied.');
 			return false;
 		}
 
-		var isDemotion = (config.groups[nextGroup].rank < config.groups[targetUser.group].rank);
-		targetUser.setGroup(nextGroup);
+		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
+		Users.setOfflineGroup(name, nextGroup);
 		rooms.lobby.usersChanged = true;
-		var groupName = config.groups[targetUser.group].name || targetUser.group || '';
-		logModCommand(room,''+targetUser.name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.');
+		var groupName = config.groups[nextGroup].name || nextGroup || '';
+		logModCommand(room,''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.');
 		return false;
 		break;
 
@@ -1369,12 +1375,12 @@ function getDataMessage(target) {
 	return response;
 }
 
-function splitTarget(target) {
+function splitTarget(target, exactName) {
 	var commaIndex = target.indexOf(',');
 	if (commaIndex < 0) {
-		return [Users.get(target), '', target];
+		return [Users.get(target, exactName), '', target];
 	}
-	var targetUser = Users.get(target.substr(0, commaIndex));
+	var targetUser = Users.get(target.substr(0, commaIndex), exactName);
 	if (!targetUser || !targetUser.connected) {
 		targetUser = null;
 	}
