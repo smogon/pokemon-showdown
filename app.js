@@ -136,7 +136,7 @@ LoginServer = {
 					clearTimeout(self.requestTimeoutTimer);
 					self.requestTimeoutTimer = null;
 				}
-				console.log('RESPONSE: '+buffer);
+				//console.log('RESPONSE: '+buffer);
 				var data = null;
 				try {
 					var data = JSON.parse(buffer);
