@@ -1,4 +1,4 @@
-var THROTTLE_DELAY = 800;
+var THROTTLE_DELAY = 900;
 
 var users = {};
 var prevUsers = {};
