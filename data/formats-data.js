@@ -2324,7 +2324,13 @@ exports.BattleFormatsData = {
 	shedinja: {
 		viableMoves: {"swordsdance":1,"willowisp":1,"xscissor":1,"shadowsneak":1,"suckerpunch":1},
 		eventPokemon: [
-			{"generation":3,"level":50,"abilities":["wonderguard"],"moves":["spite","confuseray","shadowball","grudge"]}
+			{"generation":3,"level":50,"abilities":["wonderguard"],"moves":["spite","confuseray","shadowball","grudge"]},
+			{"generation":3,"level":20,"abilities":["wonderguard"],"moves":["doubleteam","furycutter","screech"]},
+			{"generation":3,"level":25,"abilities":["wonderguard"],"moves":["swordsdance"]},
+			{"generation":3,"level":31,"abilities":["wonderguard"],"moves":["slash"]},
+			{"generation":3,"level":38,"abilities":["wonderguard"],"moves":["agility"]},
+			{"generation":3,"level":45,"abilities":["wonderguard"],"moves":["batonpass"]},
+			{"generation":4,"level":52,"abilities":["wonderguard"],"moves":["xscissor"]}
 		],
 		tier: "NU"
 	},
