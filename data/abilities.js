@@ -1653,7 +1653,7 @@ exports.BattleAbilities = {
 	},
 	"rockhead": {
 		desc: "This Pokemon does not receive recoil damage unless it uses Struggle, it misses with Jump Kick or Hi Jump Kick or it is holding Life Orb, Jaboca Berry or Rowap Berry.",
-		shortDesc: "This Pokemon does not receive recoil damage; not Struggle, Life Orb, crash damage.",
+		shortDesc: "This Pokemon does not take recoil damage besides Struggle, Life Orb, crash damage.",
 		onModifyMove: function(move) {
 			delete move.recoil;
 		},
