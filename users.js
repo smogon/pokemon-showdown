@@ -438,7 +438,7 @@ var User = (function () {
 					group = usergroups[userid].substr(0,1);
 				}
 				if (userid === 'zarel') {
-					group = '~';
+					group = config.groupsranking[config.groupsranking.length - 1];
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
