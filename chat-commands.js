@@ -378,6 +378,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
 		return false;
 		break;
+		
+	case 'kick':
+	case 'k':
+        	if (!target) return parseCommand(user, '?', cmd, room, socket);
+        	return parseCommand(user, 'redirect', ''+target+', http://www.smogon.com/sim/rules', room, socket);
+        	break;
 
 	case 'unban':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -854,6 +860,24 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'</div>');
 		return false;
 		break;
+		
+	case 'banlists':
+	case 'tiers':
+	case '!banlists':
+	case '!tiers':
+        	showOrBroadcastStart(user, cmd, room, socket, message);
+        	showOrBroadcast(user, cmd, room, socket,
+                	'<div style="border:1px solid #6688AA;padding:2px 4px">Smogon tiers:<br />' +
+                	'- <a href="http://www.smogon.com/bw/banlist/" target="_blank">The banlists for each tier</a><br />' +
+                	'- <a href="http://www.smogon.com/bw/tiers/uber" target="_blank">Uber Pokemon</a><br />' +
+                	'- <a href="http://www.smogon.com/bw/tiers/ou" target="_blank">Overused Pokemon</a><br />' +
+                	'- <a href="http://www.smogon.com/bw/tiers/uu" target="_blank">Underused Pokemon</a><br />' +
+                	'- <a href="http://www.smogon.com/bw/tiers/ru" target="_blank">Rarelyused Pokemon</a><br />' +
+                	'- <a href="http://www.smogon.com/bw/tiers/nu" target="_blank">Neverused Pokemon</a><br />' +
+                	'- <a href="http://www.smogon.com/bw/tiers/lc" target="_blank">Little Cup Pokemon</a><br />' +
+                	'</div>');
+        return false;
+        break;
 
 	// Battle commands
 
@@ -1168,6 +1192,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/redirect OR /redir [username], [url] - Redirects user to a different URL. ~~intl and ~~dev are accepted redirects. Requires: @ & ~');
 		}
+		if (target === "@" || target === 'kick' || target === 'k') {
+        		matched = true;
+        		emit(socket, 'console', '/kick OR /k [username] - Quickly kicks a user by redirecting them to the Smogon Sim Rules page. Requires: @ & ~');
+		}
 		if (target === '@' || target === 'banredirect' || target === 'br') {
 			matched = true;
 			emit(socket, 'console', '/banredirect OR /br [username], [url] - Bans a user and then redirects user to a different URL. Requires: @ & ~');
@@ -1225,7 +1253,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
 				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /forcerename, /modlog')
-				emit(socket, 'console', 'MODERATOR COMMANDS: /alts, /forcerenameto, /ban, /unban, /unbanall, /potd, /namelock, /nameunlock, /ip, /redirect');
+				emit(socket, 'console', 'MODERATOR COMMANDS: /alts, /forcerenameto, /ban, /unban, /unbanall, /potd, /namelock, /nameunlock, /ip, /redirect, /kick');
 				emit(socket, 'console', 'STAFF COMMANDS: /promote, /demote, /forcewin');
 				emit(socket, 'console', 'For details on all moderator commands, use /help @');
 			}
