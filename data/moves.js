@@ -1196,6 +1196,13 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		onHit: function(target, source) {
+			var item = target.getItem();
+			if (source.hp && item.isBerry && target.takeItem(source)) {
+				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', '[of] '+source);
+				this.singleEvent('Eat', item, null, source, null, null);
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -7830,6 +7837,13 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		onHit: function(target, source) {
+			var item = target.getItem();
+			if (source.hp && item.isBerry && target.takeItem(source)) {
+				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Pluck', '[of] '+source);
+				this.singleEvent('Eat', item, null, source, null, null);
+			}
+		},
 		secondary: false,
 		target: "any",
 		type: "Flying"
