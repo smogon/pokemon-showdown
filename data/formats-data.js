@@ -1466,7 +1466,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	spinarak: {
-		viableMoves: {"agility":1,"toxic":1,"bugbite":1,"toxicspikes":1,"poisonjab":1,"batonpass":1,"swordsdance":1},
+		viableMoves: {"agility":1,"toxic":1,"xscissor":1,"toxicspikes":1,"poisonjab":1,"batonpass":1,"swordsdance":1},
 		eventPokemon: [
 			{"generation":3,"level":14,"abilities":["insomnia","swarm"],"moves":["refresh","dig","signalbeam","nightshade"]}
 		],
@@ -1474,7 +1474,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	ariados: {
-		viableMoves: {"agility":1,"toxic":1,"bugbite":1,"toxicspikes":1,"poisonjab":1,"batonpass":1,"swordsdance":1},
+		viableMoves: {"agility":1,"toxic":1,"xscissor":1,"toxicspikes":1,"poisonjab":1,"batonpass":1,"swordsdance":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
@@ -1982,7 +1982,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	raikou: {
-		viableMoves: {"voltswitch":1,"thunderbolt":1,"hiddenpowerice":1,"aurasphere":1,"calmmind":1,"substitute":1},
+		viableMoves: {"thunderbolt":1,"hiddenpowerice":1,"aurasphere":1,"calmmind":1,"substitute":1},
 		eventPokemon: [
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["quickattack","spark","reflect","crunch"]},
 			{"generation":4,"level":30,"nature":"Rash","abilities":["pressure"],"moves":["zapcannon","aurasphere","extremespeed","weatherball"]}
@@ -2641,7 +2641,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	zangoose: {
-		viableMoves: {"swordsdance":1,"return":1,"closecombat":1,"nightslash":1,"quickattack":1,"facade":1},
+		viableMoves: {"swordsdance":1,"closecombat":1,"nightslash":1,"quickattack":1,"facade":1},
 		eventPokemon: [
 			{"generation":3,"level":18,"abilities":["immunity"],"moves":["leer","quickattack","swordsdance","furycutter"]},
 			{"generation":3,"level":10,"gender":"M","abilities":["immunity"],"moves":["scratch","leer","quickattack","swordsdance"]},
@@ -4564,7 +4564,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	terrakion: {
-		viableMoves: {"stoneedge":1,"closecombat":1,"swordsdance":1,"rockpolish":1,"substitute":1,"xscissor":1,"earthquake":1,"sacredsword":1},
+		viableMoves: {"stoneedge":1,"closecombat":1,"swordsdance":1,"rockpolish":1,"substitute":1,"xscissor":1,"earthquake":1},
 		tier: "OU"
 	},
 	virizion: {
@@ -4572,7 +4572,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	tornadus: {
-		viableMoves: {"hurricane":1,"airslash":1,"uturn":1,"bulkup":1,"acrobatics":1,"brickbreak":1,"focusblast":1,"taunt":1,"substitute":1},
+		viableMoves: {"hurricane":1,"airslash":1,"uturn":1,"bulkup":1,"acrobatics":1,"superpower":1,"focusblast":1,"taunt":1,"substitute":1,"heatwave":1},
 		eventPokemon: [
 			{"generation":5,"level":70,"gender":"M","abilities":["prankster"],"moves":["hurricane","hammerarm","airslash","hiddenpower"]}
 		],
@@ -4584,7 +4584,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	thundurus: {
-		viableMoves: {"thunderwave":1,"nastyplot":1,"thunderbolt":1,"hiddenpowerice":1,"focusblast":1,"taunt":1,"grassknot":1,"substitute":1},
+		viableMoves: {"thunderwave":1,"nastyplot":1,"thunderbolt":1,"hiddenpowerice":1,"focusblast":1,"grassknot":1,"substitute":1},
 		eventPokemon: [
 			{"generation":5,"level":70,"gender":"M","abilities":["prankster"],"moves":["thunder","hammerarm","focusblast","wildcharge"]}
 		],
@@ -4651,7 +4651,7 @@ exports.BattleFormatsData = {
 		tier: "Illegal"
 	},
 	genesect: {
-		viableMoves: {"uturn":1,"bugbuzz":1,"icebeam":1,"flamethrower":1,"thunderbolt":1,"rockpolish":1},
+		viableMoves: {"uturn":1,"bugbuzz":1,"icebeam":1,"flamethrower":1,"thunderbolt":1},
 		eventPokemon: [
 			{"generation":5,"level":50,"abilities":["download"],"moves":["technoblast","magnetbomb","solarbeam","signalbeam"]}
 		],
