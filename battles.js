@@ -2698,7 +2698,12 @@ function Battle(roomid, format, rated) {
 		switch (data[1]) {
 		case 'join':
 			var team = null;
-			if (more) team = JSON.parse(more);
+			try {
+				if (more) team = JSON.parse(more);
+			} catch (e) {
+				console.log('TEAM PARSE ERROR: '+more);
+				team = null;
+			}
 			this.join(data[2], data[3], data[4], team);
 			break;
 
