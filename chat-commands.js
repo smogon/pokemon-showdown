@@ -879,6 +879,27 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
         return false;
         break;
 
+	case 'join':
+		var targetRoom = Rooms.get(target);
+		if (!targetRoom) {
+			emit(socket, 'console', "The room '"+target+"' does not exist.");
+			return false;
+		}
+		if (!user.joinRoom(targetRoom, socket)) {
+			emit(socket, 'console', "The room '"+target+"' could not be joined (most likely, you're already in it).");
+			return false;
+		}
+		return false;
+		break;
+
+	case 'leave':
+	case 'part':
+		if (room.id === 'lobby') return false;
+
+		user.leaveRoom(room, socket);
+		return false;
+		break;
+
 	// Battle commands
 
 	case 'reset':
@@ -888,6 +909,74 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		//   selfR.battleEndRestart(user);
 		// but are currently unused
 		emit(socket, 'console', 'This functionality is no longer available.');
+		return false;
+		break;
+
+	case 'move':
+	case 'attack':
+	case 'mv':
+		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
+
+		room.decision(user, 'move', target);
+		return false;
+		break;
+
+	case 'switch':
+	case 'sw':
+		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
+
+		room.decision(user, 'switch', target);
+		return false;
+		break;
+
+	case 'undo':
+		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
+
+		room.decision(user, 'undo', target);
+		return false;
+		break;
+
+	case 'team':
+		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
+
+		room.decision(user, 'team', target);
+		return false;
+		break;
+
+	case 'search':
+	case 'cancelsearch':
+		if (!room.searchBattle) { emit(socket, 'console', 'You can only do this in lobby rooms.'); return false; }
+
+		if (target) {
+			room.searchBattle(user, target);
+		} else {
+			room.cancelSearch(user);
+		}
+		return false;
+		break;
+
+	case 'saveteam':
+		try {
+			user.team = JSON.parse(target);
+			youUser.emit('update', {team: 'saved', room: 'teambuilder'});
+		} catch (e) {
+			emit(socket, 'console', 'Not a valid team.');
+		}
+		return false;
+		break;
+
+	case 'joinbattle':
+	case 'partbattle':
+		if (!room.joinBattle) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
+
+		room.joinBattle(user);
+		return false;
+		break;
+
+	case 'leavebattle':
+		if (!room.leaveBattle) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
+
+		room.leaveBattle(user);
 		return false;
 		break;
 
@@ -912,24 +1001,27 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'forcewin':
 	case 'forcetie':
-		if (user.can('forcewin') && room.battle) {
-			room.battle.endType = 'forced';
-			if (!target) {
-				room.battle.win('');
-				logModCommand(room,user.name+' forced a tie.',true);
-				return false;
-			}
-			target = Users.get(target);
-			if (target) target = target.userid;
-			else target = '';
-
-			if (target) {
-				room.battle.win(target);
-				logModCommand(room,user.name+' forced a win for '+target+'.',true);
-			}
-
+		if (!user.can('forcewin') || !room.battle) {
+			emit(socket, 'console', '/forcewin - Access denied.');
 			return false;
 		}
+
+		room.battle.endType = 'forced';
+		if (!target) {
+			room.battle.win('');
+			logModCommand(room,user.name+' forced a tie.',true);
+			return false;
+		}
+		target = Users.get(target);
+		if (target) target = target.userid;
+		else target = '';
+
+		if (target) {
+			room.battle.win(target);
+			logModCommand(room,user.name+' forced a win for '+target+'.',true);
+		}
+
+		return false;
 		break;
 
 	case 'potd':

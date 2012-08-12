@@ -957,6 +957,7 @@ function LobbyRoom(roomid) {
 	};
 	this.removeRoom = function(room) {
 		room = getRoom(room);
+		if (!room) return;
 		if (typeof room.i[selfR.id] !== 'undefined') {
 			selfR.rooms = selfR.rooms.splice(room.i[selfR.id],1);
 			delete room.i[selfR.id];
@@ -1041,10 +1042,11 @@ function LobbyRoom(roomid) {
 	};
 }
 
-getRoom = function(roomid) {
+// to make sure you don't get null returned, pass the second argument
+getRoom = function(roomid, fallback) {
 	if (roomid && roomid.id) return roomid;
 	if (!roomid) roomid = 'default';
-	if (!rooms[roomid]) {
+	if (!rooms[roomid] && fallback) {
 		return rooms.lobby;
 	}
 	return rooms[roomid];
