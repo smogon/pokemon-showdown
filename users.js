@@ -705,7 +705,7 @@ var User = (function () {
 	};
 	User.prototype.joinRoom = function(room, socket) {
 		roomid = room?(room.id||room):'';
-		room = Rooms.get(room);
+		room = Rooms.get(room,'lobby');
 		if (!room) return false;
 		var person = null;
 		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
