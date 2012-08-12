@@ -390,34 +390,34 @@ var events = {
 		if (!message || typeof message.room !== 'string' || typeof message.message !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = Rooms.get(message.room);
+		var room = Rooms.get(message.room, 'lobby');
 		youUser.chat(message.message, room, socket);
 	},
 	leave: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		youUser.leaveRoom(Rooms.get(data.room), socket);
+		youUser.leaveRoom(Rooms.get(data.room, 'lobby'), socket);
 	},
 	leaveBattle: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = Rooms.get(data.room);
+		var room = Rooms.get(data.room, 'lobby');
 		if (room.leaveBattle) room.leaveBattle(youUser);
 	},
 	joinBattle: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = Rooms.get(data.room);
+		var room = Rooms.get(data.room, 'lobby');
 		if (room.joinBattle) room.joinBattle(youUser);
 	},
 	command: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		parseCommand(youUser, 'command', data, Rooms.get(data.room), socket);
+		parseCommand(youUser, 'command', data, Rooms.get(data.room, 'lobby'), socket);
 	},
 	challenge: function(data, socket, you) {
 		if (!data) return;
@@ -462,7 +462,7 @@ var events = {
 		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = Rooms.get(data.room);
+		var room = Rooms.get(data.room, 'lobby');
 		switch (data.choice) {
 		case 'move':
 		case 'switch':
@@ -529,7 +529,7 @@ if (config.protocol === 'io') { // Socket.IO
 		}
 		//socket.id = randomString(16); // this sucks
 
-		//socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
+		socket.remoteAddress = socket.id;
 
 		if (bannedIps[socket.remoteAddress]) {
 			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
@@ -537,7 +537,17 @@ if (config.protocol === 'io') { // Socket.IO
 		}
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		socket.on('message', function(message) {
-			var data = JSON.parse(message);
+			var data;
+			if (message.substr(0,1) === '{') {
+				data = JSON.parse(message);
+			} else {
+				var pipeIndex = message.indexOf('|');
+				if (pipeIndex > 0) data = {
+					type: 'chat',
+					room: message.substr(0, pipeIndex),
+					message: message.substr(pipeIndex+1)
+				};
+			}
 			if (!data) return;
 			if (events[data.type]) you = events[data.type](data, socket, you) || you;
 		});
@@ -563,7 +573,17 @@ if (config.protocol === 'io') { // Socket.IO
 		}
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		socket.on('data', function(message) {
-			var data = JSON.parse(message);
+			var data;
+			if (message.substr(0,1) === '{') {
+				data = JSON.parse(message);
+			} else {
+				var pipeIndex = message.indexOf('|');
+				if (pipeIndex >= 0) data = {
+					type: 'chat',
+					room: message.substr(0, pipeIndex),
+					message: message.substr(pipeIndex+1)
+				};
+			}
 			if (!data) return;
 			if (events[data.type]) you = events[data.type](data, socket, you) || you;
 		});

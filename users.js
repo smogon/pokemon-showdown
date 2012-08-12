@@ -277,7 +277,7 @@ var User = (function () {
 		var joining = !this.named;
 		this.named = (this.userid.substr(0,5) !== 'guest');
 		for (var i in this.roomCount) {
-			Rooms.get(i).rename(this, oldid, joining);
+			Rooms.get(i,'lobby').rename(this, oldid, joining);
 		}
 		rooms.lobby.usersChanged = true;
 		return true;
@@ -318,7 +318,7 @@ var User = (function () {
 		}
 		this.named = false;
 		for (var i in this.roomCount) {
-			Rooms.get(i).rename(this, oldid, false);
+			Rooms.get(i,'lobby').rename(this, oldid, false);
 		}
 		return true;
 	};
@@ -331,7 +331,7 @@ var User = (function () {
 	User.prototype.rename = function(name, token, auth) {
 		for (var i in this.roomCount) {
 			var room = Rooms.get(i);
-			if (room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
+			if (room && room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
 				this.emit('message', "You can't change your name right now because you're in the middle of a rated battle.");
 				return false;
 			}
@@ -449,7 +449,7 @@ var User = (function () {
 					return false;
 				}
 				for (var i in this.roomCount) {
-					Rooms.get(i).leave(this);
+					Rooms.get(i,'lobby').leave(this);
 				}
 				for (var i=0; i<this.people.length; i++) {
 					//console.log(''+this.name+' preparing to merge: socket '+i+' of '+this.people.length);
@@ -580,7 +580,7 @@ var User = (function () {
 				if (this.roomCount[i] > 0) {
 					// should never happen.
 					console.log('!! room miscount: '+i+' not left');
-					Rooms.get(i).leave(this);
+					Rooms.get(i,'lobby').leave(this);
 				}
 			}
 			this.roomCount = {};
@@ -706,6 +706,7 @@ var User = (function () {
 	User.prototype.joinRoom = function(room, socket) {
 		roomid = room?(room.id||room):'';
 		room = Rooms.get(room);
+		if (!room) return false;
 		var person = null;
 		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
 		if (!socket) {
@@ -721,11 +722,11 @@ var User = (function () {
 			person = socket;
 			socket = person.socket;
 		}
-		if (!socket) return;
+		if (!socket) return false;
 		else {
 			var i=0;
 			while (this.people[i] && this.people[i].socket !== socket) i++;
-			if (!this.people[i]) return;
+			if (!this.people[i]) return false;
 			if (this.people[i].socket === socket) {
 				person = this.people[i];
 			}
@@ -742,6 +743,7 @@ var User = (function () {
 		} else if (person && room.id === 'lobby') {
 			emit(person.socket, 'init', {room: roomid, notFound: true});
 		}
+		return true;
 	};
 	User.prototype.leaveRoom = function(room, socket) {
 		room = Rooms.get(room);
