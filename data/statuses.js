@@ -302,24 +302,6 @@ exports.BattleStatuses = {
 			this.effectData.duration = 2;
 		}
 	},
-	twoturnmove: {
-		duration: 2,
-		onStart: function(pokemon, source, move) {
-			this.effectData.move = move.id;
-			this.add('move', pokemon, move.name, this.resolveTarget(pokemon, move), '[prepare]');
-			var result = true;
-			result = this.singleEvent('ChargeMove', move, null, pokemon);
-			if (result) result = this.runEvent('ChargeMove', pokemon, move);
-			if (result) pokemon.addVolatile(move.id); // for moves that interact with other things, e.g. Fly or Sky Drop
-			return result;
-		},
-		onModifyPokemon: function(pokemon) {
-			pokemon.lockMove(this.effectData.move);
-		},
-		onEnd: function(pokemon) {
-			pokemon.removeVolatile(this.effectData.move);
-		}
-	},
 
 	// weather
 

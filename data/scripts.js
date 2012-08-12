@@ -5,7 +5,7 @@ exports.BattleScripts = {
 
 		this.setActiveMove(move, pokemon, target);
 
-		if (pokemon.movedThisTurn || pokemon.runBeforeMove(target, move)) {
+		if (pokemon.movedThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
 			this.debug(''+pokemon.id+' move interrupted; movedThisTurn: '+pokemon.movedThisTurn);
 			this.clearActiveMove(true);
 			return;
@@ -22,7 +22,7 @@ exports.BattleScripts = {
 		this.runEvent('AfterMove', target, pokemon, move);
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
-	useMove: function(move, pokemon, target) {
+	useMove: function(move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
 		baseMove = move;
 		move = this.getMoveCopy(move);
@@ -50,10 +50,8 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		if (move.isTwoTurnMove && !pokemon.removeVolatile('twoturnmove')) {
-			var result = pokemon.addVolatile('twoturnmove', pokemon, move);
-			if (result) return; // false means "keep going", e.g. Power Herb activates
-			attrs = ' | [silent]'; // suppress the "X used Y!" message if we're executing the attack in the same turn
+		if (move.isTwoTurnMove && !pokemon.volatiles[move.id]) {
+			attrs = '|[still]'; // suppress the default move animation
 		}
 
 		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
@@ -80,14 +78,21 @@ exports.BattleScripts = {
 		}
 		if (move.alwaysHit) accuracy = true; // bypasses ohko accuracy modifiers
 		if (target.fainted && !canTargetFainted[move.target]) {
-			attrs += ' | [notarget]';
+			attrs += '|[notarget]';
 		} else if (accuracy !== true && this.random(100) >= accuracy) {
 			missed = true;
-			attrs += ' | [miss]';
+			attrs += '|[miss]';
 		}
 		var movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
+		if (sourceEffect) attrs += '[from]'+this.getEffect(sourceEffect);
 		this.add('move', pokemon, movename, target+attrs);
+
+		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+			this.singleEvent('MoveFail', move, null, target, pokemon, move);
+			return true;
+		}
+
 		if (target.fainted && !canTargetFainted[move.target]) {
 			this.add('-notarget');
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
