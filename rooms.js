@@ -717,6 +717,12 @@ function LobbyRoom(roomid) {
 
 		formatid = toId(formatid);
 
+		var format = Tools.getFormat(formatid);
+		if (!format.searchShow) {
+			user.emit('message', 'That format is not available for searching.');
+			return;
+		}
+
 		var team = user.team;
 		var problems = Tools.validateTeam(team, formatid);
 		if (problems) {
