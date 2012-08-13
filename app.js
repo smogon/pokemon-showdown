@@ -132,7 +132,7 @@ LoginServer = {
 					clearTimeout(self.requestTimeoutTimer);
 					self.requestTimeoutTimer = null;
 				}
-				console.log('RESPONSE: '+buffer);
+				//console.log('RESPONSE: '+buffer);
 				var data = null;
 				try {
 					var data = JSON.parse(buffer);
@@ -222,18 +222,21 @@ if (process.argv[3]) {
 	config.setuid = process.argv[3];
 }
 
-if (config.protocol !== 'io') config.protocol = 'ws';
+if (config.protocol !== 'io' && config.protocol !== 'eio') config.protocol = 'ws';
 
 var app;
 var server;
-if (config.protocol === 'ws') {
+if (config.protocol === 'io') {
+	server = require('socket.io').listen(config.port).set('log level', 1);
+	server.set('transports', ['websocket', 'htmlfile', 'xhr-polling']); // temporary hack until https://github.com/LearnBoost/socket.io/issues/609 is fixed
+} else if (config.protocol === 'eio') {
+	app = require('http').createServer().listen(config.port);
+	server = require('engine.io').attach(app);
+} else {
 	app = require('http').createServer();
 	server = require('sockjs').createServer({sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js", log: function(severity, message) {
 		if (severity === 'error') console.log('ERROR: '+message);
 	}});
-} else {
-	server = require('socket.io').listen(config.port).set('log level', 1);
-	server.set('transports', ['websocket', 'htmlfile', 'xhr-polling']); // temporary hack until https://github.com/LearnBoost/socket.io/issues/609 is fixed
 }
 
 /**
@@ -317,6 +320,10 @@ function resolveUser(you, socket) {
 emit = function(socket, type, data) {
 	if (config.protocol === 'io') {
 		socket.emit(type, data);
+	} else if (config.protocol === 'eio') {
+		if (typeof data === 'object') data.type = type;
+		else data = {type: type, message: data};
+		socket.send(JSON.stringify(data));
 	} else {
 		if (typeof data === 'object') data.type = type;
 		else data = {type: type, message: data};
@@ -375,34 +382,34 @@ var events = {
 		if (!message || typeof message.room !== 'string' || typeof message.message !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = Rooms.get(message.room);
+		var room = Rooms.get(message.room, 'lobby');
 		youUser.chat(message.message, room, socket);
 	},
 	leave: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		youUser.leaveRoom(Rooms.get(data.room), socket);
+		youUser.leaveRoom(Rooms.get(data.room, 'lobby'), socket);
 	},
 	leaveBattle: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = Rooms.get(data.room);
+		var room = Rooms.get(data.room, 'lobby');
 		if (room.leaveBattle) room.leaveBattle(youUser);
 	},
 	joinBattle: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = Rooms.get(data.room);
+		var room = Rooms.get(data.room, 'lobby');
 		if (room.joinBattle) room.joinBattle(youUser);
 	},
 	command: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		parseCommand(youUser, 'command', data, Rooms.get(data.room), socket);
+		parseCommand(youUser, 'command', data, Rooms.get(data.room, 'lobby'), socket);
 	},
 	challenge: function(data, socket, you) {
 		if (!data) return;
@@ -447,7 +454,7 @@ var events = {
 		if (!data) return;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		var room = Rooms.get(data.room);
+		var room = Rooms.get(data.room, 'lobby');
 		switch (data.choice) {
 		case 'move':
 		case 'switch':
@@ -506,7 +513,43 @@ if (config.protocol === 'io') { // Socket.IO
 			youUser.disconnect(socket);
 		});
 	});
-} else { // SockJS
+} else if (config.protocol === 'eio') { // engine.io
+	server.on('connection', function (socket) {
+		var you = null;
+		if (!socket) { // WTF
+			return;
+		}
+		//socket.id = randomString(16); // this sucks
+
+		socket.remoteAddress = socket.id;
+
+		if (bannedIps[socket.remoteAddress]) {
+			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
+			return;
+		}
+		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
+		socket.on('message', function(message) {
+			var data;
+			if (message.substr(0,1) === '{') {
+				data = JSON.parse(message);
+			} else {
+				var pipeIndex = message.indexOf('|');
+				if (pipeIndex > 0) data = {
+					type: 'chat',
+					room: message.substr(0, pipeIndex),
+					message: message.substr(pipeIndex+1)
+				};
+			}
+			if (!data) return;
+			if (events[data.type]) you = events[data.type](data, socket, you) || you;
+		});
+		socket.on('close', function() {
+			youUser = resolveUser(you, socket);
+			if (!youUser) return;
+			youUser.disconnect(socket);
+		});
+	});
+} else { // SockJS and engine.io
 	server.on('connection', function (socket) {
 		var you = null;
 		if (!socket) { // WTF
@@ -522,7 +565,17 @@ if (config.protocol === 'io') { // Socket.IO
 		}
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		socket.on('data', function(message) {
-			var data = JSON.parse(message);
+			var data;
+			if (message.substr(0,1) === '{') {
+				data = JSON.parse(message);
+			} else {
+				var pipeIndex = message.indexOf('|');
+				if (pipeIndex >= 0) data = {
+					type: 'chat',
+					room: message.substr(0, pipeIndex),
+					message: message.substr(pipeIndex+1)
+				};
+			}
 			if (!data) return;
 			if (events[data.type]) you = events[data.type](data, socket, you) || you;
 		});
@@ -532,8 +585,10 @@ if (config.protocol === 'io') { // Socket.IO
 			youUser.disconnect(socket);
 		});
 	});
-	server.installHandlers(app, {});
-	app.listen(config.port);
+	if (config.protocol === 'ws') {
+		server.installHandlers(app, {});
+		app.listen(config.port);
+	}
 }
 
 console.log("Server started on port "+config.port);

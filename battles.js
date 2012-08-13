@@ -399,34 +399,45 @@ function BattlePokemon(set, side) {
 		};
 	};
 	this.getMoves = function() {
+		var lockedMove = selfB.runEvent('LockMove', selfP);
+		if (lockedMove === true) lockedMove = false;
+		if (lockedMove) {
+			lockedMove = toId(lockedMove);
+			selfP.trapped = true;
+		}
+		if (selfP.volatiles['mustRecharge'] || lockedMove === 'recharge') {
+			return [{
+				move: 'Recharge',
+				id: 'Recharge'
+			}];
+		}
 		var moves = [];
 		var hasValidMove = false;
 		for (var i=0; i<selfP.moveset.length; i++) {
 			var move = selfP.moveset[i];
+			if (lockedMove) {
+				if (lockedMove === move.id) {
+					return [move];
+				}
+				continue;
+			}
 			if (selfP.disabledMoves[move.id] || !move.pp) {
 				move.disabled = true;
-			}
-			moves.push(move);
-			if (!move.disabled) {
+			} else {
 				hasValidMove = true;
 			}
+			moves.push(move);
 		}
-		if (!hasValidMove) {
-			moves = [{
-				move: 'Struggle',
-				id: 'struggle',
-				pp: 1,
-				maxpp: 1,
-				disabled: false
+		if (lockedMove) {
+			return [{
+				move: selfB.getMove(lockedMove).name,
+				id: lockedMove
 			}];
 		}
-		if (selfP.volatiles['mustRecharge']) {
-			moves = [{
-				move: 'Recharge',
-				id: 'Recharge',
-				pp: 1,
-				maxpp: 1,
-				disabled: false
+		if (!hasValidMove) {
+			return [{
+				move: 'Struggle',
+				id: 'struggle'
 			}];
 		}
 		return moves;
@@ -901,20 +912,6 @@ function BattlePokemon(set, side) {
 	this.hpChange = function(d) {
 		return ''+selfP.hpPercent(d)+selfP.getHealth();
 	};
-	this.lockMove = function(moveid) {
-		// shortcut function for locking a pokemon into a move
-		// not really necessary, btw: you can do this all in effect script
-		// actually, you can do nearly everything in effect script
-		if (!moveid || (!selfP.hasMove(moveid) && moveid !== 'recharge')) return;
-		if (moveid === 'recharge') selfP.disabledMoves['recharge'] = false;
-		var moves = selfP.moveset;
-		for (var i=0; i<moves.length; i++) {
-			if (moves[i].id !== moveid) {
-				moves[i].disabled = true;
-			}
-		}
-		selfP.trapped = true;
-	};
 	this.runImmunity = function(type, message) {
 		if (selfP.fainted) {
 			return false;
@@ -939,10 +936,6 @@ function BattlePokemon(set, side) {
 			return false;
 		}
 		return true;
-	};
-	this.runBeforeMove = function(target, move) {
-		if (selfP.fainted) return true;
-		return !selfB.runEvent('BeforeMove', selfP, target, move);
 	};
 	this.destroy = function() {
 		// deallocate ourself
@@ -1677,17 +1670,23 @@ function Battle(roomid, format, rated) {
 				selfB.add('message BATTLE CRASHED.');
 				return;
 			}
+			moves = pokemon.getMoves();
 			if (pokemon.disabledMoves['recharge'] === false) {
 				moves = [{move: 'recharge'}];
 			}
-			selfB.p1.emitUpdate({request: {moves: pokemon.getMoves(), trapped: pokemon.trapped, side: pokemon.side.getData()}});
+			selfB.p1.emitUpdate({request: {moves: moves, trapped: pokemon.trapped, side: pokemon.side.getData()}});
 
 			selfB.p2.decision = null;
 			pokemon = selfB.p2.active[0];
+			if (!pokemon) {
+				selfB.add('message BATTLE CRASHED.');
+				return;
+			}
+			moves = pokemon.getMoves();
 			if (pokemon.disabledMoves['recharge'] === false) {
 				moves = [{move: 'recharge'}];
 			}
-			selfB.p2.emitUpdate({request: {moves: pokemon.getMoves(), trapped: pokemon.trapped, side: pokemon.side.getData()}});
+			selfB.p2.emitUpdate({request: {moves: moves, trapped: pokemon.trapped, side: pokemon.side.getData()}});
 			selfB.decisionWaiting = true;
 		}
 		if (selfB.p2.decision && selfB.p1.decision) {
@@ -2698,7 +2697,12 @@ function Battle(roomid, format, rated) {
 		switch (data[1]) {
 		case 'join':
 			var team = null;
-			if (more) team = JSON.parse(more);
+			try {
+				if (more) team = JSON.parse(more);
+			} catch (e) {
+				console.log('TEAM PARSE ERROR: '+more);
+				team = null;
+			}
 			this.join(data[2], data[3], data[4], team);
 			break;
 

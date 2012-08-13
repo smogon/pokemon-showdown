@@ -201,8 +201,8 @@ exports.BattleStatuses = {
 			this.add('-end', target, 'rampage');
 			target.addVolatile('confusion');
 		},
-		onModifyPokemon: function(pokemon) {
-			pokemon.lockMove(pokemon.lastMove);
+		onLockMove: function(pokemon) {
+			return pokemon.lastMove;
 		},
 		onBeforeTurn: function(pokemon) {
 			var move = this.getMove(pokemon.lastMove);
@@ -239,9 +239,7 @@ exports.BattleStatuses = {
 			this.add('cant', pokemon, 'recharge');
 			return false;
 		},
-		onModifyPokemon: function(pokemon) {
-			pokemon.lockMove('recharge');
-		}
+		onLockMove: 'recharge'
 	},
 	futuremove: {
 		// this is a side condition
@@ -300,24 +298,6 @@ exports.BattleStatuses = {
 		onRestart: function() {
 			this.effectData.counter *= 2;
 			this.effectData.duration = 2;
-		}
-	},
-	twoturnmove: {
-		duration: 2,
-		onStart: function(pokemon, source, move) {
-			this.effectData.move = move.id;
-			this.add('move', pokemon, move.name, this.resolveTarget(pokemon, move), '[prepare]');
-			var result = true;
-			result = this.singleEvent('ChargeMove', move, null, pokemon);
-			if (result) result = this.runEvent('ChargeMove', pokemon, move);
-			if (result) pokemon.addVolatile(move.id); // for moves that interact with other things, e.g. Fly or Sky Drop
-			return result;
-		},
-		onModifyPokemon: function(pokemon) {
-			pokemon.lockMove(this.effectData.move);
-		},
-		onEnd: function(pokemon) {
-			pokemon.removeVolatile(this.effectData.move);
 		}
 	},
 
