@@ -1,3 +1,5 @@
+const MAX_MESSAGE_LENGTH = 300;
+
 function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	var selfR = this;
 
@@ -519,7 +521,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
-		if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > 511 && !user.can('ignorelimits')) {
+		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
@@ -976,7 +978,7 @@ function LobbyRoom(roomid) {
 	this.isFull = function() { return false; };
 	this.chat = function(user, message, socket) {
 		if (!user.named || !message || !message.trim || !message.trim().length) return;
-		if (message.length > 255 && !user.can('ignorelimits')) {
+		if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
