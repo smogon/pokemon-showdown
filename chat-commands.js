@@ -1034,7 +1034,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var problems = Tools.validateTeam(user.team, target);
 		if (problems) {
 			emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-			return;
+			return false;
 		}
 		user.makeChallenge(targetUser, target);
 		return false;
