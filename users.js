@@ -437,9 +437,6 @@ var User = (function () {
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
 				}
-				if (userid === 'zarel') {
-					group = config.groupsranking[config.groupsranking.length - 1];
-				}
 			}
 			if (users[userid] && users[userid] !== this) {
 				// This user already exists; let's merge
