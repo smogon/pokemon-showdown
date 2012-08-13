@@ -519,7 +519,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
-		if (message.length > 511 && !user.can('ignorelimits')) {
+		if (message.substr(0,5) !== '/utm ' && message.length > 511 && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
