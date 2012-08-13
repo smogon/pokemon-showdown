@@ -423,7 +423,7 @@ function BattlePokemon(set, side) {
 			}
 			if (selfP.disabledMoves[move.id] || !move.pp) {
 				move.disabled = true;
-			} else {
+			} else if (!move.disabled) {
 				hasValidMove = true;
 			}
 			moves.push(move);
