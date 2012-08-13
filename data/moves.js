@@ -2288,7 +2288,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.weather === 'sunnyday' || !this.runEvent('ChargeMove', attacker, defender)) {
+			if (!this.runEvent('ChargeMove', attacker, defender)) {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
@@ -2420,7 +2420,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.weather === 'sunnyday' || !this.runEvent('ChargeMove', attacker, defender)) {
+			if (!this.runEvent('ChargeMove', attacker, defender)) {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
@@ -3844,7 +3844,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.weather === 'sunnyday' || !this.runEvent('ChargeMove', attacker, defender)) {
+			if (!this.runEvent('ChargeMove', attacker, defender)) {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
@@ -4055,7 +4055,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.weather === 'sunnyday' || !this.runEvent('ChargeMove', attacker, defender)) {
+			if (!this.runEvent('ChargeMove', attacker, defender)) {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
@@ -5729,7 +5729,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.weather === 'sunnyday' || !this.runEvent('ChargeMove', attacker, defender)) {
+			if (!this.runEvent('ChargeMove', attacker, defender)) {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
@@ -8759,7 +8759,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.weather === 'sunnyday' || !this.runEvent('ChargeMove', attacker, defender)) {
+			if (!this.runEvent('ChargeMove', attacker, defender)) {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
