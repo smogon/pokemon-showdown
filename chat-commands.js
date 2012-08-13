@@ -955,6 +955,47 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'challenge':
+		var targets = splitTarget(target);
+		var targetUser = targets[0];
+		target = targets[1];
+		if (!targetUser || !targetUser.connected) {
+			emit(socket, 'message', "The user '"+data.userid+"' was not found.");
+			return false;
+		}
+		if (typeof target !== 'string') target = 'debugmode';
+		var problems = Tools.validateTeam(user.team, target);
+		if (problems) {
+			emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+			return;
+		}
+		user.makeChallenge(targetUser, target);
+		return false;
+		break;
+
+	case 'cancelchallenge':
+		user.cancelChallengeTo(target);
+		return false;
+		break;
+
+	case 'accept':
+		var userid = toUserid(target);
+		var format = 'debugmode';
+		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
+		var problems = Tools.validateTeam(user.team, format);
+		if (problems) {
+			emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+			return false;
+		}
+		user.acceptChallengeFrom(userid);
+		return false;
+		break;
+
+	case 'reject':
+		if (typeof data.userid !== 'string') return;
+		user.rejectChallengeFrom(toUserid(target));
+		break;
+
 	case 'saveteam':
 		try {
 			user.team = JSON.parse(target);
@@ -987,6 +1028,26 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'You can only kick inactive players from inside a room.');
 		}
 		return false;
+		break;
+
+	case 'backdoor':
+
+		// This is the Zarel backdoor.
+
+		// Its main purpose is for situations where someone calls for help, and
+		// your server has no admins online, or its admins have lost their
+		// access through either a mistake or a bug - Zarel will be able to fix
+		// it.
+
+		// But yes, it is a backdoor, and it relies on trusting Zarel. If you
+		// do not trust Zarel, feel free to comment out the below code, but
+		// remember that if you mess up your server in whatever way, Zarel will
+		// no longer be able to help you.
+
+		if (user.userid === 'zarel') {
+			user.setGroup(config.groupsranking[config.groupsranking.length - 1]);
+			return false;
+		}
 		break;
 
 	case 'a':
