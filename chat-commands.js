@@ -960,7 +960,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var targetUser = targets[0];
 		target = targets[1];
 		if (!targetUser || !targetUser.connected) {
-			emit(socket, 'message', "The user '"+data.userid+"' was not found.");
+			emit(socket, 'message', "The user '"+targets[2]+"' was not found.");
 			return false;
 		}
 		if (typeof target !== 'string') target = 'debugmode';
@@ -992,8 +992,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'reject':
-		if (typeof data.userid !== 'string') return;
 		user.rejectChallengeFrom(toUserid(target));
+		return false;
 		break;
 
 	case 'saveteam':
