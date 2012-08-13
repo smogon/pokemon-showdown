@@ -662,12 +662,12 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	ponyta: {
-		viableMoves: {"flareblitz":1,"wildcharge":1,"fireblast":1,"hiddenpowergrass":1,"morningsun":1,"hypnosis":1,"flamecharge":1},
+		viableMoves: {"flareblitz":1,"wildcharge":1,"morningsun":1,"hypnosis":1,"flamecharge":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	rapidash: {
-		viableMoves: {"flareblitz":1,"wildcharge":1,"fireblast":1,"hiddenpowergrass":1,"morningsun":1,"hypnosis":1,"flamecharge":1,"megahorn":1,"drillrun":1},
+		viableMoves: {"flareblitz":1,"wildcharge":1,"morningsun":1,"hypnosis":1,"flamecharge":1,"megahorn":1,"drillrun":1},
 		eventPokemon: [
 			{"generation":3,"level":40,"abilities":["flashfire","runaway"],"moves":["batonpass","solarbeam","sunnyday","flamethrower"]}
 		],
