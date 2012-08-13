@@ -401,13 +401,14 @@ function BattlePokemon(set, side) {
 	this.getMoves = function() {
 		var lockedMove = selfB.runEvent('LockMove', selfP);
 		if (lockedMove === true) lockedMove = false;
+		if (lockedMove) {
+			lockedMove = toId(lockedMove);
+			selfP.trapped = true;
+		}
 		if (selfP.volatiles['mustRecharge'] || lockedMove === 'recharge') {
 			return [{
 				move: 'Recharge',
-				id: 'Recharge',
-				pp: 1,
-				maxpp: 1,
-				disabled: false
+				id: 'Recharge'
 			}];
 		}
 		var moves = [];
@@ -416,9 +417,7 @@ function BattlePokemon(set, side) {
 			var move = selfP.moveset[i];
 			if (lockedMove) {
 				if (lockedMove === move.id) {
-					moves.push(move);
-					hasValidMove = true;
-					break;
+					return [move];
 				}
 				continue;
 			}
@@ -429,7 +428,7 @@ function BattlePokemon(set, side) {
 			}
 			moves.push(move);
 		}
-		if (lockedMove && !moves.length) {
+		if (lockedMove) {
 			return [{
 				move: selfB.getMove(lockedMove).name,
 				id: lockedMove
@@ -438,10 +437,7 @@ function BattlePokemon(set, side) {
 		if (!hasValidMove) {
 			return [{
 				move: 'Struggle',
-				id: 'struggle',
-				pp: 1,
-				maxpp: 1,
-				disabled: false
+				id: 'struggle'
 			}];
 		}
 		return moves;
