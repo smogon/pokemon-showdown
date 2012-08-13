@@ -955,6 +955,47 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'challenge':
+		var targets = splitTarget(target);
+		var targetUser = targets[0];
+		target = targets[1];
+		if (!targetUser || !targetUser.connected) {
+			emit(socket, 'message', "The user '"+data.userid+"' was not found.");
+			return false;
+		}
+		if (typeof target !== 'string') target = 'debugmode';
+		var problems = Tools.validateTeam(user.team, target);
+		if (problems) {
+			emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+			return;
+		}
+		user.makeChallenge(targetUser, target);
+		return false;
+		break;
+
+	case 'cancelchallenge':
+		user.cancelChallengeTo(target);
+		return false;
+		break;
+
+	case 'accept':
+		var userid = toUserid(target);
+		var format = 'debugmode';
+		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
+		var problems = Tools.validateTeam(user.team, format);
+		if (problems) {
+			emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+			return false;
+		}
+		user.acceptChallengeFrom(userid);
+		return false;
+		break;
+
+	case 'reject':
+		if (typeof data.userid !== 'string') return;
+		user.rejectChallengeFrom(toUserid(target));
+		break;
+
 	case 'saveteam':
 		try {
 			user.team = JSON.parse(target);
