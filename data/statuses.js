@@ -201,8 +201,8 @@ exports.BattleStatuses = {
 			this.add('-end', target, 'rampage');
 			target.addVolatile('confusion');
 		},
-		onModifyPokemon: function(pokemon) {
-			pokemon.lockMove(pokemon.lastMove);
+		onLockMove: function(pokemon) {
+			return pokemon.lastMove;
 		},
 		onBeforeTurn: function(pokemon) {
 			var move = this.getMove(pokemon.lastMove);
@@ -239,9 +239,7 @@ exports.BattleStatuses = {
 			this.add('cant', pokemon, 'recharge');
 			return false;
 		},
-		onModifyPokemon: function(pokemon) {
-			pokemon.lockMove('recharge');
-		}
+		onLockMove: 'recharge'
 	},
 	futuremove: {
 		// this is a side condition
