@@ -997,6 +997,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'saveteam':
+	case 'utm':
 		try {
 			user.team = JSON.parse(target);
 			youUser.emit('update', {team: 'saved', room: 'teambuilder'});
