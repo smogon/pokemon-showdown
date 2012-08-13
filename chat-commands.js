@@ -770,6 +770,25 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'trn':
+		var commaIndex = target.indexOf(',');
+		var targetName = target;
+		var targetAuth = false;
+		var targetToken = '';
+		if (commaIndex >= 0) {
+			targetName = target.substr(0,commaIndex);
+			target = target.substr(commaIndex+1);
+			commaIndex = target.indexOf(',');
+			targetAuth = target;
+			if (commaIndex >= 0) {
+				targetAuth = !!parseInt(target.substr(0,commaIndex),10);
+				targetToken = target.substr(commaIndex+1);
+			}
+		}
+		user.rename(targetName, targetToken, targetAuth);
+		return false;
+		break;
+
 	case 'forcerename':
 	case 'fr':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
