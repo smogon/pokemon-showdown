@@ -41,6 +41,93 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	if (!room) return;
 	cmd = cmd.toLowerCase();
 	switch (cmd) {
+	case 'command':
+		if (target.command === 'userdetails') {
+			target.userid = ''+target.userid;
+			var targetUser = Users.get(target.userid);
+			if (!targetUser || !room) return false;
+			var roomList = {};
+			for (var i in targetUser.roomCount) {
+				if (i==='lobby') continue;
+				var targetRoom = Rooms.get(i);
+				if (!targetRoom) continue;
+				var roomData = {};
+				if (targetRoom.battle) {
+					var battle = targetRoom.battle;
+					roomData.p1 = battle.p1?' '+battle.p1:'';
+					roomData.p2 = battle.p2?' '+battle.p2:'';
+				}
+				roomList[i] = roomData;
+			}
+			var userdetails = {
+				command: 'userdetails',
+				userid: targetUser.userid,
+				avatar: targetUser.avatar,
+				rooms: roomList,
+				room: room.id
+			};
+			if (user.can('ip', targetUser)) {
+				userdetails.ip = targetUser.ip;
+			}
+			emit(socket, 'command', userdetails);
+		}
+		if (target.command === 'roomlist') {
+			if (!room || !room.getRoomList) return false;
+			emit(socket, 'command', {
+				command: 'roomlist',
+				rooms: room.getRoomList(true),
+				room: room.id
+			});
+		}
+		return false;
+		break;
+	case 'cmd':
+		var spaceIndex = target.indexOf(' ');
+		var cmd = target;
+		if (spaceIndex > 0) {
+			cmd = target.substr(0, spaceIndex);
+			target = target.substr(spaceIndex+1);
+		} else {
+			target = '';
+		}
+		if (cmd === 'userdetails') {
+			var targetUser = Users.get(target);
+			if (!targetUser || !room) return false;
+			var roomList = {};
+			for (var i in targetUser.roomCount) {
+				if (i==='lobby') continue;
+				var targetRoom = Rooms.get(i);
+				if (!targetRoom) continue;
+				var roomData = {};
+				if (targetRoom.battle) {
+					var battle = targetRoom.battle;
+					roomData.p1 = battle.p1?' '+battle.p1:'';
+					roomData.p2 = battle.p2?' '+battle.p2:'';
+				}
+				roomList[i] = roomData;
+			}
+			var userdetails = {
+				command: 'userdetails',
+				userid: targetUser.userid,
+				avatar: targetUser.avatar,
+				rooms: roomList,
+				room: room.id
+			};
+			if (user.can('ip', targetUser)) {
+				userdetails.ip = targetUser.ip;
+			}
+			emit(socket, 'command', userdetails);
+		} else if (cmd === 'roomlist') {
+			if (!room || !room.getRoomList) return false;
+			emit(socket, 'command', {
+				command: 'roomlist',
+				rooms: room.getRoomList(true),
+				room: room.id
+			});
+		}
+		return false;
+		break;
+
 	case 'me':
 		if (canTalk(user, room)) {
 			return '/me '+target;
@@ -131,46 +218,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			logModCommand(room,user.name+" unlocked the name of "+target+".");
 		} else {
 			emit(socket, 'console', target+" not found.");
-		}
-		return false;
-		break;
-	case 'command':
-		if (target.command === 'userdetails') {
-			target.userid = ''+target.userid;
-			var targetUser = Users.get(target.userid);
-			if (!targetUser || !room) return false;
-			var roomList = {};
-			for (var i in targetUser.roomCount) {
-				if (i==='lobby') continue;
-				var targetRoom = Rooms.get(i);
-				if (!targetRoom) continue;
-				var roomData = {};
-				if (targetRoom.battle) {
-					var battle = targetRoom.battle;
-					roomData.p1 = battle.p1?' '+battle.p1:'';
-					roomData.p2 = battle.p2?' '+battle.p2:'';
-				}
-				roomList[i] = roomData;
-			}
-			var userdetails = {
-				command: 'userdetails',
-				userid: targetUser.userid,
-				avatar: targetUser.avatar,
-				rooms: roomList,
-				room: room.id
-			};
-			if (user.can('ip', targetUser)) {
-				userdetails.ip = targetUser.ip;
-			}
-			emit(socket, 'command', userdetails);
-		}
-		if (target.command === 'roomlist') {
-			if (!room || !room.getRoomList) return false;
-			emit(socket, 'command', {
-				command: 'roomlist',
-				rooms: room.getRoomList(true),
-				room: room.id
-			});
 		}
 		return false;
 		break;
@@ -925,7 +972,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'sw':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
-		room.decision(user, 'switch', target);
+		room.decision(user, 'switch', parseInt(target,10)-1);
 		return false;
 		break;
 
@@ -939,7 +986,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'team':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
-		room.decision(user, 'team', target);
+		room.decision(user, 'team', parseInt(target,10)-1);
 		return false;
 		break;
 
@@ -956,6 +1003,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'challenge':
+	case 'chall':
 		var targets = splitTarget(target);
 		var targetUser = targets[0];
 		target = targets[1];
@@ -974,6 +1022,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'cancelchallenge':
+	case 'cchall':
 		user.cancelChallengeTo(target);
 		return false;
 		break;
