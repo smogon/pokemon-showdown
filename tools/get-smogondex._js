@@ -77,10 +77,6 @@ exports.getSmogonDex = function(_) {
 				name = "deoxysspeed";
 				break;
 
-			case "genesect" :
-				tier = "Unreleased";
-				break;
-
 			case "giratinao" :
 				name = "giratinaorigin";
 				break;

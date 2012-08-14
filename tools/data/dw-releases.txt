@@ -10,6 +10,9 @@ blastoise [male only]
 caterpie
 metapod
 butterfree
+weedle
+kakuna
+beedrill
 pidgey
 pidgeotto
 pidgeot
@@ -43,6 +46,8 @@ oddish
 gloom
 vileplume
 bellossom
+venonat
+venomoth
 diglett
 dugtrio
 meowth
@@ -84,6 +89,8 @@ doduo
 dodrio
 seel
 dewgong
+grimer
+muk
 shellder
 cloyster
 gastly
@@ -123,6 +130,8 @@ seadra
 kingdra
 goldeen
 seaking
+staryu
+starmie
 mimejr
 mrmime
 scyther
@@ -135,10 +144,12 @@ electivire
 magby
 magmar
 magmortar
+pinsir
 tauros
 magikarp
 gyarados
 lapras
+ditto
 eevee
 vaporeon
 jolteon
@@ -168,7 +179,9 @@ spinarak
 ariados
 chinchou
 lanturn
-togekiss [male only]
+togepi
+togetic
+togekiss
 natu
 xatu
 mareep
@@ -202,6 +215,7 @@ snubbull
 granbull
 qwilfish
 shuckle
+heracross
 sneasel
 weavile
 teddiursa
@@ -228,6 +242,8 @@ miltank
 larvitar
 pupitar
 tyranitar
+lugia
+hooh
 treecko [male only]
 grovyle [male only]
 sceptile [male only]
@@ -254,6 +270,8 @@ gardevoir
 gallade
 surskit
 masquerain
+shroomish
+breloom
 whismur
 loudred
 exploud
@@ -291,6 +309,8 @@ cacnea
 cacturne
 swablu
 altaria
+zangoose
+seviper
 lunatone
 solrock
 barboach
@@ -356,6 +376,8 @@ bastiodon
 burmy
 wormadam
 mothim
+combee
+vespiquen
 pachirisu
 buizel
 floatzel
@@ -378,7 +400,8 @@ spiritomb
 gible
 gabite
 garchomp
-lucario [male only]
+riolu
+lucario
 hippopotas
 hippowdon
 skorupi
@@ -395,23 +418,107 @@ rotomwash
 rotomfrost
 rotomfan
 rotommow
+dialga
+palkia
+giratina
+patrat
+watchog
+lillipup
+herdier
+stoutland
+purrloin
+liepard
 munna
 musharna
+pidove
+tranquill
+unfezant
+blitzle
+zebstrika
+roggenrola
+boldore
+gigalith
+woobat
+swoobat
 drilbur
 excadrill
+tympole
+palpitoad
+seismitoad
+sewaddle
+swadloon
+leavanny
+venipede
+whirlipede
+scolipede
+cottonee
+whimsicott
+petilil
+lilligant
+basculin
+basculinbluestriped
+sandile
+krokorok
+krookodile
 darumaka
 darmanitan
-minccino [male only]
-cinccino [male only]
+maractus
+dwebble
+crustle
+sigilyph
+tirtouga
+carracosta
+trubbish
+garbodor
+minccino
+cinccino
+gothorita [male only]
+gothitelle [male only]
+solosis
+duosion
+reuniclus
+ducklett
+swanna
+vanillite
+vanillish
+vanilluxe
 deerling
 sawsbuck
+emolga
+karrablast
+escavalier
 foongus
 amoonguss
 frillish
 jellicent
+alomomola
+joltik
+galvantula
+klang
+klinklang
+elgyem
+beheeyem
+axew
+fraxure
+haxorus
+cubchoo
+beartic
+shelmet
+accelgor
+stunfisk
+mienfoo
+mienshao
 druddigon
+golett
+golurk
+pawniard
+bisharp
+bouffalant
+braviary
 vullaby
 mandibuzz
+heatmor
+durant
 tornadus
 thundurus
 landorus
