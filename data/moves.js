@@ -901,7 +901,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		onModifyMove: function(move) {
-			if (this.weather === 'hail') move.accuracy = true;
+			if (this.isWeather('hail')) move.accuracy = true;
 		},
 		secondary: {
 			chance: 10,
@@ -4538,7 +4538,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		onModifyMove: function(move) {
-			if (this.weather === 'sunnyday') move.boosts = {atk: 2, spa: 2};
+			if (this.isWeather('sunnyday')) move.boosts = {atk: 2, spa: 2};
 		},
 		boosts: {
 			atk: 1,
@@ -5523,8 +5523,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onModifyMove: function(move) {
-			if (this.weather === 'raindance') move.accuracy = true;
-			else if (this.weather === 'sunnyday') move.accuracy = 50;
+			if (this.isWeather('raindance')) move.accuracy = true;
+			else if (this.isWeather('sunnyday')) move.accuracy = 50;
 		},
 		secondary: {
 			chance: 30,
@@ -7328,8 +7328,8 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		heal: [1,2],
 		onModifyMove: function(move) {
-			if (this.weather === 'sunnyday') move.heal = [2,3];
-			else if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') move.heal = [1,4];
+			if (this.isWeather('sunnyday')) move.heal = [2,3];
+			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [1,4];
 		},
 		secondary: false,
 		target: "self",
@@ -7350,8 +7350,8 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		heal: [1,2],
 		onModifyMove: function(move) {
-			if (this.weather === 'sunnyday') move.heal = [2,3];
-			else if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') move.heal = [1,4];
+			if (this.isWeather('sunnyday')) move.heal = [2,3];
+			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [1,4];
 		},
 		secondary: false,
 		target: "self",
@@ -10623,7 +10623,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 120,
 		basePowerCallback: function(pokemon, target) {
-			if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') {
+			if (this.isWeather(['raindance','sandstorm','hail'])) {
 				this.debug('weakened by weather');
 				return 60;
 			}
@@ -10643,7 +10643,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.weather === 'sunnyday' || !this.runEvent('ChargeMove', attacker, defender)) {
+			if (this.isWeather('sunnyday') || !this.runEvent('ChargeMove', attacker, defender)) {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
@@ -11556,8 +11556,8 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		heal: [1,2],
 		onModifyMove: function(move) {
-			if (this.weather === 'sunnyday') move.heal = [2,3];
-			else if (this.weather === 'raindance' || this.weather === 'sandstorm' || this.weather === 'hail') move.heal = [1,4];
+			if (this.isWeather('sunnyday')) move.heal = [2,3];
+			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [1,4];
 		},
 		secondary: false,
 		target: "self",
@@ -11884,8 +11884,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onModifyMove: function(move) {
-			if (this.weather === 'raindance') move.accuracy = true;
-			else if (this.weather === 'sunnyday') move.accuracy = 50;
+			if (this.isWeather('raindance')) move.accuracy = true;
+			else if (this.isWeather('sunnyday')) move.accuracy = 50;
 		},
 		secondary: {
 			chance: 30,
