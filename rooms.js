@@ -603,6 +603,8 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 		selfR.users = null;
 
+		rooms.lobby.removeRoom(selfR.id);
+
 		// deallocate children and get rid of references to them
 		if (selfR.battle) {
 			selfR.battle.destroy();
@@ -616,8 +618,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 
 		// get rid of some possibly-circular references
 		delete rooms[selfR.id];
-
-		rooms.lobby.removeRoom(selfR.id);
 
 		selfR = null;
 	};
