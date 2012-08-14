@@ -493,6 +493,11 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 		delete selfR.users[user.userid];
 		selfR.addCmd('leave', user.name);
+
+		if (Object.isEmpty(selfR.users)) {
+			selfR.active = false;
+		}
+
 		selfR.update();
 	};
 	this.isEmpty = function() {
@@ -612,6 +617,8 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		// get rid of some possibly-circular references
 		delete rooms[selfR.id];
 
+		rooms.lobby.removeRoom(selfR.id);
+
 		selfR = null;
 	};
 }
@@ -677,6 +684,7 @@ function LobbyRoom(roomid) {
 				if (room.battle.players[0]) roomData.p1 = room.battle.players[0].getIdentity();
 				if (room.battle.players[1]) roomData.p2 = room.battle.players[1].getIdentity();
 			}
+			if (!roomData.p1 || !roomData.p2) continue;
 			roomList[selfR.rooms[i].id] = roomData;
 
 			total++;
