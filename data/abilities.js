@@ -70,6 +70,7 @@ exports.BattleAbilities = {
 		onAnyModifyPokemon: function(pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
 		},
+		onAnyTryWeather: false,
 		id: "airlock",
 		name: "Air Lock",
 		rating: 3,
@@ -196,7 +197,7 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its speed is temporarily doubled.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
 		onModifyStats: function(stats) {
-			if (this.weather === 'sunnyday') {
+			if (this.isWeather('sunnyday')) {
 				stats.spe *= 2;
 			}
 		},
@@ -228,6 +229,7 @@ exports.BattleAbilities = {
 		onAnyModifyPokemon: function(pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
 		},
+		onAnyTryWeather: false,
 		id: "cloudnine",
 		name: "Cloud Nine",
 		rating: 3,
@@ -556,7 +558,7 @@ exports.BattleAbilities = {
 			delete this.effectData.forme;
 		},
 		onModifyStats: function(stats, pokemon) {
-			if (this.weather === 'sunnyday') {
+			if (this.isWeather('sunnyday')) {
 				stats.atk *= 1.5;
 				stats.spd *= 1.5;
 				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunny') {
@@ -689,7 +691,7 @@ exports.BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
-			if ((this.weather === 'sunnyday') || (this.random(2) === 0)) {
+			if (this.isWeather('sunnyday') || this.random(2) === 0) {
 				if (!pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
 						pokemon.setItem(pokemon.lastItem);
 						this.add("-item", pokemon, pokemon.item, '[from] ability: Harvest');
@@ -779,7 +781,7 @@ exports.BattleAbilities = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
-			if (pokemon.status && this.weather === 'raindance') {
+			if (pokemon.status && this.isWeather('raindance')) {
 				this.debug('hydration');
 				pokemon.cureStatus();
 			}
@@ -1010,12 +1012,12 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon is active while Sunny Day is in effect, it cannot become poisoned, burned, paralyzed or put to sleep (other than user-induced Rest). Leaf Guard does not heal status effects that existed before Sunny Day came into effect.",
 		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused, and Rest will fail for it.",
 		onSetStatus: function(pokemon) {
-			if (this.weather === 'sunnyday') {
+			if (this.isWeather('sunnyday')) {
 				return false;
 			}
 		},
 		onTryHit: function(target, source, move) {
-			if (this.weather === 'sunnyday' && move && move.id === 'yawn') {
+			if (move && move.id === 'yawn' && this.isWeather('sunnyday')) {
 				return false;
 			}
 		},
@@ -1687,7 +1689,7 @@ exports.BattleAbilities = {
 		desc: "Raises the power of Rock, Ground, and Steel-type moves by 30% while a Sandstorm is in effect. It also gives the user immunity to damage from Sandstorm.",
 		shortDesc: "This Pokemon's Rock/Ground/Steel attacks do 1.3x in Sandstorm; immunity to it.",
 		onBasePower: function(basePower, attacker, defender, move) {
-			if (this.weather === 'sandstorm') {
+			if (this.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return basePower * 13/10;
@@ -1706,7 +1708,7 @@ exports.BattleAbilities = {
 		desc: "Doubles Speed in a Sandstorm, and makes the Pokemon immune to Sandstorm damage.",
 		shortDesc: "If Sandstorm is active, this Pokemon's Speed is doubled; immunity to Sandstorm.",
 		onModifyStats: function(stats, pokemon) {
-			if (this.weather === 'sandstorm') {
+			if (this.isWeather('sandstorm')) {
 				stats.spe *= 2;
 			}
 		},
@@ -1738,7 +1740,7 @@ exports.BattleAbilities = {
 		},
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
-			if (this.weather === 'sandstorm') {
+			if (this.isWeather('sandstorm')) {
 				this.debug('sand veil - decreasing accuracy');
 				move.accuracy *= 0.8;
 			}
@@ -1928,7 +1930,7 @@ exports.BattleAbilities = {
 		},
 		onSourceModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
-			if (this.weather === 'hail') {
+			if (this.isWeather('hail')) {
 				this.debug('snow cloak - decreasing accuracy');
 				move.accuracy *= 0.8;
 			}
@@ -1954,7 +1956,7 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its Special Attack temporarily receives a 50% boost but this Pokemon also receives damage equal to one-eighth of its max HP after each turn.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Sp. Atk is 1.5x and loses 1/8 max HP per turn.",
 		onModifyStats: function(stats, pokemon) {
-			if (this.weather === 'sunnyday') {
+			if (this.isWeather('sunnyday')) {
 				stats.spa *= 1.5;
 			}
 		},
@@ -2151,7 +2153,7 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon is active while Rain Dance is in effect, its speed is temporarily doubled.",
 		shortDesc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
 		onModifyStats: function(stats, pokemon) {
-			if (this.weather === 'raindance') {
+			if (this.isWeather('raindance')) {
 				stats.spe *= 2;
 			}
 		},

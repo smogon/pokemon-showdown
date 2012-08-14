@@ -423,7 +423,7 @@ function BattlePokemon(set, side) {
 			}
 			if (selfP.disabledMoves[move.id] || !move.pp) {
 				move.disabled = true;
-			} else {
+			} else if (!move.disabled) {
 				hasValidMove = true;
 			}
 			moves.push(move);
@@ -1173,6 +1173,16 @@ function Battle(roomid, format, rated) {
 	};
 	this.clearWeather = function() {
 		return selfB.setWeather('');
+	};
+	this.isWeather = function(weather, target) {
+		if (selfB.event) {
+			if (!target) target = selfB.event.target;
+		}
+		if (!selfB.runEvent('TryWeather', target)) return false;
+		if (!Array.isArray(weather)) {
+			return this.weather === toId(weather);
+		}
+		return (weather.map(toId).indexOf(this.weather) >= 0);
 	};
 	this.getWeather = function() {
 		return selfB.getEffect(selfB.weather);

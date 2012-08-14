@@ -1,3 +1,5 @@
+const MAX_MESSAGE_LENGTH = 300;
+
 function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	var selfR = this;
 
@@ -491,6 +493,11 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 		delete selfR.users[user.userid];
 		selfR.addCmd('leave', user.name);
+
+		if (Object.isEmpty(selfR.users)) {
+			selfR.active = false;
+		}
+
 		selfR.update();
 	};
 	this.isEmpty = function() {
@@ -519,7 +526,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
-		if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > 511 && !user.can('ignorelimits')) {
+		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
@@ -595,6 +602,8 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			delete selfR.users[i];
 		}
 		selfR.users = null;
+
+		rooms.lobby.removeRoom(selfR.id);
 
 		// deallocate children and get rid of references to them
 		if (selfR.battle) {
@@ -675,6 +684,7 @@ function LobbyRoom(roomid) {
 				if (room.battle.players[0]) roomData.p1 = room.battle.players[0].getIdentity();
 				if (room.battle.players[1]) roomData.p2 = room.battle.players[1].getIdentity();
 			}
+			if (!roomData.p1 || !roomData.p2) continue;
 			roomList[selfR.rooms[i].id] = roomData;
 
 			total++;
@@ -976,7 +986,7 @@ function LobbyRoom(roomid) {
 	this.isFull = function() { return false; };
 	this.chat = function(user, message, socket) {
 		if (!user.named || !message || !message.trim || !message.trim().length) return;
-		if (message.length > 255 && !user.can('ignorelimits')) {
+		if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
