@@ -537,9 +537,11 @@ if (config.protocol === 'io') { // Socket.IO
 		}
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		socket.on('message', function(message) {
-			var data;
+			var data = null;
 			if (message.substr(0,1) === '{') {
-				data = JSON.parse(message);
+				try {
+					data = JSON.parse(message);
+				} catch (e) {}
 			} else {
 				var pipeIndex = message.indexOf('|');
 				if (pipeIndex > 0) data = {
@@ -573,9 +575,11 @@ if (config.protocol === 'io') { // Socket.IO
 		}
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		socket.on('data', function(message) {
-			var data;
+			var data = null;
 			if (message.substr(0,1) === '{') {
-				data = JSON.parse(message);
+				try {
+					data = JSON.parse(message);
+				} catch (e) {}
 			} else {
 				var pipeIndex = message.indexOf('|');
 				if (pipeIndex >= 0) data = {
