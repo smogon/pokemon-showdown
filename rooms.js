@@ -975,7 +975,7 @@ function LobbyRoom(roomid) {
 		room = getRoom(room);
 		if (!room) return;
 		if (typeof room.i[selfR.id] !== 'undefined') {
-			selfR.rooms = selfR.rooms.splice(room.i[selfR.id],1);
+			selfR.rooms.splice(room.i[selfR.id],1);
 			delete room.i[selfR.id];
 			for (var i=0; i<selfR.rooms.length; i++) {
 				selfR.rooms[i].i[selfR.id] = i;
