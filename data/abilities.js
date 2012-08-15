@@ -583,7 +583,7 @@ exports.BattleAbilities = {
 		onModifyPokemon: function(pokemon) {
 			if (pokemon.baseTemplate.species !== 'Castform' || pokemon.transformed) return;
 			var forme = null;
-			switch (this.weather) {
+			switch (this.effectiveWeather()) {
 			case 'sunnyday':
 				if (pokemon.template.speciesid !== 'castformsunny') forme = 'Castform-Sunny';
 				break;

@@ -1174,15 +1174,19 @@ function Battle(roomid, format, rated) {
 	this.clearWeather = function() {
 		return selfB.setWeather('');
 	};
-	this.isWeather = function(weather, target) {
+	this.effectiveWeather = function(target) {
 		if (selfB.event) {
 			if (!target) target = selfB.event.target;
 		}
-		if (!selfB.runEvent('TryWeather', target)) return false;
+		if (!selfB.runEvent('TryWeather', target)) return '';
+		return this.weather;
+	};
+	this.isWeather = function(weather, target) {
+		var ourWeather = selfB.effectiveWeather(target);
 		if (!Array.isArray(weather)) {
-			return this.weather === toId(weather);
+			return ourWeather === toId(weather);
 		}
-		return (weather.map(toId).indexOf(this.weather) >= 0);
+		return (weather.map(toId).indexOf(ourWeather) >= 0);
 	};
 	this.getWeather = function() {
 		return selfB.getEffect(selfB.weather);
