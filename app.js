@@ -331,6 +331,16 @@ emit = function(socket, type, data) {
 	}
 };
 
+sendData = function(socket, data) {
+	if (config.protocol === 'io') {
+		socket.emit('data', data);
+	} else if (config.protocol === 'eio') {
+		socket.send(data);
+	} else {
+		socket.write(data);
+	}
+};
+
 function randomString(length) {
 	var strArr = [];
 	var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -383,7 +393,9 @@ var events = {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		var room = Rooms.get(message.room, 'lobby');
-		youUser.chat(message.message, room, socket);
+		message.message.split('\n').forEach(function(text){
+			youUser.chat(text, room, socket);
+		});
 	},
 	leave: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
@@ -529,9 +541,11 @@ if (config.protocol === 'io') { // Socket.IO
 		}
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		socket.on('message', function(message) {
-			var data;
+			var data = null;
 			if (message.substr(0,1) === '{') {
-				data = JSON.parse(message);
+				try {
+					data = JSON.parse(message);
+				} catch (e) {}
 			} else {
 				var pipeIndex = message.indexOf('|');
 				if (pipeIndex > 0) data = {
@@ -565,9 +579,11 @@ if (config.protocol === 'io') { // Socket.IO
 		}
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		socket.on('data', function(message) {
-			var data;
+			var data = null;
 			if (message.substr(0,1) === '{') {
-				data = JSON.parse(message);
+				try {
+					data = JSON.parse(message);
+				} catch (e) {}
 			} else {
 				var pipeIndex = message.indexOf('|');
 				if (pipeIndex >= 0) data = {

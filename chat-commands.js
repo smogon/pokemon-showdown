@@ -138,15 +138,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'birkal':
 		if (canTalk(user, room) && user.can('broadcast') && room.id === 'lobby') {
 			if (cmd === '!birkal') {
-				room.log.push({
-					name: user.getIdentity(),
-					message: '!birkal '+target
-				});
+				room.log.push('|c|'+user.getIdentity()+'|!birkal '+target);
 			}
-			room.log.push({
-				name: ' Birkal',
-				message: '/me '+target
-			});
+			room.log.push('|c| Birkal|/me '+target);
 			return false;
 		}
 		break;
@@ -850,7 +844,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var dataMessages = getDataMessage(target);
 		for (var i=0; i<dataMessages.length; i++) {
 			if (cmd.substr(0,1) !== '!') {
-				emit(socket, 'console', dataMessages[i]);
+				sendData(socket, '>'+room.id+'\n'+dataMessages[i]);
 			} else if (user.can('broadcast') && canTalk(user, room)) {
 				room.add(dataMessages[i]);
 			}
@@ -1068,7 +1062,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'utm':
 		try {
 			user.team = JSON.parse(target);
-			youUser.emit('update', {team: 'saved', room: 'teambuilder'});
+			user.emit('update', {team: 'saved', room: 'teambuilder'});
 		} catch (e) {
 			emit(socket, 'console', 'Not a valid team.');
 		}
@@ -1568,10 +1562,7 @@ function showOrBroadcastStart(user, cmd, room, socket, message) {
 			emit(socket, 'console', "You need to be voiced to broadcast this command's information.");
 			emit(socket, 'console', "To see it for yourself, use: /"+message.substr(1));
 		} else if (canTalk(user, room, socket)) {
-			room.add({
-				name: user.getIdentity(),
-				message: message
-			});
+			room.add('|c|'+user.getIdentity()+'|'+message);
 		}
 	}
 }
@@ -1592,35 +1583,23 @@ function getDataMessage(target) {
 	var atLeastOne = false;
 	var response = [];
 	if (pokemon.exists) {
-		response.push({
-			name: '&server',
-			message: '/data-pokemon '+pokemon.name
-		});
+		response.push('|c|&server|/data-pokemon '+pokemon.name);
 		atLeastOne = true;
 	}
 	if (ability.exists) {
-		response.push({
-			name: '&server',
-			message: '/data-ability '+ability.name
-		});
+		response.push('|c|&server|/data-ability '+ability.name);
 		atLeastOne = true;
 	}
 	if (item.exists) {
-		response.push({
-			name: '&server',
-			message: '/data-item '+item.name
-		});
+		response.push('|c|&server|/data-item '+item.name);
 		atLeastOne = true;
 	}
 	if (move.exists) {
-		response.push({
-			name: '&server',
-			message: '/data-move '+move.name
-		});
+		response.push('|c|&server|/data-move '+move.name);
 		atLeastOne = true;
 	}
 	if (!atLeastOne) {
-		response.push({message: "No pokemon, item, move, or ability named '"+target+"' was found. (Check your capitalization?)"});
+		response.push("||No pokemon, item, move, or ability named '"+target+"' was found. (Check your capitalization?)");
 	}
 	return response;
 }
