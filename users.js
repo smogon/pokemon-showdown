@@ -182,6 +182,15 @@ var User = (function () {
 			emit(this.people[i].socket, message, data);
 		}
 	};
+	User.prototype.sendTo = function(roomid, data) {
+		if (roomid && roomid.id) roomid = roomid.id;
+		if (!roomid) roomid = 'lobby';
+		if (roomid !== 'lobby') data = '>'+roomid+'\n'+data;
+		for (var i=0; i<this.people.length; i++) {
+			if (roomid && !this.people[i].rooms[roomid]) continue;
+			sendData(this.people[i].socket, data);
+		}
+	};
 	User.prototype.getIdentity = function() {
 		if (this.muted) {
 			return '!'+this.name;
@@ -934,6 +943,11 @@ var Person = (function () {
 	Person.prototype.rename = function(name) {
 		this.name = name;
 		this.userid = toUserid(name);
+	};
+	Person.prototype.sendTo = function(roomid, data) {
+		if (roomid && roomid.id) roomid = roomid.id;
+		if (roomid && roomid !== 'lobby') data = '>'+roomid+'\n'+data;
+		sendData(this.socket, data);
 	};
 	return Person;
 })();

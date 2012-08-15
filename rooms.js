@@ -635,9 +635,6 @@ function LobbyRoom(roomid) {
 	this.numRooms = 0;
 	this.searchers = [];
 
-	this.usersChanged = true;
-	this.roomsChanged = true;
-
 	// Never do any other file IO synchronously
 	// but this is okay to prevent race conditions as we start up PS
 	this.numRooms = 0;
@@ -657,7 +654,6 @@ function LobbyRoom(roomid) {
 		}
 		if (!omitRoomList) update.rooms = selfR.getRoomList();
 		if (!omitUsers) update.u = selfR.getUserList();
-		update.searcher = selfR.searchers.length;
 		return update;
 	};
 	this.getUserList = function() {
@@ -692,7 +688,7 @@ function LobbyRoom(roomid) {
 		}
 		return roomList;
 	};
-	this.cancelSearch = function(user, noUpdate) {
+	this.cancelSearch = function(user) {
 		var success = false;
 		user.cancelChallengeTo();
 		for (var i=0; i<selfR.searchers.length; i++) {
@@ -708,9 +704,6 @@ function LobbyRoom(roomid) {
 				i--;
 				if (!success) {
 					searchUser.emit('update', {searching: false, room: selfR.id});
-					if (!noUpdate) {
-						selfR.update();
-					}
 					success = true;
 				}
 				continue;
@@ -747,7 +740,6 @@ function LobbyRoom(roomid) {
 			room: selfR.id
 		};
 		user.emit('update', {searching: newSearchData, room: selfR.id});
-		selfR.update();
 
 		// get the user's rating before actually starting to search
 		var newSearch = {
@@ -786,17 +778,13 @@ function LobbyRoom(roomid) {
 		}
 		selfR.searchers.push(newSearch);
 	};
-	this.update = function(excludeUser) {
-		var update = selfR.getUpdate(selfR.lastUpdate, !selfR.usersChanged, !selfR.roomsChanged);
-		update.room = selfR.id;
+	this.update = function() {
+		if (selfR.log.length <= selfR.lastUpdate) return;
+		var update = selfR.log.slice(selfR.lastUpdate).join('\n');
 		if (selfR.log.length > 100) selfR.log = selfR.log.slice(-100);
 		selfR.lastUpdate = selfR.log.length;
-		for (var i in selfR.users) {
-			if (selfR.users[i] === excludeUser) continue;
-			selfR.users[i].emit('update', update);
-		}
-		selfR.usersChanged = false;
-		selfR.roomsChanged = false;
+
+		selfR.send(update);
 	};
 	this.emit = function(type, message, user) {
 		if (type === 'console' || type === 'update') {
@@ -813,32 +801,24 @@ function LobbyRoom(roomid) {
 			}
 		}
 	};
-	this.updateRooms = function(excludeUser) {
-		var update = {
-			rooms: selfR.getRoomList()
-		};
-		update.room = selfR.id;
-		for (var i in selfR.users) {
-			if (selfR.users[i] === excludeUser) continue;
-			selfR.users[i].emit('update', update);
+	this.send = function(message, user) {
+		if (user) {
+			user.sendTo(selfR, message);
+		} else {
+			for (var i in selfR.users) {
+				selfR.users[i].sendTo(selfR, message);
+			}
 		}
-		selfR.roomsChanged = false;
+	};
+	this.updateRooms = function(excludeUser) {
+		// do nothing
 	};
 	this.add = function(message) {
-		if (typeof message === 'string') {
-			selfR.log.push({
-				message: message
-			});
-		} else {
-			selfR.log.push(message);
-		}
+		selfR.log.push(message);
 		selfR.update();
 	};
 	this.addRaw = function(message) {
-		selfR.log.push({
-			rawMessage: message
-		});
-		selfR.update();
+		selfR.add('|raw|'+message);
 	};
 	this.initSocket = function(user, socket) {
 		var initdata = {
@@ -851,8 +831,7 @@ function LobbyRoom(roomid) {
 			rooms: selfR.getRoomList(),
 			u: selfR.getUserList(),
 			roomType: 'lobby',
-			log: selfR.log.slice(-25),
-			searcher: selfR.searchers.length
+			log: selfR.log.slice(-25)
 		};
 		emit(socket, 'init', initdata);
 	};
@@ -862,10 +841,10 @@ function LobbyRoom(roomid) {
 
 		selfR.users[user.userid] = user;
 		if (user.named && config.reportjoins) {
-			selfR.log.push({name: user.getIdentity(), action: 'join'});
+			selfR.log.push('|j|'+user.getIdentity());
 			selfR.update(user);
 		} else if (user.named) {
-			selfR.emit('console', {name: user.getIdentity(), action: 'join', silent: 1});
+			selfR.log.push('|J|'+user.getIdentity());
 		}
 
 		var initdata = {
@@ -878,8 +857,7 @@ function LobbyRoom(roomid) {
 			rooms: selfR.getRoomList(),
 			u: selfR.getUserList(),
 			roomType: 'lobby',
-			log: selfR.log.slice(-100),
-			searcher: selfR.searchers.length
+			log: selfR.log.slice(-100)
 		};
 		user.emit('init', initdata);
 
@@ -889,14 +867,13 @@ function LobbyRoom(roomid) {
 		delete selfR.users[oldid];
 		selfR.users[user.userid] = user;
 		if (joining && config.reportjoins) {
-			selfR.log.push({name: user.getIdentity(), oldid: oldid, action: 'join'});
-			selfR.update();
+			selfR.add('|j|'+user.getIdentity());
 		} else if (joining) {
-			selfR.emit('console', {name: user.getIdentity(), oldid: oldid, action: 'join', silent: 1});
+			selfR.send('|J|'+user.getIdentity());
 		} else if (!user.named) {
-			selfR.emit('console', {name: oldid, action: 'leave', silent: 1});
+			selfR.send('|L| '+oldid);
 		} else {
-			selfR.emit('console', {name: user.getIdentity(), oldid: oldid, action: 'rename', silent: 1});
+			selfR.send('|N|'+user.getIdentity()+'|'+oldid);
 		}
 		return user;
 	};
@@ -905,10 +882,9 @@ function LobbyRoom(roomid) {
 		delete selfR.users[user.userid];
 		selfR.cancelSearch(user, true);
 		if (config.reportjoins) {
-			selfR.log.push({name: user.getIdentity(), action: 'leave'});
-			selfR.update();
+			selfR.add('|l|'+user.getIdentity());
 		} else if (user.named) {
-			selfR.emit('console', {name: user.getIdentity(), action: 'leave', silent: 1});
+			selfR.send('|L|'+user.getIdentity());
 		}
 	};
 	this.startBattle = function(p1, p2, format, rated, p1team, p2team) {
@@ -952,16 +928,10 @@ function LobbyRoom(roomid) {
 		newRoom.joinBattle(p2, p2team);
 		selfR.cancelSearch(p1, true);
 		selfR.cancelSearch(p2, true);
-		selfR.roomsChanged = true;
 		if (config.reportbattles) {
-			selfR.log.push({
-				name: p1.name,
-				name2: p2.name,
-				room: newRoom.id,
-				format: format,
-				action: 'battle'
-			});
-			selfR.update();
+			selfR.add('|b|'+newRoom.id+'|'+p1.getIdentity()+'|'+p2.getIdentity());
+		} else {
+			selfR.send('|B|'+newRoom.id+'|'+p1.getIdentity()+'|'+p2.getIdentity());
 		}
 	};
 	this.addRoom = function(room, format, p1, p2, parent, rated) {
@@ -1022,37 +992,22 @@ function LobbyRoom(roomid) {
 
 			var room = selfR;
 			var me = user;
-			selfR.log.push({
-				name: user.getIdentity(),
-				message: '>> '+cmd
-			});
+			selfR.log.push('|c|'+user.getIdentity()+'|>> '+cmd);
 			if (user.can('console')) {
 				try {
-					selfR.log.push({
-						name: user.getIdentity(),
-						message: '<< '+eval(cmd)
-					});
+					selfR.log.push('|c|'+user.getIdentity()+'|<< '+eval(cmd));
 				} catch (e) {
-					selfR.log.push({
-						name: user.getIdentity(),
-						message: '<< error: '+e.message
-					});
+					selfR.log.push('|c|'+user.getIdentity()+'|<< error: '+e.message);
 					var stack = (""+e.stack).split("\n");
 					for (var i=0; i<stack.length; i++) {
-						user.emit('console', '<< '+stack[i]);
+						user.sendTo(selfR.id, '<< '+stack[i]);
 					}
 				}
 			} else {
-				selfR.log.push({
-					name: user.getIdentity(),
-					message: '<< Access denied.'
-				});
+				selfR.log.push('|c|'+user.getIdentity()+'|<< Access denied.');
 			}
 		} else if (!user.muted) {
-			selfR.log.push({
-				name: user.getIdentity(),
-				message: message
-			});
+			selfR.log.push('|c|'+user.getIdentity()+'|'+message);
 		}
 		selfR.update();
 	};

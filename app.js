@@ -339,6 +339,16 @@ emit = function(socket, type, data) {
 	}
 };
 
+sendData = function(socket, data) {
+	if (config.protocol === 'io') {
+		socket.emit('data', data);
+	} else if (config.protocol === 'eio') {
+		socket.send(data);
+	} else {
+		socket.write(data);
+	}
+};
+
 function randomString(length) {
 	var strArr = [];
 	var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -391,7 +401,9 @@ var events = {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		var room = Rooms.get(message.room, 'lobby');
-		youUser.chat(message.message, room, socket);
+		message.message.split('\n').forEach(function(text){
+			youUser.chat(text, room, socket);
+		});
 	},
 	leave: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
