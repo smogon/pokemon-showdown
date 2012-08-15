@@ -514,15 +514,15 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	};
 	this.add = function(message) {
 		if (message.rawMessage) {
-			selfR.addCmd('chatmsg-raw', message.rawMessage);
+			selfR.addCmd('raw', message.rawMessage);
 		} else if (message.name) {
 			selfR.addCmd('chat', message.name.substr(1), message.message);
 		} else {
-			selfR.addCmd('chatmsg', message);
+			selfR.log.push(message);
 		}
 	};
 	this.addRaw = function(message) {
-		selfR.addCmd('chatmsg-raw', message);
+		selfR.addCmd('raw', message);
 	};
 	this.chat = function(user, message, socket) {
 		var cmd = '', target = '';
