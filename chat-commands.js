@@ -679,69 +679,40 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			break;
 		}
 		if (config.modchat === true) {
-			room.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>Moderated chat was enabled!</b><br />Only registered users can talk.</div>');
+			room.addRaw('<div style="background:#BB6655;color:white;padding:2px 4px"><b>Moderated chat was enabled!</b><br />Only registered users can talk.</div>');
 		} else if (!config.modchat) {
-			room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
+			room.addRaw('<div style="background:#6688AA;color:white;padding:2px 4px"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
 		} else {
 			var modchat = sanitize(config.modchat);
-			room.addRaw('<div style="background-color:#AA6655;color:white;padding:2px 4px"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
+			room.addRaw('<div style="background:#AA6655;color:white;padding:2px 4px"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
 		}
 		logModCommand(room,user.name+' set modchat to '+config.modchat,true);
 		return false;
 		break;
-
-	/* commenting this out so it doesn't get eliminated but it sticks around for possible further use
-	case 'announce':
-		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (!user.can('announce')) {
-			emit(socket, 'console', '/announce - Access denied.');
-			return false;
-		}
-		target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
-		if (target.indexOf("<script") != -1) {
-			//This is a temporary fix to prevent malicious abuse of /announce
-			return false;
-		}
-		room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>'+target+'</b></div>');
-		logModCommand(room,user.name+' announced '+target,true);
-		return false;
-		break; 
-	*/
 	
 	case 'declare':
-                if (!target) return parseCommand(user, '?', cmd, room, socket);
-                // announce is used because leaders and up can already announce and i didn't want to try and mess with permissions
-                if (!user.can('announce')) {
-                        emit(socket, 'console', '/declare - Access denied.');
-                        return false;
-                }
-                target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
-                if (target.indexOf("<script") != -1) {
-                        //This is a temporary fix to prevent malicious abuse of /declare
-                        return false;
-                }
-                room.addRaw('<div style="background-color:#7067AB;color:white;padding:2px 4px"><b>'+target+'</b></div>');
-                logModCommand(room,user.name+' declared '+target,true);
+        if (!target) return parseCommand(user, '?', cmd, room, socket);
+        // announce is used because leaders and up can already announce and i didn't want to try and mess with permissions
+        if (!user.can('announce')) {
+                emit(socket, 'console', '/declare - Access denied.');
                 return false;
-                break;
+        }
+        target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
+        room.addRaw('<div style="background:#7067AB;color:white;padding:2px 4px"><b>'+target+'</b></div>');
+        logModCommand(room,user.name+' declared '+target,true);
+        return false;
+        break;
  
 	case 'announce':
 	case 'wall':
-                if (!target) return parseCommand(user, '?', cmd, room, socket);
-                // mute is used because drivers and up can already mute and i didn't want to try and mess with permissions
-                if (!user.can('mute')) {
-                        emit(socket, 'console', '/announce - Access denied.');
-                        return false;
-                }
-                target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
-                if (target.indexOf("<script") != -1) {
-                        //This is a temporary fix to prevent malicious abuse of /announce
-                        return false;
-                }
-                room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>'+target+'<div align="right"><em>-'+user.name+'</em></div></b></div>');
-                logModCommand(room,user.name+' announced '+target,true);
+        if (!target) return parseCommand(user, '?', cmd, room, socket);
+        // mute is used because drivers and up can already mute and i didn't want to try and mess with permissions
+        if (!user.can('mute')) {
+                emit(socket, 'console', '/announce - Access denied.');
                 return false;
-                break;
+        }
+        return '/announce '+target;
+        break;
 
 	case 'hotpatch':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
