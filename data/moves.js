@@ -8493,6 +8493,9 @@ exports.BattleMovedex = {
 			}
 			target.side.sideConditions['pursuit'].sources.push(pokemon);
 		},
+		onModifyMove: function(move, source, target) {
+			if (target && target.beingCalledBack) move.accuracy = true;
+		},
 		onTryHit: function(target, pokemon) {
 			target.side.removeSideCondition('pursuit');
 		},
