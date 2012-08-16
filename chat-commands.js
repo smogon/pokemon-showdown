@@ -1583,7 +1583,7 @@ function showOrBroadcastStart(user, cmd, room, socket, message) {
 
 function showOrBroadcast(user, cmd, room, socket, rawMessage) {
 	if (cmd.substr(0,1) !== '!') {
-		emit(socket, 'console', {rawMessage: rawMessage, room: room.id});
+		sendData(socket, '>'+room.id+'\n|raw|'+rawMessage);
 	} else if (user.can('broadcast') && canTalk(user, room)) {
 		room.addRaw(rawMessage);
 	}
