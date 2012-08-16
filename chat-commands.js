@@ -679,32 +679,40 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			break;
 		}
 		if (config.modchat === true) {
-			room.addRaw('<div style="background-color:#BB6655;color:white;padding:2px 4px"><b>Moderated chat was enabled!</b><br />Only registered users can talk.</div>');
+			room.addRaw('<div style="background:#BB6655;color:white;padding:2px 4px"><b>Moderated chat was enabled!</b><br />Only registered users can talk.</div>');
 		} else if (!config.modchat) {
-			room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
+			room.addRaw('<div style="background:#6688AA;color:white;padding:2px 4px"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
 		} else {
 			var modchat = sanitize(config.modchat);
-			room.addRaw('<div style="background-color:#AA6655;color:white;padding:2px 4px"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
+			room.addRaw('<div style="background:#AA6655;color:white;padding:2px 4px"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
 		}
 		logModCommand(room,user.name+' set modchat to '+config.modchat,true);
 		return false;
 		break;
-
+	
+	case 'declare':
+        if (!target) return parseCommand(user, '?', cmd, room, socket);
+        // announce is used because leaders and up can already announce and i didn't want to try and mess with permissions
+        if (!user.can('announce')) {
+                emit(socket, 'console', '/declare - Access denied.');
+                return false;
+        }
+        target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
+        room.addRaw('<div style="background:#7067AB;color:white;padding:2px 4px"><b>'+target+'</b></div>');
+        logModCommand(room,user.name+' declared '+target,true);
+        return false;
+        break;
+ 
 	case 'announce':
-		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		if (!user.can('announce')) {
-			emit(socket, 'console', '/announce - Access denied.');
-			return false;
-		}
-		target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
-		if (target.indexOf("<script") != -1) {
-			//This is a temporary fix to prevent malicious abuse of /announce
-			return false;
-		}
-		room.addRaw('<div style="background-color:#6688AA;color:white;padding:2px 4px"><b>'+target+'</b></div>');
-		logModCommand(room,user.name+' announced '+target,true);
-		return false;
-		break;
+	case 'wall':
+        if (!target) return parseCommand(user, '?', cmd, room, socket);
+        // mute is used because drivers and up can already mute and i didn't want to try and mess with permissions
+        if (!user.can('mute')) {
+                emit(socket, 'console', '/announce - Access denied.');
+                return false;
+        }
+        return '/announce '+target;
+        break;
 
 	case 'hotpatch':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -1444,9 +1452,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: & ~');
 		}
-		if (target === '&' || target === 'announce') {
-			matched = true;
-			emit(socket, 'console', '/announce [message] - Make an announcement. Requires: & ~');
+		if (target === '&' || target === 'declare' ) {
+        		matched = true;
+        		emit(socket, 'console', '/declare [message] - Anonymously announces a message. Requires: & ~');
+		}
+		if (target === '%' || target === 'announce' || target === 'wall' ) {
+        		matched = true;
+        		emit(socket, 'console', '/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
 		}
 		if (target === '@' || target === 'modchat') {
 			matched = true;
@@ -1465,12 +1477,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (!target) {
 			emit(socket, 'console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
-			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /intro (replace / with ! to broadcast)');
+			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /tiers, /intro (replace / with ! to broadcast)');
 			emit(socket, 'console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
-				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /forcerename, /modlog')
+				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /forcerename, /modlog, /announce')
 				emit(socket, 'console', 'MODERATOR COMMANDS: /alts, /forcerenameto, /ban, /unban, /unbanall, /potd, /namelock, /nameunlock, /ip, /redirect, /kick');
-				emit(socket, 'console', 'STAFF COMMANDS: /promote, /demote, /forcewin');
+				emit(socket, 'console', 'LEADER COMMANDS: /promote, /demote, /forcewin, /declare');
 				emit(socket, 'console', 'For details on all moderator commands, use /help @');
 			}
 			emit(socket, 'console', 'For details of a specific command, use something like: /help data');
