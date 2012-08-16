@@ -5,6 +5,10 @@ exports.port = 8000;
 //   PS as root and set this to an unprivileged user
 exports.setuid = '';
 
+// protocol - WebSockets ("ws") or Socket.IO ("io").
+//	We recommend using WebSockets unless you have a really compelling reason not to.
+exports.protocol = 'ws';
+
 // The server ID - a unique ID describing this Showdown server
 exports.serverid = 'testserver';
 
@@ -61,10 +65,6 @@ exports.reportbattles = true;
 //   huge influxes of spammy users.
 exports.modchat = false;
 
-// protocol - WebSockets ("ws") or Socket.IO ("io").
-//	We recommend using WebSockets unless you have a really compelling reason not to.
-exports.protocol = 'ws';
-
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
@@ -103,47 +103,62 @@ exports.protocol = 'ws';
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
-exports.groupsranking = [' ', '+', '%', '@', '&'];
+exports.groupsranking = [' ', '+', '%', '@', '&', '~'];
 exports.groups = {
-	'&': {
-		id: "sysop",
-		name: "System Operator",
-		root: true
-	},
-	'@': {
+	'~': {
 		id: "admin",
-		name: "Admin",
-		inherit: '%',
+		name: "Administrator",
+		root: true,
+		rank: 5
+	},
+	'&': {
+		id: "leader",
+		name: "Leader",
+		inherit: '@',
 		jurisdiction: '@u',
 		promote: 'u',
 		forcewin: true,
-		ban: true,
-		mute: true,
-		forcerename: true,
+		declare: true,
+		modchatall: true,
+		potd: true,
+		namelock: true,
 		forcerenameto: true,
-		announce: true,
-		modchat: true
+		rank: 4
 	},
-	'%': {
+	'@': {
 		id: "mod",
 		name: "Moderator",
+		inherit: '%',
+		jurisdiction: 'u',
+		ban: true,
+		modchat: true,
+		redirect: true,
+		forcerename: true,
+		ip: true,
+		alts: '@u',
+		rank: 3
+	},
+	'%': {
+		id: "driver",
+		name: "Driver",
 		inherit: '+',
-		jurisdiction: 'su',
-		ban: 'u',
-		mute: 'u',
-		namelock: 'u',
-		forcerename: 'u',
-		redirect: true
+		jurisdiction: 'u',
+		announce: true,
+		warn: true,
+		mute: true,
+		forcerename: true,
+		rank: 2
 	},
 	'+': {
 		id: "voice",
-		name: "Voiced",
+		name: "Voice",
 		inherit: ' ',
-		broadcast: true
+		broadcast: true,
+		rank: 1
 	},
 	' ': {
-		jurisdiction: 's',
-		ip: true,
-		alts: true
+		ip: 's',
+		alts: 's',
+		rank: 0
 	}
 };
