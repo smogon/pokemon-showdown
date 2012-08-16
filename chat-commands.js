@@ -451,7 +451,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'unbanall':
-		if (user.can('ban')) {
+		if (!user.can('ban')) {
 			emit(socket, 'console', '/unbanall - Access denied.');
 			return false;
 		}
