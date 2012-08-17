@@ -2207,12 +2207,11 @@ function Battle(roomid, format, rated) {
 		}
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) selfB.add('-resisted', target);
-			baseDamage /= 2;
+			baseDamage = Math.floor(baseDamage/2);
 			if (totalTypeMod <= -2) {
-				baseDamage /= 2;
+				baseDamage = Math.floor(baseDamage/2);
 			}
 		}
-		baseDamage = Math.round(baseDamage);
 
 		if (basePower && !Math.floor(baseDamage)) {
 			return 1;
