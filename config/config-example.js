@@ -91,15 +91,20 @@ exports.modchat = false;
 //                  group and target group are both in jurisdiction.
 //     - ban: Banning and unbanning.
 //     - mute: Muting and unmuting.
+//     - warn: (FIXME: Not implemented)
+//     - modlog: View the moderation log.
 //     - receivemutedpms: Receive PMs from muted users.
 //     - forcerename: /fr command.
 //     - forcerenameto: /frt command.
+//     - namelock: /nl command.
 //     - redirect: /redir command.
 //     - ip: IP checking.
 //     - alts: Alt checking.
 //     - broadcast: Broadcast informational commands.
-//     - announce: /announce command.
-//     - modchat: Set modchat.
+//     - announce: /announce and /crashnoted commands.
+//     - declare: /declare command.
+//     - modchat: Set modchat for up to the second level.
+//     - modchatall: Set modchat for any rank.
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
@@ -146,6 +151,7 @@ exports.groups = {
 		announce: true,
 		warn: true,
 		mute: true,
+		modlog: true,
 		forcerename: true,
 		rank: 2
 	},

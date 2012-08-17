@@ -419,7 +419,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targetUser.emit('console', {evalRawMessage: 'window.location.href="'+targets[1]+'"'});
 		return false;
 		break;
-		
+
 	case 'kick':
 	case 'k':
         	if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -675,8 +675,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				emit(socket, 'console', 'That moderated chat setting is unrecognized.');
 				return false;
 			}
-			if (target !== '+' && !user.can('modchatall')) {
-				emit(socket, 'console', '/modchat - Access denied for setting higher than +.');
+			if (config.groupsranking.indexOf(target) > 1 && !user.can('modchatall')) {
+				emit(socket, 'console', '/modchat - Access denied for setting higher than ' + config.groupsranking[1] + '.');
 				return false;
 			}
 			config.modchat = target;
@@ -693,7 +693,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		logModCommand(room,user.name+' set modchat to '+config.modchat,true);
 		return false;
 		break;
-	
+
 	case 'declare':
         if (!target) return parseCommand(user, '?', cmd, room, socket);
         if (!user.can('declare')) {
@@ -705,7 +705,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
         logModCommand(room,user.name+' declared '+target,true);
         return false;
         break;
- 
+
 	case 'announce':
 	case 'wall':
         if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -930,7 +930,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'</div>');
 		return false;
 		break;
-		
+
 	case 'banlists':
 	case 'tiers':
 	case '!banlists':
@@ -1264,7 +1264,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 	case 'modlog':
-		if (!user.can('mute')) {
+		if (!user.can('modlog')) {
 			emit(socket, 'console', '/modlog - Access denied.');
 			return false;
 		}
