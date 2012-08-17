@@ -93,7 +93,6 @@ exports.modchat = false;
 //     - mute: Muting and unmuting.
 //     - warn: (FIXME: Not implemented)
 //     - modlog: View the moderation log.
-//     - receivemutedpms: Receive PMs from muted users.
 //     - forcerename: /fr command.
 //     - forcerenameto: /frt command.
 //     - namelock: /nl command.
