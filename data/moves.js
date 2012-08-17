@@ -4033,6 +4033,7 @@ exports.BattleMovedex = {
 		name: "Foul Play",
 		pp: 15,
 		priority: 0,
+		useTargetOffensive: true,
 		isContact: true,
 		secondary: false,
 		target: "normal",
