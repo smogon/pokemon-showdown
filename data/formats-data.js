@@ -1621,6 +1621,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	wynaut: {
+		viableMoves: {"counter":1,"destinybond":1,"encore":1,"mirrorcoat":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"abilities":["shadowtag"],"moves":["splash","charm","encore","tickle"]}
 		],
