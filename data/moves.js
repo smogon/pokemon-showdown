@@ -4033,6 +4033,7 @@ exports.BattleMovedex = {
 		name: "Foul Play",
 		pp: 15,
 		priority: 0,
+		useTargetOffensive: true,
 		isContact: true,
 		secondary: false,
 		target: "normal",
@@ -8492,6 +8493,9 @@ exports.BattleMovedex = {
 				target.side.sideConditions['pursuit'].sources = [];
 			}
 			target.side.sideConditions['pursuit'].sources.push(pokemon);
+		},
+		onModifyMove: function(move, source, target) {
+			if (target && target.beingCalledBack) move.accuracy = true;
 		},
 		onTryHit: function(target, pokemon) {
 			target.side.removeSideCondition('pursuit');

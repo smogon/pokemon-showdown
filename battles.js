@@ -2146,19 +2146,24 @@ function Battle(roomid, format, rated) {
 			pokemon = target;
 		}
 
-		var attack = move.category==='Physical'?pokemon.stats.atk:pokemon.stats.spa;
-		var defense = move.defensiveCategory==='Physical'?target.stats.def:target.stats.spd;
+		var attacker = pokemon;
+		var defender = target;
+		if (move.useTargetOffensive) attacker = target;
+		if (move.useSourceDefensive) defender = pokemon;
+
+		var attack = move.category==='Physical'?attacker.stats.atk:attacker.stats.spa;
+		var defense = move.defensiveCategory==='Physical'?defender.stats.def:defender.stats.spd;
 
 		if (move.crit) {
 			move.ignoreNegativeOffensive = true;
 			move.ignorePositiveDefensive = true;
 		}
-		if (move.ignoreNegativeOffensive && attack < (move.category==='Physical'?pokemon.unboostedStats.atk:pokemon.unboostedStats.spa)) {
+		if (move.ignoreNegativeOffensive && attack < (move.category==='Physical'?attacker.unboostedStats.atk:attacker.unboostedStats.spa)) {
 			move.ignoreOffensive = true;
 		}
 		if (move.ignoreOffensive) {
 			selfB.debug('Negating (sp)atk boost/penalty.');
-			attack = (move.category==='Physical'?pokemon.unboostedStats.atk:pokemon.unboostedStats.spa);
+			attack = (move.category==='Physical'?attacker.unboostedStats.atk:attacker.unboostedStats.spa);
 		}
 		if (move.ignorePositiveDefensive && defense > (move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd)) {
 			move.ignoreDefensive = true;
@@ -2173,6 +2178,9 @@ function Battle(roomid, format, rated) {
 		//int(int(int(2*L/5+2)*A*P/D)/50);
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
 
+		// fudge factor because there's apparently something wrong with this formula
+		baseDamage--;
+
 		// multi-target modifier (doubles only)
 		// weather modifier (TODO: relocate here)
 		// crit
@@ -2186,7 +2194,7 @@ function Battle(roomid, format, rated) {
 		// gen 1-2
 		//var randFactor = Math.floor(Math.random()*39)+217;
 		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
-		baseDamage = Math.round(baseDamage * selfB.random(85,101) / 100);
+		baseDamage = Math.floor(baseDamage * (100 - selfB.random(16)) / 100);
 
 		// STAB
 		if (type !== '???' && pokemon.hasType(type)) {
@@ -2207,12 +2215,11 @@ function Battle(roomid, format, rated) {
 		}
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) selfB.add('-resisted', target);
-			baseDamage /= 2;
+			baseDamage = Math.floor(baseDamage/2);
 			if (totalTypeMod <= -2) {
-				baseDamage /= 2;
+				baseDamage = Math.floor(baseDamage/2);
 			}
 		}
-		baseDamage = Math.round(baseDamage);
 
 		if (basePower && !Math.floor(baseDamage)) {
 			return 1;
