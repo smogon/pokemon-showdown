@@ -194,6 +194,8 @@ if (!fs.existsSync('./config/config.js')) {
 }
 
 config = require('./config/config.js');
+for (var rank = 0; rank < config.groupsranking.length; ++rank)
+    config.groups[config.groupsranking[rank]].rank = rank;
 
 /*
 var app = require('http').createServer()

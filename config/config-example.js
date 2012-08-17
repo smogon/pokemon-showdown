@@ -113,8 +113,7 @@ exports.groups = {
 	'~': {
 		id: "admin",
 		name: "Administrator",
-		root: true,
-		rank: 5
+		root: true
 	},
 	'&': {
 		id: "leader",
@@ -127,8 +126,7 @@ exports.groups = {
 		modchatall: true,
 		potd: true,
 		namelock: true,
-		forcerenameto: true,
-		rank: 4
+		forcerenameto: true
 	},
 	'@': {
 		id: "mod",
@@ -140,8 +138,7 @@ exports.groups = {
 		redirect: true,
 		forcerename: true,
 		ip: true,
-		alts: '@u',
-		rank: 3
+		alts: '@u'
 	},
 	'%': {
 		id: "driver",
@@ -152,19 +149,16 @@ exports.groups = {
 		warn: true,
 		mute: true,
 		modlog: true,
-		forcerename: true,
-		rank: 2
+		forcerename: true
 	},
 	'+': {
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
-		broadcast: true,
-		rank: 1
+		broadcast: true
 	},
 	' ': {
 		ip: 's',
-		alts: 's',
-		rank: 0
+		alts: 's'
 	}
 };
