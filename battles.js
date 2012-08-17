@@ -2186,7 +2186,7 @@ function Battle(roomid, format, rated) {
 		// gen 1-2
 		//var randFactor = Math.floor(Math.random()*39)+217;
 		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
-		baseDamage = Math.round(baseDamage * selfB.random(85,101) / 100);
+		baseDamage = Math.floor(baseDamage * (100 - selfB.random(16)) / 100);
 
 		// STAB
 		if (type !== '???' && pokemon.hasType(type)) {
