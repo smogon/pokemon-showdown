@@ -136,8 +136,8 @@ Goldeen: Drill Run, Megahorn, Rain Dance, Return, Waterfall
 Seaking: Drill Run, Megahorn, Rain Dance, Return, Waterfall
 Staryu: Ice Beam, Rapid Spin, Recover, Surf, Thunderbolt
 Starmie: Ice Beam, Psychic, Rapid Spin, Recover, Surf, Thunderbolt, Trick
-Mimejr: Barrier, Baton Pass, Calm Mind, Encore, Healing Wish, Hidden Power Fighting, Nasty Plot, Psychic, Shadow Ball, Substitute, Thunderbolt
-Mrmime: Barrier, Baton Pass, Calm Mind, Encore, Healing Wish, Hidden Power Fighting, Nasty Plot, Psychic, Shadow Ball, Substitute, Thunderbolt
+Mime Jr.: Barrier, Baton Pass, Calm Mind, Encore, Healing Wish, Hidden Power Fighting, Nasty Plot, Psychic, Shadow Ball, Substitute, Thunderbolt
+Mr. Mime: Barrier, Baton Pass, Calm Mind, Encore, Healing Wish, Hidden Power Fighting, Nasty Plot, Psychic, Shadow Ball, Substitute, Thunderbolt
 Scyther: Aerial Ace, Baton Pass, Brick Break, Bug Bite, Quick Attack, Roost, Swords Dance, U-turn
 Scizor: Baton Pass, Bug Bite, Bullet Punch, Pursuit, Roost, Superpower, Swords Dance, U-turn
 Smoochum: Grass Knot, Hidden Power Fighting, Ice Beam, Psychic, Shadow Ball, Trick
@@ -228,7 +228,7 @@ Honchkrow: Brave Bird, Heat Wave, Hidden Power Grass, Pursuit, Roost, Substitute
 Misdreavus: Calm Mind, Hidden Power Fighting, Nasty Plot, Shadow Ball, Substitute, Thunderbolt, Will-O-Wisp
 Mismagius: Calm Mind, Hidden Power Fighting, Nasty Plot, Shadow Ball, Substitute, Thunderbolt, Will-O-Wisp
 Unown: Hidden Power Psychic
-Unownb: Counter, Encore, Mirror Coat, Unownc: Unownd: Unowne: Unownf: Unowng: Unownh: Unowni: Unownj: Unownk: Unownl: Unownm: Unownn: Unowno: Unownp: Unownq: Unownr: Unowns: Unownt: Unownu: Unownv: Unownw: Unownx: Unowny: Unownz: Unownem: Unownqm: Wynaut: Destiny Bond
+Wynaut: Counter, Destiny Bond, Encore, Mirror Coat
 Wobbuffet: Counter, Destiny Bond, Encore, Mirror Coat
 Girafarig: Agility, Baton Pass, Calm Mind, Hyper Voice, Psychic, Thunder Wave, Thunderbolt
 Pineco: Bug Bite, Rapid Spin, Spikes, Stealth Rock, Toxic Spikes
