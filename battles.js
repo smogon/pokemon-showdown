@@ -2139,13 +2139,6 @@ function Battle(roomid, format, rated) {
 
 		var level = pokemon.level;
 
-		var oldpokemon;
-		if (move.id === 'foulplay') { // evil hack, kill this with fire as soon as possible
-			selfB.debug('using target\'s attack');
-			oldpokemon = pokemon;
-			pokemon = target;
-		}
-
 		var attacker = pokemon;
 		var defender = target;
 		if (move.useTargetOffensive) attacker = target;
@@ -2172,8 +2165,6 @@ function Battle(roomid, format, rated) {
 			selfB.debug('Negating (sp)def boost/penalty.');
 			defense = move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd;
 		}
-
-		if (oldpokemon) pokemon = oldpokemon;
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
