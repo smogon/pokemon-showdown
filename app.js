@@ -1,3 +1,5 @@
+const LOGIN_SERVER_TIMEOUT = 10000;
+
 try {
 	require('nodetime').profile({
 		accountKey: '42437e1e248457af9645471075b01b12c01d8493', 
@@ -120,7 +122,7 @@ LoginServer = {
 			self.requestEnd();
 		};
 
-		self.requestTimeoutTimer = setTimeout(reqError, 120000);
+		self.requestTimeoutTimer = setTimeout(reqError, LOGIN_SERVER_TIMEOUT);
 
 		req = http.request(requestOptions, function(res) {
 			if (self.requestTimeoutTimer) {
@@ -155,7 +157,7 @@ LoginServer = {
 			self.requestTimeoutTimer = setTimeout(function(){
 				if (res.connection) res.connection.destroy();
 				endReq();
-			}, 120000);
+			}, LOGIN_SERVER_TIMEOUT);
 		});
 
 		req.on('error', reqError);
