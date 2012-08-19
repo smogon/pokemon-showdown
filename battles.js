@@ -920,7 +920,7 @@ function BattlePokemon(set, side) {
 			return true;
 		}
 		if (selfP.negateImmunity[type]) return true;
-		if (!selfB.getImmunity(type, selfP)) {
+		if (!selfP.negateImmunity['Type'] && !selfB.getImmunity(type, selfP)) {
 			selfB.debug('natural immunity');
 			if (message) {
 				selfB.add('-immune', selfP, '[msg]');

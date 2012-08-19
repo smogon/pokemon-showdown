@@ -2338,6 +2338,18 @@ exports.BattleItems = {
 		onEat: function() { },
 		desc: "Reduces damage from a super effective Grass-type attack by 50%."
 	},
+	"ringtarget": {
+		id: "ringtarget",
+		name: "Ring Target",
+		spritenum: 410,
+		fling: {
+			basePower: 10
+		},
+		onModifyPokemon: function(pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		desc: "Negates any type-based immunities. Does not affect abilities."
+	},
 	"rockgem": {
 		id: "rockgem",
 		name: "Rock Gem",
