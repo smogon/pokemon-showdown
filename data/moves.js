@@ -2912,6 +2912,12 @@ exports.BattleMovedex = {
 		num: 497,
 		accuracy: 100,
 		basePower: 40,
+		basePowerCallback: function() {
+			if (this.pseudoWeather.echoedvoice) {
+				return 40 * this.pseudoWeather.echoedvoice.multiplier;
+			}
+			return 40;
+		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. For every consecutive turn that this move is used by at least one Pokemon, this move's power is multiplied by the number of turns to pass, but not more than 5. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "Power increases when used on consecutive turns.",
@@ -2919,22 +2925,21 @@ exports.BattleMovedex = {
 		name: "Echoed Voice",
 		pp: 15,
 		priority: 0,
-		onTryHit: function(target, user) {
-			user.side.addSideCondition('echoedvoice');
+		onTry: function() {
+			this.addPseudoWeather('echoedvoice');
 		},
 		effect: {
 			duration: 2,
 			onStart: function() {
-				this.effectData.damage = 40;
+				this.effectData.multiplier = 1;
 			},
 			onRestart: function() {
-				if (this.effectData.damage < 80) {
-					this.effectData.damage += 40;
+				if (this.effectData.duration !== 2) {
+					this.effectData.duration = 2;
+					if (this.effectData.multiplier < 5) {
+						this.effectData.multiplier++;
+					}
 				}
-				this.effectData.duration = 2;
-			},
-			onBasePower: function(power) {
-				return power + this.effectData.damage;
 			}
 		},
 		isSoundBased: true,
