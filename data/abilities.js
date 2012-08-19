@@ -145,7 +145,7 @@ exports.BattleAbilities = {
 		onResidual: function(pokemon) {
 			for (var i=0; i<pokemon.side.foe.active.length; i++) {
 				var target = pokemon.side.foe.active[i];
-				if (target.status === 'slp') {
+				if (pokemon.hp && target.status === 'slp') {
 					this.damage(target.maxhp/8, target);
 				}
 			}
