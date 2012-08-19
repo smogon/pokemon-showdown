@@ -566,13 +566,18 @@ exports.BattleMovedex = {
 		basePower: false,
 		category: "Status",
 		desc: "Raises the user's Speed by 2 stages. If the user's Speed was changed, the user's weight is reduced by 100kg as long as it remains active. This effect is stackable but cannot reduce the user's weight to less than 0.1kg.",
-		shortDesc: "Boosts the user's Speed by 2 and halves weight.",
+		shortDesc: "Boosts the user's Speed by 2; user loses 100kg.",
 		id: "autotomize",
 		isViable: true,
 		name: "Autotomize",
 		pp: 15,
 		priority: 0,
 		isSnatchable: true,
+		onTryHit: function(pokemon) {
+			if ((pokemon.ability !== 'contrary' && pokemon.boosts.spe === 6) || (pokemon.ability === 'contrary' && pokemon.boosts.spe === -6)) {
+				return false;
+			}
+		},
 		boosts: {
 			spe: 2
 		},
@@ -580,10 +585,22 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'Autotomize');
+				if (pokemon.weightkg !== 0.1) {
+					this.effectData.multiplier = 1;
+					this.add('-message', pokemon.name+' became nimble! (placeholder)');
+				}
+			},
+			onRestart: function(pokemon) {
+				if (pokemon.weightkg !== 0.1) {
+					this.effectData.multiplier++;
+					this.add('-message', pokemon.name+' became nimble! (placeholder)');
+				}
 			},
 			onModifyPokemon: function(pokemon) {
-				pokemon.weightkg /= 2;
+				if (this.effectData.multiplier) {
+					pokemon.weightkg -= this.effectData.multiplier*100;
+					if (pokemon.weightkg < 0.1) pokemon.weightkg = 0.1;
+				}
 			}
 		},
 		secondary: false,
