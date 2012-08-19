@@ -2902,6 +2902,24 @@ exports.BattleMovedex = {
 		name: "Echoed Voice",
 		pp: 15,
 		priority: 0,
+		onTryHit: function(target, user) {
+			user.side.addSideCondition('echoedvoice');
+		},
+		effect: {
+			duration: 2,
+			onStart: function() {
+				this.effectData.damage = 40;
+			},
+			onRestart: function() {
+				if (this.effectData.damage < 80) {
+					this.effectData.damage += 40;
+				}
+				this.effectData.duration = 2;
+			},
+			onBasePower: function(power) {
+				return power + this.effectData.damage;
+			}
+		},
 		isSoundBased: true,
 		secondary: false,
 		target: "normal",
