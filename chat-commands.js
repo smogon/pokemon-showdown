@@ -141,6 +141,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				room.log.push('|c|'+user.getIdentity()+'|!birkal '+target);
 			}
 			room.log.push('|c| Birkal|/me '+target);
+			if (!parseCommand.lastBirkal) parseCommand.lastBirkal = [];
+			parseCommand.lastBirkal.push(user.name);
+			if (parseCommand.lastBirkal.length > 100) parseCommand.lastBirkal.shift();
 			return false;
 		}
 		break;
