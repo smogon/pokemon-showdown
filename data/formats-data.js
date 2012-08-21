@@ -1985,7 +1985,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"thunderbolt":1,"hiddenpowerice":1,"aurasphere":1,"calmmind":1,"substitute":1},
 		eventPokemon: [
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["quickattack","spark","reflect","crunch"]},
-			{"generation":4,"level":30,"nature":"Rash","abilities":["pressure"],"moves":["zapcannon","aurasphere","extremespeed","weatherball"]}
+			{"generation":4,"level":30,"shiny":true,"nature":"Rash","abilities":["pressure"],"moves":["zapcannon","aurasphere","extremespeed","weatherball"]}
 		],
 		tier: "UU"
 	},
@@ -1993,7 +1993,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"extremespeed":1,"flareblitz":1,"ironhead":1,"flamecharge":1,"stoneedge":1},
 		eventPokemon: [
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["firespin","stomp","flamethrower","swagger"]},
-			{"generation":4,"level":30,"nature":"Adamant","abilities":["pressure"],"moves":["flareblitz","howl","extremespeed","crushclaw"]}
+			{"generation":4,"level":30,"shiny":true,"nature":"Adamant","abilities":["pressure"],"moves":["flareblitz","howl","extremespeed","crushclaw"]}
 		],
 		tier: "RU"
 	},
@@ -2001,7 +2001,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"hydropump":1,"icebeam":1,"scald":1,"hiddenpowergrass":1,"hiddenpowerelectric":1,"rest":1,"sleeptalk":1,"roar":1,"calmmind":1},
 		eventPokemon: [
 			{"generation":3,"level":70,"abilities":["pressure"],"moves":["gust","aurorabeam","mist","mirrorcoat"]},
-			{"generation":4,"level":30,"nature":"Relaxed","abilities":["pressure"],"moves":["sheercold","airslash","extremespeed","aquaring"]}
+			{"generation":4,"level":30,"shiny":true,"nature":"Relaxed","abilities":["pressure"],"moves":["sheercold","airslash","extremespeed","aquaring"]}
 		],
 		tier: "UU"
 	},
