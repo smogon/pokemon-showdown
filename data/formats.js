@@ -291,8 +291,10 @@ exports.BattleFormats = {
 			if (template.num == 487) { // Giratina
 				if (item.id === 'griseousorb') {
 					set.species = 'Giratina-Origin';
+					set.ability = 'Levitate';
 				} else {
 					set.species = 'Giratina';
+					set.ability = 'Pressure';
 				}
 			}
 			if (template.num == 555) { // Darmanitan
