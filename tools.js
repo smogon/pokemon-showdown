@@ -662,6 +662,8 @@ module.exports = (function () {
 		set.ability = ability.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
+		if (!set.level) set.level = 100;
+
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
 		var name = set.species;
@@ -757,6 +759,32 @@ module.exports = (function () {
 							problem = problem.concat(".");
 						}
 						problems.push(problem);
+					}
+				}
+			}
+
+			if (lsetData.sources && lsetData.sources.length === 1 && !lsetData.sourcesBefore) {
+				// we're restricted to a single source
+				var source = lsetData.sources[0];
+				if (source.substr(1,1) === 'S') {
+					// it's an event
+					var eventData = template.eventPokemon[parseInt(source.substr(2),10)];
+					if (eventData) {
+						if (eventData.nature && eventData.nature !== set.nature) {
+							problems.push(name+" must come from a specific event that gives it a "+eventData.nature+" nature.");
+						}
+						if (eventData.shiny) {
+							set.shiny = true;
+						}
+						if (eventData.abilities && eventData.abilities[0] !== ability.id && eventData.abilities[1] !== ability.id) {
+							problems.push(name+" must come from a specific event that gives it "+eventData.abilities.join(" or ")+".");
+						}
+						if (eventData.gender) {
+							set.gender = eventData.gender;
+						}
+						if (eventData.level && set.level < eventData.level) {
+							problems.push(name+" must come from a specific event that makes it at least level "+eventData.level+".");
+						}
 					}
 				}
 			}
