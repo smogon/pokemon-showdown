@@ -143,6 +143,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			room.log.push('|c| Birkal|/me '+target);
 			if (!parseCommand.lastBirkal) parseCommand.lastBirkal = [];
 			parseCommand.lastBirkal.push(user.name);
+			parseCommand.lastBirkal.push(target);
 			if (parseCommand.lastBirkal.length > 100) parseCommand.lastBirkal.shift();
 			return false;
 		}
@@ -862,6 +863,63 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				room.add(dataMessages[i]);
 			}
 		}
+		return false;
+		break;
+
+	case 'learnset':
+	case '!learnset':
+	case 'learn':
+	case '!learn':
+		var lsetData = {};
+		var targets = target.split(',');
+		var template = Tools.getTemplate(targets[0]);
+		var move = {};
+		var result;
+
+		showOrBroadcastStart(user, cmd, room, socket, message);
+
+		if (!template.exists) {
+			showOrBroadcast(user, cmd, room, socket,
+				'Pokemon "'+template.id+'" not found.');
+			return false;
+		}
+
+		for (var i=1, len=targets.length; i<len; i++) {
+			move = Tools.getMove(targets[i]);
+			if (!move.exists) {
+				showOrBroadcast(user, cmd, room, socket,
+					'Move "'+move.id+'" not found.');
+				return false;
+			}
+			result = Tools.checkLearnset(move, template, lsetData);
+			if (!result) break;
+		}
+		var buffer = ''+template.name+(result?" <strong style=\"color:#228822;text-decoration:underline\">can</strong> learn ":" <strong style=\"color:#CC2222;text-decoration:underline\">can't</strong> learn ")+(targets.length>2?"these moves":move.name);
+		if (result) {
+			var sourceNames = {E:"egg",S:"event",D:"dream world"};
+			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul style=\"margin-top:0;margin-bottom:0\">";
+			if (lsetData.sources) {
+				var sources = lsetData.sources.sort().map(function(a){ return a.substr(0,2); }).unique();
+				var prevSource;
+				var prevSourceType;
+				for (var i=0, len=sources.length; i<len; i++) {
+					var source = sources[i];
+					if (source.substr(0,2) === prevSourceType) {
+						if (prevSourceCount < 3) buffer += ', '+source.substr(2);
+						if (prevSourceCount == 3) buffer += ', ...';
+						prevSourceCount++;
+						continue;
+					}
+					buffer += "<li>generation "+source.substr(0,1)+" "+sourceNames[source.substr(1,1)]+" "+(source.substr(2));
+					prevSourceType = source.substr(0,2);
+					prevSourceCount = 0;
+				}
+			}
+			if (lsetData.sourcesBefore) buffer += "<li>any generation before "+(lsetData.sourcesBefore+1)+"</li>"
+			buffer += "</ul>";
+		}
+		showOrBroadcast(user, cmd, room, socket,
+			buffer);
 		return false;
 		break;
 
