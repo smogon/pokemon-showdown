@@ -256,8 +256,8 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":5,"abilities":["static"],"moves":["thundershock","charm","teeterdance"]},
 			{"generation":3,"level":5,"abilities":["static"],"moves":["thundershock","charm","followme"]},
 			{"generation":4,"level":1,"abilities":["static"],"moves":["volttackle","thunderbolt","grassknot","return"]},
-			{"generation":4,"level":30,"gender":"M","nature":"Jolly","abilities":["static"],"moves":["charge","volttackle","endeavor","endure"]},
-			{"generation":4,"level":30,"gender":"M","nature":"Jolly","abilities":["static"],"moves":["volttackle","charge","endeavor","endure"]}
+			{"generation":4,"level":30,"shiny":true,"gender":"M","nature":"Jolly","abilities":["static"],"moves":["charge","volttackle","endeavor","endure"]},
+			{"generation":4,"level":30,"shiny":true,"gender":"M","nature":"Jolly","abilities":["static"],"moves":["volttackle","charge","endeavor","endure"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
@@ -993,7 +993,7 @@ exports.BattleFormatsData = {
 	horsea: {
 		viableMoves: {"hydropump":1,"icebeam":1,"substitute":1,"hiddenpowergrass":1,"raindance":1},
 		eventPokemon: [
-			{"generation":5,"level":1,"abilities":["swiftswim","sniper"],"moves":["bubble"]}
+			{"generation":5,"level":1,"shiny":true,"abilities":["swiftswim","sniper"],"moves":["bubble"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
@@ -1188,7 +1188,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"quickattack":1,"return":1,"bite":1,"batonpass":1,"irontail":1,"yawn":1,"protect":1,"wish":1},
 		eventPokemon: [
 			{"generation":4,"level":10,"gender":"F","nature":"Lonely","abilities":["adaptability"],"moves":["covet","bite","helpinghand","attract"]},
-			{"generation":4,"level":50,"gender":"M","nature":"Hardy","abilities":["adaptability"],"moves":["irontail","trumpcard","flail","quickattack"]}
+			{"generation":4,"level":50,"shiny":true,"gender":"M","nature":"Hardy","abilities":["adaptability"],"moves":["irontail","trumpcard","flail","quickattack"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
@@ -2009,7 +2009,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"earthquake":1,"stoneedge":1,"rockpolish":1,"dragondance":1,"superpower":1},
 		eventPokemon: [
 			{"generation":3,"level":20,"abilities":["guts"],"moves":["sandstorm","dragondance","bite","outrage"]},
-			{"generation":5,"level":5,"gender":"M","abilities":["guts"],"moves":["bite","leer","sandstorm","superpower"]}
+			{"generation":5,"level":5,"shiny":true,"gender":"M","abilities":["guts"],"moves":["bite","leer","sandstorm","superpower"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
@@ -2109,7 +2109,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	mudkip: {
-		viableMoves: {"waterfall":1,"rockslide":1,"superpower":1,"icebeam":1},
+		viableMoves: {"waterfall":1,"earthpower":1,"superpower":1,"icebeam":1},
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","abilities":["torrent"],"moves":["tackle","growl","mudslap","watergun"]},
 			{"generation":5,"level":10,"gender":"M","abilities":["damp"],"moves":["tackle","growl","mudslap","watergun"]}
@@ -2149,7 +2149,7 @@ exports.BattleFormatsData = {
 	zigzagoon: {
 		viableMoves: {"bellydrum":1,"extremespeed":1,"seedbomb":1,"substitute":1},
 		eventPokemon: [
-			{"generation":3,"level":5,"abilities":["pickup"],"moves":["tackle","growl","tailwhip"]},
+			{"generation":3,"level":5,"shiny":true,"abilities":["pickup"],"moves":["tackle","growl","tailwhip"]},
 			{"generation":3,"level":5,"abilities":["pickup"],"moves":["tackle","growl","extremespeed"]}
 		],
 		dreamWorldRelease: true,
@@ -2586,7 +2586,7 @@ exports.BattleFormatsData = {
 	trapinch: {
 		viableMoves: {"earthquake":1,"rockslide":1,"crunch":1,"quickattack":1,"superpower":1},
 		eventPokemon: [
-			{"generation":5,"level":1,"abilities":["hypercutter","arenatrap"],"moves":["bite"]}
+			{"generation":5,"level":1,"shiny":true,"abilities":["hypercutter","arenatrap"],"moves":["bite"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
@@ -2625,7 +2625,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"roost":1,"toxic":1,"cottonguard":1,"return":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"abilities":["naturalcure"],"moves":["peck","growl","falseswipe"]},
-			{"generation":5,"level":1,"abilities":["naturalcure"],"moves":["peck","growl"]}
+			{"generation":5,"level":1,"shiny":true,"abilities":["naturalcure"],"moves":["peck","growl"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
@@ -2757,7 +2757,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":35,"abilities":["marvelscale"],"moves":["waterpulse","twister","recover","raindance"]},
 			{"generation":4,"level":50,"gender":"F","nature":"Bold","abilities":["marvelscale"],"moves":["recover","raindance","icebeam","hydropump"]},
-			{"generation":4,"level":50,"gender":"M","nature":"Timid","abilities":["marvelscale"],"moves":["raindance","recover","hydropump","icywind"]},
+			{"generation":4,"level":50,"shiny":true,"gender":"M","nature":"Timid","abilities":["marvelscale"],"moves":["raindance","recover","hydropump","icywind"]},
 			{"generation":5,"level":50,"abilities":["marvelscale"],"moves":["recover","hydropump","icebeam","mirrorcoat"]}
 		],
 		dreamWorldRelease: true,
@@ -2918,7 +2918,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":5,"abilities":["rockhead"],"moves":["rage","bite","wish"]},
 			{"generation":3,"level":5,"abilities":["rockhead"],"moves":["rage","bite","irondefense"]},
-			{"generation":5,"level":1,"abilities":["rockhead"],"moves":["rage"]}
+			{"generation":5,"level":1,"shiny":true,"abilities":["rockhead"],"moves":["rage"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
@@ -3017,7 +3017,7 @@ exports.BattleFormatsData = {
 	rayquaza: {
 		viableMoves: {"outrage":1,"vcreate":1,"extremespeed":1,"dragondance":1,"swordsdance":1,"dracometeor":1,"dragonclaw":1},
 		eventPokemon: [
-			{"generation":5,"level":70,"abilities":["airlock"],"moves":["dragonpulse","ancientpower","outrage","dragondance"]},
+			{"generation":5,"level":70,"shiny":true,"abilities":["airlock"],"moves":["dragonpulse","ancientpower","outrage","dragondance"]},
 			{"generation":5,"level":100,"abilities":["airlock"],"moves":["extremespeed","hyperbeam","dragonpulse","vcreate"]}
 		],
 		tier: "Uber"
@@ -4462,7 +4462,7 @@ exports.BattleFormatsData = {
 	druddigon: {
 		viableMoves: {"outrage":1,"superpower":1,"earthquake":1,"suckerpunch":1,"dragonclaw":1,"dragontail":1,"substitute":1,"glare":1,"stealthrock":1,"firepunch":1,"thunderpunch":1},
 		eventPokemon: [
-			{"generation":5,"level":1,"abilities":["roughskin","sheerforce"],"moves":["leer","scratch"]}
+			{"generation":5,"level":1,"shiny":true,"abilities":["roughskin","sheerforce"],"moves":["leer","scratch"]}
 		],
 		dreamWorldRelease: true,
 		tier: "RU"
@@ -4475,7 +4475,7 @@ exports.BattleFormatsData = {
 	golurk: {
 		viableMoves: {"substitute":1,"focuspunch":1,"earthquake":1,"shadowpunch":1,"hammerarm":1,"dynamicpunch":1,"icepunch":1,"stoneedge":1,"stealthrock":1},
 		eventPokemon: [
-			{"generation":5,"level":70,"abilities":["ironfist"],"moves":["shadowpunch","hyperbeam","gyroball","hammerarm"]}
+			{"generation":5,"level":70,"shiny":true,"abilities":["ironfist"],"moves":["shadowpunch","hyperbeam","gyroball","hammerarm"]}
 		],
 		dreamWorldRelease: true,
 		tier: "NU"
@@ -4533,7 +4533,7 @@ exports.BattleFormatsData = {
 	deino: {
 		viableMoves: {"outrage":1,"crunch":1,"firefang":1,"dragontail":1,"thunderwave":1,"superpower":1},
 		eventPokemon: [
-			{"generation":5,"level":1,"abilities":["hustle"],"moves":["tackle","dragonrage"]}
+			{"generation":5,"level":1,"shiny":true,"abilities":["hustle"],"moves":["tackle","dragonrage"]}
 		],
 		tier: "LC"
 	},
@@ -4544,7 +4544,7 @@ exports.BattleFormatsData = {
 	hydreigon: {
 		viableMoves: {"uturn":1,"dracometeor":1,"substitute":1,"dragonpulse":1,"focusblast":1,"fireblast":1,"surf":1,"darkpulse":1,"roost":1},
 		eventPokemon: [
-			{"generation":5,"level":70,"gender":"M","abilities":["levitate"],"moves":["hypervoice","dragonbreath","flamethrower","focusblast"]}
+			{"generation":5,"level":70,"shiny":true,"gender":"M","abilities":["levitate"],"moves":["hypervoice","dragonbreath","flamethrower","focusblast"]}
 		],
 		tier: "OU"
 	},
