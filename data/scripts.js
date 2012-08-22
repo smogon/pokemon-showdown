@@ -37,9 +37,13 @@ exports.BattleScripts = {
 			all: 1, foeSide: 1
 		};
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-		move = this.runEvent('ModifyMove',pokemon,target,move,move);
 		if (baseMove.target !== move.target) {
 			//Target changed in ModifyMove, so we must adjust it here
+			target = this.resolveTarget(pokemon, move);
+		}
+		move = this.runEvent('ModifyMove',pokemon,target,move,move);
+		if (baseMove.target !== move.target) {
+			//check again
 			target = this.resolveTarget(pokemon, move);
 		}
 		if (!move) return false;

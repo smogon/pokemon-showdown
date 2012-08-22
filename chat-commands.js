@@ -141,6 +141,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				room.log.push('|c|'+user.getIdentity()+'|!birkal '+target);
 			}
 			room.log.push('|c| Birkal|/me '+target);
+			if (!parseCommand.lastBirkal) parseCommand.lastBirkal = [];
+			parseCommand.lastBirkal.push(user.name);
+			parseCommand.lastBirkal.push(target);
+			if (parseCommand.lastBirkal.length > 100) parseCommand.lastBirkal.shift();
 			return false;
 		}
 		break;
@@ -631,6 +635,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var name = targetUser ? targetUser.name : targets[2];
 
 		var nextGroup = targets[1] ? targets[1] : Users.getNextGroupSymbol(currentGroup, cmd === 'demote');
+		if (targets[1] === 'deauth') nextGroup = ' ';
 		if (!config.groups[nextGroup]) {
 			emit(socket, 'console', 'Group \'' + nextGroup + '\' does not exist.');
 			return false;
@@ -642,10 +647,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
 		Users.setOfflineGroup(name, nextGroup);
-		rooms.lobby.usersChanged = true;
 		var groupName = config.groups[nextGroup].name || nextGroup || '';
 		logModCommand(room,''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.');
+		if (targetUser && targetUser.connected) room.send('|N|'+targetUser.getIdentity()+'|'+targetUser.userid);
 		return false;
+		break;
+
+	case 'deauth':
+		return parseCommand(user, 'demote', target+', deauth', room, socket);
 		break;
 
 	case 'modchat':
@@ -859,6 +868,69 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				room.add(dataMessages[i]);
 			}
 		}
+		return false;
+		break;
+
+	case 'learnset':
+	case '!learnset':
+	case 'learn':
+	case '!learn':
+	case 'learnall':
+	case '!learnall':
+		var lsetData = {};
+		var targets = target.split(',');
+		var template = Tools.getTemplate(targets[0]);
+		var move = {};
+		var result;
+		var all = (cmd.substr(cmd.length-3) === 'all');
+
+		showOrBroadcastStart(user, cmd, room, socket, message);
+
+		if (!template.exists) {
+			showOrBroadcast(user, cmd, room, socket,
+				'Pokemon "'+template.id+'" not found.');
+			return false;
+		}
+
+		for (var i=1, len=targets.length; i<len; i++) {
+			move = Tools.getMove(targets[i]);
+			if (!move.exists) {
+				showOrBroadcast(user, cmd, room, socket,
+					'Move "'+move.id+'" not found.');
+				return false;
+			}
+			result = Tools.checkLearnset(move, template, lsetData);
+			if (!result) break;
+		}
+		var buffer = ''+template.name+(result?" <strong style=\"color:#228822;text-decoration:underline\">can</strong> learn ":" <strong style=\"color:#CC2222;text-decoration:underline\">can't</strong> learn ")+(targets.length>2?"these moves":move.name);
+		if (result) {
+			var sourceNames = {E:"egg",S:"event",D:"dream world"};
+			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul style=\"margin-top:0;margin-bottom:0\">";
+			if (lsetData.sources) {
+				var sources = lsetData.sources.sort();
+				var prevSource;
+				var prevSourceType;
+				for (var i=0, len=sources.length; i<len; i++) {
+					var source = sources[i];
+					if (source.substr(0,2) === prevSourceType) {
+						if (prevSourceCount < 0) buffer += ": "+source.substr(2);
+						else if (all || prevSourceCount < 3) buffer += ', '+source.substr(2);
+						else if (prevSourceCount == 3) buffer += ', ...';
+						prevSourceCount++;
+						continue;
+					}
+					prevSourceType = source.substr(0,2);
+					prevSourceCount = source.substr(2)?0:-1;
+					buffer += "<li>gen "+source.substr(0,1)+" "+sourceNames[source.substr(1,1)];
+					if (prevSourceType === '5E' && template.maleOnlyDreamWorld) buffer += " (cannot have DW ability)";
+					if (source.substr(2)) buffer += ": "+source.substr(2);
+				}
+			}
+			if (lsetData.sourcesBefore) buffer += "<li>any generation before "+(lsetData.sourcesBefore+1);
+			buffer += "</ul>";
+		}
+		showOrBroadcast(user, cmd, room, socket,
+			buffer);
 		return false;
 		break;
 

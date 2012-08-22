@@ -361,49 +361,85 @@ module.exports = (function () {
 		return stats;
 	};
 
-
 	Tools.prototype.checkLearnset = function(move, template, lsetData) {
-		lsetData = lsetData || {set:{},format:{}};
-		var set = lsetData.set;
-		var format = lsetData.format;
+		move = toId(move);
+		template = this.getTemplate(template);
+
+		lsetData = lsetData || {};
+		var set = (lsetData.set || (lsetData.set={}));
+		var format = (lsetData.format || (lsetData.format={}));
 		var alreadyChecked = {};
 		var result = false;
-		var isDW = (this.getAbility(set.ability).name === template.abilities.DW);
 		var isMaleOnly = template.maleOnlyDreamWorld;
 		var recheck = false;
-		if (move.id) move = move.id;
+
+		var limit1 = true;
+		var sketch = true;
+
+		// This is a pretty complicated algorithm
+
+		// Abstractly, what it does is construct the union of sets of all
+		// possible ways this pokemon could be obtained, and then intersect
+		// it with a the pokemon's existing set of all possible ways it could
+		// be obtained. If this intersection is non-empty, the move is legal.
+
+		// We apply several optimizations to this algorithm. The most
+		// important is that with, for instance, a TM move, that Pokemon
+		// could have been obtained from any gen at or before that TM's gen.
+		// Instead of adding every possible source before or during that gen,
+		// we keep track of a maximum gen variable, intended to mean "any
+		// source at or before this gen is possible."
+
+		// set of possible sources of a pokemon with this move, represented as an array
+		var sources = [];
+		// the equivalent of adding "every source at or before this gen" to sources
+		var sourcesBefore = 0;
+
 		do {
 			alreadyChecked[template.speciesid] = true;
 			if (template.learnset) {
-				if (template.learnset[move]) {
+				if (template.learnset[move] || template.learnset['sketch']) {
 					var lset = template.learnset[move];
+					if (lset) sketch = false;
+					if (!lset) lset = template.learnset['sketch'];
 					if (typeof lset === 'string') lset = [lset];
-					if (isDW) {
-						result = null; // DW illegality
-						if (isMaleOnly && !template.maleOnlyDreamWorld) { // the pokemon is released, but not its prevo(s)
-							return result;
-						}
-						// the combination of DW ability and gen 3-4 exclusive move is illegal
-						for (var i=0; i<lset.length; i++) {
-							if (lset[i].substr(0,1) === '5' && (!isMaleOnly || lset[i] !== '5E')) {
+
+					for (var i=0, len=lset.length; i<len; i++) {
+						var learned = lset[i];
+						if (learned.substr(1,1) in {L:1,M:1,T:1}) {
+							if (learned.substr(0,1) === '5') {
+								// current-gen level-up, TM, or tutor moves:
+								//   always available
 								return true;
 							}
-						}
-					} else {
-						// the combination of non-DW ability and DW exclusive move is illegal
-						result = 0; // DW exclusivity
-						for (var i=0; i<lset.length; i++) {
-							if (lset[i] !== '5D') return true;
+							// past-gen level-up, TM, or tutor moves:
+							//   available as long as the source gen was or was before this gen
+							limit1 = false;
+							sourcesBefore = Math.max(sourcesBefore, parseInt(learned.substr(0,1),10));
+						} else if (learned.substr(1,1) in {E:1,S:1,D:1}) {
+							// egg, event, or DW moves:
+							//   only if that was the source
+							if (learned.substr(1,1) === 'E') {
+								var atLeastOne = false;
+								for (var templateid in this.data.Pokedex) {
+									var dexEntry = this.getTemplate(templateid);
+									if (!dexEntry.isNonstandard && dexEntry.gen <= parseInt(learned.substr(0,1),10) && dexEntry.id !== template.id && dexEntry.learnset && (dexEntry.learnset[move]||dexEntry.learnset['sketch'])) {
+										if (dexEntry.eggGroups.intersect(template.eggGroups).length) {
+											atLeastOne = true;
+											sources.push(learned+dexEntry.id);
+										}
+									}
+								}
+								if (!atLeastOne) sources.push(learned+template.id);
+							} else if (learned.substr(1,1) === 'S') {
+								sources.push(learned+' '+template.id);
+							} else {
+								sources.push(learned);
+							}
 						}
 					}
 				}
-				if (template.learnset['sketch']) {
-					var lset = template.learnset['sketch'];
-					if (typeof lset === 'string') lset = [lset];
-					for (var i=0; i<lset.length; i++) if (lset[i].substr(1) !== 'E') return true;
-					result = 1;
-				}
-				if (format.mimicGlitch && template.gen < 5 && !isDW) {
+				if (format.mimicGlitch && template.gen < 5) {
 					var glitchMoves = {metronome:1, copycat:1, transform:1, mimic:1, assist:1};
 					var getGlitch = false;
 					for (var i in glitchMoves) {
@@ -417,32 +453,77 @@ module.exports = (function () {
 						}
 					}
 					if (getGlitch) {
-						if (this.getMove(move).gen >= 5) {
-							result = 1;
-						} else {
-							return true;
+						sourcesBefore = Math.max(sourcesBefore, 4);
+						if (this.getMove(move).gen < 5) {
+							limit1 = false;
 						}
 					}
 				}
 			}
-			if (Object.keys(template.abilities).length === 1 && template.dreamWorldRelease && !recheck) {
-				// Some Pokemon with no DW ability still have DW-exclusive moves (e.g. Gastly, Koffing, Chimecho)
-				isDW = !isDW;
-				recheck = true;
-				alreadyChecked[template.speciesid] = null;
-				continue;
-			} else {
-				recheck = false;
-			}
-			if (template.speciesid === 'shaymin') {
+			if (template.prevo) {
+				template = this.getTemplate(template.prevo);
+			} else if (template.speciesid === 'shaymin') {
 				template = this.getTemplate('shayminsky');
 			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem') {
 				template = this.getTemplate(template.baseSpecies);
 			} else {
-				template = this.getTemplate(template.prevo);
+				template = null;
 			}
 		} while (template && template.species && !alreadyChecked[template.speciesid]);
-		return result;
+
+		if (limit1 && sketch) {
+			// limit 1 sketch move
+			if (lsetData.sketchMove) {
+				return false;
+			}
+			lsetData.sketchMove = move;
+		}
+
+		// Now that we have our list of possible sources, intersect it with the current list
+		if (!sourcesBefore && !sources.length) {
+			return false;
+		}
+		if (sourcesBefore || lsetData.sourcesBefore) {
+			// having sourcesBefore is the equivalent of having everything before that gen
+			// in sources, so we fill the other array in preparation for intersection
+			if (sourcesBefore && lsetData.sources) {
+				for (var i=0, len=lsetData.sources.length; i<len; i++) {
+					var learned = lsetData.sources[i];
+					if (parseInt(learned.substr(0,1),10) <= sourcesBefore) {
+						sources.push(learned);
+					}
+				}
+				sourcesBefore = 0;
+			}
+			if (lsetData.sourcesBefore && sources.length) {
+				if (!lsetData.sources) lsetData.sources = [];
+				for (var i=0, len=sources.length; i<len; i++) {
+					var learned = sources[i];
+					if (parseInt(learned.substr(0,1),10) <= lsetData.sourcesBefore) {
+						lsetData.sources.push(learned);
+					}
+				}
+				delete lsetData.sourcesBefore;
+			}
+		}
+		if (sources.length) {
+			if (lsetData.sources) {
+				var intersectSources = lsetData.sources.intersect(sources);
+				if (!intersectSources.length) {
+					lsetData.incompatible = true;
+					return false;
+				}
+				lsetData.sources = intersectSources;
+			} else {
+				lsetData.sources = sources.unique();
+			}
+		}
+
+		if (sourcesBefore) {
+			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore||5);
+		}
+
+		return true;
 	};
 	Tools.prototype.getBanlistTable = function(format, subformat, depth) {
 		var banlistTable;
@@ -586,11 +667,14 @@ module.exports = (function () {
 		set.ability = ability.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
+		if (!set.level) set.level = 100;
+
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
 		var name = set.species;
 		if (set.species !== set.name) name = set.name + " ("+set.species+")";
-		var source = '';
+		var isDW = false;
+		var lsetData = {set:set, format:format};
 
 		var setHas = {};
 
@@ -639,12 +723,13 @@ module.exports = (function () {
 				problems.push(name+" can't have "+set.ability+".");
 			}
 			if (ability.name === template.abilities['DW']) {
-				source = 'DW';
+				isDW = true;
 
 				if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
 					problems.push(name+"'s Dream World ability is unreleased.");
 				} else if (template.maleOnlyDreamWorld) {
 					set.gender = 'M';
+					lsetData.sources = ['5D'];
 				}
 			}
 		}
@@ -659,7 +744,6 @@ module.exports = (function () {
 			// in the cartridge-compliant set validator: formats.js:pokemon
 			set.moves = set.moves.slice(0,24);
 
-			var lsetData = {set:set, format:format};
 			for (var i=0; i<set.moves.length; i++) {
 				if (!set.moves[i]) continue;
 				var move = this.getMove(string(set.moves[i]));
@@ -675,19 +759,62 @@ module.exports = (function () {
 					var lset = this.checkLearnset(move, template, lsetData);
 					if (!lset) {
 						var problem = name+" can't learn "+move.name;
-						if (lset === null) {
-							problem = problem.concat(" if it's from the Dream World.");
-						} else if (lset === 0) {
-							problem = problem.concat(" if it's not from the Dream World.");
+						if (lsetData.incompatible) {
+							if (isDW) {
+								problem = problem.concat(" because it's incompatible with its ability or another move.");
+							} else {
+								problem = problem.concat(" because it's incompatible with another move.");
+							}
 						} else {
 							problem = problem.concat(".");
 						}
 						problems.push(problem);
-					} else if (lset === 1) {
-						limit1++;
-						if (limit1 > 1) {
-							problems.push(name+" can't Sketch "+move.name+" - it's limited to 1 Sketch move.");
+					}
+				}
+			}
+
+			if (lsetData.sources && lsetData.sources.length === 1 && !lsetData.sourcesBefore) {
+				// we're restricted to a single source
+				var source = lsetData.sources[0];
+				if (source.substr(1,1) === 'S') {
+					// it's an event
+					var eventData = null;
+					var splitSource = source.substr(2).split(' ');
+					var eventTemplate = this.getTemplate(splitSource[1]);
+					if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0],10)];
+					if (eventData) {
+						if (eventData.nature && eventData.nature !== set.nature) {
+							problems.push(name+" must come from a specific event that gives it a "+eventData.nature+" nature.");
 						}
+						if (eventData.shiny) {
+							set.shiny = true;
+						}
+						if (eventData.abilities && eventData.abilities[0] !== ability.id && eventData.abilities[1] !== ability.id) {
+							problems.push(name+" must come from a specific event that gives it "+eventData.abilities.join(" or ")+".");
+						}
+						if (eventData.gender) {
+							set.gender = eventData.gender;
+						}
+						if (eventData.level && set.level < eventData.level) {
+							problems.push(name+" must come from a specific event that makes it at least level "+eventData.level+".");
+						}
+					}
+					isDW = false;
+				}
+			}
+			if (isDW) {
+				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
+					problems.push(name+" has a DW ability - it can't have moves only learned before gen 5.");
+				} else if (lsetData.sources) {
+					var compatibleSource = false;
+					for (var i=0,len=lsetData.sources.length; i<len; i++) {
+						if (lsetData.sources[i].substr(0,2) in {'5E':1, '5D':1}) {
+							compatibleSource = true;
+							break;
+						}
+					}
+					if (!compatibleSource) {
+						problems.push(name+" has moves incompatible with its DW ability.");
 					}
 				}
 			}
