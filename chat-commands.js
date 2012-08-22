@@ -875,11 +875,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case '!learnset':
 	case 'learn':
 	case '!learn':
+	case 'learnall':
+	case '!learnall':
 		var lsetData = {};
 		var targets = target.split(',');
 		var template = Tools.getTemplate(targets[0]);
 		var move = {};
 		var result;
+		var all = (cmd.substr(cmd.length-3) === 'all');
 
 		showOrBroadcastStart(user, cmd, room, socket, message);
 
@@ -904,23 +907,26 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			var sourceNames = {E:"egg",S:"event",D:"dream world"};
 			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul style=\"margin-top:0;margin-bottom:0\">";
 			if (lsetData.sources) {
-				var sources = lsetData.sources.sort().map(function(a){ return a.substr(0,2); }).unique();
+				var sources = lsetData.sources.sort();
 				var prevSource;
 				var prevSourceType;
 				for (var i=0, len=sources.length; i<len; i++) {
 					var source = sources[i];
 					if (source.substr(0,2) === prevSourceType) {
-						if (prevSourceCount < 3) buffer += ', '+source.substr(2);
-						if (prevSourceCount == 3) buffer += ', ...';
+						if (prevSourceCount < 0) buffer += ": "+source.substr(2);
+						else if (all || prevSourceCount < 3) buffer += ', '+source.substr(2);
+						else if (prevSourceCount == 3) buffer += ', ...';
 						prevSourceCount++;
 						continue;
 					}
-					buffer += "<li>generation "+source.substr(0,1)+" "+sourceNames[source.substr(1,1)]+" "+(source.substr(2));
 					prevSourceType = source.substr(0,2);
-					prevSourceCount = 0;
+					prevSourceCount = source.substr(2)?0:-1;
+					buffer += "<li>gen "+source.substr(0,1)+" "+sourceNames[source.substr(1,1)];
+					if (prevSourceType === '5E' && template.maleOnlyDreamWorld) buffer += " (cannot have DW ability)";
+					if (source.substr(2)) buffer += ": "+source.substr(2);
 				}
 			}
-			if (lsetData.sourcesBefore) buffer += "<li>any generation before "+(lsetData.sourcesBefore+1)+"</li>"
+			if (lsetData.sourcesBefore) buffer += "<li>any generation before "+(lsetData.sourcesBefore+1);
 			buffer += "</ul>";
 		}
 		showOrBroadcast(user, cmd, room, socket,
