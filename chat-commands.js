@@ -635,6 +635,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var name = targetUser ? targetUser.name : targets[2];
 
 		var nextGroup = targets[1] ? targets[1] : Users.getNextGroupSymbol(currentGroup, cmd === 'demote');
+		if (targets[1] === 'deauth') nextGroup = ' ';
 		if (!config.groups[nextGroup]) {
 			emit(socket, 'console', 'Group \'' + nextGroup + '\' does not exist.');
 			return false;
@@ -646,10 +647,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
 		Users.setOfflineGroup(name, nextGroup);
-		rooms.lobby.usersChanged = true;
 		var groupName = config.groups[nextGroup].name || nextGroup || '';
 		logModCommand(room,''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.');
+		if (targetUser && targetUser.connected) room.send('|N|'+targetUser.getIdentity()+'|'+targetUser.userid);
 		return false;
+		break;
+
+	case 'deauth':
+		return parseCommand(user, 'demote', target+', deauth', room, socket);
 		break;
 
 	case 'modchat':
