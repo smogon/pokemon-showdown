@@ -419,21 +419,23 @@ module.exports = (function () {
 						} else if (learned.substr(1,1) in {E:1,S:1,D:1}) {
 							// egg, event, or DW moves:
 							//   only if that was the source
-							if (learned === '5D' && !isMaleOnly) {
-								sources.push('5D');
-								learned = '5E';
-							}
 							if (learned.substr(1,1) === 'E') {
 								var atLeastOne = false;
 								for (var templateid in this.data.Pokedex) {
 									var dexEntry = this.getTemplate(templateid);
-									if (dexEntry.gen <= parseInt(learned.substr(0,1),10) && dexEntry.id !== template.id && dexEntry.learnset && dexEntry.learnset[move] && dexEntry.eggGroups.intersect(template.eggGroups).length) {
-										atLeastOne = true;
-										sources.push(learned+dexEntry.id);
+									if (!dexEntry.isNonstandard && dexEntry.gen <= parseInt(learned.substr(0,1),10) && dexEntry.id !== template.id && dexEntry.learnset && (dexEntry.learnset[move]||dexEntry.learnset['sketch'])) {
+										if (dexEntry.eggGroups.intersect(template.eggGroups).length) {
+											atLeastOne = true;
+											sources.push(learned+dexEntry.id);
+										}
 									}
 								}
+								if (!atLeastOne) sources.push(learned+template.id);
+							} else if (learned.substr(1,1) === 'S') {
+								sources.push(learned+' '+template.id);
+							} else {
+								sources.push(learned);
 							}
-							sources.push(learned);
 						}
 					}
 				}
@@ -495,7 +497,7 @@ module.exports = (function () {
 				if (!lsetData.sources) lsetData.sources = [];
 				for (var i=0, len=sources.length; i<len; i++) {
 					var learned = sources[i];
-					if (parseInt(learned.substr(0,1),10) <= sourcesBefore) {
+					if (parseInt(learned.substr(0,1),10) <= lsetData.sourcesBefore) {
 						lsetData.sources.push(learned);
 					}
 				}
@@ -506,6 +508,7 @@ module.exports = (function () {
 			if (lsetData.sources) {
 				var intersectSources = lsetData.sources.intersect(sources);
 				if (!intersectSources.length) {
+					lsetData.incompatible = true;
 					return false;
 				}
 				lsetData.sources = intersectSources;
@@ -515,7 +518,7 @@ module.exports = (function () {
 		}
 
 		if (sourcesBefore) {
-			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore||0);
+			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore||5);
 		}
 
 		return true;
@@ -668,7 +671,8 @@ module.exports = (function () {
 		set.name = set.name || set.species;
 		var name = set.species;
 		if (set.species !== set.name) name = set.name + " ("+set.species+")";
-		var source = '';
+		var isDW = false;
+		var lsetData = {set:set, format:format};
 
 		var setHas = {};
 
@@ -717,12 +721,13 @@ module.exports = (function () {
 				problems.push(name+" can't have "+set.ability+".");
 			}
 			if (ability.name === template.abilities['DW']) {
-				source = 'DW';
+				isDW = true;
 
 				if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
 					problems.push(name+"'s Dream World ability is unreleased.");
 				} else if (template.maleOnlyDreamWorld) {
 					set.gender = 'M';
+					lsetData.sources = ['5D'];
 				}
 			}
 		}
@@ -737,7 +742,6 @@ module.exports = (function () {
 			// in the cartridge-compliant set validator: formats.js:pokemon
 			set.moves = set.moves.slice(0,24);
 
-			var lsetData = {set:set, format:format};
 			for (var i=0; i<set.moves.length; i++) {
 				if (!set.moves[i]) continue;
 				var move = this.getMove(string(set.moves[i]));
@@ -753,8 +757,12 @@ module.exports = (function () {
 					var lset = this.checkLearnset(move, template, lsetData);
 					if (!lset) {
 						var problem = name+" can't learn "+move.name;
-						if (template.learnset && template.learnset[move.id]) {
-							problem = problem.concat(" because it's incompatible with the rest of your set.");
+						if (lsetData.incompatible) {
+							if (isDW) {
+								problem = problem.concat(" because it's incompatible with its ability or another move.");
+							} else {
+								problem = problem.concat(" because it's incompatible with another move.");
+							}
 						} else {
 							problem = problem.concat(".");
 						}
@@ -768,7 +776,10 @@ module.exports = (function () {
 				var source = lsetData.sources[0];
 				if (source.substr(1,1) === 'S') {
 					// it's an event
-					var eventData = template.eventPokemon[parseInt(source.substr(2),10)];
+					var eventData = null;
+					var splitSource = source.substr(2).split(' ');
+					var eventTemplate = this.getTemplate(splitSource[1]);
+					if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0],10)];
 					if (eventData) {
 						if (eventData.nature && eventData.nature !== set.nature) {
 							problems.push(name+" must come from a specific event that gives it a "+eventData.nature+" nature.");
@@ -785,6 +796,23 @@ module.exports = (function () {
 						if (eventData.level && set.level < eventData.level) {
 							problems.push(name+" must come from a specific event that makes it at least level "+eventData.level+".");
 						}
+					}
+					isDW = false;
+				}
+			}
+			if (isDW) {
+				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
+					problems.push(name+" has a DW ability - it can't have moves only learned before gen 5.");
+				} else if (lsetData.sources) {
+					var compatibleSource = false;
+					for (var i=0,len=lsetData.sources.length; i<len; i++) {
+						if (lsetData.sources[i].substr(0,2) in {'5E':1, '5D':1}) {
+							compatibleSource = true;
+							break;
+						}
+					}
+					if (!compatibleSource) {
+						problems.push(name+" has moves incompatible with its DW ability.");
 					}
 				}
 			}
