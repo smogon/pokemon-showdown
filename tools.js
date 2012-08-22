@@ -460,12 +460,14 @@ module.exports = (function () {
 					}
 				}
 			}
-			if (template.speciesid === 'shaymin') {
+			if (template.prevo) {
+				template = this.getTemplate(template.prevo);
+			} else if (template.speciesid === 'shaymin') {
 				template = this.getTemplate('shayminsky');
 			} else if (template.basespecies !== template.species && template.basespecies !== 'Kyurem') {
 				template = this.getTemplate(template.basespecies);
 			} else {
-				template = this.getTemplate(template.prevo);
+				template = null;
 			}
 		} while (template && template.species && !alreadyChecked[template.speciesid]);
 
