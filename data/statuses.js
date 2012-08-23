@@ -168,7 +168,7 @@ exports.BattleStatuses = {
 		},
 		onResidualOrder: 11,
 		onResidual: function(pokemon) {
-			if (this.effectData.source && !this.effectData.source.isActive) {
+			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0)) {
 				pokemon.removeVolatile('partiallytrapped');
 				return;
 			}
