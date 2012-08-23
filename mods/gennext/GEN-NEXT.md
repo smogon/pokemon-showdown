@@ -10,8 +10,8 @@ Major changes:
   type, except Genesect will still take neutral damage from SR)
 
 - Unown gets an item named Strange Orb (select "Stick" in the teambuilder)
-  It triples its SpA and doubles its Spe, and changes its type to the type
-  of its Hidden Power.
+  It doubles its SpA and Spe, and changes its type to the type of its Hidden
+  Power.
 
 - Bug/Flying Quiver Dancers get an item named GossamerWing (select "Stick"
   in the teambuilder). It negates the Flying weaknesses (take half damage from
@@ -23,6 +23,8 @@ Major changes:
 
 - Flower Gift has an additional effect: if Sunny Day is used, the next switch-in
   receives +1 Atk, +1 SpD
+
+- Twister is now a Flying-type Scald that confuses instead of burns
 
 Minor move changes:
 
@@ -42,6 +44,8 @@ Minor move changes:
 - Cut now has a 100% chance of lowering foe's Def
 
 - Snore's Base Power is now 100
+
+- Drill Peck's Base Power is now 100
 
 - Relic Song's secondary is now 40% -1 Atk -1 SpA (80% after Serene Grace)
 
