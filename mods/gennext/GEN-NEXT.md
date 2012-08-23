@@ -35,9 +35,8 @@ Major changes:
   - Fly: 100% -1 Def, 45 bp
   - Dig: 100% -1 Def, 40 bp
   - Dive: 100% -1 Def, 40 bp
-  - Shadow Force: 100% Ghost-Curse, 30 bp
-
-
+  - Shadow Force: 100% Ghost-Curse, 30 bp  
+     
 - Flower Gift has an additional effect: if Sunny Day is used, the next switch-in
   receives +1 Atk, +1 SpD
 
