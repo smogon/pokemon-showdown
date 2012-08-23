@@ -203,6 +203,24 @@ exports.BattleMovedex = {
 		accuracy: true
 	},
 	/******************************************************************
+	Flying moves:
+	- now a bit better
+
+	Justification:
+	- Flying has always been the type that's suffered from limited
+	  distribution. Let's see how it does without that disadvantage.
+	******************************************************************/
+	twister: {
+		inherit: true,
+		basePower: 80,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'confusion'
+		},
+		pp: 15,
+		type: "Flying"
+	},
+	/******************************************************************
 	Signature moves and other moves with limited distribution:
 	- buffed in various ways
 
@@ -212,6 +230,11 @@ exports.BattleMovedex = {
 	twineedle: {
 		inherit: true,
 		basePower: 50
+	},
+	drillpeck: {
+		inherit: true,
+		basePower: 100,
+		pp: 10
 	},
 	triattack: {
 		num: 161,
