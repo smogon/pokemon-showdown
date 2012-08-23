@@ -113,6 +113,12 @@ exports.BattleItems = {
 				pokemon.types = [pokemon.hpType];
 			}
 		},
+		onModifyStats: function(stats, pokemon) {
+			if (pokemon.template.species === 'Shuckle') {
+				stats.def *= 1.5;
+				stats.spd *= 1.5;
+			}
+		},
 		onFoeBasePower: function(basePower, attacker, defender, move) {
 			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1};
 			if (GossamerWingUsers[defender.template.species]) {
@@ -129,6 +135,11 @@ exports.BattleItems = {
 				}
 			}
 		},
+		// onResidual: function(pokemon) {
+		// 	if (pokemon.template.species === 'Shuckle') {
+		// 		this.heal(clampIntRange(pokemon.maxhp/16, 1));
+		// 	}
+		// },
 		desc: "Raises Farfetch'd's critical hit rate two stages."
 	},
 };

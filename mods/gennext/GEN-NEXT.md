@@ -37,8 +37,11 @@ Major changes:
   - Dive: 100% -1 Def, 40 bp
   - Shadow Force: 100% Ghost-Curse, 30 bp  
      
-- Flower Gift has an additional effect: if Sunny Day is used, the next switch-in
-  receives +1 Atk, +1 SpD
+- Flower Gift has an additional effect: if Sunny Day is used, the next
+  switch-in receives +1 Atk, +1 SpD
+
+- Shuckle gets Berry Shell (select "Stick" in the teambuilder), which gives a
+  50% boost to Defense and Sp. Def. It also learns Leech Seed.
 
 - Twister is now a Flying-type Scald that confuses instead of burns
 
@@ -82,6 +85,8 @@ Minor learnset changes:
 
 - Aerodactyl gets Brave Bird
 
+- Shuckle gets Leech Seed
+
 Minor ability changes:
 
 - Compoundeyes now grants 1.5x accuracy
@@ -91,5 +96,3 @@ Minor ability changes:
 Tier changes:
 
 - DrizzleSwim is no longer banned in OU
-
-- Genesect is released
