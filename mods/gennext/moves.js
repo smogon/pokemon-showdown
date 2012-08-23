@@ -62,6 +62,10 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	rocksmash: {
+		inherit: true,
+		basePower: 50
+	},
 	/******************************************************************
 	Weather moves:
 	- have increased priority
@@ -85,6 +89,192 @@ exports.BattleMovedex = {
 	hail: {
 		inherit: true,
 		priority: 1
+	},
+	/******************************************************************
+	Two-turn moves:
+	- now a bit better
+
+	Justification:
+	- Historically, these moves are useless.
+	******************************************************************/
+	solarbeam: {
+		inherit: true,
+		basePower: 60,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		effect: {
+			duration: 2,
+			onLockMove: 'solarbeam',
+			onStart: function(pokemon) {
+				this.heal(pokemon.maxhp/3);
+			}
+		},
+		breaksProtect: true
+	},
+	razorwind: {
+		inherit: true,
+		basePower: 40,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'confusion'
+		},
+		breaksProtect: true
+	},
+	skullbash: {
+		inherit: true,
+		basePower: 50,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		effect: {
+			duration: 2,
+			onLockMove: 'skullbash',
+			onStart: function(pokemon) {
+				this.boost({def:1,spd:1}, pokemon, pokemon, this.getMove('skullbash'));
+			}
+		},
+		breaksProtect: true
+	},
+	skyattack: {
+		inherit: true,
+		basePower: 70,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
+	freezeshock: {
+		inherit: true,
+		basePower: 70,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			status: 'par'
+		},
+		breaksProtect: true
+	},
+	iceburn: {
+		inherit: true,
+		basePower: 70,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			status: 'brn'
+		},
+		breaksProtect: true
+	},
+	bounce: {
+		inherit: true,
+		basePower: 45,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			status: 'par'
+		},
+		breaksProtect: true
+	},
+	fly: {
+		inherit: true,
+		basePower: 45,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
+	dig: {
+		inherit: true,
+		basePower: 40,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
+	dive: {
+		inherit: true,
+		basePower: 40,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
+	shadowforce: {
+		inherit: true,
+		basePower: 30,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'curse'
+		},
+		breaksProtect: true
 	},
 	/******************************************************************
 	Snore:
@@ -203,6 +393,22 @@ exports.BattleMovedex = {
 		accuracy: true
 	},
 	/******************************************************************
+	Draining moves:
+	- move types around, buff Leech Life
+
+	Justification:
+	- Poison, Bug, and Grass make sense for draining moves. Fighting
+	  really doesn't.
+	******************************************************************/
+	leechlife: {
+		inherit: true,
+		basePower: 60
+	},
+	drainpunch: {
+		inherit: true,
+		type: 'Poison'
+	},
+	/******************************************************************
 	Flying moves:
 	- now a bit better
 
@@ -235,6 +441,52 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 100,
 		pp: 10
+	},
+	attackorder: {
+		inherit: true,
+		basePower: 100,
+		pp: 10
+	},
+	smog: {
+		inherit: true,
+		basePower: 75,
+		secondary: {
+			chance: 30,
+			status: 'psn'
+		}
+	},
+	octazooka: {
+		inherit: true,
+		basePower: 75,
+		accuracy: 90,
+		secondary: {
+			chance: 100,
+			boosts: {
+				accuracy: -1
+			}
+		}
+	},
+	leaftornado: {
+		inherit: true,
+		basePower: 75,
+		accuracy: 90,
+		secondary: {
+			chance: 100,
+			boosts: {
+				accuracy: -1
+			}
+		}
+	},
+	muddywater: {
+		inherit: true,
+		basePower: 85,
+		accuracy: 100,
+		secondary: {
+			chance: 30,
+			boosts: {
+				accuracy: -1
+			}
+		}
 	},
 	triattack: {
 		num: 161,

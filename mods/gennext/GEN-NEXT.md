@@ -21,17 +21,35 @@ Major changes:
   items). Weather moves have +1 priority. Forecast and Flower Gift will make
   weather moves last forever.
 
+- Moves with a charge turn are now a lot more powerful. They remove Protect and
+  Substitute before hitting, they always crit (although their base power has
+  been adjusted accordingly), they have perfect accuracy, and one other change
+  depending on the move:
+  - SolarBeam: heal 33% on the charge turn, 60 bp
+  - Razor Wind: 100% confusion, 40 bp
+  - Skull Bash: +1 Def, +1 SpD on the charge turn, 50 bp
+  - Sky Attack: 100% -1 Def, 70 bp
+  - Freeze Shock: 100% paralysis, 70 bp
+  - Ice Burn: 100% burn, 70 bp
+  - Bounce: 100% paralysis, 45 bp
+  - Fly: 100% -1 Def, 45 bp
+  - Dig: 100% -1 Def, 40 bp
+  - Dive: 100% -1 Def, 40 bp
+  - Shadow Force: 100% Ghost-Curse, 30 bp
+
 - Flower Gift has an additional effect: if Sunny Day is used, the next switch-in
   receives +1 Atk, +1 SpD
 
 - Twister is now a Flying-type Scald that confuses instead of burns
+
+- Drain Punch is now Poison-type
 
 Minor move changes:
 
 - Perfect accuracy moves with a base power of 60 have their base power
   increased to 80
 
-- Drives grant a 1.3x damage bonus to Techno Blast
+- Drives grant a 1.1x damage bonus to Techno Blast
 
 - Multi-hit moves are now all perfect-accuracy
 
@@ -49,6 +67,12 @@ Minor move changes:
 
 - Relic Song's secondary is now 40% -1 Atk -1 SpA (80% after Serene Grace)
 
+- Octazooka and Leaf Tornado are now 75 base power and 90% -accuracy
+
+- Muddy Water is now 85 base power and 100% accurate
+
+- Leech Life is now 60 base power
+
 Minor learnset changes:
 
 - Masquerain gets Surf
@@ -61,6 +85,8 @@ Minor learnset changes:
 Minor ability changes:
 
 - Compoundeyes now grants 1.5x accuracy
+
+- Solid Rock and Filter now reduce 1/2 damage of SE moves, not 1/4
 
 Tier changes:
 

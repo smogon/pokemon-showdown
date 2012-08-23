@@ -74,6 +74,24 @@ exports.BattleAbilities = {
 		rating: 3.5,
 		num: 14
 	},
+	"solidrock": {
+		inherit: true,
+		onFoeBasePower: function(basePower, attacker, defender, move) {
+			if (this.getEffectiveness(move.type, defender) > 0) {
+				this.debug('Solid Rock neutralize');
+				return basePower * 1/2;
+			}
+		}
+	},
+	"filter": {
+		inherit: true,
+		onFoeBasePower: function(basePower, attacker, defender, move) {
+			if (this.getEffectiveness(move.type, defender) > 0) {
+				this.debug('Solid Rock neutralize');
+				return basePower * 1/2;
+			}
+		}
+	},
 	"telepathy": {
 		inherit: true,
 		onSwitchOut: function() {}
