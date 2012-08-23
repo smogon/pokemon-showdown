@@ -12,5 +12,8 @@ exports.BattleScripts = {
 
 		// Aerodactyl gets Brave Bird
 		this.data.Learnsets.aerodactyl.learnset.bravebird = ['5L100'];
+
+		// Shuckle gets Leech Seed
+		this.data.Learnsets.aerodactyl.learnset.leechseed = ['5L100'];
 	}
 }
