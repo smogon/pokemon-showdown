@@ -16,7 +16,7 @@ exports.BattleItems = {
 		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.id === 'technoblast') {
-				return basePower * 1.3;
+				return basePower * 1.1;
 			}
 		},
 		onDrive: 'Fire',
@@ -39,7 +39,7 @@ exports.BattleItems = {
 		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.id === 'technoblast') {
-				return basePower * 1.3;
+				return basePower * 1.1;
 			}
 		},
 		onDrive: 'Ice',
@@ -62,7 +62,7 @@ exports.BattleItems = {
 		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.id === 'technoblast') {
-				return basePower * 1.3;
+				return basePower * 1.1;
 			}
 		},
 		onDrive: 'Water',
@@ -85,7 +85,7 @@ exports.BattleItems = {
 		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.id === 'technoblast') {
-				return basePower * 1.3;
+				return basePower * 1.1;
 			}
 		},
 		onDrive: 'Electric',

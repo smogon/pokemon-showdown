@@ -8292,6 +8292,10 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, move) {
+				if (move.breaksProtect) {
+					target.removeVolatile('Protect');
+					return;
+				}
 				if (move && (move.target === 'self' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
@@ -9835,6 +9839,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		isTwoTurnMove: true,
+		breaksProtect: true,
 		onTry: function(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
