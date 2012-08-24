@@ -14,6 +14,16 @@ exports.BattleScripts = {
 		this.data.Learnsets.aerodactyl.learnset.bravebird = ['5L100'];
 
 		// Shuckle gets Leech Seed
-		this.data.Learnsets.aerodactyl.learnset.leechseed = ['5L100'];
+		this.data.Learnsets.shuckle.learnset.leechseed = ['5L100'];
+
+		// Roserade gets Smog
+		this.data.Learnsets.roserade.learnset.smog = ['5L100'];
+
+		// Every DW ability that isn't Shadow Tag becomes released
+		for (var i in this.data.FormatsData) {
+			if (i !== 'chandelure' && i !== 'gothitelle') {
+				this.data.FormatsData[i].dreamWorldRelease = true;
+			}
+		}
 	}
 }
