@@ -296,6 +296,24 @@ exports.BattleMovedex = {
 	******************************************************************/
 	relicsong: {
 		inherit: true,
+		onHit: function(target, pokemon) {
+			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
+				return;
+			}
+			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta')) {
+				this.add('-formechange', pokemon, 'Meloetta');
+				var tmpAtkEVs = pokemon.set.evs.atk;
+				pokemon.set.evs.atk = pokemon.set.evs.spa;
+				pokemon.set.evs.spa = tmpAtkEVs;
+			} else if (pokemon.transformInto('Meloetta-Pirouette')) {
+				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
+				var tmpAtkEVs = pokemon.set.evs.atk;
+				pokemon.set.evs.atk = pokemon.set.evs.spa;
+				pokemon.set.evs.spa = tmpAtkEVs;
+			}
+			// renderer takes care of this for us
+			pokemon.transformed = false;
+		},
 		secondary: {
 			chance: 40,
 			boosts: {
@@ -427,6 +445,27 @@ exports.BattleMovedex = {
 		type: "Flying"
 	},
 	/******************************************************************
+	Moves with not enough drawbacks:
+	- intensify drawbacks
+
+	Justification:
+	- Draco Meteor and Close Combat are way too common.
+	******************************************************************/
+	closecombat: {
+		inherit: true,
+		self: {
+			boosts: {
+				def: -2,
+				spd: -2
+			}
+		},
+	},
+	dracometeor: {
+		inherit: true,
+		basePower: 120,
+		accuracy: 100
+	},
+	/******************************************************************
 	Signature moves and other moves with limited distribution:
 	- buffed in various ways
 
@@ -449,9 +488,9 @@ exports.BattleMovedex = {
 	},
 	smog: {
 		inherit: true,
-		basePower: 75,
+		basePower: 60,
 		secondary: {
-			chance: 30,
+			chance: 100,
 			status: 'psn'
 		}
 	},

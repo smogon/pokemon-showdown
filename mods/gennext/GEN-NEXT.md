@@ -21,6 +21,8 @@ Major changes:
   items). Weather moves have +1 priority. Forecast and Flower Gift will make
   weather moves last forever.
 
+- Every DW ability other than on Chandelure and Gothitelle is released.
+
 - Moves with a charge turn are now a lot more powerful. They remove Protect and
   Substitute before hitting, they always crit (although their base power has
   been adjusted accordingly), they have perfect accuracy, and one other change
@@ -39,6 +41,9 @@ Major changes:
      
 - Flower Gift has an additional effect: if Sunny Day is used, the next
   switch-in receives +1 Atk, +1 SpD
+
+- Relic Song switches Meloetta's SpA and Atk EVs. Nature is not changed.
+  Its secondary is now 40% -1 Atk -1 SpA (80% after Serene Grace)
 
 - Shuckle gets Berry Shell (select "Stick" in the teambuilder), which gives a
   50% boost to Defense and Sp. Def. It also learns Leech Seed.
@@ -68,13 +73,13 @@ Minor move changes:
 
 - Drill Peck's Base Power is now 100
 
-- Relic Song's secondary is now 40% -1 Atk -1 SpA (80% after Serene Grace)
-
 - Octazooka and Leaf Tornado are now 75 base power and 90% -accuracy
 
 - Muddy Water is now 85 base power and 100% accurate
 
 - Leech Life is now 60 base power
+
+- Smog is now 60 base power, 100% poison
 
 Minor learnset changes:
 
@@ -86,6 +91,8 @@ Minor learnset changes:
 - Aerodactyl gets Brave Bird
 
 - Shuckle gets Leech Seed
+
+- Roserade gets Smog
 
 Minor ability changes:
 
