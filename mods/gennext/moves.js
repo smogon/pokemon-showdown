@@ -229,7 +229,7 @@ exports.BattleMovedex = {
 	},
 	dig: {
 		inherit: true,
-		basePower: 40,
+		basePower: 45,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -246,7 +246,7 @@ exports.BattleMovedex = {
 	},
 	dive: {
 		inherit: true,
-		basePower: 40,
+		basePower: 45,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -273,6 +273,19 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 100,
 			volatileStatus: 'curse'
+		},
+		breaksProtect: true
+	},
+	skydrop: {
+		inherit: true,
+		basePower: 40,
+		willCrit: true,
+		accuracy: true,
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
 		},
 		breaksProtect: true
 	},
