@@ -2242,7 +2242,7 @@ exports.BattleMovedex = {
 					source.faint();
 				}
 			},
-			onBeforeMovePriority: -10,
+			onBeforeMovePriority: 100,
 			onBeforeMove: function(pokemon) {
 				this.debug('removing Destiny Bond before attack');
 				pokemon.removeVolatile('destinybond');
