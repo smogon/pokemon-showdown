@@ -35,9 +35,10 @@ Major changes:
   - Ice Burn: 100% burn, 70 bp
   - Bounce: 100% paralysis, 45 bp
   - Fly: 100% -1 Def, 45 bp
-  - Dig: 100% -1 Def, 40 bp
-  - Dive: 100% -1 Def, 40 bp
-  - Shadow Force: 100% Ghost-Curse, 30 bp  
+  - Dig: 100% -1 Def, 45 bp
+  - Dive: 100% -1 Def, 45 bp
+  - Shadow Force: 100% Ghost-Curse, 30 bp
+  - Sky Drop: 100% -1 Def, 40 bp  
      
 - Flower Gift has an additional effect: if Sunny Day is used, the next
   switch-in receives +1 Atk, +1 SpD
