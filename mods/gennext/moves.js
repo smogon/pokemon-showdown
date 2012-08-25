@@ -62,6 +62,10 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	rocksmash: {
+		inherit: true,
+		basePower: 50
+	},
 	/******************************************************************
 	Weather moves:
 	- have increased priority
@@ -87,6 +91,205 @@ exports.BattleMovedex = {
 		priority: 1
 	},
 	/******************************************************************
+	Two-turn moves:
+	- now a bit better
+
+	Justification:
+	- Historically, these moves are useless.
+	******************************************************************/
+	solarbeam: {
+		inherit: true,
+		basePower: 60,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		effect: {
+			duration: 2,
+			onLockMove: 'solarbeam',
+			onStart: function(pokemon) {
+				this.heal(pokemon.maxhp/3);
+			}
+		},
+		breaksProtect: true
+	},
+	razorwind: {
+		inherit: true,
+		basePower: 40,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'confusion'
+		},
+		breaksProtect: true
+	},
+	skullbash: {
+		inherit: true,
+		basePower: 50,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		effect: {
+			duration: 2,
+			onLockMove: 'skullbash',
+			onStart: function(pokemon) {
+				this.boost({def:1,spd:1}, pokemon, pokemon, this.getMove('skullbash'));
+			}
+		},
+		breaksProtect: true
+	},
+	skyattack: {
+		inherit: true,
+		basePower: 70,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
+	freezeshock: {
+		inherit: true,
+		basePower: 70,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			status: 'par'
+		},
+		breaksProtect: true
+	},
+	iceburn: {
+		inherit: true,
+		basePower: 70,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			status: 'brn'
+		},
+		breaksProtect: true
+	},
+	bounce: {
+		inherit: true,
+		basePower: 45,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			status: 'par'
+		},
+		breaksProtect: true
+	},
+	fly: {
+		inherit: true,
+		basePower: 45,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
+	dig: {
+		inherit: true,
+		basePower: 45,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
+	dive: {
+		inherit: true,
+		basePower: 45,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
+	shadowforce: {
+		inherit: true,
+		basePower: 30,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function(target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'curse'
+		},
+		breaksProtect: true
+	},
+	skydrop: {
+		inherit: true,
+		basePower: 40,
+		willCrit: true,
+		accuracy: true,
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
+	/******************************************************************
 	Snore:
 	- base power increased to 100
 
@@ -106,6 +309,24 @@ exports.BattleMovedex = {
 	******************************************************************/
 	relicsong: {
 		inherit: true,
+		onHit: function(target, pokemon) {
+			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
+				return;
+			}
+			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta')) {
+				this.add('-formechange', pokemon, 'Meloetta');
+				var tmpAtkEVs = pokemon.set.evs.atk;
+				pokemon.set.evs.atk = pokemon.set.evs.spa;
+				pokemon.set.evs.spa = tmpAtkEVs;
+			} else if (pokemon.transformInto('Meloetta-Pirouette')) {
+				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
+				var tmpAtkEVs = pokemon.set.evs.atk;
+				pokemon.set.evs.atk = pokemon.set.evs.spa;
+				pokemon.set.evs.spa = tmpAtkEVs;
+			}
+			// renderer takes care of this for us
+			pokemon.transformed = false;
+		},
 		secondary: {
 			chance: 40,
 			boosts: {
@@ -203,6 +424,61 @@ exports.BattleMovedex = {
 		accuracy: true
 	},
 	/******************************************************************
+	Draining moves:
+	- move types around, buff Leech Life
+
+	Justification:
+	- Poison, Bug, and Grass make sense for draining moves. Fighting
+	  really doesn't.
+	******************************************************************/
+	leechlife: {
+		inherit: true,
+		basePower: 60
+	},
+	drainpunch: {
+		inherit: true,
+		type: 'Poison'
+	},
+	/******************************************************************
+	Flying moves:
+	- now a bit better
+
+	Justification:
+	- Flying has always been the type that's suffered from limited
+	  distribution. Let's see how it does without that disadvantage.
+	******************************************************************/
+	twister: {
+		inherit: true,
+		basePower: 80,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'confusion'
+		},
+		pp: 15,
+		type: "Flying"
+	},
+	/******************************************************************
+	Moves with not enough drawbacks:
+	- intensify drawbacks
+
+	Justification:
+	- Draco Meteor and Close Combat are way too common.
+	******************************************************************/
+	closecombat: {
+		inherit: true,
+		self: {
+			boosts: {
+				def: -2,
+				spd: -2
+			}
+		},
+	},
+	dracometeor: {
+		inherit: true,
+		basePower: 120,
+		accuracy: 100
+	},
+	/******************************************************************
 	Signature moves and other moves with limited distribution:
 	- buffed in various ways
 
@@ -212,6 +488,57 @@ exports.BattleMovedex = {
 	twineedle: {
 		inherit: true,
 		basePower: 50
+	},
+	drillpeck: {
+		inherit: true,
+		basePower: 100,
+		pp: 10
+	},
+	attackorder: {
+		inherit: true,
+		basePower: 100,
+		pp: 10
+	},
+	smog: {
+		inherit: true,
+		basePower: 60,
+		secondary: {
+			chance: 100,
+			status: 'psn'
+		}
+	},
+	octazooka: {
+		inherit: true,
+		basePower: 75,
+		accuracy: 90,
+		secondary: {
+			chance: 100,
+			boosts: {
+				accuracy: -1
+			}
+		}
+	},
+	leaftornado: {
+		inherit: true,
+		basePower: 75,
+		accuracy: 90,
+		secondary: {
+			chance: 100,
+			boosts: {
+				accuracy: -1
+			}
+		}
+	},
+	muddywater: {
+		inherit: true,
+		basePower: 85,
+		accuracy: 100,
+		secondary: {
+			chance: 30,
+			boosts: {
+				accuracy: -1
+			}
+		}
 	},
 	triattack: {
 		num: 161,

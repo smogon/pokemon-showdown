@@ -789,7 +789,7 @@ module.exports = (function () {
 						if (eventData.shiny) {
 							set.shiny = true;
 						}
-						if (eventData.abilities && eventData.abilities[0] !== ability.id && eventData.abilities[1] !== ability.id) {
+						if (eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
 							problems.push(name+" must come from a specific event that gives it "+eventData.abilities.join(" or ")+".");
 						}
 						if (eventData.gender) {

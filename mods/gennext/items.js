@@ -16,7 +16,7 @@ exports.BattleItems = {
 		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.id === 'technoblast') {
-				return basePower * 1.3;
+				return basePower * 1.1;
 			}
 		},
 		onDrive: 'Fire',
@@ -39,7 +39,7 @@ exports.BattleItems = {
 		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.id === 'technoblast') {
-				return basePower * 1.3;
+				return basePower * 1.1;
 			}
 		},
 		onDrive: 'Ice',
@@ -62,7 +62,7 @@ exports.BattleItems = {
 		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.id === 'technoblast') {
-				return basePower * 1.3;
+				return basePower * 1.1;
 			}
 		},
 		onDrive: 'Water',
@@ -85,7 +85,7 @@ exports.BattleItems = {
 		},
 		onBasePower: function(basePower, user, target, move) {
 			if (move.id === 'technoblast') {
-				return basePower * 1.3;
+				return basePower * 1.1;
 			}
 		},
 		onDrive: 'Electric',
@@ -108,9 +108,15 @@ exports.BattleItems = {
 		onModifyPokemon: function(pokemon) {
 			if (pokemon.template.species === 'Unown') {
 				// Strange Orb
-				pokemon.stats.spa *= 3;
+				pokemon.stats.spa *= 2;
 				pokemon.stats.spe *= 2;
 				pokemon.types = [pokemon.hpType];
+			}
+		},
+		onModifyStats: function(stats, pokemon) {
+			if (pokemon.template.species === 'Shuckle') {
+				stats.def *= 1.5;
+				stats.spd *= 1.5;
 			}
 		},
 		onFoeBasePower: function(basePower, attacker, defender, move) {
@@ -129,6 +135,11 @@ exports.BattleItems = {
 				}
 			}
 		},
+		// onResidual: function(pokemon) {
+		// 	if (pokemon.template.species === 'Shuckle') {
+		// 		this.heal(clampIntRange(pokemon.maxhp/16, 1));
+		// 	}
+		// },
 		desc: "Raises Farfetch'd's critical hit rate two stages."
 	},
 };
