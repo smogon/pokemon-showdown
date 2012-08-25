@@ -40,8 +40,8 @@ Major changes:
   - Shadow Force: 100% Ghost-Curse, 30 bp
   - Sky Drop: 100% -1 Def, 40 bp  
      
-- Flower Gift has an additional effect: if Sunny Day is used, the next
-  switch-in receives +1 Atk, +1 SpD
+- Flower Gift now only boosts Sp. Def, but if Sunny Day is used while Cherrim
+  is out, the next switch-in also receives +1 SpD
 
 - Relic Song switches Meloetta's SpA and Atk EVs. Nature is not changed.
   Its secondary is now 40% -1 Atk -1 SpA (80% after Serene Grace)
