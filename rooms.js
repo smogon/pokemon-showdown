@@ -202,6 +202,15 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			}
 		}
 	};
+	this.send = function(message, user) {
+		if (user) {
+			user.sendTo(selfR, message);
+		} else {
+			for (var i in selfR.users) {
+				selfR.users[i].sendTo(selfR, message);
+			}
+		}
+	};
 	this.tryDestroy = function() {
 		for (var i in selfR.users) {
 			// don't destroy ourselves if there are users in this room
