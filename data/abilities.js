@@ -1128,7 +1128,7 @@ exports.BattleAbilities = {
 		desc: "Prevents all damage except from direct attacks.",
 		shortDesc: "This Pokemon can only be damaged by direct attacks.",
 		onDamage: function(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
+			if (effect.effectType !== 'Move' && effect.id !== 'confusion') {
 				return false;
 			}
 		},
