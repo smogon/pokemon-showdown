@@ -51,11 +51,25 @@ exports.BattleAbilities = {
 				move.sideCondition = 'flowergift';
 			}
 		},
+		onModifyStats: function(stats, pokemon) {
+			if (this.isWeather('sunnyday')) {
+				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunny') {
+					this.effectData.forme = 'Sunny';
+					this.add('-formechange', pokemon, 'Cherrim-Sunny');
+					this.add('-message', pokemon.name+' transformed! (placeholder)');
+					this.boost({spd:1});
+				}
+			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
+				delete this.effectData.forme;
+				this.add('-formechange', pokemon, 'Cherrim');
+				this.add('-message', pokemon.name+' transformed! (placeholder)');
+			}
+		},
 		effect: {
 			onSwitchInPriority: 1,
 			onSwitchIn: function(target) {
 				if (!target.fainted) {
-					this.boost({atk:1,spd:1}, target, target, this.getAbility('flowergift'));
+					this.boost({spd:1}, target, target, this.getAbility('flowergift'));
 				}
 				target.side.removeSideCondition('flowergift');
 			}
