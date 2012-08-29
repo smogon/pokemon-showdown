@@ -1336,7 +1336,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 	case 'modlog':
-		if (!user.can('mute')) {
+		if (!user.can('modlog')) {
 			emit(socket, 'console', '/modlog - Access denied.');
 			return false;
 		}
