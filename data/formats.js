@@ -47,6 +47,19 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
+	oususpecttest: {
+		effectType: 'Format',
+		name: "OU Suspect Test",
+		challengeDefault: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		teambuilderFormat: 'ou',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: [
+			'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Normal', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-A', 'Deoxys-S', 'Dialga', 'Excadrill', 'Giratina', 'Giratina-O', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-S', 'Thundurus', 'Zekrom', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Sand Veil'
+		]
+	},
 	cap: {
 		effectType: 'Format',
 		name: "CAP",
