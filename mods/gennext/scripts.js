@@ -19,6 +19,17 @@ exports.BattleScripts = {
 		// Roserade gets Smog
 		this.data.Learnsets.roserade.learnset.smog = ['5L100'];
 
+		// Volcarona nerf: Tail Glow instead of Quiver Dance
+		delete this.data.Learnsets.volcarona.learnset.quiverdance;
+		this.data.Learnsets.volcarona.learnset.tailglow = ['5L100'];
+
+		// Meloetta: Fiery Dance
+		this.data.Learnsets.meloetta.learnset.fierydance = ['5L100'];
+
+		// Scolipede, Milotic: Coil
+		this.data.Learnsets.milotic.learnset.coil = ['5L100'];
+		this.data.Learnsets.scolipede.learnset.coil = ['5L100'];
+
 		// Every DW ability that isn't Shadow Tag becomes released
 		for (var i in this.data.FormatsData) {
 			if (i !== 'chandelure' && i !== 'gothitelle') {
@@ -26,4 +37,4 @@ exports.BattleScripts = {
 			}
 		}
 	}
-}
+};
