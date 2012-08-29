@@ -43,8 +43,9 @@ Major changes:
 - Flower Gift now only boosts Sp. Def, but if Sunny Day is used while Cherrim
   is out, the next switch-in also receives +1 SpD
 
-- Relic Song switches Meloetta's SpA and Atk EVs. Nature is not changed.
-  Its secondary is now 40% -1 Atk -1 SpA (80% after Serene Grace)
+- Relic Song switches Meloetta's SpA and Atk EVs, boosts, and certain natures,
+  specifically: Modest <-> Adamant, Jolly <-> Timid, other natures are left
+  untouched. Its secondary is now 40% -1 Atk -1 SpA (80% after Serene Grace).
 
 - Shuckle gets Berry Shell (select "Stick" in the teambuilder), which gives a
   50% boost to Defense and Sp. Def. It also learns Leech Seed.

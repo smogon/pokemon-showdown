@@ -313,16 +313,34 @@ exports.BattleMovedex = {
 			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
+			var natureChange = {
+				'Modest': 'Adamant',
+				'Adamant': 'Modest',
+				'Timid': 'Jolly',
+				'Jolly': 'Timid'
+			};
 			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta')) {
 				this.add('-formechange', pokemon, 'Meloetta');
 				var tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
+				if (natureChange[pokemon.set.nature]) pokemon.set.nature = natureChange[pokemon.set.nature];
+				var Atk2SpA = (pokemon.boosts.spa||0) - (pokemon.boosts.atk||0);
+				this.boost({
+					atk: Atk2SpA,
+					spa: -Atk2SpA
+				}, pokemon);
 			} else if (pokemon.transformInto('Meloetta-Pirouette')) {
 				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
 				var tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
+				if (natureChange[pokemon.set.nature]) pokemon.set.nature = natureChange[pokemon.set.nature];
+				var Atk2SpA = (pokemon.boosts.spa||0) - (pokemon.boosts.atk||0);
+				this.boost({
+					atk: Atk2SpA,
+					spa: -Atk2SpA
+				}, pokemon);
 			}
 			// renderer takes care of this for us
 			pokemon.transformed = false;
