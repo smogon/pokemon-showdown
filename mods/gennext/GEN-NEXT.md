@@ -54,6 +54,10 @@ Major changes:
 - Shuckle gets Berry Shell (select "Stick" in the teambuilder), which gives a
   50% boost to Defense and Sp. Def. It also learns Leech Seed.
 
+- Echoed Voice now has 80 base power, hits once, and then, 2 turns later,
+  hits again for 80 base power. It's like Doom Desire, except it still hits
+  that first time.
+
 - Twister is now a Flying-type Scald that confuses instead of burns
 
 - Drain Punch is now Poison-type
@@ -87,6 +91,11 @@ Minor move changes:
 
 - Smog is now 60 base power, 100% poison
 
+- Sludge is now 60 base power, 100% poison
+
+- Sound-based moves are no longer affected by immunities (ghosts can hear
+  things)
+
 Minor learnset changes:
 
 - Masquerain gets Surf
@@ -98,7 +107,7 @@ Minor learnset changes:
 
 - Shuckle gets Leech Seed
 
-- Roserade gets Smog
+- Roserade gets Sludge
 
 - Meloetta gets Fiery Dance
 
