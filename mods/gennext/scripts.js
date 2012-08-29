@@ -16,8 +16,8 @@ exports.BattleScripts = {
 		// Shuckle gets Leech Seed
 		this.data.Learnsets.shuckle.learnset.leechseed = ['5L100'];
 
-		// Roserade gets Smog
-		this.data.Learnsets.roserade.learnset.smog = ['5L100'];
+		// Roserade gets Sludge
+		this.data.Learnsets.roserade.learnset.sludge = ['5L100'];
 
 		// Volcarona nerf: Tail Glow instead of Quiver Dance
 		delete this.data.Learnsets.volcarona.learnset.quiverdance;

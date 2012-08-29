@@ -298,7 +298,28 @@ exports.BattleMovedex = {
 	******************************************************************/
 	snore: {
 		inherit: true,
-		basePower: 100
+		basePower: 100,
+		affectedByImmunities: false
+	},
+	/******************************************************************
+	Sound-based Normal-type moves:
+	- not affected by immunities
+
+	Justification:
+	- they're already affected by Soundproof, also, ghosts can hear
+	  sounds
+	******************************************************************/
+	hypervoice: {
+		inherit: true,
+		affectedByImmunities: false
+	},
+	round: {
+		inherit: true,
+		affectedByImmunities: false
+	},
+	uproar: {
+		inherit: true,
+		affectedByImmunities: false
 	},
 	/******************************************************************
 	Relic Song:
@@ -309,6 +330,7 @@ exports.BattleMovedex = {
 	******************************************************************/
 	relicsong: {
 		inherit: true,
+		affectedByImmunities: false,
 		onHit: function(target, pokemon) {
 			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
@@ -526,6 +548,43 @@ exports.BattleMovedex = {
 		accuracy: 100
 	},
 	/******************************************************************
+	Echoed Voice:
+	- change
+
+	Justification:
+	- no one uses Echoed Voice.
+	******************************************************************/
+	echoedvoice: {
+		inherit: true,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		isViable: true,
+		priority: 0,
+		isNotProtectable: true,
+		affectedByImmunities: false,
+		onHit: function(target, source) {
+			source.side.addSideCondition('futuremove');
+			if (source.side.sideConditions['futuremove'].positions[source.position]) {
+				return false;
+			}
+			source.side.sideConditions['futuremove'].positions[source.position] = {
+				duration: 3,
+				move: 'echoedvoice',
+				targetPosition: target.position,
+				source: source,
+				moveData: {
+					basePower: 80,
+					category: "Special",
+					type: 'Normal'
+				}
+			};
+			this.add('-start', source, 'Echoed Voice');
+		},
+		target: "normal",
+		type: "Normal"
+	},
+	/******************************************************************
 	Signature moves and other moves with limited distribution:
 	- buffed in various ways
 
@@ -547,6 +606,14 @@ exports.BattleMovedex = {
 		pp: 10
 	},
 	smog: {
+		inherit: true,
+		basePower: 60,
+		secondary: {
+			chance: 100,
+			status: 'psn'
+		}
+	},
+	sludge: {
 		inherit: true,
 		basePower: 60,
 		secondary: {
