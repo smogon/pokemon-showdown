@@ -354,6 +354,35 @@ exports.BattleMovedex = {
 		},
 	},
 	/******************************************************************
+	Stealth Rock:
+	- 1/4 damage to Flying-types, 1/8 damage to everything else
+
+	Justification:
+	- Never has one move affected the viability of types been affected
+	  by one move to such an extent. Stealth Rock makes many
+	  interesting pokemon NU, changing it gives them a fighting chance.
+
+	Flavor justification:
+	- Removes from it the status of only residual damage affected by
+	  weaknesses/resistances, which is nice. The double damage to
+	  Flying can be explained as counteracting Flying's immunity to
+	  Spikes.
+	******************************************************************/
+	stealthrock: {
+		inherit: true,
+		effect: {
+			// this is a side condition
+			onStart: function(side) {
+				this.add('-sidestart',side,'move: Stealth Rock');
+			},
+			onSwitchIn: function(pokemon) {
+				var factor = 8;
+				if (pokemon.hasType('Flying')) factor = 4;
+				var damage = this.damage(pokemon.maxhp/factor);
+			}
+		}
+	},
+	/******************************************************************
 	Multi-hit moves:
 	- changed to perfect accuracy
 

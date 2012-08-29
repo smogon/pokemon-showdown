@@ -21,6 +21,10 @@ Major changes:
   items). Weather moves have +1 priority. Forecast and Flower Gift will make
   weather moves last forever.
 
+- Stealth Rock now does 1/4 damage against Flying-types, and 1/8 damage against
+  everything else. To prevent Volcarona from shooting into Ubers, it no longer
+  gets Quiver Dance, but instead gets Tail Glow.
+
 - Every DW ability other than on Chandelure and Gothitelle is released.
 
 - Moves with a charge turn are now a lot more powerful. They remove Protect and
@@ -96,11 +100,17 @@ Minor learnset changes:
 
 - Roserade gets Smog
 
+- Meloetta gets Fiery Dance
+
+- Milotic and Scolipede get Coil
+
 Minor ability changes:
 
 - Compoundeyes now grants 1.5x accuracy
 
 - Solid Rock and Filter now reduce 1/2 damage of SE moves, not 1/4
+
+- Outrage, Thrash, and Petal Dance don't lock if the user has Own Tempo
 
 Tier changes:
 
