@@ -303,7 +303,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":30,"gender":"F","abilities":["lightningrod"],"moves":["sing","teeterdance","encore","electroball"]},
 			{"generation":5,"level":50,"abilities":["static"],"moves":["fly","irontail","electroball","quickattack"]},
 			{"generation":5,"level":100,"gender":"F","abilities":["static"],"moves":["thunder","volttackle","grassknot","quickattack"]},
-			{"generation":5,"level":50,"gender":"F","abilities":["static"],"moves":["extremespeed","thunderbolt","grassknot","brickbreak"]}
+			{"generation":5,"level":50,"gender":"F","abilities":["static"],"moves":["extremespeed","thunderbolt","grassknot","brickbreak"]},
 			{"generation":5,"level":50,"gender":"F","abilities":["lightningrod"],"moves":["fly","thunderbolt","grassknot","protect"]}
 		],
 		dreamWorldRelease: true,
