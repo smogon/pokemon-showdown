@@ -304,6 +304,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"abilities":["static"],"moves":["fly","irontail","electroball","quickattack"]},
 			{"generation":5,"level":100,"gender":"F","abilities":["static"],"moves":["thunder","volttackle","grassknot","quickattack"]},
 			{"generation":5,"level":50,"gender":"F","abilities":["static"],"moves":["extremespeed","thunderbolt","grassknot","brickbreak"]}
+			{"generation":5,"level":50,"gender":"F","abilities":["lightningrod"],"moves":["fly","thunderbolt","grassknot","protect"]}
 		],
 		dreamWorldRelease: true,
 		tier: "NU"
@@ -927,12 +928,12 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	rhyhorn: {
-		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"toxic":1,"rockblast":1},
+		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockblast":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	rhydon: {
-		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"toxic":1,"rockblast":1},
+		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockblast":1},
 		eventPokemon: [
 			{"generation":3,"level":46,"abilities":["lightningrod","rockhead"],"moves":["helpinghand","megahorn","scaryface","earthquake"]}
 		],
@@ -940,7 +941,7 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	rhyperior: {
-		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"toxic":1,"rockblast":1},
+		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockblast":1},
 		dreamWorldRelease: true,
 		tier: "UU"
 	},
@@ -3405,7 +3406,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	riolu: {
-		viableMoves: {"circlethrow":1,"roar":1,"copycat":1,"toxic":1},
+		viableMoves: {"crunch":1,"roar":1,"copycat":1,"drainpunch":1},
 		eventPokemon: [
 			{"generation":4,"level":30,"gender":"M","nature":"Serious","abilities":["steadfast"],"moves":["aurasphere","shadowclaw","bulletpunch","drainpunch"]}
 		],
