@@ -239,11 +239,12 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's type changes according to the type of the last move that hit this Pokemon.",
 		shortDesc: "This Pokemon's type changes to match the type of the last move that hit it.",
 		onAfterMoveSecondary: function(target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.category !== 'Status') {
+			if (target.isActive && effect && effect.effectType === 'Move' && effect.category !== 'Status') {
 				target.addVolatile('colorchange', source, effect);
 			}
 		},
 		effect: {
+			noCopy: true,
 			onStart: function(target, source, effect) {
 				this.effectData.type = 'Normal';
 				if (effect && effect.type && effect.type !== 'Normal') {
