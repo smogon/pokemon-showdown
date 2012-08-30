@@ -229,6 +229,16 @@ exports.BattleMovedex = {
 		basePower: 60,
 		pp: 5
 	},
+	dreameater: {
+		inherit: true,
+		desc: "Deals damage to one adjacent target, if it is asleep and does not have a Substitute. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		onTryHit: function(target) {
+			if (target.status !== 'slp' || target.volatiles['substitute']) {
+				this.add('-immune', target.id, '[msg]');
+				return null;
+			}
+		}
+	},
 	embargo: {
 		inherit: true,
 		//desc: "",
