@@ -81,7 +81,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":70,"abilities":["overgrow"],"moves":["sweetscent","growth","solarbeam","synthesis"]},
 			{"generation":3,"level":10,"gender":"M","abilities":["overgrow"],"moves":["tackle","growl","leechseed","vinewhip"]},
-			{"generation":5,"level":10,"gender":"M","abilities":["chlorophyll"],"moves":["tackle","growl","leechseed","vinewhip"]}
+			{"generation":5,"level":10,"gender":"M","abilities":["chlorophyll"],"moves":["tackle","growl","leechseed","vinewhip"]},
+			{"generation":5,"level":1,"abilities":["overgrow"],"moves":["falseswipe","block","frenzyplant","weatherball"]}
 		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
@@ -107,7 +108,8 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":40,"gender":"M","nature":"Naive","abilities":["blaze"],"moves":["return","hiddenpower","quickattack","howl"]},
 			{"generation":4,"level":40,"gender":"M","nature":"Naughty","abilities":["blaze"],"moves":["return","hiddenpower","quickattack","howl"]},
 			{"generation":5,"level":10,"gender":"M","abilities":["solarpower"],"moves":["scratch","growl","ember","smokescreen"]},
-			{"generation":4,"level":40,"gender":"M","nature":"Hardy","abilities":["blaze"],"moves":["return","hiddenpower","quickattack","howl"]}
+			{"generation":4,"level":40,"gender":"M","nature":"Hardy","abilities":["blaze"],"moves":["return","hiddenpower","quickattack","howl"]},
+			{"generation":5,"level":1,"abilities":["blaze"],"moves":["falseswipe","block","blastburn","acrobatics"]}
 		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
@@ -132,7 +134,8 @@ exports.BattleFormatsData = {
 		viableMoves: {"surf":1,"icebeam":1,"hydropump":1,"rapidspin":1,"scald":1,"aquajet":1,"toxic":1},
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","abilities":["torrent"],"moves":["tackle","tailwhip","bubble","withdraw"]},
-			{"generation":5,"level":10,"gender":"M","abilities":["raindish"],"moves":["tackle","tailwhip","bubble","withdraw"]}
+			{"generation":5,"level":10,"gender":"M","abilities":["raindish"],"moves":["tackle","tailwhip","bubble","withdraw"]},
+			{"generation":5,"level":1,"abilities":["torrent"],"moves":["falseswipe","block","hydrocannon","followme"]}
 		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
