@@ -1618,6 +1618,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
  * Pass the corresponding socket to give the user an error, if not
  */
 function canTalk(user, room, socket) {
+	if (!user.named) return false;
 	if (user.muted) {
 		if (socket) emit(socket, 'console', 'You are muted.');
 		return false;
