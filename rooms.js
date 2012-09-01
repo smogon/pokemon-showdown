@@ -964,7 +964,7 @@ function LobbyRoom(roomid) {
 	this.isEmpty = function() { return false; };
 	this.isFull = function() { return false; };
 	this.chat = function(user, message, socket) {
-		if (!user.named || !message || !message.trim || !message.trim().length) return;
+		if (!message || !message.trim || !message.trim().length) return;
 		if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
