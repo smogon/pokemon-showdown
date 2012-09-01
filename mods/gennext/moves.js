@@ -526,6 +526,12 @@ exports.BattleMovedex = {
 		pp: 15,
 		type: "Flying"
 	},
+	wingattack: {
+		inherit: true,
+		basePower: 40,
+		accuracy: true,
+		multihit: [2,2]
+	},
 	/******************************************************************
 	Moves with not enough drawbacks:
 	- intensify drawbacks
@@ -653,6 +659,12 @@ exports.BattleMovedex = {
 				accuracy: -1
 			}
 		}
+	},
+	powergem: {
+		inherit: true,
+		basePower: 40,
+		accuracy: true,
+		multihit: [2,2]
 	},
 	triattack: {
 		num: 161,
