@@ -1341,14 +1341,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 		var lines = parseInt(target || 15, 10);
-		var command = 'tail -'+lines+' ';
+		if (lines > 100) lines = 100;
 		var filename = 'logs/modlog.txt';
-		if (target.match(/^["'].+["']$/)) target = target.substring(1,target.length-1);
+		var command = 'tail -'+lines+' '+filename;
+		var grepLimit = 100;
 		if (!lines || lines < 0) { // searching for a word instead
-			command = 'grep -i \''+target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]')+'\' ';
-			console.log(command)
+			if (target.match(/^["'].+["']$/)) target = target.substring(1,target.length-1);
+			command = "awk '{print NR,$0}' "+filename+" | sort -nr | cut -d' ' -f2- | grep -m"+grepLimit+" -i '"+target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]')+"'";
 		}
-		require('child_process').exec(command+filename, function(error, stdout, stderr) {
+		
+		require('child_process').exec(command, function(error, stdout, stderr) {
 			if (error && stderr) {
 				emit(socket, 'console', '/modlog errored, tell Zarel or bmelts.');
 				console.log('/modlog error: '+error);
@@ -1364,7 +1366,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				if (!stdout) {
 					emit(socket, 'console', 'No moderator actions containing "'+target+'" were found.');
 				} else {
-					emit(socket, 'message', 'Displaying all logged actions containing "'+target+'":\n\n'+sanitize(stdout));
+					emit(socket, 'message', 'Displaying the last '+grepLimit+' logged actions containing "'+target+'":\n\n'+sanitize(stdout));
 				}
 			}
 		});
