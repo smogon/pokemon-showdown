@@ -910,7 +910,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
 			}
