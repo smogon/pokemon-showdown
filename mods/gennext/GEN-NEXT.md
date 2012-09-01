@@ -5,6 +5,10 @@ Generation NEXT makes the following changes:
 
 Major changes:
 
+- Stealth Rock now does 1/4 damage against Flying-types, and 1/8 damage against
+  everything else. To prevent Volcarona from shooting into Ubers, it no longer
+  gets Quiver Dance, but instead gets Tail Glow.
+
 - Drives will change Genesect's typing immediately after switch-in, to Bug/Ice,
   Bug/Fire, Bug/Electric, or Bug/Water. (Basically, it will change Genesect's
   type, except Genesect will still take neutral damage from SR)
@@ -21,11 +25,7 @@ Major changes:
   items). Weather moves have +1 priority. Forecast and Flower Gift will make
   weather moves last forever.
 
-- Stealth Rock now does 1/4 damage against Flying-types, and 1/8 damage against
-  everything else. To prevent Volcarona from shooting into Ubers, it no longer
-  gets Quiver Dance, but instead gets Tail Glow.
-
-- Every DW ability other than on Chandelure and Gothitelle is released.
+- Every DW ability other than on Chandelure is released.
 
 - Moves with a charge turn are now a lot more powerful. They remove Protect and
   Substitute before hitting, they always crit (although their base power has
@@ -96,6 +96,8 @@ Minor move changes:
 - Sound-based moves are no longer affected by immunities (ghosts can hear
   things)
 
+- Wing Attack and Power Gem are now like Dual Chop: 40 base power, 2-hit
+
 Minor learnset changes:
 
 - Masquerain gets Surf
@@ -124,3 +126,21 @@ Minor ability changes:
 Tier changes:
 
 - DrizzleSwim is no longer banned in OU
+
+- Kyurem is banned (by the time NEXT is done, it would presumably have
+  received enough buffs to be Uber)
+
+Metagame implication
+--------------------
+
+Obviously, the Pokemon that have received major changes (Genesect, Meloetta,
+Cherrim, Castform, Unown, Shuckle) should be more common than they were
+before.
+
+The variety of buffs to various moves may lead Smeargle to advance.
+
+With the Stealth Rock change, many pokemon previously weak to Stealth Rock
+should be more popular.
+
+Weather has been turned upside-down - with the Cherrim buffs, Sun is
+currently quite popular.
