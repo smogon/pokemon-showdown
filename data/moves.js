@@ -10245,6 +10245,10 @@ exports.BattleMovedex = {
 				this.add('-fail', target);
 				return null;
 			}
+			if (defender.volatiles['protect']) {
+				this.add('-activate', target, 'Protect');
+				return null;
+			}
 			if (defender.volatiles['bounce'] || defender.volatiles['dig'] || defender.volatiles['dive'] || defender.volatiles['fly'] || defender.volatiles['shadowforce']) {
 				this.add('-miss', attacker);
 				return null;
