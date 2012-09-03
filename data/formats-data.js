@@ -4209,7 +4209,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1,"trick":1},
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
-		tier: "NU"
+		tier: "BL"
 	},
 	solosis: {
 		viableMoves: {"calmmind":1,"recover":1,"psychic":1,"hiddenpowerfighting":1,"shadowball":1,"trickroom":1,"psyshock":1},
