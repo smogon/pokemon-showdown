@@ -20,6 +20,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80
 	},
+	magicalleaf: {
+		inherit: true,
+		basePower: 80
+	},
 	shadowpunch: {
 		inherit: true,
 		basePower: 80
@@ -110,7 +114,7 @@ exports.BattleMovedex = {
 			duration: 2,
 			onLockMove: 'solarbeam',
 			onStart: function(pokemon) {
-				this.heal(pokemon.maxhp/3);
+				this.heal(pokemon.maxhp/2);
 			}
 		},
 		breaksProtect: true
@@ -143,7 +147,7 @@ exports.BattleMovedex = {
 			duration: 2,
 			onLockMove: 'skullbash',
 			onStart: function(pokemon) {
-				this.boost({def:1,spd:1}, pokemon, pokemon, this.getMove('skullbash'));
+				this.boost({def:1,spd:1,accuracy:1}, pokemon, pokemon, this.getMove('skullbash'));
 			}
 		},
 		breaksProtect: true
