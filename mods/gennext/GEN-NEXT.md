@@ -31,9 +31,9 @@ Major changes:
   Substitute before hitting, they always crit (although their base power has
   been adjusted accordingly), they have perfect accuracy, and one other change
   depending on the move:
-  - SolarBeam: heal 33% on the charge turn, 60 bp
+  - SolarBeam: heal 50% on the charge turn, 60 bp
   - Razor Wind: 100% confusion, 40 bp
-  - Skull Bash: +1 Def, +1 SpD on the charge turn, 50 bp
+  - Skull Bash: +1 Def, +1 SpD, +1 accuracy on the charge turn, 50 bp
   - Sky Attack: 100% -1 Def, 70 bp
   - Freeze Shock: 100% paralysis, 70 bp
   - Ice Burn: 100% burn, 70 bp
@@ -114,6 +114,13 @@ Minor learnset changes:
 - Meloetta gets Fiery Dance
 
 - Milotic and Scolipede get Coil
+
+- Rotom formes learn more things:
+  - Rotom-Wash: BubbleBeam
+  - Rotom-Fan: Hurricane, Twister
+  - Rotom-Frost: Frost Breath
+  - Rotom-Heat: Heat Wave
+  - Rotom-Mow: Magical Leaf
 
 Minor ability changes:
 
