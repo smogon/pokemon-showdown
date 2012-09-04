@@ -91,6 +91,23 @@ exports.BattleItems = {
 		onDrive: 'Electric',
 		desc: "Changes Genesect to Genesect-Shock."
 	},
+	"widelens": {
+		inherit: true,
+		onModifyMove: function(move, user, target) {
+			if (typeof move.accuracy === 'number') {
+				move.accuracy *= 1.3;
+			}
+		}
+	},
+	"zoomlens": {
+		inherit: true,
+		onModifyMove: function(move, user, target) {
+			if (typeof move.accuracy === 'number' && !this.willMove(target)) {
+				this.debug('Zoom Lens boosting accuracy');
+				move.accuracy *= 1.6;
+			}
+		}
+	},
 	"stick": {
 		id: "stick",
 		name: "Stick",

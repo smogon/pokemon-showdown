@@ -408,6 +408,26 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	quiverdance: {
+		// Quiver Dance is nerfed because Volc
+		inherit: true,
+		boosts: {
+			spa: 1,
+			spe: 1,
+			accuracy: 1
+		},
+		onModifyMove: function(move, user) {
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1};
+			if (user.item === 'stick' && GossamerWingUsers[user.template.species]) {
+				move.boosts = {
+					spa: 1,
+					spd: 1,
+					spe: 1,
+					accuracy: 1
+				};
+			}
+		}
+	},
 	/******************************************************************
 	Multi-hit moves:
 	- changed to perfect accuracy
