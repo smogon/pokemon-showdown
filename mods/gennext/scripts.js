@@ -19,10 +19,6 @@ exports.BattleScripts = {
 		// Roserade gets Sludge
 		this.data.Learnsets.roserade.learnset.sludge = ['5L100'];
 
-		// Volcarona nerf: Tail Glow instead of Quiver Dance
-		delete this.data.Learnsets.volcarona.learnset.quiverdance;
-		this.data.Learnsets.volcarona.learnset.tailglow = ['5L100'];
-
 		// Meloetta: Fiery Dance
 		this.data.Learnsets.meloetta.learnset.fierydance = ['5L100'];
 

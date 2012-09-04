@@ -1,13 +1,33 @@
 Generation NEXT!
 ================
 
-Generation NEXT makes the following changes:
+Manifesto
+---------
+
+The goal of NEXT is to improve the diversity of the OU metagame by only doing
+things that could feasibly be done between gens.
+
+That means:
+
+1. no base stat changes
+2. only numbers that make sense like 60%, 30%, etc, not weird numbers like 65%
+3. no buffing OU mons, except maybe tiny buffs to mons at the bottom of OU
+4. no doing things that make zero sense flavor-wise
+
+A good example is what Game Freak did by giving Ditto the Imposter ability.
+This gave a Ditto a role in OU, while still making sense flavor-wise, and
+without doing changes 
+
+Changes
+-------
+
+Generation NEXT currently makes the following changes:
 
 Major changes:
 
 - Stealth Rock now does 1/4 damage against Flying-types, and 1/8 damage against
-  everything else. To prevent Volcarona from shooting into Ubers, it no longer
-  gets Quiver Dance, but instead gets Tail Glow.
+  everything else. To prevent Volcarona from shooting into Ubers, Quiver Dance
+  now grants +1 SpD +1 Spe +1 accuracy.
 
 - Drives will change Genesect's typing immediately after switch-in, to Bug/Ice,
   Bug/Fire, Bug/Electric, or Bug/Water. (Basically, it will change Genesect's
@@ -19,7 +39,8 @@ Major changes:
 
 - Bug/Flying Quiver Dancers get an item named GossamerWing (select "Stick"
   in the teambuilder). It negates the Flying weaknesses (take half damage from
-  Rock, Ice, and Electric moves, and SR).
+  Rock, Ice, and Electric moves, and SR), and adds +1 SpA back to Quiver
+  Dance.
 
 - Weather-inducing abilities now last for only 5 turns (and are unaffected by
   items). Weather moves have +1 priority. Forecast and Flower Gift will make
@@ -129,6 +150,12 @@ Minor ability changes:
 - Solid Rock and Filter now reduce 1/2 damage of SE moves, not 1/4
 
 - Outrage, Thrash, and Petal Dance don't lock if the user has Own Tempo
+
+Minor item changes:
+
+- Zoom Lens now grants 1.6x accuracy
+
+- Wide Lens now grants 1.3x accuracy
 
 Tier changes:
 
