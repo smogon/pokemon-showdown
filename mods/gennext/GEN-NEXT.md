@@ -5,7 +5,7 @@ Manifesto
 ---------
 
 The goal of NEXT is to improve the diversity of the OU metagame by only doing
-things that could feasibly be done between gens.
+things that could plausibly be done between gens.
 
 That means:
 
@@ -16,7 +16,7 @@ That means:
 
 A good example is what Game Freak did by giving Ditto the Imposter ability.
 This gave a Ditto a role in OU, while still making sense flavor-wise, and
-without doing changes 
+without removing anything it used to have.
 
 Changes
 -------
@@ -46,8 +46,10 @@ Major changes:
   items). Weather moves have +1 priority. Forecast and Flower Gift will make
   weather moves last forever.
 
-- Every DW ability other than on Chandelure is released.
-
+- Hail is improved:
+  - Silver Wind, Ominous Wind, and Avalanche deal 1.5x as much damage in Hail
+  - Thick Fat grants immunity to Hail damage
+     
 - Moves with a charge turn are now a lot more powerful. They remove Protect and
   Substitute before hitting, they always crit (although their base power has
   been adjusted accordingly), they have perfect accuracy, and one other change
@@ -65,6 +67,8 @@ Major changes:
   - Shadow Force: 100% Ghost-Curse, 30 bp
   - Sky Drop: 100% -1 Def, 40 bp  
      
+- Every DW ability other than on Chandelure is released.
+
 - Flower Gift now only boosts Sp. Def, but if Sunny Day is used while Cherrim
   is out, the next switch-in also receives +1 SpD
 
@@ -92,6 +96,12 @@ Minor move changes:
 
 - Multi-hit moves are now all perfect-accuracy
 
+- Whirlwind and Roar have perfect accuracy
+
+- Silver Wind, Ominous Wind, and AncientPower have a 60% chance of raising
+  one random stat by 1, rather than a 10% chance of raising every stat
+  (accuracy and evasion still can't be raised, unlike with Acupressure)
+
 - Twineedle has a new base power of 50
 
 - Tri Attack now hits 3 times and has a base power of 30
@@ -118,6 +128,8 @@ Minor move changes:
   things)
 
 - Wing Attack and Power Gem are now like Dual Chop: 40 base power, 2-hit
+
+- Glaciate now has 100 base power, 100% accuracy
 
 Minor learnset changes:
 
