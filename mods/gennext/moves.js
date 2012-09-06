@@ -429,6 +429,142 @@ exports.BattleMovedex = {
 		}
 	},
 	/******************************************************************
+	Silver Wind, Ominous Wind, AncientPower:
+	- 60% chance of raising one stat, instead of 10% chance of raising
+	  all stats
+	- Silver Wind, Ominous Wind: 90 base power in Hail
+
+	Justification:
+	- Hail sucks
+
+	Precedent:
+	- Many weathers strengthen moves. SolarBeam's base power is
+	  modified by weather.
+
+	Flavor justification:
+	- Winds are more damaging when it's hailing.
+	******************************************************************/
+	silverwind: {
+		inherit: true,
+		basePowerCallback: function() {
+			if (this.isWeather('hail')) {
+				return 90;
+			}
+			return 60;
+		},
+		secondary: {
+			chance: 60,
+			onHit: function(target) {
+				var stats = [];
+				for (var i in target.boosts) {
+					if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+						stats.push(i);
+					}
+				}
+				if (stats.length) {
+					var i = stats[this.random(stats.length)];
+					var boost = {};
+					boost[i] = 1;
+					this.boost(boost);
+				} else {
+					return false;
+				}
+			}
+		}
+	},
+	ominouswind: {
+		inherit: true,
+		basePowerCallback: function() {
+			if (this.isWeather('hail')) {
+				return 90;
+			}
+			return 60;
+		},
+		secondary: {
+			chance: 60,
+			onHit: function(target) {
+				var stats = [];
+				for (var i in target.boosts) {
+					if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+						stats.push(i);
+					}
+				}
+				if (stats.length) {
+					var i = stats[this.random(stats.length)];
+					var boost = {};
+					boost[i] = 1;
+					this.boost(boost);
+				} else {
+					return false;
+				}
+			}
+		}
+	},
+	ancientpower: {
+		inherit: true,
+		secondary: {
+			chance: 60,
+			onHit: function(target) {
+				var stats = [];
+				for (var i in target.boosts) {
+					if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+						stats.push(i);
+					}
+				}
+				if (stats.length) {
+					var i = stats[this.random(stats.length)];
+					var boost = {};
+					boost[i] = 1;
+					this.boost(boost);
+				} else {
+					return false;
+				}
+			}
+		}
+	},
+	/******************************************************************
+	Moves relating to Hail:
+	- boost in some way
+
+	Justification:
+	- Hail sucks
+	******************************************************************/
+	avalanche: {
+		inherit: true,
+		basePowerCallback: function(pokemon, source) {
+			if ((source.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn)) {
+				this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
+				return this.isWeather('hail')?180:120;
+			}
+			return this.isWeather('hail')?90:60;
+		}
+	},
+	/******************************************************************
+	Direct phazing moves:
+	- changed to perfect accuracy
+
+	Justification:
+	- NEXT has buffed perfect accuracy to the point where unbanning
+	  +evasion could be viable.
+	- as the primary counter to set-up, these should be able to counter
+	  DT (and subDT) in case they are ever unbanned.
+
+	Precedent:
+	- Haze, a move with a similar role, has perfect accuracy
+
+	Flavor justification:
+	- Whirlwinds and roaring are wide-area enough that dodging them
+	  isn't generally feasible.
+	******************************************************************/
+	roar: {
+		inherit: true,
+		accuracy: true
+	},
+	whirlwind: {
+		inherit: true,
+		accuracy: true
+	},
+	/******************************************************************
 	Multi-hit moves:
 	- changed to perfect accuracy
 
@@ -683,6 +819,11 @@ exports.BattleMovedex = {
 				accuracy: -1
 			}
 		}
+	},
+	glaciate: {
+		inherit: true,
+		basePower: 100,
+		accuracy: 100
 	},
 	powergem: {
 		inherit: true,
