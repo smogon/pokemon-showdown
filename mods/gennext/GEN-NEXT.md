@@ -1,8 +1,8 @@
 Generation NEXT!
-================
+========================================================================
 
 Manifesto
----------
+------------------------------------------------------------------------
 
 The goal of NEXT is to improve the diversity of the OU metagame by only doing
 things that could plausibly be done between gens.
@@ -19,7 +19,7 @@ This gave a Ditto a role in OU, while still making sense flavor-wise, and
 without removing anything it used to have.
 
 Changes
--------
+------------------------------------------------------------------------
 
 Generation NEXT currently makes the following changes:
 
@@ -48,7 +48,7 @@ Major changes:
 
 - Hail is improved:
   - Silver Wind, Ominous Wind, and Avalanche deal 1.5x as much damage in Hail
-  - Thick Fat grants immunity to Hail damage
+  - Thick Fat grants immunity to Hail damage  
      
 - Moves with a charge turn are now a lot more powerful. They remove Protect and
   Substitute before hitting, they always crit (although their base power has
@@ -177,7 +177,7 @@ Tier changes:
   received enough buffs to be Uber)
 
 Metagame implication
---------------------
+------------------------------------------------------------------------
 
 Obviously, the Pokemon that have received major changes (Genesect, Meloetta,
 Cherrim, Castform, Unown, Shuckle) should be more common than they were

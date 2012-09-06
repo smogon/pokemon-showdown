@@ -37,14 +37,14 @@ Showdown currently supports, in order of preference:
  - Chrome
  - Firefox
  - Safari
- - Safari for iPhone/iPod/iPad
+ - Chrome/Firefox/Safari for various mobile devices
  - Opera
  - Firefox for Android
  - IE9+
 
-IE8 has a few teambuilder issues that will be worked out when I have time.
+IE8 support can technically be added without too much difficulty, but it doesn't run PS fast enough to be usable.
 
-As for older browsers (Firefox 3.6, IE7), I won't go out of my way to support them, but if there's a simple fix, you can suggest it to me and I'll implement it.
+As for older browsers (Firefox 3.6), I won't go out of my way to support them, but if there's a simple fix, you can suggest it to me and I'll implement it.
 
 Credits
 ------------------------------------------------------------------------
