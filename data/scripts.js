@@ -359,7 +359,7 @@ exports.BattleScripts = {
 				this.dragIn(target.side);
 			}
 		}
-		if (move.selfSwitch) {
+		if (move.selfSwitch && pokemon.hp) {
 			pokemon.switchFlag = move.selfSwitch;
 		}
 		return damage;

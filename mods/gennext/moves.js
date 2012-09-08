@@ -20,6 +20,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80
 	},
+	magicalleaf: {
+		inherit: true,
+		basePower: 80
+	},
 	shadowpunch: {
 		inherit: true,
 		basePower: 80
@@ -110,7 +114,7 @@ exports.BattleMovedex = {
 			duration: 2,
 			onLockMove: 'solarbeam',
 			onStart: function(pokemon) {
-				this.heal(pokemon.maxhp/3);
+				this.heal(pokemon.maxhp/2);
 			}
 		},
 		breaksProtect: true
@@ -143,7 +147,7 @@ exports.BattleMovedex = {
 			duration: 2,
 			onLockMove: 'skullbash',
 			onStart: function(pokemon) {
-				this.boost({def:1,spd:1}, pokemon, pokemon, this.getMove('skullbash'));
+				this.boost({def:1,spd:1,accuracy:1}, pokemon, pokemon, this.getMove('skullbash'));
 			}
 		},
 		breaksProtect: true
@@ -298,7 +302,28 @@ exports.BattleMovedex = {
 	******************************************************************/
 	snore: {
 		inherit: true,
-		basePower: 100
+		basePower: 100,
+		affectedByImmunities: false
+	},
+	/******************************************************************
+	Sound-based Normal-type moves:
+	- not affected by immunities
+
+	Justification:
+	- they're already affected by Soundproof, also, ghosts can hear
+	  sounds
+	******************************************************************/
+	hypervoice: {
+		inherit: true,
+		affectedByImmunities: false
+	},
+	round: {
+		inherit: true,
+		affectedByImmunities: false
+	},
+	uproar: {
+		inherit: true,
+		affectedByImmunities: false
 	},
 	/******************************************************************
 	Relic Song:
@@ -309,20 +334,39 @@ exports.BattleMovedex = {
 	******************************************************************/
 	relicsong: {
 		inherit: true,
+		affectedByImmunities: false,
 		onHit: function(target, pokemon) {
 			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
+			var natureChange = {
+				'Modest': 'Adamant',
+				'Adamant': 'Modest',
+				'Timid': 'Jolly',
+				'Jolly': 'Timid'
+			};
 			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta')) {
 				this.add('-formechange', pokemon, 'Meloetta');
 				var tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
+				if (natureChange[pokemon.set.nature]) pokemon.set.nature = natureChange[pokemon.set.nature];
+				var Atk2SpA = (pokemon.boosts.spa||0) - (pokemon.boosts.atk||0);
+				this.boost({
+					atk: Atk2SpA,
+					spa: -Atk2SpA
+				}, pokemon);
 			} else if (pokemon.transformInto('Meloetta-Pirouette')) {
 				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
 				var tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
+				if (natureChange[pokemon.set.nature]) pokemon.set.nature = natureChange[pokemon.set.nature];
+				var Atk2SpA = (pokemon.boosts.spa||0) - (pokemon.boosts.atk||0);
+				this.boost({
+					atk: Atk2SpA,
+					spa: -Atk2SpA
+				}, pokemon);
 			}
 			// renderer takes care of this for us
 			pokemon.transformed = false;
@@ -334,6 +378,191 @@ exports.BattleMovedex = {
 				spa: -1
 			}
 		},
+	},
+	/******************************************************************
+	Stealth Rock:
+	- 1/4 damage to Flying-types, 1/8 damage to everything else
+
+	Justification:
+	- Never has one move affected the viability of types been affected
+	  by one move to such an extent. Stealth Rock makes many
+	  interesting pokemon NU, changing it gives them a fighting chance.
+
+	Flavor justification:
+	- Removes from it the status of only residual damage affected by
+	  weaknesses/resistances, which is nice. The double damage to
+	  Flying can be explained as counteracting Flying's immunity to
+	  Spikes.
+	******************************************************************/
+	stealthrock: {
+		inherit: true,
+		effect: {
+			// this is a side condition
+			onStart: function(side) {
+				this.add('-sidestart',side,'move: Stealth Rock');
+			},
+			onSwitchIn: function(pokemon) {
+				var factor = 8;
+				if (pokemon.hasType('Flying')) factor = 4;
+				var damage = this.damage(pokemon.maxhp/factor);
+			}
+		}
+	},
+	quiverdance: {
+		// Quiver Dance is nerfed because Volc
+		inherit: true,
+		boosts: {
+			spa: 1,
+			spe: 1,
+			accuracy: 1
+		},
+		onModifyMove: function(move, user) {
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1};
+			if (user.item === 'stick' && GossamerWingUsers[user.template.species]) {
+				move.boosts = {
+					spa: 1,
+					spd: 1,
+					spe: 1,
+					accuracy: 1
+				};
+			}
+		}
+	},
+	/******************************************************************
+	Silver Wind, Ominous Wind, AncientPower:
+	- 60% chance of raising one stat, instead of 10% chance of raising
+	  all stats
+	- Silver Wind, Ominous Wind: 90 base power in Hail
+
+	Justification:
+	- Hail sucks
+
+	Precedent:
+	- Many weathers strengthen moves. SolarBeam's base power is
+	  modified by weather.
+
+	Flavor justification:
+	- Winds are more damaging when it's hailing.
+	******************************************************************/
+	silverwind: {
+		inherit: true,
+		basePowerCallback: function() {
+			if (this.isWeather('hail')) {
+				return 90;
+			}
+			return 60;
+		},
+		secondary: {
+			chance: 60,
+			onHit: function(target) {
+				var stats = [];
+				for (var i in target.boosts) {
+					if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+						stats.push(i);
+					}
+				}
+				if (stats.length) {
+					var i = stats[this.random(stats.length)];
+					var boost = {};
+					boost[i] = 1;
+					this.boost(boost);
+				} else {
+					return false;
+				}
+			}
+		}
+	},
+	ominouswind: {
+		inherit: true,
+		basePowerCallback: function() {
+			if (this.isWeather('hail')) {
+				return 90;
+			}
+			return 60;
+		},
+		secondary: {
+			chance: 60,
+			onHit: function(target) {
+				var stats = [];
+				for (var i in target.boosts) {
+					if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+						stats.push(i);
+					}
+				}
+				if (stats.length) {
+					var i = stats[this.random(stats.length)];
+					var boost = {};
+					boost[i] = 1;
+					this.boost(boost);
+				} else {
+					return false;
+				}
+			}
+		}
+	},
+	ancientpower: {
+		inherit: true,
+		secondary: {
+			chance: 60,
+			onHit: function(target) {
+				var stats = [];
+				for (var i in target.boosts) {
+					if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+						stats.push(i);
+					}
+				}
+				if (stats.length) {
+					var i = stats[this.random(stats.length)];
+					var boost = {};
+					boost[i] = 1;
+					this.boost(boost);
+				} else {
+					return false;
+				}
+			}
+		}
+	},
+	/******************************************************************
+	Moves relating to Hail:
+	- boost in some way
+
+	Justification:
+	- Hail sucks
+	******************************************************************/
+	avalanche: {
+		inherit: true,
+		basePowerCallback: function(pokemon, source) {
+			if ((source.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn)) {
+				this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
+				return this.isWeather('hail')?180:120;
+			}
+			return this.isWeather('hail')?90:60;
+		}
+	},
+	/******************************************************************
+	Direct phazing moves:
+	- changed to perfect accuracy
+
+	Justification:
+	- NEXT has buffed perfect accuracy to the point where unbanning
+	  +evasion could be viable.
+	- as the primary counter to set-up, these should be able to counter
+	  DT (and subDT) in case they are ever unbanned.
+
+	Precedent:
+	- Haze, a move with a similar role, has perfect accuracy
+
+	Flavor justification:
+	- Whirlwinds and roaring are wide-area enough that dodging them
+	  isn't generally feasible.
+	******************************************************************/
+	roar: {
+		inherit: true,
+		accuracy: true
+	},
+	whirlwind: {
+		inherit: true,
+		accuracy: true
 	},
 	/******************************************************************
 	Multi-hit moves:
@@ -457,6 +686,12 @@ exports.BattleMovedex = {
 		pp: 15,
 		type: "Flying"
 	},
+	wingattack: {
+		inherit: true,
+		basePower: 40,
+		accuracy: true,
+		multihit: [2,2]
+	},
 	/******************************************************************
 	Moves with not enough drawbacks:
 	- intensify drawbacks
@@ -477,6 +712,43 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 120,
 		accuracy: 100
+	},
+	/******************************************************************
+	Echoed Voice:
+	- change
+
+	Justification:
+	- no one uses Echoed Voice.
+	******************************************************************/
+	echoedvoice: {
+		inherit: true,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		isViable: true,
+		priority: 0,
+		isNotProtectable: true,
+		affectedByImmunities: false,
+		onHit: function(target, source) {
+			source.side.addSideCondition('futuremove');
+			if (source.side.sideConditions['futuremove'].positions[source.position]) {
+				return false;
+			}
+			source.side.sideConditions['futuremove'].positions[source.position] = {
+				duration: 3,
+				move: 'echoedvoice',
+				targetPosition: target.position,
+				source: source,
+				moveData: {
+					basePower: 80,
+					category: "Special",
+					type: 'Normal'
+				}
+			};
+			this.add('-start', source, 'Echoed Voice');
+		},
+		target: "normal",
+		type: "Normal"
 	},
 	/******************************************************************
 	Signature moves and other moves with limited distribution:
@@ -500,6 +772,14 @@ exports.BattleMovedex = {
 		pp: 10
 	},
 	smog: {
+		inherit: true,
+		basePower: 60,
+		secondary: {
+			chance: 100,
+			status: 'psn'
+		}
+	},
+	sludge: {
 		inherit: true,
 		basePower: 60,
 		secondary: {
@@ -539,6 +819,17 @@ exports.BattleMovedex = {
 				accuracy: -1
 			}
 		}
+	},
+	glaciate: {
+		inherit: true,
+		basePower: 100,
+		accuracy: 100
+	},
+	powergem: {
+		inherit: true,
+		basePower: 40,
+		accuracy: true,
+		multihit: [2,2]
 	},
 	triattack: {
 		num: 161,

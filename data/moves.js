@@ -1369,6 +1369,7 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		volatileStatus: 'camouflage',
 		effect: {
+			noCopy: true,
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'typechange', 'Ground');
 			},
@@ -1707,6 +1708,7 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		volatileStatus: 'conversion',
 		effect: {
+			noCopy: true,
 			onStart: function(pokemon) {
 				var possibleTypes = pokemon.moveset.map(function(val){
 					var move = this.getMove(val.id);
@@ -1759,6 +1761,7 @@ exports.BattleMovedex = {
 			source.addVolatile("conversion2", target);
 		},
 		effect: {
+			noCopy: true,
 			onStart: function(pokemon, target, move) {
 				if (!target.lastMove) {
 					this.add('-fail', pokemon);
@@ -8920,6 +8923,7 @@ exports.BattleMovedex = {
 			source.addVolatile("reflecttype", target);
 		},
 		effect: {
+			noCopy: true,
 			onStart: function(target, source) {
 				this.effectData.types = source.types;
 				this.add("-message", target.name+"'s type changed to match "+source.name+"'s! (placeholder)");
@@ -10245,6 +10249,10 @@ exports.BattleMovedex = {
 				this.add('-fail', target);
 				return null;
 			}
+			if (defender.volatiles['protect']) {
+				this.add('-activate', target, 'Protect');
+				return null;
+			}
 			if (defender.volatiles['bounce'] || defender.volatiles['dig'] || defender.volatiles['dive'] || defender.volatiles['fly'] || defender.volatiles['shadowforce']) {
 				this.add('-miss', attacker);
 				return null;
@@ -10666,6 +10674,7 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		volatileStatus: 'soak',
 		effect: {
+			noCopy: true,
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'typechange', 'Water');
 			},

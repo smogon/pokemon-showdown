@@ -37,6 +37,12 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"thickfat": {
+		inherit:true,
+		onImmunity: function(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+	},
 	"flowergift": {
 		inherit: true,
 		onModifyMove: function(move) {
