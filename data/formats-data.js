@@ -287,6 +287,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":20,"gender":"M","nature":"Bashful","abilities":["static"],"moves":["present","quickattack","thundershock","tailwhip"]},
 			{"generation":5,"level":30,"gender":"F","abilities":["lightningrod"],"moves":["sing","teeterdance","encore","electroball"]},
 			{"generation":5,"level":50,"abilities":["static"],"moves":["fly","irontail","electroball","quickattack"]},
+			{"generation":5,"level":50,"gender":"F","nature":"Timid","abilities":["lightningrod"],"moves":["fly","thunderbolt","grassknot","protect"]},
 			{"generation":5,"level":10,"gender":"M","abilities":["lightningrod"],"moves":["thundershock","tailwhip","thunderwave","headbutt"]},
 			{"generation":5,"level":100,"gender":"F","abilities":["static"],"moves":["thunder","volttackle","grassknot","quickattack"]},
 			{"generation":5,"level":50,"gender":"F","abilities":["static"],"moves":["extremespeed","thunderbolt","grassknot","brickbreak"]},
@@ -4007,7 +4008,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"calmmind":1,"hiddenpowerfighting":1,"lightscreen":1,"psychic":1,"reflect":1,"shadowball":1,"substitute":1,"thunderbolt":1,"trick":1},
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
-		tier: "NU"
+		tier: "BL"
 	},
 	solosis: {
 		viableMoves: {"calmmind":1,"hiddenpowerfighting":1,"psychic":1,"psyshock":1,"recover":1,"shadowball":1,"trickroom":1},
@@ -4146,7 +4147,7 @@ exports.BattleFormatsData = {
 	klang: {
 		viableMoves: {"geargrind":1,"return":1,"shiftgear":1,"wildcharge":1},
 		dreamWorldRelease: true,
-		tier: "NFE"
+		tier: "NU"
 	},
 	klinklang: {
 		viableMoves: {"geargrind":1,"return":1,"shiftgear":1,"wildcharge":1},
