@@ -789,6 +789,10 @@ module.exports = (function () {
 						if (eventData.shiny) {
 							set.shiny = true;
 						}
+						if (eventData.generation < 5) eventData.isDW = false;
+						if (eventData.isDW !== undefined && eventData.isDW !== isDW) {
+							problems.push(name+" must come from a specific event that "+(isDW?"gives":"doesn't give")+" it its DW ability.");
+						}
 						if (eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
 							problems.push(name+" must come from a specific event that gives it "+eventData.abilities.join(" or ")+".");
 						}
