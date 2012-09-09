@@ -2076,7 +2076,7 @@ function Battle(roomid, format, rated) {
 			}
 		}
 
-		if (move.isSoundBased) {
+		if (move.isSoundBased && (pokemon !== target || this.gen <= 4)) {
 			if (!target.runImmunity('sound', true)) {
 				return false;
 			}

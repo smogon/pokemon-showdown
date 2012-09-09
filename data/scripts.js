@@ -1,4 +1,5 @@
 exports.BattleScripts = {
+	gen: 5,
 	runMove: function(move, pokemon, target) {
 		move = this.getMove(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
@@ -108,7 +109,7 @@ exports.BattleScripts = {
 		if (typeof move.affectedByImmunities === 'undefined') {
 			move.affectedByImmunities = (move.category !== 'Status');
 		}
-		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && !target.runImmunity('sound', true))) {
+		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (move.selfdestruct && move.target === 'adjacent') {
 				this.faint(pokemon, pokemon, move);

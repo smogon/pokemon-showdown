@@ -1,4 +1,5 @@
 exports.BattleScripts = {
+	gen: 4,
 	init: function() {
 		for (var i in this.data.Pokedex) {
 			var template = this.getTemplate(i);
