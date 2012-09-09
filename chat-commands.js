@@ -942,7 +942,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
 			'% <b>Driver</b> - The above, and they can also mute users and run tournaments<br />' +
 			'@ <b>Moderator</b> - The above, and they can ban users and check for alts<br />' +
-			'&amp; <b>Staff</b> - The above, and they can promote moderators and force ties<br />'+
+			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />'+
 			'~ <b>Administrator</b> - They can do anything, like change what this message says'+
 			'</div>');
 		return false;
