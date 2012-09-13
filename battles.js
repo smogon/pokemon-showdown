@@ -2112,7 +2112,9 @@ function Battle(roomid, format, rated) {
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(selfB, pokemon, target);
 		}
+		console.log('['+move.id+'] bp='+basePower);
 		if (!basePower) return 0;
+		basePower = clampIntRange(basePower, 1);
 
 		move.critRatio = clampIntRange(move.critRatio, 0, 5);
 		var critMult = [0, 16, 8, 4, 3, 2];
@@ -2136,6 +2138,7 @@ function Battle(roomid, format, rated) {
 			}
 		}
 		if (!basePower) return 0;
+		basePower = clampIntRange(basePower, 1);
 
 		var level = pokemon.level;
 

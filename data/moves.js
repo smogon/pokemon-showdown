@@ -2054,7 +2054,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
-			return parseInt(120*target.hp/target.maxhp);
+			return 120*target.hp/target.maxhp;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1. Makes contact.",
@@ -3260,7 +3260,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
-			return parseInt(150*pokemon.hp/pokemon.maxhp);
+			return 150*pokemon.hp/pokemon.maxhp;
 		},
 		category: "Special",
 		desc: "Deals damage to all adjacent foes. Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
@@ -7811,7 +7811,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		onHit: function(target, pokemon) {
-			var averagehp = parseInt(target.hp + pokemon.hp) / 2;
+			var averagehp = Math.floor((target.hp + pokemon.hp) / 2) || 1;
 			target.sethp(averagehp);
 			pokemon.sethp(averagehp);
 			this.add('-sethp', target, target.getHealth(), pokemon, pokemon.hpChange(), '[from] move: Pain Split');
@@ -11301,7 +11301,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(target) {
 				this.add('-start', target, 'Substitute');
-				this.effectData.hp = parseInt(target.maxhp/4);
+				this.effectData.hp = Math.floor(target.maxhp/4);
 			},
 			onTryHit: function(target, source, move) {
 				if (target === source) {
@@ -12707,7 +12707,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon) {
-			return parseInt(150*pokemon.hp/pokemon.maxhp);
+			return 150*pokemon.hp/pokemon.maxhp;
 		},
 		category: "Special",
 		desc: "Deals damage to all adjacent foes. Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
@@ -13062,7 +13062,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
-			return parseInt(120*target.hp/target.maxhp);
+			return 120*target.hp/target.maxhp;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1. Makes contact.",
