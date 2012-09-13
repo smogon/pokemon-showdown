@@ -1778,7 +1778,6 @@ exports.BattleItems = {
 		id: "micleberry",
 		name: "Micle Berry",
 		spritenum: 290,
-		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1801,7 +1800,7 @@ exports.BattleItems = {
 				move.alwaysHit = true;
 			}
 		},
-		desc: "Activates at 25% HP. Next move used will always hit. Unobtainable in BW. One-time use."
+		desc: "Activates at 25% HP. Next move used will always hit. One-time use."
 	},
 	"mindplate": {
 		id: "mindplate",
