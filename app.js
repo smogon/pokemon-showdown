@@ -392,7 +392,7 @@ var events = {
 		}
 	},
 	rename: function(data, socket, you) {
-		if (!data) return;
+		if (!data || typeof data.token !== 'string') return;
 		data.name = ''+data.name;
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
