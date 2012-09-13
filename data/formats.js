@@ -446,7 +446,7 @@ exports.BattleFormats = {
 	evasionclause: {
 		effectType: 'Banlist',
 		name: 'Evasion Clause',
-		banlist: ['BrightPowder', 'Lax Incense', 'Minimize', 'Double Team'],
+		banlist: ['Minimize', 'Double Team'],
 		onStart: function() {
 			this.add('rule', 'Evasion Clause');
 		}
