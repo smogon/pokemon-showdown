@@ -687,7 +687,7 @@ exports.BattleAbilities = {
 		},
 		id: "guts",
 		name: "Guts",
-		rating: 4,
+		rating: 3,
 		num: 62
 	},
 	"harvest": {
@@ -2265,7 +2265,7 @@ exports.BattleAbilities = {
 		},
 		id: "tintedlens",
 		name: "Tinted Lens",
-		rating: 4.5,
+		rating: 4,
 		num: 110
 	},
 	"torrent": {
