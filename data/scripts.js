@@ -395,11 +395,11 @@ exports.BattleScripts = {
 		}	
 
 		for (var i=0; i<6; i++) {
-				
+
 			//choose forme
 			var formes = [];
 			for (var j in this.data.Pokedex) {
-				if (this.data.Pokedex[j].num === teamdexno[i] && this.getTemplate(Pokedex[j].species).learnset) {
+				if (this.data.Pokedex[j].num === teamdexno[i] && this.getTemplate(this.data.Pokedex[j].species).learnset) {
 					formes.push(this.data.Pokedex[j].species);
 				}
 			}
