@@ -859,7 +859,7 @@ exports.BattleItems = {
 			basePower: 40
 		},
 		onModifyStats: function(stats, pokemon) {
-			if (pokemon.template.nfe) {
+			if (pokemon.baseTemplate.nfe) {
 				stats.def *= 1.5;
 				stats.spd *= 1.5;
 			}
