@@ -607,7 +607,7 @@ exports.BattleScripts = {
 				hasMove = {};
 				counter = {
 					Physical: 0, Special: 0, Status: 0, damage: 0,
-					technician: 0, skilllink: 0, contrary: 0,
+					technician: 0, skilllink: 0, contrary: 0, sheerforce: 0,
 					recoil: 0, inaccurate: 0,
 					physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 				};
@@ -628,6 +628,13 @@ exports.BattleScripts = {
 					}
 					if (move.recoil) {
 						counter['recoil']++;
+					}
+					if (move.secondary) {
+						if (move.secondary.chance < 50) {
+							counter['sheerforce'] -= 5;
+						} else {
+							counter['sheerforce']++;
+						}
 					}
 					if (move.accuracy && move.accuracy !== true && move.accuracy < 90) {
 						counter['inaccurate']++;
@@ -870,7 +877,13 @@ exports.BattleScripts = {
 					if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate']) {
 						rejectAbility = true;
 					}
-					if (ability === 'Moody') {
+					if (ability === 'Sheer Force' && !counter['sheerforce']) {
+						rejectAbility = true;
+					}
+					if (ability === 'Moody' && template.id !== 'bidoof') {
+						rejectAbility = true;
+					}
+					if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
 						rejectAbility = true;
 					}
 
@@ -1066,19 +1079,21 @@ exports.BattleScripts = {
 				Uber: 70
 			};
 			var customScale = {
-				Meloetta: 78,
-				Caterpie: 99, Metapod: 99,
-				Weedle: 99, Kakuna: 99,
-				Hoppip: 99,
+				Caterpie: 99, Metapod: 99, Weedle: 99, Kakuna: 99,
 				Wurmple: 99, Silcoon: 99, Cascoon: 99,
-				Feebas: 99,
-				Magikarp: 99
+				Hoppip: 99, Sunkern: 99,
+				Feebas: 99, Magikarp: 99,
+				Unown: 99,
+				Cleffa: 99, Igglybuff: 99, 
+
+				// Eviolite
+				Dusclops: 84, Porygon2: 82, Chansey: 78, Gligar: 90, Munchlax: 95, Metang: 90
 			};
 			var level = levelScale[template.tier] || 90;
 			if (customScale[template.name]) level = customScale[template.name];
 
 			if (template.name === 'Chandelure' && ability === 'Shadow Tag') level = 70;
-			if (template.name === 'Serperior' && ability === 'Contrary') level = 75;
+			if (template.name === 'Serperior' && ability === 'Contrary') level = 74;
 			if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 85;
 
 			pokemon.push({
