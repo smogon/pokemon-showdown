@@ -2752,7 +2752,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	feebas: {
-		viableMoves: {"protect":1,"confuseray":1,"hypnosis":1,"lightscreen":1,"scald":1,"toxic":1},
+		viableMoves: {"protect":1,"confuseray":1,"hypnosis":1,"scald":1,"toxic":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
@@ -3573,7 +3573,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	manaphy: {
-		viableMoves: {"tailglow":1,"surf":1,"icebeam":1,"grassknot":1,"calmmind":1},
+		viableMoves: {"tailglow":1,"surf":1,"icebeam":1,"grassknot":1},
 		eventPokemon: [
 			{"generation":4,"level":5,"abilities":["hydration"],"moves":["tailglow","bubble","watersport"]},
 			{"generation":4,"level":1,"abilities":["hydration"],"moves":["tailglow","bubble","watersport"]},
@@ -3846,7 +3846,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	purrloin: {
-		viableMoves: {"suckerpunch":1,"darkpulse":1,"encore":1,"toxic":1,"trick":1,"fakeout":1},
+		viableMoves: {"swagger":1,"thunderwave":1,"encore":1,"uturn":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
