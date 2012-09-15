@@ -278,7 +278,7 @@ exports.BattleAbilities = {
 	},
 	"compoundeyes": {
 		desc: "The accuracy of this Pokemon's moves receives a 30% increase; for example, a 75% accurate move becomes 97.5% accurate.",
-		shortDesc: "This Pokemon's moves have their Accuracy boosted to 1.3x.",
+		shortDesc: "This Pokemon's moves have their accuracy boosted to 1.3x.",
 		onModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
 			this.debug('compoundeyes - enhancing accuracy');
@@ -618,7 +618,7 @@ exports.BattleAbilities = {
 	},
 	"forewarn": {
 		desc: "The move with the highest Base Power in the opponent's moveset is revealed.",
-		shortDesc: "On switch-in, this Pokemon is alerted to the foes' move with the highest base power.",
+		shortDesc: "On switch-in, this Pokemon is alerted to the foes' move with the highest Base Power.",
 		onStart: function(pokemon) {
 			var targets = pokemon.side.foe.active;
 			var warnMoves = [];
@@ -768,7 +768,7 @@ exports.BattleAbilities = {
 	},
 	"hustle": {
 		desc: "This Pokemon's Attack receives a 50% boost but its Physical attacks receive a 20% drop in Accuracy. For example, a 100% accurate move would become an 80% accurate move. The accuracy of moves that never miss, such as Aerial Ace, remains unaffected.",
-		shortDesc: "This Pokemon's Attack is 1.5x and Accuracy of its physical attacks is 0.8x.",
+		shortDesc: "This Pokemon's Attack is 1.5x and accuracy of its physical attacks is 0.8x.",
 		onModifyStats: function(stats) {
 			stats.atk *= 1.5;
 		},
@@ -1017,7 +1017,7 @@ exports.BattleAbilities = {
 	},
 	"leafguard": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, it cannot become poisoned, burned, paralyzed or put to sleep (other than user-induced Rest). Leaf Guard does not heal status effects that existed before Sunny Day came into effect.",
-		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused, and Rest will fail for it.",
+		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
 		onSetStatus: function(pokemon) {
 			if (this.isWeather('sunnyday')) {
 				return false;
@@ -1035,7 +1035,7 @@ exports.BattleAbilities = {
 	},
 	"levitate": {
 		desc: "This Pokemon is immune to Ground-type attacks, Spikes, Toxic Spikes and the Arena Trap ability; it loses these immunities while holding Iron Ball, after using Ingrain or if Gravity is in effect.",
-		shortDesc: "This Pokemon is immune to Ground; Gravity, Ingrain, Smack Down, Iron Ball cancel it.",
+		shortDesc: "This Pokemon is immune to Ground; Gravity, Ingrain, Smack Down, Iron Ball nullify it.",
 		onImmunity: function(type) {
 			if (type === 'Ground') return false;
 		},
@@ -1196,7 +1196,7 @@ exports.BattleAbilities = {
 	},
 	"moldbreaker": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Herbivore, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
-		shortDesc: "This Pokemon's moves ignore the target's Ability if that Ability would modify damage.",
+		shortDesc: "This Pokemon's moves ignore the target's Ability if it could modify the effectiveness.",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Mold Breaker');
 		},
@@ -1993,7 +1993,7 @@ exports.BattleAbilities = {
 	},
 	"soundproof": {
 		desc: "This Pokemon is immune to the effects of the sound-related moves Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar.",
-		shortDesc: "This Pokemon is immune to sound-based moves.",
+		shortDesc: "This Pokemon is immune to sound-based moves, except Heal Bell.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'sound') {
 				this.add('-immune', pokemon.id, '[msg]');
@@ -2007,7 +2007,7 @@ exports.BattleAbilities = {
 	},
 	"speedboost": {
 		desc: "While this Pokemon is active, its Speed increases by one stage at the end of every turn; the six stage maximum for stat boosts is still in effect.",
-		shortDesc: "This Pokemon's Speed is boosted by 1 at the end of each turn.",
+		shortDesc: "This Pokemon's Speed is boosted by 1 at the end of each full turn on the field.",
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
@@ -2022,7 +2022,7 @@ exports.BattleAbilities = {
 	},
 	"stall": {
 		desc: "This Pokemon attacks last in its priority bracket.",
-		shortDesc: "This Pokemon attacks last among Pokemon using the same or greater priority moves.",
+		shortDesc: "This Pokemon moves last among Pokemon using the same or greater priority moves.",
 		onModifyPriority: function(priority) {
 			return priority - 0.1;
 		},
@@ -2197,7 +2197,7 @@ exports.BattleAbilities = {
 	},
 	"technician": {
 		desc: "When this Pokemon uses an attack that has 60 Base Power or less, the move's Base Power receives a 50% boost. For example, a move with 60 Base Power effectively becomes a move with 90 Base Power.",
-		shortDesc: "This Pokemon's attacks of 60 base power or less do 1.5x damage. Includes Struggle.",
+		shortDesc: "This Pokemon's attacks of 60 Base Power or less do 1.5x damage. Includes Struggle.",
 		onBasePowerPriority: 10,
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (basePower <= 60) {
@@ -2220,7 +2220,7 @@ exports.BattleAbilities = {
 	},
 	"teravolt": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
-		shortDesc: "This Pokemon's moves ignore the target's Ability if that Ability would modify damage.",
+		shortDesc: "This Pokemon's moves ignore the target's Ability if it could modify the effectiveness.",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Teravolt');
 		},
@@ -2241,7 +2241,7 @@ exports.BattleAbilities = {
 	},
 	"thickfat": {
 		desc: "This Pokemon receives halved damage from Ice-type and Fire-type attacks.",
-		shortDesc: "This Pokemon receives half damage from Ice-type and Fire-type attacks.",
+		shortDesc: "This Pokemon receives half damage from Fire- and Ice-type attacks.",
 		onSourceBasePower: function(basePower, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thick Fat weaken');
@@ -2336,7 +2336,7 @@ exports.BattleAbilities = {
 	},
 	"turboblaze": {
 		desc: "When this Pokemon becomes active, it nullifies the abilities of opposing active Pokemon that hinder this Pokemon's attacks. These abilities include Battle Armor, Clear Body, Damp, Dry Skin, Filter, Flash Fire, Flower Gift, Heatproof, Hyper Cutter, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Lightningrod, Limber, Magma Armor, Marvel Scale, Motor Drive, Oblivious, Own Tempo, Sand Veil, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Tangled Feet, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Veil, White Smoke and Wonder Guard.",
-		shortDesc: "This Pokemon's moves ignore the target's Ability if that Ability would modify damage.",
+		shortDesc: "This Pokemon's moves ignore the target's Ability if it could modify the effectiveness.",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Turboblaze');
 		},
@@ -2410,7 +2410,7 @@ exports.BattleAbilities = {
 	},
 	"victorystar": {
 		desc: "Raises every friendly Pokemon's Accuracy, including this Pokemon's, by 10% (multiplied).",
-		shortDesc: "This Pokemon and its allies' moves have their Accuracy boosted to 1.1x.",
+		shortDesc: "This Pokemon and its allies' moves have their accuracy boosted to 1.1x.",
 		onAllyModifyMove: function(move) {
 			if (typeof move.accuracy === 'number') {
 				move.accuracy *= 1.1;
@@ -2542,7 +2542,7 @@ exports.BattleAbilities = {
 	},
 	"wonderskin": {
 		desc: "Causes the chance of a status move working to be halved. It does not affect moves that inflict status as a secondary effect like Thunder's chance to paralyze.",
-		shortDesc: "All status moves with a set % Accuracy are 50% accurate if used on this Pokemon.",
+		shortDesc: "All status moves with a set % accuracy are 50% accurate if used on this Pokemon.",
 		onSourceModifyMovePriority: 10,
 		onSourceModifyMove: function(move) {
 			if (move.category === 'Status' && typeof move.accuracy === 'number') {
