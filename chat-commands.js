@@ -1602,6 +1602,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 	}
 
+	// remove zalgo
+	message = message.replace(/[\u0300-\u036f]{3,}/g,'');
+
 	if (message.substr(0,1) === '/' && message.substr(0,2) !== '//') {
 		// To the client, "/text" has special meaning, so "//" is used to
 		// escape "/" at the beginning of a message
@@ -1612,7 +1615,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		// Here, we are automatically escaping unrecognized commands.
 		return '/'+message;
 	}
-	return;
+	return message;
 }
 
 /**
