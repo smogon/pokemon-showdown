@@ -42,8 +42,8 @@ Major changes:
   Rock, Ice, and Electric moves, and SR), and adds +1 SpA back to Quiver
   Dance.
 
-- Weather-inducing abilities now last for only 5 turns (and are unaffected by
-  items). Weather moves have +1 priority. Forecast and Flower Gift will make
+- Weather-inducing abilities now last for only 5 turns (or 8 with the right
+  item). Weather moves have +1 priority. Forecast and Flower Gift will make
   weather moves last forever.
 
 - Hail is improved:
@@ -157,11 +157,13 @@ Minor learnset changes:
 
 Minor ability changes:
 
-- Compoundeyes now grants 1.5x accuracy
+- Compoundeyes now grants 1.6x accuracy
 
 - Solid Rock and Filter now reduce 1/2 damage of SE moves, not 1/4
 
 - Outrage, Thrash, and Petal Dance don't lock if the user has Own Tempo
+
+- Slow Start now only lasts 3 turns instead of 5
 
 Minor item changes:
 

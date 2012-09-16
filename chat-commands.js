@@ -942,7 +942,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
 			'% <b>Driver</b> - The above, and they can also mute users and run tournaments<br />' +
 			'@ <b>Moderator</b> - The above, and they can ban users and check for alts<br />' +
-			'&amp; <b>Staff</b> - The above, and they can promote moderators and force ties<br />'+
+			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />'+
 			'~ <b>Administrator</b> - They can do anything, like change what this message says'+
 			'</div>');
 		return false;
@@ -1214,7 +1214,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		room.battle.endType = 'forced';
 		if (!target) {
-			room.battle.win('');
+			room.battle.tie();
 			logModCommand(room,user.name+' forced a tie.',true);
 			return false;
 		}
@@ -1602,6 +1602,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 	}
 
+	// remove zalgo
+	message = message.replace(/[\u0300-\u036f]{3,}/g,'');
+
 	if (message.substr(0,1) === '/' && message.substr(0,2) !== '//') {
 		// To the client, "/text" has special meaning, so "//" is used to
 		// escape "/" at the beginning of a message
@@ -1612,7 +1615,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		// Here, we are automatically escaping unrecognized commands.
 		return '/'+message;
 	}
-	return;
+	return message;
 }
 
 /**

@@ -2,25 +2,25 @@ exports.BattleAbilities = {
 	"drizzle": {
 		inherit: true,
 		onStart: function(source) {
-			this.setWeather('raindance', null, null);
+			this.setWeather('raindance', source, null);
 		}
 	},
 	"drought": {
 		inherit: true,
 		onStart: function(source) {
-			this.setWeather('sunnyday', null, null);
+			this.setWeather('sunnyday', source, null);
 		}
 	},
 	"snowwarning": {
 		inherit: true,
 		onStart: function(source) {
-			this.setWeather('hail', null, null);
+			this.setWeather('hail', source, null);
 		}
 	},
 	"sandstream": {
 		inherit: true,
 		onStart: function(source) {
-			this.setWeather('sandstorm', null, null);
+			this.setWeather('sandstorm', source, null);
 		}
 	},
 	"forecast": {
@@ -81,13 +81,29 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"slowstart": {
+		inherit: true,
+		effect: {
+			duration: 3,
+			onStart: function(target) {
+				this.add('-start', target, 'Slow Start');
+			},
+			onModifyStats: function(stats) {
+				stats.atk /= 2;
+				stats.spe /= 2;
+			},
+			onEnd: function(target) {
+				this.add('-end', target, 'Slow Start');
+			}
+		}
+	},
 	"compoundeyes": {
-		desc: "The accuracy of this Pokemon's moves receives a 50% increase; for example, a 50% accurate move becomes 75% accurate.",
-		shortDesc: "This Pokemon's moves have their Accuracy boosted to 1.5x.",
+		desc: "The accuracy of this Pokemon's moves receives a 60% increase; for example, a 50% accurate move becomes 80% accurate.",
+		shortDesc: "This Pokemon's moves have their Accuracy boosted to 1.6x.",
 		onModifyMove: function(move) {
 			if (typeof move.accuracy !== 'number') return;
 			this.debug('compoundeyes - enhancing accuracy');
-			move.accuracy *= 1.5;
+			move.accuracy *= 1.6;
 		},
 		id: "compoundeyes",
 		name: "Compoundeyes",
