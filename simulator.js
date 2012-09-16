@@ -100,6 +100,10 @@ var Simulator = (function(){
 	};
 
 	Simulator.prototype.win = function(user) {
+		if (!user) {
+			this.tie();
+			return;
+		}
 		this.sendFor(user, 'win');
 	};
 	Simulator.prototype.lose = function(user) {
