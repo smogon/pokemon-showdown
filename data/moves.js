@@ -514,8 +514,9 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('attract');
 					return;
 				}
+				this.add('-message', pokemon.name+' is in love with '+this.effectData.source.name+'! (placeholder)');
 				if (this.random(2) === 0) {
-					this.add('cant', pokemon, 'Attract', move);
+					this.add('-message', pokemon.name+' is immobilized by love! (placeholder)');
 					return false;
 				}
 			}
