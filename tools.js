@@ -420,11 +420,13 @@ module.exports = (function () {
 							// egg, event, or DW moves:
 							//   only if that was the source
 							if (learned.substr(1,1) === 'E') {
+								var eggGroups = template.eggGroups;
+								if (eggGroups[0] === 'No Eggs') eggGroups = this.getTemplate(template.evos[0]).eggGroups;
 								var atLeastOne = false;
 								for (var templateid in this.data.Pokedex) {
 									var dexEntry = this.getTemplate(templateid);
 									if (!dexEntry.isNonstandard && dexEntry.gen <= parseInt(learned.substr(0,1),10) && dexEntry.id !== template.id && dexEntry.learnset && (dexEntry.learnset[move]||dexEntry.learnset['sketch'])) {
-										if (dexEntry.eggGroups.intersect(template.eggGroups).length) {
+										if (dexEntry.eggGroups.intersect(eggGroups).length) {
 											atLeastOne = true;
 											sources.push(learned+dexEntry.id);
 										}
