@@ -1072,22 +1072,30 @@ exports.BattleScripts = {
 				UU: 78,
 				BL: 76,
 				OU: 74,
-				CAP: 73,
-				G4CAP: 73,
-				G5CAP: 73,
-				Unreleased: 73,
+				CAP: 74,
+				G4CAP: 74,
+				G5CAP: 74,
+				Unreleased: 74,
 				Uber: 70
 			};
 			var customScale = {
-				Caterpie: 99, Metapod: 99, Weedle: 99, Kakuna: 99,
-				Wurmple: 99, Silcoon: 99, Cascoon: 99,
-				Hoppip: 99, Sunkern: 99,
-				Feebas: 99, Magikarp: 99,
-				Unown: 99,
-				Cleffa: 99, Igglybuff: 99, 
-
+				// Really bad Pokemon and jokemons
+				Azurill: 99, Burmy: 99, Cascoon: 99, Caterpie: 99, Cleffa: 99, Combee: 99, Feebas: 99, Igglybuff: 99,
+				Happiny: 99, Hoppip: 99, Kakuna: 99, Kricketot: 99, Ledyba: 99, Magikarp: 99, Metapod: 99, Pichu: 99, Ralts: 99,
+				Sentret: 99, Silcoon: 99, Slakoth: 99, Sunkern: 99, Tynamo: 99, Unown: 99, Weedle: 99, Wurmple: 99, Zigzagoon: 99,
+				Clefairy: 95, Jigglypuff: 95, Kirlia: 95, Luvdisc: 95, Marill: 95, Skiploom: 95,
+				Delibird: 90, "Farfetch'd": 90, Ledian: 90, Pachirisu: 90,
+				
 				// Eviolite
-				Dusclops: 84, Porygon2: 82, Chansey: 78, Gligar: 90, Munchlax: 95, Metang: 90
+				Ferroseed: 95, Misdreavus: 95, Munchlax: 95, Murkrow: 95, Natu: 95, 
+				Gligar: 90, Metang: 90, Monferno: 90, Roselia: 90, Seadra: 90, Togetic: 90, Wartortle: 90, Whirlipede: 90, 
+				Dusclops: 84, Porygon2: 82, Chansey: 78,
+
+				// Weather or teammate dependent
+				Vulpix: 95, Excadrill: 78, Ninetales: 78, Tentacruel: 78, Toxicroak: 78, Venusaur: 78,
+
+				// Holistic judgment
+				Carvanha: 90, Blaziken: 74, Garchomp: 74, Thundurus: 74
 			};
 			var level = levelScale[template.tier] || 90;
 			if (customScale[template.name]) level = customScale[template.name];
