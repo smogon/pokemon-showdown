@@ -915,6 +915,62 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
                 	'</div>');
         return false;
         break;
+        
+        case 'analysis':
+	case 'dex':
+	case 'pokedex':
+	case 'strategy':
+	case '!analysis':
+	case '!dex':
+	case '!pokedex':
+	case '!strategy':
+		var targets = target.split(',');
+		var template = Tools.getTemplate(targets[0]);
+		var generation = (targets[1] || "bw").trim().toLowerCase();
+		var genNumber = 5;	
+
+		showOrBroadcastStart(user, cmd, room, socket, message);
+
+		if(!template.exists) {
+			showOrBroadcast(user, cmd, room, socket,
+				'Pokemon "'+template.id+'" not found.');
+			return false;
+		}
+
+		if(generation === "bw" || generation === "bw2")
+			generation = "bw";
+		else if(generation === "dp" || generation === "dpp") {
+			generation = "dp";
+			genNumber = 4;
+		}
+		else if(generation === "adv" || generation === "rse" || generation === "rs") {
+			generation = "rs";
+			genNumber = 3;
+		}
+		else if(generation === "gsc" || generation === "gs") {
+			generation = "gs";
+			genNumber = 2;
+		}
+		else if(generation === "rby" || generation === "rb") {
+			generation = "rb";
+			genNumber = 1;
+		}
+		else {
+			showOrBroadcast(user, cmd, room, socket,
+				'Generation "'+generation+'" does not exist.');
+			return false;
+		}
+
+		if (genNumber < template.gen) {
+			showOrBroadcast(user, cmd, room, socket,
+				''+template.name+' did not exist in '+generation.toUpperCase()+'!');
+			return false;
+		}
+
+		showOrBroadcast(user, cmd, room, socket,
+			'<a href="http://www.smogon.com/'+generation+'/pokemon/'+template.name+'" target="_blank">'+generation.toUpperCase()+' '+template.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+	return false;
+	break;
 
 	// Battle commands
 
@@ -1183,6 +1239,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.');
 			emit(socket, 'console', '!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~');
 		}
+		if (target === "all" || target === 'data') {
+			matched = true;
+			emit(socket, 'console', '/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pokemon in the given generation.');
+			emit(socket, 'console', '!analysis [pokemon], [generation] - Shows everyone this link. Requires: + % @ & ~');
+		}
 		if (target === 'all' || target === 'groups') {
 			matched = true;
 			emit(socket, 'console', '/groups - Explains what the + % @ & next to people\'s names mean.');
@@ -1290,7 +1351,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (!target) {
 			emit(socket, 'console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
-			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /tiers, /intro (replace / with ! to broadcast)');
+			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /tiers, /intro, /learn, /analysis (replace / with ! to broadcast)');
 			emit(socket, 'console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
 				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /forcerename, /modlog, /announce')
