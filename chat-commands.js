@@ -426,9 +426,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		
 	case 'kick':
 	case 'k':
-        	if (!target) return parseCommand(user, '?', cmd, room, socket);
-        	return parseCommand(user, 'redirect', ''+target+', http://www.smogon.com/sim/rules', room, socket);
-        	break;
+			if (!target) return parseCommand(user, '?', cmd, room, socket);
+			return parseCommand(user, 'redirect', ''+target+', http://www.smogon.com/sim/rules', room, socket);
+			break;
 
 	case 'unban':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -879,6 +879,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case '!learnall':
 		var lsetData = {};
 		var targets = target.split(',');
+		if (!targets[1]) return parseCommand(user, 'help', 'learn', room, socket);
 		var template = Tools.getTemplate(targets[0]);
 		var move = {};
 		var result;
@@ -1471,6 +1472,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/cap - Provides an introduction to the Create-A-Pokemon project.');
 			emit(socket, 'console', '!cap - Show everyone that information. Requires: + % @ & ~');
+		}
+		if (target === 'all' || target === 'learn' || target === 'learnset' || target === 'learnall') {
+			matched = true;
+			emit(socket, 'console', '/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.')
+			emit(socket, 'console', '!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ & ~')
 		}
 		if (target === '@' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
