@@ -11134,6 +11134,7 @@ exports.BattleMovedex = {
 		type: "Fighting"
 	},
 	"steamroller": {
+		num: 537,
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback: function(pokemon, target) {
