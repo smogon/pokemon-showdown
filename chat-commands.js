@@ -635,7 +635,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var name = targetUser ? targetUser.name : targets[2];
 
 		var nextGroup = targets[1] ? targets[1] : Users.getNextGroupSymbol(currentGroup, cmd === 'demote');
-		if (targets[1] === 'deauth') nextGroup = ' ';
+		if (targets[1] === 'deauth') nextGroup = config.groupsranking[0];
 		if (!config.groups[nextGroup]) {
 			emit(socket, 'console', 'Group \'' + nextGroup + '\' does not exist.');
 			return false;
@@ -1349,7 +1349,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			if (target.match(/^["'].+["']$/)) target = target.substring(1,target.length-1);
 			command = "awk '{print NR,$0}' "+filename+" | sort -nr | cut -d' ' -f2- | grep -m"+grepLimit+" -i '"+target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]')+"'";
 		}
-		
+
 		require('child_process').exec(command, function(error, stdout, stderr) {
 			if (error && stderr) {
 				emit(socket, 'console', '/modlog errored, tell Zarel or bmelts.');
