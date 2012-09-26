@@ -421,6 +421,27 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	mimic: {
+		inherit: true,
+		//desc: "",
+		onHit: function(target, source) {
+			var disallowedMoves = {chatter:1, metronome:1, mimic:1, sketch:1, struggle:1, transform:1};
+			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
+			var moveslot = source.moves.indexOf('mimic');
+			if (moveslot === -1) return false;
+			var move = Tools.getMove(target.lastMove);
+			source.moveset[moveslot] = {
+				move: move.name,
+				id: move.id,
+				pp: 5,
+				maxpp: move.pp * 8/5,
+				disabled: false,
+				used: false
+			};
+			source.moves[moveslot] = toId(move.name);
+			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+		}
+	},
 	miracleeye: {
 		inherit: true,
 		isBounceable: false
