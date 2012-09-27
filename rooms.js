@@ -758,6 +758,10 @@ function LobbyRoom(roomid) {
 			selfR.addSearch(newSearch, user);
 		});
 	};
+	this.searchRange = function(formatid) {
+		if (formatid === 'ou' || formatid === 'randombattle') return 200;
+		return 400;
+	};
 	this.addSearch = function(newSearch, user) {
 		if (!user.connected) return;
 		for (var i=0; i<selfR.searchers.length; i++) {
@@ -768,7 +772,7 @@ function LobbyRoom(roomid) {
 				i--;
 				continue;
 			}
-			if (newSearch.formatid === search.formatid && Math.abs(newSearch.rating - search.rating) < 350) {
+			if (newSearch.formatid === search.formatid && Math.abs(newSearch.rating - search.rating) < this.searchRange(search.formatid)) {
 				if (searchUser === user) {
 					return;
 				}
