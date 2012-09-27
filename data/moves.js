@@ -3456,6 +3456,7 @@ exports.BattleMovedex = {
 		name: "Feint",
 		pp: 10,
 		priority: 2,
+		isNotProtectable: true,
 		onHit: function(target, source) {
 			if (target.removeVolatile('protect')) {
 				this.add("-activate", target, "move: Feint");
