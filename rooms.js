@@ -104,19 +104,15 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 							//selfR.add("Ladder updated.");
 
 							var oldacre = Math.round(data.p1rating.oldacre);
-							var oldrdacre = Math.round(data.p1rating.oldrdacre);
 							var acre = Math.round(data.p1rating.acre);
-							var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'winning':(p1score<.01?'losing':'tying'));
+							var reasons = ''+(acre-oldacre)+' for '+(p1score>.99?'winning':(p1score<.01?'losing':'tying'));
 							if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
-							if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
 							selfR.addRaw(sanitize(p1)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
 
 							var oldacre = Math.round(data.p2rating.oldacre);
-							var oldrdacre = Math.round(data.p2rating.oldrdacre);
 							var acre = Math.round(data.p2rating.acre);
-							var reasons = ''+(oldrdacre-oldacre)+' for '+(p1score>.99?'losing':(p1score<.01?'winning':'tying'));
+							var reasons = ''+(acre-oldacre)+' for '+(p1score>.99?'losing':(p1score<.01?'winning':'tying'));
 							if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
-							if (oldrdacre != acre) reasons += ', +'+(acre-oldrdacre)+' from bonus pool';
 							selfR.addRaw(sanitize(p2)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
 
 							Users.get(p1).cacheMMR(rated.format, data.p1rating);
