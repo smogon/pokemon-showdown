@@ -11305,6 +11305,7 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp/4);
+				delete target.volatiles['partiallytrapped'];
 			},
 			onTryHit: function(target, source, move) {
 				if (target === source) {
