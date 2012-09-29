@@ -89,6 +89,9 @@ Major changes:
 
 Minor move changes:
 
+- Draco Meteor and Close Combat have been nerfed: CC gives -2 Def, -2 SpD, and
+  Draco Meteor is 120 bp, 100% accuracy
+
 - Perfect accuracy moves with a base power of 60 have their base power
   increased to 80
 
@@ -177,18 +180,3 @@ Tier changes:
 
 - Kyurem is banned (by the time NEXT is done, it would presumably have
   received enough buffs to be Uber)
-
-Metagame implication
-------------------------------------------------------------------------
-
-Obviously, the Pokemon that have received major changes (Genesect, Meloetta,
-Cherrim, Castform, Unown, Shuckle) should be more common than they were
-before.
-
-The variety of buffs to various moves may lead Smeargle to advance.
-
-With the Stealth Rock change, many pokemon previously weak to Stealth Rock
-should be more popular.
-
-Weather has been turned upside-down - with the Cherrim buffs, Sun is
-currently quite popular.
