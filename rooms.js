@@ -751,16 +751,31 @@ function LobbyRoom(roomid) {
 			userid: user.userid,
 			formatid: formatid,
 			team: team,
-			rating: 1500
+			rating: 1500,
+			time: new Date().getTime()
 		};
 		user.doWithMMR(formatid, function(mmr) {
 			newSearch.rating = mmr;
 			selfR.addSearch(newSearch, user);
 		});
 	};
-	this.searchRange = function(formatid) {
-		if (formatid === 'ou' || formatid === 'randombattle') return 200;
-		return 400;
+	this.matchmakingOK = function(search1, search2, user1, user2) {
+		// users must be different
+		if (user1 === user2) return false;
+
+		// users must not have been matched immediately previously
+		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
+
+		// search must be within range
+		var searchRange = 400, formatid = search1.formatid, elapsed = Math.abs(search1.time-search2.time);
+		if (formatid === 'ou' || formatid === 'randombattle') searchRange = 200;
+		searchRange += elapsed/600; // +1 every .6 seconds
+		if (searchRange > 1000) searchRange = 1000;
+		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
+
+		user1.lastMatch = user2.userid;
+		user2.lastMatch = user1.userid;
+		return true;
 	};
 	this.addSearch = function(newSearch, user) {
 		if (!user.connected) return;
@@ -772,10 +787,8 @@ function LobbyRoom(roomid) {
 				i--;
 				continue;
 			}
-			if (newSearch.formatid === search.formatid && Math.abs(newSearch.rating - search.rating) < this.searchRange(search.formatid)) {
-				if (searchUser === user) {
-					return;
-				}
+			if (newSearch.formatid === search.formatid && searchUser === user) return; // only one search per format
+			if (newSearch.formatid === search.formatid && this.matchmakingOK(search, newSearch, searchUser, user)) {
 				selfR.cancelSearch(user, true);
 				selfR.cancelSearch(searchUser, true);
 				user.emit('update', {searching: false, room: selfR.id});
