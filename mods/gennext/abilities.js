@@ -59,9 +59,9 @@ exports.BattleAbilities = {
 		},
 		onModifyStats: function(stats, pokemon) {
 			if (this.isWeather('sunnyday')) {
-				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunny') {
-					this.effectData.forme = 'Sunny';
-					this.add('-formechange', pokemon, 'Cherrim-Sunny');
+				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
+					this.effectData.forme = 'Sunshine';
+					this.add('-formechange', pokemon, 'Cherrim-Sunshine');
 					this.add('-message', pokemon.name+' transformed! (placeholder)');
 					this.boost({spd:1});
 				}

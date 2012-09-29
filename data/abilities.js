@@ -568,9 +568,9 @@ exports.BattleAbilities = {
 			if (this.isWeather('sunnyday')) {
 				stats.atk *= 1.5;
 				stats.spd *= 1.5;
-				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunny') {
-					this.effectData.forme = 'Sunny';
-					this.add('-formechange', pokemon, 'Cherrim-Sunny');
+				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
+					this.effectData.forme = 'Sunshine';
+					this.add('-formechange', pokemon, 'Cherrim-Sunshine');
 					this.add('-message', pokemon.name+' transformed! (placeholder)');
 				}
 			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
