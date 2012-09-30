@@ -2252,7 +2252,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	ralts: {
-		viableMoves: {"trickroom":1,"destinybond":1,"hypnosis":1,"willowisp":1},
+		viableMoves: {"trickroom":1,"destinybond":1,"psychic":1,"willowisp":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["growl","wish"]},
 			{"generation":3,"level":5,"moves":["growl","charm"]},
@@ -2262,7 +2262,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	kirlia: {
-		viableMoves: {"trickroom":1,"destinybond":1,"hypnosis":1,"willowisp":1},
+		viableMoves: {"trickroom":1,"destinybond":1,"psychic":1,"willowisp":1},
 		dreamWorldRelease: true,
 		tier: "NFE"
 	},
