@@ -4,6 +4,8 @@
 
 */
 
+var crypto = require('crypto');
+
 /**
  * `parseCommand`. This is the function most of you are interested in,
  * apparently.
@@ -780,6 +782,28 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'nick':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		user.rename(target);
+		return false;
+		break;
+
+	case 'savereplay':
+		if (!room || !room.battle) return false;
+		var data = room.log.join("\n");
+		var datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g,'')).digest('hex');
+
+		LoginServer.request('prepreplay', {
+			id: room.id.substr(7),
+			loghash: datahash,
+			p1: room.p1.name,
+			p2: room.p2.name,
+			format: room.format
+		}, function(success) {
+			emit(socket, 'command', {
+				command: 'savereplay',
+				log: data,
+				room: 'lobby',
+				id: room.id.substr(7)
+			});
+		});
 		return false;
 		break;
 
