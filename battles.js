@@ -2393,8 +2393,28 @@ function Battle(roomid, format, rated) {
 			selfB.runEvent(decision.event, decision.pokemon);
 			break;
 		case 'team':
-			var i = parseInt(decision.team[0], 10);
+			var i = parseInt(decision.team[0], 10)-1;
 			if (i >= 6 || i < 0) return;
+
+			if (decision.team[1]) {
+				// validate the choice
+				var newPokemon = [null,null,null,null,null,null];
+				for (var j=0; j<6; j++) {
+					var i = parseInt(decision.team[j], 10)-1;
+					newPokemon[j] = decision.side.pokemon[i];
+				}
+				var reject = false;
+				for (var j=0; j<6; j++) {
+					if (!newPokemon[j]) reject = true;
+				}
+				if (!reject) {
+					for (var j=0; j<6; j++) {
+						newPokemon[j].position = j;
+					}
+					decision.side.pokemon = newPokemon;
+					return;
+				}
+			}
 
 			if (i == 0) return;
 			var pokemon = decision.side.pokemon[i];

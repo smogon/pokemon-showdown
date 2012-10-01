@@ -1162,7 +1162,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'team':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
-		room.decision(user, 'team', parseInt(target,10)-1);
+		room.decision(user, 'team', target);
 		return false;
 		break;
 
