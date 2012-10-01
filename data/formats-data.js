@@ -1386,7 +1386,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"moves":["synthesis","return","hypnosis","teleport"]},
 			{"generation":4,"level":5,"moves":["pound"]}
 		],
-		tier: "OU"
+		tier: "UU"
 	},
 	chikorita: {
 		viableMoves: {"reflect":1,"lightscreen":1,"safeguard":1,"aromatherapy":1,"grasswhistle":1,"leechseed":1,"toxic":1,"gigadrain":1,"synthesis":1},
@@ -2958,7 +2958,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":30,"abilities":["clearbody"],"moves":["takedown","confusion","metalclaw","refresh"]}
 		],
 		dreamWorldRelease: true,
-		tier: "RU"
+		tier: "NU"
 	},
 	metagross: {
 		viableMoves: {"meteormash":1,"earthquake":1,"agility":1,"stealthrock":1,"zenheadbutt":1,"bulletpunch":1,"trick":1},
@@ -3851,7 +3851,7 @@ exports.BattleFormatsData = {
 	stoutland: {
 		viableMoves: {"return":1,"wildcharge":1,"superpower":1,"crunch":1,"icefang":1},
 		dreamWorldRelease: true,
-		tier: "UU"
+		tier: "RU"
 	},
 	purrloin: {
 		viableMoves: {"swagger":1,"thunderwave":1,"encore":1,"uturn":1},
@@ -4143,7 +4143,7 @@ exports.BattleFormatsData = {
 	},
 	cofagrigus: {
 		viableMoves: {"nastyplot":1,"trickroom":1,"shadowball":1,"hiddenpowerfighting":1,"willowisp":1,"haze":1,"rest":1,"sleeptalk":1,"painsplit":1},
-		tier: "RU"
+		tier: "UU"
 	},
 	tirtouga: {
 		viableMoves: {"shellsmash":1,"aquajet":1,"waterfall":1,"stoneedge":1,"earthquake":1,"stealthrock":1},
@@ -4581,7 +4581,7 @@ exports.BattleFormatsData = {
 	},
 	virizion: {
 		viableMoves: {"swordsdance":1,"calmmind":1,"closecombat":1,"focusblast":1,"hiddenpowerice":1,"stoneedge":1,"leafblade":1,"gigadrain":1,"substitute":1,"synthesis":1},
-		tier: "OU"
+		tier: "UU"
 	},
 	tornadus: {
 		viableMoves: {"hurricane":1,"airslash":1,"uturn":1,"bulkup":1,"acrobatics":1,"superpower":1,"focusblast":1,"taunt":1,"substitute":1,"heatwave":1},
@@ -4589,7 +4589,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":70,"gender":"M","abilities":["prankster"],"moves":["hurricane","hammerarm","airslash","hiddenpower"]}
 		],
 		dreamWorldRelease: true,
-		tier: "OU"
+		tier: "UU"
 	},
 	tornadustherian: {
 		viableMoves: {"hurricane":1,"airslash":1,"focusblast":1,"uturn":1,"heatwave":1},
@@ -4657,7 +4657,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":15,"abilities":["serenegrace"],"moves":["quickattack","confusion","round"]}
 		],
-		tier: "OU"
+		tier: "UU"
 	},
 	meloettapirouette: {
 		tier: "Illegal"
