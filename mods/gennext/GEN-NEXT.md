@@ -101,7 +101,7 @@ Minor move changes:
 
 - Whirlwind and Roar have perfect accuracy
 
-- Silver Wind, Ominous Wind, and AncientPower have a 60% chance of raising
+- Silver Wind, Ominous Wind, and AncientPower have a 100% chance of raising
   one random stat by 1, rather than a 10% chance of raising every stat
   (accuracy and evasion still can't be raised, unlike with Acupressure)
 
