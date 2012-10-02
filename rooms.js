@@ -769,8 +769,8 @@ function LobbyRoom(roomid) {
 		// search must be within range
 		var searchRange = 400, formatid = search1.formatid, elapsed = Math.abs(search1.time-search2.time);
 		if (formatid === 'ou' || formatid === 'randombattle') searchRange = 200;
-		searchRange += elapsed/600; // +1 every .6 seconds
-		if (searchRange > 1000) searchRange = 1000;
+		searchRange += elapsed/400; // +1 every .4 seconds
+		if (searchRange > 1200) searchRange = 1200;
 		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
 
 		user1.lastMatch = user2.userid;
