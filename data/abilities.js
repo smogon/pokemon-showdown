@@ -568,9 +568,9 @@ exports.BattleAbilities = {
 			if (this.isWeather('sunnyday')) {
 				stats.atk *= 1.5;
 				stats.spd *= 1.5;
-				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunny') {
-					this.effectData.forme = 'Sunny';
-					this.add('-formechange', pokemon, 'Cherrim-Sunny');
+				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
+					this.effectData.forme = 'Sunshine';
+					this.add('-formechange', pokemon, 'Cherrim-Sunshine');
 					this.add('-message', pokemon.name+' transformed! (placeholder)');
 				}
 			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
@@ -587,7 +587,7 @@ exports.BattleAbilities = {
 	"forecast": {
 		desc: "This Pokemon's type changes according to the current weather conditions: it becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and remains its regular type otherwise.",
 		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
-		onModifyPokemon: function(pokemon) {
+		onUpdate: function(pokemon) {
 			if (pokemon.baseTemplate.species !== 'Castform' || pokemon.transformed) return;
 			var forme = null;
 			switch (this.effectiveWeather()) {
@@ -991,7 +991,7 @@ exports.BattleAbilities = {
 	},
 	"keeneye": {
 		desc: "This Pokemon's Accuracy cannot be lowered.",
-		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Accuracy.",
+		shortDesc: "Prevents other Pokemon from lowering this Pokemon's accuracy.",
 		onBoost: function(boost, target, source) {
 			if (source && target === source) return;
 			if (boost['accuracy'] && boost['accuracy'] < 0) {
@@ -1741,7 +1741,7 @@ exports.BattleAbilities = {
 	},
 	"sandveil": {
 		desc: "If active while Sandstorm is in effect, this Pokemon's Evasion receives a 20% boost; if this Pokemon has a typing that would normally take damage from Sandstorm, this Pokemon is also immune to Sandstorm's damage.",
-		shortDesc: "If Sandstorm is active, this Pokemon's Evasion is 1.25x; immunity to Sandstorm.",
+		shortDesc: "If Sandstorm is active, this Pokemon's evasion is 1.25x; immunity to Sandstorm.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'sandstorm') return false;
 		},
@@ -1931,7 +1931,7 @@ exports.BattleAbilities = {
 	},
 	"snowcloak": {
 		desc: "If active while Hail is in effect, this Pokemon's Evasion receives a 20% boost; if this Pokemon has a typing that would normally take damage from Hail, this Pokemon is also immune to Hail's damage.",
-		shortDesc: "If Hail is active, this Pokemon's Evasion is 1.25x; immunity to Hail.",
+		shortDesc: "If Hail is active, this Pokemon's evasion is 1.25x; immunity to Hail.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'hail') return false;
 		},
@@ -2184,7 +2184,7 @@ exports.BattleAbilities = {
 	},
 	"tangledfeet": {
 		desc: "When this Pokemon is confused, its opponent's attacks have a 50% chance of missing.",
-		shortDesc: "This Pokemon's Evasion is doubled as long as it is confused.",
+		shortDesc: "This Pokemon's evasion is doubled as long as it is confused.",
 		onSourceModifyMove: function(move, source, target) {
 			if (target && target.volatiles['confusion'] && move.accuracy !== true) {
 				move.accuracy /= 2;

@@ -623,13 +623,13 @@ var User = (function () {
 		formatid = toId(formatid);
 
 		// this should relieve login server strain
-		this.mmrCache[formatid] = 1500;
+		// this.mmrCache[formatid] = 1500;
 
 		if (this.mmrCache[formatid]) {
 			callback.call(that, this.mmrCache[formatid]);
 			return;
 		}
-		LoginServer.request('ladderformatgetmmr', {
+		LoginServer.request('mmr', {
 			format: formatid,
 			user: this.userid
 		}, function(data) {

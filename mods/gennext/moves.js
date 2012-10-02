@@ -430,7 +430,7 @@ exports.BattleMovedex = {
 	},
 	/******************************************************************
 	Silver Wind, Ominous Wind, AncientPower:
-	- 60% chance of raising one stat, instead of 10% chance of raising
+	- 100% chance of raising one stat, instead of 10% chance of raising
 	  all stats
 	- Silver Wind, Ominous Wind: 90 base power in Hail
 
@@ -453,21 +453,23 @@ exports.BattleMovedex = {
 			return 60;
 		},
 		secondary: {
-			chance: 60,
-			onHit: function(target) {
-				var stats = [];
-				for (var i in target.boosts) {
-					if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
-						stats.push(i);
+			chance: 100,
+			self: {
+				onHit: function(target, source) {
+					var stats = [];
+					for (var i in target.boosts) {
+						if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+							stats.push(i);
+						}
 					}
-				}
-				if (stats.length) {
-					var i = stats[this.random(stats.length)];
-					var boost = {};
-					boost[i] = 1;
-					this.boost(boost);
-				} else {
-					return false;
+					if (stats.length) {
+						var i = stats[this.random(stats.length)];
+						var boost = {};
+						boost[i] = 1;
+						this.boost(boost);
+					} else {
+						return false;
+					}
 				}
 			}
 		}
@@ -481,21 +483,23 @@ exports.BattleMovedex = {
 			return 60;
 		},
 		secondary: {
-			chance: 60,
-			onHit: function(target) {
-				var stats = [];
-				for (var i in target.boosts) {
-					if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
-						stats.push(i);
+			chance: 100,
+			self: {
+				onHit: function(target, source) {
+					var stats = [];
+					for (var i in target.boosts) {
+						if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+							stats.push(i);
+						}
 					}
-				}
-				if (stats.length) {
-					var i = stats[this.random(stats.length)];
-					var boost = {};
-					boost[i] = 1;
-					this.boost(boost);
-				} else {
-					return false;
+					if (stats.length) {
+						var i = stats[this.random(stats.length)];
+						var boost = {};
+						boost[i] = 1;
+						this.boost(boost);
+					} else {
+						return false;
+					}
 				}
 			}
 		}
@@ -503,21 +507,23 @@ exports.BattleMovedex = {
 	ancientpower: {
 		inherit: true,
 		secondary: {
-			chance: 60,
-			onHit: function(target) {
-				var stats = [];
-				for (var i in target.boosts) {
-					if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
-						stats.push(i);
+			chance: 100,
+			self: {
+				onHit: function(target, source) {
+					var stats = [];
+					for (var i in target.boosts) {
+						if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+							stats.push(i);
+						}
 					}
-				}
-				if (stats.length) {
-					var i = stats[this.random(stats.length)];
-					var boost = {};
-					boost[i] = 1;
-					this.boost(boost);
-				} else {
-					return false;
+					if (stats.length) {
+						var i = stats[this.random(stats.length)];
+						var boost = {};
+						boost[i] = 1;
+						this.boost(boost);
+					} else {
+						return false;
+					}
 				}
 			}
 		}
