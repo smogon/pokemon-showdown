@@ -705,7 +705,7 @@ exports.BattleAbilities = {
 				}
 			}
 		},
-		rating: 4,
+		rating: 0.5,
 		num: 139
 	},
 	"healer": {
