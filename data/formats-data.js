@@ -981,7 +981,8 @@ exports.BattleFormatsData = {
 		viableMoves: {"batonpass":1,"bugbite":1,"bulletpunch":1,"pursuit":1,"roost":1,"superpower":1,"swordsdance":1,"uturn":1},
 		eventPokemon: [
 			{"generation":3,"level":50,"gender":"M","abilities":["swarm"],"moves":["furycutter","metalclaw","swordsdance","slash"]},
-			{"generation":4,"level":50,"gender":"M","nature":"Adamant","abilities":["swarm"],"moves":["xscissor","swordsdance","irondefense","agility"]}
+			{"generation":4,"level":50,"gender":"M","nature":"Adamant","abilities":["swarm"],"moves":["xscissor","swordsdance","irondefense","agility"]},
+			{"generation":5,"level":100,"gender":"M","abilities":["technician"],"moves":["bulletpunch","bugbite","roost","swordsdance"]}
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
@@ -1247,7 +1248,8 @@ exports.BattleFormatsData = {
 		viableMoves: {"dracometeor":1,"dragonclaw":1,"dragondance":1,"dragontail":1,"earthquake":1,"extremespeed":1,"firepunch":1,"hurricane":1,"outrage":1,"roost":1,"substitute":1,"superpower":1,"thunderwave":1,"waterfall":1},
 		eventPokemon: [
 			{"generation":3,"level":70,"abilities":["innerfocus"],"moves":["agility","safeguard","wingattack","outrage"]},
-			{"generation":4,"level":50,"gender":"M","nature":"Mild","abilities":["innerfocus"],"moves":["dracometeor","thunderbolt","outrage","dragondance"]}
+			{"generation":4,"level":50,"gender":"M","nature":"Mild","abilities":["innerfocus"],"moves":["dracometeor","thunderbolt","outrage","dragondance"]},
+			{"generation":5,"level":100,"gender":"M","abilities":["multiscale"],"moves":["extremespeed","firepunch","dragondance","outrage"]}
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
@@ -1894,7 +1896,8 @@ exports.BattleFormatsData = {
 	tyranitar: {
 		viableMoves: {"aquatail":1,"crunch":1,"dragondance":1,"fireblast":1,"icebeam":1,"pursuit":1,"stealthrock":1,"stoneedge":1,"superpower":1},
 		eventPokemon: [
-			{"generation":3,"level":70,"abilities":["sandstream"],"moves":["thrash","scaryface","crunch","earthquake"]}
+			{"generation":3,"level":70,"abilities":["sandstream"],"moves":["thrash","scaryface","crunch","earthquake"]},
+			{"generation":5,"level":100,"gender":"M","abilities":["sandstream"],"moves":["fireblast","icebeam","stoneedge","crunch"]}
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
@@ -2769,6 +2772,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"agility":1,"bulletpunch":1,"earthquake":1,"meteormash":1,"stealthrock":1,"trick":1,"zenheadbutt":1},
 		eventPokemon: [
 			{"generation":4,"level":62,"nature":"Brave","abilities":["clearbody"],"moves":["bulletpunch","meteormash","hammerarm","zenheadbutt"]},
+			{"generation":5,"level":100,"abilities":["clearbody"],"moves":["bulletpunch","zenheadbutt","hammerarm","icepunch"]},
 			{"generation":5,"level":50,"abilities":["clearbody"],"moves":["meteormash","earthquake","bulletpunch","hammerarm"]}
 		],
 		dreamWorldRelease: true,
@@ -3210,6 +3214,9 @@ exports.BattleFormatsData = {
 	},
 	garchomp: {
 		viableMoves: {"dragonclaw":1,"earthquake":1,"firefang":1,"outrage":1,"stoneedge":1,"swordsdance":1},
+		eventPokemon: [
+			{"generation":5,"level":100,"gender":"M","abilities":["sandveil"],"moves":["outrage","earthquake","swordsdance","stoneedge"]}
+		],
 		dreamWorldRelease: true,
 		tier: "Uber"
 	},
