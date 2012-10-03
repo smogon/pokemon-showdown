@@ -391,13 +391,6 @@ var events = {
 			youUser.joinRoom(data.room, socket);
 		}
 	},
-	rename: function(data, socket, you) {
-		if (!data || typeof data.token !== 'string') return;
-		data.name = ''+data.name;
-		var youUser = resolveUser(you, socket);
-		if (!youUser) return;
-		youUser.rename(data.name, data.token, data.auth);
-	},
 	chat: function(message, socket, you) {
 		if (!message || typeof message.room !== 'string' || typeof message.message !== 'string') return;
 		var youUser = resolveUser(you, socket);
@@ -412,94 +405,6 @@ var events = {
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
 		youUser.leaveRoom(Rooms.get(data.room, 'lobby'), socket);
-	},
-	leaveBattle: function(data, socket, you) {
-		if (!data || typeof data.room !== 'string') return;
-		var youUser = resolveUser(you, socket);
-		if (!youUser) return;
-		var room = Rooms.get(data.room, 'lobby');
-		if (room.leaveBattle) room.leaveBattle(youUser);
-	},
-	joinBattle: function(data, socket, you) {
-		if (!data || typeof data.room !== 'string') return;
-		var youUser = resolveUser(you, socket);
-		if (!youUser) return;
-		var room = Rooms.get(data.room, 'lobby');
-		if (room.joinBattle) room.joinBattle(youUser);
-	},
-	command: function(data, socket, you) {
-		if (!data || typeof data.room !== 'string') return;
-		var youUser = resolveUser(you, socket);
-		if (!youUser) return;
-		parseCommand(youUser, 'command', data, Rooms.get(data.room, 'lobby'), socket);
-	},
-	challenge: function(data, socket, you) {
-		if (!data) return;
-		var youUser = resolveUser(you, socket);
-		if (!youUser) return;
-		//console.log('CHALLENGE: '+youUser.name+' => '+data.userid+' ('+data.act+')');
-		switch (data.act) {
-		case 'make':
-			if (typeof data.format !== 'string') data.format = 'debugmode';
-			if (typeof data.userid !== 'string') return;
-			var problems = Tools.validateTeam(youUser.team, data.format);
-			if (problems) {
-				emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-				return;
-			}
-			if (!Users.get(data.userid) || !Users.get(data.userid).connected) {
-				emit(socket, 'message', "The user '"+data.userid+"' was not found.");
-			}
-			youUser.makeChallenge(data.userid, data.format);
-			break;
-		case 'cancel':
-			youUser.cancelChallengeTo(data.userid);
-			break;
-		case 'accept':
-			if (typeof data.userid !== 'string') return;
-			var format = 'debugmode';
-			if (youUser.challengesFrom[data.userid]) format = youUser.challengesFrom[data.userid].format;
-			var problems = Tools.validateTeam(youUser.team, format);
-			if (problems) {
-				emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-				return;
-			}
-			youUser.acceptChallengeFrom(data.userid);
-			break;
-		case 'reject':
-			if (typeof data.userid !== 'string') return;
-			youUser.rejectChallengeFrom(data.userid);
-			break;
-		}
-	},
-	decision: function(data, socket, you) {
-		if (!data) return;
-		var youUser = resolveUser(you, socket);
-		if (!youUser) return;
-		var room = Rooms.get(data.room, 'lobby');
-		switch (data.choice) {
-		case 'move':
-		case 'switch':
-		case 'undo':
-		case 'team':
-			if (room.decision) room.decision(youUser,data.choice,data.move);
-			break;
-		case 'search':
-			if (data.search) {
-				if (typeof data.format !== 'string') return;
-				if (room.searchBattle) room.searchBattle(youUser, data.format);
-			} else {
-				if (room.cancelSearch) room.cancelSearch(youUser);
-			}
-			break;
-		}
-	},
-	saveTeam: function(data, socket, you) {
-		if (!data) return;
-		var youUser = resolveUser(you, socket);
-		if (!youUser) return;
-		youUser.team = data.team;
-		youUser.emit('update', {team: 'saved', room: 'teambuilder'});
 	}
 };
 
