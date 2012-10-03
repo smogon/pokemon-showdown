@@ -85,7 +85,7 @@ Major changes:
 
 - Twister is now a Flying-type Scald that confuses instead of burns
 
-- Drain Punch is now Poison-type
+- Drain Punch is now an 80 Base Power Poison-type move
 
 Minor move changes:
 
@@ -121,9 +121,9 @@ Minor move changes:
 
 - Muddy Water is now 85 base power and 100% accurate
 
-- Leech Life is now 60 base power
+- Leech Life is now 75 base power
 
-- Smog is now 60 base power, 100% poison
+- Smog is now 80 base power, 100% poison
 
 - Sludge is now 60 base power, 100% poison
 
@@ -133,6 +133,8 @@ Minor move changes:
 - Wing Attack and Power Gem are now like Dual Chop: 40 base power, 2-hit
 
 - Glaciate now has 100 base power, 100% accuracy
+
+- Zoroark gets a significantly wider movepool: It now learns: Ice Beam, Giga Drain, Earthquake, Stone Edge, Superpower, X-Scissor
 
 Minor learnset changes:
 

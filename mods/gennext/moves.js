@@ -402,9 +402,9 @@ exports.BattleMovedex = {
 				this.add('-sidestart',side,'move: Stealth Rock');
 			},
 			onSwitchIn: function(pokemon) {
-				var factor = 8;
+				var factor = 2;
 				if (pokemon.hasType('Flying')) factor = 4;
-				var damage = this.damage(pokemon.maxhp/factor);
+				var damage = this.damage(pokemon.maxhp*factor/16);
 			}
 		}
 	},
@@ -668,10 +668,11 @@ exports.BattleMovedex = {
 	******************************************************************/
 	leechlife: {
 		inherit: true,
-		basePower: 60
+		basePower: 75
 	},
 	drainpunch: {
 		inherit: true,
+		basePower: 80,
 		type: 'Poison'
 	},
 	/******************************************************************
@@ -779,7 +780,7 @@ exports.BattleMovedex = {
 	},
 	smog: {
 		inherit: true,
-		basePower: 60,
+		basePower: 80,
 		secondary: {
 			chance: 100,
 			status: 'psn'
