@@ -1783,7 +1783,7 @@ function getDataMessage(target) {
 		atLeastOne = true;
 	}
 	if (!atLeastOne) {
-		response.push("||No pokemon, item, move, or ability named '"+target+"' was found. (Check your capitalization?)");
+		response.push("||No pokemon, item, move, or ability named '"+target+"' was found. (Check your spelling?)");
 	}
 	return response;
 }
