@@ -1671,15 +1671,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				return parseCommand(user, 'demote', toUserid(target) + ',' + nextGroup, room, socket);
 			}
 		}
+	}
 
-		// There is no default case for unrecognised commands
-
-		// If a user types "/text" and there is no command "/text", it will be displayed:
-		// no error message will be given about unrecognized commands.
-
-		// This is intentional: Some people like to say things like "/shrug" - this
-		// means they don't need to manually escape it like "//shrug" - we will
-		// do it automatically for them
+	if (message.substr(0,1) === '/' && cmd) {
+		// To guard against command typos, we now emit an error message
+		emit(socket, 'console', 'The command "/'+cmd+'" was unrecognized. To send a message starting with "/'+cmd+'", type "//'+cmd+'".');
+		return false;
 	}
 
 	// chat moderation
@@ -1696,16 +1693,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	// remove zalgo
 	message = message.replace(/[\u0300-\u036f]{3,}/g,'');
 
-	if (message.substr(0,1) === '/' && message.substr(0,2) !== '//') {
-		// To the client, "/text" has special meaning, so "//" is used to
-		// escape "/" at the beginning of a message
-
-		// For instance: "/me did blah" will show as "* USER did blah", and
-		// "//me did blah" will show as "/me did blah"
-
-		// Here, we are automatically escaping unrecognized commands.
-		return '/'+message;
-	}
 	return message;
 }
 
