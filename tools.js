@@ -163,7 +163,7 @@ module.exports = (function () {
 			}
 			if (!move.id) move.id = id;
 			if (!move.name) move.name = name;
-			if (!move.fullname) move.fullname = 'move: '+name;
+			if (!move.fullname) move.fullname = 'move: '+move.name;
 			move.toString = this.effectToString;
 			if (!move.critRatio) move.critRatio = 1;
 			if (!move.baseType) move.baseType = move.type;
@@ -232,7 +232,7 @@ module.exports = (function () {
 			}
 			if (!effect.id) effect.id = id;
 			if (!effect.name) effect.name = name;
-			if (!effect.fullname) effect.fullname = name;
+			if (!effect.fullname) effect.fullname = effect.name;
 			effect.toString = this.effectToString;
 			if (!effect.category) effect.category = 'Effect';
 			if (!effect.effectType) effect.effectType = 'Effect';
@@ -252,7 +252,7 @@ module.exports = (function () {
 			}
 			if (!effect.id) effect.id = id;
 			if (!effect.name) effect.name = name;
-			if (!effect.fullname) effect.fullname = name;
+			if (!effect.fullname) effect.fullname = effect.name;
 			effect.toString = this.effectToString;
 			if (!effect.category) effect.category = 'Effect';
 			if (!effect.effectType) effect.effectType = 'Effect';
@@ -271,7 +271,7 @@ module.exports = (function () {
 			}
 			if (!item.id) item.id = id;
 			if (!item.name) item.name = name;
-			if (!item.fullname) item.fullname = 'item: '+name;
+			if (!item.fullname) item.fullname = 'item: '+item.name;
 			item.toString = this.effectToString;
 			if (!item.category) item.category = 'Effect';
 			if (!item.effectType) item.effectType = 'Item';
@@ -290,7 +290,7 @@ module.exports = (function () {
 			}
 			if (!ability.id) ability.id = id;
 			if (!ability.name) ability.name = name;
-			if (!ability.fullname) ability.fullname = 'ability: '+name;
+			if (!ability.fullname) ability.fullname = 'ability: '+ability.name;
 			ability.toString = this.effectToString;
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
