@@ -5,6 +5,29 @@ function clampIntRange(num, min, max) {
 	return num;
 }
 exports.BattleMovedex = {
+	acupressure: {
+		inherit: true,
+		desc: "Raises a random stat by 2 stages as long as the stat is not already at stage 6. The user can choose to use this move on itself or an ally. Fails if no stat stage can be raised or if the user or ally has a Substitute. This move ignores Protect and Detect.",
+		onHit: function(target) {
+			if (target.volatiles['substitute']) {
+				return false;
+			}
+			var stats = [];
+			for (var i in target.boosts) {
+				if (target.boosts[i] < 6) {
+					stats.push(i);
+				}
+			}
+			if (stats.length) {
+				var i = stats[this.random(stats.length)];
+				var boost = {};
+				boost[i] = 2;
+				this.boost(boost);
+			} else {
+				return false;
+			}
+		}
+	},
 	assist: {
 		inherit: true,
 		desc: "The user performs a random move from any of the Pokemon on its team. Assist cannot generate itself, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
@@ -153,6 +176,21 @@ exports.BattleMovedex = {
 	},
 	curse: {
 		inherit: true,
+		desc: "If the user is not a Ghost-type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost-type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for one adjacent target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected or has a Substitute.",
+		effect: {
+			onStart: function(pokemon, source) {
+				if (pokemon.volatiles['substitute']) {
+					this.add('-fail', target);
+					return false;
+				}
+				this.add('-start', pokemon, 'Curse', '[of] '+source);
+				this.directDamage(source.maxhp/2, source, source);
+			},
+			onResidualOrder: 10,
+			onResidual: function(pokemon) {
+				this.damage(pokemon.maxhp/4);
+			}
+		},
 		type: "???"
 	},
 	defog: {
@@ -426,7 +464,7 @@ exports.BattleMovedex = {
 		//desc: "",
 		onHit: function(target, source) {
 			var disallowedMoves = {chatter:1, metronome:1, mimic:1, sketch:1, struggle:1, transform:1};
-			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
+			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1 || target.volatiles['substitute']) return false;
 			var moveslot = source.moves.indexOf('mimic');
 			if (moveslot === -1) return false;
 			var move = Tools.getMove(target.lastMove);
@@ -515,6 +553,29 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 400,
 		//desc: ""
+	},
+	sketch: {
+		inherit: true,
+		//desc: "",
+		onHit: function(target, source) {
+			var disallowedMoves = {chatter:1, sketch:1, struggle:1};
+			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1 || target.volatiles['substitute']) return false;
+			var moveslot = source.moves.indexOf('sketch');
+			if (moveslot === -1) return false;
+			var move = Tools.getMove(target.lastMove);
+			var sketchedMove = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				disabled: false,
+				used: false
+			};
+			source.moveset[moveslot] = sketchedMove;
+			source.baseMoveset[moveslot] = sketchedMove;
+			source.moves[moveslot] = toId(move.name);
+			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+		}
 	},
 	spikes: {
 		inherit: true,

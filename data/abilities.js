@@ -674,7 +674,7 @@ exports.BattleAbilities = {
 		shortDesc: "When this Pokemon has 1/2 or less of its max HP, it uses certain Berries early.",
 		id: "gluttony",
 		name: "Gluttony",
-		rating: 1.5,
+		rating: 0,
 		num: 82
 	},
 	"guts": {
@@ -705,7 +705,7 @@ exports.BattleAbilities = {
 				}
 			}
 		},
-		rating: 4,
+		rating: 0.5,
 		num: 139
 	},
 	"healer": {

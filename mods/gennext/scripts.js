@@ -34,6 +34,14 @@ exports.BattleScripts = {
 		this.data.Learnsets.rotomheat.learnset.heatwave = ['5L100'];
 		this.data.Learnsets.rotommow.learnset.magicalleaf = ['5L100'];
 
+		// Zororark: much wider movepool
+		this.data.Learnsets.zoroark.learnset.earthquake = ['5M'];
+		this.data.Learnsets.zoroark.learnset.stoneedge = ['5M'];
+		this.data.Learnsets.zoroark.learnset.icebeam = ['5M'];
+		this.data.Learnsets.zoroark.learnset.xscissor = ['5M'];
+		this.data.Learnsets.zoroark.learnset.gigadrain = ['5T'];
+		this.data.Learnsets.zoroark.learnset.superpower = ['5T'];
+
 		// Every DW ability that isn't Shadow Tag becomes released
 		for (var i in this.data.FormatsData) {
 			if (i !== 'chandelure' && i !== 'gothitelle') {
