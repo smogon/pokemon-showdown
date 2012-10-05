@@ -662,7 +662,7 @@ module.exports = (function () {
 		var template = this.getTemplate(string(set.species));
 		set.species = template.species;
 
-		set.name = string(set.name).trim();
+		set.name = string(set.name).trim().replace(/|/g,'');
 		var item = this.getItem(string(set.item));
 		set.item = item.name;
 		var ability = this.getAbility(string(set.ability));
