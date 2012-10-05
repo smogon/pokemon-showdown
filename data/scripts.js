@@ -18,7 +18,11 @@ exports.BattleScripts = {
 			}
 		}
 		pokemon.lastDamage = 0;
-		pokemon.deductPP(move, 1, target);
+		var lockedMove = this.runEvent('LockMove', pokemon);
+		if (lockedMove === true) lockedMove = false;
+		if (!lockedMove) {
+			pokemon.deductPP(move, 1, target);
+		}
 		this.useMove(move, pokemon, target);
 		this.runEvent('AfterMove', target, pokemon, move);
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
