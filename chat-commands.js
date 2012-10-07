@@ -1067,28 +1067,26 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		if(generation === "bw" || generation === "bw2")
+		if(generation === "bw" || generation === "bw2" || generation === "5" || generation === "five")
 			generation = "bw";
-		else if(generation === "dp" || generation === "dpp") {
+		else if(generation === "dp" || generation === "dpp" || generation === "4" || generation === "four") {
 			generation = "dp";
 			genNumber = 4;
 		}
-		else if(generation === "adv" || generation === "rse" || generation === "rs") {
+		else if(generation === "adv" || generation === "rse" || generation === "rs" || generation === "3" || generation === "three") {
 			generation = "rs";
 			genNumber = 3;
 		}
-		else if(generation === "gsc" || generation === "gs") {
+		else if(generation === "gsc" || generation === "gs" || generation === "2" || generation === "two") {
 			generation = "gs";
 			genNumber = 2;
 		}
-		else if(generation === "rby" || generation === "rb") {
+		else if(generation === "rby" || generation === "rb" || generation === "1" || generation === "one") {
 			generation = "rb";
 			genNumber = 1;
 		}
 		else {
-			showOrBroadcast(user, cmd, room, socket,
-				'Generation "'+generation+'" does not exist.');
-			return false;
+		generation = "bw";
 		}
 
 		if (genNumber < template.gen) {
