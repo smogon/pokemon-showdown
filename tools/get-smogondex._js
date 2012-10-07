@@ -81,6 +81,18 @@ exports.getSmogonDex = function(_) {
 				name = "giratinaorigin";
 				break;
 
+			case "landorust" :
+				name = "landorustherian";
+				break;
+
+			case "kyuremb" :
+				name = "kyuremblack";
+				break;
+
+			case "kyuremw" :
+				name = "kyuremwhite";
+				break;
+
 			case "meloettap" :
 				name = "meloettapirouette";
 				tier = "Illegal";
@@ -108,6 +120,14 @@ exports.getSmogonDex = function(_) {
 
 			case "shaymins" :
 				name = "shayminsky";
+				break;
+
+			case "thundurust" :
+				name = "thundurustherian";
+				break;
+
+			case "tornadust" :
+				name = "tornadustherian";
 				break;
 
 			case "wormadamg" :
@@ -278,6 +298,22 @@ exports.getSmogonDex = function(_) {
 							}
 						};
 				}
+				break;
+
+			case "keldeo" :
+				smogonDex["keldeoresolution"] = {
+						types: types,
+						tier: tier,
+						abilities: abilities,
+						baseStats: {
+							hp: hp,
+							atk: atk,
+							def: def,
+							spa: spa,
+							spd: spd,
+							spe: spe
+						}
+					};
 				break;
 
 			case "unown" :
