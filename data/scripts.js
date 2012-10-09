@@ -1087,8 +1087,8 @@ exports.BattleScripts = {
 				Azurill: 99, Burmy: 99, Cascoon: 99, Caterpie: 99, Cleffa: 99, Combee: 99, Feebas: 99, Igglybuff: 99, Happiny: 99, Hoppip: 99,
 				Kakuna: 99, Kricketot: 99, Ledyba: 99, Magikarp: 99, Metapod: 99, Pichu: 99, Ralts: 99, Sentret: 99, Shedinja: 99,
 				Silcoon: 99, Slakoth: 99, Sunkern: 99, Tynamo: 99, Tyrogue: 99, Unown: 99, Weedle: 99, Wurmple: 99, Zigzagoon: 99,
-				Clefairy: 95, Jigglypuff: 95, Kirlia: 95, Luvdisc: 95, Marill: 95, Skiploom: 95,
-				Delibird: 90, "Farfetch'd": 90, Ledian: 90, Pachirisu: 90,
+				Clefairy: 95, Delibird: 95, "Farfetch'd": 95, Jigglypuff: 95, Kirlia: 95, Ledian: 95, Luvdisc: 95, Marill: 95, Skiploom: 95,
+				Pachirisu: 90,
 				
 				// Eviolite
 				Ferroseed: 95, Misdreavus: 95, Munchlax: 95, Murkrow: 95, Natu: 95, 
@@ -1107,6 +1107,7 @@ exports.BattleScripts = {
 			if (template.name === 'Chandelure' && ability === 'Shadow Tag') level = 70;
 			if (template.name === 'Serperior' && ability === 'Contrary') level = 74;
 			if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 85;
+			if (template.name === 'Spinda' && ability !== 'Contrary') level = 95;
 
 			pokemon.push({
 				name: template.name,
