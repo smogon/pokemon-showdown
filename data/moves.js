@@ -5206,6 +5206,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
+		hasCustomRecoil: true,
 		onMoveFail: function(target, source, move) {
 			this.damage(source.maxhp/2, source);
 		},
@@ -6109,6 +6110,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
+		hasCustomRecoil: true,
 		onMoveFail: function(target, source, move) {
 			this.damage(source.maxhp/2, source);
 		},

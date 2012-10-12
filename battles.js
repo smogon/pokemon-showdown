@@ -2112,7 +2112,6 @@ function Battle(roomid, format, rated) {
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(selfB, pokemon, target);
 		}
-		console.log('['+move.id+'] bp='+basePower);
 		if (!basePower) return 0;
 		basePower = clampIntRange(basePower, 1);
 
