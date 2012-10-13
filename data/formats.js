@@ -105,8 +105,8 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: []
+		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Moody']
 	},
 	uu: {
 		effectType: 'Format',
@@ -473,7 +473,7 @@ exports.BattleFormats = {
 	evasionclause: {
 		effectType: 'Banlist',
 		name: 'Evasion Clause',
-		banlist: ['Minimize', 'Double Team'],
+		banlist: ['Minimize', 'Double Team', 'Sand Veil', 'Snow Cloak'],
 		onStart: function() {
 			this.add('rule', 'Evasion Clause');
 		}
