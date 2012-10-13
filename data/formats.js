@@ -106,7 +106,22 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Moody']
+		banlist: ['Unreleased', 'Illegal', 'Moody'],
+		validateSet: function(set) {
+			// limit one of each move in Standard
+			var moves = [];
+			if (set.moves) {
+				var hasMove = {};
+				for (var i=0; i<set.moves.length; i++) {
+					var move = this.getMove(set.moves[i]);
+					var moveid = move.id;
+					if (hasMove[moveid]) continue;
+					hasMove[moveid] = true;
+					moves.push(set.moves[i]);
+				}
+			}
+			set.moves = moves;
+		}
 	},
 	uu: {
 		effectType: 'Format',
