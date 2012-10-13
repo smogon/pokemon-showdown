@@ -793,6 +793,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		isContact: true,
 		volatileStatus: 'bide',
+		affectedByImmunities: false,
 		effect: {
 			duration: 3,
 			onLockMove: 'bide',
@@ -815,6 +816,7 @@ exports.BattleMovedex = {
 			onBeforeMove: function(pokemon) {
 				if (this.effectData.duration === 1) {
 					if (!this.effectData.totalDamage) {
+						this.add('-end', pokemon, 'Bide');
 						this.add('-fail', pokemon);
 						return false;
 					}
