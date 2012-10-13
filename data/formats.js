@@ -275,8 +275,8 @@ exports.BattleFormats = {
 
 	standard: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Moody'],
+		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause'],
+		banlist: ['Unreleased', 'Illegal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
 			var moves = [];
@@ -484,6 +484,14 @@ exports.BattleFormats = {
 		banlist: ['Minimize', 'Double Team', 'Sand Veil', 'Snow Cloak'],
 		onStart: function() {
 			this.add('rule', 'Evasion Clause');
+		}
+	},
+	moodyclause: {
+		effectType: 'Banlist',
+		name: 'Moody Clause',
+		banlist: ['Moody'],
+		onStart: function() {
+			this.add('rule', 'Moody Clause');
 		}
 	},
 	sleepclause: {
