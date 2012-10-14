@@ -1548,7 +1548,7 @@ exports.BattleAbilities = {
 		},
 		id: "prankster",
 		name: "Prankster",
-		rating: 4,
+		rating: 4.5,
 		num: 158
 	},
 	"pressure": {
