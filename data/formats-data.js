@@ -3414,7 +3414,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":100,"abilities":["sandveil"],"moves":["outrage","earthquake","swordsdance","stoneedge"]}
 		],
 		dreamWorldRelease: true,
-		tier: "Uber"
+		tier: "OU"
 	},
 	riolu: {
 		viableMoves: {"crunch":1,"roar":1,"copycat":1,"drainpunch":1},

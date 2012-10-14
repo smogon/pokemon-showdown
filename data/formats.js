@@ -44,7 +44,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Evasion Clause'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	oususpecttest: {
@@ -55,7 +55,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		teambuilderFormat: 'ou',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Evasion Clause'],
 		banlist: [
 			'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Excadrill', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Thundurus', 'Zekrom', 'Kyurem-Black', 'Kyurem-White', 'Drizzle ++ Swift Swim', 'Soul Dew'
 		]
@@ -68,7 +68,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		teambuilderFormat: 'ou',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Evasion Clause'],
 		banlist: [
 			'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Excadrill', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Thundurus', 'Zekrom', 'Kyurem-Black', 'Kyurem-White', 'Drizzle ++ Swift Swim', 'Soul Dew'
 		]
@@ -80,7 +80,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
+		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview', 'Evasion Clause'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	capnecturnaplaytest: {
@@ -105,7 +105,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Team Preview', 'Standard', 'Evasion Moves Clause'],
 		banlist: []
 	},
 	uu: {
@@ -145,21 +145,21 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup', 'Evasion Moves Clause'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
 	},
 	lcubers: {
 		effectType: 'Format',
 		name: "LC",
 		challengeShow: true,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup', 'Evasion Moves Clause'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Soul Dew']
 	},
 	lcuu: {
 		effectType: 'Format',
 		name: "LC UU",
 		challengeShow: true,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup', 'Evasion Moves Clause'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew', 'Abra', 'Aipom', 'Archen', 'Aron', 'Axew', 'Bronzor', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos', 'Croagunk', 'Cubone', 'Diglett', 'Dratini', 'Drifloon', 'Drilbur', 'Duskull', 'Dwebble', 'Elekid', 'Ferroseed', 'Foongus', 'Frillish', 'Gastly', 'Hippopotas', 'Houndour', 'Larvesta', 'Lileep', 'Machop', 'Magnemite', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Murkrow', 'Natu', 'Onix', 'Pawniard', 'Ponyta', 'Porygon', 'Scraggy', 'Shellder', 'Slowpoke', 'Snover', 'Staryu', 'Taillow', 'Timburr', 'Zorua']
 	},
 	dwubers: {
@@ -275,8 +275,8 @@ exports.BattleFormats = {
 
 	standard: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Moody'],
+		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause'],
+		banlist: ['Unreleased', 'Illegal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
 			var moves = [];
@@ -470,12 +470,28 @@ exports.BattleFormats = {
 			return problems;
 		}
 	},
+	evasionmovesclause: {
+		effectType: 'Banlist',
+		name: 'Evasion Moves Clause',
+		banlist: ['Minimize', 'Double Team'],
+		onStart: function() {
+			this.add('rule', 'Evasion Moves Clause');
+		}
+	},
 	evasionclause: {
 		effectType: 'Banlist',
 		name: 'Evasion Clause',
-		banlist: ['Minimize', 'Double Team'],
+		banlist: ['Minimize', 'Double Team', 'Sand Veil', 'Snow Cloak'],
 		onStart: function() {
 			this.add('rule', 'Evasion Clause');
+		}
+	},
+	moodyclause: {
+		effectType: 'Banlist',
+		name: 'Moody Clause',
+		banlist: ['Moody'],
+		onStart: function() {
+			this.add('rule', 'Moody Clause');
 		}
 	},
 	sleepclause: {
