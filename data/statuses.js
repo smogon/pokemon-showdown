@@ -10,9 +10,9 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target.id, 'brn');
 		},
-		onModifyStats: function(stats, pokemon) {
-			if (pokemon.ability !== 'guts') {
-				stats.atk /= 2;
+		onSourceDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move' && effect.category === 'Physical' && source && source.ability !== 'guts') {
+				return damage / 2;
 			}
 		},
 		onResidualOrder: 9,
