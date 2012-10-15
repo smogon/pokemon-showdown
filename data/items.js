@@ -1796,8 +1796,9 @@ exports.BattleItems = {
 			onModifyMove: function(move, pokemon) {
 				this.add('-enditem', pokemon, 'Micle Berry');
 				pokemon.removeVolatile('MicleBerry');
-				move.accuracy = true;
-				move.alwaysHit = true;
+				if (typeof move.accuracy === 'number') {
+					move.accuracy *= 1.2;
+				}
 			}
 		},
 		desc: "Activates at 25% HP. Next move used will always hit. One-time use."
