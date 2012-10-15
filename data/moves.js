@@ -7322,7 +7322,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onBoost: function(boost, target, source) {
-				if (source && target === source) return;
+				if (!source || target === source) return;
 				for (var i in boost) {
 					if (boost[i] < 0) {
 						delete boost[i];
