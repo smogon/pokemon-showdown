@@ -10,9 +10,9 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target.id, 'brn');
 		},
-		onSourceDamage: function(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.category === 'Physical' && source && source.ability !== 'guts') {
-				return damage / 2;
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (move && move.category === 'Physical' && attacker && attacker.ability !== 'guts') {
+				return basePower / 2;
 			}
 		},
 		onResidualOrder: 9,
