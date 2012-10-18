@@ -505,6 +505,11 @@ exports.BattleScripts = {
 			//four random unique moves from movepool. don't worry about "attacking" or "viable"
 			var moves;
 			var pool = ['struggle'];
+			if (poke === 'Smeargle') {
+				pool = Object.keys(this.data.Movedex)
+			} else {
+				if (template.learnset) pool = Object.keys(template.learnset);
+			}
 			if (template.learnset) pool = Object.keys(template.learnset);
 			if (pool.length < 5) {
 				moves = pool;
