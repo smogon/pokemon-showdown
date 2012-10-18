@@ -68,7 +68,13 @@ exports.BattleMovedex = {
 	},
 	rocksmash: {
 		inherit: true,
-		basePower: 50
+		basePower: 50,
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		}
 	},
 	/******************************************************************
 	Weather moves:
@@ -292,6 +298,66 @@ exports.BattleMovedex = {
 			}
 		},
 		breaksProtect: true
+	},
+	hyperbeam: {
+		inherit: true,
+		accuracy: true,
+		basePower: 75,
+		willCrit: true,
+		self: null,
+		onHit: function(target, source) {
+			if (!target.hp) {
+				source.addVolatile('mustrecharge');
+			}
+		}
+	},
+	gigaimpact: {
+		inherit: true,
+		accuracy: true,
+		basePower: 75,
+		willCrit: true,
+		self: null,
+		onHit: function(target, source) {
+			if (!target.hp) {
+				source.addVolatile('mustrecharge');
+			}
+		}
+	},
+	blastburn: {
+		inherit: true,
+		accuracy: true,
+		basePower: 75,
+		willCrit: true,
+		self: null,
+		onHit: function(target, source) {
+			if (!target.hp) {
+				source.addVolatile('mustrecharge');
+			}
+		}
+	},
+	frenzyplant: {
+		inherit: true,
+		accuracy: true,
+		basePower: 75,
+		willCrit: true,
+		self: null,
+		onHit: function(target, source) {
+			if (!target.hp) {
+				source.addVolatile('mustrecharge');
+			}
+		}
+	},
+	hydrocannon: {
+		inherit: true,
+		accuracy: true,
+		basePower: 75,
+		willCrit: true,
+		self: null,
+		onHit: function(target, source) {
+			if (!target.hp) {
+				source.addVolatile('mustrecharge');
+			}
+		}
 	},
 	/******************************************************************
 	Snore:
@@ -777,6 +843,12 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 100,
 		pp: 10
+	},
+	autotomize: {
+		inherit: true,
+		boosts: {
+			spe: 3
+		},
 	},
 	smog: {
 		inherit: true,

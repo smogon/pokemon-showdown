@@ -67,6 +67,10 @@ Major changes:
   - Shadow Force: 100% Ghost-Curse, 30 bp
   - Sky Drop: 100% -1 Def, 40 bp  
      
+- Recharge moves are similarly buffed. They have 75 base power, always crit,
+  and they only recharge if they KO. Be careful - in return for a KO, they
+  still give the foe a free switch-in _and_ a turn to set up.
+
 - Every DW ability other than on Chandelure is released.
 
 - Flower Gift now only boosts Sp. Def, but if Sunny Day is used while Cherrim
@@ -82,6 +86,11 @@ Major changes:
 - Echoed Voice now has 80 base power, hits once, and then, 2 turns later,
   hits again for 80 base power. It's like Doom Desire, except it still hits
   that first time.
+
+- Life Orb now behaves much more consistently as normal recoil. Sheer Force
+  will boost every move and negate all Life Orb recoil if it is held, Reckless
+  will boost every move if Life Orb is held, and Rock Head will negate Life
+  Orb recoil.
 
 - Twister is now a Flying-type Scald that confuses instead of burns
 
@@ -111,7 +120,8 @@ Minor move changes:
 
 - Strength now has a 30% chance of raising user's Atk
 
-- Cut now has a 100% chance of lowering foe's Def
+- Cut and Rock Smash are 50 base power and now have a 100% chance of
+  lowering foe's Def
 
 - Snore's Base Power is now 100
 
@@ -133,6 +143,8 @@ Minor move changes:
 - Wing Attack and Power Gem are now like Dual Chop: 40 base power, 2-hit
 
 - Glaciate now has 100 base power, 100% accuracy
+
+- Autotomize now gives +3 Speed
 
 - Zoroark gets a significantly wider movepool: It now learns: Ice Beam, Giga Drain, Earthquake, Stone Edge, Superpower, X-Scissor
 

@@ -128,6 +128,35 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"sheerforce": {
+		inherit: true,
+		onModifyMove: function(move, pokemon) {
+			if (move.secondaries || pokemon.item === 'lifeorb') {
+				if (!move.basePowerModifier) move.basePowerModifier = 1;
+				move.basePowerModifier *= 13/10;
+				delete move.secondaries;
+				move.negateSecondary = true;
+			}
+		}
+	},
+	"reckless": {
+		inherit: true,
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (move.recoil || move.hasCustomRecoil || attacker.item === 'lifeorb') {
+				this.debug('Reckless boost');
+				return basePower * 12/10;
+			}
+		}
+	},
+	"rockhead": {
+		inherit: true,
+		onModifyMove: function(move) {
+			delete move.recoil;
+		},
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.id === 'lifeorb') return false;
+		}
+	},
 	"telepathy": {
 		inherit: true,
 		onSwitchOut: function() {}
