@@ -192,7 +192,7 @@ exports.BattleStatuses = {
 		},
 		onResidual: function(target) {
 			var move = this.getMove(target.lastMove);
-			if (!move.self || move.self.volatileStatus !== 'lockedmove') {
+			if (!move.self || move.self.volatileStatus !== 'lockedmove' || target.status === 'slp') {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
 			}
