@@ -3987,17 +3987,17 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	tympole: {
-		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"raindance":1},
+		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	palpitoad: {
-		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"raindance":1,"stealthrock":1},
+		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"stealthrock":1},
 		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	seismitoad: {
-		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"raindance":1,"stealthrock":1},
+		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"stealthrock":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
@@ -4572,11 +4572,11 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	cobalion: {
-		viableMoves: {"closecombat":1,"ironhead":1,"swordsdance":1,"substitute":1,"stoneedge":1,"calmmind":1,"focusblast":1,"voltswitch":1,"hiddenpowerice":1,"flashcannon":1,"thunderwave":1,"stealthrock":1},
+		viableMoves: {"closecombat":1,"ironhead":1,"swordsdance":1,"substitute":1,"stoneedge":1,"voltswitch":1,"hiddenpowerice":1,"thunderwave":1,"stealthrock":1},
 		tier: "UU"
 	},
 	terrakion: {
-		viableMoves: {"stoneedge":1,"closecombat":1,"swordsdance":1,"rockpolish":1,"substitute":1,"xscissor":1,"earthquake":1},
+		viableMoves: {"stoneedge":1,"closecombat":1,"swordsdance":1,"rockpolish":1,"substitute":1,"earthquake":1},
 		tier: "OU"
 	},
 	virizion: {
