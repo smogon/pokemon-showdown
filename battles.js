@@ -2845,4 +2845,3 @@ function Battle(roomid, format, rated) {
 exports.BattlePokemon = BattlePokemon;
 exports.BattleSide = BattleSide;
 exports.Battle = Battle;
-

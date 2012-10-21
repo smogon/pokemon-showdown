@@ -258,7 +258,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		var otherids = ['p2', 'p1'];
 
 		var name = 'An unknown player';
-		if (user) { 
+		if (user) {
 			name = user.name;
 		} else if (selfR.rated) {
 			name = selfR.rated[ids[side]];
