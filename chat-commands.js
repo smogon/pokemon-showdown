@@ -131,9 +131,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'me':
-		if (canTalk(user, room)) {
-			return '/me '+target;
-		}
+	case 'mee':
+		if (canTalk(user, room)) return true;
 		break;
 
 	case '!birkal':
