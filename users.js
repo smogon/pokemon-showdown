@@ -1005,4 +1005,3 @@ exports.setOfflineGroup = function(name, group) {
 	}
 	exportUsergroups();
 };
-
