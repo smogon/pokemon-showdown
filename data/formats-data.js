@@ -1876,7 +1876,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	swinub: {
-		viableMoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"stealthrock":1,"superpower":1,"endeavor":1,"stealthrock":1},
+		viableMoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"superpower":1,"endeavor":1,"stealthrock":1},
 		eventPokemon: [
 			{"generation":3,"level":22,"abilities":["oblivious"],"moves":["charm","ancientpower","mist","mudshot"]}
 		],
@@ -1884,7 +1884,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	piloswine: {
-		viableMoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"stealthrock":1,"superpower":1,"endeavor":1,"stealthrock":1},
+		viableMoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"superpower":1,"endeavor":1,"stealthrock":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
@@ -3854,12 +3854,12 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	purrloin: {
-		viableMoves: {"swagger":1,"thunderwave":1,"encore":1,"uturn":1},
+		viableMoves: {"swagger":1,"thunderwave":1,"substitute":1,"foulplay":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	liepard: {
-		viableMoves: {"nastyplot":1,"darkpulse":1,"encore":1,"hiddenpowerfighting":1,"trick":1},
+		viableMoves: {"swagger":1,"thunderwave":1,"substitute":1,"foulplay":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
