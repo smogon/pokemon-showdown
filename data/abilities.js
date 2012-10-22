@@ -404,9 +404,9 @@ exports.BattleAbilities = {
 				totaldef += foeactive[i].stats.def;
 				totalspd += foeactive[i].stats.spd;
 			}
-			if (totaldef >= totalspd) {
+			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa:1});
-			} else {
+			} else if (totalspd) {
 				this.boost({atk:1});
 			}
 		},
