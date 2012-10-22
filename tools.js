@@ -485,19 +485,21 @@ module.exports = (function () {
 		if (!sourcesBefore && !sources.length) {
 			return false;
 		}
+		if (!sources.length) sources = null;
 		if (sourcesBefore || lsetData.sourcesBefore) {
 			// having sourcesBefore is the equivalent of having everything before that gen
 			// in sources, so we fill the other array in preparation for intersection
 			if (sourcesBefore && lsetData.sources) {
+				if (!sources) sources = [];
 				for (var i=0, len=lsetData.sources.length; i<len; i++) {
 					var learned = lsetData.sources[i];
 					if (parseInt(learned.substr(0,1),10) <= sourcesBefore) {
 						sources.push(learned);
 					}
 				}
-				sourcesBefore = 0;
+				if (!lsetData.sourcesBefore) sourcesBefore = 0;
 			}
-			if (lsetData.sourcesBefore && sources.length) {
+			if (lsetData.sourcesBefore && sources) {
 				if (!lsetData.sources) lsetData.sources = [];
 				for (var i=0, len=sources.length; i<len; i++) {
 					var learned = sources[i];
@@ -505,13 +507,13 @@ module.exports = (function () {
 						lsetData.sources.push(learned);
 					}
 				}
-				delete lsetData.sourcesBefore;
+				if (!sourcesBefore) delete lsetData.sourcesBefore;
 			}
 		}
-		if (sources.length) {
+		if (sources) {
 			if (lsetData.sources) {
 				var intersectSources = lsetData.sources.intersect(sources);
-				if (!intersectSources.length) {
+				if (!intersectSources.length && !(sourcesBefore && lsetData.sourcesBefore)) {
 					lsetData.incompatible = true;
 					return false;
 				}
