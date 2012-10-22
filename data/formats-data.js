@@ -332,17 +332,17 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	nidoranf: {
-		viableMoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1,"doublekick":1},
+		viableMoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	nidorina: {
-		viableMoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1,"doublekick":1,"icebeam":1},
+		viableMoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1,"icebeam":1},
 		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	nidoqueen: {
-		viableMoves: {"toxicspikes":1,"stealthrock":1,"fireblast":1,"thunderbolt":1,"icebeam":1,"earthpower":1,"sludgewave":1,"dragontail":1,"focusblast":1},
+		viableMoves: {"toxicspikes":1,"stealthrock":1,"fireblast":1,"thunderbolt":1,"icebeam":1,"earthpower":1,"sludgewave":1,"focusblast":1},
 		dreamWorldRelease: true,
 		tier: "RU"
 	},
