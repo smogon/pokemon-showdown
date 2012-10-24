@@ -82,8 +82,10 @@ exports.BattleScripts = {
 			}
 		}
 		if (move.ohko) { // bypasses accuracy modifiers
-			accuracy = 30;
-			if (pokemon.level > target.level) accuracy += (pokemon.level - target.level);
+			if (!target.volatiles['bounce'] && !target.volatiles['dig'] && !target.volatiles['dive'] && !target.volatiles['fly'] && !target.volatiles['shadowforce'] && !target.volatiles['skydrop']) {
+				accuracy = 30;
+				if (pokemon.level > target.level) accuracy += (pokemon.level - target.level);
+			}
 		}
 		if (move.alwaysHit) accuracy = true; // bypasses ohko accuracy modifiers
 		if (target.fainted && !canTargetFainted[move.target]) {
