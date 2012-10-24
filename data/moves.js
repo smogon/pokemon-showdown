@@ -2333,8 +2333,6 @@ exports.BattleMovedex = {
 					if (!move.basePowerModifier) move.basePowerModifier = 1;
 					move.basePowerModifier *= 2;
 					return;
-				} else if (move.id === 'fissure') {
-					return;
 				}
 				move.accuracy = 0;
 			}
