@@ -2992,7 +2992,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	latias: {
-		viableMoves: {"dragonpulse":1,"surf":1,"hiddenpowerfire":1,"roost":1,"calmmind":1,"wish":1,"healingwish":1},
+		viableMoves: {"dragonpulse":1,"surf":1,"hiddenpowerfire":1,"roost":1,"calmmind":1,"healingwish":1},
 		eventPokemon: [
 			{"generation":3,"level":50,"gender":"F","abilities":["levitate"],"moves":["charm","recover","psychic","mistball"]},
 			{"generation":3,"level":70,"gender":"F","abilities":["levitate"],"moves":["mistball","psychic","recover","charm"]},
@@ -3436,12 +3436,12 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	hippopotas: {
-		viableMoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1},
+		viableMoves: {"earthquake":1,"slackoff":1,"whirlwind":1,"stealthrock":1,"protect":1,"toxic":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	hippowdon: {
-		viableMoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1,"icefang":1,"stoneedge":1,"stockpile":1},
+		viableMoves: {"earthquake":1,"slackoff":1,"whirlwind":1,"stealthrock":1,"protect":1,"toxic":1,"icefang":1,"stoneedge":1,"stockpile":1},
 		dreamWorldRelease: true,
 		tier: "OU"
 	},
@@ -4622,7 +4622,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	landorus: {
-		viableMoves: {"stoneedge":1,"earthquake":1,"swordsdance":1,"rockpolish":1,"hiddenpowerice":1,"uturn":1},
+		viableMoves: {"earthpower":1,"focusblast":1,"rockpolish":1,"hiddenpowerice":1,"psychic":1},
 		dreamWorldRelease: true,
 		tier: "OU"
 	},
