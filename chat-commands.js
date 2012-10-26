@@ -224,7 +224,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'forfeit':
 	case 'concede':
 	case 'surrender':
-		if (!room.battle) return;
+		if (!room.battle) {
+			emit(socket, 'console', "There's nothing to forfeit here.");
+			return false;
+		}
 		if (!room.forfeit(user)) {
 			emit(socket, 'console', "You can't forfeit this battle.");
 		}
