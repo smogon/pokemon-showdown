@@ -2727,7 +2727,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			var stats = [];
 			for (var i in pokemon.boosts) {
-				if (pokemon.boosts[i] < 6) {
+				if (i !== 'accuracy' && i !== 'evasion' && pokemon.boosts[i] < 6) {
 					stats.push(i);
 				}
 			}
