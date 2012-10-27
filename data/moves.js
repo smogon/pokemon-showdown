@@ -7486,7 +7486,7 @@ exports.BattleMovedex = {
 				this.add("-start", pokemon, 'Mud Sport');
 			},
 			onAnyBasePower: function(basePower, user, target, move) {
-				if (move.type === 'Electric') return basePower / 3;
+				if (move.type === 'Electric') return basePower * 0.33;
 			}
 		},
 		secondary: false,
@@ -12701,7 +12701,7 @@ exports.BattleMovedex = {
 				this.add("-start", pokemon, 'move: Water Sport');
 			},
 			onAnyBasePower: function(basePower, user, target, move) {
-				if (move.type === 'Fire') return basePower / 3;
+				if (move.type === 'Fire') return basePower * 0.33;
 			}
 		},
 		secondary: false,
