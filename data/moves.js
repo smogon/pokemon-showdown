@@ -6435,13 +6435,13 @@ exports.BattleMovedex = {
 		volatileStatus: 'lockon',
 		effect: {
 			duration: 2,
-			onModifyMove: function(move) {
+			onFoeModifyMove: function(move) {
 				move.accuracy = true;
 				move.alwaysHit = true;
 			}
 		},
 		secondary: false,
-		target: "self",
+		target: "normal",
 		type: "Normal"
 	},
 	"lovelykiss": {
@@ -7185,7 +7185,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'lockon',
 		secondary: false,
-		target: "self",
+		target: "normal",
 		type: "Normal"
 	},
 	"minimize": {
