@@ -700,6 +700,9 @@ exports.BattleScripts = {
 					case 'endure':
 						if (!hasMove['flail'] && !hasMove['endeavor'] && !hasMove['reversal']) rejected = true;
 						break;
+					case 'focuspunch':
+						if (!hasMove['substitute']) rejected = true;
+						break;
 
 					// we only need to set up once
 
