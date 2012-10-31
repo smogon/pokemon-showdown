@@ -672,6 +672,9 @@ exports.BattleScripts = {
 				case 'focuspunch':
 					if (!hasMove['substitute']) rejected = true;
 					break;
+				case 'storedpower':
+					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
+					break;
 
 				// we only need to set up once
 
