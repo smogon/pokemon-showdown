@@ -647,6 +647,29 @@ function LobbyRoom(roomid) {
 		this.numRooms = parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
 	} catch (e) {} // file doesn't exist [yet]
 
+	// generate and cache the format list
+	{
+		var formatListText = '|formats';
+		var curSection = '';
+		for (var i in Tools.data.Formats) {
+			var format = Tools.data.Formats[i];
+			if (!format.challengeShow && !format.searchShow) continue;
+
+			var section = format.section;
+			if (section === undefined) section = format.mod;
+			if (!section) section = '';
+			if (section !== curSection) {
+				curSection = section;
+				formatListText += '||'+section;
+			}
+			formatListText += '|'+format.name;
+			if (!format.challengeShow) formatListText += ',,';
+			else if (!format.searchShow) formatListText += ',';
+			if (format.team) formatListText += ',#';
+		}
+		this.formatListText = formatListText;
+	}
+
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
 		var update = {room: roomid};
 		var i = since;
@@ -879,7 +902,7 @@ function LobbyRoom(roomid) {
 			rooms: selfR.getRoomList(),
 			u: selfR.getUserList(),
 			roomType: 'lobby',
-			log: selfR.log.slice(-100)
+			log: selfR.log.slice(-100).include(this.formatListText)
 		};
 		user.emit('init', initdata);
 
