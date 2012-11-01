@@ -273,6 +273,17 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Kyurem']
 	},
+	// doublesrandombattle: {
+	// 	effectType: 'Format',
+	// 	gameType: 'doubles',
+	// 	name: "Doubles Random Battle",
+	// 	team: 'random',
+	// 	canUseRandomTeam: true,
+	// 	rated: true,
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	ruleset: ['PotD', 'Pokemon']
+	// },
 
 	// rules
 
