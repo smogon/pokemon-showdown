@@ -2672,6 +2672,7 @@ function Battle(roomid, format, rated) {
 
 	this.join = function(slot, name, avatar, team) {
 		if (selfB.p1 && selfB.p1.isActive && selfB.p2 && selfB.p2.isActive) return false;
+		if ((selfB.p1 && selfB.p1.isActive && selfB.p1.name === name) || (selfB.p2 && selfB.p2.isActive && selfB.p2.name === name)) return false;
 		if (selfB.p1 && selfB.p1.isActive || slot === 'p2') {
 			if (selfB.started) {
 				selfB.p2.name = name;
@@ -2719,11 +2720,13 @@ function Battle(roomid, format, rated) {
 
 	// IPC
 
+	this.messageLog = [];
 	this.send = function(type, data) {
 		if (Array.isArray(data)) data = data.join("\n");
 		process.send(this.id+"\n"+type+"\n"+data);
 	};
 	this.receive = function(data, more) {
+		this.messageLog.push(data.join(' '));
 		var logPos = selfB.log.length;
 		var alreadyEnded = selfB.ended;
 		switch (data[1]) {
@@ -2769,7 +2772,7 @@ function Battle(roomid, format, rated) {
 			var p1active = p1?p1.active[0]:null;
 			var p2active = p2?p2.active[0]:null;
 			try {
-				this.send('update', '|chat|server|<<< '+eval(data[2]));
+				this.send('update', '|chat|~|<<< '+eval(data[2]));
 			} catch (e) {
 				this.send('update', '|chatmsg|<<< error: '+e.message);
 			}
