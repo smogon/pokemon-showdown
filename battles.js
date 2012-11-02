@@ -182,9 +182,10 @@ function BattlePokemon(set, side) {
 	if (this.set.moves) {
 		for (var i=0; i<this.set.moves.length; i++) {
 			var move = selfB.getMove(this.set.moves[i]);
-			if (move.id === 'HiddenPower') {
+			if (move.id === 'hiddenpower') {
 				this.hpType = move.type;
 			}
+			if (!this.set.ivs) this.set.ivs = selfB.getType(this.hpType).HPivs;
 			this.baseMoveset.push({
 				move: move.name,
 				id: move.id,
@@ -290,8 +291,12 @@ function BattlePokemon(set, side) {
 	this.hp = this.hp || this.maxhp;
 
 	this.toString = function() {
-		if (selfP.illusion) return selfP.illusion.fullname;
-		return selfP.fullname;
+		var fullname = selfP.fullname
+		if (selfP.illusion) fullname = selfP.illusion.fullname;
+
+		var positionList = ['a','b','c','d','e','f'];
+		if (selfP.isActive) return fullname.substr(0,2) + positionList[selfP.position] + fullname.substr(2);
+		return fullname;
 	};
 	this.getDetails = function() {
 		if (selfP.illusion) return selfP.illusion.details + '|' + selfP.getHealth();
@@ -969,6 +974,12 @@ function BattleSide(name, battle, n, team) {
 
 	this.id = (n?'p2':'p1');
 
+	switch (battle.gameType) {
+	case 'doubles':
+		this.active = [null, null];
+		break;
+	}
+
 	this.team = selfB.getTeam(this, team);
 	for (var i=0; i<this.team.length && i<6; i++) {
 		//console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
@@ -1084,6 +1095,7 @@ function Battle(roomid, format, rated) {
 
 	// merge in scripts and tools
 	Tools.mod(format).install(this);
+	format = Tools.getFormat(format);
 
 	this.log = [];
 	this.turn = 0;
@@ -1116,6 +1128,8 @@ function Battle(roomid, format, rated) {
 	this.toString = function() {
 		return 'Battle: '+selfS.format;
 	};
+
+	this.gameType = (format.gameType || 'singles');
 
 	// This function is designed to emulate the on-cartridge PRNG, as described in
 	// http://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
@@ -1742,38 +1756,38 @@ function Battle(roomid, format, rated) {
 		selfB.decisionWaiting = false;
 		return true;
 	};
-	this.switchIn = function(pokemon) {
+	this.switchIn = function(pokemon, pos) {
 		if (!pokemon) return false;
+		if (!pos) pos = 0;
 		var side = pokemon.side;
-		if (side.active[0] && !side.active[0].fainted) {
-			//selfB.add('switch-out '+side.active[0].id);
-		}
+		// if (side.active[0] && !side.active[0].fainted) {
+		// 	selfB.add('switch-out '+side.active[0].id);
+		// }
 		selfB.runEvent('BeforeSwitchIn', pokemon);
-		if (side.active[0]) {
-			var oldActive = side.active[0];
-			var oldpos = pokemon.position;
+		if (side.active[pos]) {
+			var oldActive = side.active[pos];
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
-			pokemon.position = oldActive.position;
-			oldActive.position = oldpos;
+			oldActive.position = pokemon.position;
+			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
 		}
 		var lastMove = null;
-		if (side.active[0]) {
-			lastMove = selfB.getMove(side.active[0].lastMove);
-			if (side.active[0].switchFlag === 'copyvolatile') {
-				pokemon.copyVolatileFrom(side.active[0]);
+		if (side.active[pos]) {
+			lastMove = selfB.getMove(side.active[pos].lastMove);
+			if (side.active[pos].switchFlag === 'copyvolatile') {
+				pokemon.copyVolatileFrom(side.active[pos]);
 			}
-			side.active[0].clearVolatile();
+			side.active[pos].clearVolatile();
 		}
-		side.active[0] = pokemon;
+		side.active[pos] = pokemon;
 		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		selfB.add('switch', side.active[0], side.active[0].getDetails());
+		selfB.add('switch', side.active[pos], side.active[pos].getDetails());
 		pokemon.update();
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -1801,13 +1815,13 @@ function Battle(roomid, format, rated) {
 		}
 		return canSwitchIn[Math.floor(Math.random()*canSwitchIn.length)];
 	};
-	this.dragIn = function(side) {
+	this.dragIn = function(side, pos) {
 		var pokemon = selfB.getRandomSwitchable(side);
+		if (!pos) pos = 0;
 		if (!pokemon) return false;
 		selfB.runEvent('BeforeSwitchIn', pokemon);
-		if (side.active[0]) {
-			var oldActive = side.active[0];
-			var oldpos = pokemon.position;
+		if (side.active[pos]) {
+			var oldActive = side.active[pos];
 			if (!oldActive.hp) {
 				return false;
 			}
@@ -1816,19 +1830,19 @@ function Battle(roomid, format, rated) {
 			}
 			selfB.runEvent('SwitchOut', oldActive);
 			oldActive.isActive = false;
-			pokemon.position = oldActive.position;
-			oldActive.position = oldpos;
+			oldActive.position = pokemon.position;
+			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
 			oldActive.clearVolatile();
 		}
-		side.active[0] = pokemon;
+		side.active[pos] = pokemon;
 		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		selfB.add('drag', side.active[0], side.active[0].getDetails());
+		selfB.add('drag', side.active[pos], side.active[pos].getDetails());
 		pokemon.update();
 		selfB.runEvent('SwitchIn', pokemon);
 		selfB.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -1878,6 +1892,8 @@ function Battle(roomid, format, rated) {
 		selfB.started = true;
 		selfB.p2.foe = selfB.p1;
 		selfB.p1.foe = selfB.p2;
+
+		selfB.add('gametype', selfB.gameType);
 
 		var format = selfB.getFormat();
 		selfB.add('tier', format.name);
@@ -2019,6 +2035,7 @@ function Battle(roomid, format, rated) {
 			if (!effect) effect = selfB.effect;
 		}
 		effect = selfB.getEffect(effect);
+		if (damage && damage <= 1) damage = 1;
 		damage = Math.floor(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
 		damage = selfB.runEvent('TryHeal', target, source, effect, damage);
@@ -2373,8 +2390,12 @@ function Battle(roomid, format, rated) {
 		switch (decision.choice) {
 		case 'start':
 			selfB.add('start');
-			selfB.switchIn(selfB.p1.pokemon[0]);
-			selfB.switchIn(selfB.p2.pokemon[0]);
+			for (var pos=0; pos<selfB.p1.active.length; pos++) {
+				selfB.switchIn(selfB.p1.pokemon[pos], pos);
+			}
+			for (var pos=0; pos<selfB.p2.active.length; pos++) {
+				selfB.switchIn(selfB.p2.pokemon[pos], pos);
+			}
 			selfB.midTurn = true;
 			break;
 		case 'move':
@@ -2662,7 +2683,7 @@ function Battle(roomid, format, rated) {
 		selfB.log.push('|'+Array.prototype.slice.call(arguments).join('|'));
 	};
 	this.debug = function(activity) {
-		if (selfB.getFormat(selfB.format).debug) {
+		if (selfB.getFormat().debug) {
 			selfB.add('debug', activity);
 		}
 	};
@@ -2671,6 +2692,7 @@ function Battle(roomid, format, rated) {
 
 	this.join = function(slot, name, avatar, team) {
 		if (selfB.p1 && selfB.p1.isActive && selfB.p2 && selfB.p2.isActive) return false;
+		if ((selfB.p1 && selfB.p1.isActive && selfB.p1.name === name) || (selfB.p2 && selfB.p2.isActive && selfB.p2.name === name)) return false;
 		if (selfB.p1 && selfB.p1.isActive || slot === 'p2') {
 			if (selfB.started) {
 				selfB.p2.name = name;
@@ -2718,11 +2740,13 @@ function Battle(roomid, format, rated) {
 
 	// IPC
 
+	this.messageLog = [];
 	this.send = function(type, data) {
 		if (Array.isArray(data)) data = data.join("\n");
 		process.send(this.id+"\n"+type+"\n"+data);
 	};
 	this.receive = function(data, more) {
+		this.messageLog.push(data.join(' '));
 		var logPos = selfB.log.length;
 		var alreadyEnded = selfB.ended;
 		switch (data[1]) {
@@ -2768,7 +2792,7 @@ function Battle(roomid, format, rated) {
 			var p1active = p1?p1.active[0]:null;
 			var p2active = p2?p2.active[0]:null;
 			try {
-				this.send('update', '|chat|server|<<< '+eval(data[2]));
+				this.send('update', '|chat|~|<<< '+eval(data[2]));
 			} catch (e) {
 				this.send('update', '|chatmsg|<<< error: '+e);
 			}

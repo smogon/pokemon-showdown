@@ -332,17 +332,17 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	nidoranf: {
-		viableMoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1,"doublekick":1},
+		viableMoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	nidorina: {
-		viableMoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1,"doublekick":1,"icebeam":1},
+		viableMoves: {"toxicspikes":1,"crunch":1,"poisonjab":1,"honeclaws":1,"icebeam":1},
 		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	nidoqueen: {
-		viableMoves: {"toxicspikes":1,"stealthrock":1,"fireblast":1,"thunderbolt":1,"icebeam":1,"earthpower":1,"sludgewave":1,"dragontail":1,"focusblast":1},
+		viableMoves: {"toxicspikes":1,"stealthrock":1,"fireblast":1,"thunderbolt":1,"icebeam":1,"earthpower":1,"sludgewave":1,"focusblast":1},
 		dreamWorldRelease: true,
 		tier: "RU"
 	},
@@ -1876,7 +1876,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	swinub: {
-		viableMoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"stealthrock":1,"superpower":1,"endeavor":1,"stealthrock":1},
+		viableMoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"superpower":1,"endeavor":1,"stealthrock":1},
 		eventPokemon: [
 			{"generation":3,"level":22,"abilities":["oblivious"],"moves":["charm","ancientpower","mist","mudshot"]}
 		],
@@ -1884,7 +1884,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	piloswine: {
-		viableMoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"stealthrock":1,"superpower":1,"endeavor":1,"stealthrock":1},
+		viableMoves: {"earthquake":1,"iciclecrash":1,"iceshard":1,"superpower":1,"endeavor":1,"stealthrock":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
@@ -2992,7 +2992,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	latias: {
-		viableMoves: {"dragonpulse":1,"surf":1,"hiddenpowerfire":1,"roost":1,"calmmind":1,"wish":1,"healingwish":1},
+		viableMoves: {"dragonpulse":1,"surf":1,"hiddenpowerfire":1,"roost":1,"calmmind":1,"healingwish":1},
 		eventPokemon: [
 			{"generation":3,"level":50,"gender":"F","abilities":["levitate"],"moves":["charm","recover","psychic","mistball"]},
 			{"generation":3,"level":70,"gender":"F","abilities":["levitate"],"moves":["mistball","psychic","recover","charm"]},
@@ -3436,12 +3436,12 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	hippopotas: {
-		viableMoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1},
+		viableMoves: {"earthquake":1,"slackoff":1,"whirlwind":1,"stealthrock":1,"protect":1,"toxic":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	hippowdon: {
-		viableMoves: {"earthquake":1,"slackoff":1,"roar":1,"stealthrock":1,"protect":1,"toxic":1,"icefang":1,"stoneedge":1,"stockpile":1},
+		viableMoves: {"earthquake":1,"slackoff":1,"whirlwind":1,"stealthrock":1,"protect":1,"toxic":1,"icefang":1,"stoneedge":1,"stockpile":1},
 		dreamWorldRelease: true,
 		tier: "OU"
 	},
@@ -3571,7 +3571,7 @@ exports.BattleFormatsData = {
 	},
 	cresselia: {
 		viableMoves: {"moonlight":1,"psychic":1,"icebeam":1,"thunderwave":1,"toxic":1,"lunardance":1,"rest":1,"sleeptalk":1,"calmmind":1,"reflect":1,"lightscreen":1},
-		tier: "BL2"
+		tier: "RU"
 	},
 	phione: {
 		viableMoves: {"raindance":1,"scald":1,"uturn":1,"rest":1,"icebeam":1,"surf":1},
@@ -3854,12 +3854,12 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	purrloin: {
-		viableMoves: {"swagger":1,"thunderwave":1,"encore":1,"uturn":1},
+		viableMoves: {"swagger":1,"thunderwave":1,"substitute":1,"foulplay":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	liepard: {
-		viableMoves: {"nastyplot":1,"darkpulse":1,"encore":1,"hiddenpowerfighting":1,"trick":1},
+		viableMoves: {"swagger":1,"thunderwave":1,"substitute":1,"foulplay":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
@@ -3987,17 +3987,17 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	tympole: {
-		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"raindance":1},
+		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	palpitoad: {
-		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"raindance":1,"stealthrock":1},
+		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"stealthrock":1},
 		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	seismitoad: {
-		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"raindance":1,"stealthrock":1},
+		viableMoves: {"hydropump":1,"surf":1,"sludgewave":1,"earthpower":1,"hiddenpowerelectric":1,"stealthrock":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
@@ -4540,7 +4540,7 @@ exports.BattleFormatsData = {
 	durant: {
 		viableMoves: {"honeclaws":1,"ironhead":1,"xscissor":1,"stoneedge":1,"batonpass":1,"superpower":1},
 		dreamWorldRelease: true,
-		tier: "BL2"
+		tier: "RU"
 	},
 	deino: {
 		viableMoves: {"outrage":1,"crunch":1,"firefang":1,"dragontail":1,"thunderwave":1,"superpower":1},
@@ -4572,11 +4572,11 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	cobalion: {
-		viableMoves: {"closecombat":1,"ironhead":1,"swordsdance":1,"substitute":1,"stoneedge":1,"calmmind":1,"focusblast":1,"voltswitch":1,"hiddenpowerice":1,"flashcannon":1,"thunderwave":1,"stealthrock":1},
+		viableMoves: {"closecombat":1,"ironhead":1,"swordsdance":1,"substitute":1,"stoneedge":1,"voltswitch":1,"hiddenpowerice":1,"thunderwave":1,"stealthrock":1},
 		tier: "UU"
 	},
 	terrakion: {
-		viableMoves: {"stoneedge":1,"closecombat":1,"swordsdance":1,"rockpolish":1,"substitute":1,"xscissor":1,"earthquake":1},
+		viableMoves: {"stoneedge":1,"closecombat":1,"swordsdance":1,"rockpolish":1,"substitute":1,"earthquake":1},
 		tier: "OU"
 	},
 	virizion: {
@@ -4622,7 +4622,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	landorus: {
-		viableMoves: {"stoneedge":1,"earthquake":1,"swordsdance":1,"rockpolish":1,"hiddenpowerice":1,"uturn":1},
+		viableMoves: {"earthpower":1,"focusblast":1,"rockpolish":1,"hiddenpowerice":1,"psychic":1},
 		dreamWorldRelease: true,
 		tier: "OU"
 	},

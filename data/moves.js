@@ -2333,8 +2333,6 @@ exports.BattleMovedex = {
 					if (!move.basePowerModifier) move.basePowerModifier = 1;
 					move.basePowerModifier *= 2;
 					return;
-				} else if (move.id === 'fissure') {
-					return;
 				}
 				move.accuracy = 0;
 			}
@@ -6437,13 +6435,13 @@ exports.BattleMovedex = {
 		volatileStatus: 'lockon',
 		effect: {
 			duration: 2,
-			onModifyMove: function(move) {
+			onFoeModifyMove: function(move) {
 				move.accuracy = true;
 				move.alwaysHit = true;
 			}
 		},
 		secondary: false,
-		target: "self",
+		target: "normal",
 		type: "Normal"
 	},
 	"lovelykiss": {
@@ -7187,7 +7185,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'lockon',
 		secondary: false,
-		target: "self",
+		target: "normal",
 		type: "Normal"
 	},
 	"minimize": {
@@ -7488,7 +7486,7 @@ exports.BattleMovedex = {
 				this.add("-start", pokemon, 'Mud Sport');
 			},
 			onAnyBasePower: function(basePower, user, target, move) {
-				if (move.type === 'Electric') return basePower / 3;
+				if (move.type === 'Electric') return basePower * 0.33;
 			}
 		},
 		secondary: false,
@@ -12703,7 +12701,7 @@ exports.BattleMovedex = {
 				this.add("-start", pokemon, 'move: Water Sport');
 			},
 			onAnyBasePower: function(basePower, user, target, move) {
-				if (move.type === 'Fire') return basePower / 3;
+				if (move.type === 'Fire') return basePower * 0.33;
 			}
 		},
 		secondary: false,

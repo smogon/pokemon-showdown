@@ -131,9 +131,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'me':
-		if (canTalk(user, room)) {
-			return '/me '+target;
-		}
+	case 'mee':
+		if (canTalk(user, room)) return true;
 		break;
 
 	case '!birkal':
@@ -225,7 +224,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'forfeit':
 	case 'concede':
 	case 'surrender':
-		if (!room.battle) return;
+		if (!room.battle) {
+			emit(socket, 'console', "There's nothing to forfeit here.");
+			return false;
+		}
 		if (!room.forfeit(user)) {
 			emit(socket, 'console', "You can't forfeit this battle.");
 		}
@@ -240,7 +242,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'avatar':
 		if (!target) return parseCommand(user, 'avatars', '', room, socket);
 		var avatar = parseInt(target);
-		if (!avatar || avatar > 263 || avatar < 1) {
+		if (!avatar || avatar > 294 || avatar < 1) {
 			emit(socket, 'console', 'Invalid avatar.');
 			return false;
 		}
@@ -706,26 +708,26 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'declare':
-        if (!target) return parseCommand(user, '?', cmd, room, socket);
-        if (!user.can('declare')) {
-                emit(socket, 'console', '/declare - Access denied.');
-                return false;
-        }
-        target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
-        room.addRaw('<div style="background:#7067AB;color:white;padding:2px 4px"><b>'+target+'</b></div>');
-        logModCommand(room,user.name+' declared '+target,true);
-        return false;
-        break;
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (!user.can('declare')) {
+			emit(socket, 'console', '/declare - Access denied.');
+			return false;
+		}
+		target = target.replace(/\[\[([A-Za-z0-9-]+)\]\]/, '<button onclick="selectTab(\'$1\');return false">Go to $1</button>');
+		room.addRaw('<div style="background:#7067AB;color:white;padding:2px 4px"><b>'+target+'</b></div>');
+		logModCommand(room,user.name+' declared '+target,true);
+		return false;
+		break;
 
 	case 'announce':
 	case 'wall':
-        if (!target) return parseCommand(user, '?', cmd, room, socket);
-        if (!user.can('announce')) {
-                emit(socket, 'console', '/announce - Access denied.');
-                return false;
-        }
-        return '/announce '+target;
-        break;
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		if (!user.can('announce')) {
+			emit(socket, 'console', '/announce - Access denied.');
+			return false;
+		}
+		return '/announce '+target;
+		break;
 
 	case 'hotpatch':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
@@ -1032,21 +1034,21 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'tiers':
 	case '!banlists':
 	case '!tiers':
-        	showOrBroadcastStart(user, cmd, room, socket, message);
-        	showOrBroadcast(user, cmd, room, socket,
-                	'<div style="border:1px solid #6688AA;padding:2px 4px">Smogon tiers:<br />' +
-                	'- <a href="http://www.smogon.com/bw/banlist/" target="_blank">The banlists for each tier</a><br />' +
-                	'- <a href="http://www.smogon.com/bw/tiers/uber" target="_blank">Uber Pokemon</a><br />' +
-                	'- <a href="http://www.smogon.com/bw/tiers/ou" target="_blank">Overused Pokemon</a><br />' +
-                	'- <a href="http://www.smogon.com/bw/tiers/uu" target="_blank">Underused Pokemon</a><br />' +
-                	'- <a href="http://www.smogon.com/bw/tiers/ru" target="_blank">Rarelyused Pokemon</a><br />' +
-                	'- <a href="http://www.smogon.com/bw/tiers/nu" target="_blank">Neverused Pokemon</a><br />' +
-                	'- <a href="http://www.smogon.com/bw/tiers/lc" target="_blank">Little Cup Pokemon</a><br />' +
-                	'</div>');
-        return false;
-        break;
-        
-        case 'analysis':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Smogon tiers:<br />' +
+			'- <a href="http://www.smogon.com/bw/banlist/" target="_blank">The banlists for each tier</a><br />' +
+			'- <a href="http://www.smogon.com/bw/tiers/uber" target="_blank">Uber Pokemon</a><br />' +
+			'- <a href="http://www.smogon.com/bw/tiers/ou" target="_blank">Overused Pokemon</a><br />' +
+			'- <a href="http://www.smogon.com/bw/tiers/uu" target="_blank">Underused Pokemon</a><br />' +
+			'- <a href="http://www.smogon.com/bw/tiers/ru" target="_blank">Rarelyused Pokemon</a><br />' +
+			'- <a href="http://www.smogon.com/bw/tiers/nu" target="_blank">Neverused Pokemon</a><br />' +
+			'- <a href="http://www.smogon.com/bw/tiers/lc" target="_blank">Little Cup Pokemon</a><br />' +
+			'</div>');
+		return false;
+		break;
+
+	case 'analysis':
 	case 'dex':
 	case 'pokedex':
 	case 'strategy':
@@ -1057,13 +1059,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var targets = target.split(',');
 		var template = Tools.getTemplate(targets[0]);
 		var generation = (targets[1] || "bw").trim().toLowerCase();
-		var genNumber = 5;	
+		var genNumber = 5;
 
 		showOrBroadcastStart(user, cmd, room, socket, message);
 
 		if(!template.exists) {
-			showOrBroadcast(user, cmd, room, socket,
-				'Pokemon "'+template.id+'" not found.');
+			showOrBroadcast(user, cmd, room, socket, 'Pokemon "'+template.id+'" not found.');
 			return false;
 		}
 
@@ -1086,19 +1087,18 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			genNumber = 1;
 		}
 		else {
-		generation = "bw";
+			generation = "bw";
 		}
 
 		if (genNumber < template.gen) {
-			showOrBroadcast(user, cmd, room, socket,
-				''+template.name+' did not exist in '+generation.toUpperCase()+'!');
+			showOrBroadcast(user, cmd, room, socket, template.name+' did not exist in '+generation.toUpperCase()+'!');
 			return false;
 		}
 
 		showOrBroadcast(user, cmd, room, socket,
 			'<a href="http://www.smogon.com/'+generation+'/pokemon/'+template.name+'" target="_blank">'+generation.toUpperCase()+' '+template.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
-	return false;
-	break;
+		return false;
+		break;
 
 	case 'join':
 		var targetRoom = Rooms.get(target);
@@ -1583,8 +1583,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/redirect OR /redir [username], [url] - Redirects user to a different URL. ~~intl and ~~dev are accepted redirects. Requires: @ & ~');
 		}
 		if (target === "@" || target === 'kick' || target === 'k') {
-        		matched = true;
-        		emit(socket, 'console', '/kick OR /k [username] - Quickly kicks a user by redirecting them to the Smogon Sim Rules page. Requires: @ & ~');
+			matched = true;
+			emit(socket, 'console', '/kick OR /k [username] - Quickly kicks a user by redirecting them to the Smogon Sim Rules page. Requires: @ & ~');
 		}
 		if (target === '@' || target === 'banredirect' || target === 'br') {
 			matched = true;
@@ -1619,12 +1619,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: & ~');
 		}
 		if (target === '&' || target === 'declare' ) {
-        		matched = true;
-        		emit(socket, 'console', '/declare [message] - Anonymously announces a message. Requires: & ~');
+			matched = true;
+			emit(socket, 'console', '/declare [message] - Anonymously announces a message. Requires: & ~');
 		}
 		if (target === '%' || target === 'announce' || target === 'wall' ) {
-        		matched = true;
-        		emit(socket, 'console', '/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
+			matched = true;
+			emit(socket, 'console', '/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
 		}
 		if (target === '@' || target === 'modchat') {
 			matched = true;
