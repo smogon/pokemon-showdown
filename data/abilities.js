@@ -206,7 +206,7 @@ exports.BattleAbilities = {
 		},
 		id: "chlorophyll",
 		name: "Chlorophyll",
-		rating: 3.5,
+		rating: 2,
 		num: 34
 	},
 	"clearbody": {
@@ -1030,7 +1030,7 @@ exports.BattleAbilities = {
 		},
 		id: "leafguard",
 		name: "Leaf Guard",
-		rating: 3,
+		rating: 1,
 		num: 102
 	},
 	"levitate": {
