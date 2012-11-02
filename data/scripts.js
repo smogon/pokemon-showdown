@@ -925,7 +925,7 @@ exports.BattleScripts = {
 				item = 'Choice Specs';
 			} else if (counter.Status <= 1 && (hasMove['trick'] || hasMove['switcheroo'])) {
 				item = 'Choice Scarf';
-			} else if (hasMove['rest'] && !hasMove['sleeptalk']) {
+			} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure') {
 				item = 'Chesto Berry';
 			} else if (hasMove['naturalgift']) {
 				item = 'Liechi Berry';
@@ -983,7 +983,7 @@ exports.BattleScripts = {
 					}
 				}
 			} else if (ability === 'Marvel Scale' && hasMove['psychoshift']) {
-				item = 'FlameOrb';
+				item = 'Flame Orb';
 			} else if (hasMove['reflect'] || hasMove['lightscreen']) {
 				// less priority than if you'd had both
 				item = 'Light Clay';
@@ -1005,7 +1005,7 @@ exports.BattleScripts = {
 				item = 'Choice Scarf';
 			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect']) {
 				item = 'Leftovers';
-			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'sturdy') {
+			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
 				item = 'Focus Sash';
 			} else if (ability === 'Iron Barbs') {
 				// only Iron Barbs for now
@@ -1019,7 +1019,7 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else if (counter.Physical + counter.Special >= 4) {
 				item = 'Expert Belt';
-			} else if (i===0 && ability !== 'sturdy') {
+			} else if (i===0 && ability !== 'Sturdy') {
 				item = 'Focus Sash';
 
 			// this is the "REALLY can't think of a good item" cutoff
