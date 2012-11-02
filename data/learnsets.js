@@ -50377,9 +50377,10 @@ exports.BattleLearnsets = {
 			fling: ["5M"],
 			fly: ["5M"],
 			focusblast: ["5M"],
+			freezeshock: ["5L50"],
 			frustration: ["5M"],
+			fusionbolt: ["5L43"],
 			gigaimpact: ["5M"],
-			glaciate: ["5L50"],
 			hail: ["5M"],
 			hiddenpower: ["5M"],
 			honeclaws: ["5M"],
@@ -50404,7 +50405,6 @@ exports.BattleLearnsets = {
 			roost: ["5T"],
 			round: ["5M"],
 			safeguard: ["5M"],
-			scaryface: ["5L43"],
 			shadowball: ["5M"],
 			shadowclaw: ["5M"],
 			signalbeam: ["5T"],
@@ -50441,14 +50441,15 @@ exports.BattleLearnsets = {
 			fly: ["5M"],
 			focusblast: ["5M"],
 			frustration: ["5M"],
+			fusionflare: ["5L43"],
 			gigaimpact: ["5M"],
-			glaciate: ["5L50"],
 			hail: ["5M"],
 			hiddenpower: ["5M"],
 			honeclaws: ["5M"],
 			hyperbeam: ["5M"],
 			hypervoice: ["5T","5L92"],
 			icebeam: ["5M","5L22"],
+			iceburn: ["5L50"],
 			icywind: ["5T","5L1"],
 			imprison: ["5L8","5L64"],
 			ironhead: ["5T"],
@@ -50467,7 +50468,6 @@ exports.BattleLearnsets = {
 			roost: ["5T"],
 			round: ["5M"],
 			safeguard: ["5M"],
-			scaryface: ["5L43"],
 			shadowball: ["5M"],
 			shadowclaw: ["5M"],
 			signalbeam: ["5T"],
@@ -50542,7 +50542,7 @@ exports.BattleLearnsets = {
 			xscissor: ["5M"]
 		}
 	},
-	keldeoresolution: {
+	keldeoresolute: {
 		learnset: {
 			aerialace: ["5M"],
 			aquajet: ["5L1","5S0"],

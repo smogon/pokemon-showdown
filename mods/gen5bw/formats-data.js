@@ -4402,7 +4402,7 @@ exports.BattleFormatsData = {
 		],
 		tier: "Unreleased"
 	},
-	keldeoresolution: {
+	keldeoresolute: {
 		tier: "Unreleased"
 	},
 	meloetta: {

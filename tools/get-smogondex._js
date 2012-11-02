@@ -301,7 +301,7 @@ exports.getSmogonDex = function(_) {
 				break;
 
 			case "keldeo" :
-				smogonDex["keldeoresolution"] = {
+				smogonDex["keldeoresolute"] = {
 						types: types,
 						tier: tier,
 						abilities: abilities,

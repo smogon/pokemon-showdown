@@ -16,7 +16,7 @@ exports.BattleAliases = {
 	"deoxysdefence": "Deoxys-Defense",
 	"deoxyss": "Deoxys-Speed",
 	"giratinao": "Giratina-Origin",
-	"keldeor": "Keldeo-Resolution",
+	"keldeor": "Keldeo-Resolute",
 	"kyuremb": "Kyurem-Black",
 	"kyuremw": "Kyurem-White",
 	"landorust": "Landorus-Therian",

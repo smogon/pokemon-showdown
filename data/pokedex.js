@@ -17033,7 +17033,7 @@ exports.BattlePokedex = {
 	keldeo: {
 		num: 647,
 		species: "Keldeo",
-		forme: "regular",
+		forme: "Ordinary",
 		types: ["Water","Fighting"],
 		gender: "N",
 		baseStats: {
@@ -17051,14 +17051,14 @@ exports.BattlePokedex = {
 		weightkg: 48.5,
 		colour: "Yellow",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["keldeoresolution"],
+		otherFormes: ["keldeoresolute"],
 	},
-	keldeoresolution: {
+	keldeoresolute: {
 		num: 647,
-		species: "Keldeo-resolution",
+		species: "Keldeo-Resolute",
 		baseSpecies: "Keldeo",
-		forme: "resolution",
-		formeLetter: "r",
+		forme: "Resolute",
+		formeLetter: "R",
 		types: ["Water","Fighting"],
 		gender: "N",
 		baseStats: {
