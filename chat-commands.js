@@ -242,7 +242,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'avatar':
 		if (!target) return parseCommand(user, 'avatars', '', room, socket);
 		var avatar = parseInt(target);
-		if (!avatar || avatar > 263 || avatar < 1) {
+		if (!avatar || avatar > 294 || avatar < 1) {
 			emit(socket, 'console', 'Invalid avatar.');
 			return false;
 		}
