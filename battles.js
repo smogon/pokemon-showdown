@@ -182,9 +182,10 @@ function BattlePokemon(set, side) {
 	if (this.set.moves) {
 		for (var i=0; i<this.set.moves.length; i++) {
 			var move = selfB.getMove(this.set.moves[i]);
-			if (move.id === 'HiddenPower') {
+			if (move.id === 'hiddenpower') {
 				this.hpType = move.type;
 			}
+			if (!this.set.ivs) this.set.ivs = selfB.getType(this.hpType).HPivs;
 			this.baseMoveset.push({
 				move: move.name,
 				id: move.id,
