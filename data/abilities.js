@@ -2572,6 +2572,7 @@ exports.BattleAbilities = {
 		effect: {
 			onStart: function(pokemon) {
 				if (pokemon.transformInto('Darmanitan-Zen')) {
+					pokemon.transformed = false;
 					this.add('-formechange', pokemon, 'Darmanitan-Zen');
 					this.add('-message', 'Zen Mode triggered! (placeholder)');
 				} else {
@@ -2580,6 +2581,7 @@ exports.BattleAbilities = {
 			},
 			onEnd: function(pokemon) {
 				if (pokemon.transformInto('Darmanitan')) {
+					pokemon.transformed = false;
 					this.add('-formechange', pokemon, 'Darmanitan');
 					this.add('-message', 'Zen Mode ended! (placeholder)');
 				} else {
@@ -2588,6 +2590,7 @@ exports.BattleAbilities = {
 			},
 			onUpdate: function(pokemon) {
 				if (pokemon.ability !== 'zenmode') {
+					pokemon.transformed = false;
 					pokemon.removeVolatile('zenmode');
 				}
 			}
