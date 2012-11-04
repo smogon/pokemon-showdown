@@ -2177,7 +2177,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	beautifly: {
-		viableMoves: {"quiverdance":1,"bugbuzz":1,"psychic":1,"hiddenpowerfighting":1,"hiddenpowerrock":1,"substitute":1,"roost":1},
+		viableMoves: {"quiverdance":1,"bugbuzz":1,"gigadrain":1,"hiddenpowerfighting":1,"hiddenpowerrock":1,"substitute":1,"roost":1},
 		tier: "NU"
 	},
 	cascoon: {
@@ -4439,7 +4439,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	cryogonal: {
-		viableMoves: {"icebeam":1,"recover":1,"toxic":1,"haze":1,"reflect":1,"acidarmor":1,"knockoff":1},
+		viableMoves: {"icebeam":1,"recover":1,"toxic":1,"rapidspin":1,"reflect":1},
 		tier: "RU"
 	},
 	shelmet: {
@@ -4480,12 +4480,12 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	golett: {
-		viableMoves: {"substitute":1,"focuspunch":1,"earthquake":1,"shadowpunch":1,"hammerarm":1,"dynamicpunch":1,"icepunch":1,"stoneedge":1,"stealthrock":1},
+		viableMoves: {"earthquake":1,"shadowpunch":1,"dynamicpunch":1,"icepunch":1,"stoneedge":1,"stealthrock":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	golurk: {
-		viableMoves: {"substitute":1,"focuspunch":1,"earthquake":1,"shadowpunch":1,"hammerarm":1,"dynamicpunch":1,"icepunch":1,"stoneedge":1,"stealthrock":1},
+		viableMoves: {"earthquake":1,"shadowpunch":1,"dynamicpunch":1,"icepunch":1,"stoneedge":1,"stealthrock":1},
 		eventPokemon: [
 			{"generation":5,"level":70,"shiny":true,"abilities":["ironfist"],"moves":["shadowpunch","hyperbeam","gyroball","hammerarm"]}
 		],
