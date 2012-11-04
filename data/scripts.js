@@ -941,7 +941,7 @@ exports.BattleScripts = {
 				item = 'Flying Gem';
 			} else if (hasMove['shellsmash']) {
 				item = 'White Herb';
-			} else if (ability === 'Poison Heal' || ability === 'Toxic Boost') {
+			} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
 				item = 'Toxic Orb';
 			} else if (hasMove['raindance']) {
 				item = 'Damp Rock';
