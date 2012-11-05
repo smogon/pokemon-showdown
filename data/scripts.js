@@ -716,6 +716,9 @@ exports.BattleScripts = {
 				case 'surf':
 					if (hasMove['scald'] || hasMove['hydropump']) rejected = true;
 					break;
+				case 'aquatail':
+					if (hasMove['waterfall']) rejected = true;
+					break;
 				case 'energyball':
 				case 'grassknot':
 				case 'petaldance':
