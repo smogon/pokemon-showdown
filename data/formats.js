@@ -106,11 +106,20 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "UU",
 		rated: true,
-		challengeShow: true,
-		searchShow: true,
+		// challengeShow: true,
+		// searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Snow Warning', 'Drought', 'Sand Stream']
+	},
+	uususpecttest: {
+		effectType: 'Format',
+		name: "UU (Suspect Test)",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
 	ru: {
 		effectType: 'Format',
