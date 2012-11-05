@@ -1563,7 +1563,7 @@ exports.BattleAbilities = {
 		},
 		id: "pressure",
 		name: "Pressure",
-		rating: 1,
+		rating: 2,
 		num: 46
 	},
 	"purepower": {
@@ -1600,7 +1600,7 @@ exports.BattleAbilities = {
 		},
 		id: "raindish",
 		name: "Rain Dish",
-		rating: 3,
+		rating: 1,
 		num: 44
 	},
 	"rattled": {
@@ -1708,7 +1708,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandforce",
 		name: "Sand Force",
-		rating: 3,
+		rating: 2,
 		num: 159
 	},
 	"sandrush": {
@@ -1724,7 +1724,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandrush",
 		name: "Sand Rush",
-		rating: 3.5,
+		rating: 2,
 		num: 146
 	},
 	"sandstream": {
@@ -1754,7 +1754,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandveil",
 		name: "Sand Veil",
-		rating: 3,
+		rating: 1,
 		num: 8
 	},
 	"sapsipper": {
@@ -1944,7 +1944,7 @@ exports.BattleAbilities = {
 		},
 		id: "snowcloak",
 		name: "Snow Cloak",
-		rating: 2,
+		rating: 0.5,
 		num: 81
 	},
 	"snowwarning": {
@@ -1974,7 +1974,7 @@ exports.BattleAbilities = {
 		},
 		id: "solarpower",
 		name: "Solar Power",
-		rating: 3,
+		rating: 1.5,
 		num: 94
 	},
 	"solidrock": {
@@ -2166,7 +2166,7 @@ exports.BattleAbilities = {
 		},
 		id: "swiftswim",
 		name: "Swift Swim",
-		rating: 3.5,
+		rating: 2,
 		num: 33
 	},
 	"synchronize": {
