@@ -795,7 +795,7 @@ exports.BattleAbilities = {
 		},
 		id: "hydration",
 		name: "Hydration",
-		rating: 4,
+		rating: 2,
 		num: 93
 	},
 	"hypercutter": {
