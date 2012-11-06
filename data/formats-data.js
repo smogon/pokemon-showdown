@@ -4636,7 +4636,7 @@ exports.BattleFormatsData = {
 	},
 	kyuremblack: {
 		viableMoves: {"outrage":1,"fusionbolt":1,"icebeam":1,"roost":1},
-		tier: "Uber"
+		tier: "OU"
 	},
 	kyuremwhite: {
 		viableMoves: {"dracometeor":1,"dragonpulse":1,"icebeam":1,"fusionflare":1,"earthpower":1,"focusblast":1,"roost":1},
