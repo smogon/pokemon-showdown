@@ -26,6 +26,7 @@ var Simulator = (function(){
 		this.players = [null, null];
 		this.playerids = [null, null];
 		this.playerTable = {};
+		this.requests = {};
 
 		simulators[id] = this;
 
@@ -42,6 +43,8 @@ var Simulator = (function(){
 	Simulator.prototype.playerTable = null;
 	Simulator.prototype.format = null;
 	Simulator.prototype.room = null;
+
+	Simulator.prototype.requests = null;
 
 	// log information
 	Simulator.prototype.logData = null;
@@ -86,7 +89,10 @@ var Simulator = (function(){
 
 		case 'request':
 			var player = this.getPlayer(lines[2]);
-			if (player) player.emit('update', JSON.parse(lines[3]));
+			if (player) {
+				this.requests[player.userid] = lines[3];
+				player.emit('update', JSON.parse(lines[3]));
+			}
 			break;
 
 		case 'log':
@@ -126,6 +132,7 @@ var Simulator = (function(){
 		this.players[slot] = (user || null);
 		this.playerids[slot] = (user ? user.userid : null);
 		this.playerTable = {};
+		this.requests = {};
 		this.active = !this.ended;
 		for (var i=0, len=this.players.length; i<len; i++) {
 			var player = this.players[i];
