@@ -1138,7 +1138,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'mv':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
-		room.decision(user, 'move', target);
+		room.decision(user, 'choose', 'move '+target);
 		return false;
 		break;
 
@@ -1146,7 +1146,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'sw':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
-		room.decision(user, 'switch', parseInt(target,10)-1);
+		room.decision(user, 'choose', 'switch '+parseInt(target,10));
+		return false;
+		break;
+
+	case 'choose':
+		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
+
+		room.decision(user, 'choose', target);
 		return false;
 		break;
 
@@ -1160,7 +1167,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'team':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
-		room.decision(user, 'team', target);
+		room.decision(user, 'choose', 'team '+target);
 		return false;
 		break;
 
