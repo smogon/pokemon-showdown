@@ -737,6 +737,7 @@ exports.BattleScripts = {
 					if (hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
 					break;
 				case 'rockslide':
+				case 'rockblast':
 					if (hasMove['stoneedge']) rejected = true;
 					break;
 				case 'dragonclaw':
