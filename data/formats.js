@@ -444,7 +444,7 @@ exports.BattleFormats = {
 			}
 		},
 		onTeamPreview: function() {
-			this.callback('team-preview');
+			this.makeRequest('teampreview');
 		}
 	},
 	littlecup: {
