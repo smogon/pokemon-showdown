@@ -428,7 +428,7 @@ var User = (function () {
 				if (userid === "serei") avatar = 172;
 				else if (userid === "hobsgoblin") avatar = 52;
 				else if (userid === "ataraxia") avatar = 1002;
-				else if (userid === "verbatim") avatar = 1003;
+				else if (userid === "verbatim") avatar = 283;
 				else if (userid === "mortygymleader") avatar = 144;
 				else if (userid === "leadermorty") avatar = 144;
 				else if (userid === "leaderjasmine") avatar = 146;
