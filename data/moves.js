@@ -7901,7 +7901,7 @@ exports.BattleMovedex = {
 			for (var i=0; i<this.sides.length; i++) {
 				for (var j=0; j<this.sides[i].active.length; j++) {
 					if (this.sides[i].active[j].runImmunity('sound')) this.sides[i].active[j].addVolatile('perishsong');
-					else this.add('-message', this.sides[i].active[j].name+' is immune to Perish Song due to Soundproof, the graphics are incorrect (placeholder)');
+					else this.add('-end', this.sides[i].active[j].name, 'Perish Song');
 				}
 			}
 		},
