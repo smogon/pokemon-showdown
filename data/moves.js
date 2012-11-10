@@ -514,9 +514,9 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('attract');
 					return;
 				}
-				this.add('-activate', pokemon.name, 'Attract', '[of] '+this.effectData.source);
+				this.add('-activate', pokemon, 'Attract', '[of] '+this.effectData.source);
 				if (this.random(2) === 0) {
-					this.add('cant', pokemon.name, 'Attract');
+					this.add('cant', pokemon, 'Attract');
 					return false;
 				}
 			}
@@ -1422,7 +1422,7 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		volatileStatus: 'charge',
 		onHit: function(pokemon) {
-			this.add('-activate', pokemon.name, 'move: Charge');
+			this.add('-activate', pokemon, 'move: Charge');
 		},
 		effect: {
 			duration: 2,
@@ -4608,7 +4608,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'grudge',
 		effect: {
 			onStart: function(pokemon) {
-				this.add('-singlemove', pokemon, 'move: Grudge');
+				this.add('-singlemove', pokemon, 'Grudge');
 			},
 			onFaint: function(target, source, effect) {
 				this.debug('Grudge detected fainted pokemon');
@@ -4617,7 +4617,7 @@ exports.BattleMovedex = {
 					for (var i in source.moveset) {
 						if (source.moveset[i].id === source.lastMove) {
 							source.moveset[i].pp = 0;
-							this.add('-activate', source, 'move: Grudge');
+							this.add('-activate', source, 'Grudge', this.getMove(source.lastMove).name);
 						}
 					}
 				}
@@ -7901,7 +7901,7 @@ exports.BattleMovedex = {
 			for (var i=0; i<this.sides.length; i++) {
 				for (var j=0; j<this.sides[i].active.length; j++) {
 					if (this.sides[i].active[j].runImmunity('sound')) this.sides[i].active[j].addVolatile('perishsong');
-					else this.add('-end', this.sides[i].active[j].name, 'Perish Song');
+					else this.add('-end', this.sides[i].active[j], 'Perish Song');
 				}
 			}
 		},
