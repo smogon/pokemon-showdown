@@ -4544,6 +4544,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 22,
 			onEnd: function() {
+				this.add('-fieldend', 'move: Gravity');
 				this.add('-message', 'Gravity returned to normal! (placeholder)');
 			}
 		},
