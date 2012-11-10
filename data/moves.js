@@ -514,9 +514,9 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('attract');
 					return;
 				}
-				this.add('-message', pokemon.name+' is in love with '+this.effectData.source.name+'! (placeholder)');
+				this.add('-activate', pokemon.name, 'Attract', '[of] '+this.effectData.source);
 				if (this.random(2) === 0) {
-					this.add('-message', pokemon.name+' is immobilized by love! (placeholder)');
+					this.add('cant', pokemon.name, 'Attract');
 					return false;
 				}
 			}
@@ -4539,7 +4539,7 @@ exports.BattleMovedex = {
 				}
 				if (pokemon.volatiles['bounce'] || pokemon.volatiles['fly'] || pokemon.volatiles['skydrop']) {
 					pokemon.removeVolatile('twoturnmove');
-					this.add("-message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
+					this.add('-activate', pokemon, 'Gravity');
 				}
 			},
 			onResidualOrder: 22,
@@ -6582,8 +6582,7 @@ exports.BattleMovedex = {
 					for (var m in target.moveset) {
 						target.moveset[m].pp = target.moveset[m].maxpp;
 					}
-					this.add('-message',target.name+' became cloaked in mystical moonlight! (placeholder)');
-					this.add('-heal',target,target.getHealth(),'[from] move: Lunar Dance','[silent]'); // remove [silent] once the message is implemented clientside
+					this.add('-heal',target,target.getHealth(),'[from] move: Lunar Dance'); // remove [silent] once the message is implemented clientside
 					target.side.removeSideCondition('lunardance');
 				}
 			}
@@ -6802,25 +6801,25 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon) {
 			var i = this.random(100);
 			if (i < 5) {
-				this.add('-message', 'Magnitude 4! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 4);
 				return 10;
 			} else if (i < 15) {
-				this.add('-message', 'Magnitude 5! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 5);
 				return 30;
 			} else if (i < 35) {
-				this.add('-message', 'Magnitude 6! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 6);
 				return 50;
 			} else if (i < 65) {
-				this.add('-message', 'Magnitude 7! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 7);
 				return 70;
 			} else if (i < 85) {
-				this.add('-message', 'Magnitude 8! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 8);
 				return 90;
 			} else if (i < 95) {
-				this.add('-message', 'Magnitude 9! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 9);
 				return 110;
 			} else {
-				this.add('-message', 'Magnitude 10! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 10);
 				return 150;
 			}
 		},
@@ -11207,7 +11206,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		beforeMoveCallback: function(pokemon) {
-			this.add('-message', pokemon.name+' has no moves left! (placeholder)');
+			this.add('-activate', pokemon, 'move: Struggle');
 		},
 		onModifyMove: function(move) {
 			move.type = '???';
