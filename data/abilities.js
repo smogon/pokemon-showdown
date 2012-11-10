@@ -113,6 +113,7 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			var targets = pokemon.side.foe.active;
 			for (var i=0; i<targets.length; i++) {
+				if (targets[i].fainted) continue;
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
 					if (move.category !== 'Status' && (this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
@@ -624,6 +625,7 @@ exports.BattleAbilities = {
 			var warnMoves = [];
 			var warnBp = 1;
 			for (var i=0; i<targets.length; i++) {
+				if (targets[i].fainted) continue;
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
 					var bp = move.basePower;
@@ -660,7 +662,7 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			if (target.item) {
+			if (target && target.item) {
 				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] '+pokemon);
 			}
 		},
@@ -885,7 +887,7 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon copies the foe it's facing; stats, moves, types, Ability.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			if (pokemon.transformInto(target)) {
+			if (target && pokemon.transformInto(target)) {
 				this.add('-transform', pokemon, target);
 			}
 		},
@@ -1444,6 +1446,7 @@ exports.BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			var foe = pokemon.side.foe.randomActive();
+			if (!foe) return;
 			if (!pokemon.item && foe.lastItem && foe.usedItemThisTurn && foe.lastItem !== 'airballoon' && foe.lastItem !== 'ejectbutton') {
 				pokemon.setItem(foe.lastItem);
 				foe.lastItem = '';
@@ -2300,7 +2303,7 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onUpdate: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			if (!target || target.fainted) return;
+			if (!target) return;
 			var ability = this.getAbility(target.ability);
 			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, zenmode:1};
 			if (bannedAbilities[target.ability]) {

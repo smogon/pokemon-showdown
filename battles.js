@@ -1016,8 +1016,12 @@ function BattleSide(name, battle, n, team) {
 	};
 
 	this.randomActive = function() {
-		var i = Math.floor(Math.random() * selfS.active.length);
-		return selfS.active[i];
+		var actives = selfS.active.filter(function(active) {
+			return active && !active.fainted;
+		});
+		if (!actives.length) return null;
+		var i = Math.floor(Math.random() * actives.length);
+		return actives[i];
 	};
 
 	this.addSideCondition = function(status, source, sourceEffect) {
