@@ -3332,14 +3332,14 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 70,
 		basePowerCallback: function(pokemon) {
-			if (pokemon.status) {
+			if (pokemon.status && pokemon.status !== 'slp') {
 				return 140;
 			}
 			return 70;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the user is burned, paralyzed, or poisoned. Makes contact.",
-		shortDesc: "Power doubles when user is inflicted by a status.",
+		shortDesc: "Power doubles if user is burn/poison/paralyzed.",
 		id: "facade",
 		isViable: true,
 		name: "Facade",
