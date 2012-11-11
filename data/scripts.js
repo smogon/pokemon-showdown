@@ -719,9 +719,7 @@ exports.BattleScripts = {
 				case 'aquatail':
 					if (hasMove['waterfall']) rejected = true;
 					break;
-				case 'energyball':
-				case 'grassknot':
-				case 'petaldance':
+				case 'energyball': case 'grassknot': case 'petaldance':
 					if (hasMove['gigadrain']) rejected = true;
 					break;
 				case 'seedbomb':
@@ -736,8 +734,7 @@ exports.BattleScripts = {
 				case 'discharge':
 					if (hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
 					break;
-				case 'rockslide':
-				case 'rockblast':
+				case 'rockslide': case 'rockblast':
 					if (hasMove['stoneedge']) rejected = true;
 					break;
 				case 'dragonclaw':
@@ -782,6 +779,9 @@ exports.BattleScripts = {
 					break;
 				case 'roost':
 					if (hasMove['recover']) rejected = true;
+					break;
+				case 'substitute':
+					if (hasMove['uturn'] || hasMove['voltswitch']) rejected = true;
 					break;
 				}
 				// handle HP IVs
@@ -933,6 +933,8 @@ exports.BattleScripts = {
 				item = 'Chesto Berry';
 			} else if (hasMove['naturalgift']) {
 				item = 'Liechi Berry';
+			} else if (ability === 'Harvest') {
+				item = 'Sitrus Berry';
 			} else if (template.species === 'Cubone' || template.species === 'Marowak') {
 				item = 'Thick Club';
 			} else if (template.species === 'Pikachu') {
