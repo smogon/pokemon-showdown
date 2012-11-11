@@ -707,7 +707,7 @@ exports.BattleAbilities = {
 				}
 			}
 		},
-		rating: 0.5,
+		rating: 2,
 		num: 139
 	},
 	"healer": {
@@ -1014,7 +1014,7 @@ exports.BattleAbilities = {
 		},
 		id: "klutz",
 		name: "Klutz",
-		rating: 1.5,
+		rating: 0,
 		num: 103
 	},
 	"leafguard": {
