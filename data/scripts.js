@@ -698,17 +698,20 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'knockoff': case 'protect': case 'perishsong': case 'magiccoat':
+				case 'knockoff': case 'protect': case 'perishsong': case 'magiccoat': case 'trick':
+					if (setupType) rejected = true;
+					break;
+				case 'uturn': case 'voltswitch':
 					if (setupType) rejected = true;
 					break;
 
 				// bit redundant to have both
 
-				case 'fireblast':
-					if (hasMove['eruption'] || hasMove['overheat'] || hasMove['flamethrower']) rejected = true;
-					break;
 				case 'flamethrower':
-					if (hasMove['lavaplume'] || hasMove['fireblast'] || hasMove['overheat']) rejected = true;
+					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast']) rejected = true;
+					break;
+				case 'overheat':
+					if (hasMove['fireblast']) rejected = true;
 					break;
 				case 'icebeam':
 					if (hasMove['blizzard']) rejected = true;
@@ -716,26 +719,38 @@ exports.BattleScripts = {
 				case 'surf':
 					if (hasMove['scald'] || hasMove['hydropump']) rejected = true;
 					break;
-				case 'aquatail':
-					if (hasMove['waterfall']) rejected = true;
+				case 'waterfall':
+					if (hasMove['aquatail']) rejected = true;
+					break;
+				case 'airslash':
+					if (hasMove['hurricane']) rejected = true;
+					break;
+				case 'acrobatics':
+					if (hasMove['bravebird']) rejected = true;
 					break;
 				case 'energyball': case 'grassknot': case 'petaldance':
 					if (hasMove['gigadrain']) rejected = true;
 					break;
-				case 'seedbomb':
-					if (hasMove['needlearm']) rejected = true;
+				case 'firepunch':
+					if (hasMove['flareblitz']) rejected = true;
 					break;
-				case 'flareblitz':
-					if (hasMove['firepunch']) rejected = true;
+				case 'crosschop': case 'hijumpkick':
+					if (hasMove['closecombat']) rejected = true;
+					break;
+				case 'drainpunch':
+					if (hasMove['closecombat'] || hasMove['hijumpkick']) rejected = true;
 					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
 					break;
-				case 'discharge':
-					if (hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
+				case 'discharge': case 'thunder':
+					if (hasMove['voltswitch']) rejected = true;
 					break;
 				case 'rockslide': case 'rockblast':
-					if (hasMove['stoneedge']) rejected = true;
+					if (hasMove['stoneedge'] || hasMove['headsmash']) rejected = true;
+					break;
+				case 'stoneedge':
+					if (hasMove['headsmash']) rejected = true;
 					break;
 				case 'dragonclaw':
 					if (hasMove['outrage'] || hasMove['dragontail']) rejected = true;
@@ -747,12 +762,7 @@ exports.BattleScripts = {
 					if (hasMove['dracometeor']) rejected = true;
 					break;
 				case 'return':
-					if (hasMove['bodyslam']) rejected = true;
-					if (hasMove['flail']) rejected = true;
-					if (hasMove['facade']) rejected = true;
-					break;
-				case 'flail':
-					if (hasMove['facade']) rejected = true;
+					if (hasMove['bodyslam'] || hasMove['facade'] || hasMove['doubleedge'] || hasMove['tailslap']) rejected = true;
 					break;
 				case 'poisonjab':
 					if (hasMove['gunkshot']) rejected = true;
@@ -761,11 +771,8 @@ exports.BattleScripts = {
 					if (hasMove['psyshock']) rejected = true;
 					break;
 
-				case 'yawn':
-					if (hasMove['grasswhistle']) rejected = true;
-					break;
 				case 'rest':
-					if (hasMove['morningsun']) rejected = true;
+					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight']) rejected = true;
 					break;
 				case 'softboiled':
 					if (hasMove['wish']) rejected = true;
