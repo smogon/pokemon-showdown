@@ -977,6 +977,21 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'</div>');
 		return false;
 		break;
+	
+	case 'om':
+	case 'othermetas':
+	case '!om':
+	case '!othermetas':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Information on the Other Metagames:<br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3463764" target="_blank">Balanced Hackmons</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3471810" target="_blank">Dream World OU</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3467120" target="_blank">Glitchmons</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3473992" target="_blank">Seasonal</a>' +
+			'</div>');
+		return false;
+		break;
 
 	case 'rules':
 	case 'rule':
@@ -1511,7 +1526,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.');
 			emit(socket, 'console', '!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~');
 		}
-		if (target === "all" || target === 'data') {
+		if (target === "all" || target === 'analysis') {
 			matched = true;
 			emit(socket, 'console', '/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pokemon in the given generation.');
 			emit(socket, 'console', '!analysis [pokemon], [generation] - Shows everyone this link. Requires: + % @ & ~');
@@ -1540,6 +1555,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/cap - Provides an introduction to the Create-A-Pokemon project.');
 			emit(socket, 'console', '!cap - Show everyone that information. Requires: + % @ & ~');
+		}
+		if (target === 'all' || target === 'om') {
+			matched = true;
+			emit(socket, 'console', '/om - Provides links to information on the Other Metagames.');
+			emit(socket, 'console', '!om - Show everyone that information. Requires: + % @ & ~');
 		}
 		if (target === 'all' || target === 'learn' || target === 'learnset' || target === 'learnall') {
 			matched = true;
