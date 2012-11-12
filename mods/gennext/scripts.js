@@ -22,6 +22,9 @@ exports.BattleScripts = {
 		// Meloetta: Fiery Dance
 		this.data.Learnsets.meloetta.learnset.fierydance = ['5L100'];
 
+		// Galvantula: Zap Cannon
+		this.data.Learnsets.galvantula.learnset.zapcannon = ['5L100'];
+
 		// Scolipede, Milotic: Coil
 		this.data.Learnsets.milotic.learnset.coil = ['5L100'];
 		this.data.Learnsets.scolipede.learnset.coil = ['5L100'];

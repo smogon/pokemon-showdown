@@ -163,6 +163,8 @@ Minor learnset changes:
 
 - Meloetta gets Fiery Dance
 
+- Galvantula gets Zap Cannon
+
 - Milotic and Scolipede get Coil
 
 - Rotom formes learn more things:
