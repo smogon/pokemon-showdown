@@ -181,6 +181,7 @@ exports.BattleScripts = {
 		return true;
 	},
 	moveHit: function(target, pokemon, move, moveData, isSecondary, isSelf) {
+		var damage = 0;
 		move = this.getMoveCopy(move);
 
 		if (!isSecondary && !isSelf) this.setActiveMove(move, pokemon, target);
@@ -267,7 +268,7 @@ exports.BattleScripts = {
 
 		if (target) {
 			var didSomething = false;
-			var damage = this.getDamage(pokemon, target, moveData);
+			damage = this.getDamage(pokemon, target, moveData);
 			if (damage === false || damage === null) {
 				this.singleEvent('MoveFail', move, null, target, pokemon, move);
 				return false;
@@ -1172,5 +1173,3 @@ exports.BattleScripts = {
 		return team;
 	}
 };
-
-var BattleScripts = exports.BattleScripts;

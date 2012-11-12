@@ -134,7 +134,7 @@ module.exports = (function () {
 			if (!template.genderRatio && template.gender === 'M') template.genderRatio = {M:1,F:0};
 			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0,F:1};
 			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0,F:0};
-			if (!template.genderRatio) template.genderRatio = {M:.5,F:.5};
+			if (!template.genderRatio) template.genderRatio = {M:0.5,F:0.5};
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.gen) {
 				if (template.num >= 494) template.gen = 5;
@@ -194,7 +194,7 @@ module.exports = (function () {
 	 */
 	Tools.prototype.getMoveCopy = function(move) {
 		if (move && move.isCopy) return move;
-		var move = this.getMove(move);
+		move = this.getMove(move);
 		var moveCopy = Object.clone(move, true);
 		moveCopy.isCopy = true;
 		return moveCopy;
@@ -346,7 +346,7 @@ module.exports = (function () {
 		Relaxed: {plus:'def', minus:'spe'},
 		Sassy: {plus:'spd', minus:'spe'},
 		Serious: {},
-		Timid: {plus:'spe', minus:'atk'},
+		Timid: {plus:'spe', minus:'atk'}
 	};
 	Tools.prototype.getNature = function(nature) {
 		if (typeof nature === 'string') nature = BattleNatures[nature];
@@ -369,9 +369,6 @@ module.exports = (function () {
 		var set = (lsetData.set || (lsetData.set={}));
 		var format = (lsetData.format || (lsetData.format={}));
 		var alreadyChecked = {};
-		var result = false;
-		var isMaleOnly = template.maleOnlyDreamWorld;
-		var recheck = false;
 
 		var limit1 = true;
 		var sketch = true;
@@ -737,7 +734,6 @@ module.exports = (function () {
 				}
 			}
 		}
-		var limit1 = 0;
 		if (!set.moves || !set.moves.length) {
 			problems.push(name+" has no moves.");
 		} else {

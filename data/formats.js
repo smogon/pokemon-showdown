@@ -226,7 +226,7 @@ exports.BattleFormats = {
 		name: "Hax Clause",
 		challengeShow: true,
 		canUseRandomTeam: true,
-		ruleset: ['Hax Clause', 'Team Preview']
+		ruleset: ['Hax Clause rule', 'Team Preview']
 	},
 	glitchmons: {
 		effectType: 'Format',
@@ -464,7 +464,7 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	haxclause: {
+	haxclauserule: {
 		effectType: 'Rule',
 		onStart: function() {
 			this.add('rule', 'Hax Clause');
