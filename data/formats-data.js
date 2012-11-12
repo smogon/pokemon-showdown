@@ -3546,7 +3546,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	heatran: {
-		viableMoves: {"substitute":1,"fireblast":1,"lavaplume":1,"willowisp":1,"stealthrock":1,"earthpower":1,"hiddenpowergrass":1,"hiddenpowerice":1,"dragonpulse":1,"protect":1,"toxic":1,"roar":1,"overheat":1},
+		viableMoves: {"substitute":1,"fireblast":1,"lavaplume":1,"willowisp":1,"stealthrock":1,"earthpower":1,"hiddenpowergrass":1,"hiddenpowerice":1,"protect":1,"toxic":1,"roar":1},
 		eventPokemon: [
 			{"generation":4,"level":50,"nature":"Quiet","abilities":["flashfire"],"moves":["eruption","magmastorm","earthpower","ancientpower"]}
 		],
