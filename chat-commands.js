@@ -1095,8 +1095,26 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
+		var poke = template.name.toLowerCase();
+
+		if (poke === 'nidoranm') poke = 'nidoran-m';
+		if (poke === 'nidoranf') poke = 'nidoran-f';
+		if (poke === 'farfetch\'d') poke = 'farfetchd';
+		if (poke === 'mr. mime') poke = 'mr_mime';
+		if (poke === 'mime jr.') poke = 'mime_jr';
+		if (poke === 'deoxys-attack' || poke === 'deoxys-defense' || poke === 'deoxys-speed' || poke === 'kyurem-black' || poke === 'kyurem-white') poke = poke.substr(0,8);
+		if (poke === 'wormadam-trash') poke = 'wormadam-s';
+		if (poke === 'wormadam-sandy') poke = 'wormadam-g';
+		if (poke === 'rotom-wash' || poke === 'rotom-frost' || poke === 'rotom-heat') poke = poke.substr(0,7);
+		if (poke === 'rotom-mow') poke = 'rotom-c';
+		if (poke === 'rotom-fan') poke = 'rotom-s';
+		if (poke === 'giratina-origin' || poke === 'tornadus-therian' || poke === 'landorus-therian') poke = poke.substr(0,10);
+		if (poke === 'shaymin-sky') poke = 'shaymin-s';
+		if (poke === 'arceus') poke = 'arceus-normal';
+		if (poke === 'thundurus-therian') poke = 'thundurus-t';
+
 		showOrBroadcast(user, cmd, room, socket,
-			'<a href="http://www.smogon.com/'+generation+'/pokemon/'+template.name+'" target="_blank">'+generation.toUpperCase()+' '+template.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+			'<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+'" target="_blank">'+generation.toUpperCase()+' '+template.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
 		return false;
 		break;
 
