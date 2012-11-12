@@ -145,7 +145,7 @@ var User = (function () {
 		this.group = config.groupsranking[0];
 
 		var trainersprites = [1, 2, 101, 102, 169, 170];
-		this.avatar = trainersprites[parseInt(Math.random()*trainersprites.length)];
+		this.avatar = trainersprites[Math.floor(Math.random()*trainersprites.length)];
 
 		this.connected = true;
 
@@ -1000,7 +1000,7 @@ exports.setOfflineGroup = function(name, group) {
 		delete usergroups[userid];
 	} else {
 		var usergroup = usergroups[userid];
-		var name = usergroup ? usergroup.substr(1) : name;
+		name = usergroup ? usergroup.substr(1) : name;
 		usergroups[userid] = group+name;
 	}
 	exportUsergroups();
