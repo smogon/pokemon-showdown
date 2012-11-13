@@ -696,6 +696,7 @@ exports.BattleScripts = {
 					break;
 
 				// bad after setup
+
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
@@ -729,8 +730,11 @@ exports.BattleScripts = {
 				case 'acrobatics':
 					if (hasMove['bravebird']) rejected = true;
 					break;
-				case 'energyball': case 'grassknot': case 'petaldance':
+				case 'energyball': case 'grassknot': case 'petaldance': case 'solarbeam':
 					if (hasMove['gigadrain']) rejected = true;
+					break;
+				case 'weatherball':
+					if (!hasMove['sunnyday']) rejected = true;
 					break;
 				case 'firepunch':
 					if (hasMove['flareblitz']) rejected = true;
@@ -773,7 +777,7 @@ exports.BattleScripts = {
 					break;
 
 				case 'rest':
-					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight']) rejected = true;
+					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis']) rejected = true;
 					break;
 				case 'softboiled':
 					if (hasMove['wish']) rejected = true;
@@ -790,6 +794,9 @@ exports.BattleScripts = {
 					break;
 				case 'substitute':
 					if (hasMove['uturn'] || hasMove['voltswitch']) rejected = true;
+					break;
+				case 'fakeout':
+					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
 					break;
 				}
 				// handle HP IVs
