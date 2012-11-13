@@ -12504,7 +12504,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback: function(pokemon,target) {
-			if (target.status === 'psn') {
+			if (target.status === 'psn' || target.status === 'tox') {
 				return 130;
 			}
 			return 65;
