@@ -2088,14 +2088,19 @@ exports.BattleMovedex = {
 		onModifyMove: function(move, source, target) {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
+				delete move.onHit;
 				move.self = { boosts: {atk:1,def:1,spe:-1}};
 				move.target = "self";
+			}
+		},
+		onHit: function(target, source) {
+			if (!this.directDamage(source.maxhp/2, source, source)) {
+				return false;
 			}
 		},
 		effect: {
 			onStart: function(pokemon, source) {
 				this.add('-start', pokemon, 'Curse', '[of] '+source);
-				this.directDamage(source.maxhp/2, source, source);
 			},
 			onResidualOrder: 10,
 			onResidual: function(pokemon) {
