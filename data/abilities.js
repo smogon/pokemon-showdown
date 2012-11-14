@@ -308,7 +308,7 @@ exports.BattleAbilities = {
 		shortDesc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets Disabled.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (!source || source.volatiles['disable']) return;
-			if (source !== target) {
+			if (source !== target && move && move.effectType === 'Move') {
 				if (this.random(10) < 3) {
 					source.addVolatile('disable');
 				}
