@@ -1366,7 +1366,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'loadbanlist':
-		if (!user.can('announce')) {
+		if (!user.can('declare')) {
 			emit(socket, 'console', '/loadbanlist - Access denied.');
 			return false;
 		}
@@ -1404,7 +1404,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/crashnoted - There is no active crash.');
 			return false;
 		}
-		if (!user.can('announce')) {
+		if (!user.can('declare')) {
 			emit(socket, 'console', '/crashnoted - Access denied.');
 			return false;
 		}
@@ -1453,7 +1453,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 	case 'banword':
 	case 'bw':
-		if (!user.can('announce')) {
+		if (!user.can('declare')) {
 			emit(socket, 'console', '/banword - Access denied.');
 			return false;
 		}
@@ -1468,7 +1468,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 	case 'unbanword':
 	case 'ubw':
-		if (!user.can('announce')) {
+		if (!user.can('declare')) {
 			emit(socket, 'console', '/unbanword - Access denied.');
 			return false;
 		}
