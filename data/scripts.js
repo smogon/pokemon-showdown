@@ -680,17 +680,17 @@ exports.BattleScripts = {
 				// we only need to set up once
 
 				case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup': case 'bellydrum':
-					if (!counter['Physical'] && !hasMove['batonpass']) rejected = true;
+					if (counter.Physical < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 					isSetup = true;
 					break;
 				case 'nastyplot': case 'tailglow': case 'quiverdance': case 'calmmind':
-					if (!counter['Special'] && !hasMove['batonpass']) rejected = true;
+					if (counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
 					isSetup = true;
 					break;
 				case 'shellsmash': case 'growth': case 'workup':
-					if (!counter['Special'] && !counter['Physical'] && !hasMove['batonpass']) rejected = true;
+					if (counter.Physical+counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Mixed' || counter['mixedsetup'] > 1) rejected = true;
 					isSetup = true;
 					break;
@@ -727,8 +727,8 @@ exports.BattleScripts = {
 				case 'airslash':
 					if (hasMove['hurricane']) rejected = true;
 					break;
-				case 'acrobatics':
-					if (hasMove['bravebird']) rejected = true;
+				case 'bravebird': case 'pluck':
+					if (hasMove['acrobatics']) rejected = true;
 					break;
 				case 'energyball': case 'grassknot': case 'petaldance': case 'solarbeam':
 					if (hasMove['gigadrain']) rejected = true;
