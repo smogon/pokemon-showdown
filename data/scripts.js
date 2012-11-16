@@ -541,7 +541,7 @@ exports.BattleScripts = {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
 
-		var moveKeys = Object.keys(template.viableMoves).randomize();
+		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
 		var moves = [];
 		var ability = '';
 		var item = '';
