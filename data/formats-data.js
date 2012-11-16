@@ -21,6 +21,12 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "G5CAP"
 	},
+	aurumoth: {
+		viableMoves: {"dragondance":1,"quiverdance":1,"willowisp":1,"tailglow":1,"wish":1, "bugbuzz":1, "hydropump":1, "megahorn":1, "psyshock":1, "overheat":1, "xscissor":1, "trick":1, "zenheadbutt":1,},
+		isNonstandard: true,
+		dreamWorldRelease: true,
+		tier: "G5CAP"
+	},
 	syclant: {
 		viableMoves: {"bugbuzz":1,"icebeam":1,"blizzard":1,"earthpower":1,"spikes":1,"superpower":1,"tailglow":1,"uturn":1,"focusblast":1},
 		isNonstandard: true,
