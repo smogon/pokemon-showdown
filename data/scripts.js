@@ -885,6 +885,9 @@ exports.BattleScripts = {
 				if (ability === 'Sheer Force' && !counter['sheerforce']) {
 					rejectAbility = true;
 				}
+				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
+					rejectAbility = true;
+				}
 				if (ability === 'Moody' && template.id !== 'bidoof') {
 					rejectAbility = true;
 				}
@@ -1008,7 +1011,7 @@ exports.BattleScripts = {
 			} else if (hasMove['reflect'] || hasMove['lightscreen']) {
 				// less priority than if you'd had both
 				item = 'Light Clay';
-			} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch']) {
+			} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge']) {
 				if (Math.random()*3 > 1) {
 					item = 'Choice Band';
 				} else {
