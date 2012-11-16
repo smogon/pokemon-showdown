@@ -659,6 +659,9 @@ module.exports = (function () {
 		}
 
 		var template = this.getTemplate(string(set.species));
+		if (!template.exists) {
+			return ["The Pokemon '"+set.species+"' does not exist."];
+		}
 		set.species = template.species;
 
 		set.name = string(set.name).trim().replace(/\|/g,'');
