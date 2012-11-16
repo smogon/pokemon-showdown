@@ -2093,10 +2093,11 @@ exports.BattleMovedex = {
 				move.target = "self";
 			}
 		},
+		onTryHit: function(target, source) {
+			if (target.volatiles.curse) return false;
+		},
 		onHit: function(target, source) {
-			if (!this.directDamage(source.maxhp/2, source, source)) {
-				return false;
-			}
+			this.directDamage(source.maxhp/2, source, source);
 		},
 		effect: {
 			onStart: function(pokemon, source) {
@@ -2244,7 +2245,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'destinybond',
 		effect: {
 			onStart: function(pokemon) {
-				this.add('-movestatus', pokemon, 'Destiny Bond');
+				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
 			onFaint: function(target, source, effect) {
 				if (!source || !effect) return;
