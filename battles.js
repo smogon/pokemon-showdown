@@ -2694,6 +2694,10 @@ function Battle(roomid, format, rated) {
 				if (data < 0) data = 0;
 				if (data > side.pokemon.length-1) data = side.pokemon.length-1;
 
+				if (!side.pokemon[data]) {
+					selfB.debugError("Can't switch: You can't switch to a pokemon that doesn't exist");
+					return false;
+				}
 				if (data == i) {
 					selfB.debugError("Can't switch: You can't switch to yourself");
 					return false;
