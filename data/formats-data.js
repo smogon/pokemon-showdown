@@ -982,6 +982,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":50,"gender":"M","abilities":["swarm"],"moves":["furycutter","metalclaw","swordsdance","slash"]},
 			{"generation":4,"level":50,"gender":"M","nature":"Adamant","abilities":["swarm"],"moves":["xscissor","swordsdance","irondefense","agility"]},
+			{"generation":5,"level":10,"gender":"M","abilities":["lightmetal"],"moves":["leer","focusenergy","pursuit","steelwing"]},
 			{"generation":5,"level":100,"gender":"M","abilities":["technician"],"moves":["bulletpunch","bugbite","roost","swordsdance"]}
 		],
 		dreamWorldRelease: true,
@@ -2820,6 +2821,7 @@ exports.BattleFormatsData = {
 	kyogre: {
 		viableMoves: {"waterspout":1,"surf":1,"thunder":1,"icebeam":1,"calmmind":1,"rest":1,"sleeptalk":1},
 		eventPokemon: [
+			{"generation":5,"level":100,"abilities":["drizzle"],"moves":["waterspout","thunder","icebeam","sheercold"]},
 			{"generation":5,"level":80,"abilities":["drizzle"],"moves":["icebeam","ancientpower","waterspout","thunder"]}
 		],
 		tier: "Uber"
@@ -2827,6 +2829,7 @@ exports.BattleFormatsData = {
 	groudon: {
 		viableMoves: {"earthquake":1,"dragontail":1,"stealthrock":1,"stoneedge":1,"swordsdance":1,"rockpolish":1,"thunderwave":1,"firepunch":1},
 		eventPokemon: [
+			{"generation":5,"level":100,"abilities":["drought"],"moves":["eruption","hammerarm","earthpower","solarbeam"]},
 			{"generation":5,"level":80,"abilities":["drought"],"moves":["earthquake","ancientpower","eruption","solarbeam"]}
 		],
 		tier: "Uber"
@@ -3594,7 +3597,8 @@ exports.BattleFormatsData = {
 		viableMoves: {"vcreate":1,"fusionbolt":1,"uturn":1,"psychic":1,"energyball":1,"focusblast":1,"fireblast":1,"thunder":1},
 		eventPokemon: [
 			{"generation":5,"level":15,"abilities":["victorystar"],"moves":["incinerate","quickattack","endure","confusion"]},
-			{"generation":5,"level":50,"abilities":["victorystar"],"moves":["vcreate","fusionflare","fusionbolt","searingshot"]}
+			{"generation":5,"level":50,"abilities":["victorystar"],"moves":["vcreate","fusionflare","fusionbolt","searingshot"]},
+			{"generation":5,"level":100,"nature":"Lax","abilities":["victorystar"],"moves":["vcreate","blueflare","boltstrike","glaciate"]}
 		],
 		tier: "UU"
 	},
@@ -4430,7 +4434,7 @@ exports.BattleFormatsData = {
 	},
 	kyuremblack: {
 		viableMoves: {"outrage":1,"fusionbolt":1,"icebeam":1,"roost":1},
-		tier: "Uber"
+		tier: "OU"
 	},
 	kyuremwhite: {
 		viableMoves: {"dracometeor":1,"dragonpulse":1,"icebeam":1,"fusionflare":1,"earthpower":1,"focusblast":1,"roost":1},
