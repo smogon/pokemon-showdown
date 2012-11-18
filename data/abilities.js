@@ -113,6 +113,7 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			var targets = pokemon.side.foe.active;
 			for (var i=0; i<targets.length; i++) {
+				if (targets[i].fainted) continue;
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
 					if (move.category !== 'Status' && (this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
@@ -206,7 +207,7 @@ exports.BattleAbilities = {
 		},
 		id: "chlorophyll",
 		name: "Chlorophyll",
-		rating: 3.5,
+		rating: 2,
 		num: 34
 	},
 	"clearbody": {
@@ -307,7 +308,7 @@ exports.BattleAbilities = {
 		shortDesc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets Disabled.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (!source || source.volatiles['disable']) return;
-			if (source !== target) {
+			if (source !== target && move && move.effectType === 'Move') {
 				if (this.random(10) < 3) {
 					source.addVolatile('disable');
 				}
@@ -624,6 +625,7 @@ exports.BattleAbilities = {
 			var warnMoves = [];
 			var warnBp = 1;
 			for (var i=0; i<targets.length; i++) {
+				if (targets[i].fainted) continue;
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
 					var bp = move.basePower;
@@ -660,7 +662,7 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			if (target.item) {
+			if (target && target.item) {
 				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] '+pokemon);
 			}
 		},
@@ -705,7 +707,7 @@ exports.BattleAbilities = {
 				}
 			}
 		},
-		rating: 0.5,
+		rating: 2,
 		num: 139
 	},
 	"healer": {
@@ -795,7 +797,7 @@ exports.BattleAbilities = {
 		},
 		id: "hydration",
 		name: "Hydration",
-		rating: 4,
+		rating: 2,
 		num: 93
 	},
 	"hypercutter": {
@@ -885,7 +887,7 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon copies the foe it's facing; stats, moves, types, Ability.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			if (pokemon.transformInto(target)) {
+			if (target && pokemon.transformInto(target)) {
 				this.add('-transform', pokemon, target);
 			}
 		},
@@ -1012,7 +1014,7 @@ exports.BattleAbilities = {
 		},
 		id: "klutz",
 		name: "Klutz",
-		rating: 1.5,
+		rating: 0,
 		num: 103
 	},
 	"leafguard": {
@@ -1030,7 +1032,7 @@ exports.BattleAbilities = {
 		},
 		id: "leafguard",
 		name: "Leaf Guard",
-		rating: 3,
+		rating: 1,
 		num: 102
 	},
 	"levitate": {
@@ -1444,6 +1446,7 @@ exports.BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			var foe = pokemon.side.foe.randomActive();
+			if (!foe) return;
 			if (!pokemon.item && foe.lastItem && foe.usedItemThisTurn && foe.lastItem !== 'airballoon' && foe.lastItem !== 'ejectbutton') {
 				pokemon.setItem(foe.lastItem);
 				foe.lastItem = '';
@@ -1563,7 +1566,7 @@ exports.BattleAbilities = {
 		},
 		id: "pressure",
 		name: "Pressure",
-		rating: 1,
+		rating: 2,
 		num: 46
 	},
 	"purepower": {
@@ -1600,7 +1603,7 @@ exports.BattleAbilities = {
 		},
 		id: "raindish",
 		name: "Rain Dish",
-		rating: 3,
+		rating: 1,
 		num: 44
 	},
 	"rattled": {
@@ -1708,7 +1711,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandforce",
 		name: "Sand Force",
-		rating: 3,
+		rating: 2,
 		num: 159
 	},
 	"sandrush": {
@@ -1724,7 +1727,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandrush",
 		name: "Sand Rush",
-		rating: 3.5,
+		rating: 2,
 		num: 146
 	},
 	"sandstream": {
@@ -1754,7 +1757,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandveil",
 		name: "Sand Veil",
-		rating: 3,
+		rating: 1,
 		num: 8
 	},
 	"sapsipper": {
@@ -1944,7 +1947,7 @@ exports.BattleAbilities = {
 		},
 		id: "snowcloak",
 		name: "Snow Cloak",
-		rating: 2,
+		rating: 0.5,
 		num: 81
 	},
 	"snowwarning": {
@@ -1974,7 +1977,7 @@ exports.BattleAbilities = {
 		},
 		id: "solarpower",
 		name: "Solar Power",
-		rating: 3,
+		rating: 1.5,
 		num: 94
 	},
 	"solidrock": {
@@ -2166,7 +2169,7 @@ exports.BattleAbilities = {
 		},
 		id: "swiftswim",
 		name: "Swift Swim",
-		rating: 3.5,
+		rating: 2,
 		num: 33
 	},
 	"synchronize": {
@@ -2300,7 +2303,7 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onUpdate: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
-			if (!target || target.fainted) return;
+			if (!target) return;
 			var ability = this.getAbility(target.ability);
 			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, zenmode:1};
 			if (bannedAbilities[target.ability]) {
@@ -2572,6 +2575,7 @@ exports.BattleAbilities = {
 		effect: {
 			onStart: function(pokemon) {
 				if (pokemon.transformInto('Darmanitan-Zen')) {
+					pokemon.transformed = false;
 					this.add('-formechange', pokemon, 'Darmanitan-Zen');
 					this.add('-message', 'Zen Mode triggered! (placeholder)');
 				} else {
@@ -2580,6 +2584,7 @@ exports.BattleAbilities = {
 			},
 			onEnd: function(pokemon) {
 				if (pokemon.transformInto('Darmanitan')) {
+					pokemon.transformed = false;
 					this.add('-formechange', pokemon, 'Darmanitan');
 					this.add('-message', 'Zen Mode ended! (placeholder)');
 				} else {
@@ -2588,6 +2593,7 @@ exports.BattleAbilities = {
 			},
 			onUpdate: function(pokemon) {
 				if (pokemon.ability !== 'zenmode') {
+					pokemon.transformed = false;
 					pokemon.removeVolatile('zenmode');
 				}
 			}

@@ -145,7 +145,7 @@ var User = (function () {
 		this.group = config.groupsranking[0];
 
 		var trainersprites = [1, 2, 101, 102, 169, 170];
-		this.avatar = trainersprites[parseInt(Math.random()*trainersprites.length)];
+		this.avatar = trainersprites[Math.floor(Math.random()*trainersprites.length)];
 
 		this.connected = true;
 
@@ -428,7 +428,7 @@ var User = (function () {
 				if (userid === "serei") avatar = 172;
 				else if (userid === "hobsgoblin") avatar = 52;
 				else if (userid === "ataraxia") avatar = 1002;
-				else if (userid === "verbatim") avatar = 1003;
+				else if (userid === "verbatim") avatar = 283;
 				else if (userid === "mortygymleader") avatar = 144;
 				else if (userid === "leadermorty") avatar = 144;
 				else if (userid === "leaderjasmine") avatar = 146;
@@ -440,7 +440,7 @@ var User = (function () {
 				else if (userid === "bmelts") avatar = 1004;
 				else if (userid === "n") avatar = 209;
 				else if (userid === "desolate") avatar = 152;
-				else if (userid === "steamroll") avatar = 126;
+				else if (userid === "growlithe") avatar = 1007;
 				else if (userid === "v4") avatar = 94;
 				else if (userid === "hawntah") avatar = 161;
 				else if (userid === "greatsage") avatar = 1005;
@@ -1000,7 +1000,7 @@ exports.setOfflineGroup = function(name, group) {
 		delete usergroups[userid];
 	} else {
 		var usergroup = usergroups[userid];
-		var name = usergroup ? usergroup.substr(1) : name;
+		name = usergroup ? usergroup.substr(1) : name;
 		usergroups[userid] = group+name;
 	}
 	exportUsergroups();

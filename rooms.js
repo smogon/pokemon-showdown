@@ -413,6 +413,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			battlelog: selfR.log
 		};
 		emit(socket, 'init', initdata);
+		if (selfR.battle.requests[user.userid]) {
+			emit(socket, 'update', JSON.parse(selfR.battle.requests[user.userid]));
+			sendData(socket, '>'+selfR.id+'\n|callback|decision');
+		}
 	};
 	this.join = function(user) {
 		if (!user) return false;

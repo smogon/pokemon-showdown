@@ -43,46 +43,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	if (!room) return;
 	cmd = cmd.toLowerCase();
 	switch (cmd) {
-	case 'command':
-		if (target.command === 'userdetails') {
-			target.userid = ''+target.userid;
-			var targetUser = Users.get(target.userid);
-			if (!targetUser || !room) return false;
-			var roomList = {};
-			for (var i in targetUser.roomCount) {
-				if (i==='lobby') continue;
-				var targetRoom = Rooms.get(i);
-				if (!targetRoom) continue;
-				var roomData = {};
-				if (targetRoom.battle) {
-					var battle = targetRoom.battle;
-					roomData.p1 = battle.p1?' '+battle.p1:'';
-					roomData.p2 = battle.p2?' '+battle.p2:'';
-				}
-				roomList[i] = roomData;
-			}
-			var userdetails = {
-				command: 'userdetails',
-				userid: targetUser.userid,
-				avatar: targetUser.avatar,
-				rooms: roomList,
-				room: room.id
-			};
-			if (user.can('ip', targetUser)) {
-				userdetails.ip = targetUser.ip;
-			}
-			emit(socket, 'command', userdetails);
-		}
-		if (target.command === 'roomlist') {
-			if (!room || !room.getRoomList) return false;
-			emit(socket, 'command', {
-				command: 'roomlist',
-				rooms: room.getRoomList(true),
-				room: room.id
-			});
-		}
-		return false;
-		break;
 	case 'cmd':
 		var spaceIndex = target.indexOf(' ');
 		var cmd = target;
@@ -1017,6 +977,21 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'</div>');
 		return false;
 		break;
+	
+	case 'om':
+	case 'othermetas':
+	case '!om':
+	case '!othermetas':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Information on the Other Metagames:<br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3463764" target="_blank">Balanced Hackmons</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3471810" target="_blank">Dream World OU</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3467120" target="_blank">Glitchmons</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3473992" target="_blank">Seasonal</a>' +
+			'</div>');
+		return false;
+		break;
 
 	case 'rules':
 	case 'rule':
@@ -1095,8 +1070,26 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
+		var poke = template.name.toLowerCase();
+
+		if (poke === 'nidoranm') poke = 'nidoran-m';
+		if (poke === 'nidoranf') poke = 'nidoran-f';
+		if (poke === 'farfetch\'d') poke = 'farfetchd';
+		if (poke === 'mr. mime') poke = 'mr_mime';
+		if (poke === 'mime jr.') poke = 'mime_jr';
+		if (poke === 'deoxys-attack' || poke === 'deoxys-defense' || poke === 'deoxys-speed' || poke === 'kyurem-black' || poke === 'kyurem-white') poke = poke.substr(0,8);
+		if (poke === 'wormadam-trash') poke = 'wormadam-s';
+		if (poke === 'wormadam-sandy') poke = 'wormadam-g';
+		if (poke === 'rotom-wash' || poke === 'rotom-frost' || poke === 'rotom-heat') poke = poke.substr(0,7);
+		if (poke === 'rotom-mow') poke = 'rotom-c';
+		if (poke === 'rotom-fan') poke = 'rotom-s';
+		if (poke === 'giratina-origin' || poke === 'tornadus-therian' || poke === 'landorus-therian') poke = poke.substr(0,10);
+		if (poke === 'shaymin-sky') poke = 'shaymin-s';
+		if (poke === 'arceus') poke = 'arceus-normal';
+		if (poke === 'thundurus-therian') poke = 'thundurus-t';
+
 		showOrBroadcast(user, cmd, room, socket,
-			'<a href="http://www.smogon.com/'+generation+'/pokemon/'+template.name+'" target="_blank">'+generation.toUpperCase()+' '+template.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+			'<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+'" target="_blank">'+generation.toUpperCase()+' '+template.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
 		return false;
 		break;
 
@@ -1138,7 +1131,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'mv':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
-		room.decision(user, 'move', target);
+		room.decision(user, 'choose', 'move '+target);
 		return false;
 		break;
 
@@ -1146,7 +1139,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'sw':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
-		room.decision(user, 'switch', parseInt(target,10)-1);
+		room.decision(user, 'choose', 'switch '+parseInt(target,10));
+		return false;
+		break;
+
+	case 'choose':
+		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
+
+		room.decision(user, 'choose', target);
 		return false;
 		break;
 
@@ -1160,7 +1160,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'team':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
-		room.decision(user, 'team', target);
+		room.decision(user, 'choose', 'team '+target);
 		return false;
 		break;
 
@@ -1366,7 +1366,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'loadbanlist':
-		if (!user.can('announce')) {
+		if (!user.can('declare')) {
 			emit(socket, 'console', '/loadbanlist - Access denied.');
 			return false;
 		}
@@ -1404,7 +1404,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/crashnoted - There is no active crash.');
 			return false;
 		}
-		if (!user.can('announce')) {
+		if (!user.can('declare')) {
 			emit(socket, 'console', '/crashnoted - Access denied.');
 			return false;
 		}
@@ -1453,7 +1453,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 	case 'banword':
 	case 'bw':
-		if (!user.can('announce')) {
+		if (!user.can('declare')) {
 			emit(socket, 'console', '/banword - Access denied.');
 			return false;
 		}
@@ -1468,7 +1468,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 	case 'unbanword':
 	case 'ubw':
-		if (!user.can('announce')) {
+		if (!user.can('declare')) {
 			emit(socket, 'console', '/unbanword - Access denied.');
 			return false;
 		}
@@ -1526,7 +1526,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.');
 			emit(socket, 'console', '!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~');
 		}
-		if (target === "all" || target === 'data') {
+		if (target === "all" || target === 'analysis') {
 			matched = true;
 			emit(socket, 'console', '/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pokemon in the given generation.');
 			emit(socket, 'console', '!analysis [pokemon], [generation] - Shows everyone this link. Requires: + % @ & ~');
@@ -1555,6 +1555,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/cap - Provides an introduction to the Create-A-Pokemon project.');
 			emit(socket, 'console', '!cap - Show everyone that information. Requires: + % @ & ~');
+		}
+		if (target === 'all' || target === 'om') {
+			matched = true;
+			emit(socket, 'console', '/om - Provides links to information on the Other Metagames.');
+			emit(socket, 'console', '!om - Show everyone that information. Requires: + % @ & ~');
 		}
 		if (target === 'all' || target === 'learn' || target === 'learnset' || target === 'learnall') {
 			matched = true;

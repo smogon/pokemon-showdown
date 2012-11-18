@@ -171,7 +171,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: false,
 		category: "Status",
-		desc: "Causes one adjacent target to take its turn immediately after the user this turn, no matter the priority of its selected move. Fails if the target would have moved next anyway, or if the target already moved this turn. Ignores a target's Substitute.",
+		desc: "Causes one adjacent target to take its turn immediately after the user this turn, no matter the priority of its selected move. Fails if the target would have moved next anyway, or if the target already moved this turn. This move ignores Protect and Detect. Ignores a target's Substitute.",
 		shortDesc: "The target makes its move right after the user.",
 		id: "afteryou",
 		name: "After You",
@@ -514,9 +514,9 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('attract');
 					return;
 				}
-				this.add('-message', pokemon.name+' is in love with '+this.effectData.source.name+'! (placeholder)');
+				this.add('-activate', pokemon, 'Attract', '[of] '+this.effectData.source);
 				if (this.random(2) === 0) {
-					this.add('-message', pokemon.name+' is immobilized by love! (placeholder)');
+					this.add('cant', pokemon, 'Attract');
 					return false;
 				}
 			}
@@ -588,13 +588,13 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				if (pokemon.weightkg !== 0.1) {
 					this.effectData.multiplier = 1;
-					this.add('-message', pokemon.name+' became nimble! (placeholder)');
+					this.add('-start', pokemon, 'Autotomize');
 				}
 			},
-			onRestart: function(pokemon) {
+			onRestart: function(pokemon)		 {
 				if (pokemon.weightkg !== 0.1) {
 					this.effectData.multiplier++;
-					this.add('-message', pokemon.name+' became nimble! (placeholder)');
+					this.add('-start', pokemon, 'Autotomize');
 				}
 			},
 			onModifyPokemon: function(pokemon) {
@@ -825,7 +825,7 @@ exports.BattleMovedex = {
 					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage*2});
 					return false;
 				}
-				this.add('-message', pokemon.name+' is storing energy! (placeholder)');
+				this.add('-activate', pokemon, 'Bide');
 				return false;
 			}
 		},
@@ -1422,7 +1422,7 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		volatileStatus: 'charge',
 		onHit: function(pokemon) {
-			this.add('-message', pokemon.name+' began charging power! (placeholder)');
+			this.add('-activate', pokemon, 'move: Charge');
 		},
 		effect: {
 			duration: 2,
@@ -1753,7 +1753,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user's type changes to match a type that resists or is immune to the type of the last move used by one adjacent target, but not either of its current types. The determined type of the move is used rather than the original type. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types. Ignores a target's Substitute.",
+		desc: "The user's type changes to match a type that resists or is immune to the type of the last move used by one adjacent target, but not either of its current types. The determined type of the move is used rather than the original type. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types. This move ignores Protect and Detect. Ignores a target's Substitute.",
 		shortDesc: "Changes user's type to resist target's last move.",
 		id: "conversion2",
 		name: "Conversion 2",
@@ -2076,7 +2076,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "If the user is not a Ghost-type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost-type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for one adjacent target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected. Ignores a target's Substitute.",
+		desc: "If the user is not a Ghost-type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost-type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for one adjacent target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected. This move ignores Protect and Detect. Ignores a target's Substitute.",
 		shortDesc: "Curses if Ghost, else +1 Atk, +1 Def, -1 Spe.",
 		id: "curse",
 		isViable: true,
@@ -2088,14 +2088,20 @@ exports.BattleMovedex = {
 		onModifyMove: function(move, source, target) {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
+				delete move.onHit;
 				move.self = { boosts: {atk:1,def:1,spe:-1}};
 				move.target = "self";
 			}
 		},
+		onTryHit: function(target, source) {
+			if (target.volatiles.curse) return false;
+		},
+		onHit: function(target, source) {
+			this.directDamage(source.maxhp/2, source, source);
+		},
 		effect: {
 			onStart: function(pokemon, source) {
 				this.add('-start', pokemon, 'Curse', '[of] '+source);
-				this.directDamage(source.maxhp/2, source, source);
 			},
 			onResidualOrder: 10,
 			onResidual: function(pokemon) {
@@ -2239,12 +2245,12 @@ exports.BattleMovedex = {
 		volatileStatus: 'destinybond',
 		effect: {
 			onStart: function(pokemon) {
-				this.add('-message', pokemon.name+' is trying to take its foe down with it! (placeholder)');
+				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
 			onFaint: function(target, source, effect) {
 				if (!source || !effect) return;
 				if (effect.effectType === 'Move' && target.lastMove === 'destinybond') {
-					this.add('-message', target.name+' took its attacker down with it! (placeholder)');
+					this.add('-activate', target, 'Destiny Bond');
 					source.faint();
 				}
 			},
@@ -3332,14 +3338,14 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 70,
 		basePowerCallback: function(pokemon) {
-			if (pokemon.status) {
+			if (pokemon.status && pokemon.status !== 'slp') {
 				return 140;
 			}
 			return 70;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the user is burned, paralyzed, or poisoned. Makes contact.",
-		shortDesc: "Power doubles when user is inflicted by a status.",
+		shortDesc: "Power doubles if user is burn/poison/paralyzed.",
 		id: "facade",
 		isViable: true,
 		name: "Facade",
@@ -4539,12 +4545,12 @@ exports.BattleMovedex = {
 				}
 				if (pokemon.volatiles['bounce'] || pokemon.volatiles['fly'] || pokemon.volatiles['skydrop']) {
 					pokemon.removeVolatile('twoturnmove');
-					this.add("-message", pokemon.name+" couldn't stay airborne because of gravity! (placeholder)");
+					this.add('-activate', pokemon, 'Gravity');
 				}
 			},
 			onResidualOrder: 22,
 			onEnd: function() {
-				this.add('-message', 'Gravity returned to normal! (placeholder)');
+				this.add('-fieldend', 'move: Gravity');
 			}
 		},
 		secondary: false,
@@ -4608,7 +4614,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'grudge',
 		effect: {
 			onStart: function(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Grudge');
+				this.add('-singlemove', pokemon, 'Grudge');
 			},
 			onFaint: function(target, source, effect) {
 				this.debug('Grudge detected fainted pokemon');
@@ -4617,7 +4623,7 @@ exports.BattleMovedex = {
 					for (var i in source.moveset) {
 						if (source.moveset[i].id === source.lastMove) {
 							source.moveset[i].pp = 0;
-							this.add('-activate', source, 'move: Grudge');
+							this.add('-activate', source, 'Grudge', this.getMove(source.lastMove).name);
 						}
 					}
 				}
@@ -5163,7 +5169,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes one adjacent ally to have the power of its attack this turn boosted to 1.5x (this effect is stackable). Fails if there is no adjacent ally, but does not fail if the ally is using a two-turn move. Ignores a target's Substitute. Priority +5.",
+		desc: "Causes one adjacent ally to have the power of its attack this turn boosted to 1.5x (this effect is stackable). Fails if there is no adjacent ally, but does not fail if the ally is using a two-turn move. This move ignores Protect and Detect. Ignores a target's Substitute. Priority +5.",
 		shortDesc: "Increases the power of an ally's move by 50%.",
 		id: "helpinghand",
 		name: "Helping Hand",
@@ -6582,8 +6588,7 @@ exports.BattleMovedex = {
 					for (var m in target.moveset) {
 						target.moveset[m].pp = target.moveset[m].maxpp;
 					}
-					this.add('-message',target.name+' became cloaked in mystical moonlight! (placeholder)');
-					this.add('-heal',target,target.getHealth(),'[from] move: Lunar Dance','[silent]'); // remove [silent] once the message is implemented clientside
+					this.add('-heal',target,target.getHealth(),'[from] move: Lunar Dance');
 					target.side.removeSideCondition('lunardance');
 				}
 			}
@@ -6802,25 +6807,25 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon) {
 			var i = this.random(100);
 			if (i < 5) {
-				this.add('-message', 'Magnitude 4! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 4);
 				return 10;
 			} else if (i < 15) {
-				this.add('-message', 'Magnitude 5! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 5);
 				return 30;
 			} else if (i < 35) {
-				this.add('-message', 'Magnitude 6! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 6);
 				return 50;
 			} else if (i < 65) {
-				this.add('-message', 'Magnitude 7! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 7);
 				return 70;
 			} else if (i < 85) {
-				this.add('-message', 'Magnitude 8! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 8);
 				return 90;
 			} else if (i < 95) {
-				this.add('-message', 'Magnitude 9! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 9);
 				return 110;
 			} else {
-				this.add('-message', 'Magnitude 10! (placeholder)');
+				this.add('-activate', pokemon, 'move: Magnitude', 10);
 				return 150;
 			}
 		},
@@ -7166,7 +7171,7 @@ exports.BattleMovedex = {
 				used: false
 			};
 			source.moves[moveslot] = toId(move.name);
-			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+			this.add('-start', source, 'Mimic', move.name);
 		},
 		secondary: false,
 		target: "normal",
@@ -7324,7 +7329,7 @@ exports.BattleMovedex = {
 				for (var i in boost) {
 					if (boost[i] < 0) {
 						delete boost[i];
-						this.add('-message', target.name+' is protected by the mist! (placeholder)');
+						this.add('-activate', target, 'Mist');
 					}
 				}
 			},
@@ -7902,7 +7907,7 @@ exports.BattleMovedex = {
 			for (var i=0; i<this.sides.length; i++) {
 				for (var j=0; j<this.sides[i].active.length; j++) {
 					if (this.sides[i].active[j].runImmunity('sound')) this.sides[i].active[j].addVolatile('perishsong');
-					else this.add('-message', this.sides[i].active[j].name+' is immune to Perish Song due to Soundproof, the graphics are incorrect (placeholder)');
+					else this.add('-end', this.sides[i].active[j], 'Perish Song');
 				}
 			}
 		},
@@ -8930,13 +8935,11 @@ exports.BattleMovedex = {
 			noCopy: true,
 			onStart: function(target, source) {
 				this.effectData.types = source.types;
-				this.add("-message", target.name+"'s type changed to match "+source.name+"'s! (placeholder)");
-				//this.add("-start", target, "Reflect Type", "[of] "+source);
+				this.add('-start', target, 'typechange', source.types.join(', '), '[from] move: Reflect Type', '[of] '+source);
 			},
 			onRestart: function(target, source) {
 				this.effectData.types = source.types;
-				this.add("-message", target.name+"'s type changed to match "+source.name+"'s! (placeholder)");
-				//this.add("-start", target, "Reflect Type", "[of] "+source);
+				this.add('-start', target, 'typechange', source.types.join(', '), '[from] move: Reflect Type', '[of] '+source);
 			},
 			onModifyPokemon: function(pokemon) {
 				pokemon.types = this.effectData.types;
@@ -10124,7 +10127,7 @@ exports.BattleMovedex = {
 			source.moveset[moveslot] = sketchedMove;
 			source.baseMoveset[moveslot] = sketchedMove;
 			source.moves[moveslot] = toId(move.name);
-			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+			this.add('-activate', source, 'move: Sketch', move.name);
 		},
 		secondary: false,
 		target: "normal",
@@ -10155,7 +10158,7 @@ exports.BattleMovedex = {
 				source.ability = sourceAbility;
 				return false;
 			}
-			this.add('-message', source.name+' swapped Abilities with its target! (placeholder)'); // TODO
+			this.add('-activate', source, 'move: Skill Swap');
 		},
 		secondary: false,
 		target: "normal",
@@ -10519,7 +10522,7 @@ exports.BattleMovedex = {
 					pokemon.movedThisTurn = true;
 				}
 				if (!applies) return false;
-				this.add('-message', pokemon.name+' fell straight down! (placeholder)');
+				this.add('-start', pokemon, 'Smack Down');
 			},
 			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {
@@ -10625,13 +10628,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {
-				this.add('-message', pokemon.name+' waits for a target to make a move! (placeholder)');
+				this.add('-singleturn', pokemon, 'Snatch');
 			},
 			onAnyTryHit: function(target, source, move) {
 				if (move && move.isSnatchable) {
 					var snatchUser = this.effectData.source;
 					snatchUser.removeVolatile('snatch');
-					this.add("-message", snatchUser.name+" snatched "+source.name+"'s move! (placeholder)");
+					this.add('-activate', snatchUser, 'Snatch', '[of] '+source);
 					this.useMove(move.id, snatchUser);
 					return null;
 				}
@@ -11207,7 +11210,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		beforeMoveCallback: function(pokemon) {
-			this.add('-message', pokemon.name+' has no moves left! (placeholder)');
+			this.add('-activate', pokemon, 'move: Struggle');
 		},
 		onModifyMove: function(move) {
 			move.type = '???';
@@ -11881,7 +11884,7 @@ exports.BattleMovedex = {
 			duration: 3,
 			onStart: function(target) {
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
-				this.add('-message', target.name+' was hurled into the air! (placeholder)');
+				this.add('-start', target, 'Telekinesis');
 			},
 			onSourceModifyMove: function(move) {
 				move.accuracy = true;
@@ -11891,7 +11894,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 16,
 			onEnd: function(target) {
-				this.add('-message', 'Telekinesis ended. (placeholder)');
+				this.add('-end', target, 'Telekinesis');
 			}
 		},
 		secondary: false,
@@ -12507,7 +12510,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback: function(pokemon,target) {
-			if (target.status === 'psn') {
+			if (target.status === 'psn' || target.status === 'tox') {
 				return 130;
 			}
 			return 65;

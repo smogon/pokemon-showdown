@@ -181,6 +181,7 @@ exports.BattleScripts = {
 		return true;
 	},
 	moveHit: function(target, pokemon, move, moveData, isSecondary, isSelf) {
+		var damage = 0;
 		move = this.getMoveCopy(move);
 
 		if (!isSecondary && !isSelf) this.setActiveMove(move, pokemon, target);
@@ -267,7 +268,7 @@ exports.BattleScripts = {
 
 		if (target) {
 			var didSomething = false;
-			var damage = this.getDamage(pokemon, target, moveData);
+			damage = this.getDamage(pokemon, target, moveData);
 			if (damage === false || damage === null) {
 				this.singleEvent('MoveFail', move, null, target, pokemon, move);
 				return false;
@@ -539,7 +540,7 @@ exports.BattleScripts = {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
 
-		var moveKeys = Object.keys(template.viableMoves).randomize();
+		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
 		var moves = [];
 		var ability = '';
 		var item = '';
@@ -678,36 +679,40 @@ exports.BattleScripts = {
 				// we only need to set up once
 
 				case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup': case 'bellydrum':
-					if (!counter['Physical'] && !hasMove['batonpass']) rejected = true;
+					if (counter.Physical < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 					isSetup = true;
 					break;
 				case 'nastyplot': case 'tailglow': case 'quiverdance': case 'calmmind':
-					if (!counter['Special'] && !hasMove['batonpass']) rejected = true;
+					if (counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
 					isSetup = true;
 					break;
 				case 'shellsmash': case 'growth': case 'workup':
-					if (!counter['Special'] && !counter['Physical'] && !hasMove['batonpass']) rejected = true;
+					if (counter.Physical+counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Mixed' || counter['mixedsetup'] > 1) rejected = true;
 					isSetup = true;
 					break;
 
 				// bad after setup
+
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'knockoff': case 'protect': case 'perishsong': case 'magiccoat':
+				case 'knockoff': case 'protect': case 'perishsong': case 'magiccoat': case 'trick': case 'switcheroo':
+					if (setupType) rejected = true;
+					break;
+				case 'uturn': case 'voltswitch':
 					if (setupType) rejected = true;
 					break;
 
 				// bit redundant to have both
 
-				case 'fireblast':
-					if (hasMove['eruption'] || hasMove['overheat'] || hasMove['flamethrower']) rejected = true;
-					break;
 				case 'flamethrower':
-					if (hasMove['lavaplume'] || hasMove['fireblast'] || hasMove['overheat']) rejected = true;
+					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast']) rejected = true;
+					break;
+				case 'overheat':
+					if (hasMove['fireblast']) rejected = true;
 					break;
 				case 'icebeam':
 					if (hasMove['blizzard']) rejected = true;
@@ -715,25 +720,41 @@ exports.BattleScripts = {
 				case 'surf':
 					if (hasMove['scald'] || hasMove['hydropump']) rejected = true;
 					break;
-				case 'energyball':
-				case 'grassknot':
-				case 'petaldance':
+				case 'waterfall':
+					if (hasMove['aquatail']) rejected = true;
+					break;
+				case 'airslash':
+					if (hasMove['hurricane']) rejected = true;
+					break;
+				case 'bravebird': case 'pluck':
+					if (hasMove['acrobatics']) rejected = true;
+					break;
+				case 'energyball': case 'grassknot': case 'petaldance': case 'solarbeam':
 					if (hasMove['gigadrain']) rejected = true;
 					break;
-				case 'seedbomb':
-					if (hasMove['needlearm']) rejected = true;
+				case 'weatherball':
+					if (!hasMove['sunnyday']) rejected = true;
 					break;
-				case 'flareblitz':
-					if (hasMove['firepunch']) rejected = true;
+				case 'firepunch':
+					if (hasMove['flareblitz']) rejected = true;
+					break;
+				case 'crosschop': case 'hijumpkick':
+					if (hasMove['closecombat']) rejected = true;
+					break;
+				case 'drainpunch':
+					if (hasMove['closecombat'] || hasMove['hijumpkick']) rejected = true;
 					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
 					break;
-				case 'discharge':
-					if (hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
+				case 'discharge': case 'thunder':
+					if (hasMove['voltswitch']) rejected = true;
 					break;
-				case 'rockslide':
-					if (hasMove['stoneedge']) rejected = true;
+				case 'rockslide': case 'rockblast':
+					if (hasMove['stoneedge'] || hasMove['headsmash']) rejected = true;
+					break;
+				case 'stoneedge':
+					if (hasMove['headsmash']) rejected = true;
 					break;
 				case 'dragonclaw':
 					if (hasMove['outrage'] || hasMove['dragontail']) rejected = true;
@@ -745,12 +766,7 @@ exports.BattleScripts = {
 					if (hasMove['dracometeor']) rejected = true;
 					break;
 				case 'return':
-					if (hasMove['bodyslam']) rejected = true;
-					if (hasMove['flail']) rejected = true;
-					if (hasMove['facade']) rejected = true;
-					break;
-				case 'flail':
-					if (hasMove['facade']) rejected = true;
+					if (hasMove['bodyslam'] || hasMove['facade'] || hasMove['doubleedge'] || hasMove['tailslap']) rejected = true;
 					break;
 				case 'poisonjab':
 					if (hasMove['gunkshot']) rejected = true;
@@ -759,11 +775,8 @@ exports.BattleScripts = {
 					if (hasMove['psyshock']) rejected = true;
 					break;
 
-				case 'yawn':
-					if (hasMove['grasswhistle']) rejected = true;
-					break;
 				case 'rest':
-					if (hasMove['morningsun']) rejected = true;
+					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis']) rejected = true;
 					break;
 				case 'softboiled':
 					if (hasMove['wish']) rejected = true;
@@ -777,6 +790,12 @@ exports.BattleScripts = {
 					break;
 				case 'roost':
 					if (hasMove['recover']) rejected = true;
+					break;
+				case 'substitute':
+					if (hasMove['uturn'] || hasMove['voltswitch']) rejected = true;
+					break;
+				case 'fakeout':
+					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
 					break;
 				}
 				// handle HP IVs
@@ -865,6 +884,9 @@ exports.BattleScripts = {
 				if (ability === 'Sheer Force' && !counter['sheerforce']) {
 					rejectAbility = true;
 				}
+				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
+					rejectAbility = true;
+				}
 				if (ability === 'Moody' && template.id !== 'bidoof') {
 					rejectAbility = true;
 				}
@@ -924,10 +946,12 @@ exports.BattleScripts = {
 				item = 'Choice Specs';
 			} else if (counter.Status <= 1 && (hasMove['trick'] || hasMove['switcheroo'])) {
 				item = 'Choice Scarf';
-			} else if (hasMove['rest'] && !hasMove['sleeptalk']) {
+			} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure') {
 				item = 'Chesto Berry';
 			} else if (hasMove['naturalgift']) {
 				item = 'Liechi Berry';
+			} else if (ability === 'Harvest') {
+				item = 'Sitrus Berry';
 			} else if (template.species === 'Cubone' || template.species === 'Marowak') {
 				item = 'Thick Club';
 			} else if (template.species === 'Pikachu') {
@@ -940,7 +964,7 @@ exports.BattleScripts = {
 				item = 'Flying Gem';
 			} else if (hasMove['shellsmash']) {
 				item = 'White Herb';
-			} else if (ability === 'Poison Heal' || ability === 'Toxic Boost') {
+			} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
 				item = 'Toxic Orb';
 			} else if (hasMove['raindance']) {
 				item = 'Damp Rock';
@@ -982,11 +1006,11 @@ exports.BattleScripts = {
 					}
 				}
 			} else if (ability === 'Marvel Scale' && hasMove['psychoshift']) {
-				item = 'FlameOrb';
+				item = 'Flame Orb';
 			} else if (hasMove['reflect'] || hasMove['lightscreen']) {
 				// less priority than if you'd had both
 				item = 'Light Clay';
-			} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch']) {
+			} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge']) {
 				if (Math.random()*3 > 1) {
 					item = 'Choice Band';
 				} else {
@@ -1004,7 +1028,7 @@ exports.BattleScripts = {
 				item = 'Choice Scarf';
 			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect']) {
 				item = 'Leftovers';
-			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'sturdy') {
+			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
 				item = 'Focus Sash';
 			} else if (ability === 'Iron Barbs') {
 				// only Iron Barbs for now
@@ -1018,7 +1042,7 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else if (counter.Physical + counter.Special >= 4) {
 				item = 'Expert Belt';
-			} else if (i===0 && ability !== 'sturdy') {
+			} else if (i===0 && ability !== 'Sturdy') {
 				item = 'Focus Sash';
 
 			// this is the "REALLY can't think of a good item" cutoff
@@ -1158,5 +1182,3 @@ exports.BattleScripts = {
 		return team;
 	}
 };
-
-var BattleScripts = exports.BattleScripts;

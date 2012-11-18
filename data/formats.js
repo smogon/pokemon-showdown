@@ -63,9 +63,10 @@ exports.BattleFormats = {
 		searchShow: true,
 		teambuilderFormat: 'ou',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: [
+		/* banlist: [
 			'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Excadrill', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Thundurus', 'Zekrom', 'Kyurem-White', 'Drizzle ++ Swift Swim', 'Soul Dew'
-		]
+		] */
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Genesect']
 	},
 	cap: {
 		effectType: 'Format',
@@ -106,11 +107,20 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "UU",
 		rated: true,
-		challengeShow: true,
-		searchShow: true,
+		// challengeShow: true,
+		// searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Snow Warning', 'Drought', 'Sand Stream']
+	},
+	uususpecttest: {
+		effectType: 'Format',
+		name: "UU (Suspect Test)",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
 	ru: {
 		effectType: 'Format',
@@ -216,7 +226,7 @@ exports.BattleFormats = {
 		name: "Hax Clause",
 		challengeShow: true,
 		canUseRandomTeam: true,
-		ruleset: ['Hax Clause', 'Team Preview']
+		ruleset: ['Hax Clause rule', 'Team Preview']
 	},
 	glitchmons: {
 		effectType: 'Format',
@@ -435,7 +445,7 @@ exports.BattleFormats = {
 			}
 		},
 		onTeamPreview: function() {
-			this.callback('team-preview');
+			this.makeRequest('teampreview');
 		}
 	},
 	littlecup: {
@@ -454,7 +464,7 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	haxclause: {
+	haxclauserule: {
 		effectType: 'Rule',
 		onStart: function() {
 			this.add('rule', 'Hax Clause');
