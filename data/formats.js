@@ -48,6 +48,17 @@ exports.BattleFormats = {
 		name: "OU",
 		challengeDefault: true,
 		rated: true,
+		// challengeShow: true,
+		// searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	},
+	oucurrent: {
+		effectType: 'Format',
+		name: "OU (Current)",
+		challengeDefault: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
@@ -56,7 +67,7 @@ exports.BattleFormats = {
 	},
 	oususpecttest: {
 		effectType: 'Format',
-		name: "OU Suspect Test",
+		name: "OU (Suspect Test)",
 		challengeDefault: true,
 		rated: true,
 		challengeShow: true,
@@ -73,25 +84,18 @@ exports.BattleFormats = {
 		name: "CAP",
 		rated: true,
 		challengeShow: true,
-		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
-	capnecturnaplaytest: {
+	capaurumothplaytest: {
 		effectType: 'Format',
-		name: "CAP Necturna Playtest",
-		rated: true,
-		ruleset: ['CAP Pokemon', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Standard', 'Team Preview'],
-		banlist: ['Uber','G4CAP','Tomohawk','ShadowStrike','Paleo Wave','Soul Dew']
-	},
-	capmolluxplaytest: {
-		mod: 'gen5bw',
-		effectType: 'Format',
-		name: "CAP Mollux Playtest",
+		name: "CAP Aurumoth Playtest",
+		challengeShow: true,
+		searchShow: true,
 		rated: true,
 		ruleset: ['CAP'],
-		banlist: ['G4CAP','Tomohawk','Necturna','ShadowStrike','Paleo Wave']
+		banlist: ['G4CAP','Tomohawk','Necturna','Mollux','Kyurem-Black','Garchomp','ShadowStrike','Paleo Wave']
 	},
 	ubers: {
 		effectType: 'Format',
