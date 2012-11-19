@@ -387,7 +387,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		selfR.graceTime = new Date().getTime();
 	};
 	this.decision = function(user, choice, data) {
-		selfR.cancelReset();
 		selfR.battle.sendFor(user, choice, data);
 		if (selfR.active !== selfR.battle.active) {
 			selfR.active = selfR.battle.active;
