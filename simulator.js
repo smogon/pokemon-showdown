@@ -101,6 +101,7 @@ var Simulator = (function(){
 
 		case 'inactiveside':
 			this.inactiveSide = parseInt(lines[2], 10);
+			this.room.cancelReset();
 			break;
 		}
 	};
