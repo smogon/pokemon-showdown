@@ -2686,7 +2686,7 @@ function Battle(roomid, format, rated) {
 			case 'switch':
 				if (i > side.active.length || i > side.pokemon.length) continue;
 				if (side.pokemon[i].trapped && side.currentRequest === 'move') {
-					selfB.debugError("Can't switch: The active pokemon is trapped");
+					selfB.debug("Can't switch: The active pokemon is trapped");
 					return false;
 				}
 
@@ -2695,19 +2695,19 @@ function Battle(roomid, format, rated) {
 				if (data > side.pokemon.length-1) data = side.pokemon.length-1;
 
 				if (!side.pokemon[data]) {
-					selfB.debugError("Can't switch: You can't switch to a pokemon that doesn't exist");
+					selfB.debug("Can't switch: You can't switch to a pokemon that doesn't exist");
 					return false;
 				}
 				if (data == i) {
-					selfB.debugError("Can't switch: You can't switch to yourself");
+					selfB.debug("Can't switch: You can't switch to yourself");
 					return false;
 				}
 				if (selfB.battleType !== 'triples' && data < side.active.length) {
-					selfB.debugError("Can't switch: You can't switch to an active pokemon except in triples");
+					selfB.debug("Can't switch: You can't switch to an active pokemon except in triples");
 					return false;
 				}
 				if (side.pokemon[data].fainted) {
-					selfB.debugError("Can't switch: You can't switch to a fainted pokemon");
+					selfB.debug("Can't switch: You can't switch to a fainted pokemon");
 					return false;
 				}
 
