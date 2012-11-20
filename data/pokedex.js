@@ -86,6 +86,28 @@ exports.BattlePokedex = {
 		colour: "Pink",
 		eggGroups: ["Fairy","Ground"],
 	},
+	aurumoth: {
+		num: -4,
+		species: "Aurumoth",
+		types: ["Bug","Psychic"],
+		baseStats: {
+			hp: 110,
+			atk: 120,
+			def: 99,
+			spa: 117,
+			spd: 60,
+			spe: 94
+		},
+		abilities: {
+			0: "Weak Armor",
+			1: "No Guard",
+			DW: "Illusion"
+		},
+		heightm: 2.1,
+		weightkg: 193,
+		colour: "Purple",
+		eggGroups: ["Bug"],
+	},
 	syclant: {
 		num: -51,
 		species: "Syclant",

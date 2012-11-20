@@ -110,7 +110,7 @@ Voltorb: Volt Switch, Thunderbolt, Taunt, Foul Play, Hidden Power Ice
 Electrode: Volt Switch, Thunderbolt, Taunt, Foul Play, Hidden Power Ice
 Exeggcute: Substitute, Leech Seed, Giga Drain, Psychic, Sleep Powder, Stun Spore, Hidden Power Fire, Synthesis
 Exeggutor: Substitute, Leech Seed, Giga Drain, Leaf Storm, Psychic, Sleep Powder, Stun Spore, Hidden Power Fire, Synthesis
-Cubone: Substitute, Bonemerang, Double-Edge, Stone Edge, Fire Punch, Earthquake
+Cubone: Substitute, Bonemerang, Double-Edge, Rock Slide, Fire Punch, Earthquake
 Marowak: Substitute, Bonemerang, Double-Edge, Stone Edge, Swords Dance, Fire Punch, Earthquake
 Tyrogue: Hi Jump Kick, Rapid Spin, Fake Out, Bullet Punch, Mach Punch, Toxic, Counter
 Hitmonlee: Hi Jump Kick, Sucker Punch, Stone Edge, Mach Punch, Substitute, Fake Out, Close Combat, Earthquake, Blaze Kick
@@ -186,9 +186,9 @@ Meganium: Reflect, Light Screen, Safeguard, Aromatherapy, GrassWhistle, Leech Se
 Cyndaquil: Eruption, Fire Blast, Flamethrower, Hidden Power Grass, Nature Power
 Quilava: Eruption, Fire Blast, Flamethrower, Hidden Power Grass, Nature Power
 Typhlosion: Eruption, Fire Blast, Flamethrower, Hidden Power Grass, Nature Power, Focus Blast
-Totodile: Aqua Jet, Waterfall, Crunch, Ice Punch, Superpower, Dragon Dance, Swords Dance, Return
-Croconaw: Aqua Jet, Waterfall, Crunch, Ice Punch, Superpower, Dragon Dance, Swords Dance, Return
-Feraligatr: Aqua Jet, Waterfall, Crunch, Ice Punch, Dragon Dance, Swords Dance, Return, Earthquake, Superpower
+Totodile: Aqua Jet, Waterfall, Crunch, Ice Punch, Superpower, Dragon Dance, Swords Dance
+Croconaw: Aqua Jet, Waterfall, Crunch, Ice Punch, Superpower, Dragon Dance, Swords Dance
+Feraligatr: Aqua Jet, Waterfall, Crunch, Ice Punch, Dragon Dance, Swords Dance, Earthquake, Superpower
 Sentret: Super Fang, Trick, Toxic, U-turn, Knock Off
 Furret: Return, U-turn, Sucker Punch, Trick, Ice Punch, Fire Punch, ThunderPunch
 Hoothoot: Reflect, Toxic, Roost, Light Screen, Whirlwind, Night Shade, Magic Coat
@@ -288,7 +288,7 @@ Zigzagoon: Belly Drum, ExtremeSpeed, Seed Bomb, Substitute
 Linoone: Belly Drum, ExtremeSpeed, Seed Bomb, Substitute, Shadow Claw
 Wurmple: Bug Bite, Poison Sting, Tackle, Electroweb
 Silcoon: Bug Bite, Poison Sting, Tackle, Electroweb
-Beautifly: Quiver Dance, Bug Buzz, Psychic, Hidden Power Fighting, Hidden Power Rock, Substitute, Roost
+Beautifly: Quiver Dance, Bug Buzz, Giga Drain, Hidden Power Fighting, Hidden Power Rock, Substitute, Roost
 Cascoon: Bug Bite, Poison Sting, Tackle, Electroweb
 Dustox: Toxic, Roost, Whirlwind, Bug Buzz, Protect, Sludge Bomb, Quiver Dance
 Lotad: Giga Drain, Ice Beam, Scald, Substitute, Leech Seed
@@ -496,7 +496,7 @@ Mesprit: Calm Mind, Psychic, Thunderbolt, Ice Beam, Substitute, U-turn, Trick, S
 Azelf: Nasty Plot, Psychic, Fire Blast, Grass Knot, Thunderbolt, Ice Punch, U-turn, Trick, Taunt, Stealth Rock, Explosion
 Dialga: Stealth Rock, Draco Meteor, Dragon Pulse, Roar, Dragon Tail, Thunderbolt, Outrage, Bulk Up, Fire Blast, Aura Sphere, Rest, Sleep Talk, Dragon Claw
 Palkia: Spacial Rend, Draco Meteor, Surf, Hydro Pump, Thunderbolt, Outrage, Fire Blast
-Heatran: Substitute, Fire Blast, Lava Plume, Will-O-Wisp, Stealth Rock, Earth Power, Hidden Power Grass, Hidden Power Ice, Dragon Pulse, Protect, Toxic, Roar, Overheat
+Heatran: Substitute, Fire Blast, Lava Plume, Will-O-Wisp, Stealth Rock, Earth Power, Hidden Power Grass, Hidden Power Ice, Protect, Toxic, Roar
 Regigigas: Thunder Wave, Substitute, Return, Drain Punch, Earthquake, Fire Punch, Toxic, Confuse Ray
 Giratina: Rest, Sleep Talk, Dragon Tail, Roar, Will-O-Wisp, Calm Mind, Dragon Pulse, Shadow Ball
 Giratina-Origin: Draco Meteor, Shadow Sneak, Dragon Tail, Hidden Power Fire, Will-O-Wisp, Calm Mind, Substitute, Dragon Pulse, Shadow Ball, Aura Sphere, Outrage
@@ -645,15 +645,15 @@ Fraxure: Dragon Dance, Swords Dance, Outrage, Dragon Claw, Aqua Tail, Superpower
 Haxorus: Dragon Dance, Swords Dance, Outrage, Dragon Claw, Earthquake, Aqua Tail, Superpower
 Cubchoo: Ice Beam, Surf, Hidden Power Grass, Superpower
 Beartic: Icicle Crash, Superpower, Night Slash, Stone Edge, Swords Dance, Aqua Jet
-Cryogonal: Ice Beam, Recover, Toxic, Haze, Reflect, Acid Armor, Knock Off
+Cryogonal: Ice Beam, Recover, Toxic, Rapid Spin, Reflect
 Shelmet: Spikes, Yawn, Substitute, Acid Armor, Baton Pass, Recover, Toxic, Bug Buzz
 Accelgor: Spikes, Yawn, Bug Buzz, Focus Blast, Giga Drain, Hidden Power Rock, Encore
 Stunfisk: Discharge, Thunderbolt, Earth Power, Scald, Toxic, Rest, Sleep Talk, Hidden Power Ice, Stealth Rock
 Mienfoo: U-turn, Drain Punch, Stone Edge, Swords Dance, Baton Pass, Hi Jump Kick, Fake Out
 Mienshao: U-turn, Fake Out, Hi Jump Kick, Stone Edge, Drain Punch, Swords Dance, Baton Pass
 Druddigon: Outrage, Superpower, Earthquake, Sucker Punch, Dragon Claw, Dragon Tail, Substitute, Glare, Stealth Rock, Fire Punch, ThunderPunch
-Golett: Substitute, Focus Punch, Earthquake, Shadow Punch, Hammer Arm, DynamicPunch, Ice Punch, Stone Edge, Stealth Rock
-Golurk: Substitute, Focus Punch, Earthquake, Shadow Punch, Hammer Arm, DynamicPunch, Ice Punch, Stone Edge, Stealth Rock
+Golett: Earthquake, Shadow Punch, DynamicPunch, Ice Punch, Stone Edge, Stealth Rock
+Golurk: Earthquake, Shadow Punch, DynamicPunch, Ice Punch, Stone Edge, Stealth Rock
 Pawniard: Swords Dance, Substitute, Sucker Punch, Iron Head, Brick Break, Night Slash
 Bisharp: Swords Dance, Substitute, Sucker Punch, Iron Head, Brick Break, Night Slash
 Bouffalant: Head Charge, Earthquake, Stone Edge, Megahorn, Swords Dance, Superpower
