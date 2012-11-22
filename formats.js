@@ -112,6 +112,12 @@ exports.BattleFormats = {
 		name: "Haxmons",
 		ruleset: ['HaxClause', 'TeamPreview']
 	},
+
+	NFE: {
+		effecType: 'Format',
+		name: "NFE",
+		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview', 'NFEClause']
+
 	DebugMode: {
 		effectType: 'Format',
 		name: "Debug Mode",
@@ -276,6 +282,26 @@ exports.BattleFormats = {
 			}
 		}
 	},
+	NFEClause: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule NFE Clause');
+		},
+		validateTeam: function(team, format) {
+			var speciesTable = {};
+			for (var i=0; i<team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				if (!pokemon.template.nfe) {
+					return [template.name+" is banned by NFE Clause."];
+				}
+				speciesTable[template.num] = true;
+			}
+		}
+	},
+
+
+
+
 	SleepClause: {
 		effectType: 'Rule',
 		onStart: function() {
