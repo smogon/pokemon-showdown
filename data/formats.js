@@ -218,6 +218,11 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'OHKO Clause'],
 		banlist: ['Wonder Guard', 'Pure Power', 'Huge Power', 'Shadow Tag', 'Arena Trap']
 	},
+	NFE: {
+		effectType: 'Format',
+		name: "NFE",
+		ruleset: ['Pokemon', 'SleepClause', 'SpeciesClause', 'Standard', 'TeamPreview', 'NFEclause']
+	},
 	pu: {
 		effectType: 'Format',
 		name: "PU",
@@ -499,9 +504,34 @@ exports.BattleFormats = {
 					return [template.name+" is banned by Species Clause."];
 				}
 				speciesTable[template.num] = true;
+
+
+
 			}
 		}
 	},
+NFEclause: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule', 'NFE clause');
+		},
+		validateTeam: function(team, format) {
+			var speciesTable = {};
+			for (var i=0; i<team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				if (!pokemon.baseTemplate.nfe) {
+					return [template.name+" is banned by NFE clause."];
+				}
+
+
+
+
+			}
+		}
+	},
+
+
+
 	ohkoclause: {
 		effectType: 'Rule',
 		onStart: function() {
