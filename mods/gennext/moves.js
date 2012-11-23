@@ -12,7 +12,7 @@ exports.BattleMovedex = {
 	- Giga Drain and Drain Punch, similar 60 base power moves, have
 	  been upgraded
 	******************************************************************/
-	aerialace: {	
+	aerialace: {
 		inherit: true,
 		basePower: 80
 	},
@@ -443,7 +443,7 @@ exports.BattleMovedex = {
 				atk: -1,
 				spa: -1
 			}
-		},
+		}
 	},
 	/******************************************************************
 	Stealth Rock:
