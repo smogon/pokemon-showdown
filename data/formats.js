@@ -128,22 +128,31 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "RU",
 		rated: true,
-		challengeShow: true,
-		searchShow: true,
+		// challengeShow: true,
+		// searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
 	},
-	rususpecttest: {
+	rucurrent: {
 		effectType: 'Format',
-		name: "RU (Suspect Test)",
+		name: "RU (current)",
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		isTeambuilderFormat: true,
 		ruleset: ['UU'],
-		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Nidoqueen', 'Cresselia']
+		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
 	},
+	// rususpecttest: {
+	// 	effectType: 'Format',
+	// 	name: "RU (Suspect Test)",
+	// 	rated: true,
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	isTeambuilderFormat: true,
+	// 	ruleset: ['UU'],
+	// 	banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Nidoqueen', 'Cresselia']
+	// },
 	nu: {
 		effectType: 'Format',
 		name: "NU",
