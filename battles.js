@@ -291,7 +291,7 @@ function BattlePokemon(set, side) {
 	this.hp = this.hp || this.maxhp;
 
 	this.toString = function() {
-		var fullname = selfP.fullname
+		var fullname = selfP.fullname;
 		if (selfP.illusion) fullname = selfP.illusion.fullname;
 
 		var positionList = ['a','b','c','d','e','f'];
@@ -413,7 +413,7 @@ function BattlePokemon(set, side) {
 		if (selfP.volatiles['mustRecharge'] || lockedMove === 'recharge') {
 			return [{
 				move: 'Recharge',
-				id: 'Recharge'
+				id: 'recharge'
 			}];
 		}
 		var moves = [];
