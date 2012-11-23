@@ -1660,7 +1660,7 @@ exports.BattleAbilities = {
 		},
 		id: "rivalry",
 		name: "Rivalry",
-		rating: 2.5,
+		rating: 0.5,
 		num: 79
 	},
 	"rockhead": {
