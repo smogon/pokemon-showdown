@@ -779,7 +779,7 @@ exports.BattleMovedex = {
 				def: -2,
 				spd: -2
 			}
-		},
+		}
 	},
 	dracometeor: {
 		inherit: true,
@@ -848,7 +848,20 @@ exports.BattleMovedex = {
 		inherit: true,
 		boosts: {
 			spe: 3
-		},
+		}
+	},
+	nightdaze: {
+		inherit: true,
+		accuracy: 100,
+		onModifyMove: function(move, user) {
+			if (user.illusion) {
+				var illusionMoves = user.illusion.moves.filter(function(illusionMove) {
+					var illusionMove = this.getMove(illusionMove);
+					return illusionMove.category !== 'Status';
+				}, this);
+				if (illusionMoves.length) move.name = illusionMoves.sample();
+			}
+		}
 	},
 	smog: {
 		inherit: true,
