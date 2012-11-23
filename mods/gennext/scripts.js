@@ -45,6 +45,9 @@ exports.BattleScripts = {
 		this.data.Learnsets.zoroark.learnset.gigadrain = ['5T'];
 		this.data.Learnsets.zoroark.learnset.superpower = ['5T'];
 
+		// Aipom: eggSketch! :D
+		this.data.Learnsets.aipom.learnset.sketch = ['5E'];
+
 		// Every DW ability that isn't Shadow Tag becomes released
 		for (var i in this.data.FormatsData) {
 			if (i !== 'chandelure' && i !== 'gothitelle') {

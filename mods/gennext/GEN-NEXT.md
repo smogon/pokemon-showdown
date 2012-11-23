@@ -83,6 +83,9 @@ Major changes:
 - Shuckle gets Berry Shell (select "Stick" in the teambuilder), which gives a
   50% boost to Defense and Sp. Def. It also learns Leech Seed.
 
+- Ambipom gets Sketch as an egg move, allowing it to use exactly one move not
+  normally in its learnset.
+
 - Echoed Voice now has 80 base power, hits once, and then, 2 turns later,
   hits again for 80 base power. It's like Doom Desire, except it still hits
   that first time.
@@ -147,6 +150,8 @@ Minor move changes:
 - Autotomize now gives +3 Speed
 
 - Zoroark gets a significantly wider movepool: It now learns: Ice Beam, Giga Drain, Earthquake, Stone Edge, Superpower, X-Scissor
+
+- if Illusion is active, Night Daze now displays as a random non-Status move in the copied pokemon's moveset
 
 Minor learnset changes:
 
