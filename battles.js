@@ -447,6 +447,12 @@ function BattlePokemon(set, side) {
 		}
 		return moves;
 	};
+	this.getRequestData = function() {
+		return {
+			moves: selfP.getMoves(),
+			trapped: selfP.trapped
+		}
+	};
 	this.positiveBoosts = function() {
 		var boosts = 0;
 		for (var i in selfP.boosts) {
@@ -1704,33 +1710,20 @@ function Battle(roomid, format, rated) {
 			break;
 
 		default:
-			var moves;
-			var pokemon;
+			var activeData;
 			selfB.p1.decision = null;
 			selfB.p1.currentRequest = 'move';
-			pokemon = selfB.p1.active[0];
-			if (!pokemon) {
-				selfB.add('message BATTLE CRASHED.');
-				return;
-			}
-			moves = pokemon.getMoves();
-			if (pokemon.disabledMoves['recharge'] === false) {
-				moves = [{move: 'recharge'}];
-			}
-			selfB.p1.emitUpdate({request: {moves: moves, trapped: pokemon.trapped, side: pokemon.side.getData(), rqid: selfB.currentRequestID}});
+			activeData = selfB.p1.active.map(function(pokemon) {
+				if (pokemon) return pokemon.getRequestData();
+			});
+			selfB.p1.emitUpdate({request: {active: activeData, side: selfB.p1.getData(), rqid: selfB.currentRequestID}});
 
 			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'move';
-			pokemon = selfB.p2.active[0];
-			if (!pokemon) {
-				selfB.add('message BATTLE CRASHED.');
-				return;
-			}
-			moves = pokemon.getMoves();
-			if (pokemon.disabledMoves['recharge'] === false) {
-				moves = [{move: 'recharge'}];
-			}
-			selfB.p2.emitUpdate({request: {moves: moves, trapped: pokemon.trapped, side: pokemon.side.getData(), rqid: selfB.currentRequestID}});
+			activeData = selfB.p2.active.map(function(pokemon) {
+				if (pokemon) return pokemon.getRequestData();
+			});
+			selfB.p2.emitUpdate({request: {active: activeData, side: selfB.p2.getData(), rqid: selfB.currentRequestID}});
 			break;
 		}
 
