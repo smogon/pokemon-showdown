@@ -323,7 +323,7 @@ exports.BattleFormats = {
 	},
 	standardubers: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'Moody Clause'],
+		ruleset: ['Sleep Clause', 'Species Clause', 'Moody Clause', 'OHKO Clause'],
 		banlist: ['Unreleased', 'Illegal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
