@@ -42,6 +42,24 @@ exports.BattleAbilities = {
 		onImmunity: function(type, pokemon) {
 			if (type === 'hail') return false;
 		},
+		onSourceBasePower: function(basePower, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
+				this.debug('Thick Fat weaken');
+				return basePower / 2;
+			}
+		}
+	},
+	"snowcloak": {
+		inherit: true,
+		onImmunity: function(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		onSourceBasePower: function(basePower) {
+			if (this.isWeather('hail')) {
+				return basePower * 2/3;
+			}
+			return basePower * 4/5;
+		}
 	},
 	"flowergift": {
 		inherit: true,
@@ -148,6 +166,17 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"clearbody": {
+		inherit: true,
+		onBoost: function(boost, target, source) {
+			for (var i in boost) {
+				if (boost[i] < 0) {
+					delete boost[i];
+					this.add("-message", target.name+"'s stats were not lowered! (placeholder)");
+				}
+			}
+		}
+	},
 	"rockhead": {
 		inherit: true,
 		onModifyMove: function(move) {
@@ -155,6 +184,27 @@ exports.BattleAbilities = {
 		},
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.id === 'lifeorb') return false;
+		}
+	},
+	"download": {
+		inherit: true,
+		onStart: function (pokemon) {
+			if (pokemon.template.id === 'genesect') {
+				if (!pokemon.getItem().onDrive) return;
+			}
+			var foeactive = pokemon.side.foe.active;
+			var totaldef = 0;
+			var totalspd = 0;
+			for (var i=0; i<foeactive.length; i++) {
+				if (!foeactive[i] || foeactive[i].fainted) continue;
+				totaldef += foeactive[i].stats.def;
+				totalspd += foeactive[i].stats.spd;
+			}
+			if (totaldef && totaldef >= totalspd) {
+				this.boost({spa:1});
+			} else if (totalspd) {
+				this.boost({atk:1});
+			}
 		}
 	},
 	"telepathy": {
