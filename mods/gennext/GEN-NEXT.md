@@ -30,12 +30,13 @@ Major changes:
   now grants +1 SpD +1 Spe +1 accuracy.
 
 - Drives will change Genesect's typing immediately after switch-in, to Bug/Ice,
-  Bug/Fire, Bug/Electric, or Bug/Water. (Basically, it will change Genesect's
-  type, except Genesect will still take neutral damage from SR)
+  Bug/Fire, Bug/Electric, or Bug/Water (basically, it will change Genesect's
+  type, except Genesect will still take neutral damage from SR). However,
+  Download will not activate unless Genesect holds a Drive.
 
 - Unown gets an item named Strange Orb (select "Stick" in the teambuilder)
-  It doubles its SpA and Spe, and changes its type to the type of its Hidden
-  Power.
+  It doubles its SpA, SpD, and Spe, and changes its type to the type of its
+  Hidden Power.
 
 - Bug/Flying Quiver Dancers get an item named GossamerWing (select "Stick"
   in the teambuilder). It negates the Flying weaknesses (take half damage from
@@ -48,6 +49,8 @@ Major changes:
 
 - Hail is improved:
   - Silver Wind, Ominous Wind, and Avalanche deal 1.5x as much damage in Hail
+  - Snow Cloak no longer modifies evasion, but instead decreases damage by 33%
+    in Hail (and 20% out of Hail)
   - Thick Fat grants immunity to Hail damage  
      
 - Moves with a charge turn are now a lot more powerful. They remove Protect and
@@ -95,17 +98,22 @@ Major changes:
   will boost every move if Life Orb is held, and Rock Head will negate Life
   Orb recoil.
 
-- Twister is now a Flying-type Scald that confuses instead of burns
+- Twister is now a 80 base power Flying move with a 30% confusion chance
+
+- Freezing doesn't have a 20% thaw chance. Instead, thawing happens at the end
+  of the second turn. Because this new freeze effect is a nerf, Blizzard now
+  has a 30% chance of inflicting freeze.
 
 - Drain Punch is now an 80 Base Power Poison-type move
 
 Minor move changes:
 
-- Draco Meteor and Close Combat have been nerfed: CC gives -2 Def, -2 SpD, and
-  Draco Meteor is 120 bp, 100% accuracy
+- all 95%-accurate moves, as well as Charge Beam and Rock Slide, are now 100% accurate
+
+- Close Combat has been nerfed: it now gives -2 Def, -2 SpD
 
 - Perfect accuracy moves with a base power of 60 have their base power
-  increased to 80
+  increased to 80 (physical) or 90 (special)
 
 - Drives grant a 1.1x damage bonus to Techno Blast
 
@@ -170,7 +178,7 @@ Minor learnset changes:
 
 - Galvantula gets Zap Cannon
 
-- Milotic and Scolipede get Coil
+- Milotic, Scolipede, and Steelix get Coil
 
 - Rotom formes learn more things:
   - Rotom-Wash: BubbleBeam
@@ -189,6 +197,10 @@ Minor ability changes:
 
 - Slow Start now only lasts 3 turns instead of 5
 
+- Clear Body prevents all stat lowering (relevant: the Regis' Superpower and Metagross' Hammer Arm)
+
+- Thick Fat grants half damage from Fighting
+
 Minor item changes:
 
 - Zoom Lens now grants 1.6x accuracy
@@ -197,7 +209,7 @@ Minor item changes:
 
 Tier changes:
 
-- DrizzleSwim is no longer banned in OU
+- OU no longer has any tier-specific bans (DrizzleSwim and Soul Dew are no longer banned)
 
-- Kyurem is banned (by the time NEXT is done, it would presumably have
+- Kyurem, Kyurem-B, Deoxys-D, Latios, and Latias are now Uber (by the time NEXT is done, they would presumably have
   received enough buffs to be Uber)

@@ -1,7 +1,7 @@
 exports.BattleMovedex = {
 	/******************************************************************
 	Perfect accuracy moves:
-	- base power increased 60 to 80
+	- base power increased 60 to 80 (physical) or 90 (special)
 
 	Justification:
 	- perfect accuracy is too underpowered to have such low base power
@@ -20,21 +20,21 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80
 	},
-	magicalleaf: {
-		inherit: true,
-		basePower: 80
-	},
 	shadowpunch: {
 		inherit: true,
 		basePower: 80
 	},
+	magicalleaf: {
+		inherit: true,
+		basePower: 90
+	},
 	shockwave: {
 		inherit: true,
-		basePower: 80
+		basePower: 90
 	},
 	swift: {
 		inherit: true,
-		basePower: 80
+		basePower: 90
 	},
 	/******************************************************************
 	HMs:
@@ -770,7 +770,7 @@ exports.BattleMovedex = {
 	- intensify drawbacks
 
 	Justification:
-	- Draco Meteor and Close Combat are way too common.
+	- Close Combat is way too common.
 	******************************************************************/
 	closecombat: {
 		inherit: true,
@@ -780,11 +780,6 @@ exports.BattleMovedex = {
 				spd: -2
 			}
 		}
-	},
-	dracometeor: {
-		inherit: true,
-		basePower: 120,
-		accuracy: 100
 	},
 	/******************************************************************
 	Echoed Voice:
@@ -822,6 +817,64 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal"
+	},
+	/******************************************************************
+	Moves with 95% accuracy, also Rock Slide and Charge Beam:
+	- buffed to 100% accuracy
+
+	Justification:
+	- missing Hydro Pump is losing a gamble, but missing V-create is
+	  nothing but hax
+	- Rock Slide is included for being similar enough to Air Slash
+	- Charge Beam is included because its 30% chance of no boost is enough
+	******************************************************************/
+	firefang: {
+		inherit: true,
+		accuracy: 100
+	},
+	icefang: {
+		inherit: true,
+		accuracy: 100
+	},
+	thunderfang: {
+		inherit: true,
+		accuracy: 100
+	},
+	razorshell: {
+		inherit: true,
+		accuracy: 100
+	},
+	drillrun: {
+		inherit: true,
+		accuracy: 100
+	},
+	vcreate: {
+		inherit: true,
+		accuracy: 100
+	},
+	aeroblast: {
+		inherit: true,
+		accuracy: 100
+	},
+	sacredfire: {
+		inherit: true,
+		accuracy: 100
+	},
+	spacialrend: {
+		inherit: true,
+		accuracy: 100
+	},
+	airslash: {
+		inherit: true,
+		accuracy: 100
+	},
+	rockslide: {
+		inherit: true,
+		accuracy: 100
+	},
+	chargebeam: {
+		inherit: true,
+		accuracy: 100
 	},
 	/******************************************************************
 	Signature moves and other moves with limited distribution:

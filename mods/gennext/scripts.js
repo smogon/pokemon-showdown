@@ -25,9 +25,10 @@ exports.BattleScripts = {
 		// Galvantula: Zap Cannon
 		this.data.Learnsets.galvantula.learnset.zapcannon = ['5L100'];
 
-		// Scolipede, Milotic: Coil
+		// Scolipede, Milotic, Steelix: Coil
 		this.data.Learnsets.milotic.learnset.coil = ['5L100'];
 		this.data.Learnsets.scolipede.learnset.coil = ['5L100'];
+		this.data.Learnsets.steelix.learnset.coil = ['5L100'];
 
 		// Rotoms: lots of moves
 		this.data.Learnsets.rotomwash.learnset.bubblebeam = ['5L100'];

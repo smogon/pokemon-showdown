@@ -1,4 +1,25 @@
 exports.BattleStatuses = {
+	frz: {
+		effectType: 'Status',
+		onStart: function(target) {
+			this.add('-status', target.id, 'frz');
+		},
+		duration: 2,
+		onBeforeMovePriority: 2,
+		onBeforeMove: function(pokemon, target, move) {
+			if (move.thawsUser) {
+				pokemon.cureStatus();
+				return;
+			}
+			this.add('cant', pokemon.id, 'frz');
+			return false;
+		},
+		onHit: function(target, source, move) {
+			if (move.type === 'Fire' && move.category !== 'Status' || move.thawsUser) {
+				target.cureStatus();
+			}
+		}
+	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		durationCallback: function() {

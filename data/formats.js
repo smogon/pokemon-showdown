@@ -302,7 +302,7 @@ exports.BattleFormats = {
 		name: "[Gen NEXT] NEXT-OU",
 		challengeShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Kyurem']
+		banlist: ['Uber']
 	},
 	// doublesrandombattle: {
 	// 	effectType: 'Format',
