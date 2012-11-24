@@ -3023,14 +3023,16 @@ exports.BattleFormatsData = {
 	kyogre: {
 		viableMoves: {"waterspout":1,"surf":1,"thunder":1,"icebeam":1,"calmmind":1,"rest":1,"sleeptalk":1},
 		eventPokemon: [
-			{"generation":5,"level":80,"moves":["icebeam","ancientpower","waterspout","thunder"]}
+			{"generation":5,"level":80,"moves":["icebeam","ancientpower","waterspout","thunder"]},
+			{"generation":5,"level":100,"moves":["waterspout","thunder","icebeam","sheercold"]}
 		],
 		tier: "Uber"
 	},
 	groudon: {
 		viableMoves: {"earthquake":1,"dragontail":1,"stealthrock":1,"stoneedge":1,"swordsdance":1,"rockpolish":1,"thunderwave":1,"firepunch":1},
 		eventPokemon: [
-			{"generation":5,"level":80,"moves":["earthquake","ancientpower","eruption","solarbeam"]}
+			{"generation":5,"level":80,"moves":["earthquake","ancientpower","eruption","solarbeam"]},
+			{"generation":5,"level":100,"moves":["eruption","hammerarm","earthpower","solarbeam"]}
 		],
 		tier: "Uber"
 	},
@@ -3788,10 +3790,11 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	victini: {
-		viableMoves: {"vcreate":1,"fusionbolt":1,"uturn":1,"psychic":1,"energyball":1,"focusblast":1,"fireblast":1,"thunder":1},
+		viableMoves: {"vcreate":1,"boltstrike":1,"uturn":1,"psychic":1,"focusblast":1,"blueflare":1},
 		eventPokemon: [
 			{"generation":5,"level":15,"moves":["incinerate","quickattack","endure","confusion"]},
-			{"generation":5,"level":50,"moves":["vcreate","fusionflare","fusionbolt","searingshot"]}
+			{"generation":5,"level":50,"moves":["vcreate","fusionflare","fusionbolt","searingshot"]},
+			{"generation":5,"level":100,"moves":["vcreate","blueflare","boltstrike","glaciate"]}
 		],
 		tier: "UU"
 	},
