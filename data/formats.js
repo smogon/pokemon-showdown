@@ -54,7 +54,7 @@ exports.BattleFormats = {
 	},
 	oucurrent: {
 		effectType: 'Format',
-		name: "OU (Current)",
+		name: "OU (current)",
 		challengeDefault: true,
 		rated: true,
 		challengeShow: true,
@@ -65,7 +65,7 @@ exports.BattleFormats = {
 	},
 	oususpecttest: {
 		effectType: 'Format',
-		name: "OU (Suspect Test)",
+		name: "OU (suspect test)",
 		challengeDefault: true,
 		rated: true,
 		challengeShow: true,
@@ -117,7 +117,7 @@ exports.BattleFormats = {
 	},
 	uususpecttest: {
 		effectType: 'Format',
-		name: "UU (Suspect Test)",
+		name: "UU (suspect test)",
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
