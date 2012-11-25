@@ -1027,7 +1027,7 @@ exports.BattleScripts = {
 				item = 'Air Balloon';
 			} else if (hasMove['eruption'] || hasMove['waterspout']) {
 				item = 'Choice Scarf';
-			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect']) {
+			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 				item = 'Leftovers';
 			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
 				item = 'Focus Sash';
