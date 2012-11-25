@@ -101,6 +101,64 @@ exports.BattleMovedex = {
 		priority: 1
 	},
 	/******************************************************************
+	Substitute:
+	- has precedence over Protect
+
+	Justification:
+	- Sub/Protect stalling is annoying
+	******************************************************************/
+	substitute: {
+		inherit: true,
+		effect: {
+			onStart: function(target) {
+				this.add('-start', target, 'Substitute');
+				this.effectData.hp = Math.floor(target.maxhp/4);
+				delete target.volatiles['partiallytrapped'];
+			},
+			onTryHitPriority: 2,
+			onTryHit: function(target, source, move) {
+				if (target === source) {
+					this.debug('sub bypass: self hit');
+					return;
+				}
+				if (move.category === 'Status') {
+					var SubBlocked = {
+						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, trick:1, worryseed:1, yawn:1
+					};
+					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
+						return false;
+					}
+					return;
+				}
+				var damage = this.getDamage(source, target, move);
+				if (!damage) {
+					return null;
+				}
+				damage = this.runEvent('SubDamage', target, source, move, damage);
+				if (!damage) {
+					return damage;
+				}
+				if (damage > target.volatiles['substitute'].hp) {
+					damage = target.volatiles['substitute'].hp;
+				}
+				target.volatiles['substitute'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.volatiles['substitute'].hp <= 0) {
+					target.removeVolatile('substitute');
+					this.runEvent('AfterSubDamage', target, source, move, damage);
+					return 0; // hit
+				} else {
+					this.add('-activate', target, 'Substitute', '[damage]');
+					this.runEvent('AfterSubDamage', target, source, move, damage);
+					return 0; // hit
+				}
+			},
+			onEnd: function(target) {
+				this.add('-end', target, 'Substitute');
+			}
+		}
+	},
+	/******************************************************************
 	Two-turn moves:
 	- now a bit better
 
@@ -780,6 +838,39 @@ exports.BattleMovedex = {
 				spd: -2
 			}
 		}
+	},
+	/******************************************************************
+	Blizzard:
+	- 30% freeze chance
+
+	Justification:
+	- freeze was nerfed, Blizzard can now have Thunder/Hurricane-like
+	  secondary chances.
+	******************************************************************/
+	blizzard: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			status: 'frz'
+		}
+	},
+	/******************************************************************
+	Selfdestruct and Explosion:
+	- 120 and 180 base power autocrit
+
+	Justification:
+	- these were nerfed unreasonably in gen 5, they're now somewhat
+	  usable again.
+	******************************************************************/
+	selfdestruct: {
+		inherit: true,
+		basePower: 140,
+		willCrit: true
+	},
+	explosion: {
+		inherit: true,
+		basePower: 180,
+		willCrit: true
 	},
 	/******************************************************************
 	Echoed Voice:

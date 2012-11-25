@@ -61,6 +61,22 @@ exports.BattleAbilities = {
 			return basePower * 4/5;
 		}
 	},
+	"icebody": {
+		inherit: true,
+		onImmunity: function(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		onWeather: function(target, source, effect) {
+			this.heal(target.maxhp/16);
+		},
+		onAfterDamage: function(damage, target, source, move) {
+			if (move && move.isContact && this.hasWeather('hail')) {
+				if (this.random(10) < 3) {
+					source.trySetStatus('frz', target, move);
+				}
+			}
+		}
+	},
 	"flowergift": {
 		inherit: true,
 		onModifyMove: function(move) {
@@ -102,7 +118,7 @@ exports.BattleAbilities = {
 	"slowstart": {
 		inherit: true,
 		effect: {
-			duration: 3,
+			duration: 2,
 			onStart: function(target) {
 				this.add('-start', target, 'Slow Start');
 			},
@@ -204,6 +220,14 @@ exports.BattleAbilities = {
 				this.boost({spa:1});
 			} else if (totalspd) {
 				this.boost({atk:1});
+			}
+		}
+	},
+	"victorystar": {
+		inherit: true,
+		onAllyModifyMove: function(move) {
+			if (typeof move.accuracy === 'number') {
+				move.accuracy *= 1.5;
 			}
 		}
 	},

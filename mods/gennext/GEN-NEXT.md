@@ -10,13 +10,24 @@ things that could plausibly be done between gens.
 That means:
 
 1. no base stat changes
-2. only numbers that make sense like 60%, 30%, etc, not weird numbers like 65%
-3. no buffing OU mons, except maybe tiny buffs to mons at the bottom of OU
-4. no doing things that make zero sense flavor-wise
+2. no removing from movepools
+3. no removing from ability distribution
+4. no typing changes without strong justification
+5. only numbers that make sense like 60%, 30%, etc, not weird numbers like 65%
+6. no buffing OU mons, except maybe tiny buffs to mons at the bottom of OU
+7. no doing things that make zero sense flavor-wise
 
 A good example is what Game Freak did by giving Ditto the Imposter ability.
 This gave a Ditto a role in OU, while still making sense flavor-wise, and
 without removing anything it used to have.
+
+A good example of what NEXT changes is Cherrim. We have taken an interesting
+idea (ability designed for Sunny Day support) and made it viable in OU.
+
+This approach is in sharp contrast to many mods that do change many things on
+NEXT's "don't change" list. The result is a metagame that feels a lot like
+a new generation: existing OU threats stay mostly the same, but many new
+threats and strategies are introduced.
 
 Changes
 ------------------------------------------------------------------------
@@ -51,8 +62,16 @@ Major changes:
   - Silver Wind, Ominous Wind, and Avalanche deal 1.5x as much damage in Hail
   - Snow Cloak no longer modifies evasion, but instead decreases damage by 33%
     in Hail (and 20% out of Hail)
+  - Ice Body has 30% chance of freezing a contact move (and grants passive
+    healing out of Hail, too)
   - Thick Fat grants immunity to Hail damage  
      
+- Freezing doesn't have a 20% thaw chance. Instead, thawing happens at the end
+  of the second turn. Because this new freeze effect is a nerf, Blizzard now
+  has a 30% chance of inflicting freeze.
+
+- Every DW ability other than on Chandelure is released.
+
 - Moves with a charge turn are now a lot more powerful. They remove Protect and
   Substitute before hitting, they always crit (although their base power has
   been adjusted accordingly), they have perfect accuracy, and one other change
@@ -73,8 +92,6 @@ Major changes:
 - Recharge moves are similarly buffed. They have 75 base power, always crit,
   and they only recharge if they KO. Be careful - in return for a KO, they
   still give the foe a free switch-in _and_ a turn to set up.
-
-- Every DW ability other than on Chandelure is released.
 
 - Flower Gift now only boosts Sp. Def, but if Sunny Day is used while Cherrim
   is out, the next switch-in also receives +1 SpD
@@ -99,10 +116,6 @@ Major changes:
   Orb recoil.
 
 - Twister is now a 80 base power Flying move with a 30% confusion chance
-
-- Freezing doesn't have a 20% thaw chance. Instead, thawing happens at the end
-  of the second turn. Because this new freeze effect is a nerf, Blizzard now
-  has a 30% chance of inflicting freeze.
 
 - Drain Punch is now an 80 Base Power Poison-type move
 
@@ -157,9 +170,16 @@ Minor move changes:
 
 - Autotomize now gives +3 Speed
 
-- Zoroark gets a significantly wider movepool: It now learns: Ice Beam, Giga Drain, Earthquake, Stone Edge, Superpower, X-Scissor
+- Zoroark gets a significantly wider movepool: It now learns: Ice Beam, Giga
+  Drain, Earthquake, Stone Edge, Superpower, X-Scissor
 
-- if Illusion is active, Night Daze now displays as a random non-Status move in the copied pokemon's moveset
+- if Illusion is active, Night Daze now displays as a random non-Status move
+  in the copied pokemon's moveset
+
+- Selfdestruct and Explosion are now 140 and 180 base power autocrit moves, respectively
+
+- Protect does not protect Substitutes (with passive healing being more
+  common, Sub/Protect stalling could be overpowered)
 
 Minor learnset changes:
 
@@ -189,15 +209,16 @@ Minor learnset changes:
 
 Minor ability changes:
 
-- Compoundeyes now grants 1.6x accuracy
+- Compoundeyes now grants 1.6x accuracy, Victory Star grants 1.5x
 
 - Solid Rock and Filter now reduce 1/2 damage of SE moves, not 1/4
 
 - Outrage, Thrash, and Petal Dance don't lock if the user has Own Tempo
 
-- Slow Start now only lasts 3 turns instead of 5
+- Slow Start now only lasts 2 turns instead of 5
 
-- Clear Body prevents all stat lowering (relevant: the Regis' Superpower and Metagross' Hammer Arm)
+- Clear Body prevents all stat lowering (relevant: the Regis' Superpower and
+  Metagross' Hammer Arm)
 
 - Thick Fat grants half damage from Fighting
 
@@ -209,7 +230,8 @@ Minor item changes:
 
 Tier changes:
 
-- OU no longer has any tier-specific bans (DrizzleSwim and Soul Dew are no longer banned)
+- OU no longer has any tier-specific bans (DrizzleSwim and Soul Dew are no
+  longer banned)
 
-- Kyurem, Kyurem-B, Deoxys-D, Latios, and Latias are now Uber (by the time NEXT is done, they would presumably have
-  received enough buffs to be Uber)
+- Kyurem, Kyurem-B, Deoxys-D, Latios, and Latias are now Uber (by the time
+  NEXT is done, they would presumably have received enough buffs to be Uber)
