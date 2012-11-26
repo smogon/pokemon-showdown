@@ -17,6 +17,12 @@ exports.serverid = 'testserver';
 //   still be able to login with an unregistered token.
 exports.servertoken = 'exampletoken-382hgraw4jr2tioq';
 
+// Proxy IP - a list of proxy IPs with trusted X-Forwarded-For headers
+//   The list can be an array, or a string with whatever delimiter you wish.
+//   Leave at false to never trust any proxy. Set to true to trust all
+//   proxies.
+exports.proxyip = false;
+
 // login server data - don't forget the http:// and the trailing slash
 //   This is the URL of the user database and ladder mentioned earlier.
 //   Don't change this setting - there aren't any other login servers right now
