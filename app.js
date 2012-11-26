@@ -413,7 +413,8 @@ if (config.protocol === 'io') { // Socket.IO
 	server.sockets.on('connection', function (socket) {
 		var you = null;
 
-		socket.remoteAddress = (socket.handshake.headers["x-forwarded-for"]||"").split(",").shift() || socket.handshake.address.address; // for compatibility with SockJS semantics
+		socket.remoteAddress = socket.handshake.address.address; // for compatibility with SockJS semantics
+		if (config.proxyip && (config.proxyip === true || config.proxyip.indexOf(socket.remoteAddress) >= 0)) socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
 
 		if (bannedIps[socket.remoteAddress]) {
 			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
@@ -486,7 +487,7 @@ if (config.protocol === 'io') { // Socket.IO
 		}
 		socket.id = randomString(16); // this sucks
 
-		socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
+		if (config.proxyip && (config.proxyip === true || config.proxyip.indexOf(socket.remoteAddress) >= 0)) socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
 
 		if (bannedIps[socket.remoteAddress]) {
 			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
