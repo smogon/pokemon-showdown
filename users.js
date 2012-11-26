@@ -395,12 +395,16 @@ var User = (function () {
 	User.prototype.finishRename = function(success, tokenData, token, auth) {
 		var name = this.renamePending;
 		var userid = toUserid(name);
+		var expired = false;
 
 		var body = '';
 		if (success) {
 			var tokenDataSplit = tokenData.split(',');
 			if (tokenDataSplit[0] === userid) {
 				body = tokenDataSplit[1];
+				if (Math.abs(parseInt(tokenDataSplit[2],10) - Date.now()/1000) > 2*24*60*60) {
+					expired = true;
+				}
 			} else {
 				console.log('verify userid mismatch: '+tokenData);
 			}
@@ -408,7 +412,11 @@ var User = (function () {
 			console.log('verify failed: '+tokenData);
 		}
 
-		if (body) {
+		if (expired) {
+			console.log('verify failed: '+tokenData);
+			body = '';
+			this.emit('nameTaken', {userid:userid, name:name, reason: "Your session expired. Please log in again."});
+		} else if (body) {
 			//console.log('BODY: "'+body+'"');
 
 			if (users[userid] && !users[userid].authenticated && users[userid].connected) {
