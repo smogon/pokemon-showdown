@@ -1675,7 +1675,7 @@ function Battle(roomid, format, rated) {
 
 		switch (type) {
 		case 'switch':
-			if (selfB.p1.active[0].fainted) {
+			if (selfB.p1.active.any(function(a){return a.fainted;})) {
 				selfB.p1.decision = null;
 				selfB.p1.currentRequest = 'switch';
 				selfB.p1.emitUpdate({
@@ -1683,7 +1683,7 @@ function Battle(roomid, format, rated) {
 					request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
 				});
 			}
-			if (selfB.p2.active[0].fainted) {
+			if (selfB.p2.active.any(function(a){return a.fainted;})) {
 				selfB.p2.decision = null;
 				selfB.p2.currentRequest = 'switch';
 				selfB.p2.emitUpdate({
@@ -2285,7 +2285,7 @@ function Battle(roomid, format, rated) {
 		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
 	};
 	this.checkFainted = function() {
-		if (selfB.p1.active[0].fainted || selfB.p2.active[0].fainted) {
+		if (selfB.p1.active.any(function(a){return a.fainted;}) || selfB.p2.active.any(function(a){return a.fainted;})) {
 			selfB.makeRequest('switch');
 			return true;
 		}
