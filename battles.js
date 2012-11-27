@@ -1678,35 +1678,53 @@ function Battle(roomid, format, rated) {
 			if (selfB.p1.active[0].fainted) {
 				selfB.p1.decision = null;
 				selfB.p1.currentRequest = 'switch';
-				selfB.p1.emitUpdate({request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}});
+				selfB.p1.emitUpdate({
+					side: 'p1',
+					request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+				});
 			}
 			if (selfB.p2.active[0].fainted) {
 				selfB.p2.decision = null;
 				selfB.p2.currentRequest = 'switch';
-				selfB.p2.emitUpdate({request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}});
+				selfB.p2.emitUpdate({
+					side: 'p2',
+					request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+				});
 			}
 			break;
 
 		case 'switch-ally':
 			selfB.p1.decision = null;
 			selfB.p1.currentRequest = 'switch';
-			selfB.p1.emitUpdate({request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}});
+			selfB.p1.emitUpdate({
+				side: 'p1',
+				request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+			});
 			break;
 
 		case 'switch-foe':
 			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'switch';
-			selfB.p2.emitUpdate({request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}});
+			selfB.p2.emitUpdate({
+				side: 'p2',
+				request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+			});
 			break;
 
 		case 'teampreview':
 			selfB.add('teampreview');
 			selfB.p1.decision = null;
 			selfB.p1.currentRequest = 'teampreview';
-			selfB.p1.emitUpdate({request: {teamPreview: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}});
+			selfB.p1.emitUpdate({
+				side: 'p1',
+				request: {teamPreview: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+			});
 			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'teampreview';
-			selfB.p2.emitUpdate({request: {teamPreview: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}});
+			selfB.p2.emitUpdate({
+				side: 'p2',
+				request: {teamPreview: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+			});
 			break;
 
 		default:
@@ -1716,14 +1734,20 @@ function Battle(roomid, format, rated) {
 			activeData = selfB.p1.active.map(function(pokemon) {
 				if (pokemon) return pokemon.getRequestData();
 			});
-			selfB.p1.emitUpdate({request: {active: activeData, side: selfB.p1.getData(), rqid: selfB.currentRequestID}});
+			selfB.p1.emitUpdate({
+				side: 'p1',
+				request: {active: activeData, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+			});
 
 			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'move';
 			activeData = selfB.p2.active.map(function(pokemon) {
 				if (pokemon) return pokemon.getRequestData();
 			});
-			selfB.p2.emitUpdate({request: {active: activeData, side: selfB.p2.getData(), rqid: selfB.currentRequestID}});
+			selfB.p2.emitUpdate({
+				side: 'p2',
+				request: {active: activeData, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+			});
 			break;
 		}
 
