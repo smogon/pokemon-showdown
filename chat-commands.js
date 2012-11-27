@@ -390,9 +390,22 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'kick':
 	case 'k':
-			if (!target) return parseCommand(user, '?', cmd, room, socket);
-			return parseCommand(user, 'redirect', ''+target+', http://www.smogon.com/sim/rules', room, socket);
-			break;
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		var targets = splitTarget(target);
+		var targetUser = targets[0];
+		if (!targetUser) {
+			emit(socket, 'console', 'User '+targets[2]+' not found.');
+			return false;
+		}
+		if (!user.can('redirect', targetUser)) {
+			emit(socket, 'console', '/redirect - Access denied.');
+			return false;
+		}
+
+		logModCommand(room,''+targetUser.name+' was kicked to the Rules page by '+user.name+'' + (targets[1] ? " (" + targets[1] + ")" : ""));
+		targetUser.emit('console', {evalRawMessage: 'window.location.href="http://www.smogon.com/sim/rules"'});
+		return false;
+		break;
 
 	case 'unban':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
