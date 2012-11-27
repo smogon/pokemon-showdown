@@ -20,7 +20,8 @@ exports.servertoken = 'exampletoken-382hgraw4jr2tioq';
 // Proxy IP - a list of proxy IPs with trusted X-Forwarded-For headers
 //   The list can be an array, or a string with whatever delimiter you wish.
 //   Leave at false to never trust any proxy. Set to true to trust all
-//   proxies.
+//   proxies. DO NOT SET TO TRUE UNLESS YOU ARE SURE YOU ARE BEHIND A
+//   TRUSTED PROXY.
 exports.proxyip = false;
 
 // login server data - don't forget the http:// and the trailing slash
