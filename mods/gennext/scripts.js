@@ -49,6 +49,9 @@ exports.BattleScripts = {
 		// Aipom: eggSketch! :D
 		this.data.Learnsets.aipom.learnset.sketch = ['5E'];
 
+		// Azumarill: free Belly Drum
+		this.data.Learnsets.azumarill.learnset.bellydrum = ['5L100'];
+
 		// Every DW ability that isn't Shadow Tag becomes released
 		for (var i in this.data.FormatsData) {
 			if (i !== 'chandelure' && i !== 'gothitelle') {

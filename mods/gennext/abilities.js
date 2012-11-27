@@ -231,6 +231,54 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"shellarmor": {
+		inherit: true,
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				damage -= target.maxhp/16;
+				if (damage < 0) damage = 0;
+				return damage;
+			}
+		}
+	},
+	"battlearmor": {
+		inherit: true,
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				damage -= target.maxhp/16;
+				if (damage < 0) damage = 0;
+				return damage;
+			}
+		}
+	},
+	"weakarmor": {
+		inherit: true,
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				damage -= target.maxhp/16;
+				if (damage < 0) damage = 0;
+				return damage;
+			}
+		}
+	},
+	"magmaarmor": {
+		inherit: true,
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				damage -= target.maxhp/16;
+				if (damage < 0) damage = 0;
+				return damage;
+			}
+		}
+	},
+	"ironfist": {
+		inherit: true,
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (move.isPunchAttack) {
+				return basePower * 13/10;
+			}
+		}
+	},
 	"telepathy": {
 		inherit: true,
 		onSwitchOut: function() {}

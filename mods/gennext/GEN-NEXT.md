@@ -119,9 +119,53 @@ Major changes:
 
 - Drain Punch is now an 80 Base Power Poison-type move
 
+New mechanic: Signature Pokemon:
+
+- Certain moves have a Signature Pokemon associated with them. A move will
+  deal 1.5x its usual damage when used by its Signature Pokemon. Some of these
+  moves also receive other changes that apply to all Pokemon using the move -
+  those changes are listed in parentheses.
+
+  - Flareon: Fire Fang (20% burn, 20% flinch, 100% accuracy)
+
+  - Walrein: Ice Fang (20% freeze, 20% flinch, 100% accuracy)
+
+  - Luxray: Thunder Fang (20% paralysis, 20% flinch, 100% accuracy)
+
+  - Seviper: Poison Fang (65 base power, 40% toxic poison, 20% flinch)
+
+  - Drapion: Poison Tail (60 base power, 40% toxic poison)
+
+  - Muk: Sludge (60 base power, 100% poison)
+
+  - Weezing: Smog (75 base power, 100% poison)
+
+  - Rapidash: Flame Charge
+
+  - Darmanitan: Flame Wheel
+
+  - Galvantula: Electroweb (60 base power, 100% accuracy)
+
+  - Glaceon: Icy Wind (60 base power, 100% accuracy)
+
+  - Swampert: Mud Shot (60 base power, 100% accuracy)
+
+  - Gallade: Psycho Cut
+
+  - Kyurem: Glaciate (80 base power, 100% accuracy)
+
+  - Weavile: Ice Shard
+
+  - Sharpedo: Aqua Jet
+
+  - Hitmonchan: Mach Punch
+
+  - Banette: Shadow Sneak
+
 Minor move changes:
 
-- all 95%-accurate moves, as well as Charge Beam and Rock Slide, are now 100% accurate
+- all 95%-accurate moves, as well as Charge Beam and Rock Slide, are now 100%
+  accurate
 
 - Close Combat has been nerfed: it now gives -2 Def, -2 SpD
 
@@ -157,16 +201,10 @@ Minor move changes:
 
 - Leech Life is now 75 base power
 
-- Smog is now 80 base power, 100% poison
-
-- Sludge is now 60 base power, 100% poison
-
 - Sound-based moves are no longer affected by immunities (ghosts can hear
   things)
 
 - Wing Attack and Power Gem are now like Dual Chop: 40 base power, 2-hit
-
-- Glaciate now has 100 base power, 100% accuracy
 
 - Autotomize now gives +3 Speed
 
@@ -176,7 +214,8 @@ Minor move changes:
 - if Illusion is active, Night Daze now displays as a random non-Status move
   in the copied pokemon's moveset
 
-- Selfdestruct and Explosion are now 140 and 180 base power autocrit moves, respectively
+- Selfdestruct and Explosion are now 140 and 180 base power autocrit moves,
+  respectively, and they are both perfect-accuracy
 
 - Protect does not protect Substitutes (with passive healing being more
   common, Sub/Protect stalling could be overpowered)
@@ -207,11 +246,18 @@ Minor learnset changes:
   - Rotom-Heat: Heat Wave
   - Rotom-Mow: Magical Leaf
 
+- Azumarill now gets Belly Drum with no incompatibilities
+
 Minor ability changes:
+
+- Weak Armor, Magma Armor, Shell Armor, and Battle Armor all reduce incoming
+  move damage by 1/16 of the user's max HP, in addition to their usual effects
 
 - Compoundeyes now grants 1.6x accuracy, Victory Star grants 1.5x
 
 - Solid Rock and Filter now reduce 1/2 damage of SE moves, not 1/4
+
+- Iron Fist now grants a 1.3x boost
 
 - Outrage, Thrash, and Petal Dance don't lock if the user has Own Tempo
 
