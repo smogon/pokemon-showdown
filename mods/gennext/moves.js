@@ -28,6 +28,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 90
 	},
+	magnetbomb: {
+		inherit: true,
+		basePower: 90
+	},
 	shockwave: {
 		inherit: true,
 		basePower: 90
@@ -865,11 +869,13 @@ exports.BattleMovedex = {
 	selfdestruct: {
 		inherit: true,
 		basePower: 140,
+		accuracy: true,
 		willCrit: true
 	},
 	explosion: {
 		inherit: true,
 		basePower: 180,
+		accuracy: true,
 		willCrit: true
 	},
 	/******************************************************************
@@ -910,6 +916,168 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	/******************************************************************
+	New feature: Signature Pokemon
+	- Selected weak moves receive a 1.5x damage boost when used by a
+	  compatible Pokemon.
+
+	Justification:
+	- Gives a use for many otherwise competitively unviable moves
+	- This is the sort of change that Game Freak is likely to make
+	******************************************************************/
+	firefang: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'flareon') return power * 1.5;
+		},
+		accuracy: 100,
+		secondaries: [
+			{chance:20, status:'brn'},
+			{chance:20, volatileStatus:'flinch'}
+		]
+	},
+	icefang: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'walrein') return power * 1.5;
+		},
+		accuracy: 100,
+		secondaries: [
+			{chance:20, status:'frz'},
+			{chance:20, volatileStatus:'flinch'}
+		]
+	},
+	thunderfang: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'luxray') return power * 1.5;
+		},
+		accuracy: 100,
+		secondaries: [
+			{chance:20, status:'par'},
+			{chance:20, volatileStatus:'flinch'}
+		]
+	},
+	poisonfang: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'seviper') return power * 1.5;
+		},
+		accuracy: 100,
+		secondaries: [
+			{chance:40, status:'tox'},
+			{chance:20, volatileStatus:'flinch'}
+		]
+	},
+	poisontail: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'drapion') return power * 1.5;
+		},
+		accuracy: 100,
+		secondary: {
+			chance: 40,
+			status: 'tox'
+		}
+	},
+	sludge: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'muk') return power * 1.5;
+		},
+		secondary: {
+			chance: 100,
+			status: 'psn'
+		}
+	},
+	smog: {
+		inherit: true,
+		basePower: 75,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'weezing') return power * 1.5;
+		},
+		secondary: {
+			chance: 100,
+			status: 'psn'
+		}
+	},
+	flamecharge: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'rapidash') return power * 1.5;
+		}
+	},
+	flamewheel: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'darmanitan') return power * 1.5;
+		}
+	},
+	electroweb: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'galvantula') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	icywind: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'glaceon') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	mudshot: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'swampert') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	psychocut: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'gallade') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	glaciate: {
+		inherit: true,
+		basePower: 80,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'kyurem') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	iceshard: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'weavile') return power * 1.5;
+		}
+	},
+	aquajet: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'sharpedo') return power * 1.5;
+		}
+	},
+	machpunch: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'hitmonchan') return power * 1.5;
+		}
+	},
+	shadowsneak: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'banette') return power * 1.5;
+		}
+	},
+	/******************************************************************
 	Moves with 95% accuracy, also Rock Slide and Charge Beam:
 	- buffed to 100% accuracy
 
@@ -919,18 +1087,6 @@ exports.BattleMovedex = {
 	- Rock Slide is included for being similar enough to Air Slash
 	- Charge Beam is included because its 30% chance of no boost is enough
 	******************************************************************/
-	firefang: {
-		inherit: true,
-		accuracy: 100
-	},
-	icefang: {
-		inherit: true,
-		accuracy: 100
-	},
-	thunderfang: {
-		inherit: true,
-		accuracy: 100
-	},
 	razorshell: {
 		inherit: true,
 		accuracy: 100
@@ -983,6 +1139,11 @@ exports.BattleMovedex = {
 		basePower: 100,
 		pp: 10
 	},
+	needlearm: {
+		inherit: true,
+		basePower: 100,
+		pp: 10
+	},
 	attackorder: {
 		inherit: true,
 		basePower: 100,
@@ -1005,22 +1166,6 @@ exports.BattleMovedex = {
 				}, this);
 				if (illusionMoves.length) move.name = illusionMoves.sample();
 			}
-		}
-	},
-	smog: {
-		inherit: true,
-		basePower: 80,
-		secondary: {
-			chance: 100,
-			status: 'psn'
-		}
-	},
-	sludge: {
-		inherit: true,
-		basePower: 60,
-		secondary: {
-			chance: 100,
-			status: 'psn'
 		}
 	},
 	octazooka: {
@@ -1055,11 +1200,6 @@ exports.BattleMovedex = {
 				accuracy: -1
 			}
 		}
-	},
-	glaciate: {
-		inherit: true,
-		basePower: 100,
-		accuracy: 100
 	},
 	powergem: {
 		inherit: true,
