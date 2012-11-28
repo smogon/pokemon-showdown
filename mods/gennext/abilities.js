@@ -279,6 +279,30 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"stench": {
+		inherit: true,
+		onModifyMove: function(move) {
+			if (move.category !== "Status") {
+				this.debug('Adding Stench flinch');
+				if (!move.secondaries) move.secondaries = [];
+				for (var i=0; i<move.secondaries.length; i++) {
+					if (move.secondaries[i].volatileStatus === 'flinch') return;
+				}
+				move.secondaries.push({
+					chance: 40,
+					volatileStatus: 'flinch'
+				});
+			}
+		}
+	},
+	"aftermath": {
+		inherit: true,
+		onFaint: function(target, source, effect) {
+			if (effect && effect.effectType === 'Move' && source) {
+				this.damage(source.maxhp/3, source, target);
+			}
+		}
+	},
 	"telepathy": {
 		inherit: true,
 		onSwitchOut: function() {}

@@ -126,15 +126,15 @@ New mechanic: Signature Pokemon:
   moves also receive other changes that apply to all Pokemon using the move -
   those changes are listed in parentheses.
 
-  - Flareon: Fire Fang (20% burn, 20% flinch, 100% accuracy)
+  - Flareon: Fire Fang (20% burn, 30% flinch, 100% accuracy)
 
-  - Walrein: Ice Fang (20% freeze, 20% flinch, 100% accuracy)
+  - Walrein: Ice Fang (20% freeze, 30% flinch, 100% accuracy)
 
-  - Luxray: Thunder Fang (20% paralysis, 20% flinch, 100% accuracy)
+  - Luxray: Thunder Fang (20% paralysis, 30% flinch, 100% accuracy)
 
-  - Seviper: Poison Fang (65 base power, 40% toxic poison, 20% flinch)
+  - Seviper: Poison Fang (65 base power, 60% toxic poison, 30% flinch)
 
-  - Drapion: Poison Tail (60 base power, 40% toxic poison)
+  - Drapion: Poison Tail (60 base power, 80% toxic poison)
 
   - Muk: Sludge (60 base power, 100% poison)
 
@@ -217,6 +217,8 @@ Minor move changes:
 - Selfdestruct and Explosion are now 140 and 180 base power autocrit moves,
   respectively, and they are both perfect-accuracy
 
+- Acid and Acid Spray aren't affected by immunities
+
 - Protect does not protect Substitutes (with passive healing being more
   common, Sub/Protect stalling could be overpowered)
 
@@ -261,12 +263,17 @@ Minor ability changes:
 
 - Outrage, Thrash, and Petal Dance don't lock if the user has Own Tempo
 
+- Stench now grants a 40% flinch chance
+
 - Slow Start now only lasts 2 turns instead of 5
 
 - Clear Body prevents all stat lowering (relevant: the Regis' Superpower and
   Metagross' Hammer Arm)
 
 - Thick Fat grants half damage from Fighting
+
+- Aftermath no longer requires contact, and its damage is buffed to 1/3 of the
+  foe's max HP
 
 Minor item changes:
 
