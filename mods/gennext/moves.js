@@ -932,7 +932,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		secondaries: [
 			{chance:20, status:'brn'},
-			{chance:20, volatileStatus:'flinch'}
+			{chance:30, volatileStatus:'flinch'}
 		]
 	},
 	icefang: {
@@ -943,7 +943,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		secondaries: [
 			{chance:20, status:'frz'},
-			{chance:20, volatileStatus:'flinch'}
+			{chance:30, volatileStatus:'flinch'}
 		]
 	},
 	thunderfang: {
@@ -954,7 +954,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		secondaries: [
 			{chance:20, status:'par'},
-			{chance:20, volatileStatus:'flinch'}
+			{chance:30, volatileStatus:'flinch'}
 		]
 	},
 	poisonfang: {
@@ -964,8 +964,8 @@ exports.BattleMovedex = {
 		},
 		accuracy: 100,
 		secondaries: [
-			{chance:40, status:'tox'},
-			{chance:20, volatileStatus:'flinch'}
+			{chance:60, status:'tox'},
+			{chance:30, volatileStatus:'flinch'}
 		]
 	},
 	poisontail: {
@@ -976,7 +976,7 @@ exports.BattleMovedex = {
 		},
 		accuracy: 100,
 		secondary: {
-			chance: 40,
+			chance: 80,
 			status: 'tox'
 		}
 	},
@@ -1206,6 +1206,14 @@ exports.BattleMovedex = {
 		basePower: 40,
 		accuracy: true,
 		multihit: [2,2]
+	},
+	acid: {
+		inherit: true,
+		affectedByImmunities: false
+	},
+	acidspray: {
+		inherit: true,
+		affectedByImmunities: false
 	},
 	triattack: {
 		num: 161,
