@@ -291,7 +291,7 @@ function BattlePokemon(set, side) {
 	this.hp = this.hp || this.maxhp;
 
 	this.toString = function() {
-		var fullname = selfP.fullname
+		var fullname = selfP.fullname;
 		if (selfP.illusion) fullname = selfP.illusion.fullname;
 
 		var positionList = ['a','b','c','d','e','f'];
@@ -413,7 +413,7 @@ function BattlePokemon(set, side) {
 		if (selfP.volatiles['mustRecharge'] || lockedMove === 'recharge') {
 			return [{
 				move: 'Recharge',
-				id: 'Recharge'
+				id: 'recharge'
 			}];
 		}
 		var moves = [];
@@ -446,6 +446,12 @@ function BattlePokemon(set, side) {
 			}];
 		}
 		return moves;
+	};
+	this.getRequestData = function() {
+		return {
+			moves: selfP.getMoves(),
+			trapped: selfP.trapped
+		}
 	};
 	this.positiveBoosts = function() {
 		var boosts = 0;
@@ -1669,68 +1675,79 @@ function Battle(roomid, format, rated) {
 
 		switch (type) {
 		case 'switch':
-			if (selfB.p1.active[0].fainted) {
+			if (selfB.p1.active.any(function(a){return a.fainted;})) {
 				selfB.p1.decision = null;
 				selfB.p1.currentRequest = 'switch';
-				selfB.p1.emitUpdate({request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}});
+				selfB.p1.emitUpdate({
+					side: 'p1',
+					request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+				});
 			}
-			if (selfB.p2.active[0].fainted) {
+			if (selfB.p2.active.any(function(a){return a.fainted;})) {
 				selfB.p2.decision = null;
 				selfB.p2.currentRequest = 'switch';
-				selfB.p2.emitUpdate({request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}});
+				selfB.p2.emitUpdate({
+					side: 'p2',
+					request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+				});
 			}
 			break;
 
 		case 'switch-ally':
 			selfB.p1.decision = null;
 			selfB.p1.currentRequest = 'switch';
-			selfB.p1.emitUpdate({request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}});
+			selfB.p1.emitUpdate({
+				side: 'p1',
+				request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+			});
 			break;
 
 		case 'switch-foe':
 			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'switch';
-			selfB.p2.emitUpdate({request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}});
+			selfB.p2.emitUpdate({
+				side: 'p2',
+				request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+			});
 			break;
 
 		case 'teampreview':
 			selfB.add('teampreview');
 			selfB.p1.decision = null;
 			selfB.p1.currentRequest = 'teampreview';
-			selfB.p1.emitUpdate({request: {teamPreview: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}});
+			selfB.p1.emitUpdate({
+				side: 'p1',
+				request: {teamPreview: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+			});
 			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'teampreview';
-			selfB.p2.emitUpdate({request: {teamPreview: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}});
+			selfB.p2.emitUpdate({
+				side: 'p2',
+				request: {teamPreview: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+			});
 			break;
 
 		default:
-			var moves;
-			var pokemon;
+			var activeData;
 			selfB.p1.decision = null;
 			selfB.p1.currentRequest = 'move';
-			pokemon = selfB.p1.active[0];
-			if (!pokemon) {
-				selfB.add('message BATTLE CRASHED.');
-				return;
-			}
-			moves = pokemon.getMoves();
-			if (pokemon.disabledMoves['recharge'] === false) {
-				moves = [{move: 'recharge'}];
-			}
-			selfB.p1.emitUpdate({request: {moves: moves, trapped: pokemon.trapped, side: pokemon.side.getData(), rqid: selfB.currentRequestID}});
+			activeData = selfB.p1.active.map(function(pokemon) {
+				if (pokemon) return pokemon.getRequestData();
+			});
+			selfB.p1.emitUpdate({
+				side: 'p1',
+				request: {active: activeData, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+			});
 
 			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'move';
-			pokemon = selfB.p2.active[0];
-			if (!pokemon) {
-				selfB.add('message BATTLE CRASHED.');
-				return;
-			}
-			moves = pokemon.getMoves();
-			if (pokemon.disabledMoves['recharge'] === false) {
-				moves = [{move: 'recharge'}];
-			}
-			selfB.p2.emitUpdate({request: {moves: moves, trapped: pokemon.trapped, side: pokemon.side.getData(), rqid: selfB.currentRequestID}});
+			activeData = selfB.p2.active.map(function(pokemon) {
+				if (pokemon) return pokemon.getRequestData();
+			});
+			selfB.p2.emitUpdate({
+				side: 'p2',
+				request: {active: activeData, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+			});
 			break;
 		}
 
@@ -1778,12 +1795,9 @@ function Battle(roomid, format, rated) {
 		return true;
 	};
 	this.switchIn = function(pokemon, pos) {
-		if (!pokemon) return false;
+		if (!pokemon || pokemon.isActive) return false;
 		if (!pos) pos = 0;
 		var side = pokemon.side;
-		// if (side.active[0] && !side.active[0].fainted) {
-		// 	selfB.add('switch-out '+side.active[0].id);
-		// }
 		selfB.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[pos]) {
 			var oldActive = side.active[pos];
@@ -1815,9 +1829,9 @@ function Battle(roomid, format, rated) {
 	};
 	this.canSwitch = function(side) {
 		var canSwitchIn = [];
-		for (var i=0; i<side.pokemon.length; i++) {
+		for (var i=side.active.length; i<side.pokemon.length; i++) {
 			var pokemon = side.pokemon[i];
-			if (pokemon !== side.active[0] && !pokemon.fainted) {
+			if (!pokemon.fainted) {
 				canSwitchIn.push(pokemon);
 			}
 		}
@@ -1825,9 +1839,9 @@ function Battle(roomid, format, rated) {
 	};
 	this.getRandomSwitchable = function(side) {
 		var canSwitchIn = [];
-		for (var i=0; i<side.pokemon.length; i++) {
+		for (var i=side.active.length; i<side.pokemon.length; i++) {
 			var pokemon = side.pokemon[i];
-			if (pokemon !== side.active[0] && !pokemon.fainted) {
+			if (!pokemon.fainted) {
 				canSwitchIn.push(pokemon);
 			}
 		}
@@ -1839,7 +1853,7 @@ function Battle(roomid, format, rated) {
 	this.dragIn = function(side, pos) {
 		var pokemon = selfB.getRandomSwitchable(side);
 		if (!pos) pos = 0;
-		if (!pokemon) return false;
+		if (!pokemon || pokemon.isActive) return false;
 		selfB.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[pos]) {
 			var oldActive = side.active[pos];
@@ -2268,10 +2282,10 @@ function Battle(roomid, format, rated) {
 		if (move.target === 'self' || move.target === 'all' || move.target === 'allies' || move.target === 'allySide' || move.target === 'ally') {
 			return pokemon;
 		}
-		return pokemon.side.foe.active[0];
+		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
 	};
 	this.checkFainted = function() {
-		if (selfB.p1.active[0].fainted || selfB.p2.active[0].fainted) {
+		if (selfB.p1.active.any(function(a){return a.fainted;}) && selfB.canSwitch(selfB.p1) || selfB.p2.active.any(function(a){return a.fainted;}) && selfB.canSwitch(selfB.p2)) {
 			selfB.makeRequest('switch');
 			return true;
 		}
@@ -2338,7 +2352,7 @@ function Battle(roomid, format, rated) {
 					selfB.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move}, true);
 				}
 			} else if (decision.choice === 'switch' && !decision.speed) {
-				if (decision.side.active[0].isActive) decision.speed = decision.side.active[0].stats.spe;
+				if (decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.stats.spe;
 			}
 			if (decision.move) {
 				var target;
@@ -2434,7 +2448,7 @@ function Battle(roomid, format, rated) {
 			selfB.runMove(decision.move, decision.pokemon, selfB.getTarget(decision));
 			break;
 		case 'beforeTurnMove':
-			if (decision.pokemon !== decision.pokemon.side.active[0]) return false;
+			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
 			selfB.debug('before turn callback: '+decision.move.id);
 			decision.move.beforeTurnCallback.call(selfB, decision.pokemon, selfB.getTarget(decision));
@@ -2498,7 +2512,7 @@ function Battle(roomid, format, rated) {
 			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
 				break;
 			}
-			selfB.switchIn(decision.target);
+			selfB.switchIn(decision.target, decision.pokemon.position);
 			//decision.target.runSwitchIn();
 			break;
 		case 'runSwitch':
@@ -2684,6 +2698,12 @@ function Battle(roomid, format, rated) {
 				break;
 
 			case 'switch':
+				if (side.currentRequest === 'switch') {
+					// ugly hack
+					if (side.active[0] && !side.active[0].fainted && side.active[1] && side.active[1].fainted) {
+						i = 1;
+					}
+				}
 				if (i > side.active.length || i > side.pokemon.length) continue;
 				if (side.pokemon[i].trapped && side.currentRequest === 'move') {
 					selfB.debug("Can't switch: The active pokemon is trapped");

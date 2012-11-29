@@ -8,7 +8,7 @@ exports.BattleStatuses = {
 	brn: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('-status', target.id, 'brn');
+			this.add('-status', target, 'brn');
 		},
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (move && move.category === 'Physical' && attacker && attacker.ability !== 'guts') {
@@ -23,7 +23,7 @@ exports.BattleStatuses = {
 	par: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('-status', target.id, 'par');
+			this.add('-status', target, 'par');
 		},
 		onModifyStats: function(stats, pokemon) {
 			if (pokemon.ability !== 'quickfeet') {
@@ -33,7 +33,7 @@ exports.BattleStatuses = {
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon) {
 			if (this.random(4) === 0) {
-				this.add('cant', pokemon.id, 'par');
+				this.add('cant', pokemon, 'par');
 				return false;
 			}
 		}
@@ -41,7 +41,7 @@ exports.BattleStatuses = {
 	slp: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('-status', target.id, 'slp');
+			this.add('-status', target, 'slp');
 			// 1-3 turns
 			this.effectData.startTime = this.random(2,5);
 			this.effectData.time = this.effectData.startTime;
@@ -62,7 +62,7 @@ exports.BattleStatuses = {
 				pokemon.cureStatus();
 				return;
 			}
-			this.add('cant', pokemon.id, 'slp');
+			this.add('cant', pokemon, 'slp');
 			if (move.sleepUsable) {
 				return;
 			}
@@ -72,7 +72,7 @@ exports.BattleStatuses = {
 	frz: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('-status', target.id, 'frz');
+			this.add('-status', target, 'frz');
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
@@ -80,7 +80,7 @@ exports.BattleStatuses = {
 				pokemon.cureStatus();
 				return;
 			}
-			this.add('cant', pokemon.id, 'frz');
+			this.add('cant', pokemon, 'frz');
 			return false;
 		},
 		onHit: function(target, source, move) {
@@ -92,7 +92,7 @@ exports.BattleStatuses = {
 	psn: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('-status', target.id, 'psn');
+			this.add('-status', target, 'psn');
 		},
 		onResidualOrder: 9,
 		onResidual: function(pokemon) {
@@ -102,7 +102,7 @@ exports.BattleStatuses = {
 	tox: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('-status', target.id, 'tox');
+			this.add('-status', target, 'tox');
 			this.effectData.stage = 0;
 		},
 		onSwitchIn: function() {
@@ -119,11 +119,11 @@ exports.BattleStatuses = {
 	confusion: {
 		// this is a volatile status
 		onStart: function(target) {
-			this.add('-start', target.id, 'confusion');
+			this.add('-start', target, 'confusion');
 			this.effectData.time = this.random(2,6);
 		},
 		onEnd: function(target) {
-			this.add('-end', target.id, 'confusion');
+			this.add('-end', target, 'confusion');
 		},
 		onBeforeMove: function(pokemon) {
 			pokemon.volatiles.confusion.time--;
@@ -131,7 +131,7 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
-			this.add('-activate', pokemon.id, 'confusion');
+			this.add('-activate', pokemon, 'confusion');
 			if (this.random(2) === 0) {
 				return;
 			}
@@ -179,7 +179,7 @@ exports.BattleStatuses = {
 			}
 		},
 		onEnd: function(pokemon) {
-			this.add('-end', pokemon, this.effectData.sourceEffect.id, '[partiallytrapped]');
+			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
 		},
 		onModifyPokemon: function(pokemon) {
 			pokemon.trapped = true;

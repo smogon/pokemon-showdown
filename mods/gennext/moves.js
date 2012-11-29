@@ -1,7 +1,7 @@
 exports.BattleMovedex = {
 	/******************************************************************
 	Perfect accuracy moves:
-	- base power increased 60 to 80
+	- base power increased 60 to 80 (physical) or 90 (special)
 
 	Justification:
 	- perfect accuracy is too underpowered to have such low base power
@@ -12,7 +12,7 @@ exports.BattleMovedex = {
 	- Giga Drain and Drain Punch, similar 60 base power moves, have
 	  been upgraded
 	******************************************************************/
-	aerialace: {	
+	aerialace: {
 		inherit: true,
 		basePower: 80
 	},
@@ -20,21 +20,25 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80
 	},
-	magicalleaf: {
-		inherit: true,
-		basePower: 80
-	},
 	shadowpunch: {
 		inherit: true,
 		basePower: 80
 	},
+	magicalleaf: {
+		inherit: true,
+		basePower: 90
+	},
+	magnetbomb: {
+		inherit: true,
+		basePower: 90
+	},
 	shockwave: {
 		inherit: true,
-		basePower: 80
+		basePower: 90
 	},
 	swift: {
 		inherit: true,
-		basePower: 80
+		basePower: 90
 	},
 	/******************************************************************
 	HMs:
@@ -99,6 +103,64 @@ exports.BattleMovedex = {
 	hail: {
 		inherit: true,
 		priority: 1
+	},
+	/******************************************************************
+	Substitute:
+	- has precedence over Protect
+
+	Justification:
+	- Sub/Protect stalling is annoying
+	******************************************************************/
+	substitute: {
+		inherit: true,
+		effect: {
+			onStart: function(target) {
+				this.add('-start', target, 'Substitute');
+				this.effectData.hp = Math.floor(target.maxhp/4);
+				delete target.volatiles['partiallytrapped'];
+			},
+			onTryHitPriority: 2,
+			onTryHit: function(target, source, move) {
+				if (target === source) {
+					this.debug('sub bypass: self hit');
+					return;
+				}
+				if (move.category === 'Status') {
+					var SubBlocked = {
+						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, trick:1, worryseed:1, yawn:1
+					};
+					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
+						return false;
+					}
+					return;
+				}
+				var damage = this.getDamage(source, target, move);
+				if (!damage) {
+					return null;
+				}
+				damage = this.runEvent('SubDamage', target, source, move, damage);
+				if (!damage) {
+					return damage;
+				}
+				if (damage > target.volatiles['substitute'].hp) {
+					damage = target.volatiles['substitute'].hp;
+				}
+				target.volatiles['substitute'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.volatiles['substitute'].hp <= 0) {
+					target.removeVolatile('substitute');
+					this.runEvent('AfterSubDamage', target, source, move, damage);
+					return 0; // hit
+				} else {
+					this.add('-activate', target, 'Substitute', '[damage]');
+					this.runEvent('AfterSubDamage', target, source, move, damage);
+					return 0; // hit
+				}
+			},
+			onEnd: function(target) {
+				this.add('-end', target, 'Substitute');
+			}
+		}
 	},
 	/******************************************************************
 	Two-turn moves:
@@ -443,7 +505,7 @@ exports.BattleMovedex = {
 				atk: -1,
 				spa: -1
 			}
-		},
+		}
 	},
 	/******************************************************************
 	Stealth Rock:
@@ -770,7 +832,7 @@ exports.BattleMovedex = {
 	- intensify drawbacks
 
 	Justification:
-	- Draco Meteor and Close Combat are way too common.
+	- Close Combat is way too common.
 	******************************************************************/
 	closecombat: {
 		inherit: true,
@@ -779,12 +841,42 @@ exports.BattleMovedex = {
 				def: -2,
 				spd: -2
 			}
-		},
+		}
 	},
-	dracometeor: {
+	/******************************************************************
+	Blizzard:
+	- 30% freeze chance
+
+	Justification:
+	- freeze was nerfed, Blizzard can now have Thunder/Hurricane-like
+	  secondary chances.
+	******************************************************************/
+	blizzard: {
 		inherit: true,
-		basePower: 120,
-		accuracy: 100
+		secondary: {
+			chance: 30,
+			status: 'frz'
+		}
+	},
+	/******************************************************************
+	Selfdestruct and Explosion:
+	- 120 and 180 base power autocrit
+
+	Justification:
+	- these were nerfed unreasonably in gen 5, they're now somewhat
+	  usable again.
+	******************************************************************/
+	selfdestruct: {
+		inherit: true,
+		basePower: 140,
+		accuracy: true,
+		willCrit: true
+	},
+	explosion: {
+		inherit: true,
+		basePower: 180,
+		accuracy: true,
+		willCrit: true
 	},
 	/******************************************************************
 	Echoed Voice:
@@ -824,6 +916,214 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	/******************************************************************
+	New feature: Signature Pokemon
+	- Selected weak moves receive a 1.5x damage boost when used by a
+	  compatible Pokemon.
+
+	Justification:
+	- Gives a use for many otherwise competitively unviable moves
+	- This is the sort of change that Game Freak is likely to make
+	******************************************************************/
+	firefang: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'flareon') return power * 1.5;
+		},
+		accuracy: 100,
+		secondaries: [
+			{chance:20, status:'brn'},
+			{chance:30, volatileStatus:'flinch'}
+		]
+	},
+	icefang: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'walrein') return power * 1.5;
+		},
+		accuracy: 100,
+		secondaries: [
+			{chance:20, status:'frz'},
+			{chance:30, volatileStatus:'flinch'}
+		]
+	},
+	thunderfang: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'luxray') return power * 1.5;
+		},
+		accuracy: 100,
+		secondaries: [
+			{chance:20, status:'par'},
+			{chance:30, volatileStatus:'flinch'}
+		]
+	},
+	poisonfang: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'seviper') return power * 1.5;
+		},
+		accuracy: 100,
+		secondaries: [
+			{chance:60, status:'tox'},
+			{chance:30, volatileStatus:'flinch'}
+		]
+	},
+	poisontail: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'drapion') return power * 1.5;
+		},
+		accuracy: 100,
+		secondary: {
+			chance: 80,
+			status: 'tox'
+		}
+	},
+	sludge: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'muk') return power * 1.5;
+		},
+		secondary: {
+			chance: 100,
+			status: 'psn'
+		}
+	},
+	smog: {
+		inherit: true,
+		basePower: 75,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'weezing') return power * 1.5;
+		},
+		secondary: {
+			chance: 100,
+			status: 'psn'
+		}
+	},
+	flamecharge: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'rapidash') return power * 1.5;
+		}
+	},
+	flamewheel: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'darmanitan') return power * 1.5;
+		}
+	},
+	electroweb: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'galvantula') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	icywind: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'glaceon') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	mudshot: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'swampert') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	psychocut: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'gallade') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	glaciate: {
+		inherit: true,
+		basePower: 80,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'kyurem') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	iceshard: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'weavile') return power * 1.5;
+		}
+	},
+	aquajet: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'sharpedo') return power * 1.5;
+		}
+	},
+	machpunch: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'hitmonchan') return power * 1.5;
+		}
+	},
+	shadowsneak: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'banette') return power * 1.5;
+		}
+	},
+	/******************************************************************
+	Moves with 95% accuracy, also Rock Slide and Charge Beam:
+	- buffed to 100% accuracy
+
+	Justification:
+	- missing Hydro Pump is losing a gamble, but missing V-create is
+	  nothing but hax
+	- Rock Slide is included for being similar enough to Air Slash
+	- Charge Beam is included because its 30% chance of no boost is enough
+	******************************************************************/
+	razorshell: {
+		inherit: true,
+		accuracy: 100
+	},
+	drillrun: {
+		inherit: true,
+		accuracy: 100
+	},
+	vcreate: {
+		inherit: true,
+		accuracy: 100
+	},
+	aeroblast: {
+		inherit: true,
+		accuracy: 100
+	},
+	sacredfire: {
+		inherit: true,
+		accuracy: 100
+	},
+	spacialrend: {
+		inherit: true,
+		accuracy: 100
+	},
+	airslash: {
+		inherit: true,
+		accuracy: 100
+	},
+	rockslide: {
+		inherit: true,
+		accuracy: 100
+	},
+	chargebeam: {
+		inherit: true,
+		accuracy: 100
+	},
+	/******************************************************************
 	Signature moves and other moves with limited distribution:
 	- buffed in various ways
 
@@ -839,6 +1139,11 @@ exports.BattleMovedex = {
 		basePower: 100,
 		pp: 10
 	},
+	needlearm: {
+		inherit: true,
+		basePower: 100,
+		pp: 10
+	},
 	attackorder: {
 		inherit: true,
 		basePower: 100,
@@ -848,22 +1153,19 @@ exports.BattleMovedex = {
 		inherit: true,
 		boosts: {
 			spe: 3
-		},
-	},
-	smog: {
-		inherit: true,
-		basePower: 80,
-		secondary: {
-			chance: 100,
-			status: 'psn'
 		}
 	},
-	sludge: {
+	nightdaze: {
 		inherit: true,
-		basePower: 60,
-		secondary: {
-			chance: 100,
-			status: 'psn'
+		accuracy: 100,
+		onModifyMove: function(move, user) {
+			if (user.illusion) {
+				var illusionMoves = user.illusion.moves.filter(function(illusionMove) {
+					var illusionMove = this.getMove(illusionMove);
+					return illusionMove.category !== 'Status';
+				}, this);
+				if (illusionMoves.length) move.name = illusionMoves.sample();
+			}
 		}
 	},
 	octazooka: {
@@ -899,16 +1201,19 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	glaciate: {
-		inherit: true,
-		basePower: 100,
-		accuracy: 100
-	},
 	powergem: {
 		inherit: true,
 		basePower: 40,
 		accuracy: true,
 		multihit: [2,2]
+	},
+	acid: {
+		inherit: true,
+		affectedByImmunities: false
+	},
+	acidspray: {
+		inherit: true,
+		affectedByImmunities: false
 	},
 	triattack: {
 		num: 161,

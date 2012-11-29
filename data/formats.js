@@ -26,7 +26,6 @@ exports.BattleFormats = {
 		name: "[Seasonal] Seasoning's Greetings",
 		team: 'randomSeasonal',
 		canUseRandomTeam: true,
-		searchDefault: true,
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -37,7 +36,6 @@ exports.BattleFormats = {
 		name: "Challenge Cup",
 		team: 'randomCC',
 		canUseRandomTeam: true,
-		searchDefault: true,
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -56,7 +54,7 @@ exports.BattleFormats = {
 	},
 	oucurrent: {
 		effectType: 'Format',
-		name: "OU (Current)",
+		name: "OU (current)",
 		challengeDefault: true,
 		rated: true,
 		challengeShow: true,
@@ -67,7 +65,7 @@ exports.BattleFormats = {
 	},
 	oususpecttest: {
 		effectType: 'Format',
-		name: "OU (Suspect Test)",
+		name: "OU (suspect test)",
 		challengeDefault: true,
 		rated: true,
 		challengeShow: true,
@@ -101,10 +99,20 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "Ubers",
 		rated: true,
+		// challengeShow: true,
+		// searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers', 'Evasion Moves Clause'],
+		banlist: []
+	},
+	uberssuspecttest: {
+		effectType: 'Format',
+		name: "Ubers (suspect test)",
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers', 'Evasion Moves Clause'],
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
 		banlist: []
 	},
 	uu: {
@@ -119,7 +127,7 @@ exports.BattleFormats = {
 	},
 	uususpecttest: {
 		effectType: 'Format',
-		name: "UU (Suspect Test)",
+		name: "UU (suspect test)",
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -130,12 +138,31 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "RU",
 		rated: true,
-		challengeShow: true,
-		searchShow: true,
+		// challengeShow: true,
+		// searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
 	},
+	rucurrent: {
+		effectType: 'Format',
+		name: "RU (current)",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
+	},
+	// rususpecttest: {
+	// 	effectType: 'Format',
+	// 	name: "RU (Suspect Test)",
+	// 	rated: true,
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	isTeambuilderFormat: true,
+	// 	ruleset: ['UU'],
+	// 	banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Nidoqueen', 'Cresselia']
+	// },
 	nu: {
 		effectType: 'Format',
 		name: "NU",
@@ -285,7 +312,7 @@ exports.BattleFormats = {
 		name: "[Gen NEXT] NEXT-OU",
 		challengeShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Kyurem']
+		banlist: ['Uber']
 	},
 	// doublesrandombattle: {
 	// 	effectType: 'Format',
@@ -323,7 +350,7 @@ exports.BattleFormats = {
 	},
 	standardubers: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'Moody Clause'],
+		ruleset: ['Sleep Clause', 'Species Clause', 'Moody Clause', 'OHKO Clause'],
 		banlist: ['Unreleased', 'Illegal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard

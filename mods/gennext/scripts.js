@@ -25,9 +25,10 @@ exports.BattleScripts = {
 		// Galvantula: Zap Cannon
 		this.data.Learnsets.galvantula.learnset.zapcannon = ['5L100'];
 
-		// Scolipede, Milotic: Coil
+		// Scolipede, Milotic, Steelix: Coil
 		this.data.Learnsets.milotic.learnset.coil = ['5L100'];
 		this.data.Learnsets.scolipede.learnset.coil = ['5L100'];
+		this.data.Learnsets.steelix.learnset.coil = ['5L100'];
 
 		// Rotoms: lots of moves
 		this.data.Learnsets.rotomwash.learnset.bubblebeam = ['5L100'];
@@ -44,6 +45,12 @@ exports.BattleScripts = {
 		this.data.Learnsets.zoroark.learnset.xscissor = ['5M'];
 		this.data.Learnsets.zoroark.learnset.gigadrain = ['5T'];
 		this.data.Learnsets.zoroark.learnset.superpower = ['5T'];
+
+		// Aipom: eggSketch! :D
+		this.data.Learnsets.aipom.learnset.sketch = ['5E'];
+
+		// Azumarill: free Belly Drum
+		this.data.Learnsets.azumarill.learnset.bellydrum = ['5L100'];
 
 		// Every DW ability that isn't Shadow Tag becomes released
 		for (var i in this.data.FormatsData) {

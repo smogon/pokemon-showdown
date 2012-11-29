@@ -1022,11 +1022,11 @@ exports.BattleScripts = {
 				} else {
 					item = 'Expert Belt';
 				}
-			} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate') {
+			} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if (hasMove['eruption'] || hasMove['waterspout']) {
 				item = 'Choice Scarf';
-			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect']) {
+			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 				item = 'Leftovers';
 			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
 				item = 'Focus Sash';
@@ -1050,7 +1050,7 @@ exports.BattleScripts = {
 
 			} else if (hasType['Flying'] || ability === 'Levitate') {
 				item = 'Leftovers';
-			} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate') {
+			} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if (hasType['Poison']) {
 				item = 'Black Sludge';

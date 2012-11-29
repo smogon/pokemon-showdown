@@ -42,6 +42,40 @@ exports.BattleAbilities = {
 		onImmunity: function(type, pokemon) {
 			if (type === 'hail') return false;
 		},
+		onSourceBasePower: function(basePower, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
+				this.debug('Thick Fat weaken');
+				return basePower / 2;
+			}
+		}
+	},
+	"snowcloak": {
+		inherit: true,
+		onImmunity: function(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		onSourceBasePower: function(basePower) {
+			if (this.isWeather('hail')) {
+				return basePower * 2/3;
+			}
+			return basePower * 4/5;
+		}
+	},
+	"icebody": {
+		inherit: true,
+		onImmunity: function(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		onWeather: function(target, source, effect) {
+			this.heal(target.maxhp/16);
+		},
+		onAfterDamage: function(damage, target, source, move) {
+			if (move && move.isContact && this.hasWeather('hail')) {
+				if (this.random(10) < 3) {
+					source.trySetStatus('frz', target, move);
+				}
+			}
+		}
 	},
 	"flowergift": {
 		inherit: true,
@@ -84,7 +118,7 @@ exports.BattleAbilities = {
 	"slowstart": {
 		inherit: true,
 		effect: {
-			duration: 3,
+			duration: 2,
 			onStart: function(target) {
 				this.add('-start', target, 'Slow Start');
 			},
@@ -148,6 +182,17 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"clearbody": {
+		inherit: true,
+		onBoost: function(boost, target, source) {
+			for (var i in boost) {
+				if (boost[i] < 0) {
+					delete boost[i];
+					this.add("-message", target.name+"'s stats were not lowered! (placeholder)");
+				}
+			}
+		}
+	},
 	"rockhead": {
 		inherit: true,
 		onModifyMove: function(move) {
@@ -155,6 +200,107 @@ exports.BattleAbilities = {
 		},
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.id === 'lifeorb') return false;
+		}
+	},
+	"download": {
+		inherit: true,
+		onStart: function (pokemon) {
+			if (pokemon.template.id === 'genesect') {
+				if (!pokemon.getItem().onDrive) return;
+			}
+			var foeactive = pokemon.side.foe.active;
+			var totaldef = 0;
+			var totalspd = 0;
+			for (var i=0; i<foeactive.length; i++) {
+				if (!foeactive[i] || foeactive[i].fainted) continue;
+				totaldef += foeactive[i].stats.def;
+				totalspd += foeactive[i].stats.spd;
+			}
+			if (totaldef && totaldef >= totalspd) {
+				this.boost({spa:1});
+			} else if (totalspd) {
+				this.boost({atk:1});
+			}
+		}
+	},
+	"victorystar": {
+		inherit: true,
+		onAllyModifyMove: function(move) {
+			if (typeof move.accuracy === 'number') {
+				move.accuracy *= 1.5;
+			}
+		}
+	},
+	"shellarmor": {
+		inherit: true,
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				damage -= target.maxhp/16;
+				if (damage < 0) damage = 0;
+				return damage;
+			}
+		}
+	},
+	"battlearmor": {
+		inherit: true,
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				damage -= target.maxhp/16;
+				if (damage < 0) damage = 0;
+				return damage;
+			}
+		}
+	},
+	"weakarmor": {
+		inherit: true,
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				damage -= target.maxhp/16;
+				if (damage < 0) damage = 0;
+				return damage;
+			}
+		}
+	},
+	"magmaarmor": {
+		inherit: true,
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				damage -= target.maxhp/16;
+				if (damage < 0) damage = 0;
+				return damage;
+			}
+		}
+	},
+	"ironfist": {
+		inherit: true,
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (move.isPunchAttack) {
+				return basePower * 13/10;
+			}
+		}
+	},
+	"stench": {
+		inherit: true,
+		onModifyMove: function(move) {
+			if (move.category !== "Status") {
+				this.debug('Adding Stench flinch');
+				if (!move.secondaries) move.secondaries = [];
+				for (var i=0; i<move.secondaries.length; i++) {
+					if (move.secondaries[i].volatileStatus === 'flinch') return;
+				}
+				move.secondaries.push({
+					chance: 40,
+					volatileStatus: 'flinch'
+				});
+			}
+		}
+	},
+	"aftermath": {
+		inherit: true,
+		onFaint: function(target, source, effect) {
+			if (effect && effect.effectType === 'Move' && source) {
+				this.damage(source.maxhp/3, source, target);
+			}
 		}
 	},
 	"telepathy": {
