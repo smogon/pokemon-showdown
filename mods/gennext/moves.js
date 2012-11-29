@@ -960,11 +960,11 @@ exports.BattleMovedex = {
 	poisonfang: {
 		inherit: true,
 		onBasePower: function(power, user) {
-			if (user.template.id === 'seviper') return power * 1.5;
+			if (user.template.id === 'drapion') return power * 1.5;
 		},
 		accuracy: 100,
 		secondaries: [
-			{chance:60, status:'tox'},
+			{chance:100, status:'tox'},
 			{chance:30, volatileStatus:'flinch'}
 		]
 	},
@@ -972,11 +972,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function(power, user) {
-			if (user.template.id === 'drapion') return power * 1.5;
+			if (user.template.id === 'seviper') return power * 1.5;
 		},
 		accuracy: 100,
 		secondary: {
-			chance: 80,
+			chance: 60,
 			status: 'tox'
 		}
 	},
