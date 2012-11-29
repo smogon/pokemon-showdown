@@ -132,9 +132,9 @@ New mechanic: Signature Pokemon:
 
   - Luxray: Thunder Fang (20% paralysis, 30% flinch, 100% accuracy)
 
-  - Seviper: Poison Fang (65 base power, 60% toxic poison, 30% flinch)
+  - Drapion: Poison Fang (65 base power, 100% toxic poison, 30% flinch)
 
-  - Drapion: Poison Tail (60 base power, 80% toxic poison)
+  - Seviper: Poison Tail (60 base power, 60% toxic poison)
 
   - Muk: Sludge (60 base power, 100% poison)
 
