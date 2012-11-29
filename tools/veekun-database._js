@@ -5,7 +5,7 @@ var zlib = require("zlib");
 var sqlite = require("sqlite-fts");
 
 function VeekunDatabase(db, _) {
-	this.db = db,
+	this.db = db;
 
 	this.getAllFormeIds = function(_) {
 		var dbResult = this.db.execute("SELECT id FROM pokemon_forms ORDER BY \"order\" ASC", _);
@@ -14,7 +14,7 @@ function VeekunDatabase(db, _) {
 			result.push(dbResult[r].id);
 		}
 		return result;
-	},
+	};
 
 	this.getAllGenerations = function(_) {
 		var dbResult = this.db.execute("SELECT id FROM generations", _);
@@ -23,7 +23,7 @@ function VeekunDatabase(db, _) {
 			results.push(dbResult[d].id);
 		}
 		return results;
-	},
+	};
 
 	// Following functions return either ids or numbers
 
@@ -43,7 +43,7 @@ function VeekunDatabase(db, _) {
 		}
 		assert(defaults === 1);
 		return result;
-	},
+	};
 
 	this.getPokemonDefaultForme = function(pokemonId, _) {
 		var formeIds = this.getPokemonFormes(pokemonId, _);
@@ -53,7 +53,7 @@ function VeekunDatabase(db, _) {
 			}
 		}
 		assert(false);
-	},
+	};
 
 	this.getIsDefaultFormeCache_ = new Object();
 	this.getIsDefaultForme = function(formeId, _, isOverrideCache) {
@@ -63,11 +63,11 @@ function VeekunDatabase(db, _) {
 		var dbResult = this.db.execute("SELECT pokemon_id, is_default FROM pokemon_forms WHERE id = ? LIMIT 1", [formeId], _)[0];
 		var dbResult2 = this.db.execute("SELECT is_default FROM pokemon WHERE id = ? LIMIT 1", [dbResult.pokemon_id], _)[0];
 		return (this.getIsDefaultFormeCache_[formeId] = !!(dbResult.is_default && dbResult2.is_default));
-	},
+	};
 
 	this.getIsBattleOnlyForme = function(formeId, _) {
 		return !!this.db.execute("SELECT is_battle_only FROM pokemon_forms WHERE id = ? LIMIT 1", [formeId], _)[0].is_battle_only;
-	},
+	};
 
 	this.getPokemonPokedexNumbers = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
@@ -78,20 +78,20 @@ function VeekunDatabase(db, _) {
 			results[dbResult[d].pokedex_id] = dbResult[d].pokedex_number;
 		}
 		return results;
-	},
+	};
 
 	this.getPokemonNationalPokedexNumber = function(pokemonId, _) {
 		var nationalPokedexId = 1; // National is always 1
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		return this.db.execute("SELECT pokedex_number FROM pokemon_dex_numbers WHERE species_id = ? AND pokedex_id = ? LIMIT 1", [speciesId, nationalPokedexId], _)[0].pokedex_number;
-	},
+	};
 
 	this.getPokemonIdFromNationalPokedexNumber = function(nationalPokedexNumber, _) {
 		var nationalPokedexId = 1; // National is always 1
 		return this.speciesIdToDefaultFormePokemonId(this.db.execute("SELECT species_id FROM pokemon_dex_numbers \
 																	  WHERE pokedex_number = ? AND pokedex_id = ? LIMIT 1",
 																	 [nationalPokedexNumber, nationalPokedexId], _)[0].species_id, _);
-	},
+	};
 
 	this.getFormeTypes = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
@@ -101,7 +101,7 @@ function VeekunDatabase(db, _) {
 			results.push(dbResult[d].type_id);
 		}
 		return results;
-	},
+	};
 
 	this.getFormeBaseStats = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
@@ -112,7 +112,7 @@ function VeekunDatabase(db, _) {
 			results[dbResult[d].stat_id] = dbResult[d].base_stat;
 		}
 		return results;
-	},
+	};
 
 	this.getFormeAbilities = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
@@ -129,14 +129,14 @@ function VeekunDatabase(db, _) {
 			results.push(result);
 		}
 		return results;
-	},
+	};
 
 	this.getPokemonPrevo = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
 		var dbResult = this.db.execute("SELECT evolves_from_species_id FROM pokemon_species WHERE id = ? LIMIT 1", [speciesId], _);
 		if (!dbResult[0].evolves_from_species_id) return 0;
 		return this.speciesIdToDefaultFormePokemonId(dbResult[0].evolves_from_species_id, _);
-	},
+	};
 
 	this.getPokemonEvos = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
@@ -146,7 +146,11 @@ function VeekunDatabase(db, _) {
 			results.push(this.speciesIdToDefaultFormePokemonId(dbResult[d].id, _));
 		}
 		return results;
-	},
+	};
+
+	this.getPokemonEvolutionInfo = function(pokemonId, _) {
+		return this.getSpeciesEvolutionInfo_(this.pokemonIdToSpeciesId(pokemonId, _), _);
+	};
 
 	this.getFormeLearnset = function(formeId, versionGroupId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
@@ -163,7 +167,7 @@ function VeekunDatabase(db, _) {
 				});
 		}
 		return results;
-	},
+	};
 
 	this.getPokemonEggGroups = function(pokemonId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
@@ -173,7 +177,7 @@ function VeekunDatabase(db, _) {
 			results.push(dbResult[d].egg_group_id);
 		}
 		return results;
-	},
+	};
 
 	this.getFormeMiscInfo = function(formeId, _) {
 		var pokemonId = this.formeIdToPokemonId(formeId, _);
@@ -204,11 +208,11 @@ function VeekunDatabase(db, _) {
 		result.isFormesSwitchable = dbResult.forms_switchable;
 
 		return result;
-	},
+	};
 
 	this.getTypeId = function(typeIdentifier, _) {
 		return this.db.execute("SELECT id FROM types WHERE identifier = ? LIMIT 1", [typeIdentifier], _)[0].id;
-	},
+	};
 
 	this.getVersionGroupIdsForGeneration = function(generation, _) {
 		var dbResult = this.db.execute("SELECT id FROM version_groups WHERE generation_id = ? ORDER BY \"order\"", [generation], _);
@@ -217,11 +221,11 @@ function VeekunDatabase(db, _) {
 			results.push(dbResult[d].id);
 		}
 		return results;
-	},
+	};
 
 	this.getLanguageId = function(languageName, _) {
 		return this.db.execute("SELECT id FROM languages WHERE identifier = ? LIMIT 1", [languageName], _)[0].id;
-	},
+	};
 
 	// Following functions return text
 
@@ -250,20 +254,23 @@ function VeekunDatabase(db, _) {
 		}
 		var pokemonForme = pokemonNameWithForme.replace(pokemonName, "").replace(/\s+/g, " ").trim();
 		return {name: pokemonName, forme: pokemonForme};
-	},
+	};
 
 	this.getPokedexName = function(pokedexId, languageId, _) {
 		return this.getSingleText_("pokedex_prose", "name", "pokedex_id", pokedexId, languageId, _);
-	},
+	};
+	this.getEvolutionTypeName = function(evolutionTypeId, languageId, _) {
+		return this.getSingleText_("evolution_trigger_prose", "name", "evolution_trigger_id", evolutionTypeId, languageId, _);
+	};
 	this.getStatName = function(statId, languageId, _) {
 		return this.getSingleText_("stat_names", "name", "stat_id", statId, languageId, _);
-	},
+	};
 	this.getTypeName = function(typeId, languageId, _) {
 		return this.getSingleText_("type_names", "name", "type_id", typeId, languageId, _);
-	},
+	};
 	this.getEggGroupName = function(eggGroupId, languageId, _) {
 		return this.getSingleText_("egg_group_prose", "name", "egg_group_id", eggGroupId, languageId, _);
-	},
+	};
 
 	this.getPokemonPokedexDescriptions = function(pokemonId, languageId, _) {
 		var speciesId = this.pokemonIdToSpeciesId(pokemonId, _);
@@ -276,29 +283,35 @@ function VeekunDatabase(db, _) {
 			result[this.getSingleText_("version_names", "name", "version_id", dbResult[d].version_id, languageId, _)] = dbResult[d].flavor_text.replace(/\s+/g, " ").trim();
 		}
 		return result;
-	},
+	};
 
 	this.getMoveName = function(moveId, languageId, _) {
 		return this.getSingleText_("move_names", "name", "move_id", moveId, languageId, _);
-	},
+	};
 	this.getMoveMethodOfLearningName = function(methodOfLearningId, languageId, _) {
 		return this.getSingleText_("pokemon_move_method_prose", "name", "pokemon_move_method_id", methodOfLearningId, languageId, _);
-	},
+	};
 	this.getAbilityName = function(abilityId, languageId, _) {
 		return this.getSingleText_("ability_names", "name", "ability_id", abilityId, languageId, _);
-	},
+	};
 	this.getPokemonGenus = function(pokemonId, languageId, _) {
 		return this.getSingleText_("pokemon_species_names", "genus", "pokemon_species_id", this.pokemonIdToSpeciesId(pokemonId, _), languageId, _);
-	},
+	};
 	this.getColourName = function(colourId, languageId, _) {
 		return this.getSingleText_("pokemon_color_names", "name", "pokemon_color_id", colourId, languageId, _);
-	},
+	};
 	this.getShapeName = function(shapeId, languageId, _) {
 		return this.getSingleText_("pokemon_shape_prose", "awesome_name", "pokemon_shape_id", shapeId, languageId, _);
-	},
+	};
 	this.getHabitatName = function(habitatId, languageId, _) {
 		return this.getSingleText_("pokemon_habitat_names", "name", "pokemon_habitat_id", habitatId, languageId, _);
-	},
+	};
+	this.getLocationName = function(locationId, languageId, _) {
+		return this.getSingleText_("location_names", "name", "location_id", locationId, languageId, _);
+	};
+	this.getItemName = function(itemId, languageId, _) {
+		return this.getSingleText_("item_names", "name", "item_id", itemId, languageId, _);
+	};
 
 	// id conversion functions
 
@@ -308,10 +321,10 @@ function VeekunDatabase(db, _) {
 			return this.formeIdToPokemonIdCache_[formeId];
 		}
 		return (this.formeIdToPokemonIdCache_[formeId] = this.db.execute("SELECT pokemon_id FROM pokemon_forms WHERE id = ? LIMIT 1", [formeId], _)[0].pokemon_id);
-	},
+	};
 	this.formeIdToSpeciesId = function(formeId, _) {
 		return this.pokemonIdToSpeciesId(this.formeIdToPokemonId(formeId, _), _);
-	},
+	};
 	this.pokemonIdToFormeIdsCache_ = new Object();
 	this.pokemonIdToFormeIds = function(pokemonId, _, isOverrideCache) {
 		if (!isOverrideCache && this.pokemonIdToFormeIdsCache_[pokemonId]) {
@@ -323,14 +336,14 @@ function VeekunDatabase(db, _) {
 			result.push(dbResult[d].id);
 		}
 		return (this.pokemonIdToFormeIdsCache_[pokemonId] = result);
-	},
+	};
 	this.pokemonIdToSpeciesIdCache_ = new Object();
 	this.pokemonIdToSpeciesId = function(pokemonId, _, isOverrideCache) {
 		if (!isOverrideCache && this.pokemonIdToSpeciesIdCache_[pokemonId]) {
 			return this.pokemonIdToSpeciesIdCache_[pokemonId];
 		}
 		return (this.pokemonIdToSpeciesIdCache_[pokemonId] = this.db.execute("SELECT species_id FROM pokemon WHERE id = ? LIMIT 1", [pokemonId], _)[0].species_id);
-	},
+	};
 	this.speciesIdToPokemonIdsCache_ = new Object();
 	this.speciesIdToPokemonIds = function(speciesId, _, isOverrideCache) {
 		if (!isOverrideCache && this.speciesIdToPokemonIdsCache_[speciesId]) {
@@ -342,7 +355,7 @@ function VeekunDatabase(db, _) {
 			result.push(dbResult[d].id);
 		}
 		return (this.speciesIdToPokemonIdsCache_[speciesId] = result);
-	},
+	};
 	this.speciesIdToDefaultFormePokemonId = function(speciesId, _) {
 		var pokemonIds = this.speciesIdToPokemonIds(speciesId, _);
 		var results = new Array();
@@ -354,7 +367,7 @@ function VeekunDatabase(db, _) {
 		}
 		assert(results.length === 1);
 		return results[0];
-	},
+	};
 
 	// Convienience function
 
@@ -370,6 +383,7 @@ function VeekunDatabase(db, _) {
 					abilities: true,
 					prevo: true,
 					evos: true,
+					evolutionInfo: true,
 					learnset: true,
 					eggGroups: true,
 					misc: true
@@ -488,6 +502,28 @@ function VeekunDatabase(db, _) {
 			}
 		}
 
+		// Get the evolution information
+		if (requestedData.evolutionInfo) {
+			var evolutionInfoIds = this.getPokemonEvolutionInfo(pokemonId, _);
+			result.evolutionInfo = new Array();
+			for (var e = 0; e < evolutionInfoIds.length; ++e) {
+				var evolutionInfo = {evolutionType: this.getEvolutionTypeName(evolutionInfoIds[e].evolutionTypeId, languageId, _), required: {}};
+				if (evolutionInfoIds[e].triggerItemId) evolutionInfo.triggerItem = this.getItemName(evolutionInfoIds[e].triggerItemId, languageId, _);
+				if (evolutionInfoIds[e].required.level) evolutionInfo.required.level = evolutionInfoIds[e].required.level;
+				if (evolutionInfoIds[e].required.heldItemId) evolutionInfo.required.heldItem = this.getItemName(evolutionInfoIds[e].required.heldItemId, languageId, _);
+				if (evolutionInfoIds[e].required.gender) evolutionInfo.required.gender = evolutionInfoIds[e].required.gender;
+				if (evolutionInfoIds[e].required.locationId) evolutionInfo.required.location = this.getLocationName(evolutionInfoIds[e].required.locationId, languageId, _);
+				if (evolutionInfoIds[e].required.timeOfDay) evolutionInfo.required.timeOfDay = evolutionInfoIds[e].required.timeOfDay;
+				if (evolutionInfoIds[e].required.moveId) evolutionInfo.required.move = this.getMoveName(evolutionInfoIds[e].required.moveId, languageId, _);
+				if (evolutionInfoIds[e].required.happiness) evolutionInfo.required.happiness = evolutionInfoIds[e].required.happiness;
+				if (evolutionInfoIds[e].required.beauty) evolutionInfo.required.beauty = evolutionInfoIds[e].required.beauty; // Milotic
+				if (evolutionInfoIds[e].required.physicalStatProportion) evolutionInfo.required.physicalStatProportion = evolutionInfoIds[e].required.physicalStatProportion; // Hitmonlee/chan/top
+				if (evolutionInfoIds[e].required.inPartyPokemonId) evolutionInfo.required.inPartyPokemon = this.getFormeName(this.pokemonIdToFormeIds(evolutionInfoIds[e].required.inPartyPokemonId, _)[0], languageId, _).name; // Mantine
+				if (evolutionInfoIds[e].required.tradedPokemonId) evolutionInfo.required.tradedPokemon = this.getFormeName(this.pokemonIdToFormeIds(evolutionInfoIds[e].required.tradedPokemonId, _)[0], languageId, _).name; // Accelgor + Escavalier
+				result.evolutionInfo.push(evolutionInfo);
+			}
+		}
+
 		// Get the pokemon learnset
 		if (requestedData.learnset) {
 			result.learnset = new Object();
@@ -541,15 +577,37 @@ function VeekunDatabase(db, _) {
 		}
 
 		return result;
-	},
+	};
 
 	// Close the database
 
 	this.close = function(_) {
 		this.db.close(_);
-	},
+	};
 
-	// Lonely private function
+	// "Private" functions
+
+	this.getSpeciesEvolutionInfo_ = function(speciesId, _) { // What pokemon it evolves from and why
+		var dbResult = this.db.execute("SELECT * FROM pokemon_evolution WHERE evolved_species_id = ?", [speciesId], _);
+		var results = [];
+		for (var d = 0; d < dbResult.length; ++d) {
+			var result = {evolutionTypeId: dbResult[d].evolution_trigger_id, required: {}};
+			if (dbResult[d].trigger_item_id) result.triggerItemId = dbResult[d].trigger_item_id;
+			if (dbResult[d].minimum_level) result.required.level = dbResult[d].minimum_level;
+			if (dbResult[d].held_item_id) result.required.heldItemId = dbResult[d].held_item_id;
+			if (dbResult[d].gender_id) result.required.gender = this.getSingleText_("genders", "identifier", "id", dbResult[d].gender_id, 1, _, 1);
+			if (dbResult[d].location_id) result.required.locationId = dbResult[d].location_id;
+			if (dbResult[d].time_of_day) result.required.timeOfDay = dbResult[d].time_of_day;
+			if (dbResult[d].known_move_id) result.required.moveId = dbResult[d].known_move_id;
+			if (dbResult[d].minimum_happiness) result.required.happiness = dbResult[d].minimum_happiness;
+			if (dbResult[d].minimum_beauty) result.required.beauty = dbResult[d].minimum_beauty; // Milotic
+			if (dbResult[d].relative_physical_stats) result.required.physicalStatProportion = dbResult[d].relative_physical_stats; // Hitmonlee/chan/top
+			if (dbResult[d].party_species_id) result.required.inPartyPokemonId = this.speciesIdToDefaultFormePokemonId(dbResult[d].party_species_id, _); // Mantine
+			if (dbResult[d].trade_species_id) result.required.tradedPokemonId = this.speciesIdToDefaultFormePokemonId(dbResult[d].trade_species_id, _); // Accelgor + Escavalier
+			results.push(result);
+		}
+		return results;
+	};
 
 	this.singleTextCache_ = new Object();
 	this.getSingleText_ = function(table, textKey, idKey, id, languageId, _, languageIdKeyOverride, isOverrideCache) {
@@ -557,7 +615,7 @@ function VeekunDatabase(db, _) {
 			languageIdKeyOverride = "local_language_id";
 		}
 
-		var argumentsHash = JSON.stringify({table: table, textKey: textKey, idKye: idKey, id: id, languageId: languageId, languageIdKeyOverride: languageIdKeyOverride});
+		var argumentsHash = JSON.stringify({table: table, textKey: textKey, idKey: idKey, id: id, languageId: languageId, languageIdKeyOverride: languageIdKeyOverride});
 		if (!isOverrideCache && this.singleTextCache_[argumentsHash]) {
 			return this.singleTextCache_[argumentsHash];
 		}
@@ -572,7 +630,7 @@ function VeekunDatabase(db, _) {
 		} else {
 			return (this.singleTextCache_[argumentsHash] = "");
 		}
-	}
+	};
 }
 
 exports.getVeekunDatabase = function(_, isForceRedownload) {

@@ -34,6 +34,7 @@ function main(argv, _) {
 				abilities: true,
 				prevo: true,
 				evos: true,
+				evolutionInfo: true,
 				eggGroups: true,
 				misc: true
 			});
@@ -148,6 +149,19 @@ function convertVeekunPokemon(pokemon) {
 		result.otherFormes.push(toIdForName(pokemon.otherFormes[f].combinedName, pokemon.otherFormes[f].forme));
 	}
 
+	// Work out the minimum evolution level
+	result.evoLevel = Infinity;
+	for (var e = 0; e < pokemon.evolutionInfo.length; ++e) {
+		if (pokemon.evolutionInfo[e].required.level && pokemon.evolutionInfo[e].required.level < result.evoLevel) {
+			result.evoLevel = pokemon.evolutionInfo[e].required.level;
+		} else if (pokemon.evolutionInfo[e].required.move) {
+			result.evoMove = pokemon.evolutionInfo[e].required.move;
+		}
+	}
+	if (result.evoLevel === Infinity) {
+		result.evoLevel = result.prevo ? 1 : 0;
+	}
+
 	return result;
 }
 
@@ -242,6 +256,12 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	}
 	if (pokemon.evos.length > 0) {
 		writeLine("evos: " + JSON.stringify(pokemon.evos) + ",");
+	}
+	if (pokemon.evoLevel) {
+		writeLine("evoLevel: " + JSON.stringify(pokemon.evoLevel) + ",");
+	}
+	if (pokemon.evoMove) {
+		writeLine("evoMove: " + JSON.stringify(pokemon.evoMove) + ",");
 	}
 	writeLine("eggGroups: " + JSON.stringify(pokemon.eggGroups) + ",");
 	if (pokemon.otherFormes.length > 0) {
