@@ -99,10 +99,20 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "Ubers",
 		rated: true,
+		// challengeShow: true,
+		// searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers', 'Evasion Moves Clause'],
+		banlist: []
+	},
+	uberssuspecttest: {
+		effectType: 'Format',
+		name: "Ubers (suspect test)",
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers', 'Evasion Moves Clause'],
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
 		banlist: []
 	},
 	uu: {
