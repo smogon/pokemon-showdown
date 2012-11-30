@@ -407,7 +407,7 @@ module.exports = (function () {
 							if (learned.substr(0,1) === '5') {
 								// current-gen level-up, TM, or tutor moves:
 								//   always available
-								return true;
+								return false;
 							}
 							// past-gen level-up, TM, or tutor moves:
 							//   available as long as the source gen was or was before this gen
@@ -473,14 +473,14 @@ module.exports = (function () {
 		if (limit1 && sketch) {
 			// limit 1 sketch move
 			if (lsetData.sketchMove) {
-				return false;
+				return {type:'oversketched', maxSketches: 1};
 			}
 			lsetData.sketchMove = move;
 		}
 
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
-			return false;
+			return true;
 		}
 		if (!sources.length) sources = null;
 		if (sourcesBefore || lsetData.sourcesBefore) {
@@ -511,8 +511,7 @@ module.exports = (function () {
 			if (lsetData.sources) {
 				var intersectSources = lsetData.sources.intersect(sources);
 				if (!intersectSources.length && !(sourcesBefore && lsetData.sourcesBefore)) {
-					lsetData.incompatible = true;
-					return false;
+					return {type:'incompatible'};
 				}
 				lsetData.sources = intersectSources;
 			} else {
@@ -524,7 +523,7 @@ module.exports = (function () {
 			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore||5);
 		}
 
-		return true;
+		return false;
 	};
 	Tools.prototype.getBanlistTable = function(format, subformat, depth) {
 		var banlistTable;
@@ -759,19 +758,21 @@ module.exports = (function () {
 				}
 
 				if (banlistTable['illegal']) {
-					var lset = this.checkLearnset(move, template, lsetData);
-					if (!lset) {
-						var problem = name+" can't learn "+move.name;
-						if (lsetData.incompatible) {
+					var problem = this.checkLearnset(move, template, lsetData);
+					if (problem) {
+						var problemString = name+" can't learn "+move.name;
+						if (problem.type === 'incompatible') {
 							if (isDW) {
-								problem = problem.concat(" because it's incompatible with its ability or another move.");
+								problemString = problemString.concat(" because it's incompatible with its ability or another move.");
 							} else {
-								problem = problem.concat(" because it's incompatible with another move.");
+								problemString = problemString.concat(" because it's incompatible with another move.");
 							}
+						} else if (problem.type === 'oversketched') {
+							problemString = problemString.concat(" because it can only sketch "+problem.maxSketches+" move"+(problem.maxSketches>1?"s":"")+".");
 						} else {
-							problem = problem.concat(".");
+							problemString = problemString.concat(".");
 						}
-						problems.push(problem);
+						problems.push(problemString);
 					}
 				}
 			}
@@ -824,6 +825,10 @@ module.exports = (function () {
 						problems.push(name+" has moves incompatible with its DW ability.");
 					}
 				}
+			}
+			if (set.level < template.evoLevel) {
+				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
+				problems.push(name+" must be at least level "+template.evoLevel+".");
 			}
 		}
 		setHas[toId(template.tier)] = true;
