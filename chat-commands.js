@@ -881,7 +881,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (!targets[1]) return parseCommand(user, 'help', 'learn', room, socket);
 		var template = Tools.getTemplate(targets[0]);
 		var move = {};
-		var result;
+		var problem;
 		var all = (cmd.substr(cmd.length-3) === 'all');
 
 		showOrBroadcastStart(user, cmd, room, socket, message);
@@ -899,11 +899,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 					'Move "'+move.id+'" not found.');
 				return false;
 			}
-			result = Tools.checkLearnset(move, template, lsetData);
-			if (!result) break;
+			problem = Tools.checkLearnset(move, template, lsetData);
+			if (problem) break;
 		}
-		var buffer = ''+template.name+(result?" <strong style=\"color:#228822;text-decoration:underline\">can</strong> learn ":" <strong style=\"color:#CC2222;text-decoration:underline\">can't</strong> learn ")+(targets.length>2?"these moves":move.name);
-		if (result) {
+		var buffer = ''+template.name+(problem?" <strong style=\"color:#CC2222;text-decoration:underline\">can't</strong> learn ":" <strong style=\"color:#228822;text-decoration:underline\">can</strong> learn ")+(targets.length>2?"these moves":move.name);
+		if (!problem) {
 			var sourceNames = {E:"egg",S:"event",D:"dream world"};
 			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul style=\"margin-top:0;margin-bottom:0\">";
 			if (lsetData.sources) {
@@ -990,7 +990,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'</div>');
 		return false;
 		break;
-	
+
 	case 'om':
 	case 'othermetas':
 	case '!om':
