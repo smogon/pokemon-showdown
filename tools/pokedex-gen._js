@@ -63,7 +63,11 @@ function convertVeekunPokemon(pokemon) {
 	result.num = pokemon.nationalPokedexNumber;
 	result.species = pokemon.combinedName.replace("♂", "M").replace("♀", "F");
 	result.baseSpecies = pokemon.name.replace("♂", "M").replace("♀", "F");
-	result.forme = pokemon.forme;
+	if (pokemon.isDefaultForme) {
+		result.baseForme = pokemon.forme;
+	} else {
+		result.forme = pokemon.forme;
+	}
 	result.isDefaultForme = pokemon.isDefaultForme;
 	result.isBattleOnlyForme = pokemon.isBattleOnlyForme;
 	result.eggGroups = pokemon.eggGroups;
@@ -145,7 +149,7 @@ function convertVeekunPokemon(pokemon) {
 
 	// Convert the other formes to ids
 	result.otherFormes = new Array();
-	for (var f = 0; f < pokemon.otherFormes.length; ++f) {
+	for (var f = 0; f < pokemon.otherFormes.length && pokemon.isDefaultForme; ++f) {
 		result.otherFormes.push(toIdForName(pokemon.otherFormes[f].combinedName, pokemon.otherFormes[f].forme));
 	}
 
@@ -199,15 +203,12 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	// Ignore the DW ability if it is the same as a normal ability
 	var abilities = JSON.parse(JSON.stringify(pokemon.abilities));
 	if (abilities["DW"]) {
-		var dwAbility = abilities["DW"];
-		delete abilities["DW"];
 		for (var a in abilities) {
-			if (abilities[a] === dwAbility) {
-				dwAbility = "";
+			if (a !== "DW" && abilities[a] === abilities["DW"]) {
+				delete abilities["DW"];
 				break;
 			}
 		}
-		if (dwAbility) abilities["DW"] = dwAbility;
 	}
 
 	// Start outputting!
@@ -220,6 +221,9 @@ function outputPokemon(pokemon, isNotNeedFinalNewline) {
 	}
 	if (pokemon.baseSpecies && pokemon.baseSpecies !== pokemon.species) {
 		writeLine("baseSpecies: " + JSON.stringify(pokemon.baseSpecies) + ",");
+	}
+	if (pokemon.baseForme) {
+		writeLine("baseForme: " + JSON.stringify(pokemon.baseForme) + ",");
 	}
 	if (pokemon.forme) {
 		writeLine("forme: " + JSON.stringify(pokemon.forme) + ",");

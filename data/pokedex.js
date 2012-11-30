@@ -949,7 +949,6 @@ exports.BattlePokedex = {
 		colour: "Yellow",
 		evos: ["pikachu"],
 		eggGroups: ["No Eggs"],
-		otherFormes: ["pichu"],
 	},
 	pikachu: {
 		num: 25,
@@ -5795,7 +5794,7 @@ exports.BattlePokedex = {
 	unown: {
 		num: 201,
 		species: "Unown",
-		forme: "A",
+		baseForme: "A",
 		types: ["Psychic"],
 		gender: "N",
 		baseStats: {
@@ -5838,7 +5837,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownc: {
 		num: 201,
@@ -5863,7 +5861,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownd: {
 		num: 201,
@@ -5888,7 +5885,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unowne: {
 		num: 201,
@@ -5913,7 +5909,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownf: {
 		num: 201,
@@ -5938,7 +5933,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unowng: {
 		num: 201,
@@ -5963,7 +5957,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownh: {
 		num: 201,
@@ -5988,7 +5981,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unowni: {
 		num: 201,
@@ -6013,7 +6005,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownj: {
 		num: 201,
@@ -6038,7 +6029,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownk: {
 		num: 201,
@@ -6063,7 +6053,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownl: {
 		num: 201,
@@ -6088,7 +6077,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownm: {
 		num: 201,
@@ -6113,7 +6101,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownn: {
 		num: 201,
@@ -6138,7 +6125,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unowno: {
 		num: 201,
@@ -6163,7 +6149,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownp: {
 		num: 201,
@@ -6188,7 +6173,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownq: {
 		num: 201,
@@ -6213,7 +6197,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownr: {
 		num: 201,
@@ -6238,7 +6221,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unowns: {
 		num: 201,
@@ -6263,7 +6245,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownt: {
 		num: 201,
@@ -6288,7 +6269,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownu","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownu: {
 		num: 201,
@@ -6313,7 +6293,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownv","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownv: {
 		num: 201,
@@ -6338,7 +6317,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownw","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownw: {
 		num: 201,
@@ -6363,7 +6341,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownx","unowny","unownz","unownem","unownqm"],
 	},
 	unownx: {
 		num: 201,
@@ -6388,7 +6365,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unowny","unownz","unownem","unownqm"],
 	},
 	unowny: {
 		num: 201,
@@ -6413,7 +6389,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unownz","unownem","unownqm"],
 	},
 	unownz: {
 		num: 201,
@@ -6438,7 +6413,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownem","unownqm"],
 	},
 	unownem: {
 		num: 201,
@@ -6464,7 +6438,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownqm"],
 	},
 	unownqm: {
 		num: 201,
@@ -6490,7 +6463,6 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["unown","unownb","unownc","unownd","unowne","unownf","unowng","unownh","unowni","unownj","unownk","unownl","unownm","unownn","unowno","unownp","unownq","unownr","unowns","unownt","unownu","unownv","unownw","unownx","unowny","unownz","unownem"],
 	},
 	wynaut: {
 		num: 360,
@@ -9919,7 +9891,6 @@ exports.BattlePokedex = {
 		weightkg: 0.8,
 		colour: "White",
 		eggGroups: ["Fairy","Indeterminate"],
-		otherFormes: ["castform","castformrainy","castformsnowy"],
 	},
 	castformrainy: {
 		num: 351,
@@ -9943,7 +9914,6 @@ exports.BattlePokedex = {
 		weightkg: 0.8,
 		colour: "White",
 		eggGroups: ["Fairy","Indeterminate"],
-		otherFormes: ["castform","castformsunny","castformsnowy"],
 	},
 	castformsnowy: {
 		num: 351,
@@ -9967,7 +9937,6 @@ exports.BattlePokedex = {
 		weightkg: 0.8,
 		colour: "White",
 		eggGroups: ["Fairy","Indeterminate"],
-		otherFormes: ["castform","castformsunny","castformrainy"],
 	},
 	kecleon: {
 		num: 352,
@@ -10781,7 +10750,7 @@ exports.BattlePokedex = {
 	deoxys: {
 		num: 386,
 		species: "Deoxys",
-		forme: "Normal",
+		baseForme: "Normal",
 		types: ["Psychic"],
 		gender: "N",
 		baseStats: {
@@ -10824,7 +10793,6 @@ exports.BattlePokedex = {
 		weightkg: 60.8,
 		colour: "Red",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["deoxys","deoxysdefense","deoxysspeed"],
 	},
 	deoxysdefense: {
 		num: 386,
@@ -10849,7 +10817,6 @@ exports.BattlePokedex = {
 		weightkg: 60.8,
 		colour: "Red",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["deoxys","deoxysattack","deoxysspeed"],
 	},
 	deoxysspeed: {
 		num: 386,
@@ -10874,7 +10841,6 @@ exports.BattlePokedex = {
 		weightkg: 60.8,
 		colour: "Red",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["deoxys","deoxysattack","deoxysdefense"],
 	},
 	turtwig: {
 		num: 387,
@@ -11421,7 +11387,7 @@ exports.BattlePokedex = {
 	burmy: {
 		num: 412,
 		species: "Burmy",
-		forme: "Plant",
+		baseForme: "Plant",
 		types: ["Bug"],
 		baseStats: {
 			hp: 40,
@@ -11466,7 +11432,6 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
 		eggGroups: ["Bug"],
-		otherFormes: ["burmy","burmytrash"],
 	},
 	burmytrash: {
 		num: 412,
@@ -11492,12 +11457,11 @@ exports.BattlePokedex = {
 		colour: "Gray",
 		evos: ["wormadam","wormadamsandy","wormadamtrash","mothim"],
 		eggGroups: ["Bug"],
-		otherFormes: ["burmy","burmysandy"],
 	},
 	wormadam: {
 		num: 413,
 		species: "Wormadam",
-		forme: "Plant",
+		baseForme: "Plant",
 		types: ["Bug","Grass"],
 		gender: "F",
 		baseStats: {
@@ -11546,7 +11510,6 @@ exports.BattlePokedex = {
 		prevo: "burmy",
 		evoLevel: 20,
 		eggGroups: ["Bug"],
-		otherFormes: ["wormadam","wormadamtrash"],
 	},
 	wormadamtrash: {
 		num: 413,
@@ -11574,7 +11537,6 @@ exports.BattlePokedex = {
 		prevo: "burmy",
 		evoLevel: 20,
 		eggGroups: ["Bug"],
-		otherFormes: ["wormadam","wormadamsandy"],
 	},
 	mothim: {
 		num: 414,
@@ -11738,7 +11700,7 @@ exports.BattlePokedex = {
 	cherrim: {
 		num: 421,
 		species: "Cherrim",
-		forme: "Overcast",
+		baseForme: "Overcast",
 		types: ["Grass"],
 		baseStats: {
 			hp: 70,
@@ -11783,12 +11745,11 @@ exports.BattlePokedex = {
 		prevo: "cherubi",
 		evoLevel: 25,
 		eggGroups: ["Fairy","Plant"],
-		otherFormes: ["cherrim"],
 	},
 	shellos: {
 		num: 422,
 		species: "Shellos",
-		forme: "West",
+		baseForme: "West",
 		types: ["Water"],
 		baseStats: {
 			hp: 76,
@@ -11835,12 +11796,11 @@ exports.BattlePokedex = {
 		colour: "Purple",
 		evos: ["gastrodon","gastrodoneast"],
 		eggGroups: ["Water 1","Indeterminate"],
-		otherFormes: ["shellos"],
 	},
 	gastrodon: {
 		num: 423,
 		species: "Gastrodon",
-		forme: "West",
+		baseForme: "West",
 		types: ["Water","Ground"],
 		baseStats: {
 			hp: 111,
@@ -11889,7 +11849,6 @@ exports.BattlePokedex = {
 		prevo: "shellos",
 		evoLevel: 30,
 		eggGroups: ["Water 1","Indeterminate"],
-		otherFormes: ["gastrodon"],
 	},
 	drifloon: {
 		num: 425,
@@ -12587,7 +12546,6 @@ exports.BattlePokedex = {
 		weightkg: 0.3,
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
-		otherFormes: ["rotom","rotomwash","rotomfrost","rotomfan","rotommow"],
 	},
 	rotomwash: {
 		num: 479,
@@ -12612,7 +12570,6 @@ exports.BattlePokedex = {
 		weightkg: 0.3,
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
-		otherFormes: ["rotom","rotomheat","rotomfrost","rotomfan","rotommow"],
 	},
 	rotomfrost: {
 		num: 479,
@@ -12637,7 +12594,6 @@ exports.BattlePokedex = {
 		weightkg: 0.3,
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
-		otherFormes: ["rotom","rotomheat","rotomwash","rotomfan","rotommow"],
 	},
 	rotomfan: {
 		num: 479,
@@ -12662,7 +12618,6 @@ exports.BattlePokedex = {
 		weightkg: 0.3,
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
-		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotommow"],
 	},
 	rotommow: {
 		num: 479,
@@ -12687,7 +12642,6 @@ exports.BattlePokedex = {
 		weightkg: 0.3,
 		colour: "Red",
 		eggGroups: ["Indeterminate"],
-		otherFormes: ["rotom","rotomheat","rotomwash","rotomfrost","rotomfan"],
 	},
 	uxie: {
 		num: 480,
@@ -12841,7 +12795,7 @@ exports.BattlePokedex = {
 	giratina: {
 		num: 487,
 		species: "Giratina",
-		forme: "Altered",
+		baseForme: "Altered",
 		types: ["Ghost","Dragon"],
 		gender: "N",
 		baseStats: {
@@ -12885,7 +12839,6 @@ exports.BattlePokedex = {
 		weightkg: 650,
 		colour: "Black",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["giratina"],
 	},
 	cresselia: {
 		num: 488,
@@ -12974,7 +12927,7 @@ exports.BattlePokedex = {
 	shaymin: {
 		num: 492,
 		species: "Shaymin",
-		forme: "Land",
+		baseForme: "Land",
 		types: ["Grass"],
 		gender: "N",
 		baseStats: {
@@ -13017,12 +12970,11 @@ exports.BattlePokedex = {
 		weightkg: 5.2,
 		colour: "Green",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["shaymin"],
 	},
 	arceus: {
 		num: 493,
 		species: "Arceus",
-		forme: "Normal",
+		baseForme: "Normal",
 		types: ["Normal"],
 		gender: "N",
 		baseStats: {
@@ -13065,7 +13017,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusdark: {
 		num: 493,
@@ -13090,7 +13041,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusdragon: {
 		num: 493,
@@ -13115,7 +13065,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceuselectric: {
 		num: 493,
@@ -13140,7 +13089,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusfighting: {
 		num: 493,
@@ -13165,7 +13113,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusfire: {
 		num: 493,
@@ -13190,7 +13137,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusflying: {
 		num: 493,
@@ -13215,7 +13161,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusghost: {
 		num: 493,
@@ -13240,7 +13185,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusgrass: {
 		num: 493,
@@ -13265,7 +13209,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusground: {
 		num: 493,
@@ -13290,7 +13233,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusice: {
 		num: 493,
@@ -13315,7 +13257,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceuspoison: {
 		num: 493,
@@ -13340,7 +13281,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspsychic","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceuspsychic: {
 		num: 493,
@@ -13365,7 +13305,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceusrock","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceusrock: {
 		num: 493,
@@ -13390,7 +13329,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceussteel","arceuswater","arceusunknown"],
 	},
 	arceussteel: {
 		num: 493,
@@ -13415,7 +13353,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceuswater","arceusunknown"],
 	},
 	arceuswater: {
 		num: 493,
@@ -13440,7 +13377,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceusunknown"],
 	},
 	arceusunknown: {
 		num: 493,
@@ -13466,7 +13402,6 @@ exports.BattlePokedex = {
 		weightkg: 320,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["arceus","arceusbug","arceusdark","arceusdragon","arceuselectric","arceusfighting","arceusfire","arceusflying","arceusghost","arceusgrass","arceusground","arceusice","arceuspoison","arceuspsychic","arceusrock","arceussteel","arceuswater"],
 	},
 	victini: {
 		num: 494,
@@ -14799,7 +14734,7 @@ exports.BattlePokedex = {
 	basculin: {
 		num: 550,
 		species: "Basculin",
-		forme: "Red-Striped",
+		baseForme: "Red-Striped",
 		types: ["Water"],
 		baseStats: {
 			hp: 70,
@@ -14844,7 +14779,6 @@ exports.BattlePokedex = {
 		weightkg: 18,
 		colour: "Green",
 		eggGroups: ["Water 2"],
-		otherFormes: ["basculin"],
 	},
 	sandile: {
 		num: 551,
@@ -14943,7 +14877,7 @@ exports.BattlePokedex = {
 	darmanitan: {
 		num: 555,
 		species: "Darmanitan",
-		forme: "Standard",
+		baseForme: "Standard",
 		types: ["Fire"],
 		baseStats: {
 			hp: 105,
@@ -14990,7 +14924,6 @@ exports.BattlePokedex = {
 		prevo: "darumaka",
 		evoLevel: 35,
 		eggGroups: ["Ground"],
-		otherFormes: ["darmanitan"],
 	},
 	maractus: {
 		num: 556,
@@ -15671,7 +15604,7 @@ exports.BattlePokedex = {
 	deerling: {
 		num: 585,
 		species: "Deerling",
-		forme: "Spring",
+		baseForme: "Spring",
 		types: ["Normal","Grass"],
 		baseStats: {
 			hp: 60,
@@ -15718,7 +15651,6 @@ exports.BattlePokedex = {
 		colour: "Yellow",
 		evos: ["sawsbuck"],
 		eggGroups: ["Ground"],
-		otherFormes: ["deerling","deerlingautumn","deerlingwinter"],
 	},
 	deerlingautumn: {
 		num: 585,
@@ -15745,7 +15677,6 @@ exports.BattlePokedex = {
 		colour: "Yellow",
 		evos: ["sawsbuck"],
 		eggGroups: ["Ground"],
-		otherFormes: ["deerling","deerlingsummer","deerlingwinter"],
 	},
 	deerlingwinter: {
 		num: 585,
@@ -15772,12 +15703,11 @@ exports.BattlePokedex = {
 		colour: "Yellow",
 		evos: ["sawsbuck"],
 		eggGroups: ["Ground"],
-		otherFormes: ["deerling","deerlingsummer","deerlingautumn"],
 	},
 	sawsbuck: {
 		num: 586,
 		species: "Sawsbuck",
-		forme: "Spring",
+		baseForme: "Spring",
 		types: ["Normal","Grass"],
 		baseStats: {
 			hp: 80,
@@ -15826,7 +15756,6 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		evoLevel: 34,
 		eggGroups: ["Ground"],
-		otherFormes: ["sawsbuck","sawsbuckautumn","sawsbuckwinter"],
 	},
 	sawsbuckautumn: {
 		num: 586,
@@ -15854,7 +15783,6 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		evoLevel: 34,
 		eggGroups: ["Ground"],
-		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckwinter"],
 	},
 	sawsbuckwinter: {
 		num: 586,
@@ -15882,7 +15810,6 @@ exports.BattlePokedex = {
 		prevo: "deerling",
 		evoLevel: 34,
 		eggGroups: ["Ground"],
-		otherFormes: ["sawsbuck","sawsbucksummer","sawsbuckautumn"],
 	},
 	emolga: {
 		num: 587,
@@ -17129,7 +17056,7 @@ exports.BattlePokedex = {
 	tornadus: {
 		num: 641,
 		species: "Tornadus",
-		forme: "Incarnate",
+		baseForme: "Incarnate",
 		types: ["Flying"],
 		gender: "M",
 		baseStats: {
@@ -17173,12 +17100,11 @@ exports.BattlePokedex = {
 		weightkg: 63,
 		colour: "Green",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["tornadus"],
 	},
 	thundurus: {
 		num: 642,
 		species: "Thundurus",
-		forme: "Incarnate",
+		baseForme: "Incarnate",
 		types: ["Electric","Flying"],
 		gender: "M",
 		baseStats: {
@@ -17222,7 +17148,6 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		colour: "Blue",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["thundurus"],
 	},
 	reshiram: {
 		num: 643,
@@ -17269,7 +17194,7 @@ exports.BattlePokedex = {
 	landorus: {
 		num: 645,
 		species: "Landorus",
-		forme: "Incarnate",
+		baseForme: "Incarnate",
 		types: ["Ground","Flying"],
 		gender: "M",
 		baseStats: {
@@ -17313,7 +17238,6 @@ exports.BattlePokedex = {
 		weightkg: 68,
 		colour: "Brown",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["landorus"],
 	},
 	kyurem: {
 		num: 646,
@@ -17360,7 +17284,6 @@ exports.BattlePokedex = {
 		weightkg: 325,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["kyurem","kyuremwhite"],
 	},
 	kyuremwhite: {
 		num: 646,
@@ -17385,12 +17308,11 @@ exports.BattlePokedex = {
 		weightkg: 325,
 		colour: "Gray",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["kyurem","kyuremblack"],
 	},
 	keldeo: {
 		num: 647,
 		species: "Keldeo",
-		forme: "Ordinary",
+		baseForme: "Ordinary",
 		types: ["Water","Fighting"],
 		gender: "N",
 		baseStats: {
@@ -17433,12 +17355,11 @@ exports.BattlePokedex = {
 		weightkg: 48.5,
 		colour: "Yellow",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["keldeo"],
 	},
 	meloetta: {
 		num: 648,
 		species: "Meloetta",
-		forme: "Aria",
+		baseForme: "Aria",
 		types: ["Normal","Psychic"],
 		gender: "N",
 		baseStats: {
@@ -17481,7 +17402,6 @@ exports.BattlePokedex = {
 		weightkg: 6.5,
 		colour: "White",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["meloetta"],
 	},
 	genesect: {
 		num: 649,
@@ -17528,7 +17448,6 @@ exports.BattlePokedex = {
 		weightkg: 82.5,
 		colour: "Purple",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["genesect","genesectshock","genesectburn","genesectchill"],
 	},
 	genesectshock: {
 		num: 649,
@@ -17553,7 +17472,6 @@ exports.BattlePokedex = {
 		weightkg: 82.5,
 		colour: "Purple",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["genesect","genesectdouse","genesectburn","genesectchill"],
 	},
 	genesectburn: {
 		num: 649,
@@ -17578,7 +17496,6 @@ exports.BattlePokedex = {
 		weightkg: 82.5,
 		colour: "Purple",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["genesect","genesectdouse","genesectshock","genesectchill"],
 	},
 	genesectchill: {
 		num: 649,
@@ -17603,6 +17520,5 @@ exports.BattlePokedex = {
 		weightkg: 82.5,
 		colour: "Purple",
 		eggGroups: ["No Eggs"],
-		otherFormes: ["genesect","genesectdouse","genesectshock","genesectburn"],
 	}
 };
