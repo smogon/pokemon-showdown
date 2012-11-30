@@ -4698,7 +4698,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"]},
 			{"generation":5,"level":15,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"]}
 		],
-		tier: "OU"
+		tier: "Uber"
 	},
 	genesectdouse: {
 		tier: "Illegal"
