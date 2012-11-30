@@ -12950,7 +12950,7 @@ exports.BattleMovedex = {
 		name: "Wonder Room",
 		pp: 10,
 		priority: -7,
-		onFieldHit: function(target, source, effect) {
+		onHitField: function(target, source, effect) {
 			if (this.pseudoWeather['wonderroom']) {
 				this.removePseudoWeather('wonderroom', source, effect, '[of] '+source);
 			} else {
@@ -12974,7 +12974,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "all",
 		type: "Psychic"
 	},
 	"woodhammer": {
