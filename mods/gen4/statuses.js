@@ -13,8 +13,8 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function(target) {
 			this.add('-status', target.id, 'slp');
-			// 2-7 turns
-			this.effectData.time = this.random(3,9);
+			// 1-4 turns
+			this.effectData.time = this.random(2,6);
 			if (target.getAbility().isHalfSleep) {
 				this.effectData.time = Math.floor(this.effectData.time / 2);
 			}
