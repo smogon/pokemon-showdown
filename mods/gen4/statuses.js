@@ -15,14 +15,14 @@ exports.BattleStatuses = {
 			this.add('-status', target.id, 'slp');
 			// 1-4 turns
 			this.effectData.time = this.random(2,6);
-			if (target.getAbility().isHalfSleep) {
-				this.effectData.time = Math.floor(this.effectData.time / 2);
-			}
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
+			if (pokemon.getAbility().isHalfSleep) {
+				pokemon.statusData.time--;
+			}
 			pokemon.statusData.time--;
-			if (!pokemon.statusData.time) {
+			if (pokemon.statusData.time <= 0) {
 				pokemon.cureStatus();
 				return;
 			}
