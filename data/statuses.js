@@ -45,20 +45,17 @@ exports.BattleStatuses = {
 			// 1-3 turns
 			this.effectData.startTime = this.random(2,5);
 			this.effectData.time = this.effectData.startTime;
-			if (target.getAbility().isHalfSleep) {
-				this.effectData.time = Math.floor(this.effectData.time / 2);
-			}
 		},
 		onSwitchIn: function(target) {
 			this.effectData.time = this.effectData.startTime;
-			if (target.getAbility().isHalfSleep) {
-				this.effectData.time = Math.floor(this.effectData.time / 2);
-			}
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
+			if (pokemon.getAbility().isHalfSleep) {
+				pokemon.statusData.time--;
+			}
 			pokemon.statusData.time--;
-			if (!pokemon.statusData.time) {
+			if (pokemon.statusData.time <= 0) {
 				pokemon.cureStatus();
 				return;
 			}
