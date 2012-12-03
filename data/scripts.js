@@ -276,9 +276,9 @@ exports.BattleScripts = {
 			if (move.noFaint && damage >= target.hp) {
 				damage = target.hp - 1;
 			}
-			if (damage && !target.fainted) {
+			if ((damage || damage === 0) && !target.fainted) {
 				damage = this.damage(damage, target, pokemon, move);
-				if (!damage) return false;
+				if (!(damage || damage === 0)) return false;
 				didSomething = true;
 			} else if (damage === false && typeof hitResult === 'undefined') {
 				this.add('-fail', target);
