@@ -1995,7 +1995,7 @@ function Battle(roomid, format, rated) {
 		}
 		if (!target || !target.hp) return 0;
 		effect = selfB.getEffect(effect);
-		if (!damage) return 0;
+		if (!(damage || damage === 0)) return damage;
 		damage = clampIntRange(damage, 1);
 
 		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
@@ -2004,17 +2004,13 @@ function Battle(roomid, format, rated) {
 				return 0;
 			}
 			damage = selfB.runEvent('Damage', target, source, effect, damage);
-			if (!damage) {
-				this.debug('damage event said zero');
-				return 0;
+			if (!(damage || damage === 0)) {
+				this.debug('damage event failed');
+				return damage;
 			}
 		}
 		damage = clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
-		if (!damage) {
-			this.debug('pokemon.damage said zero');
-			return 0;
-		}
 		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
 		if (name === 'tox') name = 'psn';
