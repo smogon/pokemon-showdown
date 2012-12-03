@@ -2009,7 +2009,7 @@ function Battle(roomid, format, rated) {
 				return damage;
 			}
 		}
-		damage = clampIntRange(damage, 1);
+		if (damage !== 0) damage = clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
