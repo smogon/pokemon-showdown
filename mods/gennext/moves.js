@@ -24,11 +24,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80
 	},
-	magicalleaf: {
-		inherit: true,
-		basePower: 90
-	},
 	magnetbomb: {
+		inherit: true,
+		basePower: 80
+	},
+	magicalleaf: {
 		inherit: true,
 		basePower: 90
 	},
@@ -540,7 +540,7 @@ exports.BattleMovedex = {
 		// Quiver Dance is nerfed because Volc
 		inherit: true,
 		boosts: {
-			spa: 1,
+			spd: 1,
 			spe: 1,
 			accuracy: 1
 		},
@@ -1120,6 +1120,34 @@ exports.BattleMovedex = {
 		accuracy: 100
 	},
 	chargebeam: {
+		inherit: true,
+		accuracy: 100
+	},
+	aircutter: {
+		inherit: true,
+		accuracy: 100
+	},
+	furycutter: {
+		inherit: true,
+		accuracy: 100
+	},
+	crushclaw: {
+		inherit: true,
+		accuracy: 100
+	},
+	razorleaf: {
+		inherit: true,
+		accuracy: 100
+	},
+	stringshot: {
+		inherit: true,
+		accuracy: 100
+	},
+	metalclaw: {
+		inherit: true,
+		accuracy: 100
+	},
+	snarl: {
 		inherit: true,
 		accuracy: 100
 	},
