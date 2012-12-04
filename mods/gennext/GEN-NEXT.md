@@ -165,7 +165,7 @@ New mechanic: Signature Pokemon:
 Minor move changes:
 
 - all 95%-accurate moves, as well as Charge Beam and Rock Slide, are now 100%
-  accurate
+  accurate (except Jump Kick, which will be rebalanced later)
 
 - Close Combat has been nerfed: it now gives -2 Def, -2 SpD
 
@@ -193,7 +193,7 @@ Minor move changes:
 
 - Snore's Base Power is now 100
 
-- Drill Peck's Base Power is now 100
+- Drill Peck, Needle Arm, and Attack Order's Base Powers are now 100
 
 - Octazooka and Leaf Tornado are now 75 base power and 90% -accuracy
 
