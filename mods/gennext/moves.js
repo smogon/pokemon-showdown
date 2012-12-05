@@ -1038,13 +1038,6 @@ exports.BattleMovedex = {
 		},
 		accuracy: 100
 	},
-	psychocut: {
-		inherit: true,
-		onBasePower: function(power, user) {
-			if (user.template.id === 'gallade') return power * 1.5;
-		},
-		accuracy: 100
-	},
 	glaciate: {
 		inherit: true,
 		basePower: 80,
@@ -1172,10 +1165,20 @@ exports.BattleMovedex = {
 		basePower: 100,
 		pp: 10
 	},
+	leafblade: {
+		inherit: true,
+		basePower: 100,
+		pp: 10
+	},
 	attackorder: {
 		inherit: true,
 		basePower: 100,
 		pp: 10
+	},
+	crabhammer: {
+		inherit: true,
+		basePower: 100,
+		accuracy: 100
 	},
 	autotomize: {
 		inherit: true,
@@ -1192,7 +1195,7 @@ exports.BattleMovedex = {
 					var illusionMove = this.getMove(illusionMove);
 					return illusionMove.category !== 'Status';
 				}, this);
-				if (illusionMoves.length) move.name = illusionMoves.sample();
+				if (illusionMoves.length) move.name = this.getMove(illusionMoves.sample()).name;
 			}
 		}
 	},
