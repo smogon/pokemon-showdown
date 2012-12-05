@@ -1730,7 +1730,7 @@ function canTalk(user, room, socket) {
 			}
 		} else {
 			if (!user.authenticated && config.modchat === true) {
-				if (socket) emit(socket, 'console', 'Because moderated chat is set, you must be registered speak in lobby chat.');
+				if (socket) emit(socket, 'console', 'Because moderated chat is set, you must be registered to speak in lobby chat.');
 				return false;
 			} else if (config.groupsranking.indexOf(user.group) < config.groupsranking.indexOf(config.modchat)) {
 				var groupName = config.groups[config.modchat].name;
