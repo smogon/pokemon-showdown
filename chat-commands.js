@@ -977,6 +977,18 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'</div>');
 		return false;
 		break;
+		
+	case 'changepass':
+	case 'changepassword':
+	case '!changepass':
+	case '!changepassword':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Want to change your password?<br />' +
+			'- <a href="http://forum.pokemonshowdown.com/settings.php" target="_blank">Change Password</a><br />' +
+			'</div>');
+		return false;
+		break;
 
 	case 'cap':
 	case '!cap':
