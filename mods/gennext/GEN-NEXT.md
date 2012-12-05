@@ -150,8 +150,6 @@ New mechanic: Signature Pokemon:
 
   - Swampert: Mud Shot (60 base power, 100% accuracy)
 
-  - Gallade: Psycho Cut
-
   - Kyurem: Glaciate (80 base power, 100% accuracy)
 
   - Weavile: Ice Shard
@@ -193,7 +191,8 @@ Minor move changes:
 
 - Snore's Base Power is now 100
 
-- Drill Peck, Needle Arm, and Attack Order's Base Powers are now 100
+- Drill Peck, Needle Arm, Attack Order, Leaf Blade, and Crabhammers's Base
+  Powers are now 100
 
 - Octazooka and Leaf Tornado are now 75 base power and 90% -accuracy
 
