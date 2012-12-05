@@ -612,7 +612,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var name = targetUser ? targetUser.name : targets[2];
 
 		var nextGroup = targets[1] ? targets[1] : Users.getNextGroupSymbol(currentGroup, cmd === 'demote');
-		if (targets[1] === 'deauth') nextGroup = ' ';
+		if (targets[1] === 'deauth') nextGroup = config.groupsranking[0];
 		if (!config.groups[nextGroup]) {
 			emit(socket, 'console', 'Group \'' + nextGroup + '\' does not exist.');
 			return false;
@@ -661,8 +661,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				emit(socket, 'console', 'That moderated chat setting is unrecognized.');
 				return false;
 			}
-			if (target !== '+' && !user.can('modchatall')) {
-				emit(socket, 'console', '/modchat - Access denied for setting higher than +.');
+			if (config.groupsranking.indexOf(target) > 1 && !user.can('modchatall')) {
+				emit(socket, 'console', '/modchat - Access denied for setting higher than ' + config.groupsranking[1] + '.');
 				return false;
 			}
 			config.modchat = target;
@@ -881,7 +881,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (!targets[1]) return parseCommand(user, 'help', 'learn', room, socket);
 		var template = Tools.getTemplate(targets[0]);
 		var move = {};
-		var result;
+		var problem;
 		var all = (cmd.substr(cmd.length-3) === 'all');
 
 		showOrBroadcastStart(user, cmd, room, socket, message);
@@ -899,11 +899,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 					'Move "'+move.id+'" not found.');
 				return false;
 			}
-			result = Tools.checkLearnset(move, template, lsetData);
-			if (!result) break;
+			problem = Tools.checkLearnset(move, template, lsetData);
+			if (problem) break;
 		}
-		var buffer = ''+template.name+(result?" <strong style=\"color:#228822;text-decoration:underline\">can</strong> learn ":" <strong style=\"color:#CC2222;text-decoration:underline\">can't</strong> learn ")+(targets.length>2?"these moves":move.name);
-		if (result) {
+		var buffer = ''+template.name+(problem?" <strong style=\"color:#CC2222;text-decoration:underline\">can't</strong> learn ":" <strong style=\"color:#228822;text-decoration:underline\">can</strong> learn ")+(targets.length>2?"these moves":move.name);
+		if (!problem) {
 			var sourceNames = {E:"egg",S:"event",D:"dream world"};
 			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul style=\"margin-top:0;margin-bottom:0\">";
 			if (lsetData.sources) {
@@ -990,7 +990,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'</div>');
 		return false;
 		break;
-	
+
 	case 'om':
 	case 'othermetas':
 	case '!om':
