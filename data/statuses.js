@@ -196,9 +196,6 @@ exports.BattleStatuses = {
 		},
 		onEnd: function(target) {
 			this.add('-end', target, 'rampage');
-			if (!move.self || move.self.volatileStatus !== 'lockedmove' || target.status === 'slp') {
-				return;
-			}
 			target.addVolatile('confusion');
 		},
 		onLockMove: function(pokemon) {
