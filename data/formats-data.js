@@ -1673,87 +1673,6 @@ exports.BattleFormatsData = {
 		viableMoves: {"hiddenpowerpsychic":1},
 		tier: "NU"
 	},
-	unownb: {
-		tier: "NU"
-	},
-	unownc: {
-		tier: "NU"
-	},
-	unownd: {
-		tier: "NU"
-	},
-	unowne: {
-		tier: "NU"
-	},
-	unownf: {
-		tier: "NU"
-	},
-	unowng: {
-		tier: "NU"
-	},
-	unownh: {
-		tier: "NU"
-	},
-	unowni: {
-		tier: "NU"
-	},
-	unownj: {
-		tier: "NU"
-	},
-	unownk: {
-		tier: "NU"
-	},
-	unownl: {
-		tier: "NU"
-	},
-	unownm: {
-		tier: "NU"
-	},
-	unownn: {
-		tier: "NU"
-	},
-	unowno: {
-		tier: "NU"
-	},
-	unownp: {
-		tier: "NU"
-	},
-	unownq: {
-		tier: "NU"
-	},
-	unownr: {
-		tier: "NU"
-	},
-	unowns: {
-		tier: "NU"
-	},
-	unownt: {
-		tier: "NU"
-	},
-	unownu: {
-		tier: "NU"
-	},
-	unownv: {
-		tier: "NU"
-	},
-	unownw: {
-		tier: "NU"
-	},
-	unownx: {
-		tier: "NU"
-	},
-	unowny: {
-		tier: "NU"
-	},
-	unownz: {
-		tier: "NU"
-	},
-	unownem: {
-		tier: "NU"
-	},
-	unownqm: {
-		tier: "NU"
-	},
 	wynaut: {
 		viableMoves: {"destinybond":1,"counter":1,"mirrorcoat":1,"encore":1},
 		eventPokemon: [
@@ -3267,14 +3186,6 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
-	burmysandy: {
-		viableMoves: {"bugbite":1,"hiddenpowerice":1,"electroweb":1,"protect":1},
-		tier: "LC"
-	},
-	burmytrash: {
-		viableMoves: {"bugbite":1,"hiddenpowerice":1,"electroweb":1,"protect":1},
-		tier: "LC"
-	},
 	wormadam: {
 		viableMoves: {"leafstorm":1,"gigadrain":1,"signalbeam":1,"hiddenpowerice":1,"hiddenpowerrock":1,"toxic":1,"psychic":1,"protect":1},
 		dreamWorldRelease: true,
@@ -3326,25 +3237,12 @@ exports.BattleFormatsData = {
 		viableMoves: {"sunnyday":1,"solarbeam":1,"weatherball":1,"hiddenpowerice":1},
 		tier: "NU"
 	},
-	cherrimsunshine: {
-		tier: "Illegal"
-	},
 	shellos: {
 		viableMoves: {"scald":1,"clearsmog":1,"recover":1,"toxic":1,"icebeam":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
-	shelloseast: {
-		viableMoves: {"scald":1,"clearsmog":1,"recover":1,"toxic":1,"icebeam":1},
-		dreamWorldRelease: true,
-		tier: "LC"
-	},
 	gastrodon: {
-		viableMoves: {"earthpower":1,"icebeam":1,"scald":1,"toxic":1,"recover":1,"clearsmog":1},
-		dreamWorldRelease: true,
-		tier: "OU"
-	},
-	gastrodoneast: {
 		viableMoves: {"earthpower":1,"icebeam":1,"scald":1,"toxic":1,"recover":1,"clearsmog":1},
 		dreamWorldRelease: true,
 		tier: "OU"
@@ -4297,27 +4195,9 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
-	deerlingsummer: {
-		tier: "LC"
-	},
-	deerlingautumn: {
-		tier: "LC"
-	},
-	deerlingwinter: {
-		tier: "LC"
-	},
 	sawsbuck: {
 		viableMoves: {"swordsdance":1,"hornleech":1,"jumpkick":1,"naturepower":1,"return":1,"substitute":1,"synthesis":1,"batonpass":1},
 		dreamWorldRelease: true,
-		tier: "NU"
-	},
-	sawsbucksummer: {
-		tier: "NU"
-	},
-	sawsbuckautumn: {
-		tier: "NU"
-	},
-	sawsbuckwinter: {
 		tier: "NU"
 	},
 	emolga: {
@@ -4679,7 +4559,7 @@ exports.BattleFormatsData = {
 		],
 		tier: "OU"
 	},
-	keldeoresolution: {
+	keldeoresolute: {
 		tier: "OU"
 	},
 	meloetta: {
