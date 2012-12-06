@@ -10,9 +10,6 @@ exports.BattleScripts = {
 		// Masquerain also gets Surf because we want it to be viable
 		this.data.Learnsets.masquerain.learnset.surf = ['5M'];
 
-		// Aerodactyl gets Brave Bird
-		this.data.Learnsets.aerodactyl.learnset.bravebird = ['5L100'];
-
 		// Shuckle gets Leech Seed
 		this.data.Learnsets.shuckle.learnset.leechseed = ['5L100'];
 
