@@ -850,7 +850,7 @@ exports.BattleAbilities = {
 					if (!pokemon.side.pokemon[i].fainted) break;
 				}
 				// Pokemon cannot disguise as itself.
-				if (pokemon.illusion === pokemon.side.pokemon[i]) {
+				if (pokemon === pokemon.side.pokemon[i]) {
 					pokemon.illusion = null;
 				}
 				else pokemon.illusion = pokemon.side.pokemon[i];
