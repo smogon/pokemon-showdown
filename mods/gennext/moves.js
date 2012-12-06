@@ -1046,6 +1046,34 @@ exports.BattleMovedex = {
 		},
 		accuracy: 100
 	},
+	octazooka: {
+		inherit: true,
+		basePower: 75,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'octillery') return power * 1.5;
+		},
+		accuracy: 90,
+		secondary: {
+			chance: 100,
+			boosts: {
+				accuracy: -1
+			}
+		}
+	},
+	leaftornado: {
+		inherit: true,
+		basePower: 75,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'serperior') return power * 1.5;
+		},
+		accuracy: 90,
+		secondary: {
+			chance: 100,
+			boosts: {
+				accuracy: -1
+			}
+		}
+	},
 	iceshard: {
 		inherit: true,
 		onBasePower: function(power, user) {
@@ -1196,28 +1224,6 @@ exports.BattleMovedex = {
 					return illusionMove.category !== 'Status';
 				}, this);
 				if (illusionMoves.length) move.name = this.getMove(illusionMoves.sample()).name;
-			}
-		}
-	},
-	octazooka: {
-		inherit: true,
-		basePower: 75,
-		accuracy: 90,
-		secondary: {
-			chance: 100,
-			boosts: {
-				accuracy: -1
-			}
-		}
-	},
-	leaftornado: {
-		inherit: true,
-		basePower: 75,
-		accuracy: 90,
-		secondary: {
-			chance: 100,
-			boosts: {
-				accuracy: -1
 			}
 		}
 	},

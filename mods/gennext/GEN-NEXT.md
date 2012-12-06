@@ -152,6 +152,10 @@ New mechanic: Signature Pokemon:
 
   - Kyurem: Glaciate (80 base power, 100% accuracy)
 
+  - Octillery: Octazooka (75 base power, 90% accuracy, 100% -1 accuracy)
+
+  - Serperior: Leaf Tornado (75 base power, 90% accuracy, 100% -1 accuracy)
+
   - Weavile: Ice Shard
 
   - Sharpedo: Aqua Jet
@@ -193,8 +197,6 @@ Minor move changes:
 
 - Drill Peck, Needle Arm, Attack Order, Leaf Blade, and Crabhammers's Base
   Powers are now 100
-
-- Octazooka and Leaf Tornado are now 75 base power and 90% -accuracy
 
 - Muddy Water is now 85 base power and 100% accurate
 
