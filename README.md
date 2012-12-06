@@ -58,6 +58,6 @@ Developers
 
 Contributors
 
+- [The Immortal]
 - [Marty-D]
 - Cody Thompson [Rising_Dusk]
-- [The Immortal]
