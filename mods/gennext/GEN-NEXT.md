@@ -230,8 +230,6 @@ Minor learnset changes:
 - Bug/Flying Quiver Dancers (Butterfree, Beautifly, Masquerain, Mothim) get
   Hurricane
 
-- Aerodactyl gets Brave Bird
-
 - Shuckle gets Leech Seed
 
 - Roserade gets Sludge

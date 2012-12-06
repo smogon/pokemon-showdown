@@ -66,7 +66,7 @@ exports.BattleAbilities = {
 		onImmunity: function(type, pokemon) {
 			if (type === 'hail') return false;
 		},
-		onWeather: function(target, source, effect) {
+		onResidual: function(target, source, effect) {
 			this.heal(target.maxhp/16);
 		},
 		onAfterDamage: function(damage, target, source, move) {
