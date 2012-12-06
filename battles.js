@@ -1014,7 +1014,7 @@ function BattleSide(name, battle, n, team) {
 				condition: pokemon.getHealth(true),
 				active: (pokemon.position < pokemon.side.active.length),
 				moves: pokemon.moves,
-				ability: pokemon.ability,
+				baseAbility: pokemon.baseAbility,
 				item: pokemon.item
 			});
 		}
