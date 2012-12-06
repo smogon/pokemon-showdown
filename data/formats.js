@@ -50,7 +50,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Snow Cloak', 'Sand Veil']
 	},
 	// oususpecttest: {
 	// 	effectType: 'Format',
@@ -92,7 +92,7 @@ exports.BattleFormats = {
 		// challengeShow: true,
 		// searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers', 'Evasion Moves Clause'],
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers', 'Evasion Clause'],
 		banlist: []
 	},
 	uberssuspecttest: {
@@ -170,14 +170,14 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview', 'Little Cup', 'Evasion Moves Clause'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
 	},
 	lcubers: {
 		effectType: 'Format',
 		name: "LC Ubers",
 		challengeShow: true,
-		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview', 'Little Cup', 'Evasion Moves Clause'],
+		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview', 'Little Cup', 'Evasion Clause'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Soul Dew']
 	},
 	lcuu: {
@@ -555,18 +555,10 @@ exports.BattleFormats = {
 			return problems;
 		}
 	},
-	evasionmovesclause: {
-		effectType: 'Banlist',
-		name: 'Evasion Moves Clause',
-		banlist: ['Minimize', 'Double Team'],
-		onStart: function() {
-			this.add('rule', 'Evasion Moves Clause');
-		}
-	},
 	evasionclause: {
 		effectType: 'Banlist',
 		name: 'Evasion Clause',
-		banlist: ['Minimize', 'Double Team', 'Sand Veil', 'Snow Cloak'],
+		banlist: ['Minimize', 'Double Team'],
 		onStart: function() {
 			this.add('rule', 'Evasion Clause');
 		}
