@@ -977,7 +977,19 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'</div>');
 		return false;
 		break;
-
+		
+	case 'calc':
+	case '!calc':
+	case 'calculator':
+	case '!calculator':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd , room , socket,
+			'<div style="border:1px solid #6688AA;padding:2px 4px">Pokemon Showdown! damage calculator. (Courtesy of Honko)<br />' +
+			'- <a href="http://pokemonshowdown.com/damagecalc/" target="_blank">Damage Calculator</a><br />' +
+			'</div>');
+		return false;
+		break;
+	
 	case 'cap':
 	case '!cap':
 		showOrBroadcastStart(user, cmd, room, socket, message);
