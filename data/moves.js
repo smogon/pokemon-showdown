@@ -389,7 +389,8 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isSnatchable: true,
-		onHitSide: function(side, source) {
+		onHit: function(pokemon, source) {
+			var side = pokemon.side;
 			for (var i=0; i<side.pokemon.length; i++) {
 				side.pokemon[i].status = '';
 			}
@@ -4909,7 +4910,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		isSoundBased: true, // though it isn't affected by Soundproof
-		onHitSide: function(side, source) {
+		onHit: function(pokemon, source) {
+			var side = pokemon.side;
 			for (var i=0; i<side.pokemon.length; i++) {
 				side.pokemon[i].status = '';
 			}
