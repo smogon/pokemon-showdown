@@ -32,7 +32,7 @@ exports.BattleMovedex = {
 				spd: -1
 			}
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Poison"
 	},
 	"acidarmor": {
@@ -129,7 +129,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "ally",
+		target: "adjacentAllyOrSelf",
 		type: "Normal"
 	},
 	"aerialace": {
@@ -216,7 +216,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		critRatio: 2,
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Flying"
 	},
 	"airslash": {
@@ -396,7 +396,7 @@ exports.BattleMovedex = {
 			this.add('-cureteam',source,'[from] move: Aromatherapy');
 		},
 		secondary: false,
-		target: "allySide",
+		target: "allyTeam",
 		type: "Grass"
 	},
 	"assist": {
@@ -927,7 +927,7 @@ exports.BattleMovedex = {
 			chance: 10,
 			status: 'frz'
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Ice"
 	},
 	"block": {
@@ -1193,7 +1193,7 @@ exports.BattleMovedex = {
 				spe: -1
 			}
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Water"
 	},
 	"bubblebeam": {
@@ -1299,7 +1299,7 @@ exports.BattleMovedex = {
 				spe: -1
 			}
 		},
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Ground"
 	},
 	"bulletpunch": {
@@ -1405,7 +1405,7 @@ exports.BattleMovedex = {
 			spa: -2
 		},
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Normal"
 	},
 	"charge": {
@@ -1919,7 +1919,7 @@ exports.BattleMovedex = {
 		priority: -5,
 		isContact: true,
 		secondary: false,
-		target: "normal",
+		target: "scripted",
 		type: "Fighting"
 	},
 	"covet": {
@@ -2109,7 +2109,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "anyFoe",
+		target: "normal",
 		type: "Ghost"
 	},
 	"cut": {
@@ -2161,7 +2161,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		status: 'slp',
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Dark"
 	},
 	"defendorder": {
@@ -2426,7 +2426,7 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'par'
 		},
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Electric"
 	},
 	"dive": {
@@ -2915,7 +2915,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		secondary: false,
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Ground"
 	},
 	"echoedvoice": {
@@ -3022,7 +3022,7 @@ exports.BattleMovedex = {
 				spe: -1
 			}
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Electric"
 	},
 	"embargo": {
@@ -3278,7 +3278,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Fire"
 	},
 	"explosion": {
@@ -3294,7 +3294,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		selfdestruct: true,
 		secondary: false,
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Normal"
 	},
 	"extrasensory": {
@@ -4418,7 +4418,7 @@ exports.BattleMovedex = {
 				spe: -1
 			}
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Ice"
 	},
 	"glare": {
@@ -4573,7 +4573,7 @@ exports.BattleMovedex = {
 			atk: -1
 		},
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Normal"
 	},
 	"growth": {
@@ -4916,7 +4916,7 @@ exports.BattleMovedex = {
 			this.add('-cureteam', source, '[from] move: HealBell');
 		},
 		secondary: false,
-		target: "allySide",
+		target: "allyTeam",
 		type: "Normal"
 	},
 	"healblock": {
@@ -4950,7 +4950,7 @@ exports.BattleMovedex = {
 			onTryHeal: false
 		},
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Psychic"
 	},
 	"healorder": {
@@ -5127,7 +5127,7 @@ exports.BattleMovedex = {
 			chance: 10,
 			status: 'brn'
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Fire"
 	},
 	"heavyslam": {
@@ -5177,7 +5177,7 @@ exports.BattleMovedex = {
 		priority: 5,
 		isNotProtectable: true,
 		secondary: false,
-		target: "ally",
+		target: "adjacentAlly",
 		type: "Normal"
 	},
 	"hex": {
@@ -5671,7 +5671,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSoundBased: true,
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Normal"
 	},
 	"hypnosis": {
@@ -5914,7 +5914,7 @@ exports.BattleMovedex = {
 				spe: -1
 			}
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Ice"
 	},
 	"imprison": {
@@ -5969,7 +5969,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Fire"
 	},
 	"inferno": {
@@ -6226,7 +6226,7 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'brn'
 		},
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Fire"
 	},
 	"leafblade": {
@@ -6362,7 +6362,7 @@ exports.BattleMovedex = {
 			def: -1
 		},
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Normal"
 	},
 	"lick": {
@@ -6424,7 +6424,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "allies",
+		target: "allySide",
 		type: "Psychic"
 	},
 	"lockon": {
@@ -6550,7 +6550,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "allies",
+		target: "allySide",
 		type: "Normal"
 	},
 	"lunardance": {
@@ -6837,7 +6837,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		secondary: false,
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Ground"
 	},
 	"mefirst": {
@@ -6871,7 +6871,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Normal"
 	},
 	"meanlook": {
@@ -7022,7 +7022,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		secondary: false,
-		target: "normal",
+		target: "scripted",
 		type: "Steel"
 	},
 	"metalclaw": {
@@ -7261,7 +7261,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -5,
 		secondary: false,
-		target: "normal",
+		target: "scripted",
 		type: "Psychic"
 	},
 	"mirrormove": {
@@ -7343,7 +7343,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "allies",
+		target: "allySide",
 		type: "Ice"
 	},
 	"mistball": {
@@ -7516,7 +7516,7 @@ exports.BattleMovedex = {
 				accuracy: -1
 			}
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Water"
 	},
 	"nastyplot": {
@@ -7783,7 +7783,7 @@ exports.BattleMovedex = {
 			volatileStatus: 'lockedmove'
 		},
 		secondary: false,
-		target: "normal",
+		target: "randomNormal",
 		type: "Dragon"
 	},
 	"overheat": {
@@ -7943,7 +7943,7 @@ exports.BattleMovedex = {
 			volatileStatus: 'lockedmove'
 		},
 		secondary: false,
-		target: "normal",
+		target: "randomNormal",
 		type: "Grass"
 	},
 	"pinmissile": {
@@ -8017,7 +8017,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		status: 'psn',
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Poison"
 	},
 	"poisonjab": {
@@ -8126,7 +8126,7 @@ exports.BattleMovedex = {
 			chance: 10,
 			status: 'frz'
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Ice"
 	},
 	"powergem": {
@@ -8777,7 +8777,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		critRatio: 2,
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Grass"
 	},
 	"razorshell": {
@@ -8832,7 +8832,7 @@ exports.BattleMovedex = {
 		},
 		critRatio: 2,
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Normal"
 	},
 	"recover": {
@@ -8914,7 +8914,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "allies",
+		target: "allySide",
 		type: "Psychic"
 	},
 	"reflecttype": {
@@ -8998,7 +8998,7 @@ exports.BattleMovedex = {
 			// renderer takes care of this for us
 			pokemon.transformed = false;
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Normal"
 	},
 	"rest": {
@@ -9230,7 +9230,7 @@ exports.BattleMovedex = {
 			chance: 30,
 			volatileStatus: 'flinch'
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Rock"
 	},
 	"rocksmash": {
@@ -9544,7 +9544,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "allies",
+		target: "allySide",
 		type: "Normal"
 	},
 	"sandattack": {
@@ -9686,7 +9686,7 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'brn'
 		},
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Fire"
 	},
 	"secretpower": {
@@ -9794,7 +9794,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		selfdestruct: true,
 		secondary: false,
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Normal"
 	},
 	"shadowball": {
@@ -10496,7 +10496,7 @@ exports.BattleMovedex = {
 			chance: 10,
 			status: 'psn'
 		},
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Poison"
 	},
 	"smackdown": {
@@ -10610,7 +10610,7 @@ exports.BattleMovedex = {
 				spa: -1
 			}
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Dark"
 	},
 	"snatch": {
@@ -11193,7 +11193,7 @@ exports.BattleMovedex = {
 			spe: -1
 		},
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Bug"
 	},
 	"struggle": {
@@ -11241,7 +11241,7 @@ exports.BattleMovedex = {
 				spa: -1
 			}
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Bug"
 	},
 	"stunspore": {
@@ -11470,7 +11470,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		secondary: false,
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Water"
 	},
 	"swagger": {
@@ -11547,7 +11547,7 @@ exports.BattleMovedex = {
 			evasion: -1
 		},
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Normal"
 	},
 	"swift": {
@@ -11562,7 +11562,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Normal"
 	},
 	"switcheroo": {
@@ -11634,7 +11634,7 @@ exports.BattleMovedex = {
 			return target.hasType(source.types);
 		},
 		secondary: false,
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Psychic"
 	},
 	"synthesis": {
@@ -11728,7 +11728,7 @@ exports.BattleMovedex = {
 			def: -1
 		},
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Normal"
 	},
 	"tailwind": {
@@ -11766,7 +11766,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "allies",
+		target: "allySide",
 		type: "Flying"
 	},
 	"takedown": {
@@ -11864,7 +11864,7 @@ exports.BattleMovedex = {
 		isBounceable: false,
 		volatileStatus: 'confusion',
 		secondary: false,
-		target: "adjacent",
+		target: "allAdjacent",
 		type: "Normal"
 	},
 	"telekinesis": {
@@ -11964,7 +11964,7 @@ exports.BattleMovedex = {
 			volatileStatus: 'lockedmove'
 		},
 		secondary: false,
-		target: "normal",
+		target: "randomNormal",
 		type: "Normal"
 	},
 	"thunder": {
@@ -12428,7 +12428,7 @@ exports.BattleMovedex = {
 			chance: 20,
 			volatileStatus: 'flinch'
 		},
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Dragon"
 	},
 	"uturn": {
@@ -12462,7 +12462,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSoundBased: true,
 		secondary: false,
-		target: "normal",
+		target: "randomNormal",
 		type: "Normal"
 	},
 	"vcreate": {
@@ -12727,7 +12727,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		secondary: false,
-		target: "foes",
+		target: "allAdjacentFoes",
 		type: "Water"
 	},
 	"waterfall": {
@@ -12832,7 +12832,7 @@ exports.BattleMovedex = {
 		priority: 3,
 		isSnatchable: true,
 		secondary: false,
-		target: "normal",
+		target: "allySide",
 		type: "Rock"
 	},
 	"wildcharge": {
