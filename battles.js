@@ -2275,7 +2275,7 @@ function Battle(roomid, format, rated) {
 	};
 	this.resolveTarget = function(pokemon, move) {
 		move = selfB.getMove(move);
-		if (move.target === 'self' || move.target === 'all' || move.target === 'allies' || move.target === 'allySide' || move.target === 'ally') {
+		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' || move.target === 'allyTeam' || move.target === 'adjacentAlly' || move.target === 'adjacentAllyOrSelf') {
 			return pokemon;
 		}
 		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
