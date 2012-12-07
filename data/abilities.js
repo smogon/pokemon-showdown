@@ -351,7 +351,7 @@ exports.BattleAbilities = {
 			}
 		},
 		name: "Damp",
-		rating: 1,
+		rating: 0.5,
 		num: 6
 	},
 	"defeatist": {
@@ -463,7 +463,7 @@ exports.BattleAbilities = {
 		},
 		id: "dryskin",
 		name: "Dry Skin",
-		rating: 3,
+		rating: 3.5,
 		num: 87
 	},
 	"earlybird": {
@@ -812,7 +812,7 @@ exports.BattleAbilities = {
 		},
 		id: "hypercutter",
 		name: "Hyper Cutter",
-		rating: 2,
+		rating: 1.5,
 		num: 52
 	},
 	"icebody": {
@@ -1066,7 +1066,7 @@ exports.BattleAbilities = {
 		},
 		id: "lightningrod",
 		name: "Lightningrod",
-		rating: 3,
+		rating: 3.5,
 		num: 32
 	},
 	"limber": {
@@ -1351,7 +1351,7 @@ exports.BattleAbilities = {
 		},
 		id: "noguard",
 		name: "No Guard",
-		rating: 4.1,
+		rating: 4.5,
 		num: 99
 	},
 	"normalize": {
@@ -1669,7 +1669,7 @@ exports.BattleAbilities = {
 		},
 		id: "rockhead",
 		name: "Rock Head",
-		rating: 3.5,
+		rating: 3,
 		num: 69
 	},
 	"roughskin": {
@@ -1769,7 +1769,7 @@ exports.BattleAbilities = {
 		},
 		id: "sapsipper",
 		name: "Sap Sipper",
-		rating: 3,
+		rating: 3.5,
 		num: 157
 	},
 	"scrappy": {
@@ -1829,7 +1829,7 @@ exports.BattleAbilities = {
 		},
 		id: "shedskin",
 		name: "Shed Skin",
-		rating: 3,
+		rating: 4,
 		num: 61
 	},
 	"sheerforce": {
@@ -2101,7 +2101,7 @@ exports.BattleAbilities = {
 		},
 		id: "stormdrain",
 		name: "Storm Drain",
-		rating: 3,
+		rating: 3.5,
 		num: 114
 	},
 	"sturdy": {
@@ -2129,7 +2129,7 @@ exports.BattleAbilities = {
 		onDragOut: false,
 		id: "suctioncups",
 		name: "Suction Cups",
-		rating: 3,
+		rating: 2.5,
 		num: 21
 	},
 	"superluck": {
@@ -2435,7 +2435,7 @@ exports.BattleAbilities = {
 		},
 		id: "vitalspirit",
 		name: "Vital Spirit",
-		rating: 1,
+		rating: 2,
 		num: 72
 	},
 	"voltabsorb": {
@@ -2450,7 +2450,7 @@ exports.BattleAbilities = {
 		},
 		id: "voltabsorb",
 		name: "Volt Absorb",
-		rating: 3,
+		rating: 3.5,
 		num: 10
 	},
 	"waterabsorb": {
@@ -2465,7 +2465,7 @@ exports.BattleAbilities = {
 		},
 		id: "waterabsorb",
 		name: "Water Absorb",
-		rating: 3,
+		rating: 3.5,
 		num: 11
 	},
 	"waterveil": {
