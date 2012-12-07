@@ -536,4 +536,4 @@ catch (err) {
 	process.exit(1);
 }
 
-console.log("Test your server at http://psim.tk/~~localhost:"+config.port);
+console.log("Test your server at http://play.pokemonshowdown.com/~~localhost:"+config.port);
