@@ -509,7 +509,8 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":10,"gender":"M","moves":["scratch","growl","bite"]},
 			{"generation":3,"level":22,"moves":["sing","slash","payday","bite"]},
 			{"generation":4,"level":21,"gender":"F","nature":"Jolly","abilities":["pickup"],"moves":["bite","fakeout","furyswipes","screech"]},
-			{"generation":4,"level":10,"gender":"M","nature":"Jolly","abilities":["pickup"],"moves":["fakeout","payday","assist","scratch"]}
+			{"generation":4,"level":10,"gender":"M","nature":"Jolly","abilities":["pickup"],"moves":["fakeout","payday","assist","scratch"]},
+			{"generation":5,"level":15,"gender":"M","isDW":false,"abilities":["pickup"],"moves":["furyswipes","sing","nastyplot","snatch"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
