@@ -1304,7 +1304,7 @@ function Battle(roomid, format, rated) {
 		b.priority = b.priority || 0;
 		b.subPriority = b.subPriority || 0;
 		b.speed = b.speed || 0;
-		if (typeof a.order === 'number' || typeof b.order === 'number') {
+		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
 			if (typeof a.order !== 'number') {
 				return -(1);
 			}
