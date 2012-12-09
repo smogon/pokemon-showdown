@@ -107,7 +107,7 @@ exports.BattleScripts = {
 		if (target.fainted && !canTargetFainted[move.target]) {
 			this.add('-notarget');
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
-			if (move.selfdestruct && move.target === 'adjacent') {
+			if (move.selfdestruct && move.target === 'allAdjacent') {
 				this.faint(pokemon, pokemon, move);
 			}
 			return true;
@@ -117,7 +117,7 @@ exports.BattleScripts = {
 		}
 		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
-			if (move.selfdestruct && move.target === 'adjacent') {
+			if (move.selfdestruct && move.target === 'allAdjacent') {
 				this.faint(pokemon, pokemon, move);
 			}
 			return true;
@@ -125,7 +125,7 @@ exports.BattleScripts = {
 		if (missed) {
 			this.add('-miss', pokemon);
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
-			if (move.selfdestruct && move.target === 'adjacent') {
+			if (move.selfdestruct && move.target === 'allAdjacent') {
 				this.faint(pokemon, pokemon, move);
 			}
 			return true;
