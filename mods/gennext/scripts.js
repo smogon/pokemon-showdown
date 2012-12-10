@@ -1,5 +1,7 @@
 exports.BattleScripts = {
 	init: function() {
+		this.data.Pokedex.cherrimsunshine.types = ['Grass', 'Fire'];
+
 		// Give Hurricane to all the Bug/Flying Quiver-dancers
 		// Precedent: Volcarona
 		this.data.Learnsets.masquerain.learnset.hurricane = ['5L100'];

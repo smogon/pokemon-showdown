@@ -738,10 +738,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: true
 	},
-	doublehit: {
-		inherit: true,
-		accuracy: true
-	},
 	doublekick: {
 		inherit: true,
 		accuracy: true
@@ -1207,6 +1203,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 100,
 		accuracy: 100
+	},
+	doublehit: {
+		inherit: true,
+		basePower: 40,
+		accuracy: true
 	},
 	autotomize: {
 		inherit: true,

@@ -56,9 +56,9 @@ exports.BattleAbilities = {
 		},
 		onSourceBasePower: function(basePower) {
 			if (this.isWeather('hail')) {
-				return basePower * 2/3;
+				return basePower * 3/4;
 			}
-			return basePower * 4/5;
+			return basePower * 7/8;
 		}
 	},
 	"icebody": {
@@ -300,6 +300,38 @@ exports.BattleAbilities = {
 		onFaint: function(target, source, effect) {
 			if (effect && effect.effectType === 'Move' && source) {
 				this.damage(source.maxhp/3, source, target);
+			}
+		}
+	},
+	"guts": {
+		inherit: true,
+		onDamage: function(damage, attacker, defender, effect) {
+			if (effect && (effect.id === 'brn' || effect.id === 'psn' || effect.id === 'tox')) {
+				return damage / 2;
+			}
+		}
+	},
+	"quickfeet": {
+		inherit: true,
+		onDamage: function(damage, attacker, defender, effect) {
+			if (effect && (effect.id === 'brn' || effect.id === 'psn' || effect.id === 'tox')) {
+				return damage / 2;
+			}
+		}
+	},
+	"toxicboost": {
+		inherit: true,
+		onDamage: function(damage, attacker, defender, effect) {
+			if (effect && (effect.id === 'psn' || effect.id === 'tox')) {
+				return damage / 2;
+			}
+		}
+	},
+	"flareboost": {
+		inherit: true,
+		onDamage: function(damage, attacker, defender, effect) {
+			if (effect && (effect.id === 'brn')) {
+				return damage / 2;
 			}
 		}
 	},

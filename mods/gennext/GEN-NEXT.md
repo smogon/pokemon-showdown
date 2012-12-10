@@ -29,6 +29,13 @@ NEXT's "don't change" list. The result is a metagame that feels a lot like
 a new generation: existing OU threats stay mostly the same, but many new
 threats and strategies are introduced.
 
+Recent changes
+------------------------------------------------------------------------
+
+A changelog for NEXT is available here:
+
+https://github.com/Zarel/Pokemon-Showdown/commits/master/mods/gennext
+
 Changes
 ------------------------------------------------------------------------
 
@@ -55,13 +62,16 @@ Major changes:
   Dance.
 
 - Weather-inducing abilities now last for only 5 turns (or 8 with the right
-  item). Weather moves have +1 priority. Forecast and Flower Gift will make
-  weather moves last forever.
+  item). Weather moves have +1 priority.
+
+- Forecast will make weather moves last forever. Cherrim will make Sunny Day
+  last forever. Phione will make Rain Dance last forever. Cryogonal will make
+  Hail last forever. Probopass will make Sandstorm last forever.
 
 - Hail is improved:
   - Silver Wind, Ominous Wind, and Avalanche deal 1.5x as much damage in Hail
-  - Snow Cloak no longer modifies evasion, but instead decreases damage by 33%
-    in Hail (and 20% out of Hail)
+  - Snow Cloak no longer modifies evasion, but instead decreases damage by 25%
+    in Hail (and 12.5% out of Hail)
   - Ice Body has 30% chance of freezing a contact move (and grants passive
     healing out of Hail, too)
   - Thick Fat grants immunity to Hail damage  
@@ -164,6 +174,19 @@ New mechanic: Signature Pokemon:
 
   - Banette: Shadow Sneak
 
+New mechanic: Intrinsics:
+
+- Pokemon that previously get Levitate are now immune to Ground intrinsically.
+  Instead, they get new abilities in addition to their Ground immunity:
+
+  - Unown: Adaptability
+
+  - Bronzong: Heatproof
+
+  - Flygon: Compoundeyes
+
+  - Weezing: Aftermath
+
 Minor move changes:
 
 - all 95%-accurate moves, as well as Charge Beam and Rock Slide, are now 100%
@@ -223,6 +246,8 @@ Minor move changes:
 - Protect does not protect Substitutes (with passive healing being more
   common, Sub/Protect stalling could be overpowered)
 
+- Double Hit is now 40 base power
+
 Minor learnset changes:
 
 - Masquerain gets Surf
@@ -273,6 +298,10 @@ Minor ability changes:
 
 - Aftermath no longer requires contact, and its damage is buffed to 1/3 of the
   foe's max HP
+
+- Guts, Quick Feet, and Toxic Boost take half damage from poisoning
+
+- Guts, Quick Feet, and Flare Boost take half damage from burns
 
 Minor item changes:
 

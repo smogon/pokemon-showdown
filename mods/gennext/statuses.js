@@ -49,5 +49,99 @@ exports.BattleStatuses = {
 				this.changeDecision(pokemon, {move: pokemon.lastMove});
 			}
 		}
+	},
+
+
+	// intrinsics!
+
+	unown: {
+		// Unown: Adaptability
+		onImmunity: function(type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function(pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'adaptability';
+				pokemon.baseAbility = 'adaptability';
+			}
+		}
+	},
+	bronzong: {
+		// Bronzong: Heatproof
+		onImmunity: function(type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function(pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'heatproof';
+				pokemon.baseAbility = 'heatproof';
+			}
+		}
+	},
+	weezing: {
+		// Weezing: Aftermath
+		onImmunity: function(type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function(pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'aftermath';
+				pokemon.baseAbility = 'aftermath';
+			}
+		}
+	},
+	flygon: {
+		// Flygon: Compoundeyes
+		onImmunity: function(type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function(pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'compoundeyes';
+				pokemon.baseAbility = 'compoundeyes';
+			}
+		}
+	},
+	cryogonal: {
+		// Cryogonal: infinite hail
+		onModifyMove: function(move) {
+			if (move.id === 'hail') {
+				var weather = move.weather;
+				move.weather = null;
+				move.onHit = function(target, source) {
+					this.setWeather(weather, source, this.getAbility('snowwarning'));
+					this.weatherData.duration = 0;
+				};
+				move.target = 'self';
+			}
+		}
+	},
+	probopass: {
+		// Cryogonal: infinite hail
+		onModifyMove: function(move) {
+			if (move.id === 'sandstorm') {
+				var weather = move.weather;
+				move.weather = null;
+				move.onHit = function(target, source) {
+					this.setWeather(weather, source, this.getAbility('sandstream'));
+					this.weatherData.duration = 0;
+				};
+				move.target = 'self';
+			}
+		}
+	},
+	phione: {
+		// Phione: infinite rain
+		onModifyMove: function(move) {
+			if (move.id === 'raindance') {
+				var weather = move.weather;
+				move.weather = null;
+				move.onHit = function(target, source) {
+					this.setWeather(weather, source, this.getAbility('drizzle'));
+					this.weatherData.duration = 0;
+				};
+				move.target = 'self';
+			}
+		}
 	}
 };
