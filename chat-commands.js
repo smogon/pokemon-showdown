@@ -1630,7 +1630,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === '@' || target === 'modlog') {
 			matched = true;
-			emit(socket, 'console', '/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: % @ & ~');
+			emit(socket, 'console', '/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: @ & ~');
 		}
 		if (target === '%' || target === 'mute' || target === 'm') {
 			matched = true;
@@ -1658,8 +1658,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === '&' || target === 'forcerenameto' || target === 'frt') {
 			matched = true;
-			emit(socket, 'console', '/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: @ & ~');
-			emit(socket, 'console', '/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: @ & ~');
+			emit(socket, 'console', '/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: & ~');
+			emit(socket, 'console', '/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: & ~');
 		}
 		if (target === '&' || target === 'forcetie') {
 			matched === true;
