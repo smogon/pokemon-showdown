@@ -1652,7 +1652,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched === true;
 			emit(socket, 'console', '/namelock OR /nl [username] - Disallowes the used from changing their names');
 		}
-		if (target === '@' || target === 'forcerenameto' || target === 'frt') {
+		if (target === '&' || target === 'forcerenameto' || target === 'frt') {
 			matched = true;
 			emit(socket, 'console', '/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: @ & ~');
 			emit(socket, 'console', '/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: @ & ~');
