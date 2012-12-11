@@ -1650,7 +1650,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === '&' || target === 'namelock' || target === 'nl') {
 			matched === true;
-			emit(socket, 'console', '/namelock OR /nl [username] - Disallowes the used from changing their names');
+			emit(socket, 'console', '/namelock OR /nl [username] - Disallowes the used from changing their names. Requires: & ~');
+		}
+		if (target === '&' || target === 'unnamelock') {
+			matched === true;
+			emit(socket, 'console', '/unnamelock - Removes name lock from user. Requres: & ~');
 		}
 		if (target === '&' || target === 'forcerenameto' || target === 'frt') {
 			matched = true;
