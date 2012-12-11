@@ -1628,7 +1628,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/unbanall - Unban all IP addresses. Requires: @ & ~');
 		}
-		if (target === '%' || target === 'modlog') {
+		if (target === '@' || target === 'modlog') {
 			matched = true;
 			emit(socket, 'console', '/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: % @ & ~');
 		}
