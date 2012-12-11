@@ -1591,6 +1591,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.')
 			emit(socket, 'console', '!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ & ~')
 		}
+		if (target === 'all' || target === 'calc' || target === 'caclulator') {
+			matched = true;
+			emit(socket, 'console', '/calc - Provides a link to a damage calculator');
+			emit(socket, 'console', '!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~');
+		}
 		if (target === '@' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
 			emit(socket, 'console', '/alts OR /altcheck OR /alt OR /getalts [username] - Get a user\'s alts. Requires: @ & ~');
@@ -1598,11 +1603,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === '@' || target === 'forcerename' || target === 'fr') {
 			matched = true;
 			emit(socket, 'console', '/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: @ & ~');
-		}
-		if (target === '@' || target === 'forcerenameto' || target === 'frt') {
-			matched = true;
-			emit(socket, 'console', '/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: @ & ~');
-			emit(socket, 'console', '/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: @ & ~');
 		}
 		if (target === '@' || target === 'ban' || target === 'b') {
 			matched = true;
@@ -1628,6 +1628,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/unbanall - Unban all IP addresses. Requires: @ & ~');
 		}
+		if (target === '@' || target === 'modlog') {
+			matched = true;
+			emit(socket, 'console', '/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: @ & ~');
+		}
 		if (target === '%' || target === 'mute' || target === 'm') {
 			matched = true;
 			emit(socket, 'console', '/mute OR /m [username], [reason] - Mute user with reason. Requires: % @ & ~');
@@ -1636,10 +1640,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/unmute [username] - Remove mute from user. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'modlog') {
-			matched = true;
-			emit(socket, 'console', '/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: % @ & ~');
-		}
 		if (target === '&' || target === 'promote') {
 			matched = true;
 			emit(socket, 'console', '/promote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: & ~');
@@ -1647,6 +1647,23 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === '&' || target === 'demote') {
 			matched = true;
 			emit(socket, 'console', '/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: & ~');
+		}
+		if (target === '&' || target === 'namelock' || target === 'nl') {
+			matched === true;
+			emit(socket, 'console', '/namelock OR /nl [username] - Disallowes the used from changing their names. Requires: & ~');
+		}
+		if (target === '&' || target === 'unnamelock') {
+			matched === true;
+			emit(socket, 'console', '/unnamelock - Removes name lock from user. Requres: & ~');
+		}
+		if (target === '&' || target === 'forcerenameto' || target === 'frt') {
+			matched = true;
+			emit(socket, 'console', '/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: & ~');
+			emit(socket, 'console', '/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: & ~');
+		}
+		if (target === '&' || target === 'forcetie') {
+			matched === true;
+			emit(socket, 'console', '/forcetie - Forces the current match to tie. Requires: & ~');
 		}
 		if (target === '&' || target === 'declare' ) {
 			matched = true;
@@ -1673,12 +1690,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (!target) {
 			emit(socket, 'console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
-			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /tiers, /intro, /learn, /analysis (replace / with ! to broadcast)');
+			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /tiers, /intro, /learn, /analysis (replace / with ! to broadcast. (Requires: + % @ & ~))');
 			emit(socket, 'console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
-				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /forcerename, /modlog, /announce')
-				emit(socket, 'console', 'MODERATOR COMMANDS: /alts, /forcerenameto, /ban, /unban, /unbanall, /potd, /namelock, /nameunlock, /ip, /redirect, /kick');
-				emit(socket, 'console', 'LEADER COMMANDS: /promote, /demote, /forcewin, /declare');
+				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /announce')
+				emit(socket, 'console', 'MODERATOR COMMANDS: /alts, /forcerename, /ban, /unban, /unbanall, /ip, /modlog, /redirect, /kick');
+				emit(socket, 'console', 'LEADER COMMANDS: /promote, /demote, /forcerenameto, /namelock, /nameunlock, /forcewin, /forcetie, /declare');
 				emit(socket, 'console', 'For details on all moderator commands, use /help @');
 			}
 			emit(socket, 'console', 'For details of a specific command, use something like: /help data');
