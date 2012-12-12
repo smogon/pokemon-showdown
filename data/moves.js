@@ -4020,6 +4020,16 @@ exports.BattleMovedex = {
 		name: "Follow Me",
 		pp: 20,
 		priority: 3,
+		onHit: function(target, source) {
+			source.side.foe.active.forEach(function(target) {
+				if (!target) return;
+				var decision = this.willMove(target);
+				if (!decision) return;
+				if (decision.targetLoc > 0 && this.validTargetLoc(source.position+1, target, this.getMove(decision.move).target)) {
+					decision.targetLoc = source.position+1;
+				}
+			}.bind(this));
+		},
 		secondary: false,
 		target: "self",
 		type: "Normal"
@@ -8706,6 +8716,16 @@ exports.BattleMovedex = {
 		name: "Rage Powder",
 		pp: 20,
 		priority: 3,
+		onHit: function(target, source) {
+			source.side.foe.active.forEach(function(target) {
+				if (!target) return;
+				var decision = this.willMove(target);
+				if (!decision) return;
+				if (decision.targetLoc > 0 && this.validTargetLoc(source.position+1, target, this.getMove(decision.move).target)) {
+					decision.targetLoc = source.position+1;
+				}
+			}.bind(this));
+		},
 		secondary: false,
 		target: "self",
 		type: "Bug"

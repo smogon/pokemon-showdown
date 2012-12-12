@@ -1141,7 +1141,7 @@ function Battle(roomid, format, rated) {
 	this.eventDepth = 0;
 
 	this.toString = function() {
-		return 'Battle: '+selfS.format;
+		return 'Battle: '+selfB.format;
 	};
 
 	this.gameType = (format.gameType || 'singles');
@@ -2310,14 +2310,14 @@ function Battle(roomid, format, rated) {
 
 		return Math.floor(baseDamage);
 	};
-	this.validTargetLoc = function(targetLoc, user, targetType) {
-		var numSlots = user.side.active.length;
+	this.validTargetLoc = function(targetLoc, source, targetType) {
+		var numSlots = source.side.active.length;
 		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
 
-		var userLoc = -(user.position+1);
+		var sourceLoc = -(source.position+1);
 		var isFoe = (targetLoc > 0);
-		var isAdjacent = (isFoe ? Math.abs(-(numSlots+1-targetLoc)-userLoc)<=1 : Math.abs(targetLoc-userLoc)<=1);
-		var isSelf = (userLoc === targetLoc);
+		var isAdjacent = (isFoe ? Math.abs(-(numSlots+1-targetLoc)-sourceLoc)<=1 : Math.abs(targetLoc-sourceLoc)<=1);
+		var isSelf = (sourceLoc === targetLoc);
 
 		switch (targetType) {
 		case 'normal':
@@ -2332,6 +2332,15 @@ function Battle(roomid, format, rated) {
 			return !isSelf;
 		}
 		return false;
+	};
+	this.validTarget = function(target, source, targetType) {
+		var targetLoc;
+		if (target.side == source.side) {
+			targetLoc = -(target.position+1);
+		} else {
+			targetLoc = target.position+1;
+		}
+		return selfB.validTargetLocP(targetLoc, source, targetType);
 	};
 	this.getTarget = function(decision) {
 		var move = selfB.getMove(decision.move);
