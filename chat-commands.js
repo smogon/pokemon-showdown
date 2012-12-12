@@ -1636,6 +1636,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/mute OR /m [username], [reason] - Mute user with reason. Requires: % @ & ~');
 		}
+		if (target === '%' || target === 'ipmute') {
+			matched = true;
+			emit(socket, 'console','/ipmute [username] - Mutes a players IP adress. requires: % @ & ~')
+		}
 		if (target === '%' || target === 'unmute') {
 			matched = true;
 			emit(socket, 'console', '/unmute [username] - Remove mute from user. Requires: % @ & ~');
@@ -1693,7 +1697,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /tiers, /intro, /learn, /analysis (replace / with ! to broadcast. (Requires: + % @ & ~))');
 			emit(socket, 'console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
-				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /announce')
+				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /ipmute, /unmute, /announce')
 				emit(socket, 'console', 'MODERATOR COMMANDS: /alts, /forcerename, /ban, /unban, /unbanall, /ip, /modlog, /redirect, /kick');
 				emit(socket, 'console', 'LEADER COMMANDS: /promote, /demote, /forcerenameto, /namelock, /nameunlock, /forcewin, /forcetie, /declare');
 				emit(socket, 'console', 'For details on all moderator commands, use /help @');
