@@ -153,10 +153,6 @@ exports.BattleScripts = {
 			return true;
 		}
 
-		if (move.selfdestruct) {
-			this.faint(pokemon, pokemon, move);
-		}
-
 		if (!move.negateSecondary) {
 			this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
@@ -164,6 +160,10 @@ exports.BattleScripts = {
 		return true;
 	},
 	rollMoveHit: function(target, pokemon, move, spreadHit) {
+		if (move.selfdestruct && spreadHit) {
+			this.faint(pokemon, pokemon, move);
+		}
+
 		if (move.accuracy !== true && this.random(100) >= move.accuracy) {
 			if (!spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
@@ -205,11 +205,8 @@ exports.BattleScripts = {
 
 		if (!damage && damage !== 0) return false;
 
-		if (move.recoil && pokemon.lastDamage) {
-			this.damage(pokemon.lastDamage * move.recoil[0] / move.recoil[1], pokemon, target, 'recoil');
-		}
-		if (move.drain && pokemon.lastDamage) {
-			this.heal(Math.ceil(pokemon.lastDamage * move.drain[0] / move.drain[1]), pokemon, target, 'drain');
+		if (move.selfdestruct) {
+			this.faint(pokemon, pokemon, move);
 		}
 
 		if (!move.negateSecondary) {

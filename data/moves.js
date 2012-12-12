@@ -11333,13 +11333,17 @@ exports.BattleMovedex = {
 				source.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
 					target.removeVolatile('substitute');
-					this.runEvent('AfterSubDamage', target, source, move, damage);
-					return 0; // hit
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
-					this.runEvent('AfterSubDamage', target, source, move, damage);
-					return 0; // hit
 				}
+				if (move.recoil) {
+					this.damage(damage * move.recoil[0] / move.recoil[1], source, target, 'recoil');
+				}
+				if (move.drain) {
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				}
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return 0; // hit
 			},
 			onEnd: function(target) {
 				this.add('-end', target, 'Substitute');

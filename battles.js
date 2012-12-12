@@ -2061,6 +2061,14 @@ function Battle(roomid, format, rated) {
 			}
 			break;
 		}
+
+		if (effect.recoil && source) {
+			selfB.damage(damage * effect.recoil[0] / effect.recoil[1], source, target, 'recoil');
+		}
+		if (effect.drain && source) {
+			selfB.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
+		}
+
 		if (target.fainted) selfB.faint(target);
 		else {
 			damage = selfB.runEvent('AfterDamage', target, source, effect, damage);
