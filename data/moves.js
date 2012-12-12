@@ -2111,6 +2111,7 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "normal",
+		ghostTarget: "self",
 		type: "Ghost"
 	},
 	"cut": {
@@ -10897,11 +10898,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTryHit: function(target, pokemon) {
 			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
-		},
-		onMoveFail: function(pokemon) {
-			pokemon.removeVolatile('stockpile');
-		},
-		afterMoveCallback: function(pokemon) {
 			pokemon.removeVolatile('stockpile');
 		},
 		secondary: false,

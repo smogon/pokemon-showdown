@@ -324,24 +324,88 @@ exports.BattleFormats = {
 			set.moves = moves;
 		}
 	},
-	// doublesrandombattle: {
-	// 	effectType: 'Format',
-	// 	gameType: 'doubles',
-	// 	name: "Doubles Random Battle",
-	// 	team: 'random',
-	// 	canUseRandomTeam: true,
-	// 	rated: true,
-	// 	challengeShow: true,
-	// 	searchShow: true,
-	// 	ruleset: ['PotD', 'Pokemon']
-	// },
+	doublesrandombattledev: {
+		effectType: 'Format',
+		section: 'doubles (unfinished)',
+		gameType: 'doubles',
+		name: "Doubles Random Battle (dev)",
+		team: 'random',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		debug: true,
+		ruleset: ['PotD', 'Pokemon']
+	},
+	doublescustomgamedev: {
+		effectType: 'Format',
+		section: 'doubles (unfinished)',
+		gameType: 'doubles',
+		name: "Doubles Custom Game (dev)",
+		challengeShow: true,
+		canUseRandomTeam: true,
+		debug: true,
+		// no restrictions, for serious
+		ruleset: ['Team Preview']
+	},
+	doublesvgc2013dev: {
+		effectType: 'Format',
+		section: 'doubles (unfinished)',
+		gameType: 'doubles',
+		name: "Doubles VGC 2013 (dev)",
+		challengeShow: true,
+		canUseRandomTeam: true,
+		debug: true,
+		onBegin: function() {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		validateSet: function(set) {
+			if (!set.level || set.level > 50) {
+				set.level = 50;
+			}
+		},
+		// no restrictions, for serious
+		ruleset: ['Pokemon', 'VGC Team Preview', 'Species Clause'],
+		banlist: ['Unreleased', 'Illegal',
+			'Mewtwo', 
+			'Mew', 
+			'Lugia', 
+			'Ho-Oh', 
+			'Celebi', 
+			'Kyogre', 
+			'Groudon', 
+			'Rayquaza', 
+			'Jirachi', 
+			'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Deoxys-Defense',
+			'Chatot', 
+			'Dialga', 
+			'Palkia', 
+			'Giratina', 
+			'Phione', 
+			'Manaphy', 
+			'Darkrai', 
+			'Shaymin', 'Shaymin-Sky',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 
+			'Victini', 
+			'Reshiram', 
+			'Zekrom', 
+			'Kyurem', 
+			'Keldeo', 
+			'Meloetta', 
+			'Genesect',
+			'Sky Drop', 'Dark Void', 'Soul Dew'
+		]
+	},
 
 	// rules
 
 	standard: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Clause'],
-		banlist: ['Unreleased', 'Illegal'],
+		banlist: ['Unreleased', 'Illegal', 'Spikes + Sleep Powder + Roserade'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
 			var moves = [];
@@ -472,6 +536,21 @@ exports.BattleFormats = {
 			if (this.effect.onPotD) {
 				this.add('rule', 'Pokemon of the Day: '+this.effect.onPotD);
 			}
+		}
+	},
+	vgcteampreview: {
+		onStartPriority: -10,
+		onStart: function() {
+			this.add('clearpoke');
+			for (var i=0; i<this.sides[0].pokemon.length; i++) {
+				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+			}
+			for (var i=0; i<this.sides[1].pokemon.length; i++) {
+				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+			}
+		},
+		onTeamPreview: function() {
+			this.makeRequest('teampreview', 4);
 		}
 	},
 	teampreview: {
