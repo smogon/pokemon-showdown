@@ -1690,7 +1690,10 @@ function Battle(roomid, format, rated) {
 				return !a.fainted;
 			}
 			function shouldSwitch(a) {
-				if (!switchablesLeft) return false;
+				if (!switchablesLeft) {
+					a.switchFlag = false;
+					return false;
+				}
 				if (a.switchFlag) switchablesLeft--;
 				return !!a.switchFlag;
 			}
