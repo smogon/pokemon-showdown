@@ -8315,14 +8315,9 @@ exports.BattleMovedex = {
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
-					// Outrage counter is removed
-					if (source.volatiles['lockedmove'].duration === 1) {
-						source.removeVolatile('lockedmove');
-					} else {
-						delete source.volatiles['lockedmove'];
-					}
+					// Outrage counter is reset
+					source.volatiles['lockedmove'].duration = lockedmove.durationCallback();
 				}
-				this.singleEvent('MoveFail', move, null, target, source, move);
 				return null;
 			}
 		},
@@ -8655,7 +8650,6 @@ exports.BattleMovedex = {
 					// Outrage counter is reset
 					source.volatiles['lockedmove'].duration = lockedmove.durationCallback();
 				}
-				this.singleEvent('MoveFail', effect, null, target, source, effect);
 				return null;
 			}
 		},
@@ -12829,6 +12823,44 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		isSnatchable: true,
+		sideCondition: 'wideguard',
+		onTryHitSide: function(side, source) {
+			if (!this.willAct()) {
+				return false;
+			}
+			var counter = 1;
+			if (source.volatiles['stall']) {
+				counter = source.volatiles['stall'].counter || 1;
+			}
+			if (counter >= 256) {
+				return (this.random()*4294967296 < 1); // 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
+			}
+			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			return (this.random(counter) === 0);
+		},
+		onHitSide: function(side, source) {
+			source.addVolatile('stall');
+		},
+		effect: {
+			duration: 1,
+			onStart: function(target) {
+				this.add('-singleturn', target, 'Wide Guard');
+			},
+			onTryHitPriority: 1,
+			onTryHit: function(target, source, effect) {
+				// Wide Guard blocks spread moves
+				if (effect && (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes')) {
+					return;
+				}
+				this.add('-activate', target, 'Wide Guard');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					source.volatiles['lockedmove'].duration = lockedmove.durationCallback();
+				}
+				return null;
+			}
+		},
 		secondary: false,
 		target: "allySide",
 		type: "Rock"
