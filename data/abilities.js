@@ -1065,6 +1065,13 @@ exports.BattleAbilities = {
 				return null;
 			}
 		},
+		onAnyRedirectTargetPriority: 1,
+		onAnyRedirectTarget: function(target, source, source2, move) {
+			if (move.type !== 'Electric') return;
+			if (this.validTarget(this.effectData.target, source, move.target)) {
+				return this.effectData.target;
+			}
+		},
 		id: "lightningrod",
 		name: "Lightningrod",
 		rating: 3.5,
@@ -2099,6 +2106,13 @@ exports.BattleAbilities = {
 			if (type === 'Water') {
 				this.boost({spa:1});
 				return null;
+			}
+		},
+		onAnyRedirectTargetPriority: 1,
+		onAnyRedirectTarget: function(target, source, source2, move) {
+			if (move.type !== 'Water') return;
+			if (this.validTarget(this.effectData.target, source, move.target)) {
+				return this.effectData.target;
 			}
 		},
 		id: "stormdrain",

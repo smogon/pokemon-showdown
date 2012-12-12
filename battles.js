@@ -2340,7 +2340,7 @@ function Battle(roomid, format, rated) {
 		} else {
 			targetLoc = target.position+1;
 		}
-		return selfB.validTargetLocP(targetLoc, source, targetType);
+		return selfB.validTargetLoc(targetLoc, source, targetType);
 	};
 	this.getTarget = function(decision) {
 		var move = selfB.getMove(decision.move);

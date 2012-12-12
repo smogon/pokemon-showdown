@@ -148,6 +148,9 @@ exports.BattleScripts = {
 				this.add('-notarget');
 				return true;
 			}
+			if (target.side.active.length > 1) {
+				target = this.runEvent('RedirectTarget', pokemon, pokemon, move, target);
+			}
 			damage = this.rollMoveHit(target, pokemon, move);
 		}
 
