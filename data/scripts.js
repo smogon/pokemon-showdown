@@ -170,6 +170,10 @@ exports.BattleScripts = {
 			return false;
 		}
 
+		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
+			return false;
+		}
+
 		var damage = 0;
 		pokemon.lastDamage = 0;
 		if (move.multihit) {
@@ -291,10 +295,6 @@ exports.BattleScripts = {
 				}
 			} else if (isSecondary && !moveData.self) {
 				hitResult = this.runEvent('TrySecondaryHit', target, pokemon, moveData);
-			}
-
-			if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
-				return false;
 			}
 
 			if (hitResult === 0) {
