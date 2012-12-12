@@ -327,7 +327,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		debug: true,
-		ruleset: ['PotD', 'Pokemon']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	doublescustomgamedev: {
 		effectType: 'Format',
