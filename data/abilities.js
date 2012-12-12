@@ -952,6 +952,7 @@ exports.BattleAbilities = {
 	"ironbarbs": {
 		desc: "All moves that make contact with the Pokemon with Iron Barbs will damage the user by 1/8 of their maximum HP after damage is dealt.",
 		shortDesc: "This Pokemon causes other Pokemon making contact to lose 1/8 of their max HP.",
+		onAfterDamageOrder: 1,
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
 				this.damage(source.maxhp/8, source, target);
@@ -1675,6 +1676,7 @@ exports.BattleAbilities = {
 	"roughskin": {
 		desc: "Causes recoil damage equal to 1/8 of the opponent's max HP if an opponent directly attacks.",
 		shortDesc: "This Pokemon causes other Pokemon making contact to lose 1/8 of their max HP.",
+		onAfterDamageOrder: 1,
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
 				this.damage(source.maxhp/8, source, target);

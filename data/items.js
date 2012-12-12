@@ -2380,6 +2380,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 60
 		},
+		onAfterDamageOrder: 2,
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
 				this.damage(source.maxhp/6, source, target);
