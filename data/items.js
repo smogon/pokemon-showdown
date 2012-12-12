@@ -2305,7 +2305,7 @@ exports.BattleItems = {
 			if (source && source !== target && move && move.category !== 'Status') {
 				if (target.useItem()) { // This order is correct - the item is used up even against a pokemon with Ingrain or that otherwise can't be forced out
 					if (this.runEvent('DragOut', source, target, move)) {
-						this.dragIn(source.side);
+						this.dragIn(source.side, source.position);
 					}
 				}
 			}
