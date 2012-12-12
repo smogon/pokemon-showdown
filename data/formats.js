@@ -242,13 +242,6 @@ exports.BattleFormats = {
 		ruleset: ['NU'],
 		banlist: ["Charizard", "Wartortle", "Kadabra", "Golem", "Haunter", "Exeggutor", "Weezing", "Kangaskhan", "Pinsir", "Lapras", "Ampharos", "Misdreavus", "Piloswine", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Camerupt", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Absol", "Gorebyss", "Regirock", "Regice", "Torterra", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Serperior", "Emboar", "Samurott", "Musharna", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Cinccino", "Sawsbuck", "Amoonguss", "Alomomola", "Golurk", "Braviary", "Rapidash", "Articuno"]
 	},
-	haxclause: {
-		effectType: 'Format',
-		name: "Hax Clause",
-		challengeShow: true,
-		canUseRandomTeam: true,
-		ruleset: ['Hax Clause rule', 'Team Preview']
-	},
 	glitchmons: {
 		effectType: 'Format',
 		name: "Glitchmons",
@@ -582,24 +575,6 @@ exports.BattleFormats = {
 			if (!set.level || set.level > 5) {
 				set.level = 5;
 			}
-		}
-	},
-	haxclauserule: {
-		effectType: 'Rule',
-		onStart: function() {
-			this.add('rule', 'Hax Clause');
-		},
-		onModifyMovePriority: -100,
-		onModifyMove: function(move) {
-			if (move.secondaries) {
-				for (var s = 0; s < move.secondaries.length; ++s) {
-					move.secondaries[s].chance = 100;
-				}
-			}
-			if (move.accuracy !== true && move.accuracy <= 99) {
-				move.accuracy = 0;
-			}
-			move.willCrit = true;
 		}
 	},
 	speciesclause: {
