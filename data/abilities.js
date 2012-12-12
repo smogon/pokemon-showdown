@@ -884,7 +884,7 @@ exports.BattleAbilities = {
 		desc: "As soon as the user comes into battle, it Transforms into its opponent, copying the opponent's stats exactly, with the exception of HP. Imposter copies all stat changes on the target originating from moves and abilities such as Swords Dance and Intimidate, but not from items such as Choice Specs. Imposter will not Transform the user if the opponent is an Illusion or if the opponent is behind a Substitute.",
 		shortDesc: "On switch-in, this Pokemon copies the foe it's facing; stats, moves, types, Ability.",
 		onStart: function(pokemon) {
-			var target = pokemon.side.foe.randomActive();
+			var target = pokemon.side.foe.active[pokemon.side.foe.active.length-1-pokemon.position];
 			if (target && pokemon.transformInto(target)) {
 				this.add('-transform', pokemon, target);
 			}
