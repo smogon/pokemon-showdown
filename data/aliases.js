@@ -69,6 +69,8 @@ exports.BattleAliases = {
 	"band": "Choice Band",
 	"lefties": "Leftovers",
 	"lo": "Life Orb",
+	"fightgem": "Fighting Gem", // PO sucks at naming things :S
+	"flightgem": "Flying Gem",
 
 	// pokemon
 	"dnite": "Dragonite",
