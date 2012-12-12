@@ -356,12 +356,12 @@ exports.BattleFormats = {
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		validateSet: function(set) {
-			if (!set.level || set.level > 50) {
-				set.level = 50;
+			if (!set.level || set.level >= 50) {
+				set.forcedLevel = 50;
 			}
 		},
 		// no restrictions, for serious
-		ruleset: ['Pokemon', 'VGC Team Preview', 'Species Clause'],
+		ruleset: ['Pokemon', 'VGC Team Preview', 'Species Clause', 'Item Clause'],
 		banlist: ['Unreleased', 'Illegal',
 			'Mewtwo', 
 			'Mew', 
@@ -590,6 +590,23 @@ exports.BattleFormats = {
 					return [template.name+" is banned by Species Clause."];
 				}
 				speciesTable[template.num] = true;
+			}
+		}
+	},
+	itemclause: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule', 'Item Clause');
+		},
+		validateTeam: function(team, format) {
+			var itemTable = {};
+			for (var i=0; i<team.length; i++) {
+				var item = toId(team[i].item);
+				if (!item) continue;
+				if (itemTable[item]) {
+					return [this.getItem(item).name+" is banned by Item Clause."];
+				}
+				itemTable[item] = true;
 			}
 		}
 	},

@@ -807,7 +807,7 @@ module.exports = (function () {
 						if (eventData.gender) {
 							set.gender = eventData.gender;
 						}
-						if (eventData.level && set.level < eventData.level) {
+						if (eventData.level && set.level < eventData.level && !set.forcedLevel) {
 							problems.push(name+" must come from a specific event that makes it at least level "+eventData.level+".");
 						}
 					}
@@ -830,7 +830,7 @@ module.exports = (function () {
 					}
 				}
 			}
-			if (set.level < template.evoLevel) {
+			if (set.level < template.evoLevel && !set.forcedLevel) {
 				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 				problems.push(name+" must be at least level "+template.evoLevel+".");
 			}
