@@ -185,6 +185,7 @@ function BattlePokemon(set, side) {
 	if (this.set.moves) {
 		for (var i=0; i<this.set.moves.length; i++) {
 			var move = selfB.getMove(this.set.moves[i]);
+			if (!move.id) continue;
 			if (move.id === 'hiddenpower') {
 				this.hpType = move.type;
 			}
