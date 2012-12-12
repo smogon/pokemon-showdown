@@ -5187,6 +5187,20 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 5,
 		isNotProtectable: true,
+		volatileStatus: 'helpinghand',
+		onTryHit: function(target, source) {
+			if (target === source) return false;
+		},
+		effect: {
+			duration: 1,
+			onStart: function(target, source) {
+				this.add('-singleturn', target, 'Helping Hand', '[of] '+source);
+			},
+			onBasePower: function(basePower) {
+				this.debug('Boosting from Helping Hand');
+				return basePower * 1.5;
+			}
+		},
 		secondary: false,
 		target: "adjacentAlly",
 		type: "Normal"
