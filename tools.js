@@ -264,6 +264,10 @@ module.exports = (function () {
 		if (!item || typeof item === 'string') {
 			var name = (item||'').trim();
 			var id = toId(name);
+			if (this.data.Aliases[id]) {
+				name = this.data.Aliases[id];
+				id = toId(name);
+			}
 			item = {};
 			if (id && this.data.Items[id]) {
 				item = this.data.Items[id];
