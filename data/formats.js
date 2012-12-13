@@ -345,8 +345,9 @@ exports.BattleFormats = {
 		section: 'doubles (unfinished)',
 		gameType: 'doubles',
 		name: "Doubles VGC 2013 (dev)",
+		rated: true,
 		challengeShow: true,
-		canUseRandomTeam: true,
+		searchShow: true,
 		debug: true,
 		onBegin: function() {
 			this.debug('cutting down to 4');
