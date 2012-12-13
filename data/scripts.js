@@ -167,7 +167,7 @@ exports.BattleScripts = {
 	},
 	rollMoveHit: function(target, pokemon, move, spreadHit) {
 		if (move.selfdestruct && spreadHit) {
-			this.faint(pokemon, pokemon, move);
+			pokemon.hp = 0;
 		}
 
 		if (move.accuracy !== true && this.random(100) >= move.accuracy) {
