@@ -774,7 +774,7 @@ function BattlePokemon(set, side) {
 		return false;
 	};
 	this.useItem = function(source, sourceEffect) {
-		if (!selfP.hp || !selfP.isActive) return false;
+		if (!selfP.isActive) return false;
 		if (!selfP.item) return false;
 		if (!sourceEffect && selfB.effect) sourceEffect = selfB.effect;
 		if (!source && selfB.event && selfB.event.target) source = selfB.event.target;
