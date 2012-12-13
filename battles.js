@@ -1919,11 +1919,6 @@ function Battle(roomid, format, rated) {
 	};
 	this.nextTurn = function() {
 		selfB.turn++;
-		if (selfB.turn === 1) {
-			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
-			var beginCallback = selfB.getFormat().onBegin;
-			if (beginCallback) beginCallback.call(selfB);
-		}
 		for (var i=0; i<selfB.sides.length; i++) {
 			for (var j=0; j<selfB.sides[i].active.length; j++) {
 				var pokemon = selfB.sides[i].active[j];
@@ -2543,6 +2538,10 @@ function Battle(roomid, format, rated) {
 		// returns whether or not we ended in a callback
 		switch (decision.choice) {
 		case 'start':
+			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
+			var beginCallback = selfB.getFormat().onBegin;
+			if (beginCallback) beginCallback.call(selfB);
+
 			selfB.add('start');
 			for (var pos=0; pos<selfB.p1.active.length; pos++) {
 				selfB.switchIn(selfB.p1.pokemon[pos], pos);
