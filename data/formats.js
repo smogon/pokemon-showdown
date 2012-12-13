@@ -386,7 +386,7 @@ exports.BattleFormats = {
 			'Victini', 
 			'Reshiram', 
 			'Zekrom', 
-			'Kyurem', 
+			'Kyurem', 'Kyurem-Black', 'Kyurem-White', 
 			'Keldeo', 
 			'Meloetta', 
 			'Genesect',
