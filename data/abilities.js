@@ -2231,7 +2231,7 @@ exports.BattleAbilities = {
 		desc: "If a Pokemon has Telepathy, it will not take damage from its teammates' moves in double and triple battles.",
 		shortDesc: "This Pokemon does not take damage from its allies' attacks.",
 		onTryHit: function(target, source, move) {
-			if (target.side === source.side && move.target === 'allAdjacent') {
+			if (target.side === source.side && move.category !== 'Status') {
 				this.add('-activate', target, 'ability: Telepathy');
 				return null;
 			}
