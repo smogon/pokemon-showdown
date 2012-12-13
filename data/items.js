@@ -581,20 +581,13 @@ exports.BattleItems = {
 			basePower: 80,
 			type: "Ghost"
 		},
-		onResidual: function(pokemon) {
+		onModifyPriority: function(priority, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				pokemon.eatItem();
-			}
-		},
-		onEat: function(pokemon) {
-			pokemon.addVolatile('custapberry');
-		},
-		effect: {
-			duration: 2,
-			onModifyPriority: function(priority, pokemon) {
-				this.add('-enditem', pokemon, 'Custap Berry');
-				pokemon.removeVolatile('custapberry');
-				return priority + 0.1;
+				if (pokemon.eatItem()) {
+					this.add('-enditem', pokemon, 'Custap Berry');
+					pokemon.removeVolatile('custapberry');
+					return priority + 0.1;
+				}
 			}
 		},
 		desc: "Activates at 25% HP. Next move used goes first. Unobtainable in BW. One-time use."
