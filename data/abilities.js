@@ -375,7 +375,7 @@ exports.BattleAbilities = {
 		desc: "Raises the user's Attack stat by two stages when a stat is lowered, including the Attack stat. This does not include self-induced stat drops like those from Close Combat.",
 		shortDesc: "This Pokemon's Attack is boosted by 2 for each of its stats that is lowered by a foe.",
 		onAfterEachBoost: function(boost, target, source) {
-			if (!source || target === source) {
+			if (!source || target.side === source.side) {
 				return;
 			}
 			var statsLowered = false;
