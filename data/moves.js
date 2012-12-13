@@ -4022,6 +4022,7 @@ exports.BattleMovedex = {
 		priority: 3,
 		volatileStatus: 'followme',
 		effect: {
+			duration: 1,
 			onFoeRedirectTarget: function(target, source, source2, move) {
 				if (this.validTarget(this.effectData.target, source, move.target)) {
 					return this.effectData.target;
