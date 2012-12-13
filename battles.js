@@ -2654,6 +2654,7 @@ function Battle(roomid, format, rated) {
 		// phazing (Roar, etc)
 
 		function checkForceSwitchFlag(a) {
+			if (!a) return false;
 			if (a.hp && a.forceSwitchFlag) {
 				selfB.dragIn(a.side, a.position);
 			}
@@ -2671,8 +2672,8 @@ function Battle(roomid, format, rated) {
 
 		if (!selfB.queue.length) selfB.checkFainted();
 
-		function hasSwitchFlag(a) { return a.switchFlag; }
-		function removeSwitchFlag(a) { a.switchFlag = false; }
+		function hasSwitchFlag(a) { return a?a.switchFlag:false; }
+		function removeSwitchFlag(a) { if (a) a.switchFlag = false; }
 		var p1switch = selfB.p1.active.any(hasSwitchFlag);
 		var p2switch = selfB.p2.active.any(hasSwitchFlag);
 
