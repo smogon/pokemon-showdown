@@ -1343,7 +1343,7 @@ function Battle(roomid, format, rated) {
 		for (var i=0; i<selfB.sides.length;i++) {
 			var side = selfB.sides[i];
 			for (var j=0; j<side.active.length; j++) {
-				actives.push(side.active[j]);
+				if (side.active[j]) actives.push(side.active[j]);
 			}
 		}
 		actives.sort(function(a, b) {
@@ -2378,6 +2378,7 @@ function Battle(roomid, format, rated) {
 	};
 	this.checkFainted = function() {
 		function isFainted(a) {
+			if (!a) return false;
 			if (a.fainted) {
 				a.switchFlag = true;
 				return true;
@@ -2812,7 +2813,7 @@ function Battle(roomid, format, rated) {
 				break;
 			case 'move':
 				if (i >= side.active.length) return false;
-				if (side.pokemon[i].fainted) {
+				if (!side.pokemon[i] || side.pokemon[i].fainted) {
 					decisions.push({
 						choice: 'pass'
 					});
@@ -2826,7 +2827,7 @@ function Battle(roomid, format, rated) {
 				break;
 			case 'switch':
 				if (i >= side.active.length) return false;
-				if (!side.active[i].switchFlag) {
+				if (!side.active[i] || !side.active[i].switchFlag) {
 					if (choice !== 'pass') choices.splice(i, 0, 'pass');
 					decisions.push({
 						choice: 'pass'

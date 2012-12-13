@@ -110,7 +110,7 @@ exports.BattleScripts = {
 			if (move.target === 'allAdjacent') {
 				var allyActive = pokemon.side.active;
 				for (var i=0; i<allyActive.length; i++) {
-					if (Math.abs(i-pokemon.position)<=1 && i != pokemon.position && !allyActive[i].fainted) {
+					if (allyActive[i] && Math.abs(i-pokemon.position)<=1 && i != pokemon.position && !allyActive[i].fainted) {
 						if (!atLeastOne) {
 							damage = 0;
 							atLeastOne = true;
@@ -122,7 +122,7 @@ exports.BattleScripts = {
 			var foeActive = pokemon.side.foe.active;
 			var foePosition = foeActive.length-pokemon.position-1;
 			for (var i=0; i<foeActive.length; i++) {
-				if (Math.abs(i-foePosition)<=1 && !foeActive[i].fainted) {
+				if (foeActive[i] && Math.abs(i-foePosition)<=1 && !foeActive[i].fainted) {
 					if (!atLeastOne) {
 						damage = 0;
 						atLeastOne = true;
