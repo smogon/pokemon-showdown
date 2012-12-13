@@ -138,6 +138,7 @@ exports.BattleScripts = {
 				}
 				return true;
 			}
+			if (!pokemon.hp) pokemon.faint();
 		} else {
 			if (target.fainted && target.side !== pokemon.side) {
 				// if a targeted foe faints, the move is retargeted

@@ -1353,7 +1353,9 @@ function Battle(roomid, format, rated) {
 			return Math.random()-0.5;
 		});
 		for (var i=0; i<actives.length; i++) {
-			if (actives[i].isStarted) selfB.runEvent(eventid, actives[i], null, effect, relayVar);
+			if (actives[i].isStarted) {
+				selfB.runEvent(eventid, actives[i], null, effect, relayVar);
+			}
 		}
 	};
 	this.residualEvent = function(eventid, relayVar) {
