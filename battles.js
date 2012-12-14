@@ -1526,19 +1526,20 @@ function Battle(roomid, format, rated) {
 		var order = false;
 		var priority = 0;
 		var subOrder = 0;
-		var status = statuses[statuses.length-1].status;
-		if (status[callbackType+'Order']) {
-			order = status[callbackType+'Order'];
+		var status = statuses[statuses.length-1];
+		if (status.status[callbackType+'Order']) {
+			order = status.status[callbackType+'Order'];
 		}
-		if (status[callbackType+'Priority']) {
-			priority = status[callbackType+'Priority'];
-		} else if (status[callbackType+'SubOrder']) {
-			subOrder = -status[callbackType+'SubOrder'];
+		if (status.status[callbackType+'Priority']) {
+			priority = status.status[callbackType+'Priority'];
+		} else if (status.status[callbackType+'SubOrder']) {
+			subOrder = -status.status[callbackType+'SubOrder'];
 		}
 
-		statuses[statuses.length-1].order = order;
-		statuses[statuses.length-1].priority = priority;
-		statuses[statuses.length-1].subOrder = subOrder;
+		status.order = order;
+		status.priority = priority;
+		status.subOrder = subOrder;
+		if (status.thing && status.thing.stats) status.speed = status.thing.stats.spe;
 	};
 	// bubbles up to parents
 	this.getRelevantEffects = function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
