@@ -341,8 +341,10 @@ function BattlePokemon(set, side) {
 			selfP.boosts[i] = selfP.baseBoosts[i];
 		}
 		selfB.natureModify(selfP.stats, selfP.set.nature);
+		selfP.unmodifiedStats = {};
 		for (var i in selfP.stats) {
 			selfP.stats[i] = Math.floor(selfP.stats[i]);
+			selfP.unmodifiedStats[i] = selfP.stats[i];
 		}
 		if (init) return;
 
