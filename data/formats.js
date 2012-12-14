@@ -387,7 +387,7 @@ exports.BattleFormats = {
 			'Reshiram', 
 			'Zekrom', 
 			'Kyurem', 'Kyurem-Black', 'Kyurem-White', 
-			'Keldeo', 
+			'Keldeo', 'Keldeo-Resolute',
 			'Meloetta', 
 			'Genesect',
 			'Sky Drop', 'Dark Void', 'Soul Dew'
