@@ -1533,7 +1533,7 @@ function Battle(roomid, format, rated) {
 		if (status.status[callbackType+'Priority']) {
 			priority = status.status[callbackType+'Priority'];
 		} else if (status.status[callbackType+'SubOrder']) {
-			subOrder = -status.status[callbackType+'SubOrder'];
+			subOrder = status.status[callbackType+'SubOrder'];
 		}
 
 		status.order = order;
