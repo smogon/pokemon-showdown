@@ -8665,6 +8665,21 @@ exports.BattleMovedex = {
 		name: "Quash",
 		pp: 15,
 		priority: 0,
+		onHit: function(target) {
+			if (target.side.active.length < 2) return false; // fails in singles
+			var decision = this.willMove(target);
+			if (decision) {
+				this.cancelMove(target);
+				for (var i=this.queue.length-1; i>=0; i--) {
+					if (this.queue[i].choice === 'residual') {
+						this.queue.splice(i,0,decision)
+						break;
+					}
+				}
+			} else {
+				return false;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Dark"
