@@ -1228,5 +1228,38 @@ exports.BattleScripts = {
 		}
 
 		return team;
+	},
+	randomSeasonalWWTeam: function(side) {
+		var seasonalPokemonList = ['raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx', 'lapras', 'snorlax', 'articuno', 'azumarill', 'granbull', 'delibird', 'stantler', 'miltank', 'blissey', 'swalot', 'lunatone', 'castform', 'chimecho', 'glalie', 'walrein', 'regice', 'jirachi', 'bronzong', 'chatot', 'abomasnow', 'weavile', 'togekiss', 'glaceon', 'probopass', 'froslass', 'rotom-frost', 'uxie', 'mesprit', 'azelf', 'victini', 'vanilluxe', 'sawsbuck', 'beartic', 'cryogonal', 'chandelure'];
+
+		var shouldHavePresent = {raichu:1,clefable:1,wigglytuff:1,azumarill:1,granbull:1,miltank:1,blissey:1,togekiss:1,delibird:1};
+
+		seasonalPokemonList = seasonalPokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var template = this.getTemplate(seasonalPokemonList[i]);
+
+			// we're gonna modify the default template
+			template = Object.clone(template, true);
+			delete template.viableMoves.ironhead;
+			delete template.viableMoves.fireblast;
+			delete template.viableMoves.overheat;
+			if (template.id === 'chandelure') {
+				template.viableMoves.flameburst = 1;
+				template.abilities.DW = 'Flash Fire';
+			}
+
+			var set = this.randomSet(template, i);
+
+			if (template.id in shouldHavePresent) set.moves[0] = 'Present';
+
+			set.level = 100;
+
+			team.push(set);
+		}
+
+		return team;
 	}
 };

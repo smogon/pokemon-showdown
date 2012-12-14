@@ -234,6 +234,7 @@ exports.BattleStatuses = {
 		duration: 2,
 		onBeforeMove: function(pokemon) {
 			this.add('cant', pokemon, 'recharge');
+			pokemon.removeVolatile('mustrecharge');
 			return false;
 		},
 		onLockMove: 'recharge'
