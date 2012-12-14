@@ -588,7 +588,7 @@ exports.BattleFormats = {
 			for (var i=0; i<team.length; i++) {
 				var template = this.getTemplate(team[i].species);
 				if (speciesTable[template.num]) {
-					return [template.name+" is banned by Species Clause."];
+					return ["You are limited to one of each pokemon by Species Clause.","(You have at least two "+template.name+")"];
 				}
 				speciesTable[template.num] = true;
 			}
@@ -605,7 +605,7 @@ exports.BattleFormats = {
 				var item = toId(team[i].item);
 				if (!item) continue;
 				if (itemTable[item]) {
-					return [this.getItem(item).name+" is banned by Item Clause."];
+					return ["You are limited to one of each item by Item Clause.","(You have at least two "+this.getItem(item).name+")"];
 				}
 				itemTable[item] = true;
 			}
