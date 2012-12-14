@@ -208,7 +208,7 @@ exports.BattleScripts = {
 			damage = this.moveHit(target, pokemon, move);
 		}
 
-		target.gotAttacked(move, damage, pokemon);
+		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
 
 		if (!damage && damage !== 0) return false;
 
