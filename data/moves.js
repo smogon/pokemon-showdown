@@ -4669,6 +4669,32 @@ exports.BattleMovedex = {
 		name: "Guard Split",
 		pp: 10,
 		priority: 0,
+		onHit: function(target, source) {
+			if (!target.volatiles.guardsplit) {
+				target.addVolatile('guardsplit');
+				target.volatiles.guardsplit.def = target.unmodifiedStats.def;
+				target.volatiles.guardsplit.spd = target.unmodifiedStats.spd;
+			}
+			if (!source.volatiles.guardsplit) {
+				source.addVolatile('guardsplit');
+				source.volatiles.guardsplit.def = source.unmodifiedStats.def;
+				source.volatiles.guardsplit.spd = source.unmodifiedStats.spd;
+			}
+			var newdef = Math.floor((target.volatiles.guardsplit.def + source.volatiles.guardsplit.def)/2);
+			target.volatiles.guardsplit.def = newdef;
+			source.volatiles.guardsplit.def = newdef;
+			var newspd = Math.floor((target.volatiles.guardsplit.spd + source.volatiles.guardsplit.spd)/2);
+			target.volatiles.guardsplit.spd = newspd;
+			source.volatiles.guardsplit.spd = newspd;
+			this.add('-activate', source, 'Guard Split', '[of] '+target);
+		},
+		effect: {
+			onModifyStatsPriority: 100,
+			onModifyStats: function(stats) {
+				stats.def = this.effectData.def;
+				stats.spd = this.effectData.spd;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -8190,6 +8216,32 @@ exports.BattleMovedex = {
 		name: "Power Split",
 		pp: 10,
 		priority: 0,
+		onHit: function(target, source) {
+			if (!target.volatiles.powersplit) {
+				target.addVolatile('powersplit');
+				target.volatiles.powersplit.atk = target.unmodifiedStats.atk;
+				target.volatiles.powersplit.spa = target.unmodifiedStats.spa;
+			}
+			if (!source.volatiles.powersplit) {
+				source.addVolatile('powersplit');
+				source.volatiles.powersplit.atk = source.unmodifiedStats.atk;
+				source.volatiles.powersplit.spa = source.unmodifiedStats.spa;
+			}
+			var newatk = Math.floor((target.volatiles.powersplit.atk + source.volatiles.powersplit.atk)/2);
+			target.volatiles.powersplit.atk = newatk;
+			source.volatiles.powersplit.atk = newatk;
+			var newspa = Math.floor((target.volatiles.powersplit.spa + source.volatiles.powersplit.spa)/2);
+			target.volatiles.powersplit.spa = newspa;
+			source.volatiles.powersplit.spa = newspa;
+			this.add('-activate', source, 'Power Split', '[of] '+target);
+		},
+		effect: {
+			onModifyStatsPriority: 100,
+			onModifyStats: function(stats) {
+				stats.atk = this.effectData.atk;
+				stats.spa = this.effectData.spa;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
