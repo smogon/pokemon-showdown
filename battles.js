@@ -593,7 +593,6 @@ function BattlePokemon(set, side) {
 		selfP.movedThisTurn = false;
 		selfP.newlySwitched = true;
 		selfP.beingCalledBack = false;
-		selfP.illusion = null;
 		selfP.update(init);
 	};
 
@@ -1132,7 +1131,7 @@ function Battle(roomid, format, rated) {
 	this.pseudoWeather = {};
 
 	this.format = toId(format);
-	this.formatData = {id:''};
+	this.formatData = {id:this.format};
 
 	this.ended = false;
 	this.started = false;
@@ -1566,6 +1565,11 @@ function Battle(roomid, format, rated) {
 				statuses.push({status: status, callback: status[callbackType], statusData: selfB.weatherData, end: selfB.clearWeather, thing: thing, priority: status[callbackType+'Priority']||0});
 				selfB.resolveLastPriority(statuses,callbackType);
 			}
+			status = selfB.getFormat();
+			if (typeof status[callbackType] !== 'undefined' || (getAll && thing.formatData[getAll])) {
+				statuses.push({status: status, callback: status[callbackType], statusData: selfB.formatData, end: function(){}, thing: thing, priority: status[callbackType+'Priority']||0});
+				selfB.resolveLastPriority(statuses,callbackType);
+			}
 			if (bubbleDown) {
 				statuses = statuses.concat(selfB.getRelevantEffectsInner(selfB.p1, callbackType,null,null,false,true, getAll));
 				statuses = statuses.concat(selfB.getRelevantEffectsInner(selfB.p2, callbackType,null,null,false,true, getAll));
@@ -1830,6 +1834,15 @@ function Battle(roomid, format, rated) {
 		if (!pokemon || pokemon.isActive) return false;
 		if (!pos) pos = 0;
 		var side = pokemon.side;
+		if (side.active[pos]) {
+			var oldActive = side.active[pos];
+			var lastMove = null;
+			lastMove = selfB.getMove(oldActive.lastMove);
+			if (oldActive.switchCopyFlag === 'copyvolatile') {
+				delete oldActive.switchCopyFlag;
+				pokemon.copyVolatileFrom(oldActive);
+			}
+		}
 		selfB.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[pos]) {
 			var oldActive = side.active[pos];
@@ -1839,15 +1852,7 @@ function Battle(roomid, format, rated) {
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
-		}
-		var lastMove = null;
-		if (side.active[pos]) {
-			lastMove = selfB.getMove(side.active[pos].lastMove);
-			if (side.active[pos].switchCopyFlag === 'copyvolatile') {
-				delete side.active[pos].switchCopyFlag;
-				pokemon.copyVolatileFrom(side.active[pos]);
-			}
-			side.active[pos].clearVolatile();
+			oldActive.clearVolatile();
 		}
 		side.active[pos] = pokemon;
 		pokemon.isActive = true;
