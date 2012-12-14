@@ -28,6 +28,7 @@ exports.BattleScripts = {
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	useMove: function(move, pokemon, target, sourceEffect) {
+		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMove(move);
 		baseMove = move;
 		move = this.getMoveCopy(move);
@@ -35,6 +36,7 @@ exports.BattleScripts = {
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
+		if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -91,10 +93,13 @@ exports.BattleScripts = {
 
 		var movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
-		if (sourceEffect) attrs += '[from]'+this.getEffect(sourceEffect);
+		if (sourceEffect) attrs += '|[from]'+this.getEffect(sourceEffect);
 		this.addMove('move', pokemon, movename, target+attrs);
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+			return true;
+		}
+		if (!this.runEvent('TryMove', pokemon, target, move)) {
 			return true;
 		}
 
@@ -285,13 +290,17 @@ exports.BattleScripts = {
 			}
 			// only run the hit events for the hit itself, not the secondary or self hits
 			if (!isSelf && !isSecondary) {
-				if (move.target !== 'all' && move.target !== 'foeSide' && move.target !== 'allySide') {
+				if (move.target === 'all') {
+					hitResult = this.runEvent('TryHitField', target, pokemon, move);
+				} else if (move.target === 'foeSide' || move.target === 'allySide') {
+					hitResult = this.runEvent('TryHitSide', target, pokemon, move);
+				} else {
 					hitResult = this.runEvent('TryHit', target, pokemon, move);
-					if (!hitResult) {
-						if (hitResult === false) this.add('-fail', target);
-						if (hitResult !== 0) { // special Substitute hit flag
-							return false;
-						}
+				}
+				if (!hitResult) {
+					if (hitResult === false) this.add('-fail', target);
+					if (hitResult !== 0) { // special Substitute hit flag
+						return false;
 					}
 				}
 				if (!this.runEvent('TryFieldHit', target, pokemon, move)) {

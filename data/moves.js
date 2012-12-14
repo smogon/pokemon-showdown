@@ -10726,8 +10726,8 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-singleturn', pokemon, 'Snatch');
 			},
-			onAnyTryHit: function(target, source, move) {
-				if (move && move.isSnatchable) {
+			onAnyTryMove: function(source, target, move) {
+				if (move && move.isSnatchable && move.sourceEffect !== 'snatch') {
 					var snatchUser = this.effectData.source;
 					snatchUser.removeVolatile('snatch');
 					this.add('-activate', snatchUser, 'Snatch', '[of] '+source);
