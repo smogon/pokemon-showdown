@@ -8640,8 +8640,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
-			onSwitchOutPriority: 10,
-			onSwitchOut: function(pokemon) {
+			onBeforeSwitchOut: function(pokemon) {
 				this.debug('Pursuit start');
 				var sources = this.effectData.sources;
 				for (var i=0; i<sources.length; i++) {
@@ -8733,8 +8732,8 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
-			onStart: function(target) {
-				this.add('-singleturn', target, 'Quick Guard');
+			onStart: function(target, source) {
+				this.add('-singleturn', source, 'Quick Guard');
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, effect) {
@@ -12947,8 +12946,8 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
-			onStart: function(target) {
-				this.add('-singleturn', target, 'Wide Guard');
+			onStart: function(target, source) {
+				this.add('-singleturn', source, 'Wide Guard');
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, effect) {
