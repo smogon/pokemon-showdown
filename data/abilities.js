@@ -340,8 +340,10 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, no Pokemon on the field can use Selfdestruct or Explosion.",
 		shortDesc: "While this Pokemon is active, Selfdestruct, Explosion, and Aftermath do not work.",
 		id: "damp",
-		onAnyTryHit: function(target, source, effect) {
+		onAnyTryMove: function(target, source, effect) {
 			if (effect.id === 'selfdestruct' || effect.id === 'explosion') {
+				this.attrLastMove('[still]');
+				this.add('-activate', this.effectData.target, 'ability: Damp');
 				return false;
 			}
 		},
