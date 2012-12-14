@@ -1246,6 +1246,8 @@ exports.BattleScripts = {
 			delete template.viableMoves.ironhead;
 			delete template.viableMoves.fireblast;
 			delete template.viableMoves.overheat;
+			delete template.viableMoves.vcreate;
+			delete template.viableMoves.blueflare;
 			if (template.id === 'chandelure') {
 				template.viableMoves.flameburst = 1;
 				template.abilities.DW = 'Flash Fire';
