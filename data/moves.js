@@ -178,7 +178,16 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isNotProtectable: true,
-		onTryHit: false, // After You will always fail when used in a single battle
+		onHit: function(target) {
+			if (target.side.active.length < 2) return false; // fails in singles
+			var decision = this.willMove(target);
+			if (decision) {
+				this.cancelMove(target);
+				this.queue.unshift(decision);
+			} else {
+				return false;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
