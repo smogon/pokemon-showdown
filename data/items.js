@@ -586,7 +586,7 @@ exports.BattleItems = {
 				if (pokemon.eatItem()) {
 					this.add('-enditem', pokemon, 'Custap Berry');
 					pokemon.removeVolatile('custapberry');
-					return priority + 0.2;
+					return priority + 0.1;
 				}
 			}
 		},
