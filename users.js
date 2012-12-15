@@ -6,16 +6,6 @@ var numUsers = 0;
 var people = {};
 var numPeople = 0;
 
-function sanitizeName(name) {
-	name = name.trim();
-	if (name.length > 18) name = name.substr(0,18);
-	while (config.groups[name.substr(0,1)]) {
-		name = name.substr(1);
-	}
-	name = name.replace(/[\|\[\]\,]/g, '');
-	return name;
-}
-
 function getUser(name, exactName) {
 	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
@@ -349,7 +339,7 @@ var User = (function () {
 			}
 		}
 		if (!name) name = '';
-		name = sanitizeName(name);
+		name = toName(name);
 		name = nameLock(this,name);
 		var userid = toUserid(name);
 		if (this.authenticated) auth = false;
