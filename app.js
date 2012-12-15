@@ -267,6 +267,20 @@ toId = function(text) {
 toUserid = toId;
 
 /**
+ * Validates a username or Pokemon nickname
+ */
+var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1};
+toName = function(name) {
+	name = string(name).trim();
+	name = name.replace(/(\||\n|\[|\]|\,)/g, '');
+	while (bannedNameStartChars[name.substr(0,1)]) {
+		name = name.substr(1);
+	}
+	if (name.length > 18) name = name.substr(0,18);
+	return name;
+};
+
+/**
  * Escapes a string for HTML
  * If strEscape is true, escapes it for JavaScript, too
  */
