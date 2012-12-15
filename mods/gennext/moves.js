@@ -1199,6 +1199,18 @@ exports.BattleMovedex = {
 		basePower: 100,
 		pp: 10
 	},
+	stomp: {
+		inherit: true,
+		basePower: 100,
+		accuracy: true,
+		pp: 10
+	},
+	steamroller: {
+		inherit: true,
+		basePower: 100,
+		accuracy: true,
+		pp: 10
+	},
 	crabhammer: {
 		inherit: true,
 		basePower: 100,

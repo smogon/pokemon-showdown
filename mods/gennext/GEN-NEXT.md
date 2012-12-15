@@ -221,6 +221,9 @@ Minor move changes:
 - Drill Peck, Needle Arm, Attack Order, Leaf Blade, and Crabhammers's Base
   Powers are now 100
 
+- Stomp and Steamroller now have 100 Base Power and perfect accuracy to
+  reflect their thematic status as counters to Minimize
+
 - Muddy Water is now 85 base power and 100% accurate
 
 - Leech Life is now 75 base power
