@@ -449,6 +449,18 @@ exports.BattleFormats = {
 		debug: true,
 		ruleset: ['PotD', 'Pokemon']
 	},
+	doubleschallengecup: {
+		effectType: 'Format',
+		section: 'doubles (unfinished)',
+		gameType: 'doubles',
+		name: "Doubles Challenge Cup",
+		team: 'randomCC',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		debug: true,
+		ruleset: ['Pokemon']
+	},
 	doublescustomgamedev: {
 		effectType: 'Format',
 		section: 'doubles (unfinished)',
