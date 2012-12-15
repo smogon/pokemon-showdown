@@ -439,7 +439,7 @@ exports.BattleFormats = {
 	},
 	doublesrandombattledev: {
 		effectType: 'Format',
-		section: 'doubles (unfinished)',
+		section: 'doubles',
 		gameType: 'doubles',
 		name: "Doubles Random Battle (dev)",
 		team: 'random',
@@ -451,7 +451,7 @@ exports.BattleFormats = {
 	},
 	doubleschallengecup: {
 		effectType: 'Format',
-		section: 'doubles (unfinished)',
+		section: 'doubles',
 		gameType: 'doubles',
 		name: "Doubles Challenge Cup",
 		team: 'randomCC',
@@ -461,11 +461,11 @@ exports.BattleFormats = {
 		debug: true,
 		ruleset: ['Pokemon']
 	},
-	doublescustomgamedev: {
+	doublescustomgame: {
 		effectType: 'Format',
-		section: 'doubles (unfinished)',
+		section: 'doubles',
 		gameType: 'doubles',
-		name: "Doubles Custom Game (dev)",
+		name: "Doubles Custom Game",
 		challengeShow: true,
 		canUseRandomTeam: true,
 		debug: true,
@@ -474,7 +474,7 @@ exports.BattleFormats = {
 	},
 	doublesvgc2013dev: {
 		effectType: 'Format',
-		section: 'doubles (unfinished)',
+		section: 'doubles',
 		gameType: 'doubles',
 		name: "Doubles VGC 2013 (dev)",
 		rated: true,
