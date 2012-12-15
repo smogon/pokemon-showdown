@@ -355,6 +355,18 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'OHKO Clause'],
 		banlist: ['Wonder Guard', 'Pure Power', 'Huge Power', 'Shadow Tag', 'Arena Trap']
 	},
+	doubleshackmons: {
+		effectType: 'Format',
+		section: 'doubles (unfinished)',
+		gameType: 'doubles',
+		name: "Doubles Hackmons",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon'],
+		banlist: []
+	},
 	pu: {
 		effectType: 'Format',
 		name: "PU",
