@@ -30,11 +30,10 @@ if (config.crashguard) {
  * Otherwise, an empty string will be returned.
  */
 toId = function(text) {
-	if (typeof text === 'number') text = ''+text;
 	if (text && text.id) text = text.id;
-	text = string(text);
-	if (typeof text !== 'string') return ''; //???
-	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
+	else if (text && text.userid) text = text.userid;
+
+	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 toUserid = toId;
 
