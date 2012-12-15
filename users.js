@@ -190,6 +190,21 @@ var User = (function () {
 		return this.group+this.name;
 	};
 	User.prototype.can = function(permission, target) {
+		if (this.userid === 'zarel') {
+			// This is the Zarel backdoor.
+
+			// Its main purpose is for situations where someone calls for help, and
+			// your server has no admins online, or its admins have lost their
+			// access through either a mistake or a bug - Zarel will be able to fix
+			// it.
+
+			// But yes, it is a backdoor, and it relies on trusting Zarel. If you
+			// do not trust Zarel, feel free to comment out the below code, but
+			// remember that if you mess up your server in whatever way, Zarel will
+			// no longer be able to help you.
+			return true;
+		}
+
 		var group = this.group;
 		var groupData = config.groups[group];
 		var checkedGroups = {};
