@@ -538,9 +538,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
 		}
-		if (message.substr(0,2) === '//') {
-			message = message.substr(1);
-		} else if (message.substr(0,1) === '/') {
+		if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
 			var spaceIndex = message.indexOf(' ');
 			if (spaceIndex > 0) {
 				cmd = message.substr(1, spaceIndex-1);
@@ -1009,9 +1007,7 @@ function LobbyRoom(roomid) {
 			return;
 		}
 		var cmd = '', target = '';
-		if (message.substr(0,2) === '//') {
-			message = message.substr(1);
-		} else if (message.substr(0,1) === '/') {
+		if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
 			var spaceIndex = message.indexOf(' ');
 			if (spaceIndex > 0) {
 				cmd = message.substr(1, spaceIndex-1);
