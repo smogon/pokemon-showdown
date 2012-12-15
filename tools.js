@@ -151,6 +151,10 @@ module.exports = (function () {
 		if (!move || typeof move === 'string') {
 			var name = (move||'').trim();
 			var id = toId(name);
+			if (this.data.Aliases[id]) {
+				name = this.data.Aliases[id];
+				id = toId(name);
+			}
 			move = {};
 			if (id.substr(0,12) === 'HiddenPower[') {
 				var hptype = id.substr(12);
