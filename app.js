@@ -257,12 +257,10 @@ if (config.protocol === 'io') {
  * Otherwise, an empty string will be returned.
  */
 toId = function(text) {
-	if (typeof text === 'number') text = ''+text;
 	if (text && text.id) text = text.id;
 	else if (text && text.userid) text = text.userid;
-	text = string(text);
-	if (typeof text !== 'string') return ''; //???
-	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
+
+	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 toUserid = toId;
 
