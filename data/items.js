@@ -264,10 +264,10 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onSourceModifyMove: function(move) {
-			if (typeof move.accuracy !== 'number') return;
+		onAccuracy: function(accuracy) {
+			if (typeof accuracy !== 'number') return;
 			this.debug('brightpowder - decreasing accuracy');
-			move.accuracy *= 0.9;
+			return accuracy * 0.9;
 		},
 		desc: "Raises evasion 10%."
 	},
@@ -1444,10 +1444,10 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onSourceModifyMove: function(move) {
-			if (typeof move.accuracy !== 'number') return;
-			this.debug('Lax Incense - decreasing accuracy');
-			move.accuracy *= 0.9;
+		onAccuracy: function(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('lax incense - decreasing accuracy');
+			return accuracy * 0.9;
 		},
 		desc: "Hold item which raises evasion 10%. Allows breeding of Wynaut."
 	},

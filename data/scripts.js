@@ -62,35 +62,6 @@ exports.BattleScripts = {
 			attrs = '|[still]'; // suppress the default move animation
 		}
 
-		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
-
-		// calculate true accuracy
-		var accuracy = move.accuracy;
-		if (accuracy !== true) {
-			if (!move.ignoreAccuracy) {
-				if (pokemon.boosts.accuracy > 0) {
-					accuracy *= boostTable[pokemon.boosts.accuracy];
-				} else {
-					accuracy /= boostTable[-pokemon.boosts.accuracy];
-				}
-			}
-			if (!move.ignoreEvasion) {
-				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-					accuracy /= boostTable[target.boosts.evasion];
-				} else if (target.boosts.evasion < 0) {
-					accuracy *= boostTable[-target.boosts.evasion];
-				}
-			}
-		}
-		if (move.ohko) { // bypasses accuracy modifiers
-			if (!target.volatiles['bounce'] && !target.volatiles['dig'] && !target.volatiles['dive'] && !target.volatiles['fly'] && !target.volatiles['shadowforce'] && !target.volatiles['skydrop']) {
-				accuracy = 30;
-				if (pokemon.level > target.level) accuracy += (pokemon.level - target.level);
-			}
-		}
-		if (move.alwaysHit) accuracy = true; // bypasses ohko accuracy modifiers
-		move.accuracy = accuracy;
-
 		var movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]'+this.getEffect(sourceEffect);
@@ -176,7 +147,35 @@ exports.BattleScripts = {
 			pokemon.hp = 0;
 		}
 
-		if (move.accuracy !== true && this.random(100) >= move.accuracy) {
+		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
+
+		// calculate true accuracy
+		var accuracy = move.accuracy;
+		if (accuracy !== true) {
+			if (!move.ignoreAccuracy) {
+				if (pokemon.boosts.accuracy > 0) {
+					accuracy *= boostTable[pokemon.boosts.accuracy];
+				} else {
+					accuracy /= boostTable[-pokemon.boosts.accuracy];
+				}
+			}
+			if (!move.ignoreEvasion) {
+				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
+					accuracy /= boostTable[target.boosts.evasion];
+				} else if (target.boosts.evasion < 0) {
+					accuracy *= boostTable[-target.boosts.evasion];
+				}
+			}
+		}
+		if (move.ohko) { // bypasses accuracy modifiers
+			if (!target.volatiles['bounce'] && !target.volatiles['dig'] && !target.volatiles['dive'] && !target.volatiles['fly'] && !target.volatiles['shadowforce'] && !target.volatiles['skydrop']) {
+				accuracy = 30;
+				if (pokemon.level > target.level) accuracy += (pokemon.level - target.level);
+			}
+		}
+		if (move.alwaysHit) accuracy = true; // bypasses ohko accuracy modifiers
+		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+		if (accuracy !== true && this.random(100) >= accuracy) {
 			if (!spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			return false;
