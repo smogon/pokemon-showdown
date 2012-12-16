@@ -279,8 +279,9 @@ Minor learnset changes:
 
 Minor ability changes:
 
-- Weak Armor, Magma Armor, Shell Armor, and Battle Armor all reduce incoming
-  move damage by 1/16 of the user's max HP, in addition to their usual effects
+- Weak Armor, Magma Armor, Shell Armor all reduce incoming move damage by 1/16
+  of the user's max HP, in addition to their usual effects (Battle Armor
+  reduces by 1/8)
 
 - Compoundeyes now grants 1.6x accuracy, Victory Star grants 1.5x
 
@@ -294,6 +295,10 @@ Minor ability changes:
 
 - Slow Start now only lasts 2 turns instead of 5
 
+- Truant will only activate if a move succeeds (e.g. not if it misses, fails,
+  or is Protected against), and will heal the user by 33% during its Truant
+  turn
+
 - Clear Body prevents all stat lowering (relevant: the Regis' Superpower and
   Metagross' Hammer Arm)
 
@@ -301,6 +306,8 @@ Minor ability changes:
 
 - Aftermath no longer requires contact, and its damage is buffed to 1/3 of the
   foe's max HP
+
+- Gluttony allows a Pokemon to use a Berry twice.
 
 - Guts, Quick Feet, and Toxic Boost take half damage from poisoning
 
