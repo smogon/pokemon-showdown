@@ -551,7 +551,7 @@ exports.BattleFormats = {
 	standardubers: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause', 'Species Clause', 'Moody Clause', 'OHKO Clause'],
-		banlist: ['Unreleased', 'Illegal'],
+		banlist: ['Unreleased', 'Illegal', 'Spikes + Sleep Powder + Roserade'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
 			var moves = [];
@@ -571,7 +571,7 @@ exports.BattleFormats = {
 	standarddw: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause'],
-		banlist: ['Illegal', 'Moody'],
+		banlist: ['Illegal', 'Moody', 'Spikes + Sleep Powder + Roserade'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
 			var moves = [];
