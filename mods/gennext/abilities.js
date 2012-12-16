@@ -245,7 +245,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				damage -= target.maxhp/16;
+				damage -= target.maxhp/8;
 				if (damage < 0) damage = 0;
 				return damage;
 			}
@@ -303,6 +303,18 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"gluttony": {
+		inherit: true,
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual: function(pokemon) {
+			if (!pokemon.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
+				pokemon.gluttonyFlag = true;
+				pokemon.setItem(pokemon.lastItem);
+				this.add("-item", pokemon, pokemon.item, '[from] ability: Gluttony');
+			}
+		}
+	},
 	"guts": {
 		inherit: true,
 		onDamage: function(damage, attacker, defender, effect) {
@@ -324,6 +336,26 @@ exports.BattleAbilities = {
 		onDamage: function(damage, attacker, defender, effect) {
 			if (effect && (effect.id === 'psn' || effect.id === 'tox')) {
 				return damage / 2;
+			}
+		}
+	},
+	"truant": {
+		onModifyMove: function(move, pokemon) {
+			if (!move.self) move.self = {};
+			if (!move.self.volatileStatus) move.self.volatileStatus = 'truant';
+		},
+		effect: {
+			duration: 2,
+			onStart: function(pokemon) {
+				this.add('-start', pokemon, 'Truant');
+			},
+			onBeforeMove: function(pokemon, target, move) {
+				if (pokemon.removeVolatile('truant')) {
+					this.add('cant', pokemon, 'ability: Truant');
+					pokemon.movedThisTurn = true;
+					this.heal(pokemon.maxhp/3);
+					return false;
+				}
 			}
 		}
 	},
