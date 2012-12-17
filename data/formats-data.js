@@ -2985,7 +2985,8 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"moves":["psychoboost","swift","doubleteam","extremespeed"]},
 			{"generation":4,"level":50,"moves":["psychoboost","detect","counter","mirrorcoat"]},
 			{"generation":4,"level":50,"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]}
+			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]},
+			{"generation":5,"level":100,"moves":["nastyplot","darkpulse","recover","psychoboost"]}
 		],
 		tier: "Uber"
 	},
@@ -3000,7 +3001,8 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"moves":["psychoboost","swift","doubleteam","extremespeed"]},
 			{"generation":4,"level":50,"moves":["psychoboost","detect","counter","mirrorcoat"]},
 			{"generation":4,"level":50,"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]}
+			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]},
+			{"generation":5,"level":100,"moves":["nastyplot","darkpulse","recover","psychoboost"]}
 		],
 		tier: "Uber"
 	},
@@ -3015,7 +3017,8 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"moves":["psychoboost","swift","doubleteam","extremespeed"]},
 			{"generation":4,"level":50,"moves":["psychoboost","detect","counter","mirrorcoat"]},
 			{"generation":4,"level":50,"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]}
+			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]},
+			{"generation":5,"level":100,"moves":["nastyplot","darkpulse","recover","psychoboost"]}
 		],
 		tier: "OU"
 	},
@@ -3030,7 +3033,8 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"moves":["psychoboost","swift","doubleteam","extremespeed"]},
 			{"generation":4,"level":50,"moves":["psychoboost","detect","counter","mirrorcoat"]},
 			{"generation":4,"level":50,"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]}
+			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]},
+			{"generation":5,"level":100,"moves":["nastyplot","darkpulse","recover","psychoboost"]}
 		],
 		tier: "Uber"
 	},
@@ -4136,7 +4140,8 @@ exports.BattleFormatsData = {
 	gothorita: {
 		viableMoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1,"trick":1},
 		eventPokemon: [
-			{"generation":5,"level":32,"gender":"M","isDW":true,"moves":["psyshock","flatter","futuresight","mirrorcoat"]}
+			{"generation":5,"level":32,"gender":"M","isDW":true,"moves":["psyshock","flatter","futuresight","mirrorcoat"]},
+			{"generation":5,"level":32,"gender":"M","isDW":true,"moves":["psyshock","flatter","futuresight","imprison"]}
 		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
