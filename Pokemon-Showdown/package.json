@@ -1,0 +1,29 @@
+{
+  "name": "Pokemon-Showdown",
+  "version": "0.0.1",
+  "dependencies": {
+    "sugar": ">=1.2.5",
+    "request": ">=2.1.1",
+    "socket.io": ">=0.8.7",
+    "sockjs": ">=0.3.1"
+  },
+  "scripts": {"start": "node app.js"},
+  "bin": "./app.js",
+  "homepage": "http://play.pokemonshowdown.com",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Zarel/Pokemon-Showdown.git"
+  },
+  "author": {
+    "name": "Guangcong Luo",
+    "email": "zarelsl@gmail.com",
+    "url": "http://aesoft.org"
+  },
+  "contributors": [ {
+      "name": "Bill Meltsner",
+      "email": "bill@meltsner.com",
+      "url": "http://www.meltsner.com"
+    }
+  ],
+  "private": true
+}
