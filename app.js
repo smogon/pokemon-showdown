@@ -122,7 +122,9 @@ LoginServer = {
 			self.requestEnd();
 		};
 
-		self.requestTimeoutTimer = setTimeout(reqError, LOGIN_SERVER_TIMEOUT);
+		self.requestTimeoutTimer = setTimeout(function() {
+			reqError('timeout');
+		}, LOGIN_SERVER_TIMEOUT);
 
 		req = http.request(requestOptions, function(res) {
 			if (self.requestTimeoutTimer) {
@@ -147,7 +149,11 @@ LoginServer = {
 					var data = JSON.parse(buffer);
 				} catch (e) {}
 				for (var i=0,len=requestCallbacks.length; i<len; i++) {
-					requestCallbacks[i](data?data[i]:null, res.statusCode);
+					if (data) {
+						requestCallbacks[i](data[i], res.statusCode);
+					} else {
+						requestCallbacks[i](null, res.statusCode, 'corruption');
+					}
 				}
 				self.requestEnd();
 			}.once();

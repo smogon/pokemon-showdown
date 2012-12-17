@@ -84,13 +84,13 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 					p2: p2,
 					score: p1score,
 					format: toId(rated.format)
-				}, function(data) {
+				}, function(data, statusCode, error) {
 					if (!selfR) {
 						console.log('room expired before ladder update was received');
 						return;
 					}
 					if (!data) {
-						selfR.addRaw('Error: Ladder server overloaded - ladder could not be updated.');
+						selfR.addRaw('Ladder (probably) updated, but score could not be retrieved ('+error+').');
 						selfR.update();
 						// log the battle anyway
 						if (!Tools.getFormat(selfR.format).noLog) {
