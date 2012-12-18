@@ -421,15 +421,62 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	bide: {
+		inherit: true,
+		effect: {
+			duration: 2,
+			onLockMove: 'bide',
+			onStart: function(pokemon) {
+				if (pokemon.hp <= 1 || pokemon.lastMove === 'bide') return false;
+				this.effectData.totalDamage = 0;
+				this.add('-start', pokemon, 'Bide');
+			},
+			onDamagePriority: -11,
+			onDamage: function(damage, target, source, move) {
+				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
+					damage = target.hp-1;
+				}
+				if (!move || move.effectType !== 'Move') return;
+				if (!source || source.side === target.side) return;
+				this.effectData.totalDamage += damage;
+				this.effectData.sourcePosition = source.position;
+				this.effectData.sourceSide = source.side;
+				return damage;
+			},
+			onAfterSetStatus: function(status, pokemon) {
+				if (status.id === 'slp') {
+					pokemon.removeVolatile('bide');
+				}
+			},
+			onBeforeMove: function(pokemon) {
+				if (this.effectData.duration === 1) {
+					if (!this.effectData.totalDamage) {
+						this.add('-end', pokemon, 'Bide');
+						this.add('-fail', pokemon);
+						return false;
+					}
+					this.add('-end', pokemon, 'Bide');
+					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage*2});
+					return false;
+				}
+				this.add('-activate', pokemon, 'Bide');
+				return false;
+			}
+		}
+	},
 	/******************************************************************
 	Snore:
 	- base power increased to 100
+	- deals Special damage off physical Attack (reverse Psyshock)
 
 	Justification:
 	- Sleep Talk needs some competition
 	******************************************************************/
 	snore: {
 		inherit: true,
+		category: "Physical",
+		defensiveCategory: "Special",
 		basePower: 100,
 		affectedByImmunities: false
 	},
@@ -455,13 +502,14 @@ exports.BattleMovedex = {
 	},
 	/******************************************************************
 	Relic Song:
-	- secondary changed to 40% -Atk -SpA (80% after Serene Grace)
+	- now 60 bp priority move with no secondary
 
 	Justification:
 	- Meloetta-P needs viability
 	******************************************************************/
 	relicsong: {
 		inherit: true,
+		basePower: 60,
 		affectedByImmunities: false,
 		onHit: function(target, pokemon) {
 			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
@@ -499,13 +547,8 @@ exports.BattleMovedex = {
 			// renderer takes care of this for us
 			pokemon.transformed = false;
 		},
-		secondary: {
-			chance: 40,
-			boosts: {
-				atk: -1,
-				spa: -1
-			}
-		}
+		priority: 1,
+		secondary: null
 	},
 	/******************************************************************
 	Stealth Rock:
@@ -586,7 +629,7 @@ exports.BattleMovedex = {
 				onHit: function(target, source) {
 					var stats = [];
 					for (var i in target.boosts) {
-						if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+						if (i!=='accuracy' && i!=='evasion' && i!=='atk' && target.boosts[i] < 6) {
 							stats.push(i);
 						}
 					}
@@ -616,7 +659,7 @@ exports.BattleMovedex = {
 				onHit: function(target, source) {
 					var stats = [];
 					for (var i in target.boosts) {
-						if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+						if (i!=='accuracy' && i!=='evasion' && i!=='atk' && target.boosts[i] < 6) {
 							stats.push(i);
 						}
 					}
@@ -640,7 +683,7 @@ exports.BattleMovedex = {
 				onHit: function(target, source) {
 					var stats = [];
 					for (var i in target.boosts) {
-						if (i !== 'accuracy' && i !== 'evasion' && target.boosts[i] < 6) {
+						if (i!=='accuracy' && i!=='evasion' && i!=='atk' && target.boosts[i] < 6) {
 							stats.push(i);
 						}
 					}
@@ -1094,6 +1137,22 @@ exports.BattleMovedex = {
 			if (user.template.id === 'banette') return power * 1.5;
 		}
 	},
+	steelwing: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'skarmory') return power * 1.5;
+		},
+		accuracy: 100,
+		secondary: {
+			chance: 50,
+			self: {
+				boosts: {
+					def: 1
+				}
+			}
+		}
+	},
 	/******************************************************************
 	Moves with 95% accuracy, also Rock Slide and Charge Beam:
 	- buffed to 100% accuracy
@@ -1198,6 +1257,13 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 100,
 		pp: 10
+	},
+	withdraw: {
+		inherit: true,
+		boosts: {
+			def: 1,
+			spd: 1
+		}
 	},
 	stomp: {
 		inherit: true,

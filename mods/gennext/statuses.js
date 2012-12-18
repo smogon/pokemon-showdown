@@ -102,8 +102,32 @@ exports.BattleStatuses = {
 			}
 		}
 	},
+	eelektross: {
+		// Eelektross: Poison Heal
+		onImmunity: function(type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function(pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'poisonheal';
+				pokemon.baseAbility = 'poisonheal';
+			}
+		}
+	},
+	claydol: {
+		// Claydol: Filter
+		onImmunity: function(type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function(pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'filter';
+				pokemon.baseAbility = 'filter';
+			}
+		}
+	},
 	cryogonal: {
-		// Cryogonal: infinite hail
+		// Cryogonal: infinite hail, Ice Body
 		onModifyMove: function(move) {
 			if (move.id === 'hail') {
 				var weather = move.weather;
@@ -114,10 +138,19 @@ exports.BattleStatuses = {
 				};
 				move.target = 'self';
 			}
+		},
+		onImmunity: function(type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function(pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'icebody';
+				pokemon.baseAbility = 'icebody';
+			}
 		}
 	},
 	probopass: {
-		// Cryogonal: infinite hail
+		// Probopass: infinite sand
 		onModifyMove: function(move) {
 			if (move.id === 'sandstorm') {
 				var weather = move.weather;

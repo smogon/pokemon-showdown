@@ -49,6 +49,12 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"marvelscale": {
+		inherit:true,
+		onImmunity: function(type, pokemon) {
+			if (type === 'hail') return false;
+		}
+	},
 	"snowcloak": {
 		inherit: true,
 		onImmunity: function(type, pokemon) {
@@ -59,6 +65,27 @@ exports.BattleAbilities = {
 				return basePower * 3/4;
 			}
 			return basePower * 7/8;
+		},
+		onAccuracy: function() {}
+	},
+	"sandveil": {
+		inherit: true,
+		onImmunity: function(type, pokemon) {
+			if (type === 'sandstorm') return false;
+		},
+		onSourceBasePower: function(basePower) {
+			if (this.isWeather('sandstorm')) {
+				return basePower * 4/5;
+			}
+		},
+		onAccuracy: function() {}
+	},
+	"waterveil": {
+		inherit: true,
+		onSourceBasePower: function(basePower) {
+			if (this.isWeather('raindance')) {
+				return basePower * 4/5;
+			}
 		}
 	},
 	"icebody": {
@@ -70,7 +97,7 @@ exports.BattleAbilities = {
 			this.heal(target.maxhp/16);
 		},
 		onAfterDamage: function(damage, target, source, move) {
-			if (move && move.isContact && this.hasWeather('hail')) {
+			if (move && move.isContact && this.isWeather('hail')) {
 				if (this.random(10) < 3) {
 					source.trySetStatus('frz', target, move);
 				}
@@ -159,17 +186,6 @@ exports.BattleAbilities = {
 			if (this.getEffectiveness(move.type, defender) > 0) {
 				this.debug('Solid Rock neutralize');
 				return basePower * 1/2;
-			}
-		}
-	},
-	"sheerforce": {
-		inherit: true,
-		onModifyMove: function(move, pokemon) {
-			if (move.secondaries || pokemon.item === 'lifeorb') {
-				if (!move.basePowerModifier) move.basePowerModifier = 1;
-				move.basePowerModifier *= 13/10;
-				delete move.secondaries;
-				move.negateSecondary = true;
 			}
 		}
 	},
