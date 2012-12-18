@@ -235,9 +235,14 @@ exports.BattleAbilities = {
 		inherit: true,
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				damage -= target.maxhp/16;
+				damage -= target.maxhp/8;
 				if (damage < 0) damage = 0;
 				return damage;
+			}
+		},
+		onHit: function(target, source, move) {
+			if (move.id === 'shellsmash') {
+				target.setAbility('');
 			}
 		}
 	},
@@ -252,21 +257,31 @@ exports.BattleAbilities = {
 		}
 	},
 	"weakarmor": {
-		inherit: true,
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				damage -= target.maxhp/16;
+				damage -= target.maxhp/8;
 				if (damage < 0) damage = 0;
+				target.setAbility('');
+				this.boost({spe: 1});
 				return damage;
 			}
-		}
+		},
+		onAfterDamage: function() {}
 	},
 	"magmaarmor": {
 		inherit: true,
+		onImmunity: function(type, pokemon) {
+			if (type === 'hail') return false;
+		},
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				damage -= target.maxhp/16;
+				damage -= target.maxhp/8;
 				if (damage < 0) damage = 0;
+				if (effect.type === 'Ice' || effect.type === 'Water') {
+					this.add('-activate', target, 'ability: Magma Armor');
+					target.setAbility('battlearmor');
+					damage = 0;
+				}
 				return damage;
 			}
 		}

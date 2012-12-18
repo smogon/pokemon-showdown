@@ -279,9 +279,18 @@ Minor learnset changes:
 
 Minor ability changes:
 
-- Weak Armor, Magma Armor, Shell Armor all reduce incoming move damage by 1/16
-  of the user's max HP, in addition to their usual effects (Battle Armor
-  reduces by 1/8)
+- Weak Armor reduces incoming move damage by 1/8 of the user's max HP
+  and increases the user's Speed for the first hit after switch-in (and
+  does not activate again until the next switch-in) instead of its
+  previous effect
+
+- Shell Armor and Battle Armor reduce incoming move damage by 1/8 of
+  the user's max HP in addition to their crit negation (also, Shell
+  Armor is removed when using Shell Smash)
+
+- Magma Armor reduces incoming move damage by 1/8 of the user's max HP,
+  provides immunity to Hail and freeze, and provides a one-time immunity
+  to Water and Ice, after which it turns into Shell Armor
 
 - Compoundeyes now grants 1.6x accuracy, Victory Star grants 1.5x
 
