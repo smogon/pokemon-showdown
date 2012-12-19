@@ -406,16 +406,22 @@ exports.BattleFormats = {
 		challengeShow: true,
 		canUseRandomTeam: true,
 		debug: true,
-		// no restrictions, for serious
 		ruleset: []
 	},
-        gen3hackmons: {
+	gen3hackmons: {
 		mod: 'gen3',
 		effectType: 'Format',
 		name: "[Gen 3] Hackmons",
 		challengeShow: true,
 		ruleset: ['Pokemon'],
 		banlist: []
+	},
+	gen3customgame: {
+		mod: 'gen3',
+		effectType: 'Format',
+		name: "[Gen 3] Custom Game",
+		challengeShow: true,
+		ruleset: []
 	},
 	gennextnextou: {
 		mod: 'gennext',
