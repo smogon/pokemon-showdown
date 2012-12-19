@@ -1,0 +1,204 @@
+This is a pseudocode overview of how Showdown works - particularly relevant to anyone writing event code.
+
+(A) = negated by Mold Breaker (and Turboblaze/Teravolt) on abilities only during a move
+(S) = negated by Sheer Force only during a move with a secondary effect
+(U) = negated by Substitute
+
+(Air Lock and Klutz negates every event for the corresponding effect, so don't need to be marked)
+
+=== MOVES ===
+
+A quick overview of how moves work:
+
+STEP 1. MOVE PRE-USAGE
+	external execution interruption (flinch, full paralysis)
+	"POKEMON used MOVE!"
+STEP 2: MOVE USAGE
+	internal execution interruption (charge turn for SolarBeam etc)
+	move start of sub-move (Metronome, Sleep Talk etc)
+	PP deduction
+	STEP 3. MOVE EXECUTION (sub-moves start from here)
+		there is no target
+		internal move failure ("But it failed!")
+		STEP 4. MOVE HIT (happens once per target)
+			move misses
+			external move failure (Protect, Substitute blocked etc)
+			immunity
+			move animation
+			damage
+			other effects
+			secondary effects
+
+=== MAIN LOOP ===
+
+[BeforeTurn]
+for every move:
+	[ModifyPriority]
+	move's [BeforeTurn]
+
+runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, then residual at end {
+	runSwitch() {
+		[BeforeSwitch]
+		switch
+	}
+	runAfterSwitch() - after all pokemon are switched in {
+		[Switch]
+		ability's [Start]
+		item's [Start]
+	}
+	runMove() {
+		[BeforeMove] (A)
+		-> false => exit runMove
+
+		display "POKEMON used MOVE!"
+
+		useMove() {
+			[ModifyMove] (A)
+
+			move's [InterruptMove]
+
+			if no targets:
+				display "But there was no target..." and exit useMove()
+
+			moveHit() - once for each hit of multi-hit move, and also once for secondary hits {
+				move's [TryHit], [TryHitSide] or [TryHitField] (A)
+				if hit:
+					[TryHit] (A)
+					-> 0 => skip to SelfHit (used for Substitute)
+					-> null => exit moveHit()
+					-> false => display "But it failed!" and exit moveHit()
+				[Immunity] (A)
+				-> null => exit moveHit()
+				-> false => display "It had no effect!" and exit moveHit()
+
+				move animation
+
+				getDamage() {
+					move's [BasePower]
+					[BasePower] (A)
+					move's [Damage]
+					if critical hit:
+						[CriticalHit] (A)
+				}
+				damage() {
+					[Damage] (A,U)
+					-> false => exit damage()
+					damage
+					[AfterDamage] (U)
+				}
+				heal() {
+					[Heal] (A)
+					-> false => exit heal()
+					heal
+					[AfterHeal]
+				}
+				status() (U) {
+					[Status] (A)
+					-> false => exit status()
+					status change
+					status's [Start] (A)
+					-> false => restore previous status and exit status()
+					[AfterStatus]
+				}
+				effect() (U) {
+					if effect already exists:
+						effect's [Restart] (A)
+					otherwise:
+						effect change
+						effect's [Start] (A)
+						-> false => remove effect and exit effect()
+				}
+
+				recoil() {
+					call damage()
+				}
+				drain() {
+					call heal()
+				}
+
+				if hit:
+					[SelfHit] (A)
+				if secondary hit:
+					[SecondarySelfHit] (A)
+
+				if hit:
+					if secondary roll succeeds:
+						secondary() (S,U) {
+							call moveHit()
+						}
+			}
+
+			[AfterMoveSecondary] (S,U)
+			[AfterMoveSecondarySelf] (S)
+
+			[AfterMove]
+		}
+		pp deducted
+	}
+	runFaint() {
+		[Faint]
+	}
+	residual() {
+		for every effect:
+			if duration = 0:
+				effect's [End]
+				remove effect
+			otherwise:
+				effect's [Residual]
+	}
+
+	choose switch-ins for fainted pokemon
+	=> runSwitch() and runAfterSwitch() again
+
+	[Update]
+}
+
+
+
+=== ISOLATED ===
+
+These are not part of the main loop, and are only called from inside an event.
+
+(For instance, eatItem() is usually called from within the Update event of a berry, and weather() is called
+from the Residual event of a weather condition)
+
+eatItem() {
+	[UseItem] (A)
+	-> false => exit EatItem()
+	[EatItem] (A)
+	-> false => exit EatItem()
+	item's [Eat]
+	remove item from pokemon
+}
+
+useItem() {
+	[UseItem] (A)
+	-> false => exit UseItem()
+	remove item from pokemon
+}
+
+takeItem() {
+	[TakeItem] (A)
+	-> false => exit TakeItem()
+	remove item from pokemon
+}
+
+setItem() {
+	set item
+	item's [Start]
+}
+
+setAbility() {
+	set ability
+	ability's [Start]
+}
+
+weather() {
+	[Weather]
+}
+
+updatePokemon() {
+	for every pokemon:
+		[ModifyStats] (A)
+		[ModifyPokemon] (A)
+}
