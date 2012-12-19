@@ -67,7 +67,7 @@ exports.BattleScripts = {
 
 		// overwrite categories
 		var specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
-		var category = specalTypes[type]?'Special':'Physical';
+		var category = specialTypes[type]?'Special':'Physical';
 
 		var basePower = move.basePower;
 		if (move.basePowerCallback) {
