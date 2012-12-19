@@ -102,7 +102,8 @@ exports.BattleAbilities = {
 					source.trySetStatus('frz', target, move);
 				}
 			}
-		}
+		},
+		onWeather: function() {}
 	},
 	"flowergift": {
 		inherit: true,
