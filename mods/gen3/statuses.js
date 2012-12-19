@@ -1,11 +1,4 @@
 exports.BattleStatuses = {
-/*
-Still not sure if I did the changes to this correctly as well
-Sorry about how inept I may appear (and probably am) at programming - as I've said I am not familiar with javascript and probably didn't look at the rest of the code well enough
-There's probably going to need to be some proofreading on a lot of my stuff.
-(Also my comments are mostly unneeded, save for small explanations - if so they should be removed)
--Relados
-*/
 	par: {
 		inherit: true,
 		onBeforeMovePriority: 2,

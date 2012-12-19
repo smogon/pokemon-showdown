@@ -4,7 +4,7 @@ Alright, just here to say that some of the changes I made to the abilities for g
 I tried to come up with the most legitimate sources I could.  Here's an important one that should probably be addressed early on, because I'm not sure I fixed it:
 According to what I looked up, TWave doesn't activate Volt Absorb and Will-o-wisp doesn't activate Flash Fire.  I'm not sure how accurate this information is.
 However, I did try to put that in nonetheless, but I'm pretty sure I did it badly (you won't find my changes here, I think they're in the moves file).  One of the programmers who knows how this stuff works more than I do (which is all of them) should maybe try to implement that better than I did
-There's a couple of things I copied here also from the gen4 file (this also applies to all the move changes).  Once again, some documentation on that I doubt the credibility - not all of it may be correct
+There's a couple of t hings I copied here also from the gen4 file (this also applies to all the move changes).  Once again, some documentation on that I doubt the credibility - not all of it may be correct
 Oh, and one more thing:  I didn't alter the descriptions much, if at all, on the changes to moves, items, and abilities.
 -Relados
 */
