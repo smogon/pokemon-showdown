@@ -8394,7 +8394,9 @@ exports.BattleMovedex = {
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					source.volatiles['lockedmove'].duration = lockedmove.durationCallback.call(this);
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
 				}
 				return null;
 			}
@@ -8740,7 +8742,9 @@ exports.BattleMovedex = {
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					source.volatiles['lockedmove'].duration = lockedmove.durationCallback.call(this);
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
 				}
 				return null;
 			}
@@ -12959,7 +12963,9 @@ exports.BattleMovedex = {
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					source.volatiles['lockedmove'].duration = lockedmove.durationCallback.call(this);
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
 				}
 				return null;
 			}
