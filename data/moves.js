@@ -1128,14 +1128,14 @@ exports.BattleMovedex = {
 		basePower: 120,
 		category: "Physical",
 		desc: "Deals damage to one adjacent or non-adjacent target. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
-		shortDesc: "Has 1/3 recoil.",
+		shortDesc: "Has 33% recoil.",
 		id: "bravebird",
 		isViable: true,
 		name: "Brave Bird",
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		recoil: [1,3],
+		recoil: [33,100],
 		secondary: false,
 		target: "any",
 		type: "Flying"
@@ -2545,14 +2545,14 @@ exports.BattleMovedex = {
 		basePower: 120,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
-		shortDesc: "Has 1/3 recoil.",
+		shortDesc: "Has 33% recoil.",
 		id: "doubleedge",
 		isViable: true,
 		name: "Double-Edge",
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		recoil: [1,3],
+		recoil: [33,100],
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3756,7 +3756,7 @@ exports.BattleMovedex = {
 		basePower: 120,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target with a 10% chance to burn it. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. If the user is frozen, it will defrost before using this move. Makes contact.",
-		shortDesc: "Has 1/3 recoil. 10% chance to burn. Thaws user.",
+		shortDesc: "Has 33% recoil. 10% chance to burn. Thaws user.",
 		id: "flareblitz",
 		isViable: true,
 		name: "Flare Blitz",
@@ -3764,7 +3764,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		thawsUser: true,
-		recoil: [1,3],
+		recoil: [33,100],
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -11440,7 +11440,7 @@ exports.BattleMovedex = {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
 				if (move.recoil) {
-					this.damage(damage * move.recoil[0] / move.recoil[1], source, target, 'recoil');
+					this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
@@ -12696,14 +12696,14 @@ exports.BattleMovedex = {
 		basePower: 120,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target with a 10% chance to paralyze it. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
-		shortDesc: "Has 1/3 recoil. 10% chance to paralyze target.",
+		shortDesc: "Has 33% recoil. 10% chance to paralyze target.",
 		id: "volttackle",
 		isViable: true,
 		name: "Volt Tackle",
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		recoil: [1,3],
+		recoil: [33,100],
 		secondary: {
 			chance: 10,
 			status: 'par'
@@ -13122,14 +13122,14 @@ exports.BattleMovedex = {
 		basePower: 120,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
-		shortDesc: "Has 1/3 recoil.",
+		shortDesc: "Has 33% recoil.",
 		id: "woodhammer",
 		isViable: true,
 		name: "Wood Hammer",
 		pp: 15,
 		priority: 0,
 		isContact: true,
-		recoil: [1,3],
+		recoil: [33,100],
 		secondary: false,
 		target: "normal",
 		type: "Grass"
