@@ -2238,7 +2238,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	breloom: {
-		viableMoves: {"spore":1,"substitute":1,"leechseed":1,"focuspunch":1,"machpunch":1,"lowsweep":1,"bulletseed":1,"stoneedge":1,"swordsdance":1,"thunderpunch":1},
+		viableMoves: {"spore":1,"substitute":1,"leechseed":1,"focuspunch":1,"machpunch":1,"lowsweep":1,"bulletseed":1,"stoneedge":1,"swordsdance":1},
 		dreamWorldRelease: true,
 		tier: "OU"
 	},
@@ -3197,7 +3197,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	wormadamsandy: {
-		viableMoves: {"earthquake":1,"toxic":1,"bugbite":1,"protect":1,"suckerpunch":1},
+		viableMoves: {"earthquake":1,"toxic":1,"rockblast":1,"protect":1,"stealthrock":1},
 		tier: "NU"
 	},
 	wormadamtrash: {
@@ -3220,17 +3220,17 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	pachirisu: {
-		viableMoves: {"lightscreen":1,"discharge":1,"superfang":1,"toxic":1,"voltswitch":1},
+		viableMoves: {"lightscreen":1,"thunderwave":1,"superfang":1,"toxic":1,"voltswitch":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	buizel: {
-		viableMoves: {"waterfall":1,"return":1,"aquajet":1,"switcheroo":1,"brickbreak":1,"bulkup":1,"batonpass":1,"icepunch":1},
+		viableMoves: {"waterfall":1,"aquajet":1,"switcheroo":1,"brickbreak":1,"bulkup":1,"batonpass":1,"icepunch":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	floatzel: {
-		viableMoves: {"waterfall":1,"return":1,"aquajet":1,"switcheroo":1,"brickbreak":1,"bulkup":1,"batonpass":1,"icepunch":1,"crunch":1},
+		viableMoves: {"waterfall":1,"aquajet":1,"switcheroo":1,"brickbreak":1,"bulkup":1,"batonpass":1,"icepunch":1,"crunch":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
@@ -4194,7 +4194,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	deerling: {
-		viableMoves: {"workup":1,"agility":1,"batonpass":1,"substitute":1,"jumpkick":1,"naturepower":1,"synthesis":1,"return":1},
+		viableMoves: {"workup":1,"agility":1,"batonpass":1,"seedbomb":1,"jumpkick":1,"naturepower":1,"synthesis":1,"return":1,"thunderwave":1},
 		eventPokemon: [
 			{"generation":5,"level":30,"gender":"F","isDW":true,"moves":["faintattack","takedown","jumpkick","aromatherapy"]}
 		],
