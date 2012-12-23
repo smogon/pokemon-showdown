@@ -496,10 +496,10 @@ exports.BattleAbilities = {
 	"filter": {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
-		onFoeBasePower: function(basePower, attacker, defender, move) {
-			if (this.getEffectiveness(move.type, defender) > 0) {
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move' && this.getEffectiveness(effect.type, target) > 0) {
 				this.debug('Filter neutralize');
-				return basePower * 3/4;
+				return damage * 3/4;
 			}
 		},
 		id: "filter",
@@ -730,7 +730,7 @@ exports.BattleAbilities = {
 				return basePower / 2;
 			}
 		},
-		onDamage: function(damage, attacker, defender, effect) {
+		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.id === 'brn') {
 				return damage / 2;
 			}
@@ -1992,10 +1992,10 @@ exports.BattleAbilities = {
 	"solidrock": {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
-		onFoeBasePower: function(basePower, attacker, defender, move) {
-			if (this.getEffectiveness(move.type, defender) > 0) {
+		onDamage: function(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move' && this.getEffectiveness(effect.type, target) > 0) {
 				this.debug('Solid Rock neutralize');
-				return basePower * 3/4;
+				return damage * 3/4;
 			}
 		},
 		id: "solidrock",
