@@ -212,7 +212,7 @@ exports.BattleFormats = {
 		// challengeShow: true,
 		// searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers', 'Evasion Clause'],
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
 		banlist: []
 	},
 	uberssuspecttest: {
