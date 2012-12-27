@@ -2063,7 +2063,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	swampert: {
-		viableMoves: {"waterfall":1,"earthquake":1,"icepunch":1,"stealthrock":1,"roar":1,"superpower":1,"stoneedge":1,"rest":1,"sleeptalk":1,"curse":1},
+		viableMoves: {"surf":1,"earthquake":1,"icebeam":1,"stealthrock":1,"roar":1,"superpower":1,"stoneedge":1,"rest":1,"sleeptalk":1,"hydropump":1},
 		eventPokemon: [
 			{"generation":5,"level":50,"isDW":false,"moves":["earthquake","icebeam","hydropump","hammerarm"]}
 		],
