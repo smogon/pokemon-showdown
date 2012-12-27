@@ -1177,7 +1177,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	gyarados: {
-		viableMoves: {"dragondance":1,"waterfall":1,"earthquake":1,"bounce":1,"rest":1,"sleeptalk":1,"dragontail":1,"stoneedge":1,"substitute":1,"thunderwave":1,"icefang":1},
+		viableMoves: {"dragondance":1,"waterfall":1,"earthquake":1,"bounce":1,"rest":1,"sleeptalk":1,"dragontail":1,"stoneedge":1,"substitute":1,"icefang":1},
 		dreamWorldRelease: true,
 		tier: "OU"
 	},
