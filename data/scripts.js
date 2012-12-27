@@ -937,7 +937,7 @@ exports.BattleScripts = {
 				if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate']) {
 					rejectAbility = true;
 				}
-				if (ability === 'Sheer Force' && !counter['sheerforce']) {
+				if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
 					rejectAbility = true;
 				}
 				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
