@@ -4457,23 +4457,23 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
-			if (target.weightkg > 200) {
+			if (target.weightkg >= 200) {
 				this.debug('120 bp');
 				return 120;
 			}
-			if (target.weightkg > 100) {
+			if (target.weightkg >= 100) {
 				this.debug('100 bp');
 				return 100;
 			}
-			if (target.weightkg > 50) {
+			if (target.weightkg >= 50) {
 				this.debug('80 bp');
 				return 80;
 			}
-			if (target.weightkg > 25) {
+			if (target.weightkg >= 25) {
 				this.debug('60 bp');
 				return 60;
 			}
-			if (target.weightkg > 10) {
+			if (target.weightkg >= 10) {
 				this.debug('40 bp');
 				return 40;
 			}
@@ -6528,19 +6528,19 @@ exports.BattleMovedex = {
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			var targetWeight = target.weightkg;
-			if (target.weightkg > 200) {
+			if (target.weightkg >= 200) {
 				return 120;
 			}
-			if (target.weightkg > 100) {
+			if (target.weightkg >= 100) {
 				return 100;
 			}
-			if (target.weightkg > 50) {
+			if (target.weightkg >= 50) {
 				return 80;
 			}
-			if (target.weightkg > 25) {
+			if (target.weightkg >= 25) {
 				return 60;
 			}
-			if (target.weightkg > 10) {
+			if (target.weightkg >= 10) {
 				return 40;
 			}
 			return 20;
