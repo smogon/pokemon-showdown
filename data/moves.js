@@ -11407,6 +11407,7 @@ exports.BattleMovedex = {
 				this.effectData.hp = Math.floor(target.maxhp/4);
 				delete target.volatiles['partiallytrapped'];
 			},
+			onTryHitPriority: -1,
 			onTryHit: function(target, source, move) {
 				if (target === source) {
 					this.debug('sub bypass: self hit');
