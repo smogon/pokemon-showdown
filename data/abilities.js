@@ -1555,7 +1555,6 @@ exports.BattleAbilities = {
 			if (move && move.category === 'Status') {
 				return priority + 1;
 			}
-			return priority;
 		},
 		id: "prankster",
 		name: "Prankster",
