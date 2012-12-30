@@ -446,7 +446,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon absorbs Water attacks and gains a weakness to Fire attacks. If Sunny Day is in effect, this Pokemon takes damage. If Rain Dance is in effect, this Pokemon recovers health.",
 		shortDesc: "This Pokemon is healed 1/4 by Water, 1/8 by Rain; is hurt 1.25x by Fire, 1/8 by Sun.",
 		onTryHit: function(target, source, move) {
-			if (move.type === 'Water') {
+			if (target !== source && move.type === 'Water') {
 				this.heal(target.maxhp/4);
 				return null;
 			}
@@ -539,7 +539,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon is immune to all Fire-type attacks; additionally, its own Fire-type attacks receive a 50% boost if a Fire-type move hits this Pokemon. Multiple boosts do not occur if this Pokemon is hit with multiple Fire-type attacks.",
 		shortDesc: "This Pokemon's Fire attacks do 1.5x damage if hit by one Fire move; Fire immunity.",
 		onTryHit: function(target, source, move) {
-			if (move.type === 'Fire') {
+			if (target !== source && move.type === 'Fire') {
 				target.addVolatile('flashfire');
 				return null;
 			}
@@ -1062,7 +1062,7 @@ exports.BattleAbilities = {
 		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment. The user is immune to Electric and its Special Attack is increased one stage when hit by one.",
 		shortDesc: "This Pokemon draws Electric moves to itself to boost Sp. Atk by 1; Electric immunity.",
 		onTryHit: function(target, source, move) {
-			if (move.type === 'Electric') {
+			if (target !== source && move.type === 'Electric') {
 				this.boost({spa:1});
 				return null;
 			}
@@ -1265,7 +1265,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon is immune to all Electric-type attacks, including Thunder Wave, and if an Electric-type attack hits this Pokemon, it receives a one-level Speed boost.",
 		shortDesc: "This Pokemon's Speed is boosted by 1 if hit by an Electric move; Electric immunity.",
 		onTryHit: function(target, source, move) {
-			if (move.type === 'Electric') {
+			if (target !== source && move.type === 'Electric') {
 				this.boost({spe:1});
 				return null;
 			}
@@ -1772,7 +1772,7 @@ exports.BattleAbilities = {
 		desc: "When a Pokemon with Sap Sipper is hit with a Grass-type attack, its attack is increased by one level, and the move itself has no effect. If hit by a multi-hit attack like Bullet Seed, it will increase attack by one stage for each hit. The only Grass-type move that will not activate Sap Sipper is Aromatherapy.",
 		shortDesc: "This Pokemon's Attack is boosted by 1 if hit by any Grass move; Grass immunity.",
 		onTryHit: function(target, source, move) {
-			if (move.type === 'Grass') {
+			if (target !== source && move.type === 'Grass') {
 				this.boost({atk:1});
 				return null;
 			}
@@ -2006,7 +2006,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon is immune to the effects of the sound-related moves Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar.",
 		shortDesc: "This Pokemon is immune to sound-based moves, except Heal Bell.",
 		onTryHit: function(target, source, move) {
-			if (move.isSoundBased) {
+			if (target !== source && move.isSoundBased) {
 				this.add('-immune', target.id, '[msg]');
 				return null;
 			}
@@ -2104,7 +2104,7 @@ exports.BattleAbilities = {
 		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball. The user is immune to Water and its Special Attack is increased one stage when hit by one.",
 		shortDesc: "This Pokemon draws Water moves to itself to boost Sp. Atk by 1; Water immunity.",
 		onTryHit: function(target, source, move) {
-			if (move.type === 'Water') {
+			if (target !== source && move.type === 'Water') {
 				this.boost({spa:1});
 				return null;
 			}
@@ -2467,7 +2467,7 @@ exports.BattleAbilities = {
 		desc: "When an Electric-type attack hits this Pokemon, it recovers 25% of its max HP.",
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Electric moves; Electric immunity.",
 		onTryHit: function(target, source, move) {
-			if (move.type === 'Electric') {
+			if (target !== source && move.type === 'Electric') {
 				var d = target.heal(target.maxhp/4);
 				this.add('-heal',target,d+target.getHealth(),'[from] ability: Volt Absorb');
 				return null;
@@ -2482,7 +2482,7 @@ exports.BattleAbilities = {
 		desc: "When a Water-type attack hits this Pokemon, it recovers 25% of its max HP.",
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Water moves; Water immunity.",
 		onTryHit: function(target, source, move) {
-			if (move.type === 'Water') {
+			if (target !== source && move.type === 'Water') {
 				var d = target.heal(target.maxhp/4);
 				this.add('-heal',target,d+target.getHealth(),'[from] ability: Water Absorb');
 				return null;
