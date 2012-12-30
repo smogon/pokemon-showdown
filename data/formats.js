@@ -166,6 +166,17 @@ exports.BattleFormats = {
 		name: "OU",
 		challengeDefault: true,
 		rated: true,
+		// challengeShow: true,
+		// searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Snow Cloak', 'Sand Veil']
+	},
+	oucurrent: {
+		effectType: 'Format',
+		name: "OU (current)",
+		challengeDefault: true,
+		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
