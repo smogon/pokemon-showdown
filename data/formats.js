@@ -220,22 +220,22 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "Ubers",
 		rated: true,
-		// challengeShow: true,
-		// searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
-		banlist: []
-	},
-	uberssuspecttest: {
-		effectType: 'Format',
-		name: "Ubers (suspect test)",
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
 		banlist: []
 	},
+	// uberssuspecttest: {
+	// 	effectType: 'Format',
+	// 	name: "Ubers (suspect test)",
+	// 	rated: true,
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	isTeambuilderFormat: true,
+	// 	ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
+	// 	banlist: []
+	// },
 	uu: {
 		effectType: 'Format',
 		name: "UU",
@@ -259,8 +259,8 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		name: "RU",
 		rated: true,
-		// challengeShow: true,
-		// searchShow: true,
+		challengeShow: true,
+		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
@@ -274,16 +274,16 @@ exports.BattleFormats = {
 	// 	ruleset: ['UU'],
 	// 	banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
 	// },
-	rususpecttest: {
-		effectType: 'Format',
-		name: "RU (Suspect Test)",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['UU'],
-		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
-	},
+	// rususpecttest: {
+	// 	effectType: 'Format',
+	// 	name: "RU (Suspect Test)",
+	// 	rated: true,
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	isTeambuilderFormat: true,
+	// 	ruleset: ['UU'],
+	// 	banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
+	// },
 	nu: {
 		effectType: 'Format',
 		name: "NU",
