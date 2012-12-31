@@ -9622,7 +9622,13 @@ exports.BattleMovedex = {
 			},
 			onSetStatus: function(status, target, source, effect) {
 				if (source && source !== target && source.ability !== 'infiltrator' || (effect && effect.id === 'toxicspikes')) {
-					this.debug('interrupting setstatus');
+					this.debug('interrupting setStatus');
+					return false;
+				}
+			},
+			onTryConfusion: function(target, source, effect) {
+				if (source && source !== target && source.ability !== 'infiltrator') {
+					this.debug('interrupting addVolatile');
 					return false;
 				}
 			},
