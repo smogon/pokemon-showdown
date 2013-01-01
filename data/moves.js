@@ -1104,7 +1104,7 @@ exports.BattleMovedex = {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown') {
+				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
 				return 0;
@@ -2339,7 +2339,7 @@ exports.BattleMovedex = {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onAccuracy: function(accuracy, target, source, move) {
-				if (move.id === 'earthquake' || move.id === 'magnitude') {
+				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'helpinghand') {
 					return;
 				}
 				return 0;
@@ -2468,7 +2468,7 @@ exports.BattleMovedex = {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onAccuracy: function(accuracy, target, source, move) {
-				if (move.id === 'surf' || move.id === 'whirlpool') {
+				if (move.id === 'surf' || move.id === 'whirlpool' || move.id === 'helpinghand') {
 					return;
 				}
 				return 0;
@@ -3915,7 +3915,7 @@ exports.BattleMovedex = {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown') {
+				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
 				return 0;
@@ -9966,6 +9966,9 @@ exports.BattleMovedex = {
 			duration: 2,
 			onLockMove: 'shadowforce',
 			onAccuracy: function(accuracy, target, source, move) {
+				if (move.id === 'helpinghand') {
+					return;
+				}
 				return 0;
 			}
 		},
@@ -10350,12 +10353,12 @@ exports.BattleMovedex = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			if (defender.volatiles['substitute']) {
-				this.add('-fail', target);
+			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
+				this.add('-fail', defender);
 				return null;
 			}
 			if (defender.volatiles['protect']) {
-				this.add('-activate', target, 'Protect');
+				this.add('-activate', defender, 'Protect');
 				return null;
 			}
 			if (defender.volatiles['bounce'] || defender.volatiles['dig'] || defender.volatiles['dive'] || defender.volatiles['fly'] || defender.volatiles['shadowforce']) {
@@ -10402,7 +10405,7 @@ exports.BattleMovedex = {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown') {
+				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
 				return 0;
