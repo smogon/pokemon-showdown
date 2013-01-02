@@ -890,6 +890,11 @@ function BattlePokemon(set, side) {
 			return false;
 		}
 		if (!selfP.runImmunity(status.id)) return false;
+		var result = selfB.runEvent('TryAddVolatile', selfP, source, sourceEffect, status);
+		if (!result) {
+			selfB.debug('add volatile ['+status.id+'] interrupted');
+			return result;
+		}
 		selfP.volatiles[status.id] = {id: status.id};
 		selfP.volatiles[status.id].target = selfP;
 		if (source) {
