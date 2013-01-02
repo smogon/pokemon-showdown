@@ -2983,18 +2983,17 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
-			var targetSpeed = target.stats.spe;
-			var pokemonSpeed = pokemon.stats.spe;
-			if (pokemonSpeed >= targetSpeed * 4) {
+			var ratio = (pokemon.stats.spe / target.stats.spe);
+			if (ratio >= 4) {
 				return 150;
 			}
-			if (pokemonSpeed >= targetSpeed * 3) {
+			if (ratio >= 3) {
 				return 120;
 			}
-			if (pokemonSpeed >= targetSpeed * 2) {
+			if (ratio >= 2) {
 				return 80;
 			}
-			if (pokemonSpeed >= targetSpeed) {
+			if (ratio >= 1) {
 				return 60;
 			}
 			return 40;
