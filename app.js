@@ -62,10 +62,15 @@ LoginServer = {
 		req.end();
 	},
 	requestQueue: [],
+	disabled: false,
 	request: function(action, data, callback) {
 		if (typeof data === 'function') {
 			callback = data;
 			data = null;
+		}
+		if (this.disabled) {
+			callback(null, null, 'disabled');
+			return;
 		}
 		if (!data) data = {};
 		data.act = action;
