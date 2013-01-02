@@ -760,6 +760,33 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'disableladder':
+		if (!user.can('modchat')) {
+			emit(socket, 'console', '/disableladder - Access denied.');
+			return false;
+		}
+		if (LoginServer.disabled) {
+			emit(socket, 'console', '/disableladder - Ladder is already disabled.');
+			return false;
+		}
+		LoginServer.disabled = true;
+		room.addRaw('<div style="background:#BB6655;color:white;padding:2px 4px"><b>Due to high server load, the ladder has been temporarily disabled</b><br />Rated games will no longer update the ladder. It will be back momentarily.</div>');
+		return false;
+		break;
+	case 'enableladder':
+		if (!user.can('modchat')) {
+			emit(socket, 'console', '/enable - Access denied.');
+			return false;
+		}
+		if (!LoginServer.disabled) {
+			emit(socket, 'console', '/enable - Ladder is already enabled.');
+			return false;
+		}
+		LoginServer.disabled = false;
+		room.addRaw('<div style="background-color:#559955;color:white;padding:2px 4px"><b>The ladder is now back.</b><br />Rated games will update the ladder now.</div>');
+		return false;
+		break;
+
 	case 'savereplay':
 		if (!room || !room.battle) return false;
 		var data = room.log.join("\n");
