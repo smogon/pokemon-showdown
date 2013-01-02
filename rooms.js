@@ -99,8 +99,8 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 						return;
 					} else {
 						try {
-							p1rating = data.p1rating.acre;
-							p2rating = data.p2rating.acre;
+							p1rating = data.p1rating;
+							p2rating = data.p2rating;
 							//selfR.add("Ladder updated.");
 
 							var oldacre = Math.round(data.p1rating.oldacre);
