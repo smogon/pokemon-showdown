@@ -1078,7 +1078,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":50,"gender":"M","moves":["furycutter","metalclaw","swordsdance","slash"]},
 			{"generation":4,"level":50,"gender":"M","nature":"Adamant","abilities":["swarm"],"moves":["xscissor","swordsdance","irondefense","agility"]},
-			{"generation":5,"level":100,"gender":"M","isDW":false,"abilities":["technician"],"moves":["bulletpunch","bugbite","roost","swordsdance"]}
+			{"generation":5,"level":100,"gender":"M","isDW":false,"abilities":["technician"],"moves":["bulletpunch","bugbite","roost","swordsdance"]},
+			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["leer","focusenergy","pursuit","steelwing"]}
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
@@ -1957,7 +1958,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	tyranitar: {
-		viableMoves: {"crunch":1,"stoneedge":1,"pursuit":1,"superpower":1,"fireblast":1,"icebeam":1,"stealthrock":1,"aquatail":1,"dragondance":1},
+		viableMoves: {"crunch":1,"stoneedge":1,"pursuit":1,"superpower":1,"fireblast":1,"icebeam":1,"stealthrock":1,"aquatail":1},
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["thrash","scaryface","crunch","earthquake"]},
 			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["fireblast","icebeam","stoneedge","crunch"]}
