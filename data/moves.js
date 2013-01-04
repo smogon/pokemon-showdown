@@ -5985,6 +5985,7 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		volatileStatus: 'imprison',
 		effect: {
+			noCopy: true,
 			onStart: function(target) {
 				this.add('-start', target, 'move: Imprison');
 			},
