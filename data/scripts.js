@@ -940,6 +940,9 @@ exports.BattleScripts = {
 				if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
 					rejectAbility = true;
 				}
+				if (ability === 'Prankster' && !counter['Status']) {
+					rejectAbility = true;
+				}
 				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
 					rejectAbility = true;
 				}
