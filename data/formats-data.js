@@ -378,7 +378,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	clefable: {
-		viableMoves: {"calmmind":1,"hypervoice":1,"softboiled":1,"storedpower":1},
+		viableMoves: {"calmmind":1,"hypervoice":1,"softboiled":1,"fireblast":1,"thunderbolt":1,"icebeam":1},
 		dreamWorldRelease: true,
 		tier: "RU"
 	},
@@ -2443,7 +2443,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	roselia: {
-		viableMoves: {"spikes":1,"toxicspikes":1,"sleeppowder":1,"gigadrain":1,"stunspore":1,"rest":1},
+		viableMoves: {"spikes":1,"toxicspikes":1,"sleeppowder":1,"gigadrain":1,"stunspore":1,"rest":1,"sludgebomb":1},
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["absorb","growth","poisonsting"]},
 			{"generation":3,"level":22,"moves":["sweetkiss","magicalleaf","leechseed","grasswhistle"]}
@@ -4265,7 +4265,7 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	ferroseed: {
-		viableMoves: {"spikes":1,"stealthrock":1,"leechseed":1,"seedbomb":1,"protect":1,"thunderwave":1},
+		viableMoves: {"spikes":1,"stealthrock":1,"leechseed":1,"seedbomb":1,"protect":1,"thunderwave":1,"gyroball":1},
 		tier: "RU"
 	},
 	ferrothorn: {
