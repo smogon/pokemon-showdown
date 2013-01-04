@@ -143,9 +143,6 @@ exports.BattleScripts = {
 		return true;
 	},
 	rollMoveHit: function(target, pokemon, move, spreadHit) {
-		if (move.selfdestruct && spreadHit) {
-			pokemon.hp = 0;
-		}
 
 		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
 
