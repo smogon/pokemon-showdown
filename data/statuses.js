@@ -190,24 +190,26 @@ exports.BattleStatuses = {
 			return this.random(2,4);
 		},
 		onResidual: function(target) {
-			var move = this.getMove(target.lastMove);
-			if (!move.self || move.self.volatileStatus !== 'lockedmove' || target.status === 'slp') {
+			if (target.lastMove === 'struggle' || target.status === 'slp') {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
 			}
+		},
+		onStart: function(target, source, effect) {
+			this.effectData.move = effect.id;
 		},
 		onEnd: function(target) {
 			this.add('-end', target, 'rampage');
 			target.addVolatile('confusion');
 		},
 		onLockMove: function(pokemon) {
-			return pokemon.lastMove;
+			return this.effectData.move;
 		},
 		onBeforeTurn: function(pokemon) {
-			var move = this.getMove(pokemon.lastMove);
-			if (pokemon.lastMove) {
-				this.debug('Forcing into '+pokemon.lastMove);
-				this.changeDecision(pokemon, {move: pokemon.lastMove});
+			var move = this.getMove(this.effectData.move);
+			if (move.id) {
+				this.debug('Forcing into '+move.id);
+				this.changeDecision(pokemon, {move: move.id});
 			}
 		}
 	},
