@@ -3137,7 +3137,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				var decision = this.willMove(pokemon);
-				if (decision) {
+				if (decision && toId(decision.move) !== this.effectData.move) {
 					this.changeDecision(pokemon, {move:this.effectData.move});
 				}
 			}
