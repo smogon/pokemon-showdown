@@ -276,11 +276,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		clearTimeout(selfR.resetTimer);
 		selfR.resetTimer = null;
 
-		var action = 'be kicked';
-		if (selfR.rated) {
-			action = 'forfeit';
-		}
-
 		var inactiveSide = selfR.getInactiveSide();
 
 		if (!selfR.battle || selfR.battle.ended || !selfR.battle.started) return false;
@@ -301,17 +296,13 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			selfR.sideTicksLeft[inactiveSide]--;
 		}
 		if (selfR.inactiveTicksLeft) {
-			selfR.add('Inactive players will '+action+' in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
+			selfR.add('Inactive players will forfeit in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
 			selfR.update();
 			selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
 			return;
 		}
 
-		if (selfR.rated) {
-			selfR.forfeit(null,' lost because of their inactivity.', inactiveSide);
-		} else {
-			selfR.add('Kicking inactive players is unsupported in non-ladder games.');
-		}
+		selfR.forfeit(null,' lost because of their inactivity.', inactiveSide);
 
 		if (selfR.parentid) {
 			getRoom(selfR.parentid).updateRooms();
@@ -326,20 +317,9 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			user.emit('console', {room:selfR.id, message: 'The inactivity timer is already counting down.'});
 				return;
 		}
-		if ((!selfR.battle.p1 || !selfR.battle.p2) && !selfR.rated) {
-			selfR.add('This isn\'t a rated battle; victory doesn\'t mean anything.');
-			selfR.add('Do you just want to see the text "you win"? Okay. You win.');
-			selfR.update();
-			return;
-		}
 
 		selfR.inactiveAtrrib = '';
 		if (user) selfR.inactiveAtrrib = ' (requested by '+user.name+')';
-
-		var action = 'be kicked';
-		if (selfR.rated) {
-			action = 'forfeit';
-		}
 
 		// a tick is 30 seconds
 
@@ -365,7 +345,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 
 		selfR.inactiveTicksLeft = tickTime;
-		var message = 'Inactive players will '+action+' in '+(tickTime*30)+' seconds.'+selfR.inactiveAtrrib;
+		var message = 'Inactive players will forfeit in '+(tickTime*30)+' seconds.'+selfR.inactiveAtrrib;
 		if (elapsedTicks < 1 && tickTime >= 2 && selfR.sideTicksLeft[inactiveSide] > -4) {
 			// the foe has at least a minute left, and hasn't been given 30 seconds to make a move yet
 			// we'll wait another 30 seconds before notifying them that they have a time limit
