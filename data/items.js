@@ -769,7 +769,7 @@ exports.BattleItems = {
 			}
 		},
 		onAfterMoveSecondary: function(target, source, move) {
-			if (source && source !== target && move && move.category !== 'Status') {
+			if (source && source !== target && target.hp && move && move.category !== 'Status') {
 				if (target.useItem()) {
 					target.switchFlag = true;
 				}
@@ -2294,7 +2294,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onAfterMoveSecondary: function(target, source, move) {
-			if (source && source !== target && move && move.category !== 'Status') {
+			if (source && source !== target && source.hp && target.hp && move && move.category !== 'Status') {
 				if (target.useItem()) { // This order is correct - the item is used up even against a pokemon with Ingrain or that otherwise can't be forced out
 					if (this.runEvent('DragOut', source, target, move)) {
 						this.dragIn(source.side, source.position);
