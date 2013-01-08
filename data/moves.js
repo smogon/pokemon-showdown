@@ -12968,8 +12968,8 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 1,
 			onTryHit: function(target, source, effect) {
-				// Wide Guard blocks spread moves
-				if (effect && (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes')) {
+				// Wide Guard blocks damaging spread moves
+				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))) {
 					return;
 				}
 				this.add('-activate', target, 'Wide Guard');
