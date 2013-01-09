@@ -50,6 +50,9 @@ var Simulator = (function(){
 	Simulator.prototype.logData = null;
 	Simulator.prototype.endType = 'normal';
 
+	Simulator.prototype.getFormat = function() {
+		return Tools.getFormat(this.format);
+	};
 	Simulator.prototype.send = function() {
 		Battles.send(''+this.id+'|'+slice.call(arguments).join('|'));
 	};
@@ -70,6 +73,7 @@ var Simulator = (function(){
 		this.send.apply(this, [action, opposite[player]].concat(slice.call(arguments, 2)));
 	};
 
+	Simulator.prototype.rqid = '';
 	Simulator.prototype.receive = function(lines) {
 		switch (lines[1]) {
 		case 'update':
@@ -89,9 +93,13 @@ var Simulator = (function(){
 
 		case 'request':
 			var player = this.getPlayer(lines[2]);
+			var rqid = lines[3];
 			if (player) {
-				this.requests[player.userid] = lines[3];
-				player.emit('update', JSON.parse(lines[3]));
+				this.requests[player.userid] = lines[4];
+				player.emit('update', JSON.parse(lines[4]));
+			}
+			if (rqid !== this.rqid) {
+				this.room.nextInactive();
 			}
 			break;
 
@@ -101,7 +109,6 @@ var Simulator = (function(){
 
 		case 'inactiveside':
 			this.inactiveSide = parseInt(lines[2], 10);
-			this.room.cancelReset();
 			break;
 		}
 	};
@@ -154,6 +161,9 @@ var Simulator = (function(){
 			}
 		}
 		return this.players[slot];
+	};
+	Simulator.prototype.getSlot = function(player) {
+		return this.players.indexOf(player);
 	};
 
 	Simulator.prototype.join = function(user, slot, team) {

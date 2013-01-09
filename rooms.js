@@ -1,4 +1,5 @@
 const MAX_MESSAGE_LENGTH = 300;
+const TIMEOUT_DEALLOCATE = 15*60*1000;
 
 function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	var selfR = this;
@@ -27,16 +28,16 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	this.rated = rated;
 	this.battle = Simulator.create(selfR.id, format, rated, this);
 	this.resetTimer = null;
+	this.resetUser = '';
 	this.destroyTimer = null;
-	this.graceTime = 0;
 
 	this.parentid = parentid||'';
 	this.p1 = p1 || '';
 	this.p2 = p2 || '';
 
-	this.sideTicksLeft = [8, 8];
+	this.sideTicksLeft = [18, 18];
 	this.sideFreeTicks = [0, 0];
-	this.inactiveTicksLeft = 0;
+	this.maxTicksLeft = 0;
 
 	this.active = false;
 
@@ -154,7 +155,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		// empty rooms time out after ten minutes
 		if (!hasUsers) {
 			if (!selfR.destroyTimer) {
-				selfR.destroyTimer = setTimeout(selfR.tryDestroy, 600000);
+				selfR.destroyTimer = setTimeout(selfR.tryDestroy, TIMEOUT_DEALLOCATE);
 			}
 		} else if (selfR.destroyTimer) {
 			clearTimeout(selfR.destroyTimer);
@@ -225,6 +226,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	this.reset = function(reload) {
 		clearTimeout(selfR.resetTimer);
 		selfR.resetTimer = null;
+		selfR.resetUser = '';
 
 		if (lockdown) {
 			selfR.add('The battle was not restarted because the server is preparing to shut down.');
@@ -258,7 +260,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		var ids = ['p1', 'p2'];
 		var otherids = ['p2', 'p1'];
 
-		var name = 'An unknown player';
+		var name = 'Player '+(side+1);
 		if (user) {
 			name = user.name;
 		} else if (selfR.rated) {
@@ -276,96 +278,124 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		clearTimeout(selfR.resetTimer);
 		selfR.resetTimer = null;
 
-		var inactiveSide = selfR.getInactiveSide();
-
 		if (!selfR.battle || selfR.battle.ended || !selfR.battle.started) return false;
 
-		if (inactiveSide == -1) {
-			selfR.add('Both players are inactive, so neither player was kicked.');
-			selfR.update();
-			return;
-		}
+		var inactiveSide = selfR.getInactiveSide();
 
 		// now to see how much time we have left
-		if (selfR.inactiveTicksLeft) {
-			selfR.inactiveTicksLeft--;
+		if (selfR.maxTicksLeft) {
+			selfR.maxTicksLeft--;
 		}
-		if (selfR.sideFreeTicks[inactiveSide]) {
-			selfR.sideFreeTicks[inactiveSide]--;
-		} else {
-			selfR.sideTicksLeft[inactiveSide]--;
+
+		if (inactiveSide != 1) {
+			// side 0 is inactive
+			if (selfR.sideFreeTicks[0]) {
+				selfR.sideFreeTicks[0]--;
+			} else {
+				selfR.sideTicksLeft[0]--;
+			}
 		}
-		if (selfR.inactiveTicksLeft) {
-			selfR.add('Inactive players will forfeit in '+(selfR.inactiveTicksLeft*30)+' seconds.'+(selfR.sideFreeTicks[inactiveSide]?selfR.inactiveAtrrib:''));
-			selfR.update();
-			selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
+		if (inactiveSide != 0) {
+			// side 1 is inactive
+			if (selfR.sideFreeTicks[1]) {
+				selfR.sideFreeTicks[1]--;
+			} else {
+				selfR.sideTicksLeft[1]--;
+			}
+		}
+
+		if (selfR.maxTicksLeft && selfR.sideTicksLeft[0] && selfR.sideTicksLeft[1]) {
+			if (inactiveSide == 0 || inactiveSide == 1) {
+				// one side is inactive
+				var ticksLeft = Math.min(selfR.sideTicksLeft[inactiveSide], selfR.maxTicksLeft);
+				var inactiveUser = selfR.battle.getPlayer(inactiveSide);
+				if (ticksLeft % 3 == 0 || ticksLeft <= 3) {
+					selfR.send('|inactive|'+inactiveUser.name+' has '+(ticksLeft*10)+' seconds left.');
+				}
+			} else {
+				// both sides are inactive
+				var ticksLeft0 = Math.min(selfR.sideTicksLeft[0], selfR.maxTicksLeft);
+				var inactiveUser0 = selfR.battle.getPlayer(0);
+				if (ticksLeft0 % 3 == 0 || ticksLeft0 <= 3) {
+					selfR.send('|inactive|'+inactiveUser0.name+' has '+(ticksLeft0*10)+' seconds left.', inactiveUser0);
+				}
+
+				var ticksLeft1 = Math.min(selfR.sideTicksLeft[1], selfR.maxTicksLeft);
+				var inactiveUser1 = selfR.battle.getPlayer(1);
+				if (ticksLeft1 % 3 == 0 || ticksLeft0 <= 3) {
+					selfR.send('|inactive|'+inactiveUser1.name+' has '+(ticksLeft1*10)+' seconds left.', inactiveUser1);
+				}
+			}
+			selfR.resetTimer = setTimeout(selfR.kickInactive, 10*1000);
 			return;
 		}
 
-		selfR.forfeit(null,' lost because of their inactivity.', inactiveSide);
+		if (inactiveSide < 0) {
+			if (selfR.sideTicksLeft[0]) inactiveSide = 1;
+			else if (selfR.sideTicksLeft[1]) inactiveSide = 0;
+		}
+
+		selfR.forfeit(selfR.battle.getPlayer(inactiveSide),' lost because of their inactivity.', inactiveSide);
+		selfR.resetUser = '';
 
 		if (selfR.parentid) {
 			getRoom(selfR.parentid).updateRooms();
 		}
 	};
-	this.requestReset = function(user) {
-		selfR.add('Requesting resets is no longer supported.');
-		selfR.update();
-	};
-	this.requestKickInactive = function(user) {
+	this.requestKickInactive = function(user, force) {
 		if (selfR.resetTimer) {
-			user.emit('console', {room:selfR.id, message: 'The inactivity timer is already counting down.'});
-				return;
+			selfR.send('|inactive|The inactivity timer is already counting down.', user);
+			return false;
+		}
+		if (user) {
+			if (!force && selfR.battle.getSlot(user) < 0) return false;
+			selfR.resetUser = user.id;
+			selfR.send('|inactive|Battle timer is now ON: inactive players will automatically lose when time\'s up. (requested by '+user.name+')');
 		}
 
-		selfR.inactiveAtrrib = '';
-		if (user) selfR.inactiveAtrrib = ' (requested by '+user.name+')';
+		// a tick is 10 seconds
 
-		// a tick is 30 seconds
-
-		var elapsedTicks = Math.floor((new Date().getTime() - selfR.graceTime) / 30000);
-		tickTime = 6 - elapsedTicks;
-		if (tickTime < 1) {
-			tickTime = 1;
+		var maxTicksLeft = 12; // 2 minutes
+		if (!selfR.battle.p1 || !selfR.battle.p2) {
+			// if a player has left, don't wait longer than 6 ticks (1 minute)
+			maxTicksLeft = 6;
 		}
+		selfR.sideFreeTicks = [1,1];
 
-		if (tickTime > 2 && (!selfR.battle.p1 || !selfR.battle.p2)) {
-			// if a player has left, don't wait longer than 2 ticks (60 seconds)
-			tickTime = 2;
-		}
+		selfR.maxTicksLeft = maxTicksLeft;
 
-		if (elapsedTicks >= 8) selfR.sideTicksLeft[inactiveSide]--;
-		if (elapsedTicks >= 6) selfR.sideTicksLeft[inactiveSide]--;
-		if (elapsedTicks >= 4) selfR.sideTicksLeft[inactiveSide]--;
-		if (elapsedTicks >= 2) selfR.sideTicksLeft[inactiveSide]--;
 		var inactiveSide = selfR.getInactiveSide();
-		if (tickTime > 2 && selfR.sideTicksLeft[inactiveSide] < tickTime) {
-			tickTime = selfR.sideTicksLeft[inactiveSide];
-			if (tickTime < 2) tickTime = 2;
+		if (inactiveSide != 1) {
+			// side 0 is inactive
+			var ticksLeft0 = Math.min(selfR.sideTicksLeft[0], selfR.maxTicksLeft) + 1;
+			selfR.send('|inactive|You have '+(ticksLeft0*10)+' seconds to make your decision.', selfR.battle.getPlayer(0));
+		}
+		if (inactiveSide != 0) {
+			// side 1 is inactive
+			var ticksLeft1 = Math.min(selfR.sideTicksLeft[1], selfR.maxTicksLeft) + 1;
+			selfR.send('|inactive|You have '+(ticksLeft1*10)+' seconds to make your decision.', selfR.battle.getPlayer(1));
 		}
 
-		selfR.inactiveTicksLeft = tickTime;
-		var message = 'Inactive players will forfeit in '+(tickTime*30)+' seconds.'+selfR.inactiveAtrrib;
-		if (elapsedTicks < 1 && tickTime >= 2 && selfR.sideTicksLeft[inactiveSide] > -4) {
-			// the foe has at least a minute left, and hasn't been given 30 seconds to make a move yet
-			// we'll wait another 30 seconds before notifying them that they have a time limit
-			user.emit('console', {room:selfR.id, message: message});
-			selfR.sideFreeTicks[inactiveSide] = 1;
-		} else {
-			selfR.add(message);
-			selfR.sideFreeTicks[inactiveSide] = 0;
-		}
-		selfR.update();
-		selfR.resetTimer = setTimeout(selfR.kickInactive, 30*1000);
+		selfR.resetTimer = setTimeout(selfR.kickInactive, 10*1000);
+		return true;
 	};
-	this.cancelReset = function() {
+	this.nextInactive = function() {
 		if (selfR.resetTimer) {
-			selfR.add('The restart or kick was interrupted by activity.');
 			selfR.update();
 			clearTimeout(selfR.resetTimer);
 			selfR.resetTimer = null;
+			selfR.requestKickInactive();
 		}
-		selfR.graceTime = new Date().getTime();
+	};
+	this.stopKickInactive = function(user, force) {
+		if (!force && user && user.id !== selfR.resetUser) return false;
+		if (selfR.resetTimer) {
+			clearTimeout(selfR.resetTimer);
+			selfR.resetTimer = null;
+			selfR.send('|inactive|Battle timer is now OFF.');
+			return true;
+		}
+		return false;
 	};
 	this.decision = function(user, choice, data) {
 		selfR.battle.sendFor(user, choice, data);
@@ -376,10 +406,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			}
 		}
 		selfR.update();
-	};
-	this.battleEndRestart = function() {
-		selfR.add('Rematch support has been temporarily disabled. Please challenge this user again in the lobby.');
-		return;
 	};
 	this.initSocket = function(user, socket) {
 		var initdata = {
@@ -447,7 +473,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			}
 		}
 
-		selfR.cancelReset();
 		selfR.battle.join(user, slot, team);
 		selfR.active = selfR.battle.active;
 		selfR.update();
