@@ -192,10 +192,10 @@ exports.BattleScripts = {
 			if (hits.length) {
 				// yes, it's hardcoded... meh
 				if (hits[0] === 2 && hits[1] === 5) {
-					var roll = this.random(20);
-					if (roll < 7) hits = 2;
-					else if (roll < 14) hits = 3;
-					else if (roll < 17) hits = 4;
+					var roll = this.random(6);
+					if (roll < 2) hits = 2;
+					else if (roll < 4) hits = 3;
+					else if (roll < 5) hits = 4;
 					else hits = 5;
 				} else {
 					hits = this.random(hits[0],hits[1]+1);
