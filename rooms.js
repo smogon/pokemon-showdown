@@ -392,7 +392,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		if (selfR.resetTimer) {
 			clearTimeout(selfR.resetTimer);
 			selfR.resetTimer = null;
-			selfR.send('|inactive|Battle timer is now OFF.');
+			selfR.send('|inactiveoff|Battle timer is now OFF.');
 			return true;
 		}
 		return false;
