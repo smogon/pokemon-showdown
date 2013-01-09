@@ -723,12 +723,14 @@ exports.BattleFormats = {
 		effectType: 'Rule',
 		validateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
-			
 			if (template.prevo) {
 				return [set.species+" isn't the first in its evolution family."];
 			}
 			if (!template.nfe) {
 				return [set.species+" doesn't have an evolution family."];
+			}
+			if (set.ability === template.abilities['DW'] && template.dreamWorldRelease && (template.maleOnlyDreamWorld || template.gender === 'N')) {
+				return [set.species+" must be at least level 10 with its DW ability."];
 			}
 			if (!set.level || set.level > 5) {
 				set.level = 5;
