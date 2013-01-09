@@ -1100,7 +1100,7 @@ function BattleSide(name, battle, n, team) {
 	};
 	this.emitUpdate = function(update) {
 		update.room = selfB.id;
-		selfB.send('request', this.id+"\n"+JSON.stringify(update));
+		selfB.send('request', this.id+"\n"+selfB.rqid+"\n"+JSON.stringify(update));
 	};
 	this.destroy = function() {
 		// deallocate ourself
@@ -1703,17 +1703,21 @@ function Battle(roomid, format, rated) {
 		return null;
 	};
 	this.makeRequest = function(type, requestDetails) {
-		selfB.currentRequest = type;
-		selfB.currentRequestID++;
 		if (!selfB.p1.isActive || !selfB.p2.isActive) {
 			return;
+		}
+		if (type) {
+			selfB.currentRequest = type;
+			selfB.rqid++;
+			selfB.p1.decision = null;
+			selfB.p2.decision = null;
+		} else {
+			type = selfB.currentRequest;
 		}
 		selfB.update();
 
 		// default to no request
-		selfB.p1.decision = true;
 		selfB.p1.currentRequest = '';
-		selfB.p2.decision = true;
 		selfB.p2.currentRequest = '';
 
 		switch (type) {
@@ -1735,81 +1739,82 @@ function Battle(roomid, format, rated) {
 			switchablesLeft = selfB.p1.pokemon.slice(selfB.p1.active.length).count(canSwitch);
 			switchTable = selfB.p1.active.map(shouldSwitch);
 			if (switchTable.any(true)) {
-				selfB.p1.decision = null;
 				selfB.p1.currentRequest = 'switch';
 				selfB.p1.emitUpdate({
 					side: 'p1',
-					request: {forceSwitch: switchTable, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+					request: {forceSwitch: switchTable, side: selfB.p1.getData(), rqid: selfB.rqid}
 				});
 			}
 			switchablesLeft = selfB.p2.pokemon.slice(selfB.p2.active.length).count(canSwitch);
 			switchTable = selfB.p2.active.map(shouldSwitch);
 			if (switchTable.any(true)) {
-				selfB.p2.decision = null;
 				selfB.p2.currentRequest = 'switch';
 				selfB.p2.emitUpdate({
 					side: 'p2',
-					request: {forceSwitch: switchTable, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+					request: {forceSwitch: switchTable, side: selfB.p2.getData(), rqid: selfB.rqid}
 				});
 			}
 			break;
 
 		case 'switch-ally':
-			selfB.p1.decision = null;
 			selfB.p1.currentRequest = 'switch';
 			selfB.p1.emitUpdate({
 				side: 'p1',
-				request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+				request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.rqid}
 			});
 			break;
 
 		case 'switch-foe':
-			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'switch';
 			selfB.p2.emitUpdate({
 				side: 'p2',
-				request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+				request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.rqid}
 			});
 			break;
 
 		case 'teampreview':
 			selfB.add('teampreview'+(requestDetails?'|'+requestDetails:''));
-			selfB.p1.decision = null;
 			selfB.p1.currentRequest = 'teampreview';
 			selfB.p1.emitUpdate({
 				side: 'p1',
-				request: {teamPreview: true, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+				request: {teamPreview: true, side: selfB.p1.getData(), rqid: selfB.rqid}
 			});
-			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'teampreview';
 			selfB.p2.emitUpdate({
 				side: 'p2',
-				request: {teamPreview: true, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+				request: {teamPreview: true, side: selfB.p2.getData(), rqid: selfB.rqid}
 			});
 			break;
 
 		default:
 			var activeData;
-			selfB.p1.decision = null;
 			selfB.p1.currentRequest = 'move';
 			activeData = selfB.p1.active.map(function(pokemon) {
 				if (pokemon) return pokemon.getRequestData();
 			});
 			selfB.p1.emitUpdate({
 				side: 'p1',
-				request: {active: activeData, side: selfB.p1.getData(), rqid: selfB.currentRequestID}
+				request: {active: activeData, side: selfB.p1.getData(), rqid: selfB.rqid}
 			});
 
-			selfB.p2.decision = null;
 			selfB.p2.currentRequest = 'move';
 			activeData = selfB.p2.active.map(function(pokemon) {
 				if (pokemon) return pokemon.getRequestData();
 			});
 			selfB.p2.emitUpdate({
 				side: 'p2',
-				request: {active: activeData, side: selfB.p2.getData(), rqid: selfB.currentRequestID}
+				request: {active: activeData, side: selfB.p2.getData(), rqid: selfB.rqid}
 			});
 			break;
+		}
+
+		if (!selfB.p1.currentRequest) {
+			selfB.p1.decision = true;
+			selfB.p1.emitUpdate({request: {wait: true}});
+		}
+		if (!selfB.p2.currentRequest) {
+			selfB.p2.decision = true;
+			selfB.p2.emitUpdate({request: {wait: true}});
 		}
 
 		if (selfB.p2.decision && selfB.p1.decision) {
@@ -1823,9 +1828,6 @@ function Battle(roomid, format, rated) {
 			selfB.win();
 			return;
 		}
-
-		if (!selfB.p1.currentRequest) selfB.p1.emitUpdate({request: {wait: true}});
-		if (!selfB.p2.currentRequest) selfB.p2.emitUpdate({request: {wait: true}});
 
 		selfB.add('callback', 'decision');
 	};
@@ -1980,7 +1982,7 @@ function Battle(roomid, format, rated) {
 		selfB.p1.emitUpdate({midBattle: selfB.started, side: 'p1', sideData: selfB.p1.getData()});
 
 		if (selfB.started) {
-			selfB.makeRequest(selfB.currentRequest);
+			selfB.makeRequest();
 			selfB.isActive = true;
 			selfB.activeTurns = 0;
 			return;
@@ -2427,7 +2429,7 @@ function Battle(roomid, format, rated) {
 	this.queue = [];
 	this.faintQueue = [];
 	this.currentRequest = '';
-	this.currentRequestID = 0;
+	this.rqid = 0;
 	this.faintMessages = function() {
 		while (selfB.faintQueue.length) {
 			var faintData = selfB.faintQueue.shift();

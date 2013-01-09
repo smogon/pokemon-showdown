@@ -1170,10 +1170,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'reset':
 	case 'restart':
-		// These commands used to be:
-		//   selfR.requestReset(user);
-		//   selfR.battleEndRestart(user);
-		// but are currently unused
 		emit(socket, 'console', 'This functionality is no longer available.');
 		return false;
 		break;
@@ -1304,6 +1300,21 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'You can only kick inactive players from inside a room.');
 		}
 		return false;
+		break;
+
+	case 'timer':
+		target = toId(target);
+		if (room.requestKickInactive) {
+			if (target === 'off') {
+				room.stopKickInactive(user, user.can('timer'));
+			} else {
+				room.requestKickInactive(user, user.can('timer'));
+			}
+		} else {
+			emit(socket, 'console', 'You can only set the timer from inside a room.');
+		}
+		return false;
+		break;
 		break;
 
 	case 'backdoor':
