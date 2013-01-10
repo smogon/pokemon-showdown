@@ -35,7 +35,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	this.p1 = p1 || '';
 	this.p2 = p2 || '';
 
-	this.sideTicksLeft = [18, 18];
+	this.sideTicksLeft = [16, 16];
 	this.sideFreeTicks = [0, 0];
 	this.maxTicksLeft = 0;
 
@@ -309,21 +309,21 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				// one side is inactive
 				var ticksLeft = Math.min(selfR.sideTicksLeft[inactiveSide], selfR.maxTicksLeft);
 				var inactiveUser = selfR.battle.getPlayer(inactiveSide);
-				if (ticksLeft % 3 == 0 || ticksLeft <= 3) {
-					selfR.send('|inactive|'+inactiveUser.name+' has '+(ticksLeft*10)+' seconds left.');
+				if (ticksLeft % 3 == 0 || ticksLeft <= 4) {
+					selfR.send('|inactive|'+(inactiveUser?inactiveUser.name:'Player '+(inactiveSide+1))+' has '+(ticksLeft*10)+' seconds left.');
 				}
 			} else {
 				// both sides are inactive
 				var ticksLeft0 = Math.min(selfR.sideTicksLeft[0], selfR.maxTicksLeft);
 				var inactiveUser0 = selfR.battle.getPlayer(0);
-				if (ticksLeft0 % 3 == 0 || ticksLeft0 <= 3) {
-					selfR.send('|inactive|'+inactiveUser0.name+' has '+(ticksLeft0*10)+' seconds left.', inactiveUser0);
+				if (ticksLeft0 % 3 == 0 || ticksLeft0 <= 4) {
+					selfR.send('|inactive|'+(inactiveUser0?inactiveUser0.name:'Player 1')+' has '+(ticksLeft0*10)+' seconds left.', inactiveUser0);
 				}
 
 				var ticksLeft1 = Math.min(selfR.sideTicksLeft[1], selfR.maxTicksLeft);
 				var inactiveUser1 = selfR.battle.getPlayer(1);
-				if (ticksLeft1 % 3 == 0 || ticksLeft0 <= 3) {
-					selfR.send('|inactive|'+inactiveUser1.name+' has '+(ticksLeft1*10)+' seconds left.', inactiveUser1);
+				if (ticksLeft1 % 3 == 0 || ticksLeft0 <= 4) {
+					selfR.send('|inactive|'+(inactiveUser1?inactiveUser1.name:'Player 2')+' has '+(ticksLeft1*10)+' seconds left.', inactiveUser1);
 				}
 			}
 			selfR.resetTimer = setTimeout(selfR.kickInactive, 10*1000);
@@ -349,7 +349,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 		if (user) {
 			if (!force && selfR.battle.getSlot(user) < 0) return false;
-			selfR.resetUser = user.id;
+			selfR.resetUser = user.userid;
 			selfR.send('|inactive|Battle timer is now ON: inactive players will automatically lose when time\'s up. (requested by '+user.name+')');
 		}
 
@@ -367,12 +367,12 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		var inactiveSide = selfR.getInactiveSide();
 		if (inactiveSide != 1) {
 			// side 0 is inactive
-			var ticksLeft0 = Math.min(selfR.sideTicksLeft[0], selfR.maxTicksLeft) + 1;
+			var ticksLeft0 = Math.min(selfR.sideTicksLeft[0] + 1, selfR.maxTicksLeft);
 			selfR.send('|inactive|You have '+(ticksLeft0*10)+' seconds to make your decision.', selfR.battle.getPlayer(0));
 		}
 		if (inactiveSide != 0) {
 			// side 1 is inactive
-			var ticksLeft1 = Math.min(selfR.sideTicksLeft[1], selfR.maxTicksLeft) + 1;
+			var ticksLeft1 = Math.min(selfR.sideTicksLeft[1] + 1, selfR.maxTicksLeft);
 			selfR.send('|inactive|You have '+(ticksLeft1*10)+' seconds to make your decision.', selfR.battle.getPlayer(1));
 		}
 
@@ -388,7 +388,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 	};
 	this.stopKickInactive = function(user, force) {
-		if (!force && user && user.id !== selfR.resetUser) return false;
+		if (!force && user && user.userid !== selfR.resetUser) return false;
 		if (selfR.resetTimer) {
 			clearTimeout(selfR.resetTimer);
 			selfR.resetTimer = null;
