@@ -2411,12 +2411,6 @@ function Battle(roomid, format, rated) {
 		// make sure these don't get short-circuited out; all switch flags need to be set
 		var p1fainted = selfB.p1.active.map(isFainted);
 		var p2fainted = selfB.p2.active.map(isFainted);
-
-		if (p1fainted.any(true) && selfB.canSwitch(selfB.p1) || p2fainted.any(true) && selfB.canSwitch(selfB.p2)) {
-			selfB.makeRequest('switch');
-			return true;
-		}
-		return false;
 	};
 	this.queue = [];
 	this.faintQueue = [];
@@ -2758,7 +2752,6 @@ function Battle(roomid, format, rated) {
 
 			if (selfB.ended) return;
 		}
-		if (selfB.checkFainted()) return;
 
 		selfB.nextTurn();
 		selfB.midTurn = false;
