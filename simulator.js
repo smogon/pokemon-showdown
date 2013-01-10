@@ -74,12 +74,17 @@ var Simulator = (function(){
 	};
 
 	Simulator.prototype.rqid = '';
+	Simulator.prototype.inactiveQueued = false;
 	Simulator.prototype.receive = function(lines) {
 		switch (lines[1]) {
 		case 'update':
 			this.active = !this.ended && this.p1 && this.p2;
 			this.room.push(lines.slice(2));
 			this.room.update();
+			if (this.inactiveQueued) {
+				this.room.nextInactive();
+				this.inactiveQueued = false;
+			}
 			break;
 
 		case 'winupdate':
@@ -100,7 +105,7 @@ var Simulator = (function(){
 			}
 			if (rqid !== this.rqid) {
 				this.rqid = rqid;
-				this.room.nextInactive();
+				this.inactiveQueued = true;
 			}
 			break;
 

@@ -1717,6 +1717,8 @@ function Battle(roomid, format, rated) {
 		selfB.update();
 
 		// default to no request
+		var p1request = null;
+		var p2request = null;
 		selfB.p1.currentRequest = '';
 		selfB.p2.currentRequest = '';
 
@@ -1740,50 +1742,22 @@ function Battle(roomid, format, rated) {
 			switchTable = selfB.p1.active.map(shouldSwitch);
 			if (switchTable.any(true)) {
 				selfB.p1.currentRequest = 'switch';
-				selfB.p1.emitUpdate({
-					side: 'p1',
-					request: {forceSwitch: switchTable, side: selfB.p1.getData(), rqid: selfB.rqid}
-				});
+				p1request = {forceSwitch: switchTable, side: selfB.p1.getData(), rqid: selfB.rqid};
 			}
 			switchablesLeft = selfB.p2.pokemon.slice(selfB.p2.active.length).count(canSwitch);
 			switchTable = selfB.p2.active.map(shouldSwitch);
 			if (switchTable.any(true)) {
 				selfB.p2.currentRequest = 'switch';
-				selfB.p2.emitUpdate({
-					side: 'p2',
-					request: {forceSwitch: switchTable, side: selfB.p2.getData(), rqid: selfB.rqid}
-				});
+				p2request = {forceSwitch: switchTable, side: selfB.p2.getData(), rqid: selfB.rqid};
 			}
-			break;
-
-		case 'switch-ally':
-			selfB.p1.currentRequest = 'switch';
-			selfB.p1.emitUpdate({
-				side: 'p1',
-				request: {forceSwitch: true, side: selfB.p1.getData(), rqid: selfB.rqid}
-			});
-			break;
-
-		case 'switch-foe':
-			selfB.p2.currentRequest = 'switch';
-			selfB.p2.emitUpdate({
-				side: 'p2',
-				request: {forceSwitch: true, side: selfB.p2.getData(), rqid: selfB.rqid}
-			});
 			break;
 
 		case 'teampreview':
 			selfB.add('teampreview'+(requestDetails?'|'+requestDetails:''));
 			selfB.p1.currentRequest = 'teampreview';
-			selfB.p1.emitUpdate({
-				side: 'p1',
-				request: {teamPreview: true, side: selfB.p1.getData(), rqid: selfB.rqid}
-			});
+			p1request = {teamPreview: true, side: selfB.p1.getData(), rqid: selfB.rqid};
 			selfB.p2.currentRequest = 'teampreview';
-			selfB.p2.emitUpdate({
-				side: 'p2',
-				request: {teamPreview: true, side: selfB.p2.getData(), rqid: selfB.rqid}
-			});
+			p2request = {teamPreview: true, side: selfB.p2.getData(), rqid: selfB.rqid};
 			break;
 
 		default:
@@ -1792,27 +1766,45 @@ function Battle(roomid, format, rated) {
 			activeData = selfB.p1.active.map(function(pokemon) {
 				if (pokemon) return pokemon.getRequestData();
 			});
-			selfB.p1.emitUpdate({
-				side: 'p1',
-				request: {active: activeData, side: selfB.p1.getData(), rqid: selfB.rqid}
-			});
+			p1request = {active: activeData, side: selfB.p1.getData(), rqid: selfB.rqid};
 
 			selfB.p2.currentRequest = 'move';
 			activeData = selfB.p2.active.map(function(pokemon) {
 				if (pokemon) return pokemon.getRequestData();
 			});
-			selfB.p2.emitUpdate({
-				side: 'p2',
-				request: {active: activeData, side: selfB.p2.getData(), rqid: selfB.rqid}
-			});
+			p2request = {active: activeData, side: selfB.p2.getData(), rqid: selfB.rqid};
 			break;
 		}
 
-		if (!selfB.p1.currentRequest) {
+		if (selfB.p1 && selfB.p2) {
+			var inactiveSide = -1;
+			if (p1request && !p2request) {
+				inactiveSide = 0;
+			} else if (!p1request && p2request) {
+				inactiveSide = 1;
+			}
+			if (inactiveSide !== selfB.inactiveSide) {
+				this.send('inactiveside', inactiveSide);
+				selfB.inactiveSide = inactiveSide;
+			}
+		}
+
+		if (p1request) {
+			selfB.p1.emitUpdate({
+				side: 'p1',
+				request: p1request
+			});
+		} else {
 			selfB.p1.decision = true;
 			selfB.p1.emitUpdate({request: {wait: true}});
 		}
-		if (!selfB.p2.currentRequest) {
+
+		if (p2request) {
+			selfB.p2.emitUpdate({
+				side: 'p2',
+				request: p2request
+			});
+		} else {
 			selfB.p2.decision = true;
 			selfB.p2.emitUpdate({request: {wait: true}});
 		}
@@ -3090,6 +3082,23 @@ function Battle(roomid, format, rated) {
 			break;
 		}
 
+		if (selfB.p1 && selfB.p2) {
+			var inactiveSide = -1;
+			if (!selfB.p1.isActive && selfB.p2.isActive) {
+				inactiveSide = 0;
+			} else if (selfB.p1.isActive && !selfB.p2.isActive) {
+				inactiveSide = 1;
+			} else if (!selfB.p1.decision && selfB.p2.decision) {
+				inactiveSide = 0;
+			} else if (selfB.p1.decision && !selfB.p2.decision) {
+				inactiveSide = 1;
+			}
+			if (inactiveSide !== selfB.inactiveSide) {
+				this.send('inactiveside', inactiveSide);
+				selfB.inactiveSide = inactiveSide;
+			}
+		}
+
 		if (selfB.log.length > logPos) {
 			if (selfB.ended && !alreadyEnded) {
 				if (selfB.rated) {
@@ -3106,23 +3115,6 @@ function Battle(roomid, format, rated) {
 				this.send('winupdate', [selfB.winner].concat(selfB.log.slice(logPos)));
 			} else {
 				this.send('update', selfB.log.slice(logPos));
-			}
-		}
-
-		if (selfB.p1 && selfB.p2) {
-			var inactiveSide = -1;
-			if (!selfB.p1.isActive && selfB.p2.isActive) {
-				inactiveSide = 0;
-			} else if (selfB.p1.isActive && !selfB.p2.isActive) {
-				inactiveSide = 1;
-			} else if (!selfB.p1.decision && selfB.p2.decision) {
-				inactiveSide = 0;
-			} else if (selfB.p1.decision && !selfB.p2.decision) {
-				inactiveSide = 1;
-			}
-			if (inactiveSide !== selfB.inactiveSide) {
-				this.send('inactiveside', inactiveSide);
-				selfB.inactiveSide = inactiveSide;
 			}
 		}
 	};
