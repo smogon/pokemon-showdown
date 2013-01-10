@@ -738,7 +738,10 @@ module.exports = (function () {
 
 				if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
 					problems.push(name+"'s Dream World ability is unreleased.");
-				} else if (template.maleOnlyDreamWorld) {
+				} else if (set.level < 10 && (template.maleOnlyDreamWorld || template.gender === 'N')) {
+					problems.push(name+" must be at least level 10 with its DW ability.");
+				}
+				if (template.maleOnlyDreamWorld) {
 					set.gender = 'M';
 					lsetData.sources = ['5D'];
 				}

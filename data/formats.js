@@ -729,9 +729,6 @@ exports.BattleFormats = {
 			if (!template.nfe) {
 				return [set.species+" doesn't have an evolution family."];
 			}
-			if (set.ability === template.abilities['DW'] && template.dreamWorldRelease && (template.maleOnlyDreamWorld || template.gender === 'N')) {
-				return [set.species+" must be at least level 10 with its DW ability."];
-			}
 			if (!set.level || set.level > 5) {
 				set.level = 5;
 			}
