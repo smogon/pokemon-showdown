@@ -521,7 +521,7 @@ exports.BattleFormats = {
 		name: "Smogon Doubles",
 		challengeShow: true,
 		searchShow: true,
-		canUseRandomTeam: true,
+		rated: true,
 		debug: true,
 		// no restrictions, for serious
 		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
