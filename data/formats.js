@@ -169,7 +169,7 @@ exports.BattleFormats = {
 		// challengeShow: true,
 		// searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	oucurrent: {
@@ -444,7 +444,7 @@ exports.BattleFormats = {
 	},
 	standardnext: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Clause'],
+		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause'],
 		banlist: ['Unreleased', 'Illegal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -461,6 +461,85 @@ exports.BattleFormats = {
 			}
 			set.moves = moves;
 		}
+	},
+	doublesvgc2013dev: {
+		effectType: 'Format',
+		section: 'doubles',
+		gameType: 'doubles',
+		name: "Doubles VGC 2013 (dev)",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		debug: true,
+		onBegin: function() {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		validateSet: function(set) {
+			if (!set.level || set.level >= 50) {
+				set.forcedLevel = 50;
+			}
+		},
+		// no restrictions, for serious
+		ruleset: ['Pokemon', 'VGC Team Preview', 'Species Clause', 'Item Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
+			'Mewtwo',
+			'Mew',
+			'Lugia',
+			'Ho-Oh',
+			'Celebi',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Jirachi',
+			'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Deoxys-Defense',
+			'Chatot',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Phione',
+			'Manaphy',
+			'Darkrai',
+			'Shaymin', 'Shaymin-Sky',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Victini',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem', 'Kyurem-Black', 'Kyurem-White',
+			'Keldeo', 'Keldeo-Resolute',
+			'Meloetta',
+			'Genesect'
+		]
+	},
+	smogondoubles: {
+		effectType: 'Format',
+		section: 'doubles',
+		gameType: 'doubles',
+		name: "Smogon Doubles",
+		challengeShow: true,
+		searchShow: true,
+		canUseRandomTeam: true,
+		debug: true,
+		// no restrictions, for serious
+		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
+			'Mewtwo',
+			'Lugia',
+			'Ho-Oh',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem-White'
+		]
 	},
 	doublesrandombattledev: {
 		effectType: 'Format',
@@ -497,65 +576,12 @@ exports.BattleFormats = {
 		// no restrictions, for serious
 		ruleset: ['Team Preview']
 	},
-	doublesvgc2013dev: {
-		effectType: 'Format',
-		section: 'doubles',
-		gameType: 'doubles',
-		name: "Doubles VGC 2013 (dev)",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		debug: true,
-		onBegin: function() {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		validateSet: function(set) {
-			if (!set.level || set.level >= 50) {
-				set.forcedLevel = 50;
-			}
-		},
-		// no restrictions, for serious
-		ruleset: ['Pokemon', 'VGC Team Preview', 'Species Clause', 'Item Clause'],
-		banlist: ['Unreleased', 'Illegal',
-			'Mewtwo',
-			'Mew',
-			'Lugia',
-			'Ho-Oh',
-			'Celebi',
-			'Kyogre',
-			'Groudon',
-			'Rayquaza',
-			'Jirachi',
-			'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Deoxys-Defense',
-			'Chatot',
-			'Dialga',
-			'Palkia',
-			'Giratina', 'Giratina-Origin',
-			'Phione',
-			'Manaphy',
-			'Darkrai',
-			'Shaymin', 'Shaymin-Sky',
-			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Victini',
-			'Reshiram',
-			'Zekrom',
-			'Kyurem', 'Kyurem-Black', 'Kyurem-White',
-			'Keldeo', 'Keldeo-Resolute',
-			'Meloetta',
-			'Genesect',
-			'Sky Drop', 'Dark Void', 'Soul Dew'
-		]
-	},
 
 	// rules
 
 	standard: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Clause'],
+		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Spikes + Sleep Powder + Roserade'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -595,7 +621,7 @@ exports.BattleFormats = {
 	},
 	standarddw: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause'],
+		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause'],
 		banlist: ['Illegal', 'Moody'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -737,7 +763,7 @@ exports.BattleFormats = {
 	speciesclause: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('rule', 'Species Clause');
+			this.add('rule', 'Species Clause: Limit one of each Pokemon');
 		},
 		validateTeam: function(team, format) {
 			var speciesTable = {};
@@ -753,7 +779,7 @@ exports.BattleFormats = {
 	itemclause: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('rule', 'Item Clause');
+			this.add('rule', 'Item Clause: Limit one of each item');
 		},
 		validateTeam: function(team, format) {
 			var itemTable = {};
@@ -770,7 +796,7 @@ exports.BattleFormats = {
 	ohkoclause: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('rule', 'OHKO Clause');
+			this.add('rule', 'OHKO Clause: OHKO moves are banned');
 		},
 		validateSet: function(set) {
 			var problems = [];
@@ -783,12 +809,20 @@ exports.BattleFormats = {
 			return problems;
 		}
 	},
-	evasionclause: {
+	evasionabilitiesclause: {
 		effectType: 'Banlist',
-		name: 'Evasion Clause',
-		banlist: ['Minimize', 'Double Team', 'Sand Veil', 'Snow Cloak'],
+		name: 'Evasion Abilities Clause',
+		banlist: ['Sand Veil', 'Snow Cloak'],
 		onStart: function() {
-			this.add('rule', 'Evasion Clause');
+			this.add('rule', 'Evasion Abilities Clause: Evasion abilities are banned');
+		}
+	},
+	evasionmovesclause: {
+		effectType: 'Banlist',
+		name: 'Evasion Moves Clause',
+		banlist: ['Minimize', 'Double Team'],
+		onStart: function() {
+			this.add('rule', 'Evasion Move Clause: Evasion moves are banned');
 		}
 	},
 	moodyclause: {
@@ -796,13 +830,13 @@ exports.BattleFormats = {
 		name: 'Moody Clause',
 		banlist: ['Moody'],
 		onStart: function() {
-			this.add('rule', 'Moody Clause');
+			this.add('rule', 'Moody Clause: Moody is banned');
 		}
 	},
 	sleepclause: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('rule', 'Sleep Clause');
+			this.add('rule', 'Sleep Clause: Limit one foe put to sleep');
 		},
 		onSetStatus: function(status, target, source) {
 			if (source && source.side === target.side) {
@@ -825,7 +859,7 @@ exports.BattleFormats = {
 	freezeclause: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('rule', 'Freeze Clause');
+			this.add('rule', 'Freeze Clause: Limit one foe frozen');
 		},
 		onSetStatus: function(status, target, source) {
 			if (source && source.side === target.side) {
