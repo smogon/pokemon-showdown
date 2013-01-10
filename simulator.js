@@ -99,6 +99,7 @@ var Simulator = (function(){
 				player.emit('update', JSON.parse(lines[4]));
 			}
 			if (rqid !== this.rqid) {
+				this.rqid = rqid;
 				this.room.nextInactive();
 			}
 			break;
