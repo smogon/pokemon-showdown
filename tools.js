@@ -691,7 +691,10 @@ module.exports = (function () {
 		set.ability = ability.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
-		if (!set.level) set.level = 100;
+		var maxLevel = format.maxLevel || 100;
+		if (!set.level || set.level > maxLevel) {
+			set.level = maxLevel;
+		}
 
 		set.species = set.species || set.name || 'Bulbasaur';
 		set.name = set.name || set.species;
