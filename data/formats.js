@@ -524,7 +524,7 @@ exports.BattleFormats = {
 		rated: true,
 		debug: true,
 		// no restrictions, for serious
-		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
+		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
 			'Mewtwo',
 			'Lugia',
