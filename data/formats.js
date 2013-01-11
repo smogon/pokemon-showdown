@@ -822,7 +822,7 @@ exports.BattleFormats = {
 		name: 'Evasion Moves Clause',
 		banlist: ['Minimize', 'Double Team'],
 		onStart: function() {
-			this.add('rule', 'Evasion Move Clause: Evasion moves are banned');
+			this.add('rule', 'Evasion Moves Clause: Evasion moves are banned');
 		}
 	},
 	moodyclause: {
