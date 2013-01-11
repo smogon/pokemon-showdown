@@ -1233,6 +1233,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'message', "The user '"+targets[2]+"' was not found.");
 			return false;
 		}
+		if (!targetUser.allowChallenges) {
+			emit(socket, 'message', "The user '"+targets[2]+"' is not accepting challenges right now.");
+			return false;
+		}
 		if (typeof target !== 'string') target = 'debugmode';
 		var problems = Tools.validateTeam(user.team, target);
 		if (problems) {
@@ -1242,11 +1246,25 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		user.makeChallenge(targetUser, target);
 		return false;
 		break;
+		
+	case 'blockchallenges':
+	case 'bc':
+		user.setChallenges(false);
+		emit(socket, 'console', 'You are now blocking all incoming challenge requests.');
+		return false;
+		break;
+		
+	case 'allowchallenges':
+	case 'ac':
+		user.setChallenges(true);
+		emit(socket, 'console', 'You are available from challenges from now on.');
+		return false;
+		break;
 
 	case 'cancelchallenge':
 	case 'cchall':
 		user.cancelChallengeTo(target);
-		return false;
+		return false
 		break;
 
 	case 'accept':
