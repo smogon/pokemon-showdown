@@ -297,6 +297,7 @@ exports.BattleFormats = {
 	lc: {
 		effectType: 'Format',
 		name: "LC",
+		maxLevel: 5,
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -307,6 +308,7 @@ exports.BattleFormats = {
 	lcubers: {
 		effectType: 'Format',
 		name: "LC Ubers",
+		maxLevel: 5,
 		challengeShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Soul Dew']
@@ -314,6 +316,7 @@ exports.BattleFormats = {
 	lcuu: {
 		effectType: 'Format',
 		name: "LC UU",
+		maxLevel: 5,
 		challengeShow: true,
 		ruleset: ['LC'],
 		banlist: ['Abra', 'Aipom', 'Archen', 'Aron', 'Axew', 'Bronzor', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos', 'Croagunk', 'Diglett', 'Dratini', 'Drifloon', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Foongus', 'Frillish', 'Gastly', 'Hippopotas', 'Houndour', 'Larvesta', 'Lileep', 'Magnemite', 'Meowth', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Murkrow', 'Onix', 'Pawniard', 'Ponyta', 'Porygon', 'Riolu', 'Sandshrew', 'Scraggy', 'Shellder', 'Snover', 'Staryu', 'Taillow', 'Tentacool', 'Timburr', 'Tirtouga']
@@ -754,9 +757,6 @@ exports.BattleFormats = {
 			}
 			if (!template.nfe) {
 				return [set.species+" doesn't have an evolution family."];
-			}
-			if (!set.level || set.level > 5) {
-				set.level = 5;
 			}
 		}
 	},
