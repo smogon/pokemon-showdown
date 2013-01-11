@@ -35,7 +35,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	this.p1 = p1 || '';
 	this.p2 = p2 || '';
 
-	this.sideTicksLeft = [16, 16];
+	this.sideTicksLeft = [18, 18];
 	this.sideFreeTicks = [0, 0];
 	this.maxTicksLeft = 0;
 
@@ -365,6 +365,11 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		selfR.maxTicksLeft = maxTicksLeft;
 
 		var inactiveSide = selfR.getInactiveSide();
+		if (inactiveSide < 0) {
+			// add 10 seconds to bank if they're below 160 seconds
+			if (selfR.sideTicksLeft[0] < 16) selfR.sideTicksLeft[0]++;
+			if (selfR.sideTicksLeft[1] < 16) selfR.sideTicksLeft[1]++;
+		}
 		if (inactiveSide != 1) {
 			// side 0 is inactive
 			var ticksLeft0 = Math.min(selfR.sideTicksLeft[0] + 1, selfR.maxTicksLeft);
