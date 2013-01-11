@@ -79,19 +79,15 @@ exports.BattleScripts = {
 		}
 
 		var damage = false;
-		var atLeastOne = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 			damage = this.moveHit(target, pokemon, move);
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
+			var targets = [];
 			if (move.target === 'allAdjacent') {
 				var allyActive = pokemon.side.active;
 				for (var i=0; i<allyActive.length; i++) {
 					if (allyActive[i] && Math.abs(i-pokemon.position)<=1 && i != pokemon.position && !allyActive[i].fainted) {
-						if (!atLeastOne) {
-							damage = 0;
-							atLeastOne = true;
-						}
-						damage += (this.rollMoveHit(allyActive[i], pokemon, move, true) || 0);
+						targets.push(allyActive[i]);
 					}
 				}
 			}
@@ -99,20 +95,20 @@ exports.BattleScripts = {
 			var foePosition = foeActive.length-pokemon.position-1;
 			for (var i=0; i<foeActive.length; i++) {
 				if (foeActive[i] && Math.abs(i-foePosition)<=1 && !foeActive[i].fainted) {
-					if (!atLeastOne) {
-						damage = 0;
-						atLeastOne = true;
-					}
-					damage += (this.rollMoveHit(foeActive[i], pokemon, move, true) || 0);
+					targets.push(foeActive[i]);
 				}
 			}
-			if (!atLeastOne) {
+			if (!targets.length) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
 				if (move.selfdestruct && this.gen == 5) {
 					this.faint(pokemon, pokemon, move);
 				}
 				return true;
+			}
+			damage = 0;
+			for (var i=0; i<targets.length; i++) {
+				damage += (this.rollMoveHit(targets[i], pokemon, move, targets.length > 1) || 0);
 			}
 			if (!pokemon.hp) pokemon.faint();
 		} else {
