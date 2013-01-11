@@ -1396,6 +1396,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		lockdown = true;
 		for (var id in rooms) {
 			rooms[id].addRaw('<div style="background-color:#AA5544;color:white;padding:2px 4px"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>');
+			if (rooms[id].requestKickInactive) rooms[id].requestKickInactive(user, true);
 		}
 		return false;
 		break;
