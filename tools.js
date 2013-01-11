@@ -425,18 +425,29 @@ module.exports = (function () {
 							// egg, event, or DW moves:
 							//   only if that was the source
 							if (learned.substr(1,1) === 'E') {
+								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								var eggGroups = template.eggGroups;
 								if (eggGroups[0] === 'No Eggs') eggGroups = this.getTemplate(template.evos[0]).eggGroups;
 								var atLeastOne = false;
 								for (var templateid in this.data.Pokedex) {
 									var dexEntry = this.getTemplate(templateid);
-									if (!dexEntry.isNonstandard && dexEntry.gen <= parseInt(learned.substr(0,1),10) && dexEntry.id !== template.id && dexEntry.learnset && (dexEntry.learnset[move]||dexEntry.learnset['sketch'])) {
+									if (
+										// CAP pokemon can't breed
+										!dexEntry.isNonstandard && 
+										// can't breed mons from future gens
+										dexEntry.gen <= parseInt(learned.substr(0,1),10) &&
+										// if chainbreeding, only match the original source
+										!alreadyChecked[dexEntry.speciesid] &&
+										// the breeding target can learn this move
+										dexEntry.learnset && (dexEntry.learnset[move]||dexEntry.learnset['sketch'])) {
 										if (dexEntry.eggGroups.intersect(eggGroups).length) {
+											// we can breed with it
 											atLeastOne = true;
 											sources.push(learned+dexEntry.id);
 										}
 									}
 								}
+								// chainbreeding with itself from earlier gen
 								if (!atLeastOne) sources.push(learned+template.id);
 							} else if (learned.substr(1,1) === 'S') {
 								sources.push(learned+' '+template.id);
@@ -447,6 +458,7 @@ module.exports = (function () {
 					}
 				}
 				if (format.mimicGlitch && template.gen < 5) {
+					// include the Mimic Glitch when checking this mon's learnset
 					var glitchMoves = {metronome:1, copycat:1, transform:1, mimic:1, assist:1};
 					var getGlitch = false;
 					for (var i in glitchMoves) {
@@ -467,6 +479,7 @@ module.exports = (function () {
 					}
 				}
 			}
+			// also check to see if the mon's prevo or freely switchable formes can learn this move
 			if (template.prevo) {
 				template = this.getTemplate(template.prevo);
 			} else if (template.speciesid === 'shaymin') {
