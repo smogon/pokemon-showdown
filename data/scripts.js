@@ -106,9 +106,10 @@ exports.BattleScripts = {
 				}
 				return true;
 			}
+			if (targets.length == 1) move.spreadHit = true;
 			damage = 0;
 			for (var i=0; i<targets.length; i++) {
-				damage += (this.rollMoveHit(targets[i], pokemon, move, targets.length > 1) || 0);
+				damage += (this.rollMoveHit(targets[i], pokemon, move, true) || 0);
 			}
 			if (!pokemon.hp) pokemon.faint();
 		} else {
