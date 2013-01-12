@@ -2328,7 +2328,7 @@ function Battle(roomid, format, rated) {
 			return 1;
 		}
 
-		if (pokemon.side.active.length > 1 && (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes')) {
+		if (move.spreadHit) {
 			baseDamage = selfB.modify(baseDamage, move.spreadModifier || 0.75);
 		}
 
