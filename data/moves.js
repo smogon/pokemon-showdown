@@ -6463,7 +6463,8 @@ exports.BattleMovedex = {
 			onFoeBasePower: function(basePower, attacker, defender, move) {
 				if (move.category === 'Special' && defender.side === this.effectData.target) {
 					if (!move.crit && attacker.ability !== 'infiltrator') {
-						this.debug('Light Screen weaken');
+						this.debug('Light Screen weaken')
+						if (attacker.side.active.length > 1) return basePower*2/3;
 						return basePower/2;
 					}
 				}
@@ -8999,6 +9000,7 @@ exports.BattleMovedex = {
 				if (move.category === 'Physical' && defender.side === this.effectData.target) {
 					if (!move.crit && attacker.ability !== 'infiltrator') {
 						this.debug('Reflect weaken');
+						if (attacker.side.active.length > 1) return basePower*2/3;
 						return basePower/2;
 					}
 				}
