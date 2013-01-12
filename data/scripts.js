@@ -106,7 +106,7 @@ exports.BattleScripts = {
 				}
 				return true;
 			}
-			if (targets.length == 1) move.spreadHit = true;
+			if (targets.length > 1) move.spreadHit = true;
 			damage = 0;
 			for (var i=0; i<targets.length; i++) {
 				damage += (this.rollMoveHit(targets[i], pokemon, move, true) || 0);
