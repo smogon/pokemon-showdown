@@ -134,7 +134,7 @@ exports.BattleStatuses = {
 			if (this.random(2) === 0) {
 				return;
 			}
-			this.damage(this.getDamage(pokemon,pokemon,40));
+			this.directDamage(this.getDamage(pokemon,pokemon,40));
 			return false;
 		}
 	},

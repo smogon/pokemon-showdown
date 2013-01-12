@@ -5268,7 +5268,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		hasCustomRecoil: true,
 		onMoveFail: function(target, source, move) {
-			this.damage(source.maxhp/2, source);
+			this.damage(source.maxhp/2, source, source, {id:'hijumpkick'});
 		},
 		secondary: false,
 		target: "normal",
@@ -6172,7 +6172,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		hasCustomRecoil: true,
 		onMoveFail: function(target, source, move) {
-			this.damage(source.maxhp/2, source);
+			this.damage(source.maxhp/2, source, source, {id:'jumpkick'});
 		},
 		secondary: false,
 		target: "normal",
