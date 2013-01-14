@@ -1005,7 +1005,7 @@ exports.BattleScripts = {
 				item = 'Choice Specs';
 			} else if (counter.Status <= 1 && (hasMove['trick'] || hasMove['switcheroo'])) {
 				item = 'Choice Scarf';
-			} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure') {
+			} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
 				item = 'Chesto Berry';
 			} else if (hasMove['naturalgift']) {
 				item = 'Liechi Berry';
