@@ -846,7 +846,7 @@ module.exports = (function () {
 				} else if (lsetData.sources) {
 					var compatibleSource = false;
 					for (var i=0,len=lsetData.sources.length; i<len; i++) {
-						if (lsetData.sources[i].substr(0,2) in {'5E':1, '5D':1}) {
+						if (lsetData.sources[i].substr(0,2) === '5E' || (lsetData.sources[i].substr(0,2) === '5D' && (set.level >= 10 || set.forcedLevel))) {
 							compatibleSource = true;
 							break;
 						}
