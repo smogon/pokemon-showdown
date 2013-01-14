@@ -722,6 +722,12 @@ exports.BattleMovedex = {
 			duration: 1,
 			onStart: function(pokemon) {
 				this.effectData.index = 0;
+				while (pokemon.side.pokemon[this.effectData.index] !== pokemon &&
+					(!pokemon.side.pokemon[this.effectData.index] ||
+					pokemon.side.pokemon[this.effectData.index].fainted ||
+					pokemon.side.pokemon[this.effectData.index].status)) {
+					this.effectData.index++;
+				}
 			},
 			onRestart: function(pokemon) {
 				do {
