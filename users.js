@@ -17,6 +17,9 @@ function getUser(name, exactName) {
 	}
 	return users[userid];
 }
+function getExactUser(name) {
+	return getUser(name, true);
+}
 function searchUser(name) {
 	var userid = toUserid(name);
 	while (userid && !users[userid]) {
@@ -983,6 +986,7 @@ function ipSearch(ip, table) {
 }
 
 exports.get = getUser;
+exports.getExact = getExactUser;
 exports.searchUser = searchUser;
 exports.connectUser = connectUser;
 exports.users = users;
