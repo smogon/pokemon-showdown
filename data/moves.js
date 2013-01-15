@@ -6399,7 +6399,7 @@ exports.BattleMovedex = {
 		},
 		onTryHit: function(target) {
 			if (target.hasType('Grass')) {
-				this.add('-immune', target.id, '[msg]');
+				this.add('-immune', target, '[msg]');
 				return null;
 			}
 		},
