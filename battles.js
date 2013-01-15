@@ -1730,6 +1730,7 @@ function Battle(roomid, format, rated) {
 				return !a.fainted;
 			}
 			function shouldSwitch(a) {
+				if (!a) return false;
 				if (!switchablesLeft) {
 					a.switchFlag = false;
 					return false;
