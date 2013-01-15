@@ -64,9 +64,9 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			}
 
 			var p1 = rated.p1;
-			if (Users.get(rated.p1)) p1 = Users.get(rated.p1).name;
+			if (Users.get(rated.p1) && Users.get(rated.p1).userid == p1) p1 = Users.get(rated.p1).name;
 			var p2 = rated.p2;
-			if (Users.get(rated.p2)) p2 = Users.get(rated.p2).name;
+			if (Users.get(rated.p2) && Users.get(rated.p2).userid == p2) p2 = Users.get(rated.p2).name;
 
 			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken=[token]');
 
