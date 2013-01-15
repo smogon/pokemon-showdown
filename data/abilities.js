@@ -1916,7 +1916,11 @@ exports.BattleAbilities = {
 			onStart: function(target) {
 				this.add('-start', target, 'Slow Start');
 			},
-			onModifyStats: function(stats) {
+			onModifyStats: function(stats, pokemon) {
+				if (pokemon.ability !== 'slowstart') {
+					pokemon.removeVolatile('slowstart');
+					return;
+				}
 				stats.atk /= 2;
 				stats.spe /= 2;
 			},
