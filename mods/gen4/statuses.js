@@ -39,5 +39,14 @@ exports.BattleStatuses = {
 			if (source.item === 'gripclaw') return 6;
 			return this.random(3,7);
 		}
+	},
+	stall: {
+		inherit: true,
+		onStart: function() {
+			this.effectData.counter = 2;
+			// In gen 4, the chance of protect succeeding does not fall below 1/8.
+			// See http://upokecenter.dreamhosters.com/dex/?lang=en&move=182
+			this.effectData.counterMax = 8;
+		},
 	}
 };
