@@ -8689,7 +8689,7 @@ exports.BattleMovedex = {
 		sideCondition: 'quickguard',
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		onTryHitSide: function(side, source) {
-			return this.willAct() && this.runEvent('StallMove', pokemon);
+			return this.willAct() && this.runEvent('StallMove', source);
 		},
 		onHitSide: function(side, source) {
 			source.addVolatile('stall');
