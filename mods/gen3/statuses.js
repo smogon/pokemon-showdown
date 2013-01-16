@@ -68,5 +68,11 @@ exports.BattleStatuses = {
 		onEnd: function() {
 			this.add('-weather', 'none');
 		}
+	},
+	stall: {
+		// In gen 3, the chance of protect succeeding does not fall below 1/8.
+		// See http://upokecenter.dreamhosters.com/dex/?lang=en&move=182
+		inherit: true,
+		counterMax: 8
 	}
 };
