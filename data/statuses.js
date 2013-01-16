@@ -294,9 +294,9 @@ exports.BattleStatuses = {
 	stall: {
 		// Protect, Detect, Endure counter
 		duration: 2,
+		counterMax: 256,
 		onStart: function() {
 			this.effectData.counter = 2;
-			this.effectData.counterMax = 256;
 		},
 		onStallMove: function() {
 			// this.effectData.counter should never be undefined here.
@@ -310,7 +310,7 @@ exports.BattleStatuses = {
 			return (this.random(counter) === 0);
 		},
 		onRestart: function() {
-			if (this.effectData.counter < this.effectData.counterMax) {
+			if (this.effectData.counter < this.effect.counterMax) {
 				this.effectData.counter *= 2;
 			}
 			this.effectData.duration = 2;
