@@ -136,6 +136,7 @@ var User = (function () {
 		this.authenticated = false;
 		this.userid = toUserid(this.name);
 		this.group = config.groupsranking[0];
+		this.allowChallenges = true;
 
 		var trainersprites = [1, 2, 101, 102, 169, 170, 265, 266];
 		this.avatar = trainersprites[Math.floor(Math.random()*trainersprites.length)];
@@ -816,6 +817,9 @@ var User = (function () {
 		if (!user || this.challengeTo) {
 			return false;
 		}
+		if (!user.allowChallenges) {
+			return false;
+		}
 		if (new Date().getTime() < this.lastChallenge + 10000) {
 			// 10 seconds ago
 			return false;
@@ -927,6 +931,11 @@ var User = (function () {
 			this.chatQueue = null;
 			this.chatQueueTimeout = null;
 		}
+	};
+	User.prototype.setChallenges = function (boolean) {
+		// Boolean must be boolean, also allowing challenges by default
+		if (boolean !== false) boolean = true;
+		this.allowChallenges = boolean;
 	};
 	return User;
 })();
