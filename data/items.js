@@ -1315,7 +1315,6 @@ exports.BattleItems = {
 		id: "jabocaberry",
 		name: "Jaboca Berry",
 		spritenum: 230,
-		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -1329,7 +1328,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "If hit by a physical attack, the attacker takes 12.5% damage. Unobtainable in BW. One-time use."
+		desc: "If hit by a physical attack, the attacker takes 12.5% damage. One-time use."
 	},
 	"kasibberry": {
 		id: "kasibberry",
