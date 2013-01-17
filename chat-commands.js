@@ -1235,6 +1235,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'message', "The user '"+targets[2]+"' was not found.");
 			return false;
 		}
+		if (!targetUser.allowChallenges) {
+			emit(socket, 'message', "The user '"+targets[2]+"' is not accepting challenges right now.");
+			return false;
+		}
 		if (typeof target !== 'string') target = 'debugmode';
 		var problems = Tools.validateTeam(user.team, target);
 		if (problems) {
