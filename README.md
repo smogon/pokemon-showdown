@@ -46,6 +46,13 @@ IE8 support can technically be added without too much difficulty, but it doesn't
 
 As for older browsers (Firefox 3.6), I won't go out of my way to support them, but if there's a simple fix, you can suggest it to me and I'll implement it.
 
+License
+------------------------------------------------------------------------
+
+Pokemon Showdown's server is distributed under the terms of the [MIT License][1].
+
+  [1]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+
 Credits
 ------------------------------------------------------------------------
 
