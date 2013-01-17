@@ -1244,6 +1244,20 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		user.makeChallenge(targetUser, target);
 		return false;
 		break;
+		
+	case 'blockchallenges':
+	case 'bc':
+		user.allowChallenges = false;
+		emit(socket, 'console', 'You are now blocking all incoming challenge requests.');
+		return false;
+		break;
+
+	case 'allowchallenges':
+	case 'ac':
+		user.allowChallenges = true;
+		emit(socket, 'console', 'You are available from challenges from now on.');
+		return false;
+		break;
 
 	case 'cancelchallenge':
 	case 'cchall':
