@@ -2646,6 +2646,7 @@ exports.BattleAbilities = {
 			}
 		},
 		id: "mountaineer",
+		isNonstandard: true,
 		name: "Mountaineer",
 		rating: 3.5,
 		num: -2
@@ -2654,6 +2655,7 @@ exports.BattleAbilities = {
 		desc: "It can reflect the effect of status moves when switching in.",
 		shortDesc: "On switch-in, this Pokemon blocks certain status moves and uses the move itself.",
 		id: "rebound",
+		isNonstandard: true,
 		name: "Rebound",
 		onAllyTryFieldHit: function(target, source, move) {
 			if (target === source) return;
@@ -2684,6 +2686,7 @@ exports.BattleAbilities = {
 		desc: "Increases the duration of many field effects by two turns when used by this Pokémon.",
 		shortDesc: "The duration of certain field effects is increased by 2 turns if used by this Pokemon.",
 		id: "persistent",
+		isNonstandard: true,
 		name: "Persistent",
 		// implemented in the corresponding move
 		rating: 4,

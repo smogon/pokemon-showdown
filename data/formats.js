@@ -686,6 +686,12 @@ exports.BattleFormats = {
 			if (template.isNonstandard) {
 				problems.push(set.species+' is not a real Pokemon.');
 			}
+			if (set.ability) {
+				var ability = this.getAbility(set.ability);
+				if (ability.isNonstandard) {
+					problems.push(ability.name+' is not a real ability.');
+				}
+			}
 			if (set.moves) for (var i=0; i<set.moves.length; i++) {
 				var move = this.getMove(set.moves[i]);
 				if (move.isNonstandard) {
