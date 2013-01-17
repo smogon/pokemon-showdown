@@ -166,23 +166,23 @@ exports.BattleFormats = {
 		name: "OU",
 		challengeDefault: true,
 		rated: true,
-		// challengeShow: true,
-		// searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
-	oucurrent: {
-		effectType: 'Format',
-		name: "OU (current)",
-		challengeDefault: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
+	//oucurrent: {
+	//	effectType: 'Format',
+	//	name: "OU (current)",
+	//	challengeDefault: true,
+	//	rated: true,
+	//	challengeShow: true,
+	//	searchShow: true,
+	//	isTeambuilderFormat: true,
+	//	ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+	//	banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	//},
 	// oususpecttest: {
 	// 	effectType: 'Format',
 	// 	name: "OU (suspect test)",
