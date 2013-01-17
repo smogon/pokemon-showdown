@@ -141,6 +141,7 @@ exports.groups = {
 		modchat: true,
 		redirect: true,
 		forcerename: true,
+		modlog: true,
 		ip: true,
 		alts: '@u',
 		rank: 3
@@ -154,6 +155,8 @@ exports.groups = {
 		warn: true,
 		mute: true,
 		forcerename: true,
+		timer: true,
+		alts: '%u',
 		rank: 2
 	},
 	'+': {
