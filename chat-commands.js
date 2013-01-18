@@ -1062,9 +1062,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		
 	case 'faq':
 	case '!faq':
-		target = target.toLowerCase() || 'all';
+		target = target.toLowerCase();
 		var buffer = '<div style="border:1px solid #6688AA;padding:2px 4px">';
 		var matched = false;
+		if (!target || target === 'all') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/sim/faq" target="_blank">Frequently Asked Questions</a><br />';
+		}
 		if (target === 'all' || target === 'deviation') {
 			matched = true;
 			buffer += '<a href="http://www.smogon.com/sim/faq#deviation" target="_blank">Why did this user gain or lose so many points?</a><br />';
@@ -1080,6 +1084,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === 'all' || target === 'restarts') {
 			matched = true;
 			buffer += '<a href="http://www.smogon.com/sim/faq#restarts" target="_blank">Why is the server restarting?</a><br />';
+		}
+		if (target === 'all' || target === 'staff') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/sim/staff_faq" target="_blank">Staff FAQ</a><br />';
 		}
 		if (!matched) {
 			emit(socket, 'console', 'The FAQ entry "'+target+'" was not found. Try /faq for general help.');
