@@ -565,6 +565,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'unmute':
+	case 'um':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targetid = toUserid(target);
 		var targetUser = Users.get(target);
@@ -1058,6 +1059,49 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'</div>');
 		return false;
 		break;
+		
+	case 'faq':
+	case '!faq':
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		target = target.toLowerCase();
+		showOrBroadcast(user, cmd, room, socket, '<div style="border:1px solid #6688AA;padding:2px 4px">');
+		var matched = false;
+		if (target === 'all' || target === 'decay') {
+			matched = true;
+			showOrBroadcast(user, cmd, room, socket, 
+				'<a href="http://www.smogon.com/sim/faq#decay" target="_blank">Why did this user gain points when he lost?</a><br />');
+		}
+		if (target === 'all' || target === 'deviation') {
+			matched = true;
+			showOrBroadcast(user, cmd, room, socket, 
+			'<a href="http://www.smogon.com/sim/faq#deviation" target="_blank">Why did this user gain or lose so many points?</a><br />');
+		}
+		if (target === 'all' || target === 'doubles') {
+			matched = true;
+			showOrBroadcast(user, cmd, room, socket, 
+			'<a href="http://www.smogon.com/sim/faq#doubles" target="_blank">Can I play doubles here?</a><br />');
+		}
+		if (target === 'all' || target === 'randomcap') {
+			matched = true;
+			showOrBroadcast(user, cmd, room, socket, 
+			'<a href="http://www.smogon.com/sim/faq#randomcap" target="_blank">What is this fakemon and what is it doing in my random battle?</a><br />');
+		}
+		if (target === 'all' || target === 'restarts') {
+			matched = true;
+			showOrBroadcast(user, cmd, room, socket, 
+			'<a href="http://www.smogon.com/sim/faq#restarts" target="_blank">Why is the server restarting?</a><br />');
+		}
+		if (!target) {
+			showOrBroadcast(user, cmd, room, socket, 
+			'<a href="http://www.smogon.com/sim/faq#decay" target="_blank">Why did this user gain points when he lost?</a><br />');
+			showOrBroadcast(user, cmd, room, socket, 
+			'<a href="http://www.smogon.com/sim/faq#deviation" target="_blank">Why did this user gain or lose so many points?</a><br />');
+		} else if (!matched) {
+			emit(socket, 'console', 'The command "/'+target+'" was not found. Try /faq for general help');
+		}
+		showOrBroadcast(user, cmd, room, socket, '</div>');
+		return false;
+		break;
 
 	case 'banlists':
 	case 'tiers':
@@ -1250,6 +1294,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 		
 	case 'blockchallenges':
+	case 'idle':
 	case 'bc':
 		user.allowChallenges = false;
 		emit(socket, 'console', 'You are now blocking all incoming challenge requests.');
@@ -1257,9 +1302,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'allowchallenges':
+	case 'back':
 	case 'ac':
 		user.allowChallenges = true;
-		emit(socket, 'console', 'You are available from challenges from now on.');
+		emit(socket, 'console', 'You are available for challenges from now on.');
 		return false;
 		break;
 
@@ -1655,11 +1701,19 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/calc - Provides a link to a damage calculator');
 			emit(socket, 'console', '!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~');
 		}
-		if (target === '@' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
+		if (target === 'all' || target === 'blockchallenges' || target === 'bc' || target === 'idle') {
+			matched = true;
+			emit(socket, 'console', '/blockchallenges OR /bc OR /idle - Blocks challenges so no one can challenge you.');
+		}
+		if (target === 'all' || target === 'allowchallenges' || target === 'ac' || target === 'back') {
+			matched = true;
+			emit(socket, 'console', '/allowchallenges OR /ac OR /back - Unlocks challenges so you can be challenged again.');
+		}
+		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
 			emit(socket, 'console', '/alts OR /altcheck OR /alt OR /getalts [username] - Get a user\'s alts. Requires: @ & ~');
 		}
-		if (target === '@' || target === 'forcerename' || target === 'fr') {
+		if (target === '%' || target === 'forcerename' || target === 'fr') {
 			matched = true;
 			emit(socket, 'console', '/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: @ & ~');
 		}
@@ -1748,12 +1802,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/help OR /h OR /? - Gives you help.');
 		}
 		if (!target) {
-			emit(socket, 'console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help');
+			emit(socket, 'console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /blockchallenges, /allowchallenges');
 			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /tiers, /intro, /learn, /analysis (replace / with ! to broadcast. (Requires: + % @ & ~))');
 			emit(socket, 'console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
-				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /announce')
-				emit(socket, 'console', 'MODERATOR COMMANDS: /alts, /forcerename, /ban, /unban, /unbanall, /ip, /modlog, /redirect, /kick');
+				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /announce, /forcerename, /alts')
+				emit(socket, 'console', 'MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /modlog, /redirect, /kick');
 				emit(socket, 'console', 'LEADER COMMANDS: /promote, /demote, /forcerenameto, /namelock, /nameunlock, /forcewin, /forcetie, /declare');
 				emit(socket, 'console', 'For details on all moderator commands, use /help @');
 			}
@@ -1885,7 +1939,7 @@ function splitTarget(target, exactName) {
 		return [Users.get(target, exactName), '', target];
 	}
 	var targetUser = Users.get(target.substr(0, commaIndex), exactName);
-	if (!targetUser || !targetUser.connected) {
+	if (!targetUser) {
 		targetUser = null;
 	}
 	return [targetUser, target.substr(commaIndex+1).trim(), target.substr(0, commaIndex)];
