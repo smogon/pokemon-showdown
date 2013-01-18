@@ -36,6 +36,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	this.p2 = p2 || '';
 
 	this.sideTicksLeft = [21, 21];
+	if (!rated) this.sideTicksLeft = [28,28];
 	this.sideFreeTicks = [0, 0];
 	this.maxTicksLeft = 0;
 
@@ -360,6 +361,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			// if a player has left, don't wait longer than 6 ticks (1 minute)
 			maxTicksLeft = 6;
 		}
+		if (!selfR.rated) maxTicksLeft = 30;
 		selfR.sideFreeTicks = [1,1];
 
 		selfR.maxTicksLeft = maxTicksLeft;
