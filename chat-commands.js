@@ -1065,17 +1065,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		target = target.toLowerCase() || 'all';
 		var buffer = '<div style="border:1px solid #6688AA;padding:2px 4px">';
 		var matched = false;
-		if (target === 'all' || target === 'decay') {
-			matched = true;
-			buffer += '<a href="http://www.smogon.com/sim/faq#decay" target="_blank">Why did this user gain points when he lost?</a><br />';
-		}
 		if (target === 'all' || target === 'deviation') {
 			matched = true;
 			buffer += '<a href="http://www.smogon.com/sim/faq#deviation" target="_blank">Why did this user gain or lose so many points?</a><br />';
 		}
-		if (target === 'all' || target === 'doubles') {
+		if (target === 'all' || target === 'doubles' || target === 'triples' || target === 'rotation') {
 			matched = true;
-			buffer += '<a href="http://www.smogon.com/sim/faq#doubles" target="_blank">Can I play doubles here?</a><br />';
+			buffer += '<a href="http://www.smogon.com/sim/faq#doubles" target="_blank">Can I play doubles/triples/rotation battles here?</a><br />';
 		}
 		if (target === 'all' || target === 'randomcap') {
 			matched = true;
