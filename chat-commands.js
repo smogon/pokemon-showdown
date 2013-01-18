@@ -1062,44 +1062,36 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		
 	case 'faq':
 	case '!faq':
-		showOrBroadcastStart(user, cmd, room, socket, message);
-		target = target.toLowerCase();
-		showOrBroadcast(user, cmd, room, socket, '<div style="border:1px solid #6688AA;padding:2px 4px">');
+		target = target.toLowerCase() || 'all';
+		var buffer = '<div style="border:1px solid #6688AA;padding:2px 4px">';
 		var matched = false;
 		if (target === 'all' || target === 'decay') {
 			matched = true;
-			showOrBroadcast(user, cmd, room, socket, 
-				'<a href="http://www.smogon.com/sim/faq#decay" target="_blank">Why did this user gain points when he lost?</a><br />');
+			buffer += '<a href="http://www.smogon.com/sim/faq#decay" target="_blank">Why did this user gain points when he lost?</a><br />';
 		}
 		if (target === 'all' || target === 'deviation') {
 			matched = true;
-			showOrBroadcast(user, cmd, room, socket, 
-			'<a href="http://www.smogon.com/sim/faq#deviation" target="_blank">Why did this user gain or lose so many points?</a><br />');
+			buffer += '<a href="http://www.smogon.com/sim/faq#deviation" target="_blank">Why did this user gain or lose so many points?</a><br />';
 		}
 		if (target === 'all' || target === 'doubles') {
 			matched = true;
-			showOrBroadcast(user, cmd, room, socket, 
-			'<a href="http://www.smogon.com/sim/faq#doubles" target="_blank">Can I play doubles here?</a><br />');
+			buffer += '<a href="http://www.smogon.com/sim/faq#doubles" target="_blank">Can I play doubles here?</a><br />';
 		}
 		if (target === 'all' || target === 'randomcap') {
 			matched = true;
-			showOrBroadcast(user, cmd, room, socket, 
-			'<a href="http://www.smogon.com/sim/faq#randomcap" target="_blank">What is this fakemon and what is it doing in my random battle?</a><br />');
+			buffer += '<a href="http://www.smogon.com/sim/faq#randomcap" target="_blank">What is this fakemon and what is it doing in my random battle?</a><br />';
 		}
 		if (target === 'all' || target === 'restarts') {
 			matched = true;
-			showOrBroadcast(user, cmd, room, socket, 
-			'<a href="http://www.smogon.com/sim/faq#restarts" target="_blank">Why is the server restarting?</a><br />');
+			buffer += '<a href="http://www.smogon.com/sim/faq#restarts" target="_blank">Why is the server restarting?</a><br />';
 		}
-		if (!target) {
-			showOrBroadcast(user, cmd, room, socket, 
-			'<a href="http://www.smogon.com/sim/faq#decay" target="_blank">Why did this user gain points when he lost?</a><br />');
-			showOrBroadcast(user, cmd, room, socket, 
-			'<a href="http://www.smogon.com/sim/faq#deviation" target="_blank">Why did this user gain or lose so many points?</a><br />');
-		} else if (!matched) {
-			emit(socket, 'console', 'The command "/'+target+'" was not found. Try /faq for general help');
+		if (!matched) {
+			emit(socket, 'console', 'The FAQ entry "'+target+'" was not found. Try /faq for general help.');
+			return false;
 		}
-		showOrBroadcast(user, cmd, room, socket, '</div>');
+		buffer += '</div>';
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket, buffer);
 		return false;
 		break;
 
