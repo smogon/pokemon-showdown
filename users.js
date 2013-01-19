@@ -817,7 +817,7 @@ var User = (function () {
 		if (!user || this.challengeTo) {
 			return false;
 		}
-		if (!user.allowChallenges) {
+		if (!user.allowChallenges && !user.isAuth()) {
 			return false;
 		}
 		if (new Date().getTime() < this.lastChallenge + 10000) {
@@ -931,6 +931,9 @@ var User = (function () {
 			this.chatQueue = null;
 			this.chatQueueTimeout = null;
 		}
+	};
+	User.prototype.isAuth = function() {
+		return ['%', '@', '&', '~'].indexOf(this.group) >= 0;
 	};
 	return User;
 })();
