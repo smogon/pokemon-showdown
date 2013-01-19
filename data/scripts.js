@@ -717,7 +717,6 @@ exports.BattleScripts = {
 
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
-					if (hasMove['trick'] || hasMove['protect'] || hasMove['substitute'] || hasMove['bellydrum']) rejected = true;
 					break;
 				case 'endure':
 					if (!hasMove['flail'] && !hasMove['endeavor'] && !hasMove['reversal']) rejected = true;
@@ -727,6 +726,12 @@ exports.BattleScripts = {
 					break;
 				case 'storedpower':
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
+					break;
+
+				// not useful together
+
+				case 'bellydrum': case 'encore': case 'protect': case 'pursuit': case 'stealthrock': case 'suckerpunch': case 'trick':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 
 				// we only need to set up once
@@ -755,14 +760,14 @@ exports.BattleScripts = {
 				case 'knockoff': case 'protect': case 'perishsong': case 'magiccoat': case 'trick': case 'switcheroo':
 					if (setupType) rejected = true;
 					break;
-				case 'uturn': case 'voltswitch':
+				case 'uturn': case 'voltswitch': case 'relicsong':
 					if (setupType) rejected = true;
 					break;
 
 				// bit redundant to have both
 
 				case 'flamethrower':
-					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast']) rejected = true;
+					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast'] || hasMove['blueflare']) rejected = true;
 					break;
 				case 'overheat':
 					if (hasMove['fireblast']) rejected = true;
@@ -772,6 +777,9 @@ exports.BattleScripts = {
 					break;
 				case 'surf':
 					if (hasMove['scald'] || hasMove['hydropump']) rejected = true;
+					break;
+				case 'hydropump':
+					if (hasMove['razorshell'] || hasMove['scald']) rejected = true;
 					break;
 				case 'waterfall':
 					if (hasMove['aquatail']) rejected = true;
@@ -808,6 +816,9 @@ exports.BattleScripts = {
 					break;
 				case 'stoneedge':
 					if (hasMove['headsmash']) rejected = true;
+					break;
+				case 'bonemerang': case 'earthpower':
+					if (hasMove['earthquake']) rejected = true;
 					break;
 				case 'dragonclaw':
 					if (hasMove['outrage'] || hasMove['dragontail']) rejected = true;
@@ -995,6 +1006,8 @@ exports.BattleScripts = {
 				item = 'Focus Sash';
 			} else if (template.species === 'Unown') {
 				item = 'Choice Specs';
+			} else if ((template.species === 'Wynaut' || template.species === 'Wobbuffet') && hasMove['destinybond']) && Math.random()*2 > 1) {
+				item = 'Custap Berry';
 			} else if (hasMove['trick'] && hasMove['gyroball'] && (ability === 'Levitate' || hasType['Flying'])) {
 				item = 'Macho Brace';
 			} else if (hasMove['trick'] && hasMove['gyroball']) {
@@ -1103,6 +1116,8 @@ exports.BattleScripts = {
 				item = 'Expert Belt';
 			} else if (i===0 && ability !== 'Sturdy') {
 				item = 'Focus Sash';
+			} else if (hasMove['outrage']) {
+				item = 'Lum Berry';
 
 			// this is the "REALLY can't think of a good item" cutoff
 			// why not always Leftovers? Because it's boring. :P
