@@ -589,7 +589,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Activates at 25% HP. Next move used goes first. Unobtainable in BW. One-time use."
+		desc: "Activates at 25% HP. Next move used goes first. One-time use."
 	},
 	"damprock": {
 		id: "damprock",
@@ -2645,7 +2645,7 @@ exports.BattleItems = {
 				stats.spd *= 1.5;
 			}
 		},
-		desc: "Raises Special Attack and Special Defense by 50% if the holder is Latias or Latios. Unobtainable in BW."
+		desc: "Raises Special Attack and Special Defense by 50% if the holder is Latias or Latios."
 	},
 	"spelltag": {
 		id: "spelltag",
