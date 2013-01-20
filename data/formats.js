@@ -161,6 +161,23 @@ exports.BattleFormats = {
 		searchShow: true,
 		ruleset: ['Pokemon']
 	},
+	challengecup1vs1: {
+		effectType: 'Format',
+		name: "Challenge Cup 1 VS 1",
+		team: 'randomCC',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		ruleset: ['Pokemon', 'Team Preview'],
+		debug: true,
+		onBegin: function() {
+			this.debug('Cutting down to 1');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
 	ou: {
 		effectType: 'Format',
 		name: "OU",
