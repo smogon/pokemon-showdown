@@ -9049,7 +9049,7 @@ exports.BattleMovedex = {
 			chance: 10,
 			status: 'slp'
 		},
-		onHit: function(target, pokemon) {
+		effect: function(target, pokemon) {
 			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
