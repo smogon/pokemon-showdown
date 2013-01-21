@@ -788,7 +788,7 @@ exports.BattleAbilities = {
 	"hustle": {
 		desc: "This Pokemon's Attack receives a 50% boost but its Physical attacks receive a 20% drop in Accuracy. For example, a 100% accurate move would become an 80% accurate move. The accuracy of moves that never miss, such as Aerial Ace, remains unaffected.",
 		shortDesc: "This Pokemon's Attack is 1.5x and accuracy of its physical attacks is 0.8x.",
-		onModifyAtk: function(stats) {
+		onModifyAtk: function(atk) {
 			return atk * 1.5;
 		},
 		onModifyMove: function(move) {
@@ -1594,7 +1594,7 @@ exports.BattleAbilities = {
 	"purepower": {
 		desc: "This Pokemon's Attack stat is doubled. Therefore, if this Pokemon's Attack stat on the status screen is 200, it effectively has an Attack stat of 400; which is then subject to the full range of stat boosts and reductions.",
 		shortDesc: "This Pokemon's Attack is doubled.",
-		onModifyAtk: function(stats) {
+		onModifyAtk: function(atk) {
 			return atk * 2;
 		},
 		id: "purepower",
