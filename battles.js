@@ -2336,7 +2336,15 @@ function Battle(roomid, format, rated) {
 
 		return Math.floor(baseDamage);
 	};
-	this.validTargetLoc = function(targetLoc, source, targetType) {
+	/**
+	 * Returns whether a proposed target for a move is valid.
+	 *
+	 * 'userSelected' specifies whether the proposed target was chosen by the
+	 * client, as opposed to internal use within the game logic. The difference
+	 * is that for a 'randomNormal' move, the client cannot specify a target,
+	 * but internal game logic code can.
+	 */
+	this.validTargetLoc = function(targetLoc, source, targetType, userSelected) {
 		var numSlots = source.side.active.length;
 		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
 
@@ -2346,6 +2354,11 @@ function Battle(roomid, format, rated) {
 		var isSelf = (sourceLoc === targetLoc);
 
 		switch (targetType) {
+		case 'randomNormal':
+			if (userSelected) {
+				return false;
+			}
+			// fall through to next case
 		case 'normal':
 			return isAdjacent && !isSelf;
 		case 'adjacentAlly':
@@ -2366,12 +2379,12 @@ function Battle(roomid, format, rated) {
 		} else {
 			targetLoc = target.position+1;
 		}
-		return selfB.validTargetLoc(targetLoc, source, targetType);
+		return selfB.validTargetLoc(targetLoc, source, targetType, false);
 	};
 	this.getTarget = function(decision) {
 		var move = selfB.getMove(decision.move);
 		var target;
-		if (selfB.validTargetLoc(decision.targetLoc, decision.pokemon, move.target)) {
+		if (selfB.validTargetLoc(decision.targetLoc, decision.pokemon, move.target, true)) {
 			if (decision.targetLoc > 0) {
 				target = decision.pokemon.side.foe.active[decision.targetLoc-1];
 			} else {

@@ -4011,6 +4011,7 @@ exports.BattleMovedex = {
 			duration: 1,
 			onFoeRedirectTarget: function(target, source, source2, move) {
 				if (this.validTarget(this.effectData.target, source, move.target)) {
+					this.debug("Follow Me redirected target of move");
 					return this.effectData.target;
 				}
 			}
