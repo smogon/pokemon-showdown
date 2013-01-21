@@ -1275,7 +1275,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'message', "The user '"+targets[2]+"' was not found.");
 			return false;
 		}
-		if (!targetUser.allowChallenges) {
+		if (!targetUser.allowChallenges && !user.can('challengealways', targetUser)) {
 			emit(socket, 'message', "The user '"+targets[2]+"' is not accepting challenges right now.");
 			return false;
 		}
@@ -1704,6 +1704,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === 'all' || target === 'allowchallenges' || target === 'ac' || target === 'back') {
 			matched = true;
 			emit(socket, 'console', '/allowchallenges OR /ac OR /back - Unlocks challenges so you can be challenged again.');
+		}
+		if (target === 'all' || target === 'faq') {
+			matched = true;
+			text = '/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.<br />';
+			text += '!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ & ~';
+			emit(socket, 'console', text);
 		}
 		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
