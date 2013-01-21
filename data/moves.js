@@ -11600,7 +11600,7 @@ exports.BattleMovedex = {
 		},
 		onHit: function(pokemon) {
 			var healAmount = [4,2,1];
-			this.heal(pokemon.maxhp / healAmount[pokemon.volatiles['stockpile'].layers]);
+			this.heal(pokemon.maxhp / healAmount[(pokemon.volatiles['stockpile'].layers - 1)]);
 			pokemon.removeVolatile('stockpile');
 		},
 		secondary: false,
