@@ -529,9 +529,9 @@ exports.BattleAbilities = {
 	"flareboost": {
 		desc: "When the user with this ability is burned, its Special Attack is raised by 50%.",
 		shortDesc: "When this Pokemon is burned, its special attacks do 1.5x damage.",
-		onModifySpA: function(spa, pokemon) {
-			if (pokemon.status === 'brn') {
-				return spa * 1.5;
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (attacker.status === 'brn' && move.category === 'Special') {
+				return basePower * 1.5;
 			}
 		},
 		id: "flareboost",
@@ -2336,9 +2336,9 @@ exports.BattleAbilities = {
 	"toxicboost": {
 		desc: "When the user is poisoned, its Attack stat is raised by 50%.",
 		shortDesc: "When this Pokemon is poisoned, its physical attacks do 1.5x damage.",
-		onModifyAtk: function(atk, pokemon) {
-			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
-				return atk * 1.5;
+		onBasePower: function(basePower, attacker, defender, move) {
+			if ((attacker.status === 'psn' || attacker.status === 'tox') && move.category === 'Physical') {
+				return basePower * 1.5;
 			}
 		},
 		id: "toxicboost",
