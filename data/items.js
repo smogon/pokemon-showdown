@@ -2649,12 +2649,12 @@ exports.BattleItems = {
 		},
 		onModifySpA: function(spa, pokemon) {
 			if (pokemon.template.species === 'Latios' || pokemon.template.species === 'Latias') {
-				return spa * 2;
+				return spa * 1.5;
 			}
 		},
 		onModifySpD: function(spd, pokemon) {
 			if (pokemon.template.species === 'Latios' || pokemon.template.species === 'Latias') {
-				return spd * 2;
+				return spd * 1.5;
 			}
 		},
 		desc: "Raises Special Attack and Special Defense by 50% if the holder is Latias or Latios."
