@@ -157,6 +157,7 @@ exports.groups = {
 		forcerename: true,
 		timer: true,
 		alts: '%u',
+		challengealways: true,
 		rank: 2
 	},
 	'+': {
