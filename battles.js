@@ -247,6 +247,7 @@ function BattlePokemon(set, side) {
 	for (var i in this.set.ivs) {
 		this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
 	}
+	this.speed = 0;
 
 	var hpTypeX = 0, hpPowerX = 0;
 	var i = 1;
@@ -322,6 +323,8 @@ function BattlePokemon(set, side) {
 		if (init) return;
 
 		selfB.runEvent('ModifyPokemon', selfP);
+
+		selfP.speed = selfP.getStat('spe');
 	};
 	this.getStat = function(statName, unboosted, unmodified) {
 		statName = toId(statName);
@@ -343,7 +346,7 @@ function BattlePokemon(set, side) {
 
 		// stat modifier effects
 		var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-		stat = selfB.runEvent('Modify'+statTable[stat], selfP, null, null, stat);
+		stat = selfB.runEvent('Modify'+statTable[statName], selfP, null, null, stat);
 		stat = Math.floor(stat);
 
 		if (unboosted) return stat;
@@ -1350,8 +1353,8 @@ function Battle(roomid, format, rated) {
 			}
 		}
 		actives.sort(function(a, b) {
-			if (b.getStat('spe') - a.getStat('spe')) {
-				return b.getStat('spe') - a.getStat('spe');
+			if (b.speed - a.speed) {
+				return b.speed - a.speed;
 			}
 			return Math.random()-0.5;
 		});
@@ -1546,7 +1549,7 @@ function Battle(roomid, format, rated) {
 		status.order = order;
 		status.priority = priority;
 		status.subOrder = subOrder;
-		if (status.thing && status.thing.getStat) status.speed = status.thing.getStat('spe');
+		if (status.thing && status.thing.getStat) status.speed = status.thing.speed;
 	};
 	// bubbles up to parents
 	this.getRelevantEffects = function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
@@ -2466,7 +2469,7 @@ function Battle(roomid, format, rated) {
 					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
 				}
 				decision.pokemon.switchFlag = false;
-				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.getStat('spe');
+				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.speed;
 			}
 			if (decision.move) {
 				var target;
@@ -2485,8 +2488,8 @@ function Battle(roomid, format, rated) {
 				}
 			}
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
-			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.getStat('spe');
-			if (!decision.speed) decision.speed = decision.pokemon.getStat('spe');
+			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.speed;
+			if (!decision.speed) decision.speed = decision.pokemon.speed;
 
 			if (decision.choice === 'switch' && !decision.side.pokemon[0].isActive) {
 				// if there's no actives, switches happen before activations
