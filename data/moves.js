@@ -9059,16 +9059,21 @@ exports.BattleMovedex = {
 			status: 'slp'
 		},
 		onHit: function(target, pokemon) {
-			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
-				return;
+			if (pokemon.baseTemplate.species === 'Meloetta' && !pokemon.transformed) {
+				pokemon.addVolatile('relicsong');
 			}
-			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta')) {
-				this.add('-formechange', pokemon, 'Meloetta');
-			} else if (pokemon.transformInto('Meloetta-Pirouette')) {
-				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
+		},
+		effect: {
+			duration: 1,
+			onAfterMoveSecondarySelf: function(pokemon, target, move) {
+				if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.transformInto('Meloetta')) {
+					this.add('-formechange', pokemon, 'Meloetta');
+				} else if (pokemon.transformInto('Meloetta-Pirouette')) {
+					this.add('-formechange', pokemon, 'Meloetta-Pirouette');
+				}
+				pokemon.transformed = false;
+				pokemon.removeVolatile('relicsong');
 			}
-			// renderer takes care of this for us
-			pokemon.transformed = false;
 		},
 		target: "allAdjacentFoes",
 		type: "Normal"
