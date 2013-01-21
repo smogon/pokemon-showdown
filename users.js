@@ -817,7 +817,7 @@ var User = (function () {
 		if (!user || this.challengeTo) {
 			return false;
 		}
-		if (!user.allowChallenges) {
+		if (!user.allowChallenges && !this.can('challengealways', user)) {
 			return false;
 		}
 		if (new Date().getTime() < this.lastChallenge + 10000) {
