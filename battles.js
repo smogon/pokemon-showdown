@@ -1476,13 +1476,14 @@ function Battle(roomid, format, rated) {
 		}
 		for (var i=0; i<statuses.length; i++) {
 			var status = statuses[i].status;
-			if (statuses[i].thing.fainted) continue;
+			var thing = status[i].thing
+			if (thing.fainted) continue;
 			//selfB.debug('match '+eventid+': '+status.id+' '+status.effectType);
-			if (status.effectType === 'Status' && statuses[i].thing.status !== status.id) {
+			if (status.effectType === 'Status' && thing.status !== status.id) {
 				// it's changed; call it off
 				continue;
 			}
-			if (statuses[i].thing.ignore && statuses[i].thing.ignore[status.effectType] === 'A') {
+			if (thing.ignore && thing.ignore[status.effectType] === 'A') {
 				// ignore attacking events
 				var AttackingEvents = {
 					BeforeMove: 1,
@@ -1512,10 +1513,13 @@ function Battle(roomid, format, rated) {
 					}
 					continue;
 				}
-			} else if (statuses[i].thing.ignore && statuses[i].thing.ignore[status.effectType]) {
-				selfB.debug(eventid+' handler suppressed by Klutz or Magic Room');
+			} else if (thing.ignore && thing.ignore[status.effectType]) {
+				if (eventid !== 'ModifyPokemon' && eventid !== 'ModifyStats' && eventid !== 'Update') {
+					selfB.debug(eventid+' handler suppressed by Klutz or Magic Room');
+				}
 				continue;
-			} else if (target.ignore && target.ignore[status.effectType+'Target']) {
+			}
+			if (target.ignore && target.ignore[status.effectType+'Target']) {
 				selfB.debug(eventid+' handler suppressed by Air Lock');
 				continue;
 			}
@@ -1526,7 +1530,7 @@ function Battle(roomid, format, rated) {
 				var parentEvent = selfB.event;
 				selfB.effect = statuses[i].status;
 				selfB.effectData = statuses[i].statusData;
-				selfB.effectData.target = statuses[i].thing;
+				selfB.effectData.target = thing;
 				selfB.event = {id: eventid, target: target, source: source, effect: effect};
 				selfB.eventDepth++;
 				returnVal = statuses[i].callback.apply(selfB, args);
