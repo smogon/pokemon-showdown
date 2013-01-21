@@ -1275,7 +1275,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'message', "The user '"+targets[2]+"' was not found.");
 			return false;
 		}
-		if (!targetUser.allowChallenges && !user.can('challengealways', targetUser)) {
+		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			emit(socket, 'message', "The user '"+targets[2]+"' is not accepting challenges right now.");
 			return false;
 		}
@@ -1289,18 +1289,17 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 		
-	case 'blockchallenges':
+	case 'away':
 	case 'idle':
-	case 'bc':
-		user.allowChallenges = false;
+	case 'blockchallenges':
+		user.blockChallenges = true;
 		emit(socket, 'console', 'You are now blocking all incoming challenge requests.');
 		return false;
 		break;
 
-	case 'allowchallenges':
 	case 'back':
-	case 'ac':
-		user.allowChallenges = true;
+	case 'allowchallenges':
+		user.blockChallenges = false;
 		emit(socket, 'console', 'You are available for challenges from now on.');
 		return false;
 		break;
@@ -1697,13 +1696,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/calc - Provides a link to a damage calculator');
 			emit(socket, 'console', '!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~');
 		}
-		if (target === 'all' || target === 'blockchallenges' || target === 'bc' || target === 'idle') {
+		if (target === 'all' || target === 'blockchallenges' || target === 'away' || target === 'idle') {
 			matched = true;
-			emit(socket, 'console', '/blockchallenges OR /bc OR /idle - Blocks challenges so no one can challenge you.');
+			emit(socket, 'console', '/away - Blocks challenges so no one can challenge you.');
 		}
-		if (target === 'all' || target === 'allowchallenges' || target === 'ac' || target === 'back') {
+		if (target === 'all' || target === 'allowchallenges' || target === 'back') {
 			matched = true;
-			emit(socket, 'console', '/allowchallenges OR /ac OR /back - Unlocks challenges so you can be challenged again.');
+			emit(socket, 'console', '/back - Unlocks challenges so you can be challenged again.');
 		}
 		if (target === 'all' || target === 'faq') {
 			matched = true;
