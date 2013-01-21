@@ -2978,7 +2978,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
-			var ratio = (pokemon.stats.spe / target.stats.spe);
+			var ratio = (pokemon.getStat('spe') / target.getStat('spe'));
 			if (ratio >= 4) {
 				return 150;
 			}
@@ -4650,13 +4650,13 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			if (!target.volatiles.guardsplit) {
 				target.addVolatile('guardsplit');
-				target.volatiles.guardsplit.def = target.unmodifiedStats.def;
-				target.volatiles.guardsplit.spd = target.unmodifiedStats.spd;
+				target.volatiles.guardsplit.def = target.getStat('def', true, true);
+				target.volatiles.guardsplit.spd = target.getStat('spd', true, true);
 			}
 			if (!source.volatiles.guardsplit) {
 				source.addVolatile('guardsplit');
-				source.volatiles.guardsplit.def = source.unmodifiedStats.def;
-				source.volatiles.guardsplit.spd = source.unmodifiedStats.spd;
+				source.volatiles.guardsplit.def = source.getStat('def', true, true);
+				source.volatiles.guardsplit.spd = source.getStat('spd', true, true);
 			}
 			var newdef = Math.floor((target.volatiles.guardsplit.def + source.volatiles.guardsplit.def)/2);
 			target.volatiles.guardsplit.def = newdef;
@@ -4667,10 +4667,13 @@ exports.BattleMovedex = {
 			this.add('-activate', source, 'Guard Split', '[of] '+target);
 		},
 		effect: {
-			onModifyStatsPriority: 100,
-			onModifyStats: function(stats) {
-				stats.def = this.effectData.def;
-				stats.spd = this.effectData.spd;
+			onModifyDefPriority: 100,
+			onModifyDef: function() {
+				return this.effectData.def;
+			},
+			onModifySpDPriority: 100,
+			onModifySpD: function() {
+				return this.effectData.spd;
 			}
 		},
 		secondary: false,
@@ -4762,9 +4765,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
-			var targetSpeed = target.stats.spe;
-			var pokemonSpeed = pokemon.stats.spe;
-			var power = (Math.floor(25 * targetSpeed / pokemonSpeed) || 1);
+			var power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) || 1);
 			if (power > 150) power = 150;
 			this.debug(''+power+' bp');
 			return power;
@@ -8203,13 +8204,13 @@ exports.BattleMovedex = {
 		onHit: function(target, source) {
 			if (!target.volatiles.powersplit) {
 				target.addVolatile('powersplit');
-				target.volatiles.powersplit.atk = target.unmodifiedStats.atk;
-				target.volatiles.powersplit.spa = target.unmodifiedStats.spa;
+				target.volatiles.powersplit.atk = target.getStat('atk', true, true);
+				target.volatiles.powersplit.spa = target.getStat('spa', true, true);
 			}
 			if (!source.volatiles.powersplit) {
 				source.addVolatile('powersplit');
-				source.volatiles.powersplit.atk = source.unmodifiedStats.atk;
-				source.volatiles.powersplit.spa = source.unmodifiedStats.spa;
+				source.volatiles.powersplit.atk = source.getStat('atk', true, true);
+				source.volatiles.powersplit.spa = source.getStat('spa', true, true);
 			}
 			var newatk = Math.floor((target.volatiles.powersplit.atk + source.volatiles.powersplit.atk)/2);
 			target.volatiles.powersplit.atk = newatk;
@@ -8220,10 +8221,13 @@ exports.BattleMovedex = {
 			this.add('-activate', source, 'Power Split', '[of] '+target);
 		},
 		effect: {
-			onModifyStatsPriority: 100,
-			onModifyStats: function(stats) {
-				stats.atk = this.effectData.atk;
-				stats.spa = this.effectData.spa;
+			onModifyAtkPriority: 100,
+			onModifyAtk: function() {
+				return this.effectData.atk;
+			},
+			onModifySpAPriority: 100,
+			onModifySpA: function() {
+				return this.effectData.spa;
 			}
 		},
 		secondary: false,
@@ -8274,19 +8278,23 @@ exports.BattleMovedex = {
 		volatileStatus: 'powertrick',
 		effect: {
 			onStart: function(pokemon) {
+				this.effectData.atk = pokemon.getStat('def', true, true);
+				this.effectData.def = pokemon.getStat('atk', true, true);
 				this.add('-start', pokemon, 'Power Trick');
 			},
 			onEnd: function(pokemon) {
 				this.add('-end', pokemon, 'Power Trick');
 			},
 			onRestart: function(pokemon) {
-				pokemon.removeVolatile('PowerTrick');
+				pokemon.removeVolatile('Power Trick');
 			},
-			onModifyStatsPriority: -100,
-			onModifyStats: function(stats) {
-				var temp = stats.atk;
-				stats.atk = stats.def;
-				stats.def = temp;
+			onModifyAtkPriority: 100,
+			onModifyAtk: function() {
+				return this.effectData.atk;
+			},
+			onModifySpAPriority: 100,
+			onModifySpA: function() {
+				return this.effectData.spa;
 			}
 		},
 		secondary: false,
@@ -11834,8 +11842,8 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart', side, 'move: Tailwind');
 			},
-			onModifyStats: function(stats) {
-				stats.spe *= 2;
+			onModifySpe: function(spe) {
+				return spe * 2;
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 4,
@@ -12391,15 +12399,10 @@ exports.BattleMovedex = {
 			onStart: function(target, source) {
 				this.add('-fieldstart', 'move: Trick Room', '[of] '+source);
 			},
-			onModifyPokemonPriority: -100,
-			onModifyPokemon: function(pokemon) {
+			onModifySpePriority: -100,
+			onModifySpe: function(spe) {
 				// just for fun: Trick Room glitch
-				if (pokemon.stats.spe <= 1809) {
-					pokemon.stats.spe = -pokemon.stats.spe;
-				}
-				if (pokemon.unboostedStats.spe <= 1809) {
-					pokemon.unboostedStats.spe = -pokemon.unboostedStats.spe;
-				}
+				if (spe <= 1809) return -spe;
 			},
 			onResidualOrder: 23,
 			onEnd: function() {
@@ -13070,11 +13073,13 @@ exports.BattleMovedex = {
 			onStart: function(side, source) {
 				this.add('-fieldstart', 'move: WonderRoom', '[of] '+source);
 			},
-			onModifyStatsPriority: -100,
-			onModifyStats: function(stats) {
-				var tmp = stats.spd;
-				stats.spd = stats.def;
-				stats.def = tmp;
+			onModifyDefPriority: -100,
+			onModifyDef: function(def, pokemon) {
+				return pokemon.getStat('spd', true, true);
+			},
+			onModifySpDPriority: -100,
+			onModifySpD: function(spd, pokemon) {
+				return pokemon.getStat('def', true, true);
 			},
 			onResidualOrder: 24,
 			onEnd: function() {

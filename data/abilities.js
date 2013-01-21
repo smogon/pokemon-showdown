@@ -200,9 +200,9 @@ exports.BattleAbilities = {
 	"chlorophyll": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its speed is temporarily doubled.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
-		onModifyStats: function(stats) {
+		onModifySpe: function(spe) {
 			if (this.isWeather('sunnyday')) {
-				stats.spe *= 2;
+				return spe * 2;
 			}
 		},
 		id: "chlorophyll",
@@ -359,10 +359,14 @@ exports.BattleAbilities = {
 	"defeatist": {
 		desc: "Attack and Special Attack are halved when HP is less than half.",
 		shortDesc: "When this Pokemon has 1/2 or less of its max HP, its Attack and Sp. Atk are halved.",
-		onModifyStats: function(stats, pokemon) {
+		onModifyAtk: function(atk, pokemon) {
 			if (pokemon.hp < pokemon.maxhp/2) {
-				stats.atk /= 2;
-				stats.spa /= 2;
+				return atk / 2;
+			}
+		},
+		onModifySpA: function(atk, pokemon) {
+			if (pokemon.hp < pokemon.maxhp/2) {
+				return atk / 2;
 			}
 		},
 		onResidual: function(pokemon) {
@@ -404,8 +408,8 @@ exports.BattleAbilities = {
 			var totalspd = 0;
 			for (var i=0; i<foeactive.length; i++) {
 				if (!foeactive[i] || foeactive[i].fainted) continue;
-				totaldef += foeactive[i].stats.def;
-				totalspd += foeactive[i].stats.spd;
+				totaldef += foeactive[i].getStat('def');
+				totalspd += foeactive[i].getStat('spd');
 			}
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa:1});
@@ -525,9 +529,9 @@ exports.BattleAbilities = {
 	"flareboost": {
 		desc: "When the user with this ability is burned, its Special Attack is raised by 50%.",
 		shortDesc: "When this Pokemon is burned, its special attacks do 1.5x damage.",
-		onModifyStats: function(stats, pokemon) {
+		onModifySpA: function(spa, pokemon) {
 			if (pokemon.status === 'brn') {
-				stats.spa *= 1.5;
+				return spa * 1.5;
 			}
 		},
 		id: "flareboost",
@@ -567,19 +571,30 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			delete this.effectData.forme;
 		},
-		onModifyStats: function(stats, pokemon) {
+		onUpdate: function(pokemon) {
+			if (!pokemon.isActive || pokemon.speciesid !== 'cherrim') return;
 			if (this.isWeather('sunnyday')) {
-				stats.atk *= 1.5;
-				stats.spd *= 1.5;
-				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
+				if (this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine');
 					this.add('-message', pokemon.name+' transformed! (placeholder)');
 				}
-			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
-				delete this.effectData.forme;
-				this.add('-formechange', pokemon, 'Cherrim');
-				this.add('-message', pokemon.name+' transformed! (placeholder)');
+			} else {
+				if (this.effectData.forme) {
+					delete this.effectData.forme;
+					this.add('-formechange', pokemon, 'Cherrim');
+					this.add('-message', pokemon.name+' transformed! (placeholder)');
+				}
+			}
+		},
+		onAllyModifyAtk: function(atk) {
+			if (this.isWeather('sunnyday')) {
+				return atk *= 1.5;
+			}
+		},
+		onAllyModifySpD: function(spd) {
+			if (this.isWeather('sunnyday')) {
+				return spd *= 1.5;
 			}
 		},
 		id: "flowergift",
@@ -684,9 +699,9 @@ exports.BattleAbilities = {
 	"guts": {
 		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed or asleep (including self-induced Rest), its Attack stat receives a 50% boost; the burn status' Attack drop is also ignored.",
 		shortDesc: "If this Pokemon is statused, its Attack is 1.5x; burn's Attack drop is ignored.",
-		onModifyStats: function(stats, pokemon) {
+		onModifyAtk: function(atk, pokemon) {
 			if (pokemon.status) {
-				stats.atk *= 1.5;
+				return atk * 1.5;
 			}
 		},
 		id: "guts",
@@ -762,8 +777,8 @@ exports.BattleAbilities = {
 	"hugepower": {
 		desc: "This Pokemon's Attack stat is doubled. Therefore, if this Pokemon's Attack stat on the status screen is 200, it effectively has an Attack stat of 400; which is then subject to the full range of stat boosts and reductions.",
 		shortDesc: "This Pokemon's Attack is doubled.",
-		onModifyStats: function(stats) {
-			stats.atk *= 2;
+		onModifyAtk: function(atk) {
+			return atk * 2;
 		},
 		id: "hugepower",
 		name: "Huge Power",
@@ -773,8 +788,8 @@ exports.BattleAbilities = {
 	"hustle": {
 		desc: "This Pokemon's Attack receives a 50% boost but its Physical attacks receive a 20% drop in Accuracy. For example, a 100% accurate move would become an 80% accurate move. The accuracy of moves that never miss, such as Aerial Ace, remains unaffected.",
 		shortDesc: "This Pokemon's Attack is 1.5x and accuracy of its physical attacks is 0.8x.",
-		onModifyStats: function(stats) {
-			stats.atk *= 1.5;
+		onModifyAtk: function(stats) {
+			return atk * 1.5;
 		},
 		onModifyMove: function(move) {
 			if (move.category === 'Physical' && typeof move.accuracy === 'number') {
@@ -1186,9 +1201,9 @@ exports.BattleAbilities = {
 	"marvelscale": {
 		desc: "When this Pokemon becomes burned, poisoned (including Toxic), paralyzed, frozen or put to sleep (including self-induced sleep via Rest), its Defense receives a 50% boost.",
 		shortDesc: "If this Pokemon is statused, its Defense is 1.5x.",
-		onModifyStats: function(stats, pokemon) {
+		onModifyDef: function(def, pokemon) {
 			if (pokemon.status) {
-				stats.def *= 1.5;
+				return def * 1.5;
 			}
 		},
 		id: "marvelscale",
@@ -1579,8 +1594,8 @@ exports.BattleAbilities = {
 	"purepower": {
 		desc: "This Pokemon's Attack stat is doubled. Therefore, if this Pokemon's Attack stat on the status screen is 200, it effectively has an Attack stat of 400; which is then subject to the full range of stat boosts and reductions.",
 		shortDesc: "This Pokemon's Attack is doubled.",
-		onModifyStats: function(stats) {
-			stats.atk *= 2;
+		onModifyAtk: function(stats) {
+			return atk * 2;
 		},
 		id: "purepower",
 		name: "Pure Power",
@@ -1590,9 +1605,9 @@ exports.BattleAbilities = {
 	"quickfeet": {
 		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed, asleep (including self-induced Rest) or frozen, its Speed stat receives a 50% boost; the paralysis status' Speed drop is also ignored.",
 		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; paralysis' Speed drop is ignored.",
-		onModifyStats: function(stats, pokemon) {
+		onModifySpe: function(spe, pokemon) {
 			if (pokemon.status) {
-				stats.spe *= 1.5;
+				return spe * 1.5;
 			}
 		},
 		id: "quickfeet",
@@ -1725,9 +1740,9 @@ exports.BattleAbilities = {
 	"sandrush": {
 		desc: "Doubles Speed in a Sandstorm, and makes the Pokemon immune to Sandstorm damage.",
 		shortDesc: "If Sandstorm is active, this Pokemon's Speed is doubled; immunity to Sandstorm.",
-		onModifyStats: function(stats, pokemon) {
+		onModifySpe: function(spe, pokemon) {
 			if (this.isWeather('sandstorm')) {
-				stats.spe *= 2;
+				return spe * 2;
 			}
 		},
 		onImmunity: function(type, pokemon) {
@@ -1916,13 +1931,19 @@ exports.BattleAbilities = {
 			onStart: function(target) {
 				this.add('-start', target, 'Slow Start');
 			},
-			onModifyStats: function(stats, pokemon) {
+			onModifyAtk: function(atk, pokemon) {
 				if (pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
-				stats.atk /= 2;
-				stats.spe /= 2;
+				return atk / 2;
+			},
+			onModifySpe: function(spe, pokemon) {
+				if (pokemon.ability !== 'slowstart') {
+					pokemon.removeVolatile('slowstart');
+					return;
+				}
+				return spe / 2;
 			},
 			onEnd: function(target) {
 				this.add('-end', target, 'Slow Start');
@@ -1977,9 +1998,9 @@ exports.BattleAbilities = {
 	"solarpower": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its Special Attack temporarily receives a 50% boost but this Pokemon also receives damage equal to one-eighth of its max HP after each turn.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Sp. Atk is 1.5x and loses 1/8 max HP per turn.",
-		onModifyStats: function(stats, pokemon) {
+		onModifySpA: function(spa, pokemon) {
 			if (this.isWeather('sunnyday')) {
-				stats.spa *= 1.5;
+				return spa * 1.5;
 			}
 		},
 		onWeather: function(target, source, effect) {
@@ -2181,9 +2202,9 @@ exports.BattleAbilities = {
 	"swiftswim": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, its speed is temporarily doubled.",
 		shortDesc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
-		onModifyStats: function(stats, pokemon) {
+		onModifySpe: function(spe, pokemon) {
 			if (this.isWeather('raindance')) {
-				stats.spe *= 2;
+				return spe * 2;
 			}
 		},
 		id: "swiftswim",
@@ -2315,9 +2336,9 @@ exports.BattleAbilities = {
 	"toxicboost": {
 		desc: "When the user is poisoned, its Attack stat is raised by 50%.",
 		shortDesc: "When this Pokemon is poisoned, its physical attacks do 1.5x damage.",
-		onModifyStats: function(stats, pokemon) {
+		onModifyAtk: function(atk, pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
-				stats.atk *= 1.5;
+				return atk * 1.5;
 			}
 		},
 		id: "toxicboost",
@@ -2411,13 +2432,13 @@ exports.BattleAbilities = {
 			pokemon.addVolatile('unburden');
 		},
 		effect: {
-			onModifyStats: function(stats, pokemon) {
+			onModifySpe: function(spe, pokemon) {
 				if (pokemon.ability !== 'unburden') {
 					pokemon.removeVolatile('unburden');
 					return;
 				}
 				if (!pokemon.item) {
-					stats.spe *= 2;
+					return spe * 2;
 				}
 			}
 		},
