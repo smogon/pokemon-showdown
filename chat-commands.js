@@ -1279,7 +1279,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'message', "The user '"+targets[2]+"' is not accepting challenges right now.");
 			return false;
 		}
-		if (typeof target !== 'string') target = 'debugmode';
+		if (typeof target !== 'string') target = 'customgame';
 		var problems = Tools.validateTeam(user.team, target);
 		if (problems) {
 			emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
