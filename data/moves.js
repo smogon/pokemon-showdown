@@ -6706,7 +6706,6 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move.isBounceable) {
-					target.removeVolatile('MagicCoat');
 					var newMove = this.getMoveCopy(move.id);
 					newMove.hasBounced = true;
 					this.add('-activate', target, 'move: Magic Coat', newMove, '[of] '+source);
