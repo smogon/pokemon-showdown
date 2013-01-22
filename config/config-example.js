@@ -157,7 +157,7 @@ exports.groups = {
 		forcerename: true,
 		timer: true,
 		alts: '%u',
-		bypassblocks: true,
+		bypassblocks: 'u%@&~',
 		rank: 2
 	},
 	'+': {
