@@ -122,19 +122,27 @@ exports.BattleItems = {
 				move.critRatio += 2;
 			}
 		},
-		onModifyPokemon: function(pokemon) {
-			if (pokemon.template.species === 'Unown') {
-				// Strange Orb
-				pokemon.stats.spa *= 2;
-				pokemon.stats.spd *= 2;
-				pokemon.stats.spe *= 2;
-				pokemon.types = [pokemon.hpType];
+		onModifyDef: function(def, pokemon) {
+			if (pokemon.template.species === 'Shuckle') {
+				return def*1.5;
 			}
 		},
-		onModifyStats: function(stats, pokemon) {
+		onModifySpA: function(spa, pokemon) {
+			if (pokemon.template.species === 'Unown') {
+				return spa*2;
+			}
+		},
+		onModifySpD: function(spd, pokemon) {
+			if (pokemon.template.species === 'Unown') {
+				return spd*2;
+			}
 			if (pokemon.template.species === 'Shuckle') {
-				stats.def *= 1.5;
-				stats.spd *= 1.5;
+				return spd*1.5;
+			}
+		},
+		onModifySpe: function(spe, pokemon) {
+			if (pokemon.template.species === 'Unown') {
+				return spe*2;
 			}
 		},
 		onFoeBasePower: function(basePower, attacker, defender, move) {
