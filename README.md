@@ -1,12 +1,12 @@
-Showdown
+Pokemon Showdown
 ========================================================================
 
-Showdown is a simulator of Pokemon battles. It currently supports singles battles in Generations 4-5 (HGSS, BW, BW2).
+Pokemon Showdown is a simulator of Pokemon battles. It currently supports singles battles in Generations 4-5 (HGSS, BW, BW2).
 
 Installing
 ------------------------------------------------------------------------
 
-Showdown requires Node.js and npm (which is installed by default with Node.js since v0.6.3).
+Pokemon Showdown requires Node.js and npm (which is installed by default with Node.js since v0.6.3).
 
 Run `npm install` to install all necessary dependencies.
 
