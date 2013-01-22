@@ -476,7 +476,7 @@ exports.BattleItems = {
 		onModifyMove: function(move, pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
-		onModifySpa: function(spa) {
+		onModifySpA: function(spa) {
 			return spa * 1.5;
 		},
 		isChoice: true,
