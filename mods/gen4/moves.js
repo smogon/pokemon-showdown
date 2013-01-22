@@ -436,6 +436,35 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 130
 	},
+	magiccoat: {
+		inherit: true,
+		effect: {
+			duration: 1,
+			onStart: function(target) {
+				this.add('-singleturn', target, 'move: Magic Coat');
+			},
+			onAllyTryFieldHit: function(target, source, move) {
+				if (target === source) return;
+				if (typeof move.isBounceable === 'undefined') {
+					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+				}
+				if (move.target !== 'foeSide' && target !== this.effectData.target) {
+					return;
+				}
+				if (move.hasBounced) {
+					return;
+				}
+				if (move.isBounceable) {
+					target.removeVolatile('MagicCoat');
+					var newMove = this.getMoveCopy(move.id);
+					newMove.hasBounced = true;
+					this.add('-activate', target, 'move: Magic Coat', newMove, '[of] '+source);
+					this.moveHit(source, target, newMove);
+					return null;
+				}
+			}
+		}
+	},
 	magmastorm: {
 		inherit: true,
 		accuracy: 70
