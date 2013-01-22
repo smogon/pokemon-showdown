@@ -2768,7 +2768,7 @@ exports.BattleItems = {
 		spritenum: 475,
 		onModifyMove: function(move, user) {
 			if (user.template.species === 'Farfetch\'d') {
-			move.critRatio += 2;
+				move.critRatio += 2;
 			}
 		},
 		desc: "Raises Farfetch'd's critical hit rate two stages."
