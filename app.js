@@ -8,7 +8,24 @@ try {
 	});
 } catch(e) {}
 
-require('sugar');
+/**
+ * Require a module, but display a helpful error message if it fails.
+ * This is currently only used in this file, and only for modules which are
+ * not bundled with node.js, because that should be adequate to convey the
+ * point to the user.
+ */
+function requireGracefully(path) {
+	try {
+		return require(path);
+	} catch (e) {
+		console.error("ERROR: " + e.message + ". Please run\n\n" +
+			"           npm install\n\n" +
+			"       or refer to README.md for more help running Pokemon Showdown.");
+		process.exit(1);
+	}
+}
+
+requireGracefully('sugar');
 
 fs = require('fs');
 if (!fs.existsSync) {
@@ -247,14 +264,14 @@ if (config.protocol !== 'io' && config.protocol !== 'eio') config.protocol = 'ws
 var app;
 var server;
 if (config.protocol === 'io') {
-	server = require('socket.io').listen(config.port).set('log level', 1);
+	server = requireGracefully('socket.io').listen(config.port).set('log level', 1);
 	server.set('transports', ['websocket', 'htmlfile', 'xhr-polling']); // temporary hack until https://github.com/LearnBoost/socket.io/issues/609 is fixed
 } else if (config.protocol === 'eio') {
 	app = require('http').createServer().listen(config.port);
 	server = require('engine.io').attach(app);
 } else {
 	app = require('http').createServer();
-	server = require('sockjs').createServer({sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js", log: function(severity, message) {
+	server = requireGracefully('sockjs').createServer({sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js", log: function(severity, message) {
 		if (severity === 'error') console.log('ERROR: '+message);
 	}});
 }
