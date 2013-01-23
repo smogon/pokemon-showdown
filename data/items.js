@@ -1765,6 +1765,25 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onStart: function(pokemon) {
+			pokemon.addVolatile('metronome');
+		},
+		effect: {
+			onBasePower: function(basePower, pokemon, target, move) {
+				if (pokemon.item !== 'metronome') {
+					pokemon.removeVolatile('metronome');
+					return;
+				}
+				if (!this.effectData.move || this.effectData.move !== move.id) {
+					this.effectData.move = move.id;
+					this.effectData.numConsecutive = 0;
+				} else if (this.effectData.numConsecutive < 5) {
+					this.effectData.numConsecutive++;
+				}
+				var bpMod = [1, 1.2, 1.4, 1.6, 1.8, 2];
+				return basePower * bpMod[this.effectData.numConsecutive];
+			}
+		},
 		desc: "Boost the power of attacks used consecutively."
 	},
 	"micleberry": {
