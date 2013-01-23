@@ -202,7 +202,7 @@ exports.BattleScripts = {
 			for (var i=0; i<hits && target.hp && pokemon.hp; i++) {
 				var moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) return true;
-				damage += (moveDamage || 0);
+				damage = (moveDamage || 0);
 			}
 			this.add('-hitcount', target, i);
 		} else {
