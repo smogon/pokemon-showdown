@@ -786,6 +786,9 @@ exports.BattleFormatsData = {
 	},
 	cloyster: {
 		viableMoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"iceshard":1,"rapidspin":1,"spikes":1,"toxicspikes":1},
+		eventPokemon: [
+			{"generation":5,"level":30,"gender":"M","nature":"Naughty","isDW":false,"abilities":["skilllink"],"moves":["iciclespear","rockblast","hiddenpower","razorshell"]}
+		],
 		dreamWorldRelease: true,
 		tier: "OU"
 	},
@@ -4562,7 +4565,8 @@ exports.BattleFormatsData = {
 	keldeo: {
 		viableMoves: {"hydropump":1,"secretsword":1,"calmmind":1,"hiddenpowerghost":1,"hiddenpowerelectric":1,"substitute":1,"surf":1},
 		eventPokemon: [
-			{"generation":5,"level":15,"moves":["aquajet","leer","doublekick","bubblebeam"]}
+			{"generation":5,"level":15,"moves":["aquajet","leer","doublekick","bubblebeam"]},
+			{"generation":5,"level":50,"moves":["sacredsword","hydropump","aquajet","swordsdance"]}
 		],
 		tier: "OU"
 	},
