@@ -168,8 +168,8 @@ exports.BattleFormats = {
 		canUseRandomTeam: true,
 		rated: true,
 		challengeShow: true,
+		searchShow: true,
 		ruleset: ['Pokemon', 'Team Preview'],
-		debug: true,
 		onBegin: function() {
 			this.debug('Cutting down to 1');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
