@@ -1440,6 +1440,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		config.potd = target;
+		Simulator.eval('config.potd = \''+toId(target)+'\'');
 		if (target) {
 			logModCommand(room, 'The Pokemon of the Day was changed to '+target+' by '+user.name+'.');
 		} else {

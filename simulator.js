@@ -233,3 +233,8 @@ exports.create = function(id, format, rated, room) {
 	if (simulators[id]) return simulators[id];
 	return new Simulator(id, format, rated, room);
 }
+
+exports.eval = function(code) {
+	// evaluate code in a simulator process.
+	Battles.send('|eval|'+code);
+}
