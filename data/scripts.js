@@ -862,13 +862,6 @@ exports.BattleScripts = {
 					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
 					break;
 				}
-				// handle HP IVs
-				if (move.id === 'hiddenpower') {
-					var HPivs = this.getType(move.name.substr(13)).HPivs;
-					for (var iv in HPivs) {
-						ivs[iv] = HPivs[iv];
-					}
-				}
 				if (k===3) {
 					if (counter['Status']>=4) {
 						// taunt bait, not okay
@@ -896,6 +889,14 @@ exports.BattleScripts = {
 				if (rejected && j<moveKeys.length) {
 					moves.splice(k,1);
 					break;
+				}
+
+				// handle HP IVs
+				if (move.id === 'hiddenpower') {
+					var HPivs = this.getType(move.type).HPivs;
+					for (var iv in HPivs) {
+						ivs[iv] = HPivs[iv];
+					}
 				}
 			}
 

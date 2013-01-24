@@ -200,9 +200,11 @@ function BattlePokemon(set, side) {
 			var move = selfB.getMove(this.set.moves[i]);
 			if (!move.id) continue;
 			if (move.id === 'hiddenpower') {
-				this.hpType = move.type;
+				if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
+					this.set.ivs = selfB.getType(move.type).HPivs;
+				}
+				move = selfB.getMove('hiddenpower');
 			}
-			if (!this.set.ivs) this.set.ivs = selfB.getType(this.hpType).HPivs;
 			this.baseMoveset.push({
 				move: move.name,
 				id: move.id,
@@ -212,28 +214,18 @@ function BattlePokemon(set, side) {
 				disabled: false,
 				used: false
 			});
-			this.moves.push(toId(move.name));
+			this.moves.push(move.id);
 		}
 	}
 
 	if (!this.set.evs) {
 		this.set.evs = {
-			hp: 84,
-			atk: 84,
-			def: 84,
-			spa: 84,
-			spd: 84,
-			spe: 84
+			hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84
 		};
 	}
 	if (!this.set.ivs) {
 		this.set.ivs = {
-			hp: 31,
-			atk: 31,
-			def: 31,
-			spa: 31,
-			spd: 31,
-			spe: 31
+			hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31
 		};
 	}
 	var stats = { hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
@@ -261,22 +253,12 @@ function BattlePokemon(set, side) {
 	this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
 
 	this.boosts = {
-		atk: 0,
-		def: 0,
-		spa: 0,
-		spd: 0,
-		spe: 0,
-		accuracy: 0,
-		evasion: 0
+		atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
+		accuracy: 0, evasion: 0
 	};
 	this.baseBoosts = {
-		atk: 0,
-		def: 0,
-		spa: 0,
-		spd: 0,
-		spe: 0,
-		accuracy: 0,
-		evasion: 0
+		atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
+		accuracy: 0, evasion: 0
 	};
 	this.baseStats = this.template.baseStats;
 	this.bst = 0;
@@ -431,7 +413,19 @@ function BattlePokemon(set, side) {
 			} else if (!move.disabled) {
 				hasValidMove = true;
 			}
-			moves.push(move);
+			var moveName = move.move;
+			if (move.id === 'hiddenpower') {
+				moveName += ' '+selfP.hpType;
+				if (selfP.hpPower != 70) moveName += ' '+selfP.hpPower;
+			}
+			moves.push({
+				move: moveName,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.maxpp,
+				target: move.target,
+				disabled: move.disabled
+			});
 		}
 		if (lockedMove) {
 			return [{
@@ -1024,7 +1018,12 @@ function BattleSide(name, battle, n, team) {
 				details: pokemon.details,
 				condition: pokemon.getHealth(true),
 				active: (pokemon.position < pokemon.side.active.length),
-				moves: pokemon.moves,
+				moves: pokemon.moves.map(function(move) {
+					if (move === 'hiddenpower') {
+						return move + toId(pokemon.hpType) + (pokemon.hpPower == 70?'':pokemon.hpPower);
+					}
+					return move;
+				}),
 				baseAbility: pokemon.baseAbility,
 				item: pokemon.item
 			});
@@ -2922,6 +2921,7 @@ function Battle(roomid, format, rated) {
 					move = data;
 				}
 				if (!pokemon.canUseMove(move)) move = pokemon.getValidMoves()[0];
+				move = selfB.getMove(move).id;
 
 				decisions.push({
 					choice: 'move',

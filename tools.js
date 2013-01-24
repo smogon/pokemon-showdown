@@ -156,10 +156,9 @@ module.exports = (function () {
 				id = toId(name);
 			}
 			move = {};
-			if (id.substr(0,12) === 'HiddenPower[') {
-				var hptype = id.substr(12);
-				hptype = hptype.substr(0,hptype.length-1);
-				id = 'HiddenPower'+hptype;
+			if (id.substr(0,11) === 'hiddenpower') {
+				var matches = /([a-z]*)([0-9]*)/.exec(id);
+				id = matches[1];
 			}
 			if (id && this.data.Movedex[id]) {
 				move = this.data.Movedex[id];
@@ -314,6 +313,7 @@ module.exports = (function () {
 	Tools.prototype.getType = function(type) {
 		if (!type || typeof type === 'string') {
 			var id = toId(type);
+			id = id.substr(0,1).toUpperCase() + id.substr(1);
 			type = {};
 			if (id && this.data.TypeChart[id]) {
 				type = this.data.TypeChart[id];
