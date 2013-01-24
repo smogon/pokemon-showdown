@@ -734,6 +734,17 @@ exports.BattleAbilities = {
 		name: "Healer",
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
+		onResidual: function(pokemon) {
+			var allyActive = pokemon.side.active;
+			if (pokemon.side.active === 1) {
+				return;
+			}
+			for (var i=0; i<allyActive.length; i++) {
+				if (allyActive[i] && Math.abs(i-pokemon.position) <= 1 && i !== pokemon.position && !allyActive[i].fainted && allyActive[i].status && this.random(10) < 3) {
+					allyActive[i].cureStatus();
+				}
+			}
+		},
 		rating: 0,
 		num: 131
 	},
