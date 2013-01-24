@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "dependencies": {
     "sugar": ">=1.2.5",
-    "request": ">=2.1.1",
     "socket.io": ">=0.8.7",
     "sockjs": ">=0.3.1"
   },
@@ -12,7 +11,7 @@
   "homepage": "http://play.pokemonshowdown.com",
   "repository": {
     "type": "git",
-    "url": "http://github.com/Zarel/Pokemon-Showdown.git"
+    "url": "https://github.com/Zarel/Pokemon-Showdown.git"
   },
   "author": {
     "name": "Guangcong Luo",
