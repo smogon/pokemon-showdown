@@ -736,7 +736,7 @@ exports.BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			var allyActive = pokemon.side.active;
-			if (pokemon.side.active === 1) {
+			if (allyActive.length === 1) {
 				return;
 			}
 			for (var i=0; i<allyActive.length; i++) {
