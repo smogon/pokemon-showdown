@@ -109,6 +109,10 @@ process.on('message', function(message) {
 	} else {
 		if (Battles[data[0]]) {
 			Battles[data[0]].receive(data, more);
+		} else if (data[1] === 'eval') {
+			try {
+				eval(data[2]);
+			} catch (e) {}
 		}
 	}
 });
