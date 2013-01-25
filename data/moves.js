@@ -3666,6 +3666,17 @@ exports.BattleMovedex = {
 		name: "Flame Burst",
 		pp: 15,
 		priority: 0,
+		onHit: function(target, source) {
+			var allyActive = target.side.active;
+			if (allyActive.length === 1) {
+				return;
+			}
+			for (var i=0; i<allyActive.length; i++) {
+				if (allyActive[i] && this.isAdjacent(target, allyActive[i])) {
+					this.damage(allyActive[i].maxhp/16, allyActive[i], source, 'flameburst');
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Fire"
