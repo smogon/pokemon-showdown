@@ -7218,6 +7218,7 @@ exports.BattleMovedex = {
 				id: move.id,
 				pp: move.pp,
 				maxpp: move.pp,
+				target: move.target,
 				disabled: false,
 				used: false
 			};
@@ -10215,6 +10216,7 @@ exports.BattleMovedex = {
 				id: move.id,
 				pp: move.pp,
 				maxpp: move.pp,
+				target: move.target,
 				disabled: false,
 				used: false
 			};
