@@ -583,7 +583,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		// Battle actions are actually just text commands that are handled in
 		// parseCommand(), which in turn often calls Simulator.prototype.sendFor().
 		// Sometimes the call to sendFor is done indirectly, by calling
-		// room.decision(), where room.prototype === BattleRoom.
+		// room.decision(), where room.constructor === BattleRoom.
 		var parsedMessage = parseCommand(user, cmd, target, selfR, socket, message);
 		if (typeof parsedMessage === 'string') {
 			message = parsedMessage;
