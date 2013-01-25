@@ -740,7 +740,7 @@ exports.BattleAbilities = {
 				return;
 			}
 			for (var i=0; i<allyActive.length; i++) {
-				if (allyActive[i] && Math.abs(i-pokemon.position) <= 1 && i !== pokemon.position && !allyActive[i].fainted && allyActive[i].status && this.random(10) < 3) {
+				if (allyActive[i] && this.isAdjacent(pokemon, allyActive[i]) && allyActive[i].status && this.random(10) < 3) {
 					allyActive[i].cureStatus();
 				}
 			}

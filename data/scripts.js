@@ -419,6 +419,11 @@ exports.BattleScripts = {
 		}
 		return damage;
 	},
+	isAdjacent: function(pokemon1, pokemon2) {
+		if (!pokemon1.fainted && !pokemon2.fainted && pokemon2.position !== pokemon1.position && Math.abs(pokemon2.position-pokemon1.position) <= 1) {
+			return true;
+		}
+	},
 	getTeam: function(side, team) {
 		var format = side.battle.getFormat();
 		if (format.team === 'random') {
