@@ -90,6 +90,8 @@ Tools = require('./tools.js');
 
 var Battles = {};
 
+// Receive and process a message sent using Simulator.prototype.send in
+// another process.
 process.on('message', function(message) {
 	//console.log('CHILD MESSAGE RECV: "'+message+'"');
 	var nlIndex = message.indexOf("\n");
@@ -985,6 +987,7 @@ function BattleSide(name, battle, n, team) {
 	this.pokemonLeft = 0;
 	this.active = [null];
 	this.decision = null;
+	this.ackRequest = -1;
 	this.foe = null;
 	this.sideConditions = {};
 
@@ -1113,7 +1116,7 @@ function BattleSide(name, battle, n, team) {
 
 		selfS = null;
 	};
-}
+} // function BattleSide
 
 function Battle(roomid, format, rated) {
 	var selfB = this;
@@ -2757,6 +2760,25 @@ function Battle(roomid, format, rated) {
 		if (!decision.pokemon) decision.pokemon = pokemon;
 		selfB.addQueue(decision);
 	};
+	this.ackRequest = function(sideid, rqid) {
+		var side = null;
+		if (sideid === 'p1' || sideid === 'p2') side = selfB[sideid];
+		// This condition should be impossible because the sideid comes
+		// from our forked process and if the player id were invalid, we would
+		// not have even got to this function. However, the function below
+		// also checks for the !side condition, so we check for it here as well.
+		if (!side) return;
+		// This condition is possible, however.
+		if (!side.currentRequest) return;
+
+		var ack = parseInt(rqid, 10);
+		if (ack < side.ackRequest) {
+			// It's hard to think of a case where this could happen, but in
+			// case it can, we check for it.
+			return;
+		}
+		side.ackRequest = ack;
+	};
 	/**
 	 * Takes a choice string passed from the client. Starts the next
 	 * turn if all required choices have been made.
@@ -2766,6 +2788,15 @@ function Battle(roomid, format, rated) {
 		if (sideid === 'p1' || sideid === 'p2') side = selfB[sideid];
 		if (!side) return; // wtf
 		if (!side.currentRequest) return;
+		// The client must acknowledge having received a request before we
+		// will process a choice string. This prevents problems where the
+		// user accidentally selects a move for a turn that hasn't happened
+		// yet due to lag.
+		if (side.ackRequest !== selfB.rqid) {
+			// Make sure the client knows it still has to send in a decision.
+			selfB.send('resendrequest', sideid);
+			return;
+		}
 
 		if (typeof choice === 'string') choice = choice.split(',');
 
@@ -3011,10 +3042,13 @@ function Battle(roomid, format, rated) {
 	// IPC
 
 	this.messageLog = [];
+	// Messages sent by this function are received and handled in
+	// Simulator.prototype.receive in simulator.js (in another process).
 	this.send = function(type, data) {
 		if (Array.isArray(data)) data = data.join("\n");
 		process.send(this.id+"\n"+type+"\n"+data);
 	};
+	// This function is called by this process's 'message' event.
 	this.receive = function(data, more) {
 		this.messageLog.push(data.join(' '));
 		var logPos = selfB.log.length;
@@ -3046,6 +3080,10 @@ function Battle(roomid, format, rated) {
 		case 'win':
 		case 'tie':
 			this.win(data[2]);
+			break;
+
+		case 'ackrequest':
+			this.ackRequest(data[2], data[3]);
 			break;
 
 		case 'choose':

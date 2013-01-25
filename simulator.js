@@ -109,6 +109,11 @@ var Simulator = (function(){
 			}
 			break;
 
+		case 'resendrequest':
+			var player = this.getPlayer(lines[2]);
+			this.resendRequest(player);
+			break;
+
 		case 'log':
 			this.logData = JSON.parse(lines[2]);
 			break;
@@ -119,6 +124,10 @@ var Simulator = (function(){
 		}
 	};
 
+	Simulator.prototype.resendRequest = function(user) {
+		user.emit('update', JSON.parse(this.requests[user.userid]));
+		user.sendTo(this.id, '|callback|decision');
+	};
 	Simulator.prototype.win = function(user) {
 		if (!user) {
 			this.tie();
