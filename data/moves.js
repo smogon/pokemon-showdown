@@ -8302,9 +8302,9 @@ exports.BattleMovedex = {
 			onModifyAtk: function() {
 				return this.effectData.atk;
 			},
-			onModifySpAPriority: 100,
-			onModifySpA: function() {
-				return this.effectData.spa;
+			onModifyDefPriority: 100,
+			onModifyDef: function() {
+				return this.effectData.def;
 			}
 		},
 		secondary: false,
