@@ -1240,13 +1240,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
-	case 'ackrequest':
-		if (!room.ackRequest) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
-
-		room.ackRequest(user, target);
-		return false;
-		break;
-
 	case 'undo':
 		if (!room.decision) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
