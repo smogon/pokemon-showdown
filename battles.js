@@ -421,7 +421,7 @@ function BattlePokemon(set, side) {
 			}
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
-				moveName += ' '+selfP.hpType;
+				moveName = 'Hidden Power '+selfP.hpType;
 				if (selfP.hpPower != 70) moveName += ' '+selfP.hpPower;
 			}
 			moves.push({
