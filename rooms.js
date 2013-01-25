@@ -2,7 +2,7 @@ const MAX_MESSAGE_LENGTH = 300;
 const TIMEOUT_DEALLOCATE = 15*60*1000;
 // Increment this by 1 for each change that breaks compatibility between
 // the previous version of the client and the current version of the server.
-const BATTLE_ROOM_PROTOCOL_VERSION = 1;
+const BATTLE_ROOM_PROTOCOL_VERSION = 2;
 
 function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	var selfR = this;
@@ -416,9 +416,6 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			}
 		}
 		selfR.update();
-	};
-	this.ackRequest = function(user, rqid) {
-		selfR.battle.sendFor(user, 'ackrequest', rqid);
 	};
 	// This function is only called when the room is not empty.
 	// Joining an empty room calls this.join() below instead.

@@ -2760,44 +2760,35 @@ function Battle(roomid, format, rated) {
 		if (!decision.pokemon) decision.pokemon = pokemon;
 		selfB.addQueue(decision);
 	};
-	this.ackRequest = function(sideid, rqid) {
-		var side = null;
-		if (sideid === 'p1' || sideid === 'p2') side = selfB[sideid];
-		// This condition should be impossible because the sideid comes
-		// from our forked process and if the player id were invalid, we would
-		// not have even got to this function. However, the function below
-		// also checks for the !side condition, so we check for it here as well.
-		if (!side) return;
-		// This condition is possible, however.
-		if (!side.currentRequest) return;
-
-		var ack = parseInt(rqid, 10);
-		if (ack < side.ackRequest) {
-			// It's hard to think of a case where this could happen, but in
-			// case it can, we check for it.
-			return;
-		}
-		side.ackRequest = ack;
-	};
 	/**
 	 * Takes a choice string passed from the client. Starts the next
 	 * turn if all required choices have been made.
 	 */
-	this.choose = function(sideid, choice) {
+	this.choose = function(sideid, choice, rqid) {
 		var side = null;
 		if (sideid === 'p1' || sideid === 'p2') side = selfB[sideid];
+		// This condition should be impossible because the sideid comes
+		// from our forked process and if the player id were invalid, we would
+		// not have even got to this function.
 		if (!side) return; // wtf
+
+		// This condition can occur if the client sends a decision at the
+		// wrong time.
 		if (!side.currentRequest) return;
+
 		// The client must acknowledge having received a request before we
 		// will process a choice string. This prevents problems where the
 		// user accidentally selects a move for a turn that hasn't happened
 		// yet due to lag.
-		if (side.ackRequest !== selfB.rqid) {
+		if ((rqid !== undefined) && (parseInt(rqid, 10) !== selfB.rqid)) {
 			// Make sure the client knows it still has to send in a decision.
 			selfB.send('resendrequest', sideid);
 			return;
 		}
 
+		// It should be impossible for choice not to be a string. Choice comes
+		// from splitting the string sent by our forked process, not from the
+		// client. However, just in case, we maintain this check for now.
 		if (typeof choice === 'string') choice = choice.split(',');
 
 		side.decision = selfB.parseChoice(choice, side);
@@ -2823,7 +2814,10 @@ function Battle(roomid, format, rated) {
 	this.undoChoice = function(sideid) {
 		var side = null;
 		if (sideid === 'p1' || sideid === 'p2') side = selfB[sideid];
+		// The following condition can never occur for the reasons given in
+		// the choose() function above.
 		if (!side) return; // wtf
+		// This condition can occur.
 		if (!side.currentRequest) return;
 
 		side.decision = false;
@@ -3082,12 +3076,8 @@ function Battle(roomid, format, rated) {
 			this.win(data[2]);
 			break;
 
-		case 'ackrequest':
-			this.ackRequest(data[2], data[3]);
-			break;
-
 		case 'choose':
-			this.choose(data[2], data[3]);
+			this.choose(data[2], data[3], data[4]);
 			break;
 
 		case 'undo':
