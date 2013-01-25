@@ -1,5 +1,8 @@
 const MAX_MESSAGE_LENGTH = 300;
 const TIMEOUT_DEALLOCATE = 15*60*1000;
+// Increment this by 1 for each change that breaks compatibility between
+// the previous version of the client and the current version of the server.
+const BATTLE_ROOM_PROTOCOL_VERSION = 1;
 
 function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	var selfR = this;
@@ -414,6 +417,11 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		}
 		selfR.update();
 	};
+	this.ackRequest = function(user, rqid) {
+		selfR.battle.sendFor(user, 'ackrequest', rqid);
+	};
+	// This function is only called when the room is not empty.
+	// Joining an empty room calls this.join() below instead.
 	this.initSocket = function(user, socket) {
 		var initdata = {
 			name: user.name,
@@ -423,12 +431,12 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			token: user.token,
 			room: selfR.id,
 			roomType: 'battle',
+			version: BATTLE_ROOM_PROTOCOL_VERSION,
 			battlelog: selfR.log
 		};
 		emit(socket, 'init', initdata);
 		if (selfR.battle.requests[user.userid]) {
-			emit(socket, 'update', JSON.parse(selfR.battle.requests[user.userid]));
-			sendData(socket, '>'+selfR.id+'\n|callback|decision');
+			selfR.battle.resendRequest(user);
 		}
 	};
 	this.join = function(user) {
@@ -450,6 +458,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			token: user.token,
 			room: selfR.id,
 			roomType: 'battle',
+			version: BATTLE_ROOM_PROTOCOL_VERSION,
 			battlelog: selfR.log
 		};
 		user.emit('init', initdata);
@@ -571,6 +580,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			}
 		}
 
+		// Battle actions are actually just text commands that are handled in
+		// parseCommand(), which in turn often calls Simulator.prototype.sendFor().
+		// Sometimes the call to sendFor is done indirectly, by calling
+		// room.decision(), where room.prototype === BattleRoom.
 		var parsedMessage = parseCommand(user, cmd, target, selfR, socket, message);
 		if (typeof parsedMessage === 'string') {
 			message = parsedMessage;
