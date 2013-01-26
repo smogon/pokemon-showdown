@@ -9631,6 +9631,12 @@ exports.BattleMovedex = {
 		num: 496,
 		accuracy: 100,
 		basePower: 60,
+		basePowerCallback: function(target, source, move) {
+			if (move.sourceEffect === 'round') {
+				return 120;
+			}
+			return 60;
+		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. If there are other active Pokemon that chose this move for use this turn, those Pokemon take their turn immediately after the user, in Speed order, and this move's power is 120 for each other user. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "Power doubles if others used Round this turn.",
@@ -9639,6 +9645,16 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isSoundBased: true,
+		onHit: function(target, source) {
+			for (var i=0; i<this.queue.length; i++) {
+				var decision = this.queue[i];
+				if (!decision.pokemon || !decision.move) continue;
+				if (decision.move.id === 'round') {
+					this.prioritizeQueue(decision);
+					return;
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
