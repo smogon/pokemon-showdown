@@ -2796,7 +2796,7 @@ function Battle(roomid, format, rated) {
 		// yet due to lag.
 		if ((rqid !== undefined) && (parseInt(rqid, 10) !== selfB.rqid)) {
 			// Make sure the client knows it still has to send in a decision.
-			selfB.send('resendrequest', sideid);
+			// selfB.send('resendrequest', sideid);
 			return;
 		}
 

@@ -110,8 +110,8 @@ var Simulator = (function(){
 			break;
 
 		case 'resendrequest':
-			var player = this.getPlayer(lines[2]);
-			this.resendRequest(player);
+			// var player = this.getPlayer(lines[2]);
+			// this.resendRequest(player);
 			break;
 
 		case 'log':
