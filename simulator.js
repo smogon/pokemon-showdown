@@ -110,8 +110,8 @@ var Simulator = (function(){
 			break;
 
 		case 'resendrequest':
-			// var player = this.getPlayer(lines[2]);
-			// this.resendRequest(player);
+			var player = this.getPlayer(lines[2]);
+			this.resendRequest(player);
 			break;
 
 		case 'log':
@@ -125,6 +125,8 @@ var Simulator = (function(){
 	};
 
 	Simulator.prototype.resendRequest = function(user) {
+		// The !user condition can occur. Do not remove this check.
+		if (!user) return;
 		user.emit('update', JSON.parse(this.requests[user.userid]));
 		user.sendTo(this.id, '|callback|decision');
 	};
