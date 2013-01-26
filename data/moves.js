@@ -7892,6 +7892,9 @@ exports.BattleMovedex = {
 		name: "Pay Day",
 		pp: 20,
 		priority: 0,
+		onHit: function() {
+			this.add('-message', 'Coins were scattered everywhere!');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
