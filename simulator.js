@@ -110,8 +110,8 @@ var Simulator = (function(){
 			break;
 
 		case 'resendrequest':
-			// var player = this.getPlayer(lines[2]);
-			// this.resendRequest(player);
+			var player = this.getPlayer(lines[2]);
+			this.resendRequest(player);
 			break;
 
 		case 'log':
@@ -126,7 +126,7 @@ var Simulator = (function(){
 
 	Simulator.prototype.resendRequest = function(user) {
 		user.emit('update', JSON.parse(this.requests[user.userid]));
-		user.sendTo(this.id, '|callback|decision');
+		user.sendTo(this.room, '|callback|decision');
 	};
 	Simulator.prototype.win = function(user) {
 		if (!user) {
