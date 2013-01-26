@@ -163,13 +163,13 @@ exports.BattleFormats = {
 	},
 	challengecup1vs1: {
 		effectType: 'Format',
-		name: "Challenge Cup 1 VS 1",
+		name: "Challenge Cup 1-vs-1",
 		team: 'randomCC',
 		canUseRandomTeam: true,
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		ruleset: ['Pokemon', 'Team Preview'],
+		ruleset: ['Pokemon', 'Team Preview 1v1'],
 		onBegin: function() {
 			this.debug('Cutting down to 1');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -504,7 +504,7 @@ exports.BattleFormats = {
 			}
 		},
 		// no restrictions, for serious
-		ruleset: ['Pokemon', 'VGC Team Preview', 'Species Clause', 'Item Clause'],
+		ruleset: ['Pokemon', 'Team Preview VGC', 'Species Clause', 'Item Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
 			'Mewtwo',
 			'Mew',
@@ -741,7 +741,7 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	vgcteampreview: {
+	teampreviewvgc: {
 		onStartPriority: -10,
 		onStart: function() {
 			this.add('clearpoke');
@@ -754,6 +754,21 @@ exports.BattleFormats = {
 		},
 		onTeamPreview: function() {
 			this.makeRequest('teampreview', 4);
+		}
+	},
+	teampreview1v1: {
+		onStartPriority: -10,
+		onStart: function() {
+			this.add('clearpoke');
+			for (var i=0; i<this.sides[0].pokemon.length; i++) {
+				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+			}
+			for (var i=0; i<this.sides[1].pokemon.length; i++) {
+				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+			}
+		},
+		onTeamPreview: function() {
+			this.makeRequest('teampreview', 1);
 		}
 	},
 	teampreview: {
