@@ -7893,7 +7893,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		onHit: function() {
-			this.add('-message', 'Coins were scattered everywhere!');
+			this.add('-fieldactivate', 'move: Pay Day');
 		},
 		secondary: false,
 		target: "normal",
