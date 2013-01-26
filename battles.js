@@ -2216,7 +2216,7 @@ function Battle(roomid, format, rated) {
 
 		var basePower = move.basePower;
 		if (move.basePowerCallback) {
-			basePower = move.basePowerCallback.call(selfB, pokemon, target);
+			basePower = move.basePowerCallback.call(selfB, pokemon, target, move);
 		}
 		if (!basePower) return 0;
 		basePower = clampIntRange(basePower, 1);
@@ -2508,6 +2508,20 @@ function Battle(roomid, format, rated) {
 			selfB.queue.sort(selfB.comparePriority);
 		}
 	};
+	this.prioritizeQueue = function(decision, source, sourceEffect) {
+		if (selfB.event) {
+			if (!source) source = selfB.event.source;
+			if (!sourceEffect) sourceEffect = selfB.effect;
+		}
+		for (var i=0; i<this.queue.length; i++) {
+			if (this.queue[i] === decision) {
+				this.queue.splice(i,1);
+				break;
+			}
+		}
+		decision.sourceEffect = sourceEffect;
+		this.queue.unshift(decision);
+	};
 	this.willAct = function() {
 		for (var i=0; i<selfB.queue.length; i++) {
 			if (selfB.queue[i].choice === 'move' || selfB.queue[i].choice === 'switch') {
@@ -2580,7 +2594,7 @@ function Battle(roomid, format, rated) {
 		case 'move':
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
-			selfB.runMove(decision.move, decision.pokemon, selfB.getTarget(decision));
+			selfB.runMove(decision.move, decision.pokemon, selfB.getTarget(decision), decision.sourceEffect);
 			break;
 		case 'beforeTurnMove':
 			if (!decision.pokemon.isActive) return false;
