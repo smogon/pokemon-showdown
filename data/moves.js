@@ -450,6 +450,13 @@ exports.BattleMovedex = {
 		num: 372,
 		accuracy: 100,
 		basePower: 50,
+		basePowerCallback: function(pokemon, source) {
+			if (source.lastDamage > 0 && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.move != "Pain Split") {			
+				this.debug('Boosted damge for being hit this turn');
+				return 100;
+			}
+			return 50;
+		},		
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the target has already taken damage this turn, other than from Pain Split. Makes contact.",
 		shortDesc: "Power doubles if target was damaged this turn.",
