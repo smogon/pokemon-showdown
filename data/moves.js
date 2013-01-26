@@ -9645,7 +9645,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isSoundBased: true,
-		onHit: function(target, source) {
+		onTryHit: function(target, source) {
 			for (var i=0; i<this.queue.length; i++) {
 				var decision = this.queue[i];
 				if (!decision.pokemon || !decision.move) continue;
