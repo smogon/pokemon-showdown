@@ -3562,6 +3562,13 @@ exports.BattleMovedex = {
 		num: 519,
 		accuracy: 100,
 		basePower: 50,
+		basePowerCallback: function(target, source, move) {
+			if (move.sourceEffect in {grasspledge:1, waterpledge:1}) {
+				this.debug('triple damage');
+				return 150;
+			}
+			return 50;
+		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. If one of the user's allies chose to use Grass Pledge or Water Pledge this turn and has not moved yet, they take their turn immediately after the user and the user's move does nothing. Power triples if this move is used by an ally that way, and a sea of fire appears on the target's side if the first move was Grass Pledge, or a rainbow appears on the user's side if the first move was Water Pledge.",
 		shortDesc: "Use with Grass or Water Pledge for added effect.",
@@ -3569,6 +3576,41 @@ exports.BattleMovedex = {
 		name: "Fire Pledge",
 		pp: 10,
 		priority: 0,
+		onTryHit: function(target, source, move) {
+			for (var i=0; i<this.queue.length; i++) {
+				var decision = this.queue[i];
+				if (!decision.pokemon || !decision.move) continue;
+				if (decision.pokemon.side === source.side && decision.move.id in {grasspledge:1, waterpledge:1}) {
+					this.prioritizeQueue(decision);
+					return null;
+				}
+			}
+		},
+		onHit: function(target, source, move) {
+			if (move.sourceEffect === 'grasspledge') {
+				target.side.addSideCondition('grasspledge');
+			}
+			if (move.sourceEffect === 'waterpledge') {
+				source.side.addSideCondition('firepledge');
+			}
+		},
+		effect: {
+			duration: 4,
+			onStart: function(targetSide) {
+				this.add('-sidestart', targetSide, 'Fire Pledge');
+			},
+			onEnd: function(targetSide) {
+				this.add('-sideend', targetSide, 'Fire Pledge');
+			},
+			onModifyMove: function(move) {
+				if (move.secondaries) {
+					this.debug('doubling secondary chance');
+					for (var i=0; i<move.secondaries.length; i++) {
+						move.secondaries[i].chance *= 2;
+					}
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -4499,6 +4541,13 @@ exports.BattleMovedex = {
 		num: 520,
 		accuracy: 100,
 		basePower: 50,
+		basePowerCallback: function(target, source, move) {
+			if (move.sourceEffect in {waterpledge:1, firepledge:1}) {
+				this.debug('triple damage');
+				return 150;
+			}
+			return 50;
+		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. If one of the user's allies chose to use Fire Pledge or Water Pledge this turn and has not moved yet, they take their turn immediately after the user and the user's move does nothing. Power triples if this move is used by an ally that way, and a sea of fire appears on the target's side if the first move was Fire Pledge, or a swamp appears on the target's side if the first move was Water Pledge.",
 		shortDesc: "Use with Fire or Water Pledge for added effect.",
@@ -4506,6 +4555,41 @@ exports.BattleMovedex = {
 		name: "Grass Pledge",
 		pp: 10,
 		priority: 0,
+		onTryHit: function(target, source, move) {
+			for (var i=0; i<this.queue.length; i++) {
+				var decision = this.queue[i];
+				if (!decision.pokemon || !decision.move) continue;
+				if (decision.pokemon.side === source.side && decision.move.id in {waterpledge:1, firepledge:1}) {
+					this.prioritizeQueue(decision);
+					return null;
+				}
+			}
+		},
+		onHit: function(target, source, move) {
+			if (move.sourceEffect === 'waterpledge') {
+				target.side.addSideCondition('waterpledge');
+			}
+			if (move.sourceEffect === 'firepledge') {
+				target.side.addSideCondition('grasspledge');
+			}
+		},
+		effect: {
+			duration: 4,
+			onStart: function(targetSide) {
+				this.add('-sidestart', targetSide, 'Grass Pledge');
+			},
+			onEnd: function(targetSide) {
+				this.add('-sideend', targetSide, 'Grass Pledge');
+			},
+			onResidual: function(side) {
+				for (var i=0; i<side.active.length; i++) {
+					var pokemon = side.active[i];
+					if (pokemon && !pokemon.hasType('Fire')) {
+						this.damage(pokemon.maxhp/8, pokemon);
+					}
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -12762,6 +12846,13 @@ exports.BattleMovedex = {
 		num: 518,
 		accuracy: 100,
 		basePower: 50,
+		basePowerCallback: function(target, source, move) {
+			if (move.sourceEffect in {firepledge:1, grasspledge:1}) {
+				this.debug('triple damage');
+				return 150;
+			}
+			return 50;
+		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. If one of the user's allies chose to use Fire Pledge or Grass Pledge this turn and has not moved yet, they take their turn immediately after the user and the user's move does nothing. Power triples if this move is used by an ally that way, and a rainbow appears on the user's side if the first move was Fire Pledge, or a swamp appears on the target's side if the first move was Grass Pledge.",
 		shortDesc: "Use with Grass or Fire Pledge for added effect.",
@@ -12769,6 +12860,36 @@ exports.BattleMovedex = {
 		name: "Water Pledge",
 		pp: 10,
 		priority: 0,
+		onTryHit: function(target, source, move) {
+			for (var i=0; i<this.queue.length; i++) {
+				var decision = this.queue[i];
+				if (!decision.pokemon || !decision.move) continue;
+				if (decision.pokemon.side === source.side && decision.move.id in {firepledge:1, grasspledge:1}) {
+					this.prioritizeQueue(decision);
+					return null;
+				}
+			}
+		},
+		onHit: function(target, source, move) {
+			if (move.sourceEffect === 'firepledge') {
+				source.side.addSideCondition('firepledge');
+			}
+			if (move.sourceEffect === 'grasspledge') {
+				target.side.addSideCondition('waterpledge');
+			}
+		},
+		effect: {
+			duration: 4,
+			onStart: function(targetSide) {
+				this.add('-sidestart', targetSide, 'Water Pledge');
+			},
+			onEnd: function(targetSide) {
+				this.add('-sideend', targetSide, 'Water Pledge');
+			},
+			onModifySpe: function(spe) {
+				return spe/4;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Water"

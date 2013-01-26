@@ -1,6 +1,6 @@
 exports.BattleScripts = {
 	gen: 5,
-	runMove: function(move, pokemon, target) {
+	runMove: function(move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
 
@@ -23,7 +23,7 @@ exports.BattleScripts = {
 		if (!lockedMove) {
 			pokemon.deductPP(move, 1, target);
 		}
-		this.useMove(move, pokemon, target);
+		this.useMove(move, pokemon, target, sourceEffect);
 		this.runEvent('AfterMove', target, pokemon, move);
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
