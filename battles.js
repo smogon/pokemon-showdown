@@ -2790,13 +2790,8 @@ function Battle(roomid, format, rated) {
 		// wrong time.
 		if (!side.currentRequest) return;
 
-		// The client must acknowledge having received a request before we
-		// will process a choice string. This prevents problems where the
-		// user accidentally selects a move for a turn that hasn't happened
-		// yet due to lag.
+		// Make sure the decision is for the right request.
 		if ((rqid !== undefined) && (parseInt(rqid, 10) !== selfB.rqid)) {
-			// Make sure the client knows it still has to send in a decision.
-			selfB.send('resendrequest', sideid);
 			return;
 		}
 
