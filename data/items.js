@@ -820,7 +820,7 @@ exports.BattleItems = {
 			type: "Bug"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move && this.getEffectiveness(move.type, target) >= 2) {
+			if (move && this.getEffectiveness(move.type, target) > 0) {
 				target.addVolatile('enigmaberry');
 			}
 		},
