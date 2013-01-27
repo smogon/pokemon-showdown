@@ -1784,6 +1784,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/declare [message] - Anonymously announces a message. Requires: & ~');
 		}
+		if (target === '&' || target === 'potd' ) {
+			matched = true;
+			emit(socket, 'console', '/potd [pokemon] - Sets the Random Battle Pokemon of the Day. Requires: & ~');
+		}
 		if (target === '%' || target === 'announce' || target === 'wall' ) {
 			matched = true;
 			emit(socket, 'console', '/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
@@ -1804,8 +1808,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/help OR /h OR /? - Gives you help.');
 		}
 		if (!target) {
-			emit(socket, 'console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /blockchallenges, /allowchallenges');
-			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /tiers, /intro, /learn, /analysis (replace / with ! to broadcast. (Requires: + % @ & ~))');
+			emit(socket, 'console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back');
+			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))');
 			emit(socket, 'console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
 				emit(socket, 'console', 'DRIVER COMMANDS: /mute, /unmute, /announce, /forcerename, /alts')
