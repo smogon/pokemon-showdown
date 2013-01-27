@@ -376,9 +376,7 @@ function BattlePokemon(set, side) {
 			success = true;
 		}
 		selfP.lastMove = move.id;
-		if (!amount) {
-			selfP.movedThisTurn = true;
-		}
+		selfP.movedThisTurn = true;
 		return success;
 	};
 	this.gotAttacked = function(move, damage, source) {
