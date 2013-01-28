@@ -450,13 +450,13 @@ exports.BattleMovedex = {
 		num: 372,
 		accuracy: 100,
 		basePower: 50,
-		basePowerCallback: function(pokemon, source) {
-			if (source.lastDamage > 0 && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.move != "Pain Split") {			
-				this.debug('Boosted damge for being hit this turn');
+		basePowerCallback: function(pokemon, target) {
+			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {			
+				this.debug('Boosted for being damaged this turn');
 				return 100;
 			}
 			return 50;
-		},		
+		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the target has already taken damage this turn, other than from Pain Split. Makes contact.",
 		shortDesc: "Power doubles if target was damaged this turn.",
@@ -464,6 +464,19 @@ exports.BattleMovedex = {
 		name: "Assurance",
 		pp: 10,
 		priority: 0,
+		beforeTurnCallback: function(pokemon, target) {
+			pokemon.addVolatile('assurance');
+			pokemon.volatiles.assurance.position = target.position;
+		},
+		effect: {
+			duration: 1,
+			onFoeAfterDamage: function(damage, target) {
+				if (target.position == this.effectData.position) {
+					this.debug('damaged this turn');
+					this.effectData.hurt = true;
+				}
+			}
+		},
 		isContact: true,
 		secondary: false,
 		target: "normal",
@@ -629,8 +642,8 @@ exports.BattleMovedex = {
 		num: 419,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function(pokemon, source) {
-			if (source.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
+		basePowerCallback: function(pokemon, target) {
+			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
 				this.debug('Boosted for getting hit by '+pokemon.lastAttackedBy.move);
 				return 120;
 			}
