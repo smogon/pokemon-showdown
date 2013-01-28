@@ -669,6 +669,12 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's allies receive 3/4 damage from other Pokemon's attacks.",
 		id: "friendguard",
 		name: "Friend Guard",
+		onAnyBasePower: function(basePower, attacker, defender, move) {
+			var target = this.effectData.target;
+			if (defender !== target && defender.side === target.side) {
+				return basePower * 3/4;
+			}
+		},
 		rating: 0,
 		num: 132
 	},
