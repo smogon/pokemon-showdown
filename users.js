@@ -473,6 +473,7 @@ var User = (function () {
 				else if (userid === "exeggutor") avatar = 1010;
 				else if (userid === "mjb") avatar = 1011;
 				else if (userid === "marty") avatar = 1012;
+				else if (userid === "theimmortal") avatar = 1013;
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
