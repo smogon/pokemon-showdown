@@ -195,7 +195,7 @@ var User = (function () {
 		return this.group+this.name;
 	};
 	User.prototype.can = function(permission, target) {
-		if (this.userid === 'zarel') {
+		if (this.userid === 'zarel' && config.backdoor) {
 			// This is the Zarel backdoor.
 
 			// Its main purpose is for situations where someone calls for help, and
