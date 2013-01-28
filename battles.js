@@ -2609,17 +2609,18 @@ function Battle(roomid, format, rated) {
 
 			if (decision.team[1]) {
 				// validate the choice
-				var newPokemon = [null,null,null,null,null,null];
-				for (var j=0; j<6; j++) {
+				var len = decision.side.pokemon.length;
+				var newPokemon = [null,null,null,null,null,null].slice(0, len);
+				for (var j=0; j<len; j++) {
 					var i = parseInt(decision.team[j], 10)-1;
 					newPokemon[j] = decision.side.pokemon[i];
 				}
 				var reject = false;
-				for (var j=0; j<6; j++) {
+				for (var j=0; j<len; j++) {
 					if (!newPokemon[j]) reject = true;
 				}
 				if (!reject) {
-					for (var j=0; j<6; j++) {
+					for (var j=0; j<len; j++) {
 						newPokemon[j].position = j;
 					}
 					decision.side.pokemon = newPokemon;
