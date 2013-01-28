@@ -218,7 +218,12 @@ var User = (function () {
 			if (checkedGroups[group]) return false;
 			checkedGroups[group] = true;
 
-			if (groupData['root']) {
+			// The console permission is incredibly powerful because it allows
+			// the execution of abitrary shell commands on the local computer.
+			// As such, we do not include it inside the "root" permission; if
+			// the server operator intends to give administrators the console
+			// permission, it must be given explicitly.
+			if (groupData['root'] && (permission !== 'console')) {
 				return true;
 			}
 			if (groupData[permission]) {
