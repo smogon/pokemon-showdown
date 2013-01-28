@@ -51,6 +51,40 @@ exports.BattleScripts = {
 		// Azumarill: free Belly Drum
 		this.data.Learnsets.azumarill.learnset.bellydrum = ['5L100'];
 
+		// Spinda: free Superpower
+		this.data.Learnsets.spinda.learnset.superpower = ['5L100'];
+
+		// Venusaur
+		this.data.Pokedex.venusaur.abilities['1'] = 'Leaf Guard';
+		// Charizard
+		this.data.Pokedex.charizard.abilities['1'] = 'Flash Fire';
+		// Blastoise
+		this.data.Pokedex.blastoise.abilities['1'] = 'Shell Armor';
+		// Meganium
+		this.data.Pokedex.meganium.abilities['1'] = 'Harvest';
+		// Typhlosion
+		this.data.Pokedex.typhlosion.abilities['1'] = 'Flame Body';
+		// Feraligatr
+		this.data.Pokedex.feraligatr.abilities['1'] = 'Intimidate';
+		// Sceptile
+		this.data.Pokedex.sceptile.abilities['1'] = 'Limber';
+		// Blaziken
+		this.data.Pokedex.blaziken.abilities['1'] = 'Reckless';
+		// Swampert
+		this.data.Pokedex.swampert.abilities['1'] = 'Hydration';
+		// Torterra
+		this.data.Pokedex.torterra.abilities['1'] = 'Weak Armor';
+		// Infernape
+		this.data.Pokedex.infernape.abilities['1'] = 'No Guard';
+		// Empoleon
+		this.data.Pokedex.empoleon.abilities['1'] = 'Ice Body';
+		// Serperior
+		this.data.Pokedex.serperior.abilities['1'] = 'Own Tempo';
+		// Emboar
+		this.data.Pokedex.emboar.abilities['1'] = 'Sheer Force';
+		// Samurott
+		this.data.Pokedex.samurott.abilities['1'] = 'Technician';
+
 		// Every DW ability that isn't Shadow Tag becomes released
 		for (var i in this.data.FormatsData) {
 			if (i !== 'chandelure' && i !== 'gothitelle') {

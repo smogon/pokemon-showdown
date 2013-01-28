@@ -202,7 +202,7 @@ Minor move changes:
 - Close Combat has been nerfed: it now gives -2 Def, -2 SpD
 
 - Perfect accuracy moves with a base power of 60 have their base power
-  increased to 80 (physical) or 90 (special)
+  increased to 90
 
 - Drives grant a 1.1x damage bonus to Techno Blast
 
@@ -284,12 +284,31 @@ Minor learnset changes:
 
 - Milotic, Scolipede, and Steelix get Coil
 
+- Spinda gets Superpower with no incompatibilities
+
 - Rotom formes learn more things:
   - Rotom-Wash: BubbleBeam
   - Rotom-Fan: Hurricane, Twister
   - Rotom-Frost: Frost Breath
   - Rotom-Heat: Heat Wave
   - Rotom-Mow: Magical Leaf
+
+- Starters get new abilities
+  - Venusaur: Leaf Guard
+  - Charizard: Flash Fire
+  - Blastoise: Shell Armor
+  - Meganium: Harvest
+  - Typhlosion: Flame Body
+  - Feraligatr: Intimidate
+  - Sceptile: Limber
+  - Blaziken: Reckless
+  - Swampert: Hydration
+  - Torterra: Weak Armor
+  - Infernape: No Guard
+  - Empoleon: Ice Body
+  - Serperior: Own Tempo
+  - Emboar: Sheer Force
+  - Samurott: Technician
 
 Minor ability changes:
 
@@ -338,6 +357,9 @@ Minor ability changes:
 
 - Water Veil and Sand Veil grant 20% damage reduction in rain and sand,
   respectively (this replaces Sand Veil's usual effect, but not Water Veil's)
+
+- Multiscale decreases damage by 1/3 rather than 1/2 (Sorry, Dragonite,
+  this is in return for a usable physical Flying STAB in Aerial Ace)
 
 Minor item changes:
 
