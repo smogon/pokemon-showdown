@@ -165,6 +165,9 @@ exports.BattleStatuses = {
 			if (source.item === 'gripclaw') return 6;
 			return this.random(5,7);
 		},
+		onStart: function(pokemon, source) {
+			this.add('-activate', pokemon, 'move: ' +this.effectData.sourceEffect, '[of] '+source);
+		},
 		onResidualOrder: 11,
 		onResidual: function(pokemon) {
 			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0)) {
