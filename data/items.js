@@ -650,6 +650,12 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onAttractPriority: -100,
+		onAttract: function(target, source) {
+			this.debug('attract intercepted: '+target+' from '+source);
+			if (!source || source === target) return;
+			if (!source.volatiles.attract) source.addVolatile('attract', target);
+		},
 		desc: "If the holder becomes infatuated, so does the enemy."
 	},
 	"domefossil": {

@@ -530,13 +530,25 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isBounceable: true,
-		onHit: function(target) {
-			if (target.addVolatile('attract')) this.add("-start", target, "Attract");
-			else return false;
-		},
+		volatileStatus: 'attract',
 		effect: {
-			onStart: function(pokemon, source) {
-				return ((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M'));
+			onStart: function(pokemon, source, effect) {
+				if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
+					this.debug('incompatible gender');
+					return false;
+				}
+				if (!this.runEvent('Attract', pokemon, source)) {
+					this.debug('Attract event failed');
+					return false;
+				}
+
+				if (effect.id === 'cutecharm') {
+					this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] '+source);
+				if (effect.id === 'destinyknot') {
+					this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] '+source);
+				} else {
+					this.add('-start', pokemon, 'Attract');
+				}
 			},
 			onBeforeMove: function(pokemon, target, move) {
 				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['attract']) {

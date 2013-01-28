@@ -324,11 +324,9 @@ exports.BattleAbilities = {
 		shortDesc: "30% chance of infatuating Pokemon of the opposite gender if they make contact.",
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact) {
-				if (this.random(10) < 3) {
-					if (source.addVolatile('attract', target)) {
-						this.add('-start', source, 'Attract', '[from] Cute Charm', '[of] '+target);
-					}
-				}
+				//if (this.random(10) < 3) {
+					source.addVolatile('attract', target);
+				//}
 			}
 		},
 		id: "cutecharm",
