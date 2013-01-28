@@ -303,6 +303,15 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"multiscale": {
+		inherit: true,
+		onSourceBasePower: function(basePower, attacker, defender, move) {
+			if (defender.hp >= defender.maxhp) {
+				this.debug('Multiscale weaken');
+				return basePower*2/3;
+			}
+		}
+	},
 	"ironfist": {
 		inherit: true,
 		onBasePower: function(basePower, attacker, defender, move) {

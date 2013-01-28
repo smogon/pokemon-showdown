@@ -1,7 +1,7 @@
 exports.BattleMovedex = {
 	/******************************************************************
 	Perfect accuracy moves:
-	- base power increased 60 to 80 (physical) or 90 (special)
+	- base power increased 60 to 90
 
 	Justification:
 	- perfect accuracy is too underpowered to have such low base power
@@ -14,19 +14,19 @@ exports.BattleMovedex = {
 	******************************************************************/
 	aerialace: {
 		inherit: true,
-		basePower: 80
+		basePower: 90
 	},
 	faintattack: {
 		inherit: true,
-		basePower: 80
+		basePower: 90
 	},
 	shadowpunch: {
 		inherit: true,
-		basePower: 80
+		basePower: 90
 	},
 	magnetbomb: {
 		inherit: true,
-		basePower: 80
+		basePower: 90
 	},
 	magicalleaf: {
 		inherit: true,
