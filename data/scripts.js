@@ -190,10 +190,7 @@ exports.BattleScripts = {
 				// yes, it's hardcoded... meh
 				if (hits[0] === 2 && hits[1] === 5) {
 					var roll = this.random(6);
-					if (roll < 2) hits = 2;
-					else if (roll < 4) hits = 3;
-					else if (roll < 5) hits = 4;
-					else hits = 5;
+					hits = [2,2,3,3,4,5][roll];
 				} else {
 					hits = this.random(hits[0],hits[1]+1);
 				}
@@ -201,11 +198,12 @@ exports.BattleScripts = {
 			hits = Math.floor(hits);
 			for (var i=0; i<hits && target.hp && pokemon.hp; i++) {
 				var moveDamage = this.moveHit(target, pokemon, move);
-				if (moveDamage === false) return true;
+				if (moveDamage === false) break;
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage = (moveDamage || 0);
 			}
+			if (i === 0) return true;
 			this.add('-hitcount', target, i);
 		} else {
 			damage = this.moveHit(target, pokemon, move);
