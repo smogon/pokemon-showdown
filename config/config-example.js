@@ -99,7 +99,6 @@ exports.backdoor = true;
 //                       and 'u' is another special group where it means all groups
 //                       lower in rank than the current group.
 //   All the possible permissions are as follows:
-//     - console: Developer console (>>).
 //     - lockdown: /lockdown and /endlockdown commands.
 //     - hotpatch: /hotpatch, /crashfixed and /savelearnsets commands.
 //     - ignorelimits: Ignore limits such as chat message length.
