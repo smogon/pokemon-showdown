@@ -1,8 +1,20 @@
 // The server port - the port to run Pokemon Showdown under
 exports.port = 8000;
 
-// The setuid user - if you're using a port below 1024, you probably want to run
-//   PS as root and set this to an unprivileged user
+// The setuid user. If this is specified, the Pokemon Showdown server will
+// setuid() to this user after initialisation.
+//
+// WARNING: This is not generally the right way to run the server. If you want
+//          to run the server on a port below 1024, the correct way to do it
+//          is to run the server on port X > 1024 and then forward port the
+//          preferred port to port X.
+//
+//          If the server *.js files are writeable by the setuid user, this
+//          feature is equivalent to giving root to the setuid user, because
+//          they can just inject code to give themselves root into the part
+//          of the code before setuid() is called.
+//
+//          This feature should be used with caution.
 exports.setuid = '';
 
 // protocol - WebSockets ("ws") or Socket.IO ("io").
