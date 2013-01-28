@@ -721,6 +721,7 @@ exports.BattleMovedex = {
 		basePower: false,
 		basePowerCallback: function(pokemon, target) {
 			pokemon.addVolatile('beatup');
+			if (!pokemon.side.pokemon[pokemon.volatiles.beatup.index]) return null;
 			return 5 + Math.floor(pokemon.side.pokemon[pokemon.volatiles.beatup.index].baseStats.atk / 10);
 		},
 		category: "Physical",
@@ -730,14 +731,7 @@ exports.BattleMovedex = {
 		name: "Beat Up",
 		pp: 10,
 		priority: 0,
-		onModifyMove: function(move, pokemon) {
-			var validpokemon = 1;
-			for (var p in pokemon.side.pokemon) {
-				if (pokemon.side.pokemon[p] === pokemon) continue;
-				if (pokemon.side.pokemon[p] && !pokemon.side.pokemon[p].fainted && !pokemon.side.pokemon[p].status) validpokemon++;
-			}
-			move.multihit = validpokemon;
-		},
+		multihit: 6,
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {

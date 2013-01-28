@@ -2216,7 +2216,7 @@ function Battle(roomid, format, rated) {
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(selfB, pokemon, target, move);
 		}
-		if (!basePower) return 0;
+		if (!basePower) return basePower;
 		basePower = clampIntRange(basePower, 1);
 
 		move.critRatio = clampIntRange(move.critRatio, 0, 5);
