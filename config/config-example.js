@@ -72,6 +72,15 @@ exports.reportbattles = true;
 //   huge influxes of spammy users.
 exports.modchat = false;
 
+// backdoor - allow Zarel to provide tech support for your server
+//   This backdoor gives Zarel admin access to your server, which allows him
+//   to provide tech support. This can be useful in a variety of situations:
+//   if an attacker attacks your server and you are not online, if you need
+//   help setting up your server, etc.
+//   It is a backdoor, though, so if you do not trust Zarel you should
+//   disable this feature.
+exports.backdoor = true;
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
