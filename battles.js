@@ -3099,11 +3099,10 @@ function Battle(roomid, format, rated) {
 			var p1active = p1?p1.active[0]:null;
 			var p2active = p2?p2.active[0]:null;
 			try {
-				this.send('update', '|chat|~|<<< '+eval(data[2]));
+				this.add('chat', '~', '<<< '+eval(data[2]));
 			} catch (e) {
-				this.send('update', '|chatmsg|<<< error: '+e.message);
+				this.add('chatmsg', '<<< error: '+e.message);
 			}
-			return;
 			break;
 		}
 
