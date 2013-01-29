@@ -523,7 +523,7 @@ exports.BattleMovedex = {
 	flail: {
 		num: 175,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			var hpPercent = pokemon.hpPercent(pokemon.hp);
 			if (hpPercent <= 5) {
@@ -725,7 +725,7 @@ exports.BattleMovedex = {
 	lowkick: {
 		num: 67,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			var targetWeight = target.weightkg;
 			if (target.weightkg >= 200) {
