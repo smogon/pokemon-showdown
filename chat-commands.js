@@ -1691,6 +1691,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			text += '!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ & ~';
 			emit(socket, 'console', text);
 		}
+		if (target === 'timestamps') {
+			matched = true;
+			emit(socket, 'console', 'Set your timestamps preference:');
+			emit(socket, 'console', '/timestamps off - no timestamps:');
+			emit(socket, 'console', '/timestamps minutes - timestamps of the form [hh:mm]');
+			emit(socket, 'console', '/timestamps seconds - timestamps of the form [hh:mm:ss]');
+		}
 		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
 			emit(socket, 'console', '/alts OR /altcheck OR /alt OR /getalts [username] - Get a user\'s alts. Requires: @ & ~');
@@ -1789,7 +1796,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/help OR /h OR /? - Gives you help.');
 		}
 		if (!target) {
-			emit(socket, 'console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back');
+			emit(socket, 'console', 'COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps');
 			emit(socket, 'console', 'INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))');
 			emit(socket, 'console', 'For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
