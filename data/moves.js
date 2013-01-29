@@ -169,7 +169,7 @@ exports.BattleMovedex = {
 	"afteryou": {
 		num: 495,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Causes one adjacent target to take its turn immediately after the user this turn, no matter the priority of its selected move. Fails if the target would have moved next anyway, or if the target already moved this turn. This move ignores Protect and Detect. Ignores a target's Substitute.",
 		shortDesc: "The target makes its move right after the user.",
@@ -250,7 +250,7 @@ exports.BattleMovedex = {
 	"allyswitch": {
 		num: 502,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "The user swaps positions with its ally on the far side of the field. Fails if there is no Pokemon at that position, if the user is the only Pokemon on its side, or if the user is in the middle. Priority +1.",
 		shortDesc: "Switches position with the ally on the far side.",
@@ -606,7 +606,7 @@ exports.BattleMovedex = {
 	"autotomize": {
 		num: 475,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Speed by 2 stages. If the user's Speed was changed, the user's weight is reduced by 100kg as long as it remains active. This effect is stackable but cannot reduce the user's weight to less than 0.1kg.",
 		shortDesc: "Boosts the user's Speed by 2; user loses 100kg.",
@@ -730,7 +730,7 @@ exports.BattleMovedex = {
 	"beatup": {
 		num: 251,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			pokemon.addVolatile('beatup');
 			if (!pokemon.side.pokemon[pokemon.volatiles.beatup.index]) return null;
@@ -796,7 +796,7 @@ exports.BattleMovedex = {
 	"bestow": {
 		num: 516,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Causes one adjacent target to receive the user's held item. Fails if the target is already holding an item or if the user is holding a Mail.",
 		shortDesc: "User passes its held item to the target.",
@@ -825,7 +825,7 @@ exports.BattleMovedex = {
 	"bide": {
 		num: 117,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Physical",
 		desc: "The user spends two turns locked into this move and then, on the second turn after using this move, the user attacks the last Pokemon that hit it, inflicting double the damage in HP it lost during the two turns. If the last Pokemon that hit it is no longer on the field, the user attacks a random foe instead. If the user is prevented from moving during this move's use, the effect ends. This move does not check accuracy and can hit Ghost-types. Makes contact. Priority +1.",
 		shortDesc: "Waits 2 turns; deals double the damage taken.",
@@ -1643,7 +1643,7 @@ exports.BattleMovedex = {
 	"coil": {
 		num: 489,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack, Defense, and accuracy by 1 stage.",
 		shortDesc: "Boosts user's Attack, Defense, and accuracy by 1.",
@@ -1901,7 +1901,7 @@ exports.BattleMovedex = {
 	"cottonguard": {
 		num: 538,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 3 stages.",
 		shortDesc: "Boosts the user's Defense by 3.",
@@ -1940,7 +1940,7 @@ exports.BattleMovedex = {
 	"counter": {
 		num: 68,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		damageCallback: function(pokemon) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Physical') {
 				return 2 * pokemon.lastAttackedBy.damage;
@@ -2094,7 +2094,7 @@ exports.BattleMovedex = {
 	"crushgrip": {
 		num: 462,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			return 120*target.hp/target.maxhp;
 		},
@@ -2744,7 +2744,7 @@ exports.BattleMovedex = {
 	"dragonrage": {
 		num: 82,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		damage: 40,
 		category: "Special",
 		desc: "Deals damage to one adjacent target equal to 40HP.",
@@ -3002,7 +3002,7 @@ exports.BattleMovedex = {
 	"electroball": {
 		num: 486,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			var ratio = (pokemon.getStat('spe') / target.getStat('spe'));
 			if (ratio >= 4) {
@@ -3170,7 +3170,7 @@ exports.BattleMovedex = {
 	"endeavor": {
 		num: 283,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		damageCallback: function(pokemon,target) {
 			if (target.hp > pokemon.hp) {
 				return target.hp - pokemon.hp;
@@ -3249,7 +3249,7 @@ exports.BattleMovedex = {
 	"entrainment": {
 		num: 494,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Causes one adjacent target's Ability to become the same as the user's. Fails if the target's Ability is Multitype, Truant, or the same Ability as the user, or if the user's Ability is Flower Gift, Forecast, Illusion, Imposter, Multitype, Trace, Wonder Guard, or Zen Mode. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "The target's Ability changes to match the user's.",
@@ -3280,7 +3280,7 @@ exports.BattleMovedex = {
 	"eruption": {
 		num: 284,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon) {
 			return 150*pokemon.hp/pokemon.maxhp;
 		},
@@ -3517,7 +3517,7 @@ exports.BattleMovedex = {
 	"finalgambit": {
 		num: 515,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		damageCallback: function(pokemon) {
 			return pokemon.hp;
 		},
@@ -3674,7 +3674,7 @@ exports.BattleMovedex = {
 	"fissure": {
 		num: 90,
 		accuracy: 30,
-		basePower: false,
+		basePower: 0,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target equal to the target's max HP. Ignores accuracy and evasion modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Ability Sturdy are immune.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
@@ -3690,7 +3690,7 @@ exports.BattleMovedex = {
 	"flail": {
 		num: 175,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			var hpPercent = pokemon.hpPercent(pokemon.hp);
 			if (hpPercent <= 5) {
@@ -3895,7 +3895,7 @@ exports.BattleMovedex = {
 	"fling": {
 		num: 374,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. The power of this move is based on the user's held item. The held item is lost and it activates for the target if applicable. If there is no target or the target avoids this move using Protect or Detect, the user's held item is still lost. Fails if the user has no held item, if the held item cannot be thrown, if the user is under the effect of Embargo or Magic Room, or if the user has the Ability Klutz.",
 		shortDesc: "Flings the user's item at the target. Power varies.",
@@ -4240,7 +4240,7 @@ exports.BattleMovedex = {
 	"frustration": {
 		num: 218,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon) {
 			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || 1;
 		},
@@ -4538,7 +4538,7 @@ exports.BattleMovedex = {
 	"grassknot": {
 		num: 447,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			if (target.weightkg >= 200) {
 				this.debug('120 bp');
@@ -4781,7 +4781,7 @@ exports.BattleMovedex = {
 	"guardsplit": {
 		num: 470,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "The user and one adjacent target have their Defense and Special Defense stats set to be equal to the average of the user and the target's Defense and Special Defense stats, respectively, rounded down. Stat stage changes are unaffected.",
 		shortDesc: "Averages Defense and Sp. Def stats with target.",
@@ -4854,7 +4854,7 @@ exports.BattleMovedex = {
 	"guillotine": {
 		num: 12,
 		accuracy: 30,
-		basePower: false,
+		basePower: 0,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target equal to the target's maximum HP. Ignores accuracy and evasion modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Ability Sturdy are immune. Makes contact.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
@@ -4905,7 +4905,7 @@ exports.BattleMovedex = {
 	"gyroball": {
 		num: 360,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			var power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) || 1);
 			if (power > 150) power = 150;
@@ -5142,7 +5142,7 @@ exports.BattleMovedex = {
 	"healpulse": {
 		num: 505,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Causes one adjacent or non-adjacent target to gain 1/2 of its maximum HP, rounded half up. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Heals the target by 50% of its max HP.",
@@ -5248,7 +5248,7 @@ exports.BattleMovedex = {
 	"heatcrash": {
 		num: 535,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			var targetWeight = target.weightkg;
 			var pokemonWeight = pokemon.weightkg;
@@ -5301,7 +5301,7 @@ exports.BattleMovedex = {
 	"heavyslam": {
 		num: 484,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			var targetWeight = target.weightkg;
 			var pokemonWeight = pokemon.weightkg;
@@ -5656,7 +5656,7 @@ exports.BattleMovedex = {
 	"honeclaws": {
 		num: 468,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and accuracy by 1 stage.",
 		shortDesc: "Boosts the user's Attack and accuracy by 1.",
@@ -5693,7 +5693,7 @@ exports.BattleMovedex = {
 	"horndrill": {
 		num: 32,
 		accuracy: 30,
-		basePower: false,
+		basePower: 0,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target equal to the target's maximum HP. Ignores accuracy and evasion modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Ability Sturdy are immune. Makes contact.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
@@ -6653,7 +6653,7 @@ exports.BattleMovedex = {
 	"lowkick": {
 		num: 67,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			var targetWeight = target.weightkg;
 			if (target.weightkg >= 200) {
@@ -6863,7 +6863,7 @@ exports.BattleMovedex = {
 	"magicroom": {
 		num: 478,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, the held items of all active Pokemon have no effect. During the effect, Fling and Natural Gift are prevented from being used by all active Pokemon. If this move is used during the effect, the effect ends. Priority -7.",
 		shortDesc: "For 5 turns, all held items have no effect.",
@@ -6985,7 +6985,7 @@ exports.BattleMovedex = {
 	"magnitude": {
 		num: 222,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon) {
 			var i = this.random(100);
 			if (i < 5) {
@@ -7188,7 +7188,7 @@ exports.BattleMovedex = {
 	"metalburst": {
 		num: 368,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		damageCallback: function(pokemon) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
 				return 1.5 * pokemon.lastAttackedBy.damage;
@@ -7427,7 +7427,7 @@ exports.BattleMovedex = {
 	"mirrorcoat": {
 		num: 243,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		damageCallback: function(pokemon) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Special') {
 				return 2 * pokemon.lastAttackedBy.damage;
@@ -7725,7 +7725,7 @@ exports.BattleMovedex = {
 	"naturalgift": {
 		num: 363,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon) {
 			if (pokemon.volatiles['naturalgift']) return pokemon.volatiles['naturalgift'].basePower;
 			return false;
@@ -7762,7 +7762,7 @@ exports.BattleMovedex = {
 	"naturepower": {
 		num: 267,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles. (In-game: Seed Bomb in grass, Mud Bomb in puddles, Hydro Pump on water, Rock Slide in caves, Earthquake on rocky ground and sand, Blizzard on snow, Ice Beam on ice, and Tri Attack everywhere else.)",
 		shortDesc: "Attack changes based on terrain. (Earthquake)",
@@ -7821,7 +7821,7 @@ exports.BattleMovedex = {
 	"nightshade": {
 		num: 101,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		damage: 'level',
 		category: "Special",
 		desc: "Deals damage to one adjacent target equal to the user's level.",
@@ -8338,7 +8338,7 @@ exports.BattleMovedex = {
 	"powersplit": {
 		num: 471,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "The user and one adjacent target have their Attack and Special Attack stats set to be equal to the average of the user and the target's Attack and Special Attack stats, respectively, rounded down. Stat stage changes are unaffected.",
 		shortDesc: "Averages Attack and Sp. Atk stats with target.",
@@ -8698,7 +8698,7 @@ exports.BattleMovedex = {
 	"psywave": {
 		num: 149,
 		accuracy: 80,
-		basePower: false,
+		basePower: 0,
 		damageCallback: function(pokemon) {
 			return (this.random(5,16) / 10) * pokemon.level;
 		},
@@ -8784,7 +8784,7 @@ exports.BattleMovedex = {
 	"quash": {
 		num: 511,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Causes one adjacent target to take its turn after all other Pokemon this turn, no matter the priority of its selected move. Fails if the target already moved this turn.",
 		shortDesc: "Forces the target to move last.",
@@ -8831,7 +8831,7 @@ exports.BattleMovedex = {
 	"quickguard": {
 		num: 501,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "The user and its party members are protected from attacks with original priority greater than 0 made by other Pokemon, including allies, during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
 		shortDesc: "Protects allies from priority attacks for one turn.",
@@ -8878,7 +8878,7 @@ exports.BattleMovedex = {
 	"quiverdance": {
 		num: 483,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack, Special Defense, and Speed by 1 stage.",
 		shortDesc: "Boosts the user's Sp. Atk, Sp. Def, Speed by 1.",
@@ -8916,7 +8916,7 @@ exports.BattleMovedex = {
 	"ragepowder": {
 		num: 476,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Until the end of the turn, all single-target attacks from the foe's team are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Ability Magic Bounce, or drawn in by the Abilities Lightningrod or Storm Drain. Fails if it is not a double or triple battle. Priority +3.",
 		shortDesc: "The foes' moves target the user on the turn used.",
@@ -9137,7 +9137,7 @@ exports.BattleMovedex = {
 	"reflecttype": {
 		num: 513,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Causes the user's types to become those of one adjacent target. Fails if the user is an Arceus. Ignores a target's Substitute.",
 		shortDesc: "User becomes the same type as the target.",
@@ -9267,7 +9267,7 @@ exports.BattleMovedex = {
 	"return": {
 		num: 216,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon) {
 			return Math.floor((pokemon.happiness * 10) / 25) || 1;
 		},
@@ -9310,7 +9310,7 @@ exports.BattleMovedex = {
 	"reversal": {
 		num: 179,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			var hpPercent = pokemon.hpPercent(pokemon.hp);
 			if (hpPercent <= 5) {
@@ -10009,7 +10009,7 @@ exports.BattleMovedex = {
 	"seismictoss": {
 		num: 69,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		damage: 'level',
 		category: "Physical",
 		desc: "Deals damage to one adjacent target equal to the user's level. Makes contact.",
@@ -10178,7 +10178,7 @@ exports.BattleMovedex = {
 	"sheercold": {
 		num: 329,
 		accuracy: 30,
-		basePower: false,
+		basePower: 0,
 		category: "Special",
 		desc: "Deals damage to one adjacent target equal to the target's max HP. Ignores accuracy and evasion modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Ability Sturdy are immune.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
@@ -10194,7 +10194,7 @@ exports.BattleMovedex = {
 	"shellsmash": {
 		num: 504,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack, Special Attack, and Speed by 2 stages. Lowers the user's Defense and Special Defense by 1 stage.",
 		shortDesc: "Boosts Atk, SpA, Spe by 2. Lowers Def, SpD by 1.",
@@ -10218,7 +10218,7 @@ exports.BattleMovedex = {
 	"shiftgear": {
 		num: 508,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack by 1 stage and its Speed by 2 stages.",
 		shortDesc: "Boosts the user's Speed by 2 and Attack by 1.",
@@ -10299,7 +10299,7 @@ exports.BattleMovedex = {
 	"simplebeam": {
 		num: 493,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Causes one adjacent target's Ability to become Simple. Fails if the target's Ability is Multitype, Simple, or Truant. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "The target's Ability becomes Simple.",
@@ -10923,7 +10923,7 @@ exports.BattleMovedex = {
 	"soak": {
 		num: 487,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Causes one adjacent target to become a Water-type. Fails if the target is an Arceus. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Changes the target's type to Water.",
@@ -11008,7 +11008,7 @@ exports.BattleMovedex = {
 	"sonicboom": {
 		num: 49,
 		accuracy: 90,
-		basePower: false,
+		basePower: 0,
 		damage: 20,
 		category: "Special",
 		desc: "Deals damage to one adjacent target equal to 20HP.",
@@ -11134,7 +11134,7 @@ exports.BattleMovedex = {
 	"spitup": {
 		num: 255,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon) {
 			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
 			return pokemon.volatiles['stockpile'].layers * 100;
@@ -11653,7 +11653,7 @@ exports.BattleMovedex = {
 	"superfang": {
 		num: 162,
 		accuracy: 90,
-		basePower: false,
+		basePower: 0,
 		damageCallback: function(pokemon, target) {
 			return target.hp/2;
 		},
@@ -12123,7 +12123,7 @@ exports.BattleMovedex = {
 	"telekinesis": {
 		num: 477,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "For 3 turns, one adjacent target cannot avoid any attacks made against it, other than OHKO moves, as long as it remains active. During the effect, the target is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, and the Ability Arena Trap as long as it remains active. If the target uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, and Iron Ball override this move if the target is under any of their effects. Fails if the target is already under this effect or the effects of Ingrain or Smack Down. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. This move cannot be used while Gravity is in effect.",
 		shortDesc: "For 3 turns, target floats but moves can't miss it.",
@@ -12613,7 +12613,7 @@ exports.BattleMovedex = {
 	"trumpcard": {
 		num: 376,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon) {
 			var move = pokemon.getMoveData(pokemon.lastMove); // Account for calling Trump Card via other moves
 			switch (move.pp) {
@@ -13050,7 +13050,7 @@ exports.BattleMovedex = {
 	"waterspout": {
 		num: 323,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon) {
 			return 150*pokemon.hp/pokemon.maxhp;
 		},
@@ -13158,7 +13158,7 @@ exports.BattleMovedex = {
 	"wideguard": {
 		num: 469,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
 		shortDesc: "Protects allies from multi-target hits for one turn.",
@@ -13308,7 +13308,7 @@ exports.BattleMovedex = {
 	"wonderroom": {
 		num: 472,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, all active Pokemon have their Defense and Special Defense stats swapped. Stat stage changes are unaffected. If this move is used during the effect, the effect ends. Priority -7.",
 		shortDesc: "For 5 turns, all Defense and Sp. Def stats switch.",
@@ -13366,7 +13366,7 @@ exports.BattleMovedex = {
 	"workup": {
 		num: 526,
 		accuracy: true,
-		basePower: false,
+		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and Special Attack by 1 stage.",
 		shortDesc: "Boosts the user's Attack and Sp. Atk by 1.",
@@ -13437,7 +13437,7 @@ exports.BattleMovedex = {
 	"wringout": {
 		num: 378,
 		accuracy: 100,
-		basePower: false,
+		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
 			return 120*target.hp/target.maxhp;
 		},
