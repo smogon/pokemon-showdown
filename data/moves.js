@@ -4675,6 +4675,7 @@ exports.BattleMovedex = {
 			onStart: function() {
 				this.add('-fieldstart', 'move: Gravity');
 			},
+			onModifyPokemonPriority: 100,
 			onModifyPokemon: function(pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
 				pokemon.boosts.evasion -= 2;
@@ -10776,7 +10777,7 @@ exports.BattleMovedex = {
 				if (!applies) return false;
 				this.add('-start', pokemon, 'Smack Down');
 			},
-			onModifyPokemonPriority: 1,
+			onModifyPokemonPriority: 100,
 			onModifyPokemon: function(pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
 			}
