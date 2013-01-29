@@ -2320,7 +2320,9 @@ function Battle(roomid, format, rated) {
 		}
 
 		if (move.spreadHit) {
-			baseDamage = selfB.modify(baseDamage, move.spreadModifier || 0.75);
+			var spreadModifier = move.spreadModifier || 0.75;
+			selfB.debug('Spread modifier: ' + spreadModifier);
+			baseDamage = selfB.modify(baseDamage, spreadModifier);
 		}
 
 		return Math.floor(baseDamage);
