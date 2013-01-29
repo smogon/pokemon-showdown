@@ -544,7 +544,7 @@ exports.BattleMovedex = {
 
 				if (effect.id === 'cutecharm') {
 					this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] '+source);
-				if (effect.id === 'destinyknot') {
+				} else if (effect.id === 'destinyknot') {
 					this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] '+source);
 				} else {
 					this.add('-start', pokemon, 'Attract');
@@ -12708,6 +12708,57 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isSoundBased: true,
+		self: {
+			volatileStatus: 'uproar'
+		},
+		onTryHit: function(target) {
+			for (var i=0; i<target.side.active.length; i++) {
+				var allyActive = target.side.active[i];
+				if (allyActive && allyActive.status === 'slp') allyActive.cureStatus();
+				var foeActive = target.side.foe.active[i];
+				if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();
+			}
+		},
+		effect: {
+			duration: 3,
+			onResidual: function(target) {
+				if (target.lastMove === 'struggle') {
+					// don't lock
+					delete target.volatiles['uproar'];
+				}
+			},
+			onStart: function(target) {
+				this.add('-start', target, 'Uproar');
+			},
+			onResidual: function(target) {
+				this.add('-start', target, 'Uproar', '[upkeep]');
+			},
+			onEnd: function(target) {
+				this.add('-end', target, 'Uproar');
+			},
+			onLockMove: function(pokemon) {
+				return 'uproar';
+			},
+			onBeforeTurn: function(pokemon) {
+				this.debug('Forcing into uproar');
+				this.changeDecision(pokemon, {move: 'uproar'});
+			},
+			onAnySetStatus: function(status, pokemon) {
+				if (status.id === 'slp') {
+					if (pokemon === this.effectData.target) {
+						this.add('-fail', pokemon, 'slp', '[from] Uproar', '[msg]');
+					} else {
+						this.add('-fail', pokemon, 'slp', '[from] Uproar');
+					}
+					return null;
+				}
+			},
+			onAnyTryHit: function(target, source, move) {
+				if (move && move.id === 'yawn') {
+					return false;
+				}
+			}
+		},
 		secondary: false,
 		target: "randomNormal",
 		type: "Normal"
