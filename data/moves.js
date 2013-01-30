@@ -184,6 +184,7 @@ exports.BattleMovedex = {
 			if (decision) {
 				this.cancelMove(target);
 				this.queue.unshift(decision);
+				this.add('-activate', target, 'move: After You');
 			} else {
 				return false;
 			}
@@ -8803,6 +8804,7 @@ exports.BattleMovedex = {
 						break;
 					}
 				}
+				this.add('-activate', target, 'move: Quash');
 			} else {
 				return false;
 			}
