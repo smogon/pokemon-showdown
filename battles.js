@@ -2278,6 +2278,12 @@ function Battle(roomid, format, rated) {
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
 
 		// multi-target modifier (doubles only)
+		if (move.spreadHit) {
+			var spreadModifier = move.spreadModifier || 0.75;
+			selfB.debug('Spread modifier: ' + spreadModifier);
+			baseDamage = selfB.modify(baseDamage, spreadModifier);
+		}
+
 		// weather modifier (TODO: relocate here)
 		// crit
 		if (move.crit) {
@@ -2319,12 +2325,6 @@ function Battle(roomid, format, rated) {
 
 		if (basePower && !Math.floor(baseDamage)) {
 			return 1;
-		}
-
-		if (move.spreadHit) {
-			var spreadModifier = move.spreadModifier || 0.75;
-			selfB.debug('Spread modifier: ' + spreadModifier);
-			baseDamage = selfB.modify(baseDamage, spreadModifier);
 		}
 
 		return Math.floor(baseDamage);
