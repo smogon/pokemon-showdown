@@ -420,6 +420,13 @@ var User = (function () {
 				if (Math.abs(parseInt(tokenDataSplit[2],10) - Date.now()/1000) > 2*24*60*60) {
 					expired = true;
 				}
+				if (config.tokenhosts && (config.tokenhosts.length > 0)) {
+					// Make sure the host name is one we accept.
+					if ((tokenDataSplit.length < 4) ||
+							(config.tokenhosts.indexOf(tokenDataSplit[3]) === -1)) {
+						expired = true;
+					}
+				}
 			} else {
 				console.log('verify userid mismatch: '+tokenData);
 			}

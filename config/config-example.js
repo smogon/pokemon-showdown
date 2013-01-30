@@ -24,6 +24,11 @@ exports.protocol = 'ws';
 // The server ID - a unique ID describing this Showdown server
 exports.serverid = 'testserver';
 
+// Host names that we will accept in login tokens.
+// Leave empty to accept any hostname in the login token (dangerous).
+// TODO: Document this better.
+exports.tokenhosts = [];
+
 // The server token - to access the login database and ladder on pokemonshowdown.com
 //   This token must be registered for accessing the ladder, but you will
 //   still be able to login with an unregistered token.
