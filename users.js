@@ -166,6 +166,7 @@ var User = (function () {
 	}
 
 	User.prototype.blockChallenges = false;
+	User.prototype.blockLobbyChat = false;
 
 	User.prototype.emit = function(message, data) {
 		var roomid = false;

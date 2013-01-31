@@ -1378,6 +1378,19 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 		break;
 
+	case 'lobbychat':
+		target = toId(target);
+		if (target === 'off') {
+			user.blockLobbyChat = true;
+			emit(socket, 'console', 'You are now blocking lobby chat.');
+		} else {
+			user.blockLobbyChat = false;
+			emit(socket, 'console', 'You are now receiving lobby chat.');
+		}
+		return false;
+		break;
+		break;
+
 	case 'a':
 		if (user.can('battlemessage')) {
 			// secret sysop command
@@ -1858,6 +1871,10 @@ function canTalk(user, room, socket) {
 		if (socket) emit(socket, 'console', 'You are muted.');
 		return false;
 	}
+	if (user.blockLobbyChat) {
+		if (socket) emit(socket, 'console', "You can't send messages while blocking lobby chat.");
+		return false;
+	}
 	if (config.modchat && room.id === 'lobby') {
 		if (config.modchat === 'crash') {
 			if (!user.can('ignorelimits')) {
@@ -1906,19 +1923,19 @@ function getDataMessage(target) {
 	var atLeastOne = false;
 	var response = [];
 	if (pokemon.exists) {
-		response.push('|c|&server|/data-pokemon '+pokemon.name);
+		response.push('|c|~|/data-pokemon '+pokemon.name);
 		atLeastOne = true;
 	}
 	if (ability.exists) {
-		response.push('|c|&server|/data-ability '+ability.name);
+		response.push('|c|~|/data-ability '+ability.name);
 		atLeastOne = true;
 	}
 	if (item.exists) {
-		response.push('|c|&server|/data-item '+item.name);
+		response.push('|c|~|/data-item '+item.name);
 		atLeastOne = true;
 	}
 	if (move.exists) {
-		response.push('|c|&server|/data-move '+move.name);
+		response.push('|c|~|/data-move '+move.name);
 		atLeastOne = true;
 	}
 	if (!atLeastOne) {
