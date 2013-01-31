@@ -1700,9 +1700,15 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === 'all' || target === 'faq') {
 			matched = true;
-			text = '/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.<br />';
-			text += '!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ & ~';
-			emit(socket, 'console', text);
+			emit(socket, 'console', '/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.');
+			emit(socket, 'console', '!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ & ~');
+		}
+		if (target === 'all' || target === 'highlight') {
+			matched = true;
+			emit(socket, 'console', 'Set your highlights preference:');
+			emit(socket, 'console', '/highlight delete - deletes all highlighting words.');
+			emit(socket, 'console', '/highlight add, word - adds a highlighing word. You can add several words separated by commas.');
+			emit(socket, 'console', '/highlight delete, word - deletes a single or seveal highlighting words. Separated by commas.');
 		}
 		if (target === 'timestamps') {
 			matched = true;
