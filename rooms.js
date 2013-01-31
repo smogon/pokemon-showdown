@@ -141,9 +141,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 	};
 	this.update = function(excludeUser) {
 		if (selfR.log.length < selfR.lastUpdate) return;
+		var updates = selfR.log.slice(selfR.lastUpdate);
 		var update = {
 			since: selfR.lastUpdate,
-			updates: selfR.log.slice(selfR.lastUpdate),
+			updates: updates,
 			active: selfR.active
 		}
 		selfR.lastUpdate = selfR.log.length;
@@ -151,9 +152,10 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		update.room = selfR.id;
 		var hasUsers = false;
 		for (var i in selfR.users) {
+			var user = selfR.users[i];
 			hasUsers = true;
-			if (selfR.users[i] === excludeUser) continue;
-			selfR.users[i].emit('update', update);
+			if (user === excludeUser) continue;
+			user.emit('update', update);
 		}
 
 		// empty rooms time out after ten minutes
@@ -874,8 +876,11 @@ function LobbyRoom(roomid) {
 		if (user) {
 			user.sendTo(selfR, message);
 		} else {
+			var isPureLobbyChat = (message.indexOf('\n') < 0 && message.match(/^\|c\|[^\|]*\|/) && message.substr(0,5) !== '|c|~|');
 			for (var i in selfR.users) {
-				selfR.users[i].sendTo(selfR, message);
+				user = selfR.users[i];
+				if (isPureLobbyChat && user.blockLobbyChat) continue;
+				user.sendTo(selfR, message);
 			}
 		}
 	};
