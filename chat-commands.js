@@ -629,10 +629,32 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
-		Users.setOfflineGroup(name, nextGroup);
+		if (!Users.setOfflineGroup(name, nextGroup)) {
+			emit(socket, 'console', '/promote - WARNING: This user is offline and could be unregistered. Use /forcepromote if you\'re sure you want to risk it.');
+			return false;
+		}
 		var groupName = config.groups[nextGroup].name || nextGroup || '';
 		logModCommand(room,''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.');
 		if (targetUser && targetUser.connected) room.send('|N|'+targetUser.getIdentity()+'|'+targetUser.userid);
+		return false;
+		break;
+
+	case 'forcepromote':
+		// warning: never document this command in /help
+		if (!user.can('forcepromote')) {
+			emit(socket, 'console', '/forcepromote - Access denied.');
+			return false;
+		}
+		var targets = splitTarget(target, true);
+		var name = targets[2];
+		var nextGroup = targets[1] ? targets[1] : Users.getNextGroupSymbol(' ', false);
+
+		if (!Users.setOfflineGroup(name, nextGroup, true)) {
+			emit(socket, 'console', '/forcepromote - Don\'t forcepromote unless you have to.');
+			return false;
+		}
+		var groupName = config.groups[nextGroup].name || nextGroup || '';
+		logModCommand(room,''+name+' was promoted to ' + (groupName.trim()) + ' by '+user.name+'.');
 		return false;
 		break;
 

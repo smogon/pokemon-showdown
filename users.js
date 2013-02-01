@@ -1030,18 +1030,22 @@ exports.getNextGroupSymbol = function(group, isDown) {
 	return nextGroupRank;
 };
 
-exports.setOfflineGroup = function(name, group) {
+exports.setOfflineGroup = function(name, group, force) {
 	var userid = toUserid(name);
-	var user = getUser(userid);
+	var user = getExactUser(userid);
+	if (force && (user || usergroups[userid])) return false;
 	if (user) {
-		return user.setGroup(group);
+		user.setGroup(group);
+		return true;
 	}
 	if (!group || group === config.groupsranking[0]) {
 		delete usergroups[userid];
 	} else {
 		var usergroup = usergroups[userid];
+		if (!usergroup && !force) return false;
 		name = usergroup ? usergroup.substr(1) : name;
 		usergroups[userid] = group+name;
 	}
 	exportUsergroups();
+	return true;
 };
