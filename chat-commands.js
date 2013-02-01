@@ -771,6 +771,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 		LoginServer.disabled = true;
+		logModCommand(room, 'The ladder was disabled by ' + user.name + '.', true);
 		room.addRaw('<div style="background:#BB6655;color:white;padding:2px 4px"><b>Due to high server load, the ladder has been temporarily disabled</b><br />Rated games will no longer update the ladder. It will be back momentarily.</div>');
 		return false;
 		break;
@@ -784,6 +785,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 		LoginServer.disabled = false;
+		logModCommand(room, 'The ladder was enabled by ' + user.name + '.', true);
 		room.addRaw('<div style="background-color:#559955;color:white;padding:2px 4px"><b>The ladder is now back.</b><br />Rated games will update the ladder now.</div>');
 		return false;
 		break;
