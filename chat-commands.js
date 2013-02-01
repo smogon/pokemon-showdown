@@ -477,6 +477,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		} */
 
+		if (!user.named) {
+			emit(socket, 'console', 'You must choose a name before you can send private messages.');
+			return false;
+		}
+
 		var message = {
 			name: user.getIdentity(),
 			pm: targetUser.getIdentity(),
