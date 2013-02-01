@@ -583,7 +583,7 @@ exports.BattleItems = {
 		onModifyPriority: function(priority, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				if (pokemon.eatItem()) {
-					this.add('-enditem', pokemon, 'Custap Berry');
+					this.add('-activate', pokemon, 'Custap Berry');
 					pokemon.removeVolatile('custapberry');
 					return priority + 0.1;
 				}
