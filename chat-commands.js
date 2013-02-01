@@ -762,7 +762,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'disableladder':
-		if (!user.can('modchat')) {
+		if (!user.can('disableladder')) {
 			emit(socket, 'console', '/disableladder - Access denied.');
 			return false;
 		}
@@ -775,7 +775,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 	case 'enableladder':
-		if (!user.can('modchat')) {
+		if (!user.can('disableladder')) {
 			emit(socket, 'console', '/enable - Access denied.');
 			return false;
 		}
