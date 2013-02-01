@@ -155,6 +155,7 @@ exports.groups = {
 		potd: true,
 		namelock: true,
 		forcerenameto: true,
+		disableladder: true,
 		rank: 4
 	},
 	'@': {
