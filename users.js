@@ -418,7 +418,7 @@ var User = (function () {
 			var tokenDataSplit = tokenData.split(',');
 			if (tokenDataSplit[0] === userid) {
 				body = tokenDataSplit[1];
-				if (Math.abs(parseInt(tokenDataSplit[2],10) - Date.now()/1000) > 2*24*60*60) {
+				if (Math.abs(parseInt(tokenDataSplit[2],10) - Date.now()/1000) > 60) {
 					expired = true;
 				}
 				if (config.tokenhosts && (config.tokenhosts.length > 0)) {
