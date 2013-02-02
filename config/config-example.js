@@ -37,11 +37,12 @@ exports.serverid = 'testserver';
 //
 // You should specify the hostnames here that people use to connect to your
 // server. For example, if your server is hosted on battle.example.com, you
-// would specify 'battle.example.com' here. By default, we only accept
-// 'localhost' and '127.0.0.1'. You *must* change this setting if you want
-// people to be able to use registered names on your server when connecting
-// over the internet.
-exports.tokenhosts = ['localhost', '127.0.0.1'];
+// would specify 'battle.example.com' here.
+//
+// If this is set to an empty array ([]), which is the default, the server
+// will accept the first token, and will then add the hostname in that token
+// (and the corresponding IP address) to tokenhosts.
+exports.tokenhosts = [];
 
 // A signed assertion from the login server must be presented to this
 // server within this many seconds. This can be 1 minute (or possibly
