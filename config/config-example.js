@@ -29,6 +29,12 @@ exports.serverid = 'testserver';
 // TODO: Document this better.
 exports.tokenhosts = [];
 
+// A signed assertion from the login server must be presented to this
+// server within this many seconds. This can be 1 minute (or possibly
+// less) unless your clock is wrong. In order to accommodate servers
+// with inaccurate clocks, the default is 25 hours.
+exports.tokenexpiry = 25*60*60;
+
 // The server token - to access the login database and ladder on pokemonshowdown.com
 //   This token must be registered for accessing the ladder, but you will
 //   still be able to login with an unregistered token.
