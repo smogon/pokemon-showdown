@@ -454,7 +454,7 @@ var User = (function () {
 		if (invalidHost) {
 			console.log('invalid hostname in token: ' + tokenData);
 			body = '';
-			this.emit('nameTaken', {userid:userid, name:name, reason: "Your token specified a hostname that is not in `tokenhosts`. If this is your server, please read the documentation in config/config.js for help. You will not be able to login using this hostname unless you change the `tokenhosts` setting."});
+			this.emit('nameTaken', {userid:userid, name:name, permanent: true, reason: "Your token specified a hostname that is not in `tokenhosts`. If this is your server, please read the documentation in config/config.js for help. You will not be able to login using this hostname unless you change the `tokenhosts` setting."});
 		} else if (expired) {
 			console.log('verify failed: '+tokenData);
 			body = '';
