@@ -211,6 +211,16 @@ var User = (function () {
 			return true;
 		}
 
+		// The console permission is incredibly powerful because it allows
+		// the execution of abitrary shell commands on the local computer.
+		// As such, it can only be used from a specified whitelist of IPs.
+		if (permission === 'console') {
+			var whitelist = config.consoleips || ['127.0.0.1'];
+			if (whitelist.indexOf(this.ip) === -1) {
+				return false;
+			}
+		}
+
 		var group = this.group;
 		var groupData = config.groups[group];
 		var checkedGroups = {};
@@ -219,12 +229,7 @@ var User = (function () {
 			if (checkedGroups[group]) return false;
 			checkedGroups[group] = true;
 
-			// The console permission is incredibly powerful because it allows
-			// the execution of abitrary shell commands on the local computer.
-			// As such, we do not include it inside the "root" permission; if
-			// the server operator intends to give administrators the console
-			// permission, it must be given explicitly.
-			if (groupData['root'] && (permission !== 'console')) {
+			if (groupData['root']) {
 				return true;
 			}
 			if (groupData[permission]) {

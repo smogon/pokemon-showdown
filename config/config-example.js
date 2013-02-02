@@ -104,6 +104,18 @@ exports.modchat = false;
 //   disable this feature.
 exports.backdoor = true;
 
+// List of IPs from which the dev console (>> and >>>) can be used.
+// The console is incredibly powerful because it allows the execution of
+// arbitrary commands on the local computer (as the user running the
+// server). If an account with the console permission were compromised,
+// it could possibly be used to take over the server computer. As such,
+// you should only specify a small range of trusted IPs here, or none
+// at all. By default, only localhost can use the dev console.
+// In addition to connecting from a valid IP, a user must *also* have
+// the `console` permission in order to use the dev console.
+// Setting this to an empty array ([]) will disable the dev console.
+exports.consoleips = ['127.0.0.1'];
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
