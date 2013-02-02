@@ -26,8 +26,22 @@ exports.serverid = 'testserver';
 
 // Host names that we will accept in login tokens.
 // Leave empty to accept any hostname in the login token (dangerous).
-// TODO: Document this better.
-exports.tokenhosts = [];
+//
+// When the client connects to a Pokemon Showdown server at example.com,
+// the client requests a signed assertion from the login server as proof
+// that the user controls the name which she is using. The signed assertion
+// will contain the hostname that the client used to connect to the server,
+// which would be example.com in this case. The server verifies that the
+// hostname provided is a valid hostname -- namely, one of the hostnames
+// provided in this array.
+//
+// You should specify the hostnames here that people use to connect to your
+// server. For example, if your server is hosted on battle.example.com, you
+// would specify 'battle.example.com' here. By default, we only accept
+// 'localhost' and '127.0.0.1'. You *must* change this setting if you want
+// people to be able to use registered names on your server when connecting
+// over the internet.
+exports.tokenhosts = ['localhost', '127.0.0.1'];
 
 // A signed assertion from the login server must be presented to this
 // server within this many seconds. This can be 1 minute (or possibly
