@@ -3045,7 +3045,8 @@ exports.BattleFormatsData = {
 	turtwig: {
 		viableMoves: {"reflect":1,"lightscreen":1,"stealthrock":1,"seedbomb":1,"substitute":1,"leechseed":1,"toxic":1},
 		eventPokemon: [
-			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["tackle","withdraw","absorb"]}
+			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["tackle","withdraw","absorb"]},
+			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["tackle","withdraw","absorb","stockpile"]}
 		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
@@ -3068,7 +3069,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":40,"gender":"M","nature":"Mild","moves":["flamethrower","thunderpunch","grassknot","helpinghand"]},
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["scratch","leer","ember","taunt"]},
-			{"generation":4,"level":40,"gender":"M","nature":"Hardy","moves":["flamethrower","thunderpunch","grassknot","helpinghand"]}
+			{"generation":4,"level":40,"gender":"M","nature":"Hardy","moves":["flamethrower","thunderpunch","grassknot","helpinghand"]},
+			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["leer","ember","taunt","fakeout"]}
 		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
@@ -3091,7 +3093,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["pound","growl","bubble"]},
 			{"generation":5,"level":15,"isDW":false,"moves":["hydropump","featherdance","watersport","peck"]},
-			{"generation":5,"level":15,"gender":"M","isDW":false,"moves":["sing","round","featherdance","peck"]}
+			{"generation":5,"level":15,"gender":"M","isDW":false,"moves":["sing","round","featherdance","peck"]},
+			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["pound","growl","bubble","featherdance"]}
 		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
@@ -3332,7 +3335,8 @@ exports.BattleFormatsData = {
 	garchomp: {
 		viableMoves: {"outrage":1,"dragonclaw":1,"earthquake":1,"stoneedge":1,"firefang":1,"swordsdance":1},
 		eventPokemon: [
-			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["outrage","earthquake","swordsdance","stoneedge"]}
+			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["outrage","earthquake","swordsdance","stoneedge"]},
+			{"generation":5,"level":48,"gender":"M","isDW":true,"moves":["slash","dragonclaw","dig","crunch"]}
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
