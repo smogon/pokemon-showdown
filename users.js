@@ -417,6 +417,7 @@ var User = (function () {
 		var name = this.renamePending;
 		var userid = toUserid(name);
 		var expired = false;
+		var invalidHost = false;
 
 		var body = '';
 		if (success) {
@@ -427,11 +428,20 @@ var User = (function () {
 				if (Math.abs(parseInt(tokenDataSplit[2],10) - Date.now()/1000) > expiry) {
 					expired = true;
 				}
-				if (config.tokenhosts && (config.tokenhosts.length > 0)) {
-					// Make sure the host name is one we accept.
-					if ((tokenDataSplit.length < 4) ||
-							(config.tokenhosts.indexOf(tokenDataSplit[3]) === -1)) {
-						expired = true;
+				if (tokenDataSplit.length < 4) {
+					expired = true;
+				} else if (config.tokenhosts) {
+					var host = tokenDataSplit[3];
+					if (config.tokenhosts.length === 0) {
+						config.tokenhosts.push(host);
+						console.log('Added ' + host + ' to valid tokenhosts');
+						require('dns').lookup(host, function(err, address) {
+							if (err || (address === host)) return;
+							config.tokenhosts.push(address);
+							console.log('Added ' + address + ' to valid tokenhosts');
+						});
+					} else if (config.tokenhosts.indexOf(host) === -1) {
+						invalidHost = true;
 					}
 				}
 			} else {
@@ -441,7 +451,11 @@ var User = (function () {
 			console.log('verify failed: '+tokenData);
 		}
 
-		if (expired) {
+		if (invalidHost) {
+			console.log('invalid hostname in token: ' + tokenData);
+			body = '';
+			this.emit('nameTaken', {userid:userid, name:name, reason: "Your token specified a hostname that is not in `tokenhosts`. If this is your server, please read the documentation in config/config.js for help. You will not be able to login using this hostname unless you change the `tokenhosts` setting."});
+		} else if (expired) {
 			console.log('verify failed: '+tokenData);
 			body = '';
 			this.emit('nameTaken', {userid:userid, name:name, reason: "Your session expired. Please log in again."});
