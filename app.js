@@ -232,6 +232,25 @@ if (!fs.existsSync('./config/config.js')) {
 
 config = require('./config/config.js');
 
+if (config.watchconfig) {
+	fs.watchFile('./config/config.js', function(curr, prev) {
+		if (curr.mtime <= prev.mtime) return;
+		fs.readFile('./config/config.js', function(err, data) {
+			if (err) return;
+			var oldconfig = config;
+			try {
+				for (var i in require.cache) delete require.cache[i];
+				config = require('./config/config.js');
+				console.log('Reloaded config/config.js');
+			} catch (e) {
+				// In case of an error in the new config file, just stick
+				// with the old one.
+				config = oldconfig;
+			}
+		});
+	});
+}
+
 /*
 var app = require('http').createServer()
   , io = require('socket.io').listen(app)
