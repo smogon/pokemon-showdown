@@ -899,6 +899,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/forcerenameto - Access denied.');
 			return false;
 		}
+		
+		// Let's check if the new name is not taken
+		var newUser = getUser(toUserid(targets[1]));
+		if (newUser) {
+			emit(socket, 'console', 'The user '+targets[1]+' already exists!');
+			return false;
+		}
 
 		if (targetUser.userid === toUserid(targets[2])) {
 			logModCommand(room, ''+targetUser.name+' was forcibly renamed to '+targets[1]+' by '+user.name+'.');
