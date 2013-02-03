@@ -25,7 +25,6 @@ exports.protocol = 'ws';
 exports.serverid = 'testserver';
 
 // Host names that we will accept in login tokens.
-// Leave empty to accept any hostname in the login token (dangerous).
 //
 // When the client connects to a Pokemon Showdown server at example.com,
 // the client requests a signed assertion from the login server as proof
