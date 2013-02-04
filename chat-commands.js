@@ -873,7 +873,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		if (targetUser.userid === toUserid(targets[2])) {
-			logModCommand(room,''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : ""));
+			logModCommand(room,''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : ""), true);
 			targetUser.resetName();
 			targetUser.emit('nameTaken', {reason: user.name+" has forced you to change your name. "+targets[1]});
 		} else {
