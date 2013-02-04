@@ -1742,9 +1742,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === 'timestamps') {
 			matched = true;
 			emit(socket, 'console', 'Set your timestamps preference:');
-			emit(socket, 'console', '/timestamps off - no timestamps:');
-			emit(socket, 'console', '/timestamps minutes - timestamps of the form [hh:mm]');
-			emit(socket, 'console', '/timestamps seconds - timestamps of the form [hh:mm:ss]');
+			emit(socket, 'console', '/timestamps [all|lobby|pms], [minutes|seconds|off]');
+			emit(socket, 'console', 'all changes all timestamps preferences, lobby changes only lobby chat preferences, pms changes PM preferences.');
+			emit(socket, 'console', 'off will set timestamps off, minutes will show timestamps of the form [hh:mm] and seconds will show timestamps of the form [hh:ii:ss].');
 		}
 		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
