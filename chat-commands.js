@@ -634,7 +634,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 		var groupName = config.groups[nextGroup].name || nextGroup || '';
-		logModCommand(room,''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.');
+		logModCommand(room,''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.', isDemotion);
 		if (targetUser && targetUser.connected) room.send('|N|'+targetUser.getIdentity()+'|'+targetUser.userid);
 		return false;
 		break;
