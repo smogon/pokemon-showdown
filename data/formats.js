@@ -21,16 +21,16 @@ exports.BattleFormats = {
 		searchShow: true,
 		ruleset: ['Random Battle']
 	},
-	// seasonalseasoningsgreetings: {
-	// 	effectType: 'Format',
-	// 	name: "[Seasonal] Seasoning's Greetings",
-	// 	team: 'randomSeasonal',
-	// 	canUseRandomTeam: true,
-	// 	rated: true,
-	// 	challengeShow: true,
-	// 	searchShow: true,
-	// 	ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
-	// },
+	/* seasonalseasoningsgreetings: {
+		effectType: 'Format',
+		name: "[Seasonal] Seasoning's Greetings",
+		team: 'randomSeasonal',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
+	},
 	seasonalwinterwonderland: {
 		effectType: 'Format',
 		name: "[Seasonal] Winter Wonderland",
@@ -149,6 +149,17 @@ exports.BattleFormats = {
 				}
 			}
 		},
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
+	},*/
+	seasonalvalentineventure: {
+		effectType: 'Format',
+		name: "[Seasonal] Valentine Venture",
+		team: 'randomSeasonalVV',
+		gameType: 'doubles',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	challengecup: {
