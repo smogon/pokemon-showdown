@@ -1299,14 +1299,13 @@ exports.BattleScripts = {
 		return team;
 	},
 	randomSeasonalVVTeam: function(side) {
-		var couples = ['nidoranf+nidoranm', 'nidorina+nidorino', 'nidoqueen+nidoking', 'gallade+gardevoir', 'plusle+minun', 'illumise+volbeat', 'latias+latios', 'skitty+wailord', 'tauros+miltank', 'rufflet+vullaby', 'braviary+mandibuzz', 'mew+mesprit', 'audino+chansey', 'lickilicky+blissey', 'purugly+beautifly', 'clefairy+wigglytuff', 'clefable+jigglypuff', 'cleffa+igglybuff', 'pichu+pachirisu', 'alomomola+luvdisc', 'gorebyss+huntail', 'kyuremb+kyuremw', 'cherrim+cherubi', 'slowbro+slowking', 'jynx+lickitung', 'milotic+gyarados', 'slowpoke+shelder', 'happiny+mimejr', 'mrmime+smoochum', 'woobat+munna', 'swoobat+musharna', 'delcatty+lopunny', 'skitty+buneary', 'togetic+shaymin', 'glameow+snubbull', 'whismur+wormadam', 'finneon+porygon', 'ditto+porygon2', 'porygonz+togekiss', 'hoppip+togepi', 'lumineon+corsola', 'exeggcute+flaaffy'];
+		var couples = ['nidoranf+nidoranm', 'nidorina+nidorino', 'nidoqueen+nidoking', 'gallade+gardevoir', 'plusle+minun', 'illumise+volbeat', 'latias+latios', 'skitty+wailord', 'tauros+miltank', 'rufflet+vullaby', 'braviary+mandibuzz', 'mew+mesprit', 'audino+chansey', 'lickilicky+blissey', 'purugly+beautifly', 'clefairy+wigglytuff', 'clefable+jigglypuff', 'cleffa+igglybuff', 'pichu+pachirisu', 'alomomola+luvdisc', 'gorebyss+huntail', 'kyuremb+kyuremw', 'cherrim+cherubi', 'slowbro+slowking', 'jynx+lickitung', 'milotic+gyarados', 'slowpoke+shellder', 'happiny+mimejr', 'mrmime+smoochum', 'woobat+munna', 'swoobat+musharna', 'delcatty+lopunny', 'skitty+buneary', 'togetic+shaymin', 'glameow+snubbull', 'whismur+wormadam', 'finneon+porygon', 'ditto+porygon2', 'porygonz+togekiss', 'hoppip+togepi', 'lumineon+corsola', 'exeggcute+flaaffy'];
 		couples = couples.randomize();
 		var shouldHaveAttract = {audino:1, beautifly:1, delcatty:1, finneon:1, glameow:1, lumineon:1, purugly:1, swoobat:1, woobat:1, wormadam:1, wormadamsandy:1, wormadamtrash:1};
 		var shouldHaveKiss = {buneary:1, finneon:1, lopunny:1, lumineon:1, minun:1, pachirisu:1, pichu:1, plusle:1, shaymin:1, togekiss:1, togepi:1, togetic:1};
 		var team = [];
 		
-		// First we get the three couples and separate it in a list of Pokemon to deal with them
-		couples = couples.splice(0, 3);
+		// First we get the first three couples and separate it in a list of Pokemon to deal with them
 		var pokemons = [];
 		for (var i=0; i<3; i++) {
 			var couple = couples[i].split('+');
@@ -1324,11 +1323,11 @@ exports.BattleScripts = {
 			var template = this.getTemplate(pokemon);
 			var set = this.randomSet(template, i);
 			// We set some arbitrary moves
-			if (template.id === 'jynx') set.moves[0] = 'Lovely Kiss';
+			if (template.id === 'jynx' && set.moves.indexOf('Lovely Kiss') < 0) set.moves[0] = 'Lovely Kiss';
 			if (template.id in shouldHaveAttract) set.moves[0] = 'Attract';
 			if (template.id in shouldHaveKiss) set.moves[0] = 'Sweet Kiss';
 			// We set some arbitrary levels to balance
-			if (template.id === 'kyuremb' || template.id === 'kyuremw') set.level = 60;
+			if (template.id === 'kyuremblack' || template.id === 'kyuremwhite') set.level = 60;
 			if (template.id === 'magikarp') set.level = 100;
 			team.push(set);
 		}
