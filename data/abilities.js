@@ -884,7 +884,7 @@ exports.BattleAbilities = {
 			if (pokemon === pokemon.side.pokemon[i]) return;
 			pokemon.illusion = pokemon.side.pokemon[i];
 		},
-		onDamage: function(damage, pokemon, source, effect) {
+		onAfterDamage: function(damage, pokemon, source, effect) {
 			if (pokemon.illusion && effect && effect.effectType === 'Move') {
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
