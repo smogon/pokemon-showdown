@@ -126,6 +126,30 @@ exports.BattleStatuses = {
 			}
 		}
 	},
+	gengar: {
+		// Gengar: Cursed Body
+		onImmunity: function(type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function(pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'cursedbody';
+				pokemon.baseAbility = 'cursedbody';
+			}
+		}
+	},
+	mismagius: {
+		// Mismagius: Cursed Body
+		onImmunity: function(type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function(pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'cursedbody';
+				pokemon.baseAbility = 'cursedbody';
+			}
+		}
+	},
 	cryogonal: {
 		// Cryogonal: infinite hail, Ice Body
 		onModifyMove: function(move) {
