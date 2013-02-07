@@ -344,6 +344,19 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"cursedbody": {
+		desc: "When this Pokemon faints, attacker is Cursed.",
+		shortDesc: "When this Pokemon faints, attacker is Cursed.",
+		onFaint: function(target, source, effect) {
+			if (effect && effect.effectType === 'Move' && source) {
+				source.addVolatile('curse');
+			}
+		},
+		id: "cursedbody",
+		name: "Cursed Body",
+		rating: 3,
+		num: 130
+	},
 	"gluttony": {
 		inherit: true,
 		onResidualOrder: 26,
