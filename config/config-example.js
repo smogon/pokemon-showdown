@@ -24,25 +24,6 @@ exports.protocol = 'ws';
 // The server ID - a unique ID describing this Showdown server
 exports.serverid = 'testserver';
 
-// Host names that we will accept in login tokens.
-//
-// When the client connects to a Pokemon Showdown server at example.com,
-// the client requests a signed assertion from the login server as proof
-// that the user controls the name which she is using. The signed assertion
-// will contain the hostname that the client used to connect to the server,
-// which would be example.com in this case. The server verifies that the
-// hostname provided is a valid hostname -- namely, one of the hostnames
-// provided in this array.
-//
-// You should specify the hostnames here that people use to connect to your
-// server. For example, if your server is hosted on battle.example.com, you
-// would specify 'battle.example.com' here.
-//
-// If this is set to an empty array ([]), which is the default, the server
-// will accept the first token, and will then add the hostname in that token
-// (and the corresponding IP address) to tokenhosts.
-exports.tokenhosts = [];
-
 // A signed assertion from the login server must be presented to this
 // server within this many seconds. This can be 1 minute (or possibly
 // less) unless your clock is wrong. In order to accommodate servers
