@@ -1,3 +1,5 @@
+var crypto = require('crypto');
+
 var THROTTLE_DELAY = 900;
 
 var users = {};
@@ -40,30 +42,32 @@ function nameLock(user,name,ip) {
 	}
 	return name||user.name;
 }
-function connectUser(name, socket, token, room) {
+function connectUser(name, socket, room) {
 	var userid = toUserid(name);
-	var user;
 	var person = new Person(name, socket, true);
 	if (person.banned) return person;
-	if (users[userid]) {
-		user = users[userid];
-		if (!user.add(name, person, token)) {
-			console.log('JOIN: '+name+' ['+(''+token).substr(0,30)+'] ['+socket.id+']');
-			user = new User('', person, token);
-			user.rename(name, token);
-			user = person.user;
-		} else {
-			console.log('MERGE: '+name+' ['+(''+token).substr(0,30)+'] ['+socket.id+']');
-		}
-	} else {
-		console.log('JOIN: '+name+' ['+(''+token).substr(0,30)+'] ['+socket.id+']');
-		user = new User(name, person, token);
-		var nameSuggestion = nameLock(user);
-		if (nameSuggestion !== user.name) {
-			user.rename(nameSuggestion);
-			user = person.user;
-		}
+	var user = new User(person);
+	var nameSuggestion = nameLock(user);
+	if (nameSuggestion !== user.name) {
+		user.rename(nameSuggestion);
+		user = person.user;
 	}
+	// Generate 1024-bit challenge string.
+	crypto.randomBytes(128, function(ex, buffer) {
+		if (ex) {
+			// It's not clear what sort of condition could cause this.
+			// For now, we'll basically assume it can't happen.
+			console.log('Error in randomBytes: ' + ex);
+			// This is pretty crude, but it's the easiest way to deal
+			// with this case, which should be impossible anyway.
+			user.destroy();
+		} else {
+			person.challenge = buffer.toString('hex');
+			console.log('JOIN: ' + name + ' [' + person.challenge.substr(0, 15) + '] [' + socket.id + ']');
+			var keyid = config.loginserverpublickeyid || 0;
+			person.sendTo(null, '|challenge-string|' + keyid + '|' + person.challenge);
+		}
+	});
 	if (room) {
 		user.joinRoom(room, person);
 	}
@@ -121,14 +125,10 @@ importBannedWords();
 
 // User
 var User = (function () {
-	function User(name, person, token) {
+	function User(person) {
 		numUsers++;
-		if (!token) {
-			//token = ''+Math.floor(Math.random()*10000);
-			token = ''+person.socket.id;
-		}
 		this.mmrCache = {};
-		this.token = token;
+		this.token = ''+person.socket.id;
 		this.guestNum = numUsers;
 		this.name = 'Guest '+numUsers;
 		this.named = false;
@@ -160,8 +160,6 @@ var User = (function () {
 		users[this.userid] = this;
 		if (person.banned) {
 			this.destroy();
-		} else if (name) {
-			this.rename(name,token);
 		}
 	}
 
@@ -357,11 +355,12 @@ var User = (function () {
 	};
 	/**
 	 *
-	 * @param name    The name you want
-	 * @param token   Login token
-	 * @param auth    Make sure this account will identify as registered
+	 * @param name    		The name you want
+	 * @param token   		Login token
+	 * @param auth    		Make sure this account will identify as registered
+	 * @param challenge		The challenge string for this connection
 	 */
-	User.prototype.rename = function(name, token, auth) {
+	User.prototype.rename = function(name, token, auth, challenge) {
 		for (var i in this.roomCount) {
 			var room = Rooms.get(i);
 			if (room && room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
@@ -405,7 +404,7 @@ var User = (function () {
 			this.renamePending = name;
 			var self = this;
 			Verifier.verify(tokenData, tokenSig, function(success, tokenData) {
-				self.finishRename(success, tokenData, token, auth);
+				self.finishRename(success, tokenData, token, auth, challenge);
 			});
 		} else {
 			this.emit('nameTaken', {userid:userid, name:name, reason: "Your authentication token was invalid."});
@@ -413,25 +412,25 @@ var User = (function () {
 
 		return false;
 	};
-	User.prototype.finishRename = function(success, tokenData, token, auth) {
+	User.prototype.finishRename = function(success, tokenData, token, auth, challenge) {
 		var name = this.renamePending;
 		var userid = toUserid(name);
 		var expired = false;
 		var invalidHost = false;
 
 		var body = '';
-		if (success) {
+		if (success && challenge) {
 			var tokenDataSplit = tokenData.split(',');
-			if (tokenDataSplit[0] === userid) {
-				body = tokenDataSplit[1];
+			if (tokenDataSplit.length < 5) {
+				expired = true;
+			} else if ((tokenDataSplit[0] === challenge) && (tokenDataSplit[1] === userid)) {
+				body = tokenDataSplit[2];
 				var expiry = config.tokenexpiry || 25*60*60;
-				if (Math.abs(parseInt(tokenDataSplit[2],10) - Date.now()/1000) > expiry) {
+				if (Math.abs(parseInt(tokenDataSplit[3],10) - Date.now()/1000) > expiry) {
 					expired = true;
 				}
-				if (tokenDataSplit.length < 4) {
-					expired = true;
-				} else if (config.tokenhosts) {
-					var host = tokenDataSplit[3];
+				if (config.tokenhosts) {
+					var host = tokenDataSplit[4];
 					if (config.tokenhosts.length === 0) {
 						config.tokenhosts.push(host);
 						console.log('Added ' + host + ' to valid tokenhosts');
@@ -769,6 +768,14 @@ var User = (function () {
 		}
 		this.people = [];
 	};
+	User.prototype.getPersonFromSocket = function(socket) {
+		for (var i = 0; ; ++i) {
+			if (!this.people[i]) return null;
+			if (this.people[i].socket === socket) {
+				return this.people[i];
+			}
+		}
+	};
 	User.prototype.joinRoom = function(room, socket) {
 		roomid = room?(room.id||room):'';
 		room = Rooms.get(room,'lobby');
@@ -789,15 +796,11 @@ var User = (function () {
 			socket = person.socket;
 		}
 		if (!socket) return false;
-		else {
-			var i=0;
-			while (this.people[i] && this.people[i].socket !== socket) i++;
-			if (!this.people[i]) return false;
-			if (this.people[i].socket === socket) {
-				person = this.people[i];
-			}
+		else if (!person) {
+			person = this.getPersonFromSocket(socket);
+			if (!person) return false;
 		}
-		if (person && !person.rooms[room.id]) {
+		if (!person.rooms[room.id]) {
 			person.rooms[room.id] = room;
 			if (!this.roomCount[room.id]) {
 				this.roomCount[room.id]=1;
@@ -806,7 +809,7 @@ var User = (function () {
 				this.roomCount[room.id]++;
 				room.initSocket(this, socket);
 			}
-		} else if (person && room.id === 'lobby') {
+		} else if (room.id === 'lobby') {
 			emit(person.socket, 'init', {room: roomid, notFound: true});
 		}
 		return true;

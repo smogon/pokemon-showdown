@@ -439,7 +439,7 @@ var events = {
 	join: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string' || typeof data.name !== 'string') return;
 		if (!you) {
-			you = Users.connectUser(data.name, socket, data.token, data.room);
+			you = Users.connectUser(data.name, socket, data.room);
 			return you;
 		} else {
 			var youUser = resolveUser(you, socket);
