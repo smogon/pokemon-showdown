@@ -1323,7 +1323,7 @@ exports.BattleScripts = {
 			var template = this.getTemplate(pokemon);
 			var set = this.randomSet(template, i);
 			// We set some arbitrary moves
-			if (template.id === 'jynx' && set.moves.indexOf('Lovely Kiss') < 0) set.moves[0] = 'Lovely Kiss';
+			if (template.id === 'jynx' && set.moves.indexOf('lovelykiss') < 0) set.moves[0] = 'Lovely Kiss';
 			if (template.id in shouldHaveAttract) set.moves[0] = 'Attract';
 			if (template.id in shouldHaveKiss) set.moves[0] = 'Sweet Kiss';
 			// We set some arbitrary levels to balance
