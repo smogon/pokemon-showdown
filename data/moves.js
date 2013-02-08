@@ -8403,7 +8403,7 @@ exports.BattleMovedex = {
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
 
-			this.add('-swapboost', target, source, 'atk, spa', '[from] move: Power Swap');
+			this.add('-swapboost', source, target, 'atk, spa', '[from] move: Power Swap');
 		},
 		secondary: false,
 		target: "normal",
