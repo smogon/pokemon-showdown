@@ -817,7 +817,7 @@ exports.BattleMovedex = {
 				source.item = yourItem;
 				return false;
 			}
-			this.add('-item',target,yourItem.name,'[from] move: Bestow');
+			this.add('-item', target, yourItem.name, '[from] move: Bestow', '[of] '+source);
 		},
 		secondary: false,
 		target: "normal",
@@ -4850,7 +4850,7 @@ exports.BattleMovedex = {
 			source.setBoost(targetBoosts);
 			target.setBoost(sourceBoosts);
 
-			this.add('-swapboost', target, source, 'def, spd', '[from] move: Guard Swap');
+			this.add('-swapboost', source, target, 'def, spd', '[from] move: Guard Swap');
 		},
 		secondary: false,
 		target: "normal",
@@ -5244,7 +5244,7 @@ exports.BattleMovedex = {
 			target.setBoost(sourceBoosts);
 			source.setBoost(targetBoosts);
 
-			this.add('-swapboost', target, source, '[from] move: Heart Swap');
+			this.add('-swapboost', source, target, '[from] move: Heart Swap');
 		},
 		secondary: false,
 		target: "normal",
