@@ -39,7 +39,10 @@ if (!process.send) {
 	process.on('message', function(message) {
 		var verifier = crypto.createVerify(keyalgo);
 		verifier.update(message.data);
-		var success = verifier.verify(pkey, message.sig, 'hex');
+		var success = false;
+		try {
+			success = verifier.verify(pkey, message.sig, 'hex');
+		} catch (e) {}
 		process.send({
 			success: success,
 			guid: message.guid
