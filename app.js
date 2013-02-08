@@ -248,6 +248,20 @@ if (config.watchconfig) {
 	});
 }
 
+if ((config.loginserverpublickeyid === undefined) ||
+		(config.loginserverpublickeyid === 0)) {
+	console.log('Note: You are using the original login server public key. We suggest you');
+	console.log('      upgrade to the new public key by copying the values of the following');
+	console.log('      config settings from config/config-example.js to config/config.js:');
+	console.log('');
+	console.log('          exports.loginserverpublickeyid');
+	console.log('          exports.loginserverpublickey');
+	console.log('');
+	console.log('      The original public key will continue to work for now, but you should');
+	console.log('      upgrade at your earliest convenience.');
+	console.log('');
+}
+
 /*
 var app = require('http').createServer()
   , io = require('socket.io').listen(app)
