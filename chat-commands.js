@@ -368,7 +368,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
 		var targetUser = targets[0];
-		if (!targetUser) {
+		if (!targetUser || !targetUser.connected) {
 			emit(socket, 'console', 'User '+targets[2]+' not found.');
 			return false;
 		}
@@ -393,7 +393,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
 		var targetUser = targets[0];
-		if (!targetUser) {
+		if (!targetUser || !targetUser.connected) {
 			emit(socket, 'console', 'User '+targets[2]+' not found.');
 			return false;
 		}
@@ -463,7 +463,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'You forgot the comma.');
 			return parseCommand(user, '?', cmd, room, socket);
 		}
-		if (!targets[0]) {
+		if (!targets[0] || !targetUser.connected) {
 			if (target.indexOf(' ')) {
 				emit(socket, 'console', 'User '+targets[2]+' not found. Did you forget a comma?');
 			} else {
