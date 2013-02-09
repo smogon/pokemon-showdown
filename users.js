@@ -43,8 +43,7 @@ function nameLock(user,name,ip) {
 	return name||user.name;
 }
 function connectUser(name, socket, room) {
-	var userid = toUserid(name);
-	var connection = new Connection(name, socket, true);
+	var connection = new Connection(socket, true);
 	if (connection.banned) return connection;
 	var user = new User(connection);
 	var nameSuggestion = nameLock(user);
@@ -296,7 +295,6 @@ var User = (function () {
 		}
 
 		for (var i=0; i<this.connections.length; i++) {
-			this.connections[i].rename(name, oldid);
 			//console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
 			emit(this.connections[i].socket, 'update', {
 				name: name,
@@ -583,9 +581,7 @@ var User = (function () {
 	};
 	User.prototype.merge = function(connection) {
 		this.connected = true;
-		var oldid = connection.userid;
 		this.connections.push(connection);
-		connection.rename(this.name, oldid);
 		//console.log(''+this.name+' merging: socket '+connection.socket.id+' of ');
 		emit(connection.socket, 'update', {
 			name: this.name,
@@ -984,11 +980,7 @@ var User = (function () {
 })();
 
 var Connection = (function () {
-	function Connection(name, socket, user) {
-		this.named = true;
-		this.name = name;
-		this.userid = toUserid(name);
-
+	function Connection(socket, user) {
 		this.socket = socket;
 		this.rooms = {};
 
@@ -1014,10 +1006,6 @@ var Connection = (function () {
 		}
 	}
 
-	Connection.prototype.rename = function(name) {
-		this.name = name;
-		this.userid = toUserid(name);
-	};
 	Connection.prototype.sendTo = function(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'lobby') data = '>'+roomid+'\n'+data;
