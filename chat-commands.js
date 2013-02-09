@@ -854,13 +854,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				targetToken = target.substr(commaIndex+1);
 			}
 		}
-		var person = user.getPersonFromSocket(socket);
-		if (!person) {
+		var connection = user.getConnectionFromSocket(socket);
+		if (!connection) {
 			// This is probably impossible.
 			console.log('Probably-impossible error in /trn');
 			return false;
 		}
-		user.rename(targetName, targetToken, targetAuth, person.challenge);
+		user.rename(targetName, targetToken, targetAuth, connection.challenge);
 		return false;
 		break;
 
