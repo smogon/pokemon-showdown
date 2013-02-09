@@ -1,13 +1,6 @@
 const LOGIN_SERVER_TIMEOUT = 15000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-try {
-	require('nodetime').profile({
-		accountKey: '42437e1e248457af9645471075b01b12c01d8493',
-		appName: 'Pokemon Showdown'
-	});
-} catch(e) {}
-
 /**
  * Require a module, but display a helpful error message if it fails.
  * This is currently only used in this file, and only for modules which are
