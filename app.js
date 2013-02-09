@@ -235,16 +235,11 @@ config = require('./config/config.js');
 if (config.watchconfig) {
 	fs.watchFile('./config/config.js', function(curr, prev) {
 		if (curr.mtime <= prev.mtime) return;
-		var oldconfig = config;
 		try {
 			for (var i in require.cache) delete require.cache[i];
 			config = require('./config/config.js');
 			console.log('Reloaded config/config.js');
-		} catch (e) {
-			// In case of an error in the new config file, just stick
-			// with the old one.
-			config = oldconfig;
-		}
+		} catch (e) {}
 	});
 }
 
@@ -261,26 +256,6 @@ if ((config.loginserverpublickeyid === undefined) ||
 	console.log('      upgrade at your earliest convenience.');
 	console.log('');
 }
-
-/*
-var app = require('http').createServer()
-  , io = require('socket.io').listen(app)
-  , fs = require('fs');
-
-function handler (req, res) {
-	fs.readFile(__dirname + '/index.html',
-	function (err, data) {
-		if (err) {
-			res.writeHead(500);
-			return res.end('Error loading index.html');
-		}
-
-		res.writeHead(200);
-		res.end(data);
-	});
-}
-
-app.listen(8000); */
 
 if (process.argv[2] && parseInt(process.argv[2])) {
 	config.port = parseInt(process.argv[2]);
