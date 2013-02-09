@@ -406,6 +406,30 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targetUser.emit('console', {evalRawMessage: 'window.location.href="http://pokemonshowdown.com/rules"'});
 		return false;
 		break;
+		
+	case 'warn':
+	case 'alert':
+	case 'a':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		var targets = splitTarget(target);
+		var targetUser = targets[0];
+		if (!targetUser || !targetUser.connected) {
+			emit(socket, 'console', 'User '+targets[2]+' not found.');
+			return false;
+		}
+		if (!targets[1]) {
+			emit(socket, 'console', 'You need a reason to warn a user.');
+			return false;
+		}
+		if (!user.can('warn', targetUser)) {
+			emit(socket, 'console', '/warn - Access denied.');
+			return false;
+		}
+
+		logModCommand(room, '' + targetUser.name + ' was warned by ' + user.name + ' due to: ' + targets[1] + '.');
+		targetUser.emit('message', 'You have been warned by ' + user.name + ' due to the following reason: &quot;' + targets[1] + '&quot;. Read the <a href="http://www.smogon.com/sim/rules">rules</a> to avoid further punishment for your behaviour.');
+		return false;
+		break;
 
 	case 'unban':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);

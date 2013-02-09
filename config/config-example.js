@@ -209,6 +209,7 @@ exports.groups = {
 		forcerename: true,
 		timer: true,
 		alts: '%u',
+		modlog: '%u',
 		bypassblocks: 'u%@&~',
 		rank: 2
 	},
