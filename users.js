@@ -5,8 +5,8 @@ var THROTTLE_DELAY = 900;
 var users = {};
 var prevUsers = {};
 var numUsers = 0;
-var people = {};
-var numPeople = 0;
+var connections = {};
+var numConnections = 0;
 
 function getUser(name, exactName) {
 	if (!name || name === '!') return null;
@@ -44,13 +44,13 @@ function nameLock(user,name,ip) {
 }
 function connectUser(name, socket, room) {
 	var userid = toUserid(name);
-	var person = new Person(name, socket, true);
-	if (person.banned) return person;
-	var user = new User(person);
+	var connection = new Connection(name, socket, true);
+	if (connection.banned) return connection;
+	var user = new User(connection);
 	var nameSuggestion = nameLock(user);
 	if (nameSuggestion !== user.name) {
 		user.rename(nameSuggestion);
-		user = person.user;
+		user = connection.user;
 	}
 	// Generate 1024-bit challenge string.
 	crypto.randomBytes(128, function(ex, buffer) {
@@ -62,16 +62,16 @@ function connectUser(name, socket, room) {
 			// with this case, which should be impossible anyway.
 			user.destroy();
 		} else {
-			person.challenge = buffer.toString('hex');
-			console.log('JOIN: ' + name + ' [' + person.challenge.substr(0, 15) + '] [' + socket.id + ']');
+			connection.challenge = buffer.toString('hex');
+			console.log('JOIN: ' + name + ' [' + connection.challenge.substr(0, 15) + '] [' + socket.id + ']');
 			var keyid = config.loginserverpublickeyid || 0;
-			person.sendTo(null, '|challenge-string|' + keyid + '|' + person.challenge);
+			connection.sendTo(null, '|challenge-string|' + keyid + '|' + connection.challenge);
 		}
 	});
 	if (room) {
-		user.joinRoom(room, person);
+		user.joinRoom(room, connection);
 	}
-	return person;
+	return connection;
 }
 
 var usergroups = {};
@@ -125,10 +125,10 @@ importBannedWords();
 
 // User
 var User = (function () {
-	function User(person) {
+	function User(connection) {
 		numUsers++;
 		this.mmrCache = {};
-		this.token = ''+person.socket.id;
+		this.token = ''+connection.socket.id;
 		this.guestNum = numUsers;
 		this.name = 'Guest '+numUsers;
 		this.named = false;
@@ -142,9 +142,9 @@ var User = (function () {
 
 		this.connected = true;
 
-		if (person.user) person.user = this;
-		this.people = [person];
-		this.ip = person.ip;
+		if (connection.user) connection.user = this;
+		this.connections = [connection];
+		this.ip = connection.ip;
 
 		this.muted = !!ipSearch(this.ip,mutedIps);
 		this.prevNames = {};
@@ -158,7 +158,7 @@ var User = (function () {
 
 		// initialize
 		users[this.userid] = this;
-		if (person.banned) {
+		if (connection.banned) {
 			this.destroy();
 		}
 	}
@@ -171,18 +171,18 @@ var User = (function () {
 		if (data && data.room) {
 			roomid = data.room;
 		}
-		for (var i=0; i<this.people.length; i++) {
-			if (roomid && !this.people[i].rooms[roomid]) continue;
-			emit(this.people[i].socket, message, data);
+		for (var i=0; i<this.connections.length; i++) {
+			if (roomid && !this.connections[i].rooms[roomid]) continue;
+			emit(this.connections[i].socket, message, data);
 		}
 	};
 	User.prototype.sendTo = function(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (!roomid) roomid = 'lobby';
 		if (roomid !== 'lobby') data = '>'+roomid+'\n'+data;
-		for (var i=0; i<this.people.length; i++) {
-			if (roomid && !this.people[i].rooms[roomid]) continue;
-			sendData(this.people[i].socket, data);
+		for (var i=0; i<this.connections.length; i++) {
+			if (roomid && !this.connections[i].rooms[roomid]) continue;
+			sendData(this.connections[i].socket, data);
 		}
 	};
 	User.prototype.getIdentity = function() {
@@ -295,10 +295,10 @@ var User = (function () {
 			this.group = config.groupsranking[config.groupsranking.length - 1];
 		}
 
-		for (var i=0; i<this.people.length; i++) {
-			this.people[i].rename(name, oldid);
-			//console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
-			emit(this.people[i].socket, 'update', {
+		for (var i=0; i<this.connections.length; i++) {
+			this.connections[i].rename(name, oldid);
+			//console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
+			emit(this.connections[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
 				named: true,
@@ -337,10 +337,10 @@ var User = (function () {
 		users[this.userid] = this;
 		this.authenticated = false;
 
-		for (var i=0; i<this.people.length; i++) {
-			this.people[i].rename(name, oldid);
-			console.log(''+name+' renaming: socket '+i+' of '+this.people.length);
-			emit(this.people[i].socket, 'update', {
+		for (var i=0; i<this.connections.length; i++) {
+			this.connections[i].rename(name, oldid);
+			console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
+			emit(this.connections[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
 				named: false,
@@ -516,12 +516,12 @@ var User = (function () {
 				for (var i in this.roomCount) {
 					Rooms.get(i,'lobby').leave(this);
 				}
-				for (var i=0; i<this.people.length; i++) {
-					//console.log(''+this.name+' preparing to merge: socket '+i+' of '+this.people.length);
-					user.merge(this.people[i]);
+				for (var i=0; i<this.connections.length; i++) {
+					//console.log(''+this.name+' preparing to merge: socket '+i+' of '+this.connections.length);
+					user.merge(this.connections[i]);
 				}
 				this.roomCount = {};
-				this.people = [];
+				this.connections = [];
 				this.connected = false;
 				if (!this.authenticated) {
 					this.group = config.groupsranking[0];
@@ -562,33 +562,33 @@ var User = (function () {
 		}
 		this.renamePending = false;
 	};
-	User.prototype.add = function(name, person, token) {
+	User.prototype.add = function(name, connection, token) {
 		// name is ignored - this is intentional
-		if (person.banned || this.token !== token) {
+		if (connection.banned || this.token !== token) {
 			return false;
 		}
 		this.connected = true;
-		person.user = this;
-		this.people.push(person);
-		this.ip = person.ip;
-		return person;
+		connection.user = this;
+		this.connections.push(connection);
+		this.ip = connection.ip;
+		return connection;
 	};
-	User.prototype.merge = function(person) {
+	User.prototype.merge = function(connection) {
 		this.connected = true;
-		var oldid = person.userid;
-		this.people.push(person);
-		person.rename(this.name, oldid);
-		//console.log(''+this.name+' merging: socket '+person.socket.id+' of ');
-		emit(person.socket, 'update', {
+		var oldid = connection.userid;
+		this.connections.push(connection);
+		connection.rename(this.name, oldid);
+		//console.log(''+this.name+' merging: socket '+connection.socket.id+' of ');
+		emit(connection.socket, 'update', {
 			name: this.name,
 			userid: this.userid,
 			named: true,
 			token: this.token
 		});
-		person.user = this;
-		for (var i in person.rooms) {
+		connection.user = this;
+		for (var i in connection.rooms) {
 			if (!this.roomCount[i]) {
-				person.rooms[i].join(this);
+				connection.rooms[i].join(this);
 				this.roomCount[i] = 0;
 			}
 			this.roomCount[i]++;
@@ -596,11 +596,11 @@ var User = (function () {
 	};
 	User.prototype.debugData = function() {
 		var str = ''+this.group+this.name+' ('+this.userid+')';
-		for (var i=0; i<this.people.length; i++) {
-			var person = this.people[i];
+		for (var i=0; i<this.connections.length; i++) {
+			var connection = this.connections[i];
 			str += ' socket'+i+'[';
 			var first = true;
-			for (var j in person.rooms) {
+			for (var j in connection.rooms) {
 				if (first) first=false;
 				else str+=',';
 				str += j;
@@ -620,26 +620,26 @@ var User = (function () {
 		exportUsergroups();
 	};
 	User.prototype.disconnect = function(socket) {
-		var person = null;
-		for (var i=0; i<this.people.length; i++) {
-			if (this.people[i].socket === socket) {
+		var connection = null;
+		for (var i=0; i<this.connections.length; i++) {
+			if (this.connections[i].socket === socket) {
 				console.log('DISCONNECT: '+this.userid);
-				if (this.people.length <= 1) {
+				if (this.connections.length <= 1) {
 					this.connected = false;
 					if (!this.authenticated) {
 						this.group = config.groupsranking[0];
 					}
 				}
-				person = this.people[i];
-				for (var j in person.rooms) {
-					this.leaveRoom(person.rooms[j], socket);
+				connection = this.connections[i];
+				for (var j in connection.rooms) {
+					this.leaveRoom(connection.rooms[j], socket);
 				}
-				person.user = null;
-				this.people.splice(i,1);
+				connection.user = null;
+				this.connections.splice(i,1);
 				break;
 			}
 		}
-		if (!this.people.length) {
+		if (!this.connections.length) {
 			// cleanup
 			for (var i in this.roomCount) {
 				if (this.roomCount[i] > 0) {
@@ -751,28 +751,28 @@ var User = (function () {
 	User.prototype.destroy = function() {
 		// Disconnects a user from the server
 		this.destroyChatQueue();
-		var person = null;
+		var connection = null;
 		this.connected = false;
-		for (var i=0; i<this.people.length; i++) {
+		for (var i=0; i<this.connections.length; i++) {
 			console.log('DESTROY: '+this.userid);
-			person = this.people[i];
-			person.user = null;
-			for (var j in person.rooms) {
-				this.leaveRoom(person.rooms[j], person);
+			connection = this.connections[i];
+			connection.user = null;
+			for (var j in connection.rooms) {
+				this.leaveRoom(connection.rooms[j], connection);
 			}
 			if (config.protocol === 'io') {
-				person.socket.disconnect();
+				connection.socket.disconnect();
 			} else {
-				person.socket.end();
+				connection.socket.end();
 			}
 		}
-		this.people = [];
+		this.connections = [];
 	};
-	User.prototype.getPersonFromSocket = function(socket) {
+	User.prototype.getConnectionFromSocket = function(socket) {
 		for (var i = 0; ; ++i) {
-			if (!this.people[i]) return null;
-			if (this.people[i].socket === socket) {
-				return this.people[i];
+			if (!this.connections[i]) return null;
+			if (this.connections[i].socket === socket) {
+				return this.connections[i];
 			}
 		}
 	};
@@ -780,28 +780,28 @@ var User = (function () {
 		roomid = room?(room.id||room):'';
 		room = Rooms.get(room,'lobby');
 		if (!room) return false;
-		var person = null;
+		var connection = null;
 		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
 		if (!socket) {
-			for (var i=0; i<this.people.length;i++) {
+			for (var i=0; i<this.connections.length;i++) {
 				// only join full clients, not pop-out single-room
 				// clients
-				if (this.people[i].rooms['lobby']) {
-					this.joinRoom(room, this.people[i]);
+				if (this.connections[i].rooms['lobby']) {
+					this.joinRoom(room, this.connections[i]);
 				}
 			}
 			return;
 		} else if (socket.socket) {
-			person = socket;
-			socket = person.socket;
+			connection = socket;
+			socket = connection.socket;
 		}
 		if (!socket) return false;
-		else if (!person) {
-			person = this.getPersonFromSocket(socket);
-			if (!person) return false;
+		else if (!connection) {
+			connection = this.getConnectionFromSocket(socket);
+			if (!connection) return false;
 		}
-		if (!person.rooms[room.id]) {
-			person.rooms[room.id] = room;
+		if (!connection.rooms[room.id]) {
+			connection.rooms[room.id] = room;
 			if (!this.roomCount[room.id]) {
 				this.roomCount[room.id]=1;
 				room.join(this);
@@ -810,15 +810,15 @@ var User = (function () {
 				room.initSocket(this, socket);
 			}
 		} else if (room.id === 'lobby') {
-			emit(person.socket, 'init', {room: roomid, notFound: true});
+			emit(connection.socket, 'init', {room: roomid, notFound: true});
 		}
 		return true;
 	};
 	User.prototype.leaveRoom = function(room, socket) {
 		room = Rooms.get(room);
-		for (var i=0; i<this.people.length; i++) {
-			if (this.people[i] === socket || this.people[i].socket === socket || !socket) {
-				if (this.people[i].rooms[room.id]) {
+		for (var i=0; i<this.connections.length; i++) {
+			if (this.connections[i] === socket || this.connections[i].socket === socket || !socket) {
+				if (this.connections[i].rooms[room.id]) {
 					if (this.roomCount[room.id]) {
 						this.roomCount[room.id]--;
 						if (!this.roomCount[room.id]) {
@@ -826,14 +826,14 @@ var User = (function () {
 							delete this.roomCount[room.id];
 						}
 					}
-					if (!this.people[i]) {
+					if (!this.connections[i]) {
 						// race condition? This should never happen, but it does.
 						fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
-							this.write("\npeople="+JSON.stringify(this.people)+"\ni="+i+"\n\n");
+							this.write("\nconnections="+JSON.stringify(this.connections)+"\ni="+i+"\n\n");
 							this.end();
 						});
 					} else {
-						delete this.people[i].rooms[room.id];
+						delete this.connections[i].rooms[room.id];
 					}
 				}
 				if (socket) {
@@ -975,8 +975,8 @@ var User = (function () {
 	return User;
 })();
 
-var Person = (function () {
-	function Person(name, socket, user) {
+var Connection = (function () {
+	function Connection(name, socket, user) {
 		this.named = true;
 		this.name = name;
 		this.userid = toUserid(name);
@@ -986,13 +986,13 @@ var Person = (function () {
 
 		this.user = user;
 
-		numPeople++;
-		while (people['p'+numPeople]) {
+		numConnections++;
+		while (connections['p'+numConnections]) {
 			// should never happen
-			numPeople++;
+			numConnections++;
 		}
-		this.id = 'p'+numPeople;
-		people[this.id] = this;
+		this.id = 'p'+numConnections;
+		connections[this.id] = this;
 
 		this.ip = '';
 		if (socket.remoteAddress) {
@@ -1006,16 +1006,16 @@ var Person = (function () {
 		}
 	}
 
-	Person.prototype.rename = function(name) {
+	Connection.prototype.rename = function(name) {
 		this.name = name;
 		this.userid = toUserid(name);
 	};
-	Person.prototype.sendTo = function(roomid, data) {
+	Connection.prototype.sendTo = function(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'lobby') data = '>'+roomid+'\n'+data;
 		sendData(this.socket, data);
 	};
-	return Person;
+	return Connection;
 })();
 
 function ipSearch(ip, table) {
