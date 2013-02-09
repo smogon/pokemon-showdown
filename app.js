@@ -451,9 +451,9 @@ if (config.crashguard) {
 // event functions
 var events = {
 	join: function(data, socket, you) {
-		if (!data || typeof data.room !== 'string' || typeof data.name !== 'string') return;
+		if (!data || typeof data.room !== 'string') return;
 		if (!you) {
-			you = Users.connectUser(data.name, socket, data.room);
+			you = Users.connectUser(socket, data.room);
 			return you;
 		} else {
 			var youUser = resolveUser(you, socket);

@@ -42,11 +42,11 @@ function nameLock(user,name,ip) {
 	}
 	return name||user.name;
 }
-function connectUser(name, socket, room) {
+function connectUser(socket, room) {
 	var connection = new Connection(socket, true);
 	if (connection.banned) return connection;
 	var user = new User(connection);
-	var nameSuggestion = nameLock(user);
+	var nameSuggestion = nameLock(user);	// returns user.name if not namelocked
 	if (nameSuggestion !== user.name) {
 		user.rename(nameSuggestion);
 		user = connection.user;
@@ -60,9 +60,9 @@ function connectUser(name, socket, room) {
 			// This is pretty crude, but it's the easiest way to deal
 			// with this case, which should be impossible anyway.
 			user.destroy();
-		} else {
+		} else if (connection.user) {	// if user is still connected
 			connection.challenge = buffer.toString('hex');
-			console.log('JOIN: ' + name + ' [' + connection.challenge.substr(0, 15) + '] [' + socket.id + ']');
+			console.log('JOIN: ' + connection.user.name + ' [' + connection.challenge.substr(0, 15) + '] [' + socket.id + ']');
 			var keyid = config.loginserverpublickeyid || 0;
 			connection.sendTo(null, '|challenge-string|' + keyid + '|' + connection.challenge);
 		}
@@ -475,6 +475,11 @@ var User = (function () {
 					return this;
 				}
 			}
+
+			if (!this.named) {
+				console.log('IDENTIFY: ' + name + ' [' + this.name + '] [' + challenge.substr(0, 15) + ']');
+			}
+
 			var group = config.groupsranking[0];
 			var avatar = 0;
 			var authenticated = false;
