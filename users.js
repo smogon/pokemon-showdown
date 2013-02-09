@@ -355,12 +355,12 @@ var User = (function () {
 	};
 	/**
 	 *
-	 * @param name    		The name you want
-	 * @param token   		Login token
-	 * @param auth    		Make sure this account will identify as registered
-	 * @param challenge		The challenge string for this connection
+	 * @param name    	The name you want
+	 * @param token   	Login token
+	 * @param auth    	Make sure this account will identify as registered
+	 * @param socket	The socket asking for the rename
 	 */
-	User.prototype.rename = function(name, token, auth, challenge) {
+	User.prototype.rename = function(name, token, auth, socket) {
 		for (var i in this.roomCount) {
 			var room = Rooms.get(i);
 			if (room && room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
@@ -368,6 +368,14 @@ var User = (function () {
 				return false;
 			}
 		}
+
+		var challenge = '';
+		if (socket) {
+			var connection = this.getConnectionFromSocket(socket);
+			if (!connection) return false;	// Should be impossible.
+			challenge = connection.challenge;
+		}
+
 		if (!name) name = '';
 		name = toName(name);
 		name = nameLock(this,name);
