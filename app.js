@@ -338,6 +338,17 @@ clampIntRange = function(num, min, max) {
 	return num;
 };
 
+try {
+	if (config.setuid) {
+		process.setuid(config.setuid);
+		console.log("setuid succeeded, we are now running as "+config.setuid);
+	}
+}
+catch (err) {
+	console.log("ERROR: setuid failed: [%s] Call: [%s]", err.message, err.syscall);
+	process.exit(1);
+}
+
 Data = {};
 Tools = require('./tools.js');
 
@@ -562,16 +573,5 @@ if (config.protocol === 'io') { // Socket.IO
 }
 
 console.log("Server started on port "+config.port);
-
-try {
-	if (config.setuid) {
-		process.setuid(config.setuid);
-		console.log("setuid succeeded, we are now running as "+config.setuid);
-	}
-}
-catch (err) {
-	console.log("ERROR: setuid failed: [%s] Call: [%s]", err.message, err.syscall);
-	process.exit(1);
-}
 
 console.log("Test your server at http://play.pokemonshowdown.com/~~localhost:"+config.port);
