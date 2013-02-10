@@ -336,7 +336,6 @@ var User = (function () {
 		this.authenticated = false;
 
 		for (var i=0; i<this.connections.length; i++) {
-			this.connections[i].rename(name, oldid);
 			console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
 			emit(this.connections[i].socket, 'update', {
 				name: name,
