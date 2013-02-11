@@ -2205,7 +2205,11 @@ exports.BattleAbilities = {
 	"suctioncups": {
 		desc: "This Pokemon cannot be forced out.",
 		shortDesc: "This Pokemon cannot be forced to switch out by another Pokemon's attack or item.",
-		onDragOut: false,
+		onDragOutPriority: 1,
+		onDragOut: function(pokemon) {
+			this.add('-activate', pokemon, 'ability: Suction Cups');
+			return false;
+		},
 		id: "suctioncups",
 		name: "Suction Cups",
 		rating: 2.5,
