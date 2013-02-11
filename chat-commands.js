@@ -1742,7 +1742,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'Set your highlights preference:');
 			emit(socket, 'console', '/highlight delete - deletes all highlighting words.');
 			emit(socket, 'console', '/highlight add, word - adds a highlighing word. You can add several words separated by commas.');
-			emit(socket, 'console', '/highlight delete, word - deletes a single or seveal highlighting words. Separated by commas.');
+			emit(socket, 'console', '/highlight delete, word - deletes a single or several highlighting words. Separated by commas.');
 		}
 		if (target === 'timestamps') {
 			matched = true;
