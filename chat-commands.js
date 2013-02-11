@@ -201,15 +201,20 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'avatar':
 		if (!target) return parseCommand(user, 'avatars', '', room, socket);
-		var avatar = parseInt(target);
+		var parts = target.split(',');
+		var avatar = parseInt(parts[0]);
 		if (!avatar || avatar > 294 || avatar < 1) {
-			emit(socket, 'console', 'Invalid avatar.');
+			if (!parts[1]) {
+				emit(socket, 'console', 'Invalid avatar.');
+			}
 			return false;
 		}
 
 		user.avatar = avatar;
-		emit(socket, 'console', 'Avatar changed to:');
-		emit(socket, 'console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" width="80" height="80" />'});
+		if (!parts[1]) {
+			emit(socket, 'console', 'Avatar changed to:');
+			emit(socket, 'console', {rawMessage: '<img src="/sprites/trainers/'+avatar+'.png" alt="" width="80" height="80" />'});
+		}
 
 		return false;
 		break;
