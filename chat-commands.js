@@ -1839,6 +1839,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/hotpatch data - reload the game data (abilities, moves...)');
 			emit(socket, 'console', '/hotpatch chat - reload chat-commands.js');
 		}
+		if (target === '~' || target === 'lockdown') {
+			matched = true;
+			emit(socket, 'console', '/lockdown - locks down the server preventing new battles from starting so it can be restarted. Requires: ~');
+		}
+		if (target === '~' || target === 'kill') {
+			matched = true;
+			emit(socket, 'console', '/kill - kills and closes the server to be restarted. Can\'t be done unless the server is in lockdown state. Requires: ~');
+		}
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands') {
 			matched = true;
 			emit(socket, 'console', '/help OR /h OR /? - Gives you help.');
