@@ -336,6 +336,8 @@ Minor ability changes:
   provides immunity to Hail and freeze, and provides a one-time immunity
   to Water and Ice, after which it turns into Shell Armor
 
+- Telepathy grants Imprison on switch-in
+
 - Compoundeyes now grants 1.6x accuracy, Victory Star grants 1.5x
 
 - Solid Rock and Filter now reduce 1/2 damage of SE moves, not 1/4
