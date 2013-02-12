@@ -231,7 +231,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				if (!first) output += ' | ';
 				first = false;
 
-				output += '<a href="/'+i+'" onclick="return selectTab(\''+i+'\');">'+i+'</a>';
+				output += '<a href="/'+i+'" room="'+i+'">'+i+'</a>';
 			}
 			if (!output) {
 				emit(socket, 'console', ""+targetUser.name+" is offline.");
@@ -311,7 +311,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				if (!first) output += ' | ';
 				first = false;
 
-				output += '<a href="/'+i+'" onclick="return selectTab(\''+i+'\');">'+i+'</a>';
+				output += '<a href="/'+i+'" room="'+i+'">'+i+'</a>';
 			}
 			emit(socket, 'console', {rawMessage: output});
 		}
