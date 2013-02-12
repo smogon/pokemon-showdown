@@ -938,7 +938,7 @@ var User = (function () {
 			if (this.chatQueue.length > 6) {
 				emit(socket, 'console', {
 					room: room.id,
-					rawMessage: "<strong style=\"color:red\">Your message was not sent because you've been typing too quickly.</strong>"
+					rawMessage: "<strong class=\"message-throttle-notice\">Your message was not sent because you've been typing too quickly.</strong>"
 				});
 			} else {
 				this.chatQueue.push([message, room, socket]);
