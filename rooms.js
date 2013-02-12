@@ -79,7 +79,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			} else {
 				var winner = Users.get(winnerid);
 				if (winner && !winner.authenticated) {
-					selfR.send('|register-account|' + winner.userid, winner);
+					selfR.send('|askreg|' + winner.userid, winner);
 				}
 				var p1rating, p2rating;
 				// update rankings
