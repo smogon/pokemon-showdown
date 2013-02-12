@@ -827,7 +827,7 @@ exports.BattleMovedex = {
 	},
 	/******************************************************************
 	Draining moves:
-	- move types around, buff Leech Life
+	- buff Leech Life
 
 	Justification:
 	- Poison, Bug, Grass, and Ghost make sense for draining types.
@@ -933,6 +933,27 @@ exports.BattleMovedex = {
 		basePower: 180,
 		accuracy: true,
 		willCrit: true
+	},
+	/******************************************************************
+	Scald:
+	- base power not affected by weather
+	- 0% burn in rain, 60% burn in sun
+
+	Justification:
+	- rain could use a nerf
+	******************************************************************/
+	scald: {
+		inherit: true,
+		onModifyMove: function(move) {
+			switch (this.effectiveWeather()) {
+			case 'sunnyday':
+				move.secondary.chance = 60;
+				break;
+			case 'raindance':
+				delete move.secondary;
+				break;
+			}
+		}
 	},
 	/******************************************************************
 	Echoed Voice:

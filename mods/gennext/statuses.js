@@ -52,6 +52,41 @@ exports.BattleStatuses = {
 	},
 
 
+	// weather!
+
+	raindance: {
+		inherit: true,
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (move.id === 'Scald') {
+				return;
+			}
+			if (move.type === 'Water') {
+				this.debug('rain water boost');
+				return basePower * 1.5;
+			}
+			if (move.type === 'Fire') {
+				this.debug('rain fire suppress');
+				return basePower * .5;
+			}
+		}
+	},
+	sunnyday: {
+		inherit: true,
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (move.id === 'Scald') {
+				return;
+			}
+			if (move.type === 'Fire') {
+				this.debug('Sunny Day fire boost');
+				return basePower * 1.5;
+			}
+			if (move.type === 'Water') {
+				this.debug('Sunny Day water suppress');
+				return basePower * .5;
+			}
+		}
+	},
+
 	// intrinsics!
 
 	unown: {

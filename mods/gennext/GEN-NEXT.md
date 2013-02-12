@@ -208,6 +208,9 @@ Minor move changes:
 - Perfect accuracy moves with a base power of 60 have their base power
   increased to 90
 
+- Scald's damage is no longer affected by weather: instead, it gets 0% burn
+  chance in rain and 60% burn chance in sun
+
 - Shadow Ball now has 90 base power and 30% -SpD
 
 - Drives grant a 1.1x damage bonus to Techno Blast
