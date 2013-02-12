@@ -79,7 +79,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			} else {
 				var winner = Users.get(winnerid);
 				if (winner && !winner.authenticated) {
-					winner.emit('console', {rawMessage: '<div class="message-register-account"><b>Register an account to protect your ladder rating!</b><br /><button onclick="overlay(\'register\',{ifuserid:\''+winner.userid+'\'});return false"><b>Register</b></button></div>'});
+					winner.emit('console,', {registerAccountMessage: 1});
 				}
 				var p1rating, p2rating;
 				// update rankings
