@@ -92,7 +92,7 @@ Major changes:
   - Sky Attack: 100% -1 Def, 70 bp
   - Freeze Shock: 100% paralysis, 70 bp
   - Ice Burn: 100% burn, 70 bp
-  - Bounce: 100% paralysis, 45 bp
+  - Bounce: 30% paralysis, 45 bp
   - Fly: 100% -1 Def, 45 bp
   - Dig: 100% -1 Def, 45 bp
   - Dive: 100% -1 Def, 45 bp

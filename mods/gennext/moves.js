@@ -277,7 +277,7 @@ exports.BattleMovedex = {
 			target.removeVolatile('substitute');
 		},
 		secondary: {
-			chance: 100,
+			chance: 30,
 			status: 'par'
 		},
 		breaksProtect: true
