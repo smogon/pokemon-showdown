@@ -64,7 +64,7 @@ function connectUser(socket, room) {
 			connection.challenge = buffer.toString('hex');
 			console.log('JOIN: ' + connection.user.name + ' [' + connection.challenge.substr(0, 15) + '] [' + socket.id + ']');
 			var keyid = config.loginserverpublickeyid || 0;
-			connection.sendTo(null, '|challenge-string|' + keyid + '|' + connection.challenge);
+			connection.sendTo(null, '|challstr|' + keyid + '|' + connection.challenge);
 		}
 	});
 	if (room) {
