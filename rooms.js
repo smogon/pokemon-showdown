@@ -75,7 +75,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 			//update.updates.push('[DEBUG] uri: '+config.loginserver+'action.php?act=ladderupdate&serverid='+config.serverid+'&p1='+encodeURIComponent(p1)+'&p2='+encodeURIComponent(p2)+'&score='+p1score+'&format='+toId(rated.format)+'&servertoken=[token]');
 
 			if (!rated.p1 || !rated.p2) {
-				selfR.push('|chatmsg-raw|ERROR: Ladder not updated: a player does not exist');
+				selfR.push('|raw|ERROR: Ladder not updated: a player does not exist');
 			} else {
 				var winner = Users.get(winnerid);
 				if (winner && !winner.authenticated) {
@@ -83,7 +83,7 @@ function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 				}
 				var p1rating, p2rating;
 				// update rankings
-				selfR.push('|chatmsg-raw|Ladder updating...');
+				selfR.push('|raw|Ladder updating...');
 				LoginServer.request('ladderupdate', {
 					p1: p1,
 					p2: p2,
