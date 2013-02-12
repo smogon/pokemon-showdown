@@ -420,6 +420,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		canUseRandomTeam: true,
 		debug: true,
+		maxLevel: 1000,
 		// no restrictions, for serious
 		ruleset: ['Team Preview']
 	},
@@ -429,6 +430,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		canUseRandomTeam: true,
 		debug: true,
+		maxLevel: 1000,
 		// no restrictions, for serious
 		ruleset: []
 	},
@@ -603,6 +605,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		canUseRandomTeam: true,
 		debug: true,
+		maxLevel: 1000,
 		// no restrictions, for serious
 		ruleset: ['Team Preview']
 	},
@@ -727,6 +730,9 @@ exports.BattleFormats = {
 			}
 			if (set.moves && set.moves.length > 4) {
 				problems.push((set.name||set.species) + ' has more than four moves.');
+			}
+			if (set.level && set.level > 100) {
+				problems.push((set.name||set.species) + ' is higher than level 100.');
 			}
 			return problems;
 		}

@@ -148,7 +148,7 @@ function BattlePokemon(set, side) {
 	this.baseMoveset = [];
 	this.trapped = false;
 
-	this.level = clampIntRange(set.forcedLevel || set.level || 100, 1, 100);
+	this.level = clampIntRange(set.forcedLevel || set.level || 100, 1, 1000);
 	this.hp = 0;
 	this.maxhp = 100;
 	var genders = {M:'M',F:'F'};
