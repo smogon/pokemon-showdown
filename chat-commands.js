@@ -898,13 +898,17 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case '!learn':
 	case 'learnall':
 	case '!learnall':
-		var lsetData = {};
+	case 'learn5':
+	case '!learn5':
+		var lsetData = {set:{}};
 		var targets = target.split(',');
 		if (!targets[1]) return parseCommand(user, 'help', 'learn', room, socket);
 		var template = Tools.getTemplate(targets[0]);
 		var move = {};
 		var problem;
 		var all = (cmd.substr(cmd.length-3) === 'all');
+
+		if (cmd === 'learn5' || cmd === '!learn5') lsetData.set.level = 5;
 
 		showOrBroadcastStart(user, cmd, room, socket, message);
 
