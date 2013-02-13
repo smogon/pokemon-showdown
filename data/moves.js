@@ -4396,6 +4396,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isNotProtectable: true,
+		affectedByImmunities: false,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
@@ -4409,6 +4410,7 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 100,
 					category: "Special",
+					affectedByImmunities: true,
 					type: 'Psychic'
 				}
 			};
