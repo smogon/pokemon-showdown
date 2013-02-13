@@ -377,6 +377,7 @@ module.exports = (function () {
 		var set = (lsetData.set || (lsetData.set={}));
 		var format = (lsetData.format || (lsetData.format={}));
 		var alreadyChecked = {};
+		var level = set.level || 100;
 
 		var limit1 = true;
 		var sketch = true;
@@ -411,9 +412,20 @@ module.exports = (function () {
 
 					for (var i=0, len=lset.length; i<len; i++) {
 						var learned = lset[i];
-						if (learned.substr(1,1) in {L:1,M:1,T:1}) {
+						if (learned.substr(0,2) in {'4L':1,'5L':1}) {
+							// gen 4 or 5 level-up moves
+							if (!template.gender || template.gender === 'F') {
+								// always available as egg move
+								// TODO: include only egg sources
+								return false;
+							}
+							if (level >= parseInt(learned.substr(2),10)) {
+								// we're past the required level to learn it
+								return false;
+							}
+						} else if (learned.substr(1,1) in {L:1,M:1,T:1}) {
 							if (learned.substr(0,1) === '5') {
-								// current-gen level-up, TM, or tutor moves:
+								// current-gen TM or tutor moves:
 								//   always available
 								return false;
 							}
@@ -692,7 +704,7 @@ module.exports = (function () {
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		var maxLevel = format.maxLevel || 100;
-		if (!set.level || set.level > maxLevel) {
+		if (!set.level || set.level > maxLevel || set.level == set.forcedLevel) {
 			set.level = maxLevel;
 		}
 
@@ -833,7 +845,7 @@ module.exports = (function () {
 						if (eventData.gender) {
 							set.gender = eventData.gender;
 						}
-						if (eventData.level && set.level < eventData.level && !set.forcedLevel) {
+						if (eventData.level && set.level < eventData.level) {
 							problems.push(name+" must come from a specific event that makes it at least level "+eventData.level+".");
 						}
 					}
@@ -846,7 +858,7 @@ module.exports = (function () {
 				} else if (lsetData.sources) {
 					var compatibleSource = false;
 					for (var i=0,len=lsetData.sources.length; i<len; i++) {
-						if (lsetData.sources[i].substr(0,2) === '5E' || (lsetData.sources[i].substr(0,2) === '5D' && (set.level >= 10 || set.forcedLevel))) {
+						if (lsetData.sources[i].substr(0,2) === '5E' || (lsetData.sources[i].substr(0,2) === '5D' && set.level >= 10)) {
 							compatibleSource = true;
 							break;
 						}
@@ -856,9 +868,12 @@ module.exports = (function () {
 					}
 				}
 			}
-			if (set.level < template.evoLevel && !set.forcedLevel) {
+			if (set.level < template.evoLevel) {
 				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 				problems.push(name+" must be at least level "+template.evoLevel+".");
+			}
+			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && this.getAbility(set.ability).gen === 4 && !template.prevo) {
+				problems.push(name+" has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");
 			}
 		}
 		setHas[toId(template.tier)] = true;
