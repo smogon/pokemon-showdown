@@ -414,16 +414,19 @@ module.exports = (function () {
 						var learned = lset[i];
 						if (learned.substr(0,2) in {'4L':1,'5L':1}) {
 							// gen 4 or 5 level-up moves
-							if (!template.gender || template.gender === 'F') {
-								// always available as egg move
-								// TODO: include only egg sources
-								return false;
-							}
 							if (level >= parseInt(learned.substr(2),10)) {
 								// we're past the required level to learn it
 								return false;
 							}
-						} else if (learned.substr(1,1) in {L:1,M:1,T:1}) {
+							if (!template.gender || template.gender === 'F') {
+								// available as egg move
+								learned = learned.substr(0,1)+'Eany';
+							} else {
+								// this move is unavailable, skip it
+								continue;
+							}
+						}
+						if (learned.substr(1,1) in {L:1,M:1,T:1}) {
 							if (learned.substr(0,1) === '5') {
 								// current-gen TM or tutor moves:
 								//   always available
@@ -441,6 +444,8 @@ module.exports = (function () {
 								var eggGroups = template.eggGroups;
 								if (eggGroups[0] === 'No Eggs') eggGroups = this.getTemplate(template.evos[0]).eggGroups;
 								var atLeastOne = false;
+								var fromSelf = (learned.substr(1) === 'Eany');
+								learned = learned.substr(0,2);
 								for (var templateid in this.data.Pokedex) {
 									var dexEntry = this.getTemplate(templateid);
 									if (
@@ -449,7 +454,7 @@ module.exports = (function () {
 										// can't breed mons from future gens
 										dexEntry.gen <= parseInt(learned.substr(0,1),10) &&
 										// if chainbreeding, only match the original source
-										!alreadyChecked[dexEntry.speciesid] &&
+										(!alreadyChecked[dexEntry.speciesid] || fromSelf) &&
 										// the breeding target can learn this move
 										dexEntry.learnset && (dexEntry.learnset[move]||dexEntry.learnset['sketch'])) {
 										if (dexEntry.eggGroups.intersect(eggGroups).length) {
