@@ -884,13 +884,7 @@ exports.BattleAbilities = {
 			if (pokemon === pokemon.side.pokemon[i]) return;
 			pokemon.illusion = pokemon.side.pokemon[i];
 		},
-		onAfterDamage: function(damage, pokemon, source, effect) {
-			if (pokemon.illusion && effect && effect.effectType === 'Move') {
-				this.debug('illusion cleared');
-				pokemon.illusion = null;
-				this.add('replace', pokemon, pokemon.getDetails());
-			}
-		},
+		// illusion clearing is hardcoded in the damage function
 		id: "illusion",
 		name: "Illusion",
 		rating: 4.5,
