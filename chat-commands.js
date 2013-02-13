@@ -924,7 +924,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			problem = Tools.checkLearnset(move, template, lsetData);
 			if (problem) break;
 		}
-		var buffer = ''+template.name+(problem?" <strong class=\"message-learn-cannotlearn\">can't</strong> learn ":" <strong class=\"message-learn-canlearn\">can</strong> learn ")+(targets.length>2?"these moves":move.name);
+		var buffer = ''+template.name+(problem?" <span class=\"message-learn-cannotlearn\">can't</span> learn ":" <span class=\"message-learn-canlearn\">can</span> learn ")+(targets.length>2?"these moves":move.name);
 		if (!problem) {
 			var sourceNames = {E:"egg",S:"event",D:"dream world"};
 			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul class=\"message-learn-list\">";
