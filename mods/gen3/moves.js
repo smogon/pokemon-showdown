@@ -111,7 +111,7 @@ exports.BattleMovedex = {
 		shortDesc: "Waits 2-3 turns; deals double the damage taken.",
 		priority: 0,
 		effect: {
-			duration: 2+random(),
+			duration: 2,	// TODO: Use correct duration.
 			onLockMove: 'bide',
 			onStart: function(pokemon) {
 				this.effectData.totalDamage = 0;
