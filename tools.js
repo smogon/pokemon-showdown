@@ -33,8 +33,13 @@ module.exports = (function () {
 		} else {
 			dataTypes.forEach(function(dataType) {
 				try {
-					Data[mod][dataType] = require('./mods/'+mod+'/'+dataFiles[dataType])['Battle'+dataType];
-				} catch (e) {}
+					var path = './mods/' + mod + '/' + dataFiles[dataType];
+					if (fs.existsSync(path)) {
+						Data[mod][dataType] = require(path)['Battle' + dataType];
+					}
+				} catch (e) {
+					console.log(e.stack);
+				}
 				if (!Data[mod][dataType]) Data[mod][dataType] = {};
 				for (var i in Data.base[dataType]) {
 					if (Data[mod][dataType][i] === null) {
