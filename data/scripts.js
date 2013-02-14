@@ -733,12 +733,6 @@ exports.BattleScripts = {
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
 					break;
 
-				// not useful together
-
-				case 'bellydrum': case 'encore': case 'protect': case 'pursuit': case 'stealthrock': case 'suckerpunch': case 'trick':
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					break;
-
 				// we only need to set up once
 
 				case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup': case 'bellydrum':
@@ -762,11 +756,14 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'knockoff': case 'protect': case 'perishsong': case 'magiccoat': case 'trick': case 'switcheroo':
+				case 'knockoff': case 'perishsong': case 'magiccoat': case 'haze':
 					if (setupType) rejected = true;
 					break;
 				case 'uturn': case 'voltswitch': case 'relicsong':
 					if (setupType) rejected = true;
+					break;
+				case 'pursuit': case 'trick': case 'switcheroo': case 'protect':
+					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 
 				// bit redundant to have both
@@ -808,7 +805,7 @@ exports.BattleScripts = {
 					if (hasMove['closecombat']) rejected = true;
 					break;
 				case 'drainpunch':
-					if (hasMove['closecombat'] || hasMove['hijumpkick']) rejected = true;
+					if (hasMove['closecombat'] || hasMove['hijumpkick'] || hasMove['crosschop']) rejected = true;
 					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
@@ -847,8 +844,8 @@ exports.BattleScripts = {
 				case 'rest':
 					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis']) rejected = true;
 					break;
-				case 'softboiled':
-					if (hasMove['wish']) rejected = true;
+				case 'softboiled': case 'roost':
+					if (hasMove['wish'] || hasMove['recover']) rejected = true;
 					break;
 				case 'perishsong':
 					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
@@ -857,14 +854,17 @@ exports.BattleScripts = {
 					// Whirlwind outclasses Roar because Soundproof
 					if (hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					break;
-				case 'roost':
-					if (hasMove['recover']) rejected = true;
-					break;
 				case 'substitute':
 					if (hasMove['uturn'] || hasMove['voltswitch']) rejected = true;
 					break;
 				case 'fakeout':
 					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
+					break;
+				case 'bellydrum': case 'encore': case 'stealthrock': case 'suckerpunch':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'trickroom':
+					if (hasMove['trick']) rejected = true;
 					break;
 				}
 				if (k===3) {
@@ -979,6 +979,9 @@ exports.BattleScripts = {
 				}
 				if ((abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts') && ability !== 'Quick Feet' && hasMove['facade']) {
 					ability = 'Guts';
+				}
+				if ((abilities[0] === 'Swift Swim' || abilities[1] === 'Swift Swim' || abilities[2] === 'Swift Swim') && hasMove['raindance']) {
+					ability = 'Swift Swim';
 				}
 			}
 
