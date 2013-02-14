@@ -174,7 +174,7 @@ exports.BattleScripts = {
 		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 		if (accuracy !== true && this.random(100) >= accuracy) {
 			if (!spreadHit) this.attrLastMove('[miss]');
-			this.add('-miss', pokemon);
+			this.add('-miss', pokemon, target);
 			return false;
 		}
 
