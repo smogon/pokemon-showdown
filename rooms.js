@@ -674,7 +674,7 @@ function LobbyRoom(roomid) {
 	} catch (e) {} // file doesn't exist [yet]
 
 	// generate and cache the format list
-	{
+	this.formatListText = (function() {
 		var formatListText = '|formats';
 		var curSection = '';
 		for (var i in Tools.data.Formats) {
@@ -693,8 +693,8 @@ function LobbyRoom(roomid) {
 			else if (!format.searchShow) formatListText += ',';
 			if (format.team) formatListText += ',#';
 		}
-		this.formatListText = formatListText;
-	}
+		return formatListText;
+	})();
 
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
 		var update = {room: roomid};
