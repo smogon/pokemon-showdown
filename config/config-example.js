@@ -124,6 +124,9 @@ exports.consoleips = ['127.0.0.1'];
 // being reloaded by the server. This feature might not work on Windows.
 exports.watchconfig = false;
 
+// loglobby - whether to log the lobby.
+exports.loglobby = false;
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"

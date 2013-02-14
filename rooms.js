@@ -665,6 +665,8 @@ function LobbyRoom(roomid) {
 	this.rooms = [];
 	this.numRooms = 0;
 	this.searchers = [];
+	this.logFile = null;
+	this.logFilename = '';
 
 	// Never do any other file IO synchronously
 	// but this is okay to prevent race conditions as we start up PS
@@ -695,6 +697,41 @@ function LobbyRoom(roomid) {
 		}
 		return formatListText;
 	})();
+
+	this.rollLogFile = function(sync) {
+		var mkdir = sync ? (function(path, mode, callback) {
+			try {
+				fs.mkdirSync(path, mode);
+			} catch (e) {}	// directory already exists
+			callback();
+		}) : fs.mkdir;
+		var date = new Date();
+		var path = 'logs/lobby';
+		mkdir(path, '0755', function() {
+			path += '/' + date.format('{yyyy}-{MM}');
+			mkdir(path, '0755', function() {
+				path += '/' + date.format('{yyyy}-{MM}-{dd}') + '.txt';
+				if (path !== selfR.logFilename) {
+					selfR.logFilename = path;
+					if (selfR.logFile) selfR.logFile.destroySoon();
+					selfR.logFile = fs.createWriteStream(path, {flags: 'a'});
+				}
+				var timestamp = +date;
+				date.advance('1 hour').reset('minutes').advance('1 second');
+				setTimeout(selfR.rollLogFile, +date - timestamp);
+			});
+		});
+	};
+	if (config.loglobby) {
+		this.rollLogFile(true);
+		this.logEntries = function(entries) {
+			var timestamp = new Date().format('{HH}:{mm}:{ss} ');
+			selfR.logFile.write(timestamp + entries.join('\n' + timestamp) + '\n');
+		};
+		this.logEntries(['Lobby created']);
+	} else {
+		this.logEntries = function() { };
+	}
 
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
 		var update = {room: roomid};
@@ -851,11 +888,13 @@ function LobbyRoom(roomid) {
 	};
 	this.update = function() {
 		if (selfR.log.length <= selfR.lastUpdate) return;
-		var update = selfR.log.slice(selfR.lastUpdate).join('\n');
+		var entries = selfR.log.slice(selfR.lastUpdate);
+		var update = entries.join('\n');
 		if (selfR.log.length > 100) selfR.log = selfR.log.slice(-100);
 		selfR.lastUpdate = selfR.log.length;
 
 		selfR.send(update);
+		selfR.logEntries(entries);
 	};
 	this.emit = function(type, message, user) {
 		if (type === 'console' || type === 'update') {
