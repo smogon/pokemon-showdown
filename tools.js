@@ -936,7 +936,7 @@ module.exports = (function () {
 	 */
 	Tools.prototype.install = function(battle) {
 		for (var i in this) {
-			if (battle[i]) {
+			if (battle[i] !== undefined) {
 				battle.debug('scripts.js overrode battle.' + i);
 			}
 			battle[i] = this[i];
