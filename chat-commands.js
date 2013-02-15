@@ -1505,6 +1505,45 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'updateserver':
+		if (!user.can('hotpatch')) {
+			emit(socket, 'console', '/updateserver - Access denied.');
+			return false;
+		}
+
+		var logQueue = [];
+		logQueue.push(user.name + ' used /updateserver');
+
+		var exec = require('child_process').exec;
+		exec('git diff-index --quiet HEAD --', function(error) {
+			var cmd = 'git pull --rebase';
+			if (error) {
+				if (error.code === 1) {
+					// The working directory or index have local changes.
+					cmd = 'git stash;' + cmd + ';git stash pop';
+				} else {
+					// The most likely case here is that the user does not have
+					// `git` on the PATH (which would be error.code === 127).
+					user.emit('console', '' + error);
+					logQueue.push('' + error);
+					logQueue.forEach(rooms.lobby.logEntry);
+					return;
+				}
+			}
+			var entry = 'Running `' + cmd + '`';
+			user.emit('console', entry);
+			logQueue.push(entry);
+			exec(cmd, function(error, stdout, stderr) {
+				('' + stdout + stderr).split('\n').forEach(function(s) {
+					user.emit('console', s);
+					logQueue.push(s);
+				});
+				logQueue.forEach(rooms.lobby.logEntry);
+			});
+		});
+		return false;
+		break;
+
 	case 'crashfixed':
 		if (!lockdown) {
 			emit(socket, 'console', '/crashfixed - There is no active crash.');
