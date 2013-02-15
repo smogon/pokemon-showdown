@@ -948,7 +948,7 @@ exports.BattleFormats = {
 				type = template.types[1];
 				if (type) typeTable[type] = (typeTable[type]||0) + 1;
 			}
-			for (var type in typeTable)
+			for (var type in typeTable) {
 				if (typeTable[type] >= team.length) {
 					return;
 				}
