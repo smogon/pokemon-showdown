@@ -1159,6 +1159,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			generation = "rb";
 			genNumber = 1;
 		}
+		else if(template.tier.indexOf("CAP", template.tier.length - 3) !== -1) {
+			generation = "cap";
+		}
 		else {
 			generation = "bw";
 		}
