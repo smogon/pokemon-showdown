@@ -599,8 +599,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/promote - WARNING: This user is offline and could be unregistered. Use /forcepromote if you\'re sure you want to risk it.');
 			return false;
 		}
-		var groupName = config.groups[nextGroup].name || nextGroup || '';
-		logModCommand(room,''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + (groupName.trim() || 'a regular user') + ' by '+user.name+'.', isDemotion);
+		var groupName = (config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
+		logModCommand(room,''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + groupName + ' by '+user.name+'.', isDemotion);
+		if (isDemotion) {
+			emit(socket, 'console', 'You demoted ' + user.name + ' to ' + groupName + '.');
+		}
 		if (targetUser && targetUser.connected) room.send('|N|'+targetUser.getIdentity()+'|'+targetUser.userid);
 		return false;
 		break;
