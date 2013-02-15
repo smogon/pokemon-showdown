@@ -724,13 +724,13 @@ function LobbyRoom(roomid) {
 	};
 	if (config.loglobby) {
 		this.rollLogFile(true);
-		this.logEntries = function(entries) {
+		this.logEntry = function(entry) {
 			var timestamp = new Date().format('{HH}:{mm}:{ss} ');
-			selfR.logFile.write(timestamp + entries.join('\n' + timestamp) + '\n');
+			selfR.logFile.write(timestamp + entry + '\n');
 		};
-		this.logEntries(['Lobby created']);
+		this.logEntry('Lobby created');
 	} else {
-		this.logEntries = function() { };
+		this.logEntry = function() { };
 	}
 
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
@@ -894,7 +894,6 @@ function LobbyRoom(roomid) {
 		selfR.lastUpdate = selfR.log.length;
 
 		selfR.send(update);
-		selfR.logEntries(entries);
 	};
 	this.emit = function(type, message, user) {
 		if (type === 'console' || type === 'update') {
@@ -926,9 +925,12 @@ function LobbyRoom(roomid) {
 	this.updateRooms = function(excludeUser) {
 		// do nothing
 	};
-	this.add = function(message) {
+	this.add = function(message, noUpdate) {
 		selfR.log.push(message);
-		selfR.update();
+		this.logEntry(message);
+		if (!noUpdate) {
+			selfR.update();
+		}
 	};
 	this.addRaw = function(message) {
 		selfR.add('|raw|'+message);
@@ -954,10 +956,12 @@ function LobbyRoom(roomid) {
 
 		selfR.users[user.userid] = user;
 		if (user.named && config.reportjoins) {
-			selfR.log.push('|j|'+user.getIdentity());
+			selfR.add('|j|'+user.getIdentity(), true);
 			selfR.update(user);
 		} else if (user.named) {
-			selfR.log.push('|J|'+user.getIdentity());
+			var entry = '|J|'+user.getIdentity();
+			selfR.send(entry);
+			selfR.logEntry(entry);
 		}
 
 		var initdata = {
@@ -981,12 +985,17 @@ function LobbyRoom(roomid) {
 		selfR.users[user.userid] = user;
 		if (joining && config.reportjoins) {
 			selfR.add('|j|'+user.getIdentity());
-		} else if (joining) {
-			selfR.send('|J|'+user.getIdentity());
-		} else if (!user.named) {
-			selfR.send('|L| '+oldid);
 		} else {
-			selfR.send('|N|'+user.getIdentity()+'|'+oldid);
+			var entry;
+			if (joining) {
+				entry = '|J|' + user.getIdentity();
+			} else if (!user.named) {
+				entry = '|L| ' + oldid;
+			} else {
+				entry = '|N|' + user.getIdentity() + '|' + oldid;
+			}
+			selfR.send(entry);
+			selfR.logEntry(entry);
 		}
 		return user;
 	};
@@ -1103,22 +1112,22 @@ function LobbyRoom(roomid) {
 
 			var room = selfR;
 			var me = user;
-			selfR.log.push('|c|'+user.getIdentity()+'|>> '+cmd);
+			selfR.add('|c|'+user.getIdentity()+'|>> '+cmd, true);
 			if (user.can('console')) {
 				try {
-					selfR.log.push('|c|'+user.getIdentity()+'|<< '+eval(cmd));
+					selfR.add('|c|'+user.getIdentity()+'|<< '+eval(cmd), true);
 				} catch (e) {
-					selfR.log.push('|c|'+user.getIdentity()+'|<< error: '+e.message);
+					selfR.add('|c|'+user.getIdentity()+'|<< error: '+e.message, true);
 					var stack = (""+e.stack).split("\n");
 					for (var i=0; i<stack.length; i++) {
 						user.sendTo(selfR.id, '<< '+stack[i]);
 					}
 				}
 			} else {
-				selfR.log.push('|c|'+user.getIdentity()+'|<< Access denied.');
+				selfR.add('|c|'+user.getIdentity()+'|<< Access denied.', true);
 			}
 		} else if (!user.muted) {
-			selfR.log.push('|c|'+user.getIdentity()+'|'+message);
+			selfR.add('|c|'+user.getIdentity()+'|'+message, true);
 		}
 		selfR.update();
 	};
