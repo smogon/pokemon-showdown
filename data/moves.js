@@ -3152,16 +3152,6 @@ exports.BattleMovedex = {
 						pokemon.moveset[i].disabled = true;
 					}
 				}
-			},
-			onBeforeTurn: function(pokemon) {
-				if (!this.effectData.move) {
-					// ???
-					return;
-				}
-				var decision = this.willMove(pokemon);
-				if (decision && toId(decision.move) !== this.effectData.move) {
-					this.changeDecision(pokemon, {move:this.effectData.move});
-				}
 			}
 		},
 		secondary: false,
