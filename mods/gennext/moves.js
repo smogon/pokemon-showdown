@@ -892,6 +892,24 @@ exports.BattleMovedex = {
 		}
 	},
 	/******************************************************************
+	Surf:
+	- 10% chance of lowering Speed
+
+	Justification:
+	- Hydro Pump outclasses Surf way too often
+	- This is really minor, but maybe it'll affect Sheer Force or
+	  something
+	******************************************************************/
+	surf: {
+		inherit: true,
+		secondary: {
+			chance: 10,
+			boosts: {
+				spe: -1
+			}
+		}
+	},
+	/******************************************************************
 	Special Ghost and Fighting:
 	- buff Ghost, nerf Fighting
 
@@ -1192,8 +1210,9 @@ exports.BattleMovedex = {
 		}
 	},
 	/******************************************************************
-	Moves with 95% accuracy, also Rock Slide and Charge Beam:
-	- buffed to 100% accuracy
+	Moves with accuracy not a multiple of 10%
+	- round up to a multiple of 10%
+	- Rock Slide and Charge Beam also round up to 100%
 
 	Justification:
 	- missing Hydro Pump is losing a gamble, but missing V-create is
@@ -1264,6 +1283,78 @@ exports.BattleMovedex = {
 	snarl: {
 		inherit: true,
 		accuracy: 100
+	},
+	powerwhip: {
+		inherit: true,
+		accuracy: 90
+	},
+	seedflare: {
+		inherit: true,
+		accuracy: 90
+	},
+	meteormash: {
+		inherit: true,
+		accuracy: 90
+	},
+	boltstrike: {
+		inherit: true,
+		accuracy: 90,
+		secondary: {
+			chance: 30,
+			status: 'par'
+		}
+	},
+	blueflare: {
+		inherit: true,
+		accuracy: 90,
+		secondary: {
+			chance: 30,
+			status: 'brn'
+		}
+	},
+	fireblast: {
+		inherit: true,
+		accuracy: 80,
+		secondary: {
+			chance: 20,
+			status: 'brn'
+		}
+	},
+	magmastorm: {
+		inherit: true,
+		accuracy: 80
+	},
+	megakick: {
+		inherit: true,
+		accuracy: 80
+	},
+	poisonpowder: {
+		inherit: true,
+		accuracy: 80
+	},
+	stunspore: {
+		inherit: true,
+		accuracy: 80
+	},
+	sleeppowder: {
+		inherit: true,
+		accuracy: 80
+	},
+	lovelykiss: {
+		inherit: true,
+		accuracy: 80
+	},
+	eggbomb: {
+		inherit: true,
+		accuracy: 80
+	},
+	grasswhistle: {
+		inherit: true,
+		accuracy: 60
+	},
+	sing: {
+		inherit: true,
+		accuracy: 60
 	},
 	/******************************************************************
 	Signature moves and other moves with limited distribution:
@@ -1376,6 +1467,16 @@ exports.BattleMovedex = {
 	acidspray: {
 		inherit: true,
 		affectedByImmunities: false
+	},
+	eggbomb: {
+		inherit: true,
+		accuracy: 80,
+		basePower: 40,
+		willCrit: true
+	},
+	sacredsword: {
+		inherit: true,
+		basePower: 95
 	},
 	triattack: {
 		num: 161,
