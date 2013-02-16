@@ -24,6 +24,9 @@ exports.BattleScripts = {
 		// Galvantula: Zap Cannon
 		this.data.Learnsets.galvantula.learnset.zapcannon = ['5L100'];
 
+		// Virizion: Horn Leech
+		this.data.Learnsets.virizion.learnset.hornleech = ['5L100'];
+
 		// Scolipede, Milotic, Steelix: Coil
 		this.data.Learnsets.milotic.learnset.coil = ['5L100'];
 		this.data.Learnsets.scolipede.learnset.coil = ['5L100'];
