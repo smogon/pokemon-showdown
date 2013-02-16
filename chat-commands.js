@@ -38,6 +38,7 @@ var crypto = require('crypto');
  */
 
 var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
+var updateServerLock = false;
 
 function parseCommandLocal(user, cmd, target, room, socket, message) {
 	if (!room) return;
@@ -1482,6 +1483,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
+		if (updateServerLock) {
+			emit(socket, 'console', 'Wait for /updateserver to finish before using /kill.');
+			return false;
+		}
+
 		process.exit();
 		return false;
 		break;
@@ -1510,6 +1516,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
+		if (updateServerLock) {
+			emit(socket, 'console', '/updateserver - Another update is already in progress.');
+			return false;
+		}
+
+		updateServerLock = true;
+
 		var logQueue = [];
 		logQueue.push(user.name + ' used /updateserver');
 
@@ -1526,6 +1539,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 					user.emit('console', '' + error);
 					logQueue.push('' + error);
 					logQueue.forEach(rooms.lobby.logEntry);
+					updateServerLock = false;
 					return;
 				}
 			}
@@ -1538,6 +1552,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 					logQueue.push(s);
 				});
 				logQueue.forEach(rooms.lobby.logEntry);
+				updateServerLock = false;
 			});
 		});
 		return false;
