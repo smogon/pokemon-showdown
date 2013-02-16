@@ -198,8 +198,13 @@ New mechanic: Intrinsics:
 
 Minor move changes:
 
-- all 95%-accurate moves, as well as Charge Beam and Rock Slide, are now 100%
-  accurate (except Jump Kick, which will be rebalanced later)
+- all moves' accuracy is rounded up to the nearest multiple of 10%
+  (except Jump Kick, which will be rebalanced later)
+
+- Charge Beam and Rock Slide are now 100% accurate
+
+- Blue Flare has 30% burn chance, Fire Blast has 20% burn chance and is
+  80% accurate
 
 - Focus Blast has 50% accuracy (use HP Fighting unless you have No Guard)
 
@@ -276,6 +281,12 @@ Minor move changes:
 
 - Dizzy Punch is 90 base power, 50% confusion chance
 
+- Sacred Sword now has 95 base power
+
+- Egg Bomb is now 40 base power autocrit
+
+- Surf has a 10% chance to lower Speed
+
 Minor learnset changes:
 
 - Azumarill now gets Belly Drum with no incompatibilities
@@ -322,6 +333,11 @@ Minor learnset changes:
   - Samurott: Technician
 
 Minor ability changes:
+
+- Justified now caps base power to 100 against non-Dark foes:
+  Musketeers are recommended to use Sacred Sword over Close Combat and
+  Surf over Hydro Pump, other pokemon are recommended not to use
+  Justified
 
 - Weak Armor reduces incoming move damage by 1/8 of the user's max HP
   and increases the user's Speed for the first hit after switch-in (and
