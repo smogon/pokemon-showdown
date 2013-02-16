@@ -1367,10 +1367,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'timer':
 		target = toId(target);
 		if (room.requestKickInactive) {
-			if (target === 'off') {
+			if (target === 'off' || target === 'stop') {
 				room.stopKickInactive(user, user.can('timer'));
-			} else {
+			} else if (target === 'on' || !target) {
 				room.requestKickInactive(user, user.can('timer'));
+			} else {
+				emit(socket, 'console', "'"+target+"' is not a recognized timer state.");
 			}
 		} else {
 			emit(socket, 'console', 'You can only set the timer from inside a room.');
