@@ -1,10 +1,18 @@
-Showdown Logging
+Pokemon Showdown Logging
 ========================================================================
 
-This is the Showdown log directory.
+This is the Pokemon Showdown log directory.
 
-By default, no battles are logged!
+Pokemon Showdown will log rated battles in each format, but not unrated
+battles. There is currently no config option to log unrated battles.
+Battle logs are placed under a subdirectory for each month (e.g. `2013-02`).
 
-Showdown will only log rated battles in a format if you create a subdirectory
-in here (`logs/`) named with that format's name in lowercase (spaces and
-punctuation stripped).
+Moderator actions are logged to `modlog.txt`.
+
+If the server or the simulator process crashes, a stack trace will
+usually be logged to `errors.txt`.
+
+By default, Pokemon Showdown does not log the lobby. However, you can
+enable logging of the lobby by setting the `loglobby` option in
+`config.js`. If you enable lobby logging, lobby logs are written to
+a subdirectory named `lobby`.
