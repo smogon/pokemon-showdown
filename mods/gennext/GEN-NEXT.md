@@ -304,6 +304,8 @@ Minor learnset changes:
 
 - Galvantula gets Zap Cannon
 
+- Virizion gets Horn Leech
+
 - Milotic, Scolipede, and Steelix get Coil
 
 - Spinda gets Superpower with no incompatibilities
