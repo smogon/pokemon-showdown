@@ -1006,7 +1006,9 @@ function LobbyRoom(roomid) {
 		if (config.reportjoins) {
 			selfR.add('|l|'+user.getIdentity());
 		} else if (user.named) {
-			selfR.send('|L|'+user.getIdentity());
+			var entry = '|L|' + user.getIdentity();
+			selfR.send(entry);
+			selfR.logEntry(entry);
 		}
 	};
 	this.startBattle = function(p1, p2, format, rated, p1team, p2team) {
