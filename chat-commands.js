@@ -1505,7 +1505,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'updateserver':
-		if (!user.can('hotpatch')) {
+		if (!user.can('console')) {
 			emit(socket, 'console', '/updateserver - Access denied.');
 			return false;
 		}
