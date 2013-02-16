@@ -645,7 +645,7 @@ exports.BattleScripts = {
 			hasMove = {};
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
-				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0,
+				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0,
 				recoil: 0, inaccurate: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
@@ -663,6 +663,9 @@ exports.BattleScripts = {
 				}
 				if (move.multihit && move.multihit[1] === 5) {
 					counter['skilllink']++;
+				}
+				if (move.isPunchAttack) {
+					counter['ironfist']++;
 				}
 				if (move.recoil) {
 					counter['recoil']++;
@@ -756,13 +759,13 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'knockoff': case 'perishsong': case 'magiccoat': case 'haze':
+				case 'knockoff': case 'perishsong': case 'magiccoat': case 'spikes':
 					if (setupType) rejected = true;
 					break;
 				case 'uturn': case 'voltswitch': case 'relicsong':
 					if (setupType) rejected = true;
 					break;
-				case 'pursuit': case 'trick': case 'switcheroo': case 'protect':
+				case 'pursuit': case 'trick': case 'switcheroo': case 'protect': case 'haze': case 'stealthrock':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 
@@ -793,13 +796,19 @@ exports.BattleScripts = {
 					if (hasMove['acrobatics']) rejected = true;
 					break;
 				case 'energyball': case 'grassknot': case 'petaldance': case 'solarbeam':
-					if (hasMove['gigadrain']) rejected = true;
+					if (hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
+					break;
+				case 'gigadrain':
+					if (hasMove['leafstorm']) rejected = true;
 					break;
 				case 'weatherball':
 					if (!hasMove['sunnyday']) rejected = true;
 					break;
 				case 'firepunch':
 					if (hasMove['flareblitz']) rejected = true;
+					break;
+				case 'bugbite':
+					if (hasMove['uturn']) rejected = true;
 					break;
 				case 'crosschop': case 'hijumpkick':
 					if (hasMove['closecombat']) rejected = true;
@@ -860,11 +869,22 @@ exports.BattleScripts = {
 				case 'fakeout':
 					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
 					break;
-				case 'bellydrum': case 'encore': case 'stealthrock': case 'suckerpunch':
+				case 'bellydrum': case 'encore': case 'suckerpunch':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
-				case 'trickroom':
+				case 'trickroom': case 'reflect': case 'lightscreen':
 					if (hasMove['trick']) rejected = true;
+					break;
+				case 'rockpolish': case 'agility': case 'autotomize':
+					if (!setupType && !hasMove['batonpass'] && hasMove['thunderwave']) rejected = true;
+					if ((hasMove['stealthrock'] || hasMove['spikes'] || hasMove['toxicspikes']) && !hasMove['batonpass']) rejected = true;
+					break;
+				case 'thunderwave':
+					if (setupType && (hasMove['rockpolish'] || hasMove['agility'])) rejected = true;
+					if (hasMove['trickroom']) rejected = true;
+					break;
+				case 'lavaplume':
+					if (hasMove['willowisp']) rejected = true;
 					break;
 				}
 				if (k===3) {
@@ -943,6 +963,9 @@ exports.BattleScripts = {
 					rejectAbility = true;
 				}
 				if (ability === 'Skill Link' && !counter['skilllink']) {
+					rejectAbility = true;
+				}
+				if (ability === 'Iron Fist' && !counter['ironfist']) {
 					rejectAbility = true;
 				}
 				if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil']) {
