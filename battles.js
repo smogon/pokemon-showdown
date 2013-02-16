@@ -1121,6 +1121,8 @@ function BattleSide(name, battle, n, team) {
 function Battle(roomid, formatarg, rated) {
 	var selfB = this;
 	var format = Tools.getFormat(formatarg);
+	// Merge in scripts and tools.
+	Tools.mod(formatarg).install(this);
 
 	this.log = [];
 	this.turn = 0;
@@ -3176,11 +3178,6 @@ function Battle(roomid, formatarg, rated) {
 
 		selfB = null;
 	};
-
-	// Merge in scripts and tools.
-	// This call is located at the end of the Battle function so that mods
-	// can override properties of Battle by defining functions in scripts.js.
-	Tools.mod(formatarg).install(this);
 } // function Battle
 
 exports.BattlePokemon = BattlePokemon;
