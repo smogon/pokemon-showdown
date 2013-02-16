@@ -458,6 +458,8 @@ module.exports = (function () {
 										!dexEntry.isNonstandard && 
 										// can't breed mons from future gens
 										dexEntry.gen <= parseInt(learned.substr(0,1),10) &&
+										// genderless pokemon can't pass egg moves
+										dexEntry.gender !== 'N' &&
 										// if chainbreeding, only match the original source
 										(!alreadyChecked[dexEntry.speciesid] || fromSelf) &&
 										// the breeding target can learn this move
