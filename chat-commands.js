@@ -598,8 +598,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 		var groupName = (config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
-		logModCommand(room,''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + groupName + ' by '+user.name+'.', isDemotion);
+		var entry = ''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + groupName + ' by '+user.name+'.';
+		logModCommand(room, entry, isDemotion);
 		if (isDemotion) {
+			rooms.lobby.logEntry(entry);
 			emit(socket, 'console', 'You demoted ' + name + ' to ' + groupName + '.');
 			if (targetUser) {
 				targetUser.emit('console', 'You were demoted to ' + groupName + ' by ' + user.name + '.');
@@ -842,7 +844,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		if (targetUser.userid === toUserid(targets[2])) {
-			logModCommand(room,''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : ""));
+			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : "");
+			logModCommand(room, entry, true);
+			rooms.lobby.sendAuth(entry);
+			if (room.id !== 'lobby') {
+				room.add(entry);
+			} else {
+				room.logEntry(entry);
+			}
 			targetUser.resetName();
 			targetUser.emit('nameTaken', {reason: user.name+" has forced you to change your name. "+targets[1]});
 		} else {
@@ -870,7 +879,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		if (targetUser.userid === toUserid(targets[2])) {
-			logModCommand(room, ''+targetUser.name+' was forcibly renamed to '+targets[1]+' by '+user.name+'.');
+			var entry = ''+targetUser.name+' was forcibly renamed to '+targets[1]+' by '+user.name+'.';
+			logModCommand(room, entry, true);
+			rooms.lobby.sendAuth(entry);
+			if (room.id !== 'lobby') {
+				room.add(entry);
+			} else {
+				room.logEntry(entry);
+			}
 			targetUser.forceRename(targets[1]);
 		} else {
 			emit(socket, 'console', "User "+targetUser.name+" is no longer using that name.");
@@ -1458,6 +1474,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			rooms[id].addRaw('<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>');
 			if (rooms[id].requestKickInactive) rooms[id].requestKickInactive(user, true);
 		}
+
+		rooms.lobby.logEntry(user.name + ' used /lockdown');
+
 		return false;
 		break;
 
@@ -1471,6 +1490,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		for (var id in rooms) {
 			rooms[id].addRaw('<div class="broadcast-green"><b>The server shutdown was canceled.</b></div>');
 		}
+
+		rooms.lobby.logEntry(user.name + ' used /endlockdown');
+
 		return false;
 		break;
 
@@ -1489,6 +1511,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'Wait for /updateserver to finish before using /kill.');
 			return false;
 		}
+
+		rooms.lobby.logEntry(user.name + ' used /kill');
 
 		process.exit();
 		return false;
@@ -1573,6 +1597,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		lockdown = false;
 		config.modchat = false;
 		rooms.lobby.addRaw('<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
+		rooms.lobby.logEntry(user.name + ' used /crashfixed');
 		return false;
 		break;
 	case 'crashnoted':
@@ -1589,6 +1614,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		lockdown = false;
 		config.modchat = false;
 		rooms.lobby.addRaw('<div class="broadcast-green"><b>We have logged the crash and are working on fixing it!</b><br />You may resume talking in the lobby and starting new battles.</div>');
+		rooms.lobby.logEntry(user.name + ' used /crashnoted');
 		return false;
 		break;
 	case 'modlog':
