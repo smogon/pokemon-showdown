@@ -510,11 +510,7 @@ exports.BattleFormats = {
 			this.p2.pokemon = this.p2.pokemon.slice(0,4);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
-		validateSet: function(set) {
-			if (!set.level || set.level >= 50) {
-				set.forcedLevel = 50;
-			}
-		},
+		maxForcedLevel: 50,
 		// no restrictions, for serious
 		ruleset: ['Pokemon', 'Team Preview VGC', 'Species Clause', 'Item Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',

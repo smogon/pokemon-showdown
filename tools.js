@@ -716,6 +716,12 @@ module.exports = (function () {
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		var maxLevel = format.maxLevel || 100;
+		var maxForcedLevel = format.maxForcedLevel || 100;
+		if (set.level && set.level >= maxForcedLevel) {
+			set.forcedLevel = maxForcedLevel;
+		} else {
+			set.forcedLevel = format.forcedLevel;
+		}
 		if (!set.level || set.level > maxLevel || set.level == set.forcedLevel) {
 			set.level = maxLevel;
 		}
