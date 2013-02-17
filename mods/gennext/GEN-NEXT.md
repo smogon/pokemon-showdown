@@ -275,7 +275,8 @@ Minor move changes:
 - Acid and Acid Spray aren't affected by immunities
 
 - Protect does not protect Substitutes (with passive healing being more
-  common, Sub/Protect stalling could be overpowered)
+  common, Sub/Protect stalling could be overpowered) and Substitutes increase
+  accuracy against them to 100%
 
 - Double Hit is now 40 base power
 
@@ -286,6 +287,8 @@ Minor move changes:
 - Egg Bomb is now 40 base power autocrit
 
 - Surf has a 10% chance to lower Speed
+
+- Minimize only increases evasion by one stage
 
 Minor learnset changes:
 
@@ -405,6 +408,10 @@ Tier changes:
 
 - OU no longer has any tier-specific bans (DrizzleSwim and Soul Dew are no
   longer banned)
+
+- Moody is no longer banned
+
+- Minimize is no longer banned
 
 - Kyurem, Kyurem-B, Deoxys-D, Latios, and Latias are now Uber (by the time
   NEXT is done, they would presumably have received enough buffs to be Uber)

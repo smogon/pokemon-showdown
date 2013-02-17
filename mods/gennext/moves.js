@@ -107,9 +107,13 @@ exports.BattleMovedex = {
 	/******************************************************************
 	Substitute:
 	- has precedence over Protect
+	- makes all moves hit against it
+	Minimize:
+	- only +1 evasion
 
 	Justification:
 	- Sub/Protect stalling is annoying
+	- Evasion stalling is annoying
 	******************************************************************/
 	substitute: {
 		inherit: true,
@@ -118,6 +122,10 @@ exports.BattleMovedex = {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp/4);
 				delete target.volatiles['partiallytrapped'];
+			},
+			onAccuracyPriority: -100,
+			onAccuracy: function(accuracy, target, source, move) {
+				return 100;
 			},
 			onTryHitPriority: 2,
 			onTryHit: function(target, source, move) {
@@ -160,6 +168,12 @@ exports.BattleMovedex = {
 			onEnd: function(target) {
 				this.add('-end', target, 'Substitute');
 			}
+		}
+	},
+	minimize: {
+		inherit: true,
+		boosts: {
+			evasion: 1
 		}
 	},
 	/******************************************************************
