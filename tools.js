@@ -385,7 +385,7 @@ module.exports = (function () {
 		var level = set.level || 100;
 
 		var limit1 = true;
-		var sketch = true;
+		var sketch = false;
 
 		// This is a pretty complicated algorithm
 
@@ -411,8 +411,10 @@ module.exports = (function () {
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					var lset = template.learnset[move];
-					if (lset) sketch = false;
-					if (!lset) lset = template.learnset['sketch'];
+					if (!lset) {
+						lset = template.learnset['sketch'];
+						sketch = true;
+					}
 					if (typeof lset === 'string') lset = [lset];
 
 					for (var i=0, len=lset.length; i<len; i++) {
