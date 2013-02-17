@@ -214,11 +214,11 @@ exports.BattleScripts = {
 
 		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
 
-		if (!damage && damage !== 0) return false;
-
 		if (move.selfdestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
+
+		if (!damage && damage !== 0) return false;
 
 		if (!move.negateSecondary) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
