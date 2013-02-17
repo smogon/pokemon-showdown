@@ -1439,6 +1439,110 @@ function Battle(roomid, formatarg, rated) {
 		if (typeof returnVal === 'undefined') return true;
 		return returnVal;
 	};
+	/**
+	 * runEvent is the core of Pokemon Showdown's event system.
+	 *
+	 * Basic usage
+	 * ===========
+	 *
+	 *   this.runEvent('Blah')
+	 * will trigger any onBlah global event handlers.
+	 *
+	 *   this.runEvent('Blah', target)
+	 * will additionally trigger any onBlah handlers on the target, onAllyBlah
+	 * handlers on any active pokemon on the target's team, and onFoeBlah
+	 * handlers on any active pokemon on the target's foe's team
+	 *
+	 *   this.runEvent('Blah', target, source)
+	 * will additionally trigger any onSourceBlah handlers on the source
+	 *
+	 *   this.runEvent('Blah', target, source, effect)
+	 * will additionally pass the effect onto all event handlers triggered
+	 *
+	 *   this.runEvent('Blah', target, source, effect, relayVar)
+	 * will additionally pass the relayVar as the first argument along all event
+	 * handlers
+	 *
+	 * You may leave any of these null. For instance, if you have a relayVar but
+	 * no source or effect:
+	 *   this.runEvent('Damage', target, null, null, 50)
+	 *
+	 * Event handlers
+	 * ==============
+	 *
+	 * Items, abilities, statuses, and other effects like SR, confusion, weather,
+	 * or Trick Room can have event handlers. Event handlers are functions that
+	 * can modify what happens during an event.
+	 *
+	 * event handlers are passed:
+	 *   function(target, source, effect)
+	 * although some of these can be blank.
+	 *
+	 * certain events have a relay variable, in which case they're passed:
+	 *   function(relayVar, target, source, effect)
+	 *
+	 * Relay variables are variables that give additional information about the
+	 * event. For instance, the damage event has a relayVar which is the amount
+	 * of damage dealt.
+	 *
+	 * If a relay variable isn't passed to runEvent, there will still be a secret
+	 * relayVar defaulting to `true`, but it won't get passed to any event
+	 * handlers.
+	 *
+	 * After an event handler is run, its return value helps determine what
+	 * happens next:
+	 * 1. If the return value isn't `undefined`, relayVar is set to the return
+	 *    value
+	 * 2. If relayVar is falsy, no more event handlers are run
+	 * 3. Otherwise, if there are more event handlers, the next one is run and
+	 *    we go back to step 1.
+	 * 4. Once all event handlers are run (or one of them results in a falsy
+	 *    relayVar), relayVar is returned by runEvent
+	 *
+	 * As a shortcut, an event handler that isn't a function will be interpreted
+	 * as a function that returns that value.
+	 *
+	 * You can have return values mean whatever you like, but in general, we
+	 * follow the convention that returning `false` or `null` means
+	 * stopping or interrupting the event.
+	 *
+	 * For instance, returning `false` from a TrySetStatus handler means that
+	 * the pokemon doesn't get statused.
+	 *
+	 * If a failed event usually results in a message like "But it failed!"
+	 * or "It had no effect!", returning `null` will suppress that message and
+	 * returning `false` will display it. Returning `null` is useful if your
+	 * event handler already gave its own custom failure message.
+	 *
+	 * Returning `undefined` means "don't change anything" or "keep going".
+	 * A function that does nothing but return `undefined` is the equivalent
+	 * of not having an event handler at all.
+	 *
+	 * Returning a value means that that value is the new `relayVar`. For
+	 * instance, if a Damage event handler returns 50, the damage event
+	 * will deal 50 damage instead of whatever it was going to deal before.
+	 *
+	 * Useful values
+	 * =============
+	 *
+	 * In addition to all the methods and attributes of Tools, Battle, and
+	 * Scripts, event handlers have some additional values they can access:
+	 *
+	 * this.effect:
+	 *   the Effect having the event handler
+	 * this.effectData:
+	 *   the data store associated with the above Effect. This is a plain Object
+	 *   and you can use it to store data for later event handlers.
+	 * this.effectData.target:
+	 *   the Pokemon, Side, or Battle that the event handler's effect was
+	 *   attached to.
+	 * this.event.id:
+	 *   the event ID
+	 * this.event.target, this.event.source, this.event.effect:
+	 *   the target, source, and effect of the event. These are the same
+	 *   variables that are passed as arguments to the event handler, but
+	 *   they're useful for functions called by the event handler.
+	 */
 	this.runEvent = function(eventid, target, source, effect, relayVar) {
 		if (selfB.eventDepth >= 5) {
 			// oh fuck
@@ -1527,6 +1631,7 @@ function Battle(roomid, formatarg, rated) {
 			} else {
 				returnVal = statuses[i].callback;
 			}
+
 			if (typeof returnVal !== 'undefined') {
 				relayVar = returnVal;
 				if (!relayVar) return relayVar;
@@ -2223,7 +2328,7 @@ function Battle(roomid, formatarg, rated) {
 			basePower = move.basePowerCallback.call(selfB, pokemon, target, move);
 		}
 		if (!basePower) {
-			if (basePower === 0) return; // returning undefined means dealing no damage
+			if (basePower === 0) return; // returning undefined means not dealing damage
 			return basePower;
 		}
 		basePower = clampIntRange(basePower, 1);

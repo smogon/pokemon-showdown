@@ -316,7 +316,25 @@ exports.BattleScripts = {
 
 		if (target) {
 			var didSomething = false;
+
 			damage = this.getDamage(pokemon, target, moveData);
+
+			// getDamage has several possible return values:
+			//
+			//   a number:
+			//     means that much damage is dealt (0 damage still counts as dealing
+			//     damage for the purposes of things like Static)
+			//   false:
+			//     gives error message: "But it failed!" and move ends
+			//   null:
+			//     the move ends, with no message (usually, a custom fail message
+			//     was already output by an event handler)
+			//   undefined:
+			//     means no damage is dealt and the move continues
+			//
+			// basically, these values have the same meanings as they do for event
+			// handlers.
+
 			if ((damage || damage === 0) && !target.fainted) {
 				if (move.noFaint && damage >= target.hp) {
 					damage = target.hp - 1;
