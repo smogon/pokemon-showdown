@@ -213,6 +213,7 @@ exports.groups = {
 		timer: true,
 		alts: '%u',
 		bypassblocks: 'u%@&~',
+		receiveauthmessages: true,
 		rank: 2
 	},
 	'+': {
