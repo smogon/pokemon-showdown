@@ -170,8 +170,11 @@ exports.BattleScripts = {
 				if (pokemon.level > target.level) accuracy += (pokemon.level - target.level);
 			}
 		}
-		if (move.alwaysHit) accuracy = true; // bypasses ohko accuracy modifiers
-		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+		if (move.alwaysHit) {
+			accuracy = true; // bypasses ohko accuracy modifiers
+		} else {
+			accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+		}
 		if (accuracy !== true && this.random(100) >= accuracy) {
 			if (!spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon, target);
