@@ -924,7 +924,7 @@ function LobbyRoom(roomid) {
 	};
 	this.sendAuth = function(message) {
 		for (var i in selfR.users) {
-			user = selfR.users[i];
+			var user = selfR.users[i];
 			if (user.connected && user.can('receiveauthmessages')) {
 				user.sendTo(selfR, message);
 			}
