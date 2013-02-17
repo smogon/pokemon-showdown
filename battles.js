@@ -2222,7 +2222,10 @@ function Battle(roomid, formatarg, rated) {
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(selfB, pokemon, target, move);
 		}
-		if (!basePower) return basePower;
+		if (!basePower) {
+			if (basePower === 0) return; // returning undefined means dealing no damage
+			return basePower;
+		}
 		basePower = clampIntRange(basePower, 1);
 
 		move.critRatio = clampIntRange(move.critRatio, 0, 5);
