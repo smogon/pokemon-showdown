@@ -10537,7 +10537,7 @@ exports.BattleMovedex = {
 			onFoeBeforeMove: function(attacker, defender, move) {
 				if (attacker === this.effectData.source) {
 					this.debug('Sky drop nullifying.');
-					this.add('-message', '(Sky Drop prevented a pokemon from moving.)');
+					this.add('-message', '(Sky Drop prevented a Pokemon from moving.)');
 					return null;
 				}
 			},
