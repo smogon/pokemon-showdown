@@ -1536,6 +1536,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'refreshpage':
+		if (!user.can('hotpatch')) {
+			emit(socket, 'console', '/refreshpage - Access denied.');
+			return false;
+		}
+		rooms.lobby.send('|refresh|');
+		rooms.lobby.logEntry(user.name + ' used /refreshpage');
+		return false;
+		break;
+
 	case 'updateserver':
 		if (!user.can('console')) {
 			emit(socket, 'console', '/updateserver - Access denied.');
