@@ -30,6 +30,14 @@ module.exports = (function () {
 				} catch (e) {}
 				if (!Data[mod][dataType]) Data[mod][dataType] = {};
 			}, this);
+			try {
+				var configFormats = require('./config/formats.js').Formats;
+				for (var i=0; i<configFormats.length; i++) {
+					var id = toId(configFormats[i].name);
+					configFormats[i].effectType = 'Format';
+					Data[mod].Formats[id] = configFormats[i];
+				}
+			} catch (e) {}
 		} else {
 			dataTypes.forEach(function(dataType) {
 				try {
