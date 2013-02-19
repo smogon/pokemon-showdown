@@ -914,8 +914,11 @@ function BattlePokemon(set, side) {
 		return true;
 	};
 	this.hpPercent = function(d) {
-		//return Math.floor(Math.floor(d*48/selfP.maxhp + 0.5)*100/48);
-		return Math.floor(d*100/selfP.maxhp + 0.5);
+		//var percent = Math.floor(d*100/selfP.maxhp + 0.5);
+		var pixels = Math.floor(d*48/selfP.maxhp + 0.5) || 1;
+		if (d <= 0) pixels = 0;
+		if (pixels >= 48 && d < selfP.maxhp) pixels = 47;
+		return Math.floor(pixels*100/48);
 	};
 	this.getHealth = function(realHp) {
 		if (selfP.fainted) return ' (0 fnt)';
@@ -924,9 +927,13 @@ function BattlePokemon(set, side) {
 		if (realHp) {
 			hpstring = ''+selfP.hp+'/'+selfP.maxhp;
 		} else {
-			var hpp = Math.floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
-			if (!selfP.hp) hpp = 0;
-			hpstring = ''+hpp+'/100';
+			//var hpp = Math.floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
+			//if (!selfP.hp) hpp = 0;
+			//hpstring = ''+hpp+'/100';
+			var pixels = Math.floor(selfP.hp*48/selfP.maxhp + 0.5) || 1;
+			if (selfP.hp <= 0) pixels = 0;
+			if (pixels >= 48 && selfP.hp < selfP.maxhp) pixels = 47;
+			hpstring = ''+pixels+'/48';
 		}
 		var status = '';
 		if (selfP.status) status = ' '+selfP.status;
