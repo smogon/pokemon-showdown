@@ -4672,17 +4672,37 @@ exports.BattleMovedex = {
 			onStart: function() {
 				this.add('-fieldstart', 'move: Gravity');
 			},
+			onAccuracy: function(accuracy) {
+				if (typeof accuracy !== 'number') return;
+				return accuracy * 5/3;
+			},
 			onModifyPokemonPriority: 100,
 			onModifyPokemon: function(pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
-				pokemon.boosts.evasion -= 2;
 				var disabledMoves = {bounce:1, fly:1, hijumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
 				for (var m in disabledMoves) {
 					pokemon.disabledMoves[m] = true;
 				}
-				if (pokemon.volatiles['bounce'] || pokemon.volatiles['fly'] || pokemon.volatiles['skydrop']) {
-					pokemon.removeVolatile('twoturnmove');
-					this.add('-activate', pokemon, 'Gravity');
+				var applies = false;
+				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
+					applies = true;
+					pokemon.movedThisTurn = true;
+				}
+				if (pokemon.volatiles['magnetrise']) {
+					applies = true;
+					delete pokemon.volatiles['magnetrise'];
+				}
+				if (pokemon.volatiles['telekinesis']) {
+					applies = true;
+					delete pokemon.volatiles['telekinesis'];
+				}
+				if (applies) this.add('-activate', pokemon, 'Gravity');
+			},
+			onBeforeMove: function(pokemon, target, move) {
+				var disabledMoves = {bounce:1, fly:1, hijumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
+				if (disabledMoves[move.id]) {
+					this.add('cant', pokemon, 'move: Gravity', move);
+					return false;
 				}
 			},
 			onResidualOrder: 22,
@@ -10769,14 +10789,26 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				var applies = false;
 				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.ability === 'levitate') applies = true;
-				if (pokemon.removeVolatile('telekinesis')) applies = true;
-				if (pokemon.removeVolatile('magnetrise')) applies = true;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
 					pokemon.movedThisTurn = true;
 				}
+				if (pokemon.volatiles['magnetrise']) {
+					applies = true;
+					delete pokemon.volatiles['magnetrise'];
+				}
+				if (pokemon.volatiles['telekinesis']) {
+					applies = true;
+					delete pokemon.volatiles['telekinesis'];
+				}
 				if (!applies) return false;
 				this.add('-start', pokemon, 'Smack Down');
+			},
+			onRestart: function(pokemon) {
+				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
+					pokemon.movedThisTurn = true;
+					this.add('-start', pokemon, 'Smack Down');
+				}
 			},
 			onModifyPokemonPriority: 100,
 			onModifyPokemon: function(pokemon) {
