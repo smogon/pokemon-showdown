@@ -10,6 +10,7 @@ exports.BattleAliases = {
 	"castformfire": "Castform-Sunny",
 	"cherrims": "Cherrim-Sunshine",
 	"cherrimsunny": "Cherrim-Sunshine",
+	"darmanitanz": "Darmanitan-Zen",
 	"darmanitanzenmode": "Darmanitan-Zen",
 	"deoxysa": "Deoxys-Attack",
 	"deoxysd": "Deoxys-Defense",
