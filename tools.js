@@ -77,12 +77,6 @@ module.exports = (function () {
 		}
 		this.data = Data[mod];
 
-		// Scripts are Tools specific to a mod; they add to or overwrite base tools
-		// Many Scripts are not meant to be run from Tools directly; rather, they're meant
-		// to be copied into Battle.js using Tools.install and run from there
-		for (var i in this.data.Scripts) {
-			this[i] = this.data.Scripts[i];
-		}
 		if (this.init) this.init();
 	}
 
@@ -964,7 +958,18 @@ module.exports = (function () {
 	 */
 	Tools.prototype.install = function(battle) {
 		for (var i in this) {
-			battle[i] = this[i];
+			if (battle[i] === undefined) battle[i] = this[i];
+		}
+	};
+	/**
+	 * Install our data.Scripts functions into the battle object
+	 * TODO: merge this back into Tools.prototype.install once
+	 * we refactor battles.js to use prototypes
+	 */
+	Tools.prototype.installScripts = function(battle) {
+		// Scripts override the default Battle prototype for a mod
+		for (var i in this.data.Scripts) {
+			battle[i] = this.data.Scripts[i];
 		}
 	};
 
