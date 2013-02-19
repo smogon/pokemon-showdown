@@ -26,18 +26,28 @@ module.exports = (function () {
 		if (mod === 'base') {
 			dataTypes.forEach(function(dataType) {
 				try {
-					Data[mod][dataType] = require('./data/'+dataFiles[dataType])['Battle'+dataType];
-				} catch (e) {}
+					var path = './data/' + dataFiles[dataType];
+					if (fs.existsSync(path)) {
+						Data[mod][dataType] = require(path)['Battle' + dataType];
+					}
+				} catch (e) {
+					console.log(e.stack);
+				}
 				if (!Data[mod][dataType]) Data[mod][dataType] = {};
 			}, this);
 			try {
-				var configFormats = require('./config/formats.js').Formats;
-				for (var i=0; i<configFormats.length; i++) {
-					var id = toId(configFormats[i].name);
-					configFormats[i].effectType = 'Format';
-					Data[mod].Formats[id] = configFormats[i];
+				var path = './config/formats.js';
+				if (fs.existsSync(path)) {
+					var configFormats = require(path).Formats;
+					for (var i=0; i<configFormats.length; i++) {
+						var id = toId(configFormats[i].name);
+						configFormats[i].effectType = 'Format';
+						Data[mod].Formats[id] = configFormats[i];
+					}
 				}
-			} catch (e) {}
+			} catch (e) {
+				console.log(e.stack);
+			}
 		} else {
 			dataTypes.forEach(function(dataType) {
 				try {
