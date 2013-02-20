@@ -473,15 +473,17 @@ module.exports = (function () {
 										// can't breed mons from future gens
 										dexEntry.gen <= parseInt(learned.substr(0,1),10) &&
 										// genderless pokemon can't pass egg moves
-										dexEntry.gender !== 'N' &&
-										// if chainbreeding, only match the original source
-										(!alreadyChecked[dexEntry.speciesid] || fromSelf) &&
-										// the breeding target can learn this move
-										dexEntry.learnset && (dexEntry.learnset[move]||dexEntry.learnset['sketch'])) {
-										if (dexEntry.eggGroups.intersect(eggGroups).length) {
-											// we can breed with it
-											atLeastOne = true;
-											sources.push(learned+dexEntry.id);
+										dexEntry.gender !== 'N') {
+										if (
+											// chainbreeding
+											fromSelf ||
+											// otherwise parent must be able to learn the move
+											!alreadyChecked[dexEntry.speciesid] && dexEntry.learnset && (dexEntry.learnset[move]||dexEntry.learnset['sketch'])) {
+											if (dexEntry.eggGroups.intersect(eggGroups).length) {
+												// we can breed with it
+												atLeastOne = true;
+												sources.push(learned+dexEntry.id);
+											}
 										}
 									}
 								}
