@@ -1514,7 +1514,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		rooms.lobby.logEntry(user.name + ' used /kill');
 
-		process.exit();
+		setTimeout(function() {
+			process.exit();
+		}, 250);
 		return false;
 		break;
 
