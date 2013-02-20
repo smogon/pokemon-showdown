@@ -205,6 +205,7 @@ exports.BattleScripts = {
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage = (moveDamage || 0);
+				this.eachEvent('Update');
 			}
 			if (i === 0) return true;
 			this.add('-hitcount', target, i);
