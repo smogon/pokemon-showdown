@@ -77,6 +77,12 @@ module.exports = (function () {
 		}
 		this.data = Data[mod];
 
+		// Scripts can override Tools
+		// Be careful! Some Scripts are meant to be run only from inside a
+		// Battle!
+		for (var i in this.data.Scripts) {
+			this[i] = this.data.Scripts[i];
+		}
 		if (this.init) this.init();
 	}
 
