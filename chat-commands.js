@@ -1512,11 +1512,17 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		rooms.lobby.logEntry(user.name + ' used /kill');
+		rooms.lobby.destroyLog(function() {
+			rooms.lobby.logEntry(user.name + ' used /kill');
+		}, function() {
+			process.exit();
+		});
 
+		// Just in the case the above never terminates, kill the process
+		// after 10 seconds.
 		setTimeout(function() {
 			process.exit();
-		}, 250);
+		}, 10000);
 		return false;
 		break;
 

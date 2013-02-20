@@ -667,6 +667,7 @@ function LobbyRoom(roomid) {
 	this.searchers = [];
 	this.logFile = null;
 	this.logFilename = '';
+	this.destroyingLog = false;
 
 	// Never do any other file IO synchronously
 	// but this is okay to prevent race conditions as we start up PS
@@ -738,6 +739,7 @@ function LobbyRoom(roomid) {
 		mkdir(path, '0755', function() {
 			path += '/' + date.format('{yyyy}-{MM}');
 			mkdir(path, '0755', function() {
+				if (selfR.destroyingLog) return;
 				path += '/' + date.format('{yyyy}-{MM}-{dd}') + '.txt';
 				if (path !== selfR.logFilename) {
 					selfR.logFilename = path;
@@ -749,6 +751,17 @@ function LobbyRoom(roomid) {
 				setTimeout(selfR.rollLogFile, +date - timestamp);
 			});
 		});
+	};
+	this.destroyLog = function(initialCallback, finalCallback) {
+		selfR.destroyingLog = true;
+		initialCallback();
+		if (selfR.logFile) {
+			selfR.logEntry = function() { };
+			selfR.logFile.on('close', finalCallback);
+			selfR.logFile.destroySoon();
+		} else {
+			finalCallback();
+		}
 	};
 	if (config.loglobby) {
 		this.rollLogFile(true);
