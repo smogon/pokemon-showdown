@@ -763,6 +763,27 @@ function LobbyRoom(roomid) {
 			finalCallback();
 		}
 	};
+	this.logUserStats = function() {
+		var total = 0;
+		var guests = 0;
+		var groups = {};
+		config.groupsranking.forEach(function(group) {
+			groups[group] = 0;
+		});
+		for (var i in selfR.users) {
+			var user = selfR.users[i];
+			++total;
+			if (!user.named) {
+				++guests;
+			}
+			++groups[user.group];
+		}
+		var entry = '|userstats|total:' + total + '|guests:' + guests;
+		for (var i in groups) {
+			entry += '|' + i + ':' + groups[i];
+		}
+		selfR.logEntry(entry);
+	};
 	if (config.loglobby) {
 		this.rollLogFile(true);
 		this.logEntry = function(entry) {
@@ -770,6 +791,9 @@ function LobbyRoom(roomid) {
 			selfR.logFile.write(timestamp + entry + '\n');
 		};
 		this.logEntry('Lobby created');
+		if (config.loguserstats) {
+			setInterval(this.logUserStats, config.loguserstats);
+		}
 	} else {
 		this.logEntry = function() { };
 	}

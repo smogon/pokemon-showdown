@@ -127,6 +127,10 @@ exports.watchconfig = false;
 // loglobby - whether to log the lobby.
 exports.loglobby = false;
 
+// loguserstats - how often (in milliseconds) to write user stats to the
+// lobby log. This has no effect if `loglobby` is disabled.
+exports.loguserstats = 1000*60*10; // 10 minutes
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
