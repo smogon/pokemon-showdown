@@ -440,6 +440,8 @@ module.exports = (function () {
 						if (learned.substr(0,2) in {'4L':1,'5L':1}) {
 							// gen 4 or 5 level-up moves
 							if (level >= parseInt(learned.substr(2),10)) {
+								// Chatter and Struggle cannot be sketched
+								if (sketch && (move === 'chatter' || move === 'struggle')) return true;
 								// we're past the required level to learn it
 								return false;
 							}
