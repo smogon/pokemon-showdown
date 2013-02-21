@@ -472,7 +472,7 @@ exports.BattleScripts = {
 			while (true) {
 				var x=Math.floor(Math.random()*649)+1;
 				if (teamdexno.indexOf(x) === -1) {
-					teamdexno.push(x)
+					teamdexno.push(x);
 					break;
 				}
 			}
@@ -586,12 +586,11 @@ exports.BattleScripts = {
 			var moves;
 			var pool = ['struggle'];
 			if (poke === 'Smeargle') {
-				pool = Object.keys(this.data.Movedex)
-			} else {
-				if (template.learnset) pool = Object.keys(template.learnset);
+				pool = Object.keys(this.data.Movedex).exclude('struggle', 'chatter');
+			} else if (template.learnset) {
+				pool = Object.keys(template.learnset);
 			}
-			if (template.learnset) pool = Object.keys(template.learnset);
-			if (pool.length < 5) {
+			if (pool.length <= 4) {
 				moves = pool;
 			} else {
 				moves=pool.sample(4);
