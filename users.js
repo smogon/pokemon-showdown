@@ -308,7 +308,6 @@ var User = (function () {
 		for (var i in this.roomCount) {
 			Rooms.get(i,'lobby').rename(this, oldid, joining);
 		}
-		rooms.lobby.usersChanged = true;
 		return true;
 	};
 	User.prototype.resetName = function() {
