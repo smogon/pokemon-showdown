@@ -735,16 +735,29 @@ function LobbyRoom(roomid) {
 			callback();
 		}) : fs.mkdir;
 		var date = new Date();
-		var path = 'logs/lobby';
-		mkdir(path, '0755', function() {
-			path += '/' + date.format('{yyyy}-{MM}');
-			mkdir(path, '0755', function() {
+		var basepath = 'logs/lobby/';
+		mkdir(basepath, '0755', function() {
+			var path = date.format('{yyyy}-{MM}');
+			mkdir(basepath + path, '0755', function() {
 				if (selfR.destroyingLog) return;
 				path += '/' + date.format('{yyyy}-{MM}-{dd}') + '.txt';
 				if (path !== selfR.logFilename) {
 					selfR.logFilename = path;
 					if (selfR.logFile) selfR.logFile.destroySoon();
-					selfR.logFile = fs.createWriteStream(path, {flags: 'a'});
+					selfR.logFile = fs.createWriteStream(basepath + path, {flags: 'a'});
+					// Create a symlink to today's lobby log.
+					// These operations need to be synchronous, but it's okay
+					// because this code is only executed once every 24 hours.
+					var link0 = basepath + 'today.txt.0';
+					try {
+						fs.unlinkSync(link0);
+					} catch (e) {} // file doesn't exist
+					try {
+						fs.symlinkSync(path, link0); // `basepath` intentionally not included
+						try {
+							fs.renameSync(link0, basepath + 'today.txt');
+						} catch (e) {} // OS doesn't support atomic rename
+					} catch (e) {} // OS doesn't support symlinks
 				}
 				var timestamp = +date;
 				date.advance('1 hour').reset('minutes').advance('1 second');
