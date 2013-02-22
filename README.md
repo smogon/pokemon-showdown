@@ -91,10 +91,10 @@ Developers
 
 - Guangcong Luo [Zarel]
 - Bill Meltsner [bmelts]
+- Cathy J. Fitzpatrick [cathyjf]
 
 Contributors
 
 - [The Immortal]
 - [Marty-D]
 - Cody Thompson [Rising_Dusk]
-- Cathy J. Fitzpatrick
