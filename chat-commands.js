@@ -169,8 +169,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 		}
 		if (removed) {
-			if (Users.get(target)) {
-				rooms.lobby.usersChanged = true;
+			var targetUser = Users.get(target);
+			if (targetUser) {
+				rooms.lobby.sendIdentity(targetUser);
 			}
 			logModCommand(room,user.name+" unlocked the name of "+target+".");
 		} else {
@@ -497,12 +498,15 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 
 		targetUser.muted = true;
+		rooms.lobby.sendIdentity(targetUser);
 		for (var i=0; i<alts.length; i++) {
 			var targetAlt = Users.get(alts[i]);
-			if (targetAlt) targetAlt.muted = true;
+			if (targetAlt) {
+				targetAlt.muted = true;
+				rooms.lobby.sendIdentity(targetAlt);
+			}
 		}
 
-		rooms.lobby.usersChanged = true;
 		return false;
 		break;
 
@@ -523,13 +527,16 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 
 		targetUser.muted = true;
+		rooms.lobby.sendIdentity(targetUser);
 		mutedIps[targetUser.ip] = targetUser.userid;
 		for (var i=0; i<alts.length; i++) {
 			var targetAlt = Users.get(alts[i]);
-			if (targetAlt) targetAlt.muted = true;
+			if (targetAlt) {
+				targetAlt.muted = true;
+				rooms.lobby.sendIdentity(targetAlt);
+			}
 		}
 
-		rooms.lobby.usersChanged = true;
 		return false;
 		break;
 
@@ -561,7 +568,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		targetUser.muted = false;
-		rooms.lobby.usersChanged = true;
+		rooms.lobby.sendIdentity(targetUser);
 		logModCommand(room,''+targetUser.name+' was unmuted by '+user.name+'.');
 		return false;
 		break;
@@ -607,7 +614,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				targetUser.emit('console', 'You were demoted to ' + groupName + ' by ' + user.name + '.');
 			}
 		}
-		if (targetUser && targetUser.connected) room.send('|N|'+targetUser.getIdentity()+'|'+targetUser.userid);
+		rooms.lobby.sendIdentity(targetUser);
 		return false;
 		break;
 

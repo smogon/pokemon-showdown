@@ -987,6 +987,11 @@ function LobbyRoom(roomid) {
 			}
 		}
 	};
+	this.sendIdentity = function(user) {
+		if (user && user.connected) {
+			selfR.send('|N|' + user.getIdentity() + '|' + user.userid);
+		}
+	};
 	this.sendAuth = function(message) {
 		for (var i in selfR.users) {
 			var user = selfR.users[i];
