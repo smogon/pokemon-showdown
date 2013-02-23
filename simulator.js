@@ -1,15 +1,28 @@
-var Battles = require('child_process').fork('battles.js');
 
 var simulators = {};
-
-Battles.on('message', function(message) {
-	var lines = message.split("\n");
-	var sim = simulators[lines[0]];
-	if (sim) {
-		//console.log('MESSAGE RECV: "'+message+'"');
-		sim.receive(lines);
+var processes = (function(fork, num) {
+	var ret = [];
+	for (var i = 0; i < num; ++i) {
+		ret.push((function() {
+			var process = fork('battles.js');
+			process.on('message', function(message) {
+				var lines = message.split('\n');
+				var sim = simulators[lines[0]];
+				if (sim) {
+					sim.receive(lines);
+				}
+			});
+			return {
+				load: 0,
+				send: function(data) {
+					process.send(data);
+				}
+			};
+		})());
+		console.log('NEW SIMULATOR PROCESS: ' + i);
 	}
-});
+	return ret;
+})(require('child_process').fork, config.simulatorprocesses || 1);
 
 var slice = Array.prototype.slice;
 
@@ -27,6 +40,17 @@ var Simulator = (function(){
 		this.playerids = [null, null];
 		this.playerTable = {};
 		this.requests = {};
+
+		this.process = (function() {
+			var process = processes[0];
+			for (var i = 1; i < processes.length; ++i) {
+				if (processes[i].load < process.load) {
+					process = processes[i];
+				}
+			}
+			++process.load;
+			return process;
+		})();
 
 		simulators[id] = this;
 
@@ -54,7 +78,7 @@ var Simulator = (function(){
 		return Tools.getFormat(this.format);
 	};
 	Simulator.prototype.send = function() {
-		Battles.send(''+this.id+'|'+slice.call(arguments).join('|'));
+		this.process.send(''+this.id+'|'+slice.call(arguments).join('|'));
 	};
 	Simulator.prototype.sendFor = function(user, action) {
 		var player = this.playerTable[toUserid(user)];
@@ -231,6 +255,7 @@ var Simulator = (function(){
 
 		this.players = null;
 		this.room = null;
+		--this.process.load;
 		delete simulators[this.id];
 	};
 
@@ -239,13 +264,18 @@ var Simulator = (function(){
 
 exports.Simulator = Simulator;
 exports.simulators = simulators;
+// `processes` is not used outside this file, but it might be useful to be
+// able to access it using the dev console.
+exports.processes = processes;
 
 exports.create = function(id, format, rated, room) {
 	if (simulators[id]) return simulators[id];
 	return new Simulator(id, format, rated, room);
 }
 
+// Evaluate code in every simulator process.
 exports.eval = function(code) {
-	// evaluate code in a simulator process.
-	Battles.send('|eval|'+code);
+	processes.forEach(function(process) {
+		process.send('|eval|' + code);
+	});
 }

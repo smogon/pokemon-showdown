@@ -131,6 +131,11 @@ exports.loglobby = false;
 // lobby log. This has no effect if `loglobby` is disabled.
 exports.loguserstats = 1000*60*10; // 10 minutes
 
+// simulatorprocesses - the number of processes to use for handling battles
+// You should leave this at 1 unless your server has a very large amount of
+// traffic (i.e. hundreds of concurrent battles).
+exports.simulatorprocesses = 1;
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
