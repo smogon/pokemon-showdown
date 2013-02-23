@@ -538,6 +538,9 @@ var User = (function () {
 
 				user.group = group;
 				if (avatar) user.avatar = avatar;
+				if (!user.authenticated && (this.ip !== user.ip)) {
+					user.muted = this.muted;
+				}
 				user.authenticated = authenticated;
 				user.ip = this.ip;
 
