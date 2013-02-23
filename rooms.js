@@ -813,12 +813,18 @@ function LobbyRoom(roomid) {
 
 	(function() {
 		const REPORT_USER_STATS_INTERVAL = 1000 * 60 * 10;
-		setInterval(function() {
+		var reportUserStats = function() {
+			var users = 0;
+			for (var i in selfR.users) {
+				++users;
+			}
 			LoginServer.request('updateuserstats', {
-				date: +date,
-				users: total
+				date: +new Date(),
+				users: users
 			}, function() {});
-		}, REPORT_USER_STATS_INTERVAL);
+		};
+		setInterval(reportUserStats, REPORT_USER_STATS_INTERVAL);
+		reportUserStats();
 	})();
 
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
