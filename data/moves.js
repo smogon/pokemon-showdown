@@ -3074,6 +3074,7 @@ exports.BattleMovedex = {
 			onEnd: function(pokemon) {
 				this.add('-end', pokemon, 'Embargo');
 			},
+			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {
 				pokemon.ignore['Item'] = true;
 			}
@@ -6891,7 +6892,7 @@ exports.BattleMovedex = {
 		name: "Magic Room",
 		pp: 10,
 		priority: -7,
-		onFieldHit: function(target, source, effect) {
+		onHitField: function(target, source, effect) {
 			if (this.pseudoWeather['magicroom']) {
 				this.removePseudoWeather('magicroom', source, effect, '[of] '+source);
 			} else {
@@ -6910,7 +6911,7 @@ exports.BattleMovedex = {
 			onStart: function(target, source) {
 				this.add('-fieldstart', 'move: Magic Room', '[of] '+source);
 			},
-			onModifyPokemonPriority: -100,
+			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {
 				pokemon.ignore['Item'] = true;
 			},
@@ -6920,7 +6921,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "all",
 		type: "Psychic"
 	},
 	"magicalleaf": {

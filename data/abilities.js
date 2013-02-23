@@ -1034,6 +1034,7 @@ exports.BattleAbilities = {
 	"klutz": {
 		desc: "This Pokemon ignores both the positive and negative effects of its held item, other than the speed-halving and EV-enhancing effects of Macho Brace, Power Anklet, Power Band, Power Belt, Power Bracer, Power Lens, and Power Weight. Fling cannot be used.",
 		shortDesc: "This Pokemon's held item has no effect, except Macho Brace. Fling cannot be used.",
+		onModifyPokemonPriority: 1,
 		onModifyPokemon: function(pokemon) {
 			pokemon.ignore['Item'] = true;
 		},

@@ -222,11 +222,11 @@ exports.BattleStatuses = {
 			if (!this.effectData.move) return false;
 		},
 		onModifyPokemon: function(pokemon) {
-			if (!pokemon.hasMove(this.effectData.move)) {
+			if (!pokemon.getItem().isChoice || !pokemon.hasMove(this.effectData.move)) {
+				pokemon.removeVolatile('choicelock');
 				return;
 			}
-			if (!pokemon.getItem().isChoice) {
-				pokemon.removeVolatile('choicelock');
+			if (pokemon.ignore['Item']) {
 				return;
 			}
 			var moves = pokemon.moveset;
