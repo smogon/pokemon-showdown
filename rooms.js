@@ -801,7 +801,7 @@ function LobbyRoom(roomid) {
 			LoginServer.request('updateuserstats', {
 				date: +date,
 				users: total
-			});
+			}, function() {});
 		}
 	};
 	if (config.loglobby) {
