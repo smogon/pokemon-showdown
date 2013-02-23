@@ -795,28 +795,31 @@ function LobbyRoom(roomid) {
 		for (var i in groups) {
 			entry += '|' + i + ':' + groups[i];
 		}
-		var date = new Date();
-		selfR.logEntry(entry, date);
-		if (config.reportuserstats) { // undocumented for now...
-			LoginServer.request('updateuserstats', {
-				date: +date,
-				users: total
-			}, function() {});
-		}
+		selfR.logEntry(entry);
 	};
 	if (config.loglobby) {
 		this.rollLogFile(true);
 		this.logEntry = function(entry, date) {
-			var timestamp = (date || new Date()).format('{HH}:{mm}:{ss} ');
+			var timestamp = (new Date()).format('{HH}:{mm}:{ss} ');
 			selfR.logFile.write(timestamp + entry + '\n');
 		};
 		this.logEntry('Lobby created');
+		if (config.loguserstats) {
+			setInterval(this.logUserStats, config.loguserstats);
+		}
 	} else {
 		this.logEntry = function() { };
 	}
-	if (config.loguserstats) {
-		setInterval(this.logUserStats, config.loguserstats);
-	}
+
+	(function() {
+		const REPORT_USER_STATS_INTERVAL = 1000 * 60 * 10;
+		setInterval(function() {
+			LoginServer.request('updateuserstats', {
+				date: +date,
+				users: total
+			}, function() {});
+		}, REPORT_USER_STATS_INTERVAL);
+	})();
 
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
 		var update = {room: roomid};
