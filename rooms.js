@@ -824,7 +824,6 @@ function LobbyRoom(roomid) {
 			}, function() {});
 		};
 		setInterval(reportUserStats, REPORT_USER_STATS_INTERVAL);
-		reportUserStats();
 	})();
 
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
