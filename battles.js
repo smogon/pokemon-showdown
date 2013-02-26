@@ -982,51 +982,49 @@ function BattlePokemon(set, side) {
 	selfP.clearVolatile(true);
 } // function BattlePokemon
 
-function BattleSide(name, battle, n, team) {
-	var selfB = battle;
-	var selfS = this;
+var BattleSide = (function() {
+	function BattleSide(name, battle, n, team) {
+		this.battle = battle;
+		this.n = n;
+		this.name = name;
+		this.pokemon = [];
+		this.active = [null];
+		this.sideConditions = {};
 
-	this.battle = battle;
-	this.n = n;
-	this.name = name;
-	this.isActive = false;
-	this.pokemon = [];
-	this.pokemonLeft = 0;
-	this.active = [null];
-	this.decision = null;
-	this.ackRequest = -1;
-	this.foe = null;
-	this.sideConditions = {};
+		this.id = (n?'p2':'p1');
 
-	this.id = (n?'p2':'p1');
+		switch (this.battle.gameType) {
+		case 'doubles':
+			this.active = [null, null];
+			break;
+		}
 
-	switch (battle.gameType) {
-	case 'doubles':
-		this.active = [null, null];
-		break;
+		this.team = this.battle.getTeam(this, team);
+		for (var i=0; i<this.team.length && i<6; i++) {
+			//console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
+			this.pokemon.push(new BattlePokemon(this.team[i], this));
+		}
+		this.pokemonLeft = this.pokemon.length;
+		for (var i=0; i<this.pokemon.length; i++) {
+			this.pokemon[i].position = i;
+		}
 	}
 
-	this.team = selfB.getTeam(this, team);
-	for (var i=0; i<this.team.length && i<6; i++) {
-		//console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
-		this.pokemon.push(new BattlePokemon(this.team[i], this));
-	}
-	this.pokemonLeft = this.pokemon.length;
-	for (var i=0; i<this.pokemon.length; i++) {
-		this.pokemon[i].position = i;
-	}
+	BattleSide.prototype.isActive = false;
+	BattleSide.prototype.pokemonLeft = 0;
+	BattleSide.prototype.decision = null;
+	BattleSide.prototype.foe = null;
 
-	this.toString = function() {
-		return selfS.id+': '+selfS.name;
+	BattleSide.prototype.toString = function() {
+		return this.id+': '+this.name;
 	};
-
-	this.getData = function() {
+	BattleSide.prototype.getData = function() {
 		var data = {
-			name: selfS.name,
+			name: this.name,
 			pokemon: []
 		};
-		for (var i=0; i<selfS.pokemon.length; i++) {
-			var pokemon = selfS.pokemon[i];
+		for (var i=0; i<this.pokemon.length; i++) {
+			var pokemon = this.pokemon[i];
 			data.pokemon.push({
 				ident: pokemon.fullname,
 				details: pokemon.details,
@@ -1044,86 +1042,82 @@ function BattleSide(name, battle, n, team) {
 		}
 		return data;
 	};
-
-	this.randomActive = function() {
-		var actives = selfS.active.filter(function(active) {
+	BattleSide.prototype.randomActive = function() {
+		var actives = this.active.filter(function(active) {
 			return active && !active.fainted;
 		});
 		if (!actives.length) return null;
 		var i = Math.floor(Math.random() * actives.length);
 		return actives[i];
 	};
-
-	this.addSideCondition = function(status, source, sourceEffect) {
-		status = selfB.getEffect(status);
-		if (selfS.sideConditions[status.id]) {
-			selfB.singleEvent('Restart', status, selfS.sideConditions[status.id], selfS, source, sourceEffect);
+	BattleSide.prototype.addSideCondition = function(status, source, sourceEffect) {
+		status = this.battle.getEffect(status);
+		if (this.sideConditions[status.id]) {
+			this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
 			return false;
 		}
-		selfS.sideConditions[status.id] = {id: status.id};
-		selfS.sideConditions[status.id].target = selfS;
+		this.sideConditions[status.id] = {id: status.id};
+		this.sideConditions[status.id].target = this;
 		if (source) {
-			selfS.sideConditions[status.id].source = source;
-			selfS.sideConditions[status.id].sourcePosition = source.position;
+			this.sideConditions[status.id].source = source;
+			this.sideConditions[status.id].sourcePosition = source.position;
 		}
 		if (status.duration) {
-			selfS.sideConditions[status.id].duration = status.duration;
+			this.sideConditions[status.id].duration = status.duration;
 		}
 		if (status.durationCallback) {
-			selfS.sideConditions[status.id].duration = status.durationCallback.call(selfB, selfS, source, sourceEffect);
+			this.sideConditions[status.id].duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
-		if (!selfB.singleEvent('Start', status, selfS.sideConditions[status.id], selfS, source, sourceEffect)) {
-			delete selfS.sideConditions[status.id];
+		if (!this.battle.singleEvent('Start', status, this.sideConditions[status.id], this, source, sourceEffect)) {
+			delete this.sideConditions[status.id];
 			return false;
 		}
-		selfB.update();
+		this.battle.update();
 		return true;
 	};
-	this.getSideCondition = function(status) {
-		status = selfB.getEffect(status);
-		if (!selfS.sideConditions[status.id]) return null;
+	BattleSide.prototype.getSideCondition = function(status) {
+		status = this.battle.getEffect(status);
+		if (!this.sideConditions[status.id]) return null;
 		return status;
 	};
-	this.removeSideCondition = function(status) {
-		status = selfB.getEffect(status);
-		if (!selfS.sideConditions[status.id]) return false;
-		selfB.singleEvent('End', status, selfS.sideConditions[status.id], selfS);
-		delete selfS.sideConditions[status.id];
-		selfB.update();
+	BattleSide.prototype.removeSideCondition = function(status) {
+		status = this.battle.getEffect(status);
+		if (!this.sideConditions[status.id]) return false;
+		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
+		delete this.sideConditions[status.id];
+		this.battle.update();
 		return true;
 	};
-	this.emitUpdate = function(update) {
-		update.room = selfB.id;
-		selfB.send('request', this.id+"\n"+selfB.rqid+"\n"+JSON.stringify(update));
+	BattleSide.prototype.emitUpdate = function(update) {
+		update.room = this.battle.id;
+		this.battle.send('request', this.id+"\n"+this.battle.rqid+"\n"+JSON.stringify(update));
 	};
-	this.destroy = function() {
+	BattleSide.prototype.destroy = function() {
 		// deallocate ourself
 
 		// deallocate children and get rid of references to them
-		for (var i=0; i<selfS.pokemon.length; i++) {
-			if (selfS.pokemon[i]) selfS.pokemon[i].destroy();
-			selfS.pokemon[i] = null;
+		for (var i=0; i<this.pokemon.length; i++) {
+			if (this.pokemon[i]) this.pokemon[i].destroy();
+			this.pokemon[i] = null;
 		}
-		selfS.pokemon = null;
-		for (var i=0; i<selfS.active.length; i++) {
-			selfS.active[i] = null;
+		this.pokemon = null;
+		for (var i=0; i<this.active.length; i++) {
+			this.active[i] = null;
 		}
-		selfS.active = null;
+		this.active = null;
 
-		if (selfS.decision) {
-			delete selfS.decision.side;
-			delete selfS.decision.pokemon;
+		if (this.decision) {
+			delete this.decision.side;
+			delete this.decision.pokemon;
 		}
-		selfS.decision = null;
+		this.decision = null;
 
 		// get rid of some possibly-circular references
-		selfS.battle = null;
-		selfS.foe = null;
-		selfB = null;
-
-		selfS = null;
+		this.battle = null;
+		this.foe = null;
 	};
-} // function BattleSide
+	return BattleSide;
+})();
 
 function Battle(roomid, formatarg, rated) {
 	var selfB = this;
