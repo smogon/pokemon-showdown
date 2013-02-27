@@ -2956,7 +2956,7 @@ var Battle = (function() {
 			this.go();
 		}
 	};
-	this.undoChoice = function(sideid) {
+	Battle.prototype.undoChoice = function(sideid) {
 		var side = null;
 		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
 		// The following condition can never occur for the reasons given in
