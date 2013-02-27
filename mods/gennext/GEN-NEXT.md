@@ -147,7 +147,7 @@ New mechanic: Signature Pokemon:
 
   - Weezing: Smog (75 base power, 100% poison)
 
-  - Rapidash: Flame Charge
+  - Rapidash: Flame Charge (60 base power)
 
   - Darmanitan: Flame Wheel
 

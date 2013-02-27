@@ -1113,6 +1113,7 @@ exports.BattleMovedex = {
 	},
 	flamecharge: {
 		inherit: true,
+		basePower: 60,
 		onBasePower: function(power, user) {
 			if (user.template.id === 'rapidash') return power * 1.5;
 		}
