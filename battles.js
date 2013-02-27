@@ -1134,7 +1134,7 @@ var Battle = (function() {
 			var ret = Object.create(battle);
 			tools.install(ret);
 			return ret;
-		}
+		};
 	})();
 
 	Battle.prototype = {};
