@@ -119,213 +119,214 @@ process.on('message', function(message) {
 	}
 });
 
-function BattlePokemon(set, side) {
-	var selfB = side.battle;
-	var selfS = side;
-	var selfP = this;
-	this.side = side;
-	if (typeof set === 'string') set = {name: set};
+var BattlePokemon = (function() {
+	function BattlePokemon(set, side) {
+		this.side = side;
+		this.battle = side.battle;
+		if (typeof set === 'string') set = {name: set};
 
-	this.baseSet = set;
-	this.set = this.baseSet;
+		this.baseSet = set;
+		this.set = this.baseSet;
 
-	this.baseTemplate = selfB.getTemplate(set.species || set.name);
-	if (!this.baseTemplate.exists) {
-		selfB.debug('Unidentified species: '+this.species);
-		this.baseTemplate = selfB.getTemplate('Bulbasaur');
-	}
-	this.species = this.baseTemplate.species;
-	if (set.name === set.species || !set.name || !set.species) {
-		set.name = this.species;
-	}
-	this.name = (set.name || set.species || 'Bulbasaur').substr(0,20);
-	this.speciesid = toId(this.species);
-	this.template = this.baseTemplate;
-	this.moves = [];
-	this.baseMoves = this.moves;
-	this.movepp = {};
-	this.moveset = [];
-	this.baseMoveset = [];
-	this.trapped = false;
-
-	this.level = clampIntRange(set.forcedLevel || set.level || 100, 1, 1000);
-	this.hp = 0;
-	this.maxhp = 100;
-	var genders = {M:'M',F:'F'};
-	this.gender = this.template.gender || genders[set.gender] || (Math.random()*2<1?'M':'F');
-	if (this.gender === 'N') this.gender = '';
-	this.happiness = typeof set.happiness === 'number' ? clampIntRange(set.happiness, 0, 255) : 255;
-
-	this.fullname = this.side.id + ': ' + this.name;
-	this.details = this.species + (this.level==100?'':', L'+this.level) + (this.gender===''?'':', '+this.gender) + (this.set.shiny?', shiny':'');
-
-	this.id = this.fullname; // shouldn't really be used anywhere
-	this.illusion = null;
-
-	this.fainted = false;
-	this.lastItem = '';
-	this.status = '';
-	this.statusData = {};
-	this.volatiles = {};
-	this.position = 0;
-	this.lastMove = '';
-	this.lastDamage = 0;
-	this.lastAttackedBy = null;
-	this.movedThisTurn = false;
-	this.usedItemThisTurn = false;
-	this.newlySwitched = false;
-	this.beingCalledBack = false;
-	this.isActive = false;
-	this.isStarted = false; // has this pokemon's Start events run yet?
-
-	this.transformed = false;
-	this.negateImmunity = {};
-
-	this.height = this.template.height;
-	this.heightm = this.template.heightm;
-	this.weight = this.template.weight;
-	this.weightkg = this.template.weightkg;
-
-	this.ignore = {};
-	this.duringMove = false;
-
-	this.baseAbility = toId(set.ability);
-	this.ability = this.baseAbility;
-	this.item = toId(set.item);
-	this.abilityData = {id: this.ability};
-	this.itemData = {id: this.item};
-	this.speciesData = {id: this.speciesid};
-
-	this.hpType = 'Dark';
-	this.hpPower = 70;
-
-	this.types = this.baseTemplate.types;
-
-	if (this.set.moves) {
-		for (var i=0; i<this.set.moves.length; i++) {
-			var move = selfB.getMove(this.set.moves[i]);
-			if (!move.id) continue;
-			if (move.id === 'hiddenpower') {
-				if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
-					this.set.ivs = selfB.getType(move.type).HPivs;
-				}
-				move = selfB.getMove('hiddenpower');
-			}
-			this.baseMoveset.push({
-				move: move.name,
-				id: move.id,
-				pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
-				maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
-				target: (move.ghostTarget && (this.types[0]==='Ghost'||this.types[1]==='Ghost') ? move.ghostTarget : move.target),
-				disabled: false,
-				used: false
-			});
-			this.moves.push(move.id);
+		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
+		if (!this.baseTemplate.exists) {
+			this.battle.debug('Unidentified species: '+this.species);
+			this.baseTemplate = this.battle.getTemplate('Bulbasaur');
 		}
-	}
+		this.species = this.baseTemplate.species;
+		if (set.name === set.species || !set.name || !set.species) {
+			set.name = this.species;
+		}
+		this.name = (set.name || set.species || 'Bulbasaur').substr(0,20);
+		this.speciesid = toId(this.species);
+		this.template = this.baseTemplate;
+		this.moves = [];
+		this.baseMoves = this.moves;
+		this.movepp = {};
+		this.moveset = [];
+		this.baseMoveset = [];
 
-	if (!this.set.evs) {
-		this.set.evs = {
-			hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84
+		this.level = clampIntRange(set.forcedLevel || set.level || 100, 1, 1000);
+
+		var genders = {M:'M',F:'F'};
+		this.gender = this.template.gender || genders[set.gender] || (Math.random()*2<1?'M':'F');
+		if (this.gender === 'N') this.gender = '';
+		this.happiness = typeof set.happiness === 'number' ? clampIntRange(set.happiness, 0, 255) : 255;
+
+		this.fullname = this.side.id + ': ' + this.name;
+		this.details = this.species + (this.level==100?'':', L'+this.level) + (this.gender===''?'':', '+this.gender) + (this.set.shiny?', shiny':'');
+
+		this.id = this.fullname; // shouldn't really be used anywhere
+
+		this.statusData = {};
+		this.volatiles = {};
+		this.negateImmunity = {};
+
+		this.height = this.template.height;
+		this.heightm = this.template.heightm;
+		this.weight = this.template.weight;
+		this.weightkg = this.template.weightkg;
+
+		this.ignore = {};
+
+		this.baseAbility = toId(set.ability);
+		this.ability = this.baseAbility;
+		this.item = toId(set.item);
+		this.abilityData = {id: this.ability};
+		this.itemData = {id: this.item};
+		this.speciesData = {id: this.speciesid};
+
+		this.types = this.baseTemplate.types;
+
+		if (this.set.moves) {
+			for (var i=0; i<this.set.moves.length; i++) {
+				var move = this.battle.getMove(this.set.moves[i]);
+				if (!move.id) continue;
+				if (move.id === 'hiddenpower') {
+					if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
+						this.set.ivs = this.battle.getType(move.type).HPivs;
+					}
+					move = this.battle.getMove('hiddenpower');
+				}
+				this.baseMoveset.push({
+					move: move.name,
+					id: move.id,
+					pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+					maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+					target: (move.ghostTarget && (this.types[0]==='Ghost'||this.types[1]==='Ghost') ? move.ghostTarget : move.target),
+					disabled: false,
+					used: false
+				});
+				this.moves.push(move.id);
+			}
+		}
+
+		if (!this.set.evs) {
+			this.set.evs = {
+				hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84
+			};
+		}
+		if (!this.set.ivs) {
+			this.set.ivs = {
+				hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31
+			};
+		}
+		var stats = { hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
+		for (var i in stats) {
+			if (!this.set.evs[i]) this.set.evs[i] = 0;
+			if (!this.set.ivs[i] && this.set.ivs[i] !== 0) this.set.ivs[i] = 31;
+		}
+		for (var i in this.set.evs) {
+			this.set.evs[i] = clampIntRange(this.set.evs[i], 0, 255);
+		}
+		for (var i in this.set.ivs) {
+			this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
+		}
+
+		var hpTypeX = 0, hpPowerX = 0;
+		var i = 1;
+		for (var s in stats) {
+			hpTypeX += i * (this.set.ivs[s] % 2);
+			hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
+			i *= 2;
+		}
+		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
+		this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
+		this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
+
+		this.boosts = {
+			atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
+			accuracy: 0, evasion: 0
 		};
-	}
-	if (!this.set.ivs) {
-		this.set.ivs = {
-			hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31
+		this.baseBoosts = {
+			atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
+			accuracy: 0, evasion: 0
 		};
-	}
-	var stats = { hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
-	for (var i in stats) {
-		if (!this.set.evs[i]) this.set.evs[i] = 0;
-		if (!this.set.ivs[i] && this.set.ivs[i] !== 0) this.set.ivs[i] = 31;
-	}
-	for (var i in this.set.evs) {
-		this.set.evs[i] = clampIntRange(this.set.evs[i], 0, 255);
-	}
-	for (var i in this.set.ivs) {
-		this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
-	}
-	this.speed = 0;
+		this.baseStats = this.template.baseStats;
+		this.bst = 0;
+		for (var i in this.baseStats) {
+			this.bst += this.baseStats[i];
+		}
+		this.bst = this.bst || 10;
 
-	var hpTypeX = 0, hpPowerX = 0;
-	var i = 1;
-	for (var s in stats) {
-		hpTypeX += i * (this.set.ivs[s] % 2);
-		hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
-		i *= 2;
+		this.maxhp = Math.floor(Math.floor(2*this.baseStats['hp']+this.set.ivs['hp']+Math.floor(this.set.evs['hp']/4)+100)*this.level / 100 + 10);
+		if (this.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
+		this.hp = this.hp || this.maxhp;
+
+		this.clearVolatile(true);
 	}
-	var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
-	this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
-	this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
 
-	this.boosts = {
-		atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
-		accuracy: 0, evasion: 0
-	};
-	this.baseBoosts = {
-		atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
-		accuracy: 0, evasion: 0
-	};
-	this.baseStats = this.template.baseStats;
-	this.bst = 0;
-	for (var i in this.baseStats) {
-		this.bst += this.baseStats[i];
-	}
-	this.bst = this.bst || 10;
+	BattlePokemon.prototype.trapped = false;
+	BattlePokemon.prototype.hp = 0;
+	BattlePokemon.prototype.maxhp = 100;
+	BattlePokemon.prototype.illusion = null;
+	BattlePokemon.prototype.fainted = false;
+	BattlePokemon.prototype.lastItem = '';
+	BattlePokemon.prototype.status = '';
+	BattlePokemon.prototype.position = 0;
+	BattlePokemon.prototype.lastMove = '';
+	BattlePokemon.prototype.lastDamage = 0;
+	BattlePokemon.prototype.lastAttackedBy = null;
+	BattlePokemon.prototype.movedThisTurn = false;
+	BattlePokemon.prototype.usedItemThisTurn = false;
+	BattlePokemon.prototype.newlySwitched = false;
+	BattlePokemon.prototype.beingCalledBack = false;
+	BattlePokemon.prototype.isActive = false;
+	BattlePokemon.prototype.isStarted = false; // has this pokemon's Start events run yet?
+	BattlePokemon.prototype.transformed = false;
+	BattlePokemon.prototype.duringMove = false;
+	BattlePokemon.prototype.hpType = 'Dark';
+	BattlePokemon.prototype.hpPower = 70;
+	BattlePokemon.prototype.speed = 0;
 
-	this.maxhp = Math.floor(Math.floor(2*selfP.baseStats['hp']+selfP.set.ivs['hp']+Math.floor(selfP.set.evs['hp']/4)+100)*selfP.level / 100 + 10);
-	if (this.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
-	this.hp = this.hp || this.maxhp;
-
-	this.toString = function() {
-		var fullname = selfP.fullname;
-		if (selfP.illusion) fullname = selfP.illusion.fullname;
+	BattlePokemon.prototype.toString = function() {
+		var fullname = this.fullname;
+		if (this.illusion) fullname = this.illusion.fullname;
 
 		var positionList = ['a','b','c','d','e','f'];
-		if (selfP.isActive) return fullname.substr(0,2) + positionList[selfP.position] + fullname.substr(2);
+		if (this.isActive) return fullname.substr(0,2) + positionList[this.position] + fullname.substr(2);
 		return fullname;
 	};
-	this.getDetails = function() {
-		if (selfP.illusion) return selfP.illusion.details + '|' + selfP.getHealth();
-		return selfP.details + '|' + selfP.getHealth();
+	BattlePokemon.prototype.getDetails = function() {
+		if (this.illusion) return this.illusion.details + '|' + this.getHealth();
+		return this.details + '|' + this.getHealth();
 	};
-
-	this.update = function(init) {
-		selfP.baseStats = selfP.template.baseStats;
+	BattlePokemon.prototype.update = function(init) {
+		this.baseStats = this.template.baseStats;
 		// reset for Light Metal etc
-		selfP.weightkg = selfP.template.weightkg;
+		this.weightkg = this.template.weightkg;
 		// reset for Forecast etc
-		selfP.types = selfP.template.types;
+		this.types = this.template.types;
 		// reset for diabled moves
-		selfP.disabledMoves = {};
-		selfP.negateImmunity = {};
-		selfP.trapped = false;
+		this.disabledMoves = {};
+		this.negateImmunity = {};
+		this.trapped = false;
 		// reset for ignore settings
-		selfP.ignore = {};
-		for (var i in selfP.moveset) {
-			if (selfP.moveset[i]) selfP.moveset[i].disabled = false;
+		this.ignore = {};
+		for (var i in this.moveset) {
+			if (this.moveset[i]) this.moveset[i].disabled = false;
 		}
-		for (var i in selfP.baseBoosts) {
-			selfP.boosts[i] = selfP.baseBoosts[i];
+		for (var i in this.baseBoosts) {
+			this.boosts[i] = this.baseBoosts[i];
 		}
 		if (init) return;
 
-		selfB.runEvent('ModifyPokemon', selfP);
+		this.battle.runEvent('ModifyPokemon', this);
 
-		selfP.speed = selfP.getStat('spe');
+		this.speed = this.getStat('spe');
 	};
-	this.getStat = function(statName, unboosted, unmodified) {
+	BattlePokemon.prototype.getStat = function(statName, unboosted, unmodified) {
 		statName = toId(statName);
-		var boost = selfP.boosts[statName];
+		var boost = this.boosts[statName];
 
-		if (statName === 'hp') return selfP.maxhp; // please just read .maxhp directly
+		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
-		var stat = selfP.baseStats[statName];
-		stat = Math.floor(Math.floor(2*stat+selfP.set.ivs[statName]+Math.floor(selfP.set.evs[statName]/4))*selfP.level / 100 + 5);
+		var stat = this.baseStats[statName];
+		stat = Math.floor(Math.floor(2*stat+this.set.ivs[statName]+Math.floor(this.set.evs[statName]/4))*this.level / 100 + 5);
 
 		// nature
-		var nature = selfB.getNature(selfP.set.nature);
+		var nature = this.battle.getNature(this.set.nature);
 		if (statName === nature.plus) stat *= 1.1;
 		if (statName === nature.minus) stat *= 0.9;
 		stat = Math.floor(stat);
@@ -334,7 +335,7 @@ function BattlePokemon(set, side) {
 
 		// stat modifier effects
 		var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-		stat = selfB.runEvent('Modify'+statTable[statName], selfP, null, null, stat);
+		stat = this.battle.runEvent('Modify'+statTable[statName], this, null, null, stat);
 		stat = Math.floor(stat);
 
 		if (unboosted) return stat;
@@ -351,54 +352,54 @@ function BattlePokemon(set, side) {
 
 		return stat;
 	};
-	this.getMoveData = function(move) {
-		move = selfB.getMove(move);
-		for (var i=0; i<selfP.moveset.length; i++) {
-			var moveData = selfP.moveset[i];
+	BattlePokemon.prototype.getMoveData = function(move) {
+		move = this.battle.getMove(move);
+		for (var i=0; i<this.moveset.length; i++) {
+			var moveData = this.moveset[i];
 			if (moveData.id === move.id) {
 				return moveData;
 			}
 		}
 		return null;
 	};
-	this.deductPP = function(move, amount, source) {
-		move = selfB.getMove(move);
-		var ppData = selfP.getMoveData(move);
+	BattlePokemon.prototype.deductPP = function(move, amount, source) {
+		move = this.battle.getMove(move);
+		var ppData = this.getMoveData(move);
 		var success = false;
 		if (ppData) {
 			ppData.used = true;
 		}
 		if (ppData && ppData.pp) {
-			ppData.pp -= selfB.runEvent('DeductPP', selfP, source||selfP, move, amount||1);
+			ppData.pp -= this.battle.runEvent('DeductPP', this, source||this, move, amount||1);
 			if (ppData.pp <= 0) {
 				ppData.pp = 0;
 			}
 			success = true;
 		}
 		if (!amount) {
-			selfP.lastMove = move.id;
-			selfP.movedThisTurn = true;
+			this.lastMove = move.id;
+			this.movedThisTurn = true;
 		}
 		return success;
 	};
-	this.gotAttacked = function(move, damage, source) {
+	BattlePokemon.prototype.gotAttacked = function(move, damage, source) {
 		if (!damage) damage = 0;
-		move = selfB.getMove(move);
-		selfP.lastAttackedBy = {
+		move = this.battle.getMove(move);
+		this.lastAttackedBy = {
 			pokemon: source,
 			damage: damage,
 			move: move.id,
 			thisTurn: true
 		};
 	};
-	this.getMoves = function() {
-		var lockedMove = selfB.runEvent('LockMove', selfP);
+	BattlePokemon.prototype.getMoves = function() {
+		var lockedMove = this.battle.runEvent('LockMove', this);
 		if (lockedMove === true) lockedMove = false;
 		if (lockedMove) {
 			lockedMove = toId(lockedMove);
-			selfP.trapped = true;
+			this.trapped = true;
 		}
-		if (selfP.volatiles['mustRecharge'] || lockedMove === 'recharge') {
+		if (this.volatiles['mustRecharge'] || lockedMove === 'recharge') {
 			return [{
 				move: 'Recharge',
 				id: 'recharge'
@@ -406,23 +407,23 @@ function BattlePokemon(set, side) {
 		}
 		var moves = [];
 		var hasValidMove = false;
-		for (var i=0; i<selfP.moveset.length; i++) {
-			var move = selfP.moveset[i];
+		for (var i=0; i<this.moveset.length; i++) {
+			var move = this.moveset[i];
 			if (lockedMove) {
 				if (lockedMove === move.id) {
 					return [move];
 				}
 				continue;
 			}
-			if (selfP.disabledMoves[move.id] || !move.pp) {
+			if (this.disabledMoves[move.id] || !move.pp) {
 				move.disabled = true;
 			} else if (!move.disabled) {
 				hasValidMove = true;
 			}
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
-				moveName = 'Hidden Power '+selfP.hpType;
-				if (selfP.hpPower != 70) moveName += ' '+selfP.hpPower;
+				moveName = 'Hidden Power '+this.hpType;
+				if (this.hpPower != 70) moveName += ' '+this.hpPower;
 			}
 			moves.push({
 				move: moveName,
@@ -435,7 +436,7 @@ function BattlePokemon(set, side) {
 		}
 		if (lockedMove) {
 			return [{
-				move: selfB.getMove(lockedMove).name,
+				move: this.battle.getMove(lockedMove).name,
 				id: lockedMove
 			}];
 		}
@@ -447,63 +448,63 @@ function BattlePokemon(set, side) {
 		}
 		return moves;
 	};
-	this.getRequestData = function() {
+	BattlePokemon.prototype.getRequestData = function() {
 		return {
-			moves: selfP.getMoves(),
-			trapped: selfP.trapped
+			moves: this.getMoves(),
+			trapped: this.trapped
 		}
 	};
-	this.positiveBoosts = function() {
+	BattlePokemon.prototype.positiveBoosts = function() {
 		var boosts = 0;
-		for (var i in selfP.boosts) {
-			if (selfP.boosts[i] > 0) boosts += selfP.boosts[i];
+		for (var i in this.boosts) {
+			if (this.boosts[i] > 0) boosts += this.boosts[i];
 		}
 		return boosts;
 	};
-	this.boostBy = function(boost, source, effect) {
+	BattlePokemon.prototype.boostBy = function(boost, source, effect) {
 		var changed = false;
 		for (var i in boost) {
 			var delta = boost[i];
-			selfP.baseBoosts[i] += delta;
-			if (selfP.baseBoosts[i] > 6) {
-				delta -= selfP.baseBoosts[i] - 6;
-				selfP.baseBoosts[i] = 6;
+			this.baseBoosts[i] += delta;
+			if (this.baseBoosts[i] > 6) {
+				delta -= this.baseBoosts[i] - 6;
+				this.baseBoosts[i] = 6;
 			}
-			if (selfP.baseBoosts[i] < -6) {
-				delta -= selfP.baseBoosts[i] - (-6);
-				selfP.baseBoosts[i] = -6;
+			if (this.baseBoosts[i] < -6) {
+				delta -= this.baseBoosts[i] - (-6);
+				this.baseBoosts[i] = -6;
 			}
 			if (delta) changed = true;
 		}
-		selfP.update();
+		this.update();
 		return changed;
 	};
-	this.clearBoosts = function() {
-		for (var i in selfP.baseBoosts) {
-			selfP.baseBoosts[i] = 0;
+	BattlePokemon.prototype.clearBoosts = function() {
+		for (var i in this.baseBoosts) {
+			this.baseBoosts[i] = 0;
 		}
-		selfP.update();
+		this.update();
 	};
-	this.setBoost = function(boost) {
+	BattlePokemon.prototype.setBoost = function(boost) {
 		for (var i in boost) {
-			selfP.baseBoosts[i] = boost[i];
+			this.baseBoosts[i] = boost[i];
 		}
-		selfP.update();
+		this.update();
 	};
-	this.copyVolatileFrom = function(pokemon) {
-		selfP.clearVolatile();
-		selfP.baseBoosts = pokemon.baseBoosts;
-		selfP.volatiles = pokemon.volatiles;
-		selfP.update();
+	BattlePokemon.prototype.copyVolatileFrom = function(pokemon) {
+		this.clearVolatile();
+		this.baseBoosts = pokemon.baseBoosts;
+		this.volatiles = pokemon.volatiles;
+		this.update();
 		pokemon.clearVolatile();
-		for (var i in selfP.volatiles) {
-			var status = selfP.getVolatile(i);
+		for (var i in this.volatiles) {
+			var status = this.getVolatile(i);
 			if (status.noCopy) {
-				delete selfP.volatiles[i];
+				delete this.volatiles[i];
 			}
 		}
 	};
-	this.transformInto = function(baseTemplate) {
+	BattlePokemon.prototype.transformInto = function(baseTemplate) {
 		var pokemon = null;
 		if (baseTemplate && baseTemplate.template) {
 			pokemon = baseTemplate;
@@ -512,27 +513,27 @@ function BattlePokemon(set, side) {
 				return false;
 			}
 		} else if (!baseTemplate || !baseTemplate.abilities) {
-			baseTemplate = selfB.getTemplate(baseTemplate);
+			baseTemplate = this.battle.getTemplate(baseTemplate);
 		}
 		if (!baseTemplate.abilities || pokemon && pokemon.transformed) {
 			return false;
 		}
-		selfP.transformed = true;
-		selfP.template = baseTemplate;
-		selfP.baseStats = selfP.template.baseStats;
-		selfP.types = baseTemplate.types;
+		this.transformed = true;
+		this.template = baseTemplate;
+		this.baseStats = this.template.baseStats;
+		this.types = baseTemplate.types;
 		if (pokemon) {
-			selfP.ability = pokemon.ability;
-			selfP.set = pokemon.set;
-			selfP.moveset = [];
-			selfP.moves = [];
+			this.ability = pokemon.ability;
+			this.set = pokemon.set;
+			this.moveset = [];
+			this.moves = [];
 			for (var i=0; i<pokemon.moveset.length; i++) {
 				var moveData = pokemon.moveset[i];
 				var moveName = moveData.move;
 				if (moveData.id === 'hiddenpower') {
-					moveName = 'Hidden Power '+selfP.hpType;
+					moveName = 'Hidden Power '+this.hpType;
 				}
-				selfP.moveset.push({
+				this.moveset.push({
 					move: moveName,
 					id: moveData.id,
 					pp: 5,
@@ -540,17 +541,17 @@ function BattlePokemon(set, side) {
 					target: moveData.target,
 					disabled: false
 				});
-				selfP.moves.push(toId(moveName));
+				this.moves.push(toId(moveName));
 			}
 			for (var j in pokemon.baseBoosts) {
-				selfP.baseBoosts[j] = pokemon.baseBoosts[j];
+				this.baseBoosts[j] = pokemon.baseBoosts[j];
 			}
 		}
-		selfP.update();
+		this.update();
 		return true;
 	};
-	this.clearVolatile = function(init) {
-		selfP.baseBoosts = {
+	BattlePokemon.prototype.clearVolatile = function(init) {
+		this.baseBoosts = {
 			atk: 0,
 			def: 0,
 			spa: 0,
@@ -569,88 +570,87 @@ function BattlePokemon(set, side) {
 			this.moveset.push(this.baseMoveset[i]);
 			this.moves.push(toId(this.baseMoveset[i].move));
 		}
-		selfP.transformed = false;
-		selfP.ability = selfP.baseAbility;
-		selfP.template = selfP.baseTemplate;
-		selfP.baseStats = selfP.template.baseStats;
-		selfP.types = selfP.template.types;
-		for (var i in selfP.volatiles) {
-			if (selfP.volatiles[i].linkedStatus) {
-				selfP.volatiles[i].linkedPokemon.removeVolatile(selfP.volatiles[i].linkedStatus);
+		this.transformed = false;
+		this.ability = this.baseAbility;
+		this.template = this.baseTemplate;
+		this.baseStats = this.template.baseStats;
+		this.types = this.template.types;
+		for (var i in this.volatiles) {
+			if (this.volatiles[i].linkedStatus) {
+				this.volatiles[i].linkedPokemon.removeVolatile(this.volatiles[i].linkedStatus);
 			}
 		}
-		selfP.volatiles = {};
-		selfP.switchFlag = false;
-		selfP.lastMove = '';
-		selfP.lastDamage = 0;
-		selfP.lastAttackedBy = null;
-		selfP.movedThisTurn = false;
-		selfP.newlySwitched = true;
-		selfP.beingCalledBack = false;
-		selfP.update(init);
+		this.volatiles = {};
+		this.switchFlag = false;
+		this.lastMove = '';
+		this.lastDamage = 0;
+		this.lastAttackedBy = null;
+		this.movedThisTurn = false;
+		this.newlySwitched = true;
+		this.beingCalledBack = false;
+		this.update(init);
 	};
-
-	this.hasType = function (type) {
+	BattlePokemon.prototype.hasType = function (type) {
 		if (!type) return false;
 		if (Array.isArray(type)) {
 			for (var i=0; i<type.length; i++) {
-				if (selfP.hasType(type[i])) return true;
+				if (this.hasType(type[i])) return true;
 			}
 		} else {
-			if (selfP.types[0] === type) return true;
-			if (selfP.types[1] === type) return true;
+			if (this.types[0] === type) return true;
+			if (this.types[1] === type) return true;
 		}
 		return false;
 	};
 	// returns the amount of damage actually dealt
-	this.faint = function(source, effect) {
-		if (selfP.fainted) return 0;
-		var d = selfP.hp;
-		selfP.hp = 0;
-		selfP.switchFlag = false;
-		selfP.status = 'fnt';
-		//selfP.fainted = true;
-		selfB.faintQueue.push({
-			target: selfP,
+	BattlePokemon.prototype.faint = function(source, effect) {
+		if (this.fainted) return 0;
+		var d = this.hp;
+		this.hp = 0;
+		this.switchFlag = false;
+		this.status = 'fnt';
+		//this.fainted = true;
+		this.battle.faintQueue.push({
+			target: this,
 			source: source,
 			effect: effect
 		});
 		return d;
 	};
-	this.damage = function(d, source, effect) {
-		if (!selfP.hp) return 0;
+	BattlePokemon.prototype.damage = function(d, source, effect) {
+		if (!this.hp) return 0;
 		if (d < 1 && d > 0) d = 1;
 		d = Math.floor(d);
 		if (isNaN(d)) return 0;
 		if (d <= 0) return 0;
-		selfP.hp -= d;
-		if (selfP.hp <= 0) {
-			d += selfP.hp;
-			selfP.faint(source, effect);
+		this.hp -= d;
+		if (this.hp <= 0) {
+			d += this.hp;
+			this.faint(source, effect);
 		}
 		return d;
 	};
-	this.hasMove = function(moveid) {
+	BattlePokemon.prototype.hasMove = function(moveid) {
 		moveid = toId(moveid);
 		if (moveid.substr(0,11) === 'hiddenpower') moveid = 'hiddenpower';
-		for (var i=0; i<selfP.moveset.length; i++) {
-			if (moveid === selfB.getMove(selfP.moveset[i].move).id) {
+		for (var i=0; i<this.moveset.length; i++) {
+			if (moveid === this.battle.getMove(this.moveset[i].move).id) {
 				return moveid;
 			}
 		}
 		return false;
 	};
-	this.canUseMove = function(moveid) {
+	BattlePokemon.prototype.canUseMove = function(moveid) {
 		moveid = toId(moveid);
 		if (moveid.substr(0,11) === 'hiddenpower') moveid = 'hiddenpower';
-		if (!selfP.hasMove(moveid)) return false;
-		if (selfP.disabledMoves[moveid]) return false;
-		var moveData = selfP.getMoveData(moveid);
+		if (!this.hasMove(moveid)) return false;
+		if (this.disabledMoves[moveid]) return false;
+		var moveData = this.getMoveData(moveid);
 		if (!moveData || !moveData.pp || moveData.disabled) return false;
 		return true;
 	};
-	this.getValidMoves = function() {
-		var pMoves = selfP.getMoves();
+	BattlePokemon.prototype.getValidMoves = function() {
+		var pMoves = this.getMoves();
 		var moves = [];
 		for (var i=0; i<pMoves.length; i++) {
 			if (!pMoves[i].disabled) {
@@ -661,326 +661,320 @@ function BattlePokemon(set, side) {
 		return moves;
 	};
 	// returns the amount of damage actually healed
-	this.heal = function(d) {
-		if (!selfP.hp) return 0;
+	BattlePokemon.prototype.heal = function(d) {
+		if (!this.hp) return 0;
 		d = Math.floor(d);
 		if (isNaN(d)) return 0;
 		if (d <= 0) return 0;
-		if (selfP.hp >= selfP.maxhp) return 0;
-		selfP.hp += d;
-		if (selfP.hp > selfP.maxhp) {
-			d -= selfP.hp - selfP.maxhp;
-			selfP.hp = selfP.maxhp;
+		if (this.hp >= this.maxhp) return 0;
+		this.hp += d;
+		if (this.hp > this.maxhp) {
+			d -= this.hp - this.maxhp;
+			this.hp = this.maxhp;
 		}
 		return d;
 	};
 	// sets HP, returns delta
-	this.sethp = function(d) {
-		if (!selfP.hp) return 0;
+	BattlePokemon.prototype.sethp = function(d) {
+		if (!this.hp) return 0;
 		d = Math.floor(d);
 		if (isNaN(d)) return;
 		if (d < 1) d = 1;
-		d = d-selfP.hp;
-		selfP.hp += d;
-		if (selfP.hp > selfP.maxhp) {
-			d -= selfP.hp - selfP.maxhp;
-			selfP.hp = selfP.maxhp;
+		d = d-this.hp;
+		this.hp += d;
+		if (this.hp > this.maxhp) {
+			d -= this.hp - this.maxhp;
+			this.hp = this.maxhp;
 		}
 		return d;
 	};
-	this.trySetStatus = function(status, source, sourceEffect) {
-		if (!selfP.hp) return false;
-		if (selfP.status) return false;
-		return selfP.setStatus(status, source, sourceEffect);
+	BattlePokemon.prototype.trySetStatus = function(status, source, sourceEffect) {
+		if (!this.hp) return false;
+		if (this.status) return false;
+		return this.setStatus(status, source, sourceEffect);
 	};
-	this.cureStatus = function() {
-		if (!selfP.hp) return false;
+	BattlePokemon.prototype.cureStatus = function() {
+		if (!this.hp) return false;
 		// unlike clearStatus, gives cure message
-		if (selfP.status) {
-			selfB.add('-curestatus', selfP, selfP.status);
-			selfP.setStatus('');
+		if (this.status) {
+			this.battle.add('-curestatus', this, this.status);
+			this.setStatus('');
 		}
 	};
-	this.setStatus = function(status, source, sourceEffect, ignoreImmunities) {
-		if (!selfP.hp) return false;
-		status = selfB.getEffect(status);
-		if (selfB.event) {
-			if (!source) source = selfB.event.source;
-			if (!sourceEffect) sourceEffect = selfB.effect;
+	BattlePokemon.prototype.setStatus = function(status, source, sourceEffect, ignoreImmunities) {
+		if (!this.hp) return false;
+		status = this.battle.getEffect(status);
+		if (this.battle.event) {
+			if (!source) source = this.battle.event.source;
+			if (!sourceEffect) sourceEffect = this.battle.effect;
 		}
 
 		if (!ignoreImmunities && status.id) {
 			// the game currently never ignores immunities
-			if (!selfP.runImmunity(status.id==='tox'?'psn':status.id)) {
-				selfB.debug('immune to status');
+			if (!this.runImmunity(status.id==='tox'?'psn':status.id)) {
+				this.battle.debug('immune to status');
 				return false;
 			}
 		}
 
-		if (selfP.status === status.id) return false;
-		var prevStatus = selfP.status;
-		var prevStatusData = selfP.statusData;
-		if (status.id && !selfB.runEvent('SetStatus', selfP, source, sourceEffect, status)) {
-			selfB.debug('set status ['+status.id+'] interrupted');
+		if (this.status === status.id) return false;
+		var prevStatus = this.status;
+		var prevStatusData = this.statusData;
+		if (status.id && !this.battle.runEvent('SetStatus', this, source, sourceEffect, status)) {
+			this.battle.debug('set status ['+status.id+'] interrupted');
 			return false;
 		}
 
-		selfP.status = status.id;
-		selfP.statusData = {id: status.id, target: selfP};
-		if (source) selfP.statusData.source = source;
+		this.status = status.id;
+		this.statusData = {id: status.id, target: this};
+		if (source) this.statusData.source = source;
 		if (status.duration) {
-			selfP.statusData.duration = status.duration;
+			this.statusData.duration = status.duration;
 		}
 		if (status.durationCallback) {
-			selfP.statusData.duration = status.durationCallback.call(selfB, selfP, source, sourceEffect);
+			this.statusData.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
 
-		if (status.id && !selfB.singleEvent('Start', status, selfP.statusData, selfP, source, sourceEffect)) {
-			selfB.debug('status start ['+status.id+'] interrupted');
+		if (status.id && !this.battle.singleEvent('Start', status, this.statusData, this, source, sourceEffect)) {
+			this.battle.debug('status start ['+status.id+'] interrupted');
 			// cancel the setstatus
-			selfP.status = prevStatus;
-			selfP.statusData = prevStatusData;
+			this.status = prevStatus;
+			this.statusData = prevStatusData;
 			return false;
 		}
-		selfP.update();
-		if (status.id && !selfB.runEvent('AfterSetStatus', selfP, source, sourceEffect, status)) {
+		this.update();
+		if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
 			return false;
 		}
 		return true;
 	};
-	this.clearStatus = function() {
+	BattlePokemon.prototype.clearStatus = function() {
 		// unlike cureStatus, does not give cure message
-		return selfP.setStatus('');
+		return this.setStatus('');
 	};
-	this.getStatus = function() {
-		return selfB.getEffect(selfP.status);
+	BattlePokemon.prototype.getStatus = function() {
+		return this.battle.getEffect(this.status);
 	};
-	this.eatItem = function(source, sourceEffect) {
-		if (!selfP.hp || !selfP.isActive) return false;
-		if (!selfP.item) return false;
-		if (!sourceEffect && selfB.effect) sourceEffect = selfB.effect;
-		if (!source && selfB.event && selfB.event.target) source = selfB.event.target;
-		var item = selfP.getItem();
-		if (selfB.runEvent('UseItem', selfP, null, null, item) && selfB.runEvent('EatItem', selfP, null, null, item)) {
-			selfB.add('-enditem', selfP, item, '[eat]');
+	BattlePokemon.prototype.eatItem = function(source, sourceEffect) {
+		if (!this.hp || !this.isActive) return false;
+		if (!this.item) return false;
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		var item = this.getItem();
+		if (this.battle.runEvent('UseItem', this, null, null, item) && this.battle.runEvent('EatItem', this, null, null, item)) {
+			this.battle.add('-enditem', this, item, '[eat]');
 
-			selfB.singleEvent('Eat', item, selfP.itemData, selfP, source, sourceEffect);
+			this.battle.singleEvent('Eat', item, this.itemData, this, source, sourceEffect);
 
-			selfP.lastItem = selfP.item;
-			selfP.item = '';
-			selfP.itemData = {id: '', target: selfP};
-			selfP.usedItemThisTurn = true;
+			this.lastItem = this.item;
+			this.item = '';
+			this.itemData = {id: '', target: this};
+			this.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
 	};
-	this.useItem = function(source, sourceEffect) {
-		if (!selfP.isActive) return false;
-		if (!selfP.item) return false;
-		if (!sourceEffect && selfB.effect) sourceEffect = selfB.effect;
-		if (!source && selfB.event && selfB.event.target) source = selfB.event.target;
-		var item = selfP.getItem();
-		if (selfB.runEvent('UseItem', selfP, null, null, item)) {
+	BattlePokemon.prototype.useItem = function(source, sourceEffect) {
+		if (!this.isActive) return false;
+		if (!this.item) return false;
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		var item = this.getItem();
+		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
-				selfB.add('-enditem', selfP, item, '[of] '+source);
+				this.battle.add('-enditem', this, item, '[of] '+source);
 				break;
 			default:
 				if (!item.isGem) {
-					selfB.add('-enditem', selfP, item);
+					this.battle.add('-enditem', this, item);
 				}
 				break;
 			}
 
-			selfB.singleEvent('Use', item, selfP.itemData, selfP, source, sourceEffect);
+			this.battle.singleEvent('Use', item, this.itemData, this, source, sourceEffect);
 
-			selfP.lastItem = selfP.item;
-			selfP.item = '';
-			selfP.itemData = {id: '', target: selfP};
-			selfP.usedItemThisTurn = true;
+			this.lastItem = this.item;
+			this.item = '';
+			this.itemData = {id: '', target: this};
+			this.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
 	};
-	this.takeItem = function(source) {
-		if (!selfP.hp || !selfP.isActive) return false;
-		if (!selfP.item) return false;
-		if (!source) source = selfP;
-		var item = selfP.getItem();
-		if (selfB.runEvent('TakeItem', selfP, source, null, item)) {
-			selfP.lastItem = '';
-			selfP.item = '';
-			selfP.itemData = {id: '', target: selfP};
+	BattlePokemon.prototype.takeItem = function(source) {
+		if (!this.hp || !this.isActive) return false;
+		if (!this.item) return false;
+		if (!source) source = this;
+		var item = this.getItem();
+		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
+			this.lastItem = '';
+			this.item = '';
+			this.itemData = {id: '', target: this};
 			return item;
 		}
 		return false;
 	};
-	this.setItem = function(item, source, effect) {
-		if (!selfP.hp || !selfP.isActive) return false;
-		item = selfB.getItem(item);
-		selfP.lastItem = selfP.item;
-		selfP.item = item.id;
-		selfP.itemData = {id: item.id, target: selfP};
+	BattlePokemon.prototype.setItem = function(item, source, effect) {
+		if (!this.hp || !this.isActive) return false;
+		item = this.battle.getItem(item);
+		this.lastItem = this.item;
+		this.item = item.id;
+		this.itemData = {id: item.id, target: this};
 		if (item.id) {
-			selfB.singleEvent('Start', item, selfP.itemData, selfP, source, effect);
+			this.battle.singleEvent('Start', item, this.itemData, this, source, effect);
 		}
-		if (selfP.lastItem) selfP.usedItemThisTurn = true;
+		if (this.lastItem) this.usedItemThisTurn = true;
 		return true;
 	};
-	this.getItem = function() {
-		return selfB.getItem(selfP.item);
+	BattlePokemon.prototype.getItem = function() {
+		return this.battle.getItem(this.item);
 	};
-	this.clearItem = function() {
-		return selfP.setItem('');
+	BattlePokemon.prototype.clearItem = function() {
+		return this.setItem('');
 	};
-	this.setAbility = function(ability, source, effect) {
-		if (!selfP.hp) return false;
-		ability = selfB.getAbility(ability);
-		if (selfP.ability === ability.id) {
+	BattlePokemon.prototype.setAbility = function(ability, source, effect) {
+		if (!this.hp) return false;
+		ability = this.battle.getAbility(ability);
+		if (this.ability === ability.id) {
 			return false;
 		}
-		if (ability.id === 'Multitype' || ability.id === 'Illusion' || selfP.ability === 'Multitype') {
+		if (ability.id === 'Multitype' || ability.id === 'Illusion' || this.ability === 'Multitype') {
 			return false;
 		}
-		selfP.ability = ability.id;
-		selfP.abilityData = {id: ability.id, target: selfP};
+		this.ability = ability.id;
+		this.abilityData = {id: ability.id, target: this};
 		if (ability.id) {
-			selfB.singleEvent('Start', ability, selfP.abilityData, selfP, source, effect);
+			this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
 		}
 		return true;
 	};
-	this.getAbility = function() {
-		return selfB.getAbility(selfP.ability);
+	BattlePokemon.prototype.getAbility = function() {
+		return this.battle.getAbility(this.ability);
 	};
-	this.clearAbility = function() {
-		return selfP.setAbility('');
+	BattlePokemon.prototype.clearAbility = function() {
+		return this.setAbility('');
 	};
-	this.getNature = function() {
-		return selfB.getNature(selfP.set.nature);
+	BattlePokemon.prototype.getNature = function() {
+		return this.battle.getNature(this.set.nature);
 	};
-	this.addVolatile = function(status, source, sourceEffect) {
-		if (!selfP.hp) return false;
-		status = selfB.getEffect(status);
-		if (selfB.event) {
-			if (!source) source = selfB.event.source;
-			if (!sourceEffect) sourceEffect = selfB.effect;
+	BattlePokemon.prototype.addVolatile = function(status, source, sourceEffect) {
+		if (!this.hp) return false;
+		status = this.battle.getEffect(status);
+		if (this.battle.event) {
+			if (!source) source = this.battle.event.source;
+			if (!sourceEffect) sourceEffect = this.battle.effect;
 		}
 
-		if (selfP.volatiles[status.id]) {
-			selfB.singleEvent('Restart', status, selfP.volatiles[status.id], selfP, source, sourceEffect);
+		if (this.volatiles[status.id]) {
+			this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
 			return false;
 		}
-		if (!selfP.runImmunity(status.id)) return false;
-		var result = selfB.runEvent('TryAddVolatile', selfP, source, sourceEffect, status);
+		if (!this.runImmunity(status.id)) return false;
+		var result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
 		if (!result) {
-			selfB.debug('add volatile ['+status.id+'] interrupted');
+			this.battle.debug('add volatile ['+status.id+'] interrupted');
 			return result;
 		}
-		selfP.volatiles[status.id] = {id: status.id};
-		selfP.volatiles[status.id].target = selfP;
+		this.volatiles[status.id] = {id: status.id};
+		this.volatiles[status.id].target = this;
 		if (source) {
-			selfP.volatiles[status.id].source = source;
-			selfP.volatiles[status.id].sourcePosition = source.position;
+			this.volatiles[status.id].source = source;
+			this.volatiles[status.id].sourcePosition = source.position;
 		}
 		if (sourceEffect) {
-			selfP.volatiles[status.id].sourceEffect = sourceEffect;
+			this.volatiles[status.id].sourceEffect = sourceEffect;
 		}
 		if (status.duration) {
-			selfP.volatiles[status.id].duration = status.duration;
+			this.volatiles[status.id].duration = status.duration;
 		}
 		if (status.durationCallback) {
-			selfP.volatiles[status.id].duration = status.durationCallback.call(selfB, selfP, source, sourceEffect);
+			this.volatiles[status.id].duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
-		if (!selfB.singleEvent('Start', status, selfP.volatiles[status.id], selfP, source, sourceEffect)) {
+		if (!this.battle.singleEvent('Start', status, this.volatiles[status.id], this, source, sourceEffect)) {
 			// cancel
-			delete selfP.volatiles[status.id];
+			delete this.volatiles[status.id];
 			return false;
 		}
-		selfP.update();
+		this.update();
 		return true;
 	};
-	this.getVolatile = function(status) {
-		status = selfB.getEffect(status);
-		if (!selfP.volatiles[status.id]) return null;
+	BattlePokemon.prototype.getVolatile = function(status) {
+		status = this.battle.getEffect(status);
+		if (!this.volatiles[status.id]) return null;
 		return status;
 	};
-	this.removeVolatile = function(status) {
-		if (!selfP.hp) return false;
-		status = selfB.getEffect(status);
-		if (!selfP.volatiles[status.id]) return false;
-		selfB.singleEvent('End', status, selfP.volatiles[status.id], selfP);
-		delete selfP.volatiles[status.id];
-		selfP.update();
+	BattlePokemon.prototype.removeVolatile = function(status) {
+		if (!this.hp) return false;
+		status = this.battle.getEffect(status);
+		if (!this.volatiles[status.id]) return false;
+		this.battle.singleEvent('End', status, this.volatiles[status.id], this);
+		delete this.volatiles[status.id];
+		this.update();
 		return true;
 	};
-	this.hpPercent = function(d) {
-		//var percent = Math.floor(d*100/selfP.maxhp + 0.5);
-		var pixels = Math.floor(d*48/selfP.maxhp + 0.5) || 1;
+	BattlePokemon.prototype.hpPercent = function(d) {
+		//var percent = Math.floor(d*100/this.maxhp + 0.5);
+		var pixels = Math.floor(d*48/this.maxhp + 0.5) || 1;
 		if (d <= 0) pixels = 0;
-		if (pixels >= 48 && d < selfP.maxhp) pixels = 47;
+		if (pixels >= 48 && d < this.maxhp) pixels = 47;
 		return Math.floor(pixels*100/48);
 	};
-	this.getHealth = function(realHp) {
-		if (selfP.fainted) return ' (0 fnt)';
-		//var hpp = Math.floor(48*selfP.hp/selfP.maxhp) || 1;
+	BattlePokemon.prototype.getHealth = function(realHp) {
+		if (this.fainted) return ' (0 fnt)';
+		//var hpp = Math.floor(48*this.hp/this.maxhp) || 1;
 		var hpstring;
 		if (realHp) {
-			hpstring = ''+selfP.hp+'/'+selfP.maxhp;
+			hpstring = ''+this.hp+'/'+this.maxhp;
 		} else {
-			//var hpp = Math.floor(selfP.hp*100/selfP.maxhp + 0.5) || 1;
-			//if (!selfP.hp) hpp = 0;
+			//var hpp = Math.floor(this.hp*100/this.maxhp + 0.5) || 1;
+			//if (!this.hp) hpp = 0;
 			//hpstring = ''+hpp+'/100';
-			var pixels = Math.floor(selfP.hp*48/selfP.maxhp + 0.5) || 1;
-			if (selfP.hp <= 0) pixels = 0;
-			if (pixels >= 48 && selfP.hp < selfP.maxhp) pixels = 47;
+			var pixels = Math.floor(this.hp*48/this.maxhp + 0.5) || 1;
+			if (this.hp <= 0) pixels = 0;
+			if (pixels >= 48 && this.hp < this.maxhp) pixels = 47;
 			hpstring = ''+pixels+'/48';
 		}
 		var status = '';
-		if (selfP.status) status = ' '+selfP.status;
+		if (this.status) status = ' '+this.status;
 		return ' ('+hpstring+status+')';
 	};
-	this.hpChange = function(d) {
-		return ''+selfP.hpPercent(d)+selfP.getHealth();
+	BattlePokemon.prototype.hpChange = function(d) {
+		return ''+this.hpPercent(d)+this.getHealth();
 	};
-	this.runImmunity = function(type, message) {
-		if (selfP.fainted) {
+	BattlePokemon.prototype.runImmunity = function(type, message) {
+		if (this.fainted) {
 			return false;
 		}
 		if (!type || type === '???') {
 			return true;
 		}
-		if (selfP.negateImmunity[type]) return true;
-		if (!selfP.negateImmunity['Type'] && !selfB.getImmunity(type, selfP)) {
-			selfB.debug('natural immunity');
+		if (this.negateImmunity[type]) return true;
+		if (!this.negateImmunity['Type'] && !this.battle.getImmunity(type, this)) {
+			this.battle.debug('natural immunity');
 			if (message) {
-				selfB.add('-immune', selfP, '[msg]');
+				this.battle.add('-immune', this, '[msg]');
 			}
 			return false;
 		}
-		var immunity = selfB.runEvent('Immunity', selfP, null, null, type);
+		var immunity = this.battle.runEvent('Immunity', this, null, null, type);
 		if (!immunity) {
-			selfB.debug('artificial immunity');
+			this.battle.debug('artificial immunity');
 			if (message && immunity !== null) {
-				selfB.add('-immune', selfP, '[msg]');
+				this.battle.add('-immune', this, '[msg]');
 			}
 			return false;
 		}
 		return true;
 	};
-	this.destroy = function() {
+	BattlePokemon.prototype.destroy = function() {
 		// deallocate ourself
-
 		// get rid of some possibly-circular references
-		side = null;
-		selfB = null;
-		selfS = null;
-		selfP.side = null;
-
-		selfP = null;
+		this.battle = null;
+		this.side = null;
 	};
-
-	selfP.clearVolatile(true);
-} // function BattlePokemon
+	return BattlePokemon;
+})();
 
 var BattleSide = (function() {
 	function BattleSide(name, battle, n, team) {
