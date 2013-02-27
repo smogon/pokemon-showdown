@@ -1702,13 +1702,13 @@ var Battle = (function() {
 			for (var i in this.pseudoWeather) {
 				status = this.getPseudoWeather(i);
 				if (typeof status[callbackType] !== 'undefined' || (getAll && thing.pseudoWeather[i][getAll])) {
-					statuses.push({status: status, callback: status[callbackType], statusData: this.pseudoWeather[i], end: this.removePseudoWeather, thing: thing});
+					statuses.push({status: status, callback: status[callbackType], statusData: this.pseudoWeather[i], end: this.removePseudoWeather.bind(this), thing: thing});
 					this.resolveLastPriority(statuses,callbackType);
 				}
 			}
 			status = this.getWeather();
 			if (typeof status[callbackType] !== 'undefined' || (getAll && thing.weatherData[getAll])) {
-				statuses.push({status: status, callback: status[callbackType], statusData: this.weatherData, end: this.clearWeather, thing: thing, priority: status[callbackType+'Priority']||0});
+				statuses.push({status: status, callback: status[callbackType], statusData: this.weatherData, end: this.clearWeather.bind(this), thing: thing, priority: status[callbackType+'Priority']||0});
 				this.resolveLastPriority(statuses,callbackType);
 			}
 			status = this.getFormat();
@@ -1727,7 +1727,7 @@ var Battle = (function() {
 			for (var i in thing.sideConditions) {
 				status = thing.getSideCondition(i);
 				if (typeof status[callbackType] !== 'undefined' || (getAll && thing.sideConditions[i][getAll])) {
-					statuses.push({status: status, callback: status[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
+					statuses.push({status: status, callback: status[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition.bind(thing), thing: thing});
 					this.resolveLastPriority(statuses,callbackType);
 				}
 			}
@@ -1752,24 +1752,24 @@ var Battle = (function() {
 		}
 		var status = thing.getStatus();
 		if (typeof status[callbackType] !== 'undefined' || (getAll && thing.statusData[getAll])) {
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
+			statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus.bind(thing), thing: thing});
 			this.resolveLastPriority(statuses,callbackType);
 		}
 		for (var i in thing.volatiles) {
 			status = thing.getVolatile(i);
 			if (typeof status[callbackType] !== 'undefined' || (getAll && thing.volatiles[i][getAll])) {
-				statuses.push({status: status, callback: status[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
+				statuses.push({status: status, callback: status[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile.bind(thing), thing: thing});
 				this.resolveLastPriority(statuses,callbackType);
 			}
 		}
 		status = thing.getAbility();
 		if (typeof status[callbackType] !== 'undefined' || (getAll && thing.abilityData[getAll])) {
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
+			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility.bind(thing), thing: thing});
 			this.resolveLastPriority(statuses,callbackType);
 		}
 		status = thing.getItem();
 		if (typeof status[callbackType] !== 'undefined' || (getAll && thing.itemData[getAll])) {
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
+			statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem.bind(thing), thing: thing});
 			this.resolveLastPriority(statuses,callbackType);
 		}
 		status = this.getEffect(thing.species);
