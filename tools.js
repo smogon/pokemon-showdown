@@ -76,14 +76,6 @@ module.exports = (function () {
 			});
 		}
 		this.data = Data[mod];
-
-		// Scripts can override Tools
-		// Be careful! Some Scripts are meant to be run only from inside a
-		// Battle!
-		for (var i in this.data.Scripts) {
-			this[i] = this.data.Scripts[i];
-		}
-		if (this.init) this.init();
 	}
 
 	var moddedTools = {};
@@ -967,32 +959,32 @@ module.exports = (function () {
 	 * Install our Tools functions into the battle object
 	 */
 	Tools.prototype.install = function(battle) {
-		for (var i in this) {
-			if (battle[i] === undefined) battle[i] = this[i];
-		}
-	};
-	/**
-	 * Install our data.Scripts functions into the battle object
-	 * TODO: merge this back into Tools.prototype.install once
-	 * we refactor battles.js to use prototypes
-	 */
-	Tools.prototype.installScripts = function(battle) {
-		// Scripts override the default Battle prototype for a mod
 		for (var i in this.data.Scripts) {
 			battle[i] = this.data.Scripts[i];
 		}
 	};
 
-	moddedTools.base = new Tools();
+	Tools.construct = function(mod) {
+		var tools = new Tools(mod);
+		// Scripts override Tools.
+		var ret = Object.create(tools);
+		tools.install(ret);
+		if (ret.init) {
+			ret.init();
+		}
+		return ret;
+	};
+
+	moddedTools.base = Tools.construct();
 	try {
 		var dirs = fs.readdirSync('./mods/');
 
 		dirs.forEach(function(dir) {
-			moddedTools[dir] = new Tools(dir);
+			moddedTools[dir] = Tools.construct(dir);
 		});
 	} catch (e) {}
 
-	moddedTools.base.moddedTools = moddedTools;
+	moddedTools.base.__proto__.moddedTools = moddedTools;
 
 	return moddedTools.base;
 })();
