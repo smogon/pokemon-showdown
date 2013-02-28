@@ -3167,6 +3167,7 @@ exports.BattleMovedex = {
 			if (target.hp > pokemon.hp) {
 				return target.hp - pokemon.hp;
 			}
+			this.add('-immune', target, '[msg]');
 			return false;
 		},
 		category: "Physical",
