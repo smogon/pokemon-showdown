@@ -344,6 +344,16 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	endeavor: {
+		inherit: true,
+		damageCallback: function(pokemon,target) {
+			if (target.hp > pokemon.hp) {
+				return target.hp - pokemon.hp;
+			}
+			this.add('-fail', pokemon);
+			return false;
+		}
+	},
 	explosion: {
 		inherit: true,
 		basePower: 500,
