@@ -1933,7 +1933,6 @@ exports.BattleMovedex = {
 		boosts: {
 			spe: -2
 		},
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -4645,7 +4644,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSoundBased: true,
 		status: 'slp',
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -6523,7 +6521,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		volatileStatus: 'leechseed',
-		affectedByImmunities: true,
 		effect: {
 			onStart: function(target) {
 				this.add('-start', target, 'move: Leech Seed');
@@ -8265,7 +8262,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		status: 'psn',
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Poison"
@@ -10676,7 +10672,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		status: 'slp',
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -10977,7 +10972,6 @@ exports.BattleMovedex = {
 				pokemon.types = ['Water'];
 			}
 		},
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -11244,7 +11238,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		status: 'slp',
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -11540,7 +11533,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		status: 'par',
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -12439,7 +12431,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		status: 'tox',
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Poison"
@@ -13269,7 +13260,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		status: 'brn',
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -13449,7 +13439,6 @@ exports.BattleMovedex = {
 			}
 			return false;
 		},
-		affectedByImmunities: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
