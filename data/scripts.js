@@ -1382,5 +1382,84 @@ exports.BattleScripts = {
 		}
 
 		return team;
+	},
+	randomSeasonalSFTeam: function(side) {
+		// This is the huge list of all the Pokemon in this seasonal
+		var seasonalPokemonList = [
+			'togepi', 'togetic', 'togekiss', 'happiny', 'chansey', 'blissey', 'exeggcute', 'exeggutor', 'lopunny', 'bunneary', 
+			'azumarill', 'bulbasaur', 'ivysaur', 'venusaur', 'caterpie', 'metapod', 'bellsprout', 'weepinbell', 'victreebel', 
+			'scyther', 'chikorita', 'bayleef', 'meganium', 'spinarak', 'natu', 'xatu', 'bellossom', 'politoed', 'skiploom', 
+			'larvitar', 'tyranitar', 'celebi', 'treecko', 'grovyle', 'sceptile', 'dustox', 'lotad', 'lombre', 'ludicolo', 
+			'breloom', 'electrike', 'roselia', 'gulpin', 'vibrava', 'flygon', 'cacnea', 'cacturne', 'cradily', 'keckleon', 
+			'tropius', 'rayquaza', 'turtwig', 'grotle', 'torterra', 'budew', 'roserade', 'carnivine', 'yanmega', 'leafeon', 
+			'shaymin', 'shayminsky', 'snivy', 'servine', 'serperior', 'pansage', 'simisage', 'swadloon', 'cottonee', 
+			'whimsicott', 'petilil', 'lilligant', 'basculin', 'maractus', 'trubbish', 'garbodor', 'solosis', 'duosion', 
+			'reuniclus', 'axew', 'fraxure', 'golett', 'golurk', 'virizion', 'tornadus', 'tornadustherian', 'burmy', 'wormadam', 
+			'kakuna', 'beedrill', 'sandshrew', 'nidoqueen', 'zubat', 'golbat', 'oddish', 'gloom', 'mankey', 'poliwrath', 
+			'machoke', 'machamp', 'doduo', 'dodrio', 'grimer', 'muk', 'kingler', 'cubone', 'marowak', 'hitmonlee', 'tangela', 
+			'mrmime', 'tauros', 'kabuto', 'dragonite', 'mewtwo', 'marill', 'hoppip', 'espeon', 'teddiursa', 'ursaring', 
+			'cascoon', 'taillow', 'swellow', 'pelipper', 'masquerain', 'azurill', 'minun', 'carvanha', 'huntail', 'bagon', 
+			'shelgon', 'salamence', 'latios', 'tangrowth', 'seismitoad', 'jellicent', 'eelektross', 'druddigon', 'bronzor', 
+			'bronzong', 'murkrow', 'honchkrow', 'absol', 'pidove', 'tranquill', 'unfezant', 'dunsparce', 'jirachi', 
+			'deerling', 'sawsbuck', 'meloetta', 'cherrim', 'gloom', 'vileplume', 'bellossom', 'lileep', 'venusaur', 
+			'sunflora', 'gallade', 'vullaby'
+        ];
+		seasonalPokemonList = seasonalPokemonList.randomize();
+		// Pokemon that must be shiny to be green
+		var mustBeShiny = {
+			kakuna:1, beedrill:1, sandshrew:1, nidoqueen:1, zubat:1, golbat:1, oddish:1, gloom:1, mankey:1, poliwrath:1, 
+			machoke:1, machamp:1, doduo:1, dodrio:1, grimer:1, muk:1, kingler:1, cubone:1, marowak:1, hitmonlee:1, tangela:1, 
+			mrmime:1, tauros:1, kabuto:1, dragonite:1, mewtwo:1, marill:1, hoppip:1, espeon:1, teddiursa:1, ursaring:1, 
+			cascoon:1, taillow:1, swellow:1, pelipper:1, masquerain:1, azurill:1, minun:1, carvanha:1, huntail:1, bagon:1, 
+			shelgon:1, salamence:1, latios:1, tangrowth:1, seismitoad:1, jellicent:1, elektross:1, druddigon:1, 
+			bronzor:1, bronzong:1, golett:1, golurk:1
+		};
+		// Pokemon that are in for their natural Super Luck ability
+		var superLuckPokemon = {murkrow:1, honchkrow:1, absol:1, pidove :1, tranquill:1, unfezant:1};
+		// Pokemon that are in for their natural Serene Grace ability
+		var sereneGracePokemon = {dunsparce:1, jirachi:1, deerling:1, sawsbuck:1, meloetta:1};
+		var team = [];
+		
+		// Now, let's make the team!
+		for (var i=0; i<6; i++) {
+			var pokemon = seasonalPokemonList[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomSet(template, i);
+			
+			// Everyone will have Metronome. EVERYONE. Luck everywhere!
+			set.moves[0] = 'Metronome';
+			// Also everyone will have either Softboiled, Barrage or Egg Bomb since easter!
+			var secondMove = ['Softboiled', 'Barrage', 'Egg Bomb'].randomize();
+			set.moves[1] = secondMove[0];
+			// Don't worry, both attacks are boosted for this seasonal!
+			
+			// Also Super Luck or Serene Grace as an ability. Yay luck!
+			if (template.id in superLuckPokemon) {
+				set.ability = 'Super Luck';
+			} else if (template.id in sereneGracePokemon) {
+				set.ability = 'Serene Grace';
+			} else {
+				var abilities = ['Serene Grace', 'Super Luck'].randomize();
+				set.ability = abilities[0];
+			}
+			
+			// Jellicent must always be male to be green
+			if (template.id === 'Jellicent') {
+				set.gender = 'M';
+			}
+			
+			// These Pokemon must always be shiny to be green
+			if (template.id in mustBeShiny) {
+				set.shiny = true;
+			}
+			
+			// We don't want choice items
+			if (['Choice Scarf', 'Choice Band', 'Choice Specs'].indexOf(set.item) > -1) {
+				set.item = 'Metronome';
+			}
+			team.push(set);
+		}
+
+		return team;
 	}
 };
