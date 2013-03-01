@@ -319,6 +319,22 @@ exports.BattleStatuses = {
 			this.effectData.duration = 2;
 		},
 	},
+	rage: {
+		duration: 2,
+		onStart: function(target, source, effect) {
+			this.effectData.move = effect.id;
+		},
+		onTryHit: function(target, source, move) {
+			if (target.boosts.atk < 6 && move.id === 'disable') {
+				this.boost({atk:1});
+			}
+		},
+		onHit: function(target, source, move) {
+			if (target.boosts.atk < 6 && move.category !== 'Status') {
+				this.boost({atk:1});
+			}
+		}
+	},
 
 	// weather
 
