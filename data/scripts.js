@@ -602,6 +602,7 @@ exports.BattleScripts = {
 				ability: ability,
 				evs: evs,
 				ivs: ivs,
+				nature: nature,
 				item: item,
 				level: level,
 				happiness: happiness,
