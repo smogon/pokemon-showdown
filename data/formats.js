@@ -150,7 +150,7 @@ exports.BattleFormats = {
 			}
 		},
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
-	},*/
+	},
 	seasonalvalentineventure: {
 		effectType: 'Format',
 		name: "[Seasonal] Valentine Venture",
@@ -160,6 +160,87 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
+	},*/
+	seasonalspringforward: {
+		effectType: 'Format',
+		name: "[Seasonal] Spring Forward",
+		team: 'randomSeasonalSF',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		onBegin: function() {
+			if (this.random(100) < 75) {
+				this.add('-message', "March and April showers bring May flowers...");
+				this.setWeather('Rain Dance');
+				delete this.weatherData.duration;
+			}
+			this.debug('Cutting teams down to three.');
+    		this.p1.pokemon = this.p1.pokemon.slice(0,3);
+	        this.p1.pokemonLeft = this.p1.pokemon.length;
+	        this.p2.pokemon = this.p2.pokemon.slice(0,3);
+	        this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		onSwitchIn: function(pokemon) {
+			var greenPokemon = {
+				bulbasaur:1, ivysaur:1, venusaur:1, caterpie:1, metapod:1, bellsprout:1, weepinbell:1, victreebel:1, scyther:1,
+				chikorita:1, bayleef:1, meganium:1, spinarak:1, natu:1, xatu:1, bellossom:1, politoed:1, skiploom:1, lavitar:1, 
+				tyranitar:1, celebi:1, treecko:1, grovyle:1, sceptile:1, dustox:1, lotad:1, lombre:1, ludicolo:1, breloom:1, 
+				electrike:1, roselia:1, gulpin:1, vibrava:1, flygon:1, cacnea:1, cacturne:1, cradily:1, keckleon:1, tropius:1, 
+				rayquaza:1, turtwig:1, grotle:1, torterra:1, budew:1, roserade:1, carnivine:1, yanmega:1, leafeon:1, shaymin:1, 
+				shayminsky:1, snivy:1, servine:1, serperior:1, pansage:1, simisage:1, swadloon:1, cottonee:1, whimsicott:1, 
+				petilil:1, lilligant:1, basculin:1, maractus:1, trubbish:1, garbodor:1, solosis:1, duosion:1, reuniclus:1, 
+				axew:1, fraxure:1, golett:1, golurk:1, virizion:1, tornadus:1, tornadustherian:1, burmy:1, 
+				kakuna:1, beedrill:1, sandshrew:1, nidoqueen:1, zubat:1, golbat:1, oddish:1, gloom:1, mankey:1, poliwrath:1, 
+				machoke:1, machamp:1, doduo:1, dodrio:1, grimer:1, muk:1, kingler:1, cubone:1, marowak:1, hitmonlee:1, tangela:1, 
+				mrmime:1, tauros:1, kabuto:1, dragonite:1, mewtwo:1, marill:1, hoppip:1, espeon:1, teddiursa:1, ursaring:1, 
+				cascoon:1, taillow:1, swellow:1, pelipper:1, masquerain:1, azurill:1, minun:1, carvanha:1, huntail:1, bagon:1, 
+				shelgon:1, salamence:1, latios:1, tangrowth:1, seismitoad:1, jellicent:1, elektross:1, druddigon:1, 
+				bronzor:1, bronzong:1, gallade:1
+			};
+			if (pokemon.template.id in greenPokemon) {
+				this.add('-message', pokemon.name + " drank way too much!");
+				pokemon.addVolatile('confusion');
+				pokemon.statusData.time = 0;
+			}
+		},
+		onModifyMove: function(move) {
+			if (move.id === 'barrage') {
+				move.category = 'Special';
+				move.type = 'Grass';
+				move.basePower = 35;
+				move.critRatio = 2;
+				move.accuracy = 100;
+				move.multihit = [3,5],
+				move.onBeforeMove = function() {
+					this.add('-message', "You found a little chocolate egg!");
+				};
+				move.onHit = function (target, source) {
+					this.heal(Math.ceil(source.maxhp / 40), source);
+				};
+			} else if (move.id === 'eggbomb') {
+				move.category = 'Special';
+				move.type = 'Grass';
+				move.basePower = 100;
+				move.willCrit = true;
+				move.accuracy = 100;
+				move.onHit = function (target, source) {
+					this.add('-message', source.name + " ate a big chocolate egg!");
+					this.heal(source.maxhp / 8, source);
+				};
+				// Too much chocolate, you get fat. Also with STAB it's too OP
+				move.self = {boosts: {spe: -2, spa: -1}};
+			} else if (move.id === 'softboiled') {
+				move.heal = [3,4];
+				move.onHit = function(target) {
+					this.add('-message', target.name + " ate a delicious chocolate egg!");
+				};
+			} else {
+				// As luck is everywhere...
+				move.critRatio = 2;
+			}
+		},
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	challengecup: {
