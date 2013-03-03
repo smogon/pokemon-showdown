@@ -1400,7 +1400,7 @@ exports.BattleScripts = {
 			'machoke', 'machamp', 'doduo', 'dodrio', 'grimer', 'muk', 'kingler', 'cubone', 'marowak', 'hitmonlee', 'tangela', 
 			'mrmime', 'tauros', 'kabuto', 'dragonite', 'mewtwo', 'marill', 'hoppip', 'espeon', 'teddiursa', 'ursaring', 
 			'cascoon', 'taillow', 'swellow', 'pelipper', 'masquerain', 'azurill', 'minun', 'carvanha', 'huntail', 'bagon', 
-			'shelgon', 'salamence', 'latios', 'tangrowth', 'seismitoad', 'jellicent', 'eelektross', 'druddigon', 'bronzor', 
+			'shelgon', 'salamence', 'latios', 'tangrowth', 'seismitoad', 'eelektross', 'druddigon', 'bronzor', 
 			'bronzong', 'murkrow', 'honchkrow', 'absol', 'pidove', 'tranquill', 'unfezant', 'dunsparce', 'jirachi', 
 			'deerling', 'sawsbuck', 'meloetta', 'cherrim', 'gloom', 'vileplume', 'bellossom', 'lileep', 'venusaur', 
 			'sunflora', 'gallade', 'vullaby'
@@ -1444,11 +1444,6 @@ exports.BattleScripts = {
 				set.ability = abilities[0];
 			}
 			
-			// Jellicent must always be male to be green
-			if (template.id === 'Jellicent') {
-				set.gender = 'M';
-			}
-			
 			// These Pokemon must always be shiny to be green
 			if (template.id in mustBeShiny) {
 				set.shiny = true;
@@ -1457,6 +1452,10 @@ exports.BattleScripts = {
 			// We don't want choice items
 			if (['Choice Scarf', 'Choice Band', 'Choice Specs'].indexOf(set.item) > -1) {
 				set.item = 'Metronome';
+			}
+			// Avoid Toxic Orb Breloom
+			if (template.id === 'breloom' && set.item === 'Toxic Orb') {
+				set.item = 'Lum Berry';
 			}
 			team.push(set);
 		}
