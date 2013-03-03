@@ -1430,8 +1430,10 @@ exports.BattleScripts = {
 			// Everyone will have Metronome. EVERYONE. Luck everywhere!
 			set.moves[0] = 'Metronome';
 			// Also everyone will have either Softboiled, Barrage or Egg Bomb since easter!
-			var secondMove = ['Softboiled', 'Barrage', 'Egg Bomb'].randomize();
-			set.moves[1] = secondMove[0];
+			var secondMove = ['softboiled', 'barrage', 'eggbomb'].randomize();
+			if (set.moves.indexOf(secondMove) === -1) {
+				set.moves[1] = secondMove[0];
+			}
 			// Don't worry, both attacks are boosted for this seasonal!
 			
 			// Also Super Luck or Serene Grace as an ability. Yay luck!
@@ -1456,6 +1458,14 @@ exports.BattleScripts = {
 			// Avoid Toxic Orb Breloom
 			if (template.id === 'breloom' && set.item === 'Toxic Orb') {
 				set.item = 'Lum Berry';
+			}
+			// Change gems to Grass Gem
+			if (set.item.indexOf('Gem') > -1) {
+				if (set.moves.indexOf('barrage') > -1 || set.moves.indexOf('eggbomb') > -1 || set.moves.indexOf('gigadrain') > -1) {
+					set.item = 'Grass Gem';
+				} else {
+					set.item = 'Metronome';
+				}
 			}
 			team.push(set);
 		}
