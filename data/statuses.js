@@ -193,7 +193,7 @@ exports.BattleStatuses = {
 			return this.random(2,4);
 		},
 		onResidual: function(target) {
-			if (target.lastMove === 'struggle' || target.status === 'slp' || !target.movedThisTurn) {
+			if (target.lastMove === 'struggle' || target.status === 'slp') {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
 			}
