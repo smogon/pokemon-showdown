@@ -8928,6 +8928,24 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		self: {
+			volatileStatus: 'rage'
+		},
+		effect: {
+			onStart: function(pokemon) {
+				this.add('-singlemove', pokemon, 'Rage');
+			},
+			onHit: function(target, source, move) {
+				if (target !== source && move.category !== 'Status') {
+					this.boost({atk:1});
+				}
+			},
+			onBeforeMovePriority: 100,
+			onBeforeMove: function(pokemon) {
+				this.debug('removing Rage before attack');
+				pokemon.removeVolatile('rage');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
