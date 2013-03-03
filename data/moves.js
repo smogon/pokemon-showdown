@@ -8928,6 +8928,15 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		self: {
+			volatileStatus: 'rage'
+		},
+		onHit: function(target, source) {
+			// Renew rage's duration when it's used
+			if (source.volatiles['rage']) {
+				source.volatiles['rage'].duration = 2;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
