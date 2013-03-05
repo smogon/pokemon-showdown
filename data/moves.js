@@ -4329,7 +4329,7 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon) {
 			var actives = pokemon.side.active;
 			for (var i=0; i<actives.length; i++) {
-				if (actives[i] && actives[i].lastMove === 'fusionflare' && actives[i].movedThisTurn) {
+				if (actives[i] && actives[i].moveThisTurn === 'fusionflare') {
 					this.debug('double power');
 					return 200;
 				}
@@ -4355,7 +4355,7 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon) {
 			var actives = pokemon.side.active;
 			for (var i=0; i<actives.length; i++) {
-				if (actives[i] && actives[i].lastMove === 'fusionbolt' && actives[i].movedThisTurn) {
+				if (actives[i] && actives[i].moveThisTurn === 'fusionbolt') {
 					this.debug('double power');
 					return 200;
 				}
@@ -4686,7 +4686,7 @@ exports.BattleMovedex = {
 				var applies = false;
 				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
 					applies = true;
-					pokemon.movedThisTurn = true;
+					this.cancelMove(pokemon);
 				}
 				if (pokemon.volatiles['magnetrise']) {
 					applies = true;
@@ -8791,7 +8791,6 @@ exports.BattleMovedex = {
 				var sources = this.effectData.sources;
 				for (var i=0; i<sources.length; i++) {
 					this.runMove('pursuit', sources[i], pokemon);
-					sources[i].movedThisTurn = true;
 				}
 			}
 		},
@@ -10806,7 +10805,7 @@ exports.BattleMovedex = {
 				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.ability === 'levitate') applies = true;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
-					pokemon.movedThisTurn = true;
+					this.cancelMove(pokemon);
 				}
 				if (pokemon.volatiles['magnetrise']) {
 					applies = true;
@@ -10821,7 +10820,7 @@ exports.BattleMovedex = {
 			},
 			onRestart: function(pokemon) {
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
-					pokemon.movedThisTurn = true;
+					this.cancelMove(pokemon);
 					this.add('-start', pokemon, 'Smack Down');
 				}
 			},
