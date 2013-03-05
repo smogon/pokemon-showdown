@@ -11347,7 +11347,7 @@ exports.BattleMovedex = {
 				if (this.effectData.layers < 3) {
 					this.effectData.layers++;
 					this.add('-start', target, 'stockpile'+this.effectData.layers);
-					this.boost({def:1, spd:1});
+					this.boost({def:1, spd:1}, target, target, this.getMove('stockpile'));
 				}
 			},
 			onEnd: function(target) {
