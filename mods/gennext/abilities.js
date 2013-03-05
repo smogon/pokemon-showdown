@@ -406,7 +406,6 @@ exports.BattleAbilities = {
 			onBeforeMove: function(pokemon, target, move) {
 				if (pokemon.removeVolatile('truant')) {
 					this.add('cant', pokemon, 'ability: Truant');
-					pokemon.movedThisTurn = true;
 					this.heal(pokemon.maxhp/3);
 					return false;
 				}

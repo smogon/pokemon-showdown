@@ -269,10 +269,12 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.lastItem = '';
 	BattlePokemon.prototype.status = '';
 	BattlePokemon.prototype.position = 0;
+
 	BattlePokemon.prototype.lastMove = '';
+	BattlePokemon.prototype.moveThisTurn = '';
+
 	BattlePokemon.prototype.lastDamage = 0;
 	BattlePokemon.prototype.lastAttackedBy = null;
-	BattlePokemon.prototype.movedThisTurn = false;
 	BattlePokemon.prototype.usedItemThisTurn = false;
 	BattlePokemon.prototype.newlySwitched = false;
 	BattlePokemon.prototype.beingCalledBack = false;
@@ -381,11 +383,11 @@ var BattlePokemon = (function() {
 			}
 			success = true;
 		}
-		if (!amount) {
-			this.lastMove = move.id;
-			this.movedThisTurn = true;
-		}
 		return success;
+	};
+	BattlePokemon.prototype.moveUsed = function(move) {
+		this.lastMove = this.battle.getMove(move).id;
+		this.moveThisTurn = this.lastMove;
 	};
 	BattlePokemon.prototype.gotAttacked = function(move, damage, source) {
 		if (!damage) damage = 0;
@@ -587,10 +589,12 @@ var BattlePokemon = (function() {
 		}
 		this.volatiles = {};
 		this.switchFlag = false;
+
 		this.lastMove = '';
+		this.moveThisTurn = '';
+
 		this.lastDamage = 0;
 		this.lastAttackedBy = null;
-		this.movedThisTurn = false;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 		this.update(init);
@@ -2079,7 +2083,7 @@ var Battle = (function() {
 			for (var j=0; j<this.sides[i].active.length; j++) {
 				var pokemon = this.sides[i].active[j];
 				if (!pokemon) continue;
-				pokemon.movedThisTurn = false;
+				pokemon.moveThisTurn = '';
 				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
 				if (pokemon.lastAttackedBy) {

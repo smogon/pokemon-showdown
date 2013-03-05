@@ -6,8 +6,15 @@ exports.BattleScripts = {
 
 		this.setActiveMove(move, pokemon, target);
 
-		if (pokemon.movedThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
-			this.debug(''+pokemon.id+' move interrupted; movedThisTurn: '+pokemon.movedThisTurn);
+		if (pokemon.moveThisTurn) {
+			// THIS IS PURELY A SANITY CHECK
+			// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
+			// USE this.cancelMove INSTEAD
+			this.debug(''+pokemon.id+' INCONSISTENT STATE, ALREADY MOVED: '+pokemon.moveThisTurn);
+			this.clearActiveMove(true);
+			return;
+		}
+		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
 			this.clearActiveMove(true);
 			return;
 		}
@@ -24,6 +31,7 @@ exports.BattleScripts = {
 			pokemon.deductPP(move, null, target);
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
+		pokemon.moveUsed(move);
 		this.runEvent('AfterMove', target, pokemon, move);
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
