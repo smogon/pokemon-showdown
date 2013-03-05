@@ -738,7 +738,10 @@ module.exports = (function () {
 		} else if ((set.level || maxLevel) >= maxForcedLevel) {
 			set.forcedLevel = maxForcedLevel;
 		}
-		if (!set.level || set.level > maxLevel || set.level == set.forcedLevel) {
+		if (!set.level) {
+			set.level = 100;
+		}
+		if (set.level > maxLevel || set.level == set.forcedLevel) {
 			set.level = maxLevel;
 		}
 
