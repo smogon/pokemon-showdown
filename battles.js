@@ -496,8 +496,10 @@ var BattlePokemon = (function() {
 		if (!template.abilities || pokemon && pokemon.transformed) {
 			return false;
 		}
+		if (!this.formeChange(template, true)) {
+			return false;
+		}
 		this.transformed = true;
-		this.formeChange(template, true);
 		for (var statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
 		}
@@ -545,6 +547,7 @@ var BattlePokemon = (function() {
 			}
 			this.speed = this.stats.spe;
 		}
+		return true;
 	};
 	BattlePokemon.prototype.clearVolatile = function(init) {
 		this.boosts = {
