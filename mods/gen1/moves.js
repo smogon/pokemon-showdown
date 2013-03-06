@@ -1013,9 +1013,6 @@ exports.BattleMovedex = {
 				if (!damage) return null;
 				damage = this.runEvent('SubDamage', target, source, move, damage);
 				if (!damage) return damage;
-				if (damage > target.volatiles['substitute'].hp) {
-					damage = target.volatiles['substitute'].hp;
-				}
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
@@ -1033,6 +1030,9 @@ exports.BattleMovedex = {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);
+				// Add here counter damage
+				target.lastAttackedBy.move = move.id;
+				target.lastAttackedBy.damage = damage;
 				return 0; // hit
 			},
 			onEnd: function(target) {
