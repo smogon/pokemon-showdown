@@ -210,10 +210,11 @@ var User = (function () {
 
 		// The console permission is incredibly powerful because it allows
 		// the execution of abitrary shell commands on the local computer.
-		// As such, it can only be used from a specified whitelist of IPs.
+		// As such, it can only be used from a specified whitelist of IPs
+		// and userids.
 		if (permission === 'console') {
 			var whitelist = config.consoleips || ['127.0.0.1'];
-			if (whitelist.indexOf(this.ip) === -1) {
+			if (whitelist.indexOf(this.ip) < 0 && whitelist.indexOf(this.userid) < 0) {
 				return false;
 			}
 		}
