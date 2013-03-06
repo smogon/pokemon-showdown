@@ -55,6 +55,7 @@ exports.BattleScripts = {
 	runMove: function(move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
+		if (target.subFainted) delete target.subFainted;
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -193,14 +194,7 @@ exports.BattleScripts = {
 	},
 	rollMoveHit: function(target, pokemon, move, spreadHit) {
 		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
-
-		// Not selfdestructs if Substitute is gonna faint
-		var targetSub = target.volatiles['substitute'];
 		var doSelfDestruct = true;
-		var subHp = false;
-		if ((typeof targetSub === 'object') && targetSub !== null) {
-			var subHp = (targetSub.hp !== false && targetSub.hp !== 0);
-		}
 		
 		// Calculate true accuracy
 		var accuracy = move.accuracy;
@@ -275,6 +269,10 @@ exports.BattleScripts = {
 				}
 				if (moveDamage === false) break;
 				damage = (moveDamage || 0);
+				if (target.subFainted) {
+					i++;
+					break;
+				}
 			}
 			move.damage = null;
 			if (i === 0) return true;
@@ -288,8 +286,7 @@ exports.BattleScripts = {
 		if (!damage && damage !== 0) return false;
 		
 		// Checking if substitute fainted
-		var currentSub = target.volatiles['substitute'];
-		if (subHp === true && (currentSub === undefined || currentSub === null)) {
+		if (target.subFainted) {
 			doSelfDestruct = false;
 		}
 		if (move.selfdestruct && doSelfDestruct) {

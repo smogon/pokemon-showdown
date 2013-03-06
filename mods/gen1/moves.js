@@ -1019,7 +1019,9 @@ exports.BattleMovedex = {
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
+					this.debug('Substitute broke');
 					target.removeVolatile('substitute');
+					target.subFainted = true;
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
