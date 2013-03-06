@@ -515,6 +515,74 @@ exports.BattleFormats = {
 		// no restrictions, for serious
 		ruleset: []
 	},
+	// Previous gens
+	gen1ou: {
+		mod: 'gen1',
+		effectType: 'Format',
+		name: "[Gen 1] OU",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		debug: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Gen1 Pokemon', 'All Abilities', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause'],
+		banlist: ['Uber', 'Illegal']
+	},
+	gen1uu: {
+		mod: 'gen1',
+		effectType: 'Format',
+		name: "[Gen 1] UU",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		debug: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Gen1 Pokemon', 'All Abilities', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause'],
+		banlist: ['Uber', 'OU', 'Illegal']
+	},
+	gen1ubers: {
+		mod: 'gen1',
+		effectType: 'Format',
+		name: "[Gen 1] Ubers",
+		challengeShow: true,
+		debug: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Gen1 Pokemon', 'All Abilities', 'Sleep Clause', 'Species Clause'],
+		banlist: ['Illegal']
+	},
+	gen1uu: {
+		mod: 'gen1',
+		effectType: 'Format',
+		name: "[Gen 1] UU",
+		challengeShow: true,
+		debug: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Gen1 Pokemon', 'All Abilities', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause'],
+		banlist: ['Uber', 'OU', 'Illegal']
+	},
+	gen1lc: {
+		mod: 'gen1',
+		effectType: 'Format',
+		name: "[Gen 1] LC",
+		maxLevel: 5,
+		challengeShow: true,
+		debug: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Gen1 Pokemon', 'All Abilities', 'Little Cup', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause'],
+		banlist: ['Uber', 'OU', 'UU', 'Illegal', 'Sonicboom', 'Dragon Rage']
+
+	},
+	gen1challengecup: {
+		mod: 'gen1',
+		effectType: 'Format',
+		name: "[Gen 1] Challenge Cup",
+		team: 'randomCC',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['Pokemon']
+	},
 	gen4hackmons: {
 		mod: 'gen4',
 		effectType: 'Format',
