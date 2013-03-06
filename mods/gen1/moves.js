@@ -885,7 +885,11 @@ exports.BattleMovedex = {
 	},
 	skullbash: {
 		inherit: true,
-		effect: null
+		effect: {
+			duration: 2,
+			onLockMove: 'skullbash',
+			onStart: function(pokemon) {}
+		}
 	},
 	skyattack: {
 		inherit: true,
