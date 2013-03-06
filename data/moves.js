@@ -11069,14 +11069,19 @@ exports.BattleMovedex = {
 			return pokemon.volatiles['stockpile'].layers * 100;
 		},
 		category: "Special",
-		desc: "Deals damage to one adjacent target. Power is equal to 100 times the user's Stockpile count. Fails if the user's Stockpile count is 0. After dealing damage, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
+		desc: "Deals damage to one adjacent target. Power is equal to 100 times the user's Stockpile count. Fails if the user's Stockpile count is 0. Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
 		shortDesc: "More power with more uses of Stockpile.",
 		id: "spitup",
 		name: "Spit Up",
 		pp: 10,
 		priority: 0,
-		onTryHit: function(target, pokemon) {
-			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
+		onTry: function(pokemon) {
+			if (!pokemon.volatiles['stockpile']) {
+				this.add('-fail', pokemon);
+				return false;
+			}
+		},
+		onAfterMove: function(pokemon) {
 			pokemon.removeVolatile('stockpile');
 		},
 		secondary: false,
@@ -11218,20 +11223,21 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(target) {
 				this.effectData.layers = 1;
-				this.add('-start',target,'stockpile'+this.effectData.layers);
-				this.boost({def:1, spd:1});
+				this.add('-start', target, 'stockpile'+this.effectData.layers);
+				this.boost({def:1, spd:1}, target, target, this.getMove('stockpile'));
 			},
 			onRestart: function(target) {
 				if (this.effectData.layers < 3) {
 					this.effectData.layers++;
-					this.add('-start',target,'stockpile'+this.effectData.layers);
-					this.boost({def:1, spd:1});
+					this.add('-start', target, 'stockpile'+this.effectData.layers);
+					this.boost({def:1, spd:1}, target, target, this.getMove('stockpile'));
 				}
 			},
 			onEnd: function(target) {
 				var layers = this.effectData.layers * -1;
 				this.effectData.layers = 0;
-				this.boost({def:layers, spd:layers});
+				this.boost({def:layers, spd:layers}, target, target, this.getMove('stockpile'));
+				this.add('-end', target, 'Stockpile');
 			}
 		},
 		secondary: false,
