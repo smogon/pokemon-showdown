@@ -4807,33 +4807,13 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onHit: function(target, source) {
-			if (!target.volatiles.guardsplit) {
-				target.addVolatile('guardsplit');
-				target.volatiles.guardsplit.def = target.getStat('def', true, true);
-				target.volatiles.guardsplit.spd = target.getStat('spd', true, true);
-			}
-			if (!source.volatiles.guardsplit) {
-				source.addVolatile('guardsplit');
-				source.volatiles.guardsplit.def = source.getStat('def', true, true);
-				source.volatiles.guardsplit.spd = source.getStat('spd', true, true);
-			}
-			var newdef = Math.floor((target.volatiles.guardsplit.def + source.volatiles.guardsplit.def)/2);
-			target.volatiles.guardsplit.def = newdef;
-			source.volatiles.guardsplit.def = newdef;
-			var newspd = Math.floor((target.volatiles.guardsplit.spd + source.volatiles.guardsplit.spd)/2);
-			target.volatiles.guardsplit.spd = newspd;
-			source.volatiles.guardsplit.spd = newspd;
+			var newdef = Math.floor((target.stats.def + source.stats.def)/2);
+			target.stats.def = newdef;
+			source.stats.def = newdef;
+			var newspd = Math.floor((target.stats.spd + source.stats.spd)/2);
+			target.stats.spd = newspd;
+			source.stats.spd = newspd;
 			this.add('-activate', source, 'Guard Split', '[of] '+target);
-		},
-		effect: {
-			onModifyDefPriority: 100,
-			onModifyDef: function() {
-				return this.effectData.def;
-			},
-			onModifySpDPriority: 100,
-			onModifySpD: function() {
-				return this.effectData.spd;
-			}
 		},
 		secondary: false,
 		target: "normal",
@@ -4855,8 +4835,8 @@ exports.BattleMovedex = {
 			var sourceBoosts = {};
 
 			for (var i in {def:1,spd:1}) {
-				targetBoosts[i] = target.baseBoosts[i];
-				sourceBoosts[i] = source.baseBoosts[i];
+				targetBoosts[i] = target.boosts[i];
+				sourceBoosts[i] = source.boosts[i];
 			}
 
 			source.setBoost(targetBoosts);
@@ -5248,9 +5228,9 @@ exports.BattleMovedex = {
 			var targetBoosts = {};
 			var sourceBoosts = {};
 
-			for (var i in target.baseBoosts) {
-				targetBoosts[i] = target.baseBoosts[i];
-				sourceBoosts[i] = source.baseBoosts[i];
+			for (var i in target.boosts) {
+				targetBoosts[i] = target.boosts[i];
+				sourceBoosts[i] = source.boosts[i];
 			}
 
 			target.setBoost(sourceBoosts);
@@ -8365,33 +8345,13 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onHit: function(target, source) {
-			if (!target.volatiles.powersplit) {
-				target.addVolatile('powersplit');
-				target.volatiles.powersplit.atk = target.getStat('atk', true, true);
-				target.volatiles.powersplit.spa = target.getStat('spa', true, true);
-			}
-			if (!source.volatiles.powersplit) {
-				source.addVolatile('powersplit');
-				source.volatiles.powersplit.atk = source.getStat('atk', true, true);
-				source.volatiles.powersplit.spa = source.getStat('spa', true, true);
-			}
-			var newatk = Math.floor((target.volatiles.powersplit.atk + source.volatiles.powersplit.atk)/2);
-			target.volatiles.powersplit.atk = newatk;
-			source.volatiles.powersplit.atk = newatk;
-			var newspa = Math.floor((target.volatiles.powersplit.spa + source.volatiles.powersplit.spa)/2);
-			target.volatiles.powersplit.spa = newspa;
-			source.volatiles.powersplit.spa = newspa;
+			var newatk = Math.floor((target.stats.atk + source.stats.atk)/2);
+			target.stats.atk = newatk;
+			source.stats.atk = newatk;
+			var newspa = Math.floor((target.stats.spa + source.stats.spa)/2);
+			target.stats.spa = newspa;
+			source.stats.spa = newspa;
 			this.add('-activate', source, 'Power Split', '[of] '+target);
-		},
-		effect: {
-			onModifyAtkPriority: 100,
-			onModifyAtk: function() {
-				return this.effectData.atk;
-			},
-			onModifySpAPriority: 100,
-			onModifySpA: function() {
-				return this.effectData.spa;
-			}
 		},
 		secondary: false,
 		target: "normal",
@@ -8413,8 +8373,8 @@ exports.BattleMovedex = {
 			var sourceBoosts = {};
 
 			for (var i in {atk:1,spa:1}) {
-				targetBoosts[i] = target.baseBoosts[i];
-				sourceBoosts[i] = source.baseBoosts[i];
+				targetBoosts[i] = target.boosts[i];
+				sourceBoosts[i] = source.boosts[i];
 			}
 
 			source.setBoost(targetBoosts);
@@ -8441,8 +8401,6 @@ exports.BattleMovedex = {
 		volatileStatus: 'powertrick',
 		effect: {
 			onStart: function(pokemon) {
-				this.effectData.atk = pokemon.getStat('def', true, true);
-				this.effectData.def = pokemon.getStat('atk', true, true);
 				this.add('-start', pokemon, 'Power Trick');
 			},
 			onEnd: function(pokemon) {
@@ -8453,11 +8411,11 @@ exports.BattleMovedex = {
 			},
 			onModifyAtkPriority: 100,
 			onModifyAtk: function() {
-				return this.effectData.atk;
+				return this.stats.def;
 			},
 			onModifyDefPriority: 100,
 			onModifyDef: function() {
-				return this.effectData.def;
+				return this.stats.atk;
 			}
 		},
 		secondary: false,
@@ -8587,8 +8545,8 @@ exports.BattleMovedex = {
 		isNotProtectable: true,
 		onHit: function(target, source) {
 			var targetBoosts = {};
-			for (var i in target.baseBoosts) {
-				targetBoosts[i] = target.baseBoosts[i];
+			for (var i in target.boosts) {
+				targetBoosts[i] = target.boosts[i];
 			}
 			source.setBoost(targetBoosts);
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
@@ -9247,12 +9205,11 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onAfterMoveSecondarySelf: function(pokemon, target, move) {
-				if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.transformInto('Meloetta')) {
+				if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta')) {
 					this.add('-formechange', pokemon, 'Meloetta');
-				} else if (pokemon.transformInto('Meloetta-Pirouette')) {
+				} else if (pokemon.formeChange('Meloetta-Pirouette')) {
 					this.add('-formechange', pokemon, 'Meloetta-Pirouette');
 				}
-				pokemon.transformed = false;
 				pokemon.removeVolatile('relicsong');
 			}
 		},
@@ -13378,13 +13335,13 @@ exports.BattleMovedex = {
 			onStart: function(side, source) {
 				this.add('-fieldstart', 'move: WonderRoom', '[of] '+source);
 			},
-			onModifyDefPriority: -100,
+			onModifyDefPriority: 100,
 			onModifyDef: function(def, pokemon) {
-				return pokemon.getStat('spd', true, true);
+				return pokemon.stats.spd;
 			},
-			onModifySpDPriority: -100,
+			onModifySpDPriority: 100,
 			onModifySpD: function(spd, pokemon) {
-				return pokemon.getStat('def', true, true);
+				return pokemon.stats.def;
 			},
 			onResidualOrder: 24,
 			onEnd: function() {

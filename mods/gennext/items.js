@@ -9,7 +9,7 @@ exports.BattleItems = {
 		onStart: function (pokemon) {
 			if (pokemon.species === 'Genesect') {
 				this.add('-item', pokemon, 'Burn Drive');
-				if (pokemon.transformInto('Genesect-Burn')) {
+				if (pokemon.formeChange('Genesect-Burn')) {
 					this.add('-formechange', pokemon, 'Genesect-Burn');
 				}
 			}
@@ -32,7 +32,7 @@ exports.BattleItems = {
 		onStart: function (pokemon) {
 			if (pokemon.species === 'Genesect') {
 				this.add('-item', pokemon, 'Chill Drive');
-				if (pokemon.transformInto('Genesect-Chill')) {
+				if (pokemon.formeChange('Genesect-Chill')) {
 					this.add('-formechange', pokemon, 'Genesect-Chill');
 				}
 			}
@@ -55,7 +55,7 @@ exports.BattleItems = {
 		onStart: function (pokemon) {
 			if (pokemon.species === 'Genesect') {
 				this.add('-item', pokemon, 'Douse Drive');
-				if (pokemon.transformInto('Genesect-Douse')) {
+				if (pokemon.formeChange('Genesect-Douse')) {
 					this.add('-formechange', pokemon, 'Genesect-Douse');
 				}
 			}
@@ -78,7 +78,7 @@ exports.BattleItems = {
 		onStart: function (pokemon) {
 			if (pokemon.species === 'Genesect') {
 				this.add('-item', pokemon, 'Shock Drive');
-				if (pokemon.transformInto('Genesect-Shock')) {
+				if (pokemon.formeChange('Genesect-Shock')) {
 					this.add('-formechange', pokemon, 'Genesect-Shock');
 				}
 			}
