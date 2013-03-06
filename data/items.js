@@ -3006,8 +3006,8 @@ exports.BattleItems = {
 			effect: function(pokemon) {
 				var activate = false;
 				var boosts = {};
-				for (var i in pokemon.baseBoosts) {
-					if (pokemon.baseBoosts[i] < 0) {
+				for (var i in pokemon.boosts) {
+					if (pokemon.boosts[i] < 0) {
 						activate = true;
 						boosts[i] = 0;
 					}
@@ -3020,8 +3020,8 @@ exports.BattleItems = {
 		onUpdate: function(pokemon) {
 			var activate = false;
 			var boosts = {};
-			for (var i in pokemon.baseBoosts) {
-				if (pokemon.baseBoosts[i] < 0) {
+			for (var i in pokemon.boosts) {
+				if (pokemon.boosts[i] < 0) {
 					activate = true;
 					boosts[i] = 0;
 				}

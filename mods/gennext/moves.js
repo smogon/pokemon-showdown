@@ -535,7 +535,7 @@ exports.BattleMovedex = {
 				'Timid': 'Jolly',
 				'Jolly': 'Timid'
 			};
-			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.transformInto('Meloetta')) {
+			if (pokemon.template.speciesid==='meloettapirouette' && pokemon.formeChange('Meloetta')) {
 				this.add('-formechange', pokemon, 'Meloetta');
 				var tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
@@ -546,7 +546,7 @@ exports.BattleMovedex = {
 					atk: Atk2SpA,
 					spa: -Atk2SpA
 				}, pokemon);
-			} else if (pokemon.transformInto('Meloetta-Pirouette')) {
+			} else if (pokemon.formeChange('Meloetta-Pirouette')) {
 				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
 				var tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;

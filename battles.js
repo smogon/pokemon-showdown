@@ -130,8 +130,7 @@ var BattlePokemon = (function() {
 		this.battle = side.battle;
 		if (typeof set === 'string') set = {name: set};
 
-		this.baseSet = set;
-		this.set = this.baseSet;
+		this.set = set;
 
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
@@ -243,19 +242,10 @@ var BattlePokemon = (function() {
 			atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
 			accuracy: 0, evasion: 0
 		};
-		this.baseBoosts = {
-			atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
-			accuracy: 0, evasion: 0
-		};
-		this.baseStats = this.template.baseStats;
-		this.bst = 0;
-		for (var i in this.baseStats) {
-			this.bst += this.baseStats[i];
-		}
-		this.bst = this.bst || 10;
+		this.stats = {atk:0, def:0, spa:0, spd:0, spe:0};
 
-		this.maxhp = Math.floor(Math.floor(2*this.baseStats['hp']+this.set.ivs['hp']+Math.floor(this.set.evs['hp']/4)+100)*this.level / 100 + 10);
-		if (this.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
+		this.maxhp = Math.floor(Math.floor(2*this.template.baseStats['hp']+this.set.ivs['hp']+Math.floor(this.set.evs['hp']/4)+100)*this.level / 100 + 10);
+		if (this.template.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
 		this.hp = this.hp || this.maxhp;
 
 		this.clearVolatile(true);
@@ -299,7 +289,6 @@ var BattlePokemon = (function() {
 		return this.details + '|' + this.getHealth();
 	};
 	BattlePokemon.prototype.update = function(init) {
-		this.baseStats = this.template.baseStats;
 		// reset for Light Metal etc
 		this.weightkg = this.template.weightkg;
 		// reset for Forecast etc
@@ -312,9 +301,6 @@ var BattlePokemon = (function() {
 		this.ignore = {};
 		for (var i in this.moveset) {
 			if (this.moveset[i]) this.moveset[i].disabled = false;
-		}
-		for (var i in this.baseBoosts) {
-			this.boosts[i] = this.baseBoosts[i];
 		}
 		if (init) return;
 
@@ -329,15 +315,7 @@ var BattlePokemon = (function() {
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
-		var stat = this.baseStats[statName];
-		stat = Math.floor(Math.floor(2*stat+this.set.ivs[statName]+Math.floor(this.set.evs[statName]/4))*this.level / 100 + 5);
-
-		// nature
-		var nature = this.battle.getNature(this.set.nature);
-		if (statName === nature.plus) stat *= 1.1;
-		if (statName === nature.minus) stat *= 0.9;
-		stat = Math.floor(stat);
-
+		var stat = this.stats[statName];
 		if (unmodified) return stat;
 
 		// stat modifier effects
@@ -348,6 +326,7 @@ var BattlePokemon = (function() {
 		if (unboosted) return stat;
 
 		// stat boosts
+		boost = this.battle.runEvent('ModifyBoost', this, null, null, boost);
 		var boostTable = [1,1.5,2,2.5,3,3.5,4];
 		if (boost > 6) boost = 6;
 		if (boost < -6) boost = -6;
@@ -472,14 +451,14 @@ var BattlePokemon = (function() {
 		var changed = false;
 		for (var i in boost) {
 			var delta = boost[i];
-			this.baseBoosts[i] += delta;
-			if (this.baseBoosts[i] > 6) {
-				delta -= this.baseBoosts[i] - 6;
-				this.baseBoosts[i] = 6;
+			this.boosts[i] += delta;
+			if (this.boosts[i] > 6) {
+				delta -= this.boosts[i] - 6;
+				this.boosts[i] = 6;
 			}
-			if (this.baseBoosts[i] < -6) {
-				delta -= this.baseBoosts[i] - (-6);
-				this.baseBoosts[i] = -6;
+			if (this.boosts[i] < -6) {
+				delta -= this.boosts[i] - (-6);
+				this.boosts[i] = -6;
 			}
 			if (delta) changed = true;
 		}
@@ -487,20 +466,20 @@ var BattlePokemon = (function() {
 		return changed;
 	};
 	BattlePokemon.prototype.clearBoosts = function() {
-		for (var i in this.baseBoosts) {
-			this.baseBoosts[i] = 0;
+		for (var i in this.boosts) {
+			this.boosts[i] = 0;
 		}
 		this.update();
 	};
 	BattlePokemon.prototype.setBoost = function(boost) {
 		for (var i in boost) {
-			this.baseBoosts[i] = boost[i];
+			this.boosts[i] = boost[i];
 		}
 		this.update();
 	};
 	BattlePokemon.prototype.copyVolatileFrom = function(pokemon) {
 		this.clearVolatile();
-		this.baseBoosts = pokemon.baseBoosts;
+		this.boosts = pokemon.boosts;
 		this.volatiles = pokemon.volatiles;
 		this.update();
 		pokemon.clearVolatile();
@@ -511,54 +490,66 @@ var BattlePokemon = (function() {
 			}
 		}
 	};
-	BattlePokemon.prototype.transformInto = function(baseTemplate) {
-		var pokemon = null;
-		if (baseTemplate && baseTemplate.template) {
-			pokemon = baseTemplate;
-			baseTemplate = pokemon.template;
-			if (pokemon.fainted || pokemon.illusion || pokemon.volatiles['substitute']) {
-				return false;
-			}
-		} else if (!baseTemplate || !baseTemplate.abilities) {
-			baseTemplate = this.battle.getTemplate(baseTemplate);
+	BattlePokemon.prototype.transformInto = function(pokemon) {
+		var template = pokemon.template;
+		if (pokemon.fainted || pokemon.illusion || pokemon.volatiles['substitute']) {
+			return false;
 		}
-		if (!baseTemplate.abilities || pokemon && pokemon.transformed) {
+		if (!template.abilities || pokemon && pokemon.transformed) {
 			return false;
 		}
 		this.transformed = true;
-		this.template = baseTemplate;
-		this.baseStats = this.template.baseStats;
-		this.types = baseTemplate.types;
-		if (pokemon) {
-			this.ability = pokemon.ability;
-			this.set = pokemon.set;
-			this.moveset = [];
-			this.moves = [];
-			for (var i=0; i<pokemon.moveset.length; i++) {
-				var moveData = pokemon.moveset[i];
-				var moveName = moveData.move;
-				if (moveData.id === 'hiddenpower') {
-					moveName = 'Hidden Power '+this.hpType;
-				}
-				this.moveset.push({
-					move: moveName,
-					id: moveData.id,
-					pp: 5,
-					maxpp: 5,
-					target: moveData.target,
-					disabled: false
-				});
-				this.moves.push(toId(moveName));
+		this.formeChange(template, true);
+		for (var statName in this.stats) {
+			this.stats[statName] = pokemon.stats[statName];
+		}
+		this.ability = pokemon.ability;
+		this.moveset = [];
+		this.moves = [];
+		for (var i=0; i<pokemon.moveset.length; i++) {
+			var moveData = pokemon.moveset[i];
+			var moveName = moveData.move;
+			if (moveData.id === 'hiddenpower') {
+				moveName = 'Hidden Power '+this.hpType;
 			}
-			for (var j in pokemon.baseBoosts) {
-				this.baseBoosts[j] = pokemon.baseBoosts[j];
-			}
+			this.moveset.push({
+				move: moveName,
+				id: moveData.id,
+				pp: 5,
+				maxpp: 5,
+				target: moveData.target,
+				disabled: false
+			});
+			this.moves.push(toId(moveName));
+		}
+		for (var j in pokemon.boosts) {
+			this.boosts[j] = pokemon.boosts[j];
 		}
 		this.update();
 		return true;
 	};
+	BattlePokemon.prototype.formeChange = function(template, dontRecalculateStats) {
+		template = this.battle.getTemplate(template);
+
+		if (!template.abilities) return false;
+		this.template = template;
+		this.types = this.template.types;
+		if (!dontRecalculateStats) {
+			for (var statName in this.stats) {
+				var stat = this.template.baseStats[statName];
+				stat = Math.floor(Math.floor(2*stat+this.set.ivs[statName]+Math.floor(this.set.evs[statName]/4))*this.level / 100 + 5);
+
+				// nature
+				var nature = this.battle.getNature(this.set.nature);
+				if (statName === nature.plus) stat *= 1.1;
+				if (statName === nature.minus) stat *= 0.9;
+				this.stats[statName] = Math.floor(stat);
+			}
+			this.speed = this.stats.spe;
+		}
+	};
 	BattlePokemon.prototype.clearVolatile = function(init) {
-		this.baseBoosts = {
+		this.boosts = {
 			atk: 0,
 			def: 0,
 			spa: 0,
@@ -567,6 +558,7 @@ var BattlePokemon = (function() {
 			accuracy: 0,
 			evasion: 0
 		};
+
 		this.moveset = [];
 		this.moves = [];
 		// we're copying array contents
@@ -579,9 +571,6 @@ var BattlePokemon = (function() {
 		}
 		this.transformed = false;
 		this.ability = this.baseAbility;
-		this.template = this.baseTemplate;
-		this.baseStats = this.template.baseStats;
-		this.types = this.template.types;
 		for (var i in this.volatiles) {
 			if (this.volatiles[i].linkedStatus) {
 				this.volatiles[i].linkedPokemon.removeVolatile(this.volatiles[i].linkedStatus);
@@ -597,6 +586,9 @@ var BattlePokemon = (function() {
 		this.lastAttackedBy = null;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
+
+		this.formeChange(this.baseTemplate);
+
 		this.update(init);
 	};
 	BattlePokemon.prototype.hasType = function (type) {
@@ -1627,6 +1619,7 @@ var Battle = (function() {
 					CriticalHit: 1,
 					ModifyPokemon: 1,
 					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1,
+					ModifyBoost: 1,
 					TryHit: 1,
 					TrySecondaryHit: 1,
 					Hit: 1,
