@@ -291,8 +291,6 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.update = function(init) {
 		// reset for Light Metal etc
 		this.weightkg = this.template.weightkg;
-		// reset for Forecast etc
-		this.types = this.template.types;
 		// reset for diabled moves
 		this.disabledMoves = {};
 		this.negateImmunity = {};

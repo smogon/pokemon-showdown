@@ -95,56 +95,6 @@ exports.BattleMovedex = {
 		accuracy: 75,
 		pp: 10
 	},
-	conversion: {
-		inherit: true,
-		//desc: "",
-		onTryHit: function(pokemon) {
-			if (pokemon.ability === 'multitype') return false;
-		},
-		volatileStatus: 'conversion',
-		effect: {
-			onStart: function(pokemon) {
-				var possibleTypes = pokemon.moveset.map(function(val){
-					var move = this.getMove(val.id);
-					var noConversion = {conversion:1, curse:1};
-					if (!noConversion[move.id] && !pokemon.hasType(move.type)) {
-						return move.type;
-					}
-				}, this).compact();
-				if (!possibleTypes.length) {
-					this.add('-fail', pokemon);
-					return false;
-				}
-				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
-				this.add('-start', pokemon, 'typechange', this.effectData.type);
-			},
-			onRestart: function(pokemon) {
-				var possibleTypes = pokemon.moveset.map(function(val){
-					var move = this.getMove(val.id);
-					if (move.id !== 'conversion' && !pokemon.hasType(move.type)) {
-						return move.type;
-					}
-				}, this).compact();
-				if (!possibleTypes.length) {
-					this.add('-fail', pokemon);
-					return false;
-				}
-				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
-				this.add('-start', pokemon, 'typechange', this.effectData.type);
-			},
-			onModifyPokemon: function(pokemon) {
-				pokemon.types = [this.effectData.type];
-			}
-		}
-	},
-	conversion2: {
-		inherit: true,
-		//desc: "",
-		onTryHit: function(target, source) {
-			if (source.ability === 'multitype') return false;
-			source.addVolatile("conversion2", target);
-		}
-	},
 	copycat: {
 		inherit: true,
 		//desc: "",
