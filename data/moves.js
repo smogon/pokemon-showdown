@@ -1410,15 +1410,9 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isSnatchable: true,
-		volatileStatus: 'camouflage',
-		effect: {
-			noCopy: true,
-			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'typechange', 'Ground');
-			},
-			onModifyPokemon: function(pokemon) {
-				pokemon.types = ['Ground'];
-			}
+		onHit: function(target) {
+			this.add('-start', target, 'typechange', 'Ground');
+			target.types = ['Ground'];
 		},
 		secondary: false,
 		target: "self",
@@ -1749,40 +1743,20 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isSnatchable: true,
-		volatileStatus: 'conversion',
-		effect: {
-			noCopy: true,
-			onStart: function(pokemon) {
-				var possibleTypes = pokemon.moveset.map(function(val){
-					var move = this.getMove(val.id);
-					if (move.id !== 'conversion' && !pokemon.hasType(move.type)) {
-						return move.type;
-					}
-				}, this).compact();
-				if (!possibleTypes.length) {
-					this.add('-fail', pokemon);
-					return false;
+		onHit: function(target) {
+			var possibleTypes = target.moveset.map(function(val){
+				var move = this.getMove(val.id);
+				if (move.id !== 'conversion' && !target.hasType(move.type)) {
+					return move.type;
 				}
-				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
-				this.add('-start', pokemon, 'typechange', this.effectData.type);
-			},
-			onRestart: function(pokemon) {
-				var possibleTypes = pokemon.moveset.map(function(val){
-					var move = this.getMove(val.id);
-					if (move.id !== 'conversion' && !pokemon.hasType(move.type)) {
-						return move.type;
-					}
-				}, this).compact();
-				if (!possibleTypes.length) {
-					this.add('-fail', pokemon);
-					return false;
-				}
-				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
-				this.add('-start', pokemon, 'typechange', this.effectData.type);
-			},
-			onModifyPokemon: function(pokemon) {
-				pokemon.types = [this.effectData.type];
+			}, this).compact();
+			if (!possibleTypes.length) {
+				this.add('-fail', target);
+				return false;
 			}
+			var type = possibleTypes[this.random(possibleTypes.length)];
+			this.add('-start', target, 'typechange', type);
+			target.types = [type];
 		},
 		secondary: false,
 		target: "self",
@@ -1800,56 +1774,27 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isNotProtectable: true,
-		onTryHit: function(target, source) {
-			source.addVolatile("conversion2", target);
-		},
-		effect: {
-			noCopy: true,
-			onStart: function(pokemon, target, move) {
-				if (!target.lastMove) {
-					this.add('-fail', pokemon);
-					return false;
-				}
-				var possibleTypes = [];
-				var attackType = this.getMove(target.lastMove).type;
-				for (var type in this.data.TypeChart) {
-					if (pokemon.hasType(type) || target.hasType(type)) continue;
-					var typeCheck = this.data.TypeChart[type].damageTaken[attackType];
-					if (typeCheck === 2 || typeCheck === 3) {
-						possibleTypes.push(type);
-					}
-				}
-				if (!possibleTypes.length) {
-					this.add('-fail', pokemon);
-					return false;
-				}
-				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
-				this.add('-start', pokemon, 'typechange', this.effectData.type);
-			},
-			onRestart: function(pokemon, target, move) {
-				if (!target.lastMove) {
-					this.add('-fail', pokemon);
-					return false;
-				}
-				var possibleTypes = [];
-				var attackType = this.getMove(target.lastMove).type;
-				for (var type in this.data.TypeChart) {
-					if (pokemon.hasType(type) || target.hasType(type)) continue;
-					var typeCheck = this.data.TypeChart[type].damageTaken[attackType];
-					if (typeCheck === 2 || typeCheck === 3) {
-						possibleTypes.push(type);
-					}
-				}
-				if (!possibleTypes.length) {
-					this.add('-fail', pokemon);
-					return false;
-				}
-				this.effectData.type = possibleTypes[this.random(possibleTypes.length)];
-				this.add('-start', pokemon, 'typechange', this.effectData.type);
-			},
-			onModifyPokemon: function(pokemon) {
-				pokemon.types = [this.effectData.type];
+		onHit: function(target, source) {
+			if (!target.lastMove) {
+				this.add('-fail', source);
+				return false;
 			}
+			var possibleTypes = [];
+			var attackType = this.getMove(target.lastMove).type;
+			for (var type in this.data.TypeChart) {
+				if (source.hasType(type) || target.hasType(type)) continue;
+				var typeCheck = this.data.TypeChart[type].damageTaken[attackType];
+				if (typeCheck === 2 || typeCheck === 3) {
+					possibleTypes.push(type);
+				}
+			}
+			if (!possibleTypes.length) {
+				this.add('-fail', source);
+				return false;
+			}
+			var type = possibleTypes[this.random(possibleTypes.length)];
+			this.add('-start', source, 'typechange', type);
+			source.types = [type];
 		},
 		secondary: false,
 		target: "normal",
@@ -9140,21 +9085,8 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function(target, source) {
-			source.addVolatile("reflecttype", target);
-		},
-		effect: {
-			noCopy: true,
-			onStart: function(target, source) {
-				this.effectData.types = source.types;
-				this.add('-start', target, 'typechange', source.types.join(', '), '[from] move: Reflect Type', '[of] '+source);
-			},
-			onRestart: function(target, source) {
-				this.effectData.types = source.types;
-				this.add('-start', target, 'typechange', source.types.join(', '), '[from] move: Reflect Type', '[of] '+source);
-			},
-			onModifyPokemon: function(pokemon) {
-				pokemon.types = this.effectData.types;
-			}
+			this.add('-start', source, 'typechange', target.types.join(', '), '[from] move: Reflect Type', '[of] '+target);
+			source.types = target.types;
 		},
 		secondary: false,
 		target: "normal",
@@ -10936,15 +10868,9 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isBounceable: true,
-		volatileStatus: 'soak',
-		effect: {
-			noCopy: true,
-			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'typechange', 'Water');
-			},
-			onModifyPokemon: function(pokemon) {
-				pokemon.types = ['Water'];
-			}
+		onHit: function(target) {
+			this.add('-start', target, 'typechange', 'Water');
+			target.types = ['Water'];
 		},
 		secondary: false,
 		target: "normal",
@@ -11143,19 +11069,14 @@ exports.BattleMovedex = {
 			return pokemon.volatiles['stockpile'].layers * 100;
 		},
 		category: "Special",
-		desc: "Deals damage to one adjacent target. Power is equal to 100 times the user's Stockpile count. Fails if the user's Stockpile count is 0. Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
+		desc: "Deals damage to one adjacent target. Power is equal to 100 times the user's Stockpile count. Fails if the user's Stockpile count is 0. After dealing damage, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
 		shortDesc: "More power with more uses of Stockpile.",
 		id: "spitup",
 		name: "Spit Up",
 		pp: 10,
 		priority: 0,
-		onTry: function(pokemon) {
-			if (!pokemon.volatiles['stockpile']) {
-				this.add('-fail', pokemon);
-				return false;
-			}
-		},
-		onAfterMove: function(pokemon) {
+		onTryHit: function(target, pokemon) {
+			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
 			pokemon.removeVolatile('stockpile');
 		},
 		secondary: false,
@@ -11297,21 +11218,20 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(target) {
 				this.effectData.layers = 1;
-				this.add('-start', target, 'stockpile'+this.effectData.layers);
-				this.boost({def:1, spd:1}, target, target, this.getMove('stockpile'));
+				this.add('-start',target,'stockpile'+this.effectData.layers);
+				this.boost({def:1, spd:1});
 			},
 			onRestart: function(target) {
 				if (this.effectData.layers < 3) {
 					this.effectData.layers++;
-					this.add('-start', target, 'stockpile'+this.effectData.layers);
-					this.boost({def:1, spd:1}, target, target, this.getMove('stockpile'));
+					this.add('-start',target,'stockpile'+this.effectData.layers);
+					this.boost({def:1, spd:1});
 				}
 			},
 			onEnd: function(target) {
 				var layers = this.effectData.layers * -1;
 				this.effectData.layers = 0;
-				this.boost({def:layers, spd:layers}, target, target, this.getMove('stockpile'));
-				this.add('-end', target, 'move: Stockpile');
+				this.boost({def:layers, spd:layers});
 			}
 		},
 		secondary: false,

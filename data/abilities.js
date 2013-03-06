@@ -245,31 +245,12 @@ exports.BattleAbilities = {
 	"colorchange": {
 		desc: "This Pokemon's type changes according to the type of the last move that hit this Pokemon.",
 		shortDesc: "This Pokemon's type changes to match the type of the last move that hit it.",
-		onAfterMoveSecondary: function(target, source, effect) {
-			if (target.isActive && effect && effect.effectType === 'Move' && effect.category !== 'Status') {
-				target.addVolatile('colorchange', source, effect);
-			}
-		},
-		effect: {
-			noCopy: true,
-			onStart: function(target, source, effect) {
-				this.effectData.type = 'Normal';
-				if (effect && effect.type && effect.type !== 'Normal') {
-					this.add('-start', target, 'typechange', effect.type, '[from] Color Change');
-					this.effectData.type = effect.type;
-				} else {
-					return false;
+		onAfterMoveSecondary: function(target, source, move) {
+			if (target.isActive && move && move.effectType === 'Move' && move.category !== 'Status') {
+				if (!target.hasType(move.type)) {
+					this.add('-start', target, 'typechange', move.type, '[from] Color Change');
+					target.types = [move.type];
 				}
-			},
-			onRestart: function(target, source, effect) {
-				if (effect && effect.type && effect.type !== this.effectData.type) {
-					this.add('-start', target, 'typechange', effect.type, '[from] Color Change');
-					this.effectData.type = effect.type;
-				}
-			},
-			onModifyPokemon: function(target) {
-				if (!this.effectData.type) this.effectData.type = 'Normal';
-				target.types = [this.effectData.type];
 			}
 		},
 		id: "colorchange",
