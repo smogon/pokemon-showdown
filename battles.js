@@ -500,6 +500,7 @@ var BattlePokemon = (function() {
 			return false;
 		}
 		this.transformed = true;
+		this.types = pokemon.types;
 		for (var statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
 		}
