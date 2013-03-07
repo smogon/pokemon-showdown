@@ -50,8 +50,9 @@ Partial Trapping Moves
 ----------------------
 Partial trapping moves let eiher Pokemon switch but target will be unable to move for its duration.
 
-Glitches not implemented
-------------------------
+TODO. Glitches not implemented
+------------------------------
 Being fully paralysed or self-hit from confusion in the immune turn of Fly or Dig granted you immunity for the rest of the match 
 until you switch or use Fly/Dig again.
-This glitch is deemed game-breaking, relies in luck to reproduce and it's not part of the metagame, so it's not implemented.
+This glitch is not implemented by now since, besides game-breaking, relies in luck to reproduce and it's not part of the metagame.
+Since it's difficult to reproduce and to properly play, this will be implemented in the future, but not right now.
