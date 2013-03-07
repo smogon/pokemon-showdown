@@ -8355,12 +8355,12 @@ exports.BattleMovedex = {
 				pokemon.removeVolatile('Power Trick');
 			},
 			onModifyAtkPriority: 100,
-			onModifyAtk: function() {
-				return this.stats.def;
+			onModifyAtk: function(atk, pokemon) {
+				return pokemon.stats.def;
 			},
 			onModifyDefPriority: 100,
-			onModifyDef: function() {
-				return this.stats.atk;
+			onModifyDef: function(atk, pokemon) {
+				return pokemon.stats.atk;
 			}
 		},
 		secondary: false,
