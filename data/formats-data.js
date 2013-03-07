@@ -3336,7 +3336,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"outrage":1,"dragonclaw":1,"earthquake":1,"stoneedge":1,"firefang":1,"swordsdance":1},
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["outrage","earthquake","swordsdance","stoneedge"]},
-			{"generation":5,"level":48,"gender":"M","isDW":true,"moves":["slash","dragonclaw","dig","crunch"]}
+			{"generation":5,"level":48,"gender":"M","isDW":true,"moves":["dragonclaw","dig","crunch","outrage"]}
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
@@ -4580,7 +4580,8 @@ exports.BattleFormatsData = {
 	meloetta: {
 		viableMoves: {"relicsong":1,"closecombat":1,"calmmind":1,"psychic":1,"thunderbolt":1,"hypervoice":1,"uturn":1},
 		eventPokemon: [
-			{"generation":5,"level":15,"moves":["quickattack","confusion","round"]}
+			{"generation":5,"level":15,"moves":["quickattack","confusion","round"]},
+			{"generation":5,"level":50,"moves":["round","teeterdance","psychic","closecombat"]}
 		],
 		tier: "UU"
 	},
