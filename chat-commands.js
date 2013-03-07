@@ -907,6 +907,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case '!data':
 	case 'stats':
 	case '!stats':
+	case 'dex':
+	case '!dex':
+	case 'pokedex':
+	case '!pokedex':
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		var dataMessages = getDataMessage(target);
 		for (var i=0; i<dataMessages.length; i++) {
@@ -1143,13 +1147,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'analysis':
-	case 'dex':
-	case 'pokedex':
-	case 'strategy':
 	case '!analysis':
-	case '!dex':
-	case '!pokedex':
+	case 'strategy':
 	case '!strategy':
+	case 'smogdex':
+	case '!smogdex':
 		var targets = target.split(',');
 		var pokemon = Tools.getTemplate(targets[0]);
 		var item = Tools.getItem(targets[0]);
