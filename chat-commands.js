@@ -1151,16 +1151,15 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case '!pokedex':
 	case '!strategy':
 		var targets = target.split(',');
-		var template = Tools.getTemplate(targets[0]);
+		var pokemon = Tools.getTemplate(targets[0]);
+		var item = Tools.getItem(targets[0]);
+		var move = Tools.getMove(targets[0]);
+		var ability = Tools.getAbility(targets[0]);
+		var atLeastOne = false;
 		var generation = (targets[1] || "bw").trim().toLowerCase();
 		var genNumber = 5;
 
 		showOrBroadcastStart(user, cmd, room, socket, message);
-
-		if (!template.exists) {
-			showOrBroadcast(user, cmd, room, socket, 'Pokemon "'+template.id+'" not found.');
-			return false;
-		}
 
 		if (generation === "bw" || generation === "bw2" || generation === "5" || generation === "five") {
 			generation = "bw";
@@ -1179,35 +1178,68 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		} else {
 			generation = "bw";
 		}
-
-		if (genNumber < template.gen) {
-			showOrBroadcast(user, cmd, room, socket, template.name+' did not exist in '+generation.toUpperCase()+'!');
+		
+		// Pokemon
+		if (pokemon.exists) {
+			atLeastOne = true;
+			if (genNumber < pokemon.gen) {
+				showOrBroadcast(user, cmd, room, socket, pokemon.name+' did not exist in '+generation.toUpperCase()+'!');
+				return false;
+			}
+			if (pokemon.tier === 'G4CAP' || pokemon.tier === 'G5CAP') {
+				generation = "cap";
+			}
+	
+			var poke = pokemon.name.toLowerCase();
+			if (poke === 'nidoranm') poke = 'nidoran-m';
+			if (poke === 'nidoranf') poke = 'nidoran-f';
+			if (poke === 'farfetch\'d') poke = 'farfetchd';
+			if (poke === 'mr. mime') poke = 'mr_mime';
+			if (poke === 'mime jr.') poke = 'mime_jr';
+			if (poke === 'deoxys-attack' || poke === 'deoxys-defense' || poke === 'deoxys-speed' || poke === 'kyurem-black' || poke === 'kyurem-white') poke = poke.substr(0,8);
+			if (poke === 'wormadam-trash') poke = 'wormadam-s';
+			if (poke === 'wormadam-sandy') poke = 'wormadam-g';
+			if (poke === 'rotom-wash' || poke === 'rotom-frost' || poke === 'rotom-heat') poke = poke.substr(0,7);
+			if (poke === 'rotom-mow') poke = 'rotom-c';
+			if (poke === 'rotom-fan') poke = 'rotom-s';
+			if (poke === 'giratina-origin' || poke === 'tornadus-therian' || poke === 'landorus-therian') poke = poke.substr(0,10);
+			if (poke === 'shaymin-sky') poke = 'shaymin-s';
+			if (poke === 'arceus') poke = 'arceus-normal';
+			if (poke === 'thundurus-therian') poke = 'thundurus-t';
+	
+			showOrBroadcast(user, cmd, room, socket,
+				'<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+'" target="_blank">'+generation.toUpperCase()+' '+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+		}
+		
+		// Item
+		if (item.exists && genNumber > 1) {
+			atLeastOne = true;
+			var itemName = item.name.toLowerCase().replace(' ', '_');
+			showOrBroadcast(user, cmd, room, socket,
+					'<a href="http://www.smogon.com/'+generation+'/items/'+itemName+'" target="_blank">'+generation.toUpperCase()+' '+item.name+' item analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+		}
+		
+		// Ability
+		if (ability.exists && genNumber > 2) {
+			atLeastOne = true;
+			var abilityName = ability.name.toLowerCase().replace(' ', '_');
+			showOrBroadcast(user, cmd, room, socket,
+					'<a href="http://www.smogon.com/'+generation+'/abilities/'+abilityName+'" target="_blank">'+generation.toUpperCase()+' '+ability.name+' ability analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+		}
+		
+		// Move
+		if (move.exists) {
+			atLeastOne = true;
+			var moveName = move.name.toLowerCase().replace(' ', '_');
+			showOrBroadcast(user, cmd, room, socket,
+					'<a href="http://www.smogon.com/'+generation+'/moves/'+moveName+'" target="_blank">'+generation.toUpperCase()+' '+move.name+' move analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+		}
+		
+		if (!atLeastOne) {
+			showOrBroadcast(user, cmd, room, socket, 'Pokemon, item, move, or ability not found for generation ' + generation.toUpperCase() + '.');
 			return false;
 		}
-		if (template.tier === 'G4CAP' || template.tier === 'G5CAP') {
-			generation = "cap";
-		}
-
-		var poke = template.name.toLowerCase();
-
-		if (poke === 'nidoranm') poke = 'nidoran-m';
-		if (poke === 'nidoranf') poke = 'nidoran-f';
-		if (poke === 'farfetch\'d') poke = 'farfetchd';
-		if (poke === 'mr. mime') poke = 'mr_mime';
-		if (poke === 'mime jr.') poke = 'mime_jr';
-		if (poke === 'deoxys-attack' || poke === 'deoxys-defense' || poke === 'deoxys-speed' || poke === 'kyurem-black' || poke === 'kyurem-white') poke = poke.substr(0,8);
-		if (poke === 'wormadam-trash') poke = 'wormadam-s';
-		if (poke === 'wormadam-sandy') poke = 'wormadam-g';
-		if (poke === 'rotom-wash' || poke === 'rotom-frost' || poke === 'rotom-heat') poke = poke.substr(0,7);
-		if (poke === 'rotom-mow') poke = 'rotom-c';
-		if (poke === 'rotom-fan') poke = 'rotom-s';
-		if (poke === 'giratina-origin' || poke === 'tornadus-therian' || poke === 'landorus-therian') poke = poke.substr(0,10);
-		if (poke === 'shaymin-sky') poke = 'shaymin-s';
-		if (poke === 'arceus') poke = 'arceus-normal';
-		if (poke === 'thundurus-therian') poke = 'thundurus-t';
-
-		showOrBroadcast(user, cmd, room, socket,
-			'<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+'" target="_blank">'+generation.toUpperCase()+' '+template.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+		
 		return false;
 		break;
 
