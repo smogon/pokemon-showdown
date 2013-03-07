@@ -486,6 +486,7 @@ var BattlePokemon = (function() {
 			if (status.noCopy) {
 				delete this.volatiles[i];
 			}
+			this.battle.singleEvent('Copy', status, this.volatiles[i], this);
 		}
 	};
 	BattlePokemon.prototype.transformInto = function(pokemon) {

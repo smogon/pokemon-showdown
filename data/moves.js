@@ -8347,20 +8347,27 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'Power Trick');
+				var newatk = pokemon.stats.def;
+				var newdef = pokemon.stats.atk;
+				pokemon.stats.atk = newatk;
+				pokemon.stats.def = newdef;
+			},
+			onCopy: function(pokemon) {
+				this.add('-start', pokemon, 'Power Trick');
+				var newatk = pokemon.stats.def;
+				var newdef = pokemon.stats.atk;
+				pokemon.stats.atk = newatk;
+				pokemon.stats.def = newdef;
 			},
 			onEnd: function(pokemon) {
 				this.add('-end', pokemon, 'Power Trick');
+				var newatk = pokemon.stats.def;
+				var newdef = pokemon.stats.atk;
+				pokemon.stats.atk = newatk;
+				pokemon.stats.def = newdef;
 			},
 			onRestart: function(pokemon) {
 				pokemon.removeVolatile('Power Trick');
-			},
-			onModifyAtkPriority: 100,
-			onModifyAtk: function(atk, pokemon) {
-				return pokemon.stats.def;
-			},
-			onModifyDefPriority: 100,
-			onModifyDef: function(atk, pokemon) {
-				return pokemon.stats.atk;
 			}
 		},
 		secondary: false,
