@@ -984,7 +984,9 @@ function LobbyRoom(roomid) {
 		if (selfR.log.length <= selfR.lastUpdate) return;
 		var entries = selfR.log.slice(selfR.lastUpdate);
 		var update = entries.join('\n');
-		if (selfR.log.length > 100) selfR.log = selfR.log.slice(-100);
+		if (selfR.log.length > 100) {
+			selfR.log.splice(0, selfR.log.length - 100);
+		}
 		selfR.lastUpdate = selfR.log.length;
 
 		selfR.send(update);
