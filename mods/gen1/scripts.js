@@ -618,23 +618,23 @@ exports.BattleScripts = {
 			switch (move.critRatio) {
 			case 1:
 				// Normal crit-rate: BaseSpeed * 100 / 512.
-				critRatio = pokemon.baseStats['spe'] * 100 / 512;
+				critRatio = pokemon.template.baseStats['spe'] * 100 / 512;
 				break;
 			case 2:
 				// High crit-rate: BaseSpeed * 100 / 64
-				critRatio = pokemon.baseStats['spe'] * 100 / 64;
+				critRatio = pokemon.template.baseStats['spe'] * 100 / 64;
 				break;
 			case -2:
 				// Crit rate destroyed by Focus Energy (dumb trainer is dumb)
-				critRatio = (pokemon.baseStats['spe'] * 100 / 64) * 0.25;
-				this.debug('Using ruined normal crit-rate: (pokemon.baseStats[\'spe\'] * 100 / 64) * 0.25');
+				critRatio = (pokemon.template.baseStats['spe'] * 100 / 64) * 0.25;
+				this.debug('Using ruined normal crit-rate: (template.baseStats[\'spe\'] * 100 / 64) * 0.25');
 				break;
 			case -1:
 				// High crit move ruined by Focus Energy. Deppends on speed
 				if (pokemon.speed > target.speed) {
 					// Critical rate not decreased if pokemon is faster than target
-					critRatio = pokemon.baseStats['spe'] * 100 / 64;
-					this.debug('Using ruined high crit-rate: pokemon.baseStats[\'spe\'] * 100 / 64');
+					critRatio = pokemon.template.baseStats['spe'] * 100 / 64;
+					this.debug('Using ruined high crit-rate: template.baseStats[\'spe\'] * 100 / 64');
 				} else {
 					// If you are slower, you can't crit on this moves
 					this.debug('Ruined crit rate, too slow, cannnot crit');
