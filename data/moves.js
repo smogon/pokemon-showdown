@@ -735,7 +735,7 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon, target) {
 			pokemon.addVolatile('beatup');
 			if (!pokemon.side.pokemon[pokemon.volatiles.beatup.index]) return null;
-			return 5 + Math.floor(pokemon.side.pokemon[pokemon.volatiles.beatup.index].baseStats.atk / 10);
+			return 5 + Math.floor(pokemon.side.pokemon[pokemon.volatiles.beatup.index].template.baseStats.atk / 10);
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target and hits one time for the user and one time for each unfainted Pokemon without a major status problem in the user's party. The power of each hit is equal to 5+(X/10), where X is each participating Pokemon's base Attack; each hit is considered to come from the user.",
