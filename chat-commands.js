@@ -1127,6 +1127,62 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcast(user, cmd, room, socket, buffer);
 		return false;
 		break;
+		
+	case 'teach':
+	case '!teach':
+		target = target.toLowerCase();
+		var buffer = '<div class="message-faq">';
+		var matched = false;
+		if (!target || target === 'all') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/forums/forumdisplay.php?f=28" target="_blank">The metagame forums, where you can become a true Pokemon Master</a><br />';
+			buffer += 'Type /othermetas or /om for information on the Other Metagames.<br />';
+		}
+		if (target === 'all' || target === 'evs' || target === 'ivs' || target === 'ev' || target === 'iv') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/ingame/misc/evs_ivs" target="_blank">An introduction to the EVs and IVs</a><br />';
+		}
+		if (target === 'all' || target === 'item' || target === 'items') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/bw/items/" target="_blank">Learn everything about competitive viable items</a><br />';
+		}
+		if (target === 'all' || target === 'rmt' || target === 'teammaking' || target === 'teams') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/forums/forumdisplay.php?f=52" target="_blank">Learn everything about team making</a><br />';
+		}
+		if (target === 'all' || target === 'uber' || target === 'ubers') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/forums/forumdisplay.php?f=160" target="_blank">Learn everything about the Ubers metagame</a><br />';
+		}
+		if (target === 'all' || target === 'ou' || target === 'overused') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/forums/forumdisplay.php?f=203" target="_blank">Learn everything about the OU metagame</a><br />';
+		}
+		if (target === 'all' || target === 'uu' || target === 'underused') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/forums/forumdisplay.php?f=170" target="_blank">Learn everything about the UU metagame</a><br />';
+		}
+		if (target === 'all' || target === 'ru' || target === 'rarelyused') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/forums/forumdisplay.php?f=178" target="_blank">Learn everything about the RU metagame</a><br />';
+		}
+		if (target === 'all' || target === 'nu' || target === 'neverused') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/forums/forumdisplay.php?f=185" target="_blank">Learn everything about the NU metagame</a><br />';
+		}
+		if (target === 'all' || target === 'lc' || target === 'littlecup') {
+			matched = true;
+			buffer += '<a href="http://www.smogon.com/forums/forumdisplay.php?f=161" target="_blank">Learn everything about the LC metagame</a><br />';
+		}
+		if (!matched) {
+			emit(socket, 'console', 'The entry "'+target+'" for /teach was not found. Try /teach for general help.');
+			return false;
+		}
+		buffer += '</div>';
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket, buffer);
+		return false;
+		break;
 
 	case 'banlists':
 	case 'tiers':
