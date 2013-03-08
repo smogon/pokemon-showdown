@@ -794,7 +794,10 @@ module.exports = (function () {
 			}
 
 			// Don't check abilities for metagames with All Abilities 
-			if (format.ruleset.indexOf('All Abilities') === -1) {
+			if (this.gen <= 2) {
+				set.ability = '';
+			}
+			if (!banlistTable['ignoreillegalabilities']) {
 				if (ability.name !== template.abilities['0'] &&
 					ability.name !== template.abilities['1'] &&
 					ability.name !== template.abilities['DW']) {
