@@ -1887,7 +1887,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function(pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Physical') {
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getCategory(pokemon.lastAttackedBy.move) === 'Physical') {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('-fail',pokemon.id);
@@ -6533,7 +6533,7 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onFoeBasePower: function(basePower, attacker, defender, move) {
-				if (move.category === 'Special' && defender.side === this.effectData.target) {
+				if (this.getCategory(move) === 'Special' && defender.side === this.effectData.target) {
 					if (!move.crit && attacker.ability !== 'infiltrator') {
 						this.debug('Light Screen weaken')
 						if (attacker.side.active.length > 1) return basePower*2/3;
@@ -7373,7 +7373,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function(pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getMove(pokemon.lastAttackedBy.move).category === 'Special') {
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getCategory(pokemon.lastAttackedBy.move) === 'Special') {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('-fail', pokemon);
@@ -9060,7 +9060,7 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onFoeBasePower: function(basePower, attacker, defender, move) {
-				if (move.category === 'Physical' && defender.side === this.effectData.target) {
+				if (this.getCategory(move) === 'Physical' && defender.side === this.effectData.target) {
 					if (!move.crit && attacker.ability !== 'infiltrator') {
 						this.debug('Reflect weaken');
 						if (attacker.side.active.length > 1) return basePower*2/3;
