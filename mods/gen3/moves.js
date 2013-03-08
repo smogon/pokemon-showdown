@@ -13,14 +13,12 @@ It is possible kupo just forgot to update it.
 exports.BattleMovedex = {
 	absorb: {
 		inherit: true,
-		category: "Special",
 		pp: 20
 	},
 	acid: {
 		num: 51,
 		accuracy: 100,
 		basePower: 40,
-		category: "Physical",
 		desc: "Deals damage to all adjacent foes with a 10% chance to lower their Special Defense by 1 stage each.",
 		shortDesc: "10% chance to lower the foe(s) Sp. Def by 1.",
 		id: "acid",
@@ -36,17 +34,8 @@ exports.BattleMovedex = {
 		target: "foes",
 		type: "Poison"
 	},
-	aeroblast: {
-		inherit: true,
-		category: "Physical"
-	},
-	aircutter: {
-		inherit: true,
-		category: "Physical"
-	},
 	ancientpower: {
 		inherit: true,
-		category: "Physical",
 		isContact: true
 	},
 	assist: {
@@ -83,7 +72,6 @@ exports.BattleMovedex = {
 			if (target.volatiles['minimize']) return 60;
 			return 35;
 		},
-		category: "Physical",
 		desc: "Deals damage to one adjacent target with a 30% chance to flinch it. Makes contact.",
 		shortDesc: "30% chance to flinch the target.",
 		id: "astonish",
@@ -101,7 +89,6 @@ exports.BattleMovedex = {
 	beatup: {
 		inherit: true,
 		basePower: 10,
-		category: "Special",
 		basePowerCallback: undefined,
 		desc: "Does one hit for the user and each other unfainted non-egg active and non-active Pokemon on the user's side without a status problem."
 	},
@@ -150,19 +137,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 75
 	},
-	bite: {
-		inherit: true,
-		category: "Special"
-	},
-	blazekick: {
-		inherit: true,
-		category: "Physical"
-	},
 	blizzard: {
 		num: 59,
 		accuracy: 70,
 		basePower: 120,
-		category: "Special",
 		desc: "Deals damage to all adjacent foes with a 10% chance to freeze each. If the weather is Hail, this move cannot miss.",
 		shortDesc: "10% chance to freeze the foe(s).",
 		id: "blizzard",
@@ -192,8 +170,7 @@ exports.BattleMovedex = {
 	},
 	bulletseed: {
 		inherit: true,
-		basePower: 10,
-		category: "Special"
+		basePower: 10
 	},
 	charge: {
 		inherit: true,
@@ -201,7 +178,6 @@ exports.BattleMovedex = {
 	},
 	clamp: {
 		inherit: true,
-		category: "Special",
 		accuracy: 75,
 		pp: 10
 	},
@@ -212,7 +188,7 @@ exports.BattleMovedex = {
 	counter: {
 		inherit: true,
 		damageCallback: function(pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && (this.getMove(pokemon.lastAttackedBy.move).category === 'Physical' || this.getmove(pokemon.lastAttackedBy.move).id === 'hiddenpower')) {
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower')) {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('-fail',pokemon.id);
@@ -226,12 +202,10 @@ exports.BattleMovedex = {
 	},
 	crabhammer: {
 		inherit: true,
-		category: "Special",
 		accuracy: 85
 	},
 	crunch: {
 		inherit: true,
-		category: "Special",
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -327,21 +301,15 @@ exports.BattleMovedex = {
 	},
 	dive: {
 		inherit: true,
-		basePower: 60,
-		category: "Special"
+		basePower: 60
 	},
 	doomdesire: {
 		inherit: true,
 		accuracy: 85,
 		basePower: 120,
-		category: "Physical",
 		onModifyMove: function(move) {
 			move.type = '???';
 		}
-	},
-	dragonclaw: {
-		inherit: true,
-		category: "Special"
 	},
 	dreameater: {
 		inherit: true,
@@ -437,7 +405,6 @@ exports.BattleMovedex = {
 			}
 			return 70;
 		},
-		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the user is burned, paralyzed, or poisoned. Makes contact.",
 		shortDesc: "Power doubles when user is inflicted by a status.",
 		id: "facade",
@@ -452,7 +419,6 @@ exports.BattleMovedex = {
 	},
 	faintattack: {
 		inherit: true,
-		category: "Special",
 		isContact: false
 	},
 	fakeout: {
@@ -460,10 +426,6 @@ exports.BattleMovedex = {
 		shortDesc: "Usually hits first; first turn out only; target flinch.",
 		priority: 1,
 		isContact: false
-	},
-	firepunch: {
-		inherit: true,
-		category: "Special"
 	},
 	firespin: {
 		inherit: true,
@@ -493,7 +455,6 @@ exports.BattleMovedex = {
 			}
 			return 20;
 		},
-		category: "Physical",
 		desc: "Deals damage to one adjacent target based on the amount of HP the user has left. X is equal to (user's current HP * 48 / user's maximum HP), rounded down; the base power of this attack is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1. Makes contact.",
 		shortDesc: "More power the less HP the user has left.",
 		id: "flail",
@@ -505,10 +466,6 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal"
-	},
-	flamewheel: {
-		inherit: true,
-		category: "Special"
 	},
 	flash: {
 		inherit: true,
@@ -554,10 +511,6 @@ exports.BattleMovedex = {
 			spa: 1
 		}
 	},
-	gust: {
-		inherit: true,
-		category: "Physical"
-	},
 	hiddenpower: {
 		num: 237,
 		accuracy: 100,
@@ -565,7 +518,6 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon) {
 			return pokemon.hpPower || 70;
 		},
-		category: "Physical",
 		desc: "Deals damage to one adjacent target. This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
 		shortDesc: "Varies in power and type based on the user's IVs.",
 		id: "hiddenpower",
@@ -575,44 +527,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		onModifyMove: function(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
-			if ((move.type === 'Dark') || (move.type === 'Psychic') || (move.type === 'Fire') || (move.type === 'Water') || (move.type === 'Electric') || (move.type === 'Grass') || (move.type === 'Ice') || (move.type === 'Dragon')) move.category = 'Special';
-			else move.category = 'Physical';
 		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
-	},
-	hiddenpowerbug: {
-		inherit: true,
-		category: "Physical"
-	},
-	hiddenpowerfighting: {
-		inherit: true,
-		category: "Physical"
-	},
-	hiddenpowerflying: {
-		inherit: true,
-		category: "Physical"
-	},
-	hiddenpowerghost: {
-		inherit: true,
-		category: "Physical"
-	},
-	hiddenpowerground: {
-		inherit: true,
-		category: "Physical"
-	},
-	hiddenpowerpoison: {
-		inherit: true,
-		category: "Physical"
-	},
-	hiddenpowerrock: {
-		inherit: true,
-		category: "Physical"
-	},
-	hiddenpowersteel: {
-		inherit: true,
-		category: "Physical"
 	},
 	hijumpkick: {
 		inherit: true,
@@ -627,30 +545,13 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	hyperbeam: {
-		inherit: true,
-		category: "Physical"
-	},
-	hypervoice: {
-		inherit: true,
-		category: "Physical"
-	},
 	hypnosis: {
 		inherit: true,
 		accuracy: 60
 	},
-	iceball: {
-		inherit: true,
-		category: "Special"
-	},
-	icepunch: {
-		inherit: true,
-		category: "Special"
-	},
 	iciclespear: {
 		inherit: true,
-		basePower: 10,
-		category: "Special"
+		basePower: 10
 	},
 	jumpkick: {
 		inherit: true,
@@ -663,14 +564,9 @@ exports.BattleMovedex = {
 			this.damage(clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
 		}
 	},
-	knockoff: {
-		inherit: true,
-		category: "Special"
-	},
 	leafblade: {
 		inherit: true,
-		basePower: 70,
-		category: "Special"
+		basePower: 70
 	},
 	lowkick: {
 		num: 67,
@@ -699,14 +595,6 @@ exports.BattleMovedex = {
 	megadrain: {
 		inherit: true,
 		pp: 10
-	},
-	mudshot: {
-		inherit: true,
-		category: "Physical"
-	},
-	mudslap: {
-		inherit: true,
-		category: "Physical"
 	},
 	mirrormove: {
 		num: 119,
@@ -739,7 +627,6 @@ exports.BattleMovedex = {
 	},
 	needlearm: {
 		inherit: true,
-		category: "Special",
 		basePowerCallback: function(pokemon, target) {
 			if (target.volatiles['minimize']) return 120;
 			return 60;
@@ -752,7 +639,6 @@ exports.BattleMovedex = {
 	outrage: {
 		inherit: true,
 		basePower: 90,
-		category: "Special",
 		pp: 15
 	},
 	overheat: {
@@ -775,27 +661,17 @@ exports.BattleMovedex = {
 	},
 	poisongas: {
 		inherit: true,
-		accuracy: 55,
-		category: "Physical"
+		accuracy: 55
 	},
 	protect: {
 		inherit: true,
 		//desc: "",
 		priority: 3
 	},
-	pursuit: {
-		inherit: true,
-		category: "Special"
-	},
-	razorleaf: {
-		inherit: true,
-		category: "Special"
-	},
 	razorwind: {
 		num: 13,
 		accuracy: 100,
 		basePower: 80,
-		category: "Physical",
 		desc: "Deals damage to all adjacent foes. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Charges, then hits foe(s) turn 2.",
 		id: "razorwind",
@@ -853,34 +729,6 @@ exports.BattleMovedex = {
 		basePower: 400,
 		//desc: ""
 	},
-	shadowball: {
-		inherit: true,
-		category: "Physical"
-	},
-	signalbeam: {
-		inherit: true,
-		category: "Physical"
-	},
-	silverwind: {
-		inherit: true,
-		category: "Physical"
-	},
-	sludge: {
-		inherit: true,
-		category: "Physical"
-	},
-	sludgebomb: {
-		inherit: true,
-		category: "Physical"
-	},
-	sonicboom: {
-		inherit: true,
-		category: "Physical"
-	},
-	spark: {
-		inherit: true,
-		category: "Special"
-	},
 	spikes: {
 		inherit: true,
 		isBounceable: false
@@ -905,7 +753,6 @@ exports.BattleMovedex = {
 		num: 165,
 		accuracy: true,
 		basePower: 50,
-		category: "Physical",
 		desc: "Deals typeless damage to one adjacent foe at random. If this move was successful, the user loses 1/2 of the damage dealt, rounded half up; the Ability Rock Head does not prevent this. This move can only be used if none of the user's known moves can be selected. Makes contact.",
 		shortDesc: "User loses half of the damage dealt as recoil.",
 		id: "struggle",
@@ -924,10 +771,6 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal"
-	},
-	swift: {
-		inherit: true,
-		category: "Physical"
 	},
 	tackle: {
 		inherit: true,
@@ -951,10 +794,6 @@ exports.BattleMovedex = {
 		basePower: 90,
 		pp: 20
 	},
-	thunderpunch: {
-		inherit: true,
-		category: "Special"
-	},
 	thunderwave: {
 		inherit: true,
 		onTryHit: function(target) {
@@ -977,25 +816,18 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 85
 	},
-	triattack: {
-		inherit: true,
-		category: "Physical"
-	},
 	uproar: {
 		inherit: true,
-		basePower: 50,
-		category: "Physical"
+		basePower: 50
 	},
 	vinewhip: {
 		inherit: true,
-		category: "Special",
 		pp: 10
 	},
 	volttackle: {
 		num: 344,
 		accuracy: 100,
 		basePower: 120,
-		category: "Special",
 		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
 		shortDesc: "Has 1/3 recoil.",
 		id: "volttackle",
@@ -1012,7 +844,6 @@ exports.BattleMovedex = {
 		num: 127,
 		accuracy: 100,
 		basePower: 80,
-		category: "Physical",
 		desc: "Deals damage to one adjacent target. Makes contact. (Field: Can be used to climb a waterfall.)",
 		shortDesc: "Deals damage.",
 		id: "waterfall",
@@ -1032,7 +863,6 @@ exports.BattleMovedex = {
 			if (this.weather) return 100;
 			return 50;
 		},
-		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles during weather effects and this move's type changes to match; Ice-type during Hail, Water-type during Rain Dance, Rock-type during Sandstorm, and Fire-type during Sunny Day.",
 		shortDesc: "Power doubles and type varies in each weather.",
 		id: "weatherball",
@@ -1055,8 +885,6 @@ exports.BattleMovedex = {
 				move.type = 'Ice';
 				break;
 			}
-			if (move.type === 'Rock') move.category = 'Physical';
-			else move.category = 'Special';
 		},
 		secondary: false,
 		target: "normal",

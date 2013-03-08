@@ -2312,6 +2312,10 @@ var Battle = (function() {
 		var modifier = Math.floor(numerator*4096/denominator);
 		return Math.floor((value * modifier + 2048 - 1) / 4096);
 	};
+	Battle.prototype.getCategory = function(move) {
+		move = this.getMove(move);
+		return move.category || 'Physical';
+	};
 	Battle.prototype.getDamage = function(pokemon, target, move, suppressMessages) {
 		if (typeof move === 'string') move = this.getMove(move);
 
@@ -2353,11 +2357,11 @@ var Battle = (function() {
 		if (!move) {
 			move = {};
 		}
-		if (!move.category) move.category = 'Physical';
-		if (!move.defensiveCategory) move.defensiveCategory = move.category;
 		if (!move.type) move.type = '???';
 		var type = move.type;
 		// '???' is typeless damage: used for Struggle and Confusion etc
+		var category = this.getCategory(move);
+		var defensiveCategory = move.defensiveCategory || category;
 
 		var basePower = move.basePower;
 		if (move.basePowerCallback) {
@@ -2400,26 +2404,26 @@ var Battle = (function() {
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
 
-		var attack = attacker.getStat(move.category==='Physical'?'atk':'spa');
-		var defense = defender.getStat(move.defensiveCategory==='Physical'?'def':'spd');
+		var attack = attacker.getStat(category==='Physical'?'atk':'spa');
+		var defense = defender.getStat(defensiveCategory==='Physical'?'def':'spd');
 
 		if (move.crit) {
 			move.ignoreNegativeOffensive = true;
 			move.ignorePositiveDefensive = true;
 		}
-		if (move.ignoreNegativeOffensive && attack < attacker.getStat(move.category==='Physical'?'atk':'spa', true)) {
+		if (move.ignoreNegativeOffensive && attack < attacker.getStat(category==='Physical'?'atk':'spa', true)) {
 			move.ignoreOffensive = true;
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.getStat(move.category==='Physical'?'atk':'spa', true);
+			attack = attacker.getStat(category==='Physical'?'atk':'spa', true);
 		}
-		if (move.ignorePositiveDefensive && defense > target.getStat(move.defensiveCategory==='Physical'?'def':'spd', true)) {
+		if (move.ignorePositiveDefensive && defense > target.getStat(defensiveCategory==='Physical'?'def':'spd', true)) {
 			move.ignoreDefensive = true;
 		}
 		if (move.ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
-			defense = target.getStat(move.defensiveCategory==='Physical'?'def':'spd', true);
+			defense = target.getStat(defensiveCategory==='Physical'?'def':'spd', true);
 		}
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
