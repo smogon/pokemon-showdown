@@ -1031,6 +1031,7 @@ exports.BattleMovedex = {
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				// Add here counter damage
+				if (!target.lastAttackedBy) target.lastAttackedBy = {pokemon: source, thisTurn: true};
 				target.lastAttackedBy.move = move.id;
 				target.lastAttackedBy.damage = damage;
 				return 0; // hit
