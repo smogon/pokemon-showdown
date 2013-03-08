@@ -793,22 +793,25 @@ module.exports = (function () {
 				problems.push(name+" has more than 510 total EVs.");
 			}
 
-			if (ability.name !== template.abilities['0'] &&
-				ability.name !== template.abilities['1'] &&
-				ability.name !== template.abilities['DW']) {
-				problems.push(name+" can't have "+set.ability+".");
-			}
-			if (ability.name === template.abilities['DW']) {
-				isDW = true;
-
-				if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
-					problems.push(name+"'s Dream World ability is unreleased.");
-				} else if (set.level < 10 && (template.maleOnlyDreamWorld || template.gender === 'N')) {
-					problems.push(name+" must be at least level 10 with its DW ability.");
+			// Don't check abilities for metagames with All Abilities 
+			if (format.ruleset.indexOf('All Abilities') === -1) {
+				if (ability.name !== template.abilities['0'] &&
+					ability.name !== template.abilities['1'] &&
+					ability.name !== template.abilities['DW']) {
+					problems.push(name+" can't have "+set.ability+".");
 				}
-				if (template.maleOnlyDreamWorld) {
-					set.gender = 'M';
-					lsetData.sources = ['5D'];
+				if (ability.name === template.abilities['DW']) {
+					isDW = true;
+	
+					if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
+						problems.push(name+"'s Dream World ability is unreleased.");
+					} else if (set.level < 10 && (template.maleOnlyDreamWorld || template.gender === 'N')) {
+						problems.push(name+" must be at least level 10 with its DW ability.");
+					}
+					if (template.maleOnlyDreamWorld) {
+						set.gender = 'M';
+						lsetData.sources = ['5D'];
+					}
 				}
 			}
 		}
