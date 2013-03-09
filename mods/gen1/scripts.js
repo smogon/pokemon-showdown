@@ -195,6 +195,7 @@ exports.BattleScripts = {
 	rollMoveHit: function(target, pokemon, move, spreadHit) {
 		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
 		var doSelfDestruct = true;
+		var damage = 0;
 		
 		// Calculate true accuracy
 		var accuracy = move.accuracy;
@@ -234,64 +235,63 @@ exports.BattleScripts = {
 		if (accuracy !== true && (this.random(100) >= accuracy || this.random(256) === 256)) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon, target);
-			return false;
+			damage = false;
 		}
 
 		if (move.affectedByImmunities && !target.runImmunity(move.type, true)) {
-			return false;
+			damage = false;
 		}
 
-		var damage = 0;
-		pokemon.lastDamage = 0;
-		if (move.multihit) {
-			var hits = move.multihit;
-			if (hits.length) {
-				// Yes, it's hardcoded... meh
-				if (hits[0] === 2 && hits[1] === 5) {
-					var roll = this.random(6);
-					hits = [2, 2, 3, 3, 4, 5][roll];
-				} else {
-					hits = this.random(hits[0], hits[1]+1);
+		if (damage !== false) {
+			pokemon.lastDamage = 0;
+			if (move.multihit) {
+				var hits = move.multihit;
+				if (hits.length) {
+					// Yes, it's hardcoded... meh
+					if (hits[0] === 2 && hits[1] === 5) {
+						var roll = this.random(6);
+						hits = [2, 2, 3, 3, 4, 5][roll];
+					} else {
+						hits = this.random(hits[0], hits[1]+1);
+					}
 				}
+				hits = Math.floor(hits);
+				// In gen 1, all the hits have the same damage for multihits move
+				var moveDamage = 0;
+				for (var i=0; i<hits && target.hp && pokemon.hp; i++) {
+					if (i === 0) {
+						// First hit, we calculate
+						moveDamage = this.moveHit(target, pokemon, move);
+						var firstDamage = moveDamage;
+					} else {
+						// We get the previous damage to make it fix damage
+						move.damage = firstDamage;
+						moveDamage = this.moveHit(target, pokemon, move);
+					}
+					if (moveDamage === false) break;
+					damage = (moveDamage || 0);
+					if (target.subFainted) {
+						i++
+						break;
+					}
+				}
+				move.damage = null;
+				if (i === 0) return true;
+				this.add('-hitcount', target, i);
+			} else {
+				damage = this.moveHit(target, pokemon, move);
 			}
-			hits = Math.floor(hits);
-			// In gen 1, all the hits have the same damage for multihits move
-			var moveDamage = 0;
-			for (var i=0; i<hits && target.hp && pokemon.hp; i++) {
-				if (i === 0) {
-					// First hit, we calculate
-					moveDamage = this.moveHit(target, pokemon, move);
-					var firstDamage = moveDamage;
-				} else {
-					// We get the previous damage to make it fix damage
-					move.damage = firstDamage;
-					moveDamage = this.moveHit(target, pokemon, move);
-				}
-				if (moveDamage === false) break;
-				damage = (moveDamage || 0);
-				if (target.subFainted) {
-					i++;
-					break;
-				}
-			}
-			move.damage = null;
-			if (i === 0) return true;
-			this.add('-hitcount', target, i);
-		} else {
-			damage = this.moveHit(target, pokemon, move);
 		}
 
 		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
 		
-		if (!damage && damage !== 0) return false;
-		
 		// Checking if substitute fainted
-		if (target.subFainted) {
-			doSelfDestruct = false;
-		}
+		if (target.subFainted) doSelfDestruct = false;
 		if (move.selfdestruct && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
+		
+		if (!damage && damage !== 0) return false;
 
 		if (!move.negateSecondary) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
@@ -588,10 +588,6 @@ exports.BattleScripts = {
 		// '???' is typeless damage: used for Struggle and Confusion etc
 		if (!move.type) move.type = '???';
 		var type = move.type;
-
-		// In Gen 1 category deppends on attacking type
-		var specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
-		var category = (type in specialTypes)? 'Special' : 'Physical';
 		
 		// We get the base power and apply basePowerCallback if necessary
 		var basePower = move.basePower;
@@ -609,7 +605,6 @@ exports.BattleScripts = {
 		// Checking for the move's Critical Hit ratio
 		// First, we check if it's a 100% crit move
 		move.critRatio = clampIntRange(move.critRatio, 0, 5);
-		var critMult = [0, 16, 8, 4, 3, 2];
 		move.crit = move.willCrit || false;
 		var critRatio = 0;
 		// Otherwise, we calculate the critical hit chance
@@ -634,7 +629,7 @@ exports.BattleScripts = {
 				if (pokemon.speed > target.speed) {
 					// Critical rate not decreased if pokemon is faster than target
 					critRatio = pokemon.template.baseStats['spe'] * 100 / 64;
-					this.debug('Using ruined high crit-rate: template.baseStats[\'spe\'] * 100 / 64');
+					 this.debug('Using ruined high crit-rate: template.baseStats[\'spe\'] * 100 / 64');
 				} else {
 					// If you are slower, you can't crit on this moves
 					this.debug('Ruined crit rate, too slow, cannnot crit');
@@ -689,7 +684,7 @@ exports.BattleScripts = {
 		}
 
 		// Gen 1 damage formula: 
-		// ((((min(((((2 * L / 5 + 2)*Atk*BP)/max(1, Def))/50), 997) + 2)*Stab)*TypeEffect))*Random/255
+		// (min(((2 * L / 5 + 2) * Atk * BP) / max(1, Def) / 50, 997) + 2) * Stab * TypeEffect * Random / 255
 		// Where: L: user level, A: current attack, P: move power, D: opponent current defense,
 		// S is the Stab modifier, T is the type effectiveness modifier, R is random between 217 and 255
 		// The max damage is 999
