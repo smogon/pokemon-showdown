@@ -798,8 +798,11 @@ exports.BattleScripts = {
 				case 'uturn': case 'voltswitch': case 'relicsong':
 					if (setupType) rejected = true;
 					break;
-				case 'pursuit': case 'trick': case 'switcheroo': case 'protect': case 'haze': case 'stealthrock':
+				case 'pursuit': case 'protect': case 'haze': case 'stealthrock':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					break;
+				case 'trick': case 'switcheroo':
+					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen']) rejected = true;
 					break;
 
 				// bit redundant to have both
@@ -905,8 +908,11 @@ exports.BattleScripts = {
 				case 'bellydrum': case 'encore': case 'suckerpunch':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
-				case 'trickroom': case 'reflect': case 'lightscreen':
-					if (hasMove['trick']) rejected = true;
+				case 'cottonguard':
+					if (hasMove['reflect']) rejected = true;
+					break;
+				case 'lightscreen':
+					if (hasMove['calmmind']) rejected = true;
 					break;
 				case 'rockpolish': case 'agility': case 'autotomize':
 					if (!setupType && !hasMove['batonpass'] && hasMove['thunderwave']) rejected = true;
@@ -1161,7 +1167,7 @@ exports.BattleScripts = {
 				}
 			} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
-			} else if (hasMove['eruption'] || hasMove['waterspout']) {
+			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 				item = 'Choice Scarf';
 			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 				item = 'Leftovers';
