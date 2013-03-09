@@ -11,20 +11,13 @@ function clampIntRange(num, min, max) {
 exports.BattleMovedex = {
 	absorb: {
 		inherit: true,
-		category: "Special",
+		accuracy: 255,
 		pp: 20
 	},
 	acid: {
-		num: 51,
-		accuracy: 100,
-		basePower: 40,
+		inherit: true,
+		accuracy: 255,
 		category: "Physical",
-		desc: "Deals damage to target with a 10% chance to lower its Defense by 1 stage.",
-		shortDesc: "10% chance to lower the foe's Defense by 1.",
-		id: "acid",
-		name: "Acid",
-		pp: 30,
-		priority: 0,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -32,7 +25,6 @@ exports.BattleMovedex = {
 			}
 		},
 		target: "normal",
-		type: "Poison"
 	},
 	agility: {
 		inherit: true,
@@ -53,10 +45,22 @@ exports.BattleMovedex = {
 			spa: 2
 		}
 	},
+	aurorabeam: {
+		inherit: true,
+		accuracy: 255,
+		secondary: {
+			chance: 10,
+			boosts: {
+				atk: -1
+			}
+		}
+	},
+	barrage: {
+		inherit: true,
+		accuracy: 216
+	},
 	bide: {
 		inherit: true,
-		desc: "The user spends two to three turns locked into this move and then, on the second turn after using this move, the user attacks the last Pokemon that hit it, inflicting double the damage in HP it lost during the two turns. If the last Pokemon that hit it is no longer on the field, the user attacks a random foe instead. If the user is prevented from moving during this move's use, the effect ends. This move ignores Accuracy and Evasion modifiers and can hit Ghost-types. Makes contact. Priority +1.",
-		shortDesc: "Waits 2-3 turns; deals double the damage taken.",
 		priority: 0,
 		accuracy: true,
 		ignoreEvasion: true,
@@ -135,7 +139,7 @@ exports.BattleMovedex = {
 	},
 	bind: {
 		inherit: true,
-		accuracy: 75,
+		accuracy: 191,
 		affectedByImmunities: false,
 		volatileStatus: 'partiallytrapped',
 		self: {
@@ -161,11 +165,9 @@ exports.BattleMovedex = {
 	},
 	bite: {
 		inherit: true,
-		accuracy: 100,
+		accuracy: 255,
 		basePower: 60,
 		category: "Physical",
-		desc: "Deals damage to the target with a 10% chance to flinch it.",
-		shortDesc: "10% chance to flinch the target.",
 		id: "bite",
 		name: "Bite",
 		pp: 25,
@@ -180,11 +182,9 @@ exports.BattleMovedex = {
 	},
 	blizzard: {
 		inherit: true,
-		accuracy: 90,
+		accuracy: 229,
 		basePower: 120,
 		category: "Special",
-		desc: "Deals damage to the target and has a 10% chance to freeze it.",
-		shortDesc: "10% chance to freeze the foe.",
 		secondary: {
 			chance: 10,
 			status: 'frz'
@@ -192,14 +192,31 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ice"
 	},
+	bodyslam: {
+		inherit: true,
+		accuracy: 255
+	},
+	boneclub: {
+		inherit: true,
+		accuracy: 216
+	},
+	bonemerang: {
+		inherit: true,
+		accuracy: 229
+	},
 	bubble: {
 		inherit: true,
+		accuracy: 255,
 		target: "normal"
+	},
+	bubblebeam: {
+		inherit: true,
+		accuracy: 255
 	},
 	clamp: {
 		inherit: true,
 		category: "Special",
-		accuracy: 75,
+		accuracy: 191,
 		basePower: 35,
 		pp: 10,
 		volatileStatus: 'partiallytrapped',
@@ -224,6 +241,22 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	cometpunch: {
+		inherit: true,
+		accuracy: 216
+	},
+	confuseray: {
+		inherit: true,
+		accuracy: 255
+	},
+	confusion: {
+		inherit: true,
+		accuracy: 255
+	},
+	constrict: {
+		inherit: true,
+		accuracy: 255
+	},
 	conversion: {
 		inherit: true,
 		volatileStatus: 'conversion',
@@ -246,6 +279,7 @@ exports.BattleMovedex = {
 	},
 	counter: {
 		inherit: true,
+		accuracy: 255,
 		affectedByImmunities: false,
 		willCrit: false,
 		damageCallback: function(pokemon) {
@@ -259,13 +293,17 @@ exports.BattleMovedex = {
 	},
 	crabhammer: {
 		inherit: true,
+		accuracy: 216,
 		category: "Special",
-		accuracy: 85
+	},
+	cut: {
+		inherit: true,
+		accuracy: 242
 	},
 	dig: {
 		inherit: true,
-		desc: "Deals damage to one target. This attack charges on the first turn and strikes on the second. On the first turn, the user avoids all attacks other than Earthquake and Magnitude but takes double damage from them, and is also unaffected by Hail and Sandstorm damage. The user cannot make a move between turns. If the user is holding a Power Herb, the move completes in one turn. Makes contact. (Field: Can be used to escape a cave quickly.)",
-		shortDesc: "Digs underground turn 1, strikes turn 2.",
+		accuracy: 255,
+		basePower: 100,
 		onTry: function(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -298,7 +336,7 @@ exports.BattleMovedex = {
 	},
 	disable: {
 		inherit: true,
-		accuracy: 55,
+		accuracy: 140,
 		desc: "The target cannot choose a random move for 0-6 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.",
 		effect: {
 			duration: 4,
@@ -339,26 +377,34 @@ exports.BattleMovedex = {
 	},
 	dizzypunch: {
 		inherit: true,
+		accuracy: 255,
 		desc: "Deals damage to the target.",
 		shortDesc: "Deals damage.",
 		secondary: null
 	},
 	doubleedge: {
 		inherit: true,
-		name: "Double-Edge",
+		accuracy: 255,
 		basePower: 100,
 		desc: "Deals damage to the target. If the target lost HP, the user takes recoil damage equal to 25% that HP, rounded half up, but not less than 1HP.",
 		shortDesc: "Has 25% recoil.",
 		recoil: [25,100]
 	},
+	doublekick: {
+		inherit: true,
+		accuracy: 255
+	},
 	doubleslap: {
 		inherit: true,
+		accuracy: 216
 	},
 	dragonrage: {
 		inherit: true,
+		accuracy: 255,
 	},
 	dreameater: {
 		inherit: true,
+		accuracy: 255,
 		desc: "Deals damage to one adjacent target, if it is asleep and does not have a Substitute. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		onTryHit: function(target) {
 			if (target.status !== 'slp' || target.volatiles['substitute']) {
@@ -367,18 +413,31 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	drillpeck: {
+		inherit: true,
+		accuracy: 255
+	},
 	earthquake: {
 		inherit: true,
-		category: "Physical"
+		accuracy: 255,
+	},
+	eggbomb: {
+		inherit: true,
+		accuracy: 191
+	},
+	ember: {
+		inherit: true,
+		accuracy: 255
 	},
 	explosion: {
 		inherit: true,
+		accuracy: 255,
 		basePower: 340,
 		target: "normal"
 	},
 	fireblast: {
 		inherit: true,
-		accuracy: 85,
+		accuracy: 216,
 		desc: "Deals damage to the target with a 30% chance to burn it.",
 		shortDesc: "30% chance to burn the target.",
 		secondary: {
@@ -388,11 +447,12 @@ exports.BattleMovedex = {
 	},
 	firepunch: {
 		inherit: true,
+		accuracy: 255,
 		category: "Special"
 	},
 	firespin: {
 		inherit: true,
-		accuracy: 70,
+		accuracy: 178,
 		basePower: 15,
 		volatileStatus: 'partiallytrapped',
 		self: {
@@ -416,12 +476,22 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	fissure: {
+		inherit: true,
+		accuracy: 76
+	},
+	flamethrower: {
+		inherit: true,
+		accuracy: 255
+	},
 	flash: {
 		inherit: true,
+		accuracy: 178,
 		target: "normal"
 	},
 	fly: {
 		inherit: true,
+		accuracy: 242,
 		desc: "Deals damage to target. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns. (Field: Can be used to fly to a previously visited area.)",
 		shortDesc: "Flies up on first turn, then strikes the next turn.",
 		effect: {
@@ -464,13 +534,22 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
+	furyattack: {
+		inherit: true,
+		accuracy: 216
+	},
+	furyswipes: {
+		inherit: true,
+		accuracy: 204
+	},
 	glare: {
 		inherit: true,
-		accuracy: 75,
+		accuracy: 191,
 		affectedByImmunities: false
 	},
 	growl: {
 		inherit: true,
+		accuracy: 255,
 		target: "normal"
 	},
 	growth: {
@@ -483,8 +562,13 @@ exports.BattleMovedex = {
 			spd: 1
 		}
 	},
+	guillotine: {
+		inherit: true,
+		accuracy: 76
+	},
 	gust: {
 		inherit: true,
+		accuracy: 255,
 		category: "Physical",
 		type: "Normal"
 	},
@@ -510,9 +594,14 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	headbutt: {
+		inherit: true,
+		accuracy: 255
+	},
 	hijumpkick: {
 		inherit: true,
-		basePower: 130,
+		accuracy: 229,
+		basePower: 85,
 		desc: "If this attack misses the target, the user takes 1 HP of damage.",
 		shortDesc: "User takes 1 HP damage it would have dealt if miss.",
 		pp: 20,
@@ -522,13 +611,21 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	hornattack: {
+		inherit: true,
+		accuracy: 255
+	},
 	horndrill: {
 		inherit: true,
-		desc: "Deals damage to one target equal to the target's maximum HP. Ignores accuracy and evasion modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is faster.",
-		shortDesc: "OHKOs the target. Fails if user is slower than the target."
+		accuracy: 76
+	},
+	hydropump: {
+		inherit: true,
+		accuracy: 204
 	},
 	hyperbeam: {
 		inherit: true,
+		accuracy: 229,
 		category: "Physical",
 		desc: "Deals damage to a target. If this move is successful, the user must recharge on the following turn and cannot make a move, unless the opponent faints or a Substitute is destroyed.",
 		shortDesc: "User cannot move next turn unless target or substitute faints.",
@@ -543,16 +640,26 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
+	hyperfang: {
+		inherit: true,
+		accuracy: 229
+	},
 	hypnosis: {
 		inherit: true,
-		accuracy: 60
+		accuracy: 153
+	},
+	icebeam: {
+		inherit: true,
+		accuracy: 255
 	},
 	icepunch: {
 		inherit: true,
+		accuracy: 255,
 		category: "Special"
 	},
 	jumpkick: {
 		inherit: true,
+		accuracy: 242,
 		basePower: 70,
 		desc: "If this attack misses the target, the user 1HP of damage.",
 		shortDesc: "User takes 1 HP damage if miss.",
@@ -563,10 +670,20 @@ exports.BattleMovedex = {
 	},
 	karatechop: {
 		inherit: true,
+		accuracy: 255,
 		type: "Normal"
+	},
+	kinesis: {
+		inherit: true,
+		accuracy: 204
+	},
+	leechlife: {
+		inherit: true,
+		accuracy: 255
 	},
 	leechseed: {
 		inherit: true,
+		accuracy: 229,
 		desc: "The Pokemon at the user's position steals 1/8 of one adjacent target's max HP, rounded down, at the end of each turn. Grass-types are unaffected.",
 		shortDesc: "1/8 of target's HP is restored to user every turn.",
 		id: "leechseed",
@@ -611,6 +728,14 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Grass"
 	},
+	leer: {
+		inherit: true,
+		accuracy: 255
+	},
+	lick: {
+		inherit: true,
+		accuracy: 255
+	},
 	lightscreen: {
 		num: 113,
 		accuracy: true,
@@ -634,14 +759,28 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
+	lovelykiss: {
+		inherit: true,
+		accuracy: 191
+	},
 	lowkick: {
-		num: 67,
-		accuracy: 90,
-		basePower: 50
+		inherit: true,
+		accuracy: 229,
+		basePower: 50,
+		basePowerCallback: undefined
 	},
 	megadrain: {
 		inherit: true,
+		accuracy: 255,
 		pp: 10
+	},
+	megakick: {
+		inherit: true,
+		accuracy: 191
+	},
+	megapunch: {
+		inherit: true,
+		accuracy: 216
 	},
 	metronome: {
 		inherit: true,
@@ -698,6 +837,12 @@ exports.BattleMovedex = {
 			this.add('-start', source, 'Mimic', move.name);
 		}
 	},
+	minimize: {
+		inherit: true,
+		boosts: {
+			evasion: 1
+		},
+	},
 	mirrormove: {
 		num: 119,
 		accuracy: true,
@@ -725,28 +870,55 @@ exports.BattleMovedex = {
 	},
 	nightshade: {
 		inherit: true,
+		accuracy: 255,
 		affectedByImmunities: false
+	},
+	payday: {
+		inherit: true,
+		accuracy: 255
+	},
+	peck: {
+		inherit: true,
+		accuracy: 255
 	},
 	petaldance: {
 		inherit: true,
-		basePower: 120,
+		accuracy: 255,
+		basePower: 70,
 		pp: 20
+	},
+	pinmissile: {
+		inherit: true,
+		accuracy: 216
 	},
 	poisongas: {
 		inherit: true,
-		accuracy: 55,
-		category: "Physical",
+		accuracy: 140,
 		target: "normal"
 	},
 	poisonsting: {
 		inherit: true,
+		accuracy: 255,
 		secondary: {
 			chance: 20,
 			status: 'psn'
 		}
 	},
+	poisonpowder: {
+		inherit: true,
+		accuracy: 191
+	},
+	pound: {
+		inherit: true,
+		accuracy: 255
+	},
+	psybeam: {
+		inherit: true,
+		accuracy: 255
+	},
 	psychic: {
 		inherit: true,
+		accuracy: 255,
 		desc: "Deals damage to one target with a 30% chance to lower its Special by 1 stage.",
 		shortDesc: "30% chance to lower the target's Special by 1.",
 		secondary: {
@@ -759,22 +931,28 @@ exports.BattleMovedex = {
 	},
 	psywave: {
 		inherit: true,
-		target: "normal"
+		accuracy: 204
+	},
+	quickattack: {
+		inherit: true,
+		accuracy: 255
 	},
 	rage: {
 		inherit: true,
+		accuracy: 255,
 		self: {
 			volatileStatus: 'rage'
 		}
 	},
 	razorleaf: {
 		inherit: true,
+		accuracy: 242,
 		category: "Special",
 		target: "normal"
 	},
 	razorwind: {
 		num: 13,
-		accuracy: 75,
+		accuracy: 191,
 		basePower: 80,
 		category: "Physical",
 		desc: "Deals damage to a foe. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns.",
@@ -861,30 +1039,52 @@ exports.BattleMovedex = {
 	},
 	rockslide: {
 		inherit: true,
+		accuracy: 229,
 		desc: "Deals damage to a foe.",
 		shortDesc: "Deals damage.",
 		secondary: null,
 		target: "normal"
 	},
+	rockthrow: {
+		inherit: true,
+		accuracy: 165
+	},
+	rollingkick: {
+		inherit: true,
+		accuracy: 216
+	},
+	sandattack: {
+		inherit: true,
+		accuracy: 255
+	},
+	scratch: {
+		inherit: true,
+		accuracy: 255
+	},
 	screech: {
 		inherit: true,
+		accuracy: 216,
 		target: "normal"
 	},
 	seismictoss: {
 		inherit: true,
+		accuracy: 255,
 		affectedByImmunities: false
 	},
 	selfdestruct: {
 		inherit: true,
+		accuracy: 255,
 		basePower: 260,
 		target: "normal"
 	},
 	sing: {
 		inherit: true,
+		accuracy: 140,
 		target: "normal"
 	},
 	skullbash: {
 		inherit: true,
+		accuracy: 255,
 		effect: {
 			duration: 2,
 			onLockMove: 'skullbash',
@@ -893,18 +1093,26 @@ exports.BattleMovedex = {
 	},
 	skyattack: {
 		inherit: true,
+		accuracy: 229,
 		critRatio: 1
+	},
+	slam: {
+		inherit: true,
+		accuracy: 191
 	},
 	sludge: {
 		inherit: true,
+		accuracy: 255,
 		category: "Physical"
 	},
 	smog: {
 		inherit: true,
+		accuracy: 178,
 		target: "normal"
 	},
 	smokescreen: {
 		inherit: true,
+		accuracy: 255,
 		target: "normal"
 	},
 	softboiled: {
@@ -918,23 +1126,42 @@ exports.BattleMovedex = {
 			this.heal(Math.floor(target.maxhp / 2), target, target);
 		}
 	},
+	solarbeam: {
+		inherit: true,
+		accuracy: 255
+	},
 	sonicboom: {
 		inherit: true,
+		accuracy: 229,
 		category: "Physical"
+	},
+	spikecannon: {
+		inherit: true,
+		accuracy: 255
+	},
+	spore: {
+		inherit: true,
+		accuracy: 255
 	},
 	stomp: {
 		inherit: true,
+		accuracy: 255,
 		basePowerCallback: null,
 		desc: "Deals damage to one adjacent target with a 30% chance to flinch it.",
 		shortDesc: "30% chance to flinch the target."
 	},
+	strength: {
+		inherit: true,
+		accuracy: 255
+	},
 	stringshot: {
 		inherit: true,
+		accuracy: 242,
 		target: "normal"
 	},
 	struggle: {
 		num: 165,
-		accuracy: true,
+		accuracy: 255,
 		basePower: 50,
 		category: "Physical",
 		desc: "Deals typeless damage to one adjacent foe at random. If this move was successful, the user loses 1/2 of the damage dealt, rounded half up; the Ability Rock Head does not prevent this. This move can only be used if none of the user's known moves can be selected. Makes contact.",
@@ -955,6 +1182,14 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal"
+	},
+	stunspore: {
+		inherit: true,
+		accuracy: 191
+	},
+	submission: {
+		inherit: true,
+		accuracy: 204
 	},
 	substitute: {
 		num: 164,
@@ -1044,9 +1279,18 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
+	superfang: {
+		inherit: true,
+		accuracy: 229
+	},
 	supersonic: {
 		inherit: true,
+		accuracy: 140,
 		target: "normal"
+	},
+	surf: {
+		inherit: true,
+		accuracy: 255
 	},
 	swift: {
 		inherit: true,
@@ -1066,31 +1310,48 @@ exports.BattleMovedex = {
 	},
 	tackle: {
 		inherit: true,
-		accuracy: 95,
+		accuracy: 242,
 		basePower: 35
 	},
 	tailwhip: {
 		inherit: true,
+		accuracy: 255,
 		target: "normal"
+	},
+	takedown: {
+		inherit: true,
+		accuracy: 216
 	},
 	thrash: {
 		inherit: true,
+		accuracy: 255,
 		basePower: 90,
 		pp: 20
 	},
 	thunder: {
 		inherit: true,
+		accuracy: 178,
 		secondary: {
 			chance: 10,
 			status: 'par'
 		}
 	},
+	thunderbolt: {
+		inherit: true,
+		accuracy: 255
+	},
 	thunderpunch: {
 		inherit: true,
+		accuracy: 255,
 		category: "Special"
+	},
+	thundershock: {
+		inherit: true,
+		accuracy: 255
 	},
 	thunderwave: {
 		inherit: true,
+		accuracy: 255,
 		onTryHit: function(target) {
 			if (target.hasType('Ground')) {
 				this.add('-immune', target.id, '[msg]');
@@ -1100,21 +1361,41 @@ exports.BattleMovedex = {
 	},
 	toxic: {
 		inherit: true,
-		accuracy: 85
+		accuracy: 216
 	},
 	triattack: {
 		inherit: true,
+		accuracy: 255,
 		category: "Physical",
 		secondary: null
 	},
+	twineedle: {
+		inherit: true,
+		accuracy: 255
+	},
+	vicegrip: {
+		inherit: true,
+		accuracy: 255
+	},
 	vinewhip: {
 		inherit: true,
+		accuracy: 255,
 		category: "Special",
 		pp: 10
 	},
+	watergun: {
+		inherit: true,
+		accuracy: 255
+	},
+	waterfall: {
+		inherit: true,
+		accuracy: 255,
+		category: "Special",
+		secondary: false,
+	},
 	whirlwind: {
 		inherit: true,
-		inherit: true,
+		accuracy: 216,
 		desc: "Does nothing.",
 		shortDesc: "Does nothing.",
 		isViable: false,
@@ -1122,11 +1403,12 @@ exports.BattleMovedex = {
 	},
 	wingattack: {
 		inherit: true,
+		accuracy: 255,
 		basePower: 35
 	},
 	wrap: {
 		inherit: true,
-		accuracy: 85,
+		accuracy: 216,
 		affectedByImmunities: false,
 		volatileStatus: 'partiallytrapped',
 		self: {

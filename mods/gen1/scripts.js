@@ -224,17 +224,17 @@ exports.BattleScripts = {
 		
 		// Bypasses accuracy modifiers
 		if (move.ohko && !target.volatiles['dig'] && !target.volatiles['fly']) {
-			accuracy = 30;
+			accuracy = 76;
 		}
 		
 		// Bypasses ohko accuracy modifiers
-		if (move.alwaysHit) accuracy = true; 
+		if (move.alwaysHit) accuracy = true;
 		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 		
 		// Gen 1, 1/256 chance of missing always, no matter what
-		if (accuracy !== true && (this.random(100) >= accuracy || this.random(256) === 256)) {
+		if (accuracy !== true && this.random(256) >= accuracy) {
 			this.attrLastMove('[miss]');
-			this.add('-miss', pokemon, target);
+			this.add('-miss', pokemon);
 			damage = false;
 		}
 
