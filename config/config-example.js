@@ -136,6 +136,10 @@ exports.loguserstats = 1000*60*10; // 10 minutes
 // traffic (i.e. hundreds of concurrent battles).
 exports.simulatorprocesses = 1;
 
+// inactiveuserthreshold - how long a user must be inactive before being pruned
+// from the `users` array. The default is 1 hour.
+exports.inactiveuserthreshold = 1000*60*60;
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
