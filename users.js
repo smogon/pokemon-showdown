@@ -5,7 +5,6 @@ var THROTTLE_DELAY = 900;
 var users = {};
 var prevUsers = {};
 var numUsers = 0;
-var connections = {};
 var numConnections = 0;
 
 function getUser(name, exactName) {
@@ -994,12 +993,7 @@ var Connection = (function () {
 		this.user = user;
 
 		numConnections++;
-		while (connections['p'+numConnections]) {
-			// should never happen
-			numConnections++;
-		}
 		this.id = 'p'+numConnections;
-		connections[this.id] = this;
 
 		this.ip = '';
 		if (socket.remoteAddress) {
