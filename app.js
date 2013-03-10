@@ -485,7 +485,7 @@ if (config.protocol === 'io') { // Socket.IO
 			})(e));
 		}
 		socket.on('disconnect', function() {
-			youUser = resolveUser(you, socket);
+			var youUser = resolveUser(you, socket);
 			if (!youUser) return;
 			youUser.disconnect(socket);
 		});
@@ -523,7 +523,7 @@ if (config.protocol === 'io') { // Socket.IO
 			if (events[data.type]) you = events[data.type](data, socket, you) || you;
 		});
 		socket.on('close', function() {
-			youUser = resolveUser(you, socket);
+			var youUser = resolveUser(you, socket);
 			if (!youUser) return;
 			youUser.disconnect(socket);
 		});
@@ -561,7 +561,7 @@ if (config.protocol === 'io') { // Socket.IO
 			if (events[data.type]) you = events[data.type](data, socket, you) || you;
 		});
 		socket.on('close', function() {
-			youUser = resolveUser(you, socket);
+			var youUser = resolveUser(you, socket);
 			if (!youUser) return;
 			youUser.disconnect(socket);
 		});
