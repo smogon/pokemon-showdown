@@ -199,6 +199,9 @@ exports.BattleScripts = {
 		
 		// Calculate true accuracy
 		var accuracy = move.accuracy;
+		if (accuracy !== true) {
+			accuracy = Math.floor(accuracy*255/100);
+		}
 		
 		// Partial trapping moves: true accuracy while it lasts
 		if (move.volatileStatus === 'partiallytrapped' && pokemon.volatiles['partialtrappinglock']) {
@@ -220,11 +223,6 @@ exports.BattleScripts = {
 					accuracy *= boostTable[-target.boosts.evasion];
 				}
 			}
-		}
-		
-		// Bypasses accuracy modifiers
-		if (move.ohko && !target.volatiles['dig'] && !target.volatiles['fly']) {
-			accuracy = 76;
 		}
 		
 		// Bypasses ohko accuracy modifiers
