@@ -137,7 +137,7 @@ exports.BattleItems = {
 			type: "Steel"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Steel' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Steel' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -334,7 +334,7 @@ exports.BattleItems = {
 			type: "Rock"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Rock' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Rock' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -396,7 +396,7 @@ exports.BattleItems = {
 			type: "Normal"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Normal') {
+			if (move.type === 'Normal' && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -492,7 +492,7 @@ exports.BattleItems = {
 			type: "Fighting"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Fighting' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Fighting' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -521,7 +521,7 @@ exports.BattleItems = {
 			type: "Flying"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Flying' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Flying' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -541,7 +541,7 @@ exports.BattleItems = {
 			type: "Dark"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Dark' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Dark' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -1162,7 +1162,7 @@ exports.BattleItems = {
 			type: "Dragon"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Dragon' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Dragon' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -1350,7 +1350,7 @@ exports.BattleItems = {
 			type: "Ghost"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Ghost' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Ghost' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -1370,7 +1370,7 @@ exports.BattleItems = {
 			type: "Poison"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Poison' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Poison' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -1939,7 +1939,7 @@ exports.BattleItems = {
 			type: "Fire"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Fire' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Fire' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -2012,7 +2012,7 @@ exports.BattleItems = {
 			type: "Water"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Water' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Water' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -2032,7 +2032,7 @@ exports.BattleItems = {
 			type: "Psychic"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Psychic' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Psychic' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -2346,7 +2346,7 @@ exports.BattleItems = {
 			type: "Grass"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Grass' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Grass' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -2561,7 +2561,7 @@ exports.BattleItems = {
 			type: "Ground"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Ground' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Ground' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -2855,7 +2855,7 @@ exports.BattleItems = {
 			type: "Bug"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Bug' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Bug' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -2936,7 +2936,7 @@ exports.BattleItems = {
 			type: "Electric"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Electric' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Electric' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
@@ -3093,7 +3093,7 @@ exports.BattleItems = {
 			type: "Ice"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
-			if (move.type === 'Ice' && this.getEffectiveness(move.type, target) > 0) {
+			if (move.type === 'Ice' && this.getEffectiveness(move.type, target) > 0 && !target.volatiles['substitute']) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					return basePower * 0.5;
