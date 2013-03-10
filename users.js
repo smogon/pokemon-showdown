@@ -5,7 +5,6 @@ var THROTTLE_DELAY = 900;
 var users = {};
 var prevUsers = {};
 var numUsers = 0;
-var numConnections = 0;
 
 function getUser(name, exactName) {
 	if (!name || name === '!') return null;
@@ -1007,9 +1006,6 @@ var Connection = (function () {
 		this.rooms = {};
 
 		this.user = user;
-
-		numConnections++;
-		this.id = 'p'+numConnections;
 
 		this.ip = '';
 		if (socket.remoteAddress) {
