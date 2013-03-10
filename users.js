@@ -163,6 +163,7 @@ var User = (function () {
 
 	User.prototype.blockChallenges = false;
 	User.prototype.blockLobbyChat = false;
+	User.prototype.lastConnected = 0;
 
 	User.prototype.emit = function(message, data) {
 		var roomid = false;
@@ -531,7 +532,7 @@ var User = (function () {
 				}
 				this.roomCount = {};
 				this.connections = [];
-				this.connected = false;
+				this.markInactive();
 				if (!this.authenticated) {
 					this.group = config.groupsranking[0];
 				}
@@ -629,13 +630,17 @@ var User = (function () {
 		}
 		exportUsergroups();
 	};
+	User.prototype.markInactive = function() {
+		this.connected = false;
+		this.lastConnected = Date.now();
+	};
 	User.prototype.disconnect = function(socket) {
 		var connection = null;
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i].socket === socket) {
 				console.log('DISCONNECT: '+this.userid);
 				if (this.connections.length <= 1) {
-					this.connected = false;
+					this.markInactive();
 					if (!this.authenticated) {
 						this.group = config.groupsranking[0];
 					}
@@ -762,7 +767,7 @@ var User = (function () {
 		// Disconnects a user from the server
 		this.destroyChatQueue();
 		var connection = null;
-		this.connected = false;
+		this.markInactive();
 		for (var i=0; i<this.connections.length; i++) {
 			console.log('DESTROY: '+this.userid);
 			connection = this.connections[i];
@@ -982,6 +987,17 @@ var User = (function () {
 			this.chatQueueTimeout = null;
 		}
 	};
+	// "static" function
+	User.pruneInactive = function(threshold) {
+		var now = Date.now();
+		for (var i in users) {
+			var user = users[i];
+			if (user.connected) continue;
+			if ((now - user.lastConnected) > threshold) {
+				delete users[i];
+			}
+		}
+	};
 	return User;
 })();
 
@@ -1037,6 +1053,13 @@ exports.addBannedWord = addBannedWord;
 exports.removeBannedWord = removeBannedWord;
 
 exports.usergroups = usergroups;
+
+exports.pruneInactive = User.pruneInactive;
+exports.pruneInactiveTimer = setInterval(
+	User.pruneInactive,
+	1000*60*30,
+	config.inactiveuserthreshold || 1000*60*60
+);
 
 exports.getNextGroupSymbol = function(group, isDown) {
 	var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(group) + (isDown ? -1 : 1)];
