@@ -125,7 +125,6 @@ var User = (function () {
 	function User(connection) {
 		numUsers++;
 		this.mmrCache = {};
-		this.token = ''+connection.socket.id;
 		this.guestNum = numUsers;
 		this.name = 'Guest '+numUsers;
 		this.named = false;
@@ -299,8 +298,7 @@ var User = (function () {
 			emit(this.connections[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
-				named: true,
-				token: this.token
+				named: true
 			});
 		}
 		var joining = !this.named;
@@ -339,8 +337,7 @@ var User = (function () {
 			emit(this.connections[i].socket, 'update', {
 				name: name,
 				userid: this.userid,
-				named: false,
-				token: this.token
+				named: false
 			});
 		}
 		this.named = false;
@@ -559,7 +556,6 @@ var User = (function () {
 			}
 
 			// rename success
-			this.token = token;
 			this.group = group;
 			if (avatar) this.avatar = avatar;
 			return this.forceRename(name, authenticated);
@@ -574,17 +570,6 @@ var User = (function () {
 		}
 		this.renamePending = false;
 	};
-	User.prototype.add = function(name, connection, token) {
-		// name is ignored - this is intentional
-		if (connection.banned || this.token !== token) {
-			return false;
-		}
-		this.connected = true;
-		connection.user = this;
-		this.connections.push(connection);
-		this.ip = connection.ip;
-		return connection;
-	};
 	User.prototype.merge = function(connection) {
 		this.connected = true;
 		this.connections.push(connection);
@@ -592,8 +577,7 @@ var User = (function () {
 		emit(connection.socket, 'update', {
 			name: this.name,
 			userid: this.userid,
-			named: true,
-			token: this.token
+			named: true
 		});
 		connection.user = this;
 		for (var i in connection.rooms) {
