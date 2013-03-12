@@ -162,7 +162,7 @@ exports.BattleStatuses = {
 	partiallytrapped: {
 		duration: 5,
 		durationCallback: function(target, source) {
-			if (source.item === 'gripclaw') return 6;
+			if (source.item === 'gripclaw') return 8;
 			return this.random(5,7);
 		},
 		onStart: function(pokemon, source) {

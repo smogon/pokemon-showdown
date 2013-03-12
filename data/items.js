@@ -1116,7 +1116,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		// implemented in statuses
-		desc: "Partial trapping moves last 5 turns."
+		desc: "Partial trapping moves last 7 turns."
 	},
 	"griseousorb": {
 		id: "griseousorb",
