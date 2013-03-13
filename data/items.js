@@ -11,7 +11,7 @@ exports.BattleItems = {
 				this.boost({spa: 1});
 			}
 		},
-		desc: "Boosts Special Attack of holder if hit by a Water-type attack. One-time use."
+		desc: "Raises Sp. Atk by 1 if hit by a Water-type attack. Single use."
 	},
 	"adamantorb": {
 		id: "adamantorb",
@@ -25,7 +25,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Hold item which raises power of Dialga's STAB moves 20%."
+		desc: "If holder is a Dialga, its Steel- and Dragon-type attacks have 1.2x power."
 	},
 	"aguavberry": {
 		id: "aguavberry",
@@ -47,13 +47,12 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"airballoon": {
 		id: "airballoon",
 		name: "Air Balloon",
 		spritenum: 6,
-		desc: "Makes the holder immune to Ground-type attacks. Disappears when holder is hit.",
 		fling: {
 			basePower: 10
 		},
@@ -76,7 +75,8 @@ exports.BattleItems = {
 				this.add('-enditem', target, 'Air Balloon');
 				target.setItem('');
 			}
-		}
+		},
+		desc: "Holder is immune to Ground-type attacks. Pops when holder is hit."
 	},
 	"apicotberry": {
 		id: "apicotberry",
@@ -95,7 +95,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({spd:1});
 		},
-		desc: "Raises Special Defense by one stage when at 25% HP or less. One-time use."
+		desc: "Raises Sp. Def by 1 when at 1/4 max HP or less. Single use."
 	},
 	"armorfossil": {
 		id: "armorfossil",
@@ -125,7 +125,7 @@ exports.BattleItems = {
 				pokemon.cureStatus();
 			}
 		},
-		desc: "Cures freeze. One-time use."
+		desc: "Holder is cured if it is frozen. Single use."
 	},
 	"babiriberry": {
 		id: "babiriberry",
@@ -145,7 +145,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Steel-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Steel-type attack. Single use."
 	},
 	"belueberry": {
 		id: "belueberry",
@@ -156,7 +156,7 @@ exports.BattleItems = {
 			basePower: 80,
 			type: "Electric"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"berryjuice": {
 		id: "berryjuice",
@@ -172,7 +172,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Restores 20 HP when at 50% HP or less. One-time use."
+		desc: "Restores 20HP when at 1/2 max HP or less. Single use."
 	},
 	"bigroot": {
 		id: "bigroot",
@@ -188,7 +188,7 @@ exports.BattleItems = {
 				return Math.ceil((damage * 1.3) - 0.5); // Big Root rounds half down
 			}
 		},
-		desc: "Increases HP gained from draining moves by 30%."
+		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed."
 	},
 	"bindingband": {
 		id: "bindingband",
@@ -198,7 +198,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		// implemented in statuses
-		desc: "Increases power of multi-turn trapping moves."
+		desc: "Holder's partial-trapping moves deal 1/8 max HP per turn instead of 1/16."
 	},
 	"blackbelt": {
 		id: "blackbelt",
@@ -212,7 +212,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Fighting-type moves 20%."
+		desc: "Holder's Fighting-type attacks have 1.2x power."
 	},
 	"blacksludge": {
 		id: "blacksludge",
@@ -230,7 +230,7 @@ exports.BattleItems = {
 				this.damage(pokemon.maxhp/8);
 			}
 		},
-		desc: "Recovers 1\/16 HP each turn for Poison types. Damages all other types."
+		desc: "Each turn, if holder is a Poison-type, restores 1/16 max HP; loses 1/8 if not."
 	},
 	"blackglasses": {
 		id: "blackglasses",
@@ -244,7 +244,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Dark-type moves 20%."
+		desc: "Holder's Dark-type attacks have 1.2x power."
 	},
 	"blukberry": {
 		id: "blukberry",
@@ -255,7 +255,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Fire"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"brightpowder": {
 		id: "brightpowder",
@@ -269,7 +269,7 @@ exports.BattleItems = {
 			this.debug('brightpowder - decreasing accuracy');
 			return accuracy * 0.9;
 		},
-		desc: "Raises evasion 10%."
+		desc: "The accuracy of attacks against the holder is 0.9x."
 	},
 	"buggem": {
 		id: "buggem",
@@ -284,7 +284,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Bug-type move by 50%. One-time use."
+		desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use."
 	},
 	"burndrive": {
 		id: "burndrive",
@@ -294,7 +294,7 @@ exports.BattleItems = {
 			basePower: 70
 		},
 		onDrive: 'Fire',
-		desc: "Changes the type of Techno Blast to Fire."
+		desc: "Holder's Techno Blast is Fire-type."
 	},
 	"cellbattery": {
 		id: "cellbattery",
@@ -308,7 +308,7 @@ exports.BattleItems = {
 				this.boost({atk: 1});
 			}
 		},
-		desc: "Boosts Attack of holder if hit by an Electric-type attack. One-time use."
+		desc: "Raises Attack by 1 if hit by an Electric-type attack. Single use."
 	},
 	"charcoal": {
 		id: "charcoal",
@@ -322,7 +322,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Fire-type moves 20%."
+		desc: "Holder's Fire-type attacks have 1.2x power."
 	},
 	"chartiberry": {
 		id: "chartiberry",
@@ -342,7 +342,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Rock-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Rock-type attack. Single use."
 	},
 	"cheriberry": {
 		id: "cheriberry",
@@ -363,7 +363,7 @@ exports.BattleItems = {
 				pokemon.cureStatus();
 			}
 		},
-		desc: "Cures paralysis. One-time use."
+		desc: "Holder cures itself if it is paralyzed. Single use."
 	},
 	"chestoberry": {
 		id: "chestoberry",
@@ -384,7 +384,7 @@ exports.BattleItems = {
 				pokemon.cureStatus();
 			}
 		},
-		desc: "Cures sleep. One-time use."
+		desc: "Holder wakes up if it is asleep. Single use."
 	},
 	"chilanberry": {
 		id: "chilanberry",
@@ -404,7 +404,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a Normal-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a Normal-type attack. Single use."
 	},
 	"chilldrive": {
 		id: "chilldrive",
@@ -414,7 +414,7 @@ exports.BattleItems = {
 			basePower: 70
 		},
 		onDrive: 'Ice',
-		desc: "Changes the type of Techno Blast to Ice."
+		desc: "Holder's Techno Blast is Ice-type."
 	},
 	"choiceband": {
 		id: "choiceband",
@@ -436,7 +436,7 @@ exports.BattleItems = {
 			return atk * 1.5;
 		},
 		isChoice: true,
-		desc: "Hold item which raises Attack 50%, but locks holder into one move."
+		desc: "Holder's Attack is 1.5x, but it can only use the first move it selects."
 	},
 	"choicescarf": {
 		id: "choicescarf",
@@ -458,7 +458,7 @@ exports.BattleItems = {
 			return spe * 1.5;
 		},
 		isChoice: true,
-		desc: "Hold item which raises Speed 50%, but locks holder into one move."
+		desc: "Holder's Speed is 1.5x, but it can only use the first move it selects."
 	},
 	"choicespecs": {
 		id: "choicespecs",
@@ -480,7 +480,7 @@ exports.BattleItems = {
 			return spa * 1.5;
 		},
 		isChoice: true,
-		desc: "Hold item which raises Special Attack 50%, but locks holder into one move."
+		desc: "Holder's Sp. Atk is 1.5x, but it can only use the first move it selects."
 	},
 	"chopleberry": {
 		id: "chopleberry",
@@ -500,7 +500,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Fighting-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Fighting-type attack. Single use."
 	},
 	"clawfossil": {
 		id: "clawfossil",
@@ -529,7 +529,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Flying-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Flying-type attack. Single use."
 	},
 	"colburberry": {
 		id: "colburberry",
@@ -549,7 +549,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Dark-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Dark-type attack. Single use."
 	},
 	"cornnberry": {
 		id: "cornnberry",
@@ -560,7 +560,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Bug"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"coverfossil": {
 		id: "coverfossil",
@@ -589,7 +589,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Activates at 25% HP. Next move used goes first. One-time use."
+		desc: "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use."
 	},
 	"damprock": {
 		id: "damprock",
@@ -598,7 +598,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 60
 		},
-		desc: "Rain Dance lasts 8 turns."
+		desc: "Holder's use of Rain Dance lasts 8 turns instead of 5."
 	},
 	"darkgem": {
 		id: "darkgem",
@@ -613,7 +613,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Dark-type move by 50%. One-time use."
+		desc: "Holder's first successful Dark-type attack will have 1.5x power. Single use."
 	},
 	"deepseascale": {
 		id: "deepseascale",
@@ -627,7 +627,7 @@ exports.BattleItems = {
 				return spd * 2;
 			}
 		},
-		desc: "Doubles Clamperl's Special Defence. Evolves Clamperl into Gorebyss."
+		desc: "If holder is a Clamperl, its Sp. Def is doubled."
 	},
 	"deepseatooth": {
 		id: "deepseatooth",
@@ -641,7 +641,7 @@ exports.BattleItems = {
 				return spa * 2;
 			}
 		},
-		desc: "Doubles Clamperl's Special Attack. Evolves Clamperl into Huntail."
+		desc: "If holder is a Clamperl, its Sp. Atk is doubled."
 	},
 	"destinyknot": {
 		id: "destinyknot",
@@ -656,7 +656,7 @@ exports.BattleItems = {
 			if (!source || source === target) return;
 			if (!source.volatiles.attract) source.addVolatile('attract', target);
 		},
-		desc: "If the holder becomes infatuated, so does the enemy."
+		desc: "If holder becomes infatuated, the other Pokemon also becomes infatuated."
 	},
 	"domefossil": {
 		id: "domefossil",
@@ -675,7 +675,7 @@ exports.BattleItems = {
 			basePower: 70
 		},
 		onDrive: 'Water',
-		desc: "Changes the type of Techno Blast to Water."
+		desc: "Holder's Techno Blast is Water-type."
 	},
 	"dracoplate": {
 		id: "dracoplate",
@@ -690,7 +690,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Dragon-type moves 20%. Pokemon with Multitype become Dragon-type."
+		desc: "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon-type."
 	},
 	"dragonfang": {
 		id: "dragonfang",
@@ -704,7 +704,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Dragon-type moves 20%."
+		desc: "Holder's Dragon-type attacks have 1.2x power."
 	},
 	"dragongem": {
 		id: "dragongem",
@@ -719,7 +719,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Dragon-type move by 50%. One-time use."
+		desc: "Holder's first successful Dragon-type attack will have 1.5x power. Single use."
 	},
 	"dreadplate": {
 		id: "dreadplate",
@@ -734,7 +734,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of the holder's Dark-type moves 20%. Pokemon with Multitype become Dark-type."
+		desc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark-type."
 	},
 	"durinberry": {
 		id: "durinberry",
@@ -745,7 +745,7 @@ exports.BattleItems = {
 			basePower: 80,
 			type: "Water"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"earthplate": {
 		id: "earthplate",
@@ -760,7 +760,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Ground-type moves 20%. Pokemon with Multitype become Ground-type."
+		desc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground-type."
 	},
 	"ejectbutton": {
 		id: "ejectbutton",
@@ -781,7 +781,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "When the holder is hit, it immediately switches out. One-time use."
+		desc: "If holder is hit, it immediately switches out with a chosen ally. Single use."
 	},
 	"electirizer": {
 		id: "electirizer",
@@ -790,7 +790,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 80
 		},
-		desc: "Evolves Electabuzz into Electivire."
+		desc: "Evolves Electabuzz into Electivire when traded."
 	},
 	"electricgem": {
 		id: "electricgem",
@@ -805,7 +805,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Electric-type move by 50%. One-time use."
+		desc: "Holder's first successful Electric-type attack will have 1.5x power. Single use."
 	},
 	"energypowder": {
 		id: "energypowder",
@@ -814,7 +814,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		desc: "Restores 50 HP to one Pokemon but tastes bitter."
+		desc: "Restores 50HP to one Pokemon but lowers Happiness."
 	},
 	"enigmaberry": {
 		id: "enigmaberry",
@@ -841,7 +841,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.heal(pokemon.maxhp/4);
 		},
-		desc: "Heals 25% HP after being hit by a super effective attack. One-time use."
+		desc: "Restores 1/4 max HP when holder is hit by a super effective move. Single use."
 	},
 	"eviolite": {
 		id: "eviolite",
@@ -860,7 +860,7 @@ exports.BattleItems = {
 				return spd * 1.5;
 			}
 		},
-		desc: "Boosts Defense and Special Defense of holder by 50% if it is an NFE Pokemon."
+		desc: "If holder's species can evolve, its Defense and Sp. Def are 1.5x."
 	},
 	"expertbelt": {
 		id: "expertbelt",
@@ -874,7 +874,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Super effective attacks are 20% stronger."
+		desc: "Holder's super effective attacks against other Pokemon do 1.2x damage."
 	},
 	"fightinggem": {
 		id: "fightinggem",
@@ -889,7 +889,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Fighting-type move by 50%. One-time use."
+		desc: "Holder's first successful Fighting-type attack will have 1.5x power. Single use."
 	},
 	"figyberry": {
 		id: "figyberry",
@@ -911,7 +911,7 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"firegem": {
 		id: "firegem",
@@ -926,7 +926,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Fire-type move by 50%. One-time use."
+		desc: "Holder's first successful Fire-type attack will have 1.5x power. Single use."
 	},
 	"fistplate": {
 		id: "fistplate",
@@ -941,7 +941,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Fighting-type moves 20%. Pokemon with Multitype become Fighting-type."
+		desc: "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting-type."
 	},
 	"flameorb": {
 		id: "flameorb",
@@ -959,7 +959,7 @@ exports.BattleItems = {
 				pokemon.trySetStatus('brn');
 			}
 		},
-		desc: "Burns the holder."
+		desc: "At the end of every turn, this item attempts to burn the holder."
 	},
 	"flameplate": {
 		id: "flameplate",
@@ -974,7 +974,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Fire-type moves 20%. Pokemon with Multitype become Fire-type."
+		desc: "Holder's Fire-type attacks have 1.2x power. Judgment is Fire-type."
 	},
 	"floatstone": {
 		id: "floatstone",
@@ -986,7 +986,7 @@ exports.BattleItems = {
 		onModifyPokemon: function(pokemon) {
 			pokemon.weightkg /= 2;
 		},
-		desc: "The weight of the holder is halved."
+		desc: "Holder's weight is halved."
 	},
 	"flyinggem": {
 		id: "flyinggem",
@@ -1001,7 +1001,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Flying-type move by 50%. One-time use."
+		desc: "Holder's first successful Flying-type attack will have 1.5x power. Single use."
 	},
 	"focusband": {
 		id: "focusband",
@@ -1016,7 +1016,7 @@ exports.BattleItems = {
 				return target.hp - 1;
 			}
 		},
-		desc: "Gives a 10% chance of surviving a hit with at least 1 HP."
+		desc: "Holder has a 10% chance to survive an attack that would KO it with 1HP."
 	},
 	"focussash": {
 		id: "focussash",
@@ -1032,7 +1032,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "The holder always survives one attack at full HP. One-time use."
+		desc: "If holder's HP is full, will survive an attack that would KO it with 1HP. Single use."
 	},
 	"fullincense": {
 		id: "fullincense",
@@ -1046,7 +1046,7 @@ exports.BattleItems = {
 				return priority - 0.1;
 			}
 		},
-		desc: "Makes the holder move last. Allows breeding of Munchlax."
+		desc: "Holder moves last in its priority bracket."
 	},
 	"ganlonberry": {
 		id: "ganlonberry",
@@ -1065,7 +1065,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({def:1});
 		},
-		desc: "Raises Defense by one stage when at 25% HP or less. One-time use."
+		desc: "Raises Defense by 1 when at 1/4 max HP or less. Single use."
 	},
 	"ghostgem": {
 		id: "ghostgem",
@@ -1080,7 +1080,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Ghost-type move by 50%. One-time use."
+		desc: "Holder's first successful Ghost-type attack will have 1.5x power. Single use."
 	},
 	"grassgem": {
 		id: "grassgem",
@@ -1095,7 +1095,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Grass-type move by 50%. One-time use."
+		desc: "Holder's first successful Grass-type attack will have 1.5x power. Single use."
 	},
 	"grepaberry": {
 		id: "grepaberry",
@@ -1106,7 +1106,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Flying"
 		},
-		desc: "Increases happiness, but lowers Special Defense EVs by 10."
+		desc: "No competitive use."
 	},
 	"gripclaw": {
 		id: "gripclaw",
@@ -1116,7 +1116,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		// implemented in statuses
-		desc: "Partial trapping moves last 7 turns."
+		desc: "Holder's partial-trapping moves always last 7 turns."
 	},
 	"griseousorb": {
 		id: "griseousorb",
@@ -1135,7 +1135,7 @@ exports.BattleItems = {
 				return false;
 			}
 		},
-		desc: "Raises the Base Power of Giratina's STAB moves 20% and transforms Giratina into Giratina-O when held. Cannot be removed or given to Giratina in battle."
+		desc: "If holder is a Giratina, its Ghost- and Dragon-type attacks have 1.2x power."
 	},
 	"groundgem": {
 		id: "groundgem",
@@ -1150,7 +1150,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Ground-type move by 50%. One-time use."
+		desc: "Holder's first successful Ground-type attack will have 1.5x power. Single use."
 	},
 	"habanberry": {
 		id: "habanberry",
@@ -1170,7 +1170,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Dragon-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Dragon-type attack. Single use."
 	},
 	"hardstone": {
 		id: "hardstone",
@@ -1184,7 +1184,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Rock-type moves 20%."
+		desc: "Holder's Rock-type attacks have 1.2x power."
 	},
 	"heatrock": {
 		id: "heatrock",
@@ -1193,7 +1193,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 60
 		},
-		desc: "Sunny Day lasts 8 turns."
+		desc: "Holder's use of Sunny Day lasts 8 turns instead of 5."
 	},
 	"helixfossil": {
 		id: "helixfossil",
@@ -1213,7 +1213,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Ground"
 		},
-		desc: "Increases happiness, but lowers Special Attack EVs by 10."
+		desc: "No competitive use."
 	},
 	"iapapaberry": {
 		id: "iapapaberry",
@@ -1235,7 +1235,7 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"icegem": {
 		id: "icegem",
@@ -1250,7 +1250,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Ice-type move by 50%. One-time use."
+		desc: "Holder's first successful Ice-type attack will have 1.5x power. Single use."
 	},
 	"icicleplate": {
 		id: "icicleplate",
@@ -1265,7 +1265,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Ice-type moves 20%. Pokemon with Multitype become Ice-type."
+		desc: "Holder's Ice-type attacks have 1.2x power. Judgment is Ice-type."
 	},
 	"icyrock": {
 		id: "icyrock",
@@ -1274,7 +1274,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 40
 		},
-		desc: "Hail lasts 8 turns."
+		desc: "Holder's use of Hail lasts 8 turns instead of 5."
 	},
 	"insectplate": {
 		id: "insectplate",
@@ -1289,7 +1289,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Bug-type moves 20%. Pokemon with Multitype become Bug-type."
+		desc: "Holder's Bug-type attacks have 1.2x power. Judgment is Bug-type."
 	},
 	"ironball": {
 		id: "ironball",
@@ -1304,7 +1304,7 @@ exports.BattleItems = {
 		onModifySpe: function(spe) {
 			return spe / 2;
 		},
-		desc: "Reduces Speed 50% and removes holder's Ground-type immunity."
+		desc: "Holder's Speed is halved and it becomes grounded."
 	},
 	"ironplate": {
 		id: "ironplate",
@@ -1319,7 +1319,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Steel-type moves 20%. Pokemon with Multitype become Steel-type."
+		desc: "Holder's Steel-type attacks have 1.2x power. Judgment is Steel-type."
 	},
 	"jabocaberry": {
 		id: "jabocaberry",
@@ -1338,7 +1338,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "If hit by a physical attack, the attacker takes 12.5% damage. One-time use."
+		desc: "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use."
 	},
 	"kasibberry": {
 		id: "kasibberry",
@@ -1358,7 +1358,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Ghost-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Ghost-type attack. Single use."
 	},
 	"kebiaberry": {
 		id: "kebiaberry",
@@ -1378,7 +1378,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Poison-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Poison-type attack. Single use."
 	},
 	"kelpsyberry": {
 		id: "kelpsyberry",
@@ -1389,7 +1389,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Fighting"
 		},
-		desc: "Increases happiness, but lowers Attack EVs by 10."
+		desc: "No competitive use."
 	},
 	"kingsrock": {
 		id: "kingsrock",
@@ -1411,7 +1411,7 @@ exports.BattleItems = {
 				});
 			}
 		},
-		desc: "Certain moves have a 10% flinch rate."
+		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch."
 	},
 	"laggingtail": {
 		id: "laggingtail",
@@ -1425,7 +1425,7 @@ exports.BattleItems = {
 				return priority - 0.1;
 			}
 		},
-		desc: "The holder will go last within its move's priority bracket, regardless of Speed."
+		desc: "Holder moves last in its priority bracket."
 	},
 	"lansatberry": {
 		id: "lansatberry",
@@ -1444,7 +1444,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			pokemon.addVolatile('focusenergy');
 		},
-		desc: "Raises critical hit rate by two stages when at 25% HP or less. One-time use."
+		desc: "Holder gains the Focus Energy effect when at 1/4 max HP or less. Single use."
 	},
 	"laxincense": {
 		id: "laxincense",
@@ -1458,7 +1458,7 @@ exports.BattleItems = {
 			this.debug('lax incense - decreasing accuracy');
 			return accuracy * 0.9;
 		},
-		desc: "Hold item which raises evasion 10%. Allows breeding of Wynaut."
+		desc: "The accuracy of attacks against the holder is 0.9x."
 	},
 	"leftovers": {
 		id: "leftovers",
@@ -1472,7 +1472,7 @@ exports.BattleItems = {
 		onResidual: function(pokemon) {
 			this.heal(pokemon.maxhp/16);
 		},
-		desc: "Heals 1\/16 HP each turn."
+		desc: "At the end of every turn, holder restores 1/16 of its max HP."
 	},
 	"leppaberry": {
 		id: "leppaberry",
@@ -1509,7 +1509,7 @@ exports.BattleItems = {
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
 			this.add("-message",pokemon.name+" restored "+move.move+"'s PP using its Leppa Berry! (placeholder)");
 		},
-		desc: "Restores 10 PP to a move that has run out of PP. One-time use."
+		desc: "Restores 10PP to the first of the holder's moves to reach 0PP. Single use."
 	},
 	"liechiberry": {
 		id: "liechiberry",
@@ -1528,7 +1528,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({atk:1});
 		},
-		desc: "Raises Attack by one stage when at 25% HP or less. One-time use."
+		desc: "Raises Attack by 1 when at 1/4 max HP or less. Single use."
 	},
 	"lifeorb": {
 		id: "lifeorb",
@@ -1550,7 +1550,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Boosts power by 30%, user takes 10% recoil each turn it attacks."
+		desc: "Holder's damaging moves do 1.3x damage; loses 1/10 max HP after the attack."
 	},
 	"lightball": {
 		id: "lightball",
@@ -1570,7 +1570,7 @@ exports.BattleItems = {
 				return spa * 2;
 			}
 		},
-		desc: "Doubles Pikachu's Attack and Special Attack."
+		desc: "If holder is a Pikachu, its Attack and Sp. Atk are doubled."
 	},
 	"lightclay": {
 		id: "lightclay",
@@ -1580,7 +1580,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		// implemented in the corresponding thing
-		desc: "If the holder uses either Light Screen or Reflect, the two moves will stay on the field for eight turns instead of five."
+		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5."
 	},
 	"luckypunch": {
 		id: "luckypunch",
@@ -1594,7 +1594,7 @@ exports.BattleItems = {
 				move.critRatio += 2;
 			}
 		},
-		desc: "Raises Chansey's critical hit ratio two stages."
+		desc: "If holder is a Chansey, its critical hit ratio is boosted by 2."
 	},
 	"lumberry": {
 		id: "lumberry",
@@ -1614,7 +1614,7 @@ exports.BattleItems = {
 			pokemon.cureStatus();
 			pokemon.removeVolatile('confusion');
 		},
-		desc: "Cures status. Consumed after use."
+		desc: "Holder cures itself if it is confused or has a major status problem. Single use."
 	},
 	"lustrousorb": {
 		id: "lustrousorb",
@@ -1628,7 +1628,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Palkia's STAB moves 20%."
+		desc: "If holder is a Palkia, its Water- and Dragon-type attacks have 1.2x power."
 	},
 	"machobrace": {
 		id: "machobrace",
@@ -1640,7 +1640,7 @@ exports.BattleItems = {
 		onModifySpe: function(spe) {
 			return spe / 2;
 		},
-		desc: "Reduces Speed 50%. Doubles EVs gained."
+		desc: "Holder's Speed is halved."
 	},
 	"magnet": {
 		id: "magnet",
@@ -1654,7 +1654,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Electric-type moves 20%."
+		desc: "Holder's Electric-type attacks have 1.2x power."
 	},
 	"magoberry": {
 		id: "magoberry",
@@ -1676,7 +1676,7 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"magostberry": {
 		id: "magostberry",
@@ -1687,7 +1687,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Rock"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"meadowplate": {
 		id: "meadowplate",
@@ -1702,7 +1702,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Grass-type moves 20%. Pokemon with Multitype become Grass-type."
+		desc: "Holder's Grass-type attacks have 1.2x power. Judgment is Grass-type."
 	},
 	"mentalherb": {
 		id: "mentalherb",
@@ -1734,7 +1734,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Cures certain conditions. One-time use."
+		desc: "Cures holder if affected by Attract, Disable, Encore, Taunt, Torment. Single use."
 	},
 	"metalcoat": {
 		id: "metalcoat",
@@ -1748,7 +1748,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Steel-type moves 20%. Evolves Onix and Scyther."
+		desc: "Holder's Steel-type attacks have 1.2x power."
 	},
 	"metalpowder": {
 		id: "metalpowder",
@@ -1762,7 +1762,7 @@ exports.BattleItems = {
 				return def * 2;
 			}
 		},
-		desc: "Raises Ditto's Defense and Special Defense by 50%."
+		desc: "If holder is a Ditto that hasn't Transformed, its Defense is doubled."
 	},
 	"metronome": {
 		id: "metronome",
@@ -1790,7 +1790,7 @@ exports.BattleItems = {
 				return basePower * bpMod[this.effectData.numConsecutive];
 			}
 		},
-		desc: "Boost the power of attacks used consecutively."
+		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns."
 	},
 	"micleberry": {
 		id: "micleberry",
@@ -1819,7 +1819,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Activates at 25% HP. Next move used will always hit. One-time use."
+		desc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use."
 	},
 	"mindplate": {
 		id: "mindplate",
@@ -1834,7 +1834,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Psychic-type moves 20%. Pokemon with Multitype become Psychic-type."
+		desc: "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic-type."
 	},
 	"miracleseed": {
 		id: "miracleseed",
@@ -1848,7 +1848,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Grass-type moves 20%."
+		desc: "Holder's Grass-type attacks have 1.2x power."
 	},
 	"muscleband": {
 		id: "muscleband",
@@ -1862,7 +1862,7 @@ exports.BattleItems = {
 				return basePower * 1.1;
 			}
 		},
-		desc: "Raises power of physical moves 10%."
+		desc: "Holder's physical attacks have 1.1x power."
 	},
 	"mysticwater": {
 		id: "mysticwater",
@@ -1876,7 +1876,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Water-type moves 20%."
+		desc: "Holder's Water-type attacks have 1.2x power."
 	},
 	"nanabberry": {
 		id: "nanabberry",
@@ -1887,7 +1887,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Water"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"nevermeltice": {
 		id: "nevermeltice",
@@ -1901,7 +1901,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Ice-type moves 20%."
+		desc: "Holder's Ice-type attacks have 1.2x power."
 	},
 	"nomelberry": {
 		id: "nomelberry",
@@ -1912,7 +1912,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Dragon"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"normalgem": {
 		id: "normalgem",
@@ -1927,7 +1927,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Normal-type move by 50%. One-time use."
+		desc: "Holder's first successful Normal-type attack will have 1.5x power. Single use."
 	},
 	"occaberry": {
 		id: "occaberry",
@@ -1947,7 +1947,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Fire-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Fire-type attack. Single use."
 	},
 	"oddincense": {
 		id: "oddincense",
@@ -1961,7 +1961,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Psychic-type moves 20%. Allows breeding of Mime Jr."
+		desc: "Holder's Psychic-type attacks have 1.2x power."
 	},
 	"oldamber": {
 		id: "oldamber",
@@ -1989,7 +1989,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.heal(10);
 		},
-		desc: "Restores 10 HP when at 50% HP or less. One-time use."
+		desc: "Restores 10HP when at 1/2 max HP or less. Single use."
 	},
 	"pamtreberry": {
 		id: "pamtreberry",
@@ -2000,7 +2000,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Steel"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"passhoberry": {
 		id: "passhoberry",
@@ -2020,7 +2020,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Water-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Water-type attack. Single use."
 	},
 	"payapaberry": {
 		id: "payapaberry",
@@ -2040,7 +2040,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Psychic-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Psychic-type attack. Single use."
 	},
 	"pechaberry": {
 		id: "pechaberry",
@@ -2061,7 +2061,7 @@ exports.BattleItems = {
 				pokemon.cureStatus();
 			}
 		},
-		desc: "Cures poison. One-time use."
+		desc: "Holder is cured if it is poisoned. Single use."
 	},
 	"persimberry": {
 		id: "persimberry",
@@ -2080,7 +2080,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			pokemon.removeVolatile('confusion');
 		},
-		desc: "Cures confusion. One-time use."
+		desc: "Holder is cured if it is confused. Single use."
 	},
 	"petayaberry": {
 		id: "petayaberry",
@@ -2099,7 +2099,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({spa:1});
 		},
-		desc: "Raises Special Attack by one stage when at 25% HP or less. One-time use."
+		desc: "Raises Sp. Atk by 1 when at 1/4 max HP or less. Single use."
 	},
 	"pinapberry": {
 		id: "pinapberry",
@@ -2110,7 +2110,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Grass"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"plumefossil": {
 		id: "plumefossil",
@@ -2134,7 +2134,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Poison-type moves 20%."
+		desc: "Holder's Poison-type attacks have 1.2x power."
 	},
 	"poisongem": {
 		id: "poisongem",
@@ -2149,7 +2149,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Poison-type move by 50%. One-time use."
+		desc: "Holder's first successful Poison-type attack will have 1.5x power. Single use."
 	},
 	"pomegberry": {
 		id: "pomegberry",
@@ -2160,7 +2160,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Ice"
 		},
-		desc: "Increases happiness, but lowers HP EVs by 10."
+		desc: "No competitive use."
 	},
 	"powerherb": {
 		id: "powerherb",
@@ -2175,7 +2175,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		desc: "Moves with a charge turn activate instantly."
+		desc: "Holder's two-turn moves complete in one turn (except Sky Drop). Single use."
 	},
 	"psychicgem": {
 		id: "psychicgem",
@@ -2190,7 +2190,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Psychic-type move by 50%. One-time use."
+		desc: "Holder's first successful Psychic-type attack will have 1.5x power. Single use."
 	},
 	"qualotberry": {
 		id: "qualotberry",
@@ -2201,7 +2201,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Poison"
 		},
-		desc: "Increases happiness, but lowers Defense EVs by 10."
+		desc: "No competitive use."
 	},
 	"quickclaw": {
 		id: "quickclaw",
@@ -2216,7 +2216,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 80
 		},
-		desc: "Gives the user a 20% chance to go first."
+		desc: "Each turn, holder has a 20% chance to move first in its priority bracket."
 	},
 	"quickpowder": {
 		id: "quickpowder",
@@ -2230,7 +2230,7 @@ exports.BattleItems = {
 				return spe * 2;
 			}
 		},
-		desc: "Doubles Ditto's Speed."
+		desc: "If holder is a Ditto that hasn't Transformed, its Speed is doubled."
 	},
 	"rabutaberry": {
 		id: "rabutaberry",
@@ -2241,7 +2241,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Ghost"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"rarebone": {
 		id: "rarebone",
@@ -2250,7 +2250,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 100
 		},
-		desc: "Can be Flung for 100 BP."
+		desc: "No competitive use."
 	},
 	"rawstberry": {
 		id: "rawstberry",
@@ -2271,7 +2271,7 @@ exports.BattleItems = {
 				pokemon.cureStatus();
 			}
 		},
-		desc: "Cures burn. One-time use."
+		desc: "Holder is cured if it is burned. Single use."
 	},
 	"razorclaw": {
 		id: "razorclaw",
@@ -2283,7 +2283,7 @@ exports.BattleItems = {
 		onModifyMove: function(move) {
 			move.critRatio++;
 		},
-		desc: "Raises critical hit rate one stage. Evolves Sneasel into Weavile."
+		desc: "Holder's critical hit ratio is boosted by 1."
 	},
 	"razorfang": {
 		id: "razorfang",
@@ -2305,7 +2305,7 @@ exports.BattleItems = {
 				});
 			}
 		},
-		desc: "Certain moves have a 10% flinch rate. Evolves Gligar into Gliscor."
+		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch."
 	},
 	"razzberry": {
 		id: "razzberry",
@@ -2316,7 +2316,7 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Steel"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"redcard": {
 		id: "redcard",
@@ -2334,7 +2334,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "The opponent is forced out immediately if it attacks the holder. One-time use."
+		desc: "If holder is hit, it forces the attacker to switch to a random ally. Single use."
 	},
 	"rindoberry": {
 		id: "rindoberry",
@@ -2354,7 +2354,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Grass-type attack by 50%."
+		desc: "Halves damage taken from a super effective Grass-type attack. Single use."
 	},
 	"ringtarget": {
 		id: "ringtarget",
@@ -2366,7 +2366,7 @@ exports.BattleItems = {
 		onModifyPokemon: function(pokemon) {
 			pokemon.negateImmunity['Type'] = true;
 		},
-		desc: "Negates any type-based immunities. Does not affect abilities."
+		desc: "Holder's type immunities granted by its own typing are negated."
 	},
 	"rockgem": {
 		id: "rockgem",
@@ -2381,7 +2381,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Rock-type move by 50%. One-time use."
+		desc: "Holder's first successful Rock-type attack will have 1.5x power. Single use."
 	},
 	"rockincense": {
 		id: "rockincense",
@@ -2395,7 +2395,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Rock-type moves 20%. Allows breeding of Bonsly."
+		desc: "Holder's Rock-type attacks have 1.2x power."
 	},
 	"rockyhelmet": {
 		id: "rockyhelmet",
@@ -2410,7 +2410,7 @@ exports.BattleItems = {
 				this.damage(source.maxhp/6, source, target);
 			}
 		},
-		desc: "Deals 1\/6 damage when the opponent makes contact."
+		desc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP."
 	},
 	"rootfossil": {
 		id: "rootfossil",
@@ -2433,7 +2433,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Grass-type moves 20%. Allows breeding of Budew."
+		desc: "Holder's Grass-type attacks have 1.2x power."
 	},
 	"rowapberry": {
 		id: "rowapberry",
@@ -2453,7 +2453,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "If hit by a special attack, the attacker takes 12.5% damage. Unobtainable in BW. One-time use."
+		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use."
 	},
 	"salacberry": {
 		id: "salacberry",
@@ -2472,7 +2472,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.boost({spe:1});
 		},
-		desc: "Raises Speed by one stage when at 25% HP or less. One-time use."
+		desc: "Raises Speed by 1 when at 1/4 max HP or less. Single use."
 	},
 	"scopelens": {
 		id: "scopelens",
@@ -2484,7 +2484,7 @@ exports.BattleItems = {
 		onModifyMove: function(move) {
 			move.critRatio++;
 		},
-		desc: "Raises critical hit rate one stage."
+		desc: "Holder's critical hit ratio is boosted by 1."
 	},
 	"seaincense": {
 		id: "seaincense",
@@ -2498,7 +2498,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Water-type moves 20%. Allows breeding of Azurill."
+		desc: "Holder's Water-type attacks have 1.2x power."
 	},
 	"sharpbeak": {
 		id: "sharpbeak",
@@ -2512,7 +2512,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Flying-type moves 20%."
+		desc: "Holder's Flying-type attacks have 1.2x power."
 	},
 	"shedshell": {
 		id: "shedshell",
@@ -2525,7 +2525,7 @@ exports.BattleItems = {
 		onModifyPokemon: function(pokemon) {
 			pokemon.trapped = false;
 		},
-		desc: "Allows holder to switch out even when trapped."
+		desc: "Holder may switch out even when trapped by another Pokemon."
 	},
 	"shellbell": {
 		id: "shellbell",
@@ -2539,7 +2539,7 @@ exports.BattleItems = {
 				this.heal(source.lastDamage/8, source);
 			}
 		},
-		desc: "Heals holder 1\/8 of damage dealt."
+		desc: "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon."
 	},
 	"shockdrive": {
 		id: "shockdrive",
@@ -2549,7 +2549,7 @@ exports.BattleItems = {
 			basePower: 70
 		},
 		onDrive: 'Electric',
-		desc: "Changes the type of Techno Blast to Electric."
+		desc: "Holder's Techno Blast is Electric-type."
 	},
 	"shucaberry": {
 		id: "shucaberry",
@@ -2569,7 +2569,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Ground-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Ground-type attack. Single use."
 	},
 	"silkscarf": {
 		id: "silkscarf",
@@ -2583,7 +2583,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Normal-type moves 20%."
+		desc: "Holder's Normal-type attacks have 1.2x power."
 	},
 	"silverpowder": {
 		id: "silverpowder",
@@ -2597,7 +2597,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Bug-type moves 20%."
+		desc: "Holder's Bug-type attacks have 1.2x power."
 	},
 	"sitrusberry": {
 		id: "sitrusberry",
@@ -2616,7 +2616,7 @@ exports.BattleItems = {
 		onEat: function(pokemon) {
 			this.heal(pokemon.maxhp/4);
 		},
-		desc: "Restores 25% max HP when at 50% HP or less. One-time use."
+		desc: "Restores 1/4 max HP when at 1/2 max HP or less. Single use."
 	},
 	"skullfossil": {
 		id: "skullfossil",
@@ -2640,7 +2640,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Flying-type moves 20%. Pokemon with Multitype become Flying-type."
+		desc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying-type."
 	},
 	"smoothrock": {
 		id: "smoothrock",
@@ -2649,7 +2649,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		desc: "Makes sandstorm last 8 turns."
+		desc: "Holder's use of Sandstorm lasts 8 turns instead of 5."
 	},
 	"softsand": {
 		id: "softsand",
@@ -2663,7 +2663,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Ground-type moves 20%."
+		desc: "Holder's Ground-type attacks have 1.2x power."
 	},
 	"souldew": {
 		id: "souldew",
@@ -2682,7 +2682,7 @@ exports.BattleItems = {
 				return spd * 1.5;
 			}
 		},
-		desc: "Raises Special Attack and Special Defense by 50% if the holder is Latias or Latios."
+		desc: "If holder is a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x."
 	},
 	"spelltag": {
 		id: "spelltag",
@@ -2696,7 +2696,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Ghost-type moves 20%."
+		desc: "Holder's Ghost-type attacks have 1.2x power."
 	},
 	"spelonberry": {
 		id: "spelonberry",
@@ -2707,7 +2707,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Dark"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"splashplate": {
 		id: "splashplate",
@@ -2722,7 +2722,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Water-type moves 20%. Pokemon with Multitype become Water-type."
+		desc: "Holder's Water-type attacks have 1.2x power. Judgment is Water-type."
 	},
 	"spookyplate": {
 		id: "spookyplate",
@@ -2737,7 +2737,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Ghost-type moves 20%. Pokemon with Multitype become Ghost-type."
+		desc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost-type."
 	},
 	"starfberry": {
 		id: "starfberry",
@@ -2767,7 +2767,7 @@ exports.BattleItems = {
 				this.boost(boost);
 			}
 		},
-		desc: "Raises a random stat by two stages when at 25% HP or less. One-time use."
+		desc: "Raises a random stat by 2 when at 1/4 max HP or less. Single use."
 	},
 	"steelgem": {
 		id: "steelgem",
@@ -2782,7 +2782,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Steel-type move by 50%. One-time use."
+		desc: "Holder's first successful Steel-type attack will have 1.5x power. Single use."
 	},
 	"stick": {
 		id: "stick",
@@ -2796,7 +2796,7 @@ exports.BattleItems = {
 				move.critRatio += 2;
 			}
 		},
-		desc: "Raises Farfetch'd's critical hit rate two stages."
+		desc: "If holder is a Farfetch'd, its critical hit ratio is boosted by 2."
 	},
 	"stickybarb": {
 		id: "stickybarb",
@@ -2817,7 +2817,7 @@ exports.BattleItems = {
 				// no message for Sticky Barb changing hands
 			}
 		},
-		desc: "Causes damage to holder and attaches to attacker upon contact."
+		desc: "Each turn, holder loses 1/8 max HP. An attacker making contact can receive it."
 	},
 	"stoneplate": {
 		id: "stoneplate",
@@ -2832,7 +2832,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises base power of Rock-type moves 20%. Pokemon with Multitype become Rock-type."
+		desc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock-type."
 	},
 	"tamatoberry": {
 		id: "tamatoberry",
@@ -2843,7 +2843,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Psychic"
 		},
-		desc: "Increases happiness, but lowers Speed EVs by 10."
+		desc: "No competitive use."
 	},
 	"tangaberry": {
 		id: "tangaberry",
@@ -2863,7 +2863,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Bug-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Bug-type attack. Single use."
 	},
 	"thickclub": {
 		id: "thickclub",
@@ -2877,7 +2877,7 @@ exports.BattleItems = {
 				return atk * 2;
 			}
 		},
-		desc: "Doubles Cubone's and Marowak's Attack."
+		desc: "If holder is a Cubone or a Marowak, its Attack is doubled."
 	},
 	"toxicorb": {
 		id: "toxicorb",
@@ -2895,7 +2895,7 @@ exports.BattleItems = {
 				pokemon.trySetStatus('tox');
 			}
 		},
-		desc: "Poisons the holder."
+		desc: "At the end of every turn, this item attempts to badly poison the holder."
 	},
 	"toxicplate": {
 		id: "toxicplate",
@@ -2910,7 +2910,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Poison-type moves 20%. Pokemon with Multitype become Poison-type."
+		desc: "Holder's Poison-type attacks have 1.2x power. Judgment is Poison-type."
 	},
 	"twistedspoon": {
 		id: "twistedspoon",
@@ -2924,7 +2924,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Psychic-type moves 20%."
+		desc: "Holder's Psychic-type attacks have 1.2x power."
 	},
 	"wacanberry": {
 		id: "wacanberry",
@@ -2944,7 +2944,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Electric-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Electric-type attack. Single use."
 	},
 	"watergem": {
 		id: "watergem",
@@ -2959,7 +2959,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		desc: "Raises the power of a Water-type move by 50%. One-time use."
+		desc: "Holder's first successful Water-type attack will have 1.5x power. Single use."
 	},
 	"watmelberry": {
 		id: "watmelberry",
@@ -2970,7 +2970,7 @@ exports.BattleItems = {
 			basePower: 80,
 			type: "Fire"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"waveincense": {
 		id: "waveincense",
@@ -2984,7 +2984,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Water-type moves 20%. Allows breeding of Mantyke."
+		desc: "Holder's Water-type attacks have 1.2x power."
 	},
 	"wepearberry": {
 		id: "wepearberry",
@@ -2995,7 +2995,7 @@ exports.BattleItems = {
 			basePower: 70,
 			type: "Electric"
 		},
-		desc: "No use. Unobtainable in BW."
+		desc: "No competitive use."
 	},
 	"whiteherb": {
 		id: "whiteherb",
@@ -3031,7 +3031,7 @@ exports.BattleItems = {
 				this.add('-restoreboost', pokemon, '[silent]');
 			}
 		},
-		desc: "Removes stat decreases. Consumed after use."
+		desc: "Restores all lowered stat stages to 0 when one is less than 0. Single use."
 	},
 	"widelens": {
 		id: "widelens",
@@ -3045,7 +3045,7 @@ exports.BattleItems = {
 				move.accuracy *= 1.1;
 			}
 		},
-		desc: "Raises accuracy 10%."
+		desc: "The accuracy of attacks by the holder is 1.1x."
 	},
 	"wikiberry": {
 		id: "wikiberry",
@@ -3067,7 +3067,7 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1\/8 max HP when at 50% HP or less. May confuse. One-time use."
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"wiseglasses": {
 		id: "wiseglasses",
@@ -3081,7 +3081,7 @@ exports.BattleItems = {
 				return basePower * 1.1;
 			}
 		},
-		desc: "Raises damage from special moves 10%."
+		desc: "Holder's special attacks have 1.1x power."
 	},
 	"yacheberry": {
 		id: "yacheberry",
@@ -3101,7 +3101,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function() { },
-		desc: "Reduces damage from a super effective Ice-type attack by 50%. Consumed after use."
+		desc: "Halves damage taken from a super effective Ice-type attack. Single use."
 	},
 	"zapplate": {
 		id: "zapplate",
@@ -3116,7 +3116,7 @@ exports.BattleItems = {
 				return basePower * 1.2;
 			}
 		},
-		desc: "Raises power of Electric moves 20%. Pokemon with Multitype become Electric-type."
+		desc: "Holder's Electric-type attacks have 1.2x power. Judgment is Electric-type."
 	},
 	"zoomlens": {
 		id: "zoomlens",
@@ -3131,6 +3131,6 @@ exports.BattleItems = {
 				move.accuracy *= 1.2;
 			}
 		},
-		desc: "Raises accuracy by 20% if the holder moves after the target."
+		desc: "The accuracy of attacks by the holder is 1.2x if it moves after the target."
 	}
 };
