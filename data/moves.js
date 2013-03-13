@@ -3188,7 +3188,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes one adjacent target's Ability to become the same as the user's. Fails if the target's Ability is Multitype, Truant, or the same Ability as the user, or if the user's Ability is Flower Gift, Forecast, Illusion, Imposter, Multitype, Trace, Wonder Guard, or Zen Mode. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		desc: "Causes one adjacent target's Ability to become the same as the user's. Fails if the target's Ability is Multitype, Truant, or the same Ability as the user, or if the user's Ability is Flower Gift, Forecast, Illusion, Imposter, Multitype, Trace, or Zen Mode. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "The target's Ability changes to match the user's.",
 		id: "entrainment",
 		name: "Entrainment",
@@ -3198,7 +3198,7 @@ exports.BattleMovedex = {
 		onTryHit: function(target, source) {
 			if (target === source) return false;
 			var bannedTargetAbilities = {multitype:1, truant:1};
-			var bannedSourceAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, wonderguard:1, zenmode:1};
+			var bannedSourceAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, zenmode:1};
 			if (bannedTargetAbilities[target.ability] || bannedSourceAbilities[source.ability] || target.ability === source.ability) {
 				return false;
 			}
