@@ -2164,7 +2164,7 @@ exports.BattleItems = {
 	},
 	"powerherb": {
 		id: "powerherb",
-		onChargeMove: function(pokemon, move) {
+		onChargeMove: function(pokemon, target, move) {
 			if (pokemon.useItem()) {
 				this.debug('power herb - remove charge turn for '+move.id);
 				return false; // skip charge turn
