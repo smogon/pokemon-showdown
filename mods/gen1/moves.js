@@ -654,7 +654,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 90,
 		basePower: 50,
-		basePowerCallback: undefined
+		basePowerCallback: undefined,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch'
+		}
 	},
 	megadrain: {
 		inherit: true,
@@ -1039,6 +1043,7 @@ exports.BattleMovedex = {
 					}
 					return;
 				}
+				if (move.volatileStatus && target === source) return;
 				var damage = this.getDamage(source, target, move);
 				if (!damage) return null;
 				damage = this.runEvent('SubDamage', target, source, move, damage);
