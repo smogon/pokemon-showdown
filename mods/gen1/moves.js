@@ -1039,6 +1039,7 @@ exports.BattleMovedex = {
 					}
 					return;
 				}
+				if (move.volatileStatus && target === source) return;
 				var damage = this.getDamage(source, target, move);
 				if (!damage) return null;
 				damage = this.runEvent('SubDamage', target, source, move, damage);
