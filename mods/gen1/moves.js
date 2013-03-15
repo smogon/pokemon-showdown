@@ -654,7 +654,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 90,
 		basePower: 50,
-		basePowerCallback: undefined
+		basePowerCallback: undefined,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch'
+		}
 	},
 	megadrain: {
 		inherit: true,
