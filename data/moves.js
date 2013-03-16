@@ -6981,8 +6981,11 @@ exports.BattleMovedex = {
 		onHit: function(target, pokemon) {
 			var decision = this.willMove(target);
 			if (decision) {
+				var noMeFirst = {
+					chatter:1, counter:1, covet:1, focuspunch:1, mefirst:1, metalburst:1, mirrorcoat:1, struggle:1, thief:1
+				};
 				var move = this.getMove(decision.move);
-				if (move.category !== 'Status') {
+				if (move.category !== 'Status' && !noMeFirst[move]) {
 					pokemon.addVolatile('mefirst');
 					this.useMove(move, pokemon);
 					return;
