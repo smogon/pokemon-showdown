@@ -72,7 +72,7 @@ exports.crashguard = true;
 
 // local sysop - automatically promote users who connect from
 //   127.0.0.1 to the highest ranking group (Usually &, or sysop)
-exports.localsysop = false;
+exports.localsysop = true;
 
 // report joins and leaves - shows messages like "<USERNAME> joined"
 //   Join and leave messages are small and consolidated, so there will never
