@@ -802,12 +802,12 @@ exports.BattleScripts = {
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
-					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen']) rejected = true;
+					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['batonpass']) rejected = true;
 					break;
 
 				// bit redundant to have both
 
-				case 'flamethrower':
+				case 'flamethrower': case 'fierydance':
 					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast'] || hasMove['blueflare']) rejected = true;
 					break;
 				case 'overheat':
@@ -831,11 +831,14 @@ exports.BattleScripts = {
 				case 'bravebird': case 'pluck':
 					if (hasMove['acrobatics']) rejected = true;
 					break;
-				case 'energyball': case 'grassknot': case 'petaldance': case 'solarbeam':
-					if (hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
+				case 'solarbeam':
+					if ((!hasMove['sunnyday'] && template.species !== 'Ninetales') || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
 					break;
 				case 'gigadrain':
-					if (hasMove['leafstorm']) rejected = true;
+					if ((!setupType && hasMove['leafstorm']) || hasMove['petaldance']) rejected = true;
+					break;
+				case 'leafstorm':
+					if (setupType && hasMove['gigadrain']) rejected = true;
 					break;
 				case 'weatherball':
 					if (!hasMove['sunnyday']) rejected = true;
@@ -884,6 +887,12 @@ exports.BattleScripts = {
 					break;
 				case 'psychic':
 					if (hasMove['psyshock']) rejected = true;
+					break;
+				case 'fusionbolt':
+					if (setupType && hasMove['boltstrike']) rejected = true;
+					break;
+				case 'boltstrike':
+					if (!setupType && hasMove['fusionbolt']) rejected = true;
 					break;
 
 				case 'rest':
