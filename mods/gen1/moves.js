@@ -24,15 +24,6 @@ exports.BattleMovedex = {
 		},
 		target: "normal"
 	},
-	agility: {
-		inherit: true,
-		onHit: function(pokemon) {
-			// If there's a paralyse speed drop, it's negated by agility
-			if (pokemon.volatiles['parspeeddrop']) {
-				pokemon.removeVolatile('parspeeddrop');
-			}
-		}
-	},
 	amnesia: {
 		inherit: true,
 		desc: "Raises the user's Special by 2 stages.",
@@ -494,14 +485,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 75
 	},
-	growl: {
-		inherit: true,
-		onHit: function(target, source) {
-			if (target.status === 'brn' && !target.volatiles['brnattackdrop']) {
-				target.addVolatile('brnattackdrop');
-			}
-		}
-	},
 	growth: {
 		inherit: true,
 		desc: "Raises the user's Special by 1 stage.",
@@ -672,15 +655,6 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
-		}
-	},
-	meditate: {
-		inherit: true,
-		onHit: function(pokemon) {
-			// If there's a burn attack drop, it's negated by meditate
-			if (pokemon.volatiles['brnattackdrop']) {
-				pokemon.removeVolatile('brnattackdrop');
-			}
 		}
 	},
 	megadrain: {
@@ -937,15 +911,6 @@ exports.BattleMovedex = {
 		basePower: 260,
 		target: "normal"
 	},
-	sharpen: {
-		inherit: true,
-		onHit: function(pokemon) {
-			// If there's a burn attack drop, it's negated by sharpen
-			if (pokemon.volatiles['brnattackdrop']) {
-				pokemon.removeVolatile('brnattackdrop');
-			}
-		}
-	},
 	skullbash: {
 		inherit: true,
 		effect: {
@@ -996,14 +961,6 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
-		}
-	},
-	stringshot: {
-		inherit: true,
-		onHit: function(target, source) {
-			if (target.status === 'par' && !target.volatiles['parspeeddrop']) {
-				target.addVolatile('parspeeddrop');
-			}
 		}
 	},
 	struggle: {
@@ -1122,15 +1079,6 @@ exports.BattleMovedex = {
 	swift: {
 		inherit: true,
 		category: "Physical"
-	},
-	swordsdance: {
-		inherit: true,
-		onHit: function(pokemon) {
-			// If there's a burn attack drop, it's negated by swords dance
-			if (pokemon.volatiles['brnattackdrop']) {
-				pokemon.removeVolatile('brnattackdrop');
-			}
-		}
 	},
 	tackle: {
 		inherit: true,
