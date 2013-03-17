@@ -756,6 +756,14 @@ exports.BattleScripts = {
 					if (i === 'spe' && target.status === 'par' && !target.volatiles['parspeeddrop']) {
 						target.addVolatile('parspeeddrop');
 					}
+				} else {
+					// Check for boost increases deleting attack or speed drops
+					if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
+						target.removeVolatile('brnattackdrop');
+					}
+					if (i === 'spe' && target.status === 'par' && target.volatiles['parspeeddrop']) {
+						target.removeVolatile('parspeeddrop');
+					}
 				}
 				if (effect.effectType === 'Move') {
 					this.add(msg, target, i, boost[i]);
