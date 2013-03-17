@@ -991,6 +991,26 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'uptime':
+	case '!uptime':
+		var uptime = process.uptime();
+		var uptimeText;
+		if (uptime > 24*60*60) {
+			var uptimeDays = Math.floor(uptime/(24*60*60));
+			uptimeText = ''+uptimeDays+' '+(uptimeDays == 1 ? 'day' : 'days');
+			var uptimeHours = Math.floor(uptime/(60*60)) - uptimeDays*24;
+			if (uptimeHours) uptimeText += ', '+uptimeHours+' '+(uptimeHours == 1 ? 'hour' : 'hours');
+		} else {
+			uptimeText = uptime.seconds().duration();
+		}
+		showOrBroadcastStart(user, cmd, room, socket, message);
+		showOrBroadcast(user, cmd, room, socket,
+			'<div class="infobox">' +
+			'Uptime: <b>'+uptimeText+'</b>'+
+			'</div>');
+		return false;
+		break;
+
 	case 'groups':
 	case '!groups':
 		showOrBroadcastStart(user, cmd, room, socket, message);
