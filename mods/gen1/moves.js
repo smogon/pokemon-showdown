@@ -533,8 +533,14 @@ exports.BattleMovedex = {
 					}
 					this.sides[i].removeSideCondition('lightscreen');
 					this.sides[i].removeSideCondition('reflect');
-					if (hasTox) this.sides[i].active[j].setStatus('psn');
-					this.sides[i].active[j].clearVolatile();
+					// Turns toxic to poison for user
+					if (hasTox && this.sides[i].active[j].id === source.id) {
+						this.sides[i].active[j].setStatus('psn');
+					}
+					// Clears volatile only from user
+					if (this.sides[i].active[j].id === source.id) {
+						this.sides[i].active[j].clearVolatile();
+					}
 				}
 			}
 		}
