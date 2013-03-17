@@ -60,7 +60,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			durationCallBack: function (target, source, effect) {
-				return this.random(2, 3);
+				return this.random(3, 4);
 			},
 			onStart: function(pokemon) {
 				this.effectData.totalDamage = 0;
