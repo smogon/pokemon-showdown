@@ -22,7 +22,7 @@ exports.BattleStatuses = {
 		},
 		onResidualOrder: 9,
 		onResidual: function(pokemon) {
-			this.damage(pokemon.maxhp/8);
+			this.damage(pokemon.maxhp/16);
 		},
 		onSwitchIn: function (pokemon){
 			pokemon.addVolatile('brnattackdrop');
@@ -98,7 +98,7 @@ exports.BattleStatuses = {
 		},
 		onResidualOrder: 9,
 		onResidual: function(pokemon) {
-			this.damage(pokemon.maxhp/8);
+			this.damage(pokemon.maxhp/16);
 		}
 	},
 	tox: {
