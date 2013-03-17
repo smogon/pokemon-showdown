@@ -195,6 +195,7 @@ module.exports = (function () {
 				else if (move.num >= 1) move.gen = 1;
 				else move.gen = 0;
 			}
+			if (!move.priority) move.priority = 0;
 		}
 		return move;
 	};
