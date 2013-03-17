@@ -26,11 +26,10 @@ exports.BattleMovedex = {
 	},
 	agility: {
 		inherit: true,
-		onModifyMove: function(move, pokemon) {
-			// If there's a paralyse speed drop, it's negated by agility but not boost is gained
+		onHit: function(pokemon) {
+			// If there's a paralyse speed drop, it's negated by agility
 			if (pokemon.volatiles['parspeeddrop']) {
 				pokemon.removeVolatile('parspeeddrop');
-				move.boosts = {};
 			}
 		}
 	},
@@ -274,7 +273,8 @@ exports.BattleMovedex = {
 		willCrit: false,
 		damageCallback: function(pokemon) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn 
-			&& (this.getMove(pokemon.lastAttackedBy.move).type === 'Normal' || this.getMove(pokemon.lastAttackedBy.move).type === 'Fighting')) {
+			&& ((this.getMove(pokemon.lastAttackedBy.move).type === 'Normal' || this.getMove(pokemon.lastAttackedBy.move).type === 'Fighting'))
+			&& this.getMove(pokemon.lastAttackedBy.move).id !== 'seismictoss') {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('-fail',pokemon.id);
@@ -494,6 +494,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 75
 	},
+	growl: {
+		inherit: true,
+		onHit: function(target, source) {
+			if (target.status === 'brn' && !target.volatiles['brnattackdrop']) {
+				target.addVolatile('brnattackdrop');
+			}
+		}
+	},
 	growth: {
 		inherit: true,
 		desc: "Raises the user's Special by 1 stage.",
@@ -658,6 +666,15 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
+		}
+	},
+	meditate: {
+		inherit: true,
+		onHit: function(pokemon) {
+			// If there's a burn attack drop, it's negated by meditate
+			if (pokemon.volatiles['brnattackdrop']) {
+				pokemon.removeVolatile('brnattackdrop');
+			}
 		}
 	},
 	megadrain: {
@@ -914,6 +931,15 @@ exports.BattleMovedex = {
 		basePower: 260,
 		target: "normal"
 	},
+	sharpen: {
+		inherit: true,
+		onHit: function(pokemon) {
+			// If there's a burn attack drop, it's negated by sharpen
+			if (pokemon.volatiles['brnattackdrop']) {
+				pokemon.removeVolatile('brnattackdrop');
+			}
+		}
+	},
 	skullbash: {
 		inherit: true,
 		effect: {
@@ -964,6 +990,14 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
+		}
+	},
+	stringshot: {
+		inherit: true,
+		onHit: function(target, source) {
+			if (target.status === 'par' && !target.volatiles['parspeeddrop']) {
+				target.addVolatile('parspeeddrop');
+			}
 		}
 	},
 	struggle: {
@@ -1038,7 +1072,7 @@ exports.BattleMovedex = {
 					var SubBlocked = {
 						lockon:1, meanlook:1, mindreader:1, nightmare:1
 					};
-					if (move.status === 'psn' || move.status === 'tox' || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
+					if (move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
 						return false;
 					}
 					return;
@@ -1061,7 +1095,7 @@ exports.BattleMovedex = {
 					this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
 				}
 				// Attacker does not heal from drain if substitute breaks
-				if (move.drain && target.volatiles['substitute'].hp > 0) {
+				if (move.drain && target.volatiles['substitute'] && target.volatiles['substitute'].hp > 0) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);
@@ -1085,11 +1119,10 @@ exports.BattleMovedex = {
 	},
 	swordsdance: {
 		inherit: true,
-		onModifyMove: function(move, pokemon) {
-			// If there's a burn attacl drop, it's negated by swords dance but not boost is gained
+		onHit: function(pokemon) {
+			// If there's a burn attack drop, it's negated by swords dance
 			if (pokemon.volatiles['brnattackdrop']) {
 				pokemon.removeVolatile('brnattackdrop');
-				move.boosts = {};
 			}
 		}
 	},
