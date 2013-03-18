@@ -312,7 +312,7 @@ exports.BattleAbilities = {
 		},
 		id: "cutecharm",
 		name: "Cute Charm",
-		rating: 2,
+		rating: 1,
 		num: 56
 	},
 	"damp": {
@@ -2618,7 +2618,7 @@ exports.BattleAbilities = {
 		},
 		id: "wonderskin",
 		name: "Wonder Skin",
-		rating: 1,
+		rating: 3,
 		num: 147
 	},
 	"zenmode": {
