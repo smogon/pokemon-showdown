@@ -242,3 +242,31 @@ exports.groups = {
 		rank: 0
 	}
 };
+
+/* The spamfilter is a system to fight advertising, spam, worms, and other things.
+ * A filter has four options, but only needs regex, type, and action.
+ * regex - the regular expression where the spamfilter should perform the action at.
+ * type - specifies the target type:
+ *  r - room.
+ *  u - user.
+ * You can specify multiple targets: ru.
+ * action - specifies the action to be taken.
+ *  ban - bans the user.
+ *  kick - kicks the user.
+ *  mute - mutes the user.
+ *  demote - demotes the user.
+ *  lockdown - locks down the server.
+ *  block - blocks the message.
+ * Only one action can be specified.
+ * reason - ban and mute reason.
+ */
+
+exports.spamfilter = {
+	/*
+	'/^Come watch me on my webcam$/': {
+		type: 'r',
+		action: 'ban',
+		reason: 'Inappropriate'
+	}
+	*/
+};
