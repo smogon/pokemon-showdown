@@ -20,12 +20,14 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'brn');
 			target.addVolatile('brnattackdrop');
 		},
-		onResidualOrder: 9,
-		onResidual: function(pokemon) {
+		onAfterMoveSelf: function(pokemon) {
 			this.damage(pokemon.maxhp/16);
 		},
 		onSwitchIn: function (pokemon){
 			pokemon.addVolatile('brnattackdrop');
+			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
+				this.damage(pokemon.maxhp/16);
+			}
 		}
 	},
 	brnattackdrop: {
@@ -96,9 +98,13 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target, 'psn');
 		},
-		onResidualOrder: 9,
-		onResidual: function(pokemon) {
+		onAfterMoveSelf: function(pokemon) {
 			this.damage(pokemon.maxhp/16);
+		},
+		onSwitchIn: function (pokemon) {
+			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
+				this.damage(pokemon.maxhp/16);
+			}
 		}
 	},
 	tox: {
@@ -112,12 +118,19 @@ exports.BattleStatuses = {
 			//pokemon.cureStatus();
 			pokemon.setStatus('psn');
 		},
-		onResidualOrder: 9,
-		onResidual: function(pokemon) {
+		onAfterMoveSelf: function(pokemon) {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
 			this.damage(clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+		},
+		onSwitchIn: function (pokemon) {
+			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
+				if (this.effectData.stage < 15) {
+					this.effectData.stage++;
+				}
+				this.damage(clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+			}
 		}
 	},
 	confusion: {
