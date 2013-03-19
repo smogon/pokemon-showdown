@@ -596,8 +596,7 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
-			onResidualOrder: 8,
-			onResidual: function(pokemon) {
+			onAfterMoveSelf: function(pokemon) {
 				var target = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!target || target.fainted || target.hp <= 0) {
 					this.debug('Nothing to leech into');
