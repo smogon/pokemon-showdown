@@ -1169,13 +1169,14 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	magikarp: {
-		viableMoves: {"bounce":1,"flail":1,"tackle":1,"splash":1},
+		viableMoves: {"bounce":1,"flail":1,"tackle":1,"hydropump":1},
 		eventPokemon: [
 			{"generation":4,"level":5,"gender":"M","nature":"Relaxed","moves":["splash"]},
 			{"generation":4,"level":6,"gender":"F","nature":"Rash","moves":["splash"]},
 			{"generation":4,"level":7,"gender":"F","nature":"Hardy","moves":["splash"]},
 			{"generation":4,"level":5,"gender":"F","nature":"Lonely","moves":["splash"]},
-			{"generation":4,"level":4,"gender":"M","nature":"Modest","moves":["splash"]}
+			{"generation":4,"level":4,"gender":"M","nature":"Modest","moves":["splash"]},
+			{"generation":5,"level":99,"shiny":true,"gender":"M","isDW":false,"moves":["flail","hydropump","bounce","splash"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
@@ -1370,7 +1371,8 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["agility","safeguard","wingattack","outrage"]},
 			{"generation":3,"level":55,"moves":["healbell","hyperbeam","dragondance","earthquake"]},
 			{"generation":4,"level":50,"gender":"M","nature":"Mild","moves":["dracometeor","thunderbolt","outrage","dragondance"]},
-			{"generation":5,"level":100,"gender":"M","isDW":true,"moves":["extremespeed","firepunch","dragondance","outrage"]}
+			{"generation":5,"level":100,"gender":"M","isDW":true,"moves":["extremespeed","firepunch","dragondance","outrage"]},
+			{"generation":5,"level":55,"gender":"M","isDW":true,"moves":["dragonrush","safeguard","wingattack","thunderpunch"]}
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
@@ -1964,7 +1966,8 @@ exports.BattleFormatsData = {
 		viableMoves: {"crunch":1,"stoneedge":1,"pursuit":1,"superpower":1,"fireblast":1,"icebeam":1,"stealthrock":1,"aquatail":1},
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["thrash","scaryface","crunch","earthquake"]},
-			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["fireblast","icebeam","stoneedge","crunch"]}
+			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["fireblast","icebeam","stoneedge","crunch"]},
+			{"generation":5,"level":55,"gender":"M","isDW":true,"moves":["payback","crunch","earthquake","seismictoss"]}
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
