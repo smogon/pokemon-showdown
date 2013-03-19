@@ -243,6 +243,206 @@ exports.BattleFormats = {
 		},
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
+	seasonalfoolsfestival: {
+		effectType: 'Format',
+		name: "[Seasonal] Fools Festival",
+		team: 'randomSeasonalFF',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: false,
+		searchShow: false,
+		onBegin: function() {
+			var dice = this.random(100);
+			if (dice < 65) {
+				this.add('-message', "April showers bring May flowers...");
+				this.setWeather('Rain Dance');
+			} else if (dice < 95) {
+				this.add('-message', "What a wonderful spring day! Let's go picnic!");
+				this.setWeather('Sunny Day');
+			} else {
+				this.add('-message', "Bollocks, it's hailing?! In april?! Curse you, spring!!");
+				this.setWeather('Hail');
+			}
+			delete this.weatherData.duration;
+		},
+		onSwitchIn: function(pokemon) {
+			var name = (pokemon.ability === 'illusion' && pokemon.illusion)? pokemon.illusion.toString().substr(4, pokemon.illusion.toString().length) : pokemon.name;
+			var stonedPokemon = {Koffing:1, Weezing:1, Slowpoke:1, Slowbro:1, Slowking:1, Psyduck:1, Spinda:1};
+			var stonerQuotes = ['your face is green!', 'I just realised that Arceus fainted for our sins', 'I can, you know, feel the colors', 
+			"you're my bro", "I'm imaginining a new color!", "I'm smelling the things I see!", 'hehe, hehe, funny', "I'm hungry!" , 'we are pokemanz',        
+			'Did you know that Eevee backwards is eevee?! AMAZING', 'aaaam gonna be the verrrry best like no one evar wasss', 
+			"I feel like someone is watching us through a screen!", "come at me bro"];
+			if (name in stonedPokemon) {
+				var random = this.random(stonerQuotes.length);
+				this.add('-message', name + ": Duuuuuude, " + stonerQuotes[random]);
+				this.boost({spe:-1, def:1, spd:1}, pokemon, pokemon, {fullname:'high'});
+			}
+			// Pokemon switch in messages
+			var msg = '';
+			switch (name) {
+			case 'Ludicolo':
+				msg = "¡Ay, ay, ay! ¡Vámonos de fiesta, ya llegó Ludicolo!";
+				break;
+			case 'Missingno':
+				msg = "Hide yo items, hide yo data, missingno is here!";
+				break;
+			case 'Slowpoke': case 'Slowbro':
+				var didYouHear = ['Black & White are coming out soon!', 'Genesect has been banned to Ubers!',
+				'Smogon is moving to Pokemon Showdown!', "We're having a new thing called Seasonal Ladder!", 'Deoxys is getting Nasty Plot!'];
+				didYouHear = didYouHear.randomize();
+				msg = 'Did you hear? ' + didYouHear[0];
+				break;
+			case 'Spinda':
+				msg = "LOOK AT ME I'M USING SPINDA";
+				break;
+			case 'Whimsicott':
+				msg = 'Oh dear lord, not SubSeed again!';
+				break;
+			case 'Liepard':
+				msg = '#yoloswag';
+				break;
+			case 'Tornadus':
+				msg = "It's HURRICANE time!";
+				break;
+			case 'Riolu':
+				msg = 'Have you ever raged so hard that you smashed your keyboard? Let me show you.';
+				break;
+			case 'Gastly': case 'Haunter': case 'Gengar':
+				msg = 'Welcome to Trolledville, population: you';
+				break;
+			case 'Amoonguss':
+				msg = 'How do you feel about three sleep turns?';
+				break;
+			case 'Shaymin-Sky':
+				msg = 'Do you know what paraflinch is? huehue';
+				break;
+			case 'Ferrothorn':
+				msg = 'inb4 Stealth Rock';
+				break;
+			}
+			if (msg !== '') {
+				this.add('-message', msg);
+			}
+		},
+		onModifyMove: function(move) {
+			var dice = this.random(100);
+			if (dice < 40) {
+				var type = '';
+				switch (move.type.toLowerCase()){
+				case 'rock':
+				case 'ground':
+					type = 'Grass';
+					break;
+				case 'fire':
+				case 'bug':
+					type = 'Water';
+					break;
+				case 'water':
+				case 'grass':
+					type = 'Fire';
+					break;
+				case 'flying':
+					type = 'Fighting';
+					break;
+				case 'fighting':
+					type = 'Flying';
+					break;
+				case 'dark':
+					type = 'Bug';
+					break;
+				case 'dragon':
+				case 'electric':
+					type = 'Ice';
+					break;
+				case 'ghost':
+					type = 'Normal';
+					break;
+				case 'ice':
+					type = 'Electric';
+					break;
+				case 'normal':
+				case 'poison':
+					type = 'Ghost';
+					break;
+				case 'psychic':
+					type = 'Dark';
+					break;
+				case 'steel':
+					type = 'Poison';
+					break;
+				}
+				
+				move.type = type;
+				this.addRaw('-message', 'lol trolled, I changed yo move type');
+			}
+			
+			// Additional changes
+			if (move.id === 'bulkup') {
+				move.onHit = function (target, source, move) {
+					var name = (target.ability === 'illusion' && target.illusion)? target.illusion.toString().substr(4, target.illusion.toString().length) : target.name;
+					this.add('-message', name + ': Do you even lift, bro?!');
+				};
+			} else if (move.id === 'charm' || move.id === 'sweetkiss' || move.id === 'attract') {
+				var malePickUpLines = ['have you been to Fukushima recently? Because you are glowing tonight!', 
+				'did it hurt when you fell to the earth? Because you must be an angel!', 'can I buy you a drink?',
+				'roses are red / lemons are sour / spread your legs / and give me an hour', 
+				"roses are red / violets are red / I'm not good with colors", "Let's go watch cherry bossoms together (´･ω･`)",
+				"Will you be my Denko? (´･ω･`)"];
+				malePickUpLines = malePickUpLines.randomize();
+				var femalePickUpLines = ['Do you go to the gym? You are buff!', "Guy, you make me hotter than July.",
+				"While I stare at you I feel like I just peed myself", "Let's go to my apartment to have midnight coffee", 
+				"Marry me, I wanna have 10 kids of you!", "Go out with me or I'll twist your neck!", "Man, you have some nice abs, can I touch them?"];
+				femalePickUpLines = femalePickUpLines.randomize();
+				move.onTryHit = function (target, source, move) {
+					var pickUpLine = '';
+					if (source.gender === 'M') {
+						pickUpLine = malePickUpLines[0];
+					} else if (source.gender === 'F') {
+						pickUpLine = femalePickUpLines[0];
+					} else {
+						return;
+					}
+					var name = (source.ability === 'illusion' && source.illusion)? source.illusion.toString().substr(4, source.illusion.toString().length) : source.name;
+					var targetName = (target.ability === 'illusion' && target.illusion)? target.illusion.toString().substr(4, target.illusion.toString().length) : target.name;
+					this.add('-message', name + ': Hey, ' + targetName + ', ' + pickUpLine);
+				};
+				move.onMoveFail = function(target, source, move) {
+                    // Returns false so move calls onHit and onMoveFail
+					var femaleRejectLines = ['Uuuh... how about no', "gtfo I'm taken", 'I have to water the plants. On Easter Island. For a year. Bye',
+					'GO AWAY CREEP', 'Do you smell like rotten eggs?', "I wouldn't date you even if you were the last Pokemon on earth."];
+					femaleRejectLines = femaleRejectLines.randomize();
+					var maleRejectLines = ["I'd rather get it on with a dirty daycare Ditto", "I'm not realy sure you're clean", 
+					"Ew, you're disgusting!", "It's not me, it's you. Go away, ugly duckling.", "Not really interested *cough*weirdo*cough*"];
+					maleRejectLines = maleRejectLines.randomize();
+					var answer = '';
+					if (target.gender === 'M') {
+						answer = maleRejectLines[0];
+					} else if (target.gender === 'F') {
+						answer = femaleRejectLines[0];
+					} else {
+						return;
+					}
+					var targetName = (target.ability === 'illusion' && target.illusion)? target.illusion.toString().substr(4, target.illusion.toString().length) : target.name;
+                    if (!target.volatiles['attract']) {
+                        this.add('-message', targetName + ': ' + answer);
+                    }
+                };
+			}
+		},
+		onFaint: function (pokemon) {
+			// A poem every time a Pokemon faints
+			var haikus = ["You suck a lot / You are a bad trainer / let a mon faint", "they see me driving / round town with the girl i love / and I'm like, haikou",
+			"Ain't no Pokemon tough enough / ain't no bulk decent enough / ain't no recovery good enough / to keep me from fainting you, babe",
+			"Roses are red / violets are blue / you must be on some med / 'coz as a trainer you suck",
+			"You're gonna be the very worst / like no one ever was / to lose all the battles is your test / to faint them all is your cause",
+			'Twinkle twinkle little star / fuck you that was my best sweeper', "I'm wheezy and I'm sleezy / but as a trainer you're measly", 
+			"You're sharp as a rock / you're bright as a hole / you're one to mock / you could be beaten by a maimed mole",
+			"Alas, poor trainer! I knew him, your Pokémon, a fellow of infinite jest, of most excellent fancy."];
+			haikus = haikus.randomize();
+			this.add('-message', haikus[0]);
+		},
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
+	},
 	challengecup: {
 		effectType: 'Format',
 		name: "Challenge Cup",
