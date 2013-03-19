@@ -591,13 +591,30 @@ exports.BattleMovedex = {
 	},
 	leechseed: {
 		inherit: true,
-		desc: "The Pokemon at the user's position steals 1/8 of one adjacent target's max HP, rounded down, at the end of each turn. Grass-types are unaffected.",
+		onHit: function (target, source, move) {
+			if (!source || source.fainted || source.hp <= 0) {
+				// Well this shouldn't happen
+				this.debug('Nothing to leech into');
+				return;
+			}
+			if (target.newlySwitched && target.speed <= source.speed) {
+				if (target.status === 'tox') {
+					// Stage plus one since leech seed runs before Toxic
+					var toLeech = clampIntRange(target.maxhp/16, 1) * (target.statusData.stage + 1);
+				} else {
+					var toLeech = clampIntRange(target.maxhp/16, 1);
+				}
+				var damage = this.damage(toLeech, target, source, 'move: Leech Seed');
+				if (damage) {
+					this.heal(damage, source, target);
+				}
+			}
+		},
 		effect: {
 			onStart: function(target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
-			onResidualOrder: 8,
-			onResidual: function(pokemon) {
+			onAfterMoveSelf: function(pokemon) {
 				var target = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!target || target.fainted || target.hp <= 0) {
 					this.debug('Nothing to leech into');
