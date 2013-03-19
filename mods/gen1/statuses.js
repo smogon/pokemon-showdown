@@ -25,6 +25,11 @@ exports.BattleStatuses = {
 		},
 		onSwitchIn: function (pokemon){
 			pokemon.addVolatile('brnattackdrop');
+			if (pokemon.side.foe.active[0]) {
+				if (pokemon.speed <= pokemon.side.foe.active[0].speed) {
+					this.damage(pokemon.maxhp/16);
+				}
+			}
 		}
 	},
 	brnattackdrop: {
@@ -97,6 +102,13 @@ exports.BattleStatuses = {
 		},
 		onAfterMoveSelf: function(pokemon) {
 			this.damage(pokemon.maxhp/16);
+		},
+		onSwitchIn: function (pokemon) {
+			if (pokemon.side.foe.active[0]) {
+				if (pokemon.speed <= pokemon.side.foe.active[0].speed) {
+					this.damage(pokemon.maxhp/16);
+				}
+			}
 		}
 	},
 	tox: {
@@ -115,6 +127,16 @@ exports.BattleStatuses = {
 				this.effectData.stage++;
 			}
 			this.damage(clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+		},
+		onSwitchIn: function (pokemon) {
+			if (pokemon.side.foe.active[0]) {
+				if (pokemon.speed <= pokemon.side.foe.active[0].speed) {
+					if (this.effectData.stage < 15) {
+						this.effectData.stage++;
+					}
+					this.damage(clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+				}
+			}
 		}
 	},
 	confusion: {
