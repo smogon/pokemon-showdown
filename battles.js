@@ -2749,6 +2749,7 @@ var Battle = (function() {
 		case 'beforeTurnMove':
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
+			if (decision.pokemon.status === 'frz' || decision.pokemon.status === 'slp' ) return false;
 			this.debug('before turn callback: '+decision.move.id);
 			decision.move.beforeTurnCallback.call(this, decision.pokemon, this.getTarget(decision));
 			break;

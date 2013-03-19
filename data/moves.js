@@ -3996,7 +3996,8 @@ exports.BattleMovedex = {
 		},
 		beforeMoveCallback: function(pokemon) {
 			if (!pokemon.removeVolatile('focuspunch')) {
-				return false;
+				this.add('cant', pokemon, 'flinch', 'Focus Punch');
+				return true;
 			}
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.damage && pokemon.lastAttackedBy.thisTurn) {
 				this.add('cant', pokemon, 'flinch', 'Focus Punch');
