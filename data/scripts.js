@@ -1495,5 +1495,96 @@ exports.BattleScripts = {
 		}
 
 		return team;
+	},
+	randomSeasonalFFTeam: function(side) {
+		// Seasonal Pokemon list
+		var seasonalPokemonList = [
+			'missingno', 'koffing', 'weezing', 'slowpoke', 'slowbro', 'slowking', 'psyduck', 'spinda', 'whimsicott', 'liepard', 'sableye',
+			'thundurus', 'tornadus', 'illumise', 'murkrow', 'purrloin', 'riolu', 'volbeat', 'rotomheat', 'rotomfan', 'haunter',
+			'gengar', 'gastly', 'gliscor', 'venusaur', 'serperior', 'sceptile', 'shiftry', 'torterra', 'meganium', 'leafeon', 'roserade',
+			'amoonguss', 'parasect', 'breloom', 'abomasnow', 'rotommow', 'wormadam', 'tropius', 'lilligant', 'ludicolo', 'cacturne',
+			'vileplume', 'bellossom', 'victreebel', 'jumpluff', 'carnivine', 'sawsbuck', 'virizion', 'shaymin', 'arceusgrass', 'shayminsky',
+			'tangrowth', 'pansage', 'maractus', 'cradily', 'celebi', 'exeggutor', 'ferrothorn', 'zorua', 'zoroark', 'dialga'
+		];
+		seasonalPokemonList = seasonalPokemonList.randomize();
+		var team = [];
+		var mustHavePrankster = {
+			whimsicott:1, liepard:1, sableye:1, thundurus:1, tornadus:1, illumise:1, volbeat:1, murkrow:1, 
+			purrloin:1, riolu:1, sableye:1, volbeat:1, missingno:1
+		};
+		
+		// Now, let's make the team!
+		for (var i=0; i<6; i++) {
+			var pokemon = seasonalPokemonList[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomSet(template, i);
+			// Chance to have prankster or illusion
+			var dice = this.random(100);
+			if (dice < 20) {
+				set.ability = 'Prankster';
+			} else if (dice < 60) {
+				set.ability = 'Illusion';
+			}
+			if (template.id in mustHavePrankster) {
+				set.ability = 'Prankster';
+			}
+			// Let's make the movesets for some Pokemon
+			if (template.id === 'missingno') {
+				// Some serious missingno nerfing so it's just a fun annoying Poke
+				set.item = 'Flame Orb';
+				set.level = 255;
+				set.moves = ['Trick', 'Stored Power', 'Thunder Wave', 'Taunt', 'Encore', 'Attract', 'Charm', 'Leech Seed'];
+				set.evs = {hp: 4, def: 0, spd: 0, spa: 0, atk: 255, spe: 255};
+				set.ivs = {hp: 0, def: 0, spd: 0, spa: 0, atk: 0, spe: 0};
+				set.nature = 'Brave';
+			} else if (template.id === 'rotomheat') {
+				set.item = 'Flame Orb';
+				set.moves = ['Overheat', 'Volt Switch', 'Pain Split', 'Trick'];
+			} else if (template.id === 'riolu') {
+				set.item = 'Eviolite';
+				set.moves = ['Copycat', 'Roar', 'Drain Punch', 'Substitute'];
+				set.evs = {hp: 248, def: 112, spd: 96, spa: 0, atk: 0, spe: 52};
+				set.nature = 'Careful';
+			} else if (template.id in {gastly:1, haunter:1, gengar:1}) {
+				// Gengar line, troll SubDisable set
+				set.item = 'Leftovers';
+				set.moves = ['Substitute', 'Disable', 'Shadow Ball', 'Focus Blast'];
+				set.evs = {hp: 4, def: 0, spd: 0, spa: 252, atk: 0, spe: 252};
+				set.nature = 'Timid';
+			} else if (template.id === 'gliscor') {
+				set.item = 'Toxic Orb';
+				set.ability = 'Poison Heal';
+				set.moves = ['Substitute', 'Protect', 'Toxic', 'Earthquake'];
+				set.evs = {hp: 252, def: 184, spd: 0, spa: 0, atk: 0, spe: 72};
+				set.ivs = {hp: 31, def: 31, spd: 31, spa: 0, atk: 31, spe: 31};
+				set.nature = 'Impish';
+			} else if (template.id === 'purrloin') {
+				set.item = 'Eviolite';
+			} else if (template.id === 'dialga') {
+				set.level = 60;
+			} else if (template.id === 'sceptile') {
+				var items = ['Lum Berry', 'Occa Berry', 'Yache Berry', 'Sitrus Berry'];
+				items = items.randomize();
+				set.item = items[0];
+			} else if (template.id === 'breloom' && set.item === 'Toxic Orb' && set.ability !== 'Poison Heal') {
+				set.item = 'Muscle Band';
+			}
+			
+			// This is purely for the lulz
+			if (set.ability === 'Prankster' && !('attract' in set.moves) && !('charm' in set.moves) && this.random(100) < 50) {
+				var attractMoves = ['Attract', 'Charm'];
+				attractMoves = attractMoves.randomize();
+				set.moves[3] = attractMoves[0];
+			}
+			
+			// For poison types with Illusion
+			if (set.item === 'Black Sludge') {
+				set.item = 'Leftovers';
+			}
+			
+			team.push(set);
+		}
+
+		return team;
 	}
 };
