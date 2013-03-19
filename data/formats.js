@@ -373,7 +373,7 @@ exports.BattleFormats = {
 				}
 				
 				move.type = type;
-				this.addRaw('-message', 'lol trolled, I changed yo move type');
+				this.add('-message', 'lol trolled, I changed yo move type');
 			}
 			
 			// Additional changes
