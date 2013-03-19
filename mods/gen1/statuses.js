@@ -20,8 +20,7 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'brn');
 			target.addVolatile('brnattackdrop');
 		},
-		onResidualOrder: 9,
-		onResidual: function(pokemon) {
+		onAfterMoveSelf: function(pokemon) {
 			this.damage(pokemon.maxhp/16);
 		},
 		onSwitchIn: function (pokemon){
@@ -96,8 +95,7 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target, 'psn');
 		},
-		onResidualOrder: 9,
-		onResidual: function(pokemon) {
+		onAfterMoveSelf: function(pokemon) {
 			this.damage(pokemon.maxhp/16);
 		}
 	},
@@ -112,8 +110,7 @@ exports.BattleStatuses = {
 			//pokemon.cureStatus();
 			pokemon.setStatus('psn');
 		},
-		onResidualOrder: 9,
-		onResidual: function(pokemon) {
+		onAfterMoveSelf: function(pokemon) {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
