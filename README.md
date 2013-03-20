@@ -13,7 +13,7 @@ Next, obtain a copy of Pokemon Showdown. If you're reading this outside of Githu
 
 Pokemon Showdown is installed and run using a command line. In Mac OS X, open `Terminal` (it's in Utilities). In Windows, open `Command Prompt` (type `cmd` into the Start menu and it should be the first result). Type this into the command line:
 
-  cd LOCATION
+    cd LOCATION
 
 Replace `LOCATION` with the location Pokemon Showdown is in (ending up with, for instance, `cd "~/Downloads/Pokemon-Showdown"` or `cd "C:\User\Bob\Downloads\Pokemon-Showdown\"`).
 
@@ -21,7 +21,7 @@ This will set your command line's location to Pokemon Showdown's folder. You'll 
 
 To install dependencies, run the command:
 
-  npm install
+    npm install
 
 Copy `config/config-example.js` into `config/config.js`, and edit as you please.
 
@@ -29,11 +29,11 @@ Congratulations, you're done setting up Pokemon Showdown.
 
 Now, to start Pokemon Showdown, run the command:
 
-  node app.js
+    node app.js
 
 You can also specify a port:
 
-  node app.js 8000
+    node app.js 8000
 
 Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT/`
 
@@ -58,7 +58,7 @@ Once your server is up, you probably want to make yourself an Administrator (~) 
 
 The easiest way to become an Administrator is to create a file named `config/usergroups.csv` containing
 
-  USER,~
+    USER,~
 
 Replace `USER` with the username that you would like to become an Administrator.
 
@@ -74,7 +74,7 @@ Alternatively, if you do not want to use `config/usergroups.csv`, you can use th
 
 If you are running Pokemon Showdown on a remote server (such as a VPS), you can still connect from `127.0.0.1` using an SSH tunnel:
 
-  ssh user@example.com -L 3000:127.0.0.1:8000 -N
+    ssh user@example.com -L 3000:127.0.0.1:8000 -N
 
 Replace `user` by your user account on the remote computer and replace `example.com` by the host name of the remote computer. Replace `8000` by the port that the server is running on. You can then point your browser to `http://play.pokemonshowdown.com/~~localhost:3000/` and it will connect to `example.com:8000`, but it will consider you to be connecting from `127.0.0.1`, so you will become an Administrator.
 
