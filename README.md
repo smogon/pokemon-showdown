@@ -19,7 +19,7 @@ Pokemon Showdown is installed and run using a command line. In Mac OS X, open `T
 
     cd LOCATION
 
-Replace `LOCATION` with the location Pokemon Showdown is in (ending up with, for instance, `cd "~/Downloads/Pokemon-Showdown"` or `cd "C:\User\Bob\Downloads\Pokemon-Showdown\"`).
+Replace `LOCATION` with the location Pokemon Showdown is in (ending up with, for instance, `cd "~/Downloads/Pokemon-Showdown"` or `cd "C:\Users\Bob\Downloads\Pokemon-Showdown\"`).
 
 This will set your command line's location to Pokemon Showdown's folder. You'll have to do this each time you open a command line to run commands for Pokemon Showdown.
 
