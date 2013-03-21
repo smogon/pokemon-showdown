@@ -13,7 +13,7 @@ Installing
 
 Pokemon Showdown requires [Node.js][1] (versions 0.6.3 through 0.8.22 are known to be supported), so install that if you don't have it yet.
 
-Next, obtain a copy of Pokemon Showdown. If you're reading this outside of Github, you've probably already done this. If you're reading this in Github, there's a "Clone" button in the top left, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
+Next, obtain a copy of Pokemon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone" button in the top left, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
 
 Pokemon Showdown is installed and run using a command line. In Mac OS X, open `Terminal` (it's in Utilities). In Windows, open `Command Prompt` (type `cmd` into the Start menu and it should be the first result). Type this into the command line:
 
