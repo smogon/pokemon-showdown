@@ -365,6 +365,12 @@ exports.BattleItems = {
 		},
 		desc: "Holder cures itself if it is paralyzed. Single use."
 	},
+	"cherishball": {
+		id: "cherishball",
+		name: "Cherish Ball",
+		spritenum: 66,
+		desc: "A quite rare Poké Ball that has been especially crafted to commemorate an occasion of some sort."
+	},
 	"chestoberry": {
 		id: "chestoberry",
 		name: "Chesto Berry",
@@ -658,6 +664,18 @@ exports.BattleItems = {
 		},
 		desc: "If holder becomes infatuated, the other Pokemon also becomes infatuated."
 	},
+	"diveball": {
+		id: "diveball"
+		name: "Dive Ball",
+		spritenum: 101,
+		desc: "A somewhat different Poké Ball that works especially well on Pokémon that live underwater."
+	},
+	"duskball": {
+		id: "duskball"
+		name: "Dusk Ball",
+		spritenum: 115,
+		desc: "A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places like caves."
+	},
 	"domefossil": {
 		id: "domefossil",
 		name: "Dome Fossil",
@@ -735,6 +753,12 @@ exports.BattleItems = {
 			}
 		},
 		desc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark-type."
+	},
+	"dreamball": {
+		id: "dreamball",
+		name: "Dream Ball",
+		spritenum: 111,
+		desc: "A special Poké Ball that appears out of nowhere in a bag at the Entree Forest. It can catch any Pokémon."
 	},
 	"durinberry": {
 		id: "durinberry",
@@ -875,6 +899,12 @@ exports.BattleItems = {
 			}
 		},
 		desc: "Holder's super effective attacks against other Pokemon do 1.2x damage."
+	},
+	"fastball": {
+		id: "fastball"
+		name: "Fast Ball",
+		spritenum: 137,
+		desc: "A Poké Ball that makes it easier to catch Pokémon which are quick to run away."
 	},
 	"fightinggem": {
 		id: "fightinggem",
@@ -1097,6 +1127,12 @@ exports.BattleItems = {
 		},
 		desc: "Holder's first successful Grass-type attack will have 1.5x power. Single use."
 	},
+	"greatball": {
+		id: "greatball",
+		name: "Great Ball",
+		spritenum: 174,
+		desc: "A good, high-performance Ball that provides a higher Pokémon catch rate than a standard."
+	},
 	"grepaberry": {
 		id: "grepaberry",
 		name: "Grepa Berry",
@@ -1186,6 +1222,12 @@ exports.BattleItems = {
 		},
 		desc: "Holder's Rock-type attacks have 1.2x power."
 	},
+	"healball": {
+		id: "healball"
+		name: "Heal Ball",
+		spritenum: 188,
+		desc: "A remedial Poké Ball that restores the caught Pokémon's HP and eliminates any status problem."
+	},
 	"heatrock": {
 		id: "heatrock",
 		name: "Heat Rock",
@@ -1194,6 +1236,12 @@ exports.BattleItems = {
 			basePower: 60
 		},
 		desc: "Holder's use of Sunny Day lasts 8 turns instead of 5."
+	},
+	"heavyball": {
+		id: "heavyball"
+		name: "Heavy Ball",
+		spritenum: 194,
+		desc: "A Poké Ball for catching very heavy Pokémon."
 	},
 	"helixfossil": {
 		id: "helixfossil",
@@ -1511,6 +1559,12 @@ exports.BattleItems = {
 		},
 		desc: "Restores 10PP to the first of the holder's moves to reach 0PP. Single use."
 	},
+	"levelball": {
+		id: "levelball"
+		name: "Level Ball",
+		spritenum: 246,
+		desc: "A Poké Ball for catching Pokémon that are a lower level than your own."
+	},
 	"liechiberry": {
 		id: "liechiberry",
 		name: "Liechi Berry",
@@ -1582,6 +1636,12 @@ exports.BattleItems = {
 		// implemented in the corresponding thing
 		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5."
 	},
+	"loveball": {
+		id: "loveball"
+		name: "Love Ball",
+		spritenum: 258,
+		desc: "Poké Ball for catching Pokémon that are the opposite gender of your Pokémon."
+	},
 	"luckypunch": {
 		id: "luckypunch",
 		name: "Lucky Punch",
@@ -1616,6 +1676,12 @@ exports.BattleItems = {
 		},
 		desc: "Holder cures itself if it is confused or has a major status problem. Single use."
 	},
+	"lureball": {
+		id: "lureball"
+		name: "Lure Ball",
+		spritenum: 264,
+		desc: "A Poké Ball for catching Pokémon hooked by a Rod when fishing."
+	},
 	"lustrousorb": {
 		id: "lustrousorb",
 		name: "Lustrous Orb",
@@ -1629,6 +1695,12 @@ exports.BattleItems = {
 			}
 		},
 		desc: "If holder is a Palkia, its Water- and Dragon-type attacks have 1.2x power."
+	},
+	"luxuryball": {
+		id: "luxuryball"
+		name: "Luxury Ball",
+		spritenum: 266,
+		desc: "A comfortable Poké Ball that makes a caught wild Pokémon quickly grow friendly."
 	},
 	"machobrace": {
 		id: "machobrace",
@@ -1688,6 +1760,12 @@ exports.BattleItems = {
 			type: "Rock"
 		},
 		desc: "No competitive use."
+	},
+	"masterball": {
+		id: "masterball",
+		name: "Master Ball",
+		spritenum: 276,
+		desc: "The best Ball with the ultimate level of performance. It will catch any wild Pokémon."
 	},
 	"meadowplate": {
 		id: "meadowplate",
@@ -1821,6 +1899,12 @@ exports.BattleItems = {
 		},
 		desc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use."
 	},
+	"moonball": {
+		id: "moonball"
+		name: "Moon Ball",
+		spritenum: 294,
+		desc: "A Poké Ball for catching Pokémon that evolve using the Moon Stone."
+	},
 	"mindplate": {
 		id: "mindplate",
 		name: "Mind Plate",
@@ -1888,6 +1972,18 @@ exports.BattleItems = {
 			type: "Water"
 		},
 		desc: "No competitive use."
+	},
+	"nestball": {
+		id: "nestball"
+		name: "Nest Ball",
+		spritenum: 303,
+		desc: "A somewhat different Poké Ball that works especially well on weaker Pokémon in the wild."
+	},
+	"netball": {
+		id: "netball"
+		name: "Net Ball",
+		spritenum: 304,
+		desc: "A somewhat different Poké Ball that works especially well on Water- and Bug-type Pokémon."
 	},
 	"nevermeltice": {
 		id: "nevermeltice",
@@ -2001,6 +2097,12 @@ exports.BattleItems = {
 			type: "Steel"
 		},
 		desc: "No competitive use."
+	},
+	"parkball": {
+		id: "parkball"
+		name: "Park Ball",
+		spritenum: 325,
+		desc: "A special Poké Ball for the Pal Park."
 	},
 	"passhoberry": {
 		id: "passhoberry",
@@ -2151,6 +2253,12 @@ exports.BattleItems = {
 		},
 		desc: "Holder's first successful Poison-type attack will have 1.5x power. Single use."
 	},
+	"pokeball": {
+		id: "pokeball",
+		name: "Poke Ball",
+		spritenum: 345,
+		desc: "A device for catching wild Pokémon. It is thrown like a ball at the target. It is designed as a capsule system."
+	},
 	"pomegberry": {
 		id: "pomegberry",
 		name: "Pomeg Berry",
@@ -2177,6 +2285,12 @@ exports.BattleItems = {
 		},
 		desc: "Holder's two-turn moves complete in one turn (except Sky Drop). Single use."
 	},
+	"premierball": {
+		id: "premierball"
+		name: "Premier Ball",
+		spritenum: 363,
+		desc: "A somewhat rare Poké Ball that has been specially made to commemorate an event of some sort."
+	},
 	"psychicgem": {
 		id: "psychicgem",
 		name: "Psychic Gem",
@@ -2202,6 +2316,12 @@ exports.BattleItems = {
 			type: "Poison"
 		},
 		desc: "No competitive use."
+	},
+	"quickball": {
+		id: "quickball"
+		name: "Quick Ball",
+		spritenum: 372,
+		desc: "A somewhat different Poké Ball that provides a better catch rate if it is used at the start of a wild encounter."
 	},
 	"quickclaw": {
 		id: "quickclaw",
@@ -2336,6 +2456,12 @@ exports.BattleItems = {
 		},
 		desc: "If holder is hit, it forces the attacker to switch to a random ally. Single use."
 	},
+	"repeatball": {
+		id: "repeatball"
+		name: "Repeat Ball",
+		spritenum: 401,
+		desc: "A somewhat different Poké Ball that works especially well on Pokémon species that were previously caught."
+	},
 	"rindoberry": {
 		id: "rindoberry",
 		name: "Rindo Berry",
@@ -2454,6 +2580,12 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use."
+	},
+	"safariball": {
+		id: "safariball"
+		name: "Safari Ball",
+		spritenum: 425,
+		desc: "A special Poké Ball that is used only in the Great Marsh. It is decorated in a camouflage pattern."
 	},
 	"salacberry": {
 		id: "salacberry",
@@ -2739,6 +2871,12 @@ exports.BattleItems = {
 		},
 		desc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost-type."
 	},
+	"sportball": {
+		id: "sportball"
+		name: "Sport Ball",
+		spritenum: 465,
+		desc: "A special Poké Ball for the Bug-Catching Contest."
+	},
 	"starfberry": {
 		id: "starfberry",
 		name: "Starf Berry",
@@ -2879,6 +3017,12 @@ exports.BattleItems = {
 		},
 		desc: "If holder is a Cubone or a Marowak, its Attack is doubled."
 	},
+	"timerball": {
+		id: "timerball"
+		name: "Timer Ball",
+		spritenum: 494,
+		desc: "A somewhat different Ball that becomes progressively better the more turns there are in a battle."
+	},
 	"toxicorb": {
 		id: "toxicorb",
 		name: "Toxic Orb",
@@ -2925,6 +3069,12 @@ exports.BattleItems = {
 			}
 		},
 		desc: "Holder's Psychic-type attacks have 1.2x power."
+	},
+	"ultraball": {
+		id: "ultraball",
+		name: "Ultra Ball",
+		spritenum: 521,
+		desc: "An ultra-performance Ball that provides a higher Pokémon catch rate than a Great Ball."
 	},
 	"wacanberry": {
 		id: "wacanberry",
