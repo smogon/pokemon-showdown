@@ -572,6 +572,8 @@ if (config.protocol === 'io') { // Socket.IO
 	}
 }
 
-console.log("Server started on port "+config.port);
+console.log('Server started on port ' + config.port);
 
-console.log("Test your server at http://play.pokemonshowdown.com/~~localhost:"+config.port);
+console.log('Test your server at http://localhost' +
+	((config.port !== 8000) ? ('-' + config.port) : '') +
+	'.psim.us');
