@@ -39,13 +39,13 @@ You can also specify a port:
 
     node app.js 8000
 
-Visit your server at `http://play.pokemonshowdown.com/~~SERVER:PORT/`
+Visit your server at `http://SERVER-PORT.psim.us`
 
-Replace `SERVER` with your server domain or IP, and `PORT` with the server's port. You can leave off `:PORT` if it is 8000 (the default).
+Replace `SERVER` with your server domain or IP, and `PORT` with the server's port. You can leave off `-PORT` if it is 8000 (the default).
 
-Yes, you can test even if you are behind a NAT without port forwarding: `http://play.pokemonshowdown.com/~~localhost/` will connect to your local machine. Some browser setups might prevent this sort of connection, however (NoScript, for instance). If you can't get connecting locally to work in Firefox, try Chrome.
+Yes, you can test even if you are behind a NAT without port forwarding: `http://localhost.psim.us` will connect to your local machine. Some browser setups might prevent this sort of connection, however (NoScript, for instance). If you can't get connecting locally to work in Firefox, try Chrome.
 
-The reason your server is visited through `play.pokemonshowdown.com` is to make it more difficult for servers to see a user's password in any form, by handling logins globally. You can embed this in an `iframe` in your website if the URL is a big deal with you.
+The reason your server is visited through `psim.us` is to make it more difficult for servers to see a user's password in any form, by handling logins globally. You can embed this in an `iframe` in your website if the URL is a big deal with you.
 
 If you truly want to host the client yourself, there is [a repository for the Pokemon Showdown Client][2]. It's not recommended for beginners, though.
 
@@ -80,7 +80,7 @@ If you are running Pokemon Showdown on a remote server (such as a VPS), you can 
 
     ssh user@example.com -L 3000:127.0.0.1:8000 -N
 
-Replace `user` by your user account on the remote computer and replace `example.com` by the host name of the remote computer. Replace `8000` by the port that the server is running on. You can then point your browser to `http://play.pokemonshowdown.com/~~localhost:3000/` and it will connect to `example.com:8000`, but it will consider you to be connecting from `127.0.0.1`, so you will become an Administrator.
+Replace `user` by your user account on the remote computer and replace `example.com` by the host name of the remote computer. Replace `8000` by the port that the server is running on. You can then point your browser to `http://localhost-3000.psim.us` and it will connect to `example.com:8000`, but it will consider you to be connecting from `127.0.0.1`, so you will become an Administrator.
 
 
 Browser support
