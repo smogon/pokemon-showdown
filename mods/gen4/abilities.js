@@ -140,19 +140,11 @@ exports.BattleAbilities = {
 	},
 	"wonderguard": {
 		inherit: true,
-		onDamage: function(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') return;
-			if (effect.type === '???' || effect.id === 'struggle' || effect.id === 'firefang') return;
-			if (this.getEffectiveness(effect.type, target) <= 0) {
-				this.add('-activate',target,'ability: Wonder Guard');
-				return null;
-			}
-		},
-		onSubDamage: function(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') return;
-			if (target.negateImmunity[effect.type] || effect.id === 'firefang') return;
-			if (this.getEffectiveness(effect.type, target) <= 0) {
-				this.add('-activate',target,'ability: Wonder Guard');
+		onTryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.id === 'firefang') return;
+			this.debug('Wonder Guard immunity: '+move.id);
+			if (this.getEffectiveness(move.type, target) <= 0) {
+				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;
 			}
 		}
