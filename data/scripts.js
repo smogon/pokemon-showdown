@@ -678,7 +678,7 @@ exports.BattleScripts = {
 			hasMove = {};
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
-				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0,
+				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0,
 				recoil: 0, inaccurate: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
@@ -702,6 +702,9 @@ exports.BattleScripts = {
 				}
 				if (move.recoil) {
 					counter['recoil']++;
+				}
+				if (move.category !== 'Status' && !move.damage && !move.damageCallback && hasType[move.type]) {
+					counter['adaptability']++;
 				}
 				if (move.secondary) {
 					if (move.secondary.chance < 50) {
@@ -763,7 +766,7 @@ exports.BattleScripts = {
 					if (!hasMove['flail'] && !hasMove['endeavor'] && !hasMove['reversal']) rejected = true;
 					break;
 				case 'focuspunch':
-					if (!hasMove['substitute']) rejected = true;
+					if (hasMove['sleeptalk'] || !hasMove['substitute']) rejected = true;
 					break;
 				case 'storedpower':
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
@@ -811,7 +814,7 @@ exports.BattleScripts = {
 					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast'] || hasMove['blueflare']) rejected = true;
 					break;
 				case 'overheat':
-					if (hasMove['fireblast']) rejected = true;
+					if (setupType === 'Special' || hasMove['fireblast']) rejected = true;
 					break;
 				case 'icebeam':
 					if (hasMove['blizzard']) rejected = true;
@@ -914,7 +917,7 @@ exports.BattleScripts = {
 				case 'fakeout':
 					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
 					break;
-				case 'bellydrum': case 'encore': case 'suckerpunch':
+				case 'encore': case 'suckerpunch':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'cottonguard':
@@ -929,7 +932,7 @@ exports.BattleScripts = {
 					break;
 				case 'thunderwave':
 					if (setupType && (hasMove['rockpolish'] || hasMove['agility'])) rejected = true;
-					if (hasMove['trickroom']) rejected = true;
+					if (hasMove['discharge'] || hasMove['trickroom']) rejected = true;
 					break;
 				case 'lavaplume':
 					if (hasMove['willowisp']) rejected = true;
@@ -1014,6 +1017,9 @@ exports.BattleScripts = {
 					rejectAbility = true;
 				}
 				if (ability === 'Iron Fist' && !counter['ironfist']) {
+					rejectAbility = true;
+				}
+				if (ability === 'Adaptability' && !counter['adaptability']) {
 					rejectAbility = true;
 				}
 				if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil']) {
