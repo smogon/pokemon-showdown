@@ -665,13 +665,13 @@ exports.BattleItems = {
 		desc: "If holder becomes infatuated, the other Pokemon also becomes infatuated."
 	},
 	"diveball": {
-		id: "diveball"
+		id: "diveball",
 		name: "Dive Ball",
 		spritenum: 101,
 		desc: "A somewhat different Poké Ball that works especially well on Pokémon that live underwater."
 	},
 	"duskball": {
-		id: "duskball"
+		id: "duskball",
 		name: "Dusk Ball",
 		spritenum: 115,
 		desc: "A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places like caves."
@@ -901,7 +901,7 @@ exports.BattleItems = {
 		desc: "Holder's super effective attacks against other Pokemon do 1.2x damage."
 	},
 	"fastball": {
-		id: "fastball"
+		id: "fastball",
 		name: "Fast Ball",
 		spritenum: 137,
 		desc: "A Poké Ball that makes it easier to catch Pokémon which are quick to run away."
@@ -1223,7 +1223,7 @@ exports.BattleItems = {
 		desc: "Holder's Rock-type attacks have 1.2x power."
 	},
 	"healball": {
-		id: "healball"
+		id: "healball",
 		name: "Heal Ball",
 		spritenum: 188,
 		desc: "A remedial Poké Ball that restores the caught Pokémon's HP and eliminates any status problem."
@@ -1238,7 +1238,7 @@ exports.BattleItems = {
 		desc: "Holder's use of Sunny Day lasts 8 turns instead of 5."
 	},
 	"heavyball": {
-		id: "heavyball"
+		id: "heavyball",
 		name: "Heavy Ball",
 		spritenum: 194,
 		desc: "A Poké Ball for catching very heavy Pokémon."
@@ -1560,7 +1560,7 @@ exports.BattleItems = {
 		desc: "Restores 10PP to the first of the holder's moves to reach 0PP. Single use."
 	},
 	"levelball": {
-		id: "levelball"
+		id: "levelball",
 		name: "Level Ball",
 		spritenum: 246,
 		desc: "A Poké Ball for catching Pokémon that are a lower level than your own."
@@ -1637,7 +1637,7 @@ exports.BattleItems = {
 		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5."
 	},
 	"loveball": {
-		id: "loveball"
+		id: "loveball",
 		name: "Love Ball",
 		spritenum: 258,
 		desc: "Poké Ball for catching Pokémon that are the opposite gender of your Pokémon."
@@ -1677,7 +1677,7 @@ exports.BattleItems = {
 		desc: "Holder cures itself if it is confused or has a major status problem. Single use."
 	},
 	"lureball": {
-		id: "lureball"
+		id: "lureball",
 		name: "Lure Ball",
 		spritenum: 264,
 		desc: "A Poké Ball for catching Pokémon hooked by a Rod when fishing."
@@ -1697,7 +1697,7 @@ exports.BattleItems = {
 		desc: "If holder is a Palkia, its Water- and Dragon-type attacks have 1.2x power."
 	},
 	"luxuryball": {
-		id: "luxuryball"
+		id: "luxuryball",
 		name: "Luxury Ball",
 		spritenum: 266,
 		desc: "A comfortable Poké Ball that makes a caught wild Pokémon quickly grow friendly."
@@ -1900,7 +1900,7 @@ exports.BattleItems = {
 		desc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use."
 	},
 	"moonball": {
-		id: "moonball"
+		id: "moonball",
 		name: "Moon Ball",
 		spritenum: 294,
 		desc: "A Poké Ball for catching Pokémon that evolve using the Moon Stone."
@@ -1974,13 +1974,13 @@ exports.BattleItems = {
 		desc: "No competitive use."
 	},
 	"nestball": {
-		id: "nestball"
+		id: "nestball",
 		name: "Nest Ball",
 		spritenum: 303,
 		desc: "A somewhat different Poké Ball that works especially well on weaker Pokémon in the wild."
 	},
 	"netball": {
-		id: "netball"
+		id: "netball",
 		name: "Net Ball",
 		spritenum: 304,
 		desc: "A somewhat different Poké Ball that works especially well on Water- and Bug-type Pokémon."
@@ -2099,7 +2099,7 @@ exports.BattleItems = {
 		desc: "No competitive use."
 	},
 	"parkball": {
-		id: "parkball"
+		id: "parkball",
 		name: "Park Ball",
 		spritenum: 325,
 		desc: "A special Poké Ball for the Pal Park."
@@ -2286,7 +2286,7 @@ exports.BattleItems = {
 		desc: "Holder's two-turn moves complete in one turn (except Sky Drop). Single use."
 	},
 	"premierball": {
-		id: "premierball"
+		id: "premierball",
 		name: "Premier Ball",
 		spritenum: 363,
 		desc: "A somewhat rare Poké Ball that has been specially made to commemorate an event of some sort."
@@ -2318,7 +2318,7 @@ exports.BattleItems = {
 		desc: "No competitive use."
 	},
 	"quickball": {
-		id: "quickball"
+		id: "quickball",
 		name: "Quick Ball",
 		spritenum: 372,
 		desc: "A somewhat different Poké Ball that provides a better catch rate if it is used at the start of a wild encounter."
@@ -2457,7 +2457,7 @@ exports.BattleItems = {
 		desc: "If holder is hit, it forces the attacker to switch to a random ally. Single use."
 	},
 	"repeatball": {
-		id: "repeatball"
+		id: "repeatball",
 		name: "Repeat Ball",
 		spritenum: 401,
 		desc: "A somewhat different Poké Ball that works especially well on Pokémon species that were previously caught."
@@ -2582,7 +2582,7 @@ exports.BattleItems = {
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use."
 	},
 	"safariball": {
-		id: "safariball"
+		id: "safariball",
 		name: "Safari Ball",
 		spritenum: 425,
 		desc: "A special Poké Ball that is used only in the Great Marsh. It is decorated in a camouflage pattern."
@@ -2872,7 +2872,7 @@ exports.BattleItems = {
 		desc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost-type."
 	},
 	"sportball": {
-		id: "sportball"
+		id: "sportball",
 		name: "Sport Ball",
 		spritenum: 465,
 		desc: "A special Poké Ball for the Bug-Catching Contest."
@@ -3018,7 +3018,7 @@ exports.BattleItems = {
 		desc: "If holder is a Cubone or a Marowak, its Attack is doubled."
 	},
 	"timerball": {
-		id: "timerball"
+		id: "timerball",
 		name: "Timer Ball",
 		spritenum: 494,
 		desc: "A somewhat different Ball that becomes progressively better the more turns there are in a battle."
