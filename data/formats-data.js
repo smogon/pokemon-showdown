@@ -273,13 +273,7 @@ exports.BattleFormatsData = {
 	},
 	pichuspikyeared: {
 		eventPokemon: [
-			{"generation":3,"level":5,"moves":["thundershock","charm","surf"]},
-			{"generation":3,"level":5,"moves":["thundershock","charm","wish"]},
-			{"generation":3,"level":5,"moves":["thundershock","charm","teeterdance"]},
-			{"generation":3,"level":5,"moves":["thundershock","charm","followme"]},
-			{"generation":4,"level":1,"moves":["volttackle","thunderbolt","grassknot","return"]},
-			{"generation":4,"level":30,"gender":"M","nature":"Jolly","moves":["charge","volttackle","endeavor","endure"]},
-			{"generation":4,"level":30,"gender":"M","nature":"Jolly","moves":["volttackle","charge","endeavor","endure"]}
+			{"generation":4,"level":30,"gender":"F","nature":"Naughty","moves":["helpinghand","volttackle","swagger","painsplit"]}
 		],
 		tier: "LC"
 	},
