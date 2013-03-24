@@ -226,7 +226,7 @@ exports.BattleScripts = {
 
 		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
 
-		if (move.selfdestruct) {
+		if (move.selfdestruct && !target.volatiles['protect']) {
 			this.faint(pokemon, pokemon, move);
 		}
 
