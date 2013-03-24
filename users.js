@@ -206,17 +206,6 @@ var User = (function () {
 			return true;
 		}
 
-		// The console permission is incredibly powerful because it allows
-		// the execution of abitrary shell commands on the local computer.
-		// As such, it can only be used from a specified whitelist of IPs
-		// and userids.
-		if (permission === 'console') {
-			var whitelist = config.consoleips || ['127.0.0.1'];
-			if (whitelist.indexOf(this.ip) < 0 && whitelist.indexOf(this.userid) < 0) {
-				return false;
-			}
-		}
-
 		var group = this.group;
 		var groupData = config.groups[group];
 		var checkedGroups = {};
@@ -253,6 +242,27 @@ var User = (function () {
 			group = groupData['inherit'];
 			groupData = config.groups[group];
 		}
+		return false;
+	};
+	/**
+	 * Permission check for using the dev console
+	 *
+	 * The `console` permission is incredibly powerful because it allows the
+	 * execution of abitrary shell commands on the local computer As such, it
+	 * can only be used from a specified whitelist of IPs and userids. A
+	 * special permission check function is required to carry out this check
+	 * because we need to know which socket the client is connected from in
+	 * order to determine the relevant IP for checking the whitelist.
+	 */
+	User.prototype.checkConsolePermission = function(socket) {
+		if (!this.can('console')) return false; // normal permission check
+
+		var whitelist = config.consoleips || ['127.0.0.1'];
+		var connection = this.getConnectionFromSocket(socket);
+		if (!connection) return false; // should be impossible
+		if (whitelist.indexOf(connection.ip) >= 0) return true; // on the IP whitelist
+		if (whitelist.indexOf(this.userid) >= 0) return true; // on the userid whitelist
+
 		return false;
 	};
 	// Special permission check is needed for promoting and demoting
