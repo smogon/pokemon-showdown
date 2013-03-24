@@ -594,7 +594,11 @@ var User = (function () {
 	User.prototype.merge = function(connection) {
 		this.connected = true;
 		this.connections.push(connection);
-		this.ips[connection.ip] = 1;
+		if (this.ips[connection.ip]) {
+			++this.ips[connection.ip];
+		} else {
+			this.ips[connection.ip] = 1;
+		}
 		//console.log(''+this.name+' merging: socket '+connection.socket.id+' of ');
 		emit(connection.socket, 'update', {
 			name: this.name,
@@ -655,7 +659,9 @@ var User = (function () {
 					this.leaveRoom(connection.rooms[j], socket);
 				}
 				connection.user = null;
-				delete this.ips[connection.ip];
+				if (--this.ips[connection.ip] === 0) {
+					delete this.ips[connection.ip];
+				}
 				this.connections.splice(i,1);
 				break;
 			}
