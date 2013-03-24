@@ -77,7 +77,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				room: room.id
 			};
 			if (user.can('ip', targetUser)) {
-				userdetails.ip = targetUser.ip;
+				userdetails.ips = Object.keys(targetUser.ips);
 			}
 			emit(socket, 'command', userdetails);
 		} else if (cmd === 'roomlist') {
@@ -302,7 +302,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				emit(socket, 'console', '(Unregistered)');
 			}
 			if (user.can('ip', targetUser)) {
-				emit(socket, 'console', 'IP: '+targetUser.ip);
+				var ips = Object.keys(targetUser.ips);
+				emit(socket, 'console', 'IP' + ((ips.length > 1) ? 's' : '') + ': ' + ips.join(', '));
 			}
 			var output = 'In rooms: ';
 			var first = true;
@@ -462,7 +463,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'ip':
 	case 'getip':
 		if (!target) {
-			emit(socket, 'console', 'Your IP is: '+user.ip);
+			var ips = Object.keys(user.ips);
+			emit(socket, 'console', 'Your IP' + ((ips.length > 1) ? 's are' : ' is') + ': ' + ips.join(', '));
 			return false;
 		}
 		var targetUser = Users.get(target);
@@ -474,7 +476,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/ip - Access denied.');
 			return false;
 		}
-		emit(socket, 'console', 'User '+targetUser.name+' has IP: '+targetUser.ip);
+		var ips = Object.keys(targetUser.ips);
+		emit(socket, 'console', 'User ' + targetUser.name + ' has IP' + ((ips.length > 1) ? 's' : '') + ': ' + ips.join(', '));
 		return false;
 		break;
 
@@ -528,7 +531,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		targetUser.muted = true;
 		rooms.lobby.sendIdentity(targetUser);
-		mutedIps[targetUser.ip] = targetUser.userid;
+		for (var ip in targetUser.ips) {
+			mutedIps[ip] = targetUser.userid;
+		}
 		for (var i=0; i<alts.length; i++) {
 			var targetAlt = Users.get(alts[i]);
 			if (targetAlt) {
