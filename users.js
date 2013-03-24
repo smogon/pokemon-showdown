@@ -27,19 +27,26 @@ function searchUser(name) {
 	}
 	return users[userid];
 }
-function nameLock(user,name,ip) {
-	ip = ip||user.ip;
+
+// This function is terrible code that doesn't work as the original author intended.
+function nameLock(user, name) {
+	var locks = Object.values(Object.select(nameLockedIps, user.ips));
+	if (locks.length > 0) {
+		// Arbitrarily pick the first lock if there is more than one...
+		return user.nameLock(locks[0]);
+	}
 	var userid = toUserid(name);
-	if(nameLockedIps[ip]) {
-		return user.nameLock(nameLockedIps[ip]);
-	} for(var i in nameLockedIps) {
-		if((userid && toUserid(nameLockedIps[i])==userid)||user.userid==toUserid(nameLockedIps[i])) {
-			nameLockedIps[ip] = nameLockedIps[i];
-			return user.nameLock(nameLockedIps[ip]);
+	for (var i in nameLockedIps) {
+		if ((userid && toUserid(nameLockedIps[i]) === userid) || user.userid === toUserid(nameLockedIps[i])) {
+			for (var ip in user.ips) {
+				nameLockedIps[ip] = nameLockedIps[i];
+			}
+			return user.nameLock(nameLockedIps[i]);
 		}
 	}
-	return name||user.name;
+	return name || user.name;
 }
+
 function connectUser(socket, room) {
 	var connection = new Connection(socket, true);
 	if (connection.banned) return connection;
@@ -140,9 +147,10 @@ var User = (function () {
 
 		if (connection.user) connection.user = this;
 		this.connections = [connection];
-		this.ip = connection.ip;
+		this.ips = {}
+		this.ips[connection.ip] = 1;
 
-		this.muted = !!ipSearch(this.ip,mutedIps);
+		this.muted = !!ipSearch(connection.ip, mutedIps);
 		this.prevNames = {};
 		this.battles = {};
 		this.roomCount = {};
@@ -299,7 +307,7 @@ var User = (function () {
 		users[this.userid] = this;
 		this.authenticated = !!authenticated;
 
-		if (config.localsysop && this.ip === '127.0.0.1') {
+		if (config.localsysop && this.ips['127.0.0.1']) {
 			this.group = config.groupsranking[config.groupsranking.length - 1];
 		}
 
@@ -532,12 +540,18 @@ var User = (function () {
 				for (var i in this.roomCount) {
 					Rooms.get(i,'lobby').leave(this);
 				}
+				if (!user.authenticated) {
+					if (Object.isEmpty(Object.select(this.ips, user.ips))) {
+						user.muted = this.muted;
+					}
+				}
 				for (var i=0; i<this.connections.length; i++) {
 					//console.log(''+this.name+' preparing to merge: socket '+i+' of '+this.connections.length);
 					user.merge(this.connections[i]);
 				}
 				this.roomCount = {};
 				this.connections = [];
+				this.ips = {};
 				this.markInactive();
 				if (!this.authenticated) {
 					this.group = config.groupsranking[0];
@@ -545,11 +559,8 @@ var User = (function () {
 
 				user.group = group;
 				if (avatar) user.avatar = avatar;
-				if (!user.authenticated && (this.ip !== user.ip)) {
-					user.muted = this.muted;
-				}
+
 				user.authenticated = authenticated;
-				user.ip = this.ip;
 
 				if (userid !== this.userid) {
 					// doing it this way mathematically ensures no cycles
@@ -583,6 +594,7 @@ var User = (function () {
 	User.prototype.merge = function(connection) {
 		this.connected = true;
 		this.connections.push(connection);
+		this.ips[connection.ip] = 1;
 		//console.log(''+this.name+' merging: socket '+connection.socket.id+' of ');
 		emit(connection.socket, 'update', {
 			name: this.name,
@@ -643,6 +655,7 @@ var User = (function () {
 					this.leaveRoom(connection.rooms[j], socket);
 				}
 				connection.user = null;
+				delete this.ips[connection.ip];
 				this.connections.splice(i,1);
 				break;
 			}
@@ -662,12 +675,11 @@ var User = (function () {
 	User.prototype.getAlts = function() {
 		var alts = [];
 		for (var i in users) {
-			if (users[i].ip === this.ip && users[i] !== this) {
-				if (!users[i].named && !users[i].connected) {
-					continue;
-				}
-				alts.push(users[i].name);
-			}
+			if (users[i] === this) continue;
+			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
+			if (!users[i].named && !users[i].connected) continue;
+
+			alts.push(users[i].name);
 		}
 		return alts;
 	};
@@ -675,12 +687,12 @@ var User = (function () {
 		var result = this;
 		var groupRank = config.groupsranking.indexOf(this.group);
 		for (var i in users) {
-			if (users[i].ip === this.ip && users[i] !== this) {
-				if (config.groupsranking.indexOf(users[i].group) > groupRank) {
-					result = users[i];
-					groupRank = config.groupsranking.indexOf(users[i].group);
-				}
-			}
+			if (users[i] === this) continue;
+			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
+			if (config.groupsranking.indexOf(users[i].group) <= groupRank) continue;
+
+			result = users[i];
+			groupRank = config.groupsranking.indexOf(users[i].group);
 		}
 		return result;
 	};
@@ -719,41 +731,54 @@ var User = (function () {
 	User.prototype.nameLock = function(targetName, recurse) {
 		var targetUser = getUser(targetName);
 		if (!targetUser) return targetName;
-		if (nameLockedIps[this.ip] === targetName || !targetUser.ip || targetUser.ip === this.ip) {
-			nameLockedIps[this.ip] = targetName;
-			if (recurse) {
-				for (var i in users) {
-					if (users[i].ip === this.ip && users[i] !== this) {
-						users[i].destroy();
-					}
-				}
-				this.forceRename(targetName, this.authenticated);
-			}
+		if ((Object.values(Object.select(nameLockedIps, this.ips)).indexOf(targetName) < 0) &&
+				targetUser.connected &&
+				Object.isEmpty(Object.select(this.ips, targetUser.ips))) {
+			return targetName;
 		}
+		for (var ip in this.ips) {
+			nameLockedIps[ip] = targetName;
+		}
+		if (!recurse) return targetName;
+		for (var i in users) {
+			if (users[i] === this) continue;
+			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
+			users[i].destroy();
+		}
+		this.forceRename(targetName, this.authenticated);
 		return targetName;
 	};
 	User.prototype.nameLocked = function() {
-		if (nameLockedIps[this.ip]) {
-			this.nameLock(nameLockedIps[this.ip]);
+		var locks = Object.values(Object.select(nameLockedIps, this.ips));
+		if (locks.length > 0) {
+			// If the user is locked to more than one name (it's not obvious
+			// whether this is possible), just arbitrarily pick the first one.
+			this.nameLock(locks[0]);
 			return true;
 		}
+		// This code attempts to catch namelocked users logging in from another
+		// IP, and thereby add that IP to the list of namelocked IPs. However,
+		// this code is terrible and doesn't actually work as designed.
 		for (var i in nameLockedIps) {
-			if (nameLockedIps[i] === this.name) {
-				nameLockedIps[this.ip] = nameLockedIps[i];
-				this.nameLock(nameLockedIps[this.ip]);
-				return true;
+			if (nameLockedIps[i] !== this.name) continue;
+			for (var ip in this.ips) {
+				nameLockedIps[ip] = nameLockedIps[i];
 			}
+			this.nameLock(this.name);
+			return true;
 		}
 		return false;
 	};
 	User.prototype.ban = function(noRecurse) {
 		// no need to recurse, since the root for-loop already bans everything with your IP
 		if (!noRecurse) for (var i in users) {
-			if (users[i].ip === this.ip && users[i] !== this) {
-				users[i].ban(true);
-			}
+			if (users[i] === this) continue;
+			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
+			users[i].ban(true);
 		}
-		bannedIps[this.ip] = this.userid;
+		for (var ip in this.ips) {
+			bannedIps[ip] = this.userid;
+		}
 		this.destroy();
 	};
 	User.prototype.destroy = function() {
@@ -775,6 +800,7 @@ var User = (function () {
 			}
 		}
 		this.connections = [];
+		this.ips = {};
 	};
 	User.prototype.getConnectionFromSocket = function(socket) {
 		for (var i = 0; ; ++i) {
