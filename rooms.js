@@ -599,7 +599,7 @@ var BattleRoom = (function() {
 			var battle = this.battle;
 			var me = user;
 			this.addCmd('chat', user.name, '>> '+cmd);
-			if (user.can('console')) {
+			if (user.checkConsolePermission(socket)) {
 				try {
 					this.addCmd('chat', user.name, '<< '+eval(cmd));
 				} catch (e) {
@@ -616,7 +616,7 @@ var BattleRoom = (function() {
 			var cmd = message.substr(4);
 
 			this.addCmd('chat', user.name, '>>> '+cmd);
-			if (user.can('console')) {
+			if (user.checkConsolePermission(socket)) {
 				this.battle.send('eval', cmd);
 			} else {
 				this.addCmd('chat', user.name, '<<< Access denied.');
@@ -1224,7 +1224,7 @@ function LobbyRoom(roomid) {
 			var room = selfR;
 			var me = user;
 			selfR.add('|c|'+user.getIdentity()+'|>> '+cmd, true);
-			if (user.can('console')) {
+			if (user.checkConsolePermission(socket)) {
 				try {
 					selfR.add('|c|'+user.getIdentity()+'|<< '+eval(cmd), true);
 				} catch (e) {

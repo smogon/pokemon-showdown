@@ -1616,7 +1616,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'updateserver':
-		if (!user.can('console')) {
+		if (!user.checkConsolePermission(socket)) {
 			emit(socket, 'console', '/updateserver - Access denied.');
 			return false;
 		}
