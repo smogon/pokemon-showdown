@@ -5111,8 +5111,11 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isSnatchable: true,
-		onTryHit: function(pokemon) {
-			if (pokemon.side.pokemonLeft <= 1) return false;
+		onTryHit: function(pokemon, target, move) {
+			if (pokemon.side.pokemonLeft <= 1) {
+				delete move.selfdestruct;
+				return false;
+			}
 		},
 		selfdestruct: true,
 		sideCondition: 'healingwish',
@@ -6693,8 +6696,11 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isSnatchable: true,
-		onTryHit: function(pokemon) {
-			if (pokemon.side.pokemonLeft <= 1) return false;
+		onTryHit: function(pokemon, target, move) {
+			if (pokemon.side.pokemonLeft <= 1) {
+				delete move.selfdestruct;
+				return false;
+			}
 		},
 		selfdestruct: true,
 		sideCondition: 'lunardance',
