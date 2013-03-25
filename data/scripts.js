@@ -703,7 +703,7 @@ exports.BattleScripts = {
 				if (move.recoil) {
 					counter['recoil']++;
 				}
-				if (move.category !== 'Status' && !move.damage && !move.damageCallback && hasType[move.type]) {
+				if ((move.basePower || move.basePowerCallback) && hasType[move.type]) {
 					counter['adaptability']++;
 				}
 				if (move.secondary) {
@@ -723,7 +723,7 @@ exports.BattleScripts = {
 					counter['contrary']++;
 				}
 				var PhysicalSetup = {
-					swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1, bellydrum:1
+					swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1, bellydrum:1, shiftgear:1, honeclaws:1, howl:1
 				};
 				var SpecialSetup = {
 					nastyplot:1, tailglow:1, quiverdance:1, calmmind:1
@@ -806,6 +806,9 @@ exports.BattleScripts = {
 					break;
 				case 'trick': case 'switcheroo':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['batonpass']) rejected = true;
+					break;
+				case 'dragontail':
+					if (hasMove['rockpolish']) rejected = true;
 					break;
 
 				// bit redundant to have both
@@ -912,7 +915,7 @@ exports.BattleScripts = {
 					if (hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					break;
 				case 'substitute':
-					if (hasMove['uturn'] || hasMove['voltswitch']) rejected = true;
+					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit']) rejected = true;
 					break;
 				case 'fakeout':
 					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
@@ -933,6 +936,7 @@ exports.BattleScripts = {
 				case 'thunderwave':
 					if (setupType && (hasMove['rockpolish'] || hasMove['agility'])) rejected = true;
 					if (hasMove['discharge'] || hasMove['trickroom']) rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'lavaplume':
 					if (hasMove['willowisp']) rejected = true;
@@ -1059,6 +1063,9 @@ exports.BattleScripts = {
 				}
 				if ((abilities[0] === 'Swift Swim' || abilities[1] === 'Swift Swim' || abilities[2] === 'Swift Swim') && hasMove['raindance']) {
 					ability = 'Swift Swim';
+				}
+				if ((abilities[0] === 'Chlorophyll' || abilities[1] === 'Chlorophyll' || abilities[2] === 'Chlorophyll') && ability !== 'Solar Power' && hasMove['sunnyday']) {
+					ability = 'Chlorophyll';
 				}
 			}
 
@@ -1257,7 +1264,7 @@ exports.BattleScripts = {
 			Dusclops: 84, Porygon2: 82, Chansey: 78,
 
 			// Weather or teammate dependent
-			Snover: 95, Vulpix: 95, Excadrill: 78, Ninetales: 78, Tentacruel: 78, Toxicroak: 78, Venusaur: 78,
+			Snover: 95, Vulpix: 95, Excadrill: 78, Ninetales: 78, Tentacruel: 78, Toxicroak: 78, Venusaur: 78, "Tornadus-Therian": 74,
 
 			// Holistic judgment
 			Carvanha: 90, Blaziken: 74, Garchomp: 74, Thundurus: 74

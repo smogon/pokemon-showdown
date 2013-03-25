@@ -3813,7 +3813,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	panpour: {
-		viableMoves: {"nastyplot":1,"hydropump":1,"hiddenpowergrass":1,"substitute":1,"surf":1},
+		viableMoves: {"nastyplot":1,"hydropump":1,"hiddenpowergrass":1,"substitute":1,"surf":1,"icebeam":1},
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["leer","lick","watergun","hydropump"]}
 		],
@@ -4383,7 +4383,7 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	stunfisk: {
-		viableMoves: {"discharge":1,"thunderbolt":1,"earthpower":1,"scald":1,"toxic":1,"rest":1,"sleeptalk":1,"hiddenpowerice":1,"stealthrock":1},
+		viableMoves: {"discharge":1,"thunderbolt":1,"earthpower":1,"scald":1,"toxic":1,"rest":1,"sleeptalk":1,"stealthrock":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
