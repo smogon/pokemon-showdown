@@ -1,6 +1,23 @@
 const LOGIN_SERVER_TIMEOUT = 15000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
+function runNpm(command) {
+	console.log('Running `npm ' + command + '`...');
+	var child_process = require('child_process');
+	var npm = child_process.spawn('npm', [command]);
+	npm.stdout.on('data', function(data) {
+		process.stdout.write(data);
+	});
+	npm.stderr.on('data', function(data) {
+		process.stderr.write(data);
+	});
+	npm.on('close', function(code) {
+		if (!code) {
+			child_process.fork('app.js').disconnect();
+		}
+	});
+}
+
 /**
  * Require a module, but display a helpful error message if it fails.
  * This is currently only used in this file, and only for modules which are
@@ -11,17 +28,17 @@ function requireGracefully(path) {
 	try {
 		return require(path);
 	} catch (e) {
-		console.error("ERROR: " + e.message + ". Please run\n\n" +
-			"           npm install\n\n" +
-			"       or refer to README.md for more help running Pokemon Showdown.");
-		process.exit(1);
+		return null;
 	}
 }
 
-requireGracefully('sugar');
+if (!requireGracefully('sugar')) {
+	runNpm('install');
+	return;
+}
 if (!Object.select) {
-	console.error('ERROR: Your version of `sugar` is outdated. Please run `npm update`.');
-	process.exit(1);
+	runNpm('update');
+	return;
 }
 
 fs = require('fs');
@@ -360,6 +377,7 @@ Users = require('./users.js');
 
 Rooms = require('./rooms.js');
 
+delete process.send; // in case we're a child process
 Verifier = require('./verifier.js');
 
 parseCommand = require('./chat-commands.js').parseCommand;
