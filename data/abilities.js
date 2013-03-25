@@ -1637,7 +1637,7 @@ exports.BattleAbilities = {
 		},
 		id: "raindish",
 		name: "Rain Dish",
-		rating: 1,
+		rating: 1.5,
 		num: 44
 	},
 	"rattled": {
