@@ -19,6 +19,10 @@ function requireGracefully(path) {
 }
 
 requireGracefully('sugar');
+if (!Object.select) {
+	console.error('ERROR: Your version of `sugar` is outdated. Please run `npm update`.');
+	process.exit(1);
+}
 
 fs = require('fs');
 if (!fs.existsSync) {
