@@ -1646,7 +1646,7 @@ var Battle = (function() {
 				}
 				continue;
 			}
-			if (target.ignore && target.ignore[status.effectType+'Target']) {
+			if (target.ignore && (target.ignore[status.effectType+'Target'] || target.ignore[eventid+'Target'])) {
 				this.debug(eventid+' handler suppressed by Air Lock');
 				continue;
 			}
