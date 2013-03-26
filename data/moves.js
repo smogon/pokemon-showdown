@@ -7912,7 +7912,7 @@ exports.BattleMovedex = {
 		id: "outrage",
 		isViable: true,
 		name: "Outrage",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		isContact: true,
 		self: {
