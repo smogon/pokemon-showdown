@@ -11,7 +11,7 @@ You can use your own computer as a server, but for other people to connect to yo
 Installing
 ------------------------------------------------------------------------
 
-Pokemon Showdown requires [Node.js][1] (versions 0.6.3 through 0.8.22 are known to be supported), so install that if you don't have it yet.
+Pokemon Showdown requires [node.js][1], either v0.6.3 through v0.8.22, or v0.10.2-pre and up. (Unfortunately, v0.10.0 and v0.10.1 of `node.js` both contain [a bug][2] that crashes Pokemon Showdown in some cases, so these versions must be avoided.) Install `node.js` if you don't have it yet, but make sure you install a supported version (inconveniently, the latest "stable" release is v0.10.1, which, as mentioned, does **not** work).
 
 Next, obtain a copy of Pokemon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone" button in the top left, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
 
@@ -47,10 +47,11 @@ Yes, you can test even if you are behind a NAT without port forwarding: `http://
 
 The reason your server is visited through `psim.us` is to make it more difficult for servers to see a user's password in any form, by handling logins globally. You can embed this in an `iframe` in your website if the URL is a big deal with you.
 
-If you truly want to host the client yourself, there is [a repository for the Pokemon Showdown Client][2]. It's not recommended for beginners, though.
+If you truly want to host the client yourself, there is [a repository for the Pokemon Showdown Client][3]. It's not recommended for beginners, though.
 
   [1]: http://nodejs.org/
-  [2]: https://github.com/Zarel/Pokemon-Showdown-Client
+  [2]: https://github.com/joyent/node/pull/5016
+  [3]: https://github.com/Zarel/Pokemon-Showdown-Client
 
 
 Setting up an Administrator account
