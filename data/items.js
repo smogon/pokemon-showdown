@@ -794,7 +794,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onHit: function(target, source, move) {
-			if (source && source !== target && move && move.selfSwitch) {
+			if (source && source !== target && target.hp && move && move.selfSwitch) {
 				move.selfSwitch = false;
 			}
 		},
