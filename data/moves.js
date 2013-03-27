@@ -3631,20 +3631,20 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
-			var hpPercent = pokemon.hpPercent(pokemon.hp);
-			if (hpPercent <= 5) {
+			var ratio = pokemon.hp * 48 / pokemon.maxhp;
+			if (ratio < 2) {
 				return 200;
 			}
-			if (hpPercent <= 10) {
+			if (ratio < 5) {
 				return 150;
 			}
-			if (hpPercent <= 20) {
+			if (ratio < 10) {
 				return 100;
 			}
-			if (hpPercent <= 35) {
+			if (ratio < 17) {
 				return 80;
 			}
-			if (hpPercent <= 70) {
+			if (ratio < 33) {
 				return 40;
 			}
 			return 20;
@@ -9254,20 +9254,20 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
-			var hpPercent = pokemon.hpPercent(pokemon.hp);
-			if (hpPercent <= 5) {
+			var ratio = pokemon.hp * 48 / pokemon.maxhp;
+			if (ratio < 2) {
 				return 200;
 			}
-			if (hpPercent <= 10) {
+			if (ratio < 5) {
 				return 150;
 			}
-			if (hpPercent <= 20) {
+			if (ratio < 10) {
 				return 100;
 			}
-			if (hpPercent <= 35) {
+			if (ratio < 17) {
 				return 80;
 			}
-			if (hpPercent <= 70) {
+			if (ratio < 33) {
 				return 40;
 			}
 			return 20;
@@ -10444,7 +10444,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
-		desc: "Deals damage to one adjacent or non-adjacent target. This attack takes the target into the air with the user on the first turn and strikes on the second. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister. The user and the target cannot make a move between turns. If the user is holding a Power Herb, the move completes in one turn. This move has no effect on Flying-types. Fails on the first turn if the target is an ally or if the target has a Substitute. This move cannot be used while Gravity is in effect. Makes contact.",
+		desc: "Deals damage to one adjacent or non-adjacent target. This attack takes the target into the air with the user on the first turn and strikes on the second. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister. The user and the target cannot make a move between turns. This move has no effect on Flying-types. Fails on the first turn if the target is an ally or if the target has a Substitute. This move cannot be used while Gravity is in effect. Makes contact.",
 		shortDesc: "User and foe fly up turn 1. Damages on turn 2.",
 		id: "skydrop",
 		name: "Sky Drop",
