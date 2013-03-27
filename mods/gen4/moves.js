@@ -342,6 +342,28 @@ exports.BattleMovedex = {
 		accuracy: 70,
 		basePower: 15
 	},
+	flail: {
+		inherit: true,
+		basePowerCallback: function(pokemon, target) {
+			var ratio = pokemon.hp * 64 / pokemon.maxhp;
+			if (ratio < 2) {
+				return 200;
+			}
+			if (ratio < 6) {
+				return 150;
+			}
+			if (ratio < 13) {
+				return 100;
+			}
+			if (ratio < 22) {
+				return 80;
+			}
+			if (ratio < 43) {
+				return 40;
+			}
+			return 20;
+		}
+	},
 	foresight: {
 		inherit: true,
 		isBounceable: false
@@ -547,6 +569,28 @@ exports.BattleMovedex = {
 	recycle: {
 		inherit: true,
 		isSnatchable: false
+	},
+	reversal: {
+		inherit: true,
+		basePowerCallback: function(pokemon, target) {
+			var ratio = pokemon.hp * 64 / pokemon.maxhp;
+			if (ratio < 2) {
+				return 200;
+			}
+			if (ratio < 6) {
+				return 150;
+			}
+			if (ratio < 13) {
+				return 100;
+			}
+			if (ratio < 22) {
+				return 80;
+			}
+			if (ratio < 43) {
+				return 40;
+			}
+			return 20;
+		}
 	},
 	roar: {
 		inherit: true,
