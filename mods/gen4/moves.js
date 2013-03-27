@@ -8,6 +8,7 @@ exports.BattleMovedex = {
 	acupressure: {
 		inherit: true,
 		desc: "Raises a random stat by 2 stages as long as the stat is not already at stage 6. The user can choose to use this move on itself or an ally. Fails if no stat stage can be raised or if the user or ally has a Substitute. This move ignores Protect and Detect.",
+		isSnatchable: true,
 		onHit: function(target) {
 			if (target.volatiles['substitute']) {
 				return false;
@@ -54,6 +55,10 @@ exports.BattleMovedex = {
 			this.useMove(move, target);
 		}
 	},
+	aquaring: {
+		inherit: true,
+		isSnatchable: false
+	},
 	beatup: {
 		inherit: true,
 		basePower: 10,
@@ -94,6 +99,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 75,
 		pp: 10
+	},
+	conversion: {
+		inherit: true,
+		isSnatchable: false
 	},
 	copycat: {
 		inherit: true,
@@ -321,7 +330,12 @@ exports.BattleMovedex = {
 	},
 	feint: {
 		inherit: true,
-		basePower: 50
+		basePower: 50,
+		onTryHit: function(target) {
+			if (!target.volatiles['protect']) {
+				return false;
+			}
+		}
 	},
 	firespin: {
 		inherit: true,
@@ -366,6 +380,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		isBounceable: false
 	},
+	healingwish: {
+		inherit: true,
+		isSnatchable: false
+	},
 	hijumpkick: {
 		inherit: true,
 		basePower: 100,
@@ -381,6 +399,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 10
 	},
+	imprison: {
+		inherit: true,
+		isSnatchable: false
+	},
 	jumpkick: {
 		inherit: true,
 		basePower: 85,
@@ -395,6 +417,14 @@ exports.BattleMovedex = {
 	lastresort: {
 		inherit: true,
 		basePower: 130
+	},
+	luckychant: {
+		inherit: true,
+		isSnatchable: false
+	},
+	lunardance: {
+		inherit: true,
+		isSnatchable: false
 	},
 	magiccoat: {
 		inherit: true,
@@ -431,6 +461,7 @@ exports.BattleMovedex = {
 	},
 	magnetrise: {
 		inherit: true,
+		isSnatchable: false,
 		volatileStatus: 'magnetrise',
 		effect: {
 			duration: 5,
@@ -477,6 +508,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		isBounceable: false
 	},
+	outrage: {
+		inherit: true,
+		pp: 15
+	},
 	payback: {
 		inherit: true,
 		basePowerCallback: function(pokemon, target) {
@@ -493,12 +528,25 @@ exports.BattleMovedex = {
 	},
 	poisongas: {
 		inherit: true,
-		accuracy: 55
+		accuracy: 55,
+		target: "normal"
+	},
+	powertrick: {
+		inherit: true,
+		isSnatchable: false
 	},
 	protect: {
 		inherit: true,
 		//desc: "",
 		priority: 3
+	},
+	psychup: {
+		inherit: true,
+		isSnatchable: true
+	},
+	recycle: {
+		inherit: true,
+		isSnatchable: false
 	},
 	roar: {
 		inherit: true,
@@ -578,6 +626,15 @@ exports.BattleMovedex = {
 		inherit: true,
 		isBounceable: false
 	},
+	suckerpunch: {
+		inherit: true,
+		onTryHit: function(target) {
+			decision = this.willMove(target);
+			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status') {
+				return false;
+			}
+		}
+	},
 	tackle: {
 		inherit: true,
 		accuracy: 95,
@@ -629,6 +686,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		//desc: "",
 		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
+		isSnatchable: false,
 		sideCondition: 'Wish',
 		effect: {
 			duration: 2,
