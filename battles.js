@@ -921,34 +921,21 @@ var BattlePokemon = (function() {
 		this.update();
 		return true;
 	};
-	BattlePokemon.prototype.hpPercent = function(d) {
-		//var percent = Math.floor(d*100/this.maxhp + 0.5);
-		var pixels = Math.floor(d*48/this.maxhp + 0.5) || 1;
-		if (d <= 0) pixels = 0;
-		if (pixels >= 48 && d < this.maxhp) pixels = 47;
-		return Math.floor(pixels*100/48);
-	};
 	BattlePokemon.prototype.getHealth = function(realHp) {
-		if (this.fainted) return ' (0 fnt)';
-		//var hpp = Math.floor(48*this.hp/this.maxhp) || 1;
+		if (this.fainted) return '0 fnt';
 		var hpstring;
 		if (realHp) {
 			hpstring = ''+this.hp+'/'+this.maxhp;
 		} else {
-			//var hpp = Math.floor(this.hp*100/this.maxhp + 0.5) || 1;
-			//if (!this.hp) hpp = 0;
-			//hpstring = ''+hpp+'/100';
-			var pixels = Math.floor(this.hp*48/this.maxhp + 0.5) || 1;
-			if (this.hp <= 0) pixels = 0;
-			if (pixels >= 48 && this.hp < this.maxhp) pixels = 47;
-			hpstring = ''+pixels+'/48';
+			var ratio = this.hp / this.maxhp;
+			var pixels = Math.floor(ratio * 48) || 1;
+			hpstring = '' + pixels + '/48';
+			if ((pixels === 9) && (ratio > 0.2)) {
+				hpstring += 'y'; // force yellow HP bar
+			}
 		}
-		var status = '';
-		if (this.status) status = ' '+this.status;
-		return ' ('+hpstring+status+')';
-	};
-	BattlePokemon.prototype.hpChange = function(d) {
-		return ''+this.hpPercent(d)+this.getHealth();
+		if (this.status) hpstring += ' ' + this.status;
+		return hpstring;
 	};
 	BattlePokemon.prototype.runImmunity = function(type, message) {
 		if (this.fainted) {
@@ -2211,15 +2198,15 @@ var Battle = (function() {
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
 		case 'partiallytrapped':
-			this.add('-damage', target, target.hpChange(damage), '[from] '+this.effectData.sourceEffect.fullname, '[partiallytrapped]');
+			this.add('-damage', target, target.getHealth(), '[from] '+this.effectData.sourceEffect.fullname, '[partiallytrapped]');
 			break;
 		default:
 			if (effect.effectType === 'Move') {
-				this.add('-damage', target, target.hpChange(damage));
+				this.add('-damage', target, target.getHealth());
 			} else if (source && source !== target) {
-				this.add('-damage', target, target.hpChange(damage), '[from] '+effect.fullname, '[of] '+source);
+				this.add('-damage', target, target.getHealth(), '[from] '+effect.fullname, '[of] '+source);
 			} else {
-				this.add('-damage', target, target.hpChange(damage), '[from] '+name);
+				this.add('-damage', target, target.getHealth(), '[from] '+name);
 			}
 			break;
 		}
@@ -2253,10 +2240,10 @@ var Battle = (function() {
 		damage = target.damage(damage, source, effect);
 		switch (effect.id) {
 		case 'strugglerecoil':
-			this.add('-damage', target, target.hpChange(damage), '[from] recoil');
+			this.add('-damage', target, target.getHealth(), '[from] recoil');
 			break;
 		default:
-			this.add('-damage', target, target.hpChange(damage));
+			this.add('-damage', target, target.getHealth());
 			break;
 		}
 		if (target.fainted) this.faint(target);
@@ -2280,20 +2267,20 @@ var Battle = (function() {
 		switch (effect.id) {
 		case 'leechseed':
 		case 'rest':
-			this.add('-heal', target, target.hpChange(damage), '[silent]');
+			this.add('-heal', target, target.getHealth(), '[silent]');
 			break;
 		case 'drain':
-			this.add('-heal', target, target.hpChange(damage), '[from] drain', '[of] '+source);
+			this.add('-heal', target, target.getHealth(), '[from] drain', '[of] '+source);
 			break;
 		case 'wish':
 			break;
 		default:
 			if (effect.effectType === 'Move') {
-				this.add('-heal', target, target.hpChange(damage));
+				this.add('-heal', target, target.getHealth());
 			} else if (source && source !== target) {
-				this.add('-heal', target, target.hpChange(damage), '[from] '+effect.fullname, '[of] '+source);
+				this.add('-heal', target, target.getHealth(), '[from] '+effect.fullname, '[of] '+source);
 			} else {
-				this.add('-heal', target, target.hpChange(damage), '[from] '+effect.fullname);
+				this.add('-heal', target, target.getHealth(), '[from] '+effect.fullname);
 			}
 			break;
 		}
