@@ -932,6 +932,8 @@ var BattlePokemon = (function() {
 			hpstring = '' + pixels + '/48';
 			if ((pixels === 9) && (ratio > 0.2)) {
 				hpstring += 'y'; // force yellow HP bar
+			} else if ((pixels === 24) && (ratio > 0.5)) {
+				hpstring += 'g'; // force green HP bar
 			}
 		}
 		if (this.status) hpstring += ' ' + this.status;
