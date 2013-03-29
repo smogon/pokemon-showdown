@@ -7959,7 +7959,7 @@ exports.BattleMovedex = {
 			var averagehp = Math.floor((target.hp + pokemon.hp) / 2) || 1;
 			target.sethp(averagehp);
 			pokemon.sethp(averagehp);
-			this.add('-sethp', target, target.getHealth(), pokemon, pokemon.hpChange(), '[from] move: Pain Split');
+			this.add('-sethp', target, target.getHealth(), pokemon, pokemon.getHealth(), '[from] move: Pain Split');
 		},
 		secondary: false,
 		target: "normal",
@@ -13240,7 +13240,7 @@ exports.BattleMovedex = {
 				if (!target.fainted) {
 					var source = this.effectData.source;
 					var damage = this.heal(this.effectData.hp, target, target);
-					if (damage) this.add('-heal', target, target.hpChange(damage), '[from] move: Wish', '[wisher] '+source.name);
+					if (damage) this.add('-heal', target, target.getHealth(), '[from] move: Wish', '[wisher] '+source.name);
 				}
 			}
 		},
