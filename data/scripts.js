@@ -372,7 +372,7 @@ exports.BattleScripts = {
 					this.add('-fail', target);
 					return false;
 				}
-				this.add('-heal', target, target.hpChange(d));
+				this.add('-heal', target, target.getHealth());
 				didSomething = true;
 			}
 			if (moveData.status) {

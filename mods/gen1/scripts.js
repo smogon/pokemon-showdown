@@ -442,7 +442,7 @@ exports.BattleScripts = {
 					this.add('-fail', target);
 					return false;
 				}
-				this.add('-heal', target, target.hpChange(d));
+				this.add('-heal', target, target.getHealth());
 				didSomething = true;
 			}
 			if (moveData.status) {
@@ -800,15 +800,15 @@ exports.BattleScripts = {
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
 		case 'partiallytrapped':
-			this.add('-damage', target, target.hpChange(damage), '[from] '+this.effectData.sourceEffect.fullname, '[partiallytrapped]');
+			this.add('-damage', target, target.getHealth(), '[from] '+this.effectData.sourceEffect.fullname, '[partiallytrapped]');
 			break;
 		default:
 			if (effect.effectType === 'Move') {
-				this.add('-damage', target, target.hpChange(damage));
+				this.add('-damage', target, target.getHealth());
 			} else if (source && source !== target) {
-				this.add('-damage', target, target.hpChange(damage), '[from] '+effect.fullname, '[of] '+source);
+				this.add('-damage', target, target.getHealth(), '[from] '+effect.fullname, '[of] '+source);
 			} else {
-				this.add('-damage', target, target.hpChange(damage), '[from] '+name);
+				this.add('-damage', target, target.getHealth(), '[from] '+name);
 			}
 			break;
 		}

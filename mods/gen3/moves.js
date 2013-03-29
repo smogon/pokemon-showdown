@@ -437,7 +437,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
-			var hpPercent = pokemon.hpPercent(pokemon.hp);
+			var hpPercent = pokemon.hp * 100 / pokemon.maxhp;
 			if (hpPercent <= 5) {
 				return 200;
 			}
@@ -922,7 +922,7 @@ exports.BattleMovedex = {
 				if (!target.fainted) {
 					var source = this.effectData.source;
 					var damage = this.heal(target.maxhp/2, target, target);
-					if (damage) this.add('-heal', target, target.hpChange(damage), '[from] move: Wish', '[wisher] '+source.name);
+					if (damage) this.add('-heal', target, target.getHealth(), '[from] move: Wish', '[wisher] '+source.name);
 				}
 			}
 		}
