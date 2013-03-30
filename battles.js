@@ -197,7 +197,7 @@ var BattlePokemon = (function() {
 					id: move.id,
 					pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
 					maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
-					target: (move.ghostTarget && (this.types[0]==='Ghost'||this.types[1]==='Ghost') ? move.ghostTarget : move.target),
+					target: (move.nonGhostTarget && (this.types[0]!=='Ghost'&&this.types[1]!=='Ghost') ? move.nonGhostTarget : move.target),
 					disabled: false,
 					used: false
 				});
