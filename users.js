@@ -525,6 +525,7 @@ var User = (function () {
 				else if (userid === "mjb") avatar = 1011;
 				else if (userid === "marty") avatar = 1012;
 				else if (userid === "theimmortal") avatar = 1013;
+				else if (userid === "aurora") avatar = 292;
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
