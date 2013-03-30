@@ -922,7 +922,7 @@ var BattlePokemon = (function() {
 		return true;
 	};
 	BattlePokemon.prototype.getHealth = function(realHp) {
-		if (this.fainted) return '0 fnt';
+		if (this.fainted || (this.status === 'fnt')) return '0 fnt';
 		var hpstring;
 		if (realHp) {
 			hpstring = ''+this.hp+'/'+this.maxhp;
