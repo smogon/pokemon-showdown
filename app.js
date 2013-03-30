@@ -21,9 +21,7 @@ function runNpm(command) {
 if ({'v0.10.0': 1, 'v0.10.1': 1}[process.version]) {
 	// See https://github.com/joyent/node/pull/5016
 	console.log('ERROR: You are using node ' + process.version + ', which has a bug that prevents');
-	console.log('       Pokemon Showdown from working properly. Please either (a) downgrade to');
-	console.log('       node v0.8.22, or (b) upgrade to node v0.10.2-pre, which is also known');
-	console.log('       to work, but is not released yet.');
+	console.log('       Pokemon Showdown from working properly. Please upgrade to node v0.10.2.');
 	process.exit(1);
 }
 
