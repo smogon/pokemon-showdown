@@ -161,7 +161,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
-	},*/
+	},
 	seasonalspringforward: {
 		effectType: 'Format',
 		name: "[Seasonal] Spring Forward",
@@ -242,15 +242,15 @@ exports.BattleFormats = {
 			}
 		},
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
-	},
+	},*/
 	seasonalfoolsfestival: {
 		effectType: 'Format',
 		name: "[Seasonal] Fools Festival",
 		team: 'randomSeasonalFF',
 		canUseRandomTeam: true,
 		rated: true,
-		challengeShow: false,
-		searchShow: false,
+		challengeShow: true,
+		searchShow: true,
 		onBegin: function() {
 			var dice = this.random(100);
 			if (dice < 65) {
