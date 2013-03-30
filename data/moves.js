@@ -2074,11 +2074,11 @@ exports.BattleMovedex = {
 				delete move.volatileStatus;
 				delete move.onHit;
 				move.self = { boosts: {atk:1,def:1,spe:-1}};
-				move.target = "self";
+				move.target = move.nonGhostTarget;
 			}
 		},
-		onTryHit: function(target, source) {
-			if (target.volatiles.curse) return false;
+		onTryHit: function(target, source, move) {
+			if (move.volatileStatus && target.volatiles.curse) return false;
 		},
 		onHit: function(target, source) {
 			this.directDamage(source.maxhp/2, source, source);
@@ -2094,7 +2094,7 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "normal",
-		ghostTarget: "self",
+		nonGhostTarget: "self",
 		type: "Ghost"
 	},
 	"cut": {
