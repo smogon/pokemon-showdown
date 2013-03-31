@@ -895,6 +895,18 @@ exports.BattleFormats = {
 		// no restrictions, for serious
 		ruleset: ['Team Preview']
 	},
+	tiershift: {
+		mod: 'tiershift',
+		section: 'OM of the Month',
+		effectType: 'Format',
+		name: "Tier Shift",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	},
 
 	// rules
 
