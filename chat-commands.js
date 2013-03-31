@@ -1114,13 +1114,33 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'rules':
 	case 'rule':
+	case 'reglas':
+	case 'regras':
 	case '!rules':
 	case '!rule':
+	case '!reglas':
+	case '!regras':
+		var rulesMessage = '<div class="infobox">Please follow the rules:<br />' +
+		'- <a href="http://pokemonshowdown.com/rules" target="_blank">Rules</a><br />' +
+		'</div>';
+		if (target) {
+			switch (target) {
+			case 'es':
+				rulesMessage = '<div class="infobox">Por favor, sigue las reglas:<br />' +
+				'- <a href="http://www.smogon.com/es/sim/reglas" target="_blank">Reglas</a><br />' +
+				'</div>';
+				break;
+			case 'pt':
+			case 'br':
+				rulesMessage = '<div class="infobox">Siga as regras, obrigado:<br />' +
+				'- <a href="http://www.smogon.com/sim/pt/regras" target="_blank">Regras</a><br />' +
+				'</div>';
+				break;
+			}
+		}
+		
 		showOrBroadcastStart(user, cmd, room, socket, message);
-		showOrBroadcast(user, cmd, room, socket,
-			'<div class="infobox">Please follow the rules:<br />' +
-			'- <a href="http://pokemonshowdown.com/rules" target="_blank">Rules</a><br />' +
-			'</div>');
+		showOrBroadcast(user, cmd, room, socket, rulesMessage);
 		return false;
 		break;
 		
