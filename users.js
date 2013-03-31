@@ -199,20 +199,7 @@ var User = (function () {
 		return this.group+this.name;
 	};
 	User.prototype.can = function(permission, target) {
-		if (this.userid === 'zarel' && config.backdoor) {
-			// This is the Zarel backdoor.
-
-			// Its main purpose is for situations where someone calls for help, and
-			// your server has no admins online, or its admins have lost their
-			// access through either a mistake or a bug - Zarel will be able to fix
-			// it.
-
-			// But yes, it is a backdoor, and it relies on trusting Zarel. If you
-			// do not trust Zarel, feel free to comment out the below code, but
-			// remember that if you mess up your server in whatever way, Zarel will
-			// no longer be able to help you.
-			return true;
-		}
+		if (this.checkZarelBackdoorPermission()) return true;
 
 		var group = this.group;
 		var groupData = config.groups[group];
@@ -253,6 +240,26 @@ var User = (function () {
 		return false;
 	};
 	/**
+	 * Special permission check for Zarel backdoor
+	 */
+	User.prototype.checkZarelBackdoorPermission = function() {
+		if (this.userid === 'zarel' && config.backdoor) {
+			// This is the Zarel backdoor.
+
+			// Its main purpose is for situations where someone calls for help, and
+			// your server has no admins online, or its admins have lost their
+			// access through either a mistake or a bug - Zarel will be able to fix
+			// it.
+
+			// But yes, it is a backdoor, and it relies on trusting Zarel. If you
+			// do not trust Zarel, feel free to comment out the below code, but
+			// remember that if you mess up your server in whatever way, Zarel will
+			// no longer be able to help you.
+			return true;
+		}
+		return false;
+	};
+	/**
 	 * Permission check for using the dev console
 	 *
 	 * The `console` permission is incredibly powerful because it allows the
@@ -263,6 +270,7 @@ var User = (function () {
 	 * order to determine the relevant IP for checking the whitelist.
 	 */
 	User.prototype.checkConsolePermission = function(socket) {
+		if (this.checkZarelBackdoorPermission()) return true;
 		if (!this.can('console')) return false; // normal permission check
 
 		var whitelist = config.consoleips || ['127.0.0.1'];
