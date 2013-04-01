@@ -552,6 +552,11 @@ var User = (function () {
 				}
 				this.roomCount = {};
 				this.connections = [];
+				// merge IPs
+				for (var ip in this.ips) {
+					if (user.ips[ip]) user.ips[ip] += this.ips[ip];
+					else user.ips[ip] = this.ips[ip];
+				}
 				this.ips = {};
 				this.markInactive();
 				if (!this.authenticated) {
@@ -595,11 +600,6 @@ var User = (function () {
 	User.prototype.merge = function(connection) {
 		this.connected = true;
 		this.connections.push(connection);
-		if (this.ips[connection.ip]) {
-			++this.ips[connection.ip];
-		} else {
-			this.ips[connection.ip] = 1;
-		}
 		//console.log(''+this.name+' merging: socket '+connection.socket.id+' of ');
 		emit(connection.socket, 'update', {
 			name: this.name,
@@ -660,9 +660,7 @@ var User = (function () {
 					this.leaveRoom(connection.rooms[j], socket);
 				}
 				connection.user = null;
-				if (--this.ips[connection.ip] === 0) {
-					delete this.ips[connection.ip];
-				}
+				--this.ips[connection.ip];
 				this.connections.splice(i,1);
 				break;
 			}
@@ -805,9 +803,9 @@ var User = (function () {
 			} else {
 				connection.socket.end();
 			}
+			--this.ips[connection.ip];
 		}
 		this.connections = [];
-		this.ips = {};
 	};
 	User.prototype.getConnectionFromSocket = function(socket) {
 		for (var i = 0; ; ++i) {
