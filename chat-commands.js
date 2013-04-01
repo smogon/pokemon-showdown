@@ -1107,7 +1107,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3467120" target="_blank">Glitchmons</a><br />' +
 			'- <a href="http://www.smogon.com/sim/seasonal" target="_blank">Seasonal: Fools Festival</a><br />' +
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3476469" target="_blank">Smogon Doubles</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3471161" target="_blank">VGC 2013</a>' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3471161" target="_blank">VGC 2013</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3481155" target="_blank">OM of the Month: Tier Shift</a>' +
 			'</div>');
 		return false;
 		break;
