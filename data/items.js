@@ -368,8 +368,8 @@ exports.BattleItems = {
 	"cherishball": {
 		id: "cherishball",
 		name: "Cherish Ball",
-		spritenum: 66,
-		desc: "A quite rare Poké Ball that has been especially crafted to commemorate an occasion of some sort."
+		spritenum: 64,
+		desc: "A rare Poke Ball that has been crafted to commemorate an occasion."
 	},
 	"chestoberry": {
 		id: "chestoberry",
@@ -668,13 +668,7 @@ exports.BattleItems = {
 		id: "diveball",
 		name: "Dive Ball",
 		spritenum: 101,
-		desc: "A somewhat different Poké Ball that works especially well on Pokémon that live underwater."
-	},
-	"duskball": {
-		id: "duskball",
-		name: "Dusk Ball",
-		spritenum: 115,
-		desc: "A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places like caves."
+		desc: "A Poke Ball that works especially well on Pokemon that live underwater."
 	},
 	"domefossil": {
 		id: "domefossil",
@@ -758,7 +752,7 @@ exports.BattleItems = {
 		id: "dreamball",
 		name: "Dream Ball",
 		spritenum: 111,
-		desc: "A special Poké Ball that appears out of nowhere in a bag at the Entree Forest. It can catch any Pokémon."
+		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest."
 	},
 	"durinberry": {
 		id: "durinberry",
@@ -770,6 +764,12 @@ exports.BattleItems = {
 			type: "Water"
 		},
 		desc: "No competitive use."
+	},
+	"duskball": {
+		id: "duskball",
+		name: "Dusk Ball",
+		spritenum: 115,
+		desc: "A Poke Ball that makes it easier to catch wild Pokemon at night or in caves."
 	},
 	"earthplate": {
 		id: "earthplate",
@@ -904,7 +904,7 @@ exports.BattleItems = {
 		id: "fastball",
 		name: "Fast Ball",
 		spritenum: 137,
-		desc: "A Poké Ball that makes it easier to catch Pokémon which are quick to run away."
+		desc: "A Poke Ball that makes it easier to catch Pokemon which are quick to run away."
 	},
 	"fightinggem": {
 		id: "fightinggem",
@@ -1131,7 +1131,7 @@ exports.BattleItems = {
 		id: "greatball",
 		name: "Great Ball",
 		spritenum: 174,
-		desc: "A good, high-performance Ball that provides a higher Pokémon catch rate than a standard."
+		desc: "A high-performance Ball that provides a higher catch rate than a Poke Ball."
 	},
 	"grepaberry": {
 		id: "grepaberry",
@@ -1226,7 +1226,7 @@ exports.BattleItems = {
 		id: "healball",
 		name: "Heal Ball",
 		spritenum: 188,
-		desc: "A remedial Poké Ball that restores the caught Pokémon's HP and eliminates any status problem."
+		desc: "A remedial Poke Ball that restores the caught Pokemon's HP and status problem."
 	},
 	"heatrock": {
 		id: "heatrock",
@@ -1241,7 +1241,7 @@ exports.BattleItems = {
 		id: "heavyball",
 		name: "Heavy Ball",
 		spritenum: 194,
-		desc: "A Poké Ball for catching very heavy Pokémon."
+		desc: "A Poke Ball for catching very heavy Pokemon."
 	},
 	"helixfossil": {
 		id: "helixfossil",
@@ -1563,7 +1563,7 @@ exports.BattleItems = {
 		id: "levelball",
 		name: "Level Ball",
 		spritenum: 246,
-		desc: "A Poké Ball for catching Pokémon that are a lower level than your own."
+		desc: "A Poke Ball for catching Pokemon that are a lower level than your own."
 	},
 	"liechiberry": {
 		id: "liechiberry",
@@ -1640,7 +1640,7 @@ exports.BattleItems = {
 		id: "loveball",
 		name: "Love Ball",
 		spritenum: 258,
-		desc: "Poké Ball for catching Pokémon that are the opposite gender of your Pokémon."
+		desc: "Poke Ball for catching Pokemon that are the opposite gender of your Pokemon."
 	},
 	"luckypunch": {
 		id: "luckypunch",
@@ -1680,7 +1680,7 @@ exports.BattleItems = {
 		id: "lureball",
 		name: "Lure Ball",
 		spritenum: 264,
-		desc: "A Poké Ball for catching Pokémon hooked by a Rod when fishing."
+		desc: "A Poke Ball for catching Pokemon hooked by a Rod when fishing."
 	},
 	"lustrousorb": {
 		id: "lustrousorb",
@@ -1700,7 +1700,7 @@ exports.BattleItems = {
 		id: "luxuryball",
 		name: "Luxury Ball",
 		spritenum: 266,
-		desc: "A comfortable Poké Ball that makes a caught wild Pokémon quickly grow friendly."
+		desc: "A comfortable Poke Ball that makes a caught wild Pokemon quickly grow friendly."
 	},
 	"machobrace": {
 		id: "machobrace",
@@ -1765,7 +1765,7 @@ exports.BattleItems = {
 		id: "masterball",
 		name: "Master Ball",
 		spritenum: 276,
-		desc: "The best Ball with the ultimate level of performance. It will catch any wild Pokémon."
+		desc: "The best Ball with the ultimate performance. It will catch any wild Pokemon."
 	},
 	"meadowplate": {
 		id: "meadowplate",
@@ -1903,7 +1903,7 @@ exports.BattleItems = {
 		id: "moonball",
 		name: "Moon Ball",
 		spritenum: 294,
-		desc: "A Poké Ball for catching Pokémon that evolve using the Moon Stone."
+		desc: "A Poke Ball for catching Pokemon that evolve using the Moon Stone."
 	},
 	"mindplate": {
 		id: "mindplate",
@@ -1977,13 +1977,13 @@ exports.BattleItems = {
 		id: "nestball",
 		name: "Nest Ball",
 		spritenum: 303,
-		desc: "A somewhat different Poké Ball that works especially well on weaker Pokémon in the wild."
+		desc: "A Poke Ball that works especially well on weaker Pokemon in the wild."
 	},
 	"netball": {
 		id: "netball",
 		name: "Net Ball",
 		spritenum: 304,
-		desc: "A somewhat different Poké Ball that works especially well on Water- and Bug-type Pokémon."
+		desc: "A Poke Ball that works especially well on Water- and Bug-type Pokemon."
 	},
 	"nevermeltice": {
 		id: "nevermeltice",
@@ -2102,7 +2102,7 @@ exports.BattleItems = {
 		id: "parkball",
 		name: "Park Ball",
 		spritenum: 325,
-		desc: "A special Poké Ball for the Pal Park."
+		desc: "A special Poke Ball for the Pal Park."
 	},
 	"passhoberry": {
 		id: "passhoberry",
@@ -2257,7 +2257,7 @@ exports.BattleItems = {
 		id: "pokeball",
 		name: "Poke Ball",
 		spritenum: 345,
-		desc: "A device for catching wild Pokémon. It is thrown like a ball at the target. It is designed as a capsule system."
+		desc: "A device for catching wild Pokemon. It is designed as a capsule system."
 	},
 	"pomegberry": {
 		id: "pomegberry",
@@ -2289,7 +2289,7 @@ exports.BattleItems = {
 		id: "premierball",
 		name: "Premier Ball",
 		spritenum: 363,
-		desc: "A somewhat rare Poké Ball that has been specially made to commemorate an event of some sort."
+		desc: "A rare Poke Ball that has been crafted to commemorate an event."
 	},
 	"psychicgem": {
 		id: "psychicgem",
@@ -2321,7 +2321,7 @@ exports.BattleItems = {
 		id: "quickball",
 		name: "Quick Ball",
 		spritenum: 372,
-		desc: "A somewhat different Poké Ball that provides a better catch rate if it is used at the start of a wild encounter."
+		desc: "A Poke Ball that provides a better catch rate at the start of a wild encounter."
 	},
 	"quickclaw": {
 		id: "quickclaw",
@@ -2460,7 +2460,7 @@ exports.BattleItems = {
 		id: "repeatball",
 		name: "Repeat Ball",
 		spritenum: 401,
-		desc: "A somewhat different Poké Ball that works especially well on Pokémon species that were previously caught."
+		desc: "A Poke Ball that works well on Pokemon species that were previously caught."
 	},
 	"rindoberry": {
 		id: "rindoberry",
@@ -2585,7 +2585,7 @@ exports.BattleItems = {
 		id: "safariball",
 		name: "Safari Ball",
 		spritenum: 425,
-		desc: "A special Poké Ball that is used only in the Great Marsh. It is decorated in a camouflage pattern."
+		desc: "A special Poke Ball that is used only in the Safari Zone and Great Marsh."
 	},
 	"salacberry": {
 		id: "salacberry",
@@ -2875,7 +2875,7 @@ exports.BattleItems = {
 		id: "sportball",
 		name: "Sport Ball",
 		spritenum: 465,
-		desc: "A special Poké Ball for the Bug-Catching Contest."
+		desc: "A special Poke Ball for the Bug-Catching Contest."
 	},
 	"starfberry": {
 		id: "starfberry",
@@ -3021,7 +3021,7 @@ exports.BattleItems = {
 		id: "timerball",
 		name: "Timer Ball",
 		spritenum: 494,
-		desc: "A somewhat different Ball that becomes progressively better the more turns there are in a battle."
+		desc: "A Poke Ball that becomes better the more turns there are in a battle."
 	},
 	"toxicorb": {
 		id: "toxicorb",
@@ -3074,7 +3074,7 @@ exports.BattleItems = {
 		id: "ultraball",
 		name: "Ultra Ball",
 		spritenum: 521,
-		desc: "An ultra-performance Ball that provides a higher Pokémon catch rate than a Great Ball."
+		desc: "An ultra-performance Ball that provides a higher catch rate than a Great Ball."
 	},
 	"wacanberry": {
 		id: "wacanberry",
