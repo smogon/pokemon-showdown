@@ -678,7 +678,7 @@ exports.BattleScripts = {
 			hasMove = {};
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
-				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0,
+				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
 				recoil: 0, inaccurate: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
@@ -703,8 +703,9 @@ exports.BattleScripts = {
 				if (move.recoil) {
 					counter['recoil']++;
 				}
-				if ((move.basePower || move.basePowerCallback) && hasType[move.type]) {
-					counter['adaptability']++;
+				if (move.basePower || move.basePowerCallback) {
+					if (hasType[move.type]) counter['adaptability']++;
+					if (move.category === 'Physical') counter['hustle']++;
 				}
 				if (move.secondary) {
 					if (move.secondary.chance < 50) {
@@ -798,7 +799,10 @@ exports.BattleScripts = {
 				case 'knockoff': case 'perishsong': case 'magiccoat': case 'spikes':
 					if (setupType) rejected = true;
 					break;
-				case 'uturn': case 'voltswitch': case 'relicsong':
+				case 'uturn': case 'voltswitch':
+					if (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
+					break;
+				case 'relicsong':
 					if (setupType) rejected = true;
 					break;
 				case 'pursuit': case 'protect': case 'haze': case 'stealthrock':
@@ -808,7 +812,7 @@ exports.BattleScripts = {
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['batonpass']) rejected = true;
 					break;
 				case 'dragontail':
-					if (hasMove['rockpolish']) rejected = true;
+					if (hasMove['agility'] || hasMove['rockpolish']) rejected = true;
 					break;
 
 				// bit redundant to have both
@@ -1035,13 +1039,23 @@ exports.BattleScripts = {
 				if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
 					rejectAbility = true;
 				}
-				if (ability === 'Hustle' && !counter['Physical']) {
+				if (ability === 'Hustle' && !counter['hustle']) {
+					rejectAbility = true;
+				}
+				if (ability === 'Simple' && !setupType && !hasMove['flamecharge']) {
 					rejectAbility = true;
 				}
 				if (ability === 'Prankster' && !counter['Status']) {
 					rejectAbility = true;
 				}
 				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
+					rejectAbility = true;
+				}
+				// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
+				if (ability === 'Swift Swift' && !hasMove['raindance']) {
+					rejectAbility = true;
+				}
+				if (ability === 'Chlorophyll' && !hasMove['sunnyday']) {
 					rejectAbility = true;
 				}
 				if (ability === 'Moody' && template.id !== 'bidoof') {
@@ -1066,6 +1080,10 @@ exports.BattleScripts = {
 				}
 				if ((abilities[0] === 'Chlorophyll' || abilities[1] === 'Chlorophyll' || abilities[2] === 'Chlorophyll') && ability !== 'Solar Power' && hasMove['sunnyday']) {
 					ability = 'Chlorophyll';
+				}
+				if (template.id === 'combee') {
+					// it always gets Hustle but its only physical move is Endeavor, which loses accuracy
+					ability = 'Honey Gather';
 				}
 			}
 
@@ -1267,7 +1285,7 @@ exports.BattleScripts = {
 			Snover: 95, Vulpix: 95, Excadrill: 78, Ninetales: 78, Tentacruel: 78, Toxicroak: 78, Venusaur: 78, "Tornadus-Therian": 74,
 
 			// Holistic judgment
-			Carvanha: 90, Blaziken: 74, Garchomp: 74, Thundurus: 74
+			Carvanha: 90, Blaziken: 74, "Deoxys-Defense": 74, "Deoxys-Speed": 74, Garchomp: 74, Thundurus: 74
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
