@@ -46,28 +46,68 @@ if (!fs.existsSync) {
 var http = require("http");
 var url = require('url');
 
-LoginServer = {
-	parseJSON: function(json) {
+LoginServer = (function() {
+	function LoginServer(uri) {
+		console.log('Creating LoginServer object for ' + uri + '...');
+		this.uri = uri;
+		this.requestQueue = [];
+		LoginServer.loginServers[this.uri] = this;
+	}
+
+	// "static" mapping of URIs to LoginServer objects
+	LoginServer.loginServers = {};
+
+	// "static" flag
+	LoginServer.disabled = false;
+
+	LoginServer.prototype.requestTimer = null;
+	LoginServer.prototype.requestTimeoutTimer = null;
+	LoginServer.prototype.requestLog = '';
+	LoginServer.prototype.lastRequest = 0;
+	LoginServer.prototype.openRequests = 0;
+
+	var getLoginServer = function(action) {
+		var uri;
+		if (config.loginservers) {
+			uri = config.loginservers[action] || config.loginservers[null];
+		} else {
+			uri = config.loginserver;
+		}
+		if (!uri) {
+			console.log('ERROR: No login server specified for action: ' + action);
+			return;
+		}
+		return LoginServer.loginServers[uri] || new LoginServer(uri);
+	};
+	LoginServer.instantRequest = function(action, data, callback) {
+		return getLoginServer(action).instantRequest(action, data, callback);
+	};
+	LoginServer.request = function(action, data, callback) {
+		return getLoginServer(action).request(action, data, callback);
+	};
+
+	var parseJSON = function(json) {
 		if (json[0] === ']') json = json.substr(1);
 		return JSON.parse(json);
-	},
-	instantRequest: function(action, data, callback) {
+	};
+
+	LoginServer.prototype.instantRequest = function(action, data, callback) {
 		if (typeof data === 'function') {
 			callback = data;
 			data = null;
 		}
-		if (LoginServer.openRequests > 5) {
+		if (this.openRequests > 5) {
 			callback(null, null, 'overflow');
 			return;
 		}
-		LoginServer.openRequests++;
+		this.openRequests++;
 		var dataString = '';
 		if (data) {
 			for (var i in data) {
 				dataString += '&'+i+'='+encodeURIComponent(''+data[i]);
 			}
 		}
-		var req = http.get(url.parse(config.loginserver+'action.php?act='+action+'&serverid='+config.serverid+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()+dataString), function(res) {
+		var req = http.get(url.parse(this.uri+'action.php?act='+action+'&serverid='+config.serverid+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()+dataString), function(res) {
 			var buffer = '';
 			res.setEncoding('utf8');
 
@@ -78,28 +118,26 @@ LoginServer = {
 			res.on('end', function() {
 				var data = null;
 				try {
-					var data = LoginServer.parseJSON(buffer);
+					var data = parseJSON(buffer);
 				} catch (e) {}
 				callback(data, res.statusCode);
-				LoginServer.openRequests--;
+				this.openRequests--;
 			});
 		});
 
 		req.on('error', function(error) {
 			callback(null, null, error);
-			LoginServer.openRequests--;
+			this.openRequests--;
 		});
 
 		req.end();
-	},
-	requestQueue: [],
-	disabled: false,
-	request: function(action, data, callback) {
+	};
+	LoginServer.prototype.request = function(action, data, callback) {
 		if (typeof data === 'function') {
 			callback = data;
 			data = null;
 		}
-		if (this.disabled) {
+		if (LoginServer.disabled) {
 			callback(null, null, 'disabled');
 			return;
 		}
@@ -108,10 +146,8 @@ LoginServer = {
 		data.callback = callback;
 		this.requestQueue.push(data);
 		this.requestTimerPoke();
-	},
-	requestTimer: null,
-	requestTimeoutTimer: null,
-	requestTimerPoke: function() {
+	};
+	LoginServer.prototype.requestTimerPoke = function() {
 		// "poke" the request timer, i.e. make sure it knows it should make
 		// a request soon
 
@@ -119,8 +155,8 @@ LoginServer = {
 		if (this.openRequests || this.requestTimer || !this.requestQueue.length) return;
 
 		this.requestTimer = setTimeout(this.makeRequests.bind(this), LOGIN_SERVER_BATCH_TIME);
-	},
-	makeRequests: function() {
+	};
+	LoginServer.prototype.makeRequests = function() {
 		this.requestTimer = null;
 		var self = this;
 		var requests = this.requestQueue;
@@ -137,7 +173,7 @@ LoginServer = {
 
 		this.requestStart(requests.length);
 		var postData = 'serverid='+config.serverid+'&servertoken='+config.servertoken+'&nocache='+new Date().getTime()+'&json='+encodeURIComponent(JSON.stringify(requests))+'\n';
-		var requestOptions = url.parse(config.loginserver+'action.php');
+		var requestOptions = url.parse(this.uri+'action.php');
 		requestOptions.method = 'post';
 		requestOptions.headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
@@ -181,7 +217,7 @@ LoginServer = {
 				//console.log('RESPONSE: '+buffer);
 				var data = null;
 				try {
-					var data = LoginServer.parseJSON(buffer);
+					var data = parseJSON(buffer);
 				} catch (e) {}
 				for (var i=0,len=requestCallbacks.length; i<len; i++) {
 					if (data) {
@@ -205,25 +241,24 @@ LoginServer = {
 
 		req.write(postData);
 		req.end();
-	},
-	requestStart: function(size) {
+	};
+	LoginServer.prototype.requestStart = function(size) {
 		this.lastRequest = Date.now();
 		this.requestLog += ' | '+size+' requests: ';
 		this.openRequests++;
-	},
-	requestEnd: function() {
+	};
+	LoginServer.prototype.requestEnd = function() {
 		this.openRequests = 0;
 		this.requestLog += ''+(Date.now() - this.lastRequest).duration();
 		this.requestLog = this.requestLog.substr(-1000);
 		this.requestTimerPoke();
-	},
-	getLog: function() {
+	};
+	LoginServer.prototype.getLog = function() {
 		return this.requestLog + (this.lastRequest?' ('+(Date.now() - this.lastRequest).duration()+' since last request)':'');
-	},
-	requestLog: '',
-	lastRequest: 0,
-	openRequests: 0
-};
+	};
+
+	return LoginServer;
+})();
 
 // Synchronously copy config-example.js over to config.js if it doesn't exist
 if (!fs.existsSync('./config/config.js')) {
