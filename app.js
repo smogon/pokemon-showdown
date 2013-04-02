@@ -47,6 +47,10 @@ var http = require("http");
 var url = require('url');
 
 LoginServer = {
+	parseJSON: function(json) {
+		if (json[0] === ']') json = json.substr(1);
+		return JSON.parse(json);
+	},
 	instantRequest: function(action, data, callback) {
 		if (typeof data === 'function') {
 			callback = data;
@@ -74,7 +78,7 @@ LoginServer = {
 			res.on('end', function() {
 				var data = null;
 				try {
-					var data = JSON.parse(buffer);
+					var data = LoginServer.parseJSON(buffer);
 				} catch (e) {}
 				callback(data, res.statusCode);
 				LoginServer.openRequests--;
@@ -177,7 +181,7 @@ LoginServer = {
 				//console.log('RESPONSE: '+buffer);
 				var data = null;
 				try {
-					var data = JSON.parse(buffer);
+					var data = LoginServer.parseJSON(buffer);
 				} catch (e) {}
 				for (var i=0,len=requestCallbacks.length; i<len; i++) {
 					if (data) {
