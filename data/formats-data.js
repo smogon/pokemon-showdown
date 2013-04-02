@@ -1089,7 +1089,7 @@ exports.BattleFormatsData = {
 	jynx: {
 		viableMoves: {"icebeam":1,"psychic":1,"focusblast":1,"trick":1,"shadowball":1,"nastyplot":1,"lovelykiss":1,"substitute":1,"energyball":1},
 		dreamWorldRelease: true,
-		tier: "BL3"
+		tier: "NU"
 	},
 	elekid: {
 		viableMoves: {"thunderbolt":1,"crosschop":1,"voltswitch":1,"substitute":1,"icepunch":1,"psychic":1},
