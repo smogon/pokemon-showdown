@@ -1,10 +1,13 @@
 exports.BattleFormats = {
 
-	// formats
+	// Singles
+	///////////////////////////////////////////////////////////////////
 
 	randombattle: {
-		effectType: 'Format',
 		name: "Random Battle",
+		section: "Singles",
+
+		effectType: 'Format',
 		team: 'random',
 		canUseRandomTeam: true,
 		searchDefault: true,
@@ -14,12 +17,365 @@ exports.BattleFormats = {
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	unratedrandombattle: {
-		effectType: 'Format',
 		name: "Unrated Random Battle",
+		section: "Singles",
+
+		effectType: 'Format',
 		team: 'random',
 		canUseRandomTeam: true,
 		searchShow: true,
 		ruleset: ['Random Battle']
+	},
+	challengecup: {
+		name: "Challenge Cup",
+		section: "Singles",
+
+		effectType: 'Format',
+		team: 'randomCC',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['Pokemon']
+	},
+	challengecup1vs1: {
+		name: "Challenge Cup 1-vs-1",
+		section: "Singles",
+
+		effectType: 'Format',
+		team: 'randomCC',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['Pokemon', 'Team Preview 1v1'],
+		onBegin: function() {
+			this.debug('Cutting down to 1');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	ou: {
+		name: "OU",
+		section: "Singles",
+
+		effectType: 'Format',
+		challengeDefault: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	},
+	//oucurrent: {
+	//	effectType: 'Format',
+	//	name: "OU (current)",
+	//	challengeDefault: true,
+	//	rated: true,
+	//	challengeShow: true,
+	//	searchShow: true,
+	//	isTeambuilderFormat: true,
+	//	ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+	//	banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	//},
+	/*oususpecttest: {
+		effectType: 'Format',
+		name: "OU (suspect test)",
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		teambuilderFormat: 'ou',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		//  banlist: [
+			// 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Excadrill', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Thundurus', 'Zekrom', 'Kyurem-White', 'Drizzle ++ Swift Swim', 'Soul Dew'
+		// ] 
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Deoxys-Defense']
+	},*/
+	cap: {
+		name: "CAP",
+		section: "Singles",
+
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+	 	searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	},
+	// capaurumothplaytest: {
+	// 	effectType: 'Format',
+	// 	name: "CAP Aurumoth Playtest",
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	rated: true,
+	// 	ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
+	// 	banlist: ['G4CAP','Tomohawk','Necturna','Mollux','Kyurem-Black','Garchomp','ShadowStrike','Paleo Wave','Drizzle ++ Swift Swim', 'Soul Dew','Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Excadrill', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Thundurus', 'Zekrom', 'Kyurem-White']
+	// },
+	ubers: {
+		name: "Ubers",
+		section: "Singles",
+
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
+		banlist: []
+	},
+	// uberssuspecttest: {
+	// 	name: "Ubers (suspect test)",
+	// 	section: "Singles",
+
+	// 	effectType: 'Format',
+	// 	rated: true,
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	isTeambuilderFormat: true,
+	// 	ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause', 'OHKO Clause'],
+	// 	banlist: ['Unreleased', 'Illegal']
+	// },
+	uu: {
+		name: "UU",
+		section: "Singles",
+
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
+	},
+	// uususpecttest: {
+	// 	effectType: 'Format',
+	// 	name: "UU (suspect test)",
+	// 	rated: true,
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	ruleset: ['OU'],
+	// 	banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
+	// },
+	ru: {
+		name: "RU",
+		section: "Singles",
+
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
+	},
+	// rucurrent: {
+	// 	effectType: 'Format',
+	// 	name: "RU (current)",
+	// 	rated: true,
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	ruleset: ['UU'],
+	// 	banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
+	// },
+	// rususpecttest: {
+	// 	effectType: 'Format',
+	// 	name: "RU (Suspect Test)",
+	// 	rated: true,
+	// 	challengeShow: true,
+	// 	searchShow: true,
+	// 	isTeambuilderFormat: true,
+	// 	ruleset: ['UU'],
+	// 	banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
+	// },
+	nu: {
+		name: "NU",
+		section: "Singles",
+
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['RU'],
+		banlist: ['RU','BL3']
+	},
+	lc: {
+		name: "LC",
+		section: "Singles",
+
+		effectType: 'Format',
+		maxLevel: 5,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
+	},
+	customgame: {
+		name: "Custom Game",
+		section: "Singles",
+
+		effectType: 'Format',
+		challengeShow: true,
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 1000,
+		// no restrictions, for serious
+		ruleset: ['Team Preview']
+	},
+	customgamenoteampreview: {
+		name: "Custom Game (no Team Preview)",
+		section: "Singles",
+
+		effectType: 'Format',
+		challengeShow: true,
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 1000,
+		// no restrictions, for serious
+		ruleset: []
+	},
+
+	// Doubles
+	///////////////////////////////////////////////////////////////////
+
+	doublesvgc2013dev: {
+		name: "Doubles VGC 2013 (dev)",
+		section: 'Doubles',
+
+		effectType: 'Format',
+		gameType: 'doubles',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		debug: true,
+		onBegin: function() {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		maxForcedLevel: 50,
+		// no restrictions, for serious
+		ruleset: ['Pokemon', 'Team Preview VGC', 'Species Clause', 'Item Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
+			'Mewtwo',
+			'Mew',
+			'Lugia',
+			'Ho-Oh',
+			'Celebi',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Jirachi',
+			'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Deoxys-Defense',
+			'Chatot',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Phione',
+			'Manaphy',
+			'Darkrai',
+			'Shaymin', 'Shaymin-Sky',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Victini',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem', 'Kyurem-Black', 'Kyurem-White',
+			'Keldeo', 'Keldeo-Resolute',
+			'Meloetta',
+			'Genesect'
+		]
+	},
+	smogondoubles: {
+		name: "Smogon Doubles",
+		section: 'Doubles',
+
+		effectType: 'Format',
+		gameType: 'doubles',
+		challengeShow: true,
+		searchShow: true,
+		rated: true,
+		debug: true,
+		// no restrictions, for serious
+		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
+			'Mewtwo',
+			'Lugia',
+			'Ho-Oh',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem-White'
+		]
+	},
+	doublesrandombattledev: {
+		name: "Doubles Random Battle (dev)",
+		section: 'Doubles',
+
+		effectType: 'Format',
+		gameType: 'doubles',
+		team: 'random',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		debug: true,
+		ruleset: ['PotD', 'Pokemon']
+	},
+	doubleschallengecup: {
+		name: "Doubles Challenge Cup",
+		section: 'Doubles',
+
+		effectType: 'Format',
+		gameType: 'doubles',
+		team: 'randomCC',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		debug: true,
+		ruleset: ['Pokemon']
+	},
+	doublescustomgame: {
+		name: "Doubles Custom Game",
+		section: 'Doubles',
+
+		effectType: 'Format',
+		gameType: 'doubles',
+		challengeShow: true,
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 1000,
+		// no restrictions, for serious
+		ruleset: ['Team Preview']
+	},
+
+	// Other Metagames
+	///////////////////////////////////////////////////////////////////
+
+	tiershift: {
+		name: "Tier Shift",
+		section: 'OM of the Month',
+
+		mod: 'tiershift',
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	/* seasonalseasoningsgreetings: {
 		effectType: 'Format',
@@ -244,8 +600,10 @@ exports.BattleFormats = {
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},*/
 	seasonalfoolsfestival: {
-		effectType: 'Format',
 		name: "[Seasonal] Fools Festival",
+		section: 'OM of the Month',
+
+		effectType: 'Format',
 		team: 'randomSeasonalFF',
 		canUseRandomTeam: true,
 		rated: true,
@@ -455,223 +813,11 @@ exports.BattleFormats = {
 		},
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
-	challengecup: {
-		effectType: 'Format',
-		name: "Challenge Cup",
-		team: 'randomCC',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		ruleset: ['Pokemon']
-	},
-	challengecup1vs1: {
-		effectType: 'Format',
-		name: "Challenge Cup 1-vs-1",
-		team: 'randomCC',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		ruleset: ['Pokemon', 'Team Preview 1v1'],
-		onBegin: function() {
-			this.debug('Cutting down to 1');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
-	},
-	ou: {
-		effectType: 'Format',
-		name: "OU",
-		challengeDefault: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
-	//oucurrent: {
-	//	effectType: 'Format',
-	//	name: "OU (current)",
-	//	challengeDefault: true,
-	//	rated: true,
-	//	challengeShow: true,
-	//	searchShow: true,
-	//	isTeambuilderFormat: true,
-	//	ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-	//	banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	//},
-	/*oususpecttest: {
-		effectType: 'Format',
-		name: "OU (suspect test)",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		teambuilderFormat: 'ou',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		//  banlist: [
-			// 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Excadrill', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Thundurus', 'Zekrom', 'Kyurem-White', 'Drizzle ++ Swift Swim', 'Soul Dew'
-		// ] 
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Deoxys-Defense']
-	},*/
-	cap: {
-		effectType: 'Format',
-		name: "CAP",
-		rated: true,
-		challengeShow: true,
-	 	searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
-	// capaurumothplaytest: {
-	// 	effectType: 'Format',
-	// 	name: "CAP Aurumoth Playtest",
-	// 	challengeShow: true,
-	// 	searchShow: true,
-	// 	rated: true,
-	// 	ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
-	// 	banlist: ['G4CAP','Tomohawk','Necturna','Mollux','Kyurem-Black','Garchomp','ShadowStrike','Paleo Wave','Drizzle ++ Swift Swim', 'Soul Dew','Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Excadrill', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Thundurus', 'Zekrom', 'Kyurem-White']
-	// },
-	ubers: {
-		effectType: 'Format',
-		name: "Ubers",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
-		banlist: []
-	},
-	// uberssuspecttest: {
-	// 	effectType: 'Format',
-	// 	name: "Ubers (suspect test)",
-	// 	rated: true,
-	// 	challengeShow: true,
-	// 	searchShow: true,
-	// 	isTeambuilderFormat: true,
-	// 	ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
-	// 	banlist: []
-	// },
-	uu: {
-		effectType: 'Format',
-		name: "UU",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
-	},
-	// uususpecttest: {
-	// 	effectType: 'Format',
-	// 	name: "UU (suspect test)",
-	// 	rated: true,
-	// 	challengeShow: true,
-	// 	searchShow: true,
-	// 	ruleset: ['OU'],
-	// 	banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
-	// },
-	ru: {
-		effectType: 'Format',
-		name: "RU",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['UU'],
-		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
-	},
-	// rucurrent: {
-	// 	effectType: 'Format',
-	// 	name: "RU (current)",
-	// 	rated: true,
-	// 	challengeShow: true,
-	// 	searchShow: true,
-	// 	ruleset: ['UU'],
-	// 	banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
-	// },
-	// rususpecttest: {
-	// 	effectType: 'Format',
-	// 	name: "RU (Suspect Test)",
-	// 	rated: true,
-	// 	challengeShow: true,
-	// 	searchShow: true,
-	// 	isTeambuilderFormat: true,
-	// 	ruleset: ['UU'],
-	// 	banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
-	// },
-	nu: {
-		effectType: 'Format',
-		name: "NU",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['RU'],
-		banlist: ['RU','BL3']
-	},
-	lc: {
-		effectType: 'Format',
-		name: "LC",
-		maxLevel: 5,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
-	},
-	lcubers: {
-		effectType: 'Format',
-		name: "LC Ubers",
-		maxLevel: 5,
-		challengeShow: true,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Soul Dew']
-	},
-	lcuu: {
-		effectType: 'Format',
-		name: "LC UU",
-		maxLevel: 5,
-		challengeShow: true,
-		ruleset: ['LC'],
-		banlist: ['Abra', 'Aipom', 'Archen', 'Aron', 'Axew', 'Bronzor', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos', 'Croagunk', 'Diglett', 'Dratini', 'Drifloon', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Foongus', 'Frillish', 'Gastly', 'Hippopotas', 'Houndour', 'Larvesta', 'Lileep', 'Magnemite', 'Meowth', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Murkrow', 'Onix', 'Pawniard', 'Ponyta', 'Porygon', 'Riolu', 'Sandshrew', 'Scraggy', 'Shellder', 'Snover', 'Staryu', 'Taillow', 'Tentacool', 'Timburr', 'Tirtouga']
-	},
-	dwubers: {
-		effectType: 'Format',
-		name: "DW Ubers",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		isDWtier: true,
-		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
-		banlist: []
-	},
-	dwou: {
-		effectType: 'Format',
-		name: "DW OU",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
-		banlist: ['Drizzle ++ Swift Swim', 'Soul Dew', 'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Zekrom']
-	},
-	dwuu: {
-		effectType: 'Format',
-		name: "DW UU",
-		challengeShow: true,
-		ruleset: ['DW OU'],
-		banlist: ['Chandelure', 'Genesect', 'Tyranitar', 'Dragonite', 'Breloom', 'Ferrothorn', 'Politoed', 'Gliscor', 'Ninetales', 'Scizor', 'Excadrill', 'Keldeo', 'Infernape', 'Venusaur', 'Heatran', 'Rotom-Wash', 'Garchomp', 'Serperior', 'Gengar', 'Volcarona', 'Forretress', 'Conkeldurr', 'Espeon', 'Cloyster', 'Skarmory', 'Starmie', 'Salamence', 'Gyarados', 'Zapdos', 'Jirachi', 'Latios', 'Tentacruel', 'Haxorus', 'Landorus', 'Mamoswine', 'Charizard', 'Lucario', 'Jellicent', 'Blissey', 'Terrakion', 'Heracross', 'Metagross', 'Ditto', 'Hydreigon', 'Thundurus', 'Alakazam', 'Deoxys-Speed', 'Latias', 'Gastrodon', 'Togekiss', 'Donphan', 'Bronzong', 'Manaphy']
-	},
 	hackmons: {
-		effectType: 'Format',
 		name: "Hackmons",
+		section: "Other Metagames",
+
+		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -680,8 +826,10 @@ exports.BattleFormats = {
 		banlist: []
 	},
 	balancedhackmons: {
-		effectType: 'Format',
 		name: "Balanced Hackmons",
+		section: "Other Metagames",
+
+		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -690,15 +838,29 @@ exports.BattleFormats = {
 		banlist: ['Wonder Guard', 'Pure Power', 'Huge Power', 'Shadow Tag', 'Arena Trap']
 	},
 	pu: {
-		effectType: 'Format',
 		name: "PU",
+		section: "Other Metagames",
+
+		effectType: 'Format',
 		challengeShow: true,
 		ruleset: ['NU'],
 		banlist: ["Charizard", "Wartortle", "Kadabra", "Golem", "Haunter", "Exeggutor", "Weezing", "Kangaskhan", "Pinsir", "Lapras", "Ampharos", "Misdreavus", "Piloswine", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Gorebyss", "Regirock", "Regice", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Samurott", "Musharna", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Sawsbuck", "Alomomola", "Golurk", "Braviary", "Articuno", "Electabuzz", "Electrode", "Marowak", "Liepard", "Tangela", "Eelektross", "Ditto", "Seismitoad", "Zangoose", "Roselia", "Zebstrika", "Serperior", "Metang", "Tauros", "Torterra", "Cradily"]
 	},
-	glitchmons: {
+	gennextnextou: {
+		name: "Gen-NEXT OU",
+		section: "Other Metagames",
+
+		mod: 'gennext',
 		effectType: 'Format',
+		challengeShow: true,
+		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
+		banlist: ['Uber']
+	},
+	glitchmons: {
 		name: "Glitchmons",
+		section: "Other Metagames",
+
+		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -707,75 +869,112 @@ exports.BattleFormats = {
 		banlist: ['Illegal', 'Unreleased'],
 		mimicGlitch: true
 	},
-	customgame: {
+	lcubers: {
+		name: "LC Ubers",
+		section: "Other Metagames",
+
 		effectType: 'Format',
-		name: "Custom Game",
+		maxLevel: 5,
 		challengeShow: true,
-		canUseRandomTeam: true,
-		debug: true,
-		maxLevel: 1000,
-		// no restrictions, for serious
-		ruleset: ['Team Preview']
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Soul Dew']
 	},
-	customgamenoteampreview: {
+	lcuu: {
+		name: "LC UU",
+		section: "Other Metagames",
+
 		effectType: 'Format',
-		name: "Custom Game (no Team Preview)",
+		maxLevel: 5,
 		challengeShow: true,
-		canUseRandomTeam: true,
-		debug: true,
-		maxLevel: 1000,
-		// no restrictions, for serious
-		ruleset: []
+		ruleset: ['LC'],
+		banlist: ['Abra', 'Aipom', 'Archen', 'Aron', 'Axew', 'Bronzor', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos', 'Croagunk', 'Diglett', 'Dratini', 'Drifloon', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Foongus', 'Frillish', 'Gastly', 'Hippopotas', 'Houndour', 'Larvesta', 'Lileep', 'Magnemite', 'Meowth', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Murkrow', 'Onix', 'Pawniard', 'Ponyta', 'Porygon', 'Riolu', 'Sandshrew', 'Scraggy', 'Shellder', 'Snover', 'Staryu', 'Taillow', 'Tentacool', 'Timburr', 'Tirtouga']
 	},
-	// Previous gens
+	dwubers: {
+		name: "DW Ubers",
+		section: "Other Metagames",
+
+		effectType: 'Format',
+		challengeShow: true,
+		isTeambuilderFormat: true,
+		isDWtier: true,
+		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
+		banlist: []
+	},
+	dwou: {
+		name: "DW OU",
+		section: "Other Metagames",
+
+		effectType: 'Format',
+		challengeShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
+		banlist: ['Drizzle ++ Swift Swim', 'Soul Dew', 'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Zekrom']
+	},
+	dwuu: {
+		name: "DW UU",
+		section: "Other Metagames",
+
+		effectType: 'Format',
+		challengeShow: true,
+		ruleset: ['DW OU'],
+		banlist: ['Chandelure', 'Genesect', 'Tyranitar', 'Dragonite', 'Breloom', 'Ferrothorn', 'Politoed', 'Gliscor', 'Ninetales', 'Scizor', 'Excadrill', 'Keldeo', 'Infernape', 'Venusaur', 'Heatran', 'Rotom-Wash', 'Garchomp', 'Serperior', 'Gengar', 'Volcarona', 'Forretress', 'Conkeldurr', 'Espeon', 'Cloyster', 'Skarmory', 'Starmie', 'Salamence', 'Gyarados', 'Zapdos', 'Jirachi', 'Latios', 'Tentacruel', 'Haxorus', 'Landorus', 'Mamoswine', 'Charizard', 'Lucario', 'Jellicent', 'Blissey', 'Terrakion', 'Heracross', 'Metagross', 'Ditto', 'Hydreigon', 'Thundurus', 'Alakazam', 'Deoxys-Speed', 'Latias', 'Gastrodon', 'Togekiss', 'Donphan', 'Bronzong', 'Manaphy']
+	},
+
+	// Past Generations
+	///////////////////////////////////////////////////////////////////
+
 	gen4hackmons: {
+		name: "[Gen 4] Hackmons",
+		section: "Past Generations",
+
 		mod: 'gen4',
 		effectType: 'Format',
-		name: "[Gen 4] Hackmons",
 		challengeShow: true,
 		ruleset: ['Pokemon'],
 		banlist: []
 	},
 	gen4customgame: {
+		name: "[Gen 4] Custom Game",
+		section: "Past Generations",
+
 		mod: 'gen4',
 		effectType: 'Format',
-		name: "[Gen 4] Custom Game",
 		challengeShow: true,
 		canUseRandomTeam: true,
 		debug: true,
 		ruleset: []
 	},
 	gen3hackmons: {
+		name: "[Gen 3] Hackmons",
+		section: "Past Generations",
+
 		mod: 'gen3',
 		effectType: 'Format',
-		name: "[Gen 3] Hackmons",
 		challengeShow: true,
 		ruleset: ['Pokemon'],
 		banlist: []
 	},
 	gen3customgame: {
+		name: "[Gen 3] Custom Game",
+		section: "Past Generations",
+
 		mod: 'gen3',
 		effectType: 'Format',
-		name: "[Gen 3] Custom Game",
 		challengeShow: true,
 		ruleset: []
 	},
 	gen1customgame: {
+		name: "[Gen 1] Custom Game",
+		section: "Past Generations",
+
 		mod: 'gen1',
 		effectType: 'Format',
-		name: "[Gen 1] Custom Game",
 		challengeShow: true,
 		debug: true,
 		ruleset: ['Pokemon']
 	},
-	gennextnextou: {
-		mod: 'gennext',
-		effectType: 'Format',
-		name: "[Gen NEXT] NEXT-OU",
-		challengeShow: true,
-		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
-		banlist: ['Uber']
-	},
+
+
 	standardnext: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause'],
@@ -796,131 +995,9 @@ exports.BattleFormats = {
 			set.moves = moves;
 		}
 	},
-	doublesvgc2013dev: {
-		effectType: 'Format',
-		section: 'doubles',
-		gameType: 'doubles',
-		name: "Doubles VGC 2013 (dev)",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		debug: true,
-		onBegin: function() {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		maxForcedLevel: 50,
-		// no restrictions, for serious
-		ruleset: ['Pokemon', 'Team Preview VGC', 'Species Clause', 'Item Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
-			'Mewtwo',
-			'Mew',
-			'Lugia',
-			'Ho-Oh',
-			'Celebi',
-			'Kyogre',
-			'Groudon',
-			'Rayquaza',
-			'Jirachi',
-			'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Deoxys-Defense',
-			'Chatot',
-			'Dialga',
-			'Palkia',
-			'Giratina', 'Giratina-Origin',
-			'Phione',
-			'Manaphy',
-			'Darkrai',
-			'Shaymin', 'Shaymin-Sky',
-			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Victini',
-			'Reshiram',
-			'Zekrom',
-			'Kyurem', 'Kyurem-Black', 'Kyurem-White',
-			'Keldeo', 'Keldeo-Resolute',
-			'Meloetta',
-			'Genesect'
-		]
-	},
-	smogondoubles: {
-		effectType: 'Format',
-		section: 'doubles',
-		gameType: 'doubles',
-		name: "Smogon Doubles",
-		challengeShow: true,
-		searchShow: true,
-		rated: true,
-		debug: true,
-		// no restrictions, for serious
-		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
-			'Mewtwo',
-			'Lugia',
-			'Ho-Oh',
-			'Kyogre',
-			'Groudon',
-			'Rayquaza',
-			'Dialga',
-			'Palkia',
-			'Giratina', 'Giratina-Origin',
-			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Reshiram',
-			'Zekrom',
-			'Kyurem-White'
-		]
-	},
-	doublesrandombattledev: {
-		effectType: 'Format',
-		section: 'doubles',
-		gameType: 'doubles',
-		name: "Doubles Random Battle (dev)",
-		team: 'random',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		debug: true,
-		ruleset: ['PotD', 'Pokemon']
-	},
-	doubleschallengecup: {
-		effectType: 'Format',
-		section: 'doubles',
-		gameType: 'doubles',
-		name: "Doubles Challenge Cup",
-		team: 'randomCC',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		debug: true,
-		ruleset: ['Pokemon']
-	},
-	doublescustomgame: {
-		effectType: 'Format',
-		section: 'doubles',
-		gameType: 'doubles',
-		name: "Doubles Custom Game",
-		challengeShow: true,
-		canUseRandomTeam: true,
-		debug: true,
-		maxLevel: 1000,
-		// no restrictions, for serious
-		ruleset: ['Team Preview']
-	},
-	tiershift: {
-		mod: 'tiershift',
-		section: 'OM of the Month',
-		effectType: 'Format',
-		name: "Tier Shift",
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
 
-	// rules
+	// Rulesets
+	///////////////////////////////////////////////////////////////////
 
 	standard: {
 		effectType: 'Banlist',
