@@ -427,6 +427,18 @@ exports.BattleFormats = {
                         this.add('-message', targetName + ': ' + answer);
                     }
                 };
+			} else if (move.id === 'taunt') {
+				var quotes = [
+					"Yo mama so fat, she 4x resists Ice- and Fire-type attacks!",
+					"Yo mama so ugly, Captivate raises her opponent's Special Attack!",
+					"Yo mama so dumb, she lowers her Special Attack when she uses Nasty Plot!",
+					"Yo mama so fat, Smogon switched to Pokemon Showdown because PO had an integer overflow bug when you used Grass Knot against her!",
+					"Yo mama so dumb, she thought Sylveon would be Light Type!"
+				];
+				move.onHit = function (target, source) {
+					var sourceName = (source.ability === 'illusion' && source.illusion) ? source.illusion.toString().substr(4, source.illusion.toString().length) : source.name;
+					this.add('-message', sourceName + ' said, "' + quotes.sample() + '"');
+				};
 			}
 		},
 		onFaint: function (pokemon) {
