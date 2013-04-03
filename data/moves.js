@@ -10453,6 +10453,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		isTwoTurnMove: true,
 		onTry: function(attacker, defender, move) {
+			if (defender.fainted) return false;
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
