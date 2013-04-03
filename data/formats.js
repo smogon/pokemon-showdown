@@ -856,6 +856,16 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
 	},
+	oumonotype: {
+		name: "OU Monotype",
+		section: "Other Metagames",
+
+		effectType: 'Format',
+		challengeShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	},
 	glitchmons: {
 		name: "Glitchmons",
 		section: "Other Metagames",
