@@ -2565,7 +2565,6 @@ exports.BattleItems = {
 		id: "rowapberry",
 		name: "Rowap Berry",
 		spritenum: 420,
-		isUnreleased: true,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
