@@ -1154,7 +1154,7 @@ function LobbyRoom(roomid) {
 			i++;
 		}
 		selfR.numRooms = i;
-		newRoom = selfR.addRoom('battle-'+formaturlid+i, format, p1, p2, selfR.id, rated);
+		newRoom = selfR.addRoom('battle-'+formaturlid+'-'+i, format, p1, p2, selfR.id, rated);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
 		newRoom.joinBattle(p1, p1team);
