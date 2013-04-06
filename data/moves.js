@@ -6786,6 +6786,7 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				this.add('-singleturn', target, 'move: Magic Coat');
 			},
+			onAllyTryFieldHitOrder: 3,
 			onAllyTryFieldHit: function(target, source, move) {
 				if (target === source) return;
 				if (typeof move.isBounceable === 'undefined') {
@@ -8452,7 +8453,7 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				this.add('-singleturn', target, 'Protect');
 			},
-			onTryHitPriority: 1,
+			onTryHitOrder: 2,
 			onTryHit: function(target, source, move) {
 				if (move.breaksProtect) {
 					target.removeVolatile('Protect');
@@ -8791,7 +8792,7 @@ exports.BattleMovedex = {
 			onStart: function(target, source) {
 				this.add('-singleturn', source, 'Quick Guard');
 			},
-			onTryHitPriority: 1,
+			onTryHitOrder: 1,
 			onTryHit: function(target, source, effect) {
 				// Quick Guard only blocks moves with a natural positive priority
 				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
@@ -13144,7 +13145,7 @@ exports.BattleMovedex = {
 			onStart: function(target, source) {
 				this.add('-singleturn', source, 'Wide Guard');
 			},
-			onTryHitPriority: 1,
+			onTryHitOrder: 1,
 			onTryHit: function(target, source, effect) {
 				// Wide Guard blocks damaging spread moves
 				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))) {
