@@ -2381,8 +2381,11 @@ var Battle = (function() {
 		if (basePower) {
 			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
 
+			if (move.basePowerMultiplier && move.basePowerMultiplier != 1) {
+				basePower = this.modify(basePower, move.basePowerMultiplier);
+			}
 			if (move.basePowerModifier) {
-				basePower *= move.basePowerModifier;
+				basePower = this.modify(basePower, move.basePowerModifier);
 			}
 		}
 		if (!basePower) return 0;

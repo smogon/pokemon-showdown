@@ -276,11 +276,11 @@ exports.BattleItems = {
 		name: "Bug Gem",
 		spritenum: 53,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Bug') {
 				if (user.useItem(user, move)) {
 					this.add('-enditem', user, 'Bug Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -611,11 +611,11 @@ exports.BattleItems = {
 		name: "Dark Gem",
 		spritenum: 89,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Dark') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Dark Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -723,11 +723,11 @@ exports.BattleItems = {
 		name: "Dragon Gem",
 		spritenum: 107,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Dragon') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Dragon Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -821,11 +821,11 @@ exports.BattleItems = {
 		name: "Electric Gem",
 		spritenum: 120,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Electric') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Electric Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -911,11 +911,11 @@ exports.BattleItems = {
 		name: "Fighting Gem",
 		spritenum: 139,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Fighting') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Fighting Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -948,11 +948,11 @@ exports.BattleItems = {
 		name: "Fire Gem",
 		spritenum: 141,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Fire') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Fire Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -1023,11 +1023,11 @@ exports.BattleItems = {
 		name: "Flying Gem",
 		spritenum: 149,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Flying') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Flying Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -1102,11 +1102,11 @@ exports.BattleItems = {
 		name: "Ghost Gem",
 		spritenum: 161,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Ghost') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Ghost Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -1117,11 +1117,11 @@ exports.BattleItems = {
 		name: "Grass Gem",
 		spritenum: 172,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Grass') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Grass Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -1178,11 +1178,11 @@ exports.BattleItems = {
 		name: "Ground Gem",
 		spritenum: 182,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Ground') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Ground Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -1290,11 +1290,11 @@ exports.BattleItems = {
 		name: "Ice Gem",
 		spritenum: 218,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Ice') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Ice Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -2015,11 +2015,11 @@ exports.BattleItems = {
 		name: "Normal Gem",
 		spritenum: 307,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Normal') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Normal Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -2243,11 +2243,11 @@ exports.BattleItems = {
 		name: "Poison Gem",
 		spritenum: 344,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Poison') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Poison Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -2296,11 +2296,11 @@ exports.BattleItems = {
 		name: "Psychic Gem",
 		spritenum: 369,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Psychic') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Psychic Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -2499,11 +2499,11 @@ exports.BattleItems = {
 		name: "Rock Gem",
 		spritenum: 415,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Rock') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Rock Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -2911,11 +2911,11 @@ exports.BattleItems = {
 		name: "Steel Gem",
 		spritenum: 473,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Steel') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Steel Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
@@ -3100,11 +3100,11 @@ exports.BattleItems = {
 		name: "Water Gem",
 		spritenum: 528,
 		isGem: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePowerMultiplier: function(multiplier, user, target, move) {
 			if (move.type === 'Water') {
 				if (user.useItem()) {
 					this.add('-enditem', user, 'Water Gem', '[from] gem', '[move] '+move.name);
-					return basePower * 1.5;
+					return multiplier * 1.5;
 				}
 			}
 		},
