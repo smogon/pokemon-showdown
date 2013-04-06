@@ -6801,7 +6801,7 @@ exports.BattleMovedex = {
 					var newMove = this.getMoveCopy(move.id);
 					newMove.hasBounced = true;
 					this.add('-activate', target, 'move: Magic Coat', newMove, '[of] '+source);
-					this.moveHit(source, target, newMove);
+					this.useMove(newMove, target, source);
 					return null;
 				}
 			}

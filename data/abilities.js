@@ -1136,7 +1136,7 @@ exports.BattleAbilities = {
 				var newMove = this.getMoveCopy(move.id);
 				newMove.hasBounced = true;
 				this.add('-activate', target, 'ability: Magic Bounce', newMove, '[of] '+source);
-				this.moveHit(source, target, newMove);
+				this.useMove(newMove, target, source);
 				return null;
 			}
 		},
@@ -2695,7 +2695,7 @@ exports.BattleAbilities = {
 			if (move.isBounceable) {
 				this.addPseudoWeather('magicbounce');
 				this.add('-activate', target, 'ability: Rebound', move, '[of] '+source);
-				this.moveHit(source, source, move);
+				this.useMove(move, target, source);
 				return null;
 			}
 		},
