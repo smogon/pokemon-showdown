@@ -332,6 +332,10 @@ exports.BattleScripts = {
 		if (target) {
 			var didSomething = false;
 
+			if (!moveData.basePowerMultiplier) {
+				moveData.basePowerMultiplier = this.runEvent('BasePowerMultiplier', pokemon, target, move, 1);
+				this.debug('multiplier: '+move.basePowerMultiplier);
+			}
 			damage = this.getDamage(pokemon, target, moveData);
 
 			// getDamage has several possible return values:
