@@ -61,7 +61,7 @@ Once your server is up, you probably want to make yourself an Administrator (~) 
 
 ### config/usergroups.csv
 
-The easiest way to become an Administrator is to create a file named `config/usergroups.csv` containing
+To become an Administrator, create a file named `config/usergroups.csv` containing
 
     USER,~
 
@@ -72,16 +72,6 @@ This username must be registered. If you do not have a registered Pokemon Showdo
 Once you're an administrator, you can promote/demote others easily with the `/admin`, `/leader`, `/mod`, etc commands.
 
   [3]: http://pokemonshowdown.com/forum/register
-
-### localsysop setting
-
-Alternatively, if you do not want to use `config/usergroups.csv`, you can use the following method to become an Administrator. In your `config/config.js` file, you can set `exports.localsysop = true` and then any users who join from `127.0.0.1` will automatically become Administrators, even if they are unregistered.
-
-If you are running Pokemon Showdown on a remote server (such as a VPS), you can still connect from `127.0.0.1` using an SSH tunnel:
-
-    ssh user@example.com -L 3000:127.0.0.1:8000 -N
-
-Replace `user` by your user account on the remote computer and replace `example.com` by the host name of the remote computer. Replace `8000` by the port that the server is running on. You can then point your browser to `http://localhost-3000.psim.us` and it will connect to `example.com:8000`, but it will consider you to be connecting from `127.0.0.1`, so you will become an Administrator.
 
 
 Browser support

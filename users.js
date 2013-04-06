@@ -307,10 +307,6 @@ var User = (function () {
 		users[this.userid] = this;
 		this.authenticated = !!authenticated;
 
-		if (config.localsysop && this.ips['127.0.0.1']) {
-			this.group = config.groupsranking[config.groupsranking.length - 1];
-		}
-
 		for (var i=0; i<this.connections.length; i++) {
 			//console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
 			emit(this.connections[i].socket, 'update', {

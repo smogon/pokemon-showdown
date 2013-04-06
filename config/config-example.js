@@ -70,10 +70,6 @@ exports.potd = '';
 //   https://github.com/LearnBoost/socket.io/issues/609
 exports.crashguard = true;
 
-// local sysop - automatically promote users who connect from
-//   127.0.0.1 to the highest ranking group (Usually &, or sysop)
-exports.localsysop = false;
-
 // report joins and leaves - shows messages like "<USERNAME> joined"
 //   Join and leave messages are small and consolidated, so there will never
 //   be more than one line of messages.
