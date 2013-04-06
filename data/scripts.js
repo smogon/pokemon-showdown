@@ -332,7 +332,7 @@ exports.BattleScripts = {
 		if (target) {
 			var didSomething = false;
 
-			if (!moveData.basePowerMultiplier) {
+			if (!moveData.basePowerMultiplier && move.category !== 'Status') {
 				moveData.basePowerMultiplier = this.runEvent('BasePowerMultiplier', pokemon, target, move, 1);
 				this.debug('multiplier: '+move.basePowerMultiplier);
 			}
