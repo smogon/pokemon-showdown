@@ -244,8 +244,8 @@ exports.BattleFormats = {
 	// Doubles
 	///////////////////////////////////////////////////////////////////
 
-	doublesvgc2013dev: {
-		name: "Doubles VGC 2013 (dev)",
+	doublesvgc2013: {
+		name: "Doubles VGC 2013",
 		section: 'Doubles',
 
 		effectType: 'Format',
@@ -253,7 +253,6 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		debug: true,
 		onBegin: function() {
 			this.debug('cutting down to 4');
 			this.p1.pokemon = this.p1.pokemon.slice(0,4);
