@@ -637,7 +637,7 @@ exports.BattleAbilities = {
 			}
 			if (!warnMoves.length) return;
 			var warnMove = warnMoves[this.random(warnMoves.length)];
-			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
+			this.add('-activate', pokemon, 'ability: Forewarn', warnMove[0], warnMove[1]);
 		},
 		id: "forewarn",
 		name: "Forewarn",
