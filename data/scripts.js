@@ -118,7 +118,7 @@ exports.BattleScripts = {
 			if (targets.length > 1) move.spreadHit = true;
 			damage = 0;
 			for (var i=0; i<targets.length; i++) {
-				damage += (this.rollMoveHit(targets[i], pokemon, move, true) || 0);
+				damage += (this.tryMoveHit(targets[i], pokemon, move, true) || 0);
 			}
 			if (!pokemon.hp) pokemon.faint();
 		} else {
@@ -134,7 +134,7 @@ exports.BattleScripts = {
 			if (target.side.active.length > 1) {
 				target = this.runEvent('RedirectTarget', pokemon, pokemon, move, target);
 			}
-			damage = this.rollMoveHit(target, pokemon, move);
+			damage = this.tryMoveHit(target, pokemon, move);
 		}
 
 		if (!damage && damage !== 0) {
@@ -148,9 +148,82 @@ exports.BattleScripts = {
 		}
 		return true;
 	},
-	rollMoveHit: function(target, pokemon, move, spreadHit) {
+	tryMoveHit: function(target, pokemon, move, spreadHit) {
 		if (move.selfdestruct && spreadHit) {
 			pokemon.hp = 0;
+		}
+
+		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
+			return false;
+		}
+
+		this.setActiveMove(move, pokemon, target);
+		var hitResult = true;
+
+		if (typeof move.affectedByImmunities === 'undefined') {
+			move.affectedByImmunities = (move.category !== 'Status');
+		}
+
+		// this documentation is outdated
+
+		// TryHit events:
+		//   STEP 1: we see if the move will succeed at all:
+		//   - TryHit, TryHitSide, or TryHitField are run on the move,
+		//     depending on move target
+		//   == primary hit line ==
+		//   Everything after this only happens on the primary hit (not on
+		//   secondary or self-hits)
+		//   STEP 2: we see if anything blocks the move from hitting:
+		//   - TryFieldHit is run on the target
+		//   STEP 3: we see if anything blocks the move from hitting the target:
+		//   - If the move's target is a pokemon, TryHit is run on that pokemon
+
+		// Note:
+		//   If the move target is `foeSide`:
+		//     event target = pokemon 0 on the target side
+		//   If the move target is `allySide` or `all`:
+		//     event target = the move user
+		//
+		//   This is because events can't accept actual sides or fields as
+		//   targets. Choosing these event targets ensures that the correct
+		//   side or field is hit.
+		//
+		//   It is the `TryHitField` event handler's responsibility to never
+		//   use `target`.
+		//   It is the `TryFieldHit` event handler's responsibility to read
+		//   move.target and react accordingly.
+		//   An exception is `TryHitSide`, which is passed the target side.
+
+		// Note 2:
+		//   In case you didn't notice, FieldHit and HitField mean different things.
+		//     TryFieldHit - something in the field was hit
+		//     TryHitField - our move has a target of 'all' i.e. the field, and hit
+		//   This is a VERY important distinction: Every move triggers
+		//   TryFieldHit, but only  moves with a target of "all" (e.g.
+		//   Haze) trigger TryHitField.
+
+		if (move.target === 'all') {
+			hitResult = this.runEvent('TryHitField', target, pokemon, move);
+		} else if (move.target === 'foeSide' || move.target === 'allySide') {
+			hitResult = this.runEvent('TryHitSide', target, pokemon, move);
+		} else {
+			hitResult = this.runEvent('TryHit', target, pokemon, move);
+		}
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			if (hitResult !== 0) { // special Substitute hit flag
+				return false;
+			}
+		}
+		if (!this.runEvent('TryFieldHit', target, pokemon, move)) {
+			return false;
+		}
+
+		if (hitResult === 0) {
+			target = null;
+		} else if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			return false;
 		}
 
 		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
@@ -187,10 +260,6 @@ exports.BattleScripts = {
 		if (accuracy !== true && this.random(100) >= accuracy) {
 			if (!spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon, target);
-			return false;
-		}
-
-		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
 			return false;
 		}
 
@@ -243,90 +312,26 @@ exports.BattleScripts = {
 		var damage = 0;
 		move = this.getMoveCopy(move);
 
-		if (!isSecondary && !isSelf) this.setActiveMove(move, pokemon, target);
-		var hitResult = true;
 		if (!moveData) moveData = move;
+		var hitResult = true;
 
-		if (typeof move.affectedByImmunities === 'undefined') {
-			move.affectedByImmunities = (move.category !== 'Status');
+		if (move.target === 'all' && !isSelf) {
+			hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
+		} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
+			hitResult = this.singleEvent('TryHitSide', moveData, {}, target.side, pokemon, move);
+		} else {
+			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 		}
-	
-		// TryHit events:
-		//   STEP 1: we see if the move will succeed at all:
-		//   - TryHit, TryHitSide, or TryHitField are run on the move,
-		//     depending on move target
-		//   == primary hit line ==
-		//   Everything after this only happens on the primary hit (not on
-		//   secondary or self-hits)
-		//   STEP 2: we see if anything blocks the move from hitting:
-		//   - TryFieldHit is run on the target
-		//   STEP 3: we see if anything blocks the move from hitting the target:
-		//   - If the move's target is a pokemon, TryHit is run on that pokemon
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			return false;
+		}
 
-		// Note:
-		//   If the move target is `foeSide`:
-		//     event target = pokemon 0 on the target side
-		//   If the move target is `allySide` or `all`:
-		//     event target = the move user
-		//
-		//   This is because events can't accept actual sides or fields as
-		//   targets. Choosing these event targets ensures that the correct
-		//   side or field is hit.
-		//
-		//   It is the `TryHitField` event handler's responsibility to never
-		//   use `target`.
-		//   It is the `TryFieldHit` event handler's responsibility to read
-		//   move.target and react accordingly.
-		//   An exception is `TryHitSide`, which is passed the target side.
-
-		// Note 2:
-		//   In case you didn't notice, FieldHit and HitField mean different things.
-		//     TryFieldHit - something in the field was hit
-		//     TryHitField - our move has a target of 'all' i.e. the field, and hit
-		//   This is a VERY important distinction: Every move triggers
-		//   TryFieldHit, but only  moves with a target of "all" (e.g.
-		//   Haze) trigger TryHitField.
-
-		if (target) {
-			if (move.target === 'all' && !isSelf) {
-				hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
-			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
-				hitResult = this.singleEvent('TryHitSide', moveData, {}, target.side, pokemon, move);
-			} else {
-				hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
-			}
-			if (!hitResult) {
-				if (hitResult === false) this.add('-fail', target);
-				return false;
-			}
-			// only run the hit events for the hit itself, not the secondary or self hits
-			if (!isSelf && !isSecondary) {
-				if (move.target === 'all') {
-					hitResult = this.runEvent('TryHitField', target, pokemon, move);
-				} else if (move.target === 'foeSide' || move.target === 'allySide') {
-					hitResult = this.runEvent('TryHitSide', target, pokemon, move);
-				} else {
-					hitResult = this.runEvent('TryHit', target, pokemon, move);
-				}
-				if (!hitResult) {
-					if (hitResult === false) this.add('-fail', target);
-					if (hitResult !== 0) { // special Substitute hit flag
-						return false;
-					}
-				}
-				if (!this.runEvent('TryFieldHit', target, pokemon, move)) {
-					return false;
-				}
-			} else if (isSecondary && !moveData.self) {
-				hitResult = this.runEvent('TrySecondaryHit', target, pokemon, moveData);
-			}
-
-			if (hitResult === 0) {
-				target = null;
-			} else if (!hitResult) {
-				if (hitResult === false) this.add('-fail', target);
-				return false;
-			}
+		if (target && isSecondary && !moveData.self) {
+			hitResult = this.runEvent('TrySecondaryHit', target, pokemon, moveData);
+		}
+		if (!hitResult) {
+			return false;
 		}
 
 		if (target) {
