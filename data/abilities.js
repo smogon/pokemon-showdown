@@ -1121,22 +1121,29 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon blocks certain status moves and uses the move itself.",
 		id: "magicbounce",
 		name: "Magic Bounce",
-		onAllyTryFieldHitOrder: 4,
-		onAllyTryFieldHit: function(target, source, move) {
+		onTryHitOrder: 4,
+		onTryHit: function(target, source, move) {
 			if (target === source) return;
+			if (move.hasBounced) return;
 			if (typeof move.isBounceable === 'undefined') {
-					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
-			}
-			if (move.target !== 'foeSide' && target !== this.effectData.target) {
-				return;
-			}
-			if (move.hasBounced) {
-				return;
+				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
 			}
 			if (move.isBounceable) {
 				var newMove = this.getMoveCopy(move.id);
 				newMove.hasBounced = true;
-				this.add('-activate', target, 'ability: Magic Bounce', newMove, '[of] '+source);
+				this.useMove(newMove, target, source);
+				return null;
+			}
+		},
+		onAllyTryHitSide: function(target, source, move) {
+			if (target.side === source.side) return;
+			if (move.hasBounced) return;
+			if (typeof move.isBounceable === 'undefined') {
+				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			}
+			if (move.isBounceable) {
+				var newMove = this.getMoveCopy(move.id);
+				newMove.hasBounced = true;
 				this.useMove(newMove, target, source);
 				return null;
 			}
@@ -2681,23 +2688,34 @@ exports.BattleAbilities = {
 		id: "rebound",
 		isNonstandard: true,
 		name: "Rebound",
-		onAllyTryFieldHitOrder: 4,
-		onAllyTryFieldHit: function(target, source, move) {
-			if (target === source) return;
+		onTryHitOrder: 4,
+		onTryHit: function(target, source, move) {
 			if (this.effectData.target.activeTurns) return;
+
+			if (target === source) return;
+			if (move.hasBounced) return;
 			if (typeof move.isBounceable === 'undefined') {
-					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
-			}
-			if (move.target !== 'foeSide' && target !== this.effectData.target) {
-				return;
-			}
-			if (this.pseudoWeather['magicbounce']) {
-				return;
+				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
 			}
 			if (move.isBounceable) {
-				this.addPseudoWeather('magicbounce');
-				this.add('-activate', target, 'ability: Rebound', move, '[of] '+source);
-				this.useMove(move, target, source);
+				var newMove = this.getMoveCopy(move.id);
+				newMove.hasBounced = true;
+				this.useMove(newMove, target, source);
+				return null;
+			}
+		},
+		onAllyTryHitSide: function(target, source, move) {
+			if (this.effectData.target.activeTurns) return;
+
+			if (target.side === source.side) return;
+			if (move.hasBounced) return;
+			if (typeof move.isBounceable === 'undefined') {
+				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			}
+			if (move.isBounceable) {
+				var newMove = this.getMoveCopy(move.id);
+				newMove.hasBounced = true;
+				this.useMove(newMove, target, source);
 				return null;
 			}
 		},

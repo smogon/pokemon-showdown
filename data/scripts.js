@@ -89,6 +89,15 @@ exports.BattleScripts = {
 
 		var damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+			if (move.target === 'all') {
+				damage = this.runEvent('TryHitField', target, pokemon, move);
+			} else if (move.target === 'foeSide' || move.target === 'allySide') {
+				damage = this.runEvent('TryHitSide', target, pokemon, move);
+			}
+			if (!damage) {
+				if (damage === false) this.add('-fail', target);
+				return true;
+			}
 			damage = this.moveHit(target, pokemon, move);
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
 			var targets = [];
@@ -164,59 +173,12 @@ exports.BattleScripts = {
 			move.affectedByImmunities = (move.category !== 'Status');
 		}
 
-		// this documentation is outdated
-
-		// TryHit events:
-		//   STEP 1: we see if the move will succeed at all:
-		//   - TryHit, TryHitSide, or TryHitField are run on the move,
-		//     depending on move target
-		//   == primary hit line ==
-		//   Everything after this only happens on the primary hit (not on
-		//   secondary or self-hits)
-		//   STEP 2: we see if anything blocks the move from hitting:
-		//   - TryFieldHit is run on the target
-		//   STEP 3: we see if anything blocks the move from hitting the target:
-		//   - If the move's target is a pokemon, TryHit is run on that pokemon
-
-		// Note:
-		//   If the move target is `foeSide`:
-		//     event target = pokemon 0 on the target side
-		//   If the move target is `allySide` or `all`:
-		//     event target = the move user
-		//
-		//   This is because events can't accept actual sides or fields as
-		//   targets. Choosing these event targets ensures that the correct
-		//   side or field is hit.
-		//
-		//   It is the `TryHitField` event handler's responsibility to never
-		//   use `target`.
-		//   It is the `TryFieldHit` event handler's responsibility to read
-		//   move.target and react accordingly.
-		//   An exception is `TryHitSide`, which is passed the target side.
-
-		// Note 2:
-		//   In case you didn't notice, FieldHit and HitField mean different things.
-		//     TryFieldHit - something in the field was hit
-		//     TryHitField - our move has a target of 'all' i.e. the field, and hit
-		//   This is a VERY important distinction: Every move triggers
-		//   TryFieldHit, but only  moves with a target of "all" (e.g.
-		//   Haze) trigger TryHitField.
-
-		if (move.target === 'all') {
-			hitResult = this.runEvent('TryHitField', target, pokemon, move);
-		} else if (move.target === 'foeSide' || move.target === 'allySide') {
-			hitResult = this.runEvent('TryHitSide', target, pokemon, move);
-		} else {
-			hitResult = this.runEvent('TryHit', target, pokemon, move);
-		}
+		hitResult = this.runEvent('TryHit', target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) this.add('-fail', target);
 			if (hitResult !== 0) { // special Substitute hit flag
 				return false;
 			}
-		}
-		if (!this.runEvent('TryFieldHit', target, pokemon, move)) {
-			return false;
 		}
 
 		if (hitResult === 0) {
@@ -314,6 +276,36 @@ exports.BattleScripts = {
 
 		if (!moveData) moveData = move;
 		var hitResult = true;
+
+		// TryHit events:
+		//   STEP 1: we see if the move will succeed at all:
+		//   - TryHit, TryHitSide, or TryHitField are run on the move,
+		//     depending on move target (these events happen in useMove
+		//     or tryMoveHit, not below)
+		//   == primary hit line ==
+		//   Everything after this only happens on the primary hit (not on
+		//   secondary or self-hits)
+		//   STEP 2: we see if anything blocks the move from hitting:
+		//   - TryFieldHit is run on the target
+		//   STEP 3: we see if anything blocks the move from hitting the target:
+		//   - If the move's target is a pokemon, TryHit is run on that pokemon
+
+		// Note:
+		//   If the move target is `foeSide`:
+		//     event target = pokemon 0 on the target side
+		//   If the move target is `allySide` or `all`:
+		//     event target = the move user
+		//
+		//   This is because events can't accept actual sides or fields as
+		//   targets. Choosing these event targets ensures that the correct
+		//   side or field is hit.
+		//
+		//   It is the `TryHitField` event handler's responsibility to never
+		//   use `target`.
+		//   It is the `TryFieldHit` event handler's responsibility to read
+		//   move.target and react accordingly.
+		//   An exception is `TryHitSide` as a single event (but not as a normal
+		//   event), which is passed the target side.
 
 		if (move.target === 'all' && !isSelf) {
 			hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
