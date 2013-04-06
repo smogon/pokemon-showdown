@@ -1121,7 +1121,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon blocks certain status moves and uses the move itself.",
 		id: "magicbounce",
 		name: "Magic Bounce",
-		onTryHitOrder: 4,
+		onTryHitPriority: 1,
 		onTryHit: function(target, source, move) {
 			if (target === source) return;
 			if (move.hasBounced) return;
@@ -2688,7 +2688,7 @@ exports.BattleAbilities = {
 		id: "rebound",
 		isNonstandard: true,
 		name: "Rebound",
-		onTryHitOrder: 4,
+		onTryHitPriority: 1,
 		onTryHit: function(target, source, move) {
 			if (this.effectData.target.activeTurns) return;
 
