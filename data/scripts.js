@@ -145,6 +145,9 @@ exports.BattleScripts = {
 			}
 			damage = this.tryMoveHit(target, pokemon, move);
 		}
+		if (move.selfdestruct && !pokemon.hp) {
+			this.faint(pokemon, pokemon, move);
+		}
 
 		if (!damage && damage !== 0) {
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
@@ -256,10 +259,6 @@ exports.BattleScripts = {
 		}
 
 		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
-
-		if (move.selfdestruct && !target.volatiles['protect']) {
-			this.faint(pokemon, pokemon, move);
-		}
 
 		if (!damage && damage !== 0) return false;
 
