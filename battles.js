@@ -2354,6 +2354,12 @@ var Battle = (function() {
 		var category = this.getCategory(move);
 		var defensiveCategory = move.defensiveCategory || category;
 
+		if (!move.basePowerMultiplier) {
+			// happens before basePowerCallback so Acrobatics works correctly
+			this.debug('multiplier: '+move.basePowerMultiplier);
+			move.basePowerMultiplier = this.runEvent('BasePowerMultiplier', pokemon, target, move, 1);
+		}
+
 		var basePower = move.basePower;
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
