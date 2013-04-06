@@ -2356,8 +2356,8 @@ var Battle = (function() {
 
 		if (!move.basePowerMultiplier) {
 			// happens before basePowerCallback so Acrobatics works correctly
-			this.debug('multiplier: '+move.basePowerMultiplier);
 			move.basePowerMultiplier = this.runEvent('BasePowerMultiplier', pokemon, target, move, 1);
+			if (move.basePowerMultiplier != 1) this.debug('multiplier: '+move.basePowerMultiplier);
 		}
 
 		var basePower = move.basePower;
