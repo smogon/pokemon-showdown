@@ -310,7 +310,7 @@ exports.BattleScripts = {
 			hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
 		} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
 			hitResult = this.singleEvent('TryHitSide', moveData, {}, target.side, pokemon, move);
-		} else {
+		} else if (target) {
 			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 		}
 		if (!hitResult) {
@@ -318,6 +318,13 @@ exports.BattleScripts = {
 			return false;
 		}
 
+		if (target && !isSecondary && !moveData.self) {
+			hitResult = this.runEvent('TryPrimaryHit', target, pokemon, moveData);
+			if (hitResult === 0) {
+				hitResult = true;
+				target = null;
+			}
+		}
 		if (target && isSecondary && !moveData.self) {
 			hitResult = this.runEvent('TrySecondaryHit', target, pokemon, moveData);
 		}
