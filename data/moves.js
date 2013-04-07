@@ -7705,6 +7705,9 @@ exports.BattleMovedex = {
 				pokemon.setItem('');
 			}
 		},
+		onTryHit: function(target, source) {
+			if (!source.volatiles['naturalgift']) return false;
+		},
 		onModifyMove: function(move, pokemon) {
 			if (pokemon.volatiles['naturalgift']) move.type = pokemon.volatiles['naturalgift'].type;
 		},
