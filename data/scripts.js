@@ -322,7 +322,7 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		if (target && !isSecondary && !moveData.self) {
+		if (target && !isSecondary && !isSelf) {
 			hitResult = this.runEvent('TryPrimaryHit', target, pokemon, moveData);
 			if (hitResult === 0) {
 				hitResult = true;
