@@ -91,7 +91,7 @@ exports.BattleScripts = {
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 			if (move.target === 'all') {
 				damage = this.runEvent('TryHitField', target, pokemon, move);
-			} else if (move.target === 'foeSide' || move.target === 'allySide') {
+			} else {
 				damage = this.runEvent('TryHitSide', target, pokemon, move);
 			}
 			if (!damage) {
@@ -362,12 +362,16 @@ exports.BattleScripts = {
 					damage = target.hp - 1;
 				}
 				damage = this.damage(damage, target, pokemon, move);
-				if (!(damage || damage === 0)) return false;
+				if (!(damage || damage === 0)) {
+					this.debug('damage interrupted');
+					return false;
+				}
 				didSomething = true;
 			} else if (damage === false && typeof hitResult === 'undefined') {
 				this.add('-fail', target);
 			}
 			if (damage === false || damage === null) {
+				this.debug('damage calculation interrupted');
 				return false;
 			}
 			if (moveData.boosts && !target.fainted) {
@@ -378,6 +382,7 @@ exports.BattleScripts = {
 				var d = target.heal(Math.round(target.maxhp * moveData.heal[0] / moveData.heal[1]));
 				if (!d) {
 					this.add('-fail', target);
+					this.debug('heal interrupted');
 					return false;
 				}
 				this.add('-heal', target, target.getHealth());
@@ -433,6 +438,7 @@ exports.BattleScripts = {
 					this.runEvent('Hit', target, pokemon, move);
 				}
 			}
+
 			if (!hitResult && !didSomething) {
 				if (hitResult === false) this.add('-fail', target);
 				this.debug('move failed because it did nothing');

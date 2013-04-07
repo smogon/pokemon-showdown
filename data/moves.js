@@ -406,7 +406,6 @@ exports.BattleMovedex = {
 			}
 			this.add('-cureteam',source,'[from] move: Aromatherapy');
 		},
-		secondary: false,
 		target: "allyTeam",
 		type: "Grass"
 	},
@@ -5025,7 +5024,6 @@ exports.BattleMovedex = {
 			}
 			this.add('-cureteam', source, '[from] move: HealBell');
 		},
-		secondary: false,
 		target: "allyTeam",
 		type: "Normal"
 	},
