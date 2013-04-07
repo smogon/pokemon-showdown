@@ -2335,6 +2335,15 @@ var Battle = (function() {
 			}
 			return target.maxhp;
 		}
+
+		if (!move.basePowerMultiplier && move.category !== 'Status') {
+			// happens before basePowerCallback so Acrobatics works correctly
+			// activates constant damage moves
+			// but NOT OHKO moves
+			move.basePowerMultiplier = this.runEvent('BasePowerMultiplier', pokemon, target, move, 1);
+			if (move.basePowerMultiplier != 1) this.debug('multiplier: '+move.basePowerMultiplier);
+		}
+
 		if (move.damageCallback) {
 			return move.damageCallback.call(this, pokemon, target);
 		}
@@ -2353,12 +2362,6 @@ var Battle = (function() {
 		// '???' is typeless damage: used for Struggle and Confusion etc
 		var category = this.getCategory(move);
 		var defensiveCategory = move.defensiveCategory || category;
-
-		if (!move.basePowerMultiplier && move.category !== 'Status') {
-			// happens before basePowerCallback so Acrobatics works correctly
-			move.basePowerMultiplier = this.runEvent('BasePowerMultiplier', pokemon, target, move, 1);
-			if (move.basePowerMultiplier != 1) this.debug('multiplier: '+move.basePowerMultiplier);
-		}
 
 		var basePower = move.basePower;
 		if (move.basePowerCallback) {
