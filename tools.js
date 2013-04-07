@@ -896,7 +896,7 @@ module.exports = (function () {
 					isDW = false;
 				}
 			}
-			if (isDW) {
+			if (isDW && template.gender) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
 					problems.push(name+" has a DW ability - it can't have moves only learned before gen 5.");
 				} else if (lsetData.sources) {
