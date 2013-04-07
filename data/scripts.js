@@ -145,13 +145,17 @@ exports.BattleScripts = {
 			}
 			damage = this.tryMoveHit(target, pokemon, move);
 		}
-		if (move.selfdestruct && !pokemon.hp) {
+		if (!pokemon.hp) {
 			this.faint(pokemon, pokemon, move);
 		}
 
-		if (!damage && damage !== 0) {
+		if (!damage && damage !== 0 && damage !== undefined) {
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			return true;
+		}
+
+		if (move.selfdestruct) {
+			this.faint(pokemon, pokemon, move);
 		}
 
 		if (!move.negateSecondary) {
@@ -260,7 +264,7 @@ exports.BattleScripts = {
 
 		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
 
-		if (!damage && damage !== 0) return false;
+		if (!damage && damage !== 0) return damage;
 
 		if (!move.negateSecondary) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
@@ -368,6 +372,7 @@ exports.BattleScripts = {
 			}
 			if (moveData.boosts && !target.fainted) {
 				this.boost(moveData.boosts, target, pokemon, move);
+				didSomething = true;
 			}
 			if (moveData.heal && !target.fainted) {
 				var d = target.heal(Math.round(target.maxhp * moveData.heal[0] / moveData.heal[1]));
@@ -430,6 +435,7 @@ exports.BattleScripts = {
 			}
 			if (!hitResult && !didSomething) {
 				if (hitResult === false) this.add('-fail', target);
+				this.debug('move failed because it did nothing');
 				return false;
 			}
 		}
