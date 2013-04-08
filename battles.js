@@ -924,7 +924,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.getHealth = function(realHp) {
 		if (!this.hp) return '0 fnt';
 		var hpstring;
-		if (realHp) {
+		if (realHp || this.getFormat().debug) {
 			hpstring = ''+this.hp+'/'+this.maxhp;
 		} else {
 			var ratio = this.hp / this.maxhp;
