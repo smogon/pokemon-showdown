@@ -2805,7 +2805,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	froslass: {
-		viableMoves: {"icebeam":1,"spikes":1,"destinybond":1,"shadowball":1,"substitute":1,"thunderbolt":1,"thunderwave":1},
+		viableMoves: {"icebeam":1,"spikes":1,"destinybond":1,"shadowball":1,"substitute":1,"taunt":1,"thunderbolt":1,"thunderwave":1},
 		dreamWorldRelease: true,
 		tier: "UU"
 	},
