@@ -2263,7 +2263,7 @@ exports.BattleMovedex = {
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'protect',
 		onTryHit: function(pokemon) {
-			return this.willAct() && this.runEvent('StallMove', pokemon);
+			return !!this.willAct() && this.runEvent('StallMove', pokemon);
 		},
 		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
@@ -8451,7 +8451,7 @@ exports.BattleMovedex = {
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'protect',
 		onTryHit: function(pokemon) {
-			return this.willAct() && this.runEvent('StallMove', pokemon);
+			return !!this.willAct() && this.runEvent('StallMove', pokemon);
 		},
 		onHit: function(pokemon) {
 			pokemon.addVolatile('stall');
