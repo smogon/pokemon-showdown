@@ -1933,7 +1933,7 @@ var Battle = (function() {
 			});
 		} else {
 			this.p1.decision = true;
-			this.p1.emitUpdate({request: {wait: true}});
+			this.p1.emitUpdate({request: {wait: true, side: this.p1.getData()}});
 		}
 
 		if (p2request) {
@@ -1943,7 +1943,7 @@ var Battle = (function() {
 			});
 		} else {
 			this.p2.decision = true;
-			this.p2.emitUpdate({request: {wait: true}});
+			this.p2.emitUpdate({request: {wait: true, side: this.p2.getData()}});
 		}
 
 		if (this.p2.decision && this.p1.decision) {
