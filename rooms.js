@@ -143,13 +143,14 @@ var BattleRoom = (function() {
 	};
 	// idx = 0, 1 : player log
 	// idx = 2    : spectator log
+	// idx = 3    : replay log
 	BattleRoom.prototype.getLog = function(idx) {
 		var log = [];
 		for (var i = 0; i < this.log.length; ++i) {
 			var line = this.log[i];
 			if (line === '|split') {
 				log.push(this.log[i + idx + 1]);
-				i += 3;
+				i += 4;
 			} else {
 				log.push(line);
 			}
@@ -171,6 +172,7 @@ var BattleRoom = (function() {
 				logs[0].push(updateLines[i++]); // player 0
 				logs[1].push(updateLines[i++]); // player 1
 				logs[2].push(updateLines[i++]); // spectators
+				i++; // replays
 			} else {
 				logs[0].push(line);
 				logs[1].push(line);

@@ -933,7 +933,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.getHealth = function(side) {
 		if (!this.hp) return '0 fnt';
 		var hpstring;
-		if ((this.side === side) || this.battle.getFormat().debug) {
+		if ((side === true) || (this.side === side) || this.battle.getFormat().debug) {
 			hpstring = ''+this.hp+'/'+this.maxhp;
 		} else {
 			var ratio = this.hp / this.maxhp;
@@ -3145,7 +3145,7 @@ var Battle = (function() {
 			this.log.push('|'+parts.join('|'));
 		} else {
 			this.log.push('|split');
-			var sides = this.sides.concat(null);
+			var sides = this.sides.concat(null, true);
 			for (var i = 0; i < sides.length; ++i) {
 				var line = '';
 				for (var j = 0; j < parts.length; ++j) {
