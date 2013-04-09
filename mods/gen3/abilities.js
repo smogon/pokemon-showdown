@@ -255,7 +255,7 @@ Oh, and one more thing:  I didn't alter the descriptions much, if at all, on the
 		onImmunity: function(type, pokemon) {
 			if (type === 'Electric') {
 				var d = pokemon.heal(pokemon.maxhp/4);
-				this.add('-heal',pokemon,pokemon.getHealth(),'[from] ability: Volt Absorb');
+				this.add('-heal',pokemon,pokemon.getHealth,'[from] ability: Volt Absorb');
 				return null;
 			}
 		},

@@ -385,7 +385,7 @@ exports.BattleScripts = {
 					this.debug('heal interrupted');
 					return false;
 				}
-				this.add('-heal', target, target.getHealth());
+				this.add('-heal', target, target.getHealth);
 				didSomething = true;
 			}
 			if (moveData.status) {

@@ -130,6 +130,13 @@ var BattlePokemon = (function() {
 		this.battle = side.battle;
 		if (typeof set === 'string') set = {name: set};
 
+		// "prebound" function for nicer syntax (avoids use of `bind`)
+		this.getHealth = (function(self) {
+			return function(side) {
+				return BattlePokemon.getHealth.call(self, side);
+			};
+		})(this);
+
 		this.set = set;
 
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
@@ -284,9 +291,10 @@ var BattlePokemon = (function() {
 		if (this.isActive) return fullname.substr(0,2) + positionList[this.position] + fullname.substr(2);
 		return fullname;
 	};
-	BattlePokemon.prototype.getDetails = function() {
-		if (this.illusion) return this.illusion.details + '|' + this.getHealth();
-		return this.details + '|' + this.getHealth();
+	// "static" function
+	BattlePokemon.getDetails = function(side) {
+		if (this.illusion) return this.illusion.details + '|' + this.getHealth(side);
+		return this.details + '|' + this.getHealth(side);
 	};
 	BattlePokemon.prototype.update = function(init) {
 		// reset for Light Metal etc
@@ -921,19 +929,11 @@ var BattlePokemon = (function() {
 		this.update();
 		return true;
 	};
-	BattlePokemon.prototype.getHealth = function(realHp) {
-		if (!realHp) {
-			for (var i in this.battle.sides) {
-				if (this.battle.sides[i] === this.side) {
-					this.battle.sides[i].exactHealth.push(''+this.hp+'/'+this.maxhp+' '+this.status);
-				} else {
-					this.battle.sides[i].exactHealth.push('');
-				}
-			}
-		}
+	// "static" function
+	BattlePokemon.getHealth = function(side) {
 		if (!this.hp) return '0 fnt';
 		var hpstring;
-		if (realHp || this.battle.getFormat().debug) {
+		if ((this.side === side) || this.battle.getFormat().debug) {
 			hpstring = ''+this.hp+'/'+this.maxhp;
 		} else {
 			var ratio = this.hp / this.maxhp;
@@ -991,9 +991,6 @@ var BattleSide = (function() {
 		this.active = [null];
 		this.sideConditions = {};
 
-		// stores exact health for use in the health queue
-		this.exactHealth = [];
-
 		this.id = (n?'p2':'p1');
 
 		switch (this.battle.gameType) {
@@ -1024,16 +1021,14 @@ var BattleSide = (function() {
 	BattleSide.prototype.getData = function() {
 		var data = {
 			name: this.name,
-			pokemon: [],
-			exactHealth: this.exactHealth.join(',')
+			pokemon: []
 		};
-		this.exactHealth = [];
 		for (var i=0; i<this.pokemon.length; i++) {
 			var pokemon = this.pokemon[i];
 			data.pokemon.push({
 				ident: pokemon.fullname,
 				details: pokemon.details,
-				condition: pokemon.getHealth(true),
+				condition: pokemon.getHealth(pokemon.side),
 				active: (pokemon.position < pokemon.side.active.length),
 				moves: pokemon.moves.map(function(move) {
 					if (move === 'hiddenpower') {
@@ -2016,7 +2011,7 @@ var Battle = (function() {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		this.add('switch', side.active[pos], side.active[pos].getDetails());
+		this.add('switch', side.active[pos], BattlePokemon.getDetails.bind(side.active[pos]));
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -2071,7 +2066,7 @@ var Battle = (function() {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		this.add('drag', side.active[pos], side.active[pos].getDetails());
+		this.add('drag', side.active[pos], BattlePokemon.getDetails.bind(side.active[pos]));
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -2206,7 +2201,7 @@ var Battle = (function() {
 			if (target.illusion && effect && effect.effectType === 'Move') {
 				this.debug('illusion cleared');
 				target.illusion = null;
-				this.add('replace', target, target.getDetails());
+				this.add('replace', target, BattlePokemon.getDetails.bind(target));
 			}
 		}
 		if (damage !== 0) damage = clampIntRange(damage, 1);
@@ -2216,15 +2211,15 @@ var Battle = (function() {
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
 		case 'partiallytrapped':
-			this.add('-damage', target, target.getHealth(), '[from] '+this.effectData.sourceEffect.fullname, '[partiallytrapped]');
+			this.add('-damage', target, target.getHealth, '[from] '+this.effectData.sourceEffect.fullname, '[partiallytrapped]');
 			break;
 		default:
 			if (effect.effectType === 'Move') {
-				this.add('-damage', target, target.getHealth());
+				this.add('-damage', target, target.getHealth);
 			} else if (source && source !== target) {
-				this.add('-damage', target, target.getHealth(), '[from] '+effect.fullname, '[of] '+source);
+				this.add('-damage', target, target.getHealth, '[from] '+effect.fullname, '[of] '+source);
 			} else {
-				this.add('-damage', target, target.getHealth(), '[from] '+name);
+				this.add('-damage', target, target.getHealth, '[from] '+name);
 			}
 			break;
 		}
@@ -2258,10 +2253,10 @@ var Battle = (function() {
 		damage = target.damage(damage, source, effect);
 		switch (effect.id) {
 		case 'strugglerecoil':
-			this.add('-damage', target, target.getHealth(), '[from] recoil');
+			this.add('-damage', target, target.getHealth, '[from] recoil');
 			break;
 		default:
-			this.add('-damage', target, target.getHealth());
+			this.add('-damage', target, target.getHealth);
 			break;
 		}
 		if (target.fainted) this.faint(target);
@@ -2285,20 +2280,20 @@ var Battle = (function() {
 		switch (effect.id) {
 		case 'leechseed':
 		case 'rest':
-			this.add('-heal', target, target.getHealth(), '[silent]');
+			this.add('-heal', target, target.getHealth, '[silent]');
 			break;
 		case 'drain':
-			this.add('-heal', target, target.getHealth(), '[from] drain', '[of] '+source);
+			this.add('-heal', target, target.getHealth, '[from] drain', '[of] '+source);
 			break;
 		case 'wish':
 			break;
 		default:
 			if (effect.effectType === 'Move') {
-				this.add('-heal', target, target.getHealth());
+				this.add('-heal', target, target.getHealth);
 			} else if (source && source !== target) {
-				this.add('-heal', target, target.getHealth(), '[from] '+effect.fullname, '[of] '+source);
+				this.add('-heal', target, target.getHealth, '[from] '+effect.fullname, '[of] '+source);
 			} else {
-				this.add('-heal', target, target.getHealth(), '[from] '+effect.fullname);
+				this.add('-heal', target, target.getHealth, '[from] '+effect.fullname);
 			}
 			break;
 		}
@@ -3142,7 +3137,28 @@ var Battle = (function() {
 		return decisions;
 	};
 	Battle.prototype.add = function() {
-		this.log.push('|'+Array.prototype.slice.call(arguments).join('|'));
+		var parts = Array.prototype.slice.call(arguments);
+		var functions = parts.map(function(part) {
+			return typeof part === 'function';
+		});
+		if (functions.indexOf(true) < 0) {
+			this.log.push('|'+parts.join('|'));
+		} else {
+			this.log.push('|split');
+			var sides = this.sides.concat(null);
+			for (var i = 0; i < sides.length; ++i) {
+				var line = '';
+				for (var j = 0; j < parts.length; ++j) {
+					line += '|';
+					if (functions[j]) {
+						line += parts[j](sides[i]);
+					} else {
+						line += parts[j];
+					}
+				}
+				this.log.push(line);
+			}
+		}
 	};
 	Battle.prototype.addMove = function() {
 		this.lastMoveLine = this.log.length;
