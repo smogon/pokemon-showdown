@@ -2517,7 +2517,7 @@ exports.BattleAbilities = {
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
 				var d = target.heal(target.maxhp/4);
-				this.add('-heal',target,target.getHealth(),'[from] ability: Volt Absorb');
+				this.add('-heal',target,target.getHealth,'[from] ability: Volt Absorb');
 				return null;
 			}
 		},
@@ -2532,7 +2532,7 @@ exports.BattleAbilities = {
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Water') {
 				var d = target.heal(target.maxhp/4);
-				this.add('-heal',target,target.getHealth(),'[from] ability: Water Absorb');
+				this.add('-heal',target,target.getHealth,'[from] ability: Water Absorb');
 				return null;
 			}
 		},

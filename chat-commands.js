@@ -802,7 +802,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'savereplay':
 		if (!room || !room.battle) return false;
-		var data = room.log.join("\n");
+		var data = room.getLog(2).join("\n");
 		var datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g,'')).digest('hex');
 
 		LoginServer.request('prepreplay', {
