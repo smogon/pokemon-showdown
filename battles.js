@@ -922,6 +922,15 @@ var BattlePokemon = (function() {
 		return true;
 	};
 	BattlePokemon.prototype.getHealth = function(realHp) {
+		if (!realHp) {
+			for (var i in this.battle.sides) {
+				if (this.battle.sides[i] === this.side) {
+					this.battle.sides[i].exactHealth.push(''+this.hp+'/'+this.maxhp+' '+this.status);
+				} else {
+					this.battle.sides[i].exactHealth.push('');
+				}
+			}
+		}
 		if (!this.hp) return '0 fnt';
 		var hpstring;
 		if (realHp || this.battle.getFormat().debug) {
@@ -982,6 +991,9 @@ var BattleSide = (function() {
 		this.active = [null];
 		this.sideConditions = {};
 
+		// stores exact health for use in the health queue
+		this.exactHealth = [];
+
 		this.id = (n?'p2':'p1');
 
 		switch (this.battle.gameType) {
@@ -1012,8 +1024,10 @@ var BattleSide = (function() {
 	BattleSide.prototype.getData = function() {
 		var data = {
 			name: this.name,
-			pokemon: []
+			pokemon: [],
+			exactHealth: this.exactHealth.join(',')
 		};
+		this.exactHealth = [];
 		for (var i=0; i<this.pokemon.length; i++) {
 			var pokemon = this.pokemon[i];
 			data.pokemon.push({
