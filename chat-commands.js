@@ -803,7 +803,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'savereplay':
 		if (!room || !room.battle) return false;
 		var logidx = 2; // spectator log (no exact HP)
-		if (!room.active) {
+		if (room.battle.ended) {
 			// If the battle is finished when /savereplay is used, include
 			// exact HP in the replay log.
 			logidx = 3;
