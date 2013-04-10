@@ -216,6 +216,7 @@ var BattleRoom = (function() {
 		logData.p2rating = p2rating;
 		logData.endType = this.battle.endType;
 		if (!p1rating) logData.ladderError = true;
+		logData.log = BattleRoom.prototype.getLog.call(logData, 3); // replay log (exact damage)
 		var date = new Date();
 		var logfolder = date.format('{yyyy}-{MM}');
 		var logsubfolder = date.format('{yyyy}-{MM}-{dd}');
