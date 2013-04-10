@@ -448,7 +448,7 @@ var BattlePokemon = (function() {
 		return {
 			moves: this.getMoves(),
 			trapped: this.trapped
-		}
+		};
 	};
 	BattlePokemon.prototype.positiveBoosts = function() {
 		var boosts = 0;
