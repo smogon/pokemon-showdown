@@ -136,6 +136,11 @@ exports.BattleAbilities = {
 				pokemon.trapped = true;
 			}
 		},
+		onFoeMaybeTrapPokemon: function(pokemon) {
+			if (pokemon.runImmunity('Ground', false)) {
+				pokemon.maybeTrapped = true;
+			}
+		},
 		id: "arenatrap",
 		name: "Arena Trap",
 		rating: 5,
@@ -1191,6 +1196,11 @@ exports.BattleAbilities = {
 				pokemon.trapped = true;
 			}
 		},
+		onFoeMaybeTrapPokemon: function(pokemon) {
+			if (pokemon.hasType('Steel')) {
+				pokemon.maybeTrapped = true;
+			}
+		},
 		id: "magnetpull",
 		name: "Magnet Pull",
 		rating: 5,
@@ -1853,6 +1863,11 @@ exports.BattleAbilities = {
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.ability !== 'shadowtag') {
 				pokemon.trapped = true;
+			}
+		},
+		onFoeMaybeTrapPokemon: function(pokemon) {
+			if (pokemon.ability !== 'shadowtag') {
+				pokemon.maybeTrapped = true;
 			}
 		},
 		id: "shadowtag",

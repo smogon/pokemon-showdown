@@ -120,6 +120,13 @@ var Simulator = (function(){
 			this.inactiveSide = -1;
 			break;
 
+		case 'callback':
+			var player = this.getPlayer(lines[2]);
+			if (player) {
+				player.sendTo(this.id, '|callback|' + lines[3]);
+			}
+			break;
+
 		case 'request':
 			var player = this.getPlayer(lines[2]);
 			var rqid = lines[3];
