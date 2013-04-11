@@ -2654,7 +2654,7 @@ exports.BattleItems = {
 		},
 		onModifyPokemonPriority: -10,
 		onModifyPokemon: function(pokemon) {
-			pokemon.trapped = false;
+			pokemon.trapped = pokemon.maybeTrapped = false;
 		},
 		desc: "Holder may switch out even when trapped by another Pokemon."
 	},
