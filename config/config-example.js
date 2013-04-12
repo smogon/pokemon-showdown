@@ -136,6 +136,12 @@ exports.simulatorprocesses = 1;
 // from the `users` array. The default is 1 hour.
 exports.inactiveuserthreshold = 1000*60*60;
 
+// Chat blacklist. Chat messages that match any of these regular
+// expressions will be dropped and not passed along to clients.
+exports.blacklist = [
+	/\bnimp\.org\b/
+];
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"

@@ -2041,9 +2041,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 	}
 
-	if (message.match(/\bnimp\.org\b/)) {
-		// spam site
-		// todo: custom banlists
+	var blacklist = config.blacklist || [/\bnimp\.org\b/];
+	if (blacklist.any(function(r) {
+		return r.test(message);
+	})) {
 		return false;
 	}
 
