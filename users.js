@@ -345,6 +345,7 @@ var User = (function () {
 		this.userid = userid;
 		users[this.userid] = this;
 		this.authenticated = false;
+		this.group = config.groupsranking[0];
 
 		for (var i=0; i<this.connections.length; i++) {
 			console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
