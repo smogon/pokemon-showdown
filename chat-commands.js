@@ -720,25 +720,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		if (target === 'all') {
-			for (var i in require.cache) delete require.cache[i];
-			Tools = require('./tools.js');
-
-			parseCommand = require('./chat-commands.js').parseCommand;
-
-			sim = require('./battles.js');
-			BattlePokemon = sim.BattlePokemon;
-			BattleSide = sim.BattleSide;
-			Battle = sim.Battle;
-			emit(socket, 'console', 'The game engine has been hot-patched.');
-			return false;
-		} else if (target === 'data') {
-			for (var i in require.cache) delete require.cache[i];
-			Tools = require('./tools.js');
-			emit(socket, 'console', 'Game resources have been hot-patched.');
-			return false;
-		} else if (target === 'chat') {
-			for (var i in require.cache) delete require.cache[i];
+		if (target === 'chat') {
+			delete require.cache[require.resolve('./chat-commands.js')];
 			parseCommand = require('./chat-commands.js').parseCommand;
 			emit(socket, 'console', 'Chat commands have been hot-patched.');
 			return false;
@@ -1989,8 +1972,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', 'Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~');
 			emit(socket, 'console', 'Hot-patching has greater memory requirements than restarting.');
-			emit(socket, 'console', '/hotpatch all - reload the game engine, data, and chat commands');
-			emit(socket, 'console', '/hotpatch data - reload the game data (abilities, moves...)');
 			emit(socket, 'console', '/hotpatch chat - reload chat-commands.js');
 		}
 		if (target === '~' || target === 'lockdown') {
