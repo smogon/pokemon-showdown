@@ -391,7 +391,6 @@ catch (err) {
 }
 
 Data = {};
-Tools = require('./tools.js');
 
 Users = require('./users.js');
 
@@ -619,3 +618,12 @@ console.log('Server started on port ' + config.port);
 console.log('Test your server at http://localhost' +
 	((config.port !== 8000) ? ('-' + config.port) : '') +
 	'.psim.us');
+
+// This slow operation is done *after* we start listening for connections
+// to the server. Anybody who connects while this require() is running will
+// have to wait a couple seconds before they are able to join the server, but
+// at least they probably won't receive a connection error message.
+Tools = require('./tools.js');
+
+// After loading tools, generate and cache the format list.
+rooms.lobby.formatListText = rooms.lobby.getFormatListText();
