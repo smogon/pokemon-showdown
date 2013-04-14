@@ -1,28 +1,55 @@
 
 var simulators = {};
-var processes = (function(fork, num) {
-	var ret = [];
-	for (var i = 0; i < num; ++i) {
-		ret.push((function() {
-			var process = fork('battles.js');
-			process.on('message', function(message) {
-				var lines = message.split('\n');
-				var sim = simulators[lines[0]];
-				if (sim) {
-					sim.receive(lines);
-				}
-			});
-			return {
-				load: 0,
-				send: function(data) {
-					process.send(data);
-				}
-			};
-		})());
-		console.log('NEW SIMULATOR PROCESS: ' + i);
+
+var SimulatorProcess = (function() {
+	function SimulatorProcess() {
+		this.process = require('child_process').fork('battles.js');
+		this.process.on('message', function(message) {
+			var lines = message.split('\n');
+			var sim = simulators[lines[0]];
+			if (sim) {
+				sim.receive(lines);
+			}
+		});
+		this.send = this.process.send.bind(this.process);
 	}
-	return ret;
-})(require('child_process').fork, config.simulatorprocesses || 1);
+	SimulatorProcess.prototype.load = 0;
+	SimulatorProcess.prototype.active = true;
+	SimulatorProcess.processes = [];
+	SimulatorProcess.spawn = function() {
+		var num = config.simulatorprocesses || 1;
+		for (var i = 0; i < num; ++i) {
+			this.processes.push(new SimulatorProcess());
+		}
+	};
+	SimulatorProcess.respawn = function() {
+		this.processes.splice(0).forEach(function(process) {
+			process.active = false;
+			if (!process.load) process.process.disconnect();
+		});
+		this.spawn();
+	};
+	SimulatorProcess.acquire = function() {
+		var process = this.processes[0];
+		for (var i = 1; i < this.processes.length; ++i) {
+			if (this.processes[i].load < process.load) {
+				process = this.processes[i];
+			}
+		}
+		++process.load;
+		return process;
+	};
+	SimulatorProcess.release = function(process) {
+		--process.load;
+		if (!process.load && !process.active) {
+			process.process.disconnect();
+		}
+	};
+	return SimulatorProcess;
+})();
+
+// Create the initial set of simulator processes.
+SimulatorProcess.spawn();
 
 var slice = Array.prototype.slice;
 
@@ -41,16 +68,7 @@ var Simulator = (function(){
 		this.playerTable = {};
 		this.requests = {};
 
-		this.process = (function() {
-			var process = processes[0];
-			for (var i = 1; i < processes.length; ++i) {
-				if (processes[i].load < process.load) {
-					process = processes[i];
-				}
-			}
-			++process.load;
-			return process;
-		})();
+		this.process = SimulatorProcess.acquire();
 
 		simulators[id] = this;
 
@@ -262,7 +280,8 @@ var Simulator = (function(){
 
 		this.players = null;
 		this.room = null;
-		--this.process.load;
+		SimulatorProcess.release(this.process);
+		this.process = null;
 		delete simulators[this.id];
 	};
 
@@ -271,18 +290,16 @@ var Simulator = (function(){
 
 exports.Simulator = Simulator;
 exports.simulators = simulators;
-// `processes` is not used outside this file, but it might be useful to be
-// able to access it using the dev console.
-exports.processes = processes;
+exports.SimulatorProcess = SimulatorProcess;
 
 exports.create = function(id, format, rated, room) {
 	if (simulators[id]) return simulators[id];
 	return new Simulator(id, format, rated, room);
-}
+};
 
 // Evaluate code in every simulator process.
 exports.eval = function(code) {
 	processes.forEach(function(process) {
 		process.send('|eval|' + code);
 	});
-}
+};
