@@ -1527,7 +1527,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		config.potd = target;
-		Simulator.eval('config.potd = \''+toId(target)+'\'');
+		Simulator.SimulatorProcess.eval('config.potd = \''+toId(target)+'\'');
 		if (target) {
 			rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day is now '+target+'!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>');
 			logModCommand(room, 'The Pokemon of the Day was changed to '+target+' by '+user.name+'.', true);

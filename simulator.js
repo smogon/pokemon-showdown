@@ -45,6 +45,11 @@ var SimulatorProcess = (function() {
 			process.process.disconnect();
 		}
 	};
+	SimulatorProcess.eval = function(code) {
+		this.processes.forEach(function(process) {
+			process.send('|eval|' + code);
+		});
+	};
 	return SimulatorProcess;
 })();
 
@@ -295,11 +300,4 @@ exports.SimulatorProcess = SimulatorProcess;
 exports.create = function(id, format, rated, room) {
 	if (simulators[id]) return simulators[id];
 	return new Simulator(id, format, rated, room);
-};
-
-// Evaluate code in every simulator process.
-exports.eval = function(code) {
-	processes.forEach(function(process) {
-		process.send('|eval|' + code);
-	});
 };
