@@ -284,7 +284,7 @@ if (config.watchconfig) {
 	fs.watchFile('./config/config.js', function(curr, prev) {
 		if (curr.mtime <= prev.mtime) return;
 		try {
-			for (var i in require.cache) delete require.cache[i];
+			delete require.cache[require.resolve('./config/config.js')];
 			config = require('./config/config.js');
 			console.log('Reloaded config/config.js');
 		} catch (e) {}
