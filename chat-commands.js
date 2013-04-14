@@ -725,6 +725,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			parseCommand = require('./chat-commands.js').parseCommand;
 			emit(socket, 'console', 'Chat commands have been hot-patched.');
 			return false;
+		} else if (target === 'battles') {
+			Simulator.SimulatorProcess.respawn();
+			emit(socket, 'console', 'Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.');
+			return false;
 		}
 		emit(socket, 'console', 'Your hot-patch command was unrecognized.');
 		return false;
@@ -1973,6 +1977,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~');
 			emit(socket, 'console', 'Hot-patching has greater memory requirements than restarting.');
 			emit(socket, 'console', '/hotpatch chat - reload chat-commands.js');
+			emit(socket, 'console', '/hotpatch battles - spawn new simulator processes');
 		}
 		if (target === '~' || target === 'lockdown') {
 			matched = true;
