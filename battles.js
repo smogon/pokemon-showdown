@@ -130,12 +130,9 @@ var BattlePokemon = (function() {
 		this.battle = side.battle;
 		if (typeof set === 'string') set = {name: set};
 
-		// "prebound" function for nicer syntax (avoids use of `bind`)
-		this.getHealth = (function(self) {
-			return function(side) {
-				return BattlePokemon.getHealth.call(self, side);
-			};
-		})(this);
+		// "pre-bound" functions for nicer syntax (avoids repeated use of `bind`)
+		this.getHealth = BattlePokemon.getHealth.bind(this);
+		this.getDetails = BattlePokemon.getDetails.bind(this);
 
 		this.set = set;
 
@@ -2036,7 +2033,7 @@ var Battle = (function() {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		this.add('switch', side.active[pos], BattlePokemon.getDetails.bind(side.active[pos]));
+		this.add('switch', side.active[pos], side.active[pos].getDetails);
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -2091,7 +2088,7 @@ var Battle = (function() {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		this.add('drag', side.active[pos], BattlePokemon.getDetails.bind(side.active[pos]));
+		this.add('drag', side.active[pos], side.active[pos].getDetails);
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -2226,7 +2223,7 @@ var Battle = (function() {
 			if (target.illusion && effect && effect.effectType === 'Move') {
 				this.debug('illusion cleared');
 				target.illusion = null;
-				this.add('replace', target, BattlePokemon.getDetails.bind(target));
+				this.add('replace', target, target.getDetails);
 			}
 		}
 		if (damage !== 0) damage = clampIntRange(damage, 1);
