@@ -2140,7 +2140,8 @@ exports.BattleFormatsData = {
 	ludicolo: {
 		viableMoves: {"raindance":1,"hydropump":1,"surf":1,"gigadrain":1,"icebeam":1,"scald":1,"leechseed":1,"substitute":1,"toxic":1},
 		eventPokemon: [
-			{"generation":5,"level":50,"isDW":false,"abilities":["swiftswim"],"moves":["fakeout","hydropump","icebeam","gigadrain"],"pokeball":"cherishball"}
+			{"generation":5,"level":50,"isDW":false,"abilities":["swiftswim"],"moves":["fakeout","hydropump","icebeam","gigadrain"],"pokeball":"cherishball"},
+			{"generation":5,"level":30,"gender":"M","nature":"Calm","isDW":false,"abilities":["swiftswim"],"moves":["scald","gigadrain","icebeam","sunnyday"]}
 		],
 		dreamWorldRelease: true,
 		tier: "NU"
@@ -4189,17 +4190,17 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	vanillite: {
-		viableMoves: {"icebeam":1,"flashcannon":1,"hiddenpowergrass":1,"hiddenpowerfighting":1,"autotomize":1},
+		viableMoves: {"icebeam":1,"explosion":1,"hiddenpowerelectric":1,"hiddenpowerfighting":1,"autotomize":1},
 		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	vanillish: {
-		viableMoves: {"icebeam":1,"flashcannon":1,"hiddenpowergrass":1,"hiddenpowerfighting":1,"autotomize":1},
+		viableMoves: {"icebeam":1,"explosion":1,"hiddenpowerelectric":1,"hiddenpowerfighting":1,"autotomize":1},
 		dreamWorldRelease: true,
 		tier: "NFE"
 	},
 	vanilluxe: {
-		viableMoves: {"icebeam":1,"flashcannon":1,"hiddenpowergrass":1,"hiddenpowerfighting":1,"autotomize":1},
+		viableMoves: {"icebeam":1,"explosion":1,"hiddenpowerelectric":1,"hiddenpowerfighting":1,"autotomize":1},
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
