@@ -856,13 +856,19 @@ function LobbyRoom(roomid) {
 
 	(function() {
 		const REPORT_USER_STATS_INTERVAL = 1000 * 60 * 10;
+		selfR.maxUsers = selfR.maxUsersDate = 0;
 		var reportUserStats = function() {
-			var users = 0;
-			for (var i in selfR.users) {
-				++users;
+			if (selfR.maxUsersDate) {
+				LoginServer.request('updateuserstats', {
+					date: selfR.maxUsersDate,
+					users: selfR.maxUsers
+				}, function() {});
+				selfR.maxUsersDate = 0;
 			}
+			var users = 0;
+			for (var i in selfR.users) ++users;
 			LoginServer.request('updateuserstats', {
-				date: +new Date(),
+				date: Date.now(),
 				users: users
 			}, function() {});
 		};
@@ -892,6 +898,10 @@ function LobbyRoom(roomid) {
 				continue;
 			}
 			buffer += ','+selfR.users[i].getIdentity();
+		}
+		if (counter > selfR.maxUsers) {
+			selfR.maxUsers = counter;
+			selfR.maxUsersDate = Date.now();
 		}
 		return ''+counter+buffer;
 	};
