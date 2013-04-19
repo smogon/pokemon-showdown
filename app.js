@@ -18,13 +18,6 @@ function runNpm(command) {
 	});
 }
 
-if ({'v0.10.0': 1, 'v0.10.1': 1}[process.version]) {
-	// See https://github.com/joyent/node/pull/5016
-	console.log('ERROR: You are using node ' + process.version + ', which has a bug that prevents');
-	console.log('       Pokemon Showdown from working properly. Please upgrade to node v0.10.2.');
-	process.exit(1);
-}
-
 try {
 	require('sugar');
 } catch (e) {
