@@ -97,17 +97,17 @@ Community
 
 The Pokemon Showdown development IRC channel is `#showdown` at `irc.synirc.net`.
 
-[The Pokemon Showdown forums][4] are hosted on Smogon Forums.
+[The Pokemon Showdown forums][5] are hosted on Smogon Forums.
 
-  [4]: http://www.smogon.com/forums/forumdisplay.php?f=209
+  [5]: http://www.smogon.com/forums/forumdisplay.php?f=209
 
 
 License
 ------------------------------------------------------------------------
 
-Pokemon Showdown's server is distributed under the terms of the [MIT License][5].
+Pokemon Showdown's server is distributed under the terms of the [MIT License][6].
 
-  [5]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+  [6]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
 
 
 Credits
