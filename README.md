@@ -67,11 +67,11 @@ To become an Administrator, create a file named `config/usergroups.csv` containi
 
 Replace `USER` with the username that you would like to become an Administrator.
 
-This username must be registered. If you do not have a registered Pokemon Showdown account, you can create one using [the registration form][3].
+This username must be registered. If you do not have a registered Pokemon Showdown account, you can create one using [the registration form][4].
 
 Once you're an administrator, you can promote/demote others easily with the `/admin`, `/leader`, `/mod`, etc commands.
 
-  [3]: http://pokemonshowdown.com/forum/register
+  [4]: http://pokemonshowdown.com/forum/register
 
 
 Browser support
