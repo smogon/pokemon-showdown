@@ -1050,7 +1050,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case '!avatars':
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
-			'<div class="infobox">Want a custom avatar?<br />- <a href="/sprites/trainers/" target="_blank">How to change your avatar</a></div>');
+			'<div class="infobox">Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown.</div>');
 		return false;
 		break;
 
