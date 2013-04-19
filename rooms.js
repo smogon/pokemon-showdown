@@ -865,11 +865,9 @@ function LobbyRoom(roomid) {
 				}, function() {});
 				selfR.maxUsersDate = 0;
 			}
-			var users = 0;
-			for (var i in selfR.users) ++users;
 			LoginServer.request('updateuserstats', {
 				date: Date.now(),
-				users: users
+				users: Object.size(selfR.users)
 			}, function() {});
 		};
 		setInterval(reportUserStats, REPORT_USER_STATS_INTERVAL);
