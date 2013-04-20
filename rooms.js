@@ -1060,7 +1060,12 @@ function LobbyRoom(roomid) {
 		if (user) {
 			user.sendTo(selfR, message);
 		} else {
-			var isPureLobbyChat = (message.indexOf('\n') < 0 && message.match(/^\|c\|[^\|]*\|/) && message.substr(0,5) !== '|c|~|');
+			var isPureLobbyChat = false;
+			if (message.indexOf('\n') < 0) {
+				if (message.substr(0,3) === '|c|' && message.substr(0,5) !== '|c|~|') isPureLobbyChat = true;
+				if (message.substr(0,10) === '|c|~|/data') isPureLobbyChat = true;
+				if (message.substr(0,24) === '|raw|<div class="infobox') isPureLobbyChat = true;
+			}
 			for (var i in selfR.users) {
 				user = selfR.users[i];
 				if (isPureLobbyChat && user.blockLobbyChat) continue;
