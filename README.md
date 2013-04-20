@@ -127,3 +127,4 @@ Contributors
 - [The Immortal]
 - [Joim]
 - Cody Thompson [Rising_Dusk]
+- Kyle Dove [Kyle-Dove]
