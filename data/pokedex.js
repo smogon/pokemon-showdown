@@ -1,5 +1,5 @@
 exports.BattlePokedex = {
-missingno:{num:0,species:"Missingno.",types:["???","Normal"],baseStats:{hp:33,atk:136,def:0,spa:6,spd:6,spe:29},abilities:{0:"Download",1:"Normalize",DW:"Truant"},heightm:3,weightkg:1590.8,color:"Gray",eggGroups:["No Eggs"]},
+missingno:{num:0,species:"Missingno.",types:["???","Normal"],baseStats:{hp:33,atk:136,def:0,spa:6,spd:6,spe:29},abilities:{0:"",DW:""},heightm:3,weightkg:1590.8,color:"Gray",eggGroups:["No Eggs"]},
 tomohawk:{num:-1,species:"Tomohawk",types:["Flying","Fighting"],baseStats:{hp:105,atk:60,def:90,spa:115,spd:80,spe:85},abilities:{0:"Intimidate",1:"Prankster",DW:"Justified"},heightm:1.27,weightkg:37.2,color:"",eggGroups:["Ground","Flying"]},
 necturna:{num:-2,species:"Necturna",types:["Grass","Ghost"],gender:"F",baseStats:{hp:64,atk:120,def:100,spa:85,spd:120,spe:81},abilities:{0:"Forewarn",DW:"Telepathy"},heightm:1.65,weightkg:49.6,color:"Black",eggGroups:["Plant","Ground"]},
 mollux:{num:-3,species:"Mollux",types:["Fire","Poison"],baseStats:{hp:95,atk:45,def:83,spa:131,spd:105,spe:76},abilities:{0:"Dry Skin",DW:"Illuminate"},heightm:1.2,weightkg:41,color:"Pink",eggGroups:["Fairy","Ground"]},
