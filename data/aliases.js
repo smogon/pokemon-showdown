@@ -2,6 +2,7 @@ exports.BattleAliases = {
 	// formes
 	"basculinb": "Basculin-Blue-Striped",
 	"basculinblue": "Basculin-Blue-Striped",
+	"basculinbluestripe": "Basculin-Blue-Striped",
 	"castformh": "Castform-Snowy",
 	"castformice": "Castform-Snowy",
 	"castformr": "Castform-Rainy",
@@ -51,6 +52,7 @@ exports.BattleAliases = {
 	"meloettaaria": "Meloetta",
 	"basculinr": "Basculin",
 	"basculinred": "Basculin",
+	"basculinredstripe": "Basculin",
 	"basculinredstriped": "Basculin",
 	"tornadusi": "Tornadus",
 	"tornadusincarnation": "Tornadus",
