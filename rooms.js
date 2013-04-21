@@ -906,7 +906,7 @@ function LobbyRoom(roomid) {
 	this.getRoomList = function(filter) {
 		var roomList = {};
 		var total = 0;
-		for (i=selfR.rooms.length-1; i>=0; i--) {
+		for (var i=selfR.rooms.length-1; i>=0; i--) {
 			var room = selfR.rooms[i];
 			if (!room || !room.active) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
