@@ -467,12 +467,11 @@ var BattlePokemon = (function() {
 	};
 	BattlePokemon.prototype.getRequestData = function() {
 		var lockedMove = this.getLockedMove();
-		var data = {
-			moves: this.getMoves(lockedMove),
-			maybeTrapped: this.maybeTrapped
-		};
+		var data = {moves: this.getMoves(lockedMove)};
 		if (lockedMove && this.trapped) {
 			data.trapped = true;
+		} else if (this.maybeTrapped) {
+			data.maybeTrapped = true;
 		}
 		return data;
 	};
