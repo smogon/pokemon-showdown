@@ -77,7 +77,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				room: room.id
 			};
 			if (user.can('ip', targetUser)) {
-				userdetails.ips = Object.keys(targetUser.ips);
+				var ips = Object.keys(targetUser.ips);
+				if (ips.length === 1) {
+					userdetails.ip = ips[0];
+				} else {
+					userdetails.ips = ips;
+				}
 			}
 			emit(socket, 'command', userdetails);
 		} else if (cmd === 'roomlist') {
