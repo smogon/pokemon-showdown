@@ -873,6 +873,28 @@ function LobbyRoom(roomid) {
 		setInterval(reportUserStats, REPORT_USER_STATS_INTERVAL);
 	})();
 
+	this.lastRoomReported = null;
+
+	this.reportRecentBattles = function() {
+		var rooms = selfR.getRoomList(false, selfR.lastRoomReported);
+		if (Object.isEmpty(rooms)) return;
+		selfR.lastRoomReported = null;
+		var entries = [];
+		for (var id in rooms) {
+			var room = rooms[id];
+			selfR.lastRoomReported = selfR.lastRoomReported || id;
+			entries.push('|B|' + id + '|' + rooms[id].p1 + '|' + rooms[id].p2);
+		}
+		selfR.send(entries.join('\n'));
+	};
+
+	if (config.reportbattlesperiod) {
+		this.reportBattlesInterval = setInterval(
+			selfR.reportRecentBattles,
+			config.reportbattlesperiod
+		);
+	}
+
 	this.getUpdate = function(since, omitUsers, omitRoomList) {
 		var update = {room: roomid};
 		var i = since;
@@ -903,11 +925,12 @@ function LobbyRoom(roomid) {
 		}
 		return ''+counter+buffer;
 	};
-	this.getRoomList = function(filter) {
+	this.getRoomList = function(filter, lastRoomReported) {
 		var roomList = {};
 		var total = 0;
 		for (var i=selfR.rooms.length-1; i>=0; i--) {
 			var room = selfR.rooms[i];
+			if (lastRoomReported && (room.id === lastRoomReported)) break;
 			if (!room || !room.active) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
 			var roomData = {};
@@ -916,7 +939,7 @@ function LobbyRoom(roomid) {
 				if (room.battle.players[1]) roomData.p2 = room.battle.players[1].getIdentity();
 			}
 			if (!roomData.p1 || !roomData.p2) continue;
-			roomList[selfR.rooms[i].id] = roomData;
+			roomList[room.id] = roomData;
 
 			total++;
 			if (total >= 6 && !filter) break;
@@ -1216,6 +1239,7 @@ function LobbyRoom(roomid) {
 		newRoom.joinBattle(p2, p2team);
 		selfR.cancelSearch(p1, true);
 		selfR.cancelSearch(p2, true);
+		if (config.reportbattlesperiod) return;
 		if (config.reportbattles) {
 			selfR.add('|b|'+newRoom.id+'|'+p1.getIdentity()+'|'+p2.getIdentity());
 		} else {
