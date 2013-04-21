@@ -1062,9 +1062,9 @@ function LobbyRoom(roomid) {
 		} else {
 			var isPureLobbyChat = false;
 			if (message.indexOf('\n') < 0) {
-				if (message.substr(0,3) === '|c|' && message.substr(0,5) !== '|c|~|') isPureLobbyChat = true;
-				if (message.substr(0,10) === '|c|~|/data') isPureLobbyChat = true;
-				if (message.substr(0,24) === '|raw|<div class="infobox') isPureLobbyChat = true;
+				isPureLobbyChat = (message.substr(0,3) === '|c|' && message.substr(0,5) !== '|c|~|') ||
+					message.substr(0,10) === '|c|~|/data' ||
+					message.substr(0,24) === '|raw|<div class="infobox';
 			}
 			for (var i in selfR.users) {
 				user = selfR.users[i];
