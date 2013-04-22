@@ -2075,7 +2075,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 		}
 		if ((letter !== true) && (number !== true)) {
-			emit(socket, 'console', 'Your message must contain at least two distinct numbers or two distinct numbers.');
+			emit(socket, 'console', 'Your message must contain at least two distinct letters or two distinct numbers.');
 			return false;
 		}
 	}
