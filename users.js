@@ -1066,6 +1066,7 @@ function ipSearch(ip, table) {
 	return false;
 }
 
+exports.User = User;
 exports.get = getUser;
 exports.getExact = getExactUser;
 exports.searchUser = searchUser;
