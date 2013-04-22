@@ -409,7 +409,7 @@ exports.BattleStatuses = {
 			return 5;
 		},
 		onModifySpD: function(spd, pokemon) {
-			if (pokemon.hasType('Rock')) {
+			if (pokemon.hasType('Rock') && this.isWeather('sandstorm')) {
 				return spd * 3/2;
 			}
 		},
