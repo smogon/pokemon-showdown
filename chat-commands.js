@@ -98,7 +98,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'me':
 	case 'mee':
-		if (canTalk(user, room)) return true;
+		if (canTalk(user, room)) {
+			if (config.chatfilter) {
+				var suffix = config.chatfilter(user, room, socket, target);
+				if (suffix === false) return false;
+				return '/' + cmd + ' ' + suffix;
+			}
+			return true;
+		}
 		break;
 
 	case '!birkal':
