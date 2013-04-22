@@ -2047,6 +2047,39 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	// remove zalgo
 	message = message.replace(/[\u0300-\u036f]{3,}/g,'');
 
+	if (room.id === 'lobby') {
+		// check that the message contains either two distinct numbers or
+		// two distinct letters
+		var letter;
+		var number;
+		for (var i = 0; i < message.length; ++i) {
+			var char = message.charCodeAt(i);
+			if ((char >= 97) && (char <= 122)) { // a-z
+				if (!letter) letter = char;
+				else if (letter !== char) {
+					letter = true;
+					break;
+				}
+			} else if ((char >= 65) && (char <= 90)) { // A-Z
+				if (!letter) letter = char + 32;
+				else if (letter !== (char + 32)) {
+					letter = true;
+					break;
+				}
+			} else if ((char >= 48) && (char <= 57)) { // 0-9
+				if (!number) number = char;
+				else if (number !== char) {
+					number = true;
+					break;
+				}
+			}
+		}
+		if ((letter !== true) && (number !== true)) {
+			emit(socket, 'console', 'Your message must contain at least two distinct numbers or two distinct numbers.');
+			return false;
+		}
+	}
+
 	return message;
 }
 
