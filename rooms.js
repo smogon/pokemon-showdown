@@ -478,9 +478,10 @@ var BattleRoom = (function() {
 			battlelog: this.getLogForUser(user)
 		};
 		emit(socket, 'init', initdata);
-		if (this.battle.requests[user.userid]) {
-			this.battle.resendRequest(user);
-		}
+		// this handles joining a battle in which a user is a participant,
+		// where the user has already identified before attempting to join
+		// the battle
+		this.battle.resendRequest(user);
 	};
 	BattleRoom.prototype.join = function(user) {
 		if (!user) return false;
@@ -505,19 +506,24 @@ var BattleRoom = (function() {
 			battlelog: this.getLogForUser(user)
 		};
 		user.emit('init', initdata);
-
 		return user;
 	};
 	BattleRoom.prototype.rename = function(user, oldid, joining) {
 		if (joining) {
 			this.addCmd('join', user.name);
 		}
+		var resend = joining || !this.battle.playerTable[user.prevNames[user.userid]];
 		if (this.battle.playerTable[user.userid]) {
 			this.battle.rename();
 		}
 		delete this.users[oldid];
 		this.users[user.userid] = user;
 		this.update();
+		if (resend) {
+			// this handles a named user renaming themselves into a user in the
+			// battle (i.e. by using /nick)
+			this.battle.resendRequest(user);
+		}
 		return user;
 	};
 	BattleRoom.prototype.joinBattle = function(user, team) {
