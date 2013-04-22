@@ -1,8 +1,5 @@
 const MAX_MESSAGE_LENGTH = 300;
 const TIMEOUT_DEALLOCATE = 15*60*1000;
-// Increment this by 1 for each change that breaks compatibility between
-// the previous version of the client and the current version of the server.
-const BATTLE_ROOM_PROTOCOL_VERSION = 2;
 
 var BattleRoom = (function() {
 	function BattleRoom(roomid, format, p1, p2, parentid, rated) {
@@ -474,7 +471,6 @@ var BattleRoom = (function() {
 			token: user.token,
 			room: this.id,
 			roomType: 'battle',
-			version: BATTLE_ROOM_PROTOCOL_VERSION,
 			battlelog: this.getLogForUser(user)
 		};
 		emit(socket, 'init', initdata);
@@ -502,7 +498,6 @@ var BattleRoom = (function() {
 			token: user.token,
 			room: this.id,
 			roomType: 'battle',
-			version: BATTLE_ROOM_PROTOCOL_VERSION,
 			battlelog: this.getLogForUser(user)
 		};
 		user.emit('init', initdata);
