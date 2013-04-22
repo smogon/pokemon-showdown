@@ -613,11 +613,15 @@ var User = (function () {
 		});
 		connection.user = this;
 		for (var i in connection.rooms) {
+			var room = connection.rooms[i];
 			if (!this.roomCount[i]) {
-				connection.rooms[i].join(this);
+				room.join(this);
 				this.roomCount[i] = 0;
 			}
 			this.roomCount[i]++;
+			if (room.battle) {
+				room.battle.resendRequest(this);
+			}
 		}
 	};
 	User.prototype.debugData = function() {
