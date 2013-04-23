@@ -9203,6 +9203,13 @@ exports.BattleMovedex = {
 		num: 514,
 		accuracy: 100,
 		basePower: 70,
+		basePowerCallback: function(pokemon) {
+			if (pokemon.side.faintedLastTurn) {
+				this.debug('Boosted for a faint last turn');
+				return 140;
+			}
+			return 70;
+		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if one of the user's party members fainted last turn. Makes contact.",
 		shortDesc: "Power doubles if an ally fainted last turn.",

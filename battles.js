@@ -1037,6 +1037,8 @@ var BattleSide = (function() {
 
 	BattleSide.prototype.isActive = false;
 	BattleSide.prototype.pokemonLeft = 0;
+	BattleSide.prototype.faintedLastTurn = false;
+	BattleSide.prototype.faintedThisTurn = false;
 	BattleSide.prototype.decision = null;
 	BattleSide.prototype.foe = null;
 
@@ -2118,6 +2120,8 @@ var Battle = (function() {
 				}
 				pokemon.activeTurns++;
 			}
+			this.sides[i].faintedLastTurn = this.sides[i].faintedThisTurn;
+			this.sides[i].faintedThisTurn = false;
 		}
 		this.add('turn', this.turn);
 		this.makeRequest('move');
@@ -2615,6 +2619,7 @@ var Battle = (function() {
 				faintData.target.isActive = false;
 				faintData.target.isStarted = false;
 				faintData.target.side.pokemonLeft--;
+				faintData.target.side.faintedThisTurn = true;
 			}
 		}
 		if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
