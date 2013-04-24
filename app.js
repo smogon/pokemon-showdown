@@ -21,12 +21,10 @@ function runNpm(command) {
 try {
 	require('sugar');
 } catch (e) {
-	runNpm('install');
-	return;
+	return runNpm('install');
 }
 if (!Object.select) {
-	runNpm('update');
-	return;
+	return runNpm('update');
 }
 
 fs = require('fs');
@@ -303,6 +301,22 @@ if (config.protocol === 'io') {
 	server = require('engine.io').attach(app);
 } else {
 	app = require('http').createServer();
+	try {
+		var nodestatic = require('node-static');
+		var fileserver = new nodestatic.Server('./static');
+		app.on('request', function(request, response) {
+			request.resume();
+			request.addListener('end', function() {
+				fileserver.serve(request, response, function(e, res) {
+				    if (e && (e.status === 404)) {
+				        fileserver.serveFile('404.html', 404, {}, request, response);
+				    }
+				});
+			});
+		});
+	} catch (e) {
+		console.log('Did not start node-static - try `npm install` if you want to use it');
+	}
 	server = require('sockjs').createServer({
 		sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js",
 		log: function(severity, message) {
