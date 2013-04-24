@@ -153,6 +153,9 @@ exports.blacklist = [
 // intended to be used by a busy server with thousands of concurrent users.
 exports.reportbattlesperiod = false;
 
+// Set this to true if you are using Pokemon Showdown on Heroku.
+exports.herokuhack = false;
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
