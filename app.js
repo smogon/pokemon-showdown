@@ -580,6 +580,15 @@ if (config.protocol === 'io') { // Socket.IO
 			return;
 		}
 		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
+		var interval;
+		if (config.herokuhack) {
+			// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
+			interval = setInterval(function() {
+				try {
+					socket._session.recv.didClose();
+				} catch (e) {}
+			}, 15000);
+		}
 		socket.on('data', function(message) {
 			var data = null;
 			if (message.substr(0,1) === '{') {
@@ -598,6 +607,9 @@ if (config.protocol === 'io') { // Socket.IO
 			if (events[data.type]) you = events[data.type](data, socket, you) || you;
 		});
 		socket.on('close', function() {
+			if (interval) {
+				clearInterval(interval);
+			}
 			var youUser = resolveUser(you, socket);
 			if (!youUser) return;
 			youUser.disconnect(socket);
