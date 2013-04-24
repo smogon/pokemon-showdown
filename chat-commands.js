@@ -1127,13 +1127,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
 			'<div class="infobox">Information on the Other Metagames:<br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3475624" target="_blank">Hackmons</a><br />' +
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3463764" target="_blank">Balanced Hackmons</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3471810" target="_blank">Dream World OU</a><br />' +
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3467120" target="_blank">Glitchmons</a><br />' +
-			'- <a href="http://www.smogon.com/sim/seasonal" target="_blank">Seasonal: Fools Festival</a><br />' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3479358" target="_blank">Tier Shift</a><br />' +
+			'- <a href="http://www.smogon.com/sim/seasonal" target="_blank">Seasonal Ladder</a><br />' +
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3476469" target="_blank">Smogon Doubles</a><br />' +
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3471161" target="_blank">VGC 2013</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3481155" target="_blank">OM of the Month: Tier Shift</a>' +
+			'- <a href="http://www.smogon.com/forums/showthread.php?t=3481155" target="_blank">OM of the Month</a>' +
 			'</div>');
 		return false;
 		break;
