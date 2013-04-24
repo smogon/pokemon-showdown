@@ -1016,7 +1016,7 @@ var Connection = (function () {
 			this.ip = socket.remoteAddress;
 		}
 
-		if (ipSearch(this.useip, bannedIps) || useridSearch(user.userid, bannedIps)) {
+		if (ipSearch(this.ip, bannedIps) || useridSearch(user.userid, bannedIps)) {
 			// gonna kill this
 			this.banned = true;
 			this.user = null;
