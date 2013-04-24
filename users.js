@@ -1033,11 +1033,10 @@ var Connection = (function () {
 
 function ipSearch(ip, table) {
 	if (table[ip]) return true;
-	var dotIndex = ip.lastIndexOf('.');
-	for (var i=0; i<4 && dotIndex > 0; i++) {
-		ip = ip.substr(0, dotIndex);
-		if (table[ip+'.*']) return true;
-		dotIndex = ip.lastIndexOf('.');
+	var ipRange = ip.substr(0, ip.lastIndexOf('.'));
+	for (var userIp in table) {
+		var userIpRange = userIp.substr(0, userIp.lastIndexOf('.'));
+		if (ipRange === userIpRange) return true;
 	}
 	return false;
 }
