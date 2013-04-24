@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <script>
-document.location.replace('http://' +
-	document.location.hostname +
-	'-' +
-	document.location.port +
-	'.psim.us'
-);
+(function() {
+	var suffix = document.location.port ? ('-' + document.location.port) : '';
+	document.location.replace('http://' + document.location.hostname + suffix + '.psim.us');
+})();
 </script>
 <p>This is a <a href="http://www.pokemonshowdown.com">Pokemon Showdown</a> server!</p>
 <noscript><p>Try enabling JavaScript to play!</p></noscript>
