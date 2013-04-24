@@ -594,6 +594,42 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 80
 	},
+	roost: {
+		inherit: true,
+		effect: {
+			duration: 1,
+			onStart: function(pokemon) {
+				// This is not how Roost "should" be implemented, but is rather
+				// a simplification.
+
+				// This implementation has the advantage of not requiring a separate
+				// event just for Roost, and the only difference would come up in
+				// Doubles Hackmons. If we ever introduce Doubles Hackmons and
+				// Color Change Roost becomes popular; I might need to revisit this
+				// implementation. :P
+
+				if (pokemon.hasType('Flying')) {
+					// don't just delete the type; since
+					// the types array may be a pointer to the
+					// types array in the Pokedex.
+					this.effectData.oldTypes = pokemon.types;
+					if (pokemon.types[0] === 'Flying') {
+						// Pure Flying-types become ???-type
+						pokemon.types = [pokemon.types[1]];
+					} else {
+						pokemon.types = [pokemon.types[0]];
+					}
+					this.effectData.roostTypeString = pokemon.types.join(',');
+				}
+				//pokemon.negateImmunity['Ground'] = 1;
+			},
+			onEnd: function(pokemon) {
+				if (this.effectData.roostTypeString === pokemon.types.join(',')) {
+					pokemon.types = this.effectData.oldTypes;
+				}
+			}
+		}
+	},
 	sandtomb: {
 		inherit: true,
 		accuracy: 70,
