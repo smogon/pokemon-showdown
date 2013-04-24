@@ -332,23 +332,27 @@ exports.BattleMovedex = {
 				return this.random(3,7);
 			},
 			onStart: function(target) {
-				var noEncore = {encore:1,mimic:1,mirrormove:1,sketch:1,transform:1};
+				var noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, transform:1};
 				var moveIndex = target.moves.indexOf(target.lastMove);
 				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
+					// it failed
 					this.add('-fail',target);
 					delete target.volatiles['encore'];
 					return;
 				}
 				this.effectData.move = target.lastMove;
 				this.add('-start', target, 'Encore');
-				if (this.willMove(target)) {
-					this.changeDecision(target, {move:this.effectData.move});
-				} else {
+				if (!this.willMove(target)) {
 					this.effectData.duration++;
 				}
 			},
+			onOverrideDecision: function(pokemon) {
+				return this.effectData.move;
+			},
+			onResidualOrder: 13,
 			onResidual: function(target) {
 				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) {
+					// early termination if you run out of PP
 					delete target.volatiles.encore;
 					this.add('-end', target, 'Encore');
 				}
@@ -364,16 +368,6 @@ exports.BattleMovedex = {
 					if (pokemon.moveset[i].id !== this.effectData.move) {
 						pokemon.moveset[i].disabled = true;
 					}
-				}
-			},
-			onBeforeTurn: function(pokemon) {
-				if (!this.effectData.move) {
-					// ???
-					return;
-				}
-				var decision = this.willMove(pokemon);
-				if (decision) {
-					this.changeDecision(pokemon, {move:this.effectData.move});
 				}
 			}
 		}

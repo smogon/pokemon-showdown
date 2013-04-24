@@ -225,16 +225,7 @@ exports.BattleStatuses = {
 		onStart: function(target, source, effect) {
 			this.effectData.move = 'rage';
 		},
-		onLockMove: function(pokemon) {
-			return 'rage';
-		},
-		onBeforeTurn: function(pokemon) {
-			var move = this.getMove('rage');
-			if (move.id) {
-				this.debug('Forcing into rage');
-				this.changeDecision(pokemon, {move: move.id});
-			}
-		},
+		onLockMove: 'rage',
 		onTryHit: function(target, source, move) {
 			if (target.boosts.atk < 6 && move.id === 'disable') {
 				this.boost({atk:1});

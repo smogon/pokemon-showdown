@@ -41,13 +41,6 @@ exports.BattleStatuses = {
 		},
 		onLockMove: function(pokemon) {
 			return pokemon.lastMove;
-		},
-		onBeforeTurn: function(pokemon) {
-			var move = this.getMove(pokemon.lastMove);
-			if (pokemon.lastMove) {
-				this.debug('Forcing into '+pokemon.lastMove);
-				this.changeDecision(pokemon, {move: pokemon.lastMove});
-			}
 		}
 	},
 
