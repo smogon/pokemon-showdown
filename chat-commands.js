@@ -741,6 +741,21 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			Simulator.SimulatorProcess.respawn();
 			emit(socket, 'console', 'Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.');
 			return false;
+		} else if (target === 'formats') {
+			// uncache the tools.js dependency tree
+			parseCommand.uncacheTree('./tools.js');
+			// reload tools.js
+			Data = {};
+			Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+			// rebuild the formats list
+			rooms.lobby.formatListText = rooms.lobby.getFormatListText();
+			// respawn simulator processes
+			Simulator.SimulatorProcess.respawn();
+			// broadcast the new formats list to clients
+			rooms.lobby.send(rooms.lobby.formatListText);
+
+			emit(socket, 'console', 'Formats have been hotpatched.');
+			return false;
 		}
 		emit(socket, 'console', 'Your hot-patch command was unrecognized.');
 		return false;
@@ -1990,6 +2005,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'Hot-patching has greater memory requirements than restarting.');
 			emit(socket, 'console', '/hotpatch chat - reload chat-commands.js');
 			emit(socket, 'console', '/hotpatch battles - spawn new simulator processes');
+			emit(socket, 'console', '/hotpatch formats - reload the tools.js tree, rebuild and rebroad the formats list, and also spawn new simulator processes');
 		}
 		if (target === '~' || target === 'lockdown') {
 			matched = true;
@@ -2156,6 +2172,24 @@ function logModCommand(room, result, noBroadcast) {
 	if (!noBroadcast) room.add(result);
 	modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 }
+
+parseCommandLocal.uncacheTree = function(root) {
+	var uncache = [require.resolve(root)];
+	do {
+		var newuncache = [];
+		for (var i = 0; i < uncache.length; ++i) {
+			if (require.cache[uncache[i]]) {
+				newuncache.push.apply(newuncache,
+					require.cache[uncache[i]].children.map(function(module) {
+						return module.filename;
+					})
+				);
+				delete require.cache[uncache[i]];
+			}
+		}
+		uncache = newuncache;
+	} while (uncache.length > 0);
+};
 
 // This function uses synchronous IO in order to keep it relatively simple.
 // The function takes about 0.023 seconds to run on one tested computer,
