@@ -156,6 +156,16 @@ exports.reportbattlesperiod = false;
 // Set this to true if you are using Pokemon Showdown on Heroku.
 exports.herokuhack = false;
 
+// Custom avatars.
+// This allows you to specify custom avatar images for users on your server.
+// Place custom avatar files under the /static/avatars/ directory.
+//
+// Your server *must* be registered in order for your custom avatars to be
+// displayed in the client.
+exports.customavatars = {
+	//'username': 'customavatar.png'
+};
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"

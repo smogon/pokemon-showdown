@@ -504,33 +504,9 @@ var User = (function () {
 			if (body !== '1') {
 				authenticated = true;
 
-				if (userid === "serei") avatar = 172;
-				else if (userid === "hobsgoblin") avatar = 52;
-				else if (userid === "ataraxia" || userid === "okuu") avatar = 1008;
-				else if (userid === "verbatim") avatar = 283;
-				else if (userid === "mortygymleader") avatar = 144;
-				else if (userid === "leadermorty") avatar = 144;
-				else if (userid === "leaderjasmine") avatar = 146;
-				else if (userid === "championcynthia") avatar = 260;
-				else if (userid === "aeo" || userid === "zarel") avatar = 167;
-				else if (userid === "aeo1") avatar = 167;
-				else if (userid === "aeo2") avatar = 166;
-				else if (userid === "sharktamer") avatar = 7;
-				else if (userid === "bmelts") avatar = 1004;
-				else if (userid === "n") avatar = 209;
-				else if (userid === "growlithe") avatar = 1007;
-				else if (userid === "v4") avatar = 94;
-				else if (userid === "hawntah") avatar = 161;
-				else if (userid === "greatsage") avatar = 1005;
-				else if (userid === "bojangles") avatar = 1006;
-				else if (userid === "dtc") avatar = 30;
-				else if (userid === "hugendugen") avatar = 1009;
-				else if (userid === "fatecrashers") avatar = 18;
-				else if (userid === "exeggutor") avatar = 1010;
-				else if (userid === "mjb") avatar = 1011;
-				else if (userid === "marty") avatar = 1012;
-				else if (userid === "theimmortal") avatar = 1013;
-				else if (userid === "aurora") avatar = 292;
+				if (config.customavatars && config.customavatars[userid]) {
+					avatar = config.customavatars[userid];
+				}
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
