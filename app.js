@@ -308,9 +308,9 @@ if (config.protocol === 'io') {
 			request.resume();
 			request.addListener('end', function() {
 				fileserver.serve(request, response, function(e, res) {
-				    if (e && (e.status === 404)) {
-				        fileserver.serveFile('404.html', 404, {}, request, response);
-				    }
+					if (e && (e.status === 404)) {
+						fileserver.serveFile('404.html', 404, {}, request, response);
+					}
 				});
 			});
 		});
