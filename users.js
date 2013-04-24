@@ -1016,7 +1016,7 @@ var Connection = (function () {
 			this.ip = socket.remoteAddress;
 		}
 
-		if (ipSearch(this.ip,bannedIps)) {
+		if (ipSearch(this.useip, bannedIps) || useridSearch(user.userid, bannedIps)) {
 			// gonna kill this
 			this.banned = true;
 			this.user = null;
@@ -1038,6 +1038,13 @@ function ipSearch(ip, table) {
 		var userIpRange = userIp.substr(0, userIp.lastIndexOf('.'));
 		if (ipRange === userIpRange) return true;
 	}
+	return false;
+}
+
+function useridSearch(userid, table) {
+	for (var ip in table) {
+        	if (table[ip] === userid) return true;
+   	}
 	return false;
 }
 
