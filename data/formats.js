@@ -931,6 +931,20 @@ exports.BattleFormats = {
 	// Past Generations
 	///////////////////////////////////////////////////////////////////
 
+	gen4oubeta: {
+		name: "[Gen 4] OU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen4',
+		effectType: 'Format',
+		challengeDefault: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber']
+	},
 	gen4hackmons: {
 		name: "[Gen 4] Hackmons",
 		section: "Past Generations",
