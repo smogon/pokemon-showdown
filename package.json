@@ -6,6 +6,7 @@
 		"sockjs": ">=0.3.1"
 	},
 	"optionalDependencies": {
+		"node-static": ">=0.6.9",
 		"socket.io": ">=0.8.7"
 	},
 	"engines": {
