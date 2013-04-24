@@ -159,11 +159,13 @@ exports.herokuhack = false;
 // Custom avatars.
 // This allows you to specify custom avatar images for users on your server.
 // Place custom avatar files under the /static/avatars/ directory.
+// Users must be specified as userids -- that is, you must make the name all
+// lowercase and remove non-alphanumeric characters.
 //
 // Your server *must* be registered in order for your custom avatars to be
 // displayed in the client.
 exports.customavatars = {
-	//'username': 'customavatar.png'
+	//'userid': 'customavatar.png'
 };
 
 // permissions and groups:
