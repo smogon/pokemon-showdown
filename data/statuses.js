@@ -207,13 +207,6 @@ exports.BattleStatuses = {
 		},
 		onLockMove: function(pokemon) {
 			return this.effectData.move;
-		},
-		onBeforeTurn: function(pokemon) {
-			var move = this.getMove(this.effectData.move);
-			if (move.id) {
-				this.debug('Forcing into '+move.id);
-				this.changeDecision(pokemon, {move: move.id});
-			}
 		}
 	},
 	choicelock: {
@@ -317,7 +310,7 @@ exports.BattleStatuses = {
 				this.effectData.counter *= 2;
 			}
 			this.effectData.duration = 2;
-		},
+		}
 	},
 
 	// weather

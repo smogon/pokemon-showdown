@@ -1,6 +1,13 @@
 exports.BattleScripts = {
 	gen: 5,
 	runMove: function(move, pokemon, target, sourceEffect) {
+		if (!sourceEffect && toId(move) !== 'struggle') {
+			var changedMove = this.runEvent('OverrideDecision', pokemon);
+			if (changedMove && changedMove !== true) {
+				move = changedMove;
+				target = null;
+			}
+		}
 		move = this.getMove(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
 

@@ -796,12 +796,16 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.getStatus = function() {
 		return this.battle.getEffect(this.status);
 	};
-	BattlePokemon.prototype.eatItem = function(source, sourceEffect) {
+	BattlePokemon.prototype.eatItem = function(item, source, sourceEffect) {
 		if (!this.hp || !this.isActive) return false;
 		if (!this.item) return false;
+
+		var id = toId(item);
+		if (id && this.item !== id) return false;
+
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-		var item = this.getItem();
+		item = this.getItem();
 		if (this.battle.runEvent('UseItem', this, null, null, item) && this.battle.runEvent('EatItem', this, null, null, item)) {
 			this.battle.add('-enditem', this, item, '[eat]');
 
@@ -815,12 +819,16 @@ var BattlePokemon = (function() {
 		}
 		return false;
 	};
-	BattlePokemon.prototype.useItem = function(source, sourceEffect) {
+	BattlePokemon.prototype.useItem = function(item, source, sourceEffect) {
 		if (!this.isActive) return false;
 		if (!this.item) return false;
+
+		var id = toId(item);
+		if (id && this.item !== id) return false;
+
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-		var item = this.getItem();
+		item = this.getItem();
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
@@ -2967,6 +2975,15 @@ var Battle = (function() {
 		this.midTurn = false;
 		this.queue = [];
 	};
+	/**
+	 * Changes a pokemon's decision.
+	 *
+	 * The un-modded game should not use this function for anything,
+	 * since it rerolls speed ties (which messes up RNG state).
+	 *
+	 * You probably want the OverrideDecision event (which doesn't
+	 * change priority order).
+	 */
 	Battle.prototype.changeDecision = function(pokemon, decision) {
 		this.cancelDecision(pokemon);
 		if (!decision.pokemon) decision.pokemon = pokemon;
