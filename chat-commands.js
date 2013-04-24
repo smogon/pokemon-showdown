@@ -2067,7 +2067,7 @@ function canTalk(user, room, socket) {
 		if (socket) emit(socket, 'console', 'You are muted.');
 		return false;
 	}
-	if (user.blockLobbyChat) {
+	if (room.id === 'lobby' && user.blockLobbyChat) {
 		if (socket) emit(socket, 'console', "You can't send messages while blocking lobby chat.");
 		return false;
 	}
