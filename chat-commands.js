@@ -366,8 +366,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'kick':
+	case 'warn':
 	case 'k':
-		// TODO: /kick will be removed in due course.
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
 		var targetUser = targets[0];
@@ -375,13 +375,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'User '+targets[2]+' not found.');
 			return false;
 		}
-		if (!user.can('redirect', targetUser)) {
+		if (!user.can('warn', targetUser)) {
 			emit(socket, 'console', '/redirect - Access denied.');
 			return false;
 		}
 
 		logModCommand(room,''+targetUser.name+' was kicked to the Rules page by '+user.name+'' + (targets[1] ? " (" + targets[1] + ")" : ""));
-		targetUser.emit('console', {evalRulesRedirect: 1});
+		targetUser.sendTo('lobby', '|c|~|/warn '+targets[1]);
 		return false;
 		break;
 
