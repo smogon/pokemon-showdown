@@ -308,6 +308,9 @@ if (config.protocol === 'io') {
 	}});
 }
 
+// Make `server` available using the console.
+Server = server;
+
 /**
  * Converts anything to an ID. An ID must have only lowercase alphanumeric
  * characters.
