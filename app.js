@@ -303,9 +303,13 @@ if (config.protocol === 'io') {
 	server = require('engine.io').attach(app);
 } else {
 	app = require('http').createServer();
-	server = require('sockjs').createServer({sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js", log: function(severity, message) {
-		if (severity === 'error') console.log('ERROR: '+message);
-	}});
+	server = require('sockjs').createServer({
+		sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js",
+		log: function(severity, message) {
+			if (severity === 'error') console.log('ERROR: '+message);
+		},
+		prefix: '/showdown'
+	});
 }
 
 // Make `server` available using the console.
