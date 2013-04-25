@@ -985,6 +985,47 @@ module.exports = (function () {
 		return ret;
 	};
 
+	// This is kind of a random location for this function, but it needs to be
+	// accessible in both the main process and simulator processes.
+	Tools.lastCrashLog = 0;
+	Tools.logCrash = function(err, description) {
+		console.log("\n"+err.stack+"\n");
+		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
+			this.write("\n"+err.stack+"\n");
+			this.end();
+		}).on("error", function (err) {
+			console.log("\n"+err.stack+"\n");
+		});
+		var datenow = Date.now();
+		if (config.crashguardemail && ((datenow - Tools.lastCrashLog) > 1000 * 60 * 5)) {
+			Tools.lastCrashLog = datenow;
+			var transport;
+			try {
+				var transport = require('nodemailer').createTransport(
+					config.crashguardemail.transport,
+					config.crashguardemail.options
+				);
+				transport.sendMail({
+					from: config.crashguardemail.from,
+					to: config.crashguardemail.to,
+					subject: config.crashguardemail.subject,
+					text: description + ' crashed with this stack trace:\n' + err.stack
+				});
+				if (process.uptime() > 60 * 60) {
+					// no need to lock down the server
+					return true;
+				}
+			} catch (e) {
+				// could not send an email...
+				console.log('Error sending email: ' + e);
+			} finally {
+				if (transport) {
+					transport.close();
+				}
+			}
+		}
+	};
+
 	moddedTools.base = Tools.construct();
 	try {
 		var dirs = fs.readdirSync('./mods/');
@@ -995,6 +1036,7 @@ module.exports = (function () {
 	} catch (e) {}
 
 	moddedTools.base.__proto__.moddedTools = moddedTools;
+	moddedTools.base.__proto__.logCrash = Tools.logCrash;
 
 	return moddedTools.base;
 })();

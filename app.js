@@ -482,38 +482,8 @@ function randomString(length) {
 if (config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', function (err) {
-		console.log("\n"+err.stack+"\n");
-		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
-			this.write("\n"+err.stack+"\n");
-			this.end();
-		}).on("error", function (err) {
-			console.log("\n"+err.stack+"\n");
-		});
-		if (config.crashguardemail && (process.uptime() > 60 * 60)) {
-			// If the server has been running more than an hour and
-			// `crashguardemail` is enabled, send an email to the server
-			// admins instead of locking down the server.
-			var transport;
-			try {
-				var transport = require('nodemailer').createTransport(
-					config.crashguardemail.transport,
-					config.crashguardemail.options
-				);
-				transport.sendMail({
-					from: config.crashguardemail.from,
-					to: config.crashguardemail.to,
-					subject: config.crashguardemail.subject,
-					text: 'The server crashed with this stack trace:\n' + err.stack
-				});
-				return;
-			} catch (e) {
-				// could not send an email...
-				console.log('Error sending email: ' + e);
-			} finally {
-				if (transport) {
-					transport.close();
-				}
-			}
+		if (Tools.logCrash(err, 'The main process')) {
+			return;
 		}
 		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
 		Rooms.lobby.addRaw('<div class="message-server-crash"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
