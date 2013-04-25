@@ -70,6 +70,27 @@ exports.potd = '';
 //   https://github.com/LearnBoost/socket.io/issues/609
 exports.crashguard = true;
 
+// crashguardemail - if the server has been running for more than an hour
+// and crashes, send an email using these settings, rather than locking down
+// the server. Uncomment this definition if you wan to use this feature;
+// otherwise, all crashes will lock down the server.
+/**exports.crashguardemail = {
+	transport: 'SMTP',
+	options: {
+		host: 'mail.example.com',
+		port: 465,
+		secureConnection: true,
+		maxConnections: 1,
+		auth: {
+			user: 'example@domain.com',
+			pass: 'password'
+		}
+	},
+	from: 'crashlogger@example.com',
+	to: 'admin@example.com',
+	subject: 'Pokemon Showdown has crashed!'
+};**/
+
 // report joins and leaves - shows messages like "<USERNAME> joined"
 //   Join and leave messages are small and consolidated, so there will never
 //   be more than one line of messages.
