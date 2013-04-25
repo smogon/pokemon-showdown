@@ -1137,6 +1137,7 @@ exports.BattleFormats = {
 					problems.push(move.name+' is not a real move.');
 				}
 			}
+			if (item && item.isNonstandard) problems.push(item.name + ' is not a real item.');
 			if (set.moves && set.moves.length > 4) {
 				problems.push((set.name||set.species) + ' has more than four moves.');
 			}
