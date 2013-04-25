@@ -1348,6 +1348,7 @@ exports.BattleFormats = {
 			var typeTable = {};
 			for (var i=0; i<team.length; i++) {
 				var template = this.getTemplate(team[i].species);
+				if (!template.types) continue;
 
 				// first type
 				var type = template.types[0];
