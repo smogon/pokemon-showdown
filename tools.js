@@ -109,6 +109,10 @@ module.exports = (function () {
 			if (typeMod === 2) { // resist
 				totalTypeMod--;
 			}
+			if (typeMod === 3) { // immune
+				totalTypeMod = 0;
+				break;
+			}
 			// in case of weird situations like Gravity, immunity is
 			// handled elsewhere
 		}
