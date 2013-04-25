@@ -482,7 +482,7 @@ function randomString(length) {
 if (config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', function (err) {
-		if (Tools.logCrash(err, 'The main process')) {
+		if (require('./crashlogger.js')(err, 'The main process')) {
 			return;
 		}
 		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
