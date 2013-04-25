@@ -303,13 +303,28 @@ if (config.protocol === 'io') {
 	app = require('http').createServer();
 	try {
 		var nodestatic = require('node-static');
-		var fileserver = new nodestatic.Server('./static');
+		var cssserver = new nodestatic.Server('./config');
+		var avatarserver = new nodestatic.Server('./config/avatars');
+		var staticserver = new nodestatic.Server('./static');
 		app.on('request', function(request, response) {
 			request.resume();
 			request.addListener('end', function() {
-				fileserver.serve(request, response, function(e, res) {
+				var server;
+				if (request.url === '/custom.css') {
+					server = cssserver;
+				} else if (request.url.substr(0, 9) === '/avatars/') {
+					request.url = request.url.substr(8);
+					server = avatarserver;
+				} else {
+					if (/^\/(teambuilder|ladder|lobby|battle)\/?$/.test(request.url) ||
+							/^\/(lobby|battle)-([A-Za-z0-9-]*)$/.test(request.url)) {
+						request.url = '/';
+					}
+					server = staticserver;
+				}
+				server.serve(request, response, function(e, res) {
 					if (e && (e.status === 404)) {
-						fileserver.serveFile('404.html', 404, {}, request, response);
+						staticserver.serveFile('404.html', 404, {}, request, response);
 					}
 				});
 			});
