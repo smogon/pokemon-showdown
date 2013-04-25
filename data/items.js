@@ -12,6 +12,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 545,
+		gen: 5,
 		desc: "Raises Sp. Atk by 1 if hit by a Water-type attack. Single use."
 	},
 	"adamantorb": {
@@ -27,6 +28,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 135,
+		gen: 4,
 		desc: "If holder is a Dialga, its Steel- and Dragon-type attacks have 1.2x power."
 	},
 	"aguavberry": {
@@ -50,6 +52,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 162,
+		gen: 3,
 		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"airballoon": {
@@ -80,6 +83,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 541,
+		gen: 5,
 		desc: "Holder is immune to Ground-type attacks. Pops when holder is hit."
 	},
 	"apicotberry": {
@@ -100,6 +104,7 @@ exports.BattleItems = {
 			this.boost({spd:1});
 		},
 		num: 205,
+		gen: 3,
 		desc: "Raises Sp. Def by 1 when at 1/4 max HP or less. Single use."
 	},
 	"armorfossil": {
@@ -110,6 +115,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 104,
+		gen: 4,
 		desc: "Can be revived into Shieldon."
 	},
 	"aspearberry": {
@@ -132,6 +138,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 153,
+		gen: 3,
 		desc: "Holder is cured if it is frozen. Single use."
 	},
 	"babiriberry": {
@@ -153,6 +160,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 199,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Steel-type attack. Single use."
 	},
 	"belueberry": {
@@ -165,6 +173,7 @@ exports.BattleItems = {
 			type: "Electric"
 		},
 		num: 183,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"berryjuice": {
@@ -182,6 +191,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 43,
+		gen: 2,
 		desc: "Restores 20HP when at 1/2 max HP or less. Single use."
 	},
 	"bigroot": {
@@ -199,6 +209,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 296,
+		gen: 4,
 		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed."
 	},
 	"bindingband": {
@@ -210,6 +221,7 @@ exports.BattleItems = {
 		},
 		// implemented in statuses
 		num: 544,
+		gen: 5,
 		desc: "Holder's partial-trapping moves deal 1/8 max HP per turn instead of 1/16."
 	},
 	"blackbelt": {
@@ -225,6 +237,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 241,
+		gen: 2,
 		desc: "Holder's Fighting-type attacks have 1.2x power."
 	},
 	"blacksludge": {
@@ -244,6 +257,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 281,
+		gen: 4,
 		desc: "Each turn, if holder is a Poison-type, restores 1/16 max HP; loses 1/8 if not."
 	},
 	"blackglasses": {
@@ -259,6 +273,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 240,
+		gen: 2,
 		desc: "Holder's Dark-type attacks have 1.2x power."
 	},
 	"blukberry": {
@@ -271,6 +286,7 @@ exports.BattleItems = {
 			type: "Fire"
 		},
 		num: 165,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"brightpowder": {
@@ -286,6 +302,7 @@ exports.BattleItems = {
 			return accuracy * 0.9;
 		},
 		num: 213,
+		gen: 2,
 		desc: "The accuracy of attacks against the holder is 0.9x."
 	},
 	"buggem": {
@@ -302,6 +319,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 558,
+		gen: 5,
 		desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use."
 	},
 	"burndrive": {
@@ -313,6 +331,7 @@ exports.BattleItems = {
 		},
 		onDrive: 'Fire',
 		num: 118,
+		gen: 5,
 		desc: "Holder's Techno Blast is Fire-type."
 	},
 	"cellbattery": {
@@ -328,6 +347,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 546,
+		gen: 5,
 		desc: "Raises Attack by 1 if hit by an Electric-type attack. Single use."
 	},
 	"charcoal": {
@@ -343,6 +363,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 249,
+		gen: 2,
 		desc: "Holder's Fire-type attacks have 1.2x power."
 	},
 	"chartiberry": {
@@ -364,6 +385,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 195,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Rock-type attack. Single use."
 	},
 	"cheriberry": {
@@ -386,6 +408,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 149,
+		gen: 3,
 		desc: "Holder cures itself if it is paralyzed. Single use."
 	},
 	"cherishball": {
@@ -393,6 +416,7 @@ exports.BattleItems = {
 		name: "Cherish Ball",
 		spritenum: 64,
 		num: 16,
+		gen: 4,
 		desc: "A rare Poke Ball that has been crafted to commemorate an occasion."
 	},
 	"chestoberry": {
@@ -415,6 +439,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 150,
+		gen: 3,
 		desc: "Holder wakes up if it is asleep. Single use."
 	},
 	"chilanberry": {
@@ -436,6 +461,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 200,
+		gen: 4,
 		desc: "Halves damage taken from a Normal-type attack. Single use."
 	},
 	"chilldrive": {
@@ -447,6 +473,7 @@ exports.BattleItems = {
 		},
 		onDrive: 'Ice',
 		num: 119,
+		gen: 5,
 		desc: "Holder's Techno Blast is Ice-type."
 	},
 	"choiceband": {
@@ -470,6 +497,7 @@ exports.BattleItems = {
 		},
 		isChoice: true,
 		num: 220,
+		gen: 3,
 		desc: "Holder's Attack is 1.5x, but it can only use the first move it selects."
 	},
 	"choicescarf": {
@@ -493,6 +521,7 @@ exports.BattleItems = {
 		},
 		isChoice: true,
 		num: 287,
+		gen: 4,
 		desc: "Holder's Speed is 1.5x, but it can only use the first move it selects."
 	},
 	"choicespecs": {
@@ -516,6 +545,7 @@ exports.BattleItems = {
 		},
 		isChoice: true,
 		num: 297,
+		gen: 4,
 		desc: "Holder's Sp. Atk is 1.5x, but it can only use the first move it selects."
 	},
 	"chopleberry": {
@@ -537,6 +567,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 189,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Fighting-type attack. Single use."
 	},
 	"clawfossil": {
@@ -547,6 +578,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 100,
+		gen: 3,
 		desc: "Can be revived into Anorith."
 	},
 	"cobaberry": {
@@ -568,6 +600,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 192,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Flying-type attack. Single use."
 	},
 	"colburberry": {
@@ -589,6 +622,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 198,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Dark-type attack. Single use."
 	},
 	"cornnberry": {
@@ -601,6 +635,7 @@ exports.BattleItems = {
 			type: "Bug"
 		},
 		num: 175,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"coverfossil": {
@@ -611,6 +646,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 572,
+		gen: 5,
 		desc: "Can be revived into Tirtouga."
 	},
 	"custapberry": {
@@ -632,6 +668,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 210,
+		gen: 4,
 		desc: "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use."
 	},
 	"damprock": {
@@ -642,6 +679,7 @@ exports.BattleItems = {
 			basePower: 60
 		},
 		num: 285,
+		gen: 4,
 		desc: "Holder's use of Rain Dance lasts 8 turns instead of 5."
 	},
 	"darkgem": {
@@ -658,6 +696,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 562,
+		gen: 5,
 		desc: "Holder's first successful Dark-type attack will have 1.5x power. Single use."
 	},
 	"deepseascale": {
@@ -673,6 +712,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 227,
+		gen: 3,
 		desc: "If holder is a Clamperl, its Sp. Def is doubled."
 	},
 	"deepseatooth": {
@@ -688,6 +728,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 226,
+		gen: 3,
 		desc: "If holder is a Clamperl, its Sp. Atk is doubled."
 	},
 	"destinyknot": {
@@ -704,6 +745,7 @@ exports.BattleItems = {
 			if (!source.volatiles.attract) source.addVolatile('attract', target);
 		},
 		num: 280,
+		gen: 4,
 		desc: "If holder becomes infatuated, the other Pokemon also becomes infatuated."
 	},
 	"diveball": {
@@ -711,6 +753,7 @@ exports.BattleItems = {
 		name: "Dive Ball",
 		spritenum: 101,
 		num: 7,
+		gen: 3,
 		desc: "A Poke Ball that works especially well on Pokemon that live underwater."
 	},
 	"domefossil": {
@@ -721,6 +764,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 102,
+		gen: 3,
 		desc: "Can be revived into Kabuto."
 	},
 	"dousedrive": {
@@ -732,6 +776,7 @@ exports.BattleItems = {
 		},
 		onDrive: 'Water',
 		num: 116,
+		gen: 5,
 		desc: "Holder's Techno Blast is Water-type."
 	},
 	"dracoplate": {
@@ -748,6 +793,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 311,
+		gen: 4,
 		desc: "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon-type."
 	},
 	"dragonfang": {
@@ -763,6 +809,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 250,
+		gen: 2,
 		desc: "Holder's Dragon-type attacks have 1.2x power."
 	},
 	"dragongem": {
@@ -779,6 +826,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 561,
+		gen: 5,
 		desc: "Holder's first successful Dragon-type attack will have 1.5x power. Single use."
 	},
 	"dreadplate": {
@@ -795,6 +843,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 312,
+		gen: 4,
 		desc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark-type."
 	},
 	"dreamball": {
@@ -802,6 +851,7 @@ exports.BattleItems = {
 		name: "Dream Ball",
 		spritenum: 111,
 		num: 576,
+		gen: 5,
 		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest."
 	},
 	"durinberry": {
@@ -814,6 +864,7 @@ exports.BattleItems = {
 			type: "Water"
 		},
 		num: 182,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"duskball": {
@@ -821,6 +872,7 @@ exports.BattleItems = {
 		name: "Dusk Ball",
 		spritenum: 115,
 		num: 13,
+		gen: 4,
 		desc: "A Poke Ball that makes it easier to catch wild Pokemon at night or in caves."
 	},
 	"earthplate": {
@@ -837,6 +889,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 305,
+		gen: 4,
 		desc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground-type."
 	},
 	"ejectbutton": {
@@ -859,6 +912,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 547,
+		gen: 5,
 		desc: "If holder is hit, it immediately switches out with a chosen ally. Single use."
 	},
 	"electirizer": {
@@ -869,6 +923,7 @@ exports.BattleItems = {
 			basePower: 80
 		},
 		num: 322,
+		gen: 4,
 		desc: "Evolves Electabuzz into Electivire when traded."
 	},
 	"electricgem": {
@@ -885,6 +940,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 550,
+		gen: 5,
 		desc: "Holder's first successful Electric-type attack will have 1.5x power. Single use."
 	},
 	"energypowder": {
@@ -895,6 +951,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		num: 34,
+		gen: 2,
 		desc: "Restores 50HP to one Pokemon but lowers Happiness."
 	},
 	"enigmaberry": {
@@ -923,6 +980,7 @@ exports.BattleItems = {
 			this.heal(pokemon.maxhp/4);
 		},
 		num: 208,
+		gen: 3,
 		desc: "Restores 1/4 max HP when holder is hit by a super effective move. Single use."
 	},
 	"eviolite": {
@@ -943,6 +1001,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 538,
+		gen: 5,
 		desc: "If holder's species can evolve, its Defense and Sp. Def are 1.5x."
 	},
 	"expertbelt": {
@@ -958,6 +1017,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 268,
+		gen: 4,
 		desc: "Holder's super effective attacks against other Pokemon do 1.2x damage."
 	},
 	"fastball": {
@@ -965,6 +1025,7 @@ exports.BattleItems = {
 		name: "Fast Ball",
 		spritenum: 137,
 		num: 492,
+		gen: 2,
 		desc: "A Poke Ball that makes it easier to catch Pokemon which are quick to run away."
 	},
 	"fightinggem": {
@@ -981,6 +1042,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 553,
+		gen: 5,
 		desc: "Holder's first successful Fighting-type attack will have 1.5x power. Single use."
 	},
 	"figyberry": {
@@ -1004,6 +1066,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 159,
+		gen: 3,
 		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"firegem": {
@@ -1020,6 +1083,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 548,
+		gen: 5,
 		desc: "Holder's first successful Fire-type attack will have 1.5x power. Single use."
 	},
 	"fistplate": {
@@ -1036,6 +1100,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 303,
+		gen: 4,
 		desc: "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting-type."
 	},
 	"flameorb": {
@@ -1055,6 +1120,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 273,
+		gen: 4,
 		desc: "At the end of every turn, this item attempts to burn the holder."
 	},
 	"flameplate": {
@@ -1071,6 +1137,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 298,
+		gen: 4,
 		desc: "Holder's Fire-type attacks have 1.2x power. Judgment is Fire-type."
 	},
 	"floatstone": {
@@ -1084,6 +1151,7 @@ exports.BattleItems = {
 			pokemon.weightkg /= 2;
 		},
 		num: 539,
+		gen: 5,
 		desc: "Holder's weight is halved."
 	},
 	"flyinggem": {
@@ -1100,6 +1168,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 556,
+		gen: 5,
 		desc: "Holder's first successful Flying-type attack will have 1.5x power. Single use."
 	},
 	"focusband": {
@@ -1116,6 +1185,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 230,
+		gen: 2,
 		desc: "Holder has a 10% chance to survive an attack that would KO it with 1HP."
 	},
 	"focussash": {
@@ -1133,6 +1203,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 275,
+		gen: 4,
 		desc: "If holder's HP is full, will survive an attack that would KO it with 1HP. Single use."
 	},
 	"fullincense": {
@@ -1148,6 +1219,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 316,
+		gen: 4,
 		desc: "Holder moves last in its priority bracket."
 	},
 	"ganlonberry": {
@@ -1168,6 +1240,7 @@ exports.BattleItems = {
 			this.boost({def:1});
 		},
 		num: 202,
+		gen: 3,
 		desc: "Raises Defense by 1 when at 1/4 max HP or less. Single use."
 	},
 	"ghostgem": {
@@ -1184,6 +1257,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 560,
+		gen: 5,
 		desc: "Holder's first successful Ghost-type attack will have 1.5x power. Single use."
 	},
 	"grassgem": {
@@ -1200,6 +1274,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 551,
+		gen: 5,
 		desc: "Holder's first successful Grass-type attack will have 1.5x power. Single use."
 	},
 	"greatball": {
@@ -1207,6 +1282,7 @@ exports.BattleItems = {
 		name: "Great Ball",
 		spritenum: 174,
 		num: 3,
+		gen: 1,
 		desc: "A high-performance Ball that provides a higher catch rate than a Poke Ball."
 	},
 	"grepaberry": {
@@ -1219,6 +1295,7 @@ exports.BattleItems = {
 			type: "Flying"
 		},
 		num: 173,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"gripclaw": {
@@ -1230,6 +1307,7 @@ exports.BattleItems = {
 		},
 		// implemented in statuses
 		num: 286,
+		gen: 4,
 		desc: "Holder's partial-trapping moves always last 7 turns."
 	},
 	"griseousorb": {
@@ -1250,6 +1328,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 112,
+		gen: 4,
 		desc: "If holder is a Giratina, its Ghost- and Dragon-type attacks have 1.2x power."
 	},
 	"groundgem": {
@@ -1266,6 +1345,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 555,
+		gen: 5,
 		desc: "Holder's first successful Ground-type attack will have 1.5x power. Single use."
 	},
 	"habanberry": {
@@ -1287,6 +1367,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 197,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Dragon-type attack. Single use."
 	},
 	"hardstone": {
@@ -1302,6 +1383,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 238,
+		gen: 2,
 		desc: "Holder's Rock-type attacks have 1.2x power."
 	},
 	"healball": {
@@ -1309,6 +1391,7 @@ exports.BattleItems = {
 		name: "Heal Ball",
 		spritenum: 188,
 		num: 14,
+		gen: 4,
 		desc: "A remedial Poke Ball that restores the caught Pokemon's HP and status problem."
 	},
 	"heatrock": {
@@ -1319,6 +1402,7 @@ exports.BattleItems = {
 			basePower: 60
 		},
 		num: 284,
+		gen: 4,
 		desc: "Holder's use of Sunny Day lasts 8 turns instead of 5."
 	},
 	"heavyball": {
@@ -1326,6 +1410,7 @@ exports.BattleItems = {
 		name: "Heavy Ball",
 		spritenum: 194,
 		num: 495,
+		gen: 2,
 		desc: "A Poke Ball for catching very heavy Pokemon."
 	},
 	"helixfossil": {
@@ -1336,6 +1421,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 101,
+		gen: 3,
 		desc: "Can be revived into Omanyte."
 	},
 	"hondewberry": {
@@ -1348,6 +1434,7 @@ exports.BattleItems = {
 			type: "Ground"
 		},
 		num: 172,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"iapapaberry": {
@@ -1371,6 +1458,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 163,
+		gen: 3,
 		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"icegem": {
@@ -1387,6 +1475,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 552,
+		gen: 5,
 		desc: "Holder's first successful Ice-type attack will have 1.5x power. Single use."
 	},
 	"icicleplate": {
@@ -1403,6 +1492,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 302,
+		gen: 4,
 		desc: "Holder's Ice-type attacks have 1.2x power. Judgment is Ice-type."
 	},
 	"icyrock": {
@@ -1413,6 +1503,7 @@ exports.BattleItems = {
 			basePower: 40
 		},
 		num: 282,
+		gen: 4,
 		desc: "Holder's use of Hail lasts 8 turns instead of 5."
 	},
 	"insectplate": {
@@ -1429,6 +1520,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 308,
+		gen: 4,
 		desc: "Holder's Bug-type attacks have 1.2x power. Judgment is Bug-type."
 	},
 	"ironball": {
@@ -1445,6 +1537,7 @@ exports.BattleItems = {
 			return spe / 2;
 		},
 		num: 278,
+		gen: 4,
 		desc: "Holder's Speed is halved and it becomes grounded."
 	},
 	"ironplate": {
@@ -1461,6 +1554,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 313,
+		gen: 4,
 		desc: "Holder's Steel-type attacks have 1.2x power. Judgment is Steel-type."
 	},
 	"jabocaberry": {
@@ -1481,6 +1575,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 211,
+		gen: 4,
 		desc: "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use."
 	},
 	"kasibberry": {
@@ -1502,6 +1597,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 196,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Ghost-type attack. Single use."
 	},
 	"kebiaberry": {
@@ -1523,6 +1619,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 190,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Poison-type attack. Single use."
 	},
 	"kelpsyberry": {
@@ -1535,6 +1632,7 @@ exports.BattleItems = {
 			type: "Fighting"
 		},
 		num: 170,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"kingsrock": {
@@ -1558,6 +1656,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 221,
+		gen: 2,
 		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch."
 	},
 	"laggingtail": {
@@ -1573,6 +1672,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 279,
+		gen: 4,
 		desc: "Holder moves last in its priority bracket."
 	},
 	"lansatberry": {
@@ -1593,6 +1693,7 @@ exports.BattleItems = {
 			pokemon.addVolatile('focusenergy');
 		},
 		num: 206,
+		gen: 3,
 		desc: "Holder gains the Focus Energy effect when at 1/4 max HP or less. Single use."
 	},
 	"laxincense": {
@@ -1608,6 +1709,7 @@ exports.BattleItems = {
 			return accuracy * 0.9;
 		},
 		num: 255,
+		gen: 3,
 		desc: "The accuracy of attacks against the holder is 0.9x."
 	},
 	"leftovers": {
@@ -1623,6 +1725,7 @@ exports.BattleItems = {
 			this.heal(pokemon.maxhp/16);
 		},
 		num: 234,
+		gen: 2,
 		desc: "At the end of every turn, holder restores 1/16 of its max HP."
 	},
 	"leppaberry": {
@@ -1661,6 +1764,7 @@ exports.BattleItems = {
 			this.add("-message",pokemon.name+" restored "+move.move+"'s PP using its Leppa Berry! (placeholder)");
 		},
 		num: 154,
+		gen: 3,
 		desc: "Restores 10PP to the first of the holder's moves to reach 0PP. Single use."
 	},
 	"levelball": {
@@ -1668,6 +1772,7 @@ exports.BattleItems = {
 		name: "Level Ball",
 		spritenum: 246,
 		num: 493,
+		gen: 2,
 		desc: "A Poke Ball for catching Pokemon that are a lower level than your own."
 	},
 	"liechiberry": {
@@ -1688,6 +1793,7 @@ exports.BattleItems = {
 			this.boost({atk:1});
 		},
 		num: 201,
+		gen: 3,
 		desc: "Raises Attack by 1 when at 1/4 max HP or less. Single use."
 	},
 	"lifeorb": {
@@ -1711,6 +1817,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 270,
+		gen: 4,
 		desc: "Holder's damaging moves do 1.3x damage; loses 1/10 max HP after the attack."
 	},
 	"lightball": {
@@ -1732,6 +1839,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 236,
+		gen: 2,
 		desc: "If holder is a Pikachu, its Attack and Sp. Atk are doubled."
 	},
 	"lightclay": {
@@ -1743,6 +1851,7 @@ exports.BattleItems = {
 		},
 		// implemented in the corresponding thing
 		num: 269,
+		gen: 4,
 		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5."
 	},
 	"loveball": {
@@ -1750,6 +1859,7 @@ exports.BattleItems = {
 		name: "Love Ball",
 		spritenum: 258,
 		num: 496,
+		gen: 2,
 		desc: "Poke Ball for catching Pokemon that are the opposite gender of your Pokemon."
 	},
 	"luckypunch": {
@@ -1765,6 +1875,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 256,
+		gen: 2,
 		desc: "If holder is a Chansey, its critical hit ratio is boosted by 2."
 	},
 	"lumberry": {
@@ -1786,6 +1897,7 @@ exports.BattleItems = {
 			pokemon.removeVolatile('confusion');
 		},
 		num: 157,
+		gen: 3,
 		desc: "Holder cures itself if it is confused or has a major status problem. Single use."
 	},
 	"lureball": {
@@ -1793,6 +1905,7 @@ exports.BattleItems = {
 		name: "Lure Ball",
 		spritenum: 264,
 		num: 494,
+		gen: 2,
 		desc: "A Poke Ball for catching Pokemon hooked by a Rod when fishing."
 	},
 	"lustrousorb": {
@@ -1808,6 +1921,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 136,
+		gen: 4,
 		desc: "If holder is a Palkia, its Water- and Dragon-type attacks have 1.2x power."
 	},
 	"luxuryball": {
@@ -1815,6 +1929,7 @@ exports.BattleItems = {
 		name: "Luxury Ball",
 		spritenum: 266,
 		num: 11,
+		gen: 3,
 		desc: "A comfortable Poke Ball that makes a caught wild Pokemon quickly grow friendly."
 	},
 	"machobrace": {
@@ -1828,6 +1943,7 @@ exports.BattleItems = {
 			return spe / 2;
 		},
 		num: 215,
+		gen: 3,
 		desc: "Holder's Speed is halved."
 	},
 	"magnet": {
@@ -1843,6 +1959,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 242,
+		gen: 2,
 		desc: "Holder's Electric-type attacks have 1.2x power."
 	},
 	"magoberry": {
@@ -1866,6 +1983,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 161,
+		gen: 3,
 		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"magostberry": {
@@ -1878,6 +1996,7 @@ exports.BattleItems = {
 			type: "Rock"
 		},
 		num: 176,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"masterball": {
@@ -1885,6 +2004,7 @@ exports.BattleItems = {
 		name: "Master Ball",
 		spritenum: 276,
 		num: 1,
+		gen: 1,
 		desc: "The best Ball with the ultimate performance. It will catch any wild Pokemon."
 	},
 	"meadowplate": {
@@ -1901,6 +2021,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 301,
+		gen: 4,
 		desc: "Holder's Grass-type attacks have 1.2x power. Judgment is Grass-type."
 	},
 	"mentalherb": {
@@ -1934,6 +2055,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 219,
+		gen: 3,
 		desc: "Cures holder if affected by Attract, Disable, Encore, Taunt, Torment. Single use."
 	},
 	"metalcoat": {
@@ -1949,6 +2071,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 233,
+		gen: 2,
 		desc: "Holder's Steel-type attacks have 1.2x power."
 	},
 	"metalpowder": {
@@ -1964,6 +2087,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 257,
+		gen: 2,
 		desc: "If holder is a Ditto that hasn't Transformed, its Defense is doubled."
 	},
 	"metronome": {
@@ -1993,6 +2117,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 277,
+		gen: 4,
 		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns."
 	},
 	"micleberry": {
@@ -2023,6 +2148,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 209,
+		gen: 4,
 		desc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use."
 	},
 	"moonball": {
@@ -2030,6 +2156,7 @@ exports.BattleItems = {
 		name: "Moon Ball",
 		spritenum: 294,
 		num: 498,
+		gen: 2,
 		desc: "A Poke Ball for catching Pokemon that evolve using the Moon Stone."
 	},
 	"mindplate": {
@@ -2046,6 +2173,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 307,
+		gen: 4,
 		desc: "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic-type."
 	},
 	"miracleseed": {
@@ -2061,6 +2189,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 239,
+		gen: 2,
 		desc: "Holder's Grass-type attacks have 1.2x power."
 	},
 	"muscleband": {
@@ -2076,6 +2205,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 266,
+		gen: 4,
 		desc: "Holder's physical attacks have 1.1x power."
 	},
 	"mysticwater": {
@@ -2091,6 +2221,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 243,
+		gen: 2,
 		desc: "Holder's Water-type attacks have 1.2x power."
 	},
 	"nanabberry": {
@@ -2103,6 +2234,7 @@ exports.BattleItems = {
 			type: "Water"
 		},
 		num: 166,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"nestball": {
@@ -2110,6 +2242,7 @@ exports.BattleItems = {
 		name: "Nest Ball",
 		spritenum: 303,
 		num: 8,
+		gen: 3,
 		desc: "A Poke Ball that works especially well on weaker Pokemon in the wild."
 	},
 	"netball": {
@@ -2117,6 +2250,7 @@ exports.BattleItems = {
 		name: "Net Ball",
 		spritenum: 304,
 		num: 6,
+		gen: 3,
 		desc: "A Poke Ball that works especially well on Water- and Bug-type Pokemon."
 	},
 	"nevermeltice": {
@@ -2132,6 +2266,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 246,
+		gen: 2,
 		desc: "Holder's Ice-type attacks have 1.2x power."
 	},
 	"nomelberry": {
@@ -2144,6 +2279,7 @@ exports.BattleItems = {
 			type: "Dragon"
 		},
 		num: 178,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"normalgem": {
@@ -2160,6 +2296,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 564,
+		gen: 5,
 		desc: "Holder's first successful Normal-type attack will have 1.5x power. Single use."
 	},
 	"occaberry": {
@@ -2181,6 +2318,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 184,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Fire-type attack. Single use."
 	},
 	"oddincense": {
@@ -2196,6 +2334,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 314,
+		gen: 4,
 		desc: "Holder's Psychic-type attacks have 1.2x power."
 	},
 	"oldamber": {
@@ -2206,6 +2345,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 103,
+		gen: 3,
 		desc: "Can be revived into Aerodactyl."
 	},
 	"oranberry": {
@@ -2226,6 +2366,7 @@ exports.BattleItems = {
 			this.heal(10);
 		},
 		num: 155,
+		gen: 3,
 		desc: "Restores 10HP when at 1/2 max HP or less. Single use."
 	},
 	"pamtreberry": {
@@ -2238,6 +2379,7 @@ exports.BattleItems = {
 			type: "Steel"
 		},
 		num: 180,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"parkball": {
@@ -2245,6 +2387,7 @@ exports.BattleItems = {
 		name: "Park Ball",
 		spritenum: 325,
 		num: 500,
+		gen: 2,
 		desc: "A special Poke Ball for the Pal Park."
 	},
 	"passhoberry": {
@@ -2266,6 +2409,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 185,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Water-type attack. Single use."
 	},
 	"payapaberry": {
@@ -2287,6 +2431,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 193,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Psychic-type attack. Single use."
 	},
 	"pechaberry": {
@@ -2309,6 +2454,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 151,
+		gen: 3,
 		desc: "Holder is cured if it is poisoned. Single use."
 	},
 	"persimberry": {
@@ -2329,6 +2475,7 @@ exports.BattleItems = {
 			pokemon.removeVolatile('confusion');
 		},
 		num: 156,
+		gen: 3,
 		desc: "Holder is cured if it is confused. Single use."
 	},
 	"petayaberry": {
@@ -2349,6 +2496,7 @@ exports.BattleItems = {
 			this.boost({spa:1});
 		},
 		num: 204,
+		gen: 3,
 		desc: "Raises Sp. Atk by 1 when at 1/4 max HP or less. Single use."
 	},
 	"pinapberry": {
@@ -2361,6 +2509,7 @@ exports.BattleItems = {
 			type: "Grass"
 		},
 		num: 168,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"plumefossil": {
@@ -2371,6 +2520,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 573,
+		gen: 5,
 		desc: "Can be revived into Archen."
 	},
 	"poisonbarb": {
@@ -2387,6 +2537,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 245,
+		gen: 2,
 		desc: "Holder's Poison-type attacks have 1.2x power."
 	},
 	"poisongem": {
@@ -2403,6 +2554,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 554,
+		gen: 5,
 		desc: "Holder's first successful Poison-type attack will have 1.5x power. Single use."
 	},
 	"pokeball": {
@@ -2410,6 +2562,7 @@ exports.BattleItems = {
 		name: "Poke Ball",
 		spritenum: 345,
 		num: 4,
+		gen: 1,
 		desc: "A device for catching wild Pokemon. It is designed as a capsule system."
 	},
 	"pomegberry": {
@@ -2422,6 +2575,7 @@ exports.BattleItems = {
 			type: "Ice"
 		},
 		num: 169,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"powerherb": {
@@ -2438,6 +2592,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		num: 271,
+		gen: 4,
 		desc: "Holder's two-turn moves complete in one turn (except Sky Drop). Single use."
 	},
 	"premierball": {
@@ -2445,6 +2600,7 @@ exports.BattleItems = {
 		name: "Premier Ball",
 		spritenum: 363,
 		num: 12,
+		gen: 3,
 		desc: "A rare Poke Ball that has been crafted to commemorate an event."
 	},
 	"psychicgem": {
@@ -2461,6 +2617,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 557,
+		gen: 5,
 		desc: "Holder's first successful Psychic-type attack will have 1.5x power. Single use."
 	},
 	"qualotberry": {
@@ -2473,6 +2630,7 @@ exports.BattleItems = {
 			type: "Poison"
 		},
 		num: 171,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"quickball": {
@@ -2480,6 +2638,7 @@ exports.BattleItems = {
 		name: "Quick Ball",
 		spritenum: 372,
 		num: 15,
+		gen: 4,
 		desc: "A Poke Ball that provides a better catch rate at the start of a wild encounter."
 	},
 	"quickclaw": {
@@ -2496,6 +2655,7 @@ exports.BattleItems = {
 			basePower: 80
 		},
 		num: 217,
+		gen: 2,
 		desc: "Each turn, holder has a 20% chance to move first in its priority bracket."
 	},
 	"quickpowder": {
@@ -2511,6 +2671,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 274,
+		gen: 4,
 		desc: "If holder is a Ditto that hasn't Transformed, its Speed is doubled."
 	},
 	"rabutaberry": {
@@ -2523,6 +2684,7 @@ exports.BattleItems = {
 			type: "Ghost"
 		},
 		num: 177,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"rarebone": {
@@ -2533,6 +2695,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 106,
+		gen: 4,
 		desc: "No competitive use."
 	},
 	"rawstberry": {
@@ -2555,6 +2718,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 152,
+		gen: 3,
 		desc: "Holder is cured if it is burned. Single use."
 	},
 	"razorclaw": {
@@ -2568,6 +2732,7 @@ exports.BattleItems = {
 			move.critRatio++;
 		},
 		num: 326,
+		gen: 4,
 		desc: "Holder's critical hit ratio is boosted by 1."
 	},
 	"razorfang": {
@@ -2591,6 +2756,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 327,
+		gen: 4,
 		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch."
 	},
 	"razzberry": {
@@ -2603,6 +2769,7 @@ exports.BattleItems = {
 			type: "Steel"
 		},
 		num: 164,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"redcard": {
@@ -2622,6 +2789,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 542,
+		gen: 5,
 		desc: "If holder is hit, it forces the attacker to switch to a random ally. Single use."
 	},
 	"repeatball": {
@@ -2629,6 +2797,7 @@ exports.BattleItems = {
 		name: "Repeat Ball",
 		spritenum: 401,
 		num: 9,
+		gen: 3,
 		desc: "A Poke Ball that works well on Pokemon species that were previously caught."
 	},
 	"rindoberry": {
@@ -2650,6 +2819,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 187,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Grass-type attack. Single use."
 	},
 	"ringtarget": {
@@ -2663,6 +2833,7 @@ exports.BattleItems = {
 			pokemon.negateImmunity['Type'] = true;
 		},
 		num: 543,
+		gen: 5,
 		desc: "Holder's type immunities granted by its own typing are negated."
 	},
 	"rockgem": {
@@ -2679,6 +2850,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 559,
+		gen: 5,
 		desc: "Holder's first successful Rock-type attack will have 1.5x power. Single use."
 	},
 	"rockincense": {
@@ -2694,6 +2866,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 315,
+		gen: 4,
 		desc: "Holder's Rock-type attacks have 1.2x power."
 	},
 	"rockyhelmet": {
@@ -2710,6 +2883,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 540,
+		gen: 5,
 		desc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP."
 	},
 	"rootfossil": {
@@ -2720,6 +2894,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 99,
+		gen: 3,
 		desc: "Can be revived into Lileep."
 	},
 	"roseincense": {
@@ -2735,6 +2910,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 318,
+		gen: 4,
 		desc: "Holder's Grass-type attacks have 1.2x power."
 	},
 	"rowapberry": {
@@ -2755,6 +2931,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 212,
+		gen: 4,
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use."
 	},
 	"safariball": {
@@ -2762,6 +2939,7 @@ exports.BattleItems = {
 		name: "Safari Ball",
 		spritenum: 425,
 		num: 5,
+		gen: 1,
 		desc: "A special Poke Ball that is used only in the Safari Zone and Great Marsh."
 	},
 	"salacberry": {
@@ -2782,6 +2960,7 @@ exports.BattleItems = {
 			this.boost({spe:1});
 		},
 		num: 203,
+		gen: 3,
 		desc: "Raises Speed by 1 when at 1/4 max HP or less. Single use."
 	},
 	"scopelens": {
@@ -2795,6 +2974,7 @@ exports.BattleItems = {
 			move.critRatio++;
 		},
 		num: 232,
+		gen: 2,
 		desc: "Holder's critical hit ratio is boosted by 1."
 	},
 	"seaincense": {
@@ -2810,6 +2990,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 254,
+		gen: 3,
 		desc: "Holder's Water-type attacks have 1.2x power."
 	},
 	"sharpbeak": {
@@ -2825,6 +3006,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 244,
+		gen: 2,
 		desc: "Holder's Flying-type attacks have 1.2x power."
 	},
 	"shedshell": {
@@ -2839,6 +3021,7 @@ exports.BattleItems = {
 			pokemon.trapped = pokemon.maybeTrapped = false;
 		},
 		num: 295,
+		gen: 4,
 		desc: "Holder may switch out even when trapped by another Pokemon."
 	},
 	"shellbell": {
@@ -2854,6 +3037,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 253,
+		gen: 3,
 		desc: "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon."
 	},
 	"shockdrive": {
@@ -2865,6 +3049,7 @@ exports.BattleItems = {
 		},
 		onDrive: 'Electric',
 		num: 117,
+		gen: 5,
 		desc: "Holder's Techno Blast is Electric-type."
 	},
 	"shucaberry": {
@@ -2886,6 +3071,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 191,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Ground-type attack. Single use."
 	},
 	"silkscarf": {
@@ -2901,6 +3087,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 251,
+		gen: 3,
 		desc: "Holder's Normal-type attacks have 1.2x power."
 	},
 	"silverpowder": {
@@ -2916,6 +3103,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 222,
+		gen: 2,
 		desc: "Holder's Bug-type attacks have 1.2x power."
 	},
 	"sitrusberry": {
@@ -2936,6 +3124,7 @@ exports.BattleItems = {
 			this.heal(pokemon.maxhp/4);
 		},
 		num: 158,
+		gen: 3,
 		desc: "Restores 1/4 max HP when at 1/2 max HP or less. Single use."
 	},
 	"skullfossil": {
@@ -2946,6 +3135,7 @@ exports.BattleItems = {
 			basePower: 100
 		},
 		num: 105,
+		gen: 4,
 		desc: "Can be revived into Cranidos."
 	},
 	"skyplate": {
@@ -2962,6 +3152,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 306,
+		gen: 4,
 		desc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying-type."
 	},
 	"smoothrock": {
@@ -2972,6 +3163,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		num: 283,
+		gen: 4,
 		desc: "Holder's use of Sandstorm lasts 8 turns instead of 5."
 	},
 	"softsand": {
@@ -2987,6 +3179,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 237,
+		gen: 2,
 		desc: "Holder's Ground-type attacks have 1.2x power."
 	},
 	"souldew": {
@@ -3007,6 +3200,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 225,
+		gen: 3,
 		desc: "If holder is a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x."
 	},
 	"spelltag": {
@@ -3022,6 +3216,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 247,
+		gen: 2,
 		desc: "Holder's Ghost-type attacks have 1.2x power."
 	},
 	"spelonberry": {
@@ -3034,6 +3229,7 @@ exports.BattleItems = {
 			type: "Dark"
 		},
 		num: 179,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"splashplate": {
@@ -3050,6 +3246,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 299,
+		gen: 4,
 		desc: "Holder's Water-type attacks have 1.2x power. Judgment is Water-type."
 	},
 	"spookyplate": {
@@ -3066,6 +3263,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 310,
+		gen: 4,
 		desc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost-type."
 	},
 	"sportball": {
@@ -3073,6 +3271,7 @@ exports.BattleItems = {
 		name: "Sport Ball",
 		spritenum: 465,
 		num: 499,
+		gen: 4,
 		desc: "A special Poke Ball for the Bug-Catching Contest."
 	},
 	"starfberry": {
@@ -3104,6 +3303,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 207,
+		gen: 3,
 		desc: "Raises a random stat by 2 when at 1/4 max HP or less. Single use."
 	},
 	"steelgem": {
@@ -3120,6 +3320,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 563,
+		gen: 5,
 		desc: "Holder's first successful Steel-type attack will have 1.5x power. Single use."
 	},
 	"stick": {
@@ -3135,6 +3336,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 259,
+		gen: 2,
 		desc: "If holder is a Farfetch'd, its critical hit ratio is boosted by 2."
 	},
 	"stickybarb": {
@@ -3157,6 +3359,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 288,
+		gen: 4,
 		desc: "Each turn, holder loses 1/8 max HP. An attacker making contact can receive it."
 	},
 	"stoneplate": {
@@ -3173,6 +3376,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 309,
+		gen: 4,
 		desc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock-type."
 	},
 	"tamatoberry": {
@@ -3185,6 +3389,7 @@ exports.BattleItems = {
 			type: "Psychic"
 		},
 		num: 174,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"tangaberry": {
@@ -3206,6 +3411,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 194,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Bug-type attack. Single use."
 	},
 	"thickclub": {
@@ -3221,6 +3427,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 258,
+		gen: 2,
 		desc: "If holder is a Cubone or a Marowak, its Attack is doubled."
 	},
 	"timerball": {
@@ -3228,6 +3435,7 @@ exports.BattleItems = {
 		name: "Timer Ball",
 		spritenum: 494,
 		num: 10,
+		gen: 3,
 		desc: "A Poke Ball that becomes better the more turns there are in a battle."
 	},
 	"toxicorb": {
@@ -3247,6 +3455,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 272,
+		gen: 4,
 		desc: "At the end of every turn, this item attempts to badly poison the holder."
 	},
 	"toxicplate": {
@@ -3263,6 +3472,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 304,
+		gen: 4,
 		desc: "Holder's Poison-type attacks have 1.2x power. Judgment is Poison-type."
 	},
 	"twistedspoon": {
@@ -3278,6 +3488,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 248,
+		gen: 2,
 		desc: "Holder's Psychic-type attacks have 1.2x power."
 	},
 	"ultraball": {
@@ -3285,6 +3496,7 @@ exports.BattleItems = {
 		name: "Ultra Ball",
 		spritenum: 521,
 		num: 2,
+		gen: 1,
 		desc: "An ultra-performance Ball that provides a higher catch rate than a Great Ball."
 	},
 	"wacanberry": {
@@ -3306,6 +3518,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 186,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Electric-type attack. Single use."
 	},
 	"watergem": {
@@ -3322,6 +3535,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 549,
+		gen: 5,
 		desc: "Holder's first successful Water-type attack will have 1.5x power. Single use."
 	},
 	"watmelberry": {
@@ -3334,6 +3548,7 @@ exports.BattleItems = {
 			type: "Fire"
 		},
 		num: 181,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"waveincense": {
@@ -3349,6 +3564,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 317,
+		gen: 4,
 		desc: "Holder's Water-type attacks have 1.2x power."
 	},
 	"wepearberry": {
@@ -3361,6 +3577,7 @@ exports.BattleItems = {
 			type: "Electric"
 		},
 		num: 167,
+		gen: 3,
 		desc: "No competitive use."
 	},
 	"whiteherb": {
@@ -3398,6 +3615,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 214,
+		gen: 3,
 		desc: "Restores all lowered stat stages to 0 when one is less than 0. Single use."
 	},
 	"widelens": {
@@ -3413,6 +3631,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 265,
+		gen: 4,
 		desc: "The accuracy of attacks by the holder is 1.1x."
 	},
 	"wikiberry": {
@@ -3436,6 +3655,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 160,
+		gen: 3,
 		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use."
 	},
 	"wiseglasses": {
@@ -3451,6 +3671,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 267,
+		gen: 4,
 		desc: "Holder's special attacks have 1.1x power."
 	},
 	"yacheberry": {
@@ -3472,6 +3693,7 @@ exports.BattleItems = {
 		},
 		onEat: function() { },
 		num: 188,
+		gen: 4,
 		desc: "Halves damage taken from a super effective Ice-type attack. Single use."
 	},
 	"zapplate": {
@@ -3488,6 +3710,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 300,
+		gen: 4,
 		desc: "Holder's Electric-type attacks have 1.2x power. Judgment is Electric-type."
 	},
 	"zoomlens": {
@@ -3504,6 +3727,7 @@ exports.BattleItems = {
 			}
 		},
 		num: 276,
+		gen: 4,
 		desc: "The accuracy of attacks by the holder is 1.2x if it moves after the target."
 	}
 };
