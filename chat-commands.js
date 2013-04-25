@@ -380,7 +380,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		logModCommand(room,''+targetUser.name+' was kicked to the Rules page by '+user.name+'' + (targets[1] ? " (" + targets[1] + ")" : ""));
+		logModCommand(room,''+targetUser.name+' was warned by '+user.name+'' + (targets[1] ? " (" + targets[1] + ")" : ""));
 		targetUser.sendTo('lobby', '|c|~|/warn '+targets[1]);
 		return false;
 		break;
