@@ -299,6 +299,12 @@ module.exports = (function () {
 			if (!item.category) item.category = 'Effect';
 			if (!item.effectType) item.effectType = 'Item';
 			if (item.isBerry) item.fling = { basePower: 10 };
+			if (!item.gen) {
+				if (item.num >= 537) item.gen = 5;
+				else if (item.num >= 377) item.gen = 4;
+				// Due to difference in storing items, gen 2 items must be specified specifically
+				else item.gen = 3;
+			}
 		}
 		return item;
 	};
