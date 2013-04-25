@@ -11,13 +11,7 @@ config = require('./config/config.js');
 if (config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', function (err) {
-		console.log("\n"+err.stack+"\n");
-		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
-			this.write("\n"+err.stack+"\n");
-			this.end();
-		}).on("error", function (err) {
-			console.log("\n"+err.stack+"\n");
-		});
+		Tools.logCrash(err, 'A simulator process');
 		/* var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
 		Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
 		Rooms.lobby.addRaw('<div>You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
