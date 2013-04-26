@@ -83,7 +83,7 @@ if (config.protocol === 'io') {
 	server = require('engine.io').attach(app);
 } else {
 	app = require('http').createServer();
-	try {
+	var installStaticServer = function(app) {
 		var nodestatic = require('node-static');
 		var cssserver = new nodestatic.Server('./config');
 		var avatarserver = new nodestatic.Server('./config/avatars');
@@ -111,8 +111,11 @@ if (config.protocol === 'io') {
 				});
 			});
 		});
+	};
+	try {
+		installStaticServer(app);
 	} catch (e) {
-		console.log('Did not start node-static - try `npm install` if you want to use it');
+		console.log('Could not start node-static - try `npm install` if you want to use it');
 	}
 	server = require('sockjs').createServer({
 		sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js",
