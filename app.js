@@ -91,6 +91,10 @@ if (config.protocol === 'io') {
 		app.on('request', function(request, response) {
 			request.resume();
 			request.addListener('end', function() {
+				if (config.customhttpresponse &&
+						config.customhttpresponse(request, response)) {
+					return;
+				}
 				var server;
 				if (request.url === '/custom.css') {
 					server = cssserver;
