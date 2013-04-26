@@ -230,75 +230,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'whois':
+	case 'ip':
+	case 'getip':
 	case 'rooms':
-		var targetUser = user;
-		if (target) targetUser = Users.get(target);
-		if (!targetUser) {
-			emit(socket, 'console', 'User '+target+' not found.');
-		} else {
-			var output = "";
-			var first = true;
-			for (var i in targetUser.roomCount) {
-				if (!first) output += ' | ';
-				first = false;
-
-				output += '<a href="/'+i+'" room="'+i+'">'+i+'</a>';
-			}
-			if (!output) {
-				emit(socket, 'console', ""+targetUser.name+" is offline.");
-			} else {
-				emit(socket, 'console', {rawMessage: ""+targetUser.name+" is in: "+output});
-			}
-		}
-		return false;
-		break;
-
 	case 'altcheck':
 	case 'alt':
 	case 'alts':
 	case 'getalts':
-		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		var targetUser = Users.get(target);
-		if (!targetUser) {
-			emit(socket, 'console', 'User '+target+' not found.');
-			return false;
-		}
-		if (!user.can('alts', targetUser)) {
-			emit(socket, 'console', '/alts - Access denied.');
-			return false;
-		}
-
-		var alts = targetUser.getAlts();
-
-		emit(socket, 'console', 'User: '+targetUser.name);
-
-		if (!user.can('alts', targetUser.getHighestRankedAlt())) {
-			return false;
-		}
-
-		var output = '';
-		for (var i in targetUser.prevNames) {
-			if (output) output += ", ";
-			output += targetUser.prevNames[i];
-		}
-		if (output) emit(socket, 'console', 'Previous names: '+output);
-
-		for (var j=0; j<alts.length; j++) {
-			var targetAlt = Users.get(alts[j]);
-			if (!targetAlt.named && !targetAlt.connected) continue;
-
-			emit(socket, 'console', 'Alt: '+targetAlt.name);
-			output = '';
-			for (var i in targetAlt.prevNames) {
-				if (output) output += ", ";
-				output += targetAlt.prevNames[i];
-			}
-			if (output) emit(socket, 'console', 'Previous names: '+output);
-		}
-		return false;
-		break;
-
-	case 'whois':
 		var targetUser = user;
 		if (target) {
 			targetUser = Users.get(target);
@@ -307,6 +246,28 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'User '+target+' not found.');
 		} else {
 			emit(socket, 'console', 'User: '+targetUser.name);
+			if (user.can('alts', targetUser.getHighestRankedAlt())) {
+				var alts = targetUser.getAlts();
+				var output = '';
+				for (var i in targetUser.prevNames) {
+					if (output) output += ", ";
+					output += targetUser.prevNames[i];
+				}
+				if (output) emit(socket, 'console', 'Previous names: '+output);
+
+				for (var j=0; j<alts.length; j++) {
+					var targetAlt = Users.get(alts[j]);
+					if (!targetAlt.named && !targetAlt.connected) continue;
+
+					emit(socket, 'console', 'Alt: '+targetAlt.name);
+					output = '';
+					for (var i in targetAlt.prevNames) {
+						if (output) output += ", ";
+						output += targetAlt.prevNames[i];
+					}
+					if (output) emit(socket, 'console', 'Previous names: '+output);
+				}
+			}
 			if (config.groups[targetUser.group] && config.groups[targetUser.group].name) {
 				emit(socket, 'console', 'Group: ' + config.groups[targetUser.group].name + ' (' + targetUser.group + ')');
 			}
@@ -469,27 +430,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		targets[0].emit('console', message);
 		targets[0].lastPM = user.userid;
 		user.lastPM = targets[0].userid;
-		return false;
-		break;
-
-	case 'ip':
-	case 'getip':
-		if (!target) {
-			var ips = Object.keys(user.ips);
-			emit(socket, 'console', 'Your IP' + ((ips.length > 1) ? 's are' : ' is') + ': ' + ips.join(', '));
-			return false;
-		}
-		var targetUser = Users.get(target);
-		if (!targetUser) {
-			emit(socket, 'console', 'User '+target+' not found.');
-			return false;
-		}
-		if (!user.can('ip', targetUser)) {
-			emit(socket, 'console', '/ip - Access denied.');
-			return false;
-		}
-		var ips = Object.keys(targetUser.ips);
-		emit(socket, 'console', 'User ' + targetUser.name + ' has IP' + ((ips.length > 1) ? 's' : '') + ': ' + ips.join(', '));
 		return false;
 		break;
 
