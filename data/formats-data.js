@@ -27,6 +27,11 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "G5CAP"
 	},
+	malaconda: {
+		viableMoves: {"powerwhip":1,"pursuit":1,"crunch":1,"leafblade":1,"suckerpunch":1,"aromatherapy":1,"wildcharge":1,"uturn":1,"dragontail":1,"rapidspin":1,"glare":1,"stunspore":1},
+		isNonstandard: true,
+		tier: "G5CAP"
+	},
 	syclant: {
 		viableMoves: {"bugbuzz":1,"icebeam":1,"blizzard":1,"earthpower":1,"spikes":1,"superpower":1,"tailglow":1,"uturn":1,"focusblast":1},
 		isNonstandard: true,
