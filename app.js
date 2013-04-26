@@ -71,19 +71,9 @@ if (process.argv[3]) {
 	config.setuid = process.argv[3];
 }
 
-if (config.protocol !== 'io' && config.protocol !== 'eio') config.protocol = 'ws';
-
-var app;
-var server;
-if (config.protocol === 'io') {
-	server = require('socket.io').listen(config.port).set('log level', 1);
-	server.set('transports', ['websocket', 'htmlfile', 'xhr-polling']); // temporary hack until https://github.com/LearnBoost/socket.io/issues/609 is fixed
-} else if (config.protocol === 'eio') {
-	app = require('http').createServer().listen(config.port);
-	server = require('engine.io').attach(app);
-} else {
-	app = require('http').createServer();
-	var installStaticServer = function(app) {
+var app = require('http').createServer();
+try {
+	(function() {
 		var nodestatic = require('node-static');
 		var cssserver = new nodestatic.Server('./config');
 		var avatarserver = new nodestatic.Server('./config/avatars');
@@ -115,22 +105,20 @@ if (config.protocol === 'io') {
 				});
 			});
 		});
-	};
-	try {
-		installStaticServer(app);
-	} catch (e) {
-		console.log('Could not start node-static - try `npm install` if you want to use it');
-	}
-	server = require('sockjs').createServer({
-		sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js",
-		log: function(severity, message) {
-			if (severity === 'error') console.log('ERROR: '+message);
-		},
-		prefix: '/showdown'
-	});
+	})();
+} catch (e) {
+	console.log('Could not start node-static - try `npm install` if you want to use it');
 }
+var server = require('sockjs').createServer({
+	sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js",
+	log: function(severity, message) {
+		if (severity === 'error') console.log('ERROR: '+message);
+	},
+	prefix: '/showdown'
+});
 
-// Make `server` available using the console.
+// Make `app` and `server` available to the console.
+App = app;
 Server = server;
 
 /**
@@ -236,27 +224,13 @@ function resolveUser(you, socket) {
 }
 
 emit = function(socket, type, data) {
-	if (config.protocol === 'io') {
-		socket.emit(type, data);
-	} else if (config.protocol === 'eio') {
-		if (typeof data === 'object') data.type = type;
-		else data = {type: type, message: data};
-		socket.send(JSON.stringify(data));
-	} else {
-		if (typeof data === 'object') data.type = type;
-		else data = {type: type, message: data};
-		socket.write(JSON.stringify(data));
-	}
+	if (typeof data === 'object') data.type = type;
+	else data = {type: type, message: data};
+	socket.write(JSON.stringify(data));
 };
 
 sendData = function(socket, data) {
-	if (config.protocol === 'io') {
-		socket.emit('data', data);
-	} else if (config.protocol === 'eio') {
-		socket.send(data);
-	} else {
-		socket.write(data);
-	}
+	socket.write(data);
 };
 
 function randomString(length) {
@@ -312,132 +286,57 @@ var events = {
 	}
 };
 
-
-if (config.protocol === 'io') { // Socket.IO
-	server.sockets.on('connection', function (socket) {
-		var you = null;
-
-		socket.remoteAddress = socket.handshake.address.address; // for compatibility with SockJS semantics
-		if (config.proxyip && (config.proxyip === true || config.proxyip.indexOf(socket.remoteAddress) >= 0)) socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
-
-		if (bannedIps[socket.remoteAddress]) {
-			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
-			return;
-		}
-
-		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
-		var generator = function(type) {
-			return function(data) {
-				console.log(you);
-				events[type](data, socket, you);
-			};
-		};
-		for (var e in events) {
-			socket.on(e, (function(type) {
-				return function(data) {
-					you = events[type](data, socket, you) || you;
-				};
-			})(e));
-		}
-		socket.on('disconnect', function() {
-			var youUser = resolveUser(you, socket);
-			if (!youUser) return;
-			youUser.disconnect(socket);
-		});
-	});
-} else if (config.protocol === 'eio') { // engine.io
-	server.on('connection', function (socket) {
-		var you = null;
-		if (!socket) { // WTF
-			return;
-		}
-		//socket.id = randomString(16); // this sucks
-
-		socket.remoteAddress = socket.id;
-
-		if (bannedIps[socket.remoteAddress]) {
-			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
-			return;
-		}
-		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
-		socket.on('message', function(message) {
-			var data = null;
-			if (message.substr(0,1) === '{') {
-				try {
-					data = JSON.parse(message);
-				} catch (e) {}
-			} else {
-				var pipeIndex = message.indexOf('|');
-				if (pipeIndex > 0) data = {
-					type: 'chat',
-					room: message.substr(0, pipeIndex),
-					message: message.substr(pipeIndex+1)
-				};
-			}
-			if (!data) return;
-			if (events[data.type]) you = events[data.type](data, socket, you) || you;
-		});
-		socket.on('close', function() {
-			var youUser = resolveUser(you, socket);
-			if (!youUser) return;
-			youUser.disconnect(socket);
-		});
-	});
-} else { // SockJS and engine.io
-	server.on('connection', function (socket) {
-		var you = null;
-		if (!socket) { // WTF
-			return;
-		}
-		socket.id = randomString(16); // this sucks
-
-		if (config.proxyip && (config.proxyip === true || config.proxyip.indexOf(socket.remoteAddress) >= 0)) socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
-
-		if (bannedIps[socket.remoteAddress]) {
-			console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
-			return;
-		}
-		console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
-		var interval;
-		if (config.herokuhack) {
-			// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
-			interval = setInterval(function() {
-				try {
-					socket._session.recv.didClose();
-				} catch (e) {}
-			}, 15000);
-		}
-		socket.on('data', function(message) {
-			var data = null;
-			if (message.substr(0,1) === '{') {
-				try {
-					data = JSON.parse(message);
-				} catch (e) {}
-			} else {
-				var pipeIndex = message.indexOf('|');
-				if (pipeIndex >= 0) data = {
-					type: 'chat',
-					room: message.substr(0, pipeIndex),
-					message: message.substr(pipeIndex+1)
-				};
-			}
-			if (!data) return;
-			if (events[data.type]) you = events[data.type](data, socket, you) || you;
-		});
-		socket.on('close', function() {
-			if (interval) {
-				clearInterval(interval);
-			}
-			var youUser = resolveUser(you, socket);
-			if (!youUser) return;
-			youUser.disconnect(socket);
-		});
-	});
-	if (config.protocol === 'ws') {
-		server.installHandlers(app, {});
-		app.listen(config.port);
+server.on('connection', function (socket) {
+	var you = null;
+	if (!socket) { // WTF
+		return;
 	}
-}
+	socket.id = randomString(16); // this sucks
+
+	if (config.proxyip && (config.proxyip === true || config.proxyip.indexOf(socket.remoteAddress) >= 0)) socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
+
+	if (bannedIps[socket.remoteAddress]) {
+		console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
+		return;
+	}
+	console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
+	var interval;
+	if (config.herokuhack) {
+		// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
+		interval = setInterval(function() {
+			try {
+				socket._session.recv.didClose();
+			} catch (e) {}
+		}, 15000);
+	}
+	socket.on('data', function(message) {
+		var data = null;
+		if (message.substr(0,1) === '{') {
+			try {
+				data = JSON.parse(message);
+			} catch (e) {}
+		} else {
+			var pipeIndex = message.indexOf('|');
+			if (pipeIndex >= 0) data = {
+				type: 'chat',
+				room: message.substr(0, pipeIndex),
+				message: message.substr(pipeIndex+1)
+			};
+		}
+		if (!data) return;
+		if (events[data.type]) you = events[data.type](data, socket, you) || you;
+	});
+	socket.on('close', function() {
+		if (interval) {
+			clearInterval(interval);
+		}
+		var youUser = resolveUser(you, socket);
+		if (!youUser) return;
+		youUser.disconnect(socket);
+	});
+});
+server.installHandlers(app, {});
+app.listen(config.port);
 
 console.log('Server started on port ' + config.port);
 
