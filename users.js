@@ -1012,7 +1012,7 @@ var Connection = (function () {
 			this.ip = socket.remoteAddress;
 		}
 
-		if (ipSearch(this.ip,bannedIps)) {
+		if (ipSearch(this.ip, bannedIps) || useridSearch(user.userid, bannedIps)) {
 			// gonna kill this
 			this.banned = true;
 			this.user = null;
@@ -1029,12 +1029,18 @@ var Connection = (function () {
 
 function ipSearch(ip, table) {
 	if (table[ip]) return true;
-	var dotIndex = ip.lastIndexOf('.');
-	for (var i=0; i<4 && dotIndex > 0; i++) {
-		ip = ip.substr(0, dotIndex);
-		if (table[ip+'.*']) return true;
-		dotIndex = ip.lastIndexOf('.');
+	var ipRange = ip.substr(0, ip.lastIndexOf('.'));
+	for (var userIp in table) {
+		var userIpRange = userIp.substr(0, userIp.lastIndexOf('.'));
+		if (ipRange === userIpRange) return true;
 	}
+	return false;
+}
+
+function useridSearch(userid, table) {
+	for (var ip in table) {
+        	if (table[ip] === userid) return true;
+   	}
 	return false;
 }
 
