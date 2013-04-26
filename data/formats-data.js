@@ -28,7 +28,7 @@ exports.BattleFormatsData = {
 		tier: "G5CAP"
 	},
 	malaconda: {
-		viableMoves: {"powerwhip":1,"pursuit":1,"crunch":1,"leafblade":1,"suckerpunch":1,"aromatherapy":1,"wildcharge":1,"uturn":1,"dragontail":1,"rapidspin":1,"glare":1,"stunspore":1},
+		viableMoves: {"powerwhip":1,"glare":1,"crunch":1,"toxic":1,"suckerpunch":1,"rest":1,"substitute":1,"uturn":1,"synthesis":1,"rapidspin":1},
 		isNonstandard: true,
 		tier: "G5CAP"
 	},
