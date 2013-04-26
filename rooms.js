@@ -465,7 +465,6 @@ var BattleRoom = (function() {
 	BattleRoom.prototype.initSocket = function(user, socket) {
 		var initdata = {
 			name: user.name,
-			userid: user.userid,
 			named: user.named,
 			room: this.id,
 			roomType: 'battle',
@@ -490,7 +489,6 @@ var BattleRoom = (function() {
 
 		var initdata = {
 			name: user.name,
-			userid: user.userid,
 			named: user.named,
 			room: this.id,
 			roomType: 'battle',
@@ -1122,7 +1120,6 @@ function LobbyRoom(roomid) {
 	this.initSocket = function(user, socket) {
 		var initdata = {
 			name: user.name,
-			userid: user.userid,
 			named: user.named,
 			room: selfR.id,
 			rooms: selfR.getRoomList(),
@@ -1148,7 +1145,6 @@ function LobbyRoom(roomid) {
 
 		var initdata = {
 			name: user.name,
-			userid: user.userid,
 			named: user.named,
 			room: selfR.id,
 			rooms: selfR.getRoomList(),
