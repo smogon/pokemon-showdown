@@ -783,11 +783,7 @@ var User = (function () {
 			for (var j in connection.rooms) {
 				this.leaveRoom(connection.rooms[j], connection);
 			}
-			if (config.protocol === 'io') {
-				connection.socket.disconnect();
-			} else {
-				connection.socket.end();
-			}
+			connection.socket.end();
 			--this.ips[connection.ip];
 		}
 		this.connections = [];
