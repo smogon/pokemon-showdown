@@ -337,7 +337,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 		if (!user.can('warn', targetUser)) {
-			emit(socket, 'console', '/redirect - Access denied.');
+			emit(socket, 'console', '/warn - Access denied.');
 			return false;
 		}
 
