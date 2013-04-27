@@ -13,27 +13,7 @@ exports.BattleScripts = {
 			}
 		}
 		for (var i in this.data.Pokedex) {
-			var template = this.getTemplate(i);
-			if (template.gen > 4) template.isNonstandard = true;
-			delete template.abilities['DW'];
-		}
-		for (var i in this.data.Movedex) {
-			var move = this.getMove(i);
-			if (move.gen > 4) {
-				this.modData('Movedex', i).isNonstandard = true;
-			}
-		}
-		for (var i in this.data.Abilities) {
-			var ability = this.getAbility(i);
-			if (ability.gen > 4) {
-				this.modData('Abilities', i).isNonstandard = true;
-			}
-		}
-		for (var i in this.data.Items) {
-			var item = this.getItem(i);
-			if (item.gen > 4) {
-				this.modData('Items', i).isNonstandard = true;
-			}
+			delete this.data.Pokedex[i].abilities['DW'];
 		}
 	}
 }
