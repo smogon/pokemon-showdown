@@ -63,9 +63,9 @@ module.exports = (function () {
 					if (Data[mod][dataType][i] === null) {
 						// null means don't inherit
 						delete Data[mod][dataType][i];
-					} else if (typeof Data[mod][dataType][i] === 'undefined') {
+					} else if (!(i in Data[mod][dataType])) {
 						// If it doesn't exist is inherited from the base data
-						Data[mod][dataType][i] = Object.clone(Data.base[dataType][i], true);
+						Data[mod][dataType][i] = Data.base[dataType][i];
 					} else if (Data[mod][dataType][i] && Data[mod][dataType][i].inherit) {
 						// {inherit: true} can be used to modify only parts of the base data,
 						// instead of overwriting entirely
@@ -85,6 +85,11 @@ module.exports = (function () {
 		}
 		if (!mod) mod = 'base';
 		return moddedTools[mod];
+	};
+	Tools.prototype.modData = function(dataType, id) {
+		if (this.isBase) return this.data[dataType][id];
+		if (this.data[dataType][id] !== moddedTools.base.data[dataType][id]) return this.data[dataType][id];
+		return this.data[dataType][id] = Object.clone(this.data[dataType][id], true);
 	};
 
 	Tools.prototype.effectToString = function() {
