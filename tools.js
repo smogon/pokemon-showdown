@@ -1,5 +1,5 @@
 module.exports = (function () {
-	var dataTypes = ['Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Formats', 'FormatsData', 'Learnsets', 'Aliases'];
+	var dataTypes = ['FormatsData', 'Learnsets', 'Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Formats', 'Aliases'];
 	var dataFiles = {
 		'Pokedex': 'pokedex.js',
 		'Movedex': 'moves.js',
@@ -64,8 +64,13 @@ module.exports = (function () {
 						// null means don't inherit
 						delete Data[mod][dataType][i];
 					} else if (!(i in Data[mod][dataType])) {
-						// If it doesn't exist is inherited from the base data
-						Data[mod][dataType][i] = Data.base[dataType][i];
+						// If it doesn't exist it's inherited from the base data
+						if (dataType === 'Pokedex') {
+							// Pokedex entries can be modified too many different ways
+							Data[mod][dataType][i] = Object.clone(Data.base[dataType][i], true);
+						} else {
+							Data[mod][dataType][i] = Data.base[dataType][i];
+						}
 					} else if (Data[mod][dataType][i] && Data[mod][dataType][i].inherit) {
 						// {inherit: true} can be used to modify only parts of the base data,
 						// instead of overwriting entirely
@@ -130,6 +135,8 @@ module.exports = (function () {
 			template = {};
 			if (id && this.data.Pokedex[id]) {
 				template = this.data.Pokedex[id];
+				if (template.cached) return template;
+				template.cached = true;
 				template.exists = true;
 			}
 			name = template.species || template.name || name;
@@ -182,6 +189,8 @@ module.exports = (function () {
 			}
 			if (id && this.data.Movedex[id]) {
 				move = this.data.Movedex[id];
+				if (move.cached) return move;
+				move.cached = true;
 				move.exists = true;
 			}
 			if (!move.id) move.id = id;
@@ -241,10 +250,7 @@ module.exports = (function () {
 				effect = this.data.Items[id].effect;
 				effect.name = effect.name || this.data.Items[id].name;
 			} else if (id && this.data.Formats[id]) {
-				effect = this.data.Formats[id];
-				effect.name = effect.name || this.data.Formats[id].name;
-				if (!effect.mod) effect.mod = this.currentMod;
-				if (!effect.effectType) effect.effectType = 'Format';
+				return this.getFormat(effect);
 			} else if (id === 'recoil') {
 				effect = {
 					effectType: 'Recoil'
@@ -270,6 +276,8 @@ module.exports = (function () {
 			effect = {};
 			if (id && this.data.Formats[id]) {
 				effect = this.data.Formats[id];
+				if (effect.cached) return effect;
+				effect.cached = true;
 				effect.name = effect.name || this.data.Formats[id].name;
 				if (!effect.mod) effect.mod = this.currentMod;
 				if (!effect.effectType) effect.effectType = 'Format';
@@ -295,6 +303,8 @@ module.exports = (function () {
 			item = {};
 			if (id && this.data.Items[id]) {
 				item = this.data.Items[id];
+				if (item.cached) return item;
+				item.cached = true;
 				item.exists = true;
 			}
 			if (!item.id) item.id = id;
@@ -320,6 +330,8 @@ module.exports = (function () {
 			ability = {};
 			if (id && this.data.Abilities[id]) {
 				ability = this.data.Abilities[id];
+				if (ability.cached) return ability;
+				ability.cached = true;
 				ability.exists = true;
 			}
 			if (!ability.id) ability.id = id;
@@ -344,6 +356,8 @@ module.exports = (function () {
 			type = {};
 			if (id && this.data.TypeChart[id]) {
 				type = this.data.TypeChart[id];
+				if (type.cached) return type;
+				type.cached = true;
 				type.exists = true;
 				type.isType = true;
 				type.effectType = 'Type';
