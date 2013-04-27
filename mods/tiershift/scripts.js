@@ -20,12 +20,15 @@ exports.BattleScripts = {
 				adjustment = 15;
 			}
 
-			this.data.Pokedex[i].baseStats.hp += adjustment;
-			this.data.Pokedex[i].baseStats.atk += adjustment;
-			this.data.Pokedex[i].baseStats.def += adjustment;
-			this.data.Pokedex[i].baseStats.spa += adjustment;
-			this.data.Pokedex[i].baseStats.spd += adjustment;
-			this.data.Pokedex[i].baseStats.spe += adjustment;
+			if (adjustment) {
+				this.modData('Pokedex', i);
+				this.data.Pokedex[i].baseStats.hp += adjustment;
+				this.data.Pokedex[i].baseStats.atk += adjustment;
+				this.data.Pokedex[i].baseStats.def += adjustment;
+				this.data.Pokedex[i].baseStats.spa += adjustment;
+				this.data.Pokedex[i].baseStats.spd += adjustment;
+				this.data.Pokedex[i].baseStats.spe += adjustment;
+			}
 		}
 	}
 };
