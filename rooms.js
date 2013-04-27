@@ -890,20 +890,6 @@ function LobbyRoom(roomid) {
 		);
 	}
 
-	this.getUpdate = function(since, omitUsers, omitRoomList) {
-		var update = {room: roomid};
-		var i = since;
-		if (!i) i = selfR.log.length - 100;
-		if (i<0) i = 0;
-		update.logStart = i;
-		update.logUpdate = [];
-		for (;i<selfR.log.length;i++) {
-			update.logUpdate.push(selfR.log[i]);
-		}
-		if (!omitRoomList) update.rooms = selfR.getRoomList();
-		if (!omitUsers) update.u = selfR.getUserList();
-		return update;
-	};
 	this.getUserList = function() {
 		var buffer = '';
 		var counter = 0;
@@ -1121,11 +1107,11 @@ function LobbyRoom(roomid) {
 			named: user.named,
 			room: selfR.id,
 			rooms: selfR.getRoomList(),
-			u: selfR.getUserList(),
 			roomType: 'lobby',
-			log: selfR.log.slice(-25)
+			log: []
 		};
 		emit(socket, 'init', initdata);
+		sendData(socket, '|init|lobby\n|users|'+selfR.getUserList()+'\n'+selfR.log.slice(-25).join('\n'));
 	};
 	this.join = function(user) {
 		if (!user) return false; // ???
@@ -1146,11 +1132,11 @@ function LobbyRoom(roomid) {
 			named: user.named,
 			room: selfR.id,
 			rooms: selfR.getRoomList(),
-			u: selfR.getUserList(),
 			roomType: 'lobby',
-			log: selfR.log.slice(-100).include(this.formatListText)
+			log: []
 		};
 		user.emit('init', initdata);
+		this.send('|init|lobby\n'+this.formatListText+'\n|users|'+selfR.getUserList()+'\n'+selfR.log.slice(-100).join('\n'), user);
 
 		return user;
 	};
