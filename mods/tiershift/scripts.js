@@ -21,7 +21,6 @@ exports.BattleScripts = {
 			}
 
 			if (adjustment) {
-				this.modData('Pokedex', i);
 				this.data.Pokedex[i].baseStats.hp += adjustment;
 				this.data.Pokedex[i].baseStats.atk += adjustment;
 				this.data.Pokedex[i].baseStats.def += adjustment;

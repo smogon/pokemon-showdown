@@ -2,7 +2,6 @@ exports.BattleScripts = {
 	gen: 3,
 	init: function() {
 		for (var i in this.data.Pokedex) {
-			this.modData('Pokedex', i);
 			var template = this.getTemplate(i);
 			if (template.gen > 3) template.isNonstandard = true;
 			delete template.abilities['DW'];
