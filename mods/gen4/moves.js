@@ -449,23 +449,31 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				this.add('-singleturn', target, 'move: Magic Coat');
 			},
-			onAllyTryFieldHit: function(target, source, move) {
+			onTryHitPriority: 2,
+			onTryHit: function(target, source, move) {
 				if (target === source) return;
+				if (move.hasBounced) return;
 				if (typeof move.isBounceable === 'undefined') {
 					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
 				}
-				if (move.target !== 'foeSide' && target !== this.effectData.target) {
-					return;
+				if (move.isBounceable) {
+					var newMove = this.getMoveCopy(move.id);
+					newMove.hasBounced = true;
+					this.useMove(newMove, target, source);
+					return null;
 				}
-				if (move.hasBounced) {
-					return;
+			},
+			onAllyTryHitSide: function(target, source, move) {
+				if (target.side === source.side) return;
+				if (move.hasBounced) return;
+				if (typeof move.isBounceable === 'undefined') {
+					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
 				}
 				if (move.isBounceable) {
 					target.removeVolatile('MagicCoat');
 					var newMove = this.getMoveCopy(move.id);
 					newMove.hasBounced = true;
-					this.add('-activate', target, 'move: Magic Coat', newMove, '[of] '+source);
-					this.moveHit(source, target, newMove);
+					this.useMove(newMove, target, source);
 					return null;
 				}
 			}
