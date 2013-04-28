@@ -320,6 +320,8 @@ var GlobalRoom = (function() {
 		if (!user) return false; // ???
 		if (this.users[user.userid]) return user;
 
+		this.users[user.userid] = user;
+
 		if (!merging) {
 			var initdata = {
 				name: user.name,
