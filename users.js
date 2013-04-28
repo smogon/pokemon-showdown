@@ -591,7 +591,7 @@ var User = (function () {
 		for (var i in connection.rooms) {
 			var room = connection.rooms[i];
 			if (!this.roomCount[i]) {
-				room.join(this);
+				room.join(this, true);
 				this.roomCount[i] = 0;
 			}
 			this.roomCount[i]++;
