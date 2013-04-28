@@ -1113,7 +1113,7 @@ function LobbyRoom(roomid) {
 		emit(socket, 'init', initdata);
 		sendData(socket, '|init|lobby\n|users|'+selfR.getUserList()+'\n'+selfR.log.slice(-25).join('\n'));
 	};
-	this.join = function(user) {
+	this.join = function(user, merging) {
 		if (!user) return false; // ???
 		if (selfR.users[user.userid]) return user;
 
@@ -1127,16 +1127,18 @@ function LobbyRoom(roomid) {
 			selfR.logEntry(entry);
 		}
 
-		var initdata = {
-			name: user.name,
-			named: user.named,
-			room: selfR.id,
-			rooms: selfR.getRoomList(),
-			roomType: 'lobby',
-			log: []
-		};
-		user.emit('init', initdata);
-		this.send('|init|lobby\n'+this.formatListText+'\n|users|'+selfR.getUserList()+'\n'+selfR.log.slice(-100).join('\n'), user);
+		if (!merging) {
+			var initdata = {
+				name: user.name,
+				named: user.named,
+				room: selfR.id,
+				rooms: selfR.getRoomList(),
+				roomType: 'lobby',
+				log: []
+			};
+			user.emit('init', initdata);
+			this.send('|init|lobby\n'+this.formatListText+'\n|users|'+selfR.getUserList()+'\n'+selfR.log.slice(-100).join('\n'), user);
+		}
 
 		return user;
 	};
