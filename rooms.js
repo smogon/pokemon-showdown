@@ -365,7 +365,6 @@ var GlobalRoom = (function() {
 			this.cancelSearch(p2, true);
 			p1.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
 			p2.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
-			this.update();
 			return;
 		}
 
@@ -1122,11 +1121,12 @@ var ChatRoom = (function() {
 		this.logFilename = '';
 		this.destroyingLog = false;
 
+		var self;
 		if (config.loglobby) {
 			this.rollLogFile(true);
 			this.logEntry = function(entry, date) {
 				var timestamp = (new Date()).format('{HH}:{mm}:{ss} ');
-				this.logFile.write(timestamp + entry + '\n');
+				self.logFile.write(timestamp + entry + '\n');
 			};
 			this.logEntry('Lobby created');
 			if (config.loguserstats) {
