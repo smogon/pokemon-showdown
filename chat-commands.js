@@ -86,11 +86,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 			emit(socket, 'command', userdetails);
 		} else if (cmd === 'roomlist') {
-			if (!room || !room.getRoomList) return false;
 			emit(socket, 'command', {
 				command: 'roomlist',
-				rooms: room.getRoomList(true),
-				room: room.id
+				rooms: Rooms.global.getRoomList(true),
+				room: 'lobby'
 			});
 		}
 		return false;
@@ -183,7 +182,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (removed) {
 			var targetUser = Users.get(target);
 			if (targetUser) {
-				rooms.lobby.sendIdentity(targetUser);
+				Rooms.lobby.sendIdentity(targetUser);
 			}
 			logModCommand(room,user.name+" unlocked the name of "+target+".");
 		} else {
@@ -453,12 +452,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 
 		targetUser.muted = true;
-		rooms.lobby.sendIdentity(targetUser);
+		Rooms.lobby.sendIdentity(targetUser);
 		for (var i=0; i<alts.length; i++) {
 			var targetAlt = Users.get(alts[i]);
 			if (targetAlt) {
 				targetAlt.muted = true;
-				rooms.lobby.sendIdentity(targetAlt);
+				Rooms.lobby.sendIdentity(targetAlt);
 			}
 		}
 
@@ -482,7 +481,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 
 		targetUser.muted = true;
-		rooms.lobby.sendIdentity(targetUser);
+		Rooms.lobby.sendIdentity(targetUser);
 		for (var ip in targetUser.ips) {
 			mutedIps[ip] = targetUser.userid;
 		}
@@ -490,7 +489,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			var targetAlt = Users.get(alts[i]);
 			if (targetAlt) {
 				targetAlt.muted = true;
-				rooms.lobby.sendIdentity(targetAlt);
+				Rooms.lobby.sendIdentity(targetAlt);
 			}
 		}
 
@@ -525,7 +524,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		targetUser.muted = false;
-		rooms.lobby.sendIdentity(targetUser);
+		Rooms.lobby.sendIdentity(targetUser);
 		logModCommand(room,''+targetUser.name+' was unmuted by '+user.name+'.');
 		return false;
 		break;
@@ -565,13 +564,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		var entry = ''+name+' was '+(isDemotion?'demoted':'promoted')+' to ' + groupName + ' by '+user.name+'.';
 		logModCommand(room, entry, isDemotion);
 		if (isDemotion) {
-			rooms.lobby.logEntry(entry);
+			Rooms.lobby.logEntry(entry);
 			emit(socket, 'console', 'You demoted ' + name + ' to ' + groupName + '.');
 			if (targetUser) {
 				targetUser.emit('console', 'You were demoted to ' + groupName + ' by ' + user.name + '.');
 			}
 		}
-		rooms.lobby.sendIdentity(targetUser);
+		Rooms.lobby.sendIdentity(targetUser);
 		return false;
 		break;
 
@@ -688,11 +687,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			Data = {};
 			Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
 			// rebuild the formats list
-			rooms.lobby.formatListText = rooms.lobby.getFormatListText();
+			Rooms.global.formatListText = Rooms.global.getFormatListText();
 			// respawn simulator processes
 			Simulator.SimulatorProcess.respawn();
 			// broadcast the new formats list to clients
-			rooms.lobby.send(rooms.lobby.formatListText);
+			Rooms.global.send(Rooms.global.formatListText);
 
 			emit(socket, 'console', 'Formats have been hotpatched.');
 			return false;
@@ -823,7 +822,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (targetUser.userid === toUserid(targets[2])) {
 			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : "");
 			logModCommand(room, entry, true);
-			rooms.lobby.sendAuth(entry);
+			Rooms.lobby.sendAuth(entry);
 			if (room.id !== 'lobby') {
 				room.add(entry);
 			} else {
@@ -858,7 +857,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (targetUser.userid === toUserid(targets[2])) {
 			var entry = ''+targetUser.name+' was forcibly renamed to '+targets[1]+' by '+user.name+'.';
 			logModCommand(room, entry, true);
-			rooms.lobby.sendAuth(entry);
+			Rooms.lobby.sendAuth(entry);
 			if (room.id !== 'lobby') {
 				room.add(entry);
 			} else {
@@ -1316,12 +1315,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'search':
 	case 'cancelsearch':
-		if (!room.searchBattle) { emit(socket, 'console', 'You can only do this in lobby rooms.'); return false; }
-
 		if (target) {
-			room.searchBattle(user, target);
+			Rooms.global.searchBattle(user, target);
 		} else {
-			room.cancelSearch(user);
+			Rooms.global.cancelSearch(user);
 		}
 		return false;
 		break;
@@ -1497,10 +1494,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		config.potd = target;
 		Simulator.SimulatorProcess.eval('config.potd = \''+toId(target)+'\'');
 		if (target) {
-			rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day is now '+target+'!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>');
+			Rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day is now '+target+'!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>');
 			logModCommand(room, 'The Pokemon of the Day was changed to '+target+' by '+user.name+'.', true);
 		} else {
-			rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>');
+			Rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>');
 			logModCommand(room, 'The Pokemon of the Day was removed by '+user.name+'.', true);
 		}
 		return false;
@@ -1513,12 +1510,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		lockdown = true;
-		for (var id in rooms) {
-			rooms[id].addRaw('<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>');
-			if (rooms[id].requestKickInactive) rooms[id].requestKickInactive(user, true);
+		for (var id in Rooms.rooms) {
+			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>');
+			if (Rooms.rooms[id].requestKickInactive) Rooms.rooms[id].requestKickInactive(user, true);
 		}
 
-		rooms.lobby.logEntry(user.name + ' used /lockdown');
+		Rooms.lobby.logEntry(user.name + ' used /lockdown');
 
 		return false;
 		break;
@@ -1530,11 +1527,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		lockdown = false;
-		for (var id in rooms) {
-			rooms[id].addRaw('<div class="broadcast-green"><b>The server shutdown was canceled.</b></div>');
+		for (var id in Rooms.rooms) {
+			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b>The server shutdown was canceled.</b></div>');
 		}
 
-		rooms.lobby.logEntry(user.name + ' used /endlockdown');
+		Rooms.lobby.logEntry(user.name + ' used /endlockdown');
 
 		return false;
 		break;
@@ -1555,8 +1552,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		rooms.lobby.destroyLog(function() {
-			rooms.lobby.logEntry(user.name + ' used /kill');
+		Rooms.lobby.destroyLog(function() {
+			Rooms.lobby.logEntry(user.name + ' used /kill');
 		}, function() {
 			process.exit();
 		});
@@ -1592,8 +1589,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/refreshpage - Access denied.');
 			return false;
 		}
-		rooms.lobby.send('|refresh|');
-		rooms.lobby.logEntry(user.name + ' used /refreshpage');
+		Rooms.lobby.send('|refresh|');
+		Rooms.lobby.logEntry(user.name + ' used /refreshpage');
 		return false;
 		break;
 
@@ -1625,7 +1622,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 					// `git` on the PATH (which would be error.code === 127).
 					user.emit('console', '' + error);
 					logQueue.push('' + error);
-					logQueue.forEach(rooms.lobby.logEntry);
+					logQueue.forEach(Rooms.lobby.logEntry);
 					updateServerLock = false;
 					return;
 				}
@@ -1638,7 +1635,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 					user.emit('console', s);
 					logQueue.push(s);
 				});
-				logQueue.forEach(rooms.lobby.logEntry);
+				logQueue.forEach(Rooms.lobby.logEntry);
 				updateServerLock = false;
 			});
 		});
@@ -1657,8 +1654,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		lockdown = false;
 		config.modchat = false;
-		rooms.lobby.addRaw('<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
-		rooms.lobby.logEntry(user.name + ' used /crashfixed');
+		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
+		Rooms.lobby.logEntry(user.name + ' used /crashfixed');
 		return false;
 		break;
 	case 'crashnoted':
@@ -1674,8 +1671,8 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 		lockdown = false;
 		config.modchat = false;
-		rooms.lobby.addRaw('<div class="broadcast-green"><b>We have logged the crash and are working on fixing it!</b><br />You may resume talking in the lobby and starting new battles.</div>');
-		rooms.lobby.logEntry(user.name + ' used /crashnoted');
+		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We have logged the crash and are working on fixing it!</b><br />You may resume talking in the lobby and starting new battles.</div>');
+		Rooms.lobby.logEntry(user.name + ' used /crashnoted');
 		return false;
 		break;
 	case 'modlog':

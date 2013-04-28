@@ -1,4 +1,3 @@
-
 function runNpm(command) {
 	console.log('Running `npm ' + command + '`...');
 	var child_process = require('child_process');
@@ -233,15 +232,6 @@ sendData = function(socket, data) {
 	socket.write(data);
 };
 
-function randomString(length) {
-	var strArr = [];
-	var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for (var i=0;i<length;i++) {
-		strArr[i] = chars[Math.floor(Math.random()*chars.length)];
-	}
-	return strArr.join('');
-}
-
 if (config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', function (err) {
@@ -286,12 +276,12 @@ var events = {
 	}
 };
 
+var socketCounter = 0;
 server.on('connection', function (socket) {
-	var you = null;
 	if (!socket) { // WTF
 		return;
 	}
-	socket.id = randomString(16); // this sucks
+	socket.id = (++socketCounter);
 
 	if (config.proxyip && (config.proxyip === true || config.proxyip.indexOf(socket.remoteAddress) >= 0)) socket.remoteAddress = (socket.headers["x-forwarded-for"]||"").split(",").shift() || socket.remoteAddress; // for proxies
 
@@ -309,6 +299,9 @@ server.on('connection', function (socket) {
 			} catch (e) {}
 		}, 15000);
 	}
+
+	var you;
+
 	socket.on('data', function(message) {
 		var data = null;
 		if (message.substr(0,1) === '{') {
@@ -326,6 +319,7 @@ server.on('connection', function (socket) {
 		if (!data) return;
 		if (events[data.type]) you = events[data.type](data, socket, you) || you;
 	});
+
 	socket.on('close', function() {
 		if (interval) {
 			clearInterval(interval);
@@ -334,6 +328,8 @@ server.on('connection', function (socket) {
 		if (!youUser) return;
 		youUser.disconnect(socket);
 	});
+
+	you = Users.connectUser(socket);
 });
 server.installHandlers(app, {});
 app.listen(config.port);
@@ -349,4 +345,4 @@ console.log('Test your server at http://localhost:' + config.port);
 Tools = require('./tools.js');
 
 // After loading tools, generate and cache the format list.
-rooms.lobby.formatListText = rooms.lobby.getFormatListText();
+Rooms.global.formatListText = Rooms.global.getFormatListText();
