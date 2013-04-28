@@ -1894,10 +1894,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			matched = true;
 			emit(socket, 'console', '/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: @ & ~');
 		}
-		if (target === "@" || target === 'kick' || target === 'k') {
-			matched = true;
-			emit(socket, 'console', '/kick OR /k [username] - Quickly kicks a user by redirecting them to the Pokemon Showdown Rules page. Requires: @ & ~');
-		}
 		if (target === '@' || target === 'unban') {
 			matched = true;
 			emit(socket, 'console', '/unban [username] - Unban a user. Requires: @ & ~');
@@ -1909,6 +1905,14 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (target === '@' || target === 'modlog') {
 			matched = true;
 			emit(socket, 'console', '/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: @ & ~');
+		}
+		if (target === "%" || target === 'kickbattle ') {
+			matched = true;
+			emit(socket, 'console', '/kickbattle [username], [reason] - Kicks an user from a battle with reason. Requires: % @ & ~');
+		}
+		if (target === "%" || target === 'warn' || target === 'k') {
+			matched = true;
+			emit(socket, 'console', '/warn OR /k [username], [reason] - Warns a user showing them the Pokemon Showdown Rules and [reason] in an overlay. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'mute' || target === 'm') {
 			matched = true;
