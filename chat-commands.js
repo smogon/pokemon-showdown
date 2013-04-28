@@ -1411,6 +1411,28 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'kickbattle':
+		if (!room.leaveBattle) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
+
+		var targets = splitTarget(target);
+		var targetUser = targets[0];
+		if (!targetUser || !targetUser.connected) {
+			emit(socket, 'console', 'User '+targets[2]+' not found.');
+			return false;
+		}
+		if (!user.can('kick', targetUser)) {
+			emit(socket, 'console', "/kickbattle - Access denied.");
+			return false;
+		}
+
+		if (room.leaveBattle(targetUser)) {
+			logModCommand(room,''+targetUser.name+' was kicked from a battle by '+user.name+'' + (targets[1] ? " (" + targets[1] + ")" : ""));
+		} else {
+			emit(socket, 'console', "/kickbattle - User isn\'t in battle.");
+		}
+		return false;
+		break;
+
 	case 'kickinactive':
 		if (room.requestKickInactive) {
 			room.requestKickInactive(user);
