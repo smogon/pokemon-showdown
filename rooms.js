@@ -1121,12 +1121,11 @@ var ChatRoom = (function() {
 		this.logFilename = '';
 		this.destroyingLog = false;
 
-		var self;
 		if (config.loglobby) {
 			this.rollLogFile(true);
 			this.logEntry = function(entry, date) {
 				var timestamp = (new Date()).format('{HH}:{mm}:{ss} ');
-				self.logFile.write(timestamp + entry + '\n');
+				this.logFile.write(timestamp + entry + '\n');
 			};
 			this.logEntry('Lobby created');
 			if (config.loguserstats) {
@@ -1173,7 +1172,7 @@ var ChatRoom = (function() {
 				}
 				var timestamp = +date;
 				date.advance('1 hour').reset('minutes').advance('1 second');
-				setTimeout(self.rollLogFile.bind(this), +date - timestamp);
+				setTimeout(self.rollLogFile.bind(self), +date - timestamp);
 			});
 		});
 	};
