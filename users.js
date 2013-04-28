@@ -798,7 +798,7 @@ var User = (function () {
 	};
 	User.prototype.joinRoom = function(room, socket) {
 		roomid = room?(room.id||room):'';
-		room = Rooms.get(room,'lobby');
+		room = Rooms.get(room);
 		if (!room) return false;
 		var connection = null;
 		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
@@ -815,8 +815,7 @@ var User = (function () {
 			connection = socket;
 			socket = connection.socket;
 		}
-		if (!socket) return false;
-		else if (!connection) {
+		if (!connection) {
 			connection = this.getConnectionFromSocket(socket);
 			if (!connection) return false;
 		}
