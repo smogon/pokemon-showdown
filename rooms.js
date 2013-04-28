@@ -951,9 +951,11 @@ var BattleRoom = (function() {
 		}
 	};
 	BattleRoom.prototype.leaveBattle = function(user) {
-		if (!user) return; // ...
+		if (!user) return false; // ...
 		if (user.battles[this.id]) {
 			this.battle.leave(user);
+		} else {
+			return false;
 		}
 		this.active = this.battle.active;
 		this.update();
@@ -961,6 +963,7 @@ var BattleRoom = (function() {
 		if (this.parentid) {
 			getRoom(this.parentid).updateRooms();
 		}
+		return true;
 	};
 	BattleRoom.prototype.leave = function(user) {
 		if (!user) return; // ...
