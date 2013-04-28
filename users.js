@@ -72,6 +72,7 @@ function connectUser(socket, room) {
 			connection.sendTo(null, '|challstr|' + keyid + '|' + connection.challenge);
 		}
 	});
+	user.joinRoom('global', connection);
 	if (room) {
 		user.joinRoom(room, connection);
 	}
@@ -183,8 +184,7 @@ var User = (function () {
 	};
 	User.prototype.sendTo = function(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
-		if (!roomid) roomid = 'lobby';
-		if (roomid !== 'lobby') data = '>'+roomid+'\n'+data;
+		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = '>'+roomid+'\n'+data;
 		for (var i=0; i<this.connections.length; i++) {
 			if (roomid && !this.connections[i].rooms[roomid]) continue;
 			sendData(this.connections[i].socket, data);
