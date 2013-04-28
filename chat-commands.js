@@ -1262,6 +1262,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'leave':
 	case 'part':
 		if (room.id === 'lobby') return false;
+		if (room.id === 'global') return false;
 
 		user.leaveRoom(room, socket);
 		return false;
