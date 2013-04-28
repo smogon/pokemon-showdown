@@ -642,7 +642,7 @@ var User = (function () {
 				}
 				connection = this.connections[i];
 				for (var j in connection.rooms) {
-					this.leaveRoom(connection.rooms[j], socket);
+					this.leaveRoom(connection.rooms[j], socket, true);
 				}
 				connection.user = null;
 				--this.ips[connection.ip];
@@ -781,7 +781,7 @@ var User = (function () {
 			connection = this.connections[i];
 			connection.user = null;
 			for (var j in connection.rooms) {
-				this.leaveRoom(connection.rooms[j], connection);
+				this.leaveRoom(connection.rooms[j], connection, true);
 			}
 			connection.socket.end();
 			--this.ips[connection.ip];
@@ -834,8 +834,12 @@ var User = (function () {
 		}
 		return true;
 	};
-	User.prototype.leaveRoom = function(room, socket) {
+	User.prototype.leaveRoom = function(room, socket, force) {
 		room = Rooms.get(room);
+		if (room.id === 'global' && !force) {
+			// you can't leave the global room except while disconnecting
+			return false;
+		}
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i] === socket || this.connections[i].socket === socket || !socket) {
 				if (this.connections[i].rooms[room.id]) {
