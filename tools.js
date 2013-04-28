@@ -250,7 +250,10 @@ module.exports = (function () {
 				effect = this.data.Items[id].effect;
 				effect.name = effect.name || this.data.Items[id].name;
 			} else if (id && this.data.Formats[id]) {
-				return this.getFormat(effect);
+				effect = this.data.Formats[id];
+				effect.name = effect.name || this.data.Formats[id].name;
+				if (!effect.mod) effect.mod = this.currentMod;
+				if (!effect.effectType) effect.effectType = 'Format';
 			} else if (id === 'recoil') {
 				effect = {
 					effectType: 'Recoil'
