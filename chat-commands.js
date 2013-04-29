@@ -1063,18 +1063,52 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'othermetas':
 	case '!om':
 	case '!othermetas':
+		target = target.toLowerCase();
+		var buffer = '<div class="infobox">';
+		var matched = false;
+		if (!target || target === 'all') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/forumdisplay.php?f=206" target="_blank">Information on the Other Metagames</a><br />';
+		}
+		if (target === 'all' || target === 'hackmons') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/showthread.php?t=3475624" target="_blank">Hackmons</a><br />';
+		}
+		if (target === 'all' || target === 'balancedhackmons' || target === 'bh') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/showthread.php?t=3463764" target="_blank">Balanced Hackmons</a><br />';
+		}
+		if (target === 'all' || target === 'glitchmons') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/showthread.php?t=3467120" target="_blank">Glitchmons</a><br />';
+		}
+		if (target === 'all' || target === 'tiershift' || target === 'ts') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/showthread.php?t=3479358" target="_blank">Tier Shift</a><br />';
+		}
+		if (target === 'all' || target === 'seasonalladder' || target === 'seasonal') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/sim/seasonal" target="_blank">Seasonal Ladder</a><br />';
+		}
+		if (target === 'all' || target === 'smogondoubles' || target === 'doubles') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/showthread.php?t=3476469" target="_blank">Smogon Doubles</a><br />';
+		}
+		if (target === 'all' || target === 'vgc2013' || target === 'vgc') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/showthread.php?t=3471161" target="_blank">VGC 2013</a><br />';
+		}
+		if (target === 'all' || target === 'omotm' || target === 'omofthemonth' || target === 'month') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/showthread.php?t=3481155" target="_blank">OM of the Month</a>';
+		}
+		if (!matched) {
+			emit(socket, 'console', 'The Other Metas entry "'+target+'" was not found. Try /othermetas or /om for general help.');
+			return false;
+		}
+		buffer += '</div>';
 		showOrBroadcastStart(user, cmd, room, socket, message);
-		showOrBroadcast(user, cmd, room, socket,
-			'<div class="infobox">Information on the Other Metagames:<br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3475624" target="_blank">Hackmons</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3463764" target="_blank">Balanced Hackmons</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3467120" target="_blank">Glitchmons</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3479358" target="_blank">Tier Shift</a><br />' +
-			'- <a href="http://www.smogon.com/sim/seasonal" target="_blank">Seasonal Ladder</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3476469" target="_blank">Smogon Doubles</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3471161" target="_blank">VGC 2013</a><br />' +
-			'- <a href="http://www.smogon.com/forums/showthread.php?t=3481155" target="_blank">OM of the Month</a>' +
-			'</div>');
+		showOrBroadcast(user, cmd, room, socket, buffer);
 		return false;
 		break;
 
@@ -1133,17 +1167,45 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'tiers':
 	case '!banlists':
 	case '!tiers':
+		target = target.toLowerCase();
+		var buffer = '<div class="infobox">';
+		var matched = false;
+		if (!target || target === 'all') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/tiers/" target="_blank">Smogon Tiers</a><br />';
+			buffer += '- <a href="http://www.smogon.com/bw/banlist/" target="_blank">The banlists for each tier</a><br />';
+		}
+		if (target === 'all' || target === 'ubers' || target === 'uber') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/bw/tiers/uber" target="_blank">Uber Pokemon</a><br />';
+		}
+		if (target === 'all' || target === 'overused' || target === 'ou') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/bw/tiers/ou" target="_blank">Overused Pokemon</a><br />';
+		}
+		if (target === 'all' || target === 'underused' || target === 'uu') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/bw/tiers/uu" target="_blank">Underused Pokemon</a><br />';
+		}
+		if (target === 'all' || target === 'rarelyused' || target === 'ru') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/bw/tiers/ru" target="_blank">Rarelyused Pokemon</a><br />';
+		}
+		if (target === 'all' || target === 'neverused' || target === 'nu') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/bw/tiers/nu" target="_blank">Neverused Pokemon</a><br />';
+		}
+		if (target === 'all' || target === 'littlecup' || target === 'lc') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/bw/tiers/lc" target="_blank">Little Cup Pokemon</a><br />';
+		}
+		if (!matched) {
+			emit(socket, 'console', 'The Tiers entry "'+target+'" was not found. Try /tiers for general help.');
+			return false;
+		}
+		buffer += '</div>';
 		showOrBroadcastStart(user, cmd, room, socket, message);
-		showOrBroadcast(user, cmd, room, socket,
-			'<div class="infobox">Smogon tiers:<br />' +
-			'- <a href="http://www.smogon.com/bw/banlist/" target="_blank">The banlists for each tier</a><br />' +
-			'- <a href="http://www.smogon.com/bw/tiers/uber" target="_blank">Uber Pokemon</a><br />' +
-			'- <a href="http://www.smogon.com/bw/tiers/ou" target="_blank">Overused Pokemon</a><br />' +
-			'- <a href="http://www.smogon.com/bw/tiers/uu" target="_blank">Underused Pokemon</a><br />' +
-			'- <a href="http://www.smogon.com/bw/tiers/ru" target="_blank">Rarelyused Pokemon</a><br />' +
-			'- <a href="http://www.smogon.com/bw/tiers/nu" target="_blank">Neverused Pokemon</a><br />' +
-			'- <a href="http://www.smogon.com/bw/tiers/lc" target="_blank">Little Cup Pokemon</a><br />' +
-			'</div>');
+		showOrBroadcast(user, cmd, room, socket, buffer);
 		return false;
 		break;
 
