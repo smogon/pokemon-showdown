@@ -50,7 +50,6 @@ var cooldown = {
 		}
 	}
 };
-var doCooldown = setInterval(cooldown.pruneUsedCmds, 5000);
 
 function logCommand(command, target) {
 	if (target.indexOf(',') > -1) {
@@ -67,6 +66,7 @@ function usedRecently(command, target) {
 			var targets = splitTarget(target);
 			target = targets[0];
 		}
+		cooldown.pruneUsedCmds();
 		return (command + '-' + target in cooldown.lastCommands);
 	} else {
 		return false;
