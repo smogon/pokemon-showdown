@@ -75,10 +75,32 @@ var GlobalRoom = (function() {
 				config.reportbattlesperiod
 			);
 		}
+
+		if (!config.herokuhack) {
+			this.sweepClosedSocketsInterval = setInterval(
+				this.sweepClosedSockets.bind(this),
+				1000 * 60 * 10
+			);
+		}
 	}
 	GlobalRoom.prototype.type = 'global';
 
 	GlobalRoom.prototype.formatListText = '|formats';
+
+	// Deal with phantom xhr-streaming connections.
+	GlobalRoom.prototype.sweepClosedSockets = function() {
+		for (var i in this.users) {
+			var user = this.users[i];
+			user.connections.forEach(function(connection) {
+				if (connection.socket &&
+						connection.socket._session &&
+						connection.socket._session.recv &&
+						(connection.socket._session.recv.protocol === 'xhr-streaming')) {
+					connection.socket._session.recv.didClose();
+				}
+			});
+		}
+	};
 
 	GlobalRoom.prototype.getFormatListText = function() {
 		var formatListText = '|formats';
