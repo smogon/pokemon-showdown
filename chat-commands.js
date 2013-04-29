@@ -1063,8 +1063,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'othermetas':
 	case '!om':
 	case '!othermetas':
-		target = target.toLowerCase();
-		target = target.replace(' ', '');
+		target = toId(target);
 		var buffer = '<div class="infobox">';
 		var matched = false;
 		if (!target || target === 'all') {
