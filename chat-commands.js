@@ -1167,7 +1167,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'tiers':
 	case '!banlists':
 	case '!tiers':
-		target = target.toLowerCase();
+		target = toId(target);
 		var buffer = '<div class="infobox">';
 		var matched = false;
 		if (!target || target === 'all') {
