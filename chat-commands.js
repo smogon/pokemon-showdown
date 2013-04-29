@@ -1215,7 +1215,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		
 		// Item
-		if (item.exists && genNumber > 1) {
+		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
 			var itemName = item.name.toLowerCase().replace(' ', '_');
 			showOrBroadcast(user, cmd, room, socket,
@@ -1223,7 +1223,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		
 		// Ability
-		if (ability.exists && genNumber > 2) {
+		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
 			var abilityName = ability.name.toLowerCase().replace(' ', '_');
 			showOrBroadcast(user, cmd, room, socket,
@@ -1231,7 +1231,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		
 		// Move
-		if (move.exists) {
+		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
 			var moveName = move.name.toLowerCase().replace(' ', '_');
 			showOrBroadcast(user, cmd, room, socket,
