@@ -39,10 +39,48 @@ var crypto = require('crypto');
 
 var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
 var updateServerLock = false;
+var cooldown = {
+	lastCommands: {},
+	pruneUsedCmds: function () {
+		var now = Date.now();
+		for (var i in cooldown.lastCommands) {
+			if (now - cooldown.lastCommands[i] > 5000) {
+				delete cooldown.lastCommands[i];
+			}
+		}
+	}
+};
+var doCooldown = setInterval(cooldown.pruneUsedCmds, 5000);
+
+function logCommand(command, target) {
+	if (target.indexOf(',') > -1) {
+		var targets = splitTarget(target);
+		target = targets[0];
+	}
+	cooldown.lastCommands[command + '-' + target] = Date.now();
+}
+
+function usedRecently(command, target) {
+	var applyTo = {'mute':1, 'ban':1, 'warn':1};
+	if (command in applyTo || command.substr(0, 1) === '!') {
+		if (target.indexOf(',') > -1) {
+			var targets = splitTarget(target);
+			target = targets[0];
+		}
+		return (command + '-' + target in cooldown.lastCommands);
+	} else {
+		return false;
+	}
+}
 
 function parseCommandLocal(user, cmd, target, room, socket, message) {
 	if (!room) return;
 	cmd = cmd.toLowerCase();
+	if (usedRecently(cmd, target)) {
+		emit(socket, 'console', "This command has just been used with that target.");
+		return false;
+	}
+	logCommand(cmd, target);
 	switch (cmd) {
 	case 'cmd':
 		var spaceIndex = target.indexOf(' ');
