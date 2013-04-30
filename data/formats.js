@@ -325,6 +325,56 @@ exports.BattleFormats = {
 		ruleset: ['NU'],
 		banlist: ["Charizard", "Wartortle", "Kadabra", "Golem", "Haunter", "Exeggutor", "Weezing", "Kangaskhan", "Pinsir", "Lapras", "Ampharos", "Misdreavus", "Piloswine", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Gorebyss", "Regirock", "Regice", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Samurott", "Musharna", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Sawsbuck", "Alomomola", "Golurk", "Braviary", "Articuno", "Electabuzz", "Electrode", "Marowak", "Liepard", "Tangela", "Eelektross", "Ditto", "Seismitoad", "Zangoose", "Roselia", "Zebstrika", "Serperior", "Metang", "Tauros", "Torterra", "Cradily"]
 	},
+	seasonalmaymayhem: {
+		name: "[Seasonal] May Mayhem",
+		section: "OM of the Month",
+		
+		team: 'randomSeasonalMM',
+		canUseRandomTeam: true,
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		onBegin: function() {
+			// Shameless plug
+			var date = Date();
+			date = date.split(' ');
+			if (parseInt(date[2]) === 12) {
+				this.add('-message', 'Wish a HAPPY BIRTHDAY to Treecko32!!');
+			}
+			if (parseInt(date[2]) === 16) {
+				this.add('-message', 'Wish a HAPPY BIRTHDAY to Joim!!');
+			}
+		},
+		onSwitchIn: function(pokemon) {
+			var msg = '';
+			switch (pokemon.name) {
+			case 'Celebi':
+				msg = 'Do or Do not. There is no try.';
+				break;
+			case 'Clefairy':
+				msg = 'You have your moments. Not many of them, but you do have them.';
+				break;
+			case 'Piloswine':
+				msg = 'Gggggaaaaaaarrrrr. Arrrrhhhn.';
+				break;
+			case 'Deoxys':
+				msg = '*hhhh* I am your father. *hhhh*';
+				break;
+			case 'Clefable':
+				msg = 'I did shoot first.';
+				break;
+			case 'Jirachi':
+				msg = 'May the force be with you.';
+				break;
+			default:
+				var dice = this.random(100);
+				if (dice < 25) msg = 'Never gonna give you up, never gonna let you down';
+				break;
+			}
+			if (msg !== '') this.add('-message', msg);
+		}
+	},
 	hackmons: {
 		name: "Hackmons",
 		section: "Other Metagames",
