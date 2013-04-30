@@ -42,7 +42,6 @@ var updateServerLock = false;
 
 function parseCommandLocal(user, cmd, target, room, socket, message) {
 	if (!room) return;
-	cmd = cmd.toLowerCase();
 	switch (cmd) {
 	case 'cmd':
 		var spaceIndex = target.indexOf(' ');

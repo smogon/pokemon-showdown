@@ -1058,6 +1058,7 @@ var BattleRoom = (function() {
 				target = '';
 			}
 		}
+		cmd = cmd.toLowerCase();
 
 		if ((cmd === 'me') && !(user.userid in this.users)) {
 			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
@@ -1417,6 +1418,7 @@ var ChatRoom = (function() {
 				target = '';
 			}
 		}
+		cmd = cmd.toLowerCase();
 
 		if ((cmd === 'me') && !(user.userid in this.users)) {
 			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
