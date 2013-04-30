@@ -1035,6 +1035,10 @@ var BattleRoom = (function() {
 	};
 	BattleRoom.prototype.chat = function(user, message, socket) {
 		var cmd = '', target = '';
+		if (!(user.userid in this.users)) {
+			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+			return;
+		}
 		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
@@ -1384,6 +1388,10 @@ var ChatRoom = (function() {
 	};
 	ChatRoom.prototype.chat = function(user, message, socket) {
 		if (!message || !message.trim || !message.trim().length) return;
+		if (!(user.userid in this.users)) {
+			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+			return;
+		}
 		if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
