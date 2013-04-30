@@ -349,7 +349,7 @@ exports.BattleFormats = {
 			case 'Celebi':
 				msg = 'Do or Do not. There is no try.';
 				break;
-			case 'Clefairy'
+			case 'Clefairy':
 				msg = 'You have your moments. Not many of them, but you do have them.';
 				break;
 			case 'Piloswine':
