@@ -1707,7 +1707,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 					// `git` on the PATH (which would be error.code === 127).
 					user.emit('console', '' + error);
 					logQueue.push('' + error);
-					logQueue.forEach(Rooms.lobby.logEntry);
+					logQueue.forEach(Rooms.lobby.logEntry.bind(Rooms.lobby));
 					updateServerLock = false;
 					return;
 				}
@@ -1720,7 +1720,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 					user.emit('console', s);
 					logQueue.push(s);
 				});
-				logQueue.forEach(Rooms.lobby.logEntry);
+				logQueue.forEach(Rooms.lobby.logEntry.bind(Rooms.lobby));
 				updateServerLock = false;
 			});
 		});
