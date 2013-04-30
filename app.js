@@ -234,16 +234,21 @@ sendData = function(socket, data) {
 
 if (config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
-	process.on('uncaughtException', function (err) {
-		if (require('./crashlogger.js')(err, 'The main process')) {
-			return;
-		}
-		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
-		Rooms.lobby.addRaw('<div class="message-server-crash"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
-		Rooms.lobby.addRaw('<div class="message-server-crash">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
-		config.modchat = 'crash';
-		lockdown = true;
-	});
+	process.on('uncaughtException', (function() {
+		var lastCrash = 0;
+		return function(err) {
+			var dateNow = Date.now();
+			var quietCrash = require('./crashlogger.js')(err, 'The main process');
+			quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5)
+			lastCrash = Date.now();
+			if (quietCrash) return;
+			var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
+			Rooms.lobby.addRaw('<div class="message-server-crash"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
+			Rooms.lobby.addRaw('<div class="message-server-crash">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
+			config.modchat = 'crash';
+			lockdown = true;
+		};
+	})());
 }
 
 // event functions
