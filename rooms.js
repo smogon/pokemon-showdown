@@ -1035,10 +1035,6 @@ var BattleRoom = (function() {
 	};
 	BattleRoom.prototype.chat = function(user, message, socket) {
 		var cmd = '', target = '';
-		if (!(user.userid in this.users)) {
-			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
-			return;
-		}
 		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
@@ -1061,6 +1057,11 @@ var BattleRoom = (function() {
 				cmd = message;
 				target = '';
 			}
+		}
+
+		if ((cmd === 'me') && !(user.userid in this.users)) {
+			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+			return;
 		}
 
 		// Battle actions are actually just text commands that are handled in
@@ -1103,6 +1104,10 @@ var BattleRoom = (function() {
 				this.addCmd('chat', user.name, '<<< Access denied.');
 			}
 		} else {
+			if (!(user.userid in this.users)) {
+				emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+				return;
+			}
 			this.battle.chat(user, message);
 		}
 		this.update();
@@ -1388,10 +1393,6 @@ var ChatRoom = (function() {
 	};
 	ChatRoom.prototype.chat = function(user, message, socket) {
 		if (!message || !message.trim || !message.trim().length) return;
-		if (!(user.userid in this.users)) {
-			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
-			return;
-		}
 		if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			emit(socket, 'message', "Your message is too long:\n\n"+message);
 			return;
@@ -1415,6 +1416,11 @@ var ChatRoom = (function() {
 				cmd = message;
 				target = '';
 			}
+		}
+
+		if ((cmd === 'me') && !(user.userid in this.users)) {
+			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+			return;
 		}
 
 		var parsedMessage = parseCommand(user, cmd, target, this, socket, message);
@@ -1441,6 +1447,10 @@ var ChatRoom = (function() {
 				this.add('|c|'+user.getIdentity()+'|<< Access denied.', true);
 			}
 		} else if (!user.muted) {
+			if (!(user.userid in this.users)) {
+				emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+				return;
+			}
 			this.add('|c|'+user.getIdentity()+'|'+message, true);
 		}
 		this.update();
