@@ -1524,10 +1524,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'lobbychat':
 		target = toId(target);
 		if (target === 'off') {
-			user.blockLobbyChat = true;
+			user.leaveRoom(Rooms.lobby, socket);
+			sendData(socket, '|users|');
 			emit(socket, 'console', 'You are now blocking lobby chat.');
 		} else {
-			user.blockLobbyChat = false;
+			user.joinRoom(Rooms.lobby, socket);
 			emit(socket, 'console', 'You are now receiving lobby chat.');
 		}
 		return false;
