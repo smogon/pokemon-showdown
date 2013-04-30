@@ -23,10 +23,6 @@ module.exports = (function() {
 					subject: config.crashguardemail.subject,
 					text: description + ' crashed with this stack trace:\n' + err.stack
 				});
-				if (process.uptime() > 60 * 60) {
-					// no need to lock down the server
-					return true;
-				}
 			} catch (e) {
 				// could not send an email...
 				console.log('Error sending email: ' + e);
@@ -35,6 +31,10 @@ module.exports = (function() {
 					transport.close();
 				}
 			}
+		}
+		if (process.uptime() > 60 * 60) {
+			// no need to lock down the server
+			return true;
 		}
 	};
 })();
