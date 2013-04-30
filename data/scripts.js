@@ -1372,5 +1372,62 @@ exports.BattleScripts = {
 			pokemonLeft++;
 		}
 		return pokemon;
+	},
+	randomSeasonalMMTeam: function(side) {
+		// Seasonal Pokemon list
+		var seasonalPokemonList = [
+			'cherrim', 'joltik', 'surskit', 'combee', 'kricketot', 'kricketune', 'ferrothorn', 'roserade', 'roselia', 'budew', 'clefairy', 'clefable', 
+			'deoxys', 'celebi', 'jirachi', 'meloetta', 'mareep', 'chatot', 'loudred', 'ludicolo', 'sudowoodo', 'yamask', 'chandelure', 'jellicent', 
+			'arceusghost', 'gengar', 'cofagrigus', 'giratina', 'rotom', 'kangaskhan', 'marowak', 'blissey', 'sawk', 'rhydon', 'rhyperior', 'rhyhorn', 
+			'politoed', 'gastrodon', 'magcargo', 'nidoking', 'espeon', 'muk', 'weezing', 'grimer', 'muk', 'swalot', 'crobat', 'hydreigon', 'arbok', 
+			'genesect', 'gliscor', 'aerodactyl', 'ambipom', 'drapion', 'drifblim', 'venomoth', 'spiritomb', 'rattata', 'grumpig', 'blaziken', 'mewtwo',
+			'beautifly', 'skitty', 'venusaur', 'munchlax', 'wartortle', 'glaceon', 'manaphy', 'hitmonchan', 'liepard', 'sableye', 'zapdos', 'heatran',
+			'treecko', 'piloswine', 'duskull', 'dusclops', 'dusknoir', 'spiritomb'
+		];
+		seasonalPokemonList = seasonalPokemonList.randomize();
+		var team = [];
+		
+		// Now, let's make the team!
+		for (var i=0; i<6; i++) {
+			var pokemon = seasonalPokemonList[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomSet(template, i);
+			// Use metronome because month of music
+			if (set.item in {'Choice Scarf':1, 'Choice Band':1, 'Choice Specs':1, 'Life Orb':1}) {
+				set.item = 'Metronome';
+			// Berries over other items since spring
+			} else if (set.item === 'Leftovers' || set.item === 'Black Sludge') {
+				set.item = 'Sitrus Berry';
+			} else if (template.id !== 'arceusghost' && set.item !== 'Chesto Berry') {
+				if (this.getEffectiveness('Fire', template) >= 1) {
+					set.item = 'Occa Berry';
+				} else if (this.getEffectiveness('Ground', template) >= 1 && template.ability !== 'Levitate') {
+					set.item = 'Shuca Berry';
+				} else if (this.getEffectiveness('Ice', template) >= 1) {
+					set.item = 'Yache Berry';
+				} else if (this.getEffectiveness('Grass', template) >= 1) {
+					set.item = 'Rindo Berry';
+				} else if (this.getEffectiveness('Fighting', template) >= 1 && this.getImmunity('Fighting', template)) {
+					set.item = 'Chople Berry';
+				} else if (this.getEffectiveness('Rock', template) >= 1) {
+					set.item = 'Charti Berry';
+				} else if (this.getEffectiveness('Dark', template) >= 1) {
+					set.item = 'Colbur Berry';
+				} else if (this.getEffectiveness('Electric', template) >= 1 && this.getImmunity('Electric', template)) {
+					set.item = 'Wacan Berry';
+				} else if (this.getEffectiveness('Psychic', template) >= 1) {
+					set.item = 'Payapa Berry';
+				} else if (this.getEffectiveness('Flying', template) >= 1) {
+					set.item = 'Coba Berry';
+				} else if (this.getEffectiveness('Water', template) >= 1) {
+					set.item = 'Passho Berry';
+				} else {
+					set.item = 'Enigma Berry';
+				}
+			}
+			team.push(set);
+		}
+
+		return team;
 	}
 };
