@@ -71,13 +71,17 @@ if (process.argv[3]) {
 }
 
 var app = require('http').createServer();
+var appssl;
+if (config.ssl) {
+	appssl = require('https').createServer(config.ssl.options);
+}
 try {
 	(function() {
 		var nodestatic = require('node-static');
 		var cssserver = new nodestatic.Server('./config');
 		var avatarserver = new nodestatic.Server('./config/avatars');
 		var staticserver = new nodestatic.Server('./static');
-		app.on('request', function(request, response) {
+		var staticRequestHandler = function(request, response) {
 			request.resume();
 			request.addListener('end', function() {
 				if (config.customhttpresponse &&
@@ -103,7 +107,11 @@ try {
 					}
 				});
 			});
-		});
+		};
+		app.on('request', staticRequestHandler);
+		if (appssl) {
+			appssl.on('request', staticRequestHandler);
+		}
 	})();
 } catch (e) {
 	console.log('Could not start node-static - try `npm install` if you want to use it');
@@ -116,8 +124,9 @@ var server = require('sockjs').createServer({
 	prefix: '/showdown'
 });
 
-// Make `app` and `server` available to the console.
+// Make `app`, `appssl`, and `server` available to the console.
 App = app;
+AppSSL = appssl;
 Server = server;
 
 /**
@@ -338,8 +347,15 @@ server.on('connection', function (socket) {
 });
 server.installHandlers(app, {});
 app.listen(config.port);
+if (appssl) {
+	server.installHandlers(appssl, {});
+	appssl.listen(config.ssl.port);
+}
 
 console.log('Server started on port ' + config.port);
+if (appssl) {
+	console.log('SSL server started on port ' + config.ssl.port);
+}
 
 console.log('Test your server at http://localhost:' + config.port);
 
