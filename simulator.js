@@ -196,6 +196,17 @@ var Simulator = (function(){
 		this.send('chat', user.name+"\n"+message);
 	};
 
+	Simulator.prototype.isEmpty = function() {
+		if (this.p1) return false;
+		if (this.p2) return false;
+		return true;
+	};
+
+	Simulator.prototype.isFull = function() {
+		if (this.p1 && this.p2) return true;
+		return false;
+	};
+
 	Simulator.prototype.setPlayer = function(user, slot) {
 		if (this.players[slot]) {
 			delete this.players[slot].battles[this.id];
