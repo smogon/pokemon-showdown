@@ -1365,17 +1365,21 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.rename = function(user, oldid, joining) {
 		delete this.users[oldid];
 		this.users[user.userid] = user;
-		if (joining && config.reportjoins) {
-			this.add('|j|'+user.getIdentity());
-		} else {
-			var entry;
-			if (joining) {
-				entry = '|J|' + user.getIdentity();
-			} else if (!user.named) {
-				entry = '|L| ' + oldid;
+		var entry;
+		if (joining) {
+			if (config.reportjoins) {
+				entry = '|j|' + user.getIdentity();
 			} else {
-				entry = '|N|' + user.getIdentity() + '|' + oldid;
+				entry = '|J|' + user.getIdentity();
 			}
+		} else if (!user.named) {
+			entry = '|L| ' + oldid;
+		} else {
+			entry = '|N|' + user.getIdentity() + '|' + oldid;
+		}
+		if (config.reportjoins) {
+			this.add(entry);
+		} else {
 			this.send(entry);
 			this.logEntry(entry);
 		}
