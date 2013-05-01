@@ -53,11 +53,19 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			target = '';
 		}
 		if (cmd === 'userdetails') {
+			if (!room) return false;
 			var targetUser = Users.get(target);
-			if (!targetUser || !room) return false;
+			if (!targetUser) {
+				emit(socket, 'command', {
+					command: 'userdetails',
+					userid: toId(target),
+					rooms: false
+				});
+				return false;
+			}
 			var roomList = {};
 			for (var i in targetUser.roomCount) {
-				if (i==='lobby') continue;
+				if (i==='global') continue;
 				var targetRoom = Rooms.get(i);
 				if (!targetRoom) continue;
 				var roomData = {};
@@ -68,6 +76,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				}
 				roomList[i] = roomData;
 			}
+			if (!targetUser.roomCount['global']) roomList = false;
 			var userdetails = {
 				command: 'userdetails',
 				userid: targetUser.userid,
@@ -279,6 +288,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			var output = 'In rooms: ';
 			var first = true;
 			for (var i in targetUser.roomCount) {
+				if (i === 'global') continue;
 				if (!first) output += ' | ';
 				first = false;
 
