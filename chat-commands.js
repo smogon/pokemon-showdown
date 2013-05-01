@@ -1319,11 +1319,11 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'join':
 		var targetRoom = Rooms.get(target);
-		if (!targetRoom) {
+		if (target && !targetRoom) {
 			emit(socket, 'console', "The room '"+target+"' does not exist.");
 			return false;
 		}
-		if (!user.joinRoom(targetRoom, socket)) {
+		if (!user.joinRoom(targetRoom || room, socket)) {
 			emit(socket, 'console', "The room '"+target+"' could not be joined (most likely, you're already in it).");
 			return false;
 		}
@@ -1333,8 +1333,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'leave':
 	case 'part':
 		if (room.id === 'global') return false;
-
-		user.leaveRoom(room, socket);
+		var targetRoom = Rooms.get(target);
+		if (target && !targetRoom) {
+			emit(socket, 'console', "The room '"+target+"' does not exist.");
+			return false;
+		}
+		user.leaveRoom(targetRoom || room, socket);
 		return false;
 		break;
 
