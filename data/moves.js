@@ -5052,6 +5052,22 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-start', pokemon, 'move: Heal Block');
 			},
+			onModifyPokemon: function(pokemon) {
+				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
+				var moves = pokemon.moveset;
+				for (var i=0; i<moves.length; i++) {
+					if (disabledMoves[moves[i].id] || this.getMove(moves[i].id).heal) {
+						pokemon.disabledMoves[moves[i].id] = true;
+					}
+				}
+			},
+			onBeforeMove: function(pokemon, target, move) {
+				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
+				if (disabledMoves[move.id] || move.heal) {
+					this.add('cant', pokemon, 'move: Heal Block', move);
+					return false;
+				}
+			},
 			onResidualOrder: 17,
 			onEnd: function(pokemon) {
 				this.add('-end', pokemon, 'move: Heal Block');
