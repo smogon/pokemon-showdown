@@ -2531,8 +2531,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Electric moves; Electric immunity.",
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
-				var d = target.heal(target.maxhp/4);
-				this.add('-heal',target,target.getHealth,'[from] ability: Volt Absorb');
+				this.heal(target.maxhp/4);
 				return null;
 			}
 		},
@@ -2546,8 +2545,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Water moves; Water immunity.",
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Water') {
-				var d = target.heal(target.maxhp/4);
-				this.add('-heal',target,target.getHealth,'[from] ability: Water Absorb');
+				this.heal(target.maxhp/4);
 				return null;
 			}
 		},
