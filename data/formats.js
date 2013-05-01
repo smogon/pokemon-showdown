@@ -345,6 +345,7 @@ exports.BattleFormats = {
 			if (parseInt(date[2]) === 16) {
 				this.add('-message', 'Wish a HAPPY BIRTHDAY to Joim!!');
 			}
+			this.add('-message', 'Wish a HAPPY BIRTHDAY to Birkal!!');
 		},
 		onSwitchIn: function(pokemon) {
 			var msg = '';
