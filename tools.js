@@ -490,6 +490,7 @@ module.exports = (function () {
 							if (learned.substr(1,1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								var eggGroups = template.eggGroups;
+								if (!eggGroups) continue;
 								if (eggGroups[0] === 'No Eggs') eggGroups = this.getTemplate(template.evos[0]).eggGroups;
 								var atLeastOne = false;
 								var fromSelf = (learned.substr(1) === 'Eany');
