@@ -469,7 +469,7 @@ var BattleRoom = (function() {
 
 		this.sideTicksLeft = [21, 21];
 		if (!rated) this.sideTicksLeft = [28,28];
-		this.sideFreeTicks = [0, 0];
+		this.sideTurnTicks = [0, 0];
 
 		this.log = [];
 	}
@@ -478,7 +478,6 @@ var BattleRoom = (function() {
 	BattleRoom.prototype.resetTimer = null;
 	BattleRoom.prototype.resetUser = '';
 	BattleRoom.prototype.destroyTimer = null;
-	BattleRoom.prototype.maxTicksLeft = 0;
 	BattleRoom.prototype.active = false;
 	BattleRoom.prototype.lastUpdate = 0;
 
@@ -767,48 +766,38 @@ var BattleRoom = (function() {
 
 		var inactiveSide = this.getInactiveSide();
 
-		// now to see how much time we have left
-		if (this.maxTicksLeft) {
-			this.maxTicksLeft--;
-		}
-
+		var ticksLeft = [0, 0];
 		if (inactiveSide != 1) {
 			// side 0 is inactive
-			if (this.sideFreeTicks[0]) {
-				this.sideFreeTicks[0]--;
-			} else {
-				this.sideTicksLeft[0]--;
-			}
+			this.sideTurnTicks[0]--;
+			this.sideTicksLeft[0]--;
 		}
 		if (inactiveSide != 0) {
 			// side 1 is inactive
-			if (this.sideFreeTicks[1]) {
-				this.sideFreeTicks[1]--;
-			} else {
-				this.sideTicksLeft[1]--;
-			}
+			this.sideTurnTicks[1]--;
+			this.sideTicksLeft[1]--;
 		}
+		ticksLeft[0] = Math.min(this.sideTurnTicks[0], this.sideTicksLeft[0]);
+		ticksLeft[1] = Math.min(this.sideTurnTicks[1], this.sideTicksLeft[1]);
 
-		if (this.maxTicksLeft && this.sideTicksLeft[0] && this.sideTicksLeft[1]) {
+		if (ticksLeft[0] && ticksLeft[1]) {
 			if (inactiveSide == 0 || inactiveSide == 1) {
 				// one side is inactive
-				var ticksLeft = Math.min(this.sideTicksLeft[inactiveSide], this.maxTicksLeft);
+				var inactiveTicksLeft = ticksLeft[inactiveSide];
 				var inactiveUser = this.battle.getPlayer(inactiveSide);
-				if (ticksLeft % 3 == 0 || ticksLeft <= 4) {
-					this.send('|inactive|'+(inactiveUser?inactiveUser.name:'Player '+(inactiveSide+1))+' has '+(ticksLeft*10)+' seconds left.');
+				if (inactiveTicksLeft % 3 == 0 || inactiveTicksLeft <= 4) {
+					this.send('|inactive|'+(inactiveUser?inactiveUser.name:'Player '+(inactiveSide+1))+' has '+(inactiveTicksLeft*10)+' seconds left.');
 				}
 			} else {
 				// both sides are inactive
-				var ticksLeft0 = Math.min(this.sideTicksLeft[0], this.maxTicksLeft);
 				var inactiveUser0 = this.battle.getPlayer(0);
-				if (ticksLeft0 % 3 == 0 || ticksLeft0 <= 4) {
-					this.send('|inactive|'+(inactiveUser0?inactiveUser0.name:'Player 1')+' has '+(ticksLeft0*10)+' seconds left.', inactiveUser0);
+				if (ticksLeft[0] % 3 == 0 || ticksLeft[0] <= 4) {
+					this.send('|inactive|'+(inactiveUser0?inactiveUser0.name:'Player 1')+' has '+(ticksLeft[0]*10)+' seconds left.', inactiveUser0);
 				}
 
-				var ticksLeft1 = Math.min(this.sideTicksLeft[1], this.maxTicksLeft);
 				var inactiveUser1 = this.battle.getPlayer(1);
-				if (ticksLeft1 % 3 == 0 || ticksLeft0 <= 4) {
-					this.send('|inactive|'+(inactiveUser1?inactiveUser1.name:'Player 2')+' has '+(ticksLeft1*10)+' seconds left.', inactiveUser1);
+				if (ticksLeft[1] % 3 == 0 || ticksLeft[1] <= 4) {
+					this.send('|inactive|'+(inactiveUser1?inactiveUser1.name:'Player 2')+' has '+(ticksLeft[1]*10)+' seconds left.', inactiveUser1);
 				}
 			}
 			this.resetTimer = setTimeout(this.kickInactive.bind(this), 10*1000);
@@ -816,8 +805,8 @@ var BattleRoom = (function() {
 		}
 
 		if (inactiveSide < 0) {
-			if (this.sideTicksLeft[0]) inactiveSide = 1;
-			else if (this.sideTicksLeft[1]) inactiveSide = 0;
+			if (ticksLeft[0]) inactiveSide = 1;
+			else if (ticksLeft[1]) inactiveSide = 0;
 		}
 
 		this.forfeit(this.battle.getPlayer(inactiveSide),' lost because of their inactivity.', inactiveSide);
@@ -846,9 +835,8 @@ var BattleRoom = (function() {
 			maxTicksLeft = 6;
 		}
 		if (!this.rated) maxTicksLeft = 30;
-		this.sideFreeTicks = [1,1];
 
-		this.maxTicksLeft = maxTicksLeft;
+		this.sideTurnTicks = [maxTicksLeft, maxTicksLeft];
 
 		var inactiveSide = this.getInactiveSide();
 		if (inactiveSide < 0) {
@@ -856,14 +844,16 @@ var BattleRoom = (function() {
 			if (this.sideTicksLeft[0] < 16) this.sideTicksLeft[0]++;
 			if (this.sideTicksLeft[1] < 16) this.sideTicksLeft[1]++;
 		}
+		this.sideTicksLeft[0]++;
+		this.sideTicksLeft[1]++;
 		if (inactiveSide != 1) {
 			// side 0 is inactive
-			var ticksLeft0 = Math.min(this.sideTicksLeft[0] + 1, this.maxTicksLeft);
+			var ticksLeft0 = Math.min(this.sideTicksLeft[0] + 1, maxTicksLeft);
 			this.send('|inactive|You have '+(ticksLeft0*10)+' seconds to make your decision.', this.battle.getPlayer(0));
 		}
 		if (inactiveSide != 0) {
 			// side 1 is inactive
-			var ticksLeft1 = Math.min(this.sideTicksLeft[1] + 1, this.maxTicksLeft);
+			var ticksLeft1 = Math.min(this.sideTicksLeft[1] + 1, maxTicksLeft);
 			this.send('|inactive|You have '+(ticksLeft1*10)+' seconds to make your decision.', this.battle.getPlayer(1));
 		}
 
@@ -1008,15 +998,6 @@ var BattleRoom = (function() {
 		}
 
 		this.update();
-	};
-	BattleRoom.prototype.isEmpty = function() {
-		if (this.battle.p1) return false;
-		if (this.battle.p2) return false;
-		return true;
-	};
-	BattleRoom.prototype.isFull = function() {
-		if (this.battle.p1 && this.battle.p2) return true;
-		return false;
 	};
 	BattleRoom.prototype.addCmd = function() {
 		this.log.push('|'+Array.prototype.slice.call(arguments).join('|'));
