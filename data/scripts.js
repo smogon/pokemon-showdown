@@ -195,9 +195,7 @@ exports.BattleScripts = {
 			}
 		}
 
-		if (hitResult === 0) {
-			target = null;
-		} else if (!hitResult) {
+		if (hitResult !== 0 && !hitResult) {
 			if (hitResult === false) this.add('-fail', target);
 			return false;
 		}
@@ -237,6 +235,11 @@ exports.BattleScripts = {
 			if (!spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon, target);
 			return false;
+		}
+
+		if (hitResult === 0) {
+			// substitute
+			target = null;
 		}
 
 		var damage = 0;
