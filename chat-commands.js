@@ -435,7 +435,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			message: targets[1]
 		};
 		user.emit('console', message);
-		targets[0].emit('console', message);
+		if (targets[0] !== user) targets[0].emit('console', message);
 		targets[0].lastPM = user.userid;
 		user.lastPM = targets[0].userid;
 		return false;
