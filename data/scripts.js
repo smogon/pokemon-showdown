@@ -195,11 +195,6 @@ exports.BattleScripts = {
 			}
 		}
 
-		if (hitResult !== 0 && !hitResult) {
-			if (hitResult === false) this.add('-fail', target);
-			return false;
-		}
-
 		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
 
 		// calculate true accuracy
