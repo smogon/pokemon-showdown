@@ -3456,7 +3456,9 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function(pokemon) {
-			return pokemon.hp;
+			var damage = pokemon.hp;
+			pokemon.hp = 0;
+			return damage;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints. Makes contact.",
