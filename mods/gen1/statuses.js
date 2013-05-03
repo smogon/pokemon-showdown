@@ -113,11 +113,6 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'tox');
 			this.effectData.stage = 0;
 		},
-		onSwitchIn: function(pokemon) {
-			this.effectData.stage = 0;
-			//pokemon.cureStatus();
-			pokemon.setStatus('psn');
-		},
 		onAfterMoveSelf: function(pokemon) {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
@@ -125,11 +120,11 @@ exports.BattleStatuses = {
 			this.damage(clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
 		},
 		onSwitchIn: function (pokemon) {
+			this.effectData.stage = 0; // probably unnecessary...
+			pokemon.setStatus('psn');
+			// normal poison damage...
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				if (this.effectData.stage < 15) {
-					this.effectData.stage++;
-				}
-				this.damage(clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+				this.damage(pokemon.maxhp/16);
 			}
 		}
 	},
