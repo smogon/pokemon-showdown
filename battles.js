@@ -317,6 +317,10 @@ var BattlePokemon = (function() {
 						// to run it again.
 						continue;
 					}
+					if ((k === 'DW') && !pokemon.template.dreamWorldRelease) {
+						// unreleased dream world ability
+						continue;
+					}
 					this.battle.singleEvent('FoeMaybeTrapPokemon',
 						this.battle.getAbility(ability), {}, this, pokemon);
 				}
