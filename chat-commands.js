@@ -723,7 +723,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 	case 'ranking':
 	case 'rank':
 	case 'ladder':
-		emit(socket, 'console', 'You are using an old version of Pokemon Showdown. Please reload the page.');
+		emit(socket, 'console', 'The version of Pokemon Showdown that you are using does not support /' + cmd + '.');
 		return false;
 		break;
 
