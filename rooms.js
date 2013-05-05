@@ -1299,7 +1299,12 @@ var ChatRoom = (function() {
 	};
 	ChatRoom.prototype.sendIdentity = function(user) {
 		if (user && user.connected) {
-			this.send('|N|' + user.getIdentity() + '|' + user.userid);
+			var entry = '|N|' + user.getIdentity() + '|' + user.userid;
+			if (config.reportjoinsperiod) {
+				this.reportJoinsQueue.push(entry);
+			} else {
+				this.send(entry);
+			}
 		}
 	};
 	ChatRoom.prototype.sendAuth = function(message) {
@@ -1328,7 +1333,8 @@ var ChatRoom = (function() {
 			roomType: 'lobby'
 		};
 		emit(socket, 'init', initdata);
-		sendData(socket, '>'+this.id+'\n|init|chat\n|users|'+this.getUserList()+'\n'+this.log.slice(-25).join('\n'));
+		var userList = this.userList ? this.userList : this.getUserList();
+		sendData(socket, '>'+this.id+'\n|init|chat\n|users|'+userList+'\n'+this.log.slice(-25).join('\n'));
 	};
 	ChatRoom.prototype.join = function(user, merging) {
 		if (!user) return false; // ???
@@ -1356,7 +1362,8 @@ var ChatRoom = (function() {
 				roomType: 'lobby'
 			};
 			user.emit('init', initdata);
-			this.send('|init|chat\n|users|'+this.getUserList()+'\n'+this.log.slice(-100).join('\n'), user);
+			var userList = this.userList ? this.userList : this.getUserList();
+			this.send('|init|chat\n|users|'+userList+'\n'+this.log.slice(-100).join('\n'), user);
 		}
 
 		return user;
