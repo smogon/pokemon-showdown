@@ -34,19 +34,9 @@ LoginServer = require('./loginserver.js');
 // Synchronously copy config-example.js over to config.js if it doesn't exist
 if (!fs.existsSync('./config/config.js')) {
 	console.log("config.js doesn't exist - creating one with default settings...");
-	var BUF_LENGTH, buff, bytesRead, fdr, fdw, pos;
-	BUF_LENGTH = 64 * 1024;
-	buff = new Buffer(BUF_LENGTH);
-	fdr = fs.openSync('./config/config-example.js', 'r');
-	fdw = fs.openSync('./config/config.js', 'w');
-	bytesRead = 1;
-	pos = 0;
-	while (bytesRead > 0) {
-		bytesRead = fs.readSync(fdr, buff, 0, BUF_LENGTH, pos);
-		fs.writeSync(fdw, buff, 0, bytesRead);
-		pos += bytesRead;
-	}
-	fs.closeSync(fdr);
+	fs.writeFileSync('./config/config.js',
+		fs.readFileSync('./config/config-example.js')
+	);
 }
 
 config = require('./config/config.js');
