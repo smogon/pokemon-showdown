@@ -754,7 +754,7 @@ module.exports = (function () {
 		}
 		set.species = template.species;
 
-		set.name = toName(set.name).trim().replace(/\|/g,'');
+		set.name = toName(set.name);
 		var item = this.getItem(string(set.item));
 		set.item = item.name;
 		var ability = this.getAbility(string(set.ability));
