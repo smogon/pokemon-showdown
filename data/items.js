@@ -23,7 +23,7 @@ exports.BattleItems = {
 			basePower: 60
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move && user.template.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
+			if (move && user.baseTemplate.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return basePower * 1.2;
 			}
 		},
@@ -707,7 +707,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onModifySpD: function(spd, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
+			if (pokemon.baseTemplate.species === 'Clamperl') {
 				return spd * 2;
 			}
 		},
@@ -723,7 +723,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onModifySpA: function(spa, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
+			if (pokemon.baseTemplate.species === 'Clamperl') {
 				return spa * 2;
 			}
 		},
@@ -1318,12 +1318,12 @@ exports.BattleItems = {
 			basePower: 60
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (user.template.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
+			if (user.baseTemplate.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return basePower * 1.2;
 			}
 		},
 		onTakeItem: function(item, pokemon, source) {
-			if ((source && source.template.num === 487) || pokemon.template.num === 487) {
+			if ((source && source.baseTemplate.num === 487) || pokemon.baseTemplate.num === 487) {
 				return false;
 			}
 		},
@@ -1829,12 +1829,12 @@ exports.BattleItems = {
 			status: 'par'
 		},
 		onModifyAtk: function(atk, pokemon) {
-			if (pokemon.template.species === 'Pikachu') {
+			if (pokemon.baseTemplate.species === 'Pikachu') {
 				return atk * 2;
 			}
 		},
 		onModifySpA: function(spa, pokemon) {
-			if (pokemon.template.species === 'Pikachu') {
+			if (pokemon.baseTemplate.species === 'Pikachu') {
 				return spa * 2;
 			}
 		},
@@ -1870,7 +1870,7 @@ exports.BattleItems = {
 			basePower: 40
 		},
 		onModifyMove: function(move, user) {
-			if (user.template.species === 'Chansey') {
+			if (user.baseTemplate.species === 'Chansey') {
 				move.critRatio += 2;
 			}
 		},
@@ -1916,7 +1916,7 @@ exports.BattleItems = {
 			basePower: 60
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move && user.template.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (move && user.baseTemplate.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return basePower * 1.2;
 			}
 		},
@@ -3190,12 +3190,12 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onModifySpA: function(spa, pokemon) {
-			if (pokemon.template.species === 'Latios' || pokemon.template.species === 'Latias') {
+			if (pokemon.baseTemplate.species === 'Latios' || pokemon.baseTemplate.species === 'Latias') {
 				return spa * 1.5;
 			}
 		},
 		onModifySpD: function(spd, pokemon) {
-			if (pokemon.template.species === 'Latios' || pokemon.template.species === 'Latias') {
+			if (pokemon.baseTemplate.species === 'Latios' || pokemon.baseTemplate.species === 'Latias') {
 				return spd * 1.5;
 			}
 		},
@@ -3331,7 +3331,7 @@ exports.BattleItems = {
 		},
 		spritenum: 475,
 		onModifyMove: function(move, user) {
-			if (user.template.species === 'Farfetch\'d') {
+			if (user.baseTemplate.species === 'Farfetch\'d') {
 				move.critRatio += 2;
 			}
 		},
@@ -3422,7 +3422,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onModifyAtk: function(atk, pokemon) {
-			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak') {
+			if (pokemon.baseTemplate.species === 'Cubone' || pokemon.baseTemplate.species === 'Marowak') {
 				return atk * 2;
 			}
 		},
