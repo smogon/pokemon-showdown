@@ -1149,8 +1149,22 @@ var ChatRoom = (function() {
 		} else {
 			this.logEntry = function() { };
 		}
+
+		if (config.reportjoinsperiod) {
+			this.userList = this.getUserList();
+			this.reportJoinsQueue = [];
+			this.reportJoinsInterval = setInterval(
+				this.reportRecentJoins.bind(this), config.reportjoinsperiod
+			);
+		}
 	}
 	ChatRoom.prototype.type = 'chat';
+
+	ChatRoom.prototype.reportRecentJoins = function() {
+		this.userList = this.getUserList();
+		this.send(this.reportJoinsQueue.join('\n'));
+		this.reportJoinsQueue.length = 0;
+	};
 
 	ChatRoom.prototype.rollLogFile = function(sync) {
 		var mkdir = sync ? (function(path, mode, callback) {
@@ -1326,7 +1340,11 @@ var ChatRoom = (function() {
 			this.update(user);
 		} else if (user.named) {
 			var entry = '|J|'+user.getIdentity();
-			this.send(entry);
+			if (config.reportjoinsperiod) {
+				this.reportJoinsQueue.push(entry);
+			} else {
+				this.send(entry);
+			}
 			this.logEntry(entry);
 		}
 
@@ -1361,7 +1379,11 @@ var ChatRoom = (function() {
 		if (config.reportjoins) {
 			this.add(entry);
 		} else {
-			this.send(entry);
+			if (config.reportjoinsperiod) {
+				this.reportJoinsQueue.push(entry);
+			} else {
+				this.send(entry);
+			}
 			this.logEntry(entry);
 		}
 		return user;
@@ -1373,7 +1395,11 @@ var ChatRoom = (function() {
 			this.add('|l|'+user.getIdentity());
 		} else if (user.named) {
 			var entry = '|L|' + user.getIdentity();
-			this.send(entry);
+			if (config.reportjoinsperiod) {
+				this.reportJoinsQueue.push(entry);
+			} else {
+				this.send(entry);
+			}
 			this.logEntry(entry);
 		}
 	};
