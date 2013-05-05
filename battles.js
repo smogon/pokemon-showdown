@@ -1,10 +1,9 @@
 require('sugar');
 
 fs = require('fs');
-if (!fs.existsSync) {
-	// for compatibility with ancient versions of node.js
-	var path = require('path');
-	fs.existsSync = function(loc) { return path.existsSync(loc) };
+if (!('existsSync' in fs)) {
+	// for compatibility with ancient versions of node
+	fs.existsSync = require('path').existsSync;
 }
 config = require('./config/config.js');
 
