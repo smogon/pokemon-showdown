@@ -39,7 +39,7 @@ toUserid = toId;
 /**
  * Validates a username or Pokemon nickname
  */
-var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1};
+var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
 toName = function(name) {
 	name = string(name);
 	name = name.replace(/(\||\n|\[|\]|\,)/g, '').trim();
