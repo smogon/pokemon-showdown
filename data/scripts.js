@@ -699,6 +699,7 @@ exports.BattleScripts = {
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
+				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
 				recoil: 0, inaccurate: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
@@ -726,6 +727,10 @@ exports.BattleScripts = {
 				if (move.basePower || move.basePowerCallback) {
 					if (hasType[move.type]) counter['adaptability']++;
 					if (move.category === 'Physical') counter['hustle']++;
+					if (move.type === 'Fire') counter['blaze']++;
+					if (move.type === 'Grass') counter['overgrow']++;
+					if (move.type === 'Bug') counter['swarm']++;
+					if (move.type === 'Water') counter['torrent']++;
 				}
 				if (move.secondary) {
 					if (move.secondary.chance < 50) {
@@ -833,6 +838,7 @@ exports.BattleScripts = {
 					break;
 				case 'dragontail':
 					if (hasMove['agility'] || hasMove['rockpolish']) rejected = true;
+					if (hasMove['whirlwind']) rejected = true;
 					break;
 
 				// bit redundant to have both
@@ -936,7 +942,7 @@ exports.BattleScripts = {
 					break;
 				case 'roar':
 					// Whirlwind outclasses Roar because Soundproof
-					if (hasMove['whirlwind'] || hasMove['haze']) rejected = true;
+					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['haze']) rejected = true;
 					break;
 				case 'substitute':
 					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit']) rejected = true;
@@ -1035,6 +1041,18 @@ exports.BattleScripts = {
 				}
 
 				var rejectAbility = false;
+				if (ability === 'Blaze' && !counter['blaze']) {
+					rejectAbility = true;
+				}
+				if (ability === 'Overgrow' && !counter['overgrow']) {
+					rejectAbility = true;
+				}
+				if (ability === 'Swarm' && !counter['swarm']) {
+					rejectAbility = true;
+				}
+				if (ability === 'Torrent' && !counter['torrent']) {
+					rejectAbility = true;
+				}
 				if (ability === 'Contrary' && !counter['contrary']) {
 					rejectAbility = true;
 				}
@@ -1062,7 +1080,7 @@ exports.BattleScripts = {
 				if (ability === 'Hustle' && !counter['hustle']) {
 					rejectAbility = true;
 				}
-				if (ability === 'Simple' && !setupType && !hasMove['flamecharge']) {
+				if (ability === 'Simple' && !setupType && !hasMove['flamecharge'] && !hasMove['stockpile']) {
 					rejectAbility = true;
 				}
 				if (ability === 'Prankster' && !counter['Status']) {
@@ -1229,6 +1247,15 @@ exports.BattleScripts = {
 				item = 'Air Balloon';
 			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 				item = 'Choice Scarf';
+			} else if (hasMove['substitute'] && hasMove['reversal']) {
+				var shuffledMoves = moves.randomize();
+				for (var m in shuffledMoves) {
+					var move = this.getMove(shuffledMoves[m]);
+					if (move.basePower || move.basePowerCallback) {
+						item = move.type + ' Gem';
+						break;
+					}
+				}
 			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 				item = 'Leftovers';
 			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
