@@ -25,9 +25,8 @@ if (!Object.select) {
 }
 
 fs = require('fs');
-if (!fs.existsSync) {
-	var path = require('path');
-	fs.existsSync = function(loc) { return path.existsSync(loc) };
+if (!('existsSync' in fs)) {
+	fs.existsSync = require('path').existsSync;
 }
 
 LoginServer = require('./loginserver.js');
