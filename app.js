@@ -150,8 +150,8 @@ toUserid = toId;
  */
 var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1};
 toName = function(name) {
-	name = string(name).trim();
-	name = name.replace(/(\||\n|\[|\]|\,)/g, '');
+	name = string(name);
+	name = name.replace(/(\||\n|\[|\]|\,)/g, '').trim();
 	while (bannedNameStartChars[name.substr(0,1)]) {
 		name = name.substr(1);
 	}
