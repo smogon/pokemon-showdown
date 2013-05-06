@@ -45,5 +45,9 @@ exports.BattleStatuses = {
 		// See http://upokecenter.dreamhosters.com/dex/?lang=en&move=182
 		inherit: true,
 		counterMax: 8
+	},
+	trapped: {
+		inherit: true,
+		noCopy: false
 	}
 };
