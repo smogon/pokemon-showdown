@@ -1077,7 +1077,9 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon draws Electric moves to itself to boost Sp. Atk by 1; Electric immunity.",
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
-				this.boost({spa:1});
+				if (!this.boost({spa:1})) {
+					this.add('-immune', target, '[msg]');
+				}
 				return null;
 			}
 		},
@@ -1304,7 +1306,9 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Speed is boosted by 1 if hit by an Electric move; Electric immunity.",
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
-				this.boost({spe:1});
+				if (!this.boost({spe:1})) {
+					this.add('-immune', target, '[msg]');
+				}
 				return null;
 			}
 		},
@@ -1822,7 +1826,9 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Attack is boosted by 1 if hit by any Grass move; Grass immunity.",
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Grass') {
-				this.boost({atk:1});
+				if (!this.boost({atk:1})) {
+					this.add('-immune', target, '[msg]');
+				}
 				return null;
 			}
 		},
@@ -2169,7 +2175,9 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon draws Water moves to itself to boost Sp. Atk by 1; Water immunity.",
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Water') {
-				this.boost({spa:1});
+				if (!this.boost({spa:1})) {
+					this.add('-immune', target, '[msg]');
+				}
 				return null;
 			}
 		},
