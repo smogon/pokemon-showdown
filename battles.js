@@ -2189,10 +2189,12 @@ var Battle = (function() {
 		if (!target || !target.hp) return 0;
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.clone(boost));
+		var success = false;
 		for (var i in boost) {
 			var currentBoost = {};
 			currentBoost[i] = boost[i];
 			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
+				success = true;
 				var msg = '-boost';
 				if (boost[i] < 0) {
 					msg = '-unboost';
@@ -2214,6 +2216,7 @@ var Battle = (function() {
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
+		return success;
 	};
 	Battle.prototype.damage = function(damage, target, source, effect) {
 		if (this.event) {
