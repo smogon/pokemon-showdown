@@ -40,6 +40,15 @@ exports.BattleItems = {
 		},
 		desc: "Activates at 25% HP. Next move used goes first. One-time use."
 	},
+	"lifeorb": {
+		inherit: true,
+		onBasePower: function(basePower, user, target) {
+			if (!target.volatiles['substitute']) {
+				user.addVolatile('lifeorb');
+			}
+			return basePower * 1.3;
+		}
+	},
 	"mentalherb": {
 		id: "mentalherb",
 		name: "Mental Herb",
