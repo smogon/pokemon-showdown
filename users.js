@@ -6,6 +6,9 @@ var users = {};
 var prevUsers = {};
 var numUsers = 0;
 
+var bannedIps = {};
+var lockedIps = {};
+
 function getUser(name, exactName) {
 	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
@@ -28,34 +31,10 @@ function searchUser(name) {
 	return users[userid];
 }
 
-// This function is terrible code that doesn't work as the original author intended.
-function nameLock(user, name) {
-	var locks = Object.values(Object.select(nameLockedIps, user.ips));
-	if (locks.length > 0) {
-		// Arbitrarily pick the first lock if there is more than one...
-		return user.nameLock(locks[0]);
-	}
-	var userid = toUserid(name);
-	for (var i in nameLockedIps) {
-		if ((userid && toUserid(nameLockedIps[i]) === userid) || user.userid === toUserid(nameLockedIps[i])) {
-			for (var ip in user.ips) {
-				nameLockedIps[ip] = nameLockedIps[i];
-			}
-			return user.nameLock(nameLockedIps[i]);
-		}
-	}
-	return name || user.name;
-}
-
 function connectUser(socket, room) {
 	var connection = new Connection(socket, true);
 	if (connection.banned) return connection;
 	var user = new User(connection);
-	var nameSuggestion = nameLock(user);	// returns user.name if not namelocked
-	if (nameSuggestion !== user.name) {
-		user.rename(nameSuggestion);
-		user = connection.user;
-	}
 	// Generate 1024-bit challenge string.
 	crypto.randomBytes(128, function(ex, buffer) {
 		if (ex) {
@@ -151,7 +130,8 @@ var User = (function () {
 		this.ips = {}
 		this.ips[connection.ip] = 1;
 
-		this.muted = !!ipSearch(connection.ip, mutedIps);
+		this.muted = false;
+		this.locked = !!checkLocked(connection.ip);
 		this.prevNames = {};
 		this.battles = {};
 		this.roomCount = {};
@@ -191,10 +171,11 @@ var User = (function () {
 		}
 	};
 	User.prototype.getIdentity = function() {
+		if (this.locked) {
+			return '#'+this.name;
+		}
 		if (this.muted) {
 			return '!'+this.name;
-		} if(this.nameLocked()) {
-			return '#'+this.name;
 		}
 		return this.group+this.name;
 	};
@@ -394,7 +375,6 @@ var User = (function () {
 
 		if (!name) name = '';
 		name = toName(name);
-		name = nameLock(this,name);
 		var userid = toUserid(name);
 		if (this.authenticated) auth = false;
 
@@ -718,47 +698,6 @@ var User = (function () {
 			this.mmrCache[formatid] = (parseInt(mmr.r,10) + parseInt(mmr.rpr,10))/2;
 		}
 	};
-	User.prototype.nameLock = function(targetName, recurse) {
-		var targetUser = getUser(targetName);
-		if (!targetUser) return targetName;
-		if ((Object.values(Object.select(nameLockedIps, this.ips)).indexOf(targetName) < 0) &&
-				targetUser.connected &&
-				Object.isEmpty(Object.select(this.ips, targetUser.ips))) {
-			return targetName;
-		}
-		for (var ip in this.ips) {
-			nameLockedIps[ip] = targetName;
-		}
-		if (!recurse) return targetName;
-		for (var i in users) {
-			if (users[i] === this) continue;
-			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			users[i].destroy();
-		}
-		this.forceRename(targetName, this.authenticated);
-		return targetName;
-	};
-	User.prototype.nameLocked = function() {
-		var locks = Object.values(Object.select(nameLockedIps, this.ips));
-		if (locks.length > 0) {
-			// If the user is locked to more than one name (it's not obvious
-			// whether this is possible), just arbitrarily pick the first one.
-			this.nameLock(locks[0]);
-			return true;
-		}
-		// This code attempts to catch namelocked users logging in from another
-		// IP, and thereby add that IP to the list of namelocked IPs. However,
-		// this code is terrible and doesn't actually work as designed.
-		for (var i in nameLockedIps) {
-			if (nameLockedIps[i] !== this.name) continue;
-			for (var ip in this.ips) {
-				nameLockedIps[ip] = nameLockedIps[i];
-			}
-			this.nameLock(this.name);
-			return true;
-		}
-		return false;
-	};
 	User.prototype.ban = function(noRecurse) {
 		// no need to recurse, since the root for-loop already bans everything with your IP
 		if (!noRecurse) for (var i in users) {
@@ -770,6 +709,18 @@ var User = (function () {
 			bannedIps[ip] = this.userid;
 		}
 		this.destroy();
+	};
+	User.prototype.lock = function(noRecurse) {
+		// no need to recurse, since the root for-loop already bans everything with your IP
+		if (!noRecurse) for (var i in users) {
+			if (users[i] === this) continue;
+			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
+			users[i].lock(true);
+		}
+		for (var ip in this.ips) {
+			lockedIps[ip] = this.userid;
+		}
+		this.locked = true;
 	};
 	User.prototype.destroy = function() {
 		// Disconnects a user from the server
@@ -1029,6 +980,8 @@ var Connection = (function () {
 	return Connection;
 })();
 
+// ban functions
+
 function ipSearch(ip, table) {
 	if (table[ip]) return true;
 	var dotIndex = ip.lastIndexOf('.');
@@ -1039,17 +992,65 @@ function ipSearch(ip, table) {
 	}
 	return false;
 }
+function checkBanned(ip) {
+	return ipSearch(ip, bannedIps);
+}
+function checkLocked(ip) {
+	return ipSearch(ip, lockedIps);
+}
+exports.checkBanned = checkBanned;
+exports.checkLocked = checkLocked;
+
+function unban(name) {
+	var userid = toId(name);
+	for (var ip in bannedIps) {
+		if (Users.bannedIps[ip] === userid) {
+			delete Users.bannedIps[ip];
+			success = true;
+		}
+	}
+	if (success) return name;
+	return false;
+}
+function unlock(name, noRecurse) {
+	var userid = toId(name);
+	var user = getUser(userid);
+	var userip = null;
+	if (user) {
+		if (user.userid === userid) name = user.name;
+		user.locked = false;
+		if (!noRecurse) userip = Object.keys(user.ips)[0];
+	}
+	for (var ip in lockedIps) {
+		if (ip === userip && Users.lockedIps[ip] !== userid) {
+			userip = null;
+			unlock(Users.lockedIps[ip], true); // avoid infinite recursion
+		}
+		if (Users.lockedIps[ip] === userid) {
+			delete Users.lockedIps[ip];
+			success = true;
+		}
+	}
+	if (success) return name;
+	return false;
+}
+exports.unban = unban;
+exports.unlock = unlock;
 
 exports.User = User;
 exports.get = getUser;
 exports.getExact = getExactUser;
 exports.searchUser = searchUser;
 exports.connectUser = connectUser;
-exports.users = users;
-exports.prevUsers = prevUsers;
 exports.importUsergroups = importUsergroups;
 exports.addBannedWord = addBannedWord;
 exports.removeBannedWord = removeBannedWord;
+
+exports.users = users;
+exports.prevUsers = prevUsers;
+
+exports.bannedIps = bannedIps;
+exports.lockedIps = lockedIps;
 
 exports.usergroups = usergroups;
 

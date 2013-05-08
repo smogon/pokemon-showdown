@@ -240,7 +240,6 @@ exports.groups = {
 		declare: true,
 		modchatall: true,
 		potd: true,
-		namelock: true,
 		forcerenameto: true,
 		disableladder: true,
 		rank: 4
@@ -267,6 +266,7 @@ exports.groups = {
 		announce: true,
 		warn: true,
 		mute: true,
+		lock: true,
 		forcerename: true,
 		timer: true,
 		alts: '%u',
