@@ -1,5 +1,6 @@
 const MAX_MESSAGE_LENGTH = 300;
 const TIMEOUT_DEALLOCATE = 15*60*1000;
+const REPORT_USER_STATS_INTERVAL = 1000*60*10;
 
 var GlobalRoom = (function() {
 	function GlobalRoom(roomid) {
@@ -49,25 +50,14 @@ var GlobalRoom = (function() {
 
 		// init users
 		this.users = {};
+		this.userCount = 0; // cache of `Object.size(this.users)`
+		this.maxUsers = 0;
+		this.maxUsersDate = 0;
 
-		(function() {
-			const REPORT_USER_STATS_INTERVAL = 1000 * 60 * 10;
-			self.maxUsers = self.maxUsersDate = 0;
-			var reportUserStats = function() {
-				if (self.maxUsersDate) {
-					LoginServer.request('updateuserstats', {
-						date: self.maxUsersDate,
-						users: self.maxUsers
-					}, function() {});
-					self.maxUsersDate = 0;
-				}
-				LoginServer.request('updateuserstats', {
-					date: Date.now(),
-					users: Object.size(self.users)
-				}, function() {});
-			};
-			setInterval(reportUserStats, REPORT_USER_STATS_INTERVAL);
-		})();
+		this.reportUserStatsInterval = setInterval(
+			this.reportUserStats.bind(this),
+			REPORT_USER_STATS_INTERVAL
+		);
 
 		if (config.reportbattlesperiod) {
 			this.reportBattlesInterval = setInterval(
@@ -86,6 +76,20 @@ var GlobalRoom = (function() {
 	GlobalRoom.prototype.type = 'global';
 
 	GlobalRoom.prototype.formatListText = '|formats';
+
+	GlobalRoom.prototype.reportUserStats = function() {
+		if (this.maxUsersDate) {
+			LoginServer.request('updateuserstats', {
+				date: this.maxUsersDate,
+				users: this.maxUsers
+			}, function() {});
+			this.maxUsersDate = 0;
+		}
+		LoginServer.request('updateuserstats', {
+			date: Date.now(),
+			users: Object.size(this.users)
+		}, function() {});
+	};
 
 	// Deal with phantom xhr-streaming connections.
 	GlobalRoom.prototype.sweepClosedSockets = function() {
@@ -139,6 +143,7 @@ var GlobalRoom = (function() {
 		this.send(entries.join('\n'));
 	};
 
+	// This function is unused.
 	GlobalRoom.prototype.getUserList = function() {
 		var buffer = '';
 		var counter = 0;
@@ -149,12 +154,9 @@ var GlobalRoom = (function() {
 			}
 			buffer += ','+this.users[i].getIdentity();
 		}
-		if (counter > this.maxUsers) {
-			this.maxUsers = counter;
-			this.maxUsersDate = Date.now();
-		}
 		return ''+counter+buffer;
 	};
+
 	GlobalRoom.prototype.getRoomList = function(filter, lastRoomReported) {
 		var roomList = {};
 		var total = 0;
@@ -343,6 +345,10 @@ var GlobalRoom = (function() {
 		if (this.users[user.userid]) return user;
 
 		this.users[user.userid] = user;
+		if (++this.userCount > this.maxUsers) {
+			this.maxUsers = this.userCount;
+			this.maxUsersDate = Date.now();
+		}
 
 		if (!merging) {
 			var initdata = {
@@ -364,6 +370,7 @@ var GlobalRoom = (function() {
 	GlobalRoom.prototype.leave = function(user) {
 		if (!user) return; // ...
 		delete this.users[user.userid];
+		--this.userCount;
 		this.cancelSearch(user, true);
 	};
 	GlobalRoom.prototype.startBattle = function(p1, p2, format, rated, p1team, p2team) {
@@ -1247,10 +1254,6 @@ var ChatRoom = (function() {
 				continue;
 			}
 			buffer += ','+this.users[i].getIdentity();
-		}
-		if (counter > this.maxUsers) {
-			this.maxUsers = counter;
-			this.maxUsersDate = Date.now();
 		}
 		return ''+counter+buffer;
 	};
