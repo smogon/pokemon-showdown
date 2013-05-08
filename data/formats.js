@@ -101,22 +101,10 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
-		// searchShow: true,
+		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
 		banlist: []
-	},
-	uberssuspecttest: {
-		name: "Ubers (suspect test)",
-		section: "Singles",
-
-		effectType: 'Format',
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause', 'OHKO Clause'],
-		banlist: ['Unreleased', 'Illegal']
 	},
 	uu: {
 		name: "UU",
