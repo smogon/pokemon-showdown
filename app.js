@@ -208,10 +208,6 @@ Simulator = require('./simulator.js');
 
 lockdown = false;
 
-mutedIps = {};
-bannedIps = {};
-nameLockedIps = {};
-
 function resolveUser(you, socket) {
 	if (!you) {
 		emit(socket, 'connectionError', 'There has been a connection error. Please refresh the page.');
@@ -305,7 +301,7 @@ server.on('connection', function (socket) {
 		}
 	}
 
-	if (bannedIps[socket.remoteAddress]) {
+	if (Users.checkBanned(socket.remoteAddress)) {
 		console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
 		return;
 	}
