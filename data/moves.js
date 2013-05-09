@@ -1141,7 +1141,7 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onBasePower: function(basePower, target, source, move) {
+			onSourceBasePower: function(basePower, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return basePower * 2;
 				}
@@ -2309,7 +2309,7 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onBasePower: function(basePower, target, source, move) {
+			onSourceBasePower: function(basePower, target, source, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude') {
 					return basePower * 2;
 				}
@@ -2438,7 +2438,7 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onBasePower: function(basePower, target, source, move) {
+			onSourceBasePower: function(basePower, target, source, move) {
 				if (move.id === 'surf' || move.id === 'whirlpool') {
 					return basePower * 2;
 				}
@@ -3923,7 +3923,7 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onBasePower: function(basePower, target, source, move) {
+			onSourceBasePower: function(basePower, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return basePower * 2;
 				}
