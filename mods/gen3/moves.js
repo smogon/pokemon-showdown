@@ -731,7 +731,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		isBounceable: false,
 		onHit: function(target) {
-			if (target.deductPP(target.lastMove, random(2,6))) {
+			if (target.deductPP(target.lastMove, this.random(2,6))) {
 				this.add("-activate", target, 'move: Spite', target.lastMove, 4); //not quite sure how to deal with that four right now - it's just graphical though
 				return;
 			}
