@@ -662,12 +662,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
-	case 'nick':
-		if (!target) return parseCommand(user, '?', cmd, room, socket);
-		user.rename(target);
-		return false;
-		break;
-
 	case 'disableladder':
 		if (!user.can('disableladder')) {
 			emit(socket, 'console', '/disableladder - Access denied.');
