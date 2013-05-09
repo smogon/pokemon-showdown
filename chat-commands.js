@@ -654,14 +654,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
-	case 'rating':
-	case 'ranking':
-	case 'rank':
-	case 'ladder':
-		emit(socket, 'console', 'The version of Pokemon Showdown that you are using does not support /' + cmd + '.');
-		return false;
-		break;
-
 	case 'disableladder':
 		if (!user.can('disableladder')) {
 			emit(socket, 'console', '/disableladder - Access denied.');
