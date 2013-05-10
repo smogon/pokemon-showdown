@@ -1,4 +1,16 @@
 exports.BattleItems = {
+	"choiceband": {
+		inherit: true,
+		onStart: null
+	},
+	"choicescarf": {
+		inherit: true,
+		onStart: null
+	},
+	"choicespecs": {
+		inherit: true,
+		onStart: null
+	},
 	"custapberry": {
 		id: "custapberry",
 		name: "Custap Berry",
