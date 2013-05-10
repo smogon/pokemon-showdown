@@ -139,7 +139,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(pokemon, source) {
 				if (pokemon.volatiles['substitute']) {
-					this.add('-fail', target);
+					this.add('-fail', pokemon);
 					return false;
 				}
 				this.add('-start', pokemon, 'Curse', '[of] '+source);
