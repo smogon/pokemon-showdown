@@ -255,6 +255,11 @@ var events = {
 		} else {
 			var youUser = resolveUser(you, socket);
 			if (!youUser) return;
+			if (data.nojoin) {
+				// this event is being emitted for legacy servers, but the client
+				// doesn't actually want to join the room specified
+				return;
+			}
 			youUser.joinRoom(data.room, socket);
 		}
 	},
