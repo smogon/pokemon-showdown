@@ -393,14 +393,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			}
 			return parseCommand(user, '?', cmd, room, socket);
 		}
-		// temporarily disable this because blarajan
-		/* if (user.muted && !targetUser.can('mute', user)) {
-			emit(socket, 'console', 'You can only private message members of the Moderation Team (users marked by %, @, &, or ~) when muted.');
-			return false;
-		} */
 
-		if (user.locked) {
-			emit(socket, 'console', 'You are locked from sending private messages.');
+		if (user.locked && !targetUser.can('lock', user)) {
+			emit(socket, 'console', 'You can only private message members of the moderation team (users marked by %, @, &, or ~) when locked.');
 			return false;
 		}
 
