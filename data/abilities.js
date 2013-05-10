@@ -2427,6 +2427,7 @@ exports.BattleAbilities = {
 			}
 			pokemon.addVolatile('truant');
 		},
+		onBeforeMovePriority: 99,
 		effect: {
 			duration: 2
 		},
