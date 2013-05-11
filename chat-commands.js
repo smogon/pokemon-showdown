@@ -556,6 +556,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		case 'on':
 		case 'true':
 		case 'yes':
+			emit(socket, 'console', "If you're dealing with a spammer, make sure to run /loadbanlist first.");
+			emit(socket, 'console', "That said, the command you've been looking for has been renamed to: /modchat registered");
+			break;
+		case 'registered':
 			config.modchat = true;
 			break;
 		case 'off':
@@ -565,8 +569,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			break;
 		default:
 			if (!config.groups[target]) {
-				emit(socket, 'console', 'That moderated chat setting is unrecognized.');
-				return false;
+				return parseCommand(user, 'help', 'modchat', room, socket);
 			}
 			if (config.groupsranking.indexOf(target) > 1 && !user.can('modchatall')) {
 				emit(socket, 'console', '/modchat - Access denied for setting higher than ' + config.groupsranking[1] + '.');
@@ -1586,7 +1589,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'loadbanlist':
-		if (!user.can('declare')) {
+		if (!user.can('modchat')) {
 			emit(socket, 'console', '/loadbanlist - Access denied.');
 			return false;
 		}
@@ -1596,7 +1599,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			if (err) return;
 			data = (''+data).split("\n");
 			for (var i=0; i<data.length; i++) {
-				if (data[i]) Users.bannedIps[data[i]] = '#ipban';
+				if (data[i]) bannedIps[data[i]] = '#ipban';
 			}
 			emit(socket, 'console', 'banned '+i+' ips');
 		});
@@ -1950,7 +1953,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === '@' || target === 'modchat') {
 			matched = true;
-			emit(socket, 'console', '/modchat [on/off/+/%/@/&/~] - Set the level of moderated chat. Requires: @ & ~');
+			emit(socket, 'console', '/modchat [off/registered/+/%/@/&/~] - Set the level of moderated chat. Requires: @ & ~');
 		}
 		if (target === '~' || target === 'hotpatch') {
 			matched = true;
