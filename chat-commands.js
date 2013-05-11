@@ -558,6 +558,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		case 'yes':
 			emit(socket, 'console', "If you're dealing with a spammer, make sure to run /loadbanlist first.");
 			emit(socket, 'console', "That said, the command you've been looking for has been renamed to: /modchat registered");
+			return false;
 			break;
 		case 'registered':
 			config.modchat = true;
