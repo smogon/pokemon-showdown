@@ -56,7 +56,6 @@ function connectUser(socket, room) {
 	}
 
 	var connection = new Connection(socket, true);
-	if (connection.banned) return connection;
 	var user = new User(connection);
 	// Generate 1024-bit challenge string.
 	require('crypto').randomBytes(128, function(ex, buffer) {
@@ -166,9 +165,6 @@ var User = (function () {
 
 		// initialize
 		users[this.userid] = this;
-		if (connection.banned) {
-			this.destroy();
-		}
 	}
 
 	User.prototype.blockChallenges = false;
@@ -986,12 +982,6 @@ var Connection = (function () {
 		this.ip = '';
 		if (socket.remoteAddress) {
 			this.ip = socket.remoteAddress;
-		}
-
-		if (ipSearch(this.ip,bannedIps)) {
-			// gonna kill this
-			this.banned = true;
-			this.user = null;
 		}
 	}
 
