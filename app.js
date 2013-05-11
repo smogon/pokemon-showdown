@@ -249,19 +249,16 @@ if (config.crashguard) {
 var events = {
 	join: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
-		if (!you) {
-			you = Users.connectUser(socket, data.room);
-			return you;
-		} else {
-			var youUser = resolveUser(you, socket);
-			if (!youUser) return;
-			if (data.nojoin) {
-				// this event is being emitted for legacy servers, but the client
-				// doesn't actually want to join the room specified
-				return;
-			}
-			youUser.joinRoom(data.room, socket);
+		if (!you) return; // should be impossible
+
+		var youUser = resolveUser(you, socket);
+		if (!youUser) return;
+		if (data.nojoin) {
+			// this event is being emitted for legacy servers, but the client
+			// doesn't actually want to join the room specified
+			return;
 		}
+		youUser.joinRoom(data.room, socket);
 	},
 	chat: function(message, socket, you) {
 		if (!message || typeof message.room !== 'string' || typeof message.message !== 'string') return;
