@@ -308,6 +308,7 @@ server.on('connection', function (socket) {
 
 	if (Users.checkBanned(socket.remoteAddress)) {
 		console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
+		socket.end();
 		return;
 	}
 	console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
