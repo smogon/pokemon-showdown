@@ -30,6 +30,31 @@ function searchUser(name) {
 }
 
 function connectUser(socket, room) {
+	if (!socket.remoteAddress) {
+		// Somehow this socket has no remoteAddress -- this has actually
+		// crashed the main server a few times.
+		var message = 'ERROR: Socket with empty remoteAddress!\n' +
+				'id=' + socket.id + '\n' +
+				'headers=' + JSON.stringify(socket.headers) + '\n' +
+				'prefix=' + socket.prefix + '\n' +
+				'address=' + JSON.stringify(socket.address) + '\n' +
+				'url=' + socket.url + '\n' +
+				'pathname=' + socket.pathname + '\n' +
+				'protocol=' + socket.protocol + '\n';
+		if (socket._session) {
+			message += '_session.is_closing=' + socket._session.is_closing + '\n' +
+					'_session.readyState=' + socket._session.readyState + '\n' +
+					'_session.send_buffer=' + socket._session.send_buffer + '\n' +
+					'!!_session.recv=' + !!socket._session.recv + '\n';
+		} else {
+			message += socket._session;
+		}
+		try {
+			socket.end();
+		} catch (e) {}
+		throw {stack: message};
+	}
+
 	var connection = new Connection(socket, true);
 	if (connection.banned) return connection;
 	var user = new User(connection);
@@ -982,6 +1007,7 @@ var Connection = (function () {
 
 function ipSearch(ip, table) {
 	if (table[ip]) return true;
+	if (!ip) return false; // SockJS socket with undefined `remoteAddress`
 	var dotIndex = ip.lastIndexOf('.');
 	for (var i=0; i<4 && dotIndex > 0; i++) {
 		ip = ip.substr(0, dotIndex);
