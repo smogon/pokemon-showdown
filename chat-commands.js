@@ -2031,8 +2031,8 @@ function canTalk(user, room, socket) {
 		if (socket) emit(socket, 'console', 'You are locked from talking in chat.');
 		return false;
 	}
-	if (user.muted) {
-		if (socket) emit(socket, 'console', 'You are muted.');
+	if (user.muted && room.id === 'lobby') {
+		if (socket) emit(socket, 'console', 'You are muted and cannot talk in the lobby.');
 		return false;
 	}
 	if (room.id === 'lobby' && user.blockLobbyChat) {
