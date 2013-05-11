@@ -283,6 +283,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'lock':
+	case 'ipmute':
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		var targets = splitTarget(target);
 		var targetUser = targets[0];
@@ -427,6 +428,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (!user.can('mute', targetUser)) {
 			emit(socket, 'console', '/mute - Access denied.');
+			return false;
+		}
+		if (room.id !== 'lobby') {
+			emit(socket, 'console', 'Muting only applies to lobby - you probably wanted to /lock.');
 			return false;
 		}
 
