@@ -1596,7 +1596,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			if (err) return;
 			data = (''+data).split("\n");
 			for (var i=0; i<data.length; i++) {
-				if (data[i]) bannedIps[data[i]] = '#ipban';
+				if (data[i]) Users.bannedIps[data[i]] = '#ipban';
 			}
 			emit(socket, 'console', 'banned '+i+' ips');
 		});
