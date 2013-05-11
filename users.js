@@ -1,5 +1,3 @@
-var crypto = require('crypto');
-
 var THROTTLE_DELAY = 900;
 
 var users = {};
@@ -36,7 +34,7 @@ function connectUser(socket, room) {
 	if (connection.banned) return connection;
 	var user = new User(connection);
 	// Generate 1024-bit challenge string.
-	crypto.randomBytes(128, function(ex, buffer) {
+	require('crypto').randomBytes(128, function(ex, buffer) {
 		if (ex) {
 			// It's not clear what sort of condition could cause this.
 			// For now, we'll basically assume it can't happen.
