@@ -763,15 +763,15 @@ module.exports = (function () {
 
 		var maxLevel = format.maxLevel || 100;
 		var maxForcedLevel = format.maxForcedLevel || maxLevel;
+		if (!set.level) {
+			set.level = (format.defaultLevel || maxLevel);
+		}
 		if (format.forcedLevel) {
 			set.forcedLevel = format.forcedLevel;
-		} else if ((set.level || maxLevel) >= maxForcedLevel) {
+		} else if (set.level >= maxForcedLevel) {
 			set.forcedLevel = maxForcedLevel;
 		}
-		if (!set.level) {
-			set.level = 100;
-		}
-		if (set.level > maxLevel || set.level == set.forcedLevel) {
+		if (set.level > maxLevel || set.level == set.forcedLevel || set.level == set.maxForcedLevel) {
 			set.level = maxLevel;
 		}
 
