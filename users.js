@@ -1052,6 +1052,7 @@ exports.unban = unban;
 exports.unlock = unlock;
 
 exports.User = User;
+exports.Connection = Connection;
 exports.get = getUser;
 exports.getExact = getExactUser;
 exports.searchUser = searchUser;
