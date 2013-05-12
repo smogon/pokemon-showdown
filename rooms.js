@@ -309,11 +309,6 @@ var GlobalRoom = (function() {
 			}
 		}
 	};
-	GlobalRoom.prototype.sendIdentity = function(user) {
-		if (user && user.connected) {
-			this.send('|N|' + user.getIdentity() + '|' + user.userid);
-		}
-	};
 	GlobalRoom.prototype.sendAuth = function(message) {
 		for (var i in this.users) {
 			var user = this.users[i];
