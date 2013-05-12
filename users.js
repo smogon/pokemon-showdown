@@ -1032,9 +1032,11 @@ function unlock(name, unlocked, noRecurse) {
 	var userips = null;
 	if (user) {
 		if (user.userid === userid) name = user.name;
-		user.locked = false;
-		unlocked = unlocked || {};
-		unlocked[name] = 1;
+		if (user.locked) {
+			user.locked = false;
+			unlocked = unlocked || {};
+			unlocked[name] = 1;
+		}
 		if (!noRecurse) userips = user.ips;
 	}
 	for (var ip in lockedIps) {
