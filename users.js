@@ -1039,7 +1039,6 @@ function unlock(name, unlocked, noRecurse) {
 	}
 	for (var ip in lockedIps) {
 		if (userips && (ip in user.ips) && Users.lockedIps[ip] !== userid) {
-			userip = null;
 			unlocked = unlock(Users.lockedIps[ip], unlocked, true); // avoid infinite recursion
 		}
 		if (Users.lockedIps[ip] === userid) {
