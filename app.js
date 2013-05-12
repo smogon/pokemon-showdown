@@ -278,9 +278,9 @@ var events = {
 };
 
 var socketCounter = 0;
-server.on('connection', function (socket) {
-	if (!socket) { // WTF
-		return;
+server.on('connection', function(socket) {
+	if (!socket) {
+		throw {stack: '`socket` is empty in `connection` event!'};
 	}
 	socket.id = (++socketCounter);
 
