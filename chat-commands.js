@@ -320,15 +320,22 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		var name = Users.unlock(target);
+		var unlocked = Users.unlock(target);
 
-		if (name) {
-			logModCommand(room,''+name+' was unlocked by '+user.name+'.');
+		if (unlocked) {
+			var names = Object.keys(unlocked);
+			logModCommand(room, '' + names.join(', ') + ' ' +
+					((names.length > 1) ? 'were' : 'was') +
+					' unlocked by ' + user.name + '.');
+			for (var i = 0; i < names.length; ++i) {
+				var unlockedUser = Users.get(names[i]);
+				if (unlockedUser) {
+					Rooms.lobby.sendIdentity(unlockedUser);
+				}
+			}
 		} else {
 			emit(socket, 'console', 'User '+target+' is not locked.');
 		}
-		var targetUser = Users.get(target);
-		if (targetUser) Rooms.lobby.sendIdentity(targetUser);
 		return false;
 		break;
 

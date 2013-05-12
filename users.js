@@ -1026,27 +1026,29 @@ function unban(name) {
 	if (success) return name;
 	return false;
 }
-function unlock(name, noRecurse) {
+function unlock(name, unlocked, noRecurse) {
 	var userid = toId(name);
 	var user = getUser(userid);
-	var userip = null;
+	var userips = null;
 	if (user) {
 		if (user.userid === userid) name = user.name;
 		user.locked = false;
-		if (!noRecurse) userip = Object.keys(user.ips)[0];
+		unlocked = unlocked || {};
+		unlocked[name] = 1;
+		if (!noRecurse) userips = user.ips;
 	}
 	for (var ip in lockedIps) {
-		if (ip === userip && Users.lockedIps[ip] !== userid) {
+		if (userips && (ip in user.ips) && Users.lockedIps[ip] !== userid) {
 			userip = null;
-			unlock(Users.lockedIps[ip], true); // avoid infinite recursion
+			unlocked = unlock(Users.lockedIps[ip], unlocked, true); // avoid infinite recursion
 		}
 		if (Users.lockedIps[ip] === userid) {
 			delete Users.lockedIps[ip];
-			success = true;
+			unlocked = unlocked || {};
+			unlocked[name] = 1;
 		}
 	}
-	if (success) return name;
-	return false;
+	return unlocked;
 }
 exports.unban = unban;
 exports.unlock = unlock;

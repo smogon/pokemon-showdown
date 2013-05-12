@@ -1301,7 +1301,7 @@ var ChatRoom = (function() {
 		}
 	};
 	ChatRoom.prototype.sendIdentity = function(user) {
-		if (user && user.connected) {
+		if (user && user.connected && user.named) {
 			var entry = '|N|' + user.getIdentity() + '|' + user.userid;
 			if (config.reportjoinsperiod) {
 				this.reportJoinsQueue.push(entry);
