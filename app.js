@@ -284,21 +284,14 @@ server.on('connection', function(socket) {
 	}
 	socket.id = (++socketCounter);
 
-	if (config.proxyip) {
-		if (config.proxyip.indexOf(socket.remoteAddress) >= 0) {
-			var ips = (socket.headers['x-forwarded-for'] || '').split(',');
-			var ip;
-			while (ip = ips.pop()) {
-				ip = ip.trim();
-				if (config.proxyip.indexOf(ip) < 0) {
-					socket.remoteAddress = ip;
-					break;
-				}
-			}
-		} else if (config.proxyip === true) {
-			var ip = (socket.headers['x-forwarded-for'] || '').split(',').shift();
-			if (ip) {
-				socket.remoteAddress = ip.trim();
+	if (config.proxyip && (config.proxyip.indexOf(socket.remoteAddress) >= 0)) {
+		var ips = (socket.headers['x-forwarded-for'] || '').split(',');
+		var ip;
+		while (ip = ips.pop()) {
+			ip = ip.trim();
+			if (config.proxyip.indexOf(ip) < 0) {
+				socket.remoteAddress = ip;
+				break;
 			}
 		}
 	}
