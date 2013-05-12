@@ -121,6 +121,7 @@ exports.BattleFormats = {
 		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 1000,
+		defaultLevel: 100,
 		// no restrictions, for serious
 		ruleset: ['Team Preview']
 	},
@@ -133,6 +134,7 @@ exports.BattleFormats = {
 		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 1000,
+		defaultLevel: 100,
 		// no restrictions, for serious
 		ruleset: []
 	},
@@ -251,6 +253,7 @@ exports.BattleFormats = {
 		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 1000,
+		defaultLevel: 100,
 		// no restrictions, for serious
 		ruleset: ['Team Preview']
 	},
