@@ -288,7 +288,7 @@ exports.BattleFormats = {
 			var date = Date();
 			date = date.split(' ');
 			if (parseInt(date[2]) === 12) {
-				this.add('-message', 'Wish a HAPPY BIRTHDAY to Treecko32!!');
+				this.add('-message', 'Wish a HAPPY BIRTHDAY to Treecko37!!');
 			}
 			if (parseInt(date[2]) === 16) {
 				this.add('-message', 'Wish a HAPPY BIRTHDAY to Joim!!');
