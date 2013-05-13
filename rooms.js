@@ -1282,16 +1282,8 @@ var ChatRoom = (function() {
 		if (user) {
 			user.sendTo(this, message);
 		} else {
-			var isPureLobbyChat = false;
-			if (message.indexOf('\n') < 0) {
-				isPureLobbyChat = (message.substr(0,3) === '|c|' && message.substr(0,5) !== '|c|~|') ||
-					message.substr(0,10) === '|c|~|/data' ||
-					message.substr(0,24) === '|raw|<div class="infobox';
-			}
 			for (var i in this.users) {
-				user = this.users[i];
-				if (isPureLobbyChat && user.blockLobbyChat) continue;
-				user.sendTo(this, message);
+				this.users[i].sendTo(this, message);
 			}
 		}
 	};

@@ -2051,10 +2051,6 @@ function canTalk(user, room, socket) {
 		if (socket) emit(socket, 'console', 'You are muted and cannot talk in the lobby.');
 		return false;
 	}
-	if (room.id === 'lobby' && user.blockLobbyChat) {
-		if (socket) emit(socket, 'console', "You can't send messages while blocking lobby chat.");
-		return false;
-	}
 	if (config.modchat && room.id === 'lobby') {
 		if (config.modchat === 'crash') {
 			if (!user.can('ignorelimits')) {
