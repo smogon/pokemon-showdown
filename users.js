@@ -143,7 +143,6 @@ var User = (function () {
 	}
 
 	User.prototype.blockChallenges = false;
-	User.prototype.blockLobbyChat = false;
 	User.prototype.lastConnected = 0;
 
 	User.prototype.emit = function(message, data) {
