@@ -916,9 +916,16 @@ var BattleRoom = (function() {
 		if (joining) {
 			this.addCmd('join', user.name);
 		}
-		var resend = joining || !this.battle.playerTable[user.prevNames[user.userid]];
-		if (this.battle.playerTable[user.userid]) {
-			this.battle.rename();
+		var resend = joining || !this.battle.playerTable[oldid];
+		if (this.battle.playerTable[oldid]) {
+			if (this.rated) {
+				this.add('|message|'+user+' forfeited by changing their name.');
+				this.battle.lose(oldid);
+				this.battle.leave(oldid);
+				resend = false;
+			} else {
+				this.battle.rename();
+			}
 		}
 		delete this.users[oldid];
 		this.users[user.userid] = user;
