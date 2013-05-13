@@ -297,7 +297,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 
 		logModCommand(room,""+targetUser.name+" was locked from talking by "+user.name+"." + (targets[1] ? " (" + targets[1] + ")" : ""));
-		targetUser.emit('message', user.name+' has locked you from talking in chats, battles, and PMs.\n\n'+targets[1]+'\n\nIf you feel that your lock was unjustified you can appeal it at:\nhttp://www.smogon.com/forums/announcement.php?f=126&a=204');
+		targetUser.emit('message', user.name+' has locked you from talking in chats, battles, and PMing regular users.\n\n'+targets[1]+'\n\nIf you feel that your lock was unjustified, you can still PM staff members (@, &, and ~) to discuss it.');
 		var alts = targetUser.getAlts();
 		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also locked: "+alts.join(", "));
 
