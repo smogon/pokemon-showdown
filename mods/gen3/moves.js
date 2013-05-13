@@ -512,6 +512,9 @@ exports.BattleMovedex = {
 	naturepower: {
 		inherit: true,
 		accuracy: 95,
+		onModifyMove: function(move) {
+			move.accuracy = true;
+		},
 		onHit: function(target) {
 			this.useMove('swift', target);
 		}
