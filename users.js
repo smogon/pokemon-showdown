@@ -971,7 +971,6 @@ var Connection = (function () {
 
 function ipSearch(ip, table) {
 	if (table[ip]) return true;
-	if (!ip) return false; // SockJS socket with undefined `remoteAddress`
 	var dotIndex = ip.lastIndexOf('.');
 	for (var i=0; i<4 && dotIndex > 0; i++) {
 		ip = ip.substr(0, dotIndex);
