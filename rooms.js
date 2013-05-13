@@ -142,21 +142,6 @@ var GlobalRoom = (function() {
 		}
 		this.send(entries.join('\n'));
 	};
-
-	// This function is unused.
-	GlobalRoom.prototype.getUserList = function() {
-		var buffer = '';
-		var counter = 0;
-		for (var i in this.users) {
-			counter++;
-			if (!this.users[i].named) {
-				continue;
-			}
-			buffer += ','+this.users[i].getIdentity();
-		}
-		return ''+counter+buffer;
-	};
-
 	GlobalRoom.prototype.getRoomList = function(filter, lastRoomReported) {
 		var roomList = {};
 		var total = 0;
