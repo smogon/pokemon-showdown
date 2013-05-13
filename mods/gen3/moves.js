@@ -16,23 +16,13 @@ exports.BattleMovedex = {
 		pp: 20
 	},
 	acid: {
-		num: 51,
-		accuracy: 100,
-		basePower: 40,
-		desc: "Deals damage to all adjacent foes with a 10% chance to lower their Special Defense by 1 stage each.",
-		shortDesc: "10% chance to lower the foe(s) Sp. Def by 1.",
-		id: "acid",
-		name: "Acid",
-		pp: 30,
-		priority: 0,
+		inherit: true,
 		secondary: {
 			chance: 10,
 			boosts: {
 				def: -1
 			}
-		},
-		target: "foes",
-		type: "Poison"
+		}
 	},
 	ancientpower: {
 		inherit: true,
@@ -65,26 +55,11 @@ exports.BattleMovedex = {
 		}
 	},
 	astonish: {
-		num: 310,
-		accuracy: 100,
-		basePower: 30,
+		inherit: true,
 		basePowerCallback: function(pokemon, target) {
 			if (target.volatiles['minimize']) return 60;
-			return 35;
-		},
-		desc: "Deals damage to one adjacent target with a 30% chance to flinch it. Makes contact.",
-		shortDesc: "30% chance to flinch the target.",
-		id: "astonish",
-		name: "Astonish",
-		pp: 15,
-		priority: 0,
-		isContact: true,
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch'
-		},
-		target: "normal",
-		type: "Ghost"
+			return 30;
+		}
 	},
 	beatup: {
 		inherit: true,
@@ -138,22 +113,8 @@ exports.BattleMovedex = {
 		accuracy: 75
 	},
 	blizzard: {
-		num: 59,
-		accuracy: 70,
-		basePower: 120,
-		desc: "Deals damage to all adjacent foes with a 10% chance to freeze each. If the weather is Hail, this move cannot miss.",
-		shortDesc: "10% chance to freeze the foe(s).",
-		id: "blizzard",
-		isViable: true,
-		name: "Blizzard",
-		pp: 5,
-		priority: 0,
-		secondary: {
-			chance: 10,
-			status: 'frz'
-		},
-		target: "foes",
-		type: "Ice"
+		inherit: true,
+		onModifyMove: null
 	},
 	bonerush: {
 		inherit: true,
@@ -211,7 +172,7 @@ exports.BattleMovedex = {
 			boosts: {
 				spd: -1
 			}
-		},
+		}
 	},
 	curse: {
 		inherit: true,
@@ -224,28 +185,7 @@ exports.BattleMovedex = {
 	},
 	dig: {
 		inherit: true,
-		basePower: 60,
-		effect: {
-			duration: 2,
-			onLockMove: 'dig',
-			onImmunity: function(type, pokemon) {
-				if (type === 'sandstorm' || type === 'hail') return false;
-			},
-			onSourceModifyMove: function(move) {
-				if (move.target === 'foeSide') return;
-				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'fissure') {
-					// should not normally be done in ModifyMove event,
-					// but it's faster to do this here than in
-					// onFoeBasePower
-					if (!move.basePowerModifier) move.basePowerModifier = 1;
-					move.basePowerModifier *= 2;
-					return;
-				} else if (move.id === 'fissure') {
-					return;
-				}
-				move.accuracy = 0;
-			}
-		},
+		basePower: 60
 	},
 	disable: {
 		inherit: true,
@@ -389,28 +329,6 @@ exports.BattleMovedex = {
 		shortDesc: "Usually goes first.",
 		priority: 1
 	},
-	facade: {
-		num: 263,
-		accuracy: 100,
-		basePower: 70,
-		basePowerCallback: function(pokemon) {
-			if (pokemon.status && pokemon.status !== 'sleep') {
-				return 140;
-			}
-			return 70;
-		},
-		desc: "Deals damage to one adjacent target. Power doubles if the user is burned, paralyzed, or poisoned. Makes contact.",
-		shortDesc: "Power doubles when user is inflicted by a status.",
-		id: "facade",
-		isViable: true,
-		name: "Facade",
-		pp: 20,
-		priority: 0,
-		isContact: true,
-		secondary: false,
-		target: "normal",
-		type: "Normal"
-	},
 	faintattack: {
 		inherit: true,
 		isContact: false
@@ -500,7 +418,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "Raises the user's Special Attack by 1 stage.",
 		shortDesc: "Boosts the user's Sp. Atk by 1.",
-		onModifyMove: undefined,
+		onModifyMove: null,
 		boosts: {
 			spa: 1
 		}
@@ -562,30 +480,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 70
 	},
-	lowkick: {
-		num: 67,
-		accuracy: 100,
-		basePower: 0,
-		basePowerCallback: function(pokemon, target) {
-			var targetWeight = target.weightkg;
-			if (target.weightkg >= 200) {
-				return 120;
-			}
-			if (target.weightkg >= 100) {
-				return 100;
-			}
-			if (target.weightkg >= 50) {
-				return 80;
-			}
-			if (target.weightkg >= 25) {
-				return 60;
-			}
-			if (target.weightkg >= 10) {
-				return 40;
-			}
-			return 20;
-		}
-	},
 	megadrain: {
 		inherit: true,
 		pp: 10
@@ -617,7 +511,10 @@ exports.BattleMovedex = {
 	},
 	naturepower: {
 		inherit: true,
-		accuracy: 95
+		accuracy: 95,
+		onHit: function(target) {
+			this.useMove('swift', target);
+		}
 	},
 	needlearm: {
 		inherit: true,
@@ -655,43 +552,13 @@ exports.BattleMovedex = {
 	},
 	poisongas: {
 		inherit: true,
-		accuracy: 55
+		accuracy: 55,
+		target: "normal"
 	},
 	protect: {
 		inherit: true,
 		//desc: "",
 		priority: 3
-	},
-	razorwind: {
-		num: 13,
-		accuracy: 100,
-		basePower: 80,
-		desc: "Deals damage to all adjacent foes. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges, then hits foe(s) turn 2.",
-		id: "razorwind",
-		name: "Razor Wind",
-		pp: 10,
-		priority: 0,
-		isTwoTurnMove: true,
-		onTry: function(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name, defender);
-			if (!this.runEvent('ChargeMove', attacker, defender)) {
-				this.add('-anim', attacker, move.name, defender);
-				return;
-			}
-			attacker.addVolatile(move.id, defender);
-			return null;
-		},
-		effect: {
-			duration: 2,
-			onLockMove: 'razorwind'
-		},
-		secondary: false,
-		target: "foes",
-		type: "Normal"
 	},
 	recover: {
 		inherit: true,
@@ -731,8 +598,9 @@ exports.BattleMovedex = {
 		inherit: true,
 		isBounceable: false,
 		onHit: function(target) {
-			if (target.deductPP(target.lastMove, this.random(2,6))) {
-				this.add("-activate", target, 'move: Spite', target.lastMove, 4); //not quite sure how to deal with that four right now - it's just graphical though
+			var roll = this.random(2,6);
+			if (target.deductPP(target.lastMove, roll)) {
+				this.add("-activate", target, 'move: Spite', target.lastMove, roll);
 				return;
 			}
 			return false;
@@ -781,7 +649,31 @@ exports.BattleMovedex = {
 	},
 	taunt: {
 		inherit: true,
-		isBounceable: false
+		isBounceable: false,
+		effect: {
+			duration: 2,
+			onStart: function(target) {
+				this.add('-start', target, 'move: Taunt');
+			},
+			onResidualOrder: 12,
+			onEnd: function(target) {
+				this.add('-end', target, 'move: Taunt');
+			},
+			onModifyPokemon: function(pokemon) {
+				var moves = pokemon.moveset;
+				for (var i=0; i<moves.length; i++) {
+					if (this.getMove(moves[i].move).category === 'Status') {
+						moves[i].disabled = true;
+					}
+				}
+			},
+			onBeforeMove: function(attacker, defender, move) {
+				if (move.category === 'Status') {
+					this.add('cant', attacker, 'move: Taunt', move);
+					return false;
+				}
+			}
+		}
 	},
 	thrash: {
 		inherit: true,
@@ -819,70 +711,15 @@ exports.BattleMovedex = {
 		pp: 10
 	},
 	volttackle: {
-		num: 344,
-		accuracy: 100,
-		basePower: 120,
+		inherit: true,
 		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
 		shortDesc: "Has 1/3 recoil.",
-		id: "volttackle",
-		isViable: true,
-		name: "Volt Tackle",
-		pp: 15,
-		priority: 0,
-		isContact: true,
 		recoil: [1,3],
-		target: "normal",
-		type: "Electric"
+		secondary: false
 	},
 	waterfall: {
-		num: 127,
-		accuracy: 100,
-		basePower: 80,
-		desc: "Deals damage to one adjacent target. Makes contact. (Field: Can be used to climb a waterfall.)",
-		shortDesc: "Deals damage.",
-		id: "waterfall",
-		isViable: true,
-		name: "Waterfall",
-		pp: 15,
-		priority: 0,
-		isContact: true,
-		target: "normal",
-		type: "Water"
-	},
-	weatherball: {
-		num: 311,
-		accuracy: 100,
-		basePower: 50,
-		basePowerCallback: function() {
-			if (this.weather) return 100;
-			return 50;
-		},
-		desc: "Deals damage to one adjacent target. Power doubles during weather effects and this move's type changes to match; Ice-type during Hail, Water-type during Rain Dance, Rock-type during Sandstorm, and Fire-type during Sunny Day.",
-		shortDesc: "Power doubles and type varies in each weather.",
-		id: "weatherball",
-		isViable: true,
-		name: "Weather Ball",
-		pp: 10,
-		priority: 0,
-		onModifyMove: function(move) {
-			switch (this.weather) {
-			case 'sunnyday':
-				move.type = 'Fire';
-				break;
-			case 'raindance':
-				move.type = 'Water';
-				break;
-			case 'sandstorm':
-				move.type = 'Rock';
-				break;
-			case 'hail':
-				move.type = 'Ice';
-				break;
-			}
-		},
-		secondary: false,
-		target: "normal",
-		type: "Normal"
+		inherit: true,
+		secondary: false
 	},
 	whirlpool: {
 		inherit: true,
@@ -907,7 +744,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		//desc: "",
 		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
-		sideCondition: 'Wish',
 		effect: {
 			duration: 2,
 			onResidualOrder: 2,
