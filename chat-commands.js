@@ -1404,13 +1404,13 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		break;
 
 	case 'joinbattle':
-	case 'partbattle':
 		if (!room.joinBattle) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
 		room.joinBattle(user);
 		return false;
 		break;
 
+	case 'partbattle':
 	case 'leavebattle':
 		if (!room.leaveBattle) { emit(socket, 'console', 'You can only do this in battle rooms.'); return false; }
 
