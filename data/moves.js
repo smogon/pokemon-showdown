@@ -1583,7 +1583,7 @@ exports.BattleMovedex = {
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "clamp",
 		name: "Clamp",
-		pp: 10,
+		pp: 15,
 		priority: 0,
 		isContact: true,
 		volatileStatus: 'partiallytrapped',

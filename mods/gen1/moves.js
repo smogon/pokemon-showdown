@@ -200,6 +200,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 75,
 		category: "Special",
+		pp: 10,
 		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock'
