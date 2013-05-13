@@ -282,6 +282,13 @@ server.on('connection', function(socket) {
 	if (!socket) {
 		throw {stack: '`socket` is empty in `connection` event!'};
 	}
+	if (!socket.remoteAddress) {
+		// This condition occurs several times per day. It may be a SockJS bug.
+		try {
+			socket.end();
+		} catch (e) {}
+		return;
+	}
 	socket.id = (++socketCounter);
 
 	if (config.proxyip && (config.proxyip.indexOf(socket.remoteAddress) >= 0)) {
