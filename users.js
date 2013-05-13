@@ -300,7 +300,7 @@ var User = (function () {
 		var joining = !this.named;
 		this.named = (this.userid.substr(0,5) !== 'guest');
 		for (var i in this.roomCount) {
-			Rooms.get(i,'lobby').rename(this, oldid, joining);
+			Rooms.get(i,'lobby').onRename(this, oldid, joining);
 		}
 		return true;
 	};
@@ -339,7 +339,7 @@ var User = (function () {
 		}
 		this.named = false;
 		for (var i in this.roomCount) {
-			Rooms.get(i,'lobby').rename(this, oldid, false);
+			Rooms.get(i,'lobby').onRename(this, oldid, false);
 		}
 		return true;
 	};
@@ -493,7 +493,7 @@ var User = (function () {
 					return false;
 				}
 				for (var i in this.roomCount) {
-					Rooms.get(i,'lobby').leave(this);
+					Rooms.get(i,'lobby').onLeave(this);
 				}
 				if (!user.authenticated) {
 					if (Object.isEmpty(Object.select(this.ips, user.ips))) {
@@ -564,7 +564,7 @@ var User = (function () {
 		for (var i in connection.rooms) {
 			var room = connection.rooms[i];
 			if (!this.roomCount[i]) {
-				room.join(this, true);
+				room.onJoin(this, true);
 				this.roomCount[i] = 0;
 			}
 			this.roomCount[i]++;
@@ -629,7 +629,7 @@ var User = (function () {
 				if (this.roomCount[i] > 0) {
 					// should never happen.
 					console.log('!! room miscount: '+i+' not left');
-					Rooms.get(i,'lobby').leave(this);
+					Rooms.get(i,'lobby').onLeave(this);
 				}
 			}
 			this.roomCount = {};
@@ -766,10 +766,10 @@ var User = (function () {
 			connection.rooms[room.id] = room;
 			if (!this.roomCount[room.id]) {
 				this.roomCount[room.id]=1;
-				room.join(this);
+				room.onJoin(this);
 			} else {
 				this.roomCount[room.id]++;
-				room.initSocket(this, socket);
+				room.onJoinSocket(this, socket);
 			}
 		} else if (room.id === 'lobby') {
 			emit(connection.socket, 'init', {room: room.id, notFound: true});
@@ -788,7 +788,7 @@ var User = (function () {
 					if (this.roomCount[room.id]) {
 						this.roomCount[room.id]--;
 						if (!this.roomCount[room.id]) {
-							room.leave(this);
+							room.onLeave(this);
 							delete this.roomCount[room.id];
 						}
 					}
@@ -808,7 +808,7 @@ var User = (function () {
 			}
 		}
 		if (!socket && this.roomCount[room.id]) {
-			room.leave(this);
+			room.onLeave(this);
 			delete this.roomCount[room.id];
 		}
 	};
