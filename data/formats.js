@@ -14,7 +14,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	unratedrandombattle: {
 		name: "Unrated Random Battle",
@@ -198,7 +198,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		rated: true,
-		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
+		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'HP Percentage Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
 			'Mewtwo',
 			'Lugia',
@@ -226,7 +226,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		debug: true,
-		ruleset: ['PotD', 'Pokemon']
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod']
 	},
 	doubleschallengecup: {
 		name: "Doubles Challenge Cup",
@@ -239,7 +239,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		debug: true,
-		ruleset: ['Pokemon']
+		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 	doublescustomgame: {
 		name: "Doubles Custom Game",
@@ -281,6 +281,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
+		ruleset: ['HP Percentage Mod'],
 		onBegin: function() {
 			// Shameless plug
 			var date = Date();
@@ -332,7 +333,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		ruleset: ['Pokemon']
+		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 	challengecup1vs1: {
 		name: "Challenge Cup 1-vs-1",
@@ -344,7 +345,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		ruleset: ['Pokemon', 'Team Preview 1v1'],
+		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod'],
 		onBegin: function() {
 			this.debug('Cutting down to 1');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -362,7 +363,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon'],
+		ruleset: ['Pokemon', 'HP Percentage Mod'],
 		banlist: []
 	},
 	balancedhackmons: {
@@ -374,7 +375,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'OHKO Clause'],
+		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod'],
 		banlist: ['Wonder Guard', 'Pure Power', 'Huge Power', 'Shadow Tag', 'Arena Trap']
 	},
 	gennextou: {
@@ -405,7 +406,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Team Preview'],
+		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Unreleased'],
 		mimicGlitch: true
 	},
@@ -497,7 +498,7 @@ exports.BattleFormats = {
 		mod: 'gen4',
 		effectType: 'Format',
 		challengeShow: true,
-		ruleset: ['Pokemon'],
+		ruleset: ['Pokemon', 'HP Percentage Mod'],
 		banlist: []
 	},
 	gen4customgame: {
@@ -518,7 +519,7 @@ exports.BattleFormats = {
 		mod: 'gen3',
 		effectType: 'Format',
 		challengeShow: true,
-		ruleset: ['Pokemon'],
+		ruleset: ['Pokemon', 'HP Percentage Mod'],
 		banlist: []
 	},
 	gen3customgame: {
@@ -558,7 +559,7 @@ exports.BattleFormats = {
 
 	standardnext: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'HP Percentage Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Double Team'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -582,7 +583,7 @@ exports.BattleFormats = {
 
 	standard: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
 		banlist: ['Unreleased', 'Illegal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -602,7 +603,7 @@ exports.BattleFormats = {
 	},
 	standardubers: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'HP Percentage Mod'],
 		banlist: ['Unreleased', 'Illegal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -622,7 +623,7 @@ exports.BattleFormats = {
 	},
 	standarddw: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Moody'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -866,6 +867,14 @@ exports.BattleFormats = {
 		banlist: ['Moody'],
 		onStart: function() {
 			this.add('rule', 'Moody Clause: Moody is banned');
+		}
+	},
+	hppercentagemod: {
+		effectType: 'Rule',
+		name: 'HP Percentage Mod',
+		onStart: function() {
+			this.add('rule', 'HP Percentage Mod: HP is reported as percentages');
+			this.reportPercentages = true;
 		}
 	},
 	sleepclausemod: {
