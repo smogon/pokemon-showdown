@@ -122,7 +122,7 @@ exports.BattleFormats = {
 		debug: true,
 		maxLevel: 1000,
 		defaultLevel: 100,
-		// no restrictions, for serious
+		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
 	customgamenoteampreview: {
@@ -159,7 +159,6 @@ exports.BattleFormats = {
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,
-		// no restrictions, for serious
 		ruleset: ['Pokemon', 'Team Preview VGC', 'Species Clause', 'Item Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
 			'Mewtwo',
@@ -199,7 +198,6 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		rated: true,
-		// no restrictions, for serious
 		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
 			'Mewtwo',
@@ -254,7 +252,7 @@ exports.BattleFormats = {
 		debug: true,
 		maxLevel: 1000,
 		defaultLevel: 100,
-		// no restrictions, for serious
+		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
 
