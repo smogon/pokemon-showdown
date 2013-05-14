@@ -829,9 +829,10 @@ module.exports = (function () {
 			// Don't check abilities for metagames with All Abilities 
 			if (this.gen <= 2) {
 				set.ability = '';
-			}
-			if (!banlistTable['ignoreillegalabilities']) {
-				if (ability.name !== template.abilities['0'] &&
+			} else if (!banlistTable['ignoreillegalabilities']) {
+				if (!ability.name) {
+					problems.push(name+" needs to have an ability.");
+				} else if (ability.name !== template.abilities['0'] &&
 					ability.name !== template.abilities['1'] &&
 					ability.name !== template.abilities['DW']) {
 					problems.push(name+" can't have "+set.ability+".");
