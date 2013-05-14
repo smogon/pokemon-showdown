@@ -7,8 +7,7 @@
 		"sockjs": ">=0.3.1"
 	},
 	"optionalDependencies": {
-		"nodemailer": ">=0.4.1",
-		"socket.io": ">=0.8.7"
+		"nodemailer": ">=0.4.1"
 	},
 	"engines": {
 		"node": ">= 0.6.3 < 0.10.0 || > 0.10.1"
