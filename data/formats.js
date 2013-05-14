@@ -491,6 +491,20 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber']
 	},
+	gen4uubeta: {
+		name: "[Gen 4] UU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen4',
+		effectType: 'Format',
+		challengeDefault: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'OU', 'BL']
+	},
 	gen4hackmons: {
 		name: "[Gen 4] Hackmons",
 		section: "Past Generations",
