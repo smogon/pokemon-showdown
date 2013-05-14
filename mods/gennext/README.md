@@ -173,6 +173,8 @@ New mechanic: Signature Pokemon:
 
   - Banette: Shadow Sneak
 
+  - Masquerain: Surf (10% -1 Spe)
+
 New mechanic: Intrinsics:
 
 - Pokemon that previously get Levitate are now immune to Ground intrinsically.
@@ -285,8 +287,6 @@ Minor move changes:
 - Sacred Sword now has 95 base power
 
 - Egg Bomb is now 40 base power autocrit
-
-- Surf has a 10% chance to lower Speed
 
 - Minimize only increases evasion by one stage
 

@@ -906,24 +906,6 @@ exports.BattleMovedex = {
 		}
 	},
 	/******************************************************************
-	Surf:
-	- 10% chance of lowering Speed
-
-	Justification:
-	- Hydro Pump outclasses Surf way too often
-	- This is really minor, but maybe it'll affect Sheer Force or
-	  something
-	******************************************************************/
-	surf: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			boosts: {
-				spe: -1
-			}
-		}
-	},
-	/******************************************************************
 	Special Ghost and Fighting:
 	- buff Ghost, nerf Fighting
 
@@ -1221,6 +1203,18 @@ exports.BattleMovedex = {
 				boosts: {
 					def: 1
 				}
+			}
+		}
+	},
+	surf: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'masquerain') return power * 1.5;
+		},
+		secondary: {
+			chance: 10,
+			boosts: {
+				spe: -1
 			}
 		}
 	},
