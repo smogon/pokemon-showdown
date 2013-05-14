@@ -14,7 +14,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod']
 	},
 	unratedrandombattle: {
 		name: "Unrated Random Battle",
@@ -200,7 +200,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		rated: true,
 		// no restrictions, for serious
-		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
+		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew',
 			'Mewtwo',
 			'Lugia',
@@ -560,7 +560,7 @@ exports.BattleFormats = {
 
 	standardnext: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Double Team'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -584,7 +584,7 @@ exports.BattleFormats = {
 
 	standard: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause'],
 		banlist: ['Unreleased', 'Illegal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -604,7 +604,7 @@ exports.BattleFormats = {
 	},
 	standardubers: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'Moody Clause', 'OHKO Clause'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause'],
 		banlist: ['Unreleased', 'Illegal'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -624,7 +624,7 @@ exports.BattleFormats = {
 	},
 	standarddw: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause'],
 		banlist: ['Illegal', 'Moody'],
 		validateSet: function(set) {
 			// limit one of each move in Standard
@@ -870,10 +870,10 @@ exports.BattleFormats = {
 			this.add('rule', 'Moody Clause: Moody is banned');
 		}
 	},
-	sleepclause: {
+	sleepclausemod: {
 		effectType: 'Rule',
 		onStart: function() {
-			this.add('rule', 'Sleep Clause: Limit one foe put to sleep');
+			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
 		onSetStatus: function(status, target, source) {
 			if (source && source.side === target.side) {
@@ -885,7 +885,7 @@ exports.BattleFormats = {
 					if (pokemon.status === 'slp') {
 						if (!pokemon.statusData.source ||
 							pokemon.statusData.source.side !== pokemon.side) {
-							this.add('-message', 'Sleep Clause activated.');
+							this.add('-message', 'Sleep Clause Mod activated.');
 							return false;
 						}
 					}
