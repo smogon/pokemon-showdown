@@ -967,12 +967,22 @@ var BattlePokemon = (function() {
 			hpstring = ''+this.hp+'/'+this.maxhp;
 		} else {
 			var ratio = this.hp / this.maxhp;
-			var pixels = Math.floor(ratio * 48) || 1;
-			hpstring = '' + pixels + '/48';
-			if ((pixels === 9) && (ratio > 0.2)) {
-				hpstring += 'y'; // force yellow HP bar
-			} else if ((pixels === 24) && (ratio > 0.5)) {
-				hpstring += 'g'; // force green HP bar
+			if (this.battle.reportPercentages) {
+				// HP Percentage Mod mechanics
+				var percentage = Math.ceil(ratio * 100);
+				if ((percentage === 100) && (ratio < 1.0)) {
+					percentage = 99;
+				}
+				hpstring = '' + percentage + '/100';
+			} else {
+				// In-game accurate pixel health mechanics
+				var pixels = Math.floor(ratio * 48) || 1;
+				hpstring = '' + pixels + '/48';
+				if ((pixels === 9) && (ratio > 0.2)) {
+					hpstring += 'y'; // force yellow HP bar
+				} else if ((pixels === 24) && (ratio > 0.5)) {
+					hpstring += 'g'; // force green HP bar
+				}
 			}
 		}
 		if (this.status) hpstring += ' ' + this.status;
@@ -1229,6 +1239,7 @@ var Battle = (function() {
 	Battle.prototype.currentRequest = '';
 	Battle.prototype.rqid = 0;
 	Battle.prototype.lastMoveLine = 0;
+	Battle.prototype.reportPercentages = false;
 
 	Battle.prototype.toString = function() {
 		return 'Battle: '+this.format;
