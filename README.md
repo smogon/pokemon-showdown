@@ -113,18 +113,24 @@ Pokémon Showdown's server is distributed under the terms of the [MIT License][6
 Credits
 ------------------------------------------------------------------------
 
-Pokémon Showdown was created by Guangcong Luo [Zarel].
+Owner
 
-Developers
+- Guangcong Luo [Zarel] - Development, Design
 
-- Guangcong Luo [Zarel]
-- Cathy J. Fitzpatrick [cathyjf]
-- Bill Meltsner [bmelts]
+Senior Staff
+
+- Cathy J. Fitzpatrick [cathyjf] - Development
+
+Staff
+
+- Bill Meltsner [bmelts] - Development
+- [Marty-D] - Research, Development
 
 Contributors
 
-- [Marty-D]
-- [The Immortal]
-- [Joim]
-- Cody Thompson [Rising_Dusk]
-- Kyle Dove [Kyle-Dove]
+- Cody Thompson [Rising_Dusk] - Development
+- Juanma Serrano [Joim] - Development
+- Kyle Dove [Kyle_Dove] - Art (battle backdrops)
+- Samuel Teo [Yilx] - Art (main background)
+- [The Immortal] - Development
+- [Zracknel] - Art (battle weather backdrops)
