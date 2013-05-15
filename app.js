@@ -52,6 +52,12 @@ if (config.watchconfig) {
 	});
 }
 
+config.package = {};
+fs.readFile('package.json', function(err, data) {
+	if (err) return;
+	config.package = JSON.parse(data);
+});
+
 if (process.argv[2] && parseInt(process.argv[2])) {
 	config.port = parseInt(process.argv[2]);
 }
