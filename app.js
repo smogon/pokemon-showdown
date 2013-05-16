@@ -52,10 +52,10 @@ if (config.watchconfig) {
 	});
 }
 
-config.package = {};
+config.pkg = {};
 fs.readFile('package.json', function(err, data) {
 	if (err) return;
-	config.package = JSON.parse(data);
+	config.pkg = JSON.parse(data);
 });
 
 if (process.argv[2] && parseInt(process.argv[2])) {
