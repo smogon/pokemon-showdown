@@ -1938,8 +1938,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		}
 		if (target === '%' || target === 'mute' || target === 'm') {
 			matched = true;
-			emit(socket, 'console', '/mute OR /m [username], [reason] - Mute user with reason. Requires: % @ & ~');
+			emit(socket, 'console', '/mute OR /m [username], [reason] - Mute user with reason for 7 minutes. Requires: % @ & ~');
 		}
+		if (target === '%' || target === 'hourmute') {
+			matched = true;
+			emit(socket, 'console', '/hourmute , [reason] - Mute user with reason for an hour. Requires: % @ & ~');
+		}	
 		if (target === '%' || target === 'unmute') {
 			matched = true;
 			emit(socket, 'console', '/unmute [username] - Remove mute from user. Requires: % @ & ~');
