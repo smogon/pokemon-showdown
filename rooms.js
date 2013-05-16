@@ -878,7 +878,7 @@ var BattleRoom = (function() {
 	};
 	// This function is only called when the room is not empty.
 	// Joining an empty room calls this.join() below instead.
-	BattleRoom.prototype.onInitSocket = function(user, socket) {
+	BattleRoom.prototype.onJoinSocket = function(user, socket) {
 		var initdata = {
 			name: user.name,
 			named: user.named,
