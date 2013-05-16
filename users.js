@@ -611,7 +611,7 @@ var User = (function () {
 		this.connected = false;
 		this.lastConnected = Date.now();
 	};
-	User.prototype.disconnect = function(socket) {
+	User.prototype.onDisconnect = function(socket) {
 		var connection = null;
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i].socket === socket) {

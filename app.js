@@ -351,7 +351,7 @@ server.on('connection', function(socket) {
 		}
 		var youUser = resolveUser(you, socket);
 		if (!youUser) return;
-		youUser.disconnect(socket);
+		youUser.onDisconnect(socket);
 	});
 
 	you = Users.connectUser(socket);
