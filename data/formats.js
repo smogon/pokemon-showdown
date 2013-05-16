@@ -375,7 +375,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'HP Percentage Mod'],
+		ruleset: ['Hackmon', 'HP Percentage Mod'],
 		banlist: []
 	},
 	balancedhackmons: {
@@ -750,6 +750,77 @@ exports.BattleFormats = {
 		validateSet: function(set, format) {
 			// don't return
 			this.getEffect('Pokemon').validateSet.call(this, set, format);
+		}
+	},
+	hackmon: {
+		effectType: 'Banlist',
+		validateSet: function(set, format) {
+			var item = this.getItem(set.item);
+			var template = this.getTemplate(set.species);
+			var problems = [];
+
+			// Only change Pokémon that can't be obtained through a fake GTS
+			if (set.species === set.name) delete set.name;
+			if (template.num == 493) { // Arceus
+				if (set.ability === 'Multitype' && item.onPlate) {
+					set.species = 'Arceus-'+item.onPlate;
+				} else {
+					set.species = 'Arceus';
+				}
+			}
+			if (template.num == 487) { // Giratina
+				if (item.id === 'griseousorb') {
+					set.species = 'Giratina-Origin';
+					if (format.banlistTable && format.banlistTable['illegal']) set.ability = 'Levitate';
+				} else {
+					set.species = 'Giratina';
+					if (format.banlistTable && format.banlistTable['illegal']) set.ability = 'Pressure';
+				}
+			}
+			if (template.num == 555) { // Darmanitan
+				set.species = 'Darmanitan';
+			}
+			if (template.num == 351) { // Castform
+				set.species = 'Castform';
+			}
+			if (template.num == 421) { // Cherrim
+				set.species = 'Cherrim';
+			}
+			if (template.gen > this.gen) {
+				problems.push(set.species+' does not exist in gen '+this.gen+'.');
+			} else if (template.isNonstandard) {
+				problems.push(set.species+' is not a real Pokemon.');
+			}
+			if (set.ability) {
+				var ability = this.getAbility(set.ability);
+				if (ability.gen > this.gen) {
+					problems.push(ability.name+' does not exist in gen '+this.gen+'.');
+				} else if (ability.isNonstandard) {
+					problems.push(ability.name+' is not a real ability.');
+				}
+			}
+			if (set.moves) for (var i=0; i<set.moves.length; i++) {
+				var move = this.getMove(set.moves[i]);
+				if (move.gen > this.gen) {
+					problems.push(move.name+' does not exist in gen '+this.gen+'.');
+				} else if (move.isNonstandard) {
+					problems.push(move.name+' is not a real move.');
+				}
+			}
+			if (item) {
+				if (item.gen > this.gen) {
+					problems.push(item.name+' does not exist in gen '+this.gen+'.');
+				} else if (item.isNonstandard) {
+					problems.push(item.name + ' is not a real item.');
+				}
+			}
+			if (set.moves && set.moves.length > 4) {
+				problems.push((set.name||set.species) + ' has more than four moves.');
+			}
+			if (set.level && set.level > 100) {
+				problems.push((set.name||set.species) + ' is higher than level 100.');
+			}
+			return problems;
 		}
 	},
 	legal: {
