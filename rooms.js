@@ -938,7 +938,7 @@ var BattleRoom = (function() {
 		}
 		return user;
 	};
-	GlobalRoom.prototype.onUpdateIdentity = function() {};
+	BattleRoom.prototype.onUpdateIdentity = function() {};
 	BattleRoom.prototype.onLeave = function(user) {
 		if (!user) return; // ...
 		if (user.battles[this.id]) {

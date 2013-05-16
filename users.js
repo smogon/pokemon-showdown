@@ -1042,10 +1042,11 @@ exports.checkBanned = checkBanned;
 exports.checkLocked = checkLocked;
 
 function unban(name) {
+	var success;
 	var userid = toId(name);
 	for (var ip in bannedIps) {
-		if (Users.bannedIps[ip] === userid) {
-			delete Users.bannedIps[ip];
+		if (bannedIps[ip] === userid) {
+			delete bannedIps[ip];
 			success = true;
 		}
 	}
