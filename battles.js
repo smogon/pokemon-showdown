@@ -2006,7 +2006,6 @@ var Battle = (function() {
 		this.win();
 	};
 	Battle.prototype.win = function(side) {
-		var winSide = false;
 		if (this.ended) {
 			return false;
 		}
@@ -3296,6 +3295,12 @@ var Battle = (function() {
 	Battle.prototype.leave = function(slot) {
 		if (slot === 'p1' || slot === 'p2') {
 			var side = this[slot];
+			if (!side) {
+				console.log('**** '+slot+' tried to leave before it was possible in '+this.id);
+				require('./crashlogger.js')({stack: '**** '+slot+' tried to leave before it was possible in '+this.id}, 'A simulator process');
+				return;
+			}
+
 			side.emitUpdate({side:'none'});
 			side.isActive = false;
 			this.add('player', slot);
