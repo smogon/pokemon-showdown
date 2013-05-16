@@ -724,6 +724,7 @@ var User = (function () {
 	User.prototype.mute = function(time, noRecurse) {
 		if (this.muted) return;
 		if (!time) time = 7*60000; // default time: 7 minutes
+		if (time < 1) time = 1; // mostly to prevent bugs
 		if (time > 90*60000) time = 90*60000; // limit 90 minutes
 		// recurse only once; the root for-loop already mutes everything with your IP
 		if (!noRecurse) for (var i in users) {
