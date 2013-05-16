@@ -347,6 +347,7 @@ var GlobalRoom = (function() {
 		this.users[user.userid] = user;
 		return user;
 	};
+	GlobalRoom.prototype.onUpdateIdentity = function() {};
 	GlobalRoom.prototype.onLeave = function(user) {
 		if (!user) return; // ...
 		delete this.users[user.userid];
@@ -937,6 +938,7 @@ var BattleRoom = (function() {
 		}
 		return user;
 	};
+	GlobalRoom.prototype.onUpdateIdentity = function() {};
 	BattleRoom.prototype.onLeave = function(user) {
 		if (!user) return; // ...
 		if (user.battles[this.id]) {
@@ -1279,16 +1281,6 @@ var ChatRoom = (function() {
 			}
 		}
 	};
-	ChatRoom.prototype.sendIdentity = function(user) {
-		if (user && user.connected && user.named) {
-			var entry = '|N|' + user.getIdentity() + '|' + user.userid;
-			if (config.reportjoinsperiod) {
-				this.reportJoinsQueue.push(entry);
-			} else {
-				this.send(entry);
-			}
-		}
-	};
 	ChatRoom.prototype.sendAuth = function(message) {
 		for (var i in this.users) {
 			var user = this.users[i];
@@ -1376,6 +1368,19 @@ var ChatRoom = (function() {
 			this.logEntry(entry);
 		}
 		return user;
+	};
+	/**
+	 * onRename, but without a userid change
+	 */
+	ChatRoom.prototype.onUpdateIdentity = function(user) {
+		if (user && user.connected && user.named) {
+			var entry = '|N|' + user.getIdentity() + '|' + user.userid;
+			if (config.reportjoinsperiod) {
+				this.reportJoinsQueue.push(entry);
+			} else {
+				this.send(entry);
+			}
+		}
 	};
 	ChatRoom.prototype.onLeave = function(user) {
 		if (!user) return; // ...

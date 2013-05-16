@@ -40,7 +40,7 @@ function connectUser(socket, room) {
 			console.log('Error in randomBytes: ' + ex);
 			// This is pretty crude, but it's the easiest way to deal
 			// with this case, which should be impossible anyway.
-			user.destroy();
+			user.disconnectAll();
 		} else if (connection.user) {	// if user is still connected
 			connection.challenge = buffer.toString('hex');
 			console.log('JOIN: ' + connection.user.name + ' [' + connection.challenge.substr(0, 15) + '] [' + socket.id + ']');
@@ -343,6 +343,15 @@ var User = (function () {
 		}
 		return true;
 	};
+	User.prototype.updateIdentity = function() {
+		// We'll need the for-loop when we implement chatrooms
+		// for (var i in this.roomCount) {
+		// 	Rooms.get(i,'lobby').onUpdateIdentity(this);
+		// }
+		if ('lobby' in this.roomCount) {
+			Rooms.lobby.onUpdateIdentity(this);
+		}
+	};
 	/**
 	 *
 	 * @param name    	The name you want
@@ -635,6 +644,27 @@ var User = (function () {
 			this.roomCount = {};
 		}
 	};
+	User.prototype.disconnectAll = function() {
+		// Disconnects a user from the server
+		if (this.muteTimeout) {
+			clearTimeout(this.muteTimeout);
+			this.muteTimeout = null;
+		}
+		this.destroyChatQueue();
+		var connection = null;
+		this.markInactive();
+		for (var i=0; i<this.connections.length; i++) {
+			console.log('DESTROY: '+this.userid);
+			connection = this.connections[i];
+			connection.user = null;
+			for (var j in connection.rooms) {
+				this.leaveRoom(connection.rooms[j], connection, true);
+			}
+			connection.socket.end();
+			--this.ips[connection.ip];
+		}
+		this.connections = [];
+	};
 	User.prototype.getAlts = function() {
 		var alts = [];
 		for (var i in users) {
@@ -691,46 +721,59 @@ var User = (function () {
 			this.mmrCache[formatid] = (parseInt(mmr.r,10) + parseInt(mmr.rpr,10))/2;
 		}
 	};
+	User.prototype.mute = function(time, noRecurse) {
+		if (this.muted) return;
+		if (!time) time = 7*60000; // default time: 7 minutes
+		if (time > 90*60000) time = 90*60000; // limit 90 minutes
+		// recurse only once; the root for-loop already mutes everything with your IP
+		if (!noRecurse) for (var i in users) {
+			if (users[i] === this) continue;
+			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
+			users[i].mute(time, true);
+		}
+
+		var self = this;
+		this.muteTimeout = setTimeout(function() {
+			self.unmute(true);
+		}, time);
+		this.muted = true;
+		this.updateIdentity();
+	};
+	User.prototype.unmute = function(expired) {
+		if (this.muteTimeout) {
+			clearTimeout(this.muteTimeout);
+			this.muteTimeout = null;
+		}
+		if (expired) this.emit('message', 'Your mute has expired.');
+		this.muted = false;
+		this.updateIdentity();
+	};
 	User.prototype.ban = function(noRecurse) {
-		// no need to recurse, since the root for-loop already bans everything with your IP
+		// recurse only once; the root for-loop already bans everything with your IP
 		if (!noRecurse) for (var i in users) {
 			if (users[i] === this) continue;
 			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
 			users[i].ban(true);
 		}
+
 		for (var ip in this.ips) {
 			bannedIps[ip] = this.userid;
 		}
-		this.destroy();
+		this.disconnectAll();
 	};
 	User.prototype.lock = function(noRecurse) {
-		// no need to recurse, since the root for-loop already bans everything with your IP
+		// recurse only once; the root for-loop already locks everything with your IP
 		if (!noRecurse) for (var i in users) {
 			if (users[i] === this) continue;
 			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
 			users[i].lock(true);
 		}
+
 		for (var ip in this.ips) {
 			lockedIps[ip] = this.userid;
 		}
 		this.locked = true;
-	};
-	User.prototype.destroy = function() {
-		// Disconnects a user from the server
-		this.destroyChatQueue();
-		var connection = null;
-		this.markInactive();
-		for (var i=0; i<this.connections.length; i++) {
-			console.log('DESTROY: '+this.userid);
-			connection = this.connections[i];
-			connection.user = null;
-			for (var j in connection.rooms) {
-				this.leaveRoom(connection.rooms[j], connection, true);
-			}
-			connection.socket.end();
-			--this.ips[connection.ip];
-		}
-		this.connections = [];
+		this.updateIdentity();
 	};
 	User.prototype.getConnectionFromSocket = function(socket) {
 		for (var i = 0; ; ++i) {
@@ -932,6 +975,15 @@ var User = (function () {
 			this.chatQueueTimeout = null;
 		}
 	};
+	User.prototype.destroy = function() {
+		// deallocate user
+		if (this.muteTimeout) {
+			clearTimeout(this.muteTimeout);
+			this.muteTimeout = null;
+		}
+		this.destroyChatQueue();
+		delete users[this.userid];
+	};
 	// "static" function
 	User.pruneInactive = function(threshold) {
 		var now = Date.now();
@@ -939,7 +991,7 @@ var User = (function () {
 			var user = users[i];
 			if (user.connected) continue;
 			if ((now - user.lastConnected) > threshold) {
-				delete users[i];
+				users[i].destroy();
 			}
 		}
 	};
@@ -1007,6 +1059,7 @@ function unlock(name, unlocked, noRecurse) {
 		if (user.userid === userid) name = user.name;
 		if (user.locked) {
 			user.locked = false;
+			user.updateIdentity();
 			unlocked = unlocked || {};
 			unlocked[name] = 1;
 		}

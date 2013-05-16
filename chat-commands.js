@@ -302,14 +302,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also locked: "+alts.join(", "));
 
 		targetUser.lock();
-
-		Rooms.lobby.sendIdentity(targetUser);
-		for (var i=0; i<alts.length; i++) {
-			var targetAlt = Users.get(alts[i]);
-			if (targetAlt) {
-				Rooms.lobby.sendIdentity(targetAlt);
-			}
-		}
 		return false;
 		break;
 
@@ -327,12 +319,6 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			logModCommand(room, '' + names.join(', ') + ' ' +
 					((names.length > 1) ? 'were' : 'was') +
 					' unlocked by ' + user.name + '.');
-			for (var i = 0; i < names.length; ++i) {
-				var unlockedUser = Users.get(names[i]);
-				if (unlockedUser) {
-					Rooms.lobby.sendIdentity(unlockedUser);
-				}
-			}
 		} else {
 			emit(socket, 'console', 'User '+target+' is not locked.');
 		}
@@ -442,20 +428,49 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		logModCommand(room,''+targetUser.name+' was muted by '+user.name+'.' + (targets[1] ? " (" + targets[1] + ")" : ""));
-		targetUser.emit('message', user.name+' has muted you. '+targets[1]);
+		if (targetUser.muted) {
+			logModCommand(room,''+targetUser.name+' was already muted; '+user.name+' was too late.' + (targets[1] ? " (" + targets[1] + ")" : ""));
+			return false;
+		}
+
+		logModCommand(room,''+targetUser.name+' was muted by '+user.name+' for 7 minutes.' + (targets[1] ? " (" + targets[1] + ")" : ""));
+		targetUser.emit('message', user.name+' has muted you for 7 minutes. '+targets[1]);
 		var alts = targetUser.getAlts();
 		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 
-		targetUser.muted = true;
-		Rooms.lobby.sendIdentity(targetUser);
-		for (var i=0; i<alts.length; i++) {
-			var targetAlt = Users.get(alts[i]);
-			if (targetAlt) {
-				targetAlt.muted = true;
-				Rooms.lobby.sendIdentity(targetAlt);
-			}
+		targetUser.mute(7*60*1000);
+
+		return false;
+		break;
+
+	case 'hourmute':
+		if (!target) return parseCommand(user, '?', cmd, room, socket);
+		var targets = splitTarget(target);
+		var targetUser = targets[0];
+		if (!targetUser) {
+			emit(socket, 'console', 'User '+targets[2]+' not found.');
+			return false;
 		}
+		if (!user.can('mute', targetUser)) {
+			emit(socket, 'console', '/mute - Access denied.');
+			return false;
+		}
+		if (room.id !== 'lobby') {
+			emit(socket, 'console', 'Muting only applies to lobby - you probably wanted to /lock.');
+			return false;
+		}
+
+		if (targetUser.muted) {
+			logModCommand(room,''+targetUser.name+' was already muted; '+user.name+' was too late.' + (targets[1] ? " (" + targets[1] + ")" : ""));
+			return false;
+		}
+
+		logModCommand(room,''+targetUser.name+' was muted by '+user.name+' for 60 minutes.' + (targets[1] ? " (" + targets[1] + ")" : ""));
+		targetUser.emit('message', user.name+' has muted you for 60 minutes. '+targets[1]);
+		var alts = targetUser.getAlts();
+		if (alts.length) logModCommand(room,""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
+
+		targetUser.mute(60*60*1000);
 
 		return false;
 		break;
@@ -474,8 +489,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			return false;
 		}
 
-		targetUser.muted = false;
-		Rooms.lobby.sendIdentity(targetUser);
+		targetUser.unmute();
 		logModCommand(room,''+targetUser.name+' was unmuted by '+user.name+'.');
 		return false;
 		break;
@@ -521,7 +535,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				targetUser.emit('console', 'You were demoted to ' + groupName + ' by ' + user.name + '.');
 			}
 		}
-		Rooms.lobby.sendIdentity(targetUser);
+		targetUser.updateIdentity();
 		return false;
 		break;
 
