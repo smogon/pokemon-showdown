@@ -940,7 +940,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
 			'<div class="infobox">' +
-			'Server version: <b>'+config.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + parseCommandLocal.serverVersion + '" target="_blank">' + parseCommandLocal.serverVersion.substr(0,10) + '</a>)</small>' +
+			'Server version: <b>'+config.pkg.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + parseCommandLocal.serverVersion + '" target="_blank">' + parseCommandLocal.serverVersion.substr(0,10) + '</a>)</small>' +
 			'</div>');
 		return false;
 		break;
