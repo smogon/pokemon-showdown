@@ -124,7 +124,7 @@ Senior Staff
 Staff
 
 - Bill Meltsner [bmelts] - Development
-- Mathieu Dias-Martins [Marty-D] - Research, Development
+- Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 
 Contributors
 
