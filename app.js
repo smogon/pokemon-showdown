@@ -285,9 +285,6 @@ var events = {
 
 var socketCounter = 0;
 server.on('connection', function(socket) {
-	if (!socket) {
-		throw {stack: '`socket` is empty in `connection` event!'};
-	}
 	if (!socket.remoteAddress) {
 		// This condition occurs several times per day. It may be a SockJS bug.
 		try {
