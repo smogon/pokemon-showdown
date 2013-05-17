@@ -675,39 +675,6 @@ exports.BattleFormats = {
 			var problems = [];
 
 			if (set.species === set.name) delete set.name;
-			if (template.num == 493) { // Arceus
-				if (set.ability === 'Multitype' && item.onPlate) {
-					set.species = 'Arceus-'+item.onPlate;
-				} else {
-					set.species = 'Arceus';
-				}
-			}
-			if (template.num == 487) { // Giratina
-				if (item.id === 'griseousorb') {
-					set.species = 'Giratina-Origin';
-					if (format.banlistTable && format.banlistTable['illegal']) set.ability = 'Levitate';
-				} else {
-					set.species = 'Giratina';
-					if (format.banlistTable && format.banlistTable['illegal']) set.ability = 'Pressure';
-				}
-			}
-			if (template.num == 555) { // Darmanitan
-				set.species = 'Darmanitan';
-			}
-			if (template.num == 648) { // Meloetta
-				set.species = 'Meloetta';
-			}
-			if (template.num == 351) { // Castform
-				set.species = 'Castform';
-			}
-			if (template.num == 421) { // Cherrim
-				set.species = 'Cherrim';
-			}
-			if (template.num == 647) { // Keldeo
-				if (set.species === 'Keldeo-Resolution' && set.moves.indexOf('Secret Sword') < 0) {
-					set.species = 'Keldeo';
-				}
-			}
 			if (template.gen > this.gen) {
 				problems.push(set.species+' does not exist in gen '+this.gen+'.');
 			} else if (template.isNonstandard) {
@@ -741,6 +708,44 @@ exports.BattleFormats = {
 			}
 			if (set.level && set.level > 100) {
 				problems.push((set.name||set.species) + ' is higher than level 100.');
+			}
+
+			// ----------- legality line ------------------------------------------
+			if (!format.banlistTable || !format.banlistTable['illegal']) return;
+			// everything after this line only happens if we're doing legality enforcement
+
+			if (template.num == 351) { // Castform
+				set.species = 'Castform';
+			}
+			if (template.num == 421) { // Cherrim
+				set.species = 'Cherrim';
+			}
+			if (template.num == 493) { // Arceus
+				if (set.ability === 'Multitype' && item.onPlate) {
+					set.species = 'Arceus-'+item.onPlate;
+				} else {
+					set.species = 'Arceus';
+				}
+			}
+			if (template.num == 555) { // Darmanitan
+				set.species = 'Darmanitan';
+			}
+			if (template.num == 487) { // Giratina
+				if (item.id === 'griseousorb') {
+					set.species = 'Giratina-Origin';
+					set.ability = 'Levitate';
+				} else {
+					set.species = 'Giratina';
+					set.ability = 'Pressure';
+				}
+			}
+			if (template.num == 647) { // Keldeo
+				if (set.species === 'Keldeo-Resolution' && set.moves.indexOf('Secret Sword') < 0) {
+					set.species = 'Keldeo';
+				}
+			}
+			if (template.num == 648) { // Meloetta
+				set.species = 'Meloetta';
 			}
 			return problems;
 		}
