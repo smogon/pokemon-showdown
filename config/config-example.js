@@ -201,6 +201,7 @@ exports.customavatars = {
 //                       and 'u' is another special group where it means all groups
 //                       lower in rank than the current group.
 //   All the possible permissions are as follows:
+//     - console: Developer console (>>).
 //     - lockdown: /lockdown and /endlockdown commands.
 //     - hotpatch: /hotpatch, /crashfixed and /savelearnsets commands.
 //     - ignorelimits: Ignore limits such as chat message length.
@@ -215,6 +216,7 @@ exports.customavatars = {
 //     - ip: IP checking.
 //     - alts: Alt checking.
 //     - broadcast: Broadcast informational commands.
+//     - declare: /declare command.
 //     - announce: /announce command.
 //     - modchat: Set modchat.
 //     - potd: Set PotD.
@@ -237,8 +239,8 @@ exports.groups = {
 		forcewin: true,
 		declare: true,
 		modchatall: true,
+		rangeban: true,
 		potd: true,
-		forcerenameto: true,
 		disableladder: true,
 		rank: 4
 	},
@@ -249,9 +251,7 @@ exports.groups = {
 		jurisdiction: 'u',
 		ban: true,
 		modchat: true,
-		redirect: true,
 		forcerename: true,
-		modlog: true,
 		ip: true,
 		alts: '@u',
 		rank: 3
@@ -263,10 +263,12 @@ exports.groups = {
 		jurisdiction: 'u',
 		announce: true,
 		warn: true,
+		kick: true,
 		mute: true,
 		lock: true,
 		forcerename: true,
 		timer: true,
+		modlog: true,
 		alts: '%u',
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,

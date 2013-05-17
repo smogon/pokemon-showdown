@@ -1633,7 +1633,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (!target) {
 			return parseCommand(user, 'help', 'banip', room, socket);
 		}
-		if (!user.can('modchat')) {
+		if (!user.can('rangeban')) {
 			emit(socket, 'console', '/banip - Access denied.');
 			return false;
 		}
@@ -1648,7 +1648,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (!target) {
 			return parseCommand(user, 'help', 'unbanip', room, socket);
 		}
-		if (!user.can('modchat')) {
+		if (!user.can('rangeban')) {
 			emit(socket, 'console', '/unbanip - Access denied.');
 			return false;
 		}
