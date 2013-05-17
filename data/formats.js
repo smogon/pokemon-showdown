@@ -711,7 +711,7 @@ exports.BattleFormats = {
 			}
 
 			// ----------- legality line ------------------------------------------
-			if (!format.banlistTable || !format.banlistTable['illegal']) return;
+			if (!format.banlistTable || !format.banlistTable['illegal']) return problems;
 			// everything after this line only happens if we're doing legality enforcement
 
 			if (template.num == 351) { // Castform
