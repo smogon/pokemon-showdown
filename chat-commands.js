@@ -1628,6 +1628,39 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		return false;
 		break;
 
+	case 'banip':
+		target = target.trim();
+		if (!target) {
+			return parseCommand(user, 'help', 'banip', room, socket);
+		}
+		if (!user.can('modchat')) {
+			emit(socket, 'console', '/banip - Access denied.');
+			return false;
+		}
+
+		Users.bannedIps[target] = '#ipban';
+		logModCommand(room,user.name+' temporarily banned the '+(target.charAt(target.length-1)==='*'?'IP range':'IP')+': '+target);
+		return false;
+		break;
+
+	case 'unbanip':
+		target = target.trim();
+		if (!target) {
+			return parseCommand(user, 'help', 'unbanip', room, socket);
+		}
+		if (!user.can('modchat')) {
+			emit(socket, 'console', '/unbanip - Access denied.');
+			return false;
+		}
+		if (!Users.bannedIps[target]) {
+			emit(socket, 'console', ''+target+' is not a banned IP or IP range.');
+			return false;
+		}
+		delete Users.bannedIps[target];
+		logModCommand(room,user.name+' unbanned the '+(target.charAt(target.length-1)==='*'?'IP range':'IP')+': '+target);
+		return false;
+		break;
+
 	case 'refreshpage':
 		if (!user.can('hotpatch')) {
 			emit(socket, 'console', '/refreshpage - Access denied.');
