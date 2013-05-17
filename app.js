@@ -253,7 +253,7 @@ if (config.crashguard) {
 // event functions
 var events = {
 	join: function(data, socket, you) {
-		if (!data || typeof data.room !== 'string') return;
+		if (typeof data.room !== 'string') return;
 
 		var youUser = resolveUser(you);
 		if (!youUser) return;
@@ -265,7 +265,7 @@ var events = {
 		youUser.joinRoom(data.room, socket);
 	},
 	chat: function(message, socket, you) {
-		if (!message || typeof message.room !== 'string' || typeof message.message !== 'string') return;
+		if (typeof message.room !== 'string' || typeof message.message !== 'string') return;
 		var youUser = resolveUser(you);
 		if (!youUser) return;
 		var room = Rooms.get(message.room, 'lobby');
@@ -274,7 +274,7 @@ var events = {
 		});
 	},
 	leave: function(data, socket, you) {
-		if (!data || typeof data.room !== 'string') return;
+		if (typeof data.room !== 'string') return;
 		var youUser = resolveUser(you);
 		if (!youUser) return;
 		youUser.leaveRoom(Rooms.get(data.room, 'lobby'), socket);
@@ -336,8 +336,9 @@ server.on('connection', function(socket) {
 				message: message.substr(pipeIndex+1)
 			};
 		}
-		if (!data) return;
-		if (events[data.type]) you = events[data.type](data, socket, you) || you;
+		if (data && (data.type in events)) {
+			events[data.type](data, socket, you);
+		}
 	});
 
 	socket.on('close', function() {
