@@ -1829,7 +1829,7 @@ var Battle = (function() {
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
 			this.resolveLastPriority(statuses,callbackType);
 		}
-		status = this.getEffect(thing.species);
+		status = this.getEffect(thing.template.baseSpecies);
 		if (typeof status[callbackType] !== 'undefined') {
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.speciesData, end: function(){}, thing: thing});
 			this.resolveLastPriority(statuses,callbackType);

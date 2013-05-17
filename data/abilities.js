@@ -1347,15 +1347,7 @@ exports.BattleAbilities = {
 	"multitype": {
 		desc: "This Pokemon changes its type to match its corresponding held Plate; this ability only works for Arceus, prevents the removal of Arceus' held item and cannot be Skill Swapped, Role Played or Traced.",
 		shortDesc: "If this Pokemon is Arceus, its type changes to match its held Plate.",
-		onModifyPokemon: function(pokemon) {
-			if (pokemon.baseTemplate.species !== 'Arceus') {
-				return;
-			}
-			var type = this.runEvent('Plate', pokemon);
-			if (type && type !== true) {
-				pokemon.types = [type];
-			}
-		},
+		// Multitype's type-changing itself is implemented in statuses.js
 		onTakeItem: function(item) {
 			if (item.onPlate) return false;
 		},
