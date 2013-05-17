@@ -214,10 +214,9 @@ Simulator = require('./simulator.js');
 
 lockdown = false;
 
-function resolveUser(you, socket) {
+function resolveUser(you) {
 	if (!you) {
-		emit(socket, 'connectionError', 'There has been a connection error. Please refresh the page.');
-		return false;
+		throw {stack: '`you` is empty in `resolveUser` - this should be impossible'};
 	}
 	return you.user;
 }
@@ -255,9 +254,8 @@ if (config.crashguard) {
 var events = {
 	join: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
-		if (!you) return; // should be impossible
 
-		var youUser = resolveUser(you, socket);
+		var youUser = resolveUser(you);
 		if (!youUser) return;
 		if (data.nojoin) {
 			// this event is being emitted for legacy servers, but the client
@@ -268,7 +266,7 @@ var events = {
 	},
 	chat: function(message, socket, you) {
 		if (!message || typeof message.room !== 'string' || typeof message.message !== 'string') return;
-		var youUser = resolveUser(you, socket);
+		var youUser = resolveUser(you);
 		if (!youUser) return;
 		var room = Rooms.get(message.room, 'lobby');
 		message.message.split('\n').forEach(function(text){
@@ -277,7 +275,7 @@ var events = {
 	},
 	leave: function(data, socket, you) {
 		if (!data || typeof data.room !== 'string') return;
-		var youUser = resolveUser(you, socket);
+		var youUser = resolveUser(you);
 		if (!youUser) return;
 		youUser.leaveRoom(Rooms.get(data.room, 'lobby'), socket);
 	}
@@ -346,7 +344,7 @@ server.on('connection', function(socket) {
 		if (interval) {
 			clearInterval(interval);
 		}
-		var youUser = resolveUser(you, socket);
+		var youUser = resolveUser(you);
 		if (!youUser) return;
 		youUser.onDisconnect(socket);
 	});
