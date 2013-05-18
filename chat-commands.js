@@ -567,7 +567,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', 'Moderated chat is currently set to: '+config.modchat);
 			return false;
 		}
-		if (!user.can('modchat')) {
+		if (!user.can('modchat') || !canTalk(user, room)) {
 			emit(socket, 'console', '/modchat - Access denied.');
 			return false;
 		}
@@ -618,6 +618,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', '/declare - Access denied.');
 			return false;
 		}
+		if (!canTalk(user, room, socket)) {
+			return false;
+		}
 		room.addRaw('<div class="broadcast-blue"><b>'+target+'</b></div>');
 		logModCommand(room,user.name+' declared '+target,true);
 		return false;
@@ -628,6 +631,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		if (!target) return parseCommand(user, '?', cmd, room, socket);
 		if (!user.can('announce')) {
 			emit(socket, 'console', '/announce - Access denied.');
+			return false;
+		}
+		if (!canTalk(user, room, socket)) {
 			return false;
 		}
 		return '/announce '+target;
