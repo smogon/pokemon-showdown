@@ -375,7 +375,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'HP Percentage Mod'],
+		ruleset: ['Pokemon'],
 		banlist: []
 	},
 	balancedhackmons: {
@@ -387,7 +387,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod'],
+		ruleset: ['Pokemon', 'OHKO Clause'],
 		banlist: ['Wonder Guard', 'Pure Power', 'Huge Power', 'Shadow Tag', 'Arena Trap']
 	},
 	gennextou: {
