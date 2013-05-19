@@ -535,7 +535,9 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 				targetUser.emit('console', 'You were demoted to ' + groupName + ' by ' + user.name + '.');
 			}
 		}
-		targetUser.updateIdentity();
+		if (targetUser) {
+			targetUser.updateIdentity();
+		}
 		return false;
 		break;
 
