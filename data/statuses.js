@@ -464,6 +464,7 @@ exports.BattleStatuses = {
 		// overridden. This is mainly relevant for Hackmons and Balanced
 		// Hackmons.
 		onModifyPokemon: function(pokemon) {
+			if (pokemon.transformed) return;
 			var type = 'Normal';
 			if (pokemon.ability === 'multitype') {
 				var type = this.runEvent('Plate', pokemon);
