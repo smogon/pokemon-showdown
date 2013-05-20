@@ -1398,8 +1398,12 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 
 	case 'accept':
 		var userid = toUserid(target);
-		var format = 'debugmode';
+		var format = '';
 		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
+		if (!format) {
+			emit(socket, 'message', target+" cancelled their challenge before you could accept it.");
+			return false;
+		}
 		var problems = Tools.validateTeam(user.team, format);
 		if (problems) {
 			emit(socket, 'message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
