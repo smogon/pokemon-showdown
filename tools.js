@@ -687,7 +687,7 @@ module.exports = (function () {
 			if (format.canUseRandomTeam) {
 				return false;
 			}
-			return ["Random teams are not allowed in this format."];
+			return ["You sent invalid team data. If you're not using a custom client, please report this as a bug."];
 		}
 		if (!team.length) {
 			return ["Your team has no pokemon."];
