@@ -67,7 +67,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			for (var i in targetUser.roomCount) {
 				if (i==='global') continue;
 				var targetRoom = Rooms.get(i);
-				if (!targetRoom) continue;
+				if (!targetRoom || targetRoom.isPrivate) continue;
 				var roomData = {};
 				if (targetRoom.battle) {
 					var battle = targetRoom.battle;
@@ -216,7 +216,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			var output = 'In rooms: ';
 			var first = true;
 			for (var i in targetUser.roomCount) {
-				if (i === 'global') continue;
+				if (i === 'global' || Rooms.get(i).isPrivate) continue;
 				if (!first) output += ' | ';
 				first = false;
 
