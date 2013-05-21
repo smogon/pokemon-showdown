@@ -1157,6 +1157,7 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.type = 'chat';
 
 	ChatRoom.prototype.reportRecentJoins = function() {
+		if (this.reportJoinsQueue.length === 0) return;
 		this.userList = this.getUserList();
 		this.send(this.reportJoinsQueue.join('\n'));
 		this.reportJoinsQueue.length = 0;
