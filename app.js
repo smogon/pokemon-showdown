@@ -214,13 +214,6 @@ Simulator = require('./simulator.js');
 
 lockdown = false;
 
-function resolveUser(you) {
-	if (!you) {
-		throw {stack: '`you` is empty in `resolveUser` - this should be impossible'};
-	}
-	return you.user;
-}
-
 emit = function(socket, type, data) {
 	if (typeof data === 'object') data.type = type;
 	else data = {type: type, message: data};
@@ -294,7 +287,7 @@ server.on('connection', function(socket) {
 	socket.on('data', function(message) {
 		if (message.substr(0,1) === '{') return; // drop legacy JSON messages
 
-		var youUser = resolveUser(you);
+		var youUser = you.user;
 		if (!youUser) {
 			// User has already disconnected from server.
 			// It is not clear how this could happen and it may be impossible.
@@ -317,7 +310,7 @@ server.on('connection', function(socket) {
 		if (interval) {
 			clearInterval(interval);
 		}
-		var youUser = resolveUser(you);
+		var youUser = you.user;
 		if (!youUser) return;
 		youUser.onDisconnect(socket);
 	});
