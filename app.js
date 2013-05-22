@@ -250,37 +250,6 @@ if (config.crashguard) {
 	})());
 }
 
-// event functions
-var events = {
-	join: function(data, socket, you) {
-		if (typeof data.room !== 'string') return;
-
-		var youUser = resolveUser(you);
-		if (!youUser) return;
-		if (data.nojoin) {
-			// this event is being emitted for legacy servers, but the client
-			// doesn't actually want to join the room specified
-			return;
-		}
-		youUser.joinRoom(data.room, socket);
-	},
-	chat: function(message, socket, you) {
-		if (typeof message.room !== 'string' || typeof message.message !== 'string') return;
-		var youUser = resolveUser(you);
-		if (!youUser) return;
-		var room = Rooms.get(message.room, 'lobby');
-		message.message.split('\n').forEach(function(text){
-			youUser.chat(text, room, socket);
-		});
-	},
-	leave: function(data, socket, you) {
-		if (typeof data.room !== 'string') return;
-		var youUser = resolveUser(you);
-		if (!youUser) return;
-		youUser.leaveRoom(Rooms.get(data.room, 'lobby'), socket);
-	}
-};
-
 var socketCounter = 0;
 server.on('connection', function(socket) {
 	if (!socket.remoteAddress) {
@@ -323,22 +292,25 @@ server.on('connection', function(socket) {
 	var you;
 
 	socket.on('data', function(message) {
-		var data = null;
-		if (message.substr(0,1) === '{') {
-			try {
-				data = JSON.parse(message);
-			} catch (e) {}
-		} else {
-			var pipeIndex = message.indexOf('|');
-			if (pipeIndex >= 0) data = {
-				type: 'chat',
-				room: message.substr(0, pipeIndex),
-				message: message.substr(pipeIndex+1)
-			};
+		if (message.substr(0,1) === '{') return; // drop legacy JSON messages
+
+		var youUser = resolveUser(you);
+		if (!youUser) {
+			// User has already disconnected from server.
+			// It is not clear how this could happen and it may be impossible.
+			console.log('WARNING: youUser is empty in `data` event!');
+			return;
 		}
-		if (data && (data.type in events)) {
-			events[data.type](data, socket, you);
-		}
+
+		var pipeIndex = message.indexOf('|');
+		if (pipeIndex < 0) return; // invalid message format
+
+		var roomid = message.substr(0, pipeIndex);
+		var message = message.substr(pipeIndex + 1);
+		var room = Rooms.get(roomid, 'lobby');
+		message.split('\n').forEach(function(text){
+			youUser.chat(text, room, socket);
+		});
 	});
 
 	socket.on('close', function() {
