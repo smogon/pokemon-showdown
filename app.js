@@ -299,9 +299,9 @@ server.on('connection', function(socket) {
 		if (pipeIndex < 0) return; // invalid message format
 
 		var roomid = message.substr(0, pipeIndex);
-		var message = message.substr(pipeIndex + 1);
+		var lines = message.substr(pipeIndex + 1);
 		var room = Rooms.get(roomid, 'lobby');
-		message.split('\n').forEach(function(text){
+		lines.split('\n').forEach(function(text){
 			youUser.chat(text, room, socket);
 		});
 	});
