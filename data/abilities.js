@@ -576,11 +576,13 @@ exports.BattleAbilities = {
 			}
 		},
 		onAllyModifyAtk: function(atk) {
+			if (this.effectData.target.template.speciesid !== 'cherrim') return;
 			if (this.isWeather('sunnyday')) {
 				return atk *= 1.5;
 			}
 		},
 		onAllyModifySpD: function(spd) {
+			if (this.effectData.target.template.speciesid !== 'cherrim') return;
 			if (this.isWeather('sunnyday')) {
 				return spd *= 1.5;
 			}
