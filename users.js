@@ -935,6 +935,13 @@ var User = (function () {
 	User.prototype.lastChatMessage = 0;
 	User.prototype.chat = function(message, room, socket) {
 		var now = new Date().getTime();
+
+		if (message.substr(0,5) === '/cmd ') {
+			// commands are exempt from the queue
+			room.chat(this, message, socket);
+			return;
+		}
+
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
 			if (this.chatQueue.length > 6) {
