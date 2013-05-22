@@ -442,35 +442,15 @@ exports.BattleFormats = {
 		ruleset: ['LC'],
 		banlist: ['Abra', 'Aipom', 'Archen', 'Axew', 'Bronzor', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos', 'Croagunk', 'Diglett', 'Drifloon', 'Drilbur', 'Dwebble', 'Ferroseed', 'Foongus', 'Frillish', 'Gastly', 'Hippopotas', 'Houndour', 'Koffing', 'Larvesta', 'Lileep', 'Machop', 'Magnemite', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Murkrow', 'Pawniard', 'Ponyta', 'Porygon', 'Riolu', 'Sandshrew', 'Scraggy', 'Shellder', 'Shroomish', 'Slowpoke', 'Snover', 'Staryu', 'Tentacool', 'Timburr', 'Tirtouga']
 		},
-	dwubers: {
-		name: "DW Ubers",
+	dreamworld: {
+		name: "Dream World",
 		section: "Other Metagames",
 
 		effectType: 'Format',
 		challengeShow: true,
 		isTeambuilderFormat: true,
-		isDWtier: true,
 		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
 		banlist: []
-	},
-	dwou: {
-		name: "DW OU",
-		section: "Other Metagames",
-
-		effectType: 'Format',
-		challengeShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
-		banlist: ['Drizzle ++ Swift Swim', 'Soul Dew', 'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Zekrom']
-	},
-	dwuu: {
-		name: "DW UU",
-		section: "Other Metagames",
-
-		effectType: 'Format',
-		challengeShow: true,
-		ruleset: ['DW OU'],
-		banlist: ['Chandelure', 'Genesect', 'Tyranitar', 'Dragonite', 'Breloom', 'Ferrothorn', 'Politoed', 'Gliscor', 'Ninetales', 'Scizor', 'Excadrill', 'Keldeo', 'Infernape', 'Venusaur', 'Heatran', 'Rotom-Wash', 'Garchomp', 'Serperior', 'Gengar', 'Volcarona', 'Forretress', 'Conkeldurr', 'Espeon', 'Cloyster', 'Skarmory', 'Starmie', 'Salamence', 'Gyarados', 'Zapdos', 'Jirachi', 'Latios', 'Tentacruel', 'Haxorus', 'Landorus', 'Mamoswine', 'Charizard', 'Lucario', 'Jellicent', 'Blissey', 'Terrakion', 'Heracross', 'Metagross', 'Ditto', 'Hydreigon', 'Thundurus', 'Alakazam', 'Deoxys-Speed', 'Latias', 'Gastrodon', 'Togekiss', 'Donphan', 'Bronzong', 'Manaphy']
 	},
 	tiershift: {
 		name: "Tier Shift",
