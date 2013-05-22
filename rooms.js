@@ -920,7 +920,7 @@ var BattleRoom = (function() {
 		var resend = joining || !this.battle.playerTable[oldid];
 		if (this.battle.playerTable[oldid]) {
 			if (this.rated) {
-				this.add('|message|'+user+' forfeited by changing their name.');
+				this.add('|message|'+user.name+' forfeited by changing their name.');
 				this.battle.lose(oldid);
 				this.battle.leave(oldid);
 				resend = false;
