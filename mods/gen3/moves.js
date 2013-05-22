@@ -683,16 +683,6 @@ exports.BattleMovedex = {
 		basePower: 90,
 		pp: 20
 	},
-	thunderwave: {
-		inherit: true,
-		onTryHit: function(target) {
-			if (target.hasType('Ground')) {
-				this.add('-immune', target.id, '[msg]');
-				return null;
-			}
-		},
-		type: "???"
-	},
 	tickle: {
 		inherit: true,
 		notSubBlocked: true
@@ -732,16 +722,6 @@ exports.BattleMovedex = {
 	whirlwind: {
 		inherit: true,
 		isBounceable: false
-	},
-	willowisp: {
-		inherit: true,
-		onTryHit: function(target) {
-			if (target.hasType('Fire')) {
-				this.add('-immune', target.id, '[msg]');
-				return null;
-			}
-		},
-		type: "???"
 	},
 	wish: {
 		inherit: true,
