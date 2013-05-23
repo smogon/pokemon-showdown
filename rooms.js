@@ -1214,10 +1214,10 @@ var ChatRoom = (function() {
 		var buffer = '';
 		var counter = 0;
 		for (var i in this.users) {
-			counter++;
 			if (!this.users[i].named) {
 				continue;
 			}
+			counter++;
 			buffer += ','+this.users[i].getIdentity();
 		}
 		return '|users|'+counter+buffer+'\n|usercount|'+rooms.global.userCount;
