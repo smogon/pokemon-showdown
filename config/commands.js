@@ -8,6 +8,8 @@ var commands = exports.commands = {
 	alts: 'whois',
 	getalts: 'whois',
 	whois: function(target, room, user) {
+		if (!this.broadcastable()) return;
+
 		var targetUser = this.targetUserOrSelf(target);
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
@@ -42,7 +44,7 @@ var commands = exports.commands = {
 		if (!targetUser.authenticated) {
 			this.sendReply('(Unregistered)');
 		}
-		if (user.can('ip', targetUser)) {
+		if (!this.broadcasting && user.can('ip', targetUser)) {
 			var ips = Object.keys(targetUser.ips);
 			this.sendReply('IP' + ((ips.length > 1) ? 's' : '') + ': ' + ips.join(', '));
 		}
@@ -97,17 +99,17 @@ var commands = exports.commands = {
 	learnall: 'learn',
 	learn5: 'learn',
 	learn: function(target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help learn');
+
+		if (!this.broadcastable()) return;
+
 		var lsetData = {set:{}};
 		var targets = target.split(',');
-		if (!target) return this.parse('/help learn');
 		var template = Tools.getTemplate(targets[0]);
 		var move = {};
 		var problem;
 		var all = (cmd === 'learnall');
-
 		if (cmd === 'learn5') lsetData.set.level = 5;
-
-		if (!this.broadcastable()) return;
 
 		if (!template.exists) {
 			return this.sendReply('Pokemon "'+template.id+'" not found.');
@@ -152,10 +154,11 @@ var commands = exports.commands = {
 			if (lsetData.sourcesBefore) buffer += "<li>any generation before "+(lsetData.sourcesBefore+1);
 			buffer += "</ul>";
 		}
-		this.sendReply('|raw|'+buffer);
+		this.sendReplyBox(buffer);
 	},
 
 	uptime: function(target, room, user) {
+		if (!this.broadcastable()) return;
 		var uptime = process.uptime();
 		var uptimeText;
 		if (uptime > 24*60*60) {
@@ -166,13 +169,12 @@ var commands = exports.commands = {
 		} else {
 			uptimeText = uptime.seconds().duration();
 		}
-		if (!this.broadcastable()) return;
-		this.addReplyBox('Uptime: <b>'+uptimeText+'</b>');
+		this.sendReplyBox('Uptime: <b>'+uptimeText+'</b>');
 	},
 
 	groups: function(target, room, user) {
 		if (!this.broadcastable()) return;
-		this.addReplyBox('+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
+		this.sendReplyBox('+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
 			'% <b>Driver</b> - The above, and they can also mute users and check for alts<br />' +
 			'@ <b>Moderator</b> - The above, and they can ban users<br />' +
 			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />'+
@@ -181,18 +183,18 @@ var commands = exports.commands = {
 
 	opensource: function(target, room, user) {
 		if (!this.broadcastable()) return;
-		this.addReplyBox('Pokemon Showdown is open source:<br />- Language: JavaScript<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master" target="_blank">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown" target="_blank">Server source code</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown-Client" target="_blank">Client source code</a>');
+		this.sendReplyBox('Pokemon Showdown is open source:<br />- Language: JavaScript<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master" target="_blank">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown" target="_blank">Server source code</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown-Client" target="_blank">Client source code</a>');
 	},
 
 	avatars: function(target, room, user) {
 		if (!this.broadcastable()) return;
-		this.addReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown.');
+		this.sendReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown.');
 	},
 
 	introduction: 'intro',
 	intro: function(target, room, user) {
 		if (!this.broadcastable()) return;
-		this.addReplyBox('New to competitive pokemon?<br />' +
+		this.sendReplyBox('New to competitive pokemon?<br />' +
 			'- <a href="http://www.smogon.com/dp/articles/intro_comp_pokemon" target="_blank">An introduction to competitive pokemon</a><br />' +
 			'- <a href="http://www.smogon.com/bw/articles/bw_tiers" target="_blank">What do "OU", "UU", etc mean?</a><br />' +
 			'- <a href="http://www.smogon.com/bw/banlist/" target="_blank">What are the rules for each format? What is "Sleep Clause"?</a>');
@@ -201,13 +203,13 @@ var commands = exports.commands = {
 	calculator: 'calc',
 	calc: function(target, room, user) {
 		if (!this.broadcastable()) return;
-		this.addReplyBox('Pokemon Showdown! damage calculator. (Courtesy of Honko)<br />' +
+		this.sendReplyBox('Pokemon Showdown! damage calculator. (Courtesy of Honko)<br />' +
 			'- <a href="http://pokemonshowdown.com/damagecalc/" target="_blank">Damage Calculator</a>');
 	},
 
 	cap: function(target, room, user) {
 		if (!this.broadcastable()) return;
-		this.addReplyBox('An introduction to the Create-A-Pokemon project:<br />' +
+		this.sendReplyBox('An introduction to the Create-A-Pokemon project:<br />' +
 			'- <a href="http://www.smogon.com/cap/" target="_blank">CAP project website and description</a><br />' +
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=48782" target="_blank">What Pokemon have been made?</a><br />' +
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3464513" target="_blank">Talk about the metagame here</a><br />' +
@@ -259,13 +261,13 @@ var commands = exports.commands = {
 		if (!matched) {
 			return this.sendReply('The Other Metas entry "'+target+'" was not found. Try /othermetas or /om for general help.');
 		}
-		this.addReplyBox(buffer);
+		this.sendReplyBox(buffer);
 	},
 
 	rule: 'rules',
 	rules: function(target, room, user) {
 		if (!this.broadcastable()) return;
-		this.addReplyBox('Please follow the rules:<br />' +
+		this.sendReplyBox('Please follow the rules:<br />' +
 			'- <a href="http://pokemonshowdown.com/rules" target="_blank">Rules</a><br />' +
 			'</div>');
 	},
@@ -302,7 +304,7 @@ var commands = exports.commands = {
 		if (!matched) {
 			return this.sendReply('The FAQ entry "'+target+'" was not found. Try /faq for general help.');
 		}
-		this.addReplyBox(buffer);
+		this.sendReplyBox(buffer);
 	},
 
 	banlists: 'tiers',
@@ -343,7 +345,7 @@ var commands = exports.commands = {
 		if (!matched) {
 			return this.sendReply('The Tiers entry "'+target+'" was not found. Try /tiers for general help.');
 		}
-		this.addReplyBox(buffer);
+		this.sendReplyBox(buffer);
 	},
 
 	analysis: 'smogdex',
@@ -382,7 +384,7 @@ var commands = exports.commands = {
 		if (pokemon.exists) {
 			atLeastOne = true;
 			if (genNumber < pokemon.gen) {
-				return this.addReplyBox(pokemon.name+' did not exist in '+generation.toUpperCase()+'!');
+				return this.sendReplyBox(pokemon.name+' did not exist in '+generation.toUpperCase()+'!');
 			}
 			if (pokemon.tier === 'G4CAP' || pokemon.tier === 'G5CAP') {
 				generation = "cap";
@@ -405,32 +407,32 @@ var commands = exports.commands = {
 			if (poke === 'arceus') poke = 'arceus-normal';
 			if (poke === 'thundurus-therian') poke = 'thundurus-t';
 	
-			this.addReplyBox('<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+'" target="_blank">'+generation.toUpperCase()+' '+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+'" target="_blank">'+generation.toUpperCase()+' '+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
 		}
 		
 		// Item
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
 			var itemName = item.name.toLowerCase().replace(' ', '_');
-			this.addReplyBox('<a href="http://www.smogon.com/'+generation+'/items/'+itemName+'" target="_blank">'+generation.toUpperCase()+' '+item.name+' item analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/items/'+itemName+'" target="_blank">'+generation.toUpperCase()+' '+item.name+' item analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
 		}
 		
 		// Ability
 		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
 			var abilityName = ability.name.toLowerCase().replace(' ', '_');
-			this.addReplyBox('<a href="http://www.smogon.com/'+generation+'/abilities/'+abilityName+'" target="_blank">'+generation.toUpperCase()+' '+ability.name+' ability analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/abilities/'+abilityName+'" target="_blank">'+generation.toUpperCase()+' '+ability.name+' ability analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
 		}
 		
 		// Move
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
 			var moveName = move.name.toLowerCase().replace(' ', '_');
-			this.addReplyBox('<a href="http://www.smogon.com/'+generation+'/moves/'+moveName+'" target="_blank">'+generation.toUpperCase()+' '+move.name+' move analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/moves/'+moveName+'" target="_blank">'+generation.toUpperCase()+' '+move.name+' move analysis</a>, brought to you by <a href="http://www.smogon.com" target="_blank">Smogon University</a>');
 		}
 		
 		if (!atLeastOne) {
-			return this.addReplyBox('Pokemon, item, move, or ability not found for generation ' + generation.toUpperCase() + '.');
+			return this.sendReplyBox('Pokemon, item, move, or ability not found for generation ' + generation.toUpperCase() + '.');
 		}
 	},
 
@@ -491,7 +493,7 @@ var commands = exports.commands = {
 	a: function(target, room, user) {
 		if (this.can('battlemessage')) {
 			// secret sysop command
-			room.battle.add(target);
+			room.add(target);
 		}
 	},
 

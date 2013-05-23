@@ -2,10 +2,10 @@ var commands = exports.commands = {
 
 	version: function(target, room, user) {
 		if (!this.broadcastable()) return;
-		this.addReplyBox('Server version: <b>'+CommandParser.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + CommandParser.serverVersion + '" target="_blank">' + CommandParser.serverVersion.substr(0,10) + '</a>)</small>');
+		this.sendReplyBox('Server version: <b>'+CommandParser.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + CommandParser.serverVersion + '" target="_blank">' + CommandParser.serverVersion.substr(0,10) + '</a>)</small>');
 	},
 
-	me: function(target, room, user) {
+	me: function(target, room, user, connection) {
 		if (!this.canTalk()) return;
 
 		if (config.chatfilter) target = config.chatfilter(user, room, connection.socket, target);
@@ -13,7 +13,7 @@ var commands = exports.commands = {
 		return '/me ' + target;
 	},
 
-	mee: function(target) {
+	mee: function(target, room, user, connection) {
 		if (!this.canTalk()) return;
 
 		if (config.chatfilter) target = config.chatfilter(user, room, connection.socket, target);
