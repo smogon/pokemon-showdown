@@ -145,6 +145,9 @@ toName = function(name) {
 		name = name.substr(1);
 	}
 	if (name.length > 18) name = name.substr(0,18);
+	if (config.namefilter) {
+		name = config.namefilter(name);
+	}
 	return name;
 };
 
