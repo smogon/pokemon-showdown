@@ -649,7 +649,7 @@ var User = (function () {
 			clearTimeout(this.muteTimeout);
 			this.muteTimeout = null;
 		}
-		this.destroyChatQueue();
+		this.clearChatQueue();
 		var connection = null;
 		this.markInactive();
 		for (var i=0; i<this.connections.length; i++) {
@@ -957,8 +957,7 @@ var User = (function () {
 			room.chat(this, message, socket);
 		}
 	};
-	User.prototype.destroyChatQueue = function() {
-		// don't call this function unless the user's getting deallocated
+	User.prototype.clearChatQueue = function() {
 		this.chatQueue = null;
 		if (this.chatQueueTimeout) {
 			clearTimeout(this.chatQueueTimeout);
@@ -971,7 +970,7 @@ var User = (function () {
 
 		toChat[1].chat(this, toChat[0], toChat[2]);
 
-		if (this.chatQueue.length) {
+		if (this.chatQueue && this.chatQueue.length) {
 			this.chatQueueTimeout = setTimeout(
 				this.processChatQueue.bind(this), THROTTLE_DELAY);
 		} else {
@@ -985,7 +984,7 @@ var User = (function () {
 			clearTimeout(this.muteTimeout);
 			this.muteTimeout = null;
 		}
-		this.destroyChatQueue();
+		this.clearChatQueue();
 		delete users[this.userid];
 	};
 	// "static" function
