@@ -178,7 +178,7 @@ var GlobalRoom = (function() {
 				this.searchers.splice(i,1);
 				i--;
 				if (!success) {
-					searchUser.emit('update', {searching: false});
+					searchUser.send('|updatesearch|'+JSON.stringify({searching: false}));
 					success = true;
 				}
 				continue;
@@ -189,7 +189,7 @@ var GlobalRoom = (function() {
 	GlobalRoom.prototype.searchBattle = function(user, formatid) {
 		if (!user.connected) return;
 		if (lockdown) {
-			user.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
+			user.popup("The server is shutting down. Battles cannot be started at this time.");
 			return;
 		}
 
@@ -197,14 +197,14 @@ var GlobalRoom = (function() {
 
 		var format = Tools.getFormat(formatid);
 		if (!format.searchShow) {
-			user.emit('message', 'That format is not available for searching.');
+			user.popup("That format is not available for searching.");
 			return;
 		}
 
 		var team = user.team;
 		var problems = Tools.validateTeam(team, formatid);
 		if (problems) {
-			user.emit('message', "Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+			user.popup("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 			return;
 		}
 
@@ -212,7 +212,7 @@ var GlobalRoom = (function() {
 		var newSearchData = {
 			format: formatid
 		};
-		user.emit('update', {searching: newSearchData});
+		user.send('|updatesearch|'+JSON.stringify({searching: newSearchData}));
 
 		// get the user's rating before actually starting to search
 		var newSearch = {
@@ -260,7 +260,7 @@ var GlobalRoom = (function() {
 			if (newSearch.formatid === search.formatid && this.matchmakingOK(search, newSearch, searchUser, user)) {
 				this.cancelSearch(user, true);
 				this.cancelSearch(searchUser, true);
-				user.emit('update', {searching: false});
+				user.send('|updatesearch|'+JSON.stringify({searching: false}));
 				searchUser.team = search.team;
 				user.team = newSearch.team;
 				this.startBattle(searchUser, user, search.formatid, true, search.team, newSearch.team);
@@ -312,13 +312,8 @@ var GlobalRoom = (function() {
 		rooms.lobby.addRaw(message);
 	};
 	GlobalRoom.prototype.onJoinSocket = function(user, socket) {
-		var initdata = {
-			name: user.name,
-			named: user.named,
-			rooms: this.getRoomList()
-		};
-		emit(socket, 'init', initdata);
-		emitData(socket, this.formatListText);
+		var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
+		sendData(socket, initdata+this.formatListText);
 	};
 	GlobalRoom.prototype.onJoin = function(user, merging) {
 		if (!user) return false; // ???
@@ -331,13 +326,8 @@ var GlobalRoom = (function() {
 		}
 
 		if (!merging) {
-			var initdata = {
-				name: user.name,
-				named: user.named,
-				rooms: this.getRoomList()
-			};
-			user.emit('init', initdata);
-			this.send(this.formatListText, user);
+			var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
+			this.send(initdata+this.formatListText, user);
 		}
 
 		return user;
@@ -368,15 +358,15 @@ var GlobalRoom = (function() {
 		if (p1 === p2) {
 			this.cancelSearch(p1, true);
 			this.cancelSearch(p2, true);
-			p1.emit('message', 'You can\'t battle your own account. Please use something like Private Browsing to battle yourself.');
+			p1.popup("You can't battle your own account. Please use something like Private Browsing to battle yourself.");
 			return;
 		}
 
 		if (lockdown) {
 			this.cancelSearch(p1, true);
 			this.cancelSearch(p2, true);
-			p1.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
-			p2.emit('message', 'The server is shutting down. Battles cannot be started at this time.');
+			p1.popup("The server is shutting down. Battles cannot be started at this time.");
+			p2.popup("The server is shutting down. Battles cannot be started at this time.");
 			return;
 		}
 
@@ -602,13 +592,8 @@ var BattleRoom = (function() {
 		}
 		var roomid = this.id;
 		var self = this;
-		var updates = logs.map(function(log) {
-			return {
-				room: roomid,
-				since: self.lastUpdate,
-				updates: log,
-				active: self.active
-			};
+		logs = logs.map(function(log) {
+			return log.join('\n');
 		});
 		this.lastUpdate = this.log.length;
 
@@ -619,7 +604,7 @@ var BattleRoom = (function() {
 			if (user === excludeUser) continue;
 			var slot = this.battle.getSlot(user);
 			if (slot < 0) slot = 2;
-			user.emit('update', updates[slot]);
+			this.send(logs[slot], user);
 		}
 
 		// empty rooms time out after ten minutes
@@ -689,11 +674,6 @@ var BattleRoom = (function() {
 			return;
 		}
 		this.destroy();
-	};
-	BattleRoom.prototype.broadcastError = function(message) {
-		for (var i in this.users) {
-			this.users.emit('connectionError', message);
-		}
 	};
 	BattleRoom.prototype.reset = function(reload) {
 		clearTimeout(this.resetTimer);
@@ -879,14 +859,7 @@ var BattleRoom = (function() {
 	// This function is only called when the room is not empty.
 	// Joining an empty room calls this.join() below instead.
 	BattleRoom.prototype.onJoinSocket = function(user, socket) {
-		var initdata = {
-			name: user.name,
-			named: user.named,
-			room: this.id,
-			roomType: 'battle',
-			battlelog: this.getLogForUser(user)
-		};
-		emit(socket, 'init', initdata);
+		sendData(socket, '>'+this.id+'\n|init|battle\n'+this.getLogForUser(user).join('\n'));
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
@@ -903,14 +876,7 @@ var BattleRoom = (function() {
 			this.update(user);
 		}
 
-		var initdata = {
-			name: user.name,
-			named: user.named,
-			room: this.id,
-			roomType: 'battle',
-			battlelog: this.getLogForUser(user)
-		};
-		user.emit('init', initdata);
+		this.send('|init|battle\n'+this.getLogForUser(user).join('\n'), user);
 		return user;
 	};
 	BattleRoom.prototype.onRename = function(user, oldid, joining) {
@@ -1013,7 +979,7 @@ var BattleRoom = (function() {
 	BattleRoom.prototype.chat = function(user, message, socket) {
 		var cmd = '', target = '';
 		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			emit(socket, 'message', "Your message is too long:\n\n"+message);
+			sendData(socket, '|popup|Your message is too long:||||'+message);
 			return;
 		}
 		if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
@@ -1038,7 +1004,7 @@ var BattleRoom = (function() {
 		cmd = cmd.toLowerCase();
 
 		if ((cmd === 'me') && !(user.userid in this.users)) {
-			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+			sendData(socket, '|popup|You can\'t send a message to this room without being in it.');
 			return;
 		}
 
@@ -1066,7 +1032,7 @@ var BattleRoom = (function() {
 					this.addCmd('chat', user.name, '<< error: '+e.message);
 					var stack = (""+e.stack).split("\n");
 					for (var i=0; i<stack.length; i++) {
-						user.emit('console', '<< '+stack[i]);
+						this.send('<< '+stack[i], user);
 					}
 				}
 			} else {
@@ -1083,7 +1049,7 @@ var BattleRoom = (function() {
 			}
 		} else {
 			if (!(user.userid in this.users)) {
-				emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+				sendData(socket, '|popup|You can\'t send a message to this room without being in it.');
 				return;
 			}
 			this.battle.chat(user, message);
@@ -1310,13 +1276,6 @@ var ChatRoom = (function() {
 		this.add('|raw|'+message);
 	};
 	ChatRoom.prototype.onJoinSocket = function(user, socket) {
-		var initdata = {
-			name: user.name,
-			named: user.named,
-			room: this.id,
-			roomType: 'lobby'
-		};
-		emit(socket, 'init', initdata);
 		var userList = this.userList ? this.userList : this.getUserList();
 		sendData(socket, '>'+this.id+'\n|init|chat\n'+userList+'\n'+this.log.slice(-25).join('\n'));
 	};
@@ -1339,13 +1298,6 @@ var ChatRoom = (function() {
 		}
 
 		if (!merging) {
-			var initdata = {
-				name: user.name,
-				named: user.named,
-				room: this.id,
-				roomType: 'lobby'
-			};
-			user.emit('init', initdata);
 			var userList = this.userList ? this.userList : this.getUserList();
 			this.send('|init|chat\n'+userList+'\n'+this.log.slice(-100).join('\n'), user);
 		}
@@ -1410,7 +1362,7 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.chat = function(user, message, socket) {
 		if (!message || !message.trim || !message.trim().length) return;
 		if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			emit(socket, 'message', "Your message is too long:\n\n"+message);
+			sendData(socket, '|popup|Your message is too long:||||'+message);
 			return;
 		}
 		var cmd = '', target = '';
@@ -1436,7 +1388,7 @@ var ChatRoom = (function() {
 		cmd = cmd.toLowerCase();
 
 		if ((cmd === 'me') && !(user.userid in this.users)) {
-			emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+			sendData(socket, '|popup|You can\'t send a message to this room without being in it.');
 			return;
 		}
 
@@ -1465,7 +1417,7 @@ var ChatRoom = (function() {
 			}
 		} else if (!user.muted) {
 			if (!(user.userid in this.users)) {
-				emit(socket, 'message', 'You can\'t send a message to this room without being in it.');
+				sendData(socket, '|popup|You can\'t send a message to this room without being in it.');
 				return;
 			}
 			this.add('|c|'+user.getIdentity()+'|'+message, true);

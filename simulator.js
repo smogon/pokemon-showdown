@@ -155,7 +155,7 @@ var Simulator = (function(){
 			var rqid = lines[3];
 			if (player) {
 				this.requests[player.userid] = lines[4];
-				player.emit('update', JSON.parse(lines[4]));
+				player.sendTo(this.id, '|request|'+lines[4]);
 			}
 			if (rqid !== this.rqid) {
 				this.rqid = rqid;
@@ -175,8 +175,7 @@ var Simulator = (function(){
 
 	Simulator.prototype.resendRequest = function(user) {
 		if (this.requests[user.userid]) {
-			user.emit('update', JSON.parse(this.requests[user.userid]));
-			user.sendTo(this.id, '|callback|decision');
+			user.sendTo(this.id, '|request|'+this.requests[user.userid]);
 		}
 	};
 	Simulator.prototype.win = function(user) {
