@@ -67,8 +67,30 @@ var commands = exports.commands = {
 	pokedex: 'data',
 	data: function(target, room, user) {
 		if (!this.broadcastable()) return;
-		var dataMessages = getDataMessage(target);
-		this.sendReply(dataMessages.join('\n'));
+
+		var pokemon = Tools.getTemplate(target);
+		var item = Tools.getItem(target);
+		var move = Tools.getMove(target);
+		var ability = Tools.getAbility(target);
+
+		var data = '';
+		if (pokemon.exists) {
+			data += '|c|~|/data-pokemon '+pokemon.name+'\n';
+		}
+		if (ability.exists) {
+			data += '|c|~|/data-ability '+ability.name+'\n';
+		}
+		if (item.exists) {
+			data += '|c|~|/data-item '+item.name+'\n';
+		}
+		if (move.exists) {
+			data += '|c|~|/data-move '+move.name+'\n';
+		}
+		if (!data) {
+			data = "||No pokemon, item, move, or ability named '"+target+"' was found. (Check your spelling?)";
+		}
+
+		this.sendReply(data);
 	},
 
 	learnset: 'learn',
