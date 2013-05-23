@@ -1148,16 +1148,24 @@ var ChatRoom = (function() {
 
 		if (config.reportjoinsperiod) {
 			this.userList = this.getUserList();
-			this.reportJoinsQueue = [];
-			this.reportJoinsInterval = setInterval(
-				this.reportRecentJoins.bind(this), config.reportjoinsperiod
-			);
 		}
+		this.reportJoinsQueue = [];
+		this.lastGlobalCount = -1;
+		this.reportJoinsInterval = setInterval(
+			this.reportRecentJoins.bind(this), config.reportjoinsperiod
+		);
 	}
 	ChatRoom.prototype.type = 'chat';
 
 	ChatRoom.prototype.reportRecentJoins = function() {
-		if (this.reportJoinsQueue.length === 0) return;
+		// special case for the lobby
+		if ((this.id === 'lobby') && (this.lastGlobalCount !== rooms.global.userCount)) {
+			this.reportJoinsQueue.push('|usercount|' + rooms.global.userCount);
+			this.lastGlobalCount = rooms.global.userCount;
+		} else if (this.reportJoinsQueue.length === 0) {
+			// nothing to report
+			return;
+		}
 		this.userList = this.getUserList();
 		this.send(this.reportJoinsQueue.join('\n'));
 		this.reportJoinsQueue.length = 0;
@@ -1245,7 +1253,7 @@ var ChatRoom = (function() {
 			}
 			buffer += ','+this.users[i].getIdentity();
 		}
-		return ''+counter+buffer;
+		return '|users|'+counter+buffer+'\n|usercount|'+rooms.global.userCount;
 	};
 	ChatRoom.prototype.update = function() {
 		if (this.log.length <= this.lastUpdate) return;
@@ -1309,7 +1317,7 @@ var ChatRoom = (function() {
 		};
 		emit(socket, 'init', initdata);
 		var userList = this.userList ? this.userList : this.getUserList();
-		sendData(socket, '>'+this.id+'\n|init|chat\n|users|'+userList+'\n'+this.log.slice(-25).join('\n'));
+		sendData(socket, '>'+this.id+'\n|init|chat\n'+userList+'\n'+this.log.slice(-25).join('\n'));
 	};
 	ChatRoom.prototype.onJoin = function(user, merging) {
 		if (!user) return false; // ???
@@ -1338,7 +1346,7 @@ var ChatRoom = (function() {
 			};
 			user.emit('init', initdata);
 			var userList = this.userList ? this.userList : this.getUserList();
-			this.send('|init|chat\n|users|'+userList+'\n'+this.log.slice(-100).join('\n'), user);
+			this.send('|init|chat\n'+userList+'\n'+this.log.slice(-100).join('\n'), user);
 		}
 
 		return user;
