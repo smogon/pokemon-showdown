@@ -124,11 +124,11 @@ exports.consoleips = ['127.0.0.1'];
 // the server.
 exports.watchconfig = true;
 
-// loglobby - whether to log the lobby.
-exports.loglobby = false;
+// logchat - whether to log chat rooms.
+exports.logchat = false;
 
 // loguserstats - how often (in milliseconds) to write user stats to the
-// lobby log. This has no effect if `loglobby` is disabled.
+// lobby log. This has no effect if `logchat` is disabled.
 exports.loguserstats = 1000*60*10; // 10 minutes
 
 // simulatorprocesses - the number of processes to use for handling battles

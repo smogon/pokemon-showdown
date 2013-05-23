@@ -1132,13 +1132,14 @@ var ChatRoom = (function() {
 		this.logFilename = '';
 		this.destroyingLog = false;
 
-		if (config.loglobby && roomid === 'lobby') {
+		// `config.loglobby` is a legacy name
+		if (config.logchat || config.loglobby) {
 			this.rollLogFile(true);
 			this.logEntry = function(entry, date) {
 				var timestamp = (new Date()).format('{HH}:{mm}:{ss} ');
 				this.logFile.write(timestamp + entry + '\n');
 			};
-			this.logEntry('Lobby created');
+			this.logEntry('NEW CHATROOM: ' + this.id);
 			if (config.loguserstats) {
 				setInterval(this.logUserStats.bind(this), config.loguserstats);
 			}
@@ -1179,7 +1180,7 @@ var ChatRoom = (function() {
 			callback();
 		}) : fs.mkdir;
 		var date = new Date();
-		var basepath = 'logs/lobby/';
+		var basepath = 'logs/chat/' + this.id + '/';
 		var self = this;
 		mkdir(basepath, '0755', function() {
 			var path = date.format('{yyyy}-{MM}');
