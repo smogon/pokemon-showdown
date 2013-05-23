@@ -441,10 +441,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	birkal: function(target, room, user) {
-		if (!this.canTalk() || !user.can('broadcast') || !room.id === 'lobby') return;
-		if (!this.broadcastable()) return;
-		this.logEntry(user.name + ' used /birkal ' + target);
-		this.add('|c|&Birkal|/me '+target);
+		this.sendReplay("It's not funny anymore.");
 	},
 
 	potd: function(target, room, user) {
