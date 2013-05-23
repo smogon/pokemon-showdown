@@ -1063,6 +1063,7 @@ var BattleSide = (function() {
 	BattleSide.prototype.getData = function() {
 		var data = {
 			name: this.name,
+			id: this.id,
 			pokemon: []
 		};
 		for (var i=0; i<this.pokemon.length; i++) {
@@ -1134,8 +1135,7 @@ var BattleSide = (function() {
 		this.battle.send('callback', this.id + "\n" +
 			Array.prototype.slice.call(arguments).join('|'));
 	};
-	BattleSide.prototype.emitUpdate = function(update) {
-		update.room = this.battle.id;
+	BattleSide.prototype.emitRequest = function(update) {
 		this.battle.send('request', this.id+"\n"+this.battle.rqid+"\n"+JSON.stringify(update));
 	};
 	BattleSide.prototype.destroy = function() {
@@ -1969,23 +1969,17 @@ var Battle = (function() {
 		}
 
 		if (p1request) {
-			this.p1.emitUpdate({
-				side: 'p1',
-				request: p1request
-			});
+			this.p1.emitRequest(p1request);
 		} else {
 			this.p1.decision = true;
-			this.p1.emitUpdate({request: {wait: true, side: this.p1.getData()}});
+			this.p1.emitRequest({wait: true, side: this.p1.getData()});
 		}
 
 		if (p2request) {
-			this.p2.emitUpdate({
-				side: 'p2',
-				request: p2request
-			});
+			this.p2.emitRequest(p2request);
 		} else {
 			this.p2.decision = true;
-			this.p2.emitUpdate({request: {wait: true, side: this.p2.getData()}});
+			this.p2.emitRequest({wait: true, side: this.p2.getData()});
 		}
 
 		if (this.p2.decision && this.p1.decision) {
@@ -2149,8 +2143,8 @@ var Battle = (function() {
 			return;
 		}
 
-		this.p2.emitUpdate({midBattle: this.started, side: 'p2', sideData: this.p2.getData()});
-		this.p1.emitUpdate({midBattle: this.started, side: 'p1', sideData: this.p1.getData()});
+		this.p2.emitRequest({side: this.p2.getData()});
+		this.p1.emitRequest({side: this.p1.getData()});
 
 		if (this.started) {
 			this.makeRequest();
@@ -3301,7 +3295,7 @@ var Battle = (function() {
 				return;
 			}
 
-			side.emitUpdate({side:'none'});
+			side.emitRequest(null);
 			side.isActive = false;
 			this.add('player', slot);
 			this.active = false;
