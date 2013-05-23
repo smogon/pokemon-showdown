@@ -1132,7 +1132,7 @@ var ChatRoom = (function() {
 		this.logFilename = '';
 		this.destroyingLog = false;
 
-		if (config.loglobby) {
+		if (config.loglobby && roomid === 'lobby') {
 			this.rollLogFile(true);
 			this.logEntry = function(entry, date) {
 				var timestamp = (new Date()).format('{HH}:{mm}:{ss} ');
