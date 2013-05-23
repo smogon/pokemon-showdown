@@ -205,17 +205,11 @@ Rooms = require('./rooms.js');
 delete process.send; // in case we're a child process
 Verifier = require('./verifier.js');
 
-parseCommand = require('./chat-commands.js').parseCommand;
+CommandParser = require('./command-parser.js');
 
 Simulator = require('./simulator.js');
 
 lockdown = false;
-
-emit = function(socket, type, data) {
-	if (typeof data === 'object') data.type = type;
-	else data = {type: type, message: data};
-	socket.write(JSON.stringify(data));
-};
 
 sendData = function(socket, data) {
 	socket.write(data);
@@ -232,8 +226,8 @@ if (config.crashguard) {
 			lastCrash = Date.now();
 			if (quietCrash) return;
 			var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
-			Rooms.lobby.addRaw('<div class="message-server-crash"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
-			Rooms.lobby.addRaw('<div class="message-server-crash">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
+			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
+			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 			config.modchat = 'crash';
 			lockdown = true;
 		};
@@ -299,7 +293,7 @@ server.on('connection', function(socket) {
 		var lines = message.substr(pipeIndex + 1);
 		var room = Rooms.get(roomid, 'lobby');
 		lines.split('\n').forEach(function(text){
-			youUser.chat(text, room, socket);
+			youUser.chat(text, room, you);
 		});
 	});
 

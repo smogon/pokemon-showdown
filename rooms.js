@@ -1,6 +1,7 @@
-const MAX_MESSAGE_LENGTH = 300;
 const TIMEOUT_DEALLOCATE = 15*60*1000;
 const REPORT_USER_STATS_INTERVAL = 1000*60*10;
+
+var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
 
 var GlobalRoom = (function() {
 	function GlobalRoom(roomid) {
@@ -268,21 +269,6 @@ var GlobalRoom = (function() {
 			}
 		}
 		this.searchers.push(newSearch);
-	};
-	GlobalRoom.prototype.emit = function(type, message, user) {
-		if (type === 'console' || type === 'update') {
-			if (typeof message === 'string') {
-				message = {message: message};
-			}
-			message.room = this.id;
-		}
-		if (user && user.emit) {
-			user.emit(type, message);
-		} else {
-			for (var i in this.users) {
-				this.users[i].emit(type, message);
-			}
-		}
 	};
 	GlobalRoom.prototype.send = function(message, user) {
 		if (user) {
@@ -642,21 +628,6 @@ var BattleRoom = (function() {
 		//console.log(JSON.stringify(logData));
 		rooms.global.writeNumRooms();
 	};
-	BattleRoom.prototype.emit = function(type, message, user) {
-		if (type === 'console' || type === 'update') {
-			if (typeof message === 'string') {
-				message = {message: message};
-			}
-			message.room = this.id;
-		}
-		if (user && user.emit) {
-			user.emit(type, message);
-		} else {
-			for (var i in this.users) {
-				this.users[i].emit(type, message);
-			}
-		}
-	};
 	BattleRoom.prototype.send = function(message, user) {
 		if (user) {
 			user.sendTo(this, message);
@@ -976,47 +947,15 @@ var BattleRoom = (function() {
 	BattleRoom.prototype.addRaw = function(message) {
 		this.addCmd('raw', message);
 	};
-	BattleRoom.prototype.chat = function(user, message, socket) {
-		var cmd = '', target = '';
-		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			sendData(socket, '|popup|Your message is too long:||||'+message);
-			return;
-		}
-		if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
-			var spaceIndex = message.indexOf(' ');
-			if (spaceIndex > 0) {
-				cmd = message.substr(1, spaceIndex-1);
-				target = message.substr(spaceIndex+1);
-			} else {
-				cmd = message.substr(1);
-				target = '';
-			}
-		} else if (message.substr(0,1) === '!') {
-			var spaceIndex = message.indexOf(' ');
-			if (spaceIndex > 0) {
-				cmd = message.substr(0, spaceIndex);
-				target = message.substr(spaceIndex+1);
-			} else {
-				cmd = message;
-				target = '';
-			}
-		}
-		cmd = cmd.toLowerCase();
-
-		if ((cmd === 'me') && !(user.userid in this.users)) {
-			sendData(socket, '|popup|You can\'t send a message to this room without being in it.');
-			return;
-		}
-
+	BattleRoom.prototype.chat = function(user, message, connection) {
 		// Battle actions are actually just text commands that are handled in
 		// parseCommand(), which in turn often calls Simulator.prototype.sendFor().
 		// Sometimes the call to sendFor is done indirectly, by calling
 		// room.decision(), where room.constructor === BattleRoom.
-		var parsedMessage = parseCommand(user, cmd, target, this, socket, message);
-		if (typeof parsedMessage === 'string') {
-			message = parsedMessage;
-		}
-		if (parsedMessage === false) {
+
+		message = CommandParser.parse(message, this, user, connection);
+
+		if (!message) {
 			// do nothing
 		} else if (message.substr(0,3) === '>> ') {
 			var cmd = message.substr(3);
@@ -1025,7 +964,7 @@ var BattleRoom = (function() {
 			var battle = this.battle;
 			var me = user;
 			this.addCmd('chat', user.name, '>> '+cmd);
-			if (user.checkConsolePermission(socket)) {
+			if (user.checkConsolePermission(connection.socket)) {
 				try {
 					this.addCmd('chat', user.name, '<< '+eval(cmd));
 				} catch (e) {
@@ -1042,19 +981,22 @@ var BattleRoom = (function() {
 			var cmd = message.substr(4);
 
 			this.addCmd('chat', user.name, '>>> '+cmd);
-			if (user.checkConsolePermission(socket)) {
+			if (user.checkConsolePermission(connection.socket)) {
 				this.battle.send('eval', cmd);
 			} else {
 				this.addCmd('chat', user.name, '<<< Access denied.');
 			}
 		} else {
-			if (!(user.userid in this.users)) {
-				sendData(socket, '|popup|You can\'t send a message to this room without being in it.');
-				return;
-			}
 			this.battle.chat(user, message);
 		}
 		this.update();
+	};
+	BattleRoom.prototype.addModCommand = function(result) {
+		this.add(result);
+		this.logModCommand(result);
+	};
+	BattleRoom.prototype.logModCommand = function(result) {
+		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
 	BattleRoom.prototype.destroy = function() {
 		// deallocate ourself
@@ -1233,21 +1175,6 @@ var ChatRoom = (function() {
 
 		this.send(update);
 	};
-	ChatRoom.prototype.emit = function(type, message, user) {
-		if (type === 'console' || type === 'update') {
-			if (typeof message === 'string') {
-				message = {message: message};
-			}
-			message.room = this.id;
-		}
-		if (user && user.emit) {
-			user.emit(type, message);
-		} else {
-			for (var i in this.users) {
-				this.users[i].emit(type, message);
-			}
-		}
-	};
 	ChatRoom.prototype.send = function(message, user) {
 		if (user) {
 			user.sendTo(this, message);
@@ -1359,42 +1286,10 @@ var ChatRoom = (function() {
 			this.logEntry(entry);
 		}
 	};
-	ChatRoom.prototype.chat = function(user, message, socket) {
-		if (!message || !message.trim || !message.trim().length) return;
-		if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			sendData(socket, '|popup|Your message is too long:||||'+message);
-			return;
-		}
-		var cmd = '', target = '';
-		if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
-			var spaceIndex = message.indexOf(' ');
-			if (spaceIndex > 0) {
-				cmd = message.substr(1, spaceIndex-1);
-				target = message.substr(spaceIndex+1);
-			} else {
-				cmd = message.substr(1);
-				target = '';
-			}
-		} else if (message.substr(0,1) === '!') {
-			var spaceIndex = message.indexOf(' ');
-			if (spaceIndex > 0) {
-				cmd = message.substr(0, spaceIndex);
-				target = message.substr(spaceIndex+1);
-			} else {
-				cmd = message;
-				target = '';
-			}
-		}
-		cmd = cmd.toLowerCase();
+	ChatRoom.prototype.chat = function(user, message, connection) {
+		message = CommandParser.parse(message, this, user, connection);
 
-		if ((cmd === 'me') && !(user.userid in this.users)) {
-			sendData(socket, '|popup|You can\'t send a message to this room without being in it.');
-			return;
-		}
-
-		var parsedMessage = parseCommand(user, cmd, target, this, socket, message);
-		if (typeof parsedMessage === 'string') message = parsedMessage;
-		if (parsedMessage === false) {
+		if (!message) {
 			// do nothing
 		} else if (message.substr(0,3) === '>> ') {
 			var cmd = message.substr(3);
@@ -1415,14 +1310,17 @@ var ChatRoom = (function() {
 			} else {
 				this.add('|c|'+user.getIdentity()+'|<< Access denied.', true);
 			}
-		} else if (!user.muted) {
-			if (!(user.userid in this.users)) {
-				sendData(socket, '|popup|You can\'t send a message to this room without being in it.');
-				return;
-			}
+		} else {
 			this.add('|c|'+user.getIdentity()+'|'+message, true);
 		}
 		this.update();
+	};
+	ChatRoom.prototype.addModCommand = function(result) {
+		this.add(result);
+		this.logModCommand(result);
+	};
+	ChatRoom.prototype.logModCommand = function(result) {
+		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
 	return ChatRoom;
 })();

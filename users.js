@@ -142,16 +142,6 @@ var User = (function () {
 	User.prototype.blockChallenges = false;
 	User.prototype.lastConnected = 0;
 
-	User.prototype.emit = function(message, data) {
-		var roomid = false;
-		if (data && data.room) {
-			roomid = data.room;
-		}
-		for (var i=0; i<this.connections.length; i++) {
-			if (roomid && !this.connections[i].rooms[roomid]) continue;
-			emit(this.connections[i].socket, message, data);
-		}
-	};
 	User.prototype.sendTo = function(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = '>'+roomid+'\n'+data;
@@ -927,31 +917,31 @@ var User = (function () {
 	User.prototype.chatQueue = null;
 	User.prototype.chatQueueTimeout = null;
 	User.prototype.lastChatMessage = 0;
-	User.prototype.chat = function(message, room, socket) {
+	User.prototype.chat = function(message, room, connection) {
 		var now = new Date().getTime();
 
 		if (message.substr(0,5) === '/cmd ') {
 			// commands are exempt from the queue
-			room.chat(this, message, socket);
+			room.chat(this, message, connection);
 			return;
 		}
 
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
 			if (this.chatQueue.length > 6) {
-				sendData(socket, '>'+room.id+'\n|raw|' +
+				connection.sendTo(room, '|raw|' +
 					"<strong class=\"message-throttle-notice\">Your message was not sent because you've been typing too quickly.</strong>"
 				);
 			} else {
-				this.chatQueue.push([message, room, socket]);
+				this.chatQueue.push([message, room, connection]);
 			}
 		} else if (now < this.lastChatMessage + THROTTLE_DELAY) {
-			this.chatQueue = [[message, room, socket]];
+			this.chatQueue = [[message, room, connection]];
 			this.chatQueueTimeout = setTimeout(
 				this.processChatQueue.bind(this), THROTTLE_DELAY);
 		} else {
 			this.lastChatMessage = now;
-			room.chat(this, message, socket);
+			room.chat(this, message, connection);
 		}
 	};
 	User.prototype.clearChatQueue = function() {
