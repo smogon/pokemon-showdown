@@ -444,7 +444,7 @@ var commands = exports.commands = {
 		if (!this.canTalk() || !user.can('broadcast') || !room.id === 'lobby') return;
 		if (!this.broadcastable()) return;
 		this.logEntry(user.name + ' used /birkal ' + target);
-		this.add('|c| Birkal|/me '+target);
+		this.add('|c|&Birkal|/me '+target);
 	},
 
 	potd: function(target, room, user) {
