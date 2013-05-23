@@ -99,8 +99,8 @@ var commands = exports.commands = {
 	learn: function(target, room, user, connection, cmd) {
 		var lsetData = {set:{}};
 		var targets = target.split(',');
-		if (!target) return '/help learn';
-		var template = Tools.getTemplate(this.targetUser);
+		if (!target) return this.parse('/help learn');
+		var template = Tools.getTemplate(targets[0]);
 		var move = {};
 		var problem;
 		var all = (cmd === 'learnall');
@@ -111,6 +111,10 @@ var commands = exports.commands = {
 
 		if (!template.exists) {
 			return this.sendReply('Pokemon "'+template.id+'" not found.');
+		}
+
+		if (targets.length < 2) {
+			return this.sendReply('You must specify at least one move.');
 		}
 
 		for (var i=1, len=targets.length; i<len; i++) {
