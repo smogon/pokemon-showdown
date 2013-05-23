@@ -1277,6 +1277,10 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 			emit(socket, 'console', "The room '"+target+"' does not exist.");
 			return false;
 		}
+		if (targetRoom && !targetRoom.battle && targetRoom !== Rooms.lobby && !user.named) {
+			emit(socket, 'console', "You must have a name in order to join the room '"+target+"'.");
+			return false;
+		}
 		if (!user.joinRoom(targetRoom || room, socket)) {
 			emit(socket, 'console', "The room '"+target+"' could not be joined (most likely, you're already in it).");
 			return false;
