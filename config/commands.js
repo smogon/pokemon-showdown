@@ -441,7 +441,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	birkal: function(target, room, user) {
-		this.sendReplay("It's not funny anymore.");
+		this.sendReply("It's not funny anymore.");
 	},
 
 	potd: function(target, room, user) {
