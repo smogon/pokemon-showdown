@@ -948,7 +948,7 @@ function parseCommandLocal(user, cmd, target, room, socket, message) {
 		showOrBroadcastStart(user, cmd, room, socket, message);
 		showOrBroadcast(user, cmd, room, socket,
 			'<div class="infobox">' +
-			'Server version: <b>'+config.pkg.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + parseCommandLocal.serverVersion + '" target="_blank">' + parseCommandLocal.serverVersion.substr(0,10) + '</a>)</small>' +
+			'Server version: <b>'+parseCommandLocal.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + parseCommandLocal.serverVersion + '" target="_blank">' + parseCommandLocal.serverVersion.substr(0,10) + '</a>)</small>' +
 			'</div>');
 		return false;
 		break;
@@ -2199,6 +2199,12 @@ function logModCommand(room, result, noBroadcast) {
 	if (!noBroadcast) room.add(result);
 	modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 }
+
+parseCommandLocal.package = {};
+fs.readFile('package.json', function(err, data) {
+	if (err) return;
+	parseCommandLocal.package = JSON.parse(data);
+});
 
 parseCommandLocal.uncacheTree = function(root) {
 	var uncache = [require.resolve(root)];
