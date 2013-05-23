@@ -29,7 +29,7 @@ function searchUser(name) {
 	return users[userid];
 }
 
-function connectUser(socket, room) {
+function connectUser(socket) {
 	var connection = new Connection(socket, true);
 	var user = new User(connection);
 	// Generate 1024-bit challenge string.
@@ -49,9 +49,6 @@ function connectUser(socket, room) {
 		}
 	});
 	user.joinRoom('global', connection);
-	if (room) {
-		user.joinRoom(room, connection);
-	}
 	return connection;
 }
 
