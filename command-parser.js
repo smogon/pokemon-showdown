@@ -54,7 +54,7 @@ var parse = exports.parse = function(message, room, user, connection) {
 		var context = {
 			sendReply: function(data) {
 				if (this.broadcasting) {
-					if (!this.suppressBroadcast) room.add(data, true);
+					room.add(data, true);
 				} else {
 					connection.send(data);
 				}
@@ -93,16 +93,17 @@ var parse = exports.parse = function(message, room, user, connection) {
 						return false;
 					}
 
+					this.add('|c|'+user.getIdentity()+'|'+message);
+
 					// broadcast cooldown
 					var normalized = toId(message);
 					if (CommandParser.lastBroadcast === normalized &&
 							CommandParser.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-						this.suppressBroadcast = true;
+						return false;
 					}
 					CommandParser.lastBroadcast = normalized;
 					CommandParser.lastBroadcastTime = Date.now();
 
-					this.add('|c|'+user.getIdentity()+'|'+message);
 					this.broadcasting = true;
 				}
 				return true;
