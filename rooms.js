@@ -1297,7 +1297,7 @@ var ChatRoom = (function() {
 			var room = this;
 			var me = user;
 			this.add('|c|'+user.getIdentity()+'|>> '+cmd, true);
-			if (user.checkConsolePermission(socket)) {
+			if (user.checkConsolePermission(connection.socket)) {
 				try {
 					this.add('|c|'+user.getIdentity()+'|<< '+eval(cmd), true);
 				} catch (e) {
