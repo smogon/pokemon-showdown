@@ -124,9 +124,7 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('warn', targetUser)) {
-			return this.sendReply('/warn - Access denied.');
-		}
+		if (!this.can('warn', targetUser)) return false;
 
 		this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn '+target);
@@ -141,9 +139,7 @@ var commands = exports.commands = {
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('mute', targetUser)) {
-			return this.sendReply('/mute - Access denied.');
-		}
+		if (!this.can('mute', targetUser)) return false;
 		if (room.id !== 'lobby') {
 			return this.sendReply('Muting only applies to lobby - you probably wanted to /lock.');
 		}
@@ -167,9 +163,7 @@ var commands = exports.commands = {
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('mute', targetUser)) {
-			return this.sendReply('/mute - Access denied.');
-		}
+		if (!this.can('mute', targetUser)) return false;
 		if (room.id !== 'lobby') {
 			return this.sendReply('Muting only applies to lobby - you probably wanted to /lock.');
 		}
@@ -195,9 +189,7 @@ var commands = exports.commands = {
 		if (!targetUser) {
 			return this.sendReply('User '+target+' not found.');
 		}
-		if (!this.can('mute', targetUser)) {
-			return this.sendReply('/unmute - Access denied.');
-		}
+		if (!this.can('mute', targetUser)) return false;
 
 		this.addModCommand(''+targetUser.name+' was unmuted by '+user.name+'.');
 
@@ -228,9 +220,7 @@ var commands = exports.commands = {
 
 	unlock: function(target, room, user) {
 		if (!target) return this.parse('/help unlock');
-		if (!this.can('lock')) {
-			return this.sendReply('/unlock - Access denied.');
-		}
+		if (!this.can('lock')) return false;
 
 		var unlocked = Users.unlock(target);
 
@@ -253,9 +243,7 @@ var commands = exports.commands = {
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('ban', targetUser)) {
-			return this.sendReply('/ban - Access denied.');
-		}
+		if (!this.can('ban', targetUser)) return false;
 
 		targetUser.popup(user.name+" has banned you.  If you feel that your banning was unjustified you can appeal the ban:\nhttp://www.smogon.com/forums/announcement.php?f=126&a=204\n\n"+target);
 
@@ -300,9 +288,7 @@ var commands = exports.commands = {
 		if (!target) {
 			return this.parse('/help banip');
 		}
-		if (!this.can('rangeban')) {
-			return this.sendReply('/banip - Access denied.');
-		}
+		if (!this.can('rangeban')) return false;
 
 		Users.bannedIps[target] = '#ipban';
 		this.addModCommand(user.name+' temporarily banned the '+(target.charAt(target.length-1)==='*'?'IP range':'IP')+': '+target);
@@ -313,9 +299,7 @@ var commands = exports.commands = {
 		if (!target) {
 			return this.parse('/help unbanip');
 		}
-		if (!this.can('rangeban')) {
-			return this.sendReply('/unbanip - Access denied.');
-		}
+		if (!this.can('rangeban')) return false;
 		if (!Users.bannedIps[target]) {
 			return this.sendReply(''+target+' is not a banned IP or IP range.');
 		}
@@ -374,9 +358,7 @@ var commands = exports.commands = {
 
 	forcepromote: function(target, room, user) {
 		// warning: never document this command in /help
-		if (!this.can('forcepromote')) {
-			return this.sendReply('/forcepromote - Access denied.');
-		}
+		if (!this.can('forcepromote')) return false;
 		var target = this.splitTarget(target, true);
 		var name = this.targetUsername;
 		var nextGroup = target ? target : Users.getNextGroupSymbol(' ', false);
@@ -396,9 +378,7 @@ var commands = exports.commands = {
 		if (!target) {
 			return this.sendReply('Moderated chat is currently set to: '+config.modchat);
 		}
-		if (!this.can('modchat') || !canTalk(user, room)) {
-			return this.sendReply('/modchat - Access denied.');
-		}
+		if (!this.can('modchat') || !this.canTalk()) return false;
 
 		target = target.toLowerCase();
 		switch (target) {
@@ -442,9 +422,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help declare');
 		if (!this.canTalk()) return false;
 
-		if (!this.can('declare')) {
-			return this.sendReply('/declare - Access denied.');
-		}
+		if (!this.can('declare')) return false;
 
 		this.add('|raw|<div class="broadcast-blue"><b>'+target+'</b></div>');
 		this.logModCommand(user.name+' declared '+target);
@@ -455,9 +433,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help announce');
 		if (!this.canTalk()) return false;
 
-		if (!this.can('announce')) {
-			return this.sendReply('/announce - Access denied.');
-		}
+		if (!this.can('announce')) return false;
 
 		return '/announce '+target;
 	},
@@ -470,9 +446,7 @@ var commands = exports.commands = {
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('forcerename', targetUser)) {
-			return this.sendReply('/forcerename - Access denied.');
-		}
+		if (!this.can('forcerename', targetUser)) return false;
 
 		if (targetUser.userid === toUserid(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (target ? " (" + target + ")" : "");
@@ -501,9 +475,7 @@ var commands = exports.commands = {
 		if (!target) {
 			return this.sendReply('No new name was specified.');
 		}
-		if (!this.can('forcerenameto', targetUser)) {
-			return this.sendReply('/forcerenameto - Access denied.');
-		}
+		if (!this.can('forcerenameto', targetUser)) return false;
 
 		if (targetUser.userid === toUserid(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
@@ -521,9 +493,7 @@ var commands = exports.commands = {
 	},
 
 	modlog: function(target, room, user, connection) {
-		if (!this.can('modlog')) {
-			return this.sendReply('/modlog - Access denied.');
-		}
+		if (!this.can('modlog')) return false;
 		var lines = parseInt(target || 15, 10);
 		if (lines > 100) lines = 100;
 		var filename = 'logs/modlog.txt';
@@ -558,9 +528,7 @@ var commands = exports.commands = {
 
 	bw: 'banword',
 	banword: function(target, room, user) {
-		if (!this.can('declare')) {
-			return this.sendReply('/banword - Access denied.');
-		}
+		if (!this.can('declare')) return false;
 		target = toId(target);
 		if (!target) {
 			return this.sendReply('Specify a word or phrase to ban.');
@@ -571,9 +539,7 @@ var commands = exports.commands = {
 
 	ubw: 'unbanword',
 	unbanword: function(target, room, user) {
-		if (!this.can('declare')) {
-			return this.sendReply('/unbanword - Access denied.');
-		}
+		if (!this.can('declare')) return false;
 		target = toId(target);
 		if (!target) {
 			return this.sendReply('Specify a word or phrase to unban.');
@@ -588,9 +554,7 @@ var commands = exports.commands = {
 
 	hotpatch: function(target, room, user) {
 		if (!target) return this.parse('/help hotpatch');
-		if (!this.can('hotpatch')) {
-			return this.sendReply('/hotpatch - Access denied.');
-		}
+		if (!this.can('hotpatch')) return false;
 
 		if (target === 'chat') {
 
@@ -624,17 +588,13 @@ var commands = exports.commands = {
 	},
 
 	savelearnsets: function(target, room, user) {
-		if (this.can('hotpatch')) {
-			return this.sendReply('/savelearnsets - Access denied.');
-		}
+		if (this.can('hotpatch')) return false;
 		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
 		this.sendReply('learnsets.js saved.');
 	},
 
 	disableladder: function(target, room, user) {
-		if (!this.can('disableladder')) {
-			return this.sendReply('/disableladder - Access denied.');
-		}
+		if (!this.can('disableladder')) return false;
 		if (LoginServer.disabled) {
 			return this.sendReply('/disableladder - Ladder is already disabled.');
 		}
@@ -644,9 +604,7 @@ var commands = exports.commands = {
 	},
 
 	enableladder: function(target, room, user) {
-		if (!this.can('disableladder')) {
-			return this.sendReply('/enable - Access denied.');
-		}
+		if (!this.can('disableladder')) return false;
 		if (!LoginServer.disabled) {
 			return this.sendReply('/enable - Ladder is already enabled.');
 		}
@@ -656,9 +614,7 @@ var commands = exports.commands = {
 	},
 
 	lockdown: function(target, room, user) {
-		if (!this.can('lockdown')) {
-			return this.sendReply('/lockdown - Access denied.');
-		}
+		if (!this.can('lockdown')) return false;
 
 		lockdown = true;
 		for (var id in Rooms.rooms) {
@@ -671,9 +627,7 @@ var commands = exports.commands = {
 	},
 
 	endlockdown: function(target, room, user) {
-		if (!this.can('lockdown')) {
-			return this.sendReply('/endlockdown - Access denied.');
-		}
+		if (!this.can('lockdown')) return false;
 
 		lockdown = false;
 		for (var id in Rooms.rooms) {
@@ -685,9 +639,7 @@ var commands = exports.commands = {
 	},
 
 	kill: function(target, room, user) {
-		if (!this.can('lockdown')) {
-			return this.sendReply('/lockdown - Access denied.');
-		}
+		if (!this.can('lockdown')) return false;
 
 		if (!lockdown) {
 			return this.sendReply('For safety reasons, /kill can only be used during lockdown.');
@@ -711,9 +663,7 @@ var commands = exports.commands = {
 	},
 
 	loadbanlist: function(target, room, user) {
-		if (!this.can('modchat')) {
-			return this.sendReply('/loadbanlist - Access denied.');
-		}
+		if (!this.can('modchat')) return false;
 
 		this.sendReply('loading');
 		fs.readFile('config/ipbans.txt', function (err, data) {
@@ -727,9 +677,7 @@ var commands = exports.commands = {
 	},
 
 	refreshpage: function(target, room, user) {
-		if (!this.can('hotpatch')) {
-			return this.sendReply('/refreshpage - Access denied.');
-		}
+		if (!this.can('hotpatch')) return false;
 		Rooms.lobby.send('|refresh|');
 		Rooms.lobby.logEntry(user.name + ' used /refreshpage');
 	},
@@ -783,9 +731,7 @@ var commands = exports.commands = {
 		if (!lockdown) {
 			return this.sendReply('/crashfixed - There is no active crash.');
 		}
-		if (!this.can('hotpatch')) {
-			return this.sendReply('/crashfixed - Access denied.');
-		}
+		if (!this.can('hotpatch')) return false;
 
 		lockdown = false;
 		config.modchat = false;
@@ -797,9 +743,7 @@ var commands = exports.commands = {
 		if (!lockdown) {
 			return this.sendReply('/crashlogged - There is no active crash.');
 		}
-		if (!this.can('declare')) {
-			return this.sendReply('/crashlogged - Access denied.');
-		}
+		if (!this.can('declare')) return false;
 
 		lockdown = false;
 		config.modchat = false;
@@ -902,9 +846,7 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('kick', targetUser)) {
-			return this.sendReply("/kickbattle - Access denied.");
-		}
+		if (!this.can('kick', targetUser)) return false;
 
 		if (room.leaveBattle(targetUser)) {
 			this.addModCommand(''+targetUser.name+' was kicked from a battle by '+user.name+'' + (target ? " (" + target + ")" : ""));
@@ -925,9 +867,9 @@ var commands = exports.commands = {
 		target = toId(target);
 		if (room.requestKickInactive) {
 			if (target === 'off' || target === 'stop') {
-				room.stopKickInactive(user, this.can('timer'));
+				room.stopKickInactive(user, user.can('timer'));
 			} else if (target === 'on' || !target) {
-				room.requestKickInactive(user, this.can('timer'));
+				room.requestKickInactive(user, user.can('timer'));
 			} else {
 				this.sendReply("'"+target+"' is not a recognized timer state.");
 			}
@@ -938,8 +880,9 @@ var commands = exports.commands = {
 
 	forcetie: 'forcewin',
 	forcewin: function(target, room, user) {
-		if (!this.can('forcewin') || !room.battle) {
-			return this.sendReply('/forcewin - Access denied.');
+		if (!this.can('forcewin')) return false;
+		if (!room.battle) {
+			this.sendReply('/forcewin - This is not a battle room.');
 		}
 
 		room.battle.endType = 'forced';
@@ -979,7 +922,7 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			this.popupReply("The user '"+this.targetUsername+"' was not found.");
 		}
-		if (targetUser.blockChallenges && !this.can('bypassblocks', targetUser)) {
+		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			this.popupReply("The user '"+this.targetUsername+"' is not accepting challenges right now.");
 		}
 		if (typeof target !== 'string') target = 'customgame';
