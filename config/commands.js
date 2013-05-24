@@ -352,12 +352,12 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 
 		var targets = target.split(',');
-		var pokemon = Tools.getTemplate(this.targetUser);
-		var item = Tools.getItem(this.targetUser);
-		var move = Tools.getMove(this.targetUser);
-		var ability = Tools.getAbility(this.targetUser);
+		var pokemon = Tools.getTemplate(targets[0]);
+		var item = Tools.getItem(targets[0]);
+		var move = Tools.getMove(targets[0]);
+		var ability = Tools.getAbility(targets[0]);
 		var atLeastOne = false;
-		var generation = (target || "bw").trim().toLowerCase();
+		var generation = (targets[1] || "bw").trim().toLowerCase();
 		var genNumber = 5;
 
 		if (generation === "bw" || generation === "bw2" || generation === "5" || generation === "five") {
