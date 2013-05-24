@@ -6,18 +6,16 @@ var commands = exports.commands = {
 	},
 
 	me: function(target, room, user, connection) {
-		if (!this.canTalk()) return;
-
-		if (config.chatfilter) target = config.chatfilter(user, room, connection.socket, target);
+		target = this.canTalk(target);
 		if (!target) return;
+
 		return '/me ' + target;
 	},
 
 	mee: function(target, room, user, connection) {
-		if (!this.canTalk()) return;
-
-		if (config.chatfilter) target = config.chatfilter(user, room, connection.socket, target);
+		target = this.canTalk(target);
 		if (!target) return;
+
 		return '/mee ' + target;
 	},
 
@@ -420,9 +418,9 @@ var commands = exports.commands = {
 
 	declare: function(target, room, user) {
 		if (!target) return this.parse('/help declare');
-		if (!this.canTalk()) return false;
-
 		if (!this.can('declare')) return false;
+
+		if (!this.canTalk()) return;
 
 		this.add('|raw|<div class="broadcast-blue"><b>'+target+'</b></div>');
 		this.logModCommand(user.name+' declared '+target);
@@ -431,9 +429,10 @@ var commands = exports.commands = {
 	wall: 'announce',
 	announce: function(target, room, user) {
 		if (!target) return this.parse('/help announce');
-		if (!this.canTalk()) return false;
-
 		if (!this.can('announce')) return false;
+
+		target = this.canTalk(target);
+		if (!target) return;
 
 		return '/announce '+target;
 	},
