@@ -12,9 +12,10 @@ var crypto = require('crypto');
 
 var modlog = exports.modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
 
-var parse = exports.parse = function(message, room, user, connection) {
+var parse = exports.parse = function(message, room, user, connection, levelsDeep) {
 	var cmd = '', target = '';
 	if (!message || !message.trim().length) return;
+	if (!levelsDeep) levelsDeep = 0;
 	if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
@@ -108,8 +109,11 @@ var parse = exports.parse = function(message, room, user, connection) {
 				}
 				return true;
 			},
-			parse: function() {
-				return parse(message, room, user, connection);
+			parse: function(message) {
+				if (levelsDeep > 10) {
+					return this.sendReply("Error: Too much recursion");
+				}
+				return parse(message, room, user, connection, levelsDeep+1);
 			},
 			canTalk: function(message) {
 				return canTalk(user, room, connection, message);
