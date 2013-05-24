@@ -1,3 +1,5 @@
+var crypto = require('crypto');
+
 var commands = exports.commands = {
 
 	version: function(target, room, user) {
