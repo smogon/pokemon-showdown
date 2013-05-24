@@ -475,7 +475,7 @@ var commands = exports.commands = {
 		target = toId(target);
 		if (target === 'off') {
 			user.leaveRoom(Rooms.lobby, connection.socket);
-			sendData(socket, '|users|');
+			sendData(connection.socket, '|users|');
 			this.sendReply('You are now blocking lobby chat.');
 		} else {
 			user.joinRoom(Rooms.lobby, connection.socket);
