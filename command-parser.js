@@ -84,7 +84,7 @@ var parse = exports.parse = function(message, room, user, connection) {
 			logModCommand: function(result) {
 				modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 			},
-			broadcastable: function() {
+			canBroadcast: function() {
 				if (broadcast) {
 					if (!this.canTalk(message)) return false;
 					if (!user.can('broadcast')) {
