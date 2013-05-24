@@ -8,8 +8,6 @@ var commands = exports.commands = {
 	alts: 'whois',
 	getalts: 'whois',
 	whois: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-
 		var targetUser = this.targetUserOrSelf(target);
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
