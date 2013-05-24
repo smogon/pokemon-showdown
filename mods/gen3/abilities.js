@@ -34,7 +34,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Fire') {
-				if (move.id === 'willowisp' && (target.hasType('Fire') || target.status)) {
+				if (move.id === 'willowisp' && (target.hasType('Fire') || target.status || target.volatiles['substitute'])) {
 					return;
 				}
 				if (!target.addVolatile('flashfire')) {
