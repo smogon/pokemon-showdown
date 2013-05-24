@@ -684,7 +684,7 @@ var commands = exports.commands = {
 	},
 
 	updateserver: function(target, room, user, connection) {
-		if (!user.checkConsolePermission(socket)) {
+		if (!user.checkConsolePermission(connection.socket)) {
 			return this.sendReply('/updateserver - Access denied.');
 		}
 
@@ -697,6 +697,8 @@ var commands = exports.commands = {
 		var logQueue = [];
 		logQueue.push(user.name + ' used /updateserver');
 
+		connection.sendTo(room, 'updating...');
+
 		var exec = require('child_process').exec;
 		exec('git diff-index --quiet HEAD --', function(error) {
 			var cmd = 'git pull --rebase';
@@ -707,7 +709,7 @@ var commands = exports.commands = {
 				} else {
 					// The most likely case here is that the user does not have
 					// `git` on the PATH (which would be error.code === 127).
-					connection.send('' + error);
+					connection.sendTo(room, '' + error);
 					logQueue.push('' + error);
 					logQueue.forEach(Rooms.lobby.logEntry.bind(Rooms.lobby));
 					CommandParser.updateServerLock = false;
@@ -715,11 +717,11 @@ var commands = exports.commands = {
 				}
 			}
 			var entry = 'Running `' + cmd + '`';
-			connection.send(entry);
+			connection.sendTo(room, entry);
 			logQueue.push(entry);
 			exec(cmd, function(error, stdout, stderr) {
 				('' + stdout + stderr).split('\n').forEach(function(s) {
-					connection.send(s);
+					connection.sendTo(room, s);
 					logQueue.push(s);
 				});
 				logQueue.forEach(Rooms.lobby.logEntry.bind(Rooms.lobby));
