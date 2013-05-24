@@ -919,16 +919,15 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
-			this.popupReply("The user '"+this.targetUsername+"' was not found.");
+			return this.popupReply("The user '"+this.targetUsername+"' was not found.");
 		}
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
-			this.popupReply("The user '"+this.targetUsername+"' is not accepting challenges right now.");
+			return this.popupReply("The user '"+this.targetUsername+"' is not accepting challenges right now.");
 		}
 		if (typeof target !== 'string') target = 'customgame';
 		var problems = Tools.validateTeam(user.team, target);
 		if (problems) {
-			this.popupReply("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-			return false;
+			return this.popupReply("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 		}
 		user.makeChallenge(targetUser, target);
 	},
