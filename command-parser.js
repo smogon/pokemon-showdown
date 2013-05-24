@@ -52,7 +52,7 @@ var parse = exports.parse = function(message, room, user, connection) {
 				if (this.broadcasting) {
 					room.add(data, true);
 				} else {
-					connection.send(data);
+					connection.sendTo(room, data);
 				}
 			},
 			sendReplyBox: function(html) {
