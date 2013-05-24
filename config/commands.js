@@ -471,14 +471,14 @@ var commands = exports.commands = {
 		this.sendReply('/redirect - This command is obsolete and has been removed.');
 	},
 
-	lobbychat: function(target, room, user) {
+	lobbychat: function(target, room, user, connection) {
 		target = toId(target);
 		if (target === 'off') {
-			user.leaveRoom(Rooms.lobby, socket);
+			user.leaveRoom(Rooms.lobby, connection.socket);
 			sendData(socket, '|users|');
 			this.sendReply('You are now blocking lobby chat.');
 		} else {
-			user.joinRoom(Rooms.lobby, socket);
+			user.joinRoom(Rooms.lobby, connection.socket);
 			this.sendReply('You are now receiving lobby chat.');
 		}
 	},

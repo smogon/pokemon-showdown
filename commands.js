@@ -312,7 +312,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	demote: 'promote',
-	promote: function(target, room, user) {
+	promote: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help promote');
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
