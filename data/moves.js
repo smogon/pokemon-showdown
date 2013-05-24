@@ -9328,7 +9328,6 @@ exports.BattleMovedex = {
 		priority: -6,
 		isSoundBased: true,
 		forceSwitch: true,
-		notSubBlocked: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -11553,6 +11552,9 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move.category === 'Status') {
+					if (move.notSubBlocked) {
+						return;
+					}
 					var SubBlocked = {
 						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, trick:1, worryseed:1, yawn:1
 					};

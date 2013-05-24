@@ -744,10 +744,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 85
 	},
-	yawn: {
-		inherit: true,
-		notSubBlocked: true
-	},
 	zapcannon: {
 		inherit: true,
 		basePower: 100
