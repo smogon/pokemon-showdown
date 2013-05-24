@@ -445,9 +445,7 @@ var commands = exports.commands = {
 	},
 
 	potd: function(target, room, user) {
-		if (!this.can('potd')) {
-			return this.sendReply('/potd - Access denied.');
-		}
+		if (!this.can('potd')) return false;
 
 		config.potd = target;
 		Simulator.SimulatorProcess.eval('config.potd = \''+toId(target)+'\'');
@@ -488,10 +486,9 @@ var commands = exports.commands = {
 	},
 
 	a: function(target, room, user) {
-		if (this.can('battlemessage')) {
-			// secret sysop command
-			room.add(target);
-		}
+		if (!this.can('battlemessage')) return false;
+		// secret sysop command
+		room.add(target);
 	},
 
 	/*********************************************************

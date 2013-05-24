@@ -66,7 +66,11 @@ var parse = exports.parse = function(message, room, user, connection) {
 				connection.popup(message);
 			},
 			can: function(permission, target) {
-				return user.can(permission, target);
+				if (!user.can(permission, target)) {
+					this.sendReply('/'+cmd+' - Access denied.');
+					return false;
+				}
+				return true;
 			},
 			send: function(data) {
 				room.send(data);
