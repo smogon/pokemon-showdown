@@ -1,3 +1,12 @@
+/**
+ * Login server abstraction layer
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * This file handles communicating with the login server.
+ *
+ * @license MIT license
+ */
+
 const LOGIN_SERVER_TIMEOUT = 15000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
