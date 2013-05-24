@@ -87,6 +87,25 @@ var commands = exports.commands = {
 		user.lastPM = targetUser.userid;
 	},
 
+	makechatroom: function(target, room, user) {
+		if (!this.can('makeroom')) return;
+		if (Rooms.rooms[target]) {
+			return this.sendReply("The room '"+target+"' already exists.");
+		}
+		Rooms.rooms[target] = new Rooms.ChatRoom(target);
+		return this.sendReply("The room '"+target+"' was created.");
+	},
+
+	privateroom: function(target, room, user) {
+		if (target === 'off') {
+			room.isPrivate = false;
+			this.addModCommand(user.name+' made the room public.');
+		} else {
+			room.isPrivate = true;
+			this.addModCommand(user.name+' made the room private.');
+		}
+	},
+
 	join: function(target, room, user, connection) {
 		var targetRoom = Rooms.get(target);
 		if (target && !targetRoom) {
