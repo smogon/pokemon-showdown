@@ -1173,7 +1173,11 @@ var ChatRoom = (function() {
 			counter++;
 			buffer += ','+this.users[i].getIdentity();
 		}
-		return '|users|'+counter+buffer+'\n|usercount|'+rooms.global.userCount;
+		var msg = '|users|'+counter+buffer;
+		if (this.id === 'lobby') {
+			msg += '\n|usercount|'+rooms.global.userCount;
+		}
+		return msg;
 	};
 	ChatRoom.prototype.update = function() {
 		if (this.log.length <= this.lastUpdate) return;
