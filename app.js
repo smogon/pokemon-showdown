@@ -1,3 +1,47 @@
+/**
+ * Main file
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * This is the main Pokemon Showdown app, and the file you should be
+ * running to start Pokemon Showdown if you're using it normally.
+ *
+ * This file sets up our SockJS server, which handles communication
+ * between users and your server, and also sets up globals. You can
+ * see details in their corresponding files, but here's an overview:
+ *
+ * Users - from users.js
+ *
+ *   Most of the communication with users happens in users.js, we just
+ *   forward messages between the client and users.js.
+ *
+ * Rooms - from rooms.js
+ *
+ *   Every chat room and battle is a room, and what they do is done in
+ *   rooms.js. There's also a global room which every user is in, and
+ *   handles miscellaneous things like welcoming the user.
+ *
+ * Tools - from tools.js
+ *
+ *   Handles getting data about Pokemon, items, etc. *
+ *
+ * Simulator - from simulator.js
+ *
+ *   Used to access the simulator itself.
+ *
+ * CommandParser - from command-parser.js
+ *
+ *   Parses text commands like /me
+ *
+ * @license MIT license
+ */
+
+/*********************************************************
+ * Make sure we have everything set up correctly
+ *********************************************************/
+
+// Make sure our dependencies are available, and install them if they
+// aren't
+
 function runNpm(command) {
 	console.log('Running `npm ' + command + '`...');
 	var child_process = require('child_process');
@@ -24,20 +68,25 @@ if (!Object.select) {
 	return runNpm('update');
 }
 
+// Make sure config.js exists, and copy it over from config-example.js
+// if it doesn't
+
 fs = require('fs');
 if (!('existsSync' in fs)) {
 	fs.existsSync = require('path').existsSync;
 }
 
-LoginServer = require('./loginserver.js');
-
-// Synchronously copy config-example.js over to config.js if it doesn't exist
+// Synchronously, since it's needed before we can start the server
 if (!fs.existsSync('./config/config.js')) {
 	console.log("config.js doesn't exist - creating one with default settings...");
 	fs.writeFileSync('./config/config.js',
 		fs.readFileSync('./config/config-example.js')
 	);
 }
+
+/*********************************************************
+ * Load configuration
+ *********************************************************/
 
 config = require('./config/config.js');
 
@@ -58,6 +107,17 @@ if (process.argv[2] && parseInt(process.argv[2])) {
 if (process.argv[3]) {
 	config.setuid = process.argv[3];
 }
+
+/*********************************************************
+ * Start our servers
+ *********************************************************/
+
+// Static HTTP server
+
+// This handles the custom CSS and custom avatar features, and also
+// redirects yourserver:8001 to yourserver-8001.psim.us
+
+// It's optional if you don't need these features.
 
 var app = require('http').createServer();
 var appssl;
@@ -105,6 +165,12 @@ try {
 } catch (e) {
 	console.log('Could not start node-static - try `npm install` if you want to use it');
 }
+
+// SockJS server
+
+// This is the main server that handles users connecting to our server
+// and doing things on our server.
+
 var server = require('sockjs').createServer({
 	sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js",
 	log: function(severity, message) {
@@ -117,6 +183,10 @@ var server = require('sockjs').createServer({
 App = app;
 AppSSL = appssl;
 Server = server;
+
+/*********************************************************
+ * Step 4: Set up most of our globals
+ *********************************************************/
 
 /**
  * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -196,6 +266,8 @@ catch (err) {
 	process.exit(1);
 }
 
+LoginServer = require('./loginserver.js');
+
 Data = {};
 
 Users = require('./users.js');
@@ -233,6 +305,10 @@ if (config.crashguard) {
 		};
 	})());
 }
+
+/*********************************************************
+ * Step 5: Set up the server to be connected to
+ *********************************************************/
 
 var socketCounter = 0;
 server.on('connection', function(socket) {
@@ -321,6 +397,10 @@ if (appssl) {
 }
 
 console.log('Test your server at http://localhost:' + config.port);
+
+/*********************************************************
+ * Step 6: Set up our last global
+ *********************************************************/
 
 // This slow operation is done *after* we start listening for connections
 // to the server. Anybody who connects while this require() is running will

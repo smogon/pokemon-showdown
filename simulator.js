@@ -1,3 +1,15 @@
+/**
+ * Simulator abstraction layer
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * This file abstracts away Pokemon Showdown's multi-process simulator
+ * model. You can basically include this file, use its API, and pretend
+ * Pokemon Showdown is just one big happy process.
+ *
+ * For the actual simulation, see battles.js
+ * 
+ * @license MIT license
+ */
 
 var simulators = {};
 

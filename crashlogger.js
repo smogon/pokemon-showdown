@@ -1,3 +1,13 @@
+/**
+ * Crash logger
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * Logs crashes, sends an e-mail notification if you've set up
+ * config.js to do that.
+ *
+ * @license MIT license
+ */
+
 module.exports = (function() {
 	var lastCrashLog = 0;
 	return function(err, description) {

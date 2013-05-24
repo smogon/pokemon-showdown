@@ -1,3 +1,16 @@
+/**
+ * Tools
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * Handles getting data about pokemon, items, etc.
+ *
+ * This file is used by the main process (to validate teams)
+ * as well as the individual simulator processes (to get
+ * information about pokemon, items, etc to simulate).
+ *
+ * @license MIT license
+ */
+
 module.exports = (function () {
 	var dataTypes = ['FormatsData', 'Learnsets', 'Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Formats', 'Aliases'];
 	var dataFiles = {

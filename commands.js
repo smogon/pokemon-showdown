@@ -1,3 +1,16 @@
+/**
+ * System commands
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * These are system commands - commands required for Pokemon Showdown
+ * to run. A lot of these are sent by the client.
+ *
+ * If you'd like to modify commands, please go to config/commands.js,
+ * which also teaches you how to use commands.
+ *
+ * @license MIT license
+ */
+
 var crypto = require('crypto');
 
 var commands = exports.commands = {

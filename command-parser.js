@@ -1,4 +1,22 @@
-/* to reload chat commands:
+/**
+ * Command parser
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * This is the command parser. Call it with CommandParser.parse
+ * (scroll down to its definition for details)
+ *
+ * Individual commands are put in:
+ *   commands.js - "core" commands that shouldn't be modified
+ *   config/commands.js - other commands that can be safely modified
+ *
+ * The command API is (mostly) documented in config/commands.js
+ *
+ * @license MIT license
+ */
+
+/*
+
+To reload chat commands:
 
 /hotpatch chat
 
@@ -8,10 +26,35 @@ const MAX_MESSAGE_LENGTH = 300;
 
 const BROADCAST_COOLDOWN = 20*1000;
 
+const MAX_PARSE_RECURSION = 10;
+
 var crypto = require('crypto');
 
 var modlog = exports.modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
 
+/**
+ * Command parser
+ *
+ * Usage:
+ *   CommandParser.parse(message, room, user, connection)
+ *
+ * message - the message the user is trying to say
+ * room - the room the user is trying to say it in
+ * user - the user that sent the message
+ * connection - the connection the user sent the message from
+ *
+ * Returns the message the user should say, or a falsy value which
+ * means "don't say anything"
+ *
+ * Examples:
+ *   CommandParser.parse("/join lobby", room, user, connection)
+ *     will make the user join the lobby, and return false.
+ *
+ *   CommandParser.parse("Hi, guys!", room, user, connection)
+ *     will return "Hi, guys!" if the user isn't muted, or
+ *     if he's muted, will warn him that he's muted, and
+ *     return false.
+ */
 var parse = exports.parse = function(message, room, user, connection, levelsDeep) {
 	var cmd = '', target = '';
 	if (!message || !message.trim().length) return;
@@ -62,18 +105,11 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			popupReply: function(message) {
 				connection.popup(message);
 			},
-			can: function(permission, target) {
-				if (!user.can(permission, target)) {
-					this.sendReply('/'+cmd+' - Access denied.');
-					return false;
-				}
-				return true;
+			add: function(data) {
+				room.add(data, true);
 			},
 			send: function(data) {
 				room.send(data);
-			},
-			add: function(data) {
-				room.add(data, true);
 			},
 			logEntry: function(data) {
 				room.logEntry(data);
@@ -84,6 +120,13 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			},
 			logModCommand: function(result) {
 				modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
+			},
+			can: function(permission, target) {
+				if (!user.can(permission, target)) {
+					this.sendReply('/'+cmd+' - Access denied.');
+					return false;
+				}
+				return true;
 			},
 			canBroadcast: function() {
 				if (broadcast) {
@@ -110,7 +153,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				return true;
 			},
 			parse: function(message) {
-				if (levelsDeep > 10) {
+				if (levelsDeep > MAX_PARSE_RECURSION) {
 					return this.sendReply("Error: Too much recursion");
 				}
 				return parse(message, room, user, connection, levelsDeep+1);

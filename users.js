@@ -1,3 +1,28 @@
+/**
+ * Users
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * Most of the communication with users happens here.
+ *
+ * There are two object types this file introduces:
+ * User and Connection.
+ *
+ * A User object is a user, identified by username. A guest has a
+ * username in the form "Guest 12". Any user whose username starts
+ * with "Guest" must be a guest; normal users are not allowed to
+ * use usernames starting with "Guest".
+ *
+ * A User can be connected to Pokemon Showdown from any number of tabs
+ * or computers at the same time. Each connection is represented by
+ * a Connection object. A user tracks its connections in
+ * user.connections - if this array is empty, the user is offline.
+ *
+ * Get a user by username with Users.get
+ * (scroll down to its definition for details)
+ *
+ * @license MIT license
+ */
+
 var THROTTLE_DELAY = 500;
 
 var users = {};
@@ -7,6 +32,21 @@ var numUsers = 0;
 var bannedIps = {};
 var lockedIps = {};
 
+/**
+ * Get a user.
+ *
+ * Usage:
+ *   Users.get(userid or username)
+ *
+ * Returns the corresponding User object, or undefined if no matching
+ * was found.
+ *
+ * By default, this function will track users across name changes.
+ * For instance, if "Some dude" changed their name to "Some guy",
+ * Users.get("Some dude") will give you "Some guy"s user object.
+ *
+ * If this behavior is undesirable, use Users.getExact.
+ */
 function getUser(name, exactName) {
 	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
@@ -18,9 +58,23 @@ function getUser(name, exactName) {
 	}
 	return users[userid];
 }
+
+/**
+ * Get a user by their exact username.
+ *
+ * Usage:
+ *   Users.getExact(userid or username)
+ *
+ * Like Users.get, but won't track across username changes.
+ *
+ * You can also pass a boolean as Users.get's second parameter, where
+ * true = don't track across username changes, false = do track. This
+ * is not recommended since it's less readable.
+ */
 function getExactUser(name) {
 	return getUser(name, true);
 }
+
 function searchUser(name) {
 	var userid = toUserid(name);
 	while (userid && !users[userid]) {

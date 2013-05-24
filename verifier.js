@@ -1,7 +1,18 @@
-// Because I don't want two files, we're going to fork ourselves.
+/**
+ * Verifier process
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * This is just an asynchronous implementation of a verifier for a
+ * signed key, because Node.js's crypto functions are synchronous,
+ * strangely, considering how everything else is asynchronous.
+ *
+ * I wrote this one day hoping it would help with performance, but
+ * I don't think it had any noticeable effect.
+ *
+ * @license MIT license
+ */
 
-// Node.js's crypto functions are synchronous, strangely, unlike the rest of Node
-// here's an asynchronous implementation.
+// Because I don't want two files, we're going to fork ourselves.
 
 if (!process.send) {
 

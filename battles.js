@@ -1,3 +1,12 @@
+/**
+ * Simulator process
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * This file is where the battle simulation itself happens.
+ * 
+ * @license MIT license
+ */
+
 require('sugar');
 
 fs = require('fs');
