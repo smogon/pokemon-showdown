@@ -686,17 +686,17 @@ var commands = exports.commands = {
 		}, 10000);
 	},
 
-	loadbanlist: function(target, room, user) {
+	loadbanlist: function(target, room, user, connection) {
 		if (!this.can('modchat')) return false;
 
-		this.sendReply('loading');
+		connection.sendTo(room, 'loading');
 		fs.readFile('config/ipbans.txt', function (err, data) {
 			if (err) return;
 			data = (''+data).split("\n");
 			for (var i=0; i<data.length; i++) {
 				if (data[i]) Users.bannedIps[data[i]] = '#ipban';
 			}
-			this.sendReply('banned '+i+' ips');
+			connection.sendTo(room, 'banned '+i+' ips');
 		});
 	},
 
