@@ -514,8 +514,11 @@ var commands = exports.commands = {
 
 	modlog: function(target, room, user, connection) {
 		if (!this.can('modlog')) return false;
-		var lines = parseInt(target || 15, 10);
-		if (lines > 100) lines = 100;
+		var lines = 0;
+		if (!target.match('[^0-9]')) { 
+			lines = parseInt(target || 15, 10);
+			if (lines > 100) lines = 100;
+		}
 		var filename = 'logs/modlog.txt';
 		var command = 'tail -'+lines+' '+filename;
 		var grepLimit = 100;
