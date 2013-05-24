@@ -6,6 +6,8 @@
 
 const MAX_MESSAGE_LENGTH = 300;
 
+const BROADCAST_COOLDOWN = 20*1000;
+
 var crypto = require('crypto');
 
 var modlog = exports.modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
@@ -52,7 +54,7 @@ var parse = exports.parse = function(message, room, user, connection) {
 		var context = {
 			sendReply: function(data) {
 				if (this.broadcasting) {
-					room.add(data, true);
+					if (!this.suppressBroadcast) room.add(data, true);
 				} else {
 					connection.send(data);
 				}
@@ -90,6 +92,16 @@ var parse = exports.parse = function(message, room, user, connection) {
 						connection.send("To see it for yourself, use: /"+message.substr(1));
 						return false;
 					}
+
+					// broadcast cooldown
+					var normalized = toId(message);
+					if (CommandParser.lastBroadcast === normalized &&
+							CommandParser.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+						this.suppressBroadcast = true;
+					}
+					CommandParser.lastBroadcast = normalized;
+					CommandParser.lastBroadcastTime = Date.now();
+
 					this.add('|c|'+user.getIdentity()+'|'+message);
 					this.broadcasting = true;
 				}
