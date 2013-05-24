@@ -15,10 +15,6 @@ var modlog = exports.modlog = modlog || fs.createWriteStream('logs/modlog.txt', 
 var parse = exports.parse = function(message, room, user, connection) {
 	var cmd = '', target = '';
 	if (!message || !message.trim().length) return;
-	if (message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ' && message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-		connection.popup("Your message is too long:\n\n"+message);
-		return;
-	}
 	if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
@@ -90,7 +86,7 @@ var parse = exports.parse = function(message, room, user, connection) {
 			},
 			broadcastable: function() {
 				if (broadcast) {
-					if (!this.canTalk()) return false;
+					if (!this.canTalk(message)) return false;
 					if (!user.can('broadcast')) {
 						connection.send("You need to be voiced to broadcast this command's information.");
 						connection.send("To see it for yourself, use: /"+message.substr(1));
@@ -112,11 +108,11 @@ var parse = exports.parse = function(message, room, user, connection) {
 				}
 				return true;
 			},
-			parse: function(message) {
+			parse: function() {
 				return parse(message, room, user, connection);
 			},
-			canTalk: function() {
-				return canTalk(user, room, connection);
+			canTalk: function(message) {
+				return canTalk(user, room, connection, message);
 			},
 			targetUserOrSelf: function(target) {
 				if (!target) return user;
@@ -148,19 +144,8 @@ var parse = exports.parse = function(message, room, user, connection) {
 		}
 	}
 
-	if (!canTalk(user, room, connection)) {
-		return false;
-	}
-
-	// hardcoded low quality website
-	if (/\bnimp\.org\b/i.test(message)) return false;
-
-	// remove zalgo
-	message = message.replace(/[\u0300-\u036f]{3,}/g,'');
-
-	if (config.chatfilter) {
-		return config.chatfilter(user, room, connection.socket, message);
-	}
+	message = canTalk(user, room, connection, message);
+	if (!message) return false;
 
 	return message;
 };
@@ -186,7 +171,7 @@ function splitTarget(target, exactName) {
  * Can this user talk?
  * Pass the corresponding connection to give the user an error, if not
  */
-function canTalk(user, room, connection) {
+function canTalk(user, room, connection, message) {
 	if (!user.named) return false;
 	if (user.locked) {
 		if (connection) connection.sendTo(room, 'You are locked from talking in chat.');
@@ -216,8 +201,27 @@ function canTalk(user, room, connection) {
 	}
 	if (!(user.userid in room.users)) {
 		connection.popup("You can't send a message to this room without being in it.");
-		return;
+		return false;
 	}
+
+	if (message) {
+		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
+			connection.popup("Your message is too long:\n\n"+message);
+			return false;
+		}
+
+		// hardcoded low quality website
+		if (/\bnimp\.org\b/i.test(message)) return false;
+
+		// remove zalgo
+		message = message.replace(/[\u0300-\u036f]{3,}/g,'');
+
+		if (config.chatfilter) {
+			return config.chatfilter(user, room, connection.socket, message);
+		}
+		return message;
+	}
+
 	return true;
 }
 
