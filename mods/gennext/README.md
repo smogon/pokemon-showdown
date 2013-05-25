@@ -261,6 +261,10 @@ Minor move changes:
 - Sound-based moves are no longer affected by immunities (ghosts can hear
   things)
 
+- Bonemerang and Bone Rush no longer affected by immunities (you can throw
+  a bone to hit air), Bone Rush nerfed to 20 base power since it should never
+  be viable
+
 - Wing Attack and Power Gem are now like Dual Chop: 40 base power, 2-hit
 
 - Autotomize now gives +3 Speed

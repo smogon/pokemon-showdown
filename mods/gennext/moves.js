@@ -515,6 +515,25 @@ exports.BattleMovedex = {
 		affectedByImmunities: false
 	},
 	/******************************************************************
+	Bonemerang, Bone Rush moves:
+	- not affected by immunities
+	- Bone Rush nerfed to 20 base power so it's not viable on Lucario
+
+	Justification:
+	- flavor, also Marowak could use a buff
+	******************************************************************/
+	bonemerang: {
+		inherit: true,
+		affectedByImmunities: false,
+		accuracy: true
+	},
+	bonerush: {
+		inherit: true,
+		basePower: 20,
+		affectedByImmunities: false,
+		accuracy: true
+	},
+	/******************************************************************
 	Relic Song:
 	- now 60 bp priority move with no secondary
 
@@ -776,14 +795,6 @@ exports.BattleMovedex = {
 		accuracy: true
 	},
 	beatup: {
-		inherit: true,
-		accuracy: true
-	},
-	bonemerang: {
-		inherit: true,
-		accuracy: true
-	},
-	bonerush: {
 		inherit: true,
 		accuracy: true
 	},
