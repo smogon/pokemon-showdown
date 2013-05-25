@@ -3,9 +3,9 @@ LICENSE
 Procfile
 README.md
 app.js
-battles.js
-chat-commands.js
-config/config-example.js
+battle-engine.js
+command-parser.js
+commands.js
 data/abilities.js
 data/aliases.js
 data/formats-data.js
@@ -17,10 +17,7 @@ data/pokedex.js
 data/scripts.js
 data/statuses.js
 data/typechart.js
-doc.txt
 filelist.txt
-logs/logging.md
-mods/gen1/README.md
 mods/gen1/abilities.js
 mods/gen1/formats-data.js
 mods/gen1/formats.js
@@ -47,7 +44,6 @@ mods/gen4/statuses.js
 mods/gen5bw/formats-data.js
 mods/gen5bw/items.js
 mods/gen5bw/learnsets.js
-mods/gennext/README.md
 mods/gennext/abilities.js
 mods/gennext/formats-data.js
 mods/gennext/items.js
@@ -55,7 +51,6 @@ mods/gennext/moves.js
 mods/gennext/pokedex.js
 mods/gennext/scripts.js
 mods/gennext/statuses.js
-old-doc.txt
 package.json
 rooms.js
 simulator.js
