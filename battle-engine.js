@@ -3,7 +3,10 @@
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
  * This file is where the battle simulation itself happens.
- * 
+ *
+ * The most important part of the simulation happens in runEvent -
+ * see that function's definition for details.
+ *
  * @license MIT license
  */
 
