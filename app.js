@@ -101,10 +101,6 @@ if (config.watchconfig) {
 	});
 }
 
-fs.watchFile('./config/custom.css', function(curr, prev) {
-	LoginServer.request('invalidatecss', {}, function() {});
-});
-
 if (process.argv[2] && parseInt(process.argv[2])) {
 	config.port = parseInt(process.argv[2]);
 }
@@ -271,6 +267,11 @@ catch (err) {
 }
 
 LoginServer = require('./loginserver.js');
+
+fs.watchFile('./config/custom.css', function(curr, prev) {
+	LoginServer.request('invalidatecss', {}, function() {});
+});
+LoginServer.request('invalidatecss', {}, function() {});
 
 Data = {};
 
