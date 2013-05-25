@@ -185,7 +185,7 @@ AppSSL = appssl;
 Server = server;
 
 /*********************************************************
- * Step 4: Set up most of our globals
+ * Set up most of our globals
  *********************************************************/
 
 /**
@@ -307,7 +307,7 @@ if (config.crashguard) {
 }
 
 /*********************************************************
- * Step 5: Set up the server to be connected to
+ * Set up the server to be connected to
  *********************************************************/
 
 var socketCounter = 0;
@@ -399,7 +399,7 @@ if (appssl) {
 console.log('Test your server at http://localhost:' + config.port);
 
 /*********************************************************
- * Step 6: Set up our last global
+ * Set up our last global
  *********************************************************/
 
 // This slow operation is done *after* we start listening for connections
