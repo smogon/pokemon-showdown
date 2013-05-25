@@ -90,8 +90,16 @@ if (!fs.existsSync('./config/config.js')) {
 
 config = require('./config/config.js');
 
+var watchFile = function() {
+	try {
+		return fs.watchFile.apply(fs, arguments);
+	} catch (e) {
+		console.log('Your version of node does not support `fs.watchFile`');
+	}
+};
+
 if (config.watchconfig) {
-	fs.watchFile('./config/config.js', function(curr, prev) {
+	watchFile('./config/config.js', function(curr, prev) {
 		if (curr.mtime <= prev.mtime) return;
 		try {
 			delete require.cache[require.resolve('./config/config.js')];
@@ -268,7 +276,7 @@ catch (err) {
 
 LoginServer = require('./loginserver.js');
 
-fs.watchFile('./config/custom.css', function(curr, prev) {
+watchFile('./config/custom.css', function(curr, prev) {
 	LoginServer.request('invalidatecss', {}, function() {});
 });
 LoginServer.request('invalidatecss', {}, function() {});
