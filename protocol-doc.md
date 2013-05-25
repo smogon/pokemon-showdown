@@ -27,6 +27,8 @@ just send `|/join lobby`.)
 `TEXT` can contain newlines, in which case it'll be treated the same
 way as if each line were sent to the room separately.
 
+A partial list of available commands can be found with `/help`.
+
 
 Outgoing messages
 -----------------
@@ -76,7 +78,7 @@ For bandwidth reasons, there are five message types: `chat`, `join`, `leave`,
 and `b` respectively. All other message types are written out in full so they
 should be easy to understand.
 
-There are also three special message types: `J`, `L`, and `B`, which are
+Four of these can be uppercase: `J`, `L`, `N`, and `B`, which are
 the equivalent of their lowercase versions, but are recommended not to be
 displayed inline because they happen too often. For instance, the main server
 gets around 5 joins/leaves a second, and showing that inline with chat would
