@@ -1,7 +1,4 @@
-.gitignore
-LICENSE
 Procfile
-README.md
 app.js
 battle-engine.js
 command-parser.js
