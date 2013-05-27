@@ -484,6 +484,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		pp: 10
 	},
+	minimize: {
+		inherit: true,
+		desc: "Raises the user's evasion by 1 stage. After using this move, Astonish, Extrasensory, Needle Arm, and Stomp will have their power doubled if used against the user while it is active.",
+		shortDesc: "Boosts the user's evasion by 1.",
+		boosts: {
+			evasion: 1
+		}
+	},
 	mirrormove: {
 		num: 119,
 		accuracy: true,
