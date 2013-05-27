@@ -108,6 +108,76 @@ exports.BattleItems = {
 			}
 		}
 	},
+	"bigroot": {
+		inherit: true,
+		onAfterMoveSelf: function(source, target) {
+			if (source.lastDamage > 0) {
+				this.heal(source.lastDamage/8, source);
+			}
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 2,
+		onResidual: function(pokemon) {
+			this.heal(pokemon.maxhp/16);
+		}
+	},
+	"blacksludge": {
+		inherit: true,
+		onResidualOrder: 5,
+		onResidualSubOrder: 2,
+		onResidual: function(pokemon) {
+			if (pokemon.hasType('Poison')) {
+				this.heal(pokemon.maxhp/(pokemon.types.length===1 ? 8 : 16));
+			} else {
+				this.damage(pokemon.maxhp/8);
+			}
+		}
+	},
+	"focusband": {
+		id: "focusband",
+		name: "Focus Band",
+		spritenum: 150,
+		fling: {
+			basePower: 10
+		},
+		onDamage: function(damage, target, source, effect) {
+			if (target.types.length === 1 && target.types[0] === 'Fighting' &&
+					effect && effect.effectType === 'Move' &&
+					target.useItem()) {
+				if (damage >= target.hp) {
+					this.add("-message",target.name+" held on using its Focus Band!");
+					return target.hp - 1;
+				} else {
+					this.add("-message",target.name+"'s Focus Band broke!");
+				}
+			}
+		},
+		num: 230,
+		gen: 2,
+		desc: "Holder has a 10% chance to survive an attack that would KO it with 1HP."
+	},
+	"wiseglasses": {
+		inherit: true,
+		onBasePower: function(basePower, user, target, move) {
+			if (move.category === 'Special') {
+				if (user.types.length === 1 && user.types[0] === 'Psychic') {
+					return basePower * 1.2;
+				}
+				return basePower * 1.1;
+			}
+		}
+	},
+	"muscleband": {
+		inherit: true,
+		onBasePower: function(basePower, user, target, move) {
+			if (move.category === 'Physical') {
+				if (user.types.length === 1 && user.types[0] === 'Fighting') {
+					return basePower * 1.2;
+				}
+				return basePower * 1.1;
+			}
+		},
+	},
 	"stick": {
 		id: "stick",
 		name: "Stick",
@@ -146,7 +216,7 @@ exports.BattleItems = {
 			}
 		},
 		onFoeBasePower: function(basePower, attacker, defender, move) {
-			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1};
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Lilligant":1};
 			if (GossamerWingUsers[defender.template.species]) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
 					return basePower / 2;

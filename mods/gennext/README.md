@@ -56,11 +56,6 @@ Major changes:
   It doubles its SpA, SpD, and Spe, and changes its type to the type of its
   Hidden Power.
 
-- Bug/Flying Quiver Dancers get an item named GossamerWing (select "Stick"
-  in the teambuilder). It negates the Flying weaknesses (take half damage from
-  Rock, Ice, and Electric moves, and SR), and adds +1 SpA back to Quiver
-  Dance.
-
 - Weather-inducing abilities now last for only 5 turns (or 8 with the right
   item). Weather moves have +1 priority.
 
@@ -105,6 +100,11 @@ Major changes:
 
 - Flower Gift now only boosts Sp. Def, but if Sunny Day is used while Cherrim
   is out, the next switch-in also receives +1 SpD
+
+- Butterfree, Beautifly, Masquerain, Mothim, and Lilligant get an item named
+  GossamerWing (select "Stick" in the teambuilder). It makes them take half
+  damage from Rock, Ice, and Electric moves, prevents them from taking double
+  SR damage, and adds +1 SpA back to Quiver Dance.
 
 - Relic Song switches Meloetta's SpA and Atk EVs, boosts, and certain natures,
   specifically: Modest <-> Adamant, Jolly <-> Timid, other natures are left
@@ -151,9 +151,15 @@ New mechanic: Signature Pokemon:
 
   - Darmanitan: Flame Wheel
 
+  - Eelektross: Spark
+
+  - Kingdra: BubbleBeam (30% -1 Spe)
+
   - Galvantula: Electroweb (60 base power, 100% accuracy)
 
   - Skarmory: Steel Wing (60 base power, 100% accuracy, 50% +1 Def)
+
+  - Beautifly: Giga Drain
 
   - Glaceon: Icy Wind (60 base power, 100% accuracy)
 
@@ -197,6 +203,20 @@ New mechanic: Intrinsics:
   - Gengar: Cursed Body
 
   - Mismagius: Cursed Body
+
+Major item changes:
+
+- Big Root: also acts like Leftovers + Shell Bell for pure Grass types
+
+- Black Sludge: heals 1/8 per turn for pure Poison types
+
+- Focus Band: always works, but breaks after getting hit once for
+  pure Fighting types (so basically it'd be a Sash that stays intact
+  after residual damage); does nothing for other pokemon
+
+- Wise Glasses: 1.2x Special damage for pure Psychic types
+
+- Muscle Band: 1.2x Physical damage for pure Fighting types
 
 Minor move changes:
 
@@ -300,8 +320,7 @@ Minor learnset changes:
 
 - Masquerain gets Surf
 
-- Bug/Flying Quiver Dancers (Butterfree, Beautifly, Masquerain, Mothim) get
-  Hurricane
+- Butterfree, Beautifly, Masquerain, and Mothim get Hurricane
 
 - Shuckle gets Leech Seed
 
