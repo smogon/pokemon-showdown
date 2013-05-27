@@ -524,6 +524,14 @@ exports.BattleMovedex = {
 			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
 		}
 	},
+	minimize: {
+		inherit: true,
+		desc: "Raises the user's evasion by 1 stage. After using this move, Stomp will have its power doubled if used against the user while it is active.",
+		shortDesc: "Boosts the user's evasion by 1.",
+		boosts: {
+			evasion: 1
+		}
+	},
 	miracleeye: {
 		inherit: true,
 		isBounceable: false
