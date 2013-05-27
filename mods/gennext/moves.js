@@ -1117,11 +1117,37 @@ exports.BattleMovedex = {
 			if (user.template.id === 'darmanitan') return power * 1.5;
 		}
 	},
+	spark: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'eelektross') return power * 1.5;
+		}
+	},
+	bubblebeam: {
+		inherit: true,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'kingdra') return power * 1.5;
+		},
+		secondary: {
+			chance: 30,
+			boosts: {
+				spe: -1
+			}
+		}
+	},
 	electroweb: {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function(power, user) {
 			if (user.template.id === 'galvantula') return power * 1.5;
+		},
+		accuracy: 100
+	},
+	gigadrain: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'beautifly') return power * 1.5;
 		},
 		accuracy: 100
 	},
