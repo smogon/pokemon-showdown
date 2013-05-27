@@ -543,7 +543,7 @@ var commands = exports.commands = {
 
 		require('child_process').exec(command, function(error, stdout, stderr) {
 			if (error && stderr) {
-				connection.popup('/modlog errored, tell Zarel or bmelts.');
+				connection.popup('/modlog erred - modlog does not support Windows');
 				console.log('/modlog error: '+error);
 				return false;
 			}
