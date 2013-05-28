@@ -386,7 +386,7 @@ server.on('connection', function(socket) {
 			});
 		} catch (e) {
 			var stack = e.stack + '\n\n';
-			stack += 'Additional information for error in data event handler:\n';
+			stack += 'Additional information:\n';
 			stack += 'user = ' + user + '\n';
 			stack += 'ip = ' + socket.remoteAddress + '\n';
 			stack += 'roomid = ' + roomid + '\n';
@@ -394,7 +394,7 @@ server.on('connection', function(socket) {
 			var err = {stack: stack};
 			if (config.crashguard) {
 				try {
-					connection.send("Sorry! Something crashed, but we're working on fixing it.");
+					connection.sendTo(roomid||'lobby', '|html|<div class="broadcast-red"><b>Something crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
 				} catch (e) {} // don't crash again...
 				process.emit('uncaughtException', err);
 			} else {
