@@ -1487,10 +1487,10 @@ var Battle = (function() {
 	Battle.prototype.singleEvent = function(eventid, effect, effectData, target, source, sourceEffect, relayVar) {
 		if (this.eventDepth >= 5) {
 			// oh fuck
-			this.add('message STACK LIMIT EXCEEDED');
-			this.add('message PLEASE TELL AESOFT');
-			this.add('message Event: '+eventid);
-			this.add('message Parent event: '+this.event.id);
+			this.add('message', 'STACK LIMIT EXCEEDED');
+			this.add('message', 'PLEASE REPORT IN BUG THREAD');
+			this.add('message', 'Event: '+eventid);
+			this.add('message', 'Parent event: '+this.event.id);
 			return false;
 		}
 		//this.add('Event: '+eventid+' (depth '+this.eventDepth+')');
@@ -1642,10 +1642,10 @@ var Battle = (function() {
 	Battle.prototype.runEvent = function(eventid, target, source, effect, relayVar) {
 		if (this.eventDepth >= 5) {
 			// oh fuck
-			this.add('message STACK LIMIT EXCEEDED');
-			this.add('message PLEASE REPORT IN BUG THREAD');
-			this.add('message Event: '+eventid);
-			this.add('message Parent event: '+this.event.id);
+			this.add('message', 'STACK LIMIT EXCEEDED');
+			this.add('message', 'PLEASE REPORT IN BUG THREAD');
+			this.add('message', 'Event: '+eventid);
+			this.add('message', 'Parent event: '+this.event.id);
 			return false;
 		}
 		if (!target) target = this;
@@ -1999,11 +1999,11 @@ var Battle = (function() {
 
 		if (this.p2.decision && this.p1.decision) {
 			if (type !== 'move') {
-				this.add('message Attempting to recover from crash.');
+				this.add('message', 'Attempting to recover from crash.');
 				this.makeRequest('move');
 				return;
 			}
-			this.add('message BATTLE CRASHED.');
+			this.add('message', 'BATTLE CRASHED.');
 
 			this.win();
 			return;
@@ -2189,7 +2189,7 @@ var Battle = (function() {
 		}
 
 		if (!this.p1.pokemon[0] || !this.p2.pokemon[0]) {
-			this.add('message Battle not started: One of you has an empty team.');
+			this.add('message', 'Battle not started: One of you has an empty team.');
 			return;
 		}
 
