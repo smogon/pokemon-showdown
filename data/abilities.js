@@ -1610,12 +1610,12 @@ exports.BattleAbilities = {
 	},
 	"pressure": {
 		desc: "When an opponent uses a move that affects this Pokemon, an additional PP is required for the opponent to use that move.",
-		shortDesc: "If this Pokemon is the target of a move, that move loses one additional PP.",
+		shortDesc: "If this Pokemon is the target of a foe's move, that move loses one additional PP.",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Pressure');
 		},
 		onSourceDeductPP: function(pp, target, source) {
-			if (target === source) return;
+			if (target.side === source.side) return;
 			return pp+1;
 		},
 		id: "pressure",
