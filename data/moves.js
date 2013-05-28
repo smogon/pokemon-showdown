@@ -532,6 +532,7 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		volatileStatus: 'attract',
 		effect: {
+			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function(pokemon, source, effect) {
 				if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
 					this.debug('incompatible gender');
