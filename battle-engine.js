@@ -123,9 +123,13 @@ process.on('message', function(message) {
 						'Additional information:\n' +
 						'message = ' + message;
 				var fakeErr = {stack: stack};
-				require('./crashlogger.js')(fakeErr, 'A battle');
 
-				process.send(data[0]+'\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed</b></div>');
+				if (!require('./crashlogger.js')(fakeErr, 'A battle')) {
+					var ministack = (""+err.stack).split("\n").slice(0,2).join("<br />");
+					process.send(data[0]+'\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> '+ministack+'</div>');
+				} else {
+					process.send(data[0]+'\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
+				}
 			}
 		}
 	} else if (data[1] === 'dealloc') {
