@@ -204,7 +204,7 @@ New mechanic: Intrinsics:
 
   - Mismagius: Cursed Body
 
-Major item changes:
+New: Type-specific items:
 
 - Big Root: also acts like Leftovers + Shell Bell for pure Grass types
 
@@ -219,6 +219,14 @@ Major item changes:
 - Muscle Band: 1.2x Physical damage for pure Fighting types
 
 Minor move changes:
+
+- Rock Throw now removes Stealth Rock from the user's side of the field,
+  and has 100% accuracy
+
+- Rapid Spin now has 30 base power
+
+- Rock Throw and Rapid Spin remove hazards before fainting from Rocky
+  Helmet etc
 
 - all moves' accuracy is rounded up to the nearest multiple of 10%
   (except Jump Kick, which will be rebalanced later)

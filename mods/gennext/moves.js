@@ -1018,6 +1018,52 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	/******************************************************************
+	Rapid Spin, Rock Throw:
+	- remove hazards before dealing damage
+	- double damage if hazards are removed
+	- Rock Throw removes SR only
+	- Rapid Spin now has base power 30
+	- Rock Throw now has accuracy 100
+
+	Justification:
+	- hazards could use a nerf
+	******************************************************************/
+	rapidspin: {
+		inherit: true,
+		basePower: 30,
+		onBasePower: function(power, user) {
+			var doubled = false;
+			if (user.removeVolatile('leechseed')) {
+				this.add('-end', user, 'Leech Seed', '[from] move: Rapid Spin', '[of] '+user);
+				doubled = true;
+			}
+			var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
+			for (var i in sideConditions) {
+				if (user.side.removeSideCondition(i)) {
+					this.add('-sideend', user.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] '+user);
+					doubled = true;
+				}
+			}
+			if (user.volatiles['partiallytrapped']) {
+				this.add('-remove', user, user.volatiles['partiallytrapped'].sourceEffect.name, '[from] move: Rapid Spin', '[of] '+user, '[partiallytrapped]');
+				doubled = true;
+				delete user.volatiles['partiallytrapped'];
+			}
+			if (doubled) return power * 2;
+		},
+		self: undefined
+	},
+	rockthrow: {
+		inherit: true,
+		accuracy: 100,
+		onBasePower: function(power, user) {
+			if (user.side.removeSideCondition('stealthrock')) {
+				this.add('-sideend', user.side, "Stealth Rock", '[from] move: Rapid Spin', '[of] '+user);
+				return power * 2;
+			}
+		}
+	},
+	/******************************************************************
 	New feature: Signature Pokemon
 	- Selected weak moves receive a 1.5x damage boost when used by a
 	  compatible Pokemon.
