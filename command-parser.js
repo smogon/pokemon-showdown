@@ -169,14 +169,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			splitTarget: splitTarget
 		};
 
-		var result;
-		try {
-			result = commandHandler.call(context, target, room, user, connection, cmd, message);
-		} catch (err) {
-			require('./crashlogger.js')(err, 'A command in the main process');
-			var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
-			context.sendReply('|raw|<div class="broadcast-red"><b>The command "/'+cmd+'" crashed:</b> '+stack+'</div>');
-		}
+		var result = commandHandler.call(context, target, room, user, connection, cmd, message);
 		if (result === undefined) result = false;
 
 		return result;
