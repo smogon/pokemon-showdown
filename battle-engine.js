@@ -116,14 +116,40 @@ process.on('message', function(message) {
 	var data = message.split('|');
 	if (data[1] === 'init') {
 		if (!Battles[data[0]]) {
-			Battles[data[0]] = Battle.construct(data[0], data[2], data[3]);
+			try {
+				Battles[data[0]] = Battle.construct(data[0], data[2], data[3]);
+			} catch (err) {
+				var stack = err.stack + '\n\n' +
+						'Additional information:\n' +
+						'message = ' + message;
+				var fakeErr = {stack: stack};
+				require('./crashlogger.js')(fakeErr, 'A battle');
+
+				process.send(data[0]+'\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed</b></div>');
+			}
 		}
 	} else if (data[1] === 'dealloc') {
 		if (Battles[data[0]]) Battles[data[0]].destroy();
 		delete Battles[data[0]];
 	} else {
-		if (Battles[data[0]]) {
-			Battles[data[0]].receive(data, more);
+		var battle = Battles[data[0]];
+		if (battle) {
+			var prevRequest = battle.currentRequest;
+			try {
+				battle.receive(data, more);
+			} catch (err) {
+				var stack = err.stack + '\n\n' +
+						'Additional information:\n' +
+						'message = ' + message + '\n' +
+						'currentRequest = ' + prevRequest + '\n\n' +
+						'Log:\n' + battle.log.join('\n');
+				var fakeErr = {stack: stack};
+				require('./crashlogger.js')(fakeErr, 'A battle');
+
+				battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b><br />You can keep playing but it might crash again.</div>');
+				battle.makeRequest(prevRequest);
+				battle.sendUpdates();
+			}
 		} else if (data[1] === 'eval') {
 			try {
 				eval(data[2]);
@@ -1998,12 +2024,7 @@ var Battle = (function() {
 		}
 
 		if (this.p2.decision && this.p1.decision) {
-			if (type !== 'move') {
-				this.add('message', 'Attempting to recover from crash.');
-				this.makeRequest('move');
-				return;
-			}
-			this.add('message', 'BATTLE CRASHED.');
+			battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b></div>');
 
 			this.win();
 			return;
@@ -3382,6 +3403,9 @@ var Battle = (function() {
 			break;
 		}
 
+		this.sendUpdates();
+	};
+	Battle.prototype.sendUpdates = function() {
 		if (this.p1 && this.p2) {
 			var inactiveSide = -1;
 			if (!this.p1.isActive && this.p2.isActive) {
