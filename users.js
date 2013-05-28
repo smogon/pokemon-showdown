@@ -1028,6 +1028,9 @@ var User = (function () {
 		this.clearChatQueue();
 		delete users[this.userid];
 	};
+	User.prototype.toString = function() {
+		return this.userid;
+	};
 	// "static" function
 	User.pruneInactive = function(threshold) {
 		var now = Date.now();
