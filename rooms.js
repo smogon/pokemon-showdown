@@ -273,8 +273,6 @@ var GlobalRoom = (function() {
 				this.cancelSearch(user, true);
 				this.cancelSearch(searchUser, true);
 				user.send('|updatesearch|'+JSON.stringify({searching: false}));
-				searchUser.team = search.team;
-				user.team = newSearch.team;
 				this.startBattle(searchUser, user, search.formatid, true, search.team, newSearch.team);
 				return;
 			}

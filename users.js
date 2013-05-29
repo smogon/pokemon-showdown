@@ -900,7 +900,7 @@ var User = (function () {
 			challengeTo: this.challengeTo
 		}));
 	};
-	User.prototype.makeChallenge = function(user, format, isPrivate) {
+	User.prototype.makeChallenge = function(user, format/*, isPrivate*/) {
 		user = getUser(user);
 		if (!user || this.challengeTo) {
 			return false;
@@ -918,7 +918,8 @@ var User = (function () {
 			from: this.userid,
 			to: user.userid,
 			format: ''+(format||''),
-			isPrivate: !!isPrivate
+			//isPrivate: !!isPrivate, // currently unused
+			team: this.team
 		};
 		this.lastChallenge = time;
 		this.challengeTo = challenge;
@@ -959,7 +960,7 @@ var User = (function () {
 			}
 			return false;
 		}
-		Rooms.global.startBattle(this, user, user.challengeTo.format, false, this.team, user.team);
+		Rooms.global.startBattle(this, user, user.challengeTo.format, false, this.team, user.challengeTo.team);
 		delete this.challengesFrom[user.userid];
 		user.challengeTo = null;
 		this.updateChallenges();
