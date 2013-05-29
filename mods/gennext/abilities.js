@@ -114,6 +114,7 @@ exports.BattleAbilities = {
 				move.onHit = function(target, source) {
 					this.setWeather(weather, source, this.getAbility('flowergift'));
 					this.weatherData.duration = 0;
+					this.boost({spd:1}, source, source, this.getAbility('flowergift'));
 				};
 				move.target = 'self';
 				move.sideCondition = 'flowergift';
