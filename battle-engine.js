@@ -2037,7 +2037,7 @@ var Battle = (function() {
 		}
 
 		if (this.p2.decision && this.p1.decision) {
-			battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b></div>');
+			this.add('html', '<div class="broadcast-red"><b>The battle crashed</b></div>');
 
 			this.win();
 			return;
