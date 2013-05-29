@@ -2491,6 +2491,7 @@ var Battle = (function() {
 
 		// happens after crit calculation
 		if (basePower) {
+			basePower = this.singleEvent('BasePower', move, null, pokemon, target, move, basePower);
 			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
 
 			if (move.basePowerMultiplier && move.basePowerMultiplier != 1) {
