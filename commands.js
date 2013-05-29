@@ -423,6 +423,9 @@ var commands = exports.commands = {
 			return false;
 			break;
 		case 'registered':
+			if (!user.can('modchatall')) {
+				return this.sendReply('/modchat - Access denied for registered setting.');
+			}
 			config.modchat = true;
 			break;
 		case 'off':
