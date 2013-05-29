@@ -86,11 +86,14 @@ var commands = exports.commands = {
 		}
 
 		if (user.locked && !targetUser.can('lock', user)) {
-			return this.sendReply('You can only private message members of the moderation team (users marked by %, @, &, or ~) when locked.');
+			return this.popupReply('You can only private message members of the moderation team (users marked by %, @, &, or ~) when locked.');
+		}
+		if (targetUser.locked && !user.can('lock', targetUser)) {
+			return this.popupReply('This user is locked and cannot PM.');
 		}
 
 		if (!user.named) {
-			return this.sendReply('You must choose a name before you can send private messages.');
+			return this.popupReply('You must choose a name before you can send private messages.');
 		}
 
 		var message = '|pm|'+user.getIdentity()+'|'+targetUser.getIdentity()+'|'+target;
