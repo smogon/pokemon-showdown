@@ -150,9 +150,18 @@ process.on('message', function(message) {
 				var fakeErr = {stack: stack};
 				require('./crashlogger.js')(fakeErr, 'A battle');
 
+				var logPos = battle.log.length;
 				battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b><br />You can keep playing but it might crash again.</div>');
-				battle.makeRequest(prevRequest);
-				battle.sendUpdates();
+				var nestedError;
+				try {
+					battle.makeRequest(prevRequest);
+				} catch (e) {
+					nestedError = e;
+				}
+				battle.sendUpdates(logPos);
+				if (nestedError) {
+					throw nestedError;
+				}
 			}
 		} else if (data[1] === 'eval') {
 			try {
@@ -3407,9 +3416,9 @@ var Battle = (function() {
 			break;
 		}
 
-		this.sendUpdates();
+		this.sendUpdates(logPos);
 	};
-	Battle.prototype.sendUpdates = function() {
+	Battle.prototype.sendUpdates = function(logPos) {
 		if (this.p1 && this.p2) {
 			var inactiveSide = -1;
 			if (!this.p1.isActive && this.p2.isActive) {
