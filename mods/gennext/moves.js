@@ -1142,6 +1142,7 @@ exports.BattleMovedex = {
 	smog: {
 		inherit: true,
 		basePower: 75,
+		accuracy: 100,
 		onBasePower: function(power, user) {
 			if (user.template.id === 'weezing') return power * 1.5;
 		},
