@@ -3416,9 +3416,9 @@ var Battle = (function() {
 			break;
 		}
 
-		this.sendUpdates(logPos);
+		this.sendUpdates(logPos, alreadyEnded);
 	};
-	Battle.prototype.sendUpdates = function(logPos) {
+	Battle.prototype.sendUpdates = function(logPos, alreadyEnded) {
 		if (this.p1 && this.p2) {
 			var inactiveSide = -1;
 			if (!this.p1.isActive && this.p2.isActive) {
@@ -3437,7 +3437,7 @@ var Battle = (function() {
 		}
 
 		if (this.log.length > logPos) {
-			if (this.ended && !alreadyEnded) {
+			if (alreadyEnded !== undefined && this.ended && !alreadyEnded) {
 				if (this.rated) {
 					var log = {
 						turns: this.turn,
