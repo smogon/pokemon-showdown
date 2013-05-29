@@ -1534,24 +1534,29 @@ var Battle = (function() {
 		}
 		//this.add('Event: '+eventid+' (depth '+this.eventDepth+')');
 		effect = this.getEffect(effect);
+		var hasRelayVar = true;
+		if (relayVar === undefined) {
+			relayVar = true;
+			hasRelayVar = false;
+		}
 
 		if (target.fainted) {
 			return false;
 		}
 		if (effect.effectType === 'Status' && target.status !== effect.id) {
 			// it's changed; call it off
-			return true;
+			return relayVar;
 		}
 		if (target.ignore && target.ignore[effect.effectType]) {
 			this.debug(eventid+' handler suppressed by Klutz or Magic Room');
-			return true;
+			return relayVar;
 		}
 		if (target.ignore && target.ignore[effect.effectType+'Target']) {
 			this.debug(eventid+' handler suppressed by Air Lock');
-			return true;
+			return relayVar;
 		}
 
-		if (typeof effect['on'+eventid] === 'undefined') return true;
+		if (effect['on'+eventid] === undefined) return relayVar;
 		var parentEffect = this.effect;
 		var parentEffectData = this.effectData;
 		var parentEvent = this.event;
@@ -1560,8 +1565,8 @@ var Battle = (function() {
 		this.event = {id: eventid, target: target, source: source, effect: sourceEffect};
 		this.eventDepth++;
 		var args = [target, source, sourceEffect];
-		if (typeof relayVar !== 'undefined') args.unshift(relayVar);
-		var returnVal = true;
+		if (hasRelayVar) args.unshift(relayVar);
+		var returnVal;
 		if (typeof effect['on'+eventid] === 'function') {
 			returnVal = effect['on'+eventid].apply(this, args);
 		} else {
@@ -1571,7 +1576,7 @@ var Battle = (function() {
 		this.effect = parentEffect;
 		this.effectData = parentEffectData;
 		this.event = parentEvent;
-		if (typeof returnVal === 'undefined') return true;
+		if (returnVal === undefined) return relayVar;
 		return returnVal;
 	};
 	/**
