@@ -145,7 +145,7 @@ New mechanic: Signature Pokemon:
 
   - Muk: Sludge (60 base power, 100% poison)
 
-  - Weezing: Smog (75 base power, 100% poison)
+  - Weezing: Smog (75 base power, 100% poison, 100% accuracy)
 
   - Rapidash: Flame Charge (60 base power)
 
