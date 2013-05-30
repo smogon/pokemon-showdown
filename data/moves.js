@@ -6315,7 +6315,12 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		onHit: function(target, source) {
-			item = target.takeItem(source);
+			var item = target.getItem();
+			if (item.id === 'mail') {
+				target.setItem('');
+			} else {
+				item = target.takeItem(source);
+			}
 			if (item) {
 				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] '+source);
 			}
