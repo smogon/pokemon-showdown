@@ -1999,6 +1999,14 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "No competitive use."
 	},
+	"mail": {
+		id: "mail",
+		name: "Mail",
+		spritenum: 403,
+		onTakeItem: false,
+		gen: 2,
+		desc: "This item cannot be given to or taken from a Pokemon, except by Knock Off."
+	},
 	"masterball": {
 		id: "masterball",
 		name: "Master Ball",
