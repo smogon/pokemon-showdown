@@ -69,7 +69,7 @@ Major changes:
     in Hail (and 12.5% out of Hail)
   - Ice Body has 30% chance of freezing a contact move (and grants passive
     healing out of Hail, too)
-  - Thick Fat and Marvel Scale grant immunity to Hail damage  
+  - Thick Fat, Marvel Scale, and Flame Body grant immunity to Hail damage  
      
 - Freezing doesn't have a 20% thaw chance. Instead, thawing happens at the end
   of the second turn. Because this new freeze effect is a nerf, Blizzard now
@@ -387,6 +387,8 @@ Minor ability changes:
 - Magma Armor reduces incoming move damage by 1/8 of the user's max HP,
   provides immunity to Hail and freeze, and provides a one-time immunity
   to Water and Ice, after which it turns into Shell Armor
+
+- Static and Poison Point have a 100% chance of activating
 
 - Telepathy grants Imprison on switch-in
 
