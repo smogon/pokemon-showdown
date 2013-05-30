@@ -152,8 +152,7 @@ try {
 					request.url = request.url.substr(8);
 					server = avatarserver;
 				} else {
-					if (/^\/(teambuilder|ladder|lobby|battle)\/?$/.test(request.url) ||
-							/^\/(lobby|battle)-([A-Za-z0-9-]*)$/.test(request.url)) {
+					if (/^\/([A-Za-z0-9][A-Za-z0-9-]*)\/?$/.test(request.url)) {
 						request.url = '/';
 					}
 					server = staticserver;
