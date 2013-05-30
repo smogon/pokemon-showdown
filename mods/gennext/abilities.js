@@ -105,6 +105,28 @@ exports.BattleAbilities = {
 		},
 		onWeather: function() {}
 	},
+	"flamebody": {
+		inherit: true,
+		onImmunity: function(type, pokemon) {
+			if (type === 'hail') return false;
+		}
+	},
+	"static": {
+		inherit: true,
+		onAfterDamage: function(damage, target, source, move) {
+			if (move && move.isContact) {
+				source.trySetStatus('par', target, move);
+			}
+		}
+	},
+	"poisonpoint": {
+		inherit: true,
+		onAfterDamage: function(damage, target, source, move) {
+			if (move && move.isContact) {
+				source.trySetStatus('psn', target, move);
+			}
+		},
+	},
 	"flowergift": {
 		inherit: true,
 		onModifyMove: function(move) {
