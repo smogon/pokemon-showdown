@@ -314,7 +314,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"gender":"F","isDW":false,"moves":["extremespeed","thunderbolt","grassknot","brickbreak"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"gender":"F","isDW":true,"moves":["fly","thunderbolt","grassknot","protect"],"pokeball":"cherishball"},
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["thundershock","tailwhip","thunderwave","headbutt"]},
-			{"generation":5,"level":100,"gender":"M","isDW":true,"moves":["volttackle","quickattack","feint","voltswitch"]}
+			{"generation":5,"level":100,"gender":"M","isDW":true,"moves":["volttackle","quickattack","feint","voltswitch"],"pokeball":"cherishball"}
 		],
 		dreamWorldRelease: true,
 		tier: "NU"
@@ -3119,7 +3119,7 @@ exports.BattleFormatsData = {
 	empoleon: {
 		viableMoves: {"stealthrock":1,"hydropump":1,"scald":1,"icebeam":1,"hiddenpowerelectric":1,"hiddenpowerfire":1,"roar":1,"grassknot":1},
 		eventPokemon: [
-			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["hydropump","icebeam","aquajet","grassknot"]}
+			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["hydropump","icebeam","aquajet","grassknot"],"pokeball":"cherishball"}
 		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
@@ -3739,7 +3739,7 @@ exports.BattleFormatsData = {
 	serperior: {
 		viableMoves: {"leafstorm":1,"hiddenpowerfire":1,"substitute":1,"leechseed":1,"dragonpulse":1,"gigadrain":1},
 		eventPokemon: [
-			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["leafstorm","substitute","gigadrain","leechseed"]}
+			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["leafstorm","substitute","gigadrain","leechseed"],"pokeball":"cherishball"}
 		],
 		tier: "NU"
 	},
