@@ -219,6 +219,7 @@ exports.BattleItems = {
 			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Lilligant":1};
 			if (GossamerWingUsers[defender.template.species]) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
+					this.add('-message', "The attack was weakened by GoassamerWing!");
 					return basePower / 2;
 				}
 			}
