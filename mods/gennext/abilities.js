@@ -44,7 +44,7 @@ exports.BattleAbilities = {
 		},
 		onSourceBasePower: function(basePower, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
-				this.debug('Thick Fat weaken');
+				this.add('-message', "The attack was weakened by Thick Fat!");
 				return basePower / 2;
 			}
 		}
@@ -125,13 +125,13 @@ exports.BattleAbilities = {
 				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine');
-					this.add('-message', pokemon.name+' transformed! (placeholder)');
+					this.add('-message', pokemon.name+' transformed!');
 					this.boost({spd:1});
 				}
 			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
 				delete this.effectData.forme;
 				this.add('-formechange', pokemon, 'Cherrim');
-				this.add('-message', pokemon.name+' transformed! (placeholder)');
+				this.add('-message', pokemon.name+' transformed!');
 			}
 		},
 		effect: {
@@ -177,7 +177,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onFoeBasePower: function(basePower, attacker, defender, move) {
 			if (this.getEffectiveness(move.type, defender) > 0) {
-				this.debug('Solid Rock neutralize');
+				this.add('-message', "The attack was weakened by Solid Rock!");
 				return basePower * 1/2;
 			}
 		}
@@ -186,7 +186,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onFoeBasePower: function(basePower, attacker, defender, move) {
 			if (this.getEffectiveness(move.type, defender) > 0) {
-				this.debug('Solid Rock neutralize');
+				this.add('-message', "The attack was weakened by Filter!");
 				return basePower * 1/2;
 			}
 		}
@@ -253,6 +253,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
+				this.add('-message', "Its damage was reduced by Shell Armor!");
 				damage -= target.maxhp/8;
 				if (damage < 0) damage = 0;
 				return damage;
@@ -268,6 +269,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
+				this.add('-message', "Its damage was reduced by Battle Armor!");
 				damage -= target.maxhp/8;
 				if (damage < 0) damage = 0;
 				return damage;
@@ -277,6 +279,7 @@ exports.BattleAbilities = {
 	"weakarmor": {
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
+				this.add('-message', "Its damage was reduced by Weak Armor!");
 				damage -= target.maxhp/8;
 				if (damage < 0) damage = 0;
 				target.setAbility('');
@@ -299,6 +302,8 @@ exports.BattleAbilities = {
 					this.add('-activate', target, 'ability: Magma Armor');
 					target.setAbility('battlearmor');
 					damage = 0;
+				} else {
+					this.add('-message', "Its damage was reduced by Magma Armor!");
 				}
 				return damage;
 			}
@@ -308,7 +313,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onSourceBasePower: function(basePower, attacker, defender, move) {
 			if (defender.hp >= defender.maxhp) {
-				this.debug('Multiscale weaken');
+				this.add('-message', "The attack was slightly weakened by Multiscale!");
 				return basePower*2/3;
 			}
 		}
