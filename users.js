@@ -881,6 +881,7 @@ var User = (function () {
 							this.end();
 						});
 					} else {
+						this.connections[i].sendTo(room.id, '|deinit');
 						delete this.connections[i].rooms[room.id];
 					}
 				}

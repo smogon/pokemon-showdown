@@ -126,13 +126,14 @@ var commands = exports.commands = {
 	join: function(target, room, user, connection) {
 		var targetRoom = Rooms.get(target);
 		if (target && !targetRoom) {
-			return this.sendReply("|roomerror|" + target + "|The room '"+target+"' does not exist.");
+			return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
 		}
 		if (targetRoom && !targetRoom.battle && targetRoom !== Rooms.lobby && !user.named) {
-			return this.sendReply("|roomerror|" + target + "|You must have a name in order to join the room '"+target+"'.");
+			return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '"+target+"'.");
 		}
 		if (!user.joinRoom(targetRoom || room, connection)) {
-			return this.sendReply("|roomerror|" + target + "|The room '"+target+"' could not be joined (most likely, you're already in it).");
+			// This condition appears to be impossible for now.
+			return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
 		}
 	},
 
