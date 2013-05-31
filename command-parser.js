@@ -111,6 +111,15 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			send: function(data) {
 				room.send(data);
 			},
+			privateModCommand: function(data) {
+				for (var i in room.users) {
+					if (room.users[i].group in {'%':1, '@':1, '&':1, '~':1}) {
+						room.users[i].sendTo(room, data);
+					}
+				}
+				this.logEntry(data);
+				this.logModCommand(data);
+			},
 			logEntry: function(data) {
 				room.logEntry(data);
 			},

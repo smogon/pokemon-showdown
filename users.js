@@ -761,8 +761,8 @@ var User = (function () {
 			this.mmrCache[formatid] = (parseInt(mmr.r,10) + parseInt(mmr.rpr,10))/2;
 		}
 	};
-	User.prototype.mute = function(time, noRecurse) {
-		if (this.muted) return;
+	User.prototype.mute = function(time, force, noRecurse) {
+		if (this.muted && !force) return;
 		if (!time) time = 7*60000; // default time: 7 minutes
 		if (time < 1) time = 1; // mostly to prevent bugs
 		if (time > 90*60000) time = 90*60000; // limit 90 minutes
@@ -770,14 +770,16 @@ var User = (function () {
 		if (!noRecurse) for (var i in users) {
 			if (users[i] === this) continue;
 			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			users[i].mute(time, true);
+			users[i].mute(time, force, true);
 		}
 
 		var self = this;
+		if (this.muteTimeout) clearTimeout(this.muteTimeout);
 		this.muteTimeout = setTimeout(function() {
 			self.unmute(true);
 		}, time);
 		this.muted = true;
+		this.muteTime = time;
 		this.updateIdentity();
 	};
 	User.prototype.unmute = function(expired) {
@@ -787,6 +789,7 @@ var User = (function () {
 		}
 		if (expired) this.popup("Your mute has expired.");
 		this.muted = false;
+		delete this.muteTime;
 		this.updateIdentity();
 	};
 	User.prototype.ban = function(noRecurse) {
@@ -881,7 +884,6 @@ var User = (function () {
 							this.end();
 						});
 					} else {
-						this.connections[i].sendTo(room.id, '|deinit');
 						delete this.connections[i].rooms[room.id];
 					}
 				}
