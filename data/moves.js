@@ -12561,8 +12561,7 @@ exports.BattleMovedex = {
 			},
 			onModifySpePriority: -100,
 			onModifySpe: function(spe) {
-				// just for fun: Trick Room glitch
-				if (spe <= 1809) return -spe;
+				return 0x2710 - spe;
 			},
 			onResidualOrder: 23,
 			onEnd: function() {
