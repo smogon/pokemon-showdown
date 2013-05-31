@@ -204,6 +204,22 @@ var commands = exports.commands = {
 	},
 
 	/*********************************************************
+	 * Shortcuts
+	 *********************************************************/
+
+	invite: function(target, room, user) {
+		target = this.splitTarget(target);
+		if (!this.targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		var roomid = (target || room.id);
+		if (!Rooms.get(roomid)) {
+			return this.sendReply('Room '+roomid+' not found.');
+		}
+		return this.parse('/msg '+this.targetUsername+', /invite '+roomid);
+	},
+
+	/*********************************************************
 	 * Informational commands
 	 *********************************************************/
 
