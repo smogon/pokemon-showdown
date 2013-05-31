@@ -1451,10 +1451,10 @@ var Battle = (function() {
 	Battle.comparePriority = function(a, b) { // intentionally not in Battle.prototype
 		a.priority = a.priority || 0;
 		a.subPriority = a.subPriority || 0;
-		a.speed = a.speed || 0;
+		a.speed = (a.speed || 0) & 8191;
 		b.priority = b.priority || 0;
 		b.subPriority = b.subPriority || 0;
-		b.speed = b.speed || 0;
+		b.speed = (b.speed || 0) & 8191;
 		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
 			if (typeof a.order !== 'number') {
 				return -(1);
