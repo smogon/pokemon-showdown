@@ -964,38 +964,7 @@ var BattleRoom = (function() {
 
 		message = CommandParser.parse(message, this, user, connection);
 
-		if (!message) {
-			// do nothing
-		} else if (message.substr(0,3) === '>> ') {
-			var cmd = message.substr(3);
-
-			var room = this;
-			var battle = this.battle;
-			var me = user;
-			this.addCmd('chat', user.name, '>> '+cmd);
-			if (user.checkConsolePermission(connection.socket)) {
-				try {
-					this.addCmd('chat', user.name, '<< '+eval(cmd));
-				} catch (e) {
-					this.addCmd('chat', user.name, '<< error: '+e.message);
-					var stack = (""+e.stack).split("\n");
-					for (var i=0; i<stack.length; i++) {
-						this.send('<< '+stack[i], user);
-					}
-				}
-			} else {
-				this.addCmd('chat', user.name, '<< Access denied.');
-			}
-		} else if (message.substr(0,4) === '>>> ') {
-			var cmd = message.substr(4);
-
-			this.addCmd('chat', user.name, '>>> '+cmd);
-			if (user.checkConsolePermission(connection.socket)) {
-				this.battle.send('eval', cmd);
-			} else {
-				this.addCmd('chat', user.name, '<<< Access denied.');
-			}
-		} else {
+		if (message) {
 			this.battle.chat(user, message);
 		}
 		this.update();
@@ -1302,28 +1271,7 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.chat = function(user, message, connection) {
 		message = CommandParser.parse(message, this, user, connection);
 
-		if (!message) {
-			// do nothing
-		} else if (message.substr(0,3) === '>> ') {
-			var cmd = message.substr(3);
-
-			var room = this;
-			var me = user;
-			this.add('|c|'+user.getIdentity()+'|>> '+cmd, true);
-			if (user.checkConsolePermission(connection.socket)) {
-				try {
-					this.add('|c|'+user.getIdentity()+'|<< '+eval(cmd), true);
-				} catch (e) {
-					this.add('|c|'+user.getIdentity()+'|<< error: '+e.message, true);
-					var stack = (""+e.stack).split("\n");
-					for (var i=0; i<stack.length; i++) {
-						user.sendTo(this.id, '<< '+stack[i]);
-					}
-				}
-			} else {
-				this.add('|c|'+user.getIdentity()+'|<< Access denied.', true);
-			}
-		} else {
+		if (message) {
 			this.add('|c|'+user.getIdentity()+'|'+message, true);
 		}
 		this.update();

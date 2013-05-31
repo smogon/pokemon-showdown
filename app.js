@@ -380,6 +380,10 @@ server.on('connection', function(socket) {
 			var lines = message.substr(pipeIndex + 1);
 			var room = Rooms.get(roomid, 'lobby');
 			var user = connection.user;
+			if (lines.substr(0,3) === '>> ' || lines.substr(0,4) === '>>> ') {
+				user.chat(lines, room, connection);
+				return;
+			}
 			lines.split('\n').forEach(function(text) {
 				user.chat(text, room, connection);
 			});

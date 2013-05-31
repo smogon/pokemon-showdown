@@ -3414,10 +3414,12 @@ var Battle = (function() {
 			var p2 = this.p2;
 			var p1active = p1?p1.active[0]:null;
 			var p2active = p2?p2.active[0]:null;
+			data[2] = data[2].replace(/\f/g, '\n');
+			this.add('', '>>> '+data[2]);
 			try {
-				this.add('chat', '~', '<<< '+eval(data[2]));
+				this.add('', '<<< '+eval(data[2]));
 			} catch (e) {
-				this.add('chatmsg', '<<< error: '+e.message);
+				this.add('', '<<< error: '+e.message);
 			}
 			break;
 		}
