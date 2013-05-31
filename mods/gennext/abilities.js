@@ -195,6 +195,19 @@ exports.BattleAbilities = {
 		rating: 3.5,
 		num: 14
 	},
+	"keeneye": {
+		desc: "The accuracy of this Pokemon's moves receives a 60% increase; for example, a 50% accurate move becomes 80% accurate.",
+		shortDesc: "This Pokemon's moves have their Accuracy boosted to 1.6x.",
+		onModifyMove: function(move) {
+			if (typeof move.accuracy !== 'number') return;
+			this.debug('keeneye - enhancing accuracy');
+			move.accuracy *= 1.6;
+		},
+		id: "keeneye",
+		name: "Keen Eye",
+		rating: 3.5,
+		num: 14
+	},
 	"solidrock": {
 		inherit: true,
 		onFoeBasePower: function(basePower, attacker, defender, move) {
