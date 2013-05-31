@@ -59,6 +59,15 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 	var cmd = '', target = '';
 	if (!message || !message.trim().length) return;
 	if (!levelsDeep) levelsDeep = 0;
+
+	if (message.substr(0,3) === '>> ') {
+		// multiline eval
+		message = '/eval '+message.substr(3);
+	} else if (message.substr(0,4) === '>>> ') {
+		// multiline eval
+		message = '/evalbattle '+message.substr(4);
+	}
+
 	if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
