@@ -342,7 +342,10 @@ var commands = exports.commands = {
 					pokemon = {types: [Tools.getType(targets[1]).id, Tools.getType(targets[2]).id]};
 				}
 			} else {
-				return this.sendReply("'"+targets[0].trim()+"' and '"+targets[1].trim()+"' aren't recognized combination.");
+				if (!targets[1]) {
+					return this.sendReply("Attacker and defender must be separated with a comma.");
+				}
+				return this.sendReply("'"+targets[0].trim()+"' and '"+targets[1].trim()+"' aren't a recognized combination.");
 			}
 		}
 
