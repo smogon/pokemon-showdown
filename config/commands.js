@@ -316,6 +316,44 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
+	matchup: 'effectiveness',
+	effectiveness: function(target, room, user) {
+		var targets = target.split(',');
+		var type = Tools.getType(targets[1]);
+		var pokemon = Tools.getTemplate(targets[0]);
+		var defender;
+
+		if (!pokemon.exists || !type.exists) {
+			// try the other way around
+			pokemon = Tools.getTemplate(targets[1]);
+			type = Tools.getType(targets[0]);
+		}
+		defender = pokemon.species+' (not counting abilities)';
+
+		if (!pokemon.exists || !type.exists) {
+			// try two types
+			if (Tools.getType(targets[0]).exists && Tools.getType(targets[1]).exists) {
+				// two types
+				type = Tools.getType(targets[0]);
+				defender = Tools.getType(targets[1]).id;
+				pokemon = {types: [defender]};
+			} else {
+				return this.sendReply("'"+targets[0].trim()+"' and '"+targets[1].trim()+"' aren't recognized combination.");
+			}
+		}
+
+		if (!this.canBroadcast()) return;
+
+		var typeMod = Tools.getEffectiveness(type.id, pokemon);
+		var notImmune = Tools.getImmunity(type.id, pokemon);
+		var factor = 0;
+		if (notImmune) {
+			factor = Math.pow(2, typeMod);
+		}
+
+		this.sendReplyBox(''+type.id+' attacks are '+factor+'x effective against '+defender+'.');
+	},
+
 	uptime: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		var uptime = process.uptime();
