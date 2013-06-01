@@ -307,11 +307,11 @@ exports.BattleFormats = {
 			'Memento', 'Explosion', 'Perish Song', 'Destiny Bond', 'Healing Wish', 'Selfdestruct', 'Lunar Dance', 'Final Gambit'
 		]
 	},
-	seasonalmaymayhem: {
-		name: "[Seasonal] May Mayhem",
+	seasonaljunejubilee: {
+		name: "[Seasonal] June Jubilee",
 		section: "OM of the Month",
 		
-		team: 'randomSeasonalMM',
+		team: 'randomSeasonalJJ',
 		canUseRandomTeam: true,
 		effectType: 'Format',
 		rated: true,
@@ -319,44 +319,64 @@ exports.BattleFormats = {
 		searchShow: true,
 		ruleset: ['HP Percentage Mod'],
 		onBegin: function() {
-			// Shameless plug
-			var date = Date();
-			date = date.split(' ');
-			if (parseInt(date[2]) === 12) {
-				this.add('-message', 'Wish a HAPPY BIRTHDAY to Treecko37!!');
-			}
-			if (parseInt(date[2]) === 16) {
-				this.add('-message', 'Wish a HAPPY BIRTHDAY to Joim!!');
-			}
-			this.add('-message', 'Wish a HAPPY BIRTHDAY to Birkal!!');
+			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost on the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
+			this.setWeather('Sunny Day');
+			delete this.weatherData.duration;
 		},
-		onSwitchIn: function(pokemon) {
-			var msg = '';
-			switch (pokemon.name) {
-			case 'Celebi':
-				msg = 'Do or Do not. There is no try.';
-				break;
-			case 'Clefairy':
-				msg = 'You have your moments. Not many of them, but you do have them.';
-				break;
-			case 'Piloswine':
-				msg = 'Gggggaaaaaaarrrrr. Arrrrhhhn.';
-				break;
-			case 'Deoxys':
-				msg = '*hhhh* I am your father. *hhhh*';
-				break;
-			case 'Clefable':
-				msg = 'I did shoot first.';
-				break;
-			case 'Jirachi':
-				msg = 'May the force be with you.';
-				break;
-			default:
+		onBeforeMove: function(pokemon, target, move) {
+			// Reshiram changes weather with its tail until you reach the arctic
+			if (pokemon.template.speciesid === 'reshiram' && pokemon.side.battle.turn < 15) {
+				var weatherMsg = '';
 				var dice = this.random(100);
-				if (dice < 25) msg = 'Never gonna give you up, never gonna let you down';
-				break;
+				if (dice < 25) {
+					this.setWeather('Rain Dance');
+					weatherMsg = 'a Drizzle';
+				} else if (dice < 50) {
+					this.setWeather('Sunny Day');
+					weatherMsg = 'a Sunny Day';
+				} else if (dice < 75) {
+					this.setWeather('Hail');
+					weatherMsg = 'Hail';
+				} else {
+					this.setWeather('Sandstorm');
+					weatherMsg = 'a Sandstorm';
+				}
+				this.add('-message', "Reshiram caused " + weatherMsg + " with its tail!");
+				delete this.weatherData.duration;
 			}
-			if (msg !== '') this.add('-message', msg);
+		},
+		onBeforeMove: function(pokemon) {
+			if (!pokemon.side.battle.seasonal) pokemon.side.battle.seasonal = {'none':false, 'drizzle':false, 'hail':false};
+			if (pokemon.side.battle.turn >= 4 && pokemon.side.battle.seasonal.none === false) {
+				this.add('-message', "You are travelling north and you have arrived to North Dakota! It isn't as sunny here...");
+				this.clearWeather();
+				pokemon.side.battle.seasonal.none = true;
+			}
+			if (pokemon.side.battle.turn >= 8 && pokemon.side.battle.seasonal.drizzle === false) {
+				this.add('-message', "You are travelling further north and you have arrived to Edmonton! It started raining a lot... and it's effing cold.");
+				this.setWeather('Rain Dance');
+				delete this.weatherData.duration;
+				pokemon.side.battle.seasonal.drizzle = true;
+			}
+			if (pokemon.side.battle.turn >= 12 && pokemon.side.battle.seasonal.hail === false) {
+				this.add('-message', "You have arrived to the arctic! Defeat the other trainer so Delibird can be free!");
+				this.setWeather('Hail');
+				delete this.weatherData.duration;
+				pokemon.side.battle.seasonal.hail = true;
+			}
+		},
+		onFaint: function(pokemon) {
+			if (pokemon.template.id === 'delibird') {
+				var name = pokemon.side.name;
+				var winner = '';
+				if (pokemon.side.id === 'p1') {
+					winner = 'p2';
+				} else {
+					winner = 'p1';
+				}
+				this.add('-message', "No!! You let Delibird down. He trusted you. You lost the battle, " + name + ". But you lost something else: your Pokémon's trust.");
+				pokemon.battle.win(winner);
+			}
 		}
 	},
 	challengecup: {
