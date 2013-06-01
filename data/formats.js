@@ -319,7 +319,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		ruleset: ['HP Percentage Mod'],
 		onBegin: function() {
-			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost on the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
+			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
 			this.setWeather('Sunny Day');
 			delete this.weatherData.duration;
 		},
