@@ -318,7 +318,7 @@ var commands = exports.commands = {
 
 	matchup: 'effectiveness',
 	effectiveness: function(target, room, user) {
-		var targets = target.split(',');
+		var targets = target.split(/[,/]/);
 		var type = Tools.getType(targets[1]);
 		var pokemon = Tools.getTemplate(targets[0]);
 		var defender;
@@ -337,6 +337,10 @@ var commands = exports.commands = {
 				type = Tools.getType(targets[0]);
 				defender = Tools.getType(targets[1]).id;
 				pokemon = {types: [defender]};
+				if (Tools.getType(targets[2]).exists) {
+					defender = Tools.getType(targets[1]).id + '/' + Tools.getType(targets[2]).id;
+					pokemon = {types: [Tools.getType(targets[1]).id, Tools.getType(targets[2]).id]};
+				}
 			} else {
 				return this.sendReply("'"+targets[0].trim()+"' and '"+targets[1].trim()+"' aren't recognized combination.");
 			}
