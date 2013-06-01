@@ -1372,6 +1372,7 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 			if ((template.tier === 'G4CAP' || template.tier === 'G5CAP') && Math.random()*5>1) continue;
 			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
+			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
 			// Not available on BW
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
