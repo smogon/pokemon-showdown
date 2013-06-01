@@ -720,14 +720,22 @@ var commands = exports.commands = {
 	loadbanlist: function(target, room, user, connection) {
 		if (!this.can('modchat')) return false;
 
-		connection.sendTo(room, 'loading');
+		connection.sendTo(room, 'Loading ipbans.txt...');
 		fs.readFile('config/ipbans.txt', function (err, data) {
 			if (err) return;
 			data = (''+data).split("\n");
+			var count;
 			for (var i=0; i<data.length; i++) {
-				if (data[i]) Users.bannedIps[data[i]] = '#ipban';
+				if (data[i] && !Users.bannedIps[data[i]]) {
+					Users.bannedIps[data[i]] = '#ipban';
+					count++;
+				}
 			}
-			connection.sendTo(room, 'banned '+i+' ips');
+			if (!count) {
+				connection.sendTo(room, 'No IPs were banned; ipbans.txt has not been updated since the last time /loadbanlist was called.');
+			} else {
+				connection.sendTo(room, ''+count+' IPs were loaded from ipbans.txt and banned.');
+			}
 		});
 	},
 
