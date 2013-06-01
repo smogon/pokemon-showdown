@@ -1402,17 +1402,17 @@ exports.BattleScripts = {
 	randomSeasonalJJTeam: function(side) {
 		// Seasonal Pokemon list
 		var seasonalPokemonList = [
-			'ninetales', 'sawsbuck', 'vanilluxe', 'vanillite', 'vanillish', 'rotommow', 'rotomfan', 'pikachu', 'raichu', 'solrock', 'sunflora', 
-			'castform', 'ludicolo', 'thundurus', 'tornadus', 'landorus', 'magmar', 'magmortar', 'rhydon', 'rhyperior', 'lapras', 
-			'starmie', 'manaphy', 'krabby', 'kingler', 'crawdaunt', 'victreebel', 'bellossom', 'maractus', 'exeggutor', 'tropius', 'malaconda', 
-			'krillowatt', 'cherrim', 'snorlax', 'slaking', 'politoed', 'tentacool', 'tentacruel', 'sudowoodo', 'groudon', 
-			'keldeo', 'venusaur', 'hooh', 'moltres', 'zapdos', 'reshiram ', 'blastoise', 'meloetta', 'roserade', 'lilligant', 'rotommow', 
-			'rotomheat', 'beautifuly', 'charizard', 'delcatty', 'drifblim', 'floatzel', 'jumpluff', 'lunatone', 
-			'solrock', 'machoke', 'machamp', 'machop', 'meganium', 'pelliper', 'wailord', 'rapidash', 'vileplume', 'aurumoth', 'syclant', 
-			'butterfree', 'beedrill', 'parasect', 'venomoth', 'scizor', 'pinsir', 'ledian', 'ariados', 'yanmega', 'forretress', 'shuckle', 
-			'heracross', 'beautifly', 'dustox', 'masquerain', 'ninjask', 'shedinja', 'volbeat', 'illumise', 'armaldo', 'kricketune', 'wormadam', 
-			'wormadamsandy', 'wormadamtrash', 'mothim', 'vespiquen', 'arceusbug', 'leavanny', 'scolipede', 'crustle', 'escavalier',
-			'galvantula', 'accelgor', 'durant', 'volcarona', 'genesect', 'rotomheat'
+			'accelgor', 'arceusbug', 'ariados', 'armaldo', 'aurumoth', 'beautifly', 'beedrill', 'bellossom', 'blastoise',
+			'butterfree', 'castform', 'charizard', 'cherrim', 'crawdaunt', 'crustle', 'delcatty', 'drifblim', 'durant',
+			'dustox', 'escavalier', 'exeggutor', 'floatzel', 'forretress', 'galvantula', 'genesect', 'groudon', 'heracross',
+			'hooh', 'illumise', 'jumpluff', 'keldeo', 'kingler', 'krabby', 'kricketune', 'krillowatt', 'landorus', 'lapras',
+			'leavanny', 'ledian', 'lilligant', 'ludicolo', 'lunatone', 'machamp', 'machoke', 'machop', 'magmar', 'magmortar',
+			'malaconda', 'manaphy', 'maractus', 'masquerain', 'meganium', 'meloetta', 'moltres', 'mothim', 'ninetales',
+			'ninjask', 'parasect', 'pelliper', 'pikachu', 'pinsir', 'politoed', 'raichu', 'rapidash', 'reshiram', 'rhydon',
+			'rhyperior', 'roserade', 'rotomfan', 'rotomheat', 'rotommow', 'sawsbuck', 'scizor', 'scolipede', 'shedinja',
+			'shuckle', 'slaking', 'snorlax', 'solrock', 'starmie', 'sudowoodo', 'sunflora', 'syclant', 'tentacool', 'tentacruel',
+			'thundurus', 'tornadus', 'tropius', 'vanillish', 'vanillite', 'vanilluxe', 'venomoth', 'venusaur', 'vespiquen',
+			'victreebel', 'vileplume', 'volbeat', 'volcarona', 'wailord', 'wormadam', 'wormadamsandy', 'wormadamtrash', 'yanmega', 'zapdos'
 		];
 		seasonalPokemonList = seasonalPokemonList.randomize();
 		var team = [this.randomSet(this.getTemplate('delibird'), 0)];

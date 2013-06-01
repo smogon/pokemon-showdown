@@ -278,7 +278,6 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		debug: true,
 		onBegin: function() {
 			this.p1.pokemon = this.p1.pokemon.slice(0,1);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
