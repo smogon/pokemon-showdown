@@ -271,21 +271,21 @@ exports.BattleFormats = {
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 	
-	"1v1meta": {
-	        effectType: 'Format',
-	        name: "1-V-1 Meta",
+	"1v1": {
+		effectType: 'Format',
+		name: "1v1",
 		section: "OM of the Month",
-	        rated: true,
-	        challengeShow: true,
-	        searchShow: true,
-	        debug: true,
-	        onBegin: function() {
-	    		this.p1.pokemon = this.p1.pokemon.slice(0,1);
-		        this.p1.pokemonLeft = this.p1.pokemon.length;
-		        this.p2.pokemon = this.p2.pokemon.slice(0,1);
-		        this.p2.pokemonLeft = this.p2.pokemon.length;
-	        },
-	        ruleset: ['HP Percentage Mod', 'Pokemon', 'OHKO Clause', 'Evasion Moves Clause', 'Moody Clause', 'Team Preview 1v1'],
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		debug: true,
+		onBegin: function() {
+			this.p1.pokemon = this.p1.pokemon.slice(0,1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		ruleset: ['HP Percentage Mod', 'Pokemon', 'OHKO Clause', 'Evasion Moves Clause', 'Moody Clause', 'Team Preview 1v1'],
 		banlist: ['Unreleased', 'Illegal', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-A', 'Deoxys', 'Dialga', 'Giratina', 'Giritina-O', 'Groudon', 'Ho-Oh', 'Kyurem-W', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-S', 'Zekrom', 'Memento', 'Explosion', 'Perish Song', 'Destiny Bond', 'Healing Wish', 'Selfdestruct']
 	},
 	seasonalmaymayhem: {
