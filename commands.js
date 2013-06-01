@@ -724,7 +724,7 @@ var commands = exports.commands = {
 		fs.readFile('config/ipbans.txt', function (err, data) {
 			if (err) return;
 			data = (''+data).split("\n");
-			var count;
+			var count = 0;
 			for (var i=0; i<data.length; i++) {
 				if (data[i] && !Users.bannedIps[data[i]]) {
 					Users.bannedIps[data[i]] = '#ipban';
