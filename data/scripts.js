@@ -1404,10 +1404,10 @@ exports.BattleScripts = {
 		var seasonalPokemonList = [
 			'ninetales', 'sawsbuck', 'vanilluxe', 'vanillite', 'vanillish', 'rotommow', 'rotomfan', 'pikachu', 'raichu', 'solrock', 'sunflora', 
 			'castform', 'ludicolo', 'thundurus', 'tornadus', 'landorus', 'magmar', 'magmortar', 'rhydon', 'rhyperior', 'lapras', 
-			'starmie', 'manaphy', 'krabby', 'kingler', 'crawdaunt', 'victreebell', 'bellossom', 'maractus', 'exeggutor', 'tropius', 'malaconda', 
-			'krillowatt', 'cherrim', 'snorlax', 'butterfly', 'slaking', 'politoed', 'tentacool', 'tentacruel', 'sudowoodo', 'bonsai', 'groudon', 
+			'starmie', 'manaphy', 'krabby', 'kingler', 'crawdaunt', 'victreebel', 'bellossom', 'maractus', 'exeggutor', 'tropius', 'malaconda', 
+			'krillowatt', 'cherrim', 'snorlax', 'slaking', 'politoed', 'tentacool', 'tentacruel', 'sudowoodo', 'groudon', 
 			'keldeo', 'venusaur', 'hooh', 'moltres', 'zapdos', 'reshiram ', 'blastoise', 'meloetta', 'roserade', 'lilligant', 'rotommow', 
-			'rotomheat', 'beautifuly', 'butterfree', 'beedrill', 'charizard', 'delcatty', 'drifblim', 'floatzel', 'jumpluff', 'lunatone', 
+			'rotomheat', 'beautifuly', 'charizard', 'delcatty', 'drifblim', 'floatzel', 'jumpluff', 'lunatone', 
 			'solrock', 'machoke', 'machamp', 'machop', 'meganium', 'pelliper', 'wailord', 'rapidash', 'vileplume', 'aurumoth', 'syclant', 
 			'butterfree', 'beedrill', 'parasect', 'venomoth', 'scizor', 'pinsir', 'ledian', 'ariados', 'yanmega', 'forretress', 'shuckle', 
 			'heracross', 'beautifly', 'dustox', 'masquerain', 'ninjask', 'shedinja', 'volbeat', 'illumise', 'armaldo', 'kricketune', 'wormadam', 
