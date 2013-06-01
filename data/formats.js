@@ -291,7 +291,7 @@ exports.BattleFormats = {
 			'Darkrai', 
 			'Deoxys', 'Deoxys-Attack',
 			'Dialga', 
-			'Giratina', 'Giritina-Origin', 
+			'Giratina', 'Giratina-Origin', 
 			'Groudon', 
 			'Ho-Oh', 
 			'Kyogre', 
