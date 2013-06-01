@@ -155,7 +155,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 						return false;
 					}
 
-					this.add('|c|'+user.getIdentity()+'|'+message);
+					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
 
 					// broadcast cooldown
 					var normalized = toId(message);
@@ -242,8 +242,8 @@ function canTalk(user, room, connection, message) {
 		if (connection) connection.sendTo(room, 'You are locked from talking in chat.');
 		return false;
 	}
-	if (user.muted && room.id === 'lobby') {
-		if (connection) connection.sendTo(room, 'You are muted and cannot talk in the lobby.');
+	if (user.mutedRooms[room.id]) {
+		if (connection) connection.sendTo(room, 'You are muted and cannot talk in this room.');
 		return false;
 	}
 	if (config.modchat && room.id === 'lobby') {

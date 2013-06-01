@@ -177,10 +177,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 		if (!this.can('mute', targetUser)) return false;
-		if (room.id !== 'lobby') {
-			return this.sendReply('Muting only applies to lobby - you probably wanted to /lock.');
-		}
-		if (targetUser.muted || targetUser.locked || !targetUser.connected) {
+		if (targetUser.muteDuration[room.id] || targetUser.locked || !targetUser.connected) {
 			var problem = ' but was already '+(!targetUser.connected ? 'offline' : targetUser.locked ? 'locked' : 'muted');
 			if (!target) {
 				return this.privateModCommand('('+targetUser.name+' would be muted by '+user.name+problem+'.)');
@@ -193,7 +190,7 @@ var commands = exports.commands = {
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 
-		targetUser.mute(7*60*1000);
+		targetUser.mute(room.id, 7*60*1000);
 	},
 
 	hourmute: function(target, room, user) {
@@ -205,11 +202,8 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 		if (!this.can('mute', targetUser)) return false;
-		if (room.id !== 'lobby') {
-			return this.sendReply('Muting only applies to lobby - you probably wanted to /lock.');
-		}
 
-		if (((targetUser.muted && (targetUser.muteTime||0) >= 50*60*1000) || targetUser.locked) && !target) {
+		if (((targetUser.muteDuration[room.id]||0) >= 50*60*1000 || targetUser.locked) && !target) {
 			var problem = ' but was already '+(!targetUser.connected ? 'offline' : targetUser.locked ? 'locked' : 'muted');
 			return this.privateModCommand('('+targetUser.name+' would be muted by '+user.name+problem+'.)');
 		}
@@ -219,7 +213,7 @@ var commands = exports.commands = {
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 
-		targetUser.mute(60*60*1000, true);
+		targetUser.mute(room.id, 60*60*1000, true);
 	},
 
 	um: 'unmute',
@@ -232,9 +226,13 @@ var commands = exports.commands = {
 		}
 		if (!this.can('mute', targetUser)) return false;
 
+		if (!targetUser.mutedRooms[room.id]) {
+			return this.sendReply(''+targetUser.name+' isn\'t muted.');
+		}
+
 		this.addModCommand(''+targetUser.name+' was unmuted by '+user.name+'.');
 
-		targetUser.unmute();
+		targetUser.unmute(room.id);
 	},
 
 	ipmute: 'lock',

@@ -178,7 +178,8 @@ var User = (function () {
 		this.ips = {}
 		this.ips[connection.ip] = 1;
 
-		this.muted = false;
+		this.mutedRooms = {};
+		this.muteDuration = {};
 		this.locked = !!checkLocked(connection.ip);
 		this.prevNames = {};
 		this.battles = {};
@@ -212,11 +213,12 @@ var User = (function () {
 	User.prototype.popup = function(message) {
 		this.send('|popup|'+message.replace(/\n/g,'||'));
 	};
-	User.prototype.getIdentity = function() {
+	User.prototype.getIdentity = function(roomid) {
+		if (!roomid) roomid = 'lobby';
 		if (this.locked) {
 			return '#'+this.name;
 		}
-		if (this.muted) {
+		if (this.mutedRooms[roomid]) {
 			return '!'+this.name;
 		}
 		return this.group+this.name;
@@ -386,13 +388,12 @@ var User = (function () {
 		}
 		return true;
 	};
-	User.prototype.updateIdentity = function() {
-		// We'll need the for-loop when we implement chatrooms
-		// for (var i in this.roomCount) {
-		// 	Rooms.get(i,'lobby').onUpdateIdentity(this);
-		// }
-		if ('lobby' in this.roomCount) {
-			Rooms.lobby.onUpdateIdentity(this);
+	User.prototype.updateIdentity = function(roomid) {
+		if (roomid) {
+			return Rooms.get(roomid,'lobby').onUpdateIdentity(this);
+		}
+		for (var i in this.roomCount) {
+			Rooms.get(i,'lobby').onUpdateIdentity(this);
 		}
 	};
 	/**
@@ -549,7 +550,10 @@ var User = (function () {
 				}
 				if (!user.authenticated) {
 					if (Object.isEmpty(Object.select(this.ips, user.ips))) {
-						user.muted = this.muted;
+						user.mutedRooms = Object.merge(user.mutedRooms, this.mutedRooms);
+						user.muteDuration = Object.merge(user.muteDuration, this.muteDuration);
+						this.mutedRooms = {};
+						this.muteDuration = {};
 					}
 				}
 				for (var i=0; i<this.connections.length; i++) {
@@ -686,9 +690,9 @@ var User = (function () {
 	};
 	User.prototype.disconnectAll = function() {
 		// Disconnects a user from the server
-		if (this.muteTimeout) {
-			clearTimeout(this.muteTimeout);
-			this.muteTimeout = null;
+		for (var roomid in this.mutedRooms) {
+			clearTimeout(this.mutedRooms[roomid]);
+			delete this.mutedRooms[roomid];
 		}
 		this.clearChatQueue();
 		var connection = null;
@@ -761,8 +765,9 @@ var User = (function () {
 			this.mmrCache[formatid] = (parseInt(mmr.r,10) + parseInt(mmr.rpr,10))/2;
 		}
 	};
-	User.prototype.mute = function(time, force, noRecurse) {
-		if (this.muted && !force) return;
+	User.prototype.mute = function(roomid, time, force, noRecurse) {
+		if (!roomid) roomid = 'lobby';
+		if (this.mutedRooms[roomid] && !force) return;
 		if (!time) time = 7*60000; // default time: 7 minutes
 		if (time < 1) time = 1; // mostly to prevent bugs
 		if (time > 90*60000) time = 90*60000; // limit 90 minutes
@@ -774,23 +779,21 @@ var User = (function () {
 		}
 
 		var self = this;
-		if (this.muteTimeout) clearTimeout(this.muteTimeout);
-		this.muteTimeout = setTimeout(function() {
-			self.unmute(true);
+		if (this.mutedRooms[roomid]) clearTimeout(this.mutedRooms[roomid]);
+		this.mutedRooms[roomid] = setTimeout(function() {
+			self.unmute(roomid, true);
 		}, time);
-		this.muted = true;
-		this.muteTime = time;
-		this.updateIdentity();
+		this.muteDuration[roomid] = time;
+		this.updateIdentity(roomid);
 	};
-	User.prototype.unmute = function(expired) {
-		if (this.muteTimeout) {
-			clearTimeout(this.muteTimeout);
-			this.muteTimeout = null;
+	User.prototype.unmute = function(roomid, expired) {
+		if (!roomid) roomid = 'lobby';
+		if (this.mutedRooms[roomid]) {
+			clearTimeout(this.mutedRooms[roomid]);
+			delete this.mutedRooms[roomid];
+			if (expired) this.popup("Your mute has expired.");
+			this.updateIdentity(roomid);
 		}
-		if (expired) this.popup("Your mute has expired.");
-		this.muted = false;
-		delete this.muteTime;
-		this.updateIdentity();
 	};
 	User.prototype.ban = function(noRecurse) {
 		// recurse only once; the root for-loop already bans everything with your IP
@@ -1026,9 +1029,9 @@ var User = (function () {
 	};
 	User.prototype.destroy = function() {
 		// deallocate user
-		if (this.muteTimeout) {
-			clearTimeout(this.muteTimeout);
-			this.muteTimeout = null;
+		for (var roomid in this.mutedRooms) {
+			clearTimeout(this.mutedRooms[roomid]);
+			delete this.mutedRooms[roomid];
 		}
 		this.clearChatQueue();
 		delete users[this.userid];

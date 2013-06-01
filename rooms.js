@@ -1144,7 +1144,7 @@ var ChatRoom = (function() {
 				continue;
 			}
 			counter++;
-			buffer += ','+this.users[i].getIdentity();
+			buffer += ','+this.users[i].getIdentity(this.id);
 		}
 		var msg = '|users|'+counter+buffer;
 		if (this.id === 'lobby') {
@@ -1200,10 +1200,10 @@ var ChatRoom = (function() {
 
 		this.users[user.userid] = user;
 		if (user.named && config.reportjoins) {
-			this.add('|j|'+user.getIdentity(), true);
+			this.add('|j|'+user.getIdentity(this.id), true);
 			this.update(user);
 		} else if (user.named) {
-			var entry = '|J|'+user.getIdentity();
+			var entry = '|J|'+user.getIdentity(this.id);
 			if (config.reportjoinsperiod) {
 				this.reportJoinsQueue.push(entry);
 			} else {
@@ -1225,14 +1225,14 @@ var ChatRoom = (function() {
 		var entry;
 		if (joining) {
 			if (config.reportjoins) {
-				entry = '|j|' + user.getIdentity();
+				entry = '|j|' + user.getIdentity(this.id);
 			} else {
-				entry = '|J|' + user.getIdentity();
+				entry = '|J|' + user.getIdentity(this.id);
 			}
 		} else if (!user.named) {
 			entry = '|L| ' + oldid;
 		} else {
-			entry = '|N|' + user.getIdentity() + '|' + oldid;
+			entry = '|N|' + user.getIdentity(this.id) + '|' + oldid;
 		}
 		if (config.reportjoins) {
 			this.add(entry);
@@ -1251,7 +1251,7 @@ var ChatRoom = (function() {
 	 */
 	ChatRoom.prototype.onUpdateIdentity = function(user) {
 		if (user && user.connected && user.named) {
-			var entry = '|N|' + user.getIdentity() + '|' + user.userid;
+			var entry = '|N|' + user.getIdentity(this.id) + '|' + user.userid;
 			if (config.reportjoinsperiod) {
 				this.reportJoinsQueue.push(entry);
 			} else {
@@ -1263,9 +1263,9 @@ var ChatRoom = (function() {
 		if (!user) return; // ...
 		delete this.users[user.userid];
 		if (config.reportjoins) {
-			this.add('|l|'+user.getIdentity());
+			this.add('|l|'+user.getIdentity(this.id));
 		} else if (user.named) {
-			var entry = '|L|' + user.getIdentity();
+			var entry = '|L|' + user.getIdentity(this.id);
 			if (config.reportjoinsperiod) {
 				this.reportJoinsQueue.push(entry);
 			} else {
@@ -1278,7 +1278,7 @@ var ChatRoom = (function() {
 		message = CommandParser.parse(message, this, user, connection);
 
 		if (message) {
-			this.add('|c|'+user.getIdentity()+'|'+message, true);
+			this.add('|c|'+user.getIdentity(this.id)+'|'+message, true);
 		}
 		this.update();
 	};
