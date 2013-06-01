@@ -286,7 +286,26 @@ exports.BattleFormats = {
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		ruleset: ['HP Percentage Mod', 'Pokemon', 'OHKO Clause', 'Evasion Moves Clause', 'Moody Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-A', 'Deoxys', 'Dialga', 'Giratina', 'Giritina-O', 'Groudon', 'Ho-Oh', 'Kyurem-W', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-S', 'Zekrom', 'Memento', 'Explosion', 'Perish Song', 'Destiny Bond', 'Healing Wish', 'Selfdestruct']
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Darkrai', 
+			'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Deoxys-Defense',
+			'Dialga', 
+			'Genesect',
+			'Giratina', 'Giritina-Origin', 
+			'Groudon', 
+			'Ho-Oh', 
+			'Kyogre', 
+			'Kyurem-White', 
+			'Lugia', 
+			'Manaphy',
+			'Palkia', 
+			'Rayquaza', 
+			'Reshiram', 
+			'Shaymin-Sky', 
+			'Zekrom',
+			'Memento', 'Explosion', 'Perish Song', 'Destiny Bond', 'Healing Wish', 'Selfdestruct', 'Lunar Dance', 'Final Gambit'
+		]
 	},
 	seasonalmaymayhem: {
 		name: "[Seasonal] May Mayhem",
