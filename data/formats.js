@@ -296,6 +296,7 @@ exports.BattleFormats = {
 			'Kyogre', 
 			'Kyurem-White', 
 			'Lugia', 
+			'Mewtwo',
 			'Palkia', 
 			'Rayquaza', 
 			'Reshiram', 
