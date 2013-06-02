@@ -176,11 +176,11 @@ exports.BattleAbilities = {
 	"bigpecks": {
 		desc: "Prevents the Pokemon's Defense stat from being reduced.",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Defense.",
-		onBoost: function(boost, target, source) {
+		onBoost: function(boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost['def'] && boost['def'] < 0) {
 				boost['def'] = 0;
-				this.add("-message", target.name+"'s Defense was not lowered! (placeholder)");
+				if (!effect.secondaries) this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", "[of] "+target);
 			}
 		},
 		id: "bigpecks",
@@ -218,13 +218,16 @@ exports.BattleAbilities = {
 	"clearbody": {
 		desc: "Opponents cannot reduce this Pokemon's stats; they can, however, modify stat changes with Power Swap, Guard Swap and Heart Swap and inflict stat boosts with Swagger and Flatter. This ability does not prevent self-inflicted stat reductions.",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages.",
-		onBoost: function(boost, target, source) {
+		onBoost: function(boost, target, source, effect) {
 			if (source && target === source) return;
+			var showMsg = false;
 			for (var i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
+					showMsg = true;
 				}
 			}
+			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Clear Body", "[of] "+target);
 		},
 		id: "clearbody",
 		name: "Clear Body",
@@ -825,11 +828,11 @@ exports.BattleAbilities = {
 	"hypercutter": {
 		desc: "Opponents cannot reduce this Pokemon's Attack stat; they can, however, modify stat changes with Power Swap or Heart Swap and inflict a stat boost with Swagger. This ability does not prevent self-inflicted stat reductions.",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Attack.",
-		onBoost: function(boost, target, source) {
+		onBoost: function(boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost['atk'] && boost['atk'] < 0) {
 				boost['atk'] = 0;
-				this.add("-message", target.name+"'s Attack was not lowered! (placeholder)");
+				if (!effect.secondaries) this.add("-fail", target, "unboost", "Attack", "[from] ability: Hyper Cutter", "[of] "+target);
 			}
 		},
 		id: "hypercutter",
@@ -1009,11 +1012,11 @@ exports.BattleAbilities = {
 	"keeneye": {
 		desc: "This Pokemon's Accuracy cannot be lowered.",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's accuracy.",
-		onBoost: function(boost, target, source) {
+		onBoost: function(boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost['accuracy'] && boost['accuracy'] < 0) {
 				boost['accuracy'] = 0;
-				this.add("-message", target.name+"'s accuracy was not lowered! (placeholder)");
+				if (!effect.secondaries) this.add("-fail", target, "unboost", "accuracy", "[from] ability: Keen Eye", "[of] "+target);
 			}
 		},
 		id: "keeneye",
@@ -2596,14 +2599,16 @@ exports.BattleAbilities = {
 	"whitesmoke": {
 		desc: "Opponents cannot reduce this Pokemon's stats; they can, however, modify stat changes with Power Swap, Guard Swap and Heart Swap and inflict stat boosts with Swagger and Flatter. This ability does not prevent self-inflicted stat reductions. [Field Effect]\u00a0If this Pokemon is in the lead spot, the rate of wild Pokemon battles decreases by 50%.",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages.",
-		onBoost: function(boost, target, source) {
-			if (!source || target === source) return;
+		onBoost: function(boost, target, source, effect) {
+			if (source && target === source) return;
+			var showMsg = false;
 			for (var i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
-					this.add("-message", target.name+"'s stats were not lowered! (placeholder)");
+					showMsg = true;
 				}
 			}
+			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: White Smoke", "[of] "+target);
 		},
 		id: "whitesmoke",
 		name: "White Smoke",
