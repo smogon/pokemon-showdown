@@ -179,7 +179,7 @@ try {
 // and doing things on our server.
 
 var server = require('sockjs').createServer({
-	sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js",
+	sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-0.3.min.js",
 	log: function(severity, message) {
 		if (severity === 'error') console.log('ERROR: '+message);
 	},
