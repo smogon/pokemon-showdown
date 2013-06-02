@@ -108,7 +108,7 @@ var commands = exports.commands = {
 		if (Rooms.rooms[target]) {
 			return this.sendReply("The room '"+target+"' already exists.");
 		}
-		Rooms.rooms[target] = new Rooms.ChatRoom(target);
+		Rooms.rooms[target] = new Rooms.ChatRoom(toId(target), target);
 		return this.sendReply("The room '"+target+"' was created.");
 	},
 
