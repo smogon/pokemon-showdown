@@ -183,7 +183,8 @@ var server = require('sockjs').createServer({
 	log: function(severity, message) {
 		if (severity === 'error') console.log('ERROR: '+message);
 	},
-	prefix: '/showdown'
+	prefix: '/showdown',
+	websocket: !config.disablewebsocket
 });
 
 // Make `app`, `appssl`, and `server` available to the console.
