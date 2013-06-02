@@ -368,7 +368,7 @@ server.on('connection', function(socket) {
 		var ip;
 		while (ip = ips.pop()) {
 			ip = ip.trim();
-			if (isTrustedProxyIp(ip)) {
+			if (!isTrustedProxyIp(ip)) {
 				socket.remoteAddress = ip;
 				break;
 			}
