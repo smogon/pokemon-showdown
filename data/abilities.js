@@ -223,7 +223,6 @@ exports.BattleAbilities = {
 			for (var i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
-					this.add("-message", target.name+"'s stats were not lowered! (placeholder)");
 				}
 			}
 		},
