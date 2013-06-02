@@ -791,11 +791,11 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'blockchallenges' || target === 'away' || target === 'idle') {
 			matched = true;
-			this.sendReply('/away - Blocks challenges so no one can challenge you.');
+			this.sendReply('/away - Blocks challenges so no one can challenge you. Deactivate it with /back.');
 		}
 		if (target === 'all' || target === 'allowchallenges' || target === 'back') {
 			matched = true;
-			this.sendReply('/back - Unlocks challenges so you can be challenged again.');
+			this.sendReply('/back - Unlocks challenges so you can be challenged again. Deactivate it with /away.');
 		}
 		if (target === 'all' || target === 'faq') {
 			matched = true;
@@ -810,12 +810,17 @@ var commands = exports.commands = {
 			this.sendReply('/highlight delete, word - delete a word from the highlight list.');
 			this.sendReply('/highlight delete - clear the highlight list');
 		}
-		if (target === 'timestamps') {
+		if (target === 'all' || target === 'timestamps') {
 			matched = true;
 			this.sendReply('Set your timestamps preference:');
 			this.sendReply('/timestamps [all|lobby|pms], [minutes|seconds|off]');
 			this.sendReply('all - change all timestamps preferences, lobby - change only lobby chat preferences, pms - change only PM preferences');
 			this.sendReply('off - set timestamps off, minutes - show timestamps of the form [hh:mm], seconds - show timestamps of the form [hh:mm:ss]');
+		}
+		if (target === 'all' || target === 'effectiveness') {
+			matched = true;
+			this.sendReply('/effectiveness [type1], [type2] - Provides the effectiveness of a [type1] attack to a [type2] Pokémon.');
+			this.sendReply('!effectiveness [type1], [type2] - Shows everyone the effectiveness of a [type1] attack to a [type2] Pokémon.');
 		}
 		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
