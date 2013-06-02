@@ -1316,7 +1316,7 @@ var rooms = {};
 console.log("NEW GLOBAL: global");
 rooms.global = new GlobalRoom('global');
 console.log("NEW CHATROOM: lobby");
-rooms.lobby = new ChatRoom('lobby');
+rooms.lobby = new ChatRoom('lobby', 'Lobby');
 
 exports.GlobalRoom = GlobalRoom;
 exports.BattleRoom = BattleRoom;

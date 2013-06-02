@@ -105,10 +105,11 @@ var commands = exports.commands = {
 
 	makechatroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (Rooms.rooms[target]) {
+		var id = toId(target);
+		if (Rooms.rooms[id]) {
 			return this.sendReply("The room '"+target+"' already exists.");
 		}
-		Rooms.rooms[target] = new Rooms.ChatRoom(toId(target), target);
+		Rooms.rooms[id] = new Rooms.ChatRoom(id, target);
 		return this.sendReply("The room '"+target+"' was created.");
 	},
 
