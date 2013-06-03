@@ -26,9 +26,11 @@ exports.serverid = 'testserver';
 // with inaccurate clocks, the default is 25 hours.
 exports.tokenexpiry = 25*60*60;
 
-// Proxy IP - a list of proxy IPs with trusted X-Forwarded-For headers
-//   The list can be an array, or a string with whatever delimiter you wish.
-//   Leave at false to never trust any proxy.
+// proxyip - proxy IPs with trusted X-Forwarded-For headers
+//   This can be either false (meaning not to trust any proxies) or an array
+//   of strings. Each string should be either an IP address or an subnet given
+//   in CIDR notation. You should usually leave this as `false` unless you
+//   know what you are doing.
 exports.proxyip = false;
 
 // login server data - don't forget the http:// and the trailing slash
