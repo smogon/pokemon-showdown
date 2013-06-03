@@ -346,7 +346,7 @@ exports.BattleFormats = {
 		onBeforeMove: function(pokemon) {
 			if (!pokemon.side.battle.seasonal) pokemon.side.battle.seasonal = {'none':false, 'drizzle':false, 'hail':false};
 			if (pokemon.side.battle.turn >= 4 && pokemon.side.battle.seasonal.none === false) {
-				this.add('-message', "You are travelling north and you have arrived to North Dakota! It isn't as sunny here...");
+				this.add('-message', "You are travelling north and you have arrived to North Dakota! There's a clear sky and the temperature is lower here.");
 				this.clearWeather();
 				pokemon.side.battle.seasonal.none = true;
 			}
