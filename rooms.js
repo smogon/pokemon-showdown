@@ -981,6 +981,7 @@ var BattleRoom = (function() {
 	BattleRoom.prototype.logModCommand = function(result) {
 		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
+	BattleRoom.prototype.logEntry = function() {};
 	BattleRoom.prototype.destroy = function() {
 		// deallocate ourself
 
@@ -1035,8 +1036,6 @@ var ChatRoom = (function() {
 			if (config.loguserstats) {
 				setInterval(this.logUserStats.bind(this), config.loguserstats);
 			}
-		} else {
-			this.logEntry = function() { };
 		}
 
 		if (config.reportjoinsperiod) {
@@ -1289,6 +1288,7 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.logModCommand = function(result) {
 		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
+	ChatRoom.prototype.logEntry = function() {};
 	return ChatRoom;
 })();
 
