@@ -1402,9 +1402,9 @@ exports.BattleScripts = {
 	randomSeasonalJJTeam: function(side) {
 		// Seasonal Pokemon list
 		var seasonalPokemonList = [
-			'accelgor', 'arceusbug', 'ariados', 'armaldo', 'aurumoth', 'beautifly', 'beedrill', 'bellossom', 'blastoise',
+			'accelgor', 'aggron', 'arceusbug', 'ariados', 'armaldo', 'aurumoth', 'beautifly', 'beedrill', 'bellossom', 'blastoise',
 			'butterfree', 'castform', 'charizard', 'cherrim', 'crawdaunt', 'crustle', 'delcatty', 'drifblim', 'durant',
-			'dustox', 'escavalier', 'exeggutor', 'floatzel', 'forretress', 'galvantula', 'genesect', 'groudon', 'heracross',
+			'dustox', 'escavalier', 'exeggutor', 'floatzel', 'forretress', 'galvantula', 'genesect', 'groudon', 'hariyama', 'heracross',
 			'hooh', 'illumise', 'jumpluff', 'keldeo', 'kingler', 'krabby', 'kricketune', 'krillowatt', 'landorus', 'lapras',
 			'leavanny', 'ledian', 'lilligant', 'ludicolo', 'lunatone', 'machamp', 'machoke', 'machop', 'magmar', 'magmortar',
 			'malaconda', 'manaphy', 'maractus', 'masquerain', 'meganium', 'meloetta', 'moltres', 'mothim', 'ninetales',
@@ -1432,7 +1432,13 @@ exports.BattleScripts = {
 				set.moves = ['surf', 'megahorn', 'earthquake', 'rockblast'];
 			}
 			if (template.id === 'reshiram') {
-				 set.moves = ['tailwhip', 'dragontail', 'irontail', 'aquatail'];
+				set.moves = ['tailwhip', 'dragontail', 'irontail', 'aquatail'];
+			}
+			if (template.id === 'aggron') {
+				set.moves = ['surf', 'earthquake', 'bodyslam', 'rockslide'];
+			}
+			if (template.id === 'hariyama') {
+				set.moves = ['surf', 'closecombat', 'facade', 'fakeout'];
 			}
 			team.push(set);
 		}
