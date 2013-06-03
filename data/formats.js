@@ -315,7 +315,7 @@ exports.BattleFormats = {
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		ruleset: ['HP Percentage Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause'],
 		onBegin: function() {
 			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
 			this.setWeather('Sunny Day');
