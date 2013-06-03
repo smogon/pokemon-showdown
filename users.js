@@ -775,7 +775,7 @@ var User = (function () {
 		if (!noRecurse) for (var i in users) {
 			if (users[i] === this) continue;
 			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			users[i].mute(time, force, true);
+			users[i].mute(roomid, time, force, true);
 		}
 
 		var self = this;
