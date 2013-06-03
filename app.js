@@ -338,7 +338,7 @@ global.isTrustedProxyIp = (function() {
 		var subnet = iplib.toLong(parts[0]);
 		var bits = (parts.length < 2) ? 32 : parseInt(parts[1], 10);
 		var mask = -1 << (32 - bits);
-		patterns.push([subnet, subnet & mask]);
+		patterns.push([subnet & mask, mask]);
 	}
 	return function(ip) {
 		var longip = iplib.toLong(ip);
