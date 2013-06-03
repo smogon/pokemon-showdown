@@ -1090,7 +1090,7 @@ exports.BattleScripts = {
 					rejectAbility = true;
 				}
 				// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
-				if (ability === 'Swift Swift' && !hasMove['raindance']) {
+				if (ability === 'Swift Swim' && !hasMove['raindance']) {
 					rejectAbility = true;
 				}
 				if (ability === 'Chlorophyll' && !hasMove['sunnyday']) {
