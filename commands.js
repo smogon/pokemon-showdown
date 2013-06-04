@@ -432,15 +432,10 @@ var commands = exports.commands = {
 		case 'on':
 		case 'true':
 		case 'yes':
-			this.sendReply("If you're dealing with a spammer, make sure to run /loadbanlist first.");
-			this.sendReply("That said, the command you've been looking for has been renamed to: /modchat registered");
-			return false;
-			break;
 		case 'registered':
-			if (!user.can('modchatall')) {
-				return this.sendReply('/modchat - Access denied for registered setting.');
-			}
-			config.modchat = true;
+			this.sendReply("Modchat registered has been removed.");
+			this.sendReply("If you're dealing with a spammer, make sure to run /loadbanlist.");
+			return false;
 			break;
 		case 'off':
 		case 'false':
