@@ -842,7 +842,7 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/unbanall - Unban all IP addresses. Requires: @ & ~');
 		}
-		if (target === '@' || target === 'modlog') {
+		if (target === '%' || target === 'modlog') {
 			matched = true;
 			this.sendReply('/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: @ & ~');
 		}
@@ -874,13 +874,13 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: & ~');
 		}
-		if (target === '&' || target === 'forcerenameto' || target === 'frt') {
+		if (target === '~' || target === 'forcerenameto' || target === 'frt') {
 			matched = true;
 			this.sendReply('/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: & ~');
 			this.sendReply('/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: & ~');
 		}
 		if (target === '&' || target === 'forcetie') {
-			matched === true;
+			matched = true;
 			this.sendReply('/forcetie - Forces the current match to tie. Requires: & ~');
 		}
 		if (target === '&' || target === 'declare' ) {
@@ -926,7 +926,7 @@ var commands = exports.commands = {
 			if (user.group !== config.groupsranking[0]) {
 				this.sendReply('DRIVER COMMANDS: /mute, /unmute, /announce, /forcerename, /alts')
 				this.sendReply('MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /modlog, /redirect, /kick');
-				this.sendReply('LEADER COMMANDS: /promote, /demote, /forcerenameto, /forcewin, /forcetie, /declare');
+				this.sendReply('LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare');
 				this.sendReply('For details on all moderator commands, use /help @');
 			}
 			this.sendReply('For details of a specific command, use something like: /help data');
