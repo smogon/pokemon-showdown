@@ -178,7 +178,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 		if (!this.can('mute', targetUser)) return false;
-		if (targetUser.muteDuration[room.id] || targetUser.locked || !targetUser.connected) {
+		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
 			var problem = ' but was already '+(!targetUser.connected ? 'offline' : targetUser.locked ? 'locked' : 'muted');
 			if (!target) {
 				return this.privateModCommand('('+targetUser.name+' would be muted by '+user.name+problem+'.)');
@@ -204,7 +204,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('mute', targetUser)) return false;
 
-		if (((targetUser.muteDuration[room.id]||0) >= 50*60*1000 || targetUser.locked) && !target) {
+		if (((targetUser.mutedRooms[room.id] && (targetUser.muteDuration[room.id]||0) >= 50*60*1000) || targetUser.locked) && !target) {
 			var problem = ' but was already '+(!targetUser.connected ? 'offline' : targetUser.locked ? 'locked' : 'muted');
 			return this.privateModCommand('('+targetUser.name+' would be muted by '+user.name+problem+'.)');
 		}
