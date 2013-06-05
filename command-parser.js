@@ -26,6 +26,8 @@ const MAX_MESSAGE_LENGTH = 300;
 
 const BROADCAST_COOLDOWN = 20*1000;
 
+const MESSAGE_COOLDOWN = 5*60*1000;
+
 const MAX_PARSE_RECURSION = 10;
 
 var crypto = require('crypto');
@@ -280,6 +282,15 @@ function canTalk(user, room, connection, message) {
 
 		// remove zalgo
 		message = message.replace(/[\u0300-\u036f]{3,}/g,'');
+
+		var normalized = toId(message);
+		if ((normalized === user.lastMessage) &&
+				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
+			connection.popup("You can't send the same message again so soon.");
+			return false;
+		}
+		user.lastMessage = normalized;
+		user.lastMessageTime = Date.now();
 
 		if (config.chatfilter) {
 			return config.chatfilter(user, room, connection.socket, message);
