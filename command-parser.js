@@ -284,13 +284,13 @@ function canTalk(user, room, connection, message) {
 		message = message.replace(/[\u0300-\u036f]{3,}/g,'');
 
 		if (room.id === 'lobby') {
-			var normalized = toId(message);
+			var normalized = message.trim();
 			if ((normalized === user.lastMessage) &&
 					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
 				connection.popup("You can't send the same message again so soon.");
 				return false;
 			}
-			user.lastMessage = normalized;
+			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
 		}
 
