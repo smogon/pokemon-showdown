@@ -283,14 +283,16 @@ function canTalk(user, room, connection, message) {
 		// remove zalgo
 		message = message.replace(/[\u0300-\u036f]{3,}/g,'');
 
-		var normalized = toId(message);
-		if ((normalized === user.lastMessage) &&
-				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-			connection.popup("You can't send the same message again so soon.");
-			return false;
+		if (room.id === 'lobby') {
+			var normalized = toId(message);
+			if ((normalized === user.lastMessage) &&
+					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
+				connection.popup("You can't send the same message again so soon.");
+				return false;
+			}
+			user.lastMessage = normalized;
+			user.lastMessageTime = Date.now();
 		}
-		user.lastMessage = normalized;
-		user.lastMessageTime = Date.now();
 
 		if (config.chatfilter) {
 			return config.chatfilter(user, room, connection.socket, message);
