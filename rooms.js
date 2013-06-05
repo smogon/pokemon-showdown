@@ -758,7 +758,7 @@ var BattleRoom = (function() {
 			else if (ticksLeft[1]) inactiveSide = 0;
 		}
 
-		this.forfeit(this.battle.getPlayer(inactiveSide),' lost because of their inactivity.', inactiveSide);
+		this.forfeit(this.battle.getPlayer(inactiveSide),' lost due to inactivity.', inactiveSide);
 		this.resetUser = '';
 
 		if (this.parentid) {
