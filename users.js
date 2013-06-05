@@ -194,6 +194,10 @@ var User = (function () {
 		users[this.userid] = this;
 	}
 
+	// for the anti-spamming mechanism
+	User.prototype.lastMessage = '';
+	User.prototype.lastMessageTime = 0;
+
 	User.prototype.blockChallenges = false;
 	User.prototype.lastConnected = 0;
 
