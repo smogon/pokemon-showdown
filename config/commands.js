@@ -316,6 +316,51 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
+	weak: 'weakness',
+	weakness: function(target, room, user){
+
+		var targets = target.split(/[ /]/);
+		var pokemon = Tools.getTemplate(targets[0]);
+		var typeOne = Tools.getType(targets[0]);
+		var typeTwo = Tools.getType(targets[1]);
+		var weakTo = [];
+		var output = '';
+		
+		if(pokemon.exists||(typeOne.exists && typeTwo.exists == undefined)||(typeOne.exists && typeTwo.exists)){		
+			if(pokemon.exists){
+				target = pokemon.id;
+			}
+			else if(typeOne.exists && typeTwo.exists){
+				pokemon = {types: [typeOne.id, typeTwo.id]};
+				target = typeOne.id +"/"+typeTwo.id;
+			}
+			else if(typeOne.exists){
+				pokemon = {types: [typeOne.id]};
+				target = typeOne.id;
+			}
+			Object.keys(Data.base.TypeChart).forEach(function (type) {
+				var notImmune = Tools.getImmunity(type, pokemon);
+				if (notImmune) {
+					var typeMod = Tools.getEffectiveness(type, pokemon);
+					if (typeMod==1) {weakTo.push(toId(type))}
+					if (typeMod==2) {weakTo.push("<b>" + toId(type) + "</b>")}
+				}
+			})	
+		}
+		else{ output = target + " isn't a recognized type nor pokemon."}
+		
+		if(output == ""){
+			if(weakTo.length == 0){ output = target + " has no weaknesses."}
+			else{
+				output = target + " is weak to " + weakTo.join(', ') + " (not counting abilities).";
+			}
+		}
+
+		return this.sendReplyBox(output);
+
+	},
+
+
 	matchup: 'effectiveness',
 	effectiveness: function(target, room, user) {
 		var targets = target.split(/[,/]/);
