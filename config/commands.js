@@ -316,6 +316,43 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
+	weak: 'weakness',
+	weakness: function(target, room, user){
+		var targets = target.split(/[ ,\/]/);
+
+		var pokemon = Tools.getTemplate(target);
+		var type1 = Tools.getType(targets[0]);
+		var type2 = Tools.getType(targets[1]);
+
+		if (pokemon.exists) {
+			target = pokemon.species;
+		} else if (type1.exists && type2.exists) {
+			pokemon = {types: [type1.id, type2.id]};
+			target = type1.id + "/" + type2.id;
+		} else if (type1.exists) {
+			pokemon = {types: [type1.id]};
+			target = type1.id;
+		} else {
+			return this.sendReplyBox(target + " isn't a recognized type or pokemon.");
+		}
+
+		var weaknesses = [];
+		Object.keys(Data.base.TypeChart).forEach(function (type) {
+			var notImmune = Tools.getImmunity(type, pokemon);
+			if (notImmune) {
+				var typeMod = Tools.getEffectiveness(type, pokemon);
+				if (typeMod == 1) weaknesses.push(type.id);
+				if (typeMod == 2) weaknesses.push("<b>" + type.id + "</b>");
+			}
+		});
+
+		if (!weaknesses.length) {
+			this.sendReplyBox(target + " has no weaknesses.");
+		} else {
+			this.sendReplyBox(target + " is weak to: " + weaknesses.join(', ') + " (not counting abilities).");
+		}
+	},
+	
 	matchup: 'effectiveness',
 	effectiveness: function(target, room, user) {
 		var targets = target.split(/[,/]/);
