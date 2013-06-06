@@ -2043,6 +2043,11 @@ var Battle = (function() {
 
 		if (this.p2.decision && this.p1.decision) {
 			if (this.p2.decision === true && this.p1.decision === true) {
+				if (type !== 'move') {
+					// TODO: investigate this race condition; should be fixed
+					// properly later
+					return this.makeRequest('move');
+				}
 				this.add('html', '<div class="broadcast-red"><b>The battle crashed</b></div>');
 				this.win();
 			} else {
