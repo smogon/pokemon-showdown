@@ -181,6 +181,9 @@ New mechanic: Signature Pokemon:
 
   - Masquerain: Surf (10% -1 Spe)
 
+- Again, note that while the Signature Pokemon will get the 1.5x damage boost,
+  all Pokemon will get the other changes to the move listed above.
+
 New mechanic: Intrinsics:
 
 - Pokemon that previously get Levitate are now immune to Ground intrinsically.
