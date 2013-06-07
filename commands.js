@@ -978,6 +978,7 @@ var commands = exports.commands = {
 		if (!this.can('forcewin')) return false;
 		if (!room.battle) {
 			this.sendReply('/forcewin - This is not a battle room.');
+			return false;
 		}
 
 		room.battle.endType = 'forced';
