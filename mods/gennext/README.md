@@ -70,7 +70,7 @@ Major changes:
   - Ice Body has 30% chance of freezing a contact move (and grants passive
     healing out of Hail, too)
   - Thick Fat, Marvel Scale, and Flame Body grant immunity to Hail damage  
-     
+
 - Freezing doesn't have a 20% thaw chance. Instead, thawing happens at the end
   of the second turn. Because this new freeze effect is a nerf, Blizzard now
   has a 30% chance of inflicting freeze.
@@ -93,7 +93,7 @@ Major changes:
   - Dive: 100% -1 Def, 45 bp
   - Shadow Force: 100% Ghost-Curse, 30 bp
   - Sky Drop: 100% -1 Def, 40 bp  
-     
+
 - Recharge moves are similarly buffed. They have 75 base power, always crit,
   and they only recharge if they KO. Be careful - in return for a KO, they
   still give the foe a free switch-in _and_ a turn to set up.
@@ -350,7 +350,7 @@ Minor learnset changes:
   - Rotom-Frost: Frost Breath
   - Rotom-Heat: Heat Wave
   - Rotom-Mow: Magical Leaf
-     
+
 - Starters get new abilities
   - Venusaur: Leaf Guard
   - Charizard: Flash Fire
