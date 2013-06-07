@@ -299,8 +299,14 @@ var commands = exports.commands = {
 
 		this.addModCommand(""+targetUser.name+" was banned by "+user.name+"." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
-		if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
+		if (alts.length) {
+			this.addModCommand(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
+			for (var i = 0; i < alts.length; ++i) {
+				this.add('|unlink|' + toId(alts[i]));
+			}
+		}
 
+		this.add('|unlink|' + targetUser.userid);
 		targetUser.ban();
 	},
 
