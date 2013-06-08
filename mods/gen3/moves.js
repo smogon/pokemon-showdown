@@ -601,6 +601,19 @@ exports.BattleMovedex = {
 		basePower: 400,
 		//desc: ""
 	},
+	skillswap: {
+		inherit: true,
+		onHit: function(target, source) {
+			var targetAbility = target.ability;
+			var sourceAbility = source.ability;
+			if (!target.setAbility(sourceAbility) || !source.setAbility(targetAbility)) {
+				target.ability = targetAbility;
+				source.ability = sourceAbility;
+				return false;
+			}
+			this.add('-activate', source, 'move: Skill Swap');
+		}
+	},
 	spikes: {
 		inherit: true,
 		isBounceable: false
