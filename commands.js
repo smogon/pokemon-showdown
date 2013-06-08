@@ -249,7 +249,7 @@ var commands = exports.commands = {
 			return this.sendReply('/lock - Access denied.');
 		}
 
-		if ((targetUser.locked || Users.checkBanned(Object.keys(targetUser.ips)[0])) && !target) {
+		if ((targetUser.locked || Users.checkBanned(targetUser.latestIp)) && !target) {
 			var problem = ' but was already '+(targetUser.locked ? 'locked' : 'banned');
 			return this.privateModCommand('('+targetUser.name+' would be locked by '+user.name+problem+'.)');
 		}
@@ -290,7 +290,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('ban', targetUser)) return false;
 
-		if (Users.checkBanned(Object.keys(targetUser.ips)[0]) && !target) {
+		if (Users.checkBanned(targetUser.latestIp) && !target) {
 			var problem = ' but was already banned';
 			return this.privateModCommand('('+targetUser.name+' would be banned by '+user.name+problem+'.)');
 		}
