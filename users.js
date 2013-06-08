@@ -177,6 +177,10 @@ var User = (function () {
 		this.connections = [connection];
 		this.ips = {}
 		this.ips[connection.ip] = 1;
+		// Note: Using the user's latest IP for anything will usually be
+		//       wrong. Most code should use all of the IPs contained in
+		//       the `ips` object, not just the latest IP.
+		this.latestIp = connection.ip;
 
 		this.mutedRooms = {};
 		this.muteDuration = {};
@@ -572,6 +576,7 @@ var User = (function () {
 					else user.ips[ip] = this.ips[ip];
 				}
 				this.ips = {};
+				user.latestIp = this.latestIp;
 				this.markInactive();
 				if (!this.authenticated) {
 					this.group = config.groupsranking[0];
