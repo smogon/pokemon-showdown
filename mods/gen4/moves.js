@@ -683,6 +683,19 @@ exports.BattleMovedex = {
 			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
 		}
 	},
+	skillswap: {
+		inherit: true,
+		onHit: function(target, source) {
+			var targetAbility = target.ability;
+			var sourceAbility = source.ability;
+			if (!target.setAbility(sourceAbility) || !source.setAbility(targetAbility)) {
+				target.ability = targetAbility;
+				source.ability = sourceAbility;
+				return false;
+			}
+			this.add('-activate', source, 'move: Skill Swap');
+		}
+	},
 	spikes: {
 		inherit: true,
 		isBounceable: false
