@@ -511,7 +511,7 @@ var User = (function () {
 		} else if (expired) {
 			console.log('verify failed: '+tokenData);
 			body = '';
-			this.send('|nametaken|'+name+"|Your session expired. Please log in again.");
+			this.send('|nametaken|'+name+"|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.");
 		} else if (body) {
 			//console.log('BODY: "'+body+'"');
 
