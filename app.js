@@ -354,7 +354,11 @@ global.isTrustedProxyIp = (function() {
 
 var socketCounter = 0;
 server.on('connection', function(socket) {
-	if (!socket.remoteAddress) {
+	if (!socket) {
+		// For reasons that are not entirely clear, SockJS sometimes triggers
+		// this event with a null `socket` argument.
+		return;
+	} else if (!socket.remoteAddress) {
 		// This condition occurs several times per day. It may be a SockJS bug.
 		try {
 			socket.end();
