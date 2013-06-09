@@ -4372,17 +4372,19 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isBounceable: true,
+		volatileStatus: 'gastroacid',
 		onTryHit: function(pokemon) {
 			if (pokemon.ability === 'multitype') {
 				return false;
 			}
 		},
-		onHit: function(pokemon) {
-			if (pokemon.setAbility('')) {
+		effect: {
+			onStart: function(pokemon) {
 				this.add('-endability', pokemon, pokemon.ability);
-				return;
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.ignore['Ability'] = true;
 			}
-			return false;
 		},
 		secondary: false,
 		target: "normal",
