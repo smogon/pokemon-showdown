@@ -732,24 +732,15 @@ var BattlePokemon = (function() {
 		}
 		return false;
 	};
-	BattlePokemon.prototype.canUseMove = function(moveid) {
-		moveid = toId(moveid);
-		if (moveid.substr(0,11) === 'hiddenpower') moveid = 'hiddenpower';
-		if (!this.hasMove(moveid)) return false;
-		if (this.disabledMoves[moveid]) return false;
-		var moveData = this.getMoveData(moveid);
-		if (!moveData || !moveData.pp || moveData.disabled) return false;
-		return true;
-	};
 	BattlePokemon.prototype.getValidMoves = function() {
 		var pMoves = this.getMoves(this.getLockedMove());
 		var moves = [];
 		for (var i=0; i<pMoves.length; i++) {
 			if (!pMoves[i].disabled) {
-				moves.push(pMoves[i].move);
+				moves.push(pMoves[i].id);
 			}
 		}
-		if (!moves.length) return ['Struggle'];
+		if (!moves.length) return ['struggle'];
 		return moves;
 	};
 	// returns the amount of damage actually healed
@@ -3254,20 +3245,28 @@ var Battle = (function() {
 				if (targetLoc) data = data.substr(0, data.lastIndexOf(' '));
 
 				var pokemon = side.pokemon[i];
-				var move = '';
+				var validMoves = pokemon.getValidMoves();
+				var moveid = '';
 				if (data.search(/^[0-9]+$/) >= 0) {
-					move = pokemon.getValidMoves()[parseInt(data,10)-1];
+					moveid = validMoves[parseInt(data, 10) - 1];
 				} else {
-					move = data;
+					moveid = toId(data);
+					if (moveid.substr(0, 11) === 'hiddenpower') {
+						moveid = 'hiddenpower';
+					}
+					if (validMoves.indexOf(moveid) < 0) {
+						moveid = '';
+					}
 				}
-				if (!pokemon.canUseMove(move)) move = pokemon.getValidMoves()[0];
-				move = this.getMove(move).id;
+				if (!moveid) {
+					moveid = validMoves[0];
+				}
 
 				decisions.push({
 					choice: 'move',
 					pokemon: pokemon,
 					targetLoc: targetLoc,
-					move: move
+					move: moveid
 				});
 				break;
 			}
