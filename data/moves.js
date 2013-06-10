@@ -12460,7 +12460,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isNotProtectable: true,
 		onHit: function(target, pokemon) {
-			if (!pokemon.transformInto(target)) {
+			if (!pokemon.transformInto(target, pokemon)) {
 				return false;
 			}
 			this.add('-transform', pokemon, target);
