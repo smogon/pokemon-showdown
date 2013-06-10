@@ -577,12 +577,12 @@ var BattlePokemon = (function() {
 			this.battle.singleEvent('Copy', status, this.volatiles[i], this);
 		}
 	};
-	BattlePokemon.prototype.transformInto = function(pokemon) {
+	BattlePokemon.prototype.transformInto = function(pokemon, user) {
 		var template = pokemon.template;
 		if (pokemon.fainted || pokemon.illusion || pokemon.volatiles['substitute']) {
 			return false;
 		}
-		if (!template.abilities || pokemon && pokemon.transformed) {
+		if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (user && user.transformed && this.battle.gen >= 5)) {
 			return false;
 		}
 		if (!this.formeChange(template, true)) {
