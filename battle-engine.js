@@ -467,7 +467,7 @@ var BattlePokemon = (function() {
 			lockedMove = toId(lockedMove);
 			this.trapped = true;
 		}
-		if (this.volatiles['mustRecharge'] || lockedMove === 'recharge') {
+		if (lockedMove === 'recharge') {
 			return [{
 				move: 'Recharge',
 				id: 'recharge'
