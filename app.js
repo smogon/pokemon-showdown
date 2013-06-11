@@ -178,7 +178,27 @@ try {
 // This is the main server that handles users connecting to our server
 // and doing things on our server.
 
-var server = require('sockjs').createServer({
+var sockjs = require('sockjs');
+
+// Warning: Terrible hack here. The version of faye-websocket that we use has
+//          a bug where sometimes the _cursor of a StreamReader ends up being
+//          NaN, which leads to an infinite loop. The newest version of
+//          faye-websocket has *other* bugs, so this really is the least
+//          terrible option to deal with this critical issue.
+(function() {
+	var StreamReader = require('./node_modules/sockjs/node_modules/' +
+			'faye-websocket/lib/faye/websocket/hybi_parser/stream_reader.js');
+	var _read = StreamReader.prototype.read;
+	StreamReader.prototype.read = function() {
+		if (isNaN(this._cursor)) {
+			// This will break out of the otherwise-infinite loop.
+			return null;
+		}
+		return _read.apply(this, arguments);
+	};
+})();
+
+var server = sockjs.createServer({
 	sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-0.3.min.js",
 	log: function(severity, message) {
 		if (severity === 'error') console.log('ERROR: '+message);
