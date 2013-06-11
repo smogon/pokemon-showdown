@@ -731,7 +731,7 @@ module.exports = (function () {
 				}
 			}
 			if (bannedCombo) {
-				clause = format.name ? " by "+format.name : '';
+				var clause = format.name ? " by "+format.name : '';
 				problems.push("Your team has the combination of "+bannedCombo+", which is banned"+clause+".");
 			}
 		}
