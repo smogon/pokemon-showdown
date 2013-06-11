@@ -34,8 +34,10 @@ exports.BattleScripts = {
 		pokemon.lastDamage = 0;
 		var lockedMove = this.runEvent('LockMove', pokemon);
 		if (lockedMove === true) lockedMove = false;
-		if (!lockedMove) {
-			pokemon.deductPP(move, null, target);
+		if (!lockedMove && !pokemon.deductPP(move, null, target)) {
+			this.add('cant', pokemon, 'nopp', move);
+			this.clearActiveMove(true);
+			return;
 		}
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
