@@ -505,9 +505,11 @@ exports.BattleScripts = {
 		}
 		if (moveData.secondaries) {
 			var secondaryRoll;
+			var effectChance;
 			for (var i = 0; i < moveData.secondaries.length; i++) {
-				secondaryRoll = this.random(100);
-				if (typeof moveData.secondaries[i].chance === 'undefined' || secondaryRoll < moveData.secondaries[i].chance) {
+				secondaryRoll = this.random(256);
+				effectChance = Math.floor(moveData.secondaries[i].chance*255/100);
+				if (typeof moveData.secondaries[i].chance === 'undefined' || secondaryRoll < effectChance) {
 					this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
 				}
 			}
