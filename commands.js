@@ -746,7 +746,7 @@ var commands = exports.commands = {
 	},
 
 	updateserver: function(target, room, user, connection) {
-		if (!user.checkConsolePermission(connection.socket)) {
+		if (!user.checkConsolePermission(connection)) {
 			return this.sendReply('/updateserver - Access denied.');
 		}
 
@@ -817,7 +817,7 @@ var commands = exports.commands = {
 	},
 
 	eval: function(target, room, user, connection, cmd, message) {
-		if (!user.checkConsolePermission(connection.socket)) {
+		if (!user.checkConsolePermission(connection)) {
 			return this.sendReply("/eval - Access denied.");
 		}
 		if (!this.canBroadcast()) return;
@@ -835,7 +835,7 @@ var commands = exports.commands = {
 	},
 
 	evalbattle: function(target, room, user, connection, cmd, message) {
-		if (!user.checkConsolePermission(connection.socket)) {
+		if (!user.checkConsolePermission(connection)) {
 			return this.sendReply("/evalbattle - Access denied.");
 		}
 		if (!this.canBroadcast()) return;
@@ -1150,7 +1150,7 @@ var commands = exports.commands = {
 				targetToken = target.substr(commaIndex+1);
 			}
 		}
-		user.rename(targetName, targetToken, targetAuth, connection.socket);
+		user.rename(targetName, targetToken, targetAuth, connection);
 	},
 
 };

@@ -721,7 +721,7 @@ var commands = exports.commands = {
 			sendData(connection.socket, '|users|');
 			this.sendReply('You are now blocking lobby chat.');
 		} else {
-			user.joinRoom(Rooms.lobby, connection.socket);
+			user.joinRoom(Rooms.lobby, connection);
 			this.sendReply('You are now receiving lobby chat.');
 		}
 	},
