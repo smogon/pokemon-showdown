@@ -12,12 +12,12 @@
 
 require('sugar');
 
-fs = require('fs');
+global.fs = require('fs');
 if (!('existsSync' in fs)) {
 	// for compatibility with ancient versions of node
 	fs.existsSync = require('path').existsSync;
 }
-config = require('./config/config.js');
+global.config = require('./config/config.js');
 
 if (config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
@@ -39,19 +39,19 @@ if (config.crashguard) {
  * If an object with an ID is passed, its ID will be returned.
  * Otherwise, an empty string will be returned.
  */
-toId = function(text) {
+global.toId = function(text) {
 	if (text && text.id) text = text.id;
 	else if (text && text.userid) text = text.userid;
 
 	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
-toUserid = toId;
+global.toUserid = toId;
 
 /**
  * Validates a username or Pokemon nickname
  */
 var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
-toName = function(name) {
+global.toName = function(name) {
 	name = string(name);
 	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
 	while (bannedNameStartChars[name.charAt(0)]) {
@@ -68,7 +68,7 @@ toName = function(name) {
  * Escapes a string for HTML
  * If strEscape is true, escapes it for JavaScript, too
  */
-sanitize = function(str, strEscape) {
+global.sanitize = function(str, strEscape) {
 	str = (''+(str||''));
 	str = str.escapeHTML();
 	if (strEscape) str = str.replace(/'/g, '\\\'');
@@ -81,7 +81,7 @@ sanitize = function(str, strEscape) {
  * If we're expecting a string and being given anything that isn't a string
  * or a number, it's safe to assume it's an error, and return ''
  */
-string = function(str) {
+global.string = function(str) {
 	if (typeof str === 'string' || typeof str === 'number') return ''+str;
 	return '';
 }
@@ -98,8 +98,8 @@ clampIntRange = function(num, min, max) {
 	return num;
 };
 
-Data = {};
-Tools = require('./tools.js');
+global.Data = {};
+global.Tools = require('./tools.js');
 
 var Battles = {};
 
