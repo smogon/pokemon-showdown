@@ -1033,7 +1033,9 @@ var ChatRoom = (function() {
 			// nothing to report
 			return;
 		}
-		this.userList = this.getUserList();
+		if (config.reportjoinsperiod) {
+			this.userList = this.getUserList();
+		}
 		this.send(this.reportJoinsQueue.join('\n'));
 		this.reportJoinsQueue.length = 0;
 	};
