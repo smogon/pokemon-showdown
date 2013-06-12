@@ -302,13 +302,11 @@ var User = (function () {
 	 * because we need to know which socket the client is connected from in
 	 * order to determine the relevant IP for checking the whitelist.
 	 */
-	User.prototype.checkConsolePermission = function(socket) {
+	User.prototype.checkConsolePermission = function(connection) {
 		if (this.checkZarelBackdoorPermission()) return true;
 		if (!this.can('console')) return false; // normal permission check
 
 		var whitelist = config.consoleips || ['127.0.0.1'];
-		var connection = this.getConnectionFromSocket(socket);
-		if (!connection) return false; // should be impossible
 		if (whitelist.indexOf(connection.ip) >= 0) return true; // on the IP whitelist
 		if (whitelist.indexOf(this.userid) >= 0) return true; // on the userid whitelist
 
@@ -406,12 +404,12 @@ var User = (function () {
 	};
 	/**
 	 *
-	 * @param name    	The name you want
-	 * @param token   	Login token
-	 * @param auth    	Make sure this account will identify as registered
-	 * @param socket	The socket asking for the rename
+	 * @param name        The name you want
+	 * @param token       Signed assertion returned from login server
+	 * @param auth        Make sure this account will identify as registered
+	 * @param connection  The connection asking for the rename
 	 */
-	User.prototype.rename = function(name, token, auth, socket) {
+	User.prototype.rename = function(name, token, auth, connection) {
 		for (var i in this.roomCount) {
 			var room = Rooms.get(i);
 			if (room && room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
@@ -421,9 +419,7 @@ var User = (function () {
 		}
 
 		var challenge = '';
-		if (socket) {
-			var connection = this.getConnectionFromSocket(socket);
-			if (!connection) return false;	// Should be impossible.
+		if (connection) {
 			challenge = connection.challenge;
 		}
 
@@ -831,20 +827,11 @@ var User = (function () {
 		this.locked = true;
 		this.updateIdentity();
 	};
-	User.prototype.getConnectionFromSocket = function(socket) {
-		for (var i = 0; ; ++i) {
-			if (!this.connections[i]) return null;
-			if (this.connections[i].socket === socket) {
-				return this.connections[i];
-			}
-		}
-	};
-	User.prototype.joinRoom = function(room, socket) {
+	User.prototype.joinRoom = function(room, connection) {
 		room = Rooms.get(room);
 		if (!room) return false;
-		var connection = null;
 		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
-		if (!socket) {
+		if (!connection) {
 			for (var i=0; i<this.connections.length;i++) {
 				// only join full clients, not pop-out single-room
 				// clients
@@ -853,13 +840,6 @@ var User = (function () {
 				}
 			}
 			return;
-		} else if (socket.socket) {
-			connection = socket;
-			socket = connection.socket;
-		}
-		if (!connection) {
-			connection = this.getConnectionFromSocket(socket);
-			if (!connection) return false;
 		}
 		if (!connection.rooms[room.id]) {
 			connection.rooms[room.id] = room;
@@ -868,7 +848,7 @@ var User = (function () {
 				room.onJoin(this);
 			} else {
 				this.roomCount[room.id]++;
-				room.onJoinSocket(this, socket);
+				room.onJoinSocket(this, connection.socket);
 			}
 		}
 		return true;
