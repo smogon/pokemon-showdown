@@ -148,17 +148,6 @@ exports.blacklist = [
 	/\bnimp\.org\b/
 ];
 
-// reportbattlesperiod - by default, all battles are reported to clients
-// even if `reportbattles` is off. If you set this option to a value other
-// than false, then most battles will not be reported at all. Instead,
-// every so often the server will send information on the last 6 battles
-// to all clients; the `reportbattlesperiod` option specifies the length of
-// the period between reports in milliseconds.
-//
-// You should probably leave this value at `false`. It is only really
-// intended to be used by a busy server with thousands of concurrent users.
-exports.reportbattlesperiod = false;
-
 // Set this to true if you are using Pokemon Showdown on Heroku.
 exports.herokuhack = false;
 

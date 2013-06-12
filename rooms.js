@@ -71,13 +71,6 @@ var GlobalRoom = (function() {
 			REPORT_USER_STATS_INTERVAL
 		);
 
-		if (config.reportbattlesperiod) {
-			this.reportBattlesInterval = setInterval(
-				this.reportRecentBattles.bind(this),
-				config.reportbattlesperiod
-			);
-		}
-
 		if (!config.herokuhack) {
 			this.sweepClosedSocketsInterval = setInterval(
 				this.sweepClosedSockets.bind(this),
@@ -140,26 +133,11 @@ var GlobalRoom = (function() {
 		return formatListText;
 	};
 
-	GlobalRoom.prototype.lastRoomReported = null;
-
-	GlobalRoom.prototype.reportRecentBattles = function() {
-		var rooms = this.getRoomList(false, this.lastRoomReported);
-		if (Object.isEmpty(rooms)) return;
-		this.lastRoomReported = null;
-		var entries = [];
-		for (var id in rooms) {
-			var room = rooms[id];
-			this.lastRoomReported = this.lastRoomReported || id;
-			entries.push('|B|' + id + '|' + rooms[id].p1 + '|' + rooms[id].p2);
-		}
-		this.send(entries.join('\n'));
-	};
-	GlobalRoom.prototype.getRoomList = function(filter, lastRoomReported) {
+	GlobalRoom.prototype.getRoomList = function(filter) {
 		var roomList = {};
 		var total = 0;
 		for (var i=this.rooms.length-1; i>=0; i--) {
 			var room = this.rooms[i];
-			if (lastRoomReported && (room.id === lastRoomReported)) break;
 			if (!room || !room.active) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
 			var roomData = {};
@@ -379,11 +357,8 @@ var GlobalRoom = (function() {
 		newRoom.joinBattle(p2, p2team);
 		this.cancelSearch(p1, true);
 		this.cancelSearch(p2, true);
-		if (config.reportbattlesperiod) return;
 		if (config.reportbattles) {
 			rooms.lobby.add('|b|'+newRoom.id+'|'+p1.getIdentity()+'|'+p2.getIdentity());
-		} else {
-			this.send('|B|'+newRoom.id+'|'+p1.getIdentity()+'|'+p2.getIdentity());
 		}
 	};
 	GlobalRoom.prototype.addRoom = function(room, format, p1, p2, parent, rated) {
