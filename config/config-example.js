@@ -1,30 +1,8 @@
 // The server port - the port to run Pokemon Showdown under
 exports.port = 8000;
 
-// The setuid user. If this is specified, the Pokemon Showdown server will
-// setuid() to this user after initialisation.
-//
-// WARNING: This is not generally the right way to run the server. If you want
-//          to run the server on a port below 1024, the correct way to do it
-//          is to run the server on port X > 1024 and then forward port the
-//          preferred port to port X.
-//
-//          If the server *.js files are writeable by the setuid user, this
-//          feature is equivalent to giving root to the setuid user, because
-//          they can just inject code to give themselves root into the part
-//          of the code before setuid() is called.
-//
-//          This feature should be used with caution.
-exports.setuid = '';
-
 // The server ID - a unique ID describing this Showdown server
 exports.serverid = 'testserver';
-
-// A signed assertion from the login server must be presented to this
-// server within this many seconds. This can be 1 minute (or possibly
-// less) unless your clock is wrong. In order to accommodate servers
-// with inaccurate clocks, the default is 25 hours.
-exports.tokenexpiry = 25*60*60;
 
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
@@ -141,12 +119,6 @@ exports.simulatorprocesses = 1;
 // inactiveuserthreshold - how long a user must be inactive before being pruned
 // from the `users` array. The default is 1 hour.
 exports.inactiveuserthreshold = 1000*60*60;
-
-// Chat blacklist. Chat messages that match any of these regular
-// expressions will be dropped and not passed along to clients.
-exports.blacklist = [
-	/\bnimp\.org\b/
-];
 
 // Set this to true if you are using Pokemon Showdown on Heroku.
 exports.herokuhack = false;

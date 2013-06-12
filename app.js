@@ -112,9 +112,6 @@ if (config.watchconfig) {
 if (process.argv[2] && parseInt(process.argv[2])) {
 	config.port = parseInt(process.argv[2]);
 }
-if (process.argv[3]) {
-	config.setuid = process.argv[3];
-}
 
 /*********************************************************
  * Start our servers
@@ -282,17 +279,6 @@ global.clampIntRange = function(num, min, max) {
 	if (typeof max !== 'undefined' && num > max) num = max;
 	return num;
 };
-
-try {
-	if (config.setuid) {
-		process.setuid(config.setuid);
-		console.log("setuid succeeded, we are now running as "+config.setuid);
-	}
-}
-catch (err) {
-	console.log("ERROR: setuid failed: [%s] Call: [%s]", err.message, err.syscall);
-	process.exit(1);
-}
 
 global.LoginServer = require('./loginserver.js');
 
