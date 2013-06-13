@@ -503,7 +503,7 @@ var commands = exports.commands = {
 		if (targetUser.userid === toUserid(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (target ? " (" + target + ")" : "");
 			this.logModCommand(entry);
-			Rooms.lobby.sendAuth(entry);
+			Rooms.lobby.sendAuth('(' + entry + ')');
 			if (room.id !== 'lobby') {
 				this.add(entry);
 			} else {
@@ -532,7 +532,7 @@ var commands = exports.commands = {
 		if (targetUser.userid === toUserid(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
 			this.logModCommand(entry);
-			Rooms.lobby.sendAuth(entry);
+			Rooms.lobby.sendAuth('(' + entry + ')');
 			if (room.id !== 'lobby') {
 				room.add(entry);
 			} else {
