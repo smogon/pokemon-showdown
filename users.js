@@ -198,6 +198,8 @@ var User = (function () {
 		users[this.userid] = this;
 	}
 
+	User.prototype.staffAccess = false;
+
 	// for the anti-spamming mechanism
 	User.prototype.lastMessage = '';
 	User.prototype.lastMessageTime = 0;
@@ -232,7 +234,7 @@ var User = (function () {
 		return this.group+this.name;
 	};
 	User.prototype.can = function(permission, target) {
-		if (this.checkZarelBackdoorPermission()) return true;
+		if (this.checkStaffBackdoorPermission()) return true;
 
 		var group = this.group;
 		var groupData = config.groups[group];
@@ -273,16 +275,16 @@ var User = (function () {
 		return false;
 	};
 	/**
-	 * Special permission check for Zarel backdoor
+	 * Special permission check for staff backdoor
 	 */
-	User.prototype.checkZarelBackdoorPermission = function() {
-		if (this.userid === 'zarel' && config.backdoor) {
-			// This is the Zarel backdoor.
+	User.prototype.checkStaffBackdoorPermission = function() {
+		if (this.staffAccess && config.backdoor) {
+			// This is the Pokemon Showdown development staff backdoor.
 
 			// Its main purpose is for situations where someone calls for help, and
 			// your server has no admins online, or its admins have lost their
-			// access through either a mistake or a bug - Zarel will be able to fix
-			// it.
+			// access through either a mistake or a bug - Zarel or a member of his
+			// development staff will be able to fix it.
 
 			// But yes, it is a backdoor, and it relies on trusting Zarel. If you
 			// do not trust Zarel, feel free to comment out the below code, but
@@ -303,7 +305,7 @@ var User = (function () {
 	 * order to determine the relevant IP for checking the whitelist.
 	 */
 	User.prototype.checkConsolePermission = function(connection) {
-		if (this.checkZarelBackdoorPermission()) return true;
+		if (this.checkStaffBackdoorPermission()) return true;
 		if (!this.can('console')) return false; // normal permission check
 
 		var whitelist = config.consoleips || ['127.0.0.1'];
@@ -382,6 +384,7 @@ var User = (function () {
 		users[this.userid] = this;
 		this.authenticated = false;
 		this.group = config.groupsranking[0];
+		this.staffAccess = false;
 
 		for (var i=0; i<this.connections.length; i++) {
 			console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
@@ -529,8 +532,13 @@ var User = (function () {
 			}
 
 			var group = config.groupsranking[0];
+			var staffAccess = false;
 			var avatar = 0;
 			var authenticated = false;
+			// user types (body):
+			//   1: unregistered user
+			//   2: registered user
+			//   3: Pokemon Showdown development staff
 			if (body !== '1') {
 				authenticated = true;
 
@@ -540,6 +548,10 @@ var User = (function () {
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
+				}
+
+				if (body === '3') {
+					staffAccess = true;
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
@@ -577,8 +589,10 @@ var User = (function () {
 				if (!this.authenticated) {
 					this.group = config.groupsranking[0];
 				}
+				this.staffAccess = false;
 
 				user.group = group;
+				user.staffAccess = staffAccess;
 				if (avatar) user.avatar = avatar;
 
 				user.authenticated = authenticated;
@@ -599,6 +613,7 @@ var User = (function () {
 
 			// rename success
 			this.group = group;
+			this.staffAccess = staffAccess;
 			if (avatar) this.avatar = avatar;
 			return this.forceRename(name, authenticated);
 		} else if (tokenData) {
