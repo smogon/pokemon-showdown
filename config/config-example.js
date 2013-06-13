@@ -77,12 +77,13 @@ exports.reportbattles = true;
 //   huge influxes of spammy users.
 exports.modchat = false;
 
-// backdoor - allow Zarel to provide tech support for your server
-//   This backdoor gives Zarel admin access to your server, which allows him
-//   to provide tech support. This can be useful in a variety of situations:
-//   if an attacker attacks your server and you are not online, if you need
-//   help setting up your server, etc.
-//   It is a backdoor, though, so if you do not trust Zarel you should
+// backdoor - allows Zarel and his authorised Pokemon Showdown development
+//            staff to provide tech support for your server
+//   This backdoor gives Zarel (and development staff approved by him) admin
+//   access to your server, which allows him to provide tech support. This
+//   can be useful in a variety of situations: if an attacker attacks your
+//   server and you are not online, if you need help setting up your server,
+//   etc. It is a backdoor, though, so if you do not trust Zarel you should
 //   disable this feature.
 exports.backdoor = true;
 
