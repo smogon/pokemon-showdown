@@ -920,23 +920,23 @@ module.exports = (function () {
 					if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0],10)];
 					if (eventData) {
 						if (eventData.nature && eventData.nature !== set.nature) {
-							problems.push(name+" must come from a specific event that gives it a "+eventData.nature+" nature.");
+							problems.push(name+" must have a "+eventData.nature+" nature because it comes from a specific event.");
 						}
 						if (eventData.shiny) {
 							set.shiny = true;
 						}
 						if (eventData.generation < 5) eventData.isDW = false;
 						if (eventData.isDW !== undefined && eventData.isDW !== isDW) {
-							problems.push(name+" must come from a specific event that "+(isDW?"gives":"doesn't give")+" it its DW ability.");
+							problems.push(name+(isDW?" can't have":" must have")+" its DW ability because it comes from a specific event.");
 						}
 						if (eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
-							problems.push(name+" must come from a specific event that gives it "+eventData.abilities.join(" or ")+".");
+							problems.push(name+" must have "+eventData.abilities.join(" or ")+" because it comes from a specific event.");
 						}
 						if (eventData.gender) {
 							set.gender = eventData.gender;
 						}
 						if (eventData.level && set.level < eventData.level) {
-							problems.push(name+" must come from a specific event that makes it at least level "+eventData.level+".");
+							problems.push(name+" must be at least level "+eventData.level+" because it comes from a specific event.");
 						}
 					}
 					isDW = false;
