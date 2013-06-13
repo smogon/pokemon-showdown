@@ -199,6 +199,7 @@ var User = (function () {
 	}
 
 	User.prototype.staffAccess = false;
+	User.prototype.forceRenamed = false;
 
 	// for the anti-spamming mechanism
 	User.prototype.lastMessage = '';
@@ -309,8 +310,12 @@ var User = (function () {
 		if (!this.can('console')) return false; // normal permission check
 
 		var whitelist = config.consoleips || ['127.0.0.1'];
-		if (whitelist.indexOf(connection.ip) >= 0) return true; // on the IP whitelist
-		if (whitelist.indexOf(this.userid) >= 0) return true; // on the userid whitelist
+		if (whitelist.indexOf(connection.ip) >= 0) {
+			return true; // on the IP whitelist
+		}
+		if (!this.forceRenamed && (whitelist.indexOf(this.userid) >= 0)) {
+			return true; // on the userid whitelist
+		}
 
 		return false;
 	};
@@ -318,7 +323,7 @@ var User = (function () {
 	User.prototype.checkPromotePermission = function(sourceGroup, targetGroup) {
 		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
 	};
-	User.prototype.forceRename = function(name, authenticated) {
+	User.prototype.forceRename = function(name, authenticated, forcible) {
 		// skip the login server
 		var userid = toUserid(name);
 
@@ -347,6 +352,7 @@ var User = (function () {
 		this.userid = userid;
 		users[this.userid] = this;
 		this.authenticated = !!authenticated;
+		this.forceRenamed = !!forcible;
 
 		for (var i=0; i<this.connections.length; i++) {
 			//console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
@@ -593,6 +599,7 @@ var User = (function () {
 
 				user.group = group;
 				user.staffAccess = staffAccess;
+				user.forceRenamed = false;
 				if (avatar) user.avatar = avatar;
 
 				user.authenticated = authenticated;
