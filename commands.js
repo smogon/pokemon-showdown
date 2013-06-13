@@ -538,7 +538,7 @@ var commands = exports.commands = {
 			} else {
 				room.logEntry(entry);
 			}
-			targetUser.forceRename(target);
+			targetUser.forceRename(target, undefined, true);
 		} else {
 			this.sendReply("User "+targetUser.name+" is no longer using that name.");
 		}
