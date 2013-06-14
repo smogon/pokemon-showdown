@@ -230,19 +230,28 @@ global.toId = function(text) {
 global.toUserid = toId;
 
 /**
- * Validates a username or Pokemon nickname
+ * Sanitizes a username or Pokemon nickname
+ *
+ * Returns the passed name, sanitized for safe use as a name in the PS
+ * protocol.
+ *
+ * Such a string must uphold these guarantees:
+ * - must not contain any ASCII whitespace character other than a space
+ * - must not start or end with a space character
+ * - must not contain any of: | , [ ]
+ * - must not be the empty string
+ *
+ * If no such string can be found, returns the empty string. Calling
+ * functions are expected to check for that condition and deal with it
+ * accordingly.
+ *
+ * toName also enforces that there are not multiple space characters
+ * in the name, although this is not strictly necessary for safety.
  */
-var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
 global.toName = function(name) {
 	name = string(name);
 	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-	while (bannedNameStartChars[name.charAt(0)]) {
-		name = name.substr(1);
-	}
-	if (name.length > 18) name = name.substr(0,18);
-	if (config.namefilter) {
-		name = config.namefilter(name);
-	}
+	if (name.length > 18) name = name.substr(0,18).trim();
 	return name;
 };
 
