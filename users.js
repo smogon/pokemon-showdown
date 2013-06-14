@@ -411,6 +411,7 @@ var User = (function () {
 			Rooms.get(i,'lobby').onUpdateIdentity(this);
 		}
 	};
+	var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
 	/**
 	 *
 	 * @param name        The name you want
@@ -418,6 +419,16 @@ var User = (function () {
 	 * @param auth        Make sure this account will identify as registered
 	 * @param connection  The connection asking for the rename
 	 */
+	User.prototype.filterName = function(name) {
+		if (config.namefilter) {
+			name = config.namefilter(name);
+		}
+		name = toName(name);
+		while (bannedNameStartChars[name.charAt(0)]) {
+			name = name.substr(1);
+		}
+		return name;
+	};
 	User.prototype.rename = function(name, token, auth, connection) {
 		for (var i in this.roomCount) {
 			var room = Rooms.get(i);
@@ -433,7 +444,7 @@ var User = (function () {
 		}
 
 		if (!name) name = '';
-		name = toName(name);
+		name = this.filterName(name);
 		var userid = toUserid(name);
 		if (this.authenticated) auth = false;
 
