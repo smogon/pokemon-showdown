@@ -46,18 +46,6 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
-		//searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause Mod', 'Standard Ubers'],
-		banlist: []
-	},
-	uberssuspecttest: {
-		name: "Ubers (suspect test)",
-		section: "Singles",
-
-		effectType: 'Format',
-		rated: true,
-		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
@@ -631,7 +619,7 @@ exports.BattleFormats = {
 	},
 	standardubers: {
 		effectType: 'Banlist',
-		ruleset: ['Species Clause', 'Moody Clause', 'OHKO Clause', 'HP Percentage Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'HP Percentage Mod'],
 		banlist: ['Unreleased', 'Illegal']
 	},
 	standarddw: {
