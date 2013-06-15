@@ -26,7 +26,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		ruleset: ['Random Battle']
 	},
-/*	ou: {
+	ou: {
 		name: "OU",
 		section: "Singles",
 
@@ -34,11 +34,11 @@ exports.BattleFormats = {
 		challengeDefault: true,
 		rated: true,
 		challengeShow: true,
-		searchShow: true,
+		//searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},*/
+	},
 	oucurrent: {
 		name: "OU (current)",
 		section: "Singles",
