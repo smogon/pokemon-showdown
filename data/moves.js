@@ -1890,7 +1890,7 @@ exports.BattleMovedex = {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getCategory(pokemon.lastAttackedBy.move) === 'Physical') {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
-			this.add('-fail',pokemon.id);
+			this.add('-fail', pokemon);
 			return false;
 		},
 		category: "Physical",
@@ -2772,7 +2772,7 @@ exports.BattleMovedex = {
 		drain: [1,2],
 		onTryHit: function(target) {
 			if (target.status !== 'slp') {
-				this.add('-immune', target.id, '[msg]');
+				this.add('-immune', target, '[msg]');
 				return null;
 			}
 		},

@@ -46,7 +46,7 @@ exports.BattleItems = {
 			this.debug('custap eaten: '+decision);
 			if (decision) {
 				this.cancelDecision(pokemon);
-				this.add('r-custap '+pokemon.id);
+				this.add('-message', "Custap Berry activated.");
 				this.runDecision(decision);
 			}
 		},

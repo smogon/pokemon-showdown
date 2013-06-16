@@ -2,7 +2,7 @@ exports.BattleStatuses = {
 	frz: {
 		effectType: 'Status',
 		onStart: function(target) {
-			this.add('-status', target.id, 'frz');
+			this.add('-status', target, 'frz');
 		},
 		duration: 2,
 		onBeforeMovePriority: 2,
@@ -11,7 +11,7 @@ exports.BattleStatuses = {
 				pokemon.cureStatus();
 				return;
 			}
-			this.add('cant', pokemon.id, 'frz');
+			this.add('cant', pokemon, 'frz');
 			return false;
 		},
 		onHit: function(target, source, move) {
