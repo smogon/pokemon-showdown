@@ -982,10 +982,11 @@ var BattlePokemon = (function() {
 		if (status.durationCallback) {
 			this.volatiles[status.id].duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, this.volatiles[status.id], this, source, sourceEffect)) {
+		var result = this.battle.singleEvent('Start', status, this.volatiles[status.id], this, source, sourceEffect);
+		if (!result) {
 			// cancel
 			delete this.volatiles[status.id];
-			return false;
+			return result;
 		}
 		this.update();
 		return true;
