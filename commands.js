@@ -92,9 +92,8 @@ var commands = exports.commands = {
 			return this.popupReply('This user is locked and cannot PM.');
 		}
 
-		if (!user.named) {
-			return this.popupReply('You must choose a name before you can send private messages.');
-		}
+		target = this.canTalk(target, null);
+		if (!target) return false;
 
 		var message = '|pm|'+user.getIdentity()+'|'+targetUser.getIdentity()+'|'+target;
 		user.send(message);
