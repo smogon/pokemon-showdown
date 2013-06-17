@@ -610,6 +610,8 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help hotpatch');
 		if (!this.can('hotpatch')) return false;
 
+		Rooms.lobby.logEntry(user.name + ' used /hotpatch ' + target);
+
 		if (target === 'chat') {
 
 			CommandParser.uncacheTree('./command-parser.js');
