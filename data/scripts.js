@@ -434,6 +434,9 @@ exports.BattleScripts = {
 				hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
 				didSomething = didSomething || hitResult;
 			}
+			if (moveData.forceSwitch) {
+				didSomething = true; // at least defer the fail message to later
+			}
 			// Hit events
 			//   These are like the TryHit events, except we don't need a FieldHit event.
 			//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
@@ -472,6 +475,8 @@ exports.BattleScripts = {
 		if (target && target.hp > 0 && pokemon.hp > 0) {
 			if (moveData.forceSwitch && this.runEvent('DragOut', target, pokemon, move)) {
 				target.forceSwitchFlag = true;
+			} else {
+				this.add('-fail', target);
 			}
 		}
 		if (move.selfSwitch && pokemon.hp) {
