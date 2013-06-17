@@ -1755,7 +1755,6 @@ exports.BattleMovedex = {
 				}
 			}, this).compact();
 			if (!possibleTypes.length) {
-				this.add('-fail', target);
 				return false;
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
@@ -1780,7 +1779,6 @@ exports.BattleMovedex = {
 		isNotProtectable: true,
 		onHit: function(target, source) {
 			if (!target.lastMove) {
-				this.add('-fail', source);
 				return false;
 			}
 			var possibleTypes = [];
@@ -1793,7 +1791,6 @@ exports.BattleMovedex = {
 				}
 			}
 			if (!possibleTypes.length) {
-				this.add('-fail', source);
 				return false;
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
@@ -1894,7 +1891,6 @@ exports.BattleMovedex = {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getCategory(pokemon.lastAttackedBy.move) === 'Physical') {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
-			this.add('-fail', pokemon);
 			return false;
 		},
 		category: "Physical",
@@ -3070,9 +3066,8 @@ exports.BattleMovedex = {
 				var moveIndex = target.moves.indexOf(target.lastMove);
 				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					// it failed
-					this.add('-fail',target);
 					delete target.volatiles['encore'];
-					return;
+					return false;
 				}
 				this.effectData.move = target.lastMove;
 				this.add('-start', target, 'Encore');
@@ -7177,7 +7172,6 @@ exports.BattleMovedex = {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
 				return 1.5 * pokemon.lastAttackedBy.damage;
 			}
-			this.add('-fail', pokemon);
 			return false;
 		},
 		category: "Physical",
@@ -7416,7 +7410,6 @@ exports.BattleMovedex = {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getCategory(pokemon.lastAttackedBy.move) === 'Special') {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
-			this.add('-fail', pokemon);
 			return false;
 		},
 		category: "Special",
@@ -10492,8 +10485,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
-				this.add('-fail', defender);
-				return null;
+				return false;
 			}
 			if (defender.volatiles['protect']) {
 				this.add('-activate', defender, 'Protect');
@@ -11108,10 +11100,9 @@ exports.BattleMovedex = {
 				this.effectData.layers = 1;
 			},
 			onRestart: function(side) {
-				if (this.effectData.layers < 3) {
-					this.add('-sidestart', side, 'Spikes');
-					this.effectData.layers++;
-				}
+				if (this.effectData.layers >= 3) return false;
+				this.add('-sidestart', side, 'Spikes');
+				this.effectData.layers++;
 			},
 			onSwitchIn: function(pokemon) {
 				var side = pokemon.side;
@@ -11141,7 +11132,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		onTry: function(pokemon) {
 			if (!pokemon.volatiles['stockpile']) {
-				this.add('-fail', pokemon);
 				return false;
 			}
 		},
@@ -11291,11 +11281,10 @@ exports.BattleMovedex = {
 				this.boost({def:1, spd:1}, target, target, this.getMove('stockpile'));
 			},
 			onRestart: function(target) {
-				if (this.effectData.layers < 3) {
-					this.effectData.layers++;
-					this.add('-start', target, 'stockpile'+this.effectData.layers);
-					this.boost({def:1, spd:1}, target, target, this.getMove('stockpile'));
-				}
+				if (this.effectData.layers >= 3) return false;
+				this.effectData.layers++;
+				this.add('-start', target, 'stockpile'+this.effectData.layers);
+				this.boost({def:1, spd:1}, target, target, this.getMove('stockpile'));
 			},
 			onEnd: function(target) {
 				var layers = this.effectData.layers * -1;
@@ -12429,10 +12418,9 @@ exports.BattleMovedex = {
 				this.effectData.layers = 1;
 			},
 			onRestart: function(side) {
-				if (this.effectData.layers < 2) {
-					this.add('-sidestart', side, 'move: Toxic Spikes');
-					this.effectData.layers++;
-				}
+				if (this.effectData.layers >= 2) return false;
+				this.add('-sidestart', side, 'move: Toxic Spikes');
+				this.effectData.layers++;
 			},
 			onSwitchIn: function(pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
