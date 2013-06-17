@@ -415,9 +415,9 @@ exports.BattleMovedex = {
 		shortDesc: "User takes half damage it would have dealt if miss.",
 		pp: 20,
 		onMoveFail: function(target, source, move) {
-			if (target.type !== 'ghost') {
+			if (target.runImmunity('Fighting')) {
 				var damage = this.getDamage(source, target, move, true);
-				this.damage(clampIntRange(damage/8, 1, Math.floor(target.maxhp/2)), source);
+				this.damage(clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
 			}
 		}
 	},
@@ -436,8 +436,10 @@ exports.BattleMovedex = {
 		shortDesc: "User takes half damage it would have dealt if miss.",
 		pp: 25,
 		onMoveFail: function(target, source, move) {
-			var damage = this.getDamage(source, target, move, true);
-			this.damage(clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
+			if (target.runImmunity('Fighting')) {
+				var damage = this.getDamage(source, target, move, true);
+				this.damage(clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
+			}
 		}
 	},
 	leafblade: {
