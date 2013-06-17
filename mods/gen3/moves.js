@@ -69,44 +69,8 @@ exports.BattleMovedex = {
 	},
 	bide: {
 		inherit: true,
-		desc: "The user spends two to three turns locked into this move and then, on the second turn after using this move, the user attacks the last Pokemon that hit it, inflicting double the damage in HP it lost during the two turns. If the last Pokemon that hit it is no longer on the field, the user attacks a random foe instead. If the user is prevented from moving during this move's use, the effect ends. This move ignores Accuracy and Evasion modifiers and can hit Ghost-types. Makes contact. Priority +1.",
-		shortDesc: "Waits 2-3 turns; deals double the damage taken.",
-		priority: 0,
-		effect: {
-			duration: 2,	// TODO: Use correct duration.
-			onLockMove: 'bide',
-			onStart: function(pokemon) {
-				this.effectData.totalDamage = 0;
-				this.add('-start', pokemon, 'Bide');
-			},
-			onDamage: function(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move') return;
-				if (!source || source.side === target.side) return;
-				this.effectData.totalDamage += damage;
-				this.effectData.sourcePosition = source.position;
-				this.effectData.sourceSide = source.side;
-			},
-			onAfterSetStatus: function(status, pokemon) {
-				if (status.id === 'slp') {
-					pokemon.removeVolatile('bide');
-				}
-			},
-			onBeforeMove: function(pokemon) {
-				if (this.effectData.duration === 1) {
-					if (!this.effectData.totalDamage) {
-						this.add('-fail', pokemon);
-						return false;
-					}
-					this.add('-end', pokemon, 'Bide');
-					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage*2});
-					return false;
-				}
-				this.add('-message', pokemon.name+' is storing energy! (placeholder)');
-				return false;
-			}
-		},
-		type: "???"
+		accuracy: 100,
+		priority: 0
 	},
 	bind: {
 		inherit: true,
