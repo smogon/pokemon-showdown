@@ -958,8 +958,8 @@ var BattlePokemon = (function() {
 		}
 
 		if (this.volatiles[status.id]) {
-			this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
-			return false;
+			if (!status.onRestart) return false;
+			return this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
 		}
 		if (!this.runImmunity(status.id)) return false;
 		var result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
@@ -1142,8 +1142,8 @@ var BattleSide = (function() {
 	BattleSide.prototype.addSideCondition = function(status, source, sourceEffect) {
 		status = this.battle.getEffect(status);
 		if (this.sideConditions[status.id]) {
-			this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
-			return false;
+			if (!status.onRestart) return false;
+			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
 		}
 		this.sideConditions[status.id] = {id: status.id};
 		this.sideConditions[status.id].target = this;
@@ -1369,8 +1369,8 @@ var Battle = (function() {
 	Battle.prototype.addPseudoWeather = function(status, source, sourceEffect) {
 		status = this.getEffect(status);
 		if (this.pseudoWeather[status.id]) {
-			this.singleEvent('Restart', status, this.pseudoWeather[status.id], this, source, sourceEffect);
-			return false;
+			if (!status.onRestart) return false;
+			return this.singleEvent('Restart', status, this.pseudoWeather[status.id], this, source, sourceEffect);
 		}
 		this.pseudoWeather[status.id] = {id: status.id};
 		if (source) {
