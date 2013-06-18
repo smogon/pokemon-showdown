@@ -727,6 +727,7 @@ var commands = exports.commands = {
 			data = (''+data).split("\n");
 			var count = 0;
 			for (var i=0; i<data.length; i++) {
+				data[i] = data[i].split('#')[0].trim();
 				if (data[i] && !Users.bannedIps[data[i]]) {
 					Users.bannedIps[data[i]] = '#ipban';
 					count++;
