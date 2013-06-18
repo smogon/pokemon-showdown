@@ -67,7 +67,7 @@ To become an Administrator, create a file named `config/usergroups.csv` containi
 
 Replace `USER` with the username that you would like to become an Administrator.
 
-This username must be registered. If you do not have a registered Pokémon Showdown account, you can create one using [the registration form][4].
+This username must be registered. If you do not have a registered account, you can create one using the Register button in the settings menu (it looks like a gear) in the upper-right of Pokémon Showdown.
 
 Once you're an administrator, you can promote/demote others easily with the `/admin`, `/leader`, `/mod`, etc commands.
 
@@ -97,9 +97,9 @@ Community
 
 The Pokémon Showdown development IRC channel is `#showdown` at `irc.synirc.net`.
 
-[The Pokémon Showdown forums][5] are hosted on Smogon Forums.
+You can also visit the [Pokémon Showdown forums][5] for discussion and help.
 
-  [5]: http://www.smogon.com/forums/forumdisplay.php?f=209
+  [5]: http://pokemonshowdown.com/forums/
 
 
 License
