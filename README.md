@@ -71,8 +71,6 @@ This username must be registered. If you do not have a registered account, you c
 
 Once you're an administrator, you can promote/demote others easily with the `/admin`, `/leader`, `/mod`, etc commands.
 
-  [4]: http://pokemonshowdown.com/forum/register
-
 
 Browser support
 ------------------------------------------------------------------------
@@ -97,17 +95,17 @@ Community
 
 The Pokémon Showdown development IRC channel is `#showdown` at `irc.synirc.net`.
 
-You can also visit the [Pokémon Showdown forums][5] for discussion and help.
+You can also visit the [Pokémon Showdown forums][4] for discussion and help.
 
-  [5]: http://pokemonshowdown.com/forums/
+  [4]: http://pokemonshowdown.com/forums/
 
 
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's server is distributed under the terms of the [MIT License][6].
+Pokémon Showdown's server is distributed under the terms of the [MIT License][5].
 
-  [6]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+  [5]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
 
 
 Credits
