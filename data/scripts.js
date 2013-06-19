@@ -376,8 +376,6 @@ exports.BattleScripts = {
 					return false;
 				}
 				didSomething = true;
-			} else if (damage === false && typeof hitResult === 'undefined') {
-				this.add('-fail', target);
 			}
 			if (damage === false || damage === null) {
 				if (damage === false) {
@@ -472,10 +470,11 @@ exports.BattleScripts = {
 				}
 			}
 		}
-		if (target && target.hp > 0 && pokemon.hp > 0) {
-			if (moveData.forceSwitch && this.runEvent('DragOut', target, pokemon, move)) {
+		if (target && target.hp > 0 && pokemon.hp > 0 && moveData.forceSwitch) {
+			hitResult = this.runEvent('DragOut', target, pokemon, move);
+			if (hitResult) {
 				target.forceSwitchFlag = true;
-			} else {
+			} else if (hitResult === false) {
 				this.add('-fail', target);
 			}
 		}
