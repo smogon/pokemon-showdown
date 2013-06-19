@@ -450,7 +450,7 @@ exports.BattleScripts = {
 				}
 			}
 
-			if (!hitResult && !didSomething) {
+			if (!hitResult && !didSomething && !moveData.self) {
 				if (!isSelf && !isSecondary) {
 					if (hitResult === false || didSomething === false) this.add('-fail', target);
 				}
