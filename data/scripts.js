@@ -474,8 +474,6 @@ exports.BattleScripts = {
 			hitResult = this.runEvent('DragOut', target, pokemon, move);
 			if (hitResult) {
 				target.forceSwitchFlag = true;
-			} else if (hitResult === false) {
-				this.add('-fail', target);
 			}
 		}
 		if (move.selfSwitch && pokemon.hp) {
