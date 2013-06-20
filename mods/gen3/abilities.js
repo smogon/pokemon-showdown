@@ -111,7 +111,7 @@ exports.BattleAbilities = {
 	},
 	"stench": {
 		inherit: true,
-		onModifyMove: null
+		onModifyMove: function(){}
 	},
 	"sturdy": {
 		inherit: true,
