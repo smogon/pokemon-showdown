@@ -275,7 +275,7 @@ exports.BattleScripts = {
 
 		if (!damage && damage !== 0) return damage;
 
-		if (!move.negateSecondary) {
+		if (target && !move.negateSecondary) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
 			this.runEvent('AfterMoveSecondary', target, pokemon, move);
 		}
