@@ -2214,7 +2214,7 @@ exports.BattleAbilities = {
 		onDragOutPriority: 1,
 		onDragOut: function(pokemon) {
 			this.add('-activate', pokemon, 'ability: Suction Cups');
-			return false;
+			return null;
 		},
 		id: "suctioncups",
 		name: "Suction Cups",
