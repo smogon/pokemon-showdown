@@ -6158,7 +6158,7 @@ exports.BattleMovedex = {
 			},
 			onDragOut: function(pokemon) {
 				this.add('-activate', pokemon, 'move: Ingrain');
-				return false;
+				return null;
 			}
 		},
 		secondary: false,
