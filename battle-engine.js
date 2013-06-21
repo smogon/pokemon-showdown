@@ -2325,7 +2325,7 @@ var Battle = (function() {
 		}
 
 		if (effect.recoil && source) {
-			this.damage(Math.round(damage * effect.recoil[0] / effect.recoil[1]), source, target, 'recoil');
+			this.damage(clampIntRange(Math.round(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
 		}
 		if (effect.drain && source) {
 			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
