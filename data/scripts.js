@@ -432,7 +432,7 @@ exports.BattleScripts = {
 				hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
 				didSomething = didSomething || hitResult;
 			}
-			if (moveData.forceSwitch) {
+			if (moveData.forceSwitch || moveData.selfSwitch) {
 				didSomething = true; // at least defer the fail message to later
 			}
 			// Hit events
