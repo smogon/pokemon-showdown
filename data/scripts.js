@@ -1387,8 +1387,9 @@ exports.BattleScripts = {
 			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
 			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
 			if (tier === 'LC' && nuCount > 1 || (tier === 'G4CAP' || tier === 'G5CAP' || 
-				((tier === 'NFE' || tier === 'NU') && nuCount > 1) || (tier === 'Uber' && uberCount > 1)) && Math.random()*5>1)
+				((tier === 'NFE' || tier === 'NU') && nuCount > 1) || (tier === 'Uber' && uberCount > 1)) && Math.random()*5>1) {
 				continue;
+			}
 			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
 			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
 			// Not available on BW
@@ -1397,58 +1398,54 @@ exports.BattleScripts = {
 			var types = template.types;
 			var skip = false;
 			for(var t=0; t<types.length; t++) {
-				if(types[t] in typesList) {
-					if(typesList[types[t]] > 1 && Math.random()*5>1) {
+				if (types[t] in typesList) {
+					if (typesList[types[t]] > 1 && Math.random()*5>1) {
 						skip = true;
 						break;
 					}
 				}
 			}
-			if(skip)
-				continue;
+			if (skip) continue;
 			// Try to prevent Pokemon from the same evolutionary line from being placed at the same team.
 			// For example, a team with both Arcanine and Growlithe is illegal.
 			// Note: This does not try to catch split evolutionary lines -- Jolteon and Vaporeon are legal together, but Jolteon and Eevee are not.
 			var evos = template.evos;
 			var prevo = template.prevo;
 			// No evolutions? We don't need to bother.
-			if(prevo !== "" || evos.length > 0) {
+			if (prevo !== "" || evos.length > 0) {
 				var templateSpecies = template.species.toUpperCase();
 				for(var p = 0; p<pokemon.length;p++) {
 					var poke = pokemon[p];
 					var species = poke.name.toUpperCase();
 					var isFamily = false;
 					//PS only stores one pre-evolution, so we can't iterate through all of them.
-					if(prevo !== "") {
+					if (prevo !== "") {
 						//First, see if we already have the pre-evolution on our team:
-						if(species === prevo.toUpperCase()) {
+						if (species === prevo.toUpperCase()) {
 							skip = true;
 							break;
 						}
 						//Next, check to see if the proposed Pokemon is an evolution of a Pokemon already on the team:
 						for(evo in poke.evos) {
-							if(evo.toUpperCase() === templateSpecies) {
+							if (evo.toUpperCase() === templateSpecies) {
 								skip = true;
 								isFamily = true;
 								break;
 							}
 						}
-						if(isFamily)
-							break;
+						if (isFamily) break;
 					}
 					//Now, check to see if the Pokemon already on our team is an evolution of the proposed Pokemon:
 					for(evo in evos) {
-						if(evo.toUpperCase() === species) {
+						if (evo.toUpperCase() === species) {
 							skip = true;
 							isFamily = true;
 							break;
 						}
 					}
-					if(isFamily)
-						break;
+					if (isFamily) break;
 				}
-				if(skip)
-					continue;
+				if (skip) continue;
 			}
 			// Try to add the Pokemon of the Day:
 			if (ruleset && ruleset[0]==='PotD') {
@@ -1468,20 +1465,22 @@ exports.BattleScripts = {
 			}
 			// Now that our Pokemon has passed all checks, we can increment the type counter:
 			for(var t=0; t<types.length; t++) {
-				if(types[t] in typesList)
+				if (types[t] in typesList) {
 					typesList[types[t]]++;
-				else
+				} else {
 					typesList[types[t]] = 1;
+				}
 			}
 			// Create random set and add to team:
 			var set = this.randomSet(template, i);
 			pokemon.push(set);
 			pokemonLeft++;
 			// Increment Uber/NU counter:
-			if(tier === 'Uber')
+			if (tier === 'Uber') {
 				uberCount++;
-			else if(tier === 'NU' || tier === 'NFE' || tier === 'LC')
+			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
+			}
 		}
 		return pokemon;
 	},
