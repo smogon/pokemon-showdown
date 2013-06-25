@@ -1381,8 +1381,10 @@ exports.BattleFormatsData = {
 	mewtwo: {
 		viableMoves: {"psystrike":1,"aurasphere":1,"fireblast":1,"icebeam":1,"calmmind":1,"substitute":1,"recover":1,"thunderbolt":1},
 		eventPokemon: [
-			{"generation":5,"level":70,"isDW":false,"moves":["psystrike","shadowball","aurasphere","electroball"],"pokeball":"cherishball"}
+			{"generation":5,"level":70,"isDW":false,"moves":["psystrike","shadowball","aurasphere","electroball"],"pokeball":"cherishball"},
+			{"generation":5,"level":100,"nature":"Timid","isDW":true,"moves":["psystrike","icebeam","healpulse","hurricane"],"pokeball":"cherishball"}
 		],
+		dreamWorldRelease: true,
 		tier: "Uber"
 	},
 	mew: {
@@ -3070,6 +3072,9 @@ exports.BattleFormatsData = {
 	},
 	torterra: {
 		viableMoves: {"stealthrock":1,"earthquake":1,"woodhammer":1,"stoneedge":1,"synthesis":1,"leechseed":1},
+		eventPokemon: [
+			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["woodhammer","earthquake","outrage","stoneedge"],"pokeball":"cherishball"}
+		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
 		tier: "NU"
@@ -3094,6 +3099,9 @@ exports.BattleFormatsData = {
 	},
 	infernape: {
 		viableMoves: {"stealthrock":1,"fireblast":1,"closecombat":1,"uturn":1,"grassknot":1,"stoneedge":1,"machpunch":1,"swordsdance":1,"nastyplot":1,"flareblitz":1,"hiddenpowerice":1,"thunderpunch":1},
+		eventPokemon: [
+			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["fireblast","closecombat","uturn","grassknot"],"pokeball":"cherishball"}
+		],
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
 		tier: "OU"
@@ -3753,6 +3761,9 @@ exports.BattleFormatsData = {
 	},
 	emboar: {
 		viableMoves: {"flareblitz":1,"superpower":1,"flamecharge":1,"wildcharge":1,"headsmash":1,"earthquake":1,"fireblast":1},
+		eventPokemon: [
+			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["flareblitz","hammerarm","wildcharge","headsmash"],"pokeball":"cherishball"}
+		],
 		tier: "RU"
 	},
 	oshawott: {
@@ -3765,6 +3776,9 @@ exports.BattleFormatsData = {
 	},
 	samurott: {
 		viableMoves: {"swordsdance":1,"aquajet":1,"waterfall":1,"megahorn":1,"superpower":1},
+		eventPokemon: [
+			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["hydropump","icebeam","megahorn","superpower"],"pokeball":"cherishball"}
+		],
 		tier: "NU"
 	},
 	patrat: {
