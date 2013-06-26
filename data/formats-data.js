@@ -327,7 +327,7 @@ exports.BattleFormatsData = {
 	sandshrew: {
 		viableMoves: {"earthquake":1,"rockslide":1,"swordsdance":1,"rapidspin":1,"xscissor":1,"stealthrock":1,"toxic":1},
 		eventPokemon: [
-			{"generation":3,"level":12,"moves":["scratch","defensecurl","sandattack","vitalthrow"]}
+			{"generation":3,"level":12,"moves":["scratch","defensecurl","sandattack","poisonsting"]}
 		],
 		dreamWorldRelease: true,
 		tier: "LC"
