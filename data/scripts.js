@@ -1401,7 +1401,7 @@ exports.BattleScripts = {
 			if ((tier === 'G4CAP' || tier === 'G5CAP') && Math.random()*5>1) continue;
 			// Arceus formes have 1/17 the normal rate each (so Arceus as a whole has a normal rate)
 			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
-			// Basculin formes have 1/17 the normal rate each (so Basclin as a whole has a normal rate)
+			// Basculin formes have 1/2 the normal rate each (so Basclin as a whole has a normal rate)
 			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
 			// Not available on BW
 			if (template.species === 'Pichu-Spiky-eared') continue;
