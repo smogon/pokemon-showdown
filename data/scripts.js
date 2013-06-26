@@ -1375,9 +1375,14 @@ exports.BattleScripts = {
 		}
 		keys = keys.randomize();
 
-		var ruleset = this.getFormat().ruleset;
+		// PotD stuff
+		var potd = {};
+		if ('Rule:potd' in this.getFormat().banlistTable) {
+			potd = this.getTemplate(config.potd);
+		}
 
 		var typeCount = {};
+		var typeComboCount = {};
 		var uberCount = 0;
 		var nuCount = 0;
 
@@ -1388,76 +1393,35 @@ exports.BattleScripts = {
 			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
 			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
 			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
-			if (tier === 'LC' && nuCount > 1 || (tier === 'G4CAP' || tier === 'G5CAP' || 
-				((tier === 'NFE' || tier === 'NU') && nuCount > 1) || (tier === 'Uber' && uberCount > 1)) && Math.random()*5>1) {
-				continue;
-			}
+			if (tier === 'LC' && nuCount > 1) continue;
+			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random()*5>1) continue;
+			if (tier === 'Uber' && uberCount > 1 && Math.random()*5>1) continue;
+
+			// CAPs have 20% the normal rate
+			if ((tier === 'G4CAP' || tier === 'G5CAP') && Math.random()*5>1) continue;
+			// Arceus formes have 1/17 the normal rate each (so Arceus as a whole has a normal rate)
 			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
+			// Basculin formes have 1/17 the normal rate each (so Basclin as a whole has a normal rate)
 			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
 			// Not available on BW
 			if (template.species === 'Pichu-Spiky-eared') continue;
-			// Prevent too many of the same type:
+
+			// Limit 2 of any type
 			var types = template.types;
 			var skip = false;
 			for (var t=0; t<types.length; t++) {
-				if (types[t] in typeCount) {
-					if (typeCount[types[t]] > 1 && Math.random()*5>1) {
-						skip = true;
-						break;
-					}
+				if (typeCount[types[t]] > 1 && Math.random()*5>1) {
+					skip = true;
+					break;
 				}
 			}
 			if (skip) continue;
-			// Try to prevent Pokemon from the same evolutionary line from being placed at the same team.
-			// For example, a team with both Arcanine and Growlithe is illegal.
-			// Note: This does not try to catch split evolutionary lines -- Jolteon and Vaporeon are legal together, but Jolteon and Eevee are not.
-			var evos = template.evos;
-			var prevo = template.prevo;
-			// No evolutions? We don't need to bother.
-			if (prevo !== "" || evos.length > 0) {
-				var templateSpecies = template.species.toUpperCase();
-				for (var p = 0; p<pokemon.length;p++) {
-					var poke = pokemon[p];
-					var species = poke.name.toUpperCase();
-					var isFamily = false;
-					// PS only stores one pre-evolution, so we can't iterate through all of them.
-					if (prevo !== "") {
-						// First, see if we already have the pre-evolution on our team:
-						if (species === prevo.toUpperCase()) {
-							skip = true;
-							break;
-						}
-						// Next, check to see if the proposed Pokemon is an evolution of a Pokemon already on the team:
-						for (evo in poke.evos) {
-							if (evo.toUpperCase() === templateSpecies) {
-								skip = true;
-								isFamily = true;
-								break;
-							}
-						}
-						if (isFamily) break;
-					}
-					// Now, check to see if the Pokemon already on our team is an evolution of the proposed Pokemon:
-					for (evo in evos) {
-						if (evo.toUpperCase() === species) {
-							skip = true;
-							isFamily = true;
-							break;
-						}
-					}
-					if (isFamily) break;
-				}
-				if (skip) continue;
-			}
 
-			// Try to add the Pokemon of the Day:
-			if (ruleset && ruleset[0]==='PotD') {
-				var potd = this.getTemplate(config.potd);
+			if (potd && potd.name && potd.types) {
+				// The Pokemon of the Day belongs in slot 2
 				if (i===1) {
 					template = potd;
-					if (!template || !template.name || !template.types) {
-						continue;
-					} else if (template.species === 'Magikarp') {
+					if (template.species === 'Magikarp') {
 						template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
 					} else if (template.species === 'Delibird') {
 						template.viableMoves = {present:1, bestow:1};
@@ -1467,8 +1431,17 @@ exports.BattleScripts = {
 				}
 			}
 
-			// Create random set and add to team:
 			var set = this.randomSet(template, i);
+
+			// Limit 1 of any type combination
+			var typeCombo = types.join();
+			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
+				// Drought and Drizzle don't count towards the type combo limit
+				typeCombo = set.ability;
+			}
+			if (typeCombo in typeComboCount) continue;
+
+			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
 			pokemonLeft++;
@@ -1480,6 +1453,7 @@ exports.BattleScripts = {
 					typeCount[types[t]] = 1;
 				}
 			}
+			typeComboCount[typeCombo] = 1;
 			// Increment Uber/NU counter:
 			if (tier === 'Uber') {
 				uberCount++;
