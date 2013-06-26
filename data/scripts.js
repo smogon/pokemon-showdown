@@ -1376,9 +1376,11 @@ exports.BattleScripts = {
 		keys = keys.randomize();
 
 		var ruleset = this.getFormat().ruleset;
-		var typesList = {};
+
+		var typeCount = {};
 		var uberCount = 0;
 		var nuCount = 0;
+
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
 			if (!template || !template.name || !template.types) continue;
@@ -1397,9 +1399,9 @@ exports.BattleScripts = {
 			// Prevent too many of the same type:
 			var types = template.types;
 			var skip = false;
-			for(var t=0; t<types.length; t++) {
-				if (types[t] in typesList) {
-					if (typesList[types[t]] > 1 && Math.random()*5>1) {
+			for (var t=0; t<types.length; t++) {
+				if (types[t] in typeCount) {
+					if (typeCount[types[t]] > 1 && Math.random()*5>1) {
 						skip = true;
 						break;
 					}
@@ -1414,19 +1416,19 @@ exports.BattleScripts = {
 			// No evolutions? We don't need to bother.
 			if (prevo !== "" || evos.length > 0) {
 				var templateSpecies = template.species.toUpperCase();
-				for(var p = 0; p<pokemon.length;p++) {
+				for (var p = 0; p<pokemon.length;p++) {
 					var poke = pokemon[p];
 					var species = poke.name.toUpperCase();
 					var isFamily = false;
-					//PS only stores one pre-evolution, so we can't iterate through all of them.
+					// PS only stores one pre-evolution, so we can't iterate through all of them.
 					if (prevo !== "") {
-						//First, see if we already have the pre-evolution on our team:
+						// First, see if we already have the pre-evolution on our team:
 						if (species === prevo.toUpperCase()) {
 							skip = true;
 							break;
 						}
-						//Next, check to see if the proposed Pokemon is an evolution of a Pokemon already on the team:
-						for(evo in poke.evos) {
+						// Next, check to see if the proposed Pokemon is an evolution of a Pokemon already on the team:
+						for (evo in poke.evos) {
 							if (evo.toUpperCase() === templateSpecies) {
 								skip = true;
 								isFamily = true;
@@ -1435,8 +1437,8 @@ exports.BattleScripts = {
 						}
 						if (isFamily) break;
 					}
-					//Now, check to see if the Pokemon already on our team is an evolution of the proposed Pokemon:
-					for(evo in evos) {
+					// Now, check to see if the Pokemon already on our team is an evolution of the proposed Pokemon:
+					for (evo in evos) {
 						if (evo.toUpperCase() === species) {
 							skip = true;
 							isFamily = true;
@@ -1447,6 +1449,7 @@ exports.BattleScripts = {
 				}
 				if (skip) continue;
 			}
+
 			// Try to add the Pokemon of the Day:
 			if (ruleset && ruleset[0]==='PotD') {
 				var potd = this.getTemplate(config.potd);
@@ -1463,18 +1466,20 @@ exports.BattleScripts = {
 					continue; // No thanks, I've already got one
 				}
 			}
-			// Now that our Pokemon has passed all checks, we can increment the type counter:
-			for(var t=0; t<types.length; t++) {
-				if (types[t] in typesList) {
-					typesList[types[t]]++;
-				} else {
-					typesList[types[t]] = 1;
-				}
-			}
+
 			// Create random set and add to team:
 			var set = this.randomSet(template, i);
 			pokemon.push(set);
+
 			pokemonLeft++;
+			// Now that our Pokemon has passed all checks, we can increment the type counter:
+			for (var t=0; t<types.length; t++) {
+				if (types[t] in typeCount) {
+					typeCount[types[t]]++;
+				} else {
+					typeCount[types[t]] = 1;
+				}
+			}
 			// Increment Uber/NU counter:
 			if (tier === 'Uber') {
 				uberCount++;
