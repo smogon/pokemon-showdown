@@ -365,7 +365,13 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Moderating: Other
 	 *********************************************************/
-
+	
+	modnote: function(target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help note');
+		if (!this.can('mute')) return false;
+		return this.privateModCommand('(' + user.name + ' notes: ' + target + ')');
+	},
+	
 	demote: 'promote',
 	promote: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help promote');
