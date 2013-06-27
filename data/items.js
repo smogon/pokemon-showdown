@@ -1803,9 +1803,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		onBasePower: function(basePower, user) {
-			user.addVolatile('lifeorb');
-			return basePower * 1.3;
+		onDamage: function(damage, target, source, effect) {
+			source.addVolatile('lifeorb');
+			return Math.round(damage * (0x14CC / 0x1000));
 		},
 		effect: {
 			duration: 1,
