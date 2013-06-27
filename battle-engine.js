@@ -2592,6 +2592,9 @@ var Battle = (function() {
 		if (basePower && !Math.floor(baseDamage)) {
 			return 1;
 		}
+		
+		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
+		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
 		return Math.floor(baseDamage);
 	};
