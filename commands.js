@@ -367,13 +367,10 @@ var commands = exports.commands = {
 	 * Moderating: Other
 	 *********************************************************/
 	
-	note: function(target, room, user, connection, cmd) {
+	modnote: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help note');
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-		if (!targetUser) return this.sendReply('User '+this.targetUsername+' not found.');
 		if (!this.can('mute')) return false;
-		return this.privateModCommand('' + targetUser.name + ' has had a note added by ' + user.name + '. (' + target + ')');
+		return this.privateModCommand('(' + user.name + ' notes: ' + target + ')');
 	},
 	
 	demote: 'promote',
