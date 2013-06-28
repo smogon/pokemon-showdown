@@ -690,7 +690,7 @@ exports.BattleScripts = {
 		var hasMove = {};
 		var counter = {};
 		var setupType = '';
-
+		
 		var j=0;
 		do {
 			while (moves.length<4 && j<moveKeys.length) {
@@ -712,7 +712,8 @@ exports.BattleScripts = {
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
 				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
 				recoil: 0, inaccurate: 0,
-				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
+				physicalsetup: 0, specialsetup: 0, mixedsetup: 0,
+				stab: 0
 			};
 			for (var k=0; k<moves.length; k++) {
 				var move = this.getMove(moves[k]);
@@ -736,7 +737,10 @@ exports.BattleScripts = {
 					counter['recoil']++;
 				}
 				if (move.basePower || move.basePowerCallback) {
-					if (hasType[move.type]) counter['adaptability']++;
+					if (hasType[move.type]) {
+						counter['adaptability']++;
+						counter['stab']++;
+					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
 					if (move.type === 'Grass') counter['overgrow']++;
@@ -986,6 +990,9 @@ exports.BattleScripts = {
 				if (k===3) {
 					if (counter['Status']>=4) {
 						// taunt bait, not okay
+						rejected = true;
+					} else if (counter['stab']===0) {
+						// No STAB moves
 						rejected = true;
 					}
 				}
