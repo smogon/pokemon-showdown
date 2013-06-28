@@ -53,13 +53,30 @@ exports.BattleItems = {
 		desc: "Activates at 25% HP. Next move used goes first. One-time use."
 	},
 	"lifeorb": {
-		inherit: true,
+		id: "lifeorb",
+		name: "Life Orb",
+		spritenum: 249,
+		fling: {
+			basePower: 30
+		},
 		onBasePower: function(basePower, user, target) {
 			if (!target.volatiles['substitute']) {
 				user.addVolatile('lifeorb');
 			}
 			return basePower * 1.3;
-		}
+		},
+		effect: {
+			duration: 1,
+			onAfterMoveSecondarySelf: function(source, target, move) {
+				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
+					this.damage(source.maxhp/10, source, source, this.getItem('lifeorb'));
+					source.removeVolatile('lifeorb');
+				}
+			}
+		},
+		num: 270,
+		gen: 4,
+		desc: "Holder's damaging moves do 1.3x damage; loses 1/10 max HP after the attack."
 	},
 	"mentalherb": {
 		id: "mentalherb",
