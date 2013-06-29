@@ -1044,14 +1044,6 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 				
-				if (k===3) {
-					// Final pass
-					if (counter['Status']>=4) {
-						// taunt bait, not okay
-						rejected = true;
-					}
-				}
-				
 				// Remove rejected moves from the move list.
 				if (rejected && j<moveKeys.length) {
 					moves.splice(k,1);
@@ -1077,13 +1069,20 @@ exports.BattleScripts = {
 						damagingid = damagingMoves[0].id;
 						damagingType = damagingMoves[0].type;
 						var replace = false;
-						if (damagingid === 'suckerpunch' || damagingMoves[0].damageCallback) {
+						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
 							var hasEncore = false;
 							for (var m=0; m<moves.length; m++) {
 								if (moves[m].id === 'encore') hasEncore = true;
 							}
 							if (!hasEncore && Math.random()*2>1) replace = true;
+						} else if (damagingid === 'focuspunch') {
+							// Focus Punch is a bad idea without a sub:
+							var hasSub = false;
+							for (var n=0; n<moves.length; n++) {
+								if (moves[n].id === 'substitute') hasSub = true;
+							}
+							if (!hasSub) replace = true;
 						} else if (damagingid.substr(0,11) === 'hiddenpower' && damagingType === 'Ice') {
 							// Mono-HP-Ice is never acceptable.
 							replace = true;
@@ -1104,18 +1103,16 @@ exports.BattleScripts = {
 					}
 				} else if (damagingMoves.length===2) {
 					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric, Ghost/Fighting, or Dark/Fighting, reject one of them at random.
-					var typeOne = damagingMoves[0].type;
-					var typeTwo = damagingMoves[1].type;
+					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
+					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
-					if (!hasStab[typeOne] && !hasStab[typeTwo]) {
-						if (typeOne === 'Ice') {
-							if (typeTwo === 'Electric') rejectCombo = false;
-						} else if (typeOne === 'Electric') {
-							if (typeTwo === 'Ice') rejectCombo = false;
-						} else if (typeOne === 'Ghost' || typeOne === 'Dark') {
-							if (typeTwo === 'Fighting') rejectCombo = false;
-						} else if (typeOne === 'Fighting') {
-							if (typeTwo === 'Ghost' || typeTwo === 'Dark') rejectCombo = false;
+					if (!type1 in hasStab && !type2 in hasStab) {
+						if (typeCombo === 'Electric/Ice') {
+							rejectCombo = false;
+						} else if (typeCombo === 'Fighting/Ghost') {
+							rejectCombo = false;
+						} else if (typeCombo === 'Dark/Fightng') {
+							rejectCombo = false;
 						}
 					} else {
 						rejectCombo = false;
