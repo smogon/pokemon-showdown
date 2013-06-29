@@ -682,17 +682,24 @@ exports.BattleScripts = {
 			spd: 31,
 			spe: 31
 		};
-
+		var hasStab = {};
+		hasStab[template.types[0]] = true;
 		var hasType = {};
 		hasType[template.types[0]] = true;
-		if (template.types[1]) hasType[template.types[1]] = true;
+		if (template.types[1]) {
+			hasStab[template.types[1]] = true;
+			hasType[template.types[1]] = true;
+		}
 
+		var damagingMoves = [];
+		var damagingMoveIndex = {};
 		var hasMove = {};
 		var counter = {};
 		var setupType = '';
 		
 		var j=0;
 		do {
+			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length<4 && j<moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
 				j++;
@@ -706,6 +713,8 @@ exports.BattleScripts = {
 				moves.push(moveid);
 			}
 
+			damagingMoves = [];
+			damagingMoveIndex = {};
 			hasMove = {};
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
@@ -715,38 +724,59 @@ exports.BattleScripts = {
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0,
 				stab: 0
 			};
+			// Iterate through all moves we've chosen so far and keep track of what they do:
 			for (var k=0; k<moves.length; k++) {
 				var move = this.getMove(moves[k]);
 				var moveid = move.id;
+				// Keep track of all moves we have:
 				hasMove[moveid] = true;
 				if (move.damage || move.damageCallback) {
+					// Moves that do a set amount of damage:
 					counter['damage']++;
+					damagingMoves.push(move);
+					damagingMoveIndex[moveid] = k;
 				} else {
+					// Are Physical/Special/Status moves:
 					counter[move.category]++;
 				}
+				// Moves that have a low base power:
 				if (move.basePower && move.basePower <= 60) {
 					counter['technician']++;
 				}
+				// Moves that hit multiple times:
 				if (move.multihit && move.multihit[1] === 5) {
 					counter['skilllink']++;
 				}
+				// Punching moves:
 				if (move.isPunchAttack) {
 					counter['ironfist']++;
 				}
+				// Recoil:
 				if (move.recoil) {
 					counter['recoil']++;
 				}
+				// Moves which have a base power:
 				if (move.basePower || move.basePowerCallback) {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
-						counter['stab']++;
+						// STAB:
+						// Power Gem, Bounce, Aeroblast aren't considered STABs. 
+						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
+						if (moveid === 'aeroblast' || moveid === 'powergem' || moveid === 'bounce') hasStab[move.type] = false;
+						if (move.basePower <= 20 && hasStab[move.type]) counter['stab']++;
 					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
 					if (move.type === 'Grass') counter['overgrow']++;
 					if (move.type === 'Bug') counter['swarm']++;
 					if (move.type === 'Water') counter['torrent']++;
+					// Make sure not to count Knock Off, Rapid Spin, etc.
+					if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
+						damagingMoves.push(move);
+						damagingMoveIndex[moveid] = k;
+					}
 				}
+				// Moves with secondary effects:
 				if (move.secondary) {
 					if (move.secondary.chance < 50) {
 						counter['sheerforce'] -= 5;
@@ -754,24 +784,30 @@ exports.BattleScripts = {
 						counter['sheerforce']++;
 					}
 				}
+				// Moves with low accuracy:
 				if (move.accuracy && move.accuracy !== true && move.accuracy < 90) {
 					counter['inaccurate']++;
 				}
+				// Moves which drop stats:
 				var ContraryMove = {
 					leafstorm: 1, overheat: 1, closecombat: 1, superpower: 1, vcreate: 1
 				};
 				if (ContraryMove[moveid]) {
 					counter['contrary']++;
 				}
+				// Moves that boost Attack:
 				var PhysicalSetup = {
 					swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1, bellydrum:1, shiftgear:1, honeclaws:1, howl:1
 				};
+				// Moves which boost Special Attack:
 				var SpecialSetup = {
 					nastyplot:1, tailglow:1, quiverdance:1, calmmind:1
 				};
+				// Moves which boost Attack AND Special Attack:
 				var MixedSetup = {
 					growth:1, workup:1, shellsmash:1
 				};
+				
 				if (PhysicalSetup[moveid]) {
 					counter['physicalsetup']++;
 				}
@@ -783,6 +819,7 @@ exports.BattleScripts = {
 				}
 			}
 
+			// Choose a setup type:
 			if (counter['mixedsetup']) {
 				setupType = 'Mixed';
 			} else if (counter['specialsetup']) {
@@ -791,6 +828,7 @@ exports.BattleScripts = {
 				setupType = 'Physical';
 			}
 
+			// Iterate through the moves again, this time to cull them:
 			for (var k=0; k<moves.length; k++) {
 				var moveid = moves[k];
 				var move = this.getMove(moveid);
@@ -798,8 +836,8 @@ exports.BattleScripts = {
 				var isSetup = false;
 
 				switch (moveid) {
+				
 				// not very useful without their supporting moves
-
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
 					break;
@@ -814,7 +852,6 @@ exports.BattleScripts = {
 					break;
 
 				// we only need to set up once
-
 				case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup': case 'bellydrum':
 					if (counter.Physical < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
@@ -832,7 +869,6 @@ exports.BattleScripts = {
 					break;
 
 				// bad after setup
-
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
@@ -857,7 +893,7 @@ exports.BattleScripts = {
 					break;
 
 				// bit redundant to have both
-
+				// Attacks:
 				case 'flamethrower': case 'fierydance':
 					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast'] || hasMove['blueflare']) rejected = true;
 					break;
@@ -879,7 +915,7 @@ exports.BattleScripts = {
 				case 'airslash':
 					if (hasMove['hurricane']) rejected = true;
 					break;
-				case 'bravebird': case 'pluck':
+				case 'bravebird': case 'pluck': case 'drillpeck':
 					if (hasMove['acrobatics']) rejected = true;
 					break;
 				case 'solarbeam':
@@ -946,6 +982,7 @@ exports.BattleScripts = {
 					if (!setupType && hasMove['fusionbolt']) rejected = true;
 					break;
 
+				// Status:
 				case 'rest':
 					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis']) rejected = true;
 					break;
@@ -987,15 +1024,8 @@ exports.BattleScripts = {
 					if (hasMove['willowisp']) rejected = true;
 					break;
 				}
-				if (k===3) {
-					if (counter['Status']>=4) {
-						// taunt bait, not okay
-						rejected = true;
-					} else if (counter['stab']===0) {
-						// No STAB moves
-						rejected = true;
-					}
-				}
+				
+				// These moves can be used even if we aren't setting up to use them:
 				var SetupException = {
 					overheat:1, dracometeor:1, leafstorm:1,
 					voltswitch:1, uturn:1,
@@ -1007,13 +1037,24 @@ exports.BattleScripts = {
 				if (move.category === 'Physical' && setupType === 'Special' && !SetupException[move.id]) {
 					rejected = true;
 				}
+				
+				// This move doesn't satisfy our setup requirements:
 				if (setupType === 'Physical' && move.category !== 'Physical' && counter['Physical'] < 2) {
 					rejected = true;
 				}
 				if (setupType === 'Special' && move.category !== 'Special' && counter['Special'] < 2) {
 					rejected = true;
 				}
-
+				
+				if (k===3) {
+					// Final pass
+					if (counter['Status']>=4) {
+						// taunt bait, not okay
+						rejected = true;
+					}
+				}
+				
+				// Remove rejected moves from the move list.
 				if (rejected && j<moveKeys.length) {
 					moves.splice(k,1);
 					break;
@@ -1027,7 +1068,73 @@ exports.BattleScripts = {
 					}
 				}
 			}
-
+			if (j<moveKeys.length && moves.length === 4) {
+				// Move post-processing:
+				if (damagingMoves.length===0) {
+					// Have a 60% chance of rejecting one move at random:
+					if (Math.random()*1.66>1) moves.splice(Math.floor(Math.random()*moves.length),1);
+				} else if (damagingMoves.length===1) {
+					// Night Shade, Seismic Toss, etc. don't count:
+					if (!damagingMoves[0].damage) {
+						damagingid = damagingMoves[0].id;
+						damagingType = damagingMoves[0].type;
+						var replace = false;
+						if (damagingid === 'suckerpunch' || damagingMoves[0].damageCallback) {
+							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
+							var hasEncore = false;
+							for (var m=0; m<moves.length; m++) {
+								if (moves[m].id === 'encore') hasEncore = true;
+							}
+							if (!hasEncore && Math.random()*2>1) replace = true;
+						} else if (damagingid.substr(0,11) === 'hiddenpower' && damagingType === 'Ice') {
+							// Mono-HP-Ice is never acceptable.
+							replace = true;
+						} else {
+							// If you have one attack, and it's not STAB, Ice, Fire, or Ground, reject it.
+							// Mono-Ice/Ground/Fire is only acceptable if the Pokémon's STABs are one of: Poison, Psychic, Steel, Normal, Grass. 
+							if (!hasStab[damagingType]) {
+								if (damagingType === 'Ice' || damagingType === 'Fire' || damagingType === 'Ground') {
+									if (!hasStab['Poison'] && !hasStab['Psychic'] && !hasStab['Steel'] && !hasStab['Normal'] && !hasStab['Grass']) {
+										replace = true;
+									}
+								} else {
+									replace = true;
+								}
+							}
+						}
+						if (replace) moves.splice(damagingMoveIndex[damagingid],1);
+					}
+				} else if (damagingMoves.length===2) {
+					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric, Ghost/Fighting, or Dark/Fighting, reject one of them at random.
+					var typeOne = damagingMoves[0].type;
+					var typeTwo = damagingMoves[1].type;
+					var rejectCombo = true;
+					if (!hasStab[typeOne] && !hasStab[typeTwo]) {
+						if (typeOne === 'Ice') {
+							if (typeTwo === 'Electric') rejectCombo = false;
+						} else if (typeOne === 'Electric') {
+							if (typeTwo === 'Ice') rejectCombo = false;
+						} else if (typeOne === 'Ghost' || typeOne === 'Dark') {
+							if (typeTwo === 'Fighting') rejectCombo = false;
+						} else if (typeOne === 'Fighting') {
+							if (typeTwo === 'Ghost' || typeTwo === 'Dark') rejectCombo = false;
+						}
+					} else {
+						rejectCombo = false;
+					}
+					if (rejectCombo) moves.splice(Math.floor(Math.random()*moves.length),1);
+				} else {
+					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
+					var isStab = false;
+					for (var l=0; l<damagingMoves.length; l++) {
+						if (hasStab[damagingMoves[l].type]) {
+							isStab = true;
+							break;
+						}
+					}
+					if (!isStab) moves.splice(Math.floor(Math.random()*moves.length),1);
+				}
+			}
 		} while (moves.length<4 && j<moveKeys.length);
 
 		// any moveset modification goes here
