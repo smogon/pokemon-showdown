@@ -721,8 +721,7 @@ exports.BattleScripts = {
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
 				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
 				recoil: 0, inaccurate: 0,
-				physicalsetup: 0, specialsetup: 0, mixedsetup: 0,
-				stab: 0
+				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
 			// Iterate through all moves we've chosen so far and keep track of what they do:
 			for (var k=0; k<moves.length; k++) {
@@ -763,7 +762,6 @@ exports.BattleScripts = {
 						// Power Gem, Bounce, Aeroblast aren't considered STABs. 
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
 						if (moveid === 'aeroblast' || moveid === 'powergem' || moveid === 'bounce') hasStab[move.type] = false;
-						if (move.basePower <= 20 && hasStab[move.type]) counter['stab']++;
 					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
