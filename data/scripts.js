@@ -888,9 +888,9 @@ exports.BattleScripts = {
 				case 'trick': case 'switcheroo':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['batonpass']) rejected = true;
 					break;
-				case 'dragontail':
+				case 'dragontail': case 'circlethrow':
 					if (hasMove['agility'] || hasMove['rockpolish']) rejected = true;
-					if (hasMove['whirlwind']) rejected = true;
+					if (hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore']) rejected = true;
 					break;
 
 				// bit redundant to have both
@@ -995,7 +995,7 @@ exports.BattleScripts = {
 					break;
 				case 'roar':
 					// Whirlwind outclasses Roar because Soundproof
-					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['haze']) rejected = true;
+					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['haze'] || hasMove['circlethrow']) rejected = true;
 					break;
 				case 'substitute':
 					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit']) rejected = true;
@@ -1003,7 +1003,11 @@ exports.BattleScripts = {
 				case 'fakeout':
 					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
 					break;
-				case 'encore': case 'suckerpunch':
+				case 'encore':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['roar'] || hasMove['circlethrow']) rejected = true;
+					break;
+				case 'suckerpunch':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'cottonguard':
