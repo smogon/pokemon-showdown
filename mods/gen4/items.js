@@ -21,7 +21,7 @@ exports.BattleItems = {
 			type: "Ghost"
 		},
 		onBeforeTurn: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				var decision = this.willMove(pokemon);
 				if (!decision) return;
 				this.addQueue({
