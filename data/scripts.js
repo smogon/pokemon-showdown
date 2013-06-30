@@ -848,6 +848,9 @@ exports.BattleScripts = {
 				case 'storedpower':
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
 					break;
+				case 'batonpass':
+					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower']) rejected = true;
+					break;
 
 				// we only need to set up once
 				case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup': case 'bellydrum':
@@ -1071,18 +1074,10 @@ exports.BattleScripts = {
 						var replace = false;
 						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
-							var hasEncore = false;
-							for (var m=0; m<moves.length; m++) {
-								if (moves[m].id === 'encore') hasEncore = true;
-							}
-							if (!hasEncore && Math.random()*2>1) replace = true;
+							if (!hasMove['encore'] && Math.random()*2>1) replace = true;
 						} else if (damagingid === 'focuspunch') {
 							// Focus Punch is a bad idea without a sub:
-							var hasSub = false;
-							for (var n=0; n<moves.length; n++) {
-								if (moves[n].id === 'substitute') hasSub = true;
-							}
-							if (!hasSub) replace = true;
+							if (!hasMove['substitute']) replace = true;
 						} else if (damagingid.substr(0,11) === 'hiddenpower' && damagingType === 'Ice') {
 							// Mono-HP-Ice is never acceptable.
 							replace = true;
@@ -1107,13 +1102,7 @@ exports.BattleScripts = {
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
 					if (!type1 in hasStab && !type2 in hasStab) {
-						if (typeCombo === 'Electric/Ice') {
-							rejectCombo = false;
-						} else if (typeCombo === 'Fighting/Ghost') {
-							rejectCombo = false;
-						} else if (typeCombo === 'Dark/Fightng') {
-							rejectCombo = false;
-						}
+						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fightng') rejectCombo = false;
 					} else {
 						rejectCombo = false;
 					}
@@ -1330,7 +1319,13 @@ exports.BattleScripts = {
 					}
 				}
 			} else if (hasMove['trick'] || hasMove['switcheroo']) {
-				item = 'Choice Scarf';
+				if (counter['Physical'] > 2) {
+					item = 'Choice Band';
+				} else if (counter['Special'] > 2) {
+					item = 'Choice Specs';
+				} else {
+					item = 'Choice Scarf';
+				}
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
 					item = 'Flame Orb';
@@ -1392,7 +1387,7 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else if (counter.Physical + counter.Special >= 4) {
 				item = 'Expert Belt';
-			} else if (i===0 && ability !== 'Sturdy') {
+			} else if (i===0 && ability !== 'Sturdy' && !counter['recoil']) {
 				item = 'Focus Sash';
 			} else if (hasMove['outrage']) {
 				item = 'Lum Berry';
