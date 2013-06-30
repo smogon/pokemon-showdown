@@ -1270,12 +1270,15 @@ exports.BattleScripts = {
 				item = 'Macho Brace';
 			} else if (hasMove['trick'] && hasMove['gyroball']) {
 				item = 'Iron Ball';
-			} else if (counter.Physical >= 3 && (hasMove['trick'] || hasMove['switcheroo'])) {
-				item = 'Choice Band';
-			} else if (counter.Special >= 3 && (hasMove['trick'] || hasMove['switcheroo'])) {
-				item = 'Choice Specs';
-			} else if (counter.Status <= 1 && (hasMove['trick'] || hasMove['switcheroo'])) {
-				item = 'Choice Scarf';
+			} else if (hasMove['trick'] || hasMove['switcheroo']) {
+				var randomNum = Math.random()*2;
+				if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum>1)) {
+					item = 'Choice Band';
+				} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum>1)) {
+					item = 'Choice Specs';
+				} else {
+					item = 'Choice Scarf';
+				}
 			} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
 				item = 'Chesto Berry';
 			} else if (hasMove['naturalgift']) {
@@ -1317,14 +1320,6 @@ exports.BattleScripts = {
 						item = move.type + ' Gem';
 						break;
 					}
-				}
-			} else if (hasMove['trick'] || hasMove['switcheroo']) {
-				if (counter['Physical'] > 2) {
-					item = 'Choice Band';
-				} else if (counter['Special'] > 2) {
-					item = 'Choice Specs';
-				} else {
-					item = 'Choice Scarf';
 				}
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
