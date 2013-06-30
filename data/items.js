@@ -2141,18 +2141,18 @@ exports.BattleItems = {
 			type: "Rock"
 		},
 		onResidual: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'Gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
-			pokemon.addVolatile('MicleBerry');
+			pokemon.addVolatile('micleberry');
 		},
 		effect: {
 			duration: 2,
 			onModifyMove: function(move, pokemon) {
 				this.add('-enditem', pokemon, 'Micle Berry');
-				pokemon.removeVolatile('MicleBerry');
+				pokemon.removeVolatile('micleberry');
 				if (typeof move.accuracy === 'number') {
 					move.accuracy *= 1.2;
 				}
@@ -2161,14 +2161,6 @@ exports.BattleItems = {
 		num: 209,
 		gen: 4,
 		desc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use."
-	},
-	"moonball": {
-		id: "moonball",
-		name: "Moon Ball",
-		spritenum: 294,
-		num: 498,
-		gen: 2,
-		desc: "A Poke Ball for catching Pokemon that evolve using the Moon Stone."
 	},
 	"mindplate": {
 		id: "mindplate",
@@ -2202,6 +2194,14 @@ exports.BattleItems = {
 		num: 239,
 		gen: 2,
 		desc: "Holder's Grass-type attacks have 1.2x power."
+	},
+	"moonball": {
+		id: "moonball",
+		name: "Moon Ball",
+		spritenum: 294,
+		num: 498,
+		gen: 2,
+		desc: "A Poke Ball for catching Pokemon that evolve using the Moon Stone."
 	},
 	"muscleband": {
 		id: "muscleband",
