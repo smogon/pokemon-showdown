@@ -653,7 +653,7 @@ exports.BattleScripts = {
 		//console.log(team);
 		return team;
 	},
-	randomSet: function(template, i) {
+	randomSet: function(template, i, team) {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
 
@@ -661,7 +661,19 @@ exports.BattleScripts = {
 			template = this.getTemplate('unown');
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
 		}
-
+		// Determine what our team composition is:
+		var hasWeather = {};
+		if (team != undefined) {
+			for (var n=0; n<team.length;n++) {
+				var pokeAbility = team[n].ability;
+				if (pokeAbility === 'Drought') hasWeather['sun'] = true;
+				else if (pokeAbility === 'Drizzle') hasWeather['rain'] = true;
+				else if (pokeAbility === 'Snow Warning') hasWeather['hail'] = true;
+				else if (pokeAbility === 'Sand Stream') hasWeather['sandstorm'] = true;
+			}
+		}
+		
+		// Set up template:
 		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
 		var moves = [];
 		var ability = '';
@@ -722,7 +734,8 @@ exports.BattleScripts = {
 				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
 				recoil: 0, inaccurate: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0,
-				tox: 0, par: 0, psn: 0, brn: 0, frz: 0, slp: 0
+				tox: 0, par: 0, psn: 0, brn: 0, frz: 0, slp: 0,
+				boosts: 0, drops: 0
 			};
 			// Iterate through all moves we've chosen so far and keep track of what they do:
 			for (var k=0; k<moves.length; k++) {
@@ -787,38 +800,40 @@ exports.BattleScripts = {
 				if (move.accuracy && move.accuracy !== true && move.accuracy < 90) {
 					counter['inaccurate']++;
 				}
-				// Moves which drop stats:
-				var ContraryMove = {
-					leafstorm: 1, overheat: 1, closecombat: 1, superpower: 1, vcreate: 1
-				};
-				if (ContraryMove[moveid]) {
-					counter['contrary']++;
+				// Moves which affect own stats:
+				if (move.self && move.self.boosts || move.boosts || moveid === 'stockpile') {
+					var boosts = {};
+					if (move.boosts) {
+						boosts = move.boosts;
+					} else if (moveid === 'stockpile') {
+						boosts['def'] = 1;
+						boosts['spd'] = 1;
+					} else {
+						boosts = move.self.boosts;
+					}
+					var negBoosts = 0;
+					var posBoosts = 0;
+					for(n in boosts) {
+						if (boosts[n] > 0) {
+							posBoosts++;
+							counter['boosts']++;
+						} else if (boosts[n] < 0) {
+							negBoosts++;
+							counter['drops']++;
+						}
+					}
+					if (boosts['atk'] > 0 && boosts['spa'] > 0) {
+						counter['mixedsetup']++;
+					} else if (boosts['atk'] > 0) {
+						counter['physicalsetup']++;
+					} else if (boosts['spa'] > 0) {
+						counter['specialsetup']++;
+					}
+					if (posBoosts <= 0 && negBoosts > 0) counter['contrary']++;
 				}
 				// Moves that induce status:
 				if (move.status) {
 					counter[move.status]++;
-				}
-				// Moves that boost Attack:
-				var PhysicalSetup = {
-					swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1, bellydrum:1, shiftgear:1, honeclaws:1, howl:1
-				};
-				// Moves which boost Special Attack:
-				var SpecialSetup = {
-					nastyplot:1, tailglow:1, quiverdance:1, calmmind:1
-				};
-				// Moves which boost Attack AND Special Attack:
-				var MixedSetup = {
-					growth:1, workup:1, shellsmash:1
-				};
-				
-				if (PhysicalSetup[moveid]) {
-					counter['physicalsetup']++;
-				}
-				if (SpecialSetup[moveid]) {
-					counter['specialsetup']++;
-				}
-				if (MixedSetup[moveid]) {
-					counter['mixedsetup']++;
 				}
 			}
 
@@ -851,10 +866,10 @@ exports.BattleScripts = {
 					if (hasMove['sleeptalk'] || !hasMove['substitute']) rejected = true;
 					break;
 				case 'storedpower':
-					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
+					if (counter['boosts'] <= counter['drops']) rejected = true;
 					break;
 				case 'batonpass':
-					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower']) rejected = true;
+					if (!counter['boosts'] && !hasMove['substitute']) rejected = true;
 					break;
 
 				// we only need to set up once
@@ -878,17 +893,30 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'knockoff': case 'perishsong': case 'magiccoat': case 'spikes':
+				case 'perishsong':
+					if (counter['boosts']) rejected = true;
+					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
+					break;
+				case 'spikes':
 					if (setupType) rejected = true;
 					break;
+				case 'knockoff': case 'magiccoat':
+					if (setupType || (hasMove['sleeptalk'] && hasMove['rest'])) rejected = true;
+					break;
+				case 'foulplay':
+					if (counter['physicalsetup']) rejected = true;
+					break;
 				case 'uturn': case 'voltswitch':
-					if (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
+					if (counter['boosts'] || hasMove['magnetrise'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'relicsong':
 					if (setupType) rejected = true;
 					break;
-				case 'pursuit': case 'protect': case 'haze': case 'stealthrock':
+				case 'protect': case 'haze': case 'stealthrock':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					break;
+				case 'pursuit':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['batonpass']) rejected = true;
@@ -907,7 +935,10 @@ exports.BattleScripts = {
 					if (setupType === 'Special' || hasMove['fireblast']) rejected = true;
 					break;
 				case 'fireblast':
-					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['flamethrower'] || hasMove['fireydance'] || hasMove['blueflare']) rejected = true;
+					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['flamethrower'] || hasMove['fierydance'] || hasMove['blueflare']) rejected = true;
+					break;
+				case 'lavaplume':
+					if (hasMove['willowisp'] || hasMove['fireblast'] || hasMove['flamethrower'] || hasMove['heatwave']) rejected = true;
 					break;
 				case 'icebeam':
 					if (hasMove['blizzard']) rejected = true;
@@ -928,7 +959,8 @@ exports.BattleScripts = {
 					if (hasMove['acrobatics']) rejected = true;
 					break;
 				case 'solarbeam':
-					if ((!hasMove['sunnyday'] && template.species !== 'Ninetales') || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
+					if (!hasMove['sunnyday'] && !hasWeather['sun'] && template.abilities['0'] !== 'Drought' && template.abilities['1'] !== 'Drought' && template.abilities['DW'] !== 'Drought') rejected = true;
+					if (hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
 					break;
 				case 'gigadrain':
 					if ((!setupType && hasMove['leafstorm']) || hasMove['petaldance']) rejected = true;
@@ -937,7 +969,7 @@ exports.BattleScripts = {
 					if (setupType && hasMove['gigadrain']) rejected = true;
 					break;
 				case 'weatherball':
-					if (!hasMove['sunnyday']) rejected = true;
+					if (!hasMove['sunnyday'] && !hasMove['raindance'] && !hasMove['sandstorm'] && !hasMove['hail'] && !hasWeather) rejected = true;
 					break;
 				case 'firepunch':
 					if (hasMove['flareblitz']) rejected = true;
@@ -998,9 +1030,6 @@ exports.BattleScripts = {
 				case 'softboiled': case 'roost':
 					if (hasMove['wish'] || hasMove['recover']) rejected = true;
 					break;
-				case 'perishsong':
-					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
-					break;
 				case 'roar':
 					// Whirlwind outclasses Roar because Soundproof
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['haze'] || hasMove['circlethrow']) rejected = true;
@@ -1033,8 +1062,8 @@ exports.BattleScripts = {
 					if (hasMove['discharge'] || hasMove['trickroom']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
-				case 'lavaplume':
-					if (hasMove['willowisp'] || hasMove['fireblast'] || hasMove['flamethrower'] || hasMove['heatwave']) rejected = true;
+				case 'raindance': case 'sandstorm': case 'sunnyday': case 'hail':
+					if (hasWeather) rejected = true;
 					break;
 				}
 				
@@ -1175,8 +1204,8 @@ exports.BattleScripts = {
 			}
 		} while (moves.length<4 && j<moveKeys.length);
 
-		// any moveset modification goes here
-		//moves[0] = 'Safeguard';
+		// any hardcoded moveset modification goes here
+		// i.e. moves[0] = 'Safeguard';
 		{
 			var abilities = [template.abilities['0']];
 			if (template.abilities['1']) {
@@ -1192,7 +1221,6 @@ exports.BattleScripts = {
 			var ability1 = this.getAbility(abilities[1]);
 			var ability = ability0.name;
 			if (abilities[1]) {
-
 				if (ability0.rating <= ability1.rating) {
 					if (Math.random()*2<1) {
 						ability = ability1.name;
@@ -1202,67 +1230,94 @@ exports.BattleScripts = {
 						ability = ability1.name;
 					}
 				}
-
+				// These abilities should always be checked if conditions are met, no matter what their rank:
+				// Weather abilities:
+				if (hasMove['raindance'] || hasWeather['rain']) {
+					if (abilities[0] === 'Swift Swim' || abilities[1] === 'Swift Swim' || abilities[2] === 'Swift Swim') {
+						ability = 'Swift Swim';
+					} else if (abilities[0] === 'Rain Dish' || abilities[1] === 'Rain Dish' || abilities[2] === 'Rain Dish') {
+						ability = 'Rain Dish';
+					// Dry Skin doesn't NEED rain to function, but it appreciates it
+					} else if ((abilities[0] === 'Dry Skin' || abilities[1] === 'Dry Skin' || abilities[2] === 'Dry Skin') && !hasWeather['sun']) {
+						ability = 'Dry Skin';
+					} else if (abilities[0] === 'Hydration' || abilities[1] === 'Hydration' || abilities[2] === 'Hydration') {
+						ability = 'Hydration';
+					}
+				} else if (hasMove['sunnyday'] || hasWeather['sun']) {
+					if (abilities[0] === 'Chlorophyll' || abilities[1] === 'Chlorophyll' || abilities[2] === 'Chlorophyll') {
+						ability = 'Chlorophyll';
+					} else if (abilities[0] === 'Solar Power' || abilities[1] === 'Solar Power' || abilities[2] === 'Solar Power') {
+						ability = 'Solar Power';
+					} else if (abilities[0] === 'Flower Gift' || abilities[1] === 'Flower Gift' || abilities[2] === 'Flower Gift') {
+						ability = 'Flower Gift';
+					} else if (abilities[0] === 'Leaf Guard' || abilities[1] === 'Leaf Guard' || abilities[2] === 'Leaf Guard') {
+						ability = 'Leaf Guard';
+					}
+				} else if (hasMove['hail'] || hasWeather['hail']) {
+					if (abilities[0] === 'Ice Body' || abilities[1] === 'Ice Body' || abilities[2] === 'Ice Body') {
+						ability = 'Ice Body';
+					} else if (abilities[0] === 'Snow Cloak' || abilities[1] === 'Snow Cloak' || abilities[2] === 'Snow Cloak') {
+						ability = 'Snow Cloak';
+					}
+				} else if (hasMove['sandstorm'] || hasWeather['sandstorm']) {
+					if (abilities[0] === 'Sand Force' || abilities[1] === 'Sand Force' || abilities[2] === 'Sand Force') {
+						ability = 'Sand Force';
+					} else if (abilities[0] === 'Sand Rush' || abilities[1] === 'Sand Rush' || abilities[2] === 'Sand Rush') {
+						ability = 'Sand Rush';
+					} else if (abilities[0] === 'Sand Veil' || abilities[1] === 'Sand Veil' || abilities[2] === 'Sand Veil') {
+						ability = 'Sand Veil';
+					} // Misc abilities:
+				} else if (abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts' && ability !== 'Quick Feet' && hasMove['facade']) {
+					ability = 'Guts';
+				}
 				var rejectAbility = false;
 				if (ability === 'Blaze' && !counter['blaze']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Overgrow' && !counter['overgrow']) {
+				} else if (ability === 'Overgrow' && !counter['overgrow']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Swarm' && !counter['swarm']) {
+				} else if (ability === 'Swarm' && !counter['swarm']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Torrent' && !counter['torrent']) {
+				} else if (ability === 'Torrent' && !counter['torrent']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Contrary' && !counter['contrary']) {
+				} else if (ability === 'Contrary' && !counter['contrary']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Technician' && !counter['technician']) {
+				} else if (ability === 'Technician' && !counter['technician']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Skill Link' && !counter['skilllink']) {
+				} else if (ability === 'Skill Link' && !counter['skilllink']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Iron Fist' && !counter['ironfist']) {
+				} else if (ability === 'Iron Fist' && !counter['ironfist']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Adaptability' && !counter['adaptability']) {
+				} else if (ability === 'Adaptability' && !counter['adaptability']) {
 					rejectAbility = true;
-				}
-				if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil']) {
+				} else if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil']) {
 					rejectAbility = true;
-				}
-				if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate']) {
+				} else if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate']) {
 					rejectAbility = true;
-				}
-				if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
+				} else if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Hustle' && !counter['hustle']) {
+				} else if (ability === 'Hustle' && !counter['hustle']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Simple' && !setupType && !hasMove['flamecharge'] && !hasMove['stockpile']) {
+				} else if (ability === 'Simple' && !counter['boosts']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Prankster' && !counter['Status']) {
+				} else if (ability === 'Prankster' && !counter['Status']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
+				} else if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
 					rejectAbility = true;
-				}
-				// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
-				if (ability === 'Swift Swim' && !hasMove['raindance']) {
+				} else if (ability === 'Moody' && template.id !== 'bidoof') {
 					rejectAbility = true;
-				}
-				if (ability === 'Chlorophyll' && !hasMove['sunnyday']) {
+				} else if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
 					rejectAbility = true;
-				}
-				if (ability === 'Moody' && template.id !== 'bidoof') {
+				} else if (ability === 'Guts' && hasMove['substitute']) {
 					rejectAbility = true;
-				}
-				if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
+				} else if ((ability === 'Swift Swim' || ability === 'Rain Dish' || ability === 'Hydration') && !hasMove['raindance'] && !hasWeather['rain']) {
+					rejectAbility = true;
+				} else if (ability === 'Dry Skin' && (hasWeather['sun'] || hasMove['sunnyday'])) {
+					rejectAbility = true;
+				} else if ((ability === 'Chlorophyll' || ability === 'Solar Power' || ability === 'Flower Gift' || ability === 'Leaf Guard') && !hasMove['sunnyday'] && !hasWeather['sun']) {
+					rejectAbility = true;
+				} else if ((ability === 'Sand Force' || ability === 'Sand Rush' || ability === 'Sand Veil') && !hasMove['sandstorm'] && !hasWeather['sandstorm']) {
+					rejectAbility = true;
+				} else if ((ability === 'Snow Cloak' || ability === 'Ice Body') && !hasMove['hail'] && !hasWeather['hail']) {
 					rejectAbility = true;
 				}
 
@@ -1272,15 +1327,6 @@ exports.BattleScripts = {
 					} else if (ability1.rating > 0) { // only switch if the alternative doesn't suck
 						ability = ability1.name;
 					}
-				}
-				if ((abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts') && ability !== 'Quick Feet' && hasMove['facade']) {
-					ability = 'Guts';
-				}
-				if ((abilities[0] === 'Swift Swim' || abilities[1] === 'Swift Swim' || abilities[2] === 'Swift Swim') && hasMove['raindance']) {
-					ability = 'Swift Swim';
-				}
-				if ((abilities[0] === 'Chlorophyll' || abilities[1] === 'Chlorophyll' || abilities[2] === 'Chlorophyll') && ability !== 'Solar Power' && hasMove['sunnyday']) {
-					ability = 'Chlorophyll';
 				}
 				if (template.id === 'combee') {
 					// it always gets Hustle but its only physical move is Endeavor, which loses accuracy
@@ -1584,10 +1630,10 @@ exports.BattleScripts = {
 				}
 			}
 
-			var set = this.randomSet(template, i);
+			var set = this.randomSet(template, i, pokemon);
 
 			// Limit 1 of any type combination
-			var typeCombo = types.join();
+			var typeCombo = types.sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
