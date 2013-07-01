@@ -1064,6 +1064,9 @@ exports.BattleScripts = {
 				case 'raindance': case 'sandstorm': case 'sunnyday': case 'hail':
 					if (hasWeather) rejected = true;
 					break;
+				case 'powerswap':
+					if (!counter['drops'] || setupType) rejected = true;
+					break;
 				}
 				
 				// Eliminate moves if we have conflicting statuses:
@@ -1218,18 +1221,11 @@ exports.BattleScripts = {
 			}.bind(this));
 			var ability0 = this.getAbility(abilities[0]);
 			var ability1 = this.getAbility(abilities[1]);
+			var ability2 = this.getAbility(abilities[2]);
 			var ability = ability0.name;
 			if (abilities[1]) {
-				if (ability0.rating <= ability1.rating) {
-					if (Math.random()*2<1) {
-						ability = ability1.name;
-					}
-				} else if (ability0.rating - 0.6 <= ability1.rating) {
-					if (Math.random()*3<1) {
-						ability = ability1.name;
-					}
-				}
-				// These abilities should always be checked if conditions are met, no matter what their rank:
+				// These abilities should always be checked if conditions are met, no matter what their rank.
+				// Abilities closer to the top will be checked sooner than ones at the bottom.
 				// Weather abilities:
 				if (hasMove['raindance'] || hasWeather['rain']) {
 					if (abilities[0] === 'Swift Swim' || abilities[1] === 'Swift Swim' || abilities[2] === 'Swift Swim') {
@@ -1265,10 +1261,36 @@ exports.BattleScripts = {
 						ability = 'Sand Rush';
 					} else if (abilities[0] === 'Sand Veil' || abilities[1] === 'Sand Veil' || abilities[2] === 'Sand Veil') {
 						ability = 'Sand Veil';
-					} // Misc abilities:
-				} else if (abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts' && ability !== 'Quick Feet' && hasMove['facade']) {
+					} 
+					
+					// Misc abilities:
+				} else if ((abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts') && ability !== 'Quick Feet' && hasMove['facade']) {
 					ability = 'Guts';
+				} else if ((abilities[0] === 'Poison Heal' || abilities[1] === 'Poison Heal' || abilities[2] === 'Poison Heal') && hasMove['fling']) {
+					ability = 'Poison Heal';
+				} else if ((abilities[0] === 'Truant' || abilities[1] === 'Truant' || abilities[2] === 'Truant') && hasMove['entrainment']) {
+					ability = 'Truant';
+					
+					
+					// If ability not specified, there's a chance to use the one with the better rating:
+				} else if (ability0.rating <= ability1.rating) {
+					if (Math.random()*2<1) {
+						ability = ability1.name;
+					}
+				} else if (ability0.rating - 0.6 <= ability1.rating) {
+					if (Math.random()*3<1) {
+						ability = ability1.name;
+					}
+				} else if (abilities[2] && ability0.rating <= ability2.rating) {
+					if (Math.random()*2<1) {
+						ability = ability2.name;
+					}
+				} else if (abilities[2] && ability0.rating - 0.6 <= ability2.rating) {
+					if (Math.random()*3<1) {
+						ability = ability2.name;
+					}
 				}
+				
 				var rejectAbility = false;
 				if (ability === 'Blaze' && !counter['blaze']) {
 					rejectAbility = true;
@@ -1344,10 +1366,26 @@ exports.BattleScripts = {
 				}
 
 				if (rejectAbility) {
-					if (ability === ability1.name) { // or not
-						ability = ability0.name;
-					} else if (ability1.rating > 0) { // only switch if the alternative doesn't suck
+					if (!ability2 && ability1.rating > 0) { // only switch if the alternative doesn't suck
 						ability = ability1.name;
+					} else if (ability === ability1.name) { // or not
+						ability = ability0.name;
+					} else if (ability2) {
+						if (ability2.rating > 0) {
+							ability = ability2.name;
+						} else if (ability === ability2.name) {
+							if (ability0.rating > 0 && ability1.rating > 0) {
+								if(Math.random()*2>1) {
+									ability = ability0.name;
+								} else {
+									ability = ability1.name;
+								}
+							} else if (ability0.rating > 0) {
+								ability = ability0.name;
+							} else {
+								ability = ability1.name;
+							}
+						}
 					}
 				}
 				if (template.id === 'combee') {
@@ -1415,9 +1453,7 @@ exports.BattleScripts = {
 				item = 'DeepSeaTooth';
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 				item = 'Light Clay';
-			} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
-				item = 'Toxic Orb';
-			} else if (hasMove['acrobatics']) {
+			} else if (hasMove['acrobatics'] && !hasMove['fling']) {
 				item = 'Flying Gem';
 			} else if (hasMove['shellsmash']) {
 				item = 'White Herb';
@@ -1444,7 +1480,8 @@ exports.BattleScripts = {
 					}
 				}
 			} else if (ability === 'Guts') {
-				if (hasMove['drainpunch']) {
+				// Flame Orb is better if you're staying in longer than 3 turns
+				if (hasMove['drainpunch'] || counter['boosts']) {
 					item = 'Flame Orb';
 				} else {
 					item = 'Toxic Orb';
@@ -1458,11 +1495,15 @@ exports.BattleScripts = {
 						}
 					}
 				}
+			} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
+				item = 'Toxic Orb';
 			} else if (ability === 'Marvel Scale' && hasMove['psychoshift']) {
 				item = 'Flame Orb';
 			} else if (hasMove['reflect'] || hasMove['lightscreen']) {
 				// less priority than if you'd had both
 				item = 'Light Clay';
+			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
+				item = 'Choice Scarf';
 			} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
 				if (Math.random()*3 > 1) {
 					item = 'Choice Band';
@@ -1477,8 +1518,6 @@ exports.BattleScripts = {
 				}
 			} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
-			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
-				item = 'Choice Scarf';
 			} else if (hasMove['substitute'] && hasMove['reversal']) {
 				var shuffledMoves = moves.randomize();
 				for (var m in shuffledMoves) {
@@ -1488,13 +1527,13 @@ exports.BattleScripts = {
 						break;
 					}
 				}
+			} else if (ability === 'Iron Barbs') {
+				// only Iron Barbs for now
+				item = 'Rocky Helmet';
 			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 				item = 'Leftovers';
 			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
 				item = 'Focus Sash';
-			} else if (ability === 'Iron Barbs') {
-				// only Iron Barbs for now
-				item = 'Rocky Helmet';
 			} else if ((template.baseStats.hp+75)*(template.baseStats.def+template.baseStats.spd+175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 				// skarmory and forretress get exceptions for their typing
 				item = 'Leftovers';
@@ -1512,10 +1551,12 @@ exports.BattleScripts = {
 			// this is the "REALLY can't think of a good item" cutoff
 			// why not always Leftovers? Because it's boring. :P
 
-			} else if (hasType['Flying'] || ability === 'Levitate') {
-				item = 'Leftovers';
 			} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
+			}  else if (this.getEffectiveness('Ice', template) > 1) {
+				item = 'Yache Berry';
+			} else if (hasType['Flying'] || ability === 'Levitate') {
+				item = 'Leftovers';
 			} else if (hasType['Poison']) {
 				item = 'Black Sludge';
 			} else if (counter.Status <= 1) {
