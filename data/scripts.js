@@ -1071,39 +1071,39 @@ exports.BattleScripts = {
 				if (move.status) {
 					switch (move.status) {
 						case 'tox':
-							if (counter['par'] > 0 || counter['psn'] > 0 || counter['frz'] > 0 || counter['slp'] > 0) rejected = true;
+							if (counter['par'] || counter['psn'] || counter['frz'] || counter['slp']) rejected = true;
 							// Some Pokemon like running Will-o-Wisp with Toxic:
-							if (counter['brn'] > 0 && Math.random()*2>1) rejected = true;
+							if (counter['brn'] && Math.random()*2>1) rejected = true;
 							// De-increment the counter so the other status isn't rejected:
-							if (rejected) counter['tox']--;
+							if (rejected && counter['tox']) counter['tox']--;
 							break;
 						case 'par':
-							if (counter['tox'] > 0 || counter['psn'] > 0 || counter['brn'] > 0 || counter['frz'] > 0 || counter['slp'] > 0) {
+							if (counter['tox'] || counter['psn'] || counter['brn'] || counter['frz'] || counter['slp']) {
 								rejected = true;
-								counter['par']--;
+								if (counter['par']) counter['par']--;
 							}
 							break;
 						case 'psn':
-							if (counter['par'] > 0 || counter['tox'] > 0 || counter['brn'] > 0 || counter['frz'] > 0 || counter['slp'] > 0) {
+							if (counter['par'] || counter['tox'] || counter['brn'] || counter['frz'] || counter['slp']) {
 								rejected = true;
-								counter['psn']--;
+								if (counter['psn']) counter['psn']--;
 							}
 							break;
 						case 'brn':
 							if (counter['par'] > 0 || counter['psn'] > 0 || counter['frz'] > 0 || counter['slp'] > 0) rejected = true;
 							if (counter['tox'] > 0 && Math.random()*2>1) rejected = true;
-							if (rejected) counter['brn']--;
+							if (rejected && counter['brn']) counter['brn']--;
 							break;
 						case 'frz':
 							if (counter['par'] > 0 || counter['psn'] > 0 || counter['brn'] > 0 || counter['tox'] > 0 || counter['slp'] > 0) {
 								rejected = true;
-								counter['frz']--;
+								if (counter['frz']) counter['frz']--;
 							}
 							break;
 						case 'slp':
 							if (counter['par'] > 0 || counter['psn'] > 0 || counter['brn'] > 0 || counter['frz'] > 0 || counter['tox'] > 0) {
 								rejected = true;
-								counter['slp']--;
+								if (counter['slp']) counter['slp']--;
 							}
 							break;
 					}
