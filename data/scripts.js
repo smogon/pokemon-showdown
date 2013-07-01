@@ -1632,7 +1632,7 @@ exports.BattleScripts = {
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
 			// Limit 2 of any type
-			var types = template.types;
+			var types = template.types.sort();
 			var skip = false;
 			for (var t=0; t<types.length; t++) {
 				if (typeCount[types[t]] > 1 && Math.random()*5>1) {
