@@ -1272,51 +1272,74 @@ exports.BattleScripts = {
 				var rejectAbility = false;
 				if (ability === 'Blaze' && !counter['blaze']) {
 					rejectAbility = true;
-				} else if (ability === 'Overgrow' && !counter['overgrow']) {
+				}
+				if (ability === 'Overgrow' && !counter['overgrow']) {
 					rejectAbility = true;
-				} else if (ability === 'Swarm' && !counter['swarm']) {
+				}
+				if (ability === 'Swarm' && !counter['swarm']) {
 					rejectAbility = true;
-				} else if (ability === 'Torrent' && !counter['torrent']) {
+				}
+				if (ability === 'Torrent' && !counter['torrent']) {
 					rejectAbility = true;
-				} else if (ability === 'Contrary' && !counter['contrary']) {
+				}
+				if (ability === 'Contrary' && !counter['contrary']) {
 					rejectAbility = true;
-				} else if (ability === 'Technician' && !counter['technician']) {
+				}
+				if (ability === 'Technician' && !counter['technician']) {
 					rejectAbility = true;
-				} else if (ability === 'Skill Link' && !counter['skilllink']) {
+				}
+				if (ability === 'Skill Link' && !counter['skilllink']) {
 					rejectAbility = true;
-				} else if (ability === 'Iron Fist' && !counter['ironfist']) {
+				}
+				if (ability === 'Iron Fist' && !counter['ironfist']) {
 					rejectAbility = true;
-				} else if (ability === 'Adaptability' && !counter['adaptability']) {
+				}
+				if (ability === 'Adaptability' && !counter['adaptability']) {
 					rejectAbility = true;
-				} else if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil']) {
+				}
+				if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil']) {
 					rejectAbility = true;
-				} else if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate']) {
+				}
+				if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate']) {
 					rejectAbility = true;
-				} else if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
+				}
+				if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
 					rejectAbility = true;
-				} else if (ability === 'Hustle' && !counter['hustle']) {
+				}
+				if (ability === 'Hustle' && !counter['hustle']) {
 					rejectAbility = true;
-				} else if (ability === 'Simple' && !counter['boosts']) {
+				}
+				if (ability === 'Simple' && !counter['boosts']) {
 					rejectAbility = true;
-				} else if (ability === 'Prankster' && !counter['Status']) {
+				}
+				if (ability === 'Prankster' && !counter['Status']) {
 					rejectAbility = true;
-				} else if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
+				}
+				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
 					rejectAbility = true;
-				} else if (ability === 'Moody' && template.id !== 'bidoof') {
+				}
+				if (ability === 'Moody' && template.id !== 'bidoof') {
 					rejectAbility = true;
-				} else if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
+				}
+				if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
 					rejectAbility = true;
-				} else if (ability === 'Guts' && hasMove['substitute']) {
+				}
+				if (ability === 'Guts' && hasMove['substitute']) {
 					rejectAbility = true;
-				} else if ((ability === 'Swift Swim' || ability === 'Rain Dish' || ability === 'Hydration') && !hasMove['raindance'] && !hasWeather['rain']) {
+				}
+				if ((ability === 'Swift Swim' || ability === 'Rain Dish' || ability === 'Hydration') && !hasMove['raindance'] && !hasWeather['rain']) {
 					rejectAbility = true;
-				} else if (ability === 'Dry Skin' && (hasWeather['sun'] || hasMove['sunnyday'])) {
+				}
+				if (ability === 'Dry Skin' && (hasWeather['sun'] || hasMove['sunnyday'])) {
 					rejectAbility = true;
-				} else if ((ability === 'Chlorophyll' || ability === 'Solar Power' || ability === 'Flower Gift' || ability === 'Leaf Guard') && !hasMove['sunnyday'] && !hasWeather['sun']) {
+				}
+				if ((ability === 'Chlorophyll' || ability === 'Solar Power' || ability === 'Flower Gift' || ability === 'Leaf Guard') && !hasMove['sunnyday'] && !hasWeather['sun']) {
 					rejectAbility = true;
-				} else if ((ability === 'Sand Force' || ability === 'Sand Rush' || ability === 'Sand Veil') && !hasMove['sandstorm'] && !hasWeather['sandstorm']) {
+				}
+				if ((ability === 'Sand Force' || ability === 'Sand Rush' || ability === 'Sand Veil') && !hasMove['sandstorm'] && !hasWeather['sandstorm']) {
 					rejectAbility = true;
-				} else if ((ability === 'Snow Cloak' || ability === 'Ice Body') && !hasMove['hail'] && !hasWeather['hail']) {
+				}
+				if ((ability === 'Snow Cloak' || ability === 'Ice Body') && !hasMove['hail'] && !hasWeather['hail']) {
 					rejectAbility = true;
 				}
 
@@ -1698,7 +1721,7 @@ exports.BattleScripts = {
 					
 					typeCache[t] = effectiveness;
 					typeWeaknesses[t] += effectiveness;
-					if (i === 0 || (potd && potd.name && potd.types && i === 1)) continue;
+					if (i === 0 || weather || (potd && potd.name && potd.types && i === 1)) continue;
 					
 					// Change what this is compared to in order to make this more / less strict
 					// 0 means every weakness must be matched by a resistance, it likes to favor Spiritomb/Sableye/Eelektross
