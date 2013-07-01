@@ -901,6 +901,9 @@ exports.BattleScripts = {
 				case 'overheat':
 					if (setupType === 'Special' || hasMove['fireblast']) rejected = true;
 					break;
+				case 'fireblast':
+					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['flamethrower'] || hasMove['fireydance'] || hasMove['blueflare']) rejected = true;
+					break;
 				case 'icebeam':
 					if (hasMove['blizzard']) rejected = true;
 					break;
@@ -1026,7 +1029,7 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'lavaplume':
-					if (hasMove['willowisp']) rejected = true;
+					if (hasMove['willowisp'] || hasMove['fireblast'] || hasMove['flamethrower'] || hasMove['heatwave']) rejected = true;
 					break;
 				}
 				
