@@ -721,7 +721,8 @@ exports.BattleScripts = {
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
 				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
 				recoil: 0, inaccurate: 0,
-				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
+				physicalsetup: 0, specialsetup: 0, mixedsetup: 0,
+				tox: 0, par: 0, psn: 0, brn: 0, frz: 0, slp: 0
 			};
 			// Iterate through all moves we've chosen so far and keep track of what they do:
 			for (var k=0; k<moves.length; k++) {
@@ -792,6 +793,10 @@ exports.BattleScripts = {
 				};
 				if (ContraryMove[moveid]) {
 					counter['contrary']++;
+				}
+				// Moves that induce status:
+				if (move.status) {
+					counter[move.status]++;
 				}
 				// Moves that boost Attack:
 				var PhysicalSetup = {
@@ -1023,7 +1028,7 @@ exports.BattleScripts = {
 					if (!setupType && !hasMove['batonpass'] && hasMove['thunderwave']) rejected = true;
 					if ((hasMove['stealthrock'] || hasMove['spikes'] || hasMove['toxicspikes']) && !hasMove['batonpass']) rejected = true;
 					break;
-				case 'thunderwave':
+				case 'glare': case 'thunderwave':
 					if (setupType && (hasMove['rockpolish'] || hasMove['agility'])) rejected = true;
 					if (hasMove['discharge'] || hasMove['trickroom']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -1031,6 +1036,48 @@ exports.BattleScripts = {
 				case 'lavaplume':
 					if (hasMove['willowisp'] || hasMove['fireblast'] || hasMove['flamethrower'] || hasMove['heatwave']) rejected = true;
 					break;
+				}
+				
+				// Eliminate moves if we have conflicting statuses:
+				if (move.status) {
+					switch (move.status) {
+						case 'tox':
+							if (counter['par'] > 0 || counter['psn'] > 0 || counter['frz'] > 0 || counter['slp'] > 0) rejected = true;
+							// Some Pokemon like running Will-o-Wisp with Toxic:
+							if (counter['brn'] > 0 && Math.random()*2>1) rejected = true;
+							// De-increment the counter so the other status isn't rejected:
+							if (rejected) counter['tox']--;
+							break;
+						case 'par':
+							if (counter['tox'] > 0 || counter['psn'] > 0 || counter['brn'] > 0 || counter['frz'] > 0 || counter['slp'] > 0) {
+								rejected = true;
+								counter['par']--;
+							}
+							break;
+						case 'psn':
+							if (counter['par'] > 0 || counter['tox'] > 0 || counter['brn'] > 0 || counter['frz'] > 0 || counter['slp'] > 0) {
+								rejected = true;
+								counter['psn']--;
+							}
+							break;
+						case 'brn':
+							if (counter['par'] > 0 || counter['psn'] > 0 || counter['frz'] > 0 || counter['slp'] > 0) rejected = true;
+							if (counter['tox'] > 0 && Math.random()*2>1) rejected = true;
+							if (rejected) counter['brn']--;
+							break;
+						case 'frz':
+							if (counter['par'] > 0 || counter['psn'] > 0 || counter['brn'] > 0 || counter['tox'] > 0 || counter['slp'] > 0) {
+								rejected = true;
+								counter['frz']--;
+							}
+							break;
+						case 'slp':
+							if (counter['par'] > 0 || counter['psn'] > 0 || counter['brn'] > 0 || counter['frz'] > 0 || counter['tox'] > 0) {
+								rejected = true;
+								counter['slp']--;
+							}
+							break;
+					}
 				}
 				
 				// These moves can be used even if we aren't setting up to use them:
