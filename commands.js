@@ -258,6 +258,7 @@ var commands = exports.commands = {
 		this.addModCommand(""+targetUser.name+" was locked from talking by "+user.name+"." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also locked: "+alts.join(", "));
+		this.add('|unlink|' + targetUser.userid);
 
 		targetUser.lock();
 	},
