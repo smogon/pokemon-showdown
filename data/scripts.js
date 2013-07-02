@@ -982,8 +982,8 @@ exports.BattleScripts = {
 					if (hasMove['acrobatics']) rejected = true;
 					break;
 				case 'solarbeam':
-					if (!hasMove['sunnyday'] || !hasAbility['Drought']) rejected = true;
-					if (!hasWeather['sun'] || hasWeather['rain'] || hasWeather['hail'] || hasWeather['sandstorm']) rejected = true;
+					if (!hasMove['sunnyday'] && !hasAbility['Drought'] && !hasWeather['sun']) rejected = true;
+					if (hasWeather['rain'] || hasWeather['hail'] || hasWeather['sandstorm']) rejected = true;
 					if (hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
 					break;
 				case 'gigadrain':
