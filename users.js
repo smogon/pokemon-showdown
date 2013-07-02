@@ -626,6 +626,7 @@ var User = (function () {
 					}
 				}
 				if (this.named) user.prevNames[this.userid] = this.name;
+				this.destroy();
 				return true;
 			}
 
