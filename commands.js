@@ -108,8 +108,10 @@ var commands = exports.commands = {
 		if (Rooms.rooms[id]) {
 			return this.sendReply("The room '"+target+"' already exists.");
 		}
-		Rooms.rooms[id] = new Rooms.ChatRoom(id, target);
-		return this.sendReply("The room '"+target+"' was created.");
+		if (Rooms.global.addChatRoom(target)) {
+			return this.sendReply("The room '"+target+"' was created.");
+		}
+		return this.sendReply("An error occurred while trying to create the room '"+target+"'.");
 	},
 
 	privateroom: function(target, room, user) {

@@ -124,7 +124,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			},
 			privateModCommand: function(data) {
 				for (var i in room.users) {
-					if (room.users[i].group in {'%':1, '@':1, '&':1, '~':1}) {
+					if (room.users[i].isStaff) {
 						room.users[i].sendTo(room, data);
 					}
 				}
