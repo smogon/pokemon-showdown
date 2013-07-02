@@ -21,37 +21,98 @@ var GlobalRoom = (function() {
 
 		// init rooms
 		this.rooms = [];
-		this.numRooms = 0;
+		this.numBattles = 0;
 		this.searchers = [];
 
 		// Never do any other file IO synchronously
 		// but this is okay to prevent race conditions as we start up PS
-		this.numRooms = 0;
+		this.numBattles = 0;
 		try {
-			this.numRooms = parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
+			this.numBattles = parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
 		} catch (e) {} // file doesn't exist [yet]
+
+		this.chatRoomData = [];
+		try {
+			this.chatRoomData = JSON.parse(fs.readFileSync('config/chatrooms.json'));
+			if (!Array.isArray(this.chatRoomData)) this.chatRoomData = [];
+		} catch (e) {} // file doesn't exist [yet]
+
+		if (!this.chatRoomData.length) {
+			this.chatRoomData = [{
+				title: 'Lobby',
+				autojoin: true
+			}, {
+				title: 'Staff',
+				isPrivate: true,
+				staffRoom: true,
+				staffAutojoin: true
+			}];
+		}
+
+		this.chatRooms = [];
+
+		this.autojoin = []; // rooms that users autojoin upon connecting
+		this.staffAutojoin = []; // rooms that staff autojoin upon connecting
+		for (var i=0; i<this.chatRoomData.length; i++) {
+			var id = toId(this.chatRoomData[i].title);
+			console.log("NEW CHATROOM: "+id);
+			var room = rooms[id] = new ChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
+			this.chatRooms.push(room);
+			if (room.autojoin) this.autojoin.push(id);
+			if (room.staffAutojoin) this.staffAutojoin.push(id);
+		}
 
 		// this function is complex in order to avoid several race conditions
 		var self = this;
 		this.writeNumRooms = (function() {
 			var writing = false;
-			var numRooms;	// last numRooms to be written to file
+			var numBattles;	// last numBattles to be written to file
 			var finishWriting = function() {
 				writing = false;
-				if (numRooms !== self.numRooms) {
+				if (numBattles !== self.numBattles) {
 					self.writeNumRooms();
 				}
 			};
 			return function() {
 				if (writing) return;
-				numRooms = self.numRooms;
+				numBattles = self.numBattles;
 				writing = true;
-				fs.writeFile('logs/lastbattle.txt.0', '' + numRooms, function() {
+				fs.writeFile('logs/lastbattle.txt.0', '' + numBattles, function() {
 					// rename is atomic on POSIX, but will throw an error on Windows
 					fs.rename('logs/lastbattle.txt.0', 'logs/lastbattle.txt', function(err) {
 						if (err) {
 							// This should only happen on Windows.
-							fs.writeFile('logs/lastbattle.txt', '' + numRooms, finishWriting);
+							fs.writeFile('logs/lastbattle.txt', '' + numBattles, finishWriting);
+							return;
+						}
+						finishWriting();
+					});
+				});
+			};
+		})();
+
+		this.writeChatRoomData = (function() {
+			var writing = false;
+			var writePending = false; // whether or not a new write is pending
+			var finishWriting = function() {
+				writing = false;
+				if (writePending) {
+					writePending = false;
+					self.writeChatRoomData();
+				}
+			};
+			return function() {
+				if (writing) {
+					writePending = true;
+					return;
+				}
+				writing = true;
+				fs.writeFile('config/chatrooms.json.0', '' + JSON.stringify(self.chatRoomData), function() {
+					// rename is atomic on POSIX, but will throw an error on Windows
+					fs.rename('config/chatrooms.json.0', 'config/chatrooms.json', function(err) {
+						if (err) {
+							// This should only happen on Windows.
+							fs.writeFile('config/chatrooms.json', '' + JSON.stringify(self.chatRoomData), finishWriting);
 							return;
 						}
 						finishWriting();
@@ -284,11 +345,31 @@ var GlobalRoom = (function() {
 	GlobalRoom.prototype.addRaw = function(message) {
 		rooms.lobby.addRaw(message);
 	};
-	GlobalRoom.prototype.onJoinSocket = function(user, socket) {
-		var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
-		sendData(socket, initdata+this.formatListText);
+	GlobalRoom.prototype.addChatRoom = function(title) {
+		var id = toId(title);
+		if (rooms[id]) return false;
+
+		var chatRoomData = {
+			title: title
+		};
+		var room = rooms[id] = new ChatRoom(id, title, chatRoomData);
+		this.chatRoomData.push(chatRoomData);
+		this.chatRooms.push(room);
+		this.writeChatRoomData();
+		return true;
 	};
-	GlobalRoom.prototype.onJoin = function(user, merging) {
+	GlobalRoom.prototype.checkAutojoin = function(user, connection) {
+		if (user.isStaff) {
+			for (var i=0; i<this.staffAutojoin.length; i++) {
+				user.joinRoom(this.staffAutojoin[i], connection);
+			}
+		}
+	};
+	GlobalRoom.prototype.onJoinConnection = function(user, connection) {
+		var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
+		connection.send(initdata+this.formatListText);
+	};
+	GlobalRoom.prototype.onJoin = function(user, connection, merging) {
 		if (!user) return false; // ???
 		if (this.users[user.userid]) return user;
 
@@ -300,7 +381,7 @@ var GlobalRoom = (function() {
 
 		if (!merging) {
 			var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
-			this.send(initdata+this.formatListText, user);
+			connection.send(initdata+this.formatListText);
 		}
 
 		return user;
@@ -344,12 +425,12 @@ var GlobalRoom = (function() {
 		}
 
 		//console.log('BATTLE START BETWEEN: '+p1.userid+' '+p2.userid);
-		var i = this.numRooms+1;
+		var i = this.numBattles+1;
 		var formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g,'');
 		while(rooms['battle-'+formaturlid+i]) {
 			i++;
 		}
-		this.numRooms = i;
+		this.numBattles = i;
 		newRoom = this.addRoom('battle-'+formaturlid+'-'+i, format, p1, p2, this.id, rated);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
@@ -814,14 +895,14 @@ var BattleRoom = (function() {
 	};
 	// This function is only called when the room is not empty.
 	// Joining an empty room calls this.join() below instead.
-	BattleRoom.prototype.onJoinSocket = function(user, socket) {
-		sendData(socket, '>'+this.id+'\n|init|battle\n|title|'+this.title+'\n'+this.getLogForUser(user).join('\n'));
+	BattleRoom.prototype.onJoinConnection = function(user, connection) {
+		this.send('|init|battle\n|title|'+this.title+'\n'+this.getLogForUser(user).join('\n'), connection);
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
 		this.battle.resendRequest(user);
 	};
-	BattleRoom.prototype.onJoin = function(user) {
+	BattleRoom.prototype.onJoin = function(user, connection) {
 		if (!user) return false;
 		if (this.users[user.userid]) return user;
 
@@ -832,7 +913,7 @@ var BattleRoom = (function() {
 			this.update(user);
 		}
 
-		this.send('|init|battle\n|title|'+this.title+'\n'+this.getLogForUser(user).join('\n'), user);
+		this.send('|init|battle\n|title|'+this.title+'\n'+this.getLogForUser(user).join('\n'), connection);
 		return user;
 	};
 	BattleRoom.prototype.onRename = function(user, oldid, joining) {
@@ -987,7 +1068,11 @@ var BattleRoom = (function() {
 })();
 
 var ChatRoom = (function() {
-	function ChatRoom(roomid, title) {
+	function ChatRoom(roomid, title, options) {
+		if (options) {
+			this.chatRoomData = options;
+			Object.merge(this, options);
+		}
 		this.id = roomid;
 		this.title = title||roomid;
 		this.i = {};
@@ -1166,11 +1251,11 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.addRaw = function(message) {
 		this.add('|raw|'+message);
 	};
-	ChatRoom.prototype.onJoinSocket = function(user, socket) {
+	ChatRoom.prototype.onJoinConnection = function(user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
-		sendData(socket, '>'+this.id+'\n|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.log.slice(-25).join('\n'));
+		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.log.slice(-25).join('\n'), connection);
 	};
-	ChatRoom.prototype.onJoin = function(user, merging) {
+	ChatRoom.prototype.onJoin = function(user, connection, merging) {
 		if (!user) return false; // ???
 		if (this.users[user.userid]) return user;
 
@@ -1190,7 +1275,7 @@ var ChatRoom = (function() {
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
-			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.log.slice(-100).join('\n'), user);
+			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.log.slice(-100).join('\n'), connection);
 		}
 
 		return user;
@@ -1292,8 +1377,6 @@ var newRoom = function(roomid, format, p1, p2, parent, rated) {
 var rooms = {};
 console.log("NEW GLOBAL: global");
 rooms.global = new GlobalRoom('global');
-console.log("NEW CHATROOM: lobby");
-rooms.lobby = new ChatRoom('lobby', 'Lobby');
 
 exports.GlobalRoom = GlobalRoom;
 exports.BattleRoom = BattleRoom;
