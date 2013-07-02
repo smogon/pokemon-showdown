@@ -666,11 +666,19 @@ exports.BattleScripts = {
 		var hasWeather = {};
 		if (team != undefined) {
 			for (var n=0; n<team.length;n++) {
+				// Process team's abilities
 				var pokeAbility = team[n].ability;
 				if (pokeAbility === 'Drought') hasWeather['sun'] = true;
 				else if (pokeAbility === 'Drizzle') hasWeather['rain'] = true;
 				else if (pokeAbility === 'Snow Warning') hasWeather['hail'] = true;
 				else if (pokeAbility === 'Sand Stream') hasWeather['sandstorm'] = true;
+				for (var o in team[n].moves) {
+					// Process team's moves 
+					if (o === 'raindance') hasWeather['rain'] = true;
+					if (o === 'sunnyday') hasWeather['sun'] = true;
+					if (o === 'sandstorm') hasWeather['sandstorm'] = true;
+					if (o === 'hail') hasWeather['hail'] = true;
+				}
 			}
 		}
 		
@@ -703,7 +711,24 @@ exports.BattleScripts = {
 			hasStab[template.types[1]] = true;
 			hasType[template.types[1]] = true;
 		}
-
+		var hasAbility = {};
+		var abilities = [];
+		
+		if (template.abilities['0']) {
+			var ability0 = template.abilities['0'];
+			abilities.push(ability0);
+			hasAbility[ability0] = true;
+		}
+		if (template.abilities['1']) {
+			var ability1 = template.abilities['1'];
+			abilities.push(ability1);
+			hasAbility[ability1] = true;
+		}
+		if (template.abilities['DW']) {
+			var ability2 = template.abilities['DW'];
+			abilities.push(ability2);
+			hasAbility[ability2] = true;
+		}
 		var damagingMoves = [];
 		var damagingMoveIndex = {};
 		var hasMove = {};
@@ -731,9 +756,9 @@ exports.BattleScripts = {
 			hasMove = {};
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
-				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
+				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0, scrappy: 0,
 				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
-				recoil: 0, inaccurate: 0,
+				recoil: 0, inaccurate: 0, contact: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0,
 				tox: 0, par: 0, psn: 0, brn: 0, frz: 0, slp: 0,
 				boosts: 0, drops: 0
@@ -783,6 +808,7 @@ exports.BattleScripts = {
 					if (move.type === 'Grass') counter['overgrow']++;
 					if (move.type === 'Bug') counter['swarm']++;
 					if (move.type === 'Water') counter['torrent']++;
+					if (move.type === 'Normal') counter['scrappy']++;
 					// Make sure not to count Knock Off, Rapid Spin, etc.
 					if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
 						damagingMoves.push(move);
@@ -791,11 +817,15 @@ exports.BattleScripts = {
 				}
 				// Moves with secondary effects:
 				if (move.secondary) {
-					if (move.secondary.chance < 50) {
-						counter['sheerforce'] -= 5;
+					if (move.secondary.chance > 50) {
+						counter['sheerforce']--;
 					} else {
 						counter['sheerforce']++;
 					}
+				}
+				// Moves that make contact:
+				if (move.isContact) {
+					counter['contact']++;
 				}
 				// Moves with low accuracy:
 				if (move.accuracy && move.accuracy !== true && move.accuracy < 90) {
@@ -814,7 +844,7 @@ exports.BattleScripts = {
 					}
 					var negBoosts = 0;
 					var posBoosts = 0;
-					for(n in boosts) {
+					for(var n in boosts) {
 						if (boosts[n] > 0) {
 							posBoosts++;
 							counter['boosts']++;
@@ -958,7 +988,8 @@ exports.BattleScripts = {
 					if (hasMove['acrobatics']) rejected = true;
 					break;
 				case 'solarbeam':
-					if (!hasMove['sunnyday'] && !hasWeather['sun'] && template.abilities['0'] !== 'Drought' && template.abilities['1'] !== 'Drought' && template.abilities['DW'] !== 'Drought') rejected = true;
+					if (!hasMove['sunnyday'] || !hasAbility['Drought']) rejected = true;
+					if (!hasWeather['sun'] || hasWeather['rain'] || hasWeather['hail'] || hasWeather['sandstorm']) rejected = true;
 					if (hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
 					break;
 				case 'gigadrain':
@@ -1061,8 +1092,17 @@ exports.BattleScripts = {
 					if (hasMove['discharge'] || hasMove['trickroom']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
-				case 'raindance': case 'sandstorm': case 'sunnyday': case 'hail':
-					if (hasWeather) rejected = true;
+				case 'raindance':
+					if (hasWeather['sun'] || hasWeather['sandstorm'] || hasWeather['hail']) rejected = true;
+					break;
+				case 'sandstorm':
+					if (hasWeather['sun'] || hasWeather['rain'] || hasWeather['hail']) rejected = true;
+					break;
+				case 'sunnyday': 
+					if (hasWeather['rain'] || hasWeather['sandstorm'] || hasWeather['hail']) rejected = true;
+					break;
+				case 'hail':
+					if (hasWeather['sun'] || hasWeather['sandstorm'] || hasWeather['rain']) rejected = true;
 					break;
 				case 'powerswap':
 					if (!counter['drops'] || setupType) rejected = true;
@@ -1076,6 +1116,8 @@ exports.BattleScripts = {
 							if (counter['par'] || counter['psn'] || counter['frz'] || counter['slp']) rejected = true;
 							// Some Pokemon like running Will-o-Wisp with Toxic:
 							if (counter['brn'] && Math.random()*2>1) rejected = true;
+							// This is redundant if we're holding a Toxic Orb and have Fling:
+							if (hasMove['fling'] && hasAbility['Poison Heal']) rejected = true;
 							// De-increment the counter so the other status isn't rejected:
 							if (rejected && counter['tox']) counter['tox']--;
 							break;
@@ -1208,192 +1250,424 @@ exports.BattleScripts = {
 
 		// any hardcoded moveset modification goes here
 		// i.e. moves[0] = 'Safeguard';
-		{
-			var abilities = [template.abilities['0']];
-			if (template.abilities['1']) {
-				abilities.push(template.abilities['1']);
-			}
-			if (template.abilities['DW']) {
-				abilities.push(template.abilities['DW']);
-			}
-			abilities.sort(function(a,b){
-				return this.getAbility(b).rating - this.getAbility(a).rating;
-			}.bind(this));
-			var ability0 = this.getAbility(abilities[0]);
-			var ability1 = this.getAbility(abilities[1]);
-			var ability2 = this.getAbility(abilities[2]);
-			var ability = ability0.name;
-			if (abilities[1]) {
-				// These abilities should always be checked if conditions are met, no matter what their rank.
-				// Abilities closer to the top will be checked sooner than ones at the bottom.
-				// Weather abilities:
+		
+		// Any hardcoded ability modification goes here
+		if (template.id === 'combee') {
+			// it always gets Hustle but its only physical move is Endeavor, which loses accuracy
+			ability = 'Honey Gather';
+		} else if (abilities.length === 1) {
+			ability = abilities[0];
+		}
+		
+		if (!ability) {
+			// Uses the same rating system as abilities.js, only takes into account our current situation
+			var abilityRating = {};
+			for(var k=0; k<abilities.length; k++) {
+				// Not sure what this does, so commenting it out to see what breaks
+				/*abilities.sort(function(a,b){
+					return this.getAbility(b).rating - this.getAbility(abilities[k]).rating;
+				}.bind(this));*/
+				var possibleAbility = abilities[k];
+				
+				// Weather:
+				
 				if (hasMove['raindance'] || hasWeather['rain']) {
-					if (abilities[0] === 'Swift Swim' || abilities[1] === 'Swift Swim' || abilities[2] === 'Swift Swim') {
-						ability = 'Swift Swim';
-					} else if (abilities[0] === 'Rain Dish' || abilities[1] === 'Rain Dish' || abilities[2] === 'Rain Dish') {
-						ability = 'Rain Dish';
+					if (possibleAbility === 'Swift Swim') {
+						abilityRating[possibleAbility] = 5;
+					} else if (possibleAbility === 'Rain Dish') {
+						abilityRating[possibleAbility] = 4;
 					// Dry Skin doesn't NEED rain to function, but it appreciates it
-					} else if ((abilities[0] === 'Dry Skin' || abilities[1] === 'Dry Skin' || abilities[2] === 'Dry Skin') && !hasWeather['sun']) {
-						ability = 'Dry Skin';
-					} else if (abilities[0] === 'Hydration' || abilities[1] === 'Hydration' || abilities[2] === 'Hydration') {
-						ability = 'Hydration';
+					} else if (possibleAbility === 'Dry Skin' && !hasWeather['sun'] && !hasMove['sunnyday']) {
+						abilityRating[possibleAbility] = 5;
+					} else if (possibleAbility === 'Hydration') {
+						abilityRating[possibleAbility] = 5;
 					}
-				} else if (hasMove['sunnyday'] || hasWeather['sun']) {
-					if (abilities[0] === 'Chlorophyll' || abilities[1] === 'Chlorophyll' || abilities[2] === 'Chlorophyll') {
-						ability = 'Chlorophyll';
-					} else if (abilities[0] === 'Solar Power' || abilities[1] === 'Solar Power' || abilities[2] === 'Solar Power') {
-						ability = 'Solar Power';
-					} else if (abilities[0] === 'Flower Gift' || abilities[1] === 'Flower Gift' || abilities[2] === 'Flower Gift') {
-						ability = 'Flower Gift';
-					} else if (abilities[0] === 'Leaf Guard' || abilities[1] === 'Leaf Guard' || abilities[2] === 'Leaf Guard') {
-						ability = 'Leaf Guard';
-					}
-				} else if (hasMove['hail'] || hasWeather['hail']) {
-					if (abilities[0] === 'Ice Body' || abilities[1] === 'Ice Body' || abilities[2] === 'Ice Body') {
-						ability = 'Ice Body';
-					} else if (abilities[0] === 'Snow Cloak' || abilities[1] === 'Snow Cloak' || abilities[2] === 'Snow Cloak') {
-						ability = 'Snow Cloak';
-					}
-				} else if (hasMove['sandstorm'] || hasWeather['sandstorm']) {
-					if (abilities[0] === 'Sand Force' || abilities[1] === 'Sand Force' || abilities[2] === 'Sand Force') {
-						ability = 'Sand Force';
-					} else if (abilities[0] === 'Sand Rush' || abilities[1] === 'Sand Rush' || abilities[2] === 'Sand Rush') {
-						ability = 'Sand Rush';
-					} else if (abilities[0] === 'Sand Veil' || abilities[1] === 'Sand Veil' || abilities[2] === 'Sand Veil') {
-						ability = 'Sand Veil';
+				}
+				if (hasMove['sunnyday'] || hasWeather['sun']) {
+					if (possibleAbility === 'Chlorophyll') {
+						abilityRating[possibleAbility] = 5;
 					} 
-					
-					// Misc abilities:
-				} else if ((abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts') && ability !== 'Quick Feet' && hasMove['facade']) {
-					ability = 'Guts';
-				} else if ((abilities[0] === 'Poison Heal' || abilities[1] === 'Poison Heal' || abilities[2] === 'Poison Heal') && hasMove['fling']) {
-					ability = 'Poison Heal';
-				} else if ((abilities[0] === 'Truant' || abilities[1] === 'Truant' || abilities[2] === 'Truant') && hasMove['entrainment']) {
-					ability = 'Truant';
-					
-					
-					// If ability not specified, there's a chance to use the one with the better rating:
-				} else if (ability0.rating <= ability1.rating) {
-					if (Math.random()*2<1) {
-						ability = ability1.name;
+					if (possibleAbility === 'Solar Power') {
+						abilityRating[possibleAbility] = 4;
+					} 
+					if (possibleAbility === 'Flower Gift') {
+						abilityRating[possibleAbility] = 5;
+					} 
+					if (possibleAbility === 'Leaf Guard') {
+						// Not as good as Hydration since Rest always fails
+						abilityRating[possibleAbility] = 4;
+					} 
+					if (possibleAbility === 'Dry Skin') {
+						abilityRating['Dry Skin'] = -1;
 					}
-				} else if (ability0.rating - 0.6 <= ability1.rating) {
-					if (Math.random()*3<1) {
-						ability = ability1.name;
+				}
+				if (hasMove['hail'] || hasWeather['hail']) {
+					if (possibleAbility === 'Ice Body') {
+						abilityRating[possibleAbility] = 5;
 					}
-				} else if (abilities[2] && ability0.rating <= ability2.rating) {
-					if (Math.random()*2<1) {
-						ability = ability2.name;
+					if (possibleAbility === 'Snow Cloak') {
+						abilityRating[possibleAbility] = 3.5;
 					}
-				} else if (abilities[2] && ability0.rating - 0.6 <= ability2.rating) {
-					if (Math.random()*3<1) {
-						ability = ability2.name;
+					if (possibleAbility === 'Overcoat' && !hasType['Ice']) {
+						abilityRating[possibleAbility] = 4;
 					}
+				} 
+				if (hasMove['sandstorm'] || hasWeather['sandstorm']) {
+					if (possibleAbility === 'Sand Force') {
+						if (template.baseStats.spe > 100 || template.baseStats.def + template.baseStats.spd < 140) {
+							abilityRating[possibleAbility] = 5;
+						} else {
+							abilityRating[possibleAbility] = 3.5;
+						}
+					}
+					if (possibleAbility === 'Sand Rush') {
+						// Excadrill and such are too frail to use Sand Rush, but Sandslash likes it because he has low speed and solid defense
+						if (template.baseStats.spe < 100 && template.baseStats.def + template.baseStats.spd > 140) {
+							abilityRating[possibleAbility] = 5;
+						} else {
+							abilityRating[possibleAbility] = 3.5;
+						}
+					} 
+					if (possibleAbility === 'Sand Veil') {
+						abilityRating[possibleAbility] = 3.5;
+					} 
+					if (possibleAbility === 'Overcoat' && !hasType['Rock'] && !hasType['Ground'] && !hasType['Steel']) {
+						abilityRating[possibleAbility] = 4;
+					}
+				}			
+				if (possibleAbility === 'Drought') {
+					abilityRating[possibleAbility] = 5;
+					// Exceeding the usual max here, but want to make sure Ninetales always gets Drought if it has Solarbeam
+					if (hasMove['solarbeam']) abilityRating[possibleAbility]++;
+					// If we have other weathers already it's generally a bad idea
+					if (hasWeather['rain']) abilityRating[possibleAbility] -= 2;
+					if (hasWeather['hail']) abilityRating[possibleAbility] -= 2;
+					if (hasWeather['sandstorm']) abilityRating[possibleAbility] -= 2;
+					// In the future, perhaps check team's typing?
+				}
+				if (possibleAbility === 'Drizzle') {
+					abilityRating[possibleAbility] = 5;
+					if (hasWeather['sun']) abilityRating[possibleAbility] -= 2;
+					if (hasWeather['hail']) abilityRating[possibleAbility] -= 2;
+					if (hasWeather['sandstorm']) abilityRating[possibleAbility] -= 2;
+				}
+				if (possibleAbility === 'Sand Stream') {
+					if (hasType['Rock']) {
+						abilityRating[possibleAbility] = 5;
+					} else {
+						abilityRating[possibleAbility] = 4.5;
+					}
+					if (hasWeather['rain']) abilityRating[possibleAbility] -= 2;
+					if (hasWeather['hail']) abilityRating[possibleAbility] -= 2;
+					if (hasWeather['sun']) abilityRating[possibleAbility] -= 2;
+				}
+				if (possibleAbility === 'Snow Warning') {
+					abilityRating[possibleAbility] = 4;
+					if (hasWeather['rain']) abilityRating[possibleAbility] -= 2;
+					if (hasWeather['sun']) abilityRating[possibleAbility] -= 2;
+					if (hasWeather['sandstorm']) abilityRating[possibleAbility] -= 2;
 				}
 				
-				var rejectAbility = false;
-				if (ability === 'Blaze' && !counter['blaze']) {
-					rejectAbility = true;
+				// No way of inducing weather, we have to rely on the other side doing it:
+				if ((possibleAbility === 'Swift Swim' || possibleAbility === 'Rain Dish' || possibleAbility === 'Hydration') && !hasMove['raindance'] && !hasWeather['rain']) {
+					abilityRating[possibleAbility] = 1;
 				}
-				if (ability === 'Overgrow' && !counter['overgrow']) {
-					rejectAbility = true;
+				if ((possibleAbility === 'Chlorophyll' || possibleAbility === 'Solar Power' || possibleAbility === 'Flower Gift' || possibleAbility === 'Leaf Guard') && !hasMove['sunnyday'] && !hasWeather['sun']) {
+					abilityRating[possibleAbility] = 1;
 				}
-				if (ability === 'Swarm' && !counter['swarm']) {
-					rejectAbility = true;
+				if ((possibleAbility === 'Sand Force' || possibleAbility === 'Sand Rush' || possibleAbility === 'Sand Veil') && !hasMove['sandstorm'] && !hasWeather['sandstorm']) {
+					abilityRating[possibleAbility] = 1;
 				}
-				if (ability === 'Torrent' && !counter['torrent']) {
-					rejectAbility = true;
+				if ((possibleAbility === 'Snow Cloak' || possibleAbility === 'Ice Body') && !hasMove['hail'] && !hasWeather['hail']) {
+					abilityRating[possibleAbility] = 1;
 				}
-				if (ability === 'Contrary' && !counter['contrary']) {
-					rejectAbility = true;
+				
+				// End of weather stuff
+				
+				// These abilities give immunities
+				if (possibleAbility === 'Water Absorb') {
+					var effectiveness = this.getEffectiveness('Water', template);
+					if (effectiveness >= 2) {
+						abilityRating[possibleAbility] = 5;
+					} else if (effectiveness >= 1) {
+						abilityRating[possibleAbility] = 4;
+					} else {
+						abilityRating[possibleAbility] = 3.5;
+					}
 				}
-				if (ability === 'Technician' && !counter['technician']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Skill Link' && !counter['skilllink']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Iron Fist' && !counter['ironfist']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Adaptability' && !counter['adaptability']) {
-					rejectAbility = true;
-				}
-				if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil']) {
-					rejectAbility = true;
-				}
-				if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate']) {
-					rejectAbility = true;
-				}
-				if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Hustle' && !counter['hustle']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Simple' && !counter['boosts']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Prankster' && !counter['Status']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Moody' && template.id !== 'bidoof') {
-					rejectAbility = true;
-				}
-				if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
-					rejectAbility = true;
-				}
-				if (ability === 'Guts' && hasMove['substitute']) {
-					rejectAbility = true;
-				}
-				if ((ability === 'Swift Swim' || ability === 'Rain Dish' || ability === 'Hydration') && !hasMove['raindance'] && !hasWeather['rain']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Dry Skin' && (hasWeather['sun'] || hasMove['sunnyday'])) {
-					rejectAbility = true;
-				}
-				if ((ability === 'Chlorophyll' || ability === 'Solar Power' || ability === 'Flower Gift' || ability === 'Leaf Guard') && !hasMove['sunnyday'] && !hasWeather['sun']) {
-					rejectAbility = true;
-				}
-				if ((ability === 'Sand Force' || ability === 'Sand Rush' || ability === 'Sand Veil') && !hasMove['sandstorm'] && !hasWeather['sandstorm']) {
-					rejectAbility = true;
-				}
-				if ((ability === 'Snow Cloak' || ability === 'Ice Body') && !hasMove['hail'] && !hasWeather['hail']) {
-					rejectAbility = true;
-				}
-
-				if (rejectAbility) {
-					if (!ability2 && ability1.rating > 0) { // only switch if the alternative doesn't suck
-						ability = ability1.name;
-					} else if (ability === ability1.name) { // or not
-						ability = ability0.name;
-					} else if (ability2) {
-						if (ability2.rating > 0) {
-							ability = ability2.name;
-						} else if (ability === ability2.name) {
-							if (ability0.rating > 0 && ability1.rating > 0) {
-								if(Math.random()*2>1) {
-									ability = ability0.name;
-								} else {
-									ability = ability1.name;
-								}
-							} else if (ability0.rating > 0) {
-								ability = ability0.name;
-							} else {
-								ability = ability1.name;
-							}
+				if (possibleAbility === 'Motor Drive') {
+					if(template.types.indexOf('Ground') > 0) {
+						abilityRating[possibleAbility] = 0.5;
+					} else {
+						var effectiveness = this.getEffectiveness('Electric', template);
+						if (effectiveness >= 2) {
+							abilityRating[possibleAbility] = 5;
+						} else if (effectiveness >= 1) {
+							abilityRating[possibleAbility] = 4;
+						} else {
+							abilityRating[possibleAbility] = 3.5;
 						}
 					}
 				}
-				if (template.id === 'combee') {
-					// it always gets Hustle but its only physical move is Endeavor, which loses accuracy
-					ability = 'Honey Gather';
+				if (possibleAbility === 'Volt Absorb') {
+					if(template.types.indexOf('Ground') > 0) {
+						abilityRating[possibleAbility] = 0.5;
+					} else {
+						var effectiveness = this.getEffectiveness('Electric', template);
+						if (effectiveness >= 2) {
+							abilityRating[possibleAbility] = 5;
+						} else if (effectiveness >= 1) {
+							abilityRating[possibleAbility] = 4;
+						} else {
+							abilityRating[possibleAbility] = 3.5;
+						}
+					}
 				}
+				if (possibleAbility === 'Lightningrod') {
+					if(template.types.indexOf('Ground') > 0) {
+						abilityRating[possibleAbility] = 0.5;
+					} else {
+						var effectiveness = this.getEffectiveness('Electric', template);
+						if (effectiveness >= 2) {
+							abilityRating[possibleAbility] = 5;
+						} else if (effectiveness >= 1) {
+							abilityRating[possibleAbility] = 4;
+						} else {
+							abilityRating[possibleAbility] = 3.5;
+						}
+					}
+				}
+				if (possibleAbility === 'Levitate') {
+					var effectiveness = this.getEffectiveness('Ground', template);
+					if (effectiveness >= 2) {
+						abilityRating[possibleAbility] = 5;
+					} else if (effectiveness >= 1) {
+						abilityRating[possibleAbility] = 4;
+					} else {
+						abilityRating[possibleAbility] = 3.5;
+					}
+				}
+				if (possibleAbility === 'Flash Fire') {
+					var effectiveness = this.getEffectiveness('Fire', template);
+					if (effectiveness >= 2) {
+						abilityRating[possibleAbility] = 5;
+					} else if (effectiveness >= 1) {
+						abilityRating[possibleAbility] = 3.5;
+					} else {
+						// Not as useful as the others since it applies a volatile rather than upping a stat
+						abilityRating[possibleAbility] = 3;
+					}
+					abilityRating[possibleAbility] += counter['blaze'] / 2;
+				}
+				if (possibleAbility === 'Sap Sipper') {
+					var effectiveness = this.getEffectiveness('Grass', template);
+					if (effectiveness >= 2) {
+						abilityRating[possibleAbility] = 5;
+					} else if (effectiveness >= 1) {
+						abilityRating[possibleAbility] = 4;
+					} else {
+						abilityRating[possibleAbility] = 3.5;
+					}
+					abilityRating[possibleAbility] += counter['Physical'] / 2;
+				}
+				if (possibleAbility === 'Storm Drain') {
+					var effectiveness = this.getEffectiveness('Water', template);
+					if (effectiveness >= 2) {
+						abilityRating[possibleAbility] = 5;
+					} else if (effectiveness >= 1) {
+						abilityRating[possibleAbility] = 4;
+					} else {
+						abilityRating[possibleAbility] = 3.5;
+					}
+					abilityRating[possibleAbility] += counter['Special'] / 2;
+				}
+				if (possibleAbility === 'Dry Skin' && !hasWeather['sun'] && !hasMove['sunnyday'] && !hasMove['raindance'] && !hasWeather['rain']) {
+					var waterEffectiveness = this.getEffectiveness('Water', template);
+					var fireEffectiveness = this.getEffectiveness('Fire', template);
+					if (waterEffectiveness >= 2 && fireEffectiveness < 0) {
+						abilityRating[possibleAbility] = 5;
+					} else if (waterEffectiveness >= 1 && fireEffectiveness < 0) {
+						abilityRating[possibleAbility] = 4;
+					} else if (fireEffectiveness < 0) {
+						abilityRating[possibleAbility] = 3.5;
+					} else if (waterEffectiveness >= 2 && fireEffectiveness < 1) {
+						abilityRating[possibleAbility] = 3;
+					} else if (waterEffectiveness >= 1 && fireEffectiveness < 1) {
+						abilityRating[possibleAbility] = 2;
+					} else if (fireEffectiveness < 1) {
+						abilityRating[possibleAbility] = 1;
+					} else {
+						abilityRating[possibleAbility] = -1;
+					}
+				}
+				
+				// This does the opposite and removes immunities
+				
+				if (possibleAbility === 'Scrappy') {
+					abilityRating[possibleAbility] = 2.5;
+					abilityRating[possibleAbility] += counter['scrappy'];
+				}
+				
+				// Status abilities
+				
+				if (possibleAbility === 'Poison Heal') {
+					if (hasMove['fling']) {
+						abilityRating[possibleAbility] = 4.5;
+					} else if (hasAbility['Technician'] && counter['Technician']) {
+						abilityRating[possibleAbility] = 3;
+					} else {
+						abilityRating[possibleAbility] = 4;
+					}
+				}
+				if (possibleAbility === 'Guts') {
+					if (hasMove['substitute'] || hasAbility['Quick Feet']) {
+						abilityRating[possibleAbility] = 2.5;
+					} else if (counter['scrappy']) {
+						// If we don't have Facade, a damaging Normal-type move is replaced with it below
+						abilityRating[possibleAbility] = 4.5;
+					} else {
+						abilityRating[possibleAbility] = 3;
+					}
+				}
+				if (possibleAbility === 'Water Veil' && counter['Physical']) {
+					// Stick to a constant naming convention, Game Freak
+					abilityRating[possibleAbility] = 3;
+				}
+				if (possibleAbility === 'Poison Touch') {
+					if (counter['tox']) {
+						abilityRating[possibleAbility] = 0.5;
+					} else if (counter['psn'] || counter['par'] || counter['slp'] || counter['frz']) {
+						abilityRating[possibleAbility] = 1.5;
+					} else {
+						abilityRating[possibleAbility] = 2.5;
+					}
+					abilityRating[possibleAbility] += counter['contact'];
+				}
+				if (possibleAbility === 'Quick Feet') {
+					if (hasMove['substitute'] || hasType['Poison']) {
+						abilityRating[possibleAbility] = 2;
+					} else {
+						abilityRating[possibleAbility] = 3.5;
+					}
+				}
+				if (possibleAbility === 'Limber') {
+					if (template.baseStats.spe < 85) {
+						// We're too slow to worry about paralysis.
+						abilityRating[possibleAbility] = 0.5;
+					} else {
+						abilityRating[possibleAbility] = 2;
+					}
+				}
+				
+				// These affect stats:
+				
+				if (possibleAbility === 'Contrary' && counter['contrary']) {
+					abilityRating[possibleAbility] = 3 + counter['drops'];
+				}
+				if (possibleAbility === 'Defiant') {
+					abilityRating[possibleAbility] = 1.5 + counter['Physical'];
+					if (hasMove['batonpass']) abilityRating[possibleAbility]++;
+				}
+				if (possibleAbility === 'Simple') {
+					abilityRating[possibleAbility] = 0.5 + (counter['boosts'] - counter['drops'])*2;
+				}
+				if (possibleAbility === 'Moody') {
+					if (template.id !== 'bidoof') {
+						abilityRating[possibleAbility] = -2;
+					} else {
+						abilityRating[possibleAbility] = 5;
+					}
+				}
+				if (possibleAbility === 'Moxie') {
+					if (counter['drops']) {
+						abilityRating[possibleAbility] = 4 - (counter['drops']/2);
+					} else if (counter['technician']) {
+						abilityRating[possibleAbility] = 4 - (counter['technician']/2);
+					}
+				}
+				
+				// These affect status:
+				
+				if (possibleAbility === 'Prankster') {
+					abilityRating[possibleAbility] = 2.5;
+					abilityRating[possibleAbility] += counter['Status'];
+				}
+				// These change the power of certain moves:
+				
+				if (possibleAbility === 'Technician') {
+					abilityRating[possibleAbility] = 2.5 + counter['technician'];
+				}
+				if (possibleAbility === 'Iron Fist') {
+					abilityRating[possibleAbility] = 2.5 + counter['ironfist'];
+				}
+				if (possibleAbility === 'Sheer Force' || possibleAbility === 'Serene Grace') {
+					abilityRating[possibleAbility] = 2.5 + counter['sheerforce'];
+				}
+				if (possibleAbility === 'Adaptability') {
+					abilityRating[possibleAbility] = 2.5 + counter['adaptability'];
+				}
+				if (possibleAbility === 'Hustle') {
+					abilityRating[possibleAbility] = 2 + counter['hustle'];
+				}
+				// Lower rating for these since they only work at low health
+				if (possibleAbility === 'Blaze') {
+					abilityRating[possibleAbility] = 1.5 + counter['blaze'];
+				}
+				if (possibleAbility === 'Overgrow') {
+					abilityRating[possibleAbility] = 1.5 + counter['overgrow'];
+				}
+				if (possibleAbility === 'Swarm') {
+					abilityRating[possibleAbility] = 1.5 + counter['swarm'];
+				}
+				if (possibleAbility === 'Torrent') {
+					abilityRating[possibleAbility] = 1.5 + counter['torrent'];
+				}
+				
+				// These affect a small number of moves:
+				
+				if (possibleAbility === 'Skill Link') {
+					abilityRating[possibleAbility] = 2.5 + counter['skilllink'];
+				}
+				if (possibleAbility === 'Rock Head' || possibleAbility === 'Reckless') {
+					abilityRating[possibleAbility] = 2 + counter['recoil'];
+				}
+				if (possibleAbility === 'No Guard' || possibleAbility === 'Compoundeyes') {
+					abilityRating[possibleAbility] = 2.5 + counter['inaccurate'];
+				}
+				if (possibleAbility === 'Insomnia') {
+					if (hasMove['rest']) {
+						abilityRating[possibleAbility] = -1;
+					} else {
+						abilityRating[possibleAbility] = 2;
+					}
+				}
+				if (possibleAbility === 'Truant' && hasMove['entrainment']) {
+					// Just for fun
+					abilityRating[possibleAbility] = 4;
+				}
+				
+				// Fill in any abilities that don't care about the set we're running:
+				if (!abilityRating[possibleAbility]) abilityRating[possibleAbility] = this.getAbility(possibleAbility).rating;
 			}
+			
+			for (var k=0; k<abilities.length; k++) {
+				var skip = false;
+				var possibleAbility = abilities[k];
+				for (var l in abilityRating) {
+					if (l === possibleAbility) continue;
+					if (abilityRating[l] > abilityRating[possibleAbility] || abilityRating[l] === abilityRating[possibleAbility] && Math.random()*2>1) {
+						skip = true;
+						break;
+					}
+				}
+				if (skip && abilities.length - 1 !== k) continue;
+				ability = possibleAbility;
+				break;
+			}
+		}
+		hasAbility[ability] = true;
 
+		{
 			if (hasMove['gyroball']) {
 				ivs.spe = 0;
 				//evs.atk += evs.spe;
@@ -1439,7 +1713,7 @@ exports.BattleScripts = {
 				} else {
 					item = 'Choice Scarf';
 				}
-			} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
+			} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin' && (ability !== 'Hydration' || (!hasMove['raindance'] && !hasWeather['rain']))) {
 				item = 'Chesto Berry';
 			} else if (hasMove['naturalgift']) {
 				item = 'Liechi Berry';
@@ -1495,7 +1769,7 @@ exports.BattleScripts = {
 						}
 					}
 				}
-			} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
+			} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost' || (ability === 'Quick Feet' && !hasType['Poison'] && !hasMove['bellydrum'] && !hasMove['substitute'])) {
 				item = 'Toxic Orb';
 			} else if (ability === 'Marvel Scale' && hasMove['psychoshift']) {
 				item = 'Flame Orb';
@@ -1530,6 +1804,8 @@ exports.BattleScripts = {
 			} else if (ability === 'Iron Barbs') {
 				// only Iron Barbs for now
 				item = 'Rocky Helmet';
+			} else if (hasMove['outrage'] && (setupType || hasMove['substitute'])) {
+				item = 'Lum Berry';
 			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 				item = 'Leftovers';
 			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
@@ -1537,21 +1813,21 @@ exports.BattleScripts = {
 			} else if ((template.baseStats.hp+75)*(template.baseStats.def+template.baseStats.spd+175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 				// skarmory and forretress get exceptions for their typing
 				item = 'Leftovers';
+			} else if (counter['drops'] > 1 && ability !== 'Contrary' && !hasMove['superpower']) {
+				item = 'White Herb';
 			} else if (counter.Physical + counter.Special >= 3 && setupType) {
 				item = 'Life Orb';
 			} else if (counter.Special >= 3 && setupType) {
 				item = 'Life Orb';
 			} else if (counter.Physical + counter.Special >= 4) {
 				item = 'Expert Belt';
-			} else if (i===0 && ability !== 'Sturdy' && !counter['recoil']) {
+			} else if ((i===0 || template.baseStats.def + template.baseStats.spd <= 50) && ability !== 'Sturdy' && !counter['recoil']) {
 				item = 'Focus Sash';
-			} else if (hasMove['outrage']) {
-				item = 'Lum Berry';
 
 			// this is the "REALLY can't think of a good item" cutoff
 			// why not always Leftovers? Because it's boring. :P
 
-			} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise'] && !hasType['Flying']) {
 				item = 'Air Balloon';
 			}  else if (this.getEffectiveness('Ice', template) > 1) {
 				item = 'Yache Berry';
@@ -1564,9 +1840,13 @@ exports.BattleScripts = {
 			} else {
 				item = 'Leftovers';
 			}
-
+			
+			// Item post-processing
 			if (item === 'Leftovers' && hasType['Poison']) {
 				item = 'Black Sludge';
+			} else if (item === 'Focus Sash') {
+				if (hasWeather['sandstorm'] && !hasType['Rock'] && !hasType['Steel'] && !hasType['Ground']) item === 'Leftovers';
+				if (hasWeather['hail'] && !hasType['Ice']) item === 'Leftovers';
 			}
 		}
 
@@ -1642,15 +1922,16 @@ exports.BattleScripts = {
 		if ('Rule:potd' in this.getFormat().banlistTable) {
 			potd = this.getTemplate(config.potd);
 		}
-		var typeWeaknesses = {};
-		// So we aren't hardcoding the types and needing to change random deep files in Gen VI+
-		for(t in this.data.TypeChart) {
+		var typeWeaknesses = {}
+		for(var t in this.data.TypeChart) {
 			typeWeaknesses[t] = 0;
 		}
 		var typeCount = {};
 		var typeComboCount = {};
 		var uberCount = 0;
 		var nuCount = 0;
+		
+		var weather = '';
 		
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
@@ -1699,13 +1980,13 @@ exports.BattleScripts = {
 
 			var set = this.randomSet(template, i, pokemon);
 			
+			var setAbility = set.ability;
 			// Limit 1 of any type combination
 			var typeCombo = types.join();
-			var weather = false;
-			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream' || set.ability === 'Snow Warning') {
-				// Weather doesn't count towards any limits
-				typeCombo = set.ability;
-				weather = true;
+			if (setAbility === 'Drought' || setAbility === 'Drizzle' || setAbility === 'Sand Stream' || setAbility === 'Snow Warning') {
+				// Weather doesn't count towards any limits on type combinations
+				typeCombo = setAbility;
+				weather = setAbility;
 			}
 			if (typeCombo in typeComboCount && (!potd || (potd && i !== 1))) continue;
 			
@@ -1715,26 +1996,26 @@ exports.BattleScripts = {
 			// Pokemon which are 4x weak to something get 2 points for that type, Pokemon that 4x resist get -2.
 			// Pokemon which are immune to a type (except Shedinja) get -3 for that type.
 			// If a type gets too many points (too many Pokemon are weak or not enough resist), the Pokemon which caused the excess is removed.
-			if (set.ability !== 'Imposter') { 
+			if (setAbility !== 'Imposter') {
 				var typeCache = {};
-				for(t in typeWeaknesses) {
+				for(var t in typeWeaknesses) {
 					// Don't check Dragon, otherwise every team with a Dragon-type would be forced to also have a Steel-type.
 					// If Gen VI comes about and the rumors are true that Fairies are immune to Dragon, this should be removed.
 					if (t === 'Dragon') continue;
 					var immune = false;
 					if (!this.getImmunity(t, template)) {
 						immune = true;
-					} else if (set.ability === 'Levitate' && t === 'Ground') {
+					} else if (setAbility === 'Levitate' && t === 'Ground') {
 						immune = true;
-					} else if (set.ability === 'Flash Fire' && t === 'Fire') {
+					} else if (setAbility === 'Flash Fire' && t === 'Fire') {
 						immune = true;
-					} else if ((set.ability === 'Dry Skin' || set.ability === 'Water Absorb' || set.ability === 'Storm Drain') && t === 'Water') {
+					} else if ((setAbility === 'Dry Skin' || setAbility === 'Water Absorb' || setAbility === 'Storm Drain') && t === 'Water') {
 						immune = true;
-					} else if (set.ability === 'Sap Sipper' && t === 'Grass') {
+					} else if (setAbility === 'Sap Sipper' && t === 'Grass') {
 						immune = true;
-					} else if ((set.ability === 'Lightningrod' || set.ability === 'Volt Absorb' || set.ability === 'Motor Drive') && t === 'Electric') {
+					} else if ((setAbility === 'Lightningrod' || setAbility === 'Volt Absorb' || setAbility === 'Motor Drive') && t === 'Electric') {
 						immune = true;
-					} else if (set.ability === 'Wonder Guard') {
+					} else if (setAbility === 'Wonder Guard') {
 						var effectiveness = this.getEffectiveness(t, template);
 						if (effectiveness > 0) {
 							typeWeaknesses[t]++;
@@ -1751,26 +2032,42 @@ exports.BattleScripts = {
 						}
 					}
 					if (immune) {
-						typeWeaknesses[t] -= 3;
-						typeCache[t] = -3;
+						// Immune Pokemon can save 2 teammates who are 2x weak or 1 teammate who is 4x weak
+						typeWeaknesses[t] -= 2;
+						typeCache[t] = -2;
 						continue;
 					}
 					
 					var effectiveness = this.getEffectiveness(t, template);
 					// Air Balloons only work once, so while they provide a plus, it isn't a "true" immunity:
-					if ((set.item === 'Air Balloon' && t === 'Ground') || set.ability === 'Solid Rock') effectiveness /= 2;
-					
+					if ((t === 'Ground' && set.item === 'Air Balloon') || (t === 'Ice' && set.item === 'Yache Berry')) effectiveness /= 2;
+					if (setAbility === 'Solid Rock' && effectiveness > 0) effectiveness *= 0.75;
+					if (weather === 'Drought') {
+						if (t === 'Fire') effectiveness *= 1.5;
+						if (t === 'Water') effectiveness *= 0.75;
+					} else if (weather === 'Drizzle') {
+						if (t === 'Fire') effectiveness *= 0.75;
+						if (t === 'Water') effectiveness *= 1.5;
+					}
 					typeCache[t] = effectiveness;
 					typeWeaknesses[t] += effectiveness;
-					if (i === 0 || weather || (potd && potd.name && potd.types && i === 1)) continue;
-					
+					if (i === 0 || (potd && potd.name && potd.types && i === 1)) continue;
+					if (weather === 'Drought') {
+						if(setAbility === 'Chlorophyll' || setAbility === 'Solar Power' || setAbility === 'Flower Gift' || setAbility === 'Leaf Guard') continue;
+					} else if (weather === 'Drizzle') {
+						if (setAbility === 'Swift Swim' || setAbility === 'Rain Dish' || setAbility === 'Hydration') continue;
+					} else if (weather === 'Sand Stream') {
+						if (setAbility === 'Sand Force' || setAbility === 'Sand Rush' || setAbility === 'Sand Veil') continue;
+					} else if (weather === 'Snow Warning') {
+						if (setAbility === 'Snow Cloak' || setAbility === 'Ice Body') continue;
+					}
 					// Change what this is compared to in order to make this more / less strict
 					// 0 means every weakness must be matched by a resistance, it likes to favor Spiritomb/Sableye/Eelektross
-					// 1 allows a 2x effectiveness deficit or below, usually rejects 4 - 8 Pokemon per side and produces the most realistic teams
-					// 2 allows a 4x effectiveness deficit or below, usually rejects 0 - 3 Pokemon per side and produces fairly decent teams
+					// 1 allows a 2x effectiveness deficit or below, usually rejects 4 - 8 Pokemon per side and produces realistic but less random teams
+					// 2 allows a 4x effectiveness deficit or below, usually rejects 0 - 3 Pokemon per side and produces fairly decent random teams
 					if (typeWeaknesses[t] > 1) {
 						skip = true;
-						for (c in typeCache) {
+						for (var c in typeCache) {
 							// Undo everything:
 							typeWeaknesses[c] -= typeCache[c];
 						}
@@ -1778,7 +2075,7 @@ exports.BattleScripts = {
 					}
 				}
 			}
-			if (skip && !weather) continue;
+			if (skip) continue;
 			
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -1792,6 +2089,7 @@ exports.BattleScripts = {
 					typeCount[types[t]] = 1;
 				}
 			}
+			if (typeCombo === 'Drought' || typeCombo === 'Drizzle' || typeCombo === 'Sand Stream' || typeCombo === 'Snow Warning') weather = typeCombo;
 			typeComboCount[typeCombo] = 1;
 			// Increment Uber/NU counter:
 			if (tier === 'Uber') {
