@@ -194,9 +194,7 @@ exports.BattleScripts = {
 		hitResult = this.runEvent('TryHit', target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) this.add('-fail', target);
-			if (hitResult !== 0) { // special Substitute hit flag
-				return false;
-			}
+			return false;
 		}
 
 		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
@@ -234,11 +232,6 @@ exports.BattleScripts = {
 			if (!spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon, target);
 			return false;
-		}
-
-		if (hitResult === 0) {
-			// substitute
-			target = null;
 		}
 
 		var damage = 0;
@@ -334,6 +327,7 @@ exports.BattleScripts = {
 		if (target && !isSecondary && !isSelf) {
 			hitResult = this.runEvent('TryPrimaryHit', target, pokemon, moveData);
 			if (hitResult === 0) {
+				// special Substitute flag
 				hitResult = true;
 				target = null;
 			}
