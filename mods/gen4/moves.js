@@ -787,7 +787,34 @@ exports.BattleMovedex = {
 	},
 	toxicspikes: {
 		inherit: true,
-		isBounceable: false
+		isBounceable: false,
+		effect: {
+			// this is a side condition
+			onStart: function(side) {
+				this.add('-sidestart', side, 'move: Toxic Spikes');
+				this.effectData.layers = 1;
+			},
+			onRestart: function(side) {
+				if (this.effectData.layers >= 2) return false;
+				this.add('-sidestart', side, 'move: Toxic Spikes');
+				this.effectData.layers++;
+			},
+			onSwitchIn: function(pokemon) {
+				if (!pokemon.runImmunity('Ground')) return;
+				if (!pokemon.runImmunity('Poison')) return;
+				if (pokemon.hasType('Poison')) {
+					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] '+pokemon);
+					pokemon.side.removeSideCondition('toxicspikes');
+				}
+				if (pokemon.volatiles['substitute']) {
+					return;
+				} else if (this.effectData.layers >= 2) {
+					pokemon.trySetStatus('tox');
+				} else {
+					pokemon.trySetStatus('psn');
+				}
+			}
+		}
 	},
 	uproar: {
 		inherit: true,

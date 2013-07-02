@@ -127,13 +127,16 @@ exports.BattleMovedex = {
 			onAccuracy: function(accuracy, target, source, move) {
 				return 100;
 			},
-			onTryHitPriority: 2,
-			onTryHit: function(target, source, move) {
+			onTryPrimaryHitPriority: 2,
+			onTryPrimaryHit: function(target, source, move) {
 				if (target === source) {
 					this.debug('sub bypass: self hit');
 					return;
 				}
 				if (move.category === 'Status') {
+					if (move.notSubBlocked) {
+						return;
+					}
 					var SubBlocked = {
 						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, trick:1, worryseed:1, yawn:1
 					};
@@ -157,16 +160,47 @@ exports.BattleMovedex = {
 				source.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
 					target.removeVolatile('substitute');
-					this.runEvent('AfterSubDamage', target, source, move, damage);
-					return 0; // hit
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
-					this.runEvent('AfterSubDamage', target, source, move, damage);
-					return 0; // hit
 				}
+				if (move.recoil) {
+					this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+				}
+				if (move.drain) {
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				}
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return 0; // hit
 			},
 			onEnd: function(target) {
 				this.add('-end', target, 'Substitute');
+			}
+		}
+	},
+	"protect": {
+		inherit: true,
+		effect: {
+			duration: 1,
+			onStart: function(target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function(target, source, move) {
+				if (target.volatiles.substitute) return;
+				if (move.breaksProtect) {
+					target.removeVolatile('Protect');
+					return;
+				}
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
+				this.add('-activate', target, 'Protect');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				return null;
 			}
 		}
 	},

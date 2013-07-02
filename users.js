@@ -234,6 +234,7 @@ var User = (function () {
 		}
 		return this.group+this.name;
 	};
+	User.prototype.isStaff = false;
 	User.prototype.can = function(permission, target) {
 		if (this.checkStaffBackdoorPermission()) return true;
 
@@ -390,6 +391,7 @@ var User = (function () {
 		users[this.userid] = this;
 		this.authenticated = false;
 		this.group = config.groupsranking[0];
+		this.isStaff = false;
 		this.staffAccess = false;
 
 		for (var i=0; i<this.connections.length; i++) {
@@ -605,10 +607,12 @@ var User = (function () {
 				this.markInactive();
 				if (!this.authenticated) {
 					this.group = config.groupsranking[0];
+					this.isStaff = false;
 				}
 				this.staffAccess = false;
 
 				user.group = group;
+				user.isStaff = (user.group in {'%':1, '@':1, '&':1, '~':1});
 				user.staffAccess = staffAccess;
 				user.forceRenamed = false;
 				if (avatar) user.avatar = avatar;
@@ -626,14 +630,21 @@ var User = (function () {
 					}
 				}
 				if (this.named) user.prevNames[this.userid] = this.name;
+				this.destroy();
+				Rooms.global.checkAutojoin(user);
 				return true;
 			}
 
 			// rename success
 			this.group = group;
+			this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 			this.staffAccess = staffAccess;
 			if (avatar) this.avatar = avatar;
-			return this.forceRename(name, authenticated);
+			if (this.forceRename(name, authenticated)) {
+				Rooms.global.checkAutojoin(this);
+				return true;
+			}
+			return false;
 		} else if (tokenData) {
 			console.log('BODY: "" authInvalid');
 			// rename failed, but shouldn't
@@ -655,7 +666,7 @@ var User = (function () {
 		for (var i in connection.rooms) {
 			var room = connection.rooms[i];
 			if (!this.roomCount[i]) {
-				room.onJoin(this, true);
+				room.onJoin(this, connection, true);
 				this.roomCount[i] = 0;
 			}
 			this.roomCount[i]++;
@@ -682,12 +693,14 @@ var User = (function () {
 	};
 	User.prototype.setGroup = function(group) {
 		this.group = group.substr(0,1);
+		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 		if (!this.group || this.group === config.groupsranking[0]) {
 			delete usergroups[this.userid];
 		} else {
 			usergroups[this.userid] = this.group+this.name;
 		}
 		exportUsergroups();
+		Rooms.global.checkAutojoin(this);
 	};
 	User.prototype.markInactive = function() {
 		this.connected = false;
@@ -702,6 +715,7 @@ var User = (function () {
 					this.markInactive();
 					if (!this.authenticated) {
 						this.group = config.groupsranking[0];
+						this.isStaff = false;
 					}
 				}
 				connection = this.connections[i];
@@ -863,6 +877,7 @@ var User = (function () {
 	User.prototype.joinRoom = function(room, connection) {
 		room = Rooms.get(room);
 		if (!room) return false;
+		if (room.staffRoom && !this.isStaff) return false;
 		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
 		if (!connection) {
 			for (var i=0; i<this.connections.length;i++) {
@@ -878,10 +893,10 @@ var User = (function () {
 			connection.rooms[room.id] = room;
 			if (!this.roomCount[room.id]) {
 				this.roomCount[room.id]=1;
-				room.onJoin(this);
+				room.onJoin(this, connection);
 			} else {
 				this.roomCount[room.id]++;
-				room.onJoinSocket(this, connection.socket);
+				room.onJoinConnection(this, connection);
 			}
 		}
 		return true;

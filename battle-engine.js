@@ -597,6 +597,7 @@ var BattlePokemon = (function() {
 		this.moveset = [];
 		this.moves = [];
 		for (var i=0; i<pokemon.moveset.length; i++) {
+			var move = this.battle.getMove(this.set.moves[i]);
 			var moveData = pokemon.moveset[i];
 			var moveName = moveData.move;
 			if (moveData.id === 'hiddenpower') {
@@ -605,8 +606,8 @@ var BattlePokemon = (function() {
 			this.moveset.push({
 				move: moveName,
 				id: moveData.id,
-				pp: 5,
-				maxpp: 5,
+				pp: move.noPPBoosts ? moveData.maxpp : 5,
+				maxpp: this.battle.gen >= 5 ? (move.noPPBoosts ? moveData.maxpp : 5) : (this.battle.gen <= 2 ? move.pp : moveData.maxpp),
 				target: moveData.target,
 				disabled: false
 			});
@@ -2591,6 +2592,9 @@ var Battle = (function() {
 		if (basePower && !Math.floor(baseDamage)) {
 			return 1;
 		}
+		
+		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
+		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
 		return Math.floor(baseDamage);
 	};
