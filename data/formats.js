@@ -298,39 +298,16 @@ exports.BattleFormats = {
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 	
-	"1v1": {
+	stabmons: {
 		effectType: 'Format',
-		name: "1v1",
+		name: "Stabmons",
 		section: "OM of the Month",
+		mod: 'stabmons',
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		onBegin: function() {
-			this.p1.pokemon = this.p1.pokemon.slice(0,1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
-			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Darkrai', 
-			'Deoxys', 'Deoxys-Attack',
-			'Dialga', 
-			'Giratina', 'Giratina-Origin', 
-			'Groudon', 
-			'Ho-Oh', 
-			'Kyogre', 
-			'Kyurem-White', 
-			'Lugia', 
-			'Mewtwo',
-			'Palkia', 
-			'Rayquaza', 
-			'Reshiram', 
-			'Shaymin-Sky', 
-			'Zekrom',
-			'Memento', 'Explosion', 'Perish Song', 'Destiny Bond', 'Healing Wish', 'Selfdestruct', 'Lunar Dance', 'Final Gambit'
-		]
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	seasonaljunejubilee: {
 		name: "[Seasonal] June Jubilee",
