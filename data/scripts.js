@@ -1257,10 +1257,6 @@ exports.BattleScripts = {
 			// Uses the same rating system as abilities.js, only takes into account our current situation
 			var abilityRating = {};
 			for(var k=0; k<abilities.length; k++) {
-				// Not sure what this does, so commenting it out to see what breaks
-				/*abilities.sort(function(a,b){
-					return this.getAbility(b).rating - this.getAbility(abilities[k]).rating;
-				}.bind(this));*/
 				var possibleAbility = abilities[k];
 				
 				// Weather:
@@ -1807,7 +1803,8 @@ exports.BattleScripts = {
 			} else if ((template.baseStats.hp+75)*(template.baseStats.def+template.baseStats.spd+175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 				// skarmory and forretress get exceptions for their typing
 				item = 'Leftovers';
-			} else if (counter['drops'] > 1 && ability !== 'Contrary' && !hasMove['superpower']) {
+			} else if (counter['drops'] > 1 && ability !== 'Contrary' && !hasMove['superpower'] && !hasMove['closecombat']) {
+				// Pokemon with Superpower or Close Combat typically appreciate other items more
 				item = 'White Herb';
 			} else if (counter.Physical + counter.Special >= 3 && setupType) {
 				item = 'Life Orb';
@@ -1980,7 +1977,6 @@ exports.BattleScripts = {
 			if (setAbility === 'Drought' || setAbility === 'Drizzle' || setAbility === 'Sand Stream' || setAbility === 'Snow Warning') {
 				// Weather doesn't count towards any limits on type combinations
 				typeCombo = setAbility;
-				weather = setAbility;
 			}
 			if (typeCombo in typeComboCount && (!potd || (potd && i !== 1))) continue;
 			
