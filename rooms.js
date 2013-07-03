@@ -214,6 +214,19 @@ var GlobalRoom = (function() {
 		}
 		return roomList;
 	};
+	GlobalRoom.prototype.getRooms = function() {
+		var rooms = {official:[], chat:[]};
+		for (var i=0; i<this.chatRooms.length; i++) {
+			var room = this.chatRooms[i];
+			if (room.isPrivate) continue;
+			(!room.auth ? rooms.official : rooms.chat).push({
+				title: room.title,
+				desc: room.desc,
+				userCount: Object.size(room.users)
+			});
+		}
+		return rooms;
+	};
 	GlobalRoom.prototype.cancelSearch = function(user) {
 		var success = false;
 		user.cancelChallengeTo();
@@ -1208,7 +1221,7 @@ var ChatRoom = (function() {
 			buffer += ','+this.users[i].getIdentity(this.id);
 		}
 		var msg = '|users|'+counter+buffer;
-		if (this.id === 'lobby') {
+		if (this.id === 'lobby' && rooms.global) {
 			msg += '\n|usercount|'+rooms.global.userCount;
 		}
 		return msg;
