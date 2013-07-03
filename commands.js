@@ -223,6 +223,7 @@ var commands = exports.commands = {
 	    if (!target) return this.parse('/help redir');
 	    target = this.splitTarget(target);
 	    var targetUser = this.targetUser;
+	    if (!target) return this.sendReply('You need to input a room name!');
 	    var targetRoom = Rooms.get(target);
 	    if (target && !targetRoom) {
 	            return connection.sendTo(user, "|noinit|nonexistent|The room '" + target + "' does not exist.");
