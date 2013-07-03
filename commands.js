@@ -1153,6 +1153,7 @@ var commands = exports.commands = {
 			target = '';
 		}
 		if (cmd === 'userdetails') {
+
 			var targetUser = Users.get(target);
 			if (!targetUser) {
 				connection.send('|queryresponse|userdetails|'+JSON.stringify({
@@ -1189,10 +1190,19 @@ var commands = exports.commands = {
 				}
 			}
 			connection.send('|queryresponse|userdetails|'+JSON.stringify(userdetails));
+
 		} else if (cmd === 'roomlist') {
+
 			connection.send('|queryresponse|roomlist|'+JSON.stringify({
 				rooms: Rooms.global.getRoomList(true)
 			}));
+
+		} else if (cmd === 'rooms') {
+
+			connection.send('|queryresponse|rooms|'+JSON.stringify(
+				Rooms.global.getRooms()
+			));
+
 		}
 	},
 
