@@ -227,20 +227,39 @@ var User = (function () {
 	User.prototype.getIdentity = function(roomid) {
 		if (!roomid) roomid = 'lobby';
 		if (this.locked) {
-			return '#'+this.name;
+			return '‽'+this.name;
 		}
 		if (this.mutedRooms[roomid]) {
 			return '!'+this.name;
 		}
+		if (Rooms.rooms[roomid].auth) {
+			if (Rooms.rooms[roomid].auth[this.userid]) {
+				return Rooms.rooms[roomid].auth[this.userid] + this.name;
+			}
+			if (this.group === '~') return '~'+this.name;
+			if (this.group !== ' ') return '+'+this.name;
+			return ' '+this.name;
+		}
 		return this.group+this.name;
 	};
 	User.prototype.isStaff = false;
-	User.prototype.can = function(permission, target) {
+	User.prototype.can = function(permission, target, room) {
 		if (this.checkStaffBackdoorPermission()) return true;
 
 		var group = this.group;
 		var groupData = config.groups[group];
 		var checkedGroups = {};
+
+		if (room && room.auth) {
+			if (permission === 'broadcast' && group !== ' ') return true;
+			group = room.auth[this.userid]||' ';
+			if (permission === 'broadcast' && group !== ' ') return true;
+			if (group === '#' && permission in {mute:1, announce:1, declare:1, modchat:1, roommod:1}) return true;
+			if (group === '%' && (!target || target.group === ' ') && permission in {mute:1, announce:1}) return true;
+			if (groupData && groupData['root']) return true;
+			return false;
+		}
+
 		while (groupData) {
 			// Cycle checker
 			if (checkedGroups[group]) return false;

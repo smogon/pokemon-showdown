@@ -1208,7 +1208,7 @@ var ChatRoom = (function() {
 			buffer += ','+this.users[i].getIdentity(this.id);
 		}
 		var msg = '|users|'+counter+buffer;
-		if (this.id === 'lobby') {
+		if (this.id === 'lobby' && rooms.global) {
 			msg += '\n|usercount|'+rooms.global.userCount;
 		}
 		return msg;
