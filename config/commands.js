@@ -508,6 +508,22 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
+	roomhelp: function(target, room, user) {
+		if (room.id === 'lobby') return this.sendReply('This command is too spammy for lobby.');
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('Room moderators (%) can use:<br />' +
+			'- /mute <em>username</em>: 7 minute mute<br />' +
+			'- /hourmute <em>username</em>: 60 minute mute<br />' +
+			'- /unmute <em>username</em>: unmute<br />' +
+			'- /announce <em>message</em>: make an announcement<br />' +
+			'<br />' +
+			'Room owners (#) can use:<br />' +
+			'- /roommod <em>username</em>: appoint a room moderator<br />' +
+			'- /deroommod <em>username</em>: remove a room moderator<br />' +
+			'- /declare <em>message</em>: make a global declaration<br />' +
+			'</div>');
+	},
+
 	rule: 'rules',
 	rules: function(target, room, user) {
 		if (!this.canBroadcast()) return;
