@@ -162,12 +162,12 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 
 					// broadcast cooldown
 					var normalized = toId(message);
-					if (CommandParser.lastBroadcast === normalized &&
-							CommandParser.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+					if (room.lastBroadcast === normalized &&
+							room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
 						return false;
 					}
-					CommandParser.lastBroadcast = normalized;
-					CommandParser.lastBroadcastTime = Date.now();
+					room.lastBroadcast = normalized;
+					room.lastBroadcastTime = Date.now();
 
 					this.broadcasting = true;
 				}
