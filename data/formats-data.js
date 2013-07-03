@@ -4488,7 +4488,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":25,"gender":"F","isDW":true,"moves":["pluck","nastyplot","flatter","faintattack"]}
 		],
 		dreamWorldRelease: true,
-		tier: "RU"
+		tier: "NU"
 	},
 	heatmor: {
 		viableMoves: {"fireblast":1,"suckerpunch":1,"focusblast":1,"gigadrain":1},

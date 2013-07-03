@@ -141,8 +141,8 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			logModCommand: function(result) {
 				modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 			},
-			can: function(permission, target) {
-				if (!user.can(permission, target)) {
+			can: function(permission, target, room) {
+				if (!user.can(permission, target, room)) {
 					this.sendReply('/'+cmd+' - Access denied.');
 					return false;
 				}
@@ -152,7 +152,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				if (broadcast) {
 					message = this.canTalk(message);
 					if (!message) return false;
-					if (!user.can('broadcast')) {
+					if (!user.can('broadcast', null, room)) {
 						connection.send("You need to be voiced to broadcast this command's information.");
 						connection.send("To see it for yourself, use: /"+message.substr(1));
 						return false;
@@ -162,12 +162,12 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 
 					// broadcast cooldown
 					var normalized = toId(message);
-					if (CommandParser.lastBroadcast === normalized &&
-							CommandParser.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+					if (room.lastBroadcast === normalized &&
+							room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
 						return false;
 					}
-					CommandParser.lastBroadcast = normalized;
-					CommandParser.lastBroadcastTime = Date.now();
+					room.lastBroadcast = normalized;
+					room.lastBroadcastTime = Date.now();
 
 					this.broadcasting = true;
 				}
@@ -253,19 +253,19 @@ function canTalk(user, room, connection, message) {
 		connection.sendTo(room, 'You are muted and cannot talk in this room.');
 		return false;
 	}
-	if (config.modchat && room && room.id === 'lobby') {
-		if (config.modchat === 'crash') {
+	if (room && room.modchat) {
+		if (room.modchat === 'crash') {
 			if (!user.can('ignorelimits')) {
 				connection.sendTo(room, 'Because the server has crashed, you cannot speak in lobby chat.');
 				return false;
 			}
 		} else {
-			if (!user.authenticated && config.modchat === true) {
+			if (!user.authenticated && room.modchat === true) {
 				connection.sendTo(room, 'Because moderated chat is set, you must be registered to speak in lobby chat. To register, simply win a rated battle by clicking the look for battle button');
 				return false;
-			} else if (config.groupsranking.indexOf(user.group) < config.groupsranking.indexOf(config.modchat)) {
-				var groupName = config.groups[config.modchat].name;
-				if (!groupName) groupName = config.modchat;
+			} else if (config.groupsranking.indexOf(user.group) < config.groupsranking.indexOf(room.modchat)) {
+				var groupName = config.groups[room.modchat].name;
+				if (!groupName) groupName = room.modchat;
 				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in lobby chat.');
 				return false;
 			}
