@@ -728,11 +728,6 @@ var commands = exports.commands = {
 		this.sendReply('/banredirect - This command is obsolete and has been removed.');
 	},
 
-	redir: 'redirect',
-	redirect: function() {
-		this.sendReply('/redirect - This command is obsolete and has been removed.');
-	},
-
 	lobbychat: function(target, room, user, connection) {
 		target = toId(target);
 		if (target === 'off') {
@@ -889,6 +884,10 @@ var commands = exports.commands = {
 		if (target === '%' || target === 'forcerename' || target === 'fr') {
 			matched = true;
 			this.sendReply('/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: % @ & ~');
+		}
+		if (target === '%' || target === 'redir' || target === 'redirect') {
+			matched = true;
+			this.sendReply('/redirect OR /redir [username], [room] - Forcibly move a user from the current room to [room]. Requires: % @ & ~');
 		}
 		if (target === '@' || target === 'ban' || target === 'b') {
 			matched = true;
