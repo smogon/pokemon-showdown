@@ -117,11 +117,60 @@ var commands = exports.commands = {
 	privateroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
 		if (target === 'off') {
-			room.isPrivate = false;
+			delete room.isPrivate;
 			this.addModCommand(user.name+' made the room public.');
+			if (room.chatRoomData) {
+				delete room.chatRoomData.isPrivate;
+				Rooms.global.writeChatRoomData();
+			}
 		} else {
 			room.isPrivate = true;
 			this.addModCommand(user.name+' made the room private.');
+			if (room.chatRoomData) {
+				room.chatRoomData.isPrivate = true;
+				Rooms.global.writeChatRoomData();
+			}
+		}
+	},
+
+	roommod: function(target, room, user) {
+		if (!room.auth) {
+			this.sendReply("/roommod - This room isn't designed for per-room moderation");
+		}
+		var target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
+
+		if (!user.can('roommod', targetUser, room)) return false;
+
+		var name = targetUser.name;
+
+		room.auth[targetUser.userid] = '%';
+		this.add(''+name+' was appointed Room Moderator by '+user.name+'.');
+		targetUser.updateIdentity();
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	deroommod: function(target, room, user) {
+		if (!room.auth) {
+			this.sendReply("/roommod - This room isn't designed for per-room moderation");
+		}
+		var target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		var name = this.targetUsername;
+		var userid = toId(name);
+
+		if (room.auth[userid] !== '%') return this.sendReply("User '"+name+"' is not a room mod.");
+		if (!user.can('roommod', null, room)) return false;
+
+		delete room.auth[userid];
+		this.sendReply('('+name+' is no longer Room Moderator.)');
+		if (targetUser) targetUser.updateIdentity();
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
 		}
 	},
 
@@ -178,7 +227,7 @@ var commands = exports.commands = {
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('mute', targetUser)) return false;
+		if (!this.can('mute', targetUser, room)) return false;
 		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
 			var problem = ' but was already '+(!targetUser.connected ? 'offline' : targetUser.locked ? 'locked' : 'muted');
 			if (!target) {
@@ -203,7 +252,7 @@ var commands = exports.commands = {
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('mute', targetUser)) return false;
+		if (!this.can('mute', targetUser, room)) return false;
 
 		if (((targetUser.mutedRooms[room.id] && (targetUser.muteDuration[room.id]||0) >= 50*60*1000) || targetUser.locked) && !target) {
 			var problem = ' but was already '+(!targetUser.connected ? 'offline' : targetUser.locked ? 'locked' : 'muted');
@@ -226,7 +275,7 @@ var commands = exports.commands = {
 		if (!targetUser) {
 			return this.sendReply('User '+target+' not found.');
 		}
-		if (!this.can('mute', targetUser)) return false;
+		if (!this.can('mute', targetUser, room)) return false;
 
 		if (!targetUser.mutedRooms[room.id]) {
 			return this.sendReply(''+targetUser.name+' isn\'t muted.');
@@ -437,9 +486,9 @@ var commands = exports.commands = {
 
 	modchat: function(target, room, user) {
 		if (!target) {
-			return this.sendReply('Moderated chat is currently set to: '+config.modchat);
+			return this.sendReply('Moderated chat is currently set to: '+room.modchat);
 		}
-		if (!this.can('modchat') || !this.canTalk()) return false;
+		if (!this.can('modchat', null, room) || !this.canTalk()) return false;
 
 		target = target.toLowerCase();
 		switch (target) {
@@ -454,7 +503,7 @@ var commands = exports.commands = {
 		case 'off':
 		case 'false':
 		case 'no':
-			config.modchat = false;
+			room.modchat = false;
 			break;
 		default:
 			if (!config.groups[target]) {
@@ -463,23 +512,23 @@ var commands = exports.commands = {
 			if (config.groupsranking.indexOf(target) > 1 && !user.can('modchatall')) {
 				return this.sendReply('/modchat - Access denied for setting higher than ' + config.groupsranking[1] + '.');
 			}
-			config.modchat = target;
+			room.modchat = target;
 			break;
 		}
-		if (config.modchat === true) {
+		if (room.modchat === true) {
 			this.add('|raw|<div class="broadcast-red"><b>Moderated chat was enabled!</b><br />Only registered users can talk.</div>');
-		} else if (!config.modchat) {
+		} else if (!room.modchat) {
 			this.add('|raw|<div class="broadcast-blue"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
 		} else {
-			var modchat = sanitize(config.modchat);
+			var modchat = sanitize(room.modchat);
 			this.add('|raw|<div class="broadcast-red"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
 		}
-		this.logModCommand(user.name+' set modchat to '+config.modchat);
+		this.logModCommand(user.name+' set modchat to '+room.modchat);
 	},
 
 	declare: function(target, room, user) {
 		if (!target) return this.parse('/help declare');
-		if (!this.can('declare')) return false;
+		if (!this.can('declare', null, room)) return false;
 
 		if (!this.canTalk()) return;
 
@@ -490,7 +539,8 @@ var commands = exports.commands = {
 	wall: 'announce',
 	announce: function(target, room, user) {
 		if (!target) return this.parse('/help announce');
-		if (!this.can('announce')) return false;
+
+		if (!this.can('announce', null, room)) return false;
 
 		target = this.canTalk(target);
 		if (!target) return;
@@ -810,7 +860,7 @@ var commands = exports.commands = {
 		if (!this.can('hotpatch')) return false;
 
 		lockdown = false;
-		config.modchat = false;
+		Rooms.lobby.modchat = false;
 		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
 		Rooms.lobby.logEntry(user.name + ' used /crashfixed');
 	},
@@ -822,7 +872,7 @@ var commands = exports.commands = {
 		if (!this.can('declare')) return false;
 
 		lockdown = false;
-		config.modchat = false;
+		Rooms.lobby.modchat = false;
 		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We have logged the crash and are working on fixing it!</b><br />You may resume talking in the lobby and starting new battles.</div>');
 		Rooms.lobby.logEntry(user.name + ' used /crashlogged');
 	},
