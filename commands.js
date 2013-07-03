@@ -218,6 +218,25 @@ var commands = exports.commands = {
 		targetUser.send('|c|~|/warn '+target);
 	},
 
+	redirect: 'redir',
+	redir: function (target, room, user, connection) {
+	    if (!target) return this.parse('/help redir');
+	    target = this.splitTarget(target);
+	    var targetUser = this.targetUser;
+	    if (!target) return this.sendReply('You need to input a room name!');
+	    var targetRoom = Rooms.get(target);
+	    if (target && !targetRoom) {
+	            return connection.sendTo(user, "|noinit|nonexistent|The room '" + target + "' does not exist.");
+	    }
+	    if (!user.can('kick', targetUser, room)) return false;
+	    if (!targetUser || !targetUser.connected) {
+	            return this.sendReply('User '+this.targetUsername+' not found.');
+	    }
+	    this.addModCommand(targetUser.name + ' was forcibly redirected to room ' + target + ' by ' + user.name + '.');
+	    targetUser.leaveRoom(room);
+	    targetUser.joinRoom(target);
+	},
+
 	m: 'mute',
 	mute: function(target, room, user) {
 		if (!target) return this.parse('/help mute');
