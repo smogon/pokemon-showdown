@@ -168,7 +168,7 @@ exports.BattleAbilities = {
 	"slowstart": {
 		inherit: true,
 		effect: {
-			duration: 2,
+			duration: 3,
 			onStart: function(target) {
 				this.add('-start', target, 'Slow Start');
 			},
