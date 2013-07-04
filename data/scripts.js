@@ -650,10 +650,15 @@ exports.BattleScripts = {
 	randomSet: function(template, i) {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
+		var name = template.name;
 
-		if (!template.exists) {
-			template = this.getTemplate('unown');
+		if (!template.exists || (!template.viableMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
+			template = this.getTemplate('unown');
+
+			var stack = 'Template incompatible with random battles: '+name;
+			var fakeErr = {stack: stack};
+			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
 		}
 
 		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
@@ -1451,7 +1456,7 @@ exports.BattleScripts = {
 		if (template.name === 'Spinda' && ability !== 'Contrary') level = 95;
 
 		return {
-			name: template.name,
+			name: name,
 			moves: moves,
 			ability: ability,
 			evs: evs,
