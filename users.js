@@ -377,7 +377,7 @@ var User = (function () {
 		for (var i=0; i<this.connections.length; i++) {
 			//console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
 			var initdata = '|updateuser|'+this.name+'|'+(true?'1':'0')+'|'+this.avatar;
-			sendData(this.connections[i].socket, initdata);
+			this.connections[i].send(initdata);
 		}
 		var joining = !this.named;
 		this.named = (this.userid.substr(0,5) !== 'guest');
@@ -414,9 +414,9 @@ var User = (function () {
 		this.staffAccess = false;
 
 		for (var i=0; i<this.connections.length; i++) {
-			console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
+			console.log(''+name+' renaming: connection '+i+' of '+this.connections.length);
 			var initdata = '|updateuser|'+this.name+'|'+(false?'1':'0')+'|'+this.avatar;
-			sendData(this.connections[i].socket, initdata);
+			this.connections[i].send(initdata);
 		}
 		this.named = false;
 		for (var i in this.roomCount) {
@@ -611,7 +611,7 @@ var User = (function () {
 					}
 				}
 				for (var i=0; i<this.connections.length; i++) {
-					//console.log(''+this.name+' preparing to merge: socket '+i+' of '+this.connections.length);
+					//console.log(''+this.name+' preparing to merge: connection '+i+' of '+this.connections.length);
 					user.merge(this.connections[i]);
 				}
 				this.roomCount = {};
@@ -678,7 +678,7 @@ var User = (function () {
 	User.prototype.merge = function(connection) {
 		this.connected = true;
 		this.connections.push(connection);
-		//console.log(''+this.name+' merging: socket '+connection.socket.id+' of ');
+		//console.log(''+this.name+' merging: connection '+connection.socket.id);
 		var initdata = '|updateuser|'+this.name+'|'+(true?'1':'0')+'|'+this.avatar;
 		connection.send(initdata);
 		connection.user = this;
@@ -739,7 +739,7 @@ var User = (function () {
 				}
 				connection = this.connections[i];
 				for (var j in connection.rooms) {
-					this.leaveRoom(connection.rooms[j], socket, true);
+					this.leaveRoom(connection.rooms[j], connection, true);
 				}
 				connection.user = null;
 				--this.ips[connection.ip];
@@ -920,14 +920,14 @@ var User = (function () {
 		}
 		return true;
 	};
-	User.prototype.leaveRoom = function(room, socket, force) {
+	User.prototype.leaveRoom = function(room, connection, force) {
 		room = Rooms.get(room);
 		if (room.id === 'global' && !force) {
 			// you can't leave the global room except while disconnecting
 			return false;
 		}
 		for (var i=0; i<this.connections.length; i++) {
-			if (this.connections[i] === socket || this.connections[i].socket === socket || !socket) {
+			if (this.connections[i] === connection || !connection) {
 				if (this.connections[i].rooms[room.id]) {
 					if (this.roomCount[room.id]) {
 						this.roomCount[room.id]--;
@@ -947,12 +947,12 @@ var User = (function () {
 						delete this.connections[i].rooms[room.id];
 					}
 				}
-				if (socket) {
+				if (connection) {
 					break;
 				}
 			}
 		}
-		if (!socket && this.roomCount[room.id]) {
+		if (!connection && this.roomCount[room.id]) {
 			room.onLeave(this);
 			delete this.roomCount[room.id];
 		}
