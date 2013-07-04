@@ -446,5 +446,104 @@
 			this.add('-message', haikus[0]);
 		},
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
+	},
+	maymayhem: {
+		effectType: 'Format',
+		name: "May Mayhem",
+		section: "Seasonal",
+		team: 'randomSeasonalMM',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		onBegin: function() {
+			// Shameless plug
+			var date = Date();
+			date = date.split(' ');
+			if (parseInt(date[2]) === 12) {
+				this.add('-message', 'Wish a HAPPY BIRTHDAY to Treecko32!!');
+			}
+			if (parseInt(date[2]) === 16) {
+				this.add('-message', 'Wish a HAPPY BIRTHDAY to Joim!!');
+			}
+		},
+		onSwitchIn: function(pokemon) {
+			var dice = this.random(100);
+			if (dice < 25) {
+				this.add('-message', 'Never gonna give you up, never gonna let you down');
+			}
+		}
+	},
+	seasonaljunejubilee: {
+		name: "[Seasonal] June Jubilee",
+		section: "OM of the Month",
+		
+		team: 'randomSeasonalJJ',
+		canUseRandomTeam: true,
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		onBegin: function() {
+			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
+			this.setWeather('Sunny Day');
+			delete this.weatherData.duration;
+		},
+		onBeforeMove: function(pokemon, target, move) {
+			// Reshiram changes weather with its tail until you reach the arctic
+			if (pokemon.template.speciesid === 'reshiram' && pokemon.side.battle.turn < 15) {
+				var weatherMsg = '';
+				var dice = this.random(100);
+				if (dice < 25) {
+					this.setWeather('Rain Dance');
+					weatherMsg = 'a Drizzle';
+				} else if (dice < 50) {
+					this.setWeather('Sunny Day');
+					weatherMsg = 'a Sunny Day';
+				} else if (dice < 75) {
+					this.setWeather('Hail');
+					weatherMsg = 'Hail';
+				} else {
+					this.setWeather('Sandstorm');
+					weatherMsg = 'a Sandstorm';
+				}
+				this.add('-message', "Reshiram caused " + weatherMsg + " with its tail!");
+				delete this.weatherData.duration;
+			}
+		},
+		onBeforeMove: function(pokemon) {
+			if (!pokemon.side.battle.seasonal) pokemon.side.battle.seasonal = {'none':false, 'drizzle':false, 'hail':false};
+			if (pokemon.side.battle.turn >= 4 && pokemon.side.battle.seasonal.none === false) {
+				this.add('-message', "You are travelling north and you have arrived to North Dakota! There's a clear sky and the temperature is lower here.");
+				this.clearWeather();
+				pokemon.side.battle.seasonal.none = true;
+			}
+			if (pokemon.side.battle.turn >= 8 && pokemon.side.battle.seasonal.drizzle === false) {
+				this.add('-message', "You are travelling further north and you have arrived to Edmonton! It started raining a lot... and it's effing cold.");
+				this.setWeather('Rain Dance');
+				delete this.weatherData.duration;
+				pokemon.side.battle.seasonal.drizzle = true;
+			}
+			if (pokemon.side.battle.turn >= 12 && pokemon.side.battle.seasonal.hail === false) {
+				this.add('-message', "You have arrived to the arctic! Defeat the other trainer so Delibird can be free!");
+				this.setWeather('Hail');
+				delete this.weatherData.duration;
+				pokemon.side.battle.seasonal.hail = true;
+			}
+		},
+		onFaint: function(pokemon) {
+			if (pokemon.template.id === 'delibird') {
+				var name = pokemon.side.name;
+				var winner = '';
+				if (pokemon.side.id === 'p1') {
+					winner = 'p2';
+				} else {
+					winner = 'p1';
+				}
+				this.add('-message', "No!! You let Delibird down. He trusted you. You lost the battle, " + name + ". But you lost something else: your Pokémon's trust.");
+				pokemon.battle.win(winner);
+			}
+		}
 	}
 }
