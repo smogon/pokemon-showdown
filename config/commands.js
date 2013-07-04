@@ -518,6 +518,7 @@ var commands = exports.commands = {
 			'- /announce <em>message</em>: make an announcement<br />' +
 			'<br />' +
 			'Room owners (#) can use:<br />' +
+			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
 			'- /roommod <em>username</em>: appoint a room moderator<br />' +
 			'- /deroommod <em>username</em>: remove a room moderator<br />' +
 			'- /declare <em>message</em>: make a global declaration<br />' +
