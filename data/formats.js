@@ -298,76 +298,126 @@ exports.BattleFormats = {
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 	
-	seasonaljunejubilee: {
-		name: "[Seasonal] June Jubilee",
-		section: "OM of the Month",
-		
-		team: 'randomSeasonalJJ',
-		canUseRandomTeam: true,
+	seasonaljollyjuly: {
 		effectType: 'Format',
+		name: "[Seasonal] Jolly July",
+		section: "OM of the Month",
+		team: 'randomSeasonalJuly',
+		canUseRandomTeam: true,
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function() {
-			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
-			this.setWeather('Sunny Day');
-			delete this.weatherData.duration;
-		},
-		onBeforeMove: function(pokemon, target, move) {
-			// Reshiram changes weather with its tail until you reach the arctic
-			if (pokemon.template.speciesid === 'reshiram' && pokemon.side.battle.turn < 15) {
-				var weatherMsg = '';
-				var dice = this.random(100);
-				if (dice < 25) {
-					this.setWeather('Rain Dance');
-					weatherMsg = 'a Drizzle';
-				} else if (dice < 50) {
-					this.setWeather('Sunny Day');
-					weatherMsg = 'a Sunny Day';
-				} else if (dice < 75) {
-					this.setWeather('Hail');
-					weatherMsg = 'Hail';
-				} else {
-					this.setWeather('Sandstorm');
-					weatherMsg = 'a Sandstorm';
-				}
-				this.add('-message', "Reshiram caused " + weatherMsg + " with its tail!");
-				delete this.weatherData.duration;
+			this.add('-message', "You and your faithful favourite Pokémon are travelling around the world, and you will fight this trainer in many places until either win or finish the travel!");
+			// ~learn international independence days with PS~
+			var date = Date();
+			date = date.split(' ');
+			switch (parseInt(date[2])) {
+			case 4:
+				// 4th of July for the US
+				this.add('-message', "FUCK YEAH 'MURICA!");
+				break;
+			case 5:
+				// 5th independence day of Algeria and Venezuela
+				this.add('-message', "¡Libertad para Venezuela o muerte!");
+				break;
+			case 9:
+				// 9th independence day of Argentina and South Sudan
+				this.add('-message', "¡Che, viteh que somos libres!");
+				break;
+			case 10:
+				// Bahamas lol
+				this.add('-message', "Free the beaches!");
+				break;
+			case 20:
+				// Colombia
+				this.add('-message', "¡Independencia para Colombia!");
+				break;
+			case 28:
+				// Perú
+				this.add('-message', "¡Perú libre!");
+				break;
 			}
 		},
 		onBeforeMove: function(pokemon) {
-			if (!pokemon.side.battle.seasonal) pokemon.side.battle.seasonal = {'none':false, 'drizzle':false, 'hail':false};
-			if (pokemon.side.battle.turn >= 4 && pokemon.side.battle.seasonal.none === false) {
-				this.add('-message', "You are travelling north and you have arrived to North Dakota! There's a clear sky and the temperature is lower here.");
-				this.clearWeather();
-				pokemon.side.battle.seasonal.none = true;
+			// Set all the stuff
+			var dice = this.random(100);
+			if (pokemon.side.battle.turn === 1) {
+				// Set up the cities you visit around the world
+				pokemon.side.battle.cities = {
+					'N': [
+						'Madrid', 'Paris', 'London', 'Ghent', 'Amsterdam', 'Gdansk',
+						'Munich', 'Rome', 'Rabat', 'Stockholm', 'Moscow', 'Beijing',
+						'Tokyo', 'Dubai', 'New York', 'Vancouver', 'Los Angeles',
+						'Edmonton', 'Houston', 'Mexico DF', 'Barcelona', 'Blanes'
+					],
+					'S': [
+						'Buenos Aires', 'Lima', 'Johanesburg', 'Sydney', 'Melbourne',
+						'Santiago de Chile', 'Bogota', 'Lima', 'Montevideo',
+						'Wellington', 'Canberra', 'Jakarta', 'Kampala', 'Mumbai',
+						'Auckland', 'Pretoria', 'Cape Town'
+					]
+				};
+				pokemon.side.battle.currentPlace = {'hemisphere':'N', 'city':'Townsville'};
+				pokemon.side.battle.cities.N = pokemon.side.battle.cities.N.randomize();
+				pokemon.side.battle.cities.S = pokemon.side.battle.cities.S.randomize();
+				pokemon.side.battle.indexes = {'N':0, 'S':0};
+				// We choose a hemisphere and city to be in at the beginning
+				if (dice < 50) pokemon.side.battle.currentPlace.hemisphere = 'S';
+				pokemon.side.battle.currentPlace.city = pokemon.side.battle.cities[pokemon.side.battle.currentPlace.hemisphere][0];
+				pokemon.side.battle.indexes[pokemon.side.battle.currentPlace.hemisphere]++;
 			}
-			if (pokemon.side.battle.turn >= 8 && pokemon.side.battle.seasonal.drizzle === false) {
-				this.add('-message', "You are travelling further north and you have arrived to Edmonton! It started raining a lot... and it's effing cold.");
-				this.setWeather('Rain Dance');
-				delete this.weatherData.duration;
-				pokemon.side.battle.seasonal.drizzle = true;
+
+			// Snarky comments from one trainer to another
+			var diceTwo = this.random(100);
+			if (diceTwo > 75) {
+				var comments = [
+					"I've heard your mom is also travelling around the world catchin' em all, if you get what I mean, %s.",
+					"You fight like a Miltank!", "I'm your Stealth Rock to your Charizard, %s!", 
+					"I bet I could beat you with a Spinda. Or an Unown.", "I'm rubber, you're glue!", 
+					"I've seen Slowpokes with more training prowess, %s.", "You are no match to me, %s!",
+					"%s, have you learned how to battle from Bianca?"
+				];
+				comments = comments.randomize();
+				var otherTrainer = (pokemon.side.id === 'p1')? 'p2' : 'p1';
+				this.add('-message', pokemon.side.name + ': ' + comments[0].replace('%s', pokemon.side.battle[otherTrainer].name));
 			}
-			if (pokemon.side.battle.turn >= 12 && pokemon.side.battle.seasonal.hail === false) {
-				this.add('-message', "You have arrived to the arctic! Defeat the other trainer so Delibird can be free!");
-				this.setWeather('Hail');
-				delete this.weatherData.duration;
-				pokemon.side.battle.seasonal.hail = true;
+			delete diceTwo;
+
+			// This is the stuff that is calculated every turn once
+			if (!pokemon.side.battle.lastMoveTurn) pokemon.side.battle.lastMoveTurn = 0;
+			if (pokemon.side.battle.lastMoveTurn !== pokemon.side.battle.turn) {
+				var nextChange = this.random(2, 4);
+				if (pokemon.side.battle.lastMoveTurn === 0 || pokemon.side.battle.lastMoveTurn + nextChange <= pokemon.side.battle.turn) {
+					pokemon.side.battle.lastMoveTurn = pokemon.side.battle.turn;
+					if (dice < 50) {
+						if (pokemon.side.battle.currentPlace.hemisphere === 'N') {
+							pokemon.side.battle.currentPlace.hemisphere = 'S';
+							this.add('-fieldstart', 'move: Wonder Room', '[of] Seasonal');
+						} else {
+							pokemon.side.battle.currentPlace.hemisphere = 'N';
+							this.add('-fieldend', 'move: Wonder Room', '[of] Seasonal');
+						}
+					}
+
+					// Let's check if there's cities to visit left
+					if (pokemon.side.battle.indexes.N === pokemon.side.battle.cities['N'].length - 1 
+					&& pokemon.side.battle.indexes.S === pokemon.side.battle.cities['S'].length - 1) {
+						this.add('-message', "You have travelled all around the world, " + pokemon.side.name + "! You won!");
+						pokemon.battle.win(pokemon.side.id);
+						return false;
+					}
+					// Otherwise, move to the next city
+					pokemon.side.battle.currentPlace.city = pokemon.side.battle.cities[pokemon.side.battle.currentPlace.hemisphere][pokemon.side.battle.indexes[pokemon.side.battle.currentPlace.hemisphere]];
+					pokemon.side.battle.indexes[pokemon.side.battle.currentPlace.hemisphere]++;
+					var hemispheres = {'N':'northern', 'S':'southern'};
+					pokemon.side.battle.add('-message', "Travelling around the world, you have arrived to a new city in the " + hemispheres[pokemon.side.battle.currentPlace.hemisphere] + " hemisphere, " + pokemon.side.battle.currentPlace.city + "!");
+				}
 			}
 		},
-		onFaint: function(pokemon) {
-			if (pokemon.template.id === 'delibird') {
-				var name = pokemon.side.name;
-				var winner = '';
-				if (pokemon.side.id === 'p1') {
-					winner = 'p2';
-				} else {
-					winner = 'p1';
-				}
-				this.add('-message', "No!! You let Delibird down. He trusted you. You lost the battle, " + name + ". But you lost something else: your Pokémon's trust.");
-				pokemon.battle.win(winner);
-			}
+		onModifyMove: function(move) {
+			if (move.id === 'fireblast') move.name = 'July 4th Fireworks';
 		}
 	},
 	challengecup: {
