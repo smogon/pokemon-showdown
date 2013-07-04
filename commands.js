@@ -218,7 +218,7 @@ var commands = exports.commands = {
 	},
 
 	join: function(target, room, user, connection) {
-		var targetRoom = Rooms.get(toId(target));
+		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
 		if (target && !targetRoom) {
 			return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
 		}
