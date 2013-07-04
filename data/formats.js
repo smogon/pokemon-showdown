@@ -298,17 +298,6 @@ exports.BattleFormats = {
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 	
-	stabmons: {
-		effectType: 'Format',
-		name: "Stabmons",
-		section: "OM of the Month",
-		mod: 'stabmons',
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
 	seasonaljunejubilee: {
 		name: "[Seasonal] June Jubilee",
 		section: "OM of the Month",
