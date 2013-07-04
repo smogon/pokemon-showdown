@@ -133,6 +133,47 @@ var commands = exports.commands = {
 		}
 	},
 
+	roomowner: function(target, room, user) {
+		if (!room.chatRoomData) {
+			this.sendReply("/roommod - This room isn't designed for per-room moderation to be added");
+		}
+		var target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
+
+		if (!this.can('makeroom', targetUser, room)) return false;
+
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+
+		var name = targetUser.name;
+
+		room.auth[targetUser.userid] = '#';
+		this.addModCommand(''+name+' was appointed Room Owner by '+user.name+'.');
+		room.onUpdateIdentity(targetUser);
+		Rooms.global.writeChatRoomData();
+	},
+
+	roomdesc: function(target, room, user) {
+		if (!target) {
+			if (!this.canBroadcast()) return;
+			this.sendReply('The room description is: '+room.desc);
+			return;
+		}
+		if (!this.can('roommod', null, room)) return false;
+		if (target.length > 80) {
+			return this.sendReply('Error: Room description is too long (must be at most 80 characters).');
+		}
+
+		room.desc = target;
+		this.sendReply('(The room description is now: '+target+')');
+
+		if (room.chatRoomData) {
+			room.chatRoomData.desc = room.desc;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
 	roommod: function(target, room, user) {
 		if (!room.auth) {
 			this.sendReply("/roommod - This room isn't designed for per-room moderation");
@@ -142,7 +183,7 @@ var commands = exports.commands = {
 
 		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
 
-		if (!user.can('roommod', targetUser, room)) return false;
+		if (!this.can('roommod', targetUser, room)) return false;
 
 		var name = targetUser.name;
 
@@ -164,7 +205,7 @@ var commands = exports.commands = {
 		var userid = toId(name);
 
 		if (room.auth[userid] !== '%') return this.sendReply("User '"+name+"' is not a room mod.");
-		if (!user.can('roommod', null, room)) return false;
+		if (!this.can('roommod', null, room)) return false;
 
 		delete room.auth[userid];
 		this.sendReply('('+name+' is no longer Room Moderator.)');
