@@ -209,7 +209,7 @@ New mechanic: Intrinsics:
 
 New: Type-specific items:
 
-- Big Root: also acts like Leftovers + Shell Bell for pure Grass types
+- Big Root: also acts like Leftovers + Shell Bell for Grass types
 
 - Black Sludge: heals 1/8 per turn for pure Poison types
 
@@ -405,7 +405,7 @@ Minor ability changes:
 
 - Stench now grants a 40% flinch chance
 
-- Slow Start now only lasts 2 turns instead of 5
+- Slow Start now only lasts 3 turns instead of 5
 
 - Truant will only activate if a move succeeds (e.g. not if it misses, fails,
   or is Protected against), and will heal the user by 33% during its Truant
