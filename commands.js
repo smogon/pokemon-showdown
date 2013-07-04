@@ -177,6 +177,7 @@ var commands = exports.commands = {
 	roommod: function(target, room, user) {
 		if (!room.auth) {
 			this.sendReply("/roommod - This room isn't designed for per-room moderation");
+			return this.sendReply("Before setting room mods, you need to set it up with /roomowner");
 		}
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
@@ -198,6 +199,7 @@ var commands = exports.commands = {
 	deroommod: function(target, room, user) {
 		if (!room.auth) {
 			this.sendReply("/roommod - This room isn't designed for per-room moderation");
+			return this.sendReply("Before setting room mods, you need to set it up with /roomowner");
 		}
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
