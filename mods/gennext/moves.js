@@ -1025,6 +1025,9 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 100,
 		basePower: 80,
+		basePowerCallback: function() {
+			return 80;
+		},
 		category: "Special",
 		isViable: true,
 		priority: 0,
