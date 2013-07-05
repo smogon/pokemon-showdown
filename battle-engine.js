@@ -1523,6 +1523,7 @@ var Battle = (function() {
 			this.add('message', 'PLEASE REPORT IN BUG THREAD');
 			this.add('message', 'Event: '+eventid);
 			this.add('message', 'Parent event: '+this.event.id);
+			throw new Error("Stack overflow");
 			return false;
 		}
 		//this.add('Event: '+eventid+' (depth '+this.eventDepth+')');
@@ -1683,6 +1684,7 @@ var Battle = (function() {
 			this.add('message', 'PLEASE REPORT IN BUG THREAD');
 			this.add('message', 'Event: '+eventid);
 			this.add('message', 'Parent event: '+this.event.id);
+			throw new Error("Stack overflow");
 			return false;
 		}
 		if (!target) target = this;
