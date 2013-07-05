@@ -485,7 +485,7 @@ exports.BattleAbilities = {
 			this.add('-start', target, 'move: Imprison');
 		},
 		onFoeModifyPokemon: function(pokemon) {
-			var foeMoves = this.effectData.source.moveset;
+			var foeMoves = this.effectData.target.moveset;
 			for (var f=0; f<foeMoves.length; f++) {
 				pokemon.disabledMoves[foeMoves[f].id] = true;
 			}
@@ -494,6 +494,15 @@ exports.BattleAbilities = {
 			if (attacker.disabledMoves[move.id]) {
 				this.add('cant', attacker, 'move: Imprison', move);
 				return false;
+			}
+		}
+	},
+	"speedboost": {
+		inherit: true,
+		onResidualPriority: -1,
+		onResidual: function(pokemon) {
+			if (pokemon.activeTurns && !pokemon.volatiles.stall) {
+				this.boost({spe:1});
 			}
 		}
 	},
