@@ -298,6 +298,18 @@ exports.BattleFormats = {
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 	
+	oumonotype: {
+		name: "OU Monotype",
+		section: "OM of the Month",
+
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	},
 	seasonaljollyjuly: {
 		effectType: 'Format',
 		name: "[Seasonal] Jolly July",
@@ -485,16 +497,6 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
 	},
-	oumonotype: {
-		name: "OU Monotype",
-		section: "Other Metagames",
-
-		effectType: 'Format',
-		challengeShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
 	glitchmons: {
 		name: "Glitchmons",
 		section: "Other Metagames",
@@ -587,7 +589,7 @@ exports.BattleFormats = {
 	},
 	pu: {
 		name: "PU",
-		section: "Other Metas",
+		section: "Other Metagames",
 
 		effectType: 'Format',
 		challengeShow: true,
