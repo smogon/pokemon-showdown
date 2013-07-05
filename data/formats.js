@@ -696,7 +696,7 @@ exports.BattleFormats = {
 	standardnext: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Double Team']
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew']
 	},
 
 	// Rulesets

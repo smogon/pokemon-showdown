@@ -92,6 +92,10 @@ exports.BattleStatuses = {
 				pokemon.ability = 'adaptability';
 				pokemon.baseAbility = 'adaptability';
 			}
+		},
+		onModifyPokemon: function(pokemon) {
+			if (pokemon.transformed) return;
+			pokemon.types = [pokemon.hpType || 'Dark'];
 		}
 	},
 	bronzong: {
