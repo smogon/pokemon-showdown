@@ -1527,7 +1527,7 @@ var Battle = (function() {
 	// The entire event system revolves around this function
 	// (and its helper functions, getRelevant*)
 	Battle.prototype.singleEvent = function(eventid, effect, effectData, target, source, sourceEffect, relayVar) {
-		if (this.eventDepth >= 5) {
+		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
 			this.add('message', 'PLEASE REPORT IN BUG THREAD');
@@ -1688,7 +1688,7 @@ var Battle = (function() {
 	 *   they're useful for functions called by the event handler.
 	 */
 	Battle.prototype.runEvent = function(eventid, target, source, effect, relayVar) {
-		if (this.eventDepth >= 5) {
+		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
 			this.add('message', 'PLEASE REPORT IN BUG THREAD');
