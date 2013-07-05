@@ -84,8 +84,9 @@ exports.BattleAbilities = {
 		inherit: true,
 		onSourceBasePower: function(basePower) {
 			if (this.isWeather('raindance')) {
-				return basePower * 4/5;
+				return basePower * 3/4;
 			}
+			return basePower * 7/8;
 		}
 	},
 	"icebody": {

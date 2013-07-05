@@ -333,6 +333,9 @@ Minor learnset changes:
 
 - Azumarill now gets Belly Drum with no incompatibilities
 
+- Mantine gets many new moves: Recover, Whirlwind, Baton Pass, Wish, Soak,
+  Lock-On, Acid Spray, Octazooka, Stockpile
+
 - Masquerain gets Surf
 
 - Butterfree, Beautifly, Masquerain, and Mothim get Hurricane
@@ -435,8 +438,11 @@ Minor ability changes:
 
 - Guts, Quick Feet, and Flare Boost take half damage from burns
 
-- Water Veil and Sand Veil grant 20% damage reduction in rain and sand,
-  respectively (this replaces Sand Veil's usual effect, but not Water Veil's)
+- Sand Veil grants 20% damage reduction in sand (this replaces Sand Veil's
+  usual effect)
+
+- Water Veil grans 12.5% damage reduction out of rain and 25% damage
+  reduction in rain, in addition to its usual effect
 
 - Multiscale decreases damage by 1/3 rather than 1/2 (Sorry, Dragonite,
   this is in return for a usable physical Flying STAB in Aerial Ace)
