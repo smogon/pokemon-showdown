@@ -376,7 +376,7 @@ exports.BattleFormats = {
 					"I've heard your mom is also travelling around the world catchin' em all, if you get what I mean, %s.",
 					"You fight like a Miltank!", "I'm your Stealth Rock to your Charizard, %s!", 
 					"I bet I could beat you with a Spinda. Or an Unown.", "I'm rubber, you're glue!", 
-					"I've seen Slowpokes with more training prowess, %s.", "You are no match to me, %s!",
+					"I've seen Slowpokes with more training prowess, %s.", "You are no match for me, %s!",
 					"%s, have you learned how to battle from Bianca?"
 				];
 				comments = comments.randomize();
