@@ -343,7 +343,7 @@ exports.BattleFormats = {
 		onBeforeMove: function(pokemon) {
 			// Set all the stuff
 			var dice = this.random(100);
-			if (pokemon.side.battle.turn === 1) {
+			if (!pokemon.side.battle.cities) {
 				// Set up the cities you visit around the world
 				pokemon.side.battle.cities = {
 					'N': [
