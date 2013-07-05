@@ -275,7 +275,8 @@ var commands = exports.commands = {
 	    if (!targetUser || !targetUser.connected) {
 	            return this.sendReply('User '+this.targetUsername+' not found.');
 	    }
-	    this.addModCommand(targetUser.name + ' was forcibly redirected to room ' + target + ' by ' + user.name + '.');
+	    var roomName = (targetRoom.isPrivate)? 'a private room' : 'room ' + target;
+	    this.addModCommand(targetUser.name + ' was forcibly redirected to ' + roomName + ' by ' + user.name + '.');
 	    targetUser.leaveRoom(room);
 	    targetUser.joinRoom(target);
 	},
