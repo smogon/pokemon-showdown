@@ -1971,12 +1971,11 @@ exports.BattleScripts = {
 
 			var set = this.randomSet(template, i, pokemon);
 			
-			var setAbility = set.ability;
 			// Limit 1 of any type combination
 			var typeCombo = types.sort().join();
-			if (setAbility === 'Drought' || setAbility === 'Drizzle' || setAbility === 'Sand Stream' || setAbility === 'Snow Warning') {
-				// Weather doesn't count towards any limits on type combinations
-				typeCombo = setAbility;
+			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
+				 // Drought and Drizzle don't count towards the type combo limit
+				typeCombo = set.ability;
 			}
 			if (typeCombo in typeComboCount && (!potd || (potd && i !== 1))) continue;
 			
@@ -1992,7 +1991,6 @@ exports.BattleScripts = {
 					typeCount[types[t]] = 1;
 				}
 			}
-			if (typeCombo === 'Drought' || typeCombo === 'Drizzle' || typeCombo === 'Sand Stream' || typeCombo === 'Snow Warning') weather = typeCombo;
 			typeComboCount[typeCombo] = 1;
 			// Increment Uber/NU counter:
 			if (tier === 'Uber') {
