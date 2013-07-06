@@ -768,6 +768,31 @@ exports.BattleMovedex = {
 			spa: 2
 		}
 	},
+	tailwind: {
+		inherit: true,
+		desc: "For 3 turns, the user and its party members have their Speed doubled. Fails if this move is already in effect for the user's side.",
+		shortDesc: "For 3 turns, allies' Speed is doubled.",
+		effect: {
+			duration: 3,
+			durationCallback: function(target, source, effect) {
+				if (source && source.ability === 'persistent') {
+					return 5;
+				}
+				return 3;
+			},
+			onStart: function(side) {
+				this.add('-sidestart', side, 'move: Tailwind');
+			},
+			onModifySpe: function(spe) {
+				return spe * 2;
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 4,
+			onEnd: function(side) {
+				this.add('-sideend', side, 'move: Tailwind');
+			}
+		}
+	},
 	taunt: {
 		inherit: true,
 		isBounceable: false
