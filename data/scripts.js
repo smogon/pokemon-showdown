@@ -1539,10 +1539,10 @@ exports.BattleScripts = {
 			var setAbility = set.ability;
 			// Limit 1 of any type combination
 			var typeCombo = types.join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
-				// Drought and Drizzle don't count towards the type combo limit
+			if (setAbility === 'Drought' || setAbility === 'Drizzle' || setAbility === 'Sand Stream' || setAbility === 'Snow Warning') {
+				// Weather doesn't count towards any limits on type combinations
 				typeCombo = setAbility;
-			}
+		   }
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit number of Pokemon weak to any one type.
