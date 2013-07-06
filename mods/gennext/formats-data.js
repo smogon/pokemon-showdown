@@ -3,6 +3,22 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: 'OU'
 	},
+	tornadustherian: {
+		inherit: true,
+		tier: 'OU'
+	},
+	thundurus: {
+		inherit: true,
+		tier: 'OU'
+	},
+	excadrill: {
+		inherit: true,
+		tier: 'OU'
+	},
+	blaziken: {
+		inherit: true,
+		tier: 'OU'
+	},
 	kyurem: {
 		inherit: true,
 		tier: 'Uber'
@@ -12,14 +28,6 @@ exports.BattleFormatsData = {
 		tier: 'Uber'
 	},
 	deoxysdefense: {
-		inherit: true,
-		tier: 'Uber'
-	},
-	latios: {
-		inherit: true,
-		tier: 'Uber'
-	},
-	latias: {
 		inherit: true,
 		tier: 'Uber'
 	}

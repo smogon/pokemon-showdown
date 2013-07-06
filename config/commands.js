@@ -460,6 +460,15 @@ var commands = exports.commands = {
 			'- <a href="http://www.smogon.com/forums/showthread.php?t=3466826">Practice BW CAP teams</a>');
 	},
 
+	gennext: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('Generation NEXT is a mod that makes changes to the game:<br />' +
+			'- <a href="https://github.com/Zarel/Pokemon-Showdown/blob/master/mods/gennext/README.md">README: overview of Gen-NEXT</a><br />' +
+			'Example replays:<br />' +
+			'- <a href="http://pokemonshowdown.com/replay/gennextou-37815908">roseyraid vs Zarel</a><br />' +
+			'- <a href="http://pokemonshowdown.com/replay/gennextou-37900768">QwietQwilfish vs pickdenis</a>');
+	},
+
 	om: 'othermetas',
 	othermetas: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -506,6 +515,34 @@ var commands = exports.commands = {
 			return this.sendReply('The Other Metas entry "'+target+'" was not found. Try /othermetas or /om for general help.');
 		}
 		this.sendReplyBox(buffer);
+	},
+
+	roomhelp: function(target, room, user) {
+		if (room.id === 'lobby') return this.sendReply('This command is too spammy for lobby.');
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('Room moderators (%) can use:<br />' +
+			'- /mute <em>username</em>: 7 minute mute<br />' +
+			'- /hourmute <em>username</em>: 60 minute mute<br />' +
+			'- /unmute <em>username</em>: unmute<br />' +
+			'- /announce <em>message</em>: make an announcement<br />' +
+			'<br />' +
+			'Room owners (#) can use:<br />' +
+			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
+			'- /roommod <em>username</em>: appoint a room moderator<br />' +
+			'- /deroommod <em>username</em>: remove a room moderator<br />' +
+			'- /declare <em>message</em>: make a global declaration<br />' +
+			'</div>');
+	},
+
+	restarthelp: function(target, room, user) {
+		if (room.id === 'lobby' && !this.can('lockdown')) return false;
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('The server is restarting. Things to know:<br />' +
+			'- We wait a few minutes before restarting so people can finish up their battles<br />' +
+			'- The restart itself will take around 0.6 seconds<br />' +
+			'- Your ladder ranking and teams will not change<br />' +
+			'- We are restarting to update Pokémon Showdown to a newer version' +
+			'</div>');
 	},
 
 	rule: 'rules',
@@ -712,11 +749,6 @@ var commands = exports.commands = {
 		this.sendReply('/banredirect - This command is obsolete and has been removed.');
 	},
 
-	redir: 'redirect',
-	redirect: function() {
-		this.sendReply('/redirect - This command is obsolete and has been removed.');
-	},
-
 	lobbychat: function(target, room, user, connection) {
 		target = toId(target);
 		if (target === 'off') {
@@ -873,6 +905,10 @@ var commands = exports.commands = {
 		if (target === '%' || target === 'forcerename' || target === 'fr') {
 			matched = true;
 			this.sendReply('/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: % @ & ~');
+		}
+		if (target === '%' || target === 'redir' || target === 'redirect') {
+			matched = true;
+			this.sendReply('/redirect OR /redir [username], [room] - Forcibly move a user from the current room to [room]. Requires: % @ & ~');
 		}
 		if (target === '@' || target === 'ban' || target === 'b') {
 			matched = true;

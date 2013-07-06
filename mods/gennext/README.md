@@ -209,7 +209,7 @@ New mechanic: Intrinsics:
 
 New: Type-specific items:
 
-- Big Root: also acts like Leftovers + Shell Bell for pure Grass types
+- Big Root: also acts like Leftovers + Shell Bell for Grass types
 
 - Black Sludge: heals 1/8 per turn for pure Poison types
 
@@ -246,8 +246,10 @@ Minor move changes:
 - Perfect accuracy moves with a base power of 60 have their base power
   increased to 90
 
-- Scald's damage is no longer affected by weather: instead, it gets 0% burn
-  chance in rain and 60% burn chance in sun
+- Scald's damage is no longer affected by weather: instead, it gets 60% burn
+  chance in sun
+
+- Hi Jump Kick now has 100 base power
 
 - Shadow Ball now has 90 base power and 30% -SpD
 
@@ -325,9 +327,14 @@ Minor move changes:
 
 - Minimize only increases evasion by one stage
 
+- Double Team takes 25% of user's max HP (like Substitute)
+
 Minor learnset changes:
 
 - Azumarill now gets Belly Drum with no incompatibilities
+
+- Mantine gets many new moves: Recover, Whirlwind, Baton Pass, Wish, Soak,
+  Lock-On, Acid Spray, Octazooka, Stockpile
 
 - Masquerain gets Surf
 
@@ -393,6 +400,9 @@ Minor ability changes:
 
 - Static and Poison Point have a 100% chance of activating
 
+- Speed Boost does not activate on turns Protect, Detect, Endure, etc
+  are used
+
 - Telepathy grants Imprison on switch-in
 
 - Compoundeyes now grants 1.6x accuracy, Victory Star grants 1.5x
@@ -405,7 +415,7 @@ Minor ability changes:
 
 - Stench now grants a 40% flinch chance
 
-- Slow Start now only lasts 2 turns instead of 5
+- Slow Start now only lasts 3 turns instead of 5
 
 - Truant will only activate if a move succeeds (e.g. not if it misses, fails,
   or is Protected against), and will heal the user by 33% during its Truant
@@ -428,8 +438,11 @@ Minor ability changes:
 
 - Guts, Quick Feet, and Flare Boost take half damage from burns
 
-- Water Veil and Sand Veil grant 20% damage reduction in rain and sand,
-  respectively (this replaces Sand Veil's usual effect, but not Water Veil's)
+- Sand Veil grants 20% damage reduction in sand (this replaces Sand Veil's
+  usual effect)
+
+- Water Veil grans 12.5% damage reduction out of rain and 25% damage
+  reduction in rain, in addition to its usual effect
 
 - Multiscale decreases damage by 1/3 rather than 1/2 (Sorry, Dragonite,
   this is in return for a usable physical Flying STAB in Aerial Ace)
@@ -440,14 +453,26 @@ Minor item changes:
 
 - Wide Lens now grants 1.3x accuracy
 
-Tier changes:
+Bans:
 
-- OU no longer has any tier-specific bans (DrizzleSwim and Soul Dew are no
-  longer banned)
+- The OU banlist (i.e. Pokemon considered Uber) is now:
+  - Every Pokemon with over 600 BST except Slaking and Regigigas
+  - Deoxys (all formes)
+  - Darkrai
+  - Shaymin-Sky
+  - Manaphy
 
-- Moody is no longer banned
+- The following clauses are in effect:
+  - OHKO Clause
+  - Sleep Clause
+  - Soul Dew is banned
 
-- Minimize is no longer banned
+Specifically, differences from regular OU:
 
-- Kyurem, Kyurem-B, Deoxys-D, Latios, and Latias are now Uber (by the time
-  NEXT is done, they would presumably have received enough buffs to be Uber)
+- unbanned: Genesect, Thundurus, Tornadus-Therian, Excadrill, Blaziken
+
+- banned: Kyurem, Kyurem-Black
+
+- DrizzleSwim is no longer banned
+
+- There is no Moody Clause or Evasion Clause

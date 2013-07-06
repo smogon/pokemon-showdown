@@ -298,110 +298,138 @@ exports.BattleFormats = {
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 	
-	"1v1": {
-		effectType: 'Format',
-		name: "1v1",
+	oumonotype: {
+		name: "OU Monotype",
 		section: "OM of the Month",
+
+		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
-		onBegin: function() {
-			this.p1.pokemon = this.p1.pokemon.slice(0,1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
-			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Darkrai', 
-			'Deoxys', 'Deoxys-Attack',
-			'Dialga', 
-			'Giratina', 'Giratina-Origin', 
-			'Groudon', 
-			'Ho-Oh', 
-			'Kyogre', 
-			'Kyurem-White', 
-			'Lugia', 
-			'Mewtwo',
-			'Palkia', 
-			'Rayquaza', 
-			'Reshiram', 
-			'Shaymin-Sky', 
-			'Zekrom',
-			'Memento', 'Explosion', 'Perish Song', 'Destiny Bond', 'Healing Wish', 'Selfdestruct', 'Lunar Dance', 'Final Gambit'
-		]
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
-	seasonaljunejubilee: {
-		name: "[Seasonal] June Jubilee",
-		section: "OM of the Month",
-		
-		team: 'randomSeasonalJJ',
-		canUseRandomTeam: true,
+	seasonaljollyjuly: {
 		effectType: 'Format',
+		name: "[Seasonal] Jolly July",
+		section: "OM of the Month",
+		team: 'randomSeasonalJuly',
+		canUseRandomTeam: true,
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function() {
-			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
-			this.setWeather('Sunny Day');
-			delete this.weatherData.duration;
-		},
-		onBeforeMove: function(pokemon, target, move) {
-			// Reshiram changes weather with its tail until you reach the arctic
-			if (pokemon.template.speciesid === 'reshiram' && pokemon.side.battle.turn < 15) {
-				var weatherMsg = '';
-				var dice = this.random(100);
-				if (dice < 25) {
-					this.setWeather('Rain Dance');
-					weatherMsg = 'a Drizzle';
-				} else if (dice < 50) {
-					this.setWeather('Sunny Day');
-					weatherMsg = 'a Sunny Day';
-				} else if (dice < 75) {
-					this.setWeather('Hail');
-					weatherMsg = 'Hail';
-				} else {
-					this.setWeather('Sandstorm');
-					weatherMsg = 'a Sandstorm';
-				}
-				this.add('-message', "Reshiram caused " + weatherMsg + " with its tail!");
-				delete this.weatherData.duration;
+			this.add('-message', "You and your faithful favourite Pokémon are travelling around the world, and you will fight this trainer in many places until either win or finish the travel!");
+			// ~learn international independence days with PS~
+			var date = Date();
+			date = date.split(' ');
+			switch (parseInt(date[2])) {
+			case 4:
+				// 4th of July for the US
+				this.add('-message', "FUCK YEAH 'MURICA!");
+				break;
+			case 5:
+				// 5th independence day of Algeria and Venezuela
+				this.add('-message', "¡Libertad para Venezuela o muerte!");
+				break;
+			case 9:
+				// 9th independence day of Argentina and South Sudan
+				this.add('-message', "¡Che, viteh que somos libres!");
+				break;
+			case 10:
+				// Bahamas lol
+				this.add('-message', "Free the beaches!");
+				break;
+			case 20:
+				// Colombia
+				this.add('-message', "¡Independencia para Colombia!");
+				break;
+			case 28:
+				// Perú
+				this.add('-message', "¡Perú libre!");
+				break;
 			}
 		},
 		onBeforeMove: function(pokemon) {
-			if (!pokemon.side.battle.seasonal) pokemon.side.battle.seasonal = {'none':false, 'drizzle':false, 'hail':false};
-			if (pokemon.side.battle.turn >= 4 && pokemon.side.battle.seasonal.none === false) {
-				this.add('-message', "You are travelling north and you have arrived to North Dakota! There's a clear sky and the temperature is lower here.");
-				this.clearWeather();
-				pokemon.side.battle.seasonal.none = true;
+			// Set all the stuff
+			var dice = this.random(100);
+			if (!pokemon.side.battle.cities) {
+				// Set up the cities you visit around the world
+				pokemon.side.battle.cities = {
+					'N': [
+						'Madrid', 'Paris', 'London', 'Ghent', 'Amsterdam', 'Gdansk',
+						'Munich', 'Rome', 'Rabat', 'Stockholm', 'Moscow', 'Beijing',
+						'Tokyo', 'Dubai', 'New York', 'Vancouver', 'Los Angeles',
+						'Edmonton', 'Houston', 'Mexico DF', 'Barcelona', 'Blanes'
+					],
+					'S': [
+						'Buenos Aires', 'Lima', 'Johanesburg', 'Sydney', 'Melbourne',
+						'Santiago de Chile', 'Bogota', 'Lima', 'Montevideo',
+						'Wellington', 'Canberra', 'Jakarta', 'Kampala', 'Mumbai',
+						'Auckland', 'Pretoria', 'Cape Town'
+					]
+				};
+				pokemon.side.battle.currentPlace = {'hemisphere':'N', 'city':'Townsville'};
+				pokemon.side.battle.cities.N = pokemon.side.battle.cities.N.randomize();
+				pokemon.side.battle.cities.S = pokemon.side.battle.cities.S.randomize();
+				pokemon.side.battle.indexes = {'N':0, 'S':0};
+				// We choose a hemisphere and city to be in at the beginning
+				if (dice < 50) pokemon.side.battle.currentPlace.hemisphere = 'S';
+				pokemon.side.battle.currentPlace.city = pokemon.side.battle.cities[pokemon.side.battle.currentPlace.hemisphere][0];
+				pokemon.side.battle.indexes[pokemon.side.battle.currentPlace.hemisphere]++;
 			}
-			if (pokemon.side.battle.turn >= 8 && pokemon.side.battle.seasonal.drizzle === false) {
-				this.add('-message', "You are travelling further north and you have arrived to Edmonton! It started raining a lot... and it's effing cold.");
-				this.setWeather('Rain Dance');
-				delete this.weatherData.duration;
-				pokemon.side.battle.seasonal.drizzle = true;
+
+			// Snarky comments from one trainer to another
+			var diceTwo = this.random(100);
+			if (diceTwo > 75) {
+				var comments = [
+					"I've heard your mom is also travelling around the world catchin' em all, if you get what I mean, %s.",
+					"You fight like a Miltank!", "I'm your Stealth Rock to your Charizard, %s!", 
+					"I bet I could beat you with a Spinda. Or an Unown.", "I'm rubber, you're glue!", 
+					"I've seen Slowpokes with more training prowess, %s.", "You are no match for me, %s!",
+					"%s, have you learned how to battle from Bianca?"
+				];
+				comments = comments.randomize();
+				var otherTrainer = (pokemon.side.id === 'p1')? 'p2' : 'p1';
+				this.add('-message', pokemon.side.name + ': ' + comments[0].replace('%s', pokemon.side.battle[otherTrainer].name));
 			}
-			if (pokemon.side.battle.turn >= 12 && pokemon.side.battle.seasonal.hail === false) {
-				this.add('-message', "You have arrived to the arctic! Defeat the other trainer so Delibird can be free!");
-				this.setWeather('Hail');
-				delete this.weatherData.duration;
-				pokemon.side.battle.seasonal.hail = true;
+			delete diceTwo;
+
+			// This is the stuff that is calculated every turn once
+			if (!pokemon.side.battle.lastMoveTurn) pokemon.side.battle.lastMoveTurn = 0;
+			if (pokemon.side.battle.lastMoveTurn !== pokemon.side.battle.turn) {
+				var nextChange = this.random(2, 4);
+				if (pokemon.side.battle.lastMoveTurn === 0 || pokemon.side.battle.lastMoveTurn + nextChange <= pokemon.side.battle.turn) {
+					pokemon.side.battle.lastMoveTurn = pokemon.side.battle.turn;
+					if (dice < 50) {
+						if (pokemon.side.battle.currentPlace.hemisphere === 'N') {
+							pokemon.side.battle.currentPlace.hemisphere = 'S';
+							this.add('-fieldstart', 'move: Wonder Room', '[of] Seasonal');
+						} else {
+							pokemon.side.battle.currentPlace.hemisphere = 'N';
+							this.add('-fieldend', 'move: Wonder Room', '[of] Seasonal');
+						}
+					}
+
+					// Let's check if there's cities to visit left
+					if (pokemon.side.battle.indexes.N === pokemon.side.battle.cities['N'].length - 1 
+					&& pokemon.side.battle.indexes.S === pokemon.side.battle.cities['S'].length - 1) {
+						this.add('-message', "You have travelled all around the world, " + pokemon.side.name + "! You won!");
+						pokemon.battle.win(pokemon.side.id);
+						return false;
+					}
+					// Otherwise, move to the next city
+					pokemon.side.battle.currentPlace.city = pokemon.side.battle.cities[pokemon.side.battle.currentPlace.hemisphere][pokemon.side.battle.indexes[pokemon.side.battle.currentPlace.hemisphere]];
+					pokemon.side.battle.indexes[pokemon.side.battle.currentPlace.hemisphere]++;
+					var hemispheres = {'N':'northern', 'S':'southern'};
+					pokemon.side.battle.add('-message', "Travelling around the world, you have arrived to a new city in the " + hemispheres[pokemon.side.battle.currentPlace.hemisphere] + " hemisphere, " + pokemon.side.battle.currentPlace.city + "!");
+				}
 			}
 		},
-		onFaint: function(pokemon) {
-			if (pokemon.template.id === 'delibird') {
-				var name = pokemon.side.name;
-				var winner = '';
-				if (pokemon.side.id === 'p1') {
-					winner = 'p2';
-				} else {
-					winner = 'p1';
-				}
-				this.add('-message', "No!! You let Delibird down. He trusted you. You lost the battle, " + name + ". But you lost something else: your Pokémon's trust.");
-				pokemon.battle.win(winner);
-			}
+		onModifyMove: function(move) {
+			if (move.id === 'fireblast') move.name = 'July 4th Fireworks';
 		}
 	},
 	challengecup: {
@@ -469,16 +497,6 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
 	},
-	oumonotype: {
-		name: "OU Monotype",
-		section: "Other Metagames",
-
-		effectType: 'Format',
-		challengeShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
 	glitchmons: {
 		name: "Glitchmons",
 		section: "Other Metagames",
@@ -509,8 +527,8 @@ exports.BattleFormats = {
 		maxLevel: 5,
 		challengeShow: true,
 		ruleset: ['LC'],
-		banlist: ['Abra', 'Aipom', 'Archen', 'Axew', 'Bronzor', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos', 'Croagunk', 'Diglett', 'Drifloon', 'Drilbur', 'Dwebble', 'Ferroseed', 'Foongus', 'Frillish', 'Gastly', 'Hippopotas', 'Houndour', 'Koffing', 'Larvesta', 'Lileep', 'Machop', 'Magnemite', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Murkrow', 'Pawniard', 'Ponyta', 'Porygon', 'Riolu', 'Sandshrew', 'Scraggy', 'Shellder', 'Shroomish', 'Slowpoke', 'Snover', 'Staryu', 'Tentacool', 'Timburr', 'Tirtouga']
-		},
+		banlist: ['Abra', 'Aipom', 'Archen', 'Axew', 'Bronzor', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos', 'Croagunk', 'Diglett', 'Dratini', 'Drifloon', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Foongus', 'Frillish', 'Gastly', 'Hippopotas', 'Houndour', 'Koffing', 'Larvesta', 'Lileep', 'Machop', 'Magnemite', 'Mienfoo', 'Misdreavus', 'Murkrow', 'Onix', 'Pawniard', 'Ponyta', 'Porygon', 'Riolu', 'Sandshrew', 'Scraggy', 'Shellder', 'Slowpoke', 'Snover', 'Staryu', 'Timburr', 'Tirtouga']
+	},
 	dreamworld: {
 		name: "Dream World",
 		section: "Other Metagames",
@@ -534,15 +552,50 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
+	"1v1": {
+		name: "1v1",
+		section: 'Other Metagames',
+
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		onBegin: function() {
+			this.p1.pokemon = this.p1.pokemon.slice(0,1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Darkrai', 
+			'Deoxys', 'Deoxys-Attack',
+			'Dialga', 
+			'Giratina', 'Giratina-Origin', 
+			'Groudon', 
+			'Ho-Oh', 
+			'Kyogre', 
+			'Kyurem-White', 
+			'Lugia', 
+			'Mewtwo',
+			'Palkia', 
+			'Rayquaza', 
+			'Reshiram', 
+			'Shaymin-Sky', 
+			'Zekrom',
+			'Memento', 'Explosion', 'Perish Song', 'Destiny Bond', 'Healing Wish', 'Selfdestruct', 'Lunar Dance', 'Final Gambit'
+		]
+	},
 	pu: {
 		name: "PU",
-		section: "Other Metas",
+		section: "Other Metagames",
 
 		effectType: 'Format',
 		challengeShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['NU'],
-		banlist: ["Charizard", "Wartortle", "Kadabra", "Golem", "Haunter", "Exeggutor", "Weezing", "Kangaskhan", "Pinsir", "Lapras", "Ampharos", "Misdreavus", "Piloswine", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Gorebyss", "Regirock", "Regice", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Samurott", "Musharna", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Sawsbuck", "Alomomola", "Golurk", "Braviary", "Articuno", "Electabuzz", "Electrode", "Marowak", "Liepard", "Tangela", "Eelektross", "Ditto", "Seismitoad", "Zangoose", "Roselia", "Zebstrika", "Serperior", "Metang", "Tauros", "Torterra", "Cradily", "Primeape", "Munchlax", "Scolipede", "Jynx"]
+		banlist: ["Charizard", "Wartortle", "Kadabra", "Golem", "Haunter", "Exeggutor", "Weezing", "Kangaskhan", "Pinsir", "Lapras", "Ampharos", "Misdreavus", "Piloswine", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Gorebyss", "Regirock", "Regice", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Samurott", "Musharna", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Sawsbuck", "Alomomola", "Golurk", "Braviary", "Electabuzz", "Electrode", "Liepard", "Tangela", "Eelektross", "Ditto", "Seismitoad", "Zangoose", "Roselia", "Serperior", "Metang", "Tauros", "Cradily", "Primeape", "Scolipede", "Jynx", "Basculin", "Gigalith", "Camerupt", "Golbat"]
 	},
 
 	// Past Generations
@@ -645,7 +698,7 @@ exports.BattleFormats = {
 	standardnext: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Double Team']
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew']
 	},
 
 	// Rulesets

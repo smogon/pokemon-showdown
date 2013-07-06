@@ -110,6 +110,8 @@ exports.BattleMovedex = {
 	- makes all moves hit against it
 	Minimize:
 	- only +1 evasion
+	Double Team:
+	- -25% maxhp when used
 
 	Justification:
 	- Sub/Protect stalling is annoying
@@ -210,6 +212,23 @@ exports.BattleMovedex = {
 			evasion: 1
 		}
 	},
+	doubleteam: {
+		inherit: true,
+		onTryHit: function(target) {
+			if (target.boosts.evasion >= 6) {
+				return false;
+			}
+			if (target.hp <= target.maxhp/4 || target.maxhp === 1) { // Shedinja clause
+				return false;
+			}
+		},
+		onHit: function(target) {
+			this.directDamage(target.maxhp/4);
+		},
+		boosts: {
+			evasion: 1
+		}
+	},
 	/******************************************************************
 	Two-turn moves:
 	- now a bit better
@@ -220,6 +239,9 @@ exports.BattleMovedex = {
 	solarbeam: {
 		inherit: true,
 		basePower: 60,
+		basePowerCallback: function(pokemon, target) {
+			return 60;
+		},
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -655,7 +677,7 @@ exports.BattleMovedex = {
 			accuracy: 1
 		},
 		onModifyMove: function(move, user) {
-			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1};
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Lilligant":1};
 			if (user.item === 'stick' && GossamerWingUsers[user.template.species]) {
 				move.boosts = {
 					spa: 1,
@@ -996,7 +1018,7 @@ exports.BattleMovedex = {
 	/******************************************************************
 	Scald:
 	- base power not affected by weather
-	- 0% burn in rain, 60% burn in sun
+	- 60% burn in sun
 
 	Justification:
 	- rain could use a nerf
@@ -1008,11 +1030,19 @@ exports.BattleMovedex = {
 			case 'sunnyday':
 				move.secondary.chance = 60;
 				break;
-			case 'raindance':
-				delete move.secondary;
-				break;
 			}
 		}
+	},
+	/******************************************************************
+	Hi Jump Kick:
+	- 100 bp
+
+	Justification:
+	- Blaziken nerf
+	******************************************************************/
+	hijumpkick: {
+		inherit: true,
+		basePower: 100
 	},
 	/******************************************************************
 	Echoed Voice:
@@ -1025,6 +1055,9 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 100,
 		basePower: 80,
+		basePowerCallback: function() {
+			return 80;
+		},
 		category: "Special",
 		isViable: true,
 		priority: 0,
