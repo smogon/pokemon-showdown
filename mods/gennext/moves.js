@@ -842,6 +842,10 @@ exports.BattleMovedex = {
 	- You're going to attack that many times and they're all going to
 	  miss?
 	******************************************************************/
+	doublehit: {
+		inherit: true,
+		accuracy: true
+	},
 	armthrust: {
 		inherit: true,
 		accuracy: true
@@ -1570,11 +1574,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 100,
 		accuracy: 100
-	},
-	doublehit: {
-		inherit: true,
-		basePower: 40,
-		accuracy: true
 	},
 	autotomize: {
 		inherit: true,

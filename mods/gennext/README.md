@@ -317,8 +317,6 @@ Minor move changes:
   common, Sub/Protect stalling could be overpowered) and Substitutes increase
   accuracy against them to 100%
 
-- Double Hit is now 40 base power
-
 - Dizzy Punch is 90 base power, 50% confusion chance
 
 - Sacred Sword now has 95 base power

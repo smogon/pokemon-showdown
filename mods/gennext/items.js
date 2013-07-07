@@ -111,14 +111,18 @@ exports.BattleItems = {
 	"bigroot": {
 		inherit: true,
 		onAfterMoveSelf: function(source, target) {
-			if (source.lastDamage > 0) {
-				this.heal(source.lastDamage/8, source);
+			if (pokemon.hasType('Grass')) {
+				if (source.lastDamage > 0) {
+					this.heal(source.lastDamage/8, source);
+				}
 			}
 		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			this.heal(pokemon.maxhp/16);
+			if (pokemon.hasType('Grass')) {
+				this.heal(pokemon.maxhp/16);
+			}
 		}
 	},
 	"blacksludge": {
