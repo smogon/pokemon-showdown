@@ -184,13 +184,13 @@ exports.appealurl = '';
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
-exports.groupsranking = [' ', '+', '%', '@', '&', '~'];
+exports.groupsranking = [' ', '+', '%', '@', '#', '&', '~'];
 exports.groups = {
 	'~': {
 		id: "admin",
 		name: "Administrator",
 		root: true,
-		rank: 5
+		rank: 6
 	},
 	'&': {
 		id: "leader",
@@ -204,6 +204,16 @@ exports.groups = {
 		rangeban: true,
 		potd: true,
 		disableladder: true,
+		rank: 5
+	},
+	'#': {
+		id: "owner",
+		name: "Room Owner",
+		inherit: '@',
+		jurisdiction: 'u',
+		roommod: true,
+		declare: true,
+		modchatall: true,
 		rank: 4
 	},
 	'@': {
@@ -234,6 +244,7 @@ exports.groups = {
 		alts: '%u',
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
+		roomvoice: true,
 		rank: 2
 	},
 	'+': {
