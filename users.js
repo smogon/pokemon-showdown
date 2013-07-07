@@ -232,11 +232,11 @@ var User = (function () {
 		if (this.mutedRooms[roomid]) {
 			return '!'+this.name;
 		}
-		if (Rooms.rooms[roomid].auth) {
-			if (Rooms.rooms[roomid].auth[this.userid]) {
-				return Rooms.rooms[roomid].auth[this.userid] + this.name;
+		var room = Rooms.rooms[roomid];
+		if (room.auth) {
+			if (room.auth[this.userid]) {
+				return room.auth[this.userid] + this.name;
 			}
-			if (this.group === '~') return '~'+this.name;
 			if (this.group !== ' ') return '+'+this.name;
 			return ' '+this.name;
 		}
@@ -247,45 +247,51 @@ var User = (function () {
 		if (this.checkStaffBackdoorPermission()) return true;
 
 		var group = this.group;
+		var targetGroup = '';
+		if (target) targetGroup = target.group;
 		var groupData = config.groups[group];
 		var checkedGroups = {};
 
-		if (room && room.auth) {
-			if (permission === 'broadcast' && group !== ' ') return true;
-			group = room.auth[this.userid]||' ';
-			if (permission === 'broadcast' && group !== ' ') return true;
-			if (group === '#' && permission in {mute:1, announce:1, declare:1, modchat:1, roommod:1}) return true;
-			if (group === '%' && (!target || target.group === ' ') && permission in {mute:1, announce:1}) return true;
-			if (groupData && groupData['root']) return true;
-			return false;
+		// does not inherit
+		if (groupData['root']) {
+			return true;
 		}
+
+		if (room && room.auth) {
+			if (group !== ' ') group = '+';
+			if (room.auth[this.userid]) group = room.auth[this.userid];
+			groupData = config.groups[group];
+			if (target) {
+				if (targetGroup !== ' ') targetGroup = '+';
+				if (room.auth[target.userid]) targetGroup = room.auth[target.userid];
+			}
+		}
+
+		if (typeof target === 'string') targetGroup = target;
 
 		while (groupData) {
 			// Cycle checker
 			if (checkedGroups[group]) return false;
 			checkedGroups[group] = true;
 
-			if (groupData['root']) {
-				return true;
-			}
 			if (groupData[permission]) {
 				var jurisdiction = groupData[permission];
 				if (!target) {
 					return !!jurisdiction;
 				}
 				if (jurisdiction === true && permission !== 'jurisdiction') {
-					return this.can('jurisdiction', target);
+					return this.can('jurisdiction', target, room);
 				}
 				if (typeof jurisdiction !== 'string') {
 					return !!jurisdiction;
 				}
-				if (jurisdiction.indexOf(target.group) >= 0) {
+				if (jurisdiction.indexOf(targetGroup) >= 0) {
 					return true;
 				}
 				if (jurisdiction.indexOf('s') >= 0 && target === this) {
 					return true;
 				}
-				if (jurisdiction.indexOf('u') >= 0 && config.groupsranking.indexOf(this.group) > config.groupsranking.indexOf(target.group)) {
+				if (jurisdiction.indexOf('u') >= 0 && config.groupsranking.indexOf(group) > config.groupsranking.indexOf(targetGroup)) {
 					return true;
 				}
 				return false;

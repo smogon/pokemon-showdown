@@ -260,10 +260,18 @@ function canTalk(user, room, connection, message) {
 				return false;
 			}
 		} else {
+			var userGroup = user.group;
+			if (room.auth) {
+				if (room.auth[user.userid]) {
+					userGroup = room.auth[user.userid];
+				} else if (userGroup !== ' ') {
+					userGroup = '+';
+				}
+			}
 			if (!user.authenticated && room.modchat === true) {
 				connection.sendTo(room, 'Because moderated chat is set, you must be registered to speak in lobby chat. To register, simply win a rated battle by clicking the look for battle button');
 				return false;
-			} else if (config.groupsranking.indexOf(user.group) < config.groupsranking.indexOf(room.modchat)) {
+			} else if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(room.modchat)) {
 				var groupName = config.groups[room.modchat].name;
 				if (!groupName) groupName = room.modchat;
 				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in lobby chat.');
