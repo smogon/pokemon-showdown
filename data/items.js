@@ -3317,7 +3317,7 @@ exports.BattleItems = {
 		},
 		num: 207,
 		gen: 3,
-		desc: "Raises a random stat by 2 when at 1/4 max HP or less. Single use."
+		desc: "Raises a random stat by 2 when at 1/4 max HP or less (not acc/eva). Single use."
 	},
 	"steelgem": {
 		id: "steelgem",
