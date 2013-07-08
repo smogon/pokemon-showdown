@@ -102,6 +102,18 @@ exports.BattleFormats = {
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
+	uususpecttest: {
+		name: "UU Suspect Test",
+		section: "Singles",
+
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Froslass']
+	},
 	ru: {
 		name: "RU",
 		section: "Singles",
