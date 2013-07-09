@@ -1319,8 +1319,19 @@ var Battle = (function() {
 		var result = this.seed >>> 16; // the first 16 bits of the seed are the random value
 		m = Math.floor(m);
 		n = Math.floor(n);
-		return (m ? (n ? (result%(n-m))+m : result%m) : result/0x10000);
+		rand = (m ? (n ? (result%(n-m))+m : result%m) : result/0x10000);
+		this.debug('rand(' + (m ? (n ? m + ',' + n : m) : '') + ') = ' + rand);
+		return rand;
 	};
+
+	Battle.prototype.nextFrame = function(n, rand) {
+		seed = this.seed;
+		n = n ? n : 1;
+		for (frame = 0; frame < n; frame++) {
+			seed = (seed * 0x41C64E6D + 0x6073) >>> 0
+		}
+		return (rand ? (seed >>> 16) % rand : seed)
+	}
 
 	Battle.prototype.setWeather = function(status, source, sourceEffect) {
 		status = this.getEffect(status);
