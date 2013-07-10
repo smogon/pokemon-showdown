@@ -107,6 +107,7 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'claydol').abilities['1'] = 'Filter';
 		this.modData('Pokedex', 'gengar').abilities['1'] = 'Cursed Body';
 		this.modData('Pokedex', 'mismagius').abilities['1'] = 'Cursed Body';
+		this.modData('Pokedex', 'cryogonal').abilities['1'] = 'Ice Body';
 
 		// Every DW ability that isn't Shadow Tag becomes released
 		for (var i in this.data.FormatsData) {
