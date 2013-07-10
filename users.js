@@ -97,7 +97,7 @@ function connectUser(socket) {
 			user.disconnectAll();
 		} else if (connection.user) {	// if user is still connected
 			connection.challenge = buffer.toString('hex');
-			console.log('JOIN: ' + connection.user.name + ' [' + connection.challenge.substr(0, 15) + '] [' + socket.id + ']');
+			// console.log('JOIN: ' + connection.user.name + ' [' + connection.challenge.substr(0, 15) + '] [' + socket.id + ']');
 			var keyid = config.loginserverpublickeyid || 0;
 			connection.sendTo(null, '|challstr|' + keyid + '|' + connection.challenge);
 		}
@@ -420,7 +420,7 @@ var User = (function () {
 		this.staffAccess = false;
 
 		for (var i=0; i<this.connections.length; i++) {
-			console.log(''+name+' renaming: connection '+i+' of '+this.connections.length);
+			// console.log(''+name+' renaming: connection '+i+' of '+this.connections.length);
 			var initdata = '|updateuser|'+this.name+'|'+(false?'1':'0')+'|'+this.avatar;
 			this.connections[i].send(initdata);
 		}
@@ -572,7 +572,7 @@ var User = (function () {
 			}
 
 			if (!this.named) {
-				console.log('IDENTIFY: ' + name + ' [' + this.name + '] [' + challenge.substr(0, 15) + ']');
+				// console.log('IDENTIFY: ' + name + ' [' + this.name + '] [' + challenge.substr(0, 15) + ']');
 			}
 
 			var group = config.groupsranking[0];
@@ -735,7 +735,7 @@ var User = (function () {
 		var connection = null;
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i].socket === socket) {
-				console.log('DISCONNECT: '+this.userid);
+				// console.log('DISCONNECT: '+this.userid);
 				if (this.connections.length <= 1) {
 					this.markInactive();
 					if (!this.authenticated) {
@@ -775,7 +775,7 @@ var User = (function () {
 		var connection = null;
 		this.markInactive();
 		for (var i=0; i<this.connections.length; i++) {
-			console.log('DESTROY: '+this.userid);
+			// console.log('DESTROY: '+this.userid);
 			connection = this.connections[i];
 			connection.user = null;
 			for (var j in connection.rooms) {
