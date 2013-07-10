@@ -2310,9 +2310,9 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onSourceBasePower: function(basePower, target, source, move) {
+			onSourceModifyDamage: function(damage, source, target, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude') {
-					return basePower * 2;
+					return this.modify(damage, 2);
 				}
 			}
 		},
@@ -2439,9 +2439,9 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onSourceBasePower: function(basePower, target, source, move) {
+			onSourceModifyDamage: function(damage, source, target, move) {
 				if (move.id === 'surf' || move.id === 'whirlpool') {
-					return basePower * 2;
+					return this.modify(damage, 2);
 				}
 			}
 		},
@@ -6553,12 +6553,12 @@ exports.BattleMovedex = {
 				}
 				return 5;
 			},
-			onFoeBasePower: function(basePower, attacker, defender, move) {
-				if (this.getCategory(move) === 'Special' && defender.side === this.effectData.target) {
-					if (!move.crit && attacker.ability !== 'infiltrator') {
+			onFoeModifyDamage: function(damage, source, target, move) {
+				if (this.getCategory(move) === 'Special' && target.side === this.effectData.target) {
+					if (!move.crit && source.ability !== 'infiltrator') {
 						this.debug('Light Screen weaken')
-						if (attacker.side.active.length > 1) return basePower*2/3;
-						return basePower/2;
+						if (source.side.active.length > 1) return this.modify(damage, 0.66);
+						return this.modify(damage, 0.5);
 					}
 				}
 			},
@@ -7367,6 +7367,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		volatileStatus: 'minimize',
+		effect: {
+			onSourceModifyDamage: function(damage, source, target, move) {
+				if (move.id === 'stomp' || move.id === 'steamroller') {
+					return this.modify(damage, 2);
+				}
+			}
+		},
 		boosts: {
 			evasion: 2
 		},
@@ -9100,12 +9107,12 @@ exports.BattleMovedex = {
 				}
 				return 5;
 			},
-			onFoeBasePower: function(basePower, attacker, defender, move) {
-				if (this.getCategory(move) === 'Physical' && defender.side === this.effectData.target) {
-					if (!move.crit && attacker.ability !== 'infiltrator') {
+			onFoeModifyDamage: function(damage, source, target, move) {
+				if (this.getCategory(move) === 'Physical' && target.side === this.effectData.target) {
+					if (!move.crit && source.ability !== 'infiltrator') {
 						this.debug('Reflect weaken');
-						if (attacker.side.active.length > 1) return basePower*2/3;
-						return basePower/2;
+						if (source.side.active.length > 1) return this.modify(damage, 0.66);
+						return this.modify(damage, 0.5);
 					}
 				}
 			},
@@ -11305,12 +11312,8 @@ exports.BattleMovedex = {
 		num: 23,
 		accuracy: 100,
 		basePower: 65,
-		basePowerCallback: function(pokemon, target) {
-			if (target.volatiles['minimize']) return 130;
-			return 65;
-		},
 		category: "Physical",
-		desc: "Deals damage to one adjacent target with a 30% chance to flinch it. Power doubles if Minimize was used previously by the target. Makes contact.",
+		desc: "Deals damage to one adjacent target with a 30% chance to flinch it. Damage doubles if Minimize was used previously by the target. Makes contact.",
 		shortDesc: "30% chance to flinch the target.",
 		id: "stomp",
 		name: "Stomp",
@@ -11382,12 +11385,8 @@ exports.BattleMovedex = {
 		num: 537,
 		accuracy: 100,
 		basePower: 65,
-		basePowerCallback: function(pokemon, target) {
-			if (target.volatiles['minimize']) return 130;
-			return 65;
-		},
 		category: "Physical",
-		desc: "Deals damage to one adjacent target with a 30% chance to flinch it. Power doubles if Minimize was used previously by the target. Makes contact.",
+		desc: "Deals damage to one adjacent target with a 30% chance to flinch it. Damage doubles if Minimize was used previously by the target. Makes contact.",
 		shortDesc: "30% chance to flinch the target.",
 		id: "steamroller",
 		name: "Steamroller",
