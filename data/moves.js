@@ -7368,6 +7368,7 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		volatileStatus: 'minimize',
 		effect: {
+			noCopy: true,
 			onSourceModifyDamage: function(damage, source, target, move) {
 				if (move.id === 'stomp' || move.id === 'steamroller') {
 					return this.modify(damage, 2);
