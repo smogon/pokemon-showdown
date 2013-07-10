@@ -111,7 +111,7 @@ exports.BattleItems = {
 	"bigroot": {
 		inherit: true,
 		onAfterMoveSelf: function(source, target) {
-			if (pokemon.hasType('Grass')) {
+			if (source.hasType('Grass')) {
 				if (source.lastDamage > 0) {
 					this.heal(source.lastDamage/8, source);
 				}
