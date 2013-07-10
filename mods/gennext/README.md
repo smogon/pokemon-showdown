@@ -403,7 +403,10 @@ Minor ability changes:
 
 - Telepathy grants Imprison on switch-in
 
-- Compoundeyes now grants 1.6x accuracy, Victory Star grants 1.5x
+- Compoundeyes and Keen Eye now grant 1.6x accuracy (this replaces Keen
+  Eye's previous effect)
+
+- Victory Star grants 1.5x accuracy (but only for the user)
 
 - Solid Rock and Filter now reduce 1/2 damage of SE moves, not 1/4
 
