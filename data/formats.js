@@ -103,7 +103,7 @@ exports.BattleFormats = {
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
 	uususpecttest: {
-		name: "UU Suspect Test",
+		name: "UU (suspect test)",
 		section: "Singles",
 
 		effectType: 'Format',
