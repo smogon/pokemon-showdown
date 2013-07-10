@@ -1345,7 +1345,7 @@ var Battle = (function() {
 	Battle.prototype.nextFrame = function(n) {
 		var seed = this.seed;
 		n = n ? n : 1;
-		for (frame = 0; frame < n; frame++) 
+		for (frame = 0; frame < n; frame++) {
 			// To advance the RNG, you multiply its current value by 0x5D588B656C078965 and add 0x00269EC3 to the result
 			// Javascript doesnt multiply such large numbers properly, so this function does it in 16-bit parts.
 			// SEED = (SEED * 0x5D588B656C078965) + 0x00269EC3
