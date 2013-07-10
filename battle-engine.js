@@ -1275,7 +1275,7 @@ var Battle = (function() {
 		this.faintQueue = [];
 		this.messageLog = [];
 
-		this.seed = Math.floor(Math.random() * 0xFFFFFFFF); // use a random initial seed
+		this.seed = ("00000000"+Math.floor(Math.random() * 0xFFFFFFFF).toString(16)).slice(-8) + ("00000000"+Math.floor(Math.random() * 0xFFFFFFFF).toString(16)).slice(-8); // use a random initial seed (64-bit)
 	}
 
 	Battle.prototype.turn = 0;
@@ -1302,10 +1302,28 @@ var Battle = (function() {
 		return 'Battle: '+this.format;
 	};
 
-	// This function is designed to emulate the on-cartridge PRNG, as described in
+
+	// This function is designed to emulate the on-cartridge PRNG for Gens 3 and 4, as described in
 	// http://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
-	// Gen 5 uses a 64-bit initial seed, but the upper 32 bits are just for the IV RNG,
-	// and have no relevance here.
+	// This RNG uses a 32-bit initial seed
+
+	// This function has three different results, depending on arguments:
+	// - random() returns a real number in [0,1), just like Math.random()
+	// - random(n) returns an integer in [0,n)
+	// - random(m,n) returns an integer in [m,n)
+
+	// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
+	/*
+	Battle.prototype.random = function(m, n) {
+		this.seed = (this.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
+		var result = this.seed >>> 16; // the first 16 bits of the seed are the random value
+		m = Math.floor(m);
+		n = Math.floor(n);
+		return (m ? (n ? (result%(n-m))+m : result%m) : result/0x10000);
+	};
+	*/
+
+	// This function is designed to emulate the on-cartridge PRNG for Gen 5 and uses a 64-bit initial seed
 
 	// This function has three different results, depending on arguments:
 	// - random() returns a real number in [0,1), just like Math.random()
@@ -1315,12 +1333,87 @@ var Battle = (function() {
 	// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
 
 	Battle.prototype.random = function(m, n) {
-		this.seed = (this.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
-		var result = this.seed >>> 16; // the first 16 bits of the seed are the random value
+		this.seed = this.nextFrame(); // Advance the RNG
+		var high32 = parseInt(this.seed.slice(0,8), 16) ; // Use the upper 32 bits
 		m = Math.floor(m);
 		n = Math.floor(n);
-		return (m ? (n ? (result%(n-m))+m : result%m) : result/0x10000);
+		rand = (m ? (n ? Math.floor((high32 * (n-m)) / 0x100000000) + m : Math.floor((high32 * m) / 0x100000000)) : high32/0x100000000);
+		this.debug('randBW(' + (m ? (n ? m + ',' + n : m) : '') + ') = ' + rand);
+		return rand;
 	};
+	
+	Battle.prototype.nextFrame = function(n) {
+		var seed = this.seed;
+		n = n ? n : 1;
+		for (frame = 0; frame < n; frame++) 
+			// To advance the RNG, you multiply its current value by 0x5D588B656C078965 and add 0x00269EC3 to the result
+			// Javascript doesnt multiply such large numbers properly, so this function does it in 16-bit parts.
+			// SEED = (SEED * 0x5D588B656C078965) + 0x00269EC3
+			// SEED = (ax^3 + bx^2 + cx + d) and 0x5D588B656C078965 = (ex^3 + fx^2 + gx + h)
+			// x = 0x100000000, e = 0x5D58, f = 0x8B65, g = 0x6C07, h = 0x8965
+			// (SEED * 0x5D588B656C078965) = ae * x^6 + (af + be) * x^5 + (ag + bf + ce) * x^4 + (ah + bg + cf + de) * x^3 + (bh + cg + df) * x^2 + (ch + dg) * x + dh
+			// Then add the 0x00269EC3 = 0x0026 * x + 0x9EC3
+			
+			var high32 = parseInt(seed.slice(0,8), 16);
+			var low32 = parseInt(seed.slice(-8), 16);
+			var a = high32 >>> 16;
+			var b = high32 & 0xFFFF;
+			var c = low32 >>> 16;
+			var d = low32 & 0xFFFF;
+			var e = 0x5D58;
+			var f = 0x8B65;
+			var g = 0x6C07;
+			var h = 0x8965;
+
+			// Since we only care about the last 64 bits we remove any factor of x^4.
+			// (ah + bg + cf + de) * x^3 + (bh + cg + df) * x^2 + (ch + dg) * x + dh
+			var lowerBits = {};
+			lowerBits.ah = a * h;
+			lowerBits.be = b * e;
+			lowerBits.bf = b * f;
+			lowerBits.bg = b * g;
+			lowerBits.bh = b * h;
+			lowerBits.ce = c * e;
+			lowerBits.cf = c * f;
+			lowerBits.cg = c * g;
+			lowerBits.ch = c * h;
+			lowerBits.de = d * e;
+			lowerBits.df = d * f;
+			lowerBits.dg = d * g;
+			lowerBits.dh = d * h;
+			var words_carry = [];
+			words_carry[0] = (lowerBits.ah >>> 16) + (lowerBits.bg >>> 16) + (lowerBits.cf >>> 16) + (lowerBits.de >>> 16);
+			words_carry[1] = (lowerBits.bh >>> 16) + (lowerBits.cg >>> 16) + (lowerBits.df >>> 16);
+			words_carry[2] = (lowerBits.ch >>> 16) + (lowerBits.dg >>> 16);
+			words_carry[3] = lowerBits.dh >>> 16;
+			
+			// Reduce all the lowerBits to 16-bits
+			Object.keys(lowerBits).forEach(function(i) {
+				lowerBits[i] = lowerBits[i] & 0xFFFF;
+			})
+			
+			// do all the addition
+			var words = [];
+			words[3] = lowerBits.dh + 0x9EC3; // add low16 of 0x00269EC3
+			words_carry[3] += words[3] >>> 16;
+			words[3] = words[3] & 0xFFFF;
+			words[2] = lowerBits.ch + lowerBits.dg + words_carry[3] + 0x0026; // add high16 of 0x00269EC3
+			words_carry[2] += words[2] >>> 16;
+			words[2] = words[2] & 0xFFFF;
+			words[1] = lowerBits.bh + lowerBits.cg + lowerBits.df + words_carry[2];
+			words_carry[1] += words[1] >>> 16;
+			words[1] = words[1] & 0xFFFF;
+			words[0] = lowerBits.ah + lowerBits.bg + lowerBits.cf + lowerBits.de+ words_carry[1];
+			words_carry[0] += words[0] >>> 16;
+			words[0] = words[0] & 0xFFFF;
+			
+			// put the parts together
+			seed = words.map(function(word) {
+				return ("0000" + word.toString(16)).slice(-4);
+			}).join('');
+		}
+		return seed;
+	}
 
 	Battle.prototype.setWeather = function(status, source, sourceEffect) {
 		status = this.getEffect(status);
