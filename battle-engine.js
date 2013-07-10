@@ -1389,23 +1389,23 @@ var Battle = (function() {
 			
 			// Reduce all the lowerBits to 16-bits
 			Object.keys(lowerBits).forEach(function(i) {
-				lowerBits[i] = lowerBits[i] & 0xFFFF;
+				lowerBits[i] = (lowerBits[i] & 0xFFFF) >>> 0;
 			})
 			
 			// do all the addition
 			var words = [];
 			words[3] = lowerBits.dh + 0x9EC3; // add low16 of 0x00269EC3
 			words_carry[3] += words[3] >>> 16;
-			words[3] = words[3] & 0xFFFF;
+			words[3] = (words[3] & 0xFFFF) >>> 0;
 			words[2] = lowerBits.ch + lowerBits.dg + words_carry[3] + 0x0026; // add high16 of 0x00269EC3
 			words_carry[2] += words[2] >>> 16;
-			words[2] = words[2] & 0xFFFF;
+			words[2] = (words[2] & 0xFFFF) >>> 0;
 			words[1] = lowerBits.bh + lowerBits.cg + lowerBits.df + words_carry[2];
 			words_carry[1] += words[1] >>> 16;
-			words[1] = words[1] & 0xFFFF;
+			words[1] = (words[1] & 0xFFFF) >>> 0;
 			words[0] = lowerBits.ah + lowerBits.bg + lowerBits.cf + lowerBits.de+ words_carry[1];
 			words_carry[0] += words[0] >>> 16;
-			words[0] = words[0] & 0xFFFF;
+			words[0] = (words[0] & 0xFFFF) >>> 0;
 			
 			// put the parts together
 			seed = words.map(function(word) {
