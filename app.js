@@ -399,7 +399,7 @@ server.on('connection', function(socket) {
 		socket.end();
 		return;
 	}
-	console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
+	// console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 	var interval;
 	if (config.herokuhack) {
 		// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
