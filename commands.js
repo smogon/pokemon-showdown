@@ -457,7 +457,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('ban', targetUser)) return false;
 
-		if (Users.checkBanned(targetUser.latestIp) && !target) {
+		if (Users.checkBanned(targetUser.latestIp) && !target && !targetUser.connected) {
 			var problem = ' but was already banned';
 			return this.privateModCommand('('+targetUser.name+' would be banned by '+user.name+problem+'.)');
 		}
