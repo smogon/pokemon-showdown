@@ -265,7 +265,7 @@ var Simulator = (function(){
 			slot = 0;
 			while (this.players[slot]) slot++;
 		}
-		console.log('joining: '+user.name+' '+slot);
+		// console.log('joining: '+user.name+' '+slot);
 		if (this.players[slot] || slot >= this.players.length) return false;
 
 		this.setPlayer(user, slot);
