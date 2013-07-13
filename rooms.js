@@ -107,12 +107,13 @@ var GlobalRoom = (function() {
 					return;
 				}
 				writing = true;
-				fs.writeFile('config/chatrooms.json.0', '' + JSON.stringify(self.chatRoomData), function() {
+				var data = JSON.stringify(self.chatRoomData).replace(/\{"title"\:/g, '\n{"title":').replace(/\]$/,'\n]');
+				fs.writeFile('config/chatrooms.json.0', data, function() {
 					// rename is atomic on POSIX, but will throw an error on Windows
 					fs.rename('config/chatrooms.json.0', 'config/chatrooms.json', function(err) {
 						if (err) {
 							// This should only happen on Windows.
-							fs.writeFile('config/chatrooms.json', '' + JSON.stringify(self.chatRoomData), finishWriting);
+							fs.writeFile('config/chatrooms.json', data, finishWriting);
 							return;
 						}
 						finishWriting();
