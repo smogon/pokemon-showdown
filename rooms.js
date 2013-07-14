@@ -1382,7 +1382,7 @@ var newRoom = function(roomid, format, p1, p2, parent, rated) {
 	if (!p1 || !p2) return false;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid]) {
-		console.log("NEW ROOM: "+roomid);
+		// console.log("NEW BATTLE ROOM: "+roomid);
 		rooms[roomid] = new BattleRoom(roomid, format, p1, p2, parent, rated);
 	}
 	return rooms[roomid];
