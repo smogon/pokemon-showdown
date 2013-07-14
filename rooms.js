@@ -253,7 +253,7 @@ var GlobalRoom = (function() {
 	};
 	GlobalRoom.prototype.searchBattle = function(user, formatid) {
 		if (!user.connected) return;
-		if (lockdown) {
+		if (this.lockdown) {
 			user.popup("The server is shutting down. Battles cannot be started at this time.");
 			return;
 		}
@@ -430,7 +430,7 @@ var GlobalRoom = (function() {
 			return;
 		}
 
-		if (lockdown) {
+		if (this.lockdown) {
 			this.cancelSearch(p1, true);
 			this.cancelSearch(p2, true);
 			p1.popup("The server is shutting down. Battles cannot be started at this time.");
@@ -731,7 +731,7 @@ var BattleRoom = (function() {
 		this.resetTimer = null;
 		this.resetUser = '';
 
-		if (lockdown) {
+		if (rooms.global.lockdown) {
 			this.add('The battle was not restarted because the server is preparing to shut down.');
 			return;
 		}
