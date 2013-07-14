@@ -823,7 +823,6 @@ var commands = exports.commands = {
 			// uncache the tools.js dependency tree
 			CommandParser.uncacheTree('./tools.js');
 			// reload tools.js
-			Data = {};	
 			Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
 			// rebuild the formats list
 			Rooms.global.formatListText = Rooms.global.getFormatListText();
