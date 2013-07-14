@@ -382,6 +382,7 @@ var GlobalRoom = (function() {
 	GlobalRoom.prototype.onJoinConnection = function(user, connection) {
 		var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
 		connection.send(initdata+this.formatListText);
+		if (this.chatRooms.length > 2) connection.send('|queryresponse|roomlist|null'); // should display room list
 	};
 	GlobalRoom.prototype.onJoin = function(user, connection, merging) {
 		if (!user) return false; // ???
@@ -396,6 +397,7 @@ var GlobalRoom = (function() {
 		if (!merging) {
 			var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
 			connection.send(initdata+this.formatListText);
+			if (this.chatRooms.length > 2) connection.send('|queryresponse|roomlist|null'); // should display room list
 		}
 
 		return user;
