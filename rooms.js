@@ -458,7 +458,7 @@ var GlobalRoom = (function() {
 	};
 	GlobalRoom.prototype.addRoom = function(room, format, p1, p2, parent, rated) {
 		room = newRoom(room, format, p1, p2, parent, rated);
-		if (typeof room.i[this.id] !== 'undefined') return;
+		if (this.id in room.i) return;
 		room.i[this.id] = this.rooms.length;
 		this.rooms.push(room);
 		return room;
@@ -466,7 +466,7 @@ var GlobalRoom = (function() {
 	GlobalRoom.prototype.removeRoom = function(room) {
 		room = getRoom(room);
 		if (!room) return;
-		if (typeof room.i[this.id] !== 'undefined') {
+		if (this.id in room.i) {
 			this.rooms.splice(room.i[this.id],1);
 			delete room.i[this.id];
 			for (var i=0; i<this.rooms.length; i++) {

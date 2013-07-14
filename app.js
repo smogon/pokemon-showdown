@@ -285,7 +285,7 @@ global.clampIntRange = function(num, min, max) {
 	if (typeof num !== 'number') num = 0;
 	num = Math.floor(num);
 	if (num < min) num = min;
-	if (typeof max !== 'undefined' && num > max) num = max;
+	if (max !== undefined && num > max) num = max;
 	return num;
 };
 
