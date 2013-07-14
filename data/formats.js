@@ -34,11 +34,12 @@ exports.BattleFormats = {
 		challengeDefault: true,
 		rated: true,
 		challengeShow: true,
-		//searchShow: true,
+		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
+	/**
 	oucurrent: {
 		name: "OU (current)",
 		section: "Singles",
@@ -64,7 +65,7 @@ exports.BattleFormats = {
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Landorus']
-	},
+	},*/
 	// ounostealthrock: {
 	// 	name: "OU (no Stealth Rock)",
 	// 	section: "Singles",
