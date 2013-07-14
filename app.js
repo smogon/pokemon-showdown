@@ -309,8 +309,6 @@ global.CommandParser = require('./command-parser.js');
 
 global.Simulator = require('./simulator.js');
 
-global.lockdown = false;
-
 global.sendData = function(socket, data) {
 	socket.write(data);
 };
@@ -329,7 +327,7 @@ if (config.crashguard) {
 			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 			config.modchat = 'crash';
-			lockdown = true;
+			Rooms.global.lockdown = true;
 		};
 	})());
 }
@@ -399,7 +397,7 @@ server.on('connection', function(socket) {
 		socket.end();
 		return;
 	}
-	console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
+	// console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 	var interval;
 	if (config.herokuhack) {
 		// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
