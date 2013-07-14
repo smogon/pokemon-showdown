@@ -213,12 +213,12 @@ var User = (function () {
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = '>'+roomid+'\n'+data;
 		for (var i=0; i<this.connections.length; i++) {
 			if (roomid && !this.connections[i].rooms[roomid]) continue;
-			sendData(this.connections[i].socket, data);
+			this.connections[i].socket.write(data);
 		}
 	};
 	User.prototype.send = function(data) {
 		for (var i=0; i<this.connections.length; i++) {
-			sendData(this.connections[i].socket, data);
+			this.connections[i].socket.write(data);
 		}
 	};
 	User.prototype.popup = function(message) {
@@ -1131,11 +1131,11 @@ var Connection = (function () {
 	Connection.prototype.sendTo = function(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'lobby') data = '>'+roomid+'\n'+data;
-		sendData(this.socket, data);
+		this.socket.write(data);
 	};
 
 	Connection.prototype.send = function(data) {
-		sendData(this.socket, data);
+		this.socket.write(data);
 	};
 
 	Connection.prototype.popup = function(message) {
