@@ -847,7 +847,7 @@ var commands = exports.commands = {
 	lockdown: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
-		lockdown = true;
+		Rooms.global.lockdown = true;
 		for (var id in Rooms.rooms) {
 			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>');
 			if (Rooms.rooms[id].requestKickInactive) Rooms.rooms[id].requestKickInactive(user, true);
@@ -860,7 +860,7 @@ var commands = exports.commands = {
 	endlockdown: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
-		lockdown = false;
+		Rooms.global.lockdown = false;
 		for (var id in Rooms.rooms) {
 			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b>The server shutdown was canceled.</b></div>');
 		}
@@ -872,7 +872,7 @@ var commands = exports.commands = {
 	kill: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
-		if (!lockdown) {
+		if (!Rooms.global.lockdown) {
 			return this.sendReply('For safety reasons, /kill can only be used during lockdown.');
 		}
 
@@ -970,24 +970,24 @@ var commands = exports.commands = {
 	},
 
 	crashfixed: function(target, room, user) {
-		if (!lockdown) {
+		if (!Rooms.global.lockdown) {
 			return this.sendReply('/crashfixed - There is no active crash.');
 		}
 		if (!this.can('hotpatch')) return false;
 
-		lockdown = false;
+		Rooms.global.lockdown = false;
 		Rooms.lobby.modchat = false;
 		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
 		Rooms.lobby.logEntry(user.name + ' used /crashfixed');
 	},
 
 	crashlogged: function(target, room, user) {
-		if (!lockdown) {
+		if (!Rooms.global.lockdown) {
 			return this.sendReply('/crashlogged - There is no active crash.');
 		}
 		if (!this.can('declare')) return false;
 
-		lockdown = false;
+		Rooms.global.lockdown = false;
 		Rooms.lobby.modchat = false;
 		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We have logged the crash and are working on fixing it!</b><br />You may resume talking in the lobby and starting new battles.</div>');
 		Rooms.lobby.logEntry(user.name + ' used /crashlogged');
@@ -1181,6 +1181,10 @@ var commands = exports.commands = {
 
 	cancelsearch: 'search',
 	search: function(target, room, user) {
+		if (Rooms.global.lockdown) {
+			return this.popupReply("The server is shutting down. Battles cannot be started at this time.");
+		}
+
 		if (target) {
 			Rooms.global.searchBattle(user, target);
 		} else {
@@ -1190,6 +1194,10 @@ var commands = exports.commands = {
 
 	chall: 'challenge',
 	challenge: function(target, room, user) {
+		if (Rooms.global.lockdown) {
+			return this.popupReply("The server is shutting down. Battles cannot be started at this time.");
+		}
+
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
