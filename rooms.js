@@ -107,12 +107,13 @@ var GlobalRoom = (function() {
 					return;
 				}
 				writing = true;
-				fs.writeFile('config/chatrooms.json.0', '' + JSON.stringify(self.chatRoomData), function() {
+				var data = JSON.stringify(self.chatRoomData).replace(/\{"title"\:/g, '\n{"title":').replace(/\]$/,'\n]');
+				fs.writeFile('config/chatrooms.json.0', data, function() {
 					// rename is atomic on POSIX, but will throw an error on Windows
 					fs.rename('config/chatrooms.json.0', 'config/chatrooms.json', function(err) {
 						if (err) {
 							// This should only happen on Windows.
-							fs.writeFile('config/chatrooms.json', '' + JSON.stringify(self.chatRoomData), finishWriting);
+							fs.writeFile('config/chatrooms.json', data, finishWriting);
 							return;
 						}
 						finishWriting();
@@ -252,7 +253,7 @@ var GlobalRoom = (function() {
 	};
 	GlobalRoom.prototype.searchBattle = function(user, formatid) {
 		if (!user.connected) return;
-		if (lockdown) {
+		if (this.lockdown) {
 			user.popup("The server is shutting down. Battles cannot be started at this time.");
 			return;
 		}
@@ -429,7 +430,7 @@ var GlobalRoom = (function() {
 			return;
 		}
 
-		if (lockdown) {
+		if (this.lockdown) {
 			this.cancelSearch(p1, true);
 			this.cancelSearch(p2, true);
 			p1.popup("The server is shutting down. Battles cannot be started at this time.");
@@ -730,7 +731,7 @@ var BattleRoom = (function() {
 		this.resetTimer = null;
 		this.resetUser = '';
 
-		if (lockdown) {
+		if (rooms.global.lockdown) {
 			this.add('The battle was not restarted because the server is preparing to shut down.');
 			return;
 		}
@@ -1381,7 +1382,7 @@ var newRoom = function(roomid, format, p1, p2, parent, rated) {
 	if (!p1 || !p2) return false;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid]) {
-		console.log("NEW ROOM: "+roomid);
+		// console.log("NEW BATTLE ROOM: "+roomid);
 		rooms[roomid] = new BattleRoom(roomid, format, p1, p2, parent, rated);
 	}
 	return rooms[roomid];

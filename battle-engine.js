@@ -27,7 +27,7 @@ if (config.crashguard) {
 		Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
 		Rooms.lobby.addRaw('<div>You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		config.modchat = 'crash';
-		lockdown = true; */
+		Rooms.global.lockdown = true; */
 	});
 }
 
