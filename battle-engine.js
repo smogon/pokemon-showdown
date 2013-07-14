@@ -98,7 +98,6 @@ clampIntRange = function(num, min, max) {
 	return num;
 };
 
-global.Data = {};
 global.Tools = require('./tools.js');
 
 var Battles = {};
