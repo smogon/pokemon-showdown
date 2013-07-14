@@ -359,7 +359,7 @@ var User = (function () {
 
 		if (this.named) this.prevNames[this.userid] = this.name;
 
-		if (typeof authenticated === 'undefined' && userid === this.userid) {
+		if (authenticated === undefined && userid === this.userid) {
 			authenticated = this.authenticated;
 		}
 

@@ -94,7 +94,7 @@ clampIntRange = function(num, min, max) {
 	if (typeof num !== 'number') num = 0;
 	num = Math.floor(num);
 	if (num < min) num = min;
-	if (typeof max !== 'undefined' && num > max) num = max;
+	if (max !== undefined && num > max) num = max;
 	return num;
 };
 
@@ -1782,7 +1782,7 @@ var Battle = (function() {
 		effect = this.getEffect(effect);
 		var args = [target, source, effect];
 		//console.log('Event: '+eventid+' (depth '+this.eventDepth+') t:'+target.id+' s:'+(!source||source.id)+' e:'+effect.id);
-		if (typeof relayVar === 'undefined' || relayVar === null) {
+		if (relayVar === undefined || relayVar === null) {
 			relayVar = true;
 			hasRelayVar = false;
 		} else {
@@ -1857,7 +1857,7 @@ var Battle = (function() {
 				returnVal = statuses[i].callback;
 			}
 
-			if (typeof returnVal !== 'undefined') {
+			if (returnVal !== undefined) {
 				relayVar = returnVal;
 				if (!relayVar) return relayVar;
 				if (hasRelayVar) {
@@ -1901,18 +1901,18 @@ var Battle = (function() {
 		if (thing.sides) {
 			for (var i in this.pseudoWeather) {
 				status = this.getPseudoWeather(i);
-				if (typeof status[callbackType] !== 'undefined' || (getAll && thing.pseudoWeather[i][getAll])) {
+				if (status[callbackType] !== undefined || (getAll && thing.pseudoWeather[i][getAll])) {
 					statuses.push({status: status, callback: status[callbackType], statusData: this.pseudoWeather[i], end: this.removePseudoWeather, thing: thing});
 					this.resolveLastPriority(statuses,callbackType);
 				}
 			}
 			status = this.getWeather();
-			if (typeof status[callbackType] !== 'undefined' || (getAll && thing.weatherData[getAll])) {
+			if (status[callbackType] !== undefined || (getAll && thing.weatherData[getAll])) {
 				statuses.push({status: status, callback: status[callbackType], statusData: this.weatherData, end: this.clearWeather, thing: thing, priority: status[callbackType+'Priority']||0});
 				this.resolveLastPriority(statuses,callbackType);
 			}
 			status = this.getFormat();
-			if (typeof status[callbackType] !== 'undefined' || (getAll && thing.formatData[getAll])) {
+			if (status[callbackType] !== undefined || (getAll && thing.formatData[getAll])) {
 				statuses.push({status: status, callback: status[callbackType], statusData: this.formatData, end: function(){}, thing: thing, priority: status[callbackType+'Priority']||0});
 				this.resolveLastPriority(statuses,callbackType);
 			}
@@ -1926,7 +1926,7 @@ var Battle = (function() {
 		if (thing.pokemon) {
 			for (var i in thing.sideConditions) {
 				status = thing.getSideCondition(i);
-				if (typeof status[callbackType] !== 'undefined' || (getAll && thing.sideConditions[i][getAll])) {
+				if (status[callbackType] !== undefined || (getAll && thing.sideConditions[i][getAll])) {
 					statuses.push({status: status, callback: status[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
 					this.resolveLastPriority(statuses,callbackType);
 				}
@@ -1951,29 +1951,29 @@ var Battle = (function() {
 			return statuses;
 		}
 		var status = thing.getStatus();
-		if (typeof status[callbackType] !== 'undefined' || (getAll && thing.statusData[getAll])) {
+		if (status[callbackType] !== undefined || (getAll && thing.statusData[getAll])) {
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
 			this.resolveLastPriority(statuses,callbackType);
 		}
 		for (var i in thing.volatiles) {
 			status = thing.getVolatile(i);
-			if (typeof status[callbackType] !== 'undefined' || (getAll && thing.volatiles[i][getAll])) {
+			if (status[callbackType] !== undefined || (getAll && thing.volatiles[i][getAll])) {
 				statuses.push({status: status, callback: status[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
 				this.resolveLastPriority(statuses,callbackType);
 			}
 		}
 		status = thing.getAbility();
-		if (typeof status[callbackType] !== 'undefined' || (getAll && thing.abilityData[getAll])) {
+		if (status[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
 			this.resolveLastPriority(statuses,callbackType);
 		}
 		status = thing.getItem();
-		if (typeof status[callbackType] !== 'undefined' || (getAll && thing.itemData[getAll])) {
+		if (status[callbackType] !== undefined || (getAll && thing.itemData[getAll])) {
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
 			this.resolveLastPriority(statuses,callbackType);
 		}
 		status = this.getEffect(thing.template.baseSpecies);
-		if (typeof status[callbackType] !== 'undefined') {
+		if (status[callbackType] !== undefined) {
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.speciesData, end: function(){}, thing: thing});
 			this.resolveLastPriority(statuses,callbackType);
 		}
@@ -2578,7 +2578,7 @@ var Battle = (function() {
 		var critMult = [0, 16, 8, 4, 3, 2];
 
 		move.crit = move.willCrit || false;
-		if (typeof move.willCrit === 'undefined') {
+		if (move.willCrit === undefined) {
 			if (move.critRatio) {
 				move.crit = (this.random(critMult[move.critRatio]) === 0);
 			}
