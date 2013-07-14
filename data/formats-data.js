@@ -4592,7 +4592,7 @@ exports.BattleFormatsData = {
 		viableMoves: {"earthpower":1,"focusblast":1,"rockpolish":1,"hiddenpowerice":1,"psychic":1},
 		dreamWorldRelease: true,
 		dreamWorldPokeball: 'dreamball',
-		tier: "OU"
+		tier: "Uber"
 	},
 	landorustherian: {
 		viableMoves: {"rockpolish":1,"earthquake":1,"stoneedge":1,"uturn":1,"superpower":1,"stealthrock":1},
