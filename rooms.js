@@ -354,10 +354,10 @@ var GlobalRoom = (function() {
 		// do nothing
 	};
 	GlobalRoom.prototype.add = function(message, noUpdate) {
-		rooms.lobby.add(message, noUpdate);
+		if (rooms.lobby) rooms.lobby.add(message, noUpdate);
 	};
 	GlobalRoom.prototype.addRaw = function(message) {
-		rooms.lobby.addRaw(message);
+		if (rooms.lobby) rooms.lobby.addRaw(message);
 	};
 	GlobalRoom.prototype.addChatRoom = function(title) {
 		var id = toId(title);
@@ -371,6 +371,13 @@ var GlobalRoom = (function() {
 		this.chatRooms.push(room);
 		this.writeChatRoomData();
 		return true;
+	};
+	GlobalRoom.prototype.autojoin = function(user, connection) {
+		// we only autojoin regular rooms if the client requests it with /autojoin
+		// note that this restriction doesn't apply to staffAutojoin
+		for (var i=0; i<this.autojoin.length; i++) {
+			user.joinRoom(this.autojoin[i], connection);
+		}
 	};
 	GlobalRoom.prototype.checkAutojoin = function(user, connection) {
 		if (user.isStaff) {
@@ -454,7 +461,7 @@ var GlobalRoom = (function() {
 		newRoom.joinBattle(p2, p2team);
 		this.cancelSearch(p1, true);
 		this.cancelSearch(p2, true);
-		if (config.reportbattles) {
+		if (config.reportbattles && rooms.lobby) {
 			rooms.lobby.add('|b|'+newRoom.id+'|'+p1.getIdentity()+'|'+p2.getIdentity());
 		}
 	};
@@ -476,8 +483,12 @@ var GlobalRoom = (function() {
 			}
 		}
 	};
-	GlobalRoom.prototype.chat = function(user, message, socket) {
-		rooms.lobby.chat(user, message, socket);
+	GlobalRoom.prototype.chat = function(user, message, connection) {
+		if (rooms.lobby) return rooms.lobby.chat(user, message, connection);
+		message = CommandParser.parse(message, this, user, connection);
+		if (message) {
+			connection.sendPopup("You can't send messages directly to the server.");
+		}
 	};
 	return GlobalRoom;
 })();
@@ -1375,7 +1386,7 @@ var getRoom = function(roomid, fallback) {
 	if (roomid && roomid.id) return roomid;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid] && fallback) {
-		return rooms.lobby;
+		return rooms.global;
 	}
 	return rooms[roomid];
 };

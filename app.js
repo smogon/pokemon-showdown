@@ -318,8 +318,10 @@ if (config.crashguard) {
 			lastCrash = Date.now();
 			if (quietCrash) return;
 			var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
-			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
-			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
+			if (Rooms.lobby) {
+				Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
+				Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
+			}
 			config.modchat = 'crash';
 			Rooms.global.lockdown = true;
 		};
@@ -419,7 +421,8 @@ server.on('connection', function(socket) {
 
 			var roomid = message.substr(0, pipeIndex);
 			var lines = message.substr(pipeIndex + 1);
-			var room = Rooms.get(roomid, 'lobby');
+			var room = Rooms.get(roomid);
+			if (!room) room = Rooms.lobby || Rooms.global;
 			var user = connection.user;
 			if (lines.substr(0,3) === '>> ' || lines.substr(0,4) === '>>> ') {
 				user.chat(lines, room, connection);

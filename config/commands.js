@@ -734,10 +734,10 @@ var commands = exports.commands = {
 		config.potd = target;
 		Simulator.SimulatorProcess.eval('config.potd = \''+toId(target)+'\'');
 		if (target) {
-			Rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day is now '+target+'!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>');
+			if (Rooms.lobby) Rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day is now '+target+'!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>');
 			this.logModCommand('The Pokemon of the Day was changed to '+target+' by '+user.name+'.');
 		} else {
-			Rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>');
+			if (Rooms.lobby) Rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>');
 			this.logModCommand('The Pokemon of the Day was removed by '+user.name+'.');
 		}
 	},
@@ -753,6 +753,7 @@ var commands = exports.commands = {
 	},
 
 	lobbychat: function(target, room, user, connection) {
+		if (!Rooms.lobby) return this.popupReply("This server doesn't have a lobby.");
 		target = toId(target);
 		if (target === 'off') {
 			user.leaveRoom(Rooms.lobby, connection.socket);
