@@ -122,6 +122,18 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
+		//searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass']
+	},
+	rususpecttest: {
+		name: "RU (suspect test)",
+		section: "Singles",
+
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['UU'],
