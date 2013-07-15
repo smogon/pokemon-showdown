@@ -902,7 +902,7 @@ var commands = exports.commands = {
 	},
 
 	loadbanlist: function(target, room, user, connection) {
-		if (!this.can('modchat')) return false;
+		if (!this.can('hotpatch')) return false;
 
 		connection.sendTo(room, 'Loading ipbans.txt...');
 		fs.readFile('config/ipbans.txt', function (err, data) {
