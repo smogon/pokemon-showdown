@@ -293,6 +293,7 @@ var commands = exports.commands = {
 	join: function(target, room, user, connection) {
 		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
 		if (target && !targetRoom) {
+			if (target === 'lobby') return connection.sendTo(target, "|noinit|nonexistent|");
 			return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
 		}
 		if (targetRoom && !targetRoom.battle && targetRoom !== Rooms.lobby && !user.named) {
@@ -695,14 +696,8 @@ var commands = exports.commands = {
 		if (!this.can('forcerename', targetUser)) return false;
 
 		if (targetUser.userid === toUserid(this.targetUser)) {
-			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'.' + (target ? " (" + target + ")" : "");
-			this.logModCommand(entry);
-			Rooms.lobby.sendAuth('(' + entry + ')');
-			if (room.id !== 'lobby') {
-				this.add(entry);
-			} else {
-				this.logEntry(entry);
-			}
+			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'' + (target ? ": " + target + "" : "");
+			this.privateModCommand('(' + entry + ')');
 			targetUser.resetName();
 			targetUser.send('|nametaken||'+user.name+" has forced you to change your name. "+target);
 		} else {
@@ -725,13 +720,7 @@ var commands = exports.commands = {
 
 		if (targetUser.userid === toUserid(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
-			this.logModCommand(entry);
-			Rooms.lobby.sendAuth('(' + entry + ')');
-			if (room.id !== 'lobby') {
-				room.add(entry);
-			} else {
-				room.logEntry(entry);
-			}
+			this.privateModCommand('(' + entry + ')');
 			targetUser.forceRename(target, undefined, true);
 		} else {
 			this.sendReply("User "+targetUser.name+" is no longer using that name.");
@@ -805,7 +794,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help hotpatch');
 		if (!this.can('hotpatch')) return false;
 
-		Rooms.lobby.logEntry(user.name + ' used /hotpatch ' + target);
+		this.logEntry(user.name + ' used /hotpatch ' + target);
 
 		if (target === 'chat') {
 
@@ -872,7 +861,7 @@ var commands = exports.commands = {
 			if (Rooms.rooms[id].requestKickInactive) Rooms.rooms[id].requestKickInactive(user, true);
 		}
 
-		Rooms.lobby.logEntry(user.name + ' used /lockdown');
+		this.logEntry(user.name + ' used /lockdown');
 
 	},
 
@@ -884,7 +873,7 @@ var commands = exports.commands = {
 			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b>The server shutdown was canceled.</b></div>');
 		}
 
-		Rooms.lobby.logEntry(user.name + ' used /endlockdown');
+		this.logEntry(user.name + ' used /endlockdown');
 
 	},
 
@@ -899,8 +888,8 @@ var commands = exports.commands = {
 			return this.sendReply('Wait for /updateserver to finish before using /kill.');
 		}
 
-		Rooms.lobby.destroyLog(function() {
-			Rooms.lobby.logEntry(user.name + ' used /kill');
+		room.destroyLog(function() {
+			room.logEntry(user.name + ' used /kill');
 		}, function() {
 			process.exit();
 		});
@@ -937,8 +926,8 @@ var commands = exports.commands = {
 
 	refreshpage: function(target, room, user) {
 		if (!this.can('hotpatch')) return false;
-		Rooms.lobby.send('|refresh|');
-		Rooms.lobby.logEntry(user.name + ' used /refreshpage');
+		Rooms.global.send('|refresh|');
+		this.logEntry(user.name + ' used /refreshpage');
 	},
 
 	updateserver: function(target, room, user, connection) {
@@ -969,7 +958,9 @@ var commands = exports.commands = {
 					// `git` on the PATH (which would be error.code === 127).
 					connection.sendTo(room, '' + error);
 					logQueue.push('' + error);
-					logQueue.forEach(Rooms.lobby.logEntry.bind(Rooms.lobby));
+					logQueue.forEach(function(line) {
+						room.logEntry(line);
+					});
 					CommandParser.updateServerLock = false;
 					return;
 				}
@@ -982,7 +973,9 @@ var commands = exports.commands = {
 					connection.sendTo(room, s);
 					logQueue.push(s);
 				});
-				logQueue.forEach(Rooms.lobby.logEntry.bind(Rooms.lobby));
+				logQueue.forEach(function(line) {
+					room.logEntry(line);
+				});
 				CommandParser.updateServerLock = false;
 			});
 		});
@@ -995,9 +988,11 @@ var commands = exports.commands = {
 		if (!this.can('hotpatch')) return false;
 
 		Rooms.global.lockdown = false;
-		Rooms.lobby.modchat = false;
-		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
-		Rooms.lobby.logEntry(user.name + ' used /crashfixed');
+		if (Rooms.lobby) {
+			Rooms.lobby.modchat = false;
+			Rooms.lobby.addRaw('<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>');
+		}
+		this.logEntry(user.name + ' used /crashfixed');
 	},
 
 	crashlogged: function(target, room, user) {
@@ -1007,9 +1002,11 @@ var commands = exports.commands = {
 		if (!this.can('declare')) return false;
 
 		Rooms.global.lockdown = false;
-		Rooms.lobby.modchat = false;
-		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We have logged the crash and are working on fixing it!</b><br />You may resume talking in the lobby and starting new battles.</div>');
-		Rooms.lobby.logEntry(user.name + ' used /crashlogged');
+		if (Rooms.lobby) {
+			Rooms.lobby.modchat = false;
+			Rooms.lobby.addRaw('<div class="broadcast-green"><b>We have logged the crash and are working on fixing it!</b><br />You may resume talking in the lobby and starting new battles.</div>');
+		}
+		this.logEntry(user.name + ' used /crashlogged');
 	},
 
 	eval: function(target, room, user, connection, cmd, message) {
@@ -1077,7 +1074,6 @@ var commands = exports.commands = {
 		}, function(success) {
 			connection.send('|queryresponse|savereplay|'+JSON.stringify({
 				log: data,
-				room: 'lobby',
 				id: room.id.substr(7)
 			}));
 		});
