@@ -487,3 +487,15 @@ global.Tools = require('./tools.js');
 
 // After loading tools, generate and cache the format list.
 Rooms.global.formatListText = Rooms.global.getFormatListText();
+
+// load ipbans at our leisure
+fs.readFile('./config/ipbans.txt', function (err, data) {
+	if (err) return;
+	data = (''+data).split("\n");
+	for (var i=0; i<data.length; i++) {
+		data[i] = data[i].split('#')[0].trim();
+		if (data[i] && !Users.bannedIps[data[i]]) {
+			Users.bannedIps[data[i]] = '#ipban';
+		}
+	}
+});
