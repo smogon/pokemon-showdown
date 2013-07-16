@@ -1396,6 +1396,8 @@ var newRoom = function(roomid, format, p1, p2, parent, rated) {
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid]) {
 		// console.log("NEW BATTLE ROOM: "+roomid);
+		ResourceMonitor.countBattle(p1.latestIp, p1.name);
+		ResourceMonitor.countBattle(p2.latestIp, p2.name);
 		rooms[roomid] = new BattleRoom(roomid, format, p1, p2, parent, rated);
 	}
 	return rooms[roomid];

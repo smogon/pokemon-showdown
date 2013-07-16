@@ -113,6 +113,63 @@ if (process.argv[2] && parseInt(process.argv[2])) {
 	config.port = parseInt(process.argv[2]);
 }
 
+global.ResourceMonitor = {
+	connections: {},
+	connectionTimes: {},
+	battles: {},
+	battleTimes: {},
+	/**
+	 * Counts a connection. Returns true if the connection should be terminated for abuse.
+	 */
+	log: function(text) {
+		console.log(text);
+		if (Rooms.rooms.staff) Rooms.rooms.staff.add('||'+text);
+	},
+	countConnection: function(ip, name) {
+		var now = Date.now();
+		var duration = now - this.connectionTimes[ip];
+		name = (name ? ': '+name : '');
+		if (ip in this.connections && duration < 30*60*1000) {
+			this.connections[ip]++;
+			if (duration < 5*60*1000 && this.connections[ip] % 10 == 0) {
+				if (this.connections[ip] >= 30) {
+					if (this.connections[ip] % 30 == 0) this.log('IP '+ip+' rejected for '+this.connections[ip]+'th connection in the last '+duration.duration()+name);
+					return true;
+				}
+				this.log('[ResourceMonitor] IP '+ip+' has connected '+this.connections[ip]+' times in the last '+duration.duration()+name);
+			} else if (this.connections[ip] % 50 == 0) {
+				if (this.connections[ip] >= 250) {
+					if (this.connections[ip] % 50 == 0) this.log('IP '+ip+' rejected for '+this.connections[ip]+'th connection in the last '+duration.duration()+name);
+					return true;
+				}
+				this.log('[ResourceMonitor] IP '+ip+' has connected '+this.connections[ip]+' times in the last '+duration.duration()+name);
+			}
+		} else {
+			this.connections[ip] = 1;
+			this.connectionTimes[ip] = now;
+		}
+	},
+	/**
+	 * Counts a battle. Returns true if the connection should be terminated for abuse.
+	 */
+	countBattle: function(ip, name) {
+		var now = Date.now();
+		var duration = now - this.battleTimes[ip];
+		name = (name ? ': '+name : '');
+		if (ip in this.battles && duration < 30*60*1000) {
+			this.battles[ip]++;
+			if (duration < 5*60*1000 && this.battles[ip] % 15 == 0) {
+				this.log('[ResourceMonitor] IP '+ip+' has battled '+this.battles[ip]+' times in the last '+duration.duration()+name);
+			} else if (this.battles[ip] % 75 == 0) {
+				this.log('[ResourceMonitor] IP '+ip+' has battled '+this.battles[ip]+' times in the last '+duration.duration()+name);
+			}
+		} else {
+			this.battles[ip] = 1;
+			this.battleTimes[ip] = now;
+		}
+	}
+};
+
 /*********************************************************
  * Start our servers
  *********************************************************/
@@ -388,8 +445,13 @@ server.on('connection', function(socket) {
 		}
 	}
 
-	if (Users.checkBanned(socket.remoteAddress)) {
-		console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress);
+	if (ResourceMonitor.countConnection(socket.remoteAddress)) {
+		socket.end();
+		return;
+	}
+	var checkResult = Users.checkBanned(socket.remoteAddress);
+	if (checkResult) {
+		console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress+' ('+checkResult+')');
 		socket.end();
 		return;
 	}

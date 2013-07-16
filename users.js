@@ -1148,11 +1148,11 @@ var Connection = (function () {
 // ban functions
 
 function ipSearch(ip, table) {
-	if (table[ip]) return true;
+	if (table[ip]) return table[ip];
 	var dotIndex = ip.lastIndexOf('.');
 	for (var i=0; i<4 && dotIndex > 0; i++) {
 		ip = ip.substr(0, dotIndex);
-		if (table[ip+'.*']) return true;
+		if (table[ip+'.*']) return table[ip+'.*'];
 		dotIndex = ip.lastIndexOf('.');
 	}
 	return false;
