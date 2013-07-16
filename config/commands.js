@@ -206,6 +206,20 @@ var commands = exports.commands = {
 		this.sendReply('|raw|'+output);
 	},
 
+	ipsearch: function(target, room, user) {
+		if (!this.can('rangeban')) return;
+		var atLeastOne = false;
+		this.sendReply("Users with IP "+target+":");
+		for (var userid in Users.users) {
+			var user = Users.users[userid];
+			if (user.latestIp === target) {
+				this.sendReply((user.connected?"+":"-")+" "+user.name);
+				atLeastOne = true;
+			}
+		}
+		if (!atLeastOne) this.sendReply("No results found.");
+	},
+
 	/*********************************************************
 	 * Shortcuts
 	 *********************************************************/
