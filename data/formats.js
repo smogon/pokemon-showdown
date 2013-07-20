@@ -234,6 +234,28 @@ exports.BattleFormats = {
 			'Keldeo', 'Keldeo-Resolute',  'Meloetta', 'Genesect'
 		]
 	},
+	globalshowdown: {
+		name: "Global Showdown",
+		section: "Singles",
+
+		effectType: 'Format',
+		challengeShow: true,
+		rated: true,
+		searchShow: true,
+		validateSet: function(set) {
+			if (!set.level || set.level >= 50) set.forcedLevel = 50;
+			return [];
+		},
+		onBegin: function() {
+			this.debug('cutting down to 3');
+			this.p1.pokemon = this.p1.pokemon.slice(0,3);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,3);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU'],
+		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew', 'Chatot']
+	},
 
 	// Doubles
 	///////////////////////////////////////////////////////////////////
