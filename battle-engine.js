@@ -1817,6 +1817,7 @@ var Battle = (function() {
 					ModifyPokemon: 1,
 					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1,
 					ModifyBoost: 1,
+					ModifyDamage: 1,
 					TryHit: 1,
 					TryHitSide: 1,
 					TrySecondaryHit: 1,
