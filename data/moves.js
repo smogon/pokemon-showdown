@@ -8676,7 +8676,7 @@ exports.BattleMovedex = {
 		accuracy: 80,
 		basePower: 0,
 		damageCallback: function(pokemon) {
-			return (this.random(5,16) / 10) * pokemon.level;
+			return (this.random(50,151) * pokemon.level) / 100;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target equal to (user's level) * (X+50) / 100, where X is a random number from 0 to 100, rounded down, but not less than 1HP.",
