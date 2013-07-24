@@ -1277,10 +1277,10 @@ var Battle = (function() {
 		this.messageLog = [];
 
 		// use a random initial seed (64-bit, [high -> low])
-		this.seed = [Math.floor(Math.random() * 0xffff),
-			Math.floor(Math.random() * 0xffff),
-			Math.floor(Math.random() * 0xffff),
-			Math.floor(Math.random() * 0xffff)];
+		this.seed = [Math.floor(Math.random() * 0x10000),
+			Math.floor(Math.random() * 0x10000),
+			Math.floor(Math.random() * 0x10000),
+			Math.floor(Math.random() * 0x10000)];
 	}
 
 	Battle.prototype.turn = 0;
