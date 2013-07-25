@@ -868,6 +868,9 @@ var commands = exports.commands = {
 	endlockdown: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
+		if (!Rooms.global.lockdown) {
+			return this.sendReply("We're not under lockdown right now.");
+		}
 		Rooms.global.lockdown = false;
 		for (var id in Rooms.rooms) {
 			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b>The server shutdown was canceled.</b></div>');
