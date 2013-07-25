@@ -668,8 +668,8 @@ var commands = exports.commands = {
 
 	gennext: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Generation NEXT is a mod that makes changes to the game:<br />' +
-			'- <a href="https://github.com/Zarel/Pokemon-Showdown/blob/master/mods/gennext/README.md">README: overview of Gen-NEXT</a><br />' +
+		this.sendReplyBox('NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />' +
+			'- <a href="https://github.com/Zarel/Pokemon-Showdown/blob/master/mods/gennext/README.md">README: overview of NEXT</a><br />' +
 			'Example replays:<br />' +
 			'- <a href="http://pokemonshowdown.com/replay/gennextou-37815908">roseyraid vs Zarel</a><br />' +
 			'- <a href="http://pokemonshowdown.com/replay/gennextou-37900768">QwietQwilfish vs pickdenis</a>');
