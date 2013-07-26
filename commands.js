@@ -296,7 +296,7 @@ var commands = exports.commands = {
 			if (target === 'lobby') return connection.sendTo(target, "|noinit|nonexistent|");
 			return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
 		}
-		if (targetRoom && !targetRoom.battle && targetRoom !== Rooms.lobby && !user.named) {
+		if (targetRoom && targetRoom.isPrivate && !user.named) {
 			return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '"+target+"'.");
 		}
 		if (!user.joinRoom(targetRoom || room, connection)) {
