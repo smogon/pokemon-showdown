@@ -1199,10 +1199,6 @@ var commands = exports.commands = {
 
 	cancelsearch: 'search',
 	search: function(target, room, user) {
-		if (Rooms.global.lockdown) {
-			return this.popupReply("The server is shutting down. Battles cannot be started at this time.");
-		}
-
 		if (target) {
 			Rooms.global.searchBattle(user, target);
 		} else {
@@ -1211,11 +1207,7 @@ var commands = exports.commands = {
 	},
 
 	chall: 'challenge',
-	challenge: function(target, room, user) {
-		if (Rooms.global.lockdown) {
-			return this.popupReply("The server is shutting down. Battles cannot be started at this time.");
-		}
-
+	challenge: function(target, room, user, connection) {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
@@ -1224,11 +1216,7 @@ var commands = exports.commands = {
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			return this.popupReply("The user '"+this.targetUsername+"' is not accepting challenges right now.");
 		}
-		if (typeof target !== 'string') target = 'customgame';
-		var problems = Tools.validateTeam(user.team, target);
-		if (problems) {
-			return this.popupReply("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-		}
+		if (!user.prepBattle(target, 'challenge', connection)) return;
 		user.makeChallenge(targetUser, target);
 	},
 
@@ -1250,7 +1238,7 @@ var commands = exports.commands = {
 		user.cancelChallengeTo(target);
 	},
 
-	accept: function(target, room, user) {
+	accept: function(target, room, user, connection) {
 		var userid = toUserid(target);
 		var format = '';
 		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
@@ -1258,11 +1246,7 @@ var commands = exports.commands = {
 			this.popupReply(target+" cancelled their challenge before you could accept it.");
 			return false;
 		}
-		var problems = Tools.validateTeam(user.team, format);
-		if (problems) {
-			this.popupReply("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-			return false;
-		}
+		if (!user.prepBattle(format, 'challenge', connection)) return;
 		user.acceptChallengeFrom(userid);
 	},
 
