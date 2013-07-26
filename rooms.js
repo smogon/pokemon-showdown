@@ -216,7 +216,7 @@ var GlobalRoom = (function() {
 		return roomList;
 	};
 	GlobalRoom.prototype.getRooms = function() {
-		var rooms = {official:[], chat:[]};
+		var rooms = {official:[], chat:[], userCount: rooms.global.userCount};
 		for (var i=0; i<this.chatRooms.length; i++) {
 			var room = this.chatRooms[i];
 			if (room.isPrivate) continue;
@@ -1114,7 +1114,6 @@ var ChatRoom = (function() {
 			this.userList = this.getUserList();
 		}
 		this.reportJoinsQueue = [];
-		this.lastGlobalCount = -1;
 		this.reportJoinsInterval = setInterval(
 			this.reportRecentJoins.bind(this), config.reportjoinsperiod
 		);
@@ -1122,11 +1121,7 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.type = 'chat';
 
 	ChatRoom.prototype.reportRecentJoins = function() {
-		// special case for the lobby
-		if ((this.id === 'lobby') && (this.lastGlobalCount !== rooms.global.userCount)) {
-			this.reportJoinsQueue.push('|usercount|' + rooms.global.userCount);
-			this.lastGlobalCount = rooms.global.userCount;
-		} else if (this.reportJoinsQueue.length === 0) {
+		if (this.reportJoinsQueue.length === 0) {
 			// nothing to report
 			return;
 		}
@@ -1220,9 +1215,6 @@ var ChatRoom = (function() {
 			buffer += ','+this.users[i].getIdentity(this.id);
 		}
 		var msg = '|users|'+counter+buffer;
-		if (this.id === 'lobby' && rooms.global) {
-			msg += '\n|usercount|'+rooms.global.userCount;
-		}
 		return msg;
 	};
 	ChatRoom.prototype.update = function() {
