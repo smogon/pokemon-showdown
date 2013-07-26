@@ -253,25 +253,10 @@ var GlobalRoom = (function() {
 	};
 	GlobalRoom.prototype.searchBattle = function(user, formatid) {
 		if (!user.connected) return;
-		if (this.lockdown) {
-			user.popup("The server is shutting down. Battles cannot be started at this time.");
-			return;
-		}
 
 		formatid = toId(formatid);
 
-		var format = Tools.getFormat(formatid);
-		if (!format.searchShow) {
-			user.popup("That format is not available for searching.");
-			return;
-		}
-
-		var team = user.team;
-		var problems = Tools.validateTeam(team, formatid);
-		if (problems) {
-			user.popup("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-			return;
-		}
+		if (!user.prepBattle(formatid, 'search')) return;
 
 		// tell the user they've started searching
 		var newSearchData = {
@@ -283,7 +268,7 @@ var GlobalRoom = (function() {
 		var newSearch = {
 			userid: user.userid,
 			formatid: formatid,
-			team: team,
+			team: user.team,
 			rating: 1500,
 			time: new Date().getTime()
 		};

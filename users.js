@@ -963,6 +963,37 @@ var User = (function () {
 			delete this.roomCount[room.id];
 		}
 	};
+	User.prototype.prepBattle = function(formatid, type, connection) {
+		// all validation for a battle goes through here
+		if (!connection) connection = this;
+		if (!type) type = 'challenge';
+
+		if (Rooms.global.lockdown) {
+			var message = "The server is shutting down. Battles cannot be started at this time.";
+			if (Rooms.global.lockdown === 'ddos') {
+				message = "The server is under attack. Battles cannot be started at this time.";
+			}
+			connection.popup(message);
+			return false;
+		}
+		if (ResourceMonitor.countPrepBattle(connection.ip || connection.latestIp, this.name)) {
+			connection.popup("Due to high load, you are limited to 6 battles every 3 minutes.");
+			return false;
+		}
+
+		var format = Tools.getFormat(formatid);
+		if (!format[''+type+'Show']) {
+			connection.popup("That format is not available.");
+			return false;
+		}
+		var team = this.team;
+		var problems = Tools.validateTeam(team, formatid);
+		if (problems) {
+			connection.popup("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+			return false;
+		}
+		return true;
+	};
 	User.prototype.updateChallenges = function() {
 		this.send('|updatechallenges|'+JSON.stringify({
 			challengesFrom: this.challengesFrom,
