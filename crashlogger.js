@@ -11,12 +11,12 @@
 module.exports = (function() {
 	var lastCrashLog = 0;
 	return function(err, description) {
-		console.log("\n"+err.stack+"\n");
+		console.log("\nCRASH: "+err.stack+"\n");
 		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
 			this.write("\n"+err.stack+"\n");
 			this.end();
 		}).on("error", function (err) {
-			console.log("\n"+err.stack+"\n");
+			console.log("\nSUBCRASH: "+err.stack+"\n");
 		});
 		var datenow = Date.now();
 		if (config.crashguardemail && ((datenow - lastCrashLog) > 1000 * 60 * 5)) {
