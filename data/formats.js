@@ -567,7 +567,7 @@ exports.BattleFormats = {
 		banlist: ['Wonder Guard', 'Pure Power', 'Huge Power', 'Shadow Tag', 'Arena Trap']
 	},
 	gennextou: {
-		name: "Gen-NEXT OU",
+		name: "NEXT OU",
 		section: "Other Metagames",
 
 		mod: 'gennext',
