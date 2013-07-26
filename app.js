@@ -508,9 +508,10 @@ server.on('connection', function(socket) {
 				user.chat(lines, room, connection);
 				return;
 			}
-			lines.split('\n').forEach(function(text) {
-				user.chat(text, room, connection);
-			});
+			lines = lines.split('\n');
+			for (var i=0; i<lines.length; i++) {
+				if (user.chat(lines[i], room, connection) === false) break;
+			}
 		} catch (e) {
 			var stack = e.stack + '\n\n';
 			stack += 'Additional information:\n';
