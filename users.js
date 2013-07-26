@@ -1072,13 +1072,17 @@ var User = (function () {
 	User.prototype.chatQueue = null;
 	User.prototype.chatQueueTimeout = null;
 	User.prototype.lastChatMessage = 0;
+	/**
+	 * The user says message in room.
+	 * Returns false if the rest of the user's messages should be discarded.
+	 */
 	User.prototype.chat = function(message, room, connection) {
 		var now = new Date().getTime();
 
-		if (message.substr(0,5) === '/cmd ') {
-			// commands are exempt from the queue
+		if (message.substr(0,16) === '/cmd userdetails') {
+			// certain commands are exempt from the queue
 			room.chat(this, message, connection);
-			return;
+			return false; // but end the loop here
 		}
 
 		if (this.chatQueueTimeout) {
@@ -1087,6 +1091,7 @@ var User = (function () {
 				connection.sendTo(room, '|raw|' +
 					"<strong class=\"message-throttle-notice\">Your message was not sent because you've been typing too quickly.</strong>"
 				);
+				return false;
 			} else {
 				this.chatQueue.push([message, room, connection]);
 			}
