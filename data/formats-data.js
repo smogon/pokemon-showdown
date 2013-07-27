@@ -2988,7 +2988,8 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":30,"moves":["helpinghand","psychic","refresh","rest"]},
 			{"generation":4,"level":5,"moves":["wish","confusion","rest"],"pokeball":"cherishball"},
 			{"generation":4,"level":5,"moves":["wish","confusion","rest","dracometeor"],"pokeball":"cherishball"},
-			{"generation":5,"level":50,"moves":["healingwish","psychic","swift","meteormash"],"pokeball":"cherishball"}
+			{"generation":5,"level":50,"moves":["healingwish","psychic","swift","meteormash"],"pokeball":"cherishball"},
+			{"generation":5,"level":50,"moves":["dracometeor","meteormash","wish","followme"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
 	},
