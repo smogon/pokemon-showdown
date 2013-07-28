@@ -13,6 +13,14 @@ exports.BattleScripts = {
                                         this.modData('Learnsets', i).learnset.hypervoice = ['5L0'];
                                         this.modData('Learnsets', i).learnset.whirlwind = ['5L0'];
                                         this.modData('Learnsets', i).learnset.rapidspin = ['5L0'];
+                                        
+                                        //also every other normal move... let's hope that "Movedex" is the right object
+                                        for (var j in this.data.Movedex) {
+                                        	if (this.data.Movedex[j].type == "Normal") {
+                                        		this.modData('Learnsets', i).learnset[j] = ['5L0'];
+                                        	}
+                                        }
+                                        
                                 } else if (i in fire) {
                                         this.modData('Learnsets', i).learnset.flareblitz = ['5L0'];
                                         this.modData('Learnsets', i).learnset.fireblast = ['5L0'];
