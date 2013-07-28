@@ -169,7 +169,7 @@ exports.BattleFormats = {
 		section "Singles",
 		
 		mod: 'gen3',
-		effectType: 'Format'
+		effectType: 'Format',
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
