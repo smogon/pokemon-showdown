@@ -164,19 +164,6 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
 	},
-	illusionmons: {
-		name: "Illusionmons",
-		section "Singles",
-		
-		mod: 'gen3',
-		effectType: 'Format',
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		rated: true,
-		ruleset: ['pokemon','standard','Team Preview'],
-		banlist: ['Drizzle ++ Swift Swim', 'Soul Dew']
-	},
 	pogeymansou: {
 		name: "Pogeymans OU",
 		section: "Singles",
