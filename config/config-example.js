@@ -8,6 +8,18 @@ exports.port = 8000;
 //   know what you are doing.
 exports.proxyip = false;
 
+// Pokemon of the Day - put a pokemon's name here to make it Pokemon of the Day
+//   The PotD will always be in the #2 slot (not #1 so it won't be a lead)
+//   in every Random Battle team.
+exports.potd = '';
+
+// crash guard - write errors to log file instead of crashing
+//   This is normally not recommended - if Node wants to crash, the
+//   server needs to be restarted
+//   Unfortunately, socket.io bug 409 requires some sort of crash guard
+//   https://github.com/LearnBoost/socket.io/issues/609
+exports.crashguard = true;
+
 // login server data - don't forget the http:// and the trailing slash
 //   This is the URL of the user database and ladder mentioned earlier.
 //   Don't change this setting - there aren't any other login servers right now
@@ -27,18 +39,6 @@ exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
 	"wdlWIlTxJ2dfCnnJBFEt/wDsL54q8KmGbzOTvRq5uz/tMvs6ycgLVgA9r1xmVU+1\n" +
 	"6lMr2wdSzyG7l3X3q1XyQ/CT5IP4unFs5HKpG31skxlfXv5a7KW5AfsCAwEAAQ==\n" +
 	"-----END RSA PUBLIC KEY-----\n";
-
-// Pokemon of the Day - put a pokemon's name here to make it Pokemon of the Day
-//   The PotD will always be in the #2 slot (not #1 so it won't be a lead)
-//   in every randomly-generated team.
-exports.potd = '';
-
-// crash guard - write errors to log file instead of crashing
-//   This is normally not recommended - if Node wants to crash, the
-//   server needs to be restarted
-//   Unfortunately, socket.io bug 409 requires some sort of crash guard
-//   https://github.com/LearnBoost/socket.io/issues/609
-exports.crashguard = true;
 
 // crashguardemail - if the server has been running for more than an hour
 // and crashes, send an email using these settings, rather than locking down
@@ -68,7 +68,7 @@ exports.crashguard = true;
 //   getting more than 80 or so users.
 exports.reportjoins = true;
 
-// report battles - shows messages like "OU battle started"
+// report battles - shows messages like "OU battle started" in the lobby
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 160 or so users.
 exports.reportbattles = true;
