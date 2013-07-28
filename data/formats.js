@@ -164,6 +164,19 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
 	},
+	illusionmons: {
+		name: "Illusionmons",
+		section "Singles",
+		
+		mod: 'gen2',
+		effectType: 'Format'
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		rated: true,
+		ruleset: ['pokemon','standard','Team Preview']
+		banlist: ['Drizzle ++ Swift Swim', 'Soul Dew']
+	}
 	pogeymansou: {
 		name: "Pogeymans OU",
 		section: "Singles",
@@ -268,7 +281,7 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU'],
 		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew', 'Chatot']
 	},
-
+	
 	// Doubles
 	///////////////////////////////////////////////////////////////////
 
