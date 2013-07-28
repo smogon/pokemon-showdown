@@ -1,11 +1,10 @@
 exports.BattleScripts = {
-  gen: 3,
+/** MAKE EVERY POKEMON HAVE ILLUSION **/	
 	init: function() {
 		for (var i in this.data.Pokedex) {
-		delete this.data.Pokedex[i].abilities['DW'];
-  		delete this.data.Pokedex[i].abilities['DW'];
-  		delete this.data.Pokedex[i].abilities['DW'];
-		this.modData('Pokedex').learnset.hurricane = ['5L100'];  		
+		this.modData('Pokedex').abilities['DW'] = 'Illusion';
+		this.modData('Pokedex').abilities['0'] = 'Illusion';
+		this.modData('Pokedex').abilities['1'] = 'Illusion';		
 		}
 	},
 };
