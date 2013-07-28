@@ -750,8 +750,8 @@ challengeShow: true,
 ruleset: []
 },
 gen1oubeta: {
-name: "[Gen 1] OU (beta)",
-section: "Past Generations",
+name: "Pogeymans OU",
+section: "Singles",
 
 mod: 'gen1',
 effectType: 'Format',
@@ -761,11 +761,11 @@ challengeShow: true,
 searchShow: true,
 isTeambuilderFormat: true,
 ruleset: ['Pokemon', 'Standard'],
-banlist: ['Uber', 'Wrap', 'Fire Spin', 'Clamp', 'Bind']
+banlist: ['Uber']
 },
 gen1customgame: {
-name: "[Gen 1] Custom Game",
-section: "Past Generations",
+name: "Pogeymans OU Custom Game",
+section: "Singles",
 
 mod: 'gen1',
 effectType: 'Format',
