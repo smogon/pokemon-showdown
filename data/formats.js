@@ -168,7 +168,7 @@ exports.BattleFormats = {
 		name: "Illusionmons",
 		section "Singles",
 		
-		mod: 'gen2',
+		mod: 'gen3',
 		effectType: 'Format'
 		challengeShow: true,
 		searchShow: true,
