@@ -216,7 +216,7 @@ var GlobalRoom = (function() {
 		return roomList;
 	};
 	GlobalRoom.prototype.getRooms = function() {
-		var rooms = {official:[], chat:[], userCount: rooms.global.userCount, battleCount: rooms.global.battleCount};
+		var rooms = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
 		for (var i=0; i<this.chatRooms.length; i++) {
 			var room = this.chatRooms[i];
 			if (room.isPrivate) continue;
