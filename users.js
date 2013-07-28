@@ -763,6 +763,12 @@ var User = (function () {
 				}
 			}
 			this.roomCount = {};
+			if (!this.named && !Object.size(this.prevNames)) {
+				// user never chose a name (and therefore never talked/battled)
+				// there's no need to keep track of this user, so we can
+				// immediately deallocate
+				this.destroy();
+			}
 		}
 	};
 	User.prototype.disconnectAll = function() {
