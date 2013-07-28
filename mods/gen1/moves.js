@@ -9256,7 +9256,7 @@ secondary: false,
 target: "normal",
 type: "Normal"
 },
-"return": {
+"hero slash": {
 num: 216,
 accuracy: 100,
 basePower: 0,
