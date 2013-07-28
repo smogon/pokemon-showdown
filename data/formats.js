@@ -174,9 +174,9 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		rated: true,
-		ruleset: ['pokemon','standard','Team Preview']
+		ruleset: ['pokemon','standard','Team Preview'],
 		banlist: ['Drizzle ++ Swift Swim', 'Soul Dew']
-	}
+	},
 	pogeymansou: {
 		name: "Pogeymans OU",
 		section: "Singles",
