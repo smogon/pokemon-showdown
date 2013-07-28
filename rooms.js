@@ -21,14 +21,14 @@ var GlobalRoom = (function() {
 
 		// init rooms
 		this.rooms = [];
-		this.numBattles = 0;
+		this.lastBattle = 0;
 		this.searchers = [];
 
 		// Never do any other file IO synchronously
 		// but this is okay to prevent race conditions as we start up PS
-		this.numBattles = 0;
+		this.lastBattle = 0;
 		try {
-			this.numBattles = parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
+			this.lastBattle = parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
 		} catch (e) {} // file doesn't exist [yet]
 
 		this.chatRoomData = [];
@@ -66,23 +66,23 @@ var GlobalRoom = (function() {
 		var self = this;
 		this.writeNumRooms = (function() {
 			var writing = false;
-			var numBattles;	// last numBattles to be written to file
+			var lastBattle;	// last lastBattle to be written to file
 			var finishWriting = function() {
 				writing = false;
-				if (numBattles !== self.numBattles) {
+				if (lastBattle !== self.lastBattle) {
 					self.writeNumRooms();
 				}
 			};
 			return function() {
 				if (writing) return;
-				numBattles = self.numBattles;
+				lastBattle = self.lastBattle;
 				writing = true;
-				fs.writeFile('logs/lastbattle.txt.0', '' + numBattles, function() {
+				fs.writeFile('logs/lastbattle.txt.0', '' + lastBattle, function() {
 					// rename is atomic on POSIX, but will throw an error on Windows
 					fs.rename('logs/lastbattle.txt.0', 'logs/lastbattle.txt', function(err) {
 						if (err) {
 							// This should only happen on Windows.
-							fs.writeFile('logs/lastbattle.txt', '' + numBattles, finishWriting);
+							fs.writeFile('logs/lastbattle.txt', '' + lastBattle, finishWriting);
 							return;
 						}
 						finishWriting();
@@ -433,12 +433,12 @@ var GlobalRoom = (function() {
 		}
 
 		//console.log('BATTLE START BETWEEN: '+p1.userid+' '+p2.userid);
-		var i = this.numBattles+1;
+		var i = this.lastBattle+1;
 		var formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g,'');
 		while(rooms['battle-'+formaturlid+i]) {
 			i++;
 		}
-		this.numBattles = i;
+		this.lastBattle = i;
 		newRoom = this.addRoom('battle-'+formaturlid+'-'+i, format, p1, p2, this.id, rated);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
