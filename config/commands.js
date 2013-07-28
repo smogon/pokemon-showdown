@@ -291,10 +291,10 @@ var commands = exports.commands = {
 				if (!moves.count) {
 					count++;
 					moves.count = 0;
-				};
+				}
 				if (moves.count === 4) {
 					return this.sendReplyBox('Specify a maximum of 4 moves.');
-				};
+				}
 				moves[target] = 1;
 				moves.count++;
 				continue;
@@ -305,10 +305,10 @@ var commands = exports.commands = {
 				if (!ability.count) {
 					count++;
 					ability.count = 0;
-				};
+				}
 				if (ability.count === 1) {
 					return this.sendReplyBox('Specify only one ability.');
-				};
+				}
 				ability[target] = 1;
 				ability.count++;
 				continue;
