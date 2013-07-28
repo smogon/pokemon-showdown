@@ -164,9 +164,9 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
 	},
-	gen1ouenhanced: {
-		name: "Gen 1 OU Enhanced",
-		section: "Past Gen Mods",
+	pogeymansou: {
+		name: "Pogeymans OU",
+		section: "Singles",
 
 		mod: 'gen1',
 		effectType: 'Format',
