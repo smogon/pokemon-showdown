@@ -171,6 +171,8 @@ exports.BattleFormats = {
 		mod: 'gen1',
 		effectType: 'Format',
 		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber']
 	},
