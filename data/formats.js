@@ -418,6 +418,7 @@ exports.BattleFormats = {
 		name: "Illlusionmons OU",
 		section: "Singles",
 		
+		mod: 'illusionmons',
 		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
@@ -429,6 +430,7 @@ exports.BattleFormats = {
 		name: "Illusionmons Ubers",
 		section: "Singles",
 		
+		mod: 'illusionmons',
 		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
