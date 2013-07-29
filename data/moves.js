@@ -3075,8 +3075,8 @@ exports.BattleMovedex = {
 					this.effectData.duration++;
 				}
 			},
-			onOverrideDecision: function(pokemon) {
-				return this.effectData.move;
+			onOverrideDecision: function(pokemon, target, move) {
+				return (move.id === this.effectData.move ? true : this.effectData.move);
 			},
 			onResidualOrder: 13,
 			onResidual: function(target) {
