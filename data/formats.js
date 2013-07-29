@@ -164,6 +164,19 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
 	},
+	nfe: {
+		name: "NFE",
+		section: "Singles",
+		
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon','Standard','Team Preview'],
+		banlist: ['Uber','OU','UU','RU','NU','BL','BL3','BL2']
+		
+	},
 	pogeymansou: {
 		name: "Pogeymans OU",
 		section: "Singles",
