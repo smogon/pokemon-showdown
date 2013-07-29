@@ -183,6 +183,7 @@ exports.BattleFormats = {
 
 		mod: 'gen1',
 		effectType: 'Format',
+		Rated: true,
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
@@ -200,7 +201,21 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
-	}
+	},
+	pogeymanscustombattle: {
+		name: "Pogeymons (Custom Battle)",
+		Section: "singles",
+		
+		mod: 'gen1',
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		debug: true,
+		maxLevel: 100,
+		defaultLevel: 100,
+		ruleset: []
+	},
 	cap: {
 		name: "CAP",
 		section: "Singles",
