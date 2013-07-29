@@ -414,6 +414,29 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
+	illusionmons: {
+		name: "Illlusionmons OU",
+		section: "Singles",
+		
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['Pokemon','Standard'],
+		banlist: ['Ubers']
+	},
+	illusionmonsubers: {
+		name: "Illusionmons Ubers",
+		section: "Singles",
+		
+		effectType: 'Format',
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		rulesset: ['Pokemon','Standard'],
+		banlist: ['Leftovers']
+		
+	},
 	seasonaljollyjuly: {
 		effectType: 'Format',
 		name: "[Seasonal] Jolly July",
