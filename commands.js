@@ -19,6 +19,11 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Server version: <b>'+CommandParser.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + CommandParser.serverVersion + '">' + CommandParser.serverVersion.substr(0,10) + '</a>)</small>');
 	},
+	
+	Pogey: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<div class="infobox">Pogeymans Typechart and Type changes:<br />&nbsp;&nbsp;- <a href="https://docs.google.com/document/d/1TM0v2V4nFFi0oA6-sxjjce_KcPrXR6tfTV-Ei4515KA/edit" /></div>');
+	},
 
 	me: function(target, room, user, connection) {
 		target = this.canTalk(target);
