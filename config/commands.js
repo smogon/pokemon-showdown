@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Commands
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
@@ -276,13 +276,11 @@ var commands = exports.commands = {
 
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
-		var target;
 		var moves = {}, tiers = {}, colours = {}, ability = {}, gens = {}, types = {};
-		var allTypes = {'fire':1,'water':1,'electric':1,'dragon':1,'rock':1,'fighting':1,'ground':1,'ghost':1,'psychic':1,'dark':1,'bug':1,'flying':1,'grass':1,'poison':1,'normal':1,'steel':1,'ice':1};
-		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1,'illegal':1};
+		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1};
 		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
 		var count = 0;
-		var all = false;
+		var isShowAll = false;
 		var output = 10;
 
 		for (var i in targets) {
@@ -315,18 +313,6 @@ var commands = exports.commands = {
 			}
 
 			target = targets[i].trim().toLowerCase();
-			if (target.slice(0, target.indexOf(' type')) in allTypes) {
-				if (!types.count) {
-					count++;
-					types.count = 0;
-				}
-				if (types.count === 2) {
-					return this.sendReplyBox('Specify a maximum of two types.');
-				}
-				types[target.slice(0, 1).toUpperCase() + target.slice(0, target.indexOf(' type')).slice(1)] = 1;
-				types.count++;
-				continue;
-			}
 			if (target in allTiers) {
 				if (!tiers.count) {
 					count++;
@@ -345,12 +331,13 @@ var commands = exports.commands = {
 				colours.count++;
 				continue;
 			}
-			if (parseInt(target, 10) > 0 && parseInt(target, 10) < 6) {
+			var targetInt = parseInt(target);
+			if (0 < targetInt && targetInt < 6) {
 				if (!gens.count) {
 					count++;
 					gens.count = 0;
 				}
-				gens[parseInt(target, 10)] = 1;
+				gens[targetInt] = 1;
 				gens.count++;
 				continue;
 			}
@@ -358,15 +345,27 @@ var commands = exports.commands = {
 				if (this.broadcasting) {
 					return this.sendReplyBox('A search with the parameter "all" cannot be broadcast.')
 				}
-				all = true;
+				isShowAll = true;
 				continue;
 			}
-			else {
-				return this.sendReplyBox('"' + target + '" could not be found in any of the search categories.');
+			target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
+			if (target in Tools.data.TypeChart) {
+				if (!types.count) {
+					count++;
+					types.count = 0;
+				}
+				if (types.count === 2) {
+					return this.sendReplyBox('Specify a maximum of two types.');
+				}
+				types[target] = 1;
+				types.count++;
+				continue;
+			} else {
+				return this.sendReplyBox('"' + targets[i].trim().toLowerCase() + '" could not be found in any of the search categories.');
 			}
 		}
 
-		if (all && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
+		if (isShowAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br>Try "/help dexsearch" for more information on this command.');
 
 		while (count > 0) {
 			--count;
@@ -375,7 +374,7 @@ var commands = exports.commands = {
 				for (var pokemon in Tools.data.Pokedex) {
 					if (pokemon === 'arceusunknown') continue;
 					pokemon = Tools.getTemplate(pokemon);
-					if (!(!('illegal' in tiers) && pokemon.tier === 'Illegal')) {
+					if (pokemon.tier !== 'Illegal') {
 						tempResults.add(pokemon);
 					}
 				}
@@ -456,7 +455,7 @@ var commands = exports.commands = {
 
 		var resultsStr = '';
 		if (results.length > 0) {
-			if (all || results.length <= output) {
+			if (isShowAll || results.length <= output) {
 				for (var i = 0; i < results.length; i++) resultsStr += results[i].species + ', ';
 			} else {
 				var hidden = string(results.length - output);
@@ -1117,7 +1116,7 @@ var commands = exports.commands = {
                         this.sendReply('Searches for Pokemon that fulfill the selected criteria.');
                         this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
                         this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
-                        this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP/Illegal.');
+                        this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
                         this.sendReply('Types must be followed by " type", e.g., "dragon type".');
                         this.sendReply('/dexsearch [type], [move], [move],...');
                         this.sendReply('The order of the parameters does not matter.');
