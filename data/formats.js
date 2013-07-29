@@ -209,13 +209,12 @@ exports.BattleFormats = {
 		
 		mod: 'gen1',
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
-		searchShow: true,
+		canUseRandomTeam: true,
 		debug: true,
-		maxLevel: 100,
+		maxLevel: 1000,
 		defaultLevel: 100,
-		ruleset: []
+		ruleset: ['Team Preview']
 	},
 	cap: {
 		name: "CAP",
