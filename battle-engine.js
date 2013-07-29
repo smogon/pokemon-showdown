@@ -2612,24 +2612,14 @@ var Battle = (function() {
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
 
+		// The decreased offense or increased defense is ignored by certain moves or always by critical hits
 		var attack = attacker.getStat(category==='Physical'?'atk':'spa');
 		var defense = defender.getStat(defensiveCategory==='Physical'?'def':'spd');
-
-		if (move.crit) {
-			move.ignoreNegativeOffensive = true;
-			move.ignorePositiveDefensive = true;
-		}
-		if (move.ignoreNegativeOffensive && attack < attacker.getStat(category==='Physical'?'atk':'spa', true)) {
-			move.ignoreOffensive = true;
-		}
-		if (move.ignoreOffensive) {
+		if (move.ignoreOffensive || (move.crit && attack < attacker.getStat(category==='Physical'?'atk':'spa', true))) {
 			this.debug('Negating (sp)atk boost/penalty.');
 			attack = attacker.getStat(category==='Physical'?'atk':'spa', true);
 		}
-		if (move.ignorePositiveDefensive && defense > target.getStat(defensiveCategory==='Physical'?'def':'spd', true)) {
-			move.ignoreDefensive = true;
-		}
-		if (move.ignoreDefensive) {
+		if (move.ignoreDefensive || (move.crit && defense > target.getStat(defensiveCategory==='Physical'?'def':'spd', true))) {
 			this.debug('Negating (sp)def boost/penalty.');
 			defense = target.getStat(defensiveCategory==='Physical'?'def':'spd', true);
 		}
@@ -2651,11 +2641,7 @@ var Battle = (function() {
 			baseDamage = this.modify(baseDamage, move.critModifier || 2);
 		}
 
-		// randomizer
-		// this is not a modifier
-		// gen 1-2
-		//var randFactor = Math.floor(Math.random()*39)+217;
-		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
+		// Randomizer. This is not a modifier
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
