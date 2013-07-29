@@ -189,6 +189,18 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber']
 	},
+	Pogeybats: {
+		name: "Pogeybats",
+		section: "Singles",
+		
+		mod: 'gen1',
+		effectType: 'Format',
+		canUseRandomTeam: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	}
 	cap: {
 		name: "CAP",
 		section: "Singles",
