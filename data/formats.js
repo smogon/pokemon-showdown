@@ -196,6 +196,7 @@ exports.BattleFormats = {
 		
 		mod: 'gen1',
 		effectType: 'Format',
+		team: 'Random',
 		canUseRandomTeam: true,
 		rated: true,
 		challengeShow: true,
