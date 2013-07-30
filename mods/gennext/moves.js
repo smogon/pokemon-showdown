@@ -491,6 +491,30 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	rockwrecker: {
+		inherit: true,
+		accuracy: true,
+		basePower: 75,
+		willCrit: true,
+		self: null,
+		onHit: function(target, source) {
+			if (!target.hp) {
+				source.addVolatile('mustrecharge');
+			}
+		}
+	},
+	roaroftime: {
+		inherit: true,
+		accuracy: true,
+		basePower: 75,
+		willCrit: true,
+		self: null,
+		onHit: function(target, source) {
+			if (!target.hp) {
+				source.addVolatile('mustrecharge');
+			}
+		}
+	},
 	bide: {
 		inherit: true,
 		effect: {
