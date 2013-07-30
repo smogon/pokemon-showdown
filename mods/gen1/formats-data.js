@@ -801,7 +801,6 @@ tier: "OU"
 gastly: {
 viableMoves: {"shadowball":1,"sludgebomb":1,"hiddenpowerfighting":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"trick":1},
 tier: "LC"
-dreamWorldRelease: true,
 },
 haunter: {
 viableMoves: {"shadowball":1,"sludgebomb":1,"hiddenpowerfighting":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"trick":1},
@@ -810,12 +809,10 @@ eventPokemon: [
 {"generation":5,"level":30,"moves":["confuseray","suckerpunch","shadowpunch","payback"],"pokeball":"cherishball"}
 ],
 tier: "NU"
-dreamWorldRelease: true,
 },
 gengar: {
 viableMoves: {"shadowball":1,"sludgebomb":1,"focusblast":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"trick":1},
 tier: "OU"
-dreamWorldRelease: true,
 },
 onix: {
 viableMoves: {"stealthrock":1,"earthquake":1,"stoneedge":1,"dragontail":1,"curse":1},
