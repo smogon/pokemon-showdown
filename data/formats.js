@@ -204,7 +204,7 @@ exports.BattleFormats = {
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	pogeymanscustombattle: {
-		name: "Pogeymons (Custom Battle)",
+		name: "Pogeymans (Custom Battle)",
 		Section: "singles",
 		
 		mod: 'gen1',
