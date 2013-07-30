@@ -190,7 +190,7 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber']
 	},
-	Pogeybats: {
+	pogeybats: {
 		name: "Pogeybats",
 		section: "Singles",
 		
