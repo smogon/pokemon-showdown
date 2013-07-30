@@ -1343,7 +1343,6 @@ var Battle = (function() {
 		m = Math.floor(m);
 		n = Math.floor(n);
 		result = (m ? (n ? Math.floor(result*(n-m) / 0x100000000)+m : Math.floor(result*m / 0x100000000)) : result/0x100000000);
-		this.debug('randBW(' + (m ? (n ? m + ',' + n : m) : '') + ') = ' + result);
 		return result;
 	};
 
@@ -2637,11 +2636,31 @@ var Battle = (function() {
 		//int(int(int(2*L/5+2)*A*P/D)/50);
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
 
-		// multi-target modifier (doubles only)
-		if (move.spreadHit) {
-			var spreadModifier = move.spreadModifier || 0.75;
-			this.debug('Spread modifier: ' + spreadModifier);
-			baseDamage = this.modify(baseDamage, spreadModifier);
+		// Multi-target modifier (doubles and triples)
+		if (this.gameType in {'doubles':1, 'triples':1} && move.spreadHit) {
+			var sideActives = target.side.active.length;
+			for (var p in target.side.active) {
+				if (target.side.active[p].fainted) sideActives--;
+			}
+			if (move.target === 'allAdjacent') {
+				// For allAdjacentFoes, we only take into account a single side.
+				// allAdjacent moves hit allies. The damage is only full if it hits a single Pokémon, no matter whether ally or foe.
+				// We substract one from the Pokémon's active side to account for the user of the move.
+				// If all teammates are fainted, sideActives will remain the same as previously.
+				sideActives += pokemon.side.active.length - 1;
+				for (var p in pokemon.side.active) {
+					if (pokemon.side.active[p].fainted) sideActives--;
+				}
+			}
+
+			// It's only applied if there's more than one target.
+			if (sideActives > 1) {
+				var spreadModifier = move.spreadModifier || 0.75;
+				this.debug('Spread modifier: ' + spreadModifier);
+				baseDamage = this.modify(baseDamage, spreadModifier);
+			} else {
+				this.debug('Spread modifier supressed: only one target left.');	
+			}
 		}
 
 		// weather modifier (TODO: relocate here)
