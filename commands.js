@@ -575,10 +575,11 @@ var commands = exports.commands = {
 		} else if (Users.usergroups[userid]) {
 			currentGroup = Users.usergroups[userid].substr(0,1);
 		}
-
-		var nextGroup = target ? target : Users.getNextGroupSymbol(currentGroup, cmd === 'demote');
+		
+		var isDemotion = (cmd === 'demote');
+		var nextGroup = target ? target : (currentGroup === '&' && isDemotion)? '@' : (currentGroup === '@' && !isDemotion)? '&' : Users.getNextGroupSymbol(currentGroup, isDemotion);
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
-		if (!config.groups[nextGroup]) {
+		if (!config.gorups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
 		}
 		if (!user.checkPromotePermission(currentGroup, nextGroup)) {
