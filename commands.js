@@ -579,7 +579,7 @@ var commands = exports.commands = {
 		var isDemotion = (cmd === 'demote');
 		var nextGroup = target ? target : (currentGroup === '&' && isDemotion)? '@' : (currentGroup === '@' && !isDemotion)? '&' : Users.getNextGroupSymbol(currentGroup, isDemotion);
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
-		if (!config.gorups[nextGroup]) {
+		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
 		}
 		if (!user.checkPromotePermission(currentGroup, nextGroup)) {
