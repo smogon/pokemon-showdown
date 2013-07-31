@@ -102,6 +102,7 @@ exports.BattleScripts = {
 		// Levitate mons
 		this.modData('Pokedex', 'unown').abilities['1'] = 'Adaptability';
 		this.modData('Pokedex', 'flygon').abilities['1'] = 'Compoundeyes';
+		this.modData('Pokedex', 'flygon').abilities['DW'] = 'Sand Rush';
 		this.modData('Pokedex', 'weezing').abilities['1'] = 'Aftermath';
 		this.modData('Pokedex', 'eelektross').abilities['1'] = 'Poison Heal';
 		this.modData('Pokedex', 'claydol').abilities['1'] = 'Filter';
