@@ -228,7 +228,21 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['PotD', 'OU Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod'],
-		banlist: ['Ubers','LC','NFE','UU','RU','NU','BL','BL2','BL3','PU']
+		banlist: ['Uber','LC','NFE','UU','RU','NU','BL','BL2','BL3','PU']
+	},
+	pogeybatsubers: {
+		name: "Pogeybats Ubers",
+		section: "Singles",
+
+		effectType: 'Format',
+		team: 'random',
+		canUseRandomTeam: true,
+		defaultLevel: 100,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['PotD', 'Uber Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod'],
+		banlist: ['OU','LC','NFE','UU','RU','NU','BL','BL2','BL3','PU']
 	},
 	cap: {
 		name: "CAP",
