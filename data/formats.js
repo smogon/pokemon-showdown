@@ -216,6 +216,20 @@ exports.BattleFormats = {
 		defaultLevel: 100,
 		ruleset: ['Team Preview']
 	},
+	pogeybatsou: {
+		name: "Pogeybats OU",
+		section: "Singles",
+
+		effectType: 'Format',
+		team: 'random',
+		canUseRandomTeam: true,
+		defaultLevel: 100,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['PotD', 'OU Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod'],
+		banlist: ['Ubers','LC','NFE','UU','RU','NU','BL','BL2','BL3','PU']
+	},
 	cap: {
 		name: "CAP",
 		section: "Singles",
