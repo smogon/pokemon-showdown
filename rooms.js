@@ -357,6 +357,33 @@ var GlobalRoom = (function() {
 		this.writeChatRoomData();
 		return true;
 	};
+	GlobalRoom.prototype.removeChatRoom = function(title) {
+		var id = toId(title);
+		if (!rooms[id]) return false;
+		// Kick all players in roomid
+		for (var u in rooms[id].users) {
+			var user = Users.get(u);
+			if (user) user.leaveRoom(id);
+		}
+		// Find chatRoomData
+		var chatRoomDataToDelete = false;
+		for (var r in this.chatRoomData) {
+			if (toId(this.chatRoomData[r].title) === id) chatRoomDataToDelete = r;
+		}
+		if (!chatRoomDataToDelete) return false;
+		var chatRoomsToDelete = false;
+		// Find chatRooms
+		for (var r in this.chatRooms) {
+			if (toId(this.chatRooms[r].title) === id) chatRoomsToDelete = r;
+		}
+		if (!chatRoomsToDelete) return false;
+		// Delete all the room data and write the file
+		delete this.chatRooms[chatRoomsToDelete];
+		delete this.chatRoomData[chatRoomDataToDelete];
+		delete rooms[id];
+		this.writeChatRoomData();
+		return true;
+	};
 	GlobalRoom.prototype.autojoin = function(user, connection) {
 		// we only autojoin regular rooms if the client requests it with /autojoin
 		// note that this restriction doesn't apply to staffAutojoin
