@@ -162,6 +162,7 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
+		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
 
 		if (room.auth[userid] !== '#') return this.sendReply("User '"+name+"' is not a room owner.");
 		if (!this.can('makeroom', null, room)) return false;
@@ -229,6 +230,7 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
+		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
 
 		if (room.auth[userid] !== '%') return this.sendReply("User '"+name+"' is not a room mod.");
 		if (!this.can('roommod', null, room)) return false;
@@ -278,6 +280,7 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
+		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
 
 		if (room.auth[userid] !== '+') return this.sendReply("User '"+name+"' is not a room voice.");
 		if (!this.can('roomvoice', null, room)) return false;
@@ -830,7 +833,7 @@ var commands = exports.commands = {
 		if (this.can('hotpatch')) return false;
 		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
 		this.sendReply('learnsets.js saved.');
-	},
+	},	
 
 	disableladder: function(target, room, user) {
 		if (!this.can('disableladder')) return false;
