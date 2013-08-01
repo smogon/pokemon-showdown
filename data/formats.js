@@ -377,8 +377,8 @@ exports.BattleFormats = {
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 	
-	oumonotype: {
-		name: "OU Monotype",
+	stabmons: {
+		name: "STABmons",
 		section: "OM of the Month",
 
 		effectType: 'Format',
@@ -386,8 +386,62 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+		ruleset: ['Pokemon', 'Evasion Abilities Clause', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
+		banlist: ['Unreleased', 'Drizzle ++ Swift Swim', 'Soul Dew',
+			'Mewtwo', 'Lugia', 'Ho-Oh', 'Blaziken', 'Kyogre', 'Groudon', 'Rayquaza', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin', 'Manaphy', 'Darkrai', 'Shaymin-Sky',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Reshiram', 'Zekrom', 'Kyurem-White', 'Genesect'
+		],
+		validateSet: function (set, format) {
+			var problems = [];
+			// Check that moves aren't repeated
+			var moves = [];
+			if (set.moves) {
+				var hasMove = {};
+				for (var i=0; i<set.moves.length; i++) {
+					var move = this.getMove(set.moves[i]);
+					var moveid = move.id;
+					if (hasMove[moveid]) continue;
+					hasMove[moveid] = true;
+					moves.push(set.moves[i]);
+				}
+			}
+			set.moves = moves;
+
+			// Check learnset for illegalities unless the move shares typing
+			var lsetData = {set:set, format:format};
+			var template = this.getTemplate(string(set.species));
+			for (var i=0; i<set.moves.length; i++) {
+				if (!set.moves[i]) continue;
+				var move = this.getMove(string(set.moves[i]));
+				// Check if the Pokémon has the move type
+				if (template.types.indexOf(move.type) === -1) {
+					var problem = this.checkLearnset(move, template, lsetData);
+					if (problem) {
+						var problemString = template.species + " can't learn " + move.name;
+						if (problem.type === 'incompatible') {
+							problemString = problemString.concat(((isDW)? " because it's incompatible with its ability or another move."
+							: " because it's incompatible with another move."));
+						} else if (problem.type === 'oversketched') {
+							problemString = problemString.concat(' because it can only sketch '+problem.maxSketches+' move'+(problem.maxSketches>1?'s':'')+'.');
+						} else {
+							problemString = problemString.concat('.');
+						}
+						problems.push(problemString);
+					}
+				}
+			}
+			
+			// Check the EVs
+			var totalEV = 0;
+			for (var k in set.evs) {
+				if (typeof set.evs[k] !== 'number') set.evs[k] = 0;
+				totalEV += set.evs[k];
+			}
+			if (totalEV > 510) problems.push(name+' has more than 510 total EVs.');
+			
+			return problems;
+		}
 	},
 	seasonaljollyjuly: {
 		effectType: 'Format',
@@ -575,6 +629,16 @@ exports.BattleFormats = {
 		challengeShow: true,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
+	},
+	oumonotype: {
+		name: "OU Monotype",
+		section: "Other Metagames",
+
+		effectType: 'Format',
+		challengeShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	glitchmons: {
 		name: "Glitchmons",
