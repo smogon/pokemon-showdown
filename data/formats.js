@@ -517,7 +517,9 @@ exports.BattleFormats = {
 		section: "Other Metagames",
 
 		effectType: 'Format',
+		rated: true,
 		challengeShow: true,
+		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
