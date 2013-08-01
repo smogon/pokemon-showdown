@@ -1597,7 +1597,8 @@ exports.BattleScripts = {
 			teamPool = kyogresPirates;
 			moveToGet = 'hurricane';
 		} else {
-			ability = 'Tinted Lens';
+			var dice = this.random(100);
+			ability = (dice < 33)? 'Water Absorb' : 'Tinted Lens';
 			teamPool = groudonsSailors;
 			moveToGet = 'vcreate';
 		}
@@ -1606,10 +1607,12 @@ exports.BattleScripts = {
 			var template = this.getTemplate(pokemon);
 			var set = this.randomSet(template, i);
 			set.ability = ability;
+			var hasMoves = {};
 			for (var m in set.moves[m]) {
 				set.moves[m] = set.moves[m].toLowerCase();
+				hasMoves[set.moves[m]] = true;
 			}
-			if (!(moveToGet in set.moves)) {
+			if (!(moveToGet in hasMoves)) {
 				set.moves[3] = moveToGet;
 			}
 			team.push(set);
