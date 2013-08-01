@@ -2450,6 +2450,9 @@ var Battle = (function() {
 		case 'strugglerecoil':
 			this.add('-damage', target, target.getHealth, '[from] recoil');
 			break;
+		case 'confusion':
+			this.add('-damage', target, target.getHealth, '[from] confusion');
+			break;
 		default:
 			this.add('-damage', target, target.getHealth);
 			break;
