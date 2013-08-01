@@ -114,6 +114,16 @@ var commands = exports.commands = {
 		return this.sendReply("An error occurred while trying to create the room '"+target+"'.");
 	},
 
+	deletechatroom: function(target, room, user) {
+		if (!this.can('makeroom')) return;
+		var id = toId(target);
+		if (!Rooms.rooms[id]) return this.sendReply("The room '"+target+"' doesn't exist.");
+		if (Rooms.global.removeChatRoom(target)) {
+			return this.sendReply("The room '"+target+"' was deleted.");
+		}
+		return this.sendReply("An error occurred while trying to delete the room '"+target+"'.");
+	},
+
 	privateroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
 		if (target === 'off') {
