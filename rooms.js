@@ -54,6 +54,10 @@ var GlobalRoom = (function() {
 		this.autojoin = []; // rooms that users autojoin upon connecting
 		this.staffAutojoin = []; // rooms that staff autojoin upon connecting
 		for (var i=0; i<this.chatRoomData.length; i++) {
+			if (!this.chatRoomData[i] || !this.chatRoomData[i].title) {
+				console.log('ERROR: Room number ' + i + ' has no data.');
+				continue;
+			}
 			var id = toId(this.chatRoomData[i].title);
 			console.log("NEW CHATROOM: "+id);
 			var room = rooms[id] = new ChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
@@ -219,6 +223,7 @@ var GlobalRoom = (function() {
 		var rooms = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
 		for (var i=0; i<this.chatRooms.length; i++) {
 			var room = this.chatRooms[i];
+			if (!room) continue;
 			if (room.isPrivate) continue;
 			(!room.auth ? rooms.official : rooms.chat).push({
 				title: room.title,
