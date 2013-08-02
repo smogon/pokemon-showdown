@@ -383,8 +383,8 @@ var GlobalRoom = (function() {
 		}
 		if (!chatRoomsToDelete) return false;
 		// Delete all the room data and write the file
-		delete this.chatRooms[chatRoomsToDelete];
-		delete this.chatRoomData[chatRoomDataToDelete];
+		this.chatRooms.splice(chatRoomsToDelete, 1);
+		this.chatRoomData.splice(chatRoomDataToDelete, 1);
 		delete rooms[id];
 		this.writeChatRoomData();
 		return true;
