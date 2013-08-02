@@ -488,7 +488,7 @@ var BattlePokemon = (function() {
 				}
 				continue;
 			}
-			if (this.disabledMoves[move.id] || !move.pp) {
+			if (this.disabledMoves[move.id] || !move.pp && (this.battle.gen !== 1 || !this.volatiles['partialtrappinglock'])) {
 				move.disabled = true;
 			} else if (!move.disabled) {
 				hasValidMove = true;
