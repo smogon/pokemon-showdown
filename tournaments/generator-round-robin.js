@@ -69,7 +69,7 @@ RoundRobin.prototype = {
                     cell.state = match.state;
                     if (match.state === 'finished') {
                         cell.result = match.result;
-                        cell.score = match.score;
+                        cell.score = match.score.slice(0);
                     }
                 }
                 return cell;
