@@ -237,8 +237,7 @@ var User = (function () {
 			if (room.auth[this.userid]) {
 				return room.auth[this.userid] + this.name;
 			}
-			if (this.group !== ' ') return '+'+this.name;
-			return ' '+this.name;
+			if (room.isPrivate) return ' '+this.name;
 		}
 		return this.group+this.name;
 	};
@@ -258,12 +257,18 @@ var User = (function () {
 		}
 
 		if (room && room.auth) {
-			if (group !== ' ') group = '+';
-			if (room.auth[this.userid]) group = room.auth[this.userid];
+			if (room.auth[this.userid]) {
+				group = room.auth[this.userid];
+			} else if (room.isPrivate) {
+				group = ' ';
+			}
 			groupData = config.groups[group];
 			if (target) {
-				if (targetGroup !== ' ') targetGroup = '+';
-				if (room.auth[target.userid]) targetGroup = room.auth[target.userid];
+				if (room.auth[target.userid]) {
+					targetGroup = room.auth[target.userid];
+				} else if (room.isPrivate) {
+					targetGroup = ' ';
+				}
 			}
 		}
 

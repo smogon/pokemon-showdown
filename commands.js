@@ -350,7 +350,10 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('warn', targetUser)) return false;
+		if (room.isPrivate && room.auth) {
+			return this.sendReply('You can\'t warn here: This is a privately-owned room not subject to global rules.');
+		}
+		if (!this.can('warn', targetUser, room)) return false;
 
 		this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn '+target);
