@@ -114,14 +114,18 @@ var commands = exports.commands = {
 		return this.sendReply("An error occurred while trying to create the room '"+target+"'.");
 	},
 
-	deletechatroom: function(target, room, user) {
+	deregisterchatroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
-		if (!Rooms.rooms[id]) return this.sendReply("The room '"+target+"' doesn't exist.");
-		if (Rooms.global.removeChatRoom(target)) {
-			return this.sendReply("The room '"+target+"' was deleted.");
+		var targetRoom = Rooms.get(id);
+		target = targetRoom.title || targetRoom.id;
+		if (!targetRoom) return this.sendReply("The room '"+target+"' doesn't exist.");
+		if (Rooms.global.deregisterChatRoom(id)) {
+			this.sendReply("The room '"+target+"' was deregistered.");
+			this.sendReply("It will be deleted as of the next server restart.");
+			return;
 		}
-		return this.sendReply("An error occurred while trying to delete the room '"+target+"'.");
+		return this.sendReply("The room '"+target+"' isn't registered.");
 	},
 
 	privateroom: function(target, room, user) {
