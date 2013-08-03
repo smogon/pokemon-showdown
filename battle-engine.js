@@ -1625,9 +1625,6 @@ var Battle = (function() {
 			hasRelayVar = false;
 		}
 
-		if (target.fainted) {
-			return false;
-		}
 		if (effect.effectType === 'Status' && target.status !== effect.id) {
 			// it's changed; call it off
 			return relayVar;
