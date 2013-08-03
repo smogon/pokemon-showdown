@@ -149,6 +149,7 @@ RoundRobin.prototype = {
             return 'UserNotAdded';
         this.isUsersBusy[userIndex] = isBusy;
     },
+
     getAvailableMatches: function () {
         if (!this.isBracketFrozen)
             return 'BracketNotFrozen';
@@ -201,6 +202,7 @@ RoundRobin.prototype = {
         if (this.pendingMatches === 0)
             return true;
     },
+
     getResults: function () {
         if (!this.isBracketFrozen || this.pendingMatches !== 0)
             return 'TournamentNotEnded';
