@@ -104,6 +104,7 @@ var commands = exports.commands = {
 
 	makechatroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
+		if (!target) return this.sendReply("/makechatroom [room title]");
 		var id = toId(target);
 		if (Rooms.rooms[id]) {
 			return this.sendReply("The room '"+target+"' already exists.");
@@ -116,6 +117,7 @@ var commands = exports.commands = {
 
 	deregisterchatroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
+		if (!target) return this.sendReply("/deregisterchatroom [room title]");
 		var id = toId(target);
 		var targetRoom = Rooms.get(id);
 		target = targetRoom.title || targetRoom.id;
