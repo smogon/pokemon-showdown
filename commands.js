@@ -303,6 +303,10 @@ var commands = exports.commands = {
 		}
 	},
 
+	autojoin: function(target, room, user, connection) {
+		Rooms.global.autojoin(user, connection)
+	},
+
 	join: function(target, room, user, connection) {
 		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
 		if (target && !targetRoom) {
