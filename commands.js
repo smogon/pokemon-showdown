@@ -308,7 +308,7 @@ var commands = exports.commands = {
 	},
 
 	autojoin: function(target, room, user, connection) {
-		Rooms.global.autojoin(user, connection)
+		Rooms.global.autojoinRooms(user, connection)
 	},
 
 	join: function(target, room, user, connection) {

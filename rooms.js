@@ -398,7 +398,7 @@ var GlobalRoom = (function() {
 		room.destroy();
 		return true;
 	};
-	GlobalRoom.prototype.autojoin = function(user, connection) {
+	GlobalRoom.prototype.autojoinRooms = function(user, connection) {
 		// we only autojoin regular rooms if the client requests it with /autojoin
 		// note that this restriction doesn't apply to staffAutojoin
 		for (var i=0; i<this.autojoin.length; i++) {
