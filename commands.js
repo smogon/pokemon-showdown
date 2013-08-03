@@ -104,6 +104,7 @@ var commands = exports.commands = {
 
 	makechatroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
+		if (!target) return this.sendReply("/makechatroom [room title]");
 		var id = toId(target);
 		if (!id) return this.parse('/help makechatroom');
 		if (Rooms.rooms[id]) {
@@ -117,6 +118,7 @@ var commands = exports.commands = {
 
 	deregisterchatroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
+		if (!target) return this.sendReply("/deregisterchatroom [room title]");
 		var id = toId(target);
 		if (!id) return this.parse('/help deregisterchatroom');
 		var targetRoom = Rooms.get(id);
