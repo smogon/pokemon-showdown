@@ -203,7 +203,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			} else if (cmd === 'de' + config.groups[g].id || cmd === 'un' + config.groups[g].id) {
 				var nextGroup = config.groupsranking[config.groupsranking.indexOf(g) - 1];
 				if (!nextGroup) nextGroup = config.groupsranking[0];
-				return parse('/demote' + toUserid(target) + ',' + nextGroup, room, user, connection);
+				return parse('/demote ' + toUserid(target) + ',' + nextGroup, room, user, connection);
 			}
 		}
 
