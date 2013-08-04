@@ -13,6 +13,7 @@ var RoundRobin = (function () {
 		this.userScores = null;
 		this.pendingMatches = 0;
 	};
+
 	RoundRobin.prototype.addUser = function (user) {
 		if (this.isBracketFrozen)
 			return 'BracketFrozen';
@@ -228,4 +229,5 @@ var RoundRobin = (function () {
 
 	return RoundRobin;
 })();
+
 exports.RoundRobin = RoundRobin;
