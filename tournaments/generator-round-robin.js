@@ -3,17 +3,17 @@
 //       This causes some operations to be O(N) instead of O(log N) or O(N*N) instead
 //       of O(N*log N), until node.js implements the Map and Set objects.
 
-RoundRobin = function (isDoubles) {
-    this.isDoubles = !!isDoubles;
-    this.isBracketFrozen = false;
-    this.users = [];
-    this.isUsersBusy = null;
-    this.matches = null;
-    this.userScores = null;
-    this.pendingMatches = 0;
-};
-RoundRobin.prototype = {
-    addUser: function (user) {
+var RoundRobin = (function () {
+    function RoundRobin(isDoubles) {
+        this.isDoubles = !!isDoubles;
+        this.isBracketFrozen = false;
+        this.users = [];
+        this.isUsersBusy = null;
+        this.matches = null;
+        this.userScores = null;
+        this.pendingMatches = 0;
+    };
+    RoundRobin.prototype.addUser = function (user) {
         if (this.isBracketFrozen)
             return 'BracketFrozen';
 
@@ -21,8 +21,8 @@ RoundRobin.prototype = {
             return 'UserAlreadyAdded';
 
         this.users.push(user);
-    },
-    removeUser: function (user) {
+    };
+    RoundRobin.prototype.removeUser = function (user) {
         if (this.isBracketFrozen)
             return 'BracketFrozen';
 
@@ -31,8 +31,8 @@ RoundRobin.prototype = {
             return 'UserNotAdded';
 
         this.users.splice(userIndex, 1);
-    },
-    replaceUser: function (user, replacementUser) {
+    };
+    RoundRobin.prototype.replaceUser = function (user, replacementUser) {
         var userIndex = this.users.indexOf(user);
         if (userIndex < 0)
             return 'UserNotAdded';
@@ -41,12 +41,12 @@ RoundRobin.prototype = {
             return 'UserAlreadyAdded';
 
         this.users[userIndex] = replacementUser;
-    },
-    getUserCount: function () {
+    };
+    RoundRobin.prototype.getUserCount = function () {
         return this.users.length;
-    },
+    };
 
-    getBracketData: function () {
+    RoundRobin.prototype.getBracketData = function () {
         var data = {};
         data.type = 'table';
         data.tableHeaders = {
@@ -85,8 +85,8 @@ RoundRobin.prototype = {
             return score;
         }, this);
         return data;
-    },
-    freezeBracket: function () {
+    };
+    RoundRobin.prototype.freezeBracket = function () {
         this.isBracketFrozen = true;
         this.isUsersBusy = this.users.map(function () { return false; });
         this.matches = this.users.map(function (userA, row) {
@@ -100,9 +100,9 @@ RoundRobin.prototype = {
             }, this);
         }, this);
         this.userScores = this.users.map(function () { return 0; });
-    },
+    };
 
-    disqualifyUser: function (user) {
+    RoundRobin.prototype.disqualifyUser = function (user) {
         if (!this.isBracketFrozen)
             return 'BracketNotFrozen';
 
@@ -130,8 +130,8 @@ RoundRobin.prototype = {
             ++this.userScores[row];
             --this.pendingMatches;
         }, this);
-    },
-    getUserBusy: function (user) {
+    };
+    RoundRobin.prototype.getUserBusy = function (user) {
         if (!this.isBracketFrozen)
             return 'BracketNotFrozen';
 
@@ -139,8 +139,8 @@ RoundRobin.prototype = {
         if (userIndex < 0)
             return 'UserNotAdded';
         return this.isUsersBusy[userIndex];
-    },
-    setUserBusy: function (user, isBusy) {
+    };
+    RoundRobin.prototype.setUserBusy = function (user, isBusy) {
         if (!this.isBracketFrozen)
             return 'BracketNotFrozen';
 
@@ -148,9 +148,9 @@ RoundRobin.prototype = {
         if (userIndex < 0)
             return 'UserNotAdded';
         this.isUsersBusy[userIndex] = isBusy;
-    },
+    };
 
-    getAvailableMatches: function () {
+    RoundRobin.prototype.getAvailableMatches = function () {
         if (!this.isBracketFrozen)
             return 'BracketNotFrozen';
 
@@ -165,8 +165,8 @@ RoundRobin.prototype = {
             }, this);
         }, this);
         return matches;
-    },
-    setMatchResult: function (match, result, score) {
+    };
+    RoundRobin.prototype.setMatchResult = function (match, result, score) {
         if (!this.isBracketFrozen)
             return 'BracketNotFrozen';
 
@@ -201,9 +201,9 @@ RoundRobin.prototype = {
 
         if (this.pendingMatches === 0)
             return true;
-    },
+    };
 
-    getResults: function () {
+    RoundRobin.prototype.getResults = function () {
         if (!this.isBracketFrozen || this.pendingMatches !== 0)
             return 'TournamentNotEnded';
 
@@ -224,6 +224,8 @@ RoundRobin.prototype = {
             currentRank.push(this.users[score.userIndex]);
         }, this);
         return results;
-    }
-};
+    };
+
+    return RoundRobin;
+})();
 exports.RoundRobin = RoundRobin;
