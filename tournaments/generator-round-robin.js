@@ -43,8 +43,8 @@ var RoundRobin = (function () {
 
 		this.users[userIndex] = replacementUser;
 	};
-	RoundRobin.prototype.getUserCount = function () {
-		return this.users.length;
+	RoundRobin.prototype.getUsers = function () {
+		return this.users.slice(0);
 	};
 
 	RoundRobin.prototype.getBracketData = function () {
@@ -172,7 +172,7 @@ var RoundRobin = (function () {
 			return 'BracketNotFrozen';
 
 		if (!(result in {win:1, loss:1, draw:1}))
-			return 'InvalidResult';
+			return 'InvalidMatchResult';
 
 		var userIndexA = this.users.indexOf(match[0]);
 		var userIndexB = this.users.indexOf(match[1]);
