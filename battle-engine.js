@@ -3034,8 +3034,10 @@ var Battle = (function() {
 			break;
 		case 'runSwitch':
 			decision.pokemon.isStarted = true;
-			this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
-			this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			if (!decision.pokemon.fainted) {
+				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
+				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			}
 			break;
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
