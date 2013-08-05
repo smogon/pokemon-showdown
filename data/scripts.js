@@ -1571,7 +1571,7 @@ exports.BattleScripts = {
 		var lead = (dice  < 50)? 'groudon' : 'kyogre';
 		var groudonsSailors = [
 			'alakazam', 'arbok', 'arcanine', 'arceusfire', 'bibarel', 'bisharp', 'blaziken', 'blissey', 'cacturne',
-			'chandelure', 'chansey', 'chansey', 'charizard', 'cloyster', 'conkeldurr', 'druddigon', 'electivire',
+			'chandelure', 'chansey', 'charizard', 'cloyster', 'conkeldurr', 'druddigon', 'electivire',
 			'emboar', 'entei', 'exploud', 'gardevoir', 'genesect', 'golurk', 'hariyama', 'heatran', 'infernape',
 			'jellicent', 'lilligant', 'lucario', 'luxray', 'machamp', 'machoke', 'machop', 'magmortar', 'meloetta',
 			'onix', 'poliwrath', 'primeape', 'smeargle', 'snorlax', 'toxicroak', 'typhlosion', 'weezing'
@@ -1606,15 +1606,18 @@ exports.BattleScripts = {
 			var pokemon = teamPool[i];
 			var template = this.getTemplate(pokemon);
 			var set = this.randomSet(template, i);
-			set.ability = ability;
+			set.ability = (template.baseSpecies && template.baseSpecies === 'Arceus')? 'Multitype' : ability;
 			var hasMoves = {};
-			for (var m in set.moves[m]) {
+			for (var m in set.moves) {
 				set.moves[m] = set.moves[m].toLowerCase();
+				if (set.moves[m] === 'dynamicpunch') set.moves[m] = 'closecombat';
 				hasMoves[set.moves[m]] = true;
 			}
 			if (!(moveToGet in hasMoves)) {
 				set.moves[3] = moveToGet;
 			}
+			if (set.item === 'Damp Rock' && !('rain dance' in hasMoves)) set.item = 'Life Orb';
+			if (set.item === 'Heat Rock' && !('sunny day' in hasMoves)) set.item = 'Life Orb';
 			team.push(set);
 		}
 		
