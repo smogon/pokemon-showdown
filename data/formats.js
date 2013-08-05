@@ -710,7 +710,7 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Wrap', 'Fire Spin', 'Clamp', 'Bind']
+		banlist: ['Uber']
 	},
 	gen1customgame: {
 		name: "[Gen 1] Custom Game",
