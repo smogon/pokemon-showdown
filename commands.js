@@ -366,7 +366,6 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help redir');
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
-		if (!target) return this.sendReply('You need to input a room name!');
 		var targetRoom = Rooms.get(target);
 		if (target && !targetRoom) {
 			return this.sendReply("The room '" + target + "' does not exist.");
@@ -376,6 +375,9 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 		var roomName = (targetRoom.isPrivate)? 'a private room' : 'room ' + target;
+		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
+			return this.sendReply('User '+this.targetUsername+' is not on the room ' + room.id + '.');
+		}
 		this.addModCommand(targetUser.name + ' was redirected to ' + roomName + ' by ' + user.name + '.');
 		targetUser.leaveRoom(room);
 		targetUser.joinRoom(target);
