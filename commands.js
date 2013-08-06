@@ -367,7 +367,7 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		var targetRoom = Rooms.get(target);
-		if (target && !targetRoom) {
+		if (!targetRoom) {
 			return this.sendReply("The room '" + target + "' does not exist.");
 		}
 		if (!user.can('kick', targetUser, room)) return false;
