@@ -98,7 +98,7 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		rated: true,
 		challengeShow: true,
-		//searchShow: true,
+		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
