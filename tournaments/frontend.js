@@ -91,7 +91,12 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.update = function (output) {
-		output.send('|tournament|' + this.name + '|update|' + this.isTournamentStarted);
+		output.send('|tournament|' + this.name + '|update');
+		output.send('|tournament|' + this.name + '|info|' + JSON.stringify({
+			isStarted: this.isTournamentStarted,
+			format: this.format,
+			generator: this.generator.name
+		}));
 
 		this.getBracketData(output);
 
