@@ -235,6 +235,50 @@ var Tournament = (function () {
 		});
 	};
 
+	Tournament.prototype.disqualifyUser = function (user, output) {
+		var error = this.generator.disqualifyUser(user);
+		if (typeof error === 'string') {
+			output.sendReply('|tournament|' + this.name + '|error|' + error);
+			return;
+		}
+
+		this.generator.setUserBusy(user, false);
+
+		var challenge = this.pendingChallenges.get(user);
+		if (challenge) {
+			this.pendingChallenges.set(user, null);
+			if (challenge.to) {
+				this.generator.setUserBusy(challenge.to, false);
+				this.pendingChallenges.set(challenge.to, null);
+			} else if (challenge.from) {
+				this.generator.setUserBusy(challenge.from, false);
+				this.pendingChallenges.set(challenge.from, null);
+			}
+		}
+
+		var matchFrom = this.inProgressMatches.get(user);
+		if (matchFrom) {
+			this.generator.setUserBusy(matchFrom.to, false);
+			this.inProgressMatches.set(user, null);
+			matchFrom.room.forfeit(user);
+		}
+
+		var matchTo = null;
+		this.inProgressMatches.forEach(function (match, userFrom) {
+			if (match && match.to === user)
+				matchTo = userFrom;
+		});
+		if (matchTo) {
+			this.generator.setUserBusy(matchTo, false);
+			this.inProgressMatches.get(matchTo).room.forfeit(user);
+			this.inProgressMatches.set(matchTo, null);
+		}
+
+		this.isBracketInvalidated = true;
+		this.isAvailableMatchesInvalidated = true;
+		this.update(output);
+	};
+
 	Tournament.prototype.onChallenge = function (from, to, output) {
 		if (!this.availableMatches.get(from).get(to)) {
 			output.sendReply('|tournament|' + this.name + '|error|InvalidMatch')
