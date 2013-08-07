@@ -8080,14 +8080,16 @@ exports.BattleMovedex = {
 			var result = true;
 			for (var i=0; i<this.sides.length; i++) {
 				for (var j=0; j<this.sides[i].active.length; j++) {
-					if (!this.sides[i].active[j].volatiles['perishsong']) {
-						result = false;
-					}
-					if (this.sides[i].active[j].ability !== 'soundproof') {
-						this.sides[i].active[j].addVolatile('perishsong');
-					} else {
-						this.add('-immune', this.sides[i].active[j], '[msg]');
-						this.add('-end', this.sides[i].active[j], 'Perish Song');
+					if (this.sides[i].active[j]) {
+						if (!this.sides[i].active[j].volatiles['perishsong']) {
+							result = false;
+						}
+						if (this.sides[i].active[j].ability !== 'soundproof') {
+							this.sides[i].active[j].addVolatile('perishsong');
+						} else {
+							this.add('-immune', this.sides[i].active[j], '[msg]');
+							this.add('-end', this.sides[i].active[j], 'Perish Song');
+						}
 					}
 				}
 			}
