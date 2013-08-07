@@ -14,6 +14,8 @@ var RoundRobin = (function () {
 		this.pendingMatches = 0;
 	};
 
+	RoundRobin.prototype.name = "Round Robin";
+
 	RoundRobin.prototype.addUser = function (user) {
 		if (this.isBracketFrozen)
 			return 'BracketFrozen';
