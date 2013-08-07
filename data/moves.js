@@ -7548,9 +7548,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		heal: [1,2],
-		onModifyMove: function(move) {
-			if (this.isWeather('sunnyday')) move.heal = [2,3];
-			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [1,4];
+		onModifyMove: function(move, pokemon, target) {
+			if (this.isWeather('sunnyday')) move.heal = [this.modify(target.maxhp, 0.667), target.maxhp];
+			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [this.modify(target.maxhp, 0.25), target.maxhp];
+			else move.heal = [this.modify(target.maxhp, 0.5), target.maxhp];
 		},
 		secondary: false,
 		target: "self",
@@ -7570,9 +7571,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		heal: [1,2],
-		onModifyMove: function(move) {
-			if (this.isWeather('sunnyday')) move.heal = [2,3];
-			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [1,4];
+		onModifyMove: function(move, pokemon, target) {
+			if (this.isWeather('sunnyday')) move.heal = [this.modify(target.maxhp, 0.667), target.maxhp];
+			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [this.modify(target.maxhp, 0.25), target.maxhp];
+			else move.heal = [this.modify(target.maxhp, 0.5), target.maxhp];
 		},
 		secondary: false,
 		target: "self",
@@ -11897,9 +11899,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		heal: [1,2],
-		onModifyMove: function(move) {
-			if (this.isWeather('sunnyday')) move.heal = [2,3];
-			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [1,4];
+		onModifyMove: function(move, pokemon, target) {
+			if (this.isWeather('sunnyday')) move.heal = [this.modify(target.maxhp, 0.667), target.maxhp];
+			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [this.modify(target.maxhp, 0.25), target.maxhp];
+			else move.heal = [this.modify(target.maxhp, 0.5), target.maxhp];
 		},
 		secondary: false,
 		target: "self",
