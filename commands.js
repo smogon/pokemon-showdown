@@ -376,7 +376,7 @@ var commands = exports.commands = {
 		}
 		var roomName = (targetRoom.isPrivate)? 'a private room' : 'room ' + target;
 		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
-			return this.sendReply('User '+this.targetUsername+' is not on the room ' + room.id + '.');
+			return this.sendReply('User '+this.targetUsername+' is not in the room ' + room.id + '.');
 		}
 		this.addModCommand(targetUser.name + ' was redirected to ' + roomName + ' by ' + user.name + '.');
 		targetUser.leaveRoom(room);
