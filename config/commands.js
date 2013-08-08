@@ -851,7 +851,9 @@ var commands = exports.commands = {
 		var atLeastOne = false;
 		var generation = (targets[1] || "bw").trim().toLowerCase();
 		var genNumber = 5;
-
+		var doublesFormats = {'vgc2012':1,'vgc2013':1,'doubles':1};
+		var doublesFormat = (!targets[2] && generation in doublesFormats)? generation : (targets[2] || '').trim().toLowerCase();
+		var doublesText = '';
 		if (generation === "bw" || generation === "bw2" || generation === "5" || generation === "five") {
 			generation = "bw";
 		} else if (generation === "dp" || generation === "dpp" || generation === "4" || generation === "four") {
@@ -869,6 +871,14 @@ var commands = exports.commands = {
 		} else {
 			generation = "bw";
 		}
+		if (doublesFormat !== '') {
+			// Smogon only has doubles formats analysis from gen 5 onwards.
+			if (!(generation in {'bw':1,'xy':1}) || !(doublesFormat in doublesFormats)) {
+				doublesFormat = '';
+			} else {
+				doublesText = {'vgc2012':'VGC 2012 ','vgc2013':'VGC 2013 ','doubles':'Doubles '}[doublesFormat];
+				doublesFormat = '/' + doublesFormat;
+			}
 		
 		// Pokemon
 		if (pokemon.exists) {
@@ -897,7 +907,7 @@ var commands = exports.commands = {
 			if (poke === 'arceus') poke = 'arceus-normal';
 			if (poke === 'thundurus-therian') poke = 'thundurus-t';
 	
-			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+'">'+generation.toUpperCase()+' '+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+doublesFormat+'">'+generation.toUpperCase()+' '+doublesText+''+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
 		
 		// Item
