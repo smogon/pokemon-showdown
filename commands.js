@@ -826,9 +826,13 @@ var commands = exports.commands = {
 
 		if (target === 'chat') {
 
-			CommandParser.uncacheTree('./command-parser.js');
-			CommandParser = require('./command-parser.js');
-			return this.sendReply('Chat commands have been hot-patched.');
+			try {
+				CommandParser.uncacheTree('./command-parser.js');
+				CommandParser = require('./command-parser.js');
+				return this.sendReply('Chat commands have been hot-patched.');
+			} catch (e) {
+				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
+			}
 
 		} else if (target === 'battles') {
 
@@ -836,19 +840,22 @@ var commands = exports.commands = {
 			return this.sendReply('Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.');
 
 		} else if (target === 'formats') {
+			try {
+				// uncache the tools.js dependency tree
+				CommandParser.uncacheTree('./tools.js');
+				// reload tools.js
+				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				// rebuild the formats list
+				Rooms.global.formatListText = Rooms.global.getFormatListText();
+				// respawn simulator processes
+				Simulator.SimulatorProcess.respawn();
+				// broadcast the new formats list to clients
+				Rooms.global.send(Rooms.global.formatListText);
 
-			// uncache the tools.js dependency tree
-			CommandParser.uncacheTree('./tools.js');
-			// reload tools.js
-			Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
-			// rebuild the formats list
-			Rooms.global.formatListText = Rooms.global.getFormatListText();
-			// respawn simulator processes
-			Simulator.SimulatorProcess.respawn();
-			// broadcast the new formats list to clients
-			Rooms.global.send(Rooms.global.formatListText);
-
-			return this.sendReply('Formats have been hotpatched.');
+				return this.sendReply('Formats have been hotpatched.');
+			} catch (e) {
+				return this.sendReply('Something failed while trying to hotpatch formats: \n' + e.stack);
+			}
 
 		}
 		this.sendReply('Your hot-patch command was unrecognized.');
