@@ -705,10 +705,6 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/sim/seasonal">Seasonal Ladder</a><br />';
 		}
-		if (target === 'all' || target === 'smogondoubles' || target === 'doubles') {
-			matched = true;
-			buffer += '- <a href="http://www.smogon.com/forums/threads/3476469/">Smogon Doubles</a><br />';
-		}
 		if (target === 'all' || target === 'vgc2013' || target === 'vgc') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3471161/">VGC 2013</a><br />';
@@ -831,6 +827,10 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'littlecup' || target === 'lc') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/bw/tiers/lc">Little Cup Pokemon</a><br />';
+		}
+		if (target === 'all' || target === 'doubles') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/bw/metagames/doubles">Doubles</a><br />';
 		}
 		if (!matched) {
 			return this.sendReply('The Tiers entry "'+target+'" was not found. Try /tiers for general help.');
