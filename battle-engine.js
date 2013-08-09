@@ -280,7 +280,7 @@ var BattlePokemon = (function() {
 		}
 
 		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
-		if (this.gen && this.gen === 2) {
+		if (this.battle.gen && this.battle.gen === 2) {
 			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
 			var atkDV = Math.floor(this.set.ivs.atk / 2);
 			var defDV = Math.floor(this.set.ivs.def / 2);

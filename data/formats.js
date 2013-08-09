@@ -698,6 +698,30 @@ exports.BattleFormats = {
 		challengeShow: true,
 		ruleset: []
 	},
+	gen2oubeta: {
+		name: "[Gen 2] OU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen2',
+		effectType: 'Format',
+		challengeDefault: true,
+		rated: true,
+		challengeShow: true,
+		searchShow: true,
+		isTeambuilderFormat: true,
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber']
+	},
+	gen2customgame: {
+		name: "[Gen 2] Custom Game",
+		section: "Past Generations",
+
+		mod: 'gen2',
+		effectType: 'Format',
+		challengeShow: true,
+		debug: true,
+		ruleset: ['Pokemon']
+	},
 	gen1oubeta: {
 		name: "[Gen 1] OU (beta)",
 		section: "Past Generations",
