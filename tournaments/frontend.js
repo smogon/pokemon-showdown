@@ -88,7 +88,7 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.forceEnd = function (output) {
-		output.add('|tournament' + this.name + '|forceend');
+		output.add('|tournament|' + this.name + '|forceend');
 	};
 
 	Tournament.prototype.update = function (output) {
