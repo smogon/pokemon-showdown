@@ -380,6 +380,96 @@ var Tournament = (function () {
 	return Tournament;
 })();
 
+CommandParser.commands.tour = 'tournament';
+CommandParser.commands.tours = 'tournament';
+CommandParser.commands.tournaments = 'tournament';
+CommandParser.commands.tournament = function (paramString, room, user) {
+	var cmdParts = paramString.split(' ');
+	var cmd = cmdParts.shift().trim().toLowerCase();
+	var params = cmdParts.join(' ').split(',').map(function (param) { return param.trim(); });
+
+	if (cmd === 'create' || cmd === 'new') {
+		if (params.length < 2)
+			return this.sendReply("Usage: create <format>, <generator>");
+		if (!user.can('tournaments'))
+			return false;
+		if (getTournament(room.title))
+			return this.sendReply("There already is a tournament running in this room.");
+
+		createTournament(room.title, params[0], params[1], this);
+	} else if (cmd === '') {
+		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(tournaments).map(function (tournament) {
+			return {name: tournament.name, format: tournament.format, generator: tournament.generator.name};
+		})));
+	} else {
+		var tournament = getTournament(room.title);
+		if (!tournament)
+			return this.sendReply("There is currently no tournament running in this room.");
+
+		switch (cmd) {
+			case 'join':
+			case 'j':
+				tournament.addUser(user, this);
+				break;
+
+			case 'leave':
+			case 'l':
+				tournament.removeUser(user, this);
+				break;
+
+			case 'getupdate':
+				tournament.update(this);
+				break;
+
+			case 'challenge':
+				if (params.length < 1)
+					return this.sendReply("Usage: " + cmd + " <user>");
+				var targetUser = Users.get(params[0]);
+				if (!targetUser)
+					return this.sendReply("User " + params[0] + " not found.");
+				tournament.challenge(user, targetUser, this);
+				break;
+
+			case 'cancelchallenge':
+				tournament.cancelChallenge(user, this);
+				break;
+
+			case 'acceptchallenge':
+				tournament.acceptChallenge(user, this);
+				break;
+
+			default:
+				if (!user.can('tournaments'))
+					return false;
+
+				switch (cmd) {
+					case 'end':
+					case 'delete':
+						deleteTournament(room.title, this);
+						break;
+
+					case 'begin':
+					case 'start':
+						tournament.startTournament(this)
+						break;
+
+					case 'disqualify':
+					case 'dq':
+						if (params.length < 1)
+							return this.sendReply("Usage: " + cmd + " <user>");
+						var targetUser = Users.get(params[0]);
+						if (!targetUser)
+							return this.sendReply("User " + params[0] + " not found.");
+						tournament.disqualifyUser(targetUser, this);
+						break;
+
+					default:
+						return this.sendReply(cmd + " is not a tournament command.");
+				}
+		}
+	}
+};
+
 exports.Tournament = Tournament;
 exports.TournamentGenerators = TournamentGenerators;
 
