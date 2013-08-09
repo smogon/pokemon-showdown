@@ -19,11 +19,6 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Server version: <b>'+CommandParser.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + CommandParser.serverVersion + '">' + CommandParser.serverVersion.substr(0,10) + '</a>)</small>');
 	},
-	
-	Pogey: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<div class="infobox">Pogeymans Typechart and Type changes:<br />&nbsp;&nbsp;- <a href="https://docs.google.com/document/d/1TM0v2V4nFFi0oA6-sxjjce_KcPrXR6tfTV-Ei4515KA/edit" /></div>');
-	},
 
 	me: function(target, room, user, connection) {
 		target = this.canTalk(target);
@@ -110,6 +105,7 @@ var commands = exports.commands = {
 	makechatroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
+		if (!id) return this.parse('/help makechatroom');
 		if (Rooms.rooms[id]) {
 			return this.sendReply("The room '"+target+"' already exists.");
 		}
@@ -117,6 +113,21 @@ var commands = exports.commands = {
 			return this.sendReply("The room '"+target+"' was created.");
 		}
 		return this.sendReply("An error occurred while trying to create the room '"+target+"'.");
+	},
+
+	deregisterchatroom: function(target, room, user) {
+		if (!this.can('makeroom')) return;
+		var id = toId(target);
+		if (!id) return this.parse('/help deregisterchatroom');
+		var targetRoom = Rooms.get(id);
+		if (!targetRoom) return this.sendReply("The room '"+id+"' doesn't exist.");
+		target = targetRoom.title || targetRoom.id;
+		if (Rooms.global.deregisterChatRoom(id)) {
+			this.sendReply("The room '"+target+"' was deregistered.");
+			this.sendReply("It will be deleted as of the next server restart.");
+			return;
+		}
+		return this.sendReply("The room '"+target+"' isn't registered.");
 	},
 
 	privateroom: function(target, room, user) {
@@ -167,6 +178,7 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
+		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
 
 		if (room.auth[userid] !== '#') return this.sendReply("User '"+name+"' is not a room owner.");
 		if (!this.can('makeroom', null, room)) return false;
@@ -234,6 +246,7 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
+		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
 
 		if (room.auth[userid] !== '%') return this.sendReply("User '"+name+"' is not a room mod.");
 		if (!this.can('roommod', null, room)) return false;
@@ -283,6 +296,7 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
+		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
 
 		if (room.auth[userid] !== '+') return this.sendReply("User '"+name+"' is not a room voice.");
 		if (!this.can('roomvoice', null, room)) return false;
@@ -293,6 +307,10 @@ var commands = exports.commands = {
 		if (room.chatRoomData) {
 			Rooms.global.writeChatRoomData();
 		}
+	},
+
+	autojoin: function(target, room, user, connection) {
+		Rooms.global.autojoinRooms(user, connection)
 	},
 
 	join: function(target, room, user, connection) {
@@ -334,7 +352,10 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('warn', targetUser)) return false;
+		if (room.isPrivate && room.auth) {
+			return this.sendReply('You can\'t warn here: This is a privately-owned room not subject to global rules.');
+		}
+		if (!this.can('warn', targetUser, room)) return false;
 
 		this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn '+target);
@@ -343,16 +364,21 @@ var commands = exports.commands = {
 	redirect: 'redir',
 	redir: function (target, room, user, connection) {
 		if (!target) return this.parse('/help redir');
-		target = this.splitTarget(target);
+		target = toId(this.splitTarget(target));
 		var targetUser = this.targetUser;
-		if (!target) return this.sendReply('You need to input a room name!');
 		var targetRoom = Rooms.get(target);
-		if (target && !targetRoom) {
+		if (!targetRoom) {
 			return this.sendReply("The room '" + target + "' does not exist.");
 		}
 		if (!user.can('kick', targetUser, room)) return false;
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (Rooms.rooms[targetRoom.id].users[targetUser.userid]) {
+			return this.sendReply("The player " + targetUser.name + " is already in the room " + target + "!");	
+		}
+		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
+			return this.sendReply('User '+this.targetUsername+' is not in the room ' + room.id + '.');
 		}
 		var roomName = (targetRoom.isPrivate)? 'a private room' : 'room ' + target;
 		this.addModCommand(targetUser.name + ' was redirected to ' + roomName + ' by ' + user.name + '.');
@@ -580,8 +606,8 @@ var commands = exports.commands = {
 		} else if (Users.usergroups[userid]) {
 			currentGroup = Users.usergroups[userid].substr(0,1);
 		}
-
-		var nextGroup = target ? target : Users.getNextGroupSymbol(currentGroup, cmd === 'demote');
+		
+		var nextGroup = target ? target : Users.getNextGroupSymbol(currentGroup, cmd === 'demote', true);
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
@@ -803,9 +829,13 @@ var commands = exports.commands = {
 
 		if (target === 'chat') {
 
-			CommandParser.uncacheTree('./command-parser.js');
-			CommandParser = require('./command-parser.js');
-			return this.sendReply('Chat commands have been hot-patched.');
+			try {
+				CommandParser.uncacheTree('./command-parser.js');
+				CommandParser = require('./command-parser.js');
+				return this.sendReply('Chat commands have been hot-patched.');
+			} catch (e) {
+				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
+			}
 
 		} else if (target === 'battles') {
 
@@ -813,19 +843,22 @@ var commands = exports.commands = {
 			return this.sendReply('Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.');
 
 		} else if (target === 'formats') {
+			try {
+				// uncache the tools.js dependency tree
+				CommandParser.uncacheTree('./tools.js');
+				// reload tools.js
+				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				// rebuild the formats list
+				Rooms.global.formatListText = Rooms.global.getFormatListText();
+				// respawn simulator processes
+				Simulator.SimulatorProcess.respawn();
+				// broadcast the new formats list to clients
+				Rooms.global.send(Rooms.global.formatListText);
 
-			// uncache the tools.js dependency tree
-			CommandParser.uncacheTree('./tools.js');
-			// reload tools.js
-			Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
-			// rebuild the formats list
-			Rooms.global.formatListText = Rooms.global.getFormatListText();
-			// respawn simulator processes
-			Simulator.SimulatorProcess.respawn();
-			// broadcast the new formats list to clients
-			Rooms.global.send(Rooms.global.formatListText);
-
-			return this.sendReply('Formats have been hotpatched.');
+				return this.sendReply('Formats have been hotpatched.');
+			} catch (e) {
+				return this.sendReply('Something failed while trying to hotpatch formats: \n' + e.stack);
+			}
 
 		}
 		this.sendReply('Your hot-patch command was unrecognized.');
@@ -835,7 +868,7 @@ var commands = exports.commands = {
 		if (this.can('hotpatch')) return false;
 		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
 		this.sendReply('learnsets.js saved.');
-	},
+	},	
 
 	disableladder: function(target, room, user) {
 		if (!this.can('disableladder')) return false;
