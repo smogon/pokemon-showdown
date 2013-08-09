@@ -2185,6 +2185,7 @@ exports.BattleAbilities = {
 		onAnyRedirectTarget: function(target, source, source2, move) {
 			if (move.type !== 'Water') return;
 			if (this.validTarget(this.effectData.target, source, move.target)) {
+				move.accuracy = true;
 				return this.effectData.target;
 			}
 		},
