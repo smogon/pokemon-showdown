@@ -375,6 +375,7 @@ var Tournament = (function () {
 	Tournament.prototype.onTournamentEnd = function (output) {
 		var results = this.generator.getResults();
 		output.add('|tournament|' + this.name + '|end|' + usersToNames(results[0]).join(',') + (results[1] ? '|' + usersToNames(results[1]).join(',') : ''));
+		delete tournaments[toId(this.name)];
 	};
 
 	return Tournament;
