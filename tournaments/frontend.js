@@ -400,6 +400,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		createTournament(room.title, params[0], params[1], this);
 	} else if (cmd === '') {
 		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(tournaments).map(function (tournament) {
+			tournament = tournaments[tournament];
 			return {name: tournament.name, format: tournament.format, generator: tournament.generator.name};
 		})));
 	} else {
