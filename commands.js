@@ -366,7 +366,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help redir');
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
-		var targetRoom = Rooms.get(target);
+		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
 		if (!targetRoom) {
 			return this.sendReply("The room '" + target + "' does not exist.");
 		}
