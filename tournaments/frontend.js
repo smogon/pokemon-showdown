@@ -284,7 +284,7 @@ var Tournament = (function () {
 		this.update(output);
 	};
 
-	Tournament.prototype.onChallenge = function (from, to, output) {
+	Tournament.prototype.challenge = function (from, to, output) {
 		if (!this.availableMatches.get(from).get(to)) {
 			output.sendReply('|tournament|' + this.name + '|error|InvalidMatch')
 			return;
@@ -303,7 +303,7 @@ var Tournament = (function () {
 		this.isAvailableMatchesInvalidated = true;
 		this.update(output);
 	};
-	Tournament.prototype.onCancelChallenge = function (user, output) {
+	Tournament.prototype.cancelChallenge = function (user, output) {
 		var challenge = this.pendingChallenges.get(user);
 		if (!challenge || challenge.from)
 			return;
@@ -317,7 +317,7 @@ var Tournament = (function () {
 		this.isAvailableMatchesInvalidated = true;
 		this.update(output);
 	};
-	Tournament.prototype.onAcceptChallenge = function (user, output) {
+	Tournament.prototype.acceptChallenge = function (user, output) {
 		var challenge = this.pendingChallenges.get(user);
 		if (!challenge || !challenge.from)
 			return;
