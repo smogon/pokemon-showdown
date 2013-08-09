@@ -382,6 +382,8 @@ global.CommandParser = require('./command-parser.js');
 
 global.Simulator = require('./simulator.js');
 
+global.Tournaments = require('./tournaments/frontend.js');
+
 if (config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', (function() {
