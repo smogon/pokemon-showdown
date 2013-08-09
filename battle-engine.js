@@ -279,16 +279,27 @@ var BattlePokemon = (function() {
 			this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
 		}
 
-		var hpTypeX = 0, hpPowerX = 0;
-		var i = 1;
-		for (var s in stats) {
-			hpTypeX += i * (this.set.ivs[s] % 2);
-			hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
-			i *= 2;
-		}
 		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
-		this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
-		this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
+		if (this.gen && this.gen === 2) {
+			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
+			var atkDV = Math.floor(this.set.ivs.atk / 2);
+			var defDV = Math.floor(this.set.ivs.def / 2);
+			var speDV = Math.floor(this.set.ivs.spe / 2);
+			var spcDV = Math.floor(this.set.ivs.spa / 2);
+			this.hpType = hpTypes[4 * (atkDV % 4) + (defDV % 4)];
+			this.hpPower = Math.floor(5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV>2?3:spcDV) / 2 + 31);
+		} else {
+			// Hidden Power check for gen 3 onwards
+			var hpTypeX = 0, hpPowerX = 0;
+			var i = 1;
+			for (var s in stats) {
+				hpTypeX += i * (this.set.ivs[s] % 2);
+				hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
+				i *= 2;
+			}
+			this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
+			this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
+		}
 
 		this.boosts = {
 			atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
