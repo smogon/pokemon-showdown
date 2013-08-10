@@ -48,7 +48,7 @@ function getTournament(name, output) {
 var Tournament = (function () {
 	function Tournament(room, format, generator) {
 		this.room = room;
-		this.format = format;
+		this.format = toId(format);
 		this.generator = generator;
 
 		this.isBracketInvalidated = true;
