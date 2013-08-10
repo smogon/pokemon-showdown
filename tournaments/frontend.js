@@ -155,17 +155,18 @@ var Tournament = (function () {
 			if (data.type === 'tree') {
 				// TODO
 			} else if (data.type === 'table') {
+				data.tableContents.forEach(function (row, r) {
+					var inProgressMatch = this.inProgressMatches.get(data.tableHeaders.rows[r]);
+					if (inProgressMatch)
+						row.forEach(function (cell, c) {
+							if (cell && data.tableHeaders.cols[c] === inProgressMatch.to) {
+								cell.state = 'inprogress';
+								cell.room = inProgressMatch.room.id;
+							}
+						});
+				}, this);
 				data.tableHeaders.cols = usersToNames(data.tableHeaders.cols);
 				data.tableHeaders.rows = usersToNames(data.tableHeaders.rows);
-				data.tableContents.forEach(function (row) {
-					row.forEach(function (cell) {
-						if (cell)
-							cell.teams = usersToNames(cell.teams);
-					});
-				});
-				data.scores.forEach(function (score) {
-					score.team = score.team.name;
-				});
 			}
 
 			this.bracketCache = JSON.stringify(data);
@@ -282,6 +283,7 @@ var Tournament = (function () {
 			this.inProgressMatches.set(matchTo, null);
 		}
 
+		output.send('|tournament|' + this.name + '|disqualify|' + user.name);
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
 		this.update(output);
