@@ -1,7 +1,7 @@
 require("es6-shim");
 
 var TournamentGenerators = {
-	RoundRobin: require('./generator-round-robin.js').RoundRobin
+	roundrobin: require('./generator-round-robin.js').RoundRobin
 };
 
 var tournaments = {};
@@ -10,10 +10,13 @@ function usersToNames(users) {
 	return users.map(function (user) { return user.name; });
 }
 
-function createTournament(name, format, generator, output) {
-	var id = toId(name);
-	if (tournaments[id]) {
-		output.sendReply("A tournament with the same name already exists.");
+function createTournament(room, format, generator, output) {
+	if (room.type !== 'chat') {
+		output.sendReply("Tournaments can only be created in chat rooms.");
+		return;
+	}
+	if (tournaments[room.id]) {
+		output.sendReply("A tournament is already running in the room.");
 		return;
 	}
 	if (Tools.getFormat(format).effectType !== 'Format') {
@@ -21,12 +24,12 @@ function createTournament(name, format, generator, output) {
 		output.sendReply("Valid formats: " + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
 		return;
 	}
-	if (!TournamentGenerators[generator]) {
+	if (!TournamentGenerators[toId(generator)]) {
 		output.sendReply(generator + " is not a valid generator.");
 		output.sendReply("Valid generators: " + Object.keys(TournamentGenerators).join(", "));
 		return;
 	}
-	return tournaments[id] = new Tournament(name, format, new TournamentGenerators[generator](), output);
+	return tournaments[room.id] = new Tournament(room, format, new TournamentGenerators[toId(generator)]());
 }
 function deleteTournament(name, output) {
 	var id = toId(name);
@@ -43,8 +46,8 @@ function getTournament(name, output) {
 }
 
 var Tournament = (function () {
-	function Tournament(name, format, generator, output) {
-		this.name = toName(name);
+	function Tournament(room, format, generator) {
+		this.room = room;
 		this.format = format;
 		this.generator = generator;
 
@@ -60,13 +63,13 @@ var Tournament = (function () {
 
 		this.pendingChallenges = null;
 
-		output.add('|tournament|' + this.name + '|create');
-		this.update(output);
+		room.add('|tournament|create');
+		this.update();
 	}
 
 	Tournament.prototype.setGenerator = function (generator, output) {
 		if (this.isTournamentStarted) {
-			output.sendReply('|tournament|' + this.name + '|error|BracketFrozen');
+			output.sendReply('|tournament|error|BracketFrozen');
 			return;
 		}
 
@@ -74,7 +77,7 @@ var Tournament = (function () {
 		this.generator.getUsers.forEach(function (user) {
 			var error = generator.addUser(user);
 			if (typeof error === 'string') {
-				output.sendReply('|tournament|' + this.name + '|error|' + error);
+				output.sendReply('|tournament|error|' + error);
 				isErrored = true;
 			}
 		});
@@ -84,32 +87,38 @@ var Tournament = (function () {
 
 		this.generator = generator;
 		this.isBracketInvalidated = true;
-		this.update(output);
+		this.update();
 	};
 
-	Tournament.prototype.forceEnd = function (output) {
-		output.add('|tournament|' + this.name + '|forceend');
+	Tournament.prototype.forceEnd = function () {
+		this.room.add('|tournament|forceend');
 	};
 
-	Tournament.prototype.update = function (output) {
-		output.send('|tournament|' + this.name + '|update');
-		output.send('|tournament|' + this.name + '|info|' + JSON.stringify({
+	Tournament.prototype.update = function (targetUser) {
+		if (targetUser && (this.isBracketInvalidated || (this.isTournamentStarted && this.isAvailableMatchesInvalidated)))
+			targetUser = null;
+
+		this.room.send('|tournament|update', targetUser);
+		this.room.send('|tournament|info|' + JSON.stringify({
 			isStarted: this.isTournamentStarted,
 			format: this.format,
 			generator: this.generator.name
-		}));
+		}), targetUser);
 
-		this.getBracketData(output);
+		this.getBracketData(targetUser);
 
 		if (this.isTournamentStarted) {
-			this.getAvailableMatches(output);
+			this.getAvailableMatches(targetUser);
 			this.pendingChallenges.forEach(function (challenge, user) {
 				if (!challenge)
 					return;
+				if (targetUser && challenge.to !== targetUser && challenge.from !== targetUser)
+					return;
+
 				if (challenge.to)
-					user.send('|tournament|' + this.name + '|challenging|' + challenge.to.name);
+					user.sendTo(this.room, '|tournament|challenging|' + challenge.to.name);
 				else if (challenge.from)
-					user.send('|tournament|' + this.name + '|challenged|' + challenge.from.name);
+					user.sendTo(this.room, '|tournament|challenged|' + challenge.from.name);
 			}, this);
 		}
 	};
@@ -117,54 +126,55 @@ var Tournament = (function () {
 	Tournament.prototype.addUser = function (user, output) {
 		var error = this.generator.addUser(user);
 		if (typeof error === 'string') {
-			output.sendReply('|tournament|' + this.name + '|error|' + error);
+			output.sendReply('|tournament|error|' + error);
 			return;
 		}
 
-		output.send('|tournament|' + this.name + '|join|' + user.name);
+		this.room.send('|tournament|join|' + user.name);
 		this.isBracketInvalidated = true;
-		this.update(output);
+		this.update();
 	};
 	Tournament.prototype.removeUser = function (user, output) {
 		var error = this.generator.removeUser(user);
 		if (typeof error === 'string') {
-			output.sendReply('|tournament|' + this.name + '|error|' + error);
+			output.sendReply('|tournament|error|' + error);
 			return;
 		}
 
-		output.send('|tournament|' + this.name + '|leave|' + user.name);
+		this.room.send('|tournament|leave|' + user.name);
 		this.isBracketInvalidated = true;
-		this.update(output);
+		this.update();
 	};
 	Tournament.prototype.replaceUser = function (user, replacementUser, output) {
 		var error = this.generator.replaceUser(user, replacementUser);
 		if (typeof error === 'string') {
-			output.sendReply('|tournament|' + this.name + '|error|' + error);
+			output.sendReply('|tournament|error|' + error);
 			return;
 		}
 
-		output.send('|tournament|' + this.name + '|replace|' + user.name + '|' + replacementUser.name);
+		this.room.send('|tournament|replace|' + user.name + '|' + replacementUser.name);
 		this.isBracketInvalidated = true;
-		this.update(output);
+		this.update();
 	};
 
-	Tournament.prototype.getBracketData = function (output) {
-		// TODO: Add in-progress view
+	Tournament.prototype.getBracketData = function (targetUser) {
 		if (this.isBracketInvalidated) {
+			targetUser = null;
 			var data = this.generator.getBracketData();
 			if (data.type === 'tree') {
 				// TODO
 			} else if (data.type === 'table') {
-				data.tableContents.forEach(function (row, r) {
-					var inProgressMatch = this.inProgressMatches.get(data.tableHeaders.rows[r]);
-					if (inProgressMatch)
-						row.forEach(function (cell, c) {
-							if (cell && data.tableHeaders.cols[c] === inProgressMatch.to) {
-								cell.state = 'inprogress';
-								cell.room = inProgressMatch.room.id;
-							}
-						});
-				}, this);
+				if (this.isTournamentStarted)
+					data.tableContents.forEach(function (row, r) {
+						var inProgressMatch = this.inProgressMatches.get(data.tableHeaders.rows[r]);
+						if (inProgressMatch)
+							row.forEach(function (cell, c) {
+								if (cell && data.tableHeaders.cols[c] === inProgressMatch.to) {
+									cell.state = 'inprogress';
+									cell.room = inProgressMatch.room.id;
+								}
+							});
+					}, this);
 				data.tableHeaders.cols = usersToNames(data.tableHeaders.cols);
 				data.tableHeaders.rows = usersToNames(data.tableHeaders.rows);
 			}
@@ -173,10 +183,10 @@ var Tournament = (function () {
 			this.isBracketInvalidated = false;
 		}
 
-		output.send('|tournament|' + this.name + '|bracketdata|' + this.bracketCache);
+		this.room.send('|tournament|bracketdata|' + this.bracketCache, targetUser);
 	};
 
-	Tournament.prototype.startTournament = function (output) {
+	Tournament.prototype.startTournament = function () {
 		this.generator.freezeBracket();
 
 		this.availableMatches = new Map();
@@ -195,14 +205,15 @@ var Tournament = (function () {
 
 		this.isTournamentStarted = true;
 		this.isBracketInvalidated = true;
-		output.add('|tournament|' + this.name + '|start');
-		this.update(output);
+		this.room.add('|tournament|start');
+		this.update();
 	};
-	Tournament.prototype.getAvailableMatches = function (output) {
+	Tournament.prototype.getAvailableMatches = function (targetUser) {
 		if (this.isAvailableMatchesInvalidated) {
+			targetUser = null;
 			var matches = this.generator.getAvailableMatches();
 			if (typeof matches === 'string') {
-				output.sendReply('|tournament|' + this.name + '|error|' + error);
+				this.room.add("Unexpected error from getAvailableMatches(): " + error + ". Please report this to an admin.");
 				return;
 			}
 
@@ -235,19 +246,23 @@ var Tournament = (function () {
 		}
 
 		this.availableMatchesCache.challenges.forEach(function (opponents, user) {
+			if (targetUser && user !== targetUser)
+				return;
 			if (opponents.length > 0)
-				user.send('|tournament|' + this.name + '|challenges|' + usersToNames(opponents).join(','));
+				user.sendTo(this.room, '|tournament|challenges|' + usersToNames(opponents).join(','));
 		}, this);
 		this.availableMatchesCache.challengeBys.forEach(function (opponents, user) {
+			if (targetUser && user !== targetUser)
+				return;
 			if (opponents.length > 0)
-				user.send('|tournament|' + this.name + '|challengeBys|' + usersToNames(opponents).join(','));
+				user.sendTo(this.room, '|tournament|challengeBys|' + usersToNames(opponents).join(','));
 		}, this);
 	};
 
 	Tournament.prototype.disqualifyUser = function (user, output) {
 		var error = this.generator.disqualifyUser(user);
 		if (typeof error === 'string') {
-			output.sendReply('|tournament|' + this.name + '|error|' + error);
+			output.sendReply('|tournament|error|' + error);
 			return;
 		}
 
@@ -283,15 +298,15 @@ var Tournament = (function () {
 			this.inProgressMatches.set(matchTo, null);
 		}
 
-		output.send('|tournament|' + this.name + '|disqualify|' + user.name);
+		this.room.send('|tournament|disqualify|' + user.name);
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
-		this.update(output);
+		this.update();
 	};
 
 	Tournament.prototype.challenge = function (from, to, output) {
 		if (!this.availableMatches.get(from).get(to)) {
-			output.sendReply('|tournament|' + this.name + '|error|InvalidMatch')
+			output.sendReply('|tournament|error|InvalidMatch')
 			return;
 		}
 
@@ -299,7 +314,7 @@ var Tournament = (function () {
 			return;
 
 		if (this.generator.getUserBusy(from) || this.generator.getUserBusy(to)) {
-			output.add("Tournament backend breaks specifications. Please report this to an admin.");
+			this.room.add("Tournament backend breaks specifications. Please report this to an admin.");
 			return;
 		}
 
@@ -310,9 +325,9 @@ var Tournament = (function () {
 
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
-		this.update(output);
+		this.update();
 	};
-	Tournament.prototype.cancelChallenge = function (user, output) {
+	Tournament.prototype.cancelChallenge = function (user) {
 		var challenge = this.pendingChallenges.get(user);
 		if (!challenge || challenge.from)
 			return;
@@ -324,9 +339,9 @@ var Tournament = (function () {
 
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
-		this.update(output);
+		this.update();
 	};
-	Tournament.prototype.acceptChallenge = function (user, output) {
+	Tournament.prototype.acceptChallenge = function (user) {
 		var challenge = this.pendingChallenges.get(user);
 		if (!challenge || !challenge.from)
 			return;
@@ -339,20 +354,20 @@ var Tournament = (function () {
 
 		var room = Rooms.global.startBattle(challenge.from, user, this.format, true, challenge.team, user.team);
 		this.inProgressMatches.set(challenge.from, {to: user, room: room});
-		output.send('|tournament|' + this.name + '|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
+		this.room.send('|tournament|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
 
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
-		this.update(output);
+		this.update();
 
 		var self = this;
 		room._win = room.win;
 		room.win = function (winner) {
-			self.onBattleWin(this, Users.get(winner), output);
+			self.onBattleWin(this, Users.get(winner));
 			this._win(winner);
 		};
 	};
-	Tournament.prototype.onBattleWin = function (room, winner, output) {
+	Tournament.prototype.onBattleWin = function (room, winner) {
 		var from = Users.get(room.p1);
 		var to = Users.get(room.p2);
 
@@ -364,11 +379,11 @@ var Tournament = (function () {
 		var isTournamentEnded = this.generator.setMatchResult([from, to], result, room.battle.score);
 		if (typeof isTournamentEnded === 'string') {
 			// Should never happen
-			output.add("Unexpected " + isTournamentEnded + " from setMatchResult() in onBattleWin(" + room.id + ", " + winner.id + ", ...). Please report this to an admin.");
+			this.room.add("Unexpected " + isTournamentEnded + " from setMatchResult() in onBattleWin(" + room.id + ", " + winner.id + ", ...). Please report this to an admin.");
 			return;
 		}
 
-		output.send('|tournament|' + this.name + '|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(','));
+		this.room.send('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(','));
 
 		this.generator.setUserBusy(from, false);
 		this.generator.setUserBusy(to, false);
@@ -376,15 +391,15 @@ var Tournament = (function () {
 
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
-		this.update(output);
+		this.update();
 
 		if (isTournamentEnded)
-			this.onTournamentEnd(output);
+			this.onTournamentEnd();
 	};
-	Tournament.prototype.onTournamentEnd = function (output) {
+	Tournament.prototype.onTournamentEnd = function () {
 		var results = this.generator.getResults();
-		output.add('|tournament|' + this.name + '|end|' + usersToNames(results[0]).join(',') + (results[1] ? '|' + usersToNames(results[1]).join(',') : ''));
-		delete tournaments[toId(this.name)];
+		this.room.add('|tournament|end|' + usersToNames(results[0]).join(',') + (results[1] ? '|' + usersToNames(results[1]).join(',') : ''));
+		delete tournaments[toId(this.room.id)];
 	};
 
 	return Tournament;
@@ -410,10 +425,8 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			return this.sendReply("Usage: create <format>, <generator>");
 		if (!user.can('tournaments'))
 			return this.sendReply(cmd + " -  Access denied.");
-		if (getTournament(room.title))
-			return this.sendReply("There already is a tournament running in this room.");
 
-		createTournament(room.title, params[0], params[1], this);
+		createTournament(room, params[0], params[1], this);
 	} else if (cmd === '') {
 		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(tournaments).map(function (tournament) {
 			tournament = tournaments[tournament];
@@ -436,7 +449,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 				break;
 
 			case 'getupdate':
-				tournament.update(this);
+				tournament.update(user);
 				break;
 
 			case 'challenge':
@@ -449,11 +462,11 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 				break;
 
 			case 'cancelchallenge':
-				tournament.cancelChallenge(user, this);
+				tournament.cancelChallenge(user);
 				break;
 
 			case 'acceptchallenge':
-				tournament.acceptChallenge(user, this);
+				tournament.acceptChallenge(user);
 				break;
 
 			default:
@@ -468,7 +481,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 
 					case 'begin':
 					case 'start':
-						tournament.startTournament(this)
+						tournament.startTournament()
 						break;
 
 					case 'disqualify':
