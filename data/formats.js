@@ -686,6 +686,7 @@ exports.BattleFormats = {
 		mod: 'gen3',
 		effectType: 'Format',
 		challengeShow: true,
+		debug: true,
 		ruleset: ['Pokemon', 'HP Percentage Mod'],
 		banlist: []
 	},
