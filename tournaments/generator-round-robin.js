@@ -64,7 +64,6 @@ var RoundRobin = (function () {
 					return null;
 
 				var cell = {};
-				cell.teams = [userA, userB];
 				if (!this.isBracketFrozen)
 					cell.state = 'unavailable';
 				else {
@@ -79,13 +78,7 @@ var RoundRobin = (function () {
 			}, this);
 		}, this);
 		data.scores = this.users.map(function (user, u) {
-			var score = {};
-			score.team = user;
-			if (!this.isBracketFrozen)
-				score.score = 0;
-			else
-				score.score = this.userScores[u];
-			return score;
+			return this.isBracketFrozen ? this.userScores[u] : 0;
 		}, this);
 		return data;
 	};
