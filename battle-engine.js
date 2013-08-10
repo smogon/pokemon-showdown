@@ -1354,7 +1354,6 @@ var Battle = (function() {
 		m = Math.floor(m);
 		n = Math.floor(n);
 		result = (m ? (n ? Math.floor(result*(n-m) / 0x100000000)+m : Math.floor(result*m / 0x100000000)) : result/0x100000000);
-		this.debug('randBW(' + (m ? (n ? m + ',' + n : m) : '') + ') = ' + result);
 		return result;
 	};
 
