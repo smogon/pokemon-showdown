@@ -292,6 +292,10 @@ var Tournament = (function () {
 			output.sendReply('|tournament|' + this.name + '|error|InvalidMatch')
 			return;
 		}
+
+		if (!from.prepBattle(this.format, 'challenge', from))
+			return;
+
 		if (this.generator.getUserBusy(from) || this.generator.getUserBusy(to)) {
 			output.add("Tournament backend breaks specifications. Please report this to an admin.");
 			return;
@@ -299,8 +303,8 @@ var Tournament = (function () {
 
 		this.generator.setUserBusy(from, true);
 		this.generator.setUserBusy(to, true);
-		this.pendingChallenges.set(from, {to: to});
-		this.pendingChallenges.set(to, {from: from});
+		this.pendingChallenges.set(from, {to: to, team: from.team});
+		this.pendingChallenges.set(to, {from: from, team: from.team});
 
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
@@ -325,10 +329,13 @@ var Tournament = (function () {
 		if (!challenge || !challenge.from)
 			return;
 
+		if (!user.prepBattle(this.format, 'challenge', user))
+			return;
+
 		this.pendingChallenges.set(challenge.from, null);
 		this.pendingChallenges.set(user, null);
 
-		var room = Rooms.global.startBattle(challenge.from, user, this.format, true, challenge.from.team, user.team);
+		var room = Rooms.global.startBattle(challenge.from, user, this.format, true, challenge.team, user.team);
 		this.inProgressMatches.set(challenge.from, {to: user, room: room});
 		output.send('|tournament|' + this.name + '|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
 
