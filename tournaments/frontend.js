@@ -63,7 +63,7 @@ var Tournament = (function () {
 
 		this.pendingChallenges = null;
 
-		room.add('|tournament|create');
+		room.add('|tournament|create|' + format + '|' + generator.name);
 		this.update();
 	}
 
