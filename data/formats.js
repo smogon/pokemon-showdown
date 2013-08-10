@@ -1110,7 +1110,6 @@ exports.BattleFormats = {
 	oumonotype: {
 		name: "OU Monotype",
 		section: "Special",
-
 		effectType: 'Format',
 		rated: true,
 		challengeShow: true,

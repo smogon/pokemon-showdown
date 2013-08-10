@@ -1259,6 +1259,15 @@ var commands = exports.commands = {
 			'Bio: Everybody loves me :D')
 	},
 	
+	azure: 'red',
+	red: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Azure</b><br \>' +
+			'<img src="http://sprites.pokecheck.org/t/187.gif"><br />' +
+			'Sig Pokemon: <img src="http://sprites.pokecheck.org/icon/392.png"> <img src="http://sprites.pokecheck.org/icon/612.png"> <img src="http://sprites.pokecheck.org/icon/646-black.png"><img src="http://sprites.pokecheck.org/icon/178.png"><br \>' +
+			'Bio: If i have to get off my ass to do anything no ones gonna be happy')
+	},
+	
 	johnnyk121: 'johnny',
 	johnny: function(target, room, user) {
 		if (!this.canBroadcast()) return;
