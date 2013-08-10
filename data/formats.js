@@ -709,6 +709,7 @@ exports.BattleFormats = {
 		challengeShow: true,
 		searchShow: true,
 		isTeambuilderFormat: true,
+		debug: true,
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber']
 	},
