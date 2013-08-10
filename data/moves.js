@@ -7547,11 +7547,10 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isSnatchable: true,
-		heal: [1,2],
-		onModifyMove: function(move, pokemon, target) {
-			if (this.isWeather('sunnyday')) move.heal = [this.modify(target.maxhp, 0.667), target.maxhp];
-			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [this.modify(target.maxhp, 0.25), target.maxhp];
-			else move.heal = [this.modify(target.maxhp, 0.5), target.maxhp];
+		onHit: function(pokemon) {
+			if (this.isWeather('sunnyday')) this.heal(this.modify(pokemon.maxhp, 0.667));
+			else if (this.isWeather(['raindance','sandstorm','hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
+			else this.heal(this.modify(pokemon.maxhp, 0.5));
 		},
 		secondary: false,
 		target: "self",
@@ -7570,11 +7569,10 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isSnatchable: true,
-		heal: [1,2],
-		onModifyMove: function(move, pokemon, target) {
-			if (this.isWeather('sunnyday')) move.heal = [this.modify(target.maxhp, 0.667), target.maxhp];
-			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [this.modify(target.maxhp, 0.25), target.maxhp];
-			else move.heal = [this.modify(target.maxhp, 0.5), target.maxhp];
+		onHit: function(pokemon) {
+			if (this.isWeather('sunnyday')) this.heal(this.modify(pokemon.maxhp, 0.667));
+			else if (this.isWeather(['raindance','sandstorm','hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
+			else this.heal(this.modify(pokemon.maxhp, 0.5));
 		},
 		secondary: false,
 		target: "self",
@@ -11898,11 +11896,10 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isSnatchable: true,
-		heal: [1,2],
-		onModifyMove: function(move, pokemon, target) {
-			if (this.isWeather('sunnyday')) move.heal = [this.modify(target.maxhp, 0.667), target.maxhp];
-			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [this.modify(target.maxhp, 0.25), target.maxhp];
-			else move.heal = [this.modify(target.maxhp, 0.5), target.maxhp];
+		onHit: function(pokemon) {
+			if (this.isWeather('sunnyday')) this.heal(this.modify(pokemon.maxhp, 0.667));
+			else if (this.isWeather(['raindance','sandstorm','hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
+			else this.heal(this.modify(pokemon.maxhp, 0.5));
 		},
 		secondary: false,
 		target: "self",
