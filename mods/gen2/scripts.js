@@ -133,7 +133,7 @@ exports.BattleScripts = {
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.getStat(category==='Physical'?'atk':'spa', true);
+			attack = attacker.getStat(move.category==='Physical'?'atk':'spa', true);
 		}
 		if (move.ignorePositiveDefensive && defense > target.getStat(move.defensiveCategory==='Physical'?'def':'spd', true)) {
 			move.ignoreDefensive = true;
