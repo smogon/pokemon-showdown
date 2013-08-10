@@ -246,5 +246,13 @@ exports.BattleMovedex = {
 		// Disable does not build
 		inherit: true
 	},
-	magikarpsrevenge: null
+	roar: {
+		inherit: true,
+		priority: -1
+	},
+	magikarpsrevenge: null,
+	whirlwind: {
+		inherit: true,
+		priority: -1
+	},
 };
