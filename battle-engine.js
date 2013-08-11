@@ -287,7 +287,7 @@ var BattlePokemon = (function() {
 			var speDV = Math.floor(this.set.ivs.spe / 2);
 			var spcDV = Math.floor(this.set.ivs.spa / 2);
 			this.hpType = hpTypes[4 * (atkDV % 4) + (defDV % 4)];
-			this.hpPower = Math.floor(5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV>2?3:spcDV) / 2 + 31);
+			this.hpPower = Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV>2?3:spcDV)) / 2 + 31);
 		} else {
 			// Hidden Power check for gen 3 onwards
 			var hpTypeX = 0, hpPowerX = 0;
@@ -1354,7 +1354,6 @@ var Battle = (function() {
 		m = Math.floor(m);
 		n = Math.floor(n);
 		result = (m ? (n ? Math.floor(result*(n-m) / 0x100000000)+m : Math.floor(result*m / 0x100000000)) : result/0x100000000);
-		this.debug('randBW(' + (m ? (n ? m + ',' + n : m) : '') + ') = ' + result);
 		return result;
 	};
 
