@@ -390,9 +390,9 @@ exports.BattleFormats = {
 	///////////////////////////////////////////////////////////////////
 	seasonalseasoningsgreetings: {
 		effectType: 'Format',
-		name: "[Seasonal] Seasoning's Greetings",
+		name: "Seasoning's Greetings",
 		team: 'randomSeasonal',
-		section: 'Special',
+		section: 'Seasonal',
 		canUseRandomTeam: true,
 		rated: true,
 		challengeShow: true,
@@ -402,9 +402,9 @@ exports.BattleFormats = {
 	// Winter Wonderland, December 2012 and January 2013
 	seasonalwinterwonderland: {
 		effectType: 'Format',
-		name: "[Seasonal] Winter Wonderland",
+		name: "Winter Wonderland",
 		team: 'randomSeasonalWW',
-		section: 'Special',
+		section: 'Seasonal',
 		canUseRandomTeam: true,
 		rated: true,
 		challengeShow: true,
@@ -524,8 +524,8 @@ exports.BattleFormats = {
 	// Valentine Venture, February 2013
 	seasonalvalentineventure: {
 		effectType: 'Format',
-		name: "[Seasonal] Valentine Venture",
-		section: 'Special',
+		name: "Valentine Venture",
+		section: 'Seasonal',
 		team: 'randomSeasonalVV',
 		gameType: 'doubles',
 		canUseRandomTeam: true,
@@ -537,8 +537,8 @@ exports.BattleFormats = {
 	// Spring Forward, March 2013
 	seasonalspringforward: {
 		effectType: 'Format',
-		name: "[Seasonal] Spring Forward",
-		section: 'Special',
+		name: "Spring Forward",
+		section: 'Seasonal',
 		team: 'randomSeasonalSF',
 		canUseRandomTeam: true,
 		rated: true,
@@ -619,9 +619,8 @@ exports.BattleFormats = {
 	},
 	// Fools Festival, April 2013
 	seasonalfoolsfestival: {
-		name: "[Seasonal] Fools Festival",
-		section: 'Special',
-
+		name: "Fools Festival",
+		section: 'Seasonal',
 		effectType: 'Format',
 		team: 'randomSeasonalFF',
 		canUseRandomTeam: true,
@@ -834,8 +833,8 @@ exports.BattleFormats = {
 	},
 	maymayhem: {
 		effectType: 'Format',
-		name: "[Seasonal] May Mayhem",
-		section: "Special",
+		name: "May Mayhem",
+		section: "Seasonal",
 		team: 'randomSeasonalMM',
 		canUseRandomTeam: true,
 		rated: true,
@@ -860,9 +859,8 @@ exports.BattleFormats = {
 		}
 	},
 	seasonaljunejubilee: {
-		name: "[Seasonal] June Jubilee",
-		section: "Special",
-		
+		name: "June Jubilee",
+		section: "Seasonal",
 		team: 'randomSeasonalJJ',
 		canUseRandomTeam: true,
 		effectType: 'Format',
@@ -933,8 +931,8 @@ exports.BattleFormats = {
 	},
 	seasonaljollyjuly: {
 		effectType: 'Format',
-		name: "[Seasonal] Jolly July",
-		section: "Special",
+		name: "Jolly July",
+		section: "Seasonal",
 		team: 'randomSeasonalJuly',
 		canUseRandomTeam: true,
 		rated: true,
@@ -1055,8 +1053,8 @@ exports.BattleFormats = {
 	},
 	seasonalaverageaugust: {
 		effectType: 'Format',
-		name: "[Seasonal] Average August",
-		section: "Special",
+		name: "Average August",
+		section: "Seasonal",
 		team: 'randomSeasonalAA',
 		canUseRandomTeam: true,
 		rated: true,
@@ -1131,7 +1129,7 @@ exports.BattleFormats = {
 	},
 	monogen: {
 		effectType: 'Format',
-		name: "Monogen",
+		name: "OU Monogen",
 		section: "Special",
 		rated: true,
 		challengeShow: true,
@@ -1207,18 +1205,6 @@ exports.BattleFormats = {
 		challengeShow: true,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
-	},
-	oumonotype: {
-		name: "OU Monotype",
-		section: "Other Metagames",
-
-		effectType: 'Format',
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
-		isTeambuilderFormat: true,
-		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	glitchmons: {
 		name: "Glitchmons",
@@ -1822,5 +1808,30 @@ exports.BattleFormats = {
 			}
 			return ["Your team must share a type."];
 		}
-	}
+	},
+	monogenclause: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule', 'Monogen Clause: Pokemon must be from one generation');
+		},
+		validateTeam: function(team, format) {
+			var gen = [];
+			var problem = [];
+			for(var i = 0; i < team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				var generation = template.gen;
+				gen.push(generation);
+			}
+			for(var i = 1; i < team.length; i++) {
+				var x = i - 1;
+				if(gen[i] != gen[x]) {
+					problem.push('asdf');
+				}
+			}
+			if(problem[0]) {		
+			return["All Pokemon on your team must be from the same generation. Your Pokemon are from generations " + gen.join(", ") + "."];
+			}
+		}
+	},
+
 };
