@@ -117,21 +117,28 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	lightscreen: {
+		inherit: true,
+		effect: {
+			duration: 5,
+			onModifySpD: function(spd) {
+				return spd * 2;
+			},
+			onStart: function(side) {
+				this.add('-sidestart',side,'move: Light Screen');
+			},
+			onResidualOrder: 21,
+			onEnd: function(side) {
+				this.add('-sideend',side,'move: Light Screen');
+			}
+		}
+	},
 	reflect: {
 		inherit: true,
 		effect: {
 			duration: 5,
-			onFoeModifyDamage: function(damage, source, target, move) {
-				console.log('reflect onfoemodifydamage');
-				if (move.category === 'Physical' && target.side === this.effectData.target) {
-					if (!move.crit) {
-						this.debug('Reflect weaken');
-						if (source.side.active.length > 1) return this.modify(damage, 0.66);
-						return this.modify(damage, 0.5);
-					}
-				} else {
-					this.debug('Reflect ignore');
-				}
+			onModifyDef: function(def) {
+				return def * 2;
 			},
 			onStart: function(side) {
 				this.add('-sidestart',side,'Reflect');
