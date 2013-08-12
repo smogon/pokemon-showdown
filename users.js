@@ -237,8 +237,7 @@ var User = (function () {
 			if (room.auth[this.userid]) {
 				return room.auth[this.userid] + this.name;
 			}
-			if (this.group !== ' ') return '+'+this.name;
-			return ' '+this.name;
+			if (room.isPrivate) return ' '+this.name;
 		}
 		return this.group+this.name;
 	};
@@ -258,12 +257,18 @@ var User = (function () {
 		}
 
 		if (room && room.auth) {
-			if (group !== ' ') group = '+';
-			if (room.auth[this.userid]) group = room.auth[this.userid];
+			if (room.auth[this.userid]) {
+				group = room.auth[this.userid];
+			} else if (room.isPrivate) {
+				group = ' ';
+			}
 			groupData = config.groups[group];
 			if (target) {
-				if (targetGroup !== ' ') targetGroup = '+';
-				if (room.auth[target.userid]) targetGroup = room.auth[target.userid];
+				if (room.auth[target.userid]) {
+					targetGroup = room.auth[target.userid];
+				} else if (room.isPrivate) {
+					targetGroup = ' ';
+				}
 			}
 		}
 
@@ -1274,8 +1279,15 @@ exports.pruneInactiveTimer = setInterval(
 	config.inactiveuserthreshold || 1000*60*60
 );
 
-exports.getNextGroupSymbol = function(group, isDown) {
+exports.getNextGroupSymbol = function(group, isDown, excludeRooms) {
 	var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(group) + (isDown ? -1 : 1)];
+	if (excludeRooms === true && config.groups[nextGroupRank]) {
+		var iterations = 0;
+		while (config.groups[nextGroupRank].roomonly && iterations < 10) {
+			nextGroupRank = config.groupsranking[config.groupsranking.indexOf(group) + (isDown ? -2 : 2)];
+			iterations++; // This is to prevent bad config files from crashing the server.
+		}
+	}
 	if (!nextGroupRank) {
 		if (isDown) {
 			return config.groupsranking[0];

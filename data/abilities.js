@@ -532,6 +532,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Fire attacks do 1.5x damage if hit by one Fire move; Fire immunity.",
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Fire') {
+				move.accuracy = true;
 				if (!target.addVolatile('flashfire')) {
 					this.add('-immune', target, '[msg]');
 				}
@@ -2184,6 +2185,7 @@ exports.BattleAbilities = {
 		onAnyRedirectTarget: function(target, source, source2, move) {
 			if (move.type !== 'Water') return;
 			if (this.validTarget(this.effectData.target, source, move.target)) {
+				move.accuracy = true;
 				return this.effectData.target;
 			}
 		},

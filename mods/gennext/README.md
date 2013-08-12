@@ -193,7 +193,7 @@ New mechanic: Intrinsics:
 
   - Bronzong: Heatproof
 
-  - Flygon: Compoundeyes
+  - Flygon: Compoundeyes, Sand Rush
 
   - Weezing: Aftermath
 

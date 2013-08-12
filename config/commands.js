@@ -712,10 +712,6 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/sim/seasonal">Seasonal Ladder</a><br />';
 		}
-		if (target === 'all' || target === 'smogondoubles' || target === 'doubles') {
-			matched = true;
-			buffer += '- <a href="http://www.smogon.com/forums/threads/3476469/">Smogon Doubles</a><br />';
-		}
 		if (target === 'all' || target === 'vgc2013' || target === 'vgc') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3471161/">VGC 2013</a><br />';
@@ -839,6 +835,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/bw/tiers/lc">Little Cup Pokemon</a><br />';
 		}
+		if (target === 'all' || target === 'doubles') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/bw/metagames/doubles">Doubles</a><br />';
+		}
 		if (!matched) {
 			return this.sendReply('The Tiers entry "'+target+'" was not found. Try /tiers for general help.');
 		}
@@ -858,7 +858,9 @@ var commands = exports.commands = {
 		var atLeastOne = false;
 		var generation = (targets[1] || "bw").trim().toLowerCase();
 		var genNumber = 5;
-
+		var doublesFormats = {'vgc2012':1,'vgc2013':1,'doubles':1};
+		var doublesFormat = (!targets[2] && generation in doublesFormats)? generation : (targets[2] || '').trim().toLowerCase();
+		var doublesText = '';
 		if (generation === "bw" || generation === "bw2" || generation === "5" || generation === "five") {
 			generation = "bw";
 		} else if (generation === "dp" || generation === "dpp" || generation === "4" || generation === "four") {
@@ -875,6 +877,15 @@ var commands = exports.commands = {
 			genNumber = 1;
 		} else {
 			generation = "bw";
+		}
+		if (doublesFormat !== '') {
+			// Smogon only has doubles formats analysis from gen 5 onwards.
+			if (!(generation in {'bw':1,'xy':1}) || !(doublesFormat in doublesFormats)) {
+				doublesFormat = '';
+			} else {
+				doublesText = {'vgc2012':'VGC 2012 ','vgc2013':'VGC 2013 ','doubles':'Doubles '}[doublesFormat];
+				doublesFormat = '/' + doublesFormat;
+			}
 		}
 		
 		// Pokemon
@@ -904,7 +915,7 @@ var commands = exports.commands = {
 			if (poke === 'arceus') poke = 'arceus-normal';
 			if (poke === 'thundurus-therian') poke = 'thundurus-t';
 	
-			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+'">'+generation.toUpperCase()+' '+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+doublesFormat+'">'+generation.toUpperCase()+' '+doublesText+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
 		
 		// Item

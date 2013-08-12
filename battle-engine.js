@@ -279,16 +279,27 @@ var BattlePokemon = (function() {
 			this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
 		}
 
-		var hpTypeX = 0, hpPowerX = 0;
-		var i = 1;
-		for (var s in stats) {
-			hpTypeX += i * (this.set.ivs[s] % 2);
-			hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
-			i *= 2;
-		}
 		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
-		this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
-		this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
+		if (this.battle.gen && this.battle.gen === 2) {
+			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
+			var atkDV = Math.floor(this.set.ivs.atk / 2);
+			var defDV = Math.floor(this.set.ivs.def / 2);
+			var speDV = Math.floor(this.set.ivs.spe / 2);
+			var spcDV = Math.floor(this.set.ivs.spa / 2);
+			this.hpType = hpTypes[4 * (atkDV % 4) + (defDV % 4)];
+			this.hpPower = Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV>2?3:spcDV)) / 2 + 31);
+		} else {
+			// Hidden Power check for gen 3 onwards
+			var hpTypeX = 0, hpPowerX = 0;
+			var i = 1;
+			for (var s in stats) {
+				hpTypeX += i * (this.set.ivs[s] % 2);
+				hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
+				i *= 2;
+			}
+			this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
+			this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
+		}
 
 		this.boosts = {
 			atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
@@ -488,7 +499,7 @@ var BattlePokemon = (function() {
 				}
 				continue;
 			}
-			if (this.disabledMoves[move.id] || !move.pp) {
+			if (this.disabledMoves[move.id] || !move.pp && (this.battle.gen !== 1 || !this.volatiles['partialtrappinglock'])) {
 				move.disabled = true;
 			} else if (!move.disabled) {
 				hasValidMove = true;
@@ -1343,7 +1354,6 @@ var Battle = (function() {
 		m = Math.floor(m);
 		n = Math.floor(n);
 		result = (m ? (n ? Math.floor(result*(n-m) / 0x100000000)+m : Math.floor(result*m / 0x100000000)) : result/0x100000000);
-		this.debug('randBW(' + (m ? (n ? m + ',' + n : m) : '') + ') = ' + result);
 		return result;
 	};
 
@@ -1625,9 +1635,6 @@ var Battle = (function() {
 			hasRelayVar = false;
 		}
 
-		if (target.fainted) {
-			return false;
-		}
 		if (effect.effectType === 'Status' && target.status !== effect.id) {
 			// it's changed; call it off
 			return relayVar;
@@ -2230,6 +2237,7 @@ var Battle = (function() {
 		return canSwitchIn[Math.floor(Math.random()*canSwitchIn.length)];
 	};
 	Battle.prototype.dragIn = function(side, pos) {
+		if (pos >= side.active.length) return false;
 		var pokemon = this.getRandomSwitchable(side);
 		if (!pos) pos = 0;
 		if (!pokemon || pokemon.isActive) return false;
@@ -2449,6 +2457,9 @@ var Battle = (function() {
 		switch (effect.id) {
 		case 'strugglerecoil':
 			this.add('-damage', target, target.getHealth, '[from] recoil');
+			break;
+		case 'confusion':
+			this.add('-damage', target, target.getHealth, '[from] confusion');
 			break;
 		default:
 			this.add('-damage', target, target.getHealth);
@@ -3034,8 +3045,10 @@ var Battle = (function() {
 			break;
 		case 'runSwitch':
 			decision.pokemon.isStarted = true;
-			this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
-			this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			if (!decision.pokemon.fainted) {
+				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
+				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			}
 			break;
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
