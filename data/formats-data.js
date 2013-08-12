@@ -1920,7 +1920,8 @@ exports.BattleFormatsData = {
 	smeargle: {
 		viableMoves: {"spore":1,"spikes":1,"stealthrock":1,"uturn":1,"destinybond":1,"whirlwind":1},
 		eventPokemon: [
-			{"generation":3,"level":10,"gender":"M","moves":["sketch"]}
+			{"generation":3,"level":10,"gender":"M","moves":["sketch"]},
+			{"generation":5,"level":50,"gender":"F","nature":"Jolly","abilities":["technician"],"moves":["falseswipe","spore","odorsleuth","meanlook"],"pokeball":"cherishball"}
 		],
 		dreamWorldRelease: true,
 		tier: "RU"
