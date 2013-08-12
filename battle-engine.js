@@ -2237,6 +2237,7 @@ var Battle = (function() {
 		return canSwitchIn[Math.floor(Math.random()*canSwitchIn.length)];
 	};
 	Battle.prototype.dragIn = function(side, pos) {
+		if (pos >= side.active.length) return false;
 		var pokemon = this.getRandomSwitchable(side);
 		if (!pos) pos = 0;
 		if (!pokemon || pokemon.isActive) return false;
