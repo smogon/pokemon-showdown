@@ -372,9 +372,8 @@ var commands = exports.commands = {
 			var tempResults = [];
 			if (!results) {
 				for (var pokemon in Tools.data.Pokedex) {
-					if (pokemon === 'arceusunknown') continue;
 					pokemon = Tools.getTemplate(pokemon);
-					if (pokemon.tier !== 'Illegal') {
+					if (pokemon.tier !== 'Illegal' && (pokemon.tier.slice(2).toLowerCase() !== 'cap' || 'cap' in tiers)) {
 						tempResults.add(pokemon);
 					}
 				}
@@ -398,7 +397,7 @@ var commands = exports.commands = {
 			if (tiers.count > 0) {
 				for (var mon in tempResults) {
 					if ('cap' in tiers) {
-						if (tempResults[mon].tier.substring(2).toLowerCase() === 'cap') results.add(tempResults[mon]);
+						if (tempResults[mon].tier.slice(2).toLowerCase() === 'cap') results.add(tempResults[mon]);
 					}
 					if (tempResults[mon].tier.toLowerCase() in tiers) results.add(tempResults[mon]);
 				}
