@@ -54,6 +54,10 @@ var GlobalRoom = (function() {
 		this.autojoin = []; // rooms that users autojoin upon connecting
 		this.staffAutojoin = []; // rooms that staff autojoin upon connecting
 		for (var i=0; i<this.chatRoomData.length; i++) {
+			if (!this.chatRoomData[i] || !this.chatRoomData[i].title) {
+				console.log('ERROR: Room number ' + i + ' has no data.');
+				continue;
+			}
 			var id = toId(this.chatRoomData[i].title);
 			console.log("NEW CHATROOM: "+id);
 			var room = rooms[id] = new ChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
@@ -219,6 +223,7 @@ var GlobalRoom = (function() {
 		var rooms = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
 		for (var i=0; i<this.chatRooms.length; i++) {
 			var room = this.chatRooms[i];
+			if (!room) continue;
 			if (room.isPrivate) continue;
 			(!room.auth ? rooms.official : rooms.chat).push({
 				title: room.title,
@@ -357,7 +362,43 @@ var GlobalRoom = (function() {
 		this.writeChatRoomData();
 		return true;
 	};
-	GlobalRoom.prototype.autojoin = function(user, connection) {
+	GlobalRoom.prototype.deregisterChatRoom = function(id) {
+		var id = toId(id);
+		var room = rooms[id];
+		if (!room) return false; // room doesn't exist
+		if (!room.chatRoomData) return false; // room isn't registered
+		// deregister from global chatRoomData
+		// looping from the end is a pretty trivial optimization, but the
+		// assumption is that more recently added rooms are more likely to
+		// be deleted
+		for (var i=this.chatRoomData.length-1; i>=0; i--) {
+			if (id === toId(this.chatRoomData[i].title)) {
+				this.chatRoomData.splice(i, 1);
+				this.writeChatRoomData();
+				break;
+			}
+		}
+		delete room.chatRoomData;
+		return true;
+	};
+	GlobalRoom.prototype.delistChatRoom = function(id) {
+		var id = toId(id);
+		if (!rooms[id]) return false; // room doesn't exist
+		for (var i=this.chatRooms.length-1; i>=0; i--) {
+			if (id === this.chatRooms[i].id) {
+				this.chatRooms.splice(i, 1);
+				break;
+			}
+		}
+	};
+	GlobalRoom.prototype.removeChatRoom = function(id) {
+		var id = toId(id);
+		var room = rooms[id];
+		if (!room) return false; // room doesn't exist
+		room.destroy();
+		return true;
+	};
+	GlobalRoom.prototype.autojoinRooms = function(user, connection) {
 		// we only autojoin regular rooms if the client requests it with /autojoin
 		// note that this restriction doesn't apply to staffAutojoin
 		for (var i=0; i<this.autojoin.length; i++) {
@@ -613,7 +654,7 @@ var BattleRoom = (function() {
 				});
 			}
 		}
-		rooms.global.battleCount += 0 - Number(this.active);
+		rooms.global.battleCount += 0 - (this.active?1:0);
 		this.active = false;
 		this.update();
 	};
@@ -738,7 +779,7 @@ var BattleRoom = (function() {
 		this.add('RESET');
 		this.update();
 
-		rooms.global.battleCount += 0 - Number(this.active);
+		rooms.global.battleCount += 0 - (this.active?1:0);
 		this.active = false;
 		if (this.parentid) {
 			getRoom(this.parentid).updateRooms();
@@ -773,7 +814,7 @@ var BattleRoom = (function() {
 		this.addCmd('-message', name+message);
 		this.battle.endType = 'forfeit';
 		this.battle.send('win', otherids[side]);
-		rooms.global.battleCount += Number(this.battle.active) - Number(this.active);
+		rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 		this.active = this.battle.active;
 		this.update();
 		return true;
@@ -901,7 +942,7 @@ var BattleRoom = (function() {
 	BattleRoom.prototype.decision = function(user, choice, data) {
 		this.battle.sendFor(user, choice, data);
 		if (this.active !== this.battle.active) {
-			rooms.global.battleCount += Number(this.battle.active) - Number(this.active);
+			rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 			this.active = this.battle.active;
 			if (this.parentid) {
 				getRoom(this.parentid).updateRooms();
@@ -962,7 +1003,7 @@ var BattleRoom = (function() {
 		if (!user) return; // ...
 		if (user.battles[this.id]) {
 			this.battle.leave(user);
-			rooms.global.battleCount += Number(this.battle.active) - Number(this.active);
+			rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 			this.active = this.battle.active;
 			if (this.parentid) {
 				getRoom(this.parentid).updateRooms();
@@ -975,7 +1016,7 @@ var BattleRoom = (function() {
 		this.addCmd('leave', user.name);
 
 		if (Object.isEmpty(this.users)) {
-			rooms.global.battleCount += 0 - Number(this.active);
+			rooms.global.battleCount += 0 - (this.active?1:0);
 			this.active = false;
 		}
 
@@ -994,7 +1035,7 @@ var BattleRoom = (function() {
 		}
 
 		this.battle.join(user, slot, team);
-		rooms.global.battleCount += Number(this.battle.active) - Number(this.active);
+		rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 		this.active = this.battle.active;
 		if (this.active) {
 			this.title = ""+this.battle.p1+" vs. "+this.battle.p2;
@@ -1013,7 +1054,7 @@ var BattleRoom = (function() {
 		} else {
 			return false;
 		}
-		rooms.global.battleCount += Number(this.battle.active) - Number(this.active);
+		rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 		this.active = this.battle.active;
 		this.update();
 
@@ -1363,6 +1404,22 @@ var ChatRoom = (function() {
 		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
 	ChatRoom.prototype.logEntry = function() {};
+	ChatRoom.prototype.destroy = function() {
+		// deallocate ourself
+
+		// remove references to ourself
+		for (var i in this.users) {
+			this.users[i].leaveRoom(this);
+			delete this.users[i];
+		}
+		this.users = null;
+
+		rooms.global.deregisterChatRoom(this.id);
+		rooms.global.delistChatRoom(this.id);
+
+		// get rid of some possibly-circular references
+		delete rooms[this.id];
+	};
 	return ChatRoom;
 })();
 

@@ -18,6 +18,9 @@ exports.BattleStatuses = {
 			if (move.type === 'Fire' && move.category !== 'Status' || move.thawsUser) {
 				target.cureStatus();
 			}
+		},
+		onEnd: function(target) {
+			this.battle.add('-curestatus', target, 'frz');
 		}
 	},
 	lockedmove: {
