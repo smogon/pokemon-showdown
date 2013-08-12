@@ -1129,7 +1129,7 @@ exports.BattleFormats = {
 	},
 	monogen: {
 		effectType: 'Format',
-		name: "OU Monogen",
+		name: "Monogen",
 		section: "Special",
 		rated: true,
 		challengeShow: true,

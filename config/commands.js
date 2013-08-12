@@ -1475,4 +1475,9 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		Rooms.lobby.addRaw('<div class="broadcast-green"><b>Challenge the PGX League!</div>')
 	},
+
+	nn: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We have just decided a new server name!! If you can\'t find this server in the near future thats because its now call MeteorFalls!</div>')
+	},
 };
