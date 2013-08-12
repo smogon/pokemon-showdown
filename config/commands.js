@@ -1245,5 +1245,239 @@ var commands = exports.commands = {
 			this.sendReply('The command "/'+target+'" was not found. Try /help for general help');
 		}
 	},
+/*********************************************************
+	 * Special commands
+	 *********************************************************/
+	stefan: 'khaous',
+	khaous: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Khaous</b><br \>' +
+			'Current Poison Gym Leader<br \>' +
+			'Badge: Killer Poison Badge<br \>' +
+			'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/018_zps7add8bf3.png"><br \>' +
+			'Sig Pokemon: Toxicroak<br \>' +
+			'Bio: Everybody loves me :D')
+	},
+	
+	azure: 'red',
+	red: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Azure</b><br \>' +
+			'<img src="http://sprites.pokecheck.org/t/187.gif"><br />' +
+			'Sig Pokemon: <img src="http://sprites.pokecheck.org/icon/392.png"> <img src="http://sprites.pokecheck.org/icon/612.png"> <img src="http://sprites.pokecheck.org/icon/646-black.png"><img src="http://sprites.pokecheck.org/icon/178.png"><br \>' +
+			'Bio: If i have to get off my ass to do anything no ones gonna be happy')
+	},
+	
+	johnnyk121: 'johnny',
+	johnny: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Johnnyk121</b><br \>' +
+			'Current Water Elite 4 Member<br \>' +
+			'Badge: Tsunami Badge<br \>' +
+			'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/131_zps0aa936ff.png"><br \>' +
+			'Sig Pokemon: Suicune<br \>' +
+			'Bio: Just call him Johnny, no need to be stupid and type out the \'k121\' *insert Canadian flag* ')
+	},
+	
+	pk: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>PK1410</b><br \>' +
+			'Current Psychic Gym Leader<br \>' +
+			'Badge: Mystic Badge<br \>' +
+			'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/130_zpsce775186.png"><br \>' +
+			'Sig Pokemon: Latios<br \>' +
+			'Bio: Walks the dog more than anyone should!!!!!1111ONE111!! ')
+	},
+	
+	cloudx: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Cloudx</b> - Lazy Nom Cakes')
+	}, 
+	
+	thejuancabar: 'wonka',
+	wonka: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>TheJuancaBar</b> - Think of something original <img src="http://fh13.fhcdn.com/static/img/players/fifa13/138708.png">')
+	},
+	
+	tonymhfan: 'tony',
+	tony: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>TonyMHFan</b> - Tony for short, also the bestest guy ever, no one you meet will ever top this guy!')
+	},
+	
+	wisecarver: 'tanner',
+	tanner: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>wisecarver</b> - The carver of the wise')
+	},
+	
+	erick17: 'erick',
+	erick: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Erick 17</b> - Only appears when Mexico plays!')
+	},
+	
+	pb: 'harmonybadge',
+	harmonybadge: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I Chronos729 present to you the Pyro Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/001_zpsed6f1c0f.png">')
+	},
+	
+	bdb: 'beatdown',
+	beatdown: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I Co-Cheeze present to you the Beatdown Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/057_zps0916f474.png">')
+	},
+	
+	tb: 'waterbadge',
+	wb: 'waterbadge',
+	waterbadge: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I Johnny present to you the Tsunami Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/131_zps0aa936ff.png">')
+	},
+	
+	mb: 'mysticbadge',
+	mysticbadge: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I PK1410 present to you the Mystic Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/130_zpsce775186.png">')
+	}, 
+	
+	ob: 'occultbadge',
+	occultbadge: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I ScarletFrenzy present to you the Occult Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/097_zpsad64274a.png">')
+	},
+	
+	nb: 'nightbadge',
+	nightbadge: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I TheMissingLink present to you the Nightmare Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/114_zps7313774a.png">')
+	},
+	
+	zb: 'zappybadge',
+	zappybadge: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I EimP present to you the Zappy Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/025_zpse362347a.png">')
+	},
+	
+	kpb: 'poison',
+	poison: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I Khaous present to you the Killer Poison Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/018_zps7add8bf3.png">')
+	},
+	
+	wsb: 'winter',
+	winter: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I wisecarver present to you the Winter Solstice Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/088_zpsacbf333b.png">')
+	},
+	
+	sbcs: 'rock',
+	rock: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I Huskisson906 present to you the Shield badge ._. for the Carracosta Shell<br \>' +
+		'<img src="http://sprites.pokecheck.org/icon/304.png">')
+	},
+	
+	cb: 'cacabadge',
+	cacabadge: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I Erick 17 present to you the Caca Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/051_zpsb335af2e.png">')
+	},
+	
+	db: 'dracobadge',
+	dracobadge: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('I Katerra present to you the Draco Badge<br \>' +
+		'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/149_zpsbfa3f636.png">')
+	}, 
+	
+	cloudx: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Cloudx</b> - Lazy Nom Cakes')
+	}, 
+	
+	thejuancabar: 'wonka',
+	wonka: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>TheJuancaBar</b> - Think of something original <img src="http://fh13.fhcdn.com/static/img/players/fifa13/138708.png">')
+	},
+	
+	tonymhfan: 'tony',
+	tony: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>TonyMHFan</b> - Tony for short, also the bestest guy ever, no one you meet will ever top this guy!')
+	},
+	
+	wisecarver: 'tanner',
+	tanner: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>wisecarver</b> - The carver of the wise')
+	},
+	
+	erick17: 'erick',
+	erick: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Erick 17</b> - Only appears when Mexico plays!')
+	},
+	
+	strato: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Strato</b> - Only appears when Yu-Gi-Oh is mentioned *insert Canadian flag* ')
+	},
+	zero: 'enio',
+	enio: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Enio</b><br />' +
+		 '1. Horniest guy in the world. <br />' +
+		 '2. Herbert the Pervert\'s Grandson<br />' +
+		 '3. Loves Brittany Goodlette')
+	},
+	gymleader: 'gl',
+	elitefour: 'gl',
+	gl: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b><c>Gym Leaders</c></b><br />' +
+		 'Khaous - Poison Leader - Killer Poison Badge<br />' +
+		 'wisecarver - Ice Leader - Winter Solstice Badge<br />' +
+		 'PK - Psychic Leader - Mystic Badge<br />' +
+		 'TheMissingLink - Ghost Leader - Nightmare Badge<br />' +
+		 'EimP - Electric Leader - Zappy Badge<br />' +
+		 'Chronos729 - Fire Leader - Pyro Badge<br />' +
+		 'Co-Cheeze - Fighting Leader - Beatdown Badge<br />' +
+		 'Open Position<br />' +
+		 '<br />' +
+		 '<b><c>Elite Four</c></b><br />' +
+		 'Erick - Ground - Caca badge<br />' +
+		 'Johnny - Water - Tsunami Badge<br />' +
+		 'Open Position<br />' +
+		 'Open Position<br />' +		 
+		 '<br />' +
+		 '<b><c>Champion</c></b><br />' +
+		 'Winonaaaaa')
+	},
+	
+	pgx: 'pgxl',
+	nextgenxeperienceleague: 'pgxl',
+	league: 'pgxl',
+	pgxl: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		Rooms.lobby.addRaw('<div class="broadcast-green"><b>Challenge the PGX League!</div>')
+	},
 
+	nn: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		Rooms.lobby.addRaw('<div class="broadcast-green"><b>We have just decided a new server name!! If you can\'t find this server in the near future thats because its now call MeteorFalls!</div>')
+	},
 };
