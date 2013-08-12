@@ -2792,6 +2792,7 @@ exports.BattleItems = {
 		},
 		onAfterMoveSecondary: function(target, source, move) {
 			if (source && source !== target && source.hp && target.hp && move && move.category !== 'Status') {
+				if (!source.isActive) return;
 				if (target.useItem(null, source)) { // This order is correct - the item is used up even against a pokemon with Ingrain or that otherwise can't be forced out
 					if (this.runEvent('DragOut', source, target, move)) {
 						this.dragIn(source.side, source.position);
