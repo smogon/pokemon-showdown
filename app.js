@@ -554,6 +554,13 @@ if (appssl) {
 	console.log('SSL server started on port ' + config.ssl.port);
 }
 
+
+/*********************************************************
+ * Loads Trivia
+ *********************************************************/
+ 
+global.Trivia = require('./plugins/trivia.js');
+
 console.log('Test your server at http://localhost:' + config.port);
 
 /*********************************************************

@@ -1111,6 +1111,11 @@ var User = (function () {
 			this.chatQueueTimeout = setTimeout(
 				this.processChatQueue.bind(this), THROTTLE_DELAY);
 		} else {
+			if (room.title.toLowerCase() == "trivia" || room.title.toLowerCase() == "trivreview") {
+				if (!Trivia.handle(this, message, connection)) {
+					return;
+				}
+			}
 			this.lastChatMessage = now;
 			room.chat(this, message, connection);
 		}
