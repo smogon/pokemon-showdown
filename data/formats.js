@@ -834,7 +834,7 @@ exports.BattleFormats = {
 				}
 			}
 			if (template.num == 647) { // Keldeo
-				if (set.species === 'Keldeo-Resolution' && set.moves.indexOf('Secret Sword') < 0) {
+				if (set.species === 'Keldeo-Resolute' && set.moves.indexOf('Secret Sword') < 0) {
 					set.species = 'Keldeo';
 				}
 			}
