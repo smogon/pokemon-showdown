@@ -291,8 +291,8 @@ var GlobalRoom = (function() {
 		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
 
 		// search must be within range
-		var searchRange = 400, formatid = search1.formatid, elapsed = Math.abs(search1.time-search2.time);
-		if (formatid === 'ou' || formatid === 'randombattle') searchRange = 200;
+		var searchRange = 300, formatid = search1.formatid, elapsed = Math.abs(search1.time-search2.time);
+		if (formatid === 'ou' || formatid === 'randombattle') searchRange = 100;
 		searchRange += elapsed/300; // +1 every .3 seconds
 		if (searchRange > 1200) searchRange = 1200;
 		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
