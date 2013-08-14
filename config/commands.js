@@ -794,6 +794,7 @@ var commands = exports.commands = {
 	},
 
 	banlists: 'tiers',
+	tier: 'tiers',
 	tiers: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		target = toId(target);
