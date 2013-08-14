@@ -151,7 +151,7 @@ var commands = exports.commands = {
 
 	roomowner: function(target, room, user) {
 		if (!room.chatRoomData) {
-			this.sendReply("/roommod - This room isn't designed for per-room moderation to be added");
+			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
 		}
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
@@ -172,7 +172,7 @@ var commands = exports.commands = {
 	roomdeowner: 'deroomowner',
 	deroomowner: function(target, room, user) {
 		if (!room.auth) {
-			this.sendReply("/roomdeowner - This room isn't designed for per-room moderation");
+			return this.sendReply("/roomdeowner - This room isn't designed for per-room moderation");
 		}
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
