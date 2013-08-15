@@ -685,7 +685,7 @@ exports.BattleFormats = {
 		isTeambuilderFormat: true,
 		debug: true,
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Mean Look ++ Hypnosis ++ Perish Song']
+		banlist: ['Uber', 'Mean Look + Hypnosis + Perish Song']
 	},
 	gen2customgame: {
 		name: "[Gen 2] Custom Game",
