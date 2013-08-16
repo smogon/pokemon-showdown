@@ -1145,6 +1145,8 @@ var ChatRoom = (function() {
 		this.logFile = null;
 		this.logFilename = '';
 		this.destroyingLog = false;
+		this.bannedUsers = {};
+		this.bannedIps = {};
 
 		// `config.loglobby` is a legacy name
 		if (config.logchat || config.loglobby) {
