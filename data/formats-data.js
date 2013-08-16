@@ -2820,7 +2820,7 @@ exports.BattleFormatsData = {
 	froslass: {
 		viableMoves: {"icebeam":1,"spikes":1,"destinybond":1,"shadowball":1,"substitute":1,"taunt":1,"thunderbolt":1,"thunderwave":1},
 		dreamWorldRelease: true,
-		tier: "UU"
+		tier: "BL"
 	},
 	spheal: {
 		viableMoves: {"substitute":1,"protect":1,"toxic":1,"surf":1,"icebeam":1},
