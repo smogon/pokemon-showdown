@@ -693,9 +693,21 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3463764/">Balanced Hackmons</a><br />';
 		}
+		if (target === 'all' || target === 'pu') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/pu-nu-in-nu.3467083/">PU (Challenge Only)</a><br />';
+		}
+		if (target === 'all' || target === 'sketchmons') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/sketchmons-now-playable-on-ps.3479657/>Sketchmons (3rd party server only)</a><br />';
+		}
+		if (target === 'all' || target === 'abillityexchange' || target === 'ae') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/ability-exchange-ae.3485741/>Abillity Exchange (3rd party server only)</a><br />';
+		}		
 		if (target === 'all' || target === 'glitchmons') {
 			matched = true;
-			buffer += '- <a href="http://www.smogon.com/forums/threads/3467120/">Glitchmons</a><br />';
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3467120/">Glitchmons(Challenge only)</a><br />';
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
