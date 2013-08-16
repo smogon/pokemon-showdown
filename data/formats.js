@@ -32,20 +32,18 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		challengeDefault: true,
-		rated: true,
+		// rated: true,
 		challengeShow: true,
-		searchShow: true,
+		// searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
-	/**
 	oucurrent: {
 		name: "OU (current)",
 		section: "Singles",
 
 		effectType: 'Format',
-		challengeDefault: true,
 		rated: true,
 		challengeShow: true,
 		searchShow: true,
@@ -64,21 +62,8 @@ exports.BattleFormats = {
 		searchShow: true,
 		isTeambuilderFormat: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Landorus']
-	},*/
-	// ounostealthrock: {
-	// 	name: "OU (no Stealth Rock)",
-	// 	section: "Singles",
-
-	// 	effectType: 'Format',
-	// 	challengeDefault: true,
-	// 	rated: true,
-	// 	challengeShow: true,
-	// 	searchShow: true,
-	// 	isTeambuilderFormat: true,
-	// 	ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-	// 	banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Stealth Rock']
-	// },
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Keldeo', 'Keldeo-Resolute']
+	},
 	ubers: {
 		name: "Ubers",
 		section: "Singles",
@@ -700,7 +685,7 @@ exports.BattleFormats = {
 		isTeambuilderFormat: true,
 		debug: true,
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
+		banlist: ['Uber', 'Mean Look + Hypnosis + Perish Song']
 	},
 	gen2customgame: {
 		name: "[Gen 2] Custom Game",
@@ -849,7 +834,7 @@ exports.BattleFormats = {
 				}
 			}
 			if (template.num == 647) { // Keldeo
-				if (set.species === 'Keldeo-Resolution' && set.moves.indexOf('Secret Sword') < 0) {
+				if (set.species === 'Keldeo-Resolute' && set.moves.indexOf('Secret Sword') < 0) {
 					set.species = 'Keldeo';
 				}
 			}
