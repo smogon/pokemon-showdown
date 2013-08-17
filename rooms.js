@@ -292,7 +292,7 @@ var GlobalRoom = (function() {
 
 		// search must be within range
 		var searchRange = 250, formatid = search1.formatid, elapsed = Math.abs(search1.time-search2.time);
-		if (formatid === 'ou' || formatid === 'randombattle') searchRange = 100;
+		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'randombattle') searchRange = 150;
 		searchRange += elapsed/300; // +1 every .3 seconds
 		if (searchRange > 1200) searchRange = 1200;
 		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;

@@ -466,7 +466,7 @@ module.exports = (function () {
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					var lset = template.learnset[move];
-					if (!lset) {
+					if (!lset || template.speciesid === 'smeargle') {
 						lset = template.learnset['sketch'];
 						sketch = true;
 					}
