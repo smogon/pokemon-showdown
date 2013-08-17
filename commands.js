@@ -322,7 +322,7 @@ var commands = exports.commands = {
 		if (targetRoom && targetRoom.isPrivate && !user.named) {
 			return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '"+target+"'.");
 		}
-		if (user.userid in targetRoom.bannedUsers) {
+		if (user.userid && targetRoom.bannedUsers && user.userid in targetRoom.bannedUsers) {
 			return connection.sendTo(target, "|noinit|joinfailed|You are banned from that room!");
 		}
 		for (var ip in user.ips) {
