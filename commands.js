@@ -325,8 +325,10 @@ var commands = exports.commands = {
 		if (user.userid && targetRoom.bannedUsers && user.userid in targetRoom.bannedUsers) {
 			return connection.sendTo(target, "|noinit|joinfailed|You are banned from that room!");
 		}
-		for (var ip in user.ips) {
-			if (ip in targetRoom.bannedIps) return connection.sendTo(target, "|noinit|joinfailed|You are banned from that room!");
+		if (user.ips && targetRoom.bannedIps) {
+			for (var ip in user.ips) {
+				if (ip in targetRoom.bannedIps) return connection.sendTo(target, "|noinit|joinfailed|You are banned from that room!");
+			}
 		}
 
 		if (!user.joinRoom(targetRoom || room, connection)) {
