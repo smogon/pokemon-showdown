@@ -7,7 +7,7 @@ exports.BattleItems = {
 		desc: "Doubles the amount of money received in trainer battles."
 	},
 	berry: {
-	
+
 	},
 	dragonfang: {
 		inherit: true,

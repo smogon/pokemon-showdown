@@ -49,17 +49,17 @@ exports.BattleScripts = {
 			}
 			return target.maxhp;
 		}
-		
+
 		// We edit the damage through move's damage callback
 		if (move.damageCallback) {
 			return move.damageCallback.call(this, pokemon, target);
 		}
-		
+
 		// We take damage from damage=level moves
 		if (move.damage === 'level') {
 			return pokemon.level;
 		}
-		
+
 		// If there's a fix move damage, we run it
 		if (move.damage) {
 			return move.damage;
@@ -69,20 +69,20 @@ exports.BattleScripts = {
 		if (!move) {
 			move = {};
 		}
-		
+
 		// We check the category and typing to calculate later on the damage
 		move.category = this.getCategory(move);
 		if (!move.defensiveCategory) move.defensiveCategory = move.category;
 		// '???' is typeless damage: used for Struggle and Confusion etc
 		if (!move.type) move.type = '???';
 		var type = move.type;
-		
+
 		// We get the base power and apply basePowerCallback if necessary
 		var basePower = move.basePower;
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
 		}
-		
+
 		// We check for Base Power
 		if (!basePower) {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
@@ -151,12 +151,12 @@ exports.BattleScripts = {
 			if (!suppressMessages) this.add('-crit', target);
 			baseDamage = this.modify(baseDamage, move.critModifier || 2);
 		}
-		
+
 		// STAB damage bonus, the "???" type never gets STAB
 		if (type !== '???' && pokemon.hasType(type)) {
 			baseDamage = Math.floor(baseDamage * 1.5);
 		}
-		
+
 		// Type effectiveness
 		var totalTypeMod = this.getEffectiveness(type, target);
 		// Super effective attack
@@ -167,7 +167,7 @@ exports.BattleScripts = {
 				baseDamage *= 2;
 			}
 		}
-		
+
 		// Resisted attack
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
@@ -180,7 +180,7 @@ exports.BattleScripts = {
 		// Randomizer, it's a number between 217 and 255
 		var randFactor = Math.floor(Math.random()*39)+217;
 		baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
-		
+
 		// If damage is less than 1, we return 1
 		if (basePower && !Math.floor(baseDamage)) {
 			return 1;

@@ -451,7 +451,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 50,
 		basePowerCallback: function(pokemon, target) {
-			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {			
+			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {
 				this.debug('Boosted for being damaged this turn');
 				return 100;
 			}
