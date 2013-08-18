@@ -74,7 +74,7 @@ var Tournament = (function () {
 		}
 
 		var isErrored = false;
-		this.generator.getUsers.forEach(function (user) {
+		this.generator.getUsers().forEach(function (user) {
 			var error = generator.addUser(user);
 			if (typeof error === 'string') {
 				output.sendReply('|tournament|error|' + error);
