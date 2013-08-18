@@ -126,6 +126,9 @@ var RoundRobin = (function () {
 			++this.userScores[row];
 			--this.pendingMatches;
 		}, this);
+
+		if (this.pendingMatches === 0)
+			return true;
 	};
 	RoundRobin.prototype.getUserBusy = function (user) {
 		if (!this.isBracketFrozen)
