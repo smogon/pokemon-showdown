@@ -260,9 +260,9 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.disqualifyUser = function (user, output) {
-		var error = this.generator.disqualifyUser(user);
-		if (typeof error === 'string') {
-			output.sendReply('|tournament|error|' + error);
+		var isTournamentEnded = this.generator.disqualifyUser(user);
+		if (typeof isTournamentEnded === 'string') {
+			output.sendReply('|tournament|error|' + isTournamentEnded);
 			return;
 		}
 
@@ -305,6 +305,9 @@ var Tournament = (function () {
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
 		this.update();
+
+		if (isTournamentEnded)
+			this.onTournamentEnd();
 	};
 
 	Tournament.prototype.challenge = function (from, to, output) {
