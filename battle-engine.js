@@ -768,11 +768,11 @@ var BattlePokemon = (function() {
 	};
 	// returns the amount of damage actually healed
 	BattlePokemon.prototype.heal = function(d) {
-		if (!this.hp) return 0;
+		if (!this.hp) return false;
 		d = Math.floor(d);
-		if (isNaN(d)) return 0;
-		if (d <= 0) return 0;
-		if (this.hp >= this.maxhp) return 0;
+		if (isNaN(d)) return false;
+		if (d <= 0) return false;
+		if (this.hp >= this.maxhp) return false;
 		this.hp += d;
 		if (this.hp > this.maxhp) {
 			d -= this.hp - this.maxhp;
