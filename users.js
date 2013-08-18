@@ -850,7 +850,7 @@ var User = (function () {
 		if (typeof mmr === 'number') {
 			this.mmrCache[formatid] = mmr;
 		} else {
-			this.mmrCache[formatid] = parseInt(mmr.rpr,10);
+			this.mmrCache[formatid] = Math.floor((Number(mmr.rpr)*2+Number(mmr.r))/3);
 		}
 	};
 	User.prototype.mute = function(roomid, time, force, noRecurse) {
