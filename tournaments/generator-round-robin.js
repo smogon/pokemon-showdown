@@ -112,6 +112,7 @@ var RoundRobin = (function () {
 			match.state = 'finished';
 			match.result = 'loss';
 			match.score = [0, 1];
+			match.isDisqualification = true;
 			++this.userScores[col];
 			--this.pendingMatches;
 		}, this);
@@ -123,6 +124,7 @@ var RoundRobin = (function () {
 			match.state = 'finished';
 			match.result = 'win';
 			match.score = [1, 0];
+			match.isDisqualification = true;
 			++this.userScores[row];
 			--this.pendingMatches;
 		}, this);
@@ -176,7 +178,12 @@ var RoundRobin = (function () {
 
 		var match = this.matches[userIndexA][userIndexB];
 		if (!match || match.state !== 'available')
-			return 'InvalidMatch';
+			if (match.isDisqualification) {
+				if (this.pendingMatches === 0)
+					return true;
+				return;
+			} else
+				return 'InvalidMatch';
 
 		var virtualScore;
 		if (result === 'win')
