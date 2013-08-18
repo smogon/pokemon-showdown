@@ -55,9 +55,12 @@ module.exports = (function () {
 				if (fs.existsSync(path)) {
 					var configFormats = require(path).Formats;
 					for (var i=0; i<configFormats.length; i++) {
-						var id = toId(configFormats[i].name);
-						configFormats[i].effectType = 'Format';
-						data.Formats[id] = configFormats[i];
+						var format = configFormats[i];
+						var id = toId(format.name);
+						format.effectType = 'Format';
+						if (format.challengeShow === undefined) format.challengeShow = true;
+						if (format.searchShow === undefined) format.searchShow = true;
+						data.Formats[id] = format;
 					}
 				}
 			} catch (e) {
