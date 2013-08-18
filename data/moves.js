@@ -9628,7 +9628,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		heal: [1,2],
-		volatileStatus: 'roost',
+		self: {
+			volatileStatus: 'roost',
+		},
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {
