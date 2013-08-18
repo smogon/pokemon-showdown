@@ -284,6 +284,7 @@ var Tournament = (function () {
 		if (matchFrom) {
 			this.generator.setUserBusy(matchFrom.to, false);
 			this.inProgressMatches.set(user, null);
+			matchFrom.room.win = matchFrom.room._win;
 			matchFrom.room.forfeit(user);
 		}
 
@@ -294,7 +295,9 @@ var Tournament = (function () {
 		});
 		if (matchTo) {
 			this.generator.setUserBusy(matchTo, false);
-			this.inProgressMatches.get(matchTo).room.forfeit(user);
+			var matchRoom = this.inProgressMatches.get(matchTo).room;
+			matchRoom.win = matchRoom._win;
+			matchRoom.forfeit(user);
 			this.inProgressMatches.set(matchTo, null);
 		}
 
