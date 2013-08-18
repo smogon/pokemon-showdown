@@ -63,7 +63,7 @@ var Tournament = (function () {
 
 		this.pendingChallenges = null;
 
-		room.add('|tournament|create|' + format + '|' + generator.name);
+		room.send('|tournament|create|' + format + '|' + generator.name);
 		this.update();
 	}
 
@@ -91,7 +91,7 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.forceEnd = function () {
-		this.room.add('|tournament|forceend');
+		this.room.send('|tournament|forceend');
 	};
 
 	Tournament.prototype.update = function (targetUser) {
@@ -205,7 +205,7 @@ var Tournament = (function () {
 
 		this.isTournamentStarted = true;
 		this.isBracketInvalidated = true;
-		this.room.add('|tournament|start');
+		this.room.send('|tournament|start');
 		this.update();
 	};
 	Tournament.prototype.getAvailableMatches = function (targetUser) {
