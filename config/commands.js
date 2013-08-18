@@ -288,38 +288,38 @@ var commands = exports.commands = {
 				if (!moves.count) {
 					count++;
 					moves.count = 0;
-				};
+				}
 				if (moves.count === 4) {
 					return this.sendReply('Specify a maximum of 4 moves.');
-				};
+				}
 				moves[target] = 1;
 				moves.count++;
 				continue;
-			};
+			}
 
 			target = Tools.getAbility(targets[i]);
 			if (target.exists) {
 				if (!ability.count) {
 					count++;
 					ability.count = 0;
-				};
+				}
 				if (ability.count === 1) {
 					return this.sendReply('Specify only one ability.');
-				};
+				}
 				ability[target] = 1;
 				ability.count++;
 				continue;
-			};
+			}
 
 			target = targets[i].trim().toLowerCase();
 			if (['fire','water','electric','dragon','rock','fighting','ground','ghost','psychic','dark','bug','flying','grass','poison','normal','steel','ice'].indexOf(toId(target.substring(0, target.length - 4))) > -1) {
 				if (!types.count) {
 					count++;
 					types.count = 0;
-				};
+				}
 				if (types.count === 2) {
 					return this.sendReply('Specify a maximum of two types.');
-				};
+				}
 				types[toId(target.substring(0, target.length - 4)).substring(0, 1).toUpperCase() + toId(target.substring(0, target.length - 4)).substring(1)] = 1;
 				types.count++;
 			}
@@ -327,7 +327,7 @@ var commands = exports.commands = {
 				if (!tiers.count) {
 					count++;
 					tiers.count = 0;
-				};
+				}
 				tiers[target] = 1;
 				tiers.count++;
 			}
@@ -335,7 +335,7 @@ var commands = exports.commands = {
 				if (!colours.count) {
 					count++;
 					colours.count = 0;
-				};
+				}
 				colours[target] = 1;
 				colours.count++;
 			}
@@ -343,22 +343,22 @@ var commands = exports.commands = {
 				if (!gens.count) {
 					count++;
 					gens.count = 0;
-				};
+				}
 				gens[parseInt(target, 10)] = 1;
 				gens.count++;
 			}
 			else if (target === 'all') {
 				if (this.broadcasting) {
 					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
-				};
+				}
 				all = true;
 			}
 			else {
 				return this.sendReply('"' + target + '" could not be found in any of the search categories.');
-			};
-		};
+			}
+		}
 
-	if (all && count === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
+		if (all && count === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
 
 		while (count > 0) {
 			--count;
@@ -370,10 +370,10 @@ var commands = exports.commands = {
 					if (!(!('illegal' in tiers) && pokemon.tier === 'Illegal')) {
 						tempResults.add(pokemon);
 					}
-				};
+				}
 			} else {
 				for (var mon in results) tempResults.add(results[mon]);
-			};
+			}
 			var results = [];
 
 			if (types.count > 0) {
@@ -382,40 +382,40 @@ var commands = exports.commands = {
 						if (tempResults[mon].types[0] in types || tempResults[mon].types[1] in types) results.add(tempResults[mon]);
 					} else {
 						if (tempResults[mon].types[0] in types && tempResults[mon].types[1] in types) results.add(tempResults[mon]);
-					};
-				};
+					}
+				}
 				types.count = 0;
 				continue;
-			};
+			}
 
 			if (tiers.count > 0) {
 				for (var mon in tempResults) {
 					if ('cap' in tiers) {
 						if (tempResults[mon].tier.substring(2).toLowerCase() === 'cap') results.add(tempResults[mon]);
-					};
+					}
 					if (tempResults[mon].tier.toLowerCase() in tiers) results.add(tempResults[mon]);
-				};
+				}
 				tiers.count = 0;
 				continue;
-			};
+			}
 
 			if (ability.count > 0) {
 				for (var mon in tempResults) {
 					for (var monAbility in tempResults[mon].abilities) {
 						if (Tools.getAbility(tempResults[mon].abilities[monAbility]) in ability) results.add(tempResults[mon]);
-					};
-				};
+					}
+				}
 				ability.count = 0;
 				continue;
-			};
+			}
 
 			if (colours.count > 0) {
 				for (var mon in tempResults) {
 					if (tempResults[mon].color.toLowerCase() in colours) results.add(tempResults[mon]);
-				};
+				}
 				colours.count = 0;
 				continue;
-			};
+			}
 
 			if (moves.count > 0) {
 				var problem;
@@ -429,22 +429,22 @@ var commands = exports.commands = {
 							if (!move.exists) return this.sendReply('"' + move + '" is not a known move.');
 							problem = Tools.checkLearnset(move, template, lsetData);
 							if (problem) break;
-						};
-					};
+						}
+					}
 					if (!problem) results.add(tempResults[mon]);
-				};
+				}
 				moves.count = 0;
 				continue;
-			};
+			}
 
 			if (gens.count > 0) {
 				for (var mon in tempResults) {
 					if (tempResults[mon].gen in gens) results.add(tempResults[mon]);
-				};
+				}
 				gens.count = 0;
 				continue;
-			};
-		};
+			}
+		}
 
 		var resultsStr = '';
 		if (results.length > 0) {
@@ -455,10 +455,10 @@ var commands = exports.commands = {
 				results.sort(function(a,b) {return Math.round(Math.random());});
 				for (var i = 0; i < output; i++) resultsStr += results[i].species + ', ';
 				resultsStr += ' and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.  '
-			};
+			}
 		} else {
 			resultsStr = 'No Pokemon found.  ';
-		};
+		}
 		return this.sendReplyBox(resultsStr.substring(0, resultsStr.length - 2));
 	},
 
