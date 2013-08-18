@@ -6,8 +6,8 @@ Introduction
 Generation 1 includes the original japanese Green and Red, Blue, and Yellow games.
 It was very different than the game we get to know today, and it was, in fact, very different to Gen 2 as well.
 The mechanics were very different, and the game was quite glitched, but most glitches were important parts of the metagame.
-There were only 151 Pokemon plus Missingno, just a handful of moves, no abilities, no items, all stats were 
-EVd to the max and we had some kind of different IVs, which maxed at 15 and every point gave 2 to the stat, so in 
+There were only 151 Pokemon plus Missingno, just a handful of moves, no abilities, no items, all stats were
+EVd to the max and we had some kind of different IVs, which maxed at 15 and every point gave 2 to the stat, so in
 a similar fashion, Pokes used to have 30 IVs on each stat.
 
 The following sources have been used and extremly useful when developing this mod:
@@ -19,8 +19,8 @@ Special Stat
 Back then, there weren't Special Defense and Special Attack stats. It was just "Special", and moves raised and lowered it.
 That's why Special walls were so OP in Gen 1.
 
-In order to achieve a similar effect without heavily changing other scripts rather than just the mod, the mod's Pokedex 
-and the mod's moves have been edited in order to emulate it, making all Pokemon have the old special stat in both SpA and 
+In order to achieve a similar effect without heavily changing other scripts rather than just the mod, the mod's Pokedex
+and the mod's moves have been edited in order to emulate it, making all Pokemon have the old special stat in both SpA and
 SpD and making moves raise and lower both SpA and SpD at the same time.
 
 Critical Hits
@@ -30,10 +30,10 @@ This is the regular critical hit formula:
 CH% = BaseSpeed * 100 / 512.
 This is the high critical hit moves formula:
 CH% = BaseSpeed * 100 / 64.
-That means that a Persian with Slash is going to crit. This made the metagame adapt so OU prefers all the faster Pokemon 
+That means that a Persian with Slash is going to crit. This made the metagame adapt so OU prefers all the faster Pokemon
 in the game.
 
-However, if you used Focus Energy, your crit rate was ruined instead of increased, so if you were slower than your 
+However, if you used Focus Energy, your crit rate was ruined instead of increased, so if you were slower than your
 opponent you couldn't crit at all.
 
 Status
@@ -52,7 +52,7 @@ Partial trapping moves let eiher Pokemon switch but target will be unable to mov
 
 TODO. Glitches not implemented
 ------------------------------
-Being fully paralysed or self-hit from confusion in the immune turn of Fly or Dig granted you immunity for the rest of the match 
+Being fully paralysed or self-hit from confusion in the immune turn of Fly or Dig granted you immunity for the rest of the match
 until you switch or use Fly/Dig again.
 This glitch is not implemented by now since, besides game-breaking, relies in luck to reproduce and it's not part of the metagame.
 Since it's difficult to reproduce and to properly play, this will be implemented in the future, but not right now.

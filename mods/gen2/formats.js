@@ -31,13 +31,13 @@ exports.BattleFormats = {
 			if (set.moves && set.moves.length > 4) {
 				problems.push((set.name||set.species) + ' has more than four moves.');
 			}
-			
+
 			// Automatically set ability to None
 			set.ability = 'None';
-			
+
 			// In gen 2, there's no advantage on having subpar EVs and you could max all of them
 			set.evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
-			
+
 			// Check if there's Hidden Power
 			if (hasHP) {
 				// All IVs to 31 forces correct Hidden Power from Typecharts in the engine
@@ -90,14 +90,14 @@ exports.BattleFormats = {
 						 set.gender = 'F';
 					}
 				}
-				
+
 				// The HP IV is calculated with the last bit of every value. Do this last.
 				set.ivs.hp = (((set.ivs.atk / 2) % 2 * 8) + ((set.ivs.def / 2) % 2 * 4) + ((set.ivs.spe / 2) % 2 * 2) + ((set.ivs.spa / 2) % 2 * 1)) * 2;
 			}
-				
+
 			// They all also get a useless nature, since that didn't exist
 			set.nature = 'Serious';
-			
+
 			return problems;
 		}
 	},
