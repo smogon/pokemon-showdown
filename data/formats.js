@@ -9,7 +9,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		team: 'random',
-		searchDefault: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
@@ -29,7 +28,6 @@ exports.BattleFormats = {
 		section: "Singles",
 
 		effectType: 'Format',
-		challengeDefault: true,
 		challengeShow: true,
 		// searchShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -50,7 +48,6 @@ exports.BattleFormats = {
 		section: "Singles",
 
 		effectType: 'Format',
-		challengeDefault: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -558,7 +555,6 @@ exports.BattleFormats = {
 
 		mod: 'gen4',
 		effectType: 'Format',
-		challengeDefault: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard'],
@@ -570,7 +566,6 @@ exports.BattleFormats = {
 
 		mod: 'gen4',
 		effectType: 'Format',
-		challengeDefault: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard'],
@@ -622,7 +617,6 @@ exports.BattleFormats = {
 
 		mod: 'gen2',
 		effectType: 'Format',
-		challengeDefault: true,
 		challengeShow: true,
 		searchShow: true,
 		debug: true,
@@ -645,7 +639,6 @@ exports.BattleFormats = {
 
 		mod: 'gen1',
 		effectType: 'Format',
-		challengeDefault: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard'],
