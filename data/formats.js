@@ -11,7 +11,6 @@ exports.BattleFormats = {
 		team: 'random',
 		canUseRandomTeam: true,
 		searchDefault: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
@@ -24,6 +23,7 @@ exports.BattleFormats = {
 		team: 'random',
 		canUseRandomTeam: true,
 		searchShow: true,
+		rated: false,
 		ruleset: ['Random Battle']
 	},
 	ou: {
@@ -32,7 +32,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		challengeDefault: true,
-		// rated: true,
 		challengeShow: true,
 		// searchShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -43,7 +42,6 @@ exports.BattleFormats = {
 		section: "Singles",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -55,7 +53,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		challengeDefault: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -66,7 +63,6 @@ exports.BattleFormats = {
 		section: "Singles",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
@@ -77,7 +73,6 @@ exports.BattleFormats = {
 		section: "Singles",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['OU'],
@@ -88,7 +83,6 @@ exports.BattleFormats = {
 		section: "Singles",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['OU'],
@@ -99,7 +93,6 @@ exports.BattleFormats = {
 		section: "Singles",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['UU'],
@@ -110,7 +103,6 @@ exports.BattleFormats = {
 		section: "Singles",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['RU'],
@@ -122,7 +114,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		maxLevel: 5,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
@@ -133,7 +124,6 @@ exports.BattleFormats = {
 		section: "Singles",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -145,7 +135,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		challengeShow: true,
-		rated: true,
 		searchShow: true,
 		validateSet: function(set) {
 			if (!set.level || set.level >= 50) set.forcedLevel = 50;
@@ -177,7 +166,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		challengeShow: true,
-		rated: true,
 		searchShow: true,
 		validateSet: function(set) {
 			if (!set.level || set.level >= 50) set.forcedLevel = 50;
@@ -229,7 +217,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		gameType: 'doubles',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		onBegin: function() {
@@ -278,7 +265,6 @@ exports.BattleFormats = {
 		gameType: 'doubles',
 		challengeShow: true,
 		searchShow: true,
-		rated: true,
 		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'HP Percentage Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew', 'Sky Drop',
 			'Mewtwo',
@@ -304,7 +290,6 @@ exports.BattleFormats = {
 		gameType: 'doubles',
 		team: 'random',
 		canUseRandomTeam: true,
-		rated: true,
 		challengeShow: true,
 		debug: true,
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod']
@@ -317,7 +302,6 @@ exports.BattleFormats = {
 		gameType: 'doubles',
 		team: 'randomCC',
 		canUseRandomTeam: true,
-		rated: true,
 		challengeShow: true,
 		debug: true,
 		ruleset: ['Pokemon', 'HP Percentage Mod']
@@ -345,7 +329,6 @@ exports.BattleFormats = {
 		section: "OM of the Month",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -361,7 +344,6 @@ exports.BattleFormats = {
 		section: "OM of the Month",
 		team: 'randomSeasonalAA',
 		canUseRandomTeam: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		gameType: 'doubles',
@@ -416,7 +398,6 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		team: 'randomCC',
 		canUseRandomTeam: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'HP Percentage Mod']
@@ -428,7 +409,6 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		team: 'randomCC',
 		canUseRandomTeam: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod'],
@@ -445,7 +425,6 @@ exports.BattleFormats = {
 		section: "Other Metagames",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon'],
@@ -456,7 +435,6 @@ exports.BattleFormats = {
 		section: "Other Metagames",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'OHKO Clause'],
@@ -477,7 +455,6 @@ exports.BattleFormats = {
 		section: "Other Metagames",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
@@ -488,7 +465,6 @@ exports.BattleFormats = {
 		section: "Other Metagames",
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Unreleased'],
@@ -529,7 +505,6 @@ exports.BattleFormats = {
 
 		mod: 'tiershift',
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -540,7 +515,6 @@ exports.BattleFormats = {
 		section: 'Other Metagames',
 
 		effectType: 'Format',
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		onBegin: function() {
@@ -592,7 +566,6 @@ exports.BattleFormats = {
 		mod: 'gen4',
 		effectType: 'Format',
 		challengeDefault: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard'],
@@ -605,7 +578,6 @@ exports.BattleFormats = {
 		mod: 'gen4',
 		effectType: 'Format',
 		challengeDefault: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard'],
@@ -659,7 +631,6 @@ exports.BattleFormats = {
 		mod: 'gen2',
 		effectType: 'Format',
 		challengeDefault: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		debug: true,
@@ -683,7 +654,6 @@ exports.BattleFormats = {
 		mod: 'gen1',
 		effectType: 'Format',
 		challengeDefault: true,
-		rated: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Standard'],
