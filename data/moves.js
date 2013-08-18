@@ -9661,6 +9661,12 @@ exports.BattleMovedex = {
 				}
 			}
 		},
+		onTry: function(pokemon) {
+			if (pokemon.hp === pokemon.maxhp) {
+				this.add('-fail', pokemon, 'move: Roost');
+				return false;
+			}
+		},
 		secondary: false,
 		target: "self",
 		type: "Flying"
