@@ -149,32 +149,6 @@ exports.BattleFormats = {
 		ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
-	customgame: {
-		name: "Custom Game",
-		section: "Singles",
-
-		effectType: 'Format',
-		challengeShow: true,
-		canUseRandomTeam: true,
-		debug: true,
-		maxLevel: 1000,
-		defaultLevel: 100,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview']
-	},
-	customgamenoteampreview: {
-		name: "Custom Game (no Team Preview)",
-		section: "Singles",
-
-		effectType: 'Format',
-		challengeShow: true,
-		canUseRandomTeam: true,
-		debug: true,
-		maxLevel: 1000,
-		defaultLevel: 100,
-		// no restrictions, for serious
-		ruleset: []
-	},
 	gbusingles: {
 		name: "GBU Singles",
 		section: "Singles",
@@ -228,6 +202,32 @@ exports.BattleFormats = {
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU'],
 		banlist: ['Unreleased', 'Illegal', 'Sky Drop', 'Dark Void', 'Soul Dew', 'Chatot']
+	},
+	customgame: {
+		name: "Custom Game",
+		section: "Singles",
+
+		effectType: 'Format',
+		challengeShow: true,
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 1000,
+		defaultLevel: 100,
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview']
+	},
+	customgamenoteampreview: {
+		name: "Custom Game (no Team Preview)",
+		section: "Singles",
+
+		effectType: 'Format',
+		challengeShow: true,
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 1000,
+		defaultLevel: 100,
+		// no restrictions, for serious
+		ruleset: []
 	},
 
 	// Doubles
