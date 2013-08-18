@@ -7,7 +7,7 @@
  * Pokemon Showdown is just one big happy process.
  *
  * For the actual simulation, see battle-engine.js
- * 
+ *
  * @license MIT license
  */
 
