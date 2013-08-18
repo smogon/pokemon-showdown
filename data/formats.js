@@ -9,7 +9,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		team: 'random',
-		canUseRandomTeam: true,
 		searchDefault: true,
 		challengeShow: true,
 		searchShow: true,
@@ -21,7 +20,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		team: 'random',
-		canUseRandomTeam: true,
 		searchShow: true,
 		rated: false,
 		ruleset: ['Random Battle']
@@ -289,7 +287,6 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		gameType: 'doubles',
 		team: 'random',
-		canUseRandomTeam: true,
 		challengeShow: true,
 		debug: true,
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod']
@@ -301,7 +298,6 @@ exports.BattleFormats = {
 		effectType: 'Format',
 		gameType: 'doubles',
 		team: 'randomCC',
-		canUseRandomTeam: true,
 		challengeShow: true,
 		debug: true,
 		ruleset: ['Pokemon', 'HP Percentage Mod']
@@ -343,7 +339,6 @@ exports.BattleFormats = {
 		name: "[Seasonal] Average August",
 		section: "OM of the Month",
 		team: 'randomSeasonalAA',
-		canUseRandomTeam: true,
 		challengeShow: true,
 		searchShow: true,
 		gameType: 'doubles',
@@ -397,7 +392,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		team: 'randomCC',
-		canUseRandomTeam: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'HP Percentage Mod']
@@ -408,7 +402,6 @@ exports.BattleFormats = {
 
 		effectType: 'Format',
 		team: 'randomCC',
-		canUseRandomTeam: true,
 		challengeShow: true,
 		searchShow: true,
 		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod'],
@@ -600,7 +593,6 @@ exports.BattleFormats = {
 		mod: 'gen4',
 		effectType: 'Format',
 		challengeShow: true,
-		canUseRandomTeam: true,
 		debug: true,
 		ruleset: []
 	},
