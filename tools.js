@@ -462,7 +462,7 @@ module.exports = (function () {
 		do {
 			alreadyChecked[template.speciesid] = true;
 			// Stabmons hack to avoid copying all of validateSet to formats.
-			if (format.id === 'stabmons' && template.types.indexOf(this.getMove(move).type) > -1) return false; 
+			if (format.id === 'stabmons' && template.types.indexOf(this.getMove(move).type) > -1) return false;
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					var lset = template.learnset[move];
@@ -515,7 +515,7 @@ module.exports = (function () {
 									var dexEntry = this.getTemplate(templateid);
 									if (
 										// CAP pokemon can't breed
-										!dexEntry.isNonstandard && 
+										!dexEntry.isNonstandard &&
 										// can't breed mons from future gens
 										dexEntry.gen <= parseInt(learned.substr(0,1),10) &&
 										// genderless pokemon can't pass egg moves
@@ -842,7 +842,7 @@ module.exports = (function () {
 				problems.push(name+" has more than 510 total EVs.");
 			}
 
-			// Don't check abilities for metagames with All Abilities 
+			// Don't check abilities for metagames with All Abilities
 			if (this.gen <= 2) {
 				set.ability = '';
 			} else if (!banlistTable['ignoreillegalabilities']) {
@@ -855,7 +855,7 @@ module.exports = (function () {
 				}
 				if (ability.name === template.abilities['DW']) {
 					isDW = true;
-	
+
 					if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
 						problems.push(name+"'s Dream World ability is unreleased.");
 					} else if (set.level < 10 && (template.maleOnlyDreamWorld || template.gender === 'N')) {
