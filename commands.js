@@ -316,13 +316,13 @@ var commands = exports.commands = {
 	},
 
 	join: function(target, room, user, connection) {
+		if (!target) return false;
 		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
-		if (!targetRoom) return false;
-		if (target && !targetRoom) {
+		if (!targetRoom) {
 			if (target === 'lobby') return connection.sendTo(target, "|noinit|nonexistent|");
 			return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
 		}
-		if (targetRoom && targetRoom.isPrivate && !user.named) {
+		if (targetRoom.isPrivate && !user.named) {
 			return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '"+target+"'.");
 		}
 		if (user.userid && targetRoom.bannedUsers && user.userid in targetRoom.bannedUsers) {
