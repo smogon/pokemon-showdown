@@ -284,7 +284,11 @@ function canTalk(user, room, connection, message) {
 		return false;
 	}
 
-	if (message) {
+	if (typeof message === 'string') {
+		if (!message) {
+			connection.popup("Your message can't be blank.");
+			return false;
+		}
 		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			connection.popup("Your message is too long:\n\n"+message);
 			return false;
