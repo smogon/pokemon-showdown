@@ -181,7 +181,8 @@ module.exports = (function () {
 			if (!template.genderRatio) template.genderRatio = {M:0.5,F:0.5};
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.gen) {
-				if (template.num >= 494) template.gen = 5;
+				if (template.num >= 650) template.gen = 6;
+				else if (template.num >= 494) template.gen = 5;
 				else if (template.num >= 387) template.gen = 4;
 				else if (template.num >= 252) template.gen = 3;
 				else if (template.num >= 152) template.gen = 2;
@@ -219,7 +220,8 @@ module.exports = (function () {
 			if (!move.effectType) move.effectType = 'Move';
 			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
 			if (!move.gen) {
-				if (move.num >= 468) move.gen = 5;
+				if (move.num >= 560) move.gen = 6;
+				else if (move.num >= 468) move.gen = 5;
 				else if (move.num >= 355) move.gen = 4;
 				else if (move.num >= 252) move.gen = 3;
 				else if (move.num >= 166) move.gen = 2;
@@ -335,7 +337,8 @@ module.exports = (function () {
 			if (!item.effectType) item.effectType = 'Item';
 			if (item.isBerry) item.fling = { basePower: 10 };
 			if (!item.gen) {
-				if (item.num >= 537) item.gen = 5;
+				if (item.num >= 577) item.gen = 6;
+				else if (item.num >= 537) item.gen = 5;
 				else if (item.num >= 377) item.gen = 4;
 				// Due to difference in storing items, gen 2 items must be specified specifically
 				else item.gen = 3;
@@ -361,7 +364,8 @@ module.exports = (function () {
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
 			if (!ability.gen) {
-				if (ability.num >= 124) ability.gen = 5;
+				if (ability.num >= 165) ability.gen = 6;
+				else if (ability.num >= 124) ability.gen = 5;
 				else if (ability.num >= 77) ability.gen = 4;
 				else if (ability.num >= 1) ability.gen = 3;
 				else ability.gen = 0;
