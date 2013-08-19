@@ -21,14 +21,16 @@ var commands = exports.commands = {
 	},
 
 	me: function(target, room, user, connection) {
-		target = this.canTalk(target);
+		// By default, /me allows a blank message
+		if (target) target = this.canTalk(target);
 		if (!target) return;
 
 		return '/me ' + target;
 	},
 
 	mee: function(target, room, user, connection) {
-		target = this.canTalk(target);
+		// By default, /mee allows a blank message
+		if (target) target = this.canTalk(target);
 		if (!target) return;
 
 		return '/mee ' + target;
