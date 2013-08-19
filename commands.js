@@ -22,14 +22,14 @@ var commands = exports.commands = {
 
 	me: function(target, room, user, connection) {
 		target = this.canTalk(target);
-		if (!target) return;
+		if (typeof target === 'boolean') return;
 
 		return '/me ' + target;
 	},
 
 	mee: function(target, room, user, connection) {
 		target = this.canTalk(target);
-		if (!target) return;
+		if (typeof target === 'boolean') return;
 
 		return '/mee ' + target;
 	},
