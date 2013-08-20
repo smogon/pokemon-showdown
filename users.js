@@ -914,7 +914,12 @@ var User = (function () {
 		room = Rooms.get(room);
 		if (!room) return false;
 		if (room.staffRoom && !this.isStaff) return false;
-		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
+		if (this.userid && room.bannedUsers && this.userid in room.bannedUsers) return false;
+		if (this.ips && room.bannedIps) {
+			for (var ip in this.ips) {
+				if (ip in room.bannedIps) return false;
+			}
+		}
 		if (!connection) {
 			for (var i=0; i<this.connections.length;i++) {
 				// only join full clients, not pop-out single-room
