@@ -1134,10 +1134,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/roomunban [username] - Unbans the user from the room you are in. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'redirect' || target === 'redir') {
-			matched = true;
-			this.sendReply('/redirect OR /redir [username], [roomname] - Attempts to redirect [username] to room [roomname]. Requires: % @ & ~');
-		}
 		if (target === '%' || target === 'modnote') {
 			matched = true;
 			this.sendReply('/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ & ~');
