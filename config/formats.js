@@ -520,6 +520,7 @@ exports.Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
+		debug: true,
 		ruleset: []
 	},
 	{
@@ -527,7 +528,6 @@ exports.Formats = [
 		section: "Past Generations",
 
 		mod: 'gen2',
-		searchShow: false,
 		debug: true,
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber', 'Mean Look + Hypnosis + Perish Song']
