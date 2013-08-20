@@ -106,9 +106,8 @@ var Tournament = (function () {
 		}), targetUser);
 
 		this.generator.getUsers().forEach(function (user) {
-			if (targetUser && user !== targetUser)
-				return;
-			user.sendTo(this.room, '|tournament|isjoined');
+			if (!targetUser || user === targetUser)
+				user.sendTo(this.room, '|tournament|isjoined');
 		}, this);
 
 		this.room.send('|tournament|bracketdata|' + JSON.stringify(this.getBracketData()), targetUser);
@@ -116,22 +115,16 @@ var Tournament = (function () {
 		if (this.isTournamentStarted) {
 			var availableMatches = this.getAvailableMatches();
 			availableMatches.challenges.forEach(function (opponents, user) {
-				if (targetUser && user !== targetUser)
-					return;
-				if (opponents.length > 0)
+				if (opponents.length > 0 && (!targetUser || user === targetUser))
 					user.sendTo(this.room, '|tournament|challenges|' + usersToNames(opponents).join(','));
 			}, this);
 			availableMatches.challengeBys.forEach(function (opponents, user) {
-				if (targetUser && user !== targetUser)
-					return;
-				if (opponents.length > 0)
+				if (opponents.length > 0 && (!targetUser || user === targetUser))
 					user.sendTo(this.room, '|tournament|challengeBys|' + usersToNames(opponents).join(','));
 			}, this);
 
 			this.pendingChallenges.forEach(function (challenge, user) {
-				if (!challenge)
-					return;
-				if (targetUser && challenge.to !== targetUser && challenge.from !== targetUser)
+				if (!challenge || (targetUser && challenge.to !== targetUser && challenge.from !== targetUser))
 					return;
 
 				if (challenge.to)
