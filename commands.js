@@ -331,7 +331,7 @@ var commands = exports.commands = {
 	},
 
 	roomban: function(target, room, user, connection) {
-		if (!target) return false;
+		if (!target) return this.parse('/help roomban');
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
@@ -364,7 +364,7 @@ var commands = exports.commands = {
 	},
 
 	roomunban: function(target, room, user, connection) {
-		if (!target) return false;
+		if (!target) return this.parse('/help roomunban');
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
@@ -425,7 +425,7 @@ var commands = exports.commands = {
 
 	redirect: 'redir',
 	redir: function (target, room, user, connection) {
-		if (!target) return this.parse('/help redir');
+		if (!target) return this.parse('/help redirect');
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
