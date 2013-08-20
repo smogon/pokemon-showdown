@@ -105,6 +105,10 @@ var Tournament = (function () {
 			generator: this.generator.name
 		}), targetUser);
 
+		this.generator.getUsers().forEach(function (user) {
+			user.sendTo(this.room, '|tournament|isjoined');
+		}, this);
+
 		this.room.send('|tournament|bracketdata|' + JSON.stringify(this.getBracketData()), targetUser);
 
 		if (this.isTournamentStarted) {
