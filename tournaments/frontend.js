@@ -106,6 +106,8 @@ var Tournament = (function () {
 		}), targetUser);
 
 		this.generator.getUsers().forEach(function (user) {
+			if (targetUser && user !== targetUser)
+				return;
 			user.sendTo(this.room, '|tournament|isjoined');
 		}, this);
 
