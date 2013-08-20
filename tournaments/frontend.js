@@ -304,10 +304,11 @@ var Tournament = (function () {
 		this.room.send('|tournament|disqualify|' + user.name);
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
-		this.update();
 
 		if (isTournamentEnded)
 			this.onTournamentEnd();
+		else
+		this.update();
 	};
 
 	Tournament.prototype.challenge = function (from, to, output) {
@@ -397,14 +398,14 @@ var Tournament = (function () {
 
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
-		this.update();
 
 		if (isTournamentEnded)
 			this.onTournamentEnd();
+		else
+			this.update();
 	};
 	Tournament.prototype.onTournamentEnd = function () {
-		var results = this.generator.getResults();
-		this.room.add('|tournament|end|' + usersToNames(results[0]).join(',') + (results[1] ? '|' + usersToNames(results[1]).join(',') : ''));
+		this.room.add('|tournament|end|' + JSON.stringify({results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()}));
 		delete tournaments[toId(this.room.id)];
 	};
 
