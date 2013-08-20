@@ -325,22 +325,13 @@ var commands = exports.commands = {
 		if (targetRoom.isPrivate && !user.named) {
 			return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '"+target+"'.");
 		}
-		if (user.userid && targetRoom.bannedUsers && user.userid in targetRoom.bannedUsers) {
-			return connection.sendTo(target, "|noinit|joinfailed|You are banned from that room!");
-		}
-		if (user.ips && targetRoom.bannedIps) {
-			for (var ip in user.ips) {
-				if (ip in targetRoom.bannedIps) return connection.sendTo(target, "|noinit|joinfailed|You are banned from that room!");
-			}
-		}
-
 		if (!user.joinRoom(targetRoom || room, connection)) {
-			// This condition appears to be impossible for now.
 			return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
 		}
 	},
 
 	roomban: function(target, room, user, connection) {
+		if (!target) return;
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
@@ -370,8 +361,11 @@ var commands = exports.commands = {
 	},
 
 	roomunban: function(target, room, user, connection) {
+		if (!target) return;
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
+		if (target) room = Rooms.get(target) || Rooms.get(toId(target));
+		if (!room) return this.sendReply("Room '"+ target +"' does not exist.");
 		var name = this.targetUsername;
 		var userid = toId(name);
 		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
@@ -444,10 +438,10 @@ var commands = exports.commands = {
 		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
 			return this.sendReply('User '+this.targetUsername+' is not in the room ' + room.id + '.');
 		}
+		if (targetUser.joinRoom(target) === false) return this.sendReply('The room "'+target+'" could not be joined by ' + targetUser.name + '. They could be banned there.');
 		var roomName = (targetRoom.isPrivate)? 'a private room' : 'room ' + target;
 		this.addModCommand(targetUser.name + ' was redirected to ' + roomName + ' by ' + user.name + '.');
 		targetUser.leaveRoom(room);
-		targetUser.joinRoom(target);
 	},
 
 	m: 'mute',
