@@ -154,7 +154,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 					if (!message) return false;
 					if (!user.can('broadcast', null, room)) {
 						connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
-						connection.send(room, "To see it for yourself, use: /"+message.substr(1));
+						connection.sendTo(room, "To see it for yourself, use: /"+message.substr(1));
 						return false;
 					}
 
