@@ -153,19 +153,19 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 					message = this.canTalk(message);
 					if (!message) return false;
 					if (!user.can('broadcast', null, room)) {
-						connection.send("You need to be voiced to broadcast this command's information.");
-						connection.send("To see it for yourself, use: /"+message.substr(1));
+						connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
+						connection.send(room, "To see it for yourself, use: /"+message.substr(1));
 						return false;
 					}
-
-					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
 
 					// broadcast cooldown
 					var normalized = toId(message);
 					if (room.lastBroadcast === normalized &&
 							room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+						connection.sendTo(room, "You can't broadcast this because it was just broadcast.")
 						return false;
 					}
+					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
 					room.lastBroadcast = normalized;
 					room.lastBroadcastTime = Date.now();
 
