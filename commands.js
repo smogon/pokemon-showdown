@@ -336,7 +336,7 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
-		if (!userid) return this.sendReply("User '" + name + "' does not exist.");
+		if (!userid || !targetUser) return this.sendReply("User '" + name + "' does not exist.");
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!Rooms.rooms[room.id].users[userid]) {
 			return this.sendReply('User ' + this.targetUsername + ' is not in the room ' + room.id + '.');
@@ -369,7 +369,7 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
-		if (!userid) return this.sendReply("User '"+name+"' does not exist.");
+		if (!userid || !targetUser) return this.sendReply("User '"+name+"' does not exist.");
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!room.bannedUsers || !room.bannedIps) {
 			return this.sendReply('Room bans are not meant to be used in room ' + room.id + '.');
