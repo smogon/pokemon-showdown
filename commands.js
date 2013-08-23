@@ -391,15 +391,15 @@ var commands = exports.commands = {
 	},
 
 	roomauth: function(target, room, user, connection) {
-		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefor has no auth list");
+		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefor has no auth list.");
 		var buffer = [];
-		if (room.auth.length > 0) {
-			for (var u in room.auth) {
-				buffer.push(room.auth[u] + u);
-			}
+		for (var u in room.auth) {
+			buffer.push(room.auth[u] + u);
+		}
+		if (buffer.length > 0) {
 			buffer = buffer.join(', ');
 		} else {
-			buffer = 'This room has no auth';
+			buffer = 'This room has no auth.';
 		}
 		connection.popup(buffer);
 	},
