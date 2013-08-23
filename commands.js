@@ -391,14 +391,18 @@ var commands = exports.commands = {
 	},
 
 	roomauth: function(target, room, user, connection) {
-		if (!room.auth) return this.sendReply("This room uses global auth.");
+		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefor has no auth list");
 		var buffer = [];
-		for (var u in room.auth) {
-			buffer.push(room.auth[u] + u);
+		if (room.auth.length > 0) {
+			for (var u in room.auth) {
+				buffer.push(room.auth[u] + u);
+			}
+			buffer = buffer.join(', ');
+		} else {
+			buffer = 'This room has no auth';
 		}
-		buffer = buffer.join(', ');
 		connection.popup(buffer);
-	}
+	},
 
 	leave: 'part',
 	part: function(target, room, user, connection) {
