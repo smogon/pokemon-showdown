@@ -390,6 +390,16 @@ var commands = exports.commands = {
 		}
 	},
 
+	roomauth: function(target, room, user, connection) {
+		if (!room.auth) return this.sendReply("This room uses global auth.");
+		var buffer = [];
+		for (var u in room.auth) {
+			buffer.push(room.auth[u] + u);
+		}
+		buffer = buffer.join(', ');
+		connection.popup(buffer);
+	}
+
 	leave: 'part',
 	part: function(target, room, user, connection) {
 		if (room.id === 'global') return false;
