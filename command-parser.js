@@ -148,7 +148,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				}
 				return true;
 			},
-			canBroadcast: function() {
+			canBroadcast: function(failed) {
 				if (broadcast) {
 					message = this.canTalk(message);
 					if (!message) return false;
@@ -165,10 +165,11 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 						connection.sendTo(room, "You can't broadcast this because it was just broadcast.")
 						return false;
 					}
-					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
-					room.lastBroadcast = normalized;
-					room.lastBroadcastTime = Date.now();
-
+					if (!failed) {
+						this.add('|c|'+user.getIdentity(room.id)+'|'+message);
+						room.lastBroadcast = normalized;
+						room.lastBroadcastTime = Date.now();
+					}
 					this.broadcasting = true;
 				}
 				return true;
