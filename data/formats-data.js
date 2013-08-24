@@ -1247,7 +1247,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	umbreon: {
-		viableMoves: {"curse":1,"payback":1,"moonlight":1,"wish":1,"protect":1,"healbell":1,"toxic":1,"batonpass":1},
+		viableMoves: {"curse":1,"payback":1,"moonlight":1,"wish":1,"protect":1,"healbell":1,"toxic":1,"batonpass":1,"foulplay":1},
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["faintattack","meanlook","screech","moonlight"]},
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["tailwhip","tackle","helpinghand","sandattack"]}
@@ -4390,7 +4390,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	chandelure: {
-		viableMoves: {"calmmind":1,"shadowball":1,"energyball":1,"fireblast":1,"overheat":1,"hiddenpowerfighting":1,"hiddenpowerground":1,"hiddenpowerrock":1,"trick":1},
+		viableMoves: {"shadowball":1,"energyball":1,"fireblast":1,"overheat":1,"hiddenpowerfighting":1,"hiddenpowerground":1,"hiddenpowerrock":1,"trick":1,"substitute":1,"painsplit":1},
 		eventPokemon: [
 			{"generation":5,"level":50,"gender":"F","nature":"Modest","isDW":false,"abilities":["flashfire"],"moves":["heatwave","shadowball","energyball","psychic"],"pokeball":"cherishball"}
 		],
