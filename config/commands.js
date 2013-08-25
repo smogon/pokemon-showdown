@@ -243,8 +243,7 @@ var commands = exports.commands = {
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',
-	data: function(target, room, user) {
-		if (!this.canBroadcast()) return;
+	data: function(target, room, user, connection) {
 
 		var pokemon = Tools.getTemplate(target);
 		var item = Tools.getItem(target);
@@ -265,14 +264,14 @@ var commands = exports.commands = {
 			data += '|c|~|/data-move '+move.name+'\n';
 		}
 		if (!data) {
-			data = "||No pokemon, item, move, or ability named '"+target+"' was found. (Check your spelling?)";
+			connection.sendTo(room, "||No pokemon, item, move, or ability named '"+target+"' was found. (Check your spelling?)");
+		} else {
+			if (!this.canBroadcast()) return;
+			this.sendReply(data);
 		}
-
-		this.sendReply(data);
 	},
 
-	dexsearch: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+	dexsearch: function (target, room, user, connection) {
 
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
@@ -348,8 +347,10 @@ var commands = exports.commands = {
 				gens.count++;
 			}
 			else if (target === 'all') {
+				if (!this.canBroadcast(true)) return;
 				if (this.broadcasting) {
-					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
+					connection.sendTo(room, 'A search with the parameter "all" cannot be broadcast.')
+					return false;
 				}
 				all = true;
 			}
@@ -459,6 +460,7 @@ var commands = exports.commands = {
 		} else {
 			resultsStr = 'No Pokemon found.  ';
 		}
+		if (!this.canBroadcast()) return;
 		return this.sendReplyBox(resultsStr.substring(0, resultsStr.length - 2));
 	},
 
@@ -467,8 +469,6 @@ var commands = exports.commands = {
 	learn5: 'learn',
 	learn: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help learn');
-
-		if (!this.canBroadcast()) return;
 
 		var lsetData = {set:{}};
 		var targets = target.split(',');
@@ -521,6 +521,7 @@ var commands = exports.commands = {
 			if (lsetData.sourcesBefore) buffer += "<li>any generation before "+(lsetData.sourcesBefore+1);
 			buffer += "</ul>";
 		}
+		if (!this.canBroadcast()) return;
 		this.sendReplyBox(buffer);
 	},
 
@@ -677,7 +678,6 @@ var commands = exports.commands = {
 
 	om: 'othermetas',
 	othermetas: function(target, room, user) {
-		if (!this.canBroadcast()) return;
 		target = toId(target);
 		var buffer = '';
 		var matched = false;
@@ -716,12 +716,17 @@ var commands = exports.commands = {
 		if (!matched) {
 			return this.sendReply('The Other Metas entry "'+target+'" was not found. Try /othermetas or /om for general help.');
 		}
+		if (!this.canBroadcast()) return;
 		this.sendReplyBox(buffer);
 	},
 
-	roomhelp: function(target, room, user) {
-		if (room.id === 'lobby') return this.sendReply('This command is too spammy for lobby.');
-		if (!this.canBroadcast()) return;
+	roomhelp: function(target, room, user, connection) {
+		if (room.id === 'lobby') {
+			if (!this.canBroadcast(true)) return;
+			if (this.broadcasting) return connection.sendTo(room, 'This command is too spammy for lobby.');
+		} else {
+			if (!this.canBroadcast()) return;
+		}
 		this.sendReplyBox('Room moderators (%) can use:<br />' +
 			'- /mute <em>username</em>: 7 minute mute<br />' +
 			'- /hourmute <em>username</em>: 60 minute mute<br />' +
@@ -739,9 +744,15 @@ var commands = exports.commands = {
 			'</div>');
 	},
 
-	restarthelp: function(target, room, user) {
-		if (room.id === 'lobby' && !this.can('lockdown')) return false;
-		if (!this.canBroadcast()) return;
+	restarthelp: function(target, room, user, connection) {
+		if (room.id === 'lobby') {
+			if (!user.can('lockdown')) {
+				if (!this.canBroadcast(true)) return;
+				if (this.broadcasting) return connection.sendTo(room, 'You are not authorized to broadcast this command in the lobby.');
+			}
+		} else {
+			if (!this.canBroadcast()) return;
+		}
 		this.sendReplyBox('The server is restarting. Things to know:<br />' +
 			'- We wait a few minutes before restarting so people can finish up their battles<br />' +
 			'- The restart itself will take around 0.6 seconds<br />' +
@@ -759,7 +770,6 @@ var commands = exports.commands = {
 	},
 
 	faq: function(target, room, user) {
-		if (!this.canBroadcast()) return;
 		target = target.toLowerCase();
 		var buffer = '';
 		var matched = false;
@@ -790,13 +800,13 @@ var commands = exports.commands = {
 		if (!matched) {
 			return this.sendReply('The FAQ entry "'+target+'" was not found. Try /faq for general help.');
 		}
+		if (!this.canBroadcast()) return;
 		this.sendReplyBox(buffer);
 	},
 
 	banlists: 'tiers',
 	tier: 'tiers',
 	tiers: function(target, room, user) {
-		if (!this.canBroadcast()) return;
 		target = toId(target);
 		var buffer = '';
 		var matched = false;
@@ -836,13 +846,13 @@ var commands = exports.commands = {
 		if (!matched) {
 			return this.sendReply('The Tiers entry "'+target+'" was not found. Try /tiers for general help.');
 		}
+		if (!this.canBroadcast()) return;
 		this.sendReplyBox(buffer);
 	},
 
 	analysis: 'smogdex',
 	strategy: 'smogdex',
 	smogdex: function(target, room, user) {
-		if (!this.canBroadcast()) return;
 
 		var targets = target.split(',');
 		var pokemon = Tools.getTemplate(targets[0]);
@@ -916,6 +926,7 @@ var commands = exports.commands = {
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
 			var itemName = item.name.toLowerCase().replace(' ', '_');
+			if (!this.canBroadcast()) return;
 			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/items/'+itemName+'">'+generation.toUpperCase()+' '+item.name+' item analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
 
@@ -923,6 +934,7 @@ var commands = exports.commands = {
 		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
 			var abilityName = ability.name.toLowerCase().replace(' ', '_');
+			if (!this.canBroadcast()) return;
 			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/abilities/'+abilityName+'">'+generation.toUpperCase()+' '+ability.name+' ability analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
 
@@ -930,6 +942,7 @@ var commands = exports.commands = {
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
 			var moveName = move.name.toLowerCase().replace(' ', '_');
+			if (!this.canBroadcast()) return;
 			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/moves/'+moveName+'">'+generation.toUpperCase()+' '+move.name+' move analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
 
