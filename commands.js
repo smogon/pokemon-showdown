@@ -759,7 +759,7 @@ var commands = exports.commands = {
 			room.modchat = target;
 			break;
 		}
-		if (room.modchat === true) {
+		if (config.modchat === true) {
 			this.add('|raw|<div class="broadcast-red"><b>Moderated chat was enabled!</b><br />Only registered users can talk.</div>');
 		} else if (!room.modchat) {
 			this.add('|raw|<div class="broadcast-blue"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
