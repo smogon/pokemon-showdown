@@ -495,6 +495,8 @@ server.on('connection', function(socket) {
 
 	if (ResourceMonitor.countConnection(socket.remoteAddress)) {
 		socket.end();
+		// After sending the FIN packet, we make sure the I/O is totally blocked for this socket
+		socket.destroy();
 		return;
 	}
 	var checkResult = Users.checkBanned(socket.remoteAddress);
