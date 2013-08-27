@@ -1447,8 +1447,8 @@ var commands = exports.commands = {
 
 	cmd: 'query',
 	query: function(target, room, user, connection) {
-		// Avoid guest users to use the cmd errors to ease the app-layer attacks.
-		var trustable = (user.named && user.authenticated);
+		// Avoid guest users to use the cmd errors to ease the app-layer attacks in emergency mode
+		var trustable = (!config.emergency && user.named && user.authenticated);
 		var spaceIndex = target.indexOf(' ');
 		var cmd = target;
 		if (spaceIndex > 0) {
