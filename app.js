@@ -217,9 +217,9 @@ global.ResourceMonitor = {
 	 	var now = Date.now();
 		var duration = now - this.cmdsTimes[ip];
 		name = (name ? ': '+name : '');
-		if (now - this.cdmsTotal.lastCleanup > 60*1000) {
+		if (now - this.cmdsTotal.lastCleanup > 60*1000) {
 			this.cmdsTotal.count = 0;
-			this.cdmsTotal.lastCleanup = now;
+			this.cmdsTotal.lastCleanup = now;
 		}
 		this.cmdsTotal.count++;
 		if (ip in this.cmds && duration < 60*1000) {
