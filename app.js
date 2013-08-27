@@ -225,20 +225,18 @@ global.ResourceMonitor = {
 		this.cmdsTotal.count++;
 		if (ip in this.cmds && duration < 60*1000) {
 			this.cmds[ip]++;
-			if (duration < 2*60*1000 && this.cmds[ip] % 10 === 0) {
-				if (this.cmds[ip] >= 30) {
+			if (duration < 60*1000 && this.cmds[ip] % 5 === 0) {
+				if (this.cmds[ip] >= 3) {
 					if (this.cmds[ip] % 30 === 0) this.log('CMD command from '+ip+' blocked for '+this.cmds[ip]+'th use in the last '+duration.duration()+name);
 					return true;
 				}
 				this.log('[ResourceMonitor] IP '+ip+' has used CMD command '+this.cmds[ip]+' times in the last '+duration.duration()+name);
-			} else if (this.cmds[ip] % 50 === 0) {
-				if (this.cmds[ip] >= 10) {
-					if (this.cmds[ip] % 20 === 0) this.log('CMD command from '+ip+' blocked for '+this.cmds[ip]+'th use in the last '+duration.duration()+name);
-					return true;
-				}
-				this.log('[ResourceMonitor] IP '+ip+' has used a CMD command '+this.cmds[ip]+' times in the last '+duration.duration()+name);
+			} else if (this.cmds[ip] % 15 === 0) {
+				this.log('CMD command from '+ip+' blocked for '+this.cmds[ip]+'th use in the last '+duration.duration()+name);
+				return true;
 			}
-		} else if (this.cmdsTotal.count > 50) {
+		} else if (this.cmdsTotal.count > 8000) {
+			// One CMD check per user per minute on average (to-do: make this better)
 			this.log('CMD command for '+ip+' blocked because CMD has been used '+this.cmdsTotal.count+' times in the last minute.');
 			return true;
 		} else {
