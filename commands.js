@@ -1447,6 +1447,8 @@ var commands = exports.commands = {
 
 	cmd: 'query',
 	query: function(target, room, user, connection) {
+		// Avoid guest users to use the cmd errors to ease the app-layer attacks.
+		var trustable = (user.named && user.authenticated);
 		var spaceIndex = target.indexOf(' ');
 		var cmd = target;
 		if (spaceIndex > 0) {
@@ -1458,7 +1460,7 @@ var commands = exports.commands = {
 		if (cmd === 'userdetails') {
 
 			var targetUser = Users.get(target);
-			if (!targetUser) {
+			if (!trustable || !targetUser) {
 				connection.send('|queryresponse|userdetails|'+JSON.stringify({
 					userid: toId(target),
 					rooms: false
@@ -1495,13 +1497,13 @@ var commands = exports.commands = {
 			connection.send('|queryresponse|userdetails|'+JSON.stringify(userdetails));
 
 		} else if (cmd === 'roomlist') {
-
+			if (!trustable) return false;
 			connection.send('|queryresponse|roomlist|'+JSON.stringify({
 				rooms: Rooms.global.getRoomList(true)
 			}));
 
 		} else if (cmd === 'rooms') {
-
+			if (!trustable) return false;
 			connection.send('|queryresponse|rooms|'+JSON.stringify(
 				Rooms.global.getRooms()
 			));
