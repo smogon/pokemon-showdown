@@ -1011,7 +1011,7 @@ var commands = exports.commands = {
 	endemergency: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
-		if (config.emergency) {
+		if (!config.emergency) {
 			return this.sendReply("We're not in emergency mode.");
 		}
 		config.emergency = false;
