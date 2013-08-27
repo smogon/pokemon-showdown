@@ -59,15 +59,6 @@ var modlog = exports.modlog = modlog || fs.createWriteStream('logs/modlog.txt', 
  */
 var parse = exports.parse = function(message, room, user, connection, levelsDeep) {
 	var cmd = '', target = '';
-	// Emergency logging
-	if (config.emergency) {
-		fs.appendFile('logs/emergency.log', '[User: ' + user.userid + ' | ' + connection.ip + '] ' + message + '\n', function(err){
-			if (err) {
-				console.log('!! Error in emergency log !!');
-				throw err;
-			}
-		});
-	}
 	if (!message || !message.trim().length) return;
 	if (!levelsDeep) levelsDeep = 0;
 

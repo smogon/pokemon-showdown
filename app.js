@@ -580,6 +580,15 @@ server.on('connection', function(socket) {
 				return;
 			}
 			lines = lines.split('\n');
+			// Emergency logging
+			if (config.emergency) {
+				fs.appendFile('logs/emergency.log', '['+ user + ' (' + socket.remoteAddress + ')] ' + message + '\n', function(err){
+					if (err) {
+						console.log('!! Error in emergency log !!');
+						throw err;
+					}
+				});
+			}
 			for (var i=0; i<lines.length; i++) {
 				if (user.chat(lines[i], room, connection) === false) break;
 			}
