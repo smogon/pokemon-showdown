@@ -120,6 +120,9 @@ global.ResourceMonitor = {
 	battleTimes: {},
 	battlePreps: {},
 	battlePrepTimes: {},
+	cmds: {},
+	cmdsTimes: {},
+	cmdsTotal: {lastCleanup: Date.now(), count: 0},
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
@@ -133,7 +136,7 @@ global.ResourceMonitor = {
 		name = (name ? ': '+name : '');
 		if (ip in this.connections && duration < 30*60*1000) {
 			this.connections[ip]++;
-			if (duration < 5*60*1000 && this.connections[ip] % 10 == 0) {
+			if (duration < 5*60*1000 && this.connections[ip] % 10 === 0) {
 				if (this.connections[ip] >= 30) {
 					if (this.connections[ip] % 30 == 0) this.log('IP '+ip+' rejected for '+this.connections[ip]+'th connection in the last '+duration.duration()+name);
 					return true;
@@ -206,6 +209,41 @@ global.ResourceMonitor = {
 		}
 
 		return bytes;
+	},
+	/**
+	 * Controls the amount of times a cmd command is used
+	 */
+	countCmd: function(ip, name) {
+	 	var now = Date.now();
+		var duration = now - this.cmdsTimes[ip];
+		name = (name ? ': '+name : '');
+		if (now - this.cdmsTotal.lastCleanup > 60*1000) {
+			this.cmdsTotal.count = 0;
+			this.cdmsTotal.lastCleanup = now;
+		}
+		this.cmdsTotal.count++;
+		if (ip in this.cmds && duration < 60*1000) {
+			this.cmds[ip]++;
+			if (duration < 2*60*1000 && this.cmds[ip] % 10 === 0) {
+				if (this.cmds[ip] >= 30) {
+					if (this.cmds[ip] % 30 === 0) this.log('CMD command from '+ip+' blocked for '+this.cmds[ip]+'th use in the last '+duration.duration()+name);
+					return true;
+				}
+				this.log('[ResourceMonitor] IP '+ip+' has used CMD command '+this.cmds[ip]+' times in the last '+duration.duration()+name);
+			} else if (this.cmds[ip] % 50 === 0) {
+				if (this.cmds[ip] >= 10) {
+					if (this.cmds[ip] % 20 === 0) this.log('CMD command from '+ip+' blocked for '+this.cmds[ip]+'th use in the last '+duration.duration()+name);
+					return true;
+				}
+				this.log('[ResourceMonitor] IP '+ip+' has used a CMD command '+this.cmds[ip]+' times in the last '+duration.duration()+name);
+			}
+		} else if (this.cmdsTotal.count > 50) {
+			this.log('CMD command for '+ip+' blocked because CMD has been used '+this.cmdsTotal.count+' times in the last minute.');
+			return true;
+		} else {
+			this.cmds[ip] = 1;
+			this.cmdsTimes[ip] = now;
+		}
 	}
 };
 
