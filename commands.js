@@ -513,7 +513,7 @@ var commands = exports.commands = {
 
 	um: 'unmute',
 	unmute: function(target, room, user) {
-		if (!target) return this.parse('/help something');
+		if (!target) return this.parse('/help unmute');
 		var targetid = toUserid(target);
 		var targetUser = Users.get(target);
 		if (!targetUser) {
