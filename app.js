@@ -486,8 +486,10 @@ server.on('connection', function(socket) {
 	// Emergency mode connections logging
 	if (config.emergency) {
 		fs.appendFile('logs/cons.emergency.log', '#'+socketCounter+' [' + socket.remoteAddress + ']\n', function(err){
-			if (err) throw err;
-			console.log('!! Error in emergency conns log !!');
+			if (err) {
+				console.log('!! Error in emergency conns log !!');
+				throw err;
+			}
 		});
 	}
 
