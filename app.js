@@ -217,6 +217,7 @@ global.ResourceMonitor = {
 	 	var now = Date.now();
 		var duration = now - this.cmdsTimes[ip];
 		name = (name ? ': '+name : '');
+		if (!this.cmdsTotal) this.cmdsTotal = {lastCleanup: 0, count: 0};
 		if (now - this.cmdsTotal.lastCleanup > 60*1000) {
 			this.cmdsTotal.count = 0;
 			this.cmdsTotal.lastCleanup = now;
