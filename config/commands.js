@@ -1180,7 +1180,7 @@ var commands = exports.commands = {
 		}
 		if (target === '%' || target === 'hourmute') {
 			matched = true;
-			this.sendReply('/hourmute , [reason] - Mute user with reason for an hour. Requires: % @ & ~');
+			this.sendReply('/hourmute [username], [reason] - Mute user with reason for an hour. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'unmute') {
 			matched = true;
