@@ -1016,7 +1016,7 @@ var commands = exports.commands = {
 		}
 		config.emergency = false;
 		for (var id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green">The server his no longer in emergency mode.</div>');
+			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>');
 		}
 
 		this.logEntry(user.name + ' used /endemergency');
