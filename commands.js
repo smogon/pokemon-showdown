@@ -994,6 +994,34 @@ var commands = exports.commands = {
 
 	},
 
+	emergency: function(target, room, user) {
+		if (!this.can('lockdown')) return false;
+
+		if (config.emergency) {
+			return this.sendReply("We're already in emergency mode.");
+		}
+		config.emergency = true;
+		for (var id in Rooms.rooms) {
+			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>');
+		}
+
+		this.logEntry(user.name + ' used /emergency');
+	},
+
+	endemergency: function(target, room, user) {
+		if (!this.can('lockdown')) return false;
+
+		if (config.emergency) {
+			return this.sendReply("We're not in emergency mode.");
+		}
+		config.emergency = false;
+		for (var id in Rooms.rooms) {
+			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green">The server his no longer in emergency mode.</div>');
+		}
+
+		this.logEntry(user.name + ' used /endemergency');
+	},
+
 	kill: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
