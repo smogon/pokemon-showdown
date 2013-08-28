@@ -477,7 +477,7 @@ var commands = exports.commands = {
 			if (!target) {
 				return this.privateModCommand('('+targetUser.name+' would be muted by '+user.name+problem+'.)');
 			}
-			return this.addModCommand(''+targetUser.name+' would be muted by '+user.name+problem+'.' + (target ? " (" + target + ")" : ""));
+			return this.privateModCommand(''+targetUser.name+' would be muted by '+user.name+problem+'.' + (target ? " (" + target + ")" : ""));
 		}
 
 		targetUser.popup(user.name+' has muted you for 7 minutes. '+target);
