@@ -262,10 +262,9 @@ function canTalk(user, room, connection, message) {
 		} else {
 			var userGroup = user.group;
 			if (room.auth) {
-				if (room.auth[user.userid]) {
-					userGroup = room.auth[user.userid];
-				} else if (userGroup !== ' ') {
-					userGroup = '+';
+				var localauth = room.auth[user.userid];
+				if (localauth && config.groupsranking.indexOf(localauth) > config.groupsranking.indexOf(userGroup)) {
+					userGroup = localauth;
 				}
 			}
 			if (!user.authenticated && room.modchat === true) {
