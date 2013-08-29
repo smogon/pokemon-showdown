@@ -743,8 +743,7 @@ var commands = exports.commands = {
 		case 'true':
 		case 'yes':
 		case 'registered':
-			this.sendReply("Modchat registered has been removed.");
-			this.sendReply("If you're dealing with a spammer, make sure to run /loadbanlist.");
+			this.sendReply("Modchat registered is no longer available.");
 			return false;
 			break;
 		case 'off':
