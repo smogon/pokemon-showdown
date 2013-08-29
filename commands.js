@@ -756,6 +756,9 @@ var commands = exports.commands = {
 			if (config.groupsranking.indexOf(target) > 1 && !user.can('modchatall')) {
 				return this.sendReply('/modchat - Access denied for setting higher than ' + config.groupsranking[1] + '.');
 			}
+			if (room.auth && config.groupsranking.indexOf(target) > 4) {
+				return this.sendReply('/modchat - Access denied for setting higher than ' + config.groupsranking[4] + ' in a room with private moderation.');
+			}
 			room.modchat = target;
 			break;
 		}
