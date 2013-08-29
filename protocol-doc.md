@@ -12,8 +12,8 @@ Showdown directly using WebSocket:
     wss://sim.psim.us/showdown/websocket
 
 
-Incoming messages
------------------
+Client-to-server messages
+-------------------------
 
 Messages from the user to the server are in the form:
 
@@ -29,9 +29,11 @@ way as if each line were sent to the room separately.
 
 A partial list of available commands can be found with `/help`.
 
+To log in, look at the documentation for the `|challstr|` server message.
 
-Outgoing messages
------------------
+
+Server-to-client messages
+-------------------------
 
 Messages from the server to the user are in the form:
 
@@ -168,13 +170,16 @@ for a full list of message types.
 
 `|challstr|KEYID|CHALLENGE`
 
-> You tried to log in, and we need confirmation that it's really you.
+> You just connected to the server, and we're giving you some information you'll need to log in.
 >
-> Make an HTTP request to
+> If you're already logged in and have session cookies, you can make an HTTP GET request to
 > `http://play.pokemonshowdown.com/action.php?act=upkeep&challengekeyid=KEYID&challenge=CHALLENGE`
 >
-> The response will start with `]` and be followed by a JSON object which
-> we'll call `data`.
+> Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
+> with the data `act=login&user=USERNAME&pass=PASSWORD&challengekeyid=KEYID&challenge=CHALLENGE`
+>
+> Either way, the response will start with `]` and be followed by a JSON
+> object which we'll call `data`.
 >
 > Finish the rename by sending: `/trn NAME,0,ASSERTION`
 > where `NAME` is your desired username and `ASSERTION` is `data.assertion`.
