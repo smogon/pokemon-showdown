@@ -178,13 +178,17 @@ for a full list of message types.
 > Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
 > with the data `act=login&user=USERNAME&pass=PASSWORD&challengekeyid=KEYID&challenge=CHALLENGE`
 >
+> `USERNAME` is your username and `PASSWORD` is your password, and `KEYID` and
+> `CHALLENGE` are the values you got from `|challstr|`. (Also feel free to make
+> the request to `https://` if your client supports it.)
+>
 > Either way, the response will start with `]` and be followed by a JSON
 > object which we'll call `data`.
 >
-> Finish the rename by sending: `/trn NAME,0,ASSERTION`
-> where `NAME` is your desired username and `ASSERTION` is `data.assertion`.
+> Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
+> where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
 
-`|updateuser|NAME|NAMED|AVATAR`
+`|updateuser|USERNAME|NAMED|AVATAR`
 
 > Your name or avatar was successfully changed. Your username is now `NAME`.
 > `NAMED` will be `0` if you are a guest or `1` otherwise. And your avatar is
