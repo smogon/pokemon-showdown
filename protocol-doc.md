@@ -190,7 +190,7 @@ for a full list of message types.
 
 `|updateuser|USERNAME|NAMED|AVATAR`
 
-> Your name or avatar was successfully changed. Your username is now `NAME`.
+> Your name or avatar was successfully changed. Your username is now `USERNAME`.
 > `NAMED` will be `0` if you are a guest or `1` otherwise. And your avatar is
 > now `AVATAR`.
 
