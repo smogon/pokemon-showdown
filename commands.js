@@ -707,6 +707,9 @@ var commands = exports.commands = {
 		}
 		if (targetUser) {
 			targetUser.updateIdentity();
+			if (config.groups[nextGroup].rank < 2 && targetUser.roomCount['staff']) {
+				targetUser.leaveRoom('staff');
+			}
 		}
 	},
 
