@@ -1565,60 +1565,45 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomSeasonalAATeam: function(side) {
-		// First we choose the lead
-		var dice = this.random(100);
-		var lead = (dice  < 50)? 'groudon' : 'kyogre';
-		var groudonsSailors = [
-			'alakazam', 'arbok', 'arcanine', 'arceusfire', 'bibarel', 'bisharp', 'blaziken', 'blissey', 'cacturne',
-			'chandelure', 'chansey', 'charizard', 'cloyster', 'conkeldurr', 'druddigon', 'electivire',
-			'emboar', 'entei', 'exploud', 'gardevoir', 'genesect', 'golurk', 'hariyama', 'heatran', 'infernape',
-			'jellicent', 'lilligant', 'lucario', 'luxray', 'machamp', 'machoke', 'machop', 'magmortar', 'meloetta',
-			'onix', 'poliwrath', 'primeape', 'smeargle', 'snorlax', 'toxicroak', 'typhlosion', 'weezing'
+	randomSeasonalSSTeam: function(side) {
+		var crypto = require('crypto');
+		var hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16);
+		var randNums = [
+			(13 * hash + 11) % 649,
+			(18 * hash + 66) % 649,
+			(25 * hash + 73) % 649,
+			(1 * hash + 16) % 649,
+			(23 * hash + 132) % 649,
+			(5 * hash + 6) % 649
 		];
-		var kyogresPirates = [
-			'absol', 'arceusflying', 'cofagrigus', 'crobat', 'darkrai', 'delibird', 'dragonite', 'ducklett',
-			'garchomp', 'gengar', 'golem', 'gothitelle', 'honchkrow', 'krookodile', 'landorus', 'ludicolo',
-			'mandibuzz', 'pelipper', 'pidgeot', 'pidgey', 'sableye', 'scizor', 'scyther', 'sharpedo', 'shiftry',
-			'skarmory', 'staraptor', 'swanna', 'thundurus', 'thundurustherian', 'tornadus', 'tornadustherian',
-			'tyranitar', 'volcarona', 'wailord', 'weavile', 'whimsicott', 'wingull', 'zoroark'
-		];
-		groudonsSailors = groudonsSailors.randomize();
-		kyogresPirates = kyogresPirates.randomize();
-
-		// Add the lead.
-		var team = [this.randomSet(this.getTemplate(lead), 0)];
-
-		// Now, let's make the team. Each side has a different ability.
-		var teamPool = [];
-		var ability = 'Illuminate';
-		if (lead === 'kyogre') {
-			ability = 'Thick Fat';
-			teamPool = kyogresPirates;
-			moveToGet = 'hurricane';
-		} else {
-			var dice = this.random(100);
-			ability = (dice < 33)? 'Water Absorb' : 'Tinted Lens';
-			teamPool = groudonsSailors;
-			moveToGet = 'vcreate';
+		var randoms = {};
+		for (var i=0; i<6; i++) {
+			randoms[randNums[i]] = true;
 		}
-		for (var i=1; i<6; i++) {
-			var pokemon = teamPool[i];
-			var template = this.getTemplate(pokemon);
-			var set = this.randomSet(template, i);
-			set.ability = (template.baseSpecies && template.baseSpecies === 'Arceus')? 'Multitype' : ability;
-			var hasMoves = {};
-			for (var m in set.moves) {
-				set.moves[m] = set.moves[m].toLowerCase();
-				if (set.moves[m] === 'dynamicpunch') set.moves[m] = 'closecombat';
-				hasMoves[set.moves[m]] = true;
+		var team = [];
+		var mons = 0;
+		var fashion = [
+			'Choice Scarf', 'Choice Specs', 'Silk Scarf', 'Wise Glasses', 'Choice Band', 'Wide Lens',
+			'Zoom Lens', 'Destiny Knot', 'BlackGlasses', 'Expert Belt', 'Black Belt', 'Macho Brace',
+			'Focus Sash', "King's Rock", 'Muscle Band', 'Mystic Water', 'Binding Band', 'Rocky Helmet'
+		];
+		for (var p in this.data.Pokedex) {
+			if (this.data.Pokedex[p].num in randoms) {
+				var set = this.randomSet(this.getTemplate(p), mons);
+				fashion = fashion.randomize();
+				if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
+				team.push(set);
+				mons++;
 			}
-			if (!(moveToGet in hasMoves)) {
-				set.moves[3] = moveToGet;
-			}
-			if (set.item === 'Damp Rock' && !('rain dance' in hasMoves)) set.item = 'Life Orb';
-			if (set.item === 'Heat Rock' && !('sunny day' in hasMoves)) set.item = 'Life Orb';
+		}
+		// Just in case the randoms generated the same number... highly unlikely
+		var defaults = ['unown', 'castform', 'charizard', 'pikachu', 'arceus', 'cherrim'].randomize();
+		while (mons < 6) {
+			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
+			fashion = fashion.randomize();
+			if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
 			team.push(set);
+			mons++;
 		}
 
 		return team;
