@@ -1595,6 +1595,7 @@ exports.BattleScripts = {
 				if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
 				team.push(set);
 				mons++;
+				randoms[this.data.Pokedex[p].num] = false;
 			}
 		}
 		// Just in case the randoms generated the same number... highly unlikely
