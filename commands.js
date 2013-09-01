@@ -1034,7 +1034,9 @@ var commands = exports.commands = {
 		if (CommandParser.updateServerLock) {
 			return this.sendReply('Wait for /updateserver to finish before using /kill.');
 		}
-
+		
+		if (room.type === 'battle') process.exit();
+		
 		room.destroyLog(function() {
 			room.logEntry(user.name + ' used /kill');
 		}, function() {
