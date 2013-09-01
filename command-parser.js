@@ -60,7 +60,13 @@ var modlog = exports.modlog = modlog || fs.createWriteStream('logs/modlog.txt', 
 var parse = exports.parse = function(message, room, user, connection, levelsDeep) {
 	var cmd = '', target = '';
 	if (!message || !message.trim().length) return;
-	if (!levelsDeep) levelsDeep = 0;
+	if (!levelsDeep) {
+		levelsDeep = 0;
+		// if (config.emergencylog && (connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221' || message.length > 2048 || message.length > 256 && message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ')) {
+		if (config.emergencylog && (user.userid === 'pindapinda' || connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221')) {
+			config.emergencylog.write('<'+user.name+'@'+connection.ip+'> '+message+'\n');
+		}
+	}
 
 	if (message.substr(0,3) === '>> ') {
 		// multiline eval
