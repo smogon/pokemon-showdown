@@ -120,6 +120,8 @@ global.ResourceMonitor = {
 	battleTimes: {},
 	battlePreps: {},
 	battlePrepTimes: {},
+	networkUse: {},
+	networkCount: {},
 	cmds: {},
 	cmdsTimes: {},
 	cmdsTotal: {lastCleanup: Date.now(), count: 0},
@@ -188,6 +190,29 @@ global.ResourceMonitor = {
 			this.battlePreps[ip] = 1;
 			this.battlePrepTimes[ip] = now;
 		}
+	},
+	/**
+	 * data
+	 */
+	countNetworkUse: function(size) {
+		if (this.activeIp in this.networkUse) {
+			this.networkUse[this.activeIp] += size;
+			this.networkCount[this.activeIp]++;
+		} else {
+			this.networkUse[this.activeIp] = size;
+			this.networkCount[this.activeIp] = 1;
+		}
+	},
+	writeNetworkUse: function() {
+		var buf = '';
+		for (var i in this.networkUse) {
+			buf += ''+this.networkUse[i]+'\t'+this.networkCount[i]+'\t'+i+'\n';
+		}
+		fs.writeFile('logs/networkuse.tsv', buf);
+	},
+	clearNetworkUse: function() {
+		this.networkUse = {};
+		this.networkCount = {};
 	},
 	/**
 	 * Counts roughly the size of an object to have an idea of the server load.
@@ -315,18 +340,18 @@ var sockjs = require('sockjs');
 //          NaN, which leads to an infinite loop. The newest version of
 //          faye-websocket has *other* bugs, so this really is the least
 //          terrible option to deal with this critical issue.
-(function() {
-	var StreamReader = require('./node_modules/sockjs/node_modules/' +
-			'faye-websocket/lib/faye/websocket/hybi_parser/stream_reader.js');
-	var _read = StreamReader.prototype.read;
-	StreamReader.prototype.read = function() {
-		if (isNaN(this._cursor)) {
-			// This will break out of the otherwise-infinite loop.
-			return null;
-		}
-		return _read.apply(this, arguments);
-	};
-})();
+// (function() {
+// 	var StreamReader = require('./node_modules/sockjs/node_modules/' +
+// 			'faye-websocket/lib/faye/websocket/hybi_parser/stream_reader.js');
+// 	var _read = StreamReader.prototype.read;
+// 	StreamReader.prototype.read = function() {
+// 		if (isNaN(this._cursor)) {
+// 			// This will break out of the otherwise-infinite loop.
+// 			return null;
+// 		}
+// 		return _read.apply(this, arguments);
+// 	};
+// })();
 
 var server = sockjs.createServer({
 	sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-0.3.min.js",

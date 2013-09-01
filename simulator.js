@@ -112,7 +112,9 @@ var Simulator = (function(){
 	Simulator.prototype.getFormat = function() {
 		return Tools.getFormat(this.format);
 	};
+	Simulator.prototype.lastIp = null;
 	Simulator.prototype.send = function() {
+		this.activeIp = ResourceMonitor.activeIp;
 		this.process.send(''+this.id+'|'+slice.call(arguments).join('|'));
 	};
 	Simulator.prototype.sendFor = function(user, action) {
@@ -135,6 +137,7 @@ var Simulator = (function(){
 	Simulator.prototype.rqid = '';
 	Simulator.prototype.inactiveQueued = false;
 	Simulator.prototype.receive = function(lines) {
+		ResourceMonitor.activeIp = this.activeIp;
 		switch (lines[1]) {
 		case 'update':
 			this.active = !this.ended && this.p1 && this.p2;
@@ -183,6 +186,7 @@ var Simulator = (function(){
 			this.inactiveSide = parseInt(lines[2], 10);
 			break;
 		}
+		ResourceMonitor.activeIp = null;
 	};
 
 	Simulator.prototype.resendRequest = function(user) {
