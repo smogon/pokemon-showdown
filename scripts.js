@@ -362,5 +362,63 @@ exports.BattleScripts = {
 		}
 		
 		return team;
+	},
+	randomSeasonalAATeam: function(side) {
+		// First we choose the lead
+		var dice = this.random(100);
+		var lead = (dice  < 50)? 'groudon' : 'kyogre';
+		var groudonsSailors = [
+			'alakazam', 'arbok', 'arcanine', 'arceusfire', 'bibarel', 'bisharp', 'blaziken', 'blissey', 'cacturne',
+			'chandelure', 'chansey', 'charizard', 'cloyster', 'conkeldurr', 'druddigon', 'electivire',
+			'emboar', 'entei', 'exploud', 'gardevoir', 'genesect', 'golurk', 'hariyama', 'heatran', 'infernape',
+			'jellicent', 'lilligant', 'lucario', 'luxray', 'machamp', 'machoke', 'machop', 'magmortar', 'meloetta',
+			'onix', 'poliwrath', 'primeape', 'smeargle', 'snorlax', 'toxicroak', 'typhlosion', 'weezing'
+		];
+		var kyogresPirates = [
+			'absol', 'arceusflying', 'cofagrigus', 'crobat', 'darkrai', 'delibird', 'dragonite', 'ducklett',
+			'garchomp', 'gengar', 'golem', 'gothitelle', 'honchkrow', 'krookodile', 'landorus', 'ludicolo',
+			'mandibuzz', 'pelipper', 'pidgeot', 'pidgey', 'sableye', 'scizor', 'scyther', 'sharpedo', 'shiftry',
+			'skarmory', 'staraptor', 'swanna', 'thundurus', 'thundurustherian', 'tornadus', 'tornadustherian',
+			'tyranitar', 'volcarona', 'wailord', 'weavile', 'whimsicott', 'wingull', 'zoroark'
+		];
+		groudonsSailors = groudonsSailors.randomize();
+		kyogresPirates = kyogresPirates.randomize();
+
+		// Add the lead.
+		var team = [this.randomSet(this.getTemplate(lead), 0)];
+
+		// Now, let's make the team. Each side has a different ability.
+		var teamPool = [];
+		var ability = 'Illuminate';
+		if (lead === 'kyogre') {
+			ability = 'Thick Fat';
+			teamPool = kyogresPirates;
+			moveToGet = 'hurricane';
+		} else {
+			var dice = this.random(100);
+			ability = (dice < 33)? 'Water Absorb' : 'Tinted Lens';
+			teamPool = groudonsSailors;
+			moveToGet = 'vcreate';
+		}
+		for (var i=1; i<6; i++) {
+			var pokemon = teamPool[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomSet(template, i);
+			set.ability = (template.baseSpecies && template.baseSpecies === 'Arceus')? 'Multitype' : ability;
+			var hasMoves = {};
+			for (var m in set.moves) {
+				set.moves[m] = set.moves[m].toLowerCase();
+				if (set.moves[m] === 'dynamicpunch') set.moves[m] = 'closecombat';
+				hasMoves[set.moves[m]] = true;
+			}
+			if (!(moveToGet in hasMoves)) {
+				set.moves[3] = moveToGet;
+			}
+			if (set.item === 'Damp Rock' && !('rain dance' in hasMoves)) set.item = 'Life Orb';
+			if (set.item === 'Heat Rock' && !('sunny day' in hasMoves)) set.item = 'Life Orb';
+			team.push(set);
+		}
+
+		return team;
 	}
 ];
