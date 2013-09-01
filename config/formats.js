@@ -282,54 +282,11 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "[Seasonal] Average August",
+		name: "[Seasonal] School Schemes",
 		section: "OM of the Month",
 
-		team: 'randomSeasonalAA',
-		gameType: 'doubles',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
-		onBegin: function() {
-			// What does player 1 lead with?
-			var p1Where = 'boat';
-			var p2Where = 'boat';
-			if (this.p1.pokemon[0].name === 'Kyogre') p1Where = 'pirates';
-			if (this.p2.pokemon[0].name === 'Kyogre') p2Where = 'pirates';
-			var shipNames = [
-				'Zarelrules', 'Joimawesome', 'Treeckonoob', 'MJailBait', 'mikelpuns', 'TTTtttttt', 'Frazzle Dazzle',
-				'TIbot', 'CDXCIV', 'Srs Bsns Trts', 'Leemz', 'Eggymad', 'Snoffles', 'bmelted', 'Poopes', 'Hugonedugen',
-				'Il Haunter', 'chaospwns', 'WaterBro', 'niggie', 'DOOM', 'qhore', 'Jizzmine', 'Aldarown'
-			].randomize();
-			var whereAreThey = (p1Where === 'boat' && p2Where === 'boat')? 'You both were aboard the fantastic ship S. S. ' + shipNames[0] :
-			((p1Where === 'pirates' && p2Where === 'pirates')? 'You are two pirate gangs on a summer sea storm about to raze the ship S. S. ' +  shipNames[0] :
-			((p1Where === 'pirates')? this.p1.name : this.p2.name) + ' leads a pirate boat to raze the ship S. S. ' + shipNames[0]
-			+ ' where ' + ((p1Where === 'pirates')? this.p2.name : this.p1.name)) + ' is enjoying a sea travel,';
-
-			this.add('-message',
-				'Alas, poor trainers! ' + whereAreThey + " when a sudden summer Hurricane made a Wailord hit your transport, and now it's sinking! "
-				+ "There are not enough life boats for everyone nor trainers ain't sharing their Water-type friends, "
-				+ "so you'll have to fight to access a life boat! Good luck! You have to be fast to not to be hit by the Hurricane!"
-			);
-		},
-		onSwitchIn: function(pokemon) {
-			if (pokemon.battle.turn > 0) {
-				var result = true;
-				for (var i=0; i<pokemon.battle.sides.length; i++) {
-					for (var j=0; j<pokemon.battle.sides[i].active.length; j++) {
-						if (pokemon.battle.sides[i].active[j] && !pokemon.battle.sides[i].active[j].volatiles['perishsong']) {
-							result = false;
-						}
-						if (pokemon.battle.sides[i].active[j] && pokemon.battle.sides[i].active[j].ability !== 'soundproof') {
-							pokemon.battle.sides[i].active[j].addVolatile('perishsong');
-						} else {
-							this.add('-immune', pokemon.battle.sides[i].active[j], '[msg]');
-							this.add('-end', pokemon.battle.sides[i].active[j], 'Perish Song');
-						}
-					}
-				}
-				if (result) return false;
-				this.add('-fieldactivate', 'move: Perish Song');
-			}
-		}
+		team: 'randomSeasonalSS',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod']
 	},
 	{
 		name: "Challenge Cup",
