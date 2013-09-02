@@ -705,6 +705,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/sim/seasonal">Seasonal Ladder</a><br />';
 		}
+		if (target === 'all' || target === 'stabmons') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3484106/">STABmons</a>';
+		}
 		if (target === 'all' || target === 'vgc2013' || target === 'vgc') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3471161/">VGC 2013</a><br />';
