@@ -132,3 +132,4 @@ Contributors
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
 - Samuel Teo [Yilx] - Art (main background)
 - [The Immortal] - Development
+- Vivian Zou [Vtas] - Art (alternate main background)
