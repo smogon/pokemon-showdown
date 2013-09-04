@@ -192,5 +192,132 @@ exports.BattleScripts = {
 	faint: function(pokemon, source, effect) {
 		pokemon.faint(source, effect);
 		this.queue = [];
+	},
+	comparePriority: function(a, b) {
+		a.priority = a.priority || 0;
+		a.subPriority = a.subPriority || 0;
+		a.speed = a.speed || 0;
+		b.priority = b.priority || 0;
+		b.subPriority = b.subPriority || 0;
+		b.speed = b.speed || 0;
+		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
+			if (typeof a.order !== 'number') {
+				return -(1);
+			}
+			if (typeof b.order !== 'number') {
+				return -(-1);
+			}
+			if (b.order - a.order) {
+				return -(b.order - a.order);
+			}
+		}
+		if (b.priority - a.priority) {
+			return b.priority - a.priority;
+		}
+		if (b.speed - a.speed) {
+			if (b.priority === -1 && a.priority === -1) return a.speed - b.speed;
+			return b.speed - a.speed;
+		}
+		if (b.subOrder - a.subOrder) {
+			return -(b.subOrder - a.subOrder);
+		}
+		return Math.random()-0.5;
+	},
+	getResidualStatuses: function(thing, callbackType) {
+		var statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
+		statuses.sort(this.comparePriority);
+		//if (statuses[0]) this.debug('match '+(callbackType||'residualCallback')+': '+statuses[0].status.id);
+		return statuses;
+	},
+	residualEvent: function(eventid, relayVar) {
+		var statuses = this.getRelevantEffectsInner(this, 'on'+eventid, null, null, false, true, 'duration');
+		statuses.sort(this.comparePriority);
+		while (statuses.length) {
+			var statusObj = statuses.shift();
+			var status = statusObj.status;
+			if (statusObj.thing.fainted) continue;
+			if (statusObj.statusData && statusObj.statusData.duration) {
+				statusObj.statusData.duration--;
+				if (!statusObj.statusData.duration) {
+					statusObj.end.call(statusObj.thing, status.id);
+					continue;
+				}
+			}
+			this.singleEvent(eventid, status, statusObj.statusData, statusObj.thing, relayVar);
+		}
+	},
+	getRelevantEffects: function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
+		var statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
+		statuses.sort(this.comparePriority);
+		//if (statuses[0]) this.debug('match '+callbackType+': '+statuses[0].status.id);
+		return statuses;
+	},
+	addQueue: function(decision, noSort, side) {
+		if (decision) {
+			if (Array.isArray(decision)) {
+				for (var i=0; i<decision.length; i++) {
+					this.addQueue(decision[i], noSort);
+				}
+				return;
+			}
+			if (decision.choice === 'pass') return;
+			if (!decision.side && side) decision.side = side;
+			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
+			if (!decision.choice && decision.move) decision.choice = 'move';
+			if (!decision.priority) {
+				var priorities = {
+					'beforeTurn': 100,
+					'beforeTurnMove': 99,
+					'switch': 6,
+					'runSwitch': 6.1,
+					'residual': -100,
+					'team': 102,
+					'start': 101
+				};
+				if (priorities[decision.choice]) {
+					decision.priority = priorities[decision.choice];
+				}
+			}
+			if (decision.choice === 'move') {
+				if (this.getMove(decision.move).beforeTurnCallback) {
+					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move}, true);
+				}
+			} else if (decision.choice === 'switch') {
+				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
+					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
+				}
+				decision.pokemon.switchFlag = false;
+				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.speed;
+			}
+			if (decision.move) {
+				var target;
+
+				if (!decision.targetPosition) {
+					target = this.resolveTarget(decision.pokemon, decision.move);
+					decision.targetSide = target.side;
+					decision.targetPosition = target.position;
+				}
+
+				decision.move = this.getMove(decision.move);
+				if (!decision.priority) {
+					var priority = decision.move.priority;
+					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
+					decision.priority = priority;
+				}
+			}
+			if (!decision.pokemon && !decision.speed) decision.speed = 1;
+			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.speed;
+			if (!decision.speed) decision.speed = decision.pokemon.speed;
+
+			if (decision.choice === 'switch' && !decision.side.pokemon[0].isActive) {
+				// if there's no actives, switches happen before activations
+				decision.priority = 6.2;
+			}
+
+			this.queue.push(decision);
+		}
+		if (!noSort) {
+			this.queue.sort(this.comparePriority);
+		}
 	}
 };
