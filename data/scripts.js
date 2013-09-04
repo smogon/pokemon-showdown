@@ -1590,7 +1590,7 @@ exports.BattleScripts = {
 		];
 		for (var p in this.data.Pokedex) {
 			if (this.data.Pokedex[p].num in randoms && !this.data.Pokedex[p].baseSpecies) {
-				var set = this.randomSet(this.getTemplate(pokeName), mons);
+				var set = this.randomSet(this.getTemplate(p), mons);
 				fashion = fashion.randomize();
 				if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
 				team.push(set);
