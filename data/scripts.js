@@ -1578,6 +1578,7 @@ exports.BattleScripts = {
 		];
 		var randoms = {};
 		for (var i=0; i<6; i++) {
+			if (randNums[i] < 1) randNums[i] = 1;
 			randoms[randNums[i]] = true;
 		}
 		var team = [];
@@ -1588,14 +1589,12 @@ exports.BattleScripts = {
 			'Focus Sash', "King's Rock", 'Muscle Band', 'Mystic Water', 'Binding Band', 'Rocky Helmet'
 		];
 		for (var p in this.data.Pokedex) {
-			if (this.data.Pokedex[p].num in randoms) {
-				var pokeName = (this.data.Pokedex[p].baseSpecies)? this.data.Pokedex[p].baseSpecies : p;
+			if (this.data.Pokedex[p].num in randoms && !this.data.Pokedex[p].baseSpecies) {
 				var set = this.randomSet(this.getTemplate(pokeName), mons);
 				fashion = fashion.randomize();
 				if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
 				team.push(set);
 				mons++;
-				randoms[this.data.Pokedex[p].num] = false;
 			}
 		}
 		// Just in case the randoms generated the same number... highly unlikely
