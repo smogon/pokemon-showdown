@@ -193,6 +193,7 @@ var commands = exports.commands = {
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
+	
 	roomdeowner: 'deroomowner',
 	deroomowner: function(target, room, user) {
 		if (!room.auth) {
@@ -536,7 +537,6 @@ var commands = exports.commands = {
 	um: 'unmute',
 	unmute: function(target, room, user) {
 		if (!target) return this.parse('/help unmute');
-		var targetid = toUserid(target);
 		var targetUser = Users.get(target);
 		if (!targetUser) {
 			return this.sendReply('User '+target+' not found.');
