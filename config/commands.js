@@ -1138,7 +1138,7 @@ var commands = exports.commands = {
 		}
 		if (target === '%' || target === 'invite') {
 			matched = true;
-			this.sendReply('/ivite [username], [roomname] - Invites the player [username] to join the room [roomname].');
+			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
 		}
 		if (target === '%' || target === 'roomban') {
 			matched = true;
