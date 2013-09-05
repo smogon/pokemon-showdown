@@ -206,6 +206,7 @@ var User = (function () {
 	User.prototype.lastMessageTime = 0;
 
 	User.prototype.blockChallenges = false;
+	User.prototype.ignorePMs = false;
 	User.prototype.lastConnected = 0;
 
 	User.prototype.sendTo = function(roomid, data) {
