@@ -26,23 +26,8 @@ exports.Formats = [
 		name: "OU",
 		section: "Singles",
 
-		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
-	{
-		name: "OU (current)",
-		section: "Singles",
-
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
-	{
-		name: "OU (suspect test)",
-		section: "Singles",
-
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Keldeo', 'Keldeo-Resolute']
 	},
 	{
 		name: "Ubers",
@@ -54,17 +39,18 @@ exports.Formats = [
 	{
 		name: "UU",
 		section: "Singles",
-
+		
+		searchShow: false,
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
-	/*{
+	{
 		name: "UU (suspect test)",
 		section: "Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Froslass']
-	},*/
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Victini']
+	},
 	{
 		name: "RU",
 		section: "Singles",

@@ -93,6 +93,9 @@ var commands = exports.commands = {
 		if (targetUser.locked && !user.can('lock', targetUser)) {
 			return this.popupReply('This user is locked and cannot PM.');
 		}
+		if (targetUser.ignorePMs && !user.can('lock', targetUser) && (!targetUser.can('lock') || targetUser.can('hotpatch'))) {
+			return this.popupReply('This user is blocking Private Messages right now.');
+		}
 
 		target = this.canTalk(target, null);
 		if (!target) return false;
@@ -102,6 +105,25 @@ var commands = exports.commands = {
 		if (targetUser !== user) targetUser.send(message);
 		targetUser.lastPM = user.userid;
 		user.lastPM = targetUser.userid;
+	},
+
+	blockpm: 'ignorepms',
+	blockpms: 'ignorepms',
+	ignorepm: 'ignorepms',
+	ignorepms: function(target, room, user) {
+		if (user.ignorePMs) return this.sendReply('You are already blocking Private Messages!');
+		if (user.can('lock') && !user.can('hotpatch')) return this.sendReply('You are not allowed to block Private Messages.');
+		user.ignorePMs = true;
+		return this.sendReply('You are now blocking Private Messages.');
+	},
+
+	unblockpm: 'unignorepms',
+	unblockpms: 'unignorepms',
+	unignorepm: 'unignorepms',
+	unignorepms: function(target, room, user) {
+		if (!user.ignorePMs) return this.sendReply('You are not blocking Private Messages!');
+		user.ignorePMs = false;
+		return this.sendReply('You are no longer blocking Private Messages.');
 	},
 
 	makechatroom: function(target, room, user) {
@@ -171,6 +193,7 @@ var commands = exports.commands = {
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
+	
 	roomdeowner: 'deroomowner',
 	deroomowner: function(target, room, user) {
 		if (!room.auth) {
@@ -514,7 +537,6 @@ var commands = exports.commands = {
 	um: 'unmute',
 	unmute: function(target, room, user) {
 		if (!target) return this.parse('/help unmute');
-		var targetid = toUserid(target);
 		var targetUser = Users.get(target);
 		if (!targetUser) {
 			return this.sendReply('User '+target+' not found.');
