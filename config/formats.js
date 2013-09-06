@@ -187,6 +187,15 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "Smogon Doubles Ubers",
+		section: 'Doubles',
+
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'HP Percentage Mod'],
+		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Sky Drop']
+	},
+	{
 		name: "Doubles VGC 2013",
 		section: 'Doubles',
 
