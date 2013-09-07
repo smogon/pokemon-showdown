@@ -1105,7 +1105,7 @@ exports.BattleScripts = {
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
 					if (!type1 in hasStab && !type2 in hasStab) {
-						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fightng') rejectCombo = false;
+						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
 						rejectCombo = false;
 					}
