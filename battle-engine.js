@@ -2626,18 +2626,20 @@ var Battle = (function() {
 		var attack = attacker.getStat(category==='Physical'?'atk':'spa');
 		var defense = defender.getStat(defensiveCategory==='Physical'?'def':'spd');
 
+		var ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
+		var ignorePositiveDefensive = !!move.ignorePositiveDefensive;
 		if (move.crit) {
-			move.ignoreNegativeOffensive = true;
-			move.ignorePositiveDefensive = true;
+			ignoreNegativeOffensive = true;
+			ignorePositiveDefensive = true;
 		}
-		if (move.ignoreNegativeOffensive && attack < attacker.getStat(category==='Physical'?'atk':'spa', true)) {
+		if (ignoreNegativeOffensive && attack < attacker.getStat(category==='Physical'?'atk':'spa', true)) {
 			move.ignoreOffensive = true;
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
 			attack = attacker.getStat(category==='Physical'?'atk':'spa', true);
 		}
-		if (move.ignorePositiveDefensive && defense > target.getStat(defensiveCategory==='Physical'?'def':'spd', true)) {
+		if (ignorePositiveDefensive && defense > target.getStat(defensiveCategory==='Physical'?'def':'spd', true)) {
 			move.ignoreDefensive = true;
 		}
 		if (move.ignoreDefensive) {
