@@ -365,7 +365,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		if (isShowAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br>Try "/help dexsearch" for more information on this command.');
+		if (isShowAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br />Try "/help dexsearch" for more information on this command.');
 
 		while (count > 0) {
 			--count;
@@ -454,18 +454,20 @@ var commands = exports.commands = {
 
 		var resultsStr = '';
 		if (results.length > 0) {
+			for (var i = 0; i < results.length; ++i) results[i] = results[i].species;
 			if (isShowAll || results.length <= output) {
-				for (var i = 0; i < results.length; i++) resultsStr += results[i].species + ', ';
+				resultsStr = results.join(', ');
 			} else {
 				var hidden = string(results.length - output);
 				results.sort(function(a,b) {return Math.round(Math.random());});
-				for (var i = 0; i < output; i++) resultsStr += results[i].species + ', ';
-				resultsStr += ' and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.  ';
+				var shown = results.slice(0, 10);
+				resultsStr = shown.join(', ');
+				resultsStr += ', and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.';
 			}
 		} else {
-			 resultsStr = 'No Pokemon found.  ';
+			resultsStr = 'No Pokemon found.';
 		}
-		return this.sendReplyBox(resultsStr.substring(0, resultsStr.length - 2));
+		return this.sendReplyBox(resultsStr);
 	},
 
 	learnset: 'learn',
@@ -1129,24 +1131,12 @@ var commands = exports.commands = {
 			this.sendReply('!effectiveness [type1], [type2] - Shows everyone the effectiveness of a [type1] attack to a [type2] Pokémon.');
 		}
 		if (target === 'all' || target === 'dexsearch') {
-<<<<<<< HEAD
-                        matched = true;
-                        this.sendReply('Searches for Pokemon that fulfill the selected criteria.');
-                        this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
-                        this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
-                        this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
-                        this.sendReply('Types must be followed by " type", e.g., "dragon type".');
-                        this.sendReply('/dexsearch [type], [move], [move],...');
-                        this.sendReply('The order of the parameters does not matter.');
-                }
-=======
 			matched = true;
-			this.sendReply('Searches for Pokemon that fulfill the selected criteria.');
+			this.sendReply('/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
 			this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
 			this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
-			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP/Illegal.');
+			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
 			this.sendReply('Types must be followed by " type", e.g., "dragon type".');
-			this.sendReply('/dexsearch [type], [move], [move],...');
 			this.sendReply('The order of the parameters does not matter.');
 		}
 		if (target === 'all' || target === 'join') {
@@ -1169,7 +1159,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/redirect or /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
 		}
->>>>>>> upstream/master
 		if (target === '%' || target === 'modnote') {
 			matched = true;
 			this.sendReply('/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ & ~');
