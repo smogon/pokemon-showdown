@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Commands
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
