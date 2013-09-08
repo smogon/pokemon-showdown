@@ -271,41 +271,12 @@ var commands = exports.commands = {
 
 		var data = getData(target);
 		if (!data) {
-			var cmpTarget = target.toLowerCase();
-			var searchIn = ['Aliases', 'Pokedex', 'Movedex', 'Abilities', 'Items'];
-			var searchResults = [];
-			for (var i = 0; i < searchIn.length; i++) {
-				var searchObj = Tools.data[searchIn[i]];
-				for (var j in searchObj) {
-					var word = searchObj[j];
-					if (typeof word === "object") {
-						word = word.name || word.species;
-					}
-					if (!word) {
-						continue;
-					}
-
-					var ld = Tools.levenshtein(cmpTarget, word.toLowerCase(), 3);
-					if (ld <= 3) {
-						searchResults.push({ word: word, ld: ld });
-					}
-				}
-			}
-
-			if (searchResults.length) {
-				var newTarget = "";
-				var newLD = 10;
-				for (var i = 0, l = searchResults.length; i < l; i++) {
-					if (searchResults[i].ld < newLD) {
-						newTarget = searchResults[i].word;
-						newLD = searchResults[i].ld;
-					}
-				}
-
+			var newTarget = Tools.searchByLevenshtein(target);
+			if (newTarget !== false) {
 				data = "||No Pokemon, item, move, or ability named '"+target+"' was found. The data of '" + newTarget + "' will be shown instead.\n";
 				data += getData(newTarget);
 			} else {
-				data = "No Pokemon, item, move or ability named '"+target+"' was found. (Check your spelling?)";
+				data = "||No Pokemon, item, move or ability named '"+target+"' was found. (Check your spelling?)";
 			}
 		}
 

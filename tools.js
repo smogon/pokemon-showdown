@@ -1068,6 +1068,48 @@ module.exports = (function () {
 		// Step 7
 		return d[n][m];
 	};
+
+	Tools.prototype.searchByLevenshtein = function(target) {
+		var cmpTarget = target.toLowerCase();
+		var searchIn = ['Aliases', 'Pokedex', 'Movedex', 'Abilities', 'Items'];
+		var searchResults = [];
+		for (var i = 0; i < searchIn.length; i++) {
+			var searchObj = this.data[searchIn[i]];
+			if (!searchObj) {
+				continue;
+			}
+
+			for (var j in searchObj) {
+				var word = searchObj[j];
+				if (typeof word === "object") {
+					word = word.name || word.species;
+				}
+				if (!word) {
+					continue;
+				}
+
+				var ld = this.levenshtein(cmpTarget, word.toLowerCase(), 3);
+				if (ld <= 3) {
+					searchResults.push({ word: word, ld: ld });
+				}
+			}
+		}
+
+		if (searchResults.length) {
+			var newTarget = "";
+			var newLD = 10;
+			for (var i = 0, l = searchResults.length; i < l; i++) {
+				if (searchResults[i].ld < newLD) {
+					newTarget = searchResults[i].word;
+					newLD = searchResults[i].ld;
+				}
+			}
+
+			return newTarget;
+		}
+
+		return false;
+	};
 	/**
 	 * Install our Tools functions into the battle object
 	 */
