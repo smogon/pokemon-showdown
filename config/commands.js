@@ -245,29 +245,117 @@ var commands = exports.commands = {
 	pokedex: 'data',
 	data: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-
-		var pokemon = Tools.getTemplate(target);
-		var item = Tools.getItem(target);
-		var move = Tools.getMove(target);
-		var ability = Tools.getAbility(target);
-
-		var data = '';
-		if (pokemon.exists) {
-			data += '|c|~|/data-pokemon '+pokemon.name+'\n';
+		
+		function getData (target) {
+			var pokemon = Tools.getTemplate(target);
+			var item = Tools.getItem(target);
+			var move = Tools.getMove(target);
+			var ability = Tools.getAbility(target);
+			
+			var data = '';
+			if (pokemon.exists) {
+				return '|c|~|/data-pokemon '+pokemon.name+'\n';
+			}
+			if (ability.exists) {
+				return '|c|~|/data-ability '+ability.name+'\n';
+			}
+			if (item.exists) {
+				return '|c|~|/data-item '+item.name+'\n';
+			}
+			if (move.exists) {
+				return '|c|~|/data-move '+move.name+'\n';
+			}
 		}
-		if (ability.exists) {
-			data += '|c|~|/data-ability '+ability.name+'\n';
-		}
-		if (item.exists) {
-			data += '|c|~|/data-item '+item.name+'\n';
-		}
-		if (move.exists) {
-			data += '|c|~|/data-move '+move.name+'\n';
-		}
+		
+		var data = getData(target);
+		
 		if (!data) {
-			data = "||No pokemon, item, move, or ability named '"+target+"' was found. (Check your spelling?)";
+			// Original levenshtein distance function by James Westgate, turned out to be the fastest
+			var levDist = function (s, t, l) { // s = string 1, t = string 2, l = limit
+				var d = []; // 2d matrix
+				
+				// Step 1
+				var n = s.length;
+				var m = t.length;
+				
+				if (n == 0) return m;
+				if (m == 0) return n;
+				if (l && Math.abs(m - n) > l) return Math.abs(m - n);
+				
+				// Create an array of arrays in javascript (a descending loop is quicker)
+				for (var i = n; i >= 0; i--) d[i] = [];
+				
+				// Step 2
+				for (var i = n; i >= 0; i--) d[i][0] = i;
+				for (var j = m; j >= 0; j--) d[0][j] = j;
+				
+				// Step 3
+				for (var i = 1; i <= n; i++) {
+					var s_i = s.charAt(i - 1);
+					
+					// Step 4
+					for (var j = 1; j <= m; j++) {
+						
+						// Check the jagged ld total so far
+						if (i == j && d[i][j] > 4) return n;
+						
+						var t_j = t.charAt(j - 1);
+						var cost = (s_i == t_j) ? 0 : 1; // Step 5
+						
+						// Calculate the minimum
+						var mi = d[i - 1][j] + 1;
+						var b = d[i][j - 1] + 1;
+						var c = d[i - 1][j - 1] + cost;
+						
+						if (b < mi) mi = b;
+						if (c < mi) mi = c;
+						
+						d[i][j] = mi; // Step 6
+					}
+				}
+				
+				// Step 7
+				return d[n][m];
+			}
+			
+			var cmpTarget = target.toLowerCase();
+			var searchIn = ['Aliases', 'Pokedex', 'Movedex', 'Abilities', 'Items'];
+			var searchResults = [];
+			for (var i = 0; i < searchIn.length; i++) {
+				var searchObj = Tools.data[searchIn[i]];
+				for (var j in searchObj) {
+					var word = searchObj[j];
+					if (typeof word === "object") {
+						word = word.name || word.species;
+					}
+					if (!word) {
+						continue;
+					}
+					
+					var ld = levDist(cmpTarget, word.toLowerCase(), 3);
+					if (ld <= 3) {
+						searchResults.push({ word: word, ld: ld });
+					}
+				}
+			}
+			
+			if (searchResults.length) {
+				var newTarget = "";
+				var newLD = 10;
+				for (var i = 0, l = searchResults.length; i < l; i++) {
+					if (searchResults[i].ld < newLD) {
+						newTarget = searchResults[i].word;
+						newLD = searchResults[i].ld;
+					}
+				}
+				
+				data = "||No Pokemon, item, move, or ability named '"+target+"' was found. The data of '" + newTarget + "' will be shown instead.\n";
+				data += getData(newTarget);
+			} else {
+				data = "No Pokemon, item, move or ability named '"+target+"' was found. (Check your spelling?)";
+			}
 		}
-
+		
 		this.sendReply(data);
 	},
 
