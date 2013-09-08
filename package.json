@@ -4,7 +4,7 @@
 	"dependencies": {
 		"sugar": "1.3.8",
 		"node-static": "0.6.9",
-		"sockjs": "0.3.5"
+		"sockjs": "0.3.7"
 	},
 	"optionalDependencies": {
 		"nodemailer": "0.4.1",

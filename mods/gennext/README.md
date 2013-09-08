@@ -69,7 +69,7 @@ Major changes:
     in Hail (and 12.5% out of Hail)
   - Ice Body has 30% chance of freezing a contact move (and grants passive
     healing out of Hail, too)
-  - Thick Fat, Marvel Scale, and Flame Body grant immunity to Hail damage  
+  - Thick Fat, Marvel Scale, and Flame Body grant immunity to Hail damage
 
 - Freezing doesn't have a 20% thaw chance. Instead, thawing happens at the end
   of the second turn. Because this new freeze effect is a nerf, Blizzard now
@@ -92,7 +92,7 @@ Major changes:
   - Dig: 100% -1 Def, 45 bp
   - Dive: 100% -1 Def, 45 bp
   - Shadow Force: 100% Ghost-Curse, 30 bp
-  - Sky Drop: 100% -1 Def, 40 bp  
+  - Sky Drop: 100% -1 Def, 40 bp
 
 - Recharge moves are similarly buffed. They have 75 base power, always crit,
   and they only recharge if they KO. Be careful - in return for a KO, they

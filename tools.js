@@ -55,9 +55,12 @@ module.exports = (function () {
 				if (fs.existsSync(path)) {
 					var configFormats = require(path).Formats;
 					for (var i=0; i<configFormats.length; i++) {
-						var id = toId(configFormats[i].name);
-						configFormats[i].effectType = 'Format';
-						data.Formats[id] = configFormats[i];
+						var format = configFormats[i];
+						var id = toId(format.name);
+						format.effectType = 'Format';
+						if (format.challengeShow === undefined) format.challengeShow = true;
+						if (format.searchShow === undefined) format.searchShow = true;
+						data.Formats[id] = format;
 					}
 				}
 			} catch (e) {
@@ -178,7 +181,8 @@ module.exports = (function () {
 			if (!template.genderRatio) template.genderRatio = {M:0.5,F:0.5};
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.gen) {
-				if (template.num >= 494) template.gen = 5;
+				if (template.num >= 650) template.gen = 6;
+				else if (template.num >= 494) template.gen = 5;
 				else if (template.num >= 387) template.gen = 4;
 				else if (template.num >= 252) template.gen = 3;
 				else if (template.num >= 152) template.gen = 2;
@@ -216,7 +220,8 @@ module.exports = (function () {
 			if (!move.effectType) move.effectType = 'Move';
 			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
 			if (!move.gen) {
-				if (move.num >= 468) move.gen = 5;
+				if (move.num >= 560) move.gen = 6;
+				else if (move.num >= 468) move.gen = 5;
 				else if (move.num >= 355) move.gen = 4;
 				else if (move.num >= 252) move.gen = 3;
 				else if (move.num >= 166) move.gen = 2;
@@ -332,7 +337,8 @@ module.exports = (function () {
 			if (!item.effectType) item.effectType = 'Item';
 			if (item.isBerry) item.fling = { basePower: 10 };
 			if (!item.gen) {
-				if (item.num >= 537) item.gen = 5;
+				if (item.num >= 577) item.gen = 6;
+				else if (item.num >= 537) item.gen = 5;
 				else if (item.num >= 377) item.gen = 4;
 				// Due to difference in storing items, gen 2 items must be specified specifically
 				else item.gen = 3;
@@ -358,7 +364,8 @@ module.exports = (function () {
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
 			if (!ability.gen) {
-				if (ability.num >= 124) ability.gen = 5;
+				if (ability.num >= 165) ability.gen = 6;
+				else if (ability.num >= 124) ability.gen = 5;
 				else if (ability.num >= 77) ability.gen = 4;
 				else if (ability.num >= 1) ability.gen = 3;
 				else ability.gen = 0;
@@ -462,11 +469,11 @@ module.exports = (function () {
 		do {
 			alreadyChecked[template.speciesid] = true;
 			// Stabmons hack to avoid copying all of validateSet to formats.
-			if (format.id === 'stabmons' && template.types.indexOf(this.getMove(move).type) > -1) return false; 
+			if (format.id === 'stabmons' && template.types.indexOf(this.getMove(move).type) > -1) return false;
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					var lset = template.learnset[move];
-					if (!lset) {
+					if (!lset || template.speciesid === 'smeargle') {
 						lset = template.learnset['sketch'];
 						sketch = true;
 					}
@@ -515,7 +522,7 @@ module.exports = (function () {
 									var dexEntry = this.getTemplate(templateid);
 									if (
 										// CAP pokemon can't breed
-										!dexEntry.isNonstandard && 
+										!dexEntry.isNonstandard &&
 										// can't breed mons from future gens
 										dexEntry.gen <= parseInt(learned.substr(0,1),10) &&
 										// genderless pokemon can't pass egg moves
@@ -696,7 +703,7 @@ module.exports = (function () {
 		}
 		var problems = [];
 		this.getBanlistTable(format);
-		if (format.team === 'random' || format.team === 'cc') {
+		if (format.team) {
 			return false;
 		}
 		if (!team || !Array.isArray(team)) {
@@ -842,7 +849,7 @@ module.exports = (function () {
 				problems.push(name+" has more than 510 total EVs.");
 			}
 
-			// Don't check abilities for metagames with All Abilities 
+			// Don't check abilities for metagames with All Abilities
 			if (this.gen <= 2) {
 				set.ability = '';
 			} else if (!banlistTable['ignoreillegalabilities']) {
@@ -855,7 +862,7 @@ module.exports = (function () {
 				}
 				if (ability.name === template.abilities['DW']) {
 					isDW = true;
-	
+
 					if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
 						problems.push(name+"'s Dream World ability is unreleased.");
 					} else if (set.level < 10 && (template.maleOnlyDreamWorld || template.gender === 'N')) {
