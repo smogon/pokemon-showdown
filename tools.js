@@ -1021,6 +1021,53 @@ module.exports = (function () {
 		if (!problems.length) return false;
 		return problems;
 	};
+
+	Tools.prototype.levenshtein = function(s, t, l) { // s = string 1, t = string 2, l = limit
+		// Original levenshtein distance function by James Westgate, turned out to be the fastest
+		var d = []; // 2d matrix
+
+		// Step 1
+		var n = s.length;
+		var m = t.length;
+
+		if (n == 0) return m;
+		if (m == 0) return n;
+		if (l && Math.abs(m - n) > l) return Math.abs(m - n);
+
+		// Create an array of arrays in javascript (a descending loop is quicker)
+		for (var i = n; i >= 0; i--) d[i] = [];
+
+		// Step 2
+		for (var i = n; i >= 0; i--) d[i][0] = i;
+		for (var j = m; j >= 0; j--) d[0][j] = j;
+
+		// Step 3
+		for (var i = 1; i <= n; i++) {
+			var s_i = s.charAt(i - 1);
+
+			// Step 4
+			for (var j = 1; j <= m; j++) {
+				// Check the jagged ld total so far
+				if (i == j && d[i][j] > 4) return n;
+
+				var t_j = t.charAt(j - 1);
+				var cost = (s_i == t_j) ? 0 : 1; // Step 5
+
+				// Calculate the minimum
+				var mi = d[i - 1][j] + 1;
+				var b = d[i][j - 1] + 1;
+				var c = d[i - 1][j - 1] + cost;
+
+				if (b < mi) mi = b;
+				if (c < mi) mi = c;
+
+				d[i][j] = mi; // Step 6
+			}
+		}
+
+		// Step 7
+		return d[n][m];
+	};
 	/**
 	 * Install our Tools functions into the battle object
 	 */
