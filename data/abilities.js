@@ -85,7 +85,7 @@ exports.BattleAbilities = {
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (!this.willMove(defender)) {
 				this.debug('Analytic boost');
-				return basePower * 1.3;
+				return this.modify(basePower, 0x14CD, 0x1000); // The Analytic modifier is slightly higher than the normal 1.3 (0x14CC)
 			}
 		},
 		id: "analytic",
@@ -1760,7 +1760,7 @@ exports.BattleAbilities = {
 			if (this.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
-					return basePower * 13/10;
+					return this.modify(basePower, 0x14CD, 0x1000); // The Sand Force modifier is slightly higher than the normal 1.3 (0x14CC)
 				}
 			}
 		},
@@ -1904,8 +1904,11 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's attacks with secondary effects do 1.3x damage; nullifies the effects.",
 		onModifyMove: function(move) {
 			if (move.secondaries) {
-				if (!move.basePowerModifier) move.basePowerModifier = 1;
-				move.basePowerModifier *= 13/10;
+				// if (!move.basePowerModifier) move.basePowerModifier = 1;
+				// Sheer Force is the only thing using basePowerModifier
+				// So until chaining modifiers comes along,
+				// setting basePowerModifier to the proper modifier will suffice
+				move.basePowerModifier = [0x14CD,0x1000]; // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
 				delete move.secondaries;
 				move.negateSecondary = true;
 			}
