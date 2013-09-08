@@ -291,8 +291,8 @@ var GlobalRoom = (function() {
 		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
 
 		// search must be within range
-		var searchRange = 400, formatid = search1.formatid, elapsed = Math.abs(search1.time-search2.time);
-		if (formatid === 'ou' || formatid === 'randombattle') searchRange = 200;
+		var searchRange = 250, formatid = search1.formatid, elapsed = Math.abs(search1.time-search2.time);
+		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'randombattle') searchRange = 150;
 		searchRange += elapsed/300; // +1 every .3 seconds
 		if (searchRange > 1200) searchRange = 1200;
 		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
@@ -533,7 +533,7 @@ var BattleRoom = (function() {
 
 		var formatid = toId(format);
 
-		if (rated && Tools.getFormat(formatid).rated) {
+		if (rated && Tools.getFormat(formatid).rated !== false) {
 			rated = {
 				p1: p1.userid,
 				p2: p2.userid,
@@ -1145,6 +1145,8 @@ var ChatRoom = (function() {
 		this.logFile = null;
 		this.logFilename = '';
 		this.destroyingLog = false;
+		this.bannedUsers = {};
+		this.bannedIps = {};
 
 		// `config.loglobby` is a legacy name
 		if (config.logchat || config.loglobby) {

@@ -117,6 +117,38 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	lightscreen: {
+		inherit: true,
+		effect: {
+			duration: 5,
+			onModifySpD: function(spd) {
+				return spd * 2;
+			},
+			onStart: function(side) {
+				this.add('-sidestart',side,'move: Light Screen');
+			},
+			onResidualOrder: 21,
+			onEnd: function(side) {
+				this.add('-sideend',side,'move: Light Screen');
+			}
+		}
+	},
+	reflect: {
+		inherit: true,
+		effect: {
+			duration: 5,
+			onModifyDef: function(def) {
+				return def * 2;
+			},
+			onStart: function(side) {
+				this.add('-sidestart',side,'Reflect');
+			},
+			onResidualOrder: 21,
+			onEnd: function(side) {
+				this.add('-sideend',side,'Reflect');
+			}
+		}
+	},
 	rest: {
 		inherit: true,
 		onHit: function(target) {
@@ -140,7 +172,7 @@ exports.BattleMovedex = {
 				for (var i=0; i<pokemon.moveset.length; i++) {
 					var move = pokemon.moveset[i].id;
 					var NoSleepTalk = {
-						bide:1, dig:1, fly:1, metronome:1, mirrormove:1, 
+						bide:1, dig:1, fly:1, metronome:1, mirrormove:1,
 						skullbash:1, skyattack:1, sleeptalk:1, solarbeam:1, razorwind:1
 					};
 					if (move && !NoSleepTalk[move]) {

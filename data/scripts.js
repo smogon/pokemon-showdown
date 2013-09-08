@@ -536,7 +536,7 @@ exports.BattleScripts = {
 			mbst += (stats["spa"]*2+31+21+100)+5;
 			mbst += (stats["spd"]*2+31+21+100)+5;
 			mbst += (stats["spe"]*2+31+21+100)+5;
-			
+
 			var level = Math.floor(100*mbstmin/mbst); //initial level guess will underestimate
 
 			while (level < 100) {
@@ -551,10 +551,10 @@ exports.BattleScripts = {
 					break;
 				level++;
 			}
-			
+
 
 			//random gender--already handled by PS?
-			
+
 			//random ability (unreleased DW are par for the course)
 			var abilities = [template.abilities['0']];
 			if (template.abilities['1']) {
@@ -568,7 +568,7 @@ exports.BattleScripts = {
 			//random nature
 			var nature = ["Adamant", "Bashful", "Bold", "Brave", "Calm", "Careful", "Docile", "Gentle", "Hardy", "Hasty", "Impish", "Jolly", "Lax", "Lonely", "Mild", "Modest", "Naive", "Naughty", "Quiet", "Quirky", "Rash", "Relaxed", "Sassy", "Serious", "Timid"].sample();
 
-			//random item--I guess if it's in items.js, it's okay	
+			//random item--I guess if it's in items.js, it's okay
 			var item = Object.keys(this.data.Items).sample();
 
 			//since we're selecting forme at random, we gotta make sure forme/item combo is correct
@@ -578,8 +578,8 @@ exports.BattleScripts = {
 			while ((poke === 'Arceus' && item.indexOf("plate") > -1) || (poke === 'Giratina' && item === 'griseousorb')) {
 				item = Object.keys(this.data.Items).sample();
 			}
-				
-				
+
+
 
 			//random IVs
 			var ivs = {
@@ -695,7 +695,7 @@ exports.BattleScripts = {
 		var hasMove = {};
 		var counter = {};
 		var setupType = '';
-		
+
 		var j=0;
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
@@ -758,7 +758,7 @@ exports.BattleScripts = {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
-						// Power Gem, Bounce, Aeroblast aren't considered STABs. 
+						// Power Gem, Bounce, Aeroblast aren't considered STABs.
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
 						if (moveid === 'aeroblast' || moveid === 'powergem' || moveid === 'bounce') hasStab[move.type] = false;
 					}
@@ -804,7 +804,7 @@ exports.BattleScripts = {
 				var MixedSetup = {
 					growth:1, workup:1, shellsmash:1
 				};
-				
+
 				if (PhysicalSetup[moveid]) {
 					counter['physicalsetup']++;
 				}
@@ -833,7 +833,7 @@ exports.BattleScripts = {
 				var isSetup = false;
 
 				switch (moveid) {
-				
+
 				// not very useful without their supporting moves
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
@@ -1028,7 +1028,7 @@ exports.BattleScripts = {
 					if (hasMove['willowisp']) rejected = true;
 					break;
 				}
-				
+
 				// These moves can be used even if we aren't setting up to use them:
 				var SetupException = {
 					overheat:1, dracometeor:1, leafstorm:1,
@@ -1041,7 +1041,7 @@ exports.BattleScripts = {
 				if (move.category === 'Physical' && setupType === 'Special' && !SetupException[move.id]) {
 					rejected = true;
 				}
-				
+
 				// This move doesn't satisfy our setup requirements:
 				if (setupType === 'Physical' && move.category !== 'Physical' && counter['Physical'] < 2) {
 					rejected = true;
@@ -1049,7 +1049,7 @@ exports.BattleScripts = {
 				if (setupType === 'Special' && move.category !== 'Special' && counter['Special'] < 2) {
 					rejected = true;
 				}
-				
+
 				// Remove rejected moves from the move list.
 				if (rejected && j<moveKeys.length) {
 					moves.splice(k,1);
@@ -1086,7 +1086,7 @@ exports.BattleScripts = {
 							replace = true;
 						} else {
 							// If you have one attack, and it's not STAB, Ice, Fire, or Ground, reject it.
-							// Mono-Ice/Ground/Fire is only acceptable if the Pokémon's STABs are one of: Poison, Psychic, Steel, Normal, Grass. 
+							// Mono-Ice/Ground/Fire is only acceptable if the Pokémon's STABs are one of: Poison, Psychic, Steel, Normal, Grass.
 							if (!hasStab[damagingType]) {
 								if (damagingType === 'Ice' || damagingType === 'Fire' || damagingType === 'Ground') {
 									if (!hasStab['Poison'] && !hasStab['Psychic'] && !hasStab['Steel'] && !hasStab['Normal'] && !hasStab['Grass']) {
@@ -1105,7 +1105,7 @@ exports.BattleScripts = {
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
 					if (!type1 in hasStab && !type2 in hasStab) {
-						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fightng') rejectCombo = false;
+						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
 						rejectCombo = false;
 					}
@@ -1435,10 +1435,10 @@ exports.BattleScripts = {
 			Silcoon: 99, Slakoth: 99, Sunkern: 99, Tynamo: 99, Tyrogue: 99, Unown: 99, Weedle: 99, Wurmple: 99, Zigzagoon: 99,
 			Clefairy: 95, Delibird: 95, "Farfetch'd": 95, Jigglypuff: 95, Kirlia: 95, Ledian: 95, Luvdisc: 95, Marill: 95, Skiploom: 95,
 			Pachirisu: 90,
-			
+
 			// Eviolite
-			Ferroseed: 95, Misdreavus: 95, Munchlax: 95, Murkrow: 95, Natu: 95, 
-			Gligar: 90, Metang: 90, Monferno: 90, Roselia: 90, Seadra: 90, Togetic: 90, Wartortle: 90, Whirlipede: 90, 
+			Ferroseed: 95, Misdreavus: 95, Munchlax: 95, Murkrow: 95, Natu: 95,
+			Gligar: 90, Metang: 90, Monferno: 90, Roselia: 90, Seadra: 90, Togetic: 90, Wartortle: 90, Whirlipede: 90,
 			Dusclops: 84, Porygon2: 82, Chansey: 78,
 
 			// Weather or teammate dependent
@@ -1565,62 +1565,49 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomSeasonalAATeam: function(side) {
-		// First we choose the lead
-		var dice = this.random(100);
-		var lead = (dice  < 50)? 'groudon' : 'kyogre';
-		var groudonsSailors = [
-			'alakazam', 'arbok', 'arcanine', 'arceusfire', 'bibarel', 'bisharp', 'blaziken', 'blissey', 'cacturne',
-			'chandelure', 'chansey', 'charizard', 'cloyster', 'conkeldurr', 'druddigon', 'electivire',
-			'emboar', 'entei', 'exploud', 'gardevoir', 'genesect', 'golurk', 'hariyama', 'heatran', 'infernape',
-			'jellicent', 'lilligant', 'lucario', 'luxray', 'machamp', 'machoke', 'machop', 'magmortar', 'meloetta',
-			'onix', 'poliwrath', 'primeape', 'smeargle', 'snorlax', 'toxicroak', 'typhlosion', 'weezing'
+	randomSeasonalSSTeam: function(side) {
+		var crypto = require('crypto');
+		var hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16);
+		var randNums = [
+			(13 * hash + 11) % 649,
+			(18 * hash + 66) % 649,
+			(25 * hash + 73) % 649,
+			(1 * hash + 16) % 649,
+			(23 * hash + 132) % 649,
+			(5 * hash + 6) % 649
 		];
-		var kyogresPirates = [
-			'absol', 'arceusflying', 'cofagrigus', 'crobat', 'darkrai', 'delibird', 'dragonite', 'ducklett', 
-			'garchomp', 'gengar', 'golem', 'gothitelle', 'honchkrow', 'krookodile', 'landorus', 'ludicolo', 
-			'mandibuzz', 'pelipper', 'pidgeot', 'pidgey', 'sableye', 'scizor', 'scyther', 'sharpedo', 'shiftry', 
-			'skarmory', 'staraptor', 'swanna', 'thundurus', 'thundurustherian', 'tornadus', 'tornadustherian', 
-			'tyranitar', 'volcarona', 'wailord', 'weavile', 'whimsicott', 'wingull', 'zoroark'
-		];
-		groudonsSailors = groudonsSailors.randomize();
-		kyogresPirates = kyogresPirates.randomize();
-
-		// Add the lead.
-		var team = [this.randomSet(this.getTemplate(lead), 0)];
-		
-		// Now, let's make the team. Each side has a different ability.
-		var teamPool = [];
-		var ability = 'Illuminate';
-		if (lead === 'kyogre') {
-			ability = 'Thick Fat';
-			teamPool = kyogresPirates;
-			moveToGet = 'hurricane';
-		} else {
-			var dice = this.random(100);
-			ability = (dice < 33)? 'Water Absorb' : 'Tinted Lens';
-			teamPool = groudonsSailors;
-			moveToGet = 'vcreate';
+		var randoms = {};
+		for (var i=0; i<6; i++) {
+			if (randNums[i] < 1) randNums[i] = 1;
+			randoms[randNums[i]] = true;
 		}
-		for (var i=1; i<6; i++) {
-			var pokemon = teamPool[i];
-			var template = this.getTemplate(pokemon);
-			var set = this.randomSet(template, i);
-			set.ability = (template.baseSpecies && template.baseSpecies === 'Arceus')? 'Multitype' : ability;
-			var hasMoves = {};
-			for (var m in set.moves) {
-				set.moves[m] = set.moves[m].toLowerCase();
-				if (set.moves[m] === 'dynamicpunch') set.moves[m] = 'closecombat';
-				hasMoves[set.moves[m]] = true;
+		var team = [];
+		var mons = 0;
+		var fashion = [
+			'Choice Scarf', 'Choice Specs', 'Silk Scarf', 'Wise Glasses', 'Choice Band', 'Wide Lens',
+			'Zoom Lens', 'Destiny Knot', 'BlackGlasses', 'Expert Belt', 'Black Belt', 'Macho Brace',
+			'Focus Sash', "King's Rock", 'Muscle Band', 'Mystic Water', 'Binding Band', 'Rocky Helmet'
+		];
+		for (var p in this.data.Pokedex) {
+			if (this.data.Pokedex[p].num in randoms) {
+				var set = this.randomSet(this.getTemplate(p), mons);
+				fashion = fashion.randomize();
+				if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
+				team.push(set);
+				delete randoms[this.data.Pokedex[p].num];
+				mons++;
 			}
-			if (!(moveToGet in hasMoves)) {
-				set.moves[3] = moveToGet;
-			}
-			if (set.item === 'Damp Rock' && !('rain dance' in hasMoves)) set.item = 'Life Orb';
-			if (set.item === 'Heat Rock' && !('sunny day' in hasMoves)) set.item = 'Life Orb';
+		}
+		// Just in case the randoms generated the same number... highly unlikely
+		var defaults = ['politoed', 'toxicroak', 'articuno', 'jirachi', 'tentacruel', 'liepard'].randomize();
+		while (mons < 6) {
+			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
+			fashion = fashion.randomize();
+			if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
 			team.push(set);
+			mons++;
 		}
-		
+
 		return team;
 	}
 };

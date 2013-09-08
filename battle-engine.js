@@ -768,11 +768,11 @@ var BattlePokemon = (function() {
 	};
 	// returns the amount of damage actually healed
 	BattlePokemon.prototype.heal = function(d) {
-		if (!this.hp) return 0;
+		if (!this.hp) return false;
 		d = Math.floor(d);
-		if (isNaN(d)) return 0;
-		if (d <= 0) return 0;
-		if (this.hp >= this.maxhp) return 0;
+		if (isNaN(d)) return false;
+		if (d <= 0) return false;
+		if (this.hp >= this.maxhp) return false;
 		this.hp += d;
 		if (this.hp > this.maxhp) {
 			d -= this.hp - this.maxhp;
@@ -2626,18 +2626,20 @@ var Battle = (function() {
 		var attack = attacker.getStat(category==='Physical'?'atk':'spa');
 		var defense = defender.getStat(defensiveCategory==='Physical'?'def':'spd');
 
+		var ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
+		var ignorePositiveDefensive = !!move.ignorePositiveDefensive;
 		if (move.crit) {
-			move.ignoreNegativeOffensive = true;
-			move.ignorePositiveDefensive = true;
+			ignoreNegativeOffensive = true;
+			ignorePositiveDefensive = true;
 		}
-		if (move.ignoreNegativeOffensive && attack < attacker.getStat(category==='Physical'?'atk':'spa', true)) {
+		if (ignoreNegativeOffensive && attack < attacker.getStat(category==='Physical'?'atk':'spa', true)) {
 			move.ignoreOffensive = true;
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
 			attack = attacker.getStat(category==='Physical'?'atk':'spa', true);
 		}
-		if (move.ignorePositiveDefensive && defense > target.getStat(defensiveCategory==='Physical'?'def':'spd', true)) {
+		if (ignorePositiveDefensive && defense > target.getStat(defensiveCategory==='Physical'?'def':'spd', true)) {
 			move.ignoreDefensive = true;
 		}
 		if (move.ignoreDefensive) {
@@ -2664,9 +2666,6 @@ var Battle = (function() {
 
 		// randomizer
 		// this is not a modifier
-		// gen 1-2
-		//var randFactor = Math.floor(Math.random()*39)+217;
-		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
