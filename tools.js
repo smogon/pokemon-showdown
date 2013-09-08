@@ -1069,9 +1069,10 @@ module.exports = (function () {
 		return d[n][m];
 	};
 
-	Tools.prototype.searchByLevenshtein = function(target) {
+	Tools.prototype.searchByLevenshtein = function(target, searchIn) {
+		searchIn = searchIn || ['Aliases', 'Pokedex', 'Movedex', 'Abilities', 'Items'];
+
 		var cmpTarget = target.toLowerCase();
-		var searchIn = ['Aliases', 'Pokedex', 'Movedex', 'Abilities', 'Items'];
 		var searchResults = [];
 		for (var i = 0; i < searchIn.length; i++) {
 			var searchObj = this.data[searchIn[i]];
