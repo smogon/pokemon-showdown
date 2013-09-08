@@ -276,10 +276,11 @@ var commands = exports.commands = {
 
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
-		var target;
 		var moves = {}, tiers = {}, colours = {}, ability = {}, gens = {}, types = {};
+		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1};
+		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
 		var count = 0;
-		var all = false;
+		var isShowAll = false;
 		var output = 10;
 
 		for (var i in targets) {
@@ -290,7 +291,7 @@ var commands = exports.commands = {
 					moves.count = 0;
 				}
 				if (moves.count === 4) {
-					return this.sendReply('Specify a maximum of 4 moves.');
+					return this.sendReplyBox('Specify a maximum of 4 moves.');
 				}
 				moves[target] = 1;
 				moves.count++;
@@ -304,7 +305,7 @@ var commands = exports.commands = {
 					ability.count = 0;
 				}
 				if (ability.count === 1) {
-					return this.sendReply('Specify only one ability.');
+					return this.sendReplyBox('Specify only one ability.');
 				}
 				ability[target] = 1;
 				ability.count++;
@@ -312,62 +313,67 @@ var commands = exports.commands = {
 			}
 
 			target = targets[i].trim().toLowerCase();
-			if (['fire','water','electric','dragon','rock','fighting','ground','ghost','psychic','dark','bug','flying','grass','poison','normal','steel','ice'].indexOf(toId(target.substring(0, target.length - 4))) > -1) {
-				if (!types.count) {
-					count++;
-					types.count = 0;
-				}
-				if (types.count === 2) {
-					return this.sendReply('Specify a maximum of two types.');
-				}
-				types[toId(target.substring(0, target.length - 4)).substring(0, 1).toUpperCase() + toId(target.substring(0, target.length - 4)).substring(1)] = 1;
-				types.count++;
-			}
-			else if (['uber','ou','uu','ru','nu','lc','cap','bl','bl2','nfe','illegal'].indexOf(target) > -1) {
+			if (target in allTiers) {
 				if (!tiers.count) {
 					count++;
 					tiers.count = 0;
 				}
 				tiers[target] = 1;
 				tiers.count++;
+				continue;
 			}
-			else if (['green','red','blue','white','brown','yellow','purple','pink','gray','black'].indexOf(target) > -1) {
+			if (target in allColours) {
 				if (!colours.count) {
 					count++;
 					colours.count = 0;
 				}
 				colours[target] = 1;
 				colours.count++;
+				continue;
 			}
-			else if (parseInt(target, 10) > 0) {
+			var targetInt = parseInt(target);
+			if (0 < targetInt && targetInt < 6) {
 				if (!gens.count) {
 					count++;
 					gens.count = 0;
 				}
-				gens[parseInt(target, 10)] = 1;
+				gens[targetInt] = 1;
 				gens.count++;
+				continue;
 			}
-			else if (target === 'all') {
+			if (target === 'all') {
 				if (this.broadcasting) {
-					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
+					return this.sendReplyBox('A search with the parameter "all" cannot be broadcast.')
 				}
-				all = true;
+				isShowAll = true;
+				continue;
 			}
-			else {
-				return this.sendReply('"' + target + '" could not be found in any of the search categories.');
+			target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
+			if (target in Tools.data.TypeChart) {
+				if (!types.count) {
+					count++;
+					types.count = 0;
+				}
+				if (types.count === 2) {
+					return this.sendReplyBox('Specify a maximum of two types.');
+				}
+				types[target] = 1;
+				types.count++;
+				continue;
+			} else {
+				return this.sendReplyBox('"' + targets[i].trim().toLowerCase() + '" could not be found in any of the search categories.');
 			}
 		}
 
-		if (all && count === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
+		if (isShowAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br />Try "/help dexsearch" for more information on this command.');
 
 		while (count > 0) {
 			count--;
 			var tempResults = [];
 			if (!results) {
 				for (var pokemon in Tools.data.Pokedex) {
-					if (pokemon === 'arceusunknown') continue;
 					pokemon = Tools.getTemplate(pokemon);
-					if (!(!('illegal' in tiers) && pokemon.tier === 'Illegal')) {
+					if (pokemon.tier !== 'Illegal' && (pokemon.tier.slice(2).toLowerCase() !== 'cap' || 'cap' in tiers)) {
 						tempResults.add(pokemon);
 					}
 				}
@@ -391,7 +397,7 @@ var commands = exports.commands = {
 			if (tiers.count > 0) {
 				for (var mon in tempResults) {
 					if ('cap' in tiers) {
-						if (tempResults[mon].tier.substring(2).toLowerCase() === 'cap') results.add(tempResults[mon]);
+						if (tempResults[mon].tier.slice(2).toLowerCase() === 'cap') results.add(tempResults[mon]);
 					}
 					if (tempResults[mon].tier.toLowerCase() in tiers) results.add(tempResults[mon]);
 				}
@@ -426,7 +432,7 @@ var commands = exports.commands = {
 					for (var i in moves) {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {
-							if (!move.exists) return this.sendReply('"' + move + '" is not a known move.');
+							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
 							problem = Tools.checkLearnset(move, template, lsetData);
 							if (problem) break;
 						}
@@ -448,18 +454,20 @@ var commands = exports.commands = {
 
 		var resultsStr = '';
 		if (results.length > 0) {
-			if (all || results.length <= output) {
-				for (var i = 0; i < results.length; i++) resultsStr += results[i].species + ', ';
+			for (var i = 0; i < results.length; ++i) results[i] = results[i].species;
+			if (isShowAll || results.length <= output) {
+				resultsStr = results.join(', ');
 			} else {
 				var hidden = string(results.length - output);
 				results.sort(function(a,b) {return Math.round(Math.random());});
-				for (var i = 0; i < output; i++) resultsStr += results[i].species + ', ';
-				resultsStr += ' and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.  '
+				var shown = results.slice(0, 10);
+				resultsStr = shown.join(', ');
+				resultsStr += ', and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.';
 			}
 		} else {
-			resultsStr = 'No Pokemon found.  ';
+			resultsStr = 'No Pokemon found.';
 		}
-		return this.sendReplyBox(resultsStr.substring(0, resultsStr.length - 2));
+		return this.sendReplyBox(resultsStr);
 	},
 
 	learnset: 'learn',
@@ -1124,12 +1132,11 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'dexsearch') {
 			matched = true;
-			this.sendReply('Searches for Pokemon that fulfill the selected criteria.');
+			this.sendReply('/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
 			this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
 			this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
-			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP/Illegal.');
+			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
 			this.sendReply('Types must be followed by " type", e.g., "dragon type".');
-			this.sendReply('/dexsearch [type], [move], [move],...');
 			this.sendReply('The order of the parameters does not matter.');
 		}
 		if (target === 'all' || target === 'join') {
