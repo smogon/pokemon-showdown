@@ -368,7 +368,7 @@ var commands = exports.commands = {
 		if (isShowAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br />Try "/help dexsearch" for more information on this command.');
 
 		while (count > 0) {
-			--count;
+			count--;
 			var tempResults = [];
 			if (!results) {
 				for (var pokemon in Tools.data.Pokedex) {
