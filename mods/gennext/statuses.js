@@ -85,6 +85,10 @@ exports.BattleStatuses = {
 
 	// intrinsics!
 
+	bidestall: {
+		duration: 3
+	},
+
 	unown: {
 		// Unown: Adaptability
 		onImmunity: function(type) {
