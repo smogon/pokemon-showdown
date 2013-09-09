@@ -53,7 +53,7 @@ exports.BattleStatuses = {
 	raindance: {
 		inherit: true,
 		onBasePower: function(basePower, attacker, defender, move) {
-			if (move.id === 'Scald') {
+			if (move.id === 'scald') {
 				return;
 			}
 			if (move.type === 'Water') {
@@ -69,7 +69,7 @@ exports.BattleStatuses = {
 	sunnyday: {
 		inherit: true,
 		onBasePower: function(basePower, attacker, defender, move) {
-			if (move.id === 'Scald') {
+			if (move.id === 'scald') {
 				return;
 			}
 			if (move.type === 'Fire') {
@@ -84,6 +84,10 @@ exports.BattleStatuses = {
 	},
 
 	// intrinsics!
+
+	bidestall: {
+		duration: 3
+	},
 
 	unown: {
 		// Unown: Adaptability
