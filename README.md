@@ -130,6 +130,7 @@ Contributors
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
 - Cody Thompson [Rising_Dusk] - Development
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
+- Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)
 - [The Immortal] - Development
 - Vivian Zou [Vtas] - Art (alternate main background)

@@ -1069,11 +1069,30 @@ module.exports = (function () {
 		return d[n][m];
 	};
 
-	Tools.prototype.searchByLevenshtein = function(target, searchIn) {
-		searchIn = searchIn || ['Aliases', 'Pokedex', 'Movedex', 'Abilities', 'Items'];
+	Tools.prototype.dataSearch = function(target, searchIn) {
+		if (!target) {
+			return false;
+		}
+
+		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items'];
+
+		var searchFunctions = { Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem' };
+		var searchTypes = { Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item' };
+		var searchResults = [];
+		for (var i = 0; i < searchIn.length; i++) {
+			if (typeof this[searchFunctions[searchIn[i]]] === "function") {
+				var res = this[searchFunctions[searchIn[i]]](target);
+				if (res.exists) {
+					res.searchType = searchTypes[searchIn[i]];
+					searchResults.push(res);
+				}
+			}
+		}
+		if (searchResults.length) {
+			return searchResults;
+		}
 
 		var cmpTarget = target.toLowerCase();
-		var searchResults = [];
 		for (var i = 0; i < searchIn.length; i++) {
 			var searchObj = this.data[searchIn[i]];
 			if (!searchObj) {
@@ -1101,12 +1120,15 @@ module.exports = (function () {
 			var newLD = 10;
 			for (var i = 0, l = searchResults.length; i < l; i++) {
 				if (searchResults[i].ld < newLD) {
-					newTarget = searchResults[i].word;
+					newTarget = searchResults[i];
 					newLD = searchResults[i].ld;
 				}
 			}
 
-			return newTarget;
+			// To make sure we aren't in an infinite loop...
+			if (cmpTarget !== newTarget.word) {
+				return this.dataSearch(newTarget.word);
+			}
 		}
 
 		return false;

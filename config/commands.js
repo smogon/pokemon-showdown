@@ -246,38 +246,18 @@ var commands = exports.commands = {
 	data: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 
-		var getData = function(target) {
-			var pokemon = Tools.getTemplate(target);
-			var item = Tools.getItem(target);
-			var move = Tools.getMove(target);
-			var ability = Tools.getAbility(target);
-
-			var data = '';
-			if (pokemon.exists) {
-				data += '|c|~|/data-pokemon '+pokemon.name+'\n';
+		var data = '';
+		var targetId = toId(target);
+		var newTargets = Tools.dataSearch(target);
+		if (newTargets && newTargets.length) {
+			for (var i = 0; i < newTargets.length; i++) {
+				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
+					data = "No Pokemon, item, move or ability named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
+				}
+				data += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
 			}
-			if (ability.exists) {
-				data += '|c|~|/data-ability '+ability.name+'\n';
-			}
-			if (item.exists) {
-				data += '|c|~|/data-item '+item.name+'\n';
-			}
-			if (move.exists) {
-				data += '|c|~|/data-move '+move.name+'\n';
-			}
-
-			return data;
-		}
-
-		var data = getData(target);
-		if (!data) {
-			var newTarget = Tools.searchByLevenshtein(target);
-			if (newTarget !== false) {
-				data = "||No Pokemon, item, move, or ability named '"+target+"' was found. The data of '" + newTarget + "' will be shown instead.\n";
-				data += getData(newTarget);
-			} else {
-				data = "||No Pokemon, item, move or ability named '"+target+"' was found. (Check your spelling?)";
-			}
+		} else {
+			data = "No Pokemon, item, move or ability named '" + target + "' was found. (Check your spelling?)";
 		}
 
 		this.sendReply(data);
