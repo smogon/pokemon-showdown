@@ -488,11 +488,28 @@ var commands = exports.commands = {
 	m: 'mute',
 	mute: function(target, room, user) {
 		if (!target) return this.parse('/help mute');
-
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
+		var commaIndex = target.indexOf(',');
+		if (commaIndex < 0) {
+			var targetOne = target;
+			target = '';
+		} else {
+			var targetOne = target.substr(0, commaIndex);
+			target = target.substr(commaIndex+1).trim();
+		}
+		targetUser = Users.get(targetOne);
+		if (!targetUser && room.recentlytalked) {
+			targetOne = toId(targetOne);
+			for (var i = room.recentlytalked.length - 1; i >= 0; i--) {
+				var loopid = room.recentlytalked[i];
+				if (targetOne === loopid.substr(0, targetOne.length)) {
+					targetOne = room.recentlytalked[i];
+					break;
+				}
+			}
+			targetUser = Users.get(targetOne);
+		}
 		if (!targetUser) {
-			return this.sendReply('User '+this.targetUsername+' not found.');
+			return this.sendReply('User '+ targetOne +' not found.');
 		}
 		if (!this.can('mute', targetUser, room)) return false;
 		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {

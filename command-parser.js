@@ -222,6 +222,11 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
 
+	if (room.type === 'chat') {
+		if (room.recentlytalked.indexOf(user.userid) === -1) room.recentlytalked.push(user.userid);
+		if (room.recentlytalked.length > 5) room.recentlytalked.splice(0, 1);
+	}
+
 	return message;
 };
 
