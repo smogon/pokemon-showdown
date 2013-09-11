@@ -1105,7 +1105,7 @@ exports.BattleScripts = {
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
 					if (!type1 in hasStab && !type2 in hasStab) {
-						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fightng') rejectCombo = false;
+						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
 						rejectCombo = false;
 					}
@@ -1578,6 +1578,7 @@ exports.BattleScripts = {
 		];
 		var randoms = {};
 		for (var i=0; i<6; i++) {
+			if (randNums[i] < 1) randNums[i] = 1;
 			randoms[randNums[i]] = true;
 		}
 		var team = [];
@@ -1589,17 +1590,16 @@ exports.BattleScripts = {
 		];
 		for (var p in this.data.Pokedex) {
 			if (this.data.Pokedex[p].num in randoms) {
-				var pokeName = (this.data.Pokedex[p].baseSpecies)? this.data.Pokedex[p].baseSpecies : p;
-				var set = this.randomSet(this.getTemplate(pokeName), mons);
+				var set = this.randomSet(this.getTemplate(p), mons);
 				fashion = fashion.randomize();
 				if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
 				team.push(set);
+				delete randoms[this.data.Pokedex[p].num];
 				mons++;
-				randoms[this.data.Pokedex[p].num] = false;
 			}
 		}
 		// Just in case the randoms generated the same number... highly unlikely
-		var defaults = ['unown', 'castform', 'charizard', 'pikachu', 'arceus', 'cherrim'].randomize();
+		var defaults = ['politoed', 'toxicroak', 'articuno', 'jirachi', 'tentacruel', 'liepard'].randomize();
 		while (mons < 6) {
 			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
 			fashion = fashion.randomize();
