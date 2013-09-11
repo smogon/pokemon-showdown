@@ -144,7 +144,7 @@ exports.BattleAbilities = {
 			}
 			if (ability === 'Intimidate')
 			{
-				if (pokemon.setAbility('Illuminate')) {  //Temporary fix so Intimidate doesn't activate in third gen when traced
+				if (pokemon.setAbility('Illuminate')) {  // Temporary fix so Intimidate doesn't activate in third gen when traced
 					this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
 				}
 			}
