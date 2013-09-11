@@ -2638,7 +2638,7 @@ var Battle = (function() {
 		var atkStatMod = 1;
 		atkStatMod = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, atkStatMod);
 		var defStatMod = 1;
-		defStatMod = this.runEvent('Modify'+statTable[defenseStat], attacker, defender, move, defStatMod);
+		defStatMod = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defStatMod);
 		
 		if (move.useTargetOffensive) attack = defender.getStat(attackStat, defender.boosts[attackStat], atkStatMod);
 		else attack = attacker.getStat(attackStat, attacker.boosts[attackStat], atkStatMod);
