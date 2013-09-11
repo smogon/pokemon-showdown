@@ -706,8 +706,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		onModifySpD: function(spdMod, pokemon, target) {
-			if (target.baseTemplate.species === 'Clamperl') {
+		onModifySpD: function(spdMod, pokemon) {
+			if (pokemon.baseTemplate.species === 'Clamperl') {
 				return this.chain(spdMod, 2);
 			}
 		},
@@ -990,13 +990,13 @@ exports.BattleItems = {
 		fling: {
 			basePower: 40
 		},
-		onModifyDef: function(defMod, pokemon, target) {
-			if (target.baseTemplate.nfe) {
+		onModifyDef: function(defMod, pokemon) {
+			if (pokemon.baseTemplate.nfe) {
 				return this.chain(defMod, 1.5);
 			}
 		},
-		onModifySpD: function(spdMod, pokemon, target) {
-			if (target.baseTemplate.nfe) {
+		onModifySpD: function(spdMod, pokemon) {
+			if (pokemon.baseTemplate.nfe) {
 				return this.chain(spdMod, 1.5);
 			}
 		},
@@ -2092,8 +2092,8 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		spritenum: 287,
-		onModifyDef: function(defMod, pokemon, target) {
-			if (target.template.species === 'Ditto') {
+		onModifyDef: function(defMod, pokemon) {
+			if (pokemon.template.species === 'Ditto') {
 				return this.chain(defMod, 2);
 			}
 		},
@@ -3208,8 +3208,8 @@ exports.BattleItems = {
 				return this.chain(spaMod, 1.5);
 			}
 		},
-		onModifySpD: function(spdMod, pokemon, target) {
-			if (target.baseTemplate.species === 'Latios' || target.baseTemplate.species === 'Latias') {
+		onModifySpD: function(spdMod, pokemon) {
+			if (pokemon.baseTemplate.species === 'Latios' || pokemon.baseTemplate.species === 'Latias') {
 				return this.chain(spdMod, 1.5);
 			}
 		},

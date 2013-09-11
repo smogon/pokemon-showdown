@@ -213,7 +213,6 @@ exports.BattleAbilities = {
 		shortDesc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
 		onModifySpe: function(speMod) {
 			if (this.isWeather('sunnyday')) {
-				this.debug('Chlorophyll Boost');
 				return this.chain(speMod, 2);
 			}
 		},
@@ -1233,8 +1232,8 @@ exports.BattleAbilities = {
 	"marvelscale": {
 		desc: "When this Pokemon becomes burned, poisoned (including Toxic), paralyzed, frozen or put to sleep (including self-induced sleep via Rest), its Defense receives a 50% boost.",
 		shortDesc: "If this Pokemon is statused, its Defense is 1.5x.",
-		onModifyDef: function(defMod, pokemon, target) {
-			if (target.status) {
+		onModifyDef: function(defMod, pokemon) {
+			if (pokemon.status) {
 				return this.chain(defMod, 1.5);
 			}
 		},
