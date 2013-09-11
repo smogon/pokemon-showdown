@@ -272,7 +272,7 @@ var commands = exports.commands = {
 		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1};
 		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
 		var count = 0;
-		var isShowAll = false;
+		var showAll = false;
 		var output = 10;
 
 		for (var i in targets) {
@@ -337,27 +337,29 @@ var commands = exports.commands = {
 				if (this.broadcasting) {
 					return this.sendReplyBox('A search with the parameter "all" cannot be broadcast.')
 				}
-				isShowAll = true;
+				showAll = true;
 				continue;
 			}
-			target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
-			if (target in Tools.data.TypeChart) {
-				if (!types.count) {
-					count++;
-					types.count = 0;
+			if (target.indexOf(' type') > -1) {
+				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
+				if (target in Tools.data.TypeChart) {
+					if (!types.count) {
+						count++;
+						types.count = 0;
+					}
+					if (types.count === 2) {
+						return this.sendReplyBox('Specify a maximum of two types.');
+					}
+					types[target] = 1;
+					types.count++;
+					continue;
 				}
-				if (types.count === 2) {
-					return this.sendReplyBox('Specify a maximum of two types.');
-				}
-				types[target] = 1;
-				types.count++;
-				continue;
 			} else {
-				return this.sendReplyBox('"' + targets[i].trim().toLowerCase() + '" could not be found in any of the search categories.');
+				return this.sendReplyBox('"' + targets[i].trim() + '" could not be found in any of the search categories.');
 			}
 		}
 
-		if (isShowAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br />Try "/help dexsearch" for more information on this command.');
+		if (showAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br />Try "/help dexsearch" for more information on this command.');
 
 		while (count > 0) {
 			count--;
@@ -447,7 +449,7 @@ var commands = exports.commands = {
 		var resultsStr = '';
 		if (results.length > 0) {
 			for (var i = 0; i < results.length; ++i) results[i] = results[i].species;
-			if (isShowAll || results.length <= output) {
+			if (showAll || results.length <= output) {
 				resultsStr = results.join(', ');
 			} else {
 				var hidden = string(results.length - output);
