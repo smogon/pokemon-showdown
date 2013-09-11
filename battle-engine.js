@@ -397,10 +397,9 @@ var BattlePokemon = (function() {
 		}
 		this.battle.runEvent('ModifyPokemon', this);
 
-		var statMod = 1;
-		this.speed = this.getStat('spe', this.boosts['spe'], this.battle.runEvent('ModifySpe', this, null, null, statMod));
+		this.speed = this.getStat('spe');
 	};
-	BattlePokemon.prototype.getStat = function(statName, boost, modifier) {
+	BattlePokemon.prototype.calculateStat = function(statName, boost, modifier) {
 		statName = toId(statName);
 		// var boost = this.boosts[statName];
 
@@ -427,6 +426,39 @@ var BattlePokemon = (function() {
 			stat = this.battle.getStatCallback(stat, statName, this);
 		}
 
+		return stat;
+	};
+	BattlePokemon.prototype.getStat = function(statName, unboosted, unmodified) {
+		statName = toId(statName);
+
+		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
+
+		// base stat
+		var stat = this.stats[statName];
+		
+		// stat boosts
+		if (!unboosted) {
+			var boost = this.boosts[statName];
+			var boostTable = [1,1.5,2,2.5,3,3.5,4];
+			if (boost > 6) boost = 6;
+			if (boost < -6) boost = -6;
+			if (boost >= 0) {
+				stat = Math.floor(stat * boostTable[boost]);
+			} else {
+				stat = Math.floor(stat / boostTable[-boost]);
+			}
+		}
+
+		// stat modifier effects
+		if (!unmodified) {
+			var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
+			var statMod = 1;
+			statMod = this.battle.runEvent('Modify'+statTable[statName], this, null, null, statMod);
+			stat = this.battle.modify(stat, statMod);
+		}
+		if (this.battle.getStatCallback) {
+			stat = this.battle.getStatCallback(stat, statName, this);
+		}
 		return stat;
 	};
 	BattlePokemon.prototype.getMoveData = function(move) {
@@ -2640,11 +2672,11 @@ var Battle = (function() {
 		var defStatMod = 1;
 		defStatMod = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defStatMod);
 		
-		if (move.useTargetOffensive) attack = defender.getStat(attackStat, defender.boosts[attackStat], atkStatMod);
-		else attack = attacker.getStat(attackStat, attacker.boosts[attackStat], atkStatMod);
+		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, defender.boosts[attackStat], atkStatMod);
+		else attack = attacker.calculateStat(attackStat, attacker.boosts[attackStat], atkStatMod);
 		
-		if (move.useSourceDefensive) defense = attacker.getStat(defenseStat, attacker.boosts[defenseStat], defStatMod);
-		else defense = defender.getStat(defenseStat, defender.boosts[defenseStat], defStatMod);
+		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, attacker.boosts[defenseStat], defStatMod);
+		else defense = defender.calculateStat(defenseStat, defender.boosts[defenseStat], defStatMod);
 
 		var ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		var ignorePositiveDefensive = !!move.ignorePositiveDefensive;
@@ -2657,14 +2689,14 @@ var Battle = (function() {
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.getStat(attackStat, 0, atkStatMod);
+			attack = attacker.calculateStat(attackStat, 0, atkStatMod);
 		}
 		if (ignorePositiveDefensive && (move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat]) > 0) {
 			move.ignoreDefensive = true;
 		}
 		if (move.ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
-			defense = target.getStat(defenseStat, 0, defStatMod);
+			defense = target.calculateStat(defenseStat, 0, defStatMod);
 		}
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);

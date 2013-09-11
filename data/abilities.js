@@ -400,8 +400,8 @@ exports.BattleAbilities = {
 			var totalspd = 0;
 			for (var i=0; i<foeactive.length; i++) {
 				if (!foeactive[i] || foeactive[i].fainted) continue;
-				totaldef += foeactive[i].getStat('def', foeactive[i].boosts['def']);
-				totalspd += foeactive[i].getStat('spd', foeactive[i].boosts['spd']);
+				totaldef += foeactive[i].getStat('def', false, true);
+				totalspd += foeactive[i].getStat('spd', false, true);
 			}
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa:1});

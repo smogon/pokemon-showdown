@@ -2953,7 +2953,7 @@ exports.BattleMovedex = {
 			sourceSpeMod = this.runEvent('ModifySpe', pokemon, target, null, sourceSpeMod);
 			var foeSpeMod = 1;
 			sourceSpeMod = this.runEvent('ModifySpe', target, pokemon, null, foeSpeMod);
-			var ratio = (pokemon.getStat('spe', pokemon.boosts['spe'], sourceSpeMod) / target.getStat('spe', target.boosts['spe'], foeSpeMod));
+			var ratio = (pokemon.getStat('spe') / target.getStat('spe'));
 			this.debug([40, 60, 80, 120, 150][(Math.floor(ratio) > 4 ? 4 : Math.floor(ratio))] + ' bp');
 			if (ratio >= 4) {
 				return 150;
@@ -4862,7 +4862,7 @@ exports.BattleMovedex = {
 			sourceSpeMod = this.runEvent('ModifySpe', pokemon, target, null, sourceSpeMod);
 			var foeSpeMod = 1;
 			sourceSpeMod = this.runEvent('ModifySpe', target, pokemon, null, foeSpeMod);
-			var power = (Math.floor(25 * target.getStat('spe', target.boosts['spe'], foeSpeMod) / pokemon.getStat('spe', pokemon.boosts['spe'], sourceSpeMod)) || 1);
+			var power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) || 1);
 			if (power > 150) power = 150;
 			this.debug(''+power+' bp');
 			return power;
