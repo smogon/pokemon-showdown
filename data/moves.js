@@ -2949,7 +2949,12 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
+			var sourceSpeMod = 1;
+			sourceSpeMod = this.runEvent('ModifySpe', pokemon, target, null, sourceSpeMod);
+			var foeSpeMod = 1;
+			sourceSpeMod = this.runEvent('ModifySpe', target, pokemon, null, foeSpeMod);
 			var ratio = (pokemon.getStat('spe') / target.getStat('spe'));
+			this.debug([40, 60, 80, 120, 150][(Math.floor(ratio) > 4 ? 4 : Math.floor(ratio))] + ' bp');
 			if (ratio >= 4) {
 				return 150;
 			}
@@ -4853,6 +4858,10 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
+			var sourceSpeMod = 1;
+			sourceSpeMod = this.runEvent('ModifySpe', pokemon, target, null, sourceSpeMod);
+			var foeSpeMod = 1;
+			sourceSpeMod = this.runEvent('ModifySpe', target, pokemon, null, foeSpeMod);
 			var power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) || 1);
 			if (power > 150) power = 150;
 			this.debug(''+power+' bp');
@@ -12006,8 +12015,8 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart', side, 'move: Tailwind');
 			},
-			onModifySpe: function(spe) {
-				return spe * 2;
+			onModifySpe: function(speMod, pokemon) {
+				return this.chain(speMod, 2);
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 4,
@@ -12560,15 +12569,16 @@ exports.BattleMovedex = {
 			},
 			onStart: function(target, source) {
 				this.add('-fieldstart', 'move: Trick Room', '[of] '+source);
-			},
-			onModifySpePriority: -100,
-			onModifySpe: function(spe) {
-				// just for fun: Trick Room glitch
-				if (spe <= 1809) return -spe;
+				this.getStatCallback = function(stat, statName) {
+					// If stat is speed and does not overflow (Trick Room Glitch) return negative speed.
+					if (statName === 'spe' && stat <= 1809) return -stat;
+					return stat;
+				}
 			},
 			onResidualOrder: 23,
 			onEnd: function() {
 				this.add('-fieldend', 'move: Trick Room');
+				this.getStatCallback = null;
 			}
 		},
 		secondary: false,
@@ -12984,8 +12994,8 @@ exports.BattleMovedex = {
 			onEnd: function(targetSide) {
 				this.add('-sideend', targetSide, 'Water Pledge');
 			},
-			onModifySpe: function(spe) {
-				return spe/4;
+			onModifySpe: function(speMod, pokemon) {
+				return this.chain(speMod, 0.25);
 			}
 		},
 		secondary: false,
@@ -13318,13 +13328,10 @@ exports.BattleMovedex = {
 			onStart: function(side, source) {
 				this.add('-fieldstart', 'move: WonderRoom', '[of] '+source);
 			},
-			onModifyDefPriority: 100,
-			onModifyDef: function(def, pokemon) {
-				return pokemon.stats.spd;
-			},
-			onModifySpDPriority: 100,
-			onModifySpD: function(spd, pokemon) {
-				return pokemon.stats.def;
+			onModifyMovePriority: -100,
+			onModifyMove: function(move) {
+				move.defensiveCategory = ((move.defensiveCategory || this.getCategory(move)) === 'Physical' ? 'Special' : 'Physical');
+				this.debug('Defensive Category: ' + move.defensiveCategory);
 			},
 			onResidualOrder: 24,
 			onEnd: function() {
