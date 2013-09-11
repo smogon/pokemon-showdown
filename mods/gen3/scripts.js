@@ -38,7 +38,7 @@ exports.BattleScripts = {
 			}
 		}
 
-		if (move.isSoundBased && (pokemon !== target || this.gen <= 4)) {
+		if (move.isSoundBased && pokemon !== target) {
 			if (!target.runImmunity('sound', true)) {
 				return false;
 			}
@@ -63,16 +63,12 @@ exports.BattleScripts = {
 		if (move.damageCallback) {
 			return move.damageCallback.call(this, pokemon, target);
 		}
-		if (move.damage === 'level') {
-			return pokemon.level;
-		}
-		if (move.damage) {
-			return move.damage;
-		}
 
-		if (!move) {
-			move = {};
-		}
+		if (move.damage === 'level') return pokemon.level;
+
+		if (move.damage) return move.damage;
+
+		if (!move) move = {};
 		if (!move.type) move.type = '???';
 		var type = move.type;
 		// '???' is typeless damage: used for Struggle and Confusion etc
