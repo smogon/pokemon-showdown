@@ -25,9 +25,9 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target, 'par');
 		},
-		onModifySpe: function(spe, pokemon) {
+		onModifySpe: function(speMod, pokemon) {
 			if (pokemon.ability !== 'quickfeet') {
-				return spe / 4;
+				return this.chain(speMod, 0.25);
 			}
 		},
 		onBeforeMovePriority: 2,
@@ -401,9 +401,9 @@ exports.BattleStatuses = {
 			}
 			return 5;
 		},
-		onModifySpD: function(spd, pokemon) {
+		onModifySpD: function(spdMod, pokemon) {
 			if (pokemon.hasType('Rock') && this.isWeather('sandstorm')) {
-				return spd * 3/2;
+				return this.chain(spdMod, 1.5);
 			}
 		},
 		onStart: function(battle, source, effect) {

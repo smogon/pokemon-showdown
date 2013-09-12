@@ -399,25 +399,17 @@ var BattlePokemon = (function() {
 
 		this.speed = this.getStat('spe');
 	};
-	BattlePokemon.prototype.getStat = function(statName, unboosted, unmodified) {
+	BattlePokemon.prototype.calculateStat = function(statName, boost, modifier) {
 		statName = toId(statName);
-		var boost = this.boosts[statName];
+		// var boost = this.boosts[statName];
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
 		var stat = this.stats[statName];
-		if (unmodified) return stat;
-
-		// stat modifier effects
-		var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-		stat = this.battle.runEvent('Modify'+statTable[statName], this, null, null, stat);
-		stat = Math.floor(stat);
-
-		if (unboosted) return stat;
 
 		// stat boosts
-		boost = this.battle.runEvent('ModifyBoost', this, null, null, boost);
+		// boost = this.boosts[statName];
 		var boostTable = [1,1.5,2,2.5,3,3.5,4];
 		if (boost > 6) boost = 6;
 		if (boost < -6) boost = -6;
@@ -427,10 +419,46 @@ var BattlePokemon = (function() {
 			stat = Math.floor(stat / boostTable[-boost]);
 		}
 
+		// stat modifier
+		stat = this.battle.modify(stat, (modifier || 1));
+
 		if (this.battle.getStatCallback) {
 			stat = this.battle.getStatCallback(stat, statName, this);
 		}
 
+		return stat;
+	};
+	BattlePokemon.prototype.getStat = function(statName, unboosted, unmodified) {
+		statName = toId(statName);
+
+		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
+
+		// base stat
+		var stat = this.stats[statName];
+		
+		// stat boosts
+		if (!unboosted) {
+			var boost = this.boosts[statName];
+			var boostTable = [1,1.5,2,2.5,3,3.5,4];
+			if (boost > 6) boost = 6;
+			if (boost < -6) boost = -6;
+			if (boost >= 0) {
+				stat = Math.floor(stat * boostTable[boost]);
+			} else {
+				stat = Math.floor(stat / boostTable[-boost]);
+			}
+		}
+
+		// stat modifier effects
+		if (!unmodified) {
+			var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
+			var statMod = 1;
+			statMod = this.battle.runEvent('Modify'+statTable[statName], this, null, null, statMod);
+			stat = this.battle.modify(stat, statMod);
+		}
+		if (this.battle.getStatCallback) {
+			stat = this.battle.getStatCallback(stat, statName, this);
+		}
 		return stat;
 	};
 	BattlePokemon.prototype.getMoveData = function(move) {
@@ -1354,6 +1382,7 @@ var Battle = (function() {
 		m = Math.floor(m);
 		n = Math.floor(n);
 		result = (m ? (n ? Math.floor(result*(n-m) / 0x100000000)+m : Math.floor(result*m / 0x100000000)) : result/0x100000000);
+		this.debug('randBW(' + (m ? (n ? m + ',' + n : m) : '') + ') = ' + result);
 		return result;
 	};
 
@@ -2506,6 +2535,14 @@ var Battle = (function() {
 		this.runEvent('Heal', target, source, effect, damage);
 		return damage;
 	};
+	Battle.prototype.chain = function(previousMod, nextMod) {
+		// previousMod or nextMod can be either a number or an array [numerator, denominator]
+		if (previousMod.length) previousMod = Math.floor(previousMod[0] * 4096 / previousMod[1]);
+		else previousMod = Math.floor(previousMod * 4096);
+		if (nextMod.length) nextMod = Math.floor(nextMod[0] * 4096 / nextMod[1]);
+		else nextMod = Math.floor(nextMod * 4096);
+		return ((previousMod * nextMod + 2048) >> 12) / 4096; // M'' = ((M * M') + 0x800) >> 12
+	}
 	Battle.prototype.modify = function(value, numerator, denominator) {
 		// You can also use:
 		// modify(value, [numerator, denominator])
@@ -2620,11 +2657,26 @@ var Battle = (function() {
 
 		var attacker = pokemon;
 		var defender = target;
+		var attackStat = category === 'Physical' ? 'atk' : 'spa';
+		var defenseStat = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
+		var attack;
+		var defense;
+		/*
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
+		*/
 
-		var attack = attacker.getStat(category==='Physical'?'atk':'spa');
-		var defense = defender.getStat(defensiveCategory==='Physical'?'def':'spd');
+		var atkStatMod = 1;
+		atkStatMod = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, atkStatMod);
+		var defStatMod = 1;
+		defStatMod = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defStatMod);
+		
+		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, defender.boosts[attackStat], atkStatMod);
+		else attack = attacker.calculateStat(attackStat, attacker.boosts[attackStat], atkStatMod);
+		
+		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, attacker.boosts[defenseStat], defStatMod);
+		else defense = defender.calculateStat(defenseStat, defender.boosts[defenseStat], defStatMod);
 
 		var ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		var ignorePositiveDefensive = !!move.ignorePositiveDefensive;
@@ -2632,19 +2684,19 @@ var Battle = (function() {
 			ignoreNegativeOffensive = true;
 			ignorePositiveDefensive = true;
 		}
-		if (ignoreNegativeOffensive && attack < attacker.getStat(category==='Physical'?'atk':'spa', true)) {
+		if (ignoreNegativeOffensive && (move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat]) < 0) {
 			move.ignoreOffensive = true;
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.getStat(category==='Physical'?'atk':'spa', true);
+			attack = attacker.calculateStat(attackStat, 0, atkStatMod);
 		}
-		if (ignorePositiveDefensive && defense > target.getStat(defensiveCategory==='Physical'?'def':'spd', true)) {
+		if (ignorePositiveDefensive && (move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat]) > 0) {
 			move.ignoreDefensive = true;
 		}
 		if (move.ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
-			defense = target.getStat(defensiveCategory==='Physical'?'def':'spd', true);
+			defense = target.calculateStat(defenseStat, 0, defStatMod);
 		}
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
@@ -2666,6 +2718,9 @@ var Battle = (function() {
 
 		// randomizer
 		// this is not a modifier
+		// gen 1-2
+		//var randFactor = Math.floor(Math.random()*39)+217;
+		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
