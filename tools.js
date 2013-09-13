@@ -1093,6 +1093,14 @@ module.exports = (function () {
 		}
 
 		var cmpTarget = target.toLowerCase();
+		var maxLd = 3;
+		if (cmpTarget.length <= 1) {
+			return false;
+		} else if (cmpTarget.length <= 4) {
+			maxLd = 1;
+		} else if (cmpTarget.length <= 6) {
+			maxLd = 2;
+		}
 		for (var i = 0; i < searchIn.length; i++) {
 			var searchObj = this.data[searchIn[i]];
 			if (!searchObj) {
@@ -1108,8 +1116,8 @@ module.exports = (function () {
 					continue;
 				}
 
-				var ld = this.levenshtein(cmpTarget, word.toLowerCase(), 3);
-				if (ld <= 3) {
+				var ld = this.levenshtein(cmpTarget, word.toLowerCase(), maxLd);
+				if (ld <= maxLd) {
 					searchResults.push({ word: word, ld: ld });
 				}
 			}
