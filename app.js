@@ -465,6 +465,12 @@ global.CommandParser = require('./command-parser.js');
 
 global.Simulator = require('./simulator.js');
 
+try {
+	global.Dnsbl = require('./dnsbl.js');
+} catch (e) {
+	global.Dnsbl = {query:function(){}};
+}
+
 if (config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', (function() {
@@ -572,6 +578,12 @@ server.on('connection', function(socket) {
 		socket.end();
 		return;
 	}
+	Dnsbl.query(socket.remoteAddress, function(isBlocked) {
+		if (isBlocked) {
+			socket.write("|popup|Your IP is known for abuse and is permanently banned. If you are using a proxy, stop.");
+			socket.end();
+		}
+	});
 	// console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 	var interval;
 	if (config.herokuhack) {
