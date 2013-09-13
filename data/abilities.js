@@ -2372,13 +2372,13 @@ exports.BattleAbilities = {
 	"thickfat": {
 		desc: "This Pokemon receives halved damage from Ice-type and Fire-type attacks.",
 		shortDesc: "This Pokemon receives half damage from Fire- and Ice-type attacks.",
-		onModifyAtk: function(atkMod, attacker, defender, move) {
+		onSourceModifyAtk: function(atkMod, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thick Fat weaken');
 				return this.chain(atkMod, 0.5);
 			}
 		},
-		onModifySpA: function(atkMod, attacker, defender, move) {
+		onSourceModifySpA: function(atkMod, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thick Fat weaken');
 				return this.chain(atkMod, 0.5);
