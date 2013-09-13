@@ -564,6 +564,11 @@ server.on('connection', function(socket) {
 	var checkResult = Users.checkBanned(socket.remoteAddress);
 	if (checkResult) {
 		console.log('CONNECT BLOCKED - IP BANNED: '+socket.remoteAddress+' ('+checkResult+')');
+		if (checkResult === '#ipban') {
+			socket.write("|popup|Your IP is on our abuse list and is permanently banned. If you are using a proxy, stop.");
+		} else {
+			socket.write("|popup|Your IP is banned. Your ban will expire in a few days."+(config.appealurl ? " Or you can appeal at:\n" + config.appealurl:""));
+		}
 		socket.end();
 		return;
 	}
