@@ -511,6 +511,7 @@ var commands = exports.commands = {
 		targetUser.mute(room.id, 7*60*1000);
 	},
 
+	hm: 'hourmute',
 	hourmute: function(target, room, user) {
 		if (!target) return this.parse('/help hourmute');
 
