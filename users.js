@@ -897,6 +897,7 @@ var User = (function () {
 		for (var ip in this.ips) {
 			bannedIps[ip] = this.userid;
 		}
+		this.locked = true; // in case of merging into a recently banned account
 		this.disconnectAll();
 	};
 	User.prototype.lock = function(noRecurse) {
