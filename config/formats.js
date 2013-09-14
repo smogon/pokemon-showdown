@@ -30,6 +30,13 @@ exports.Formats = [
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	{
+		name: "OU (No Stealth Rock)",
+		section: "Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Stealth Rock']
+	},
+	{
 		name: "Ubers",
 		section: "Singles",
 
