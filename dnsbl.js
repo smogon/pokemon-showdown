@@ -12,9 +12,9 @@
  * @license MIT license
  */
 
-var dns = require('dns');
+const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
-var blocklists = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
+var dns = require('dns');
 
 var dnsblCache = {};
 
@@ -35,12 +35,12 @@ exports.query = function queryDnsbl(ip, callback) {
 }
 
 function queryDnsblLoop(ip, callback, reversedIpDot, index) {
-	if (index >= blocklists.length) {
+	if (index >= BLOCKLISTS.length) {
 		// not in any blocklist
 		callback(dnsblCache[ip] = false);
 		return;
 	}
-	var blocklist = blocklists[index];
+	var blocklist = BLOCKLISTS[index];
 	dns.resolve4(reversedIpDot+blocklist, function(err, addresses) {
 		if (!err) {
 			// blocked
