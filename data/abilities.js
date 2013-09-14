@@ -2506,6 +2506,7 @@ exports.BattleAbilities = {
 			move.ignoreDefensive = true;
 		},
 		onSourceModifyMove: function(move, user, target) {
+			if (user.ability === 'moldbreaker' || user.ability === 'turboblaze' || user.ability === 'teravolt') return;
 			move.ignoreAccuracy = true;
 			move.ignoreOffensive = true;
 		},
