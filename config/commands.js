@@ -144,6 +144,114 @@
  */
 
 var commands = exports.commands = {
+//gl stuff
+gl: function(target, user, room){ 
+    if
+   if(target == 'pupitar'||target == 'pup'||target == 'pupi'||user.userid === 'pupitar21'||target == 'pupitar21'){
+'Name: Pupitar21<br />'+
+'Nickname: Puppy<br />'+
+'Type: Bug<br />'+
+'Tier:OU<br />'+
+'CatchPhrase: Practice, practice, practice...<br />'+
+'Badge: Compound Badge<br />'+
+'<img src="http://s1305.photobucket.com/user/TheBattleTowerPS/media/015_zps036d1d5e.png.html"><br />'+
+'Sig. Pokemon:'<br />'+
+<img src= "http://www.pokemonelite2000.com/wp-content/uploads/2011/03/212.gif">'
+       }
+       else if(target == 'skymin'|| target == 'sky''||user.userid === 'skymn'||target == 'skymin'){
+            Name: ЖΕЧ Skymin<br />'+
+'Nickname: Skymin<br />'+
+'Type: Psychic<br />'+
+'Tier: OU<br />'+
+'CatchPhrase: Time has been used in countless ways.  What have your travels accomplished and where did they take you?'<br />'+
+'Battle Theme: http://www.listenonrepeat.com/watch/?v=ofoVDaAYars'+
+'Badge: Entourage Badge<br /> <img src= http://fc04.deviantart.net/fs71/f/2011/144/f/9/sky_shaymin_badge_by_metroidprimehunter-d3h4vzc.png><br />'+
+'Sig. Pokemon: Celebi <img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/251.gif">'
+    }
+if(target == 'elitestar'||target == 'star'||target == 'elite'||user.userid === 'elitestarex'||target == 'elitestarex'){
+'Name: ElitestarEX<br />'+
+'Nickname: Elite<br />'+
+'Type: Bug<br />+
+'Tier: OU<br />+
+'CatchPhrase: The strength of my pokemon might bug you. They are just so stunning!<br />+
+'Badge: Arachnid Badge<br />'+
+<img src= http://mob1305.photobucket.com/albums/s542/TheBattleTowerPS/049_zps4a819dcf.png><br />'+
+'Sig. Pokemon: Venomoth <img src= http://fc02.deviantart.net/fs71/f/2012/198/1/e/venomoth_animated_sprite_by_officialdragonbuster-d57ln71.gif>'
+    }
+    
+    }
+    if (target == 'riot'||target == 'rioted'||user.userid === 'rioted'||target == 'rioted'){
+'Name: RiotED<br />'+
+'Nickname: Riot<br />'+
+'Type: Grass<br />'+
+'Tier: OU<br />'+
+'CatchPhrase: Get ready to water the plants!<br />'+
+'Battle Theme: http://www.youtube.com/watch?v=kB432gp4OGI'+
+'Badge: Sprout Badge<br />'+
+<img src= http://i45.tinypic.com/35cr954.jpg><br />'+
+'Sig. Pokemon: Venusaur<br />'+
+<img src= http://fc04.deviantart.net/fs71/f/2011/206/1/5/003__venusaur_by_animated_dex-d41m563.gif>'
+    }
+if(target == 'natalie'||target == 'natz'||user.userid === 'princessnatalie'||target == 'princessnatalie'){
+'Name:Princess Natalie<br />'+
+'Nicknames: Natz or PN<br />'+
+'Type: Fire<br />'+
+'Tier: OU<br />'+
+'CatchPhrase: Give me your food or die<br />'+
+'Battle Theme: http://www.infinitelooper.com/?v=bql7hiMRnBo <br />'+
+'Badge: Ignition Badge<br />'+
+<img src= http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/038_zpsc9f8c94e.png><br />'+
+'Sig. Pokemon: Ninetales<br />'+
+<img src= http://fc03.deviantart.net/fs71/f/2010/344/5/5/ninetales_sprite_by_hotblackangel-d34mw3m.gif>'
+    }
+if (target == 'cc'||target == 'crazy'||user.userid === 'crazyclown94'||target == 'crazyclown94'){
+'Name: CrazyClown94<br />'+
+'Nickname: CC<br />'+
+'Type: Poison<br />'+
+'Tier: OU<br />'+
+'CatchPhrase: I like waffles.<br />'+
+'Badge: Defiler Badge<br />'+
+<img src= http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/089_zpsd3d163fc.png>'
+'Sig. Pokemon: Muk<br />'+
+<img src= http://fc04.deviantart.net/fs70/f/2010/147/1/d/Rapper_Muk_by_Kow_Chan.png>'
+    }
+if (target == 'cc'||target == 'crazy'||user.userid === 'crazyclown94'||target == 'crazyclown94'){
+'Name: CrazyClown94<br />'+
+'Nickname: CC<br />'+
+'Type: Poison<br />'+
+'Tier: OU<br />'+
+'CatchPhrase: I like waffles.<br />'+
+'Badge: Defiler Badge<br />'+
+<img src= http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/089_zpsd3d163fc.png>'
+'Sig. Pokemon: Muk<br />'+
+<img src= http://fc04.deviantart.net/fs70/f/2010/147/1/d/Rapper_Muk_by_Kow_Chan.png>'
+    }
+
+if (target = 'princehaunt'||target == 'haunt'||user.userid === 'princehaunt'||target == 'princehaunt'){
+'Name: PrinceHaunt<br />'+
+'Nickname: Hauntie<br />'+
+'Type: Fighting<br />'+
+'Tier: OU<br />'+
+'CatchPhrase: Me and my team have grown stronger after training in the black cave.<br />'+
+'Badge: Battalion Badge<br />'+
+<img src= http://fc03.deviantart.net/fs70/f/2012/127/e/1/lucario_badge_by_xxmunchoxx-d4yv60x.png><br />'+
+'Sig. Pokemon: Lucario<br />'+
+<img src= http://fc08.deviantart.net/fs70/f/2010/343/8/2/lucario_sprite_by_hotblackangel-d34k67v.gif>'
+    }
+
+if (target == 'anime'||target == 'tea'||target == 'oliver'||user.userid === 'animeanimeboy'||target == 'animeanimeboy'){
+'Name: AnimeAnimeboy<br />'+
+'Nickname: Oliver<br />'+
+'Type: Psychic<br />'+
+'Tier: OU<br />'+
+'Catch Phrase: Meow<br />'+
+'Sig.Pokemon: Medicham<br />'+
+<img src= http://fc05.deviantart.net/fs70/f/2011/020/4/6/medicham_bw_sprite_by_setsuna_yena-d37n04e.gif>'
+    }
+    },
+
+
+
 
 	ip: 'whois',
 	getip: 'whois',
