@@ -915,6 +915,17 @@ module.exports = (function () {
 							problemString = problemString.concat(".");
 						}
 						problems.push(problemString);
+					} else if (isDW && template.learnset && template.learnset[toId(set.moves[i])]) {  // fixes dw + past gen moves, e.g. endure + harvest exeggutor, cause checkLearnset doesn't take abilities into account
+						var illegal = true;
+						for (var j=0; j<template.learnset[toId(set.moves[i])].length; j++) {
+							if (template.learnset[toId(set.moves[i])][j].substring(0, 1) === "5") {
+								illegal = false;
+								break;
+							}
+						}
+						if (illegal) {
+							problems.push(name+" can't learn "+move.name+" because it's incompatible with its ability.");
+						}
 					}
 				}
 			}
