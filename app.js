@@ -578,9 +578,9 @@ server.on('connection', function(socket) {
 		socket.end();
 		return;
 	}
-	Dnsbl.query(socket.remoteAddress, function(isBlocked) {
+	Dnsbl.query(socket.remoteAddress, function(isBlocked, reason) {
 		if (isBlocked) {
-			socket.write("|popup|Your IP is known for abuse and is permanently banned. If you are using a proxy, stop.");
+			socket.write("|popup|"+reason);
 			socket.end();
 		}
 	});
