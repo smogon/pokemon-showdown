@@ -578,12 +578,6 @@ server.on('connection', function(socket) {
 		socket.end();
 		return;
 	}
-	Dnsbl.query(socket.remoteAddress, function(isBlocked) {
-		if (isBlocked) {
-			socket.write("|popup|Your IP is known for abuse and is permanently banned. If you are using a proxy, stop.");
-			socket.end();
-		}
-	});
 	// console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 	var interval;
 	if (config.herokuhack) {
@@ -661,6 +655,12 @@ server.on('connection', function(socket) {
 	});
 
 	connection = Users.connectUser(socket);
+	Dnsbl.query(connection.ip, function(isBlocked) {
+		if (isBlocked) {
+			connection.popup("Your IP is known for abuse and has been locked. If you're using a proxy, don't.");
+			if (connection.user) connection.user.lock(true);
+		}
+	});
 });
 server.installHandlers(app, {});
 app.listen(config.port);

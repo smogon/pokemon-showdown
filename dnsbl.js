@@ -1,6 +1,6 @@
 var dns = require('dns');
 
-var blocklist = 'zen.spamhaus.org';
+var blocklist = 'sbl.spamhaus.org';
 
 var dnsblCache = {};
 
