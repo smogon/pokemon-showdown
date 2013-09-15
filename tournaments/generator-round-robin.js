@@ -18,6 +18,7 @@ var RoundRobin = (function () {
 	};
 
 	RoundRobin.prototype.name = "Round Robin";
+	RoundRobin.prototype.isDrawingSupported = true;
 
 	RoundRobin.prototype.addUser = function (user) {
 		if (this.isBracketFrozen)
