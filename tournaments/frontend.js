@@ -382,10 +382,25 @@ var Tournament = (function () {
 			result = 'win';
 		else if (to === winner)
 			result = 'loss';
+
+		if (result === 'draw' && !this.generator.isDrawingSupported) {
+			this.room.send('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(',') + '|fail');
+
+			this.generator.setUserBusy(from, false);
+			this.generator.setUserBusy(to, false);
+			this.inProgressMatches.set(from, null);
+
+			this.isBracketInvalidated = true;
+			this.isAvailableMatchesInvalidated = true;
+
+			this.update();
+			return;
+		}
+
 		var isTournamentEnded = this.generator.setMatchResult([from, to], result, room.battle.score);
 		if (typeof isTournamentEnded === 'string') {
 			// Should never happen
-			this.room.add("Unexpected " + isTournamentEnded + " from setMatchResult() in onBattleWin(" + room.id + ", " + winner.id + ", ...). Please report this to an admin.");
+			this.room.add("Unexpected " + isTournamentEnded + " from setMatchResult() in onBattleWin(" + room.id + ", " + winner.id + "). Please report this to an admin.");
 			return;
 		}
 
