@@ -187,7 +187,7 @@ var Tournament = (function () {
 				while (queue.length > 0) {
 					var node = queue.shift();
 
-					if (this.isTournamentStarted && node.children.length > 0) {
+					if (node.state === 'available') {
 						var inProgressMatch = this.inProgressMatches.get(node.children[0].team);
 						if (inProgressMatch && node.children[1].team === inProgressMatch.to) {
 							node.state = 'inprogress';
@@ -428,7 +428,7 @@ var Tournament = (function () {
 		var isTournamentEnded = this.generator.setMatchResult([from, to], result, room.battle.score);
 		if (typeof isTournamentEnded === 'string') {
 			// Should never happen
-			this.room.add("Unexpected " + isTournamentEnded + " from setMatchResult() in onBattleWin(" + room.id + ", " + winner.id + "). Please report this to an admin.");
+			this.room.add("Unexpected " + isTournamentEnded + " from setMatchResult() in onBattleWin(" + room.id + ", " + winner.userid + "). Please report this to an admin.");
 			return;
 		}
 
