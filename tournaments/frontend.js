@@ -463,14 +463,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 	var cmd = cmdParts.shift().trim().toLowerCase();
 	var params = cmdParts.join(' ').split(',').map(function (param) { return param.trim(); });
 
-	if (cmd === 'hotpatch') {
-		if (!user.can('hotpatch'))
-			return this.sendReply(cmd + " -  Access denied.");
-		CommandParser.uncacheTree('./tournaments/frontend.js');
-		global.Tournaments = require('./frontend.js');
-		Object.merge(Tournaments.tournaments, tournaments, false);
-		this.sendReply("Tournaments hotpatched successfully.");
-	} else if (cmd === 'create' || cmd === 'new') {
+	if (cmd === 'create' || cmd === 'new') {
 		if (!user.can('tournaments'))
 			return this.sendReply(cmd + " -  Access denied.");
 		if (params.length < 2)

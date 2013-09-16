@@ -193,7 +193,7 @@ var commands = exports.commands = {
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
-	
+
 	roomdeowner: 'deroomowner',
 	deroomowner: function(target, room, user) {
 		if (!room.auth) {
@@ -933,9 +933,27 @@ var commands = exports.commands = {
 			try {
 				CommandParser.uncacheTree('./command-parser.js');
 				CommandParser = require('./command-parser.js');
+
+				var runningTournaments = Tournaments.tournaments;
+				CommandParser.uncacheTree('./tournaments/frontend.js');
+				Tournaments = require('./tournaments/frontend.js');
+				Tournaments.tournaments = runningTournaments;
+
 				return this.sendReply('Chat commands have been hot-patched.');
 			} catch (e) {
 				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
+			}
+
+		} else if (target === 'tournaments') {
+
+			try {
+				var runningTournaments = Tournaments.tournaments;
+				CommandParser.uncacheTree('./tournaments/frontend.js');
+				Tournaments = require('./tournaments/frontend.js');
+				Tournaments.tournaments = runningTournaments;
+				return this.sendReply("Tournaments have been hot-patched.");
+			} catch (e) {
+				return this.sendReply('Something failed while trying to hotpatch tournaments: \n' + e.stack);
 			}
 
 		} else if (target === 'battles') {
