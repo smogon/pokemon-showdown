@@ -1,4 +1,4 @@
-require("es6-shim");
+require('es6-shim');
 
 var TournamentGenerators = {
 	roundrobin: require('./generator-round-robin.js').RoundRobin
