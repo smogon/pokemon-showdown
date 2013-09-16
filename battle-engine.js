@@ -279,16 +279,27 @@ var BattlePokemon = (function() {
 			this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
 		}
 
-		var hpTypeX = 0, hpPowerX = 0;
-		var i = 1;
-		for (var s in stats) {
-			hpTypeX += i * (this.set.ivs[s] % 2);
-			hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
-			i *= 2;
-		}
 		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
-		this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
-		this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
+		if (this.battle.gen && this.battle.gen === 2) {
+			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
+			var atkDV = Math.floor(this.set.ivs.atk / 2);
+			var defDV = Math.floor(this.set.ivs.def / 2);
+			var speDV = Math.floor(this.set.ivs.spe / 2);
+			var spcDV = Math.floor(this.set.ivs.spa / 2);
+			this.hpType = hpTypes[4 * (atkDV % 4) + (defDV % 4)];
+			this.hpPower = Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV>2?3:spcDV)) / 2 + 31);
+		} else {
+			// Hidden Power check for gen 3 onwards
+			var hpTypeX = 0, hpPowerX = 0;
+			var i = 1;
+			for (var s in stats) {
+				hpTypeX += i * (this.set.ivs[s] % 2);
+				hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
+				i *= 2;
+			}
+			this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
+			this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
+		}
 
 		this.boosts = {
 			atk: 0, def: 0, spa: 0, spd: 0, spe: 0,
@@ -388,25 +399,17 @@ var BattlePokemon = (function() {
 
 		this.speed = this.getStat('spe');
 	};
-	BattlePokemon.prototype.getStat = function(statName, unboosted, unmodified) {
+	BattlePokemon.prototype.calculateStat = function(statName, boost, modifier) {
 		statName = toId(statName);
-		var boost = this.boosts[statName];
+		// var boost = this.boosts[statName];
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
 		var stat = this.stats[statName];
-		if (unmodified) return stat;
-
-		// stat modifier effects
-		var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-		stat = this.battle.runEvent('Modify'+statTable[statName], this, null, null, stat);
-		stat = Math.floor(stat);
-
-		if (unboosted) return stat;
 
 		// stat boosts
-		boost = this.battle.runEvent('ModifyBoost', this, null, null, boost);
+		// boost = this.boosts[statName];
 		var boostTable = [1,1.5,2,2.5,3,3.5,4];
 		if (boost > 6) boost = 6;
 		if (boost < -6) boost = -6;
@@ -416,10 +419,46 @@ var BattlePokemon = (function() {
 			stat = Math.floor(stat / boostTable[-boost]);
 		}
 
+		// stat modifier
+		stat = this.battle.modify(stat, (modifier || 1));
+
 		if (this.battle.getStatCallback) {
 			stat = this.battle.getStatCallback(stat, statName, this);
 		}
 
+		return stat;
+	};
+	BattlePokemon.prototype.getStat = function(statName, unboosted, unmodified) {
+		statName = toId(statName);
+
+		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
+
+		// base stat
+		var stat = this.stats[statName];
+		
+		// stat boosts
+		if (!unboosted) {
+			var boost = this.boosts[statName];
+			var boostTable = [1,1.5,2,2.5,3,3.5,4];
+			if (boost > 6) boost = 6;
+			if (boost < -6) boost = -6;
+			if (boost >= 0) {
+				stat = Math.floor(stat * boostTable[boost]);
+			} else {
+				stat = Math.floor(stat / boostTable[-boost]);
+			}
+		}
+
+		// stat modifier effects
+		if (!unmodified) {
+			var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
+			var statMod = 1;
+			statMod = this.battle.runEvent('Modify'+statTable[statName], this, null, null, statMod);
+			stat = this.battle.modify(stat, statMod);
+		}
+		if (this.battle.getStatCallback) {
+			stat = this.battle.getStatCallback(stat, statName, this);
+		}
 		return stat;
 	};
 	BattlePokemon.prototype.getMoveData = function(move) {
@@ -488,7 +527,7 @@ var BattlePokemon = (function() {
 				}
 				continue;
 			}
-			if (this.disabledMoves[move.id] || !move.pp) {
+			if (this.disabledMoves[move.id] || !move.pp && (this.battle.gen !== 1 || !this.volatiles['partialtrappinglock'])) {
 				move.disabled = true;
 			} else if (!move.disabled) {
 				hasValidMove = true;
@@ -757,11 +796,11 @@ var BattlePokemon = (function() {
 	};
 	// returns the amount of damage actually healed
 	BattlePokemon.prototype.heal = function(d) {
-		if (!this.hp) return 0;
+		if (!this.hp) return false;
 		d = Math.floor(d);
-		if (isNaN(d)) return 0;
-		if (d <= 0) return 0;
-		if (this.hp >= this.maxhp) return 0;
+		if (isNaN(d)) return false;
+		if (d <= 0) return false;
+		if (this.hp >= this.maxhp) return false;
 		this.hp += d;
 		if (this.hp > this.maxhp) {
 			d -= this.hp - this.maxhp;
@@ -1625,9 +1664,6 @@ var Battle = (function() {
 			hasRelayVar = false;
 		}
 
-		if (target.fainted) {
-			return false;
-		}
 		if (effect.effectType === 'Status' && target.status !== effect.id) {
 			// it's changed; call it off
 			return relayVar;
@@ -2230,6 +2266,7 @@ var Battle = (function() {
 		return canSwitchIn[Math.floor(Math.random()*canSwitchIn.length)];
 	};
 	Battle.prototype.dragIn = function(side, pos) {
+		if (pos >= side.active.length) return false;
 		var pokemon = this.getRandomSwitchable(side);
 		if (!pos) pos = 0;
 		if (!pokemon || pokemon.isActive) return false;
@@ -2450,6 +2487,9 @@ var Battle = (function() {
 		case 'strugglerecoil':
 			this.add('-damage', target, target.getHealth, '[from] recoil');
 			break;
+		case 'confusion':
+			this.add('-damage', target, target.getHealth, '[from] confusion');
+			break;
 		default:
 			this.add('-damage', target, target.getHealth);
 			break;
@@ -2495,6 +2535,14 @@ var Battle = (function() {
 		this.runEvent('Heal', target, source, effect, damage);
 		return damage;
 	};
+	Battle.prototype.chain = function(previousMod, nextMod) {
+		// previousMod or nextMod can be either a number or an array [numerator, denominator]
+		if (previousMod.length) previousMod = Math.floor(previousMod[0] * 4096 / previousMod[1]);
+		else previousMod = Math.floor(previousMod * 4096);
+		if (nextMod.length) nextMod = Math.floor(nextMod[0] * 4096 / nextMod[1]);
+		else nextMod = Math.floor(nextMod * 4096);
+		return ((previousMod * nextMod + 2048) >> 12) / 4096; // M'' = ((M * M') + 0x800) >> 12
+	}
 	Battle.prototype.modify = function(value, numerator, denominator) {
 		// You can also use:
 		// modify(value, [numerator, denominator])
@@ -2609,29 +2657,46 @@ var Battle = (function() {
 
 		var attacker = pokemon;
 		var defender = target;
+		var attackStat = category === 'Physical' ? 'atk' : 'spa';
+		var defenseStat = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
+		var attack;
+		var defense;
+		/*
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
+		*/
 
-		var attack = attacker.getStat(category==='Physical'?'atk':'spa');
-		var defense = defender.getStat(defensiveCategory==='Physical'?'def':'spd');
+		var atkStatMod = 1;
+		atkStatMod = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, atkStatMod);
+		var defStatMod = 1;
+		defStatMod = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defStatMod);
+		
+		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, defender.boosts[attackStat], atkStatMod);
+		else attack = attacker.calculateStat(attackStat, attacker.boosts[attackStat], atkStatMod);
+		
+		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, attacker.boosts[defenseStat], defStatMod);
+		else defense = defender.calculateStat(defenseStat, defender.boosts[defenseStat], defStatMod);
 
+		var ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
+		var ignorePositiveDefensive = !!move.ignorePositiveDefensive;
 		if (move.crit) {
-			move.ignoreNegativeOffensive = true;
-			move.ignorePositiveDefensive = true;
+			ignoreNegativeOffensive = true;
+			ignorePositiveDefensive = true;
 		}
-		if (move.ignoreNegativeOffensive && attack < attacker.getStat(category==='Physical'?'atk':'spa', true)) {
+		if (ignoreNegativeOffensive && (move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat]) < 0) {
 			move.ignoreOffensive = true;
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.getStat(category==='Physical'?'atk':'spa', true);
+			attack = attacker.calculateStat(attackStat, 0, atkStatMod);
 		}
-		if (move.ignorePositiveDefensive && defense > target.getStat(defensiveCategory==='Physical'?'def':'spd', true)) {
+		if (ignorePositiveDefensive && (move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat]) > 0) {
 			move.ignoreDefensive = true;
 		}
 		if (move.ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
-			defense = target.getStat(defensiveCategory==='Physical'?'def':'spd', true);
+			defense = target.calculateStat(defenseStat, 0, defStatMod);
 		}
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
@@ -3034,8 +3099,10 @@ var Battle = (function() {
 			break;
 		case 'runSwitch':
 			decision.pokemon.isStarted = true;
-			this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
-			this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			if (!decision.pokemon.fainted) {
+				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
+				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			}
 			break;
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');

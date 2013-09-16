@@ -85,7 +85,7 @@ exports.BattleAbilities = {
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (!this.willMove(defender)) {
 				this.debug('Analytic boost');
-				return basePower * 1.3;
+				return this.modify(basePower, [0x14CD, 0x1000]); // The Analytic modifier is slightly higher than the normal 1.3 (0x14CC)
 			}
 		},
 		id: "analytic",
@@ -191,10 +191,16 @@ exports.BattleAbilities = {
 	"blaze": {
 		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Fire-type attacks receive a 50% boost in power.",
 		shortDesc: "When this Pokemon has 1/3 or less of its max HP, its Fire attacks do 1.5x damage.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onModifyAtk: function(atkMod, attacker, defender, move) {
 			if (move.type === 'Fire' && attacker.hp <= attacker.maxhp/3) {
 				this.debug('Blaze boost');
-				return basePower * 1.5;
+				return this.chain(atkMod, 1.5);
+			}
+		},
+		onModifySpA: function(atkMod, attacker, defender, move) {
+			if (move.type === 'Fire' && attacker.hp <= attacker.maxhp/3) {
+				this.debug('Blaze boost');
+				return this.chain(atkMod, 1.5);
 			}
 		},
 		id: "blaze",
@@ -205,9 +211,9 @@ exports.BattleAbilities = {
 	"chlorophyll": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its speed is temporarily doubled.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
-		onModifySpe: function(spe) {
+		onModifySpe: function(speMod) {
 			if (this.isWeather('sunnyday')) {
-				return spe * 2;
+				return this.chain(speMod, 2);
 			}
 		},
 		id: "chlorophyll",
@@ -345,14 +351,14 @@ exports.BattleAbilities = {
 	"defeatist": {
 		desc: "Attack and Special Attack are halved when HP is less than half.",
 		shortDesc: "When this Pokemon has 1/2 or less of its max HP, its Attack and Sp. Atk are halved.",
-		onModifyAtk: function(atk, pokemon) {
+		onModifyAtk: function(atkMod, pokemon) {
 			if (pokemon.hp < pokemon.maxhp/2) {
-				return atk / 2;
+				return this.chain(atkMod, .5);
 			}
 		},
-		onModifySpA: function(atk, pokemon) {
+		onModifySpA: function(atkMod, pokemon) {
 			if (pokemon.hp < pokemon.maxhp/2) {
-				return atk / 2;
+				return this.chain(atkMod, .5);
 			}
 		},
 		onResidual: function(pokemon) {
@@ -394,8 +400,8 @@ exports.BattleAbilities = {
 			var totalspd = 0;
 			for (var i=0; i<foeactive.length; i++) {
 				if (!foeactive[i] || foeactive[i].fainted) continue;
-				totaldef += foeactive[i].getStat('def');
-				totalspd += foeactive[i].getStat('spd');
+				totaldef += foeactive[i].getStat('def', false, true);
+				totalspd += foeactive[i].getStat('spd', false, true);
 			}
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa:1});
@@ -532,6 +538,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Fire attacks do 1.5x damage if hit by one Fire move; Fire immunity.",
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Fire') {
+				move.accuracy = true;
 				if (!target.addVolatile('flashfire')) {
 					this.add('-immune', target, '[msg]');
 				}
@@ -543,10 +550,16 @@ exports.BattleAbilities = {
 			onStart: function(target) {
 				this.add('-start',target,'ability: Flash Fire');
 			},
-			onBasePower: function(basePower, attacker, defender, move) {
+			onModifyAtk: function(atkMod, attacker, defender, move) {
 				if (move.type === 'Fire') {
 					this.debug('Flash Fire boost');
-					return basePower * 1.5;
+					return this.chain(atkMod, 1.5);
+				}
+			},
+			onModifySpA: function(atkMod, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					this.debug('Flash Fire boost');
+					return this.chain(atkMod, 1.5);
 				}
 			}
 		},
@@ -577,16 +590,16 @@ exports.BattleAbilities = {
 				}
 			}
 		},
-		onAllyModifyAtk: function(atk) {
+		onAllyModifyAtk: function(atkMod) {
 			if (this.effectData.target.template.speciesid !== 'cherrim') return;
 			if (this.isWeather('sunnyday')) {
-				return atk *= 1.5;
+				return this.chain(atkMod, 1.5);
 			}
 		},
-		onAllyModifySpD: function(spd) {
+		onAllyModifySpD: function(spdMod) {
 			if (this.effectData.target.template.speciesid !== 'cherrim') return;
 			if (this.isWeather('sunnyday')) {
-				return spd *= 1.5;
+				return this.chain(spdMod, 1.5);
 			}
 		},
 		id: "flowergift",
@@ -696,9 +709,9 @@ exports.BattleAbilities = {
 	"guts": {
 		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed or asleep (including self-induced Rest), its Attack stat receives a 50% boost; the burn status' Attack drop is also ignored.",
 		shortDesc: "If this Pokemon is statused, its Attack is 1.5x; burn's Attack drop is ignored.",
-		onModifyAtk: function(atk, pokemon) {
+		onModifyAtk: function(atkMod, pokemon) {
 			if (pokemon.status) {
-				return atk * 1.5;
+				return this.chain(atkMod, 1.5);
 			}
 		},
 		id: "guts",
@@ -785,8 +798,8 @@ exports.BattleAbilities = {
 	"hugepower": {
 		desc: "This Pokemon's Attack stat is doubled. Therefore, if this Pokemon's Attack stat on the status screen is 200, it effectively has an Attack stat of 400; which is then subject to the full range of stat boosts and reductions.",
 		shortDesc: "This Pokemon's Attack is doubled.",
-		onModifyAtk: function(atk) {
-			return atk * 2;
+		onModifyAtk: function(atkMod) {
+			return this.chain(atkMod, 2);
 		},
 		id: "hugepower",
 		name: "Huge Power",
@@ -796,8 +809,8 @@ exports.BattleAbilities = {
 	"hustle": {
 		desc: "This Pokemon's Attack receives a 50% boost but its Physical attacks receive a 20% drop in Accuracy. For example, a 100% accurate move would become an 80% accurate move. The accuracy of moves that never miss, such as Aerial Ace, remains unaffected.",
 		shortDesc: "This Pokemon's Attack is 1.5x and accuracy of its physical attacks is 0.8x.",
-		onModifyAtk: function(atk) {
-			return atk * 1.5;
+		onModifyAtk: function(atkMod) {
+			return this.chain(atkMod, 1.5);
 		},
 		onModifyMove: function(move) {
 			if (move.category === 'Physical' && typeof move.accuracy === 'number') {
@@ -1219,9 +1232,9 @@ exports.BattleAbilities = {
 	"marvelscale": {
 		desc: "When this Pokemon becomes burned, poisoned (including Toxic), paralyzed, frozen or put to sleep (including self-induced sleep via Rest), its Defense receives a 50% boost.",
 		shortDesc: "If this Pokemon is statused, its Defense is 1.5x.",
-		onModifyDef: function(def, pokemon) {
+		onModifyDef: function(defMod, pokemon) {
 			if (pokemon.status) {
-				return def * 1.5;
+				return this.chain(defMod, 1.5);
 			}
 		},
 		id: "marvelscale",
@@ -1232,14 +1245,14 @@ exports.BattleAbilities = {
 	"minus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Plus ability.",
 		shortDesc: "If another ally has this Ability or the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
-		onModifySpA: function(spa, pokemon) {
+		onModifySpA: function(spaMod, pokemon) {
 			var allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
 			for (var i=0; i<allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && (allyActive[i].ability === 'minus' || allyActive[i].ability === 'plus')) {
-					return spa * 1.5
+					return this.chain(spaMod, 1.5);
 				}
 			}
 		},
@@ -1455,10 +1468,16 @@ exports.BattleAbilities = {
 	"overgrow": {
 		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Grass-type attacks receive a 50% boost in power.",
 		shortDesc: "When this Pokemon has 1/3 or less of its max HP, its Grass attacks do 1.5x damage.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onModifyAtk: function(atkMod, attacker, defender, move) {
 			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp/3) {
 				this.debug('Overgrow boost');
-				return basePower * 1.5;
+				return this.chain(atkMod, 1.5);
+			}
+		},
+		onModifySpA: function(atkMod, attacker, defender, move) {
+			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp/3) {
+				this.debug('Overgrow boost');
+				return this.chain(atkMod, 1.5);
 			}
 		},
 		id: "overgrow",
@@ -1533,14 +1552,14 @@ exports.BattleAbilities = {
 	"plus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Minus ability.",
 		shortDesc: "If another ally has this Ability or the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
-		onModifySpA: function(spa, pokemon) {
+		onModifySpA: function(spaMod, pokemon) {
 			var allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
 			for (var i=0; i<allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && (allyActive[i].ability === 'minus' || allyActive[i].ability === 'plus')) {
-					return spa * 1.5
+					return this.chain(spaMod, 1.5);
 				}
 			}
 		},
@@ -1628,8 +1647,8 @@ exports.BattleAbilities = {
 	"purepower": {
 		desc: "This Pokemon's Attack stat is doubled. Therefore, if this Pokemon's Attack stat on the status screen is 200, it effectively has an Attack stat of 400; which is then subject to the full range of stat boosts and reductions.",
 		shortDesc: "This Pokemon's Attack is doubled.",
-		onModifyAtk: function(atk) {
-			return atk * 2;
+		onModifyAtk: function(atkMod) {
+			return this.chain(atkMod, 2);
 		},
 		id: "purepower",
 		name: "Pure Power",
@@ -1639,9 +1658,9 @@ exports.BattleAbilities = {
 	"quickfeet": {
 		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed, asleep (including self-induced Rest) or frozen, its Speed stat receives a 50% boost; the paralysis status' Speed drop is also ignored.",
 		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; paralysis' Speed drop is ignored.",
-		onModifySpe: function(spe, pokemon) {
+		onModifySpe: function(speMod, pokemon) {
 			if (pokemon.status) {
-				return spe * 1.5;
+				return this.chain(speMod, 1.5);
 			}
 		},
 		id: "quickfeet",
@@ -1759,7 +1778,7 @@ exports.BattleAbilities = {
 			if (this.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
-					return basePower * 13/10;
+					return this.modify(basePower, [0x14CD, 0x1000]); // The Sand Force modifier is slightly higher than the normal 1.3 (0x14CC)
 				}
 			}
 		},
@@ -1774,9 +1793,9 @@ exports.BattleAbilities = {
 	"sandrush": {
 		desc: "Doubles Speed in a Sandstorm, and makes the Pokemon immune to Sandstorm damage.",
 		shortDesc: "If Sandstorm is active, this Pokemon's Speed is doubled; immunity to Sandstorm.",
-		onModifySpe: function(spe, pokemon) {
+		onModifySpe: function(speMod, pokemon) {
 			if (this.isWeather('sandstorm')) {
-				return spe * 2;
+				return this.chain(speMod, 2);
 			}
 		},
 		onImmunity: function(type, pokemon) {
@@ -1903,8 +1922,11 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's attacks with secondary effects do 1.3x damage; nullifies the effects.",
 		onModifyMove: function(move) {
 			if (move.secondaries) {
-				if (!move.basePowerModifier) move.basePowerModifier = 1;
-				move.basePowerModifier *= 13/10;
+				// if (!move.basePowerModifier) move.basePowerModifier = 1;
+				// Sheer Force is the only thing using basePowerModifier
+				// So until chaining comes along,
+				// setting basePowerModifier to the proper modifier will suffice
+				move.basePowerModifier = [0x14CD,0x1000]; // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
 				delete move.secondaries;
 				move.negateSecondary = true;
 			}
@@ -1972,19 +1994,19 @@ exports.BattleAbilities = {
 			onStart: function(target) {
 				this.add('-start', target, 'Slow Start');
 			},
-			onModifyAtk: function(atk, pokemon) {
+			onModifyAtk: function(atkMod, pokemon) {
 				if (pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
-				return atk / 2;
+				return this.chain(atkMod, 0.5);
 			},
-			onModifySpe: function(spe, pokemon) {
+			onModifySpe: function(speMod, pokemon) {
 				if (pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
-				return spe / 2;
+				return this.chain(speMod, 0.5);
 			},
 			onEnd: function(target) {
 				this.add('-end', target, 'Slow Start');
@@ -2042,9 +2064,9 @@ exports.BattleAbilities = {
 	"solarpower": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its Special Attack temporarily receives a 50% boost but this Pokemon also receives damage equal to one-eighth of its max HP after each turn.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Sp. Atk is 1.5x and loses 1/8 max HP per turn.",
-		onModifySpA: function(spa, pokemon) {
+		onModifySpA: function(spaMod, pokemon) {
 			if (this.isWeather('sunnyday')) {
-				return spa * 1.5;
+				return this.chain(spaMod, 1.5);
 			}
 		},
 		onWeather: function(target, source, effect) {
@@ -2184,6 +2206,7 @@ exports.BattleAbilities = {
 		onAnyRedirectTarget: function(target, source, source2, move) {
 			if (move.type !== 'Water') return;
 			if (this.validTarget(this.effectData.target, source, move.target)) {
+				move.accuracy = true;
 				return this.effectData.target;
 			}
 		},
@@ -2238,10 +2261,16 @@ exports.BattleAbilities = {
 	"swarm": {
 		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Bug-type attacks receive a 50% boost in power.",
 		shortDesc: "When this Pokemon has 1/3 or less of its max HP, its Bug attacks do 1.5x damage.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onModifyAtk: function(atkMod, attacker, defender, move) {
 			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp/3) {
 				this.debug('Swarm boost');
-				return basePower * 1.5;
+				return this.chain(atkMod, 1.5);
+			}
+		},
+		onModifySpA: function(atkMod, attacker, defender, move) {
+			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp/3) {
+				this.debug('Swarm boost');
+				return this.chain(atkMod, 1.5);
 			}
 		},
 		id: "swarm",
@@ -2252,9 +2281,9 @@ exports.BattleAbilities = {
 	"swiftswim": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, its speed is temporarily doubled.",
 		shortDesc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
-		onModifySpe: function(spe, pokemon) {
+		onModifySpe: function(speMod, pokemon) {
 			if (this.isWeather('raindance')) {
-				return spe * 2;
+				return this.chain(speMod, 2);
 			}
 		},
 		id: "swiftswim",
@@ -2343,10 +2372,16 @@ exports.BattleAbilities = {
 	"thickfat": {
 		desc: "This Pokemon receives halved damage from Ice-type and Fire-type attacks.",
 		shortDesc: "This Pokemon receives half damage from Fire- and Ice-type attacks.",
-		onSourceBasePower: function(basePower, attacker, defender, move) {
+		onSourceModifyAtk: function(atkMod, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thick Fat weaken');
-				return basePower / 2;
+				return this.chain(atkMod, 0.5);
+			}
+		},
+		onSourceModifySpA: function(atkMod, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				this.debug('Thick Fat weaken');
+				return this.chain(atkMod, 0.5);
 			}
 		},
 		id: "thickfat",
@@ -2371,10 +2406,16 @@ exports.BattleAbilities = {
 	"torrent": {
 		desc: "When its health reaches one-third or less of its max HP, this Pokemon's Water-type attacks receive a 50% boost in power.",
 		shortDesc: "When this Pokemon has 1/3 or less of its max HP, its Water attacks do 1.5x damage.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onModifyAtk: function(atkMod, attacker, defender, move) {
 			if (move.type === 'Water' && attacker.hp <= attacker.maxhp/3) {
 				this.debug('Torrent boost');
-				return basePower * 1.5;
+				return this.chain(atkMod, 1.5);
+			}
+		},
+		onModifySpA: function(atkMod, attacker, defender, move) {
+			if (move.type === 'Water' && attacker.hp <= attacker.maxhp/3) {
+				this.debug('Torrent boost');
+				return this.chain(atkMod, 1.5);
 			}
 		},
 		id: "torrent",
@@ -2465,6 +2506,7 @@ exports.BattleAbilities = {
 			move.ignoreDefensive = true;
 		},
 		onSourceModifyMove: function(move, user, target) {
+			if (user.ability === 'moldbreaker' || user.ability === 'turboblaze' || user.ability === 'teravolt') return;
 			move.ignoreAccuracy = true;
 			move.ignoreOffensive = true;
 		},
@@ -2481,13 +2523,13 @@ exports.BattleAbilities = {
 			pokemon.addVolatile('unburden');
 		},
 		effect: {
-			onModifySpe: function(spe, pokemon) {
+			onModifySpe: function(speMod, pokemon) {
 				if (pokemon.ability !== 'unburden') {
 					pokemon.removeVolatile('unburden');
 					return;
 				}
 				if (!pokemon.item) {
-					return spe * 2;
+					return this.chain(speMod, 2);
 				}
 			}
 		},

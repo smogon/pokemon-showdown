@@ -451,7 +451,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 50,
 		basePowerCallback: function(pokemon, target) {
-			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {			
+			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {
 				this.debug('Boosted for being damaged this turn');
 				return 100;
 			}
@@ -2949,7 +2949,12 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
+			var sourceSpeMod = 1;
+			sourceSpeMod = this.runEvent('ModifySpe', pokemon, target, null, sourceSpeMod);
+			var foeSpeMod = 1;
+			sourceSpeMod = this.runEvent('ModifySpe', target, pokemon, null, foeSpeMod);
 			var ratio = (pokemon.getStat('spe') / target.getStat('spe'));
+			this.debug([40, 60, 80, 120, 150][(Math.floor(ratio) > 4 ? 4 : Math.floor(ratio))] + ' bp');
 			if (ratio >= 4) {
 				return 150;
 			}
@@ -4853,6 +4858,10 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
+			var sourceSpeMod = 1;
+			sourceSpeMod = this.runEvent('ModifySpe', pokemon, target, null, sourceSpeMod);
+			var foeSpeMod = 1;
+			sourceSpeMod = this.runEvent('ModifySpe', target, pokemon, null, foeSpeMod);
 			var power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) || 1);
 			if (power > 150) power = 150;
 			this.debug(''+power+' bp');
@@ -7547,10 +7556,10 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isSnatchable: true,
-		heal: [1,2],
-		onModifyMove: function(move) {
-			if (this.isWeather('sunnyday')) move.heal = [2,3];
-			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [1,4];
+		onHit: function(pokemon) {
+			if (this.isWeather('sunnyday')) this.heal(this.modify(pokemon.maxhp, 0.667));
+			else if (this.isWeather(['raindance','sandstorm','hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
+			else this.heal(this.modify(pokemon.maxhp, 0.5));
 		},
 		secondary: false,
 		target: "self",
@@ -7569,10 +7578,10 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isSnatchable: true,
-		heal: [1,2],
-		onModifyMove: function(move) {
-			if (this.isWeather('sunnyday')) move.heal = [2,3];
-			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [1,4];
+		onHit: function(pokemon) {
+			if (this.isWeather('sunnyday')) this.heal(this.modify(pokemon.maxhp, 0.667));
+			else if (this.isWeather(['raindance','sandstorm','hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
+			else this.heal(this.modify(pokemon.maxhp, 0.5));
 		},
 		secondary: false,
 		target: "self",
@@ -8080,14 +8089,16 @@ exports.BattleMovedex = {
 			var result = true;
 			for (var i=0; i<this.sides.length; i++) {
 				for (var j=0; j<this.sides[i].active.length; j++) {
-					if (!this.sides[i].active[j].volatiles['perishsong']) {
-						result = false;
-					}
-					if (this.sides[i].active[j].ability !== 'soundproof') {
-						this.sides[i].active[j].addVolatile('perishsong');
-					} else {
-						this.add('-immune', this.sides[i].active[j], '[msg]');
-						this.add('-end', this.sides[i].active[j], 'Perish Song');
+					if (this.sides[i].active[j]) {
+						if (!this.sides[i].active[j].volatiles['perishsong']) {
+							result = false;
+						}
+						if (this.sides[i].active[j].ability !== 'soundproof') {
+							this.sides[i].active[j].addVolatile('perishsong');
+						} else {
+							this.add('-immune', this.sides[i].active[j], '[msg]');
+							this.add('-end', this.sides[i].active[j], 'Perish Song');
+						}
 					}
 				}
 			}
@@ -9626,7 +9637,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		heal: [1,2],
-		volatileStatus: 'roost',
+		self: {
+			volatileStatus: 'roost',
+		},
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {
@@ -11754,8 +11767,8 @@ exports.BattleMovedex = {
 			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
 		},
 		onHit: function(pokemon) {
-			var healAmount = [4,2,1];
-			this.heal(pokemon.maxhp / healAmount[(pokemon.volatiles['stockpile'].layers - 1)]);
+			var healAmount = [0.25,0.5,1];
+			this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
 			pokemon.removeVolatile('stockpile');
 		},
 		secondary: false,
@@ -11896,10 +11909,10 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isSnatchable: true,
-		heal: [1,2],
-		onModifyMove: function(move) {
-			if (this.isWeather('sunnyday')) move.heal = [2,3];
-			else if (this.isWeather(['raindance','sandstorm','hail'])) move.heal = [1,4];
+		onHit: function(pokemon) {
+			if (this.isWeather('sunnyday')) this.heal(this.modify(pokemon.maxhp, 0.667));
+			else if (this.isWeather(['raindance','sandstorm','hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
+			else this.heal(this.modify(pokemon.maxhp, 0.5));
 		},
 		secondary: false,
 		target: "self",
@@ -12002,8 +12015,8 @@ exports.BattleMovedex = {
 			onStart: function(side) {
 				this.add('-sidestart', side, 'move: Tailwind');
 			},
-			onModifySpe: function(spe) {
-				return spe * 2;
+			onModifySpe: function(speMod, pokemon) {
+				return this.chain(speMod, 2);
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 4,
@@ -12556,15 +12569,16 @@ exports.BattleMovedex = {
 			},
 			onStart: function(target, source) {
 				this.add('-fieldstart', 'move: Trick Room', '[of] '+source);
-			},
-			onModifySpePriority: -100,
-			onModifySpe: function(spe) {
-				// just for fun: Trick Room glitch
-				if (spe <= 1809) return -spe;
+				this.getStatCallback = function(stat, statName) {
+					// If stat is speed and does not overflow (Trick Room Glitch) return negative speed.
+					if (statName === 'spe' && stat <= 1809) return -stat;
+					return stat;
+				}
 			},
 			onResidualOrder: 23,
 			onEnd: function() {
 				this.add('-fieldend', 'move: Trick Room');
+				this.getStatCallback = null;
 			}
 		},
 		secondary: false,
@@ -12980,8 +12994,8 @@ exports.BattleMovedex = {
 			onEnd: function(targetSide) {
 				this.add('-sideend', targetSide, 'Water Pledge');
 			},
-			onModifySpe: function(spe) {
-				return spe/4;
+			onModifySpe: function(speMod, pokemon) {
+				return this.chain(speMod, 0.25);
 			}
 		},
 		secondary: false,
@@ -13314,13 +13328,10 @@ exports.BattleMovedex = {
 			onStart: function(side, source) {
 				this.add('-fieldstart', 'move: WonderRoom', '[of] '+source);
 			},
-			onModifyDefPriority: 100,
-			onModifyDef: function(def, pokemon) {
-				return pokemon.stats.spd;
-			},
-			onModifySpDPriority: 100,
-			onModifySpD: function(spd, pokemon) {
-				return pokemon.stats.def;
+			onModifyMovePriority: -100,
+			onModifyMove: function(move) {
+				move.defensiveCategory = ((move.defensiveCategory || this.getCategory(move)) === 'Physical' ? 'Special' : 'Physical');
+				this.debug('Defensive Category: ' + move.defensiveCategory);
 			},
 			onResidualOrder: 24,
 			onEnd: function() {
