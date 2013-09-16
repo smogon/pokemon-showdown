@@ -206,6 +206,7 @@ var User = (function () {
 	User.prototype.lastMessageTime = 0;
 
 	User.prototype.blockChallenges = false;
+	User.prototype.ignorePMs = false;
 	User.prototype.lastConnected = 0;
 
 	User.prototype.sendTo = function(roomid, data) {
@@ -214,11 +215,13 @@ var User = (function () {
 		for (var i=0; i<this.connections.length; i++) {
 			if (roomid && !this.connections[i].rooms[roomid]) continue;
 			this.connections[i].socket.write(data);
+			ResourceMonitor.countNetworkUse(data.length);
 		}
 	};
 	User.prototype.send = function(data) {
 		for (var i=0; i<this.connections.length; i++) {
 			this.connections[i].socket.write(data);
+			ResourceMonitor.countNetworkUse(data.length);
 		}
 	};
 	User.prototype.popup = function(message) {
@@ -237,8 +240,7 @@ var User = (function () {
 			if (room.auth[this.userid]) {
 				return room.auth[this.userid] + this.name;
 			}
-			if (this.group !== ' ') return '+'+this.name;
-			return ' '+this.name;
+			if (room.isPrivate) return ' '+this.name;
 		}
 		return this.group+this.name;
 	};
@@ -258,12 +260,18 @@ var User = (function () {
 		}
 
 		if (room && room.auth) {
-			if (group !== ' ') group = '+';
-			if (room.auth[this.userid]) group = room.auth[this.userid];
+			if (room.auth[this.userid]) {
+				group = room.auth[this.userid];
+			} else if (room.isPrivate) {
+				group = ' ';
+			}
 			groupData = config.groups[group];
 			if (target) {
-				if (targetGroup !== ' ') targetGroup = '+';
-				if (room.auth[target.userid]) targetGroup = room.auth[target.userid];
+				if (room.auth[target.userid]) {
+					targetGroup = room.auth[target.userid];
+				} else if (room.isPrivate) {
+					targetGroup = ' ';
+				}
 			}
 		}
 
@@ -489,7 +497,7 @@ var User = (function () {
 				}
 			}
 			if (userid === this.userid && !auth) {
-				return this.forceRename(name, this.authenticated);
+				return this.forceRename(name, this.authenticated, this.forceRenamed);
 			}
 		}
 		if (users[userid] && !users[userid].authenticated && users[userid].connected && !auth) {
@@ -845,7 +853,7 @@ var User = (function () {
 		if (typeof mmr === 'number') {
 			this.mmrCache[formatid] = mmr;
 		} else {
-			this.mmrCache[formatid] = (parseInt(mmr.r,10) + parseInt(mmr.rpr,10))/2;
+			this.mmrCache[formatid] = Math.floor((Number(mmr.rpr)*2+Number(mmr.r))/3);
 		}
 	};
 	User.prototype.mute = function(roomid, time, force, noRecurse) {
@@ -889,6 +897,7 @@ var User = (function () {
 		for (var ip in this.ips) {
 			bannedIps[ip] = this.userid;
 		}
+		this.locked = true; // in case of merging into a recently banned account
 		this.disconnectAll();
 	};
 	User.prototype.lock = function(noRecurse) {
@@ -909,7 +918,12 @@ var User = (function () {
 		room = Rooms.get(room);
 		if (!room) return false;
 		if (room.staffRoom && !this.isStaff) return false;
-		//console.log('JOIN ROOM: '+this.userid+' '+room.id);
+		if (this.userid && room.bannedUsers && this.userid in room.bannedUsers) return false;
+		if (this.ips && room.bannedIps) {
+			for (var ip in this.ips) {
+				if (ip in room.bannedIps) return false;
+			}
+		}
 		if (!connection) {
 			for (var i=0; i<this.connections.length;i++) {
 				// only join full clients, not pop-out single-room
@@ -1087,7 +1101,9 @@ var User = (function () {
 
 		if (message.substr(0,16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
+			ResourceMonitor.activeIp = connection.ip;
 			room.chat(this, message, connection);
+			ResourceMonitor.activeIp = null;
 			return false; // but end the loop here
 		}
 
@@ -1107,7 +1123,9 @@ var User = (function () {
 				this.processChatQueue.bind(this), THROTTLE_DELAY);
 		} else {
 			this.lastChatMessage = now;
+			ResourceMonitor.activeIp = connection.ip;
 			room.chat(this, message, connection);
+			ResourceMonitor.activeIp = null;
 		}
 	};
 	User.prototype.clearChatQueue = function() {
@@ -1121,7 +1139,9 @@ var User = (function () {
 		if (!this.chatQueue) return; // this should never happen
 		var toChat = this.chatQueue.shift();
 
+		ResourceMonitor.activeIp = toChat[2].ip;
 		toChat[1].chat(this, toChat[0], toChat[2]);
+		ResourceMonitor.activeIp = null;
 
 		if (this.chatQueue && this.chatQueue.length) {
 			this.chatQueueTimeout = setTimeout(
@@ -1174,10 +1194,12 @@ var Connection = (function () {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'lobby') data = '>'+roomid+'\n'+data;
 		this.socket.write(data);
+		ResourceMonitor.countNetworkUse(data.length);
 	};
 
 	Connection.prototype.send = function(data) {
 		this.socket.write(data);
+		ResourceMonitor.countNetworkUse(data.length);
 	};
 
 	Connection.prototype.popup = function(message) {
@@ -1274,8 +1296,15 @@ exports.pruneInactiveTimer = setInterval(
 	config.inactiveuserthreshold || 1000*60*60
 );
 
-exports.getNextGroupSymbol = function(group, isDown) {
+exports.getNextGroupSymbol = function(group, isDown, excludeRooms) {
 	var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(group) + (isDown ? -1 : 1)];
+	if (excludeRooms === true && config.groups[nextGroupRank]) {
+		var iterations = 0;
+		while (config.groups[nextGroupRank].roomonly && iterations < 10) {
+			nextGroupRank = config.groupsranking[config.groupsranking.indexOf(group) + (isDown ? -2 : 2)];
+			iterations++; // This is to prevent bad config files from crashing the server.
+		}
+	}
 	if (!nextGroupRank) {
 		if (isDown) {
 			return config.groupsranking[0];

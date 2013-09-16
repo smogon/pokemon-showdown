@@ -347,6 +347,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onImmunity: function(type, pokemon) {
 			if (type === 'hail') return false;
+			if (type === 'frz') return false;
 		},
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
