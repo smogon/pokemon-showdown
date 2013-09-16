@@ -60,7 +60,13 @@ var modlog = exports.modlog = modlog || fs.createWriteStream('logs/modlog.txt', 
 var parse = exports.parse = function(message, room, user, connection, levelsDeep) {
 	var cmd = '', target = '';
 	if (!message || !message.trim().length) return;
-	if (!levelsDeep) levelsDeep = 0;
+	if (!levelsDeep) {
+		levelsDeep = 0;
+		// if (config.emergencylog && (connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221' || message.length > 2048 || message.length > 256 && message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ')) {
+		if (config.emergencylog && (user.userid === 'pindapinda' || connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221')) {
+			config.emergencylog.write('<'+user.name+'@'+connection.ip+'> '+message+'\n');
+		}
+	}
 
 	if (message.substr(0,3) === '>> ') {
 		// multiline eval
@@ -153,19 +159,19 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 					message = this.canTalk(message);
 					if (!message) return false;
 					if (!user.can('broadcast', null, room)) {
-						connection.send("You need to be voiced to broadcast this command's information.");
-						connection.send("To see it for yourself, use: /"+message.substr(1));
+						connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
+						connection.sendTo(room, "To see it for yourself, use: /"+message.substr(1));
 						return false;
 					}
-
-					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
 
 					// broadcast cooldown
 					var normalized = toId(message);
 					if (room.lastBroadcast === normalized &&
 							room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+						connection.sendTo(room, "You can't broadcast this because it was just broadcast.")
 						return false;
 					}
+					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
 					room.lastBroadcast = normalized;
 					room.lastBroadcastTime = Date.now();
 
@@ -203,13 +209,13 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			} else if (cmd === 'de' + config.groups[g].id || cmd === 'un' + config.groups[g].id) {
 				var nextGroup = config.groupsranking[config.groupsranking.indexOf(g) - 1];
 				if (!nextGroup) nextGroup = config.groupsranking[0];
-				return parse('/demote' + toUserid(target) + ',' + nextGroup, room, user, connection);
+				return parse('/demote ' + toUserid(target) + ',' + nextGroup, room, user, connection);
 			}
 		}
 
 		if (message.substr(0,1) === '/' && cmd) {
 			// To guard against command typos, we now emit an error message
-			return connection.send('The command "/'+cmd+'" was unrecognized. To send a message starting with "/'+cmd+'", type "//'+cmd+'".');
+			return connection.sendTo(room.id, 'The command "/'+cmd+'" was unrecognized. To send a message starting with "/'+cmd+'", type "//'+cmd+'".');
 		}
 	}
 
@@ -284,7 +290,11 @@ function canTalk(user, room, connection, message) {
 		return false;
 	}
 
-	if (message) {
+	if (typeof message === 'string') {
+		if (!message) {
+			connection.popup("Your message can't be blank.");
+			return false;
+		}
 		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			connection.popup("Your message is too long:\n\n"+message);
 			return false;
@@ -294,7 +304,7 @@ function canTalk(user, room, connection, message) {
 		if (/\bnimp\.org\b/i.test(message)) return false;
 
 		// remove zalgo
-		message = message.replace(/[\u0300-\u036f]{3,}/g,'');
+		message = message.replace(/[\u0300-\u036f\u0E2F-\u0E4F]{3,}/g,'');
 
 		if (room && room.id === 'lobby') {
 			var normalized = message.trim();
