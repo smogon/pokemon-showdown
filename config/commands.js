@@ -246,221 +246,223 @@ var commands = exports.commands = {
 	data: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 
-		var pokemon = Tools.getTemplate(target);
-		var item = Tools.getItem(target);
-		var move = Tools.getMove(target);
-		var ability = Tools.getAbility(target);
-
 		var data = '';
-		if (pokemon.exists) {
-			data += '|c|~|/data-pokemon '+pokemon.name+'\n';
-		}
-		if (ability.exists) {
-			data += '|c|~|/data-ability '+ability.name+'\n';
-		}
-		if (item.exists) {
-			data += '|c|~|/data-item '+item.name+'\n';
-		}
-		if (move.exists) {
-			data += '|c|~|/data-move '+move.name+'\n';
-		}
-		if (!data) {
-			data = "||No pokemon, item, move, or ability named '"+target+"' was found. (Check your spelling?)";
+		var targetId = toId(target);
+		var newTargets = Tools.dataSearch(target);
+		if (newTargets && newTargets.length) {
+			for (var i = 0; i < newTargets.length; i++) {
+				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
+					data = "No Pokemon, item, move or ability named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
+				}
+				data += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+			}
+		} else {
+			data = "No Pokemon, item, move or ability named '" + target + "' was found. (Check your spelling?)";
 		}
 
 		this.sendReply(data);
 	},
-	
+
 	dexsearch: function (target, room, user) {
-                if (!this.canBroadcast()) return;
- 
-                if (!target) return this.parse('/help dexsearch');
-                var targets = target.split(',');
-                var target;
-                var moves = {}, tiers = {}, colours = {}, ability = {}, gens = {}, types = {};
-                var count = 0;
-                var all = false;
-                var output = 10;
- 
-                for (var i in targets) {
-                        target = Tools.getMove(targets[i]);
-                        if (target.exists) {
-                                if (!moves.count) {
-                                        count++;
-                                        moves.count = 0;
-                                };
-                                if (moves.count === 4) {
-                                        return this.sendReply('Specify a maximum of 4 moves.');
-                                };
-                                moves[target] = 1;
-                                moves.count++;
-                                continue;
-                        };
- 
-                        target = Tools.getAbility(targets[i]);
-                        if (target.exists) {
-                                if (!ability.count) {
-                                        count++;
-                                        ability.count = 0;
-                                };
-                                if (ability.count === 1) {
-                                        return this.sendReply('Specify only one ability.');
-                                };
-                                ability[target] = 1;
-                                ability.count++;
-                                continue;
-                        };
- 
-                        target = targets[i].trim().toLowerCase();
-                        if (['fire','water','electric','dragon','rock','fighting','ground','ghost','psychic','dark','bug','flying','grass','poison','normal','steel','ice'].indexOf(toId(target.substring(0, target.length - 4))) > -1) {
-                                if (!types.count) {
-                                        count++;
-                                        types.count = 0;
-                                };
-                                if (types.count === 2) {
-                                        return this.sendReply('Specify a maximum of two types.');
-                                };
-                                types[toId(target.substring(0, target.length - 4)).substring(0, 1).toUpperCase() + toId(target.substring(0, target.length - 4)).substring(1)] = 1;
-                                types.count++;
-                        }
-                        else if (['uber','ou','uu','ru','nu','lc','cap','bl','bl2','nfe','illegal'].indexOf(target) > -1) {
-                                if (!tiers.count) {
-                                        count++;
-                                        tiers.count = 0;
-                                };
-                                tiers[target] = 1;
-                                tiers.count++;
-                        }
-                        else if (['green','red','blue','white','brown','yellow','purple','pink','gray','black'].indexOf(target) > -1) {
-                                if (!colours.count) {
-                                        count++;
-                                        colours.count = 0;
-                                };
-                                colours[target] = 1;
-                                colours.count++;
-                        }
-                        else if (parseInt(target, 10) > 0) {
-                                if (!gens.count) {
-                                        count++;
-                                        gens.count = 0;
-                                };
-                                gens[parseInt(target, 10)] = 1;
-                                gens.count++;
-                        }
-                        else if (target === 'all') {
-                                if (this.broadcasting) {
-                                        return this.sendReply('A search with the parameter "all" cannot be broadcast.')
-                                };
-                                all = true;
-                        }
-                        else {
-                                return this.sendReply('"' + target + '" could not be found in any of the search categories.');
-                        };
-                };
- 
- 		if (all && count === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
- 
-                while (count > 0) {
-                        --count;
-                        var tempResults = [];
-                        if (!results) {
-                                for (var pokemon in Tools.data.Pokedex) {
-                                        if (pokemon === 'arceusunknown') continue;
-                                        pokemon = Tools.getTemplate(pokemon);
-                                        if (!(!('illegal' in tiers) && pokemon.tier === 'Illegal')) {
-                                                tempResults.add(pokemon);
-                                        }
-                                };
-                        } else {
-                                for (var mon in results) tempResults.add(results[mon]);
-                        };
-                        var results = [];
- 
-                        if (types.count > 0) {
-                                for (var mon in tempResults) {
-                                        if (types.count === 1) {
-                                                if (tempResults[mon].types[0] in types || tempResults[mon].types[1] in types) results.add(tempResults[mon]);
-                                        } else {
-                                                if (tempResults[mon].types[0] in types && tempResults[mon].types[1] in types) results.add(tempResults[mon]);
-                                        };
-                                };
-                                types.count = 0;
-                                continue;
-                        };
-       
-                        if (tiers.count > 0) {
-                                for (var mon in tempResults) {
-                                        if ('cap' in tiers) {
-                                                if (tempResults[mon].tier.substring(2).toLowerCase() === 'cap') results.add(tempResults[mon]);
-                                        };
-                                        if (tempResults[mon].tier.toLowerCase() in tiers) results.add(tempResults[mon]);
-                                };
-                                tiers.count = 0;
-                                continue;
-                        };
- 
-                        if (ability.count > 0) {
-                                for (var mon in tempResults) {
-                                        for (var monAbility in tempResults[mon].abilities) {
-                                                if (Tools.getAbility(tempResults[mon].abilities[monAbility]) in ability) results.add(tempResults[mon]);
-                                        };
-                                };
-                                ability.count = 0;
-                                continue;
-                        };
- 
-                        if (colours.count > 0) {
-                                for (var mon in tempResults) {
-                                        if (tempResults[mon].color.toLowerCase() in colours) results.add(tempResults[mon]);
-                                };
-                                colours.count = 0;
-                                continue;
-                        };
- 
-                        if (moves.count > 0) {
-                                var problem;
-                                var move = {};
-                                for (var mon in tempResults) {
-                                        var lsetData = {set:{}};
-                                        template = Tools.getTemplate(tempResults[mon].id);
-                                        for (var i in moves) {
-                                                move = Tools.getMove(i);
-                                                if (move.id !== 'count') {
-                                                        if (!move.exists) return this.sendReply('"' + move + '" is not a known move.');
-                                                        problem = Tools.checkLearnset(move, template, lsetData);
-                                                        if (problem) break;
-                                                };
-                                        };
-                                        if (!problem) results.add(tempResults[mon]);
-                                };
-                                moves.count = 0;
-                                continue;
-                        };
- 
-                        if (gens.count > 0) {
-                                for (var mon in tempResults) {
-                                        if (tempResults[mon].gen in gens) results.add(tempResults[mon]);
-                                };
-                                gens.count = 0;
-                                continue;
-                        };
-                };
- 
-                var resultsStr = '';
-                if (results.length > 0) {
-                        if (all || results.length <= output) {
-                                for (var i = 0; i < results.length; i++) resultsStr += results[i].species + ', ';
-                        } else {
-                                var hidden = string(results.length - output);
-                                results.sort(function(a,b) {return Math.round(Math.random());});
-                                for (var i = 0; i < output; i++) resultsStr += results[i].species + ', ';
-                                resultsStr += ' and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.  '
-                        };
-                } else {
-                        resultsStr = 'No Pokemon found.  ';
-                };
-                return this.sendReplyBox(resultsStr.substring(0, resultsStr.length - 2));
-        },
+		if (!this.canBroadcast()) return;
+
+		if (!target) return this.parse('/help dexsearch');
+		var targets = target.split(',');
+		var moves = {}, tiers = {}, colours = {}, ability = {}, gens = {}, types = {};
+		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1};
+		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
+		var count = 0;
+		var showAll = false;
+		var output = 10;
+
+		for (var i in targets) {
+			target = Tools.getMove(targets[i]);
+			if (target.exists) {
+				if (!moves.count) {
+					count++;
+					moves.count = 0;
+				}
+				if (moves.count === 4) {
+					return this.sendReplyBox('Specify a maximum of 4 moves.');
+				}
+				moves[target] = 1;
+				moves.count++;
+				continue;
+			}
+
+			target = Tools.getAbility(targets[i]);
+			if (target.exists) {
+				if (!ability.count) {
+					count++;
+					ability.count = 0;
+				}
+				if (ability.count === 1) {
+					return this.sendReplyBox('Specify only one ability.');
+				}
+				ability[target] = 1;
+				ability.count++;
+				continue;
+			}
+
+			target = targets[i].trim().toLowerCase();
+			if (target in allTiers) {
+				if (!tiers.count) {
+					count++;
+					tiers.count = 0;
+				}
+				tiers[target] = 1;
+				tiers.count++;
+				continue;
+			}
+			if (target in allColours) {
+				if (!colours.count) {
+					count++;
+					colours.count = 0;
+				}
+				colours[target] = 1;
+				colours.count++;
+				continue;
+			}
+			var targetInt = parseInt(target);
+			if (0 < targetInt && targetInt < 6) {
+				if (!gens.count) {
+					count++;
+					gens.count = 0;
+				}
+				gens[targetInt] = 1;
+				gens.count++;
+				continue;
+			}
+			if (target === 'all') {
+				if (this.broadcasting) {
+					return this.sendReplyBox('A search with the parameter "all" cannot be broadcast.')
+				}
+				showAll = true;
+				continue;
+			}
+			if (target.indexOf(' type') > -1) {
+				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
+				if (target in Tools.data.TypeChart) {
+					if (!types.count) {
+						count++;
+						types.count = 0;
+					}
+					if (types.count === 2) {
+						return this.sendReplyBox('Specify a maximum of two types.');
+					}
+					types[target] = 1;
+					types.count++;
+					continue;
+				}
+			} else {
+				return this.sendReplyBox('"' + targets[i].trim() + '" could not be found in any of the search categories.');
+			}
+		}
+
+		if (showAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br />Try "/help dexsearch" for more information on this command.');
+
+		while (count > 0) {
+			count--;
+			var tempResults = [];
+			if (!results) {
+				for (var pokemon in Tools.data.Pokedex) {
+					pokemon = Tools.getTemplate(pokemon);
+					if (pokemon.tier !== 'Illegal' && (pokemon.tier.slice(2).toLowerCase() !== 'cap' || 'cap' in tiers)) {
+						tempResults.add(pokemon);
+					}
+				}
+			} else {
+				for (var mon in results) tempResults.add(results[mon]);
+			}
+			var results = [];
+
+			if (types.count > 0) {
+				for (var mon in tempResults) {
+					if (types.count === 1) {
+						if (tempResults[mon].types[0] in types || tempResults[mon].types[1] in types) results.add(tempResults[mon]);
+					} else {
+						if (tempResults[mon].types[0] in types && tempResults[mon].types[1] in types) results.add(tempResults[mon]);
+					}
+				}
+				types.count = 0;
+				continue;
+			}
+
+			if (tiers.count > 0) {
+				for (var mon in tempResults) {
+					if ('cap' in tiers) {
+						if (tempResults[mon].tier.slice(2).toLowerCase() === 'cap') results.add(tempResults[mon]);
+					}
+					if (tempResults[mon].tier.toLowerCase() in tiers) results.add(tempResults[mon]);
+				}
+				tiers.count = 0;
+				continue;
+			}
+
+			if (ability.count > 0) {
+				for (var mon in tempResults) {
+					for (var monAbility in tempResults[mon].abilities) {
+						if (Tools.getAbility(tempResults[mon].abilities[monAbility]) in ability) results.add(tempResults[mon]);
+					}
+				}
+				ability.count = 0;
+				continue;
+			}
+
+			if (colours.count > 0) {
+				for (var mon in tempResults) {
+					if (tempResults[mon].color.toLowerCase() in colours) results.add(tempResults[mon]);
+				}
+				colours.count = 0;
+				continue;
+			}
+
+			if (moves.count > 0) {
+				var problem;
+				var move = {};
+				for (var mon in tempResults) {
+					var lsetData = {set:{}};
+					template = Tools.getTemplate(tempResults[mon].id);
+					for (var i in moves) {
+						move = Tools.getMove(i);
+						if (move.id !== 'count') {
+							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
+							problem = Tools.checkLearnset(move, template, lsetData);
+							if (problem) break;
+						}
+					}
+					if (!problem) results.add(tempResults[mon]);
+				}
+				moves.count = 0;
+				continue;
+			}
+
+			if (gens.count > 0) {
+				for (var mon in tempResults) {
+					if (tempResults[mon].gen in gens) results.add(tempResults[mon]);
+				}
+				gens.count = 0;
+				continue;
+			}
+		}
+
+		var resultsStr = '';
+		if (results.length > 0) {
+			for (var i = 0; i < results.length; ++i) results[i] = results[i].species;
+			if (showAll || results.length <= output) {
+				resultsStr = results.join(', ');
+			} else {
+				var hidden = string(results.length - output);
+				results.sort(function(a,b) {return Math.round(Math.random());});
+				var shown = results.slice(0, 10);
+				resultsStr = shown.join(', ');
+				resultsStr += ', and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.';
+			}
+		} else {
+			resultsStr = 'No Pokemon found.';
+		}
+		return this.sendReplyBox(resultsStr);
+	},
 
 	learnset: 'learn',
 	learnall: 'learn',
@@ -560,7 +562,7 @@ var commands = exports.commands = {
 			this.sendReplyBox(target + " is weak to: " + weaknesses.join(', ') + " (not counting abilities).");
 		}
 	},
-	
+
 	matchup: 'effectiveness',
 	effectiveness: function(target, room, user) {
 		var targets = target.split(/[,/]/);
@@ -705,9 +707,9 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/sim/seasonal">Seasonal Ladder</a><br />';
 		}
-		if (target === 'all' || target === 'smogondoubles' || target === 'doubles') {
+		if (target === 'all' || target === 'stabmons') {
 			matched = true;
-			buffer += '- <a href="http://www.smogon.com/forums/threads/3476469/">Smogon Doubles</a><br />';
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3484106/">STABmons</a>';
 		}
 		if (target === 'all' || target === 'vgc2013' || target === 'vgc') {
 			matched = true;
@@ -740,6 +742,8 @@ var commands = exports.commands = {
 			'- /deroommod <em>username</em>: remove a room moderator<br />' +
 			'- /declare <em>message</em>: make a global declaration<br />' +
 			'- /modchat <em>level</em>: set modchat (to turn off: /modchat off)<br />' +
+			'- /roomban <em>username</em>: bans user from the room<br />' +
+			'- /roomunban <em>username</em>: unbans user from the room<br />' +
 			'</div>');
 	},
 
@@ -798,6 +802,7 @@ var commands = exports.commands = {
 	},
 
 	banlists: 'tiers',
+	tier: 'tiers',
 	tiers: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		target = toId(target);
@@ -832,6 +837,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/bw/tiers/lc">Little Cup Pokemon</a><br />';
 		}
+		if (target === 'all' || target === 'doubles') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/bw/metagames/doubles">Doubles</a><br />';
+		}
 		if (!matched) {
 			return this.sendReply('The Tiers entry "'+target+'" was not found. Try /tiers for general help.');
 		}
@@ -851,7 +860,9 @@ var commands = exports.commands = {
 		var atLeastOne = false;
 		var generation = (targets[1] || "bw").trim().toLowerCase();
 		var genNumber = 5;
-
+		var doublesFormats = {'vgc2012':1,'vgc2013':1,'doubles':1};
+		var doublesFormat = (!targets[2] && generation in doublesFormats)? generation : (targets[2] || '').trim().toLowerCase();
+		var doublesText = '';
 		if (generation === "bw" || generation === "bw2" || generation === "5" || generation === "five") {
 			generation = "bw";
 		} else if (generation === "dp" || generation === "dpp" || generation === "4" || generation === "four") {
@@ -869,7 +880,16 @@ var commands = exports.commands = {
 		} else {
 			generation = "bw";
 		}
-		
+		if (doublesFormat !== '') {
+			// Smogon only has doubles formats analysis from gen 5 onwards.
+			if (!(generation in {'bw':1,'xy':1}) || !(doublesFormat in doublesFormats)) {
+				doublesFormat = '';
+			} else {
+				doublesText = {'vgc2012':'VGC 2012 ','vgc2013':'VGC 2013 ','doubles':'Doubles '}[doublesFormat];
+				doublesFormat = '/' + doublesFormat;
+			}
+		}
+
 		// Pokemon
 		if (pokemon.exists) {
 			atLeastOne = true;
@@ -879,7 +899,7 @@ var commands = exports.commands = {
 			if (pokemon.tier === 'G4CAP' || pokemon.tier === 'G5CAP') {
 				generation = "cap";
 			}
-	
+
 			var poke = pokemon.name.toLowerCase();
 			if (poke === 'nidoranm') poke = 'nidoran-m';
 			if (poke === 'nidoranf') poke = 'nidoran-f';
@@ -896,31 +916,31 @@ var commands = exports.commands = {
 			if (poke === 'shaymin-sky') poke = 'shaymin-s';
 			if (poke === 'arceus') poke = 'arceus-normal';
 			if (poke === 'thundurus-therian') poke = 'thundurus-t';
-	
-			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+'">'+generation.toUpperCase()+' '+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
+
+			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+doublesFormat+'">'+generation.toUpperCase()+' '+doublesText+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
-		
+
 		// Item
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
 			var itemName = item.name.toLowerCase().replace(' ', '_');
 			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/items/'+itemName+'">'+generation.toUpperCase()+' '+item.name+' item analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
-		
+
 		// Ability
 		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
 			var abilityName = ability.name.toLowerCase().replace(' ', '_');
 			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/abilities/'+abilityName+'">'+generation.toUpperCase()+' '+ability.name+' ability analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
-		
+
 		// Move
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
 			var moveName = move.name.toLowerCase().replace(' ', '_');
 			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/moves/'+moveName+'">'+generation.toUpperCase()+' '+move.name+' move analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
-		
+
 		if (!atLeastOne) {
 			return this.sendReplyBox('Pokemon, item, move, or ability not found for generation ' + generation.toUpperCase() + '.');
 		}
@@ -1105,15 +1125,34 @@ var commands = exports.commands = {
 			this.sendReply('!effectiveness [type1], [type2] - Shows everyone the effectiveness of a [type1] attack to a [type2] Pokémon.');
 		}
 		if (target === 'all' || target === 'dexsearch') {
-                        matched = true;
-                        this.sendReply('Searches for Pokemon that fulfill the selected criteria.');
-                        this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
-                        this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
-                        this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP/Illegal.');
-                        this.sendReply('Types must be followed by " type", e.g., "dragon type".');
-                        this.sendReply('/dexsearch [type], [move], [move],...');
-                        this.sendReply('The order of the parameters does not matter.');
-                }
+			matched = true;
+			this.sendReply('/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
+			this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
+			this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
+			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
+			this.sendReply('Types must be followed by " type", e.g., "dragon type".');
+			this.sendReply('The order of the parameters does not matter.');
+		}
+		if (target === 'all' || target === 'join') {
+			matched = true;
+			this.sendReply('/join [roomname] - Attempts to join the room [roomname].');
+		}
+		if (target === '%' || target === 'invite') {
+			matched = true;
+			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
+		}
+		if (target === '%' || target === 'roomban') {
+			matched = true;
+			this.sendReply('/roomban [username] - Bans the user from the room you are in. Requires: % @ & ~');
+		}
+		if (target === '%' || target === 'roomunban') {
+			matched = true;
+			this.sendReply('/roomunban [username] - Unbans the user from the room you are in. Requires: % @ & ~');
+		}
+		if (target === '%' || target === 'redirect' || target === 'redir') {
+			matched = true;
+			this.sendReply('/redirect or /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
+		}
 		if (target === '%' || target === 'modnote') {
 			matched = true;
 			this.sendReply('/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ & ~');
@@ -1133,6 +1172,10 @@ var commands = exports.commands = {
 		if (target === '@' || target === 'ban' || target === 'b') {
 			matched = true;
 			this.sendReply('/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: @ & ~');
+		}
+		if (target === '&' || target === 'banip') {
+			matched = true;
+			this.sendReply('/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~');
 		}
 		if (target === '@' || target === 'unban') {
 			matched = true;
@@ -1158,10 +1201,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/mute OR /m [username], [reason] - Mute user with reason for 7 minutes. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'hourmute') {
+		if (target === '%' || target === 'hourmute' || target === 'hm') {
 			matched = true;
-			this.sendReply('/hourmute , [reason] - Mute user with reason for an hour. Requires: % @ & ~');
-		}	
+			this.sendReply('/hourmute OR /hm [username], [reason] - Mute user with reason for an hour. Requires: % @ & ~');
+		}
 		if (target === '%' || target === 'unmute') {
 			matched = true;
 			this.sendReply('/unmute [username] - Remove mute from user. Requires: % @ & ~');
@@ -1187,17 +1230,13 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/declare [message] - Anonymously announces a message. Requires: & ~');
 		}
-		if (target === '&' || target === 'potd' ) {
-			matched = true;
-			this.sendReply('/potd [pokemon] - Sets the Random Battle Pokemon of the Day. Requires: & ~');
-		}
 		if (target === '%' || target === 'announce' || target === 'wall' ) {
 			matched = true;
 			this.sendReply('/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
 		}
 		if (target === '@' || target === 'modchat') {
 			matched = true;
-			this.sendReply('/modchat [off/registered/+/%/@/&/~] - Set the level of moderated chat. Requires: @ & ~');
+			this.sendReply('/modchat [off/+/%/@/&/~] - Set the level of moderated chat. Requires: @ for off/+ options, & ~ for all the options');
 		}
 		if (target === '~' || target === 'hotpatch') {
 			matched = true;
@@ -1215,6 +1254,30 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/kill - kills the server. Can\'t be done unless the server is in lockdown state. Requires: ~');
 		}
+		if (target === '~' || target === 'loadbanlist') {
+			matched = true;
+			this.sendReply('/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~');
+		}
+		if (target === '~' || target === 'makechatroom') {
+			matched = true;
+			this.sendReply('/makechatroom [roomname] - Creates a new room named [roomname]. Requires: ~');
+		}
+		if (target === '~' || target === 'deregisterchatroom') {
+			matched = true;
+			this.sendReply('/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: ~');
+		}
+		if (target === '~' || target === 'roomowner') {
+			matched = true;
+			this.sendReply('/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: ~');
+		}
+		if (target === '~' || target === 'roomdeowner') {
+			matched = true;
+			this.sendReply('/roomdeowner [username] - Removes [username]\'s status as a room owner. Requires: ~');
+		}
+		if (target === '~' || target === 'privateroom') {
+			matched = true;
+			this.sendReply('/privateroom [on/off] - Makes or unmakes a room private. Requires: ~');
+		}
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands') {
 			matched = true;
 			this.sendReply('/help OR /h OR /? - Gives you help.');
@@ -1222,6 +1285,7 @@ var commands = exports.commands = {
 		if (!target) {
 			this.sendReply('COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps');
 			this.sendReply('INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))');
+			this.sendReply('For details on all room commands, use /roomhelp');
 			this.sendReply('For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
 				this.sendReply('DRIVER COMMANDS: /mute, /unmute, /announce, /forcerename, /alts')

@@ -1,15 +1,12 @@
+/**
+ * Gen 3 moves
+ */
 function clampIntRange(num, min, max) {
 	num = Math.floor(num);
 	if (num < min) num = min;
 	if (typeof max !== 'undefined' && num > max) num = max;
 	return num;
 }
-/*
-Hidden Power's status as a physical/special move plagued me.  I tested it and it never seemed to work no matter what I did.
-Marty told me the way I did it was correct - testing it on kupo's server failed, however.
-It is possible kupo just forgot to update it.
--Relados
-*/
 exports.BattleMovedex = {
 	absorb: {
 		inherit: true,
@@ -64,8 +61,7 @@ exports.BattleMovedex = {
 	beatup: {
 		inherit: true,
 		basePower: 10,
-		basePowerCallback: undefined,
-		desc: "Does one hit for the user and each other unfainted non-egg active and non-active Pokemon on the user's side without a status problem."
+		basePowerCallback: null
 	},
 	bide: {
 		inherit: true,
@@ -86,8 +82,6 @@ exports.BattleMovedex = {
 	},
 	brickbreak: {
 		inherit: true,
-		desc: "Reflect and Light Screen are removed from the target's field even if the attack misses or the target is a Ghost-type.",
-		//shortDesc: "",
 		onTryHit: function(pokemon) {
 			pokemon.side.removeSideCondition('reflect');
 			pokemon.side.removeSideCondition('lightscreen');
@@ -154,8 +148,6 @@ exports.BattleMovedex = {
 	disable: {
 		inherit: true,
 		accuracy: 55,
-		desc: "The target cannot choose its last move for 4-7 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.",
-		//shortDesc: "",
 		isBounceable: false,
 		volatileStatus: 'disable',
 		effect: {
@@ -227,8 +219,6 @@ exports.BattleMovedex = {
 	},
 	encore: {
 		inherit: true,
-		//desc: "",
-		//shortDesc: "",
 		isBounceable: false,
 		volatileStatus: 'encore',
 		effect: {
@@ -278,8 +268,7 @@ exports.BattleMovedex = {
 	},
 	explosion: {
 		inherit: true,
-		basePower: 500,
-		//desc: ""
+		basePower: 500
 	},
 	extrasensory: {
 		inherit: true,
@@ -290,7 +279,6 @@ exports.BattleMovedex = {
 	},
 	extremespeed: {
 		inherit: true,
-		shortDesc: "Usually goes first.",
 		priority: 1
 	},
 	faintattack: {
@@ -299,7 +287,6 @@ exports.BattleMovedex = {
 	},
 	fakeout: {
 		inherit: true,
-		shortDesc: "Usually hits first; first turn out only; target flinch.",
 		priority: 1,
 		isContact: false
 	},
@@ -309,7 +296,7 @@ exports.BattleMovedex = {
 		basePower: 15
 	},
 	flail: {
-		num: 175,
+		inherit: true,
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
@@ -331,11 +318,7 @@ exports.BattleMovedex = {
 			}
 			return 20;
 		},
-		desc: "Deals damage to one adjacent target based on the amount of HP the user has left. X is equal to (user's current HP * 48 / user's maximum HP), rounded down; the base power of this attack is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1. Makes contact.",
-		shortDesc: "More power the less HP the user has left.",
-		id: "flail",
 		isViable: true,
-		name: "Flail",
 		pp: 15,
 		priority: 0,
 		isContact: true,
@@ -380,8 +363,6 @@ exports.BattleMovedex = {
 	},
 	growth: {
 		inherit: true,
-		desc: "Raises the user's Special Attack by 1 stage.",
-		shortDesc: "Boosts the user's Sp. Atk by 1.",
 		onModifyMove: null,
 		boosts: {
 			spa: 1
@@ -394,8 +375,6 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon) {
 			return pokemon.hpPower || 70;
 		},
-		desc: "Deals damage to one adjacent target. This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
-		shortDesc: "Varies in power and type based on the user's IVs.",
 		id: "hiddenpower",
 		isViable: true,
 		name: "Hidden Power",
@@ -411,8 +390,6 @@ exports.BattleMovedex = {
 	hijumpkick: {
 		inherit: true,
 		basePower: 85,
-		desc: "If this attack misses the target, the user takes half of the damage it would have dealt in recoil damage.",
-		shortDesc: "User takes half damage it would have dealt if miss.",
 		pp: 20,
 		onMoveFail: function(target, source, move) {
 			if (target.runImmunity('Fighting')) {
@@ -432,8 +409,6 @@ exports.BattleMovedex = {
 	jumpkick: {
 		inherit: true,
 		basePower: 70,
-		desc: "If this attack misses the target, the user takes half of the damage it would have dealt in recoil damage.",
-		shortDesc: "User takes half damage it would have dealt if miss.",
 		pp: 25,
 		onMoveFail: function(target, source, move) {
 			if (target.runImmunity('Fighting')) {
@@ -452,21 +427,15 @@ exports.BattleMovedex = {
 	},
 	minimize: {
 		inherit: true,
-		desc: "Raises the user's evasion by 1 stage. After using this move, Astonish, Extrasensory, Needle Arm, and Stomp will have their power doubled if used against the user while it is active.",
-		shortDesc: "Boosts the user's evasion by 1.",
 		boosts: {
 			evasion: 1
 		}
 	},
 	mirrormove: {
-		num: 119,
+		inherit: true,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user uses the last move used by a selected adjacent target. The copied move is used against that target, if possible. Fails if the target has not yet used a move, or the last move used was Acupressure, After You, Aromatherapy, Chatter, Conversion 2, Counter, Curse, Doom Desire, Feint, Final Gambit, Focus Punch, Future Sight, Gravity, Guard Split, Hail, Haze, Heal Bell, Heal Pulse, Helping Hand, Light Screen, Lucky Chant, Me First, Mimic, Mirror Coat, Mist, Mud Sport, Nature Power, Perish Song, Power Split, Psych Up, Quick Guard, Rain Dance, Reflect, Reflect Type, Role Play, Safeguard, Sandstorm, Sketch, Spikes, Spit Up, Stealth Rock, Struggle, Sunny Day, Tailwind, Toxic Spikes, Transform, Water Sport, Wide Guard, or any move that is self-targeting.",
-		shortDesc: "User uses the target's last used move against it.",
-		id: "mirrormove",
-		name: "Mirror Move",
 		pp: 20,
 		priority: 0,
 		isNotProtectable: true,
@@ -485,10 +454,7 @@ exports.BattleMovedex = {
 	},
 	naturepower: {
 		inherit: true,
-		accuracy: 95,
-		onModifyMove: function(move) {
-			move.accuracy = true;
-		},
+		accuracy: true,
 		onHit: function(target) {
 			this.useMove('swift', target);
 		}
@@ -534,7 +500,6 @@ exports.BattleMovedex = {
 	},
 	protect: {
 		inherit: true,
-		//desc: "",
 		priority: 3
 	},
 	recover: {
@@ -564,8 +529,7 @@ exports.BattleMovedex = {
 	},
 	selfdestruct: {
 		inherit: true,
-		basePower: 400,
-		//desc: ""
+		basePower: 400
 	},
 	skillswap: {
 		inherit: true,
@@ -602,13 +566,9 @@ exports.BattleMovedex = {
 		boosts: false
 	},
 	struggle: {
-		num: 165,
+		inherit: true,
 		accuracy: true,
 		basePower: 50,
-		desc: "Deals typeless damage to one adjacent foe at random. If this move was successful, the user loses 1/2 of the damage dealt, rounded half up; the Ability Rock Head does not prevent this. This move can only be used if none of the user's known moves can be selected. Makes contact.",
-		shortDesc: "User loses half of the damage dealt as recoil.",
-		id: "struggle",
-		name: "Struggle",
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
@@ -631,8 +591,6 @@ exports.BattleMovedex = {
 	},
 	tailglow: {
 		inherit: true,
-		desc: "Raises the user's Special Attack by 2 stages.",
-		shortDesc: "Boosts the user's Sp. Atk by 2.",
 		boosts: {
 			spa: 2
 		}
@@ -692,8 +650,6 @@ exports.BattleMovedex = {
 	},
 	volttackle: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 33% that HP, rounded half up, but not less than 1HP. Makes contact.",
-		shortDesc: "Has 1/3 recoil.",
 		recoil: [1,3],
 		secondary: false
 	},
@@ -712,8 +668,6 @@ exports.BattleMovedex = {
 	},
 	wish: {
 		inherit: true,
-		//desc: "",
-		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
 		effect: {
 			duration: 2,
 			onResidualOrder: 2,

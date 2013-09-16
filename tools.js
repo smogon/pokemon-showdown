@@ -55,9 +55,12 @@ module.exports = (function () {
 				if (fs.existsSync(path)) {
 					var configFormats = require(path).Formats;
 					for (var i=0; i<configFormats.length; i++) {
-						var id = toId(configFormats[i].name);
-						configFormats[i].effectType = 'Format';
-						data.Formats[id] = configFormats[i];
+						var format = configFormats[i];
+						var id = toId(format.name);
+						format.effectType = 'Format';
+						if (format.challengeShow === undefined) format.challengeShow = true;
+						if (format.searchShow === undefined) format.searchShow = true;
+						data.Formats[id] = format;
 					}
 				}
 			} catch (e) {
@@ -178,7 +181,8 @@ module.exports = (function () {
 			if (!template.genderRatio) template.genderRatio = {M:0.5,F:0.5};
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.gen) {
-				if (template.num >= 494) template.gen = 5;
+				if (template.num >= 650) template.gen = 6;
+				else if (template.num >= 494) template.gen = 5;
 				else if (template.num >= 387) template.gen = 4;
 				else if (template.num >= 252) template.gen = 3;
 				else if (template.num >= 152) template.gen = 2;
@@ -216,7 +220,8 @@ module.exports = (function () {
 			if (!move.effectType) move.effectType = 'Move';
 			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
 			if (!move.gen) {
-				if (move.num >= 468) move.gen = 5;
+				if (move.num >= 560) move.gen = 6;
+				else if (move.num >= 468) move.gen = 5;
 				else if (move.num >= 355) move.gen = 4;
 				else if (move.num >= 252) move.gen = 3;
 				else if (move.num >= 166) move.gen = 2;
@@ -332,7 +337,8 @@ module.exports = (function () {
 			if (!item.effectType) item.effectType = 'Item';
 			if (item.isBerry) item.fling = { basePower: 10 };
 			if (!item.gen) {
-				if (item.num >= 537) item.gen = 5;
+				if (item.num >= 577) item.gen = 6;
+				else if (item.num >= 537) item.gen = 5;
 				else if (item.num >= 377) item.gen = 4;
 				// Due to difference in storing items, gen 2 items must be specified specifically
 				else item.gen = 3;
@@ -358,7 +364,8 @@ module.exports = (function () {
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
 			if (!ability.gen) {
-				if (ability.num >= 124) ability.gen = 5;
+				if (ability.num >= 165) ability.gen = 6;
+				else if (ability.num >= 124) ability.gen = 5;
 				else if (ability.num >= 77) ability.gen = 4;
 				else if (ability.num >= 1) ability.gen = 3;
 				else ability.gen = 0;
@@ -461,10 +468,12 @@ module.exports = (function () {
 
 		do {
 			alreadyChecked[template.speciesid] = true;
+			// Stabmons hack to avoid copying all of validateSet to formats.
+			if (format.id === 'stabmons' && template.types.indexOf(this.getMove(move).type) > -1) return false;
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					var lset = template.learnset[move];
-					if (!lset) {
+					if (!lset || template.speciesid === 'smeargle') {
 						lset = template.learnset['sketch'];
 						sketch = true;
 					}
@@ -513,7 +522,7 @@ module.exports = (function () {
 									var dexEntry = this.getTemplate(templateid);
 									if (
 										// CAP pokemon can't breed
-										!dexEntry.isNonstandard && 
+										!dexEntry.isNonstandard &&
 										// can't breed mons from future gens
 										dexEntry.gen <= parseInt(learned.substr(0,1),10) &&
 										// genderless pokemon can't pass egg moves
@@ -694,7 +703,7 @@ module.exports = (function () {
 		}
 		var problems = [];
 		this.getBanlistTable(format);
-		if (format.team === 'random' || format.team === 'cc') {
+		if (format.team) {
 			return false;
 		}
 		if (!team || !Array.isArray(team)) {
@@ -840,7 +849,7 @@ module.exports = (function () {
 				problems.push(name+" has more than 510 total EVs.");
 			}
 
-			// Don't check abilities for metagames with All Abilities 
+			// Don't check abilities for metagames with All Abilities
 			if (this.gen <= 2) {
 				set.ability = '';
 			} else if (!banlistTable['ignoreillegalabilities']) {
@@ -853,7 +862,7 @@ module.exports = (function () {
 				}
 				if (ability.name === template.abilities['DW']) {
 					isDW = true;
-	
+
 					if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
 						problems.push(name+"'s Dream World ability is unreleased.");
 					} else if (set.level < 10 && (template.maleOnlyDreamWorld || template.gender === 'N')) {
@@ -1011,6 +1020,126 @@ module.exports = (function () {
 
 		if (!problems.length) return false;
 		return problems;
+	};
+
+	Tools.prototype.levenshtein = function(s, t, l) { // s = string 1, t = string 2, l = limit
+		// Original levenshtein distance function by James Westgate, turned out to be the fastest
+		var d = []; // 2d matrix
+
+		// Step 1
+		var n = s.length;
+		var m = t.length;
+
+		if (n == 0) return m;
+		if (m == 0) return n;
+		if (l && Math.abs(m - n) > l) return Math.abs(m - n);
+
+		// Create an array of arrays in javascript (a descending loop is quicker)
+		for (var i = n; i >= 0; i--) d[i] = [];
+
+		// Step 2
+		for (var i = n; i >= 0; i--) d[i][0] = i;
+		for (var j = m; j >= 0; j--) d[0][j] = j;
+
+		// Step 3
+		for (var i = 1; i <= n; i++) {
+			var s_i = s.charAt(i - 1);
+
+			// Step 4
+			for (var j = 1; j <= m; j++) {
+				// Check the jagged ld total so far
+				if (i == j && d[i][j] > 4) return n;
+
+				var t_j = t.charAt(j - 1);
+				var cost = (s_i == t_j) ? 0 : 1; // Step 5
+
+				// Calculate the minimum
+				var mi = d[i - 1][j] + 1;
+				var b = d[i][j - 1] + 1;
+				var c = d[i - 1][j - 1] + cost;
+
+				if (b < mi) mi = b;
+				if (c < mi) mi = c;
+
+				d[i][j] = mi; // Step 6
+			}
+		}
+
+		// Step 7
+		return d[n][m];
+	};
+
+	Tools.prototype.dataSearch = function(target, searchIn) {
+		if (!target) {
+			return false;
+		}
+
+		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items'];
+
+		var searchFunctions = { Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem' };
+		var searchTypes = { Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item' };
+		var searchResults = [];
+		for (var i = 0; i < searchIn.length; i++) {
+			if (typeof this[searchFunctions[searchIn[i]]] === "function") {
+				var res = this[searchFunctions[searchIn[i]]](target);
+				if (res.exists) {
+					res.searchType = searchTypes[searchIn[i]];
+					searchResults.push(res);
+				}
+			}
+		}
+		if (searchResults.length) {
+			return searchResults;
+		}
+
+		var cmpTarget = target.toLowerCase();
+		var maxLd = 3;
+		if (cmpTarget.length <= 1) {
+			return false;
+		} else if (cmpTarget.length <= 4) {
+			maxLd = 1;
+		} else if (cmpTarget.length <= 6) {
+			maxLd = 2;
+		}
+		for (var i = 0; i < searchIn.length; i++) {
+			var searchObj = this.data[searchIn[i]];
+			if (!searchObj) {
+				continue;
+			}
+
+			for (var j in searchObj) {
+				var word = searchObj[j];
+				if (typeof word === "object") {
+					word = word.name || word.species;
+				}
+				if (!word) {
+					continue;
+				}
+
+				var ld = this.levenshtein(cmpTarget, word.toLowerCase(), maxLd);
+				if (ld <= maxLd) {
+					searchResults.push({ word: word, ld: ld });
+				}
+			}
+		}
+
+		if (searchResults.length) {
+			var newTarget = "";
+			var newLD = 10;
+			for (var i = 0, l = searchResults.length; i < l; i++) {
+				if (searchResults[i].ld < newLD) {
+					newTarget = searchResults[i];
+					newLD = searchResults[i].ld;
+				}
+			}
+
+			// To make sure we aren't in an infinite loop...
+			if (cmpTarget !== newTarget.word) {
+				return this.dataSearch(newTarget.word);
+			}
+		}
+
+		return false;
 	};
 	/**
 	 * Install our Tools functions into the battle object

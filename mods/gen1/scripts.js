@@ -74,7 +74,7 @@ exports.BattleScripts = {
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.runEvent('AfterMove', target, pokemon, move);
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
-		
+
 		// If rival fainted
 		if (target.hp <= 0) {
 			// We remove recharge
@@ -83,7 +83,7 @@ exports.BattleScripts = {
 			target.side.removeSideCondition('reflect');
 			target.side.removeSideCondition('lightscreen');
 		}
-		
+
 		// For partial trapping moves, we are saving the target
 		if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
 			// Let's check if the lock exists
@@ -102,7 +102,18 @@ exports.BattleScripts = {
 						// Duration reset thus partially trapped at 2 always
 						target.volatiles['partiallytrapped'].duration = 2;
 						// We deduct an additional PP that was not deducted earlier
-						pokemon.deductPP(move, null, target);
+						// Get the move position
+						var usedMovePos = -1;
+						for (var m in pokemon.moveset) {
+							if (pokemon.moveset[m].id === move.id) usedMovePos = m;
+						}
+						if (usedMovePos > -1 && pokemon.moveset[usedMovePos].pp === 0) {
+							// If we were on the middle of the 0 PP sequence, the PPs get reset
+							pokemon.moveset[usedMovePos].pp = pokemon.moveset[usedMovePos].maxpp;
+						} else {
+							// Otherwise, plain reduct
+							pokemon.deductPP(move, null, target);
+						}
 					}
 				}
 			} // If we move to here, the move failed and there's no partial trapping lock
@@ -189,18 +200,18 @@ exports.BattleScripts = {
 		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
 		var doSelfDestruct = true;
 		var damage = 0;
-		
+
 		// Calculate true accuracy
 		var accuracy = move.accuracy;
 		if (accuracy !== true) {
 			accuracy = Math.floor(accuracy*255/100);
 		}
-		
+
 		// Partial trapping moves: true accuracy while it lasts
 		if (move.volatileStatus === 'partiallytrapped' && pokemon.volatiles['partialtrappinglock']) {
 			accuracy = true;
 		}
-		
+
 		if (accuracy !== true) {
 			if (!move.ignoreAccuracy) {
 				if (pokemon.boosts.accuracy > 0) {
@@ -217,11 +228,11 @@ exports.BattleScripts = {
 				}
 			}
 		}
-		
+
 		// Bypasses ohko accuracy modifiers
 		if (move.alwaysHit) accuracy = true;
 		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
-		
+
 		// Gen 1, 1/256 chance of missing always, no matter what
 		if (accuracy !== true && this.random(256) >= accuracy) {
 			this.attrLastMove('[miss]');
@@ -275,20 +286,20 @@ exports.BattleScripts = {
 		}
 
 		if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
-		
+
 		// Checking if substitute fainted
 		if (target.subFainted) doSelfDestruct = false;
 		if (move.selfdestruct && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
-		
+
 		if (!damage && damage !== 0) return false;
 
 		if (!move.negateSecondary) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
 			this.runEvent('AfterMoveSecondary', target, pokemon, move);
 		}
-		
+
 		// If we used a partial trapping move, we save the damage to repeat it
 		if (pokemon.volatiles['partialtrappinglock'] && !pokemon.volatiles['partialtrappinglock'].damage) {
 			pokemon.volatiles['partialtrappinglock'].damage = damage;
@@ -307,11 +318,11 @@ exports.BattleScripts = {
 		if (typeof move.affectedByImmunities === 'undefined') {
 			move.affectedByImmunities = (move.category !== 'Status');
 		}
-		
+
 		// We get the sub to the target to see if it existed
 		var targetSub = (target)? target.volatiles['substitute'] : false;
 		var targetHadSub = (targetSub !== null && targetSub !== false && (typeof targetSub !== 'undefined'));
-		
+
 		// TryHit events:
 		//   STEP 1: we see if the move will succeed at all:
 		//   - TryHit, TryHitSide, or TryHitField are run on the move,
@@ -360,7 +371,7 @@ exports.BattleScripts = {
 				if (hitResult === false) this.add('-fail', target);
 				return false;
 			}
-			
+
 			// Only run the hit events for the hit itself, not the secondary or self hits
 			if (!isSelf && !isSecondary) {
 				if (move.target === 'all') {
@@ -498,7 +509,7 @@ exports.BattleScripts = {
 		} else {
 			var targetHasSub = false;
 		}
-		
+
 		var doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
 		if (moveData.self && doSelf) {
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
@@ -517,7 +528,7 @@ exports.BattleScripts = {
 		if (move.selfSwitch && pokemon.hp) {
 			pokemon.switchFlag = move.selfSwitch;
 		}
-		
+
 		return damage;
 	},
 	getDamage: function(pokemon, target, move, suppressMessages) {
@@ -544,27 +555,27 @@ exports.BattleScripts = {
 			}
 			return target.maxhp;
 		}
-		
+
 		// We edit the damage through move's damage callback
 		if (move.damageCallback) {
 			return move.damageCallback.call(this, pokemon, target);
 		}
-		
+
 		// We take damage from damage=level moves
 		if (move.damage === 'level') {
 			return pokemon.level;
 		}
-		
+
 		// If there's a fix move damage, we run it
 		if (move.damage) {
 			return move.damage;
 		}
-		
+
 		// If it's the first hit on a Normal-type partially trap move, it hits Ghosts but damage is 0
 		if (move.volatileStatus === 'partiallytrapped' && move.type === 'Normal' && target.hasType('Ghost')) {
 			return 0;
 		}
-		
+
 		// Let's check if we are in middle of a partial trap sequence
 		if (pokemon.volatiles['partialtrappinglock'] && (target !== pokemon) && (target === pokemon.volatiles['partialtrappinglock'].locked)) {
 			return pokemon.volatiles['partialtrappinglock'].damage;
@@ -574,20 +585,20 @@ exports.BattleScripts = {
 		if (!move) {
 			move = {};
 		}
-		
+
 		// We check the category and typing to calculate later on the damage
 		if (!move.category) move.category = 'Physical';
 		if (!move.defensiveCategory) move.defensiveCategory = move.category;
 		// '???' is typeless damage: used for Struggle and Confusion etc
 		if (!move.type) move.type = '???';
 		var type = move.type;
-		
+
 		// We get the base power and apply basePowerCallback if necessary
 		var basePower = move.basePower;
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
 		}
-		
+
 		// We check for Base Power
 		if (!basePower) {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
@@ -630,7 +641,7 @@ exports.BattleScripts = {
 				}
 				break;
 			}
-			
+
 			// Last, we check deppending on ratio if the move hits
 			if (critRatio) {
 				critRatio = critRatio.floor();
@@ -676,7 +687,7 @@ exports.BattleScripts = {
 			defense = target.getStat(defType, true);
 		}
 
-		// Gen 1 damage formula: 
+		// Gen 1 damage formula:
 		// (min(((2 * L / 5 + 2) * Atk * BP) / max(1, Def) / 50, 997) + 2) * Stab * TypeEffect * Random / 255
 		// Where: L: user level, A: current attack, P: move power, D: opponent current defense,
 		// S is the Stab modifier, T is the type effectiveness modifier, R is random between 217 and 255
@@ -688,12 +699,12 @@ exports.BattleScripts = {
 			if (!suppressMessages) this.add('-crit', target);
 			baseDamage = this.modify(baseDamage, move.critModifier || 2);
 		}
-		
+
 		// STAB damage bonus, the "???" type never gets STAB
 		if (type !== '???' && pokemon.hasType(type)) {
 			baseDamage = Math.floor(baseDamage * 1.5);
 		}
-		
+
 		// Type effectiveness
 		var totalTypeMod = this.getEffectiveness(type, target);
 		// Super effective attack
@@ -704,7 +715,7 @@ exports.BattleScripts = {
 				baseDamage *= 2;
 			}
 		}
-		
+
 		// Resisted attack
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
@@ -717,7 +728,7 @@ exports.BattleScripts = {
 		// Randomizer, it's a number between 217 and 255
 		var randFactor = Math.floor(Math.random()*39)+217;
 		baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
-		
+
 		// If damage is less than 1, we return 1
 		if (basePower && !Math.floor(baseDamage)) {
 			return 1;
@@ -867,7 +878,7 @@ exports.BattleScripts = {
 			mbst += (stats["spa"]*2+30+63+100)+5;
 			mbst += (stats["spd"]*2+30+63+100)+5;
 			mbst += (stats["spe"]*2+30+63+100)+5;
-			
+
 			var level = Math.floor(100*mbstmin/mbst); // Initial level guess will underestimate
 
 			while (level < 100) {
@@ -950,7 +961,7 @@ exports.BattleScripts = {
 			pokemon.push(set);
 			pokemonLeft++;
 		}
-		
+
 		return pokemon;
 	},
 	randomSet: function(template, i) {
