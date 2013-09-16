@@ -447,7 +447,7 @@ var commands = exports.commands = {
 		}
 
 		var resultsStr = '';
-		if (results.length > 0) {
+		if (results && results.length > 0) {
 			for (var i = 0; i < results.length; ++i) results[i] = results[i].species;
 			if (showAll || results.length <= output) {
 				resultsStr = results.join(', ');
@@ -459,7 +459,7 @@ var commands = exports.commands = {
 				resultsStr += ', and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.';
 			}
 		} else {
-			resultsStr = 'No Pokemon found.';
+			resultsStr = 'No Pokémon found.';
 		}
 		return this.sendReplyBox(resultsStr);
 	},
