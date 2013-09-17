@@ -279,7 +279,7 @@ var BattlePokemon = (function() {
 			this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
 		}
 
-		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
+		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark','Fairy'];
 		if (this.battle.gen && this.battle.gen === 2) {
 			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
 			var atkDV = Math.floor(this.set.ivs.atk / 2);
@@ -297,7 +297,9 @@ var BattlePokemon = (function() {
 				hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
 				i *= 2;
 			}
-			this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
+			// Support for gen 6 metagame mods
+			var maxTypes = (this.battle.gen && this.battle.gen === 6)? 16 : 15;
+			this.hpType = hpTypes[Math.floor(hpTypeX * maxTypes / 63)];
 			this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
 		}
 
