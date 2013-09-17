@@ -5454,6 +5454,22 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Electric"
 	},
+	"hiddenpowerfairy": {
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "hiddenpower",
+		isViable: true,
+		name: "Hidden Power Fairy",
+		pp: 15,
+		priority: 0,
+		secondary: false,
+		target: "normal",
+		type: "Fairy",
+		gen: 6
+	},
 	"hiddenpowerfighting": {
 		accuracy: 100,
 		basePower: 70,
