@@ -389,8 +389,16 @@ var Elimination = (function () {
 		++loserData.loseCount;
 
 		if (targetNode.getParent()) {
-			if (targetNode.getParent().getChildAt(targetNode.isLastChild() ? 0 : 1).getValue().user)
+			var userA = targetNode.getParent().getChildAt(0).getValue().user;
+			var userB = targetNode.getParent().getChildAt(1).getValue().user;
+			if (userA && userB) {
 				targetNode.getParent().getValue().state = 'available';
+
+				if (this.users.get(userA).isDisqualified)
+					return this.setMatchResult([userA, userB], 'loss');
+				else if (this.users.get(userB).isDisqualified)
+					return this.setMatchResult([userA, userB], 'win');
+			}
 		} else if (loserData.loseCount < this.maxSubtrees && !loserData.isDisqualified) {
 			var newRoot = new TreeNode(null, {state: 'available'});
 			newRoot.addChild(targetNode);
