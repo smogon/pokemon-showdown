@@ -415,16 +415,32 @@ var commands = exports.commands = {
 
 	roomauth: function(target, room, user, connection) {
 		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefor has no auth list.");
-		var buffer = [];
+		var rvoice = [];
+		var rmod = [];
+		var rowner = [];
 		for (var u in room.auth) {
-			buffer.push(room.auth[u] + u);
+			if (room.auth[u] === '#') rowner.push(u);
 		}
-		if (buffer.length > 0) {
-			buffer = buffer.join(', ');
+		for (var u in room.auth) {
+			if (room.auth[u] === '%') rmod.push(u);
+		}
+		for (var u in room.auth) {
+			if (room.auth[u] === '+') rvoice.push(u);
+		}
+		if (rowner.length > 0) {
+			rowner = rowner.join(', ');
+		} else if (rmod.length > 0) {
+			rmod = rmod.join(', ');
+		} else if (rvoice.length > 0) {
+			rvoice = rvoice.join(', ');
 		} else {
-			buffer = 'This room has no auth.';
+			connection.popup('This room has no auth.');
 		}
-		connection.popup(buffer);
+		if (!target && target !== '#' && target !== '%' && target !== '+') connection.popup('Room Owners (#):||' + rowner + '||Room Mods (%):||' + rmod + '||Room Voice (+):||' + rvoice);
+		else if (target === '#') connection.popup('Room Owners (#):||' + rowner);
+		else if (target === '%') connection.popup('Room Mods (%):||' + rmod);
+		else if (target === '+') connection.popup('Room Voice (+):||' + rvoice);
+			else return false;
 	},
 
 	leave: 'part',
