@@ -27,14 +27,7 @@ exports.Formats = [
 		section: "Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
-	{
-		name: "OU (No Stealth Rock)",
-		section: "Singles",
-
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Stealth Rock']
+		banlist: ['Uber', 'Soul Dew']
 	},
 	{
 		name: "Ubers",
@@ -52,16 +45,10 @@ exports.Formats = [
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
 	{
-		name: "UU (suspect test)",
-		section: "Singles",
-
-		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Victini']
-	},
-	{
 		name: "RU",
 		section: "Singles",
 
+		searchShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning']
 	},
@@ -69,6 +56,7 @@ exports.Formats = [
 		name: "NU",
 		section: "Singles",
 
+		searchShow: false,
 		ruleset: ['RU'],
 		banlist: ['RU','BL3']
 	},
@@ -177,7 +165,7 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew', 'Sky Drop',
+		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew',
 			'Mewtwo',
 			'Lugia',
 			'Ho-Oh',
@@ -200,7 +188,7 @@ exports.Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Sky Drop']
+		banlist: ['Unreleased', 'Illegal', 'Dark Void']
 	},
 	{
 		name: "Doubles VGC 2013",
@@ -272,23 +260,7 @@ exports.Formats = [
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
-	{
-		name: "Budgetmons",
-		section: "OM of the Month",
-
-		ruleset: ['OU'],
-		banlist: [],
-		validateTeam: function(team, format) {
-			var bst = 0;
-			for (var i=0; i<team.length; i++) {
-				var template = this.getTemplate(team[i].species);
-				Object.values(template.baseStats, function(value) {
-					bst += value;
-				});
-			}
-			if (bst > 2300) return ['The combined BST of your team is greater than 2300.'];
-		}
-	},
+	/*** Add October Seasonal here
 	{
 		name: "[Seasonal] School Schemes",
 		section: "OM of the Month",
@@ -296,6 +268,7 @@ exports.Formats = [
 		team: 'randomSeasonalSS',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod']
 	},
+	*/
 	{
 		name: "Challenge Cup",
 		section: "Other Metagames",
@@ -345,7 +318,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+		banlist: ['Uber', 'Soul Dew']
 	},
 	{
 		name: "Glitchmons",
@@ -445,7 +418,77 @@ exports.Formats = [
 
 	// Past Generations
 	///////////////////////////////////////////////////////////////////
+	{
+		name: "[Gen 5] OU",
+		section: "Past Generations",
 
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber']
+	},
+	{
+		name: "[Gen 5] UU",
+		section: "Past Generations",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'OU', 'BL']
+	},
+	{
+		name: "[Gen 5] RU",
+		section: "Past Generations",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'OU', 'BL', 'UU', 'BL2']
+	},
+	{
+		name: "[Gen 5] NU",
+		section: "Past Generations",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'OU', 'BL', 'UU', 'BL2', 'RU', 'BL3']
+	},
+	{
+		name: "[Gen 5] Doubles",
+		section: "Past Generations",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew', 'Sky Drop',
+			'Mewtwo',
+			'Lugia',
+			'Ho-Oh',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem-White'
+		]
+	},
+	{
+		name: "[Gen 5] Hackmons",
+		section: "Past Generations",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'HP Percentage Mod'],
+		banlist: []
+	},
+	{
+		name: "[Gen 5] Custom Game",
+		section: "Past Generations",
+
+		mod: 'gen5',
+		searchShow: false,
+		debug: true,
+		ruleset: []
+	},
 	{
 		name: "[Gen 4] OU (beta)",
 		section: "Past Generations",

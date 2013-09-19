@@ -1,0 +1,8 @@
+exports.BattlePokedex = {
+jigglypuff:{num:39,species:"Jigglypuff",types:["Normal"],genderRatio:{M:0.25,F:0.75},baseStats:{hp:115,atk:45,def:20,spa:45,spd:25,spe:20},abilities:{0:"Cute Charm",DW:"Friend Guard"},heightm:0.5,weightkg:5.5,color:"Pink",prevo:"igglybuff",evos:["wigglytuff"],evoLevel:1,eggGroups:["Fairy"]},
+wigglytuff:{num:40,species:"Wigglytuff",types:["Normal"],genderRatio:{M:0.25,F:0.75},baseStats:{hp:140,atk:70,def:45,spa:75,spd:50,spe:45},abilities:{0:"Cute Charm",DW:"Frisk"},heightm:1,weightkg:12,color:"Pink",prevo:"jigglypuff",evoLevel:1,eggGroups:["Fairy"]},
+marill:{num:183,species:"Marill",types:["Water"],baseStats:{hp:70,atk:20,def:50,spa:20,spd:50,spe:40},abilities:{0:"Thick Fat",1:"Huge Power",DW:"Sap Sipper"},heightm:0.4,weightkg:8.5,color:"Blue",prevo:"azurill",evos:["azumarill"],evoLevel:1,eggGroups:["Water 1","Fairy"]},
+azumarill:{num:184,species:"Azumarill",types:["Water"],baseStats:{hp:100,atk:50,def:80,spa:50,spd:80,spe:50},abilities:{0:"Thick Fat",1:"Huge Power",DW:"Sap Sipper"},heightm:0.8,weightkg:28.5,color:"Blue",prevo:"marill",evoLevel:18,eggGroups:["Water 1","Fairy"]},
+gardevoir:{num:282,species:"Gardevoir",types:["Psychic"],baseStats:{hp:68,atk:65,def:65,spa:125,spd:115,spe:80},abilities:{0:"Synchronize",1:"Trace",DW:"Telepathy"},heightm:1.6,weightkg:48.4,color:"White",prevo:"kirlia",evoLevel:30,eggGroups:["Indeterminate"]},
+mawile:{num:303,species:"Mawile",types:["Steel"],baseStats:{hp:50,atk:85,def:85,spa:55,spd:55,spe:50},abilities:{0:"Hyper Cutter",1:"Intimidate",DW:"Sheer Force"},heightm:0.6,weightkg:11.5,color:"Black",eggGroups:["Ground","Fairy"]}
+};

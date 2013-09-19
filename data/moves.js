@@ -1879,6 +1879,9 @@ exports.BattleMovedex = {
 		boosts: {
 			spe: -2
 		},
+		onTryHit: function(target, source) {
+			return !target.hasType('Grass');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -11237,6 +11240,9 @@ exports.BattleMovedex = {
 		name: "Spore",
 		pp: 15,
 		priority: 0,
+		onTryHit: function(target, source) {
+			return !target.hasType('Grass');
+		},
 		status: 'slp',
 		secondary: false,
 		target: "normal",
@@ -11524,6 +11530,9 @@ exports.BattleMovedex = {
 		name: "Stun Spore",
 		pp: 30,
 		priority: 0,
+		onTryHit: function(target, source) {
+			return !target.hasType('Grass');
+		},
 		status: 'par',
 		secondary: false,
 		target: "normal",
