@@ -967,6 +967,23 @@ var commands = exports.commands = {
 			this.logModCommand('The Pokemon of the Day was removed by '+user.name+'.');
 		}
 	},
+	
+	roll: 'dice',
+	dice: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (room.id === 'lobby') return this.sendReply('This command cannot be used in lobby.');
+		if (target && isNaN(target) || target.length > 21) return this.sendReply('You need to enter a number to be the max roll (cannot exceed 21 characters in length).');
+		var custom = false;
+		if (target) custom = true;
+		if (custom) {
+			var rand = Math.floor((target)*Math.random()) + 1;
+			return this.sendReplyBox('Random number (1-'+target+'): '+rand);
+		}
+		else {
+			var rand = Math.floor((6)*Math.random()) + 1;
+			return this.sendReplyBox('Random number: '+rand);
+		}
+	},
 
 	register: function() {
 		if (!this.canBroadcast()) return;
@@ -1132,6 +1149,10 @@ var commands = exports.commands = {
 			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
 			this.sendReply('Types must be followed by " type", e.g., "dragon type".');
 			this.sendReply('The order of the parameters does not matter.');
+		}
+		if (target === 'all' || target === 'dice' || target === 'roll') {
+			matched = true;
+			this.sendReply('/dice [optional max number] - Randomly picks a number between 1 and 6, or between 1 and the number you choose.');
 		}
 		if (target === 'all' || target === 'join') {
 			matched = true;
