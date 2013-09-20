@@ -7476,7 +7476,7 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function(target, source) {
-			this.useMove(this.lastMove, source);
+			this.useMove(target.lastMove, source);
 		},
 		secondary: false,
 		target: "normal",
