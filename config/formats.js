@@ -47,8 +47,16 @@ exports.Formats = [
 		name: "UU",
 		section: "Singles",
 		
+		searchShow: false,
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
+	},
+	{
+		name: "UU (suspect test)",
+		section: "Singles",
+
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Victini']
 	},
 	{
 		name: "RU",
