@@ -971,18 +971,11 @@ var commands = exports.commands = {
 	roll: 'dice',
 	dice: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		if (room.id === 'lobby') return this.sendReply('This command cannot be used in lobby.');
-		if (target && isNaN(target) || target.length > 21) return this.sendReply('You need to enter a number to be the max roll (cannot exceed 21 characters in length).');
-		var custom = false;
-		if (target) custom = true;
-		if (custom) {
-			var rand = Math.floor((target)*Math.random()) + 1;
-			return this.sendReplyBox('Random number (1-'+target+'): '+rand);
-		}
-		else {
-			var rand = Math.floor((6)*Math.random()) + 1;
-			return this.sendReplyBox('Random number: '+rand);
-		}
+		if (room.id === 'lobby') return this.sendReply('This command cannot be used in Lobby room.');
+		if (target && isNaN(target) || target.length > 21) return this.sendReply('The max roll must be a number under 21 ciphers.');
+		var maxRoll = (target)? target : 6;
+		var rand = Math.floor(maxRoll * Math.random()) + 1;
+		return this.sendReplyBox('Random number (1 - ' + maxRoll + '): ' + rand);
 	},
 
 	register: function() {
@@ -991,7 +984,7 @@ var commands = exports.commands = {
 	},
 
 	br: 'banredirect',
-	banredirect: function() {
+	banredirect: function(){ 
 		this.sendReply('/banredirect - This command is obsolete and has been removed.');
 	},
 
