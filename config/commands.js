@@ -957,7 +957,7 @@ var commands = exports.commands = {
 	roll: 'dice',
 	dice: function(target, room, user) {
 		//no lobby use
-		if (false && room.id === "lobby") {
+		if (room.id === "lobby") {
 			this.sendReply("You cannot use this in the lobby.");
 			return;
 		}
