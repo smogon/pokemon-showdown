@@ -956,6 +956,10 @@ var commands = exports.commands = {
 	
 	roll: 'dice',
 	dice: function(target, room, user) {
+		//broadcast check
+		if (!this.canBroadcast())
+			return false;
+	
 		//no lobby use
 		if (room.id === "lobby") {
 			this.sendReply("You cannot use this in the lobby.");
