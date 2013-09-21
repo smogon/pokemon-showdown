@@ -961,11 +961,15 @@ var commands = exports.commands = {
 			return false;
 	
 		//no lobby use
-		if (room.id === "lobby") {
+		if (false && room.id === "lobby") {
 			this.sendReply("You cannot use this in the lobby.");
 			return;
 		}
-
+		
+		//no parameters;
+		if(target === "")
+			target = "1d6";
+			
 		//determines if dice are formatted correctly
 		var d = target.indexOf("d");
 		if (d == -1) {
@@ -980,8 +984,12 @@ var commands = exports.commands = {
 		if(target.length > d)
 			var faces = parseInt(target.substring(d + 1));
 
+		//User only entered dX
+		if(isNaN(num))
+			num = 1;
+			
 		//error conditions
-		if (isNaN(faces) || isNaN(num)) {
+		if (isNaN(faces)) {
 			this.sendReply("Please format your roll in NdX format");
 			return;
 		}
