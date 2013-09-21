@@ -53,7 +53,7 @@ it should be treated the same way whether or not it ends in a
 newline, and if the payload is empty, the entire message should be ignored.
 
 If `MESSAGE` doesn't start with `|`, it should be shown directly in the
-room's log. Otherwise, two forms can be distinguished:
+room's log. Otherwise, it will be in the form:
 
     |TYPE|DATA
 
