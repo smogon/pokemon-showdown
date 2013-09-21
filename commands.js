@@ -96,7 +96,7 @@ var commands = exports.commands = {
 		if (targetUser.ignorePMs && !user.can('lock')) {
 			if (!targetUser.can('lock')) {
 				return this.popupReply('This user is blocking Private Messages right now.');
-			} else if (targetUser.can('hotpatch'))) {
+			} else if (targetUser.can('hotpatch')) {
 				return this.popupReply('This admin is too busy to answer Private Messages right now. Please contact a different staff member.');
 			}
 		}
