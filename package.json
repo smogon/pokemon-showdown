@@ -8,7 +8,6 @@
 	},
 	"optionalDependencies": {
 		"nodemailer": "0.4.1",
-		"ip": "0.1.0",
 		"http-proxy": "0.10.0"
 	},
 	"engines": {

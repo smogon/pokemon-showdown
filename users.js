@@ -1229,6 +1229,7 @@ function checkLocked(ip) {
 }
 exports.checkBanned = checkBanned;
 exports.checkLocked = checkLocked;
+exports.checkRangeBanned = function() {};
 
 function unban(name) {
 	var success;

@@ -1082,19 +1082,17 @@ var commands = exports.commands = {
 		fs.readFile('config/ipbans.txt', function (err, data) {
 			if (err) return;
 			data = (''+data).split("\n");
-			var count = 0;
 			for (var i=0; i<data.length; i++) {
-				data[i] = data[i].split('#')[0].trim();
-				if (data[i] && !Users.bannedIps[data[i]]) {
-					Users.bannedIps[data[i]] = '#ipban';
-					count++;
+				var line = data[i].split('#')[0].trim();
+				if (!line) continue;
+				if (line.indexOf('/') >= 0) {
+					rangebans.push(line);
+				} else if (line && !Users.bannedIps[line]) {
+					Users.bannedIps[line] = '#ipban';
 				}
 			}
-			if (!count) {
-				connection.sendTo(room, 'No IPs were banned; ipbans.txt has not been updated since the last time /loadbanlist was called.');
-			} else {
-				connection.sendTo(room, ''+count+' IPs were loaded from ipbans.txt and banned.');
-			}
+			Users.checkRangeBanned = Cidr.checker(rangebans);
+			connection.sendTo(room, 'ibans.txt has been reloaded.');
 		});
 	},
 
