@@ -1139,6 +1139,7 @@ var ChatRoom = (function() {
 		this.i = {};
 
 		this.log = [];
+		this.logTimes = [];
 		this.lastUpdate = 0;
 		this.users = {};
 		this.searchers = [];
@@ -1297,6 +1298,7 @@ var ChatRoom = (function() {
 		}
 	};
 	ChatRoom.prototype.add = function(message, noUpdate) {
+		this.logTimes.push(~~(Date.now() / 1000));
 		this.log.push(message);
 		this.logEntry(message);
 		if (!noUpdate) {
@@ -1306,9 +1308,44 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.addRaw = function(message) {
 		this.add('|raw|'+message);
 	};
+	ChatRoom.prototype.logGetLast = function (amount, noTime) {
+		if (!amount) {
+			return [];
+		}
+		if (amount < 0) {
+			amount *= -1;
+		}
+
+		var logLength = this.log.length;
+		if (!logLength) {
+			return [];
+		}
+
+		var log = [];
+		var time = ~~(Date.now() / 1000);
+		for (var i = logLength - amount - 1; i < logLength; i++) {
+			if (i < 0) {
+				i = 0;
+			}
+
+			var logText = this.log[i];
+			if (!logText){
+				continue;
+			}
+
+			if (!noTime && logText.substr(0, 3) === '|c|') {
+				// Time is only added when it's a normal chat message
+				logText = '|tc|' + (time - this.logTimes[i]) + '|' + logText.substr(3);
+			}
+
+			log.push(logText);
+		}
+		
+		return log;
+	};
 	ChatRoom.prototype.onJoinConnection = function(user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
-		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.log.slice(-25).join('\n'), connection);
+		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(25).join('\n'), connection);
 	};
 	ChatRoom.prototype.onJoin = function(user, connection, merging) {
 		if (!user) return false; // ???
@@ -1330,7 +1367,7 @@ var ChatRoom = (function() {
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
-			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.log.slice(-100).join('\n'), connection);
+			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(100).join('\n'), connection);
 		}
 
 		return user;
