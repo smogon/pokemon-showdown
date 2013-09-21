@@ -53,12 +53,13 @@ it should be treated the same way whether or not it ends in a
 newline, and if the payload is empty, the entire message should be ignored.
 
 If `MESSAGE` doesn't start with `|`, it should be shown directly in the
-room's log. Otherwise, it will be in the form:
+room's log. Otherwise, two forms can be distinguished:
 
     |TYPE|DATA
 
 For example:
 
+    |tc|2|@Moderator|Some dude will join in two seconds!
     |j| Some dude
     |c|@Moderator|hi!
     |c| Some dude|you suck and i hate you!
@@ -68,6 +69,7 @@ For example:
 
 This might be displayed as:
 
+    @Moderator: Some dude will join in two seconds!
     Some dude joined.
     @Moderator: hi!
     Some dude: you suck and i hate you!
@@ -85,6 +87,10 @@ the equivalent of their lowercase versions, but are recommended not to be
 displayed inline because they happen too often. For instance, the main server
 gets around 5 joins/leaves a second, and showing that inline with chat would
 make it near-impossible to chat.
+
+`tc` is pretty much the same as `c`, but also gives the delta time; the amount
+of seconds passed since the message has been sent. This is so that when the
+chat replays for example, the times shown are correct.
 
 Some outgoing message types
 ---------------------------
