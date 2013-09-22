@@ -274,8 +274,8 @@ function canTalk(user, room, connection, message) {
 					userGroup = '+';
 				}
 			}
-			if (!user.authenticated && room.modchat === true) {
-				connection.sendTo(room, 'Because moderated chat is set, you must be registered to speak in lobby chat. To register, simply win a rated battle by clicking the look for battle button');
+			if (!user.autoconfirmed && user.group === ' ' && room.modchat === 'autoconfirmed') {
+				connection.sendTo(room, 'Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this chat.');
 				return false;
 			} else if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(room.modchat)) {
 				var groupName = config.groups[room.modchat].name;
