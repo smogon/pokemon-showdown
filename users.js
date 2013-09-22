@@ -604,6 +604,9 @@ var User = (function () {
 
 				if (body === '3') {
 					staffAccess = true;
+					user.autoconfirmed = true;
+				} else if (body === '4') {
+					user.autoconfirmed = true;
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
