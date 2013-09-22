@@ -1275,6 +1275,7 @@ var ChatRoom = (function() {
 		var update = entries.join('\n');
 		if (this.log.length > 100) {
 			this.log.splice(0, this.log.length - 100);
+			this.logTimes.splice(0, this.logTimes.length - 100);
 		}
 		this.lastUpdate = this.log.length;
 
