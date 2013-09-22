@@ -715,7 +715,7 @@ var commands = exports.commands = {
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
 		}
-		if (!user.checkPromotePermission(currentGroup, nextGroup)) {
+		if (!user.canPromote(currentGroup, nextGroup)) {
 			return this.sendReply('/' + cmd + ' - Access denied.');
 		}
 
@@ -1106,7 +1106,7 @@ var commands = exports.commands = {
 	},
 
 	updateserver: function(target, room, user, connection) {
-		if (!user.checkConsolePermission(connection)) {
+		if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply('/updateserver - Access denied.');
 		}
 
@@ -1248,7 +1248,7 @@ var commands = exports.commands = {
 	},
 
 	bash: function(target, room, user, connection) {
-		if (!user.checkConsolePermission(connection)) {
+		if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply('/bash - Access denied.');
 		}
 
@@ -1259,7 +1259,7 @@ var commands = exports.commands = {
 	},
 
 	eval: function(target, room, user, connection, cmd, message) {
-		if (!user.checkConsolePermission(connection)) {
+		if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply("/eval - Access denied.");
 		}
 		if (!this.canBroadcast()) return;
@@ -1277,7 +1277,7 @@ var commands = exports.commands = {
 	},
 
 	evalbattle: function(target, room, user, connection, cmd, message) {
-		if (!user.checkConsolePermission(connection)) {
+		if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply("/evalbattle - Access denied.");
 		}
 		if (!this.canBroadcast()) return;
