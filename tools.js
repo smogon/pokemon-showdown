@@ -434,7 +434,7 @@ module.exports = (function () {
 		return stats;
 	};
 
-	Tools.prototype.checkLearnset = function(move, template, lsetData) {
+	Tools.prototype.checkLearnset = function(move, template, lsetData, isDW) {
 		move = toId(move);
 		template = this.getTemplate(template);
 
@@ -478,7 +478,7 @@ module.exports = (function () {
 						sketch = true;
 					}
 					if (typeof lset === 'string') lset = [lset];
-
+					var DWAbilityIllegality = true;
 					for (var i=0, len=lset.length; i<len; i++) {
 						var learned = lset[i];
 						if (learned.substr(0,2) in {'4L':1,'5L':1}) {
@@ -548,6 +548,13 @@ module.exports = (function () {
 								sources.push(learned);
 							}
 						}
+						if (isDW && learned.substring(0, 1) === '5') {
+							// DW abilities only legal with 5th gen moves 
+							DWAbilityIllegality = false;
+						}
+					}
+					if (isDW && DWAbilityIllegality) {
+						return {type:'incompatible'};
 					}
 				}
 				if (format.mimicGlitch && template.gen < 5) {
@@ -900,7 +907,7 @@ module.exports = (function () {
 				}
 
 				if (banlistTable['illegal']) {
-					var problem = this.checkLearnset(move, template, lsetData);
+					var problem = this.checkLearnset(move, template, lsetData, isDW);
 					if (problem) {
 						var problemString = name+" can't learn "+move.name;
 						if (problem.type === 'incompatible') {
