@@ -52,11 +52,12 @@ exports.Formats = [
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
 	{
-		name: "UU (suspect test)",
+		name: "UU (current)",
 		section: "Singles",
 
+		challengeShow: false,
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Victini']
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
 	{
 		name: "RU",
