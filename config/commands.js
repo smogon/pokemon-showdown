@@ -971,8 +971,7 @@ var commands = exports.commands = {
 	roll: 'dice',
 	dice: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		if (room.id === 'lobby') return this.sendReply('This command cannot be used in Lobby room.');
-		if (target && isNaN(target) || target.length > 21) return this.sendReply('The max roll must be a number under 21 ciphers.');
+		if (target && isNaN(target) || target.length > 21) return this.sendReply('The max roll must be a number under 21 digits.');
 		var maxRoll = (target)? target : 6;
 		var rand = Math.floor(maxRoll * Math.random()) + 1;
 		return this.sendReplyBox('Random number (1 - ' + maxRoll + '): ' + rand);
