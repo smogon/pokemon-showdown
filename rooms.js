@@ -1344,9 +1344,22 @@ var ChatRoom = (function() {
 		
 		return log;
 	};
+	ChatRoom.prototype.getModchatNote = function (noNewline) {
+		if (this.modchat) {
+			var text = !noNewline ? '\n' : '';
+			text += '|raw|<div class="broadcast-red">';
+			text += '<b>Moderated chat is currently set to ' + this.modchat + '!</b><br />';
+			text += 'Only users of rank ' + this.modchat + ' and higher can talk.';
+			text += '</div>';
+			return text;
+		}
+
+		return '';
+	};
 	ChatRoom.prototype.onJoinConnection = function(user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
-		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(25).join('\n'), connection);
+		var modchat = this.getModchatNote();
+		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(25).join('\n')+modchat, connection);
 	};
 	ChatRoom.prototype.onJoin = function(user, connection, merging) {
 		if (!user) return false; // ???
@@ -1368,7 +1381,8 @@ var ChatRoom = (function() {
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
-			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(100).join('\n'), connection);
+			var modchat = this.getModchatNote();
+			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(100).join('\n')+modchat, connection);
 		}
 
 		return user;
