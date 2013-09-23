@@ -189,7 +189,7 @@ var GlobalRoom = (function() {
 			if (!section) section = '';
 			if (section !== curSection) {
 				curSection = section;
-				formatListText += '||'+section;
+				formatListText += '|,' + (format.column || 1) + '|'+section;
 			}
 			formatListText += '|'+format.name;
 			if (!format.challengeShow) formatListText += ',,';
