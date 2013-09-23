@@ -140,9 +140,9 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			logEntry: function(data) {
 				room.logEntry(data);
 			},
-			addModCommand: function(result) {
-				this.add(result);
-				this.logModCommand(result);
+			addModCommand: function(text, logOnlyText) {
+				this.add(text);
+				this.logModCommand(text+(logOnlyText||''));
 			},
 			logModCommand: function(result) {
 				modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
