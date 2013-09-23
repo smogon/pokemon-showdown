@@ -180,7 +180,6 @@ var GlobalRoom = (function() {
 	GlobalRoom.prototype.getFormatListText = function() {
 		var formatListText = '|formats';
 		var curSection = '';
-		var curColumn = 0;
 		for (var i in Tools.data.Formats) {
 			var format = Tools.data.Formats[i];
 			if (!format.challengeShow && !format.searchShow) continue;
