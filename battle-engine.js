@@ -625,7 +625,7 @@ var BattlePokemon = (function() {
 	};
 	BattlePokemon.prototype.transformInto = function(pokemon, user) {
 		var template = pokemon.template;
-		if (pokemon.fainted || pokemon.illusion || pokemon.volatiles['substitute']) {
+		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 			return false;
 		}
 		if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (user && user.transformed && this.battle.gen >= 5)) {
