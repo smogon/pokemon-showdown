@@ -208,8 +208,8 @@ for a full list of message types.
 > format is only available for searching, and `,` if the format is only
 > available for challenging.
 > Sections are separated by two vertical bars with the number of the column of
-> that section in it. After that follows the name of the section and another
-> vertical bar.
+> that section prefixed by `,` in it. After that follows the name of the
+> section and another vertical bar.
 
 `|updatesearch|JSON`
 
