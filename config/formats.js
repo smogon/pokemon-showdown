@@ -172,7 +172,7 @@ exports.Formats = [
 		debug: true,
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod'],
 		
-		column: 1
+		column: 2
 	},
 	{
 		name: "Smogon Doubles",
@@ -457,7 +457,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber'],
 		
-		column: 1
+		column: 2
 	},
 	{
 		name: "[Gen 4] UU (beta)",
