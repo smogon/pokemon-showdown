@@ -180,6 +180,7 @@ var GlobalRoom = (function() {
 	GlobalRoom.prototype.getFormatListText = function() {
 		var formatListText = '|formats';
 		var curSection = '';
+		var curColumn = 0;
 		for (var i in Tools.data.Formats) {
 			var format = Tools.data.Formats[i];
 			if (!format.challengeShow && !format.searchShow) continue;
@@ -189,7 +190,7 @@ var GlobalRoom = (function() {
 			if (!section) section = '';
 			if (section !== curSection) {
 				curSection = section;
-				formatListText += '||'+section;
+				formatListText += '|' + (format.column || 0) + '|'+section;
 			}
 			formatListText += '|'+format.name;
 			if (!format.challengeShow) formatListText += ',,';

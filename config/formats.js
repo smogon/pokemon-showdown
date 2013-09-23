@@ -170,7 +170,9 @@ exports.Formats = [
 		team: 'random',
 		searchShow: false,
 		debug: true,
-		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod']
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod'],
+		
+		column: 1
 	},
 	{
 		name: "Smogon Doubles",
@@ -453,7 +455,9 @@ exports.Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
+		banlist: ['Uber'],
+		
+		column: 1
 	},
 	{
 		name: "[Gen 4] UU (beta)",
