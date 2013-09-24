@@ -949,7 +949,72 @@ var commands = exports.commands = {
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
 	},
+	
+	roll: 'dice',
+	dice: function(target, room, user) {
+		//broadcast check
+		if (!this.canBroadcast())
+			return false;
+	
+		//no lobby use
+		if (false && room.id === "lobby") {
+			this.sendReply("You cannot use this in the lobby.");
+			return;
+		}
+		
+		//no parameters;
+		if(target === "")
+			target = "1d6";
+			
+		//determines if dice are formatted correctly
+		var d = target.indexOf("d");
+		if (d == -1) {
+			this.sendReply("Please format your roll in NdX format");
+			return;
+		}
 
+		//get the relevant values, parsing it as NdX where N is the number of dice and X is the number of faces on each die
+		var num = parseInt(target.substring(0,d));
+		
+		faces = NaN;
+		if(target.length > d)
+			var faces = parseInt(target.substring(d + 1));
+
+		//User only entered dX
+		if(isNaN(num))
+			num = 1;
+			
+		//error conditions
+		if (isNaN(faces)) {
+			this.sendReply("Please format your roll in NdX format");
+			return;
+		}
+
+		if (faces < 1 || faces > 1000) {
+			this.sendReply("The number of faces must be between 1 and 1000");
+			return;
+		}
+
+		if (num < 1 || num > 20) {
+			this.sendReply("The number of dice must be between 1 and 20");
+			return;
+		}
+
+		//generate rolls
+		var rolls = "";
+
+		for (var i=0; i < num; i++) {
+			if(i != num - 1)
+				rolls += (Math.floor(faces * Math.random()) + 1) + ", ";
+			else
+				rolls += (Math.floor(faces * Math.random()) + 1);
+		}
+
+		//return the rolls
+		this.sendReplyBox(user + " rolls " + num + "d" + faces + "... " + rolls);
+
+	},
+	
 	potd: function(target, room, user) {
 		if (!this.can('potd')) return false;
 
@@ -1065,6 +1130,11 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/opensource - Links to PS\'s source code repository.');
 			this.sendReply('!opensource - Show everyone that information. Requires: + % @ & ~');
+		}
+		if(target === 'all' || target === 'dice' || target === 'roll')
+		{
+			matched = true;
+			this.sendReply("/dice [roll] - Rolls N dice with X faces, where [roll] is formatted as NdX");
 		}
 		if (target === 'all' || target === 'avatars') {
 			matched = true;
