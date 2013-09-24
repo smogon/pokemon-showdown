@@ -939,6 +939,68 @@ var BattleRoom = (function() {
 		}
 		return false;
 	};
+	BattleRoom.prototype.originalSideTurnTicks = [0, 0];
+	BattleRoom.prototype.kickInactiveUpdate = function () {
+		if (!this.rated) return false;
+		if (this.resetTimer) {
+			var inactiveSide = this.getInactiveSide();
+			var changed = false;
+
+			if ((!this.battle.p1 || !this.battle.p2) && !this.originalSideTurnTicks[0] && !this.originalSideTurnTicks[1]) {
+				if ((!this.battle.p1 && inactiveSide === 0) || (!this.battle.p2 && inactiveSide === 1)) {
+					var inactiveUser = this.battle.getPlayer(inactiveSide);
+
+					if (!this.battle.p1 && inactiveSide === 0 && this.sideTurnTicks[0] > 6) {
+						this.originalSideTurnTicks[0] = this.sideTurnTicks[0];
+						this.sideTurnTicks[0] = 6;
+						changed = true;
+					} else if (!this.battle.p2 && inactiveSide === 1 && this.sideTurnTicks[1] > 6) {
+						this.originalSideTurnTicks[1] = this.sideTurnTicks[1];
+						this.sideTurnTicks[1] = 6;
+						changed = true;
+					}
+
+					if (changed) {
+						// Reset the timeout so that the player actually gets
+						// 60 seconds instead of less because of the timeout
+						// being at 5000 ms or so
+						clearTimeout(this.resetTimer);
+						this.resetTimer = setTimeout(this.kickInactive.bind(this), 10*1000);
+
+						this.send('|inactive|' + (inactiveUser ? inactiveUser.name : 'Player ' + (inactiveSide + 1)) + ' disconnected and has 60 seconds to reconnect!');
+						return true;
+					}
+				}
+			} else if (this.battle.p1 && this.battle.p2) {
+				// Only one of the following conditions should happen, but do
+				// them both since you never know...
+				if (this.originalSideTurnTicks[0]) {
+					this.sideTurnTicks[0] = this.originalSideTurnTicks[0] - 6 + this.sideTurnTicks[0];
+					this.originalSideTurnTicks[0] = 0;
+					changed = 0;
+				}
+
+				if (this.originalSideTurnTicks[1]) {
+					this.sideTurnTicks[1] = this.originalSideTurnTicks[1] - 6 + this.sideTurnTicks[1];
+					this.originalSideTurnTicks[1] = 0;
+					changed = 1;
+				}
+
+				if (changed !== false) {
+					// Resetting the timer here would be more fair for the
+					// reconnected player, but the player who stayed would get
+					// up to 9.9 seconds longer to make his/her decision.
+					// Dilemma?
+
+					var user = this.battle.getPlayer(changed);
+					this.send('|inactive|' + (user ? user.name : 'Player ' + (changed + 1)) + ' reconnected and has ' + (this.sideTurnTicks[changed] * 10) + ' seconds left!');
+					return true;
+				}
+			}
+		}
+
+		return false;
+	};
 	BattleRoom.prototype.decision = function(user, choice, data) {
 		this.battle.sendFor(user, choice, data);
 		if (this.active !== this.battle.active) {
@@ -1021,6 +1083,7 @@ var BattleRoom = (function() {
 		}
 
 		this.update();
+		this.kickInactiveUpdate();
 	};
 	BattleRoom.prototype.joinBattle = function(user, team) {
 		var slot = undefined;
@@ -1042,6 +1105,7 @@ var BattleRoom = (function() {
 			this.send('|title|'+this.title);
 		}
 		this.update();
+		this.kickInactiveUpdate();
 
 		if (this.parentid) {
 			getRoom(this.parentid).updateRooms();
@@ -1057,6 +1121,7 @@ var BattleRoom = (function() {
 		rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 		this.active = this.battle.active;
 		this.update();
+		this.kickInactiveUpdate();
 
 		if (this.parentid) {
 			getRoom(this.parentid).updateRooms();
