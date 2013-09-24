@@ -760,7 +760,7 @@ var commands = exports.commands = {
 			return this.sendReply('Moderated chat is currently set to: '+room.modchat);
 		}
 		if (!this.can('modchat', null, room)) return false;
-		if (room.modchat && (room.modchat.length > 1 || config.groupsranking.indexOf(room.modchat) > 1) && !user.can('modchatall', null, room)) {
+		if (room.modchat && room.modchat.length <= 1 && config.groupsranking.indexOf(room.modchat) > 1 && !user.can('modchatall', null, room)) {
 			return this.sendReply('/modchat - Access denied for removing a setting higher than ' + config.groupsranking[1] + '.');
 		}
 
