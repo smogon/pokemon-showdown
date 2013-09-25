@@ -388,6 +388,7 @@ var User = (function () {
 		this.userid = userid;
 		users[this.userid] = this;
 		this.authenticated = !!authenticated;
+		this.autoconfirmed = this.authenticated && this.autoconfirmed;
 		this.forceRenamed = !!forcible;
 
 		for (var i=0; i<this.connections.length; i++) {
