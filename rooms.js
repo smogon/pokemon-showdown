@@ -553,6 +553,7 @@ var BattleRoom = (function() {
 		this.sideTicksLeft = [21, 21];
 		if (!rated) this.sideTicksLeft = [28,28];
 		this.sideTurnTicks = [0, 0];
+		this.originalSideTurnTicks = [0, 0];
 
 		this.log = [];
 	}
@@ -939,7 +940,6 @@ var BattleRoom = (function() {
 		}
 		return false;
 	};
-	BattleRoom.prototype.originalSideTurnTicks = [0, 0];
 	BattleRoom.prototype.kickInactiveUpdate = function () {
 		if (!this.rated) return false;
 		if (this.resetTimer) {
@@ -987,7 +987,7 @@ var BattleRoom = (function() {
 				}
 
 				if (changed !== false) {
-					// Resetting the timer here would be more fair for the
+					// Resetting the timer here would be fairer for the
 					// reconnected player, but the player who stayed would get
 					// up to 9.9 seconds longer to make his/her decision.
 					// Dilemma?
