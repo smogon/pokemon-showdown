@@ -138,17 +138,9 @@ global.ResourceMonitor = {
 		name = (name ? ': '+name : '');
 		if (ip in this.connections && duration < 30*60*1000) {
 			this.connections[ip]++;
-			if (duration < 5*60*1000 && this.connections[ip] % 10 === 0) {
-				if (this.connections[ip] >= 30) {
-					if (this.connections[ip] % 30 == 0) this.log('IP '+ip+' rejected for '+this.connections[ip]+'th connection in the last '+duration.duration()+name);
-					return true;
-				}
+			if (duration < 5*60*1000 && this.connections[ip] % 20 === 0) {
 				this.log('[ResourceMonitor] IP '+ip+' has connected '+this.connections[ip]+' times in the last '+duration.duration()+name);
-			} else if (this.connections[ip] % 50 == 0) {
-				if (this.connections[ip] >= 250) {
-					if (this.connections[ip] % 50 == 0) this.log('IP '+ip+' rejected for '+this.connections[ip]+'th connection in the last '+duration.duration()+name);
-					return true;
-				}
+			} else if (this.connections[ip] % 60 == 0) {
 				this.log('[ResourceMonitor] IP '+ip+' has connected '+this.connections[ip]+' times in the last '+duration.duration()+name);
 			}
 		} else {
