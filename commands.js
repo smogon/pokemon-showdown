@@ -162,14 +162,14 @@ var commands = exports.commands = {
 		if (!this.can('makeroom')) return;
 		if (target === 'off') {
 			delete room.isPrivate;
-			this.addModCommand(user.name+' made the room public.');
+			this.addModCommand(user.name+' made this room public.');
 			if (room.chatRoomData) {
 				delete room.chatRoomData.isPrivate;
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
 			room.isPrivate = true;
-			this.addModCommand(user.name+' made the room private.');
+			this.addModCommand(user.name+' made this room private.');
 			if (room.chatRoomData) {
 				room.chatRoomData.isPrivate = true;
 				Rooms.global.writeChatRoomData();
@@ -180,20 +180,19 @@ var commands = exports.commands = {
 	officialchatroom: 'officialroom',
 	officialroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
+		if (!room.chatRoomData) {
+			return this.sendReply("/officialroom - This room can't be made official");
+		}
 		if (target === 'off') {
 			delete room.isOfficial;
-			this.addModCommand(user.name+' made the room official.');
-			if (room.chatRoomData) {
-				delete room.chatRoomData.isOfficial;
-				Rooms.global.writeChatRoomData();
-			}
+			this.addModCommand(user.name+' made this chat room unofficial.');
+			delete room.chatRoomData.isOfficial;
+			Rooms.global.writeChatRoomData();
 		} else {
 			room.isOfficial = true;
-			this.addModCommand(user.name+' made the room official.');
-			if (room.chatRoomData) {
-				room.chatRoomData.isOfficial = true;
-				Rooms.global.writeChatRoomData();
-			}
+			this.addModCommand(user.name+' made this chat room official.');
+			room.chatRoomData.isOfficial = true;
+			Rooms.global.writeChatRoomData();
 		}
 	},
 
