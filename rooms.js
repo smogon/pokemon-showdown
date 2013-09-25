@@ -553,6 +553,7 @@ var BattleRoom = (function() {
 		this.sideTicksLeft = [21, 21];
 		if (!rated) this.sideTicksLeft = [28,28];
 		this.sideTurnTicks = [0, 0];
+		this.disconnectTickDiff = [0, 0];
 
 		this.log = [];
 	}
@@ -939,6 +940,56 @@ var BattleRoom = (function() {
 		}
 		return false;
 	};
+	BattleRoom.prototype.kickInactiveUpdate = function () {
+		if (!this.rated) return false;
+		if (this.resetTimer) {
+			var inactiveSide = this.getInactiveSide();
+			var changed = false;
+
+			if ((!this.battle.p1 || !this.battle.p2) && !this.disconnectTickDiff[0] && !this.disconnectTickDiff[1]) {
+				if ((!this.battle.p1 && inactiveSide === 0) || (!this.battle.p2 && inactiveSide === 1)) {
+					var inactiveUser = this.battle.getPlayer(inactiveSide);
+
+					if (!this.battle.p1 && inactiveSide === 0 && this.sideTurnTicks[0] > 7) {
+						this.disconnectTickDiff[0] = this.sideTurnTicks[0] - 7;
+						this.sideTurnTicks[0] = 7;
+						changed = true;
+					} else if (!this.battle.p2 && inactiveSide === 1 && this.sideTurnTicks[1] > 7) {
+						this.disconnectTickDiff[1] = this.sideTurnTicks[1] - 7;
+						this.sideTurnTicks[1] = 7;
+						changed = true;
+					}
+
+					if (changed) {
+						this.send('|inactive|' + (inactiveUser ? inactiveUser.name : 'Player ' + (inactiveSide + 1)) + ' disconnected and has a minute to reconnect!');
+						return true;
+					}
+				}
+			} else if (this.battle.p1 && this.battle.p2) {
+				// Only one of the following conditions should happen, but do
+				// them both since you never know...
+				if (this.disconnectTickDiff[0]) {
+					this.sideTurnTicks[0] = this.sideTurnTicks[0] + this.disconnectTickDiff[0];
+					this.disconnectTickDiff[0] = 0;
+					changed = 0;
+				}
+
+				if (this.disconnectTickDiff[1]) {
+					this.sideTurnTicks[1] = this.sideTurnTicks[1] + this.disconnectTickDiff[1];
+					this.disconnectTickDiff[1] = 0;
+					changed = 1;
+				}
+
+				if (changed !== false) {
+					var user = this.battle.getPlayer(changed);
+					this.send('|inactive|' + (user ? user.name : 'Player ' + (changed + 1)) + ' reconnected and has ' + (this.sideTurnTicks[changed] * 10) + ' seconds left!');
+					return true;
+				}
+			}
+		}
+
+		return false;
+	};
 	BattleRoom.prototype.decision = function(user, choice, data) {
 		this.battle.sendFor(user, choice, data);
 		if (this.active !== this.battle.active) {
@@ -1021,6 +1072,7 @@ var BattleRoom = (function() {
 		}
 
 		this.update();
+		this.kickInactiveUpdate();
 	};
 	BattleRoom.prototype.joinBattle = function(user, team) {
 		var slot = undefined;
@@ -1042,6 +1094,7 @@ var BattleRoom = (function() {
 			this.send('|title|'+this.title);
 		}
 		this.update();
+		this.kickInactiveUpdate();
 
 		if (this.parentid) {
 			getRoom(this.parentid).updateRooms();
@@ -1057,6 +1110,7 @@ var BattleRoom = (function() {
 		rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 		this.active = this.battle.active;
 		this.update();
+		this.kickInactiveUpdate();
 
 		if (this.parentid) {
 			getRoom(this.parentid).updateRooms();
