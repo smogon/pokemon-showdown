@@ -976,12 +976,9 @@ var commands = exports.commands = {
 			if (isNaN(faces)) return this.sendReply("The number of faces must be a valid integer.");
 			if (faces < 1 || faces > 1000) return this.sendReply("The number of faces must be between 1 and 1000");
 			if (num < 1 || num > 20) return this.sendReply("The number of dice must be between 1 and 20");
-			var rolls = "";
-			for (var i=0; i < num; i++) {
-				if (i != num - 1) rolls += (Math.floor(faces * Math.random()) + 1) + ", ";
-				else rolls += (Math.floor(faces * Math.random()) + 1);
-			}
-			return this.sendReplyBox('Random number ' + num + 'x(1 - ' + faces + '): ' + rolls);
+			var rolls = new Array();
+			for (var i=0; i < num; i++) rolls[i] = (Math.floor(faces * Math.random()) + 1);
+			return this.sendReplyBox('Random number ' + num + 'x(1 - ' + faces + '): ' + rolls.join());
 		}
 		if (target && isNaN(target) || target.length > 21) return this.sendReply('The max roll must be a number under 21 digits.');
 		var maxRoll = (target)? target : 6;
