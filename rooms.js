@@ -225,7 +225,7 @@ var GlobalRoom = (function() {
 			var room = this.chatRooms[i];
 			if (!room) continue;
 			if (room.isPrivate) continue;
-			(!room.auth ? rooms.official : rooms.chat).push({
+			(room.isOfficial ? rooms.official : rooms.chat).push({
 				title: room.title,
 				desc: room.desc,
 				userCount: Object.size(room.users)

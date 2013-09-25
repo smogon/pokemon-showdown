@@ -177,6 +177,26 @@ var commands = exports.commands = {
 		}
 	},
 
+	officialchatroom: 'officialroom',
+	officialroom: function(target, room, user) {
+		if (!this.can('makeroom')) return;
+		if (target === 'off') {
+			delete room.isOfficial;
+			this.addModCommand(user.name+' made the room official.');
+			if (room.chatRoomData) {
+				delete room.chatRoomData.isOfficial;
+				Rooms.global.writeChatRoomData();
+			}
+		} else {
+			room.isOfficial = true;
+			this.addModCommand(user.name+' made the room official.');
+			if (room.chatRoomData) {
+				room.chatRoomData.isOfficial = true;
+				Rooms.global.writeChatRoomData();
+			}
+		}
+	},
+
 	roomowner: function(target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
