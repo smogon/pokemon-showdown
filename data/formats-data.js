@@ -3243,10 +3243,12 @@ exports.BattleFormatsData = {
 	},
 	wormadamsandy: {
 		viableMoves: {"earthquake":1,"toxic":1,"rockblast":1,"protect":1,"stealthrock":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	wormadamtrash: {
 		viableMoves: {"stealthrock":1,"toxic":1,"ironhead":1,"protect":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	mothim: {
