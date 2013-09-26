@@ -530,6 +530,7 @@ var commands = exports.commands = {
 		this.addModCommand(''+targetUser.name+' was muted by '+user.name+' for 7 minutes.' + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
+		this.add('|unlink|' + targetUser.userid);
 
 		targetUser.mute(room.id, 7*60*1000);
 	},
@@ -554,6 +555,7 @@ var commands = exports.commands = {
 		this.addModCommand(''+targetUser.name+' was muted by '+user.name+' for 60 minutes.' + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
+		this.add('|unlink|' + targetUser.userid);
 
 		targetUser.mute(room.id, 60*60*1000, true);
 	},
