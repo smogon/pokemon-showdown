@@ -55,7 +55,6 @@ exports.Formats = [
 		name: "UU (current)",
 		section: "Singles",
 
-		challengeShow: false,
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
