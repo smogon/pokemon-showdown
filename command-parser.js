@@ -304,7 +304,7 @@ function canTalk(user, room, connection, message) {
 		if (/\bnimp\.org\b/i.test(message)) return false;
 
 		// remove zalgo
-		message = message.replace(/[\u0300-\u036f\u0E2F-\u0E4F]{3,}/g,'');
+		message = message.replace(/[\u0300-\u036f\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,'');
 
 		if (room && room.id === 'lobby') {
 			var normalized = message.trim();
