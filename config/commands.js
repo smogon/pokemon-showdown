@@ -977,8 +977,12 @@ var commands = exports.commands = {
 			if (faces < 1 || faces > 1000) return this.sendReply("The number of faces must be between 1 and 1000");
 			if (num < 1 || num > 20) return this.sendReply("The number of dice must be between 1 and 20");
 			var rolls = new Array();
-			for (var i=0; i < num; i++) rolls[i] = (Math.floor(faces * Math.random()) + 1);
-			return this.sendReplyBox('Random number ' + num + 'x(1 - ' + faces + '): ' + rolls.join());
+			var total = 0;
+			for (var i=0; i < num; i++) {
+				rolls[i] = (Math.floor(faces * Math.random()) + 1);
+				total += rolls[i];
+			}
+			return this.sendReplyBox('Random number ' + num + 'x(1 - ' + faces + '): ' + rolls.join(', ') + '<br />Total: ' + total);
 		}
 		if (target && isNaN(target) || target.length > 21) return this.sendReply('The max roll must be a number under 21 digits.');
 		var maxRoll = (target)? target : 6;
@@ -1154,6 +1158,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'dice' || target === 'roll') {
 			matched = true;
 			this.sendReply('/dice [optional max number] - Randomly picks a number between 1 and 6, or between 1 and the number you choose.');
+			this.sendReply('/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.');
 		}
 		if (target === 'all' || target === 'join') {
 			matched = true;
@@ -1306,7 +1311,7 @@ var commands = exports.commands = {
 		}
 		if (!target) {
 			this.sendReply('COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps');
-			this.sendReply('INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))');
+			this.sendReply('INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))');
 			this.sendReply('For details on all room commands, use /roomhelp');
 			this.sendReply('For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
