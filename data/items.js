@@ -2112,19 +2112,23 @@ exports.BattleItems = {
 			pokemon.addVolatile('metronome');
 		},
 		effect: {
-			onModifyDamage: function(damageMod, source, target, move) {
-				if (source.item !== 'metronome') {
-					source.removeVolatile('metronome');
+			onStart: function(pokemon) {
+				this.effectData.numConsecutive = 0;
+				this.effectData.lastMove = '';
+			},
+			onBeforeMove: function(pokemon, target, move) {
+				if (pokemon.item !== 'metronome') {
+					pokemon.removeVolatile('metronome');
 					return;
 				}
-				if (!this.effectData.move || this.effectData.move !== move.id) {
-					this.effectData.move = move.id;
-					this.effectData.numConsecutive = 0;
-				} else if (this.effectData.numConsecutive < 5) {
-					this.effectData.numConsecutive++;
-				}
+				if (this.effectData.lastMove === move.id) this.effectData.numConsecutive++;
+				else this.effectData.numConsecutive = 0;
+				this.effectData.lastMove = move.id;
+			},
+			onModifyDamage: function(damageMod, source, target, move) {
+				var numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
 				var bpMod = [1, 1.2, 1.4, 1.6, 1.8, 2];
-				return this.chain(damageMod, bpMod[this.effectData.numConsecutive]);
+				return this.chain(damageMod, bpMod[numConsecutive]);
 			}
 		},
 		num: 277,
