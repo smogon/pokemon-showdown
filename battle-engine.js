@@ -2265,7 +2265,7 @@ var Battle = (function() {
 		if (!canSwitchIn.length) {
 			return null;
 		}
-		return canSwitchIn[Math.floor(Math.random()*canSwitchIn.length)];
+		return canSwitchIn[this.random(canSwitchIn.length)];
 	};
 	Battle.prototype.dragIn = function(side, pos) {
 		if (pos >= side.active.length) return false;
