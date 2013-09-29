@@ -798,7 +798,7 @@ exports.BattleScripts = {
 				};
 				// Moves which boost Special Attack:
 				var SpecialSetup = {
-					nastyplot:1, tailglow:1, quiverdance:1, calmmind:1
+					nastyplot:1, tailglow:1, quiverdance:1, calmmind:1, chargebeam:1
 				};
 				// Moves which boost Attack AND Special Attack:
 				var MixedSetup = {
