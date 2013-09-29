@@ -12,7 +12,7 @@
  * @license MIT license
  */
 
-const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
+const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org', 'dnsbl.dronebl.org'];
 
 var dns = require('dns');
 

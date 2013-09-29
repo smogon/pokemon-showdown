@@ -1,4 +1,4 @@
-Pokémon Showdown
+﻿Pokémon Showdown
 ========================================================================
 
 Pokémon Showdown is a simulator of Pokémon battles. It currently supports singles battles in Generations 4-5 (HGSS, BW, BW2).

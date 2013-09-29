@@ -61,6 +61,7 @@ function runNpm(command) {
 
 try {
 	require('sugar');
+	require('http-get');
 } catch (e) {
 	return runNpm('install');
 }
@@ -477,11 +478,9 @@ if (config.crashguard) {
 			if (quietCrash) return;
 			var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
 			if (Rooms.lobby) {
-				Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
-				Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
+				Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'</div>');
+				Rooms.lobby.addRaw('<div class="broadcast-green">The crash was automatically fixed and you can continue to battle and chat.</div>');
 			}
-			config.modchat = 'crash';
-			Rooms.global.lockdown = true;
 		};
 	})());
 }
@@ -676,3 +675,5 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	}
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
+global.tour = require('./tour.js').tour();
+global.hangman = require('./hangman.js').hangman();
