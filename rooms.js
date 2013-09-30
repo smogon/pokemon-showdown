@@ -9,7 +9,8 @@
  * @license MIT license
  */
 
-const TIMEOUT_DEALLOCATE = 15*60*1000;
+const TIMEOUT_EMPTY_DEALLOCATE = 10*60*1000;
+const TIMEOUT_INACTIVE_DEALLOCATE = 40*60*1000;
 const REPORT_USER_STATS_INTERVAL = 1000*60*10;
 
 var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
@@ -561,7 +562,7 @@ var BattleRoom = (function() {
 
 	BattleRoom.prototype.resetTimer = null;
 	BattleRoom.prototype.resetUser = '';
-	BattleRoom.prototype.destroyTimer = null;
+	BattleRoom.prototype.expireTimer = null;
 	BattleRoom.prototype.active = false;
 	BattleRoom.prototype.lastUpdate = 0;
 
@@ -716,12 +717,12 @@ var BattleRoom = (function() {
 
 		// empty rooms time out after ten minutes
 		if (!hasUsers) {
-			if (!this.destroyTimer) {
-				this.destroyTimer = setTimeout(this.tryDestroy.bind(this), TIMEOUT_DEALLOCATE);
+			if (!this.expireTimer) {
+				this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
 			}
-		} else if (this.destroyTimer) {
-			clearTimeout(this.destroyTimer);
-			this.destroyTimer = null;
+		} else {
+			if (this.expireTimer) clearTimeout(this.expireTimer);
+			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_INACTIVE_DEALLOCATE);
 		}
 	};
 	BattleRoom.prototype.logBattle = function(p1score, p1rating, p2rating) {
@@ -758,14 +759,8 @@ var BattleRoom = (function() {
 			}
 		}
 	};
-	BattleRoom.prototype.tryDestroy = function() {
-		for (var i in this.users) {
-			// don't destroy ourselves if there are users in this room
-			// theoretically, Room.update should've stopped tryDestroy's timer
-			// well before we get here
-			return;
-		}
-		this.destroy();
+	BattleRoom.prototype.tryExpire = function() {
+		this.expire();
 	};
 	BattleRoom.prototype.reset = function(reload) {
 		clearTimeout(this.resetTimer);
@@ -1153,6 +1148,10 @@ var BattleRoom = (function() {
 		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
 	BattleRoom.prototype.logEntry = function() {};
+	BattleRoom.prototype.expire = function() {
+		this.send('|expire|');
+		this.destroy();
+	};
 	BattleRoom.prototype.destroy = function() {
 		// deallocate ourself
 
