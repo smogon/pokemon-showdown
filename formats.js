@@ -718,4 +718,11 @@
 			}
 		}
 	},
+	{
+		name: "[Seasonal] School Schemes",
+		section: "OM of the Month",
+
+		team: 'randomSeasonalSS',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod']
+	}
 }
