@@ -259,101 +259,55 @@ var commands = exports.commands = {
 		}
 	},
 
-	roommod: function(target, room, user) {
+	roomdemote: 'roompromote',
+	roompromote: function(target, room, user, connection, cmd) {
 		if (!room.auth) {
-			this.sendReply("/roommod - This room isn't designed for per-room moderation");
+			this.sendReply("/roompromote - This room isn't designed for per-room moderation");
 			return this.sendReply("Before setting room mods, you need to set it up with /roomowner");
 		}
+		if (!target) return this.parse('/help roompromote');
+
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
+		var userid = toUserid(this.targetUsername);
+		var name = targetUser ? targetUser.name : this.targetUsername;
 
-		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
-
-		if (!this.can('roommod', null, room)) return false;
-
-		var name = targetUser.name;
-
-		if (room.auth[targetUser.userid] === '#') {
-			if (!this.can('roomowner', null, room)) return false;
+		var currentGroup = (room.auth[userid] || ' ');
+		if (!targetUser && !room.auth) {
+			return this.sendReply("User '"+this.targetUsername+"' is offline and unauthed, and so can't be promoted.");
 		}
-		room.auth[targetUser.userid] = '%';
-		this.add(''+name+' was appointed Room Moderator by '+user.name+'.');
-		targetUser.updateIdentity();
-		if (room.chatRoomData) {
-			Rooms.global.writeChatRoomData();
+
+		var nextGroup = target || Users.getNextGroupSymbol(currentGroup, cmd === 'roomdemote', true);
+		if (target === 'deauth') nextGroup = config.groupsranking[0];
+		if (!config.groups[nextGroup]) {
+			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
 		}
-	},
-
-	roomdemod: 'deroommod',
-	deroommod: function(target, room, user) {
-		if (!room.auth) {
-			this.sendReply("/roommod - This room isn't designed for per-room moderation");
-			return this.sendReply("Before setting room mods, you need to set it up with /roomowner");
+		if (currentGroup !== ' ' && !user.can('room'+config.groups[currentGroup].id, null, room)) {
+			return this.sendReply('/' + cmd + ' - Access denied for promoting from '+config.groups[currentGroup].name+'.');
 		}
-		var target = this.splitTarget(target, true);
-		var targetUser = this.targetUser;
-		var name = this.targetUsername;
-		var userid = toId(name);
-		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
-
-		if (room.auth[userid] !== '%') return this.sendReply("User '"+name+"' is not a room mod.");
-		if (!this.can('roommod', null, room)) return false;
-
-		delete room.auth[userid];
-		this.sendReply('('+name+' is no longer Room Moderator.)');
-		if (targetUser) targetUser.updateIdentity();
-		if (room.chatRoomData) {
-			Rooms.global.writeChatRoomData();
+		if (nextGroup !== ' ' && !user.can('room'+config.groups[nextGroup].id, null, room)) {
+			return this.sendReply('/' + cmd + ' - Access denied for promoting to '+config.groups[nextGroup].name+'.');
 		}
-	},
 
-	roomvoice: function(target, room, user) {
-		if (!room.auth) {
-			this.sendReply("/roomvoice - This room isn't designed for per-room moderation");
-			return this.sendReply("Before setting room voices, you need to set it up with /roomowner");
+		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
+		var groupName = (config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
+
+		if (nextGroup === ' ') {
+			delete room.auth[userid];
+		} else {
+			room.auth[userid] = nextGroup;
 		}
-		var target = this.splitTarget(target, true);
-		var targetUser = this.targetUser;
 
-		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
-
-		if (!this.can('roomvoice', null, room)) return false;
-
-		var name = targetUser.name;
-
-		if (room.auth[targetUser.userid] === '%') {
-			if (!this.can('roommod', null, room)) return false;
-		} else if (room.auth[targetUser.userid]) {
-			if (!this.can('roomowner', null, room)) return false;
+		if (isDemotion) {
+			this.privateModCommand('('+name+' was appointed to Room ' + groupName + ' by '+user.name+'.)');
+			if (targetUser) {
+				targetUser.popup('You were appointed to Room ' + groupName + ' by ' + user.name + '.');
+			}
+		} else {
+			this.addModCommand(''+name+' was appointed to Room ' + groupName + ' by '+user.name+'.');
 		}
-		room.auth[targetUser.userid] = '+';
-		this.add(''+name+' was appointed Room Voice by '+user.name+'.');
-		targetUser.updateIdentity();
-		if (room.chatRoomData) {
-			Rooms.global.writeChatRoomData();
-		}
-	},
-
-	roomdevoice: 'deroomvoice',
-	deroomvoice: function(target, room, user) {
-		if (!room.auth) {
-			this.sendReply("/roomdevoice - This room isn't designed for per-room moderation");
-			return this.sendReply("Before setting room voices, you need to set it up with /roomowner");
-		}
-		var target = this.splitTarget(target, true);
-		var targetUser = this.targetUser;
-		var name = this.targetUsername;
-		var userid = toId(name);
-		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
-
-		if (room.auth[userid] !== '+') return this.sendReply("User '"+name+"' is not a room voice.");
-		if (!this.can('roomvoice', null, room)) return false;
-
-		delete room.auth[userid];
-		this.sendReply('('+name+' is no longer Room Voice.)');
-		if (targetUser) targetUser.updateIdentity();
-		if (room.chatRoomData) {
-			Rooms.global.writeChatRoomData();
+		if (targetUser) {
+			targetUser.updateIdentity();
 		}
 	},
 
