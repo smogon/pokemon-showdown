@@ -420,5 +420,50 @@ exports.BattleScripts = {
 		}
 
 		return team;
+	},
+	randomSeasonalSSTeam: function(side) {
+		var crypto = require('crypto');
+		var hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16);
+		var randNums = [
+			(13 * hash + 11) % 649,
+			(18 * hash + 66) % 649,
+			(25 * hash + 73) % 649,
+			(1 * hash + 16) % 649,
+			(23 * hash + 132) % 649,
+			(5 * hash + 6) % 649
+		];
+		var randoms = {};
+		for (var i=0; i<6; i++) {
+			if (randNums[i] < 1) randNums[i] = 1;
+			randoms[randNums[i]] = true;
+		}
+		var team = [];
+		var mons = 0;
+		var fashion = [
+			'Choice Scarf', 'Choice Specs', 'Silk Scarf', 'Wise Glasses', 'Choice Band', 'Wide Lens',
+			'Zoom Lens', 'Destiny Knot', 'BlackGlasses', 'Expert Belt', 'Black Belt', 'Macho Brace',
+			'Focus Sash', "King's Rock", 'Muscle Band', 'Mystic Water', 'Binding Band', 'Rocky Helmet'
+		];
+		for (var p in this.data.Pokedex) {
+			if (this.data.Pokedex[p].num in randoms) {
+				var set = this.randomSet(this.getTemplate(p), mons);
+				fashion = fashion.randomize();
+				if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
+				team.push(set);
+				delete randoms[this.data.Pokedex[p].num];
+				mons++;
+			}
+		}
+		// Just in case the randoms generated the same number... highly unlikely
+		var defaults = ['politoed', 'toxicroak', 'articuno', 'jirachi', 'tentacruel', 'liepard'].randomize();
+		while (mons < 6) {
+			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
+			fashion = fashion.randomize();
+			if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
+			team.push(set);
+			mons++;
+		}
+
+		return team;
 	}
 ];
