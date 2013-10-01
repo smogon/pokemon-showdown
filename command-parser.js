@@ -204,12 +204,15 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
 		for (var g in config.groups) {
-			if (cmd === config.groups[g].id) {
+			var groupid = config.groups[g].id;
+			if (cmd === groupid) {
 				return parse('/promote ' + toUserid(target) + ',' + g, room, user, connection);
-			} else if (cmd === 'de' + config.groups[g].id || cmd === 'un' + config.groups[g].id) {
-				var nextGroup = config.groupsranking[config.groupsranking.indexOf(g) - 1];
-				if (!nextGroup) nextGroup = config.groupsranking[0];
-				return parse('/demote ' + toUserid(target) + ',' + nextGroup, room, user, connection);
+			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid) {
+				return parse('/demote ' + toUserid(target), room, user, connection);
+			} else if (cmd === 'room' + groupid) {
+				return parse('/roompromote ' + toUserid(target) + ',' + g, room, user, connection);
+			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
+				return parse('/roomdemote ' + toUserid(target), room, user, connection);
 			}
 		}
 
