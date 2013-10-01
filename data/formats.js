@@ -144,6 +144,29 @@ exports.BattleFormats = {
 			set.moves = moves;
 		}
 	},
+	abilityexchangepokemon: {
+		effectType: 'Banlist',
+		validateTeam: function(team, format) {
+			var selectedAbilities = [];
+			var defaultAbilities = [];
+			var bannedAbilities = {adaptability:1, arenatrap:1, contrary:1, hugepower:1, imposter:1, purepower:1, prankster:1, serenegrace:1, shadowtag:1, simple:1, speedboost:1, tintedlens:1, wonderguard:1};
+			var problems = [];
+			for (var i=0; i<team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				var ability = this.getAbility(team[i].ability);
+				var abilities = Object.extended(template.abilities).values();
+				if (ability.id in bannedAbilities && abilities.indexOf(ability.name) === -1) {
+					problems.push(ability.name+' is banned on Pokemon that do not legally have it.');
+				}
+				selectedAbilities.push(ability.name);
+				defaultAbilities.push(abilities);
+			}
+			if (problems.length) return problems;
+			if (!this.checkAbilities(selectedAbilities, defaultAbilities)) {
+				return ['That is not a valid Ability Exchange team.'];
+			}
+		}
+	},
 	legal: {
 		effectType: 'Banlist',
 		banlist: ['Crobat+BraveBird+Hypnosis']
