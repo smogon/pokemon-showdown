@@ -437,14 +437,14 @@ var commands = exports.commands = {
 	},
 
 	roomauth: function(target, room, user, connection) {
-		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefor has no auth list.");
+		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
 		if (!target || target === 'all') {
-			var targets = ['+', '%', '#'];
-			var l = 3;
+			var targets = config.groupsranking;
+			var l = 7;
 		} else {
 			var targets = target.split(',');
 			var l = targets.length;
-			if (l > 3) return this.sendReply('Specify once the existent ranks you want to know about.');
+			if (l > 7) return this.sendReply('Specify once the existent ranks you want to know about.');
 		}
 		
 		function listAuth(group) {
@@ -459,13 +459,13 @@ var commands = exports.commands = {
 				}
 			}
 			if (results.length) {
-				return results.join(', ');
+				return group + ':||' + results.join(', ') + '||||';
 			} else {
-				return 'This room has no users of the rank ' + group;
+				return '';
 			}
 		}
 		
-		var ranks = {'+': 1, '%': 1, '#': 1};
+		var ranks = config.groups;
 		var matches = {};
 		var matchcount = 0;
 		var buffer = '';
@@ -474,8 +474,8 @@ var commands = exports.commands = {
 			if (group in ranks && !(group in matches)) {
 				matches[group] = true;
 				matchcount++;
-				buffer += group + ':||' + listAuth(group) + '||||';
-				if (matchcount === 3) break;
+				buffer += listAuth(group);
+				if (matchcount === 7) break;
 			}
 		}
 		if (!buffer) return connection.popup('This room lacks such room auth.');
