@@ -1565,49 +1565,36 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomSeasonalSSTeam: function(side) {
-		var crypto = require('crypto');
-		var hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16);
-		var randNums = [
-			(13 * hash + 11) % 649,
-			(18 * hash + 66) % 649,
-			(25 * hash + 73) % 649,
-			(1 * hash + 16) % 649,
-			(23 * hash + 132) % 649,
-			(5 * hash + 6) % 649
+	randomSeasonalOFTeam: function(side) {
+		var seasonalPokemonList = [
+			'absol', 'alakazam', 'banette', 'beheeyem', 'bellossom', 'bisharp', 'blissey', 'cacturne', 'carvanha', 'chandelure',
+			'cofagrigus', 'conkeldurr', 'crawdaunt', 'darkrai', 'deino', 'drapion', 'drifblim', 'drifloon', 'dusclops',
+			'dusknoir', 'duskull', 'electivire', 'frillish', 'froslass', 'gallade', 'gardevoir', 'gastly', 'gengar', 'giratina',
+			'golett', 'golurk', 'gothitelle', 'hariyama', 'haunter', 'hitmonchan', 'hitmonlee', 'hitmontop', 'honchkrow', 'houndoom',
+			'houndour', 'hydreigon', 'hypno', 'infernape', 'jellicent', 'jynx', 'krokorok', 'krookodile', 'lampent', 'leavanny',
+			'liepard', 'lilligant', 'litwick', 'lopunny', 'lucario', 'ludicolo', 'machamp', 'magmortar', 'mandibuzz', 'medicham',
+			'meloetta', 'mienshao', 'mightyena', 'misdreavus', 'mismagius', 'mrmime', 'murkrow', 'nuzleaf', 'pawniard', 'poochyena',
+			'probopass', 'purrloin', 'roserade', 'rotom', 'sableye', 'sandile', 'sawk', 'scrafty', 'scraggy', 'sharpedo', 'shedinja',
+			'shiftry', 'shuppet', 'skuntank', 'sneasel', 'snorlax', 'spiritomb', 'stunky', 'throh', 'toxicroak', 'tyranitar', 'umbreon',
+			'vullaby', 'weavile', 'wobbuffet', 'yamask', 'zoroark', 'zorua', 'zweilous'
 		];
-		var randoms = {};
-		for (var i=0; i<6; i++) {
-			if (randNums[i] < 1) randNums[i] = 1;
-			randoms[randNums[i]] = true;
-		}
+		seasonalPokemonList = seasonalPokemonList.randomize();
 		var team = [];
-		var mons = 0;
-		var fashion = [
-			'Choice Scarf', 'Choice Specs', 'Silk Scarf', 'Wise Glasses', 'Choice Band', 'Wide Lens',
-			'Zoom Lens', 'Destiny Knot', 'BlackGlasses', 'Expert Belt', 'Black Belt', 'Macho Brace',
-			'Focus Sash', "King's Rock", 'Muscle Band', 'Mystic Water', 'Binding Band', 'Rocky Helmet'
-		];
-		for (var p in this.data.Pokedex) {
-			if (this.data.Pokedex[p].num in randoms) {
-				var set = this.randomSet(this.getTemplate(p), mons);
-				fashion = fashion.randomize();
-				if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
-				team.push(set);
-				delete randoms[this.data.Pokedex[p].num];
-				mons++;
-			}
-		}
-		// Just in case the randoms generated the same number... highly unlikely
-		var defaults = ['politoed', 'toxicroak', 'articuno', 'jirachi', 'tentacruel', 'liepard'].randomize();
-		while (mons < 6) {
-			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
-			fashion = fashion.randomize();
-			if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
-			team.push(set);
-			mons++;
-		}
 
+		for (var i=0; i<6; i++) {
+			var pokemon = seasonalPokemonList[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomSet(template, i);
+			var hasMoves = {};
+			for (var m in set.moves) {
+				set.moves[m] = set.moves[m].toLowerCase();
+				hasMoves[set.moves[m]] = true;
+			}
+			if (!('trick' in hasMoves)) set.moves[3] = 'trick';
+			set.moves[2] = 'Present';
+			team.push(set);
+		}
+		
 		return team;
 	}
 };
