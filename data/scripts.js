@@ -482,6 +482,23 @@ exports.BattleScripts = {
 			return true;
 		}
 	},
+	checkAbilities: function(selectedAbilities, defaultAbilities) {
+		if (!selectedAbilities.length) return true;
+		var selectedAbility = selectedAbilities.pop();
+		var isValid = false;
+		for (var i=0; i<defaultAbilities.length; i++) {
+			var defaultAbility = defaultAbilities[i];
+			if (!defaultAbility) break;
+			if (defaultAbility.indexOf(selectedAbility) !== -1) {
+				defaultAbilities.splice(i, 1);
+				isValid = this.checkAbilities(selectedAbilities, defaultAbilities);
+				if (isValid) break;
+				defaultAbilities.splice(i, 0, defaultAbility);
+			}
+		}
+		if (!isValid) selectedAbilities.push(selectedAbility);
+		return isValid;
+	},
 	getTeam: function(side, team) {
 		var format = side.battle.getFormat();
 		if (format.team === 'random') {
