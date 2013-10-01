@@ -273,7 +273,7 @@ var commands = exports.commands = {
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
 		var currentGroup = (room.auth[userid] || ' ');
-		if (!targetUser && !room.auth) {
+		if (!targetUser && !room.auth[userid]) {
 			return this.sendReply("User '"+this.targetUsername+"' is offline and unauthed, and so can't be promoted.");
 		}
 
