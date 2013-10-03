@@ -1556,7 +1556,6 @@ var commands = exports.commands = {
 		var name = this.targetUsername;
 		var userid = toId(name);
 		if (!userid || !targetUser) return this.sendReply("User '"+name+"' does not exist.");
-		if (targetUser.userid === 'brittlewind') return false;
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!room.bannedUsers || !room.bannedIps) {
 			return this.sendReply('Room bans are not meant to be used in room ' + room.id + '.');
@@ -1726,7 +1725,6 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (targetUser.userid === 'brittlewind') return false;
 
 		if (!this.can('warn', targetUser, room)) return false;
 		if (!room.auth) {
@@ -1933,7 +1931,6 @@ var commands = exports.commands = {
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (targetUser.userid === 'brittlewind') return false;
 		if (!this.can('ban', targetUser)) return false;
 		if (Users.checkBanned(targetUser.latestIp) && !target && !targetUser.connected) {
 			var problem = ' but was already banned';
@@ -2021,7 +2018,6 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!this.can('permaban', targetUser)) return false;
-		if (targetUser.userid === 'brittlewind') return false;
 		if (targetUser.group === '~' || targetUser.frostDev) return false;
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
@@ -2341,7 +2337,6 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 		if (!this.can('forcerename', targetUser)) return false;
-		if (targetUser.name === 'BrittleWind' || targetUser.name === 'Cosy' || targetUser.name === 'Prez') return this.sendReply('You cannot forcerename this user.');
 
 		if (targetUser.userid === toUserid(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'' + (target ? ": " + target + "" : "");
@@ -2365,7 +2360,6 @@ var commands = exports.commands = {
 			return this.sendReply('No new name was specified.');
 		}
 		if (!this.can('forcerenameto', targetUser)) return false;
-		if (targetUser.name === 'BrittleWind' || targetUser.name === 'Cosy' || targetUser.name === 'Prez') return this.sendReply('You cannot forcerename this user.');
 
 		if (targetUser.userid === toUserid(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
@@ -2668,6 +2662,7 @@ var commands = exports.commands = {
 	},
 
 	getid: 'showuserid',
+	userid: 'showuserid',
 	showuserid: function(target, room, user) {
 		if (!target) return this.parse('/help showuserid');
 

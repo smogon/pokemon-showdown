@@ -8,7 +8,7 @@
  * A command can be in the form:
  *   ip: 'whois',
  * This is called an alias: it makes it so /ip does the same thing as
- * /whois
+ * /whoisPsychological
  *
  * But to actually define a command, it's a function:
  *   birkal: function(target, room, user) {
@@ -262,10 +262,20 @@ var commands = exports.commands = {
 		if(!target) return this.sendReply('/poke needs a target.');
 		return this.parse('/me pokes ' + target);
 	},
+	
+	twerk: function(target, room, user){
+		return this.parse('/me twerks');
+	},
+	
 
 	slap: function(target, room, user){
 		if(!target) return this.sendReply('/poke needs a target.');
 		return this.parse('/me slaps ' + target + ' in the face with a slipper');
+	},
+	
+	twerkon: function(target, room, user){
+		if(!target) return this.sendReply('/poke needs a target.');
+		return this.parse('/me twerks on ' + target + '.');
 	},
 	
 	s: function(target, room, user){
@@ -814,7 +824,7 @@ var commands = exports.commands = {
 			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
 			'- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />' +
 			'- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />' +
-			'- /declare <em>message</em>: make a global declaration<br />' +
+			'- /declare <em>message</em>: make a declaration in the room<br />' +
 			'</div>');
 	},
 
@@ -1095,10 +1105,7 @@ var commands = exports.commands = {
 
 	priest: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('Trainer: Priest<br \>' +
-		'Ace: Shedinja<br \>' +
-		'Catchphrase: N**** try touching me! Try it!<br \>' +
-        '<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/292.gif">')
+        this.sendReplyBox('<center><img src="http://i.imgur.com/tccxmCV.png"><br><img src="http://i.imgur.com/CvhWd2c.gif"><img src="http://i.imgur.com/lZ2fjGu.png"><br><font color="red"><blink>Ace: Tyranitar</blink></font><br>Don\'t send in your Latios. You know what\'s comin')
     },
 
 	trainerbofish: function(target, room, user) {
@@ -1111,7 +1118,7 @@ var commands = exports.commands = {
 
 	snooki: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img src="http://i.imgur.com/3mlOHnd.png"><font size="7" color="#B40404"><i>Snooki</i><img src="http://i.imgur.com/PcHGs6F.png"></font></color><br><center>Ace: Jynx<br>I came in like a wrecking ball')
+        this.sendReplyBox('<center><img src="http://i.imgur.com/1U1MFAg.png"><img src="http://i.imgur.com/R9asfxu.gif"><img src="http://i.imgur.com/vqxQ6zq.png"><font color="red"><blink>Ace: Jynx</blink></font><br>I came in like a wrecking ball')
     },		
 
 	championbrave: function(target, room, user) {
@@ -1210,6 +1217,11 @@ var commands = exports.commands = {
 		'Ace: Kyurem-Black<br \>' + 
 		'Catchphrase: There be a storm comin laddie<br \>' +
 		'<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/646-black.gif">')
+	},
+	
+	killerjays: function(target, room,user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/ASI8wpu.png"><img src="http://i.imgur.com/NKqVp3S.gif"><img src="http://i.imgur.com/RkpJbD1.png"><br><font color="red"><blink>Ace: Articuno</blink></font><br>Birds Sing, Birds Fly, Birds kill people.');
 	},
 	
 	lavacadicemoo: function(target, room, user) {
@@ -1324,9 +1336,9 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://fc07.deviantart.net/fs70/f/2011/138/5/6/fma__comrades_by_silverwind91-d3gn45c.gif"><br><img src="http://fc01.deviantart.net/fs70/f/2011/039/8/1/roy_mustang_firestorm_by_silverwind91-d394lp5.gif"><font size="5" color="#FF0040"><i>Colonial Mustang</i><img src="http://i.imgur.com/VRZ9qY5.gif"></font></color><br><center><br>What am I trying to accomplish, you ask...? I want to change the dress code so that all women in the Frost... ...must wear mini-skirts!!.');
 	},
 	
-	ggmaster: function(target, room, user) {
+	psychological: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/oLAvFFV.png"><font size="7" color="#08088A"><i>GGmaster</i><img src="http://i.imgur.com/CskIIuF.png"></font></color><br><center>Ace: Dragonite<br>Dun make me spank you...');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/GeWjXUl.png"><br><img src="http://i.imgur.com/TSEXdOm.gif"><br><font color="red"><blink>Ace: Dragonite</blink></font><br>Dun make me spank you');
 	},
 	
 	siem: function(target, room, user) {
@@ -1397,6 +1409,17 @@ var commands = exports.commands = {
 	killertiger: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://sprites.pokecheck.org/s/500.gif"><br><img src="http://i.imgur.com/diRkf6z.png"><font size="7" color="#0489B1"><i>Killer Tiger</i><img src="http://i.imgur.com/4FMzRl5.png"></font></color><br><center>Ace: Salamence<br>one for all and all for one');
+	},
+	
+	twizzy: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/SGcRSab.png"><img src="http://i.imgur.com/dkwp4cu.gif"><img src="http://i.imgur.com/E04MrCc.png"><br><font color="red"><blink>Ace: Keldeo-Resolute</blink></font><br>Have you ever feel scared and there is nothing you can do about it? Challenge me and i will show you what fear is!');
+	},
+	
+	ag: 'arcainiagaming',
+	arcainiagaming: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/tFikucg.png"><br><img src="http://i.imgur.com/wSs98Iy.gif"><br><font color="red"><blink>Ace: Weavile</blink><br></font>I\'m not even on drugs. I\'m just weird.');
 	},
 	
 	prizes: function(target, room, user) {

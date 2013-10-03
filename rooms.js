@@ -1578,7 +1578,7 @@ new cronJob('0 0 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 *
 		if (Rooms.rooms[u].type === "chat") {
 			if (Rooms.rooms[u].inactiveCount == 0) Rooms.rooms[u].descbackup = Rooms.rooms[u].desc;
 			if (Rooms.rooms[u].messageCount < 50) {
-				if (Rooms.rooms[u].id != "lobby" && Rooms.rooms[u].id != "staff" && Rooms.rooms[u].id != "spamroom" && Rooms.rooms[u].id != "logroom" && Rooms.rooms[u].id != "jd" && Rooms.rooms[u].id != "secret" && Rooms.rooms[u].id != "cosyloveden" && Rooms.rooms[u].id != "tournaments2"&& Rooms.rooms[u].id != "pinkpurple"&& Rooms.rooms[u].id != "yellowbrown"&& Rooms.rooms[u].id != "green"&& Rooms.rooms[u].id != "blue"&& Rooms.rooms[u].id != "red"&& Rooms.rooms[u].id != "battleoftheleagues") {
+				if (Rooms.rooms[u].id != "lobby" && Rooms.rooms[u].id != "staff" && Rooms.rooms[u].id != "spamroom" && Rooms.rooms[u].id != "leaguehub" && Rooms.rooms[u].id != "logroom" && Rooms.rooms[u].id != "jd" && Rooms.rooms[u].id != "secret" && Rooms.rooms[u].id != "cosyloveden" && Rooms.rooms[u].id != "tournaments2"&& Rooms.rooms[u].id != "pinkpurple"&& Rooms.rooms[u].id != "yellowbrown"&& Rooms.rooms[u].id != "green"&& Rooms.rooms[u].id != "blue"&& Rooms.rooms[u].id != "red"&& Rooms.rooms[u].id != "battleoftheleagues") {
 					if (Rooms.rooms[u].active) Rooms.rooms[u].desc = '(INACTIVE) ' + Rooms.rooms[u].desc;
 					Rooms.rooms[u].active = false;
 					Rooms.rooms[u].inactiveCount++
