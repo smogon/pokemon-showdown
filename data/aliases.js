@@ -86,6 +86,7 @@ exports.BattleAliases = {
 	"poryz": "Porygon-Z",
 	"rank": "Reuniclus",
 	"ttar": "Tyranitar",
+	"mence": "Salamence",
 
 	// moves
 	"cc": "Close Combat",

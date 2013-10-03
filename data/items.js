@@ -1804,7 +1804,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onModifyDamage: function(damageMod, source, target, move) {
-			if (damage > 0 && source) {
+			if (source) {
 				source.addVolatile('lifeorb');
 				damage = this.chain(damageMod, 1.3);
 			}
