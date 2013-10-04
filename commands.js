@@ -291,6 +291,9 @@ var commands = exports.commands = {
 		if (currentGroup === nextGroup) {
 			return this.sendReply("User '"+this.targetUsername+"' is already a "+(config.groups[nextGroup].name || 'regular user')+" in this room.");
 		}
+		if (config.groups[nextGroup].globalonly) {
+			return this.sendReply("The rank of "+config.groups[nextGroup].name+" is global-only and can't be room-promoted to.");
+		}
 
 		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
 		var groupName = (config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
