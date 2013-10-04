@@ -69,6 +69,14 @@ exports.Formats = [
 		name: "NU",
 		section: "Singles",
 
+		searchShow: false,
+		ruleset: ['RU'],
+		banlist: ['RU','BL3']
+	},
+	{
+		name: "NU (current)",
+		section: "Singles",
+
 		ruleset: ['RU'],
 		banlist: ['RU','BL3']
 	},
