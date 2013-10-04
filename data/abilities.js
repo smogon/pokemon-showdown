@@ -2447,9 +2447,8 @@ exports.BattleAbilities = {
 			if (bannedAbilities[target.ability]) {
 				return;
 			}
-			if (pokemon.setAbility(ability)) {
-				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
-			}
+			this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
+			pokemon.setAbility(ability);
 		},
 		id: "trace",
 		name: "Trace",
