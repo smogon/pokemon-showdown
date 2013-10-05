@@ -983,7 +983,7 @@ var BattlePokemon = (function() {
 		if (this.ability === ability.id) {
 			return false;
 		}
-		if (ability.id === 'Multitype' || ability.id === 'Illusion' || this.ability === 'Multitype') {
+		if (ability.id === 'multitype' || ability.id === 'illusion' || this.ability === 'multitype') {
 			return false;
 		}
 		this.ability = ability.id;
@@ -2283,6 +2283,7 @@ var Battle = (function() {
 			}
 			this.runEvent('SwitchOut', oldActive);
 			oldActive.isActive = false;
+			oldActive.isStarted = false;
 			oldActive.position = pokemon.position;
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
