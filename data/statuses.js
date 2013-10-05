@@ -401,6 +401,9 @@ exports.BattleStatuses = {
 			}
 			return 5;
 		},
+		// This should be applied directly to the stat before any of these final modifiers are chained
+		// For now we just give it increased priority.
+		onModifySpDPriority: 6, 
 		onModifySpD: function(spdMod, pokemon) {
 			if (pokemon.hasType('Rock') && this.isWeather('sandstorm')) {
 				return this.chain(spdMod, 1.5);

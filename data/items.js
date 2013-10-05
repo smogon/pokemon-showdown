@@ -492,6 +492,7 @@ exports.BattleItems = {
 		onModifyMove: function(move, pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
+		onModifyAtkPriority: 1,
 		onModifyAtk: function(atkMod) {
 			return this.chain(atkMod, 1.5);
 		},
@@ -540,6 +541,7 @@ exports.BattleItems = {
 		onModifyMove: function(move, pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
+		onModifySpAPriority: 1,
 		onModifySpA: function(spaMod) {
 			return this.chain(spaMod, 1.5);
 		},
@@ -706,6 +708,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onModifySpDPriority: 2,
 		onModifySpD: function(spdMod, pokemon) {
 			if (pokemon.baseTemplate.species === 'Clamperl') {
 				return this.chain(spdMod, 2);
@@ -722,6 +725,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 90
 		},
+		onModifySpAPriority: 1,
 		onModifySpA: function(spaMod, pokemon) {
 			if (pokemon.baseTemplate.species === 'Clamperl') {
 				return this.chain(spaMod, 2);
@@ -990,11 +994,13 @@ exports.BattleItems = {
 		fling: {
 			basePower: 40
 		},
+		onModifyDefPriority: 2,
 		onModifyDef: function(defMod, pokemon) {
 			if (pokemon.baseTemplate.nfe) {
 				return this.chain(defMod, 1.5);
 			}
 		},
+		onModifySpDPriority: 2,
 		onModifySpD: function(spdMod, pokemon) {
 			if (pokemon.baseTemplate.nfe) {
 				return this.chain(spdMod, 1.5);
@@ -1831,11 +1837,13 @@ exports.BattleItems = {
 			basePower: 30,
 			status: 'par'
 		},
+		onModifyAtkPriority: 1,
 		onModifyAtk: function(atkMod, pokemon) {
 			if (pokemon.baseTemplate.species === 'Pikachu') {
 				return this.chain(atkMod, 2);
 			}
 		},
+		onModifySpAPriority: 1,
 		onModifySpA: function(spaMod, pokemon) {
 			if (pokemon.baseTemplate.species === 'Pikachu') {
 				return this.chain(spaMod, 2);
@@ -2092,6 +2100,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		spritenum: 287,
+		onModifyDefPriority: 2,
 		onModifyDef: function(defMod, pokemon) {
 			if (pokemon.template.species === 'Ditto') {
 				return this.chain(defMod, 2);
@@ -3207,11 +3216,13 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onModifySpAPriority: 1,
 		onModifySpA: function(spaMod, pokemon) {
 			if (pokemon.baseTemplate.species === 'Latios' || pokemon.baseTemplate.species === 'Latias') {
 				return this.chain(spaMod, 1.5);
 			}
 		},
+		onModifySpDPriority: 2,
 		onModifySpD: function(spdMod, pokemon) {
 			if (pokemon.baseTemplate.species === 'Latios' || pokemon.baseTemplate.species === 'Latias') {
 				return this.chain(spdMod, 1.5);
@@ -3439,6 +3450,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 90
 		},
+		onModifyAtkPriority: 1,
 		onModifyAtk: function(atkMod, pokemon) {
 			if (pokemon.baseTemplate.species === 'Cubone' || pokemon.baseTemplate.species === 'Marowak') {
 				return this.chain(atkMod, 2);
