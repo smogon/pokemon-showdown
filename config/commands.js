@@ -1224,6 +1224,12 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://i.imgur.com/ASI8wpu.png"><img src="http://i.imgur.com/NKqVp3S.gif"><img src="http://i.imgur.com/RkpJbD1.png"><br><font color="red"><blink>Ace: Articuno</blink></font><br>Birds Sing, Birds Fly, Birds kill people.');
 	},
 	
+	ryuuga: function(target, room,user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/7ALXaVt.png"><img src="http://i.imgur.com/6OFRYal.gif"><img src="http://i.imgur.com/gevm8Hh.png"><br>Ace: Jirachi<br>I
+		've never been cool - and I don\'t care.');
+	},
+	
 	lavacadicemoo: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('La vaca dice moo<br \>' +
