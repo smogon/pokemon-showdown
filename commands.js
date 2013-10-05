@@ -2301,6 +2301,19 @@ var commands = exports.commands = {
 		}
 		this.logModCommand(user.name+' globally declared '+target);
 	},
+	
+	pgdeclare: function(target, room, user) {
+		if (!target) return this.sendReply('/declareall - Declares a message in all chatrooms. Requires & ~');
+		if (!this.can('declare')) return;
+
+		if (!this.canTalk()) return;
+
+		for (var r in Rooms.rooms) {
+		if (Rooms.rooms[r].type === 'chat') Rooms.rooms[r].add('|raw|<b><i>Global declare from '+user.name+':</i><br />'+target+'</b></div>');
+		}
+
+		this.logModCommand(user.name+' declared '+target+' to all rooms.');
+		},
 
 	modmsg: 'declaremod',
 	moddeclare: 'declaremod',
