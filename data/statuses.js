@@ -10,7 +10,7 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target, 'brn');
 		},
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (move && move.category === 'Physical' && attacker && attacker.ability !== 'guts') {
 				return basePower / 2;
 			}
@@ -312,8 +312,15 @@ exports.BattleStatuses = {
 			this.effectData.duration = 2;
 		}
 	},
+	gem: {
+		duration: 1,
+		onBasePower: function(bpMod, user, target, move) {
+			this.debug('Gem Boost');
+			return this.chain(bpMod, 1.5);
+		}
+	},
 
-	// weather
+		// weather
 
 	// weather is implemented here since it's so important to the game
 
@@ -326,14 +333,14 @@ exports.BattleStatuses = {
 			}
 			return 5;
 		},
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (move.type === 'Water') {
 				this.debug('rain water boost');
-				return basePower * 1.5;
+				return this.chain(bpMod, 1.5);
 			}
 			if (move.type === 'Fire') {
 				this.debug('rain fire suppress');
-				return basePower * .5;
+				return this.chain(bpMod, 0.5);
 			}
 		},
 		onStart: function(battle, source, effect) {
@@ -362,14 +369,14 @@ exports.BattleStatuses = {
 			}
 			return 5;
 		},
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				this.debug('Sunny Day fire boost');
-				return basePower * 1.5;
+				return this.chain(bpMod, 1.5);
 			}
 			if (move.type === 'Water') {
 				this.debug('Sunny Day water suppress');
-				return basePower * .5;
+				return this.chain(bpMod, 0.5);
 			}
 		},
 		onStart: function(battle, source, effect) {
@@ -401,6 +408,9 @@ exports.BattleStatuses = {
 			}
 			return 5;
 		},
+		// This should be applied directly to the stat before any of these final modifiers are chained
+		// For now we just give it increased priority.
+		onModifySpDPriority: 6, 
 		onModifySpD: function(spdMod, pokemon) {
 			if (pokemon.hasType('Rock') && this.isWeather('sandstorm')) {
 				return this.chain(spdMod, 1.5);
