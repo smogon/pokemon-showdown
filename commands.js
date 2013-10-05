@@ -2246,36 +2246,6 @@ var commands = exports.commands = {
 		this.logRoomCommand(user.name+' declared '+target, room.id);
 	},
 
-	pdeclare: 'plaindeclare',
-	plaindeclare: function(target, room, user) {
-		if (!target) return this.parse('/help plaindeclare');
-		if (!this.can('declare', null, room)) return false;
-
-		if (!this.canTalk()) return;
-
-		this.add('|raw|'+target);
-
-		if (!room.auth) {
-			this.logModCommand(user.name+' declared '+target);
-		}
-		this.logRoomCommand(user.name+' declared '+target, room.id);
-	},
-	tdeclare: 'timeddeclare',
-	timeddeclare: function(target, room, user, connection) {
-		if (!target) return this.parse('/help timeddeclare');
-		if (!this.can('declare', null, room)) return false;
-		var targets = tour.splint(target);
-		if (targets.length != 2) return this.parse('/help timeddeclare');
-		var message = targets[0];
-		var time = targets[1];
-		if (isNaN(time)) return this.sendReply('The amount of time has to be a number - will be taken as minutes.');
-		if (time > 60 || time < 1) return this.sendReply('The amount of time should be between 1 and 60 minutes.');
-		time = (time / 60) / 1000;
-
-			this.add('|raw|'+message);
-			setTimeout(message, time);
-	},
-
 	gdeclarered: 'gdeclare',
 	gdeclaregreen: 'gdeclare',
 	gdeclare: function(target, room, user, connection, cmd) {
@@ -2303,17 +2273,17 @@ var commands = exports.commands = {
 	},
 	
 	pgdeclare: function(target, room, user) {
-		if (!target) return this.sendReply('/declareall - Declares a message in all chatrooms. Requires & ~');
-		if (!this.can('declare')) return;
+		if (!target) return this.sendReply('/declareall - Declares a message in all chatrooms. Requires ~');
+		if (!this.can('lockdown')) return;
 
 		if (!this.canTalk()) return;
 
 		for (var r in Rooms.rooms) {
-		if (Rooms.rooms[r].type === 'chat') Rooms.rooms[r].add('|raw|<b><i>Global declare from '+user.name+':</i><br />'+target+'</b></div>');
+			if (Rooms.rooms[r].type === 'chat') Rooms.rooms[r].add('|raw|<b><i>Global declare from '+user.name+':</i><br />'+target+'</b></div>');
 		}
 
 		this.logModCommand(user.name+' declared '+target+' to all rooms.');
-		},
+	},
 
 	modmsg: 'declaremod',
 	moddeclare: 'declaremod',
@@ -2392,8 +2362,6 @@ var commands = exports.commands = {
 		this.logComplaint(target);
 	},
 	
-	
-		
 	complaintslist: 'complaintlist',
 	complaintlist: function(target, room, user, connection) {
 		if (!this.can('declare')) return false;
@@ -2431,8 +2399,6 @@ var commands = exports.commands = {
 			}
 		});
 	},
-	
-	
 	
 	modlog: function(target, room, user, connection) {
 		if (!this.can('modlog')) return false;
