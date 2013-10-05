@@ -1212,6 +1212,7 @@ exports.BattleMovedex = {
 		name: "Brine",
 		pp: 10,
 		priority: 0,
+		onBasePowerPriority: 4,
 		onBasePower: function(bpMod, pokemon, target) {
 			if (target.hp * 2 < target.maxhp) {
 				return this.chain(bpMod, 2);
@@ -1468,6 +1469,7 @@ exports.BattleMovedex = {
 			onRestart: function(pokemon) {
 				this.effectData.duration = 2;
 			},
+			onBasePowerPriority: 3,
 			onBasePower: function(bpMod, attacker, defender, move) {
 				if (move.type === 'Electric') {
 					this.debug('charge boost');
@@ -3304,6 +3306,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		onBasePowerPriority: 4,
 		onBasePower: function(bpMod, pokemon) {
 			if (pokemon.status && pokemon.status !== 'slp') {
 				return this.chain(bpMod, 2);
@@ -4286,6 +4289,7 @@ exports.BattleMovedex = {
 		name: "Fusion Bolt",
 		pp: 5,
 		priority: 0,
+		onBasePowerPriority: 4,
 		onBasePower: function(bpMod, pokemon) {
 			var actives = pokemon.side.active;
 			for (var i=0; i<actives.length; i++) {
@@ -4312,6 +4316,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		thawsUser: true,
+		onBasePowerPriority: 4,
 		onBasePower: function(bpMod, pokemon) {
 			var actives = pokemon.side.active;
 			for (var i=0; i<actives.length; i++) {
@@ -5324,6 +5329,7 @@ exports.BattleMovedex = {
 			onStart: function(target, source) {
 				this.add('-singleturn', target, 'Helping Hand', '[of] '+source);
 			},
+			onBasePowerPriority: 3,
 			onBasePower: function(bpMod) {
 				this.debug('Boosting from Helping Hand');
 				return this.chain(bpMod, 1.5);
@@ -7050,6 +7056,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
+			onBasePowerPriority: 4,
 			onBasePower: function(bpMod) {
 				return this.chain(bpMod, 1.5);
 			}
@@ -7681,6 +7688,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add("-start", pokemon, 'Mud Sport');
 			},
+			onBasePowerModifier: 1,
 			onAnyBasePower: function(bpMod, user, target, move) {
 				if (move.type === 'Electric') return this.chain(bpMod, [0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			}
@@ -9266,6 +9274,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
+		onBasePowerPriority: 4,
 		onBasePower: function(bpMod, pokemon) {
 			if (pokemon.side.faintedLastTurn) {
 				this.debug('Boosted for a faint last turn');
@@ -11013,6 +11022,7 @@ exports.BattleMovedex = {
 			attacker.addVolatile(move.id, defender);
 			return null;
 		},
+		onBasePowerPriority: 4,
 		onBasePower: function(bpMod, pokemon, target) {
 			if (this.isWeather(['raindance','sandstorm','hail'])) {
 				this.debug('weakened by weather');
@@ -12826,6 +12836,7 @@ exports.BattleMovedex = {
 		name: "Venoshock",
 		pp: 10,
 		priority: 0,
+		onBasePowerPriority: 4,
 		onBasePower: function(bpMod, pokemon, target) {
 			if (target.status === 'psn' || target.status === 'tox') {
 				return this.chain(bpMod, 2);
@@ -13051,6 +13062,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add("-start", pokemon, 'move: Water Sport');
 			},
+			onBasePowerModifier: 1,
 			onAnyBasePower: function(bpMod, user, target, move) {
 				if (move.type === 'Fire') return this.chain(bpMod, [0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			}

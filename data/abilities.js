@@ -82,6 +82,7 @@ exports.BattleAbilities = {
 	"analytic": {
 		desc: "If the user moves last, the power of that move is increased by 30%.",
 		shortDesc: "This Pokemon's attacks do 1.3x damage if it is the last to move in a turn.",
+		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (!this.willMove(defender)) {
 				this.debug('Analytic boost');
@@ -453,6 +454,7 @@ exports.BattleAbilities = {
 				return null;
 			}
 		},
+		onBasePowerPriority: 7,
 		onFoeBasePower: function(bpMod, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return this.chain(bpMod, 1.25);
@@ -527,6 +529,7 @@ exports.BattleAbilities = {
 	"flareboost": {
 		desc: "When the user with this ability is burned, its Special Attack is raised by 50%.",
 		shortDesc: "When this Pokemon is burned, its special attacks do 1.5x damage.",
+		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (attacker.status === 'brn' && move.category === 'Special') {
 				return this.chain(bpMod, 1.5);
@@ -770,6 +773,7 @@ exports.BattleAbilities = {
 	"heatproof": {
 		desc: "This Pokemon receives half damage from both Fire-type attacks and residual burn damage.",
 		shortDesc: "This Pokemon receives half damage from Fire-type attacks and burn damage.",
+		onBasePowerPriority: 7,
 		onSourceBasePower: function(bpMod, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return basePower / 2;
@@ -1011,6 +1015,7 @@ exports.BattleAbilities = {
 	"ironfist": {
 		desc: "This Pokemon receives a 20% power boost for the following attacks: Bullet Punch, Comet Punch, Dizzy Punch, Drain Punch, Dynamicpunch, Fire Punch, Focus Punch, Hammer Arm, Ice Punch, Mach Punch, Mega Punch, Meteor Mash, Shadow Punch, Sky Uppercut, and Thunderpunch. Sucker Punch, which is known Ambush in Japan, is not boosted.",
 		shortDesc: "This Pokemon's punch-based attacks do 1.2x damage. Sucker Punch is not boosted.",
+		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (move.isPunchAttack) {
 				this.debug('Iron Fist boost');
@@ -1716,6 +1721,7 @@ exports.BattleAbilities = {
 	"reckless": {
 		desc: "When this Pokemon uses an attack that causes recoil damage, or an attack that has a chance to cause recoil damage such as Jump Kick and Hi Jump Kick, the attacks's power receives a 20% boost.",
 		shortDesc: "This Pokemon's attacks with recoil or crash damage do 1.2x damage; not Struggle.",
+		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (move.recoil || move.hasCustomRecoil) {
 				this.debug('Reckless boost');
@@ -1741,6 +1747,7 @@ exports.BattleAbilities = {
 	"rivalry": {
 		desc: "Increases base power of Physical and Special attacks by 25% if the opponent is the same gender, but decreases base power by 25% if opponent is the opposite gender.",
 		shortDesc: "This Pokemon's attacks do 1.25x on same gender targets; 0.75x on opposite gender.",
+		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (attacker.gender && defender.gender) {
 				if (attacker.gender === defender.gender) {
@@ -1793,6 +1800,7 @@ exports.BattleAbilities = {
 	"sandforce": {
 		desc: "Raises the power of Rock, Ground, and Steel-type moves by 30% while a Sandstorm is in effect. It also gives the user immunity to damage from Sandstorm.",
 		shortDesc: "This Pokemon's Rock/Ground/Steel attacks do 1.3x in Sandstorm; immunity to it.",
+		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (this.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
@@ -1948,6 +1956,7 @@ exports.BattleAbilities = {
 		},
 		effect: {
 			duration: 1,
+			onBasePowerPriority: 8,
 			onBasePower: function(bpMod, pokemon, target, move) {
 				return this.chain(bpMod, [0x14CD / 0x1000]); // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
 			}
@@ -2348,6 +2357,7 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon uses an attack that has 60 Base Power or less, the move's Base Power receives a 50% boost. For example, a move with 60 Base Power effectively becomes a move with 90 Base Power.",
 		shortDesc: "This Pokemon's attacks of 60 Base Power or less do 1.5x damage. Includes Struggle.",
 		onBasePowerPriority: 10,
+		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (basePower <= 60) {
 				this.debug('Technician boost');
@@ -2455,6 +2465,7 @@ exports.BattleAbilities = {
 	"toxicboost": {
 		desc: "When the user is poisoned, its Attack stat is raised by 50%.",
 		shortDesc: "When this Pokemon is poisoned, its physical attacks do 1.5x damage.",
+		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if ((attacker.status === 'psn' || attacker.status === 'tox') && move.category === 'Physical') {
 				return this.chain(bpMod, 1.5);

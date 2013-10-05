@@ -22,6 +22,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 60
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && user.baseTemplate.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chain(bpMod, 1.2);
@@ -231,6 +232,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return this.chain(bpMod, 1.2);
@@ -267,6 +269,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return this.chain(bpMod, 1.2);
@@ -357,6 +360,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return this.chain(bpMod, 1.2);
@@ -791,6 +795,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Dragon',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return this.chain(bpMod, 1.2);
@@ -807,6 +812,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 70
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return this.chain(bpMod, 1.2);
@@ -842,6 +848,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Dark',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return this.chain(bpMod, 1.2);
@@ -888,6 +895,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Ground',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Ground') {
 				return this.chain(bpMod, 1.2);
@@ -1101,6 +1109,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Fighting',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return this.chain(bpMod, 1.2);
@@ -1138,6 +1147,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Fire',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return this.chain(bpMod, 1.2);
@@ -1324,6 +1334,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 60
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (user.baseTemplate.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chain(bpMod, 1.2);
@@ -1384,6 +1395,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 100
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Rock') {
 				return this.chain(bpMod, 1.2);
@@ -1493,6 +1505,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Ice',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Ice') {
 				return this.chain(bpMod, 1.2);
@@ -1521,6 +1534,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Bug',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Bug') {
 				return this.chain(bpMod, 1.2);
@@ -1555,6 +1569,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Steel',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Steel') {
 				return this.chain(bpMod, 1.2);
@@ -1927,6 +1942,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 60
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && user.baseTemplate.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chain(bpMod, 1.2);
@@ -1965,6 +1981,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Electric') {
 				return this.chain(bpMod, 1.2);
@@ -2035,6 +2052,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Grass',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chain(bpMod, 1.2);
@@ -2085,6 +2103,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Steel') {
 				return this.chain(bpMod, 1.2);
@@ -2184,6 +2203,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Psychic',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chain(bpMod, 1.2);
@@ -2200,6 +2220,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		spritenum: 292,
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chain(bpMod, 1.2);
@@ -2224,6 +2245,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.category === 'Physical') {
 				return this.chain(bpMod, 1.1);
@@ -2240,6 +2262,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chain(bpMod, 1.2);
@@ -2285,6 +2308,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Ice') {
 				return this.chain(bpMod, 1.2);
@@ -2353,6 +2377,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chain(bpMod, 1.2);
@@ -2556,6 +2581,7 @@ exports.BattleItems = {
 			basePower: 70,
 			status: 'psn'
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Poison') {
 				return this.chain(bpMod, 1.2);
@@ -2888,6 +2914,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Rock') {
 				return this.chain(bpMod, 1.2);
@@ -2932,6 +2959,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chain(bpMod, 1.2);
@@ -3012,6 +3040,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Water') {
 				return this.chain(bpMod, 1.2);
@@ -3028,6 +3057,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 50
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move && move.type === 'Flying') {
 				return this.chain(bpMod, 1.2);
@@ -3109,6 +3139,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Normal') {
 				return this.chain(bpMod, 1.2);
@@ -3125,6 +3156,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Bug') {
 				return this.chain(bpMod, 1.2);
@@ -3174,6 +3206,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Flying',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Flying') {
 				return this.chain(bpMod, 1.2);
@@ -3201,6 +3234,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Ground') {
 				return this.chain(bpMod, 1.2);
@@ -3240,6 +3274,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Ghost') {
 				return this.chain(bpMod, 1.2);
@@ -3270,6 +3305,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Water',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chain(bpMod, 1.2);
@@ -3287,6 +3323,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Ghost',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Ghost') {
 				return this.chain(bpMod, 1.2);
@@ -3400,6 +3437,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Rock',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Rock') {
 				return this.chain(bpMod, 1.2);
@@ -3497,6 +3535,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Poison',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Poison') {
 				return this.chain(bpMod, 1.2);
@@ -3513,6 +3552,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chain(bpMod, 1.2);
@@ -3589,6 +3629,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chain(bpMod, 1.2);
@@ -3696,6 +3737,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.category === 'Special') {
 				return this.chain(bpMod, 1.1);
@@ -3735,6 +3777,7 @@ exports.BattleItems = {
 			basePower: 90
 		},
 		onPlate: 'Electric',
+		onBasePowerPriority: 6,
 		onBasePower: function(bpMod, user, target, move) {
 			if (move.type === 'Electric') {
 				return this.chain(bpMod, 1.2);
