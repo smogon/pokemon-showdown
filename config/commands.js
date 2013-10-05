@@ -1441,11 +1441,11 @@ var commands = exports.commands = {
 	mastersofthecolor: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('These are our current Masters of the Color!<br \>' +
-		'<font color="blue"><b>Blue</b></font color>: twizzy (2nd time in a row)<br \>' + 
-		'<font color="red"><b>Red</b></font color>: jerichoholic<br \>' +
-		'<font color="green"><b>Green</b></font color>: Sir Providence<br \>' +
-		'<font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>: Thank Swalot<br \>' +
-		'<font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: TheGracefulAssasin')
+		'<font color="blue"><b>Blue</b></font color>: twizzy (3rd time in a row)<br \>' + 
+		'<font color="red"><b>Red</b></font color>: E four Flint<br \>' +
+		'<font color="green"><b>Green</b></font color>: KipperSkipper<br \>' +
+		'<font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>: oSynthesizeo<br \>' +
+		'<font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: ELITE4fail')
 	},
 
 	biblialeague: function(target, room, user) {
