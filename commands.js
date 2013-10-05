@@ -315,6 +315,9 @@ var commands = exports.commands = {
 		if (targetUser) {
 			targetUser.updateIdentity();
 		}
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
+		}
 	},
 
 	autojoin: function(target, room, user, connection) {
