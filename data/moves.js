@@ -1146,9 +1146,9 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onSourceBasePower: function(basePower, target, source, move) {
+			onSourceBasePower: function(bpMod, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
-					return basePower * 2;
+					return this.chain(bpMod, 2);
 				}
 			}
 		},
@@ -1205,10 +1205,6 @@ exports.BattleMovedex = {
 		num: 362,
 		accuracy: 100,
 		basePower: 65,
-		basePowerCallback: function(pokemon, target) {
-			if (target.hp * 2 < target.maxhp) return 130;
-			return 65;
-		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. Power doubles if the target has less than or equal to half of its maximum HP remaining.",
 		shortDesc: "Power doubles if the target's HP is 50% or less.",
@@ -1216,6 +1212,11 @@ exports.BattleMovedex = {
 		name: "Brine",
 		pp: 10,
 		priority: 0,
+		onBasePower: function(bpMod, pokemon, target) {
+			if (target.hp * 2 < target.maxhp) {
+				return this.chain(bpMod, 2);
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -1467,10 +1468,10 @@ exports.BattleMovedex = {
 			onRestart: function(pokemon) {
 				this.effectData.duration = 2;
 			},
-			onBasePower: function(basePower, attacker, defender, move) {
+			onBasePower: function(bpMod, attacker, defender, move) {
 				if (move.type === 'Electric') {
 					this.debug('charge boost');
-					return basePower * 2;
+					return this.chain(bpMod, 2);
 				}
 			}
 		},
@@ -3294,12 +3295,6 @@ exports.BattleMovedex = {
 		num: 263,
 		accuracy: 100,
 		basePower: 70,
-		basePowerCallback: function(pokemon) {
-			if (pokemon.status && pokemon.status !== 'slp') {
-				return 140;
-			}
-			return 70;
-		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the user is burned, paralyzed, or poisoned. Makes contact.",
 		shortDesc: "Power doubles if user is burn/poison/paralyzed.",
@@ -3309,6 +3304,11 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		onBasePower: function(bpMod, pokemon) {
+			if (pokemon.status && pokemon.status !== 'slp') {
+				return this.chain(bpMod, 2);
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3928,9 +3928,9 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onSourceBasePower: function(basePower, target, source, move) {
+			onSourceBasePower: function(bpMod, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
-					return basePower * 2;
+					return this.chain(bpMod, 2);
 				}
 			}
 		},
@@ -4278,16 +4278,6 @@ exports.BattleMovedex = {
 		num: 559,
 		accuracy: 100,
 		basePower: 100,
-		basePowerCallback: function(pokemon) {
-			var actives = pokemon.side.active;
-			for (var i=0; i<actives.length; i++) {
-				if (actives[i] && actives[i].moveThisTurn === 'fusionflare') {
-					this.debug('double power');
-					return 200;
-				}
-			}
-			return 100;
-		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. If this move is successful, the next use of Fusion Flare by any Pokemon this turn will have its power doubled.",
 		shortDesc: "Power doubles if used after Fusion Flare.",
@@ -4296,6 +4286,15 @@ exports.BattleMovedex = {
 		name: "Fusion Bolt",
 		pp: 5,
 		priority: 0,
+		onBasePower: function(bpMod, pokemon) {
+			var actives = pokemon.side.active;
+			for (var i=0; i<actives.length; i++) {
+				if (actives[i] && actives[i].moveThisTurn === 'fusionflare') {
+					this.debug('double power');
+					return this.chain(bpMod, 2);
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -4304,16 +4303,6 @@ exports.BattleMovedex = {
 		num: 558,
 		accuracy: 100,
 		basePower: 100,
-		basePowerCallback: function(pokemon) {
-			var actives = pokemon.side.active;
-			for (var i=0; i<actives.length; i++) {
-				if (actives[i] && actives[i].moveThisTurn === 'fusionbolt') {
-					this.debug('double power');
-					return 200;
-				}
-			}
-			return 100;
-		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. If this move is successful, the next use of Fusion Bolt by any Pokemon this turn will have its power doubled. If the user is frozen, it will defrost before using this move.",
 		shortDesc: "Power doubles if used after Fusion Bolt.",
@@ -4323,6 +4312,15 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		thawsUser: true,
+		onBasePower: function(bpMod, pokemon) {
+			var actives = pokemon.side.active;
+			for (var i=0; i<actives.length; i++) {
+				if (actives[i] && actives[i].moveThisTurn === 'fusionbolt') {
+					this.debug('double power');
+					return this.chain(bpMod, 2);
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -5326,9 +5324,9 @@ exports.BattleMovedex = {
 			onStart: function(target, source) {
 				this.add('-singleturn', target, 'Helping Hand', '[of] '+source);
 			},
-			onBasePower: function(basePower) {
+			onBasePower: function(bpMod) {
 				this.debug('Boosting from Helping Hand');
-				return basePower * 1.5;
+				return this.chain(bpMod, 1.5);
 			}
 		},
 		secondary: false,
@@ -7052,8 +7050,8 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
-			onBasePower: function(basePower) {
-				return basePower * 1.5;
+			onBasePower: function(bpMod) {
+				return this.chain(bpMod, 1.5);
 			}
 		},
 		secondary: false,
@@ -7683,8 +7681,8 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add("-start", pokemon, 'Mud Sport');
 			},
-			onAnyBasePower: function(basePower, user, target, move) {
-				if (move.type === 'Electric') return basePower * 0.33;
+			onAnyBasePower: function(bpMod, user, target, move) {
+				if (move.type === 'Electric') return this.chain(bpMod, [0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			}
 		},
 		secondary: false,
@@ -9260,13 +9258,6 @@ exports.BattleMovedex = {
 		num: 514,
 		accuracy: 100,
 		basePower: 70,
-		basePowerCallback: function(pokemon) {
-			if (pokemon.side.faintedLastTurn) {
-				this.debug('Boosted for a faint last turn');
-				return 140;
-			}
-			return 70;
-		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if one of the user's party members fainted last turn. Makes contact.",
 		shortDesc: "Power doubles if an ally fainted last turn.",
@@ -9275,6 +9266,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
+		onBasePower: function(bpMod, pokemon) {
+			if (pokemon.side.faintedLastTurn) {
+				this.debug('Boosted for a faint last turn');
+				return this.chain(bpMod, 2);
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10577,7 +10574,7 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onAnyBasePower: function(basePower, target, source, move) {
+			onAnyBasePower: function(bpMod, target, source, move) {
 				if (target !== this.effectData.target && target !== this.effectData.source) {
 					return;
 				}
@@ -10585,7 +10582,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move.id === 'gust' || move.id === 'twister') {
-					return basePower * 2;
+					return this.chain(bpMod, 2);
 				}
 			}
 		},
@@ -10995,13 +10992,6 @@ exports.BattleMovedex = {
 		num: 76,
 		accuracy: 100,
 		basePower: 120,
-		basePowerCallback: function(pokemon, target) {
-			if (this.isWeather(['raindance','sandstorm','hail'])) {
-				this.debug('weakened by weather');
-				return 60;
-			}
-			return 120;
-		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
@@ -11022,6 +11012,12 @@ exports.BattleMovedex = {
 			}
 			attacker.addVolatile(move.id, defender);
 			return null;
+		},
+		onBasePower: function(bpMod, pokemon, target) {
+			if (this.isWeather(['raindance','sandstorm','hail'])) {
+				this.debug('weakened by weather');
+				return this.chain(bpMod, 0.5);
+			}
 		},
 		effect: {
 			duration: 2,
@@ -12823,12 +12819,6 @@ exports.BattleMovedex = {
 		num: 474,
 		accuracy: 100,
 		basePower: 65,
-		basePowerCallback: function(pokemon,target) {
-			if (target.status === 'psn' || target.status === 'tox') {
-				return 130;
-			}
-			return 65;
-		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. Power doubles if the target is poisoned.",
 		shortDesc: "Power doubles if the target is poisoned.",
@@ -12836,6 +12826,11 @@ exports.BattleMovedex = {
 		name: "Venoshock",
 		pp: 10,
 		priority: 0,
+		onBasePower: function(bpMod, pokemon, target) {
+			if (target.status === 'psn' || target.status === 'tox') {
+				return this.chain(bpMod, 2);
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Poison"
@@ -13056,8 +13051,8 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add("-start", pokemon, 'move: Water Sport');
 			},
-			onAnyBasePower: function(basePower, user, target, move) {
-				if (move.type === 'Fire') return basePower * 0.33;
+			onAnyBasePower: function(bpMod, user, target, move) {
+				if (move.type === 'Fire') return this.chain(bpMod, [0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			}
 		},
 		secondary: false,

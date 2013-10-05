@@ -2591,14 +2591,6 @@ var Battle = (function() {
 			return target.maxhp;
 		}
 
-		if (!move.basePowerMultiplier && move.category !== 'Status') {
-			// happens before basePowerCallback so Acrobatics works correctly
-			// activates constant damage moves
-			// but NOT OHKO moves
-			move.basePowerMultiplier = this.runEvent('BasePowerMultiplier', pokemon, target, move, 1);
-			if (move.basePowerMultiplier != 1) this.debug('multiplier: '+move.basePowerMultiplier);
-		}
-
 		if (move.damageCallback) {
 			return move.damageCallback.call(this, pokemon, target);
 		}
@@ -2642,17 +2634,12 @@ var Battle = (function() {
 		}
 
 		// happens after crit calculation
-		if (basePower) {
-			basePower = this.singleEvent('BasePower', move, null, pokemon, target, move, basePower);
-			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
+		var bpMod = 1;
+		bpMod = this.singleEvent('BasePower', move, null, pokemon, target, move, bpMod);
+		bpMod = this.runEvent('BasePower', pokemon, target, move, bpMod);
 
-			if (move.basePowerMultiplier && move.basePowerMultiplier != 1) {
-				basePower = this.modify(basePower, move.basePowerMultiplier);
-			}
-			if (move.basePowerModifier) {
-				basePower = this.modify(basePower, move.basePowerModifier);
-			}
-		}
+		basePower = this.modify(basePower, bpMod);
+
 		if (!basePower) return 0;
 		basePower = clampIntRange(basePower, 1);
 
