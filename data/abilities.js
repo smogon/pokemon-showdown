@@ -82,7 +82,7 @@ exports.BattleAbilities = {
 	"analytic": {
 		desc: "If the user moves last, the power of that move is increased by 30%.",
 		shortDesc: "This Pokemon's attacks do 1.3x damage if it is the last to move in a turn.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (!this.willMove(defender)) {
 				this.debug('Analytic boost');
 				return this.modify(basePower, [0x14CD, 0x1000]); // The Analytic modifier is slightly higher than the normal 1.3 (0x14CC)
@@ -453,9 +453,9 @@ exports.BattleAbilities = {
 				return null;
 			}
 		},
-		onFoeBasePower: function(basePower, attacker, defender, move) {
+		onFoeBasePower: function(bpMod, attacker, defender, move) {
 			if (move.type === 'Fire') {
-				return basePower * 5/4;
+				return this.chain(bpMod, 1.25);
 			}
 		},
 		onWeather: function(target, source, effect) {
@@ -527,9 +527,9 @@ exports.BattleAbilities = {
 	"flareboost": {
 		desc: "When the user with this ability is burned, its Special Attack is raised by 50%.",
 		shortDesc: "When this Pokemon is burned, its special attacks do 1.5x damage.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (attacker.status === 'brn' && move.category === 'Special') {
-				return basePower * 1.5;
+				return this.chain(bpMod, 1.5);
 			}
 		},
 		id: "flareboost",
@@ -770,7 +770,7 @@ exports.BattleAbilities = {
 	"heatproof": {
 		desc: "This Pokemon receives half damage from both Fire-type attacks and residual burn damage.",
 		shortDesc: "This Pokemon receives half damage from Fire-type attacks and burn damage.",
-		onSourceBasePower: function(basePower, attacker, defender, move) {
+		onSourceBasePower: function(bpMod, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return basePower / 2;
 			}
@@ -1011,10 +1011,10 @@ exports.BattleAbilities = {
 	"ironfist": {
 		desc: "This Pokemon receives a 20% power boost for the following attacks: Bullet Punch, Comet Punch, Dizzy Punch, Drain Punch, Dynamicpunch, Fire Punch, Focus Punch, Hammer Arm, Ice Punch, Mach Punch, Mega Punch, Meteor Mash, Shadow Punch, Sky Uppercut, and Thunderpunch. Sucker Punch, which is known Ambush in Japan, is not boosted.",
 		shortDesc: "This Pokemon's punch-based attacks do 1.2x damage. Sucker Punch is not boosted.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (move.isPunchAttack) {
 				this.debug('Iron Fist boost');
-				return basePower * 12/10;
+				return this.chain(bpMod, 1.2);
 			}
 		},
 		id: "ironfist",
@@ -1716,10 +1716,10 @@ exports.BattleAbilities = {
 	"reckless": {
 		desc: "When this Pokemon uses an attack that causes recoil damage, or an attack that has a chance to cause recoil damage such as Jump Kick and Hi Jump Kick, the attacks's power receives a 20% boost.",
 		shortDesc: "This Pokemon's attacks with recoil or crash damage do 1.2x damage; not Struggle.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (move.recoil || move.hasCustomRecoil) {
 				this.debug('Reckless boost');
-				return basePower * 12/10;
+				return this.chain(bpMod, 1.2);
 			}
 		},
 		id: "reckless",
@@ -1741,14 +1741,14 @@ exports.BattleAbilities = {
 	"rivalry": {
 		desc: "Increases base power of Physical and Special attacks by 25% if the opponent is the same gender, but decreases base power by 25% if opponent is the opposite gender.",
 		shortDesc: "This Pokemon's attacks do 1.25x on same gender targets; 0.75x on opposite gender.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (attacker.gender && defender.gender) {
 				if (attacker.gender === defender.gender) {
 					this.debug('Rivalry boost');
-					return basePower * 5/4;
+					return this.chain(bpMod, 1.25);
 				} else {
 					this.debug('Rivalry weaken');
-					return basePower * 3/4;
+					return this.chain(bpMod, 0.75);
 				}
 			}
 		},
@@ -1793,7 +1793,7 @@ exports.BattleAbilities = {
 	"sandforce": {
 		desc: "Raises the power of Rock, Ground, and Steel-type moves by 30% while a Sandstorm is in effect. It also gives the user immunity to damage from Sandstorm.",
 		shortDesc: "This Pokemon's Rock/Ground/Steel attacks do 1.3x in Sandstorm; immunity to it.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (this.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
@@ -1939,15 +1939,17 @@ exports.BattleAbilities = {
 	"sheerforce": {
 		desc: "Raises the base power of all moves that have any secondary effects by 30%, but the secondary effects are ignored. However, this ability is not applied to moves that have a negative effect on the user, such as recoil, two-turn moves, and stat reduction after using certain moves. If a Pokemon with Sheer Force is holding a Life Orb and uses an attack that would be boosted by Sheer Force, then the move gains both boosts but the user receives no recoil damage.",
 		shortDesc: "This Pokemon's attacks with secondary effects do 1.3x damage; nullifies the effects.",
-		onModifyMove: function(move) {
+		onModifyMove: function(move, pokemon) {
 			if (move.secondaries) {
-				// if (!move.basePowerModifier) move.basePowerModifier = 1;
-				// Sheer Force is the only thing using basePowerModifier
-				// So until chaining comes along,
-				// setting basePowerModifier to the proper modifier will suffice
-				move.basePowerModifier = [0x14CD,0x1000]; // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
 				delete move.secondaries;
 				move.negateSecondary = true;
+				pokemon.addVolatile('sheerforce');
+			}
+		},
+		effect: {
+			duration: 1,
+			onBasePower: function(bpMod, pokemon, target, move) {
+				return this.chain(bpMod, [0x14CD / 0x1000]); // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
 			}
 		},
 		id: "sheerforce",
@@ -2346,10 +2348,10 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon uses an attack that has 60 Base Power or less, the move's Base Power receives a 50% boost. For example, a move with 60 Base Power effectively becomes a move with 90 Base Power.",
 		shortDesc: "This Pokemon's attacks of 60 Base Power or less do 1.5x damage. Includes Struggle.",
 		onBasePowerPriority: 10,
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if (basePower <= 60) {
 				this.debug('Technician boost');
-				return basePower * 1.5;
+				return this.chain(bpMod, 1.5);
 			}
 		},
 		id: "technician",
@@ -2453,9 +2455,9 @@ exports.BattleAbilities = {
 	"toxicboost": {
 		desc: "When the user is poisoned, its Attack stat is raised by 50%.",
 		shortDesc: "When this Pokemon is poisoned, its physical attacks do 1.5x damage.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function(bpMod, attacker, defender, move) {
 			if ((attacker.status === 'psn' || attacker.status === 'tox') && move.category === 'Physical') {
-				return basePower * 1.5;
+				return this.chain(bpMod, 1.5);
 			}
 		},
 		id: "toxicboost",
