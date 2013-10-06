@@ -776,7 +776,7 @@ exports.BattleAbilities = {
 		onBasePowerPriority: 7,
 		onSourceBasePower: function(bpMod, attacker, defender, move) {
 			if (move.type === 'Fire') {
-				return basePower / 2;
+				return this.chain(bpMod, 0.5);
 			}
 		},
 		onDamage: function(damage, target, source, effect) {
