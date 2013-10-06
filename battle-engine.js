@@ -983,7 +983,7 @@ var BattlePokemon = (function() {
 		if (this.ability === ability.id) {
 			return false;
 		}
-		if (ability.id === 'Multitype' || ability.id === 'Illusion' || this.ability === 'Multitype') {
+		if (ability.id === 'multitype' || ability.id === 'illusion' || this.ability === 'multitype') {
 			return false;
 		}
 		this.ability = ability.id;
@@ -2283,6 +2283,7 @@ var Battle = (function() {
 			}
 			this.runEvent('SwitchOut', oldActive);
 			oldActive.isActive = false;
+			oldActive.isStarted = false;
 			oldActive.position = pokemon.position;
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
@@ -2590,14 +2591,6 @@ var Battle = (function() {
 			return target.maxhp;
 		}
 
-		if (!move.basePowerMultiplier && move.category !== 'Status') {
-			// happens before basePowerCallback so Acrobatics works correctly
-			// activates constant damage moves
-			// but NOT OHKO moves
-			move.basePowerMultiplier = this.runEvent('BasePowerMultiplier', pokemon, target, move, 1);
-			if (move.basePowerMultiplier != 1) this.debug('multiplier: '+move.basePowerMultiplier);
-		}
-
 		if (move.damageCallback) {
 			return move.damageCallback.call(this, pokemon, target);
 		}
@@ -2641,17 +2634,12 @@ var Battle = (function() {
 		}
 
 		// happens after crit calculation
-		if (basePower) {
-			basePower = this.singleEvent('BasePower', move, null, pokemon, target, move, basePower);
-			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
+		var bpMod = 1;
+		bpMod = this.singleEvent('BasePower', move, null, pokemon, target, move, bpMod);
+		bpMod = this.runEvent('BasePower', pokemon, target, move, bpMod);
 
-			if (move.basePowerMultiplier && move.basePowerMultiplier != 1) {
-				basePower = this.modify(basePower, move.basePowerMultiplier);
-			}
-			if (move.basePowerModifier) {
-				basePower = this.modify(basePower, move.basePowerModifier);
-			}
-		}
+		basePower = this.modify(basePower, bpMod);
+
 		if (!basePower) return 0;
 		basePower = clampIntRange(basePower, 1);
 
@@ -2664,42 +2652,43 @@ var Battle = (function() {
 		var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
 		var attack;
 		var defense;
-		/*
-		if (move.useTargetOffensive) attacker = target;
-		if (move.useSourceDefensive) defender = pokemon;
-		*/
 
 		var atkStatMod = 1;
 		atkStatMod = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, atkStatMod);
 		var defStatMod = 1;
 		defStatMod = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defStatMod);
+		var atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
+		var defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 		
-		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, defender.boosts[attackStat], atkStatMod);
-		else attack = attacker.calculateStat(attackStat, attacker.boosts[attackStat], atkStatMod);
-		
-		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, attacker.boosts[defenseStat], defStatMod);
-		else defense = defender.calculateStat(defenseStat, defender.boosts[defenseStat], defStatMod);
-
 		var ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		var ignorePositiveDefensive = !!move.ignorePositiveDefensive;
+		
 		if (move.crit) {
 			ignoreNegativeOffensive = true;
 			ignorePositiveDefensive = true;
 		}
-		if (ignoreNegativeOffensive && (move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat]) < 0) {
-			move.ignoreOffensive = true;
+		
+		if (move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0)) {
+			var ignoreOffensive = true;
 		}
-		if (move.ignoreOffensive) {
+		if (move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0)) {
+			var ignoreDefensive = true;
+		}
+		
+		if (ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.calculateStat(attackStat, 0, atkStatMod);
+			atkBoosts = 0;
 		}
-		if (ignorePositiveDefensive && (move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat]) > 0) {
-			move.ignoreDefensive = true;
-		}
-		if (move.ignoreDefensive) {
+		if (ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
-			defense = target.calculateStat(defenseStat, 0, defStatMod);
+			defBoosts = 0;
 		}
+
+		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, atkBoosts, atkStatMod);
+		else attack = attacker.calculateStat(attackStat, atkBoosts, atkStatMod);
+		
+		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, defBoosts, defStatMod);
+		else defense = defender.calculateStat(defenseStat, defBoosts, defStatMod);
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
