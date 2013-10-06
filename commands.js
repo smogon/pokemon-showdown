@@ -1418,6 +1418,12 @@ var commands = exports.commands = {
 		if (nextGroup !== ' ' && !user.can('room'+config.groups[nextGroup].id, null, room)) {
 			return this.sendReply('/' + cmd + ' - Access denied for promoting to '+config.groups[nextGroup].name+'.');
 		}
+		if (currentGroup === nextGroup) {
+			return this.sendReply("User '"+this.targetUsername+"' is already a "+(config.groups[nextGroup].name || 'regular user')+" in this room.");
+		}
+		if (config.groups[nextGroup].globalonly) {
+			return this.sendReply("The rank of "+config.groups[nextGroup].name+" is global-only and can't be room-promoted to.");
+		}
 
 		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
 		var groupName = (config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
@@ -1438,6 +1444,9 @@ var commands = exports.commands = {
 		}
 		if (targetUser) {
 			targetUser.updateIdentity();
+		}
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
 		}
 	},
 	
