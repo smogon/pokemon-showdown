@@ -12,7 +12,7 @@ exports.BattleStatuses = {
 		},
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (move && move.category === 'Physical' && attacker && attacker.ability !== 'guts') {
-				return basePower / 2;
+				return this.chain(bpMod, 0.5); // This should really take place directly in the damage function but it's here for now
 			}
 		},
 		onResidualOrder: 9,
