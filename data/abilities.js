@@ -2358,7 +2358,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's attacks of 60 Base Power or less do 1.5x damage. Includes Struggle.",
 		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
-			if (basePower <= 60) {
+			if (move.basePower <= 60) {
 				this.debug('Technician boost');
 				return this.chain(bpMod, 1.5);
 			}
