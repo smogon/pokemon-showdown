@@ -86,7 +86,7 @@ exports.BattleAbilities = {
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (!this.willMove(defender)) {
 				this.debug('Analytic boost');
-				return this.modify(basePower, [0x14CD, 0x1000]); // The Analytic modifier is slightly higher than the normal 1.3 (0x14CC)
+				return this.chain(bpMod, [0x14CD, 0x1000]); // The Analytic modifier is slightly higher than the normal 1.3 (0x14CC)
 			}
 		},
 		id: "analytic",
@@ -776,7 +776,7 @@ exports.BattleAbilities = {
 		onBasePowerPriority: 7,
 		onSourceBasePower: function(bpMod, attacker, defender, move) {
 			if (move.type === 'Fire') {
-				return basePower / 2;
+				return this.chain(bpMod, 0.5);
 			}
 		},
 		onDamage: function(damage, target, source, effect) {
@@ -1805,7 +1805,7 @@ exports.BattleAbilities = {
 			if (this.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
-					return this.modify(basePower, [0x14CD, 0x1000]); // The Sand Force modifier is slightly higher than the normal 1.3 (0x14CC)
+					return this.chain(bpMod, [0x14CD, 0x1000]); // The Sand Force modifier is slightly higher than the normal 1.3 (0x14CC)
 				}
 			}
 		},
@@ -1958,7 +1958,7 @@ exports.BattleAbilities = {
 			duration: 1,
 			onBasePowerPriority: 8,
 			onBasePower: function(bpMod, pokemon, target, move) {
-				return this.chain(bpMod, [0x14CD / 0x1000]); // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
+				return this.chain(bpMod, [0x14CD, 0x1000]); // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
 			}
 		},
 		id: "sheerforce",
@@ -2356,7 +2356,6 @@ exports.BattleAbilities = {
 	"technician": {
 		desc: "When this Pokemon uses an attack that has 60 Base Power or less, the move's Base Power receives a 50% boost. For example, a move with 60 Base Power effectively becomes a move with 90 Base Power.",
 		shortDesc: "This Pokemon's attacks of 60 Base Power or less do 1.5x damage. Includes Struggle.",
-		onBasePowerPriority: 10,
 		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (basePower <= 60) {
