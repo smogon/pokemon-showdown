@@ -2356,7 +2356,6 @@ exports.BattleAbilities = {
 	"technician": {
 		desc: "When this Pokemon uses an attack that has 60 Base Power or less, the move's Base Power receives a 50% boost. For example, a move with 60 Base Power effectively becomes a move with 90 Base Power.",
 		shortDesc: "This Pokemon's attacks of 60 Base Power or less do 1.5x damage. Includes Struggle.",
-		onBasePowerPriority: 10,
 		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (basePower <= 60) {
