@@ -1958,7 +1958,7 @@ exports.BattleAbilities = {
 			duration: 1,
 			onBasePowerPriority: 8,
 			onBasePower: function(bpMod, pokemon, target, move) {
-				return this.chain(bpMod, [0x14CD / 0x1000]); // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
+				return this.chain(bpMod, [0x14CD, 0x1000]); // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
 			}
 		},
 		id: "sheerforce",
