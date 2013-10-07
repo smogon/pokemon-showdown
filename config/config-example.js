@@ -135,7 +135,7 @@ exports.herokuhack = false;
 // displayed in the client.
 exports.customavatars = {
 	//'userid': 'customavatar.png'
-	'leaderjumpe' : 'leaderjumper.png'
+	'leaderjumper' : 'leaderjumper.png'
 };
 
 // appealurl - specify a URL containing information on how users can appeal
