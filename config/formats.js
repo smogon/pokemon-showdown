@@ -339,7 +339,7 @@ exports.Formats = [
 					move.onTryHit = function() {
 						this.add('-message', 'Trick: You got scared by a real-looking costume!');
 					};
-					move.category = 'Physical';
+					move.category = 'Special';
 					move.type = 'Dark';
 					move.basePower = 200;
 					break;
