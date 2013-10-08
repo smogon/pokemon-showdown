@@ -280,14 +280,15 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 
 	if (message) {
         if (user.isAway === true) {
-            user.isAway = false;
-            var name = user.name;
+        	if (user.name === user.originalName) user.isAway = false; connection.sendTo(user, 'Your name has been left unaltered and no longer marked as away.');
 
-            var newName = name.substr(0, name.length - 7);
+            user.isAway = false;
+            var newName = user.originalName;
 
             user.forceRename(newName, undefined, true);
             user.authenticated = true;
             connection.sendTo(room, '|raw|~~ <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
+            user.originalName = '';
         }
     }
 

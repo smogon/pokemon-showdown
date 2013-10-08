@@ -210,8 +210,8 @@ var commands = exports.commands = {
 			output += '<a href="/'+i+'" room="'+i+'">'+i+'</a>';
 		}
 		this.sendReply('|raw|'+output);
-		if (!targetUser.connected) {
-			this.sendReply('|raw|This user is <font color = "red">offline</font>.');
+		if (!targetUser.connected || targetUser.isAway) {
+			this.sendReply('|raw|This user is ' + ((!targetUser.connected) ? '<font color = "red">offline</font>.' : '<font color = "orange">away</font>.'));
 		}
 		if (targetUser.canCustomSymbol || targetUser.canCustomAvatar || targetUser.canAnimatedAvatar || targetUser.canChatRoom || targetUser.canTrainerCard || targetUser.canFixItem || targetUser.canDecAdvertise) {
 			var i = '';
@@ -1308,6 +1308,12 @@ var commands = exports.commands = {
 	teafany: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br>Ace: Farfetch\'d<br>Give me a leek to play!');
+	},
+
+	alee: 'alee93',
+	alee93: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/VJwqNpr.png"><img src="http://i.imgur.com/jLZstQ8.gif"><img src="http://i.imgur.com/Qi0y2ZD.png"><br><font color="red"><blink>Ace: Lilligant</blink><br></font><font color="purple">Love bites back, so do I ♫♥');
 	},
 	
 	meatyman: function(target, room, user) {

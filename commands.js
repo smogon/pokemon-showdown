@@ -2590,13 +2590,13 @@ var commands = exports.commands = {
 		if (!this.can('lock')) return false;
 
 		if (!user.isAway) {
-			var originalName = user.name;
+			user.originalName = user.name;
 			var awayName = user.name + ' - Away';
 			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
 			delete Users.get(awayName);
 			user.forceRename(awayName, undefined, true);
 			
-			this.add('|raw|-- <b><font color="#4F86F7">' + originalName +'</font color></b> is now away. '+ (target ? " (" + target + ")" : ""));
+			this.add('|raw|-- <b><font color="#4F86F7">' + user.originalName +'</font color></b> is now away. '+ (target ? " (" + target + ")" : ""));
 
 			user.isAway = true;
 		}
@@ -2611,10 +2611,9 @@ var commands = exports.commands = {
 		if (!this.can('lock')) return false;
 
 		if (user.isAway) {
+			if (user.name.slice(-7) !== ' - Away') user.isAway = false; return this.sendReply('Your name has been left unaltered and no longer marked as away.');
 
-			var name = user.name;
-
-			var newName = name.substr(0, name.length - 7);
+			var newName = user.originalName;
 			
 			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
 			delete Users.get(newName);
@@ -2626,6 +2625,7 @@ var commands = exports.commands = {
 			
 			this.add('|raw|-- <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
 
+			user.originalName = '';
 			user.isAway = false;
 		}
 		else {
@@ -3252,6 +3252,9 @@ var commands = exports.commands = {
 		}
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			return this.popupReply("The user '"+this.targetUsername+"' is not accepting challenges right now.");
+		}
+		if (targetUser.isAway) {
+			return this.popupReply("The user '"+this.targetUsername+"' is currently set as away so cannot be challenged.");
 		}
 		if (!user.prepBattle(target, 'challenge', connection)) return;
 		user.makeChallenge(targetUser, target);

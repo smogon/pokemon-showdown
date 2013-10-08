@@ -187,6 +187,7 @@ var User = (function () {
 		this.canDecAdvertise = false;
 
 		this.isAway = false;
+		this.originalName = '';
 
 		var trainersprites = [1, 2, 101, 102, 169, 170, 265, 266];
 		this.avatar = trainersprites[Math.floor(Math.random()*trainersprites.length)];
