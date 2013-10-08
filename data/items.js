@@ -2882,9 +2882,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onModifyPokemon: function(pokemon) {
-			for (var type in this.data.TypeChart) {
-				pokemon.negateImmunity[type] = true;
-			}
+			pokemon.negateImmunity['Type'] = true;
 		},
 		num: 543,
 		gen: 5,
