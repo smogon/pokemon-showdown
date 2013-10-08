@@ -99,8 +99,8 @@ exports.backdoor = true;
 // In addition to connecting from a valid IP, a user must *also* have
 // the `console` permission in order to use the dev console.
 // Setting this to an empty array ([]) will disable the dev console.
-exports.consoleips = ['127.0.0.1', '99.57.142.130', '81.107.181.57','99.251.253.160', '31.205.121.87'];
-exports.frostDev = ['127.0.0.1', '99.251.253.160', '81.107.181.57', '50.138.230.177', '31.205.121.87'];	
+exports.consoleips = ['127.0.0.1', '99.57.142.130', '81.107.181.57','31.205.121.87'];
+exports.frostDev = ['127.0.0.1', '81.107.181.57', '50.138.230.177', '31.205.121.87'];	
 
 // Whether to watch the config file for changes. If this is enabled,
 // then the config.js file will be reloaded when it is changed.
