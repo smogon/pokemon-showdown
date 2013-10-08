@@ -275,7 +275,6 @@ exports.Formats = [
 		gameType: 'doubles',
 		team: 'randomCC',
 		searchShow: false,
-		debug: true,
 		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 
