@@ -1602,12 +1602,15 @@ exports.BattleScripts = {
 			var pokemon = seasonalPokemonList[i];
 			var template = this.getTemplate(pokemon);
 			var set = this.randomSet(template, i);
-			var hasMoves = {};
-			for (var m in set.moves) {
-				set.moves[m] = set.moves[m].toLowerCase();
-				hasMoves[set.moves[m]] = true;
+			var trickindex = -1;
+			for (var j=0, l=set.moves.length; j<l; j++) {
+				if (set.moves[j].toLowerCase() === 'trick') {
+					trickindex = j;
+				}
 			}
-			if (!('trick' in hasMoves)) set.moves[3] = 'trick';
+			if (trickindex === -1 || trickindex === 2) {
+				set.moves[3] = 'trick';
+			}
 			set.moves[2] = 'Present';
 			team.push(set);
 		}
