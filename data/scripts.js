@@ -1602,7 +1602,6 @@ exports.BattleScripts = {
 			var pokemon = seasonalPokemonList[i];
 			var template = this.getTemplate(pokemon);
 			var set = this.randomSet(template, i);
-			var hasMoves = {};
 			var trickindex = -1;
 			for (var j=0, l=set.moves.length; j<l; j++) {
 				if (set.moves[j].toLowerCase() === 'trick') {
