@@ -441,7 +441,7 @@ exports.customavatars = {
 	'prez' : 'cosysprite.png',
 	'figufgyu' : 'figufgyu.png',
 	'akeino' : 'akeino.png',
-	'frankentein' : 'stein.png',
+	'frankentein' : 'steinuser82819283.png',
 	'e4sly' : 'e4sly.png',
 	'bibliaspulse' : 'pulse.png',
 	'zeppy' : 'zeppy.png',
