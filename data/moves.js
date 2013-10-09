@@ -6991,31 +6991,6 @@ exports.BattleMovedex = {
 		num: 222,
 		accuracy: 100,
 		basePower: 0,
-		basePowerCallback: function(pokemon) {
-			var i = this.random(100);
-			if (i < 5) {
-				this.add('-activate', pokemon, 'move: Magnitude', 4);
-				return 10;
-			} else if (i < 15) {
-				this.add('-activate', pokemon, 'move: Magnitude', 5);
-				return 30;
-			} else if (i < 35) {
-				this.add('-activate', pokemon, 'move: Magnitude', 6);
-				return 50;
-			} else if (i < 65) {
-				this.add('-activate', pokemon, 'move: Magnitude', 7);
-				return 70;
-			} else if (i < 85) {
-				this.add('-activate', pokemon, 'move: Magnitude', 8);
-				return 90;
-			} else if (i < 95) {
-				this.add('-activate', pokemon, 'move: Magnitude', 9);
-				return 110;
-			} else {
-				this.add('-activate', pokemon, 'move: Magnitude', 10);
-				return 150;
-			}
-		},
 		category: "Physical",
 		desc: "Deals damage to all adjacent Pokemon. The power of this move varies; 5% chances for 10 and 150 power, 10% chances for 30 and 110 power, 20% chances for 50 and 90 power, and 30% chance for 70 power. Power doubles against Pokemon using Dig.",
 		shortDesc: "Hits adjacent Pokemon. Power varies; 2x on Dig.",
@@ -7023,6 +6998,31 @@ exports.BattleMovedex = {
 		name: "Magnitude",
 		pp: 30,
 		priority: 0,
+		onModifyMove: function(move, pokemon) {
+			var i = this.random(100);
+			if (i < 5) {
+				this.add('-activate', pokemon, 'move: Magnitude', 4);
+				move.basePower = 10;
+			} else if (i < 15) {
+				this.add('-activate', pokemon, 'move: Magnitude', 5);
+				move.basePower = 30;
+			} else if (i < 35) {
+				this.add('-activate', pokemon, 'move: Magnitude', 6);
+				move.basePower = 50;
+			} else if (i < 65) {
+				this.add('-activate', pokemon, 'move: Magnitude', 7);
+				move.basePower = 70;
+			} else if (i < 85) {
+				this.add('-activate', pokemon, 'move: Magnitude', 8);
+				move.basePower = 90;
+			} else if (i < 95) {
+				this.add('-activate', pokemon, 'move: Magnitude', 9);
+				move.basePower = 110;
+			} else {
+				this.add('-activate', pokemon, 'move: Magnitude', 10);
+				move.basePower = 150;
+			}
+		},
 		secondary: false,
 		target: "allAdjacent",
 		type: "Ground"
