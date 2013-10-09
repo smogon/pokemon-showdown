@@ -164,6 +164,8 @@ exports.customavatars = {
 	'colonialmustang' : 'hammertime.png',
 	'gymldrlee' : 'gymldrlee.png',
 	'duskumbreon' : 'umb.png',
+	'hulasaur' : 'hulasaur.png',
+	'leaderjumper' : 'leaderjumper.png',
 	'lexie':'lexie.png',
 	'amprincessfaith' : 'princessfaith.png',
 	'flyingj138' : 'flyin.png',
