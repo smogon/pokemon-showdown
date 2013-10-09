@@ -224,7 +224,7 @@ exports.customavatars = {
 	'razorbrave' : 'vave.png',
 	'gymldrprinney' : 'nars.png',
 	'deathshark82' : 'abs2.png',
-	'lab8moth88' : 'hehehforme.png',
+	'lab8moth' : 'hehehforme.png',
 	'narutojitd' : 'narutojitd.png',
 	'amrcticaura' : 'rtic.png',
 	'leaderhunter' : 'mooper.png',
