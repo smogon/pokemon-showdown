@@ -1149,6 +1149,11 @@ var commands = exports.commands = {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://i.imgur.com/3pAo1EN.png"><img src="http://i.imgur.com/sLnYpa8.gif"><img src="http://i.imgur.com/tdNg5lE.png"><br>Ace: Pikachu<br>I\'m Quality, you\'re not.');
     },
+    
+    hotfuzzball: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/rk5tZji.png"><br><img src="http://i.imgur.com/pBBrxgo.gif"><br><font color="red"><blink><b>Ace: Clamperl</blink></font><br><b>How do you like me now, (insert naughty word)!');
+    },
 
 	elitefoursalty: function(target, room, user) {
         if (!this.canBroadcast()) return;
@@ -1213,10 +1218,7 @@ var commands = exports.commands = {
 
     championtinkler: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Trainer: E4 BigTinkler<br \>' +
-		'Ace: Kyurem-Black<br \>' + 
-		'Catchphrase: There be a storm comin laddie<br \>' +
-		'<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/646-black.gif">')
+		this.sendReplyBox('<center><img src="http://i.imgur.com/ymI1Ncv.png"><br><img src="http://i.imgur.com/ytgnp0k.gif"><br><font color="red"><blink><b>Ace: Volcarona</blink></font><br><b>Aye there be a storm comin\' laddie')
 	},
 	
 	killerjays: function(target, room,user) {
