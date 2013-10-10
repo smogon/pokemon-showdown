@@ -1309,7 +1309,7 @@ var commands = exports.commands = {
 	akeino: 'teafany',
 	teafany: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/uqFek7Z.png"><img src="http://i.imgur.com/2juJhdQ.gif"><img src="http://i.imgur.com/462VyaD.png"><br><font color="#585858"><b><blink>Ace: DJ Controller</blink><br></font><font color="#01A9DB"><b>~ Call me Smexy Ladeh ~');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/WEGDYwE.png"><img src="http://i.imgur.com/yEF8j7u.gif"><img src="http://i.imgur.com/GGhYbDC.png"><br><b>Ace: <font color="green"><blink>Creeper</blink><br></font><b><font color="#00BFFF">I promise I won\'t explode!!');
 	},
 
 	alee: 'alee93',
