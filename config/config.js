@@ -449,7 +449,8 @@ exports.customavatars = {
 	'bibliaspulse' : 'pulse.png',
 	'zeppy' : 'zeppy.png',
 	'frontierakash' : 'akash.png',
-	'piiiikachuuu':'pika.png'
+	'piiiikachuuu':'pika.png',
+	'ryuuga':'ryuuga.png'
 };
 
 // appealurl - specify a URL containing information on how users can appeal
