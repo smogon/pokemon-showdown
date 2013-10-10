@@ -144,7 +144,7 @@ exports.customavatars = {
 	'championtyphoz' : '1364487440459.png',
 	'se7engruntwander' : 'aLxYuV.png',
 	'scizorman' : 'iz.png',
-	'suppleearth' : 'suppleearth.png',
+	'suppleearth' : 'suppleearthanimatedavatarresized1002.png',
 	'ifazeoptical' : 'moos.png',
 	'murana' : 'bigeyes.png',
 	'starmaster' : 'starmaster.png',
