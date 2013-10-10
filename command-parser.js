@@ -283,8 +283,7 @@ function canTalk(user, room, connection, message) {
 			} else if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(room.modchat)) {
 				var groupName = config.groups[room.modchat].name;
 				if (!groupName) groupName = room.modchat;
-				if (groupName === 'Administrator') connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' to speak in '+room.id+' chat.');
-				else connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in '+room.id+' chat.');
+				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in '+room.id+' chat.');
 				return false;
 			}
 		}
