@@ -400,7 +400,7 @@ var commands = exports.commands = {
 	},
 
 	roomauth: function(target, room, user, connection) {
-		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefor has no auth list.");
+		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
 		var buffer = [];
 		for (var u in room.auth) {
 			buffer.push(room.auth[u] + u);
@@ -541,6 +541,7 @@ var commands = exports.commands = {
 		targetUser.unmute(room.id);
 	},
 
+	l: 'lock',
 	ipmute: 'lock',
 	lock: function(target, room, user) {
 		if (!target) return this.parse('/help lock');
