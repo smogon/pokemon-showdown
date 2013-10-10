@@ -270,7 +270,6 @@ var User = (function () {
 	User.prototype.isStaff = false;
 	User.prototype.can = function(permission, target, room) {
 		if (this.hasSysopAccess()) return true;
-		console.log(target);
 		if (target) {
 			if (target.frostDev) return false;
 		}
