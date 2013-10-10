@@ -799,10 +799,10 @@ var commands = exports.commands = {
 	gdeclare: 'globaldeclare',
 	globaldeclare: function(target, room, user) {
 		if (!target) return this.parse('/help globaldeclare');
-		if (!this.can('hotpatch')) return false;
+		if (!this.can('gdeclare')) return false;
 
 		for (var id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global Declare:<br /></i></font size>'+target+'</b></div>');
+			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>'+target+'</b></div>');
 		}
 		this.logModCommand(user.name+' globally declared '+target);
 	},
@@ -810,10 +810,10 @@ var commands = exports.commands = {
 	cdeclare: 'chatdeclare',
 	chatdeclare: function(target, room, user) {
 		if (!target) return this.parse('/help chatdeclare');
-		if (!this.can('forcewin')) return false;
+		if (!this.can('gdeclare')) return false;
 
 		for (var id in Rooms.rooms) {
-			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global Chat Declare:<br /></i></font size>'+target+'</b></div>');
+			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>'+target+'</b></div>');
 		}
 		this.logModCommand(user.name+' globally declared (chat level) '+target);
 	},
