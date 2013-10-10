@@ -1265,7 +1265,7 @@ var commands = exports.commands = {
 		}
 		if (target === '~' || target === 'chatdeclare' || target === 'cdeclare') {
 			matched = true;
-			this.sendReply('/chadeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~');
+			this.sendReply('/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~');
 		}
 		if (target === '~' || target === 'globaldeclare' || target === 'gdeclare') {
 			matched = true;
