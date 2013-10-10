@@ -800,11 +800,22 @@ var commands = exports.commands = {
 	globaldeclare: function(target, room, user) {
 		if (!target) return this.parse('/help globaldeclare');
 		if (!this.can('hotpatch')) return false;
-		
+
 		for (var id in Rooms.rooms) {
 			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global Declare:<br /></i></font size>'+target+'</b></div>');
 		}
 		this.logModCommand(user.name+' globally declared '+target);
+	},
+
+	cdeclare: 'chatdeclare',
+	chatdeclare: function(target, room, user) {
+		if (!target) return this.parse('/help chatdeclare');
+		if (!this.can('forcewin')) return false;
+
+		for (var id in Rooms.rooms) {
+			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global Chat Declare:<br /></i></font size>'+target+'</b></div>');
+		}
+		this.logModCommand(user.name+' globally declared (chat level) '+target);
 	},
 
 	wall: 'announce',

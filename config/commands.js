@@ -1263,6 +1263,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/declare [message] - Anonymously announces a message. Requires: & ~');
 		}
+		if (target === '&' || target === 'chatdeclare' || target === 'cdeclare') {
+			matched = true;
+			this.sendReply('/chadeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: & ~');
+		}
 		if (target === '~' || target === 'globaldeclare' || target === 'gdeclare') {
 			matched = true;
 			this.sendReply('/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~');
