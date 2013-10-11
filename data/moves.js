@@ -4089,6 +4089,9 @@ exports.BattleMovedex = {
 		id: "flyingpress",
 		name: "Flying Press",
 		pp: 10,
+		onModifyEffectiveness: function(effectiveness, target) {
+			return effectiveness + this.getEffectiveness('Flying', target);
+		},
 		priority: 0,
 		secondary: false,
 		target: "normal",
