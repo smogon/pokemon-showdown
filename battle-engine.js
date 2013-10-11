@@ -1828,6 +1828,11 @@ var Battle = (function() {
 		} else {
 			args.unshift(relayVar);
 		}
+
+		var parentEvent = this.event;
+		this.event = {id: eventid, target: target, source: source, effect: effect, modifier: 1};
+		this.eventDepth++;
+
 		for (var i=0; i<statuses.length; i++) {
 			var status = statuses[i].status;
 			var thing = statuses[i].thing;
@@ -1883,24 +1888,14 @@ var Battle = (function() {
 			if (typeof statuses[i].callback === 'function') {
 				var parentEffect = this.effect;
 				var parentEffectData = this.effectData;
-				var parentEvent = this.event;
 				this.effect = statuses[i].status;
 				this.effectData = statuses[i].statusData;
 				this.effectData.target = thing;
 
-				this.event = {id: eventid, target: target, source: source, effect: effect, modifier: 1};
-
-				this.eventDepth++;
 				returnVal = statuses[i].callback.apply(this, args);
-				this.eventDepth--;
-
-				if (this.event.modifier !== 1 && typeof returnVal === 'number') {
-					returnVal = this.modify(returnVal, this.event.modifier);
-				}
 
 				this.effect = parentEffect;
 				this.effectData = parentEffectData;
-				this.event = parentEvent;
 			} else {
 				returnVal = statuses[i].callback;
 			}
@@ -1913,6 +1908,13 @@ var Battle = (function() {
 				}
 			}
 		}
+
+		this.eventDepth--;
+		if (this.event.modifier !== 1 && typeof relayVar === 'number') {
+			relayVar = this.modify(relayVar, this.event.modifier);
+		}
+		this.event = parentEvent;
+
 		return relayVar;
 	};
 	Battle.prototype.resolveLastPriority = function(statuses, callbackType) {
