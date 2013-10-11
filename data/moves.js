@@ -571,7 +571,7 @@ exports.BattleMovedex = {
 	"aurasphere": {
 		num: 396,
 		accuracy: true,
-		basePower: 90,
+		basePower: 80,
 		category: "Special",
 		desc: "Deals damage to one adjacent or non-adjacent target and does not check accuracy.",
 		shortDesc: "This move does not check accuracy.",
@@ -2776,7 +2776,7 @@ exports.BattleMovedex = {
 	"dragonpulse": {
 		num: 406,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 85,
 		category: "Special",
 		desc: "Deals damage to one adjacent or non-adjacent target.",
 		shortDesc: "No additional effect.",
@@ -4631,10 +4631,12 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'geomancy',
-			onStart: function(pokemon) {
-				this.boost({spa:2, spd:2, spe:2}, pokemon, pokemon, this.getMove('geomancy'));
-			}
+			onLockMove: 'geomancy'
+		},
+		boosts: {
+			spa: 2,
+			spd: 2,
+			spe: 2
 		},
 		secondary: false,
 		target: "self",

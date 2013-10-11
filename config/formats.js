@@ -308,7 +308,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['Pokemon', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Uber']
+		banlist: ['Unreleased', 'Illegal', 'Uber', 'Limbo']
 	},
 	{
 		name: "Ability Exchange",
@@ -650,6 +650,40 @@ exports.Formats = [
 			}
 			if (bst > 2300) return ['The combined BST of your team is greater than 2300.'];
 		}
+	},
+
+	// Pokemon XY
+	///////////////////////////////////////////////////////////////////
+
+	{
+		name: "[Gen 6] Ubers (beta)",
+		section: "Pokémon X/Y",
+
+		searchShow: false,
+		debug: true,
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
+		banlist: [],
+
+		column: 2
+	},
+	{
+		name: "[Gen 6] Custom Game",
+		section: "Pokémon X/Y",
+
+		searchShow: false,
+		canUseRandomTeam: true,
+		debug: true,
+		ruleset: ['Team Preview']
+	},
+	{
+		name: "[Gen 6] Doubles Custom Game",
+		section: "Pokémon X/Y",
+
+		gameType: 'doubles',
+		searchShow: false,
+		canUseRandomTeam: true,
+		debug: true,
+		ruleset: ['Team Preview']
 	},
 
 	// Past Generations
