@@ -3,6 +3,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 120
 	},
+	bubble: {
+		inherit: true,
+		basePower: 20
+	},
 	charm: {
 		inherit: true,
 		type: "Normal"
@@ -95,6 +99,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 95
 	},
+	lowsweep: {
+		inherit: true,
+		basePower: 60
+	},
 	moonlight: {
 		inherit: true,
 		type: "Normal"
@@ -106,6 +114,19 @@ exports.BattleMovedex = {
 	flamethrower: {
 		inherit: true,
 		basePower: 95
+	},
+	frostbreath: {
+		inherit: true,
+		basePower: 40
+	},
+	furycutter: {
+		inherit: true,
+		basePower: 20
+	},
+	rocktomb: {
+		inherit: true,
+		accuracy: 80,
+		basePower: 50
 	},
 	spore: {
 		inherit: true,
@@ -130,6 +151,11 @@ exports.BattleMovedex = {
 	thunderbolt: {
 		inherit: true,
 		basePower: 95
+	},
+	vinewhip: {
+		inherit: true,
+		basePower: 35,
+		pp: 15
 	},
 	willowisp: {
 		inherit: true,

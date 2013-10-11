@@ -1225,7 +1225,7 @@ exports.BattleMovedex = {
 	"bubble": {
 		num: 145,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 40,
 		category: "Special",
 		desc: "Deals damage to all adjacent foes with a 10% chance to lower their Speed by 1 stage each.",
 		shortDesc: "10% chance to lower the foe(s) Speed by 1.",
@@ -4175,7 +4175,7 @@ exports.BattleMovedex = {
 	"frostbreath": {
 		num: 524,
 		accuracy: 90,
-		basePower: 40,
+		basePower: 60,
 		category: "Special",
 		desc: "Deals damage to one adjacent target. This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Abilities Battle Armor or Shell Armor.",
 		shortDesc: "Always results in a critical hit.",
@@ -4229,7 +4229,7 @@ exports.BattleMovedex = {
 	"furycutter": {
 		num: 210,
 		accuracy: 95,
-		basePower: 20,
+		basePower: 40,
 		basePowerCallback: function(pokemon) {
 			if (!pokemon.volatiles.furycutter) {
 				pokemon.addVolatile('furycutter');
@@ -6683,7 +6683,7 @@ exports.BattleMovedex = {
 	"lowsweep": {
 		num: 490,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 65,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target with a 100% chance to lower its Speed by 1 stage. Makes contact.",
 		shortDesc: "100% chance to lower the target's Speed by 1.",
@@ -9513,8 +9513,8 @@ exports.BattleMovedex = {
 	},
 	"rocktomb": {
 		num: 317,
-		accuracy: 80,
-		basePower: 50,
+		accuracy: 95,
+		basePower: 60,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target with a 100% chance to lower its Speed by 1 stage.",
 		shortDesc: "100% chance to lower the target's Speed by 1.",
@@ -12871,13 +12871,13 @@ exports.BattleMovedex = {
 	"vinewhip": {
 		num: 22,
 		accuracy: 100,
-		basePower: 35,
+		basePower: 45,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "vinewhip",
 		name: "Vine Whip",
-		pp: 15,
+		pp: 25,
 		priority: 0,
 		isContact: true,
 		secondary: false,
