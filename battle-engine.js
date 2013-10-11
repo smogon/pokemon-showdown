@@ -1887,10 +1887,17 @@ var Battle = (function() {
 				this.effect = statuses[i].status;
 				this.effectData = statuses[i].statusData;
 				this.effectData.target = thing;
-				this.event = {id: eventid, target: target, source: source, effect: effect};
+
+				this.event = {id: eventid, target: target, source: source, effect: effect, modifier: 1};
+
 				this.eventDepth++;
 				returnVal = statuses[i].callback.apply(this, args);
 				this.eventDepth--;
+
+				if (this.event.modifier !== 1 && typeof returnVal === 'number') {
+					returnVal = this.modify(returnVal, this.event.modifier);
+				}
+
 				this.effect = parentEffect;
 				this.effectData = parentEffectData;
 				this.event = parentEvent;
@@ -2545,7 +2552,23 @@ var Battle = (function() {
 		if (nextMod.length) nextMod = Math.floor(nextMod[0] * 4096 / nextMod[1]);
 		else nextMod = Math.floor(nextMod * 4096);
 		return ((previousMod * nextMod + 2048) >> 12) / 4096; // M'' = ((M * M') + 0x800) >> 12
-	}
+	};
+	Battle.prototype.chainModify = function(numerator, denominator) {
+		var previousMod = Math.floor(this.event.modifier * 4096);
+
+		if (numerator.length) {
+			denominator = numerator[1];
+			numerator = numerator[0];
+		}
+		var nextMod = 0;
+		if (this.event.ceilModifier) {
+			nextMod = Math.ceil(numerator * 4096 / (denominator||1));
+		} else {
+			nextMod = Math.floor(numerator * 4096 / (denominator||1));
+		}
+
+		this.event.modifier = ((previousMod * nextMod + 2048) >> 12) / 4096;
+	};
 	Battle.prototype.modify = function(value, numerator, denominator) {
 		// You can also use:
 		// modify(value, [numerator, denominator])
