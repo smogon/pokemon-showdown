@@ -1905,7 +1905,7 @@ var Battle = (function() {
 
 			if (returnVal !== undefined) {
 				relayVar = returnVal;
-				if (!relayVar) return relayVar;
+				if (!relayVar) break;
 				if (hasRelayVar) {
 					args[0] = relayVar;
 				}
