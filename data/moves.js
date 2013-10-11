@@ -4297,6 +4297,9 @@ exports.BattleMovedex = {
 		name: "Freeze Dry",
 		pp: 15,
 		priority: 0,
+		onModifyEffectiveness: function(effectiveness, target) {
+			if (target.hasType('Water')) return Math.min(effectiveness + 2, 2);
+		},
 		secondary: {
 			chance: 10,
 			status: 'frz'

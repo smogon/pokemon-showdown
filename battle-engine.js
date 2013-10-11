@@ -2749,6 +2749,7 @@ var Battle = (function() {
 		}
 		// types
 		var totalTypeMod = this.getEffectiveness(type, target);
+		totalTypeMod = this.singleEvent('ModifyEffectiveness', move, null, target, pokemon, move, totalTypeMod);
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 			baseDamage *= 2;
