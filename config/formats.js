@@ -10,6 +10,7 @@ exports.Formats = [
 		name: "Random Battle",
 		section: "Singles",
 
+		mod: 'gen5',
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
@@ -17,6 +18,7 @@ exports.Formats = [
 		name: "Unrated Random Battle",
 		section: "Singles",
 
+		mod: 'gen5',
 		team: 'random',
 		challengeShow: false,
 		rated: false,
@@ -26,6 +28,7 @@ exports.Formats = [
 		name: "OU",
 		section: "Singles",
 
+		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
@@ -33,6 +36,7 @@ exports.Formats = [
 		name: "OU (No Stealth Rock)",
 		section: "Singles",
 
+		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Stealth Rock']
 	},
@@ -40,13 +44,15 @@ exports.Formats = [
 		name: "Ubers",
 		section: "Singles",
 
+		mod: 'gen5',
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
 		banlist: []
 	},
 	{
 		name: "UU",
 		section: "Singles",
-		
+
+		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
@@ -55,6 +61,7 @@ exports.Formats = [
 		name: "UU (current)",
 		section: "Singles",
 
+		mod: 'gen5',
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
@@ -62,6 +69,7 @@ exports.Formats = [
 		name: "RU",
 		section: "Singles",
 
+		mod: 'gen5',
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning']
 	},
@@ -69,6 +77,7 @@ exports.Formats = [
 		name: "NU",
 		section: "Singles",
 
+		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['RU'],
 		banlist: ['RU','BL3']
@@ -77,6 +86,7 @@ exports.Formats = [
 		name: "NU (current)",
 		section: "Singles",
 
+		mod: 'gen5',
 		ruleset: ['RU'],
 		banlist: ['RU','BL3']
 	},
@@ -84,6 +94,7 @@ exports.Formats = [
 		name: "LC",
 		section: "Singles",
 
+		mod: 'gen5',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
@@ -92,6 +103,7 @@ exports.Formats = [
 		name: "CAP",
 		section: "Singles",
 
+		mod: 'gen5',
 		ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
@@ -99,6 +111,7 @@ exports.Formats = [
 		name: "GBU Singles",
 		section: "Singles",
 
+		mod: 'gen5',
 		validateSet: function(set) {
 			if (!set.level || set.level >= 50) set.forcedLevel = 50;
 			return [];
@@ -127,6 +140,7 @@ exports.Formats = [
 		name: "Global Showdown",
 		section: "Singles",
 
+		mod: 'gen5',
 		validateSet: function(set) {
 			if (!set.level || set.level >= 50) set.forcedLevel = 50;
 			return [];
@@ -145,6 +159,7 @@ exports.Formats = [
 		name: "Custom Game",
 		section: "Singles",
 
+		mod: 'gen5',
 		searchShow: false,
 		canUseRandomTeam: true,
 		debug: true,
@@ -157,6 +172,7 @@ exports.Formats = [
 		name: "Custom Game (no Team Preview)",
 		section: "Singles",
 
+		mod: 'gen5',
 		searchShow: false,
 		canUseRandomTeam: true,
 		debug: true,
@@ -173,6 +189,7 @@ exports.Formats = [
 		name: "Doubles Random Battle (dev)",
 		section: 'Doubles',
 
+		mod: 'gen5',
 		gameType: 'doubles',
 		team: 'random',
 		searchShow: false,
@@ -185,6 +202,7 @@ exports.Formats = [
 		name: "Smogon Doubles",
 		section: 'Doubles',
 
+		mod: 'gen5',
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew', 'Sky Drop',
@@ -207,6 +225,7 @@ exports.Formats = [
 		name: "Smogon Doubles Ubers",
 		section: 'Doubles',
 
+		mod: 'gen5',
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -216,6 +235,7 @@ exports.Formats = [
 		name: "Doubles VGC 2013",
 		section: 'Doubles',
 
+		mod: 'gen5',
 		gameType: 'doubles',
 		onBegin: function() {
 			this.debug('cutting down to 4');
@@ -259,6 +279,7 @@ exports.Formats = [
 		name: "Doubles Custom Game",
 		section: 'Doubles',
 
+		mod: 'gen5',
 		gameType: 'doubles',
 		searchShow: false,
 		canUseRandomTeam: true,
@@ -272,6 +293,7 @@ exports.Formats = [
 		name: "Doubles Challenge Cup",
 		section: 'Doubles',
 
+		mod: 'gen5',
 		gameType: 'doubles',
 		team: 'randomCC',
 		searchShow: false,
@@ -285,6 +307,7 @@ exports.Formats = [
 		name: "Ability Exchange",
 		section: "OM of the Month",
 
+		mod: 'gen5',
 		ruleset: ['Pokemon', 'Ability Exchange Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush',
 			'Mewtwo', 'Lugia', 'Ho-Oh', 'Blaziken', 'Kyogre', 'Groudon', 'Rayquaza', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin', 'Manaphy', 'Darkrai', 'Shaymin-Sky',
@@ -296,6 +319,7 @@ exports.Formats = [
 		name: "[Seasonal] Octoberfest",
 		section: "OM of the Month",
 
+		mod: 'gen5',
 		team: 'randomSeasonalOF',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onModifyMove: function(move) {
@@ -447,6 +471,7 @@ exports.Formats = [
 		name: "Challenge Cup",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		team: 'randomCC',
 		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
@@ -454,6 +479,7 @@ exports.Formats = [
 		name: "Challenge Cup 1-vs-1",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		team: 'randomCC',
 		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod'],
 		onBegin: function() {
@@ -468,6 +494,7 @@ exports.Formats = [
 		name: "Hackmons",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		ruleset: ['Pokemon'],
 		banlist: []
 	},
@@ -475,6 +502,7 @@ exports.Formats = [
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		ruleset: ['Pokemon', 'OHKO Clause'],
 		banlist: ['Wonder Guard', 'Pure Power', 'Huge Power', 'Shadow Tag', 'Arena Trap']
 	},
@@ -491,6 +519,7 @@ exports.Formats = [
 		name: "OU Monotype",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
@@ -498,6 +527,7 @@ exports.Formats = [
 		name: "Glitchmons",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Unreleased'],
@@ -507,6 +537,7 @@ exports.Formats = [
 		name: "LC Ubers",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		maxLevel: 5,
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
@@ -516,6 +547,7 @@ exports.Formats = [
 		name: "LC UU",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		maxLevel: 5,
 		searchShow: false,
 		ruleset: ['LC'],
@@ -525,6 +557,7 @@ exports.Formats = [
 		name: "Dream World",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard DW', 'Team Preview'],
 		banlist: []
@@ -541,6 +574,7 @@ exports.Formats = [
 		name: "1v1",
 		section: 'Other Metagames',
 
+		mod: 'gen5',
 		onBegin: function() {
 			this.p1.pokemon = this.p1.pokemon.slice(0,1);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
@@ -574,6 +608,7 @@ exports.Formats = [
 		name: "PU",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['NU'],
 		banlist: ["Charizard", "Wartortle", "Kadabra", "Golem", "Haunter", "Exeggutor", "Weezing", "Kangaskhan", "Pinsir", "Lapras", "Ampharos", "Misdreavus", "Piloswine", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Gorebyss", "Regirock", "Regice", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Samurott", "Musharna", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Sawsbuck", "Alomomola", "Golurk", "Braviary", "Electabuzz", "Electrode", "Liepard", "Tangela", "Eelektross", "Ditto", "Seismitoad", "Zangoose", "Roselia", "Serperior", "Metang", "Tauros", "Cradily", "Primeape", "Scolipede", "Jynx", "Basculin", "Gigalith", "Camerupt", "Golbat"]
@@ -582,6 +617,7 @@ exports.Formats = [
 		name: "STABmons",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Drizzle ++ Swift Swim', 'Soul Dew', 'Soul Dew',
 			'Mewtwo', 'Lugia', 'Ho-Oh', 'Blaziken', 'Kyogre', 'Groudon', 'Rayquaza', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin', 'Manaphy', 'Shaymin-Sky',
@@ -593,6 +629,7 @@ exports.Formats = [
 		name: "Budgetmons",
 		section: "Other Metagames",
 
+		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['OU'],
 		banlist: [],
