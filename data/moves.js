@@ -571,7 +571,7 @@ exports.BattleMovedex = {
 	"aurasphere": {
 		num: 396,
 		accuracy: true,
-		basePower: 90,
+		basePower: 80,
 		category: "Special",
 		desc: "Deals damage to one adjacent or non-adjacent target and does not check accuracy.",
 		shortDesc: "This move does not check accuracy.",
@@ -2776,7 +2776,7 @@ exports.BattleMovedex = {
 	"dragonpulse": {
 		num: 406,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 85,
 		category: "Special",
 		desc: "Deals damage to one adjacent or non-adjacent target.",
 		shortDesc: "No additional effect.",
