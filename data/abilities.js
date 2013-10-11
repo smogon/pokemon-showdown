@@ -568,10 +568,10 @@ exports.BattleAbilities = {
 	"filter": {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
-		onSourceModifyDamage: function(damageMod, source, target, move) {
+		onSourceModifyDamage: function(damage, source, target, move) {
 			if (this.getEffectiveness(move.type, target) > 0) {
 				this.debug('Filter neutralize');
-				return this.chain(damageMod, 0.75);
+					return this.chainModify(0.75);
 			}
 		},
 		id: "filter",
@@ -764,10 +764,10 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's allies receive 3/4 damage from other Pokemon's attacks.",
 		id: "friendguard",
 		name: "Friend Guard",
-		onAnyModifyDamage: function(damageMod, source, target, move) {
+		onAnyModifyDamage: function(damage, source, target, move) {
 			if (target !== this.effectData.target && target.side === this.effectData.target.side) {
 				this.debug('Friend Guard weaken')
-				return this.chain(damageMod, 0.75);
+				return this.chainModify(0.75);
 			}
 		},
 		rating: 0,
@@ -1476,10 +1476,10 @@ exports.BattleAbilities = {
 	"multiscale": {
 		desc: "Lowers damage taken by half when at maximum HP.",
 		shortDesc: "If this Pokemon is at full HP, it takes half damage from attacks.",
-		onSourceModifyDamage: function(damageMod, source, target, move) {
+		onSourceModifyDamage: function(damage, source, target, move) {
 			if (target.hp >= target.maxhp) {
 				this.debug('Multiscale weaken');
-				return this.chain(damageMod, 0.5);
+				return this.chainModify(0.5);
 			}
 		},
 		id: "multiscale",
@@ -2205,10 +2205,10 @@ exports.BattleAbilities = {
 	"sniper": {
 		desc: "When this Pokemon lands a Critical Hit, the base power of its attack is tripled rather than doubled.",
 		shortDesc: "If this Pokemon strikes with a critical hit, the damage is tripled instead of doubled.",
-		onModifyDamage: function(damageMod, source, target, move) {
+		onModifyDamage: function(damage, source, target, move) {
 			if (move.crit) {
 				this.debug('Sniper boost');
-				return this.chain(damageMod, 1.5);
+				return this.chainModify(1.5);
 			}
 		},
 		id: "sniper",
@@ -2268,10 +2268,10 @@ exports.BattleAbilities = {
 	"solidrock": {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
-		onSourceModifyDamage: function(damageMod, source, target, move) {
+		onSourceModifyDamage: function(damage, source, target, move) {
 			if (this.getEffectiveness(move.type, target) > 0) {
 				this.debug('Solid Rock neutralize');
-				return this.modify(damageMod, 0.75);
+				return this.chainModify(0.75);
 			}
 		},
 		id: "solidrock",
@@ -2617,10 +2617,10 @@ exports.BattleAbilities = {
 	"tintedlens": {
 		desc: "Doubles the power of moves that are Not Very Effective against opponents.",
 		shortDesc: "This Pokemon's attacks that are not very effective on a target do double damage.",
-		onModifyDamage: function(damageMod, source, target, move) {
+		onModifyDamage: function(damage, source, target, move) {
 			if (this.getEffectiveness(move.type, target) < 0) {
 				this.debug('Tinted Lens boost');
-				return this.chain(damageMod, 2);
+				return this.chainModify(2);
 			}
 		},
 		id: "tintedlens",
