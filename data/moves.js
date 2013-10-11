@@ -4631,10 +4631,12 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'geomancy',
-			onStart: function(pokemon) {
-				this.boost({spa:2, spd:2, spe:2}, pokemon, pokemon, this.getMove('geomancy'));
-			}
+			onLockMove: 'geomancy'
+		},
+		boosts: {
+			spa: 2,
+			spd: 2,
+			spe: 2
 		},
 		secondary: false,
 		target: "self",
