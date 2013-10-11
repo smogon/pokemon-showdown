@@ -8417,6 +8417,27 @@ exports.BattleMovedex = {
 		target: "allAdjacent",
 		type: "Electric"
 	},
+	"partingshot": {
+		num: -6,
+		gen: 6,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Lowers all adjacent foes' Attack and Special Attack by 1 stage, then the user switches out.",
+		shortDesc: "Foe's Atk/SpA -1, then switch out.",
+		id: "partingshot",
+		name: "Parting Shot",
+		pp: 40,
+		priority: 0,
+		selfSwitch: true,
+		boosts: {
+			atk: -1,
+			spa: -1
+		},
+		secondary: false,
+		target: "normal",
+		type: "Normal"
+	},
 	"payday": {
 		num: 6,
 		accuracy: 100,
