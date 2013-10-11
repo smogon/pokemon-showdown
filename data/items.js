@@ -1837,7 +1837,7 @@ exports.BattleItems = {
 		onModifyDamage: function(damage, source, target, move) {
 			if (source) {
 				source.addVolatile('lifeorb');
-				return this.chainModify(damageMod, 1.3);
+				return this.chainModify(1.3);
 			}
 		},
 		effect: {

@@ -1914,6 +1914,7 @@ var Battle = (function() {
 
 		this.eventDepth--;
 		if (this.event.modifier !== 1 && typeof relayVar === 'number') {
+			// this.debug(eventid+' modifier: 0x'+('0000'+(this.event.modifier * 4096).toString(16)).slice(-4).toUpperCase());
 			relayVar = this.modify(relayVar, this.event.modifier);
 		}
 		this.event = parentEvent;
@@ -2662,7 +2663,7 @@ var Battle = (function() {
 		}
 
 		// happens after crit calculation
-		basePower = this.runEvent('BasePower', pokemon, target, move, bpMod, true);
+		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 
 		if (!basePower) return 0;
 		basePower = clampIntRange(basePower, 1);
@@ -2704,11 +2705,11 @@ var Battle = (function() {
 			defBoosts = 0;
 		}
 
-		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, atkBoosts, atkStatMod);
-		else attack = attacker.calculateStat(attackStat, atkBoosts, atkStatMod);
+		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, atkBoosts);
+		else attack = attacker.calculateStat(attackStat, atkBoosts);
 		
-		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, defBoosts, defStatMod);
-		else defense = defender.calculateStat(defenseStat, defBoosts, defStatMod);
+		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, defBoosts);
+		else defense = defender.calculateStat(defenseStat, defBoosts);
 		
 		// Apply Stat Modifiers
 		attack = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, attack);
