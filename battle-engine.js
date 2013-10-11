@@ -298,9 +298,9 @@ var BattlePokemon = (function() {
 				i *= 2;
 			}
 			// Support for gen 5 and gen 6
-			var maxTypes = (this.battle.gen && this.battle.gen === 6)? 16 : 15;
+			var maxTypes = (this.battle.gen && this.battle.gen < 6)? 15 : 16;
 			this.hpType = hpTypes[Math.floor(hpTypeX * maxTypes / 63)];
-			this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
+			this.hpPower = (this.battle.gen && this.battle.gen < 6)? Math.floor(hpPowerX * 40 / 63) + 30 : 60;
 		}
 
 		this.boosts = {
