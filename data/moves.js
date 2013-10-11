@@ -8542,7 +8542,7 @@ exports.BattleMovedex = {
 		target: "randomNormal",
 		type: "Grass"
 	},
-	"pantomforce": {
+	"phantomforce": {
 		num: -6,
 		gen: 6,
 		accuracy: 100,
@@ -8550,7 +8550,7 @@ exports.BattleMovedex = {
 		category: "Physical",
 		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. This attack charges on the first turn and strikes on the second. On the first turn, the user avoids all attacks. The user cannot make a move between turns. If the user is holding a Power Herb, the move completes in one turn. Makes contact.",
 		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection.",
-		id: "pantomforce",
+		id: "phantomforce",
 		name: "Phantom Force",
 		pp: 5,
 		priority: 0,
