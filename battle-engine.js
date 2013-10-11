@@ -297,7 +297,7 @@ var BattlePokemon = (function() {
 				hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
 				i *= 2;
 			}
-			// Support for gen 6 metagame mods
+			// Support for gen 5 and gen 6
 			var maxTypes = (this.battle.gen && this.battle.gen === 6)? 16 : 15;
 			this.hpType = hpTypes[Math.floor(hpTypeX * maxTypes / 63)];
 			this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
