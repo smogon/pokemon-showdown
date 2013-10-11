@@ -551,8 +551,8 @@ exports.BattleAbilities = {
 		num: 27
 	},
 	"fairyaura": {
-		desc: "Increases the power of all Dark-type moves in battle.",
-		shortDesc: "Increases the power of all Dark-type moves in battle.",
+		desc: "Increases the power of all Fairy-type moves in battle.",
+		shortDesc: "Increases the power of all Fairy-type moves in battle.",
 		onBasePowerPriority: 8,
 		onBasePower: function(bpMod, attacker, defender, move) {
 			if (move.type === 'Fairy') {
