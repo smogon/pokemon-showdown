@@ -1806,7 +1806,7 @@ var Battle = (function() {
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
 	 */
-	Battle.prototype.runEvent = function(eventid, target, source, effect, relayVar) {
+	Battle.prototype.runEvent = function(eventid, target, source, effect, relayVar, onEffect) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -1827,6 +1827,14 @@ var Battle = (function() {
 			hasRelayVar = false;
 		} else {
 			args.unshift(relayVar);
+		}
+
+		var parentEvent = this.event;
+		this.event = {id: eventid, target: target, source: source, effect: effect, modifier: 1};
+		this.eventDepth++;
+
+		if (onEffect && 'on'+eventid in effect) {
+			statuses.unshift({status: effect, callback: effect['on'+eventid], statusData: null, end: null, thing: target});
 		}
 		for (var i=0; i<statuses.length; i++) {
 			var status = statuses[i].status;
@@ -1883,24 +1891,14 @@ var Battle = (function() {
 			if (typeof statuses[i].callback === 'function') {
 				var parentEffect = this.effect;
 				var parentEffectData = this.effectData;
-				var parentEvent = this.event;
 				this.effect = statuses[i].status;
 				this.effectData = statuses[i].statusData;
 				this.effectData.target = thing;
 
-				this.event = {id: eventid, target: target, source: source, effect: effect, modifier: 1};
-
-				this.eventDepth++;
 				returnVal = statuses[i].callback.apply(this, args);
-				this.eventDepth--;
-
-				if (this.event.modifier !== 1 && typeof returnVal === 'number') {
-					returnVal = this.modify(returnVal, this.event.modifier);
-				}
 
 				this.effect = parentEffect;
 				this.effectData = parentEffectData;
-				this.event = parentEvent;
 			} else {
 				returnVal = statuses[i].callback;
 			}
@@ -1913,6 +1911,13 @@ var Battle = (function() {
 				}
 			}
 		}
+
+		this.eventDepth--;
+		if (this.event.modifier !== 1 && typeof relayVar === 'number') {
+			relayVar = this.modify(relayVar, this.event.modifier);
+		}
+		this.event = parentEvent;
+
 		return relayVar;
 	};
 	Battle.prototype.resolveLastPriority = function(statuses, callbackType) {
