@@ -111,6 +111,9 @@ exports.BattleFormatsData = {
 		maleOnlyDreamWorld: true,
 		tier: "OU"
 	},
+	megavenusaur: {
+		tier: "Illegal"
+	},
 	charmander: {
 		viableMoves: {"flamethrower":1,"overheat":1,"dragonpulse":1,"hiddenpowergrass":1,"fireblast":1},
 		eventPokemon: [
@@ -141,6 +144,12 @@ exports.BattleFormatsData = {
 		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
+	megacharizardx: {
+		tier: "Illegal"
+	},
+	megacharizardy: {
+		tier: "Illegal"
+	},
 	squirtle: {
 		viableMoves: {"icebeam":1,"hydropump":1,"rapidspin":1,"scald":1,"aquajet":1,"toxic":1},
 		eventPokemon: [
@@ -166,6 +175,9 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
 		tier: "UU"
+	},
+	megablastoise: {
+		tier: "Illegal"
 	},
 	caterpie: {
 		viableMoves: {"bugbite":1,"snore":1,"tackle":1,"electroweb":1},
@@ -1396,6 +1408,12 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "Uber"
 	},
+	megamewtwox: {
+		tier: "Illegal"
+	},
+	megamewtwoy: {
+		tier: "Illegal"
+	},
 	mew: {
 		viableMoves: {"taunt":1,"willowisp":1,"roost":1,"psychic":1,"nastyplot":1,"aurasphere":1,"fireblast":1,"swordsdance":1,"superpower":1,"zenheadbutt":1,"batonpass":1,"rockpolish":1,"substitute":1,"toxic":1,"icebeam":1,"thunderbolt":1,"earthquake":1,"uturn":1,"stealthrock":1},
 		eventPokemon: [
@@ -1573,6 +1591,9 @@ exports.BattleFormatsData = {
 		viableMoves: {"voltswitch":1,"focusblast":1,"hiddenpowerice":1,"hiddenpowergrass":1,"thunderbolt":1,"healbell":1},
 		dreamWorldRelease: true,
 		tier: "NU"
+	},
+	megaampharos: {
+		tier: "Illegal"
 	},
 	azurill: {
 		viableMoves: {"scald":1,"return":1,"doubleedge":1,"encore":1,"toxic":1,"protect":1},
@@ -2388,6 +2409,9 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
+	megamawile: {
+		tier: "Illegal"
+	},
 	aron: {
 		viableMoves: {"headsmash":1,"ironhead":1,"earthquake":1,"superpower":1,"stealthrock":1},
 		dreamWorldRelease: true,
@@ -2812,6 +2836,9 @@ exports.BattleFormatsData = {
 		],
 		dreamWorldRelease: true,
 		tier: "RU"
+	},
+	megaabsol: {
+		tier: "Illegal"
 	},
 	snorunt: {
 		viableMoves: {"spikes":1,"icebeam":1,"hiddenpowerground":1,"iceshard":1,"crunch":1},
@@ -3384,6 +3411,9 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "OU"
 	},
+	megagarchomp: {
+		tier: "Illegal"
+	},
 	riolu: {
 		viableMoves: {"crunch":1,"roar":1,"copycat":1,"drainpunch":1},
 		eventPokemon: [
@@ -3402,6 +3432,9 @@ exports.BattleFormatsData = {
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
+	},
+	megalucario: {
+		tier: "Illegal"
 	},
 	hippopotas: {
 		viableMoves: {"earthquake":1,"slackoff":1,"whirlwind":1,"stealthrock":1,"protect":1,"toxic":1},
