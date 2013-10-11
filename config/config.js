@@ -372,7 +372,7 @@ exports.customavatars = {
 	'elitefourtyphoz' : 'elitefourtyphoz.png',
 	'aeroblaze' : 'claw.png',
 	'taiyoinferno' : 'merpduer.png',
-	'amkidshiftry' : 'testerforbesteramkidshiftry.png',
+	'kidshiftry' : 'testerforbesteramkidshiftry.png',
 	'femalemeowstic' : 'femalemeowstic.png',
 	'gymleaderliquid' : 'lasdkjeeee.png',
 	'ghostkirby29' : 'kirbs.png',
