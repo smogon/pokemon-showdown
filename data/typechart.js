@@ -20,7 +20,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 0
     },
-    "HPivs": {"atk":30,"def":30,"spd":30}
+    "HPivs": {"spd":30,"spe":30}
   },
   "Dark": {
     "damageTaken": {
@@ -43,7 +43,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 0
     },
-    "HPivs": {}
+    "HPivs": {"atk":30}
   },
   "Dragon": {
     "damageTaken": {
@@ -66,7 +66,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 2
     },
-    "HPivs": {"atk":30}
+    "HPivs": {"def":30}
   },
   "Electric": {
     "damageTaken": {
@@ -112,7 +112,8 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 1,
       "Water": 0
-    }
+    },
+    "HPivs": {}
   },
   "Fighting": {
     "damageTaken": {
@@ -159,7 +160,7 @@ exports.BattleTypeChart = {
       "Steel": 2,
       "Water": 1
     },
-    "HPivs": {"atk":30,"spa":30,"spe":30}
+    "HPivs": {"def":30,"spa":30,"spe":30}
   },
   "Flying": {
     "damageTaken": {
@@ -182,7 +183,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 0
     },
-    "HPivs": {"hp":30,"atk":30,"def":30,"spa":30,"spd":30}
+    "HPivs": {"spa":30,"spd":30,"spe":30}
   },
   "Ghost": {
     "damageTaken": {
@@ -229,7 +230,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 2
     },
-    "HPivs": {"atk":30,"spa":30}
+    "HPivs": {"def":30,"spa":30}
   },
   "Ground": {
     "damageTaken": {
@@ -278,7 +279,7 @@ exports.BattleTypeChart = {
       "Steel": 1,
       "Water": 0
     },
-    "HPivs": {"atk":30,"def":30}
+    "HPivs": {"spe":30}
   },
   "Normal": {
     "damageTaken": {
@@ -348,7 +349,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 0
     },
-    "HPivs": {"atk":30,"spe":30}
+    "HPivs": {"def":30,"spe":30}
   },
   "Rock": {
     "damageTaken": {
@@ -421,6 +422,6 @@ exports.BattleTypeChart = {
       "Steel": 2,
       "Water": 2
     },
-    "HPivs": {"atk":30,"def":30,"spa":30}
+    "HPivs": {"spa":30,"spe":30}
   }
 };

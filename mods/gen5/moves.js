@@ -3,6 +3,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: null
 	},
+	hiddenpowerfairy: null,
 	spore: {
 		inherit: true,
 		onTryHit: null
