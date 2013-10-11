@@ -671,8 +671,19 @@ exports.Formats = [
 		section: "Pokémon X/Y",
 
 		searchShow: false,
+		canUseRandomTeam: true,
 		debug: true,
-		ruleset: []
+		ruleset: ['Team Preview']
+	},
+	{
+		name: "[Gen 6] Doubles Custom Game",
+		section: "Pokémon X/Y",
+
+		gameType: 'doubles',
+		searchShow: false,
+		canUseRandomTeam: true,
+		debug: true,
+		ruleset: ['Team Preview']
 	},
 
 	// Past Generations
