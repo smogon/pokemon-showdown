@@ -3662,6 +3662,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "Uber"
 	},
+	arceusfairy: {
+		tier: "Limbo"
+	},
 	arceusfighting: {
 		viableMoves: {"calmmind":1,"judgment":1,"icebeam":1,"darkpulse":1,"recover":1,"toxic":1},
 		requiredItem: "Fist Plate",
