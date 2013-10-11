@@ -8810,6 +8810,28 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
+	"powder": {
+		num: -6,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Covers the target in powder that explodes if the target uses a Fire-type move.",
+		shortDesc: "Foe takes damage when using Fire moves.",
+		id: "powder",
+		name: "Powder",
+		pp: 20,
+		priority: 0,
+		isBounceable: true,
+		volatileStatus: 'powder',
+		effect: {
+			onStart: function(target) {
+				this.add('-start', target, 'Powder');
+			}
+		},
+		secondary: false,
+		target: "normal",
+		type: "Bug"
+	},
 	"powdersnow": {
 		num: 181,
 		accuracy: 100,
