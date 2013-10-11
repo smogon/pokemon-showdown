@@ -12903,6 +12903,33 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
+	"topsyturvy": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Inverts target's stat stages.",
+		shortDesc: "Inverts target's stat stages.",
+		id: "topsyturvy",
+		name: "Topsy-turvy",
+		pp: 10,
+		priority: 0,
+		onHit: function(target) {
+			var targetBoosts = {};
+
+			for (var i in target.boosts) {
+				target.boosts[i] = -target.boosts[i];
+			}
+
+			target.setBoost(targetBoosts);
+
+			this.add('-invertboost', target, '[from] move: Topsy-turvy');
+		},
+		secondary: false,
+		target: "normal",
+		type: "Dark"
+	},
 	"torment": {
 		num: 259,
 		accuracy: 100,
