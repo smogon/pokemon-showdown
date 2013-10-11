@@ -314,6 +314,7 @@ exports.BattleItems = {
 		spritenum: 53,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Bug') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Bug Gem', '[from] gem', '[move] '+move.name);
@@ -694,6 +695,7 @@ exports.BattleItems = {
 		spritenum: 89,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Dark') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Dark Gem', '[from] gem', '[move] '+move.name);
@@ -945,6 +947,7 @@ exports.BattleItems = {
 		spritenum: 120,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Electric') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Electric Gem', '[from] gem', '[move] '+move.name);
@@ -1049,6 +1052,7 @@ exports.BattleItems = {
 		spritenum: 139,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Fighting') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Fighting Gem', '[from] gem', '[move] '+move.name);
@@ -1090,6 +1094,7 @@ exports.BattleItems = {
 		spritenum: 141,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Fire') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Fire Gem', '[from] gem', '[move] '+move.name);
@@ -1177,6 +1182,7 @@ exports.BattleItems = {
 		spritenum: 149,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Flying') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Flying Gem', '[from] gem', '[move] '+move.name);
@@ -1266,6 +1272,7 @@ exports.BattleItems = {
 		spritenum: 161,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Ghost') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Ghost Gem', '[from] gem', '[move] '+move.name);
@@ -1355,6 +1362,7 @@ exports.BattleItems = {
 		spritenum: 182,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Ground') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Ground Gem', '[from] gem', '[move] '+move.name);
@@ -1486,6 +1494,7 @@ exports.BattleItems = {
 		spritenum: 218,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Ice') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Ice Gem', '[from] gem', '[move] '+move.name);
@@ -2337,6 +2346,7 @@ exports.BattleItems = {
 		spritenum: 307,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Normal') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Normal Gem', '[from] gem', '[move] '+move.name);
@@ -2597,6 +2607,7 @@ exports.BattleItems = {
 		spritenum: 344,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Poison') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Poison Gem', '[from] gem', '[move] '+move.name);
@@ -2660,6 +2671,7 @@ exports.BattleItems = {
 		spritenum: 369,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Psychic') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Psychic Gem', '[from] gem', '[move] '+move.name);
@@ -2894,6 +2906,7 @@ exports.BattleItems = {
 		spritenum: 415,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Rock') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Rock Gem', '[from] gem', '[move] '+move.name);
@@ -3377,6 +3390,7 @@ exports.BattleItems = {
 		spritenum: 473,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Steel') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Steel Gem', '[from] gem', '[move] '+move.name);
@@ -3596,6 +3610,7 @@ exports.BattleItems = {
 		spritenum: 528,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Water') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Water Gem', '[from] gem', '[move] '+move.name);
