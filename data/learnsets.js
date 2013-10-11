@@ -729,7 +729,7 @@ exports.BattleLearnsets = {
 	sylveon:{learnset:{babydolleyes:["6L0"],bite:["6L0"],drainingkiss:["6L0"],fairywind:["6L0"],lightscreen:["6L0"],mistyterrain:["6L0"],moonblast:["6L0"],refresh:["6L0"],swift:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	hawlucha:{learnset:{acrobatics:["6L0"],aerialace:["6L0"],encore:["6L0"],flyingpress:["6L0"],poweruppunch:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	dedenne:{learnset:{charm:["6L0"],doubleslap:["6L0"],nuzzle:["6L0"],paraboliccharge:["6L0"],thundershock:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
-	carbink:{learnset:{}},
+	carbink:{learnset:{rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	goomy:{learnset:{bodyslam:["6L0"],dragonbreath:["6L0"],dragonpulse:["6L0"],muddywater:["6L0"],raindance:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	sliggoo:{learnset:{dragonpulse:["6L47"]}},
 	goodra:{learnset:{}},
