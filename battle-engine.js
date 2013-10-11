@@ -2662,11 +2662,7 @@ var Battle = (function() {
 		}
 
 		// happens after crit calculation
-		var bpMod = 1;
-		bpMod = this.singleEvent('BasePower', move, null, pokemon, target, move, bpMod);
-		bpMod = this.runEvent('BasePower', pokemon, target, move, bpMod);
-
-		basePower = this.modify(basePower, bpMod);
+		basePower = this.runEvent('BasePower', pokemon, target, move, bpMod, true);
 
 		if (!basePower) return 0;
 		basePower = clampIntRange(basePower, 1);
