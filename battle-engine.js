@@ -1834,7 +1834,7 @@ var Battle = (function() {
 		this.eventDepth++;
 
 		if (onEffect && 'on'+eventid in effect) {
-			statuses.unshift({status: effect, callback: effect['on'+eventid], statusData: null, end: null, thing: target});
+			statuses.unshift({status: effect, callback: effect['on'+eventid], statusData: {}, end: null, thing: target});
 		}
 		for (var i=0; i<statuses.length; i++) {
 			var status = statuses[i].status;
@@ -2729,7 +2729,7 @@ var Battle = (function() {
 		// crit
 		if (move.crit) {
 			if (!suppressMessages) this.add('-crit', target);
-			baseDamage = this.modify(baseDamage, move.critModifier || 2);
+			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
 		}
 
 		// randomizer

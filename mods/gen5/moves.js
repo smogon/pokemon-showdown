@@ -1,4 +1,8 @@
 exports.BattleMovedex = {
+	aurasphere: {
+		inherit: true,
+		basePower: 90
+	},
 	blizzard: {
 		inherit: true,
 		basePower: 120
@@ -14,6 +18,10 @@ exports.BattleMovedex = {
 	cottonspore: {
 		inherit: true,
 		onTryHit: null
+	},
+	dragonpulse: {
+		inherit: true,
+		basePower: 90
 	},
 	hiddenpower: {
 		inherit: true,
