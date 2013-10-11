@@ -308,7 +308,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['Pokemon', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Uber']
+		banlist: ['Unreleased', 'Illegal', 'Uber', 'Limbo']
 	},
 	{
 		name: "Ability Exchange",
