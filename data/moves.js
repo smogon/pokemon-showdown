@@ -958,7 +958,7 @@ exports.BattleMovedex = {
 	"blizzard": {
 		num: 59,
 		accuracy: 70,
-		basePower: 120,
+		basePower: 110,
 		category: "Special",
 		desc: "Deals damage to all adjacent foes with a 10% chance to freeze each. If the weather is Hail, this move cannot miss.",
 		shortDesc: "10% chance to freeze the foe(s).",
@@ -3487,7 +3487,7 @@ exports.BattleMovedex = {
 	"fireblast": {
 		num: 126,
 		accuracy: 85,
-		basePower: 120,
+		basePower: 110,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 10% chance to burn it.",
 		shortDesc: "10% chance to burn the target.",
@@ -3748,7 +3748,7 @@ exports.BattleMovedex = {
 	"flamethrower": {
 		num: 53,
 		accuracy: 100,
-		basePower: 95,
+		basePower: 90,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 10% chance to burn it.",
 		shortDesc: "10% chance to burn the target.",
@@ -5385,10 +5385,7 @@ exports.BattleMovedex = {
 	"hiddenpower": {
 		num: 237,
 		accuracy: 100,
-		basePower: 0,
-		basePowerCallback: function(pokemon) {
-			return pokemon.hpPower || 70;
-		},
+		basePower: 60,
 		category: "Special",
 		desc: "Deals damage to one adjacent target. This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
 		shortDesc: "Varies in power and type based on the user's IVs.",
@@ -5406,7 +5403,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerbug": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5420,7 +5417,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerdark": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5434,7 +5431,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerdragon": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5448,7 +5445,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerelectric": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5463,7 +5460,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerfairy": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5479,7 +5476,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerfighting": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5494,7 +5491,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerfire": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5509,7 +5506,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerflying": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5523,7 +5520,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerghost": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5537,7 +5534,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowergrass": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5552,7 +5549,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerground": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5566,7 +5563,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerice": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5581,7 +5578,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerpoison": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5595,7 +5592,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerpsychic": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5609,7 +5606,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerrock": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5623,7 +5620,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowersteel": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5637,7 +5634,7 @@ exports.BattleMovedex = {
 	},
 	"hiddenpowerwater": {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
@@ -5744,7 +5741,7 @@ exports.BattleMovedex = {
 	"hurricane": {
 		num: 542,
 		accuracy: 70,
-		basePower: 120,
+		basePower: 110,
 		category: "Special",
 		desc: "Deals damage to one adjacent or non-adjacent target with a 30% chance to confuse it. This move can hit a target using Bounce, Fly, or Sky Drop. If the weather is Rain Dance, this move cannot miss. If the weather is Sunny Day, this move's accuracy is 50%.",
 		shortDesc: "30% chance to confuse target. Can't miss in rain.",
@@ -5785,7 +5782,7 @@ exports.BattleMovedex = {
 	"hydropump": {
 		num: 56,
 		accuracy: 80,
-		basePower: 120,
+		basePower: 110,
 		category: "Special",
 		desc: "Deals damage to one adjacent target.",
 		shortDesc: "No additional effect.",
@@ -5920,7 +5917,7 @@ exports.BattleMovedex = {
 	"icebeam": {
 		num: 58,
 		accuracy: 100,
-		basePower: 95,
+		basePower: 90,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 10% chance to freeze it.",
 		shortDesc: "10% chance to freeze the target.",
@@ -11750,7 +11747,7 @@ exports.BattleMovedex = {
 	"surf": {
 		num: 57,
 		accuracy: 100,
-		basePower: 95,
+		basePower: 90,
 		category: "Special",
 		desc: "Deals damage to all adjacent Pokemon. Power doubles against Pokemon using Dive. (Field: Can be used to surf on water.)",
 		shortDesc: "Hits adjacent Pokemon. Power doubles on Dive.",
@@ -12260,7 +12257,7 @@ exports.BattleMovedex = {
 	"thunder": {
 		num: 87,
 		accuracy: 70,
-		basePower: 120,
+		basePower: 110,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 30% chance to paralyze it. This move can hit a target using Bounce, Fly, or Sky Drop. If the weather is Rain Dance, this move cannot miss. If the weather is Sunny Day, this move's accuracy is 50%.",
 		shortDesc: "30% chance to paralyze target. Can't miss in rain.",
@@ -12364,7 +12361,7 @@ exports.BattleMovedex = {
 	"thunderbolt": {
 		num: 85,
 		accuracy: 100,
-		basePower: 95,
+		basePower: 90,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 10% chance to paralyze it.",
 		shortDesc: "10% chance to paralyze the target.",
@@ -13254,7 +13251,7 @@ exports.BattleMovedex = {
 	},
 	"willowisp": {
 		num: 261,
-		accuracy: 75,
+		accuracy: 85,
 		basePower: 0,
 		category: "Status",
 		desc: "Burns one adjacent target. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
