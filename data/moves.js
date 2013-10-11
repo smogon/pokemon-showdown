@@ -682,7 +682,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack by 1 stage. Priority +1.",
-		shortDesc: "Lowers foe's Defense by 1. Priority +1.",
+		shortDesc: "Lowers foe's Attack by 1. Priority +1.",
 		id: "babydolleyes",
 		name: "Baby-Doll Eyes",
 		pp: 25,
