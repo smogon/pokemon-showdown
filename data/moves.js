@@ -4298,7 +4298,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onModifyEffectiveness: function(effectiveness, target) {
-			if (target.hasType('Water')) return Math.min(effectiveness + 2, 2);
+			if (target.hasType('Water')) return effectiveness + 2;
 		},
 		secondary: {
 			chance: 10,
