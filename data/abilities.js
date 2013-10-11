@@ -64,6 +64,20 @@ exports.BattleAbilities = {
 		rating: 3,
 		num: 106
 	},
+	"aerilate": {
+		desc: "Turn all of this Pokemon's Normal-typed attacks into Flying-typed.",
+		shortDesc: "This Pokemon's Normal moves become Flying.",
+		onModifyMove: function(move) {
+			if (move.type === 'Normal') {
+				move.type = 'Flying';
+			}
+		},
+		id: "aerilate",
+		name: "Aerilate",
+		rating: 3,
+		num: -6,
+		gen: 6
+	},
 	"airlock": {
 		desc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
 		shortDesc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
@@ -147,6 +161,16 @@ exports.BattleAbilities = {
 		rating: 5,
 		num: 71
 	},
+	"aurabreak": {
+		desc: "Reverses the effect of Dark Aura and Fairy Aura.",
+		shortDesc: "Reverses the effect of Aura abilities.",
+		//todo
+		id: "aurabreak",
+		name: "Aura Break",
+		rating: 3,
+		num: -6,
+		gen: 6
+	},
 	"baddreams": {
 		desc: "If asleep, each of this Pokemon's opponents receives damage equal to one-eighth of its max HP.",
 		shortDesc: "Causes sleeping adjacent foes to lose 1/8 of their max HP at the end of each turn.",
@@ -210,6 +234,20 @@ exports.BattleAbilities = {
 		name: "Blaze",
 		rating: 2,
 		num: 66
+	},
+	"cheekpouch": {
+		desc: "Increases HP when this Pokemon consumes a berry.",
+		shortDesc: "Increases HP when this Pokemon consumes a berry.",
+		onUseItem: function(item, pokemon) {
+			if (item.isBerry) {
+				pokemon.heal(10);
+			}
+		},
+		id: "cheekpouch",
+		name: "Cheek Pouch",
+		rating: 3,
+		num: -6,
+		gen: 6
 	},
 	"chlorophyll": {
 		desc: "If this Pokemon is active while Sunny Day is in effect, its speed is temporarily doubled.",
@@ -350,6 +388,21 @@ exports.BattleAbilities = {
 		name: "Damp",
 		rating: 0.5,
 		num: 6
+	},
+	"darkaura": {
+		desc: "Increases the power of all Dark-type moves in battle.",
+		shortDesc: "Increases the power of all Dark-type moves in battle.",
+		onBasePowerPriority: 8,
+		onBasePower: function(bpMod, attacker, defender, move) {
+			if (move.type === 'Dark') {
+				return this.chain(bpMod, 1.2);
+			}
+		},
+		id: "darkaura",
+		name: "Dark Aura",
+		rating: 3,
+		num: -6,
+		gen: 6
 	},
 	"defeatist": {
 		desc: "Attack and Special Attack are halved when HP is less than half.",
@@ -497,6 +550,21 @@ exports.BattleAbilities = {
 		rating: 2,
 		num: 27
 	},
+	"fairyaura": {
+		desc: "Increases the power of all Dark-type moves in battle.",
+		shortDesc: "Increases the power of all Dark-type moves in battle.",
+		onBasePowerPriority: 8,
+		onBasePower: function(bpMod, attacker, defender, move) {
+			if (move.type === 'Fairy') {
+				return this.chain(bpMod, 1.2);
+			}
+		},
+		id: "fairyaura",
+		name: "Fairy Aura",
+		rating: 3,
+		num: -6,
+		gen: 6
+	},
 	"filter": {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
@@ -618,6 +686,16 @@ exports.BattleAbilities = {
 		rating: 3,
 		num: 122
 	},
+	"flowerveil": {
+		desc: "Prevents lowering of ally Grass-type Pokemon's stats.",
+		shortDesc: "Prevents lowering of ally Grass-type Pokemon's stats.",
+		//todo
+		id: "flowerveil",
+		name: "Flower Veil",
+		rating: 0,
+		num: -6,
+		gen: 6
+	},
 	"forecast": {
 		desc: "This Pokemon's type changes according to the current weather conditions: it becomes Fire-type during Sunny Day, Water-type during Rain Dance, Ice-type during Hail and remains its regular type otherwise.",
 		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
@@ -708,6 +786,19 @@ exports.BattleAbilities = {
 		name: "Frisk",
 		rating: 1.5,
 		num: 119
+	},
+	"furcoat": {
+		desc: "Halves the damage done to the Pokemon by physical attacks.",
+		shortDesc: "Halves the damage done to the Pokemon by physical attacks.",
+		onModifyAtkPriority: 6,
+		onSourceModifyAtk: function(atkMod, attacker, defender, move) {
+			return this.chain(atkMod, 0.5);
+		},
+		id: "furcoat",
+		name: "Fur Coat",
+		rating: 3.5,
+		num: -6,
+		gen: 6
 	},
 	"gluttony": {
 		desc: "This Pokemon consumes its held berry when its health reaches 50% max HP or lower.",
@@ -1261,6 +1352,21 @@ exports.BattleAbilities = {
 		rating: 3,
 		num: 63
 	},
+	"megalauncher": {
+		desc: "Boosts the power of pulse moves such as Water Pulse and Dark Pulse.",
+		shortDesc: "Boosts the power of pulse moves.",
+		onBasePowerPriority: 8,
+		onBasePower: function(bpMod, attacker, defender, move) {
+			if (move.isPulseMove) {
+				return this.chain(bpMod, 1.2);
+			}
+		},
+		id: "megalauncher",
+		name: "Mega Launcher",
+		rating: 3,
+		num: -6,
+		gen: 6
+	},
 	"minus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Plus ability.",
 		shortDesc: "If another ally has this Ability or the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
@@ -1526,6 +1632,16 @@ exports.BattleAbilities = {
 		rating: 1,
 		num: 20
 	},
+	"parentalbond": {
+		desc: "Allows the Pokemon to hit twice with the same move in one turn.",
+		shortDesc: "Hits twice in one turn.",
+		//todo
+		id: "parentalbond",
+		name: "Parental Bond",
+		rating: 3,
+		num: -6,
+		gen: 6
+	},
 	"pickup": {
 		desc: "If an opponent uses a consumable item, Pickup will give the Pokemon the item used, if it is not holding an item. If multiple Pickup Pokemon are in play, one will pick up a copy of the used Berry, and may or may not use it immediately. Works on Berries, Gems, Absorb Bulb, Focus Sash, Herbs, Cell Battery, Red Card, and anything that is thrown with Fling.",
 		shortDesc: "If this Pokemon has no item, it finds one used by an adjacent Pokemon this turn.",
@@ -1570,6 +1686,20 @@ exports.BattleAbilities = {
 		name: "Pickpocket",
 		rating: 1,
 		num: 124
+	},
+	"pixilate": {
+		desc: "Turn all of this Pokemon's Normal-typed attacks into Fairy-typed.",
+		shortDesc: "This Pokemon's Normal moves become Fairy.",
+		onModifyMove: function(move) {
+			if (move.type === 'Normal') {
+				move.type = 'Fairy';
+			}
+		},
+		id: "pixelite",
+		name: "Pixelite",
+		rating: 3,
+		num: -6,
+		gen: 6
 	},
 	"plus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Minus ability.",
@@ -1667,6 +1797,16 @@ exports.BattleAbilities = {
 		rating: 2,
 		num: 46
 	},
+	"protean": {
+		desc: "Changes user's type to match the move it used last.",
+		shortDesc: "Changes user's type to match the move it used last.",
+		//todo
+		id: "protean",
+		name: "Protean",
+		rating: 1.5,
+		num: -6,
+		gen: 6
+	},
 	"purepower": {
 		desc: "This Pokemon's Attack stat is doubled. Therefore, if this Pokemon's Attack stat on the status screen is 200, it effectively has an Attack stat of 400; which is then subject to the full range of stat boosts and reductions.",
 		shortDesc: "This Pokemon's Attack is doubled.",
@@ -1732,6 +1872,20 @@ exports.BattleAbilities = {
 		name: "Reckless",
 		rating: 3,
 		num: 120
+	},
+	"refrigerate": {
+		desc: "Turn all of this Pokemon's Normal-typed attacks into Ice-typed.",
+		shortDesc: "This Pokemon's Normal moves become Ice.",
+		onModifyMove: function(move) {
+			if (move.type === 'Normal') {
+				move.type = 'Ice';
+			}
+		},
+		id: "refrigerate",
+		name: "Refrigerate",
+		rating: 3,
+		num: -6,
+		gen: 6
 	},
 	"regenerator": {
 		desc: "Causes the user to restore HP by 1/3 of its maximum when switching out.",
@@ -2165,6 +2319,16 @@ exports.BattleAbilities = {
 		rating: -1,
 		num: 100
 	},
+	"stancechange": {
+		desc: "The Pokemon changes form depending on how it battles. Defense form for Status moves, and Offense form for attacking moves.",
+		shortDesc: "The Pokemon changes form depending on how it battles.",
+		//todo after adding aegislash forms
+		id: "stancechange",
+		name: "Stance Change",
+		rating: 4.5,
+		num: -6,
+		gen: 6
+	},
 	"static": {
 		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become paralyzed.",
 		shortDesc: "30% chance of paralyzing a Pokemon making contact with this Pokemon.",
@@ -2247,6 +2411,21 @@ exports.BattleAbilities = {
 		rating: 3.5,
 		num: 114
 	},
+	"strongjaw": {
+		desc: "This Pokemon receives a 50% power boost for attacks such as Bite and Crunch.",
+		shortDesc: "This Pokemon's bite-based attacks do 1.5x damage.",
+		onBasePowerPriority: 8,
+		onBasePower: function(bpMod, attacker, defender, move) {
+			if (move.isBiteAttack) {
+				return this.chain(bpMod, 1.5);
+			}
+		},
+		id: "strongjaw",
+		name: "Strong Jaw",
+		rating: 3,
+		num: -6,
+		gen: 6
+	},
 	"sturdy": {
 		desc: "This Pokemon is immune to OHKO moves, and will survive with 1 HP if hit by an attack which would KO it while at full health.",
 		shortDesc: "If this Pokemon is at full HP, it lives one hit with at least 1HP. OHKO moves fail on it.",
@@ -2311,6 +2490,16 @@ exports.BattleAbilities = {
 		name: "Swarm",
 		rating: 2,
 		num: 68
+	},
+	"sweetveil": {
+		desc: "Prevents allies to be put to Sleep.",
+		shortDesc: "Prevents allies to be put to Sleep.",
+		//todo
+		id: "sweetveil",
+		name: "Sweet Veil",
+		rating: 0,
+		num: -6,
+		gen: 6
 	},
 	"swiftswim": {
 		desc: "If this Pokemon is active while Rain Dance is in effect, its speed is temporarily doubled.",
@@ -2474,6 +2663,21 @@ exports.BattleAbilities = {
 		name: "Toxic Boost",
 		rating: 3,
 		num: 137
+	},
+	"toughclaws": {
+		desc: "This Pokemon receives a 20% power boost for Physical attacks.",
+		shortDesc: "This Pokemon's Physical attacks do 1.2x damage.",
+		onBasePowerPriority: 8,
+		onBasePower: function(bpMod, attacker, defender, move) {
+			if (move.category === 'Physical') {
+				return this.chain(bpMod, 1.2);
+			}
+		},
+		id: "toughclaws",
+		name: "Tough Claws",
+		rating: 3,
+		num: -6,
+		gen: 6
 	},
 	"trace": {
 		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability (except Multitype). This ability remains with this Pokemon until it leaves the field.",

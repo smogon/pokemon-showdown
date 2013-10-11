@@ -188,6 +188,7 @@ exports.groups = {
 		name: "Administrator",
 		root: true,
 		globalonly: true,
+		gdeclare: true,
 		rank: 6
 	},
 	'&': {
