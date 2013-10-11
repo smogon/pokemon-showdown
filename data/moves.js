@@ -928,6 +928,7 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		isContact: true,
+		isBiteAttack: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -2089,6 +2090,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
+		isBiteAttack: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -3647,6 +3649,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
+		isBiteAttack: true,
 		secondaries: [ {
 				chance: 10,
 				status: 'brn'
@@ -6062,6 +6065,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
+		isBiteAttack: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch'
@@ -6218,6 +6222,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
+		isBiteAttack: true,
 		secondaries: [ {
 				chance: 10,
 				status: 'frz'
@@ -8662,6 +8667,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
+		isBiteAttack: true,
 		secondary: {
 			chance: 30,
 			status: 'tox'
@@ -12739,6 +12745,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isContact: true,
+		isBiteAttack: true,
 		secondaries: [ {
 				chance: 10,
 				status: 'par'
