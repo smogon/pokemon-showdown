@@ -279,6 +279,15 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Holder's Dark-type attacks have 1.2x power."
 	},
+	"blazikenite": {
+		id: "blazikenite",
+		name: "Blazikenite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Blaziken."
+	},
 	"blukberry": {
 		id: "blukberry",
 		name: "Bluk Berry",
@@ -370,6 +379,24 @@ exports.BattleItems = {
 		num: 249,
 		gen: 2,
 		desc: "Holder's Fire-type attacks have 1.2x power."
+	},
+	"charizarditex": {
+		id: "charizarditex",
+		name: "Charizardite X",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Charizard into Mega Charizard X."
+	},
+	"charizarditey": {
+		id: "charizarditey",
+		name: "Charizardite Y",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Charizard into Mega Charizard Y."
 	},
 	"chartiberry": {
 		id: "chartiberry",
@@ -2171,6 +2198,24 @@ exports.BattleItems = {
 		num: 277,
 		gen: 4,
 		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns."
+	},
+	"mewtwonitex": {
+		id: "mewtwonitex",
+		name: "Mewtwonite X",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Mewtwo into Mega Mewtwo X."
+	},
+	"mewtwonitey": {
+		id: "mewtwonitey",
+		name: "Mewtwonite Y",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Mewtwo into Mega Mewtwo Y."
 	},
 	"micleberry": {
 		id: "micleberry",
