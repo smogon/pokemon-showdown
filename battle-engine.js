@@ -2732,7 +2732,7 @@ var Battle = (function() {
 		// crit
 		if (move.crit) {
 			if (!suppressMessages) this.add('-crit', target);
-			baseDamage = this.modify(baseDamage, move.critModifier || 2);
+			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
 		}
 
 		// randomizer
