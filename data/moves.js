@@ -1183,9 +1183,9 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onSourceBasePower: function(bpMod, target, source, move) {
+			onSourceBasePower: function(basePower, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
-					return this.chain(bpMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -1250,9 +1250,9 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onBasePowerPriority: 4,
-		onBasePower: function(bpMod, pokemon, target) {
+		onBasePower: function(basePower, pokemon, target) {
 			if (target.hp * 2 < target.maxhp) {
-				return this.chain(bpMod, 2);
+				return this.chainModify(2);
 			}
 		},
 		secondary: false,
@@ -1507,10 +1507,10 @@ exports.BattleMovedex = {
 				this.effectData.duration = 2;
 			},
 			onBasePowerPriority: 3,
-			onBasePower: function(bpMod, attacker, defender, move) {
+			onBasePower: function(basePower, attacker, defender, move) {
 				if (move.type === 'Electric') {
 					this.debug('charge boost');
-					return this.chain(bpMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -2413,9 +2413,9 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onSourceModifyDamage: function(damageMod, source, target, move) {
+			onSourceModifyDamage: function(damage, source, target, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude') {
-					return this.chain(damageMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -2542,9 +2542,9 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onSourceModifyDamage: function(damageMod, source, target, move) {
+			onSourceModifyDamage: function(damage, source, target, move) {
 				if (move.id === 'surf' || move.id === 'whirlpool') {
-					return this.chain(damageMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -3427,9 +3427,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		onBasePowerPriority: 4,
-		onBasePower: function(bpMod, pokemon) {
+		onBasePower: function(basePower, pokemon) {
 			if (pokemon.status && pokemon.status !== 'slp') {
-				return this.chain(bpMod, 2);
+				return this.chainModify(2);
 			}
 		},
 		secondary: false,
@@ -4068,9 +4068,9 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onSourceBasePower: function(bpMod, target, source, move) {
+			onSourceBasePower: function(basePower, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
-					return this.chain(bpMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -4478,12 +4478,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		onBasePowerPriority: 4,
-		onBasePower: function(bpMod, pokemon) {
+		onBasePower: function(basePower, pokemon) {
 			var actives = pokemon.side.active;
 			for (var i=0; i<actives.length; i++) {
 				if (actives[i] && actives[i].moveThisTurn === 'fusionflare') {
 					this.debug('double power');
-					return this.chain(bpMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -4505,12 +4505,12 @@ exports.BattleMovedex = {
 		priority: 0,
 		thawsUser: true,
 		onBasePowerPriority: 4,
-		onBasePower: function(bpMod, pokemon) {
+		onBasePower: function(basePower, pokemon) {
 			var actives = pokemon.side.active;
 			for (var i=0; i<actives.length; i++) {
 				if (actives[i] && actives[i].moveThisTurn === 'fusionbolt') {
 					this.debug('double power');
-					return this.chain(bpMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -5575,9 +5575,9 @@ exports.BattleMovedex = {
 				this.add('-singleturn', target, 'Helping Hand', '[of] '+source);
 			},
 			onBasePowerPriority: 3,
-			onBasePower: function(bpMod) {
+			onBasePower: function(basePower) {
 				this.debug('Boosting from Helping Hand');
-				return this.chain(bpMod, 1.5);
+				return this.chainModify(1.5);
 			}
 		},
 		secondary: false,
@@ -6844,12 +6844,12 @@ exports.BattleMovedex = {
 				}
 				return 5;
 			},
-			onFoeModifyDamage: function(damageMod, source, target, move) {
+			onFoeModifyDamage: function(damage, source, target, move) {
 				if (this.getCategory(move) === 'Special' && target.side === this.effectData.target) {
 					if (!move.crit && source.ability !== 'infiltrator') {
 						this.debug('Light Screen weaken')
-						if (source.side.active.length > 1) return this.chain(damageMod, 0.66);
-						return this.chain(damageMod, 0.5);
+						if (source.side.active.length > 1) return this.chainModify(0.66);
+						return this.chainModify(0.5);
 					}
 				}
 			},
@@ -7319,8 +7319,8 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onBasePowerPriority: 4,
-			onBasePower: function(bpMod) {
-				return this.chain(bpMod, 1.5);
+			onBasePower: function(basePower) {
+				return this.chainModify(1.5);
 			}
 		},
 		secondary: false,
@@ -7661,9 +7661,9 @@ exports.BattleMovedex = {
 		volatileStatus: 'minimize',
 		effect: {
 			noCopy: true,
-			onSourceModifyDamage: function(damageMod, source, target, move) {
+			onSourceModifyDamage: function(damage, source, target, move) {
 				if (move.id === 'stomp' || move.id === 'steamroller') {
-					return this.chain(damageMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -7971,9 +7971,9 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add("-start", pokemon, 'Mud Sport');
 			},
-			onBasePowerModifier: 1,
-			onAnyBasePower: function(bpMod, user, target, move) {
-				if (move.type === 'Electric') return this.chain(bpMod, [0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+			onBasePowerPriority: 1,
+			onAnyBasePower: function(basePower, user, target, move) {
+				if (move.type === 'Electric') return this.chainModify([0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			}
 		},
 		secondary: false,
@@ -9598,12 +9598,12 @@ exports.BattleMovedex = {
 				}
 				return 5;
 			},
-			onFoeModifyDamage: function(damageMod, source, target, move) {
+			onFoeModifyDamage: function(damage, source, target, move) {
 				if (this.getCategory(move) === 'Physical' && target.side === this.effectData.target) {
 					if (!move.crit && source.ability !== 'infiltrator') {
 						this.debug('Reflect weaken');
-						if (source.side.active.length > 1) return this.chain(damageMod, 0.66);
-						return this.chain(damageMod, 0.5);
+						if (source.side.active.length > 1) return this.chainModify(0.66);
+						return this.chainModify(0.5);
 					}
 				}
 			},
@@ -9732,10 +9732,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		onBasePowerPriority: 4,
-		onBasePower: function(bpMod, pokemon) {
+		onBasePower: function(basePower, pokemon) {
 			if (pokemon.side.faintedLastTurn) {
 				this.debug('Boosted for a faint last turn');
-				return this.chain(bpMod, 2);
+				return this.chainModify(2);
 			}
 		},
 		secondary: false,
@@ -11040,7 +11040,7 @@ exports.BattleMovedex = {
 				}
 				return 0;
 			},
-			onAnyBasePower: function(bpMod, target, source, move) {
+			onAnyBasePower: function(basePower, target, source, move) {
 				if (target !== this.effectData.target && target !== this.effectData.source) {
 					return;
 				}
@@ -11048,7 +11048,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move.id === 'gust' || move.id === 'twister') {
-					return this.chain(bpMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -11480,10 +11480,10 @@ exports.BattleMovedex = {
 			return null;
 		},
 		onBasePowerPriority: 4,
-		onBasePower: function(bpMod, pokemon, target) {
+		onBasePower: function(basePower, pokemon, target) {
 			if (this.isWeather(['raindance','sandstorm','hail'])) {
 				this.debug('weakened by weather');
-				return this.chain(bpMod, 0.5);
+				return this.chainModify(0.5);
 			}
 		},
 		effect: {
@@ -13322,9 +13322,9 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onBasePowerPriority: 4,
-		onBasePower: function(bpMod, pokemon, target) {
+		onBasePower: function(basePower, pokemon, target) {
 			if (target.status === 'psn' || target.status === 'tox') {
-				return this.chain(bpMod, 2);
+				return this.chainModify(2);
 			}
 		},
 		secondary: false,
@@ -13548,9 +13548,9 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add("-start", pokemon, 'move: Water Sport');
 			},
-			onBasePowerModifier: 1,
-			onAnyBasePower: function(bpMod, user, target, move) {
-				if (move.type === 'Fire') return this.chain(bpMod, [0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+			onBasePowerPriority: 1,
+			onAnyBasePower: function(basePower, user, target, move) {
+				if (move.type === 'Fire') return this.chainModify([0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			}
 		},
 		secondary: false,
