@@ -344,7 +344,7 @@ exports.BattleStatuses = {
 			}
 		},
 		onStart: function(battle, source, effect) {
-			if (effect && effect.effectType === 'Ability') {
+			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
 				this.effectData.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: '+effect, '[of] '+source);
 			} else {
@@ -380,7 +380,7 @@ exports.BattleStatuses = {
 			}
 		},
 		onStart: function(battle, source, effect) {
-			if (effect && effect.effectType === 'Ability') {
+			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
 				this.effectData.duration = 0;
 				this.add('-weather', 'SunnyDay', '[from] ability: '+effect, '[of] '+source);
 			} else {
@@ -417,7 +417,7 @@ exports.BattleStatuses = {
 			}
 		},
 		onStart: function(battle, source, effect) {
-			if (effect && effect.effectType === 'Ability') {
+			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
 				this.effectData.duration = 0;
 				this.add('-weather', 'Sandstorm', '[from] ability: '+effect, '[of] '+source);
 			} else {
@@ -446,7 +446,7 @@ exports.BattleStatuses = {
 			return 5;
 		},
 		onStart: function(battle, source, effect) {
-			if (effect && effect.effectType === 'Ability') {
+			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
 				this.effectData.duration = 0;
 				this.add('-weather', 'Hail', '[from] ability: '+effect, '[of] '+source);
 			} else {
