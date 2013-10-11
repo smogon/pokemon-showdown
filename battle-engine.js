@@ -2676,10 +2676,6 @@ var Battle = (function() {
 		var attack;
 		var defense;
 
-		var atkStatMod = 1;
-		atkStatMod = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, atkStatMod);
-		var defStatMod = 1;
-		defStatMod = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defStatMod);
 		var atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
 		var defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 		
@@ -2712,6 +2708,10 @@ var Battle = (function() {
 		
 		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, defBoosts, defStatMod);
 		else defense = defender.calculateStat(defenseStat, defBoosts, defStatMod);
+		
+		// Apply Stat Modifiers
+		attack = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, attack);
+		defense = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defense);
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
