@@ -1806,7 +1806,7 @@ var Battle = (function() {
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
 	 */
-	Battle.prototype.runEvent = function(eventid, target, source, effect, relayVar) {
+	Battle.prototype.runEvent = function(eventid, target, source, effect, relayVar, onEffect) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -1833,6 +1833,9 @@ var Battle = (function() {
 		this.event = {id: eventid, target: target, source: source, effect: effect, modifier: 1};
 		this.eventDepth++;
 
+		if (onEffect && 'on'+eventid in effect) {
+			statuses.unshift({status: effect, callback: effect['on'+eventid], statusData: null, end: null, thing: target});
+		}
 		for (var i=0; i<statuses.length; i++) {
 			var status = statuses[i].status;
 			var thing = statuses[i].thing;
