@@ -652,6 +652,29 @@ exports.Formats = [
 		}
 	},
 
+	// Pokemon XY
+	///////////////////////////////////////////////////////////////////
+
+	{
+		name: "[Gen 6] Ubers (beta)",
+		section: "Pokémon X/Y",
+
+		searchShow: false,
+		debug: true,
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
+		banlist: [],
+
+		column: 2
+	},
+	{
+		name: "[Gen 6] Custom Game",
+		section: "Pokémon X/Y",
+
+		searchShow: false,
+		debug: true,
+		ruleset: []
+	},
+
 	// Past Generations
 	///////////////////////////////////////////////////////////////////
 
