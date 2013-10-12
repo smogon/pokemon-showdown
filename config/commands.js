@@ -269,7 +269,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
 		var moves = {}, tiers = {}, colours = {}, ability = {}, gens = {}, types = {};
-		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1};
+		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1, 'limbo':1};
 		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
 		var count = 0;
 		var showAll = false;
@@ -367,7 +367,7 @@ var commands = exports.commands = {
 			if (!results) {
 				for (var pokemon in Tools.data.Pokedex) {
 					pokemon = Tools.getTemplate(pokemon);
-					if (pokemon.tier !== 'Illegal' && (pokemon.tier.slice(2).toLowerCase() !== 'cap' || 'cap' in tiers)) {
+					if (pokemon.tier !== 'Illegal' && (pokemon.tier !== 'CAP' || 'cap' in tiers)) {
 						tempResults.add(pokemon);
 					}
 				}
@@ -390,9 +390,6 @@ var commands = exports.commands = {
 
 			if (tiers.count > 0) {
 				for (var mon in tempResults) {
-					if ('cap' in tiers) {
-						if (tempResults[mon].tier.slice(2).toLowerCase() === 'cap') results.add(tempResults[mon]);
-					}
 					if (tempResults[mon].tier.toLowerCase() in tiers) results.add(tempResults[mon]);
 				}
 				tiers.count = 0;
