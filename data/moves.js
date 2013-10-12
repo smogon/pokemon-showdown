@@ -7274,6 +7274,45 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel"
 	},
+	"magneticfield": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, powers up Electric attacks.",
+		shortDesc: "For 5 turns, powers up Electric attacks.",
+		id: "magneticfield",
+		name: "Magnetic Field",
+		pp: 5,
+		priority: 0,
+		pseudoWeather: 'magneticfield',
+		effect: {
+			duration: 5,
+			durationCallback: function(target, source, effect) {
+				if (source && source.ability === 'persistent') {
+					return 7;
+				}
+				return 5;
+			},
+			onBasePower: function(basePower, user, target, move) {
+				if (move.type === 'Electric') {
+					this.debug('electric move strengthened');
+					return this.chainModify(1.5);
+				}
+			},
+			onStart: function() {
+				this.add('-fieldstart', 'move: Magnetic Field');
+			},
+			onResidualOrder: 22,
+			onEnd: function() {
+				this.add('-fieldend', 'move: Magnetic Field');
+			}
+		},
+		secondary: false,
+		target: "all",
+		type: "Electric"
+	},
 	"magnetrise": {
 		num: 393,
 		accuracy: true,
