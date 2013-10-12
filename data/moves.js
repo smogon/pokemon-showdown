@@ -6570,15 +6570,15 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 30,
 		category: "Special",
-		desc: "Deals damage to all adjacent foes and destroys any Berry they may be holding.",
-		shortDesc: "Destroys the foe(s) Berry.",
+		desc: "Deals damage to all adjacent foes and destroys any Berry or Gem they may be holding.",
+		shortDesc: "Destroys the foe(s) Berry/Gem.",
 		id: "incinerate",
 		name: "Incinerate",
 		pp: 15,
 		priority: 0,
 		onHit: function(pokemon, source) {
 			var item = pokemon.getItem();
-			if (item.isBerry && pokemon.takeItem(source)) {
+			if ((item.isBerry || item.isGem) && pokemon.takeItem(source)) {
 				this.add('-enditem', pokemon, item.name, '[from] move: Incinerate');
 			}
 		},
