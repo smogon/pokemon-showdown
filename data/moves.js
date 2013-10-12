@@ -6599,6 +6599,57 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
+	"kingsshield": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Protects. Contactors get -Atk.",
+		shortDesc: "Protects. Contactors get -Atk.",
+		id: "kingsshield",
+		isViable: true,
+		name: "King's Shield",
+		pp: 10,
+		priority: 4,
+		stallingMove: true, // Note: stallingMove is not used anywhere.
+		volatileStatus: 'kingsshield',
+		onTryHit: function(pokemon) {
+			return !!this.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit: function(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		effect: {
+			duration: 1,
+			onStart: function(target) {
+				this.add('-singleturn', target, "King's Shield");
+			},
+			onTryHitPriority: 3,
+			onTryHit: function(target, source, move) {
+				if (move.breaksProtect) {
+					target.removeVolatile("King's Shield");
+					return;
+				}
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
+				this.add('-activate', target, "King's Shield");
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (move.isContact) {
+					this.boost({atk:-2}, source, target, this.getMove("King's Shield"));
+				}
+				return null;
+			}
+		},
+		secondary: false,
+		target: "self",
+		type: "Steel"
+	},
 	"knockoff": {
 		num: 282,
 		accuracy: 100,
