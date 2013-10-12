@@ -2849,8 +2849,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
-		desc: "Deals damage to one adjacent target. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Makes contact.",
-		shortDesc: "User recovers 50% of the damage dealt.",
+		desc: "Deals damage to one adjacent target. The user recovers 75% of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Makes contact.",
+		shortDesc: "User recovers 75% of the damage dealt.",
 		id: "drainingkiss",
 		isViable: true,
 		name: "Draining Kiss",
@@ -6653,7 +6653,7 @@ exports.BattleMovedex = {
 	"knockoff": {
 		num: 282,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 65,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
 		shortDesc: "Removes the target's held item.",
@@ -6863,7 +6863,7 @@ exports.BattleMovedex = {
 	"lick": {
 		num: 122,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 30,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target with a 30% chance to paralyze it. Makes contact.",
 		shortDesc: "30% chance to paralyze the target.",
@@ -12156,7 +12156,7 @@ exports.BattleMovedex = {
 	"strugglebug": {
 		num: 522,
 		accuracy: 100,
-		basePower: 30,
+		basePower: 50,
 		category: "Special",
 		desc: "Deals damage to all adjacent foes with a 100% chance to lower their Special Attack by 1 stage each.",
 		shortDesc: "100% chance to lower the foe(s) Sp. Atk by 1.",
