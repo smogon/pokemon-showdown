@@ -1,5 +1,5 @@
 exports.BattleScripts = {
-	gen: 5,
+	gen: 6,
 	runMove: function(move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && toId(move) !== 'struggle') {
 			var changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
@@ -1440,8 +1440,6 @@ exports.BattleScripts = {
 			BL: 76,
 			OU: 74,
 			CAP: 74,
-			G4CAP: 74,
-			G5CAP: 74,
 			Unreleased: 74,
 			Uber: 70
 		};
@@ -1488,7 +1486,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves) {
+			if (this.data.FormatsData[i].viableMoves && this.data.FormatsData[i].tier !== 'Limbo') {
 				keys.push(i);
 			}
 		}
@@ -1517,7 +1515,7 @@ exports.BattleScripts = {
 			if (tier === 'Uber' && uberCount > 1 && Math.random()*5>1) continue;
 
 			// CAPs have 20% the normal rate
-			if ((tier === 'G4CAP' || tier === 'G5CAP') && Math.random()*5>1) continue;
+			if (tier === 'CAP' && Math.random()*5>1) continue;
 			// Arceus formes have 1/17 the normal rate each (so Arceus as a whole has a normal rate)
 			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
@@ -1602,12 +1600,15 @@ exports.BattleScripts = {
 			var pokemon = seasonalPokemonList[i];
 			var template = this.getTemplate(pokemon);
 			var set = this.randomSet(template, i);
-			var hasMoves = {};
-			for (var m in set.moves) {
-				set.moves[m] = set.moves[m].toLowerCase();
-				hasMoves[set.moves[m]] = true;
+			var trickindex = -1;
+			for (var j=0, l=set.moves.length; j<l; j++) {
+				if (set.moves[j].toLowerCase() === 'trick') {
+					trickindex = j;
+				}
 			}
-			if (!('trick' in hasMoves)) set.moves[3] = 'trick';
+			if (trickindex === -1 || trickindex === 2) {
+				set.moves[3] = 'trick';
+			}
 			set.moves[2] = 'Present';
 			team.push(set);
 		}

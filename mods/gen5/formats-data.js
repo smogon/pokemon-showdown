@@ -111,9 +111,6 @@ exports.BattleFormatsData = {
 		maleOnlyDreamWorld: true,
 		tier: "OU"
 	},
-	megavenusaur: {
-		tier: "Illegal"
-	},
 	charmander: {
 		viableMoves: {"flamethrower":1,"overheat":1,"dragonpulse":1,"hiddenpowergrass":1,"fireblast":1},
 		eventPokemon: [
@@ -144,12 +141,6 @@ exports.BattleFormatsData = {
 		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
-	megacharizardx: {
-		tier: "Illegal"
-	},
-	megacharizardy: {
-		tier: "Illegal"
-	},
 	squirtle: {
 		viableMoves: {"icebeam":1,"hydropump":1,"rapidspin":1,"scald":1,"aquajet":1,"toxic":1},
 		eventPokemon: [
@@ -175,9 +166,6 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		maleOnlyDreamWorld: true,
 		tier: "UU"
-	},
-	megablastoise: {
-		tier: "Illegal"
 	},
 	caterpie: {
 		viableMoves: {"bugbite":1,"snore":1,"tackle":1,"electroweb":1},
@@ -1408,12 +1396,6 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "Uber"
 	},
-	megamewtwox: {
-		tier: "Illegal"
-	},
-	megamewtwoy: {
-		tier: "Illegal"
-	},
 	mew: {
 		viableMoves: {"taunt":1,"willowisp":1,"roost":1,"psychic":1,"nastyplot":1,"aurasphere":1,"fireblast":1,"swordsdance":1,"superpower":1,"zenheadbutt":1,"batonpass":1,"rockpolish":1,"substitute":1,"toxic":1,"icebeam":1,"thunderbolt":1,"earthquake":1,"uturn":1,"stealthrock":1},
 		eventPokemon: [
@@ -1591,9 +1573,6 @@ exports.BattleFormatsData = {
 		viableMoves: {"voltswitch":1,"focusblast":1,"hiddenpowerice":1,"hiddenpowergrass":1,"thunderbolt":1,"healbell":1},
 		dreamWorldRelease: true,
 		tier: "NU"
-	},
-	megaampharos: {
-		tier: "Illegal"
 	},
 	azurill: {
 		viableMoves: {"scald":1,"return":1,"doubleedge":1,"encore":1,"toxic":1,"protect":1},
@@ -2409,9 +2388,6 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
-	megamawile: {
-		tier: "Illegal"
-	},
 	aron: {
 		viableMoves: {"headsmash":1,"ironhead":1,"earthquake":1,"superpower":1,"stealthrock":1},
 		dreamWorldRelease: true,
@@ -2836,9 +2812,6 @@ exports.BattleFormatsData = {
 		],
 		dreamWorldRelease: true,
 		tier: "RU"
-	},
-	megaabsol: {
-		tier: "Illegal"
 	},
 	snorunt: {
 		viableMoves: {"spikes":1,"icebeam":1,"hiddenpowerground":1,"iceshard":1,"crunch":1},
@@ -3411,9 +3384,6 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "OU"
 	},
-	megagarchomp: {
-		tier: "Illegal"
-	},
 	riolu: {
 		viableMoves: {"crunch":1,"roar":1,"copycat":1,"drainpunch":1},
 		eventPokemon: [
@@ -3432,9 +3402,6 @@ exports.BattleFormatsData = {
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
-	},
-	megalucario: {
-		tier: "Illegal"
 	},
 	hippopotas: {
 		viableMoves: {"earthquake":1,"slackoff":1,"whirlwind":1,"stealthrock":1,"protect":1,"toxic":1},
@@ -3694,9 +3661,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
 		tier: "Uber"
-	},
-	arceusfairy: {
-		tier: "Limbo"
 	},
 	arceusfighting: {
 		viableMoves: {"calmmind":1,"judgment":1,"icebeam":1,"darkpulse":1,"recover":1,"toxic":1},
@@ -4755,212 +4719,5 @@ exports.BattleFormatsData = {
 	},
 	genesectchill: {
 		tier: "Illegal"
-	},
-	chespin: {
-		tier: "Limbo"
-	},
-	quilladin: {
-		tier: "Limbo"
-	},
-	chesnaught: {
-		tier: "Limbo"
-	},
-	fennekin: {
-		tier: "Limbo"
-	},
-	braixen: {
-		tier: "Limbo"
-	},
-	delphox: {
-		tier: "Limbo"
-	},
-	froakie: {
-		tier: "Limbo"
-	},
-	frogadier: {
-		tier: "Limbo"
-	},
-	greninja: {
-		tier: "Limbo"
-	},
-	bunnelby: {
-		tier: "Limbo"
-	},
-	diggersby: {
-		tier: "Limbo"
-	},
-	fletchling: {
-		tier: "Limbo"
-	},
-	fletchinder: {
-		tier: "Limbo"
-	},
-	talonflame: {
-		tier: "Limbo"
-	},
-	scatterbug: {
-		tier: "Limbo"
-	},
-	spewpa: {
-		tier: "Limbo"
-	},
-	vivillon: {
-		tier: "Limbo"
-	},
-	litleo: {
-		tier: "Limbo"
-	},
-	pyroar: {
-		tier: "Limbo"
-	},
-	flabebe: {
-		tier: "Limbo"
-	},
-	floette: {
-		tier: "Limbo"
-	},
-	florges: {
-		tier: "Limbo"
-	},
-	skiddo: {
-		tier: "Limbo"
-	},
-	gogoat: {
-		tier: "Limbo"
-	},
-	pancham: {
-		tier: "Limbo"
-	},
-	pangoro: {
-		tier: "Limbo"
-	},
-	furfrou: {
-		tier: "Limbo"
-	},
-	espurr: {
-		tier: "Limbo"
-	},
-	meowstic: {
-		tier: "Limbo"
-	},
-	honedge: {
-		tier: "Limbo"
-	},
-	doublade: {
-		tier: "Limbo"
-	},
-	aegislash: {
-		tier: "Limbo"
-	},
-	spritzee: {
-		tier: "Limbo"
-	},
-	aromatisse: {
-		tier: "Limbo"
-	},
-	swirlix: {
-		tier: "Limbo"
-	},
-	slurpuff: {
-		tier: "Limbo"
-	},
-	inkay: {
-		tier: "Limbo"
-	},
-	malamar: {
-		tier: "Limbo"
-	},
-	binacle: {
-		tier: "Limbo"
-	},
-	barbaracle: {
-		tier: "Limbo"
-	},
-	skrelp: {
-		tier: "Limbo"
-	},
-	dragalge: {
-		tier: "Limbo"
-	},
-	clauncher: {
-		tier: "Limbo"
-	},
-	clawitzer: {
-		tier: "Limbo"
-	},
-	helioptile: {
-		tier: "Limbo"
-	},
-	heliolisk: {
-		tier: "Limbo"
-	},
-	tyrunt: {
-		tier: "Limbo"
-	},
-	tyrantrum: {
-		tier: "Limbo"
-	},
-	amaura: {
-		tier: "Limbo"
-	},
-	aurorus: {
-		tier: "Limbo"
-	},
-	sylveon: {
-		tier: "Limbo"
-	},
-	hawlucha: {
-		tier: "Limbo"
-	},
-	dedenne: {
-		tier: "Limbo"
-	},
-	carbink: {
-		tier: "Limbo"
-	},
-	goomy: {
-		tier: "Limbo"
-	},
-	sliggoo: {
-		tier: "Limbo"
-	},
-	goodra: {
-		tier: "Limbo"
-	},
-	klefki: {
-		tier: "Limbo"
-	},
-	phantump: {
-		tier: "Limbo"
-	},
-	trevenant: {
-		tier: "Limbo"
-	},
-	pumpkaboo: {
-		tier: "Limbo"
-	},
-	gourgeist: {
-		tier: "Limbo"
-	},
-	bergmite: {
-		tier: "Limbo"
-	},
-	avalugg: {
-		tier: "Limbo"
-	},
-	noibat: {
-		tier: "Limbo"
-	},
-	noivern: {
-		tier: "Limbo"
-	},
-	xerneas: {
-		tier: "Limbo"
-	},
-	yveltal: {
-		tier: "Limbo"
-	},
-	zygarde: {
-		tier: "Limbo"
 	}
 };

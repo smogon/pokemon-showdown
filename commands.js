@@ -1586,33 +1586,17 @@ var commands = exports.commands = {
 	},
 
 	roomauth: function(target, room, user, connection) {
-		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefor has no auth list.");
-		var rvoice = [];
-		var rmod = [];
-		var rowner = [];
+		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
+		var buffer = [];
 		for (var u in room.auth) {
-			if (room.auth[u] === '#') rowner.push(u);
+			buffer.push(room.auth[u] + u);
 		}
-		for (var u in room.auth) {
-			if (room.auth[u] === '%') rmod.push(u);
-		}
-		for (var u in room.auth) {
-			if (room.auth[u] === '+') rvoice.push(u);
-		}
-		if (rowner.length > 0) {
-			rowner = rowner.join(', ');
-		} else if (rmod.length > 0) {
-			rmod = rmod.join(', ');
-		} else if (rvoice.length > 0) {
-			rvoice = rvoice.join(', ');
+		if (buffer.length > 0) {
+			buffer = buffer.join(', ');
 		} else {
-			connection.popup('This room has no auth.');
+			buffer = 'This room has no auth.';
 		}
-		if (!target && target !== '#' && target !== '%' && target !== '+') connection.popup('Room Owners (#):||' + rowner + '||Room Mods (%):||' + rmod + '||Room Voice (+):||' + rvoice);
-		else if (target === '#') connection.popup('Room Owners (#):||' + rowner);
-		else if (target === '%') connection.popup('Room Mods (%):||' + rmod);
-		else if (target === '+') connection.popup('Room Voice (+):||' + rvoice);
-			else return false;
+		connection.popup(buffer);
 	},
 
 	leave: 'part',
@@ -1886,6 +1870,7 @@ var commands = exports.commands = {
 		}
 	},
 
+	l: 'lock',
 	ipmute: 'lock',
 	lock: function(target, room, user) {
 		if (!target) return this.parse('/help lock');
@@ -2307,6 +2292,16 @@ var commands = exports.commands = {
 		this.logModCommand(user.name+' mod declared '+target);
 	},
 
+	cdeclare: 'chatdeclare',
+	chatdeclare: function(target, room, user) {
+		if (!target) return this.parse('/help chatdeclare');
+		if (!this.can('gdeclare')) return false;
+
+		for (var id in Rooms.rooms) {
+			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>'+target+'</b></div>');
+		}
+		this.logModCommand(user.name+' globally declared (chat level) '+target);
+	},
 
 	wall: 'announce',
 	announce: function(target, room, user) {

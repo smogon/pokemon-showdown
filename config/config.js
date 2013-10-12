@@ -508,6 +508,7 @@ exports.groups = {
 		id: "admin",
 		name: "Administrator",
 		root: true,
+		gdeclare: true,
 		rank: 6
 	},
 	'&': {

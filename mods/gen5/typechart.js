@@ -5,7 +5,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 0,
       "Fighting": 2,
       "Fire": 1,
       "Flying": 1,
@@ -20,7 +19,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 0
     },
-    "HPivs": {"spd":30,"spe":30}
+    "HPivs": {"atk":30,"def":30,"spd":30}
   },
   "Dark": {
     "damageTaken": {
@@ -28,7 +27,6 @@ exports.BattleTypeChart = {
       "Dark": 2,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 1,
       "Fighting": 1,
       "Fire": 0,
       "Flying": 0,
@@ -43,7 +41,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 0
     },
-    "HPivs": {"atk":30}
+    "HPivs": {}
   },
   "Dragon": {
     "damageTaken": {
@@ -51,7 +49,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 1,
       "Electric": 2,
-      "Fairy": 1,
       "Fighting": 0,
       "Fire": 2,
       "Flying": 0,
@@ -66,16 +63,14 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 2
     },
-    "HPivs": {"def":30}
+    "HPivs": {"atk":30}
   },
   "Electric": {
     "damageTaken": {
-      par: 3,
       "Bug": 0,
       "Dark": 0,
       "Dragon": 0,
       "Electric": 2,
-      "Fairy": 0,
       "Fighting": 0,
       "Fire": 0,
       "Flying": 2,
@@ -92,36 +87,12 @@ exports.BattleTypeChart = {
     },
     "HPivs": {"spa":30}
   },
-  "Fairy": {
-    "damageTaken": {
-      "Bug": 2,
-      "Dark": 2,
-      "Dragon": 3,
-      "Electric": 0,
-      "Fairy": 0,
-      "Fighting": 2,
-      "Fire": 0,
-      "Flying": 0,
-      "Ghost": 0,
-      "Grass": 0,
-      "Ground": 0,
-      "Ice": 0,
-      "Normal": 0,
-      "Poison": 1,
-      "Psychic": 0,
-      "Rock": 0,
-      "Steel": 1,
-      "Water": 0
-    },
-    "HPivs": {}
-  },
   "Fighting": {
     "damageTaken": {
       "Bug": 2,
       "Dark": 2,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 1,
       "Fighting": 0,
       "Fire": 0,
       "Flying": 1,
@@ -145,7 +116,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 2,
       "Fighting": 0,
       "Fire": 2,
       "Flying": 0,
@@ -160,7 +130,7 @@ exports.BattleTypeChart = {
       "Steel": 2,
       "Water": 1
     },
-    "HPivs": {"def":30,"spa":30,"spe":30}
+    "HPivs": {"atk":30,"spa":30,"spe":30}
   },
   "Flying": {
     "damageTaken": {
@@ -168,7 +138,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 1,
-      "Fairy": 0,
       "Fighting": 2,
       "Fire": 0,
       "Flying": 0,
@@ -183,16 +152,14 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 0
     },
-    "HPivs": {"spa":30,"spd":30,"spe":30}
+    "HPivs": {"hp":30,"atk":30,"def":30,"spa":30,"spd":30}
   },
   "Ghost": {
     "damageTaken": {
-      trapping: 3,
       "Bug": 2,
       "Dark": 1,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 0,
       "Fighting": 3,
       "Fire": 0,
       "Flying": 0,
@@ -215,7 +182,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 2,
-      "Fairy": 0,
       "Fighting": 0,
       "Fire": 1,
       "Flying": 1,
@@ -230,7 +196,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 2
     },
-    "HPivs": {"def":30,"spa":30}
+    "HPivs": {"atk":30,"spa":30}
   },
   "Ground": {
     "damageTaken": {
@@ -239,7 +205,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 3,
-      "Fairy": 0,
       "Fighting": 0,
       "Fire": 0,
       "Flying": 0,
@@ -264,7 +229,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 0,
       "Fighting": 1,
       "Fire": 1,
       "Flying": 0,
@@ -279,7 +243,7 @@ exports.BattleTypeChart = {
       "Steel": 1,
       "Water": 0
     },
-    "HPivs": {"spe":30}
+    "HPivs": {"atk":30,"def":30}
   },
   "Normal": {
     "damageTaken": {
@@ -287,7 +251,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 0,
       "Fighting": 1,
       "Fire": 0,
       "Flying": 0,
@@ -311,7 +274,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 2,
       "Fighting": 2,
       "Fire": 0,
       "Flying": 0,
@@ -334,7 +296,6 @@ exports.BattleTypeChart = {
       "Dark": 1,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 0,
       "Fighting": 2,
       "Fire": 0,
       "Flying": 0,
@@ -349,7 +310,7 @@ exports.BattleTypeChart = {
       "Steel": 0,
       "Water": 0
     },
-    "HPivs": {"def":30,"spe":30}
+    "HPivs": {"atk":30,"spe":30}
   },
   "Rock": {
     "damageTaken": {
@@ -358,7 +319,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 0,
-      "Fairy": 0,
       "Fighting": 1,
       "Fire": 2,
       "Flying": 2,
@@ -381,14 +341,13 @@ exports.BattleTypeChart = {
       tox: 3,
       sandstorm: 3,
       "Bug": 2,
-      "Dark": 0,
+      "Dark": 2,
       "Dragon": 2,
       "Electric": 0,
-      "Fairy": 2,
       "Fighting": 1,
       "Fire": 1,
       "Flying": 2,
-      "Ghost": 0,
+      "Ghost": 2,
       "Grass": 2,
       "Ground": 1,
       "Ice": 2,
@@ -407,7 +366,6 @@ exports.BattleTypeChart = {
       "Dark": 0,
       "Dragon": 0,
       "Electric": 1,
-      "Fairy": 0,
       "Fighting": 0,
       "Fire": 2,
       "Flying": 0,
@@ -422,6 +380,6 @@ exports.BattleTypeChart = {
       "Steel": 2,
       "Water": 2
     },
-    "HPivs": {"spa":30,"spe":30}
+    "HPivs": {"atk":30,"def":30,"spa":30}
   }
 };
