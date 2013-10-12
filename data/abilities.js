@@ -1797,7 +1797,12 @@ exports.BattleAbilities = {
 	"protean": {
 		desc: "Changes user's type to match the move it used last.",
 		shortDesc: "Changes user's type to match the move it used last.",
-		//todo
+		onAfterMoveSecondarySelf: function(pokemon, target, move) {
+			if (move && !pokemon.hasType(move.type)) {
+				this.add('-start', pokemon, 'typechange', move.type, '[from] Protean');
+				pokemon.types = [move.type];
+			}
+		},
 		id: "protean",
 		name: "Protean",
 		rating: 1.5,
