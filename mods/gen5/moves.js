@@ -17,7 +17,7 @@ exports.BattleMovedex = {
 	},
 	cottonspore: {
 		inherit: true,
-		onTryHit: null
+		onTryHit: function() {}
 	},
 	dragonpulse: {
 		inherit: true,
@@ -138,11 +138,11 @@ exports.BattleMovedex = {
 	},
 	spore: {
 		inherit: true,
-		onTryHit: null
+		onTryHit: function() {}
 	},
 	stunspore: {
 		inherit: true,
-		onTryHit: null
+		onTryHit: function() {}
 	},
 	surf: {
 		inherit: true,
