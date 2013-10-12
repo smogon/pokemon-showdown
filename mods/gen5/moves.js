@@ -218,6 +218,17 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 95
 	},
+	incinerate: {
+		inherit: true,
+		desc: "Deals damage to all adjacent foes and destroys any Berry they may be holding.",
+		shortDesc: "Destroys the foe(s) Berry.",
+		onHit: function(pokemon, source) {
+			var item = pokemon.getItem();
+			if (item.isBerry && pokemon.takeItem(source)) {
+				this.add('-enditem', pokemon, item.name, '[from] move: Incinerate');
+			}
+		}
+	},
 	knockoff: {
 		inherit: true,
 		basePower: 20
