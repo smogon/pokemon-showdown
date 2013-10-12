@@ -763,7 +763,7 @@ dedenne:{num:702,species:"Dedenne",types:["Electric","Fairy"],baseStats:{hp:80,a
 carbink:{num:703,species:"Carbink",types:["Rock","Fairy"],baseStats:{hp:42,atk:56,def:152,spa:43,spd:152,spe:50},abilities:{0:"Clear Body"},heightm:0,weightkg:0,color:"",eggGroups:[""]},
 goomy:{num:704,species:"Goomy",types:["Dragon"],baseStats:{hp:40,atk:50,def:30,spa:70,spd:100,spe:45},abilities:{0:"Hydration"},heightm:0,weightkg:0,color:"",evos:["sliggoo"],eggGroups:[""]},
 sliggoo:{num:705,species:"Sliggoo",types:["Dragon"],baseStats:{hp:60,atk:70,def:50,spa:90,spd:120,spe:65},abilities:{0:"Hydration"},heightm:0,weightkg:0,color:"",prevo:"goomy",evos:["goodra"],eggGroups:[""]},
-goodra:{num:706,species:"Goodra",types:["Dragon"],baseStats:{hp:85,atk:95,def:80,spa:117,spd:142,spe:90},abilities:{0:"Hydration",1:"Sap Sipper"},heightm:0,weightkg:0,color:"",prevo:"sliggoo",eggGroups:[""]},
+goodra:{num:706,species:"Goodra",types:["Dragon"],baseStats:{hp:80,atk:95,def:80,spa:115,spd:140,spe:90},abilities:{0:"Hydration",1:"Sap Sipper"},heightm:0,weightkg:0,color:"",prevo:"sliggoo",eggGroups:[""]},
 klefki:{num:707,species:"Klefki",types:["Steel","Fairy"],baseStats:{hp:50,atk:80,def:90,spa:80,spd:80,spe:70},abilities:{0:"Prankster"},heightm:0,weightkg:0,color:"",eggGroups:[""]},
 phantump:{num:708,species:"Phantump",types:["Ghost","Grass"],baseStats:{hp:70,atk:100,def:50,spa:50,spd:60,spe:30},abilities:{0:"Natural Cure",1:"Frisk"},heightm:0,weightkg:0,color:"",evos:["trevenant"],eggGroups:[""]},
 trevenant:{num:709,species:"Trevenant",types:["Ghost","Grass"],baseStats:{hp:90,atk:120,def:70,spa:70,spd:80,spe:50},abilities:{0:"Natural Cure",1:"Frisk"},heightm:0,weightkg:0,color:"",prevo:"phantump",eggGroups:[""]},
