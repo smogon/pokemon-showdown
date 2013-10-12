@@ -175,6 +175,7 @@ exports.customavatars = {
 	'demondog19' : 'demondog19.png',
 	'pillowisp':'pillow.png',
 	'jadedrag' : 'groudon.png',
+	'leaderbjblaze' : 'leaderbjblaze.png',
 	'zezetel' : 'zezetel.png',
 	'championlights' : '34.png',
 	'elite4salemance' : 'elite4salemance.png',
