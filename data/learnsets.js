@@ -718,7 +718,7 @@ exports.BattleLearnsets = {
 	barbaracle:{learnset:{}},
 	skrelp:{learnset:{acid:["6L0"],camouflage:["6L0"],hydropump:["6L0"],poisontail:["6L0"],sludgebomb:["6L0"],surf:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	dragalge:{learnset:{}},
-	clauncher:{learnset:{crabhammer:["6L0"],swordsdance:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
+	clauncher:{learnset:{healpulse:["6L0"],darkpulse:["6L0"],dragonpulse:["6L0"],aurasphere:["6L0"],crabhammer:["6L0"],swordsdance:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	clawitzer:{learnset:{}},
 	helioptile:{learnset:{charge:["6L0"],paraboliccharge:["6L0"],quickattack:["6L0"],razorwind:["6L0"],magneticfield:["6L0"],rockslide:["6L0"],tailwhip:["6L0"],thundershock:["6L0"],thunderbolt:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	heliolisk:{learnset:{}},
