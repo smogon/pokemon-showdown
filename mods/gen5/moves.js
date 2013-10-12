@@ -131,6 +131,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 20
 	},
+	knockoff: {
+		inherit: true,
+		basePower: 20
+	},
+	lick: {
+		inherit: true,
+		basePower: 20
+	},
 	rocktomb: {
 		inherit: true,
 		accuracy: 80,
@@ -139,6 +147,10 @@ exports.BattleMovedex = {
 	spore: {
 		inherit: true,
 		onTryHit: function() {}
+	},
+	strugglebug: {
+		inherit: true,
+		basePower: 30
 	},
 	stunspore: {
 		inherit: true,
