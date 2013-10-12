@@ -8744,7 +8744,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'shadowforce',
+			onLockMove: 'phantomforce',
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'helpinghand') {
 					return;
