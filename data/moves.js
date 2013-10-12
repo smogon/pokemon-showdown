@@ -409,6 +409,23 @@ exports.BattleMovedex = {
 		target: "allyTeam",
 		type: "Grass"
 	},
+	"aromicmist": {
+		num: -6,
+		gen: 6,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "The user raises the Special Defense stat of ally Pokemon.",
+		shortDesc: "Raises ally Pokemon Special Defense by 1.",
+		id: "aromicmist",
+		name: "Aromic Mist",
+		pp: 20,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Fairy"
+	},
 	"assist": {
 		num: 274,
 		accuracy: true,
@@ -685,7 +702,7 @@ exports.BattleMovedex = {
 		shortDesc: "Lowers foe's Attack by 1. Priority +1.",
 		id: "babydolleyes",
 		name: "Baby-Doll Eyes",
-		pp: 25,
+		pp: 30,
 		priority: 1,
 		boosts: {
 			atk: -1
@@ -787,6 +804,23 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Dark"
+	},
+	"belch": {
+		num: -6,
+		gen: 6,
+		accuracy: 90,
+		basePower: 120,
+		category: "Special",
+		desc: "The user must eat a Berry to use this move.",
+		shortDesc: "User must eat a Berry to use this move.",
+		id: "belch",
+		name: "Belch",
+		pp: 10,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Poison"
 	},
 	"bellydrum": {
 		num: 187,
@@ -1132,8 +1166,8 @@ exports.BattleMovedex = {
 		num: -6,
 		gen: 6,
 		accuracy: 100,
-		basePower: 100,
-		category: "Physical",
+		basePower: 140,
+		category: "Special",
 		desc: "Deals damage to all Pokemon within range, including any allies.",
 		shortDesc: "Hits adjacent Pokemon, including allies.",
 		id: "boomburst",
@@ -1719,6 +1753,25 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
+	"confide": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Lowers the target's Special Attack stat by 1.",
+		shortDesc: "Lowers the target's Sp. Atk by 1.",
+		id: "confide",
+		name: "Confide",
+		pp: 20,
+		priority: 0,
+		boosts: {
+			spa: -1
+		},
+		secondary: false,
+		target: "normal",
+		type: "Normal"
+	},
 	"confuseray": {
 		num: 109,
 		accuracy: 100,
@@ -2242,11 +2295,11 @@ exports.BattleMovedex = {
 		basePower: 80,
 		category: "Special",
 		desc: "Deals damage to one adjacent target.",
-		shortDesc: "Deals damage to one adjacent target.",
+		shortDesc: "No additional effect.",
 		id: "dazzlinggleam",
 		isViable: true,
 		name: "Dazzling Gleam",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		secondary: false,
 		target: "normal",
@@ -2485,6 +2538,22 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal"
+	},
+	"disalarmingvoice": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 40,
+		category: "Special",
+		desc: "This attack never misses.",
+		shortDesc: "This attack never misses.",
+		id: "disalarmingvoice",
+		name: "Disalarming Voice",
+		pp: 15,
+		priority: 0,
+		secondary: false,
+		target: "normal",
+		type: "Fairy"
 	},
 	"discharge": {
 		num: 435,
@@ -2854,7 +2923,7 @@ exports.BattleMovedex = {
 		id: "drainingkiss",
 		isViable: true,
 		name: "Draining Kiss",
-		pp: 10,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		drain: [3,4],
@@ -3052,6 +3121,25 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
+	"eerieimpulse": {
+		num: -6,
+		gen: 6,
+		accuracy: 100,
+		basePower: 0,
+		category: "Special",
+		desc: "Harshly lowers the target's Special Attack stat.",
+		shortDesc: "Lowers the target's Sp. Atk by 2.",
+		id: "eerieimpulse",
+		name: "Eeerie Impulse",
+		pp: 15,
+		priority: 0,
+		boosts: {
+			spa: -2
+		},
+		secondary: false,
+		target: "normal",
+		type: "Electric"
+	},
 	"eggbomb": {
 		num: 121,
 		accuracy: 75,
@@ -3066,6 +3154,40 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal"
+	},
+	"electricterrain": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For five turns, Pokemon on the ground no longer fall asleep.",
+		shortDesc: "Prevents grounded Pokemon from sleeping for 5 turns.",
+		id: "electricterrain",
+		name: "Electric Terrain",
+		pp: 10,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Electric"
+	},
+	"electrify": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "If the target is electrified before it uses a move during that turn, the target's move becomes Electric type.",
+		shortDesc: "Changes the target's move to Electric type.",
+		id: "electrify",
+		name: "Electrify",
+		pp: 20,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Electric"
 	},
 	"electroball": {
 		num: 486,
@@ -3452,6 +3574,23 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
+	"fairylock": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Keeps all Pokemon from fleeing during the next turn.",
+		shortDesc: "Prevents fleeing for one turn.",
+		id: "fairylock",
+		name: "Fairy Lock",
+		pp: 10,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Fairy"
+	},
 	"fairywind": {
 		num: -6,
 		gen: 6,
@@ -3459,7 +3598,7 @@ exports.BattleMovedex = {
 		basePower: 40,
 		category: "Special",
 		desc: "Deals damage to one adjacent target.",
-		shortDesc: "Deals damage to one adjacent target.",
+		shortDesc: "No additional effect.",
 		id: "fairywind",
 		name: "Fairy Wind",
 		pp: 30,
@@ -3571,6 +3710,23 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal"
+	},
+	"fellstinger": {
+		num: -6,
+		gen: 6,
+		accuracy: 100,
+		basePower: 30,
+		category: "Physical",
+		desc: "When the user knocks out a target with this move, the user's Attack stat rises sharply.",
+		shortDesc: "Raises Attack by 2 if knocks out target.",
+		id: "fellstinger",
+		name: "Fell Stinger",
+		pp: 25,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Bug"
 	},
 	"fierydance": {
 		num: 552,
@@ -4031,6 +4187,23 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dark"
 	},
+	"flowershield": {
+		num: -6,
+		gen: 6,
+		accuracy: 100,
+		basePower: 30,
+		category: "Status",
+		desc: "The user raises the Defense stat of all Grass-type Pokemon in battle.",
+		shortDesc: "Raises Defense by 2 of Grass types in battle.",
+		id: "flowershield",
+		name: "Flower Shield",
+		pp: 25,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Fairy"
+	},
 	"fly": {
 		num: 19,
 		accuracy: 95,
@@ -4260,12 +4433,17 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "???",
-		shortDesc: "???",
+		desc: "Changes the target type to Grass.",
+		shortDesc: "Changes the target type to Grass.",
 		id: "forestscurse",
 		name: "Forest's Curse",
-		pp: 15,
+		pp: 20,
 		priority: 0,
+		isBounceable: true,
+		onHit: function(target) {
+			this.add('-start', target, 'typechange', 'Grass');
+			target.types = ['Grass'];
+		},
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -4619,7 +4797,7 @@ exports.BattleMovedex = {
 		shortDesc: "Sharply raises SpAtk, SpDef, and Speed on turn 2.",
 		id: "geomancy",
 		name: "Geomancy",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		isTwoTurnMove: true,
 		onTry: function(attacker, defender, move) {
@@ -4852,6 +5030,23 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSoundBased: true,
 		status: 'slp',
+		secondary: false,
+		target: "normal",
+		type: "Grass"
+	},
+	"grassyterrain": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For five turns, Pokemon on the ground restore a little HP.",
+		shortDesc: "Grounded Pokemon restore HP for 5 turns.",
+		id: "grassyterrain",
+		name: "Grassy Terrain",
+		pp: 10,
+		priority: 0,
+		//todo
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -6414,13 +6609,13 @@ exports.BattleMovedex = {
 		gen: 6,
 		accuracy: 100,
 		basePower: 20,
-		category: "Physical",
+		category: "Special",
 		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "infestation",
 		isViable: true,
 		name: "Infestation",
-		pp: 20,
+		pp: 35,
 		priority: 0,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
@@ -6461,6 +6656,23 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "self",
 		type: "Grass"
+	},
+	"iondeluge": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Changes Normal-type moves to Electric-type moves.",
+		shortDesc: "Changes Normal moves to Electric type.",
+		id: "iondeluge",
+		name: "Ion Deluge",
+		pp: 25,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Electric"
 	},
 	"irondefense": {
 		num: 334,
@@ -6677,6 +6889,23 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Dark"
+	},
+	"landswrath": {
+		num: -6,
+		gen: 6,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target.",
+		shortDesc: "No additional effect.",
+		id: "landswrath",
+		isViable: true,
+		name: "Land's Wrath",
+		pp: 10,
+		priority: 0,
+		secondary: false,
+		target: "normal",
+		type: "Ground"
 	},
 	"lastresort": {
 		num: 387,
@@ -7313,6 +7542,23 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Electric"
 	},
+	"magneticflux": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the Defense and Sp. Def stats of ally Pokémon with the Plus or Minus Ability.",
+		shortDesc: "Raises defenses of ally Pokemon with Plus/Minus.",
+		id: "magneticflux",
+		name: "Magnetic Flux",
+		pp: 20,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Electric"
+	},
 	"magnetrise": {
 		num: 393,
 		accuracy: true,
@@ -7384,6 +7630,47 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "allAdjacent",
 		type: "Ground"
+	},
+	"matblock": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user protects itself and its allies from damaging moves. Priority +4.",
+		shortDesc: "Protects the user and allies from damaging moves.",
+		id: "matblock",
+		isViable: true,
+		name: "Mat Block",
+		pp: 15,
+		priority: 4,
+		stallingMove: true, // Note: stallingMove is not used anywhere.
+		volatileStatus: 'matblock',
+		onTryHit: function(target, source, move) {
+			return !!this.willAct() && this.runEvent('StallMove', target);
+		},
+		onHit: function(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		effect: {
+			duration: 1,
+			onStart: function(target) {
+				this.add('-singleturn', target, 'Mat Block');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function(target, source, move) {
+				if (move.breaksProtect) {
+					target.removeVolatile('Mat Block');
+					return;
+				}
+				if (move && (move.target === 'self' || move.category === 'Status')) return;
+				this.add('-activate', target, 'Mat Block');
+				return null;
+			}
+		},
+		secondary: false,
+		target: "normal",
+		type: "Fighting"
 	},
 	"mefirst": {
 		num: 382,
@@ -7928,11 +8215,11 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, pokemon cannot have major status problems or confusion inflicted on them by other Pokemon.",
-		shortDesc: "5 turns: protects grounded pokemon from status.",
+		desc: "For 5 turns, Pokemon cannot have major status problems or confusion inflicted on them by other Pokemon.",
+		shortDesc: "Protects grounded pokemon from status for 5 turns.",
 		id: "mistyterrain",
 		name: "Misty Terrain",
-		pp: 25,
+		pp: 10,
 		priority: 0,
 		isSnatchable: true,
 		pseudoWeather: 'mistyterrain',
@@ -7987,8 +8274,9 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to lower its Special Attack by 1 stage.",
 		shortDesc: "30% chance to lower the target's Sp. Atk by 1.",
 		id: "moonblast",
+		isViable: true,
 		name: "Moon Blast",
-		pp: 10,
+		pp: 15,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -8157,13 +8445,13 @@ exports.BattleMovedex = {
 		num: -6,
 		gen: 6,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 80,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 30% chance to lower its Special Attack by 1 stage.",
 		shortDesc: "30% chance to lower the target's Sp. Atk by 1.",
 		id: "mysticalfire",
 		name: "Mystical Fire",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -8371,7 +8659,7 @@ exports.BattleMovedex = {
 		shortDesc: "Lowers target's Atk and SpAtk by 1.",
 		id: "nobleroar",
 		name: "Noble Roar",
-		pp: 15,
+		pp: 30,
 		priority: 0,
 		boosts: {
 			atk: -1,
@@ -8385,14 +8673,13 @@ exports.BattleMovedex = {
 		num: -6,
 		gen: 6,
 		accuracy: 100,
-		basePower: 70,
-		category: "Special",
+		basePower: 20,
+		category: "Physical",
 		desc: "Deals damage and paralyzes the target.",
 		shortDesc: "Deals damage and paralyzes the target.",
 		id: "nuzzle",
-		isViable: true,
 		name: "Nuzzle",
-		pp: 10,
+		pp: 20,
 		priority: 0,
 		secondary: {
 			chance: 100,
@@ -8412,7 +8699,7 @@ exports.BattleMovedex = {
 		id: "oblivionwing",
 		isViable: true,
 		name: "Oblivion Wing",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		drain: [3,4],
 		secondary: false,
@@ -8549,13 +8836,13 @@ exports.BattleMovedex = {
 		num: -6,
 		gen: 6,
 		accuracy: 100,
-		basePower: 75,
-		category: "Physical",
+		basePower: 50,
+		category: "Special",
 		desc: "Deals damage to all adjacent targets. The user recovers half of the HP lost by the target, rounded up.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "paraboliccharge",
 		name: "Parabolic Charge",
-		pp: 10,
+		pp: 20,
 		priority: 0,
 		isViable: true,
 		drain: [1,2],
@@ -8573,7 +8860,7 @@ exports.BattleMovedex = {
 		shortDesc: "Foe's Atk/SpA -1, then switch out.",
 		id: "partingshot",
 		name: "Parting Shot",
-		pp: 40,
+		pp: 20,
 		priority: 0,
 		selfSwitch: true,
 		boosts: {
@@ -8582,7 +8869,7 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "normal",
-		type: "Normal"
+		type: "Dark"
 	},
 	"payday": {
 		num: 6,
@@ -8695,6 +8982,23 @@ exports.BattleMovedex = {
 		target: "all",
 		type: "Normal"
 	},
+	"petalblizzard": {
+		num: -6,
+		gen: 6,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Hits all Pokemon.",
+		shortDesc: "Hits all Pokemon.",
+		id: "petalblizzard",
+		name: "Petal Blizzard",
+		pp: 15,
+		priority: 0,
+		secondary: {
+		},
+		target: "all",
+		type: "Grass"
+	},
 	"petaldance": {
 		num: 80,
 		accuracy: 100,
@@ -8725,7 +9029,7 @@ exports.BattleMovedex = {
 		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection.",
 		id: "phantomforce",
 		name: "Phantom Force",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		isContact: true,
 		isTwoTurnMove: true,
@@ -8791,7 +9095,7 @@ exports.BattleMovedex = {
 	"playnice": {
 		num: -6,
 		gen: 6,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Defense by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
@@ -8806,6 +9110,27 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal"
+	},
+	"playrough": {
+		num: -6,
+		gen: 6,
+		accuracy: 90,
+		basePower: 90,
+		category: "Physical",
+		desc: "May lower the target's Attack stat by 1.",
+		shortDesc: "May lower the target's Attack by 1.",
+		id: "playrough",
+		name: "Play Rough",
+		pp: 10,
+		priority: 0,
+		secondary: {
+			chance: 30,
+			boosts: {
+				atk: -1
+			}
+		},
+		target: "normal",
+		type: "Fairy"
 	},
 	"pluck": {
 		num: 365,
@@ -9106,6 +9431,29 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "self",
 		type: "Psychic"
+	},
+	"poweruppunch": {
+		num: -6,
+		gen: 6,
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		desc: "Hitting a target raises the Attack stat.",
+		shortDesc: "Hitting a target raises Attack by 1",
+		id: "poweruppunch",
+		name: "Power-Up Punch",
+		pp: 30,
+		priority: 0,
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					atk: 1
+				}
+			}
+		},
+		target: "normal",
+		type: "Fighting"
 	},
 	"powerwhip": {
 		num: 438,
@@ -10349,6 +10697,23 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "self",
 		type: "Flying"
+	},
+	"rototiller": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the Attack and Sp. Atk stats of Grass-type Pokemon.",
+		shortDesc: "Raises Attack and Sp. Atk of Grass Pokemon.",
+		id: "rototiller",
+		name: "Rototiller",
+		pp: 10,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Ground"
 	},
 	"round": {
 		num: 496,
@@ -11611,6 +11976,47 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
+	"spikyshield": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact.",
+		shortDesc: "Protects user. Damages attackers that make contact.",
+		id: "spikyshield",
+		isViable: true,
+		name: "Spiky Shield",
+		pp: 20,
+		priority: 4,
+		stallingMove: true, // Note: stallingMove is not used anywhere.
+		volatileStatus: 'spikyshield',
+		onTryHit: function(target, source, move) {
+			return !!this.willAct() && this.runEvent('StallMove', target);
+		},
+		onHit: function(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		effect: {
+			duration: 1,
+			onStart: function(target) {
+				this.add('-singleturn', target, 'Spiky Shield');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function(target, source, move) {
+				if (move.breaksProtect) {
+					target.removeVolatile('Spiky Shield');
+					return;
+				}
+				if (move && move.target === 'self') return;
+				this.add('-activate', target, 'Spiky Shield');
+				return null;
+			}
+		},
+		secondary: false,
+		target: "self",
+		type: "Grass"
+	},
 	"soak": {
 		num: 487,
 		accuracy: 100,
@@ -11958,6 +12364,24 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Steel"
+	},
+	"stickyweb": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Physical",
+		desc: "Lowers the Speed stat of the opposing team's Pokemon upon switching into battle.",
+		shortDesc: "Lowers Speed of opposing Pokemon switched in.",
+		id: "stickyweb",
+		isViable: true,
+		name: "Sticky Web",
+		pp: 20,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Bug"
 	},
 	"stockpile": {
 		num: 254,
@@ -13532,6 +13956,23 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
+	"venomdrench": {
+		num: -6,
+		gen: 6,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Lowers the Attack, Special Attack, and Speed stats of a poisoned target.",
+		shortDesc: "Lowers Attack, Sp. Atk, Speed of poisoned target.",
+		id: "venomdrench",
+		name: "Venom Drench",
+		pp: 20,
+		priority: 0,
+		//todo
+		secondary: false,
+		target: "normal",
+		type: "Poison"
+	},
 	"venoshock": {
 		num: 474,
 		accuracy: 100,
@@ -13824,12 +14265,12 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 15,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target and hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times.",
-		shortDesc: "Hits 2-5 times in one turn.",
+		desc: "Deals damage to one adjacent target and hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times. Almost always goes first.",
+		shortDesc: "Hits 2-5 times in one turn. Priority +1.",
 		id: "watershuriken",
 		name: "Water Shuriken",
-		pp: 30,
-		priority: 0,
+		pp: 20,
+		priority: 1,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
