@@ -304,6 +304,7 @@ exports.customavatars = {
 	'gymtrainehalezb' : 'hal.png',
 	'bytalonflame' : 'talonflame.png',
 	'e4burninglights' : 'nAObV1G.png',
+	'efourflint' : 'efourflint.png',
  	'dlkings' : '09bepgb.png',
  	'killerjays' : 'veasdfseaf.png',
 	'leaderheynow9' : 'kirby.png',
