@@ -1684,7 +1684,7 @@ exports.BattleAbilities = {
 		rating: 1,
 		num: 124
 	},
-	"pixilate": {
+	"pixelite": {
 		desc: "Turn all of this Pokemon's Normal-typed attacks into Fairy-typed.",
 		shortDesc: "This Pokemon's Normal moves become Fairy.",
 		onModifyMove: function(move) {
