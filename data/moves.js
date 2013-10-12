@@ -7922,6 +7922,62 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic"
 	},
+	"mistyterrain": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, pokemon cannot have major status problems or confusion inflicted on them by other Pokemon.",
+		shortDesc: "5 turns: protects grounded pokemon from status.",
+		id: "mistyterrain",
+		name: "Misty Terrain",
+		pp: 25,
+		priority: 0,
+		isSnatchable: true,
+		pseudoWeather: 'mistyterrain',
+		effect: {
+			duration: 5,
+			durationCallback: function(target, source, effect) {
+				if (source && source.ability === 'persistent') {
+					return 7;
+				}
+				return 5;
+			},
+			onSetStatus: function(status, target, source, effect) {
+				if (!target.runImmunity('Ground')) return;
+				if (source && source !== target || (effect && effect.id === 'toxicspikes')) {
+					this.debug('misty terrain preventing status');
+					return false;
+				}
+			},
+			onTryConfusion: function(target, source, effect) {
+				if (!target.runImmunity('Ground')) return;
+				if (source && source !== target) {
+					this.debug('misty terrain preventing confusion');
+					return false;
+				}
+			},
+			onTryHit: function(target, source, move) {
+				if (!target.runImmunity('Ground')) return;
+				if (move && move.id === 'yawn') {
+					this.debug('blocking yawn');
+					return false;
+				}
+			},
+			onStart: function(side) {
+				this.add('-fieldstart', 'Misty Terrain');
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onEnd: function(side) {
+				this.add('-fieldend', 'Misty Terrain');
+			}
+		},
+		secondary: false,
+		target: "all",
+		type: "Fairy"
+	},
 	"moonblast": {
 		num: -6,
 		gen: 6,
