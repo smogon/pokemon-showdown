@@ -1,4 +1,19 @@
 exports.BattleAliases = {
+	// mega evos
+	'megacharizard': 'charizard-mega-y',
+	'megacharizardx': 'charizard-mega-x',
+	'megacharizardy': 'charizard-mega-y',
+	'megablastoise': 'blastoise-mega',
+	'megavenusaur': 'venusaur-mega',
+	'megaampharos': 'ampharos-mega',
+	'megamawile': 'mawile-mega',
+	'megagarchomp': 'garchomp-mega',
+	'megalucario': 'lucario-mega',
+	'megaabsol': 'absol-mega',
+	'megamewtwo': 'mewtwo-mega-x',
+	'megamewtwox': 'mewtwo-mega-x',
+	'megamewtwoy': 'mewtwo-mega-y',
+
 	// formes
 	"basculinb": "Basculin-Blue-Striped",
 	"basculinblue": "Basculin-Blue-Striped",
