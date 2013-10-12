@@ -45,7 +45,7 @@ exports.BattleMovedex = {
 		id: "acidarmor",
 		isViable: true,
 		name: "Acid Armor",
-		pp: 40,
+		pp: 20,
 		priority: 0,
 		isSnatchable: true,
 		boosts: {
@@ -216,7 +216,7 @@ exports.BattleMovedex = {
 	"aircutter": {
 		num: 314,
 		accuracy: 95,
-		basePower: 55,
+		basePower: 60,
 		category: "Special",
 		desc: "Deals damage to all adjacent foes with a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio. Hits adjacent foes.",
@@ -466,13 +466,13 @@ exports.BattleMovedex = {
 	"assurance": {
 		num: 372,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
 			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {
 				this.debug('Boosted for being damaged this turn');
-				return 100;
+				return 120;
 			}
-			return 50;
+			return 60;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the target has already taken damage this turn, other than from Pain Split. Makes contact.",
@@ -737,7 +737,7 @@ exports.BattleMovedex = {
 		id: "barrier",
 		isViable: true,
 		name: "Barrier",
-		pp: 30,
+		pp: 20,
 		priority: 0,
 		isSnatchable: true,
 		boosts: {
@@ -1594,12 +1594,12 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "normal",
-		type: "Normal"
+		type: "Fairy"
 	},
 	"chatter": {
 		num: 448,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 65,
 		category: "Special",
 		desc: "Deals damage to one adjacent or non-adjacent target. This move has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording. Pokemon with the Ability Soundproof are immune. (Field: Can be used to record a sound to replace Chatot's cry. The cry is reset if Chatot is deposited in a PC.)",
 		shortDesc: "10% chance to confuse the target.",
@@ -3415,7 +3415,7 @@ exports.BattleMovedex = {
 	"energyball": {
 		num: 412,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 90,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 10% chance to lower its Special Defense by 1 stage.",
 		shortDesc: "10% chance to lower the target's Sp. Def. by 1.",
@@ -3509,7 +3509,7 @@ exports.BattleMovedex = {
 		id: "extrasensory",
 		isViable: true,
 		name: "Extrasensory",
-		pp: 30,
+		pp: 20,
 		priority: 0,
 		secondary: {
 			chance: 10,
@@ -3820,14 +3820,14 @@ exports.BattleMovedex = {
 	"firepledge": {
 		num: 519,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 80,
 		basePowerCallback: function(target, source, move) {
 			if (move.sourceEffect in {grasspledge:1, waterpledge:1}) {
 				this.add('-combine');
 				this.debug('triple damage');
-				return 150;
+				return 240;
 			}
-			return 50;
+			return 80;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. If one of the user's allies chose to use Grass Pledge or Water Pledge this turn and has not moved yet, they take their turn immediately after the user and the user's move does nothing. Power triples if this move is used by an ally that way, and a sea of fire appears on the target's side if the first move was Grass Pledge, or a rainbow appears on the user's side if the first move was Water Pledge.",
@@ -4705,7 +4705,7 @@ exports.BattleMovedex = {
 	"futuresight": {
 		num: 248,
 		accuracy: 100,
-		basePower: 100,
+		basePower: 120,
 		category: "Special",
 		desc: "Deals damage to one adjacent target two turns after this move is used. At the end of that turn, the damage is dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position. This move ignores Protect and Detect.",
 		shortDesc: "Hits two turns after being used.",
@@ -4726,7 +4726,7 @@ exports.BattleMovedex = {
 				targetPosition: target.position,
 				source: source,
 				moveData: {
-					basePower: 100,
+					basePower: 120,
 					category: "Special",
 					affectedByImmunities: true,
 					type: 'Psychic'
@@ -4884,7 +4884,7 @@ exports.BattleMovedex = {
 	},
 	"glare": {
 		num: 137,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "Paralyzes one adjacent target. Ghost-types are not immune. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
@@ -4961,14 +4961,14 @@ exports.BattleMovedex = {
 	"grasspledge": {
 		num: 520,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 80,
 		basePowerCallback: function(target, source, move) {
 			if (move.sourceEffect in {waterpledge:1, firepledge:1}) {
 				this.add('-combine');
 				this.debug('triple damage');
-				return 150;
+				return 240;
 			}
-			return 50;
+			return 80;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. If one of the user's allies chose to use Fire Pledge or Water Pledge this turn and has not moved yet, they take their turn immediately after the user and the user's move does nothing. Power triples if this move is used by an ally that way, and a sea of fire appears on the target's side if the first move was Fire Pledge, or a swamp appears on the target's side if the first move was Water Pledge.",
@@ -5270,7 +5270,7 @@ exports.BattleMovedex = {
 	},
 	"gunkshot": {
 		num: 441,
-		accuracy: 70,
+		accuracy: 80,
 		basePower: 120,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target with a 30% chance to poison it.",
@@ -5704,7 +5704,7 @@ exports.BattleMovedex = {
 	"heatwave": {
 		num: 257,
 		accuracy: 90,
-		basePower: 100,
+		basePower: 95,
 		category: "Special",
 		desc: "Deals damage to all adjacent foes with a 10% chance to burn each.",
 		shortDesc: "10% chance to burn the foe(s).",
@@ -6865,7 +6865,7 @@ exports.BattleMovedex = {
 	"knockoff": {
 		num: 282,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 55,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
 		shortDesc: "Removes the target's held item.",
@@ -6975,7 +6975,7 @@ exports.BattleMovedex = {
 	"leafstorm": {
 		num: 437,
 		accuracy: 90,
-		basePower: 140,
+		basePower: 130,
 		category: "Special",
 		desc: "Deals damage to one adjacent target and lowers the user's Special Attack by 2 stages.",
 		shortDesc: "Lowers the user's Sp. Atk by 2.",
@@ -8038,7 +8038,7 @@ exports.BattleMovedex = {
 		shortDesc: "Boosts the user's evasion by 2.",
 		id: "minimize",
 		name: "Minimize",
-		pp: 20,
+		pp: 10,
 		priority: 0,
 		isSnatchable: true,
 		volatileStatus: 'minimize',
@@ -8307,7 +8307,7 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "self",
-		type: "Normal"
+		type: "Fairy"
 	},
 	"morningsun": {
 		num: 234,
@@ -8423,7 +8423,7 @@ exports.BattleMovedex = {
 	"muddywater": {
 		num: 330,
 		accuracy: 85,
-		basePower: 95,
+		basePower: 90,
 		category: "Special",
 		desc: "Deals damage to all adjacent foes with a 30% chance to lower their accuracy by 1 stage each.",
 		shortDesc: "30% chance to lower the foe(s) accuracy by 1.",
@@ -8792,7 +8792,7 @@ exports.BattleMovedex = {
 	"overheat": {
 		num: 315,
 		accuracy: 90,
-		basePower: 140,
+		basePower: 130,
 		category: "Special",
 		desc: "Deals damage to one adjacent target and lowers the user's Special Attack by 2 stages.",
 		shortDesc: "Lowers the user's Sp. Atk by 2.",
@@ -9062,8 +9062,8 @@ exports.BattleMovedex = {
 	},
 	"pinmissile": {
 		num: 42,
-		accuracy: 85,
-		basePower: 14,
+		accuracy: 95,
+		basePower: 25,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target and hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times.",
 		shortDesc: "Hits 2-5 times in one turn.",
@@ -9177,7 +9177,7 @@ exports.BattleMovedex = {
 	},
 	"poisongas": {
 		num: 139,
-		accuracy: 80,
+		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		desc: "Poisons all adjacent foes. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
@@ -10520,7 +10520,7 @@ exports.BattleMovedex = {
 		shortDesc: "100% chance to lower the target's Speed by 1.",
 		id: "rocktomb",
 		name: "Rock Tomb",
-		pp: 10,
+		pp: 15,
 		priority: 0,
 		secondary: {
 			chance: 100,
@@ -11461,13 +11461,13 @@ exports.BattleMovedex = {
 	"skullbash": {
 		num: 130,
 		accuracy: 100,
-		basePower: 100,
+		basePower: 130,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns. Raises the user's Defense by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn. Makes contact.",
 		shortDesc: "Boosts user's Defense by 1 on turn 1. Hits turn 2.",
 		id: "skullbash",
 		name: "Skull Bash",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		isContact: true,
 		isTwoTurnMove: true,
@@ -11868,7 +11868,7 @@ exports.BattleMovedex = {
 	"smog": {
 		num: 123,
 		accuracy: 70,
-		basePower: 20,
+		basePower: 30,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 40% chance to poison it.",
 		shortDesc: "40% chance to poison the target.",
@@ -11956,7 +11956,7 @@ exports.BattleMovedex = {
 	"snore": {
 		num: 173,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 50,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 30% chance to flinch it. Fails if the user is not asleep. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "User must be asleep. 30% chance to flinch target.",
@@ -12481,7 +12481,7 @@ exports.BattleMovedex = {
 	"stormthrow": {
 		num: 480,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Abilities Battle Armor or Shell Armor. Makes contact.",
 		shortDesc: "Always results in a critical hit.",
@@ -12893,7 +12893,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "normal",
-		type: "Normal"
+		type: "Fairy"
 	},
 	"sweetscent": {
 		num: 230,
@@ -13283,7 +13283,7 @@ exports.BattleMovedex = {
 	"thief": {
 		num: 168,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. If the attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. Makes contact.",
 		shortDesc: "If the user has no item, it steals the target's.",
@@ -14121,14 +14121,14 @@ exports.BattleMovedex = {
 	"waterpledge": {
 		num: 518,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 80,
 		basePowerCallback: function(target, source, move) {
 			if (move.sourceEffect in {firepledge:1, grasspledge:1}) {
 				this.add('-combine');
 				this.debug('triple damage');
-				return 150;
+				return 240;
 			}
-			return 50;
+			return 80;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. If one of the user's allies chose to use Fire Pledge or Grass Pledge this turn and has not moved yet, they take their turn immediately after the user and the user's move does nothing. Power triples if this move is used by an ally that way, and a rainbow appears on the user's side if the first move was Fire Pledge, or a swamp appears on the target's side if the first move was Grass Pledge.",
