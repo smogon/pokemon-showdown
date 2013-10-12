@@ -2440,6 +2440,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":5,"moves":["growl","thunderwave","watersport"]},
 			{"generation":3,"level":10,"gender":"M","moves":["growl","thunderwave","quickattack"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	minun: {
@@ -2448,6 +2449,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":5,"moves":["growl","thunderwave","mudsport"]},
 			{"generation":3,"level":10,"gender":"M","moves":["growl","thunderwave","quickattack"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	volbeat: {
