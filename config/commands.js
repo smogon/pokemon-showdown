@@ -1878,11 +1878,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/declare [message] - Anonymously announces a message. Requires: & ~');
 		}
-<<<<<<< HEAD
-		if (target === '&' || target === 'plaindeclare' || target === 'plaindeclare') {
-			matched = true;
-			this.sendReply('/plaindeclare [message] - Anonymously announces a message (basic format unless html code is used). Requires: & ~');
-		}
 		if (target === '~' || target === 'gdeclare' ) {
 			matched = true;
 			this.sendReply('/gdeclare [message] - Anonymously announces a message to all rooms. Requires: ~');
@@ -1891,18 +1886,11 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/potd [pokemon] - Sets the Random Battle Pokemon of the Day. Requires: & ~');
 		}
-		if (target === '%' || target === 'announce' || target === 'wall' ) {
-=======
 		if (target === '~' || target === 'chatdeclare' || target === 'cdeclare') {
 			matched = true;
 			this.sendReply('/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~');
 		}
-		if (target === '~' || target === 'globaldeclare' || target === 'gdeclare') {
-			matched = true;
-			this.sendReply('/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~');
-		}
 		if (target === '%' || target === 'announce' || target === 'wall') {
->>>>>>> upstream/master
 			matched = true;
 			this.sendReply('/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
 		}
