@@ -9098,14 +9098,14 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers the target's Defense by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
-		shortDesc: "Lowers the target's Defense by 1.",
+		desc: "Lowers the target's Attack by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		shortDesc: "Lowers the target's Attack by 1.",
 		id: "playnice",
 		name: "Play Nice",
 		pp: 20,
 		priority: 0,
 		boosts: {
-			def: -1
+			atk: -1
 		},
 		secondary: false,
 		target: "normal",
