@@ -477,7 +477,6 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon summons Rain Dance until another weather replaces it.",
 		onStart: function(source) {
 			this.setWeather('raindance');
-			this.weatherData.duration = 0;
 		},
 		id: "drizzle",
 		name: "Drizzle",
@@ -489,7 +488,6 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon summons Sunny Day until another weather replaces it.",
 		onStart: function(source) {
 			this.setWeather('sunnyday');
-			this.weatherData.duration = 0;
 		},
 		id: "drought",
 		name: "Drought",
@@ -1991,7 +1989,6 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon summons Sandstorm until another weather replaces it.",
 		onStart: function(source) {
 			this.setWeather('sandstorm');
-			this.weatherData.duration = 0;
 		},
 		id: "sandstream",
 		name: "Sand Stream",
@@ -2238,7 +2235,6 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon summons Hail until another weather replaces it.",
 		onStart: function(source) {
 			this.setWeather('hail');
-			this.weatherData.duration = 0;
 		},
 		id: "snowwarning",
 		name: "Snow Warning",
