@@ -687,7 +687,7 @@ exports.BattleLearnsets = {
 	greninja:{learnset:{watershuriken:["6L36"]}},
 	bunnelby:{learnset:{dig:["6L0"],doublekick:["6L20"],doubleslap:["6L10"],mudshot:["6L0"],mudslap:["6L13"],quickattack:["6L7"],takedown:["6L15"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	diggersby:{learnset:{}},
-	fletchling:{learnset:{aerialace:["6L0"],agility:["6L13"],bravebird:["6L0"],flail:["6L16"],flamecharge:["6L0"],flareblitz:["6L0"],growl:["6L1"],peck:["6L0"],quickattack:["6L6"],tackle:["6L1"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
+	fletchling:{learnset:{aerialace:["6L0"],agility:["6L13"],swordsdance:["6L0"],bravebird:["6L0"],flail:["6L16"],flamecharge:["6L0"],flareblitz:["6L0"],growl:["6L1"],peck:["6L0"],quickattack:["6L6"],tackle:["6L1"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	fletchinder:{learnset:{ember:["6L17"],razorwind:["6L27"],roost:["6L25"]}},
 	talonflame:{learnset:{}},
 	scatterbug:{learnset:{aromatherapy:["6L0"],drainingkiss:["6L0"],harden:["6L0"],infestation:["6L0"],powder:["6L0"],stringshot:["6L1"],stunspore:["6L7"],tackle:["6L1"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
@@ -743,6 +743,6 @@ exports.BattleLearnsets = {
 	noibat:{learnset:{airslash:["6L0"],boomburst:["6L0"],dracometeor:["6L0"],dragonpulse:["6L0"],hurricane:["6L0"],shadowclaw:["6L0"],superfang:["6L0"],tailwind:["6L0"],whirlwind:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	noivern:{learnset:{}},
 	xerneas:{learnset:{geomancy:["6L0"],gravity:["6L0"],megahorn:["6L0"],moonblast:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
-	yveltal:{learnset:{darkpulse:["6L0"],disable:["6L0"],oblivionwing:["6L0"],phantomforce:["6L0"],snarl:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
+	yveltal:{learnset:{darkpulse:["6L0"],disable:["6L0"],oblivionwing:["6L0"],dragonclaw:["6L0"],phantomforce:["6L0"],snarl:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}},
 	zygarde:{learnset:{camoflage:["6L0"],crunch:["6L0"],dragonpulse:["6L0"],earthquake:["6L0"],rest:["6M"],sleeptalk:["6M"],protect:["6M"],substitute:["6M"],"return":["6M"],frustration:["6M"],hiddenpower:["6M"]}}
 };
