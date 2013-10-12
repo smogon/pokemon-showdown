@@ -154,6 +154,8 @@ exports.customavatars = {
 	'androidyumi' :  'androidyumi.png',
 	'priest' : 'priest4.png',
 	'skymin' : 'skymin.png',
+	'amjoker' : 'amjoker.png',
+	'failatbattling' : 'failatbattling.png',
 	'trainerbofish' : 'ret.png',
 	'elteforhallie' : '319.png',
 	'championakitaka' : 'deranged_darkrai_sprite_by_weegeedude-d4eub2r.png',
