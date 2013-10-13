@@ -3666,6 +3666,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	arceusfairy: {
+		requiredItem: "Pixel Plate",
 		tier: "Limbo"
 	},
 	arceusfighting: {
