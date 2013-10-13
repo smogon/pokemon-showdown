@@ -14,7 +14,8 @@
 module.exports = (function () {
 	var moddedTools = {};
 
-	var dataTypes = ['FormatsData', 'Learnsets', 'Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Formats', 'Aliases'];
+	var dataTypes = ['FormatsData', 'Learnsets', 'Statuses', 'TypeChart', 'Scripts', 'Formats', 'Aliases'];
+	var dataDexTypes = ['Pokedex', 'Movedex', 'Items', 'Abilities'];
 	var dataFiles = {
 		'Pokedex': 'pokedex.js',
 		'Movedex': 'moves.js',
@@ -39,6 +40,7 @@ module.exports = (function () {
 			mod: mod
 		};
 		if (mod === 'base') {
+			
 			dataTypes.forEach(function(dataType) {
 				try {
 					var path = './data/' + dataFiles[dataType];
@@ -50,6 +52,31 @@ module.exports = (function () {
 				}
 				if (!data[dataType]) data[dataType] = {};
 			}, this);
+			
+			dataDexTypes.forEach(function(dataType) {
+				try {
+					var path = './data/' + dataFiles[dataType];
+					data[dataType] = new Object();
+					if (fs.existsSync(path)) {
+						var rawData = require(path)['Battle' + dataType];
+						for (var i=0, l=rawData.length; i<l; i++) {
+							var datum = rawData[i];
+							if (datum.name) {
+								var id = toId(datum.name);
+								datum.id = id;
+								data[dataType][id] = datum;
+							} else {
+								var id = toId(datum.species);
+								data[dataType][id] = datum;
+							}
+						}
+					}
+				} catch (e) {
+					console.log('CRASH LOADING DATA: '+e.stack);
+				}
+				if (!data[dataType]) data[dataType] = {};
+			}, this);
+			
 			try {
 				var path = './config/formats.js';
 				if (fs.existsSync(path)) {
@@ -69,6 +96,36 @@ module.exports = (function () {
 		} else {
 			var baseData = moddedTools.base.data;
 			dataTypes.forEach(function(dataType) {
+				try {
+					var path = './mods/' + mod + '/' + dataFiles[dataType];
+					if (fs.existsSync(path)) {
+						data[dataType] = require(path)['Battle' + dataType];
+					}
+				} catch (e) {
+					console.log('CRASH LOADING MOD DATA: '+e.stack);
+				}
+				if (!data[dataType]) data[dataType] = {};
+				for (var i in baseData[dataType]) {
+					if (data[dataType][i] === null) {
+						// null means don't inherit
+						delete data[dataType][i];
+					} else if (!(i in data[dataType])) {
+						// If it doesn't exist it's inherited from the base data
+						if (dataType === 'Pokedex') {
+							// Pokedex entries can be modified too many different ways
+							data[dataType][i] = Object.clone(baseData[dataType][i], true);
+						} else {
+							data[dataType][i] = baseData[dataType][i];
+						}
+					} else if (data[dataType][i] && data[dataType][i].inherit) {
+						// {inherit: true} can be used to modify only parts of the base data,
+						// instead of overwriting entirely
+						delete data[dataType][i].inherit;
+						Object.merge(data[dataType][i], baseData[dataType][i], true, false);
+					}
+				}
+			});
+			dataDexTypes.forEach(function(dataType) {
 				try {
 					var path = './mods/' + mod + '/' + dataFiles[dataType];
 					if (fs.existsSync(path)) {
