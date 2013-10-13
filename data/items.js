@@ -2616,9 +2616,9 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "No competitive use."
 	},
-	"pixelplate": {
-		id: "pixelplate",
-		name: "Pixel Plate",
+	"pixieplate": {
+		id: "pixieplate",
+		name: "Pixie Plate",
 		spritenum: -6,
 		fling: {
 			basePower: 90
