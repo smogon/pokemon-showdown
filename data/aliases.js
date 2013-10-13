@@ -13,6 +13,8 @@ exports.BattleAliases = {
 	'megamewtwo': 'mewtwo-mega-x',
 	'megamewtwox': 'mewtwo-mega-x',
 	'megamewtwoy': 'mewtwo-mega-y',
+	'megascizor': 'scizor-mega',
+	'megablaziken': 'blaziken-mega',
 
 	// formes
 	"basculinb": "Basculin-Blue-Striped",
