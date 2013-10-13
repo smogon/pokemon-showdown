@@ -18,6 +18,7 @@ azurill:{num:298,species:"Azurill",types:["Normal"],genderRatio:{M:0.25,F:0.75},
 mawile:{num:303,species:"Mawile",types:["Steel"],baseStats:{hp:50,atk:85,def:85,spa:55,spd:55,spe:50},abilities:{0:"Hyper Cutter",1:"Intimidate",DW:"Sheer Force"},heightm:0.6,weightkg:11.5,color:"Black",eggGroups:["Ground","Fairy"]},
 plusle:{num:311,species:"Plusle",types:["Electric"],baseStats:{hp:60,atk:50,def:40,spa:85,spd:75,spe:95},abilities:{0:"Plus"},heightm:0.4,weightkg:4.2,color:"Yellow",eggGroups:["Fairy"]},
 minun:{num:312,species:"Minun",types:["Electric"],baseStats:{hp:60,atk:40,def:50,spa:75,spd:85,spe:95},abilities:{0:"Minus"},heightm:0.4,weightkg:4.2,color:"Yellow",eggGroups:["Fairy"]},
+kecleon:{num:352,species:"Kecleon",types:["Normal"],baseStats:{hp:60,atk:90,def:70,spa:60,spd:120,spe:40},abilities:{0:"Color Change"},heightm:1,weightkg:22,color:"Green",eggGroups:["Ground"]},
 togekiss:{num:468,species:"Togekiss",types:["Normal","Flying"],genderRatio:{M:0.875,F:0.125},baseStats:{hp:85,atk:50,def:95,spa:120,spd:115,spe:80},abilities:{0:"Hustle",1:"Serene Grace",DW:"Super Luck"},heightm:1.5,weightkg:38,color:"White",prevo:"togetic",evoLevel:2,eggGroups:["Flying","Fairy"]},
 whimsicott:{num:547,species:"Whimsicott",types:["Grass"],baseStats:{hp:60,atk:67,def:85,spa:77,spd:75,spe:116},abilities:{0:"Prankster",1:"Infiltrator",DW:"Chlorophyll"},heightm:0.7,weightkg:6.6,color:"Green",prevo:"cottonee",evoLevel:1,eggGroups:["Fairy","Plant"]}
 };
