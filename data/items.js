@@ -2616,6 +2616,24 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "No competitive use."
 	},
+	"pixelplate": {
+		id: "pixelplate",
+		name: "Pixel Plate",
+		spritenum: -6,
+		fling: {
+			basePower: 90
+		},
+		onPlate: 'Fairy',
+		onBasePowerPriority: 6,
+		onBasePower: function(basePower, user, target, move) {
+			if (move && move.type === 'Fairy') {
+				return this.chainModify(1.2);
+			}
+		},
+		num: 311,
+		gen: 6,
+		desc: "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy-type."
+	},
 	"plumefossil": {
 		id: "plumefossil",
 		name: "Plume Fossil",
