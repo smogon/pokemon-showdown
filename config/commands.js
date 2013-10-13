@@ -1167,6 +1167,11 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/join [roomname] - Attempts to join the room [roomname].');
 		}
+		if (target === 'all' || target === 'ignore') {
+			matched = true;
+			this.sendReply('/ignore [user] - Ignores all messages from the user [user].');
+			this.sendReply('Note that staff messages cannot be ignored.');
+		}
 		if (target === '%' || target === 'invite') {
 			matched = true;
 			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
