@@ -481,8 +481,8 @@ module.exports = (function () {
 
 					for (var i=0, len=lset.length; i<len; i++) {
 						var learned = lset[i];
-						if (learned.substr(0,2) in {'4L':1,'5L':1}) {
-							// gen 4 or 5 level-up moves
+						if (learned.substr(0,2) in {'4L':1,'5L':1,'6L':1}) {
+							// gen 4-6 level-up moves
 							if (level >= parseInt(learned.substr(2),10)) {
 								// Chatter and Struggle cannot be sketched
 								if (sketch && (move === 'chatter' || move === 'struggle')) return true;
@@ -498,7 +498,7 @@ module.exports = (function () {
 							}
 						}
 						if (learned.substr(1,1) in {L:1,M:1,T:1}) {
-							if (learned.substr(0,1) === '5') {
+							if (learned.substr(0,1) === '6') {
 								// current-gen TM or tutor moves:
 								//   always available
 								return false;
@@ -634,7 +634,7 @@ module.exports = (function () {
 		}
 
 		if (sourcesBefore) {
-			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore||5);
+			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore||6);
 		}
 
 		return false;
