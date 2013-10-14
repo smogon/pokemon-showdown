@@ -3130,7 +3130,7 @@ exports.BattleMovedex = {
 		desc: "Harshly lowers the target's Special Attack stat.",
 		shortDesc: "Lowers the target's Sp. Atk by 2.",
 		id: "eerieimpulse",
-		name: "Eeerie Impulse",
+		name: "Eerie Impulse",
 		pp: 15,
 		priority: 0,
 		boosts: {
