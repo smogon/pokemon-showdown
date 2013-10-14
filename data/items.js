@@ -3092,6 +3092,15 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Raises Speed by 1 when at 1/4 max HP or less. Single use."
 	},
+	"scizornite": {
+		id: "scizornite",
+		name: "Scizornite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Scizor into Mega Scizor."
+	},	
 	"scopelens": {
 		id: "scopelens",
 		name: "Scope Lens",
