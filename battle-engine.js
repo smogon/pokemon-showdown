@@ -1834,7 +1834,7 @@ var Battle = (function() {
 		this.eventDepth++;
 
 		if (onEffect && 'on'+eventid in effect) {
-			statuses.unshift({status: effect, callback: effect['on'+eventid], statusData: null, end: null, thing: target});
+			statuses.unshift({status: effect, callback: effect['on'+eventid], statusData: {}, end: null, thing: target});
 		}
 		for (var i=0; i<statuses.length; i++) {
 			var status = statuses[i].status;
@@ -1905,7 +1905,7 @@ var Battle = (function() {
 
 			if (returnVal !== undefined) {
 				relayVar = returnVal;
-				if (!relayVar) return relayVar;
+				if (!relayVar) break;
 				if (hasRelayVar) {
 					args[0] = relayVar;
 				}
@@ -1914,6 +1914,7 @@ var Battle = (function() {
 
 		this.eventDepth--;
 		if (this.event.modifier !== 1 && typeof relayVar === 'number') {
+			// this.debug(eventid+' modifier: 0x'+('0000'+(this.event.modifier * 4096).toString(16)).slice(-4).toUpperCase());
 			relayVar = this.modify(relayVar, this.event.modifier);
 		}
 		this.event = parentEvent;
@@ -2662,11 +2663,7 @@ var Battle = (function() {
 		}
 
 		// happens after crit calculation
-		var bpMod = 1;
-		bpMod = this.singleEvent('BasePower', move, null, pokemon, target, move, bpMod);
-		bpMod = this.runEvent('BasePower', pokemon, target, move, bpMod);
-
-		basePower = this.modify(basePower, bpMod);
+		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 
 		if (!basePower) return 0;
 		basePower = clampIntRange(basePower, 1);
@@ -2681,10 +2678,6 @@ var Battle = (function() {
 		var attack;
 		var defense;
 
-		var atkStatMod = 1;
-		atkStatMod = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, atkStatMod);
-		var defStatMod = 1;
-		defStatMod = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defStatMod);
 		var atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
 		var defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 		
@@ -2712,11 +2705,15 @@ var Battle = (function() {
 			defBoosts = 0;
 		}
 
-		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, atkBoosts, atkStatMod);
-		else attack = attacker.calculateStat(attackStat, atkBoosts, atkStatMod);
+		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, atkBoosts);
+		else attack = attacker.calculateStat(attackStat, atkBoosts);
 		
-		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, defBoosts, defStatMod);
-		else defense = defender.calculateStat(defenseStat, defBoosts, defStatMod);
+		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, defBoosts);
+		else defense = defender.calculateStat(defenseStat, defBoosts);
+		
+		// Apply Stat Modifiers
+		attack = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, attack);
+		defense = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defense);
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
@@ -2732,7 +2729,7 @@ var Battle = (function() {
 		// crit
 		if (move.crit) {
 			if (!suppressMessages) this.add('-crit', target);
-			baseDamage = this.modify(baseDamage, move.critModifier || 2);
+			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
 		}
 
 		// randomizer
@@ -2752,6 +2749,7 @@ var Battle = (function() {
 		}
 		// types
 		var totalTypeMod = this.getEffectiveness(type, target);
+		totalTypeMod = this.singleEvent('ModifyEffectiveness', move, null, target, pokemon, move, totalTypeMod);
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 			baseDamage *= 2;
@@ -2772,8 +2770,7 @@ var Battle = (function() {
 		}
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
-		var finalMod = 1;
-		baseDamage = this.modify(baseDamage, this.runEvent('ModifyDamage', pokemon, target, move, finalMod));
+		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
 		return Math.floor(baseDamage);
 	};
