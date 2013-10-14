@@ -143,6 +143,7 @@ exports.customavatars = {
 	'garyoaklegacy' : 'gary_oak_sprite_by_legendkyurem97-d53os6n.png',
 	'championtyphoz' : '1364487440459.png',
 	'se7engruntwander' : 'aLxYuV.png',
+	'charizard517' : 'charizard517.png',
 	'scizorman' : 'iz.png',
 	'suppleearth' : 'suppleearthanimatedavatarresized1002.png',
 	'ifazeoptical' : 'moos.png',
