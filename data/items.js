@@ -8,6 +8,15 @@ exports.BattleItems = {
 		gen: 6,
 		desc: "Mega-evolves Abomasnow."
 	},
+	"absolite": {
+		id: "absolite",
+		name: "Absolite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Absol."
+	},
 	"absorbbulb": {
 		id: "absorbbulb",
 		name: "Absorb Bulb",
@@ -40,6 +49,24 @@ exports.BattleItems = {
 		num: 135,
 		gen: 4,
 		desc: "If holder is a Dialga, its Steel- and Dragon-type attacks have 1.2x power."
+	},
+	"aerodactylite": {
+		id: "aerodactylite",
+		name: "Aerodactylite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Aerodactyl."
+	},
+	"aggronite": {
+		id: "aggronite",
+		name: "Aggronite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Aggron."
 	},
 	"aguavberry": {
 		id: "aguavberry",
@@ -95,6 +122,24 @@ exports.BattleItems = {
 		num: 541,
 		gen: 5,
 		desc: "Holder is immune to Ground-type attacks. Pops when holder is hit."
+	},
+	"alakazite": {
+		id: "alakazite",
+		name: "Alakazite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Alakazam."
+	},
+	"ampharosite": {
+		id: "ampharosite",
+		name: "Ampharosite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Ampharos."
 	},
 	"apicotberry": {
 		id: "apicotberry",
@@ -172,6 +217,15 @@ exports.BattleItems = {
 		num: 199,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Steel-type attack. Single use."
+	},
+	"banettite": {
+		id: "banettite",
+		name: "Banettite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Banette."
 	},
 	"belueberry": {
 		id: "belueberry",
@@ -287,6 +341,15 @@ exports.BattleItems = {
 		num: 240,
 		gen: 2,
 		desc: "Holder's Dark-type attacks have 1.2x power."
+	},
+	"blastoisinite": {
+		id: "blastoisinite",
+		name: "Blastoisinite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Blastoise."
 	},
 	"blazikenite": {
 		id: "blazikenite",
@@ -1302,6 +1365,33 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Raises Defense by 1 when at 1/4 max HP or less. Single use."
 	},
+	"garchompite": {
+		id: "garchompite",
+		name: "Garchompite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Garchomp."
+	},
+	"gardevoirite": {
+		id: "gardevoirite",
+		name: "Gardevoirite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Gardevoir."
+	},
+	"gengarite": {
+		id: "gengarite",
+		name: "Gengarite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Gengar."
+	},
 	"ghostgem": {
 		id: "ghostgem",
 		name: "Ghost Gem",
@@ -1410,6 +1500,15 @@ exports.BattleItems = {
 		gen: 5,
 		desc: "Holder's first successful Ground-type attack will have 1.5x power. Single use."
 	},
+	"gyaradosite": {
+		id: "gyaradosite",
+		name: "Gyaradosite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Gyarados."
+	},
 	"habanberry": {
 		id: "habanberry",
 		name: "Haban Berry",
@@ -1487,6 +1586,15 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Can be revived into Omanyte."
 	},
+	"heracronite": {
+		id: "heracronite",
+		name: "Heracronite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Heracross."
+	},
 	"hondewberry": {
 		id: "hondewberry",
 		name: "Hondew Berry",
@@ -1499,6 +1607,15 @@ exports.BattleItems = {
 		num: 172,
 		gen: 3,
 		desc: "No competitive use."
+	},
+	"houndoominite": {
+		id: "houndoominite",
+		name: "Houndoominite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Houndoom."
 	},
 	"iapapaberry": {
 		id: "iapapaberry",
@@ -1701,6 +1818,15 @@ exports.BattleItems = {
 		num: 170,
 		gen: 3,
 		desc: "No competitive use."
+	},
+	"kangaskhanite": {
+		id: "kangaskhanite",
+		name: "Kangaskhanite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Kangaskhan."
 	},
 	"kingsrock": {
 		id: "kingsrock",
@@ -1933,6 +2059,15 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Poke Ball for catching Pokemon that are the opposite gender of your Pokemon."
 	},
+	"lucarionite": {
+		id: "lucarionite",
+		name: "Lucarionite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Lucario."
+	},
 	"luckypunch": {
 		id: "luckypunch",
 		name: "Lucky Punch",
@@ -2080,6 +2215,15 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "This item cannot be given to or taken from a Pokemon, except by Knock Off."
 	},
+	"manectite": {
+		id: "manectite",
+		name: "Manectite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Manectric."
+	},
 	"masterball": {
 		id: "masterball",
 		name: "Master Ball",
@@ -2087,6 +2231,15 @@ exports.BattleItems = {
 		num: 1,
 		gen: 1,
 		desc: "The best Ball with the ultimate performance. It will catch any wild Pokemon."
+	},
+	"mawilite": {
+		id: "mawilite",
+		name: "Mawilite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Mawile."
 	},
 	"meadowplate": {
 		id: "meadowplate",
@@ -2105,6 +2258,15 @@ exports.BattleItems = {
 		num: 301,
 		gen: 4,
 		desc: "Holder's Grass-type attacks have 1.2x power. Judgment is Grass-type."
+	},
+	"medichamite": {
+		id: "medichamite",
+		name: "Medichamite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Medicham."
 	},
 	"mentalherb": {
 		id: "mentalherb",
@@ -2625,6 +2787,15 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "No competitive use."
 	},
+	"pinsirite": {
+		id: "pinsirite",
+		name: "Pinsirite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Pinsir."
+	},
 	"pixieplate": {
 		id: "pixieplate",
 		name: "Pixie Plate",
@@ -3101,15 +3272,15 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Raises Speed by 1 when at 1/4 max HP or less. Single use."
 	},
-	"scizornite": {
-		id: "scizornite",
-		name: "Scizornite",
+	"scizorite": {
+		id: "scizorite",
+		name: "Scizorite",
 		spritenum: 0,
 		//todo
 		num: -6,
 		gen: 6,
-		desc: "Mega-evolves Scizor into Mega Scizor."
-	},	
+		desc: "Mega-evolves Scizor."
+	},
 	"scopelens": {
 		id: "scopelens",
 		name: "Scope Lens",
@@ -3654,6 +3825,15 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Holder's Psychic-type attacks have 1.2x power."
 	},
+	"tyranitarite": {
+		id: "tyranitarite",
+		name: "Tyranitarite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Tyranitar."
+	},
 	"ultraball": {
 		id: "ultraball",
 		name: "Ultra Ball",
@@ -3661,6 +3841,15 @@ exports.BattleItems = {
 		num: 2,
 		gen: 1,
 		desc: "An ultra-performance Ball that provides a higher catch rate than a Great Ball."
+	},
+	"venusaurite": {
+		id: "venusaurite",
+		name: "Venusaurite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Venusaur."
 	},
 	"wacanberry": {
 		id: "wacanberry",
