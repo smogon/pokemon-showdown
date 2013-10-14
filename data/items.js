@@ -3,6 +3,7 @@ exports.BattleItems = {
 		id: "abomasite",
 		name: "Abomasite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -12,6 +13,7 @@ exports.BattleItems = {
 		id: "absolite",
 		name: "Absolite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -54,6 +56,7 @@ exports.BattleItems = {
 		id: "aerodactylite",
 		name: "Aerodactylite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -63,6 +66,7 @@ exports.BattleItems = {
 		id: "aggronite",
 		name: "Aggronite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -127,6 +131,7 @@ exports.BattleItems = {
 		id: "alakazite",
 		name: "Alakazite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -136,6 +141,7 @@ exports.BattleItems = {
 		id: "ampharosite",
 		name: "Ampharosite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -222,6 +228,7 @@ exports.BattleItems = {
 		id: "banettite",
 		name: "Banettite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -346,6 +353,7 @@ exports.BattleItems = {
 		id: "blastoisinite",
 		name: "Blastoisinite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -355,6 +363,7 @@ exports.BattleItems = {
 		id: "blazikenite",
 		name: "Blazikenite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -456,6 +465,7 @@ exports.BattleItems = {
 		id: "charizarditex",
 		name: "Charizardite X",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -465,6 +475,7 @@ exports.BattleItems = {
 		id: "charizarditey",
 		name: "Charizardite Y",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -1369,6 +1380,7 @@ exports.BattleItems = {
 		id: "garchompite",
 		name: "Garchompite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -1378,6 +1390,7 @@ exports.BattleItems = {
 		id: "gardevoirite",
 		name: "Gardevoirite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -1387,6 +1400,7 @@ exports.BattleItems = {
 		id: "gengarite",
 		name: "Gengarite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -1504,6 +1518,7 @@ exports.BattleItems = {
 		id: "gyaradosite",
 		name: "Gyaradosite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -1590,6 +1605,7 @@ exports.BattleItems = {
 		id: "heracronite",
 		name: "Heracronite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -1612,6 +1628,7 @@ exports.BattleItems = {
 		id: "houndoominite",
 		name: "Houndoominite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -1823,6 +1840,7 @@ exports.BattleItems = {
 		id: "kangaskhanite",
 		name: "Kangaskhanite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -2063,6 +2081,7 @@ exports.BattleItems = {
 		id: "lucarionite",
 		name: "Lucarionite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -2219,6 +2238,7 @@ exports.BattleItems = {
 		id: "manectite",
 		name: "Manectite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -2236,6 +2256,7 @@ exports.BattleItems = {
 		id: "mawilite",
 		name: "Mawilite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -2263,6 +2284,7 @@ exports.BattleItems = {
 		id: "medichamite",
 		name: "Medichamite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -2374,6 +2396,7 @@ exports.BattleItems = {
 		id: "mewtwonitex",
 		name: "Mewtwonite X",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -2383,6 +2406,7 @@ exports.BattleItems = {
 		id: "mewtwonitey",
 		name: "Mewtwonite Y",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -2791,6 +2815,7 @@ exports.BattleItems = {
 		id: "pinsirite",
 		name: "Pinsirite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -3276,6 +3301,7 @@ exports.BattleItems = {
 		id: "scizorite",
 		name: "Scizorite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -3829,6 +3855,7 @@ exports.BattleItems = {
 		id: "tyranitarite",
 		name: "Tyranitarite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
@@ -3846,6 +3873,7 @@ exports.BattleItems = {
 		id: "venusaurite",
 		name: "Venusaurite",
 		spritenum: 0,
+		onTakeItem: false,
 		//todo
 		num: -6,
 		gen: 6,
