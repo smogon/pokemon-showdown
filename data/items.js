@@ -1,4 +1,13 @@
 exports.BattleItems = {
+	"abomasite": {
+		id: "abomasite",
+		name: "Abomasite",
+		spritenum: 0,
+		//todo
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Abomasnow."
+	},
 	"absorbbulb": {
 		id: "absorbbulb",
 		name: "Absorb Bulb",
