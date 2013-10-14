@@ -2440,6 +2440,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":5,"moves":["growl","thunderwave","watersport"]},
 			{"generation":3,"level":10,"gender":"M","moves":["growl","thunderwave","quickattack"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	minun: {
@@ -2448,6 +2449,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":5,"moves":["growl","thunderwave","mudsport"]},
 			{"generation":3,"level":10,"gender":"M","moves":["growl","thunderwave","quickattack"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	volbeat: {
@@ -2748,6 +2750,7 @@ exports.BattleFormatsData = {
 	},
 	kecleon: {
 		viableMoves: {"stealthrock":1,"recover":1,"return":1,"thunderwave":1,"suckerpunch":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	shuppet: {
@@ -3663,6 +3666,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	arceusfairy: {
+		requiredItem: "Pixie Plate",
 		tier: "Limbo"
 	},
 	arceusfighting: {
@@ -4733,21 +4737,27 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	fennekin: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	braixen: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	delphox: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	froakie: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	frogadier: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	greninja: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	bunnelby: {
@@ -4766,12 +4776,14 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	scatterbug: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	spewpa: {
 		tier: "Limbo"
 	},
 	vivillon: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	litleo: {
@@ -4805,9 +4817,15 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	espurr: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	meowstic: {
+		dreamWorldRelease: true,
+		tier: "Limbo"
+	},
+	meowsticf: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	honedge: {
@@ -4898,24 +4916,30 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	phantump: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	trevenant: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	pumpkaboo: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	gourgeist: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	bergmite: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	avalugg: {
 		tier: "Limbo"
 	},
 	noibat: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	noivern: {
