@@ -1795,9 +1795,9 @@ exports.BattleAbilities = {
 		num: 46
 	},
 	"protean": {
-		desc: "Changes user's type to match the move it used last.",
-		shortDesc: "Changes user's type to match the move it used last.",
-		onAfterMoveSecondarySelf: function(pokemon, target, move) {
+		desc: "Changes user's type to match the user's current move before it attacks.",
+		shortDesc: "Changes user's type to match its move.",
+		onBeforeMove: function(pokemon, target, move) {
 			if (move && !pokemon.hasType(move.type)) {
 				this.add('-start', pokemon, 'typechange', move.type, '[from] Protean');
 				pokemon.types = [move.type];
