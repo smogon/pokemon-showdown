@@ -4737,21 +4737,27 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	fennekin: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	braixen: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	delphox: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	froakie: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	frogadier: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	greninja: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	bunnelby: {
@@ -4770,12 +4776,14 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	scatterbug: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	spewpa: {
 		tier: "Limbo"
 	},
 	vivillon: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	litleo: {
@@ -4809,9 +4817,15 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	espurr: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	meowstic: {
+		dreamWorldRelease: true,
+		tier: "Limbo"
+	},
+	meowsticf: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	honedge: {
@@ -4902,24 +4916,30 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	phantump: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	trevenant: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	pumpkaboo: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	gourgeist: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	bergmite: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	avalugg: {
 		tier: "Limbo"
 	},
 	noibat: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	noivern: {
