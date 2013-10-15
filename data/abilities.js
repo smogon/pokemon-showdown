@@ -2324,7 +2324,9 @@ exports.BattleAbilities = {
 		shortDesc: "The Pokemon changes form depending on how it battles.",
 		onBeforeMove: function(attacker, defender, move) {
 			if (attacker.template.baseSpecies !== 'Aegislash') return;
-			var targetSpecies = (move.category === 'Status'?'Aegislash':'Aegislash-Blade');
+			if (move.category !== 'Status') var targetSpecies = 'Aegislash-Blade';
+			else if (move.name === "King's Shield") var targetSpecies = 'Aegislash';
+			else return;
 			this.debug('target: '+targetSpecies+', current: '+attacker.template.species);
 			if (attacker.template.species !== targetSpecies && attacker.formeChange(targetSpecies)) {
 				this.add('-formechange', attacker, targetSpecies);
