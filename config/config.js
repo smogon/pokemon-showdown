@@ -191,6 +191,8 @@ exports.customavatars = {
 	'leaderbeezyboo' : 'leaderbeezyboo.png',
 	'leadershinohara' : 'leadershinohara2.png',
 	'pimpcrobat' : 'pimpcrobat.png',
+	'elitesixxposeidon' : 'Poseidon.png',
+	'shutyoface' : 'shutyoface.png',
 	'elite4belle' : 'elite4belle.png',
 	'bibliaskael' : 'aseasdfesefasef.png',
 	'runy12222' : 'Honchkrow_is_a_Pimp_by_ZeldaGameGod.png',
