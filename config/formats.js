@@ -307,7 +307,7 @@ exports.Formats = [
 		name: "Generation 5.5",
 		section: "OM of the Month",
 
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause'],
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Uber', 'Limbo']
 	},
 	{
