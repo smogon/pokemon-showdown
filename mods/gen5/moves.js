@@ -46,6 +46,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: function() {}
 	},
+	dracometeor: {
+		inherit: true,
+		basePower: 140
+	},
 	dragonpulse: {
 		inherit: true,
 		basePower: 90
