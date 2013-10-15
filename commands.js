@@ -980,7 +980,7 @@ var commands = exports.commands = {
 	},
 
 	savelearnsets: function(target, room, user) {
-		if (this.can('hotpatch')) return false;
+		if (!this.can('hotpatch')) return false;
 		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
 		this.sendReply('learnsets.js saved.');
 	},
