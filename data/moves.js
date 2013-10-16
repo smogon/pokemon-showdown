@@ -12382,7 +12382,16 @@ exports.BattleMovedex = {
 		name: "Sticky Web",
 		pp: 20,
 		priority: 0,
-		//todo
+		isBounceable: true,
+		sideCondition: 'stickyweb',
+		effect: {
+			onStart: function(side) {
+				this.add('-sidestart', side, 'move: Sticky Web');
+			},
+			onSwitchIn: function(pokemon) {
+				this.boost({spe: -1}, pokemon, pokemon, this.getMove('stickyweb'));
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Bug"
