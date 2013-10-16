@@ -2575,7 +2575,7 @@ exports.BattleAbilities = {
 					this.debug('Sweet Veil blocking yawn');
 					return false;
 				}
-			},
+			}
 		},
 		rating: 0,
 		num: -6,
