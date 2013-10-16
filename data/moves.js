@@ -5825,10 +5825,10 @@ exports.BattleMovedex = {
 	"hex": {
 		num: 506,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
-			if (target.status) return 100;
-			return 50;
+			if (target.status) return 120;
+			return 60;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. Power doubles if the target has a major status problem.",
