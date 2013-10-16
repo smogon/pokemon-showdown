@@ -138,6 +138,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 100
 	},
+	hex: {
+		inherit: true,
+		basePower: 50,
+		basePowerCallback: function(pokemon, target) {
+			if (target.status) return 100;
+			return 50;
+		}
+	},
 	hiddenpower: {
 		inherit: true,
 		basePower: 0,
