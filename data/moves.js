@@ -3167,7 +3167,30 @@ exports.BattleMovedex = {
 		name: "Electric Terrain",
 		pp: 10,
 		priority: 0,
-		//todo
+		sideCondition: 'electricterrain',
+		effect: {
+			duration: 5,
+			durationCallback: function(target, source, effect) {
+				if (source && source.ability === 'persistent') {
+					return 7;
+				}
+				return 5;
+			},
+			onSetStatus: function(status, target, source, effect) {
+				if (status === 'slp' && source && source !== target && source.ability !== 'infiltrator' && !target.runImmunity('Ground')) {
+					this.debug('Interrupting sleep from Electric Terrain');
+					return false;
+				}
+			},
+			onStart: function(side) {
+				this.add('-sidestart', side, 'Electric Terrain');
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onEnd: function(side) {
+				this.add('-sideend', side, 'Electric Terrain');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Electric"
