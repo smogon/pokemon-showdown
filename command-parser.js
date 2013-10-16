@@ -278,12 +278,12 @@ function canTalk(user, room, connection, message) {
 				}
 			}
 			if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {
-				connection.sendTo(room, 'Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this chat.');
+				connection.sendTo(room, 'Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.');
 				return false;
 			} else if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(room.modchat)) {
 				var groupName = config.groups[room.modchat].name;
 				if (!groupName) groupName = room.modchat;
-				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in lobby chat.');
+				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in this room.');
 				return false;
 			}
 		}
