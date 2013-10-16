@@ -1600,6 +1600,12 @@ exports.BattleAbilities = {
 		onImmunity: function(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail') return false;
 		},
+		onTryHit: function(pokemon, target, move) {
+			if (move.isPowder) {
+				this.add('-immune', pokemon, '[msg]', '[from] Overcoat');
+				return null;
+			}
+		},
 		id: "overcoat",
 		name: "Overcoat",
 		rating: 1,
