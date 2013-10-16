@@ -3207,7 +3207,21 @@ exports.BattleMovedex = {
 		name: "Electrify",
 		pp: 20,
 		priority: 0,
-		//todo
+		volatileStatus: 'electrify',
+		effect: {
+			duration: 1,
+			// TODO: Proper messages
+			onStart: function(pokemon) {
+				this.add('-start', pokemon, 'Electrify');
+			},
+			onModifyMove: function(move) {
+				this.debug('Electrify making move type electric');
+				move.type = 'Electric';
+			},
+			onEnd: function(pokemon) {
+				this.add('-end', pokemon, 'Electrify');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Electric"
