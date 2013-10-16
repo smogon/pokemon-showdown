@@ -2373,12 +2373,12 @@ exports.BattleAbilities = {
 		num: 100
 	},
 	"stancechange": {
-		desc: "The Pokemon changes form depending on how it battles. Defense form for Status moves, and Offense form for attacking moves.",
+		desc: "The Pokemon changes form depending on how it battles. Defense form for King's Shield, and Offense form for attacking moves.",
 		shortDesc: "The Pokemon changes form depending on how it battles.",
 		onBeforeMove: function(attacker, defender, move) {
 			if (attacker.template.baseSpecies !== 'Aegislash') return;
-			var targetSpecies = (move.category === 'Status'?'Aegislash':'Aegislash-Blade');
-			this.debug('target: '+targetSpecies+', current: '+attacker.template.species);
+			if (move.category === 'Status' && move.id !== 'kingsshield') return;
+			var targetSpecies = (move.id === 'kingsshield'?'Aegislash':'Aegislash-Blade');
 			if (attacker.template.species !== targetSpecies && attacker.formeChange(targetSpecies)) {
 				this.add('-formechange', attacker, targetSpecies);
 			}
