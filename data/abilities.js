@@ -1571,6 +1571,11 @@ exports.BattleAbilities = {
 				pokemon.removeVolatile('attract');
 				this.add("-message", pokemon.name+" got over its infatuation. (placeholder)");
 			}
+			if (pokemon.volatiles['taunt']) {
+				pokemon.removeVolatile('taunt');
+				// TODO: Research proper message.
+				this.add("-message", pokemon.name+" got over its taunt. (placeholder)");
+			}
 		},
 		onImmunity: function(type, pokemon) {
 			if (type === 'attract') {
@@ -1579,7 +1584,7 @@ exports.BattleAbilities = {
 			}
 		},
 		onTryHit: function(pokemon, target, move) {
-			if (move.id === 'captivate') {
+			if (move.id === 'captivate' || move.id === 'taunt') {
 				this.add('-immune', pokemon, '[msg]', '[from] Oblivious');
 				return null;
 			}
