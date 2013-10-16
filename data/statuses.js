@@ -46,9 +46,6 @@ exports.BattleStatuses = {
 			this.effectData.startTime = this.random(2,5);
 			this.effectData.time = this.effectData.startTime;
 		},
-		onSwitchIn: function(target) {
-			this.effectData.time = this.effectData.startTime;
-		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
 			if (pokemon.getAbility().isHalfSleep) {
