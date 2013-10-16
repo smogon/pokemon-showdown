@@ -96,23 +96,17 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":1,"isDW":false,"moves":["falseswipe","block","frenzyplant","weatherball"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	ivysaur: {
 		viableMoves: {"sleeppowder":1,"gigadrain":1,"hiddenpowerfire":1,"hiddenpowerice":1,"sludgebomb":1,"powerwhip":1,"leechseed":1,"synthesis":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NFE"
 	},
 	venusaur: {
 		viableMoves: {"sleeppowder":1,"gigadrain":1,"hiddenpowerfire":1,"hiddenpowerice":1,"sludgebomb":1,"swordsdance":1,"powerwhip":1,"leechseed":1,"synthesis":1,"earthquake":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "OU"
-	},
-	megavenusaur: {
-		tier: "Illegal"
 	},
 	charmander: {
 		viableMoves: {"flamethrower":1,"overheat":1,"dragonpulse":1,"hiddenpowergrass":1,"fireblast":1},
@@ -126,13 +120,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":1,"isDW":false,"moves":["falseswipe","block","blastburn","acrobatics"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	charmeleon: {
 		viableMoves: {"flamethrower":1,"overheat":1,"dragonpulse":1,"hiddenpowergrass":1,"fireblast":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NFE"
 	},
 	charizard: {
@@ -141,14 +133,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["wingattack","slash","dragonrage","firespin"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
-	},
-	megacharizardx: {
-		tier: "Illegal"
-	},
-	megacharizardy: {
-		tier: "Illegal"
 	},
 	squirtle: {
 		viableMoves: {"icebeam":1,"hydropump":1,"rapidspin":1,"scald":1,"aquajet":1,"toxic":1},
@@ -158,13 +143,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":1,"isDW":false,"moves":["falseswipe","block","hydrocannon","followme"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	wartortle: {
 		viableMoves: {"icebeam":1,"hydropump":1,"rapidspin":1,"scald":1,"aquajet":1,"toxic":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	blastoise: {
@@ -173,11 +156,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["protect","raindance","skullbash","hydropump"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "UU"
-	},
-	megablastoise: {
-		tier: "Illegal"
 	},
 	caterpie: {
 		viableMoves: {"bugbite":1,"snore":1,"tackle":1,"electroweb":1},
@@ -905,7 +884,6 @@ exports.BattleFormatsData = {
 	tyrogue: {
 		viableMoves: {"hijumpkick":1,"rapidspin":1,"fakeout":1,"bulletpunch":1,"machpunch":1,"toxic":1,"counter":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	hitmonlee: {
@@ -914,7 +892,6 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":38,"moves":["refresh","hijumpkick","mindreader","megakick"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "RU"
 	},
 	hitmonchan: {
@@ -923,7 +900,6 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":38,"moves":["helpinghand","skyuppercut","mindreader","megapunch"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "RU"
 	},
 	hitmontop: {
@@ -932,7 +908,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":55,"gender":"M","nature":"Adamant","isDW":false,"abilities":["intimidate"],"moves":["fakeout","closecombat","suckerpunch","helpinghand"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "UU"
 	},
 	lickitung: {
@@ -1408,12 +1383,6 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "Uber"
 	},
-	megamewtwox: {
-		tier: "Illegal"
-	},
-	megamewtwoy: {
-		tier: "Illegal"
-	},
 	mew: {
 		viableMoves: {"taunt":1,"willowisp":1,"roost":1,"psychic":1,"nastyplot":1,"aurasphere":1,"fireblast":1,"swordsdance":1,"superpower":1,"zenheadbutt":1,"batonpass":1,"rockpolish":1,"substitute":1,"toxic":1,"icebeam":1,"thunderbolt":1,"earthquake":1,"uturn":1,"stealthrock":1},
 		eventPokemon: [
@@ -1591,9 +1560,6 @@ exports.BattleFormatsData = {
 		viableMoves: {"voltswitch":1,"focusblast":1,"hiddenpowerice":1,"hiddenpowergrass":1,"thunderbolt":1,"healbell":1},
 		dreamWorldRelease: true,
 		tier: "NU"
-	},
-	megaampharos: {
-		tier: "Illegal"
 	},
 	azurill: {
 		viableMoves: {"scald":1,"return":1,"doubleedge":1,"encore":1,"toxic":1,"protect":1},
@@ -2045,13 +2011,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["pound","leer","absorb"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	grovyle: {
 		viableMoves: {"substitute":1,"leechseed":1,"gigadrain":1,"leafstorm":1,"hiddenpowerice":1,"hiddenpowerrock":1,"endeavor":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NFE"
 	},
 	sceptile: {
@@ -2060,7 +2024,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"isDW":false,"moves":["leafstorm","dragonpulse","focusblast","rockslide"],"pokeball":"cherishball"}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "RU"
 	},
 	torchic: {
@@ -2070,13 +2033,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["scratch","growl","focusenergy","ember"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	combusken: {
 		viableMoves: {"flareblitz":1,"skyuppercut":1,"protect":1,"swordsdance":1,"substitute":1,"batonpass":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	blaziken: {
@@ -2086,7 +2047,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"isDW":false,"moves":["flareblitz","hijumpkick","thunderpunch","stoneedge"],"pokeball":"cherishball"}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "Uber"
 	},
 	mudkip: {
@@ -2096,13 +2056,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["tackle","growl","mudslap","watergun"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	marshtomp: {
 		viableMoves: {"waterfall":1,"earthquake":1,"superpower":1,"icepunch":1,"rockslide":1,"stealthrock":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NFE"
 	},
 	swampert: {
@@ -2111,7 +2069,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"isDW":false,"moves":["earthquake","icebeam","hydropump","hammerarm"],"pokeball":"cherishball"}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "UU"
 	},
 	poochyena: {
@@ -2409,9 +2366,6 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "NU"
 	},
-	megamawile: {
-		tier: "Illegal"
-	},
 	aron: {
 		viableMoves: {"headsmash":1,"ironhead":1,"earthquake":1,"superpower":1,"stealthrock":1},
 		dreamWorldRelease: true,
@@ -2464,6 +2418,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":5,"moves":["growl","thunderwave","watersport"]},
 			{"generation":3,"level":10,"gender":"M","moves":["growl","thunderwave","quickattack"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	minun: {
@@ -2472,6 +2427,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":5,"moves":["growl","thunderwave","mudsport"]},
 			{"generation":3,"level":10,"gender":"M","moves":["growl","thunderwave","quickattack"]}
 		],
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	volbeat: {
@@ -2772,6 +2728,7 @@ exports.BattleFormatsData = {
 	},
 	kecleon: {
 		viableMoves: {"stealthrock":1,"recover":1,"return":1,"thunderwave":1,"suckerpunch":1},
+		dreamWorldRelease: true,
 		tier: "NU"
 	},
 	shuppet: {
@@ -2836,9 +2793,6 @@ exports.BattleFormatsData = {
 		],
 		dreamWorldRelease: true,
 		tier: "RU"
-	},
-	megaabsol: {
-		tier: "Illegal"
 	},
 	snorunt: {
 		viableMoves: {"spikes":1,"icebeam":1,"hiddenpowerground":1,"iceshard":1,"crunch":1},
@@ -3105,13 +3059,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["tackle","withdraw","absorb","stockpile"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	grotle: {
 		viableMoves: {"reflect":1,"lightscreen":1,"stealthrock":1,"seedbomb":1,"substitute":1,"leechseed":1,"toxic":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NFE"
 	},
 	torterra: {
@@ -3120,7 +3072,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["woodhammer","earthquake","outrage","stoneedge"],"pokeball":"cherishball"}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	chimchar: {
@@ -3132,13 +3083,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["leer","ember","taunt","fakeout"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	monferno: {
 		viableMoves: {"stealthrock":1,"overheat":1,"hiddenpowergrass":1,"fakeout":1,"vacuumwave":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NU"
 	},
 	infernape: {
@@ -3147,7 +3096,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["fireblast","closecombat","uturn","grassknot"],"pokeball":"cherishball"}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "OU"
 	},
 	piplup: {
@@ -3159,13 +3107,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":10,"gender":"M","isDW":true,"moves":["pound","growl","bubble","featherdance"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "LC"
 	},
 	prinplup: {
 		viableMoves: {"stealthrock":1,"hydropump":1,"scald":1,"icebeam":1,"hiddenpowerelectric":1,"hiddenpowerfire":1,"yawn":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NFE"
 	},
 	empoleon: {
@@ -3174,7 +3120,6 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":100,"gender":"M","isDW":false,"moves":["hydropump","icebeam","aquajet","grassknot"],"pokeball":"cherishball"}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "UU"
 	},
 	starly: {
@@ -3411,9 +3356,6 @@ exports.BattleFormatsData = {
 		dreamWorldRelease: true,
 		tier: "OU"
 	},
-	megagarchomp: {
-		tier: "Illegal"
-	},
 	riolu: {
 		viableMoves: {"crunch":1,"roar":1,"copycat":1,"drainpunch":1},
 		eventPokemon: [
@@ -3432,9 +3374,6 @@ exports.BattleFormatsData = {
 		],
 		dreamWorldRelease: true,
 		tier: "OU"
-	},
-	megalucario: {
-		tier: "Illegal"
 	},
 	hippopotas: {
 		viableMoves: {"earthquake":1,"slackoff":1,"whirlwind":1,"stealthrock":1,"protect":1,"toxic":1},
@@ -3696,6 +3635,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	arceusfairy: {
+		requiredItem: "Pixie Plate",
 		tier: "Limbo"
 	},
 	arceusfighting: {
@@ -4268,6 +4208,7 @@ exports.BattleFormatsData = {
 	},
 	gothita: {
 		viableMoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1,"trick":1},
+		dreamWorldRelease: true,
 		tier: "LC"
 	},
 	gothorita: {
@@ -4277,13 +4218,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":32,"gender":"M","isDW":true,"moves":["psyshock","flatter","futuresight","imprison"]}
 		],
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "NFE"
 	},
 	gothitelle: {
 		viableMoves: {"psychic":1,"thunderbolt":1,"hiddenpowerfighting":1,"shadowball":1,"substitute":1,"calmmind":1,"reflect":1,"lightscreen":1,"trick":1},
 		dreamWorldRelease: true,
-		maleOnlyDreamWorld: true,
 		tier: "BL"
 	},
 	solosis: {
@@ -4766,21 +4705,27 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	fennekin: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	braixen: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	delphox: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	froakie: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	frogadier: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	greninja: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	bunnelby: {
@@ -4799,12 +4744,14 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	scatterbug: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	spewpa: {
 		tier: "Limbo"
 	},
 	vivillon: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	litleo: {
@@ -4838,9 +4785,15 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	espurr: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	meowstic: {
+		dreamWorldRelease: true,
+		tier: "Limbo"
+	},
+	meowsticf: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	honedge: {
@@ -4931,24 +4884,30 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	phantump: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	trevenant: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	pumpkaboo: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	gourgeist: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	bergmite: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	avalugg: {
 		tier: "Limbo"
 	},
 	noibat: {
+		dreamWorldRelease: true,
 		tier: "Limbo"
 	},
 	noivern: {

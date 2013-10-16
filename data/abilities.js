@@ -164,7 +164,9 @@ exports.BattleAbilities = {
 	"aurabreak": {
 		desc: "Reverses the effect of Dark Aura and Fairy Aura.",
 		shortDesc: "Reverses the effect of Aura abilities.",
-		//todo
+		onStart: function(pokemon) {
+			this.add('-message', 'The effects of aura abilities are reversed. (placeholder)');
+		},
 		id: "aurabreak",
 		name: "Aura Break",
 		rating: 3,
@@ -394,8 +396,22 @@ exports.BattleAbilities = {
 		shortDesc: "Increases the power of all Dark-type moves in battle.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
+			var reverseAura = false;
+			for (var p in attacker.side.active) {
+				if (attacker.side.active[p].ability === 'aurabreak') {
+					reverseAura = true;
+					this.debug('Reversing Dark Aura due to Aura Break');
+				}
+			}
+			for (var p in defender.side.active) {
+				if (defender.side.active[p].ability === 'aurabreak') {
+					reverseAura = true;
+					this.debug('Reversing Dark Aura due to Aura Break');
+				}
+			}
 			if (move.type === 'Dark') {
-				return this.chainModify(1.2);
+				this.debug('Dark Aura boost: x' + (reverseAura? 0.8 : 1.2));
+				return this.chainModify(reverseAura? 0.8 : 1.2);
 			}
 		},
 		id: "darkaura",
@@ -553,8 +569,22 @@ exports.BattleAbilities = {
 		shortDesc: "Increases the power of all Fairy-type moves in battle.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
+			var reverseAura = false;
+			for (var p in attacker.side.active) {
+				if (attacker.side.active[p].ability === 'aurabreak') {
+					reverseAura = true;
+					this.debug('Reversing Fairy Aura due to Aura Break');
+				}
+			}
+			for (var p in defender.side.active) {
+				if (defender.side.active[p].ability === 'aurabreak') {
+					reverseAura = true;
+					this.debug('Reversing Fairy Aura due to Aura Break');
+				}
+			}
 			if (move.type === 'Fairy') {
-				return this.chainModify(1.2);
+				this.debug('Fairy Aura boost: x' + (reverseAura? 0.8 : 1.2));
+				return this.chainModify(reverseAura? 0.8 : 1.2);
 			}
 		},
 		id: "fairyaura",
@@ -796,6 +826,18 @@ exports.BattleAbilities = {
 		name: "Fur Coat",
 		rating: 3.5,
 		num: -6,
+		gen: 6
+	},
+	"galewings": {
+		desc: "Gives priority to Flying-type moves.",
+		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		onModifyPriority: function(priority, pokemon, target, move) {
+			if (move && move.type === 'Flying') return priority + 1;
+		},
+		id: "galewings",
+		name: "Gale Wings",
+		rating: 3.5,
+		num: -7,
 		gen: 6
 	},
 	"gluttony": {
@@ -1559,6 +1601,11 @@ exports.BattleAbilities = {
 				pokemon.removeVolatile('attract');
 				this.add("-message", pokemon.name+" got over its infatuation. (placeholder)");
 			}
+			if (pokemon.volatiles['taunt']) {
+				pokemon.removeVolatile('taunt');
+				// TODO: Research proper message.
+				this.add("-message", pokemon.name+" got over its taunt. (placeholder)");
+			}
 		},
 		onImmunity: function(type, pokemon) {
 			if (type === 'attract') {
@@ -1567,7 +1614,7 @@ exports.BattleAbilities = {
 			}
 		},
 		onTryHit: function(pokemon, target, move) {
-			if (move.id === 'captivate') {
+			if (move.id === 'captivate' || move.id === 'taunt') {
 				this.add('-immune', pokemon, '[msg]', '[from] Oblivious');
 				return null;
 			}
@@ -1582,6 +1629,12 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon does not take damage from Sandstorm or Hail.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail') return false;
+		},
+		onTryHit: function(pokemon, target, move) {
+			if (move.isPowder) {
+				this.add('-immune', pokemon, '[msg]', '[from] Overcoat');
+				return null;
+			}
 		},
 		id: "overcoat",
 		name: "Overcoat",
@@ -1795,9 +1848,9 @@ exports.BattleAbilities = {
 		num: 46
 	},
 	"protean": {
-		desc: "Changes user's type to match the move it used last.",
-		shortDesc: "Changes user's type to match the move it used last.",
-		onAfterMoveSecondarySelf: function(pokemon, target, move) {
+		desc: "Changes user's type to match the user's current move before it attacks.",
+		shortDesc: "Changes user's type to match its move.",
+		onBeforeMove: function(pokemon, target, move) {
 			if (move && !pokemon.hasType(move.type)) {
 				this.add('-start', pokemon, 'typechange', move.type, '[from] Protean');
 				pokemon.types = [move.type];
@@ -2501,9 +2554,29 @@ exports.BattleAbilities = {
 	"sweetveil": {
 		desc: "Prevents allies to be put to Sleep.",
 		shortDesc: "Prevents allies to be put to Sleep.",
-		//todo
 		id: "sweetveil",
 		name: "Sweet Veil",
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Sweet Veil');
+			pokemon.side.addSideCondition('sweetveil');
+		},
+		onSwitchOut: function(pokemon) {
+			pokemon.side.removeSideCondition('sweetveil');
+		},
+		effect: {
+			onSetStatus: function(status, target, source, effect) {
+				if (status.id === 'slp') {
+					this.debug('Sweet Veil interrupts sleep');
+					return false;
+				}
+			},
+			onTryHit: function(target, source, move) {
+				if (move && move.id === 'yawn') {
+					this.debug('Sweet Veil blocking yawn');
+					return false;
+				}
+			},
+		},
 		rating: 0,
 		num: -6,
 		gen: 6
