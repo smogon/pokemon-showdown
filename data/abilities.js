@@ -798,6 +798,18 @@ exports.BattleAbilities = {
 		num: -6,
 		gen: 6
 	},
+	"galewings": {
+		desc: "Increases the priority of Flying-type moves by 1.",
+		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		onModifyPriority: function(priority, pokemon, target, move) {
+			if (move && move.type === 'Flying') return priority + 1;
+		},
+		id: "galewings",
+		name: "Gale Wings",
+		rating: 3.5,
+		num: -7,
+		gen: 6
+	}
 	"gluttony": {
 		desc: "This Pokemon consumes its held berry when its health reaches 50% max HP or lower.",
 		shortDesc: "When this Pokemon has 1/2 or less of its max HP, it uses certain Berries early.",
