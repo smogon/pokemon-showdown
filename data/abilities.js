@@ -164,7 +164,9 @@ exports.BattleAbilities = {
 	"aurabreak": {
 		desc: "Reverses the effect of Dark Aura and Fairy Aura.",
 		shortDesc: "Reverses the effect of Aura abilities.",
-		//todo
+		onStart: function(pokemon) {
+			this.add('-message', 'The effects of aura abilities are reversed. (placeholder)');
+		},
 		id: "aurabreak",
 		name: "Aura Break",
 		rating: 3,
@@ -394,8 +396,22 @@ exports.BattleAbilities = {
 		shortDesc: "Increases the power of all Dark-type moves in battle.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
+			var reverseAura = false;
+			for (var p in attacker.side.active) {
+				if (attacker.side.active[p].ability === 'aurabreak') {
+					reverseAura = true;
+					this.debug('Reversing Dark Aura due to Aura Break');
+				}
+			}
+			for (var p in defender.side.active) {
+				if (defender.side.active[p].ability === 'aurabreak') {
+					reverseAura = true;
+					this.debug('Reversing Dark Aura due to Aura Break');
+				}
+			}
 			if (move.type === 'Dark') {
-				return this.chainModify(1.2);
+				this.debug('Dark Aura boost: x' + (reverseAura? 0.8 : 1.2));
+				return this.chainModify(reverseAura? 0.8 : 1.2);
 			}
 		},
 		id: "darkaura",
@@ -553,8 +569,22 @@ exports.BattleAbilities = {
 		shortDesc: "Increases the power of all Fairy-type moves in battle.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
+			var reverseAura = false;
+			for (var p in attacker.side.active) {
+				if (attacker.side.active[p].ability === 'aurabreak') {
+					reverseAura = true;
+					this.debug('Reversing Fairy Aura due to Aura Break');
+				}
+			}
+			for (var p in defender.side.active) {
+				if (defender.side.active[p].ability === 'aurabreak') {
+					reverseAura = true;
+					this.debug('Reversing Fairy Aura due to Aura Break');
+				}
+			}
 			if (move.type === 'Fairy') {
-				return this.chainModify(1.2);
+				this.debug('Fairy Aura boost: x' + (reverseAura? 0.8 : 1.2));
+				return this.chainModify(reverseAura? 0.8 : 1.2);
 			}
 		},
 		id: "fairyaura",
