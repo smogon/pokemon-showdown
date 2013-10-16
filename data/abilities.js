@@ -2554,9 +2554,29 @@ exports.BattleAbilities = {
 	"sweetveil": {
 		desc: "Prevents allies to be put to Sleep.",
 		shortDesc: "Prevents allies to be put to Sleep.",
-		//todo
 		id: "sweetveil",
 		name: "Sweet Veil",
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Sweet Veil');
+			pokemon.side.addSideCondition('sweetveil');
+		},
+		onSwitchOut: function(pokemon) {
+			pokemon.side.removeSideCondition('sweetveil');
+		},
+		effect: {
+			onSetStatus: function(status, target, source, effect) {
+				if (status.id === 'slp') {
+					this.debug('Sweet Veil interrupts sleep');
+					return false;
+				}
+			},
+			onTryHit: function(target, source, move) {
+				if (move && move.id === 'yawn') {
+					this.debug('Sweet Veil blocking yawn');
+					return false;
+				}
+			},
+		},
 		rating: 0,
 		num: -6,
 		gen: 6
