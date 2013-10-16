@@ -809,7 +809,7 @@ exports.BattleAbilities = {
 		rating: 3.5,
 		num: -7,
 		gen: 6
-	}
+	},
 	"gluttony": {
 		desc: "This Pokemon consumes its held berry when its health reaches 50% max HP or lower.",
 		shortDesc: "When this Pokemon has 1/2 or less of its max HP, it uses certain Berries early.",
