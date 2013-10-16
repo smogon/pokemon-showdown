@@ -3177,7 +3177,7 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onSetStatus: function(status, target, source, effect) {
-				if (status === 'slp' && source && source !== target && source.ability !== 'infiltrator' && !target.runImmunity('Ground')) {
+				if (status.id === 'slp' && source && source !== target && source.ability !== 'infiltrator' && !target.runImmunity('Ground')) {
 					this.debug('Interrupting sleep from Electric Terrain');
 					return false;
 				}
