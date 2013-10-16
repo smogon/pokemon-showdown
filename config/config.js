@@ -459,7 +459,8 @@ exports.customavatars = {
 	'zeppy' : 'zeppy.png',
 	'frontierakash' : 'akash.png',
 	'piiiikachuuu':'pika.png',
-	'ryuuga':'ryuuga.png'
+	'ryuuga':'ryuuga.png',
+	'nunuchu42':'nunuchu.png'
 };
 
 // appealurl - specify a URL containing information on how users can appeal
