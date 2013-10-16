@@ -12430,7 +12430,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "foeSide",
 		type: "Bug"
 	},
 	"stockpile": {
