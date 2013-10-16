@@ -1353,7 +1353,7 @@ var commands = exports.commands = {
 	
 	psychological: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/GeWjXUl.png"><br><img src="http://i.imgur.com/TSEXdOm.gif"><br><font color="red"><blink>Ace: Dragonite</blink></font><br>Dun make me spank you');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/QPmrbiM.png"><br><img src="http://i.imgur.com/TSEXdOm.gif"><br><font color="red"><blink>Ace: Dragonite</blink></font><br>Dun make me spank you');
 	},
 	
 	siem: function(target, room, user) {
