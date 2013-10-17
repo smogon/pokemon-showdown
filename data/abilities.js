@@ -848,6 +848,19 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 82
 	},
+	"gooey": {
+		// TODO: Better descriptions
+		desc: "Contact with the Pokémon lowers the attacker's Speed stat.",
+		shortDesc: "Contact with the Pokémon lowers the attacker's Speed stat.",
+		onAfterDamage: function(damage, target, source, effect) {
+			if (effect && effect.isContact) this.boost({spe: -1}, source, target);
+		},
+		id: "gooey",
+		name: "Gooey",
+		rating: 3.5,
+		num: -10,
+		gen 6
+	}
 	"guts": {
 		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed or asleep (including self-induced Rest), its Attack stat receives a 50% boost; the burn status' Attack drop is also ignored.",
 		shortDesc: "If this Pokemon is statused, its Attack is 1.5x; burn's Attack drop is ignored.",
