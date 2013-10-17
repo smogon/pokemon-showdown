@@ -314,6 +314,29 @@ exports.BattleAbilities = {
 		rating: 2,
 		num: 16
 	},
+	"competitive": {
+		desc: "Raises the user's Special Attack stat by two stages when a stat is lowered, including the Special Attack stat. This does not include self-induced stat drops like those from Close Combat.",
+		shortDesc: "This Pokemon's SpAtk is boosted by 2 for each of its stats that is lowered by a foe.",
+		onAfterEachBoost: function(boost, target, source) {
+			if (!source || target.side === source.side) {
+				return;
+			}
+			var statsLowered = false;
+			for (var i in boost) {
+				if (boost[i] < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({spa: 2});
+			}
+		},
+		id: "competitive",
+		name: "Competitive",
+		rating: 2,
+		num: -6,
+		gen: 6
+	},
 	"compoundeyes": {
 		desc: "The accuracy of this Pokemon's moves receives a 30% increase; for example, a 75% accurate move becomes 97.5% accurate.",
 		shortDesc: "This Pokemon's moves have their accuracy boosted to 1.3x.",
