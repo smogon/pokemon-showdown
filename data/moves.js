@@ -10045,7 +10045,7 @@ exports.BattleMovedex = {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] '+pokemon);
 				}
-				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
+				var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
 				for (var i in sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(i)) {
 						this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] '+pokemon);
