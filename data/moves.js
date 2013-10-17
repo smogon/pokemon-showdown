@@ -8325,7 +8325,7 @@ exports.BattleMovedex = {
 		shortDesc: "30% chance to lower the target's Sp. Atk by 1.",
 		id: "moonblast",
 		isViable: true,
-		name: "Moon Blast",
+		name: "Moonblast",
 		pp: 15,
 		priority: 0,
 		secondary: {
