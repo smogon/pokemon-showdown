@@ -3764,7 +3764,16 @@ exports.BattleMovedex = {
 		name: "Fell Stinger",
 		pp: 25,
 		priority: 0,
-		//todo
+		onHit: function(target, pokemon) {
+			pokemon.addVolatile('fellstinger');
+		},
+		effect: {
+			duration: 1,
+			onAfterMoveSecondarySelf: function(pokemon, target, move) {
+				if (!target || target.fainted || target.hp <= 0) this.boost({atk:2}, pokemon, pokemon, move);
+				pokemon.removeVolatile('fellstinger');
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Bug"
