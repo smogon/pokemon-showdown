@@ -15,6 +15,10 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"keeneye": {
+		inherit: true,
+		onModifyMove: function() {}
+	},
 	"oblivious": {
 		inherit: true,
 		onUpdate: function(pokemon) {

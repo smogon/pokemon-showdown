@@ -1193,6 +1193,9 @@ exports.BattleAbilities = {
 				if (!effect.secondaries) this.add("-fail", target, "unboost", "accuracy", "[from] ability: Keen Eye", "[of] "+target);
 			}
 		},
+		onModifyMove: function(move) {
+			move.ignoreEvasion = true;
+		},
 		id: "keeneye",
 		name: "Keen Eye",
 		rating: 1,
