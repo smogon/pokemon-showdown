@@ -12424,7 +12424,7 @@ exports.BattleMovedex = {
 		gen: 6,
 		accuracy: true,
 		basePower: 0,
-		category: "Physical",
+		category: "Status",
 		desc: "Lowers the Speed stat of the opposing team's Pokemon upon switching into battle.",
 		shortDesc: "Lowers Speed of opposing Pokemon switched in.",
 		id: "stickyweb",
