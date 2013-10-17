@@ -409,7 +409,7 @@ exports.BattleMovedex = {
 		target: "allyTeam",
 		type: "Grass"
 	},
-	"aromicmist": {
+	"aromaticmist": {
 		num: -6,
 		gen: 6,
 		accuracy: 100,
@@ -417,13 +417,17 @@ exports.BattleMovedex = {
 		category: "Status",
 		desc: "The user raises the Special Defense stat of ally Pokemon.",
 		shortDesc: "Raises ally Pokemon Special Defense by 1.",
-		id: "aromicmist",
-		name: "Aromic Mist",
+		id: "aromaticmist",
+		name: "Aromatic Mist",
 		pp: 20,
 		priority: 0,
-		//todo
+		onHit: function(pokemon) {
+			for (var p in pokemon.side.active) {
+				this.boost({spd: 1}, pokemon.side.active[p], pokemon.side.active[p], this.getMove("aromaticmist"));
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Fairy"
 	},
 	"assist": {
