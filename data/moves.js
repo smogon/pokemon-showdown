@@ -415,8 +415,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "The user raises the Special Defense stat of ally Pokemon.",
-		shortDesc: "Raises ally Pokemon Special Defense by 1.",
+		desc: "The user raises the Special Defense stat of itself and ally Pokemon by 1.",
+		shortDesc: "Raises user's and allies' Special Defense by 1.",
 		id: "aromaticmist",
 		name: "Aromatic Mist",
 		pp: 20,
@@ -4483,8 +4483,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Changes the target type to Grass.",
-		shortDesc: "Changes the target type to Grass.",
+		desc: "Changes the target's type to Grass.",
+		shortDesc: "Changes the target's type to Grass.",
 		id: "forestscurse",
 		name: "Forest's Curse",
 		pp: 20,
@@ -12037,7 +12037,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact.",
+		desc: "In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact by 1/8 of their maximum HP.",
 		shortDesc: "Protects user. Damages attackers that make contact.",
 		id: "spikyshield",
 		isViable: true,
@@ -12065,6 +12065,9 @@ exports.BattleMovedex = {
 				}
 				if (move && move.target === 'self') return;
 				this.add('-activate', target, 'Spiky Shield');
+				if (move.isContact) {
+					this.damage(source.maxhp/8, source, target);
+				}
 				return null;
 			}
 		},
