@@ -8577,15 +8577,15 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles. (In-game: Seed Bomb in grass, Mud Bomb in puddles, Hydro Pump on water, Rock Slide in caves, Earthquake on rocky ground and sand, Blizzard on snow, Ice Beam on ice, and Tri Attack everywhere else.)",
-		shortDesc: "Attack changes based on terrain. (Earthquake)",
+		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles.",
+		shortDesc: "Attack changes based on terrain. (Tri Attack)",
 		id: "naturepower",
 		isViable: true,
 		name: "Nature Power",
 		pp: 20,
 		priority: 0,
 		onHit: function(target) {
-			this.useMove('earthquake', target);
+			this.useMove('triattack', target);
 		},
 		secondary: false,
 		target: "self",

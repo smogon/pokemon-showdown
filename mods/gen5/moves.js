@@ -269,6 +269,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 95
 	},
+	naturepower: {
+		inherit: true,
+		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles.",
+		shortDesc: "Attack changes based on terrain. (Earthquake)",
+		onHit: function(target) {
+			this.useMove('earthquake', target);
+		}
+	},
 	overheat: {
 		inherit: true,
 		basePower: 140
