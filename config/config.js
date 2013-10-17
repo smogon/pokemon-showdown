@@ -315,7 +315,7 @@ exports.customavatars = {
 	'simplenidorino' : 'nid.png',
 	'frontierbrinn' : 'Black_2_White_2_N-1.png',
 	'grumpigthepiggy' : 'grumpig.png',
-	'auraburst' : 'muF6H.png',
+	'auraburst' : 'aurahasavagina.png',
 	'rioted' : 'rioted.png',
 	'killertiger' : 'mbitce.png',
 	'gymladerriot' : 'fire.png',
