@@ -1,4 +1,20 @@
 exports.BattleAbilities = {
+	"intimidate": {
+		inherit: true,
+		onStart: function(pokemon) {
+			var foeactive = pokemon.side.foe.active;
+			for (var i=0; i<foeactive.length; i++) {
+				if (!foeactive[i] || foeactive[i].fainted) continue;
+				if (foeactive[i].volatiles['substitute']) {
+					// does it give a message?
+					this.add('-activate',foeactive[i],'Substitute','ability: Intimidate','[of] '+pokemon);
+				} else {
+					this.add('-ability',pokemon,'Intimidate','[of] '+foeactive[i]);
+					this.boost({atk: -1}, foeactive[i], pokemon);
+				}
+			}
+		}
+	},
 	"oblivious": {
 		inherit: true,
 		onUpdate: function(pokemon) {
