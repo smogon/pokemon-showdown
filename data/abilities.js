@@ -859,8 +859,8 @@ exports.BattleAbilities = {
 		name: "Gooey",
 		rating: 3.5,
 		num: -10,
-		gen 6
-	}
+		gen: 6
+	},
 	"guts": {
 		desc: "When this Pokemon is poisoned (including Toxic), burned, paralyzed or asleep (including self-induced Rest), its Attack stat receives a 50% boost; the burn status' Attack drop is also ignored.",
 		shortDesc: "If this Pokemon is statused, its Attack is 1.5x; burn's Attack drop is ignored.",
