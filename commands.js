@@ -1450,33 +1450,6 @@ var commands = exports.commands = {
                 }
         },
 
-
-
-		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
-		var groupName = (config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
-
-		if (nextGroup === ' ') {
-			delete room.auth[userid];
-		} else {
-			room.auth[userid] = nextGroup;
-		}
-
-		if (isDemotion) {
-			this.privateModCommand('('+name+' was appointed to Room ' + groupName + ' by '+user.name+'.)');
-			if (targetUser) {
-				targetUser.popup('You were appointed to Room ' + groupName + ' by ' + user.name + '.');
-			}
-		} else {
-			this.addModCommand(''+name+' was appointed to Room ' + groupName + ' by '+user.name+'.');
-		}
-		if (targetUser) {
-			targetUser.updateIdentity();
-		}
-		if (room.chatRoomData) {
-			Rooms.global.writeChatRoomData();
-		}
-	},
-	
 	lockroom: function(target, room, user) {
 		if (!room.auth) {
 			return this.sendReply("Only unofficial chatrooms can be locked.");
