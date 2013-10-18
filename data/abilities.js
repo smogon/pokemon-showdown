@@ -740,7 +740,27 @@ exports.BattleAbilities = {
 	"flowerveil": {
 		desc: "Prevents lowering of ally Grass-type Pokemon's stats.",
 		shortDesc: "Prevents lowering of ally Grass-type Pokemon's stats.",
-		//todo
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Flower Veil');
+			pokemon.side.addSideCondition('flowerveil');
+		},
+		onSwitchOut: function(pokemon) {
+			pokemon.side.removeSideCondition('flowerveil');
+		},
+		effect: {
+			onBoost: function(boost, target, source, effect) {
+				if (source && target === source) return;
+				if (!target.hasType('Grass')) return;
+				var showMsg = false;
+				for (var i in boost) {
+					if (boost[i] < 0) {
+						delete boost[i];
+						showMsg = true;
+					}
+				}
+				if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Flower Veil", "[of] "+target);
+			}
+		},
 		id: "flowerveil",
 		name: "Flower Veil",
 		rating: 0,
