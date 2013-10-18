@@ -173,7 +173,7 @@ exports.customavatars = {
 	'lexie':'lexie.png',
 	'amprincessfaith' : 'princessfaith.png',
 	'flyingj138' : 'flyin.png',
-	'demondog19' : 'demondog19.png',
+	'demondog19' : 'frontiedemon.png',
 	'pillowisp':'pillow.png',
 	'jadedrag' : 'groudon.png',
 	'leaderbjblaze' : 'leaderbjblaze.png',
