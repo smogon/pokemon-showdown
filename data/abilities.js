@@ -859,8 +859,8 @@ exports.BattleAbilities = {
 		num: 119
 	},
 	"furcoat": {
-		desc: "Halves the damage done to the Pokemon by physical attacks.",
-		shortDesc: "Halves the damage done to the Pokemon by physical attacks.",
+		desc: "Halves the damage done to this Pokemon by physical attacks.",
+		shortDesc: "Halves physical damage done to this Pokemon.",
 		onModifyAtkPriority: 6,
 		onSourceModifyAtk: function(atk, attacker, defender, move) {
 			return this.chainModify(0.5);
@@ -872,15 +872,15 @@ exports.BattleAbilities = {
 		gen: 6
 	},
 	"galewings": {
-		desc: "Gives priority to Flying-type moves.",
-		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		desc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		shortDesc: "Gives priority to Flying-type moves.",
 		onModifyPriority: function(priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
 		id: "galewings",
 		name: "Gale Wings",
 		rating: 3.5,
-		num: -7,
+		num: -6,
 		gen: 6
 	},
 	"gluttony": {
@@ -892,16 +892,25 @@ exports.BattleAbilities = {
 		num: 82
 	},
 	"gooey": {
-		// TODO: Better descriptions
-		desc: "Contact with the Pokémon lowers the attacker's Speed stat.",
-		shortDesc: "Contact with the Pokémon lowers the attacker's Speed stat.",
+		desc: "Contact with this Pokemon lowers the attacker's Speed stat by 1.",
+		shortDesc: "Contact with this Pokemon lowers the attacker's Speed.",
 		onAfterDamage: function(damage, target, source, effect) {
 			if (effect && effect.isContact) this.boost({spe: -1}, source, target);
 		},
 		id: "gooey",
 		name: "Gooey",
 		rating: 3.5,
-		num: -10,
+		num: -6,
+		gen: 6
+	},
+	"grasspelt": {
+		desc: "This Pokemon's Defense is boosted in Grassy Terrain",
+		shortDesc: "This Pokemon's Defense is boosted in Grassy Terrain.",
+		//todo
+		id: "grasspelt",
+		name: "Grass Pelt",
+		rating: 2,
+		num: -6,
 		gen: 6
 	},
 	"guts": {
