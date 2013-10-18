@@ -290,6 +290,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 80
 	},
+	powergem: {
+		inherit: true,
+		basePower: 70
+	},
 	rocktomb: {
 		inherit: true,
 		accuracy: 80,
@@ -332,6 +336,14 @@ exports.BattleMovedex = {
 	sweetkiss: {
 		inherit: true,
 		type: "Normal"
+	},
+	swordsdance: {
+		inherit: true,
+		pp: 30
+	},
+	synchronoise: {
+		inherit: true,
+		basePower: 70
 	},
 	thief: {
 		inherit: true,

@@ -9377,7 +9377,7 @@ exports.BattleMovedex = {
 	"powergem": {
 		num: 408,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 80,
 		category: "Special",
 		desc: "Deals damage to one adjacent target.",
 		shortDesc: "No additional effect.",
@@ -13040,7 +13040,7 @@ exports.BattleMovedex = {
 		id: "swordsdance",
 		isViable: true,
 		name: "Swords Dance",
-		pp: 30,
+		pp: 20,
 		priority: 0,
 		isSnatchable: true,
 		boosts: {
@@ -13053,7 +13053,7 @@ exports.BattleMovedex = {
 	"synchronoise": {
 		num: 485,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 120,
 		category: "Special",
 		desc: "Deals damage to all adjacent Pokemon. This move has no effect on targets that do not share a type with the user.",
 		shortDesc: "Hits adjacent Pokemon sharing the user's type.",
