@@ -802,7 +802,7 @@ module.exports = (function () {
 		set.name = set.name || set.species;
 		var name = set.species;
 		if (set.species !== set.name) name = set.name + " ("+set.species+")";
-		var isDW = false;
+		var isHidden = false;
 		var lsetData = {set:set, format:format};
 
 		var setHas = {};
@@ -857,18 +857,18 @@ module.exports = (function () {
 					problems.push(name+" needs to have an ability.");
 				} else if (ability.name !== template.abilities['0'] &&
 					ability.name !== template.abilities['1'] &&
-					ability.name !== template.abilities['DW']) {
+					ability.name !== template.abilities['H']) {
 					problems.push(name+" can't have "+set.ability+".");
 				}
-				if (ability.name === template.abilities['DW']) {
-					isDW = true;
+				if (ability.name === template.abilities['H']) {
+					isHidden = true;
 
-					if (!template.dreamWorldRelease && banlistTable['Unreleased']) {
-						problems.push(name+"'s Dream World ability is unreleased.");
-					} else if (set.level < 10 && (template.maleOnlyDreamWorld || template.gender === 'N')) {
-						problems.push(name+" must be at least level 10 with its DW ability.");
+					if (template.unreleasedHidden && banlistTable['Unreleased']) {
+						problems.push(name+"'s hidden ability is unreleased.");
+					} else if (set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
+						problems.push(name+" must be at least level 10 with its hidden ability.");
 					}
-					if (template.maleOnlyDreamWorld) {
+					if (template.maleOnlyHidden) {
 						set.gender = 'M';
 						lsetData.sources = ['5D'];
 					}
@@ -904,7 +904,7 @@ module.exports = (function () {
 					if (problem) {
 						var problemString = name+" can't learn "+move.name;
 						if (problem.type === 'incompatible') {
-							if (isDW) {
+							if (isHidden) {
 								problemString = problemString.concat(" because it's incompatible with its ability or another move.");
 							} else {
 								problemString = problemString.concat(" because it's incompatible with another move.");
@@ -935,9 +935,9 @@ module.exports = (function () {
 						if (eventData.shiny) {
 							set.shiny = true;
 						}
-						if (eventData.generation < 5) eventData.isDW = false;
-						if (eventData.isDW !== undefined && eventData.isDW !== isDW) {
-							problems.push(name+(isDW?" can't have":" must have")+" its DW ability because it comes from a specific event.");
+						if (eventData.generation < 5) eventData.isHidden = false;
+						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
+							problems.push(name+(isHidden?" can't have":" must have")+" its hidden ability because it comes from a specific event.");
 						}
 						if (eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
 							problems.push(name+" must have "+eventData.abilities.join(" or ")+" because it comes from a specific event.");
@@ -949,12 +949,12 @@ module.exports = (function () {
 							problems.push(name+" must be at least level "+eventData.level+" because it comes from a specific event.");
 						}
 					}
-					isDW = false;
+					isHidden = false;
 				}
 			}
-			if (isDW && template.gender) {
+			if (isHidden && template.gender) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
-					problems.push(name+" has a DW ability - it can't have moves only learned before gen 5.");
+					problems.push(name+" has a hidden ability - it can't have moves only learned before gen 5.");
 				} else if (lsetData.sources) {
 					var compatibleSource = false;
 					for (var i=0,len=lsetData.sources.length; i<len; i++) {
@@ -964,7 +964,7 @@ module.exports = (function () {
 						}
 					}
 					if (!compatibleSource) {
-						problems.push(name+" has moves incompatible with its DW ability.");
+						problems.push(name+" has moves incompatible with its hidden ability.");
 					}
 				}
 			}

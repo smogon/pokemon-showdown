@@ -388,8 +388,8 @@ var BattlePokemon = (function() {
 						// to run it again.
 						continue;
 					}
-					if ((k === 'DW') && !pokemon.template.dreamWorldRelease) {
-						// unreleased dream world ability
+					if ((k === 'H') && pokemon.template.unreleasedHidden) {
+						// unreleased hidden ability
 						continue;
 					}
 					this.battle.singleEvent('FoeMaybeTrapPokemon',
