@@ -572,13 +572,13 @@ exports.BattleScripts = {
 
 			//random gender--already handled by PS?
 
-			//random ability (unreleased DW are par for the course)
+			//random ability (unreleased hidden are par for the course)
 			var abilities = [template.abilities['0']];
 			if (template.abilities['1']) {
 				abilities.push(template.abilities['1']);
 			}
-			if (template.abilities['DW']) {
-				abilities.push(template.abilities['DW']);
+			if (template.abilities['H']) {
+				abilities.push(template.abilities['H']);
 			}
 			var ability = abilities.sample();
 
@@ -1148,8 +1148,8 @@ exports.BattleScripts = {
 			if (template.abilities['1']) {
 				abilities.push(template.abilities['1']);
 			}
-			if (template.abilities['DW']) {
-				abilities.push(template.abilities['DW']);
+			if (template.abilities['H']) {
+				abilities.push(template.abilities['H']);
 			}
 			abilities.sort(function(a,b){
 				return this.getAbility(b).rating - this.getAbility(a).rating;
