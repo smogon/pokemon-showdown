@@ -2607,7 +2607,7 @@ var commands = exports.commands = {
 		}
 	},
 
-	/*afk: 'away',
+	afk: 'away',
 	away: function(target, room, user, connection) {
 		if (!this.can('lock')) return false;
 
@@ -2655,7 +2655,7 @@ var commands = exports.commands = {
 		}
 
 		user.updateIdentity();
-	}, */
+	}, 
 
 	customavatar: function(target, room, user, connection) {
 		if (!this.can('customavatars')) return false;
