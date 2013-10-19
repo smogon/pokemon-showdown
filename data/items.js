@@ -4003,6 +4003,19 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Holder's Water-type attacks have 1.2x power."
 	},
+	"weaknesspolicy": {
+		id: "weaknesspolicy",
+		name: "Weakness Policy",
+		spritenum: 0,
+		onHit: function(target, source, move) {
+			if (this.getEffectiveness(move.type, target) > 0 && target.useItem()) {
+				this.boost({atk: 2, spa: 2});
+			}
+		},
+		num: -6,
+		gen: 6,
+		desc: "Attack and Sp. Atk sharply increase when hit super effectively. Single use."
+	},
 	"wepearberry": {
 		id: "wepearberry",
 		name: "Wepear Berry",
