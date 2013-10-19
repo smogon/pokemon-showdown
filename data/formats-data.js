@@ -3134,6 +3134,7 @@ exports.BattleFormatsData = {
 	},
 	arceusfairy: {
 		requiredItem: "Pixie Plate",
+		gen: 6,
 		tier: "Limbo"
 	},
 	arceusfighting: {
