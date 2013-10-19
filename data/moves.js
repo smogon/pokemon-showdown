@@ -821,7 +821,11 @@ exports.BattleMovedex = {
 		name: "Belch",
 		pp: 10,
 		priority: 0,
-		//todo
+		onTryHit: function(target, pokemon) {
+			if (!pokemon.lastItem || !this.getItem(pokemon.lastItem).isBerry) {
+				return false;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Poison"
