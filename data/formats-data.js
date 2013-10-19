@@ -430,6 +430,9 @@ exports.BattleFormatsData = {
 	},
 	politoed: {
 		viableMoves: {"scald":1,"hypnosis":1,"toxic":1,"encore":1,"perishsong":1,"protect":1,"icebeam":1,"focusblast":1,"surf":1,"hydropump":1,"hiddenpowergrass":1},
+		eventPokemon: [
+			{"generation":5,"level":50,"gender":"M","nature":"Calm","isHidden":true,"moves":["scald","icebeam","perishsong","protect"],"pokeball":"cherishball"}
+		],
 		tier: "OU"
 	},
 	abra: {
@@ -801,7 +804,8 @@ exports.BattleFormatsData = {
 	kingdra: {
 		viableMoves: {"hydropump":1,"icebeam":1,"dragondance":1,"substitute":1,"outrage":1,"dracometeor":1,"waterfall":1,"rest":1,"sleeptalk":1},
 		eventPokemon: [
-			{"generation":3,"level":50,"moves":["leer","watergun","twister","agility"]}
+			{"generation":3,"level":50,"moves":["leer","watergun","twister","agility"]},
+			{"generation":5,"level":50,"gender":"M","nature":"Timid","isHidden":false,"abilities":["swiftswim"],"moves":["dracometeor","muddywater","dragonpulse","protect"],"pokeball":"cherishball"}
 		],
 		tier: "UU"
 	},
@@ -1706,7 +1710,8 @@ exports.BattleFormatsData = {
 		viableMoves: {"fireblast":1,"protect":1,"batonpass":1,"substitute":1,"hiddenpowergrass":1},
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["scratch","growl","focusenergy","ember"]},
-			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["scratch","growl","focusenergy","ember"]}
+			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["scratch","growl","focusenergy","ember"]},
+			{"generation":6,"level":10,"gender":"M","isHidden":true,"moves":["scratch","growl","focusenergy","ember"],"pokeball":"cherishball"}
 		],
 		tier: "LC"
 	},
