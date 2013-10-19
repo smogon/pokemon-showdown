@@ -2125,6 +2125,22 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Holder cures itself if it is confused or has a major status problem. Single use."
 	},
+	"luminousmoss": {
+		id: "luminousmoss",
+		name: "Luminous Moss",
+		spritenum: 0,
+		fling: {
+			basePower: 30
+		},
+		onAfterDamage: function(damage, target, source, move) {
+			if (move.type === 'Water' && target.useItem()) {
+				this.boost({spd: 1});
+			}
+		},
+		num: -6,
+		gen: 6,
+		desc: "Raises Special Defense by 1 if hit by a Water-type attack. Single use."
+	},
 	"lureball": {
 		id: "lureball",
 		name: "Lure Ball",
