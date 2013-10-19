@@ -7687,13 +7687,13 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user protects itself and its allies from damaging moves. Priority +4.",
-		shortDesc: "Protects the user and allies from damaging moves.",
+		desc: "The user protects itself and its allies from damaging moves. Fails unless it is the user's first turn on the field.",
+		shortDesc: "Protects the user and allies from damaging moves. First turn out only.",
 		id: "matblock",
 		isViable: true,
 		name: "Mat Block",
 		pp: 15,
-		priority: 4,
+		priority: 0,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
 		onTryHit: function(target, source, move) {
