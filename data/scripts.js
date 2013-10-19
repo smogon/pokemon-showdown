@@ -477,6 +477,26 @@ exports.BattleScripts = {
 		}
 		return damage;
 	},
+
+	runMegaEvo: function(pokemon) {
+		var side = pokemon.side;
+		var item = this.getItem(pokemon.item);
+		if (!item.megaStone) return false;
+		if (side.megaEvo) return false;
+		var template = this.getTemplate(item.megaStone);
+		if (!template.isMega) return false;
+		if (pokemon.baseTemplate.species !== template.baseSpecies) return false;
+
+		// okay, mega evolution is possible
+		this.add('-formechange', pokemon, template.species);
+		this.add('message', template.baseSpecies+" mega-evolved into "+template.species+"!");
+		pokemon.formeChange(template);
+		pokemon.baseTemplate = template; // mega evolution is permanent :o
+
+		side.megaEvo = 1;
+		return true;
+	},
+
 	isAdjacent: function(pokemon1, pokemon2) {
 		if (!pokemon1.fainted && !pokemon2.fainted && pokemon2.position !== pokemon1.position && Math.abs(pokemon2.position-pokemon1.position) <= 1) {
 			return true;
