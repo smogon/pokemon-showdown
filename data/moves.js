@@ -14036,7 +14036,12 @@ exports.BattleMovedex = {
 		name: "Venom Drench",
 		pp: 20,
 		priority: 0,
-		//todo
+		onHit: function(target, source, move) {
+			if (target.status === 'psn' || target.status === 'tox') {
+				return this.boost({atk:-1, spa:-1, spe:-1}, target, source, move);
+			}
+			return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Poison"
