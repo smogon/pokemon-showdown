@@ -775,6 +775,7 @@ module.exports = (function () {
 		}
 
 		var template = this.getTemplate(string(set.species));
+		if (template.isMega) template = this.getTemplate(template.baseSpecies);
 		if (!template.exists) {
 			return ["The Pokemon '"+set.species+"' does not exist."];
 		}
