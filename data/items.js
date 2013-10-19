@@ -3515,6 +3515,22 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Holder's use of Sandstorm lasts 8 turns instead of 5."
 	},
+	"snowball": {
+		id: "snowball",
+		name: "Snowball",
+		spritenum: 0,
+		fling: {
+			basePower: 30
+		},
+		onAfterDamage: function(damage, target, source, move) {
+			if (move.type === 'Ice' && target.useItem()) {
+				this.boost({atk: 1});
+			}
+		},
+		num: -6,
+		gen: 6,
+		desc: "Raises Attack by 1 if hit by an Ice-type attack. Single use."
+	},
 	"softsand": {
 		id: "softsand",
 		name: "Soft Sand",
