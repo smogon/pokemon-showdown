@@ -397,6 +397,7 @@ exports.customavatars = {
 	'gymladerstar' : 'ninec.png',
 	'lastbreathe' : 'aqua.png',
 	'championzilar' : 'scizor.png',
+	'e4shirayuri' : 'irelia.png',
 	'elite4monocle' : 'gymleadermonocle.png',
 	'ksashaka' : 'bre.png',
 	'gymleaderspheal' : 'whim.png',
