@@ -1449,12 +1449,12 @@ var commands = exports.commands = {
 	
 	mastersofthecolor: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><b><h2>These are our current Masters of the <font color="red">C<font color="blue">o<font color="pink">l<font color="purple">o<font color="green">r<font color="brown">!</h2></b></center><br \>' +
-		'<font color="blue"><b>Blue</b></font color>: twizzy (3rd time in a row)<br \>' + 
-		'<font color="red"><b>Red</b></font color>: E four Flint<br \>' +
-		'<font color="green"><b>Green</b></font color>: KipperSkipper<br \>' +
-		'<font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>: oSynthesizeo<br \>' +
-		'<font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: ELITE4fail')
+		this.sendReplyBox('<center><b><h2>These are our current Masters of the <font color="red">C<font color="blue">o<font color="pink">l<font color="purple">o<font color="green">r<font color="brown">!</h2></b></center><hr /><br \>' +
+		'<h3><font color="blue"><b>Blue</b></font color>: twizzy (3rd time in a row)</h3><img src="http://i.imgur.com/wrJLTzT.png"><br \>' + 
+		'<h3><font color="red"><b>Red</b></font color>: E four Flint</h3><img src="http://i.imgur.com/wrJLTzT.png"><br \>' +
+		'<h3><font color="green"><b>Green</b></font color>: KipperSkipper</h3><img src="http://i.imgur.com/wrJLTzT.png"><br \>' +
+		'<h3><font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>: oSynthesizeo</h3><img src="http://i.imgur.com/wrJLTzT.png"><br \>' +
+		'<h3><font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: ELITE4fail</h3><img src="http://i.imgur.com/wrJLTzT.png">')
 	},
 
 	biblialeague: function(target, room, user) {
