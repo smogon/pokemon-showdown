@@ -2674,14 +2674,14 @@ var commands = exports.commands = {
 		if (!target) return false;
 		var name = '';
 
-		for (var i in room.users){
-			if (room.users[i].group === target) {
-				name = name + room.users[i].name + ', ';
+		for (var i in Users.users){
+			if (Users.users[i].group === target) {
+				name = name + Users.users[i].name + ', ';
 			}
 		}
-		if (!name) return this.sendReply('There are no users of the rank ' + target + ' in this room.');
+		if (!name) return this.sendReply('There are no users of the rank ' + target);
 
-		this.sendReply('Users of rank ' + target + ' in this room:');
+		this.sendReply('Users of rank ' + target + );
 		this.sendReply(name);
 	},
 
@@ -2722,9 +2722,9 @@ var commands = exports.commands = {
 
 		var pmName = '~Frost PM [Do not reply]';
 
-		for (var i in room.users) {
-			var message = '|pm|'+pmName+'|'+room.users[i].getIdentity()+'|'+target;
-			room.users[i].send(message);
+		for (var i in Users.users) {
+			var message = '|pm|'+pmName+'|'+Users.users[i].getIdentity()+'|'+target;
+			Users.users[i].send(message);
 		}
 	},
 
