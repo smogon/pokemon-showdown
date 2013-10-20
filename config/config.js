@@ -385,6 +385,7 @@ exports.customavatars = {
 	'ghostkirby29' : 'kirbs.png',
 	'amakute' : 'Male-072.png',
 	'elite4hammer' : '3.png',
+	'panpawn' : 'panpawn.png',
 	'superjeenius' : 'bidoof.png', 
 	'senzaitekina' : 'wes.png',
 	'gymlederyanmega' : 'gymlederyanmega.png',
