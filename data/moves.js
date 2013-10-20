@@ -2359,21 +2359,26 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers one adjacent target's evasion by 1 stage. Whether or not the target's evasion was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, and Stealth Rock end for the target's side. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute, although a Substitute will still block the evasion lowering.",
-		shortDesc: "Removes target's hazards, lowers evasion by 1.",
+		desc: "Lowers one adjacent target's evasion by 1 stage. Whether or not the target's evasion was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the user's and the target's sides. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute, although a Substitute will still block the evasion lowering.",
+		shortDesc: "Removes hazards from both sides, lowers target's evasion by 1.",
 		id: "defog",
 		name: "Defog",
 		pp: 15,
 		priority: 0,
 		isBounceable: true,
-		onHit: function(pokemon) {
-			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
-			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
-					for (var i in sideConditions) {
-						if (pokemon.side.removeSideCondition(i)) {
-							this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+pokemon);
-						}
-					}
+		onHit: function(target, source) {
+			if (!target.volatiles['substitute']) this.boost({evasion:-1});
+			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
+			for (var i in sideConditions) {
+				if (target.side.removeSideCondition(i)) {
+					this.add('-sideend', target.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+target);
+				}
+			}
+			for (var i in sideConditions) {
+				if (source.side.removeSideCondition(i)) {
+					this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+source);
+				}
+			}
 		},
 		secondary: false,
 		target: "normal",
