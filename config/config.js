@@ -248,6 +248,7 @@ exports.customavatars = {
 	'shirotagachi' : 'shirotagachi.png',
 	'thefuckinbest' : 'sly.png',
 	'se7enadminbomber' : 'bomber.png',
+	'goyimelite4chef' : 'goyimelite4chef.png',
 	'chespintheknight' : 'ches.png',
 	'whythehate' : 'snorlax.png',
 	'onlylove':'onlylove.gif',
