@@ -13677,7 +13677,6 @@ exports.BattleMovedex = {
 			if (!pokemon.transformInto(target, pokemon)) {
 				return false;
 			}
-			this.add('-transform', pokemon, target);
 		},
 		secondary: false,
 		target: "normal",

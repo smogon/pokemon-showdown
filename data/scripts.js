@@ -492,6 +492,7 @@ exports.BattleScripts = {
 		this.add('message', template.baseSpecies+" mega-evolved into "+template.species+"!");
 		pokemon.formeChange(template);
 		pokemon.baseTemplate = template; // mega evolution is permanent :o
+		pokemon.setAbility(template.abilities['0']);
 
 		side.megaEvo = 1;
 		return true;

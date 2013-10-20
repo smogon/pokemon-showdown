@@ -639,7 +639,6 @@ var BattlePokemon = (function() {
 		for (var statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
 		}
-		this.ability = pokemon.ability;
 		this.moveset = [];
 		this.moves = [];
 		this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
@@ -665,6 +664,8 @@ var BattlePokemon = (function() {
 		for (var j in pokemon.boosts) {
 			this.boosts[j] = pokemon.boosts[j];
 		}
+		this.battle.add('-transform', this, pokemon);
+		this.setAbility(pokemon.ability);
 		this.update();
 		return true;
 	};
