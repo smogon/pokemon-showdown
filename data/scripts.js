@@ -1518,12 +1518,18 @@ exports.BattleScripts = {
 		if ('Rule:potd' in this.getFormat().banlistTable) {
 			potd = this.getTemplate(config.potd);
 		}
-
+		
+		var typeWeaknesses = {}
+		for(var t in this.data.TypeChart) {
+			typeWeaknesses[t] = 0;
+		}
 		var typeCount = {};
 		var typeComboCount = {};
 		var uberCount = 0;
 		var nuCount = 0;
 
+		var weather = "";
+		
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
 			if (!template || !template.name || !template.types) continue;
@@ -1570,15 +1576,103 @@ exports.BattleScripts = {
 			}
 
 			var set = this.randomSet(template, i);
-
+			
+			var setAbility = set.ability;
 			// Limit 1 of any type combination
 			var typeCombo = types.join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
-				// Drought and Drizzle don't count towards the type combo limit
-				typeCombo = set.ability;
-			}
+			if (setAbility === 'Drought' || setAbility === 'Drizzle' || setAbility === 'Sand Stream' || setAbility === 'Snow Warning') {
+				// Weather doesn't count towards any limits on type combinations
+				typeCombo = setAbility;
+		   }
 			if (typeCombo in typeComboCount) continue;
 
+			// Limit number of Pokemon weak to any one type.
+			// In essence, what this does is it allocates "points" on a per-type basis.
+			// Pokemon weak to a type will get positive points in that type, Pokemon that resist get negative points.
+			// Pokemon which are 4x weak to something get 2 points for that type, Pokemon that 4x resist get -2.
+			// Pokemon which are immune to a type (except Shedinja) get -3 for that type.
+			// If a type gets too many points (too many Pokemon are weak or not enough resist), the Pokemon which caused the excess is removed.
+			if (setAbility !== 'Imposter') {
+				var typeCache = {};
+				for(var t in typeWeaknesses) {
+					// Don't check Dragon, otherwise every team with a Dragon-type would be forced to also have a Steel-type.
+					// If Gen VI comes about and the rumors are true that Fairies are immune to Dragon, this should be removed.
+					if (t === 'Dragon') continue;
+					var immune = false;
+					if (!this.getImmunity(t, template)) {
+						immune = true;
+					} else if (setAbility === 'Levitate' && t === 'Ground') {
+						immune = true;
+					} else if (setAbility === 'Flash Fire' && t === 'Fire') {
+						immune = true;
+					} else if ((setAbility === 'Dry Skin' || setAbility === 'Water Absorb' || setAbility === 'Storm Drain') && t === 'Water') {
+						immune = true;
+					} else if (setAbility === 'Sap Sipper' && t === 'Grass') {
+						immune = true;
+					} else if ((setAbility === 'Lightningrod' || setAbility === 'Volt Absorb' || setAbility === 'Motor Drive') && t === 'Electric') {
+						immune = true;
+					} else if (setAbility === 'Wonder Guard') {
+						var effectiveness = this.getEffectiveness(t, template);
+						if (effectiveness > 0) {
+							typeWeaknesses[t]++;
+						} else {
+							if (template.name === 'Shedinja') {
+								// Sheddy's 1 HP means he dies a lot, and so his immunity shouldn't be weighted so highly.
+								typeWeaknesses[t]--;
+								typeCache[t] = -1;
+								continue;
+							} else {
+								// In the event Wonder Guard is ever used on anyone else for some reason:
+								immune = true;
+							}
+						}
+					}
+					if (immune) {
+						// Immune Pokemon can save 2 teammates who are 2x weak or 1 teammate who is 4x weak
+						typeWeaknesses[t] -= 2;
+						typeCache[t] = -2;
+						continue;
+					}
+					
+					var effectiveness = this.getEffectiveness(t, template);
+					// Air Balloons only work once, so while they provide a plus, it isn't a "true" immunity:
+					if ((t === 'Ground' && set.item === 'Air Balloon') || (t === 'Ice' && set.item === 'Yache Berry')) effectiveness /= 2;
+					if (setAbility === 'Solid Rock' && effectiveness > 0) effectiveness *= 0.75;
+					if (weather === 'Drought') {
+						if (t === 'Fire') effectiveness *= 1.5;
+						if (t === 'Water') effectiveness *= 0.75;
+					} else if (weather === 'Drizzle') {
+						if (t === 'Fire') effectiveness *= 0.75;
+						if (t === 'Water') effectiveness *= 1.5;
+					}
+					typeCache[t] = effectiveness;
+					typeWeaknesses[t] += effectiveness;
+					if (i === 0 || (potd && potd.name && potd.types && i === 1)) continue;
+					if (weather === 'Drought') {
+						if(setAbility === 'Chlorophyll' || setAbility === 'Solar Power' || setAbility === 'Flower Gift' || setAbility === 'Leaf Guard') continue;
+					} else if (weather === 'Drizzle') {
+						if (setAbility === 'Swift Swim' || setAbility === 'Rain Dish' || setAbility === 'Hydration') continue;
+					} else if (weather === 'Sand Stream') {
+						if (setAbility === 'Sand Force' || setAbility === 'Sand Rush' || setAbility === 'Sand Veil') continue;
+					} else if (weather === 'Snow Warning') {
+						if (setAbility === 'Snow Cloak' || setAbility === 'Ice Body') continue;
+					}
+					// Change what this is compared to in order to make this more / less strict
+					// 0 means every weakness must be matched by a resistance, it likes to favor Spiritomb/Sableye/Eelektross
+					// 1 allows a 2x effectiveness deficit or below, usually rejects 4 - 8 Pokemon per side and produces realistic but less random teams
+					// 2 allows a 4x effectiveness deficit or below, usually rejects 0 - 3 Pokemon per side and produces fairly decent random teams
+					if (typeWeaknesses[t] > 1) {
+						skip = true;
+						for (var c in typeCache) {
+							// Undo everything:
+							typeWeaknesses[c] -= typeCache[c];
+						}
+						break;
+					}
+				}
+			}
+			if (skip) continue;
+			
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
@@ -1592,6 +1686,7 @@ exports.BattleScripts = {
 				}
 			}
 			typeComboCount[typeCombo] = 1;
+			if (typeCombo === 'Drought' || typeCombo === 'Drizzle' || typeCombo === 'Sand Stream' || typeCombo === 'Snow Warning') weather = typeCombo;
 			// Increment Uber/NU counter:
 			if (tier === 'Uber') {
 				uberCount++;
