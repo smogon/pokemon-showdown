@@ -1450,11 +1450,11 @@ var commands = exports.commands = {
 	mastersofthecolor: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><b><h2>These are our current Masters of the <font color="red">C<font color="blue">o<font color="pink">l<font color="purple">o<font color="green">r<font color="brown">!</h2></b></center><hr /><br \>' +
-		'<h3><font color="blue"><b>Blue</b></font color>: twizzy (3rd time in a row)</h3><br \>' + 
-		'<h3><font color="red"><b>Red</b></font color>: E four Flint</h3><br \>' +
-		'<h3><font color="green"><b>Green</b></font color>: KipperSkipper</h3><br \>' +
-		'<h3><font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>: oSynthesizeo</h3><br \>' +
-		'<h3><font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: ELITE4fail</h3>')
+		'<h3><font color="blue"><b>Blue</b></font color>: Leader Koyu?<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/425.gif"></h3><br \>' + 
+		'<h3><font color="red"><b>Red</b></font color>: Egyptian<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/558.gif"></h3><br \>' +
+		'<h3><font color="green"><b>Green</b></font color>: Nunuchu42<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/635.gif"></h3><br \>' +
+		'<h3><font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>: Hazo<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/065.gif"></h3><br \>' +
+		'<h3><font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: ELITE4fail (2nd time in a row)<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/385.gif"></h3>')
 	},
 
 	biblialeague: function(target, room, user) {
