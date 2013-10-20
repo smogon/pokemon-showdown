@@ -1572,32 +1572,6 @@ exports.rooms = rooms;
 exports.global = rooms.global;
 exports.lobby = rooms.lobby;
 //Check for inactive rooms once an hour, automatically delete them if they remain inactive for 48 hours.
-var cronJob = require('cron').CronJob;
-new cronJob('0 0 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *', function(){
-	for (var u in Rooms.rooms) {
-		if (Rooms.rooms[u].type === "chat") {
-			if (Rooms.rooms[u].inactiveCount == 0) Rooms.rooms[u].descbackup = Rooms.rooms[u].desc;
-			if (Rooms.rooms[u].messageCount < 50) {
-				if (Rooms.rooms[u].id != "lobby" && Rooms.rooms[u].id != "staff" && Rooms.rooms[u].id != "spamroom" && Rooms.rooms[u].id != "leaguehub" && Rooms.rooms[u].id != "logroom" && Rooms.rooms[u].id != "jd" && Rooms.rooms[u].id != "secret" && Rooms.rooms[u].id != "cosyloveden" && Rooms.rooms[u].id != "tournaments2"&& Rooms.rooms[u].id != "pinkpurple"&& Rooms.rooms[u].id != "yellowbrown"&& Rooms.rooms[u].id != "green"&& Rooms.rooms[u].id != "blue"&& Rooms.rooms[u].id != "red"&& Rooms.rooms[u].id != "battleoftheleagues") {
-					if (Rooms.rooms[u].active) Rooms.rooms[u].desc = '(INACTIVE) ' + Rooms.rooms[u].desc;
-					Rooms.rooms[u].active = false;
-					Rooms.rooms[u].inactiveCount++
-				}
-			}
-			if (Rooms.rooms[u].messageCount > 50) {
-				Rooms.rooms[u].active = true;
-				Rooms.rooms[u].desc = Rooms.rooms[u].descbackup;
-				Rooms.rooms[u].inactiveCount = 0;
-			}
-			if (Rooms.rooms[u].inactiveCount > 0) {
-				Rooms.rooms[u].add('|raw|<font color=red><b>Inactivity count is now at ' + Rooms.rooms[u].inactiveCount + '. Upon reaching 48 this room will automatically be deleted.</b></font>');
-			}
-			if (Rooms.rooms[u].inactiveCount > 48) {
-				Rooms.rooms[u].add('|raw|<font color=red><b>This room will automatically be deleted upon the next server restart due to inactivity.</b></font>');
-				Rooms.rooms[u].isPrivate = true;
-				Rooms.global.deregisterChatRoom(Rooms.rooms[u].id);
-			}	
-		}
-	}
+
 	//Rooms.rooms.logroom.add('Updating inactive rooms list.');
 }, null, true, "Canada/Atlantic");
