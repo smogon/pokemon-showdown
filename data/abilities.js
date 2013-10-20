@@ -1129,8 +1129,8 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon copies the foe it's facing; stats, moves, types, Ability.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.active[pokemon.side.foe.active.length-1-pokemon.position];
-			if (target && pokemon.transformInto(target, pokemon)) {
-				this.add('-transform', pokemon, target);
+			if (target) {
+				pokemon.transformInto(target, pokemon);
 			}
 		},
 		id: "imposter",
