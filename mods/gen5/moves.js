@@ -310,6 +310,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 70
 	},
+	roar: {
+		inherit: true,
+		isNotProtectable: false
+	},
 	rocktomb: {
 		inherit: true,
 		accuracy: 80,
@@ -389,6 +393,10 @@ exports.BattleMovedex = {
 			}
 			return 50;
 		}
+	},
+	whirlwind: {
+		inherit: true,
+		isNotProtectable: false
 	},
 	willowisp: {
 		inherit: true,
