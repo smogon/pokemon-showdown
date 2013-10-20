@@ -458,6 +458,7 @@ exports.customavatars = {
 	'frankentein' : 'steinuser82819283.png',
 	'e4sly' : 'e4sly.png',
 	'bibliaspulse' : 'pulse.png',
+	'hulasaur' : 'snikcerpbiser.png',
 	'zeppy' : 'zeppy.png',
 	'frontierakash' : 'akash.png',
 	'piiiikachuuu':'pika.png',
