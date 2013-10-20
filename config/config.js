@@ -333,7 +333,7 @@ exports.customavatars = {
 	'skyleaderfable' : 'th19c.png',
 	'kellin' : 'tran.png',
 	'elite4darrelde' : 'elite4darrelde.png',
-	'absolutelyemily' : 'abs.png',
+	'absolutelyemily' : 'emely.png',
 	'gymleaderreck' : 'gal.png',
 	'v4insanity' : 'wev.png',
 	'gymleaderdrag' : 'gh.png',
