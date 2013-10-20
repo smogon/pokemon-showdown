@@ -1450,11 +1450,11 @@ var commands = exports.commands = {
 	mastersofthecolor: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><b><h2>These are our current Masters of the <font color="red">C<font color="blue">o<font color="pink">l<font color="purple">o<font color="green">r<font color="brown">!</h2></b></center><hr /><br \>' +
-		'<h3><font color="blue"><b>Blue</b></font color>: twizzy (3rd time in a row)</h3><img src="http://i.imgur.com/wrJLTzT.png" height="10"><br \>' + 
-		'<h3><font color="red"><b>Red</b></font color>: E four Flint</h3><img src="http://i.imgur.com/wrJLTzT.png" height="10"><br \>' +
-		'<h3><font color="green"><b>Green</b></font color>: KipperSkipper</h3><img src="http://i.imgur.com/wrJLTzT.png" height="10"><br \>' +
-		'<h3><font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>: oSynthesizeo</h3><img src="http://i.imgur.com/wrJLTzT.png" height="10"><br \>' +
-		'<h3><font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: ELITE4fail</h3><img src="http://i.imgur.com/wrJLTzT.png" height="10">')
+		'<h3><font color="blue"><b>Blue</b></font color>: twizzy (3rd time in a row)</h3><img src="http://i.imgur.com/wrJLTzT.png" height="50"><br \>' + 
+		'<h3><font color="red"><b>Red</b></font color>: E four Flint</h3><img src="http://i.imgur.com/wrJLTzT.png" height="50"><br \>' +
+		'<h3><font color="green"><b>Green</b></font color>: KipperSkipper</h3><img src="http://i.imgur.com/wrJLTzT.png" height="50"><br \>' +
+		'<h3><font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>: oSynthesizeo</h3><img src="http://i.imgur.com/wrJLTzT.png" height="50"><br \>' +
+		'<h3><font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: ELITE4fail</h3><img src="http://i.imgur.com/wrJLTzT.png" height="50">')
 	},
 
 	biblialeague: function(target, room, user) {
