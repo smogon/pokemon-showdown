@@ -453,6 +453,7 @@ exports.customavatars = {
 	'tachikaze' : 'tachikaze.png',
 	'cosy' : 'cosy.png',
 	'prez' : 'cosysprite.png',
+	'robin6539' : 'robin6539.png',
 	'figufgyu' : 'figufgyu.png',
 	'akeino' : 'akeino.png',
 	'frankentein' : 'steinuser82819283.png',
