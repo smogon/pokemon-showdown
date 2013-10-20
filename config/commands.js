@@ -1449,7 +1449,7 @@ var commands = exports.commands = {
 	
 	mastersofthecolor: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('These are our current Masters of the Color!<br \>' +
+		this.sendReplyBox('<center><b><h2>These are our current Masters of the <font color="red">C<font color="blue">o<font color="pink">l<font color="purple">o<font color="green">r<font color="brown">!</h2></b></center><br \>' +
 		'<font color="blue"><b>Blue</b></font color>: twizzy (3rd time in a row)<br \>' + 
 		'<font color="red"><b>Red</b></font color>: E four Flint<br \>' +
 		'<font color="green"><b>Green</b></font color>: KipperSkipper<br \>' +
