@@ -4258,9 +4258,15 @@ exports.BattleMovedex = {
 		name: "Flower Shield",
 		pp: 25,
 		priority: 0,
-		//todo
+		onHitField: function(target, source) {
+			for (var i=0; i<this.sides.length; i++) {
+				for (var j=0; j<this.sides[i].active.length; j++) {
+					this.boost({def: 2}, this.sides[i].active[j], source, 'flowershield');
+				}
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "all",
 		type: "Fairy"
 	},
 	"fly": {
