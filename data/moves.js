@@ -7653,9 +7653,15 @@ exports.BattleMovedex = {
 		name: "Magnetic Flux",
 		pp: 20,
 		priority: 0,
-		//todo
+		onHitSide: function(side, source) {
+			for (var p in side.active) {
+				if (side.active[p].ability === 'plus' || side.active[p].ability === 'minun') {
+					this.boost({spd: 1, def: 1}, side.active[p], source, this.getMove('Magnetic Flux'));
+				}
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "allySide",
 		type: "Electric"
 	},
 	"magnetrise": {
