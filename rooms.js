@@ -1571,7 +1571,3 @@ exports.create = newRoom;
 exports.rooms = rooms;
 exports.global = rooms.global;
 exports.lobby = rooms.lobby;
-//Check for inactive rooms once an hour, automatically delete them if they remain inactive for 48 hours.
-
-	//Rooms.rooms.logroom.add('Updating inactive rooms list.');
-}, null, true, "Canada/Atlantic");
