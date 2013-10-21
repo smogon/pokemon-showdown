@@ -906,7 +906,10 @@ exports.BattleAbilities = {
 	"grasspelt": {
 		desc: "This Pokemon's Defense is boosted in Grassy Terrain",
 		shortDesc: "This Pokemon's Defense is boosted in Grassy Terrain.",
-		//todo
+		onModifyDefPriority: 6,
+		onModifyDef: function(pokemon) {
+			if (this.pseudoWeather['grassyterrain']) return this.chainModify(1.5);
+		},
 		id: "grasspelt",
 		name: "Grass Pelt",
 		rating: 2,
