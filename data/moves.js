@@ -6757,7 +6757,18 @@ exports.BattleMovedex = {
 		name: "Ion Deluge",
 		pp: 25,
 		priority: 0,
-		//todo
+		volatileStatus: 'iondeluge',
+		effect: {
+			onStart: function(target) {
+				this.add('-start', target, 'move: Ion Deluge');
+			},
+			onModifyMove: function(move, pokemon) {
+				if (move.type === 'Normal') {
+					move.type = 'Electric';
+					this.debug(move.name + "'s type changed to Electric");
+				}
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Electric"
