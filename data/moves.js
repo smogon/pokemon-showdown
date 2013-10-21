@@ -7655,7 +7655,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHitSide: function(side, source) {
 			for (var p in side.active) {
-				if (side.active[p].ability === 'plus' || side.active[p].ability === 'minun') {
+				if (side.active[p].ability === 'plus' || side.active[p].ability === 'minus') {
 					this.boost({spd: 1, def: 1}, side.active[p], source, this.getMove('Magnetic Flux'));
 				}
 			}
