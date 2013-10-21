@@ -5114,9 +5114,28 @@ exports.BattleMovedex = {
 		name: "Grassy Terrain",
 		pp: 10,
 		priority: 0,
-		//todo
+		onHitField: function(target, source, effect) {
+			if (this.pseudoWeather['grassyterrain']) {
+				this.removePseudoWeather('grassyterrain', source, effect, '[of] '+source);
+			} else {
+				this.addPseudoWeather('grassyterrain', source, effect, '[of] '+source);
+			}
+		},
+		effect: {
+			duration: 5,
+			onStart: function(target, source) {
+				this.add('-fieldstart', 'move: Grassy Terrain', '[of] '+source);
+			},
+			onResidualOrder: 7,
+			onResidual: function(pokemon) {
+				if (pokemon.runImmunity('Ground')) this.heal(pokemon.maxhp / 16);
+			},
+			onEnd: function() {
+				this.add('-fieldend', 'move: Grassy Terrain', '[of] '+this.effectData.source);
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "all",
 		type: "Grass"
 	},
 	"gravity": {
