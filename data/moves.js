@@ -11497,14 +11497,14 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user trades its Ability with one adjacent target. Fails if either the user or the target's Ability is Illusion, Multitype, or Wonder Guard, or if both have the same Ability. Ignores a target's Substitute.",
+		desc: "The user trades its Ability with one adjacent target. Fails if either the user or the target's Ability is Illusion, Multitype, Stance Change, or Wonder Guard, or if both have the same Ability. Ignores a target's Substitute.",
 		shortDesc: "The user and the target trade Abilities.",
 		id: "skillswap",
 		name: "Skill Swap",
 		pp: 10,
 		priority: 0,
 		onTryHit: function(target, source) {
-			var bannedAbilities = {illusion:1, multitype:1, wonderguard:1};
+			var bannedAbilities = {illusion:1, multitype:1, stancechange:1, wonderguard:1};
 			if (bannedAbilities[target.ability] || bannedAbilities[source.ability]) {
 				return false;
 			}
