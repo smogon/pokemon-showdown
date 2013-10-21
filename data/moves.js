@@ -4249,8 +4249,8 @@ exports.BattleMovedex = {
 	"flowershield": {
 		num: -6,
 		gen: 6,
-		accuracy: 100,
-		basePower: 30,
+		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "The user raises the Defense stat of all Grass-type Pokemon in battle.",
 		shortDesc: "Raises Defense by 2 of Grass types in battle.",
@@ -4261,7 +4261,10 @@ exports.BattleMovedex = {
 		onHitField: function(target, source) {
 			for (var i=0; i<this.sides.length; i++) {
 				for (var j=0; j<this.sides[i].active.length; j++) {
-					this.boost({def: 2}, this.sides[i].active[j], source, 'flowershield');
+					if (this.sides[i].active[j].hasType('Grass')) {
+						// Apply the boost from source's Flower Shield if it has Grass type
+						this.boost({def: 2}, this.sides[i].active[j], source, this.getMove('Flower Shield'));
+					}
 				}
 			}
 		},
