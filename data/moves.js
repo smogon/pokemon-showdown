@@ -10820,9 +10820,18 @@ exports.BattleMovedex = {
 		name: "Rototiller",
 		pp: 10,
 		priority: 0,
-		//todo
+		onHitField: function(target, source) {
+			for (var i=0; i<this.sides.length; i++) {
+				for (var j=0; j<this.sides[i].active.length; j++) {
+					if (this.sides[i].active[j].hasType('Grass')) {
+						// Apply the boost from source's Rototiller if it has Grass type
+						this.boost({atk: 1, spa: 1}, this.sides[i].active[j], source, this.getMove('Rototiller'));
+					}
+				}
+			}
+		},
 		secondary: false,
-		target: "normal",
+		target: "all",
 		type: "Ground"
 	},
 	"round": {
