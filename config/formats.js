@@ -659,10 +659,30 @@ exports.Formats = [
 		name: "[Gen 6] Ubers (beta)",
 		section: "Pokémon X/Y",
 
-		searchShow: false,
 		debug: true,
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
 		banlist: [],
+
+		column: 2
+	},
+	{
+		name: "[Gen 6] OU (beta)",
+		section: "Pokémon X/Y",
+
+		debug: true,
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew'],
+
+		column: 2
+	},
+	{
+		name: "[Gen 6] Smogon Doubles (beta)",
+		section: "Pokémon X/Y",
+
+		gameType: 'doubles',
+		debug: true,
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew', 'Dark Void'],
 
 		column: 2
 	},
