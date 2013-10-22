@@ -4,7 +4,7 @@ exports.BattleStatuses = {
 		onSwitchIn: function(target) {
 			this.effectData.time = this.effectData.startTime;
 		}
-	}
+	},
 	partiallytrapped: {
 		inherit: true,
 		onResidual: function(pokemon) {
@@ -17,6 +17,6 @@ exports.BattleStatuses = {
 			} else {
 				this.damage(pokemon.maxhp/16);
 			}
-		},
+		}
 	}
 };
