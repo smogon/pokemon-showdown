@@ -151,45 +151,5 @@ exports.BattlePokedex = {
 	dusclops: {
 		inherit: true,
 		abilities: {0:"Pressure"}
-	},
-	starly: {
-		inherit: true,
-		abilities: {0:"Keen Eye"}
-	},
-	staraptor: {
-		inherit: true,
-		baseStats: {hp:85,atk:120,def:70,spa:50,spd:50,spe:100},
-		abilities: {0:"Intimidate"}
-	},
-	togekiss: {
-		inherit: true,
-		types:["Normal","Flying"],
-		baseStats: {hp:85,atk:50,def:95,spa:120,spd:115,spe:80},
-		abilities: {0:"Hustle",1:"Serene Grace"}
-	},
-	dusknoir: {
-		inherit: true,
-		baseStats: {hp:45,atk:100,def:135,spa:65,spd:135,spe:45},
-		abilities: {0:"Pressure"}
-	},
-	rotomheat: {
-		inherit: true,
-		types: ["Electric", "Ghost"]
-	},
-	rotomwash: {
-		inherit: true,
-		types: ["Electric", "Ghost"]
-	},
-	rotomfrost: {
-		inherit: true,
-		types: ["Electric", "Ghost"]
-	},
-	rotomfan: {
-		inherit: true,
-		types: ["Electric", "Ghost"]
-	},
-	rotommow: {
-		inherit: true,
-		types: ["Electric", "Ghost"]
 	}
 };
