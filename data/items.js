@@ -3334,6 +3334,23 @@ exports.BattleItems = {
 		gen: 1,
 		desc: "A special Poke Ball that is used only in the Safari Zone and Great Marsh."
 	},
+	"safetygoggles": {
+		id: "safetygoggles",
+		name: "Safety Goggles",
+		spritenum: 0,
+		onImmunity: function(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
+		},
+		onTryHit: function(pokemon, target, move) {
+			if (move.isPowder) {
+				this.add('-immune', pokemon, '[msg]', '[from] Safety Goggles');
+				return null;
+			}
+		},
+		num: -8,
+		gen: 6,
+		desc: "Protects the holder from weather-related damage and powder moves."
+	},
 	"salacberry": {
 		id: "salacberry",
 		name: "Salac Berry",
