@@ -511,7 +511,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 70
 	},
-	hijumpkick: {
+	highjumpkick: {
 		inherit: true,
 		basePower: 100,
 		desc: "If this attack misses the target, the user takes half of the damage it would have dealt in recoil damage.",

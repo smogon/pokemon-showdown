@@ -145,7 +145,7 @@ exports.BattleAliases = {
 	"cm": "Calm Mind",
 	"dd": "Dragon Dance",
 	"eq": "Earthquake",
-	"hjk": "Hi Jump Kick",
+	"hjk": "High Jump Kick",
 	"np": "Nasty Plot",
 	"qd": "Quiver Dance",
 	"rocks": "Stealth Rock",
