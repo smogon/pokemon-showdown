@@ -5127,8 +5127,16 @@ exports.BattleMovedex = {
 				this.add('-fieldstart', 'move: Grassy Terrain', '[of] '+source);
 			},
 			onResidualOrder: 7,
-			onResidual: function(pokemon) {
-				if (pokemon.runImmunity('Ground')) this.heal(pokemon.maxhp / 16);
+			onResidual: function(battle) {
+				this.debug('onResidual battle');
+				for (var s in battle.sides) {
+					for (var p in battle.sides[s].active) {
+						if (battle.sides[s].active[p].runImmunity('Ground')) {
+							this.debug('Pokémon is grounded, healing through Grassy Terrain.');
+							this.heal(battle.sides[s].active[p].maxhp / 16, battle.sides[s].active[p], battle.sides[s].active[p]);
+						}
+					}
+				}
 			},
 			onEnd: function() {
 				this.add('-fieldend', 'move: Grassy Terrain', '[of] '+this.effectData.source);
