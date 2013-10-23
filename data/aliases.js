@@ -1,8 +1,4 @@
 exports.BattleAliases = {
-	// temporary: alias new names to old names
-	"highjumpkick": "Hi Jump Kick",
-	"feintattack": "Faint Attack",
-
 	// mega evos
 	"megaabomasnow": "Abomasnow-Mega",
 	"megaabsol": "Absol-Mega",
@@ -145,7 +141,9 @@ exports.BattleAliases = {
 	"cm": "Calm Mind",
 	"dd": "Dragon Dance",
 	"eq": "Earthquake",
+	"faintattack": "Feint Attack",
 	"hjk": "High Jump Kick",
+	"hijumpkick": "High Jump Kick",
 	"np": "Nasty Plot",
 	"qd": "Quiver Dance",
 	"rocks": "Stealth Rock",
