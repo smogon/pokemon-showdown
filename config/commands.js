@@ -283,7 +283,7 @@ var commands = exports.commands = {
 					moves.count = 0;
 				}
 				if (moves.count === 4) {
-					return this.sendReplyBox('Specify a maximum of 4 moves.');
+					return this.sendReply('Specify a maximum of 4 moves.');
 				}
 				moves[target] = 1;
 				moves.count++;
@@ -297,7 +297,7 @@ var commands = exports.commands = {
 					ability.count = 0;
 				}
 				if (ability.count === 1) {
-					return this.sendReplyBox('Specify only one ability.');
+					return this.sendReply('Specify only one ability.');
 				}
 				ability[target] = 1;
 				ability.count++;
@@ -335,7 +335,7 @@ var commands = exports.commands = {
 			}
 			if (target === 'all') {
 				if (this.broadcasting) {
-					return this.sendReplyBox('A search with the parameter "all" cannot be broadcast.')
+					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
 				}
 				showAll = true;
 				continue;
@@ -348,18 +348,18 @@ var commands = exports.commands = {
 						types.count = 0;
 					}
 					if (types.count === 2) {
-						return this.sendReplyBox('Specify a maximum of two types.');
+						return this.sendReply('Specify a maximum of two types.');
 					}
 					types[target] = 1;
 					types.count++;
 					continue;
 				}
 			} else {
-				return this.sendReplyBox('"' + targets[i].trim() + '" could not be found in any of the search categories.');
+				return this.sendReply('"' + targets[i].trim() + '" could not be found in any of the search categories.');
 			}
 		}
 
-		if (showAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br />Try "/help dexsearch" for more information on this command.');
+		if (showAll && count === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
 
 		while (count > 0) {
 			count--;
