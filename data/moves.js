@@ -10069,7 +10069,16 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 3,
 		isPowder: true,
-		volatileStatus: 'followme',
+		volatileStatus: 'ragepowder',
+		effect: {
+			duration: 1,
+			onFoeRedirectTarget: function(target, source, source2, move) {
+				if (!source.hasType('Grass') && this.validTarget(this.effectData.target, source, move.target)) {
+					this.debug("Rage Powder redirected target of move");
+					return this.effectData.target;
+				}
+			}
+		},
 		secondary: false,
 		target: "self",
 		type: "Bug"
