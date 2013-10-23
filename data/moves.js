@@ -2552,7 +2552,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"disarming": {
+	"disarmingvoice": {
 		num: -6,
 		gen: 6,
 		accuracy: true,
@@ -2560,7 +2560,7 @@ exports.BattleMovedex = {
 		category: "Special",
 		desc: "This attack never misses.",
 		shortDesc: "This attack never misses.",
-		id: "disarming",
+		id: "disarmingvoice",
 		name: "Disarming Voice",
 		pp: 15,
 		priority: 0,
