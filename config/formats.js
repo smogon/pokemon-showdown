@@ -687,7 +687,7 @@ exports.Formats = [
 		column: 2
 	},
 	{
-		name: "LC",
+		name: "[Gen 6] LC (beta)",
 		section: "Pokémon X/Y",
 
 		maxLevel: 5,
