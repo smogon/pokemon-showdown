@@ -687,6 +687,17 @@ exports.Formats = [
 		column: 2
 	},
 	{
+		name: "LC",
+		section: "Pokémon X/Y",
+
+		maxLevel: 5,
+		debug: true,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther'],
+
+		column: 2
+	},
+	{
 		name: "[Gen 6] Custom Game",
 		section: "Pokémon X/Y",
 
