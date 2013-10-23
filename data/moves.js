@@ -291,7 +291,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to raise the user's Attack, Defense, Speed, Special Attack, and Special Defense by 1 stage.",
 		shortDesc: "10% chance to boost all stats by 1 (not acc/eva).",
 		id: "ancientpower",
-		name: "AncientPower",
+		name: "Ancient Power",
 		pp: 5,
 		priority: 0,
 		secondary: {
@@ -2807,7 +2807,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 30% chance to paralyze it.",
 		shortDesc: "30% chance to paralyze the target.",
 		id: "dragonbreath",
-		name: "DragonBreath",
+		name: "Dragon Breath",
 		pp: 20,
 		priority: 0,
 		secondary: {
@@ -3046,7 +3046,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 100% chance to confuse it. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "100% chance to confuse the target.",
 		id: "dynamicpunch",
-		name: "DynamicPunch",
+		name: "Dynamic Punch",
 		pp: 5,
 		priority: 0,
 		isContact: true,
@@ -3577,7 +3577,7 @@ exports.BattleMovedex = {
 		shortDesc: "Nearly always goes first.",
 		id: "extremespeed",
 		isViable: true,
-		name: "ExtremeSpeed",
+		name: "Extreme Speed",
 		pp: 5,
 		priority: 2,
 		isContact: true,
@@ -3608,15 +3608,15 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"faintattack": {
+	"feintattack": {
 		num: 185,
 		accuracy: true,
 		basePower: 60,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target and does not check accuracy. Makes contact.",
 		shortDesc: "This move does not check accuracy.",
-		id: "faintattack",
-		name: "Faint Attack",
+		id: "feintattack",
+		name: "Feint Attack",
 		pp: 20,
 		priority: 0,
 		isContact: true,
@@ -5143,7 +5143,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, the evasion of all active Pokemon is 0.6x. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Hi Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, and the Ability Arena Trap can affect Flying-types or Pokemon with the Ability Levitate. Fails if this move is already in effect.",
+		desc: "For 5 turns, the evasion of all active Pokemon is 0.6x. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, and the Ability Arena Trap can affect Flying-types or Pokemon with the Ability Levitate. Fails if this move is already in effect.",
 		shortDesc: "For 5 turns, negates all Ground immunities.",
 		id: "gravity",
 		isViable: true,
@@ -5169,7 +5169,7 @@ exports.BattleMovedex = {
 			onModifyPokemonPriority: 100,
 			onModifyPokemon: function(pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
-				var disabledMoves = {bounce:1, fly:1, hijumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
+				var disabledMoves = {bounce:1, fly:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
 				for (var m in disabledMoves) {
 					pokemon.disabledMoves[m] = true;
 				}
@@ -5189,7 +5189,7 @@ exports.BattleMovedex = {
 				if (applies) this.add('-activate', pokemon, 'Gravity');
 			},
 			onBeforeMove: function(pokemon, target, move) {
-				var disabledMoves = {bounce:1, fly:1, hijumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
+				var disabledMoves = {bounce:1, fly:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
 				if (disabledMoves[move.id]) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
@@ -5891,27 +5891,6 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
-	"hijumpkick": {
-		num: 136,
-		accuracy: 90,
-		basePower: 130,
-		category: "Physical",
-		desc: "Deals damage to one adjacent target. If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Ability Magic Guard are unaffected by crash damage. This move cannot be used while Gravity is in effect. Makes contact.",
-		shortDesc: "User is hurt by 50% of its max HP if it misses.",
-		id: "hijumpkick",
-		isViable: true,
-		name: "Hi Jump Kick",
-		pp: 10,
-		priority: 0,
-		isContact: true,
-		hasCustomRecoil: true,
-		onMoveFail: function(target, source, move) {
-			this.damage(source.maxhp/2, source, source, 'hijumpkick');
-		},
-		secondary: false,
-		target: "normal",
-		type: "Fighting"
-	},
 	"hiddenpower": {
 		num: 237,
 		accuracy: 100,
@@ -6175,6 +6154,27 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Water"
+	},
+	"highjumpkick": {
+		num: 136,
+		accuracy: 90,
+		basePower: 130,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target. If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Ability Magic Guard are unaffected by crash damage. This move cannot be used while Gravity is in effect. Makes contact.",
+		shortDesc: "User is hurt by 50% of its max HP if it misses.",
+		id: "highjumpkick",
+		isViable: true,
+		name: "High Jump Kick",
+		pp: 10,
+		priority: 0,
+		isContact: true,
+		hasCustomRecoil: true,
+		onMoveFail: function(target, source, move) {
+			this.damage(source.maxhp/2, source, source, 'highjumpkick');
+		},
+		secondary: false,
+		target: "normal",
+		type: "Fighting"
 	},
 	"honeclaws": {
 		num: 468,
@@ -10965,7 +10965,7 @@ exports.BattleMovedex = {
 		desc: "Lowers one adjacent target's accuracy by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Lowers the target's accuracy by 1.",
 		id: "sandattack",
-		name: "Sand-Attack",
+		name: "Sand Attack",
 		pp: 15,
 		priority: 0,
 		boosts: {
@@ -13520,7 +13520,7 @@ exports.BattleMovedex = {
 		shortDesc: "10% chance to paralyze the target.",
 		id: "thunderpunch",
 		isViable: true,
-		name: "ThunderPunch",
+		name: "Thunder Punch",
 		pp: 15,
 		priority: 0,
 		isContact: true,
@@ -13540,7 +13540,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to paralyze it.",
 		shortDesc: "10% chance to paralyze the target.",
 		id: "thundershock",
-		name: "ThunderShock",
+		name: "Thunder Shock",
 		pp: 30,
 		priority: 0,
 		secondary: {

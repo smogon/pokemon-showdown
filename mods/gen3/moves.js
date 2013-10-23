@@ -281,7 +281,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		priority: 1
 	},
-	faintattack: {
+	feintattack: {
 		inherit: true,
 		isContact: false
 	},
@@ -387,7 +387,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	hijumpkick: {
+	highjumpkick: {
 		inherit: true,
 		basePower: 85,
 		pp: 20,

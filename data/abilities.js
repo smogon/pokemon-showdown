@@ -346,7 +346,7 @@ exports.BattleAbilities = {
 			move.accuracy *= 1.3;
 		},
 		id: "compoundeyes",
-		name: "Compoundeyes",
+		name: "Compound Eyes",
 		rating: 3.5,
 		num: 14
 	},
@@ -1985,7 +1985,7 @@ exports.BattleAbilities = {
 		num: 155
 	},
 	"reckless": {
-		desc: "When this Pokemon uses an attack that causes recoil damage, or an attack that has a chance to cause recoil damage such as Jump Kick and Hi Jump Kick, the attacks's power receives a 20% boost.",
+		desc: "When this Pokemon uses an attack that causes recoil damage, or an attack that has a chance to cause recoil damage such as Jump Kick and High Jump Kick, the attacks's power receives a 20% boost.",
 		shortDesc: "This Pokemon's attacks with recoil or crash damage do 1.2x damage; not Struggle.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
@@ -2045,7 +2045,7 @@ exports.BattleAbilities = {
 		num: 79
 	},
 	"rockhead": {
-		desc: "This Pokemon does not receive recoil damage unless it uses Struggle, it misses with Jump Kick or Hi Jump Kick or it is holding Life Orb, Jaboca Berry or Rowap Berry.",
+		desc: "This Pokemon does not receive recoil damage unless it uses Struggle, it misses with Jump Kick or High Jump Kick or it is holding Life Orb, Jaboca Berry or Rowap Berry.",
 		shortDesc: "This Pokemon does not take recoil damage besides Struggle, Life Orb, crash damage.",
 		onModifyMove: function(move) {
 			delete move.recoil;
