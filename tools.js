@@ -181,7 +181,7 @@ module.exports = (function () {
 			if (!template.genderRatio) template.genderRatio = {M:0.5,F:0.5};
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.gen) {
-				if (template.forme && template.forme.substr(0,4) === 'Mega') {
+				if (template.forme && template.forme in {'Mega':1,'Mega-X':1,'Mega-Y':1}) {
 					template.gen = 6;
 					template.isMega = true;
 				} else if (template.num >= 650) template.gen = 6;
