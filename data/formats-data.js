@@ -4286,7 +4286,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	zygarde: {
-		tier: "OU"
+		tier: "Limbo"
 	},
 	missingno: {
 		isNonstandard: true,
