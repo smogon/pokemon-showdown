@@ -4280,12 +4280,15 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	xerneas: {
+		viableMoves: {"geomancy":1,"moonblast":1,"thunder":1,"focusblast":1,"flashcannon":1},
 		tier: "Uber"
 	},
 	yveltal: {
+		viableMoves: {"darkpulse":1,"oblivionwing":1,"taunt":1,"focusblast":1,"hurricane":1,"airslash":1,"roost":1,"acrobatics":1,"suckerpunch":1},
 		tier: "Uber"
 	},
 	zygarde: {
+		viableMoves: {"landswrath":1,"sludgewave":1,"dragonpulse":1,"focusblast":1,"dragondance":1,"earthquake":1,"extremespeed":1,"outrage":1,"rockslide":1},
 		tier: "Limbo"
 	},
 	missingno: {
