@@ -304,11 +304,12 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Generation 5.5",
+		name: "Pokebank Ubers",
 		section: "OM of the Month",
 
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Uber', 'Limbo']
+		mod: 'pokebank',
+		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'HP Percentage Mod'],
+		banlist: ['Illegal']
 	},
 	{
 		name: "Ability Exchange",
@@ -473,6 +474,13 @@ exports.Formats = [
 				};
 			}
 		}
+	},
+	{
+		name: "Generation 5.5",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal', 'Uber', 'Limbo']
 	},
 	{
 		name: "Challenge Cup",
