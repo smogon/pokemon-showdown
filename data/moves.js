@@ -9337,6 +9337,9 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		isPowder: true,
+		onTryHit: function(pokemon) {
+			return !pokemon.hasType('Grass');
+		},
 		status: 'psn',
 		secondary: false,
 		target: "normal",
@@ -9408,6 +9411,9 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 1,
 		isPowder: true,
+		onTryHit: function(pokemon) {
+			return !pokemon.hasType('Grass');
+		},
 		isBounceable: true,
 		volatileStatus: 'powder',
 		effect: {
@@ -11834,6 +11840,9 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isPowder: true,
+		onTryHit: function(pokemon) {
+			return !pokemon.hasType('Grass');
+		},
 		status: 'slp',
 		secondary: false,
 		target: "normal",
