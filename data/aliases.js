@@ -1,4 +1,8 @@
 exports.BattleAliases = {
+	// temporary: alias new names to old names
+	"highjumpkick": "Hi Jump Kick",
+	"feintattack": "Faint Attack",
+
 	// mega evos
 	"megaabomasnow": "Abomasnow-Mega",
 	"megaabsol": "Absol-Mega",
