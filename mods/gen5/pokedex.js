@@ -2,7 +2,7 @@ exports.BattlePokedex = {
 	butterfree: {
 		inherit: true,
 		baseStats: {hp:60,atk:45,def:50,spa:80,spd:80,spe:70},
-		abilities: {0:"Compoundeyes",H:"Tinted Lens"}
+		abilities: {0:"Compound Eyes",H:"Tinted Lens"}
 	},
 	beedrill: {
 		inherit: true,
