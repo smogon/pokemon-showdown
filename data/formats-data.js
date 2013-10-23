@@ -4085,6 +4085,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	chesnaught: {
+		viableMoves: {"aerialace":1,"earthquake":1,"hammerarm":1,"rockslide":1,"spikyshield":1,"stoneedge:":1,"swordsdance":1,"taunt":1,"woodhammer":1},
 		tier: "Limbo"
 	},
 	fennekin: {
@@ -4288,7 +4289,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	zygarde: {
-		viableMoves: {"landswrath":1,"sludgewave":1,"dragonpulse":1,"focusblast":1,"dragondance":1,"earthquake":1,"extremespeed":1,"outrage":1,"rockslide":1},
+		viableMoves: {"sludgewave":1,"dragonpulse":1,"focusblast":1,"dragondance":1,"earthquake":1,"extremespeed":1,"outrage":1,"rockslide":1},
 		tier: "Limbo"
 	},
 	missingno: {
