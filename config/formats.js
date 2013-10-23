@@ -479,8 +479,8 @@ exports.Formats = [
 		name: "Generation 5.5",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Uber', 'Limbo']
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Limbo']
 	},
 	{
 		name: "Challenge Cup",
