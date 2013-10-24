@@ -2294,6 +2294,20 @@ exports.BattleItems = {
 		gen: 6,
 		desc: "Mega-evolves Manectric."
 	},
+	"marangaberry": {
+		id: "marangaberry",
+		name: "Maranga Berry",
+		spritenum: 0,
+		isBerry: true,
+		onAfterDamage: function(damage, target, source, move) {
+			if (move.category === 'Special' && target.useItem()) {
+				this.boost({spd: 1});
+			}
+		},
+		num: -6,
+		gen: 6,
+		desc: "Raises Special Defense by 1 if hit by a Special attack. Single use."
+	},
 	"masterball": {
 		id: "masterball",
 		name: "Master Ball",
