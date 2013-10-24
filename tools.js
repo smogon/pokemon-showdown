@@ -484,6 +484,7 @@ module.exports = (function () {
 
 					for (var i=0, len=lset.length; i<len; i++) {
 						var learned = lset[i];
+						if (learned.charAt(0) === '6' && format.noPokebank) continue;
 						if (learned.substr(0,2) in {'4L':1,'5L':1,'6L':1}) {
 							// gen 4-6 level-up moves
 							if (level >= parseInt(learned.substr(2),10)) {
@@ -494,14 +495,14 @@ module.exports = (function () {
 							}
 							if (!template.gender || template.gender === 'F') {
 								// available as egg move
-								learned = learned.substr(0,1)+'Eany';
+								learned = learned.charAt(0)+'Eany';
 							} else {
 								// this move is unavailable, skip it
 								continue;
 							}
 						}
-						if (learned.substr(1,1) in {L:1,M:1,T:1}) {
-							if (learned.substr(0,1) === '6') {
+						if (learned.charAt(1) in {L:1,M:1,T:1}) {
+							if (learned.charAt(0) === '6') {
 								// current-gen TM or tutor moves:
 								//   always available
 								return false;
@@ -509,11 +510,11 @@ module.exports = (function () {
 							// past-gen level-up, TM, or tutor moves:
 							//   available as long as the source gen was or was before this gen
 							limit1 = false;
-							sourcesBefore = Math.max(sourcesBefore, parseInt(learned.substr(0,1),10));
-						} else if (learned.substr(1,1) in {E:1,S:1,D:1}) {
+							sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0),10));
+						} else if (learned.charAt(1) in {E:1,S:1,D:1}) {
 							// egg, event, or DW moves:
 							//   only if that was the source
-							if (learned.substr(1,1) === 'E') {
+							if (learned.charAt(0) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								var eggGroups = template.eggGroups;
 								if (!eggGroups) continue;
@@ -527,7 +528,7 @@ module.exports = (function () {
 										// CAP pokemon can't breed
 										!dexEntry.isNonstandard &&
 										// can't breed mons from future gens
-										dexEntry.gen <= parseInt(learned.substr(0,1),10) &&
+										dexEntry.gen <= parseInt(learned.charAt(0),10) &&
 										// genderless pokemon can't pass egg moves
 										dexEntry.gender !== 'N') {
 										if (
@@ -545,7 +546,7 @@ module.exports = (function () {
 								}
 								// chainbreeding with itself from earlier gen
 								if (!atLeastOne) sources.push(learned+template.id);
-							} else if (learned.substr(1,1) === 'S') {
+							} else if (learned.charAt(1) === 'S') {
 								sources.push(learned+' '+template.id);
 							} else {
 								sources.push(learned);
