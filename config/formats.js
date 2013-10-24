@@ -157,6 +157,7 @@ exports.Formats = [
 		section: "XY Doubles",
 		column: 2,
 
+		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber', 'Dark Void', 'Soul Dew']
 	},
