@@ -1843,6 +1843,20 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a super effective Poison-type attack. Single use."
 	},
+	"keeberry": {
+		id: "keeberry",
+		name: "Kee Berry",
+		spritenum: 0,
+		isBerry: true,
+		onAfterDamage: function(damage, target, source, move) {
+			if (move.category === 'Physical' && target.useItem()) {
+				this.boost({def: 1});
+			}
+		},
+		num: -6,
+		gen: 6,
+		desc: "Raises Defense by 1 if hit by a Physical attack. Single use."
+	},
 	"kelpsyberry": {
 		id: "kelpsyberry",
 		name: "Kelpsy Berry",
