@@ -1101,7 +1101,7 @@ var commands = exports.commands = {
         this.sendReplyBox('Trainer: ChampWickedWeavile<br \>' +
 		'Ace: Darkrai<br \>' +
 		'Catchphrase: Thats a nice dream you have there, it would be a shame if someone.....ATE IT.<br \>' +
-        '<img src="http://www.pokecharms.com/trainercards/images/trainers/Cosplayers/p491-1.png">')
+        '<img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491-1.png">')
     },	
 
 	priest: function(target, room, user) {
