@@ -1,4 +1,13 @@
 exports.BattleAbilities = {
+	"frisk": {
+		inherit: true,
+		onStart: function(pokemon) {
+			var target = pokemon.side.foe.randomActive();
+			if (target && target.item) {
+				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] '+pokemon);
+			}
+		}
+	},
 	"keeneye": {
 		inherit: true,
 		onModifyMove: function() {}
