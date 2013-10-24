@@ -4423,7 +4423,7 @@ exports.BattleFormatsData = {
 	},
 	zygarde: {
 		viableMoves: {"sludgewave":1,"dragonpulse":1,"focusblast":1,"dragondance":1,"earthquake":1,"extremespeed":1,"outrage":1,"rockslide":1},
-		tier: "Uber"
+		tier: "OU"
 	},
 	missingno: {
 		isNonstandard: true,
