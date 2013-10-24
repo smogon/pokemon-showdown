@@ -78,7 +78,6 @@ exports.Formats = [
 		section: "BW2 Singles",
 
 		mod: 'gen5',
-		searchShow: false,
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
 	},
@@ -95,7 +94,6 @@ exports.Formats = [
 		section: "BW2 Singles",
 
 		mod: 'gen5',
-		searchShow: false,
 		ruleset: ['RU'],
 		banlist: ['RU','BL3', 'Prankster + Assist + Liepard']
 	},
