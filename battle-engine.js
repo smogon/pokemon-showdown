@@ -234,7 +234,6 @@ var BattlePokemon = (function() {
 
 		this.types = this.baseTemplate.types;
 
-		var intendedHPType = '';
 		if (this.set.moves) {
 			for (var i=0; i<this.set.moves.length; i++) {
 				var move = this.battle.getMove(this.set.moves[i]);
@@ -243,7 +242,6 @@ var BattlePokemon = (function() {
 					if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
 						this.set.ivs = this.battle.getType(move.type).HPivs;
 					}
-					intendedHPType = move.type;
 					move = this.battle.getMove('hiddenpower');
 				}
 				this.baseMoveset.push({
@@ -281,7 +279,7 @@ var BattlePokemon = (function() {
 			this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
 		}
 
-		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark','Fairy'];
+		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
 		if (this.battle.gen && this.battle.gen === 2) {
 			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
 			var atkDV = Math.floor(this.set.ivs.atk / 2);
@@ -299,20 +297,9 @@ var BattlePokemon = (function() {
 				hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
 				i *= 2;
 			}
-			// Support for gen 5 and gen 6
-			var maxTypes = (this.battle.gen && this.battle.gen < 6)? 15 : 16;
-			this.hpType = hpTypes[Math.floor(hpTypeX * maxTypes / 63)];
-			this.hpPower = (this.battle.gen && this.battle.gen < 6)? Math.floor(hpPowerX * 40 / 63) + 30 : 60;
-		}
-
-		if (intendedHPType && intendedHPType !== this.hpType && this.battle.getType(intendedHPType).HPivs) {
-			// autocorrect Hidden Power type
-			this.set.ivs = this.battle.getType(intendedHPType).HPivs;
-			for (var i in stats) {
-				if (!this.set.ivs[i]) this.set.ivs[i] = 31;
-			}
-			this.hpType = intendedHPType;
-			this.hpPower = (this.battle.gen && this.battle.gen < 6)? 70 : 60;
+			this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
+			// In Gen 6, Hidden Power is always 60 base power
+			this.hpPower = (this.battle.gen && this.battle.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60;
 		}
 
 		this.boosts = {
