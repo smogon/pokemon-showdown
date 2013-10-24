@@ -326,7 +326,7 @@ exports.BattleMovedex = {
 					this.effectData.duration++;
 				}
 				var moves = pokemon.moves;
-				moves = moves.randomize();
+				moves.shuffle();
 				var move = this.getMove(moves[0]);
 				this.add('-start', pokemon, 'Disable', move.name);
 				this.effectData.move = move.id;

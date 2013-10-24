@@ -84,6 +84,17 @@ if (!fs.existsSync('./config/config.js')) {
 	);
 }
 
+// Implement Fisher-Yates shuffle on Array prototype so it's available for all arrays on the application
+Array.prototype.shuffle = function() {
+	for (var i = this.length - 1; i > 0; i--) {
+		var j = Math.floor(Math.random() * (i + 1));
+		var temp = this[i];
+		this[i] = this[j];
+		this[j] = temp;
+	}
+	return this;
+}
+
 /*********************************************************
  * Load configuration
  *********************************************************/
