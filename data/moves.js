@@ -1488,16 +1488,21 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user's type changes based on the battle terrain. Ground-type in Wi-Fi battles. (In-game: Ground-type in puddles, rocky ground, and sand, Water-type on water, Rock-type in caves, Ice-type on snow and ice, and Normal-type everywhere else.) Fails if the user's type cannot be changed or if the user is already purely that type.",
-		shortDesc: "Changes user's type based on terrain. (Ground)",
+		desc: "The user's type changes based on the battle terrain: Electric in Electric Terrain, Grass in Grassy Terrain, Fairy in Misty Terrain, and Normal in plain terrain. Fails if the user's type cannot be changed or if the user is already purely that type.",
+		shortDesc: "Changes user's type by terrain (default Normal).",
 		id: "camouflage",
 		name: "Camouflage",
 		pp: 20,
 		priority: 0,
 		isSnatchable: true,
 		onHit: function(target) {
-			this.add('-start', target, 'typechange', 'Ground');
-			target.types = ['Ground'];
+			var newType = 'Normal';
+			if (this.isTerrain('electricterrain')) newType = 'Electric';
+			else if (this.isTerrain('grassyterrain')) newType = 'Grass';
+			else if (this.isTerrain('mistyterrain')) newType = 'Fairy';
+
+			this.add('-start', target, 'typechange', newType);
+			target.types = [newType];
 		},
 		secondary: false,
 		target: "self",
@@ -3174,38 +3179,44 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For five turns, Pokemon on the ground no longer fall asleep.",
-		shortDesc: "Prevents grounded Pokemon from sleeping for 5 turns.",
+		desc: "For five turns, Pokemon on the ground cannot fall asleep, and will be woken up if already sleeping. Their Electric-type moves are powered up by 50%.",
+		shortDesc: "If on ground, can't sleep + Electric moves stronger.",
 		id: "electricterrain",
 		name: "Electric Terrain",
 		pp: 10,
 		priority: 0,
-		sideCondition: 'electricterrain',
+		terrain: 'electricterrain',
 		effect: {
 			duration: 5,
-			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
-					return 7;
-				}
-				return 5;
-			},
 			onSetStatus: function(status, target, source, effect) {
-				if (status.id === 'slp' && source && source !== target && source.ability !== 'infiltrator' && !target.runImmunity('Ground')) {
+				if (status.id === 'slp' && !target.runImmunity('Ground')) {
 					this.debug('Interrupting sleep from Electric Terrain');
 					return false;
 				}
 			},
-			onStart: function(side) {
-				this.add('-sidestart', side, 'Electric Terrain');
+			onUpdate: function(pokemon) {
+				if (pokemon.status === 'slp') {
+					this.debug('Waking up from Electric Terrain');
+					pokemon.cureStatus();
+				}
+			},
+			onBasePower: function(basePower, attacker, defender, move) {
+				if (move.type === 'Electric' && !attacker.runImmunity('Ground')) {
+					this.debug('electric terrain boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onStart: function() {
+				this.add('-fieldstart', 'move: Electric Terrain');
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
-			onEnd: function(side) {
-				this.add('-sideend', side, 'Electric Terrain');
+			onEnd: function() {
+				this.add('-fieldend', 'move: Electric Terrain');
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "all",
 		type: "Electric"
 	},
 	"electrify": {
@@ -5108,23 +5119,23 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For five turns, Pokemon on the ground restore a little HP.",
-		shortDesc: "Grounded Pokemon restore HP for 5 turns.",
+		desc: "For five turns, Pokemon on the ground restore 1/16 of their HP each turn. Their Grass-type moves are powered up by 50%.",
+		shortDesc: "If on ground, restore HP + Grass moves stronger.",
 		id: "grassyterrain",
 		name: "Grassy Terrain",
 		pp: 10,
 		priority: 0,
-		onHitField: function(target, source, effect) {
-			if (this.pseudoWeather['grassyterrain']) {
-				this.removePseudoWeather('grassyterrain', source, effect, '[of] '+source);
-			} else {
-				this.addPseudoWeather('grassyterrain', source, effect, '[of] '+source);
-			}
-		},
+		terrain: 'grassyterrain',
 		effect: {
 			duration: 5,
+			onBasePower: function(basePower, attacker, defender, move) {
+				if (move.type === 'Grass' && !attacker.runImmunity('Ground')) {
+					this.debug('grassy terrain boost');
+					return this.chainModify(1.5);
+				}
+			},
 			onStart: function(target, source) {
-				this.add('-fieldstart', 'move: Grassy Terrain', '[of] '+source);
+				this.add('-fieldstart', 'move: Grassy Terrain');
 			},
 			onResidualOrder: 7,
 			onResidual: function(battle) {
@@ -5139,7 +5150,7 @@ exports.BattleMovedex = {
 				}
 			},
 			onEnd: function() {
-				this.add('-fieldend', 'move: Grassy Terrain', '[of] '+this.effectData.source);
+				this.add('-fieldend', 'move: Grassy Terrain');
 			}
 		},
 		secondary: false,
@@ -8328,22 +8339,15 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, Pokemon cannot have major status problems or confusion inflicted on them by other Pokemon.",
-		shortDesc: "Protects grounded pokemon from status for 5 turns.",
+		desc: "For five turns, Grounded Pokemon cannot have major status problems or confusion inflicted on them by other Pokemon. Their Dragon-type moves are weakened by 50%.",
+		shortDesc: "If on ground, prevents status + Dragon moves weaker.",
 		id: "mistyterrain",
 		name: "Misty Terrain",
 		pp: 10,
 		priority: 0,
-		isSnatchable: true,
-		pseudoWeather: 'mistyterrain',
+		terrain: 'mistyterrain',
 		effect: {
 			duration: 5,
-			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
-					return 7;
-				}
-				return 5;
-			},
 			onSetStatus: function(status, target, source, effect) {
 				if (!target.runImmunity('Ground')) return;
 				if (source && source !== target || (effect && effect.id === 'toxicspikes')) {
@@ -8361,8 +8365,14 @@ exports.BattleMovedex = {
 			onTryHit: function(target, source, move) {
 				if (!target.runImmunity('Ground')) return;
 				if (move && move.id === 'yawn') {
-					this.debug('blocking yawn');
+					this.debug('misty terrain blocking yawn');
 					return false;
+				}
+			},
+			onBasePower: function(basePower, attacker, defender, move) {
+				if (move.type === 'Dragon' && !attacker.runImmunity('Ground')) {
+					this.debug('misty terrain weaken');
+					return this.chainModify(0.5);
 				}
 			},
 			onStart: function(side) {
@@ -8640,15 +8650,20 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "This move calls another move for use depending on the battle terrain. Tri Attack in Wi-Fi battles.",
-		shortDesc: "Attack changes based on terrain. (Tri Attack)",
+		desc: "This move calls another move for use depending on the battle terrain: Thunderbolt in Electric Terrain, Energy Ball in Grassy Terrain, Moonblast in Misty Terrain, and Tri Attack in plain terrain.",
+		shortDesc: "Attack depends on terrain (default Tri Attack).",
 		id: "naturepower",
 		isViable: true,
 		name: "Nature Power",
 		pp: 20,
 		priority: 0,
 		onHit: function(target) {
-			this.useMove('triattack', target);
+			var moveToUse = 'triattack';
+			if (this.isTerrain('electricterrain')) moveToUse = 'thunderbolt';
+			else if (this.isTerrain('grassyterrain')) moveToUse = 'energyball';
+			else if (this.isTerrain('mistyterrain')) moveToUse = 'moonblast';
+
+			this.useMove(moveToUse, target);
 		},
 		secondary: false,
 		target: "self",
