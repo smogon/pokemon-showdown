@@ -218,6 +218,7 @@ exports.BattlePokedex = {
 		abilities: {0:"Flash Fire",1:"Flame Body",H:"Shadow Tag"}
 	},
 	chandelure: {
+		inherit: true,
 		abilities: {0:"Flash Fire",1:"Flame Body",H:"Shadow Tag"}
 	}
 };
