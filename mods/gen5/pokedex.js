@@ -49,30 +49,35 @@ exports.BattlePokedex = {
 	},
 	golem: {
 		inherit: true,
-		baseStats: {hp:80,atk:120,def:130,spa:55,spd:65,spe:45},
+		baseStats: {hp:80,atk:110,def:130,spa:55,spd:65,spe:45},
 		abilities: {0:"Rock Head",1:"Sturdy",H:"Sand Veil"}
 	},
 	mrmime: {
 		inherit: true,
+		types:["Psychic"],
 		baseStats: {hp:40,atk:45,def:65,spa:100,spd:120,spe:90},
 		abilities: {0:"Soundproof",1:"Filter",H:"Technician"}
 	},
 	igglybuff: {
 		inherit: true,
+		types:["Normal"],
 		abilities: {0:"Cute Charm",H:"Friend Guard"}
 	},
 	togepi: {
 		inherit: true,
+		types:["Normal"],
 		baseStats: {hp:35,atk:20,def:65,spa:40,spd:65,spe:20},
 		abilities: {0:"Hustle",1:"Serene Grace",H:"Super Luck"}
 	},
 	togetic: {
 		inherit: true,
+		types:["Normal","Flying"],
 		baseStats: {hp:55,atk:40,def:85,spa:80,spd:105,spe:40},
 		abilities: {0:"Hustle",1:"Serene Grace",H:"Super Luck"}
 	},
 	cleffa: {
 		inherit: true,
+		types:["Normal"],
 		baseStats: {hp:50,atk:25,def:28,spa:45,spd:55,spe:15},
 		abilities: {0:"Cute Charm",1:"Magic Guard",H:"Friend Guard"}
 	},
@@ -126,6 +131,7 @@ exports.BattlePokedex = {
 	},
 	mawile: {
 		inherit: true,
+		types:["Steel"],
 		baseStats: {hp:50,atk:85,def:85,spa:55,spd:55,spe:50},
 		abilities: {0:"Hyper Cutter",1:"Intimidate",H:"Sheer Force"}
 	},
@@ -161,6 +167,10 @@ exports.BattlePokedex = {
 		baseStats: {hp:85,atk:120,def:70,spa:50,spd:50,spe:100},
 		abilities: {0:"Intimidate",H:"Reckless"}
 	},
+	mimejr: {
+		inherit: true,
+		types:["Psychic"]
+	},
 	togekiss: {
 		inherit: true,
 		types:["Normal","Flying"],
@@ -186,6 +196,7 @@ exports.BattlePokedex = {
 	},
 	whimsicott: {
 		inherit: true,
+		types:["Grass"],
 		baseStats: {hp:60,atk:67,def:85,spa:77,spd:75,spe:116},
 		abilities: {0:"Prankster",1:"Infiltrator",H:"Chlorophyll"}
 	},
