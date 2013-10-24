@@ -1849,9 +1849,12 @@ exports.BattleItems = {
 		spritenum: 0,
 		isBerry: true,
 		onAfterDamage: function(damage, target, source, move) {
-			if (move.category === 'Physical' && target.useItem()) {
-				this.boost({def: 1});
+			if (move.category === 'Physical') {
+				target.eatItem();
 			}
+		},
+		onEat: function(pokemon) {
+			this.boost({def: 1});
 		},
 		num: -6,
 		gen: 6,
@@ -2300,9 +2303,12 @@ exports.BattleItems = {
 		spritenum: 0,
 		isBerry: true,
 		onAfterDamage: function(damage, target, source, move) {
-			if (move.category === 'Special' && target.useItem()) {
-				this.boost({spd: 1});
+			if (move.category === 'Special') {
+				target.eatItem()
 			}
+		},
+		onEat: function(pokemon) {
+			this.boost({spd: 1});
 		},
 		num: -6,
 		gen: 6,
