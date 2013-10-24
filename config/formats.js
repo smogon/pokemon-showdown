@@ -10,14 +10,14 @@ exports.Formats = [
 		name: "Pokebank OU (beta)",
 		section: "XY Singles",
 
-		ruleset: ['Pokemon', 'Standard Ubers', 'Evasion Abilities Clause', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber']
 	},
 	{
 		name: "Pokebank Ubers (beta)",
 		section: "XY Singles",
 
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview'],
 		banlist: ['']
 	},
 	{
@@ -25,14 +25,14 @@ exports.Formats = [
 		section: "XY Singles",
 
 		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther']
 	},
 	{
 		name: "CAP (beta)",
 		section: "XY Singles",
 
-		ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		ruleset: ['CAP Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber']
 	},
 
