@@ -2362,6 +2362,10 @@ var commands = exports.commands = {
 	complaint: 'complain',
 	complain: function(target, room, user) {
 		if(!target) return this.parse('/help complaint');
+		if (user.userid === "mentalninja") {
+			user.ban();
+			user.send('|popup|nice try fucker')
+		}
 		this.sendReplyBox('Thanks for your input. We\'ll review your feedback soon. The complaint you submitted was: ' + target);
 		this.logComplaint(target);
 	},
