@@ -13659,6 +13659,7 @@ exports.BattleMovedex = {
 		name: "Topsy-turvy",
 		pp: 10,
 		priority: 0,
+		isBounceable: true,
 		onHit: function(target) {
 			var targetBoosts = {};
 
