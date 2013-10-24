@@ -949,7 +949,7 @@ exports.BattleScripts = {
 				keys.push(i);
 			//}
 		}
-		keys = keys.randomize();
+		keys.shuffle();
 
 		var ruleset = this.getFormat().ruleset;
 
@@ -969,7 +969,7 @@ exports.BattleScripts = {
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1
 
-		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
+		var moveKeys = Object.keys(template.viableMoves || template.learnset).shuffle();
 		var moves = [];
 		var hasType = {};
 		hasType[template.types[0]] = true;

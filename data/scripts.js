@@ -703,7 +703,7 @@ exports.BattleScripts = {
 			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
 		}
 
-		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
+		var moveKeys = Object.keys(template.viableMoves || template.learnset).shuffle();
 		var moves = [];
 		var ability = '';
 		var item = '';
@@ -1358,9 +1358,9 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
 				// Give Unburden mons a random Gem of the type of one of their damaging moves
-				var shuffledMoves = moves.randomize();
-				for (var m in shuffledMoves) {
-					var move = this.getMove(shuffledMoves[m]);
+				moves.shuffle();
+				for (var m in moves) {
+					var move = this.getMove(moves[m]);
 					if (move.basePower || move.basePowerCallback) {
 						item = move.type + ' Gem';
 						break;
@@ -1403,9 +1403,9 @@ exports.BattleScripts = {
 			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 				item = 'Choice Scarf';
 			} else if (hasMove['substitute'] && hasMove['reversal']) {
-				var shuffledMoves = moves.randomize();
-				for (var m in shuffledMoves) {
-					var move = this.getMove(shuffledMoves[m]);
+				moves.shuffle();
+				for (var m in moves) {
+					var move = this.getMove(moves[m]);
 					if (move.basePower || move.basePowerCallback) {
 						item = move.type + ' Gem';
 						break;
@@ -1515,7 +1515,7 @@ exports.BattleScripts = {
 				keys.push(i);
 			}
 		}
-		keys = keys.randomize();
+		keys.shuffle();
 
 		// PotD stuff
 		var potd = {};
@@ -1618,7 +1618,7 @@ exports.BattleScripts = {
 			'shiftry', 'shuppet', 'skuntank', 'sneasel', 'snorlax', 'spiritomb', 'stunky', 'throh', 'toxicroak', 'tyranitar', 'umbreon',
 			'vullaby', 'weavile', 'wobbuffet', 'yamask', 'zoroark', 'zorua', 'zweilous'
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
+		seasonalPokemonList.shuffle();
 		var team = [];
 
 		for (var i=0; i<6; i++) {

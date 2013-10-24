@@ -394,7 +394,7 @@ exports.Formats = [
 						this.add('-message', 'Treat: Uhm, these candy taste weird...');
 					};
 					var boosts = {};
-					var possibleBoosts = ['atk','def','spa','spd','spe','accuracy','evasion'].randomize();
+					var possibleBoosts = ['atk','def','spa','spd','spe','accuracy','evasion'].shuffle();
 					boosts[possibleBoosts[0]] = 2;
 					boosts[possibleBoosts[1]] = -1;
 					boosts[possibleBoosts[2]] = -1;
