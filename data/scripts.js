@@ -1507,7 +1507,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && this.getTemplate(i).num < 650) {
+			if (this.data.FormatsData[i].viableMoves && this.getTemplate(i).gen < 6) {
 				keys.push(i);
 			}
 		}
