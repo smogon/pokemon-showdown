@@ -243,7 +243,7 @@ var BattlePokemon = (function() {
 					if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
 						this.set.ivs = this.battle.getType(move.type).HPivs;
 					}
-					intendedHPtype = move.type;
+					intendedHPType = move.type;
 					move = this.battle.getMove('hiddenpower');
 				}
 				this.baseMoveset.push({
