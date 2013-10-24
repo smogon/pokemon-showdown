@@ -848,9 +848,11 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, it identifies the opponent's held item; in double battles, the held item of an unrevealed, randomly selected opponent is identified.",
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart: function(pokemon) {
-			var target = pokemon.side.foe.randomActive();
-			if (target && target.item) {
-				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] '+pokemon);
+			var foeactive = pokemon.side.foe.active;
+			for (var i=0; i<foeactive.length; i++) {
+				if (foeactive[i] && foeactive[i].item) {
+					this.add('-item', foeactive[i], foeactive[i].getItem().name, '[from] ability: Frisk', '[of] '+pokemon, '[identify]');
+				}
 			}
 		},
 		id: "frisk",
