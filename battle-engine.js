@@ -187,7 +187,7 @@ var BattlePokemon = (function() {
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
 			this.battle.debug('Unidentified species: '+this.species);
-			this.baseTemplate = this.battle.getTemplate('Bulbasaur');
+			this.baseTemplate = this.battle.getTemplate('Unown');
 		}
 		this.species = this.baseTemplate.species;
 		if (set.name === set.species || !set.name || !set.species) {
