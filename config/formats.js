@@ -153,6 +153,14 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		name: "Pokebank Smogon Doubles (beta)",
+		section: "XY Doubles",
+		column: 2,
+
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Dark Void', 'Soul Dew']
+	},
+	{
 		name: "Doubles Custom Game",
 		section: "XY Doubles",
 		column: 2,
