@@ -841,6 +841,9 @@ module.exports = (function () {
 		if (banlistTable['Unreleased'] && item.isUnreleased) {
 			problems.push(name+"'s item "+set.item+" is unreleased.");
 		}
+		if (banlistTable['Unreleased'] && template.isUnreleased) {
+			problems.push(name+" ("+template.species+") is unreleased.");
+		}
 		setHas[toId(set.ability)] = true;
 		if (banlistTable['illegal']) {
 			var totalEV = 0;
