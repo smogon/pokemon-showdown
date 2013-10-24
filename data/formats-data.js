@@ -4398,7 +4398,25 @@ exports.BattleFormatsData = {
 	pumpkaboo: {
 		tier: "Limbo NFE"
 	},
+	pumpkaboosmall: {
+		tier: "Limbo NFE"
+	},
+	pumpkaboolarge: {
+		tier: "Limbo NFE"
+	},
+	pumpkaboosuper: {
+		tier: "Limbo NFE"
+	},
 	gourgeist: {
+		tier: "Limbo"
+	},
+	gourgeistsmall: {
+		tier: "Limbo"
+	},
+	gourgeistlarge: {
+		tier: "Limbo"
+	},
+	gourgeistsuper: {
 		tier: "Limbo"
 	},
 	bergmite: {
