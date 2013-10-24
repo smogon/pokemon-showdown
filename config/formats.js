@@ -95,7 +95,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] RU'],
-		banlist: ['RU','BL3', 'Prankster + Assist + Liepard']
+		banlist: ['RU','BL3', 'Prankster + Assist']
 	},
 	{
 		name: "[Gen 5] LC",
