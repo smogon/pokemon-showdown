@@ -234,6 +234,7 @@ var BattlePokemon = (function() {
 
 		this.types = this.baseTemplate.types;
 
+		var intendedHPType = '';
 		if (this.set.moves) {
 			for (var i=0; i<this.set.moves.length; i++) {
 				var move = this.battle.getMove(this.set.moves[i]);
@@ -242,6 +243,7 @@ var BattlePokemon = (function() {
 					if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
 						this.set.ivs = this.battle.getType(move.type).HPivs;
 					}
+					intendedHPtype = move.type;
 					move = this.battle.getMove('hiddenpower');
 				}
 				this.baseMoveset.push({
@@ -301,6 +303,16 @@ var BattlePokemon = (function() {
 			var maxTypes = (this.battle.gen && this.battle.gen < 6)? 15 : 16;
 			this.hpType = hpTypes[Math.floor(hpTypeX * maxTypes / 63)];
 			this.hpPower = (this.battle.gen && this.battle.gen < 6)? Math.floor(hpPowerX * 40 / 63) + 30 : 60;
+		}
+
+		if (intendedHPType && intendedHPType !== this.hpType && this.battle.getType(intendedHPType).HPivs) {
+			// autocorrect Hidden Power type
+			this.set.ivs = this.battle.getType(intendedHPType).HPivs;
+			for (var i in stats) {
+				if (!this.set.ivs[i]) this.set.ivs[i] = 31;
+			}
+			this.hpType = intendedHPType;
+			this.hpPower = (this.battle.gen && this.battle.gen < 6)? 70 : 60;
 		}
 
 		this.boosts = {
