@@ -11,7 +11,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber']
+		banlist: ['Uber', 'Soul Dew']
 	},
 	{
 		name: "Pokebank Ubers (beta)",
