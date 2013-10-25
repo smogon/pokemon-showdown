@@ -421,13 +421,13 @@ exports.BattleAbilities = {
 		onBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
 			for (var p in attacker.side.active) {
-				if (attacker.side.active[p].ability === 'aurabreak') {
+				if (attacker.side.active[p] && attacker.side.active[p].ability === 'aurabreak') {
 					reverseAura = true;
 					this.debug('Reversing Dark Aura due to Aura Break');
 				}
 			}
 			for (var p in defender.side.active) {
-				if (defender.side.active[p].ability === 'aurabreak') {
+				if (defender.side.active[p] && defender.side.active[p].ability === 'aurabreak') {
 					reverseAura = true;
 					this.debug('Reversing Dark Aura due to Aura Break');
 				}
@@ -594,13 +594,13 @@ exports.BattleAbilities = {
 		onBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
 			for (var p in attacker.side.active) {
-				if (attacker.side.active[p].ability === 'aurabreak') {
+				if (attacker.side.active[p] && attacker.side.active[p].ability === 'aurabreak') {
 					reverseAura = true;
 					this.debug('Reversing Fairy Aura due to Aura Break');
 				}
 			}
 			for (var p in defender.side.active) {
-				if (defender.side.active[p].ability === 'aurabreak') {
+				if (defender.side.active[p] && defender.side.active[p].ability === 'aurabreak') {
 					reverseAura = true;
 					this.debug('Reversing Fairy Aura due to Aura Break');
 				}
