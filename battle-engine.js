@@ -2371,7 +2371,8 @@ var Battle = (function() {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		this.add('drag', side.active[pos], side.active[pos].getDetails);
+		this.add('drag', pokemon, pokemon.getDetails);
+		if (pokemon.template.isMega) this.add('-formechange', pokemon, pokemon.template.species);
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
