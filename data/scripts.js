@@ -497,6 +497,7 @@ exports.BattleScripts = {
 		pokemon.formeChange(template);
 		pokemon.baseTemplate = template; // mega evolution is permanent :o
 		pokemon.setAbility(template.abilities['0']);
+		pokemon.baseAbility = pokemon.ability;
 
 		side.megaEvo = 1;
 		return true;
