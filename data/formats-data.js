@@ -1755,7 +1755,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["blazekick","slash","mirrormove","skyuppercut"]},
 			{"generation":5,"level":50,"isHidden":false,"moves":["flareblitz","highjumpkick","thunderpunch","stoneedge"],"pokeball":"cherishball"}
 		],
-		tier: "OU"
+		tier: "Uber"
 	},
 	mudkip: {
 		viableMoves: {"waterfall":1,"earthpower":1,"superpower":1,"icebeam":1},
@@ -3174,7 +3174,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["seedflare","leechseed","synthesis","sweetscent"],"pokeball":"cherishball"}
 		],
 		isUnreleased: true,
-		tier: "Unreleased"
+		tier: "Uber"
 	},
 	arceus: {
 		viableMoves: {"swordsdance":1,"extremespeed":1,"shadowclaw":1,"earthquake":1,"recover":1},
@@ -4159,12 +4159,12 @@ exports.BattleFormatsData = {
 	kyurem: {
 		viableMoves: {"substitute":1,"icebeam":1,"dracometeor":1,"dragonpulse":1,"focusblast":1,"outrage":1,"earthpower":1,"roost":1},
 		isUnreleased: true,
-		tier: "Uber"
+		tier: "OU"
 	},
 	kyuremblack: {
 		viableMoves: {"outrage":1,"fusionbolt":1,"icebeam":1,"roost":1},
 		isUnreleased: true,
-		tier: "Uber"
+		tier: "OU"
 	},
 	kyuremwhite: {
 		viableMoves: {"dracometeor":1,"dragonpulse":1,"icebeam":1,"fusionflare":1,"earthpower":1,"focusblast":1,"roost":1},
