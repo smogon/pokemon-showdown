@@ -2466,6 +2466,7 @@ exports.BattleAbilities = {
 	"stancechange": {
 		desc: "The Pokemon changes form depending on how it battles. Defense form for King's Shield, and Offense form for attacking moves.",
 		shortDesc: "The Pokemon changes form depending on how it battles.",
+		onBeforeMovePriority: 10,
 		onBeforeMove: function(attacker, defender, move) {
 			if (attacker.template.baseSpecies !== 'Aegislash') return;
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
