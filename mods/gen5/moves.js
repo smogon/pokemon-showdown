@@ -256,6 +256,7 @@ exports.BattleMovedex = {
 	},
 	incinerate: {
 		inherit: true,
+		basePower: 30,
 		desc: "Deals damage to all adjacent foes and destroys any Berry they may be holding.",
 		shortDesc: "Destroys the foe(s) Berry.",
 		onHit: function(pokemon, source) {
@@ -280,6 +281,11 @@ exports.BattleMovedex = {
 	lowsweep: {
 		inherit: true,
 		basePower: 60
+	},
+	meteormash: {
+		inherit: true,
+		accuracy: 85,
+		basePower: 100
 	},
 	minimize: {
 		inherit: true,
@@ -340,6 +346,7 @@ exports.BattleMovedex = {
 	},
 	roar: {
 		inherit: true,
+		accuracy: 100,
 		isNotProtectable: false
 	},
 	rocktomb: {
@@ -414,6 +421,14 @@ exports.BattleMovedex = {
 		basePower: 35,
 		pp: 15
 	},
+	wakeupslap: {
+		inherit: true,
+		basePower: 60,
+		basePowerCallback: function(pokemon, target) {
+			if (target.status === 'slp') return 120;
+			return 60;
+		}
+	},
 	waterpledge: {
 		inherit: true,
 		basePower: 50,
@@ -428,6 +443,7 @@ exports.BattleMovedex = {
 	},
 	whirlwind: {
 		inherit: true,
+		accuracy: 100,
 		isNotProtectable: false
 	},
 	willowisp: {

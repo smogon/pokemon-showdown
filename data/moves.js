@@ -6658,7 +6658,7 @@ exports.BattleMovedex = {
 	"incinerate": {
 		num: 510,
 		accuracy: 100,
-		basePower: 30,
+		basePower: 60,
 		category: "Special",
 		desc: "Deals damage to all adjacent foes and destroys any Berry or Gem they may be holding.",
 		shortDesc: "Destroys the foe(s) Berry/Gem.",
@@ -8012,8 +8012,8 @@ exports.BattleMovedex = {
 	},
 	"meteormash": {
 		num: 309,
-		accuracy: 85,
-		basePower: 100,
+		accuracy: 90,
+		basePower: 90,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target with a 20% chance to raise the user's Attack by 1 stage. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "20% chance to boost the user's Attack by 1.",
@@ -10497,7 +10497,7 @@ exports.BattleMovedex = {
 	},
 	"roar": {
 		num: 46,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Causes one adjacent target to be forced to switch out and be replaced with a random unfainted ally. Fails if the target used Ingrain previously or has the Ability Suction Cups. Pokemon with the Ability Soundproof are immune. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute. Priority -6. (Wild battles: The battle ends as long as it is not a double battle and the user's level is not less than the opponent's level.)",
@@ -14246,10 +14246,10 @@ exports.BattleMovedex = {
 	"wakeupslap": {
 		num: 358,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 70,
 		basePowerCallback: function(pokemon, target) {
-			if (target.status === 'slp') return 120;
-			return 60;
+			if (target.status === 'slp') return 140;
+			return 70;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the target is asleep, and the target wakes up. Makes contact.",
@@ -14493,7 +14493,7 @@ exports.BattleMovedex = {
 	},
 	"whirlwind": {
 		num: 18,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Causes one adjacent target to be forced to switch out and be replaced with a random unfainted ally. Fails if the target used Ingrain previously or has the Ability Suction Cups. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute. Priority -6. (Wild battles: The battle ends as long as it is not a double battle and the user's level is not less than the opponent's level.)",
