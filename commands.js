@@ -1212,7 +1212,7 @@ var commands = exports.commands = {
 	tell: function(target, room, user) {
 		if (user.locked) return this.sendReply('You cannot use this command while locked.');
 		if (user.forceRenamed) return this.sendReply('You cannot use this command while under a name that you have been forcerenamed to.');
-		if (!target) return this.sendReply('/tell [username], [message] - Sends a messae to the user which they see when they next speak');
+		if (!target) return this.sendReply('/tell [username], [message] - Sends a message to the user which they see when they next speak');
 
 		var targets = target.split(',');
 		if (!targets[1]) return this.parse('/help tell');
