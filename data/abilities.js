@@ -2002,16 +2002,24 @@ exports.BattleAbilities = {
 		num: 120
 	},
 	"refrigerate": {
-		desc: "Turn all of this Pokemon's Normal-typed attacks into Ice-typed.",
-		shortDesc: "This Pokemon's Normal moves become Ice.",
-		onModifyMove: function(move) {
+		desc: "Turn all of this Pokemon's Normal-typed attacks into Ice-typed. Does 1.3x damage.",
+		shortDesc: "This Pokemon's Normal moves become Ice. Does 1.3x damage.",
+		onModifyMove: function(move, pokemon) {
 			if (move.type === 'Normal') {
 				move.type = 'Ice';
+				pokemon.addVolatile('refrigerate');
+			}
+		},
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function(basePower, pokemon, target, move) {
+				return this.chainModify([0x14CD, 0x1000]);
 			}
 		},
 		id: "refrigerate",
 		name: "Refrigerate",
-		rating: 3,
+		rating: 3.5,
 		num: -6,
 		gen: 6
 	},
