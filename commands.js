@@ -1032,7 +1032,7 @@ var commands = exports.commands = {
 			return message;
 		}
 	},
-	//it's not formatted neatly, but whatever
+
 	poof: 'd',
 	d: function(target, room, user){
 		if(room.id !== 'lobby') return false;
@@ -1042,15 +1042,15 @@ var commands = exports.commands = {
 		if(!user.muted && target){
 			var tar = toUserid(target);
 			var targetUser = Users.get(tar);
-				if(user.can('poof', targetUser)){
-					if(!targetUser){
-						user.emit('console', 'Cannot find user ' + target + '.', socket);	
-					}else{
-						if(poofeh)
-							Rooms.rooms.lobby.addRaw(btags + '~~ '+targetUser.name+' was vanished into nothingness by ' + user.name +'! ~~' + etags);
-							targetUser.disconnectAll();
-							return	this.logModCommand(targetUser.name+ ' was poofed by ' + user.name);
-						}
+			if(user.can('poof', targetUser)){
+				if(!targetUser){
+					user.emit('console', 'Cannot find user ' + target + '.', socket);	
+				}else{
+					if(poofeh)
+						Rooms.rooms.lobby.addRaw(btags + '~~ '+targetUser.name+' was vanished into nothingness by ' + user.name +'! ~~' + etags);
+						targetUser.disconnectAll();
+						return	this.logModCommand(targetUser.name+ ' was poofed by ' + user.name);
+					}
 				} else {
 					return this.sendReply('/poof target - Access denied.');
 				}
@@ -1065,20 +1065,16 @@ var commands = exports.commands = {
 
 	poofoff: 'nopoof',
 	nopoof: function(target, room, user){
-		if(!user.can('warn'))
-			return this.sendReply('/nopoof - Access denied.');
-		if(!poofeh)
-			return this.sendReply('poof is currently disabled.');
+		if(!user.can('warn')) return this.sendReply('/nopoof - Access denied.');
+		if(!poofeh) return this.sendReply('poof is currently disabled.');
 		poofeh = false;
 		this.logModCommand(user.name + ' disabled poof.');
 		return this.sendReply('poof is now disabled.');
 	},
 
 	poofon: function(target, room, user){
-		if(!user.can('warn'))
-			return this.sendReply('/poofon - Access denied.');
-		if(poofeh)
-			return this.sendReply('poof is currently enabled.');
+		if(!user.can('warn')) return this.sendReply('/poofon - Access denied.');
+		if(poofeh) return this.sendReply('poof is currently enabled.');
 		poofeh = true;
 		this.logModCommand(user.name + ' enabled poof');
 		return this.sendReply('poof is now enabled.');
