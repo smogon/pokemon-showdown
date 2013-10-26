@@ -1513,6 +1513,7 @@ var commands = exports.commands = {
 
 	rk: 'roomkick',
 	rkick: 'roomkick',
+	kick: 'roomkick',
 	roomkick: function(target, room, user){
 		if(!room.auth) return this.sendReply('/rkick is designed for rooms with their own auth.');
 		if(!this.can('roommod', null, room)) return this.sendReply('/rkick - Access Denied.');
@@ -1521,7 +1522,7 @@ var commands = exports.commands = {
 		targetUser.popup('You have been kicked from room '+ room.title +' by '+user.name+'.');
 		targetUser.leaveRoom(room);
 		room.add('|raw|'+ targetUser.name + ' has been kicked from room by '+ user.name + '.');
-		this.logModCommand(targetUser.name + ' has been kicked from room by '+ user.name + '.');
+		this.logRoomCommand(targetUser.name + ' has been kicked from room by '+ user.name + '.');
 	},
 
 	roomban: function(target, room, user, connection) {
@@ -1702,35 +1703,6 @@ var commands = exports.commands = {
 		if (room.auth) {
 			this.addRoomCommand(targetUser.name + ' was redirected to ' + roomName + ' by ' + user.name + '.', room.id);
 			targetUser.leaveRoom(room);
-		}
-	},
-
-
-	k: 'kick',
-	kick: function(target, room, user){
-		if (!this.can('lock')) return false;
-		if (!target) return this.parse('/help kick');
-		if (!this.canTalk()) return false;
-
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-
-		if (!targetUser || !targetUser.connected) {
-			return this.sendReply('User '+this.targetUsername+' not found.');
-		}
-
-		if (!this.can('warn', targetUser, room)) return false;
-		if (!room.auth) {
-			this.addModCommand(targetUser.name+' was kicked from the room by '+user.name+'.');
-			targetUser.popup('You were kicked from '+room.id+' by '+user.name+'.');
-			this.logModCommand(user.name+' kicked '+targetUser.name+' from the room '+room.id);
-			targetUser.leaveRoom(room.id);
-		}
-		if (room.auth) {
-			this.addRoomCommand(targetUser.name+' was kicked from the room by '+user.name+'.', room.id);
-			targetUser.popup('You were kicked from '+room.id+' by '+user.name+'.');
-			this.logRoomCommand(user.name+' kicked '+targetUser.name+' from the room '+room.id, room.id);
-			targetUser.leaveRoom(room.id);
 		}
 	},
 
