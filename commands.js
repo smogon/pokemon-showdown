@@ -1499,7 +1499,8 @@ var commands = exports.commands = {
 			}
 		}
 		if (target.toLowerCase() == "lobby") {
-			return connection.sendTo('lobby','|html|<div class="infobox" style="border-color:blue"><center><img src="http://i.imgur.com/RKZTxPs.png"></center><center><b><u>Welcome to the Frost Server!</u></b></center><br /> ' +
+			return connection.sendTo('lobby','|html|<div class="infobox" style="border-color:blue"><center><img src="http://i.imgur.com/RKZTxPs.png"></center><center><b><u>Welcome to the Frost Server!</u></b></center><br /> ' + 
+			'We\'re shifting into a Halloween phase - expect a theme change!<br />' +
 			'Home of many leagues for you to join or challenge, battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
 			'Make sure to type <b>/help</b> to get a list of commands that you can use and <b>/faq</b> to check out frequently asked questions.<br /><br />' +
 			'To get a chatroom for your league, please talk to an admin (~) to recieve one<br /><br />' +
