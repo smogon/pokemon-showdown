@@ -16,7 +16,7 @@ body {
 }
 
 .chat-log-add{
-        background:#f58137
+        background:#f68d4b 
 }
   
 .menugroup .button{
@@ -33,7 +33,7 @@ body {
 
 .userlist{
         border-left:1px solid #D5DDE4;
-        background:#f58137
+        background:#f68d4b 
 }
 
 .userlist li button:hover {
