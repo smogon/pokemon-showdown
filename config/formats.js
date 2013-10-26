@@ -47,6 +47,14 @@ exports.Formats = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
+		{
+		name: "[Gen 6] STABmons (Beta)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew']
+		]
+	},
 
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
