@@ -315,9 +315,29 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 80
 	},
+	poisonpowder: {
+		inherit: true,
+		onTryHit: function() {}
+	},
 	powergem: {
 		inherit: true,
 		basePower: 70
+	},
+	ragepowder: {
+		num: 476,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Until the end of the turn, all single-target attacks from the foe's team are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Ability Magic Bounce, or drawn in by the Abilities Lightningrod or Storm Drain. Fails if it is not a double or triple battle. Priority +3.",
+		shortDesc: "The foes' moves target the user on the turn used.",
+		id: "ragepowder",
+		name: "Rage Powder",
+		pp: 20,
+		priority: 3,
+		volatileStatus: 'followme',
+		secondary: false,
+		target: "self",
+		type: "Bug"
 	},
 	roar: {
 		inherit: true,
@@ -333,6 +353,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 100,
 		pp: 15
+	},
+	sleeppowder: {
+		inherit: true,
+		onTryHit: function() {}
 	},
 	smog: {
 		inherit: true,
