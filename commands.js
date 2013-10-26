@@ -1050,7 +1050,7 @@ var commands = exports.commands = {
 							Rooms.rooms.lobby.addRaw(btags + '~~ '+targetUser.name+' was vanished into nothingness by ' + user.name +'! ~~' + etags);
 							targetUser.disconnectAll();
 							return	this.logModCommand(targetUser.name+ ' was poofed by ' + user.name);
-					}
+						}
 				} else {
 					return this.sendReply('/poof target - Access denied.');
 				}
@@ -1085,8 +1085,8 @@ var commands = exports.commands = {
 	},
 
 	cpoof: function(target, room, user){
-		if(!user.can('broadcast'))
-			return this.sendReply('/cpoof - Access Denied');
+		if(!user.can('broadcast')) return this.sendReply('/cpoof - Access Denied');
+		if (!target) return this.sendReply('/cpoof - Please specify a custom poof message to use.');
 		if(poofeh) {
 			var btags = '<strong><font color="'+hashColor(Math.random().toString())+'" >';
 			var etags = '</font></strong>'
