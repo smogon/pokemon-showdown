@@ -1811,11 +1811,19 @@ exports.BattleAbilities = {
 		num: 124
 	},
 	"pixilate": {
-		desc: "Turns all of this Pokemon's Normal-typed attacks into Fairy-typed.",
-		shortDesc: "This Pokemon's Normal moves become Fairy.",
-		onModifyMove: function(move) {
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Fairy-typed. Does 1.3x damage.",
+		shortDesc: "This Pokemon's Normal moves become Fairy. Does 1.3x damage.",
+		onModifyMove: function(move, pokemon) {
 			if (move.type === 'Normal') {
 				move.type = 'Fairy';
+				pokemon.addVolatile('pixilate');
+			}
+		},
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function(basePower, pokemon, target, move) {
+				return this.chainModify([0x14CD, 0x1000]);
 			}
 		},
 		id: "pixilate",
@@ -2019,7 +2027,7 @@ exports.BattleAbilities = {
 		},
 		id: "refrigerate",
 		name: "Refrigerate",
-		rating: 3.5,
+		rating: 3,
 		num: -6,
 		gen: 6
 	},
