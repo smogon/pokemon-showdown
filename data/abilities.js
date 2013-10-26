@@ -65,7 +65,7 @@ exports.BattleAbilities = {
 		num: 106
 	},
 	"aerilate": {
-		desc: "Turn all of this Pokemon's Normal-typed attacks into Flying-typed.",
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Flying-typed.",
 		shortDesc: "This Pokemon's Normal moves become Flying.",
 		onModifyMove: function(move) {
 			if (move.type === 'Normal') {
@@ -1811,7 +1811,7 @@ exports.BattleAbilities = {
 		num: 124
 	},
 	"pixilate": {
-		desc: "Turn all of this Pokemon's Normal-typed attacks into Fairy-typed.",
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Fairy-typed.",
 		shortDesc: "This Pokemon's Normal moves become Fairy.",
 		onModifyMove: function(move) {
 			if (move.type === 'Normal') {
@@ -2002,7 +2002,7 @@ exports.BattleAbilities = {
 		num: 120
 	},
 	"refrigerate": {
-		desc: "Turn all of this Pokemon's Normal-typed attacks into Ice-typed. Does 1.3x damage.",
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Ice-typed. Does 1.3x damage.",
 		shortDesc: "This Pokemon's Normal moves become Ice. Does 1.3x damage.",
 		onModifyMove: function(move, pokemon) {
 			if (move.type === 'Normal') {
