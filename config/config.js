@@ -542,7 +542,6 @@ exports.groups = {
 		disableladder: true,
 		forcejoin: true,
 		permaban: true,
-		makeroom: true,
 		rank: 5
 	},
 	'#': {
