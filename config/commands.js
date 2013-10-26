@@ -318,6 +318,7 @@ var commands = exports.commands = {
 
 	regdate: function(target, room, user, connection) { 
 		if (!this.canBroadcast()) return;
+		if (!target) return this.sendReply('/regdate - Please specify a username.');
 		var username = target;
 		target = target.replace(/\s+/g, '');
 		var util = require("util"),
