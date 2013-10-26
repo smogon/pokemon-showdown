@@ -1,33 +1,45 @@
 #header{
-	background:url("http://upload.wikimedia.org/wikipedia/commons/d/da/Shades_of_blue.jpg")
+        background:url("http://i.imgur.com/F5pMH0a.png");
 }
 
-body{
-	background-image:url("http://i.imgur.com/hcpz7c2.jpg");
-	background-repeat:no-repeat;
-	background-position:right top
+body {
+        background:url("http://i.imgur.com/J4ALaW9.png");
 }
+
+.mainmenuwrapper {
+	background: url("http://i.imgur.com/iHubd1y.png") right bottom no-repeat;
+}
+
 
 .chat-log{
-	font-size:10pt;
-	background:#f2f9ff;
-	color:#000;
-	overflow:auto
+	background: url("http://i.imgur.com/dIfUHsq.png") right top no-repeat;
 }
 
+.chat-log-add{
+        background:#f58137
+}
+  
 .menugroup .button{
-	background:#3A5FCD
+        background:#5a11ff
 }
 
 .menugroup .menugroup{
-	text-align:center
+        text-align:center
 }
 
-.button:hover{
-	background:#4876FF
+.menugroup .button:hover {
+        background:#9f89ff
 }
 
 .userlist{
-	border-left:1px solid #D5DDE4;
-	background:#e5f5ff
+        border-left:1px solid #D5DDE4;
+        background:#f58137
+}
+
+.userlist li button:hover {
+        background:#db671d
+}
+
+.message-announce {
+        background:#000000
 }
