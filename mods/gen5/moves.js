@@ -194,7 +194,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 70
 	},
-	hiddenpowerfairy: null,
 	hiddenpowerfighting: {
 		inherit: true,
 		basePower: 70
