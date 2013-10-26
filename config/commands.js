@@ -1791,6 +1791,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/vote [option] - votes for the specified option in the poll');
 		}
+		if (target === 'all' || target === 'tell') {
+			matched = true;
+			this.sendReply('/tell [username], [message] - Sends a message to the user which they see when they next speak');
+		 }
 		if (target === 'buy') {
 			matched = true;
 			this.sendReply('/buy [item] - buys the specified item, assuming you have enough money');
