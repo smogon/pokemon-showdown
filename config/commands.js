@@ -854,6 +854,7 @@ var commands = exports.commands = {
 			'- /roomlog: view the moderator log in the room<br />' +
 			'<br />' +
 			'Room moderators (@) can also use:<br />' +
+			'- /kick <em>username</em>: kicks the user from the room<br />' +
 			'- /roomban <em>username</em>: bans user from the room<br />' +
 			'- /roomunban <em>username</em>: unbans user from the room<br />' +
 			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
