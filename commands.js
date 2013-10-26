@@ -18,6 +18,7 @@ var logeval = fs.createWriteStream('logs/eval.txt', {'flags': 'a'});
 var inShop = ['symbol', 'custom', 'animated', 'room', 'trainer', 'fix', 'declare'];
 var closeShop = false;
 var closedShop = 0;
+var avatar = fs.createWriteStream('config/avatars.csv', {'flags': 'a'}); // for /customavatar
 //spamroom
 if (typeof spamroom == "undefined") {
         spamroom = new Object();
