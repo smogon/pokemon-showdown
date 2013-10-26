@@ -1932,9 +1932,11 @@ exports.BattleAbilities = {
 		desc: "Changes user's type to match the user's current move before it attacks.",
 		shortDesc: "Changes user's type to match its move.",
 		onBeforeMove: function(pokemon, target, move) {
-			if (move && pokemon.types.join() !== move.type) {
-				this.add('-start', pokemon, 'typechange', move.type, '[from] Protean');
-				pokemon.types = [move.type];
+			if (!move) return;
+			var moveType = (move.id === 'hiddenpower' ? pokemon.hpType : move.type);
+			if (pokemon.types.join() !== moveType) {
+				this.add('-start', pokemon, 'typechange', moveType, '[from] Protean');
+				pokemon.types = [moveType];
 			}
 		},
 		id: "protean",
