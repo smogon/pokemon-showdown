@@ -35,6 +35,18 @@ exports.Formats = [
 		ruleset: ['CAP Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Uber']
 	},
+	{
+		name: "Custom Game",
+		section: "XY Singles",
+
+		searchShow: false,
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 1000,
+		defaultLevel: 100,
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview']
+	},
 
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
@@ -137,7 +149,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] Custom Game",
-		section: "Singles",
+		section: "BW2 Singles",
 
 		mod: 'gen5',
 		searchShow: false,
