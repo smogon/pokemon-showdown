@@ -916,7 +916,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Defense is boosted in Grassy Terrain.",
 		onModifyDefPriority: 6,
 		onModifyDef: function(pokemon) {
-			if (this.pseudoWeather['grassyterrain']) return this.chainModify(1.5);
+			if (this.isTerrain('grassyterrain')) return this.chainModify(1.5);
 		},
 		id: "grasspelt",
 		name: "Grass Pelt",
