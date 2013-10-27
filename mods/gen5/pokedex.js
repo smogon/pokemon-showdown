@@ -7,6 +7,10 @@ exports.BattlePokedex = {
 		inherit: true,
 		baseStats: {hp:65,atk:80,def:40,spa:45,spd:80,spe:75}
 	},
+	pidgeot: {
+		inherit: true,
+		baseStats: {hp:83,atk:80,def:75,spa:70,spd:70,spe:91}
+	},
 	pikachu: {
 		inherit: true,
 		baseStats: {hp:35,atk:55,def:30,spa:50,spd:40,spe:90}
@@ -14,6 +18,14 @@ exports.BattlePokedex = {
 	raichu: {
 		inherit: true,
 		baseStats: {hp:60,atk:90,def:55,spa:90,spd:80,spe:100}
+	},
+	nidoqueen: {
+		inherit: true,
+		baseStats: {hp:90,atk:82,def:87,spa:75,spd:85,spe:76}
+	},
+	nidoking: {
+		inherit: true,
+		baseStats: {hp:81,atk:92,def:77,spa:85,spd:75,spe:85}
 	},
 	clefairy: {
 		inherit: true,
@@ -35,9 +47,21 @@ exports.BattlePokedex = {
 		baseStats: {hp:140,atk:70,def:45,spa:75,spd:50,spe:45},
 		abilities: {0:"Cute Charm",H:"Frisk"}
 	},
+	vileplume: {
+		inherit: true,
+		baseStats: {hp:75,atk:80,def:85,spa:100,spd:90,spe:50}
+	},
+	poliwrath: {
+		inherit: true,
+		baseStats: {hp:90,atk:85,def:95,spa:70,spd:90,spe:70}
+	},
 	alakazam: {
 		inherit: true,
 		baseStats: {hp:55,atk:50,def:45,spa:135,spd:85,spe:120}
+	},
+	victreebel: {
+		inherit: true,
+		baseStats: {hp:80,atk:105,def:65,spa:100,spd:60,spe:70}
 	},
 	golem: {
 		inherit: true,
@@ -64,6 +88,14 @@ exports.BattlePokedex = {
 		inherit: true,
 		types:["Normal"]
 	},
+	ampharos: {
+		inherit: true,
+		baseStats: {hp:90,atk:75,def:75,spa:115,spd:90,spe:55}
+	},
+	bellossom: {
+		inherit: true,
+		baseStats: {hp:75,atk:80,def:85,spa:90,spd:100,spe:50}
+	},
 	marill: {
 		inherit: true,
 		types:["Water"]
@@ -72,6 +104,10 @@ exports.BattlePokedex = {
 		inherit: true,
 		types:["Water"],
 		baseStats: {hp:100,atk:50,def:80,spa:50,spd:80,spe:50}
+	},
+	jumpluff: {
+		inherit: true,
+		baseStats: {hp:75,atk:55,def:70,spa:55,spd:85,spe:110}
 	},
 	snubbull: {
 		inherit: true,
@@ -92,6 +128,10 @@ exports.BattlePokedex = {
 	gardevoir: {
 		inherit: true,
 		types:["Psychic"]
+	},
+	exploud: {
+		inherit: true,
+		baseStats: {hp:104,atk:91,def:63,spa:91,spd:63,spe:68}
 	},
 	azurill: {
 		inherit: true,
@@ -133,6 +173,10 @@ exports.BattlePokedex = {
 		inherit: true,
 		baseStats: {hp:85,atk:120,def:70,spa:50,spd:50,spe:100}
 	},
+	roserade: {
+		inherit: true,
+		baseStats: {hp:60,atk:70,def:55,spa:125,spd:105,spe:90}
+	},
 	mimejr: {
 		inherit: true,
 		types:["Psychic"]
@@ -144,6 +188,26 @@ exports.BattlePokedex = {
 	dusknoir: {
 		inherit: true,
 		abilities: {0:"Pressure"}
+	},
+	stoutland: {
+		inherit: true,
+		baseStats: {hp:85,atk:100,def:90,spa:45,spd:90,spe:80}
+	},
+	unfezant: {
+		inherit: true,
+		baseStats: {hp:80,atk:105,def:80,spa:65,spd:55,spe:93}
+	},
+	gigalith: {
+		inherit: true,
+		baseStats: {hp:85,atk:135,def:130,spa:60,spd:70,spe:25}
+	},
+	seismitoad: {
+		inherit: true,
+		baseStats: {hp:105,atk:85,def:75,spa:85,spd:75,spe:74}
+	},
+	leavanny: {
+		inherit: true,
+		baseStats: {hp:75,atk:103,def:80,spa:70,spd:70,spe:92}
 	},
 	venipede: {
 		inherit: true,
@@ -161,6 +225,10 @@ exports.BattlePokedex = {
 	whimsicott: {
 		inherit: true,
 		types:["Grass"]
+	},
+	krookodile: {
+		inherit: true,
+		baseStats: {hp:95,atk:117,def:70,spa:65,spd:70,spe:92},
 	},
 	gothita: {
 		inherit: true,
