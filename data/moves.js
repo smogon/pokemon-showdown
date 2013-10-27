@@ -9100,15 +9100,14 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "Hits all Pokemon.",
-		shortDesc: "Hits all Pokemon.",
+		desc: "Hits all adjacent Pokemon.",
+		shortDesc: "Hits all adjacent Pokemon.",
 		id: "petalblizzard",
 		name: "Petal Blizzard",
 		pp: 15,
 		priority: 0,
-		secondary: {
-		},
-		target: "all",
+		secondary: false,
+		target: "allAdjacent",
 		type: "Grass"
 	},
 	"petaldance": {
