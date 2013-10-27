@@ -4441,7 +4441,7 @@ exports.BattleMovedex = {
 		id: "followme",
 		name: "Follow Me",
 		pp: 20,
-		priority: 3,
+		priority: 2,
 		volatileStatus: 'followme',
 		effect: {
 			duration: 1,
