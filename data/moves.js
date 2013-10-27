@@ -9564,6 +9564,7 @@ exports.BattleMovedex = {
 		name: "Power-Up Punch",
 		pp: 30,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 100,
 			self: {
