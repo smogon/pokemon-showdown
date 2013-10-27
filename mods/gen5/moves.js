@@ -55,6 +55,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: function() {}
 	},
+	"crabhammer": {
+		inherit: true,
+		basePower: 90
+	},
 	defog: {
 		inherit: true,
 		desc: "Lowers one adjacent target's evasion by 1 stage. Whether or not the target's evasion was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, and Stealth Rock end for the target's side. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute, although a Substitute will still block the evasion lowering.",
@@ -286,6 +290,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60
 	},
+	"magicroom": {
+	inherit: true,
+	desc: "For 5 turns, the held items of all active Pokemon have no effect. During the effect, Fling and Natural Gift are prevented from being used by all active Pokemon. If this move is used during the effect, the effect ends. Priority -7.",
+	priority: -7
+	},
 	meteormash: {
 		inherit: true,
 		accuracy: 85,
@@ -384,6 +393,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 40
 	},
+	"stringshot": {
+		inherit: true,
+		desc: "Lowers all adjacent foes' Speed by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		shortDesc: "Lowers the foe(s) Speed by 1.",
+		boosts: {
+			spe: -1
+		}
+	},
 	strugglebug: {
 		inherit: true,
 		basePower: 30
@@ -399,6 +416,14 @@ exports.BattleMovedex = {
 	sweetkiss: {
 		inherit: true,
 		type: "Normal"
+	},
+	"sweetscent": {
+		inherit: true,
+		desc: "Lowers all adjacent foes' evasion by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. (Field: Can be used to attract wild Pokemon while standing in grass. Fails if the weather is not clear.)",
+		shortDesc: "Lowers the foe(s) evasion by 1.",
+		boosts: {
+			evasion: -1
+		}
 	},
 	swordsdance: {
 		inherit: true,
@@ -453,5 +478,9 @@ exports.BattleMovedex = {
 	willowisp: {
 		inherit: true,
 		accuracy: 75
-	}
+	},
+	"wonderroom": {
+	inherit: true,
+	desc: "For 5 turns, all active Pokemon have their Defense and Special Defense stats swapped. Stat stage changes are unaffected. If this move is used during the effect, the effect ends. Priority -7.",
+	priority: -7
 };
