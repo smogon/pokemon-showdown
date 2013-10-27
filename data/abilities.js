@@ -65,10 +65,10 @@ exports.BattleAbilities = {
 		num: 106
 	},
 	"aerilate": {
-		desc: "Turns all of this Pokemon's Normal-typed attacks into Flying-typed. Does 1.3x damage.",
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Flying-typed. Does 1.3x damage. Does not affect Hidden Power.",
 		shortDesc: "This Pokemon's Normal moves become Flying. Does 1.3x damage.",
 		onModifyMove: function(move, pokemon) {
-			if (move.type === 'Normal') {
+			if (move.type === 'Normal' && move.id !== 'hiddenpower') {
 				move.type = 'Flying';
 				pokemon.addVolatile('aerilate');
 			}
@@ -1817,10 +1817,10 @@ exports.BattleAbilities = {
 		num: 124
 	},
 	"pixilate": {
-		desc: "Turns all of this Pokemon's Normal-typed attacks into Fairy-typed. Does 1.3x damage.",
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Fairy-typed. Does 1.3x damage. Does not affect Hidden Power.",
 		shortDesc: "This Pokemon's Normal moves become Fairy. Does 1.3x damage.",
 		onModifyMove: function(move, pokemon) {
-			if (move.type === 'Normal') {
+			if (move.type === 'Normal' && move.id !== 'hiddenpower') {
 				move.type = 'Fairy';
 				pokemon.addVolatile('pixilate');
 			}
@@ -2018,10 +2018,10 @@ exports.BattleAbilities = {
 		num: 120
 	},
 	"refrigerate": {
-		desc: "Turns all of this Pokemon's Normal-typed attacks into Ice-typed. Does 1.3x damage.",
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Ice-typed. Does 1.3x damage. Does not affect Hidden Power.",
 		shortDesc: "This Pokemon's Normal moves become Ice. Does 1.3x damage.",
 		onModifyMove: function(move, pokemon) {
-			if (move.type === 'Normal') {
+			if (move.type === 'Normal' && move.id !== 'hiddenpower') {
 				move.type = 'Ice';
 				pokemon.addVolatile('refrigerate');
 			}
