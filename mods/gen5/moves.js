@@ -384,6 +384,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 40
 	},
+	stringshot: {
+		inherit: true,
+		desc: "Lowers all adjacent foes' Speed by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		shortDesc: "Lowers the foe(s) Speed by 1.",
+		boosts: {
+			spe: -1
+		}
+	},
 	strugglebug: {
 		inherit: true,
 		basePower: 30
@@ -399,6 +407,14 @@ exports.BattleMovedex = {
 	sweetkiss: {
 		inherit: true,
 		type: "Normal"
+	},
+	sweetscent: {
+		inherit: true,
+		desc: "Lowers all adjacent foes' evasion by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		shortDesc: "Lowers the foe(s) evasion by 1.",
+		boosts: {
+			evasion: -1
+		}
 	},
 	swordsdance: {
 		inherit: true,
