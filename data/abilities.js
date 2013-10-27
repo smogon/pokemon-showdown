@@ -65,11 +65,19 @@ exports.BattleAbilities = {
 		num: 106
 	},
 	"aerilate": {
-		desc: "Turns all of this Pokemon's Normal-typed attacks into Flying-typed.",
-		shortDesc: "This Pokemon's Normal moves become Flying.",
-		onModifyMove: function(move) {
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Flying-typed. Does 1.3x damage.",
+		shortDesc: "This Pokemon's Normal moves become Flying. Does 1.3x damage.",
+		onModifyMove: function(move, pokemon) {
 			if (move.type === 'Normal') {
 				move.type = 'Flying';
+				pokemon.addVolatile('aerilate');
+			}
+		},
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function(basePower, pokemon, target, move) {
+				return this.chainModify([0x14CD, 0x1000]);
 			}
 		},
 		id: "aerilate",
