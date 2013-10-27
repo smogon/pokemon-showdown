@@ -1471,12 +1471,12 @@ exports.BattleAbilities = {
 		num: 63
 	},
 	"megalauncher": {
-		desc: "Boosts the power of pulse moves such as Water Pulse and Dark Pulse.",
-		shortDesc: "Boosts the power of pulse moves.",
+		desc: "Boosts the power of Aura and Pulse moves, such as Aura Sphere and Dark Pulse, by 50%.",
+		shortDesc: "Boosts the power of Aura/Pulse moves by 50%.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (move.isPulseMove) {
-				return this.chainModify(1.2);
+				return this.chainModify(1.5);
 			}
 		},
 		id: "megalauncher",
