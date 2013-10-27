@@ -78,6 +78,58 @@ exports.Formats = [
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	{
+		name: "[Gen 5] OU Clear Skies",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Hail', 'Snow Warning', 'Sand Stream', 'Sandstorm', 'Rain Dance', 'Drizzle', 'Drought', 'Sunny Day']
+	},
+	{
+		name: "[Gen 5] OU Clear Skies - Perm",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Hail', 'Sandstorm', 'Rain Dance', 'Sunny Day']
+	},
+	{
+		name: "[Gen 5] OU No Hazards",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Spikes', 'Stealth Rocks', 'Toxic Spikes']
+	},
+	{
+		name: "[Gen 5] Point Score",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview', 'Point System'],
+		banlists: ['Drizzle ++ Swift Swim', 'Soul Dew', 'Arceus', 'Shadow Tag']
+	},
+	{
+		name: "[Gen 5] Perseverance",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		defaultLevel: 100,
+		onFaint: function(pokemon) {
+				var name = pokemon.side.name;
+				var winner = '';
+				if (pokemon.side.id === 'p1') {
+					winner = 'p2';
+				} else {
+					winner = 'p1';
+				}
+				pokemon.battle.win(winner);
+
+		},
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Shuckle', 'Sableye']
+	},
+	{
 		name: "[Gen 5] Ubers",
 		section: "BW2 Singles",
 
