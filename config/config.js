@@ -137,7 +137,7 @@ exports.herokuhack = false;
 // displayed in the client.
 exports.customavatars = {
 //'userid': 'customavatar.png'	
-	'eliteformizu':'mizu1.png',
+	/*'eliteformizu':'mizu1.png',
 	'elite4ninja' : 'ct.png',
 	'leaderlinksage' : 'WNZyhaf.png',
 	'garyoaklegacy' : 'gary_oak_sprite_by_legendkyurem97-d53os6n.png',
@@ -471,7 +471,7 @@ exports.customavatars = {
 	'frontierakash' : 'akash.png',
 	'piiiikachuuu':'pika.png',
 	'ryuuga':'ryuuga.png',
-	'nunuchu42':'nunuchu.png'
+	'nunuchu42':'nunuchu.png'*/
 };
 
 // appealurl - specify a URL containing information on how users can appeal
