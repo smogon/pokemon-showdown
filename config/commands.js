@@ -299,8 +299,6 @@ var commands = exports.commands = {
 		var symbols = ['☢','☠ ','☣'];
 		var pick = Math.floor(Math.random()*3);
 		symbol = symbols[pick];
-		this.sendReply(symbol + ', ' + pick);
-		this.sendReply(user.group);
 		this.sendReply('You have been hallow\'d with a custom symbol!');
 		user.getIdentity = function(){
 			if(this.muted)	return '!' + this.name;
