@@ -79,10 +79,12 @@ var commands = exports.commands = {
 			return this.parse('/help msg');
 		}
 		if (!targetUser || !targetUser.connected) {
-			if (!target) {
-				this.sendReply('User '+this.targetUsername+' not found. Did you forget a comma?');
+			if (targetUser && !targetUser.connected) {
+				this.popupReply('User '+this.targetUsername+' is offline.');
+			} else if (!target) {
+				this.popupReply('User '+this.targetUsername+' not found. Did you forget a comma?');
 			} else {
-				this.sendReply('User '+this.targetUsername+' not found. Did you misspell their name?');
+				this.popupReply('User '+this.targetUsername+' not found. Did you misspell their name?');
 			}
 			return this.parse('/help msg');
 		}
