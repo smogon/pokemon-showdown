@@ -105,6 +105,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 95
 	},
+	followme: {
+		inherit: true,
+		priority: 3
+	},
 	frostbreath: {
 		inherit: true,
 		basePower: 40
