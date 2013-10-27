@@ -415,8 +415,8 @@ exports.BattleAbilities = {
 		num: 6
 	},
 	"darkaura": {
-		desc: "Increases the power of all Dark-type moves in battle.",
-		shortDesc: "Increases the power of all Dark-type moves in battle.",
+		desc: "Increases the power of all Dark-type moves in battle to 1.3x.",
+		shortDesc: "Increases the power of all Dark-type moves in battle to 1.3x.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
@@ -433,8 +433,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (move.type === 'Dark') {
-				this.debug('Dark Aura boost: x' + (reverseAura? 0.8 : 1.2));
-				return this.chainModify(reverseAura? 0.8 : 1.2);
+				return this.chainModify(reverseAura? 0.75 : 1.3);
 			}
 		},
 		id: "darkaura",
@@ -588,8 +587,8 @@ exports.BattleAbilities = {
 		num: 27
 	},
 	"fairyaura": {
-		desc: "Increases the power of all Fairy-type moves in battle.",
-		shortDesc: "Increases the power of all Fairy-type moves in battle.",
+		desc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
+		shortDesc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
@@ -606,8 +605,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (move.type === 'Fairy') {
-				this.debug('Fairy Aura boost: x' + (reverseAura? 0.8 : 1.2));
-				return this.chainModify(reverseAura? 0.8 : 1.2);
+				return this.chainModify(reverseAura? 0.75 : 1.3);
 			}
 		},
 		id: "fairyaura",
