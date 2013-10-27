@@ -757,13 +757,6 @@ exports.BattleFormats = {
 		ruleset: ['Pokemon']
 	},
 
-
-	standardnext: {
-		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Soul Dew']
-	},
-
 	// Rulesets
 	///////////////////////////////////////////////////////////////////
 
@@ -781,6 +774,16 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Moody']
+	},
+	standardpokebank: {
+		effectType: 'Banlist',
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
+		banlist: ['Illegal']
+	},
+	standardnext: {
+		effectType: 'Banlist',
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'HP Percentage Mod'],
+		banlist: ['Illegal', 'Soul Dew']
 	},
 	pokemon: {
 		effectType: 'Banlist',

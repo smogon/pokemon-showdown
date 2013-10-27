@@ -404,7 +404,7 @@ var commands = exports.commands = {
 					moves.count = 0;
 				}
 				if (moves.count === 4) {
-					return this.sendReplyBox('Specify a maximum of 4 moves.');
+					return this.sendReply('Specify a maximum of 4 moves.');
 				}
 				moves[target] = 1;
 				moves.count++;
@@ -418,7 +418,7 @@ var commands = exports.commands = {
 					ability.count = 0;
 				}
 				if (ability.count === 1) {
-					return this.sendReplyBox('Specify only one ability.');
+					return this.sendReply('Specify only one ability.');
 				}
 				ability[target] = 1;
 				ability.count++;
@@ -456,7 +456,7 @@ var commands = exports.commands = {
 			}
 			if (target === 'all') {
 				if (this.broadcasting) {
-					return this.sendReplyBox('A search with the parameter "all" cannot be broadcast.')
+					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
 				}
 				showAll = true;
 				continue;
@@ -469,18 +469,18 @@ var commands = exports.commands = {
 						types.count = 0;
 					}
 					if (types.count === 2) {
-						return this.sendReplyBox('Specify a maximum of two types.');
+						return this.sendReply('Specify a maximum of two types.');
 					}
 					types[target] = 1;
 					types.count++;
 					continue;
 				}
 			} else {
-				return this.sendReplyBox('"' + targets[i].trim() + '" could not be found in any of the search categories.');
+				return this.sendReply('"' + targets[i].trim() + '" could not be found in any of the search categories.');
 			}
 		}
 
-		if (showAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br />Try "/help dexsearch" for more information on this command.');
+		if (showAll && count === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
 
 		while (count > 0) {
 			count--;
@@ -634,7 +634,7 @@ var commands = exports.commands = {
 					prevSourceType = source.substr(0,2);
 					prevSourceCount = source.substr(2)?0:-1;
 					buffer += "<li>gen "+source.substr(0,1)+" "+sourceNames[source.substr(1,1)];
-					if (prevSourceType === '5E' && template.maleOnlyDreamWorld) buffer += " (cannot have DW ability)";
+					if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
 					if (source.substr(2)) buffer += ": "+source.substr(2);
 				}
 			}
@@ -2026,7 +2026,7 @@ var commands = exports.commands = {
 			this.sendReply('/help OR /h OR /? - Gives you help.');
 		}
 		if (!target) {
-			this.sendReply('COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps');
+			this.sendReply('COMMANDS: /msg, /reply, /ignore, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps, /highlight');
 			this.sendReply('INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))');
 			this.sendReply('For details on all room commands, use /roomhelp');
 			this.sendReply('For details on all commands, use /help all');
