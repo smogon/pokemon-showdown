@@ -8552,16 +8552,16 @@ exports.BattleMovedex = {
 		num: -6,
 		gen: 6,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 65,
 		category: "Special",
-		desc: "Deals damage to one adjacent target with a 30% chance to lower its Special Attack by 1 stage.",
-		shortDesc: "30% chance to lower the target's Sp. Atk by 1.",
+		desc: "Deals damage to one adjacent target and lowers its Special Attack by 1 stage.",
+		shortDesc: "Lowers the target's Special Attack by 1.",
 		id: "mysticalfire",
 		name: "Mystical Fire",
 		pp: 10,
 		priority: 0,
 		secondary: {
-			chance: 30,
+			chance: 100,
 			boosts: {
 				spa: -1
 			}
