@@ -1481,7 +1481,6 @@ var commands = exports.commands = {
 		if (targetRoom === 'logroom' && user.group !== '~') return false;
 		if (targetRoom === 'adminroom' && user.group !== '~') return false;
 		if (targetRoom === 'spamroom' && user.group !== '~') return false;
-		if (target.toLowerCase() == 'cosytearoom' && (user.userid !== 'cosy' || user.userid !== 'teafany' || user.userid !== 'prez' || user.userid !== 'akeino')) return false;
 		if (!targetRoom) {
 			if (target === 'lobby') return connection.sendTo(target, "|noinit|nonexistent|");
 			return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
@@ -1500,14 +1499,19 @@ var commands = exports.commands = {
 				return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' is currently locked.");
 			}
 		}
-		if (target.toLowerCase() == "lobby") {
+		/*if (target.toLowerCase() == "lobby") {
 			return connection.sendTo('lobby','|html|<div class="infobox" style="border-color:blue"><center><img src="http://i.imgur.com/RKZTxPs.png"></center><center><b><u>Welcome to the Frost Server!</u></b></center><br /> ' + 
-			'We\'re shifting into a Halloween phase - expect a theme change!<br /><br />' +
 			'Home of many leagues for you to join or challenge, battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
 			'Make sure to type <b>/help</b> to get a list of commands that you can use and <b>/faq</b> to check out frequently asked questions.<br /><br />' +
 			'To get a chatroom for your league, please talk to an admin (~) to recieve one<br /><br />' +
 			'You may want to check out the <a href="http://frost-server.no-ip.org/">servers custom client</a> as you maybe missing out on some features.<br /><br />' +
 			'<b>Frost</b>-<blockquote><em>Promoting your league, one challenger at a time</em></blockquote></div>');
+		}*/
+		if (target.toLowerCase() == "lobby") {
+			return connection.sendTo('lobby','|html|<center><br><h1><font><b><img src="http://www.serebii.net/xy/pokemon/711-h.png"><font color="Orange">WELCOME </font><font color="black">TO </font><font color="Orange">FROST!</font><img src="http://www.serebii.net/xy/pokemon/711-h.png"></center></b><br />' +
+				'<center>Frost staff wish you all a happy halloween!<br /><br />' +
+				'Home of many leagues for you to join or challenge, battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
+				'Make sure to type <b>/help</b> to get a list of commands that you can use and <b>/faq</b> to check out frequently asked questions.</center>');
 		}
 	},
 
