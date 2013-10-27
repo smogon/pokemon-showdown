@@ -1762,9 +1762,25 @@ exports.BattleAbilities = {
 		num: 20
 	},
 	"parentalbond": {
-		desc: "Allows the Pokemon to hit twice with the same move in one turn.",
-		shortDesc: "Hits twice in one turn.",
-		//todo
+		desc: "Allows the Pokemon to hit twice with the same move in one turn. Second hit has 0.5x base power. Does not affect Status or multihit moves.",
+		shortDesc: "Hits twice in one turn. Second hit has 0.5x base power.",
+		onModifyMove: function(move, pokemon) {
+			if (move.category !== 'Status' && !move.multihit && move.target === "normal") {
+				move.multihit = 2;
+				pokemon.addVolatile('parentalbond');
+			}
+		},
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function(basePower) {
+				if (this.effectData.hit) {
+					return this.chainModify(0.5);
+				} else {
+					this.effectData.hit = true;
+				}
+			}
+		},
 		id: "parentalbond",
 		name: "Parental Bond",
 		rating: 3,
