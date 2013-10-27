@@ -293,7 +293,23 @@ var commands = exports.commands = {
 		return this.parse('/me sasses ' + target + '!');
 	},
 
-
+	hallowme: function(target, room, user){
+		if (user.canChooseTour) return this.sendReply('You have already received your halloween symbol, if the server restarts you can change it!');
+		var symbol = '';
+		var symbols = ['☢','☠ ','☣'];
+		var pick = Math.floor(Math.random()*3);
+		symbol = symbols[pick];
+		this.sendReply(symbol + ', ' + pick);
+		this.sendReply(user.group);
+		this.sendReply('You have been hallow\'d with a custom symbol!');
+		user.getIdentity = function(){
+			if(this.muted)	return '!' + this.name;
+			if(this.locked) return '?' + this.name;
+			return symbol + this.name;
+		};
+		user.updateIdentity();
+		user.canChooseTour = true;
+	},
 
 	/*********************************************************
 	 * Shortcuts
@@ -854,7 +870,7 @@ var commands = exports.commands = {
 			'- /roomlog: view the moderator log in the room<br />' +
 			'<br />' +
 			'Room moderators (@) can also use:<br />' +
-			'- /kick <em>username</em>: kicks the user from the room<br />' +
+			'- /rkick <em>username</em>: kicks the user from the room<br />' +
 			'- /roomban <em>username</em>: bans user from the room<br />' +
 			'- /roomunban <em>username</em>: unbans user from the room<br />' +
 			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
