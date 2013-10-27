@@ -5894,10 +5894,10 @@ exports.BattleMovedex = {
 	"hex": {
 		num: 506,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 65,
 		basePowerCallback: function(pokemon, target) {
-			if (target.status) return 120;
-			return 60;
+			if (target.status) return 130;
+			return 65;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. Power doubles if the target has a major status problem.",
@@ -12693,14 +12693,14 @@ exports.BattleMovedex = {
 		accuracy: 95,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers all adjacent foes' Speed by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
-		shortDesc: "Lowers the foe(s) Speed by 1.",
+		desc: "Lowers all adjacent foes' Speed by 2 stages. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		shortDesc: "Lowers the foe(s) Speed by 2.",
 		id: "stringshot",
 		name: "String Shot",
 		pp: 40,
 		priority: 0,
 		boosts: {
-			spe: -1
+			spe: -2
 		},
 		secondary: false,
 		target: "allAdjacentFoes",
@@ -13057,14 +13057,14 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers all adjacent foes' evasion by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. (Field: Can be used to attract wild Pokemon while standing in grass. Fails if the weather is not clear.)",
-		shortDesc: "Lowers the foe(s) evasion by 1.",
+		desc: "Lowers all adjacent foes' evasion by 2 stages. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		shortDesc: "Lowers the foe(s) evasion by 2.",
 		id: "sweetscent",
 		name: "Sweet Scent",
 		pp: 20,
 		priority: 0,
 		boosts: {
-			evasion: -1
+			evasion: -2
 		},
 		secondary: false,
 		target: "allAdjacentFoes",
