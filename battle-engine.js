@@ -977,10 +977,10 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.clearItem = function() {
 		return this.setItem('');
 	};
-	BattlePokemon.prototype.setAbility = function(ability, source, effect) {
+	BattlePokemon.prototype.setAbility = function(ability, source, effect, noForce) {
 		if (!this.hp) return false;
 		ability = this.battle.getAbility(ability);
-		if (this.ability === ability.id) {
+		if (noForce && this.ability === ability.id) {
 			return false;
 		}
 		if (ability.id === 'multitype' || ability.id === 'illusion' || this.ability === 'multitype') {
