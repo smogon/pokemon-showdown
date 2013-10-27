@@ -55,6 +55,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: function() {}
 	},
+	crabhammer: {
+		inherit: true,
+		basePower: 90
+	},
 	defog: {
 		inherit: true,
 		desc: "Lowers one adjacent target's evasion by 1 stage. Whether or not the target's evasion was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, and Stealth Rock end for the target's side. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute, although a Substitute will still block the evasion lowering.",
