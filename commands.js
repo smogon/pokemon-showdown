@@ -2672,7 +2672,7 @@ var commands = exports.commands = {
 		}
 		if (!name) return this.sendReply('There are no users of the rank ' + target);
 
-		this.sendReply('Users of rank ' + target + );
+		this.sendReply('Users of rank ' + target);
 		this.sendReply(name);
 	},
 
