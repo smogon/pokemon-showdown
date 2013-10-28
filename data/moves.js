@@ -12892,7 +12892,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		isContact: true,
 		onTryHit: function(target) {
-			decision = this.willMove(target);
+			var decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst')) {
 				return false;
 			}
