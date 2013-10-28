@@ -4272,7 +4272,7 @@ exports.BattleMovedex = {
 		onHitField: function(target, source) {
 			for (var i=0; i<this.sides.length; i++) {
 				for (var j=0; j<this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j].hasType('Grass')) {
+					if (this.sides[i].active[j] && this.sides[i].active[j].hasType('Grass')) {
 						// Apply the boost from source's Flower Shield if it has Grass type
 						this.boost({def: 2}, this.sides[i].active[j], source, this.getMove('Flower Shield'));
 					}
