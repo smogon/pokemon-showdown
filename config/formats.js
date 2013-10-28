@@ -7,6 +7,22 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		name: "OU (beta)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		noPokebank: true,
+		banlist: ['Uber', 'Soul Dew']
+	},
+	{
+		name: "Ubers (beta)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
+		noPokebank: true,
+		banlist: ['']
+	},
+	{
 		name: "Pokebank OU (beta)",
 		section: "XY Singles",
 
