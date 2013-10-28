@@ -2733,6 +2733,16 @@ exports.BattleAbilities = {
 		rating: 2,
 		num: 33
 	},
+	"symbiosis": {
+		desc: "This Pokemon immediately passes its item to an ally after their item is consumed.",
+		shortDesc: "This Pokemon passes its item to an ally after their item is consumed.",
+		//todo
+		id: "symbiosis",
+		name: "Symbiosis",
+		rating: 0,
+		num: -6,
+		gen: 6
+	},
 	"synchronize": {
 		desc: "If an opponent burns, poisons or paralyzes this Pokemon, it receives the same condition.",
 		shortDesc: "If another Pokemon burns/poisons/paralyzes this Pokemon, it also gets that status.",
