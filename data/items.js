@@ -421,6 +421,7 @@ exports.BattleItems = {
 	"buggem": {
 		id: "buggem",
 		name: "Bug Gem",
+		isUnreleased: true,
 		spritenum: 53,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -822,6 +823,7 @@ exports.BattleItems = {
 	"darkgem": {
 		id: "darkgem",
 		name: "Dark Gem",
+		isUnreleased: true,
 		spritenum: 89,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -957,6 +959,7 @@ exports.BattleItems = {
 	"dragongem": {
 		id: "dragongem",
 		name: "Dragon Gem",
+		isUnreleased: true,
 		spritenum: 107,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -1074,6 +1077,7 @@ exports.BattleItems = {
 	"electricgem": {
 		id: "electricgem",
 		name: "Electric Gem",
+		isUnreleased: true,
 		spritenum: 120,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -1179,6 +1183,7 @@ exports.BattleItems = {
 	"fightinggem": {
 		id: "fightinggem",
 		name: "Fighting Gem",
+		isUnreleased: true,
 		spritenum: 139,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -1221,6 +1226,7 @@ exports.BattleItems = {
 	"firegem": {
 		id: "firegem",
 		name: "Fire Gem",
+		isUnreleased: true,
 		spritenum: 141,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -1309,6 +1315,7 @@ exports.BattleItems = {
 	"flyinggem": {
 		id: "flyinggem",
 		name: "Flying Gem",
+		isUnreleased: true,
 		spritenum: 149,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -1429,6 +1436,7 @@ exports.BattleItems = {
 	"ghostgem": {
 		id: "ghostgem",
 		name: "Ghost Gem",
+		isUnreleased: true,
 		spritenum: 161,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -1447,6 +1455,7 @@ exports.BattleItems = {
 	"grassgem": {
 		id: "grassgem",
 		name: "Grass Gem",
+		isUnreleased: true,
 		spritenum: 172,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -1519,6 +1528,7 @@ exports.BattleItems = {
 	"groundgem": {
 		id: "groundgem",
 		name: "Ground Gem",
+		isUnreleased: true,
 		spritenum: 182,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -1681,6 +1691,7 @@ exports.BattleItems = {
 	"icegem": {
 		id: "icegem",
 		name: "Ice Gem",
+		isUnreleased: true,
 		spritenum: 218,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -2941,6 +2952,7 @@ exports.BattleItems = {
 	"poisongem": {
 		id: "poisongem",
 		name: "Poison Gem",
+		isUnreleased: true,
 		spritenum: 344,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -3005,6 +3017,7 @@ exports.BattleItems = {
 	"psychicgem": {
 		id: "psychicgem",
 		name: "Psychic Gem",
+		isUnreleased: true,
 		spritenum: 369,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -3240,6 +3253,7 @@ exports.BattleItems = {
 	"rockgem": {
 		id: "rockgem",
 		name: "Rock Gem",
+		isUnreleased: true,
 		spritenum: 415,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -3789,6 +3803,7 @@ exports.BattleItems = {
 	"steelgem": {
 		id: "steelgem",
 		name: "Steel Gem",
+		isUnreleased: true,
 		spritenum: 473,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
@@ -4029,6 +4044,7 @@ exports.BattleItems = {
 	"watergem": {
 		id: "watergem",
 		name: "Water Gem",
+		isUnreleased: true,
 		spritenum: 528,
 		isGem: true,
 		onSourceTryPrimaryHit: function(target, source, move) {
