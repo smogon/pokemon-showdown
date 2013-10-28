@@ -1371,6 +1371,31 @@ exports.BattleAbilities = {
 		rating: 1,
 		num: 64
 	},
+	"magician": {
+		desc: "If this Pokemon is not holding an item, it steals the held item of a target it hits with a move.",
+		shortDesc: "This Pokemon steals the held item of a target it hits with a move.",
+		onFoeAfterDamage: function(damage, target, source, move) {
+			if (source && source !== target && move) {
+				if (source.item) {
+					return;
+				}
+				var yourItem = target.takeItem(source);
+				if (!yourItem) {
+					return;
+				}
+				if (!source.setItem(yourItem)) {
+					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+					return;
+				}
+				this.add('-item', source, yourItem, '[from] Magician');
+			}
+		},
+		id: "magician",
+		name: "Magician",
+		rating: 2,
+		num: -6,
+		gen: 6
+	},
 	"magicbounce": {
 		desc: "Non-damaging moves are reflected back at the user.",
 		shortDesc: "This Pokemon blocks certain status moves and uses the move itself.",
