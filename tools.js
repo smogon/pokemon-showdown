@@ -450,6 +450,8 @@ module.exports = (function () {
 		var limit1 = true;
 		var sketch = false;
 
+		var sometimesPossible = false; // is this move in the learnset at all?
+
 		// This is a pretty complicated algorithm
 
 		// Abstractly, what it does is construct the union of sets of all
@@ -475,6 +477,7 @@ module.exports = (function () {
 			if (format.id === 'gen5stabmons' && template.types.indexOf(this.getMove(move).type) > -1) return false;
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
+					sometimesPossible = true;
 					var lset = template.learnset[move];
 					if (!lset || template.speciesid === 'smeargle') {
 						lset = template.learnset['sketch'];
@@ -600,6 +603,7 @@ module.exports = (function () {
 
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
+			if (format.noPokebank && sometimesPossible) return {type:'pokebank'};
 			return true;
 		}
 		if (!sources.length) sources = null;
@@ -923,6 +927,8 @@ module.exports = (function () {
 							}
 						} else if (problem.type === 'oversketched') {
 							problemString = problemString.concat(" because it can only sketch "+problem.maxSketches+" move"+(problem.maxSketches>1?"s":"")+".");
+						} else if (problem.type === 'pokebank') {
+							problemString = problemString.concat(" because it's not possible to transfer pokemon from earlier games to XY yet (Pokébank comes out in December).");
 						} else {
 							problemString = problemString.concat(".");
 						}
