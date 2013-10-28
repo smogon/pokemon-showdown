@@ -803,7 +803,9 @@ module.exports = (function () {
 			set.level = maxLevel;
 		}
 
-		set.species = set.species || set.name || 'Bulbasaur';
+		var nameTemplate = this.getTemplate(set.name);
+		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) set.name = null;
+		set.species = set.species;
 		set.name = set.name || set.species;
 		var name = set.species;
 		if (set.species !== set.name) name = set.name + " ("+set.species+")";
