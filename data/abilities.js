@@ -916,7 +916,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Defense is boosted in Grassy Terrain.",
 		onModifyDefPriority: 6,
 		onModifyDef: function(pokemon) {
-			if (this.pseudoWeather['grassyterrain']) return this.chainModify(1.5);
+			if (this.isTerrain('grassyterrain')) return this.chainModify(1.5);
 		},
 		id: "grasspelt",
 		name: "Grass Pelt",
@@ -1371,6 +1371,31 @@ exports.BattleAbilities = {
 		rating: 1,
 		num: 64
 	},
+	"magician": {
+		desc: "If this Pokemon is not holding an item, it steals the held item of a target it hits with a move.",
+		shortDesc: "This Pokemon steals the held item of a target it hits with a move.",
+		onFoeAfterDamage: function(damage, target, source, move) {
+			if (source && source !== target && move) {
+				if (source.item) {
+					return;
+				}
+				var yourItem = target.takeItem(source);
+				if (!yourItem) {
+					return;
+				}
+				if (!source.setItem(yourItem)) {
+					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+					return;
+				}
+				this.add('-item', source, yourItem, '[from] Magician');
+			}
+		},
+		id: "magician",
+		name: "Magician",
+		rating: 2,
+		num: -6,
+		gen: 6
+	},
 	"magicbounce": {
 		desc: "Non-damaging moves are reflected back at the user.",
 		shortDesc: "This Pokemon blocks certain status moves and uses the move itself.",
@@ -1471,12 +1496,12 @@ exports.BattleAbilities = {
 		num: 63
 	},
 	"megalauncher": {
-		desc: "Boosts the power of pulse moves such as Water Pulse and Dark Pulse.",
-		shortDesc: "Boosts the power of pulse moves.",
+		desc: "Boosts the power of Aura and Pulse moves, such as Aura Sphere and Dark Pulse, by 50%.",
+		shortDesc: "Boosts the power of Aura/Pulse moves by 50%.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (move.isPulseMove) {
-				return this.chainModify(1.2);
+				return this.chainModify(1.5);
 			}
 		},
 		id: "megalauncher",
@@ -1762,9 +1787,25 @@ exports.BattleAbilities = {
 		num: 20
 	},
 	"parentalbond": {
-		desc: "Allows the Pokemon to hit twice with the same move in one turn.",
-		shortDesc: "Hits twice in one turn.",
-		//todo
+		desc: "Allows the Pokemon to hit twice with the same move in one turn. Second hit has 0.5x base power. Does not affect Status or multihit moves.",
+		shortDesc: "Hits twice in one turn. Second hit has 0.5x base power.",
+		onModifyMove: function(move, pokemon) {
+			if (move.category !== 'Status' && !move.multihit && move.target === "normal") {
+				move.multihit = 2;
+				pokemon.addVolatile('parentalbond');
+			}
+		},
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function(basePower) {
+				if (this.effectData.hit) {
+					return this.chainModify(0.5);
+				} else {
+					this.effectData.hit = true;
+				}
+			}
+		},
 		id: "parentalbond",
 		name: "Parental Bond",
 		rating: 3,
@@ -2691,6 +2732,16 @@ exports.BattleAbilities = {
 		name: "Swift Swim",
 		rating: 2,
 		num: 33
+	},
+	"symbiosis": {
+		desc: "This Pokemon immediately passes its item to an ally after their item is consumed.",
+		shortDesc: "This Pokemon passes its item to an ally after their item is consumed.",
+		//todo
+		id: "symbiosis",
+		name: "Symbiosis",
+		rating: 0,
+		num: -6,
+		gen: 6
 	},
 	"synchronize": {
 		desc: "If an opponent burns, poisons or paralyzes this Pokemon, it receives the same condition.",

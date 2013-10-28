@@ -7,6 +7,31 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		name: "OU (beta)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		noPokebank: true,
+		banlist: ['Uber', 'Soul Dew']
+	},
+	{
+		name: "Ubers (beta)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
+		noPokebank: true,
+		banlist: ['']
+	},
+	{
+		name: "LC (beta)",
+		section: "XY Singles",
+
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		noPokebank: true,
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther']
+	},
+	{
 		name: "Pokebank OU (beta)",
 		section: "XY Singles",
 
@@ -217,6 +242,32 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		name: "Smogon Doubles (beta)",
+		section: "XY Doubles",
+		column: 2,
+
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		noPokebank: true,
+		banlist: ['Dark Void', 'Soul Dew',
+			'Mewtwo',
+			'Lugia',
+			'Ho-Oh',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem-White',
+			'Xerneas',
+			'Yveltal'
+		]
+	},
+	{
 		name: "Pokebank Smogon Doubles (beta)",
 		section: "XY Doubles",
 		column: 2,
@@ -236,7 +287,9 @@ exports.Formats = [
 			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
 			'Reshiram',
 			'Zekrom',
-			'Kyurem-White'
+			'Kyurem-White',
+			'Xerneas',
+			'Yveltal'
 		]
 	},
 	{

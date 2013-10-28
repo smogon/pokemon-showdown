@@ -2048,7 +2048,7 @@ exports.BattleMovedex = {
 	"crabhammer": {
 		num: 152,
 		accuracy: 90,
-		basePower: 90,
+		basePower: 100,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target with a higher chance for a critical hit. Makes contact.",
 		shortDesc: "High critical hit ratio.",
@@ -4272,7 +4272,7 @@ exports.BattleMovedex = {
 		onHitField: function(target, source) {
 			for (var i=0; i<this.sides.length; i++) {
 				for (var j=0; j<this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j].hasType('Grass')) {
+					if (this.sides[i].active[j] && this.sides[i].active[j].hasType('Grass')) {
 						// Apply the boost from source's Flower Shield if it has Grass type
 						this.boost({def: 2}, this.sides[i].active[j], source, this.getMove('Flower Shield'));
 					}
@@ -5894,10 +5894,10 @@ exports.BattleMovedex = {
 	"hex": {
 		num: 506,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 65,
 		basePowerCallback: function(pokemon, target) {
-			if (target.status) return 120;
-			return 60;
+			if (target.status) return 130;
+			return 65;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. Power doubles if the target has a major status problem.",
@@ -9564,6 +9564,7 @@ exports.BattleMovedex = {
 		name: "Power-Up Punch",
 		pp: 30,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -11489,7 +11490,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes one adjacent target's Ability to become Simple. Fails if the target's Ability is Multitype, Simple, or Truant. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		desc: "Causes one adjacent target's Ability to become Simple. Fails if the target's Ability is Multitype, Simple, Stance Change, or Truant. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "The target's Ability becomes Simple.",
 		id: "simplebeam",
 		name: "Simple Beam",
@@ -11497,7 +11498,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onTryHit: function(pokemon) {
-			var bannedAbilities = {multitype:1, simple:1, truant:1};
+			var bannedAbilities = {multitype:1, simple:1, stancechange:1, truant:1};
 			if (bannedAbilities[pokemon.ability]) {
 				return false;
 			}
@@ -12693,14 +12694,14 @@ exports.BattleMovedex = {
 		accuracy: 95,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers all adjacent foes' Speed by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
-		shortDesc: "Lowers the foe(s) Speed by 1.",
+		desc: "Lowers all adjacent foes' Speed by 2 stages. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		shortDesc: "Lowers the foe(s) Speed by 2.",
 		id: "stringshot",
 		name: "String Shot",
 		pp: 40,
 		priority: 0,
 		boosts: {
-			spe: -1
+			spe: -2
 		},
 		secondary: false,
 		target: "allAdjacentFoes",
@@ -12891,7 +12892,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		isContact: true,
 		onTryHit: function(target) {
-			decision = this.willMove(target);
+			var decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst')) {
 				return false;
 			}
@@ -13057,14 +13058,14 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers all adjacent foes' evasion by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. (Field: Can be used to attract wild Pokemon while standing in grass. Fails if the weather is not clear.)",
-		shortDesc: "Lowers the foe(s) evasion by 1.",
+		desc: "Lowers all adjacent foes' evasion by 2 stages. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		shortDesc: "Lowers the foe(s) evasion by 2.",
 		id: "sweetscent",
 		name: "Sweet Scent",
 		pp: 20,
 		priority: 0,
 		boosts: {
-			evasion: -1
+			evasion: -2
 		},
 		secondary: false,
 		target: "allAdjacentFoes",

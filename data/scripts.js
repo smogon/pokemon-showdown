@@ -1570,7 +1570,7 @@ exports.BattleScripts = {
 						template.viableMoves = {present:1, bestow:1};
 					}
 				} else if (template.species === potd.species) {
-					continue; // No thanks, I've already got one
+					continue; // No, thanks, I've already got one
 				}
 			}
 
@@ -1588,7 +1588,7 @@ exports.BattleScripts = {
 			pokemon.push(set);
 
 			pokemonLeft++;
-			// Now that our Pokemon has passed all checks, we can increment the type counter:
+			// Now that our Pokemon has passed all checks, we can increment the type counter
 			for (var t=0; t<types.length; t++) {
 				if (types[t] in typeCount) {
 					typeCount[types[t]]++;
@@ -1597,7 +1597,7 @@ exports.BattleScripts = {
 				}
 			}
 			typeComboCount[typeCombo] = 1;
-			// Increment Uber/NU counter:
+			// Increment Uber/NU counter
 			if (tier === 'Uber') {
 				uberCount++;
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
