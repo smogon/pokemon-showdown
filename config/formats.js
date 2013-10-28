@@ -23,6 +23,15 @@ exports.Formats = [
 		banlist: ['']
 	},
 	{
+		name: "LC (beta)",
+		section: "XY Singles",
+
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		noPokebank: true,
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther']
+	},
+	{
 		name: "Pokebank OU (beta)",
 		section: "XY Singles",
 
