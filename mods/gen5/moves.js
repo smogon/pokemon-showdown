@@ -372,6 +372,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: function() {}
 	},
+	smellingsalt: {
+		inherit: true,
+		basePower: 60,
+		basePowerCallback: function(pokemon, target) {
+			if (target.status === 'par') return 120;
+			return 60;
+		}
+	},
 	smog: {
 		inherit: true,
 		basePower: 20
