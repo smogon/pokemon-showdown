@@ -4823,7 +4823,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes one adjacent target's Ability to be rendered ineffective as long as it remains active. If the target uses Baton Pass, the replacement will remain under this effect. Fails if the target's Ability is Multitype. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		desc: "Causes one adjacent target's Ability to be rendered ineffective as long as it remains active. If the target uses Baton Pass, the replacement will remain under this effect. Fails if the target's Ability is Multitype or Stance Change. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Nullifies the target's Ability",
 		id: "gastroacid",
 		name: "Gastro Acid",
@@ -4832,7 +4832,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		volatileStatus: 'gastroacid',
 		onTryHit: function(pokemon) {
-			if (pokemon.ability === 'multitype') {
+			var bannedAbilities = {multitype:1, stancechange:1};
+			if (bannedAbilities[pokemon.ability]) {
 				return false;
 			}
 		},
