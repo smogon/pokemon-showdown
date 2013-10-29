@@ -11991,10 +11991,10 @@ exports.BattleMovedex = {
 	"smellingsalt": {
 		num: 265,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 70,
 		basePowerCallback: function(pokemon, target) {
-			if (target.status === 'par') return 120;
-			return 60;
+			if (target.status === 'par') return 140;
+			return 70;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the target is paralyzed, and the target is cured of paralysis. Makes contact.",
