@@ -372,7 +372,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: function() {}
 	},
-	smellingsalt: {
+	smellingsalts: {
 		inherit: true,
 		basePower: 60,
 		basePowerCallback: function(pokemon, target) {
