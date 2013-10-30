@@ -294,7 +294,7 @@ var commands = exports.commands = {
 	},
 
 	hallowme: function(target, room, user){
-		if (user.canChooseTour) return this.sendReply('You have already received your halloween symbol, if the server restarts you can change it!');
+		if (user.hasCustomSymbol) return this.sendReply('You currently have a custom symbol, use /resetsymbol if you would like to use this command again.');
 		var symbol = '';
 		var symbols = ['☢','☠ ','☣'];
 		var pick = Math.floor(Math.random()*3);
@@ -302,11 +302,23 @@ var commands = exports.commands = {
 		this.sendReply('You have been hallow\'d with a custom symbol!');
 		user.getIdentity = function(){
 			if(this.muted)	return '!' + this.name;
-			if(this.locked) return '?' + this.name;
+			if(this.locked) return '‽' + this.name;
 			return symbol + this.name;
 		};
 		user.updateIdentity();
-		user.canChooseTour = true;
+		user.hasCustomSymbol = true;
+	},
+
+	resetsymbol: function(target, room, user) {
+		//if (!user.hasCustomSymbol) return this.sendReply('You don\'t have a custom symbol!');
+		user.getIdentity = function() {
+			if (this.muted) return '!' + this.name;
+			if (this.locked) return '‽' + this.name;
+			return this.group + this.name;
+		};
+		user.hasCustomSymbol = false;
+		user.updateIdentity();
+		this.sendReply('Your symbol has been reset.');
 	},
 
 	/*********************************************************

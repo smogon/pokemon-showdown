@@ -185,6 +185,7 @@ var User = (function () {
 		this.canFixItem = false;
 		this.canChooseTour = false;
 		this.canDecAdvertise = false;
+		this.hasCustomSymbol = false;
 
 		this.isAway = false;
 		this.originalName = '';
