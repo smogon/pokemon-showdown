@@ -10073,7 +10073,7 @@ exports.BattleMovedex = {
 		id: "ragepowder",
 		name: "Rage Powder",
 		pp: 20,
-		priority: 3,
+		priority: 2,
 		isPowder: true,
 		volatileStatus: 'ragepowder',
 		effect: {
