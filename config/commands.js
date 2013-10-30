@@ -285,7 +285,7 @@ var commands = exports.commands = {
 	
 	tierpoll: 'tiervote',
 	tiervote: function(target, room, user){
-		return this.parse('/poll Tournament Tier?,randombattle,ou,ubers,uu,pointscore,perseverance,ru,nu,lc,cap,cc1v1,oumonotype,1v1');
+		return this.parse('/poll Tournament Tier?,randombattle,ou,ubers,uu,pointscore,perseverance,ru,nu,lc,cap,cc1v1,oumonotype,1v1,gen6ou,gen6pokebankou');
 	},
 	
 	gurl: function(target, room, user){
@@ -294,7 +294,7 @@ var commands = exports.commands = {
 	},
 
 	hallowme: function(target, room, user){
-		if (user.canChooseTour) return this.sendReply('You have already received your halloween symbol, if the server restarts you can change it!');
+		if (user.hasCustomSymbol) return this.sendReply('You currently have a custom symbol, use /resetsymbol if you would like to use this command again.');
 		var symbol = '';
 		var symbols = ['☢','☠ ','☣'];
 		var pick = Math.floor(Math.random()*3);
@@ -302,11 +302,23 @@ var commands = exports.commands = {
 		this.sendReply('You have been hallow\'d with a custom symbol!');
 		user.getIdentity = function(){
 			if(this.muted)	return '!' + this.name;
-			if(this.locked) return '?' + this.name;
+			if(this.locked) return '‽' + this.name;
 			return symbol + this.name;
 		};
 		user.updateIdentity();
-		user.canChooseTour = true;
+		user.hasCustomSymbol = true;
+	},
+
+	resetsymbol: function(target, room, user) {
+		if (!user.hasCustomSymbol) return this.sendReply('You don\'t have a custom symbol!');
+		user.getIdentity = function() {
+			if (this.muted) return '!' + this.name;
+			if (this.locked) return '‽' + this.name;
+			return this.group + this.name;
+		};
+		user.hasCustomSymbol = false;
+		user.updateIdentity();
+		this.sendReply('Your symbol has been reset.');
 	},
 
 	/*********************************************************
@@ -1508,9 +1520,9 @@ var commands = exports.commands = {
 	mastersofthecolor: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><b><h2>These are our current Masters of the <font color="red">C<font color="blue">o<font color="pink">l<font color="purple">o<font color="green">r<font color="brown">!</h2></b></center><hr /><br \>' +
-		'<h3><font color="blue"><b>Blue</b></font color>: Leader Koyu?<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/425.gif"></h3><h3><font color="red"><b>Red</b></font color>: Egyptian<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/558.gif"></h3><br \>' + 
+		'<h3><font color="blue"><b>Blue</b></font color>: Leader Koyu?<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/425.gif"></h3><h3><font color="red"><b>Red</b></font color>: Salemance<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/558.gif"></h3><br \>' + 
 		'<h3><font color="green"><b>Green</b></font color>: Nunuchu42<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/635.gif"></h3><h3><font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>: Hazo<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/065.gif"></h3><br \>' +
-		'<h3><font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: ELITE4fail (2nd time in a row)<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/385.gif"></h3>')
+		'<h3><font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: Fail<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/385.gif"></h3>')
 	},
 
 	biblialeague: function(target, room, user) {
@@ -1829,6 +1841,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/ignore [user] - Ignores all messages from the user [user].');
 			this.sendReply('Note that staff messages cannot be ignored.');
+		}
+		if (target === 'all' || target === 'resetsymbol') {
+			matched = true;
+			this.sendReply('/resetsymbol - Resets your symbol back to default, only works if you have a custom symbol.');
 		}
 		if (target === '%' || target === 'invite') {
 			matched = true;
