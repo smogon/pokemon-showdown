@@ -363,6 +363,15 @@ exports.BattleMovedex = {
 		basePower: 50,
 		pp: 10
 	},
+	secretpower: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			boosts: {
+				accuracy: -1
+			}
+		}
+	},
 	skullbash: {
 		inherit: true,
 		basePower: 100,
