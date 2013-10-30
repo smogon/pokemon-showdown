@@ -310,7 +310,7 @@ var commands = exports.commands = {
 	},
 
 	resetsymbol: function(target, room, user) {
-		//if (!user.hasCustomSymbol) return this.sendReply('You don\'t have a custom symbol!');
+		if (!user.hasCustomSymbol) return this.sendReply('You don\'t have a custom symbol!');
 		user.getIdentity = function() {
 			if (this.muted) return '!' + this.name;
 			if (this.locked) return '‽' + this.name;
