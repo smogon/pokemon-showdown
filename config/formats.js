@@ -241,6 +241,15 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "Doubles Challenge Cup",
+		section: 'XY Doubles',
+
+		gameType: 'doubles',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['Pokemon', 'HP Percentage Mod']
+	},
+	{
 		name: "Doubles Custom Game",
 		section: "XY Doubles",
 		column: 2,
@@ -336,16 +345,6 @@ exports.Formats = [
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
-	},
-	{
-		name: "[Gen 5] Doubles Challenge Cup",
-		section: 'BW2 Doubles',
-
-		mod: 'gen5',
-		gameType: 'doubles',
-		team: 'randomCC',
-		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 
 	// Other Metagames
@@ -516,18 +515,16 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "[Gen 5] Challenge Cup",
+		name: "Challenge Cup",
 		section: "Other Metagames",
 
-		mod: 'gen5',
 		team: 'randomCC',
 		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 	{
-		name: "[Gen 5] Challenge Cup 1-vs-1",
+		name: "Challenge Cup 1-vs-1",
 		section: "Other Metagames",
 
-		mod: 'gen5',
 		team: 'randomCC',
 		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod'],
 		onBegin: function() {
@@ -539,20 +536,18 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "[Gen 5] Hackmons",
+		name: "Hackmons",
 		section: "Other Metagames",
 
-		mod: 'gen5',
 		ruleset: ['Pokemon'],
 		banlist: []
 	},
 	{
-		name: "[Gen 5] Balanced Hackmons",
+		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
-		mod: 'gen5',
 		ruleset: ['Pokemon', 'OHKO Clause'],
-		banlist: ['Wonder Guard', 'Pure Power', 'Huge Power', 'Shadow Tag', 'Arena Trap']
+		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap']
 	},
 	{
 		name: "Gen-NEXT OU",
@@ -580,26 +575,6 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Unreleased'],
 		mimicGlitch: true
-	},
-	{
-		name: "[Gen 5] LC Ubers",
-		section: "Other Metagames",
-
-		mod: 'gen5',
-		maxLevel: 5,
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Soul Dew']
-	},
-	{
-		name: "[Gen 5] LC UU",
-		section: "Other Metagames",
-
-		mod: 'gen5',
-		maxLevel: 5,
-		searchShow: false,
-		ruleset: ['LC'],
-		banlist: ['Abra', 'Aipom', 'Archen', 'Axew', 'Bronzor', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos', 'Croagunk', 'Diglett', 'Drifloon', 'Drilbur', 'Dwebble', 'Ferroseed', 'Foongus', 'Frillish', 'Gastly', 'Hippopotas', 'Houndour', 'Koffing', 'Larvesta', 'Lileep', 'Machop', 'Magnemite', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Murkrow', 'Pawniard', 'Ponyta', 'Porygon', 'Riolu', 'Sandshrew', 'Scraggy', 'Shellder', 'Shroomish', 'Slowpoke', 'Snover', 'Staryu', 'Tentacool', 'Timburr', 'Tirtouga']
 	},
 	{
 		name: "[Gen 5] 1v1",

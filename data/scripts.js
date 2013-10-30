@@ -547,7 +547,7 @@ exports.BattleScripts = {
 		for (var i=0; i<6; i++)
 		{
 			while (true) {
-				var x=Math.floor(Math.random()*649)+1;
+				var x=Math.floor(Math.random()*718)+1;
 				if (teamdexno.indexOf(x) === -1) {
 					teamdexno.push(x);
 					break;
@@ -617,6 +617,10 @@ exports.BattleScripts = {
 			//since we're selecting forme at random, we gotta make sure forme/item combo is correct
 			if (template.requiredItem) {
 				item = template.requiredItem;
+			}
+			if (this.getItem(item).isMegaStone) {
+				// we'll exclude mega stones for now
+				item = Object.keys(this.data.Items).sample();
 			}
 			while ((poke === 'Arceus' && item.indexOf("plate") > -1) || (poke === 'Giratina' && item === 'griseousorb')) {
 				item = Object.keys(this.data.Items).sample();
