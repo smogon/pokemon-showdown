@@ -628,7 +628,7 @@ var cmds = {
 
 	forcejoin: 'fj',
 	fj: function(target, room, user, connection) {
-		if (!tour.lowauth(user,room)) return this.sendReply('You do not have enough authority to use this command.');
+		if (!user.can('declare')) return this.sendReply('You do not have enough authority to use this command.');
 		if (room.decision) return this.sendReply('Prof. Oak: There is a time and place for everything! You cannot do this in battle rooms.');
 		if (tour[room.id] == undefined || tour[room.id].status == 0 || tour[room.id].status == 2) return this.sendReply('There is no tournament in a sign-up phase.');
 		if (!target) return this.sendReply('Please specify a user who you\'d like to participate.');
@@ -691,7 +691,7 @@ var cmds = {
 
 	forceleave: 'fl',
 	fl: function(target, room, user, connection) {
-		if (!tour.lowauth(user,room)) return this.sendReply('You do not have enough authority to use this command.');
+		if (!user.can('declare')) return this.sendReply('You do not have enough authority to use this command.');
 		if (room.decision) return this.sendReply('Prof. Oak: There is a time and place for everything! You cannot do this in battle rooms.');
 		if (tour[room.id] == undefined || tour[room.id].status == 0 || tour[room.id].status == 2) return this.sendReply('There is no tournament in a sign-up phase.  Use /dq username if you wish to remove someone in an active tournament.');
 		if (!target) return this.sendReply('Please specify a user to kick from this signup.');

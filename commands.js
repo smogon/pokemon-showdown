@@ -2611,7 +2611,10 @@ var commands = exports.commands = {
 		if (!this.can('lock')) return false;
 
 		if (user.isAway) {
-			if (user.name.slice(-7) !== ' - Away') user.isAway = false; return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+			if (user.name.slice(-7) !== ' - Away') {
+				user.isAway = false; 
+				return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+			}
 
 			var newName = user.originalName;
 			
