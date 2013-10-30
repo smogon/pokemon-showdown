@@ -487,9 +487,7 @@ module.exports = (function () {
 
 					for (var i=0, len=lset.length; i<len; i++) {
 						var learned = lset[i];
-						if (format.noPokebank && learned.charAt(0) !== '6') {
-							if (learned.substr(0,2) !== '5L' && (learned.substr(0,2) !== '5M' || move in {allyswitch:1, telekinesis:1,workup:1,pluck:1})) continue;
-						}
+						if (format.noPokebank && learned.charAt(0) !== '6') continue;
 						if (learned.substr(0,2) in {'4L':1,'5L':1,'6L':1}) {
 							// gen 4-6 level-up moves
 							if (level >= parseInt(learned.substr(2),10)) {
