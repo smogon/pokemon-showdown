@@ -5679,7 +5679,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		isPulseMove: true,
-		heal: [1,2],
+		onHit: function(pokemon) {
+			if (pokemon.ability === 'megalauncher') this.heal(this.modify(pokemon.maxhp, 0.75));
+			else this.heal(this.modify(pokemon.maxhp, 0.5));
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
