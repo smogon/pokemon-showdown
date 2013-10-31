@@ -601,6 +601,7 @@ exports.BattleMovedex = {
 		name: "Aura Sphere",
 		pp: 20,
 		priority: 0,
+		isPulseMove: true,
 		secondary: false,
 		target: "any",
 		type: "Fighting"
@@ -5677,6 +5678,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isBounceable: true,
+		isPulseMove: true,
 		heal: [1,2],
 		secondary: false,
 		target: "normal",
