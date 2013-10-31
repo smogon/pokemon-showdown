@@ -3683,7 +3683,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		onTryHit: function(target, pokemon) {
 			if (pokemon.activeTurns > 1) {
-				this.debug('It\'s not your first turn out.');
+				this.add('-message', '(Fake Out only works your first turn out.)');
 				return false;
 			}
 		},
@@ -7746,20 +7746,20 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user protects itself and its allies from damaging moves. Priority +4.",
-		shortDesc: "Protects the user and allies from damaging moves.",
+		desc: "The user protects itself and its allies from damaging moves. Only works first turn out.",
+		shortDesc: "Protects from damaging moves. First turn out only.",
 		id: "matblock",
 		isViable: true,
 		name: "Mat Block",
 		pp: 15,
-		priority: 4,
+		priority: 0,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
-		onTryHit: function(target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
-		},
-		onHit: function(pokemon) {
-			pokemon.addVolatile('stall');
+		onTryHit: function(target, pokemon) {
+			if (pokemon.activeTurns > 1) {
+				this.add('-message', '(Mat Block only works your first turn out.)');
+				return false;
+			}
 		},
 		effect: {
 			duration: 1,
