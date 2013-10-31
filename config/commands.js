@@ -944,6 +944,91 @@ var commands = exports.commands = {
 			return this.sendReplyBox('Pokemon, item, move, or ability not found for generation ' + generation.toUpperCase() + '.');
 		}
 	},
+	
+		 
+	nature: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		var targetId = toId(target);
+
+		if (target == 'adamant') {
+				return this.sendReplyBox('+ Attack, - Special Attack');
+			}
+		if (target == 'bashful') {
+				return this.sendReplyBox('No stat boost or drop.');
+			}
+		if (target == 'bold') {
+				return this.sendReplyBox('+ Defense, - Attack');
+			}
+		if (target == 'brave') {
+				return this.sendReplyBox('+ Attack, - Speed');
+			}
+		if (target == 'calm') {
+				return this.sendReplyBox('+ Special Defense, - Attack');
+			}	
+		if (target == 'careful') {
+				return this.sendReplyBox('+ Special Defense, - Special Attack');
+			}
+		if (target == 'docile') {
+				return this.sendReplyBox('No stat boost or drop.');
+			}
+		if (target == 'gentle') {
+				return this.sendReplyBox('+ Special Defense, - Defense');
+			}
+		if (target == 'hardy') {
+				return this.sendReplyBox('No stat boost or drop.');
+			}	
+		if (target == 'hasty') {
+				return this.sendReplyBox('+ Speed, - Defense');
+			}	
+		if (target == 'impish') {
+				return this.sendReplyBox('+ Defense, - Special Attack');
+			}
+		if (target == 'jolly') {
+				return this.sendReplyBox('+ Speed, - Special Attack');
+			}
+		if (target == 'lax') {
+				return this.sendReplyBox('+ Defense, - Special Defense');
+			}
+		if (target == 'lonely') {
+				return this.sendReplyBox('+ Attack, - Defense');
+			}	
+		if (target == 'mild') {
+				return this.sendReplyBox('+ Special Attack, - Defense');
+			}
+		if (target == 'modest') {
+				return this.sendReplyBox('+ Special Attack, - Attack');
+			}	
+		if (target == 'naive') {
+				return this.sendReplyBox('+ Speed, - Special Defense');
+			}	
+		if (target == 'naughty') {
+				return this.sendReplyBox('+ Attack, - Special Defense');
+			}
+		if (target == 'quiet') {
+				return this.sendReplyBox('+ Special Attack, - Speed');
+			}
+		if (target == 'quirky') {
+				return this.sendReplyBox('No stat boost or drop.');
+			}
+		if (target == 'rash') {
+				return this.sendReplyBox('+ Special Attack, - Special Defense');
+			}			
+		if (target == 'relaxed') {
+				return this.sendReplyBox('+ Defense, - Speed');
+			}
+		if (target == 'sassy') {
+				return this.sendReplyBox('+ Special Defense, - Speed');
+			}
+		if (target == 'serious') {
+				return this.sendReplyBox('No stat boost or drop.');
+			}
+		if (target == 'timid') {
+				return this.sendReplyBox('+ Speed, - Attack');
+			}							
+		else {
+				return this.sendReply('The nature ' + target + ' does not exist. (Check your spelling?)')
+		}
+	},
 
 	/*********************************************************
 	 * Miscellaneous commands
