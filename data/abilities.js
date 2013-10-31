@@ -2894,11 +2894,11 @@ exports.BattleAbilities = {
 		num: 137
 	},
 	"toughclaws": {
-		desc: "This Pokemon's Physical attacks do 1.2x damage.",
-		shortDesc: "This Pokemon's Physical attacks do 1.2x damage.",
+		desc: "This Pokemon's contact attacks do 1.2x damage.",
+		shortDesc: "This Pokemon's contact attacks do 1.2x damage.",
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
-			if (move.category === 'Physical') {
+			if (move.isContact) {
 				return this.chainModify(1.2);
 			}
 		},
