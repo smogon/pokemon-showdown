@@ -497,6 +497,7 @@ module.exports = (function () {
 								return false;
 							}
 							if (!template.gender || template.gender === 'F') {
+								if (move === 'extremespeed' && format.noPokebank) continue;
 								// available as egg move
 								learned = learned.charAt(0)+'Eany';
 							} else {
