@@ -464,6 +464,7 @@ var commands = exports.commands = {
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',
+	g6learn: 'learn',
 	learn: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help learn');
 
@@ -476,6 +477,7 @@ var commands = exports.commands = {
 		var problem;
 		var all = (cmd === 'learnall');
 		if (cmd === 'learn5') lsetData.set.level = 5;
+		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
 		if (!template.exists) {
 			return this.sendReply('Pokemon "'+template.id+'" not found.');

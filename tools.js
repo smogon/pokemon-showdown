@@ -497,7 +497,6 @@ module.exports = (function () {
 								return false;
 							}
 							if (!template.gender || template.gender === 'F' || this.gen >= 6) {
-								if (move === 'extremespeed' && format.noPokebank) continue;
 								// available as egg move
 								learned = learned.charAt(0)+'Eany';
 							} else {
@@ -518,6 +517,7 @@ module.exports = (function () {
 						} else if (learned.charAt(1) in {E:1,S:1,D:1}) {
 							// egg, event, or DW moves:
 							//   only if that was the source
+							if (move === 'extremespeed' && format.noPokebank) continue;
 							if (learned.charAt(1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								var eggGroups = template.eggGroups;
