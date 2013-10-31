@@ -165,6 +165,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 70
 	},
+	healpulse: {
+		inherit: true,
+		heal: [1,2],
+		onHit: function() {}
+	},
 	heatwave: {
 		inherit: true,
 		basePower: 100
