@@ -5,7 +5,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Abomasnow-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 674,
 		gen: 6,
 		desc: "Mega-evolves Abomasnow."
 	},
@@ -15,7 +15,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Absol-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 677,
 		gen: 6,
 		desc: "Mega-evolves Absol."
 	},
@@ -58,7 +58,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Aerodactyl-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 672,
 		gen: 6,
 		desc: "Mega-evolves Aerodactyl."
 	},
@@ -68,7 +68,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Aggron-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 667,
 		gen: 6,
 		desc: "Mega-evolves Aggron."
 	},
@@ -130,7 +130,7 @@ exports.BattleItems = {
 	"alakazite": {
 		id: "alakazite",
 		name: "Alakazite",
-		spritenum: 0,
+		spritenum: 679,
 		megaStone: "Alakazam-Mega",
 		onTakeItem: false,
 		num: -6,
@@ -140,7 +140,7 @@ exports.BattleItems = {
 	"ampharosite": {
 		id: "ampharosite",
 		name: "Ampharosite",
-		spritenum: 0,
+		spritenum: 658,
 		megaStone: "Ampharos-Mega",
 		onTakeItem: false,
 		num: -6,
@@ -250,7 +250,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Banette-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 668,
 		gen: 6,
 		desc: "Mega-evolves Banette."
 	},
@@ -372,7 +372,7 @@ exports.BattleItems = {
 	"blastoisinite": {
 		id: "blastoisinite",
 		name: "Blastoisinite",
-		spritenum: 0,
+		spritenum: 661,
 		megaStone: "Blastoise-Mega",
 		onTakeItem: false,
 		num: -6,
@@ -385,7 +385,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Blaziken-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 664,
 		gen: 6,
 		desc: "Mega-evolves Blaziken."
 	},
@@ -488,7 +488,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Charizard-Mega-X",
 		onTakeItem: false,
-		num: -6,
+		num: 660,
 		gen: 6,
 		desc: "Mega-evolves Charizard into Mega Charizard X."
 	},
@@ -498,7 +498,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Charizard-Mega-Y",
 		onTakeItem: false,
-		num: -6,
+		num: 678,
 		gen: 6,
 		desc: "Mega-evolves Charizard into Mega Charizard Y."
 	},
@@ -1409,7 +1409,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Garchomp-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 683,
 		gen: 6,
 		desc: "Mega-evolves Garchomp."
 	},
@@ -1419,7 +1419,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Gardevoir-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 657,
 		gen: 6,
 		desc: "Mega-evolves Gardevoir."
 	},
@@ -1429,7 +1429,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Gengar-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 656,
 		gen: 6,
 		desc: "Mega-evolves Gengar."
 	},
@@ -1550,7 +1550,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Gyarados-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 676,
 		gen: 6,
 		desc: "Mega-evolves Gyarados."
 	},
@@ -1637,7 +1637,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Heracross-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 680,
 		gen: 6,
 		desc: "Mega-evolves Heracross."
 	},
@@ -1660,7 +1660,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Houndoom-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 666,
 		gen: 6,
 		desc: "Mega-evolves Houndoom."
 	},
@@ -1890,7 +1890,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Kangaskhan-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 675,
 		gen: 6,
 		desc: "Mega-evolves Kangaskhan."
 	},
@@ -2131,7 +2131,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Lucario-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 673,
 		gen: 6,
 		desc: "Mega-evolves Lucario."
 	},
@@ -2304,7 +2304,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Manectric-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 682,
 		gen: 6,
 		desc: "Mega-evolves Manectric."
 	},
@@ -2339,7 +2339,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Mawile-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 681,
 		gen: 6,
 		desc: "Mega-evolves Mawile."
 	},
@@ -2367,7 +2367,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Medicham-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 665,
 		gen: 6,
 		desc: "Mega-evolves Medicham."
 	},
@@ -2479,7 +2479,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-X",
 		onTakeItem: false,
-		num: -6,
+		num: 662,
 		gen: 6,
 		desc: "Mega-evolves Mewtwo into Mega Mewtwo X."
 	},
@@ -2489,7 +2489,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-Y",
 		onTakeItem: false,
-		num: -6,
+		num: 663,
 		gen: 6,
 		desc: "Mega-evolves Mewtwo into Mega Mewtwo Y."
 	},
@@ -2898,7 +2898,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Pinsir-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 671,
 		gen: 6,
 		desc: "Mega-evolves Pinsir."
 	},
@@ -3426,7 +3426,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Scizor-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 670,
 		gen: 6,
 		desc: "Mega-evolves Scizor."
 	},
@@ -3997,7 +3997,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Tyranitar-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 669,
 		gen: 6,
 		desc: "Mega-evolves Tyranitar."
 	},
@@ -4015,7 +4015,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Venusaur-Mega",
 		onTakeItem: false,
-		num: -6,
+		num: 659,
 		gen: 6,
 		desc: "Mega-evolves Venusaur."
 	},
