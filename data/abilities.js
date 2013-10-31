@@ -65,8 +65,8 @@ exports.BattleAbilities = {
 		num: 106
 	},
 	"aerilate": {
-		desc: "Turns all of this Pokemon's Normal-typed attacks into Flying-typed. Does 1.3x damage. Does not affect Hidden Power.",
-		shortDesc: "This Pokemon's Normal moves become Flying. Does 1.3x damage.",
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Flying-type and deal 1.3x damage. Does not affect Hidden Power.",
+		shortDesc: "This Pokemon's Normal moves become Flying-type and do 1.3x damage.",
 		onModifyMove: function(move, pokemon) {
 			if (move.type === 'Normal' && move.id !== 'hiddenpower') {
 				move.type = 'Flying';
@@ -1858,7 +1858,7 @@ exports.BattleAbilities = {
 		num: 124
 	},
 	"pixilate": {
-		desc: "Turns all of this Pokemon's Normal-typed attacks into Fairy-typed and deal 1.3x damage. Does not affect Hidden Power.",
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Fairy-type and deal 1.3x damage. Does not affect Hidden Power.",
 		shortDesc: "This Pokemon's Normal moves become Fairy-type and do 1.3x damage.",
 		onModifyMove: function(move, pokemon) {
 			if (move.type === 'Normal' && move.id !== 'hiddenpower') {
