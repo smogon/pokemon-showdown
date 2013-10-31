@@ -978,6 +978,18 @@ var commands = exports.commands = {
 				return this.sendReply('Something failed while trying to hotpatch formats: \n' + e.stack);
 			}
 
+		} else if (target === 'learnsets') {
+			try {
+				// uncache the tools.js dependency tree
+				CommandParser.uncacheTree('./tools.js');
+				// reload tools.js
+				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+
+				return this.sendReply('Learnsets have been hotpatched.');
+			} catch (e) {
+				return this.sendReply('Something failed while trying to hotpatch learnsets: \n' + e.stack);
+			}
+
 		}
 		this.sendReply('Your hot-patch command was unrecognized.');
 	},
