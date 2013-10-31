@@ -4336,9 +4336,11 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	skrelp: {
+		unreleasedHidden: true,
 		tier: "Limbo NFE"
 	},
 	dragalge: {
+		unreleasedHidden: true,
 		tier: "Limbo"
 	},
 	clauncher: {
@@ -4354,15 +4356,19 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	tyrunt: {
+		unreleasedHidden: true,
 		tier: "Limbo NFE"
 	},
 	tyrantrum: {
+		unreleasedHidden: true,
 		tier: "Limbo"
 	},
 	amaura: {
+		unreleasedHidden: true,
 		tier: "Limbo NFE"
 	},
 	aurorus: {
+		unreleasedHidden: true,
 		tier: "Limbo"
 	},
 	sylveon: {
