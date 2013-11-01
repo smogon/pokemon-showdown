@@ -3603,7 +3603,7 @@ exports.BattleMovedex = {
 		basePower: 70,
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the user is burned, paralyzed, or poisoned. Makes contact.",
-		shortDesc: "Power doubles if user is burn/poison/paralyzed.",
+		shortDesc: "Power doubles if user is burned/poisoned/paralyzed.",
 		id: "facade",
 		isViable: true,
 		name: "Facade",
@@ -6975,8 +6975,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 65,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
-		shortDesc: "Removes the target's held item.",
+		desc: "Deals damage to one adjacent target and causes it to drop its held item. Power is boosted x1.5 if held item is removed. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
+		shortDesc: "Removes the target's held item. 1.5x boost on item removal.",
 		id: "knockoff",
 		isViable: true,
 		name: "Knock Off",
@@ -6991,6 +6991,7 @@ exports.BattleMovedex = {
 				item = target.takeItem(source);
 			}
 			if (item) {
+				return this.chainModify(1.5);
 				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] '+source);
 			}
 		},
