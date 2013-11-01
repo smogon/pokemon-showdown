@@ -350,7 +350,7 @@ var commands = exports.commands = {
 		var userid = toId(name);
 		if (!userid || !targetUser) return this.sendReply("User '" + name + "' does not exist.");
 		if (!this.can('ban', targetUser, room)) return false;
-		if (!Rooms.rooms[room.id].users[userid]) {
+		if (!Rooms.rooms[room.id].users[userid] && room.isPrivate) {
 			return this.sendReply('User ' + this.targetUsername + ' is not in the room ' + room.id + '.');
 		}
 		if (!room.bannedUsers || !room.bannedIps) {
