@@ -1130,7 +1130,9 @@ var commands = exports.commands = {
     },
 
 	//TRAINER CARDS - Brittle, please try and keep them neat :)
-
+	bigblackhoe: 'lenora',
+	oprah: 'lenora',
+	sass: 'lenora',
 	lenora: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Trainer: Lenora<br \>' +
