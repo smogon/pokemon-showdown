@@ -983,7 +983,7 @@ var BattlePokemon = (function() {
 		if (noForce && this.ability === ability.id) {
 			return false;
 		}
-		if (ability.id === 'multitype' || ability.id === 'illusion' || this.ability === 'multitype') {
+		if (ability.id === 'multitype' || ability.id === 'illusion' || ability.id === 'stancechange' || this.ability === 'multitype') {
 			return false;
 		}
 		this.ability = ability.id;
