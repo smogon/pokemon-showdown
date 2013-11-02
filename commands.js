@@ -2250,7 +2250,7 @@ var commands = exports.commands = {
 		if (!this.canTalk()) return;
 
 		for (var r in Rooms.rooms) {
-			if (Rooms.rooms[r].type === 'chat') Rooms.rooms[r].add('|raw|<b><i>Global declare from '+user.name+':</i><br />'+target+'</b></div>');
+			if (Rooms.rooms[r].type === 'chat') Rooms.rooms[r].add('|raw|<b>'+target+'</b></div>');
 		}
 
 		this.logModCommand(user.name+' declared '+target+' to all rooms.');
