@@ -28,10 +28,12 @@ module.exports = (function () {
 		'Learnsets': 'learnsets.js',
 		'Aliases': 'aliases.js'
 	};
-	function Tools(mod) {
+	function Tools(mod, parentMod) {
 		if (!mod) {
 			mod = 'base';
 			this.isBase = true;
+		} else if (!parentMod) {
+			parentMod = 'base';
 		}
 		this.currentMod = mod;
 
@@ -67,7 +69,7 @@ module.exports = (function () {
 				console.log('CRASH LOADING FORMATS: '+e.stack);
 			}
 		} else {
-			var baseData = moddedTools.base.data;
+			var parentData = moddedTools[parentMod].data;
 			dataTypes.forEach(function(dataType) {
 				try {
 					var path = './mods/' + mod + '/' + dataFiles[dataType];
@@ -78,7 +80,7 @@ module.exports = (function () {
 					console.log('CRASH LOADING MOD DATA: '+e.stack);
 				}
 				if (!data[dataType]) data[dataType] = {};
-				for (var i in baseData[dataType]) {
+				for (var i in parentData[dataType]) {
 					if (data[dataType][i] === null) {
 						// null means don't inherit
 						delete data[dataType][i];
@@ -86,15 +88,15 @@ module.exports = (function () {
 						// If it doesn't exist it's inherited from the base data
 						if (dataType === 'Pokedex') {
 							// Pokedex entries can be modified too many different ways
-							data[dataType][i] = Object.clone(baseData[dataType][i], true);
+							data[dataType][i] = Object.clone(parentData[dataType][i], true);
 						} else {
-							data[dataType][i] = baseData[dataType][i];
+							data[dataType][i] = parentData[dataType][i];
 						}
 					} else if (data[dataType][i] && data[dataType][i].inherit) {
 						// {inherit: true} can be used to modify only parts of the base data,
 						// instead of overwriting entirely
 						delete data[dataType][i].inherit;
-						Object.merge(data[dataType][i], baseData[dataType][i], true, false);
+						Object.merge(data[dataType][i], parentData[dataType][i], true, false);
 					}
 				}
 			});
@@ -1172,8 +1174,8 @@ module.exports = (function () {
 		}
 	};
 
-	Tools.construct = function(mod) {
-		var tools = new Tools(mod);
+	Tools.construct = function(mod, parentMod) {
+		var tools = new Tools(mod, parentMod);
 		// Scripts override Tools.
 		var ret = Object.create(tools);
 		tools.install(ret);
@@ -1184,12 +1186,29 @@ module.exports = (function () {
 	};
 
 	moddedTools.base = Tools.construct();
-	try {
-		var dirs = fs.readdirSync('./mods/');
 
-		dirs.forEach(function(dir) {
-			moddedTools[dir] = Tools.construct(dir);
-		});
+	var treePath = './config/modtree.js';
+	var modTree = {};
+
+	try {
+		if (fs.existsSync(treePath)) {
+			modTree = require(treePath)['BattleMods'];
+		}
+		for (var i in modTree) {
+			if (!fs.existsSync('./mods/' + i)) {
+				delete modTree[i];
+			}
+		}
+		while (true) {
+			var deltaCount = 0;
+			for (var i in modTree) {
+				if (!moddedTools[i] && moddedTools[modTree[i]]) {
+					moddedTools[i] = Tools.construct(i, modTree[i]);
+					deltaCount++;
+				}
+			}
+			if (!deltaCount) break;
+		}
 	} catch (e) {}
 
 	moddedTools.base.__proto__.moddedTools = moddedTools;
