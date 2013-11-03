@@ -1523,7 +1523,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><b><h2>These are our current Masters of the <font color="red">C<font color="blue">o<font color="pink">l<font color="purple">o<font color="green">r<font color="brown">!</h2></b></center><hr /><br \>' +
 		'<h3><font color="blue"><b>Blue</b></font color>: <img src="http://i.imgur.com/J2D4FSX.gif"><img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/112.gif"></h3><h3><font color="red"><b>Red</b></font color>: <img src="http://i.imgur.com/qvtR5Xf.gif"><img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/272.gif"></h3><br \>' + 
-		'<h3><font color="green"><b>Green</b></font color>: Nunuchu42<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/635.gif"></h3><h3><font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>:<img src="http://i.imgur.com/k29KbfI.gif"> <img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/065.gif"></h3><br \>' +
+		'<h3><font color="green"><b>Green</b></font color>: <img src="http://i.imgur.com/hS0bpiJ.gif"><img src="http://pldh.net/media/pokemon/conquest/sprite/392.png"></h3><h3><font color="yellow"><b>Yellow</b></font color>/<font color="brown"><b>Brown</b></font color>:<img src="http://i.imgur.com/k29KbfI.gif"> <img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/065.gif"></h3><br \>' +
 		'<h3><font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: Fail<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/385.gif"></h3>')
 	},
 
