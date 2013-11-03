@@ -1,4 +1,5 @@
 exports.BattleScripts = {
+	inherit: 'gen5',
 	gen: 5,
 	init: function() {
 		for (var i in this.data.Pokedex) {
