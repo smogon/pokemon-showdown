@@ -520,6 +520,11 @@ module.exports = (function () {
 							if (move === 'extremespeed' && format.noPokebank) continue;
 							if (learned.charAt(1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
+								if (learned.charAt(0) === '6') {
+									// gen 6 doesn't have egg move incompatibilities
+									sources.push('6E');
+									continue;
+								}
 								var eggGroups = template.eggGroups;
 								if (!eggGroups) continue;
 								if (eggGroups[0] === 'No Eggs') eggGroups = this.getTemplate(template.evos[0]).eggGroups;
