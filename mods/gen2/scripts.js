@@ -2,6 +2,7 @@
  * Gen 2 scripts.
  */
 exports.BattleScripts = {
+	inherit: 'gen5',
 	gen: 2,
 	getCategory: function(move) {
 		move = this.getMove(move);
