@@ -1187,29 +1187,35 @@ module.exports = (function () {
 
 	moddedTools.base = Tools.construct();
 
-	var modTree = {};
+	// "gen6" is an alias for the current base data
+	moddedTools.gen6 = moddedTools.base;
+
+	var parentMods = {};
 
 	try {
-		var dirs = fs.readdirSync('./mods/');
+		var mods = fs.readdirSync('./mods/');
 
-		dirs.forEach(function(dir) {
-			if (fs.existsSync('./mods/'+dir+'/scripts.js')) {
-				modTree[dir] = require('./mods/'+dir+'/scripts.js').BattleScripts.inherit || 'base';
+		mods.forEach(function(mod) {
+			if (fs.existsSync('./mods/'+mod+'/scripts.js')) {
+				parentMods[mod] = require('./mods/'+mod+'/scripts.js').BattleScripts.inherit || 'base';
 			} else {
-				modTree[dir] = 'base';
+				parentMods[mod] = 'base';
 			}
 		});
 
+		var didSomething = false;
 		do {
-			var deltaCount = 0;
-			for (var i in modTree) {
-				if (!moddedTools[i] && moddedTools[modTree[i]]) {
-					moddedTools[i] = Tools.construct(i, modTree[i]);
-					deltaCount++;
+			didSomething = false;
+			for (var i in parentMods) {
+				if (!moddedTools[i] && moddedTools[parentMods[i]]) {
+					moddedTools[i] = Tools.construct(i, parentMods[i]);
+					didSomething = true;
 				}
 			}
-		} while (deltaCount);
-	} catch (e) {}
+		} while (didSomething);
+	} catch (e) {
+		console.log("Error while loading mods: "+e);
+	}
 
 	moddedTools.base.__proto__.moddedTools = moddedTools;
 
