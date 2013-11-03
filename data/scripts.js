@@ -618,7 +618,7 @@ exports.BattleScripts = {
 			if (template.requiredItem) {
 				item = template.requiredItem;
 			}
-			if (this.getItem(item).isMegaStone) {
+			if (this.getItem(item).megaStone) {
 				// we'll exclude mega stones for now
 				item = Object.keys(this.data.Items).sample();
 			}
