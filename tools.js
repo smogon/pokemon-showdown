@@ -885,7 +885,7 @@ module.exports = (function () {
 
 					if (template.unreleasedHidden && banlistTable['Unreleased']) {
 						problems.push(name+"'s hidden ability is unreleased.");
-					} else if (set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
+					} else if (this.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
 						problems.push(name+" must be at least level 10 with its hidden ability.");
 					}
 					if (template.maleOnlyHidden) {
