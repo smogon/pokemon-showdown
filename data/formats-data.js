@@ -4449,6 +4449,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	noibat: {
+		viableMoves: {"airslash":1,"hurricane":1,"dracometeor:":1,"uturn":1,"roost":1},
 		tier: "LC"
 	},
 	noivern: {
