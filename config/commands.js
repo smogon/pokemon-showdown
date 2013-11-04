@@ -294,7 +294,9 @@ var commands = exports.commands = {
 	},
 
 	hallowme: function(target, room, user){
+		var halloween = false;
 		if (user.hasCustomSymbol) return this.sendReply('You currently have a custom symbol, use /resetsymbol if you would like to use this command again.');
+		if (!halloween) return this.sendReply('It\s not Halloween anymore!');
 		var symbol = '';
 		var symbols = ['☢','☠ ','☣'];
 		var pick = Math.floor(Math.random()*3);
