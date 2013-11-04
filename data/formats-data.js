@@ -4298,9 +4298,11 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	pancham: {
+		viableMoves: {"partingshot":1,"skyuppercut":1,"crunch":1,"circlethrow":1,"workup":1,"bodyslam":1},
 		tier: "LC"
 	},
 	pangoro: {
+		viableMoves: {"partingshot":1,"skyuppercut":1,"crunch":1,"circlethrow":1,"workup":1,"bodyslam":1,"lowsweep":1},
 		tier: "Limbo"
 	},
 	furfrou: {
