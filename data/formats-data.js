@@ -4258,9 +4258,11 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	fletchling: {
+		viableMoves: {"acrobatics":1,"roost":1,"swordsdance":1,"uturn":1,"return":1},
 		tier: "LC"
 	},
 	fletchinder: {
+		viableMoves: {"acrobatics":1,"roost":1,"swordsdance":1,"uturn":1,"return":1},
 		tier: "NFE"
 	},
 	talonflame: {
