@@ -3170,6 +3170,7 @@ exports.BattleMovedex = {
 		name: "Egg Bomb",
 		pp: 10,
 		priority: 0,
+		isBombMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3284,6 +3285,7 @@ exports.BattleMovedex = {
 		name: "Electro Ball",
 		pp: 10,
 		priority: 0,
+		isBallMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -3486,6 +3488,7 @@ exports.BattleMovedex = {
 		name: "Energy Ball",
 		pp: 10,
 		priority: 0,
+		isBallMove: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -5433,6 +5436,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
+		isBallMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -6431,6 +6435,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		isBallMove: true,
 		effect: {
 			duration: 2,
 			onLockMove: 'iceball',
@@ -7607,6 +7612,7 @@ exports.BattleMovedex = {
 		name: "Magnet Bomb",
 		pp: 20,
 		priority: 0,
+		isBombMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -8314,6 +8320,7 @@ exports.BattleMovedex = {
 		name: "Mist Ball",
 		pp: 5,
 		priority: 0,
+		isBallMove: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -8475,6 +8482,7 @@ exports.BattleMovedex = {
 		name: "Mud Bomb",
 		pp: 10,
 		priority: 0,
+		isBombMove: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -11175,6 +11183,7 @@ exports.BattleMovedex = {
 		name: "Seed Bomb",
 		pp: 15,
 		priority: 0,
+		isBombMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -11246,6 +11255,7 @@ exports.BattleMovedex = {
 		name: "Shadow Ball",
 		pp: 15,
 		priority: 0,
+		isBallMove: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -11920,6 +11930,7 @@ exports.BattleMovedex = {
 		name: "Sludge Bomb",
 		pp: 10,
 		priority: 0,
+		isBombMove: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -14460,6 +14471,7 @@ exports.BattleMovedex = {
 		name: "Weather Ball",
 		pp: 10,
 		priority: 0,
+		isBallMove: true,
 		onModifyMove: function(move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
