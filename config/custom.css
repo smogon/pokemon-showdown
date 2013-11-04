@@ -1,4 +1,48 @@
 #header{
+	background:url("http://upload.wikimedia.org/wikipedia/commons/d/da/Shades_of_blue.jpg")
+}
+
+body{
+	background-image:url("http://i.imgur.com/hcpz7c2.jpg");
+	background-repeat:no-repeat;
+	background-position:right top
+}
+
+.chat-log{
+	font-size:10pt;
+	background:#f2f9ff;
+	color:#000;
+	overflow:auto
+}
+
+.menugroup .button{
+	background:#3A5FCD
+}
+
+.menugroup .menugroup{
+	text-align:center
+}
+
+.button:hover{
+	background:#4876FF
+}
+
+.userlist{
+	border-left:1px solid #D5DDE4;
+	background:#e5f5ff
+}
+
+
+
+
+
+
+
+
+/*****************************
+*halloween theme             *
+*****************************/
+/*#header{
         background:url("http://i.imgur.com/F5pMH0a.png");
 }
 
@@ -42,4 +86,4 @@ body {
 
 .message-announce {
         background:#000000
-}
+} */
