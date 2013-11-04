@@ -1500,20 +1500,20 @@ var commands = exports.commands = {
 				return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' is currently locked.");
 			}
 		}
-		/*if (target.toLowerCase() == "lobby") {
-			return connection.sendTo('lobby','|html|<div class="infobox" style="border-color:blue"><center><img src="http://i.imgur.com/RKZTxPs.png"></center><center><b><u>Welcome to the Frost Server!</u></b></center><br /> ' + 
+		if (target.toLowerCase() == "lobby") {
+			return connection.sendTo('lobby','|html|<div class="infobox" style="border-color:blue"><center><img src="http://i.imgur.com/RKZTxPs.png"><br />' +
+			'<font color=#2E9AFE><b><u>Welcome to the Frost Server!</u></b><br /><br /> ' + 
 			'Home of many leagues for you to join or challenge, battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
 			'Make sure to type <b>/help</b> to get a list of commands that you can use and <b>/faq</b> to check out frequently asked questions.<br /><br />' +
 			'To get a chatroom for your league, please talk to an admin (~) to recieve one<br /><br />' +
-			'You may want to check out the <a href="http://frost-server.no-ip.org/">servers custom client</a> as you maybe missing out on some features.<br /><br />' +
-			'<b>Frost</b>-<blockquote><em>Promoting your league, one challenger at a time</em></blockquote></div>');
-		}*/
+			'<b>Frost</b>-<blockquote><em>Promoting your league, one challenger at a time</em></blockquote></div></font></center>');
+		}/*
 		if (target.toLowerCase() == "lobby") {
 			return connection.sendTo('lobby','|html|<center><br><h1><font><b><img src="http://www.serebii.net/xy/pokemon/711-h.png"><font color="Orange">WELCOME </font><font color="black">TO </font><font color="Orange">FROST!</font><img src="http://www.serebii.net/xy/pokemon/711-h.png"></center></b><br />' +
 				'<center>Frost staff wish you all a happy halloween!<br /><br />' +
 				'Home of many leagues for you to join or challenge, battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
 				'Make sure to type <b>/help</b> to get a list of commands that you can use and <b>/faq</b> to check out frequently asked questions.</center>');
-		}
+		}*/
 	},
 
 	rk: 'roomkick',
