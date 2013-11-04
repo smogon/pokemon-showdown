@@ -4270,12 +4270,15 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	scatterbug: {
+		viableMoves: {"tackle":1,"stringshot":1,"stunspore":1,"bugbite":1},
 		tier: "LC"
 	},
 	spewpa: {
+		viableMoves: {"tackle":1,"stringshot":1,"stunspore":1,"bugbite":1},
 		tier: "NFE"
 	},
 	vivillon: {
+		viableMoves: {"sleeppowder":1,"quiverdance":1,"hurricane":1,"bugbuzz":1,"roost":1},
 		tier: "Limbo"
 	},
 	litleo: {
