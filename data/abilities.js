@@ -245,6 +245,21 @@ exports.BattleAbilities = {
 		rating: 2,
 		num: 66
 	},
+	"bulletproof": {
+		desc: "This Pokemon is protected from some Ball and Bomb moves.",
+		shortDesc: "This Pokemon is protected from ball and bomb moves.",
+		onTryHit: function(pokemon, target, move) {
+			if (move.isBallMove || move.isBombMove) {
+				this.add('-immune', pokemon, '[msg]', '[from] Bulletproof');
+				return null;
+			}
+		},
+		id: "bulletproof",
+		name: "Bulletproof",
+		rating: 3,
+		num: -6,
+		gen: 6
+	},
 	"cheekpouch": {
 		desc: "Increases HP when this Pokemon consumes a berry.",
 		shortDesc: "Increases HP when this Pokemon consumes a berry.",
@@ -255,7 +270,7 @@ exports.BattleAbilities = {
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
-		rating: 3,
+		rating: 2.5,
 		num: -6,
 		gen: 6
 	},
@@ -1729,7 +1744,7 @@ exports.BattleAbilities = {
 		num: 12
 	},
 	"overcoat": {
-		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail. It is also immune to powder moves.",
+		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail. It is also immune to Powder moves.",
 		shortDesc: "This Pokemon is immune to residual weather damage, and powder moves.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail') return false;
