@@ -169,6 +169,16 @@ exports.BattleAbilities = {
 		rating: 5,
 		num: 71
 	},
+	"aromaveil": {
+		desc: "Protects allies from attacks that limit their move choices.",
+		shortDesc: "Protects allies from attacks that limit their move choices.",
+		//todo
+		id: "aromaveil",
+		name: "Aroma Veil",
+		rating: 0,
+		num: -6,
+		gen: 6
+	},
 	"aurabreak": {
 		desc: "Reverses the effect of Dark Aura and Fairy Aura.",
 		shortDesc: "Reverses the effect of Aura abilities.",
