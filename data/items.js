@@ -354,7 +354,7 @@ exports.BattleItems = {
 	},
 	"blackglasses": {
 		id: "blackglasses",
-		name: "BlackGlasses",
+		name: "Black Glasses",
 		spritenum: 35,
 		fling: {
 			basePower: 30
@@ -2633,7 +2633,7 @@ exports.BattleItems = {
 	},
 	"nevermeltice": {
 		id: "nevermeltice",
-		name: "NeverMeltIce",
+		name: "Never-Melt Ice",
 		spritenum: 305,
 		fling: {
 			basePower: 30
