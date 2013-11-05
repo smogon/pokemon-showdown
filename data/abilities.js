@@ -183,7 +183,7 @@ exports.BattleAbilities = {
 		desc: "Reverses the effect of Dark Aura and Fairy Aura.",
 		shortDesc: "Reverses the effect of Aura abilities.",
 		onStart: function(pokemon) {
-			this.add('-message', 'The effects of aura abilities are reversed. (placeholder)');
+			this.add('-ability', pokemon, 'Aura Break');
 		},
 		id: "aurabreak",
 		name: "Aura Break",
