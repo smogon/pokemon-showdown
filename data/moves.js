@@ -6980,14 +6980,21 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 65,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
-		shortDesc: "Removes the target's held item.",
+		desc: "Deals damage to one adjacent target and causes it to drop its held item. Does 50% more damage if the target is holding an item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. It also cannot remove Mega Stones. Items lost to this move cannot be regained with Recycle. Makes contact.",
+		shortDesc: "Removes the target's held item. 1.5x damage if the target is holding an item.",
 		id: "knockoff",
 		isViable: true,
 		name: "Knock Off",
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		onBasePowerPriority: 4,
+		onBasePower: function(basePower, pokemon, target) {
+			var item = target.getItem();
+			if (item.id && !item.megaStone) {
+				return this.chainModify(1.5);
+			}
+		},
 		onHit: function(target, source) {
 			var item = target.getItem();
 			if (item.id === 'mail') {
