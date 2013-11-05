@@ -1987,7 +1987,7 @@ exports.BattleMovedex = {
 			spe: -2
 		},
 		onTryHit: function(target, source) {
-			return !target.hasType('Grass');
+			if (target.hasType('Grass')) return false;
 		},
 		secondary: false,
 		target: "normal",
@@ -9350,7 +9350,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			return !pokemon.hasType('Grass');
+			if (pokemon.hasType('Grass')) return false;
 		},
 		status: 'psn',
 		secondary: false,
@@ -9424,7 +9424,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			return !pokemon.hasType('Grass');
+			if (pokemon.hasType('Grass')) return false;
 		},
 		isBounceable: true,
 		volatileStatus: 'powder',
@@ -11855,7 +11855,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			return !pokemon.hasType('Grass');
+			if (pokemon.hasType('Grass')) return false;
 		},
 		status: 'slp',
 		secondary: false,
@@ -12466,7 +12466,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onTryHit: function(target, source) {
-			return !target.hasType('Grass');
+			if (target.hasType('Grass')) return false;
 		},
 		status: 'slp',
 		secondary: false,
@@ -12784,7 +12784,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		onTryHit: function(target, source) {
-			return !target.hasType('Grass');
+			if (target.hasType('Grass')) return false;
 		},
 		status: 'par',
 		secondary: false,
