@@ -446,7 +446,7 @@ var commands = exports.commands = {
 			return this.sendReply('You can\'t warn here: This is a privately-owned room not subject to global rules.');
 		}
 		if (target.length > MAX_REASON_LENGTH) {
-			return this.sendReply('The reason is too long. It cannot excede ' + MAX_REASON_LENGTH + ' characters.');
+			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
 		if (!this.can('warn', targetUser, room)) return false;
 
@@ -489,7 +489,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 		if (target.length > MAX_REASON_LENGTH) {
-			return this.sendReply('The reason is too long. It cannot excede ' + MAX_REASON_LENGTH + ' characters.');
+			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
 		if (!this.can('mute', targetUser, room)) return false;
 		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
@@ -519,7 +519,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 		if (target.length > MAX_REASON_LENGTH) {
-			return this.sendReply('The reason is too long. It cannot excede ' + MAX_REASON_LENGTH + ' characters.');
+			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
 		if (!this.can('mute', targetUser, room)) return false;
 
@@ -566,7 +566,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUser+' not found.');
 		}
 		if (target.length > MAX_REASON_LENGTH) {
-			return this.sendReply('The reason is too long. It cannot excede ' + MAX_REASON_LENGTH + ' characters.');
+			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
 		if (!user.can('lock', targetUser)) {
 			return this.sendReply('/lock - Access denied.');
@@ -613,7 +613,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 		if (target.length > MAX_REASON_LENGTH) {
-			return this.sendReply('The reason is too long. It cannot excede ' + MAX_REASON_LENGTH + ' characters.');
+			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
 		if (!this.can('ban', targetUser)) return false;
 
@@ -697,7 +697,7 @@ var commands = exports.commands = {
 	modnote: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help note');
 		if (target.length > MAX_REASON_LENGTH) {
-			return this.sendReply('The note is too long. It cannot excede ' + MAX_REASON_LENGTH + ' characters.');
+			return this.sendReply('The note is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
 		if (!this.can('mute')) return false;
 		return this.privateModCommand('(' + user.name + ' notes: ' + target + ')');
