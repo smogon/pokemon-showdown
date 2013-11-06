@@ -542,6 +542,7 @@ exports.groups = {
 		disableladder: true,
 		forcejoin: true,
 		permaban: true,
+		customavatars: true,
 		rank: 5
 	},
 	'#': {
