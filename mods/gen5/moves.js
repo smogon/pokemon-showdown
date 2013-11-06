@@ -51,6 +51,18 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60
 	},
+	copycat: {
+		inherit: true,
+		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
+		shortDesc: "Uses the last move used in the battle.",
+		onHit: function(pokemon) {
+			var noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1};
+			if (!this.lastMove || noCopycat[this.lastMove]) {
+				return false;
+			}
+			this.useMove(this.lastMove, pokemon);
+		},
+	},
 	cottonspore: {
 		inherit: true,
 		onTryHit: function() {}
@@ -165,6 +177,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 70
 	},
+	healpulse: {
+		inherit: true,
+		heal: [1,2],
+		onHit: function() {}
+	},
 	heatwave: {
 		inherit: true,
 		basePower: 100
@@ -275,8 +292,32 @@ exports.BattleMovedex = {
 		}
 	},
 	knockoff: {
-		inherit: true,
-		basePower: 20
+		num: 282,
+		accuracy: 100,
+		basePower: 20,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
+		shortDesc: "Removes the target's held item.",
+		id: "knockoff",
+		isViable: true,
+		name: "Knock Off",
+		pp: 20,
+		priority: 0,
+		isContact: true,
+		onHit: function(target, source) {
+			var item = target.getItem();
+			if (item.id === 'mail') {
+				target.setItem('');
+			} else {
+				item = target.takeItem(source);
+			}
+			if (item) {
+				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] '+source);
+			}
+		},
+		secondary: false,
+		target: "normal",
+		type: "Dark"
 	},
 	leafstorm: {
 		inherit: true,
@@ -363,6 +404,15 @@ exports.BattleMovedex = {
 		basePower: 50,
 		pp: 10
 	},
+	secretpower: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			boosts: {
+				accuracy: -1
+			}
+		}
+	},
 	skullbash: {
 		inherit: true,
 		basePower: 100,
@@ -371,6 +421,14 @@ exports.BattleMovedex = {
 	sleeppowder: {
 		inherit: true,
 		onTryHit: function() {}
+	},
+	smellingsalts: {
+		inherit: true,
+		basePower: 60,
+		basePowerCallback: function(pokemon, target) {
+			if (target.status === 'par') return 120;
+			return 60;
+		}
 	},
 	smog: {
 		inherit: true,

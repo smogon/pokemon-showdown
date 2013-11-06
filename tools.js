@@ -28,10 +28,12 @@ module.exports = (function () {
 		'Learnsets': 'learnsets.js',
 		'Aliases': 'aliases.js'
 	};
-	function Tools(mod) {
+	function Tools(mod, parentMod) {
 		if (!mod) {
 			mod = 'base';
 			this.isBase = true;
+		} else if (!parentMod) {
+			parentMod = 'base';
 		}
 		this.currentMod = mod;
 
@@ -67,7 +69,7 @@ module.exports = (function () {
 				console.log('CRASH LOADING FORMATS: '+e.stack);
 			}
 		} else {
-			var baseData = moddedTools.base.data;
+			var parentData = moddedTools[parentMod].data;
 			dataTypes.forEach(function(dataType) {
 				try {
 					var path = './mods/' + mod + '/' + dataFiles[dataType];
@@ -78,23 +80,23 @@ module.exports = (function () {
 					console.log('CRASH LOADING MOD DATA: '+e.stack);
 				}
 				if (!data[dataType]) data[dataType] = {};
-				for (var i in baseData[dataType]) {
+				for (var i in parentData[dataType]) {
 					if (data[dataType][i] === null) {
 						// null means don't inherit
 						delete data[dataType][i];
 					} else if (!(i in data[dataType])) {
-						// If it doesn't exist it's inherited from the base data
+						// If it doesn't exist it's inherited from the parent data
 						if (dataType === 'Pokedex') {
 							// Pokedex entries can be modified too many different ways
-							data[dataType][i] = Object.clone(baseData[dataType][i], true);
+							data[dataType][i] = Object.clone(parentData[dataType][i], true);
 						} else {
-							data[dataType][i] = baseData[dataType][i];
+							data[dataType][i] = parentData[dataType][i];
 						}
 					} else if (data[dataType][i] && data[dataType][i].inherit) {
-						// {inherit: true} can be used to modify only parts of the base data,
+						// {inherit: true} can be used to modify only parts of the parent data,
 						// instead of overwriting entirely
 						delete data[dataType][i].inherit;
-						Object.merge(data[dataType][i], baseData[dataType][i], true, false);
+						Object.merge(data[dataType][i], parentData[dataType][i], true, false);
 					}
 				}
 			});
@@ -487,9 +489,8 @@ module.exports = (function () {
 
 					for (var i=0, len=lset.length; i<len; i++) {
 						var learned = lset[i];
-						if (format.noPokebank && learned.charAt(0) !== '6') {
-							if (learned.substr(0,2) !== '5L' && (learned.substr(0,2) !== '5M' || move in {allyswitch:1, telekinesis:1,workup:1,pluck:1})) continue;
-						}
+						if (format.noPokebank && learned.charAt(0) !== '6') continue;
+						if (parseInt(learned.charAt(0),10) > this.gen) continue;
 						if (learned.substr(0,2) in {'4L':1,'5L':1,'6L':1}) {
 							// gen 4-6 level-up moves
 							if (level >= parseInt(learned.substr(2),10)) {
@@ -498,7 +499,7 @@ module.exports = (function () {
 								// we're past the required level to learn it
 								return false;
 							}
-							if (!template.gender || template.gender === 'F') {
+							if (!template.gender || template.gender === 'F' || this.gen >= 6) {
 								// available as egg move
 								learned = learned.charAt(0)+'Eany';
 							} else {
@@ -519,8 +520,14 @@ module.exports = (function () {
 						} else if (learned.charAt(1) in {E:1,S:1,D:1}) {
 							// egg, event, or DW moves:
 							//   only if that was the source
-							if (learned.charAt(0) === 'E') {
+							if (move === 'extremespeed' && format.noPokebank) continue;
+							if (learned.charAt(1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
+								if (learned.charAt(0) === '6') {
+									// gen 6 doesn't have egg move incompatibilities
+									sources.push('6E');
+									continue;
+								}
 								var eggGroups = template.eggGroups;
 								if (!eggGroups) continue;
 								if (eggGroups[0] === 'No Eggs') eggGroups = this.getTemplate(template.evos[0]).eggGroups;
@@ -881,7 +888,7 @@ module.exports = (function () {
 
 					if (template.unreleasedHidden && banlistTable['Unreleased']) {
 						problems.push(name+"'s hidden ability is unreleased.");
-					} else if (set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
+					} else if (this.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
 						problems.push(name+" must be at least level 10 with its hidden ability.");
 					}
 					if (template.maleOnlyHidden) {
@@ -976,7 +983,7 @@ module.exports = (function () {
 				} else {
 					var compatibleSource = false;
 					for (var i=0,len=lsetData.sources.length; i<len; i++) {
-						if (lsetData.sources[i].substr(0,2) === '5E' || (lsetData.sources[i].substr(0,2) === '5D' && set.level >= 10)) {
+						if (lsetData.sources[i].charAt(1) === 'E' || (lsetData.sources[i].substr(0,2) === '5D' && set.level >= 10)) {
 							compatibleSource = true;
 							break;
 						}
@@ -1168,8 +1175,8 @@ module.exports = (function () {
 		}
 	};
 
-	Tools.construct = function(mod) {
-		var tools = new Tools(mod);
+	Tools.construct = function(mod, parentMod) {
+		var tools = new Tools(mod, parentMod);
 		// Scripts override Tools.
 		var ret = Object.create(tools);
 		tools.install(ret);
@@ -1180,13 +1187,36 @@ module.exports = (function () {
 	};
 
 	moddedTools.base = Tools.construct();
-	try {
-		var dirs = fs.readdirSync('./mods/');
 
-		dirs.forEach(function(dir) {
-			moddedTools[dir] = Tools.construct(dir);
+	// "gen6" is an alias for the current base data
+	moddedTools.gen6 = moddedTools.base;
+
+	var parentMods = {};
+
+	try {
+		var mods = fs.readdirSync('./mods/');
+
+		mods.forEach(function(mod) {
+			if (fs.existsSync('./mods/'+mod+'/scripts.js')) {
+				parentMods[mod] = require('./mods/'+mod+'/scripts.js').BattleScripts.inherit || 'base';
+			} else {
+				parentMods[mod] = 'base';
+			}
 		});
-	} catch (e) {}
+
+		var didSomething = false;
+		do {
+			didSomething = false;
+			for (var i in parentMods) {
+				if (!moddedTools[i] && moddedTools[parentMods[i]]) {
+					moddedTools[i] = Tools.construct(i, parentMods[i]);
+					didSomething = true;
+				}
+			}
+		} while (didSomething);
+	} catch (e) {
+		console.log("Error while loading mods: "+e);
+	}
 
 	moddedTools.base.__proto__.moddedTools = moddedTools;
 

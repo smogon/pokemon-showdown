@@ -1,4 +1,5 @@
 exports.BattleScripts = {
+	inherit: 'gen5',
 	gen: 5,
 	init: function() {
 		this.modData('Pokedex', 'cherrimsunshine').types = ['Grass', 'Fire'];

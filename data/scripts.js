@@ -493,7 +493,7 @@ exports.BattleScripts = {
 
 		// okay, mega evolution is possible
 		this.add('-formechange', pokemon, template.species);
-		this.add('message', template.baseSpecies+" mega-evolved into "+template.species+"!");
+		this.add('message', template.baseSpecies+" has Mega Evolved into Mega "+template.baseSpecies+"!");
 		pokemon.formeChange(template);
 		pokemon.baseTemplate = template; // mega evolution is permanent :o
 		pokemon.setAbility(template.abilities['0']);
@@ -547,7 +547,7 @@ exports.BattleScripts = {
 		for (var i=0; i<6; i++)
 		{
 			while (true) {
-				var x=Math.floor(Math.random()*649)+1;
+				var x=Math.floor(Math.random()*718)+1;
 				if (teamdexno.indexOf(x) === -1) {
 					teamdexno.push(x);
 					break;
@@ -617,6 +617,10 @@ exports.BattleScripts = {
 			//since we're selecting forme at random, we gotta make sure forme/item combo is correct
 			if (template.requiredItem) {
 				item = template.requiredItem;
+			}
+			if (this.getItem(item).megaStone) {
+				// we'll exclude mega stones for now
+				item = Object.keys(this.data.Items).sample();
 			}
 			while ((poke === 'Arceus' && item.indexOf("plate") > -1) || (poke === 'Giratina' && item === 'griseousorb')) {
 				item = Object.keys(this.data.Items).sample();
@@ -1606,39 +1610,23 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomSeasonalOFTeam: function(side) {
+	randomSeasonalTeam: function(side) {
 		var seasonalPokemonList = [
-			'absol', 'alakazam', 'banette', 'beheeyem', 'bellossom', 'bisharp', 'blissey', 'cacturne', 'carvanha', 'chandelure',
-			'cofagrigus', 'conkeldurr', 'crawdaunt', 'darkrai', 'deino', 'drapion', 'drifblim', 'drifloon', 'dusclops',
-			'dusknoir', 'duskull', 'electivire', 'frillish', 'froslass', 'gallade', 'gardevoir', 'gastly', 'gengar', 'giratina',
-			'golett', 'golurk', 'gothitelle', 'hariyama', 'haunter', 'hitmonchan', 'hitmonlee', 'hitmontop', 'honchkrow', 'houndoom',
-			'houndour', 'hydreigon', 'hypno', 'infernape', 'jellicent', 'jynx', 'krokorok', 'krookodile', 'lampent', 'leavanny',
-			'liepard', 'lilligant', 'litwick', 'lopunny', 'lucario', 'ludicolo', 'machamp', 'magmortar', 'mandibuzz', 'medicham',
-			'meloetta', 'mienshao', 'mightyena', 'misdreavus', 'mismagius', 'mrmime', 'murkrow', 'nuzleaf', 'pawniard', 'poochyena',
-			'probopass', 'purrloin', 'roserade', 'rotom', 'sableye', 'sandile', 'sawk', 'scrafty', 'scraggy', 'sharpedo', 'shedinja',
-			'shiftry', 'shuppet', 'skuntank', 'sneasel', 'snorlax', 'spiritomb', 'stunky', 'throh', 'toxicroak', 'tyranitar', 'umbreon',
-			'vullaby', 'weavile', 'wobbuffet', 'yamask', 'zoroark', 'zorua', 'zweilous'
+			'alakazam', 'machamp', 'hypno', 'hitmonlee', 'hitmonchan', 'mrmime', 'jynx', 'hitmontop', 'hariyama', 'sableye', 'medicham',
+			'toxicroak', 'electivire', 'magmortar', 'conkeldurr', 'throh', 'sawk', 'gothitelle', 'beheeyem', 'bisharp', 'volbeat', 'illumise',
+			'spinda', 'cacturne', 'infernape', 'lopunny', 'lucario', 'mienshao', 'pidgeot', 'fearow', 'dodrio', 'aerodactyl', 'noctowl',
+			'crobat', 'xatu', 'skarmory', 'swellow', 'staraptor', 'honchkrow', 'chatot', 'unfezant', 'sigilyph', 'braviary', 'mandibuzz',
+			'farfetchd', 'pelipper', 'altaria', 'togekiss', 'swoobat', 'archeops', 'swanna', 'weavile', 'gallade', 'gardevoir', 'ludicolo',
+			'snorlax', 'wobbuffet', 'meloetta', 'blissey', 'landorus', 'tornadus', 'golurk', 'bellossom', 'lilligant', 'probopass', 'roserade',
+			'leavanny', 'zapdos', 'moltres', 'articuno', 'delibird', 'pancham', 'pangoro', 'hawlucha', 'noibat', 'noivern', 'fletchling',
+			'fletchinder', 'talonflame', 'vivillon', 'yveltal'
 		];
 		seasonalPokemonList = seasonalPokemonList.randomize();
 		var team = [];
-
 		for (var i=0; i<6; i++) {
-			var pokemon = seasonalPokemonList[i];
-			var template = this.getTemplate(pokemon);
-			var set = this.randomSet(template, i);
-			var trickindex = -1;
-			for (var j=0, l=set.moves.length; j<l; j++) {
-				if (set.moves[j].toLowerCase() === 'trick') {
-					trickindex = j;
-				}
-			}
-			if (trickindex === -1 || trickindex === 2) {
-				set.moves[3] = 'trick';
-			}
-			set.moves[2] = 'Present';
+			var set = this.randomSet(seasonalPokemonList[i], i);
 			team.push(set);
 		}
-		
 		return team;
 	}
 };

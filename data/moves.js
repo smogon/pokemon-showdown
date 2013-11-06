@@ -601,6 +601,7 @@ exports.BattleMovedex = {
 		name: "Aura Sphere",
 		pp: 20,
 		priority: 0,
+		isPulseMove: true,
 		secondary: false,
 		target: "any",
 		type: "Fighting"
@@ -1614,8 +1615,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 65,
 		category: "Special",
-		desc: "Deals damage to one adjacent or non-adjacent target. This move has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording. Pokemon with the Ability Soundproof are immune. (Field: Can be used to record a sound to replace Chatot's cry. The cry is reset if Chatot is deposited in a PC.)",
-		shortDesc: "10% chance to confuse the target.",
+		desc: "Deals damage to one adjacent or non-adjacent target with a 100% chance to confuse it.",
+		shortDesc: "100% chance to confuse the target.",
 		id: "chatter",
 		name: "Chatter",
 		pp: 20,
@@ -1625,7 +1626,7 @@ exports.BattleMovedex = {
 			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
 		},
 		secondary: {
-			chance: 10,
+			chance: 100,
 			volatileStatus: 'confusion'
 		},
 		target: "any",
@@ -1920,7 +1921,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		onHit: function(pokemon) {
-			var noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1};
+			var noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, roar:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1};
 			if (!this.lastMove || noCopycat[this.lastMove]) {
 				return false;
 			}
@@ -1982,11 +1983,12 @@ exports.BattleMovedex = {
 		name: "Cotton Spore",
 		pp: 40,
 		priority: 0,
+		isPowder: true,
 		boosts: {
 			spe: -2
 		},
 		onTryHit: function(target, source) {
-			return !target.hasType('Grass');
+			if (target.hasType('Grass')) return false;
 		},
 		secondary: false,
 		target: "normal",
@@ -2192,7 +2194,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
-			return 120*target.hp/target.maxhp;
+			return Math.floor(Math.floor((120 * (100 * Math.floor(target.hp * 4096 / target.maxhp)) + 2048 - 1) / 4096) / 100) || 1;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1. Makes contact.",
@@ -2307,15 +2309,15 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		desc: "Deals damage to one adjacent target.",
-		shortDesc: "No additional effect.",
+		desc: "Deals damage to all adjacent foes.",
+		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "dazzlinggleam",
 		isViable: true,
 		name: "Dazzling Gleam",
 		pp: 10,
 		priority: 0,
 		secondary: false,
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Fairy"
 	},
 	"defendorder": {
@@ -3169,6 +3171,7 @@ exports.BattleMovedex = {
 		name: "Egg Bomb",
 		pp: 10,
 		priority: 0,
+		isBombMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3255,10 +3258,6 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
-			var sourceSpeMod = 1;
-			sourceSpeMod = this.runEvent('ModifySpe', pokemon, target, null, sourceSpeMod);
-			var foeSpeMod = 1;
-			sourceSpeMod = this.runEvent('ModifySpe', target, pokemon, null, foeSpeMod);
 			var ratio = (pokemon.getStat('spe') / target.getStat('spe'));
 			this.debug([40, 60, 80, 120, 150][(Math.floor(ratio) > 4 ? 4 : Math.floor(ratio))] + ' bp');
 			if (ratio >= 4) {
@@ -3283,6 +3282,7 @@ exports.BattleMovedex = {
 		name: "Electro Ball",
 		pp: 10,
 		priority: 0,
+		isBallMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -3485,6 +3485,7 @@ exports.BattleMovedex = {
 		name: "Energy Ball",
 		pp: 10,
 		priority: 0,
+		isBallMove: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -3683,7 +3684,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		onTryHit: function(target, pokemon) {
 			if (pokemon.activeTurns > 1) {
-				this.debug('It\'s not your first turn out.');
+				this.add('-message', '(Fake Out only works your first turn out.)');
 				return false;
 			}
 		},
@@ -4823,7 +4824,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes one adjacent target's Ability to be rendered ineffective as long as it remains active. If the target uses Baton Pass, the replacement will remain under this effect. Fails if the target's Ability is Multitype. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		desc: "Causes one adjacent target's Ability to be rendered ineffective as long as it remains active. If the target uses Baton Pass, the replacement will remain under this effect. Fails if the target's Ability is Multitype or Stance Change. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Nullifies the target's Ability",
 		id: "gastroacid",
 		name: "Gastro Acid",
@@ -4832,7 +4833,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		volatileStatus: 'gastroacid',
 		onTryHit: function(pokemon) {
-			if (pokemon.ability === 'multitype') {
+			var bannedAbilities = {multitype:1, stancechange:1};
+			if (bannedAbilities[pokemon.ability]) {
 				return false;
 			}
 		},
@@ -5413,10 +5415,6 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
-			var sourceSpeMod = 1;
-			sourceSpeMod = this.runEvent('ModifySpe', pokemon, target, null, sourceSpeMod);
-			var foeSpeMod = 1;
-			sourceSpeMod = this.runEvent('ModifySpe', target, pokemon, null, foeSpeMod);
 			var power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) || 1);
 			if (power > 150) power = 150;
 			this.debug(''+power+' bp');
@@ -5431,6 +5429,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
+		isBallMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -5676,7 +5675,11 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isBounceable: true,
-		heal: [1,2],
+		isPulseMove: true,
+		onHit: function(pokemon) {
+			if (pokemon.ability === 'megalauncher') this.heal(this.modify(pokemon.maxhp, 0.75));
+			else this.heal(this.modify(pokemon.maxhp, 0.5));
+		},
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -6425,6 +6428,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		isBallMove: true,
 		effect: {
 			duration: 2,
 			onLockMove: 'iceball',
@@ -6969,14 +6973,21 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 65,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
-		shortDesc: "Removes the target's held item.",
+		desc: "Deals damage to one adjacent target and causes it to drop its held item. Does 50% more damage if the target is holding an item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. It also cannot remove Mega Stones. Items lost to this move cannot be regained with Recycle. Makes contact.",
+		shortDesc: "Removes the target's held item. 1.5x damage if the target is holding an item.",
 		id: "knockoff",
 		isViable: true,
 		name: "Knock Off",
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		onBasePowerPriority: 4,
+		onBasePower: function(basePower, pokemon, target) {
+			var item = target.getItem();
+			if (item.id && !item.megaStone) {
+				return this.chainModify(1.5);
+			}
+		},
 		onHit: function(target, source) {
 			var item = target.getItem();
 			if (item.id === 'mail') {
@@ -7601,6 +7612,7 @@ exports.BattleMovedex = {
 		name: "Magnet Bomb",
 		pp: 20,
 		priority: 0,
+		isBombMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -7745,20 +7757,20 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user protects itself and its allies from damaging moves. Priority +4.",
-		shortDesc: "Protects the user and allies from damaging moves.",
+		desc: "The user protects itself and its allies from damaging moves. Only works first turn out.",
+		shortDesc: "Protects from damaging moves. First turn out only.",
 		id: "matblock",
 		isViable: true,
 		name: "Mat Block",
 		pp: 15,
-		priority: 4,
+		priority: 0,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
-		onTryHit: function(target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
-		},
-		onHit: function(pokemon) {
-			pokemon.addVolatile('stall');
+		onTryHit: function(target, pokemon) {
+			if (pokemon.activeTurns > 1) {
+				this.add('-message', '(Mat Block only works your first turn out.)');
+				return false;
+			}
 		},
 		effect: {
 			duration: 1,
@@ -8308,6 +8320,7 @@ exports.BattleMovedex = {
 		name: "Mist Ball",
 		pp: 5,
 		priority: 0,
+		isBallMove: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -8469,6 +8482,7 @@ exports.BattleMovedex = {
 		name: "Mud Bomb",
 		pp: 10,
 		priority: 0,
+		isBombMove: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -9235,6 +9249,7 @@ exports.BattleMovedex = {
 		name: "Play Rough",
 		pp: 10,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -9336,7 +9351,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			return !pokemon.hasType('Grass');
+			if (pokemon.hasType('Grass')) return false;
 		},
 		status: 'psn',
 		secondary: false,
@@ -9410,7 +9425,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			return !pokemon.hasType('Grass');
+			if (pokemon.hasType('Grass')) return false;
 		},
 		isBounceable: true,
 		volatileStatus: 'powder',
@@ -10072,7 +10087,7 @@ exports.BattleMovedex = {
 		id: "ragepowder",
 		name: "Rage Powder",
 		pp: 20,
-		priority: 3,
+		priority: 2,
 		isPowder: true,
 		volatileStatus: 'ragepowder',
 		effect: {
@@ -11134,9 +11149,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		secondary: {
 			chance: 30,
-			boosts: {
-				accuracy: -1
-			}
+			// TODO: Look into the effects on different terrain
+			status: 'par'
 		},
 		target: "normal",
 		type: "Normal"
@@ -11170,6 +11184,7 @@ exports.BattleMovedex = {
 		name: "Seed Bomb",
 		pp: 15,
 		priority: 0,
+		isBombMove: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -11241,6 +11256,7 @@ exports.BattleMovedex = {
 		name: "Shadow Ball",
 		pp: 15,
 		priority: 0,
+		isBallMove: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -11840,7 +11856,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			return !pokemon.hasType('Grass');
+			if (pokemon.hasType('Grass')) return false;
 		},
 		status: 'slp',
 		secondary: false,
@@ -11915,6 +11931,7 @@ exports.BattleMovedex = {
 		name: "Sludge Bomb",
 		pp: 10,
 		priority: 0,
+		isBombMove: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -11987,19 +12004,19 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Rock"
 	},
-	"smellingsalt": {
+	"smellingsalts": {
 		num: 265,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 70,
 		basePowerCallback: function(pokemon, target) {
-			if (target.status === 'par') return 120;
-			return 60;
+			if (target.status === 'par') return 140;
+			return 70;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles if the target is paralyzed, and the target is cured of paralysis. Makes contact.",
 		shortDesc: "Power doubles if target is paralyzed, and cures it.",
-		id: "smellingsalt",
-		name: "SmellingSalt",
+		id: "smellingsalts",
+		name: "Smelling Salts",
 		pp: 10,
 		priority: 0,
 		isContact: true,
@@ -12449,8 +12466,9 @@ exports.BattleMovedex = {
 		name: "Spore",
 		pp: 15,
 		priority: 0,
+		isPowder: true,
 		onTryHit: function(target, source) {
-			return !target.hasType('Grass');
+			if (target.hasType('Grass')) return false;
 		},
 		status: 'slp',
 		secondary: false,
@@ -12767,8 +12785,9 @@ exports.BattleMovedex = {
 		name: "Stun Spore",
 		pp: 30,
 		priority: 0,
+		isPowder: true,
 		onTryHit: function(target, source) {
-			return !target.hasType('Grass');
+			if (target.hasType('Grass')) return false;
 		},
 		status: 'par',
 		secondary: false,
@@ -14455,6 +14474,7 @@ exports.BattleMovedex = {
 		name: "Weather Ball",
 		pp: 10,
 		priority: 0,
+		isBallMove: true,
 		onModifyMove: function(move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
@@ -14788,7 +14808,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function(pokemon, target) {
-			return 120*target.hp/target.maxhp;
+			return Math.floor(Math.floor((120 * (100 * Math.floor(target.hp * 4096 / target.maxhp)) + 2048 - 1) / 4096) / 100) || 1;
 		},
 		category: "Special",
 		desc: "Deals damage to one adjacent target. Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1. Makes contact.",
