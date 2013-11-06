@@ -1983,6 +1983,7 @@ exports.BattleMovedex = {
 		name: "Cotton Spore",
 		pp: 40,
 		priority: 0,
+		isPowder: true,
 		boosts: {
 			spe: -2
 		},
@@ -12465,6 +12466,7 @@ exports.BattleMovedex = {
 		name: "Spore",
 		pp: 15,
 		priority: 0,
+		isPowder: true,
 		onTryHit: function(target, source) {
 			if (target.hasType('Grass')) return false;
 		},
@@ -12783,6 +12785,7 @@ exports.BattleMovedex = {
 		name: "Stun Spore",
 		pp: 30,
 		priority: 0,
+		isPowder: true,
 		onTryHit: function(target, source) {
 			if (target.hasType('Grass')) return false;
 		},
