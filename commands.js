@@ -529,9 +529,9 @@ var commands = exports.commands = {
 			price = 20;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('You have purchased a custom avatar. You need to message an Admin capable of adding (Frost Developer or BrittleWind).');
+				this.sendReply('You have purchased a custom avatar. Please contact a Leader or Administrator to have it added.');
 				user.canCustomAvatar = true;
-				this.add(user.name + ' has purchased a custom avatar!');
+				Rooms.rooms.staff.add('|raw|<font color="red">'+user.name + ' has purchased a custom avatar!</font>');
 			} else {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
@@ -540,9 +540,9 @@ var commands = exports.commands = {
 			price = 35;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('You have purchased a custom animated avatar. You need to message an Admin capable of adding (Frost Developer or BrittleWind).');
+				this.sendReply('You have purchased a custom animated avatar. Please contact a Leader or Administrator to have it added.');
 				user.canAnimatedAvatar = true;
-				this.add(user.name + ' has purchased a custom animated avatar!');
+				Rooms.rooms.staff.add('|raw|<font color="red">'+user.name + ' has purchased a custom animated avatar!</font>');
 			} else {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
@@ -2511,6 +2511,7 @@ var commands = exports.commands = {
 				avatar.write('\n'+username+','+filename);
 				Users.get(username).avatar = filename;
 				connection.sendTo(room, username+' has received a custom avatar.');
+				Users.get(username).canCustomAvatar = false;
 				Users.get(username).sendTo(room, 'You have received a custom avatar from ' + user.name + '.');
 	    		}
 		});
