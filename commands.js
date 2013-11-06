@@ -2537,9 +2537,10 @@ var commands = exports.commands = {
 				Users.get(username).sendTo(room, 'You have received a custom avatar from ' + user.name + '.');
 				for (var u in Users.users) {
 					if (Users.users[u].group == "~" || Users.users[u].group == "&") {
-						Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+user.name+' has received a custom avatar from '+user.name+'.');
+						Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+username+' has received a custom avatar from '+user.name+'.');
 					}
 				}
+				Rooms.rooms.staff.send(username+' has received a custom avatar from '+user.name+'.');
 	    		}
 		});
 		this.logModCommand(user.name + ' added a custom avatar for ' + username + '.');
