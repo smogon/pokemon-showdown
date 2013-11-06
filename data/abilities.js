@@ -9,7 +9,7 @@ Ratings and how they work:
 
 -1: Detrimental
 	  An ability that does more harm than good.
-	ex. Defeatist, Klutz
+	ex. Defeatist, Normalize
 
  0: Useless
 	  An ability with no net effect on a Pokemon during a battle.
@@ -18,7 +18,7 @@ Ratings and how they work:
  1: Ineffective
 	  An ability that has a minimal effect. Should never be chosen over
 	  any other ability.
-	ex. Pressure, Damp
+	ex. Damp, Shell Armor
 
  2: Situationally useful
 	  An ability that can be useful in certain situations.
@@ -31,11 +31,11 @@ Ratings and how they work:
  4: Very useful
 	  One of the most popular abilities. The difference between 3 and 4
 	  can be ambiguous.
-	ex. Technician, Intimidate
+	ex. Technician, Protean
 
  5: Essential
 	  The sort of ability that defines metagames.
-	ex. Drizzle, Magnet Pull
+	ex. Drizzle, Shadow Tag
 
 */
 
@@ -187,7 +187,7 @@ exports.BattleAbilities = {
 		},
 		id: "aurabreak",
 		name: "Aura Break",
-		rating: 3,
+		rating: 2,
 		num: -6,
 		gen: 6
 	},
@@ -280,7 +280,7 @@ exports.BattleAbilities = {
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
-		rating: 2.5,
+		rating: 2,
 		num: -6,
 		gen: 6
 	},
@@ -912,7 +912,7 @@ exports.BattleAbilities = {
 		},
 		id: "galewings",
 		name: "Gale Wings",
-		rating: 3.5,
+		rating: 4.5,
 		num: -6,
 		gen: 6
 	},
@@ -921,7 +921,7 @@ exports.BattleAbilities = {
 		shortDesc: "When this Pokemon has 1/2 or less of its max HP, it uses certain Berries early.",
 		id: "gluttony",
 		name: "Gluttony",
-		rating: 0,
+		rating: 1.5,
 		num: 82
 	},
 	"gooey": {
@@ -932,7 +932,7 @@ exports.BattleAbilities = {
 		},
 		id: "gooey",
 		name: "Gooey",
-		rating: 3.5,
+		rating: 3,
 		num: -6,
 		gen: 6
 	},
@@ -1029,7 +1029,7 @@ exports.BattleAbilities = {
 		},
 		id: "heavymetal",
 		name: "Heavy Metal",
-		rating: 0,
+		rating: -1,
 		num: 134
 	},
 	"honeygather": {
@@ -1175,12 +1175,12 @@ exports.BattleAbilities = {
 		num: 150
 	},
 	"infiltrator": {
-		desc: "Ignores Reflect, Light Screen and Safeguard under effect on the target.",
-		shortDesc: "This Pokemon's moves ignore the foe's Reflect, Light Screen, Safeguard, and Mist.",
+		desc: "Ignores Substitute, Reflect, Light Screen, and Safeguard on the target.",
+		shortDesc: "This Pokemon's moves ignore the foe's Substitute, Reflect, Light Screen, Safeguard, and Mist.",
 		// Implemented in the corresponding effects.
 		id: "infiltrator",
 		name: "Infiltrator",
-		rating: 1,
+		rating: 2.5,
 		num: 151
 	},
 	"innerfocus": {
@@ -1226,7 +1226,7 @@ exports.BattleAbilities = {
 		},
 		id: "intimidate",
 		name: "Intimidate",
-		rating: 4,
+		rating: 3.5,
 		num: 22
 	},
 	"ironbarbs": {
@@ -1503,7 +1503,7 @@ exports.BattleAbilities = {
 		},
 		id: "magnetpull",
 		name: "Magnet Pull",
-		rating: 5,
+		rating: 4.5,
 		num: 42
 	},
 	"marvelscale": {
@@ -1664,7 +1664,7 @@ exports.BattleAbilities = {
 		},
 		id: "multitype",
 		name: "Multitype",
-		rating: 5,
+		rating: 4,
 		num: 121
 	},
 	"mummy": {
@@ -1706,7 +1706,7 @@ exports.BattleAbilities = {
 		},
 		id: "noguard",
 		name: "No Guard",
-		rating: 4.5,
+		rating: 4,
 		num: 99
 	},
 	"normalize": {
@@ -1754,7 +1754,7 @@ exports.BattleAbilities = {
 		num: 12
 	},
 	"overcoat": {
-		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail. It is also immune to Powder moves.",
+		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail. It is also immune to powder moves.",
 		shortDesc: "This Pokemon is immune to residual weather damage, and powder moves.",
 		onImmunity: function(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail') return false;
@@ -1767,7 +1767,7 @@ exports.BattleAbilities = {
 		},
 		id: "overcoat",
 		name: "Overcoat",
-		rating: 1,
+		rating: 2,
 		num: 142
 	},
 	"overgrow": {
@@ -1833,7 +1833,7 @@ exports.BattleAbilities = {
 		},
 		id: "parentalbond",
 		name: "Parental Bond",
-		rating: 3,
+		rating: 4.5,
 		num: -6,
 		gen: 6
 	},
@@ -1997,7 +1997,7 @@ exports.BattleAbilities = {
 		},
 		id: "pressure",
 		name: "Pressure",
-		rating: 2,
+		rating: 1.5,
 		num: 46
 	},
 	"protean": {
@@ -2013,7 +2013,7 @@ exports.BattleAbilities = {
 		},
 		id: "protean",
 		name: "Protean",
-		rating: 1.5,
+		rating: 4,
 		num: -6,
 		gen: 6
 	},
@@ -2113,7 +2113,7 @@ exports.BattleAbilities = {
 		},
 		id: "regenerator",
 		name: "Regenerator",
-		rating: 4.5,
+		rating: 4,
 		num: 144
 	},
 	"rivalry": {
@@ -2213,7 +2213,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandstream",
 		name: "Sand Stream",
-		rating: 5,
+		rating: 4.5,
 		num: 45
 	},
 	"sandveil": {
@@ -2231,7 +2231,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandveil",
 		name: "Sand Veil",
-		rating: 1,
+		rating: 1.5,
 		num: 8
 	},
 	"sapsipper": {
@@ -2448,7 +2448,7 @@ exports.BattleAbilities = {
 		},
 		id: "snowcloak",
 		name: "Snow Cloak",
-		rating: 0.5,
+		rating: 1,
 		num: 81
 	},
 	"snowwarning": {
@@ -2459,7 +2459,7 @@ exports.BattleAbilities = {
 		},
 		id: "snowwarning",
 		name: "Snow Warning",
-		rating: 4.5,
+		rating: 4,
 		num: 117
 	},
 	"solarpower": {
@@ -3006,7 +3006,7 @@ exports.BattleAbilities = {
 			move.ignoreAccuracy = true;
 			move.ignoreOffensive = true;
 		},
-		rating: 2,
+		rating: 3,
 		num: 109
 	},
 	"unburden": {
@@ -3290,7 +3290,7 @@ exports.BattleAbilities = {
 		effect: {
 			duration: 1
 		},
-		rating: 4.5,
+		rating: 4,
 		num: -3
 	},
 	"persistent": {
