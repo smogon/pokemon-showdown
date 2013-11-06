@@ -492,6 +492,9 @@ var commands = exports.commands = {
 	buy: function(target, room, user) {
 		if (!target) return this.parse('/help buy');
 		if (closeShop) return this.sendReply('The shop is currently closed and will open shortly.');
+		var target2 = target;
+		target = target.split(', ');
+		var avatar = '';
 		var data = fs.readFileSync('config/money.csv','utf8')
 		var match = false;
 		var money = 0;
@@ -513,7 +516,7 @@ var commands = exports.commands = {
 		}
 		user.money = money;
 		var price = 0;
-		if (target === 'symbol') {
+		if (target2 === 'symbol') {
 			price = 5;
 			if (price <= user.money) {
 				user.money = user.money - price;
@@ -525,29 +528,47 @@ var commands = exports.commands = {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
 		}
-		if (target === 'custom') {
+		if (target[0] === 'custom') {
 			price = 20;
 			if (price <= user.money) {
+				if (!target[1]) return this.sendReply('Please specify the avatar you would like you buy. It has a maximum size of 80x80 and must be in .png format. ex: /buy custom, [url to the avatar]');
+       				var filename = target[1].split('.');
+				filename = '.'+filename.pop();
+				if (filename != ".png") return this.sendReply('Your avatar must be in .png format.');
 				user.money = user.money - price;
-				this.sendReply('You have purchased a custom avatar. Please contact a Leader or Administrator to have it added.');
+				this.sendReply('You have purchased a custom avatar. Staff have been notified and it will be added in due time.');
 				user.canCustomAvatar = true;
-				Rooms.rooms.staff.add('|raw|<font color="red">'+user.name + ' has purchased a custom avatar!</font>');
+				Rooms.rooms.staff.add(user.name+' has purchased a custom avatar. Image: '+target[1]);
+				for (var u in Users.users) {
+					if (Users.users[u].group == "~" || Users.users[u].group == "&") {
+						Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+user.name+' has purchased a custom avatar. Image: '+target[1]);
+					}
+				}
 			} else {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
 		}
-		if (target === 'animated') {
+		if (target[0] === 'animated') {
 			price = 35;
 			if (price <= user.money) {
+				if (!target[1]) return this.sendReply('Please specify the avatar you would like you buy. It has a maximum size of 80x80 and must be in .gif format. ex: /buy animated, [url to the avatar]');
+       				var filename = target[1].split('.');
+				filename = '.'+filename.pop();
+				if (filename != ".gif") return this.sendReply('Your avatar must be in .gif format.');
 				user.money = user.money - price;
-				this.sendReply('You have purchased a custom animated avatar. Please contact a Leader or Administrator to have it added.');
+				this.sendReply('You have purchased a custom animated avatar. Staff have been notified and it will be added in due time.');
 				user.canAnimatedAvatar = true;
-				Rooms.rooms.staff.add('|raw|<font color="red">'+user.name + ' has purchased a custom animated avatar!</font>');
+				Rooms.rooms.staff.add(user.name+' has purchased a custom animated avatar. Image: '+target[1]);
+				for (var u in Users.users) {
+					if (Users.users[u].group == "~" || Users.users[u].group == "&") {
+						Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+user.name+' has purchased a custom animated avatar. Image: '+target[1]);
+					}
+				}
 			} else {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
 		}
-		if (target === 'room') {
+		if (target[0] === 'room') {
 			price = 80;
 			if (price <= user.money) {
 				user.money = user.money - price;
@@ -558,7 +579,7 @@ var commands = exports.commands = {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
 		}
-		if (target === 'trainer') {
+		if (target2 === 'trainer') {
 			price = 30;
 			if (price <= user.money) {
 				user.money = user.money - price;
@@ -569,7 +590,7 @@ var commands = exports.commands = {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
 		}
-		if (target === 'fix') {
+		if (target2 === 'fix') {
 			price = 10;
 			if (price <= user.money) {
 				user.money = user.money - price;
@@ -580,7 +601,7 @@ var commands = exports.commands = {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
 		}
-		if (target === 'declare') {
+		if (target2 === 'declare') {
 			price = 25;
 			if (price <= user.money) {
 				user.money = user.money - price;
@@ -2502,8 +2523,10 @@ var commands = exports.commands = {
        		var filename = target[1].split('.');
 		filename = '.'+filename.pop();
 		if (filename != ".png" && filename != ".gif") return connection.sendTo(room, '/customavatar - Invalid image type! Images are required to be png or gif.');
-     		filename = Users.get(username)+filename;
 		if (!username) return this.sendReply('User '+target[0]+' not found.');
+		if (filename == ".png") Users.get(username).canCustomAvatar = false;
+		if (filename == ".gif") Users.get(username).canAnimatedAvatar = false;
+     		filename = Users.get(username)+filename;
 		http.get(target[1], 'config/avatars/' + filename, function (error, result) {
 			if (error) {
     				return connection.sendTo(room, '/customavatar - You supplied an invalid URL!');
@@ -2511,8 +2534,12 @@ var commands = exports.commands = {
 				avatar.write('\n'+username+','+filename);
 				Users.get(username).avatar = filename;
 				connection.sendTo(room, username+' has received a custom avatar.');
-				Users.get(username).canCustomAvatar = false;
 				Users.get(username).sendTo(room, 'You have received a custom avatar from ' + user.name + '.');
+				for (var u in Users.users) {
+					if (Users.users[u].group == "~" || Users.users[u].group == "&") {
+						Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+user.name+' has received a custom avatar from '+user.name+'.');
+					}
+				}
 	    		}
 		});
 		this.logModCommand(user.name + ' added a custom avatar for ' + username + '.');
