@@ -1078,7 +1078,7 @@ var commands = exports.commands = {
 					return this.sendReply('/poof target - Access denied.');
 				}
 			}
-		if(poofeh && !user.muted){
+		if(poofeh && !user.muted && !user.locked){
 			Rooms.rooms.lobby.addRaw(btags + getRandMessage(user)+ etags);
 			user.disconnectAll();	
 		}else{
