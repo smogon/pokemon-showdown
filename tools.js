@@ -589,7 +589,10 @@ module.exports = (function () {
 				}
 			}
 			// also check to see if the mon's prevo or freely switchable formes can learn this move
-			if (template.prevo) {
+			if (!template.learnset && template.baseSpecies !== template.species) {
+				// forme takes precedence over prevo only if forme has no learnset
+				template = this.getTemplate(template.baseSpecies);
+			} if (template.prevo) {
 				template = this.getTemplate(template.prevo);
 			} else if (template.speciesid === 'shaymin') {
 				template = this.getTemplate('shayminsky');
