@@ -1,66 +1,86 @@
 exports.BattleItems = {
-	"buggem": {
+	buggem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use."
 	},
-	"darkgem": {
+	darkgem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Dark-type attack will have 1.5x power. Single use."
 	},
-	"dragongem": {
+	dragongem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Dragon-type attack will have 1.5x power. Single use."
 	},
-	"electricgem": {
+	electricgem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Electric-type attack will have 1.5x power. Single use."
 	},
-	"fightinggem": {
+	fightinggem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Fighting-type attack will have 1.5x power. Single use."
 	},
-	"firegem": {
+	firegem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Fire-type attack will have 1.5x power. Single use."
 	},
-	"flyinggem": {
+	flyinggem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Flying-type attack will have 1.5x power. Single use."
 	},
-	"ghostgem": {
+	ghostgem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Ghost-type attack will have 1.5x power. Single use."
 	},
-	"grassgem": {
+	grassgem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Grass-type attack will have 1.5x power. Single use."
 	},
-	"groundgem": {
+	groundgem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Ground-type attack will have 1.5x power. Single use."
 	},
-	"icegem": {
+	icegem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Ice-type attack will have 1.5x power. Single use."
 	},
-	"poisongem": {
+	normalgem: {
 		inherit: true,
-		isUnreleased: false
+		desc: "Holder's first successful Normal-type attack will have 1.5x power. Single use."
 	},
-	"psychicgem": {
+	poisongem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Poison-type attack will have 1.5x power. Single use."
 	},
-	"rockgem": {
+	psychicgem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Psychic-type attack will have 1.5x power. Single use."
 	},
-	"steelgem": {
+	rockgem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Rock-type attack will have 1.5x power. Single use."
 	},
-	"watergem": {
+	steelgem: {
 		inherit: true,
-		isUnreleased: false
+		isUnreleased: false,
+		desc: "Holder's first successful Steel-type attack will have 1.5x power. Single use."
+	},
+	watergem: {
+		inherit: true,
+		isUnreleased: false,
+		desc: "Holder's first successful Water-type attack will have 1.5x power. Single use."
 	}
 };
