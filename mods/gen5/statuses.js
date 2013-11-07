@@ -19,4 +19,11 @@ exports.BattleStatuses = {
 			}
 		}
 	}
+	gem: {
+		duration: 1,
+		onBasePower: function(basePower, user, target, move) {
+			this.debug('Gem Boost');
+			return this.chainModify(1.5);
+		}
+	},
 };
