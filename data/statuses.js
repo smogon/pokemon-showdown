@@ -313,7 +313,7 @@ exports.BattleStatuses = {
 		duration: 1,
 		onBasePower: function(basePower, user, target, move) {
 			this.debug('Gem Boost');
-			return this.chainModify(1.3);
+			return this.chainModify([0x14CD, 0x1000]);
 		}
 	},
 
