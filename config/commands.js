@@ -1395,6 +1395,11 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://i.imgur.com/VJwqNpr.png"><img src="http://i.imgur.com/jLZstQ8.gif"><img src="http://i.imgur.com/Qi0y2ZD.png"><br><font color="red"><blink>Ace: Lilligant</blink><br></font><font color="purple">Love bites... so do I ♫♥');
 	},
 	
+	jesserawr: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/J6AZqhx.png" width="96" height="96"><img src="http://i.imgur.com/3corYWy.png" width="315" height="70"><img src="http://i.imgur.com/J6AZqhx.png" width="96" height="96"><br><font color="lightblue"> Ace: Wynaut </font><br> Wynaut play with me ?');
+	},
+	
 	meatyman: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/UjmM3HD.png"><font size="6" color="#298A08"><i>Meaty_Man</i><img src="http://i.imgur.com/jdZVUOT.png"></font></color><br><center>Ace: Reshiram<br>Introducing the leaders of the anti-Fairy upsrising. Get momentum, and follow the buzzards.');
