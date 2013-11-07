@@ -5678,7 +5678,7 @@ exports.BattleMovedex = {
 		isPulseMove: true,
 		onHit: function(pokemon) {
 			if (pokemon.ability === 'megalauncher') this.heal(this.modify(pokemon.maxhp, 0.75));
-			else this.heal(this.modify(pokemon.maxhp, 0.5));
+			else this.heal(Math.ceil(pokemon.maxhp * 0.5));
 		},
 		secondary: false,
 		target: "normal",
