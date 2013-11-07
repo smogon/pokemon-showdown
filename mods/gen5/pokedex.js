@@ -117,6 +117,10 @@ exports.BattlePokedex = {
 		inherit: true,
 		types:["Normal"]
 	},
+	beautifly: {
+		inherit: true,
+		baseStats: {hp:60,atk:70,def:50,spa:90,spd:50,spe:65}
+	},
 	ralts: {
 		inherit: true,
 		types:["Psychic"]
