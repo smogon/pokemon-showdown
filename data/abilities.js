@@ -172,7 +172,19 @@ exports.BattleAbilities = {
 	"aromaveil": {
 		desc: "Protects allies from attacks that limit their move choices.",
 		shortDesc: "Protects allies from attacks that limit their move choices.",
-		//todo
+		onStart: function(pokemon) {
+			pokemon.side.addSideCondition('aromaveil');
+		},
+		onSwitchOut: function(pokemon) {
+			pokemon.side.removeSideCondition('aromaveil');
+		},
+		effect: {
+			onTryHit: function(target, source, move) {
+				if (move && move.id in {disable:1, encore:1, healblock:1, imprison:1, taunt:1, torment:1}) {
+					return false;
+				}
+			}
+		},
 		id: "aromaveil",
 		name: "Aroma Veil",
 		rating: 0,
@@ -772,7 +784,6 @@ exports.BattleAbilities = {
 		desc: "Prevents lowering of ally Grass-type Pokemon's stats.",
 		shortDesc: "Prevents lowering of ally Grass-type Pokemon's stats.",
 		onStart: function(pokemon) {
-			this.add('-ability', pokemon, 'Flower Veil');
 			pokemon.side.addSideCondition('flowerveil');
 		},
 		onSwitchOut: function(pokemon) {
@@ -2721,7 +2732,6 @@ exports.BattleAbilities = {
 		id: "sweetveil",
 		name: "Sweet Veil",
 		onStart: function(pokemon) {
-			this.add('-ability', pokemon, 'Sweet Veil');
 			pokemon.side.addSideCondition('sweetveil');
 		},
 		onSwitchOut: function(pokemon) {
