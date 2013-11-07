@@ -592,7 +592,7 @@ module.exports = (function () {
 			if (!template.learnset && template.baseSpecies !== template.species) {
 				// forme takes precedence over prevo only if forme has no learnset
 				template = this.getTemplate(template.baseSpecies);
-			} if (template.prevo) {
+			} else if (template.prevo) {
 				template = this.getTemplate(template.prevo);
 			} else if (template.speciesid === 'shaymin') {
 				template = this.getTemplate('shayminsky');
