@@ -1503,7 +1503,7 @@ var commands = exports.commands = {
 	
 	robin6539: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://fc09.deviantart.net/fs4/i/2004/196/9/b/Ludidolo.gif"><img src="http://i.imgur.com/pI3nnzR.gif"><img src="http://z5.ifrm.com/30155/88/0/a3555782/avatar-3555782.jpg"></center><br /><center>Ace: Ludicolor<br />TRAINS AND COLOS');
+		this.sendReplyBox('<center><img src="http://fc09.deviantart.net/fs4/i/2004/196/9/b/Ludidolo.gif"><img src="http://i.imgur.com/CSfl1OU.gif"><img src="http://z5.ifrm.com/30155/88/0/a3555782/avatar-3555782.jpg"></center><br /><center>Ace: Ludicolor<br />TRAINS AND COLOS');
 	},
 	
 	darrelde: 'elite4darrelde',
