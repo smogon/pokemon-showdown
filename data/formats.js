@@ -44,8 +44,9 @@ exports.BattleFormats = {
 			} else if (template.isNonstandard) {
 				problems.push(set.species+' is not a real Pokemon.');
 			}
+			var ability = {};
 			if (set.ability) {
-				var ability = this.getAbility(set.ability);
+				ability = this.getAbility(set.ability);
 				if (ability.gen > this.gen) {
 					problems.push(ability.name+' does not exist in gen '+this.gen+'.');
 				} else if (ability.isNonstandard) {
@@ -92,6 +93,15 @@ exports.BattleFormats = {
 			}
 			set.moves = moves;
 
+			if (template.requiredItem) {
+				if (template.isMega) {
+					// Mega evolutions evolve in-battle
+					set.species = template.baseSpecies;
+				}
+				if (item.name !== template.requiredItem) {
+					problems.push((set.name||set.species) + ' needs to hold '+template.requiredItem+'.');
+				}
+			}
 			if (template.num == 351) { // Castform
 				set.species = 'Castform';
 			}
@@ -106,6 +116,9 @@ exports.BattleFormats = {
 				}
 			}
 			if (template.num == 555) { // Darmanitan
+				if (set.species === 'Darmanitan-Zen' && ability.id !== 'zenmode') {
+					problems.push('Darmanitan-Zen transforms in-battle with Zen Mode.');
+				}
 				set.species = 'Darmanitan';
 			}
 			if (template.num == 487) { // Giratina
@@ -119,10 +132,14 @@ exports.BattleFormats = {
 			}
 			if (template.num == 647) { // Keldeo
 				if (set.species === 'Keldeo-Resolute' && set.moves.indexOf('Secret Sword') < 0) {
-					set.species = 'Keldeo';
+					problems.push('Keldeo-Resolute needs to have Secret Sword.');
 				}
+				set.species = 'Keldeo';
 			}
 			if (template.num == 648) { // Meloetta
+				if (set.species === 'Meloetta-Pirouette' && set.moves.indexOf('Relic Song') < 0) {
+					problems.push('Meloetta-Pirouette transforms in-battle with Relic Song.');
+				}
 				set.species = 'Meloetta';
 			}
 			return problems;
