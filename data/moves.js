@@ -6949,7 +6949,7 @@ exports.BattleMovedex = {
 					target.removeVolatile("King's Shield");
 					return;
 				}
-				if (move && (move.category === 'Status' || move.isNotProtectable)) return;
+				if (move && (move.category === 'Status' || move.isNotProtectable || move.id === 'suckerpunch')) return;
 				this.add('-activate', target, "King's Shield");
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
