@@ -17,6 +17,9 @@ exports.BattleFormatsData = {
 		viableMoves: {"sleeppowder":1,"gigadrain":1,"hiddenpowerfire":1,"hiddenpowerice":1,"sludgebomb":1,"swordsdance":1,"powerwhip":1,"leechseed":1,"synthesis":1,"earthquake":1},
 		tier: "OU"
 	},
+	venusaurmega: {
+		requiredItem: "Venusaurite"
+	},
 	charmander: {
 		viableMoves: {"flamethrower":1,"overheat":1,"dragonpulse":1,"hiddenpowergrass":1,"fireblast":1},
 		eventPokemon: [
@@ -41,6 +44,12 @@ exports.BattleFormatsData = {
 		],
 		tier: "NU"
 	},
+	charizardmegax: {
+		requiredItem: "Charizardite X"
+	},
+	charizardmegay: {
+		requiredItem: "Charizardite Y"
+	},
 	squirtle: {
 		viableMoves: {"icebeam":1,"hydropump":1,"rapidspin":1,"scald":1,"aquajet":1,"toxic":1},
 		eventPokemon: [
@@ -60,6 +69,9 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["protect","raindance","skullbash","hydropump"]}
 		],
 		tier: "UU"
+	},
+	blastoisemega: {
+		requiredItem: "Blastoisinite"
 	},
 	caterpie: {
 		viableMoves: {"bugbite":1,"snore":1,"tackle":1,"electroweb":1},
@@ -454,6 +466,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "OU"
 	},
+	alakazammega: {
+		requiredItem: "Alakazite"
+	},
 	machop: {
 		viableMoves: {"dynamicpunch":1,"payback":1,"bulkup":1,"icepunch":1,"rockslide":1,"bulletpunch":1},
 		tier: "LC"
@@ -625,6 +640,9 @@ exports.BattleFormatsData = {
 		viableMoves: {"shadowball":1,"sludgebomb":1,"focusblast":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"trick":1},
 		tier: "OU"
 	},
+	gengarmega: {
+		requiredItem: "Gengarite"
+	},
 	onix: {
 		viableMoves: {"stealthrock":1,"earthquake":1,"stoneedge":1,"dragontail":1,"curse":1},
 		tier: "LC"
@@ -793,6 +811,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "NU"
 	},
+	kangaskhanmega: {
+		requiredItem: "Kangaskhanite"
+	},
 	horsea: {
 		viableMoves: {"hydropump":1,"icebeam":1,"substitute":1,"hiddenpowergrass":1,"raindance":1},
 		eventPokemon: [
@@ -868,6 +889,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "OU"
 	},
+	scizormega: {
+		requiredItem: "Scizorite"
+	},
 	smoochum: {
 		viableMoves: {"icebeam":1,"psychic":1,"hiddenpowerfighting":1,"trick":1,"shadowball":1,"grassknot":1},
 		tier: "LC"
@@ -930,6 +954,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "NU"
 	},
+	pinsirmega: {
+		requiredItem: "Pinsirite"
+	},
 	tauros: {
 		viableMoves: {"return":1,"earthquake":1,"zenheadbutt":1,"rockslide":1,"pursuit":1},
 		eventPokemon: [
@@ -954,6 +981,9 @@ exports.BattleFormatsData = {
 	gyarados: {
 		viableMoves: {"dragondance":1,"waterfall":1,"earthquake":1,"bounce":1,"rest":1,"sleeptalk":1,"dragontail":1,"stoneedge":1,"substitute":1,"icefang":1},
 		tier: "OU"
+	},
+	gyaradosmega: {
+		requiredItem: "Gyaradosite"
 	},
 	lapras: {
 		viableMoves: {"icebeam":1,"thunderbolt":1,"healbell":1,"toxic":1,"surf":1,"dragondance":1,"substitute":1,"waterfall":1,"return":1,"avalanche":1,"rest":1,"sleeptalk":1,"curse":1,"iceshard":1,"drillrun":1},
@@ -1072,6 +1102,9 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":15,"gender":"M","isHidden":false,"abilities":["pressure"],"moves":["steelwing","icefang","firefang","thunderfang"],"pokeball":"cherishball"}
 		],
 		tier: "RU"
+	},
+	aerodactylmega: {
+		requiredItem: "Aerodactylite"
 	},
 	munchlax: {
 		viableMoves: {"rest":1,"curse":1,"sleeptalk":1,"bodyslam":1,"earthquake":1,"return":1,"firepunch":1,"icepunch":1,"whirlwind":1},
@@ -1319,6 +1352,9 @@ exports.BattleFormatsData = {
 		viableMoves: {"voltswitch":1,"focusblast":1,"hiddenpowerice":1,"hiddenpowergrass":1,"thunderbolt":1,"healbell":1},
 		tier: "NU"
 	},
+	ampharosmega: {
+		requiredItem: "Ampharosite"
+	},
 	azurill: {
 		viableMoves: {"scald":1,"return":1,"doubleedge":1,"encore":1,"toxic":1,"protect":1},
 		tier: "LC"
@@ -1497,6 +1533,9 @@ exports.BattleFormatsData = {
 		viableMoves: {"closecombat":1,"megahorn":1,"stoneedge":1,"swordsdance":1,"facade":1},
 		tier: "UU"
 	},
+	heracrossmega: {
+		requiredItem: "Heracronite"
+	},
 	sneasel: {
 		viableMoves: {"iceshard":1,"icepunch":1,"lowkick":1,"pursuit":1,"swordsdance":1},
 		eventPokemon: [
@@ -1604,6 +1643,9 @@ exports.BattleFormatsData = {
 		viableMoves: {"nastyplot":1,"pursuit":1,"darkpulse":1,"suckerpunch":1,"fireblast":1,"hiddenpowerfighting":1},
 		tier: "UU"
 	},
+	houndoommega: {
+		requiredItem: "Houndoominite"
+	},
 	phanpy: {
 		viableMoves: {"stealthrock":1,"earthquake":1,"iceshard":1,"headsmash":1,"knockoff":1,"seedbomb":1,"superpower":1},
 		tier: "LC"
@@ -1683,6 +1725,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "OU"
 	},
+	tyranitarmega: {
+		requiredItem: "Tyranitarite"
+	},
 	lugia: {
 		viableMoves: {"toxic":1,"dragontail":1,"roost":1,"substitute":1,"whirlwind":1,"icebeam":1},
 		eventPokemon: [
@@ -1758,6 +1803,9 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"isHidden":false,"moves":["flareblitz","highjumpkick","thunderpunch","stoneedge"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
+	},
+	blazikenmega: {
+		requiredItem: "Blazikenite"
 	},
 	mudkip: {
 		viableMoves: {"waterfall":1,"earthpower":1,"superpower":1,"icebeam":1},
@@ -1901,6 +1949,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "NU"
 	},
+	gardevoirmega: {
+		requiredItem: "Gardevoirite"
+	},
 	gallade: {
 		viableMoves: {"closecombat":1,"trick":1,"stoneedge":1,"shadowsneak":1,"swordsdance":1,"bulkup":1,"drainpunch":1,"icepunch":1,"psychocut":1},
 		tier: "RU"
@@ -2041,6 +2092,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "NU"
 	},
+	mawilemega: {
+		requiredItem: "Mawilite"
+	},
 	aron: {
 		viableMoves: {"headsmash":1,"ironhead":1,"earthquake":1,"superpower":1,"stealthrock":1},
 		tier: "LC"
@@ -2057,6 +2111,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "RU"
 	},
+	aggronmega: {
+		requiredItem: "Aggronite"
+	},
 	meditite: {
 		viableMoves: {"highjumpkick":1,"psychocut":1,"icepunch":1,"thunderpunch":1,"trick":1,"fakeout":1,"bulletpunch":1,"drainpunch":1},
 		eventPokemon: [
@@ -2069,6 +2126,9 @@ exports.BattleFormatsData = {
 		viableMoves: {"highjumpkick":1,"drainpunch":1,"psychocut":1,"icepunch":1,"thunderpunch":1,"trick":1,"fakeout":1,"bulletpunch":1},
 		tier: "RU"
 	},
+	medichammega: {
+		requiredItem: "Medichamite"
+	},
 	electrike: {
 		viableMoves: {"voltswitch":1,"thunderbolt":1,"hiddenpowerice":1,"switcheroo":1,"flamethrower":1},
 		tier: "LC"
@@ -2079,6 +2139,9 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":44,"moves":["refresh","thunder","raindance","bite"]}
 		],
 		tier: "RU"
+	},
+	manectricmega: {
+		requiredItem: "Manectite"
 	},
 	plusle: {
 		viableMoves: {"nastyplot":1,"thunderbolt":1,"substitute":1,"batonpass":1,"hiddenpowerice":1},
@@ -2373,6 +2436,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "NU"
 	},
+	banettemega: {
+		requiredItem: "Banettite"
+	},
 	duskull: {
 		viableMoves: {"willowisp":1,"shadowsneak":1,"icebeam":1,"painsplit":1,"substitute":1,"nightshade":1},
 		eventPokemon: [
@@ -2416,6 +2482,9 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["doubleteam","slash","futuresight","perishsong"]}
 		],
 		tier: "RU"
+	},
+	absolmega: {
+		requiredItem: "Absolite"
 	},
 	snorunt: {
 		viableMoves: {"spikes":1,"icebeam":1,"hiddenpowerground":1,"iceshard":1,"crunch":1},
@@ -2946,6 +3015,9 @@ exports.BattleFormatsData = {
 		],
 		tier: "OU"
 	},
+	garchompmega: {
+		requiredItem: "Garchompite"
+	},
 	riolu: {
 		viableMoves: {"crunch":1,"roar":1,"copycat":1,"drainpunch":1},
 		eventPokemon: [
@@ -2962,6 +3034,9 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"gender":"M","nature":"Naughty","isHidden":true,"moves":["bulletpunch","closecombat","stoneedge","shadowclaw"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
+	},
+	lucariomega: {
+		requiredItem: "Lucarionite"
 	},
 	hippopotas: {
 		viableMoves: {"earthquake":1,"slackoff":1,"whirlwind":1,"stealthrock":1,"protect":1,"toxic":1},
@@ -3012,6 +3087,9 @@ exports.BattleFormatsData = {
 	abomasnow: {
 		viableMoves: {"blizzard":1,"iceshard":1,"gigadrain":1,"leechseed":1,"substitute":1,"focusblast":1},
 		tier: "UU"
+	},
+	abomasnowmega: {
+		requiredItem: "Abomasite"
 	},
 	rotom: {
 		viableMoves: {"thunderbolt":1,"discharge":1,"voltswitch":1,"shadowball":1,"substitute":1,"painsplit":1,"hiddenpowerice":1,"hiddenpowerfighting":1,"willowisp":1,"rest":1,"sleeptalk":1,"trick":1},
