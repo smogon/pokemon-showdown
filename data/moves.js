@@ -67,6 +67,7 @@ exports.BattleMovedex = {
 		name: "Acid Spray",
 		pp: 20,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -602,6 +603,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isPulseMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "any",
 		type: "Fighting"
@@ -727,6 +729,7 @@ exports.BattleMovedex = {
 		name: "Barrage",
 		pp: 20,
 		priority: 0,
+		isBullet: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -1458,6 +1461,7 @@ exports.BattleMovedex = {
 		name: "Bullet Seed",
 		pp: 30,
 		priority: 0,
+		isBullet: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -3171,7 +3175,7 @@ exports.BattleMovedex = {
 		name: "Egg Bomb",
 		pp: 10,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3282,7 +3286,7 @@ exports.BattleMovedex = {
 		name: "Electro Ball",
 		pp: 10,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -3485,7 +3489,7 @@ exports.BattleMovedex = {
 		name: "Energy Ball",
 		pp: 10,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -4362,6 +4366,7 @@ exports.BattleMovedex = {
 		name: "Focus Blast",
 		pp: 5,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -5429,7 +5434,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isBallMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -6428,7 +6433,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isBallMove: true,
+		isBullet: true,
 		effect: {
 			duration: 2,
 			onLockMove: 'iceball',
@@ -7612,7 +7617,7 @@ exports.BattleMovedex = {
 		name: "Magnet Bomb",
 		pp: 20,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -8320,7 +8325,7 @@ exports.BattleMovedex = {
 		name: "Mist Ball",
 		pp: 5,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -8482,7 +8487,7 @@ exports.BattleMovedex = {
 		name: "Mud Bomb",
 		pp: 10,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -8843,6 +8848,7 @@ exports.BattleMovedex = {
 		name: "Octazooka",
 		pp: 10,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -11184,7 +11190,7 @@ exports.BattleMovedex = {
 		name: "Seed Bomb",
 		pp: 15,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -11256,7 +11262,7 @@ exports.BattleMovedex = {
 		name: "Shadow Ball",
 		pp: 15,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -11931,7 +11937,7 @@ exports.BattleMovedex = {
 		name: "Sludge Bomb",
 		pp: 10,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -14474,7 +14480,7 @@ exports.BattleMovedex = {
 		name: "Weather Ball",
 		pp: 10,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		onModifyMove: function(move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
