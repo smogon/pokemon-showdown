@@ -6955,7 +6955,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move && (move.category === 'Status' || move.isNotProtectable || move.id === 'suckerpunch')) return;
-				this.add('-activate', target, "King's Shield");
+				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
