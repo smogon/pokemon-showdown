@@ -424,12 +424,13 @@ var commands = exports.commands = {
 		var p = 'bucks';
 		if (giveMoney < 2) p = 'buck';
 		this.sendReply(targetUser.name + ' was given ' + giveMoney + ' ' + p + '. This user now has ' + targetUser.money + ' bucks.');
-		targetUser.send(user.name + ' has given you ' + giveMoney + ' ' + p + '.');
+		this.popupReply(user.name + ' has given you ' + giveMoney + ' ' + p + '.');
 		} else {
 			return this.parse('/help givebucks');
 		}
 	},
-		
+	
+	rb: 'removebucks',	
 	takebucks: 'removebucks',
 	removebucks: function(target, room, user) {
 		if(!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
