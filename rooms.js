@@ -75,13 +75,17 @@ var GlobalRoom = (function() {
 			var lastBattle;	// last lastBattle to be written to file
 			var finishWriting = function() {
 				writing = false;
-				if (lastBattle !== self.lastBattle) {
+				if (lastBattle < self.lastBattle) {
 					self.writeNumRooms();
 				}
 			};
 			return function() {
 				if (writing) return;
-				lastBattle = self.lastBattle;
+
+				// batch writing lastbattle.txt for every 10 battles
+				if (lastBattle >= self.lastBattle) return;
+				lastBattle = self.lastBattle + 10;
+
 				writing = true;
 				fs.writeFile('logs/lastbattle.txt.0', '' + lastBattle, function() {
 					// rename is atomic on POSIX, but will throw an error on Windows

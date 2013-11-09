@@ -67,6 +67,7 @@ exports.BattleMovedex = {
 		name: "Acid Spray",
 		pp: 20,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -602,6 +603,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isPulseMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "any",
 		type: "Fighting"
@@ -727,6 +729,7 @@ exports.BattleMovedex = {
 		name: "Barrage",
 		pp: 20,
 		priority: 0,
+		isBullet: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -1330,7 +1333,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to lower its Speed by 1 stage.",
 		shortDesc: "10% chance to lower the target's Speed by 1.",
 		id: "bubblebeam",
-		name: "BubbleBeam",
+		name: "Bubble Beam",
 		pp: 20,
 		priority: 0,
 		secondary: {
@@ -1458,6 +1461,7 @@ exports.BattleMovedex = {
 		name: "Bullet Seed",
 		pp: 30,
 		priority: 0,
+		isBullet: true,
 		multihit: [2,5],
 		secondary: false,
 		target: "normal",
@@ -3171,7 +3175,7 @@ exports.BattleMovedex = {
 		name: "Egg Bomb",
 		pp: 10,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3282,7 +3286,7 @@ exports.BattleMovedex = {
 		name: "Electro Ball",
 		pp: 10,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -3485,7 +3489,7 @@ exports.BattleMovedex = {
 		name: "Energy Ball",
 		pp: 10,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -4362,6 +4366,7 @@ exports.BattleMovedex = {
 		name: "Focus Blast",
 		pp: 5,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -5106,7 +5111,7 @@ exports.BattleMovedex = {
 		desc: "Puts one adjacent target to sleep. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "Puts the target to sleep.",
 		id: "grasswhistle",
-		name: "GrassWhistle",
+		name: "Grass Whistle",
 		pp: 15,
 		priority: 0,
 		isSoundBased: true,
@@ -5429,7 +5434,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isContact: true,
-		isBallMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -5678,7 +5683,7 @@ exports.BattleMovedex = {
 		isPulseMove: true,
 		onHit: function(pokemon) {
 			if (pokemon.ability === 'megalauncher') this.heal(this.modify(pokemon.maxhp, 0.75));
-			else this.heal(this.modify(pokemon.maxhp, 0.5));
+			else this.heal(Math.ceil(pokemon.maxhp * 0.5));
 		},
 		secondary: false,
 		target: "normal",
@@ -6428,7 +6433,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
-		isBallMove: true,
+		isBullet: true,
 		effect: {
 			duration: 2,
 			onLockMove: 'iceball',
@@ -6949,7 +6954,7 @@ exports.BattleMovedex = {
 					target.removeVolatile("King's Shield");
 					return;
 				}
-				if (move && (move.category === 'Status' || move.isNotProtectable)) return;
+				if (move && (move.category === 'Status' || move.isNotProtectable || move.id === 'suckerpunch')) return;
 				this.add('-activate', target, "King's Shield");
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -7612,7 +7617,7 @@ exports.BattleMovedex = {
 		name: "Magnet Bomb",
 		pp: 20,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -8320,7 +8325,7 @@ exports.BattleMovedex = {
 		name: "Mist Ball",
 		pp: 5,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -8482,7 +8487,7 @@ exports.BattleMovedex = {
 		name: "Mud Bomb",
 		pp: 10,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -8843,6 +8848,7 @@ exports.BattleMovedex = {
 		name: "Octazooka",
 		pp: 10,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -9346,7 +9352,7 @@ exports.BattleMovedex = {
 		desc: "Poisons one adjacent target. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Poisons the target.",
 		id: "poisonpowder",
-		name: "PoisonPowder",
+		name: "Poison Powder",
 		pp: 35,
 		priority: 0,
 		isPowder: true,
@@ -11184,7 +11190,7 @@ exports.BattleMovedex = {
 		name: "Seed Bomb",
 		pp: 15,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -11236,7 +11242,7 @@ exports.BattleMovedex = {
 		desc: "The user faints and then damage is dealt to all adjacent Pokemon.",
 		shortDesc: "Hits adjacent Pokemon. The user faints.",
 		id: "selfdestruct",
-		name: "Selfdestruct",
+		name: "Self-Destruct",
 		pp: 5,
 		priority: 0,
 		selfdestruct: true,
@@ -11256,7 +11262,7 @@ exports.BattleMovedex = {
 		name: "Shadow Ball",
 		pp: 15,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -11931,7 +11937,7 @@ exports.BattleMovedex = {
 		name: "Sludge Bomb",
 		pp: 10,
 		priority: 0,
-		isBombMove: true,
+		isBullet: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -12053,7 +12059,7 @@ exports.BattleMovedex = {
 		desc: "Lowers one adjacent target's accuracy by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Lowers the target's accuracy by 1.",
 		id: "smokescreen",
-		name: "SmokeScreen",
+		name: "Smokescreen",
 		pp: 20,
 		priority: 0,
 		boosts: {
@@ -12211,7 +12217,7 @@ exports.BattleMovedex = {
 		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "softboiled",
 		isViable: true,
-		name: "Softboiled",
+		name: "Soft-Boiled",
 		pp: 10,
 		priority: 0,
 		isSnatchable: true,
@@ -12229,7 +12235,7 @@ exports.BattleMovedex = {
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		id: "solarbeam",
 		isViable: true,
-		name: "SolarBeam",
+		name: "Solar Beam",
 		pp: 10,
 		priority: 0,
 		isTwoTurnMove: true,
@@ -12269,7 +12275,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target equal to 20HP.",
 		shortDesc: "Always does 20 HP of damage.",
 		id: "sonicboom",
-		name: "SonicBoom",
+		name: "Sonic Boom",
 		pp: 20,
 		priority: 0,
 		secondary: false,
@@ -12855,7 +12861,7 @@ exports.BattleMovedex = {
 				}
 				if (move.category === 'Status') {
 					var SubBlocked = {
-						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, trick:1, worryseed:1, yawn:1
+						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, topsyturvy:1, trick:1, worryseed:1, yawn:1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
 						return false;
@@ -14184,7 +14190,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target. Makes contact.",
 		shortDesc: "No additional effect.",
 		id: "vicegrip",
-		name: "ViceGrip",
+		name: "Vice Grip",
 		pp: 30,
 		priority: 0,
 		isContact: true,
@@ -14474,7 +14480,7 @@ exports.BattleMovedex = {
 		name: "Weather Ball",
 		pp: 10,
 		priority: 0,
-		isBallMove: true,
+		isBullet: true,
 		onModifyMove: function(move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
@@ -14940,7 +14946,7 @@ exports.BattleMovedex = {
 		id: "shadowstrike",
 		isNonstandard: true,
 		isViable: true,
-		name: "ShadowStrike",
+		name: "Shadow Strike",
 		pp: 10,
 		priority: 0,
 		isContact: true,

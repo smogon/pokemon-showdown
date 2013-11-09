@@ -435,7 +435,7 @@ exports.BattleItems = {
 		},
 		num: 558,
 		gen: 5,
-		desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Bug-type attack will have 1.3x power. Single use."
 	},
 	"burndrive": {
 		id: "burndrive",
@@ -837,7 +837,7 @@ exports.BattleItems = {
 		},
 		num: 562,
 		gen: 5,
-		desc: "Holder's first successful Dark-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Dark-type attack will have 1.3x power. Single use."
 	},
 	"deepseascale": {
 		id: "deepseascale",
@@ -973,7 +973,7 @@ exports.BattleItems = {
 		},
 		num: 561,
 		gen: 5,
-		desc: "Holder's first successful Dragon-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Dragon-type attack will have 1.3x power. Single use."
 	},
 	"dreadplate": {
 		id: "dreadplate",
@@ -1091,7 +1091,7 @@ exports.BattleItems = {
 		},
 		num: 550,
 		gen: 5,
-		desc: "Holder's first successful Electric-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Electric-type attack will have 1.3x power. Single use."
 	},
 	"energypowder": {
 		id: "energypowder",
@@ -1197,7 +1197,7 @@ exports.BattleItems = {
 		},
 		num: 553,
 		gen: 5,
-		desc: "Holder's first successful Fighting-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Fighting-type attack will have 1.3x power. Single use."
 	},
 	"figyberry": {
 		id: "figyberry",
@@ -1240,7 +1240,7 @@ exports.BattleItems = {
 		},
 		num: 548,
 		gen: 5,
-		desc: "Holder's first successful Fire-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Fire-type attack will have 1.3x power. Single use."
 	},
 	"fistplate": {
 		id: "fistplate",
@@ -1329,7 +1329,7 @@ exports.BattleItems = {
 		},
 		num: 556,
 		gen: 5,
-		desc: "Holder's first successful Flying-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Flying-type attack will have 1.3x power. Single use."
 	},
 	"focusband": {
 		id: "focusband",
@@ -1450,7 +1450,7 @@ exports.BattleItems = {
 		},
 		num: 560,
 		gen: 5,
-		desc: "Holder's first successful Ghost-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Ghost-type attack will have 1.3x power. Single use."
 	},
 	"grassgem": {
 		id: "grassgem",
@@ -1469,7 +1469,7 @@ exports.BattleItems = {
 		},
 		num: 551,
 		gen: 5,
-		desc: "Holder's first successful Grass-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Grass-type attack will have 1.3x power. Single use."
 	},
 	"greatball": {
 		id: "greatball",
@@ -1543,7 +1543,7 @@ exports.BattleItems = {
 		},
 		num: 555,
 		gen: 5,
-		desc: "Holder's first successful Ground-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Ground-type attack will have 1.3x power. Single use."
 	},
 	"gyaradosite": {
 		id: "gyaradosite",
@@ -1706,7 +1706,7 @@ exports.BattleItems = {
 		},
 		num: 552,
 		gen: 5,
-		desc: "Holder's first successful Ice-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Ice-type attack will have 1.3x power. Single use."
 	},
 	"icicleplate": {
 		id: "icicleplate",
@@ -2677,7 +2677,7 @@ exports.BattleItems = {
 		},
 		num: 564,
 		gen: 5,
-		desc: "Holder's first successful Normal-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Normal-type attack will have 1.3x power. Single use."
 	},
 	"occaberry": {
 		id: "occaberry",
@@ -2967,7 +2967,7 @@ exports.BattleItems = {
 		},
 		num: 554,
 		gen: 5,
-		desc: "Holder's first successful Poison-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Poison-type attack will have 1.3x power. Single use."
 	},
 	"pokeball": {
 		id: "pokeball",
@@ -3032,7 +3032,7 @@ exports.BattleItems = {
 		},
 		num: 557,
 		gen: 5,
-		desc: "Holder's first successful Psychic-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Psychic-type attack will have 1.3x power. Single use."
 	},
 	"qualotberry": {
 		id: "qualotberry",
@@ -3268,7 +3268,7 @@ exports.BattleItems = {
 		},
 		num: 559,
 		gen: 5,
-		desc: "Holder's first successful Rock-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Rock-type attack will have 1.3x power. Single use."
 	},
 	"rockincense": {
 		id: "rockincense",
@@ -3818,7 +3818,7 @@ exports.BattleItems = {
 		},
 		num: 563,
 		gen: 5,
-		desc: "Holder's first successful Steel-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Steel-type attack will have 1.3x power. Single use."
 	},
 	"stick": {
 		id: "stick",
@@ -4059,7 +4059,7 @@ exports.BattleItems = {
 		},
 		num: 549,
 		gen: 5,
-		desc: "Holder's first successful Water-type attack will have 1.5x power. Single use."
+		desc: "Holder's first successful Water-type attack will have 1.3x power. Single use."
 	},
 	"watmelberry": {
 		id: "watmelberry",

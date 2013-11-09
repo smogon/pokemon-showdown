@@ -181,6 +181,7 @@ module.exports = (function () {
 			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0,F:1};
 			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0,F:0};
 			if (!template.genderRatio) template.genderRatio = {M:0.5,F:0.5};
+			if (!template.tier && template.baseSpecies !== template.species) template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.gen) {
 				if (template.forme && template.forme in {'Mega':1,'Mega-X':1,'Mega-Y':1}) {
@@ -589,7 +590,10 @@ module.exports = (function () {
 				}
 			}
 			// also check to see if the mon's prevo or freely switchable formes can learn this move
-			if (template.prevo) {
+			if (!template.learnset && template.baseSpecies !== template.species) {
+				// forme takes precedence over prevo only if forme has no learnset
+				template = this.getTemplate(template.baseSpecies);
+			} else if (template.prevo) {
 				template = this.getTemplate(template.prevo);
 			} else if (template.speciesid === 'shaymin') {
 				template = this.getTemplate('shayminsky');
@@ -789,7 +793,6 @@ module.exports = (function () {
 		}
 
 		var template = this.getTemplate(string(set.species));
-		if (template.isMega) template = this.getTemplate(template.baseSpecies);
 		if (!template.exists) {
 			return ["The Pokemon '"+set.species+"' does not exist."];
 		}

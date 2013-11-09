@@ -210,6 +210,7 @@ exports.BattleTypeChart = {
   },
   "Grass": {
     "damageTaken": {
+      powder: 3,
       "Bug": 1,
       "Dark": 0,
       "Dragon": 0,
