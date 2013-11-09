@@ -97,6 +97,7 @@ exports.BattleFormats = {
 				if (template.isMega) {
 					// Mega evolutions evolve in-battle
 					set.species = template.baseSpecies;
+					set.ability = Tools.getTemplate(set.species).abilities['0'];
 				}
 				if (item.name !== template.requiredItem) {
 					problems.push((set.name||set.species) + ' needs to hold '+template.requiredItem+'.');
