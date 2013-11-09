@@ -271,7 +271,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon is protected from some Ball and Bomb moves.",
 		shortDesc: "This Pokemon is protected from ball and bomb moves.",
 		onTryHit: function(pokemon, target, move) {
-			if (move.isBallMove || move.isBombMove) {
+			if (move.isBullet) {
 				this.add('-immune', pokemon, '[msg]', '[from] Bulletproof');
 				return null;
 			}
