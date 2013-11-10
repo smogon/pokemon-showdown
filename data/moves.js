@@ -7771,8 +7771,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
-		onTryHit: function(target, pokemon) {
-			if (pokemon.activeTurns > 1) {
+		onTryHitSide: function(side, source) {
+			if (source.activeTurns > 1) {
 				this.add('-message', '(Mat Block only works your first turn out.)');
 				return false;
 			}
@@ -7790,11 +7790,18 @@ exports.BattleMovedex = {
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
 				this.add('-activate', target, 'Mat Block');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
 				return null;
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "allySide",
 		type: "Fighting"
 	},
 	"mefirst": {
