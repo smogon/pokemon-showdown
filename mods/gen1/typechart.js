@@ -297,5 +297,7 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Water": 2
     }
-  }
+  },
+  "Dark": null,
+  "Steel": null
 };
