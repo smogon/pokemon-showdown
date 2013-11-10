@@ -20,7 +20,7 @@ exports.Formats = [
 
 		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
 		noPokebank: true,
-		banlist: ['']
+		banlist: []
 	},
 	{
 		name: "LC (beta)",
@@ -43,7 +43,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview'],
-		banlist: ['']
+		banlist: []
 	},
 	{
 		name: "Pokebank LC (beta)",
