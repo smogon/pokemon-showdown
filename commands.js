@@ -424,7 +424,7 @@ var commands = exports.commands = {
 		var p = 'bucks';
 		if (giveMoney < 2) p = 'buck';
 		this.sendReply(targetUser.name + ' was given ' + giveMoney + ' ' + p + '. This user now has ' + targetUser.money + ' bucks.');
-		targetUser.send('|popup|user.name + ' has given you ' + giveMoney + ' ' + p + '.');
+		targetUser.send('|popup|' + user.name + ' has given you ' + giveMoney + ' ' + p + '.');
 		} else {
 			return this.parse('/help givebucks');
 		}
