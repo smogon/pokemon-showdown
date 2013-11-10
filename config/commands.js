@@ -291,7 +291,7 @@ var commands = exports.commands = {
 	gurl: function(target, room, user){
 		if(!target) return this.sendReply('/sass needs a target.');
 		return this.parse('/me sasses ' + target + '!');
-	},
+	}
 
 	hallowme: function(target, room, user){
 		var halloween = false;
@@ -1148,6 +1148,12 @@ var commands = exports.commands = {
     brittlewind: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
+    },
+   
+    mainserver: 'serverstatus',
+    serverstatus: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('The main server is currently: <font color="red"><bold>DOWN</bold></fontcolor>')
     },
 
 	runzy : 'championrunzy',
