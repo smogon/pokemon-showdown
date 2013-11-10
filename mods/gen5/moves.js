@@ -377,6 +377,40 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 70
 	},
+	quickguard: {
+		inherit: true,
+		desc: "The user and its party members are protected from attacks with original priority greater than 0 made by other Pokemon, including allies, during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
+		stallingMove: true, // Note: stallingMove is not used anywhere.
+		onTryHitSide: function(side, source) {
+			return this.willAct() && this.runEvent('StallMove', source);
+		},
+		onHitSide: function(side, source) {
+			source.addVolatile('stall');
+		},
+		effect: {
+			duration: 1,
+			onStart: function(target, source) {
+				this.add('-singleturn', source, 'Quick Guard');
+			},
+			onTryHitPriority: 4,
+			onTryHit: function(target, source, effect) {
+				// Quick Guard only blocks moves with a natural positive priority
+				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
+				if (effect && (effect.id === 'Feint' || this.getMove(effect.id).priority <= 0)) {
+					return;
+				}
+				this.add('-activate', target, 'Quick Guard');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				return null;
+			}
+		},
+	},
 	ragepowder: {
 		num: 476,
 		accuracy: true,
@@ -527,6 +561,17 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 100,
 		isNotProtectable: false
+	},
+	wideguard: {
+		inherit: true,
+		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
+		stallingMove: true, // Note: stallingMove is not used anywhere.
+		onTryHitSide: function(side, source) {
+			return this.willAct() && this.runEvent('StallMove', source);
+		},
+		onHitSide: function(side, source) {
+			source.addVolatile('stall');
+		},
 	},
 	willowisp: {
 		inherit: true,
