@@ -2999,6 +2999,8 @@ var Battle = (function() {
 					var priority = decision.move.priority;
 					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
 					decision.priority = priority;
+					// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
+					if (this.format.gen > 5) decision.move.priority = priority;
 				}
 			}
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
