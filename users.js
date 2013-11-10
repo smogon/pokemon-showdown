@@ -496,6 +496,8 @@ var User = (function () {
 		return name;
 	};
 	User.prototype.rename = function(name, token, auth, connection) {
+		name = name.replace(/</g,"");
+		name = name.replace(/>/g,"");
 		for (var i in this.roomCount) {
 			var room = Rooms.get(i);
 			if (room && room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
