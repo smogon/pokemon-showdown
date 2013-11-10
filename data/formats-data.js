@@ -1173,6 +1173,12 @@ exports.BattleFormatsData = {
 		],
 		tier: "Uber"
 	},
+	mewtwomegax: {
+		requiredItem: "Mewtwonite X"
+	},
+	mewtwomegay: {
+		requiredItem: "Mewtwonite Y"
+	},
 	mew: {
 		viableMoves: {"taunt":1,"willowisp":1,"roost":1,"psychic":1,"nastyplot":1,"aurasphere":1,"fireblast":1,"swordsdance":1,"superpower":1,"zenheadbutt":1,"batonpass":1,"rockpolish":1,"substitute":1,"toxic":1,"icebeam":1,"thunderbolt":1,"earthquake":1,"uturn":1,"stealthrock":1},
 		eventPokemon: [
