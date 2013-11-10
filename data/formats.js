@@ -31,6 +31,28 @@ exports.BattleFormats = {
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Moody']
 	},
+	standardgbu: {
+		effectType: 'Banlist',
+		ruleset: ['Species Clause', 'Item Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew',
+			'Mewtwo',
+			'Lugia',
+			'Ho-Oh',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem-White',
+			'Xerneas',
+			'Yveltal',
+			'Zygarde'
+		]
+	},
 	pokemon: {
 		effectType: 'Banlist',
 		validateSet: function(set, format) {
