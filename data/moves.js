@@ -12859,7 +12859,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || source.ability === 'infiltrator' && this.gen >= 6) {
+				if (move.notSubBlocked || (source.ability === 'infiltrator' || move.isSoundBased) && this.gen >= 6) {
 					return;
 				}
 				if (move.category === 'Status') {
@@ -13728,6 +13728,12 @@ exports.BattleMovedex = {
 		name: "Toxic",
 		pp: 10,
 		priority: 0,
+		onModifyMove: function(move, pokemon) {
+			if (pokemon.hasType('Poison')) {
+				move.accuracy = true;
+				move.alwaysHit = true;
+			}
+		},
 		status: 'tox',
 		secondary: false,
 		target: "normal",
