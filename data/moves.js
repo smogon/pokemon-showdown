@@ -12859,7 +12859,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || source.ability === 'infiltrator' && this.gen >= 6) {
+				if (move.notSubBlocked || (source.ability === 'infiltrator' || move.isSoundBased) && this.gen >= 6) {
 					return;
 				}
 				if (move.category === 'Status') {
