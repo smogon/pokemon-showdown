@@ -291,7 +291,7 @@ var commands = exports.commands = {
 	gurl: function(target, room, user){
 		if(!target) return this.sendReply('/sass needs a target.');
 		return this.parse('/me sasses ' + target + '!');
-	}
+	},
 
 	hallowme: function(target, room, user){
 		var halloween = false;
