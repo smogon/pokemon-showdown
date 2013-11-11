@@ -8,7 +8,7 @@
  * A command can be in the form:
  *   ip: 'whois',
  * This is called an alias: it makes it so /ip does the same thing as
- * /whoisPsychological
+ * /whois
  *
  * But to actually define a command, it's a function:
  *   birkal: function(target, room, user) {
@@ -1476,9 +1476,7 @@ var commands = exports.commands = {
 	prez: 'cosy',
 	cosy: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<marquee behavior=alternate><img src="http://fc06.deviantart.net/fs70/f/2013/070/4/f/catbug_avatar_by_kezzi_rose-d5xq7ev.gif"></marquee><br />' +
-		'<center><h2><b><font color="red">Prez</font> and <font color="purple">Cosy</h2></font><br /><i>Have a cuppa tea and calm your nipples</i></center>' +
-		'<br /><br /><marquee direction="right" behavior=alternate><img src="http://fc06.deviantart.net/fs70/f/2013/070/4/f/catbug_avatar_by_kezzi_rose-d5xq7ev.gif"></marquee>');
+		this.sendReplyBox('<center><marquee direction="right"><img src="http://fc06.deviantart.net/fs70/f/2013/070/4/f/catbug_avatar_by_kezzi_rose-d5xq7ev.gif"></marquee><img src="http://i.imgur.com/7msrgtH.gif"><br /><font color="purple"><b>Calm your nipples and have a cuppa tea.</b></font></center>);
 	},
 	
 	cookies: 'sirecookies',
