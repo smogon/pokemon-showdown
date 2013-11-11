@@ -14551,12 +14551,8 @@ exports.BattleMovedex = {
 		priority: 3,
 		isSnatchable: true,
 		sideCondition: 'wideguard',
-		stallingMove: true, // Note: stallingMove is not used anywhere.
 		onTryHitSide: function(side, source) {
-			return this.willAct() && this.runEvent('StallMove', source);
-		},
-		onHitSide: function(side, source) {
-			source.addVolatile('stall');
+			return this.willAct();
 		},
 		effect: {
 			duration: 1,
