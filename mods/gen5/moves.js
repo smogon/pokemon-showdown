@@ -535,7 +535,7 @@ exports.BattleMovedex = {
 	toxic: {
 		inherit: true,
 		onModifyMove: function() {}
-	}
+	},
 	vinewhip: {
 		inherit: true,
 		basePower: 35,
