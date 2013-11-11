@@ -10,7 +10,7 @@ exports.Formats = [
 		name: "OU (beta)",
 		section: "XY Singles",
 
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		noPokebank: true,
 		banlist: ['Uber', 'Soul Dew']
 	},
@@ -60,7 +60,7 @@ exports.Formats = [
 		name: "Pokebank OU (beta)",
 		section: "XY Singles",
 
-		ruleset: ['Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew']
 	},
 	{
@@ -82,7 +82,7 @@ exports.Formats = [
 		name: "CAP (beta)",
 		section: "XY Singles",
 
-		ruleset: ['CAP Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview'],
+		ruleset: ['CAP Pokemon', 'Standard Pokebank', 'Team Preview'],
 		banlist: ['Uber']
 	},
 	{
