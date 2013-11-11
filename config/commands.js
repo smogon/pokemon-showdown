@@ -1476,7 +1476,7 @@ var commands = exports.commands = {
 	prez: 'cosy',
 	cosy: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><marquee direction="right"><img src="http://fc06.deviantart.net/fs70/f/2013/070/4/f/catbug_avatar_by_kezzi_rose-d5xq7ev.gif"></marquee><img src="http://i.imgur.com/7msrgtH.gif"><br /><font color="purple"><b>Calm your nipples and have a cuppa tea.</b></font></center>);
+		this.sendReplyBox('<center><marquee direction="right"><img src="http://i.imgur.com/dMQcJz8.gif"></marquee><img src="http://i.imgur.com/7msrgtH.gif"><br /><font color="purple"><b>Calm your nipples and have a cuppa tea.</b></font></center>');
 	},
 	
 	cookies: 'sirecookies',
