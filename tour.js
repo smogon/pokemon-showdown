@@ -181,6 +181,7 @@ exports.tour = function(t) {
 			*/
 			var loser = "";
 			var r = tour[rid].round;
+			var tier = Tools.data.Formats[tour[rid].tier].name;
 			for (var i in r) {
 				if (r[i][0] == uid) {
 					var key = i;
@@ -225,14 +226,12 @@ exports.tour = function(t) {
 					if (!row[i]) continue;
 					var parts = row[i].split(",");
 					var userid = toUserid(parts[0]);
-					if (Users.get(loser).userid == userid) {
+					if (Users.get(loser).userid == userid && tier == parts[2]) {
 						var x = Number(parts[1]);
 						var tourlosses = x;
 						match = true;
-						if (match === true) {
-							line = line + row[i];
-							break;
-						}
+						line = line + row[i];
+						break;
 					}
 				}
 				Users.get(loser).tourLosses = tourlosses;
@@ -244,13 +243,13 @@ exports.tour = function(t) {
 						return console.log(err);
 					}
 					});
-					var result = data.replace(re, Users.get(loser).userid+','+Users.get(loser).tourLosses);
+					var result = data.replace(re, Users.get(loser).userid+','+Users.get(loser).tourLosses+','+tier);
 					fs.writeFile('config/tourlosses.csv', result, 'utf8', function (err) {
 						if (err) return console.log(err);
 					});
 				} else {
 					var log = fs.createWriteStream('config/tourlosses.csv', {'flags': 'a'});
-					log.write("\n"+Users.get(loser).userid+','+Users.get(loser).tourLosses);
+					log.write("\n"+Users.get(loser).userid+','+Users.get(loser).tourLosses+','+tier);
 				}
 				return r[key][winner];
 			}
@@ -364,18 +363,17 @@ exports.tour = function(t) {
 				var tourwins = 0;
 				var row = (''+data).split("\n");
 				var line = '';
+				var tier = Tools.data.Formats[tour[rid].tier].name;
 				for (var i = row.length; i > -1; i--) {
 					if (!row[i]) continue;
 					var parts = row[i].split(",");
 					var userid = toUserid(parts[0]);
-					if (Users.users[w[0]].userid == userid) {
+					if (Users.users[w[0]].userid == userid && tier == parts[2]) {
 						var x = Number(parts[1]);
 						var tourwins = x;
 						match = true;
-						if (match === true) {
-							line = line + row[i];
-							break;
-						}
+						line = line + row[i];
+						break;
 					}
 				}
 				Users.users[w[0]].tourWins = tourwins;
@@ -387,13 +385,13 @@ exports.tour = function(t) {
 						return console.log(err);
 					}
 					});
-					var result = data.replace(re, Users.users[w[0]].userid+','+Users.users[w[0]].tourWins);
+					var result = data.replace(re, Users.users[w[0]].userid+','+Users.users[w[0]].tourWins+','+tier);
 					fs.writeFile('config/tourwins.csv', result, 'utf8', function (err) {
 						if (err) return console.log(err);
 					});
 				} else {
 					var log = fs.createWriteStream('config/tourwins.csv', {'flags': 'a'});
-					log.write("\n"+Users.users[w[0]].userid+','+Users.users[w[0]].tourWins);
+					log.write("\n"+Users.users[w[0]].userid+','+Users.users[w[0]].tourWins+','+tier);
 				}
 				//for now, this is the only way to get points/money
 				var data = fs.readFileSync('config/money.csv','utf8')
