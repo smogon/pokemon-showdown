@@ -181,7 +181,7 @@ exports.tour = function(t) {
 			*/
 			var loser = "";
 			var r = tour[rid].round;
-			var tier = Tools.data.Formats[tour[rid].tier].name;
+			var tier = toUserid(Tools.data.Formats[tour[rid].tier].name);
 			for (var i in r) {
 				if (r[i][0] == uid) {
 					var key = i;
@@ -366,7 +366,7 @@ exports.tour = function(t) {
 					var tourwins = 0;
 					var row = (''+data).split("\n");
 					var line = '';
-					var tier = Tools.data.Formats[tour[rid].tier].name;
+					var tier = toUserid(Tools.data.Formats[tour[rid].tier].name);
 					for (var i = row.length; i > -1; i--) {
 						if (!row[i]) continue;
 						var parts = row[i].split(",");
@@ -1187,6 +1187,52 @@ var cmds = {
 		if (!tour[room.id].question) return this.sendReply('There is currently no poll going on.');
 		if (!this.canBroadcast()) return;
 		this.sendReply('|raw|<div class="infobox"><h2>' + tour[room.id].question + separacion + '<font font size=1 color = "#939393"><small>/vote OPTION</small></font></h2><hr />' + separacion + separacion + " &bull; " + tour[room.id].answerList.join(' &bull; ') + '</div>');
+	},
+	tourstats: 'ts',
+	tourneystats: 'ts',
+	tourstat: 'ts',
+	ts: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (!target) return this.sendReply('Correct usage: /tourstats <username>, <tier>');
+		var target = tour.splint(target);
+		if (!target[1]) return this.sendReply('Correct usage: /tourstats <username>, <tier>');
+		var tier = toUserid(target[1]);
+		if (!Tools.data.Formats[tier]) return this.sendReplyBox('You supplied an invalid tier!');
+		if (!Users.get(target[0])) return this.sendReplyBox(target[0]+' has no ranked tournament wins or losses.');
+		var userid = Users.get(target[0]).userid;
+		var username = Users.get(target[0]).name;
+		tiername = Tools.data.Formats[tier].name;
+		var data = fs.readFileSync('config/tourwins.csv','utf8')
+		var match = false;
+		var tourwins = 0;
+		var row = (''+data).split("\n");
+		var line = '';
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			if (username == parts[0] && tier == parts[2]) {
+				var x = Number(parts[1]);
+				var tourwins = x;
+				match = true;
+				break;
+			}
+		}
+		var data = fs.readFileSync('config/tourlosses.csv','utf8')
+		var match = false;
+		var tourlosses = 0;
+		var row = (''+data).split("\n");
+		var line = '';
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			if (username == parts[0] && tier == parts[2]) {
+				var x = Number(parts[1]);
+				var tourlosses = x;
+				match = true;
+				break;
+			}
+		}
+		this.sendReplyBox(username+' has '+tourwins+' tournament wins and '+tourlosses+' tournament losses in '+tiername);
 	}
 };
 
