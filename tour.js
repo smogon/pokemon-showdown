@@ -217,39 +217,41 @@ exports.tour = function(t) {
 				tour[rid].losers.push(r[key][loser]);
 				loser = r[key][loser];
 				tour[rid].history.push(r[key][winner] + "|" + r[key][loser]);
-				var data = fs.readFileSync('config/tourlosses.csv','utf8')
-				var match = false;
-				var tourlosses = 0;
-				var row = (''+data).split("\n");
-				var line = '';
-				for (var i = row.length; i > -1; i--) {
-					if (!row[i]) continue;
-					var parts = row[i].split(",");
-					var userid = toUserid(parts[0]);
-					if (Users.get(loser).userid == userid && tier == parts[2]) {
-						var x = Number(parts[1]);
-						var tourlosses = x;
-						match = true;
-						line = line + row[i];
-						break;
+				if (tour[rid].size >= 8) {
+					var data = fs.readFileSync('config/tourlosses.csv','utf8')
+					var match = false;
+					var tourlosses = 0;
+					var row = (''+data).split("\n");
+					var line = '';
+					for (var i = row.length; i > -1; i--) {
+						if (!row[i]) continue;
+						var parts = row[i].split(",");
+						var userid = toUserid(parts[0]);
+						if (Users.get(loser).userid == userid && tier == parts[2]) {
+							var x = Number(parts[1]);
+							var tourlosses = x;
+							match = true;
+							line = line + row[i];
+							break;
+						}
 					}
-				}
-				Users.get(loser).tourLosses = tourlosses;
-				Users.get(loser).tourLosses++;
-				if (match === true) {
-					var re = new RegExp(line,"g");
-					fs.readFile('config/tourlosses.csv', 'utf8', function (err,data) {
-					if (err) {
-						return console.log(err);
+					Users.get(loser).tourLosses = tourlosses;
+					Users.get(loser).tourLosses++;
+					if (match === true) {
+						var re = new RegExp(line,"g");
+						fs.readFile('config/tourlosses.csv', 'utf8', function (err,data) {
+						if (err) {
+							return console.log(err);
+						}
+						});
+						var result = data.replace(re, Users.get(loser).userid+','+Users.get(loser).tourLosses+','+tier);
+						fs.writeFile('config/tourlosses.csv', result, 'utf8', function (err) {
+							if (err) return console.log(err);
+						});
+					} else {
+						var log = fs.createWriteStream('config/tourlosses.csv', {'flags': 'a'});
+						log.write("\n"+Users.get(loser).userid+','+Users.get(loser).tourLosses+','+tier);
 					}
-					});
-					var result = data.replace(re, Users.get(loser).userid+','+Users.get(loser).tourLosses+','+tier);
-					fs.writeFile('config/tourlosses.csv', result, 'utf8', function (err) {
-						if (err) return console.log(err);
-					});
-				} else {
-					var log = fs.createWriteStream('config/tourlosses.csv', {'flags': 'a'});
-					log.write("\n"+Users.get(loser).userid+','+Users.get(loser).tourLosses+','+tier);
 				}
 				return r[key][winner];
 			}
@@ -358,40 +360,42 @@ exports.tour = function(t) {
 				}
 				//end tour
 				Rooms.rooms[rid].addRaw('<h2><font color="green">Congratulations <font color="black">' + Users.users[w[0]].name + '</font>!  You have won the ' + Tools.data.Formats[tour[rid].tier].name + ' Tournament!<br>You have also won ' + tourMoney + ' Frost ' + p + '! ' + tooSmall + '</font></h2>' + '<br><font color="blue"><b>SECOND PLACE:</b></font> ' + Users.users[l[0]].name + '<hr />');
-				var data = fs.readFileSync('config/tourwins.csv','utf8')
-				var match = false;
-				var tourwins = 0;
-				var row = (''+data).split("\n");
-				var line = '';
-				var tier = Tools.data.Formats[tour[rid].tier].name;
-				for (var i = row.length; i > -1; i--) {
-					if (!row[i]) continue;
-					var parts = row[i].split(",");
-					var userid = toUserid(parts[0]);
-					if (Users.users[w[0]].userid == userid && tier == parts[2]) {
-						var x = Number(parts[1]);
-						var tourwins = x;
-						match = true;
-						line = line + row[i];
-						break;
+				if (tour[rid].size >= 8) {
+					var data = fs.readFileSync('config/tourwins.csv','utf8')
+					var match = false;
+					var tourwins = 0;
+					var row = (''+data).split("\n");
+					var line = '';
+					var tier = Tools.data.Formats[tour[rid].tier].name;
+					for (var i = row.length; i > -1; i--) {
+						if (!row[i]) continue;
+						var parts = row[i].split(",");
+						var userid = toUserid(parts[0]);
+						if (Users.users[w[0]].userid == userid && tier == parts[2]) {
+							var x = Number(parts[1]);
+							var tourwins = x;
+							match = true;
+							line = line + row[i];
+							break;
+						}
 					}
-				}
-				Users.users[w[0]].tourWins = tourwins;
-				Users.users[w[0]].tourWins++;
-				if (match === true) {
-					var re = new RegExp(line,"g");
-					fs.readFile('config/tourwins.csv', 'utf8', function (err,data) {
-					if (err) {
-						return console.log(err);
+					Users.users[w[0]].tourWins = tourwins;
+					Users.users[w[0]].tourWins++;
+					if (match === true) {
+						var re = new RegExp(line,"g");
+						fs.readFile('config/tourwins.csv', 'utf8', function (err,data) {
+						if (err) {
+							return console.log(err);
+						}
+						});
+						var result = data.replace(re, Users.users[w[0]].userid+','+Users.users[w[0]].tourWins+','+tier);
+						fs.writeFile('config/tourwins.csv', result, 'utf8', function (err) {
+							if (err) return console.log(err);
+						});
+					} else {
+						var log = fs.createWriteStream('config/tourwins.csv', {'flags': 'a'});
+						log.write("\n"+Users.users[w[0]].userid+','+Users.users[w[0]].tourWins+','+tier);
 					}
-					});
-					var result = data.replace(re, Users.users[w[0]].userid+','+Users.users[w[0]].tourWins+','+tier);
-					fs.writeFile('config/tourwins.csv', result, 'utf8', function (err) {
-						if (err) return console.log(err);
-					});
-				} else {
-					var log = fs.createWriteStream('config/tourwins.csv', {'flags': 'a'});
-					log.write("\n"+Users.users[w[0]].userid+','+Users.users[w[0]].tourWins+','+tier);
 				}
 				//for now, this is the only way to get points/money
 				var data = fs.readFileSync('config/money.csv','utf8')
