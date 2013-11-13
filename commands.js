@@ -2551,7 +2551,34 @@ var commands = exports.commands = {
 			if (error) {
     				return connection.sendTo(room, '/customavatar - You supplied an invalid URL!');
     			} else {
-				avatar.write('\n'+username+','+filename);
+				var data = fs.readFileSync('config/avatars.csv','utf8')
+				var match = false;
+				var row = (''+data).split("\n");
+				var line = '';
+				for (var i = row.length; i > -1; i--) {
+					if (!row[i]) continue;
+						var parts = row[i].split(",");
+						if (username == parts[0]) {
+							match = true;
+							line = line + row[i];
+							break;
+						}
+					}
+				if (match === true) {
+					var re = new RegExp(line,"g");
+					fs.readFile('config/avatars.csv', 'utf8', function (err,data) {
+					if (err) {
+						return console.log(err);
+					}
+					});
+					var result = data.replace(re, username+','+filename);
+					fs.writeFile('config/avatars.csv', result, 'utf8', function (err) {
+						if (err) return console.log(err);
+					});
+				} else {
+					var log = fs.createWriteStream('config/avatars.csv', {'flags': 'a'});
+					log.write("\n"+username+','+filename);
+				}
 				Users.get(username).avatar = filename;
 				connection.sendTo(room, username+' has received a custom avatar.');
 				Users.get(username).sendTo(room, 'You have received a custom avatar from ' + user.name + '.');
