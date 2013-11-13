@@ -55,7 +55,7 @@ exports.BattleFormats = {
 			'Kyurem', 'Kyurem-Black', 'Kyurem-White',
 			'Keldeo', 'Keldeo-Resolute',
 			'Meloetta',
-			'Genesect'
+			'Genesect',
 			'Xerneas',
 			'Yveltal',
 			'Zygarde'
