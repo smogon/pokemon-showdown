@@ -91,7 +91,7 @@ var connections = {};
 
 function socketConnect(worker, workerid, socketid, ip) {
 	var id = ''+workerid+'-'+socketid;
-	var connection = connections[id] = new Connection(id, worker, socketid, true, ip);
+	var connection = connections[id] = new Connection(id, worker, socketid, null, ip);
 
 	if (ResourceMonitor.countConnection(ip)) {
 		return connection.destroy();
@@ -103,9 +103,9 @@ function socketConnect(worker, workerid, socketid, ip) {
 	if (checkResult) {
 		console.log('CONNECT BLOCKED - IP BANNED: '+ip+' ('+checkResult+')');
 		if (checkResult === '#ipban') {
-			socket.write("|popup|Your IP ("+ip+") is on our abuse list and is permanently banned. If you are using a proxy, stop.");
+			connection.send("|popup|Your IP ("+ip+") is on our abuse list and is permanently banned. If you are using a proxy, stop.");
 		} else {
-			socket.write("|popup|Your IP ("+ip+") used is banned under the username '"+checkResult+"''. Your ban will expire in a few days."+(config.appealurl ? " Or you can appeal at:\n" + config.appealurl:""));
+			connection.send("|popup|Your IP ("+ip+") used is banned under the username '"+checkResult+"''. Your ban will expire in a few days."+(config.appealurl ? " Or you can appeal at:\n" + config.appealurl:""));
 		}
 		return connection.destroy();
 	}
@@ -178,6 +178,7 @@ function socketReceive(worker, workerid, socketid, message) {
 		var room = Rooms.get(roomid);
 		if (!room) room = Rooms.lobby || Rooms.global;
 		var user = connection.user;
+		if (!user) return;
 		if (lines.substr(0,3) === '>> ' || lines.substr(0,4) === '>>> ') {
 			user.chat(lines, room, connection);
 			return;
@@ -910,7 +911,7 @@ var User = (function () {
 			for (var j in connection.rooms) {
 				this.leaveRoom(connection.rooms[j], connection, true);
 			}
-			connection.socket.end();
+			connection.destroy();
 			--this.ips[connection.ip];
 		}
 		this.connections = [];
