@@ -172,17 +172,9 @@ exports.BattleAbilities = {
 	"aromaveil": {
 		desc: "Protects allies from attacks that limit their move choices.",
 		shortDesc: "Protects allies from attacks that limit their move choices.",
-		onStart: function(pokemon) {
-			pokemon.side.addSideCondition('aromaveil');
-		},
-		onSwitchOut: function(pokemon) {
-			pokemon.side.removeSideCondition('aromaveil');
-		},
-		effect: {
-			onTryHit: function(target, source, move) {
-				if (move && move.id in {disable:1, encore:1, healblock:1, imprison:1, taunt:1, torment:1}) {
-					return false;
-				}
+		onAllyTryHit: function(target, source, move) {
+			if (move && move.id in {disable:1, encore:1, healblock:1, imprison:1, taunt:1, torment:1}) {
+				return false;
 			}
 		},
 		id: "aromaveil",
@@ -2731,24 +2723,16 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents allies from being put to Sleep.",
 		id: "sweetveil",
 		name: "Sweet Veil",
-		onStart: function(pokemon) {
-			pokemon.side.addSideCondition('sweetveil');
+		onAllySetStatus: function(status, target, source, effect) {
+			if (status.id === 'slp') {
+				this.debug('Sweet Veil interrupts sleep');
+				return false;
+			}
 		},
-		onSwitchOut: function(pokemon) {
-			pokemon.side.removeSideCondition('sweetveil');
-		},
-		effect: {
-			onSetStatus: function(status, target, source, effect) {
-				if (status.id === 'slp') {
-					this.debug('Sweet Veil interrupts sleep');
-					return false;
-				}
-			},
-			onTryHit: function(target, source, move) {
-				if (move && move.id === 'yawn') {
-					this.debug('Sweet Veil blocking yawn');
-					return false;
-				}
+		onAllyTryHit: function(target, source, move) {
+			if (move && move.id === 'yawn') {
+				this.debug('Sweet Veil blocking yawn');
+				return false;
 			}
 		},
 		rating: 0,
