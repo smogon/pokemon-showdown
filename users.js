@@ -1050,7 +1050,7 @@ var User = (function () {
 			return;
 		}
 		if (!connection.rooms[room.id]) {
-			connection.rooms[room.id] = room;
+			connection.joinRoom(room);
 			if (!this.roomCount[room.id]) {
 				this.roomCount[room.id]=1;
 				room.onJoin(this, connection);
@@ -1085,7 +1085,7 @@ var User = (function () {
 						});
 					} else {
 						this.connections[i].sendTo(room.id, '|deinit');
-						delete this.connections[i].rooms[room.id];
+						this.connections[i].leaveRoom(room);
 					}
 				}
 				if (connection) {
@@ -1327,6 +1327,18 @@ var Connection = (function () {
 
 	Connection.prototype.popup = function(message) {
 		this.send('|popup|'+message.replace(/\n/g,'||'));
+	};
+
+	Connection.prototype.joinRoom = function(room) {
+		if (room.id in this.rooms) return;
+		this.rooms[room.id] = room;
+		Sockets.channelAdd(this.worker, room.id, this.socketid);
+	};
+	Connection.prototype.leaveRoom = function(room) {
+		if (room.id in this.rooms) {
+			delete this.rooms[room.id];
+			Sockets.channelRemove(this.worker, room.id, this.socketid);
+		}
 	};
 
 	return Connection;

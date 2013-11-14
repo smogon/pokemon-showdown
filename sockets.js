@@ -53,6 +53,11 @@ if (cluster.isMaster) {
 		worker.send('!'+socketid);
 	};
 
+	exports.channelBroadcast = function(channelid, message) {
+		for (var workerid in workers) {
+			workers[workerid].send('#'+channelid+'\n'+message);
+		}
+	};
 	exports.channelSend = function(worker, channelid, message) {
 		worker.send('#'+channelid+'\n'+message);
 	};
@@ -258,6 +263,11 @@ if (cluster.isMaster) {
 				clearInterval(interval);
 			}
 			process.send('!'+socketid);
+
+			delete sockets[socketid];
+			for (channelid in channels) {
+				delete channels[channelid][socketid];
+			}
 		});
 	});
 	server.installHandlers(app, {});

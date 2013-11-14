@@ -331,10 +331,7 @@ var GlobalRoom = (function() {
 		if (user) {
 			user.sendTo(this, message);
 		} else {
-			for (var i in this.users) {
-				user = this.users[i];
-				user.sendTo(this, message);
-			}
+			Sockets.channelBroadcast(this.id, message);
 		}
 	};
 	GlobalRoom.prototype.sendAuth = function(message) {
@@ -758,9 +755,7 @@ var BattleRoom = (function() {
 		if (user) {
 			user.sendTo(this, message);
 		} else {
-			for (var i in this.users) {
-				this.users[i].sendTo(this, message);
-			}
+			Sockets.channelBroadcast(this.id, message);
 		}
 	};
 	BattleRoom.prototype.tryExpire = function() {
@@ -1342,9 +1337,8 @@ var ChatRoom = (function() {
 		if (user) {
 			user.sendTo(this, message);
 		} else {
-			for (var i in this.users) {
-				this.users[i].sendTo(this, message);
-			}
+			if (this.id !== 'lobby') message = '>'+this.id+'\n'+message;
+			Sockets.channelBroadcast(this.id, message);
 		}
 	};
 	ChatRoom.prototype.sendAuth = function(message) {
