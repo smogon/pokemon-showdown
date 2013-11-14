@@ -23,7 +23,7 @@ if (cluster.isMaster) {
 		var worker = workers[i] = cluster.fork();
 		(function(worker, i) {
 			worker.on('message', function(data) {
-				console.log('master received: '+data);
+				// console.log('master received: '+data);
 				switch (data.charAt(0)) {
 				case '*': // *socketid, ip
 					// connect
@@ -146,7 +146,7 @@ if (cluster.isMaster) {
 	var channels = {};
 
 	process.on('message', function(data) {
-		console.log('worker received: '+data);
+		// console.log('worker received: '+data);
 		var socket = null;
 		var socketid = null;
 		var channelid = null;
@@ -261,16 +261,13 @@ if (cluster.isMaster) {
 		});
 	});
 	server.installHandlers(app, {});
-	console.log('Server starting on port ' + config.port);
 	app.listen(config.port);
+	console.log('Worker '+cluster.worker.id+' now listening on port ' + config.port);
+
 	if (appssl) {
 		server.installHandlers(appssl, {});
 		appssl.listen(config.ssl.port);
-	}
-
-	console.log('Server started on port ' + config.port);
-	if (appssl) {
-		console.log('SSL server started on port ' + config.ssl.port);
+		console.log('Worker '+cluster.worker.id+' now listening for SSL on port ' + config.ssl.port);
 	}
 
 	console.log('Test your server at http://localhost:' + config.port);
