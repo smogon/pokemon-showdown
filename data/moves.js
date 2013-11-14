@@ -1417,7 +1417,7 @@ exports.BattleMovedex = {
 		basePower: 60,
 		category: "Physical",
 		desc: "Deals damage to all adjacent Pokemon with a 100% chance to lower their Speed by 1 stage each.",
-		shortDesc: "100% chance to lower adjacent Pkmn Speed by 1.",
+		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
 		id: "bulldoze",
 		name: "Bulldoze",
 		pp: 20,
