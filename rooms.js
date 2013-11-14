@@ -755,7 +755,7 @@ var BattleRoom = (function() {
 		if (user) {
 			user.sendTo(this, message);
 		} else {
-			Sockets.channelBroadcast(this.id, message);
+			Sockets.channelBroadcast(this.id, '>'+this.id+'\n'+message);
 		}
 	};
 	BattleRoom.prototype.tryExpire = function() {
