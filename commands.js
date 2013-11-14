@@ -1290,6 +1290,7 @@ var commands = exports.commands = {
 		if (Rooms.global.addChatRoom(target)) {
 			return this.sendReply("The room '"+target+"' was created.");
 			if (Rooms.rooms.logroom) Rooms.rooms.logroom.addRaw('ROOM LOG ' + user.name + ' has made the room ' + target + '.');
+			this.logModCommand('Room '+target+' has been created by '+user.name+'.');
 		}
 		return this.sendReply("An error occurred while trying to create the room '"+target+"'.");
 	},
@@ -1305,6 +1306,7 @@ var commands = exports.commands = {
 		if (Rooms.global.deregisterChatRoom(id)) {
 			this.sendReply("The room '"+target+"' was deregistered.");
 			this.sendReply("It will be deleted as of the next server restart.");
+			this.logModCommand('Room '+id+' has been deleted by '+user.name+'.');
 			return;
 		}
 		return this.sendReply("The room '"+target+"' isn't registered.");
