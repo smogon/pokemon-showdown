@@ -2424,7 +2424,7 @@ exports.BattleAbilities = {
 	},
 	"sniper": {
 		desc: "When this Pokemon lands a Critical Hit, the damage is increased to another 1.5x.",
-		shortDesc: "If this Pokemon strikes with a critical hit, the damage is 2.25x instead of 1.5x.",
+		shortDesc: "If this Pokemon strikes with a critical hit, the damage is increased by 50%",
 		onModifyDamage: function(damage, source, target, move) {
 			if (move.crit) {
 				this.debug('Sniper boost');
