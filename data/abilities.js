@@ -156,7 +156,7 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents foes from switching out normally unless they have immunity to Ground.",
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.runImmunity('Ground', false)) {
-				pokemon.trapped = true;
+				pokemon.tryTrap();
 			}
 		},
 		onFoeMaybeTrapPokemon: function(pokemon) {
@@ -1496,7 +1496,7 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents Steel-type foes from switching out normally.",
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.hasType('Steel')) {
-				pokemon.trapped = true;
+				pokemon.tryTrap();
 			}
 		},
 		onFoeMaybeTrapPokemon: function(pokemon) {
@@ -2288,7 +2288,7 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents foes from switching out normally unless they also have this Ability.",
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.ability !== 'shadowtag') {
-				pokemon.trapped = true;
+				pokemon.tryTrap();
 			}
 		},
 		onFoeMaybeTrapPokemon: function(pokemon) {
