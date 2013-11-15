@@ -1176,7 +1176,7 @@ var commands = exports.commands = {
 
 	championdarkrai: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491-1.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://imgur.com/JmqGNKI.gif"><img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491.png"><br /><center><b>Ace:</b> Darkrai</center><br /><center><b>Catchphrase:</b> Thats a nice dream you have there, it would be a shame if someone.....ATE IT.</center>')
+        this.sendReplyBox('<img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491-1.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://imgur.com/JmqGNKI.gif"><img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491.png"><br /><center><b>Ace:</b> Darkrai</center><br /><center><b>Catchphrase:</b> I got so many ghost hoes I lost count</center>')
     },	
     
     jitlittle : 'elitistregion',
