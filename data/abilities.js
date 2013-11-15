@@ -1402,21 +1402,19 @@ exports.BattleAbilities = {
 	"magician": {
 		desc: "If this Pokemon is not holding an item, it steals the held item of a target it hits with a move.",
 		shortDesc: "This Pokemon steals the held item of a target it hits with a move.",
-		onFoeAfterDamage: function(damage, target, source, move) {
-			if (source && source !== target && move) {
-				if (source.item) {
-					return;
-				}
-				var yourItem = target.takeItem(source);
-				if (!yourItem) {
-					return;
-				}
-				if (!source.setItem(yourItem)) {
-					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
-					return;
-				}
-				this.add('-item', source, yourItem, '[from] Magician');
+		onHit: function(target, source) {
+			if (source.item) {
+				return;
 			}
+			var yourItem = target.takeItem(source);
+			if (!yourItem) {
+				return;
+			}
+			if (!source.setItem(yourItem)) {
+				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+				return;
+			}
+			this.add('-item', source, yourItem, '[from] move: Thief', '[of] '+target);
 		},
 		id: "magician",
 		name: "Magician",
