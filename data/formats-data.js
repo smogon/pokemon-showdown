@@ -1808,7 +1808,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["blazekick","slash","mirrormove","skyuppercut"]},
 			{"generation":5,"level":50,"isHidden":false,"moves":["flareblitz","highjumpkick","thunderpunch","stoneedge"],"pokeball":"cherishball"}
 		],
-		tier: "OU"
+		tier: "Uber"
 	},
 	blazikenmega: {
 		requiredItem: "Blazikenite"
@@ -2696,7 +2696,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":100,"moves":["nastyplot","darkpulse","recover","psychoboost"],"pokeball":"duskball"}
 		],
 		isUnreleased: true,
-		tier: "OU"
+		tier: "Uber"
 	},
 	deoxysattack: {
 		viableMoves: {"psychoboost":1,"superpower":1,"extremespeed":1,"icebeam":1,"thunderbolt":1,"firepunch":1,"spikes":1,"stealthrock":1},
