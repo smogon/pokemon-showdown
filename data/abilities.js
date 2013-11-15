@@ -1414,7 +1414,7 @@ exports.BattleAbilities = {
 				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 				return;
 			}
-			this.add('-item', source, yourItem, '[from] move: Thief', '[of] '+target);
+			this.add('-item', source, yourItem, '[from] ability: Magician', '[of] '+target);
 		},
 		id: "magician",
 		name: "Magician",
