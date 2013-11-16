@@ -9005,6 +9005,7 @@ exports.BattleMovedex = {
 		name: "Parting Shot",
 		pp: 20,
 		priority: 0,
+		isSoundBased: true,
 		selfSwitch: true,
 		boosts: {
 			atk: -1,
