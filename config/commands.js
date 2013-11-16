@@ -1180,6 +1180,7 @@ var commands = exports.commands = {
     },	
     
     jitlittle : 'elitistregion',
+    elitist: 'elitistregion',
     theelitistregion : 'elitistregion',
     elitistregion: function(target, room, user) {
         if (!this.canBroadcast()) return;
