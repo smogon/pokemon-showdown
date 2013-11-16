@@ -1507,7 +1507,6 @@ var commands = exports.commands = {
 		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
 		if (targetRoom === 'logroom' && user.group !== '~') return false;
 		if (targetRoom === 'adminroom' && user.group !== '~') return false;
-		if (targetRoom === 'spamroom' && user.group !== '~') return false;
 		if (!targetRoom) {
 			if (target === 'lobby') return connection.sendTo(target, "|noinit|nonexistent|");
 			return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
@@ -1540,6 +1539,9 @@ var commands = exports.commands = {
 				'Home of many leagues for you to join or challenge, battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
 				'Make sure to type <b>/help</b> to get a list of commands that you can use and <b>/faq</b> to check out frequently asked questions.</center>');
 		}*/
+		if (targetRoom.id === "spamroom" && !user.isStaff) {
+			return connection.sendTo(target, "|noinit|nonexistent|The room'"+target+"' does not exist.");
+		}
 	},
 
 	rk: 'roomkick',
