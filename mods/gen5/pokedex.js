@@ -71,6 +71,10 @@ exports.BattlePokedex = {
 		inherit: true,
 		types:["Psychic"]
 	},
+	zapdos: {
+		inherit: true,
+		abilities:{0:"Pressure",H:"Lightningrod"}
+	},
 	igglybuff: {
 		inherit: true,
 		types:["Normal"],
