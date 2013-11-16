@@ -1176,7 +1176,15 @@ var commands = exports.commands = {
 
 	championdarkrai: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491-1.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://imgur.com/JmqGNKI.gif"><img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491.png"><br /><center><b>Ace:</b> Darkrai</center><br /><center><b>Catchphrase:</b> Thats a nice dream you have there, it would be a shame if someone.....ATE IT.</center>')
+        this.sendReplyBox('<img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491-1.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://imgur.com/JmqGNKI.gif"><img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491.png"><br /><center><b>Ace:</b> Darkrai</center><br /><center><b>Catchphrase:</b> I got so many ghost hoes I lost count</center>')
+    },	
+    
+    jitlittle : 'elitistregion',
+    elitist: 'elitistregion',
+    theelitistregion : 'elitistregion',
+    elitistregion: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.neoseeker.com/m/467283_photo.gif"></center><center><img src="http://i.imgur.com/fZwex8l.png"></center><center><img src="http://fc05.deviantart.net/fs71/f/2010/218/2/2/Sunkern_avatar_by_SilverSail.gif"></center><br /><center><b>Ace:</b> The Kern; I will duck you up</center><br/><center><b>"Reach For the Elite"</b></center> ')
     },	
 
 	priest: function(target, room, user) {

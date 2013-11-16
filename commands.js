@@ -1017,9 +1017,9 @@ var commands = exports.commands = {
 			log.write("\n"+targetUser.userid+','+targetUser.coins);
 		}
 		var p = 'coins';
-		if (giveCoins < 2) p = 'coin';
+		if (takeCoins < 2) p = 'coin';
 		this.sendReply(targetUser.name + ' was had ' + takeCoins + ' ' + p + ' removed. This user now has ' + targetUser.coins + ' coins.');
-		targetUser.send(user.name + ' has given you ' + takeCoins + ' ' + p + '.');
+		targetUser.send(user.name + ' has taken ' + takeCoins + ' ' + p + ' from you.');
 		} else {
 			return this.parse('/help takecoins');
 		}
