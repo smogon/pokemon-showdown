@@ -1183,7 +1183,7 @@ var commands = exports.commands = {
     theelitistregion : 'elitistregion',
     elitistregion: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://i.neoseeker.com/m/467283_photo.gif"><img src="http://i.imgur.com/fZwex8l.png"><img src="http://fc05.deviantart.net/fs71/f/2010/218/2/2/Sunkern_avatar_by_SilverSail.gif"><br /><center><b>Ace:</b> The Kern; I will duck you up</center>')
+        this.sendReplyBox('<center><img src="http://i.neoseeker.com/m/467283_photo.gif"></center><center><img src="http://i.imgur.com/fZwex8l.png"></center><center><img src="http://fc05.deviantart.net/fs71/f/2010/218/2/2/Sunkern_avatar_by_SilverSail.gif"></center><br /><center><b>Ace:</b> The Kern; I will duck you up</center><br/><center><b>"Reach For the Elite"</b></center> ')
     },	
 
 	priest: function(target, room, user) {
