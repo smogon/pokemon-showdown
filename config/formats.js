@@ -98,13 +98,6 @@ exports.Formats = [
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther']
 	},
 	{
-		name: "CAP (beta)",
-		section: "XY Singles",
-
-		ruleset: ['CAP Pokemon', 'Standard Pokebank', 'Team Preview'],
-		banlist: ['Uber']
-	},
-	{
 		name: "Custom Game",
 		section: "XY Singles",
 
@@ -120,6 +113,14 @@ exports.Formats = [
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
 
+	{
+		name: "[Gen 5] CAP Cawmodore Playtest",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', "Tomohawk", "Necturna", "Mollux", "Aurumoth", "Malaconda", "Syclant", "Revenankh", "Pyroak", "Fidgit", "Stratagem", "Arghonaut", "Kitsunoh", "Cyclohm", "Colossoil", "Krilowatt", "Voodoom"]
+	},
 	{
 		name: "[Gen 5] Random Battle",
 		section: "BW2 Singles",
@@ -433,6 +434,14 @@ exports.Formats = [
 			'Kangaskhanite',
 			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water'
 		]
+	},
+	{
+		name: "CAP (beta)",
+		section: "Other Metagames",
+
+		searchShow: false,
+		ruleset: ['CAP Pokemon', 'Standard Pokebank', 'Team Preview'],
+		banlist: ['Uber', 'Cawmodore', 'Soul Dew']
 	},
 	{
 		name: "Challenge Cup",
