@@ -1238,6 +1238,12 @@ var commands = exports.commands = {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://i.imgur.com/rk5tZji.png"><br><img src="http://i.imgur.com/pBBrxgo.gif"><br><font color="red"><blink><b>Ace: Clamperl</blink></font><br><b>How do you like me now, (insert naughty word)!');
     },
+     
+     mastersofthecolor: 'motc', 
+     motc: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<h2>Masters of the Colors</h2><hr /><br />In this tournament, you will construct a team based on the color of your name. You are not allowed to <em>choose</em> the color of your name. Follow these steps if you wish to participate:<ol><li>Look at the color of your name and determine if your name color is: <b>Red, Blue, Green, Pink/Purple, Yellow/Brown</b></li><li>Once you have found out your name color, type that color in the main chat to bring up a list of pokemon with that color. Ex]BrittleWind is Blue so I would type /blue in the main chat, Cosy is Red so he would type /red in the main chat. (If your name color is Yellow/Brown you are allowed to use both yellow <em>and</em> brown Pokemon. The same goes for Pink/Purple)</li><li>Now using list of pokemon you see on your screen, make a <b>Gen5 OU</b> team using only the pokemon on the list. Some pokemon on the list won\'t be in the OU category so ignore them. As long as your able to do a Gen 5 OU battle with only your pokemon, your good to go!</li><li>Now all you have to do is wait for the declare to come up telling you that Masters of the Colors has started! If you happen to come accross any trouble during the event, feel free to PM the room owner for your designated room.</li></ol>');
+    },
 
 	elitefoursalty: function(target, room, user) {
         if (!this.canBroadcast()) return;
