@@ -316,7 +316,7 @@ exports.tour = function(t) {
 				loser = r[key][loser];
 				tour[rid].history.push(r[key][winner] + "|" + r[key][loser]);
 				if (tour[rid].size >= 8) {
-					tour.addTourLoss(loser.userid, tier); //for recording tour stats
+					tour.addTourLoss(loser, tier); //for recording tour stats
 				}
 				return r[key][winner];
 			}
