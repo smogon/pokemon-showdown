@@ -1847,6 +1847,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/tell [username], [message] - Sends a message to the user which they see when they next speak');
 		 }
+		if (target === 'all' || target === 'tourstats' || target === 'ts') {
+			matched = true;
+			this.sendReply('/tourstats [username], [tier] - Shows the target users tournament stats. Tier may be replaced with \"all\" to view the targets ranking in every tier.');
+		}
 		if (target === 'buy') {
 			matched = true;
 			this.sendReply('/buy [item] - buys the specified item, assuming you have enough money');
