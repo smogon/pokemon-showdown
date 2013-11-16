@@ -741,6 +741,7 @@ module.exports = (function () {
 		}
 		var teamHas = {};
 		for (var i=0; i<team.length; i++) {
+			if (!team[i]) return ["You sent invalid team data. If you're not using a custom client, please report this as a bug."];
 			var setProblems = this.validateSet(team[i], format, teamHas);
 			if (setProblems) {
 				problems = problems.concat(setProblems);
