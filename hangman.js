@@ -116,7 +116,7 @@ var cmds = {
 		if(hangman === false) {
 			return this.sendReply('There is no game of hangman going on right now.');
 		}
-		if(user.userid != hangmaner[0]) {
+		if(user.userid != hangman[room.id].hangmaner[0]) {
 			return this.sendReply('You cannot change the category because you are not running hangman.');
 		}
 		hangman[room.id].hangmantopic[0] = target;
