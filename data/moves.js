@@ -6716,7 +6716,7 @@ exports.BattleMovedex = {
 		id: "infestation",
 		isViable: true,
 		name: "Infestation",
-		pp: 35,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		volatileStatus: 'partiallytrapped',
