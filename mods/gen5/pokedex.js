@@ -230,6 +230,10 @@ exports.BattlePokedex = {
 		baseStats: {hp:60,atk:90,def:89,spa:55,spd:69,spe:112},
 		abilities: {0:"Poison Point",1:"Swarm",H:"Quick Feet"}
 	},
+	cottonee: {
+		inherit: true,
+		types:["Grass"]
+	},
 	whimsicott: {
 		inherit: true,
 		types:["Grass"]
