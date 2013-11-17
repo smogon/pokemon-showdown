@@ -83,6 +83,8 @@ exports.BattleFormats = {
 				var move = this.getMove(set.moves[i]);
 				if (move.gen > this.gen) {
 					problems.push(move.name+' does not exist in gen '+this.gen+'.');
+				} else if (!isNonstandard && move.isNonstandard) {
+					problems.push(move.name+' is not a real move.');
 				}
 			}
 			if (item.gen > this.gen) {
@@ -101,9 +103,6 @@ exports.BattleFormats = {
 				}
 				if (ability.isNonstandard) {
 					problems.push(ability.name+' is not a real ability.');
-				}
-				if (move.isNonstandard) {
-					problems.push(move.name+' is not a real move.');
 				}
 				if (item.isNonstandard) {
 					problems.push(item.name + ' is not a real item.');
