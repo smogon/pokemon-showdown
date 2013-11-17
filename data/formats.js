@@ -190,6 +190,13 @@ exports.BattleFormats = {
 			// don't return
 			this.getEffect('Pokemon').validateSet.call(this, set, format);
 
+			var item = this.getItem(set.item);
+			if (item) {
+				if (item.gen > this.gen) {
+					return [item.name+' does not exist in gen '+this.gen+'.'];
+				}
+			}
+
 			// limit one of each move
 			var moves = [];
 			if (set.moves) {
