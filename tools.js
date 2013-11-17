@@ -485,6 +485,8 @@ module.exports = (function () {
 					if (!lset || template.speciesid === 'smeargle') {
 						lset = template.learnset['sketch'];
 						sketch = true;
+						// Chatter, Struggle and Magikarp's Revenge cannot be sketched
+						if (move in {'chatter':1, 'struggle':1, 'magikarpsrevenge':1}) return true;
 					}
 					if (typeof lset === 'string') lset = [lset];
 
@@ -495,8 +497,6 @@ module.exports = (function () {
 						if (learned.substr(0,2) in {'4L':1,'5L':1,'6L':1}) {
 							// gen 4-6 level-up moves
 							if (level >= parseInt(learned.substr(2),10)) {
-								// Chatter and Struggle cannot be sketched
-								if (sketch && (move === 'chatter' || move === 'struggle')) return true;
 								// we're past the required level to learn it
 								return false;
 							}
