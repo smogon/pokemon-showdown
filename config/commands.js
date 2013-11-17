@@ -1401,6 +1401,11 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/WEGDYwE.png"><img src="http://i.imgur.com/yEF8j7u.gif"><img src="http://i.imgur.com/GGhYbDC.png"><br><b>Ace: <font color="green"><blink>Creeper</blink><br></font><b><font color="#00BFFF">I promise I won\'t explode!!');
 	},
+	
+	princesshigh: function(target, room, user) {
+		if (!this.canBraodcast()) return;
+		this.sendReplyBox('<center><img height="125" width="78" src="http://th06.deviantart.net/fs45/PRE/i/2009/066/d/6/Gardevoir_by_Onpu_chan.jpg"><img width="400" height="80" src="http://i.imgur.com/6wcoVZk.gif"><img height="125" width="78" src="http://fc01.deviantart.net/fs71/i/2012/267/9/c/50_pokemon__16_gardevoir_by_megbeth-d5fsg1a.png"><br><b>Ace: <font color="green"><blink>Gardevior</blink><br></font><b><font color="red">Never</font><font color="#FF7E00"> make</font><font color="orange"> war</font><font color="green"> with</font><font color="blue"> someone</font><font color="#8F00FF">, always</font><font color="red"> make</font><font color="#FF7E00"> peace</font><font color="orange"> and</font><font color="green"> love</font>');
+	},
 
 	alee: 'alee93',
 	alee93: function(target, room, user) {
