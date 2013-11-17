@@ -881,77 +881,101 @@ var cmds = {
 		}
 	},
 	
-	viewround: 'vr',
-	viewreport: 'vr',
-	vr: function(target, room, user, connection) {
-		if (!tour[room.id].status) {
-			if (!this.canBroadcast()) return;
-			var oghtml = "<hr /><h2>Tournaments In Their Signup Phase:</h2>";
-			var html = oghtml;
-			for (var i in tour) {
-				var c = tour[i];
-				if (typeof c == "object") {
-					if (c.status == 1) html += '<button name="joinRoom" value="' + i + '">' + Rooms.rooms[i].title + ' - ' + Tools.data.Formats[c.tier].name + '</button> ';
-				}
+	viewround: function(target, room, user, connection) {
+		if (!this.canBroadcast()) return;
+		if (room.decision) return this.sendReply('Prof. Oak: There is a time and place for everything! You cannot do this in battle rooms.');
+		if (tour[room.id] == undefined) return this.sendReply('There is no active tournament in this room.');
+		if (tour[room.id].status < 2) return this.sendReply('There is no tournament out of its signup phase.');
+		var html = '<hr /><h3><font color="green">Round '+ tour[room.id].roundNum + '!</font></h3><font color="blue"><b>TIER:</b></font> ' + Tools.data.Formats[tour[room.id].tier].name + "<hr /><center><small><font color=red>Red</font> = lost, <font color=green>Green</font> = won, <a class='ilink'><b>URL</b></a> = battling</small><center>";
+		var r = tour[room.id].round;
+		var firstMatch = false;
+		for (var i in r) {
+			if (!r[i][1]) {
+				//bye
+				var byer = tour.username(r[i][0]);
+				html += "<font color=\"red\">" + clean(byer) + " has received a bye.</font><br />";
 			}
-			if (html == oghtml) html += "There are currently no tournaments in their signup phase.";
-			this.sendReply('|raw|' + html + "<hr />");
-		} else if (tour[room.id].status == 1) {
-			if (!tour.lowauth(user,room)) return this.sendReply('You should not use this command during the sign-up phase.');
-			tour.reportdue(room, connection);
-		} else {
-			if (!this.canBroadcast()) return;
-			if (room.decision) return this.sendReply('Prof. Oak: There is a time and place for everything! You cannot do this in battle rooms.');
-			if (tour[room.id] == undefined) return this.sendReply('There is no active tournament in this room.');
-			if (tour[room.id].status < 2) return this.sendReply('There is no tournament out of its signup phase.');
-			var html = '<hr /><h3><font color="green">Round '+ tour[room.id].roundNum + '!</font></h3><font color="blue"><b>TIER:</b></font> ' + Tools.data.Formats[tour[room.id].tier].name + "<hr /><center><small><font color=red>Red</font> = lost, <font color=green>Green</font> = won, <a class='ilink'><b>URL</b></a> = battling</small><center>";
-			var r = tour[room.id].round;
-			var firstMatch = false;
-			for (var i in r) {
-				if (!r[i][1]) {
-					//bye
-					var byer = tour.username(r[i][0]);
-					html += "<font color=\"red\">" + clean(byer) + " has received a bye.</font><br />";
+			else {
+				if (r[i][2] == undefined) {
+					//haven't started
+					var p1n = tour.username(r[i][0]);
+					var p2n = tour.username(r[i][1]);
+					if (p1n.substr(0, 6) === 'Guest ') p1n = r[i][0];
+					if (p2n.substr(0, 6) === 'Guest ') p2n = r[i][1];
+					var tabla = "";if (!firstMatch) {var tabla = "</center><table align=center cellpadding=0 cellspacing=0>";firstMatch = true;}
+					html += tabla + "<tr><td align=right>" + clean(p1n) + "</td><td>&nbsp;VS&nbsp;</td><td>" + clean(p2n) + "</td></tr>";
+				}
+				else if (r[i][2] == -1) {
+					//currently battling
+					var p1n = tour.username(r[i][0]);
+					var p2n = tour.username(r[i][1]);
+					if (p1n.substr(0, 6) === 'Guest ') p1n = r[i][0];
+					if (p2n.substr(0, 6) === 'Guest ') p2n = r[i][1];
+					var tabla = "";if (!firstMatch) {var tabla = "</center><table align=center cellpadding=0 cellspacing=0>";firstMatch = true;}
+					var tourbattle = tour[room.id].battles[i];
+					function link(txt) {return "<a href='/" + tourbattle + "' room='" + tourbattle + "' class='ilink'>" + txt + "</a>";}
+					html += tabla + "<tr><td align=right><b>" + link(clean(p1n)) + "</b></td><td><b>&nbsp;" + link("VS") + "&nbsp;</b></td><td><b>" + link(clean(p2n)) + "</b></td></tr>";
 				}
 				else {
-					if (r[i][2] == undefined) {
-						//haven't started
-						var p1n = tour.username(r[i][0]);
-						var p2n = tour.username(r[i][1]);
-						if (p1n.substr(0, 6) === 'Guest ') p1n = r[i][0];
-						if (p2n.substr(0, 6) === 'Guest ') p2n = r[i][1];
-						var tabla = "";if (!firstMatch) {var tabla = "</center><table align=center cellpadding=0 cellspacing=0>";firstMatch = true;}
-						html += tabla + "<tr><td align=right>" + clean(p1n) + "</td><td>&nbsp;VS&nbsp;</td><td>" + clean(p2n) + "</td></tr>";
+					//match completed
+					var p1 = "red";
+					var p2 = "green";
+					if (r[i][2] == r[i][0]) {
+						p1 = "green";
+						p2 = "red";
 					}
-					else if (r[i][2] == -1) {
-						//currently battling
-						var p1n = tour.username(r[i][0]);
-						var p2n = tour.username(r[i][1]);
-						if (p1n.substr(0, 6) === 'Guest ') p1n = r[i][0];
-						if (p2n.substr(0, 6) === 'Guest ') p2n = r[i][1];
-						var tabla = "";if (!firstMatch) {var tabla = "</center><table align=center cellpadding=0 cellspacing=0>";firstMatch = true;}
-						var tourbattle = tour[room.id].battles[i];
-						function link(txt) {return "<a href='/" + tourbattle + "' room='" + tourbattle + "' class='ilink'>" + txt + "</a>";}
-						html += tabla + "<tr><td align=right><b>" + link(clean(p1n)) + "</b></td><td><b>&nbsp;" + link("VS") + "&nbsp;</b></td><td><b>" + link(clean(p2n)) + "</b></td></tr>";
-					}
-					else {
-						//match completed
-						var p1 = "red";
-						var p2 = "green";
-						if (r[i][2] == r[i][0]) {
-							p1 = "green";
-							p2 = "red";
-						}
-						var p1n = tour.username(r[i][0]);
-						var p2n = tour.username(r[i][1]);
-						if (p1n.substr(0, 6) === 'Guest ') p1n = r[i][0];
-						if (p2n.substr(0, 6) === 'Guest ') p2n = r[i][1];
-						var tabla = "";if (!firstMatch) {var tabla = "</center><table align=center cellpadding=0 cellspacing=0>";firstMatch = true;}
-						html += tabla + "<tr><td align=right><b><font color=\"" + p1 + "\">" + clean(p1n) + "</font></b></td><td><b>&nbsp;VS&nbsp;</b></td><td><font color=\"" + p2 + "\"><b>" + clean(p2n) + "</b></font></td></tr>";
-					}
+					var p1n = tour.username(r[i][0]);
+					var p2n = tour.username(r[i][1]);
+					if (p1n.substr(0, 6) === 'Guest ') p1n = r[i][0];
+					if (p2n.substr(0, 6) === 'Guest ') p2n = r[i][1];
+					var tabla = "";if (!firstMatch) {var tabla = "</center><table align=center cellpadding=0 cellspacing=0>";firstMatch = true;}
+					html += tabla + "<tr><td align=right><b><font color=\"" + p1 + "\">" + clean(p1n) + "</font></b></td><td><b>&nbsp;VS&nbsp;</b></td><td><font color=\"" + p2 + "\"><b>" + clean(p2n) + "</b></font></td></tr>";
 				}
 			}
-			this.sendReply("|raw|" + html + "</table>");
+		}
+		this.sendReply("|raw|" + html + "</table>");
+	},
+
+	viewreport: 'vr',
+	vr: function(target, room, user) {
+		if (!tour[room.id].status) {
+			if (this.broadcasting) {
+				return this.parse('!tours');
+			} else {
+				return this.parse('/tours');
+			}
+		} else if (tour[room.id].status == 1) {
+			if (!tour.userauth(user,room)) return this.sendReply('You should not use this command during the sign-up phase.');
+			var remslots = tour[room.id].size - tour[room.id].players.length;
+			if (tour[room.id].players.length == tour[room.id].playerslogged.length) {
+				if (!this.broadcasting) return this.sendReply('There is nothing to report.');
+			} else if (tour[room.id].players.length == tour[room.id].playerslogged.length + 1) {
+				var someid = tour[room.id].players[tour[room.id].playerslogged.length];
+				room.addRaw('<b>' + tour.username(someid) + '</b> has joined the tournament. <b><i>' + remslots + ' slot' + ( remslots == 1 ? '' : 's') + ' remaining.</b></i>');
+				tour[room.id].playerslogged.push(tour[room.id].players[tour[room.id].playerslogged.length]);
+			} else {
+				var someid = tour[room.id].players[tour[room.id].playerslogged.length];
+				var prelistnames = '<b>' + tour.username(someid) + '</b>';
+				for (var i = tour[room.id].playerslogged.length + 1; i < tour[room.id].players.length - 1; i++) {
+					someid = tour[room.id].players[i];
+					prelistnames = prelistnames + ', <b>' + tour.username(someid) + '</b>';
+				}
+				someid = tour[room.id].players[tour[room.id].players.length - 1];
+				var listnames = prelistnames + ' and <b>' + tour.username(someid) + '</b>';
+				room.addRaw(listnames + ' have joined the tournament. <b><i>' + remslots + ' slot' + ( remslots == 1 ? '' : 's') + ' remaining.</b></i>');
+
+				tour[room.id].playerslogged.push(tour[room.id].players[tour[room.id].playerslogged.length]);
+				for (var i = tour[room.id].playerslogged.length; i < tour[room.id].players.length - 1; i++) { //the length is disturbed by the push above
+					tour[room.id].playerslogged.push(tour[room.id].players[i]);
+				}
+				tour[room.id].playerslogged.push(tour[room.id].players[tour[room.id].players.length - 1]);
+			}
+		} else {
+			if (this.broadcasting) {
+				return this.parse('!viewround');
+			} else {
+				return this.parse('/viewround');
+			}
 		}
 	},
 
