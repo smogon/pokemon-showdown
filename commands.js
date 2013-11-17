@@ -1555,7 +1555,7 @@ var commands = exports.commands = {
 		targetUser.popup('You have been kicked from room '+ room.title +' by '+user.name+'.');
 		targetUser.leaveRoom(room);
 		room.add('|raw|'+ targetUser.name + ' has been kicked from room by '+ user.name + '.');
-		this.logRoomCommand(targetUser.name + ' has been kicked from room by '+ user.name + '.');
+		this.logRoomCommand(targetUser.name + ' has been kicked from room by '+ user.name + '.', room.id);
 	},
 
 	roomban: function(target, room, user, connection) {
@@ -2468,7 +2468,8 @@ var commands = exports.commands = {
 	},
 
 	roomlog: function(target, room, user, connection) {
-		if (!this.can('mute', target, room)) return false;
+		if (!room.auth[user.userid] || room.auth[user.userid] == '+' || !user.isStaff) return false;
+		if (!this.can('mute', null, room)) return false;
 		var lines = 0;
 		if (!target.match('[^0-9]')) {
 			lines = parseInt(target || 15, 10);
