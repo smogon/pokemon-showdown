@@ -1393,7 +1393,7 @@ var commands = exports.commands = {
 	
 	typhozzz: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/gp79zxb.png"><img src="http://i.imgur.com/eDS32pU.gif"><img src="http://i.imgur.com/UTfUkBW.png"><br>Ace: Typhlosion<br>nurse joy call an ambulance bc u just got ba ba burned by typhozzz');
+		this.sendReplyBox('<center><img height="100" width="100" src="http://th08.deviantart.net/fs70/PRE/i/2011/111/e/5/typhlosion_by_sharkjaw-d3ehtqh.jpg"><img src="http://i.imgur.com/eDS32pU.gif"><img src="http://i.imgur.com/UTfUkBW.png"><br><b>Ace: <font color="red"> Typhlosion</font></b><br>If you can\'t handle the heat, get out the kitchen!');
 	},
 	
 	akeino: 'teafany',
@@ -1405,6 +1405,11 @@ var commands = exports.commands = {
 	princesshigh: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img height="125" width="78" src="http://th06.deviantart.net/fs45/PRE/i/2009/066/d/6/Gardevoir_by_Onpu_chan.jpg"><img width="400" height="80" src="http://i.imgur.com/6wcoVZk.gif"><img height="125" width="78" src="http://fc01.deviantart.net/fs71/i/2012/267/9/c/50_pokemon__16_gardevoir_by_megbeth-d5fsg1a.png"><br><b>Ace: <font color="green"><blink>Gardevior</blink><br></font><b><font color="red">Never</font><font color="#FF7E00"> make</font><font color="orange"> war</font><font color="green"> with</font><font color="blue"> someone</font><font color="#8F00FF">, always</font><font color="red"> make</font><font color="#FF7E00"> peace</font><font color="orange"> and</font><font color="green"> love</font>');
+	},
+	
+	jordanmooo: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height="150" width="90" src="http://i.imgur.com/iy2hGg1.png"><img src="http://i.imgur.com/0Tz3gUZ.gif"><img height="150" width="90" src="http://fc09.deviantart.net/fs71/f/2010/310/c/9/genosect_by_pokedex_himori-d32apkw.png"><br><b>Ace: <font color="purple"><blink>Genesect</blink><br></font><b><font color="green">TIME FOR TUBBY BYE BYE</font></font></center>');
 	},
 
 	alee: 'alee93',
