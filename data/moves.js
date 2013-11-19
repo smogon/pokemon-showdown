@@ -1785,6 +1785,7 @@ exports.BattleMovedex = {
 		name: "Confide",
 		pp: 20,
 		priority: 0,
+		isNotProtectable: true,
 		boosts: {
 			spa: -1
 		},
