@@ -18,33 +18,63 @@ if (cluster.isMaster) {
 
 	var workers = exports.workers = {};
 
+	var spawnWorker = exports.spawnWorker = function() {
+		var worker = cluster.fork();
+		var id = worker.id;
+		workers[id] = worker;
+		worker.on('message', function(data) {
+			// console.log('master received: '+data);
+			switch (data.charAt(0)) {
+			case '*': // *socketid, ip
+				// connect
+				var nlPos = data.indexOf('\n');
+				Users.socketConnect(worker, id, data.substr(1, nlPos-1), data.substr(nlPos+1));
+				break;
+
+			case '!': // !socketid
+				// disconnect
+				Users.socketDisconnect(worker, id, data.substr(1));
+				break;
+
+			case '<': // <socketid, message
+				// message
+				var nlPos = data.indexOf('\n');
+				Users.socketReceive(worker, id, data.substr(1, nlPos-1), data.substr(nlPos+1));
+				break;
+			}
+		});
+	};
+
 	var workerCount = config.workers || 1;
 	for (var i=0; i<workerCount; i++) {
-		var worker = workers[i] = cluster.fork();
-		(function(worker, i) {
-			worker.on('message', function(data) {
-				// console.log('master received: '+data);
-				switch (data.charAt(0)) {
-				case '*': // *socketid, ip
-					// connect
-					var nlPos = data.indexOf('\n');
-					Users.socketConnect(worker, i, data.substr(1, nlPos-1), data.substr(nlPos+1));
-					break;
-
-				case '!': // !socketid
-					// disconnect
-					Users.socketDisconnect(worker, i, data.substr(1));
-					break;
-
-				case '<': // <socketid, message
-					// message
-					var nlPos = data.indexOf('\n');
-					Users.socketReceive(worker, i, data.substr(1, nlPos-1), data.substr(nlPos+1));
-					break;
-				}
-			});
-		})(worker, i);
+		spawnWorker();
 	}
+
+	var killWorker = exports.killWorker = function(worker) {
+		var idd = worker.id+'-';
+		var count = 0;
+		for (var connectionid in Users.connections) {
+			if (connectionid.substr(idd.length) === idd) {
+				var connection = Users.connections[connectionid];
+				Users.socketDisconnect(worker, worker.id, connection.socketid);
+				count++;
+			}
+		}
+		worker.kill();
+		delete workers[worker.id];
+		return count;
+	};
+
+	var killPid = exports.killPid = function(pid) {
+		pid = ''+pid;
+		for (var id in workers) {
+			var worker = workers[id];
+			if (pid === ''+worker.process.pid) {
+				return killWorker(worker);
+			}
+		}
+		return false;
+	};
 
 	exports.socketSend = function(worker, socketid, message) {
 		worker.send('>'+socketid+'\n'+message);
