@@ -1,6 +1,8 @@
 exports.BattleAbilities = {
 	"frisk": {
 		inherit: true,
+		desc: "When this Pokemon enters the field, it identifies the opponent's held item; in double battles, the held item of an unrevealed, randomly selected opponent is identified.",
+		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
 			if (target && target.item) {
