@@ -4528,12 +4528,12 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
-			if (!target.hasType('Grass')) {
-				if (target.types.length < 3) target.types.push('Grass');
-				else target.types[2] = 'Grass';
-				this.add('-start', target, 'typechange', target.types.join(', '));
+			if (!target.hasType("Grass")) {
+				if (target.types.length < 3) target.types.push("Grass");
+				else target.types[2] = "Grass";
+				this.add("-start", target, "typechange", target.types.join(", "), "[from] move: Forest's Curse");
 			} else {
-				this.add('-fail', target);
+				this.add("-fail", target);
 			}
 		},
 		secondary: false,
@@ -13901,7 +13901,7 @@ exports.BattleMovedex = {
 			if (!target.hasType('Ghost')) {
 				if (target.types.length < 3) target.types.push('Ghost');
 				else target.types[2] = 'Ghost';
-				this.add('-start', target, 'typechange', target.types.join(', '));
+				this.add('-start', target, 'typechange', target.types.join(', '), '[from] move: Trick-or-Treat');
 			} else {
 				this.add('-fail', target);
 			}
