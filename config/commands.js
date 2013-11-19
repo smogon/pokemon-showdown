@@ -1133,7 +1133,7 @@ var commands = exports.commands = {
 		'/replace [username], [username] - Replaces user in a tournament with the second user');
     },
 
-	//TRAINER CARDS - Brittle, please try and keep them neat :)
+	//TRAINER CARDS - Brittle, please try and keep them neat :) hi cosy
 	bigblackhoe: 'lenora',
 	oprah: 'lenora',
 	sass: 'lenora',
@@ -1148,6 +1148,13 @@ var commands = exports.commands = {
     brittlewind: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
+    },
+    
+    
+    bibliaskael: 'kael',
+    kael: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/yukiko_right_real_final.gif"><img src="http://i1141.photobucket.com/albums/n587/diebenacht/Biblia%20and%20Showdown/cooltext1288802061.png"><img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/naoto_left_final_50.gif"><br /><center><b>Ace:</b> Latios</center><center><b>Catchphrase:</b> My tofu...</center>')
     },
    
 
