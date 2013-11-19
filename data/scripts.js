@@ -1625,6 +1625,7 @@ exports.BattleScripts = {
 		var team = [];
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(seasonalPokemonList[i], i);
+			if (seasonalPokemonList[i] === 'talonflame') set.level = 74;
 			team.push(set);
 		}
 		return team;
