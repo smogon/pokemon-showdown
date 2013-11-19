@@ -4528,8 +4528,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
-			this.add('-start', target, 'typechange', 'Grass');
-			target.types = ['Grass'];
+			if (!target.hasType('Grass')) {
+				if (target.types.length < 3) target.types.push('Grass');
+				else target.types[2] = 'Grass';
+				this.add('-start', target, 'typechange', target.types.join(', '));
+			} else {
+				this.add('-fail', target);
+			}
 		},
 		secondary: false,
 		target: "normal",
@@ -13893,8 +13898,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
-			this.add('-start', target, 'typechange', 'Ghost');
-			target.types = ['Ghost'];
+			if (!target.hasType('Ghost')) {
+				if (target.types.length < 3) target.types.push('Ghost');
+				else target.types[2] = 'Ghost';
+				this.add('-start', target, 'typechange', target.types.join(', '));
+			} else {
+				this.add('-fail', target);
+			}
 		},
 		secondary: false,
 		target: "normal",
