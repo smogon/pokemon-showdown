@@ -87,7 +87,7 @@ function searchUser(name) {
  * Routing
  *********************************************************/
 
-var connections = {};
+var connections = exports.connections = {};
 
 function socketConnect(worker, workerid, socketid, ip) {
 	var id = ''+workerid+'-'+socketid;
