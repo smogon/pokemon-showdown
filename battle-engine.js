@@ -744,8 +744,9 @@ var BattlePokemon = (function() {
 				if (this.hasType(type[i])) return true;
 			}
 		} else {
-			if (this.types[0] === type) return true;
-			if (this.types[1] === type) return true;
+			for (var i=0; i<this.types.length; i++) {
+				if (this.types[i] === type) return true;
+			}
 		}
 		return false;
 	};
