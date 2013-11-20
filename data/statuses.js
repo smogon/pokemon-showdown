@@ -153,7 +153,10 @@ exports.BattleStatuses = {
 				delete pokemon.volatiles['trapped'];
 				return;
 			}
-			pokemon.trapped = true;
+			pokemon.tryTrap();
+		},
+		onStart: function(target) {
+			this.add('-activate', target, 'trapped')
 		}
 	},
 	partiallytrapped: {
@@ -181,7 +184,7 @@ exports.BattleStatuses = {
 			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
 		},
 		onModifyPokemon: function(pokemon) {
-			pokemon.trapped = true;
+			pokemon.tryTrap();
 		}
 	},
 	lockedmove: {

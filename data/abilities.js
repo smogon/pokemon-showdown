@@ -156,7 +156,7 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents foes from switching out normally unless they have immunity to Ground.",
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.runImmunity('Ground', false)) {
-				pokemon.trapped = true;
+				pokemon.tryTrap();
 			}
 		},
 		onFoeMaybeTrapPokemon: function(pokemon) {
@@ -172,17 +172,9 @@ exports.BattleAbilities = {
 	"aromaveil": {
 		desc: "Protects allies from attacks that limit their move choices.",
 		shortDesc: "Protects allies from attacks that limit their move choices.",
-		onStart: function(pokemon) {
-			pokemon.side.addSideCondition('aromaveil');
-		},
-		onSwitchOut: function(pokemon) {
-			pokemon.side.removeSideCondition('aromaveil');
-		},
-		effect: {
-			onTryHit: function(target, source, move) {
-				if (move && move.id in {disable:1, encore:1, healblock:1, imprison:1, taunt:1, torment:1}) {
-					return false;
-				}
+		onAllyTryHit: function(target, source, move) {
+			if (move && move.id in {disable:1, encore:1, healblock:1, imprison:1, taunt:1, torment:1}) {
+				return false;
 			}
 		},
 		id: "aromaveil",
@@ -887,8 +879,8 @@ exports.BattleAbilities = {
 		num: 132
 	},
 	"frisk": {
-		desc: "When this Pokemon enters the field, it identifies the opponent's held item; in double battles, the held item of an unrevealed, randomly selected opponent is identified.",
-		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
+		desc: "When this Pokemon enters the field, it identifies all the opponent's held items.",
+		shortDesc: "On switch-in, this Pokemon identifies the foe's held items.",
 		onStart: function(pokemon) {
 			var foeactive = pokemon.side.foe.active;
 			for (var i=0; i<foeactive.length; i++) {
@@ -1410,21 +1402,19 @@ exports.BattleAbilities = {
 	"magician": {
 		desc: "If this Pokemon is not holding an item, it steals the held item of a target it hits with a move.",
 		shortDesc: "This Pokemon steals the held item of a target it hits with a move.",
-		onFoeAfterDamage: function(damage, target, source, move) {
-			if (source && source !== target && move) {
-				if (source.item) {
-					return;
-				}
-				var yourItem = target.takeItem(source);
-				if (!yourItem) {
-					return;
-				}
-				if (!source.setItem(yourItem)) {
-					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
-					return;
-				}
-				this.add('-item', source, yourItem, '[from] Magician');
+		onHit: function(target, source) {
+			if (source.item) {
+				return;
 			}
+			var yourItem = target.takeItem(source);
+			if (!yourItem) {
+				return;
+			}
+			if (!source.setItem(yourItem)) {
+				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+				return;
+			}
+			this.add('-item', source, yourItem, '[from] ability: Magician', '[of] '+target);
 		},
 		id: "magician",
 		name: "Magician",
@@ -1504,7 +1494,7 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents Steel-type foes from switching out normally.",
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.hasType('Steel')) {
-				pokemon.trapped = true;
+				pokemon.tryTrap();
 			}
 		},
 		onFoeMaybeTrapPokemon: function(pokemon) {
@@ -2296,7 +2286,7 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents foes from switching out normally unless they also have this Ability.",
 		onFoeModifyPokemon: function(pokemon) {
 			if (pokemon.ability !== 'shadowtag') {
-				pokemon.trapped = true;
+				pokemon.tryTrap();
 			}
 		},
 		onFoeMaybeTrapPokemon: function(pokemon) {
@@ -2432,7 +2422,7 @@ exports.BattleAbilities = {
 	},
 	"sniper": {
 		desc: "When this Pokemon lands a Critical Hit, the damage is increased to another 1.5x.",
-		shortDesc: "If this Pokemon strikes with a critical hit, the damage is 2.25x instead of 1.5x.",
+		shortDesc: "If this Pokemon strikes with a critical hit, the damage is increased by 50%",
 		onModifyDamage: function(damage, source, target, move) {
 			if (move.crit) {
 				this.debug('Sniper boost');
@@ -2731,24 +2721,16 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents allies from being put to Sleep.",
 		id: "sweetveil",
 		name: "Sweet Veil",
-		onStart: function(pokemon) {
-			pokemon.side.addSideCondition('sweetveil');
+		onAllySetStatus: function(status, target, source, effect) {
+			if (status.id === 'slp') {
+				this.debug('Sweet Veil interrupts sleep');
+				return false;
+			}
 		},
-		onSwitchOut: function(pokemon) {
-			pokemon.side.removeSideCondition('sweetveil');
-		},
-		effect: {
-			onSetStatus: function(status, target, source, effect) {
-				if (status.id === 'slp') {
-					this.debug('Sweet Veil interrupts sleep');
-					return false;
-				}
-			},
-			onTryHit: function(target, source, move) {
-				if (move && move.id === 'yawn') {
-					this.debug('Sweet Veil blocking yawn');
-					return false;
-				}
+		onAllyTryHit: function(target, source, move) {
+			if (move && move.id === 'yawn') {
+				this.debug('Sweet Veil blocking yawn');
+				return false;
 			}
 		},
 		rating: 0,
@@ -2944,13 +2926,13 @@ exports.BattleAbilities = {
 		gen: 6
 	},
 	"trace": {
-		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability (except Multitype). This ability remains with this Pokemon until it leaves the field.",
+		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability. This ability remains with this Pokemon until it leaves the field.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onUpdate: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
 			if (!target) return;
 			var ability = this.getAbility(target.ability);
-			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, zenmode:1};
+			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
 			if (bannedAbilities[target.ability]) {
 				return;
 			}

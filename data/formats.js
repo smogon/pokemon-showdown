@@ -31,9 +31,39 @@ exports.BattleFormats = {
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Moody']
 	},
+	standardgbu: {
+		effectType: 'Banlist',
+		ruleset: ['Species Clause', 'Item Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew',
+			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
+			'Lugia',
+			'Ho-Oh',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Phione',
+			'Manaphy',
+			'Darkrai',
+			'Shaymin', 'Shaymin-Sky',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Victini',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem', 'Kyurem-Black', 'Kyurem-White',
+			'Keldeo', 'Keldeo-Resolute',
+			'Meloetta',
+			'Genesect',
+			'Xerneas',
+			'Yveltal',
+			'Zygarde'
+		]
+	},
 	pokemon: {
 		effectType: 'Banlist',
-		validateSet: function(set, format) {
+		validateSet: function(set, format, isNonstandard) {
 			var item = this.getItem(set.item);
 			var template = this.getTemplate(set.species);
 			var problems = [];
@@ -41,38 +71,42 @@ exports.BattleFormats = {
 			if (set.species === set.name) delete set.name;
 			if (template.gen > this.gen) {
 				problems.push(set.species+' does not exist in gen '+this.gen+'.');
-			} else if (template.isNonstandard) {
-				problems.push(set.species+' is not a real Pokemon.');
 			}
 			var ability = {};
 			if (set.ability) {
 				ability = this.getAbility(set.ability);
 				if (ability.gen > this.gen) {
 					problems.push(ability.name+' does not exist in gen '+this.gen+'.');
-				} else if (ability.isNonstandard) {
-					problems.push(ability.name+' is not a real ability.');
 				}
 			}
 			if (set.moves) for (var i=0; i<set.moves.length; i++) {
 				var move = this.getMove(set.moves[i]);
 				if (move.gen > this.gen) {
 					problems.push(move.name+' does not exist in gen '+this.gen+'.');
-				} else if (move.isNonstandard) {
+				} else if (!isNonstandard && move.isNonstandard) {
 					problems.push(move.name+' is not a real move.');
 				}
 			}
-			if (item) {
-				if (item.gen > this.gen) {
-					problems.push(item.name+' does not exist in gen '+this.gen+'.');
-				} else if (item.isNonstandard) {
-					problems.push(item.name + ' is not a real item.');
-				}
+			if (item.gen > this.gen) {
+				problems.push(item.name+' does not exist in gen '+this.gen+'.');
 			}
 			if (set.moves && set.moves.length > 4) {
 				problems.push((set.name||set.species) + ' has more than four moves.');
 			}
 			if (set.level && set.level > 100) {
 				problems.push((set.name||set.species) + ' is higher than level 100.');
+			}
+
+			if (!isNonstandard) {
+				if (template.isNonstandard) {
+					problems.push(set.species+' is not a real Pokemon.');
+				}
+				if (ability.isNonstandard) {
+					problems.push(ability.name+' is not a real ability.');
+				}
+				if (item.isNonstandard) {
+					problems.push(item.name + ' is not a real item.');
+				}
 			}
 
 			// ----------- legality line ------------------------------------------
@@ -97,7 +131,15 @@ exports.BattleFormats = {
 				if (template.isMega) {
 					// Mega evolutions evolve in-battle
 					set.species = template.baseSpecies;
-					set.ability = Tools.getTemplate(set.species).abilities['0'];
+					var baseAbilities = Tools.getTemplate(set.species).abilities;
+					var niceAbility = false;
+					for (var i in baseAbilities) {
+						if (baseAbilities[i] === set.ability) {
+							niceAbility = true;
+							break;
+						}
+					}
+					if (!niceAbility) set.ability = baseAbilities['0'];
 				}
 				if (item.name !== template.requiredItem) {
 					problems.push((set.name||set.species) + ' needs to hold '+template.requiredItem+'.');
@@ -149,22 +191,7 @@ exports.BattleFormats = {
 	cappokemon: {
 		effectType: 'Rule',
 		validateSet: function(set, format) {
-			// don't return
-			this.getEffect('Pokemon').validateSet.call(this, set, format);
-
-			// limit one of each move
-			var moves = [];
-			if (set.moves) {
-				var hasMove = {};
-				for (var i=0; i<set.moves.length; i++) {
-					var move = this.getMove(set.moves[i]);
-					var moveid = move.id;
-					if (hasMove[moveid]) continue;
-					hasMove[moveid] = true;
-					moves.push(set.moves[i]);
-				}
-			}
-			set.moves = moves;
+			return this.getEffect('Pokemon').validateSet.call(this, set, format, true);
 		}
 	},
 	abilityexchangepokemon: {

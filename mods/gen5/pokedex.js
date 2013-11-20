@@ -71,6 +71,18 @@ exports.BattlePokedex = {
 		inherit: true,
 		types:["Psychic"]
 	},
+	articuno: {
+		inherit: true,
+		abilities:{0:"Pressure"}
+	},
+	zapdos: {
+		inherit: true,
+		abilities:{0:"Pressure"}
+	},
+	moltres: {
+		inherit: true,
+		abilities:{0:"Pressure"}
+	},
 	igglybuff: {
 		inherit: true,
 		types:["Normal"],
@@ -116,6 +128,18 @@ exports.BattlePokedex = {
 	granbull: {
 		inherit: true,
 		types:["Normal"]
+	},
+	raikou: {
+		inherit: true,
+		abilities:{0:"Pressure"}
+	},
+	entei: {
+		inherit: true,
+		abilities:{0:"Pressure"}
+	},
+	suicune: {
+		inherit: true,
+		abilities:{0:"Pressure"}
 	},
 	beautifly: {
 		inherit: true,
@@ -168,6 +192,18 @@ exports.BattlePokedex = {
 	dusclops: {
 		inherit: true,
 		abilities: {0:"Pressure"}
+	},
+	regirock: {
+		inherit: true,
+		abilities: {0:"Clear Body"}
+	},
+	regice: {
+		inherit: true,
+		abilities: {0:"Clear Body"}
+	},
+	registeel: {
+		inherit: true,
+		abilities: {0:"Clear Body"}
 	},
 	starly: {
 		inherit: true,
@@ -226,6 +262,10 @@ exports.BattlePokedex = {
 		baseStats: {hp:60,atk:90,def:89,spa:55,spd:69,spe:112},
 		abilities: {0:"Poison Point",1:"Swarm",H:"Quick Feet"}
 	},
+	cottonee: {
+		inherit: true,
+		types:["Grass"]
+	},
 	whimsicott: {
 		inherit: true,
 		types:["Grass"]
@@ -236,7 +276,7 @@ exports.BattlePokedex = {
 	},
 	gothita: {
 		inherit: true,
-		abilities: {0:"Frisk",H:"Shadow Tag"}
+		abilities: {0:"Frisk"}
 	},
 	gothorita: {
 		inherit: true,
@@ -254,16 +294,32 @@ exports.BattlePokedex = {
 		inherit: true,
 		abilities: {0:"Iron Barbs"}
 	},
+	klink: {
+		inherit: true,
+		abilities: {0:"Plus",1:"Minus"}
+	},
 	litwick: {
 		inherit: true,
-		abilities: {0:"Flash Fire",1:"Flame Body",H:"Shadow Tag"}
+		abilities: {0:"Flash Fire",1:"Flame Body"}
 	},
 	lampent: {
 		inherit: true,
-		abilities: {0:"Flash Fire",1:"Flame Body",H:"Shadow Tag"}
+		abilities: {0:"Flash Fire",1:"Flame Body"}
 	},
 	chandelure: {
 		inherit: true,
-		abilities: {0:"Flash Fire",1:"Flame Body",H:"Shadow Tag"}
+		abilities: {0:"Flash Fire",1:"Flame Body"}
+	},
+	rufflet: {
+		inherit: true,
+		abilities: {0:"Keen Eye",1:"Sheer Force"}
+	},
+	larvesta: {
+		inherit: true,
+		abilities: {0:"Flame Body"}
+	},
+	volcarona: {
+		inherit: true,
+		abilities: {0:"Flame Body"}
 	}
 };

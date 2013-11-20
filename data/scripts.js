@@ -1115,7 +1115,7 @@ exports.BattleScripts = {
 				// Move post-processing:
 				if (damagingMoves.length===0) {
 					// Have a 60% chance of rejecting one move at random:
-					if (Math.random()*1.66>1) moves.splice(Math.floor(Math.random()*moves.length),1);
+					if (Math.random()*1.66<1) moves.splice(Math.floor(Math.random()*moves.length),1);
 				} else if (damagingMoves.length===1) {
 					// Night Shade, Seismic Toss, etc. don't count:
 					if (!damagingMoves[0].damage) {
@@ -1625,6 +1625,7 @@ exports.BattleScripts = {
 		var team = [];
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(seasonalPokemonList[i], i);
+			if (seasonalPokemonList[i] === 'talonflame') set.level = 74;
 			team.push(set);
 		}
 		return team;

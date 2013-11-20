@@ -182,7 +182,7 @@ for a full list of message types.
 > `http://play.pokemonshowdown.com/action.php?act=upkeep&challengekeyid=KEYID&challenge=CHALLENGE`
 >
 > Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
-> with the data `act=login&user=USERNAME&pass=PASSWORD&challengekeyid=KEYID&challenge=CHALLENGE`
+> with the data `act=login&name=USERNAME&pass=PASSWORD&challengekeyid=KEYID&challenge=CHALLENGE`
 >
 > `USERNAME` is your username and `PASSWORD` is your password, and `KEYID` and
 > `CHALLENGE` are the values you got from `|challstr|`. (Also feel free to make
