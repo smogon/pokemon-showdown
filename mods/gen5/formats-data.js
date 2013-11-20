@@ -3274,7 +3274,7 @@ exports.BattleFormatsData = {
 	snivy: {
 		viableMoves: {"leafstorm":1,"hiddenpowerfire":1,"substitute":1,"leechseed":1,"hiddenpowerice":1,"gigadrain":1},
 		eventPokemon: [
-			{"generation":5,"level":5,"gender":"M","nature":"Hardy","isHidden":false,"moves":["growth","synthesis","energyball","aromatherapy"],"pokeball":"cherishball"}
+			{"generation":5,"level":5,"gender":"M","nature":"Hardy","moves":["growth","synthesis","energyball","aromatherapy"],"pokeball":"cherishball"}
 		],
 		tier: "LC"
 	},
@@ -3285,7 +3285,7 @@ exports.BattleFormatsData = {
 	serperior: {
 		viableMoves: {"leafstorm":1,"hiddenpowerfire":1,"substitute":1,"leechseed":1,"dragonpulse":1,"gigadrain":1},
 		eventPokemon: [
-			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["leafstorm","substitute","gigadrain","leechseed"],"pokeball":"cherishball"}
+			{"generation":5,"level":100,"gender":"M","moves":["leafstorm","substitute","gigadrain","leechseed"],"pokeball":"cherishball"}
 		],
 		tier: "NU"
 	},
@@ -3300,7 +3300,7 @@ exports.BattleFormatsData = {
 	emboar: {
 		viableMoves: {"flareblitz":1,"superpower":1,"flamecharge":1,"wildcharge":1,"headsmash":1,"earthquake":1,"fireblast":1},
 		eventPokemon: [
-			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["flareblitz","hammerarm","wildcharge","headsmash"],"pokeball":"cherishball"}
+			{"generation":5,"level":100,"gender":"M","moves":["flareblitz","hammerarm","wildcharge","headsmash"],"pokeball":"cherishball"}
 		],
 		tier: "RU"
 	},
@@ -3315,7 +3315,7 @@ exports.BattleFormatsData = {
 	samurott: {
 		viableMoves: {"swordsdance":1,"aquajet":1,"waterfall":1,"megahorn":1,"superpower":1},
 		eventPokemon: [
-			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["hydropump","icebeam","megahorn","superpower"],"pokeball":"cherishball"}
+			{"generation":5,"level":100,"gender":"M","moves":["hydropump","icebeam","megahorn","superpower"],"pokeball":"cherishball"}
 		],
 		tier: "NU"
 	},
@@ -3807,7 +3807,7 @@ exports.BattleFormatsData = {
 	chandelure: {
 		viableMoves: {"shadowball":1,"energyball":1,"fireblast":1,"overheat":1,"hiddenpowerfighting":1,"hiddenpowerground":1,"hiddenpowerrock":1,"trick":1,"substitute":1,"painsplit":1},
 		eventPokemon: [
-			{"generation":5,"level":50,"gender":"F","nature":"Modest","isHidden":false,"abilities":["flashfire"],"moves":["heatwave","shadowball","energyball","psychic"],"pokeball":"cherishball"}
+			{"generation":5,"level":50,"gender":"F","nature":"Modest","abilities":["flashfire"],"moves":["heatwave","shadowball","energyball","psychic"],"pokeball":"cherishball"}
 		],
 		tier: "UU"
 	},
@@ -3955,8 +3955,8 @@ exports.BattleFormatsData = {
 	volcarona: {
 		viableMoves: {"quiverdance":1,"fierydance":1,"fireblast":1,"bugbuzz":1,"roost":1,"gigadrain":1},
 		eventPokemon: [
-			{"generation":5,"level":35,"isHidden":false,"moves":["stringshot","leechlife","gust","firespin"]},
-			{"generation":5,"level":77,"gender":"M","nature":"Calm","isHidden":false,"moves":["bugbuzz","overheat","hyperbeam","quiverdance"],"pokeball":"cherishball"}
+			{"generation":5,"level":35,"moves":["stringshot","leechlife","gust","firespin"]},
+			{"generation":5,"level":77,"gender":"M","nature":"Calm","moves":["bugbuzz","overheat","hyperbeam","quiverdance"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
 	},
