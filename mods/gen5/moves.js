@@ -331,6 +331,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60
 	},
+	magicroom: {
+		inherit: true,
+		priority: 0
+	},
 	meteormash: {
 		inherit: true,
 		accuracy: 85,
@@ -580,5 +584,9 @@ exports.BattleMovedex = {
 	willowisp: {
 		inherit: true,
 		accuracy: 75
+	},
+	wonderroom: {
+		inherit: true,
+		priority: -7
 	}
 };
