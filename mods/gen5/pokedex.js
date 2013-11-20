@@ -83,42 +83,6 @@ exports.BattlePokedex = {
 		inherit: true,
 		abilities:{0:"Pressure"}
 	},
-	chikorita: {
-		inherit: true,
-		abilities:{0:"Overgrow"}
-	},
-	bayleef: {
-		inherit: true,
-		abilities:{0:"Overgrow"}
-	},
-	meganium: {
-		inherit: true,
-		abilities:{0:"Overgrow"}
-	},
-	cyndaquil: {
-		inherit: true,
-		abilities:{0:"Blaze"}
-	},
-	quilava: {
-		inherit: true,
-		abilities:{0:"Blaze"}
-	},
-	typhlosion: {
-		inherit: true,
-		abilities:{0:"Blaze"}
-	},
-	totodile: {
-		inherit: true,
-		abilities:{0:"Torrent"}
-	},
-	croconaw: {
-		inherit: true,
-		abilities:{0:"Torrent"}
-	},
-	feraligatr: {
-		inherit: true,
-		abilities:{0:"Torrent"}
-	},
 	igglybuff: {
 		inherit: true,
 		types:["Normal"],
@@ -264,46 +228,6 @@ exports.BattlePokedex = {
 	dusknoir: {
 		inherit: true,
 		abilities: {0:"Pressure"}
-	},
-	heatran: {
-		inherit: true,
-		abilities: {0:"Flash Fire"}
-	},
-	snivy: {
-		inherit: true,
-		abilities: {0:"Overgrow"}
-	},
-	servine: {
-		inherit: true,
-		abilities: {0:"Overgrow"}
-	},
-	serperior: {
-		inherit: true,
-		abilities: {0:"Overgrow"}
-	},
-	tepig: {
-		inherit: true,
-		abilities: {0:"Blaze"}
-	},
-	pignite: {
-		inherit: true,
-		abilities: {0:"Blaze"}
-	},
-	emboar: {
-		inherit: true,
-		abilities: {0:"Blaze"}
-	},
-	oshawott: {
-		inherit: true,
-		abilities: {0:"Torrent"}
-	},
-	dewott: {
-		inherit: true,
-		abilities: {0:"Torrent"}
-	},
-	samurott: {
-		inherit: true,
-		abilities: {0:"Torrent"}
 	},
 	stoutland: {
 		inherit: true,
