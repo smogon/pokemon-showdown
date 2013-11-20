@@ -4531,7 +4531,7 @@ exports.BattleMovedex = {
 		onHit: function(target) {
 			if (target.hasType("Grass")) return false;
 			target.types = target.types.slice(0,2).concat(["Grass"]);
-			this.add("-start", target, "typechange", target.types.join(", "), "[from] move: Forest's Curse");
+			this.add("-start", target, "typechange", target.types.join("/"), "[from] move: Forest's Curse");
 		},
 		secondary: false,
 		target: "normal",
@@ -10345,7 +10345,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function(target, source) {
-			this.add('-start', source, 'typechange', target.types.join(', '), '[from] move: Reflect Type', '[of] '+target);
+			this.add('-start', source, 'typechange', target.types.join('/'), '[from] move: Reflect Type', '[of] '+target);
 			source.types = target.types;
 		},
 		secondary: false,
@@ -13898,7 +13898,7 @@ exports.BattleMovedex = {
 		onHit: function(target) {
 			if (target.hasType('Ghost')) return false;
 			target.types = target.types.slice(0,2).concat(['Ghost']);
-			this.add('-start', target, 'typechange', target.types.join(', '), '[from] move: Trick-or-Treat');
+			this.add('-start', target, 'typechange', target.types.join('/'), '[from] move: Trick-or-Treat');
 		},
 		secondary: false,
 		target: "normal",
