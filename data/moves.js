@@ -5148,7 +5148,8 @@ exports.BattleMovedex = {
 			onStart: function(target, source) {
 				this.add('-fieldstart', 'move: Grassy Terrain');
 			},
-			onResidualOrder: 7,
+			onResidualOrder: 5,
+			onResidualSubOrder: 2,
 			onResidual: function(battle) {
 				this.debug('onResidual battle');
 				for (var s in battle.sides) {
