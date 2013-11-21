@@ -981,10 +981,10 @@ module.exports = (function () {
 					isHidden = false;
 				}
 			}
-			if (isHidden && template.gender && lsetData.sourcesBefore < 5) {
+			if (isHidden && lsetData.sourcesBefore < 5) {
 				if (!lsetData.sources) {
 					problems.push(name+" has a hidden ability - it can't have moves only learned before gen 5.");
-				} else {
+				} else if (template.gender) {
 					var compatibleSource = false;
 					for (var i=0,len=lsetData.sources.length; i<len; i++) {
 						if (lsetData.sources[i].charAt(1) === 'E' || (lsetData.sources[i].substr(0,2) === '5D' && set.level >= 10)) {
