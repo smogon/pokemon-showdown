@@ -2722,8 +2722,13 @@ var Battle = (function() {
 		}
 		basePower = clampIntRange(basePower, 1);
 
-		move.critRatio = clampIntRange(move.critRatio, 0, 5);
-		var critMult = [0, 16, 8, 4, 3, 2];
+		if (this.gen < 6) {
+			move.critRatio = clampIntRange(move.critRatio, 0, 4);
+			var critMult = [0, 16, 8, 2, 1];
+		} else {
+			move.critRatio = clampIntRange(move.critRatio, 0, 5);
+			var critMult = [0, 16, 8, 4, 3, 2];
+		}
 
 		move.crit = move.willCrit || false;
 		if (move.willCrit === undefined) {
