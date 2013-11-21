@@ -453,21 +453,33 @@ exports.BattleFormats = {
 			return ["Your team must share a type."];
 		}
 	},
+	megaonly: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule', 'Mega Pokemon only');
+		},
+		validateTeam: function(team, format) {
+			for (var i=0; i<team.length; i++) {
+				var formLetter = this.getTemplate(team[i].species).formeLetter;
+				if (formLetter !== 'M') return ["All Pokemon on your team must be mega Pokemon."];
+			}
+		}
+	},
 	sashclause: {
-                effectType: 'Rule',
-                onStart: function() {
-                        this.add('rule', 'Sash Clause: Limit one Focus Sash');
-                },
-                validateTeam: function(team, format) {
-                        var hasFocusSash = 0;
-                        for (var i=0; i<team.length; i++) { // Check each pokemon
-                                var item = toId(team[i].item); // Get it's item
-                                if (item === 'focussash') hasFocusSash++; // If it's an item add 1 to the counter
-                                if (hasFocusSash > 1) { // If the counter is more than 1 return the error
-                                        return ["You are limited to only one Focus Sash by Sash Clause."];
-								}				
-							}
-					}
+        effectType: 'Rule',
+        onStart: function() {
+            this.add('rule', 'Sash Clause: Limit one Focus Sash');
+        },
+        validateTeam: function(team, format) {
+            var hasFocusSash = 0;
+            for (var i=0; i<team.length; i++) { // Check each pokemon
+                var item = toId(team[i].item); // Get it's item
+                if (item === 'focussash') hasFocusSash++; // If it's an item add 1 to the counter
+                if (hasFocusSash > 1) { // If the counter is more than 1 return the error
+                    return ["You are limited to only one Focus Sash by Sash Clause."];
+				}				
+			}
+		}
 	},
 	pointsystem: {
 		name: 'Point System',

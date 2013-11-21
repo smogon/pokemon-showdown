@@ -98,6 +98,13 @@ exports.Formats = [
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther']
 	},
 	{
+		name: "Mega Battles (beta)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'megaonly', 'Team Preview'],
+		banlist: []
+	},
+	{
 		name: "Custom Game",
 		section: "XY Singles",
 

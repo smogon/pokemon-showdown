@@ -572,7 +572,7 @@ var commands = exports.commands = {
 			}
 		}
 		if (target[0] === 'room') {
-			price = 80;
+			price = 100;
 			if (price <= user.money) {
 				user.money = user.money - price;
 				this.sendReply('You have purchased a chat room. You need to message an Admin so that the room can be made.');
@@ -583,7 +583,7 @@ var commands = exports.commands = {
 			}
 		}
 		if (target2 === 'trainer') {
-			price = 30;
+			price = 40;
 			if (price <= user.money) {
 				user.money = user.money - price;
 				this.sendReply('You have purchased a trainer card. You need to message an Admin capable of adding this (Frost Deverloper or BrittleWind).');
@@ -653,7 +653,7 @@ var commands = exports.commands = {
 			'<tr><td>Custom</td><td>Buys a custom avatar to be applied to your name (you supply)</td><td>20</td></tr>' +
 			'<tr><td>Animated</td><td>Buys an animated avatar to be applied to your name (you supply)</td><td>35</td></tr>' +
 			'<tr><td>Room</td><td>Buys a chatroom for you to own (within reason, can be refused)</td><td>100</td></tr>' +
-			'<tr><td>Trainer</td><td>Buys a trainer card which shows information through a command such as /brittlewind (note: third image costs 10 bucks extra, ask for more details)</td><td>40</td></tr>' +
+			'<tr><td>Trainer</td><td>Buys a trainer card which shows information through a command such as /brittlewind</td><td>40</td></tr>' +
 			'<tr><td>Fix</td><td>Buys the ability to alter your current custom avatar or trainer card (don\'t buy if you have neither)!</td><td>10</td></tr>' +
 			'<tr><td>Declare</td><td>You get the ability to get two declares from an Admin in lobby. This can be used for league advertisement (not server)</td><td>25</td></tr>' +
 			'</table><br />To buy an item from the shop, use /buy [command]. <br />Also do /moneycommands to view money based commands.</center>');
@@ -1548,7 +1548,7 @@ var commands = exports.commands = {
 	rkick: 'roomkick',
 	kick: 'roomkick',
 	roomkick: function(target, room, user){
-		if(!room.auth) return this.sendReply('/rkick is designed for rooms with their own auth.');
+		if(!room.auth && room.id !== "staff") return this.sendReply('/rkick is designed for rooms with their own auth.');
 		if(!this.can('roommod', null, room)) return this.sendReply('/rkick - Access Denied.');
 		var targetUser = Users.get(target);
 		if(targetUser == undefined) return this.sendReply('User not found.');
