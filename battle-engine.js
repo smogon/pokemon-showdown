@@ -2722,7 +2722,7 @@ var Battle = (function() {
 		}
 		basePower = clampIntRange(basePower, 1);
 
-		if (this.gen < 6) {
+		if (this.gen <= 5) {
 			move.critRatio = clampIntRange(move.critRatio, 0, 4);
 			var critMult = [0, 16, 8, 2, 1];
 		} else {
