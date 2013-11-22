@@ -884,7 +884,8 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			var foeactive = pokemon.side.foe.active;
 			for (var i=0; i<foeactive.length; i++) {
-				if (foeactive[i] && foeactive[i].item) {
+				if (!foeactive[i] || foeactive[i].fainted) continue;
+				if (foeactive[i].item) {
 					this.add('-item', foeactive[i], foeactive[i].getItem().name, '[from] ability: Frisk', '[of] '+pokemon, '[identify]');
 				}
 			}
