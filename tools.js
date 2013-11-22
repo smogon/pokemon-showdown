@@ -857,10 +857,10 @@ module.exports = (function () {
 			clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
 			problems.push(name+"'s item "+set.item+" is banned"+clause+".");
 		}
-		if (banlistTable['Unreleased'] && item.isUnreleased) {
+		if (banlistTable['Unreleased Items'] && item.isUnreleased) {
 			problems.push(name+"'s item "+set.item+" is unreleased.");
 		}
-		if (banlistTable['Unreleased'] && template.isUnreleased) {
+		if (banlistTable['Unreleased Pokemon'] && template.isUnreleased) {
 			problems.push(name+" ("+template.species+") is unreleased.");
 		}
 		setHas[toId(set.ability)] = true;
