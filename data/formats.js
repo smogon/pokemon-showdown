@@ -9,12 +9,12 @@ exports.BattleFormats = {
 	standard: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal']
+		banlist: ['Unreleased Pokemon', 'Unreleased Items', 'Illegal']
 	},
 	standardpokebank: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
-		banlist: ['Illegal']
+		banlist: ['Illegal', 'Unreleased Items']
 	},
 	standardnext: {
 		effectType: 'Banlist',
@@ -24,7 +24,7 @@ exports.BattleFormats = {
 	standardubers: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal']
+		banlist: ['Unreleased Pokemon', 'Unreleased Items', 'Illegal']
 	},
 	standarddw: {
 		effectType: 'Banlist',
@@ -34,7 +34,7 @@ exports.BattleFormats = {
 	standardgbu: {
 		effectType: 'Banlist',
 		ruleset: ['Species Clause', 'Item Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew',
+		banlist: ['Unreleased Pokemon', 'Unreleased Items', 'Illegal', 'Dark Void', 'Soul Dew',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
 			'Lugia',
 			'Ho-Oh',
