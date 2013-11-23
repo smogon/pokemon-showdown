@@ -1249,7 +1249,7 @@ var commands = exports.commands = {
      mastersofthecolorhelp: 'motc', 
      motc: function(target, room, user) {
     	if (!this.canBroadcast()) return;
-    	this.sendReplyBox('<h2>Masters of the Colors</h2><hr /><br />In this tournament, you will construct a team based on the color of your name. You are not allowed to <em>choose</em> the color of your name. Follow these steps if you wish to participate:<ol><li>Look at the color of your name and determine if your name color is: <b>Red, Blue, Green, Pink/Purple, Yellow/Brown</b></li><li>Once you have found out your name color, type that color in the main chat to bring up a list of pokemon with that color. Ex]BrittleWind is Blue so I would type /blue in the main chat, Cosy is Red so he would type /red in the main chat. (If your name color is Yellow/Brown you are allowed to use both yellow <em>and</em> brown Pokemon. The same goes for Pink/Purple)</li><li>Now using list of pokemon you see on your screen, make a <b>Gen5 OU</b> team using only the pokemon on the list. Some pokemon on the list won\'t be in the OU category so ignore them. As long as your able to do a Gen 5 OU battle with only your pokemon, your good to go!</li><li>Now all you have to do is wait for the declare to come up telling you that Masters of the Colors has started! If you happen to come accross any trouble during the event, feel free to PM the room owner for your designated room.</li></ol>');
+    	this.sendReplyBox('<h2>Masters of the Colors</h2><hr /><br />In this tournament, you will construct a team based on the color of your name. You are not allowed to <em>choose</em> the color of your name. Follow these steps if you wish to participate:<ol><li>Look at the color of your name and determine if your name color is: <b>Red, Blue, Green, Pink/Purple, Yellow/Brown</b></li><li>Once you have found out your name color, type that color in the main chat to bring up a list of pokemon with that color. Ex]BrittleWind is Blue so I would type /blue in the main chat, Cosy is Red so he would type /red in the main chat. (If your name color is Yellow/Brown you are allowed to use both yellow <em>and</em> brown Pokemon. The same goes for Pink/Purple)</li><li>Now using list of pokemon you see on your screen, make a <b>Gen5 OU</b> team using only the pokemon on the list. Some pokemon on the list won\'t be in the OU category so ignore them. As long as your able to do a Gen 5 OU battle with only your pokemon, your good to go!</li><li>Now all you have to do is wait for the declare to come up telling you that Masters of the Colors has started! If you happen to come accross any trouble during the event, feel free to PM the room owner for your designated room.</li><li><b>IF</b> you do win, your challenge isn\'t over yet! After winning, construct a team using only <b>Black, White, or Gray</b> Pokemon (you may use /black etc. to see the list). You will go against the other winners of Masters of the Colors and the winner will recieve an extra 10 bucks!</ol>');
     },
 
 	elitefoursalty: function(target, room, user) {
@@ -1583,30 +1583,31 @@ var commands = exports.commands = {
 		'Make sure to check out our website by clicking <a href="http://biblialeague.webs.com/">here</a>!<br \>' +
 		'<img src="http://i.imgur.com/94mtyFk.png">')
 	},
-
+	
+	/*Masters of the Colors commands*/
 	blue: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src = "http://i.imgur.com/tz1KkyK.jpg"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
+		this.sendReplyBox('<img src = "http://i.imgur.com/OqoH8a5.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	brown: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src = "http://i.imgur.com/LxYZx1R.jpg"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
+		this.sendReplyBox('<img src = "http://i.imgur.com/b6edaUk.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	green: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src = "http://i.imgur.com/o6LFviQ.jpg"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
+		this.sendReplyBox('<img src = "http://i.imgur.com/K2QQUn9.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	pink: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src = "http://i.imgur.com/H15u7aA.jpg"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
+		this.sendReplyBox('<img src = "http://i.imgur.com/VIPAdDd.jpg"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	purple: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src = "http://i.imgur.com/1CasclP.jpg"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
+		this.sendReplyBox('<img src = "http://i.imgur.com/BNZhyMP.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	red: function(target, room, user) {
@@ -1616,8 +1617,24 @@ var commands = exports.commands = {
 	
 	yellow: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src = "http://i.imgur.com/lLwzzgl.jpg"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
+		this.sendReplyBox('<img src = "http://i.imgur.com/OupZ4Cf.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
+	
+	gray: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<img src = "http://i.imgur.com/1j0hjwZ.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
+	},
+	
+	black: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<img src = "http://i.imgur.com/g9IYdib.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
+	},
+	
+	white: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<img src = "http://i.imgur.com/3FVavln.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
+	},
+	/*Ends mastersof the colors commands*/
 	
 	piiiikachuuu: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1644,9 +1661,9 @@ var commands = exports.commands = {
 	currentevents: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<font size = 2>Here is a list of events that will be happening today (Pacific Time):</font><br />' +
-						'<ul><li><b>12:30</b>-<i>Regular users Tournament</i>-This OU format tournament is held in lobby and has no size limit (there is a 3 minute registration period).First place gets <b>30 Points</b> and second place gets <b>20 Points</b>.</li>' +
-						'<li><b>1:30</b>-<i>Masters of the Color</i>-In this tournament, your team must share a color that is based on your name. All names fit under these four categories: red, blue, green, yellow/brown, pink/purple. To see a list of pokemon for your name, type /[color].(ex- /green). Winning for your color will earn you <b>15 Points</b>.</li>' +
-						'<li><b>2:30</b>-<i>Battle of the Leagues</i>-This tournament is in OU Monotype format and involves the different leagues on Frost. Each league has <b>ONE</b> representitive that will fight against other league\'s representitives. The winning representitive will recieve <b>30 Points</b> and everyone else in the league will recieve <b>15 Points</b>.</li>' +
+						'<ul><li><b>12:30</b>-<i>Regular users Tournament</i>-This Gen 6 Pokebank OU format tournament is held in lobby and has no size limit (there is a 3 minute registration period).First place gets <b>30 Points</b> and second place gets <b>20 Points</b>.</li>' +
+						'<li><b>1:30</b>-<i>Masters of the Color</i>-In this tournament, your team must share a color that is based on your name. All names fit under these four categories: red, blue, green, yellow/brown, pink/purple. To see a list of pokemon for your name, type /[color].(ex- /green). Winning for your color will earn you <b>15 Points</b>.(Type /motc for more help) /</li>' +
+						'<li><b>2:30</b>-<i>Battle of the Leagues</i>-This tournament is in Gen 6 OU Monotype format and involves the different leagues on Frost. Each league has <b>ONE</b> representitive that will fight against other league\'s representitives. The winning representitive will recieve <b>30 Points</b> and everyone else in the league will recieve <b>15 Points</b>.</li>' +
 						'<li><b>3:30</b>-<i>Regular users Tournament</i>-The format for this tournament is voted on in lobby, is held in the lobby, and has no size limit (there is a 3 minute registration period).First place gets <b>30 Points</b> and second place gets <b>20 Points</b>.</li></ul>' +
 						'As always, make sure to have a fun time on Frost!');
 	},
