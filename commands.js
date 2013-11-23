@@ -1530,7 +1530,7 @@ var commands = exports.commands = {
 			'<font color=#2E9AFE><b><u>Welcome to the Frost Server!</u></b><br /><br /> ' + 
 			'Home of many leagues for you to join or challenge, battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
 			'Make sure to type <b>/help</b> to get a list of commands that you can use and <b>/faq</b> to check out frequently asked questions.<br /><br />' +
-			'To get a chatroom for your league, please talk to an admin (~) to recieve one<br /><br />' +
+			'To get a chatroom for your league, please talk to an admin (~) to receive one<br /><br />' +
 			'<b>Frost</b>-<blockquote><em>Promoting your league, one challenger at a time</em></blockquote></div></font></center>');
 		}/*
 		if (target.toLowerCase() == "lobby") {
