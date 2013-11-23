@@ -531,7 +531,7 @@ module.exports = (function () {
 								}
 								var eggGroups = template.eggGroups;
 								if (!eggGroups) continue;
-								if (eggGroups[0] === 'No Eggs') eggGroups = this.getTemplate(template.evos[0]).eggGroups;
+								if (eggGroups[0] === 'Undiscovered') eggGroups = this.getTemplate(template.evos[0]).eggGroups;
 								var atLeastOne = false;
 								var fromSelf = (learned.substr(1) === 'Eany');
 								learned = learned.substr(0,2);
