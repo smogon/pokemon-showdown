@@ -524,7 +524,7 @@ module.exports = (function () {
 							//   only if that was the source
 							if (format.noPokebank) {
 								if (move === 'extremespeed') continue;
-								if (move === 'destinybond' && template.id === 'gastly') continue;
+								if (move === 'perishsong' && template.id === 'gastly') continue;
 								if (move === 'stealthrock' && template.id === 'skarmory') continue;
 							}
 							if (learned.charAt(1) === 'E') {
