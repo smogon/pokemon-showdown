@@ -101,7 +101,7 @@ exports.Formats = [
 		name: "Mega Battles (beta)",
 		section: "XY Singles",
 
-		ruleset: ['Pokemon', 'megaonly', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard','megaonly', 'Team Preview'],
 		banlist: []
 	},
 	{
