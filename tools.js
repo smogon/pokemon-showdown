@@ -473,6 +473,7 @@ module.exports = (function () {
 		var sources = [];
 		// the equivalent of adding "every source at or before this gen" to sources
 		var sourcesBefore = 0;
+		var noPastGen = format.noPokebank || format.requirePentagon;
 
 		do {
 			alreadyChecked[template.speciesid] = true;
@@ -492,7 +493,7 @@ module.exports = (function () {
 
 					for (var i=0, len=lset.length; i<len; i++) {
 						var learned = lset[i];
-						if (format.noPokebank && learned.charAt(0) !== '6') continue;
+						if (noPastGen && learned.charAt(0) !== '6') continue;
 						if (parseInt(learned.charAt(0),10) > this.gen) continue;
 						if (learned.substr(0,2) in {'4L':1,'5L':1,'6L':1}) {
 							// gen 4-6 level-up moves
@@ -521,7 +522,11 @@ module.exports = (function () {
 						} else if (learned.charAt(1) in {E:1,S:1,D:1}) {
 							// egg, event, or DW moves:
 							//   only if that was the source
-							if (move === 'extremespeed' && format.noPokebank) continue;
+							if (format.noPokebank) {
+								if (move === 'extremespeed') continue;
+								if (move === 'destinybond' && template.id === 'gastly') continue;
+								if (move === 'stealthrock' && template.id === 'skarmory') continue;
+							}
 							if (learned.charAt(1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								if (learned.charAt(0) === '6') {
@@ -614,7 +619,7 @@ module.exports = (function () {
 
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
-			if (format.noPokebank && sometimesPossible) return {type:'pokebank'};
+			if (noPastGen && sometimesPossible) return {type:'pokebank'};
 			return true;
 		}
 		if (!sources.length) sources = null;
@@ -857,11 +862,13 @@ module.exports = (function () {
 			clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
 			problems.push(name+"'s item "+set.item+" is banned"+clause+".");
 		}
-		if (banlistTable['Unreleased'] && item.isUnreleased) {
+		if (banlistTable['illegal'] && item.isUnreleased) {
 			problems.push(name+"'s item "+set.item+" is unreleased.");
 		}
 		if (banlistTable['Unreleased'] && template.isUnreleased) {
-			problems.push(name+" ("+template.species+") is unreleased.");
+			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
+				problems.push(name+" ("+template.species+") is unreleased.");
+			}
 		}
 		setHas[toId(set.ability)] = true;
 		if (banlistTable['illegal']) {
@@ -890,7 +897,7 @@ module.exports = (function () {
 				if (ability.name === template.abilities['H']) {
 					isHidden = true;
 
-					if (template.unreleasedHidden && banlistTable['Unreleased']) {
+					if (template.unreleasedHidden && banlistTable['illegal']) {
 						problems.push(name+"'s hidden ability is unreleased.");
 					} else if (this.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
 						problems.push(name+" must be at least level 10 with its hidden ability.");
