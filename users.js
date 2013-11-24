@@ -1272,13 +1272,22 @@ var User = (function () {
 	 */
 	User.prototype.chat = function(message, room, connection) {
 		var now = new Date().getTime();
-
+				
 		if (message.substr(0,16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
 			ResourceMonitor.activeIp = connection.ip;
 			room.chat(this, message, connection);
 			ResourceMonitor.activeIp = null;
 			return false; // but end the loop here
+		}
+
+		if (this.lastChatText) {
+			var number = Users.levenshtein(this.lastChatText, message);
+			if (number < 6) {
+				this.lastChatText = message;
+				connection.sendTo(room, '|raw|<strong class=\"message-throttle-notice\">Your message was not sent.</strong>');
+				return false;
+			}
 		}
 
 		if (this.chatQueueTimeout) {
@@ -1297,6 +1306,7 @@ var User = (function () {
 				this.processChatQueue.bind(this), THROTTLE_DELAY);
 		} else {
 			this.lastChatMessage = now;
+			this.lastChatText = message;
 			ResourceMonitor.activeIp = connection.ip;
 			room.chat(this, message, connection);
 			ResourceMonitor.activeIp = null;
@@ -1537,4 +1547,64 @@ exports.setOfflineGroup = function(name, group, force) {
 	return true;
 };
 
+exports.levenshtein = function( a, b )
+{
+	var i;
+	var j;
+	var cost;
+	var d = new Array();
+ 
+	if ( a.length == 0 )
+	{
+		return b.length;
+	}
+ 
+	if ( b.length == 0 )
+	{
+		return a.length;
+	}
+ 
+	for ( i = 0; i <= a.length; i++ )
+	{
+		d[ i ] = new Array();
+		d[ i ][ 0 ] = i;
+	}
+ 
+	for ( j = 0; j <= b.length; j++ )
+	{
+		d[ 0 ][ j ] = j;
+	}
+ 
+	for ( i = 1; i <= a.length; i++ )
+	{
+		for ( j = 1; j <= b.length; j++ )
+		{
+			if ( a.charAt( i - 1 ) == b.charAt( j - 1 ) )
+			{
+				cost = 0;
+			}
+			else
+			{
+				cost = 1;
+			}
+ 
+			d[ i ][ j ] = Math.min( d[ i - 1 ][ j ] + 1, d[ i ][ j - 1 ] + 1, d[ i - 1 ][ j - 1 ] + cost );
+			
+			if(
+         i > 1 && 
+         j > 1 &&  
+         a.charAt(i - 1) == b.charAt(j-2) && 
+         a.charAt(i-2) == b.charAt(j-1)
+         ){
+          d[i][j] = Math.min(
+            d[i][j],
+            d[i - 2][j - 2] + cost
+          )
+         
+			}
+		}
+	}
+ 
+	return d[ a.length ][ b.length ];
+};
 
