@@ -97,13 +97,13 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther']
 	},
-	{
+	/*{
 		name: "Mega Battles (beta)",
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'OHKO Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Evasion Abilities Clause', 'megaonly', 'Team Preview'],
 		banlist: []
-	},
+	},*/
 	{
 		name: "Custom Game",
 		section: "XY Singles",
