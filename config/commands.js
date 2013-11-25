@@ -1154,7 +1154,7 @@ var commands = exports.commands = {
     bibliaskael: 'kael',
     kael: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/yukiko_hair_flip_final_50_80.gif"><img width="300" src="http://i1141.photobucket.com/albums/n587/diebenacht/Biblia%20and%20Showdown/cooltext1288802061.png"><img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/naoto_left_final_50_80.gif"><br /><center><b>Ace:</b> Latios</center><center><b>Catchphrase:</b> My tofu...</center>')
+        this.sendReplyBox('<img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/yukiko_hair_flip_final_50_80.gif"><img height="180" src="http://i1141.photobucket.com/albums/n587/diebenacht/teaddy_final_trans-1.gif"><img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/naoto_left_final_50_80.gif"><br /><center><b>Ace:</b> Latios</center><center><b>Catchphrase:</b> My tofu...</center>')
     },
    
 
