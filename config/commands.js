@@ -1598,51 +1598,61 @@ var commands = exports.commands = {
 	
 	/*Masters of the Colors commands*/
 	blue: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/OqoH8a5.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	brown: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/b6edaUk.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	green: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/K2QQUn9.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	pink: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/VIPAdDd.jpg"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	purple: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/BNZhyMP.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	red: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/zia6WOO.jpg"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	yellow: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/OupZ4Cf.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	gray: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/1j0hjwZ.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	black: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/g9IYdib.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
 	
 	white: function(target, room, user) {
+		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.')
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src = "http://i.imgur.com/3FVavln.png"><br />You are allowed to use these pokemon for Masters of the Color. Shineys are <b>not</b> allowed.');
 	},
