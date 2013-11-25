@@ -1,3 +1,4 @@
+/*
 #header{
 	background:url("http://upload.wikimedia.org/wikipedia/commons/d/da/Shades_of_blue.jpg")
 }
@@ -30,10 +31,55 @@ body{
 .userlist{
 	border-left:1px solid #D5DDE4;
 	background:#e5f5ff
+}*/
+
+/****************************
+*Thanksgiving Theme (deer)  *
+****************************/
+#header{
+background:url("http://pythoughts.com/wp-content/uploads/2011/01/hrgreenbrown.jpg");
+}
+
+body {
+background:url("http://i.imgur.com/L38WoEG.png");
+}
+
+.mainmenuwrapper {
+        background: url("http://i.imgur.com/rov52z9.png") right bottom no-repeat;
 }
 
 
+.chat-log{
+        background: url("http://i.imgur.com/dIfUHsq.png") right top no-repeat;
+}
 
+.chat-log-add{
+background:#FF9540
+}
+.menugroup .button{
+background:#785936
+}
+
+.menugroup .menugroup{
+text-align:center
+}
+
+.menugroup .button:hover {
+background:#B5823F
+}
+
+.userlist{
+border-left:1px solid #785936;
+background:#FF9540
+}
+
+.userlist li button:hover {
+background:#B5823F
+}
+
+.message-announce {
+background:#000000
+}
 
 
 
