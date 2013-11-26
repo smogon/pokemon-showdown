@@ -34,7 +34,7 @@ exports.BattleFormats = {
 	standardgbu: {
 		effectType: 'Banlist',
 		ruleset: ['Species Clause', 'Item Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew',
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
 			'Lugia',
 			'Ho-Oh',
