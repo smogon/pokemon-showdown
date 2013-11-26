@@ -92,7 +92,7 @@ background:url("http://i.imgur.com/Ci5DW3i.jpg");
 }
 
 .mainmenuwrapper {
-        background: url("http://i.imgur.com/SW6b0MU.png") right bottom no-repeat;
+        background: url("http://i.imgur.com/hcfggvP.png") left bottom no-repeat;
 }
 
 
@@ -101,7 +101,7 @@ background:url("http://i.imgur.com/Ci5DW3i.jpg");
 }
 
 .chat-log-add{
-background:#00497f
+background:#0066b2
 }
 .menugroup .button{
 background:#0092FF
@@ -117,11 +117,11 @@ background:#23AFFF
 
 .userlist{
 border-left:1px solid #785936;
-background:#65a8cc
+background: #156999
 }
 
 .userlist li button:hover {
-background:#0083e5
+background:#00477c
 }
 
 .userlist li button:active {
