@@ -95,7 +95,7 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther']
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel']
 	},
 	{
 		name: "Custom Game",
