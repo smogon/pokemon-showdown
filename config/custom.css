@@ -121,11 +121,11 @@ background: #7fd3ff
 }
 
 .userlist li button:hover {
-background:#9bccef
+background:#3f697f
 }
 
 .userlist li button:active {
-	background: #003a66;
+	background: #65a8cc;
 }
 
 .message-announce {
