@@ -5483,6 +5483,24 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
+	"happyhour": {
+		num: 603,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Doubles the prize money received after battle.",
+		shortDesc: "No competitive use.",
+		id: "happyhour",
+		name: "Happy Hour",
+		pp: 30,
+		priority: 0,
+		onHit: function(target) {
+			this.add('-message', 'Everyone is caught up in the happy atmosphere!');
+		},
+		secondary: false,
+		target: "self",
+		type: "Normal"
+	},
 	"harden": {
 		num: 106,
 		accuracy: true,
