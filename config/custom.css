@@ -36,7 +36,7 @@ body{
 /****************************
 *Thanksgiving Theme (deer)  *
 ****************************/
-#header{
+/*#header{
 background:url("http://pythoughts.com/wp-content/uploads/2011/01/hrgreenbrown.jpg");
 }
 
@@ -79,9 +79,58 @@ background:#B5823F
 
 .message-announce {
 background:#000000
+}*/
+/************************************************
+*Vaniluxe theme                                 *
+************************************************/
+#header{
+background:url("http://www.southernbreezefarm.net/sitebuilder/images/blue_banner-760x147.jpg");
+}
+
+body {
+background:url("http://i.imgur.com/Ci5DW3i.jpg");
+}
+
+.mainmenuwrapper {
+        background: url("http://i.imgur.com/SW6b0MU.png") right bottom no-repeat;
 }
 
 
+.chat-log{
+        background: url("http://i.imgur.com/2OtugRn.png") right top no-repeat;
+}
+
+.chat-log-add{
+background:#785936
+}
+.menugroup .button{
+background:#0092FF
+}
+
+.menugroup .menugroup{
+text-align:center
+}
+
+.menugroup .button:hover {
+background:#23AFFF
+}
+
+.userlist{
+border-left:1px solid #785936;
+background:#005799
+}
+
+.userlist li button:hover {
+background:#0083e5
+}
+
+.userlist li button:active {
+	background: #003a66;
+}
+
+.message-announce {
+background:#000000
+}
 
 
 
