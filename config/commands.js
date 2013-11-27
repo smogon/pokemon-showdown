@@ -1158,6 +1158,11 @@ var commands = exports.commands = {
     
     scizorknight: function(target, room, user) {
         if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<center><img height="90" src="http://fc01.deviantart.net/fs71/f/2011/261/0/c/shiftry_by_rapidashking-d4a9pc4.png"><img src="http://i.imgur.com/HHlDOu0.gif"><img height="100"src="http://25.media.tumblr.com/tumblr_m1kzfuWYgE1qd4zl8o1_500.png"><br /><b><center>Ace:</center></b> Shiftry<br /><b><center>Catchphrase: </center></b> Kicking your ass will be my pleasure!');
+    },
+    
+    scizorknight: function(target, room, user) {
+        if (!this.canBroadcast()) return;
         this.sendReplyBox('<img height="100" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/212.gif"><img src="http://i.imgur.com/RlhvAOI.gif"><img height="100" src="http://img.pokemondb.net/sprites/black-white/anim/shiny/breloom.gif"><br /><center><b>Ace:</b> Scizor</center><br /><center><b>Catchphrase:</b> I Love The Way You lose ♥')
     },
     bibliaskael: 'kael',
