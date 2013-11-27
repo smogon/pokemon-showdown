@@ -1150,6 +1150,12 @@ var commands = exports.commands = {
         this.add('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
     },
     
+    pikadagreat : 'pika', 
+    pika: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.add('|raw|<img src="http://sprites.pokecheck.org/i/025.gif" height="85"><img src="http://i.imgur.com/LwD0s9p.gif"><img height="100" src="http://media0.giphy.com/media/DCp4s7Z1FizZe/200.gif"><br /><center><b>Ace:</b> Pikachu</center><br /><center><b>Catchphrase:</b> Its not a party without Pikachu</center>')
+    },
+    
     scizorknight: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.add('|raw|<img height="100" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/212.gif"><img src="http://i.imgur.com/RlhvAOI.gif"><img height="100" src="http://img.pokemondb.net/sprites/black-white/anim/shiny/genesect.gif"><br /><center><b>Ace:</b> Scizor</center><br /><center><b>Catchphrase:</b> I Love The Way You lose ♥')
