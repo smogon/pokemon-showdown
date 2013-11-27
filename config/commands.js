@@ -1153,7 +1153,7 @@ var commands = exports.commands = {
     pikadagreat : 'pika', 
     pika: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.add('|raw|<img src="http://sprites.pokecheck.org/i/025.gif" height="85"><img src="http://i.imgur.com/LwD0s9p.gif"><img height="100" src="http://media0.giphy.com/media/DCp4s7Z1FizZe/200.gif"><br /><center><b>Ace:</b> Pikachu</center><br /><center><b>Catchphrase:</b> Its not a party without Pikachu</center>')
+        this.add('|raw|<img src="http://sprites.pokecheck.org/i/025.gif" height="85"><img src="http://i.imgur.com/LwD0s9p.gif"><img height="100" src="http://img.pokemondb.net/sprites/black-white/anim/shiny/breloom.gif"><br /><center><b>Ace:</b> Pikachu</center><br /><center><b>Catchphrase:</b> Its not a party without Pikachu</center>')
     },
     
     scizorknight: function(target, room, user) {
