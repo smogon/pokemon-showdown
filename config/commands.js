@@ -1147,7 +1147,21 @@ var commands = exports.commands = {
 
     brittlewind: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
+        this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
+    },
+    
+    
+    chmpionxman : 'xman',
+    championxman : 'xman',
+    xman: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<img src="http://fdzeta.net/imgcache/207158dz.gif"><img src="http://i.imgur.com/9bKjjcM.gif"><img src="http://img.pokemondb.net/sprites/black-white/anim/shiny/infernape.gif"><br /><center><b>Ace: </b>Infernape</center><br /><center><b>Catchphrase: </b>It may be risky, but it may be teh only way to win.</center><br />')
+    },
+    
+    shira : 'e4shirayuri', 
+    e4shirayuri: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<img height="170" src="http://www.okamiworld.com/wiki/images/b/bd/Amaterasu_5_-_Solar_Flare.jpg"><img src="http://i.imgur.com/THEJxYZ.gif"><img src="http://1-media-cdn.foolz.us/ffuuka/board/vp/image/1366/82/1366827374253.jpg" height="91"><br /><center><b>Ace: </b>Gliscor</center><br /><center><b>Catcphrase: </b>Rub-a-dub-dub, Shira be in your tub.</center><br />')
     },
     
     pikadagreat : 'pika', 
