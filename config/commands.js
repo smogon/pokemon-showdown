@@ -1152,7 +1152,7 @@ var commands = exports.commands = {
     
     scizorknight: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('|raw|<img height="100" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/212.gif"><img src="http://i.imgur.com/RlhvAOI.gif"><img height="100" src="http://img.pokemondb.net/sprites/black-white/anim/shiny/genesect.gif"><br /><center><b>Ace:</b> Scizor</center><br /><center><b>Catchphrase:</b> I Love The Way You lose ♥')
+        this.add('|raw|<img height="100" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/212.gif"><img src="http://i.imgur.com/RlhvAOI.gif"><img height="100" src="http://img.pokemondb.net/sprites/black-white/anim/shiny/genesect.gif"><br /><center><b>Ace:</b> Scizor</center><br /><center><b>Catchphrase:</b> I Love The Way You lose ♥')
     },
     bibliaskael: 'kael',
     kael: function(target, room, user) {
