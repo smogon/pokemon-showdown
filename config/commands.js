@@ -1147,14 +1147,17 @@ var commands = exports.commands = {
 
     brittlewind: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
+        this.add('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
     },
     
-    
+    scizorknight: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('|raw|<img height="100" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/212.gif"><img src="http://i.imgur.com/RlhvAOI.gif"><img height="100" src="http://img.pokemondb.net/sprites/black-white/anim/shiny/genesect.gif"><br /><center><b>Ace:</b> Scizor</center><br /><center><b>Catchphrase:</b> I Love The Way You lose ♥')
+    },
     bibliaskael: 'kael',
     kael: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/yukiko_hair_flip_final_50_80.gif"><img height="180" src="http://i1141.photobucket.com/albums/n587/diebenacht/teaddy_final_trans-1.gif"><img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/naoto_left_final_50_80.gif"><br /><center><b>Ace:</b> Latios</center><center><b>Catchphrase:</b> My tofu...</center>')
+        this.add('|raw|<img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/yukiko_hair_flip_final_50_80.gif"><img height="180" src="http://i1141.photobucket.com/albums/n587/diebenacht/teaddy_final_trans-1.gif"><img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/naoto_left_final_50_80.gif"><br /><center><b>Ace:</b> Latios</center><center><b>Catchphrase:</b> My tofu...</center>')
     },
    
 
