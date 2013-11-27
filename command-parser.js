@@ -32,7 +32,7 @@ const MAX_PARSE_RECURSION = 10;
 
 var crypto = require('crypto');
 
-var modlog = exports.modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
+var modlog = exports.modlog = modlog || {lobby: fs.createWriteStream('logs/modlog_lobby.txt', {flags:'a+'})};
 
 /**
  * Command parser
@@ -145,7 +145,8 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				this.logModCommand(text+(logOnlyText||''));
 			},
 			logModCommand: function(result) {
-				modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
+				if (!modlog[room.id]) modlog[room.id] = fs.createWriteStream('logs/modlog_' + room.id + '.txt', {flags:'a+'});
+				modlog[room.id].write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 			},
 			can: function(permission, target, room) {
 				if (!user.can(permission, target, room)) {
