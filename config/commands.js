@@ -1252,11 +1252,11 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/rk5tZji.png"><br><img src="http://i.imgur.com/pBBrxgo.gif"><br><font color="red"><blink><b>Ace: Clamperl</blink></font><br><b>How do you like me now, (insert naughty word)!');
     },
     
-    frostradio : 'radio', 
+    /*frostradio : 'radio', 
     radio: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<h1><b>Frost has its very own radio station!</b><h1><hr /><br /><font size="2">Click the image to join with other Frost users on this cool website found by Priest!<a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"><a href="http://plug.dj/frost-ps/"><img src="http://i.imgur.com/QFMHeDO.png"></a>');
-    },
+    },*/
      
      mastersofthecolorhelp: 'motc', 
      motc: function(target, room, user) {
