@@ -97,12 +97,10 @@ background:url("http://i.imgur.com/Ci5DW3i.jpg");
 
 
 .chat-log{
-        /**********************************************************************
-        *Vanlite chat picture						      *
-        background: url("http://i.imgur.com/2OtugRn.png") right top no-repeat;*/
+        /*Vanlite chat picture*/					      
+        /*background: url("http://i.imgur.com/2OtugRn.png") right top no-repeat;*/
         /*Cubchoo Background*/
-        background: url("http://cdn.bulbagarden.net/upload/thumb/7/72/613Cubchoo.png/250px-613Cubchoo.png")right top no-repeat;
-}
+        background: url("http://i.imgur.com/FqpmTtq.png") right top no-repeat;
 
 .chat-log-add{
 background:#0066b2
