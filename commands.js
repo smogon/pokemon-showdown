@@ -1478,12 +1478,13 @@ var commands = exports.commands = {
                 }
 
                 if (isDemotion) {
-                        this.privateModCommand('('+name+' was appointed to Room ' + groupName + ' by '+user.name+'.)');
+                        this.addRoomCommand('('+name+' was appointed to Room ' + groupName + ' by '+user.name+'.)');
                         if (targetUser) {
                                 targetUser.popup('You were appointed to Room ' + groupName + ' by ' + user.name + '.');
                         }
                 } else {
-                        this.addModCommand(''+name+' was appointed to Room ' + groupName + ' by '+user.name+'.');
+                        if (groupName == "Owner") this.addModCommand(''+name+' was appointed to Room ' + groupName + ' by '+user.name+'.');
+                        if (!groupName == "Owner") this.addRoomCommand(''+name+' was appointed to Room ' + groupName + ' by '+user.name+'.',room.id);
                 }
                 if (targetUser) {
                         targetUser.updateIdentity();
@@ -1501,7 +1502,7 @@ var commands = exports.commands = {
 			return this.sendReply('/lockroom - Access denied.');
 		}
 		room.lockedRoom = true;
-		this.add(user.name + ' has locked the room.');
+		this.addRoomCommand(user.name + ' has locked the room.',room.id);
 	},
 	
 	unlockroom: function(target, room, user) {
@@ -1512,7 +1513,7 @@ var commands = exports.commands = {
 			return this.sendReply('/unlockroom - Access denied.');
 		}
 		room.lockedRoom = false;
-		this.add(user.name + ' has unlocked the room.');
+		this.addRoomCommand(user.name + ' has unlocked the room.',room.id);
 	},
 
 	autojoin: function(target, room, user, connection) {
@@ -1724,7 +1725,8 @@ var commands = exports.commands = {
 		}
 		if (!this.can('warn', targetUser, room)) return false;
 		
-		this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
+		if (!room.auth) this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
+		if (room.auth) this.addRoomCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""),room.id);
 		targetUser.send('|c|~|/warn '+target);
 	},
 
