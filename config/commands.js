@@ -464,7 +464,6 @@ var commands = exports.commands = {
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',
-	g6learn: 'learn',
 	learn: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help learn');
 
@@ -477,7 +476,6 @@ var commands = exports.commands = {
 		var problem;
 		var all = (cmd === 'learnall');
 		if (cmd === 'learn5') lsetData.set.level = 5;
-		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
 		if (!template.exists) {
 			return this.sendReply('Pokemon "'+template.id+'" not found.');
@@ -627,10 +625,25 @@ var commands = exports.commands = {
 		this.sendReplyBox('+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
 			'% <b>Driver</b> - The above, and they can also mute and lock users and check for alts<br />' +
 			'@ <b>Moderator</b> - The above, and they can ban users<br />' +
-			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />' +
-			'~ <b>Administrator</b> - They can do anything, like change what this message says<br />' +
-			'# <b>Room Owner</b> - They are administrators of the room and can almost totally control it');
+			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />'+
+			'~ <b>Administrator</b> - They can do anything, like change what this message says');
 	},
+	
+
+    website: function(target, room, user) {
+                    if (!this.canBroadcast()) return;
+                    this.sendReplyBox(' <b>Website League</b> - <a href="http://leaf-league.weebly.com/">Click Here</a><br />');
+                                   
+            },
+
+	
+
+    forum: function(target, room, user) {
+                    if (!this.canBroadcast()) return;
+                    this.sendReplyBox(' <b>League Forum</b> - <a href="http://leaf-league.forumotion.com/">Click Here</a> Fourm<br />');
+                                   
+            },
+
 
 	opensource: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1225,7 +1238,7 @@ var commands = exports.commands = {
 		}
 		if (target === '%' || target === 'modlog') {
 			matched = true;
-			this.sendReply('/modlog [roomid|all], [n] - Roomid defaults to current room. If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n" on room\'s log [roomid]. If you set [all] as [roomid], searches for "n" on all rooms\'s logs. Requires: % @ & ~');
+			this.sendReply('/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: % @ & ~');
 		}
 		if (target === "%" || target === 'kickbattle ') {
 			matched = true;
@@ -1344,5 +1357,126 @@ var commands = exports.commands = {
 			this.sendReply('The command "/'+target+'" was not found. Try /help for general help');
 		}
 	},
+	        //TRAINER CARDS - Brittle, please try and keep them neat :) hi cosy
+        ruby: 'Kari Ruby',
+        ruby: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Elite Four:<center><img src="http://i.imgur.com/b8BkoNg.jpg"></center><br \>' +
+				'Title:<center> The Gentle Blaze</center><br \>' +
+                'Ace:<center> Charizard</center><br \>' +
+                'Quote:<center> Now sit back and watch me burn!</center><br \>' +
+                '<center><img src="http://fc07.deviantart.net/fs71/f/2013/277/a/b/mega_charizard_y_sprite_by_flamejow-d6m3y7l.png"></center>')
+        },
 
+		
+		lily: 'Lily',
+        lily: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Elite Four: Lily Rainbow<br \>' +
+                'Ace: Nidoqueen<br \>' +
+                'Quote: You better find a cure or I will take over! .<br \>' +
+                '<img src="http://media.pldh.net/pokemon/gen5/blackwhite_animated_front/031.gif">')
+        },
+		
+		
+		quincy: 'quincy',
+        quincy: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Professor: Quincy<br \>' +
+                'Ace: Togekiss<br \>' +
+                'Quote: If you do not battle with your life on the line, dont battle all .<br \>' +
+                '<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/togekiss.gif">')
+        },
+				
+		
+		red: 'red',
+        red: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Palace Mavin: Red<br \>' +
+                'Ace: Darmanitan and Duskinoir<br \>' +
+                'Quote: Either I just rek you or we screw eachother passionatly and yaoi style .<br \>' +
+                '<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/darmanitan-standard-mode.gif">')
+        },				
+
+		
+		blair: 'Blair',
+        blair: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Gym Leader: Blair<br \>' +
+                'Ace: Togekiss<br \>' +
+                'Quote: Let me just Blair some music .<br \>' +
+                '<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/togekiss.gif">')
+        },
+		
+		
+		atom: 'Atomsk',
+        atom: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Elite Four: Atomsk<br \>' +
+                'Ace: Greninja<br \>' +
+                'Quote: Its no fun unless your fighting a losing battle .<br \>' +
+                '<img src="http://img.pokemondb.net/sprites/x-y/pixel/greninja.png">')
+        },				
+		
+		
+		fluffy: 'Fluffy',
+        fluffy: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Dome Ace: Fluffy<br \>' +
+                'Ace: Aegislash<br \>' +
+                'Quote: Learning comes from losing .<br \>' +
+                '<img src="http://img.pokemondb.net/sprites/x-y/normal/aegislash-blade.png">')
+        },				
+		
+		
+		lynn: 'Lynn',
+		lyzz: 'Lynn',
+        lynn: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Champion Lyn Keikai Hikaru<br \>' +
+				'Title: The Eternally Cool yet Elegant<br \>' +
+                'Ace: Gardevoir and Gallade<br \>' +
+                'Quote: Mind, Skill, Tranquility .<br \>' +
+                '<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/gardevoir.gif"><img src="http://img.pokemondb.net/sprites/black-white/anim/normal/gallade.gif">')
+        },				
+
+		
+		missing1: 'missing1',
+        missing1: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Gym Leader: Missing1<br \>' +
+                'Ace: Arcanine<br \>' +
+                'Quote: None as of yet.<br \>' +
+                '<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/arcanine.gif">')
+        },
+		
+		
+		aaron: 'Aaron',
+        aaron: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Gym Leader: Aaron<br \>' +
+                'Ace: Mega Aggron<br \>' +
+                'Quote: Rock Solid Through The Core.<br \>' +
+                '<img src="http://i305.photobucket.com/albums/nn232/XandZero2/MEGAGGRON_zpsa46c3722.png">')
+        },
+				
+		
+		raven: 'Raven',
+        raven: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Gym Leader: Raven<br \>' +
+                'Ace: Toxicroak <br \>' +
+                'Quote: Its never truly over until one loses.<br \>' +
+                '<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/toxicroak.gif">')
+        },
+		
+		
+		kolotos: 'kolotos',
+        kolotos: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('Elite Four: Kolotos<br \>' +
+                'Ace: Electivire<br \>' +
+                'Quote: Feel the thunder! .<br \>' +
+                '<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/electivire.gif">')
+        },
 };
