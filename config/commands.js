@@ -2125,7 +2125,7 @@ var commands = exports.commands = {
 		}
 		if (target === '&' || target === 'givebucks' || target === 'gb' || target === 'awardbucks') {
 			matched = true;
-			this.sendReply('/givebucks [username],[amount],[reason] - Gives bucks to [username]. Reason is optional.');
+			this.sendReply('/givebucks [username],[amount],[reason] - Gives bucks to [username]. Reason is optional. Requires: & ~');
 		}
 		if (target === '&' || target === 'gdeclare' ) {
 			matched = true;
