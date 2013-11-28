@@ -1930,7 +1930,7 @@ var commands = exports.commands = {
 			this.sendReply('/dice [optional max number] - Randomly picks a number between 1 and 6, or between 1 and the number you choose.');
 			this.sendReply('/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.');
 		}
-		if (target === 'all' || target === 'complaint' || target === 'complain') {
+		if (target === 'all' || target === 'complaint' || target === 'complain' || target === 'cry') {
 			matched = true;
 			this.sendReply('/complain OR /complaint [message] - Adds a complaint to the list of complaints which will be reviewed by server staff.');
 		}
@@ -1946,17 +1946,22 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/tourstats [username], [tier] - Shows the target users tournament stats. Tier may be replaced with \"all\" to view the targets ranking in every tier.');
 		}
-		if (target === 'buy') {
+		if (target === 'all' || target === 'buy') {
 			matched = true;
-			this.sendReply('/buy [item] - buys the specified item, assuming you have enough money');
+			this.sendReply('/buy [item] - buys the specified item, assuming you have enough money.');
+			this.sendReply('If the item you are buying is an avatar, you must specify the image. ex: /buy [custom/animated],[image]');
 		}
-		if (target === 'addfriend') {
+		if (target === 'all' || target === 'friends') {
 			matched = true;
-			this.sendReply('/addfriend [user] - adds the specified user to your friends list');
+			this.sendReply('/friends - Shows all of the users on your friends list. Only works on the custom client.');
 		}
-		if (target === 'removefriend') {
+		if (target === 'all' || target === 'addfriend') {
 			matched = true;
-			this.sendReply('/removefriend [user] - removes the specified user from your friends list');
+			this.sendReply('/addfriend [user] - adds the specified user to your friends list. Only works on the custom client.');
+		}
+		if (target === 'all' || target === 'removefriend') {
+			matched = true;
+			this.sendReply('/removefriend [user] - removes the specified user from your friends list. Only works on the custom client.');
 		}
 		if (target === 'all' || target === 'join') {
 			matched = true;
@@ -1971,6 +1976,11 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/resetsymbol - Resets your symbol back to default, only works if you have a custom symbol.');
 		}
+		if (target === 'all' || target === 'atm' || target === 'wallet' || target === 'satchel' || target === 'fannypack' || target === 'purse' || target === 'bag') {
+			matched = true;
+			this.sendReply('/wallet [username] - Shows you how many bucks and coins [username] has.');
+		}
+    	// Driver commands
 		if (target === '%' || target === 'invite') {
 			matched = true;
 			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
@@ -1995,34 +2005,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/alts OR /altcheck OR /alt OR /getalts [username] - Get a user\'s alts. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'forcerename' || target === 'fr') {
-			matched = true;
-			this.sendReply('/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: % @ & ~');
-		}
 		if (target === '%' || target === 'redir' || target === 'redirect') {
 			matched = true;
 			this.sendReply('/redirect OR /redir [username], [room] - Forcibly move a user from the current room to [room]. Requires: % @ & ~');
 		}
-		if (target === '@' || target === 'ban' || target === 'b') {
-			matched = true;
-			this.sendReply('/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: @ & ~');
-		}
-		if (target === '&' || target === 'banip') {
-			matched = true;
-			this.sendReply('/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~');
-		}
-		if (target === '@' || target === 'unban') {
-			matched = true;
-			this.sendReply('/unban [username] - Unban a user. Requires: @ & ~');
-		}
-		if (target === '@' || target === 'unbanall') {
-			matched = true;
-			this.sendReply('/unbanall - Unban all IP addresses. Requires: @ & ~');
-		}
-		if (target === '&' || target === 'permaban' || target === 'permban' || target === 'pban') {
-     		matched = true;
-      		this.sendReply('/permaban [username] - Permanently bans the user from the server. Bans placed by this command do not reset on server restarts. Requires: & ~');
-    	}
 		if (target === '%' || target === 'modlog') {
 			matched = true;
 			this.sendReply('/modlog [roomid|all], [n] - Roomid defaults to current room. If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n" on room\'s log [roomid]. If you set [all] as [roomid], searches for "n" on all rooms\'s logs. Requires: % @ & ~');
@@ -2063,6 +2049,40 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/showuserid [username] - To get the raw id of the user. Requires: % @ & ~');
 		}
+		if (target === '%' || target === 'announce' || target === 'wall') {
+			matched = true;
+			this.sendReply('/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
+		}
+		// Moderator commands
+		if (target === '@' || target === 'forcerename' || target === 'fr') {
+			matched = true;
+			this.sendReply('/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: @ & ~');
+		}
+		if (target === '@' || target === 'ban' || target === 'b') {
+			matched = true;
+			this.sendReply('/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: @ & ~');
+		}
+		if (target === '@' || target === 'unban') {
+			matched = true;
+			this.sendReply('/unban [username] - Unban a user. Requires: @ & ~');
+		}
+		if (target === '@' || target === 'unbanall') {
+			matched = true;
+			this.sendReply('/unbanall - Unban all IP addresses. Requires: @ & ~');
+		}
+		if (target === '@' || target === 'modchat') {
+			matched = true;
+			this.sendReply('/modchat [off/autoconfirmed/+/%/@/&/~] - Set the level of moderated chat. Requires: @ for off/autoconfirmed/+ options, & ~ for all the options');
+		}
+		// Leader commands
+		if (target === '&' || target === 'banip') {
+			matched = true;
+			this.sendReply('/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~');
+		}
+		if (target === '&' || target === 'permaban' || target === 'permban' || target === 'pban') {
+     		matched = true;
+      		this.sendReply('/permaban [username] - Permanently bans the user from the server. Bans placed by this command do not reset on server restarts. Requires: & ~');
+    	}
 		if (target === '&' || target === 'promote') {
 			matched = true;
 			this.sendReply('/promote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: & ~');
@@ -2070,11 +2090,6 @@ var commands = exports.commands = {
 		if (target === '&' || target === 'demote') {
 			matched = true;
 			this.sendReply('/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: & ~');
-		}
-		if (target === '~' || target === 'forcerenameto' || target === 'frt') {
-			matched = true;
-			this.sendReply('/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: & ~');
-			this.sendReply('/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: & ~');
 		}
 		if (target === '&' || target === 'forcetie') {
 			matched = true;
@@ -2084,25 +2099,9 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/declare [message] - Anonymously announces a message. Requires: & ~');
 		}
-		if (target === '~' || target === 'gdeclare' ) {
-			matched = true;
-			this.sendReply('/gdeclare [message] - Anonymously announces a message to all rooms. Requires: ~');
-		}
 		if (target === '&' || target === 'potd' ) {
 			matched = true;
 			this.sendReply('/potd [pokemon] - Sets the Random Battle Pokemon of the Day. Requires: & ~');
-		}
-		if (target === '~' || target === 'chatdeclare' || target === 'cdeclare') {
-			matched = true;
-			this.sendReply('/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~');
-		}
-		if (target === '%' || target === 'announce' || target === 'wall') {
-			matched = true;
-			this.sendReply('/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
-		}
-		if (target === '@' || target === 'modchat') {
-			matched = true;
-			this.sendReply('/modchat [off/autoconfirmed/+/%/@/&/~] - Set the level of moderated chat. Requires: @ for off/autoconfirmed/+ options, & ~ for all the options');
 		}
 		if (target === '&' || target === 'inactiverooms') {
 			matched = true;
@@ -2112,22 +2111,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/roomlist - Lists all of the rooms on the server, including inactive and private rooms. Requires: & ~');
 		}
-		if (target === '~' || target === 'givepoints') {
-			matched = true;
-			this.sendReply('/givepoints [username], [number of points] - Awards the user a specified number of points. Requires: ~');
-		}
-		if (target === '~' || target === 'removepoints') {
-			matched = true;
-			this.sendReply('/removepoints [username], [number of points] - Removes the specified amount of points from the user. Requires: ~');
-		}
-		if (target === '~' || target === 'awarditem') {
-			matched = true;
-			this.sendReply('/awarditem [username], [shop item] - Gives the user the item from the shop, for free! Requires: ~');
-		}
-		if (target === '~' || target === 'removeitem') {
-			matched = true;
-			this.sendReply('/remoteitem [username], [shop item] - Removes the item from the user. Requires: ~');
-		}
 		if (target === '&' || target === 'away') {
 			matched = true;
 			this.sendReply('/away - Set yourself as away which will also change your name. Requires: % @ & ~');
@@ -2135,6 +2118,47 @@ var commands = exports.commands = {
 		if (target === '&' || target === 'back') {
 			matched = true;
 			this.sendReply('/back - Marks yourself as back and reverts name back. Requires: % @ & ~');
+		}
+		if (target === '&' || target === 'takebucks' || target === 'removebucks' || target === 'tb' || target === 'rb') {
+			matched = true;
+			this.sendReply('/takebucks [username],[amount],[reason] - Removes bucks from [username]. Reason is optional. Requires: & ~');
+		}
+		if (target === '&' || target === 'gdeclare' ) {
+			matched = true;
+			this.sendReply('/gdeclare [message] - Anonymously announces a message to all rooms. Requires: & ~');
+		}
+		if (target === '&' || target === 'gdeclarered') {
+			matched = true;
+			this.sendReply('/gdeclarered [message] - Anonymously announces a message to all rooms with a red background. Requires: & ~');
+		}
+		if (target === '&' || target === 'gdeclaregreen') {
+			matched = true;
+			this.sendReply('/gdeclaregreen [message] - Anonymously announces a message to all rooms with a green background. Requires: & ~');
+		}
+		if (target === '&' || target === 'chatdeclare' || target === 'cdeclare') {
+			matched = true;
+			this.sendReply('/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: & ~');
+		}
+		if (target === '&' || target === 'customavatar') {
+			matched = true;
+			this.sendReply('/customavatar [username], [image] - Gives [username] the image as their avatar. Requires: & ~');
+		}
+		//Admin commands
+		if (target === '~' || target === 'sendpopup' || target === 'spop') {
+			matched = true;
+			this.sendReply('/sendpopup [username], [message] - Sends a popup to [username] displaying [message].')
+		}
+		if (target === '~' || target === 'forcerenameto' || target === 'frt') {
+			matched = true;
+			this.sendReply('/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: ~');
+		}
+		if (target === '~' || target === 'awarditem') {
+			matched = true;
+			this.sendReply('/awarditem [username], [shop item] - Gives the user the item from the shop, for free! Requires: ~');
+		}
+		if (target === '~' || target === 'removeitem') {
+			matched = true;
+			this.sendReply('/removeitem [username], [shop item] - Removes the item from the user. Requires: ~');
 		}
 		if (target === '~' || target === 'hotpatch') {
 			matched = true;

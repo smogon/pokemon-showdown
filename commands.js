@@ -371,8 +371,9 @@ var commands = exports.commands = {
 	awardbucks: 'givebucks',
 	gb: 'givebucks',
 	givebucks: function(target, room, user) {
-		if(!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
-		if(!target) return this.parse('/help givebucks');
+		if(!user.can('bucks')) return this.sendReply('You do not have enough authority to do this.');
+		if(!target) return this.parse('Usage: /givebucks [username],[amount],[reason] - Gives bucks to [username]. Reason is optional.');
+		var reason = ' ';
 		if (target.indexOf(',') != -1) {
 			var parts = target.split(',');
 			parts[0] = this.splitTarget(parts[0]);
@@ -383,6 +384,7 @@ var commands = exports.commands = {
 		if (isNaN(parts[1])) {
 			return this.sendReply('Very funny, now use a real number.');
 		}
+		if (parts[2]) reason = parts[2];
 		var cleanedUp = parts[1].trim();
 		var giveMoney = Number(cleanedUp);
 		var data = fs.readFileSync('config/money.csv','utf8')
@@ -423,18 +425,21 @@ var commands = exports.commands = {
 		}
 		var p = 'bucks';
 		if (giveMoney < 2) p = 'buck';
-		this.sendReply(targetUser.name + ' was given ' + giveMoney + ' ' + p + '. This user now has ' + targetUser.money + ' bucks.');
+		this.sendReply(targetUser.name + ' was given ' + giveMoney + ' ' + p + '. This user now has ' + targetUser.money + ' bucks. ('+reason+')');
+		this.logModCommand(user.name+' gave '+targetUser.name+' '+giveMoney+' '+p+'. ('+reason+')');
 		targetUser.send('|popup|' + user.name + ' has given you ' + giveMoney + ' ' + p + '.');
 		} else {
 			return this.parse('/help givebucks');
 		}
 	},
 	
+	tb: 'removebucks',
 	rb: 'removebucks',	
 	takebucks: 'removebucks',
 	removebucks: function(target, room, user) {
-		if(!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
-		if(!target) return this.parse('/help removebucks');
+		if(!user.can('bucks')) return this.sendReply('You do not have enough authority to do this.');
+		if(!target) return this.parse('Usage: /takebucks [username],[amount],[reason] - Removes bucks from [username]. Reason is optional.');
+		var reason = ' ';
 		if (target.indexOf(',') != -1) {
 			var parts = target.split(',');
 			parts[0] = this.splitTarget(parts[0]);
@@ -445,6 +450,7 @@ var commands = exports.commands = {
 		if (isNaN(parts[1])) {
 			return this.sendReply('Very funny, now use a real number.');
 		}
+		if (parts[2]) reason = parts[2];
 		var cleanedUp = parts[1].trim();
 		var takeMoney = Number(cleanedUp);
 		var data = fs.readFileSync('config/money.csv','utf8')
@@ -486,7 +492,8 @@ var commands = exports.commands = {
 		var p = 'bucks';
 		if (takeMoney < 2) p = 'buck';
 		this.sendReply(targetUser.name + ' has had ' + takeMoney + ' ' + p + ' removed. This user now has ' + targetUser.money + ' bucks.');
-		targetUser.send(user.name + ' has removed ' + takeMoney + ' bucks from you.');
+		this.logModCommand(user.name+' removed '+takeMoney+' '+p+' from '+targetUser.name+'. ('+reason+')');
+		targetUser.send(user.name + ' has removed ' + takeMoney + ' bucks from you. ');
 		} else {
 			return this.parse('/help removebucks');
 		}
@@ -586,9 +593,14 @@ var commands = exports.commands = {
 			price = 40;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('You have purchased a trainer card. You need to message an Admin capable of adding this (Frost Deverloper or BrittleWind).');
+				this.sendReply('You have purchased a trainer card. You need to message an Admin capable of adding this (Frost Developer or BrittleWind).');
 				user.canTrainerCard = true;
-				this.add(user.name + ' has purchased a trainer card!');
+				Rooms.rooms.staff.add(user.name + ' has purchased a trainer card!');
+				for (var u in Users.users) {
+					if (Users.users[u].frostDev || Users.users[u].userid == "brittlewind") {
+						Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+user.name+' has purchased a trainer card');
+					}
+				}
 			} else {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
@@ -597,7 +609,7 @@ var commands = exports.commands = {
 			price = 10;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('You have purchased the ability to alter your avatar or trainer card. You need to message an Admin capable of adding this (Frost Deverloper or BrittleWind).');
+				this.sendReply('You have purchased the ability to alter your avatar or trainer card. You need to message an Admin capable of adding this (Frost Developer or BrittleWind).');
 				user.canFixItem = true;
 				this.add(user.name + ' has purchased the ability to set alter their card or avatar!');
 			} else {
@@ -610,7 +622,12 @@ var commands = exports.commands = {
 				user.money = user.money - price;
 				this.sendReply('You have purchased the ability to declare (from Admin). To do this message an Admin (~) with the message you want to send. Keep it sensible!');
 				user.canDecAdvertise = true;
-				this.add(user.name + ' has purchased the ability to declare from an Admin!');
+				Rooms.rooms.staff.add(user.name + ' has purchased the ability to declare from an Admin!');
+				for (var u in Users.users) {
+					if (Users.users[u].group == "~" || Users.users[u].group == "&") {
+						Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+user.name+' has purchased a the ability to declare.');
+					}
+				}
 			} else {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
@@ -2224,7 +2241,7 @@ var commands = exports.commands = {
 
 	spop: 'sendpopup',
 	sendpopup: function(target, room, user) {
-		if (!this.can('hotpatch')) return false;
+		if (!this.can('popup')) return false;
 		
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -2260,38 +2277,42 @@ var commands = exports.commands = {
 		if (!room.auth) {
 			this.logModCommand(user.name+' declared '+target);
 		}
-		this.logRoomCommand(user.name+' declared '+target, room.id);
+		if (room.auth) {
+			this.logRoomCommand(user.name+' declared '+target, room.id);
+		}
 	},
 
 	gdeclarered: 'gdeclare',
 	gdeclaregreen: 'gdeclare',
 	gdeclare: function(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help gdeclare');
-		if (!this.can('lockdown')) return false;
-
-		var roomName = (room.isPrivate)? 'a private room' : room.id;
+		if (!target) return this.parse('/help '+cmd);
+		if (!this.can('gdeclare')) return false;
+		var staff = '';
+		if (user.group == '&') staff = 'a Leader';
+		if (user.group == '~') staff = 'an Administrator';
+		//var roomName = (room.isPrivate)? 'a private room' : room.id;
 
 		if (cmd === 'gdeclare'){
 			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from '+roomName+'<br /></i></font size>'+target+'</b></div>');
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
 			}
 		}
 		if (cmd === 'gdeclarered'){
 			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from '+roomName+'<br /></i></font size>'+target+'</b></div>');
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
 			}
 		}
 		else if (cmd === 'gdeclaregreen'){
 			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from '+roomName+'<br /></i></font size>'+target+'</b></div>');
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
 			}
 		}
 		this.logModCommand(user.name+' globally declared '+target);
 	},
 	
 	pgdeclare: function(target, room, user) {
-		if (!target) return this.sendReply('/declareall - Declares a message in all chatrooms. Requires ~');
-		if (!this.can('lockdown')) return;
+		if (!target) return this.parse('/help pgdeclare');
+		if (!this.can('pgdeclare')) return;
 
 		if (!this.canTalk()) return;
 
@@ -2395,7 +2416,7 @@ var commands = exports.commands = {
 	
 	complaintslist: 'complaintlist',
 	complaintlist: function(target, room, user, connection) {
-		if (!this.can('declare')) return false;
+		if (!this.can('complaintlist')) return false;
 		var lines = 0;
 		if (!target.match('[^0-9]')) { 
 			lines = parseInt(target || 15, 10);
@@ -2495,7 +2516,6 @@ var commands = exports.commands = {
 	},
 
 	roomlog: function(target, room, user, connection) {
-		if (!room.auth[user.userid] || room.auth[user.userid] == '+' || !user.isStaff) return false;
 		if (!this.can('mute', null, room)) return false;
 		var lines = 0;
 		if (!target.match('[^0-9]')) {
@@ -2568,7 +2588,7 @@ var commands = exports.commands = {
 
 	customavatar: function(target, room, user, connection) {
 		if (!this.can('customavatars')) return false;
-		if (!target) return connection.sendTo(room, 'Usage: /customavatar username, URL');
+		if (!target) return this.parse('/help customavatar');
 		var http = require('http-get');
 		target = target.split(", ");
 		var username = Users.get(target[0]);
@@ -2708,7 +2728,7 @@ var commands = exports.commands = {
 
 	afk: 'away',
 	away: function(target, room, user, connection) {
-		if (!this.can('lock')) return false;
+		if (!this.can('away')) return false;
 
 		if (!user.isAway) {
 			user.originalName = user.name;
@@ -2729,7 +2749,7 @@ var commands = exports.commands = {
 	},
 
 	back: function(target, room, user, connection) {
-		if (!this.can('lock')) return false;
+		if (!this.can('away')) return false;
 
 		if (user.isAway) {
 			if (user.name.slice(-7) !== ' - Away') {
@@ -2833,7 +2853,7 @@ var commands = exports.commands = {
 	masspm: 'pmall',
 	pmall: function(target, room, user) {
 		if (!target) return this.parse('/pmall [message] - Sends a PM to every user in a room.');
-		if (!this.can('hotpatch')) return false;
+		if (!this.can('pmall')) return false;
 
 		var pmName = '~Frost PM [Do not reply]';
 

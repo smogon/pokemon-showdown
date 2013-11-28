@@ -518,13 +518,22 @@ exports.appealurl = 'http://frostserver.forumotion.com/f7-discipline-appeals';
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
+//     - gdeclare: /gdeclare command.
+//     - customavatars: /customavatar command.
+//     - hide: /hide and /show commands.
+//     - permaban: /permaban command.
+//     - pgdeclare: /pgdeclare command. (plain global declare)
+//     - away: /away and /back commands.
+//     - bucks: /takebucks and /givebucks commands.
+//     - complaintlist: /complaintlist command.
+//     - popup: /sendpopup command.
+//     - pmall: /pmall command.
 exports.groupsranking = [' ', '+', '%', '@', '#', '&', '~'];
 exports.groups = {
 	'~': {
 		id: "admin",
 		name: "Administrator",
 		root: true,
-		gdeclare: true,
 		rank: 6
 	},
 	'&': {
@@ -543,6 +552,10 @@ exports.groups = {
 		forcejoin: true,
 		permaban: true,
 		customavatars: true,
+		gdeclare: true,
+		away: true,
+		bucks: true,
+		complaintlist: true,
 		rank: 5
 	},
 	'#': {
