@@ -12,12 +12,16 @@
  */
 
 var crypto = require('crypto');
+
 var poofeh = true;
+
 var ipbans = fs.createWriteStream('config/ipbans.txt', {'flags': 'a'});
 var logeval = fs.createWriteStream('logs/eval.txt', {'flags': 'a'});
+
 var inShop = ['symbol', 'custom', 'animated', 'room', 'trainer', 'fix', 'declare'];
 var closeShop = false;
 var closedShop = 0;
+
 var avatar = fs.createWriteStream('config/avatars.csv', {'flags': 'a'}); // for /customavatar
 //spamroom
 if (typeof spamroom == "undefined") {
@@ -1712,6 +1716,9 @@ var commands = exports.commands = {
 	warn: function(target, room, user) {
 		if (!target) return this.parse('/help warn');
 
+		var warnMax = 4;
+		function isOdd(num) { return num % 2;}
+
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
@@ -1725,8 +1732,28 @@ var commands = exports.commands = {
 		}
 		if (!this.can('warn', targetUser, room)) return false;
 		
-		if (!room.auth) this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
-		if (room.auth) this.addRoomCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""),room.id);
+		targetUser.warnTimes += 1;
+
+		if (targetUser.warnTimes >= warnMax) {
+			if (targetUser.warnTimes === 4) {
+				targetUser.popup('You have been automatically muted for 7 minutes due to being warned '+warnMax+' times.');
+				var alts = targetUser.getAlts();
+				if (alts.length) this.addRoomCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
+				targetUser.mute(room.id, 7*60*1000);
+				this.addModCommand(''+targetUser.name+' was automatically muted for 7 minutes.');
+				return;
+			}
+			else if (targetUser.warnTimes >= 6 && isOdd(targetUser.warnTimes) === 0) {
+				targetUser.popup('You have been automatically muted for 60 minutes due to being warned '+warnMax+' or more times.');
+				var alts = targetUser.getAlts();
+				if (alts.length) this.addRoomCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
+				targetUser.mute(room.id, 60*60*1000);
+				this.addModCommand(''+targetUser.name+' was automatically muted for 60 minutes.');
+				return;
+			}
+		}
+
+		this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn '+target);
 	},
 

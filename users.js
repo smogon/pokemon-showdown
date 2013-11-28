@@ -287,6 +287,8 @@ var User = (function () {
 		this.userid = toUserid(this.name);
 		this.group = config.groupsranking[0];
 
+		this.warnTimes = 0;
+
 		//points system user variables
 		this.money = 0;
 		this.coins = 0;
