@@ -2123,6 +2123,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/takebucks [username],[amount],[reason] - Removes bucks from [username]. Reason is optional. Requires: & ~');
 		}
+		if (target === '&' || target === 'givebucks' || target === 'gb' || target === 'awardbucks') {
+			matched = true;
+			this.sendReply('/givebucks [username],[amount],[reason] - Gives bucks to [username]. Reason is optional.');
+		}
 		if (target === '&' || target === 'gdeclare' ) {
 			matched = true;
 			this.sendReply('/gdeclare [message] - Anonymously announces a message to all rooms. Requires: & ~');

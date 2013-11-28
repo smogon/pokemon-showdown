@@ -372,7 +372,7 @@ var commands = exports.commands = {
 	gb: 'givebucks',
 	givebucks: function(target, room, user) {
 		if(!user.can('bucks')) return this.sendReply('You do not have enough authority to do this.');
-		if(!target) return this.parse('Usage: /givebucks [username],[amount],[reason] - Gives bucks to [username]. Reason is optional.');
+		if(!target) return this.parse('/help givebucks');
 		var reason = ' ';
 		if (target.indexOf(',') != -1) {
 			var parts = target.split(',');
@@ -438,7 +438,7 @@ var commands = exports.commands = {
 	takebucks: 'removebucks',
 	removebucks: function(target, room, user) {
 		if(!user.can('bucks')) return this.sendReply('You do not have enough authority to do this.');
-		if(!target) return this.parse('Usage: /takebucks [username],[amount],[reason] - Removes bucks from [username]. Reason is optional.');
+		if(!target) return this.parse('/help takebucks');
 		var reason = ' ';
 		if (target.indexOf(',') != -1) {
 			var parts = target.split(',');
