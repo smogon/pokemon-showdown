@@ -1730,7 +1730,7 @@ var commands = exports.commands = {
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
-		if (!this.can('warn', targetUser, room)) return false;
+		if (!this.can('warn')) return false;
 		
 		targetUser.warnTimes += 1;
 
@@ -1738,7 +1738,7 @@ var commands = exports.commands = {
 			if (targetUser.warnTimes === 4) {
 				targetUser.popup('You have been automatically muted for 7 minutes due to being warned '+warnMax+' times.');
 				var alts = targetUser.getAlts();
-				if (alts.length) this.addRoomCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
+				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				targetUser.mute(room.id, 7*60*1000);
 				this.addModCommand(''+targetUser.name+' was automatically muted for 7 minutes.');
 				return;
@@ -1746,7 +1746,7 @@ var commands = exports.commands = {
 			else if (targetUser.warnTimes >= 6 && isOdd(targetUser.warnTimes) === 0) {
 				targetUser.popup('You have been automatically muted for 60 minutes due to being warned '+warnMax+' or more times.');
 				var alts = targetUser.getAlts();
-				if (alts.length) this.addRoomCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
+				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				targetUser.mute(room.id, 60*60*1000);
 				this.addModCommand(''+targetUser.name+' was automatically muted for 60 minutes.');
 				return;
