@@ -2025,7 +2025,7 @@ var commands = exports.commands = {
     	}
 		if (target === '%' || target === 'modlog') {
 			matched = true;
-			this.sendReply('/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: % @ & ~');
+			this.sendReply('/modlog [roomid|all], [n] - Roomid defaults to current room. If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n" on room\'s log [roomid]. If you set [all] as [roomid], searches for "n" on all rooms\'s logs. Requires: % @ & ~');
 		}
 		if (target === "%" || target === 'kickbattle ') {
 			matched = true;

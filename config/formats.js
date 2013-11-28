@@ -29,7 +29,7 @@ exports.Formats = [
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		noPokebank: true,
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther']
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel']
 	},
 	{
 		name: "XY Battle Spot Singles (beta)",
@@ -95,7 +95,7 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther']
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel']
 	},
 	/*{
 		name: "Mega Battles (beta)",
@@ -360,6 +360,27 @@ exports.Formats = [
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		noPokebank: true,
+		banlist: ['Dark Void'], // Banning Dark Void here because technically Smeargle cannot learn it yet.
+		validateTeam: function(team, format) {
+			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
+		}
+	},
+	{
+		name: "VGC 2014 (beta)",
+		section: "XY Doubles",
+		column: 2,
+
+		gameType: 'doubles',
+		onBegin: function() {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
+		requirePentagon: true,
 		banlist: [], // The neccessary bans are in Standard GBU
 		validateTeam: function(team, format) {
 			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
