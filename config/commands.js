@@ -629,7 +629,7 @@ var commands = exports.commands = {
 			'@ <b>Moderator</b> - The above, and they can ban users<br />' +
 			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />' +
 			'~ <b>Administrator</b> - They can do anything, like change what this message says<br />' +
-			'# <b>Room Owner</b> - They are administrators of the room and can totally control it');
+			'# <b>Room Owner</b> - They are administrators of the room and can almost totally control it');
 	},
 
 	opensource: function(target, room, user) {
