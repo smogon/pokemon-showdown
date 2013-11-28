@@ -776,8 +776,9 @@ var commands = exports.commands = {
 		this.sendReplyBox('+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
 			'% <b>Driver</b> - The above, and they can also mute and lock users and check for alts<br />' +
 			'@ <b>Moderator</b> - The above, and they can ban users<br />' +
-			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />'+
-			'~ <b>Administrator</b> - They can do anything, like change what this message says');
+			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />' +
+			'~ <b>Administrator</b> - They can do anything, like change what this message says<br />' +
+			'# <b>Room Owner</b> - They are administrators of the room and can almost totally control it');
 	},
 
 	opensource: function(target, room, user) {
