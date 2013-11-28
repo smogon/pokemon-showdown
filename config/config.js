@@ -553,7 +553,6 @@ exports.groups = {
 		permaban: true,
 		customavatars: true,
 		gdeclare: true,
-		away: true,
 		bucks: true,
 		complaintlist: true,
 		rank: 5
@@ -599,6 +598,7 @@ exports.groups = {
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
 		roomvoice: true,
+		away: true,
 		rank: 2
 
 	},
