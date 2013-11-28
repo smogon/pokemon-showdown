@@ -1138,6 +1138,7 @@ var commands = exports.commands = {
 	oprah: 'lenora',
 	sass: 'lenora',
 	lenora: function(target, room, user) {
+		if (!this.can('lockdown')) return false;
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Trainer: Lenora<br \>' +
 		'Ace: Lenora<br \>' + 
