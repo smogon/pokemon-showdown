@@ -2394,6 +2394,7 @@ var commands = exports.commands = {
 			return this.sendReply('Make sure the time is just the number, and not any words.');
 		}
 		motd = setInterval(function() {Rooms.rooms.lobby.add('|raw|<div class = "infobox"><b>Message of the Day:</b><br />'+message)}, time * 60 * 1000);
+		this.logModCommand(user.name+' set the message of the day to: '+message+' for every '+time+' minutes.');
 		return this.sendReply('The message of the day was set to "'+message+'" and it will be displayed every '+time+' minutes.');
 	},
 	
@@ -2404,6 +2405,7 @@ var commands = exports.commands = {
 			return this.sendReply('There is no motd right now.');
 		}
 		clearInterval(motd);
+		this.logModCommand(user.name+' cleared the message of the day.');
 		return this.sendReply('You cleared the message of the day.');
 	},
 
