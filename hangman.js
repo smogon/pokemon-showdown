@@ -72,6 +72,9 @@ var cmds = {
 		if(!target) {
 			return this.sendReply('The correct syntax for this command is /hangman [word], [topic]');
 		}
+		if(room.type === 'battle') {
+			return this.sendReply('You cannot start this in a battle room.');
+		}
 		if(hangman[room.id].hangman === false) {
 			var targets = target.split(',');
 			if(!targets[1]) {
