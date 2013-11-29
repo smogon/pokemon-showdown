@@ -2390,6 +2390,9 @@ var commands = exports.commands = {
 		targets = target.split(',');
 		message = targets[0];
 		time = Number(targets[1]);
+		if (isNaN(time)) {
+			return this.sendReply('Make sure the time is just the number, and not any words.');
+		}
 		motd = setInterval(function() {Rooms.rooms.lobby.add('|raw|<div class = "infobox"><b>Message of the Day:</b><br />'+message)}, time * 60 * 1000);
 		return this.sendReply('The message of the day was set to "'+message+'" and it will be displayed every '+time+' minutes.');
 	},
