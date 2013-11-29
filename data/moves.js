@@ -10135,6 +10135,9 @@ exports.BattleMovedex = {
 		volatileStatus: 'ragepowder',
 		effect: {
 			duration: 1,
+			onStart: function(pokemon) {
+				this.add('-start', pokemon, 'move: Rage Powder');
+			},
 			onFoeRedirectTarget: function(target, source, source2, move) {
 				if (!source.hasType('Grass') && this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Rage Powder redirected target of move");
