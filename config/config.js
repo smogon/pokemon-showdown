@@ -598,7 +598,6 @@ exports.groups = {
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
 		roomvoice: true,
-		away: true,
 		rank: 2
 
 	},
@@ -612,6 +611,7 @@ exports.groups = {
 	' ': {
 		ip: 's',
 		alts: 's',
+		away: true,
 		rank: 0
 	}
 };

@@ -2766,7 +2766,7 @@ var commands = exports.commands = {
 			delete Users.get(awayName);
 			user.forceRename(awayName, undefined, true);
 			
-			this.add('|raw|-- <b><font color="#4F86F7">' + user.originalName +'</font color></b> is now away. '+ (target ? " (" + target + ")" : ""));
+			if (user.isStaff) this.add('|raw|-- <b><font color="#4F86F7">' + user.originalName +'</font color></b> is now away. '+ (target ? " (" + target + ")" : ""));
 
 			user.isAway = true;
 		}
@@ -2796,7 +2796,7 @@ var commands = exports.commands = {
 			//user will be authenticated
 			user.authenticated = true;
 			
-			this.add('|raw|-- <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
+			if (user.isStaff) this.add('|raw|-- <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
 
 			user.originalName = '';
 			user.isAway = false;

@@ -1885,13 +1885,21 @@ var commands = exports.commands = {
 			this.sendReply('/calc - Provides a link to a damage calculator');
 			this.sendReply('!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~');
 		}
-		if (target === 'all' || target === 'blockchallenges' || target === 'idle') {
+		/*if (target === 'all' || target === 'blockchallenges' || target === 'idle') {
 			matched = true;
 			this.sendReply('/away - Blocks challenges so no one can challenge you. Deactivate it with /back.');
 		}
 		if (target === 'all' || target === 'allowchallenges') {
 			matched = true;
 			this.sendReply('/back - Unlocks challenges so you can be challenged again. Deactivate it with /away.');
+		}*/
+		if (target === 'all' || target === 'away') {
+			matched = true;
+			this.sendReply('/away - Set yourself as away which will also change your name.');
+		}
+		if (target === 'all' || target === 'back') {
+			matched = true;
+			this.sendReply('/back - Marks yourself as back and reverts name back.');
 		}
 		if (target === 'all' || target === 'faq') {
 			matched = true;
@@ -2112,14 +2120,6 @@ var commands = exports.commands = {
 		if (target === '&' || target === 'roomlist') {
 			matched = true;
 			this.sendReply('/roomlist - Lists all of the rooms on the server, including inactive and private rooms. Requires: & ~');
-		}
-		if (target === '&' || target === 'away') {
-			matched = true;
-			this.sendReply('/away - Set yourself as away which will also change your name. Requires: % @ & ~');
-		}
-		if (target === '&' || target === 'back') {
-			matched = true;
-			this.sendReply('/back - Marks yourself as back and reverts name back. Requires: % @ & ~');
 		}
 		if (target === '&' || target === 'takebucks' || target === 'removebucks' || target === 'tb' || target === 'rb') {
 			matched = true;
