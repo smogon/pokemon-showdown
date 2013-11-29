@@ -1545,7 +1545,7 @@ var commands = exports.commands = {
 	shadowninjask: 'ninjask',
 	ninjask: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/7DKOZLx.png"><br><img src="http://i.imgur.com/YznYjmS.gif"><br>Ace: Zoroark<br>Finn, being an enormous crotch-kicking foot is a gift. Don\'t scorn a gift.');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/7DKOZLx.png"><br><img src="http://i.imgur.com/YznYjmS.gif"><br>Ace: Mega Charizard X<br>Finn, being an enormous crotch-kicking foot is a gift. Don\'t scorn a gift.');
 	},
 	
 	prez: 'cosy',
