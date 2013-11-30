@@ -1732,7 +1732,7 @@ var commands = exports.commands = {
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
-		if (!this.can('warn')) return false;
+		if (!this.can('warn', targetUser, room)) return false;
 		
 		targetUser.warnTimes += 1;
 
