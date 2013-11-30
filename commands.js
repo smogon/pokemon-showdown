@@ -22,7 +22,7 @@ var inShop = ['symbol', 'custom', 'animated', 'room', 'trainer', 'fix', 'declare
 var closeShop = false;
 var closedShop = 0;
 
-var motd = false;
+var isMotd = false;
 
 var avatar = fs.createWriteStream('config/avatars.csv', {'flags': 'a'}); // for /customavatar
 //spamroom
@@ -2384,7 +2384,7 @@ var commands = exports.commands = {
 		if (!target || target.indexOf(',') == -1) {
 			return this.sendReply('The proper syntax for this command is: /motd [message], [interval (minutes)]');
 		}
-		if (motd == true) {
+		if (isMotd == true) {
 			clearInterval(motd);
 		}
 		targets = target.split(',');
@@ -2394,6 +2394,7 @@ var commands = exports.commands = {
 			return this.sendReply('Make sure the time is just the number, and not any words.');
 		}
 		motd = setInterval(function() {Rooms.rooms.lobby.add('|raw|<div class = "infobox"><b>Message of the Day:</b><br />'+message)}, time * 60 * 1000);
+		isMotd = true;
 		this.logModCommand(user.name+' set the message of the day to: '+message+' for every '+time+' minutes.');
 		return this.sendReply('The message of the day was set to "'+message+'" and it will be displayed every '+time+' minutes.');
 	},
@@ -2401,7 +2402,7 @@ var commands = exports.commands = {
 	clearmotd: 'cmotd',
 	cmotd: function (target, room, user) {
 		if (!this.can('declare')) return false;
-		if (motd == false) {
+		if (isMotd == false) {
 			return this.sendReply('There is no motd right now.');
 		}
 		clearInterval(motd);
