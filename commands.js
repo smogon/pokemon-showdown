@@ -22,6 +22,8 @@ var inShop = ['symbol', 'custom', 'animated', 'room', 'trainer', 'fix', 'declare
 var closeShop = false;
 var closedShop = 0;
 
+var isMotd = false;
+
 var avatar = fs.createWriteStream('config/avatars.csv', {'flags': 'a'}); // for /customavatar
 //spamroom
 if (typeof spamroom == "undefined") {
@@ -1737,18 +1739,18 @@ var commands = exports.commands = {
 		if (targetUser.warnTimes >= warnMax) {
 			if (targetUser.warnTimes === 4) {
 				targetUser.popup('You have been automatically muted for 7 minutes due to being warned '+warnMax+' times.');
-				var alts = targetUser.getAlts();
-				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				targetUser.mute(room.id, 7*60*1000);
 				this.addModCommand(''+targetUser.name+' was automatically muted for 7 minutes.');
+				var alts = targetUser.getAlts();
+				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				return;
 			}
 			else if (targetUser.warnTimes >= 6 && isOdd(targetUser.warnTimes) === 0) {
 				targetUser.popup('You have been automatically muted for 60 minutes due to being warned '+warnMax+' or more times.');
-				var alts = targetUser.getAlts();
-				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				targetUser.mute(room.id, 60*60*1000);
 				this.addModCommand(''+targetUser.name+' was automatically muted for 60 minutes.');
+				var alts = targetUser.getAlts();
+				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				return;
 			}
 		}
@@ -2374,6 +2376,38 @@ var commands = exports.commands = {
 			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>'+target+'</b></div>');
 		}
 		this.logModCommand(user.name+' globally declared (chat level) '+target);
+	},
+	
+	setmotd: 'motd',
+	motd: function (target, room, user) {
+		if (!this.can('declare')) return false;
+		if (!target || target.indexOf(',') == -1) {
+			return this.sendReply('The proper syntax for this command is: /motd [message], [interval (minutes)]');
+		}
+		if (isMotd == true) {
+			clearInterval(motd);
+		}
+		targets = target.split(',');
+		message = targets[0];
+		time = Number(targets[1]);
+		if (isNaN(time)) {
+			return this.sendReply('Make sure the time is just the number, and not any words.');
+		}
+		motd = setInterval(function() {Rooms.rooms.lobby.add('|raw|<div class = "infobox"><b>Message of the Day:</b><br />'+message)}, time * 60 * 1000);
+		isMotd = true;
+		this.logModCommand(user.name+' set the message of the day to: '+message+' for every '+time+' minutes.');
+		return this.sendReply('The message of the day was set to "'+message+'" and it will be displayed every '+time+' minutes.');
+	},
+	
+	clearmotd: 'cmotd',
+	cmotd: function (target, room, user) {
+		if (!this.can('declare')) return false;
+		if (isMotd == false) {
+			return this.sendReply('There is no motd right now.');
+		}
+		clearInterval(motd);
+		this.logModCommand(user.name+' cleared the message of the day.');
+		return this.sendReply('You cleared the message of the day.');
 	},
 
 	wall: 'announce',

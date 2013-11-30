@@ -1151,6 +1151,11 @@ var commands = exports.commands = {
         if (!this.canBroadcast()) return;
         this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
     },
+   elitefourbalto : 'balto', 
+   balto: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<img height="90" src="http://fc08.deviantart.net/fs71/f/2012/035/e/f/snorlax_by_all0412-d4omc96.jpg"><img src="http://i.imgur.com/gcbLD9A.png"><img src="http://fc04.deviantart.net/fs71/f/2013/223/3/b/mega_kangaskhan_by_peegeray-d6hnnmk.png" height="100"><br /><center><b>Ace: </b>Snorlax</center><br /><center><b>Catchphrase: </b>To be a championship player,you need a championship team.</center><br />')
+    },
     
     
     chmpionxman : 'xman',
@@ -1545,7 +1550,7 @@ var commands = exports.commands = {
 	shadowninjask: 'ninjask',
 	ninjask: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/7DKOZLx.png"><br><img src="http://i.imgur.com/YznYjmS.gif"><br>Ace: Zoroark<br>Finn, being an enormous crotch-kicking foot is a gift. Don\'t scorn a gift.');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/7DKOZLx.png"><br><img src="http://i.imgur.com/YznYjmS.gif"><br>Ace: Mega Charizard X<br>Finn, being an enormous crotch-kicking foot is a gift. Don\'t scorn a gift.');
 	},
 	
 	prez: 'cosy',
