@@ -1739,18 +1739,18 @@ var commands = exports.commands = {
 		if (targetUser.warnTimes >= warnMax) {
 			if (targetUser.warnTimes === 4) {
 				targetUser.popup('You have been automatically muted for 7 minutes due to being warned '+warnMax+' times.');
-				var alts = targetUser.getAlts();
-				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				targetUser.mute(room.id, 7*60*1000);
 				this.addModCommand(''+targetUser.name+' was automatically muted for 7 minutes.');
+				var alts = targetUser.getAlts();
+				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				return;
 			}
 			else if (targetUser.warnTimes >= 6 && isOdd(targetUser.warnTimes) === 0) {
 				targetUser.popup('You have been automatically muted for 60 minutes due to being warned '+warnMax+' or more times.');
-				var alts = targetUser.getAlts();
-				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				targetUser.mute(room.id, 60*60*1000);
 				this.addModCommand(''+targetUser.name+' was automatically muted for 60 minutes.');
+				var alts = targetUser.getAlts();
+				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 				return;
 			}
 		}
