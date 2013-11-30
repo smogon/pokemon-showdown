@@ -497,7 +497,7 @@ var commands = exports.commands = {
 		}
 		var p = 'bucks';
 		if (takeMoney < 2) p = 'buck';
-		this.sendReply(targetUser.name + ' has had ' + takeMoney + ' ' + p + ' removed. This user now has ' + targetUser.money + ' bucks.');
+		this.sendReply(targetUser.name + ' has had ' + takeMoney + ' ' + p + ' removed. This user now has ' + targetUser.money + ' bucks. ('+reason+')');
 		this.logModCommand(user.name+' removed '+takeMoney+' '+p+' from '+targetUser.name+'. ('+reason+')');
 		targetUser.send(user.name + ' has removed ' + takeMoney + ' bucks from you. ');
 		} else {
