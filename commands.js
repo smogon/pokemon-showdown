@@ -2996,7 +2996,7 @@ var commands = exports.commands = {
 		}
 
 		room.destroyLog(function() {
-			room.logEntry(user.name + ' used /kill');
+			this.logModCommand(user.name + ' used /kill');
 		}, function() {
 			process.exit();
 		});
@@ -3018,6 +3018,7 @@ var commands = exports.commands = {
 		if (CommandParser.updateServerLock) {
 			return this.sendReply('Wait for /updateserver to finish before using /kill.');
 		}
+		this.logModCommand(user.name + ' used /restart');
 		var exec = require('child_process').exec;
 		exec('./restart.sh');
 		Rooms.global.send('|refresh|');
