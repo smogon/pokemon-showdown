@@ -113,14 +113,14 @@ exports.Formats = [
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
 
-	{
-		name: "[Gen 5] CAP Cawmodore Playtest",
-		section: "BW2 Singles",
+	// {
+	// 	name: "[Gen 5] CAP Cawmodore Playtest",
+	// 	section: "BW2 Singles",
 
-		mod: 'gen5',
-		ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', "Tomohawk", "Necturna", "Mollux", "Aurumoth", "Malaconda", "Syclant", "Revenankh", "Pyroak", "Fidgit", "Stratagem", "Arghonaut", "Kitsunoh", "Cyclohm", "Colossoil", "Krilowatt", "Voodoom"]
-	},
+	// 	mod: 'gen5',
+	// 	ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+	// 	banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', "Tomohawk", "Necturna", "Mollux", "Aurumoth", "Malaconda", "Syclant", "Revenankh", "Pyroak", "Fidgit", "Stratagem", "Arghonaut", "Kitsunoh", "Cyclohm", "Colossoil", "Krilowatt", "Voodoom"]
+	// },
 	{
 		name: "[Gen 5] Random Battle",
 		section: "BW2 Singles",
@@ -462,9 +462,8 @@ exports.Formats = [
 		name: "CAP (beta)",
 		section: "Other Metagames",
 
-		searchShow: false,
 		ruleset: ['CAP Pokemon', 'Standard Pokebank', 'Team Preview'],
-		banlist: ['Uber', 'Cawmodore', 'Soul Dew']
+		banlist: ['Uber', 'Soul Dew']
 	},
 	{
 		name: "Challenge Cup",
