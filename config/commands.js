@@ -1153,6 +1153,14 @@ var commands = exports.commands = {
         if (!this.canBroadcast()) return;
         this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
     },
+    
+    themapples : 'mapples',
+    mapples: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<img height="80" src="http://images.wikia.com/pokemontowerdefense/images/5/52/Infernape-infernape-23393713-629-354.png"><img src="http://i.imgur.com/xSdk7j6.gif"><img height="80" src="http://i806.photobucket.com/albums/yy343/double_trouble_bmgf/pokemon-dp/snapshot20100813014143.jpg"><br /><center><b>Ace: </b>Infernape</center><br /><center><b>Catchphrase: </b>My goal is to....<s>catch</s> enslave them all</center><br />')
+    },
+    
+    
    elitefourbalto : 'balto', 
    balto: function(target, room, user) {
         if (!this.canBroadcast()) return;
