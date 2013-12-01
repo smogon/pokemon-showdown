@@ -1,3 +1,110 @@
+/************************
+* Happy Holidays!    	*
+************************/
+#header {
+	background:url("http://i.imgur.com/q9MiuzK.png");
+}
+
+body {
+	background:url("http://i.imgur.com/XVyi9P9.jpg");
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.chat-log{
+	background: url("http://i.imgur.com/dIfUHsq.png") right top no-repeat;
+}
+
+.chat-log-add, .battle-log-add {
+    background: url("http://i.imgur.com/g83vifF.png");
+}
+  
+.menugroup .button{
+	background: url("http://images2.layoutsparks.com/1/189265/horse-snow-fall-winter.gif")center;
+}
+
+.menugroup {
+  background: url("http://i.imgur.com/vEduIJq.png");
+}
+
+.menugroup .menugroup{
+	text-align: center;
+}
+
+.menugroup .button:hover {
+	background: url("http://images2.layoutsparks.com/1/189265/horse-snow-fall-winter.gif")center;
+	color: #fff600;
+}
+
+.userlist{
+	border-left:1px solid #D5DDE4;
+	background: #86f586;
+}
+
+.userlist li button:hover {
+	background:#edeb39;
+}
+
+.message-announce {
+	background:#47cb39;
+	outline: 1px solid red;
+}
+
+.userlist li em.group, .pm-window h3 small  {
+   color: #5e5e5e;
+}
+  
+.tabbar a.button {
+    background: url("http://i.imgur.com/ajzvYbV.png");
+	color: black;
+  }
+    
+.tabbar a.button:hover {
+	background: url("http://i.imgur.com/WSrAVxz.png");
+	color: black;
+}
+
+.tabbar a.button.cur, .tabbar a.button.cur:hover {
+	background: url("http://i.imgur.com/g83vifF.png");
+	color: black;
+}
+
+.tabbar a.button.notifying, .tabbar a.button.notifying:hover {
+	background: url("http://i.imgur.com/CtoyG6B.png");
+}
+    
+.maintabbarbottom {
+	background: url("http://i.imgur.com/eTEXz5K.png");
+}
+
+.closebutton:hover {
+	color: black;
+}
+
+.pm-window h3 {
+    background: url("http://i.imgur.com/g83vifF.png");
+}
+
+.pm-window.focused h3, .pm-window.focused h3:hover {
+    background: url("http://i.imgur.com/ajzvYbV.png");
+}
+      
+.pm-log-add {
+	background: url("http://i.imgur.com/g83vifF.png");
+}
+
+.pad, .ps-popup, .pm-log, .ps-room.ps-room-opaque {
+    background: url("http://i.imgur.com/Q8vHT0Y.png");
+    overflow: auto;
+}
+
+.challenge {
+	background: url("http://i.imgur.com/CtoyG6B.png");
+	color: black;
+}
+
 /*
 #header{
 	background:url("http://upload.wikimedia.org/wikipedia/commons/d/da/Shades_of_blue.jpg")
@@ -83,7 +190,7 @@ background:#000000
 /************************************************
 *Vaniluxe theme                                 *
 ************************************************/
-#header{
+/*#header{
 background:url("http://www.southernbreezefarm.net/sitebuilder/images/blue_banner-760x147.jpg");
 }
 
@@ -96,11 +203,11 @@ background:url("http://i.imgur.com/Ci5DW3i.jpg");
 }
 
 
-.chat-log{
+.chat-log{*/
         /*Vanlite chat picture*/					      
         /*background: url("http://i.imgur.com/2OtugRn.png") right top no-repeat;*/
         /*Cubchoo Background*/
-        background: url("http://i.imgur.com/FqpmTtq.png") right top no-repeat;
+        /*background: url("http://i.imgur.com/FqpmTtq.png") right top no-repeat;
 }
 .chat-log-add{
 background:#0066b2
@@ -132,7 +239,7 @@ background:#65a8cc;
 
 .message-announce {
 background:#000000
-}
+}*/
 
 
 
