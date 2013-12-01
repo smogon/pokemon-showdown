@@ -1159,6 +1159,12 @@ var commands = exports.commands = {
         this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
     },
     
+    creaturephil : 'phil',
+    phil: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<img height="200" src="http://fc01.deviantart.net/fs70/f/2013/167/a/7/pancham_by_haychel-d64z92n.jpg"><img height="60" src="http://i.imgur.com/3jS3bPY.png"><img src="http://i.imgur.com/DKHdhf0.png" height="200"><br /><center><b>Ace: </b>Pancham</center><br /><center><b>Catchphrase: </b><a href="http://creatureleague.weebly.com">http://creatureleague.weebly.com</a></center><br />')
+    },
+    
     themapples : 'mapples',
     mapples: function(target, room, user) {
         if (!this.canBroadcast()) return;
