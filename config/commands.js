@@ -1149,6 +1149,11 @@ var commands = exports.commands = {
 		'<img src="http://hydra-images.cursecdn.com/pokemon.gamepedia.com/3/3e/LenoraBWsprite.gif">')
 	},
 
+    thefronteirbeast: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<img src=""><img src="http://i.imgur.com/3eN4nV3.gif"><img src=""><br /><center><b>Ace: </b>Hydreigon</center><br /><center><b>Catchphrase: </b>You wanna hax with me huh WELL YOU DIE</center><br />')
+    },
+    
     brittlewind: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
