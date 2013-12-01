@@ -528,6 +528,7 @@ exports.appealurl = 'http://frostserver.forumotion.com/f7-discipline-appeals';
 //     - complaintlist: /complaintlist command.
 //     - popup: /sendpopup command.
 //     - pmall: /pmall command.
+//	   - unlink: /unlink command.
 exports.groupsranking = [' ', '+', '%', '@', '#', '&', '~'];
 exports.groups = {
 	'~': {
@@ -598,6 +599,7 @@ exports.groups = {
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
 		roomvoice: true,
+		unlink: true,
 		rank: 2
 
 	},
