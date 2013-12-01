@@ -1283,13 +1283,18 @@ var User = (function () {
 			return false; // but end the loop here
 		}
 
-		if (this.lastChatText && message.substr(0,1) != '/') {
+		/*if (this.lastChatText && message.substr(0,1) != '/') {
 			var number = Users.levenshtein(this.lastChatText, message);
 			if (number < 4) {
 				this.lastChatText = message;
 				connection.sendTo(room, '|raw|<strong class=\"message-throttle-notice\">Your message was not sent.</strong>');
 				return false;
 			}
+		}*/
+
+		if (message.indexOf("psim.us") > -1 && message.indexOf("frost.psim.us") == -1) {
+			connection.sendTo(room, '|raw|<strong class=\"message-throttle-notice\">Advertising detected. Your message was not sent.</strong>');
+			return false;
 		}
 
 		if (this.chatQueueTimeout) {
