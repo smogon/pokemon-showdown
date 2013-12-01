@@ -1819,6 +1819,7 @@ var commands = exports.commands = {
 			var alts = targetUser.getAlts();
 			if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 			targetUser.mute(room.id, 7*60*1000);
+			this.add('|unlink|' + targetUser.userid);
 		}
 		if (room.auth) {
 			targetUser.popup(user.name+' has muted you for 7 minutes in ' + room.id + '. '+target);
@@ -1826,6 +1827,7 @@ var commands = exports.commands = {
 			var alts = targetUser.getAlts();
 			if (alts.length) this.addRoomCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 			targetUser.mute(room.id, 7*60*1000);
+			this.add('|unlink|' + targetUser.userid);
 		}
 	},
 
@@ -1902,6 +1904,7 @@ var commands = exports.commands = {
 			var alts = targetUser.getAlts();
 			if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 			targetUser.mute(room.id, 7*60*1000);
+			this.add('|unlink|' + targetUser.userid);
 		}
 		if (room.auth) {
 			targetUser.popup(user.name+' has muted you for 24 hours in ' + room.id + '. '+target);
@@ -1909,6 +1912,7 @@ var commands = exports.commands = {
 			var alts = targetUser.getAlts();
 			if (alts.length) this.addRoomCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
 			targetUser.mute(room.id, 24*60*60*1000);
+			this.add('|unlink|' + targetUser.userid);
 		}
 	},
 
