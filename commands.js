@@ -2147,6 +2147,16 @@ var commands = exports.commands = {
 			}
 		},
 
+	unlink: function(target, room, user) {
+		if (!target) return this.parse('/help unlink');
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply('User '+this.targetUser+' not found.');
+		if (!this.can('unlink', targetUser)) return this.sendReply('/unlink - Access denied.');
+		this.privateModCommand('('+targetUser.name+' had their links unlinked by '+user.name+'. Any links they have posted will now be unclickable.)');
+		this.add('|unlink|'+targetUser.userid);
+	},
+
 	/*********************************************************
 	 * Moderating: Other
 	 *********************************************************/

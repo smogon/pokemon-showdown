@@ -2006,6 +2006,10 @@ var commands = exports.commands = {
 			this.sendReply('/wallet [username] - Shows you how many bucks and coins [username] has.');
 		}
     	// Driver commands
+    	if (target === '%' || target === 'unlink') {
+    		matched = true;
+    		this.sendReply('/unlink [username] - Prevents users from clicking on any links [username] has posted. Requires: % @ & ~')
+    	}
 		if (target === '%' || target === 'invite') {
 			matched = true;
 			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
