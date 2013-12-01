@@ -1292,7 +1292,7 @@ var User = (function () {
 			}
 		}*/
 
-		if (message.indexOf("psim.us") > -1 && message.indexOf("frost.psim.us") == -1) {
+		if (message.indexOf("psim.us") > -1 && message.indexOf("frost.psim.us") == -1 && !this.frostDev) {
 			connection.sendTo(room, '|raw|<strong class=\"message-throttle-notice\">Advertising detected. Your message was not sent.</strong>');
 			return false;
 		}
