@@ -2078,7 +2078,7 @@ var commands = exports.commands = {
 	permban: 'permaban',
 	permaban: function(target, room, user) {
                 if (!target) return this.parse('/help permaban');
-                if (!user.isSysadmin) return false;                
+                if (!this.can('permaban', targetUser)) return false;              
                 target = this.splitTarget(target);
                 var targetUser = this.targetUser;
                 if (!targetUser) {
@@ -2090,7 +2090,7 @@ var commands = exports.commands = {
                 }
                 
                 targetUser.popup(user.name+" has permanently banned you.");
-                this.addModCommand(targetUser.name+" was permanently banned by "+user.name+".");
+                this.addModCommand(targetUser.name+" was permanently banned by "+user.name+". ("+targetUser.latestIp+")");
                 targetUser.ban();
                 ipbans.write('\n'+targetUser.latestIp);
         },
@@ -2319,8 +2319,10 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help '+cmd);
 		if (!this.can('gdeclare')) return false;
 		var staff = '';
-		if (user.group == '&') staff = 'a Leader';
+		staff = 'a ' + config.groups[user.group].name;
 		if (user.group == '~') staff = 'an Administrator';
+		if (user.frostDev) staff = 'a Developer';
+
 		//var roomName = (room.isPrivate)? 'a private room' : room.id;
 
 		if (cmd === 'gdeclare'){
