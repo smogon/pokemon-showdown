@@ -7660,12 +7660,13 @@ exports.BattleMovedex = {
 		pseudoWeather: 'magneticfield',
 		effect: {
 			duration: 5,
-			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+			/*durationCallback: function(target, source, effect) {
+				// Persistent isn't updated for BW/XY moves
+				if (source && source.ability === 'Persistent') {
 					return 7;
 				}
 				return 5;
-			},
+			},*/
 			onBasePower: function(basePower, user, target, move) {
 				if (move.type === 'Electric') {
 					this.debug('electric move strengthened');
