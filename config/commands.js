@@ -1024,6 +1024,16 @@ var commands = exports.commands = {
 		// secret sysop command
 		room.add(target);
 	},
+	
+	showimage: function (target, room, user) {
+		if (!target) return this.parse('/help showimage');
+		if (!this.can('declare', null, room)) return false;
+		
+		if (!this.canTalk()) return;
+		
+		this.add('|raw|<div class="broadcast"><img src='+ target +'><br/><i><font color="gray">Image shown by</font> <b>' + user.name + '</b></i></div>');
+		this.logModCommand(user.name+' displayed an image: '+target);
+	},
 
 	/*********************************************************
 	 * Help commands
@@ -1267,6 +1277,10 @@ var commands = exports.commands = {
 		if (target === '&' || target === 'declare') {
 			matched = true;
 			this.sendReply('/declare [message] - Anonymously announces a message. Requires: & ~');
+		}
+		if (target === '&' || target === 'showimage') {
+			matched = true;
+			this.sendReply('/showimage [URL] - Displays an image in the chatroom. Requires: & ~');
 		}
 		if (target === '~' || target === 'chatdeclare' || target === 'cdeclare') {
 			matched = true;
