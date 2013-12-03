@@ -505,7 +505,7 @@ module.exports = (function () {
 								// we're past the required level to learn it
 								return false;
 							}
-							if (!template.gender || template.gender === 'F' || this.gen >= 6) {
+							if (!template.gender || template.gender === 'F') {
 								// available as egg move
 								learned = learned.charAt(0)+'Eany';
 							} else {
