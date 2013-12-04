@@ -500,5 +500,25 @@ exports.BattleScripts = {
 		}
 		
 		return team;
+	},
+	randomSeasonalTeam: function(side) {
+		var seasonalPokemonList = [
+			'alakazam', 'machamp', 'hypno', 'hitmonlee', 'hitmonchan', 'mrmime', 'jynx', 'hitmontop', 'hariyama', 'sableye', 'medicham',
+			'toxicroak', 'electivire', 'magmortar', 'conkeldurr', 'throh', 'sawk', 'gothitelle', 'beheeyem', 'bisharp', 'volbeat', 'illumise',
+			'spinda', 'cacturne', 'infernape', 'lopunny', 'lucario', 'mienshao', 'pidgeot', 'fearow', 'dodrio', 'aerodactyl', 'noctowl',
+			'crobat', 'xatu', 'skarmory', 'swellow', 'staraptor', 'honchkrow', 'chatot', 'unfezant', 'sigilyph', 'braviary', 'mandibuzz',
+			'farfetchd', 'pelipper', 'altaria', 'togekiss', 'swoobat', 'archeops', 'swanna', 'weavile', 'gallade', 'gardevoir', 'ludicolo',
+			'snorlax', 'wobbuffet', 'meloetta', 'blissey', 'landorus', 'tornadus', 'golurk', 'bellossom', 'lilligant', 'probopass', 'roserade',
+			'leavanny', 'zapdos', 'moltres', 'articuno', 'delibird', 'pancham', 'pangoro', 'hawlucha', 'noibat', 'noivern', 'fletchling',
+			'fletchinder', 'talonflame', 'vivillon', 'yveltal'
+		];
+		seasonalPokemonList = seasonalPokemonList.randomize();
+		var team = [];
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(seasonalPokemonList[i], i);
+			if (seasonalPokemonList[i] === 'talonflame') set.level = 74;
+			team.push(set);
+		}
+		return team;
 	}
 ];
