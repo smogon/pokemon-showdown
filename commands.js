@@ -786,6 +786,7 @@ var commands = exports.commands = {
 		case 'no':
 			room.modchat = false;
 			break;
+		case 'ac':
 		case 'autoconfirmed':
 			room.modchat = 'autoconfirmed';
 			break;
