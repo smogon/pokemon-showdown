@@ -65,7 +65,7 @@ var plugins = exports.plugins = {
 				result += ' Consolation prize to: ' + ((consolation.length > 0)? consolation.join(', ') : 'no one') + '.';
 				result += '<br />Solution: ' + plugins.scavenger.roomOne + ', ' 
 				+ plugins.scavenger.roomTwo + ', ' + plugins.scavenger.roomThree + '.';
-				if (Rooms.rooms.scavengers) Rooms.rooms.scavengers.add('|raw|<div class="broadcast-blue">' + result + '</div>');
+				if (Rooms.rooms.scavengers) Rooms.rooms.scavengers.add('|raw|<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 				this.parse('/scavengerresethunt');
 				return this.sendReply('Scavenger hunt finished.');
 			},
@@ -79,7 +79,7 @@ var plugins = exports.plugins = {
 				plugins.scavenger.secondHint = '';
 				plugins.scavenger.thirdHint = '';
 				plugins.scavenger.participants = {};
-				plugins.scavenger.finished = {winner: '', second: '', third: '', consolation: []};
+				plugins.scavenger.finished = [];
 				return this.sendReply('Scavenger hunt reset.');
 			},
 			scavenger: 'scavengers',
