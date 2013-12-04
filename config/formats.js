@@ -598,22 +598,29 @@ exports.Formats = [
 
 		validateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
-			if (template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
+			if (!(template.id in {'bronzong':1, 'bronzor':1}) && template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
 				return [set.species+" is not a Flying type and does not have the ability Levitate."];
 			}
 		},
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: [
 			// Banned items
-			'Soul Dew', 'Iron Ball',
+			'Soul Dew', 'Iron Ball', 'Pinsirite',
 			// Banned moves
 			'Body Slam', 'Bulldoze', 'Dig', 'Dive', 'Earth Power', 'Earthquake', 'Electric Terrain', 'Fire Pledge', 'Fissure',
 			'Flying Press', 'Frenzy Plant', 'Geomancy', 'Grass Knot', 'Grass Pledge', 'Grassy Terrain', 'Gravity', 'Heavy Slam',
 			'Ingrain', "Land's Wrath", 'Magnitude', 'Mat Block', 'Misty Terrain', 'Mud Sport', 'Muddy Water', 'Rototiller',
 			'Seismic Toss', 'Slam', 'Smack Down', 'Spikes', 'Stomp', 'Substitute', 'Surf', 'Toxic Spikes', 'Water Pledge', 'Water Sport',
 			// Banned Pokémon
-			'Arceus-Flying', 'Chatot', 'Delibird', 'Dodrio', 'Gengar', 'Giratina', 'Giratina-Origin', 'Hawlucha', 'Ho-Oh', 'Lugia',
-			'Murkrow', 'Rayquaza', 'Shaymin-Sky', 'Thundurus', 'Yveltal'
+			// Illegal Flying-types
+			'Pidgey', 'Spearow', "Farfetch'd", 'Doduo', 'Dodrio', 'Hoothoot', 'Natu', 'Murkrow', 'Delibird', 'Taillow', 'Starly', 'Chatot',
+			'Shaymin-Sky', 'Pidove', 'Archen', 'Ducklett', 'Rufflet', 'Vullaby', 'Fletchling', 'Hawlucha',
+			// Illegal Levitators
+			'Gastly', 'Gengar',
+			// Illegal Megas
+			'Pinsir-Mega',
+			// Illegal Ubers
+			'Arceus-Flying', 'Giratina', 'Giratina-Origin', 'Ho-Oh', 'Lugia', 'Rayquaza', 'Yveltal'
 		]
 	},
 	{
