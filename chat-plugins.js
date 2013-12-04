@@ -35,11 +35,11 @@ var plugins = exports.plugins = {
 				if (plugins.scavenger.status === 'on') return this.sendReply('There is already an active scavenger hunt.');
 				var targets = target.split(',');
 				targets[0] = toId(targets[0]);
-				targets[1] = toId(targets[1]);
+				targets[1] = targets[1].trim();
 				targets[2] = toId(targets[2]);
-				targets[3] = toId(targets[3]);
+				targets[3] = targets[3].trim();
 				targets[4] = toId(targets[4]);
-				targets[5] = toId(targets[5]);
+				targets[5] = targets[5].trim();
 				if (!targets[0] || !targets[1] || !targets[2] || !targets[3] || !targets[4] || !targets[5])
 					return this.sendReply('You need to add three rooms and three hints in a [room, hint,] format.');
 				plugins.scavenger.status = 'on';
