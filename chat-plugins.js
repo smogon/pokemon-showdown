@@ -88,22 +88,22 @@ var plugins = exports.plugins = {
 			},
 			scavengerhint: function(target, room, user) {
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt right now.');
-				if (!plugins.scavenger.participants[user.id]) return this.sendReply('You are not participating in the current scavenger hunt.');
-				if (plugins.scavenger.participants[user.id].room >= 3) return this.sendReply('You have already finished!');
+				if (!plugins.scavenger.participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt.');
+				if (plugins.scavenger.participants[user.userid].room >= 3) return this.sendReply('You have already finished!');
 				return this.sendReply(
 					'Your current hint: ' 
-					+ plugins.scavenger[{0:'firstHint', 1:'secondHint', 2:'thirdHint'}[plugins.scavenger.participants[user.id].room]]
+					+ plugins.scavenger[{0:'firstHint', 1:'secondHint', 2:'thirdHint'}[plugins.scavenger.participants[user.userid].room]]
 					+ '. Type /scavenge [solution] to find out if you are right.'
 				);
 			},
 			scavenge: function(target, room, user) {
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt right now.');
-				if (!plugins.scavenger.participants[user.id]) return this.sendReply('You are not participating in the current scavenger hunt.');
-				if (plugins.scavenger.participants[user.id].room >= 3) return this.sendReply('You have already finished!');
+				if (!plugins.scavenger.participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt.');
+				if (plugins.scavenger.participants[user.userid].room >= 3) return this.sendReply('You have already finished!');
 				target = toId(target);
-				if (plugins.scavenger[{0:'roomOne', 1:'roomTwo', 2:'roomThree'}[plugins.scavenger.participants[user.id].room]] === target) {
-					plugins.scavenger.participants[user.id].room++;
-					if (plugins.scavenger.participants[user.id].room < 3) {
+				if (plugins.scavenger[{0:'roomOne', 1:'roomTwo', 2:'roomThree'}[plugins.scavenger.participants[user.userid].room]] === target) {
+					plugins.scavenger.participants[user.userid].room++;
+					if (plugins.scavenger.participants[user.userid].room < 3) {
 						return this.sendReply('Well done! You have advanced to the next room! Type /scavengerhint to see the next hint!');
 					} else {
 						// User finished, let's check the result
@@ -120,8 +120,8 @@ var plugins = exports.plugins = {
 			},
 			joinhunt: function(target, room, user) {
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt right now.');
-				if (plugins.scavenger.participants[user.id]) return this.sendReply('You are already participating in the current scavenger hunt.');
-				plugins.scavenger.participants[user.id] = {id: user.id, room: 0};
+				if (plugins.scavenger.participants[user.userid]) return this.sendReply('You are already participating in the current scavenger hunt.');
+				plugins.scavenger.participants[user.userid] = {id: user.userid, room: 0};
 				return this.sendReply('You joined the scavenger hunt. Type /scavenge name to try to find the room and /scavengerhint to read your current hint.');
 			}
 		}
