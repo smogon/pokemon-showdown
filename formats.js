@@ -877,4 +877,11 @@
 			}
 		}
 	},
+	{
+		name: "[Seasonal] Thankless Thanksgiving",
+		section: "OM of the Month",
+
+		team: 'randomSeasonal',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod']
+	}
 }
