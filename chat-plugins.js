@@ -58,7 +58,7 @@ var plugins = exports.plugins = {
 				var winner = plugins.scavenger.finished[0];
 				var second = plugins.scavenger.finished[1];
 				var third = plugins.scavenger.finished[2];
-				var consolation = plugins.scavenger.finished.slice(2);
+				var consolation = plugins.scavenger.finished.slice(3);
 				result += '<strong>Winner of Scavenger Hunt: ' + ((winner)? winner : 'no one') + '.';
 				result += '</strong> Second place: ' + ((second)? second : 'no one') + '.';
 				result += ' Third place: ' + ((third)? third : 'no one') + '.';
