@@ -598,14 +598,14 @@ exports.Formats = [
 
 		validateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
-			if (!(template.id in {'bronzong':1, 'bronzor':1}) && template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
+			if (template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
 				return [set.species+" is not a Flying type and does not have the ability Levitate."];
 			}
 		},
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: [
 			// Banned items
-			'Soul Dew', 'Iron Ball', 'Pinsirite',
+			'Soul Dew', 'Iron Ball', 'Pinsirite', 'Gengarite',
 			// Banned moves
 			'Body Slam', 'Bulldoze', 'Dig', 'Dive', 'Earth Power', 'Earthquake', 'Electric Terrain', 'Fire Pledge', 'Fissure',
 			'Flying Press', 'Frenzy Plant', 'Geomancy', 'Grass Knot', 'Grass Pledge', 'Grassy Terrain', 'Gravity', 'Heavy Slam',
@@ -618,7 +618,7 @@ exports.Formats = [
 			// Illegal Levitators
 			'Gastly', 'Gengar',
 			// Illegal Megas
-			'Pinsir-Mega',
+			'Pinsir-Mega', 'Gengar-Mega',
 			// Illegal Ubers
 			'Arceus-Flying', 'Giratina', 'Giratina-Origin', 'Ho-Oh', 'Lugia', 'Rayquaza', 'Yveltal'
 		]
