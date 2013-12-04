@@ -73,6 +73,10 @@ exports.BattleItems = {
 		isUnreleased: false,
 		desc: "Holder's first successful Rock-type attack will have 1.5x power. Single use."
 	},
+	souldew: {
+		inherit: true,
+		isUnreleased: false
+	},
 	steelgem: {
 		inherit: true,
 		isUnreleased: false,
