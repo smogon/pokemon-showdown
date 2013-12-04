@@ -1151,7 +1151,7 @@ var commands = exports.commands = {
 
     thefronteirbeast: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img src=""><img src="http://i.imgur.com/3eN4nV3.gif"><img src=""><br /><center><b>Ace: </b>Hydreigon</center><br /><center><b>Catchphrase: </b>You wanna hax with me huh WELL YOU DIE</center><br />')
+        this.sendReply('|raw|<img height="100" src="http://www.explodingdog.com/drawing/awesome.jpg"><img src="http://i.imgur.com/3eN4nV3.gif"><img height="100" src="http://fc09.deviantart.net/fs70/f/2011/089/a/1/hydreigon_the_dark_dragon_poke_by_kingofanime_koa-d3cslir.png"><br /><center><b>Ace: </b>Hydreigon</center><br /><center><b>Catchphrase: </b>You wanna hax with me huh WELL YOU DIE</center><br />')
     },
     
     brittlewind: function(target, room, user) {
