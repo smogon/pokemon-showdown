@@ -4992,24 +4992,6 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
-	"glowpunch": {
-		num: -6,
-		gen: 6,
-		accuracy: 100,
-		basePower: 70,
-		category: "Physical",
-		desc: "Deals damage to one adjacent target. Makes contact. Damage is boosted to 1.2x by the Ability Iron Fist.",
-		shortDesc: "Deals damage to one adjacent target.",
-		id: "glowpunch",
-		name: "Glow Punch",
-		pp: 20,
-		priority: 0,
-		isContact: true,
-		isPunchAttack: true,
-		secondary: false,
-		target: "normal",
-		type: "Fire"
-	},
 	"grassknot": {
 		num: 447,
 		accuracy: 100,
