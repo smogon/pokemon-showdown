@@ -1278,6 +1278,7 @@ var commands = exports.commands = {
 
 		var date = Date();
 		var message = '|raw|' + date.substring(0, date.indexOf('GMT') - 1) + ' - <b>' + user.getIdentity() + '</b> said: ' + targets[1].trim();
+		if (message.length > 500) return this.sendReply('Your tell exceeded the maximum length.');
 		tells[targetUser].add(message);
 
 		return this.sendReply('Message "' + targets[1].trim() + '" sent to ' + targetUser + '.');
