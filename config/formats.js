@@ -1,4 +1,4 @@
-// Note: This is the list of formats
+﻿// Note: This is the list of formats
 // The rules that formats use are stored in data/formats.js
 
 exports.Formats = [
@@ -108,6 +108,13 @@ exports.Formats = [
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
+	},
+{	
+		name: "Pokebank OU Monotype",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Same Type Clause', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite']
 	},
 
 	// BW2 Singles
