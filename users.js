@@ -33,6 +33,8 @@ var bannedIps = {};
 var lockedIps = {};
 
 var ipbans = fs.createWriteStream("config/ipbans.txt", {flags: "a"}); // do not remove this line
+var bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
+bannedMessages = bannedMessages.split('\n');
 	
 /**
  * Get a user.
@@ -1274,7 +1276,7 @@ var User = (function () {
 	 */
 	User.prototype.chat = function(message, room, connection) {
 		var now = new Date().getTime();
-				
+
 		if (message.substr(0,16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
 			ResourceMonitor.activeIp = connection.ip;
@@ -1291,6 +1293,22 @@ var User = (function () {
 				return false;
 			}
 		}*/
+		if (!room.isPrivate) {
+			for (var x in bannedMessages) {
+				console.log(bannedMessages[x]);
+				if (message.indexOf(bannedMessages[x]) > -1 && bannedMessages[x] != '') {
+					connection.user.lock();
+					connection.user.popup('You have been automatically locked for sending a message containing a banned word. If you feel this was a mistake please contact a staff member.');
+					//Rooms.rooms.staff.logModCommand(connection.user.name + ' was locked for sending a message containing a banned word. Message: ' + message);
+					for (var u in Users.users) {
+						if (Users.users[u].isStaff) {
+							Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+connection.user.name+' has been automatically locked for sending a message containing a banned word. Message: ' + message);
+						}
+					}
+					return false;
+				}
+			}
+		}
 
 		if (message.indexOf("psim.us") > -1 && message.indexOf("frost.psim.us") == -1 && !this.frostDev) {
 			connection.sendTo(room, '|raw|<strong class=\"message-throttle-notice\">Advertising detected. Your message was not sent.</strong>');
