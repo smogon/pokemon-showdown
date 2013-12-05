@@ -31,7 +31,7 @@ var plugins = exports.plugins = {
 		finished: [],
 		commands: {
 			scavengerstarthunt: function(target, room, user) {
-				if (!this.can('hotpatch')) return false;
+				if (!this.can('ban', null, room)) return false;
 				if (plugins.scavenger.status === 'on') return this.sendReply('There is already an active scavenger hunt.');
 				var targets = target.split(',');
 				if (!targets[0] || !targets[1] || !targets[2] || !targets[3] || !targets[4] || !targets[5])
@@ -50,7 +50,7 @@ var plugins = exports.plugins = {
 				return this.sendReply('Scavenger hunt started.');
 			},
 			scavengerendhunt: function(target, room, user) {
-				if (!this.can('hotpatch')) return false;
+				if (!this.can('ban', null, room)) return false;
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt.');
 				var result = '';
 				var winner = plugins.scavenger.finished[0];
@@ -68,7 +68,7 @@ var plugins = exports.plugins = {
 				return this.sendReply('Scavenger hunt finished.');
 			},
 			scavengerresethunt: function(target, room, user) {
-				if (!this.can('hotpatch')) return false;
+				if (!this.can('ban', null, room)) return false;
 				plugins.scavenger.status = 'off';
 				plugins.scavenger.roomOne = '';
 				plugins.scavenger.roomTwo = '';
@@ -99,16 +99,22 @@ var plugins = exports.plugins = {
 				if (!plugins.scavenger.participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt.');
 				if (plugins.scavenger.participants[user.userid].room >= 3) return this.sendReply('You have already finished!');
 				target = toId(target);
-				if (plugins.scavenger[{0:'roomOne', 1:'roomTwo', 2:'roomThree'}[plugins.scavenger.participants[user.userid].room]] === target) {
+				var room = plugins.scavenger.participants[user.userid].room;
+				if (plugins.scavenger[{0:'roomOne', 1:'roomTwo', 2:'roomThree'}[room]] === target) {
 					plugins.scavenger.participants[user.userid].room++;
-					if (plugins.scavenger.participants[user.userid].room < 3) {
-						return this.sendReply('Well done! You have advanced to the next room! Type /scavengerhint to see the next hint!');
+					room++;
+					if (room < 3) {
+						var currentHint = {1:'secondHint', 2:'thirdHint'};
+						return this.sendReply(
+							'Well done! You have advanced to the next room! The next hint is: '
+							+ plugins.scavenger[currentHint[room]]
+						);
 					} else {
 						// User finished, let's check the result
 						plugins.scavenger.finished.push(user.name);
 						var winningPositions = {1:'winner', 2:'second', 3:'third'};
 						var position = plugins.scavenger.finished.length;
-						var result = 'The user ' + user.name + ' has finished the hunt! He is the '
+						var result = 'The user ' + user.name + ' has finished the hunt! (S)he is the '
 						+ ((winningPositions[position])? winningPositions[position] : position + 'th') + '!';
 						if (Rooms.rooms.scavengers) Rooms.rooms.scavengers.add(
 							'|raw|<div class="broadcast-blue"><strong>' + result + '</strong></div>'
