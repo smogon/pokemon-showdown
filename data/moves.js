@@ -12544,7 +12544,7 @@ exports.BattleMovedex = {
 		effect: {
 			// this is a side condition
 			onStart: function(side) {
-				this.add('-sidestart',side,'move: Stealth Rock');
+				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn: function(pokemon) {
 				var typeMod = this.getEffectiveness('Rock', pokemon);
@@ -12604,6 +12604,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchIn: function(pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
+				this.add('-start', pokemon, 'Sticky Web');
 				this.boost({spe: -1}, pokemon, pokemon, this.getMove('stickyweb'));
 			}
 		},
