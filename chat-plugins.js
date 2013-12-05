@@ -34,21 +34,19 @@ var plugins = exports.plugins = {
 				if (!this.can('hotpatch')) return false;
 				if (plugins.scavenger.status === 'on') return this.sendReply('There is already an active scavenger hunt.');
 				var targets = target.split(',');
-				targets[0] = toId(targets[0]);
-				targets[1] = targets[1].trim();
-				targets[2] = toId(targets[2]);
-				targets[3] = targets[3].trim();
-				targets[4] = toId(targets[4]);
-				targets[5] = targets[5].trim();
 				if (!targets[0] || !targets[1] || !targets[2] || !targets[3] || !targets[4] || !targets[5])
 					return this.sendReply('You need to add three rooms and three hints in a [room, hint,] format.');
 				plugins.scavenger.status = 'on';
-				plugins.scavenger.roomOne = targets[0];
-				plugins.scavenger.firstHint = targets[1];
-				plugins.scavenger.roomTwo = targets[2];
-				plugins.scavenger.secondHint = targets[3];
-				plugins.scavenger.roomThree = targets[4];
-				plugins.scavenger.thirdHint = targets[5];
+				plugins.scavenger.roomOne = toId(targets[0]);
+				plugins.scavenger.firstHint = targets[1].trim();
+				plugins.scavenger.roomTwo = toId(targets[2]);
+				plugins.scavenger.secondHint = targets[3].trim();
+				plugins.scavenger.roomThree = toId(targets[4]);
+				plugins.scavenger.thirdHint = targets[5].trim();
+				if (Rooms.rooms.scavengers) Rooms.rooms.scavengers.add(
+					'|raw|<div class="broadcast-blue"><strong>A new Scavenger Hunt has been started!' 
+					+ ' The first hint is: ' + plugins.scavenger.firstHint + '</strong></div>'
+				);
 				return this.sendReply('Scavenger hunt started.');
 			},
 			scavengerendhunt: function(target, room, user) {
@@ -112,17 +110,45 @@ var plugins = exports.plugins = {
 						var position = plugins.scavenger.finished.length;
 						var result = 'The user ' + user.name + ' has finished the hunt! He is the '
 						+ ((winningPositions[position])? winningPositions[position] : position + 'th') + '!';
-						if (Rooms.rooms.scavengers) Rooms.rooms.scavengers.add('|raw|<div class="broadcast-blue">' + result + '</div>');
+						if (Rooms.rooms.scavengers) Rooms.rooms.scavengers.add(
+							'|raw|<div class="broadcast-blue"><strong>' + result + '</strong></div>'
+						);
 					}
 				} else {
-					return this.sendReply('Fat luck - that is not the next room.');
+					return this.sendReply('Fat luck - that is not the next room!');
 				}
 			},
 			joinhunt: function(target, room, user) {
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt right now.');
 				if (plugins.scavenger.participants[user.userid]) return this.sendReply('You are already participating in the current scavenger hunt.');
 				plugins.scavenger.participants[user.userid] = {id: user.userid, room: 0};
-				return this.sendReply('You joined the scavenger hunt. Type /scavenge name to try to find the room and /scavengerhint to read your current hint.');
+				return this.sendReply('You joined the scavenger hunt! Type /scavenge name to try to find the room and /scavengerhint to read your current hint.');
+			},
+			scavengerstatus: function(target, room, user) {
+				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt right now.');
+				if (!plugins.scavenger.participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt.');
+				var currentHint = {0:'firstHint', 1:'secondHint', 2:'thirdHint'};
+				var room = plugins.scavenger.participants[user.userid].room;
+				return this.sendReply(
+					'Your current hunt status: You are in the room #' + room + ((room < 3)? '. Your current hint is '
+					+ plugins.scavenger[currentHint[room]] : '. You have finished') + '.'
+				);
+			},
+			scavengerhelp: function(target, room, user) {
+				if (!this.canBroadcast()) return;
+				this.sendReplyBox(
+					'<strong>Player commands:</strong><br />' +
+					'- /scavengers: Join the scavengers room<br />' +
+					'- /joinhunt: Join the current hunt<br />' +
+					'- /scavengerhint: Get your current hint<br />' +
+					'- /scavengerstatus: Get your current game status<br />' +
+					'- /scavenge <em>name</em>: Test the [name] to find a room<br />' +
+					'<br />' +
+					'<strong>Admin commands:</strong><br />' +
+					'- /scavengerstarthunt <em>room one, hint, room two, hint, room three, hint</em>: Start a new hunt<br />' +
+					'- /scavengerendhunt: Finish current hunt and announce winners<br />' +
+					'- /scavengerresethunt: Reset the current hunt to mint status'
+				);
 			}
 		}
 	}
