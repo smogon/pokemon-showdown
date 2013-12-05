@@ -313,7 +313,7 @@ exports.BattleItems = {
 		// implemented in statuses
 		num: 544,
 		gen: 5,
-		desc: "Holder's partial-trapping moves deal 1/8 max HP per turn instead of 1/16."
+		desc: "Holder's partial-trapping moves deal 1/6 max HP per turn instead of 1/8."
 	},
 	"blackbelt": {
 		id: "blackbelt",
