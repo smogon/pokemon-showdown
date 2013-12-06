@@ -168,6 +168,7 @@ exports.BattleAliases = {
 	"web": "Sticky Web",
 	"wow": "Will-O-Wisp",
 	"playaround": "Play Rough",
+	"glowpunch": "Power-up Punch",
 
 	// Japanese names
 	"birijion": "Virizion",
