@@ -13,10 +13,11 @@ exports.BattleFormats = {
 			}
 			var hasHP = false;
 			if (set.item) {
-				if (set.item.gen > this.gen) {
-					problems.push(set.item.name+' does not exist in gen '+this.gen+'.');
-				} else if (set.item.isNonstandard) {
-					problems.push(set.item.name + ' is not a real item.');
+				var item = this.getItem(set.item);
+				if (item.gen > this.gen) {
+					problems.push(item.name+' does not exist in gen '+this.gen+'.');
+				} else if (item.isNonstandard) {
+					problems.push(item.name + ' is not a real item.');
 				}
 			}
 			if (set.moves) for (var i=0; i<set.moves.length; i++) {
