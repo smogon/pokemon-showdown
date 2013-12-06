@@ -3153,7 +3153,7 @@ exports.BattleMovedex = {
 		gen: 6,
 		accuracy: 100,
 		basePower: 0,
-		category: "Special",
+		category: "Status",
 		desc: "Harshly lowers the target's Special Attack stat.",
 		shortDesc: "Lowers the target's Sp. Atk by 2.",
 		id: "eerieimpulse",
