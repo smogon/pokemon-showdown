@@ -9224,22 +9224,6 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Bug"
 	},
-	"playaround": {
-		num: -6,
-		gen: 6,
-		accuracy: 100,
-		basePower: 70,
-		category: "Physical",
-		desc: "Deals damage to one adjacent target.",
-		shortDesc: "Deals damage to one adjacent target.",
-		id: "playaround",
-		name: "Play Around",
-		pp: 20,
-		priority: 0,
-		secondary: false,
-		target: "normal",
-		type: "Fairy"
-	},
 	"playnice": {
 		num: -6,
 		gen: 6,
