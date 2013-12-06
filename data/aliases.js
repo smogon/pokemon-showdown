@@ -167,6 +167,7 @@ exports.BattleAliases = {
 	"twave": "Thunder Wave",
 	"web": "Sticky Web",
 	"wow": "Will-O-Wisp",
+	"playaround": "Play Rough",
 
 	// Japanese names
 	"birijion": "Virizion",
