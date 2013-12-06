@@ -12568,7 +12568,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchIn: function(pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
-				this.add('-start', pokemon, 'Sticky Web');
+				this.add('-activate', pokemon, 'Sticky Web');
 				this.boost({spe: -1}, pokemon, pokemon, this.getMove('stickyweb'));
 			}
 		},
