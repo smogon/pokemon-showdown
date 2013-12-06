@@ -11,7 +11,7 @@
  * /whois
  *
  * But to actually define a command, it's a function:
- *   birkal: function(target, room, user) {
+ *   birkal: function(target, room, user) 
  *     this.sendReply("It's not funny anymore.");
  *   },
  *
@@ -1393,7 +1393,7 @@ var commands = exports.commands = {
 	
 	killerjays: function(target, room,user) {
 		if (!this.canBroadcast()) return;
-		this.sendReply('|raw|<center><img height="150" src="http://i.imgur.com/hcfggvP.png"><img src="http://i.imgur.com/NKqVp3S.gif"><img src="http://i.imgur.com/RkpJbD1.png"><br><font color="red"><blink>Ace: Articuno</blink></font><br>Birds Sing, Birds Fly, Birds kill people.');
+		this.sendReply('|raw|<center><img height="150" src="http://i.imgur.com/hcfggvP.png"><img src="http://i.imgur.com/uLoVXAs.gif"><img src="http://i.imgur.com/RkpJbD1.png"><br><font size="2"><b>Ace:</b> Articuno</font><br><font size="2"><b>Catchphrase: </b>Birds Sing, Birds Fly, Birds kill people.</font>');
 	},
 	
 	ryuuga: function(target, room,user) {
