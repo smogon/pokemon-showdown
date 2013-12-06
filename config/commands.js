@@ -1393,7 +1393,7 @@ var commands = exports.commands = {
 	
 	killerjays: function(target, room,user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/ASI8wpu.png"><img src="http://i.imgur.com/NKqVp3S.gif"><img src="http://i.imgur.com/RkpJbD1.png"><br><font color="red"><blink>Ace: Articuno</blink></font><br>Birds Sing, Birds Fly, Birds kill people.');
+		this.sendReplyBox('<center><img height="100" src="http://i.imgur.com/hcfggvP.png"><img src="http://i.imgur.com/NKqVp3S.gif"><img src="http://i.imgur.com/RkpJbD1.png"><br><font color="red"><blink>Ace: Articuno</blink></font><br>Birds Sing, Birds Fly, Birds kill people.');
 	},
 	
 	ryuuga: function(target, room,user) {
