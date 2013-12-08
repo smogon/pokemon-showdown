@@ -229,6 +229,10 @@ exports.BattlePokedex = {
 		inherit: true,
 		abilities: {0:"Pressure"}
 	},
+	heatran: {
+		inherit: true,
+		abilities: {0:"Flash Fire"}
+	},
 	stoutland: {
 		inherit: true,
 		baseStats: {hp:85,atk:100,def:90,spa:45,spd:90,spe:80}
