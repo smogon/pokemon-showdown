@@ -2279,6 +2279,7 @@ var commands = exports.commands = {
 		case 'no':
 			room.modchat = false;
 			break;
+		case 'ac':
 		case 'autoconfirmed':
 			room.modchat = 'autoconfirmed';
 			break;
@@ -2558,6 +2559,7 @@ var commands = exports.commands = {
 		// Otherwise, the text is defaulted to text search in current room's modlog.
 		var roomId = room.id;
 		var roomLogs = {};
+		var fs = require('fs');
 		if (target.indexOf(',') > -1) {
 			var targets = target.split(',');
 			target = targets[1].trim();
@@ -2573,25 +2575,30 @@ var commands = exports.commands = {
 
 		// Control if we really, really want to check all modlogs for a word.
 		var roomNames = '';
+		var filename = '';
+		var command = '';
 		if (roomId === 'all' && wordSearch) {
-			for (var i in Rooms.rooms) roomLogs[i] = true;
 			roomNames = 'all rooms';
+			// Get a list of all the rooms
+			var fileList = fs.readdirSync('logs/modlog');
+			for (var i=0; i<fileList.length; i++) {
+				filename += 'logs/modlog/' + fileList[i] + ' ';
+			}
 		} else {
-			roomLogs[roomId] = true;
+			roomid = room.id;
 			roomNames = 'the room ' + roomId;
+			filename = 'logs/modlog/modlog_' + roomId + '.txt';
 		}
 
-		// Seek for all rooms input for the lines or text
-		var filename = [];
-		for (var r in roomLogs) filename.push('logs/modlog_' + r + '.txt');
-		filename = filename.join(' ');
-		var command = 'tail -' + lines + ' ' + filename;
+		// Seek for all input rooms for the lines or text
+		command = 'tail -' + lines + ' ' + filename;
 		var grepLimit = 100;
 		if (wordSearch) { // searching for a word instead
 			if (target.match(/^["'].+["']$/)) target = target.substring(1,target.length-1);
-			command = "awk '{print NR,$0}' "+filename+" | sort -nr | cut -d' ' -f2- | grep -m"+grepLimit+" -i '"+target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]')+"'";
+			command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m"+grepLimit+" -i '"+target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]')+"'";
 		}
 
+		// Execute the file search to see modlog
 		require('child_process').exec(command, function(error, stdout, stderr) {
 			if (error && stderr) {
 				connection.popup('/modlog empty on ' + roomNames + ' or erred - modlog does not support Windows');
@@ -2751,7 +2758,7 @@ var commands = exports.commands = {
 
 		this.logEntry(user.name + ' used /hotpatch ' + target);
 
-		if (target === 'chat') {
+		if (target === 'chat' || target === 'commands') {
 
 			try {
 				CommandParser.uncacheTree('./command-parser.js');

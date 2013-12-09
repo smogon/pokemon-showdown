@@ -568,7 +568,7 @@ var commands = exports.commands = {
 				var move = {};
 				for (var mon in tempResults) {
 					var lsetData = {set:{}};
-					template = Tools.getTemplate(tempResults[mon].id);
+					var template = Tools.getTemplate(tempResults[mon].id);
 					for (var i in moves) {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {

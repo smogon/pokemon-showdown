@@ -505,7 +505,7 @@ module.exports = (function () {
 								// we're past the required level to learn it
 								return false;
 							}
-							if (!template.gender || template.gender === 'F' || this.gen >= 6) {
+							if (!template.gender || template.gender === 'F') {
 								// available as egg move
 								learned = learned.charAt(0)+'Eany';
 							} else {
@@ -1012,7 +1012,7 @@ module.exports = (function () {
 				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 				problems.push(name+" must be at least level "+template.evoLevel+".");
 			}
-			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && this.getAbility(set.ability).gen === 4 && !template.prevo) {
+			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && this.getAbility(set.ability).gen === 4 && !template.prevo && this.gen <= 5) {
 				problems.push(name+" has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");
 			}
 		}

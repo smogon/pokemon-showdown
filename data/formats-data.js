@@ -3169,6 +3169,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":50,"nature":"Quiet","moves":["eruption","magmastorm","earthpower","ancientpower"]}
 		],
+		unreleasedHidden: true,
 		isUnreleased: true,
 		tier: "OU"
 	},
