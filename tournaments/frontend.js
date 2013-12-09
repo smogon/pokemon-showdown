@@ -464,7 +464,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 	var params = cmdParts.join(' ').split(',').map(function (param) { return param.trim(); });
 
 	if (cmd === 'create' || cmd === 'new') {
-		if (!user.can('tournaments'))
+		if (!user.can('tournaments', null, room))
 			return this.sendReply(cmd + " -  Access denied.");
 		if (params.length < 2)
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
@@ -513,7 +513,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 				break;
 
 			default:
-				if (!user.can('tournaments'))
+				if (!user.can('tournaments', null, room))
 					return this.sendReply(cmd + " -  Access denied.");
 
 				switch (cmd) {
