@@ -189,19 +189,23 @@ exports.BattleStatuses = {
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
-		durationCallback: function() {
-			return this.random(2,4);
-		},
+		duration: 2,
 		onResidual: function(target) {
-			if (target.lastMove === 'struggle' || target.status === 'slp' || !target.moveThisTurn) {
+			if (target.status === 'slp') {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
 			}
+			this.effectData.trueDuration--;
 		},
 		onStart: function(target, source, effect) {
+			this.effectData.trueDuration = this.random(2,4);
 			this.effectData.move = effect.id;
 		},
+		onRestart: function() {
+			if (this.effectData.trueDuration >= 2) this.duration = 2;
+		},
 		onEnd: function(target) {
+			if (this.effectData.trueDuration > 1) return;
 			this.add('-end', target, 'rampage');
 			target.addVolatile('confusion');
 		},
