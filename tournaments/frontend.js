@@ -109,29 +109,34 @@ var Tournament = (function () {
 		if (targetUser && (this.isBracketInvalidated || (this.isTournamentStarted && this.isAvailableMatchesInvalidated)))
 			targetUser = null;
 
-		this.room.send('|tournament|update', targetUser);
-		this.room.send('|tournament|info|' + JSON.stringify({
+		this.room.send('|tournament|update|' + JSON.stringify({
 			isStarted: this.isTournamentStarted,
 			format: this.format,
-			generator: this.generator.name
+			generator: this.generator.name,
+			bracketData: this.getBracketData(),
+
+			// Defaults of the below packets (which gets overwritten client side)
+			isJoined: false,
+			challenges: [],
+			challengeBys: [],
+			challenging: null,
+			challenged: null
 		}), targetUser);
 
 		this.generator.getUsers().forEach(function (user) {
 			if (!targetUser || user === targetUser)
-				user.sendTo(this.room, '|tournament|isjoined');
+				user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
 		}, this);
-
-		this.room.send('|tournament|bracketdata|' + JSON.stringify(this.getBracketData()), targetUser);
 
 		if (this.isTournamentStarted) {
 			var availableMatches = this.getAvailableMatches();
 			availableMatches.challenges.forEach(function (opponents, user) {
 				if (opponents.length > 0 && (!targetUser || user === targetUser))
-					user.sendTo(this.room, '|tournament|challenges|' + usersToNames(opponents).join(','));
+					user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenges: usersToNames(opponents)}));
 			}, this);
 			availableMatches.challengeBys.forEach(function (opponents, user) {
 				if (opponents.length > 0 && (!targetUser || user === targetUser))
-					user.sendTo(this.room, '|tournament|challengeBys|' + usersToNames(opponents).join(','));
+					user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challengeBys: usersToNames(opponents)}));
 			}, this);
 
 			this.pendingChallenges.forEach(function (challenge, user) {
@@ -139,11 +144,13 @@ var Tournament = (function () {
 					return;
 
 				if (challenge.to)
-					user.sendTo(this.room, '|tournament|challenging|' + challenge.to.name);
+					user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenging: challenge.to.name}));
 				else if (challenge.from)
-					user.sendTo(this.room, '|tournament|challenged|' + challenge.from.name);
+					user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenged: challenge.from.name}));
 			}, this);
 		}
+
+		this.room.send('|tournament|updateEnd', targetUser);
 	};
 
 	Tournament.prototype.addUser = function (user, output) {
