@@ -249,7 +249,7 @@ exports.BattleScripts = {
 			}
 			hits = Math.floor(hits);
 			for (var i=0; i<hits && target.hp && pokemon.hp; i++) {
-				if (!move.sourceEffect && pokemon.status === 'slp') break;
+				if (!move.sourceEffect && !move.sleepUsable && pokemon.status === 'slp') break;
 
 				var moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
