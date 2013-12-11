@@ -1159,6 +1159,12 @@ var commands = exports.commands = {
         this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
     },
     
+    moogle : 'kupo',
+    kupo: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<marquee><img src="http://192.184.93.156:8000/avatars/kupo.png"></marquee><br /><img height="100" src="http://oyster.ignimgs.com/wordpress/write.ign.com/74314/2012/01/Moogle.jpg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://i.imgur.com/6UawAhH.gif">&nbsp;&nbsp;&nbsp;<img height="100" src="http://images2.wikia.nocookie.net/__cb20120910220204/gfaqsff/images/b/bb/Kupo1705.jpg"><br /><center><b>Ace: </b>Moogle</center><br /><center><b>Catchphrase: </b>Kupo!</center><br /><marquee direction="right"><img src="http://i.imgur.com/lSRFzG5.png"></marquee>')
+    },
+    
     creaturephil : 'phil',
     phil: function(target, room, user) {
         if (!this.canBroadcast()) return;
