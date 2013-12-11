@@ -2033,7 +2033,7 @@ exports.BattleMovedex = {
 		shortDesc: "If the user has no item, it steals the target's.",
 		id: "covet",
 		name: "Covet",
-		pp: 40,
+		pp: 25,
 		priority: 0,
 		isContact: true,
 		onHit: function(target, source) {
@@ -6989,7 +6989,7 @@ exports.BattleMovedex = {
 		id: "knockoff",
 		isViable: true,
 		name: "Knock Off",
-		pp: 20,
+		pp: 25,
 		priority: 0,
 		isContact: true,
 		onBasePowerPriority: 4,
@@ -9760,7 +9760,7 @@ exports.BattleMovedex = {
 	},
 	"psychoshift": {
 		num: 375,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		desc: "The user's major status problem is transferred to one adjacent target, and the user is cured. Fails if the target already has a major status problem.",
@@ -13443,7 +13443,7 @@ exports.BattleMovedex = {
 		shortDesc: "If the user has no item, it steals the target's.",
 		id: "thief",
 		name: "Thief",
-		pp: 10,
+		pp: 25,
 		priority: 0,
 		isContact: true,
 		onHit: function(target, source) {
