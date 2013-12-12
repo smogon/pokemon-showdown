@@ -1394,6 +1394,23 @@ var commands = exports.commands = {
 		}
 	},
 
+	roomfounder: function(target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomfounder - This room is't designed for per-room moderation to be added.");
+		}
+		var target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
+		if (!this.can('makeroom', targetUser, room)) return false;
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+		var name = targetUser.name;
+		room.auth[targetUser.userid] = '#';
+		room.founder = targetUser.userid;
+		this.addModCommand(''+name+' was appointed to Room Founder by '+user.name+'.');
+		room.onUpdateIdentity(targetUser);
+		Rooms.global.writeChatRoomData();
+	},
+
 	roomowner: function(target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
@@ -1403,7 +1420,7 @@ var commands = exports.commands = {
 
 		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
 
-		if (!this.can('makeroom', targetUser, room)) return false;
+		if (!room.founder || room.founder != user.userid) return false;
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
@@ -1427,7 +1444,7 @@ var commands = exports.commands = {
 		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
 
 		if (room.auth[userid] !== '#') return this.sendReply("User '"+name+"' is not a room owner.");
-		if (!this.can('makeroom', null, room)) return false;
+		if (!room.founder || user.userid != room.founder) return false;
 
 		delete room.auth[userid];
 		this.sendReply('('+name+' is no longer Room Owner.)');
@@ -1666,15 +1683,77 @@ var commands = exports.commands = {
 	roomauth: function(target, room, user, connection) {
 		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
 		var buffer = [];
-		for (var u in room.auth) {
-			buffer.push(room.auth[u] + u);
+		var owners = [];
+		var admins = [];
+		var leaders = [];
+		var mods = [];
+		var drivers = [];
+		var voices = [];
+		
+		room.owners = ''; room.admins = ''; room.leaders = ''; room.mods = ''; room.drivers = ''; room.voices = ''; 
+		for (var u in room.auth) { 
+			if (room.auth[u] == '#') { 
+				room.owners = room.owners +u+',';
+			} 
+			if (room.auth[u] == '~') { 
+				room.admins = room.admins +u+',';
+			} 
+			if (room.auth[u] == '&') { 
+				room.leaders = room.leaders +u+',';
+			}
+			if (room.auth[u] == '@') { 
+				room.mods = room.mods +u+',';
+			} 
+			if (room.auth[u] == '%') { 
+				room.drivers = room.drivers +u+',';
+			} 
+			if (room.auth[u] == '+') { 
+				room.voices = room.voices +u+',';
+			} 
 		}
-		if (buffer.length > 0) {
-			buffer = buffer.join(', ');
-		} else {
-			buffer = 'This room has no auth.';
+
+		if (!room.founder) founder = '';
+		if (room.founder) founder = room.founder;
+
+		room.owners = room.owners.split(',');
+
+		for (var u in room.owners) {
+			if (room.owners[u] != '') owners.push(room.owners[u]);
 		}
-		connection.popup(buffer);
+		for (var u in room.admins) {
+			if (room.admins[u] != '') admins.push(room.admins[u]);
+		}
+		for (var u in room.leaders) {
+			if (room.leaders[u] != '') leaders.push(room.leaders[u]);
+		}
+		for (var u in room.mods) {
+			if (room.mods[u] != '') mods.push(room.mods[u]);
+		}
+		for (var u in room.drivers) {
+			if (room.drivers[u] != '') drivers.push(room.drivers[u]);
+		}
+		for (var u in room.voices) {
+			if (room.voices[u] != '') voices.push(room.voices[u]);
+		}
+		if (owners.length > 0) {
+			owners = owners.join(', ');
+		} 
+		if (admins.length > 0) {
+			admins = admins.join(', ');
+		}
+		if (leaders.length > 0) {
+			leaders = leaders.join(', ');
+		}
+		if (mods.length > 0) {
+			mods = mods.join(', ');
+		}
+		if (drivers.length > 0) {
+			drivers = drivers.join(', ');
+		}
+		if (voices.length > 0) {
+			voices = voices.join(', ');
+		}
+		connection.popup('Founder: '+founder+'\nOwners: '+owners+'\nAdministrators: '+admins+'\nLeaders: '+leaders+'\nModerators: '+mods+'\nDrivers: '+drivers+'\nVoices: '+voices);
 	},
 
 	leave: 'part',
