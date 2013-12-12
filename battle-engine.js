@@ -21,8 +21,8 @@ global.config = require('./config/config.js');
 
 if (config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
-	process.on('uncaughtException', function (err) {
-		require('./crashlogger.js')(err, 'A simulator process');
+	//process.on('uncaughtException', function (err) {
+	//	require('./crashlogger.js')(err, 'A simulator process');
 		/* var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
 		if (Rooms.lobby) {
 			Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
@@ -30,7 +30,7 @@ if (config.crashguard) {
 		}
 		config.modchat = 'crash';
 		Rooms.global.lockdown = true; */
-	});
+	//});
 }
 
 /**
@@ -106,7 +106,9 @@ var Battles = {};
 
 // Receive and process a message sent using Simulator.prototype.send in
 // another process.
-process.on('message', function(message) {
+//var socket = process;
+var socket = fakeProcess.client;
+socket.on('message', function(message) {
 	//console.log('CHILD MESSAGE RECV: "'+message+'"');
 	var nlIndex = message.indexOf("\n");
 	var more = '';
@@ -3653,7 +3655,7 @@ var Battle = (function() {
 	// Simulator.prototype.receive in simulator.js (in another process).
 	Battle.prototype.send = function(type, data) {
 		if (Array.isArray(data)) data = data.join("\n");
-		process.send(this.id+"\n"+type+"\n"+data);
+		socket.send(this.id+"\n"+type+"\n"+data);
 	};
 	// This function is called by this process's 'message' event.
 	Battle.prototype.receive = function(data, more) {
