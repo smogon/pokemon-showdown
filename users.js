@@ -1295,7 +1295,6 @@ var User = (function () {
 		}*/
 		if (!room.isPrivate) {
 			for (var x in bannedMessages) {
-				console.log(bannedMessages[x]);
 				if (message.indexOf(bannedMessages[x]) > -1 && bannedMessages[x] != '') {
 					connection.user.lock();
 					connection.user.popup('You have been automatically locked for sending a message containing a banned word. If you feel this was a mistake please contact a staff member.');
