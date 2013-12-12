@@ -187,7 +187,7 @@ var BattlePokemon = (function() {
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
 			this.battle.debug('Unidentified species: '+this.species);
-			this.baseTemplate = this.battle.getTemplate('Bulbasaur');
+			this.baseTemplate = this.battle.getTemplate('Unown');
 		}
 		this.species = this.baseTemplate.species;
 		if (set.name === set.species || !set.name || !set.species) {
@@ -298,7 +298,8 @@ var BattlePokemon = (function() {
 				i *= 2;
 			}
 			this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
-			this.hpPower = Math.floor(hpPowerX * 40 / 63) + 30;
+			// In Gen 6, Hidden Power is always 60 base power
+			this.hpPower = (this.battle.gen && this.battle.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60;
 		}
 
 		this.boosts = {
@@ -371,7 +372,7 @@ var BattlePokemon = (function() {
 		}
 		if (init) return;
 
-		this.battle.runEvent('MaybeTrapPokemon', this);
+		if (this.runImmunity('trapped')) this.battle.runEvent('MaybeTrapPokemon', this);
 		for (var i = 0; i < this.battle.sides.length; ++i) {
 			var side = this.battle.sides[i];
 			if (side === this.side) continue;
@@ -386,12 +387,14 @@ var BattlePokemon = (function() {
 						// to run it again.
 						continue;
 					}
-					if ((k === 'DW') && !pokemon.template.dreamWorldRelease) {
-						// unreleased dream world ability
+					if ((k === 'H') && pokemon.template.unreleasedHidden) {
+						// unreleased hidden ability
 						continue;
 					}
-					this.battle.singleEvent('FoeMaybeTrapPokemon',
-						this.battle.getAbility(ability), {}, this, pokemon);
+					if (this.runImmunity('trapped')) {
+						this.battle.singleEvent('FoeMaybeTrapPokemon',
+							this.battle.getAbility(ability), {}, this, pokemon);
+					}
 				}
 			}
 		}
@@ -623,7 +626,7 @@ var BattlePokemon = (function() {
 	};
 	BattlePokemon.prototype.transformInto = function(pokemon, user) {
 		var template = pokemon.template;
-		if (pokemon.fainted || pokemon.illusion || pokemon.volatiles['substitute']) {
+		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 			return false;
 		}
 		if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (user && user.transformed && this.battle.gen >= 5)) {
@@ -637,7 +640,6 @@ var BattlePokemon = (function() {
 		for (var statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
 		}
-		this.ability = pokemon.ability;
 		this.moveset = [];
 		this.moves = [];
 		this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
@@ -663,6 +665,8 @@ var BattlePokemon = (function() {
 		for (var j in pokemon.boosts) {
 			this.boosts[j] = pokemon.boosts[j];
 		}
+		this.battle.add('-transform', this, pokemon);
+		this.setAbility(pokemon.ability);
 		this.update();
 		return true;
 	};
@@ -740,8 +744,9 @@ var BattlePokemon = (function() {
 				if (this.hasType(type[i])) return true;
 			}
 		} else {
-			if (this.types[0] === type) return true;
-			if (this.types[1] === type) return true;
+			for (var i=0; i<this.types.length; i++) {
+				if (this.types[i] === type) return true;
+			}
 		}
 		return false;
 	};
@@ -773,6 +778,13 @@ var BattlePokemon = (function() {
 		}
 		return d;
 	};
+	BattlePokemon.prototype.tryTrap = function() {
+		if (this.runImmunity('trapped')) {
+			this.trapped = true;
+			return true;
+		}
+		return false;
+	}
 	BattlePokemon.prototype.hasMove = function(moveid) {
 		moveid = toId(moveid);
 		if (moveid.substr(0,11) === 'hiddenpower') moveid = 'hiddenpower';
@@ -975,13 +987,13 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.clearItem = function() {
 		return this.setItem('');
 	};
-	BattlePokemon.prototype.setAbility = function(ability, source, effect) {
+	BattlePokemon.prototype.setAbility = function(ability, source, effect, noForce) {
 		if (!this.hp) return false;
 		ability = this.battle.getAbility(ability);
-		if (this.ability === ability.id) {
+		if (noForce && this.ability === ability.id) {
 			return false;
 		}
-		if (ability.id === 'Multitype' || ability.id === 'Illusion' || this.ability === 'Multitype') {
+		if (ability.id === 'multitype' || ability.id === 'illusion' || ability.id === 'stancechange' || this.ability === 'multitype') {
 			return false;
 		}
 		this.ability = ability.id;
@@ -1093,12 +1105,15 @@ var BattlePokemon = (function() {
 			return true;
 		}
 		if (this.negateImmunity[type]) return true;
-		if (!this.negateImmunity['Type'] && !this.battle.getImmunity(type, this)) {
-			this.battle.debug('natural immunity');
-			if (message) {
-				this.battle.add('-immune', this, '[msg]');
+		if (!(this.negateImmunity['Type'] && type in this.battle.data.TypeChart)) {
+			// Ring Target not active
+			if (!this.battle.getImmunity(type, this)) {
+				this.battle.debug('natural immunity');
+				if (message) {
+					this.battle.add('-immune', this, '[msg]');
+				}
+				return false;
 			}
-			return false;
 		}
 		var immunity = this.battle.runEvent('Immunity', this, null, null, type);
 		if (!immunity) {
@@ -1300,6 +1315,7 @@ var Battle = (function() {
 		this.id = roomid;
 		this.rated = rated;
 		this.weatherData = {id:''};
+		this.terrainData = {id:''};
 		this.pseudoWeather = {};
 
 		this.format = toId(format);
@@ -1328,6 +1344,7 @@ var Battle = (function() {
 	Battle.prototype.lastUpdate = 0;
 	Battle.prototype.currentRequest = '';
 	Battle.prototype.weather = '';
+	Battle.prototype.terrain = '';
 	Battle.prototype.ended = false;
 	Battle.prototype.started = false;
 	Battle.prototype.active = false;
@@ -1440,7 +1457,7 @@ var Battle = (function() {
 			seed = nextSeed;
 		}
 		return seed;
-	}
+	};
 
 	Battle.prototype.setWeather = function(status, source, sourceEffect) {
 		status = this.getEffect(status);
@@ -1494,6 +1511,60 @@ var Battle = (function() {
 	Battle.prototype.getWeather = function() {
 		return this.getEffect(this.weather);
 	};
+
+	Battle.prototype.setTerrain = function(status, source, sourceEffect) {
+		status = this.getEffect(status);
+		if (sourceEffect === undefined && this.effect) sourceEffect = this.effect;
+		if (source === undefined && this.event && this.event.target) source = this.event.target;
+
+		if (this.terrain === status.id) return false;
+		if (this.terrain && !status.id) {
+			var oldstatus = this.getTerrain();
+			this.singleEvent('End', oldstatus, this.terrainData, this);
+		}
+		var prevTerrain = this.terrain;
+		var prevTerrainData = this.terrainData;
+		this.terrain = status.id;
+		this.terrainData = {id: status.id};
+		if (source) {
+			this.terrainData.source = source;
+			this.terrainData.sourcePosition = source.position;
+		}
+		if (status.duration) {
+			this.terrainData.duration = status.duration;
+		}
+		if (status.durationCallback) {
+			this.terrainData.duration = status.durationCallback.call(this, source, sourceEffect);
+		}
+		if (!this.singleEvent('Start', status, this.terrainData, this, source, sourceEffect)) {
+			this.terrain = prevTerrain;
+			this.terrainData = prevTerrainData;
+			return false;
+		}
+		this.update();
+		return true;
+	};
+	Battle.prototype.clearTerrain = function() {
+		return this.setTerrain('');
+	};
+	Battle.prototype.effectiveTerrain = function(target) {
+		if (this.event) {
+			if (!target) target = this.event.target;
+		}
+		if (!this.runEvent('TryTerrain', target)) return '';
+		return this.terrain;
+	};
+	Battle.prototype.isTerrain = function(terrain, target) {
+		var ourTerrain = this.effectiveTerrain(target);
+		if (!Array.isArray(terrain)) {
+			return ourTerrain === toId(terrain);
+		}
+		return (terrain.map(toId).indexOf(ourTerrain) >= 0);
+	};
+	Battle.prototype.getTerrain = function() {
+		return this.getEffect(this.terrain);
+	};
+
 	Battle.prototype.getFormat = function() {
 		return this.getEffect(this.format);
 	};
@@ -1804,7 +1875,7 @@ var Battle = (function() {
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
 	 */
-	Battle.prototype.runEvent = function(eventid, target, source, effect, relayVar) {
+	Battle.prototype.runEvent = function(eventid, target, source, effect, relayVar, onEffect) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -1825,6 +1896,14 @@ var Battle = (function() {
 			hasRelayVar = false;
 		} else {
 			args.unshift(relayVar);
+		}
+
+		var parentEvent = this.event;
+		this.event = {id: eventid, target: target, source: source, effect: effect, modifier: 1};
+		this.eventDepth++;
+
+		if (onEffect && 'on'+eventid in effect) {
+			statuses.unshift({status: effect, callback: effect['on'+eventid], statusData: {}, end: null, thing: target});
 		}
 		for (var i=0; i<statuses.length; i++) {
 			var status = statuses[i].status;
@@ -1881,29 +1960,34 @@ var Battle = (function() {
 			if (typeof statuses[i].callback === 'function') {
 				var parentEffect = this.effect;
 				var parentEffectData = this.effectData;
-				var parentEvent = this.event;
 				this.effect = statuses[i].status;
 				this.effectData = statuses[i].statusData;
 				this.effectData.target = thing;
-				this.event = {id: eventid, target: target, source: source, effect: effect};
-				this.eventDepth++;
+
 				returnVal = statuses[i].callback.apply(this, args);
-				this.eventDepth--;
+
 				this.effect = parentEffect;
 				this.effectData = parentEffectData;
-				this.event = parentEvent;
 			} else {
 				returnVal = statuses[i].callback;
 			}
 
 			if (returnVal !== undefined) {
 				relayVar = returnVal;
-				if (!relayVar) return relayVar;
+				if (!relayVar) break;
 				if (hasRelayVar) {
 					args[0] = relayVar;
 				}
 			}
 		}
+
+		this.eventDepth--;
+		if (this.event.modifier !== 1 && typeof relayVar === 'number') {
+			// this.debug(eventid+' modifier: 0x'+('0000'+(this.event.modifier * 4096).toString(16)).slice(-4).toUpperCase());
+			relayVar = this.modify(relayVar, this.event.modifier);
+		}
+		this.event = parentEvent;
+
 		return relayVar;
 	};
 	Battle.prototype.resolveLastPriority = function(statuses, callbackType) {
@@ -1948,6 +2032,11 @@ var Battle = (function() {
 			status = this.getWeather();
 			if (status[callbackType] !== undefined || (getAll && thing.weatherData[getAll])) {
 				statuses.push({status: status, callback: status[callbackType], statusData: this.weatherData, end: this.clearWeather, thing: thing, priority: status[callbackType+'Priority']||0});
+				this.resolveLastPriority(statuses,callbackType);
+			}
+			status = this.getTerrain();
+			if (status[callbackType] !== undefined || (getAll && thing.terrainData[getAll])) {
+				statuses.push({status: status, callback: status[callbackType], statusData: this.terrainData, end: this.clearTerrain, thing: thing, priority: status[callbackType+'Priority']||0});
 				this.resolveLastPriority(statuses,callbackType);
 			}
 			status = this.getFormat();
@@ -2237,7 +2326,8 @@ var Battle = (function() {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		this.add('switch', side.active[pos], side.active[pos].getDetails);
+		this.add('switch', pokemon, pokemon.getDetails);
+		if (pokemon.template.isMega) this.add('-formechange', pokemon, pokemon.template.species);
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -2263,7 +2353,7 @@ var Battle = (function() {
 		if (!canSwitchIn.length) {
 			return null;
 		}
-		return canSwitchIn[Math.floor(Math.random()*canSwitchIn.length)];
+		return canSwitchIn[this.random(canSwitchIn.length)];
 	};
 	Battle.prototype.dragIn = function(side, pos) {
 		if (pos >= side.active.length) return false;
@@ -2281,6 +2371,7 @@ var Battle = (function() {
 			}
 			this.runEvent('SwitchOut', oldActive);
 			oldActive.isActive = false;
+			oldActive.isStarted = false;
 			oldActive.position = pokemon.position;
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
@@ -2293,7 +2384,8 @@ var Battle = (function() {
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
-		this.add('drag', side.active[pos], side.active[pos].getDetails);
+		this.add('drag', pokemon, pokemon.getDetails);
+		if (pokemon.template.isMega) this.add('-formechange', pokemon, pokemon.template.species);
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -2542,7 +2634,23 @@ var Battle = (function() {
 		if (nextMod.length) nextMod = Math.floor(nextMod[0] * 4096 / nextMod[1]);
 		else nextMod = Math.floor(nextMod * 4096);
 		return ((previousMod * nextMod + 2048) >> 12) / 4096; // M'' = ((M * M') + 0x800) >> 12
-	}
+	};
+	Battle.prototype.chainModify = function(numerator, denominator) {
+		var previousMod = Math.floor(this.event.modifier * 4096);
+
+		if (numerator.length) {
+			denominator = numerator[1];
+			numerator = numerator[0];
+		}
+		var nextMod = 0;
+		if (this.event.ceilModifier) {
+			nextMod = Math.ceil(numerator * 4096 / (denominator||1));
+		} else {
+			nextMod = Math.floor(numerator * 4096 / (denominator||1));
+		}
+
+		this.event.modifier = ((previousMod * nextMod + 2048) >> 12) / 4096;
+	};
 	Battle.prototype.modify = function(value, numerator, denominator) {
 		// You can also use:
 		// modify(value, [numerator, denominator])
@@ -2588,14 +2696,6 @@ var Battle = (function() {
 			return target.maxhp;
 		}
 
-		if (!move.basePowerMultiplier && move.category !== 'Status') {
-			// happens before basePowerCallback so Acrobatics works correctly
-			// activates constant damage moves
-			// but NOT OHKO moves
-			move.basePowerMultiplier = this.runEvent('BasePowerMultiplier', pokemon, target, move, 1);
-			if (move.basePowerMultiplier != 1) this.debug('multiplier: '+move.basePowerMultiplier);
-		}
-
 		if (move.damageCallback) {
 			return move.damageCallback.call(this, pokemon, target);
 		}
@@ -2625,8 +2725,13 @@ var Battle = (function() {
 		}
 		basePower = clampIntRange(basePower, 1);
 
-		move.critRatio = clampIntRange(move.critRatio, 0, 5);
-		var critMult = [0, 16, 8, 4, 3, 2];
+		if (this.gen <= 5) {
+			move.critRatio = clampIntRange(move.critRatio, 0, 5);
+			var critMult = [0, 16, 8, 4, 3, 2];
+		} else {
+			move.critRatio = clampIntRange(move.critRatio, 0, 4);
+			var critMult = [0, 16, 8, 2, 1];
+		}
 
 		move.crit = move.willCrit || false;
 		if (move.willCrit === undefined) {
@@ -2639,17 +2744,8 @@ var Battle = (function() {
 		}
 
 		// happens after crit calculation
-		if (basePower) {
-			basePower = this.singleEvent('BasePower', move, null, pokemon, target, move, basePower);
-			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
+		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 
-			if (move.basePowerMultiplier && move.basePowerMultiplier != 1) {
-				basePower = this.modify(basePower, move.basePowerMultiplier);
-			}
-			if (move.basePowerModifier) {
-				basePower = this.modify(basePower, move.basePowerModifier);
-			}
-		}
 		if (!basePower) return 0;
 		basePower = clampIntRange(basePower, 1);
 
@@ -2662,42 +2758,43 @@ var Battle = (function() {
 		var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
 		var attack;
 		var defense;
-		/*
-		if (move.useTargetOffensive) attacker = target;
-		if (move.useSourceDefensive) defender = pokemon;
-		*/
 
-		var atkStatMod = 1;
-		atkStatMod = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, atkStatMod);
-		var defStatMod = 1;
-		defStatMod = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defStatMod);
+		var atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
+		var defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 		
-		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, defender.boosts[attackStat], atkStatMod);
-		else attack = attacker.calculateStat(attackStat, attacker.boosts[attackStat], atkStatMod);
-		
-		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, attacker.boosts[defenseStat], defStatMod);
-		else defense = defender.calculateStat(defenseStat, defender.boosts[defenseStat], defStatMod);
-
 		var ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		var ignorePositiveDefensive = !!move.ignorePositiveDefensive;
+		
 		if (move.crit) {
 			ignoreNegativeOffensive = true;
 			ignorePositiveDefensive = true;
 		}
-		if (ignoreNegativeOffensive && (move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat]) < 0) {
-			move.ignoreOffensive = true;
+		
+		if (move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0)) {
+			var ignoreOffensive = true;
 		}
-		if (move.ignoreOffensive) {
+		if (move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0)) {
+			var ignoreDefensive = true;
+		}
+		
+		if (ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.calculateStat(attackStat, 0, atkStatMod);
+			atkBoosts = 0;
 		}
-		if (ignorePositiveDefensive && (move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat]) > 0) {
-			move.ignoreDefensive = true;
-		}
-		if (move.ignoreDefensive) {
+		if (ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
-			defense = target.calculateStat(defenseStat, 0, defStatMod);
+			defBoosts = 0;
 		}
+
+		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, atkBoosts);
+		else attack = attacker.calculateStat(attackStat, atkBoosts);
+		
+		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, defBoosts);
+		else defense = defender.calculateStat(defenseStat, defBoosts);
+		
+		// Apply Stat Modifiers
+		attack = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, attack);
+		defense = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defense);
 
 		//int(int(int(2*L/5+2)*A*P/D)/50);
 		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
@@ -2713,7 +2810,7 @@ var Battle = (function() {
 		// crit
 		if (move.crit) {
 			if (!suppressMessages) this.add('-crit', target);
-			baseDamage = this.modify(baseDamage, move.critModifier || 2);
+			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
 		}
 
 		// randomizer
@@ -2733,6 +2830,7 @@ var Battle = (function() {
 		}
 		// types
 		var totalTypeMod = this.getEffectiveness(type, target);
+		totalTypeMod = this.singleEvent('ModifyEffectiveness', move, null, target, pokemon, move, totalTypeMod);
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 			baseDamage *= 2;
@@ -2885,6 +2983,7 @@ var Battle = (function() {
 					'beforeTurnMove': 99,
 					'switch': 6,
 					'runSwitch': 6.1,
+					'megaEvo': 5.9,
 					'residual': -100,
 					'team': 102,
 					'start': 101
@@ -2913,11 +3012,13 @@ var Battle = (function() {
 					decision.targetPosition = target.position;
 				}
 
-				decision.move = this.getMove(decision.move);
+				decision.move = this.getMoveCopy(decision.move);
 				if (!decision.priority) {
 					var priority = decision.move.priority;
 					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
 					decision.priority = priority;
+					// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
+					if (this.gen > 5) decision.move.priority = priority;
 				}
 			}
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
@@ -3022,6 +3123,9 @@ var Battle = (function() {
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
 			this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
+			break;
+		case 'megaEvo':
+			if (this.runMegaEvo) this.runMegaEvo(decision.pokemon);
 			break;
 		case 'beforeTurnMove':
 			if (!decision.pokemon.isActive) return false;
@@ -3400,6 +3504,9 @@ var Battle = (function() {
 
 			case 'move':
 				var targetLoc = 0;
+				var pokemon = side.pokemon[i];
+				var validMoves = pokemon.getValidMoves();
+				var moveid = '';
 
 				if (data.substr(data.length-2) === ' 1') targetLoc = 1;
 				if (data.substr(data.length-2) === ' 2') targetLoc = 2;
@@ -3410,9 +3517,14 @@ var Battle = (function() {
 
 				if (targetLoc) data = data.substr(0, data.lastIndexOf(' '));
 
-				var pokemon = side.pokemon[i];
-				var validMoves = pokemon.getValidMoves();
-				var moveid = '';
+				if (data.substr(data.length-5) === ' mega') {
+					decisions.push({
+						choice: 'megaEvo',
+						pokemon: pokemon
+					});
+					data = data.substr(0, data.length-5);
+				}
+
 				if (data.search(/^[0-9]+$/) >= 0) {
 					moveid = validMoves[parseInt(data, 10) - 1];
 				} else {

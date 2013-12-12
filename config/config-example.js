@@ -78,13 +78,13 @@ exports.reportbattles = true;
 //   huge influxes of spammy users.
 exports.modchat = false;
 
-// backdoor - allows Zarel and his authorised Pokemon Showdown development
-//            staff to provide tech support for your server
-//   This backdoor gives Zarel (and development staff approved by him) admin
-//   access to your server, which allows him to provide tech support. This
+// backdoor - allows Pokemon Showdown system operators to provide technical
+//            support for your server
+//   This backdoor gives system operators (such as Zarel) console admin
+//   access to your server, which allow them to provide tech support. This
 //   can be useful in a variety of situations: if an attacker attacks your
 //   server and you are not online, if you need help setting up your server,
-//   etc. It is a backdoor, though, so if you do not trust Zarel you should
+//   etc. If you do not trust Pokemon Showdown with admin access, you should
 //   disable this feature.
 exports.backdoor = true;
 
@@ -187,6 +187,8 @@ exports.groups = {
 		id: "admin",
 		name: "Administrator",
 		root: true,
+		globalonly: true,
+		gdeclare: true,
 		rank: 6
 	},
 	'&': {
@@ -201,6 +203,7 @@ exports.groups = {
 		rangeban: true,
 		potd: true,
 		disableladder: true,
+		globalonly: true,
 		rank: 5
 	},
 	'#': {
@@ -209,9 +212,10 @@ exports.groups = {
 		inherit: '@',
 		jurisdiction: 'u',
 		roommod: true,
-		roomonly: true,
+		roomdriver: true,
 		declare: true,
 		modchatall: true,
+		roomonly: true,
 		rank: 4
 	},
 	'@': {
@@ -221,6 +225,7 @@ exports.groups = {
 		jurisdiction: 'u',
 		ban: true,
 		modchat: true,
+		roomvoice: true,
 		forcerename: true,
 		ip: true,
 		alts: '@u',
@@ -242,7 +247,6 @@ exports.groups = {
 		alts: '%u',
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
-		roomvoice: true,
 		rank: 2
 	},
 	'+': {
