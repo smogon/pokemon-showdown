@@ -1758,7 +1758,7 @@ var commands = exports.commands = {
 		if (voices.length > 0) {
 			voices = voices.join(', ');
 		}
-		connection.popup('Founder: '+founder+'\nOwners: '+owners+'\nAdministrators: '+admins+'\nLeaders: '+leaders+'\nModerators: '+mods+'\nDrivers: '+drivers+'\nVoices: '+voices);
+		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nAdministrators: \n'+admins+'\nLeaders: \n'+leaders+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nVoices: \n'+voices);
 	},
 
 	leave: 'part',
