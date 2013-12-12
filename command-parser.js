@@ -226,6 +226,17 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
 
+	if (user.authenticated && global.tells) {
+		var alts = user.getAlts();
+		alts.push(user.name);
+		alts.map(toId).forEach(function (user) {
+			if (tells[user]) {
+				tells[user].forEach(connection.sendTo.bind(connection, room));
+				delete tells[user];
+			}
+		});
+	}
+
 	return message;
 };
 

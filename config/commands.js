@@ -1162,6 +1162,23 @@ var commands = exports.commands = {
 		}
 	},
 
+	tell: function(target, room, user) {
+		if (!target) return false;
+		var message = this.splitTarget(target);
+		if (!message) return this.sendReply('You forgot the comma.');
+		if (user.locked) return this.sendReply("You cannot use this command while locked.");
+
+		message = this.canTalk(message, null);
+		if (!message) return false;
+
+		if (!global.tells) global.tells = {};
+		if (!tells[this.targetUsername]) tells[this.targetUsername] = [];
+		if (tells[this.targetUsername].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
+
+		tells[this.targetUsername].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
+		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
+	},
+
 	/*********************************************************
 	 * Help commands
 	 *********************************************************/
