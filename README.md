@@ -1,7 +1,7 @@
 Pokémon Showdown
 ========================================================================
 
-Pokémon Showdown is a simulator of Pokémon battles. It currently supports singles battles in Generations 4-5 (HGSS, BW, BW2).
+Pokémon Showdown is a simulator of Pokémon battles. It currently supports singles battles in all the games out so far (Generations 1 through 6).
 
 This repository contains the files needed to set up your own Pokémon Showdown server. Note that to set up a server, you'll also need a server computer.
 

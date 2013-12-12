@@ -32,7 +32,7 @@ const MAX_PARSE_RECURSION = 10;
 
 var crypto = require('crypto');
 
-var modlog = exports.modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
+var modlog = exports.modlog = modlog || {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'})};
 
 /**
  * Command parser
@@ -140,12 +140,13 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			logEntry: function(data) {
 				room.logEntry(data);
 			},
-			addModCommand: function(result) {
-				this.add(result);
-				this.logModCommand(result);
+			addModCommand: function(text, logOnlyText) {
+				this.add(text);
+				this.logModCommand(text+(logOnlyText||''));
 			},
 			logModCommand: function(result) {
-				modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
+				if (!modlog[room.id]) modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
+				modlog[room.id].write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 			},
 			can: function(permission, target, room) {
 				if (!user.can(permission, target, room)) {
@@ -204,12 +205,15 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
 		for (var g in config.groups) {
-			if (cmd === config.groups[g].id) {
+			var groupid = config.groups[g].id;
+			if (cmd === groupid) {
 				return parse('/promote ' + toUserid(target) + ',' + g, room, user, connection);
-			} else if (cmd === 'de' + config.groups[g].id || cmd === 'un' + config.groups[g].id) {
-				var nextGroup = config.groupsranking[config.groupsranking.indexOf(g) - 1];
-				if (!nextGroup) nextGroup = config.groupsranking[0];
-				return parse('/demote ' + toUserid(target) + ',' + nextGroup, room, user, connection);
+			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid) {
+				return parse('/demote ' + toUserid(target), room, user, connection);
+			} else if (cmd === 'room' + groupid) {
+				return parse('/roompromote ' + toUserid(target) + ',' + g, room, user, connection);
+			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
+				return parse('/roomdemote ' + toUserid(target), room, user, connection);
 			}
 		}
 
@@ -274,13 +278,13 @@ function canTalk(user, room, connection, message) {
 					userGroup = '+';
 				}
 			}
-			if (!user.authenticated && room.modchat === true) {
-				connection.sendTo(room, 'Because moderated chat is set, you must be registered to speak in lobby chat. To register, simply win a rated battle by clicking the look for battle button');
+			if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {
+				connection.sendTo(room, 'Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.');
 				return false;
 			} else if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(room.modchat)) {
 				var groupName = config.groups[room.modchat].name;
 				if (!groupName) groupName = room.modchat;
-				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in lobby chat.');
+				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in this room.');
 				return false;
 			}
 		}
@@ -304,7 +308,7 @@ function canTalk(user, room, connection, message) {
 		if (/\bnimp\.org\b/i.test(message)) return false;
 
 		// remove zalgo
-		message = message.replace(/[\u0300-\u036f\u0E2F-\u0E4F]{3,}/g,'');
+		message = message.replace(/[\u0300-\u036f\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,'');
 
 		if (room && room.id === 'lobby') {
 			var normalized = message.trim();
@@ -315,10 +319,17 @@ function canTalk(user, room, connection, message) {
 			}
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
+
+			if (user.group === ' ') {
+				if (message.toLowerCase().indexOf('spoiler:') >= 0 || message.toLowerCase().indexOf('spoilers:') >= 0) {
+					connection.sendTo(room, "Due to spam, spoilers can't be sent to the lobby.");
+					return false;
+				}
+			}
 		}
 
 		if (config.chatfilter) {
-			return config.chatfilter(user, room, connection.socket, message);
+			return config.chatfilter(user, room, connection, message);
 		}
 		return message;
 	}
@@ -391,4 +402,12 @@ var commands = exports.commands = require('./commands.js').commands;
 var customCommands = require('./config/commands.js');
 if (customCommands && customCommands.commands) {
 	Object.merge(commands, customCommands.commands);
+}
+
+/*********************************************************
+ * Install plug-in commands
+ *********************************************************/
+var plugins = require('./chat-plugins.js').plugins;
+for (var p in plugins) {
+	if (plugins[p].commands) Object.merge(commands, plugins[p].commands);
 }
