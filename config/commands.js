@@ -796,7 +796,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'autoconfirmed') {
 			matched = true;
 			buffer += 'A user is autoconfirmed when they have won at least one rated battle and has been registered for a week or longer.<br />';
-		}	
+		}
 		if (!matched) {
 			return this.sendReply('The FAQ entry "'+target+'" was not found. Try /faq for general help.');
 		}
@@ -969,7 +969,7 @@ var commands = exports.commands = {
 			this.logModCommand('The Pokemon of the Day was removed by '+user.name+'.');
 		}
 	},
-	
+
 	roll: 'dice',
 	dice: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1002,7 +1002,7 @@ var commands = exports.commands = {
 	},
 
 	br: 'banredirect',
-	banredirect: function(){ 
+	banredirect: function(){
 		this.sendReply('/banredirect - This command is obsolete and has been removed.');
 	},
 
@@ -1023,6 +1023,84 @@ var commands = exports.commands = {
 		if (!this.can('battlemessage')) return false;
 		// secret sysop command
 		room.add(target);
+	},
+
+	/*********************************************************
+	 * Custom commands
+	 *********************************************************/
+	d: 'poof',
+	cpoof: 'poof',
+	poof: (function () {
+		var messages = [
+			"has vanished into nothingness!",
+			"visited kupo's bedroom and never returned!",
+			"used Explosion!",
+			"fell into the void.",
+			"was squished by pandaw's large behind!",
+			"became EnerG's slave!",
+			"became kupo's love slave!",
+			"has left the building.",
+			"felt Thundurus's wrath!",
+			"died of a broken heart.",
+			"got lost in a maze!",
+			"was hit by Magikarp's Revenge!",
+			"was sucked into a whirlpool!",
+			"got scared and left the server!",
+			"fell off a cliff!",
+			"got eaten by a bunch of piranhas!",
+			"is blasting off again!",
+			"A large spider descended from the sky and picked up {{user}}.",
+			"tried to touch RisingPokeStar!",
+			"got their sausage smoked by Charmanderp!",
+			"was forced to give mpea an oil massage!",
+			"took an arrow to the knee... and then one to the face.",
+			"peered through the hole on Shedinja's back",
+			"recieved judgment from the almighty Arceus!",
+			"used Final Gambit and missed!",
+			"pissed off a Gyarados!",
+			"screamed \"BSHAX IMO\"!",
+			"was actually a 12 year and was banned for COPPA.",
+			"got lost in the illusion of reality.",
+			"was unfortunate and didn't get a cool message.",
+			"The Immortal accidently kicked {{user}} from the server!",
+			"was knocked out cold by Fallacies!",
+			"died making love to an Excadrill!",
+			"was shoved in a Blendtec Blender with iPad!",
+			"was BLEGHED on by LightBlue!",
+			"was bitten by a rabid Wolfie!",
+			"was kicked from server! (lel clause)",
+			"was Pan Hammered!"
+		];
+
+		return function(target, room, user) {
+			if (config.poofoff) return this.sendReply("Poof is currently disabled.");
+			if (room.id !== 'lobby' || user.muted) return false;
+			if (target && !this.can('broadcast')) return false;
+
+			var message = target || messages[Math.floor(Math.random() * messages.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			var colour = '#' + [1, 1, 1].map(function () {
+				var part = Math.floor(Math.random() * 0xaa);
+				return (part < 0x10 ? '0' : '') + part.toString(16);
+			}).join('');
+
+			room.addRaw('<strong><font color="' + colour + '">~~ ' + message.replace(/{{user}}/g, user.name) + ' ~~</font></strong>');
+			user.disconnectAll();
+		};
+	})(),
+
+	poofoff: 'nopoof',
+	nopoof: function() {
+		if (!this.can('warn')) return false;
+		config.poofoff = true;
+		return this.sendReply("Poof is now disabled.");
+	},
+
+	poofon: function() {
+		if (!this.can('warn')) return false;
+		config.poofoff = false;
+		return this.sendReply("Poof is now enabled.");
 	},
 
 	/*********************************************************
