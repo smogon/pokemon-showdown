@@ -1689,7 +1689,7 @@ var commands = exports.commands = {
 		var mods = [];
 		var drivers = [];
 		var voices = [];
-		
+
 		room.owners = ''; room.admins = ''; room.leaders = ''; room.mods = ''; room.drivers = ''; room.voices = ''; 
 		for (var u in room.auth) { 
 			if (room.auth[u] == '#') { 
@@ -1716,6 +1716,11 @@ var commands = exports.commands = {
 		if (room.founder) founder = room.founder;
 
 		room.owners = room.owners.split(',');
+		room.admins = room.admins.split(',');
+		room.leaders = room.leaders.split(',');
+		room.mods = room.mods.split(',');
+		room.drivers = room.drivers.split(',');
+		room.voices = room.voices.split(',');
 
 		for (var u in room.owners) {
 			if (room.owners[u] != '') owners.push(room.owners[u]);
