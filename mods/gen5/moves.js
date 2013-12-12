@@ -372,7 +372,15 @@ exports.BattleMovedex = {
 	},
 	minimize: {
 		inherit: true,
-		pp: 20
+		pp: 20,
+		effect: {
+			noCopy: true,
+			onSourceModifyDamage: function (damage, source, target, move) {
+				if (move.id in {'stomp':1, 'steamroller':1}) {
+					return this.chainModify(2);
+				}
+			}
+		}
 	},
 	moonlight: {
 		inherit: true,
