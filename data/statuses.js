@@ -202,7 +202,9 @@ exports.BattleStatuses = {
 			this.effectData.move = effect.id;
 		},
 		onRestart: function() {
-			if (this.effectData.trueDuration >= 2) this.duration = 2;
+			if (this.effectData.trueDuration >= 2) {
+				this.effectData.duration = 2;
+			}
 		},
 		onEnd: function(target) {
 			if (this.effectData.trueDuration > 1) return;
