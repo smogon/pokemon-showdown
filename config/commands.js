@@ -184,13 +184,13 @@ var commands = exports.commands = {
 		if (config.groups[targetUser.group] && config.groups[targetUser.group].name) {
 			this.sendReply('Group: ' + config.groups[targetUser.group].name + ' (' + targetUser.group + ')');
 		}
-		if (targetUser.staffAccess) {
-			this.sendReply('(Pok\xE9mon Showdown Development Staff)');
+		if (targetUser.isSysop) {
+			this.sendReply('(Pok\xE9mon Showdown System Operator)');
 		}
 		if (!targetUser.authenticated) {
 			this.sendReply('(Unregistered)');
 		}
-		if (!this.broadcasting && user.can('ip', targetUser)) {
+		if (!this.broadcasting && (user.can('ip', targetUser) || user === targetUser)) {
 			var ips = Object.keys(targetUser.ips);
 			this.sendReply('IP' + ((ips.length > 1) ? 's' : '') + ': ' + ips.join(', '));
 		}
@@ -269,7 +269,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
 		var moves = {}, tiers = {}, colours = {}, ability = {}, gens = {}, types = {};
-		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1};
+		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1, 'limbo':1};
 		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
 		var count = 0;
 		var showAll = false;
@@ -283,7 +283,7 @@ var commands = exports.commands = {
 					moves.count = 0;
 				}
 				if (moves.count === 4) {
-					return this.sendReplyBox('Specify a maximum of 4 moves.');
+					return this.sendReply('Specify a maximum of 4 moves.');
 				}
 				moves[target] = 1;
 				moves.count++;
@@ -297,7 +297,7 @@ var commands = exports.commands = {
 					ability.count = 0;
 				}
 				if (ability.count === 1) {
-					return this.sendReplyBox('Specify only one ability.');
+					return this.sendReply('Specify only one ability.');
 				}
 				ability[target] = 1;
 				ability.count++;
@@ -335,7 +335,7 @@ var commands = exports.commands = {
 			}
 			if (target === 'all') {
 				if (this.broadcasting) {
-					return this.sendReplyBox('A search with the parameter "all" cannot be broadcast.')
+					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
 				}
 				showAll = true;
 				continue;
@@ -348,18 +348,18 @@ var commands = exports.commands = {
 						types.count = 0;
 					}
 					if (types.count === 2) {
-						return this.sendReplyBox('Specify a maximum of two types.');
+						return this.sendReply('Specify a maximum of two types.');
 					}
 					types[target] = 1;
 					types.count++;
 					continue;
 				}
 			} else {
-				return this.sendReplyBox('"' + targets[i].trim() + '" could not be found in any of the search categories.');
+				return this.sendReply('"' + targets[i].trim() + '" could not be found in any of the search categories.');
 			}
 		}
 
-		if (showAll && count === 0) return this.sendReplyBox('No search parameters other than "all" were found.<br />Try "/help dexsearch" for more information on this command.');
+		if (showAll && count === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
 
 		while (count > 0) {
 			count--;
@@ -367,7 +367,7 @@ var commands = exports.commands = {
 			if (!results) {
 				for (var pokemon in Tools.data.Pokedex) {
 					pokemon = Tools.getTemplate(pokemon);
-					if (pokemon.tier !== 'Illegal' && (pokemon.tier.slice(2).toLowerCase() !== 'cap' || 'cap' in tiers)) {
+					if (pokemon.tier !== 'Illegal' && (pokemon.tier !== 'CAP' || 'cap' in tiers)) {
 						tempResults.add(pokemon);
 					}
 				}
@@ -390,9 +390,6 @@ var commands = exports.commands = {
 
 			if (tiers.count > 0) {
 				for (var mon in tempResults) {
-					if ('cap' in tiers) {
-						if (tempResults[mon].tier.slice(2).toLowerCase() === 'cap') results.add(tempResults[mon]);
-					}
 					if (tempResults[mon].tier.toLowerCase() in tiers) results.add(tempResults[mon]);
 				}
 				tiers.count = 0;
@@ -422,7 +419,7 @@ var commands = exports.commands = {
 				var move = {};
 				for (var mon in tempResults) {
 					var lsetData = {set:{}};
-					template = Tools.getTemplate(tempResults[mon].id);
+					var template = Tools.getTemplate(tempResults[mon].id);
 					for (var i in moves) {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {
@@ -447,7 +444,7 @@ var commands = exports.commands = {
 		}
 
 		var resultsStr = '';
-		if (results.length > 0) {
+		if (results && results.length > 0) {
 			for (var i = 0; i < results.length; ++i) results[i] = results[i].species;
 			if (showAll || results.length <= output) {
 				resultsStr = results.join(', ');
@@ -459,7 +456,7 @@ var commands = exports.commands = {
 				resultsStr += ', and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.';
 			}
 		} else {
-			resultsStr = 'No Pokemon found.';
+			resultsStr = 'No Pokémon found.';
 		}
 		return this.sendReplyBox(resultsStr);
 	},
@@ -467,6 +464,7 @@ var commands = exports.commands = {
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',
+	g6learn: 'learn',
 	learn: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help learn');
 
@@ -479,6 +477,7 @@ var commands = exports.commands = {
 		var problem;
 		var all = (cmd === 'learnall');
 		if (cmd === 'learn5') lsetData.set.level = 5;
+		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
 		if (!template.exists) {
 			return this.sendReply('Pokemon "'+template.id+'" not found.');
@@ -516,7 +515,7 @@ var commands = exports.commands = {
 					prevSourceType = source.substr(0,2);
 					prevSourceCount = source.substr(2)?0:-1;
 					buffer += "<li>gen "+source.substr(0,1)+" "+sourceNames[source.substr(1,1)];
-					if (prevSourceType === '5E' && template.maleOnlyDreamWorld) buffer += " (cannot have DW ability)";
+					if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
 					if (source.substr(2)) buffer += ": "+source.substr(2);
 				}
 			}
@@ -628,8 +627,9 @@ var commands = exports.commands = {
 		this.sendReplyBox('+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
 			'% <b>Driver</b> - The above, and they can also mute and lock users and check for alts<br />' +
 			'@ <b>Moderator</b> - The above, and they can ban users<br />' +
-			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />'+
-			'~ <b>Administrator</b> - They can do anything, like change what this message says');
+			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />' +
+			'~ <b>Administrator</b> - They can do anything, like change what this message says<br />' +
+			'# <b>Room Owner</b> - They are administrators of the room and can almost totally control it');
 	},
 
 	opensource: function(target, room, user) {
@@ -711,10 +711,6 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3484106/">STABmons</a>';
 		}
-		if (target === 'all' || target === 'vgc2013' || target === 'vgc') {
-			matched = true;
-			buffer += '- <a href="http://www.smogon.com/forums/threads/3471161/">VGC 2013</a><br />';
-		}
 		if (target === 'all' || target === 'omotm' || target === 'omofthemonth' || target === 'month') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3481155/">OM of the Month</a>';
@@ -728,22 +724,24 @@ var commands = exports.commands = {
 	roomhelp: function(target, room, user) {
 		if (room.id === 'lobby') return this.sendReply('This command is too spammy for lobby.');
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Room moderators (%) can use:<br />' +
+		this.sendReplyBox('Room drivers (%) can use:<br />' +
 			'- /mute <em>username</em>: 7 minute mute<br />' +
 			'- /hourmute <em>username</em>: 60 minute mute<br />' +
 			'- /unmute <em>username</em>: unmute<br />' +
-			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
-			'- /deroomvoice <em>username</em>: remove a room voice<br />' +
 			'- /announce <em>message</em>: make an announcement<br />' +
 			'<br />' +
-			'Room owners (#) can use:<br />' +
-			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
-			'- /roommod <em>username</em>: appoint a room moderator<br />' +
-			'- /deroommod <em>username</em>: remove a room moderator<br />' +
-			'- /declare <em>message</em>: make a global declaration<br />' +
-			'- /modchat <em>level</em>: set modchat (to turn off: /modchat off)<br />' +
+			'Room moderators (@) can also use:<br />' +
 			'- /roomban <em>username</em>: bans user from the room<br />' +
 			'- /roomunban <em>username</em>: unbans user from the room<br />' +
+			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
+			'- /roomdevoice <em>username</em>: remove a room voice<br />' +
+			'- /modchat <em>level</em>: set modchat (to turn off: /modchat off)<br />' +
+			'<br />' +
+			'Room owners (#) can also use:<br />' +
+			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
+			'- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />' +
+			'- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />' +
+			'- /declare <em>message</em>: make a global declaration<br />' +
 			'</div>');
 	},
 
@@ -795,6 +793,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '<a href="http://www.smogon.com/sim/staff_faq">Staff FAQ</a><br />';
 		}
+		if (target === 'all' || target === 'autoconfirmed') {
+			matched = true;
+			buffer += 'A user is autoconfirmed when they have won at least one rated battle and has been registered for a week or longer.<br />';
+		}	
 		if (!matched) {
 			return this.sendReply('The FAQ entry "'+target+'" was not found. Try /faq for general help.');
 		}
@@ -967,6 +969,32 @@ var commands = exports.commands = {
 			this.logModCommand('The Pokemon of the Day was removed by '+user.name+'.');
 		}
 	},
+	
+	roll: 'dice',
+	dice: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		var d = target.indexOf("d");
+		if (d != -1) {
+			var num = parseInt(target.substring(0,d));
+			faces = NaN;
+			if (target.length > d) var faces = parseInt(target.substring(d + 1));
+			if (isNaN(num)) num = 1;
+			if (isNaN(faces)) return this.sendReply("The number of faces must be a valid integer.");
+			if (faces < 1 || faces > 1000) return this.sendReply("The number of faces must be between 1 and 1000");
+			if (num < 1 || num > 20) return this.sendReply("The number of dice must be between 1 and 20");
+			var rolls = new Array();
+			var total = 0;
+			for (var i=0; i < num; i++) {
+				rolls[i] = (Math.floor(faces * Math.random()) + 1);
+				total += rolls[i];
+			}
+			return this.sendReplyBox('Random number ' + num + 'x(1 - ' + faces + '): ' + rolls.join(', ') + '<br />Total: ' + total);
+		}
+		if (target && isNaN(target) || target.length > 21) return this.sendReply('The max roll must be a number under 21 digits.');
+		var maxRoll = (target)? target : 6;
+		var rand = Math.floor(maxRoll * Math.random()) + 1;
+		return this.sendReplyBox('Random number (1 - ' + maxRoll + '): ' + rand);
+	},
 
 	register: function() {
 		if (!this.canBroadcast()) return;
@@ -974,7 +1002,7 @@ var commands = exports.commands = {
 	},
 
 	br: 'banredirect',
-	banredirect: function() {
+	banredirect: function(){ 
 		this.sendReply('/banredirect - This command is obsolete and has been removed.');
 	},
 
@@ -1133,9 +1161,19 @@ var commands = exports.commands = {
 			this.sendReply('Types must be followed by " type", e.g., "dragon type".');
 			this.sendReply('The order of the parameters does not matter.');
 		}
+		if (target === 'all' || target === 'dice' || target === 'roll') {
+			matched = true;
+			this.sendReply('/dice [optional max number] - Randomly picks a number between 1 and 6, or between 1 and the number you choose.');
+			this.sendReply('/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.');
+		}
 		if (target === 'all' || target === 'join') {
 			matched = true;
 			this.sendReply('/join [roomname] - Attempts to join the room [roomname].');
+		}
+		if (target === 'all' || target === 'ignore') {
+			matched = true;
+			this.sendReply('/ignore [user] - Ignores all messages from the user [user].');
+			this.sendReply('Note that staff messages cannot be ignored.');
 		}
 		if (target === '%' || target === 'invite') {
 			matched = true;
@@ -1187,7 +1225,7 @@ var commands = exports.commands = {
 		}
 		if (target === '%' || target === 'modlog') {
 			matched = true;
-			this.sendReply('/modlog [n] - If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n". Requires: % @ & ~');
+			this.sendReply('/modlog [roomid|all], [n] - Roomid defaults to current room. If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n" on room\'s log [roomid]. If you set [all] as [roomid], searches for "n" on all rooms\'s logs. Requires: % @ & ~');
 		}
 		if (target === "%" || target === 'kickbattle ') {
 			matched = true;
@@ -1226,17 +1264,25 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/forcetie - Forces the current match to tie. Requires: & ~');
 		}
-		if (target === '&' || target === 'declare' ) {
+		if (target === '&' || target === 'declare') {
 			matched = true;
 			this.sendReply('/declare [message] - Anonymously announces a message. Requires: & ~');
 		}
-		if (target === '%' || target === 'announce' || target === 'wall' ) {
+		if (target === '~' || target === 'chatdeclare' || target === 'cdeclare') {
+			matched = true;
+			this.sendReply('/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~');
+		}
+		if (target === '~' || target === 'globaldeclare' || target === 'gdeclare') {
+			matched = true;
+			this.sendReply('/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~');
+		}
+		if (target === '%' || target === 'announce' || target === 'wall') {
 			matched = true;
 			this.sendReply('/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
 		}
 		if (target === '@' || target === 'modchat') {
 			matched = true;
-			this.sendReply('/modchat [off/+/%/@/&/~] - Set the level of moderated chat. Requires: @ for off/+ options, & ~ for all the options');
+			this.sendReply('/modchat [off/autoconfirmed/+/%/@/&/~] - Set the level of moderated chat. Requires: @ for off/autoconfirmed/+ options, & ~ for all the options');
 		}
 		if (target === '~' || target === 'hotpatch') {
 			matched = true;
@@ -1283,8 +1329,8 @@ var commands = exports.commands = {
 			this.sendReply('/help OR /h OR /? - Gives you help.');
 		}
 		if (!target) {
-			this.sendReply('COMMANDS: /msg, /reply, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps');
-			this.sendReply('INFORMATIONAL COMMANDS: /data, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))');
+			this.sendReply('COMMANDS: /msg, /reply, /ignore, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps, /highlight');
+			this.sendReply('INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))');
 			this.sendReply('For details on all room commands, use /roomhelp');
 			this.sendReply('For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {

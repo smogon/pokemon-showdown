@@ -9,7 +9,8 @@
  * @license MIT license
  */
 
-const TIMEOUT_DEALLOCATE = 15*60*1000;
+const TIMEOUT_EMPTY_DEALLOCATE = 10*60*1000;
+const TIMEOUT_INACTIVE_DEALLOCATE = 40*60*1000;
 const REPORT_USER_STATS_INTERVAL = 1000*60*10;
 
 var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
@@ -73,13 +74,17 @@ var GlobalRoom = (function() {
 			var lastBattle;	// last lastBattle to be written to file
 			var finishWriting = function() {
 				writing = false;
-				if (lastBattle !== self.lastBattle) {
+				if (lastBattle < self.lastBattle) {
 					self.writeNumRooms();
 				}
 			};
 			return function() {
 				if (writing) return;
-				lastBattle = self.lastBattle;
+
+				// batch writing lastbattle.txt for every 10 battles
+				if (lastBattle >= self.lastBattle) return;
+				lastBattle = self.lastBattle + 10;
+
 				writing = true;
 				fs.writeFile('logs/lastbattle.txt.0', '' + lastBattle, function() {
 					// rename is atomic on POSIX, but will throw an error on Windows
@@ -189,7 +194,7 @@ var GlobalRoom = (function() {
 			if (!section) section = '';
 			if (section !== curSection) {
 				curSection = section;
-				formatListText += '||'+section;
+				formatListText += '|,' + (format.column || 1) + '|'+section;
 			}
 			formatListText += '|'+format.name;
 			if (!format.challengeShow) formatListText += ',,';
@@ -225,7 +230,7 @@ var GlobalRoom = (function() {
 			var room = this.chatRooms[i];
 			if (!room) continue;
 			if (room.isPrivate) continue;
-			(!room.auth ? rooms.official : rooms.chat).push({
+			(room.isOfficial ? rooms.official : rooms.chat).push({
 				title: room.title,
 				desc: room.desc,
 				userCount: Object.size(room.users)
@@ -326,10 +331,7 @@ var GlobalRoom = (function() {
 		if (user) {
 			user.sendTo(this, message);
 		} else {
-			for (var i in this.users) {
-				user = this.users[i];
-				user.sendTo(this, message);
-			}
+			Sockets.channelBroadcast(this.id, message);
 		}
 	};
 	GlobalRoom.prototype.sendAuth = function(message) {
@@ -554,6 +556,7 @@ var BattleRoom = (function() {
 		this.sideTicksLeft = [21, 21];
 		if (!rated) this.sideTicksLeft = [28,28];
 		this.sideTurnTicks = [0, 0];
+		this.disconnectTickDiff = [0, 0];
 
 		this.log = [];
 	}
@@ -561,7 +564,7 @@ var BattleRoom = (function() {
 
 	BattleRoom.prototype.resetTimer = null;
 	BattleRoom.prototype.resetUser = '';
-	BattleRoom.prototype.destroyTimer = null;
+	BattleRoom.prototype.expireTimer = null;
 	BattleRoom.prototype.active = false;
 	BattleRoom.prototype.lastUpdate = 0;
 
@@ -716,12 +719,12 @@ var BattleRoom = (function() {
 
 		// empty rooms time out after ten minutes
 		if (!hasUsers) {
-			if (!this.destroyTimer) {
-				this.destroyTimer = setTimeout(this.tryDestroy.bind(this), TIMEOUT_DEALLOCATE);
+			if (!this.expireTimer) {
+				this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
 			}
-		} else if (this.destroyTimer) {
-			clearTimeout(this.destroyTimer);
-			this.destroyTimer = null;
+		} else {
+			if (this.expireTimer) clearTimeout(this.expireTimer);
+			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_INACTIVE_DEALLOCATE);
 		}
 	};
 	BattleRoom.prototype.logBattle = function(p1score, p1rating, p2rating) {
@@ -753,19 +756,11 @@ var BattleRoom = (function() {
 		if (user) {
 			user.sendTo(this, message);
 		} else {
-			for (var i in this.users) {
-				this.users[i].sendTo(this, message);
-			}
+			Sockets.channelBroadcast(this.id, '>'+this.id+'\n'+message);
 		}
 	};
-	BattleRoom.prototype.tryDestroy = function() {
-		for (var i in this.users) {
-			// don't destroy ourselves if there are users in this room
-			// theoretically, Room.update should've stopped tryDestroy's timer
-			// well before we get here
-			return;
-		}
-		this.destroy();
+	BattleRoom.prototype.tryExpire = function() {
+		this.expire();
 	};
 	BattleRoom.prototype.reset = function(reload) {
 		clearTimeout(this.resetTimer);
@@ -940,6 +935,56 @@ var BattleRoom = (function() {
 		}
 		return false;
 	};
+	BattleRoom.prototype.kickInactiveUpdate = function () {
+		if (!this.rated) return false;
+		if (this.resetTimer) {
+			var inactiveSide = this.getInactiveSide();
+			var changed = false;
+
+			if ((!this.battle.p1 || !this.battle.p2) && !this.disconnectTickDiff[0] && !this.disconnectTickDiff[1]) {
+				if ((!this.battle.p1 && inactiveSide === 0) || (!this.battle.p2 && inactiveSide === 1)) {
+					var inactiveUser = this.battle.getPlayer(inactiveSide);
+
+					if (!this.battle.p1 && inactiveSide === 0 && this.sideTurnTicks[0] > 7) {
+						this.disconnectTickDiff[0] = this.sideTurnTicks[0] - 7;
+						this.sideTurnTicks[0] = 7;
+						changed = true;
+					} else if (!this.battle.p2 && inactiveSide === 1 && this.sideTurnTicks[1] > 7) {
+						this.disconnectTickDiff[1] = this.sideTurnTicks[1] - 7;
+						this.sideTurnTicks[1] = 7;
+						changed = true;
+					}
+
+					if (changed) {
+						this.send('|inactive|' + (inactiveUser ? inactiveUser.name : 'Player ' + (inactiveSide + 1)) + ' disconnected and has a minute to reconnect!');
+						return true;
+					}
+				}
+			} else if (this.battle.p1 && this.battle.p2) {
+				// Only one of the following conditions should happen, but do
+				// them both since you never know...
+				if (this.disconnectTickDiff[0]) {
+					this.sideTurnTicks[0] = this.sideTurnTicks[0] + this.disconnectTickDiff[0];
+					this.disconnectTickDiff[0] = 0;
+					changed = 0;
+				}
+
+				if (this.disconnectTickDiff[1]) {
+					this.sideTurnTicks[1] = this.sideTurnTicks[1] + this.disconnectTickDiff[1];
+					this.disconnectTickDiff[1] = 0;
+					changed = 1;
+				}
+
+				if (changed !== false) {
+					var user = this.battle.getPlayer(changed);
+					this.send('|inactive|' + (user ? user.name : 'Player ' + (changed + 1)) + ' reconnected and has ' + (this.sideTurnTicks[changed] * 10) + ' seconds left!');
+					return true;
+				}
+			}
+		}
+
+		return false;
+	};
 	BattleRoom.prototype.decision = function(user, choice, data) {
 		this.battle.sendFor(user, choice, data);
 		if (this.active !== this.battle.active) {
@@ -1022,6 +1067,7 @@ var BattleRoom = (function() {
 		}
 
 		this.update();
+		this.kickInactiveUpdate();
 	};
 	BattleRoom.prototype.joinBattle = function(user, team) {
 		var slot = undefined;
@@ -1043,6 +1089,7 @@ var BattleRoom = (function() {
 			this.send('|title|'+this.title);
 		}
 		this.update();
+		this.kickInactiveUpdate();
 
 		if (this.parentid) {
 			getRoom(this.parentid).updateRooms();
@@ -1058,6 +1105,7 @@ var BattleRoom = (function() {
 		rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 		this.active = this.battle.active;
 		this.update();
+		this.kickInactiveUpdate();
 
 		if (this.parentid) {
 			getRoom(this.parentid).updateRooms();
@@ -1100,6 +1148,10 @@ var BattleRoom = (function() {
 		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
 	BattleRoom.prototype.logEntry = function() {};
+	BattleRoom.prototype.expire = function() {
+		this.send('|expire|');
+		this.destroy();
+	};
 	BattleRoom.prototype.destroy = function() {
 		// deallocate ourself
 
@@ -1140,6 +1192,7 @@ var ChatRoom = (function() {
 		this.i = {};
 
 		this.log = [];
+		this.logTimes = [];
 		this.lastUpdate = 0;
 		this.users = {};
 		this.searchers = [];
@@ -1275,6 +1328,7 @@ var ChatRoom = (function() {
 		var update = entries.join('\n');
 		if (this.log.length > 100) {
 			this.log.splice(0, this.log.length - 100);
+			this.logTimes.splice(0, this.logTimes.length - 100);
 		}
 		this.lastUpdate = this.log.length;
 
@@ -1284,9 +1338,8 @@ var ChatRoom = (function() {
 		if (user) {
 			user.sendTo(this, message);
 		} else {
-			for (var i in this.users) {
-				this.users[i].sendTo(this, message);
-			}
+			if (this.id !== 'lobby') message = '>'+this.id+'\n'+message;
+			Sockets.channelBroadcast(this.id, message);
 		}
 	};
 	ChatRoom.prototype.sendAuth = function(message) {
@@ -1298,6 +1351,7 @@ var ChatRoom = (function() {
 		}
 	};
 	ChatRoom.prototype.add = function(message, noUpdate) {
+		this.logTimes.push(~~(Date.now() / 1000));
 		this.log.push(message);
 		this.logEntry(message);
 		if (!noUpdate) {
@@ -1307,9 +1361,57 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.addRaw = function(message) {
 		this.add('|raw|'+message);
 	};
+	ChatRoom.prototype.logGetLast = function (amount, noTime) {
+		if (!amount) {
+			return [];
+		}
+		if (amount < 0) {
+			amount *= -1;
+		}
+
+		var logLength = this.log.length;
+		if (!logLength) {
+			return [];
+		}
+
+		var log = [];
+		var time = ~~(Date.now() / 1000);
+		for (var i = logLength - amount - 1; i < logLength; i++) {
+			if (i < 0) {
+				i = 0;
+			}
+
+			var logText = this.log[i];
+			if (!logText){
+				continue;
+			}
+
+			if (!noTime && logText.substr(0, 3) === '|c|') {
+				// Time is only added when it's a normal chat message
+				logText = '|tc|' + (time - this.logTimes[i]) + '|' + logText.substr(3);
+			}
+
+			log.push(logText);
+		}
+
+		return log;
+	};
+	ChatRoom.prototype.getModchatNote = function (noNewline) {
+		if (this.modchat) {
+			var text = !noNewline ? '\n' : '';
+			text += '|raw|<div class="broadcast-red">';
+			text += '<b>Moderated chat is currently set to ' + this.modchat + '!</b><br />';
+			text += 'Only users of rank ' + this.modchat + ' and higher can talk.';
+			text += '</div>';
+			return text;
+		}
+
+		return '';
+	};
 	ChatRoom.prototype.onJoinConnection = function(user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
-		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.log.slice(-25).join('\n'), connection);
+		var modchat = this.getModchatNote();
+		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(25).join('\n')+modchat, connection);
 		if (global.Tournaments && Tournaments.getTournament(this.id))
 			Tournaments.getTournament(this.id).update(user);
 	};
@@ -1333,7 +1435,8 @@ var ChatRoom = (function() {
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
-			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.log.slice(-100).join('\n'), connection);
+			var modchat = this.getModchatNote();
+			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(100).join('\n')+modchat, connection);
 			if (global.Tournaments && Tournaments.getTournament(this.id))
 				Tournaments.getTournament(this.id).update(user);
 		}

@@ -249,7 +249,7 @@ Minor move changes:
 - Scald's damage is no longer affected by weather: instead, it gets 60% burn
   chance in sun
 
-- Hi Jump Kick now has 100 base power
+- High Jump Kick now has 100 base power
 
 - Shadow Ball now has 90 base power and 30% -SpD
 

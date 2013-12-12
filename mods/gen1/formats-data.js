@@ -430,7 +430,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	hitmonlee: {
-		//viableMoves: {"hijumpkick":1,"suckerpunch":1,"stoneedge":1,"machpunch":1,"substitute":1,"fakeout":1,"closecombat":1,"earthquake":1,"blazekick":1},
+		//viableMoves: {"highjumpkick":1,"suckerpunch":1,"stoneedge":1,"machpunch":1,"substitute":1,"fakeout":1,"closecombat":1,"earthquake":1,"blazekick":1},
 		tier: "UU"
 	},
 	hitmonchan: {
