@@ -1105,7 +1105,7 @@ var BattlePokemon = (function() {
 			return true;
 		}
 		if (this.negateImmunity[type]) return true;
-		if (!(this.negateImmunity['Type'] && type in this.data.TypeChart)) {
+		if (!(this.negateImmunity['Type'] && type in this.battle.data.TypeChart)) {
 			// Ring Target not active
 			if (!this.battle.getImmunity(type, this)) {
 				this.battle.debug('natural immunity');
