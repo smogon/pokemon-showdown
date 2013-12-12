@@ -124,6 +124,7 @@ if (cluster.isMaster) {
 	}
 	try {
 		(function() {
+			var fs = require('fs');
 			var nodestatic = require('node-static');
 			var cssserver = new nodestatic.Server('./config');
 			var avatarserver = new nodestatic.Server('./config/avatars');
@@ -148,6 +149,10 @@ if (cluster.isMaster) {
 						server = staticserver;
 					}
 					server.serve(request, response, function(e, res) {
+						fs.appendFile('logs/access.log',
+							request.socket.remoteAddress + ' - - [' + new Date().toLocaleString() + '] "' +
+							request.method + ' ' + request.url + ' HTTP/' + request.httpVersion + '" ' +
+							(e ? e.status : 200) + ' ? "' + (request.headers['referer'] || '-') + '" "' + (request.headers['user-agent'] || '-') + '"\n');
 						if (e && (e.status === 404)) {
 							staticserver.serveFile('404.html', 404, {}, request, response);
 						}
@@ -208,7 +213,7 @@ if (cluster.isMaster) {
 			break;
 
 		case '>': // >socketid, message
-			// message 
+			// message
 			var nlLoc = data.indexOf('\n');
 			socket = sockets[data.substr(1, nlLoc-1)];
 			if (!socket) return;
