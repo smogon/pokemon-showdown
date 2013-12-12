@@ -930,7 +930,7 @@ var commands = exports.commands = {
 				filename += 'logs/modlog/' + fileList[i] + ' ';
 			}
 		} else {
-			roomid = room.id;
+			roomId = room.id;
 			roomNames = 'the room ' + roomId;
 			filename = 'logs/modlog/modlog_' + roomId + '.txt';
 		}
