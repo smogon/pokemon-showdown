@@ -504,7 +504,7 @@ exports.BattleFormatsData = {
 	},
 	kangaskhan: {
 		eventPokemon: [
-			{"generation":2,"level":5,"gender":"F","moves":["cometpunch","faintattack"]}
+			{"generation":2,"level":5,"gender":"F","moves":["cometpunch","feintattack"]}
 		],
 		tier: "BL"
 	},
@@ -788,7 +788,7 @@ exports.BattleFormatsData = {
 	},
 	magby: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["ember","faintattack"]}
+			{"generation":2,"level":5,"moves":["ember","feintattack"]}
 		],
 		tier: "NFE"
 	},

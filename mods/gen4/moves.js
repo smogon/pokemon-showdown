@@ -438,7 +438,80 @@ exports.BattleMovedex = {
 		inherit: true,
 		isSnatchable: false
 	},
-	hijumpkick: {
+	hiddenpower: {
+		inherit: true,
+		basePower: 0,
+		basePowerCallback: function(pokemon) {
+			return pokemon.hpPower || 70;
+		},
+		desc: "Deals damage to one adjacent target. This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
+		shortDesc: "Varies in power and type based on the user's IVs."
+	},
+	hiddenpowerbug: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerdark: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerdragon: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerelectric: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerfighting: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerfire: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerflying: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerghost: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowergrass: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerground: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerice: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerpoison: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerpsychic: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerrock: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowersteel: {
+		inherit: true,
+		basePower: 70
+	},
+	hiddenpowerwater: {
+		inherit: true,
+		basePower: 70
+	},
+	highjumpkick: {
 		inherit: true,
 		basePower: 100,
 		desc: "If this attack misses the target, the user takes half of the damage it would have dealt in recoil damage.",
