@@ -632,9 +632,17 @@ var commands = exports.commands = {
 			'# <b>Room Owner</b> - They are administrators of the room and can almost totally control it');
 	},
 
+	git: 'opensource',
 	opensource: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Pokemon Showdown is open source:<br />- Language: JavaScript<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown">Server source code</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown-Client">Client source code</a>');
+		this.sendReplyBox('Pokemon Showdown is open source:<br />'+
+				  '- Language: JavaScript<br />'+
+				  '- <a href="https://github.com/kupochu/Pokemon-Showdown">TBT\'s Source Code</a><br />'+
+				  '- <a href="https://github.com/kupochu/Pokemon-Showdown/commits/master">TBT\'s latest updates</a><br />'+
+				  '- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master">What\'s new with main?</a><br />'+
+				  '- <a href="https://github.com/Zarel/Pokemon-Showdown">Main Server source code</a><br />'+
+				  '- <a href="https://github.com/Zarel/Pokemon-Showdown-Client">Client source code</a>'
+				  );
 	},
 
 	avatars: function(target, room, user) {
@@ -955,6 +963,7 @@ var commands = exports.commands = {
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
 	},
+	
 
 	potd: function(target, room, user) {
 		if (!this.can('potd')) return false;
