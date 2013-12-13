@@ -1761,6 +1761,74 @@ var commands = exports.commands = {
 		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nAdministrators: \n'+admins+'\nLeaders: \n'+leaders+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nVoices: \n'+voices);
 	},
 
+    stafflist: function(target, room, user, connection) {
+        var buffer = [];
+        var admins = [];
+        var leaders = [];
+        var mods = [];
+        var drivers = [];
+        var voices = [];
+        
+        admins2 = ''; leaders2 = ''; mods2 = ''; drivers2 = ''; voices2 = ''; 
+        stafflist = fs.readFileSync('config/usergroups.csv','utf8');
+        stafflist = stafflist.split('\n');
+        for (var u in stafflist) {
+            line = stafflist[u].split(',');
+			if (line[1] == '~') { 
+                admins2 = admins2 +line[0]+',';
+            } 
+            if (line[1] == '&') { 
+                leaders2 = leaders2 +line[0]+',';
+            }
+            if (line[1] == '@') { 
+                mods2 = mods2 +line[0]+',';
+            } 
+            if (line[1] == '%') { 
+                drivers2 = drivers2 +line[0]+',';
+            } 
+            if (line[1] == '+') { 
+                voices2 = voices2 +line[0]+',';
+             } 
+        }
+        admins2 = admins2.split(',');
+        leaders2 = leaders2.split(',');
+        mods2 = mods2.split(',');
+        drivers2 = drivers2.split(',');
+        voices2 = voices2.split(',');
+        for (var u in admins2) {
+            if (admins2[u] != '') admins.push(admins2[u]);
+        }
+        for (var u in leaders2) {
+            if (leaders2[u] != '') leaders.push(leaders2[u]);
+        }
+        for (var u in mods2) {
+            if (mods2[u] != '') mods.push(mods2[u]);
+        }
+        for (var u in drivers2) {
+            if (drivers2[u] != '') drivers.push(drivers2[u]);
+        }
+        for (var u in voices2) {
+            if (voices2[u] != '') voices.push(voices2[u]);
+        }
+        if (admins.length > 0) {
+            admins = admins.join(', ');
+        }
+        if (leaders.length > 0) {
+            leaders = leaders.join(', ');
+        }
+        if (mods.length > 0) {
+            mods = mods.join(', ');
+        }
+        if (drivers.length > 0) {
+            drivers = drivers.join(', ');
+        }
+        if (voices.length > 0) {
+            voices = voices.join(', ');
+        }
+        connection.popup('Administrators: \n'+admins+'\nLeaders: \n'+leaders+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nVoices: \n'+voices);
+    },
+
+
 	leave: 'part',
 	part: function(target, room, user, connection) {
 		if (room.id === 'global') return false;
