@@ -689,12 +689,11 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "[Gen 5] OU Monotype",
+		name: "OU Monotype",
 		section: "Other Metagames",
 
-		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite']
 	},
 	{
 		name: "[Gen 5] Glitchmons",
