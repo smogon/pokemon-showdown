@@ -1520,7 +1520,7 @@ var commands = exports.commands = {
                 }
 
                 if (isDemotion) {
-                        this.addRoomCommand('('+name+' was appointed to Room ' + groupName + ' by '+user.name+'.)');
+                        this.addRoomCommand(''+name+' was appointed to Room ' + groupName + ' by '+user.name+'.',room.id);
                         if (targetUser) {
                                 targetUser.popup('You were appointed to Room ' + groupName + ' by ' + user.name + '.');
                         }
