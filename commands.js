@@ -22,6 +22,10 @@ var commands = exports.commands = {
 		this.sendReplyBox('Server version: <b>'+CommandParser.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + CommandParser.serverVersion + '">' + CommandParser.serverVersion.substr(0,10) + '</a>)</small>');
 	},
 
+	kupkup: function(target, room, user, connection) {
+		return this.parse('/me THE KUPKUP CHANT: ♪kupo kupo kupochu~♫');
+	},
+	
 	slap: function(target, room, user, connection) {
 		return this.parse('/me slaps ' + target + ' with a large trout.');	
 	},
