@@ -955,6 +955,19 @@ var commands = exports.commands = {
 			return this.sendReplyBox('Pokemon, item, move, or ability not found for generation ' + generation.toUpperCase() + '.');
 		}
 	},
+	
+	forum: 'forums',
+	forums: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('TBT\'s forums are located <a href="http://thebattletower.xiaotai.org/index.php">here</a>.');
+	},
+	
+	league: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReplyBox('TBT\'s Pokemon League can be found <a href="">here</a>.<br />'+
+                		  'Current Champion: None <br />'+
+                		  'Beat the League and get your own custom avatar!');
+	},
 
 	/*********************************************************
 	 * Miscellaneous commands
