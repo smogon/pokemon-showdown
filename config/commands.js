@@ -1099,7 +1099,7 @@ var commands = exports.commands = {
 			if (target && !this.can('broadcast')) return false;
 			if (room.id !== 'lobby') return false;
 
-			var message = target || messages[Math.floor(Math.random() * messages.length)];
+			var message = target.replace('<3', '&lt;3') || messages[Math.floor(Math.random() * messages.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
 			message = message.replace(/{{user}}/g, user.name);
