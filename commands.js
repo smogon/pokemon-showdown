@@ -1420,7 +1420,7 @@ var commands = exports.commands = {
 
 		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
 
-		if (!room.founder || room.founder != user.userid) return false;
+		if (!room.founder || room.founder != user.userid || !this.can('makeroom', targetUser, room)) return false;
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
@@ -1444,7 +1444,7 @@ var commands = exports.commands = {
 		if (!userid || userid === '') return this.sendReply("User '"+name+"' does not exist.");
 
 		if (room.auth[userid] !== '#') return this.sendReply("User '"+name+"' is not a room owner.");
-		if (!room.founder || user.userid != room.founder) return false;
+		if (!room.founder || user.userid != room.founder || !this.can('makeroom', targetUser, room)) return false;
 
 		delete room.auth[userid];
 		this.sendReply('('+name+' is no longer Room Owner.)');
