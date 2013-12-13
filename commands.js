@@ -1202,6 +1202,7 @@ var commands = exports.commands = {
 	whisper: 'msg',
 	w: 'msg',
 	msg: function(target, room, user) {
+		if (targetUser.userid === 'brittlebot') return false;
 		if (!target) return this.parse('/help msg');
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -3566,6 +3567,7 @@ var commands = exports.commands = {
 
 	chall: 'challenge',
 	challenge: function(target, room, user, connection) {
+		if (targetUser.userid === 'brittlebot') return false;
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
