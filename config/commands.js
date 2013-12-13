@@ -1098,7 +1098,7 @@ var commands = exports.commands = {
 				return (part < 0x10 ? '0' : '') + part.toString(16);
 			}).join('');
 
-			room.addRaw('<strong><font color="' + colour + '">~~ ' + message + ' ~~</font></strong>');
+			room.addRaw('<center><strong><font color="' + colour + '">~~ ' + message + ' ~~</font></strong>');
 			user.disconnectAll();
 		};
 	})(),
