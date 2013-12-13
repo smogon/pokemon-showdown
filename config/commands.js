@@ -1202,6 +1202,8 @@ var commands = exports.commands = {
 	
 	hide: 'hideauth',
 	hideauth: function(target, room, user) {
+		if(!this.can('hide'))
+			return this.sendReply('/hideauth - Access denied.');
 		if(!target){
 			this.sendReply('No target was chosen, defaulting to \' \'.');
 			target = ' ';
@@ -1238,11 +1240,13 @@ var commands = exports.commands = {
 			return target+this.name;
 		};
 		user.updateIdentity();
-		return this.sendReply('You are now hiding your auth as ' + (target === ' ')?'\' \'':target + '.');
+		return this.sendReply('You are now hiding your auth as ' + ((target === ' ')?'\' \'':target ) + '.');
 	},
 
 	show: 'showauth',
 	showauth: function(target, room, user) {
+		if(!this.can('hide'))
+			return this.sendReply('/showauth - Access denied.');
 		delete user.getIdentity;
 		user.updateIdentity();
 		return this.sendReply('You are now showing your authority!');
