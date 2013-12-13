@@ -1205,7 +1205,6 @@ var commands = exports.commands = {
 		if(!this.can('hide'))
 			return this.sendReply('/hideauth - Access denied.');
 		if(!target){
-			this.sendReply('No target was chosen, defaulting to \' \'.');
 			target = ' ';
 		}else{
 			if(target.length > 1)
