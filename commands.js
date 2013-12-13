@@ -22,6 +22,32 @@ var commands = exports.commands = {
 		this.sendReplyBox('Server version: <b>'+CommandParser.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + CommandParser.serverVersion + '">' + CommandParser.serverVersion.substr(0,10) + '</a>)</small>');
 	},
 
+	slap: function(target, room, user, connection) {
+		return this.parse('/me slaps ' + target + ' with a large trout.');	
+	},
+	
+	dk: 'dropkick',
+	dropkick: function(target, room, user, connection) {
+		return this.parse('/me dropkicks ' + target + ' across the Pokémon Stadium!');	
+	},
+	
+	punt: function(target, room, user, connection) {
+		return this.parse('/me punts ' + target + ' to the moon!');	
+	},
+	
+	hug: function(target, room, user, connection) {
+		return this.parse('/me hugs ' + target + '.');	
+	},
+	
+	poke: function(target, room, user, connection) {
+		return this.parse('/me pokes ' + target + '.');	
+	},
+	
+	crai: 'cry',
+	cry: function(target, room, user, connection) {
+		return this.parse('/me starts tearbending dramatically like Katara.');	
+	},
+	
 	me: function(target, room, user, connection) {
 		// By default, /me allows a blank message
 		if (target) target = this.canTalk(target);
