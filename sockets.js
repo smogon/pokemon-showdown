@@ -187,6 +187,23 @@ if (cluster.isMaster) {
 	var sockets = {};
 	var channels = {};
 
+	// Deal with phantom xhr-streaming connections.
+	global.sweepClosedSockets = function() {
+		for (var s in sockets) {
+			if (sockets[s].protocol === 'xhr-streaming' &&
+				sockets[s]._session &&
+				sockets[s]._session.recv) {
+				sockets[s]._session.recv.didClose();
+			}
+		}
+	};
+	if (!config.herokuhack) {
+		global.sweepClosedSocketsInterval = setInterval(
+			sweepClosedSockets,
+			1000 * 60 * 10
+		);
+	}
+
 	process.on('message', function(data) {
 		// console.log('worker received: '+data);
 		var socket = null;
@@ -208,7 +225,7 @@ if (cluster.isMaster) {
 			break;
 
 		case '>': // >socketid, message
-			// message 
+			// message
 			var nlLoc = data.indexOf('\n');
 			socket = sockets[data.substr(1, nlLoc-1)];
 			if (!socket) return;
