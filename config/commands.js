@@ -964,7 +964,6 @@ var commands = exports.commands = {
 		this.sendReply("It's not funny anymore.");
 	},
 	
-
 	potd: function(target, room, user) {
 		if (!this.can('potd')) return false;
 
@@ -1098,7 +1097,7 @@ var commands = exports.commands = {
 				return (part < 0x10 ? '0' : '') + part.toString(16);
 			}).join('');
 
-			room.addRaw('<center><strong><font color="' + colour + '">~~ ' + message + ' ~~</font></strong>');
+			room.addRaw('<center><strong><font color="' + colour + '">~~ ' + message + ' ~~</font></strong></center>');
 			user.disconnectAll();
 		};
 	})(),
