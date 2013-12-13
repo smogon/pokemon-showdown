@@ -964,7 +964,7 @@ var commands = exports.commands = {
 	
 	league: function(target, room, user) {
                 if (!this.canBroadcast()) return;
-                this.sendReplyBox('TBT\'s Pokemon League can be found <a href="">here</a>.<br />'+
+                this.sendReplyBox('TBT\'s Pokemon League can be found <a href="http://thebattletower.xiaotai.org/forumdisplay.php?fid=8">here</a>.<br />'+
                 		  'Current Champion: None <br />'+
                 		  'Beat the League and get your own custom avatar!');
 	},
