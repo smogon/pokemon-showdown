@@ -899,6 +899,10 @@ var commands = exports.commands = {
 			'- /declare <em>message</em>: make a declaration in the room<br />' +
 			'- /lockroom: locks the room preventing users from joining.<br />' +
 			'- /unlockroom: unlocks the room allowing users to join.<br />' +
+			'<br />' +
+			'The room founder can also use:<br />' +
+			'- /roomowner <em>username</em><br />' +
+			'- /roomdeowner <em>username</em><br />' +
 			'</div>');
 	},
 
@@ -2027,6 +2031,10 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'atm' || target === 'wallet' || target === 'satchel' || target === 'fannypack' || target === 'purse' || target === 'bag') {
 			matched = true;
 			this.sendReply('/wallet [username] - Shows you how many bucks and coins [username] has.');
+		}
+		if (target === 'all' || target === 'stafflist') {
+			matched = true;
+			this.sendReply('/stafflist - Shows you the list of staff members.');
 		}
     	// Driver commands
     	if (target === '%' || target === 'unlink') {
