@@ -141,13 +141,6 @@ var GlobalRoom = (function() {
 			this.reportUserStats.bind(this),
 			REPORT_USER_STATS_INTERVAL
 		);
-
-		if (!config.herokuhack) {
-			this.sweepClosedSocketsInterval = setInterval(
-				this.sweepClosedSockets.bind(this),
-				1000 * 60 * 10
-			);
-		}
 	}
 	GlobalRoom.prototype.type = 'global';
 
@@ -165,21 +158,6 @@ var GlobalRoom = (function() {
 			date: Date.now(),
 			users: Object.size(this.users)
 		}, function() {});
-	};
-
-	// Deal with phantom xhr-streaming connections.
-	GlobalRoom.prototype.sweepClosedSockets = function() {
-		for (var i in this.users) {
-			var user = this.users[i];
-			user.connections.forEach(function(connection) {
-				if (connection.socket &&
-						connection.socket._session &&
-						connection.socket._session.recv &&
-						(connection.socket._session.recv.protocol === 'xhr-streaming')) {
-					connection.socket._session.recv.didClose();
-				}
-			});
-		}
 	};
 
 	GlobalRoom.prototype.getFormatListText = function() {
@@ -1392,7 +1370,7 @@ var ChatRoom = (function() {
 
 			log.push(logText);
 		}
-		
+
 		return log;
 	};
 	ChatRoom.prototype.getModchatNote = function (noNewline) {
