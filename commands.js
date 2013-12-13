@@ -1420,7 +1420,7 @@ var commands = exports.commands = {
 
 		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
 
-		if (!room.founder || room.founder != user.userid || !this.can('makeroom', targetUser, room)) return false;
+		if (!room.founder || room.founder != user.userid && !this.can('makeroom', targetUser, room)) return false;
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
