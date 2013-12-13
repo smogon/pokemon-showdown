@@ -1199,6 +1199,54 @@ var commands = exports.commands = {
 		tells[this.targetUsername].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
+	
+	hide: 'hideauth',
+	hideauth: function(target, room, user) {
+		if(!target){
+			this.sendReply('No target was chosen, defaulting to \' \'.');
+			target = ' ';
+		}else{
+			if(target.length > 1)
+				target = target.charAt(0);
+
+			if(config.groupsranking.indexOf(target) == -1){
+				this.sendReply('You have picked an invalid group, defaulting to \' \'.');
+				target = ' ';
+			}else{
+				if(config.groupsranking.indexOf(target) >= config.groupsranking.indexOf(user.group)){
+					return this.sendReply('The group you have chosen is either your current group'+ 
+							      ' OR one of higher rank. You cannot hide like that.');
+				}
+			}
+		}
+
+		user.getIdentity = function (roomid) {
+			if (!roomid) roomid = 'lobby';
+			if (this.locked) {
+				return '‽'+this.name;
+			}
+			if (this.mutedRooms[roomid]) {
+				return '!'+this.name;
+			}
+			var room = Rooms.rooms[roomid];
+			if (room.auth) {
+				if (room.auth[this.userid]) {
+					return room.auth[this.userid] + this.name;
+				}
+				if (room.isPrivate) return ' '+this.name;
+			}
+			return target+this.name;
+		};
+		user.updateIdentity();
+		return this.sendReply('You are now hiding your auth as ' + (target === ' ')?'\' \'':target + '.');
+	},
+
+	show: 'showauth',
+	showauth: function(target, room, user) {
+		delete user.getIdentity;
+		user.updateIdentity();
+		return this.sendReply('You are now showing your authority!');
+	},
 
 	/*********************************************************
 	 * Help commands
