@@ -23,7 +23,7 @@ var commands = exports.commands = {
 	},
 
 	kupkup: function(target, room, user, connection) {
-		return this.parse('/me THE KUPKUP CHANT: ♪kupo kupo kupochu~♫');
+		return this.parse('/me does THE KUPKUP CHANT: ♪kupo kupo kupochu~♫');
 	},
 	
 	slap: function(target, room, user, connection) {
