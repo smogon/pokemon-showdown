@@ -1267,6 +1267,7 @@ var commands = exports.commands = {
 	makechatroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
+		if (!id) return this.parse('/help makechatroom');
 		if (Rooms.rooms[id]) {
 			return this.sendReply("The room '"+target+"' already exists.");
 		}
@@ -1855,7 +1856,7 @@ var commands = exports.commands = {
 
 	permaban: function(target, room, user) {
 		if (!target) return this.parse('/help permaban');
-		if (!user.isSysadmin) return false;		
+		if (!user.isSysop) return false;		
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) {
