@@ -955,13 +955,13 @@ var commands = exports.commands = {
 			return this.sendReplyBox('Pokemon, item, move, or ability not found for generation ' + generation.toUpperCase() + '.');
 		}
 	},
-	
+
 	forum: 'forums',
 	forums: function(target, room, user) {
                 if (!this.canBroadcast()) return;
                 this.sendReplyBox('TBT\'s forums are located <a href="http://thebattletower.xiaotai.org/index.php">here</a>.');
 	},
-	
+
 	league: function(target, room, user) {
                 if (!this.canBroadcast()) return;
                 this.sendReplyBox('TBT\'s Pokemon League can be found <a href="http://thebattletower.xiaotai.org/forumdisplay.php?fid=8">here</a>.<br />'+
@@ -976,7 +976,7 @@ var commands = exports.commands = {
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
 	},
-	
+
 	potd: function(target, room, user) {
 		if (!this.can('potd')) return false;
 
@@ -1049,6 +1049,30 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Custom commands
 	 *********************************************************/
+
+	kupkup: function() {
+		return this.parse("/me does THE KUPKUP CHANT: ♪kupo kupo kupochu~♫");
+	},
+	slap: function() {
+		return this.parse("/me slaps " + target + " with a large trout.");
+	},
+	dk: 'dropkick',
+	dropkick: function(target) {
+		return this.parse("/me dropkicks " + target + " across the Pokémon Stadium!");
+	},
+	punt: function(target) {
+		return this.parse("/me punts " + target + " to the moon!");
+	},
+	hug: function(target) {
+		return this.parse("/me hugs " + target + ".");
+	},
+	poke: function(target) {
+		return this.parse("/me pokes " + target + ".");
+	},
+	crai: 'cry',
+	cry: function() {
+		return this.parse("/me starts tearbending dramatically like Katara.");
+	},
 
 	d: 'poof',
 	cpoof: 'poof',
@@ -1198,7 +1222,7 @@ var commands = exports.commands = {
 		tells[this.targetUsername].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
-	
+
 	hide: 'hideauth',
 	hideauth: function(target, room, user) {
 		if(!this.can('hide'))
@@ -1214,7 +1238,7 @@ var commands = exports.commands = {
 				target = ' ';
 			}else{
 				if(config.groupsranking.indexOf(target) >= config.groupsranking.indexOf(user.group)){
-					return this.sendReply('The group you have chosen is either your current group'+ 
+					return this.sendReply('The group you have chosen is either your current group'+
 							      ' OR one of higher rank. You cannot hide like that.');
 				}
 			}
