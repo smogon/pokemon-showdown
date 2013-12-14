@@ -676,16 +676,16 @@ exports.Formats = [
 			'Kangaskhanite',
 			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
+			'Yveltal',
 			'Xerneas'
 		]
 	},
 	{
-		name: "[Gen 5] OU Monotype",
+		name: "OU Monotype",
 		section: "Other Metagames",
 
-		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite']
 	},
 	{
 		name: "[Gen 5] Glitchmons",
