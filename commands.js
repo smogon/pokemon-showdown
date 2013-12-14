@@ -1135,11 +1135,8 @@ var commands = exports.commands = {
 		if(poofeh) {
 			var btags = '<strong><font color="'+hashColor(Math.random().toString())+'" >';
 			var etags = '</font></strong>'
-			target = target.replace(/&(?!\w+;)/g, '&amp;')
-  		 	target = target.replace(/</g, '&lt;')
-    		target = target.replace(/>/g, '&gt;')
-    		target = target.replace(/"/g, '&quot;');
-			Rooms.rooms.lobby.addRaw(btags + '~~ '+user.name+' '+target+'! ~~' + etags);
+			escapedTarget = escapeHTML(target);
+			Rooms.rooms.lobby.addRaw(btags + '~~ '+user.name+' '+escapedTarget+'! ~~' + etags);
 			this.logModCommand(user.name + ' used a custom poof message: \n "'+target+'"');
 			user.disconnectAll();	
 		}else{
@@ -3928,3 +3925,11 @@ function HueToRgb(m1, m2, hue) {
 	return (255 * v).toString(16);
 }
 
+function escapeHTML(target) {
+	if (!target) return false;
+	target = target.replace(/&(?!\w+;)/g, '&amp;')
+  	target = target.replace(/</g, '&lt;')
+    target = target.replace(/>/g, '&gt;')
+   	target = target.replace(/"/g, '&quot;');
+   	return target;
+}
