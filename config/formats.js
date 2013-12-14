@@ -3,9 +3,82 @@
 
 exports.Formats = [
 
+	// Amethyst Metas
+	///////////////////////////////////////////////////////////////////
+	{
+		name: "Clash of Tiers",
+		section: "Amethyst Metas",
+
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers', 'Tier Clash Clause'],
+		banlist: []
+	},
+	{
+		name: "Mixed Tier",
+		section: "Amethyst Metas",
+		
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Mixed Tier Clause'],
+		banlist: ['Gengarite', 'Soul Dew']
+	},
+	{
+		name: "Monotype Tier Shift",
+		section: "Amethyst Metas",
+		
+		mod: "tiershift",
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview', 'Same Type Clause'],
+		banlist: ['Uber', 'Gengarite', 'Soul Dew']
+	},
+	{
+		name: "Kill The Mailman",
+		section: "Amethyst Metas",
+		
+		mod: 'mailman',
+		onFaint: function(pokemon) {
+			if (pokemon.side.pokemon[0].item === 'mail') {
+				var name = pokemon.side.name;
+				var winner = '';
+				var message = 'the mailman of '+name+' fainted.';
+				if (pokemon.side.id === 'p1') {
+					if (this.p2.pokemon[0].item === 'mail') {
+						winner = 'p2';
+						message = 'The mailman of '+this.p1.name+' was KOed by the mailman of '+this.p2.name+'.';
+					} else {
+						winner = 'p1';
+					}
+				} else {
+					if (this.p1.pokemon[0].item === 'mail') {
+						winner = 'p1';
+						message = 'The mailman of '+this.p2.name+' was KOed by the mailman of '+this.p1.name+'.';
+					} else {
+						winner = 'p2';
+					}
+				}
+				this.add('message', message);
+				pokemon.battle.win(winner);
+			}
+			if (pokemon.side.pokemonLeft === 2) {
+				var loser = '';
+				this.debug('1 poke left');
+				for (var i = 0; i < pokemon.side.team.length; i ++) {
+					if (pokemon.side.pokemon[i].fainted === true) continue;
+					if (pokemon.side.pokemon[i].item === 'Mail') {
+						loser = pokemon.side.id;
+						this.debug('checking for item');
+					}
+				}
+				if (loser === 'p1') {
+					this.add('message', 'Since '+this.p2.name+' managed to KO all of '+this.p1.name+'\'s Pokemon except for their mailman, '+this.p2.name+' has won the battle!');
+					pokemon.battle.win('p2');
+				} else {
+					this.add('message', 'Since '+this.p1.name+' managed to KO all of '+this.p2.name+'\'s Pokemon except for their mailman, '+this.p1.name+' has won the battle!');
+					pokemon.battle.win('p1');
+				}
+			}
+		},
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview', 'Mailman Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Frisk', 'Explosion', 'Self-Destruct', 'Final Gambit', 'Arena Trap', 'Shedinja', 'Perish Song']
+	},
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
-
 	{
 		name: "OU (beta)",
 		section: "XY Singles",

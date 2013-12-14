@@ -239,7 +239,50 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Informational commands
 	 *********************************************************/
+	 
+	regdate: function(target, room, user, connection) { 
+		if (!this.canBroadcast()) return;
+		if (!target || target == "." || target == "," || target == "'") return this.sendReply('/regdate - Please specify a valid username.'); //temp fix for symbols that break the command
+		var username = target;
+		target = target.replace(/\s+/g, '');
+		var util = require("util"),
+    	http = require("http");
 
+		var options = {
+    		host: "www.pokemonshowdown.com",
+    		port: 80,
+    		path: "/forum/~"+target
+		};
+
+		var content = "";   
+		var self = this;
+		var req = http.request(options, function(res) {
+			
+		    res.setEncoding("utf8");
+		    res.on("data", function (chunk) {
+	        content += chunk;
+    		});
+	    	res.on("end", function () {
+			content = content.split("<em");
+			if (content[1]) {
+				content = content[1].split("</p>");
+				if (content[0]) {
+					content = content[0].split("</em>");
+					if (content[1]) {
+						regdate = content[1];
+						data = username+' was registered on'+regdate+'.';
+					}
+				}
+			}
+			else {
+				data = username+' is not registered.';
+			}
+			self.sendReplyBox(data);
+		    });
+		});
+		req.end();
+	},
+	
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',
@@ -251,10 +294,14 @@ var commands = exports.commands = {
 		var newTargets = Tools.dataSearch(target);
 		if (newTargets && newTargets.length) {
 			for (var i = 0; i < newTargets.length; i++) {
+				var template = Tools.getTemplate(newTargets[i].species);
 				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
 					data = "No Pokemon, item, move or ability named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
 				}
 				data += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+				if (newTargets[i].searchType === 'pokemon') {
+					data += 'Tier: ' + template.tier + '\n';
+				}
 			}
 		} else {
 			data = "No Pokemon, item, move or ability named '" + target + "' was found. (Check your spelling?)";
@@ -1023,6 +1070,7 @@ var commands = exports.commands = {
 		if (!this.can('battlemessage')) return false;
 		// secret sysop command
 		room.add(target);
+		this.logModCommand(user.name + ' used /a. Room: ' + room.id + ' Message: ' + target);
 	},
 
 	/*********************************************************
@@ -1035,6 +1083,37 @@ var commands = exports.commands = {
 	help: function(target, room, user) {
 		target = target.toLowerCase();
 		var matched = false;
+		if (target === 'rps' || target === 'rockpaperscissors') {
+			matched = true;
+			this.sendReplyBox('<b><font size = 3>Rock-Paper-Scissors</font></b><br>This is the classic game of rock-paper-scissors. The commands are as follows:<br>' +
+					'- /rps - starts the game<br>' +
+					'- /jrps OR /joinrps - joins the game<br>' +
+					'- /respond [choice] OR /shoot [choice] - chooses either rock, paper, or scissors<br>' +
+					'- /endrps - ends the game (only necessary for stopping mid-game; it will end on its own after using /compare). Requires: +%@&~<br>' +
+					'<br>PM me any glitches you find. Thanks! - piiiikachuuu');
+		}
+		if (target === 'hangman') {
+			matched = true;
+			this.sendReplyBox('<font size = 3>Hangman</font><br>This is the game of hangman. The host player will pick a word, and other players will be allowed 8 guesses to figure out the word by guessing letters.<br>' +
+				'The commands to run hangman are as follows:<br>' + 
+				'- /hangman [word], [topic] - starts the game and sets the topic. Requires: +%@&~<br>' +
+				'- /topic OR /category - allows the host to specify a category<br>' +
+				'- /guess [letter] - allows users to guess letters<br>' +
+				'- /guessword [word] - allows users to guess words<br>' +
+				'- /viewhangman - shows the progress and how many guesses are left<br>' +
+				'- /word - displays the word to the host<br>' +
+				'- /endhangman - ends the game if something goes wrong. Requires: +%@&~<br><br>' +
+				'PM me if you find any bugs. Have fun! - piiiikachuuu');
+		}
+		if (target === 'all' || target === 'regdate') {
+			matched = true;
+			this.sendReply('/regdate [username] - Shows you the date the username was registered on.');
+			this.sendReply('!regdate [username] - Broadcasts the date the username was registered on to the room. Requires: + % @ & ~');
+		}
+		if (target === 'all' || target === 'complaint' || target === 'complain') {
+			matched = true;
+			this.sendReply('/complain OR /complaint [message] - Adds a complaint to the list of complaints which will be reviewed by server staff.');
+		}
 		if (target === 'all' || target === 'msg' || target === 'pm' || target === 'whisper' || target === 'w') {
 			matched = true;
 			this.sendReply('/msg OR /whisper OR /w [username], [message] - Send a private message.');
@@ -1209,7 +1288,7 @@ var commands = exports.commands = {
 		}
 		if (target === '@' || target === 'ban' || target === 'b') {
 			matched = true;
-			this.sendReply('/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: @ & ~');
+			this.sendReply('/ban /barn OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: @ & ~');
 		}
 		if (target === '&' || target === 'banip') {
 			matched = true;
@@ -1257,8 +1336,8 @@ var commands = exports.commands = {
 		}
 		if (target === '~' || target === 'forcerenameto' || target === 'frt') {
 			matched = true;
-			this.sendReply('/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: & ~');
-			this.sendReply('/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: & ~');
+			this.sendReply('/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: ~');
+			this.sendReply('/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: ~');
 		}
 		if (target === '&' || target === 'forcetie') {
 			matched = true;
@@ -1283,6 +1362,14 @@ var commands = exports.commands = {
 		if (target === '@' || target === 'modchat') {
 			matched = true;
 			this.sendReply('/modchat [off/autoconfirmed/+/%/@/&/~] - Set the level of moderated chat. Requires: @ for off/autoconfirmed/+ options, & ~ for all the options');
+		}
+		if (target === '&' || target === 'permaban') {
+			matched = true;
+			this.sendReply('/permaban [username] - Permanently bans the user from the server. Bans placed by this command do not reset on server restarts.');
+		}
+		if (target === '&' || target === 'customavatar') {
+			matched = true;
+			this.sendReply('/customavatar [username], [URL] - Adds a custom avatar for the specified username. Requires: & ~');
 		}
 		if (target === '~' || target === 'hotpatch') {
 			matched = true;
@@ -1336,7 +1423,7 @@ var commands = exports.commands = {
 			if (user.group !== config.groupsranking[0]) {
 				this.sendReply('DRIVER COMMANDS: /mute, /unmute, /announce, /forcerename, /alts')
 				this.sendReply('MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /modlog, /redirect, /kick');
-				this.sendReply('LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare');
+				this.sendReply('LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare, /permaban');
 				this.sendReply('For details on all moderator commands, use /help @');
 			}
 			this.sendReply('For details of a specific command, use something like: /help data');
@@ -1344,5 +1431,5 @@ var commands = exports.commands = {
 			this.sendReply('The command "/'+target+'" was not found. Try /help for general help');
 		}
 	},
-
+	
 };

@@ -34,6 +34,8 @@ var crypto = require('crypto');
 
 var modlog = exports.modlog = modlog || {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'})};
 
+var complaint = exports.complaint = complaint || fs.createWriteStream('logs/complaint.txt', {flags:'a+'});
+
 /**
  * Command parser
  *
@@ -148,6 +150,9 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				if (!modlog[room.id]) modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
 				modlog[room.id].write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 			},
+			logComplaint: function(result) {
+				complaint.write('['+(new Date().toJSON())+'] ('+room.id+') '+ user.name + ': ' +result+'\n');
+			},
 			can: function(permission, target, room) {
 				if (!user.can(permission, target, room)) {
 					this.sendReply('/'+cmd+' - Access denied.');
@@ -225,6 +230,45 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
+	//spamroom
+	// if user is not in spamroom
+	if(spamroom[user.userid] == undefined){
+		// check to see if an alt exists in list
+		for(var u in spamroom){
+			if(Users.get(user.userid) == Users.get(u)){
+				// if alt exists, add new user id to spamroom, break out of loop.
+				spamroom[user.userid] = true;
+				break;
+			}
+		}
+	}
+
+	if (spamroom[user.userid]) {
+		Rooms.rooms.spamroom.add('|c|' + user.getIdentity() + '|' + message);
+		connection.sendTo(room, "|c|" + user.getIdentity() + "|" + message);
+		return false;
+	}
+
+	//tells
+	var alts = user.getAlts();
+	for (var u in alts) {
+		var alt = toId(alts[u]);
+		if (alt in tells) {
+			if (!tells[user.userid]) tells[user.userid] = [];
+			for (var tell in tells[alt]) {
+				tells[user.userid].add(tells[alt][tell]);
+			}
+			delete tells[alt];
+		}
+	}
+
+	if (tells[user.userid] && user.authenticated) {
+		for (var tell in tells[user.userid]) {
+			connection.sendTo(room, tells[user.userid][tell]);
+		}
+		delete tells[user.userid];
+	}
+
 
 	return message;
 };
