@@ -1247,6 +1247,7 @@ var commands = exports.commands = {
 	showauth: function(target, room, user) {
 		if (!this.can('hide')) return false;
 		delete user.getIdentity;
+		user.updateIdentity();
 		return this.sendReply("You are now showing your authority!");
 	},
 
