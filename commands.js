@@ -2894,7 +2894,7 @@ var commands = exports.commands = {
 		if (!this.can('customavatars')) return false;
 		if (!target) return this.parse('/help customavatar');
 		var http = require('http-get');
-		target = target.split(", ");
+		target = splint(target);
 		var username = Users.get(target[0]);
        		var filename = target[1].split('.');
 		filename = '.'+filename.pop();
@@ -3977,4 +3977,11 @@ function escapeHTML(target) {
     target = target.replace(/>/g, '&gt;')
    	target = target.replace(/"/g, '&quot;');
    	return target;
+}
+
+function splint(target) {
+	//splittyDiddles
+	var cmdArr =  target.split(",");
+	for (var i = 0; i < cmdArr.length; i++) cmdArr[i] = cmdArr[i].trim();
+	return cmdArr;
 }
