@@ -344,49 +344,6 @@ var commands = exports.commands = {
 	 * Informational commands
 	 *********************************************************/
 
-	regdate: function(target, room, user, connection) { 
-		if (!this.canBroadcast()) return;
-		if (!target || target == "." || target == "," || target == "'") return this.sendReply('/regdate - Please specify a valid username.'); //temp fix for symbols that break the command
-		var username = target;
-		target = target.replace(/\s+/g, '');
-		var util = require("util"),
-    	http = require("http");
-
-		var options = {
-    		host: "www.pokemonshowdown.com",
-    		port: 80,
-    		path: "/forum/~"+target
-		};
-
-		var content = "";   
-		var self = this;
-		var req = http.request(options, function(res) {
-			
-		    res.setEncoding("utf8");
-		    res.on("data", function (chunk) {
-	        content += chunk;
-    		});
-	    	res.on("end", function () {
-			content = content.split("<em");
-			if (content[1]) {
-				content = content[1].split("</p>");
-				if (content[0]) {
-					content = content[0].split("</em>");
-					if (content[1]) {
-						regdate = content[1];
-						data = username+' was registered on'+regdate+'.';
-					}
-				}
-			}
-			else {
-				data = username+' is not registered.';
-			}
-			self.sendReplyBox(data);
-		    });
-		});
-		req.end();
-	},
-
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',

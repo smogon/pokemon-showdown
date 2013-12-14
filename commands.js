@@ -1051,7 +1051,52 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Other Stuff                                    
 	 *********************************************************/
-		
+	
+	regdate: function(target, room, user, connection) { 
+		if (!this.canBroadcast()) return;
+		var username = target;
+		var userid = toUserid(target);
+		//target = target.replace(/\s+/g, '');
+		username = escapeHTML(username);
+		if (userid == '') return this.sendReplyBox(username+' is not a valid username.');
+		var util = require("util"),
+    	http = require("http");
+
+		var options = {
+    		host: "www.pokemonshowdown.com",
+    		port: 80,
+    		path: "/forum/~"+userid
+		};
+
+		var content = "";   
+		var self = this;
+		var req = http.request(options, function(res) {
+			
+		    res.setEncoding("utf8");
+		    res.on("data", function (chunk) {
+	        content += chunk;
+    		});
+	    	res.on("end", function () {
+			content = content.split("<em");
+			if (content[1]) {
+				content = content[1].split("</p>");
+				if (content[0]) {
+					content = content[0].split("</em>");
+					if (content[1]) {
+						regdate = content[1];
+						data = username+' was registered on'+regdate+'.';
+					}
+				}
+			}
+			else {
+				data = username+' is not registered.';
+			}
+			self.sendReplyBox(data);
+		    });
+		});
+		req.end();
+	},
+
 	version: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Server version: <b>'+CommandParser.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + CommandParser.serverVersion + '">' + CommandParser.serverVersion.substr(0,10) + '</a>)</small>');
