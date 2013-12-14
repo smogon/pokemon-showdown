@@ -1098,11 +1098,10 @@ var commands = exports.commands = {
 			if (config.poofoff) return this.sendReply("Poof is currently disabled.");
 			if (target && !this.can('broadcast')) return false;
 			if (room.id !== 'lobby') return false;
-			if(target) while(target.indexOf('<') != -1) target = target.replace('<', '&lt;'); 
 			var message = target || messages[Math.floor(Math.random() * messages.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, user.name);
+			message = message.replace(/</g, '&lt;').replace(/{{user}}/g, user.name);
 			if (!this.canTalk(message)) return false;
 
 			var colour = '#' + [1, 1, 1].map(function () {
