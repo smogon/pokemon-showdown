@@ -958,15 +958,15 @@ var commands = exports.commands = {
 
 	forum: 'forums',
 	forums: function(target, room, user) {
-                if (!this.canBroadcast()) return;
-                this.sendReplyBox('TBT\'s forums are located <a href="http://thebattletower.xiaotai.org/index.php">here</a>.');
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('TBT\'s forums are located <a href="http://thebattletower.xiaotai.org/index.php">here</a>.');
 	},
 
 	league: function(target, room, user) {
-                if (!this.canBroadcast()) return;
-                this.sendReplyBox('TBT\'s Pokemon League can be found <a href="http://thebattletower.xiaotai.org/forumdisplay.php?fid=8">here</a>.<br />'+
-                		  'Current Champion: None <br />'+
-                		  'Beat the League and get your own custom avatar!');
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('TBT\'s Pokemon League can be found <a href="http://thebattletower.xiaotai.org/forumdisplay.php?fid=8">here</a>.<br />'+
+				  'Current Champion: None <br />'+
+				  'Beat the League and get your own custom avatar!');
 	},
 
 	/*********************************************************
@@ -1225,53 +1225,29 @@ var commands = exports.commands = {
 
 	hide: 'hideauth',
 	hideauth: function(target, room, user) {
-		if(!this.can('hide'))
-			return this.sendReply('/hideauth - Access denied.');
-		if(!target){
-			target = ' ';
-		}else{
-			if(target.length > 1)
-				target = target.charAt(0);
-
-			if(config.groupsranking.indexOf(target) == -1){
-				this.sendReply('You have picked an invalid group, defaulting to \' \'.');
-				target = ' ';
-			}else{
-				if(config.groupsranking.indexOf(target) >= config.groupsranking.indexOf(user.group)){
-					return this.sendReply('The group you have chosen is either your current group'+
-							      ' OR one of higher rank. You cannot hide like that.');
-				}
-			}
-		}
+		if (!this.can('hide')) return false;
+		target = (target || config.groupsranking[0])[0];
+		if (config.groupsranking.indexOf(target) < 0) {
+			target = config.groupsranking[0];
+			this.sendReply("You have picked an invalid group, defaulting to '" + target + "'.");
+		} else if (config.groupsranking.indexOf(target) >= config.groupsranking.indexOf(user.group))
+			return this.sendReply("The group you have chosen is either your current group OR one of higher rank. You cannot hide like that.");
 
 		user.getIdentity = function (roomid) {
-			if (!roomid) roomid = 'lobby';
-			if (this.locked) {
-				return '‽'+this.name;
-			}
-			if (this.mutedRooms[roomid]) {
-				return '!'+this.name;
-			}
-			var room = Rooms.rooms[roomid];
-			if (room.auth) {
-				if (room.auth[this.userid]) {
-					return room.auth[this.userid] + this.name;
-				}
-				if (room.isPrivate) return ' '+this.name;
-			}
-			return target+this.name;
+			var identity = Object.getPrototypeOf(this).getIdentity.call(this, roomid);
+			if (identity[0] === this.group)
+				return target + identity.slice(1);
+			return identity;
 		};
 		user.updateIdentity();
-		return this.sendReply('You are now hiding your auth as ' + ((target === ' ')?'\' \'':target ) + '.');
+		return this.sendReply("You are now hiding your auth as '" + target + "'.");
 	},
 
 	show: 'showauth',
 	showauth: function(target, room, user) {
-		if(!this.can('hide'))
-			return this.sendReply('/showauth - Access denied.');
+		if (!this.can('hide')) return false;
 		delete user.getIdentity;
-		user.updateIdentity();
-		return this.sendReply('You are now showing your authority!');
+		return this.sendReply("You are now showing your authority!");
 	},
 
 	/*********************************************************
