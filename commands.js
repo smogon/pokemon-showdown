@@ -24,7 +24,7 @@ var closedShop = 0;
 
 var isMotd = false;
 
-var avatar = fs.createWriteStream('config/avatars.csv', {'flags': 'a'}); // for /customavatar
+//var avatar = fs.createWriteStream('config/avatars.csv', {'flags': 'a'}); // for /customavatar
 //spamroom
 if (typeof spamroom == "undefined") {
         spamroom = new Object();
@@ -1051,51 +1051,6 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Other Stuff                                    
 	 *********************************************************/
-	
-	regdate: function(target, room, user, connection) { 
-		if (!this.canBroadcast()) return;
-		var username = target;
-		var userid = toUserid(target);
-		//target = target.replace(/\s+/g, '');
-		username = escapeHTML(username);
-		if (userid == '') return this.sendReplyBox(username+' is not a valid username.');
-		var util = require("util"),
-    	http = require("http");
-
-		var options = {
-    		host: "www.pokemonshowdown.com",
-    		port: 80,
-    		path: "/forum/~"+userid
-		};
-
-		var content = "";   
-		var self = this;
-		var req = http.request(options, function(res) {
-			
-		    res.setEncoding("utf8");
-		    res.on("data", function (chunk) {
-	        content += chunk;
-    		});
-	    	res.on("end", function () {
-			content = content.split("<em");
-			if (content[1]) {
-				content = content[1].split("</p>");
-				if (content[0]) {
-					content = content[0].split("</em>");
-					if (content[1]) {
-						regdate = content[1];
-						data = username+' was registered on'+regdate+'.';
-					}
-				}
-			}
-			else {
-				data = username+' is not registered.';
-			}
-			self.sendReplyBox(data);
-		    });
-		});
-		req.end();
-	},
 
 	version: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -2890,66 +2845,6 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Server management commands
 	 *********************************************************/
-
-	customavatar: function(target, room, user, connection) {
-		if (!this.can('customavatars')) return false;
-		if (!target) return this.parse('/help customavatar');
-		var http = require('http-get');
-		target = splint(target);
-		var username = Users.get(target[0]);
-       		var filename = target[1].split('.');
-		filename = '.'+filename.pop();
-		if (filename != ".png" && filename != ".gif") return connection.sendTo(room, '/customavatar - Invalid image type! Images are required to be png or gif.');
-		if (!username) return this.sendReply('User '+target[0]+' not found.');
-		if (filename == ".png") Users.get(username).canCustomAvatar = false;
-		if (filename == ".gif") Users.get(username).canAnimatedAvatar = false;
-     		filename = Users.get(username)+filename;
-		http.get(target[1], 'config/avatars/' + filename, function (error, result) {
-			if (error) {
-    				return connection.sendTo(room, '/customavatar - You supplied an invalid URL!');
-    			} else {
-				var data = fs.readFileSync('config/avatars.csv','utf8')
-				var match = false;
-				var row = (''+data).split("\n");
-				var line = '';
-				for (var i = row.length; i > -1; i--) {
-					if (!row[i]) continue;
-						var parts = row[i].split(",");
-						if (username == parts[0]) {
-							match = true;
-							line = line + row[i];
-							break;
-						}
-					}
-				if (match === true) {
-					var re = new RegExp(line,"g");
-					fs.readFile('config/avatars.csv', 'utf8', function (err,data) {
-					if (err) {
-						return console.log(err);
-					}
-					});
-					var result = data.replace(re, username+','+filename);
-					fs.writeFile('config/avatars.csv', result, 'utf8', function (err) {
-						if (err) return console.log(err);
-					});
-				} else {
-					var log = fs.createWriteStream('config/avatars.csv', {'flags': 'a'});
-					log.write("\n"+username+','+filename);
-				}
-				Users.get(username).avatar = filename;
-				connection.sendTo(room, username+' has received a custom avatar.');
-				Users.get(username).sendTo(room, 'You have received a custom avatar from ' + user.name + '.');
-				for (var u in Users.users) {
-					if (Users.users[u].group == "~" || Users.users[u].group == "&") {
-						Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+username+' has received a custom avatar from '+user.name+'.');
-					}
-				}
-				Rooms.rooms.staff.send(username+' has received a custom avatar from '+user.name+'.');
-	    		}
-		});
-		this.logModCommand(user.name + ' added a custom avatar for ' + username + '.');
-	},
-
 
 	hotpatch: function(target, room, user) {
 		if (!target) return this.parse('/help hotpatch');
