@@ -133,6 +133,12 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	rage: {
+		// todo
+		// Rage boosts in Gens 2-4 is for the duration of Rage only
+		// Disable does not build
+		inherit: true
+	},
 	reflect: {
 		inherit: true,
 		effect: {
@@ -160,6 +166,10 @@ exports.BattleMovedex = {
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
 		secondary: false
+	},
+	roar: {
+		inherit: true,
+		priority: -1
 	},
 	selfdestruct: {
 		inherit: true,
@@ -272,19 +282,13 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	rage: {
-		// todo
-		// Rage boosts in Gens 2-4 is for the duration of Rage only
-		// Disable does not build
-		inherit: true
-	},
-	roar: {
+	waterfall: {
 		inherit: true,
-		priority: -1
+		secondary: false
 	},
-	magikarpsrevenge: null,
 	whirlwind: {
 		inherit: true,
 		priority: -1
 	},
+	magikarpsrevenge: null
 };
