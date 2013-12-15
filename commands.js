@@ -417,7 +417,7 @@ var commands = exports.commands = {
 		this.sendReplyBox ('<center>Trainer:<font color="#5A13CD"><b>Ross</b></font><br />' +
                    '<center>Types: Dark (OU), Dark (UU E4), Rock (RU E4), Grass(NU)<br />' +
                    '<center>Signature Pokemon: <font color="red"><b>Victini</b></font><br />' +
-                   '<center>Catchphrase: I\'ll swallow swords spit up my pride, I follow through again this time. I\'ll be just fine...><br />' +
+                   '<center>Catchphrase: I\'ll swallow swords spit up my pride, I follow through again this time. I\'ll be just fine...<br />' +
                    '<center><img src="http://www.smogon.com/download/sprites/bwmini/494.gif">');
 	},
 		
@@ -486,7 +486,7 @@ var commands = exports.commands = {
 		sky: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox ('<center>Trainer: <font color="#199461"><b>Skymin</b></font><br />' +
-						'<center>Ace: <font color="#3CC977"><b>Shaymin-Sky</b></font><br />' +
+						'<center>Signature Pokemon: <font color="#3CC977"><b>Shaymin-Sky</b></font><br />' +
 						'<center>Catchphrase:Come on now you can\'t be real, I will show you what it is, let the anthem build.<br />' +
 						'<center><a href="https://www.listenonrepeat.com/watch?v=MVO-iK2aTK4">Battle Theme</a><br />' +
 						'<center><a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="http://www.smogon.com/download/sprites/bwmini/492-s.gif"></a>');
@@ -508,7 +508,7 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center>Trainer:<font color="#2610B7"><b>blizzardq</b></font><br />' +
 						'<center>Signature Pokemon: <font color="blue"><b>Keldeo</b></font><br />' +
 						'<center>Catchphrase:雪.<br />' + 
-						'<center>PM me command ideas. I am a coder in training. <br />' +
+						'<center>PM me command ideas. I am a coder for Amethyst. <br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/647.gif">');
 	},
 	
@@ -516,7 +516,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#7EC60C"><b>brooksyy</b></font><br />' +
 						'<center>Types: Dragon(OU)<br />' +
-						'<center>Signature Pokemon: <font color="grey"><b>Kyurem-B</b></font><br />' +
+						'<center>Signature Pokemon: <b>Kyurem-B</b><br />' +
 						'<center>Catchphrase: Most beautiful award winner 2013<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/646-b.gif">');
 	},
@@ -524,7 +524,7 @@ var commands = exports.commands = {
 	coolasian: 'ca',
 	ca: function(target, room, user) {
 		if(!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer:<font color="#22776B"><b>CoolAsian</b></font><br />' +
+		this.sendReplyBox('<center>Trainer:<font color="#2D2BAB"><b>CoolAsian</b></font><br />' +
 						'<center>Types: Poison(OU)<br />' +
 						'<center>Signature Pokemon: <font color="purple"><b>Gengar</b></font><br />' +
 						'<center>Catchphrase: Despair to the creeping horror of Poison-Type Pokemon!<br />' +
@@ -619,8 +619,8 @@ var commands = exports.commands = {
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/596.gif">');
 	},
 
-	hostageclam: 'hg',
-	hg: function(target, room, user) {
+	hostageclam: 'hc',
+	hc: function(target, room, user) {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#1B7E15"><b>hostageclam</b></font><br />' +
 						'<center>Types: Bug(UU),Bug(RU)<br />' +
@@ -946,6 +946,21 @@ var commands = exports.commands = {
 		user.forceRename('Mizu :D', user.authenticated);
 	},
 	
+	jd: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+			this.sendReply("saks more.");
+	},
+	
+
+	s: function(target, room, user) {
+		if (user.userid != 'skymn') {
+			return this.sendReply("Nope.");
+		}
+		delete Users.users.skymn;
+		user.forceRename('Skymіn', user.authenticated);
+	},
+
+
 	ai: function(target, room, user) {
 		if (user.userid != 'aikenk') {
 			return this.sendReply("Nope.");
@@ -960,29 +975,30 @@ var commands = exports.commands = {
 		this.sendReplyBox('<font size = 3><b>Clash of Tiers</b></font><br><font size = 2>by EnerG218</font><br>A metagame created by EnerG218, Clash of Tiers is a metagame focused on comparing the different tiers. Each player is given 6 points to make a team with. Points are spent based on tier: Ubers are worth 6, OU is worth 5, UU is worth 4, RU is worth 3, NU is worth 2, and LC is worth 1.<br>Have fun!');
 	},
 	
+	
 	afk: function(target, room, user) {
 		 if (!this.can('warn') && user.userid != 'blizzardq') {
 		return this.sendReply("Nope.");
 		}
 		if (user.afk === true) {
-		return this.sendReply("You are already AFK.");
+		return this.sendReply("You are already Away.");
 		}
 		user.originalname = user.name;
-		this.add(''+user.name+' is now AFK.');
-		user.forceRename(''+user.name+' - AFK');
+		this.add(''+user.name+' is now Away.');
+		user.forceRename(''+user.name+' - Away');
 		user.afk = true;
 		return this.parse('/away');
 		},
 	
 	unafk: function(target, room, user) {
-		 if (!this.can('warn') && user.userid != 'blizzardqafk') {
+		 if (!this.can('warn') && user.userid != 'blizzardqaway') {
 		return this.sendReply("Nope.");
 		}
 		if (user.afk != true) {
-		return this.sendReply("You need to be AFK first.");
+		return this.sendReply("You need to be Away first.");
 		}
 		user.forceRename(user.originalname);
-		this.add(""+user.name+" is now unAFK.");
+		this.add(""+user.name+" is now unAway.");
 		user.afk = false;
 		return this.parse('/back');
 		},
