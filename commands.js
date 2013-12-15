@@ -1863,9 +1863,11 @@ var commands = exports.commands = {
 		this.addModCommand('All bans and locks have been lifted by '+user.name+'.');
 	},
 
-	permaban: function(target, room, user) {
+	permaban: function(target, room, user, connection) {
 		if (!target) return this.parse('/help permaban');
-		if (!user.isSysop) return false;		
+		if (!user.hasConsoleAccess(connection)) {
+			return this.sendReply("/eval - Access denied.");
+		}		
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) {
