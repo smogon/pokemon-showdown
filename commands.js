@@ -2859,6 +2859,8 @@ var commands = exports.commands = {
 				CommandParser = require('./command-parser.js');
 				CommandParser.uncacheTree('./tour.js');
 				tour = require('./tour.js').tour(tour);
+				CommandParser.uncacheTree('./frost-commands.js');
+				frostcommands = require('./frost-commands.js');
 				return this.sendReply('Chat commands have been hot-patched.');
 			} catch (e) {
 				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
