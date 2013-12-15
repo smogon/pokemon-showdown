@@ -516,7 +516,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#7EC60C"><b>brooksyy</b></font><br />' +
 						'<center>Types: Dragon(OU)<br />' +
-						'<center>Signature Pokemon: <b>Kyurem-B</b><br />' +
+						'<center>Signature Pokemon: <b>Kyurem-Black</b><br />' +
 						'<center>Catchphrase: Most beautiful award winner 2013<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/646-b.gif">');
 	},
@@ -979,7 +979,7 @@ var commands = exports.commands = {
 		}
 		user.originalname = user.name;
 		this.add(''+user.name+' is now Away.');
-		user.forceRename(''+user.name+' - Away');
+		user.forceRename(''+user.name+' - Away', user.authenticated);
 		user.afk = true;
 		return this.parse('/away');
 	},
@@ -991,7 +991,7 @@ var commands = exports.commands = {
 		if (user.afk != true) {
 			return this.sendReply("You need to be Away first.");
 		}
-		user.forceRename(user.originalname);
+		user.forceRename(user.originalname, user.authenticated);
 		this.add(""+user.name+" is now unAway.");
 		user.afk = false;
 		return this.parse('/back');
