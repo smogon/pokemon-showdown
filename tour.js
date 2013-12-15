@@ -573,6 +573,8 @@ var cmds = {
 				tour = require('./tour.js').tour(tour);
 				CommandParser.uncacheTree('./hangman.js');
 				hangman = require('./hangman.js').hangman(hangman);
+				CommandParser.uncacheTree('./frost-commands.js');
+				frostcommands = require('./frost-commands.js');
 				return this.sendReply('Chat commands have been hot-patched.');
 			} catch (e) {
 				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
