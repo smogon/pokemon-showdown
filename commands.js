@@ -944,15 +944,9 @@ var commands = exports.commands = {
 		}
 		delete Users.users.mizud;
 		user.forceRename('Mizu :D', user.authenticated);
-	},
-	
-	jd: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-			this.sendReply("saks more.");
-	},
-	
+	},	
 
-	s: function(target, room, user) {
+	skymn: function(target, room, user) {
 		if (user.userid != 'skymn') {
 			return this.sendReply("Nope.");
 		}
@@ -977,32 +971,31 @@ var commands = exports.commands = {
 	
 	
 	afk: function(target, room, user) {
-		 if (!this.can('warn') && user.userid != 'blizzardq') {
-		return this.sendReply("Nope.");
+		if (!this.can('warn') && user.userid != 'blizzardq') {
+			return this.sendReply("Nope.");
 		}
 		if (user.afk === true) {
-		return this.sendReply("You are already Away.");
+			return this.sendReply("You are already Away.");
 		}
 		user.originalname = user.name;
 		this.add(''+user.name+' is now Away.');
 		user.forceRename(''+user.name+' - Away');
 		user.afk = true;
 		return this.parse('/away');
-		},
+	},
 	
 	unafk: function(target, room, user) {
-		 if (!this.can('warn') && user.userid != 'blizzardqaway') {
-		return this.sendReply("Nope.");
+		if (!this.can('warn') && user.userid != 'blizzardqaway') {
+			return this.sendReply("Nope.");
 		}
 		if (user.afk != true) {
-		return this.sendReply("You need to be Away first.");
+			return this.sendReply("You need to be Away first.");
 		}
 		user.forceRename(user.originalname);
 		this.add(""+user.name+" is now unAway.");
 		user.afk = false;
 		return this.parse('/back');
-		},
-	
+	},
 	
 	mixedtier: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1041,7 +1034,7 @@ var commands = exports.commands = {
 		if(poofeh && !user.muted && !user.locked){
 			Rooms.rooms.lobby.addRaw(btags + getRandMessage(user)+ etags);
 			user.disconnectAll();	
-		}else{
+		} else {
 			return this.sendReply('poof is currently disabled.');
 		}
 	},
