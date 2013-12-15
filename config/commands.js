@@ -1120,6 +1120,12 @@ var commands = exports.commands = {
         this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
     },
     
+    gemini : 'prfessorgemini',
+    prfessorgemini: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<img height="100" src="http://i.imgur.com/UUSMQaL.jpg"><img src="http://i.imgur.com/HrHfI4e.gif"><img height="100" src="http://25.media.tumblr.com/tumblr_lrmuy73LRE1r2ugr3o1_500.gif"><br /><center><b>Ace: </b>Pinsir</center><br /><center><b>Catchphrase: </b>I am Professor Gemini. The best professor there is because I\'m not named after a f**king tree</center>')
+    },
+    
     sagethesausage: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReply('|raw|<img height="120" src="http://i.imgur.com/mc7oWrv.gif"><img width="250" src="http://i.imgur.com/vaCeYTQ.gif"><img height="120" src="http://fc00.deviantart.net/fs23/f/2007/320/d/4/COUNTER_by_petheadclipon_by_wobbuffet.png"><br /><center><b>Ace: </b>Wobbuffet</center><br /><center><b>Catchphrase: </b>Woah! Buffet! Wynaut eat when no one is looking?</center>')
