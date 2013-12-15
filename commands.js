@@ -1454,6 +1454,7 @@ var commands = exports.commands = {
 		room.founder = targetUser.userid;
 		this.addModCommand(''+name+' was appointed to Room Founder by '+user.name+'.');
 		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.founder = room.founder;
 		Rooms.global.writeChatRoomData();
 	},
 
