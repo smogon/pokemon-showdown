@@ -1120,6 +1120,12 @@ var commands = exports.commands = {
         this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
     },
     
+    elitefourkaiser : 'kaiser',
+    kaiser: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/534.gif"><img width="450" src="http://i.imgur.com/TZgQzzZ.png"><img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/475.gif"><br /><center><b>Ace: </b>Gallade</center><br /><center><b>Catchphrase: </b>Fight to the Death, When you give up thats when you really lose</center>')
+    },
+    
     gemini : 'prfessorgemini',
     prfessorgemini: function(target, room, user) {
         if (!this.canBroadcast()) return;
