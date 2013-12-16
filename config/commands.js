@@ -1118,7 +1118,7 @@ var commands = exports.commands = {
     elitefourlight : 'light',
     light: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="100" src="http://th09.deviantart.net/fs71/PRE/i/2013/227/5/a/lucario_mega_evolve_artworkunofficialby_tomycase-d6i3sip.png"><img width="450" src="http://i.imgur.com/v4h0TvD.png"><img src="http://i.imgur.com/21NYnjz.gif"><br /><center><b>Ace: </b>Mega Lucario</center><br /><center><b>Catchphrase: </b>Their is always Light within the darkness</center>')
+        this.sendReply('|raw|<img height="100" src="http://i.imgur.com/eetjLuv.png"><img width="450" src="http://i.imgur.com/v4h0TvD.png"><img src="http://i.imgur.com/21NYnjz.gif"><br /><center><b>Ace: </b>Mega Lucario</center><br /><center><b>Catchphrase: </b>Their is always Light within the darkness</center>')
     },
     
     brittlewind: function(target, room, user) {
