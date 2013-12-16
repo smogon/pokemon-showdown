@@ -6997,14 +6997,16 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function(target, source) {
-			var item = target.getItem();
-			if (item.id === 'mail') {
-				target.setItem('');
-			} else {
-				item = target.takeItem(source);
-			}
-			if (item) {
-				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] '+source);
+			if (source.hp) {
+				var item = target.getItem();
+				if (item.id === 'mail') {
+					target.setItem('');
+				} else {
+					item = target.takeItem(source);
+				}
+				if (item) {
+					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] '+source);
+				}
 			}
 		},
 		secondary: false,
