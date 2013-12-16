@@ -119,6 +119,7 @@ exports.BattleAliases = {
 
 	// pokemon
 	"aboma": "Abomasnow",
+	"chandy": "Chandelure",
 	"chomp": "Garchomp",
 	"dnite": "Dragonite",
 	"ferro": "Ferrothorn",
@@ -126,6 +127,7 @@ exports.BattleAliases = {
 	"gar": "Gengar",
 	"garde": "Gardevoir",
 	"hippo": "Hippowdon",
+	"kang": "Kangaskhan",
 	"kyub": "Kyurem-Black",
 	"kyuw": "Kyurem-White",
 	"lando": "Landorus",
