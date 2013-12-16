@@ -992,7 +992,7 @@ var commands = exports.commands = {
 			return this.sendReply("You need to be Away first.");
 		}
 		user.forceRename(user.originalname, user.authenticated);
-		this.add(""+user.name+" is now unAway.");
+		this.add(""+user.name+" is no longer Away.");
 		user.afk = false;
 		return this.parse('/back');
 	},
