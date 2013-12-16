@@ -153,6 +153,20 @@ var Tournament = (function () {
 		this.room.send('|tournament|updateEnd', targetUser);
 	};
 
+	Tournament.prototype.purgeGhostUsers = function () {
+		// "Ghost" users sometimes end up in the tournament because they've merged with another user.
+		// This function is to remove those ghost users from the tournament.
+		this.generator.getUsers().forEach(function (user) {
+			if (!Users.getExact(user.userid))
+				// The two following functions are called without their second argument,
+				// but the second argument will not be used in this situation
+				if (this.isTournamentStarted)
+					this.disqualifyUser(user);
+				else
+					this.removeUser(user);
+		}, this);
+	};
+
 	Tournament.prototype.addUser = function (user, output) {
 		var error = this.generator.addUser(user);
 		if (typeof error === 'string') {
@@ -234,6 +248,7 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.startTournament = function () {
+		this.purgeGhostUsers();
 		this.generator.freezeBracket();
 
 		this.availableMatches = new Map();
@@ -367,6 +382,7 @@ var Tournament = (function () {
 
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
+		this.purgeGhostUsers();
 		this.update();
 	};
 	Tournament.prototype.cancelChallenge = function (user) {
