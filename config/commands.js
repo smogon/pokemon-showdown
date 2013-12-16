@@ -1115,6 +1115,12 @@ var commands = exports.commands = {
         this.sendReply('|raw|<img height="100" src="http://www.explodingdog.com/drawing/awesome.jpg"><img src="http://i.imgur.com/3eN4nV3.gif"><img height="100" src="http://fc09.deviantart.net/fs70/f/2011/089/a/1/hydreigon_the_dark_dragon_poke_by_kingofanime_koa-d3cslir.png"><br /><center><b>Ace: </b>Hydreigon</center><br /><center><b>Catchphrase: </b>You wanna hax with me huh WELL YOU DIE</center><br />')
     },
     
+    elitefourlight : 'light',
+    light: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReply('|raw|<img height="100" src="http://th09.deviantart.net/fs71/PRE/i/2013/227/5/a/lucario_mega_evolve_artworkunofficialby_tomycase-d6i3sip.png"><img width="450" src="http://i.imgur.com/v4h0TvD.png"><img src="http://i.imgur.com/21NYnjz.gif"><br /><center><b>Ace: </b>Mega Lucario</center><br /><center><b>Catchphrase: </b>Their is always Light within the darkness</center>')
+    },
+    
     brittlewind: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
