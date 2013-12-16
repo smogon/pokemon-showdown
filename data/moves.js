@@ -3244,16 +3244,12 @@ exports.BattleMovedex = {
 		volatileStatus: 'electrify',
 		effect: {
 			duration: 1,
-			// TODO: Proper messages
-			onStart: function(pokemon) {
-				this.add('-start', pokemon, 'Electrify');
+			onStart: function(target) {
+				this.add('-singleturn',target,'move: Electrify');
 			},
 			onModifyMove: function(move) {
 				this.debug('Electrify making move type electric');
 				move.type = 'Electric';
-			},
-			onEnd: function(pokemon) {
-				this.add('-end', pokemon, 'Electrify');
 			}
 		},
 		secondary: false,
@@ -3657,7 +3653,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		//todo
 		secondary: false,
-		target: "normal",
+		target: "all",
 		type: "Fairy"
 	},
 	"fairywind": {
@@ -6774,11 +6770,12 @@ exports.BattleMovedex = {
 		id: "iondeluge",
 		name: "Ion Deluge",
 		pp: 25,
-		priority: 0,
+		priority: 1,
 		volatileStatus: 'iondeluge',
 		effect: {
+			duration: 1,
 			onStart: function(target) {
-				this.add('-start', target, 'move: Ion Deluge');
+				this.add('-fieldactivate', target, 'move: Ion Deluge');
 			},
 			onModifyMove: function(move, pokemon) {
 				if (move.type === 'Normal') {
@@ -6788,7 +6785,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "all",
 		type: "Electric"
 	},
 	"irondefense": {
