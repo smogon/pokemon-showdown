@@ -405,7 +405,7 @@ exports.tour = function(t) {
 				var tourMoney = 0;
 				var tooSmall = '';
 				var p = 'bucks';
-				if (!Rooms.rooms[rid].auth || rid === 'tournaments' || rid === 'tournaments2') {
+				if (!Rooms.rooms[rid].auth || rid === 'tournaments' || rid === 'tournaments2' || rid === 'cetournaments') {
 					if (tour[rid].size >= 32) {
 						tourMoney = 3;
 					}
