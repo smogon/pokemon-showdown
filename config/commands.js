@@ -1567,7 +1567,7 @@ var commands = exports.commands = {
 	frankenstein : 'frank',
 	frank: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/9wSqwcb.png"><img src = "http://i.imgur.com/2RAtpGN.png"><img src="http://i.imgur.com/xy6MeVC.png"></font></color><br><center>Ace: Mega-Scizor<br>Are you ready to fight against fear itself? Will you cross beyond that door? Let your souls make the decision for you.');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/9wSqwcb.png"><img src = "http://i.imgur.com/2RAtpGN.png"><img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQxx868Qej4oh2rxdz_OdwvSJGzY0nV0IZZjQpX4oQ3UUruxAZlKKv3rwtbmg"></font></color><br><center>Ace: Mega-Scizor<br>Are you ready to fight against fear itself? Will you cross beyond that door? Let your souls make the decision for you.');
 	},
 	
 	shadowninjask: 'ninjask',
