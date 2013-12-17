@@ -1310,6 +1310,15 @@ var commands = exports.commands = {
 			var toolsSize = ResourceMonitor.sizeOfObject(Tools);
 			this.sendReply("Tools are using " + toolsSize + " bytes of memory.");
 		}
+		if (target === 'all' || target === 'v8') {
+			this.sendReply('Retrieving V8 memory usage...');
+			var o = process.memoryUsage();
+			this.sendReply(
+				'Resident set size: ' + o.rss + ', ' + o.heapUsed +' heap used of ' + o.heapTotal  + ' total heap. '
+				+ (o.heapTotal - o.heapUsed) + ' heap left.'
+			);
+			delete o;
+		}
 		if (target === 'all') {
 			this.sendReply('Calculating Total size...');
 			var total = (roomSize + configSize + rmSize + appSize + cpSize + simSize + toolsSize + usersSize) || 0;
