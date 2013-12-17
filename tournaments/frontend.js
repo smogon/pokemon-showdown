@@ -247,7 +247,12 @@ var Tournament = (function () {
 		return this.bracketCache;
 	};
 
-	Tournament.prototype.startTournament = function () {
+	Tournament.prototype.startTournament = function (output) {
+		if (this.isTournamentStarted) {
+			output.sendReply('|tournament|error|AlreadyStarted');
+			return;
+		}
+
 		this.purgeGhostUsers();
 		this.generator.freezeBracket();
 
@@ -555,7 +560,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 
 					case 'begin':
 					case 'start':
-						tournament.startTournament()
+						tournament.startTournament(this)
 						break;
 
 					case 'disqualify':
