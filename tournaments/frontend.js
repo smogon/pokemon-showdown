@@ -494,7 +494,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 	} else if (cmd === '') {
 		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).map(function (tournament) {
 			tournament = exports.tournaments[tournament];
-			return {name: tournament.name, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
+			return {room: tournament.room.id, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
 		})));
 	} else {
 		var tournament = getTournament(room.title);
