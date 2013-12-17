@@ -5,7 +5,7 @@ var TournamentGenerators = {
 	elimination: require('./generator-elimination.js').Elimination
 };
 
-var tournaments = {};
+exports.tournaments = {};
 
 function usersToNames(users) {
 	return users.map(function (user) { return user.name; });
@@ -26,7 +26,7 @@ function createTournament(room, format, generator, args, output) {
 		output.sendReply("Tournaments can only be created in chat rooms.");
 		return;
 	}
-	if (tournaments[room.id]) {
+	if (exports.tournaments[room.id]) {
 		output.sendReply("A tournament is already running in the room.");
 		return;
 	}
@@ -40,20 +40,20 @@ function createTournament(room, format, generator, args, output) {
 		output.sendReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
 		return;
 	}
-	return tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output));
+	return exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output));
 }
 function deleteTournament(name, output) {
 	var id = toId(name);
-	var tournament = tournaments[id];
+	var tournament = exports.tournaments[id];
 	if (!tournament)
 		output.sendReply(name + " doesn't exist.");
 	tournament.forceEnd(output);
-	delete tournaments[id];
+	delete exports.tournaments[id];
 }
 function getTournament(name, output) {
 	var id = toId(name);
-	if (tournaments[id])
-		return tournaments[id];
+	if (exports.tournaments[id])
+		return exports.tournaments[id];
 }
 
 var Tournament = (function () {
@@ -146,6 +146,20 @@ var Tournament = (function () {
 		}
 	};
 
+	Tournament.prototype.purgeGhostUsers = function () {
+		// "Ghost" users sometimes end up in the tournament because they've merged with another user.
+		// This function is to remove those ghost users from the tournament.
+		this.generator.getUsers().forEach(function (user) {
+			if (!Users.getExact(user.userid))
+				// The two following functions are called without their second argument,
+				// but the second argument will not be used in this situation
+				if (this.isTournamentStarted)
+					this.disqualifyUser(user);
+				else
+					this.removeUser(user);
+		}, this);
+	};
+
 	Tournament.prototype.addUser = function (user, output) {
 		var error = this.generator.addUser(user);
 		if (typeof error === 'string') {
@@ -227,6 +241,7 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.startTournament = function () {
+		this.purgeGhostUsers();
 		this.generator.freezeBracket();
 
 		this.availableMatches = new Map();
@@ -360,6 +375,7 @@ var Tournament = (function () {
 
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
+		this.purgeGhostUsers();
 		this.update();
 	};
 	Tournament.prototype.cancelChallenge = function (user) {
@@ -449,7 +465,7 @@ var Tournament = (function () {
 	};
 	Tournament.prototype.onTournamentEnd = function () {
 		this.room.add('|tournament|end|' + JSON.stringify({results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()}));
-		delete tournaments[toId(this.room.id)];
+		delete exports.tournaments[toId(this.room.id)];
 	};
 
 	return Tournament;
@@ -471,8 +487,8 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 
 		createTournament(room, params.shift(), params.shift(), params, this);
 	} else if (cmd === '') {
-		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(tournaments).map(function (tournament) {
-			tournament = tournaments[tournament];
+		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).map(function (tournament) {
+			tournament = exports.tournaments[tournament];
 			return {name: tournament.name, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
 		})));
 	} else {
@@ -557,5 +573,4 @@ exports.TournamentGenerators = TournamentGenerators;
 
 exports.createTournament = createTournament;
 exports.deleteTournament = deleteTournament;
-exports.getTournament = getTournament;
-exports.tournaments = tournaments;
+exports.get = getTournament;
