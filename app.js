@@ -385,9 +385,9 @@ if (config.crashguard) {
                         lastCrash = Date.now();
                         if (quietCrash) return;
                         var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
-                        if (Rooms.staff) {
-                                Rooms.staff.addRaw('<div class="broadcast-red"><b>The server has experienced a crash:</b> '+stack+'</div>');
-                                Rooms.staff.addRaw('<div class="broadcast-green">The crash has been maintained, and the server will run fine. A restart is advised to prevent any issues.</div>');
+                        if (Rooms.rooms.staff) {
+                                Rooms.rooms.staff.addRaw('<div class="broadcast-red"><b>The server has experienced a crash:</b> '+stack+'</div>');
+                                Rooms.rooms.staff.addRaw('<div class="broadcast-green">The crash has been maintained, and the server will run fine. A restart is advised to prevent any issues.</div>');
                                 for (var u in Users.users) {
 									if (Users.users[u].group == "~" || Users.users[u].group == "&") {
 										Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|The server has experienced a crash, please check the staff room for the error stack.');
