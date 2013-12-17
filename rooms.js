@@ -676,7 +676,6 @@ var BattleRoom = (function() {
 				logs[0].push(line);
 				logs[1].push(line);
 				logs[2].push(line);
-				if (line === "|callback|decision" && !this.active) this.active = true; // Hack
 			}
 		}
 		var roomid = this.id;
