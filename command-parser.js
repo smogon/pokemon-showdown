@@ -364,10 +364,10 @@ function canTalk(user, room, connection, message) {
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
 			
-			if (message.toLowerCase().indexOf("nigger") > -1 || message.toLowerCase().indexOf("nigga") > -1 || message.toLowerCase().indexOf("cunt") > -1 || message.toLowerCase().indexOf("whore") > -1) {
+		     /*	if (message.toLowerCase().indexOf("nigger") > -1 || message.toLowerCase().indexOf("nigga") > -1 || message.toLowerCase().indexOf("cunt") > -1 || message.toLowerCase().indexOf("whore") > -1) {
 				connection.sendTo(room,"Sorry, yet that word is banned from lobby.");
 				return false;
-			}
+			} */
 
 			if (user.group === ' ') {
 				if (message.toLowerCase().indexOf('spoiler:') >= 0 || message.toLowerCase().indexOf('spoilers:') >= 0) {
