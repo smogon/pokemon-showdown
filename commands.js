@@ -1899,7 +1899,7 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (room.isPrivate && room.auth) {
+		if (!room.isOfficial) {
 			return this.sendReply('You can\'t warn here: This is a privately-owned room not subject to global rules.');
 		}
 		if (target.length > MAX_REASON_LENGTH) {
