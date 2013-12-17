@@ -9405,6 +9405,7 @@ exports.BattleMovedex = {
 				this.add('-start', target, 'Powder');
 			},
 			onBeforeMove: function(pokemon, target, move) {
+				var item = pokemon.getItem();
 				if (move.type === 'Fire' || (move.name === 'Hidden Power' && pokemon.hpType === 'Fire') || (move.name === 'Weather Ball' && this.isWeather('sunnyday')) || (item.isBerry && move.name === 'Natural Gift' && item.naturalGift.type === 'Fire') || (move.name === 'Judgment' && item.name === 'Flame Plate')) {
 					this.add('-activate', pokemon, 'Powder');
 					this.directDamage(Math.floor(pokemon.maxhp / 4) + 1);
