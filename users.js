@@ -1112,10 +1112,10 @@ var User = (function () {
 			connection.popup(message);
 			return false;
 		}
-		if (ResourceMonitor.countPrepBattle(connection.ip || connection.latestIp, this.name)) {
+		/*if (ResourceMonitor.countPrepBattle(connection.ip || connection.latestIp, this.name)) {
 			connection.popup("Due to high load, you are limited to 6 battles every 3 minutes.");
 			return false;
-		}
+		}*/
 
 		var format = Tools.getFormat(formatid);
 		if (!format[''+type+'Show']) {
