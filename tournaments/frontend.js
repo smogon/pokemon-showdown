@@ -580,4 +580,4 @@ exports.TournamentGenerators = TournamentGenerators;
 
 exports.createTournament = createTournament;
 exports.deleteTournament = deleteTournament;
-exports.getTournament = getTournament;
+exports.get = getTournament;
