@@ -1285,11 +1285,6 @@ var commands = exports.commands = {
 			var rmSize = ResourceMonitor.sizeOfObject(ResourceMonitor);
 			this.sendReply("The Resource Monitor is using " + rmSize + " bytes of memory.");
 		}
-		if (target === 'all' || target === 'apps' || target === 'app' || target === 'serverapps') {
-			this.sendReply('Calculating Server Apps size...');
-			var appSize = ResourceMonitor.sizeOfObject(App) + ResourceMonitor.sizeOfObject(AppSSL) + ResourceMonitor.sizeOfObject(Server);
-			this.sendReply("Server Apps are using " + appSize + " bytes of memory.");
-		}
 		if (target === 'all' || target === 'cmdp' || target === 'cp' || target === 'commandparser') {
 			this.sendReply('Calculating Command Parser size...');
 			var cpSize = ResourceMonitor.sizeOfObject(CommandParser);
