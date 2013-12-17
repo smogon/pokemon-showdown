@@ -111,7 +111,7 @@ function socketConnect(worker, workerid, socketid, ip) {
 	}
 	// Emergency mode connections logging
 	if (config.emergency) {
-		fs.appendFile('logs/cons.emergency.log', '#'+socketCounter+' [' + ip + ']\n', function(err){
+		fs.appendFile('logs/cons.emergency.log', '[' + ip + ']\n', function(err){
 			if (err) {
 				console.log('!! Error in emergency conns log !!');
 				throw err;
