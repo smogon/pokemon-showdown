@@ -15,32 +15,7 @@ var simulators = {};
 
 var SimulatorProcess = (function() {
 	function SimulatorProcess() {
-		//this.process = require('child_process').fork('battle-engine.js');
-		if (global.fakeProcess) throw "Combined lobby and battle process hack does not allow more than one SimulatorProcess";
-		var EventEmitter = require("events").EventEmitter;
-		fakeProcess = {
-			serverEmitter: new EventEmitter(),
-			clientEmitter: new EventEmitter(),
-			server: {
-				on: function (event, callback) {
-					return fakeProcess.clientEmitter.on(event, callback);
-				},
-				send: function (message) {
-					return fakeProcess.serverEmitter.emit('message', message);
-				}
-			},
-			client: {
-				on: function (event, callback) {
-					return fakeProcess.serverEmitter.on(event, callback);
-				},
-				send: function (message) {
-					return fakeProcess.clientEmitter.emit('message', message);
-				}
-			}
-		};
-		this.process = fakeProcess.server;
-		require("./battle-engine.js");
-
+		this.process = require('child_process').fork('battle-engine.js');
 		this.process.on('message', function(message) {
 			var lines = message.split('\n');
 			var sim = simulators[lines[0]];
