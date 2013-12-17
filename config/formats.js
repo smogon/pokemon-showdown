@@ -526,7 +526,7 @@ exports.Formats = [
 				move.basePower = 0;
 				delete move.heal;
 				move.accuracy = 100;
-				switch (this.random(23)) {
+				switch (this.random(19)) {
 				case 0:
 					move.onTryHit = function() {
 						this.add('-message', "The present was a bomb!");
@@ -627,35 +627,17 @@ exports.Formats = [
 					break;
 				case 16:
 					move.onTryHit = function() {
-						this.add('-message', "The present was a fire!");
-					};
-					move.secondary = {chance: 100, status: 'brn'};
-					break;
-				case 17:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a poisoned apple!");
-					};
-					move.secondary = {chance: 100, status: 'tox'};
-					break;
-				case 18:
-					move.onTryHit = function() {
-						this.add('-message', "The present was an electric shock!");
-					};
-					move.secondary = {chance: 100, status: 'par'};
-					break;
-				case 19:
-					move.onTryHit = function() {
 						this.add('-message', "The present was a crafty shield!");
 					};
 					move.volatileStatus = 'craftyshield';
 					break;
-				case 21:
+				case 17:
 					move.onTryHit = function() {
 						this.add('-message', "The present was an electrification!");
 					};
 					move.volatileStatus = 'electrify';
 					break;
-				case 22:
+				case 18:
 					move.onTryHit = function() {
 						this.add('-message', "The present was an ion deluge!");
 					};

@@ -239,8 +239,8 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Informational commands
 	 *********************************************************/
-	 
-	regdate: function(target, room, user, connection) { 
+
+	regdate: function(target, room, user, connection) {
 		if (!this.canBroadcast()) return;
 		if (!target || target == "." || target == "," || target == "'") return this.sendReply('/regdate - Please specify a valid username.'); //temp fix for symbols that break the command
 		var username = target;
@@ -254,10 +254,10 @@ var commands = exports.commands = {
     		path: "/forum/~"+target
 		};
 
-		var content = "";   
+		var content = "";
 		var self = this;
 		var req = http.request(options, function(res) {
-			
+
 		    res.setEncoding("utf8");
 		    res.on("data", function (chunk) {
 	        content += chunk;
@@ -282,7 +282,7 @@ var commands = exports.commands = {
 		});
 		req.end();
 	},
-	
+
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',
@@ -843,7 +843,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'autoconfirmed') {
 			matched = true;
 			buffer += 'A user is autoconfirmed when they have won at least one rated battle and has been registered for a week or longer.<br />';
-		}	
+		}
 		if (!matched) {
 			return this.sendReply('The FAQ entry "'+target+'" was not found. Try /faq for general help.');
 		}
@@ -1016,7 +1016,7 @@ var commands = exports.commands = {
 			this.logModCommand('The Pokemon of the Day was removed by '+user.name+'.');
 		}
 	},
-	
+
 	roll: 'dice',
 	dice: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1049,7 +1049,7 @@ var commands = exports.commands = {
 	},
 
 	br: 'banredirect',
-	banredirect: function(){ 
+	banredirect: function(){
 		this.sendReply('/banredirect - This command is obsolete and has been removed.');
 	},
 
@@ -1095,7 +1095,7 @@ var commands = exports.commands = {
 		if (target === 'hangman') {
 			matched = true;
 			this.sendReplyBox('<font size = 3>Hangman</font><br>This is the game of hangman. The host player will pick a word, and other players will be allowed 8 guesses to figure out the word by guessing letters.<br>' +
-				'The commands to run hangman are as follows:<br>' + 
+				'The commands to run hangman are as follows:<br>' +
 				'- /hangman [word], [topic] - starts the game and sets the topic. Requires: +%@&~<br>' +
 				'- /topic OR /category - allows the host to specify a category<br>' +
 				'- /guess [letter] - allows users to guess letters<br>' +
@@ -1421,8 +1421,8 @@ var commands = exports.commands = {
 			this.sendReply('For details on all room commands, use /roomhelp');
 			this.sendReply('For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
-				this.sendReply('DRIVER COMMANDS: /mute, /unmute, /announce, /forcerename, /alts')
-				this.sendReply('MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /modlog, /redirect, /kick');
+				this.sendReply('DRIVER COMMANDS: /mute, /unmute, /announce, /modlog, /forcerename, /alts')
+				this.sendReply('MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /redirect, /kick');
 				this.sendReply('LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare, /permaban');
 				this.sendReply('For details on all moderator commands, use /help @');
 			}
@@ -1431,5 +1431,5 @@ var commands = exports.commands = {
 			this.sendReply('The command "/'+target+'" was not found. Try /help for general help');
 		}
 	},
-	
+
 };
