@@ -11,7 +11,7 @@ You can use your own computer as a server, but for other people to connect to yo
 Installing
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires [node.js][1], either v0.6.3 through v0.8.22, or v0.10.2 and up. Install `node.js` if you don't have it yet; the latest stable version is a good choice to install.
+Pokémon Showdown requires [node.js][1], v0.10.2 and up. Install `node.js` if you don't have it yet; the latest stable version is a good choice to install.
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone" button in the bottom of the right sidebar, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
 
