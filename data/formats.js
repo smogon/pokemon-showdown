@@ -174,10 +174,9 @@ exports.BattleFormats = {
 				}
 			}
 			if (template.num == 647) { // Keldeo
-				if (set.species === 'Keldeo-Resolute' && set.moves.indexOf('Secret Sword') < 0) {
-					problems.push('Keldeo-Resolute needs to have Secret Sword.');
+				if (set.moves.indexOf('Secret Sword') < 0) {
+					set.species = 'Keldeo';
 				}
-				set.species = 'Keldeo';
 			}
 			if (template.num == 648) { // Meloetta
 				if (set.species === 'Meloetta-Pirouette' && set.moves.indexOf('Relic Song') < 0) {
