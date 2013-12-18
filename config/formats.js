@@ -29,6 +29,7 @@ exports.Formats = [
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		noPokebank: true,
+		defaultLevel: 5,
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel']
 	},
 	{
@@ -92,7 +93,7 @@ exports.Formats = [
 	{
 		name: "Pokebank LC (beta)",
 		section: "XY Singles",
-
+		defaultLevel: 5,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel']
