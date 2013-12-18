@@ -958,7 +958,7 @@ var commands = exports.commands = {
 
 	donate: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Like this server and want to help?<br /><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4PHAVXW3SHVCG"><img src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_SM.gif" /></a><br />Every bit helps! Donations over $5 get voice and a custom avatar!</center>');
+		this.sendReplyBox('<center>Like this server and want to help?<br /><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4PHAVXW3SHVCG"><img src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_SM.gif" /></a><br />Every bit helps! Donations over $5 get voice and a custom avatar! (Subject to moderator discretion)</center>');
 	},
 
 	forum: 'forums',
