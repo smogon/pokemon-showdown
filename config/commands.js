@@ -1494,10 +1494,10 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img height="150" width="90" src="http://i.imgur.com/iy2hGg1.png"><img src="http://i.imgur.com/0Tz3gUZ.gif"><img height="150" width="90" src="http://fc09.deviantart.net/fs71/f/2010/310/c/9/genosect_by_pokedex_himori-d32apkw.png"><br><b>Ace: <font color="purple"><blink>Genesect</blink><br></font><b><font color="green">TIME FOR TUBBY BYE BYE</font></font></center>');
 	},
 
-	alee: 'alee93',
-	alee93: function(target, room, user) {
+	alee: 'sweetie',
+	sweetie: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/VJwqNpr.png"><img src="http://i.imgur.com/jLZstQ8.gif"><img src="http://i.imgur.com/Qi0y2ZD.png"><br><font color="red"><blink>Ace: Lilligant</blink><br></font><font color="purple">Love bites... so do I ♫♥');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/b9uMRhZ.gif"><br><center><img src="http://i.imgur.com/prh7sMT.gif"><br><font color="red"><blink>Ace: Gardevoir</blink><br></font><font color="purple">Yes you, make me so nervous that I just can\'t hold your hand♥♫');
 	},
 	
 	jesserawr: function(target, room, user) {
