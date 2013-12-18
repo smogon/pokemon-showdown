@@ -160,9 +160,10 @@ var Tournament = (function () {
 			if (!Users.getExact(user.userid))
 				// The two following functions are called without their second argument,
 				// but the second argument will not be used in this situation
-				if (this.isTournamentStarted)
-					this.disqualifyUser(user);
-				else
+				if (this.isTournamentStarted) {
+					if (!this.disqualifiedUsers.get(user))
+						this.disqualifyUser(user);
+				} else
 					this.removeUser(user);
 		}, this);
 	};
@@ -259,6 +260,7 @@ var Tournament = (function () {
 		this.availableMatches = new Map();
 		this.inProgressMatches = new Map();
 		this.pendingChallenges = new Map();
+		this.disqualifiedUsers = new Map();
 		var users = this.generator.getUsers();
 		users.forEach(function (user) {
 			var availableMatches = new Map();
@@ -268,6 +270,7 @@ var Tournament = (function () {
 			this.availableMatches.set(user, availableMatches);
 			this.inProgressMatches.set(user, null);
 			this.pendingChallenges.set(user, null);
+			this.disqualifiedUsers.set(user, false);
 		}, this);
 
 		this.isTournamentStarted = true;
@@ -320,7 +323,12 @@ var Tournament = (function () {
 			output.sendReply('|tournament|error|' + isTournamentEnded);
 			return;
 		}
+		if (this.disqualifiedUsers.get(user)) {
+			output.sendReply('|tournament|error|AlreadyDisqualified');
+			return;
+		}
 
+		this.disqualifiedUsers.set(user, true);
 		this.generator.setUserBusy(user, false);
 
 		var challenge = this.pendingChallenges.get(user);
@@ -363,7 +371,7 @@ var Tournament = (function () {
 		if (isTournamentEnded)
 			this.onTournamentEnd();
 		else
-		this.update();
+			this.update();
 	};
 
 	Tournament.prototype.challenge = function (from, to, output) {
