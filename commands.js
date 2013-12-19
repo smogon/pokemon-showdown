@@ -1283,69 +1283,6 @@ var commands = exports.commands = {
 		this.logEntry(user.name + ' used /crashlogged');
 	},
 
-	'memusage': 'memoryusage',
-	memoryusage: function(target) {
-		if (!this.can('hotpatch')) return false;
-		target = toId(target) || 'all';
-		if (target === 'all') {
-			this.sendReply('Loading memory usage, this might take a while.');
-		}
-		if (target === 'all' || target === 'rooms' || target === 'room') {
-			this.sendReply('Calcualting Room size...');
-			var roomSize = ResourceMonitor.sizeOfObject(Rooms);
-			this.sendReply("Rooms are using " + roomSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'config') {
-			this.sendReply('Calculating config size...');
-			var configSize = ResourceMonitor.sizeOfObject(config);
-			this.sendReply("Config is using " + configSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'resourcemonitor' || target === 'rm') {
-			this.sendReply('Calculating Resource Monitor size...');
-			var rmSize = ResourceMonitor.sizeOfObject(ResourceMonitor);
-			this.sendReply("The Resource Monitor is using " + rmSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'apps' || target === 'app' || target === 'serverapps') {
-			this.sendReply('Calculating Server Apps size...');
-			var appSize = ResourceMonitor.sizeOfObject(App) + ResourceMonitor.sizeOfObject(AppSSL) + ResourceMonitor.sizeOfObject(Server);
-			this.sendReply("Server Apps are using " + appSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'cmdp' || target === 'cp' || target === 'commandparser') {
-			this.sendReply('Calculating Command Parser size...');
-			var cpSize = ResourceMonitor.sizeOfObject(CommandParser);
-			this.sendReply("Command Parser is using " + cpSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'sim' || target === 'simulator') {
-			this.sendReply('Calculating Simulator size...');
-			var simSize = ResourceMonitor.sizeOfObject(Simulator);
-			this.sendReply("Simulator is using " + simSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'users') {
-			this.sendReply('Calculating Users size...');
-			var usersSize = ResourceMonitor.sizeOfObject(Users);
-			this.sendReply("Users is using " + usersSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'tools') {
-			this.sendReply('Calculating Tools size...');
-			var toolsSize = ResourceMonitor.sizeOfObject(Tools);
-			this.sendReply("Tools are using " + toolsSize + " bytes of memory.");
-		}
-		if (target === 'all') {
-			this.sendReply('Calculating Total size...');
-			var total = (roomSize + configSize + rmSize + appSize + cpSize + simSize + toolsSize + usersSize) || 0;
-			var units = ['bytes', 'K', 'M', 'G'];
-			var converted = total;
-			var unit = 0;
-			while (converted > 1024) {
-				converted /= 1024;
-				unit++;
-			}
-			converted = Math.round(converted);
-			this.sendReply("Total memory used: " + converted + units[unit] + " (" + total + " bytes).");
-		}
-		return;
-	},
-
 	bash: function(target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply('/bash - Access denied.');
