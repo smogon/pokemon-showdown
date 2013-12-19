@@ -442,7 +442,7 @@ var commands = exports.commands = {
 	miner: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox ('<center>Trainer:<font color="#750292"><b>Miner0</b></font><br />' +
-                   '<center>Types: Fire(OU E4), Flying(UU E4),Bug (RU E4)<br />' +
+                   '<center>Types: Fire(Former OU E4), Flying(UU E4),Bug (RU E4)<br />' +
                     '<center>Ace: <font color="red"><b>Darmanitan</b></font><br />' +
                     '<center>Catchphrase:  It doesn\'t matter on the types in the begining, only the outcome does.<br />' +
                     '<center><img src="http://www.smogon.com/download/sprites/bwmini/555.gif">');
@@ -495,10 +495,10 @@ var commands = exports.commands = {
 	cheese: function(target, room, user) {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color=" #0772CF"><b>platinumCheesecake</b></font><br />' +
-						'<center>Types: Fairy(OU), Poison(NU, RU)<br />' +
-						'<center>Signature Pokemon:<font color="#C11FA9"><b>Togekiss</b></font><br />' +
+						'<center>Types:Poison(NU, RU)<br />' +
+						'<center>Signature Pokemon:<font color="purple"><b>Golbat</b></font><br />' +
 						'<center>Catchphrase: wait so i can put anything i want here?<br />' +
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/468.gif">');
+						'<center><img src="http://www.smogon.com/download/sprites/bwmini/42.gif">');
 	},
 	
 	blizzard: 'blizzy',
@@ -535,6 +535,7 @@ var commands = exports.commands = {
 	wise: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#AC6116"><b>wisecarver</b></font><br />' +
+						'<center>Types: Fairy(OU)<br />' +
 						'<center>Signature Pokemon: <b>Mawile</b><br />' +
 						'<center>Catchphrase: "Every strike brings me closer to my next homerun" ~Babe Ruth<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/303.gif">');
@@ -583,21 +584,21 @@ var commands = exports.commands = {
 		
 	sam: function (target, room, user) {
 	 	if (!this.canBroadcast()) return;
-      	this.sendReplyBox ('<center>Trainer: <font color="#8D6007"><b>Sam</b></font><br />' +
-						'<center>Types: Grass(OU)<br />' + 
+      			this.sendReplyBox('<center>Trainer: <font color="#8D6007"><b>Sam</b></font><br />' +
+						'<center>Types: Grass(Former OU)<br />' + 
 						'<center>Ace:<font color="green"><b>Breloom</b></font><br />' + 
 						'<center>Catchphrase:Persona!<br />' + 
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/286.gif">');
 	},
       
-    ewok: function (target, room, user) {
+    	ewok: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-     	this.sendReplyBox ('<center>Trainer: <font color="#928216"><b>Ewok</b></font><br />' + 
+     			this.sendReplyBox('<center>Trainer: <font color="#928216"><b>Ewok</b></font><br />' + 
 						'<center>Types: Fire(OU), Poison(UU)<br />' +
 						'<center>Ace:<b>(Mega)Houndoom</b><br />' +
 						'<center>Catchphrase:Its better to burn out then fade away<br />' + 
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/229.gif">');
-    },
+    	},
 
 		
 	turtlelord: 'tl',
@@ -619,11 +620,11 @@ var commands = exports.commands = {
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/596.gif">');
 	},
 
-	hostageclam: 'hc',
+	clam: 'hc',
 	hc: function(target, room, user) {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#1B7E15"><b>hostageclam</b></font><br />' +
-						'<center>Types: Bug(UU),Bug(RU)<br />' +
+						'<center>Types: Bug(UU, RU, NU)<br />' +
 						'<center>Signature Pokemon: <font color="red"><b>Typhlosion</b></font><br />' +
 						'<center>Catchphrase: "Knock Knock? Who\'s there? Banana. Banana who? Banana you glad I didn\'t say orange? - Llama<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/157.gif">');
@@ -697,9 +698,10 @@ var commands = exports.commands = {
 	energ218: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="blue"><b>EnerG218</b></font><br />' +
-						'<center>Types: Nub(OU, UU, RU, NU)<br />' +
-						'<center>Signature Pokemon: <b>Nub</b><br />' +
-						'<center>Catchphrase: nubnubnubnubnubnubnubnubnubnubnubnubnubnub');
+						'<center>Types: /eval(OU, UU, RU, NU)<br />' +
+						'<center>Signature Pokemon: <font color="brown"><b>Buizel</b></font><br />' +
+						'<center>Catchphrase: kk<br />' +
+						'<center><img src="http://www.smogon.com/download/sprites/bwmini/418.gif">');
 	}, 
 
 	modernwolf: function(target, room, user) {
@@ -3039,7 +3041,7 @@ function getRandMessage(user){
 		break;
 		case 34: message = message + user.name + ' was hit by a wrecking ball!';
 		break;
-		case 35: message = message + user.name + ' was Flare Blitzed by miner0\'s Darmanitan!';
+		case 35: message = message + user.name + ' was hit by a train!';
 		break;
 		default: message = message + user.name + ' fled from colonial mustang!';
 	};
