@@ -14,7 +14,8 @@
 
 // Because I don't want two files, we're going to fork ourselves.
 
-if (!process.send) {
+var fakeProcess = new (require('./fake-process').FakeProcess)();
+//if (!process.send) {
 
 	// This is the parent
 
@@ -22,14 +23,16 @@ if (!process.send) {
 	var callbacks = {};
 	var callbackData = {};
 
-	var child = require('child_process').fork('verifier.js');
+	//var child = require('child_process').fork('verifier.js');
 	exports.verify = function(data, signature, callback) {
 		var localGuid = guid++;
 		callbacks[localGuid] = callback;
 		callbackData[localGuid] = data;
-		child.send({data: data, sig: signature, guid: localGuid});
+		//child.send({data: data, sig: signature, guid: localGuid});
+		fakeProcess.server.send({data: data, sig: signature, guid: localGuid});
 	}
-	child.on('message', function(response) {
+	//child.on('message', function(response) {
+	fakeProcess.server.on('message', function(response) {
 		if (callbacks[response.guid]) {
 			callbacks[response.guid](response.success, callbackData[response.guid]);
 			delete callbacks[response.guid];
@@ -37,7 +40,7 @@ if (!process.send) {
 		}
 	});
 
-} else {
+//} else {
 
 	// This is the child
 
@@ -47,17 +50,19 @@ if (!process.send) {
 	var keyalgo = config.loginserverkeyalgo;
 	var pkey = config.loginserverpublickey;
 
-	process.on('message', function(message) {
+	//process.on('message', function(message) {
+	fakeProcess.client.on('message', function(message) {
 		var verifier = crypto.createVerify(keyalgo);
 		verifier.update(message.data);
 		var success = false;
 		try {
 			success = verifier.verify(pkey, message.sig, 'hex');
 		} catch (e) {}
-		process.send({
+		//process.send({
+		fakeProcess.client.send({
 			success: success,
 			guid: message.guid
 		});
 	});
 
-}
+//}
