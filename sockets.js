@@ -100,11 +100,6 @@ if (cluster.isMaster) {
 		worker.send('-'+channelid+'\n'+socketid);
 	};
 
-	cluster.on('death', function(worker) {
-		console.log('Worker ' + worker.pid + ' died. Restarting again...');
-		spawnWorker();
-	});
-
 } else {
 	// is worker
 
