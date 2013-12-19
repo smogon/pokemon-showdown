@@ -12,7 +12,7 @@ exports.Formats = [
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		noPokebank: true,
-		banlist: ['Uber', 'Soul Dew', 'Gengarite']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
 		name: "Ubers (beta)",
@@ -80,7 +80,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
 		name: "Pokebank Ubers (beta)",
