@@ -60,7 +60,9 @@ if (cluster.isMaster) {
 				count++;
 			}
 		}
-		worker.kill();
+		try {
+			worker.kill();
+		} catch (e) {}
 		delete workers[worker.id];
 		return count;
 	};
