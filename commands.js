@@ -540,9 +540,9 @@ var commands = exports.commands = {
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/303.gif">');
 	},
 	
-	pony: function(target, room, user) {
-		if(!this.canBroadcast()) return;
-		if (this.broadcasting && !this.can('warn')) return this.sendReply('Due to spam, this command is restricted when being broadcasted.');
+	pony: function(target, room, user, connection) {
+		if(!this.canBroadcast()) return connection.sendTo(room,'You cannot broadcast this.');
+		if (this.broadcasting && !user.can('warn')) return connection.sendTo(room,'Due to spam, this command is restricted when being broadcasted.');
 		this.sendReplyBox('<center><img src="http://31.media.tumblr.com/c75cf0dbf3b7b14afd62ac4d228fb57a/tumblr_mj59oo9OS71rb26uco1_400.gif">');
 	},
 		
