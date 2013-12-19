@@ -61,7 +61,9 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 				count++;
 			}
 		}
-		worker.kill();
+		try {
+			worker.kill();
+		} catch (e) {}
 		delete workers[worker.id];
 		return count;*/
 		return 0;
@@ -99,11 +101,6 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	exports.channelRemove = function(worker, channelid, socketid) {
 		worker.send('-'+channelid+'\n'+socketid);
 	};
-
-	/*cluster.on('death', function(worker) {
-		console.log('Worker ' + worker.pid + ' died. Restarting again...');
-		spawnWorker();
-	});*/
 
 //} else {
 	// is worker

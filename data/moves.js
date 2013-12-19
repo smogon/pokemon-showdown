@@ -7027,7 +7027,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		secondary: false,
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Ground"
 	},
 	"lastresort": {
