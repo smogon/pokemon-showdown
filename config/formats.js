@@ -55,7 +55,7 @@ exports.Formats = [
 				this.add('message', message);
 				pokemon.battle.win(winner);
 			}
-			if (pokemon.side.pokemonLeft === 2) {
+			if (pokemon.side.pokemonLeft === 1) {
 				var loser = '';
 				this.debug('1 poke left');
 				for (var i = 0; i < pokemon.side.team.length; i ++) {
