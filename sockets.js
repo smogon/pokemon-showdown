@@ -62,7 +62,9 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 				count++;
 			}
 		}
-		worker.kill();
+		try {
+			worker.kill();
+		} catch (e) {}
 		delete workers[worker.id];
 		return count;*/
 	};
@@ -106,6 +108,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	});*/
 
 //} else {
+
 	// is worker
 
 	// Static HTTP server

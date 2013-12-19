@@ -11687,6 +11687,9 @@ exports.BattleMovedex = {
 			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
 				return false;
 			}
+			if (defender.weightkg >= attacker.weightkg) {
+				return false;
+			}
 			if (defender.volatiles['protect']) {
 				this.add('-activate', defender, 'Protect');
 				return null;
