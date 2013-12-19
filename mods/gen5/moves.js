@@ -478,6 +478,29 @@ exports.BattleMovedex = {
 		basePower: 100,
 		pp: 15
 	},
+	skydrop: {
+		inherit: true,
+		onTry: function(attacker, defender, move) {
+			if (defender.fainted) return false;
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
+				return false;
+			}
+			if (defender.volatiles['protect']) {
+				this.add('-activate', defender, 'Protect');
+				return null;
+			}
+			if (defender.volatiles['bounce'] || defender.volatiles['dig'] || defender.volatiles['dive'] || defender.volatiles['fly'] || defender.volatiles['shadowforce']) {
+				this.add('-miss', attacker, defender);
+				return null;
+			}
+			this.add('-prepare', attacker, move.name, defender);
+			attacker.addVolatile(move.id, defender);
+			return null;
+		}
+	},
 	sleeppowder: {
 		inherit: true,
 		onTryHit: function() {}
