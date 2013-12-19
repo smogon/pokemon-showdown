@@ -14,6 +14,7 @@
 var crypto = require('crypto');
 var poofeh = true;
 var ipbans = fs.createWriteStream('config/ipbans.txt', {'flags': 'a'});
+var avatars = fs.createWriteStream('config/avatars.txt', {'flags': 'a'});
 
 //spamroom
 if (typeof spamroom == "undefined") {
@@ -45,6 +46,31 @@ if (typeof tells === 'undefined') {
 const MAX_REASON_LENGTH = 300;
 
 var commands = exports.commands = {
+
+	requestavatar: function(target, room, user) {
+		if (!target) return this.parse('/help requestavatar');
+		if (!this.can('broadcast')) return;
+		var customavatars = fs.readFileSync('config/avatars.txt','utf8');
+		if (customavatars.indexOf(user.userid) > -1) {
+			return this.sendReply('You have already requested an avatar.');
+		}
+		if (target.indexOf('.') === -1) {
+			return this.sendReply('Make sure you\'re using the raw image.');
+		}
+        var extension = target.split('.');
+		extension = '.'+extension.pop();
+		if (extension != ".png" && extension != ".gif" && extension != ".jpg") {
+			return this.sendReply('Please use a .png, .gif, or .jpg file.');
+		}
+		avatars.write('\n'+user.userid+':\n'+target);
+		this.sendReply('Submitted! Expect to see it soon.');
+	},
+	
+	avatarrequests: function(target, room, user, connection) {
+		if (!this.can('hotpatch')) return;
+		var customavatars = fs.readFileSync('config/avatars.txt','utf8');
+		user.send('|popup|'+customavatars);
+	},
 
 	reminders: 'reminder',
 	reminder: function(target, room, user) {
