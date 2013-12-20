@@ -3512,8 +3512,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onTryHit: function(target, source) {
 			if (target === source) return false;
-			var bannedTargetAbilities = {multitype:1, truant:1};
-			var bannedSourceAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, zenmode:1};
+			var bannedTargetAbilities = {multitype:1, stancechange:1, truant:1};
+			var bannedSourceAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
 			if (bannedTargetAbilities[target.ability] || bannedSourceAbilities[source.ability] || target.ability === source.ability) {
 				return false;
 			}
