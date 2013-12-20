@@ -530,6 +530,7 @@ module.exports = (function () {
 								if (move === 'extremespeed') continue;
 								if (move === 'perishsong' && template.id === 'gastly') continue;
 								if (move === 'stealthrock' && template.id === 'skarmory') continue;
+								if (move === 'drillrun' && template.id === 'karrablast') continue;
 							}
 							if (learned.charAt(1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
