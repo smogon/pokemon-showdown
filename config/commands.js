@@ -1254,6 +1254,10 @@ var commands = exports.commands = {
 			this.sendReply('/ignore [user] - Ignores all messages from the user [user].');
 			this.sendReply('Note that staff messages cannot be ignored.');
 		}
+		if (target === '+' || target === 'requestavatar') {
+			matched = true;
+			this.sendReply('/requestavatar [URL] - Requests an avatar to be added for the user. Requires: + % @ & ~');
+		}
 		if (target === '%' || target === 'invite') {
 			matched = true;
 			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
