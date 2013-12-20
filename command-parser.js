@@ -364,6 +364,11 @@ function canTalk(user, room, connection, message) {
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
 			
+			if (message.toLowerCase().indexOf('.psim.us') > -1) {
+				 connection.sendTo(room,"Sorry, yet that is a link to another server. Advertising.");
+				 return false;
+			}
+			
 		     /*	if (message.toLowerCase().indexOf("nigger") > -1 || message.toLowerCase().indexOf("nigga") > -1 || message.toLowerCase().indexOf("cunt") > -1 || message.toLowerCase().indexOf("whore") > -1) {
 				connection.sendTo(room,"Sorry, yet that word is banned from lobby.");
 				return false;
