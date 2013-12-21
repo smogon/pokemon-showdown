@@ -424,7 +424,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="purple"><b>Kozman</b></font><br />' +
                   '<center>Types: Fighting(OU E4)<br />' +
-                  '<center>Ace: <font color="purple"><b>Mienshao</b></font><br />' + 
+                  '<center>Signature Pokemon: <font color="purple"><b>Mienshao</b></font><br />' + 
                   '<center>Catchphrase: Everyone has an inner Amethyst... You just need to unlock it.<br />' +
                   '<center><img src="http://www.smogon.com/download/sprites/bwmini/620.gif">');
 	},
@@ -434,7 +434,7 @@ var commands = exports.commands = {
  		 this.sendReplyBox('<center>Trainer: <font color="#986C1B"><b>Saira</b></font><br />' +
                            '<center>Types: Psychic(OU)<br />' +
                            '<center>Catchphrase:bloom to blossom, bloom to perish<br />' +
-                           '<center>Signature Pokemon: <font color="#FFFCAB"><b>Alakazam</b></font><br />' +
+                           '<center>Signature Pokemon: <font color="brown"><b>Alakazam</b></font><br />' +
                            '<center><img src="http://www.smogon.com/download/sprites/bwmini/65.gif"><br />');
 	},
    
@@ -460,7 +460,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#C11FA9"><b>Mizu :D</b></font><br />' +
                   '<center>Types: Flying(UU)<br />' +
-                  '<center>Ace: <font color="#C11FA9"><b>Togekiss</b></font><br />' +
+                  '<center>Signaute Pokemon: <font color="#C11FA9"><b>Togekiss</b></font><br />' +
                   '<center>Catchphrase: /me glomps jd<br />' +
                   '<center><img src="http://www.smogon.com/download/sprites/bwmini/468.gif">');
 	},
@@ -469,7 +469,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox ('<center>Trainer:<font color="#750292"><b>Miner0</b></font><br />' +
                    '<center>Types: Fire(Former OU E4), Flying(UU E4),Bug (RU E4)<br />' +
-                    '<center>Ace: <font color="red"><b>Darmanitan</b></font><br />' +
+                    '<center>Signature Pokemon: <font color="red"><b>Darmanitan</b></font><br />' +
                     '<center>Catchphrase:  It doesn\'t matter on the types in the begining, only the outcome does.<br />' +
                     '<center><img src="http://www.smogon.com/download/sprites/bwmini/555.gif">');
 	},
@@ -593,7 +593,7 @@ var commands = exports.commands = {
 	smelly: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox ('<center>Trainer: mrSmellyfeet100<br />' +
-						'<center>Ace: <font color="purple"><b>Skuntank</b></font><br />' +
+						'<center>Signature Pokemon: <font color="purple"><b>Skuntank</b></font><br />' +
 						'<center>Catchphrase: smell ya later!<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/435.gif">');
 	},
@@ -611,8 +611,8 @@ var commands = exports.commands = {
 	sam: function (target, room, user) {
 	 	if (!this.canBroadcast()) return;
       			this.sendReplyBox('<center>Trainer: <font color="#8D6007"><b>Sam</b></font><br />' +
-						'<center>Types: Grass(Former OU)<br />' + 
-						'<center>Ace:<font color="green"><b>Breloom</b></font><br />' + 
+						'<center>Types: Grass(OU)<br />' + 
+						'<center>Signature Pokemon:<font color="green"><b>Breloom</b></font><br />' + 
 						'<center>Catchphrase:Persona!<br />' + 
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/286.gif">');
 	},
@@ -621,7 +621,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
      			this.sendReplyBox('<center>Trainer: <font color="#928216"><b>Ewok</b></font><br />' + 
 						'<center>Types: Fire(OU), Poison(UU)<br />' +
-						'<center>Ace:<b>(Mega)Houndoom</b><br />' +
+						'<center>Signature Pokemon:<b>Houndoom-Mega</b><br />' +
 						'<center>Catchphrase:Its better to burn out then fade away<br />' + 
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/229.gif">');
     	},
@@ -661,7 +661,7 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center>Trainer: <font color="#491CAB"><b>Bayspot</b></font><br />' +
 						'<center>Types: Steel(OU), Ice(UU), Flying(RU)<br />' +
 						'<center>Signature Pokemon: <font color="brown"><b>Shuckle</b></font><br />' +
-						'<center>Catchphrase: Fall in love with my shuckle.<br />' +
+						'<center>Catchphrase:Everyday I\'m Shuckling.<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/213.gif">');
 	},
 	
@@ -685,7 +685,7 @@ var commands = exports.commands = {
 	pidove: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#051694"><b>Pidove</b></font><br />' +
-						'<center>Ace:<b>Shelgon</b><br />' +
+						'<center>Signature Pokemon:<b>Shelgon</b><br />' +
 						'<center>Catchphrase: not bad not bad at all<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/372.gif">');
 	},
@@ -720,7 +720,7 @@ var commands = exports.commands = {
 						'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/114_zps7313774a.png">');
 	},
        
-	nubnub: 'energ218',
+	energ: 'energ218',
 	energ218: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="blue"><b>EnerG218</b></font><br />' +
@@ -730,24 +730,13 @@ var commands = exports.commands = {
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/418.gif">');
 	}, 
 
-	modernwolf: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<b>Information on Gym Le@der 9:</b><br />'+
-						'Type: Rock<br />' +
-						'Tier: Over Used (OU)<br />' +
-						'<a href="gymleadermustang.wix.com%2F-amethystleague%23!gym-leaders%2FaboutPage" target="_blank">Thread</a><br />' +
-						'Signature Pokemon: Kabutops<br />' +
-						'<img src="http://www.poke-amph.com/black-white/sprites/small/141.png"><br />' +
-						'Badge: Obsidian Badge<br />' +
-						'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/146_zps098d23fa.png">');
-	},
 		
 	zact94: 'zac',	
 	zac: function(target, room, user) {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#2723A4"><b>ZacT94</b></font><br />' +
 						'<center>Types: Ghost(UU), Noraml(RU)<br />' +
-						'<center>Ace: <font color="#D9D50D"><b>Cofagrigus</b></font><br />' +
+						'<center>Signature Pokemon: <font color="#D9D50D"><b>Cofagrigus</b></font><br />' +
 						'<center>Catchphrase:Damn it my cat won\'t stop walking on my keyboard!<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/563.gif">');
 	},
@@ -866,7 +855,7 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReplyBox('<b>Hasty</b>: <font color="green"><b>Speed</b></font>, <font color="red"><b>Defense</b></font>');
 		}
-		if (target ==='serious' ) {
+		if (target ==='serious') {
 			matched = true;
 			this.sendReplyBox('<b>Serious</b>: <font color="blue"><b>Neutral</b></font>');
 		}
@@ -876,7 +865,7 @@ var commands = exports.commands = {
 		}
 		if (target==='naive' || target ==='+spe -spd') {
 			matched = true;
-			this.sendReplyBox('<b>Naive</b>: <font color="green"><b>Speed</b></font>, <font color="red"><b>Special Defense</b></font>');
+			this.sendReplyBox('<b>Naïve</b>: <font color="green"><b>Speed</b></font>, <font color="red"><b>Special Defense</b></font>');
 		}
 		if (target==='modest' || target ==='+spa -atk') {
 			matched = true;
@@ -936,7 +925,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'plus speed' || target === '+spe') {
 			matched = true;
-			this.sendReplyBox("<b>+ Speed Natures: Timid, Hasty, Jolly, Naive</b>");
+			this.sendReplyBox("<b>+ Speed Natures: Timid, Hasty, Jolly, Naïve</b>");
 		}
 		if (target === 'minus attack' || target==='-atk') {
 			matched = true;
@@ -952,7 +941,7 @@ var commands = exports.commands = {
 		}
 		if (target ==='minus special defense' || target === '-spd') {
 			matched = true;
-			this.sendReplyBox("<b>-Special Defense Natures: Naughty, Lax, Rash, Naive</b>");
+			this.sendReplyBox("<b>-Special Defense Natures: Naughty, Lax, Rash, Naïve</b>");
 		}
 		if (target === 'minus speed' || target === '-spe') {
 			matched = true;
