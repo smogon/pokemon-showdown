@@ -1567,7 +1567,7 @@ var commands = exports.commands = {
 	frankenstein : 'frank',
 	frank: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/9wSqwcb.png"><img src = "http://i.imgur.com/2RAtpGN.png"><img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQxx868Qej4oh2rxdz_OdwvSJGzY0nV0IZZjQpX4oQ3UUruxAZlKKv3rwtbmg"></font></color><br><center>Ace: Mega-Scizor<br>Are you ready to fight against fear itself? Will you cross beyond that door? Let your souls make the decision for you.');
+		this.sendReply('|raw|<img src="http://i.imgur.com/9wSqwcb.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><font color="green" size="6">Franken Ştein&nbsp;&nbsp;</font></b><img height="150" src="http://fc03.deviantart.net/fs70/f/2013/120/5/9/thundurus_therian_forme_by_xous54-d4zn05j.png"></font></color><br><center><b>Ace:</b><br /> Thundurus-T<br><b>Catcphrase:</b><br /> Are you ready to fight against fear itself? Will you cross beyond that door? Let your souls make the decision for you.');
 	},
 	
 	shadowninjask: 'ninjask',
