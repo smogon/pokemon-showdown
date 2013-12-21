@@ -364,11 +364,11 @@ function canTalk(user, room, connection, message) {
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
 			
-			if (message.toLowerCase().indexOf('.psim.us') > -1) {
+			if (message.toLowerCase().indexOf('.psim.us') > -1 || message.toLowerCase().indexOf('play.pokemonshowdown.com/~~') > -1) {
 				if (message.toLowerCase().indexOf('amethyst.psim.us') > -1) {
 					return message;
 				}
-				 connection.sendTo(room,"Sorry, yet that is a link to another server. Advertising.");
+				 connection.sendTo(room,"Sorry, yet that is a link to another server which is advertising.");
 				 return false;
 			}
 			
