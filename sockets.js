@@ -111,6 +111,12 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 	// is worker
 
+	// ofe is optional
+	// if installed, it will heap dump if the process runs out of memory
+	try {
+		require('ofe').call();
+	} catch {}
+
 	// Static HTTP server
 
 	// This handles the custom CSS and custom avatar features, and also
@@ -268,9 +274,16 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		case '-': // -channelid, socketid
 			// remove from channel
 			var nlLoc = data.indexOf('\n');
-			var channel = channels[data.substr(1, nlLoc-1)];
+			var channelid = data.substr(1, nlLoc-1);
+			var channel = channels[channelid];
 			if (!channel) return;
 			delete channel[data.substr(nlLoc+1)];
+			var isEmpty = true;
+			for (var socketid in channel) {
+				isEmpty = false;
+				break;
+			}
+			if (isEmpty) delete channels[channelid];
 			break;
 		}
 	});
