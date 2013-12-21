@@ -1105,8 +1105,9 @@ var commands = exports.commands = {
 				}
 			}
 		if(poofeh && !user.muted && !user.locked){
-			Rooms.rooms.lobby.addRaw(btags + getRandMessage(user)+ etags);
-			user.disconnectAll();	
+			/*Rooms.rooms.lobby.addRaw(btags + getRandMessage(user)+ etags);
+			user.disconnectAll();	*/
+			return this.sendReply('You can\'t poof while muted or locked.');
 		}else{
 			return this.sendReply('poof is currently disabled.');
 		}
