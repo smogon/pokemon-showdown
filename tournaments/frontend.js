@@ -74,7 +74,7 @@ var Tournament = (function () {
 
 		this.pendingChallenges = null;
 
-		room.send('|tournament|create|' + format + '|' + generator.name);
+		room.add('|tournament|create|' + format + '|' + generator.name);
 		this.update();
 	}
 
@@ -102,7 +102,7 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.forceEnd = function () {
-		this.room.send('|tournament|forceend');
+		this.room.add('|tournament|forceend');
 	};
 
 	Tournament.prototype.update = function (targetUser) {
@@ -175,7 +175,7 @@ var Tournament = (function () {
 			return;
 		}
 
-		this.room.send('|tournament|join|' + user.name);
+		this.room.add('|tournament|join|' + user.name);
 		this.isBracketInvalidated = true;
 		this.update();
 	};
@@ -186,7 +186,7 @@ var Tournament = (function () {
 			return;
 		}
 
-		this.room.send('|tournament|leave|' + user.name);
+		this.room.add('|tournament|leave|' + user.name);
 		this.isBracketInvalidated = true;
 		this.update();
 	};
@@ -197,7 +197,7 @@ var Tournament = (function () {
 			return;
 		}
 
-		this.room.send('|tournament|replace|' + user.name + '|' + replacementUser.name);
+		this.room.add('|tournament|replace|' + user.name + '|' + replacementUser.name);
 		this.isBracketInvalidated = true;
 		this.update();
 	};
@@ -275,7 +275,7 @@ var Tournament = (function () {
 
 		this.isTournamentStarted = true;
 		this.isBracketInvalidated = true;
-		this.room.send('|tournament|start');
+		this.room.add('|tournament|start');
 		this.update();
 	};
 	Tournament.prototype.getAvailableMatches = function () {
@@ -364,7 +364,7 @@ var Tournament = (function () {
 			this.inProgressMatches.set(matchTo, null);
 		}
 
-		this.room.send('|tournament|disqualify|' + user.name);
+		this.room.add('|tournament|disqualify|' + user.name);
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
 
@@ -425,7 +425,7 @@ var Tournament = (function () {
 
 		var room = Rooms.global.startBattle(challenge.from, user, this.format, true, challenge.team, user.team);
 		this.inProgressMatches.set(challenge.from, {to: user, room: room});
-		this.room.send('|tournament|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
+		this.room.add('|tournament|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
 
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
@@ -449,7 +449,7 @@ var Tournament = (function () {
 			result = 'loss';
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
-			this.room.send('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(',') + '|fail');
+			this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(',') + '|fail');
 
 			this.generator.setUserBusy(from, false);
 			this.generator.setUserBusy(to, false);
@@ -469,7 +469,7 @@ var Tournament = (function () {
 			return;
 		}
 
-		this.room.send('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(','));
+		this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(','));
 
 		this.generator.setUserBusy(from, false);
 		this.generator.setUserBusy(to, false);
