@@ -46,7 +46,6 @@ if (typeof tells === 'undefined') {
 const MAX_REASON_LENGTH = 300;
 
 var commands = exports.commands = {
-	m: 'math',
 	math: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		target = target.trim();
