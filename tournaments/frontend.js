@@ -375,7 +375,7 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.challenge = function (from, to, output) {
-		if (!this.availableMatches.get(from).get(to)) {
+		if (!this.availableMatches.get(from) || !this.availableMatches.get(from).get(to)) {
 			output.sendReply('|tournament|error|InvalidMatch')
 			return;
 		}
