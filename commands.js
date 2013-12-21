@@ -69,9 +69,9 @@ var commands = exports.commands = {
 		} else if (operator === '/') {
 			var divide = a / b;
 			return this.sendReplyBox("<b>"+a+"</b> divided by <b>"+b+"</b> is <b>"+divide+"</b>");
-		} else if (operator === 'square') {
-			var square = a * a;
-			return this.sendReplyBox("<b>"+a+"</b> squared is <b>"+square+"</b>");
+		} else if (operator === '^') {
+			var square = Math.pow(a,b);
+			return this.sendReplyBox("<b>"+a+"</b> to the power of <b>"+b+"</b> is <b>"+square+"</b>");
 		} else if (operator === 'sr' || operator === 'squareroot') {
 			var sqrt = Math.sqrt(a);
 			return this.sendReplyBox("The square root of <b>"+a+"</b> is <b>"+sqrt+"</b>");
