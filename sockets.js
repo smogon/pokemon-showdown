@@ -115,7 +115,9 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	// if installed, it will heap dump if the process runs out of memory
 	try {
 		require('ofe').call();
-	} catch {}
+	} catch (e) {
+
+	}
 
 	// Static HTTP server
 
