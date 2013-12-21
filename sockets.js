@@ -103,6 +103,12 @@ if (cluster.isMaster) {
 } else {
 	// is worker
 
+	// ofe is optional
+	// if installed, it will heap dump if the process runs out of memory
+	try {
+		require('ofe').call();
+	} catch {}
+
 	// Static HTTP server
 
 	// This handles the custom CSS and custom avatar features, and also
