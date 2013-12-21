@@ -947,7 +947,7 @@ var cmds = {
 				return this.parse('/tours');
 			}
 		} else if (tour[room.id].status == 1) {
-			if (!tour.userauth(user,room)) return this.sendReply('You should not use this command during the sign-up phase.');
+			if (tour.status != 0) return this.sendReply('You should not use this command during the sign-up phase.');
 			var remslots = tour[room.id].size - tour[room.id].players.length;
 			if (tour[room.id].players.length == tour[room.id].playerslogged.length) {
 				if (!this.broadcasting) return this.sendReply('There is nothing to report.');
