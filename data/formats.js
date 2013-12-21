@@ -9,11 +9,11 @@ exports.BattleFormats = {
 	standard: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal']
+		banlist: ['Unreleased', 'Illegal', 'Heal Pulse + Leppa Berry + Recycle']
 	},
 	standardpokebank: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Heal Pulse + Leppa Berry + Recycle'],
 		banlist: ['Illegal']
 	},
 	standardnext: {
@@ -24,7 +24,7 @@ exports.BattleFormats = {
 	standardubers: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal']
+		banlist: ['Unreleased', 'Illegal', 'Heal Pulse + Leppa Berry + Recycle']
 	},
 	standarddw: {
 		effectType: 'Banlist',
