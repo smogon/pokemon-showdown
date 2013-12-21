@@ -1627,7 +1627,12 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
-		if (targetUser.group === '~' || targetUser.frostDev) return false;
+		if (targetUser.group === '~') {
+			return this.sendReply('Administrators can\'t be room banned.');
+		}
+		if (targetUser.frostDev) {
+			return this.sendReply('Frost Developers can\'t be room banned.');
+		}
 		if (!userid || !targetUser) return this.sendReply("User '" + name + "' does not exist.");
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!Rooms.rooms[room.id].users[userid] && room.isPrivate) {
