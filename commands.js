@@ -46,6 +46,7 @@ if (typeof tells === 'undefined') {
 const MAX_REASON_LENGTH = 300;
 
 var commands = exports.commands = {
+
 	math: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		target = target.trim();
@@ -54,24 +55,24 @@ var commands = exports.commands = {
 		var b = target[2];
 		var operator = target[1];
 		if (!operator) {
-			return this.sendReply('/math [number] [operator] [number] OR [number] [operator - calculates two numbers using the operator.
+			return this.sendReply('/math [number] [operator] [number] OR [number] [operator] - Calculates two numbers using the operator.');
 		}
-		if (operator==='*') {
-			var multi = a*b;
+		if (operator === '*') {
+			var multi = a * b;
 			return this.sendReplyBox("<b>"+a+"</b> multiplied by <b>"+b+"</b> is <b>"+multi+"</b>");
-		}else if (operator==='+') {
+		} else if (operator === '+') {
 			var add = parseInt(a) + parseInt(b);
 			return this.sendReplyBox("<b>"+a+"</b> plus <b>"+b+"</b> is <b>"+add+"</b>");
-		}else if (operator==='-') {
-			var minus = a-b;
+		} else if (operator === '-') {
+			var minus = a - b;
 			return this.sendReplyBox("<b>"+a+"</b> minus <b>"+b+"</b> is <b>"+minus+"</b>");
-		}else if (operator==='/') {
-			var divide = a/b;
+		} else if (operator === '/') {
+			var divide = a / b;
 			return this.sendReplyBox("<b>"+a+"</b> divided by <b>"+b+"</b> is <b>"+divide+"</b>");
-		}else if (operator==='square') {
-			var square = a*a;
+		} else if (operator === 'square') {
+			var square = a * a;
 			return this.sendReplyBox("<b>"+a+"</b> squared is <b>"+square+"</b>");
-		}else if (operator==='sr' || operator==='squareroot') {
+		} else if (operator === 'sr' || operator === 'squareroot') {
 			var sqrt = Math.sqrt(a);
 			return this.sendReplyBox("The square root of <b>"+a+"</b> is <b>"+sqrt+"</b>");
 		}
