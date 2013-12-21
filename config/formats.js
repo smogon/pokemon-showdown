@@ -672,6 +672,13 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "Pokebank OU (beta) Monotype",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview', 'Same Type'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
+	},
+	{
 		name: "OU Monotype",
 		section: "Other Metagames",
 
