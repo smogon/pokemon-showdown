@@ -259,9 +259,16 @@ if (cluster.isMaster) {
 		case '-': // -channelid, socketid
 			// remove from channel
 			var nlLoc = data.indexOf('\n');
-			var channel = channels[data.substr(1, nlLoc-1)];
+			var channelid = data.substr(1, nlLoc-1);
+			var channel = channels[channelid];
 			if (!channel) return;
 			delete channel[data.substr(nlLoc+1)];
+			var isEmpty = true;
+			for (var socketid in channel) {
+				isEmpty = false;
+				break;
+			}
+			if (isEmpty) delete channels[channelid];
 			break;
 		}
 	});
