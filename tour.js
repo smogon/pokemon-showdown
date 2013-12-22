@@ -1,6 +1,17 @@
 /*********************************************************
  * Functions
  *********************************************************/
+ var christmas = false;
+
+ var cronJob = require('cron').CronJob;
+new cronJob('0 0 0 * * *', function(){
+	date = Date();
+	date = date.split(' ');
+	if (date[1] == 'Dec' && date[2] == '24') {
+    	christmas = true;
+    }
+}, null, true);
+
 exports.tour = function(t) {
   if (typeof t != "undefined") var tour = t; else var tour = new Object();
 	var tourStuff = {
@@ -419,6 +430,10 @@ exports.tour = function(t) {
 					if (tour[rid].size < 8) {
 						tourMoney = 0;
 						tooSmall = tooSmall + '(the tour was too small)';
+					}
+					if (christmas) {
+						tourMoney = tourMoney * 2;
+						tooSmall = '(Prizes are doubled due to christmas!)';
 					}
 				} else {
 					tooSmall += '(this is not an official chatroom)';

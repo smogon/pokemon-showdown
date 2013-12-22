@@ -72,7 +72,7 @@ if (!Object.select) {
 // Make sure config.js exists, and copy it over from config-example.js
 // if it doesn't
 
-global.fs = require('fs');
+global.fs = require('graceful-fs');
 if (!('existsSync' in fs)) {
 	fs.existsSync = require('path').existsSync;
 }
