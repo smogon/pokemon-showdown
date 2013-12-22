@@ -15,7 +15,6 @@ var crypto = require('crypto');
 
 var poofeh = true;
 
-var ipbans = fs.createWriteStream('config/ipbans.txt', {'flags': 'a'});
 var logeval = fs.createWriteStream('logs/eval.txt', {'flags': 'a'});
 
 var inShop = ['symbol', 'custom', 'animated', 'room', 'trainer', 'fix', 'declare'];
@@ -2256,27 +2255,6 @@ var commands = exports.commands = {
 		delete Users.bannedIps[target];
 		this.addModCommand(user.name+' unbanned the '+(target.charAt(target.length-1)==='*'?'IP range':'IP')+': '+target);
 	},
-
-	pban: 'permaban',
-	permban: 'permaban',
-	permaban: function(target, room, user) {
-                if (!target) return this.parse('/help permaban');
-                if (!this.can('permaban', targetUser)) return false;              
-                target = this.splitTarget(target);
-                var targetUser = this.targetUser;
-                if (!targetUser) {
-                        return this.sendReply('User '+this.targetUsername+' not found.');
-                }
-                if (Users.checkBanned(targetUser.latestIp) && !target && !targetUser.connected) {
-                        var problem = ' but was already banned';
-                        return this.privateModCommand('('+targetUser.name+' would be banned by '+user.name+problem+'.)');
-                }
-                
-                targetUser.popup(user.name+" has permanently banned you.");
-                this.addModCommand(targetUser.name+" was permanently banned by "+user.name+"."," ("+targetUser.latestIp+")");
-                targetUser.ban();
-                ipbans.write('\n'+targetUser.latestIp);
-        },
 	
 	flogout: 'forcelogout',
 	forcelogout: function(target, room, user) {
