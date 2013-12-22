@@ -2273,7 +2273,7 @@ var commands = exports.commands = {
                 }
                 
                 targetUser.popup(user.name+" has permanently banned you.");
-                this.addModCommand(targetUser.name+" was permanently banned by "+user.name+". ("+targetUser.latestIp+")");
+                this.addModCommand(targetUser.name+" was permanently banned by "+user.name+"."," ("+targetUser.latestIp+")");
                 targetUser.ban();
                 ipbans.write('\n'+targetUser.latestIp);
         },
