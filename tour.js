@@ -7,8 +7,11 @@
 new cronJob('0 0 0 * * *', function(){
 	date = Date();
 	date = date.split(' ');
-	if (date[1] == 'Dec' && date[2] == '24') {
+	if (date[1] == 'Dec' && date[2] == '25') {
     	christmas = true;
+    }
+    else {
+    	christmas = false;
     }
 }, null, true);
 
