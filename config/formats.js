@@ -104,7 +104,7 @@ exports.Formats = [
 		searchShow: false,
 		canUseRandomTeam: true,
 		debug: true,
-		maxLevel: 1000,
+		maxLevel: 9999,
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
@@ -225,7 +225,7 @@ exports.Formats = [
 		searchShow: false,
 		canUseRandomTeam: true,
 		debug: true,
-		maxLevel: 1000,
+		maxLevel: 9999,
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
@@ -344,6 +344,8 @@ exports.Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		canUseRandomTeam: true,
+		maxLevel: 9999,
+		defaultLevel: 100,
 		debug: true,
 		ruleset: ['Team Preview']
 	},
@@ -428,7 +430,7 @@ exports.Formats = [
 		searchShow: false,
 		canUseRandomTeam: true,
 		debug: true,
-		maxLevel: 1000,
+		maxLevel: 9999,
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
