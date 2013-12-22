@@ -370,6 +370,7 @@ var User = (function () {
 	};
 	User.prototype.getIdentity = function(roomid) {
 		if (!roomid) roomid = 'lobby';
+		if (this.group == '~' || this.group == '&') return this.group+this.name;
 		if (this.locked) {
 			return '‽'+this.name;
 		}
