@@ -76,104 +76,6 @@ exports.tour = function(t) {
 				answers: new Object()
 			};
 		},
-		addTourWin: function(target, tier) {
-			var data = fs.readFileSync('config/tourstats.csv','utf8')
-			var match = false;
-			var wins = 0;
-			var losses = 0;
-			var row = (''+data).split("\n");
-			var line = '';
-			if (tier) tier = toUserid(tier);
-			if (target) target = toUserid(target);
-			for (var i = row.length; i > -1; i--) {
-				if (!row[i]) continue;
-				var parts = row[i].split(",");
-				parts[3] = parts[3].replace('.','');
-				if (target == parts[0] && tier == parts[3]) {
-					wins = Number(parts[1]);
-					losses = Number(parts[2]);
-					match = true;
-					line = line + row[i];
-					break;
-				}
-			}
-			wins++;
-			if (match === true) {
-				var re = new RegExp(line,"g");
-				fs.readFile('config/tourstats.csv', 'utf8', function (err,data) {
-				if (err) {
-					return console.log(err);
-				}
-				var result = data.replace(re, target+','+wins+','+losses+','+tier+'.');
-				fs.writeFile('config/tourstats.csv', result, 'utf8', function (err) {
-					if (err) return console.log(err);
-				});
-				});
-			} else {
-				var log = fs.createWriteStream('config/tourstats.csv', {'flags': 'a'});
-				log.write("\n"+target+','+wins+','+losses+','+tier+'.');
-			}
-		},
-		addTourLoss: function(target, tier) {
-			var data = fs.readFileSync('config/tourstats.csv','utf8')
-			var match = false;
-			var wins = 0;
-			var losses = 0;
-			var row = (''+data).split("\n");
-			var line = '';
-			if (tier) tier = toUserid(tier);
-			if (target) target = toUserid(target);
-			for (var i = row.length; i > -1; i--) {
-				if (!row[i]) continue;
-				var parts = row[i].split(",");
-				parts[3] = parts[3].replace('.','');
-				if (target == parts[0] && tier == parts[3]) {
-					wins = Number(parts[1]);
-					losses = Number(parts[2]);
-					match = true;
-					line = line + row[i];
-					break;
-				}
-			}
-			losses++;
-			if (match === true) {
-				var re = new RegExp(line,"g");
-				fs.readFile('config/tourstats.csv', 'utf8', function (err,data) {
-				if (err) {
-					return console.log(err);
-				}
-				var result = data.replace(re, target+','+wins+','+losses+','+tier+'.');
-				fs.writeFile('config/tourstats.csv', result, 'utf8', function (err) {
-					if (err) return console.log(err);
-				});
-				});
-			} else {
-				var log = fs.createWriteStream('config/tourstats.csv', {'flags': 'a'});
-				log.write("\n"+target+','+wins+','+losses+','+tier+'.');
-			}
-		},
-		getTourStats: function(target, tier) {
-			var data = fs.readFileSync('config/tourstats.csv','utf8')
-			var row = (''+data).split("\n");
-			var match = false;
-			var tourstats = false;
-			if (tier) tier += '.';
-			for (var i = row.length; i > -1; i--) {
-				if (!row[i]) continue;
-				var parts = row[i].split(",");
-				if(target === parts[0]){
-					if(!tier){
-						if(tourstats){
-							tourstats += parts.toString();
-						}else{
-							tourstats = parts.toString();
-						}
-					}else if(tier === parts[3])
-						tourstats = parts.toString();
-				}
-			}
-			return tourstats;
-		},
 		shuffle: function(list) {
 		  var i, j, t;
 		  for (i = 1; i < list.length; i++) {
@@ -330,7 +232,7 @@ exports.tour = function(t) {
 				loser = r[key][loser];
 				tour[rid].history.push(r[key][winner] + "|" + r[key][loser]);
 				if (tour[rid].size >= 8) {
-					tour.addTourLoss(loser, tier); //for recording tour stats
+					frostcommands.addTourLoss(loser, tier); //for recording tour stats
 				}
 				return r[key][winner];
 			}
@@ -444,7 +346,7 @@ exports.tour = function(t) {
 				//end tour
 				Rooms.rooms[rid].addRaw('<h2><font color="green">Congratulations <font color="black">' + Users.users[w[0]].name + '</font>!  You have won the ' + Tools.data.Formats[tour[rid].tier].name + ' Tournament!<br>You have also won ' + tourMoney + ' Frost ' + p + '! ' + tooSmall + '</font></h2>' + '<br><font color="blue"><b>SECOND PLACE:</b></font> ' + Users.users[l[0]].name + '<hr />');
 				if (tour[rid].size >= 8) {
-					tour.addTourWin(Users.users[w[0]].name, Tools.data.Formats[tour[rid].tier].name); //for recording tour stats
+					frostcommands.addTourWin(Users.users[w[0]].name, Tools.data.Formats[tour[rid].tier].name); //for recording tour stats
 				}
 				//for now, this is the only way to get points/money
 				var data = fs.readFileSync('config/money.csv','utf8')
@@ -1263,39 +1165,6 @@ var cmds = {
 		if (!this.canBroadcast()) return;
 		this.sendReply('|raw|<div class="infobox"><h2>' + tour[room.id].question + separacion + '<font font size=1 color = "#939393"><small>/vote OPTION</small></font></h2><hr />' + separacion + separacion + " &bull; " + tour[room.id].answerList.join(' &bull; ') + '</div>');
 	},
-	tourstats: 'ts',
-	tourneystats: 'ts',
-	tourstat: 'ts',
-	ts: function(target, room, user) {
-		if (!target) return this.sendReply('Correct usage: /tourstats <username>, <tier>');
-		var tar = tour.splint(target);
-		var tier = false;
-		tier = toUserid(tar[1]);
-		if (!Tools.data.Formats[tier] && tier !== "all") 
-			return this.sendReplyBox('You supplied an invalid tier!');
-		var userid = toUserid(tar[0]);
-		var username = tar[0];
-		if (tier !== "all") {
-			var tiername = Tools.data.Formats[tier].name;
-			var tourstats = tour.getTourStats(userid,tier);
-			if (!tourstats) return this.sendReplyBox(username + ' has no ranked tournament wins or losses.')
-			if (!this.canBroadcast()) return;;
-			var tourstuff = tourstats.split(',');
-			var tourwins = tourstuff[1];
-			var tourlosses = tourstuff[2];
-			return this.sendReplyBox(username+' has '+tourwins+' tournament wins and '+tourlosses+' tournament losses in '+tiername);
-		}
-		var tourstats = tour.getTourStats(userid);
-		if (!tourstats) return this.sendReplyBox(username + ' has no ranked tournament wins or losses.')
-		var tourstuff = tourstats.split('.');
-		for (var u in tourstuff) {
-			tourstats = tourstuff[u].split(',');
-			var tourwins = tourstats[1];
-			var tourlosses = tourstats[2];
-			var tiername = tourstats[3];
-			if (tourstuff[u] !== '') this.sendReplyBox(username+' has '+tourwins+' tournament wins and '+tourlosses+' tournament losses in '+tiername);
-		}
-	}
 };
 
 for (var i in cmds) CommandParser.commands[i] = cmds[i];
