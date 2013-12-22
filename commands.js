@@ -433,7 +433,7 @@ var commands = exports.commands = {
 		if (giveMoney < 2) p = 'buck';
 		this.sendReply(targetUser.name + ' was given ' + giveMoney + ' ' + p + '. This user now has ' + targetUser.money + ' bucks. ('+reason+')');
 		this.logModCommand(user.name+' gave '+targetUser.name+' '+giveMoney+' '+p+'. ('+reason+')');
-		targetUser.send('|popup|' + user.name + ' has given you ' + giveMoney + ' ' + p + '.');
+		targetUser.send('|popup|' + user.name + ' has given you ' + giveMoney + ' ' + p + '. ('+reason+')');
 		} else {
 			return this.parse('/help givebucks');
 		}
@@ -499,7 +499,7 @@ var commands = exports.commands = {
 		if (takeMoney < 2) p = 'buck';
 		this.sendReply(targetUser.name + ' has had ' + takeMoney + ' ' + p + ' removed. This user now has ' + targetUser.money + ' bucks. ('+reason+')');
 		this.logModCommand(user.name+' removed '+takeMoney+' '+p+' from '+targetUser.name+'. ('+reason+')');
-		targetUser.send(user.name + ' has removed ' + takeMoney + ' bucks from you. ');
+		targetUser.send(user.name + ' has removed ' + takeMoney + ' bucks from you. ('+reason+')');
 		} else {
 			return this.parse('/help removebucks');
 		}
