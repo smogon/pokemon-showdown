@@ -19,8 +19,6 @@ var logeval = fs.createWriteStream('logs/eval.txt', {'flags': 'a'});
 
 var isMotd = false;
 
-var exchangeOn = false;
-
 //var avatar = fs.createWriteStream('config/avatars.csv', {'flags': 'a'}); // for /customavatar
 //spamroom
 if (typeof spamroom == "undefined") {
@@ -200,23 +198,6 @@ var commands = exports.commands = {
 			Users.get(target).send(user.name + ' has removed you from their friends list.');
 		}
 	},
-
-	/*********************************************************
-	 * Casino                                  
-	 *********************************************************/
-
-	 toggleexchange: function(target, room, user) {
-	 	if (!user.can('hotpatch')) return this.sendReply('Only Admins can enable or disable the ability to exchange.');
-
-	 	if (!exchangeOn) {
-	 		exchangeOn = false;
-	 		this.sendReply('Users can no longer exchange bucks/coins.');
-	 	}
-	 	else if (exchangeOn) {
-	 		exchangeOn = true;
-	 		this.sendReply('Users can now exchange bucks/coins.');
-	 	}
-	 },
 
 	/*********************************************************
 	 * Other Stuff                                    
