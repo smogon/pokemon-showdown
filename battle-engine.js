@@ -1140,14 +1140,14 @@ var BattleSide = (function() {
 		this.n = n;
 		this.name = name;
 		this.pokemon = [];
-		this.active = [{}];
+		this.active = [null];
 		this.sideConditions = {};
 
 		this.id = (n?'p2':'p1');
 
 		switch (this.battle.gameType) {
 		case 'doubles':
-			this.active = [{}, {}];
+			this.active = [null, null];
 			break;
 		}
 
