@@ -11704,7 +11704,7 @@ exports.BattleMovedex = {
 			return null;
 		},
 		onTryHit: function(target) {
-			if (target.hasType('Flying')) {
+			if (!pokemon.runImmunity('Ground')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
