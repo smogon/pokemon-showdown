@@ -4,6 +4,10 @@ exports.BattleItems = {
 		isUnreleased: false,
 		desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use."
 	},
+	custapberry: {
+		inherit: true,
+		isUnreleased: false
+	},
 	darkgem: {
 		inherit: true,
 		isUnreleased: false,
