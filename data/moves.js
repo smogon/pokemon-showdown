@@ -11688,8 +11688,9 @@ exports.BattleMovedex = {
 			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
 				return false;
 			}
-			if (defender.weightkg >= attacker.weightkg) {
-				return false;
+			if (defender.weightkg >= 200) {
+				this.add('message', defender.species + ' is too heavy. (placeholder)');
+				return null;
 			}
 			if (defender.volatiles['protect']) {
 				this.add('-activate', defender, 'Protect');
@@ -11704,7 +11705,7 @@ exports.BattleMovedex = {
 			return null;
 		},
 		onTryHit: function(target) {
-			if (!pokemon.runImmunity('Ground')) {
+			if (!target.hasType('Flying')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
