@@ -1468,6 +1468,8 @@ var ChatRoom = (function() {
 			}
 			this.logEntry(entry);
 		}
+		if (global.Tournaments && Tournaments.get(this.id))
+			Tournaments.get(this.id).update(user);
 		return user;
 	};
 	/**
