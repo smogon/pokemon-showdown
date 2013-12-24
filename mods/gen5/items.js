@@ -54,6 +54,10 @@ exports.BattleItems = {
 		isUnreleased: false,
 		desc: "Holder's first successful Ice-type attack will have 1.5x power. Single use."
 	},
+	mail: {
+		inherit: true,
+		isUnreleased: false
+	},
 	normalgem: {
 		inherit: true,
 		desc: "Holder's first successful Normal-type attack will have 1.5x power. Single use."
