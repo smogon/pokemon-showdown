@@ -5,7 +5,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Abomasnow-Mega",
 		megaEvolves: "Abomasnow",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 674,
 		gen: 6,
 		desc: "Mega-evolves Abomasnow."
@@ -16,7 +19,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Absol-Mega",
 		megaEvolves: "Absol",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 677,
 		gen: 6,
 		desc: "Mega-evolves Absol."
@@ -60,7 +66,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Aerodactyl-Mega",
 		megaEvolves: "Aerodactyl",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 672,
 		gen: 6,
 		desc: "Mega-evolves Aerodactyl."
@@ -71,7 +80,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Aggron-Mega",
 		megaEvolves: "Aggron",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 667,
 		gen: 6,
 		desc: "Mega-evolves Aggron."
@@ -137,7 +149,10 @@ exports.BattleItems = {
 		spritenum: 679,
 		megaStone: "Alakazam-Mega",
 		megaEvolves: "Alakazam",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: -6,
 		gen: 6,
 		desc: "Mega-evolves Alakazam."
@@ -148,7 +163,10 @@ exports.BattleItems = {
 		spritenum: 658,
 		megaStone: "Ampharos-Mega",
 		megaEvolves: "Ampharos",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: -6,
 		gen: 6,
 		desc: "Mega-evolves Ampharos."
@@ -256,7 +274,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Banette-Mega",
 		megaEvolves: "Banette",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 668,
 		gen: 6,
 		desc: "Mega-evolves Banette."
@@ -382,7 +403,10 @@ exports.BattleItems = {
 		spritenum: 661,
 		megaStone: "Blastoise-Mega",
 		megaEvolves: "Blastoise",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: -6,
 		gen: 6,
 		desc: "Mega-evolves Blastoise."
@@ -393,7 +417,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Blaziken-Mega",
 		megaEvolves: "Blaziken",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 664,
 		gen: 6,
 		desc: "Mega-evolves Blaziken."
@@ -497,7 +524,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Charizard-Mega-X",
 		megaEvolves: "Charizard",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 660,
 		gen: 6,
 		desc: "Mega-evolves Charizard into Mega Charizard X."
@@ -508,7 +538,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Charizard-Mega-Y",
 		megaEvolves: "Charizard",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 678,
 		gen: 6,
 		desc: "Mega-evolves Charizard into Mega Charizard Y."
@@ -1421,7 +1454,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Garchomp-Mega",
 		megaEvolves: "Garchomp",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 683,
 		gen: 6,
 		desc: "Mega-evolves Garchomp."
@@ -1432,7 +1468,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Gardevoir-Mega",
 		megaEvolves: "Gardevoir",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 657,
 		gen: 6,
 		desc: "Mega-evolves Gardevoir."
@@ -1443,7 +1482,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Gengar-Mega",
 		megaEvolves: "Gengar",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 656,
 		gen: 6,
 		desc: "Mega-evolves Gengar."
@@ -1566,7 +1608,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Gyarados-Mega",
 		megaEvolves: "Gyarados",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 676,
 		gen: 6,
 		desc: "Mega-evolves Gyarados."
@@ -1654,7 +1699,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Heracross-Mega",
 		megaEvolves: "Heracross",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 680,
 		gen: 6,
 		desc: "Mega-evolves Heracross."
@@ -1678,7 +1726,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Houndoom-Mega",
 		megaEvolves: "Houndoom",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 666,
 		gen: 6,
 		desc: "Mega-evolves Houndoom."
@@ -1909,7 +1960,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Kangaskhan-Mega",
 		megaEvolves: "Kangaskhan",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 675,
 		gen: 6,
 		desc: "Mega-evolves Kangaskhan."
@@ -2151,7 +2205,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Lucario-Mega",
 		megaEvolves: "Lucario",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 673,
 		gen: 6,
 		desc: "Mega-evolves Lucario."
@@ -2326,7 +2383,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Manectric-Mega",
 		megaEvolves: "Manectric",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 682,
 		gen: 6,
 		desc: "Mega-evolves Manectric."
@@ -2362,7 +2422,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Mawile-Mega",
 		megaEvolves: "Mawile",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 681,
 		gen: 6,
 		desc: "Mega-evolves Mawile."
@@ -2391,7 +2454,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Medicham-Mega",
 		megaEvolves: "Medicham",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 665,
 		gen: 6,
 		desc: "Mega-evolves Medicham."
@@ -2504,7 +2570,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-X",
 		megaEvolves: "Mewtwo",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 662,
 		gen: 6,
 		desc: "Mega-evolves Mewtwo into Mega Mewtwo X."
@@ -2515,7 +2584,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-Y",
 		megaEvolves: "Mewtwo",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 663,
 		gen: 6,
 		desc: "Mega-evolves Mewtwo into Mega Mewtwo Y."
@@ -2925,7 +2997,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Pinsir-Mega",
 		megaEvolves: "Pinsir",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 671,
 		gen: 6,
 		desc: "Mega-evolves Pinsir."
@@ -3454,7 +3529,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Scizor-Mega",
 		megaEvolves: "Scizor",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 670,
 		gen: 6,
 		desc: "Mega-evolves Scizor."
@@ -4027,7 +4105,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Tyranitar-Mega",
 		megaEvolves: "Tyranitar",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 669,
 		gen: 6,
 		desc: "Mega-evolves Tyranitar."
@@ -4046,7 +4127,10 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Venusaur-Mega",
 		megaEvolves: "Venusaur",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 659,
 		gen: 6,
 		desc: "Mega-evolves Venusaur."
