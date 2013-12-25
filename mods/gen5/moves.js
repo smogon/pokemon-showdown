@@ -569,6 +569,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 70
 	},
+	technoblast: {
+		inherit: true,
+		basePower: 85
+	},
 	thief: {
 		inherit: true,
 		basePower: 40,
