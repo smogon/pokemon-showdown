@@ -382,7 +382,7 @@ exports.BattleFormats = {
 		name: 'Endless Battle Clause',
 		banlist: ['Heal Pulse + Leppa Berry + Recycle', 'Pain Split + Leppa Berry + Recycle', 'Fling + Leppa Berry + Recycle'],
 		onStart: function() {
-			this.add('rule', 'Endless Battle Clause: Forcing battles not to end is banned.');
+			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned.');
 		}
 	},
 	moodyclause: {
