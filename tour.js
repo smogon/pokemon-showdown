@@ -1148,7 +1148,7 @@ var cmds = {
 		sortable.sort(function(a, b) {return a[1] - b[1]});
 		var html = "";
 		for (var i = sortable.length - 1; i > -1; i--) {
-			console.log(i);
+			//console.log(i);
 			var option = sortable[i][0];
 			var value = sortable[i][1];
 			html += "&bull; " + option + " - " + Math.floor(value / votes * 100) + "% (" + value + ")<br />";
