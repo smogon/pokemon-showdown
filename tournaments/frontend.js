@@ -222,6 +222,10 @@ var Tournament = (function () {
 				var node = queue.shift();
 
 				if (node.state === 'available') {
+					var pendingChallenge = this.pendingChallenges.get(node.children[0].team);
+					if (pendingChallenge && node.children[1].team === pendingChallenge.to)
+						node.state = 'challenging';
+
 					var inProgressMatch = this.inProgressMatches.get(node.children[0].team);
 					if (inProgressMatch && node.children[1].team === inProgressMatch.to) {
 						node.state = 'inprogress';
@@ -239,10 +243,17 @@ var Tournament = (function () {
 		} else if (data.type === 'table') {
 			if (this.isTournamentStarted)
 				data.tableContents.forEach(function (row, r) {
+					var pendingChallenge = this.pendingChallenges.get(data.tableHeaders.rows[r]);
 					var inProgressMatch = this.inProgressMatches.get(data.tableHeaders.rows[r]);
-					if (inProgressMatch)
+					if (pendingChallenge || inProgressMatch)
 						row.forEach(function (cell, c) {
-							if (cell && data.tableHeaders.cols[c] === inProgressMatch.to) {
+							if (!cell)
+								return;
+
+							if (pendingChallenge && data.tableHeaders.cols[c] === pendingChallenge.to)
+								cell.state = 'challenging';
+
+							if (inProgressMatch && data.tableHeaders.cols[c] === inProgressMatch.to) {
 								cell.state = 'inprogress';
 								cell.room = inProgressMatch.room.id;
 							}
