@@ -473,7 +473,7 @@ module.exports = (function () {
 		var sources = [];
 		// the equivalent of adding "every source at or before this gen" to sources
 		var sourcesBefore = 0;
-		var noPastGen = format.noPokebank || format.requirePentagon;
+		var noPastGen = format.requirePentagon;
 
 		do {
 			alreadyChecked[template.speciesid] = true;
@@ -488,10 +488,6 @@ module.exports = (function () {
 						sketch = true;
 						// Chatter, Struggle and Magikarp's Revenge cannot be sketched
 						if (move in {'chatter':1, 'struggle':1, 'magikarpsrevenge':1}) return true;
-						// Signature moves are unavailable in XY pre-Pokebank
-						if (format.noPokebank && move in {'conversion':1,'conversion2':1,'aeroblast':1,'sacredfire':1,'mistball':1,'lusterpurge':1,'doomdesire':1,'psychoboost':1,'roaroftime':1,'spacialrend':1,'magmastorm':1,'crushgrip':1,'shadowforce':1,'lunardance':1,'heartswap':1,'darkvoid':1,'seedflare':1,'judgment':1,'searingshot':1,'vcreate':1,'fusionflare':1,'fusionbolt':1,'blueflare':1,'boltstrike':1,'glaciate':1,'freezeshock':1,'iceburn':1,'secretsword':1,'relicsong':1,'technoblast':1}) {
-							return true;
-						}
 					}
 					if (typeof lset === 'string') lset = [lset];
 
@@ -526,12 +522,6 @@ module.exports = (function () {
 						} else if (learned.charAt(1) in {E:1,S:1,D:1}) {
 							// egg, event, or DW moves:
 							//   only if that was the source
-							if (format.noPokebank) {
-								if (move === 'extremespeed') continue;
-								if (move === 'perishsong' && template.id === 'gastly') continue;
-								if (move === 'stealthrock' && template.id === 'skarmory') continue;
-								if (move === 'drillrun' && template.id === 'karrablast') continue;
-							}
 							if (learned.charAt(1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								if (learned.charAt(0) === '6') {

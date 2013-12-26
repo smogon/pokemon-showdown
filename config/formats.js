@@ -11,7 +11,6 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		noPokebank: true,
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
@@ -19,7 +18,6 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
-		noPokebank: true,
 		banlist: []
 	},
 	{
@@ -28,7 +26,6 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		noPokebank: true,
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel']
 	},
 	{
@@ -44,7 +41,6 @@ exports.Formats = [
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		noPokebank: true,
 		banlist: [], // The neccessary bans are in Standard GBU
 		validateTeam: function(team, format) {
 			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
@@ -63,7 +59,6 @@ exports.Formats = [
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		noPokebank: true,
 		banlist: [], // The neccessary bans are in Standard GBU
 		validateTeam: function(team, format) {
 			for (var i = 0; i < team.length; i++) {
@@ -74,28 +69,6 @@ exports.Formats = [
 			}
 			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
 		}
-	},
-	{
-		name: "Pokebank OU (beta)",
-		section: "XY Singles",
-
-		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
-	},
-	{
-		name: "Pokebank Ubers (beta)",
-		section: "XY Singles",
-
-		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview'],
-		banlist: []
-	},
-	{
-		name: "Pokebank LC (beta)",
-		section: "XY Singles",
-
-		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard Pokebank', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel']
 	},
 	{
 		name: "Custom Game",
@@ -241,32 +214,6 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		noPokebank: true,
-		banlist: ['Dark Void', 'Soul Dew',
-			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
-			'Lugia',
-			'Ho-Oh',
-			'Kyogre',
-			'Groudon',
-			'Rayquaza',
-			'Dialga',
-			'Palkia',
-			'Giratina', 'Giratina-Origin',
-			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Reshiram',
-			'Zekrom',
-			'Kyurem-White',
-			'Xerneas',
-			'Yveltal'
-		]
-	},
-	{
-		name: "Pokebank Smogon Doubles (beta)",
-		section: "XY Doubles",
-		column: 2,
-
-		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Dark Void', 'Soul Dew',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
 			'Lugia',
@@ -300,7 +247,6 @@ exports.Formats = [
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		noPokebank: true,
 		banlist: ['Dark Void'], // Banning Dark Void here because technically Smeargle cannot learn it yet.
 		validateTeam: function(team, format) {
 			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
@@ -611,7 +557,7 @@ exports.Formats = [
 		name: "CAP (beta)",
 		section: "Other Metagames",
 
-		ruleset: ['CAP Pokemon', 'Standard Pokebank', 'Team Preview'],
+		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
