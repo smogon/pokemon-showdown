@@ -998,7 +998,6 @@ var commands = exports.commands = {
 		if (user.userid != 'skymn') {
 			return this.sendReply("Nope.");
 		}
-		delete Users.users.skymn;
 		user.forceRename('Skymіn', user.authenticated);
 	},
 
@@ -1007,9 +1006,15 @@ var commands = exports.commands = {
 		if (user.userid != 'aikenk') {
 			return this.sendReply("Nope.");
 		}
-		delete Users.users.aikenk;
 		user.forceRename('Aikenkα', user.authenticated);
 	},
+	
+	touchme: function(target, room, user) {
+		if (user.userid != 'gymledertouchme') {
+			return false;
+		}
+		delete Users.users.gymledertochme;
+		user.forceRename("GуmLe@dеrToսchMe", user.authenticated);
 	
 	cot: 'clashoftiers',
 	clashoftiers: function(target, room, user) {
