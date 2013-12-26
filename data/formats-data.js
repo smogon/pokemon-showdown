@@ -4327,6 +4327,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	carbink: {
+		viableMoves: {"stealthrock":1,"lightscreen":1,"reflect":1,"explosion":1},
 		tier: "Limbo"
 	},
 	goomy: {
@@ -4375,7 +4376,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	avalugg: {
-		viableMoves: {"rapidspin":1,"recover":1,"avalanche:":1,"roar":1,"roost":1,"earthquake":1},
+		viableMoves: {"rapidspin":1,"recover":1,"avalanche:":1,"roar":1,"earthquake":1},
 		tier: "Limbo"
 	},
 	noibat: {
