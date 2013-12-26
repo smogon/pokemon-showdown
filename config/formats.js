@@ -88,6 +88,13 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite']
 	},
 	{
+		name: "OU Monotype",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite']
+	},
+	{
 		name: "Ubers (beta)",
 		section: "XY Singles",
 
@@ -734,13 +741,6 @@ exports.Formats = [
 			'Yveltal',
 			'Xerneas'
 		]
-	},
-	{
-		name: "OU Monotype",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'Standard', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite']
 	},
 	{
 		name: "[Gen 5] Glitchmons",
