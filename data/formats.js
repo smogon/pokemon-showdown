@@ -475,7 +475,7 @@ exports.BattleFormats = {
 		for(var i = 0; i < team.length; i++) {
 			var template = this.getTemplate(team[i].species);
 			var tier = template.tier;
-			if(tier === 'OU' || tier === 'BL') {
+			if(tier === 'OU' || tier === 'Limbo' || tier === 'BL') {
 				points = points + 5;
 			}
 			if(tier === 'Uber') {
