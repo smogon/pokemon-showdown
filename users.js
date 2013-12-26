@@ -701,7 +701,9 @@ var User = (function () {
 			var group = config.groupsranking[0];
 			var isSysop = false;
 			var avatar = 0;
-			var authenticated = false;
+                        var authenticated = false;
+                        var avatars = fs.readFileSync('config/avatars.csv', 'utf8');
+                        avatars = avatars.split('\n');
 			// user types (body):
 			//   1: unregistered user
 			//   2: registered user
@@ -709,9 +711,12 @@ var User = (function () {
 			if (body !== '1') {
 				authenticated = true;
 
-				if (config.customavatars && config.customavatars[userid]) {
-					avatar = config.customavatars[userid];
-				}
+				if (config.customavatars) {
+                                        for (var u in avatars) {
+                                                var blah = avatars[u].split(',');
+                                                if (blah[0] == userid) avatar = blah[1];
+                                        }
+                                }
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
