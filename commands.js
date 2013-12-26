@@ -545,7 +545,7 @@ var commands = exports.commands = {
 		this.sendReplyBox ('<center>Trainer: <font color="#199461"><b>Skymin</b></font><br />' +
 						'<center>Signature Pokemon: <font color="#3CC977"><b>Shaymin-Sky</b></font><br />' +
 						'<center> Ha. Get ready, get set, let\'s roll, <br> In steady increase of control, <br> One limit, that\'s time to let go, <br> The end is slow.<br />' +
-						'<center><a href="https://www.listenonrepeat.com/watch?v=MVO-iK2aTK4">Battle Theme</a><br />' +
+					'<center><a href="https://www.listenonrepeat.com/watch/?v=e9ZEd5pI-Vk">Battle Theme</a><br />' +
 						'<center><a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="http://www.smogon.com/download/sprites/bwmini/492-s.gif"></a>');
 	},
 
@@ -716,7 +716,7 @@ var commands = exports.commands = {
 	pidove: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#051694"><b>Pidove</b></font><br />' +
-						'<center>Signature Pokemon:<b>Shelgon</b><br />' +
+						'<center>Signature Pokemon:<font color="#C11FA9"><b>Slowbro</b></font><br />' +
 						'<center>Catchphrase: not bad not bad at all<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/372.gif">');
 	},
@@ -998,6 +998,7 @@ var commands = exports.commands = {
 		if (user.userid != 'skymn') {
 			return this.sendReply("Nope.");
 		}
+		delete Users.users.skymn;
 		user.forceRename('Skymіn', user.authenticated);
 	},
 
@@ -1006,15 +1007,9 @@ var commands = exports.commands = {
 		if (user.userid != 'aikenk') {
 			return this.sendReply("Nope.");
 		}
+		delete Users.users.aikenk;
 		user.forceRename('Aikenkα', user.authenticated);
 	},
-	
-	touchme: function(target, room, user) {
-		if (user.userid != 'gymledertouchme') {
-			return false;
-		}
-		delete Users.users.gymledertochme;
-		user.forceRename("GуmLe@dеrToսchMe", user.authenticated);
 	
 	cot: 'clashoftiers',
 	clashoftiers: function(target, room, user) {
