@@ -233,6 +233,30 @@ exports.BattlePokedex = {
 		inherit: true,
 		abilities: {0:"Flash Fire"}
 	},
+	snivy: {
+		inherit: true,
+		abilities: {0:"Overgrow"}
+	},
+	servine: {
+		inherit: true,
+		abilities: {0:"Overgrow"}
+	},
+	serperior: {
+		inherit: true,
+		abilities: {0:"Overgrow"}
+	},
+	oshawott: {
+		inherit: true,
+		abilities: {0:"Torrent"}
+	},
+	dewott: {
+		inherit: true,
+		abilities: {0:"Torrent"}
+	},
+	samurott: {
+		inherit: true,
+		abilities: {0:"Torrent"}
+	},
 	stoutland: {
 		inherit: true,
 		baseStats: {hp:85,atk:100,def:90,spa:45,spd:90,spe:80}
