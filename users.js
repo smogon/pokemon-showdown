@@ -667,11 +667,25 @@ var User = (function () {
 						invalidHost = true;
 					}
 				}
+			} else if (tokenDataSplit[1] !== userid) {
+				// outdated token
+				// (a user changed their name again since this token was created)
+				// return without clearing renamePending; the more recent rename is still pending
+				return;
 			} else {
-				console.log('verify userid mismatch: '+tokenData);
+				// a user sent an invalid token
+				if (tokenDataSplit[0] !== challenge) {
+					console.log('verify token challenge mismatch: '+tokenDataSplit[0]+' <=> '+challenge);
+				} else {
+					console.log('verify token mismatch: '+tokenData);
+				}
 			}
 		} else {
-			console.log('verify failed: '+tokenData);
+			if (!challenge) {
+				console.log('verification failed; no challenge');
+			} else {
+				console.log('verify failed: '+token);
+			}
 		}
 
 		if (invalidHost) {
