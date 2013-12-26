@@ -612,7 +612,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['CAP Pokemon', 'Standard Pokebank', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
 		name: "Challenge Cup",
