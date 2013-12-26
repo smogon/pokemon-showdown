@@ -207,6 +207,8 @@ exports.groups = {
 		declare: true,
 		modchatall: true,
 		rangeban: true,
+		permaban: true,
+		customavatars: true,
 		potd: true,
 		disableladder: true,
 		globalonly: true,
