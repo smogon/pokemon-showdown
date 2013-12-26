@@ -1110,7 +1110,7 @@ var commands = exports.commands = {
 		'<img src="http://hydra-images.cursecdn.com/pokemon.gamepedia.com/3/3e/LenoraBWsprite.gif">')
 	},
 
-    thefronteirbeast: function(target, room, user) {
+    thefrontierbeast: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReply('|raw|<img height="100" src="http://www.explodingdog.com/drawing/awesome.jpg"><img src="http://i.imgur.com/3eN4nV3.gif"><img height="100" src="http://fc09.deviantart.net/fs70/f/2011/089/a/1/hydreigon_the_dark_dragon_poke_by_kingofanime_koa-d3cslir.png"><br /><center><b>Ace: </b>Hydreigon</center><br /><center><b>Catchphrase: </b>You wanna hax with me huh WELL YOU DIE</center><br />')
     },
