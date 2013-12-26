@@ -58,6 +58,94 @@ exports.Formats = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
+	
+	// XY Doubles
+	///////////////////////////////////////////////////////////////////
+
+	{
+		name: "Smogon Doubles (beta)",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Dark Void', 'Soul Dew',
+			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
+			'Lugia',
+			'Ho-Oh',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem-White',
+			'Xerneas',
+			'Yveltal'
+		]
+	},
+	{
+		name: "XY Battle Spot Doubles (beta)",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		onBegin: function() {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		banlist: ['Dark Void'], // Banning Dark Void here because technically Smeargle cannot learn it yet.
+		validateTeam: function(team, format) {
+			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
+		}
+	},
+	{
+		name: "VGC 2014 (beta)",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		onBegin: function() {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
+		requirePentagon: true,
+		banlist: [], // The neccessary bans are in Standard GBU
+		validateTeam: function(team, format) {
+			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
+		}
+	},
+	{
+		name: "Doubles Challenge Cup",
+		section: 'XY Doubles',
+
+		gameType: 'doubles',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['Pokemon', 'HP Percentage Mod']
+	},
+	{
+		name: "Doubles Custom Game",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		searchShow: false,
+		canUseRandomTeam: true,
+		maxLevel: 9999,
+		defaultLevel: 100,
+		debug: true,
+		ruleset: ['Team Preview']
+	},
 
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
@@ -73,6 +161,7 @@ exports.Formats = [
 	{
 		name: "[Gen 5] Random Battle",
 		section: "BW2 Singles",
+		column: 2,
 
 		mod: 'gen5',
 		team: 'random',
@@ -91,6 +180,7 @@ exports.Formats = [
 	{
 		name: "[Gen 5] OU",
 		section: "BW2 Singles",
+		column: 2,
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -177,98 +267,6 @@ exports.Formats = [
 		maxLevel: 9999,
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview']
-	},
-
-	// XY Doubles
-	///////////////////////////////////////////////////////////////////
-
-	{
-		name: "Smogon Doubles (beta)",
-		section: "XY Doubles",
-		column: 2,
-
-		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Dark Void', 'Soul Dew',
-			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
-			'Lugia',
-			'Ho-Oh',
-			'Kyogre',
-			'Groudon',
-			'Rayquaza',
-			'Dialga',
-			'Palkia',
-			'Giratina', 'Giratina-Origin',
-			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Reshiram',
-			'Zekrom',
-			'Kyurem-White',
-			'Xerneas',
-			'Yveltal'
-		]
-	},
-	{
-		name: "XY Battle Spot Doubles (beta)",
-		section: "XY Doubles",
-		column: 2,
-
-		gameType: 'doubles',
-		onBegin: function() {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		banlist: ['Dark Void'], // Banning Dark Void here because technically Smeargle cannot learn it yet.
-		validateTeam: function(team, format) {
-			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
-		}
-	},
-	{
-		name: "VGC 2014 (beta)",
-		section: "XY Doubles",
-		column: 2,
-
-		gameType: 'doubles',
-		onBegin: function() {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
-		requirePentagon: true,
-		banlist: [], // The neccessary bans are in Standard GBU
-		validateTeam: function(team, format) {
-			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
-		}
-	},
-	{
-		name: "Doubles Challenge Cup",
-		section: 'XY Doubles',
-
-		gameType: 'doubles',
-		team: 'randomCC',
-		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
-	},
-	{
-		name: "Doubles Custom Game",
-		section: "XY Doubles",
-		column: 2,
-
-		gameType: 'doubles',
-		searchShow: false,
-		canUseRandomTeam: true,
-		maxLevel: 9999,
-		defaultLevel: 100,
-		debug: true,
 		ruleset: ['Team Preview']
 	},
 
