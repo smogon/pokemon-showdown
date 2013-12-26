@@ -4291,6 +4291,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	clawitzer: {
+		viableMoves: {"waterpulse":1,"darkpulse":1,"aurasphere":1,"icebeam":1,"uturn":1},
 		tier: "Limbo"
 	},
 	helioptile: {
