@@ -644,7 +644,7 @@ var commands = exports.commands = {
       			this.sendReplyBox('<center>Trainer: <font color="#8D6007"><b>Sam</b></font><br />' +
 						'<center>Types: Grass(OU)<br />' + 
 						'<center>Signature Pokemon:<font color="green"><b>Breloom</b></font><br />' + 
-						'<center>Catchphrase:Persona!<br />' + 
+						'<center>Catchphrase:A Thousand Die as a Million are born<br />' + 
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/286.gif">');
 	},
       
@@ -1014,7 +1014,7 @@ var commands = exports.commands = {
 	cot: 'clashoftiers',
 	clashoftiers: function(target, room, user) {
 		if(!this.canBroadcast()) return;
-		this.sendReplyBox('<font size = 3><b>Clash of Tiers</b></font><br><font size = 2>by EnerG218</font><br>A metagame created by EnerG218, Clash of Tiers is a metagame focused on comparing the different tiers. Each player is given 6 points to make a team with. Points are spent based on tier: Ubers are worth 6, OU is worth 5, UU is worth 4, RU is worth 3, NU is worth 2, and LC is worth 1.<br>Have fun!');
+		this.sendReplyBox('<font size = 3><b>Clash of Tiers</b></font><br><font size = 2>by EnerG218</font><br>A metagame created by EnerG218, Clash of Tiers is a metagame focused on comparing the different tiers. Each player is given 6 points to make a team with. Points are spent based on tier: Ubers are worth 6, OU and Limbo are worth 5, UU is worth 4, RU is worth 3, NU is worth 2, and LC is worth 1.<br>Have fun!');
 	},
 	
 	
