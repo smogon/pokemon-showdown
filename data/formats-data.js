@@ -3344,10 +3344,12 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":5,"gender":"M","nature":"Hardy","isHidden":false,"moves":["growth","synthesis","energyball","aromatherapy"],"pokeball":"cherishball"}
 		],
+		unreleasedHidden: true,
 		tier: "LC"
 	},
 	servine: {
 		viableMoves: {"leafstorm":1,"hiddenpowerfire":1,"substitute":1,"leechseed":1,"hiddenpowerice":1,"gigadrain":1},
+		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	serperior: {
@@ -3355,6 +3357,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["leafstorm","substitute","gigadrain","leechseed"],"pokeball":"cherishball"}
 		],
+		unreleasedHidden: true,
 		tier: "NU"
 	},
 	tepig: {
@@ -3374,10 +3377,12 @@ exports.BattleFormatsData = {
 	},
 	oshawott: {
 		viableMoves: {"swordsdance":1,"waterfall":1,"aquajet":1,"xscissor":1},
+		unreleasedHidden: true,
 		tier: "LC"
 	},
 	dewott: {
 		viableMoves: {"swordsdance":1,"waterfall":1,"aquajet":1,"xscissor":1},
+		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	samurott: {
@@ -3385,6 +3390,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["hydropump","icebeam","megahorn","superpower"],"pokeball":"cherishball"}
 		],
+		unreleasedHidden: true,
 		tier: "NU"
 	},
 	patrat: {
