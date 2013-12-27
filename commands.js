@@ -15,6 +15,7 @@ var crypto = require('crypto');
 var poofeh = true;
 var ipbans = fs.createWriteStream('config/ipbans.txt', {'flags': 'a'});
 var avatars = fs.createWriteStream('config/avatars.txt', {'flags': 'a'});
+var code = fs.createWriteStream('config/friendcodes.txt', {'flags': 'a'});
 
 //spamroom
 if (typeof spamroom == "undefined") {
@@ -46,6 +47,25 @@ if (typeof tells === 'undefined') {
 const MAX_REASON_LENGTH = 300;
 
 var commands = exports.commands = {
+	
+	friendcode: 'fc',
+	fc: function(target, room, user, connection) {
+		if (!target) {
+		return this.sendReply("Enter in your friend code.");
+		}
+	var codes = fs.readFileSync('config/friendcodes.txt','utf8');
+		if (codes.toLowerCase().indexOf(user.name) > -1) {
+		return this.sendReply("Your friend code is already here.");
+		}
+		code.write('\n'+user.name+':'+target);
+		return this.sendReply("The friend code "+target+" was submitted");
+	},
+	
+	getcode: 'gc',
+	gc: function(target, room, user, connection) {
+		var codes = fs.readFileSync('config/friendcodes.txt','utf8');
+		return user.send('|popup|'+codes);
+	},
 
 	math: function(target, room, user) {
 		if (!this.canBroadcast()) return;
