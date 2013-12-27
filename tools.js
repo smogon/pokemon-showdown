@@ -941,7 +941,7 @@ module.exports = (function () {
 						} else if (problem.type === 'oversketched') {
 							problemString = problemString.concat(" because it can only sketch "+problem.maxSketches+" move"+(problem.maxSketches>1?"s":"")+".");
 						} else if (problem.type === 'pokebank') {
-							problemString = problemString.concat(" because it's not possible to transfer pokemon from earlier games to XY yet (Pokébank comes out in December).");
+							problemString = problemString.concat(" because it's only obtainable from a previous generation.");
 						} else {
 							problemString = problemString.concat(".");
 						}
