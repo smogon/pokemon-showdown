@@ -7,21 +7,21 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "OU (beta)",
+		name: "OU",
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
-		name: "Ubers (beta)",
+		name: "Ubers",
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
 		banlist: []
 	},
 	{
-		name: "LC (beta)",
+		name: "LC",
 		section: "XY Singles",
 
 		maxLevel: 5,
@@ -29,7 +29,7 @@ exports.Formats = [
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel']
 	},
 	{
-		name: "XY Battle Spot Singles (beta)",
+		name: "XY Battle Spot Singles",
 		section: "XY Singles",
 
 		onBegin: function() {
@@ -58,12 +58,12 @@ exports.Formats = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
-	
+
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Smogon Doubles (beta)",
+		name: "Smogon Doubles",
 		section: "XY Doubles",
 
 		gameType: 'doubles',
@@ -87,7 +87,7 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "XY Battle Spot Doubles (beta)",
+		name: "XY Battle Spot Doubles",
 		section: "XY Doubles",
 
 		gameType: 'doubles',
@@ -100,13 +100,12 @@ exports.Formats = [
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		banlist: ['Dark Void'], // Banning Dark Void here because technically Smeargle cannot learn it yet.
 		validateTeam: function(team, format) {
 			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
 		}
 	},
 	{
-		name: "VGC 2014 (beta)",
+		name: "VGC 2014",
 		section: "XY Doubles",
 
 		gameType: 'doubles',
@@ -528,7 +527,7 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "CAP (beta)",
+		name: "CAP",
 		section: "Other Metagames",
 
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],

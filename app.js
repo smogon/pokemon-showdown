@@ -1,3 +1,8 @@
+require('nodetime').profile({
+    accountKey: '881abccc997cf0f743b49afb996b1bcab3e20fed', 
+    appName: 'PS Socket Process'
+  });
+
 /**
  * Main file
  * Pokemon Showdown - http://pokemonshowdown.com/
