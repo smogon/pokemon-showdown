@@ -51,11 +51,11 @@ var commands = exports.commands = {
 	friendcode: 'fc',
 	fc: function(target, room, user, connection) {
 		if (!target) {
-		return this.sendReply("Enter in your friend code.");
+			return this.sendReply("Enter in your friend code.");
 		}
-	var codes = fs.readFileSync('config/friendcodes.txt','utf8');
+		var codes = fs.readFileSync('config/friendcodes.txt','utf8');
 		if (codes.toLowerCase().indexOf(user.name) > -1) {
-		return this.sendReply("Your friend code is already here.");
+			return this.sendReply("Your friend code is already here.");
 		}
 		code.write('\n'+user.name+':'+target);
 		return this.sendReply("The friend code "+target+" was submitted");
