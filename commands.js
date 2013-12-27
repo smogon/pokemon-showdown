@@ -51,14 +51,20 @@ var commands = exports.commands = {
 	friendcode: 'fc',
 	fc: function(target, room, user, connection) {
 		if (!target) {
-			return this.sendReply("Enter in your friend code.");
+			return this.sendReply("Enter in your friend code. Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
 		}
+		var fc = target;
+		fc = fc.replace('-', '');
+		fc = fc.replace(' ', '');
+		if (isNaN(fc)) return this.sendReply("The friend code you submitted contains non-numerical characters. Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
+		if (fc.length < 12) return this.sendReply("The friend code you have entered is not long enough! Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
+		fc = fc.slice(0,4)+'-'+fc.slice(4,8)+'-'+fc.slice(8,12);
 		var codes = fs.readFileSync('config/friendcodes.txt','utf8');
 		if (codes.toLowerCase().indexOf(user.name) > -1) {
 			return this.sendReply("Your friend code is already here.");
 		}
-		code.write('\n'+user.name+':'+target);
-		return this.sendReply("The friend code "+target+" was submitted");
+		code.write('\n'+user.name+':'+fc);
+		return this.sendReply("The friend code "+fc+" was submitted.");
 	},
 	
 	getcode: 'gc',
