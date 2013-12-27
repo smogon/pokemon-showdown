@@ -213,6 +213,11 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 				sockets[s]._session.recv) {
 				sockets[s]._session.recv.didClose();
 			}
+			if (sockets[s]._session &&
+                                sockets[s]._session.to_tref &&
+                                sockets[s]._session.to_tref._idleTimeout === -1) {
+                                sockets[s]._session.timeout_cb();
+                        }
 		}
 	};
 	if (!config.herokuhack) {
