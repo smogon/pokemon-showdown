@@ -1006,6 +1006,12 @@ module.exports = (function () {
 			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && this.getAbility(set.ability).gen === 4 && !template.prevo && this.gen <= 5) {
 				problems.push(name+" has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");
 			}
+			if (!lsetData.sources && lsetData.sourcesBefore >= 3) {
+				var oldAbilities = this.mod('gen'+lsetData.sourcesBefore).getTemplate(name).abilities;
+				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && ability.name !== oldAbilities['H']) {
+					problems.push(name+" has moves incompatible with its ability.");
+				}
+			}
 		}
 		setHas[toId(template.tier)] = true;
 		if (banlistTable[template.tier]) {
