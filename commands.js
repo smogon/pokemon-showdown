@@ -54,9 +54,8 @@ var commands = exports.commands = {
 			return this.sendReply("Enter in your friend code. Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
 		}
 		var fc = target;
-		fc = fc.replace(/'-'/g, '');
-		fc = fc.replace(/' '/g, '');
-		if (user.userid === "piiiikachuuu") this.sendReply(fc);
+		fc = fc.replace(/-/g, '');
+		fc = fc.replace(/ /g, '');
 		if (isNaN(fc)) return this.sendReply("The friend code you submitted contains non-numerical characters. Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
 		if (fc.length < 12) return this.sendReply("The friend code you have entered is not long enough! Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
 		fc = fc.slice(0,4)+'-'+fc.slice(4,8)+'-'+fc.slice(8,12);
