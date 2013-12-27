@@ -32,7 +32,7 @@ const MAX_PARSE_RECURSION = 10;
 
 var crypto = require('crypto');
 
-var modlog = exports.modlog = modlog || {lobby: fs.createWriteStream('logs/modlog_lobby.txt', {flags:'a+'})};
+var modlog = exports.modlog = modlog || {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'})};
 
 /**
  * Command parser
@@ -145,7 +145,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				this.logModCommand(text+(logOnlyText||''));
 			},
 			logModCommand: function(result) {
-				if (!modlog[room.id]) modlog[room.id] = fs.createWriteStream('logs/modlog_' + room.id + '.txt', {flags:'a+'});
+				if (!modlog[room.id]) modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
 				modlog[room.id].write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 			},
 			can: function(permission, target, room) {
@@ -402,4 +402,12 @@ var commands = exports.commands = require('./commands.js').commands;
 var customCommands = require('./config/commands.js');
 if (customCommands && customCommands.commands) {
 	Object.merge(commands, customCommands.commands);
+}
+
+/*********************************************************
+ * Install plug-in commands
+ *********************************************************/
+var plugins = require('./chat-plugins.js').plugins;
+for (var p in plugins) {
+	if (plugins[p].commands) Object.merge(commands, plugins[p].commands);
 }

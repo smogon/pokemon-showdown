@@ -313,7 +313,7 @@ exports.BattleItems = {
 		// implemented in statuses
 		num: 544,
 		gen: 5,
-		desc: "Holder's partial-trapping moves deal 1/8 max HP per turn instead of 1/16."
+		desc: "Holder's partial-trapping moves deal 1/6 max HP per turn instead of 1/8."
 	},
 	"blackbelt": {
 		id: "blackbelt",
@@ -790,6 +790,7 @@ exports.BattleItems = {
 	"custapberry": {
 		id: "custapberry",
 		name: "Custap Berry",
+		isUnreleased: true,
 		spritenum: 86,
 		isBerry: true,
 		naturalGift: {
@@ -2296,6 +2297,7 @@ exports.BattleItems = {
 		name: "Mail",
 		spritenum: 403,
 		onTakeItem: false,
+		isUnreleased: true,
 		gen: 2,
 		desc: "This item cannot be given to or taken from a Pokemon, except by Knock Off."
 	},
@@ -3675,6 +3677,7 @@ exports.BattleItems = {
 	"souldew": {
 		id: "souldew",
 		name: "Soul Dew",
+		isUnreleased: true,
 		spritenum: 459,
 		fling: {
 			basePower: 30

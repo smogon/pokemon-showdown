@@ -419,7 +419,7 @@ var commands = exports.commands = {
 				var move = {};
 				for (var mon in tempResults) {
 					var lsetData = {set:{}};
-					template = Tools.getTemplate(tempResults[mon].id);
+					var template = Tools.getTemplate(tempResults[mon].id);
 					for (var i in moves) {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {
@@ -1347,8 +1347,8 @@ var commands = exports.commands = {
 			this.sendReply('For details on all room commands, use /roomhelp');
 			this.sendReply('For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
-				this.sendReply('DRIVER COMMANDS: /mute, /unmute, /announce, /forcerename, /alts')
-				this.sendReply('MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /modlog, /redirect, /kick');
+				this.sendReply('DRIVER COMMANDS: /mute, /unmute, /announce, /modlog, /forcerename, /alts')
+				this.sendReply('MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /redirect, /kick');
 				this.sendReply('LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare');
 				this.sendReply('For details on all moderator commands, use /help @');
 			}

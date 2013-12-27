@@ -1105,12 +1105,15 @@ var BattlePokemon = (function() {
 			return true;
 		}
 		if (this.negateImmunity[type]) return true;
-		if (!this.negateImmunity['Type'] && !this.battle.getImmunity(type, this)) {
-			this.battle.debug('natural immunity');
-			if (message) {
-				this.battle.add('-immune', this, '[msg]');
+		if (!(this.negateImmunity['Type'] && type in this.battle.data.TypeChart)) {
+			// Ring Target not active
+			if (!this.battle.getImmunity(type, this)) {
+				this.battle.debug('natural immunity');
+				if (message) {
+					this.battle.add('-immune', this, '[msg]');
+				}
+				return false;
 			}
-			return false;
 		}
 		var immunity = this.battle.runEvent('Immunity', this, null, null, type);
 		if (!immunity) {

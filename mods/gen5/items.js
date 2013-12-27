@@ -4,6 +4,10 @@ exports.BattleItems = {
 		isUnreleased: false,
 		desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use."
 	},
+	custapberry: {
+		inherit: true,
+		isUnreleased: false
+	},
 	darkgem: {
 		inherit: true,
 		isUnreleased: false,
@@ -54,6 +58,10 @@ exports.BattleItems = {
 		isUnreleased: false,
 		desc: "Holder's first successful Ice-type attack will have 1.5x power. Single use."
 	},
+	mail: {
+		inherit: true,
+		isUnreleased: false
+	},
 	normalgem: {
 		inherit: true,
 		desc: "Holder's first successful Normal-type attack will have 1.5x power. Single use."
@@ -72,6 +80,10 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 		desc: "Holder's first successful Rock-type attack will have 1.5x power. Single use."
+	},
+	souldew: {
+		inherit: true,
+		isUnreleased: false
 	},
 	steelgem: {
 		inherit: true,
