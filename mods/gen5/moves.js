@@ -345,6 +345,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		priority: 0
 	},
+	magmastorm: {
+		inherit: true,
+		basePower: 120
+	},
 	meteormash: {
 		inherit: true,
 		accuracy: 85,
