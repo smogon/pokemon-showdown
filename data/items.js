@@ -790,6 +790,7 @@ exports.BattleItems = {
 	"custapberry": {
 		id: "custapberry",
 		name: "Custap Berry",
+		isUnreleased: true,
 		spritenum: 86,
 		isBerry: true,
 		naturalGift: {
@@ -2296,6 +2297,7 @@ exports.BattleItems = {
 		name: "Mail",
 		spritenum: 403,
 		onTakeItem: false,
+		isUnreleased: true,
 		gen: 2,
 		desc: "This item cannot be given to or taken from a Pokemon, except by Knock Off."
 	},

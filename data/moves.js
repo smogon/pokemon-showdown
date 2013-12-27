@@ -3512,8 +3512,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onTryHit: function(target, source) {
 			if (target === source) return false;
-			var bannedTargetAbilities = {multitype:1, truant:1};
-			var bannedSourceAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, zenmode:1};
+			var bannedTargetAbilities = {multitype:1, stancechange:1, truant:1};
+			var bannedSourceAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
 			if (bannedTargetAbilities[target.ability] || bannedSourceAbilities[source.ability] || target.ability === source.ability) {
 				return false;
 			}
@@ -7027,7 +7027,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		secondary: false,
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Ground"
 	},
 	"lastresort": {
@@ -9407,7 +9407,8 @@ exports.BattleMovedex = {
 				this.add('-start', target, 'Powder');
 			},
 			onBeforeMove: function(pokemon, target, move) {
-				if (move.type === 'Fire') {
+				var item = pokemon.getItem();
+				if (move.type === 'Fire' || (move.name === 'Hidden Power' && pokemon.hpType === 'Fire') || (move.name === 'Weather Ball' && this.isWeather('sunnyday')) || (item.isBerry && move.name === 'Natural Gift' && item.naturalGift.type === 'Fire') || (move.name === 'Judgment' && item.name === 'Flame Plate')) {
 					this.add('-activate', pokemon, 'Powder');
 					this.directDamage(Math.floor(pokemon.maxhp / 4) + 1);
 					return false;
@@ -11687,6 +11688,10 @@ exports.BattleMovedex = {
 			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
 				return false;
 			}
+			if (defender.weightkg >= 200) {
+				this.add('message', defender.species + ' is too heavy. (placeholder)');
+				return null;
+			}
 			if (defender.volatiles['protect']) {
 				this.add('-activate', defender, 'Protect');
 				return null;
@@ -11700,7 +11705,7 @@ exports.BattleMovedex = {
 			return null;
 		},
 		onTryHit: function(target) {
-			if (target.hasType('Flying')) {
+			if (!target.hasType('Flying')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
@@ -13356,7 +13361,7 @@ exports.BattleMovedex = {
 	"technoblast": {
 		num: 546,
 		accuracy: 100,
-		basePower: 85,
+		basePower: 120,
 		category: "Special",
 		desc: "Deals damage to one adjacent target. This move's type depends on the user's held Drive.",
 		shortDesc: "Type varies based on the held Drive.",

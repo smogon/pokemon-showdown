@@ -61,7 +61,9 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 				count++;
 			}
 		}
-		worker.kill();
+		try {
+			worker.kill();
+		} catch (e) {}
 		delete workers[worker.id];
 		return count;*/
 		return 0;
@@ -100,13 +102,14 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		worker.send('-'+channelid+'\n'+socketid);
 	};
 
-	/*cluster.on('death', function(worker) {
-		console.log('Worker ' + worker.pid + ' died. Restarting again...');
-		spawnWorker();
-	});*/
-
 //} else {
 	// is worker
+
+	// ofe is optional
+	// if installed, it will heap dump if the process runs out of memory
+	try {
+		require('ofe').call();
+	} catch (e) {}
 
 	// Static HTTP server
 
@@ -264,9 +267,16 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		case '-': // -channelid, socketid
 			// remove from channel
 			var nlLoc = data.indexOf('\n');
-			var channel = channels[data.substr(1, nlLoc-1)];
+			var channelid = data.substr(1, nlLoc-1);
+			var channel = channels[channelid];
 			if (!channel) return;
 			delete channel[data.substr(nlLoc+1)];
+			var isEmpty = true;
+			for (var socketid in channel) {
+				isEmpty = false;
+				break;
+			}
+			if (isEmpty) delete channels[channelid];
 			break;
 		}
 	});

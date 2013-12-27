@@ -5,13 +5,15 @@ Pokémon Showdown is a simulator of Pokémon battles. It currently supports sing
 
 This repository contains the files needed to set up your own Pokémon Showdown server. Note that to set up a server, you'll also need a server computer.
 
-You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, by setting up any firewalls you might have to allow that port through to you (this sometimes isn't possible on certain internet connections).
+You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, which sometimes requires [port forwarding][1] (note that this isn't possible on certain internet connections).
+
+  [1]: http://en.wikipedia.org/wiki/Port_forwarding
 
 
 Installing
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires [node.js][1], either v0.6.3 through v0.8.22, or v0.10.2 and up. Install `node.js` if you don't have it yet; the latest stable version is a good choice to install.
+Pokémon Showdown requires [node.js][2], v0.10.2 and up. Install `node.js` if you don't have it yet; the latest stable version is a good choice to install.
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone" button in the bottom of the right sidebar, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
 
@@ -49,8 +51,7 @@ You will be redirected to `http://SERVER.psim.us`. The reason your server is vis
 
 If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][3]. It's not recommended for beginners, though.
 
-  [1]: http://nodejs.org/
-  [2]: https://github.com/joyent/node/pull/5016
+  [2]: http://nodejs.org/
   [3]: https://github.com/Zarel/Pokemon-Showdown-Client
 
 
