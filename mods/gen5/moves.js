@@ -377,6 +377,10 @@ exports.BattleMovedex = {
 	
 	naturalgift: {
 		inherit: true, 
+		basePowerCallback: function(pokemon) {
+                        if (pokemon.volatiles['naturalgift']) return pokemon.volatiles['naturalgift'].basePower;
+                        return false;
+                },
 		beforeMoveCallback: function(pokemon) {
                         var item = pokemon.getItem();
                         if (item.id && item.naturalGift) {
