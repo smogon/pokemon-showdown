@@ -1160,6 +1160,9 @@ var commands = exports.commands = {
 		if (targetUser.length > 18) {
 			return this.sendReply('The name of user "' + this.targetUsername + '" is too long.');
 		}
+		if (targets[1].indexOf('<') > -1 || targets[1].indexOf('>') > -1) {
+			return this.sendReply("HTML is not allowed in /tell.");
+		}
 
 		if (!tells[targetUser]) tells[targetUser] = [];
 		if (tells[targetUser].length === 5) return this.sendReply('User ' + targetUser + ' has too many tells queued.');
