@@ -195,13 +195,22 @@ if (cluster.isMaster) {
 	var sockets = {};
 	var channels = {};
 
-	// Deal with phantom xhr-streaming connections.
+	// Deal with phantom connections.
 	global.sweepClosedSockets = function() {
 		for (var s in sockets) {
 			if (sockets[s].protocol === 'xhr-streaming' &&
 				sockets[s]._session &&
 				sockets[s]._session.recv) {
 				sockets[s]._session.recv.didClose();
+			}
+
+			// A ghost connection's `_session.to_tref._idleTimeout` property is -1 while a normal timeout value for normal users.
+			// Simply calling `_session.timeout_cb` on those connections kills those connections.
+			// This timeout is the timeout that sockjs sets to wait for users to reconnect within that time to continue their session.
+			if (sockets[s]._session &&
+				sockets[s]._session.to_tref &&
+				sockets[s]._session.to_tref._idleTimeout === -1) {
+				sockets[s]._session.timeout_cb();
 			}
 		}
 	};
