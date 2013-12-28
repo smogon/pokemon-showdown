@@ -2833,15 +2833,21 @@ var Battle = (function() {
 		totalTypeMod = this.singleEvent('ModifyEffectiveness', move, null, target, pokemon, move, totalTypeMod);
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
-			baseDamage *= 2;
-			if (totalTypeMod >= 2) {
+			if (totalTypeMod > 3) {
+				totalTypeMod = 3;
+				console.log('Error: Type modifier overrange.\n\n'+this.log.join('\n'));
+			}
+			for (var i=0; i<totalTypeMod; i++) {
 				baseDamage *= 2;
 			}
 		}
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
-			baseDamage = Math.floor(baseDamage/2);
-			if (totalTypeMod <= -2) {
+			if (totalTypeMod < -3) {
+				totalTypeMod = -3;
+				console.log('Error: Type modifier underrange.\n\n'+this.log.join('\n'));
+			}
+			for (var i=0; i>totalTypeMod; i--) {
 				baseDamage = Math.floor(baseDamage/2);
 			}
 		}
