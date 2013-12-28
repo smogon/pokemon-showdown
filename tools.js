@@ -1009,7 +1009,7 @@ module.exports = (function () {
 			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && this.getAbility(set.ability).gen === 4 && !template.prevo && this.gen <= 5) {
 				problems.push(name+" has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");
 			}
-			if (!lsetData.sources && lsetData.sourcesBefore >= 3 && (isHidden || this.gen <= 5)) {
+			if (!lsetData.sources && lsetData.sourcesBefore >= 3 && (isHidden || this.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
 				var oldAbilities = this.mod('gen'+lsetData.sourcesBefore).getTemplate(set.species).abilities;
 				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && ability.name !== oldAbilities['H']) {
 					problems.push(name+" has moves incompatible with its ability.");
