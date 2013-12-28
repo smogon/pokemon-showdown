@@ -743,11 +743,10 @@ var commands = exports.commands = {
 		if (target.toLowerCase() == "lobby") {
 			return connection.sendTo('lobby','|html|<div class="infobox" style="border-color:blue"><center><img src="http://i.imgur.com/RKZTxPs.png"><br />' +
 			'<b><u>Welcome to the Frost Server!</u></b><br />' + 
-			'<img src = "http://i.imgur.com/Fhn96HP.png"><br />' +
-			/*'Home of many leagues for you to join or challenge, battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
+			'Home of many leagues for you to join or challenge, battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
 			'Make sure to type <b>/help</b> to get a list of commands that you can use and <b>/faq</b> to check out frequently asked questions.<br /><br />' +
 			'To get a chatroom for your league, please talk to an admin (~) to receive one<br /><br />' +
-			'Feel free to jam out with Frost <a href="http://plug.dj/frost-ps/">here</a>!<br /><br />' +*/
+			'Feel free to jam out with Frost <a href="http://plug.dj/frost-ps/">here</a>!<br /><br />' +
 			'<b>Frost</b>-<blockquote><em>Promoting your league, one challenger at a time</em></blockquote></div></font></center>');
 		}
 		if (target.toLowerCase() === 'frostcasino' || target.toLowerCase() === 'frost casino') {
