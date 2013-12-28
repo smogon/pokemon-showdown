@@ -202,7 +202,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	global.AppSSL = appssl;
 	global.Server = server;
 
-	var sockets = {};
+	global.sockets = {};
 	var channels = {};
 
 	// Deal with phantom xhr-streaming connections.
