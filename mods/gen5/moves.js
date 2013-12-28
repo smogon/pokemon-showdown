@@ -374,6 +374,20 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 95
 	},
+	
+	naturalgift: {
+		inherit: true, 
+		beforeMoveCallback: function(pokemon) {
+                        var item = pokemon.getItem();
+                        if (item.id && item.naturalGift) {
+                                pokemon.addVolatile('naturalgift');
+                                pokemon.volatiles['naturalgift'].basePower = item.naturalGift.basePower - 20;
+                                pokemon.volatiles['naturalgift'].type = item.naturalGift.type;
+                                pokemon.setItem('');
+                        }
+                }
+	}
+
 	naturepower: {
 		inherit: true,
 		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles.",
