@@ -252,7 +252,7 @@ var commands = exports.commands = {
 			mailgame = false;
 			guesses = 8;
 			usermail = [];
-			return this.add("Sorry, " + usermail[0] + " the Mailman got away.");
+			return this.add("Sorry, the Mailman got away.");
 		}
 	},
 
@@ -736,7 +736,7 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center>Trainer:<font color="#051694"><b>Pidove</b></font><br />' +
 						'<center>Signature Pokemon:<font color="#C11FA9"><b>Slowbro</b></font><br />' +
 						'<center>Catchphrase: not bad not bad at all<br />' +
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/372.gif">');
+						'<center><img src="http://www.smogon.com/download/sprites/bwmini/80.gif">');
 	},
 
 	solor: function(target, room, user) {
