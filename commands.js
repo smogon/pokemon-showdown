@@ -659,9 +659,9 @@ var commands = exports.commands = {
 	smelly: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox ('<center>Trainer: mrSmellyfeet100<br />' +
-						'<center>Signature Pokemon: <font color="purple"><b>Skuntank</b></font><br />' +
+						'<center>Signature Pokemon: <font color="grey"><b>Aggron-Mega</b></font><br />' +
 						'<center>Catchphrase: smell ya later!<br />' +
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/435.gif">');
+						'<center><img src="http://www.serebii.net/pokedex-xy/icon/306.png">');
 	},
 	
 	darkgirafarig: 'dg',
@@ -689,7 +689,7 @@ var commands = exports.commands = {
 						'<center>Types: Fire(OU), Poison(UU)<br />' +
 						'<center>Signature Pokemon:<b>Houndoom-Mega</b><br />' +
 						'<center>Catchphrase:Its better to burn out then fade away<br />' + 
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/229.gif">');
+						'<center><img src="http://www.serebii.net/pokedex-xy/icon/229.png">');
     	},
 
 		
@@ -717,9 +717,9 @@ var commands = exports.commands = {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#1B7E15"><b>hostageclam</b></font><br />' +
 						'<center>Types: Bug(UU, RU, NU)<br />' +
-						'<center>Signature Pokemon: <font color="red"><b>Typhlosion</b></font><br />' +
+						'<center>Signature Pokemon: <font color="black"><b>Pangoro</b></font><br />' +
 						'<center>Catchphrase: "Knock Knock? Who\'s there? Banana. Banana who? Banana you glad I didn\'t say orange? - Llama<br />' +
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/157.gif">');
+						'<center><img src="http://www.serebii.net/pokedex-xy/icon/675.png">');
 	},
 		
 	bay: function (target, room, user) {
@@ -734,9 +734,9 @@ var commands = exports.commands = {
 	pidove: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#051694"><b>Pidove</b></font><br />' +
-						'<center>Signature Pokemon:<font color="#C11FA9"><b>Slowbro</b></font><br />' +
-						'<center>Catchphrase: not bad not bad at all<br />' +
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/80.gif">');
+						'<center>Signature Pokemon:<font color="blue"><b>Greninja</b></font><br />' +
+						'<center>Catchphrase: get greninja\'d<br />' +
+						'<center><img src="http://www.serebii.net/pokedex-xy/icon/658.png">');
 	},
 
 	solor: function(target, room, user) {
