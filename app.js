@@ -433,11 +433,24 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	}
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
+
 try {
 	global.tour = require('./tour.js').tour();
+} catch (e) {
+	console.log('Error loading tour.js');
+}
+try {
 	global.hangman = require('./hangman.js').hangman();
+} catch (e) {
+	console.log('Error loading hangman.js');
+}
+try {
 	global.frostcommands = require('./frost-commands.js');
+} catch (e) {
+	console.log('Error loading frost-commands.js');
+}
+try {
 	global.economy = require('./economy.js');
 } catch (e) {
-	console.log('Error loading custom scripts.');
+	console.log('Error loading economy.js');
 }
