@@ -11705,7 +11705,7 @@ exports.BattleMovedex = {
 			return null;
 		},
 		onTryHit: function(target) {
-			if (!target.hasType('Flying')) {
+			if (target.hasType('Flying')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
