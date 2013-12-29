@@ -1221,10 +1221,10 @@ var commands = exports.commands = {
 		if (!message) return false;
 
 		if (!global.tells) global.tells = {};
-		if (!tells[this.targetUsername]) tells[this.targetUsername] = [];
-		if (tells[this.targetUsername].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
+		if (!tells[toUserid(this.targetUsername)]) tells[toUserid(this.targetUsername)] = [];
+		if (tells[toUserid(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
 
-		tells[this.targetUsername].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
+		tells[toUserid(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
 
