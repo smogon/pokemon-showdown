@@ -134,9 +134,9 @@ var Tournament = (function () {
 				}));
 
 				var pendingChallenge = this.pendingChallenges.get(targetUser);
-				if (pendingChallenge.to)
+				if (pendingChallenge && pendingChallenge.to)
 					targetUser.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenging: pendingChallenge.to.name}));
-				else if (pendingChallenge.from)
+				else if (pendingChallenge && pendingChallenge.from)
 					targetUser.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenged: pendingChallenge.from.name}));
 			}
 		} else {
