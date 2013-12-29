@@ -437,7 +437,7 @@ try {
 	global.tour = require('./tour.js').tour();
 	global.hangman = require('./hangman.js').hangman();
 	global.frostcommands = require('./frost-commands.js');
-	global.ecosystem = require('./ecosystem.js');
+	global.economy = require('./economy.js');
 } catch (e) {
 	console.log('Error loading custom scripts.');
 }

@@ -750,11 +750,11 @@ var commands = exports.commands = {
 			'<b>Frost</b>-<blockquote><em>Promoting your league, one challenger at a time</em></blockquote></div></font></center>');
 		}
 		if (target.toLowerCase() === 'frostcasino' || target.toLowerCase() === 'frost casino') {
-			if (ecosystem.closeCasino === true) {
+			if (economy.closeCasino === true) {
 				return connection.sendTo('frostcasino', '|html|<div class="infobox" style="border-color:blue"><center><font size="18">Frost Casino is</font> <font size="18" color="red">closed!</font><br />' +
 					'<br />The casino is currently closed, if you would like it to be opened ask a member of staff.</center></div>');
 			}
-			else if (ecosystem.closeCasino === false) {
+			else if (economy.closeCasino === false) {
 
 			}
 		}
