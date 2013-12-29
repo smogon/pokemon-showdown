@@ -721,23 +721,6 @@ var commands = exports.commands = {
 						'<center>Catchphrase:Everyday I\'m Shuckling.<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/213.gif">');
 	},
-	
-	finny: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer: <font color="#6D2231"><b>Finny</b></font><br />' +
-						'<center>Signature Pokemon: <font color="red"><b>Victini</b></font><br />' +
-						'<center>Catchphrase: Abc, I got a D<br />' +
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/494.gif">');
-	},
-
-	miloticnob: 'nob',
-	nob: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer:<font color="#C11FA9"><b>miloticnob</b></font><br />' +
-						'<center>Signature Pokemon: <font color="blue"><b>Milotic</b></font> and <font color="green"><b>Whimsicott</b></font><br />' +
-						'<center>Catchpharse: excuse me I have some dick to suck<br />' +
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/350.gif"><img src="http://www.smogon.com/download/sprites/bwmini/547.gif">');
-	},
 		
 	pidove: function (target, room, user) {
 		if (!this.canBroadcast()) return;
