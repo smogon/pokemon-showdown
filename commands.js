@@ -640,7 +640,7 @@ var commands = exports.commands = {
 	},
 	
 	pierce: function(target, room, user) {
-		if(!this.canBraodcast()) return;
+		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#C51BC0"><b>GymLe@derTouchMe</b></font><br />' +
                          			 '<center>Types: Water(OU)<br />' +
 						 '<center>Signature Pokemon:<font color="blue"><b>Politoed</b></font><br />' +
@@ -1695,8 +1695,6 @@ var commands = exports.commands = {
 		return this.sendReply(this.targetUsername + ' and their alts were successfully removed from the spamroom list.');
 	},
 	
-	kick: 'warn',
-	k: 'warn',
 	warn: function(target, room, user) {
 		if (!target) return this.parse('/help warn');
 
