@@ -2009,6 +2009,10 @@ var commands = exports.commands = {
 				tour = require('./tour.js').tour(tour);
 				CommandParser.uncacheTree('./frost-commands.js');
 				frostcommands = require('./frost-commands.js');
+				CommandParser.uncacheTree('./economy.js');
+				economy = require('./economy.js');
+				CommandParser.uncacheTree('./hangman.js');
+				hangman = require('./hangman.js').hangman();
 				return this.sendReply('Chat commands have been hot-patched.');
 			} catch (e) {
 				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
