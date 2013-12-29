@@ -2015,12 +2015,11 @@ var commands = exports.commands = {
 
 		} else if (target === 'battles') {
 
-			/*Simulator.SimulatorProcess.respawn();
-			return this.sendReply('Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.');*/
-			return this.sendReply('Battle hotpatching is not supported with the single process hack.');
+			Simulator.SimulatorProcess.respawn();
+			return this.sendReply('Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.');
 
 		} else if (target === 'formats') {
-			/*try {
+			try {
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
@@ -2035,8 +2034,7 @@ var commands = exports.commands = {
 				return this.sendReply('Formats have been hotpatched.');
 			} catch (e) {
 				return this.sendReply('Something failed while trying to hotpatch formats: \n' + e.stack);
-			}*/
-			return this.sendReply('Formats hotpatching is not supported with the single process hack.');
+			}
 
 		} else if (target === 'learnsets') {
 			try {
@@ -2471,9 +2469,9 @@ var commands = exports.commands = {
 			return this.sendReply('Wait for /updateserver to finish before using /kill.');
 		}
 
-		/*for (var i in Sockets.workers) {
+		for (var i in Sockets.workers) {
 			Sockets.workers[i].kill();
-		}*/
+		}
 
 		room.destroyLog(function() {
 			this.logModCommand(user.name + ' used /kill');
