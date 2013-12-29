@@ -8,13 +8,8 @@ exports.BattleFormats = {
 
 	standard: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Heal Pulse + Leppa Berry + Recycle']
-	},
-	standardpokebank: {
-		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Heal Pulse + Leppa Berry + Recycle'],
-		banlist: ['Illegal']
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
+		banlist: ['Unreleased', 'Illegal']
 	},
 	standardnext: {
 		effectType: 'Banlist',
@@ -23,13 +18,8 @@ exports.BattleFormats = {
 	},
 	standardubers: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Heal Pulse + Leppa Berry + Recycle']
-	},
-	standarddw: {
-		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
-		banlist: ['Illegal', 'Moody']
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
+		banlist: ['Unreleased', 'Illegal']
 	},
 	standardgbu: {
 		effectType: 'Banlist',
@@ -375,6 +365,14 @@ exports.BattleFormats = {
 		banlist: ['Minimize', 'Double Team'],
 		onStart: function() {
 			this.add('rule', 'Evasion Moves Clause: Evasion moves are banned');
+		}
+	},
+	endlessbattleclause: {
+		effectType: 'Banlist',
+		name: 'Endless Battle Clause',
+		banlist: ['Heal Pulse + Leppa Berry + Recycle', 'Pain Split + Leppa Berry + Recycle', 'Fling + Leppa Berry + Recycle'],
+		onStart: function() {
+			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned.');
 		}
 	},
 	moodyclause: {

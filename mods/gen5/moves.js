@@ -345,6 +345,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		priority: 0
 	},
+	magmastorm: {
+		inherit: true,
+		basePower: 120
+	},
 	meteormash: {
 		inherit: true,
 		accuracy: 85,
@@ -568,6 +572,10 @@ exports.BattleMovedex = {
 	synchronoise: {
 		inherit: true,
 		basePower: 70
+	},
+	technoblast: {
+		inherit: true,
+		basePower: 85
 	},
 	thief: {
 		inherit: true,
