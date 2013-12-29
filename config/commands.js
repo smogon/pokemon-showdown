@@ -1132,14 +1132,22 @@ var commands = exports.commands = {
 			this.sendReply('/calc - Provides a link to a damage calculator');
 			this.sendReply('!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~');
 		}
-		if (target === 'all' || target === 'blockchallenges' || target === 'away' || target === 'idle') {
+		if (target === 'all' || target === 'blockchallenges' || target === 'idle') {
 			matched = true;
-			this.sendReply('/away - Blocks challenges so no one can challenge you. Deactivate it with /back.');
+			this.sendReply('/blockchallenges - Blocks challenges so no one can challenge you. Deactivate it with /allowchallenges.');
 		}
-		if (target === 'all' || target === 'allowchallenges' || target === 'back') {
+		if (target === 'all' || target === 'allowchallenges') {
 			matched = true;
-			this.sendReply('/back - Unlocks challenges so you can be challenged again. Deactivate it with /away.');
+			this.sendReply('/allowchallenges - Unlocks challenges so you can be challenged again. Deactivate it with /blockchallenges.');
 		}
+		if (target === 'all' || target === 'away') {
+            matched = true;
+            this.sendReply('/away - Set yourself as away which will also change your name.');
+        }
+        if (target === 'all' || target === 'back') {
+            matched = true;
+            this.sendReply('/back - Marks yourself as back and reverts name back.');
+        }
 		if (target === 'all' || target === 'faq') {
 			matched = true;
 			this.sendReply('/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.');

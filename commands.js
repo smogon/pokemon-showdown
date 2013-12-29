@@ -429,6 +429,85 @@ var commands = exports.commands = {
 	},
 
 	/*********************************************************
+	 * Other Commands
+	 *********************************************************/
+
+	hide: function(target, room, user) {
+        if (this.can('hide')) {
+        	user.getIdentity = function(){
+                if(this.muted)        return '!' + this.name;
+                if(this.locked) return '‽' + this.name;
+                return ' ' + this.name;
+            };
+            user.updateIdentity();
+            this.sendReply('You have hidden your staff symbol.');
+            return false;
+        }
+	},
+
+    show: function(target, room, user) {
+        if (this.can('hide')) {
+            delete user.getIdentity
+            user.updateIdentity();
+            this.sendReply('You have revealed your staff symbol');
+            return false;
+        }
+    },
+
+    afk: 'away',
+        away: function(target, room, user, connection) {
+                if (!this.can('away')) return false;
+
+                if (!user.isAway) {
+                        user.originalName = user.name;
+                        var awayName = user.name + ' - Away';
+                        //delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+                        delete Users.get(awayName);
+                        user.forceRename(awayName, undefined, true);
+                        
+                        if (user.isStaff) this.add('|raw|-- <b><font color="#4F86F7">' + user.originalName +'</font color></b> is now away. '+ (target ? " (" + target + ")" : ""));
+
+                        user.isAway = true;
+                }
+                else {
+                        return this.sendReply('You are already set as away, type /back if you are now back');
+                }
+
+                user.updateIdentity();
+        },
+
+        back: function(target, room, user, connection) {
+                if (!this.can('away')) return false;
+
+                if (user.isAway) {
+                        if (user.name.slice(-7) !== ' - Away') {
+                                user.isAway = false; 
+                                return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+                        }
+
+                        var newName = user.originalName;
+                        
+                        //delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+                        delete Users.get(newName);
+
+                        user.forceRename(newName, undefined, true);
+                        
+                        //user will be authenticated
+                        user.authenticated = true;
+                        
+                        if (user.isStaff) this.add('|raw|-- <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
+
+                        user.originalName = '';
+                        user.isAway = false;
+                }
+                else {
+                        return this.sendReply('You are not set as away');
+                }
+
+                user.updateIdentity();
+        }, 
+
+	/*********************************************************
 	 * Moderating: Punishments
 	 *********************************************************/
 
@@ -1549,14 +1628,12 @@ var commands = exports.commands = {
 		user.makeChallenge(targetUser, target);
 	},
 
-	away: 'blockchallenges',
 	idle: 'blockchallenges',
 	blockchallenges: function(target, room, user) {
 		user.blockChallenges = true;
 		this.sendReply('You are now blocking all incoming challenge requests.');
 	},
 
-	back: 'allowchallenges',
 	allowchallenges: function(target, room, user) {
 		user.blockChallenges = false;
 		this.sendReply('You are available for challenges from now on.');

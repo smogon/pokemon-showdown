@@ -274,6 +274,7 @@ exports.groups = {
 	},
 	' ': {
 		ip: 's',
+		away: 'true',
 		alts: 's',
 		rank: 0
 	}
