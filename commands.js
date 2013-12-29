@@ -252,7 +252,7 @@ var commands = exports.commands = {
 			mailgame = false;
 			guesses = 8;
 			usermail = [];
-			return this.add("Sorry, the Mailman got away.");
+			return this.add("Sorry, " + usermail[0] + " the Mailman got away.");
 		}
 	},
 
@@ -632,11 +632,20 @@ var commands = exports.commands = {
 		
 	absol: function(target, room, user) {
 		if(!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer:<font color="#741E99"><b>Absol-utelyEmily</b></font><br />' +
+		this.sendReplyBox('<center>Trainer:<font color="#15A7AC"><b>Absol-utelyEmily</b></font><br />' +
 						'<center>Types: Normal(OU)<br />' +
 						'<center>Signature Pokemon: <font color="red"><b>Porygon2</b></font><br />' +
 						'<center>Catchphrase: This thing is Absol-utely one bulky mofo<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/233.gif">');
+	},
+	
+	pierce: function(target, room, user) {
+		if(!this.canBraodcast()) return;
+		this.sendReplyBox('<center>Trainer:<font color="#C51BC0"><b>GymLe@derTouchMe</b></font><br />' +
+                         			 '<center>Types: Water(OU)<br />' +
+						 '<center>Signature Pokemon:<font color="blue"><b>Politoed</b></font><br />' +
+						 '<center>Catchphrase: fk u hope<br />' +
+						 '<center><img src="http://www.smogon.com/download/sprites/bwmini/186.gif">');
 	},
 		
 	umbreon: function(target, room, user) {
@@ -997,7 +1006,7 @@ var commands = exports.commands = {
 
 	mizu: function (target, room, user) {
 		if (user.userid != 'mizukurage') {
-			return this.sendReply('nope');
+			return this.sendReply('Nope.');
 		}
 		delete Users.users.mizud;
 		user.forceRename('Mizu :D', user.authenticated);
@@ -1035,8 +1044,8 @@ var commands = exports.commands = {
 			return this.sendReply("You are already Away.");
 		}
 		user.originalname = user.name;
-		this.add(''+user.name+' is now Away.');
-		user.forceRename(''+user.name+' - Away', user.authenticated);
+		this.add(user.name+' is now Away.');
+		user.forceRename(user.name+' - Away', user.authenticated);
 		user.afk = true;
 		return this.parse('/away');
 	},
@@ -1049,7 +1058,7 @@ var commands = exports.commands = {
 			return this.sendReply("You need to be Away first.");
 		}
 		user.forceRename(user.originalname, user.authenticated);
-		this.add(""+user.name+" is no longer Away.");
+		this.add(user.name+" is no longer Away.");
 		user.afk = false;
 		return this.parse('/back');
 	},
