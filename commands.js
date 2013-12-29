@@ -718,7 +718,7 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center>Trainer: <font color="#1B7E15"><b>hostageclam</b></font><br />' +
 						'<center>Types: Bug(UU, RU, NU)<br />' +
 						'<center>Signature Pokemon: <font color="black"><b>Pangoro</b></font><br />' +
-						'<center>Catchphrase: "Knock Knock? Who\'s there? Banana. Banana who? Banana you glad I didn\'t say orange? - Llama<br />' +
+						'<center>Catchphrase:Get rekt Skrubb<br />' +
 						'<center><img src="http://www.serebii.net/pokedex-xy/icon/675.png">');
 	},
 		
@@ -851,7 +851,8 @@ var commands = exports.commands = {
 		this.logComplaint(target);
 	},
                  
-	nature: function(target, room, user) {
+	nature: 'n',
+	n: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		target = target.toLowerCase();
 		target = target.trim();
@@ -882,7 +883,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'docile') {
 			matched = true;
-			this.sendReplyBox('<b>Doctile</b>: <font color="blue"><b>Neutral</b></font>');
+			this.sendReplyBox('<b>Docile</b>: <font color="blue"><b>Neutral</b></font>');
 		}
 		if (target === 'relaxed' || target ==='+def -spe') {
 			matched = true;
