@@ -778,6 +778,7 @@ var commands = exports.commands = {
 		if(!this.can('roommod', null, room)) return this.sendReply('/rkick - Access Denied.');
 		var targetUser = Users.get(target);
 		if(targetUser == undefined) return this.sendReply('User not found.');
+		if (targetUser.frostDev) return this.sendReply('Frost Developers can\'t be room kicked');
 		targetUser.popup('You have been kicked from room '+ room.title +' by '+user.name+'.');
 		targetUser.leaveRoom(room);
 		room.add('|raw|'+ targetUser.name + ' has been kicked from room by '+ user.name + '.');
