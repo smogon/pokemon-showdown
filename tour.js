@@ -645,6 +645,7 @@ var cmds = {
 	l: function(target, room, user, connection) {
 		if (room.decision) return this.sendReply('Prof. Oak: There is a time and place for everything! You cannot do this in battle rooms.');
 		if (tour[room.id] == undefined || tour[room.id].status == 0) return this.sendReply('There is no active tournament to leave.');
+		if (tour[room.id].status == 2 && tour[room.id].roundNum == 1) return this.sendReply('You can\'t leave a tournament in the first round, ask a staff member to replace you.');
 		if (tour[room.id].status == 1) {
 			var index = tour[room.id].players.indexOf(user.userid);
 			if (index !== -1) {
