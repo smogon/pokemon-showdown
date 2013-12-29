@@ -1077,7 +1077,7 @@ var commands = exports.commands = {
 		
 		targetUser.warnTimes += 1;
 
-		if (targetUser.warnTimes >= warnMax) {
+		if (targetUser.warnTimes >= warnMax && !room.auth) {
 			if (targetUser.warnTimes === 4) {
 				targetUser.popup('You have been automatically muted for 7 minutes due to being warned '+warnMax+' times.');
 				targetUser.mute(room.id, 7*60*1000);
