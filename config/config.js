@@ -204,6 +204,7 @@ exports.groups = {
 		jurisdiction: '@u',
 		promote: 'u',
 		forcewin: true,
+		hide: true,
 		declare: true,
 		modchatall: true,
 		rangeban: true,
@@ -274,7 +275,7 @@ exports.groups = {
 	},
 	' ': {
 		ip: 's',
-		away: 'true',
+		away: true,
 		alts: 's',
 		rank: 0
 	}
