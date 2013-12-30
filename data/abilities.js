@@ -776,7 +776,7 @@ exports.BattleAbilities = {
 		desc: "Prevents lowering of ally Grass-type Pokemon's stats.",
 		shortDesc: "Prevents lowering of ally Grass-type Pokemon's stats.",
 		onAllyBoost: function(boost, target, source, effect) {
-			if (source && target === source) return;
+			if ((source && target === source) || !target.hasType('Grass')) return;
 			var showMsg = false;
 			for (var i in boost) {
 				if (boost[i] < 0) {
