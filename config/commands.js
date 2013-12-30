@@ -1055,28 +1055,31 @@ var commands = exports.commands = {
 	 * Custom commands
 	 *********************************************************/
 
-	kupkup: function() {
+	kupkup: function(target, room, user) {
 		return this.parse("/me does THE KUPKUP CHANT: ♪kupo kupo kupochu~♫");
 	},
-	slap: function() {
+	slap: function(target, room, user) {
 		return this.parse("/me slaps " + target + " with a large trout.");
 	},
 	dk: 'dropkick',
-	dropkick: function(target) {
+	dropkick: function(target, room, user) {
 		return this.parse("/me dropkicks " + target + " across the Pokémon Stadium!");
 	},
-	punt: function(target) {
+	punt: function(target, room, user) {
 		return this.parse("/me punts " + target + " to the moon!");
 	},
-	hug: function(target) {
+	hug: function(target, room, user) {
 		return this.parse("/me hugs " + target + ".");
 	},
-	poke: function(target) {
+	poke: function(target, room, user) {
 		return this.parse("/me pokes " + target + ".");
 	},
 	crai: 'cry',
-	cry: function() {
+	cry: function(target, room, user) {
 		return this.parse("/me starts tearbending dramatically like Katara.");
+	},
+	pet: function(target, room, user) {
+		return this.parse("/me pets " + target + ".");
 	},
 
 	d: 'poof',
