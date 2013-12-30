@@ -1106,7 +1106,7 @@ var commands = exports.commands = {
 			"A large spider descended from the sky and picked up {{user}}.",
 			"tried to touch RisingPokeStar!",
 			"got their sausage smoked by Charmanderp!",
-			"was forced to give mpea an oil massage!",
+			"fell into a meerkat hole!",
 			"took an arrow to the knee... and then one to the face.",
 			"peered through the hole on Shedinja's back",
 			"recieved judgment from the almighty Arceus!",
