@@ -697,7 +697,7 @@ var commands = exports.commands = {
 		if (!room.auth) {
 			return this.sendReply("Only unofficial chatrooms can be locked.");
 		}
-		if (!room.auth[user.userid] === '#' && user.group != '~') {
+		if (room.auth[user.userid] != '#' && user.group != '~') {
 			return this.sendReply('/lockroom - Access denied.');
 		}
 		room.lockedRoom = true;
@@ -708,7 +708,7 @@ var commands = exports.commands = {
 		if (!room.auth) {
 			return this.sendReply("Only unofficial chatrooms can be unlocked.");
 		}
-		if (!room.auth[user.userid] === '#' && user.group != '~') {
+		if (room.auth[user.userid] != '#' && user.group != '~') {
 			return this.sendReply('/unlockroom - Access denied.');
 		}
 		room.lockedRoom = false;
