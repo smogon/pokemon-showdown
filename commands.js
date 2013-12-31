@@ -495,9 +495,10 @@ var commands = exports.commands = {
                            '<center><img src="http://www.smogon.com/download/sprites/bwmini/65.gif"><br />');
 	},
    
-	ross: function (target, room, user) {
+	ross: 'zuku',
+	zuku: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox ('<center>Trainer:<font color="#5A13CD"><b>Ross</b></font><br />' +
+		this.sendReplyBox ('<center>Trainer:<font color="#9A9C26"><b>Zukushiku</b></font><br />' +
                    '<center>Types: Dark (OU), Dark (UU E4), Rock (RU E4), Grass(NU)<br />' +
                    '<center>Signature Pokemon: <font color="red"><b>Victini</b></font><br />' +
                    '<center>Catchphrase: I\'ll swallow swords spit up my pride, I follow through again this time. I\'ll be just fine...<br />' +
@@ -734,6 +735,7 @@ var commands = exports.commands = {
 	pidove: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#051694"><b>Pidove</b></font><br />' +
+						'<center>Types: Fire(UU), Dragon(NU E4)<br />' +
 						'<center>Signature Pokemon:<font color="blue"><b>Greninja</b></font><br />' +
 						'<center>Catchphrase: get greninja\'d<br />' +
 						'<center><img src="http://www.serebii.net/pokedex-xy/icon/658.png">');
@@ -794,20 +796,18 @@ var commands = exports.commands = {
 	ao: 'aortega',
 	aortega: function(target, room, user) {
 			if(!this.canBroadcast()) return;
-			this.sendReplyBox('Elite F@ur AOrtega: OU, Fairy type, etc etc.');
+			this.sendReplyBox('AOrtega: OU, E4, Fairy type, etc etc.');
 	},
 		
-	silver: function(target, room, user) {
-		if(!this.canBroadcast()) return;
-		this.sendReplyBox('<b>Information on Elite F@ur Hope:</b><br />' +
-						'Type: Psychic<br />' +
-						'Tier: Under Used (UU)<br />' + 
-						'<a href="gymleadermustang.wix.com%2F-amethystleague%23!gym-leaders%2FaboutPage" target="_blank">Thread</a><br />' +
-						'Signature Pokemon: Mew<br />' +
-						'<img src="http://www.poke-amph.com/black-white/sprites/small/151.png"><br />' +
-						'Badge: ESP Badge<br />');
+	silver: 'hope', //merry christmas, hope.
+	hope: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center>Trainer: <font color="#1355A0"><b>Eclair de Larmes</b></font>(plus many other alts)<br />' +
+					'<center>Types: OU(Champion)<br />' +
+					'<center>Signature Pokemon: <b>Meloetta</b><br />' +
+					'<center>Catchphrase:vini vidi vici</br />' +
+					'<center><img src="http://www.smogon.com/download/sprites/bwmini/648.gif">');
 	},
-
 	league: 'leagueintro',
 	leagueintro: function(target, room, user) {
 		if (!this.canBroadcast()) return;
