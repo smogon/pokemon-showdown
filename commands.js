@@ -803,11 +803,12 @@ var commands = exports.commands = {
 	hope: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#1355A0"><b>Eclair de Larmes</b></font>(plus many other alts)<br />' +
-					'<center>Types: OU(Champion)<br />' +
+					'<center>Types: OU (Champion)<br />' +
 					'<center>Signature Pokemon: <b>Meloetta</b><br />' +
-					'<center>Catchphrase:vini vidi vici</br />' +
+					'<center>Catchphrase:veni, vidi, vici.</br />' +
 					'<center><img src="http://www.smogon.com/download/sprites/bwmini/648.gif">');
 	},
+	
 	league: 'leagueintro',
 	leagueintro: function(target, room, user) {
 		if (!this.canBroadcast()) return;
