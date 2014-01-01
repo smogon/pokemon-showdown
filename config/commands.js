@@ -1203,10 +1203,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'redir' || target === 'redirect') {
-			matched = true;
-			this.sendReply('/redirect OR /redir [username], [room] - Forcibly move a user from the current room to [room]. Requires: % @ & ~');
-		}
 		if (target === '@' || target === 'ban' || target === 'b') {
 			matched = true;
 			this.sendReply('/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: @ & ~');
