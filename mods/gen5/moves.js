@@ -7,6 +7,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 55
 	},
+	airslash: {
+		inherit: true,
+		pp: 20
+	},
 	assist: {
 		inherit: true,
 		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
@@ -203,6 +207,10 @@ exports.BattleMovedex = {
 			return 50;
 		}
 	},
+	growth: {
+		inherit: true,
+		pp: 40
+	},
 	gunkshot: {
 		inherit: true,
 		accuracy: 70
@@ -345,6 +353,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		priority: 0
 	},
+	magmastorm: {
+		inherit: true,
+		basePower: 120
+	},
 	meteormash: {
 		inherit: true,
 		accuracy: 85,
@@ -402,6 +414,10 @@ exports.BattleMovedex = {
 	psychoshift: {
 		inherit: true,
 		accuracy: 90
+	},
+	psywave: {
+		inherit: true,
+		accuracy: 80
 	},
 	quickguard: {
 		inherit: true,
@@ -463,6 +479,10 @@ exports.BattleMovedex = {
 		accuracy: 80,
 		basePower: 50,
 		pp: 10
+	},
+	sacredsword: {
+		inherit: true,
+		pp: 20
 	},
 	secretpower: {
 		inherit: true,
@@ -568,6 +588,14 @@ exports.BattleMovedex = {
 	synchronoise: {
 		inherit: true,
 		basePower: 70
+	},
+	tailwind: {
+		inherit: true,
+		pp: 30
+	},
+	technoblast: {
+		inherit: true,
+		basePower: 85
 	},
 	thief: {
 		inherit: true,

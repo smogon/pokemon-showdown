@@ -240,7 +240,7 @@ exports.BattleMovedex = {
 		id: "airslash",
 		isViable: true,
 		name: "Air Slash",
-		pp: 20,
+		pp: 15,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -2764,7 +2764,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times. Makes contact.",
 		shortDesc: "Hits 2-5 times in one turn.",
 		id: "doubleslap",
-		name: "DoubleSlap",
+		name: "Double Slap",
 		pp: 10,
 		priority: 0,
 		isContact: true,
@@ -2950,7 +2950,7 @@ exports.BattleMovedex = {
 		id: "drainingkiss",
 		isViable: true,
 		name: "Draining Kiss",
-		pp: 20,
+		pp: 10,
 		priority: 0,
 		isContact: true,
 		drain: [3,4],
@@ -3741,7 +3741,7 @@ exports.BattleMovedex = {
 		desc: "Lowers one adjacent target's Attack by 2 stages. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Lowers the target's Attack by 2.",
 		id: "featherdance",
-		name: "FeatherDance",
+		name: "Feather Dance",
 		pp: 15,
 		priority: 0,
 		boosts: {
@@ -4271,7 +4271,7 @@ exports.BattleMovedex = {
 		shortDesc: "Raises Defense by 1 of Grass types in battle.",
 		id: "flowershield",
 		name: "Flower Shield",
-		pp: 25,
+		pp: 10,
 		priority: 0,
 		onHitField: function(target, source) {
 			var targets = [];
@@ -4563,8 +4563,8 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to freeze it. Super-effective against Water-type Pokemon",
 		shortDesc: "Super-effective against Water. 10% freeze chance.",
 		id: "freezedry",
-		name: "Freeze Dry",
-		pp: 15,
+		name: "Freeze-Dry",
+		pp: 20,
 		priority: 0,
 		onModifyEffectiveness: function(effectiveness, target) {
 			if (target.hasType('Water')) return effectiveness + 2;
@@ -5245,7 +5245,7 @@ exports.BattleMovedex = {
 		id: "growth",
 		isViable: true,
 		name: "Growth",
-		pp: 40,
+		pp: 20,
 		priority: 0,
 		isSnatchable: true,
 		onModifyMove: function(move) {
@@ -7597,7 +7597,7 @@ exports.BattleMovedex = {
 	"magmastorm": {
 		num: 463,
 		accuracy: 75,
-		basePower: 120,
+		basePower: 100,
 		category: "Special",
 		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
@@ -7733,7 +7733,7 @@ exports.BattleMovedex = {
 		id: "matblock",
 		isViable: true,
 		name: "Mat Block",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
@@ -9558,7 +9558,7 @@ exports.BattleMovedex = {
 		shortDesc: "Hitting a target raises Attack by 1",
 		id: "poweruppunch",
 		name: "Power-Up Punch",
-		pp: 30,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		secondary: {
@@ -9823,7 +9823,7 @@ exports.BattleMovedex = {
 	},
 	"psywave": {
 		num: 149,
-		accuracy: 80,
+		accuracy: 100,
 		basePower: 0,
 		damageCallback: function(pokemon) {
 			return (this.random(50,151) * pokemon.level) / 100;
@@ -10913,7 +10913,7 @@ exports.BattleMovedex = {
 		id: "sacredsword",
 		isViable: true,
 		name: "Sacred Sword",
-		pp: 20,
+		pp: 15,
 		priority: 0,
 		isContact: true,
 		ignoreEvasion: true,
@@ -11688,8 +11688,9 @@ exports.BattleMovedex = {
 			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
 				return false;
 			}
-			if (defender.weightkg >= attacker.weightkg) {
-				return false;
+			if (defender.weightkg >= 200) {
+				this.add('message', defender.species + ' is too heavy. (placeholder)');
+				return null;
 			}
 			if (defender.volatiles['protect']) {
 				this.add('-activate', defender, 'Protect');
@@ -12132,7 +12133,7 @@ exports.BattleMovedex = {
 		id: "spikyshield",
 		isViable: true,
 		name: "Spiky Shield",
-		pp: 20,
+		pp: 10,
 		priority: 4,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'spikyshield',
@@ -13267,7 +13268,7 @@ exports.BattleMovedex = {
 		id: "tailwind",
 		isViable: true,
 		name: "Tailwind",
-		pp: 30,
+		pp: 15,
 		priority: 0,
 		isSnatchable: true,
 		sideCondition: 'tailwind',
@@ -13360,7 +13361,7 @@ exports.BattleMovedex = {
 	"technoblast": {
 		num: 546,
 		accuracy: 100,
-		basePower: 85,
+		basePower: 120,
 		category: "Special",
 		desc: "Deals damage to one adjacent target. This move's type depends on the user's held Drive.",
 		shortDesc: "Type varies based on the held Drive.",
@@ -13645,8 +13646,8 @@ exports.BattleMovedex = {
 		desc: "Inverts target's stat stages.",
 		shortDesc: "Inverts target's stat stages.",
 		id: "topsyturvy",
-		name: "Topsy-turvy",
-		pp: 10,
+		name: "Topsy-Turvy",
+		pp: 20,
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
