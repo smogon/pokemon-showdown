@@ -79,7 +79,13 @@ exports.BattleMovedex = {
 	},
 	chatter: {
 		inherit: true,
-		basePower: 60
+		basePower: 60,
+		desc: "Deals damage to one adjacent or non-adjacent target. This move has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording. Pokemon with the Ability Soundproof are immune.",
+		shortDesc: "10% chance to confuse the target.",
+		secondary: {
+			chance: 10,
+			volatileStatus: 'confusion'
+		}
 	},
 	copycat: {
 		inherit: true,
