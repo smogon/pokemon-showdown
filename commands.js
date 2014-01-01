@@ -535,7 +535,7 @@ var commands = exports.commands = {
 	aikenka: 'aik',
 	aik: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer: <font color="#C71A20"><b>Aikenká</b></font><br />' +
+		this.sendReplyBox('<center>Trainer: <font color="#C71A20"><b>Aikenkα</b></font><br />' +
 						'<center>Signature Pokemon: <font color="brown"><b>Damion the Dragonite</b></font><br />' +
 						'<center>Catchphrase: My mom is my inspiration<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/149.gif">');
@@ -677,7 +677,7 @@ var commands = exports.commands = {
 		
 	sam: function (target, room, user) {
 	 	if (!this.canBroadcast()) return;
-      			this.sendReplyBox('<center>Trainer: <font color="#8D6007"><b>Sam</b></font><br />' +
+      			this.sendReplyBox('<center>Trainer: <font color="#089D06"><b>Sam</b></font><br />' +
 						'<center>Types: Grass(OU)<br />' + 
 						'<center>Signature Pokemon:<font color="green"><b>Breloom</b></font><br />' + 
 						'<center>Catchphrase:A Thousand Die as a Million are born<br />' + 
@@ -725,7 +725,7 @@ var commands = exports.commands = {
 		
 	bay: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer: <font color="#491CAB"><b>Bayspot</b></font><br />' +
+		this.sendReplyBox('<center>Trainer: <font color="#1823A5"><b>Bay</b></font><br />' +
 						'<center>Types: Steel(OU), Ice(UU), Flying(RU)<br />' +
 						'<center>Signature Pokemon: <font color="brown"><b>Shuckle</b></font><br />' +
 						'<center>Catchphrase:Everyday I\'m Shuckling.<br />' +
@@ -799,14 +799,14 @@ var commands = exports.commands = {
 			this.sendReplyBox('AOrtega: OU, E4, Fairy type, etc etc.');
 	},
 		
-	silver: 'hope', //merry christmas, hope.
+	silver: 'hope', 
 	hope: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#1355A0"><b>Eclair de Larmes</b></font>(plus many other alts)<br />' +
-					'<center>Types: OU (Champion)<br />' +
-					'<center>Signature Pokemon: <b>Meloetta</b><br />' +
+					'<center>Types: Champion (OU)<br />' +
+					'<center>Signature Pokemon: <font color="#265892"><b>AOrtega</b></font><br />' +
 					'<center>Catchphrase:veni, vidi, vici.</br />' +
-					'<center><img src="http://www.smogon.com/download/sprites/bwmini/648.gif">');
+					'<center><img src="http://www.smogon.com/download/sprites/bwmini/428.gif">');
 	},
 	
 	league: 'leagueintro',
