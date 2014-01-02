@@ -1064,6 +1064,12 @@ var cmds = {
 		if (tour[room.id].question) return this.sendReply('There is currently a poll going on already.');
 		var separacion = "&nbsp;&nbsp;";
 		var answers = tour.splint(target);
+		formats = ''; 
+		for (var u in Tools.data.Formats) {
+			if (Tools.data.Formats[u].name && Tools.data.Formats[u].challengeShow) formats = formats+','+Tools.data.Formats[u].name;
+		}
+		formats = 'Tournament'+formats;
+		if (answers[0] == 'tournament' || answers[0] == 'tour') answers = tour.splint(formats);
 		if (answers.length < 3) return this.sendReply('Correct syntax for this command is /poll question, option, option...');
 		var question = answers[0];
 		answers.splice(0, 1);
@@ -1113,7 +1119,7 @@ var cmds = {
 			//console.log(i);
 			var option = sortable[i][0];
 			var value = sortable[i][1];
-			html += "&bull; " + option + " - " + Math.floor(value / votes * 100) + "% (" + value + ")<br />";
+			if (value > 0) html += "&bull; " + option + " - " + Math.floor(value / votes * 100) + "% (" + value + ")<br />";
 		}
 		room.addRaw('<div class="infobox"><h2>Results to "' + obj.question + '"<br /><i><font size=1 color = "#939393">Poll ended by '+user.name+'</font></i></h2><hr />' + html + '</div>');		tour[room.id].question = undefined;
 		tour[room.id].answerList = new Array();
