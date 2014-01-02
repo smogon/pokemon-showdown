@@ -1478,6 +1478,11 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://i.imgur.com/WEGDYwE.png"><img src="http://i.imgur.com/yEF8j7u.gif"><img src="http://i.imgur.com/GGhYbDC.png"><br><b>Ace: <font color="green"><blink>Creeper</blink><br></font><b><font color="#00BFFF">I promise I won\'t explode!!');
 	},
 	
+	roserade26: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img width="90" height="90" src="http://firechao.com/Images/PokemonGuide/bidoof_sprite.png"><img src="http://i.imgur.com/f7YIx7s.gif"><img width="120" height="110" src="http://2.images.gametrailers.com/image_root/vid_thumbs/2013/06_jun_2013/gt_massive_thumb_AVGN_640x360_07-01-13.jpg"><br /><b>Quote: If you win, I hate you<br />Ace: Roserade</b></center>');
+	},
+	
 	spike: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img width="90" height="150" src="http://th02.deviantart.net/fs71/200H/i/2013/222/d/d/lucario_mega_form_by_tomycase-d6hetwg.png"><img src="http://i.imgur.com/L4M0q0l.gif"><img width="150" height="110" src="http://25.media.tumblr.com/a79cacf7be02d0834800f2b693dd86db/tumblr_mv06m93qkX1qd09iko1_1280.png"><br /><b>Quote: OOOoooOOoo Kill\'em<br />Ace: Goomy</b></center>');
