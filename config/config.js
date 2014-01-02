@@ -1,3 +1,7 @@
+// Server ID
+exports.serverid = 'leaf';
+// Leaf Server Token
+exports.servertoken = 'fh9820302fj02394fr';
 // The server port - the port to run Pokemon Showdown under
 exports.port = 9000;
 
