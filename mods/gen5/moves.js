@@ -7,6 +7,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 55
 	},
+	airslash: {
+		inherit: true,
+		pp: 20
+	},
 	assist: {
 		inherit: true,
 		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
@@ -75,7 +79,13 @@ exports.BattleMovedex = {
 	},
 	chatter: {
 		inherit: true,
-		basePower: 60
+		basePower: 60,
+		desc: "Deals damage to one adjacent or non-adjacent target. This move has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording. Pokemon with the Ability Soundproof are immune.",
+		shortDesc: "10% chance to confuse the target.",
+		secondary: {
+			chance: 10,
+			volatileStatus: 'confusion'
+		}
 	},
 	copycat: {
 		inherit: true,
@@ -202,6 +212,10 @@ exports.BattleMovedex = {
 			}
 			return 50;
 		}
+	},
+	growth: {
+		inherit: true,
+		pp: 40
 	},
 	gunkshot: {
 		inherit: true,
@@ -407,6 +421,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 90
 	},
+	psywave: {
+		inherit: true,
+		accuracy: 80
+	},
 	quickguard: {
 		inherit: true,
 		desc: "The user and its party members are protected from attacks with original priority greater than 0 made by other Pokemon, including allies, during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
@@ -467,6 +485,10 @@ exports.BattleMovedex = {
 		accuracy: 80,
 		basePower: 50,
 		pp: 10
+	},
+	sacredsword: {
+		inherit: true,
+		pp: 20
 	},
 	secretpower: {
 		inherit: true,
@@ -572,6 +594,10 @@ exports.BattleMovedex = {
 	synchronoise: {
 		inherit: true,
 		basePower: 70
+	},
+	tailwind: {
+		inherit: true,
+		pp: 30
 	},
 	technoblast: {
 		inherit: true,

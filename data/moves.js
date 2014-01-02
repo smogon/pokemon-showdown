@@ -240,7 +240,7 @@ exports.BattleMovedex = {
 		id: "airslash",
 		isViable: true,
 		name: "Air Slash",
-		pp: 20,
+		pp: 15,
 		priority: 0,
 		secondary: {
 			chance: 30,
@@ -436,7 +436,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
+		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Belch, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
 		shortDesc: "Uses a random move known by a team member.",
 		id: "assist",
 		name: "Assist",
@@ -450,7 +450,7 @@ exports.BattleMovedex = {
 				for (var i=0; i<pokemon.moves.length; i++) {
 					var move = pokemon.moves[i];
 					var noAssist = {
-						assist:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
+						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
 					};
 					if (move && !noAssist[move]) {
 						moves.push(move);
@@ -2764,7 +2764,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times. Makes contact.",
 		shortDesc: "Hits 2-5 times in one turn.",
 		id: "doubleslap",
-		name: "DoubleSlap",
+		name: "Double Slap",
 		pp: 10,
 		priority: 0,
 		isContact: true,
@@ -2950,7 +2950,7 @@ exports.BattleMovedex = {
 		id: "drainingkiss",
 		isViable: true,
 		name: "Draining Kiss",
-		pp: 20,
+		pp: 10,
 		priority: 0,
 		isContact: true,
 		drain: [3,4],
@@ -3741,7 +3741,7 @@ exports.BattleMovedex = {
 		desc: "Lowers one adjacent target's Attack by 2 stages. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Lowers the target's Attack by 2.",
 		id: "featherdance",
-		name: "FeatherDance",
+		name: "Feather Dance",
 		pp: 15,
 		priority: 0,
 		boosts: {
@@ -4271,7 +4271,7 @@ exports.BattleMovedex = {
 		shortDesc: "Raises Defense by 1 of Grass types in battle.",
 		id: "flowershield",
 		name: "Flower Shield",
-		pp: 25,
+		pp: 10,
 		priority: 0,
 		onHitField: function(target, source) {
 			var targets = [];
@@ -4563,8 +4563,8 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target with a 10% chance to freeze it. Super-effective against Water-type Pokemon",
 		shortDesc: "Super-effective against Water. 10% freeze chance.",
 		id: "freezedry",
-		name: "Freeze Dry",
-		pp: 15,
+		name: "Freeze-Dry",
+		pp: 20,
 		priority: 0,
 		onModifyEffectiveness: function(effectiveness, target) {
 			if (target.hasType('Water')) return effectiveness + 2;
@@ -5245,7 +5245,7 @@ exports.BattleMovedex = {
 		id: "growth",
 		isViable: true,
 		name: "Growth",
-		pp: 40,
+		pp: 20,
 		priority: 0,
 		isSnatchable: true,
 		onModifyMove: function(move) {
@@ -7733,7 +7733,7 @@ exports.BattleMovedex = {
 		id: "matblock",
 		isViable: true,
 		name: "Mat Block",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
@@ -9558,7 +9558,7 @@ exports.BattleMovedex = {
 		shortDesc: "Hitting a target raises Attack by 1",
 		id: "poweruppunch",
 		name: "Power-Up Punch",
-		pp: 30,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		secondary: {
@@ -9823,7 +9823,7 @@ exports.BattleMovedex = {
 	},
 	"psywave": {
 		num: 149,
-		accuracy: 80,
+		accuracy: 100,
 		basePower: 0,
 		damageCallback: function(pokemon) {
 			return (this.random(50,151) * pokemon.level) / 100;
@@ -10913,7 +10913,7 @@ exports.BattleMovedex = {
 		id: "sacredsword",
 		isViable: true,
 		name: "Sacred Sword",
-		pp: 20,
+		pp: 15,
 		priority: 0,
 		isContact: true,
 		ignoreEvasion: true,
@@ -12133,7 +12133,7 @@ exports.BattleMovedex = {
 		id: "spikyshield",
 		isViable: true,
 		name: "Spiky Shield",
-		pp: 20,
+		pp: 10,
 		priority: 4,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'spikyshield',
@@ -13268,7 +13268,7 @@ exports.BattleMovedex = {
 		id: "tailwind",
 		isViable: true,
 		name: "Tailwind",
-		pp: 30,
+		pp: 15,
 		priority: 0,
 		isSnatchable: true,
 		sideCondition: 'tailwind',
@@ -13646,8 +13646,8 @@ exports.BattleMovedex = {
 		desc: "Inverts target's stat stages.",
 		shortDesc: "Inverts target's stat stages.",
 		id: "topsyturvy",
-		name: "Topsy-turvy",
-		pp: 10,
+		name: "Topsy-Turvy",
+		pp: 20,
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
