@@ -204,6 +204,7 @@ exports.Formats = [
 		name: "Smogon Doubles UU",
 		section: "XY Doubles",
 
+		searchShow: false,
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Dark Void', 'Soul Dew',
