@@ -178,15 +178,6 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Smogon Doubles Ubers",
-		section: "XY Doubles",
-
-		searchShow: false,
-		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
-		banlist: ['Dark Void']
-	},
-	{
 		name: "Smogon Doubles",
 		section: "XY Doubles",
 
@@ -209,6 +200,15 @@ exports.Formats = [
 			'Xerneas',
 			'Yveltal'
 		]
+	},
+	{
+		name: "Smogon Doubles Ubers",
+		section: "XY Doubles",
+
+		searchShow: false,
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
+		banlist: ['Dark Void']
 	},
 	{
 		name: "Smogon Doubles UU",
