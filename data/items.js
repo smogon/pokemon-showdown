@@ -5,7 +5,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Abomasnow-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 674,
 		gen: 6,
@@ -17,7 +17,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Absol-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 677,
 		gen: 6,
@@ -62,7 +62,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Aerodactyl-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 672,
 		gen: 6,
@@ -74,7 +74,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Aggron-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 667,
 		gen: 6,
@@ -141,7 +141,7 @@ exports.BattleItems = {
 		spritenum: 679,
 		megaStone: "Alakazam-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: -6,
 		gen: 6,
@@ -153,7 +153,7 @@ exports.BattleItems = {
 		spritenum: 658,
 		megaStone: "Ampharos-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: -6,
 		gen: 6,
@@ -262,7 +262,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Banette-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 668,
 		gen: 6,
@@ -389,7 +389,7 @@ exports.BattleItems = {
 		spritenum: 661,
 		megaStone: "Blastoise-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: -6,
 		gen: 6,
@@ -401,7 +401,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Blaziken-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 664,
 		gen: 6,
@@ -506,7 +506,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Charizard-Mega-X",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 660,
 		gen: 6,
@@ -518,7 +518,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Charizard-Mega-Y",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 678,
 		gen: 6,
@@ -1432,7 +1432,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Garchomp-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 683,
 		gen: 6,
@@ -1444,7 +1444,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Gardevoir-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 657,
 		gen: 6,
@@ -1456,7 +1456,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Gengar-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 656,
 		gen: 6,
@@ -1580,7 +1580,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Gyarados-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 676,
 		gen: 6,
@@ -1669,7 +1669,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Heracross-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 680,
 		gen: 6,
@@ -1694,7 +1694,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Houndoom-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 666,
 		gen: 6,
@@ -1926,7 +1926,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Kangaskhan-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 675,
 		gen: 6,
@@ -2169,7 +2169,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Lucario-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 673,
 		gen: 6,
@@ -2345,7 +2345,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Manectric-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 682,
 		gen: 6,
@@ -2382,7 +2382,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Mawile-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 681,
 		gen: 6,
@@ -2412,7 +2412,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Medicham-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 665,
 		gen: 6,
@@ -2526,7 +2526,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-X",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 662,
 		gen: 6,
@@ -2538,7 +2538,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-Y",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 663,
 		gen: 6,
@@ -2949,7 +2949,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Pinsir-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 671,
 		gen: 6,
@@ -3479,7 +3479,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Scizor-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 670,
 		gen: 6,
@@ -4053,7 +4053,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Tyranitar-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 669,
 		gen: 6,
@@ -4073,7 +4073,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		megaStone: "Venusaur-Mega",
 		onTakeItem: function(item, pokemon) {
-			if (pokemon.baseTemplate.species === this.getTemplate(item.megaStone).baseSpecies) return false;
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
 		},
 		num: 659,
 		gen: 6,
