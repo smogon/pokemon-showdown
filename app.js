@@ -428,3 +428,5 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	}
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
+/* Chat plugins like scavengers*/ 
+global.plugins = require('./chat-plugins.js')
