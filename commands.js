@@ -776,10 +776,12 @@ var commands = exports.commands = {
 	rkick: 'roomkick',
 	kick: 'roomkick',
 	roomkick: function(target, room, user){
-		if(!room.auth && room.id !== "staff") return this.sendReply('/rkick is designed for rooms with their own auth.');
-		if(!this.can('roommod', null, room)) return this.sendReply('/rkick - Access Denied.');
+		if (!room.auth && room.id !== "staff") return this.sendReply('/rkick is designed for rooms with their own auth.');
+		if (!this.can('roommod', null, room)) return false;
+		if (!target) return this.sendReply('/rkick [username] - kicks the user from the room. Requires: @ & ~');
 		var targetUser = Users.get(target);
-		if(targetUser == undefined) return this.sendReply('User not found.');
+		if (!targetUser) return this.sendReply('User '+target+' not found.');
+		if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target+' is not in this room.');
 		if (targetUser.frostDev) return this.sendReply('Frost Developers can\'t be room kicked');
 		targetUser.popup('You have been kicked from room '+ room.title +' by '+user.name+'.');
 		targetUser.leaveRoom(room);
@@ -799,7 +801,7 @@ var commands = exports.commands = {
 		if (targetUser.frostDev) {
 			return this.sendReply('Frost Developers can\'t be room banned.');
 		}
-		if (!userid || !targetUser) return this.sendReply("User '" + name + "' does not exist.");
+		if (!userid || !targetUser) return this.sendReply('User '+name+' not found.');
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!Rooms.rooms[room.id].users[userid] && room.isPrivate) {
 			return this.sendReply('User ' + this.targetUsername + ' is not in the room ' + room.id + '.');
@@ -832,7 +834,7 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
-		if (!userid || !targetUser) return this.sendReply("User '"+name+"' does not exist.");
+		if (!userid || !targetUser) return this.sendReply('User '+name+' not found.');
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!room.bannedUsers || !room.bannedIps) {
 			return this.sendReply('Room bans are not meant to be used in room ' + room.id + '.');
@@ -2011,10 +2013,18 @@ var commands = exports.commands = {
 				CommandParser = require('./command-parser.js');
 				CommandParser.uncacheTree('./tour.js');
 				tour = require('./tour.js').tour(tour);
-				CommandParser.uncacheTree('./frost-commands.js');
-				frostcommands = require('./frost-commands.js');
-				CommandParser.uncacheTree('./economy.js');
-				economy = require('./economy.js');
+				try {
+					CommandParser.uncacheTree('./frost-commands.js');
+					frostcommands = require('./frost-commands.js');
+				} catch (e) {
+					this.sendReply('Frost-commands.js could not be hotpatched.');
+				}
+				try {
+					CommandParser.uncacheTree('./economy.js');
+					economy = require('./economy.js');
+				} catch (e) {
+					this.sendReply('Economy.js could not be hotpatched.');
+				}
 				CommandParser.uncacheTree('./hangman.js');
 				hangman = require('./hangman.js').hangman();
 				return this.sendReply('Chat commands have been hot-patched.');
