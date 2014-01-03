@@ -856,6 +856,7 @@ var commands = exports.commands = {
 			'- /declare <em>message</em>: make a declaration in the room<br />' +
 			'- /lockroom: locks the room preventing users from joining.<br />' +
 			'- /unlockroom: unlocks the room allowing users to join.<br />' +
+			'- /setwelcomemessage: <em>message</em>: sets the message people will see when they join the room. Can contain html and must be bought from the store first.' +
 			'<br />' +
 			'The room founder can also use:<br />' +
 			'- /roomowner <em>username</em><br />' +
