@@ -55,4 +55,4 @@ piiiikachuuu - Main Currency Developer and other bits
 
 jd - Tid bits
 
-bandi - Initial concept for roulette :)
+Orivexes - Initial concept for roulette :)
