@@ -357,140 +357,17 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Seasonal] Christmas Charade",
+		name: "[Seasonal] Winter's Wont",
 		section: "OM of the Month",
 
-		team: 'randomSeasonalCC',
+		mod: 'inverse',
+		gameType: 'doubles',
+		team: 'randomSeasonalWinter',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		maxLevel: 1000,
 		onBegin: function() {
 			this.setWeather('Hail');
 			delete this.weatherData.duration;
-		},
-		onModifyMove: function(move) {
-			if (move.id === 'present') {
-				move.category = 'Status';
-				move.basePower = 0;
-				delete move.heal;
-				move.accuracy = 100;
-				switch (this.random(19)) {
-				case 0:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a bomb!");
-					};
-					move.category = 'Physical';
-					move.basePower = 250;
-					break;
-				case 1:
-					move.onTryHit = function() {
-						this.add('-message', "The present was confusion!");
-					};
-					move.volatileStatus = 'confusion';
-						break;
-				case 2:
-					move.onTryHit = function() {
-						this.add('-message', "The present was Disable!");
-					};
-					move.volatileStatus = 'disable';
-					break;
-				case 3:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a taunt!");
-					};
-					move.volatileStatus = 'taunt';
-					break;
-				case 4:
-					move.onTryHit = function() {
-						this.add('-message', "The present was some seeds!");
-					};
-					move.volatileStatus = 'leechseed';
-					break;
-				case 5:
-					move.onTryHit = function() {
-						this.add('-message', "The present was an embargo!");
-					};
-					move.volatileStatus = 'embargo';
-					break;
-				case 6:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a music box!");
-					};
-					move.volatileStatus = 'perishsong';
-					break;
-				case 7:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a curse!");
-					};
-					move.volatileStatus = 'curse';
-					break;
-				case 8:
-					move.onTryHit = function() {
-						this.add('-message', "The present was Torment!");
-					};
-					move.volatileStatus = 'torment';
-					break;
-				case 9:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a trap!");
-					};
-					move.volatileStatus = 'partiallytrapped';
-					break;
-				case 10:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a root!");
-					};
-					move.volatileStatus = 'ingrain';
-					break;
-				case 11:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a makeover!");
-					};
-					var boosts = {};
-					var possibleBoosts = ['atk','def','spa','spd','spe','accuracy','evasion'].randomize();
-					boosts[possibleBoosts[0]] = 1;
-					boosts[possibleBoosts[1]] = -1;
-					boosts[possibleBoosts[2]] = -1;
-					move.boosts = boosts;
-					break;
-				case 12:
-					move.onTryHit = function() {
-						this.add('-message', "The present was psychic powers!");
-					};
-					move.volatileStatus = 'telekinesis';
-					break;
-				case 13:
-					move.onTryHit = function() {
-						this.add('-message', "The present was fatigue!");
-					};
-					move.volatileStatus = 'mustrecharge';
-					break;
-				case 14:
-				case 15:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a snowball hit!");
-					};
-					move.category = 'Ice';
-					move.basePower = 250;
-					break;
-				case 16:
-					move.onTryHit = function() {
-						this.add('-message', "The present was a crafty shield!");
-					};
-					move.volatileStatus = 'craftyshield';
-					break;
-				case 17:
-					move.onTryHit = function() {
-						this.add('-message', "The present was an electrification!");
-					};
-					move.volatileStatus = 'electrify';
-					break;
-				case 18:
-					move.onTryHit = function() {
-						this.add('-message', "The present was an ion deluge!");
-					};
-					move.volatileStatus = 'iondeluge';
-					break;
-				}
-			}
 		}
 	},
 	{
