@@ -285,7 +285,7 @@ var commands = exports.commands = {
 	
 	tierpoll: 'tiervote',
 	tiervote: function(target, room, user){
-		return this.parse('/poll Tournament Tier?,ou,ubers,lc,smogondoubles,vgc2014,cap,challengecup,challengecup1vs1,hackmons,gen6oumonotype,gen51v1,gen5randombattle,gen5ou,gen5uu,gen5ru,gen5nu,gen5perseverance,skybattles,inversebattles');
+		return this.parse('/poll Tournament Tier?, OU, UU, Ubers, LC, LC UU, Doubles, Christmas Charade, Sky Battles, CAP, cc, cc1v1, hackmons, inverse battle, OU Monotype, Gen51v1, Gen5OU, Gen5UU, Gen5RU, Gen5NU, Gen5Ubers, Gen5Perseverance, Gen5LC, Gen5RandomBattle');
 	},
 	
 	gurl: function(target, room, user){
