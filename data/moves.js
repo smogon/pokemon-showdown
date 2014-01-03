@@ -1539,6 +1539,25 @@ exports.BattleMovedex = {
 		target: "allAdjacentFoes",
 		type: "Normal"
 	},
+	"celebrate": {
+		num: 150,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "No in-game effect. (Doubles prizes out-of-battle.)",
+		shortDesc: "Does nothing.",
+		id: "Celebrate",
+		name: "celebrate",
+		pp: 40,
+		priority: 0,
+		onTryHit: function(target, source) {
+			this.add('-activate', target, "move: Celebrate");
+			return null;
+		},
+		secondary: false,
+		target: "self",
+		type: "Normal"
+	},
 	"charge": {
 		num: 268,
 		accuracy: true,
