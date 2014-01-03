@@ -520,5 +520,22 @@ exports.BattleScripts = {
 			team.push(set);
 		}
 		return team;
+	},
+	randomSeasonalCCTeam: function(side) {
+		var seasonalPokemonList = [
+			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx',
+			'lapras', 'snorlax', 'articuno', 'azumarill', 'granbull', 'delibird', 'stantler', 'miltank', 'blissey', 'swalot', 'lunatone',
+			'castform', 'chimecho', 'glalie', 'walrein', 'regice', 'jirachi', 'bronzong', 'chatot', 'abomasnow', 'weavile', 'togekiss',
+			'glaceon', 'probopass', 'froslass', 'rotom-frost', 'uxie', 'mesprit', 'azelf', 'victini', 'vanilluxe', 'sawsbuck', 'beartic',
+			'cryogonal', 'chandelure', 'gardevoir', 'amaura', 'aurorus', 'bergmite', 'avalugg'
+		];
+		seasonalPokemonList = seasonalPokemonList.randomize();
+		var team = [];
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(seasonalPokemonList[i], i);
+			set.moves[3] = 'Present';
+			team.push(set);
+		}
+		return team;
 	}
 ];
