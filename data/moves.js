@@ -6189,6 +6189,23 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
+	"holdback": {
+		gen: 6,
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target but leaves it with at least 1HP. Makes contact.",
+		shortDesc: "Always leaves the target with at least 1 HP.",
+		id: "holdback",
+		name: "Hold Back",
+		pp: 40,
+		priority: 0,
+		isContact: true,
+		noFaint: true,
+		secondary: false,
+		target: "normal",
+		type: "Normal"
+	},
 	"honeclaws": {
 		num: 468,
 		accuracy: true,
