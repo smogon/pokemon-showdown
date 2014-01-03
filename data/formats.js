@@ -25,7 +25,7 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		ruleset: ['Species Clause', 'Item Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
-			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
+			'Mewtwo',
 			'Lugia',
 			'Ho-Oh',
 			'Kyogre',
