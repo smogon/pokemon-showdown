@@ -828,6 +828,19 @@ module.exports = (function () {
 		var nameTemplate = this.getTemplate(set.name);
 		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) set.name = null;
 		set.species = set.species;
+
+		if (format.ruleset) {
+			for (var i=0; i<format.ruleset.length; i++) {
+				var subformat = this.getFormat(format.ruleset[i]);
+				if (subformat.validateSet) {
+					problems = problems.concat(subformat.validateSet.call(this, set, format)||[]);
+				}
+			}
+		}
+		if (format.validateSet) {
+			problems = problems.concat(format.validateSet.call(this, set, format)||[]);
+		}
+
 		set.name = set.name || set.species;
 		var name = set.species;
 		if (set.species !== set.name) name = set.name + " ("+set.species+")";
@@ -1046,18 +1059,6 @@ module.exports = (function () {
 				clause = format.name ? " by "+format.name : '';
 				problems.push(name+" has the combination of "+bannedCombo+", which is banned"+clause+".");
 			}
-		}
-
-		if (format.ruleset) {
-			for (var i=0; i<format.ruleset.length; i++) {
-				var subformat = this.getFormat(format.ruleset[i]);
-				if (subformat.validateSet) {
-					problems = problems.concat(subformat.validateSet.call(this, set, format)||[]);
-				}
-			}
-		}
-		if (format.validateSet) {
-			problems = problems.concat(format.validateSet.call(this, set, format)||[]);
 		}
 
 		if (!problems.length) return false;
