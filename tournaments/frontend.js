@@ -74,9 +74,9 @@ var Tournament = (function () {
 
 		this.pendingChallenges = null;
 
-		room.add('|tournament|create|' + format + '|' + generator.name);
+		room.add('|tournament|create|' + this.format + '|' + generator.name);
 		room.send('|tournament|update|' + JSON.stringify({
-			format: format,
+			format: this.format,
 			generator: generator.name,
 			isStarted: false,
 			isJoined: false
