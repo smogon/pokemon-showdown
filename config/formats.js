@@ -92,6 +92,7 @@ exports.Formats = [
 		name: "LC UU",
 		section: "XY Singles",
 
+		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel',
