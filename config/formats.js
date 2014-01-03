@@ -14,6 +14,13 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
+		name: "Ubers",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
+		banlist: []
+	},
+	{
 		name: "UU (beta)",
 		section: "XY Singles",
 
@@ -72,13 +79,6 @@ exports.Formats = [
 			'Tyranitar',
 			'Venusaur',
 			'Volcarona']
-	},
-	{
-		name: "Ubers",
-		section: "XY Singles",
-
-		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
-		banlist: []
 	},
 	{
 		name: "LC",
@@ -205,8 +205,8 @@ exports.Formats = [
 		name: "Smogon Doubles Ubers",
 		section: "XY Doubles",
 
-		searchShow: false,
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
 		banlist: ['Dark Void']
 	},
@@ -214,8 +214,8 @@ exports.Formats = [
 		name: "Smogon Doubles UU",
 		section: "XY Doubles",
 
-		searchShow: false,
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Dark Void', 'Soul Dew',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
