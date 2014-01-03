@@ -1,31 +1,21 @@
 /**
  * Seasonal Ladders of Pokémon Showdown
- * The formats with the mod-like tweaks go into /data/formats.js
+ * The formats with the mod-like tweaks go into /config/formats.js
  * The team making scripts go into /data/scripts.js
  *
  * THIS IS A BACKUP FILE.
  */
  exports.BattleFormats = {
 	// Seasoning Greetings, November 2012
-	seasonalseasoningsgreetings: {
-		effectType: 'Format',
+	{
 		name: "[Seasonal] Seasoning's Greetings",
 		team: 'randomSeasonal',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	// Winter Wonderland, December 2012 and January 2013
-	seasonalwinterwonderland: {
-		effectType: 'Format',
+	{
 		name: "[Seasonal] Winter Wonderland",
 		team: 'randomSeasonalWW',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
 		onBegin: function() {
 			this.setWeather('Hail');
 			delete this.weatherData.duration;
@@ -139,26 +129,16 @@
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	// Valentine Venture, February 2013
-	seasonalvalentineventure: {
-		effectType: 'Format',
+	{
 		name: "[Seasonal] Valentine Venture",
 		team: 'randomSeasonalVV',
 		gameType: 'doubles',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	// Spring Forward, March 2013
-	seasonalspringforward: {
-		effectType: 'Format',
+	{
 		name: "[Seasonal] Spring Forward",
 		team: 'randomSeasonalSF',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
 		onBegin: function() {
 			if (this.random(100) < 75) {
 				this.add('-message', "March and April showers bring May flowers...");
@@ -233,16 +213,11 @@
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	// Fools Festival, April 2013
-	seasonalfoolsfestival: {
+	{
 		name: "[Seasonal] Fools Festival",
 		section: 'OM of the Month',
 
-		effectType: 'Format',
 		team: 'randomSeasonalFF',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
 		onBegin: function() {
 			var dice = this.random(100);
 			if (dice < 65) {
@@ -447,15 +422,10 @@
 		},
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
-	maymayhem: {
-		effectType: 'Format',
+	{
 		name: "May Mayhem",
 		section: "Seasonal",
 		team: 'randomSeasonalMM',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
 		onBegin: function() {
 			// Shameless plug
 			var date = Date();
@@ -474,16 +444,11 @@
 			}
 		}
 	},
-	seasonaljunejubilee: {
+	{
 		name: "[Seasonal] June Jubilee",
 		section: "OM of the Month",
 		
 		team: 'randomSeasonalJJ',
-		canUseRandomTeam: true,
-		effectType: 'Format',
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function() {
 			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
@@ -546,15 +511,10 @@
 			}
 		}
 	},
-	seasonaljollyjuly: {
-		effectType: 'Format',
+	{
 		name: "[Seasonal] Jolly July",
 		section: "OM of the Month",
 		team: 'randomSeasonalJuly',
-		canUseRandomTeam: true,
-		rated: true,
-		challengeShow: true,
-		searchShow: true,
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function() {
 			this.add('-message', "You and your faithful favourite Pokémon are travelling around the world, and you will fight this trainer in many places until either win or finish the travel!");
@@ -668,7 +628,7 @@
 			if (move.id === 'fireblast') move.name = 'July 4th Fireworks';
 		}
 	},
-	seasonalaverageaugust: {
+	{
 		name: "[Seasonal] Average August",
 		section: "OM of the Month",
 
@@ -877,11 +837,150 @@
 			}
 		}
 	},
+	// Thankless Thanksgiving, November 2013
 	{
 		name: "[Seasonal] Thankless Thanksgiving",
 		section: "OM of the Month",
 
 		team: 'randomSeasonal',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod']
+	},
+	// Christmas Charade, December 2013
+	{
+		name: "[Seasonal] Christmas Charade",
+		section: "OM of the Month",
+
+		team: 'randomSeasonalCC',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		onBegin: function() {
+			this.setWeather('Hail');
+			delete this.weatherData.duration;
+		},
+		onModifyMove: function(move) {
+			if (move.id === 'present') {
+				move.category = 'Status';
+				move.basePower = 0;
+				delete move.heal;
+				move.accuracy = 100;
+				switch (this.random(19)) {
+				case 0:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a bomb!");
+					};
+					move.category = 'Physical';
+					move.basePower = 250;
+					break;
+				case 1:
+					move.onTryHit = function() {
+						this.add('-message', "The present was confusion!");
+					};
+					move.volatileStatus = 'confusion';
+						break;
+				case 2:
+					move.onTryHit = function() {
+						this.add('-message', "The present was Disable!");
+					};
+					move.volatileStatus = 'disable';
+					break;
+				case 3:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a taunt!");
+					};
+					move.volatileStatus = 'taunt';
+					break;
+				case 4:
+					move.onTryHit = function() {
+						this.add('-message', "The present was some seeds!");
+					};
+					move.volatileStatus = 'leechseed';
+					break;
+				case 5:
+					move.onTryHit = function() {
+						this.add('-message', "The present was an embargo!");
+					};
+					move.volatileStatus = 'embargo';
+					break;
+				case 6:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a music box!");
+					};
+					move.volatileStatus = 'perishsong';
+					break;
+				case 7:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a curse!");
+					};
+					move.volatileStatus = 'curse';
+					break;
+				case 8:
+					move.onTryHit = function() {
+						this.add('-message', "The present was Torment!");
+					};
+					move.volatileStatus = 'torment';
+					break;
+				case 9:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a trap!");
+					};
+					move.volatileStatus = 'partiallytrapped';
+					break;
+				case 10:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a root!");
+					};
+					move.volatileStatus = 'ingrain';
+					break;
+				case 11:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a makeover!");
+					};
+					var boosts = {};
+					var possibleBoosts = ['atk','def','spa','spd','spe','accuracy','evasion'].randomize();
+					boosts[possibleBoosts[0]] = 1;
+					boosts[possibleBoosts[1]] = -1;
+					boosts[possibleBoosts[2]] = -1;
+					move.boosts = boosts;
+					break;
+				case 12:
+					move.onTryHit = function() {
+						this.add('-message', "The present was psychic powers!");
+					};
+					move.volatileStatus = 'telekinesis';
+					break;
+				case 13:
+					move.onTryHit = function() {
+						this.add('-message', "The present was fatigue!");
+					};
+					move.volatileStatus = 'mustrecharge';
+					break;
+				case 14:
+				case 15:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a snowball hit!");
+					};
+					move.category = 'Ice';
+					move.basePower = 250;
+					break;
+				case 16:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a crafty shield!");
+					};
+					move.volatileStatus = 'craftyshield';
+					break;
+				case 17:
+					move.onTryHit = function() {
+						this.add('-message', "The present was an electrification!");
+					};
+					move.volatileStatus = 'electrify';
+					break;
+				case 18:
+					move.onTryHit = function() {
+						this.add('-message', "The present was an ion deluge!");
+					};
+					move.volatileStatus = 'iondeluge';
+					break;
+				}
+			}
+		}
 	}
 }
