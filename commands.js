@@ -91,6 +91,16 @@ var commands = exports.commands = {
 			return this.parse('/help msg');
 		}
 
+		if (config.pmmodchat) {
+			var userGroup = user.group;
+			if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
+				var groupName = config.groups[config.pmmodchat].name;
+				if (!groupName) groupName = config.pmmodchat;
+				this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to PM users.');
+				return false;
+			}
+		}
+
 		if (user.locked && !targetUser.can('lock', user)) {
 			return this.popupReply('You can only private message members of the moderation team (users marked by %, @, &, or ~) when locked.');
 		}
@@ -1544,6 +1554,15 @@ var commands = exports.commands = {
 		}
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			return this.popupReply("The user '"+this.targetUsername+"' is not accepting challenges right now.");
+		}
+		if (config.pmmodchat) {
+			var userGroup = user.group;
+			if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
+				var groupName = config.groups[config.pmmodchat].name;
+				if (!groupName) groupName = config.pmmodchat;
+				this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to challenge users.');
+				return false;
+			}
 		}
 		if (!user.prepBattle(target, 'challenge', connection)) return;
 		user.makeChallenge(targetUser, target);
