@@ -1046,7 +1046,11 @@ var commands = exports.commands = {
 			return this.sendReply("You are already Away.");
 		}
 		user.originalname = user.name;
+		if (target.length > 0) {
+			this.add(user.name+' is now Away ('+target+').';
+		}else{
 		this.add(user.name+' is now Away.');
+		}
 		user.forceRename(user.name+' - Away', user.authenticated);
 		user.afk = true;
 		return this.parse('/away');
