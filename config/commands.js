@@ -190,6 +190,70 @@ var commands = exports.commands = {
 		if (targetUser.frostDev) {
 			this.sendReply('(Frost Development Staff)');
 		}
+		if (targetUser.monoType != '') {
+			var type = targetUser.monoType.toLowerCase();
+			var hex = '';
+			switch (type) {
+				case 'normal':
+				hex = 'A8A77A';
+				break;
+				case 'fire':
+				hex = 'FF0000';
+				break;
+				case 'water':
+				hex = '6390F0';
+				break;
+				case 'electric':
+				hex = 'F7D02C';
+				break;
+				case 'grass':
+				hex = '7AC74C';
+				break;
+				case 'ice':
+				hex = '96D9D6';
+				break;
+				case 'fighting':
+				hex = 'C22E28';
+				break;
+				case 'poison':
+				hex = 'A33EA1';
+				break;
+				case 'ground':
+				hex = 'E2BF65';
+				break;
+				case 'flying':
+				hex = 'A98FF3';
+				break;
+				case 'psychic':
+				hex = 'F95587';
+				break;
+				case 'bug':
+				hex = 'A6B91A';
+				break;
+				case 'rock':
+				hex = 'B6A136';
+				break;
+				case 'ghost':
+				hex = '735797';
+				break;
+				case 'dragon':
+				hex = '6F35FC';
+				break;
+				case 'dark':
+				hex = '705746';
+				break;
+				case 'steel':
+				hex = 'B7B7CE';
+				break;
+				case 'fairy':
+				hex = 'EE99AC';
+				break;
+				default:
+				hex = '000000';
+				break;
+			}
+			this.sendReply('|raw|<b><font color="#'+hex+'">'+targetUser.monoType+'</font></b> type');
+		}
 		if (targetUser.customClient) {
 			this.sendReply('|raw|' + targetUser.name + ' is using the <a href="http://frost-server.no-ip.org"><i>custom client!</i></a>');
 		}
@@ -1967,6 +2031,14 @@ var commands = exports.commands = {
 			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
 			this.sendReply('Types must be followed by " type", e.g., "dragon type".');
 			this.sendReply('The order of the parameters does not matter.');
+		}
+		if (target === 'all' || target === 'settype') {
+			matched = true;
+			this.sendReply('/settype [type] - Set your type, viewed in /whois and through /findtype command.')
+		}
+		if (target === 'all' || target === 'findtype') {
+			matched = true;
+			this.sendReply('/findtype [type], [optional, room or global] - Look for users of a specific type in your current room, or the entire server (global).')
 		}
 		if (target === 'all' || target === 'dice' || target === 'roll') {
 			matched = true;
