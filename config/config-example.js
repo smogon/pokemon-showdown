@@ -76,7 +76,8 @@ exports.reportbattles = true;
 // moderated chat - prevent unregistered, unvoiced users from speaking
 //   This should only be enabled temporarily, when you're dealing with
 //   huge influxes of spammy users.
-exports.modchat = false;
+exports.chatmodchat = false;
+exports.battlemodchat = false;
 
 // backdoor - allows Pokemon Showdown system operators to provide technical
 //            support for your server

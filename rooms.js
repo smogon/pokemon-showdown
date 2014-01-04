@@ -505,6 +505,7 @@ var BattleRoom = (function() {
 		this.id = roomid;
 		this.title = ""+p1.name+" vs. "+p2.name;
 		this.i = {};
+		this.modchat = (config.battlemodchat || false);
 
 		format = ''+(format||'');
 
@@ -1179,6 +1180,7 @@ var ChatRoom = (function() {
 		this.destroyingLog = false;
 		this.bannedUsers = {};
 		this.bannedIps = {};
+		this.modchat = (config.chatmodchat || false);
 
 		// `config.loglobby` is a legacy name
 		if (config.logchat || config.loglobby) {

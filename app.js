@@ -12,7 +12,7 @@
  * Users - from users.js
  *
  *   Most of the communication with users happens in users.js, we just
- *   forward messages between the client and users.js.
+ *   forward messages between the sockets.js and users.js.
  *
  * Rooms - from rooms.js
  *
@@ -31,6 +31,11 @@
  * CommandParser - from command-parser.js
  *
  *   Parses text commands like /me
+ *
+ * Sockets - from sockets.js
+ *
+ *   Used to abstract out network connections. sockets.js handles
+ *   the actual server and connection set-up.
  *
  * @license MIT license
  */
@@ -264,10 +269,6 @@ global.ResourceMonitor = {
 };
 
 /*********************************************************
- * Start our servers
- *********************************************************/
-
-/*********************************************************
  * Set up most of our globals
  *********************************************************/
 
@@ -393,7 +394,7 @@ if (config.crashguard) {
 }
 
 /*********************************************************
- * Set up the server to be connected to
+ * Start networking processes to be connected to
  *********************************************************/
 
 global.Sockets = require('./sockets.js');

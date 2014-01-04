@@ -495,6 +495,11 @@ module.exports = (function () {
 						var learned = lset[i];
 						if (noPastGen && learned.charAt(0) !== '6') continue;
 						if (parseInt(learned.charAt(0),10) > this.gen) continue;
+						if (!template.isNonstandard) {
+							// HMs can't be transferred
+							if (this.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
+							if (this.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+						}
 						if (learned.substr(0,2) in {'4L':1,'5L':1,'6L':1}) {
 							// gen 4-6 level-up moves
 							if (level >= parseInt(learned.substr(2),10)) {
@@ -941,7 +946,7 @@ module.exports = (function () {
 						} else if (problem.type === 'oversketched') {
 							problemString = problemString.concat(" because it can only sketch "+problem.maxSketches+" move"+(problem.maxSketches>1?"s":"")+".");
 						} else if (problem.type === 'pokebank') {
-							problemString = problemString.concat(" because it's not possible to transfer pokemon from earlier games to XY yet (Pokébank comes out in December).");
+							problemString = problemString.concat(" because it's only obtainable from a previous generation.");
 						} else {
 							problemString = problemString.concat(".");
 						}
@@ -1005,6 +1010,12 @@ module.exports = (function () {
 			}
 			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && this.getAbility(set.ability).gen === 4 && !template.prevo && this.gen <= 5) {
 				problems.push(name+" has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");
+			}
+			if (!lsetData.sources && lsetData.sourcesBefore >= 3 && (isHidden || this.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
+				var oldAbilities = this.mod('gen'+lsetData.sourcesBefore).getTemplate(set.species).abilities;
+				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && ability.name !== oldAbilities['H']) {
+					problems.push(name+" has moves incompatible with its ability.");
+				}
 			}
 		}
 		setHas[toId(template.tier)] = true;
