@@ -635,6 +635,9 @@ exports.BattleFormatsData = {
 	},
 	gengar: {
 		viableMoves: {"shadowball":1,"sludgebomb":1,"focusblast":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1,"trick":1},
+		eventPokemon: [
+			{"generation":6,"level":25,"nature":"Timid","moves":["psychic","confuseray","suckerpunch","shadowpunch"],"pokeball":"cherishball"}
+		],
 		tier: "OU"
 	},
 	gengarmega: {
@@ -881,7 +884,8 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"gender":"M","nature":"Adamant","abilities":["swarm"],"moves":["xscissor","swordsdance","irondefense","agility"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"abilities":["technician"],"moves":["bulletpunch","bugbite","roost","swordsdance"],"pokeball":"cherishball"},
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["leer","focusenergy","pursuit","steelwing"]},
-			{"generation":6,"level":50,"gender":"M","isHidden":false,"moves":["xscissor","nightslash","doublehit","ironhead"],"pokeball":"cherishball"}
+			{"generation":6,"level":50,"gender":"M","isHidden":false,"moves":["xscissor","nightslash","doublehit","ironhead"],"pokeball":"cherishball"},
+			{"generation":6,"level":25,"nature":"Adamant","isHidden":false,"abilities":["technician"],"moves":["aerialace","falseswipe","agility","furycutter"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
 	},
@@ -1453,7 +1457,8 @@ exports.BattleFormatsData = {
 		viableMoves: {"destinybond":1,"counter":1,"mirrorcoat":1,"encore":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["counter","mirrorcoat","safeguard","destinybond"]},
-			{"generation":3,"level":10,"gender":"M","moves":["counter","mirrorcoat","safeguard","destinybond"]}
+			{"generation":3,"level":10,"gender":"M","moves":["counter","mirrorcoat","safeguard","destinybond"]},
+			{"generation":6,"level":10,"gender":"M","isHidden":false,"moves":["counter"],"pokeball":"cherishball"}
 		],
 		tier: "BL"
 	},
@@ -1735,7 +1740,8 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["ancientpower","futuresight","batonpass","perishsong"]},
 			{"generation":3,"level":10,"moves":["leechseed","recover","healbell","safeguard"]},
 			{"generation":3,"level":30,"moves":["healbell","safeguard","ancientpower","futuresight"]},
-			{"generation":4,"level":50,"moves":["leafstorm","recover","nastyplot","healingwish"],"pokeball":"cherishball"}
+			{"generation":4,"level":50,"moves":["leafstorm","recover","nastyplot","healingwish"],"pokeball":"cherishball"},
+			{"generation":6,"level":10,"moves":["recover","healbell","safeguard","holdback"],"pokeball":"luxuryball"}
 		],
 		tier: "OU"
 	},
@@ -4279,6 +4285,9 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	inkay: {
+		eventPokemon: [
+			{"generation":6,"level":10,"isHidden":false,"moves":["happyhour","foulplay","hypnosis","topsyturvy"],"pokeball":"cherishball"}
+		],
 		tier: "LC"
 	},
 	malamar: {
