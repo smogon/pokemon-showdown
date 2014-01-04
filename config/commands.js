@@ -1162,7 +1162,20 @@ var commands = exports.commands = {
 		'/replace [username], [username] - Replaces user in a tournament with the second user');
     },
 
-	//TRAINER CARDS - Brittle, please try and keep them neat :) hi cosy
+	/***************************************
+	* Trainer Cards                        *
+	***************************************/
+
+	dbz: 'dragonballsz',
+	dragonballsz: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('|<center><img width="140" height="100" src="http://i.imgur.com/m9gPc4J.gif">' + // first image
+			'<img width="280" height="110"src="http://i.imgur.com/rwzs91Z.gif">' + // name
+			'<img width="140" height="100"src="http://i.imgur.com/J4HlhUR.gif"><br />' + // second image
+			'<font color=red><blink> Ace: Princess Celestia </blink></font><br />' +
+			'*sends out ninjask* Gotta go fast.');
+	},
+
 	bigblackhoe: 'lenora',
 	oprah: 'lenora',
 	sass: 'lenora',
