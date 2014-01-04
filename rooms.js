@@ -510,6 +510,7 @@ var BattleRoom = (function() {
 
 		this.users = {};
 		this.format = format;
+		this.auth = {};
 		//console.log("NEW BATTLE");
 
 		var formatid = toId(format);
@@ -1059,6 +1060,7 @@ var BattleRoom = (function() {
 			}
 		}
 
+		this.auth[user.userid] = '\u2605';
 		this.battle.join(user, slot, team);
 		rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 		this.active = this.battle.active;
@@ -1080,6 +1082,7 @@ var BattleRoom = (function() {
 		} else {
 			return false;
 		}
+		this.auth[user.userid] = '+';
 		rooms.global.battleCount += (this.battle.active?1:0) - (this.active?1:0);
 		this.active = this.battle.active;
 		this.update();
