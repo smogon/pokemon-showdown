@@ -1,7 +1,7 @@
 /************************
 * Happy Holidays!    	*
 ************************/
-#header {
+/*#header {
 	background:url("http://i.imgur.com/q9MiuzK.png");
 }
 
@@ -103,9 +103,9 @@ body {
 .challenge {
 	background: url("http://i.imgur.com/CtoyG6B.png");
 	color: black;
-}
+}*/
 
-/*
+
 #header{
 	background:url("http://upload.wikimedia.org/wikipedia/commons/d/da/Shades_of_blue.jpg")
 }
@@ -138,7 +138,7 @@ body{
 .userlist{
 	border-left:1px solid #D5DDE4;
 	background:#e5f5ff
-}*/
+}
 
 /****************************
 *Thanksgiving Theme (deer)  *
