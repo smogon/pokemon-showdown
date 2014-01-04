@@ -2938,6 +2938,7 @@ var commands = exports.commands = {
 		}
 		if (targetUser.isAway) {
 			return this.popupReply("The user '"+this.targetUsername+"' is currently set as away so cannot be challenged.");
+		}
 		if (config.pmmodchat) {
 			var userGroup = user.group;
 			if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
