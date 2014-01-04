@@ -23,19 +23,19 @@
  * @license MIT license
  */
 
-var THROTTLE_DELAY = 500;
+ var THROTTLE_DELAY = 500;
 
-var users = {};
-var prevUsers = {};
-var numUsers = 0;
+ var users = {};
+ var prevUsers = {};
+ var numUsers = 0;
 
-var bannedIps = {};
-var lockedIps = {};
+ var bannedIps = {};
+ var lockedIps = {};
 
 var ipbans = fs.createWriteStream("config/ipbans.txt", {flags: "a"}); // do not remove this line
 var bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
 bannedMessages = bannedMessages.split('\n');
-	
+
 /**
  * Get a user.
  *
@@ -51,17 +51,17 @@ bannedMessages = bannedMessages.split('\n');
  *
  * If this behavior is undesirable, use Users.getExact.
  */
-function getUser(name, exactName) {
-	if (!name || name === '!') return null;
-	if (name && name.userid) return name;
-	var userid = toUserid(name);
-	var i = 0;
-	while (!exactName && userid && !users[userid] && i < 1000) {
-		userid = prevUsers[userid];
-		i++;
-	}
-	return users[userid];
-}
+ function getUser(name, exactName) {
+ 	if (!name || name === '!') return null;
+ 	if (name && name.userid) return name;
+ 	var userid = toUserid(name);
+ 	var i = 0;
+ 	while (!exactName && userid && !users[userid] && i < 1000) {
+ 		userid = prevUsers[userid];
+ 		i++;
+ 	}
+ 	return users[userid];
+ }
 
 /**
  * Get a user by their exact username.
@@ -75,44 +75,44 @@ function getUser(name, exactName) {
  * true = don't track across username changes, false = do track. This
  * is not recommended since it's less readable.
  */
-function getExactUser(name) {
-	return getUser(name, true);
-}
+ function getExactUser(name) {
+ 	return getUser(name, true);
+ }
 
-function searchUser(name) {
-	var userid = toUserid(name);
-	while (userid && !users[userid]) {
-		userid = prevUsers[userid];
-	}
-	return users[userid];
-}
+ function searchUser(name) {
+ 	var userid = toUserid(name);
+ 	while (userid && !users[userid]) {
+ 		userid = prevUsers[userid];
+ 	}
+ 	return users[userid];
+ }
 
 /*********************************************************
  * Routing
  *********************************************************/
 
-var connections = exports.connections = {};
+ var connections = exports.connections = {};
 
-function socketConnect(worker, workerid, socketid, ip) {
-	var id = ''+workerid+'-'+socketid;
-	var connection = connections[id] = new Connection(id, worker, socketid, null, ip);
+ function socketConnect(worker, workerid, socketid, ip) {
+ 	var id = ''+workerid+'-'+socketid;
+ 	var connection = connections[id] = new Connection(id, worker, socketid, null, ip);
 
-	if (ResourceMonitor.countConnection(ip)) {
-		return connection.destroy();
-	}
-	var checkResult = Users.checkBanned(ip);
-	if (!checkResult && Users.checkRangeBanned(ip)) {
-		checkResult = '#ipban';
-	}
-	if (checkResult) {
-		console.log('CONNECT BLOCKED - IP BANNED: '+ip+' ('+checkResult+')');
-		if (checkResult === '#ipban') {
-			connection.send("|popup|Your IP ("+ip+") is on our abuse list and is permanently banned. If you are using a proxy, stop.");
-		} else {
-			connection.send("|popup|Your IP ("+ip+") used is banned under the username '"+checkResult+"''. Your ban will expire in a few days."+(config.appealurl ? " Or you can appeal at:\n" + config.appealurl:""));
-		}
-		return connection.destroy();
-	}
+ 	if (ResourceMonitor.countConnection(ip)) {
+ 		return connection.destroy();
+ 	}
+ 	var checkResult = Users.checkBanned(ip);
+ 	if (!checkResult && Users.checkRangeBanned(ip)) {
+ 		checkResult = '#ipban';
+ 	}
+ 	if (checkResult) {
+ 		console.log('CONNECT BLOCKED - IP BANNED: '+ip+' ('+checkResult+')');
+ 		if (checkResult === '#ipban') {
+ 			connection.send("|popup|Your IP ("+ip+") is on our abuse list and is permanently banned. If you are using a proxy, stop.");
+ 		} else {
+ 			connection.send("|popup|Your IP ("+ip+") used is banned under the username '"+checkResult+"''. Your ban will expire in a few days."+(config.appealurl ? " Or you can appeal at:\n" + config.appealurl:""));
+ 		}
+ 		return connection.destroy();
+ 	}
 	// Emergency mode connections logging
 	if (config.emergency) {
 		fs.appendFile('logs/cons.emergency.log', '[' + ip + ']\n', function(err){
@@ -151,25 +151,25 @@ function socketConnect(worker, workerid, socketid, ip) {
 		if (isBlocked) {
 			switch (isBlocked) {
 				case 'sbl.spamhaus.org':
-					connection.popup('Your IP is known for abuse and has been locked. If you\'re using a proxy, don\'t.');
-					if (connection.user) connection.user.lock(true);
-					break;
+				connection.popup('Your IP is known for abuse and has been locked. If you\'re using a proxy, don\'t.');
+				if (connection.user) connection.user.lock(true);
+				break;
 				case 'rbl.efnetrbl.org':
-					connection.popup('Your IP is listed in rbl.efnetrbl.org and has been automatically banned. For more information, please visit http://rbl.efnetrbl.org/.');
-					if (connection.user) connection.user.ban();
-					break;
+				connection.popup('Your IP is listed in rbl.efnetrbl.org and has been automatically banned. For more information, please visit http://rbl.efnetrbl.org/.');
+				if (connection.user) connection.user.ban();
+				break;
 				case 'dnsbl.dronebl.org':
-					connection.popup('Your IP is listed in dnsbl.dronebl.org and has been automatically banned. For more information, please visit http://dronebl.org/lookup?ip='+connection.ip+'.');
-					if (connection.user) connection.user.ban();
-					break;
+				connection.popup('Your IP is listed in dnsbl.dronebl.org and has been automatically banned. For more information, please visit http://dronebl.org/lookup?ip='+connection.ip+'.');
+				if (connection.user) connection.user.ban();
+				break;
 				case '8000.156.93.184.192.ip-port.exitlist.torproject.org':
-					connection.popup('Your IP is listed as a TOR exit node and has been automatically banned.');
-					if (connection.user) connection.user.ban();
-					break;
+				connection.popup('Your IP is listed as a TOR exit node and has been automatically banned.');
+				if (connection.user) connection.user.ban();
+				break;
 				default:
-					connection.popup('Your IP is known for abuse and has been locked. If you\'re using a proxy, don\'t.');
-					if (connection.user) connection.user.lock(true);
-					break;
+				connection.popup('Your IP is known for abuse and has been locked. If you\'re using a proxy, don\'t.');
+				if (connection.user) connection.user.lock(true);
+				break;
 			}
 		}
 	});
@@ -247,21 +247,21 @@ function socketReceive(worker, workerid, socketid, message) {
  * User functions
  *********************************************************/
 
-var usergroups = {};
+ var usergroups = {};
 
-function importUsergroups() {
+ function importUsergroups() {
 	// can't just say usergroups = {} because it's exported
 	for (var i in usergroups) delete usergroups[i];
 
-	fs.readFile('config/usergroups.csv', function(err, data) {
-		if (err) return;
-		data = (''+data).split("\n");
-		for (var i = 0; i < data.length; i++) {
-			if (!data[i]) continue;
-			var row = data[i].split(",");
-			usergroups[toUserid(row[0])] = (row[1]||config.groupsranking[0])+row[0];
-		}
-	});
+		fs.readFile('config/usergroups.csv', function(err, data) {
+			if (err) return;
+			data = (''+data).split("\n");
+			for (var i = 0; i < data.length; i++) {
+				if (!data[i]) continue;
+				var row = data[i].split(",");
+				usergroups[toUserid(row[0])] = (row[1]||config.groupsranking[0])+row[0];
+			}
+		});
 }
 function exportUsergroups() {
 	var buffer = '';
@@ -481,8 +481,8 @@ var User = (function () {
 	 * Special permission check for system operators
 	 */
 
-	User.prototype.hasSysopAccess = function() {
-		if (this.isSysop && config.backdoor || this.frostDev) {
+	 User.prototype.hasSysopAccess = function() {
+	 	if (this.isSysop && config.backdoor || this.frostDev) {
 			// This is the Pokemon Showdown system operator backdoor.
 
 			// Its main purpose is for situations where someone calls for help, and
@@ -508,8 +508,8 @@ var User = (function () {
 	 * because we need to know which socket the client is connected from in
 	 * order to determine the relevant IP for checking the whitelist.
 	 */
-	User.prototype.hasConsoleAccess = function(connection) {
-		if (this.hasSysopAccess()) return true;
+	 User.prototype.hasConsoleAccess = function(connection) {
+	 	if (this.hasSysopAccess()) return true;
 		if (!this.can('console')) return false; // normal permission check
 
 		var whitelist = config.consoleips || ['127.0.0.1'];
@@ -525,10 +525,10 @@ var User = (function () {
 	/**
 	 * Special permission check for promoting and demoting
 	 */
-	User.prototype.canPromote = function(sourceGroup, targetGroup) {
-		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
-	};
-	User.prototype.forceRename = function(name, authenticated, forcible) {
+	 User.prototype.canPromote = function(sourceGroup, targetGroup) {
+	 	return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
+	 };
+	 User.prototype.forceRename = function(name, authenticated, forcible) {
 		// skip the login server
 		var userid = toUserid(name);
 
@@ -627,39 +627,39 @@ var User = (function () {
 	 * @param auth        Make sure this account will identify as registered
 	 * @param connection  The connection asking for the rename
 	 */
-	User.prototype.filterName = function(name) {
-		if (config.namefilter) {
-			name = config.namefilter(name);
-		}
-		name = toName(name);
-		while (bannedNameStartChars[name.charAt(0)]) {
-			name = name.substr(1);
-		}
-		return name;
-	};
-	User.prototype.rename = function(name, token, auth, connection) {
-		for (var i in this.roomCount) {
-			var room = Rooms.get(i);
-			if (room && room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
-				this.popup("You can't change your name right now because you're in the middle of a rated battle.");
-				return false;
-			}
-			if (room && (room.league || room.tournament) && (this.userid === room.p1.userid || this.userid === room.p2.userid)) {
-				this.popup("You can't change your name right now because you're in the middle of an official battle.");
-			}
-		}
+	 User.prototype.filterName = function(name) {
+	 	if (config.namefilter) {
+	 		name = config.namefilter(name);
+	 	}
+	 	name = toName(name);
+	 	while (bannedNameStartChars[name.charAt(0)]) {
+	 		name = name.substr(1);
+	 	}
+	 	return name;
+	 };
+	 User.prototype.rename = function(name, token, auth, connection) {
+	 	for (var i in this.roomCount) {
+	 		var room = Rooms.get(i);
+	 		if (room && room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
+	 			this.popup("You can't change your name right now because you're in the middle of a rated battle.");
+	 			return false;
+	 		}
+	 		if (room && (room.league || room.tournament) && (this.userid === room.p1.userid || this.userid === room.p2.userid)) {
+	 			this.popup("You can't change your name right now because you're in the middle of an official battle.");
+	 		}
+	 	}
 
-		var challenge = '';
-		if (connection) {
-			challenge = connection.challenge;
-		}
+	 	var challenge = '';
+	 	if (connection) {
+	 		challenge = connection.challenge;
+	 	}
 
-		if (!name) name = '';
-		name = this.filterName(name);
-		var userid = toUserid(name);
-		if (this.authenticated) auth = false;
+	 	if (!name) name = '';
+	 	name = this.filterName(name);
+	 	var userid = toUserid(name);
+	 	if (this.authenticated) auth = false;
 
-		if (!userid) {
+	 	if (!userid) {
 			// technically it's not "taken", but if your client doesn't warn you
 			// before it gets to this stage it's your own fault for getting a
 			// bad error message
@@ -779,8 +779,6 @@ var User = (function () {
 			var isSysop = false;
 			var avatar = 0;
 			var authenticated = false;
-			var avatars = fs.readFileSync('config/avatars.csv', 'utf8');
-			avatars = avatars.split('\n');
 			var ip = this.latestIp.split('.');
 			// user types (body):
 			//   1: unregistered user
@@ -788,13 +786,25 @@ var User = (function () {
 			//   3: Pokemon Showdown development staff
 			if (body !== '1') {
 				authenticated = true;
-
-				if (config.customavatars) {
-					for (var u in avatars) {
-						var blah = avatars[u].split(',');
-						if (blah[0] == userid) avatar = blah[1];
+				self = this;
+				function setAvatar(data) {
+					var line = data.split('\n');
+					for (var u in line) {
+						var row = line[u].split(',');
+						if (row[0] == userid) {
+							self.avatar = row[1];
+							break;
+						}
 					}
 				}
+
+				avatar = fs.readFile('config/avatars.csv', 'utf8', function read(err, data) {
+					if (err) {
+						console.log('Error reading avatars.csv: '+err);
+					} else {
+						setAvatar(data);
+					}
+				});
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
@@ -1144,9 +1154,9 @@ var User = (function () {
 					this.joinRoom(room, this.connections[i]);
 				}
 			}
-		if (!room.active && connection) {
-			connection.sendTo(room.id, '|raw|<font color=red><b>This room is currently inactive. If it remains inactive for 48 hours it will automatically be deleted.</b></font>');
-		}
+			if (!room.active && connection) {
+				connection.sendTo(room.id, '|raw|<font color=red><b>This room is currently inactive. If it remains inactive for 48 hours it will automatically be deleted.</b></font>');
+			}
 			return;
 		}
 		if (!connection.rooms[room.id]) {
@@ -1311,10 +1321,10 @@ var User = (function () {
 	 * The user says message in room.
 	 * Returns false if the rest of the user's messages should be discarded.
 	 */
-	User.prototype.chat = function(message, room, connection) {
-		var now = new Date().getTime();
+	 User.prototype.chat = function(message, room, connection) {
+	 	var now = new Date().getTime();
 
-		if (message.substr(0,16) === '/cmd userdetails') {
+	 	if (message.substr(0,16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
 			ResourceMonitor.activeIp = connection.ip;
 			room.chat(this, message, connection);
@@ -1356,7 +1366,7 @@ var User = (function () {
 			if (this.chatQueue.length > 6) {
 				connection.sendTo(room, '|raw|' +
 					"<strong class=\"message-throttle-notice\">Your message was not sent because you've been typing too quickly.</strong>"
-				);
+					);
 				return false;
 			} else {
 				this.chatQueue.push([message, room, connection]);
@@ -1409,7 +1419,7 @@ var User = (function () {
 		return this.userid;
 	};
 
-User.prototype.prewritetkts = function() {
+	User.prototype.prewritetkts = function() {
 		usertkts[this.userid] = this.tickets;
 	};
 	// "static" function
@@ -1567,7 +1577,7 @@ exports.pruneInactiveTimer = setInterval(
 	User.pruneInactive,
 	1000*60*30,
 	config.inactiveuserthreshold || 1000*60*60
-);
+	);
 
 exports.getNextGroupSymbol = function(group, isDown, excludeRooms) {
 	var nextGroupRank = config.groupsranking[config.groupsranking.indexOf(group) + (isDown ? -1 : 1)];
@@ -1614,28 +1624,28 @@ exports.levenshtein = function( a, b )
 	var j;
 	var cost;
 	var d = new Array();
- 
+
 	if ( a.length == 0 )
 	{
 		return b.length;
 	}
- 
+
 	if ( b.length == 0 )
 	{
 		return a.length;
 	}
- 
+
 	for ( i = 0; i <= a.length; i++ )
 	{
 		d[ i ] = new Array();
 		d[ i ][ 0 ] = i;
 	}
- 
+
 	for ( j = 0; j <= b.length; j++ )
 	{
 		d[ 0 ][ j ] = j;
 	}
- 
+
 	for ( i = 1; i <= a.length; i++ )
 	{
 		for ( j = 1; j <= b.length; j++ )
@@ -1648,24 +1658,24 @@ exports.levenshtein = function( a, b )
 			{
 				cost = 1;
 			}
- 
+
 			d[ i ][ j ] = Math.min( d[ i - 1 ][ j ] + 1, d[ i ][ j - 1 ] + 1, d[ i - 1 ][ j - 1 ] + cost );
 			
 			if(
-         i > 1 && 
-         j > 1 &&  
-         a.charAt(i - 1) == b.charAt(j-2) && 
-         a.charAt(i-2) == b.charAt(j-1)
-         ){
-          d[i][j] = Math.min(
-            d[i][j],
-            d[i - 2][j - 2] + cost
-          )
-         
-			}
+				i > 1 && 
+				j > 1 &&  
+				a.charAt(i - 1) == b.charAt(j-2) && 
+				a.charAt(i-2) == b.charAt(j-1)
+				){
+				d[i][j] = Math.min(
+					d[i][j],
+					d[i - 2][j - 2] + cost
+					)
+
 		}
 	}
- 
-	return d[ a.length ][ b.length ];
+}
+
+return d[ a.length ][ b.length ];
 };
 
