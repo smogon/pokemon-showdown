@@ -286,6 +286,13 @@ var commands = exports.commands = {
 		var userid = toUserid(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
+		if (!userid) {
+			if (target && config.groups[target]) {
+				var groupid = config.groups[target].id;
+				return this.sendReply("/room"+groupid+" [username] - Promote a user to "+groupid+" in this room only");
+			}
+			return this.parse("/help roompromote");
+		}
 		var currentGroup = (room.auth[userid] || ' ');
 		if (!targetUser && !room.auth[userid]) {
 			return this.sendReply("User '"+this.targetUsername+"' is offline and unauthed, and so can't be promoted.");
@@ -295,6 +302,9 @@ var commands = exports.commands = {
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
+		}
+		if (config.groups[nextGroup].globalonly) {
+			return this.sendReply('Group \'room' + config.groups[nextGroup].id + '\' does not exist as a room rank.');
 		}
 		if (currentGroup !== ' ' && !user.can('room'+config.groups[currentGroup].id, null, room)) {
 			return this.sendReply('/' + cmd + ' - Access denied for promoting from '+config.groups[currentGroup].name+'.');
@@ -721,6 +731,14 @@ var commands = exports.commands = {
 		var userid = toUserid(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
+		if (!userid) {
+			if (target && config.groups[target]) {
+				var groupid = config.groups[target].id;
+				return this.sendReply("/"+groupid+" [username] - Promote a user to "+groupid+" globally");
+			}
+			return this.parse("/help promote");
+		}
+
 		var currentGroup = ' ';
 		if (targetUser) {
 			currentGroup = targetUser.group;
@@ -732,6 +750,9 @@ var commands = exports.commands = {
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
+		}
+		if (config.groups[nextGroup].roomonly) {
+			return this.sendReply('Group \'' + config.groups[nextGroup].id + '\' does not exist as a global rank.');
 		}
 		if (!user.canPromote(currentGroup, nextGroup)) {
 			return this.sendReply('/' + cmd + ' - Access denied.');
