@@ -2919,6 +2919,15 @@ var commands = exports.commands = {
 	cancelsearch: 'search',
 	search: function(target, room, user) {
 		if (target) {
+			if (config.pmmodchat) {
+				var userGroup = user.group;
+				if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
+					var groupName = config.groups[config.pmmodchat].name;
+					if (!groupName) groupName = config.pmmodchat;
+					this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to search for a battle.');
+					return false;
+				}
+			}
 			Rooms.global.searchBattle(user, target);
 		} else {
 			Rooms.global.cancelSearch(user);
