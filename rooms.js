@@ -1184,6 +1184,7 @@ var ChatRoom = (function() {
 		this.bannedUsers = {};
 		this.bannedIps = {};
 		this.modchat = (config.chatmodchat || false);
+		this.autodeclare = (config.chatautodeclare || false);
 
 		// `config.loglobby` is a legacy name
 		if (config.logchat || config.loglobby) {
@@ -1391,10 +1392,23 @@ var ChatRoom = (function() {
 
 		return '';
 	};
+	ChatRoom.prototype.getAutoDeclareNote = function (noNewline) {
+		if (this.autodeclare) {
+			var text = !noNewline ? '\n' : '';
+			text += '|raw|<div class="broadcast-blue">';
+			text += '<b>' + this.chatRoomData.topic + '</b>';
+			text += '</div>';
+			return text;
+		}
+
+		return '';
+	
+	};
 	ChatRoom.prototype.onJoinConnection = function(user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
 		var modchat = this.getModchatNote();
-		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(25).join('\n')+modchat, connection);
+		var autodeclare = this.getAutoDeclareNote();
+		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(25).join('\n')+modchat+autodeclare, connection);
 	};
 	ChatRoom.prototype.onJoin = function(user, connection, merging) {
 		if (!user) return false; // ???
@@ -1417,7 +1431,8 @@ var ChatRoom = (function() {
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
 			var modchat = this.getModchatNote();
-			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(100).join('\n')+modchat, connection);
+			var autodeclare = this.getAutoDeclareNote();
+			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(100).join('\n')+modchat+autodeclare, connection);
 		}
 
 		return user;
