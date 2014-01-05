@@ -1169,11 +1169,11 @@ var commands = exports.commands = {
 	dbz: 'dragonballsz',
 	dragonballsz: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('|<center><img width="140" height="100" src="http://i.imgur.com/m9gPc4J.gif">' + // first image
-			'<img width="280" height="110"src="http://i.imgur.com/rwzs91Z.gif">' + // name
+		this.sendReplyBox('<center><img width="140" height="100" src="http://i.imgur.com/m9gPc4J.gif">' + // first image
+			'<img width="280" height="100"src="http://i.imgur.com/rwzs91Z.gif">' + // name
 			'<img width="140" height="100"src="http://i.imgur.com/J4HlhUR.gif"><br />' + // second image
 			'<font color=red><blink> Ace: Princess Celestia </blink></font><br />' +
-			'*sends out ninjask* Gotta go fast.');
+			'*sends out ninjask* Gotta go fast.</center>');
 	},
 
 	bigblackhoe: 'lenora',
@@ -1182,74 +1182,120 @@ var commands = exports.commands = {
 	lenora: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Trainer: Lenora<br \>' +
-		'Ace: Lenora<br \>' + 
-		'Catchphrase: Sass me and see what happens.<br \>' +
-		'<img src="http://hydra-images.cursecdn.com/pokemon.gamepedia.com/3/3e/LenoraBWsprite.gif">')
+		this.sendReplyBox('Trainer: Lenora<br />' +
+		'Ace: Lenora<br />' + 
+		'Catchphrase: Sass me and see what happens.<br />' +
+		'<img src="http://hydra-images.cursecdn.com/pokemon.gamepedia.com/3/3e/LenoraBWsprite.gif">');
 	},
 
     thefrontierbeast: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="100" src="http://www.explodingdog.com/drawing/awesome.jpg"><img src="http://i.imgur.com/3eN4nV3.gif"><img height="100" src="http://fc09.deviantart.net/fs70/f/2011/089/a/1/hydreigon_the_dark_dragon_poke_by_kingofanime_koa-d3cslir.png"><br /><center><b>Ace: </b>Hydreigon</center><br /><center><b>Catchphrase: </b>You wanna hax with me huh WELL YOU DIE</center><br />')
+        this.sendReplyBox('<center><img height="100" src="http://www.explodingdog.com/drawing/awesome.jpg">' +
+        	'<img height="100" src="http://i.imgur.com/3eN4nV3.gif">' +
+        	'<img height="100" src="http://fc09.deviantart.net/fs70/f/2011/089/a/1/hydreigon_the_dark_dragon_poke_by_kingofanime_koa-d3cslir.png"><br />' +
+        	'<b>Ace: </b>Hydreigon<br />' +
+        	'<b>Catchphrase: </b>You wanna hax with me huh WELL YOU DIE<br /></center>');
     },
     
     elitefourlight : 'light',
     light: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="100" src="http://i.imgur.com/eetjLuv.png"><img width="450" src="http://i.imgur.com/v4h0TvD.png"><img src="http://i.imgur.com/21NYnjz.gif"><br /><center><b>Ace: </b>Mega Lucario</center><br /><center><b>Catchphrase: </b>Their is always Light within the darkness</center>')
+        this.sendReplyBox('<center><img height="100" src="http://i.imgur.com/eetjLuv.png">' +
+        	'<img height="100" width="450" src="http://i.imgur.com/v4h0TvD.png">' +
+        	'<img height="100" src="http://i.imgur.com/21NYnjz.gif"><br />' +
+        	'<b>Ace: </b>Mega Lucario<br />' +
+        	'<b>Catchphrase: </b>Their is always Light within the darkness</center>');
     },
     
     darkjak : 'jak',
     jak: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="100" src="http://www.freewebs.com/jak-4/Dark%20Jak%202.jpg"><img src="http://i.imgur.com/eswH4MI.gif"><img height="100" src="http://fc07.deviantart.net/fs70/i/2013/281/6/b/mega_charizard_x_by_magnastorm-d6ppbi7.jpg"><br /><center><b>Ace: </b>Mega Charizard-X</center><br /><center><b>Catchphrase: </b>The Darkside cannot be extinguished, when you fight</center>')
+        this.sendReplyBox('<center><img height="100" src="http://www.freewebs.com/jak-4/Dark%20Jak%202.jpg">' +
+        	'<img height="100" src="http://i.imgur.com/eswH4MI.gif">' +
+        	'<img height="100" src="http://fc07.deviantart.net/fs70/i/2013/281/6/b/mega_charizard_x_by_magnastorm-d6ppbi7.jpg"><br />' +
+        	'<b>Ace: </b>Mega Charizard-X<br />' +
+        	'<b>Catchphrase: </b>The Darkside cannot be extinguished, when you fight</center>')
     },
     
     brittlewind: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<center><img src="http://i.imgur.com/3tCl8az.gif>"><br><img src="http://i.imgur.com/kxaNPFf.gif"><img src="http://i.imgur.com/qACUYrg.gif"><img src="http://i.imgur.com/0otHf5v.gif"><br>Ace: Mr. Kitty<br>Gurl please. I can beat you with mah eyes closed.')
+        this.sendReplyBox('<center><img height="100" src="http://i.imgur.com/3tCl8az.gif>"><br />' +
+        	'<img height="100" src="http://i.imgur.com/kxaNPFf.gif">' +
+        	'<img height="100" src="http://i.imgur.com/qACUYrg.gif">' +
+        	'<img height="100" src="http://i.imgur.com/0otHf5v.gif"><br />' +
+        	'Ace: Mr. Kitty<br />' +
+        	'Gurl please. I can beat you with mah eyes closed.');
     },
     
     elitefourkaiser : 'kaiser',
     kaiser: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/534.gif"><img width="450" src="http://i.imgur.com/TZgQzzZ.png"><img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/475.gif"><br /><center><b>Ace: </b>Gallade</center><br /><center><b>Catchphrase: </b>Fight to the Death, When you give up thats when you really lose</center>')
+        this.sendReplyBox('<center><img height="80" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/534.gif">' +
+        	'<img height="80" width="450" src="http://i.imgur.com/TZgQzzZ.png">' +
+        	'<img height="80" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/475.gif"><br />' +
+        	'<b>Ace: </b>Gallade<br />' +
+        	'<b>Catchphrase: </b>Fight to the Death, When you give up thats when you really lose</center>');
     },
     
     gemini : 'prfessorgemini',
     prfessorgemini: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="100" src="http://i.imgur.com/UUSMQaL.jpg"><img src="http://i.imgur.com/HrHfI4e.gif"><img height="100" src="http://25.media.tumblr.com/tumblr_lrmuy73LRE1r2ugr3o1_500.gif"><br /><center><b>Ace: </b>Pinsir</center><br /><center><b>Catchphrase: </b>I am Professor Gemini. The best professor there is because I\'m not named after a f**king tree</center>')
+        this.sendReplyBox('<center><img height="100" src="http://i.imgur.com/UUSMQaL.jpg">' +
+        	'<img src="http://i.imgur.com/HrHfI4e.gif">' +
+        	'<img height="100" src="http://25.media.tumblr.com/tumblr_lrmuy73LRE1r2ugr3o1_500.gif"><br />' +
+        	'<b>Ace: </b>Pinsir<br />' +
+        	'<b>Catchphrase: </b>I am Professor Gemini. The best professor there is because I\'m not named after a f**king tree</center>')
     },
     
     sagethesausage: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="120" src="http://i.imgur.com/mc7oWrv.gif"><img width="250" src="http://i.imgur.com/vaCeYTQ.gif"><img height="120" src="http://fc00.deviantart.net/fs23/f/2007/320/d/4/COUNTER_by_petheadclipon_by_wobbuffet.png"><br /><center><b>Ace: </b>Wobbuffet</center><br /><center><b>Catchphrase: </b>Woah! Buffet! Wynaut eat when no one is looking?</center>')
+        this.sendReplyBox('<center><img height="100" src="http://i.imgur.com/mc7oWrv.gif">' +
+        	'<img src="http://i.imgur.com/vaCeYTQ.gif">' +
+        	'<img height="100" src="http://fc00.deviantart.net/fs23/f/2007/320/d/4/COUNTER_by_petheadclipon_by_wobbuffet.png"><br />' +
+        	'<b>Ace: </b>Wobbuffet<br />' +
+        	'<b>Catchphrase: </b>Woah! Buffet! Wynaut eat when no one is looking?</center>');
     },
     
     moogle : 'kupo',
     kupo: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<marquee><img src="http://192.184.93.156:8000/avatars/kupo.png"></marquee><br /><img height="100" src="http://oyster.ignimgs.com/wordpress/write.ign.com/74314/2012/01/Moogle.jpg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://i.imgur.com/6UawAhH.gif">&nbsp;&nbsp;&nbsp;<img height="100" src="http://images2.wikia.nocookie.net/__cb20120910220204/gfaqsff/images/b/bb/Kupo1705.jpg"><br /><center><b>Ace: </b>Moogle</center><br /><center><b>Catchphrase: </b>Kupo!</center><br /><marquee direction="right"><img src="http://i.imgur.com/lSRFzG5.png"></marquee>')
+        this.sendReplyBox('<center><img height="100" src="http://192.184.93.156:8000/avatars/kupo.png"><br />' +
+        	'<img height="100" src="http://oyster.ignimgs.com/wordpress/write.ign.com/74314/2012/01/Moogle.jpg">' +
+        	'<img height="100" src="http://i.imgur.com/6UawAhH.gif">' +
+        	'<img height="100" src="http://images2.wikia.nocookie.net/__cb20120910220204/gfaqsff/images/b/bb/Kupo1705.jpg"><br />' +
+        	'<b>Ace: </b>Moogle<br />' +
+        	'<b>Catchphrase: </b>Kupo!<br /></center>');
     },
     
     creaturephil : 'phil',
     phil: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="200" src="http://fc01.deviantart.net/fs70/f/2013/167/a/7/pancham_by_haychel-d64z92n.jpg"><img height="60" src="http://i.imgur.com/3jS3bPY.png"><img src="http://i.imgur.com/DKHdhf0.png" height="200"><br /><center><b>Ace: </b>Pancham</center><br /><center><b>Catchphrase: </b><a href="http://creatureleague.weebly.com">http://creatureleague.weebly.com</a></center><br />')
+        this.sendReplyBox('<center><img height="150" src="http://fc01.deviantart.net/fs70/f/2013/167/a/7/pancham_by_haychel-d64z92n.jpg">' +
+        	'<img src="http://i.imgur.com/3jS3bPY.png">' +
+        	'<img src="http://i.imgur.com/DKHdhf0.png" height="150"><br />' +
+        	'<b>Ace: </b>Pancham<br />' +
+        	'<b>Catchphrase: </b><a href="http://creatureleague.weebly.com">http://creatureleague.weebly.com</a></center>');
     },
     
     themapples : 'mapples',
     mapples: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="80" src="http://images.wikia.com/pokemontowerdefense/images/5/52/Infernape-infernape-23393713-629-354.png"><img src="http://i.imgur.com/xSdk7j6.gif"><img height="80" src="http://i806.photobucket.com/albums/yy343/double_trouble_bmgf/pokemon-dp/snapshot20100813014143.jpg"><br /><center><b>Ace: </b>Infernape</center><br /><center><b>Catchphrase: </b>My goal is to....<s>catch</s> enslave them all</center><br />')
+        this.sendReplyBox('<center><img height="80" src="http://images.wikia.com/pokemontowerdefense/images/5/52/Infernape-infernape-23393713-629-354.png">' +
+        	'<img src="http://i.imgur.com/xSdk7j6.gif">' +
+        	'<img height="80" src="http://i806.photobucket.com/albums/yy343/double_trouble_bmgf/pokemon-dp/snapshot20100813014143.jpg"><br />' +
+        	'<b>Ace: </b>Infernape<br />' +
+        	'<b>Catchphrase: </b>My goal is to....<s>catch</s> enslave them all</center>');
     },
     
     
    elitefourbalto : 'balto', 
    balto: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="90" src="http://fc08.deviantart.net/fs71/f/2012/035/e/f/snorlax_by_all0412-d4omc96.jpg"><img src="http://i.imgur.com/gcbLD9A.png"><img src="http://fc04.deviantart.net/fs71/f/2013/223/3/b/mega_kangaskhan_by_peegeray-d6hnnmk.png" height="100"><br /><center><b>Ace: </b>Snorlax</center><br /><center><b>Catchphrase: </b>To be a championship player,you need a championship team.</center><br />')
+        this.sendReplyBox('<center><img height="90" src="http://fc08.deviantart.net/fs71/f/2012/035/e/f/snorlax_by_all0412-d4omc96.jpg">' +
+        	'<img src="http://i.imgur.com/gcbLD9A.png">' +
+        	'<img src="http://fc04.deviantart.net/fs71/f/2013/223/3/b/mega_kangaskhan_by_peegeray-d6hnnmk.png" height="100"><br />' +
+        	'<b>Ace: </b>Snorlax<br />' +
+        	'<b>Catchphrase: </b>To be a championship player,you need a championship team.</center>');
     },
     
     
@@ -1257,34 +1303,58 @@ var commands = exports.commands = {
     championxman : 'xman',
     xman: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img src="http://fdzeta.net/imgcache/207158dz.gif"><img src="http://i.imgur.com/9bKjjcM.gif"><img src="http://img.pokemondb.net/sprites/black-white/anim/shiny/infernape.gif"><br /><center><b>Ace: </b>Infernape</center><br /><center><b>Catchphrase: </b>It may be risky, but it may be teh only way to win.</center><br />')
+        this.sendReplyBox('<center><img height="80" src="http://fdzeta.net/imgcache/207158dz.gif">' +
+        	'<img src="http://i.imgur.com/9bKjjcM.gif">' +
+        	'<img src="http://img.pokemondb.net/sprites/black-white/anim/shiny/infernape.gif"><br />' +
+        	'<b>Ace: </b>Infernape<br />' +
+        	'<b>Catchphrase: </b>It may be risky, but it may be teh only way to win.</center>');
     },
     
     shira : 'e4shirayuri', 
     e4shirayuri: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<img height="170" src="http://www.okamiworld.com/wiki/images/b/bd/Amaterasu_5_-_Solar_Flare.jpg"><img src="http://i.imgur.com/THEJxYZ.gif"><img src="http://1-media-cdn.foolz.us/ffuuka/board/vp/image/1366/82/1366827374253.jpg" height="91"><br /><center><b>Ace: </b>Gliscor</center><br /><center><b>Catcphrase: </b>Rub-a-dub-dub, Shira be in your tub.</center><br />')
+        this.sendReplyBox('<center><img height="100" src="http://www.okamiworld.com/wiki/images/b/bd/Amaterasu_5_-_Solar_Flare.jpg">' +
+        	'<img src="http://i.imgur.com/THEJxYZ.gif">' +
+        	'<img height="100" src="http://1-media-cdn.foolz.us/ffuuka/board/vp/image/1366/82/1366827374253.jpg" height="91"><br />' +
+        	'<b>Ace: </b>Gliscor<br />' +
+        	'<b>Catcphrase: </b>Rub-a-dub-dub, Shira be in your tub.</center>');
     },
     
     pikadagreat : 'pika', 
     pika: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://sprites.pokecheck.org/i/025.gif" height="85"><img src="http://i.imgur.com/LwD0s9p.gif"><img height="100" src="http://media0.giphy.com/media/DCp4s7Z1FizZe/200.gif"><br /><center><b>Ace:</b> Pikachu</center><br /><center><b>Catchphrase:</b> Its not a party without Pikachu</center>')
+        this.sendReplyBox('<center><img src="http://sprites.pokecheck.org/i/025.gif" height="100">' +
+        	'<img height="100" src="http://i.imgur.com/LwD0s9p.gif">' +
+        	'<img height="100" src="http://media0.giphy.com/media/DCp4s7Z1FizZe/200.gif"><br />' +
+        	'<b>Ace:</b> Pikachu<br />' +
+        	'<b>Catchphrase:</b> Its not a party without Pikachu</center>');
     },
     
     kidshiftry: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReply('|raw|<center><img height="90" src="http://fc01.deviantart.net/fs71/f/2011/261/0/c/shiftry_by_rapidashking-d4a9pc4.png"><img src="http://i.imgur.com/HHlDOu0.gif"><img height="100"src="http://25.media.tumblr.com/tumblr_m1kzfuWYgE1qd4zl8o1_500.png"><br /><b><center>Ace:</center></b> Shiftry<br /><b><center>Catchphrase: </center></b> Kicking your ass will be my pleasure!');
+        this.sendReplyBox('<center><img height="100" src="http://fc01.deviantart.net/fs71/f/2011/261/0/c/shiftry_by_rapidashking-d4a9pc4.png">' +
+        	'<img height="100" src="http://i.imgur.com/HHlDOu0.gif">' +
+        	'<img height="100"src="http://25.media.tumblr.com/tumblr_m1kzfuWYgE1qd4zl8o1_500.png"><br />' +
+        	'<b>Ace:</b> Shiftry<br /><b>Catchphrase: </b> Kicking your ass will be my pleasure!</center>');
     },
     
     scizorknight: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img height="100" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/212.gif"><img src="http://i.imgur.com/RlhvAOI.gif"><img height="100" src="http://img.pokemondb.net/sprites/black-white/anim/shiny/breloom.gif"><br /><center><b>Ace:</b> Scizor</center><br /><center><b>Catchphrase:</b> I Love The Way You lose ♥')
+        this.sendReplyBox('<center><img height="100" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/212.gif">' +
+        	'<img src="http://i.imgur.com/RlhvAOI.gif">' +
+        	'<img height="100" src="http://img.pokemondb.net/sprites/black-white/anim/shiny/breloom.gif"><br />' +
+        	'<b>Ace:</b> Scizor<br />' +
+        	'<b>Catchphrase:</b> I Love The Way You lose ♥</center>');
     },
+
     bibliaskael: 'kael',
     kael: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/yukiko_hair_flip_final_50_80.gif"><img height="180" src="http://i1141.photobucket.com/albums/n587/diebenacht/teaddy_final_trans-1.gif"><img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/naoto_left_final_50_80.gif"><br /><center><b>Ace:</b> Latios</center><center><b>Catchphrase:</b> My tofu...</center>')
+        this.sendReplyBox('<center><img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/yukiko_hair_flip_final_50_80.gif">' +
+        	'<img height="180" src="http://i1141.photobucket.com/albums/n587/diebenacht/teaddy_final_trans-1.gif">' +
+        	'<img src="http://i1141.photobucket.com/albums/n587/diebenacht/Persona/Arena%20gif/naoto_left_final_50_80.gif"><br />' +
+        	'<b>Ace:</b> Latios' +
+        	'<b>Catchphrase:</b> My tofu...</center>');
     },
    
 
@@ -1292,15 +1362,18 @@ var commands = exports.commands = {
 	runzy : 'championrunzy',
 	championrunzy: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img src="http://i.imgur.com/BSqLNeB.gif"><font size="6" color="#FA5882"><i>Champion Runzy</i><img src="http://i.imgur.com/itnjFmx.gif"></font></color><br><center>Ace: Whimsicott<br>Want some Leech Seed?');
+        this.sendReplyBox('<center><img src="http://i.imgur.com/BSqLNeB.gif">' +
+        	'<font size="6" color="#FA5882"><i>Champion Runzy</i>' +
+        	'<img src="http://i.imgur.com/itnjFmx.gif"></font></color><br />' +
+        	'Ace: Whimsicott<br>Want some Leech Seed?</center>');
         },
     
     	glisteringaeon: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('Trainer: Glistering Aeon<br \>' +
-		'Ace: Really? Duh.<br \>' +
-		'Catchphrase: Grab your sombreros and glow sticks and lets rave!<br \>' +
-        	'<img src="http://www.animeyume.com/ludicolo.jpg">');
+        this.sendReplyBox('<center>Trainer: Glistering Aeon<br />' +
+		'Ace: Really? Duh.<br />' +
+		'Catchphrase: Grab your sombreros and glow sticks and lets rave!<br />' +
+        '<img height="150" src="http://www.animeyume.com/ludicolo.jpg"></center>');
     	},
 
 	champwickedweavile: function(target, room, user) {
@@ -1308,12 +1381,16 @@ var commands = exports.commands = {
         this.sendReplyBox('Trainer: ChampWickedWeavile<br \>' +
 		'Ace: Scyther<br \>' +
 		'Catchphrase: I suck at this game.<br \>' +
-        '<img src="http://play.pokemonshowdown.com/sprites/trainers/80.png">')
+        '<img src="http://play.pokemonshowdown.com/sprites/trainers/80.png">');
     },
 
 	championdarkrai: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491-1.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://imgur.com/JmqGNKI.gif"><img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491.png"><br /><center><b>Ace:</b> Darkrai</center><br /><center><b>Catchphrase:</b> I got so many ghost hoes I lost count</center>')
+        this.sendReplyBox('<center><img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491-1.png">' +
+        	'<img src="http://imgur.com/JmqGNKI.gif">' +
+        	'<img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491.png"><br />' +
+        	'<b>Ace:</b> Darkrai<br />' +
+        	'<b>Catchphrase:</b> I got so many ghost hoes I lost count</center>');
     },	
     
     jitlittle : 'elitistregion',
@@ -1321,7 +1398,11 @@ var commands = exports.commands = {
     theelitistregion : 'elitistregion',
     elitistregion: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img src="http://i.neoseeker.com/m/467283_photo.gif"></center><center><img src="http://i.imgur.com/fZwex8l.png"></center><center><img src="http://fc05.deviantart.net/fs71/f/2010/218/2/2/Sunkern_avatar_by_SilverSail.gif"></center><br /><center><b>Ace:</b> The Kern; I will duck you up</center><br/><center><b>"Reach For the Elite"</b></center> ')
+        this.sendReplyBox('<center><img height="100" src="http://i.neoseeker.com/m/467283_photo.gif">' +
+        	'<img height="100" src="http://i.imgur.com/fZwex8l.png">' +
+        	'<img height="100" src="http://fc05.deviantart.net/fs71/f/2010/218/2/2/Sunkern_avatar_by_SilverSail.gif"><br />' +
+        	'<b>Ace:</b> The Kern; I will duck you up<br />' +
+        	'<b>"Reach For the Elite"</b></center>');
     },	
 
 	priest: function(target, room, user) {
