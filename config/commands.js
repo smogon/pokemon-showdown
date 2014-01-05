@@ -736,9 +736,11 @@ var commands = exports.commands = {
 			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
 			'- /roomdevoice <em>username</em>: remove a room voice<br />' +
 			'- /modchat <em>level</em>: set modchat (to turn off: /modchat off)<br />' +
+			'- /autodeclare <em>on</em>: turns on autodeclare, displays room topic upon joining room (to turn off: /autodeclare off)<br />' +
 			'<br />' +
 			'Room owners (#) can also use:<br />' +
 			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
+			'- /roomtopic <em>description</em>: set the room topic to be shown upon joining the room<br />' +
 			'- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />' +
 			'- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />' +
 			'- /declare <em>message</em>: make a global declaration<br />' +
