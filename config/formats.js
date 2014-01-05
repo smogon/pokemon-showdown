@@ -755,7 +755,7 @@ exports.Formats = [
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
-	{
+/*	{
 		name: "[Seasonal] Christmas Charade",
 		section: "OM of the Month",
 
@@ -891,7 +891,7 @@ exports.Formats = [
 				}
 			}
 		}
-	},
+	},*/
 	{
 		name: "Sky Battles",
 		section: "OM of the Month",
