@@ -255,23 +255,24 @@ var commands = exports.commands = {
 
 	roomtopic: function(target, room, user) {
 		if (!target) {
-			if (!this.canBroadcast()) return;      			
+			if (!this.canBroadcast()) return;
 			this.sendReply('|raw|<div class="broadcast-blue"><b>'+room.topic+'</b></div>');
-    			return;
-                }
-                if (!this.can('roommod', null, room)) return false;
-                if (target.length > 500) {
-                        return this.sendReply('Error: Room topic is too long (must be at most 500 characters).');
+			return;
+		}
+		if (!this.can('roommod', null, room)) return false;
+		if (target.length > 500) {
+			return this.sendReply('Error: Room topic is too long (must be at most 500 characters).');
 		
-                }
+		}
 
-                room.topic = target;
-                this.sendReply('(The room topic is now: '+target+')');
+		room.topic = target;
+		this.sendReply('(The room topic is now: '+target+')');
 
-                if (room.chatRoomData) {
-                        room.chatRoomData.topic = room.topic;
-                        Rooms.global.writeChatRoomData();
-                }
+		if (room.chatRoomData) {
+			room.chatRoomData.topic = room.topic;
+			Rooms.global.writeChatRoomData();
+		}
+		
 	},
 	
 	roomdesc: function(target, room, user) {
@@ -882,7 +883,7 @@ var commands = exports.commands = {
 			break;
 		default:
 			if (!config.groups[target]) {
-				return this.parse('/help autodeclare');
+			return this.parse('/help autodeclare');
 			}
 			if (config.groupsranking.indexOf(target) > 1 && !user.can('autodeclareall', null, room)) {
 				return this.sendReply('/autodeclare - Access denied for setting higher than ' + config.groupsranking[1] + '.');
