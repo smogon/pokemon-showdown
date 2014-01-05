@@ -4,10 +4,15 @@ exports.BattleItems = {
 		name: "Abomasite",
 		spritenum: 0,
 		megaStone: "Abomasnow-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Abomasnow",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 674,
 		gen: 6,
@@ -18,10 +23,15 @@ exports.BattleItems = {
 		name: "Absolite",
 		spritenum: 0,
 		megaStone: "Absol-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Absol",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 677,
 		gen: 6,
@@ -65,10 +75,15 @@ exports.BattleItems = {
 		name: "Aerodactylite",
 		spritenum: 0,
 		megaStone: "Aerodactyl-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Aerodactyl",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 672,
 		gen: 6,
@@ -79,10 +94,15 @@ exports.BattleItems = {
 		name: "Aggronite",
 		spritenum: 0,
 		megaStone: "Aggron-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Aggron",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 667,
 		gen: 6,
@@ -148,10 +168,15 @@ exports.BattleItems = {
 		name: "Alakazite",
 		spritenum: 679,
 		megaStone: "Alakazam-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Alakazam",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: -6,
 		gen: 6,
@@ -162,10 +187,15 @@ exports.BattleItems = {
 		name: "Ampharosite",
 		spritenum: 658,
 		megaStone: "Ampharos-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Ampharos",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: -6,
 		gen: 6,
@@ -273,10 +303,15 @@ exports.BattleItems = {
 		name: "Banettite",
 		spritenum: 0,
 		megaStone: "Banette-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Banette",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 668,
 		gen: 6,
@@ -402,10 +437,15 @@ exports.BattleItems = {
 		name: "Blastoisinite",
 		spritenum: 661,
 		megaStone: "Blastoise-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Blastoise",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: -6,
 		gen: 6,
@@ -416,10 +456,15 @@ exports.BattleItems = {
 		name: "Blazikenite",
 		spritenum: 0,
 		megaStone: "Blaziken-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Blaziken",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 664,
 		gen: 6,
@@ -523,10 +568,15 @@ exports.BattleItems = {
 		name: "Charizardite X",
 		spritenum: 0,
 		megaStone: "Charizard-Mega-X",
+<<<<<<< HEAD
 		megaEvolves: "Charizard",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 660,
 		gen: 6,
@@ -537,10 +587,15 @@ exports.BattleItems = {
 		name: "Charizardite Y",
 		spritenum: 0,
 		megaStone: "Charizard-Mega-Y",
+<<<<<<< HEAD
 		megaEvolves: "Charizard",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 678,
 		gen: 6,
@@ -1453,10 +1508,15 @@ exports.BattleItems = {
 		name: "Garchompite",
 		spritenum: 0,
 		megaStone: "Garchomp-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Garchomp",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 683,
 		gen: 6,
@@ -1467,10 +1527,15 @@ exports.BattleItems = {
 		name: "Gardevoirite",
 		spritenum: 0,
 		megaStone: "Gardevoir-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Gardevoir",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 657,
 		gen: 6,
@@ -1481,10 +1546,15 @@ exports.BattleItems = {
 		name: "Gengarite",
 		spritenum: 0,
 		megaStone: "Gengar-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Gengar",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 656,
 		gen: 6,
@@ -1607,10 +1677,15 @@ exports.BattleItems = {
 		name: "Gyaradosite",
 		spritenum: 0,
 		megaStone: "Gyarados-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Gyarados",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 676,
 		gen: 6,
@@ -1698,10 +1773,15 @@ exports.BattleItems = {
 		name: "Heracronite",
 		spritenum: 0,
 		megaStone: "Heracross-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Heracross",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 680,
 		gen: 6,
@@ -1725,10 +1805,15 @@ exports.BattleItems = {
 		name: "Houndoominite",
 		spritenum: 0,
 		megaStone: "Houndoom-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Houndoom",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 666,
 		gen: 6,
@@ -1959,10 +2044,15 @@ exports.BattleItems = {
 		name: "Kangaskhanite",
 		spritenum: 0,
 		megaStone: "Kangaskhan-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Kangaskhan",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 675,
 		gen: 6,
@@ -2204,10 +2294,15 @@ exports.BattleItems = {
 		name: "Lucarionite",
 		spritenum: 0,
 		megaStone: "Lucario-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Lucario",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 673,
 		gen: 6,
@@ -2382,10 +2477,15 @@ exports.BattleItems = {
 		name: "Manectite",
 		spritenum: 0,
 		megaStone: "Manectric-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Manectric",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 682,
 		gen: 6,
@@ -2421,10 +2521,15 @@ exports.BattleItems = {
 		name: "Mawilite",
 		spritenum: 0,
 		megaStone: "Mawile-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Mawile",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 681,
 		gen: 6,
@@ -2453,10 +2558,15 @@ exports.BattleItems = {
 		name: "Medichamite",
 		spritenum: 0,
 		megaStone: "Medicham-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Medicham",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 665,
 		gen: 6,
@@ -2569,10 +2679,15 @@ exports.BattleItems = {
 		name: "Mewtwonite X",
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-X",
+<<<<<<< HEAD
 		megaEvolves: "Mewtwo",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 662,
 		gen: 6,
@@ -2583,10 +2698,15 @@ exports.BattleItems = {
 		name: "Mewtwonite Y",
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-Y",
+<<<<<<< HEAD
 		megaEvolves: "Mewtwo",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 663,
 		gen: 6,
@@ -2996,10 +3116,15 @@ exports.BattleItems = {
 		name: "Pinsirite",
 		spritenum: 0,
 		megaStone: "Pinsir-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Pinsir",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 671,
 		gen: 6,
@@ -3528,10 +3653,15 @@ exports.BattleItems = {
 		name: "Scizorite",
 		spritenum: 0,
 		megaStone: "Scizor-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Scizor",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 670,
 		gen: 6,
@@ -4104,10 +4234,15 @@ exports.BattleItems = {
 		name: "Tyranitarite",
 		spritenum: 0,
 		megaStone: "Tyranitar-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Tyranitar",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 669,
 		gen: 6,
@@ -4126,10 +4261,15 @@ exports.BattleItems = {
 		name: "Venusaurite",
 		spritenum: 0,
 		megaStone: "Venusaur-Mega",
+<<<<<<< HEAD
 		megaEvolves: "Venusaur",
 		onTakeItem: function(item, source) {
 			if (item.megaEvolves === source.baseSpecies) return false;
 			return true;
+=======
+		onTakeItem: function(item, pokemon) {
+			if (pokemon.baseTemplate.baseSpecies === this.getTemplate(item.megaStone).baseSpecies) return false;
+>>>>>>> upstream/master
 		},
 		num: 659,
 		gen: 6,

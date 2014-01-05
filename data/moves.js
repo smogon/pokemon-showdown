@@ -411,8 +411,7 @@ exports.BattleMovedex = {
 		type: "Grass"
 	},
 	"aromaticmist": {
-		num: -6,
-		gen: 6,
+		num: 597,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -436,7 +435,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
+		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Belch, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
 		shortDesc: "Uses a random move known by a team member.",
 		id: "assist",
 		name: "Assist",
@@ -450,7 +449,7 @@ exports.BattleMovedex = {
 				for (var i=0; i<pokemon.moves.length; i++) {
 					var move = pokemon.moves[i];
 					var noAssist = {
-						assist:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
+						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
 					};
 					if (move && !noAssist[move]) {
 						moves.push(move);
@@ -700,8 +699,7 @@ exports.BattleMovedex = {
 		type: "Ice"
 	},
 	"babydolleyes": {
-		num: -6,
-		gen: 6,
+		num: 608,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -814,8 +812,7 @@ exports.BattleMovedex = {
 		type: "Dark"
 	},
 	"belch": {
-		num: -6,
-		gen: 6,
+		num: 562,
 		accuracy: 90,
 		basePower: 120,
 		category: "Special",
@@ -1177,8 +1174,7 @@ exports.BattleMovedex = {
 		type: "Ground"
 	},
 	"boomburst": {
-		num: -6,
-		gen: 6,
+		num: 586,
 		accuracy: 100,
 		basePower: 140,
 		category: "Special",
@@ -1539,6 +1535,26 @@ exports.BattleMovedex = {
 		target: "allAdjacentFoes",
 		type: "Normal"
 	},
+	"celebrate": {
+		num: -6,
+		gen: 6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "No in-game effect.",
+		shortDesc: "No in-game effect.",
+		id: "Celebrate",
+		name: "celebrate",
+		pp: 40,
+		priority: 0,
+		onTryHit: function(target, source) {
+			this.add('-activate', target, 'move: Celebrate');
+			return null;
+		},
+		secondary: false,
+		target: "self",
+		type: "Normal"
+	},
 	"charge": {
 		num: 268,
 		accuracy: true,
@@ -1774,8 +1790,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"confide": {
-		num: -6,
-		gen: 6,
+		num: 590,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -2073,8 +2088,7 @@ exports.BattleMovedex = {
 		type: "Water"
 	},
 	"craftyshield": {
-		num: -6,
-		gen: 6,
+		num: 578,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -2311,8 +2325,7 @@ exports.BattleMovedex = {
 		type: "Dark"
 	},
 	"dazzlinggleam": {
-		num: -6,
-		gen: 6,
+		num: 605,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
@@ -2567,8 +2580,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"disarmingvoice": {
-		num: -6,
-		gen: 6,
+		num: 574,
 		accuracy: true,
 		basePower: 40,
 		category: "Special",
@@ -2940,8 +2952,7 @@ exports.BattleMovedex = {
 		type: "Dragon"
 	},
 	"drainingkiss": {
-		num: -6,
-		gen: 6,
+		num: 577,
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
@@ -3149,8 +3160,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"eerieimpulse": {
-		num: -6,
-		gen: 6,
+		num: 598,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -3184,8 +3194,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"electricterrain": {
-		num: -6,
-		gen: 6,
+		num: 604,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -3230,8 +3239,7 @@ exports.BattleMovedex = {
 		type: "Electric"
 	},
 	"electrify": {
-		num: -6,
-		gen: 6,
+		num: 582,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -3640,8 +3648,7 @@ exports.BattleMovedex = {
 		type: "Dark"
 	},
 	"fairylock": {
-		num: -6,
-		gen: 6,
+		num: 587,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -3657,8 +3664,7 @@ exports.BattleMovedex = {
 		type: "Fairy"
 	},
 	"fairywind": {
-		num: -6,
-		gen: 6,
+		num: 584,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
@@ -3777,8 +3783,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"fellstinger": {
-		num: -6,
-		gen: 6,
+		num: 565,
 		accuracy: 100,
 		basePower: 30,
 		category: "Physical",
@@ -4262,8 +4267,7 @@ exports.BattleMovedex = {
 		type: "Dark"
 	},
 	"flowershield": {
-		num: -6,
-		gen: 6,
+		num: 579,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -4338,8 +4342,7 @@ exports.BattleMovedex = {
 		type: "Flying"
 	},
 	"flyingpress": {
-		num: -6,
-		gen: 6,
+		num: 560,
 		accuracy: 95,
 		basePower: 80,
 		category: "Physical",
@@ -4515,8 +4518,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"forestscurse": {
-		num: -6,
-		gen: 6,
+		num: 571,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -4555,8 +4557,7 @@ exports.BattleMovedex = {
 		type: "Dark"
 	},
 	"freezedry": {
-		num: -6,
-		gen: 6,
+		num: 573,
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -4877,8 +4878,7 @@ exports.BattleMovedex = {
 		type: "Steel"
 	},
 	"geomancy": {
-		num: -6,
-		gen: 6,
+		num: 601,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -5106,8 +5106,7 @@ exports.BattleMovedex = {
 		type: "Grass"
 	},
 	"grassyterrain": {
-		num: -6,
-		gen: 6,
+		num: 580,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -5469,14 +5468,15 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Doubles the prize money received after battle.",
+		desc: "No competitive effect. (Doubles the prize money received after battle.)",
 		shortDesc: "No effect.",
 		id: "happyhour",
 		name: "Happy Hour",
 		pp: 30,
 		priority: 0,
-		onHit: function(target) {
-			this.add('-message', 'Everyone is caught up in the happy atmosphere!');
+		onTryHit: function(target, source) {
+			this.add('-activate', target, 'move: Happy Hour');
+			return null;
 		},
 		secondary: false,
 		target: "self",
@@ -6189,6 +6189,23 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Fighting"
 	},
+	"holdback": {
+		gen: 6,
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target but leaves it with at least 1HP. Makes contact.",
+		shortDesc: "Always leaves the target with at least 1 HP.",
+		id: "holdback",
+		name: "Hold Back",
+		pp: 40,
+		priority: 0,
+		isContact: true,
+		noFaint: true,
+		secondary: false,
+		target: "normal",
+		type: "Normal"
+	},
 	"honeclaws": {
 		num: 468,
 		accuracy: true,
@@ -6706,8 +6723,7 @@ exports.BattleMovedex = {
 		type: "Fire"
 	},
 	"infestation": {
-		num: -6,
-		gen: 6,
+		num: 611,
 		accuracy: 100,
 		basePower: 20,
 		category: "Special",
@@ -6760,8 +6776,7 @@ exports.BattleMovedex = {
 		type: "Grass"
 	},
 	"iondeluge": {
-		num: -6,
-		gen: 6,
+		num: 569,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -6926,8 +6941,7 @@ exports.BattleMovedex = {
 		type: "Psychic"
 	},
 	"kingsshield": {
-		num: -6,
-		gen: 6,
+		num: 588,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -7014,8 +7028,7 @@ exports.BattleMovedex = {
 		type: "Dark"
 	},
 	"landswrath": {
-		num: -6,
-		gen: 6,
+		num: 616,
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
@@ -7628,8 +7641,7 @@ exports.BattleMovedex = {
 		type: "Steel"
 	},
 	"magneticflux": {
-		num: -6,
-		gen: 6,
+		num: 602,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -7723,8 +7735,7 @@ exports.BattleMovedex = {
 		type: "Ground"
 	},
 	"matblock": {
-		num: -6,
-		gen: 6,
+		num: 561,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -8317,8 +8328,7 @@ exports.BattleMovedex = {
 		type: "Psychic"
 	},
 	"mistyterrain": {
-		num: -6,
-		gen: 6,
+		num: 581,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -8372,8 +8382,7 @@ exports.BattleMovedex = {
 		type: "Fairy"
 	},
 	"moonblast": {
-		num: -6,
-		gen: 6,
+		num: 585,
 		accuracy: 100,
 		basePower: 95,
 		category: "Special",
@@ -8549,8 +8558,7 @@ exports.BattleMovedex = {
 		type: "Water"
 	},
 	"mysticalfire": {
-		num: -6,
-		gen: 6,
+		num: 595,
 		accuracy: 100,
 		basePower: 65,
 		category: "Special",
@@ -8762,8 +8770,7 @@ exports.BattleMovedex = {
 		type: "Ghost"
 	},
 	"nobleroar": {
-		num: -6,
-		gen: 6,
+		num: 568,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -8782,8 +8789,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"nuzzle": {
-		num: -6,
-		gen: 6,
+		num: 609,
 		accuracy: 100,
 		basePower: 20,
 		category: "Physical",
@@ -8801,8 +8807,7 @@ exports.BattleMovedex = {
 		type: "Electric"
 	},
 	"oblivionwing": {
-		num: -6,
-		gen: 6,
+		num: 613,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
@@ -8946,8 +8951,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"paraboliccharge": {
-		num: -6,
-		gen: 6,
+		num: 570,
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
@@ -8964,8 +8968,7 @@ exports.BattleMovedex = {
 		type: "Electric"
 	},
 	"partingshot": {
-		num: -6,
-		gen: 6,
+		num: 575,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -9097,8 +9100,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"petalblizzard": {
-		num: -6,
-		gen: 6,
+		num: 572,
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
@@ -9133,8 +9135,7 @@ exports.BattleMovedex = {
 		type: "Grass"
 	},
 	"phantomforce": {
-		num: -6,
-		gen: 6,
+		num: 566,
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
@@ -9190,8 +9191,7 @@ exports.BattleMovedex = {
 		type: "Bug"
 	},
 	"playnice": {
-		num: -6,
-		gen: 6,
+		num: 589,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -9210,8 +9210,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"playrough": {
-		num: -6,
-		gen: 6,
+		num: 583,
 		accuracy: 90,
 		basePower: 90,
 		category: "Physical",
@@ -9385,7 +9384,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"powder": {
-		num: -6,
+		num: 600,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -9549,8 +9548,7 @@ exports.BattleMovedex = {
 		type: "Psychic"
 	},
 	"poweruppunch": {
-		num: -6,
-		gen: 6,
+		num: 612,
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
@@ -10826,8 +10824,7 @@ exports.BattleMovedex = {
 		type: "Flying"
 	},
 	"rototiller": {
-		num: -6,
-		gen: 6,
+		num: 563,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -12123,8 +12120,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"spikyshield": {
-		num: -6,
-		gen: 6,
+		num: 596,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -12518,8 +12514,7 @@ exports.BattleMovedex = {
 		type: "Steel"
 	},
 	"stickyweb": {
-		num: -6,
-		gen: 6,
+		num: 564,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -13638,8 +13633,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"topsyturvy": {
-		num: -6,
-		gen: 6,
+		num: 576,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -13843,8 +13837,7 @@ exports.BattleMovedex = {
 		type: "Psychic"
 	},
 	"trickortreat": {
-		num: -6,
-		gen: 6,
+		num: 567,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -14128,8 +14121,7 @@ exports.BattleMovedex = {
 		type: "Fighting"
 	},
 	"venomdrench": {
-		num: -6,
-		gen: 6,
+		num: 599,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -14436,8 +14428,7 @@ exports.BattleMovedex = {
 		type: "Water"
 	},
 	"watershuriken": {
-		num: -6,
-		gen: 6,
+		num: 594,
 		accuracy: 100,
 		basePower: 15,
 		category: "Physical",
