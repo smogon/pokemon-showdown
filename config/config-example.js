@@ -80,6 +80,14 @@ exports.chatmodchat = false;
 exports.battlemodchat = false;
 exports.pmmodchat = false;
 
+// room autodeclare - this shows the room topic upon joining the room. 
+// 	the topic is set with the command /roomtopic. It is similar to
+//	/roomdesc but it has a larger character limit and you use the format
+//	that is used with the /declare command. This means that you can show
+//	pictures and have clickable links. Keep it set to false in this file
+//	to prevent undefined errors that occur when the room has no set topic.
+exports.chatautodeclare = false;
+
 // backdoor - allows Pokemon Showdown system operators to provide technical
 //            support for your server
 //   This backdoor gives system operators (such as Zarel) console admin
