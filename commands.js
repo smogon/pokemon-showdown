@@ -253,6 +253,27 @@ var commands = exports.commands = {
 		}
 	},
 
+	roomtopic: function(target, room, user) {
+		if (!target) {
+			if (!this.canBroadcast()) return;      			
+			this.sendReply('|raw|<div class="broadcast-blue"><b>'+room.topic+'</b></div>');
+    			return;
+                }
+                if (!this.can('roommod', null, room)) return false;
+                if (target.length > 500) {
+                        return this.sendReply('Error: Room topic is too long (must be at most 500 characters).');
+		
+                }
+
+                room.topic = target;
+                this.sendReply('(The room topic is now: '+target+')');
+
+                if (room.chatRoomData) {
+                        room.chatRoomData.topic = room.topic;
+                        Rooms.global.writeChatRoomData();
+                }
+	},
+	
 	roomdesc: function(target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
@@ -842,6 +863,44 @@ var commands = exports.commands = {
 		this.logModCommand(user.name+' set modchat to '+room.modchat);
 	},
 
+	autodeclare: function(target, room, user) {
+		if (!target) {
+			return this.sendReply('Room autodeclare is currently set to: '+room.autodeclare);
+		}
+		if (!this.can('autodeclare', null, room)) return false;
+		if (room.chatRoomData.topic && room.chatRoomData.topic.length <= 1 && config.groupsranking.indexOf(room.topic) > 1 && !user.can('autodeclareall', null, room)) {
+			return this.sendReply('/autodeclare - Access denied for removing a setting higher than ' + config.groupsranking[1] + '.');
+		}
+
+		target = target.toLowerCase();
+		switch (target) {
+		case 'on':
+			room.autodeclare = true;
+			break;
+		case 'off':
+			room.autodeclare = false;
+			break;
+		default:
+			if (!config.groups[target]) {
+				return this.parse('/help autodeclare');
+			}
+			if (config.groupsranking.indexOf(target) > 1 && !user.can('autodeclareall', null, room)) {
+				return this.sendReply('/autodeclare - Access denied for setting higher than ' + config.groupsranking[1] + '.');
+			}
+			room.autodeclare = target;
+			break;
+		}
+		if (room.autodeclare === true) {
+			this.sendReply('|raw|<div class="broadcast-green"><b>AutoDeclare was enabled!</b><br />The message set with /roomtopic will be shown upon joining the room.</div>');
+		} else if (!room.autodeclare) {
+			this.sendReply('|raw|<div class="broadcast-blue"><b>AutoDeclare was disabled!</b><br />Room topic will not be shown upon joining the room.</div>');
+		} else {
+			var autodeclare = sanitize(room.autodeclare);
+			this.sendReply('|raw|<div class="broadcast-green"><b>AutoDeclare was enabled!</b><br />The message set with /roomtopic will be shown upon joining the room.</div>');
+		}
+		this.logModCommand(user.name+' set autodeclare to '+room.autodeclare);
+	},
+	
 	declare: function(target, room, user) {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
