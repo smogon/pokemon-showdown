@@ -1047,9 +1047,9 @@ var commands = exports.commands = {
 		}
 		user.originalname = user.name;
 		if (target.length > 0) {
-			this.add(user.name+' is now Away ('+target+').');
+			this.add('|html|<b>'+user.name+'</b> is now Away ('+target+').');
 		} else {
-			this.add(user.name+' is now Away.');
+			this.add('|html|<b>'+user.name+'</b> is now Away.');
 		}
 		user.forceRename(user.name+' - Away', user.authenticated);
 		user.afk = true;
@@ -1064,7 +1064,7 @@ var commands = exports.commands = {
 			return this.sendReply("You need to be Away first.");
 		}
 		user.forceRename(user.originalname, user.authenticated);
-		this.add(user.name+" is no longer Away.");
+		this.add("|html|<b>"+user.name+"</b> is no longer Away.");
 		user.afk = false;
 		return this.parse('/back');
 	},
