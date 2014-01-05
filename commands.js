@@ -361,6 +361,14 @@ var commands = exports.commands = {
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
 		}
+		if (target.toLowerCase() === 'lobby') {
+			return connection.sendTo('lobby', '|html|<center><img src="http://i.imgur.com/a2M11uZ.png"><br><br><b>League of a Thousand Years</b>' +
+			'<br><br>Welcome to the Leaf league, you can find our website <a href="http://leafleague.weebly.com/">here</a> and our ' +
+			' forum <a href="http://leaf-league.forumotion.com/">here</a>.<br><br>The league is home of two regions: <font color="green">Celestia</font>' +
+			' and <font color="green">Saraphia</font> home to their own Gym Leaders, Elite Four and Champions!<br><br>' +
+			'<i><font size="0.5" color="green">"Tempest has been lain to ashes but is reborn like a phoenix. The Phoenix succumbs to the grace of a leaf ' +
+			'blowing in the wind; and like a leaf you ride the winds of fate elegantly."</font></i></center>');
+		}
 	},
 
 	rb: 'roomban',
