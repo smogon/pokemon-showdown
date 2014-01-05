@@ -1407,7 +1407,7 @@ var commands = exports.commands = {
 
 	priest: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img src="http://i.imgur.com/tccxmCV.png"><br><img src="http://i.imgur.com/CvhWd2c.gif"><img src="http://i.imgur.com/lZ2fjGu.png"><br><font color="red"><blink>Ace: Tyranitar</blink></font><br>Don\'t send in your Latios. You know what\'s comin')
+        this.sendReplyBox('<center><img width="140" height="100" src="http://images.wikia.com/es.pokemon/images/archive/3/35/20090105180143!Heatran_en_Pok%C3%A9mon_Ranger_2.png"><img src="http://i.imgur.com/BkVihDY.png"><img src="http://192.184.93.156:8000/avatars/priest4.png"><br /><font color="red"><blink>Ace: Heatran</blink></font><br />Are you ready to face holyness itself? Will you open the door to my temple? Let your chakras make the decision for you.</center>');
     },
     
    smoothmoves: function(target, room, user) {
