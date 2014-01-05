@@ -4206,7 +4206,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	talonflame: {
-		viableMoves: {"acrobatics":1,"flareblitz":1,"roost":1,"swordsdance":1,"uturn":1},
+		viableMoves: {"bravebird":1,"flareblitz":1,"roost":1,"swordsdance":1,"uturn":1},
 		tier: "Limbo"
 	},
 	scatterbug: {
