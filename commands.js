@@ -91,6 +91,16 @@ var commands = exports.commands = {
 			return this.parse('/help msg');
 		}
 
+		if (config.pmmodchat) {
+			var userGroup = user.group;
+			if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
+				var groupName = config.groups[config.pmmodchat].name;
+				if (!groupName) groupName = config.pmmodchat;
+				this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to PM users.');
+				return false;
+			}
+		}
+
 		if (user.locked && !targetUser.can('lock', user)) {
 			return this.popupReply('You can only private message members of the moderation team (users marked by %, @, &, or ~) when locked.');
 		}
@@ -276,6 +286,13 @@ var commands = exports.commands = {
 		var userid = toUserid(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
+		if (!userid) {
+			if (target && config.groups[target]) {
+				var groupid = config.groups[target].id;
+				return this.sendReply("/room"+groupid+" [username] - Promote a user to "+groupid+" in this room only");
+			}
+			return this.parse("/help roompromote");
+		}
 		var currentGroup = (room.auth[userid] || ' ');
 		if (!targetUser && !room.auth[userid]) {
 			return this.sendReply("User '"+this.targetUsername+"' is offline and unauthed, and so can't be promoted.");
@@ -285,6 +302,9 @@ var commands = exports.commands = {
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
+		}
+		if (config.groups[nextGroup].globalonly) {
+			return this.sendReply('Group \'room' + config.groups[nextGroup].id + '\' does not exist as a room rank.');
 		}
 		if (currentGroup !== ' ' && !user.can('room'+config.groups[currentGroup].id, null, room)) {
 			return this.sendReply('/' + cmd + ' - Access denied for promoting from '+config.groups[currentGroup].name+'.');
@@ -790,6 +810,14 @@ var commands = exports.commands = {
 		var userid = toUserid(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
+		if (!userid) {
+			if (target && config.groups[target]) {
+				var groupid = config.groups[target].id;
+				return this.sendReply("/"+groupid+" [username] - Promote a user to "+groupid+" globally");
+			}
+			return this.parse("/help promote");
+		}
+
 		var currentGroup = ' ';
 		if (targetUser) {
 			currentGroup = targetUser.group;
@@ -801,6 +829,9 @@ var commands = exports.commands = {
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
+		}
+		if (config.groups[nextGroup].roomonly) {
+			return this.sendReply('Group \'' + config.groups[nextGroup].id + '\' does not exist as a global rank.');
 		}
 		if (!user.canPromote(currentGroup, nextGroup)) {
 			return this.sendReply('/' + cmd + ' - Access denied.');
@@ -1525,6 +1556,7 @@ var commands = exports.commands = {
 
 	joinbattle: function(target, room, user) {
 		if (!room.joinBattle) return this.sendReply('You can only do this in battle rooms.');
+		if (!user.can('joinbattle', null, room)) return this.popupReply("You must be a roomvoice to join a battle you didn't start. Ask a player to use /roomvoice on you to join this battle.");
 
 		room.joinBattle(user);
 	},
@@ -1608,6 +1640,15 @@ var commands = exports.commands = {
 	cancelsearch: 'search',
 	search: function(target, room, user) {
 		if (target) {
+			if (config.pmmodchat) {
+				var userGroup = user.group;
+				if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
+					var groupName = config.groups[config.pmmodchat].name;
+					if (!groupName) groupName = config.pmmodchat;
+					this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to search for a battle.');
+					return false;
+				}
+			}
 			Rooms.global.searchBattle(user, target);
 		} else {
 			Rooms.global.cancelSearch(user);
@@ -1623,6 +1664,15 @@ var commands = exports.commands = {
 		}
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			return this.popupReply("The user '"+this.targetUsername+"' is not accepting challenges right now.");
+		}
+		if (config.pmmodchat) {
+			var userGroup = user.group;
+			if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
+				var groupName = config.groups[config.pmmodchat].name;
+				if (!groupName) groupName = config.pmmodchat;
+				this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to challenge users.');
+				return false;
+			}
 		}
 		if (!user.prepBattle(target, 'challenge', connection)) return;
 		user.makeChallenge(targetUser, target);

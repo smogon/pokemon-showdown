@@ -1715,8 +1715,8 @@ exports.BattleAbilities = {
 		num: 96
 	},
 	"oblivious": {
-		desc: "This Pokemon cannot be infatuated (by Attract or Cute Charm). Gaining this Ability while infatuated cures it.",
-		shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
+		desc: "This Pokemon cannot be infatuated (by Attract or Cute Charm) or taunted. Gaining this Ability while afflicted by either condition cures it.",
+		shortDesc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability cures it.",
 		onUpdate: function(pokemon) {
 			if (pokemon.volatiles['attract']) {
 				pokemon.removeVolatile('attract');
