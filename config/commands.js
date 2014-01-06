@@ -1207,6 +1207,14 @@ var commands = exports.commands = {
         	'<b>Catchphrase: </b>Their is always Light within the darkness</center>');
     },
     
+    zezetel: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="100" width="130" src="http://i.imgur.com/wpYk97G.png">' +
+    	'<img src="http://i.imgur.com/ix6LGcX.png"><img width="130" height="90" src="http://i.imgur.com/WIPr3Jl.jpg">' +
+    	'<br /><center><b>Ace: </b>Predictions</center><br /><center><b>Catchphrase: </b>' +
+    	'In matters of style, swim with the current, in matters of principle, stand like a rock.</center>');
+    },
+    
     darkjak : 'jak',
     jak: function(target, room, user) {
         if (!this.canBroadcast()) return;
@@ -1412,7 +1420,7 @@ var commands = exports.commands = {
     
    smoothmoves: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://www.sherv.net/cm/emo/funny/2/banana-smiley-emoticon.gif"><img src="http://i.imgur.com/7RTLz6V.gif"><img src="http://www.sherv.net/cm/emo/funny/2/dance.gif" height="60"><br /><center><font size="2"><b>Ace:</b> <font color="red">F</font><font color="orange">l</font><font color="green">u</font><font color="blue">f</font><font color="indigo">f</font><font color="violet">y</font> <font color="red">M</font><font color="orange">a</font><font color="green">r</font><font color="blue">e</font><font color="indigo">e</font><font color="violet">p</font><font color="red">s</font></center><br /><center><font size="2"><b>Catchphrase:</b> Time to split!</center><br />')
+        this.sendReplyBox('<img src="http://www.sherv.net/cm/emo/funny/2/banana-smiley-emoticon.gif"><img src="http://i.imgur.com/7RTLz6V.gif"><img src="http://www.sherv.net/cm/emo/funny/2/dance.gif" height="60"><br /><center><font size="2"><b>Ace:</b> <font color="red">F</font><font color="orange">l</font><font color="green">u</font><font color="blue">f</font><font color="indigo">f</font><font color="violet">y</font> <font color="red">M</font><font color="orange">a</font><font color="green">r</font><font color="blue">e</font><font color="indigo">e</font><font color="violet">p</font><font color="red">s</font></center><br /><center><font size="2"><b>Catchphrase:</b> My potassium level is over 9000000000!!!!!!!!</center><br />')
     },
 
 	trainerbofish: function(target, room, user) {
@@ -1742,7 +1750,7 @@ var commands = exports.commands = {
 	prez: 'cosy',
 	cosy: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><marquee direction="right"><img src="http://i.imgur.com/dMQcJz8.gif"></marquee><img src="http://i.imgur.com/7msrgtH.gif"><br /><font color="purple"><b>Calm your nipples and have a cuppa tea.</b></font></center>');
+		this.sendReply('|raw|<center><img src="http://i.imgur.com/yMNJ2xK.png"></center>');
 	},
 	
 	cookies: 'sirecookies',

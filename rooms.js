@@ -1057,7 +1057,8 @@ var BattleRoom = (function() {
 			} else if (this.rated.p2 === user.userid) {
 				slot = 1;
 			} else {
-				return;
+				user.popup("This is a rated battle; your username must be "+this.rated.p1+" or "+this.rated.p2+" to join.");
+				return false;
 			}
 		}
 
