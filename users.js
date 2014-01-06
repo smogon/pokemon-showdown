@@ -166,6 +166,18 @@ bannedMessages = bannedMessages.split('\n');
 				connection.popup('Your IP is listed as a TOR exit node and has been automatically banned.');
 				if (connection.user) connection.user.ban();
 				break;
+				case 'http.dnsbl.sorbs.net':
+				connection.popup('Your IP is known for running proxy servers and has been automatically banned.');
+				if (connection.user) connection.user.ban();
+				break;
+				case 'socks.dnsbl.sorbs.net':
+				connection.popup('Your IP is known for running proxy servers and has been automatically banned.');
+				if (connection.user) connection.user.ban();
+				break;
+				case 'misc.dnsbl.sorbs.net':
+				connection.popup('Your IP is known for running proxy servers and has been automatically banned.');
+				if (connection.user) connection.user.ban();
+				break;
 				default:
 				connection.popup('Your IP is known for abuse and has been locked. If you\'re using a proxy, don\'t.');
 				if (connection.user) connection.user.lock(true);
