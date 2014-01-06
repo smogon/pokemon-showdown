@@ -969,6 +969,13 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		return this.sendReply('|raw|<center><img width="300" height="169" src="http://i.imgur.com/zb2j4qq.gif?1"></center>');
 	},
+	
+        queenofthecastle: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                return this.sendReply('|raw|<center><img width="300" height="169" src="http://fc00.deviantart.net/fs70/f/2013/297/1/7/rwby_nora_valkyrie_gif_by_dustiniz117-d6rmph4.gif"></center>');
+        },
+
+
 
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
