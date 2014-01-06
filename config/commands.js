@@ -965,6 +965,11 @@ var commands = exports.commands = {
 	 * Miscellaneous commands
 	 *********************************************************/
 
+	crymeariver: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://i.imgur.com/zb2j4qq.gif?1"></center>');
+	},
+
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
 	},
