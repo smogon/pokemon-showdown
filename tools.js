@@ -975,7 +975,7 @@ module.exports = (function () {
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
 							problems.push(name+(isHidden?" can't have":" must have")+" its hidden ability because it comes from a specific event.");
 						}
-						if (eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
+						if (this.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
 							problems.push(name+" must have "+eventData.abilities.join(" or ")+" because it comes from a specific event.");
 						}
 						if (eventData.gender) {
