@@ -1442,7 +1442,12 @@ var commands = exports.commands = {
                 'Ace: Gardevoir and Gallade<br \>' +
                 'Quote: Mind, Skill, Tranquility .<br \>' +
                 '<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/gardevoir.gif"><img src="http://img.pokemondb.net/sprites/black-white/anim/normal/gallade.gif">')
-        },				
+        },
+        
+        cosy: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                this.sendReply('|raw|<center><img src="http://i.imgur.com/yMNJ2xK.png"></center>');
+        },
 
 		
 		missing1: 'missing1',
