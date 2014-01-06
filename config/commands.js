@@ -1420,7 +1420,7 @@ var commands = exports.commands = {
     
    smoothmoves: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://www.sherv.net/cm/emo/funny/2/banana-smiley-emoticon.gif"><img src="http://i.imgur.com/7RTLz6V.gif"><img src="http://www.sherv.net/cm/emo/funny/2/dance.gif" height="60"><br /><center><font size="2"><b>Ace:</b> <font color="red">F</font><font color="orange">l</font><font color="green">u</font><font color="blue">f</font><font color="indigo">f</font><font color="violet">y</font> <font color="red">M</font><font color="orange">a</font><font color="green">r</font><font color="blue">e</font><font color="indigo">e</font><font color="violet">p</font><font color="red">s</font></center><br /><center><font size="2"><b>Catchphrase:</b> Time to split!</center><br />')
+        this.sendReplyBox('<img src="http://www.sherv.net/cm/emo/funny/2/banana-smiley-emoticon.gif"><img src="http://i.imgur.com/7RTLz6V.gif"><img src="http://www.sherv.net/cm/emo/funny/2/dance.gif" height="60"><br /><center><font size="2"><b>Ace:</b> <font color="red">F</font><font color="orange">l</font><font color="green">u</font><font color="blue">f</font><font color="indigo">f</font><font color="violet">y</font> <font color="red">M</font><font color="orange">a</font><font color="green">r</font><font color="blue">e</font><font color="indigo">e</font><font color="violet">p</font><font color="red">s</font></center><br /><center><font size="2"><b>Catchphrase:</b> My potassium level is over 9000000000!!!!!!!!</center><br />')
     },
 
 	trainerbofish: function(target, room, user) {
