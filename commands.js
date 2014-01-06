@@ -472,38 +472,44 @@ var commands = exports.commands = {
 	 	if (!target) return this.sendReply('You need to add a position for the member.');
 
 	 	var position = toId(target);
+	 	var removeMember = false;
 	 	var corPos = false;
 
 	 	if (position != 'champion' && position != 'elitefour' && position != 'professor' && position != 'frontier' && position != 'gymleader' && position != 'gymtrainer') {
-			return this.sendReply('The position should be either: Champion, Elite Four, Professor, Frontier, Gym Leader or Gym Trainer.');
+	 		if (position != 'remove') {
+				return this.sendReply('The position should be either: Champion, Elite Four, Professor, Frontier, Gym Leader or Gym Trainer.');
+			} else if (position === 'remove') {
+				removeMember = true;
+			} else return this.sendReply('Errrrrrrrorrrrrrrrr');
 	 	}
 	 	else {
 	 		corPos = true;
 	 	}
 
-	 	switch(position) {
-	 		case 'champion':
-	 		position = 'Champion';
-	 		break;
-	 		case 'elitefour':
-	 		position = 'Elite Four';
-	 		break;
-	 		case 'professor':
-	 		position = 'Professor';
-	 		break;
-	 		case 'frontier':
-	 		position = 'Frontier';
-	 		break;
-	 		case 'gymleader':
-	 		position = 'Gym Leader';
-	 		break;
-	 		case 'gymtrainer':
-	 		position = 'Gym Trainer';
-	 		break;
-	 		default:
-	 		return this.sendReply('SOMETHING BROKE ABANDON SHIP!');
+	 	if (!removeMember) {
+	 		switch(position) {
+	 			case 'champion':
+		 		position = 'Champion';
+		 		break;
+	 			case 'elitefour':
+	 			position = 'Elite Four';
+		 		break;
+		 		case 'professor':
+	 			position = 'Professor';
+	 			break;
+	 			case 'frontier':
+		 		position = 'Frontier';
+		 		break;
+	 			case 'gymleader':
+	 			position = 'Gym Leader';
+		 		break;
+		 		case 'gymtrainer':
+	 			position = 'Gym Trainer';
+	 			break;
+		 		default:
+		 		return this.sendReply('SOMETHING BROKE ABANDON SHIP!');
+	 		}
 	 	}
-
 	 	var data = fs.readFileSync('config/members.csv', 'utf8');
         var rows = data.split("\n");
         var matched = false;
@@ -527,6 +533,13 @@ var commands = exports.commands = {
                         if (err) {
                                 return console.log(err);
                         }
+                        if (removeMember) {
+                        	var result = data.replace(re, '');
+                        	fs.writeFile('config/members.csv', result, 'utf8', function (err) {
+                                if (err) return console.log(err);
+                        });
+                        	return user.sendReply(targetUser+' has been removed from the members file.');
+                        }
                         var result = data.replace(re, targetUser+','+rePosition);
                         fs.writeFile('config/members.csv', result, 'utf8', function (err) {
                                 if (err) return console.log(err);
@@ -540,6 +553,7 @@ var commands = exports.commands = {
 
 	 viewmembers: function(target, room, user) {
 	 	if (!this.canBroadcast()) return;
+	 	var txtColour = 'green';
 	 	if (!target) {
 	 		var data = fs.readFileSync('config/members.csv', 'utf8');
 			var rows = data.split("\n");
@@ -571,22 +585,22 @@ var commands = exports.commands = {
 
 			}
 			var results = '';
-			results += '<font color="green"><b>Champion(s):</b></font><br>';
+			results += '<font color="'+txtColour+'"><b>Champion(s):</b></font><br>';
 			if (champion.length > 0) results += champion.join(', ') + '<br>';
 			else results += 'No Champion<br>';
-			results += '<font color="green"><b>Elite Four:</b></font><br>';
+			results += '<font color="'+txtColour+'"><b>Elite Four:</b></font><br>';
 			if (elite.length > 0) results += elite.join(', ') + '<br>';
 			else results += 'No Elite Four<br>';
-			results += '<font color="green"><b>Professors:</b></font><br>';
+			results += '<font color="'+txtColour+'"><b>Professors:</b></font><br>';
 			if (professors.length > 0) results += professors.join(', ') + '<br>';
 			else results += 'No Professors<br>';
-			results += '<font color="green"><b>Frontier:</b></font><br>';
+			results += '<font color="'+txtColour+'"><b>Frontier:</b></font><br>';
 			if (frontiers.length > 0) results += frontiers.join(', ') + '<br>';
 			else results += 'No Frontier<br>';
-			results += '<font color="green"><b>Gym Leaders:</b></font><br>';
+			results += '<font color="'+txtColour+'"><b>Gym Leaders:</b></font><br>';
 			if (leaders.length > 0) results += leaders.join(', ') + '<br>';
 			else results += 'No Gym Leaders<br>';
-			results += '<font color="green"><b>Gym Trainers:</b></font><br>';
+			results += '<font color="'+txtColour+'"><b>Gym Trainers:</b></font><br>';
 			if (trainers.length > 0) results += trainers.join(', ') + '<br>';
 			else results += 'No Gym Trainers<br>';
 
@@ -631,28 +645,28 @@ var commands = exports.commands = {
 
 			switch (search) {
 				case 'champion':
-					results += '<font color="green"><b>Champion(s):</b></font><br>';
+					results += '<font color="'+txtColour+'"><b>Champion(s):</b></font><br>';
 					if (output.length === 2) results += output[0] + ' and ' + output[1];
 					else results += output.join(', ');
 					break;
 				case 'elitefour':
-					results += '<font color="green"><b>Elite Four:</b></font><br>';
+					results += '<font color="'+txtColour+'"><b>Elite Four:</b></font><br>';
 					results += output.join(', ');
 					break;
 				case 'professors':
-					results += '<font color="green"><b>Professors:</b></font><br>';
+					results += '<font color="'+txtColour+'"><b>Professors:</b></font><br>';
 					results += output.join(', ');
 					break;
 				case 'frontier':
-					results += '<font color="green"><b>Frontier:</b></font><br>';
+					results += '<font color="'+txtColour+'"><b>Frontier:</b></font><br>';
 					results += output.join(', ');
 					break;
 				case 'gymleaders':
-					results += '<font color="green"><b>Gym Leaders:</b></font><br>';
+					results += '<font color="'+txtColour+'"><b>Gym Leaders:</b></font><br>';
 					results += output.join(', ');
 					break;
 				case 'gymtrainers':
-					results += '<font color="green"><b>Gym Trainers:</b></font><br>';
+					results += '<font color="'+txtColour+'"><b>Gym Trainers:</b></font><br>';
 					results += output.join(', ');
 					break;
 				default:
