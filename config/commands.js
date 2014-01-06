@@ -1207,6 +1207,14 @@ var commands = exports.commands = {
         	'<b>Catchphrase: </b>Their is always Light within the darkness</center>');
     },
     
+    zezetel: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="100" width="130" src="http://i.imgur.com/wpYk97G.png">' +
+    	'<img src="http://i.imgur.com/ix6LGcX.png"><img width="130" height="90" src="http://i.imgur.com/WIPr3Jl.jpg">' +
+    	'<br /><center><b>Ace: </b>Predictions</center><br /><center><b>Catchphrase: </b>' +
+    	'In matters of style, swim with the current, in matters of principle, stand like a rock.</center>');
+    },
+    
     darkjak : 'jak',
     jak: function(target, room, user) {
         if (!this.canBroadcast()) return;
