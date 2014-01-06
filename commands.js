@@ -452,6 +452,212 @@ var commands = exports.commands = {
 	 * Other Commands
 	 *********************************************************/
 
+	 setmember: function(target, room, user) {
+	 	if (!this.can('permaban')) return false;
+	 	if (!target) return this.sendReply('/setmember [username], [position], [type - optional]');
+
+		var targets = target.split(', ');
+		target = targets[1];
+		var targetUser = targets[0];
+
+	 	if (!targetUser) return this.sendReply('You need to add the name of a member to add.');
+	 	if (!target) return this.sendReply('You need to add a position for the member.');
+
+	 	var position = toId(target);
+	 	var corPos = false;
+
+	 	if (position != 'champion' && position != 'elitefour' && position != 'professor' && position != 'frontier' && position != 'gymleader' && position != 'gymtrainer') {
+			return this.sendReply('The position should be either: Champion, Elite Four, Professor, Frontier, Gym Leader or Gym Trainer.');
+	 	}
+	 	else {
+	 		corPos = true;
+	 	}
+
+	 	switch(position) {
+	 		case 'champion':
+	 		position = 'Champion';
+	 		break;
+	 		case 'elitefour':
+	 		position = 'Elite Four';
+	 		break;
+	 		case 'professor':
+	 		position = 'Professor';
+	 		break;
+	 		case 'frontier':
+	 		position = 'Frontier';
+	 		break;
+	 		case 'gymleader':
+	 		position = 'Gym Leader';
+	 		break;
+	 		case 'gymtrainer':
+	 		position = 'Gym Trainer';
+	 		break;
+	 		default:
+	 		return this.sendReply('SOMETHING BROKE ABANDON SHIP!');
+	 	}
+
+	 	var data = fs.readFileSync('config/members.csv', 'utf8');
+        var rows = data.split("\n");
+        var matched = false;
+        var line = '';
+        var rePosition = '';
+        for (var i = 0; i < rows.length; i++) {
+                if (!rows[i]) continue;
+                var parts = rows[i].split(",");
+                var userName = parts[0];
+                if (targetUser === userName) {
+                        matched = true;
+                        rePosition = parts[1];
+                        line += rows[i];
+                        break;
+                }
+    	}
+    	rePosition = position;
+    	if (matched) {
+    		var re = new RegExp(line,"g");
+                fs.readFile('config/members.csv', 'utf8', function (err,data) {
+                        if (err) {
+                                return console.log(err);
+                        }
+                        var result = data.replace(re, targetUser+','+rePosition);
+                        fs.writeFile('config/members.csv', result, 'utf8', function (err) {
+                                if (err) return console.log(err);
+                        });
+                });
+        } else {
+                fs.appendFile('config/members.csv',"\n"+targetUser+','+rePosition);
+        }
+        return this.sendReply(targetUser+' has been saved as '+rePosition+'.');
+	 },	
+
+	 viewmembers: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	if (!target) {
+	 		var data = fs.readFileSync('config/members.csv', 'utf8');
+			var rows = data.split("\n");
+			var matched = false;
+			var champion = [];
+			var elite = [];
+			var professors = [];
+			var frontiers = [];
+			var leaders = [];
+			var trainers = [];
+			for (var i = 0; i < rows.length; i++) {
+				if (!rows[i]) continue;
+				var parts = rows[i].split(",");
+				var userName = parts[0];
+				if (toId(parts[1]) === 'gymtrainer') {
+					trainers.push(userName);
+				}
+				else if (toId(parts[1]) === 'gymleader') {
+					leaders.push(userName);
+				} else if (toId(parts[1]) === 'frontier') {
+					frontiers.push(userName);
+				} else if (toId(parts[1]) === 'professor') {
+					professors.push(userName);
+				} else if (toId(parts[1]) === 'elitefour') {
+					elite.push(userName);
+				} else if (toId(parts[1]) === 'champion') {
+					champion.push(userName);
+				} else return this.sendReply('You hacked and broked me :(');
+
+			}
+			var results = '';
+			results += '<font color="green"><b>Champion(s):</b></font><br>';
+			if (champion.length > 0) results += champion.join(', ') + '<br>';
+			else results += 'No Champion<br>';
+			results += '<font color="green"><b>Elite Four:</b></font><br>';
+			if (elite.length > 0) results += elite.join(', ') + '<br>';
+			else results += 'No Elite Four<br>';
+			results += '<font color="green"><b>Professors:</b></font><br>';
+			if (professors.length > 0) results += professors.join(', ') + '<br>';
+			else results += 'No Professors<br>';
+			results += '<font color="green"><b>Frontier:</b></font><br>';
+			if (frontiers.length > 0) results += frontiers.join(', ') + '<br>';
+			else results += 'No Frontier<br>';
+			results += '<font color="green"><b>Gym Leaders:</b></font><br>';
+			if (leaders.length > 0) results += leaders.join(', ') + '<br>';
+			else results += 'No Gym Leaders<br>';
+			results += '<font color="green"><b>Gym Trainers:</b></font><br>';
+			if (trainers.length > 0) results += trainers.join(', ') + '<br>';
+			else results += 'No Gym Trainers<br>';
+
+			return this.sendReplyBox(results);
+	 	}
+	 	else {
+	 		var data = fs.readFileSync('config/members.csv', 'utf8');
+			var rows = data.split("\n");
+			var output = [];
+			var search = toId(target);
+			for (var i = 0; i < rows.length; i++) {
+				if (!rows[i]) continue;
+				var parts = rows[i].split(",");
+				var userName = parts[0];
+				var kek = false;
+				switch (search) {
+					case 'champion':
+						if (toId(parts[1]) === 'champion') output.push(userName); 
+						break;
+					case 'elitefour':
+						if (toId(parts[1]) === 'elitefour') output.push(userName);
+						break;
+					case 'professors':
+						if (toId(parts[1]) === 'professor') output.push(userName); 
+						break;
+					case 'frontier':
+						if (toId(parts[1]) === 'fronter') output.push(userName); 
+						break;
+					case 'gymleaders':
+						if (toId(parts[1]) === 'gymleader') output.push(userName); 
+						break;
+					case 'gymtrainers':
+						if (toId(parts[1]) === 'gymtrainer') output.push(userName); 
+						break;
+					default:
+						kek = true;
+				}
+				if (kek) return this.sendReply('The position should be either: Champion, Elite Four, Professors, Frontier, Gym Leaders or Gym Trainers.');
+			}
+			var results = [];
+			var kek = false;
+
+			switch (search) {
+				case 'champion':
+					results += '<font color="green"><b>Champion(s):</b></font><br>';
+					if (output.length === 2) results += output[0] + ' and ' + output[1];
+					else results += output.join(', ');
+					break;
+				case 'elitefour':
+					results += '<font color="green"><b>Elite Four:</b></font><br>';
+					results += output.join(', ');
+					break;
+				case 'professors':
+					results += '<font color="green"><b>Professors:</b></font><br>';
+					results += output.join(', ');
+					break;
+				case 'frontier':
+					results += '<font color="green"><b>Frontier:</b></font><br>';
+					results += output.join(', ');
+					break;
+				case 'gymleaders':
+					results += '<font color="green"><b>Gym Leaders:</b></font><br>';
+					results += output.join(', ');
+					break;
+				case 'gymtrainers':
+					results += '<font color="green"><b>Gym Trainers:</b></font><br>';
+					results += output.join(', ');
+					break;
+				default:
+					kek = true;
+					break;
+			}
+			if (output.length === 0) results = 'This position does not have any members set as it';
+			if (kek) return this.sendReply('SOMETHING BROKE, EMPTY THE VAULT AND BURN THE RECEIPTS!');
+
+			return this.sendReplyBox(results);
+	 	}
+	 },
+
 	hide: function(target, room, user) {
         if (this.can('hide')) {
         	user.getIdentity = function(){
@@ -1114,6 +1320,16 @@ var commands = exports.commands = {
 				CommandParser.uncacheTree('./command-parser.js');
 				CommandParser = require('./command-parser.js');
 				return this.sendReply('Chat commands have been hot-patched.');
+			} catch (e) {
+				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
+			}
+
+		} else if (target === 'frost' || target === 'more') {
+
+			try {
+				CommandParser.uncacheTree('./frostcommands.js');
+				frostcommands = require('./frostcommands.js');
+				return this.sendReply('Frost commands have been hot-patched.');
 			} catch (e) {
 				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
 			}
