@@ -494,14 +494,14 @@ exports.BattleScripts = {
 		if (pokemon.baseTemplate.species !== template.baseSpecies) return false;
 
 		// okay, mega evolution is possible
-		this.add('-formechange', pokemon, template.species);
-		this.add('message', template.baseSpecies+" has Mega Evolved into Mega "+template.baseSpecies+"!");
+		this.add('-permaformechange', pokemon, template.species, '[megaevo]');
 		pokemon.formeChange(template);
 		pokemon.baseTemplate = template; // mega evolution is permanent :o
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
 
 		side.megaEvo = 1;
+		for (var i = 0; i < side.pokemon.length; i++) side.pokemon[i].canMegaEvo = false;
 		return true;
 	},
 
