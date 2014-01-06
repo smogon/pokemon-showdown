@@ -1750,7 +1750,7 @@ var commands = exports.commands = {
 	prez: 'cosy',
 	cosy: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/yMNJ2xK.png"></center>');
+		this.sendReply('|raw|<center><img src="http://i.imgur.com/yMNJ2xK.png"></center>');
 	},
 	
 	cookies: 'sirecookies',
