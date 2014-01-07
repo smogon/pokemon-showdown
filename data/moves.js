@@ -7650,10 +7650,10 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		onHitSide: function(side, source) {
-			targets = [];
+			var targets = [];
 			for (var p in side.active) {
 				if (side.active[p].ability === 'plus' || side.active[p].ability === 'minus') {
-					targets.push();
+					targets.push(side.active[p]);
 				}
 			}
 			if (!targets.length) return false;
