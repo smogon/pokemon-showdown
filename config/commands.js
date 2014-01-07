@@ -1010,8 +1010,23 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/c2a1162d3986dffa65e437641284edc6/tumblr_muli1oVcqm1qzkj9ko1_500.gif"></center>');
 	},
+		
+	treessuck: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://media.tumblr.com/32710e9bfca046da6e4514c6fcc82b23/tumblr_inline_ms1l71n1ii1qz4rgp.gif"></center>');
+	},
 	
+	throw: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://31.media.tumblr.com/0b63717080612b951cd76bb8fbe222f5/tumblr_muli1oVcqm1qzkj9ko4_500.gif"></center>');
+	},
+		
+	spoilerwarning: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://static3.wikia.nocookie.net/__cb20131031233004/rwby/images/b/b0/The_Stray_00033.png"></center>');
+	},
 	
+
 
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
