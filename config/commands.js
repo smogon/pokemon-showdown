@@ -990,6 +990,12 @@ var commands = exports.commands = {
                 if (!this.canBroadcast()) return;
                 return this.sendReply('|raw|<center><img width="300" height="169" src="http://images1.wikia.nocookie.net/rwby/images/5/59/Tumblr_mik0scCZe41rktwn6o1_500.gif"></center>');
         },
+        
+	combatskirts: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/b74eb164763dce0487564c3ce21b9318/tumblr_mvk84l1WWN1rq5fzso1_500.gif"></center>');
+	},
+	
 
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
