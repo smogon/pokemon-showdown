@@ -1677,7 +1677,7 @@ var commands = exports.commands = {
 	alee: 'sweetie',
 	sweetie: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/b9uMRhZ.gif"><br><center><img src="http://i.imgur.com/prh7sMT.gif"><br><font color="red"><blink>Ace: Gardevoir</blink><br></font><font color="purple">Yes you, make me so nervous that I just can\'t hold your hand♥♫');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/7eTzRcI.gif?1"  height="122" width="112"><img src="http://i.imgur.com/ouRmuYO.png?1">&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://i.imgur.com/4SJ47LZ.gif"  height="128" width="100"><br><font color="red"><br><blink>Ace: Shiny Gardevoir-Mega</blink><br></font><font color="purple">Y yo que estoy ciega por el sol, guiada por la luna.... escapándome. ♪</center>');
 	},
 	
 	jesserawr: function(target, room, user) {
