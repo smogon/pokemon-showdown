@@ -998,7 +998,7 @@ var commands = exports.commands = {
 	
 	nora: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/92f2a57740bc0ad121e0cb87d9836b87/tumblr_msonfrBlq11sgww3vo1_500.gif1"></center>');
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/92f2a57740bc0ad121e0cb87d9836b87/tumblr_msonfrBlq11sgww3vo1_500.gif"></center>');
 	},
 	
 
