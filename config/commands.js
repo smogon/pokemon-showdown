@@ -975,7 +975,16 @@ var commands = exports.commands = {
                 return this.sendReply('|raw|<center><img width="300" height="169" src="http://fc00.deviantart.net/fs70/f/2013/297/1/7/rwby_nora_valkyrie_gif_by_dustiniz117-d6rmph4.gif"></center>');
         },
 
-
+	
+        crushhiswang: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                return this.sendReply('|raw|<center><img width="300" height="169" src="http://24.media.tumblr.com/67235f6be8c274a7ce05cb13e8c01c26/tumblr_mnr325ZLN41r0z4fuo2_500.gif"></center>');
+        },
+	
+        firepunch: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                return this.sendReply('|raw|<center><img width="300" height="169" src="http://31.media.tumblr.com/d216a9b45ac33766ac621dd36dce891f/tumblr_mnqp5nUxSj1rj8nzio1_400.gif"></center>');
+        },
 
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
