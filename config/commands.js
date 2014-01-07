@@ -1001,6 +1001,17 @@ var commands = exports.commands = {
 		return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/92f2a57740bc0ad121e0cb87d9836b87/tumblr_msonfrBlq11sgww3vo1_500.gif"></center>');
 	},
 	
+	rockshurt: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://31.media.tumblr.com/b86cf32cad9df3e1c31e67c678a443a5/tumblr_muli1oVcqm1qzkj9ko3_500.gif"></center>');
+	},
+	
+	owch: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/c2a1162d3986dffa65e437641284edc6/tumblr_muli1oVcqm1qzkj9ko1_500.gif"></center>');
+	},
+	
+	
 
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
