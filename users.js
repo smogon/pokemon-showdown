@@ -34,6 +34,7 @@
 
 var ipbans = fs.createWriteStream("config/ipbans.txt", {flags: "a"}); // do not remove this line
 var bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
+var userTypes = fs.readFileSync('config/types.csv','utf8'); 
 bannedMessages = bannedMessages.split('\n');
 
 /**
@@ -819,6 +820,34 @@ var User = (function () {
 						setAvatar(data);
 					}
 				});
+
+				if (this.monoType === '') {
+					var rows = userTypes.split('\n');
+					var matched = false;
+					var line = '';
+					var type = '';
+					for (var i = 0; i < rows.length; i++) {
+						if (!rows[i]) continue;
+						var parts = rows[i].split(',');
+						var userName = parts[0];
+						type = parts[1];
+						if (toId(userName) === toId(name)) matched = true;
+					}
+					if (matched) {
+						if (type.indexOf('/') > -1) {
+							var types = type.split('/');
+							types[0] = types[0].trim();
+							types[0] = types[0].charAt(0).toUpperCase() + types[0].slice(1);
+							types[1] = types[1].trim();
+							types[1] = types[1].charAt(0).toUpperCase() + types[1].slice(1);
+							this.monoType = types[0] + ' / ' + types[1];
+						}
+						else {
+							type = type.charAt(0).toUpperCase() + type.slice(1);
+							this.monoType = type;
+						}
+					}
+				}
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0,1);
