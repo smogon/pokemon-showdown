@@ -1005,13 +1005,6 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
-		name: "[Gen 6] OU Monotype",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'Standard Pokebank', 'Same Type Clause', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew']
-	},
-	{
 		name: "[Gen 5] Glitchmons",
 		section: "Other Metagames",
 
