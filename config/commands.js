@@ -1166,6 +1166,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	aerys: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height="100" src="http://imgur.com/BAKX8Wk.jpg" >' +
+			'<img height="100" src="http://i.imgur.com/2NhfpP2.gif">' +
+			'<img width="180" height="100" src="http://i.imgur.com/ImtN9kV.jpg"><br />' +
+			'<b>Ace: </b>Smeargle<br />' +
+			'<b>Catchphrase: </b>I\'m not a monster; I\'m just ahead of the curve</center>');
+	},
+
 	dbz: 'dragonballsz',
 	dragonballsz: function(target, room, user) {
 		if (!this.canBroadcast()) return;
