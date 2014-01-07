@@ -996,6 +996,11 @@ var commands = exports.commands = {
 		return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/b74eb164763dce0487564c3ce21b9318/tumblr_mvk84l1WWN1rq5fzso1_500.gif"></center>');
 	},
 	
+	nora: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/92f2a57740bc0ad121e0cb87d9836b87/tumblr_msonfrBlq11sgww3vo1_500.gif1"></center>');
+	},
+	
 
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
