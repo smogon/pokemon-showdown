@@ -985,6 +985,11 @@ var commands = exports.commands = {
                 if (!this.canBroadcast()) return;
                 return this.sendReply('|raw|<center><img width="300" height="169" src="http://31.media.tumblr.com/d216a9b45ac33766ac621dd36dce891f/tumblr_mnqp5nUxSj1rj8nzio1_400.gif"></center>');
         },
+        
+        firepunch: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                return this.sendReply('|raw|<center><img width="300" height="169" src="http://images1.wikia.nocookie.net/rwby/images/5/59/Tumblr_mik0scCZe41rktwn6o1_500.gif"></center>');
+        },
 
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
