@@ -5133,7 +5133,7 @@ exports.BattleMovedex = {
 				for (var s in battle.sides) {
 					for (var p in battle.sides[s].active) {
 						if (battle.sides[s].active[p].runImmunity('Ground')) {
-							this.debug('Pokémon is grounded, healing through Grassy Terrain.');
+							this.debug('PokÃ©mon is grounded, healing through Grassy Terrain.');
 							this.heal(battle.sides[s].active[p].maxhp / 16, battle.sides[s].active[p], battle.sides[s].active[p]);
 						}
 					}
@@ -7643,18 +7643,21 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the Defense and Sp. Def stats of ally Pokémon with the Plus or Minus Ability.",
+		desc: "Raises the Defense and Sp. Def stats of ally PokÃ©mon with the Plus or Minus Ability.",
 		shortDesc: "Raises defenses of ally Pokemon with Plus/Minus.",
 		id: "magneticflux",
 		name: "Magnetic Flux",
 		pp: 20,
 		priority: 0,
 		onHitSide: function(side, source) {
+			targets = [];
 			for (var p in side.active) {
 				if (side.active[p].ability === 'plus' || side.active[p].ability === 'minus') {
-					this.boost({spd: 1, def: 1}, side.active[p], source, this.getMove('Magnetic Flux'));
+					targets.push();
 				}
 			}
+			if (!targets.length) return false;
+			for (var i=0;i<targets.length;i++) this.boost({spd: 1, def: 1}, targets[i], source, 'move: Magnetic Flux');
 		},
 		secondary: false,
 		target: "allySide",
