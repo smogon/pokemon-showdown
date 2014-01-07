@@ -1026,6 +1026,11 @@ var commands = exports.commands = {
 		return this.sendReply('|raw|<center><img width="300" height="169" src="http://static3.wikia.nocookie.net/__cb20131031233004/rwby/images/b/b0/The_Stray_00033.png"></center>');
 	},
 	
+	iburn: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply('|raw|<center><img width="300" height="169" src="http://i.minus.com/idK6YE40trRue.gif"></center>');
+	},
+	
 
 
 	birkal: function(target, room, user) {
