@@ -10833,14 +10833,17 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onHitField: function(target, source) {
+			var targets = [];
 			for (var i=0; i<this.sides.length; i++) {
 				for (var j=0; j<this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j].hasType('Grass')) {
-						// Apply the boost from source's Rototiller if it has Grass type
-						this.boost({atk: 1, spa: 1}, this.sides[i].active[j], source, this.getMove('Rototiller'));
+					if (this.sides[i].active[j] && this.sides[i].active[j].hasType('Grass')) {
+						// This move affects every Grass-type Pokemon in play.
+						targets.push(this.sides[i].active[j]);
 					}
 				}
 			}
+			if (!targets.length) return false; // No targets; move fails
+			for (var i=0; i<targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source, 'move: Rototiller');
 		},
 		secondary: false,
 		target: "all",
