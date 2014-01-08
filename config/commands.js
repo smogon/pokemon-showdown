@@ -1035,11 +1035,12 @@ var commands = exports.commands = {
                 if (!this.canBroadcast()) return;
                 return this.sendReply('|raw|<center><img width="300" height="169" src="http://31.media.tumblr.com/tumblr_lrzvrmMDMl1r1l46do1_500.gif"></center>');
         },
-        
-	snakesonaplane: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		return this.sendReply('|raw|<center><img width="300" height="169" src="http://24.media.tumblr.com/50061b7f7abd7013806e56090c4bb03e/tumblr_mryhff94TG1sbu5xto6_400.gif"></center>');
-	},
+        		
+        lieren: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                return this.sendReply('|raw|<center><img width="300" height="169" src="http://24.media.tumblr.com/50061b7f7abd7013806e56090c4bb03e/tumblr_mryhff94TG1sbu5xto6_400.gif"></center>');
+        },
+
 
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
