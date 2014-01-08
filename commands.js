@@ -477,9 +477,10 @@ var commands = exports.commands = {
 						'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/132_zpsb8a73a6e.png">');
 	},
 
+	kozman: 'koz',
 	koz: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer: <font color="purple"><b>Kozman</b></font><br />' +
+		this.sendReplyBox('<center>Trainer: <font color="#09B38E"><b>Kozman</b></font><br />' +
                   '<center>Types: Fighting(OU E4)<br />' +
                   '<center>Signature Pokemon: <font color="purple"><b>Mienshao</b></font><br />' +
                   '<center>Catchphrase: Everyone has an inner Amethyst... You just need to unlock it.<br />' +
@@ -644,8 +645,8 @@ var commands = exports.commands = {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#C51BC0"><b>GymLe@derTouchMe</b></font><br />' +
                          			 '<center>Types: Water(OU)<br />' +
-						 '<center>Signature Pokemon:<font color="blue"><b>Politoed</b></font><br />' +
-						 '<center>Catchphrase: fk u hope<br />' +
+						 '<center>Signature Pokemon:<font color="orange"><b>Magikarp</b></font><br />' +
+						 '<center>Catchphrase: YOU AINT GOT NO PANCAKE MIX!<br />' +
 						 '<center><img src="http://www.smogon.com/download/sprites/bwmini/186.gif">');
 	},
 
@@ -774,8 +775,8 @@ var commands = exports.commands = {
 	energ: 'energ218',
 	energ218: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer:<font color="blue"><b>EnerG218</b></font><br />' +
-						'<center>Types: /eval(OU, UU, RU, NU)<br />' +
+		this.sendReplyBox('<center>Trainer:<font color="#06367F"><b>EnerG218</b></font><br />' +
+						'<center>Types: /eval (OU, UU, RU, NU)<br />' +
 						'<center>Signature Pokemon: <font color="brown"><b>Buizel</b></font><br />' +
 						'<center>Catchphrase: kk<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/418.gif">');
@@ -819,28 +820,28 @@ var commands = exports.commands = {
 	ougl: 'ouleaders',
 	ouleaders: function(target, room, user) {
 		if(!this.canBroadcast()) return;
-		this.sendReplyBox('A list of the active OU leaders can be found <a href = "http://pastebin.com/4Vq73sst" target = _blank>here</a>.');
+		this.sendReplyBox('A list of the active Amethyst OU leaders can be found <a href = "http://pastebin.com/4Vq73sst" target = _blank>here</a>.');
 	},
 
 	uugymleaders: 'uuleaders',
 	uugl: 'uuleaders',
 	uuleaders: function(target, room, user) {
 		if(!this.canBroadcast()) return;
-		this.sendReplyBox('A list of the active UU leaders can be found <a href = "http://pastebin.com/2EwGFFEW" target = _blank>here</a> and <a href="http://amethystserver.freeforums.net/thread/2/league-leaders-elite">here</a>.');
+		this.sendReplyBox('A list of the active Amethyst UU leaders can be found <a href = "http://pastebin.com/2EwGFFEW" target = _blank>here</a> and <a href="http://amethystserver.freeforums.net/thread/2/league-leaders-elite">here</a>.');
 	},
 
 	nugymleaders: 'nuleaders',
 	nugl: 'nuleaders',
 	nuleaders: function(target, room, user) {
    		if (!this.canBroadcast()) return;
-		this.sendReplyBox('A list of the active NU leaders can be found <a href = "http://pastebin.com/WwAmXACt" target = _blank>here</a>. RIP NU League.');
+		this.sendReplyBox('A list of the active Amethyst NU leaders can be found <a href = "http://pastebin.com/WwAmXACt" target = _blank>here</a>. RIP NU League.');
 	},
 
 	rugymleaders: 'ruleaders',
 	rugl: 'ruleaders',
 	ruleaders: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('A list of the active RU leaders can be found <a href = "http://pastebin.com/VM3bJLL6" target = _blank>here</a> and <a href="http://amethystserver.freeforums.net/thread/65/ru-gls-e4s">here</a>.');
+		this.sendReplyBox('A list of the active Amethyst RU leaders can be found <a href = "http://pastebin.com/VM3bJLL6" target = _blank>here</a> and <a href="http://amethystserver.freeforums.net/thread/65/ru-gls-e4s">here</a>.');
 	},
 
 	cry: 'complain',
@@ -3093,7 +3094,7 @@ var commands = exports.commands = {
 };
 
 function getRandMessage(user){
-	var numMessages = 37;
+	var numMessages = 39;
 	var message = '~~ ';
 	switch(Math.floor(Math.random()*numMessages)){
 		case 0: message = message + user.name + ' has vanished into nothingness!';
@@ -3156,7 +3157,7 @@ function getRandMessage(user){
 		break;
 		case 29: message = message + user.name + ' was unfortunate and didn\'t get a cool message.';
 		break;
-		case 30: message = message + 'The Immortal accidently kicked ' + user.name + ' from the server!';
+		case 30: message = message + 'Masakaki accidently kicked ' + user.name + ' from the server!';
 		break;
 		case 31: message = message + user.name + ' was knocked out cold by Fallacies!';
 		break;
@@ -3167,6 +3168,10 @@ function getRandMessage(user){
 		case 34: message = message + user.name + ' was hit by a wrecking ball!';
 		break;
 		case 35: message = message + user.name + ' was hit by a train!';
+		break;
+		case 36: message = message + user.name + ' used Run Away!';
+		break;
+		case 37: message = message + user.name + ' was splashed by a Magikarp!';
 		break;
 		default: message = message + user.name + ' fled from colonial mustang!';
 	};
