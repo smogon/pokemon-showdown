@@ -1445,6 +1445,8 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else if (counter.Special >= 3 && setupType) {
 				item = 'Life Orb';
+			} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
+				item = 'Assault Vest';
 			} else if (counter.Physical + counter.Special >= 4) {
 				item = 'Expert Belt';
 			} else if (i===0 && ability !== 'Sturdy' && !counter['recoil']) {
