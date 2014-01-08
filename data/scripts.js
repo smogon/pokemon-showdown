@@ -1317,6 +1317,7 @@ exports.BattleScripts = {
 				item = template.requiredItem;
 			} else if (template.species === 'Rotom-Fan') {
 				// this is just to amuse myself
+				// do we really have to keep this
 				item = 'Air Balloon';
 			} else if (template.species === 'Delibird') {
 				// to go along with the Christmas Delibird set
@@ -1332,8 +1333,6 @@ exports.BattleScripts = {
 				item = 'Focus Sash';
 			} else if (template.species === 'Unown') {
 				item = 'Choice Specs';
-			} else if ((template.species === 'Wynaut' || template.species === 'Wobbuffet') && hasMove['destinybond'] && Math.random()*2 > 1) {
-				item = 'Custap Berry';
 			} else if (hasMove['trick'] && hasMove['gyroball'] && (ability === 'Levitate' || hasType['Flying'])) {
 				item = 'Macho Brace';
 			} else if (hasMove['trick'] && hasMove['gyroball']) {
@@ -1361,6 +1360,8 @@ exports.BattleScripts = {
 				item = 'Light Ball';
 			} else if (template.species === 'Clamperl') {
 				item = 'DeepSeaTooth';
+			} else if (template.species === 'Spiritomb') {
+				item = 'Leftovers';
 			} else if (shouldMegaEvo === true) {
 				item = this.getTemplate(template.otherFormes[0]).requiredItem;
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
@@ -1382,7 +1383,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Sheer Force' || ability === 'Magic Guard') {
 				item = 'Life Orb';
 			} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
-				// Give Unburden mons a random Gem of the type of one of their damaging moves
+				// Give Unburden mons a Normal Gem if they have a Normal-type attacking move
 				for (var m in moves) {
 					var move = this.getMove(moves[m]);
 					if (move.type === 'Normal' && (move.basePower || move.basePowerCallback)) {
@@ -1435,8 +1436,7 @@ exports.BattleScripts = {
 				item = 'Leftovers';
 			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
 				item = 'Focus Sash';
-			} else if (ability === 'Iron Barbs') {
-				// only Iron Barbs for now
+			} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 				item = 'Rocky Helmet';
 			} else if ((template.baseStats.hp+75)*(template.baseStats.def+template.baseStats.spd+175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 				// skarmory and forretress get exceptions for their typing
@@ -1467,6 +1467,7 @@ exports.BattleScripts = {
 				item = 'Leftovers';
 			}
 
+			// For Trick / Switcheroo
 			if (item === 'Leftovers' && hasType['Poison']) {
 				item = 'Black Sludge';
 			}
