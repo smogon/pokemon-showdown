@@ -1471,6 +1471,12 @@ exports.BattleScripts = {
 			BL2: 80,
 			UU: 78,
 			BL: 76,
+
+			'Limbo': 86,
+			'Limbo C': 83,
+			'Limbo B': 80,
+			'Limbo A': 77,
+
 			OU: 74,
 			CAP: 74,
 			Unreleased: 74,
