@@ -1351,6 +1351,8 @@ exports.BattleScripts = {
 				item = 'Chesto Berry';
 			} else if (hasMove['naturalgift']) {
 				item = 'Liechi Berry';
+			} else if (hasMove['geomancy']) {
+				item = 'Power Herb';
 			} else if (ability === 'Harvest') {
 				item = 'Sitrus Berry';
 			} else if (template.species === 'Cubone' || template.species === 'Marowak') {
@@ -1521,10 +1523,10 @@ exports.BattleScripts = {
 			Snover: 95, Vulpix: 95, Ninetales: 78, Tentacruel: 78, Toxicroak: 78,
 
 			// Banned mega
-			Kangaskhan: 78, Gengar: 78, Blaziken: 78,
+			Kangaskhan: 72, Gengar: 72, Blaziken: 72,
 
 			// Holistic judgment
-			Carvanha: 90, Lucario: 76, Genesect: 76
+			Carvanha: 90, Lucario: 72, Genesect: 72, Kyurem: 78
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
