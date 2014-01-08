@@ -173,7 +173,7 @@ var commands = exports.commands = {
 	},
 
 	privateroom: function(target, room, user) {
-		if (!this.can('makeroom')) return;
+		if (!this.can('privateroom')) return;
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand(user.name+' made this room public.');
