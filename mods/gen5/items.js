@@ -1,64 +1,64 @@
 exports.BattleItems = {
-        aguavberry: {
-                inherit: true, 
-        	naturalGift: {
-        	     	basePower: 60, 
-        		type: "Dragon"
+	aguavberry: {
+		inherit: true, 
+		naturalGift: {
+			basePower: 60, 
+			type: "Dragon"
         	}, 
         },
-        apicotberry: {
-        	inherit: true, 
+	apicotberry: {
+		inherit: true, 
         	naturalGift: {
-        	       basePower: 80, 
-        		type: "Ground"
+			basePower: 80, 
+			type: "Ground"
         	}, 
         },
 	aspearberry: {
-        	inherit: true, 
-        	naturalGift: {
-        		basePower: 60, 
-        		type: "Ice"
+		inherit: true, 
+		naturalGift: {
+		basePower: 60, 
+			type: "Ice"
         	}, 
         },
 	babiriberry: {
-        	inherit: true, 
-        	naturalGift: {
-        		basePower: 60, 
-        		type: "Steel"
+		inherit: true, 
+		naturalGift: {
+			basePower: 60, 
+			type: "Steel"
         	}, 
         },
 	belueberry: {
-        	inherit: true, 
-        	naturalGift: {
-        		basePower: 60, 
-        		type: "Ice"
+		inherit: true, 
+		naturalGift: {
+			basePower: 60, 
+			type: "Ice"
         	}, 
         },
 	blukberry: {
-        	inherit: true, 
-        	naturalGift: {
-        		basePower: 70, 
-        		type: "Fire"
+		inherit: true, 
+		naturalGift: {
+			basePower: 70, 
+		type: "Fire"
         	}, 
         },
-        buggem: {
-                inherit: true,
-                isUnreleased: false,
-                desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use."
+	buggem: {
+		inherit: true,
+		isUnreleased: false,
+		desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use."
         },
 	chartiberry: {
-        	inherit: true, 
-        	naturalGift: {
-        		basePower: 60, 
-        		type: "Rock"
+		inherit: true, 
+		naturalGift: {
+			basePower: 60, 
+			type: "Rock"
         	}, 
         },
 	cheriberry: {
-        	inherit: true, 
-        	naturalGift: {
-        		basePower: 60, 
-        		type: "Fire"
-        	}, 
+		inherit: true, 
+		naturalGift: {
+			basePower: 60, 
+			type: "Fire"
+		}, 
         },
 	chestoberry: {
         	inherit: true, 
