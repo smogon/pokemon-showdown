@@ -837,9 +837,21 @@ module.exports = (function () {
 		var setHas = {};
 
 		if (!template || !template.abilities) {
-			set.species = 'Bulbasaur';
-			template = this.getTemplate('Bulbasaur');
+			set.species = 'Unown';
+			template = this.getTemplate('Unown');
 		}
+
+		if (format.ruleset) {
+			for (var i=0; i<format.ruleset.length; i++) {
+				var subformat = this.getFormat(format.ruleset[i]);
+				if (subformat.validateSet) {
+					problems = problems.concat(subformat.validateSet.call(this, set, format)||[]);
+				}
+			}
+		}
+		template = this.getTemplate(set.species);
+		item = this.getItem(set.item);
+		ability = this.getAbility(set.ability);
 
 		var banlistTable = this.getBanlistTable(format);
 
@@ -1048,14 +1060,6 @@ module.exports = (function () {
 			}
 		}
 
-		if (format.ruleset) {
-			for (var i=0; i<format.ruleset.length; i++) {
-				var subformat = this.getFormat(format.ruleset[i]);
-				if (subformat.validateSet) {
-					problems = problems.concat(subformat.validateSet.call(this, set, format)||[]);
-				}
-			}
-		}
 		if (format.validateSet) {
 			problems = problems.concat(format.validateSet.call(this, set, format)||[]);
 		}
