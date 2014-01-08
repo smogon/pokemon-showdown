@@ -1268,14 +1268,14 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	ledyba: {
-		viableMoves: {"roost":1,"agility":1,"lightscreen":1,"encore":1,"reflect":1,"knockoff":1,"swordsdance":1,"batonpass":1,"toxic":1,"knockoff":1},
+		viableMoves: {"roost":1,"agility":1,"lightscreen":1,"encore":1,"reflect":1,"knockoff":1,"swordsdance":1,"batonpass":1,"toxic":1},
 		eventPokemon: [
 			{"generation":3,"level":10,"moves":["refresh","psybeam","aerialace","supersonic"]}
 		],
 		tier: "LC"
 	},
 	ledian: {
-		viableMoves: {"roost":1,"bugbuzz":1,"lightscreen":1,"encore":1,"reflect":1,"knockoff":1,"toxic":1,"batonpass":1,"knockoff":1},
+		viableMoves: {"roost":1,"bugbuzz":1,"lightscreen":1,"encore":1,"reflect":1,"knockoff":1,"toxic":1,"batonpass":1},
 		tier: "Limbo"
 	},
 	spinarak: {
@@ -2464,7 +2464,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	glalie: {
-		viableMoves: {"spikes":1,"icebeam":1,"iceshard":1,"crunch":1,"earthquake":1,"crunch":1,"switcheroo":1},
+		viableMoves: {"spikes":1,"icebeam":1,"iceshard":1,"crunch":1,"earthquake":1,"switcheroo":1},
 		tier: "Limbo"
 	},
 	froslass: {
