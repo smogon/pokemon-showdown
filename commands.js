@@ -256,7 +256,8 @@ var commands = exports.commands = {
 	roomdesc: function(target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
-			this.sendReply('The room description is: '+room.desc);
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			this.sendReplyBox('The room description is: '+room.desc.replace(re, "<a href=\"$1\" title=\"\">$1</a>"));
 			return;
 		}
 		if (!this.can('roommod', null, room)) return false;
