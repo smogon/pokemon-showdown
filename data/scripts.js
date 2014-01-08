@@ -696,7 +696,7 @@ exports.BattleScripts = {
 				ability: ability,
 				evs: evs,
 				ivs: ivs,
-				nature: nature,
+				º: nature,
 				item: item,
 				level: level,
 				happiness: happiness,
@@ -1299,11 +1299,11 @@ exports.BattleScripts = {
 
 			if (hasMove['gyroball']) {
 				ivs.spe = 0;
-				//evs.atk += evs.spe;
+				evs.atk += evs.spe;
 				evs.spe = 0;
 			} else if (hasMove['trickroom']) {
 				ivs.spe = 0;
-				//evs.hp += evs.spe;
+				evs.hp += evs.spe;
 				evs.spe = 0;
 			}
 
