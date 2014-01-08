@@ -4,7 +4,10 @@ exports.BattleItems = {
 		name: "Abomasite",
 		spritenum: 0,
 		megaStone: "Abomasnow-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 674,
 		gen: 6,
 		desc: "Mega-evolves Abomasnow."
@@ -14,7 +17,10 @@ exports.BattleItems = {
 		name: "Absolite",
 		spritenum: 0,
 		megaStone: "Absol-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 677,
 		gen: 6,
 		desc: "Mega-evolves Absol."
@@ -57,7 +63,10 @@ exports.BattleItems = {
 		name: "Aerodactylite",
 		spritenum: 0,
 		megaStone: "Aerodactyl-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 672,
 		gen: 6,
 		desc: "Mega-evolves Aerodactyl."
@@ -67,7 +76,10 @@ exports.BattleItems = {
 		name: "Aggronite",
 		spritenum: 0,
 		megaStone: "Aggron-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 667,
 		gen: 6,
 		desc: "Mega-evolves Aggron."
@@ -132,7 +144,10 @@ exports.BattleItems = {
 		name: "Alakazite",
 		spritenum: 679,
 		megaStone: "Alakazam-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: -6,
 		gen: 6,
 		desc: "Mega-evolves Alakazam."
@@ -142,7 +157,10 @@ exports.BattleItems = {
 		name: "Ampharosite",
 		spritenum: 658,
 		megaStone: "Ampharos-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: -6,
 		gen: 6,
 		desc: "Mega-evolves Ampharos."
@@ -249,7 +267,10 @@ exports.BattleItems = {
 		name: "Banettite",
 		spritenum: 0,
 		megaStone: "Banette-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 668,
 		gen: 6,
 		desc: "Mega-evolves Banette."
@@ -374,7 +395,10 @@ exports.BattleItems = {
 		name: "Blastoisinite",
 		spritenum: 661,
 		megaStone: "Blastoise-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: -6,
 		gen: 6,
 		desc: "Mega-evolves Blastoise."
@@ -384,7 +408,10 @@ exports.BattleItems = {
 		name: "Blazikenite",
 		spritenum: 0,
 		megaStone: "Blaziken-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 664,
 		gen: 6,
 		desc: "Mega-evolves Blaziken."
@@ -487,7 +514,10 @@ exports.BattleItems = {
 		name: "Charizardite X",
 		spritenum: 0,
 		megaStone: "Charizard-Mega-X",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 660,
 		gen: 6,
 		desc: "Mega-evolves Charizard into Mega Charizard X."
@@ -497,7 +527,10 @@ exports.BattleItems = {
 		name: "Charizardite Y",
 		spritenum: 0,
 		megaStone: "Charizard-Mega-Y",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 678,
 		gen: 6,
 		desc: "Mega-evolves Charizard into Mega Charizard Y."
@@ -1409,7 +1442,10 @@ exports.BattleItems = {
 		name: "Garchompite",
 		spritenum: 0,
 		megaStone: "Garchomp-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 683,
 		gen: 6,
 		desc: "Mega-evolves Garchomp."
@@ -1419,7 +1455,10 @@ exports.BattleItems = {
 		name: "Gardevoirite",
 		spritenum: 0,
 		megaStone: "Gardevoir-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 657,
 		gen: 6,
 		desc: "Mega-evolves Gardevoir."
@@ -1429,7 +1468,10 @@ exports.BattleItems = {
 		name: "Gengarite",
 		spritenum: 0,
 		megaStone: "Gengar-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 656,
 		gen: 6,
 		desc: "Mega-evolves Gengar."
@@ -1551,7 +1593,10 @@ exports.BattleItems = {
 		name: "Gyaradosite",
 		spritenum: 0,
 		megaStone: "Gyarados-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 676,
 		gen: 6,
 		desc: "Mega-evolves Gyarados."
@@ -1638,7 +1683,10 @@ exports.BattleItems = {
 		name: "Heracronite",
 		spritenum: 0,
 		megaStone: "Heracross-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 680,
 		gen: 6,
 		desc: "Mega-evolves Heracross."
@@ -1661,7 +1709,10 @@ exports.BattleItems = {
 		name: "Houndoominite",
 		spritenum: 0,
 		megaStone: "Houndoom-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 666,
 		gen: 6,
 		desc: "Mega-evolves Houndoom."
@@ -1891,7 +1942,10 @@ exports.BattleItems = {
 		name: "Kangaskhanite",
 		spritenum: 0,
 		megaStone: "Kangaskhan-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 675,
 		gen: 6,
 		desc: "Mega-evolves Kangaskhan."
@@ -2132,7 +2186,10 @@ exports.BattleItems = {
 		name: "Lucarionite",
 		spritenum: 0,
 		megaStone: "Lucario-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 673,
 		gen: 6,
 		desc: "Mega-evolves Lucario."
@@ -2306,7 +2363,10 @@ exports.BattleItems = {
 		name: "Manectite",
 		spritenum: 0,
 		megaStone: "Manectric-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 682,
 		gen: 6,
 		desc: "Mega-evolves Manectric."
@@ -2341,7 +2401,10 @@ exports.BattleItems = {
 		name: "Mawilite",
 		spritenum: 0,
 		megaStone: "Mawile-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 681,
 		gen: 6,
 		desc: "Mega-evolves Mawile."
@@ -2369,7 +2432,10 @@ exports.BattleItems = {
 		name: "Medichamite",
 		spritenum: 0,
 		megaStone: "Medicham-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 665,
 		gen: 6,
 		desc: "Mega-evolves Medicham."
@@ -2481,7 +2547,10 @@ exports.BattleItems = {
 		name: "Mewtwonite X",
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-X",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 662,
 		gen: 6,
 		desc: "Mega-evolves Mewtwo into Mega Mewtwo X."
@@ -2491,7 +2560,10 @@ exports.BattleItems = {
 		name: "Mewtwonite Y",
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-Y",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 663,
 		gen: 6,
 		desc: "Mega-evolves Mewtwo into Mega Mewtwo Y."
@@ -2900,7 +2972,10 @@ exports.BattleItems = {
 		name: "Pinsirite",
 		spritenum: 0,
 		megaStone: "Pinsir-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 671,
 		gen: 6,
 		desc: "Mega-evolves Pinsir."
@@ -3428,7 +3503,10 @@ exports.BattleItems = {
 		name: "Scizorite",
 		spritenum: 0,
 		megaStone: "Scizor-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 670,
 		gen: 6,
 		desc: "Mega-evolves Scizor."
@@ -4000,7 +4078,10 @@ exports.BattleItems = {
 		name: "Tyranitarite",
 		spritenum: 0,
 		megaStone: "Tyranitar-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 669,
 		gen: 6,
 		desc: "Mega-evolves Tyranitar."
@@ -4018,7 +4099,10 @@ exports.BattleItems = {
 		name: "Venusaurite",
 		spritenum: 0,
 		megaStone: "Venusaur-Mega",
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseSpecies) return false;
+			return true;
+		},
 		num: 659,
 		gen: 6,
 		desc: "Mega-evolves Venusaur."
