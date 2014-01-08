@@ -4566,8 +4566,20 @@ exports.BattleMovedex = {
 		name: "Freeze-Dry",
 		pp: 20,
 		priority: 0,
-		onModifyEffectiveness: function(effectiveness, target) {
-			if (target.hasType('Water')) return effectiveness + 2;
+		onModifyEffectiveness: function(effectiveness, target, pokemon, move) {
+			// Hack to avoid calling getEffectiveness again
+			if (target.hasType('Water')) {
+				switch (move.type) {
+					// Electrify
+					case 'Electric':
+						return effectiveness;
+					// Normalize
+					case 'Normal':
+						return effectiveness + 1;
+					default:
+						return effectiveness + 2;
+				}
+			}
 		},
 		secondary: {
 			chance: 10,
