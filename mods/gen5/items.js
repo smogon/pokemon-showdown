@@ -71,15 +71,15 @@ exports.BattleItems = {
 	chilanberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Normal"
+			basePower: 60, 
+			type: "Normal"
 		}, 
 	},
 	chopleberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Fighting"
+			basePower: 60, 
+			type: "Fighting"
 		}, 
 	},
 	cobaberry: {
@@ -92,23 +92,23 @@ exports.BattleItems = {
 	colburberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Dark"
+			basePower: 60, 
+			type: "Dark"
 		}, 
 	},
 	cornnberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 70, 
-		type: "Water"
+			basePower: 70, 
+			type: "Water"
 		}, 
 	},
 	custapberry: {
 		inherit: true, 
 		isUnreleased: false
 		naturalGift: {
-		basePower: 80, 
-		type: "Ghost"
+			basePower: 80, 
+			type: "Ghost"
 		}, 
 	},
 	darkgem: {
@@ -124,8 +124,8 @@ exports.BattleItems = {
 	durinberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 80, 
-		type: "Water"
+			basePower: 80, 
+			type: "Water"
 		}, 
 	},
 	electricgem: {
@@ -136,8 +136,8 @@ exports.BattleItems = {
 	enigmaberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 80, 
-		type: "Bug"
+			basePower: 80, 
+			type: "Bug"
 		}, 
 	},
 	fightinggem: {
@@ -148,8 +148,8 @@ exports.BattleItems = {
 	figyberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Bug"
+			basePower: 60, 
+			type: "Bug"
 		}, 
 	},
 	firegem: {
@@ -165,8 +165,8 @@ exports.BattleItems = {
 	ganlonberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 80, 
-		type: "Ice"
+			basePower: 80, 
+			type: "Ice"
 		}, 
 	},     
 	ghostgem: {
@@ -182,8 +182,8 @@ exports.BattleItems = {
 	grepaberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 70, 
-		type: "Flying"
+			basePower: 70, 
+			type: "Flying"
 		}, 
 	},
 	groundgem: {
@@ -194,22 +194,22 @@ exports.BattleItems = {
 	habanberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Dragon"
+			basePower: 60, 
+			type: "Dragon"
 		}, 
 	},
 	hondewberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 70, 
-		type: "Ground"
+			basePower: 70, 
+			type: "Ground"
 		}, 
 	},
 	iapapaberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Dark"
+			basePower: 60, 
+			type: "Dark"
 		}, 
 	},
 	icegem: {
@@ -220,57 +220,57 @@ exports.BattleItems = {
 	jabocaberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 80, 
-		type: "Dragon"
+			basePower: 80, 
+			type: "Dragon"
 		}, 
 	},
 	kasibberry: {
 		inherit: true, 
 		naturalGift: {
 			basePower: 60, 
-		type: "Ghost"
+			type: "Ghost"
 		}, 
 	},
 	kebiaberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Poison"
+			basePower: 60, 
+			type: "Poison"
 		}, 
 	},
 	kelpsyberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 70, 
-		type: "Fighting"
+			basePower: 70, 
+			type: "Fighting"
 		}, 
 	},
 	lansatberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 80, 
-		type: "Flying"
+			basePower: 80, 
+			type: "Flying"
 		}, 
 	},
 	leppaberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Fighting"
+			basePower: 60, 
+			type: "Fighting"
 		}, 
 	},
 	liechiberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 80, 
-		type: "Grass"
+			basePower: 80, 
+			type: "Grass"
 		}, 
 	},
 	lumberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Flying"
+			basePower: 60, 
+			type: "Flying"
 		}, 
 	},
 	mail: {
@@ -280,36 +280,36 @@ exports.BattleItems = {
 	magoberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Ghost"
+			basePower: 60, 
+			type: "Ghost"
 		}, 
 	},
 	magostberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 70, 
-		type: "Rock"
+			basePower: 70, 
+			type: "Rock"
 		}, 
 	},
 	micleberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 80, 
-		type: "Rock"
+			basePower: 80, 
+			type: "Rock"
 		}, 
 	},
 	nanabberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 70, 
-		type: "Water"
+			basePower: 70, 
+			type: "Water"
 		}, 
 	},
 	nomelberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 70, 
-		type: "Dragon"
+			basePower: 70, 
+			type: "Dragon"
 		}, 
 	},
 	normalgem: {
@@ -319,50 +319,50 @@ exports.BattleItems = {
 	occaberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Fire"
+			basePower: 60, 
+			type: "Fire"
 		}, 
 	},
 	oranberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Poison"
+			basePower: 60, 
+			type: "Poison"
 		}, 
 	},
 	pamtreberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 70, 
-		type: "Steel"
+			basePower: 70, 
+			type: "Steel"
 		}, 
 	},
 	passhoberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Water"
+			basePower: 60, 
+			type: "Water"
 		}, 
 	},
 	payapaberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Psychic"
+			basePower: 60, 
+			type: "Psychic"
 		}, 
 	},
 	pechaberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Electric"
+			basePower: 60, 
+			type: "Electric"
 		}, 
 	},
 	persimberry: {
 		inherit: true, 
 		naturalGift: {
-		basePower: 60, 
-		type: "Ground"
+			basePower: 60, 
+			type: "Ground"
 		}, 
 	}, 
 	petayaberry: {
