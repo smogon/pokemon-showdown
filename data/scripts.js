@@ -1568,6 +1568,7 @@ exports.BattleScripts = {
 		var typeComboCount = {};
 		var uberCount = 0;
 		var nuCount = 0;
+		var megaCount = 0;
 
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
@@ -1624,6 +1625,9 @@ exports.BattleScripts = {
 			}
 			if (typeCombo in typeComboCount) continue;
 
+			// Limit the number of Megas to one, just like in-game
+			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
@@ -1638,12 +1642,13 @@ exports.BattleScripts = {
 			}
 			typeComboCount[typeCombo] = 1;
 
-			// Increment Uber/NU counter
+			// Increment Uber/NU and mega counter
 			if (tier === 'Uber') {
 				uberCount++;
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
+			if (this.getItem(set.item).megaStone) megaCount++;
 
 		}
 		return pokemon;
