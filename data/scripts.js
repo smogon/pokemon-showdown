@@ -1384,7 +1384,8 @@ exports.BattleScripts = {
 				item = 'Flame Orb';
 			} else if (ability === 'Sheer Force' || ability === 'Magic Guard') {
 				item = 'Life Orb';
-			} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
+			} else if (ability === 'Unburden') {
+				item = 'Red Card';
 				// Give Unburden mons a Normal Gem if they have a Normal-type attacking move
 				for (var m in moves) {
 					var move = this.getMove(moves[m]);
