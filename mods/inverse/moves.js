@@ -14,7 +14,8 @@ exports.BattleMovedex = {
 			},
 			onSwitchIn: function(pokemon) {
 				var side = pokemon.side;
-				if (pokemon.hasType('Flying') || !pokemon.runImmunity('Ground')) return;
+				if (!pokemon.runImmunity('Ground')) return;
+				if (pokemon.hasType('Flying') && pokemon.item !== 'ironball' && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				var damageAmounts = [0,3,4,6]; // 1/8, 1/6, 1/4
 				var damage = this.damage(damageAmounts[this.effectData.layers]*pokemon.maxhp/24);
 			}
@@ -27,7 +28,8 @@ exports.BattleMovedex = {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
 			onSwitchIn: function(pokemon) {
-				if (pokemon.hasType('Flying') || !pokemon.runImmunity('Ground')) return;
+				if (!pokemon.runImmunity('Ground')) return;
+				if (pokemon.hasType('Flying') && pokemon.item !== 'ironball' && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getMove('stickyweb'));
 			}
@@ -46,7 +48,9 @@ exports.BattleMovedex = {
 				this.effectData.layers++;
 			},
 			onSwitchIn: function(pokemon) {
-				if (pokemon.hasType('Flying') || !pokemon.runImmunity('Ground') || !pokemon.runImmunity('Poison')) return;
+				if (!pokemon.runImmunity('Ground')) return;
+				if (!pokemon.runImmunity('Poison')) return;
+				if (pokemon.hasType('Flying') && pokemon.item !== 'ironball' && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] '+pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
