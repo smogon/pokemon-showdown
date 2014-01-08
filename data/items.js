@@ -6,7 +6,7 @@ exports.BattleItems = {
 		megaStone: "Abomasnow-Mega",
 		megaEvolves: "Abomasnow",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 674,
@@ -20,7 +20,7 @@ exports.BattleItems = {
 		megaStone: "Absol-Mega",
 		megaEvolves: "Absol",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 677,
@@ -67,7 +67,7 @@ exports.BattleItems = {
 		megaStone: "Aerodactyl-Mega",
 		megaEvolves: "Aerodactyl",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 672,
@@ -81,7 +81,7 @@ exports.BattleItems = {
 		megaStone: "Aggron-Mega",
 		megaEvolves: "Aggron",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 667,
@@ -150,7 +150,7 @@ exports.BattleItems = {
 		megaStone: "Alakazam-Mega",
 		megaEvolves: "Alakazam",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: -6,
@@ -164,7 +164,7 @@ exports.BattleItems = {
 		megaStone: "Ampharos-Mega",
 		megaEvolves: "Ampharos",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: -6,
@@ -275,7 +275,7 @@ exports.BattleItems = {
 		megaStone: "Banette-Mega",
 		megaEvolves: "Banette",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 668,
@@ -404,7 +404,7 @@ exports.BattleItems = {
 		megaStone: "Blastoise-Mega",
 		megaEvolves: "Blastoise",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: -6,
@@ -418,7 +418,7 @@ exports.BattleItems = {
 		megaStone: "Blaziken-Mega",
 		megaEvolves: "Blaziken",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 664,
@@ -525,7 +525,7 @@ exports.BattleItems = {
 		megaStone: "Charizard-Mega-X",
 		megaEvolves: "Charizard",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 660,
@@ -539,7 +539,7 @@ exports.BattleItems = {
 		megaStone: "Charizard-Mega-Y",
 		megaEvolves: "Charizard",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 678,
@@ -1455,7 +1455,7 @@ exports.BattleItems = {
 		megaStone: "Garchomp-Mega",
 		megaEvolves: "Garchomp",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 683,
@@ -1469,7 +1469,7 @@ exports.BattleItems = {
 		megaStone: "Gardevoir-Mega",
 		megaEvolves: "Gardevoir",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 657,
@@ -1483,7 +1483,7 @@ exports.BattleItems = {
 		megaStone: "Gengar-Mega",
 		megaEvolves: "Gengar",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 656,
@@ -1609,7 +1609,7 @@ exports.BattleItems = {
 		megaStone: "Gyarados-Mega",
 		megaEvolves: "Gyarados",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 676,
@@ -1700,7 +1700,7 @@ exports.BattleItems = {
 		megaStone: "Heracross-Mega",
 		megaEvolves: "Heracross",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 680,
@@ -1727,7 +1727,7 @@ exports.BattleItems = {
 		megaStone: "Houndoom-Mega",
 		megaEvolves: "Houndoom",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 666,
@@ -1961,7 +1961,7 @@ exports.BattleItems = {
 		megaStone: "Kangaskhan-Mega",
 		megaEvolves: "Kangaskhan",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 675,
@@ -2206,7 +2206,7 @@ exports.BattleItems = {
 		megaStone: "Lucario-Mega",
 		megaEvolves: "Lucario",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 673,
@@ -2384,7 +2384,7 @@ exports.BattleItems = {
 		megaStone: "Manectric-Mega",
 		megaEvolves: "Manectric",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 682,
@@ -2423,7 +2423,7 @@ exports.BattleItems = {
 		megaStone: "Mawile-Mega",
 		megaEvolves: "Mawile",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 681,
@@ -2455,7 +2455,7 @@ exports.BattleItems = {
 		megaStone: "Medicham-Mega",
 		megaEvolves: "Medicham",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 665,
@@ -2571,7 +2571,7 @@ exports.BattleItems = {
 		megaStone: "Mewtwo-Mega-X",
 		megaEvolves: "Mewtwo",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 662,
@@ -2585,7 +2585,7 @@ exports.BattleItems = {
 		megaStone: "Mewtwo-Mega-Y",
 		megaEvolves: "Mewtwo",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 663,
@@ -2998,7 +2998,7 @@ exports.BattleItems = {
 		megaStone: "Pinsir-Mega",
 		megaEvolves: "Pinsir",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 671,
@@ -3530,7 +3530,7 @@ exports.BattleItems = {
 		megaStone: "Scizor-Mega",
 		megaEvolves: "Scizor",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 670,
@@ -4106,7 +4106,7 @@ exports.BattleItems = {
 		megaStone: "Tyranitar-Mega",
 		megaEvolves: "Tyranitar",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 669,
@@ -4128,7 +4128,7 @@ exports.BattleItems = {
 		megaStone: "Venusaur-Mega",
 		megaEvolves: "Venusaur",
 		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.species) return false;
 			return true;
 		},
 		num: 659,
