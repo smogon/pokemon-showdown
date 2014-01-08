@@ -539,7 +539,7 @@ var BattlePokemon = (function() {
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
 				moveName = 'Hidden Power '+this.hpType;
-				if (this.hpPower != 70) moveName += ' '+this.hpPower;
+				if (this.gen < 6) moveName += ' '+this.hpPower;
 			}
 			moves.push({
 				move: moveName,
@@ -2441,6 +2441,7 @@ var Battle = (function() {
 		this.p1.foe = this.p2;
 
 		this.add('gametype', this.gameType);
+		this.add('gen', this.gen);
 
 		var format = this.getFormat();
 		Tools.mod(format.mod).getBanlistTable(format); // fill in format ruleset
