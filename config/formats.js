@@ -7,6 +7,22 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		name: "Random Battle",
+		section: "XY Singles",
+
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Unrated Random Battle",
+		section: "XY Singles",
+
+		team: 'random',
+		challengeShow: false,
+		rated: false,
+		ruleset: ['Random Battle']
+	},
+	{
 		name: "OU",
 		section: "XY Singles",
 
@@ -493,25 +509,6 @@ exports.Formats = [
 	// 	ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 	// 	banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', "Tomohawk", "Necturna", "Mollux", "Aurumoth", "Malaconda", "Syclant", "Revenankh", "Pyroak", "Fidgit", "Stratagem", "Arghonaut", "Kitsunoh", "Cyclohm", "Colossoil", "Krilowatt", "Voodoom"]
 	// },
-	{
-		name: "[Gen 5] Random Battle",
-		section: "BW2 Singles",
-		column: 2,
-
-		mod: 'gen5',
-		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
-	},
-	{
-		name: "[Gen 5] Unrated Random Battle",
-		section: "BW2 Singles",
-
-		mod: 'gen5',
-		team: 'random',
-		challengeShow: false,
-		rated: false,
-		ruleset: ['Random Battle']
-	},
 	{
 		name: "[Gen 5] OU",
 		section: "BW2 Singles",
