@@ -105,7 +105,7 @@ exports.BattleItems = {
 	},
 	custapberry: {
 		inherit: true, 
-		isUnreleased: false
+		isUnreleased: false,
 		naturalGift: {
 			basePower: 80, 
 			type: "Ghost"
