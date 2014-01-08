@@ -4566,8 +4566,12 @@ exports.BattleMovedex = {
 		name: "Freeze-Dry",
 		pp: 20,
 		priority: 0,
-		onModifyEffectiveness: function(effectiveness, target) {
-			if (target.hasType('Water')) return effectiveness + 2;
+		onModifyEffectiveness: function(effectiveness, target, pokemon, move) {
+			// Hack to avoid calling getEffectiveness again
+			if (target.hasType('Water')) {
+				// not handling the case of immunity because Water has no immunities
+				return effectiveness + 1 - this.getType('Water').damageTaken[move.type];
+			}
 		},
 		secondary: {
 			chance: 10,
