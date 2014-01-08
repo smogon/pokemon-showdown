@@ -528,6 +528,16 @@ exports.BattleScripts = {
 		if (!isValid) selectedAbilities.push(selectedAbility);
 		return isValid;
 	},
+	canMegaEvo: function(template) {
+		if (template.otherFormes) {
+			var forme = this.getTemplate(template.otherFormes[0]);
+			if (forme.requiredItem) {
+				var item = this.getItem(forme.requiredItem);
+				if (item.megaStone) return true;
+			}
+		}
+		return false;
+	},
 	getTeam: function(side, team) {
 		var format = side.battle.getFormat();
 		if (format.team === 'random') {
@@ -1297,6 +1307,11 @@ exports.BattleScripts = {
 				evs.spe = 0;
 			}
 
+			var shouldMegaEvo = this.canMegaEvo(template);
+			if (template.species === 'Alakazam' || template.species === 'Scizor' || template.species === 'Garchomp') {
+				shouldMegaEvo = 'maybe';
+			}
+
 			item = 'Leftovers';
 			if (template.requiredItem) {
 				item = template.requiredItem;
@@ -1344,6 +1359,8 @@ exports.BattleScripts = {
 				item = 'Light Ball';
 			} else if (template.species === 'Clamperl') {
 				item = 'DeepSeaTooth';
+			} else if (shouldMegaEvo === true) {
+				item = this.getTemplate(template.otherFormes[0]).requiredItem;
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 				item = 'Light Clay';
 			} else if (hasMove['acrobatics']) {
@@ -1374,6 +1391,11 @@ exports.BattleScripts = {
 						break;
 					}
 				}
+
+			// medium priority
+
+			} else if (shouldMegaEvo) {
+				item = this.getTemplate(template.otherFormes[0]).requiredItem;
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
 					item = 'Flame Orb';
@@ -1525,7 +1547,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && this.getTemplate(i).gen < 6) {
+			if (this.data.FormatsData[i].viableMoves && !this.getTemplate(i).evos.length) {
 				keys.push(i);
 			}
 		}
