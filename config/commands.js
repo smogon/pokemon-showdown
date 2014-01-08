@@ -1133,7 +1133,7 @@ var commands = exports.commands = {
 			var message = target || messages[Math.floor(Math.random() * messages.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/</g, '&lt;').replace(/{{user}}/g, user.name);
+			message = message.replace(/{{user}}/g, user.name);
 			if (!this.canTalk(message)) return false;
 
 			var colour = '#' + [1, 1, 1].map(function () {
@@ -1141,7 +1141,7 @@ var commands = exports.commands = {
 				return (part < 0x10 ? '0' : '') + part.toString(16);
 			}).join('');
 
-			room.addRaw('<center><strong><font color="' + colour + '">~~ ' + message + ' ~~</font></strong></center>');
+			room.addRaw('<center><strong><font color="' + colour + '">~~ ' + sanitize(message) + ' ~~</font></strong></center>');
 			user.disconnectAll();
 		};
 	})(),
@@ -1173,11 +1173,11 @@ var commands = exports.commands = {
 				message += '<ol><li>' + room.reminders.join('</li><li>') + '</li></ol>';
 			else
 				message += "<br /><br />There are no reminders to display<br />";
-			message += "Contact a room owner, leader, or admin if you have a reminder you would like added.";
+			message += "Contact a mod, room owner, leader, or admin if you have a reminder you would like added.";
 			return this.sendReplyBox(message);
 		}
 
-		if (!this.can('declare', null, room)) return false;
+		if (!this.can('announce', null, room)) return false;
 		if (!room.reminders) room.reminders = room.chatRoomData.reminders = [];
 
 		var index = parseInt(parts[1], 10) - 1;
