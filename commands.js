@@ -2549,6 +2549,7 @@ var commands = exports.commands = {
 		fs.readFile('config/ipbans.txt', function (err, data) {
 			if (err) return;
 			data = (''+data).split("\n");
+			var rangebans = [];
 			for (var i=0; i<data.length; i++) {
 				var line = data[i].split('#')[0].trim();
 				if (!line) continue;

@@ -502,6 +502,7 @@ exports.BattleScripts = {
 		pokemon.baseAbility = pokemon.ability;
 
 		side.megaEvo = 1;
+		for (var i = 0; i < side.pokemon.length; i++) side.pokemon[i].canMegaEvo = false;
 		return true;
 	},
 
