@@ -6,7 +6,6 @@ exports.BattleItems = {
         		type: "Dragon"
         	}, 
         },
-
         apicotberry: {
         	inherit: true, 
         	naturalGift: {
