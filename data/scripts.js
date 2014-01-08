@@ -1365,8 +1365,6 @@ exports.BattleScripts = {
 				item = this.getTemplate(template.otherFormes[0]).requiredItem;
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 				item = 'Light Clay';
-			} else if (hasMove['acrobatics']) {
-				item = 'Flying Gem';
 			} else if (hasMove['shellsmash']) {
 				item = 'White Herb';
 			} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
@@ -1385,11 +1383,10 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
 				// Give Unburden mons a random Gem of the type of one of their damaging moves
-				var shuffledMoves = moves.randomize();
-				for (var m in shuffledMoves) {
-					var move = this.getMove(shuffledMoves[m]);
-					if (move.basePower || move.basePowerCallback) {
-						item = move.type + ' Gem';
+				for (var m in moves) {
+					var move = this.getMove(moves[m]);
+					if (move.type === 'Normal' && (move.basePower || move.basePowerCallback)) {
+						item = 'Normal Gem';
 						break;
 					}
 				}
@@ -1434,15 +1431,6 @@ exports.BattleScripts = {
 				item = 'Air Balloon';
 			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 				item = 'Choice Scarf';
-			} else if (hasMove['substitute'] && hasMove['reversal']) {
-				var shuffledMoves = moves.randomize();
-				for (var m in shuffledMoves) {
-					var move = this.getMove(shuffledMoves[m]);
-					if (move.basePower || move.basePowerCallback) {
-						item = move.type + ' Gem';
-						break;
-					}
-				}
 			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 				item = 'Leftovers';
 			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
