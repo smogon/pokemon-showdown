@@ -2773,7 +2773,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	staraptor: {
-		viableMoves: {"bravebird":1,"closecombat":1,"return":1,"uturn":1,"quickattack":1,"substitute":1,"roost":1,"doubleedge":1,"steelwing":1},
+		viableMoves: {"bravebird":1,"closecombat":1,"return":1,"uturn":1,"quickattack":1,"substitute":1,"roost":1,"doubleedge":1},
 		tier: "Limbo B"
 	},
 	bidoof: {
