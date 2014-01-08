@@ -457,9 +457,23 @@ exports.Formats = [
 
 		mod: 'inverse',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Kangaskhanite',
+		banlist: [
 			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Ho-Oh', 'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Xerneas', 'Yveltal', 'Gengarite', 'Gengar-Mega', 'Kyogre', 'Shaymin-Sky'
+			'Darkrai',
+			'Deoxys-Attack',
+			'Gengarite',
+			'Giratina', 'Giratina-Origin',
+			'Ho-Oh',
+			'Kangaskhanite',
+			'Kyogre',
+			'Kyurem-Black',
+			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
+			'Palkia',
+			'Rayquaza',
+			'Shaymin-Sky',
+			'Xerneas',
+			'Yveltal',
+			'Zekrom'
 		]
 	},
 	{
