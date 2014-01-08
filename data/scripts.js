@@ -1362,6 +1362,8 @@ exports.BattleScripts = {
 				item = 'DeepSeaTooth';
 			} else if (template.species === 'Spiritomb') {
 				item = 'Leftovers';
+			} else if (template.species === 'Dusclops') {
+				item = 'Eviolite';
 			} else if (shouldMegaEvo === true) {
 				item = this.getTemplate(template.otherFormes[0]).requiredItem;
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
