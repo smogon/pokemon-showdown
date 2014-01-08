@@ -505,7 +505,7 @@ var commands = exports.commands = {
     	makeprivate: 'privateroom',
     	toggleprivate: 'privateroom',      
 	privateroom: function(target, room, user) {
-		if (!this.can('makeroom')) return;
+		if (!this.can('privateroom')) return;
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand(user.name+' made this room public.');
@@ -624,7 +624,8 @@ var commands = exports.commands = {
 	roomdesc: function(target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
-			this.sendReply('The room description is: '+room.desc);
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			this.sendReplyBox('The room description is: '+room.desc.replace(re, "<a href=\"$1\">$1</a>"));
 			return;
 		}
 		if (!this.can('roommod', null, room)) return false;
