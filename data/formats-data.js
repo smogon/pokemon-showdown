@@ -674,14 +674,14 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	voltorb: {
-		viableMoves: {"voltswitch":1,"thunderbolt":1,"taunt":1,"foulplay":1,"hiddenpowerice":1,"eerieimpulse":1},
+		viableMoves: {"voltswitch":1,"thunderbolt":1,"taunt":1,"foulplay":1,"hiddenpowerice":1},
 		eventPokemon: [
 			{"generation":3,"level":19,"moves":["refresh","mirrorcoat","spark","swift"]}
 		],
 		tier: "LC"
 	},
 	electrode: {
-		viableMoves: {"voltswitch":1,"thunderbolt":1,"taunt":1,"foulplay":1,"hiddenpowerice":1,"eerieimpulse":1},
+		viableMoves: {"voltswitch":1,"thunderbolt":1,"taunt":1,"foulplay":1,"hiddenpowerice":1},
 		tier: "Limbo"
 	},
 	exeggcute: {
