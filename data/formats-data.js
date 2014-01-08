@@ -140,7 +140,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	fearow: {
-		viableMoves: {"return":1,"drillpeck":1,"doubleedge":1,"uturn":1,"quickattack":1,"pursuit":1,"drillrun":1,"roost":1,"featherdance":1},
+		viableMoves: {"return":1,"drillpeck":1,"doubleedge":1,"uturn":1,"quickattack":1,"pursuit":1,"drillrun":1,"roost":1},
 		tier: "Limbo"
 	},
 	ekans: {
@@ -263,7 +263,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	clefable: {
-		viableMoves: {"calmmind":1,"moonlight":1,"fireblast":1,"thunderbolt":1,"icebeam":1,"moonblast":1,"knockoff":1},
+		viableMoves: {"calmmind":1,"softboiled":1,"fireblast":1,"thunderbolt":1,"icebeam":1,"moonblast":1},
 		tier: "OU"
 	},
 	vulpix: {
@@ -827,7 +827,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	kingdra: {
-		viableMoves: {"hydropump":1,"icebeam":1,"dragondance":1,"substitute":1,"outrage":1,"dracometeor":1,"waterfall":1,"rest":1,"sleeptalk":1,"flashcannon":1,"dragonpulse":1},
+		viableMoves: {"hydropump":1,"icebeam":1,"dragondance":1,"substitute":1,"outrage":1,"dracometeor":1,"waterfall":1,"rest":1,"sleeptalk":1,"dragonpulse":1},
 		eventPokemon: [
 			{"generation":3,"level":50,"abilities":["swiftswim"],"moves":["leer","watergun","twister","agility"]},
 			{"generation":5,"level":50,"gender":"M","nature":"Timid","isHidden":false,"abilities":["swiftswim"],"moves":["dracometeor","muddywater","dragonpulse","protect"],"pokeball":"cherishball"}
@@ -1185,7 +1185,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Mewtwonite Y"
 	},
 	mew: {
-		viableMoves: {"taunt":1,"willowisp":1,"roost":1,"psychic":1,"nastyplot":1,"aurasphere":1,"fireblast":1,"swordsdance":1,"drainpunch":1,"zenheadbutt":1,"batonpass":1,"rockpolish":1,"substitute":1,"toxic":1,"icebeam":1,"thunderbolt":1,"earthquake":1,"uturn":1,"stealthrock":1,"suckerpunch":1,"gigadrain":1,"darkpulse":1},
+		viableMoves: {"taunt":1,"willowisp":1,"roost":1,"psychic":1,"nastyplot":1,"aurasphere":1,"fireblast":1,"swordsdance":1,"drainpunch":1,"zenheadbutt":1,"batonpass":1,"rockpolish":1,"substitute":1,"toxic":1,"icebeam":1,"thunderbolt":1,"earthquake":1,"uturn":1,"stealthrock":1,"suckerpunch":1,"defog":1},
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["pound","transform","megapunch","metronome"]},
 			{"generation":3,"level":10,"moves":["pound","transform"]},
@@ -1921,7 +1921,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	gardevoir: {
-		viableMoves: {"psychic":1,"focusblast":1,"shadowball":1,"moonblast":1,"calmmind":1,"willowisp":1,"energyball":1,"thunderbolt":1,"healingwish":1,"hypervoice":1},
+		viableMoves: {"psychic":1,"focusblast":1,"shadowball":1,"moonblast":1,"calmmind":1,"willowisp":1,"energyball":1,"thunderbolt":1,"hypervoice":1,"healingwish":1},
 		eventPokemon: [
 			{"generation":5,"level":50,"isHidden":false,"abilities":["trace"],"moves":["hypnosis","thunderbolt","focusblast","psychic"],"pokeball":"cherishball"}
 		],
@@ -2166,7 +2166,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	swalot: {
-		viableMoves: {"stockpile":1,"sludgebomb":1,"sludgewave":1,"icebeam":1,"toxic":1,"yawn":1,"encore":1,"painsplit":1,"earthquake":1},
+		viableMoves: {"stockpile":1,"sludgebomb":1,"icebeam":1,"toxic":1,"yawn":1,"encore":1,"painsplit":1,"earthquake":1},
 		tier: "Limbo"
 	},
 	carvanha: {
@@ -2399,7 +2399,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	banette: {
-		viableMoves: {"trickroom":1,"destinybond":1,"taunt":1,"shadowclaw":1,"suckerpunch":1,"willowisp":1},
+		viableMoves: {"destinybond":1,"taunt":1,"shadowclaw":1,"suckerpunch":1,"willowisp":1,"shadowsneak":1,"shadowforce":1},
 		eventPokemon: [
 			{"generation":3,"level":37,"abilities":["insomnia"],"moves":["helpinghand","feintattack","shadowball","curse"]},
 			{"generation":5,"level":37,"gender":"F","isHidden":true,"moves":["feintattack","hex","shadowball","cottonguard"]}
@@ -3811,7 +3811,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	escavalier: {
-		viableMoves: {"megahorn":1,"pursuit":1,"ironhead":1,"knockoff":1,"return":1,"swordsdance":1},
+		viableMoves: {"megahorn":1,"pursuit":1,"ironhead":1,"knockoff":1,"swordsdance":1,"drillrun":1},
 		tier: "Limbo"
 	},
 	foongus: {
