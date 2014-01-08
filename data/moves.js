@@ -4569,16 +4569,7 @@ exports.BattleMovedex = {
 		onModifyEffectiveness: function(effectiveness, target, pokemon, move) {
 			// Hack to avoid calling getEffectiveness again
 			if (target.hasType('Water')) {
-				switch (move.type) {
-					// Electrify
-					case 'Electric':
-						return effectiveness;
-					// Normalize
-					case 'Normal':
-						return effectiveness + 1;
-					default:
-						return effectiveness + 2;
-				}
+				return effectiveness + 1 - this.getType('Water').damageTaken[move.type];
 			}
 		},
 		secondary: {
