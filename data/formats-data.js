@@ -783,7 +783,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo B"
 	},
 	blissey: {
-		viableMoves: {"wish":1,"softboiled":1,"protect":1,"toxic":1,"aromatherapy":1,"seismictoss":1,"counter":1,"thunderwave":1,"stealthrock":1,"flamethrower":1,"icebeam":1,"dazzlimggleam":1},
+		viableMoves: {"wish":1,"softboiled":1,"protect":1,"toxic":1,"aromatherapy":1,"seismictoss":1,"counter":1,"thunderwave":1,"stealthrock":1,"flamethrower":1,"icebeam":1,"dazzlinggleam":1},
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"F","isHidden":true,"moves":["pound","growl","tailwhip","refresh"]}
 		],
@@ -851,7 +851,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	starmie: {
-		viableMoves: {"surf":1,"thunderbolt":1,"icebeam":1,"rapidspin":1,"recover":1,"psychic":1,"trick":1,"psychock":1,"scald":1,"hydropump":1},
+		viableMoves: {"surf":1,"thunderbolt":1,"icebeam":1,"rapidspin":1,"recover":1,"psychic":1,"trick":1,"psyshock":1,"scald":1,"hydropump":1},
 		eventPokemon: [
 			{"generation":3,"level":41,"moves":["refresh","waterfall","icebeam","recover"]}
 		],
@@ -2565,7 +2565,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	regice: {
-		viableMoves: {"thunderwave":1,"icebeam":1,"thunderbolt":1,"rest":1,"sleeptalk":1,"focusblast":1,"signalbeam":1,"ancientpower":1},
+		viableMoves: {"thunderwave":1,"icebeam":1,"thunderbolt":1,"rest":1,"sleeptalk":1,"focusblast":1,"ancientpower":1},
 		eventPokemon: [
 			{"generation":3,"level":40,"moves":["curse","superpower","ancientpower","hyperbeam"]}
 		],
@@ -4231,11 +4231,11 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	litleo: {
-		viableMoves: {"hypervoice":1,"fireblast":1,"nobleroar":1,"willowisp":1,"bulldoze":1,"yawn":1},
+		viableMoves: {"hypervoice":1,"fireblast":1,"willowisp":1,"bulldoze":1,"yawn":1},
 		tier: "LC"
 	},
 	pyroar: {
-		viableMoves: {"hypervoice":1,"fireblast":1,"nobleroar":1,"willowisp":1,"bulldoze":1,"yawn":1,"snarl":1,"sunnyday":1,"solarbeam":1},
+		viableMoves: {"hypervoice":1,"fireblast":1,"willowisp":1,"bulldoze":1,"yawn":1,"snarl":1,"sunnyday":1,"solarbeam":1},
 		tier: "Limbo"
 	},
 	flabebe: {
@@ -4421,35 +4421,35 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	pumpkaboo: {
-		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"trickortreat":1,"painsplit":1,"seedbomb":1},
+		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1},
 		tier: "LC"
 	},
 	pumpkaboosmall: {
-		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"trickortreat":1,"painsplit":1,"seedbomb":1},
+		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1},
 		tier: "LC"
 	},
 	pumpkaboolarge: {
-		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"trickortreat":1,"painsplit":1,"seedbomb":1},
+		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1},
 		tier: "LC"
 	},
 	pumpkaboosuper: {
-		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"trickortreat":1,"painsplit":1,"seedbomb":1},
+		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1},
 		tier: "LC"
 	},
 	gourgeist: {
-		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"trickortreat":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
+		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
 		tier: "Limbo"
 	},
 	gourgeistsmall: {
-		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"trickortreat":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
+		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
 		tier: "Limbo"
 	},
 	gourgeistlarge: {
-		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"trickortreat":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
+		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
 		tier: "Limbo"
 	},
 	gourgeistsuper: {
-		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"trickortreat":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
+		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
 		tier: "Limbo B"
 	},
 	bergmite: {
