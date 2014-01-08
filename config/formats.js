@@ -26,7 +26,7 @@ exports.Formats = [
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite',
-			'Aegislash',
+			'Aegislash', 'Aegislash-Blade',
 			'Alakazam', 'Alakazam-Mega',
 			'Azumarill',
 			'Blissey',
@@ -43,7 +43,7 @@ exports.Formats = [
 			'Forretress',
 			'Galvantula',
 			'Garchomp', 'Garchomp-Mega',
-			'Genesect',
+			'Genesect', 'Genesect-Douse', 'Genesect-Shock', 'Genesect-Burn', 'Genesect-Chill',
 			'Gengar', 'Gengar-Mega',
 			'Gliscor',
 			'Goodra',
