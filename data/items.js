@@ -4,11 +4,7 @@ exports.BattleItems = {
 		name: "Abomasite",
 		spritenum: 0,
 		megaStone: "Abomasnow-Mega",
-		megaEvolves: "Abomasnow",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 674,
 		gen: 6,
 		desc: "Mega-evolves Abomasnow."
@@ -18,11 +14,7 @@ exports.BattleItems = {
 		name: "Absolite",
 		spritenum: 0,
 		megaStone: "Absol-Mega",
-		megaEvolves: "Absol",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 677,
 		gen: 6,
 		desc: "Mega-evolves Absol."
@@ -65,11 +57,7 @@ exports.BattleItems = {
 		name: "Aerodactylite",
 		spritenum: 0,
 		megaStone: "Aerodactyl-Mega",
-		megaEvolves: "Aerodactyl",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 672,
 		gen: 6,
 		desc: "Mega-evolves Aerodactyl."
@@ -79,11 +67,7 @@ exports.BattleItems = {
 		name: "Aggronite",
 		spritenum: 0,
 		megaStone: "Aggron-Mega",
-		megaEvolves: "Aggron",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 667,
 		gen: 6,
 		desc: "Mega-evolves Aggron."
@@ -94,7 +78,7 @@ exports.BattleItems = {
 		spritenum: 5,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Dragon"
 		},
 		onUpdate: function(pokemon) {
@@ -148,11 +132,7 @@ exports.BattleItems = {
 		name: "Alakazite",
 		spritenum: 679,
 		megaStone: "Alakazam-Mega",
-		megaEvolves: "Alakazam",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: -6,
 		gen: 6,
 		desc: "Mega-evolves Alakazam."
@@ -162,11 +142,7 @@ exports.BattleItems = {
 		name: "Ampharosite",
 		spritenum: 658,
 		megaStone: "Ampharos-Mega",
-		megaEvolves: "Ampharos",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: -6,
 		gen: 6,
 		desc: "Mega-evolves Ampharos."
@@ -177,7 +153,7 @@ exports.BattleItems = {
 		spritenum: 10,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ground"
 		},
 		onUpdate: function(pokemon) {
@@ -209,7 +185,7 @@ exports.BattleItems = {
 		spritenum: 13,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Ice"
 		},
 		onUpdate: function(pokemon) {
@@ -252,7 +228,7 @@ exports.BattleItems = {
 		spritenum: 17,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Steel"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -273,11 +249,7 @@ exports.BattleItems = {
 		name: "Banettite",
 		spritenum: 0,
 		megaStone: "Banette-Mega",
-		megaEvolves: "Banette",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 668,
 		gen: 6,
 		desc: "Mega-evolves Banette."
@@ -288,7 +260,7 @@ exports.BattleItems = {
 		spritenum: 21,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Electric"
 		},
 		num: 183,
@@ -402,11 +374,7 @@ exports.BattleItems = {
 		name: "Blastoisinite",
 		spritenum: 661,
 		megaStone: "Blastoise-Mega",
-		megaEvolves: "Blastoise",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: -6,
 		gen: 6,
 		desc: "Mega-evolves Blastoise."
@@ -416,11 +384,7 @@ exports.BattleItems = {
 		name: "Blazikenite",
 		spritenum: 0,
 		megaStone: "Blaziken-Mega",
-		megaEvolves: "Blaziken",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 664,
 		gen: 6,
 		desc: "Mega-evolves Blaziken."
@@ -431,7 +395,7 @@ exports.BattleItems = {
 		spritenum: 44,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Fire"
 		},
 		num: 165,
@@ -523,11 +487,7 @@ exports.BattleItems = {
 		name: "Charizardite X",
 		spritenum: 0,
 		megaStone: "Charizard-Mega-X",
-		megaEvolves: "Charizard",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 660,
 		gen: 6,
 		desc: "Mega-evolves Charizard into Mega Charizard X."
@@ -537,11 +497,7 @@ exports.BattleItems = {
 		name: "Charizardite Y",
 		spritenum: 0,
 		megaStone: "Charizard-Mega-Y",
-		megaEvolves: "Charizard",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 678,
 		gen: 6,
 		desc: "Mega-evolves Charizard into Mega Charizard Y."
@@ -552,7 +508,7 @@ exports.BattleItems = {
 		spritenum: 62,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Rock"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -574,7 +530,7 @@ exports.BattleItems = {
 		spritenum: 63,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Fire"
 		},
 		onUpdate: function(pokemon) {
@@ -605,7 +561,7 @@ exports.BattleItems = {
 		spritenum: 65,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Water"
 		},
 		onUpdate: function(pokemon) {
@@ -628,7 +584,7 @@ exports.BattleItems = {
 		spritenum: 66,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Normal"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -736,7 +692,7 @@ exports.BattleItems = {
 		spritenum: 71,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Fighting"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -769,7 +725,7 @@ exports.BattleItems = {
 		spritenum: 76,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Flying"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -791,7 +747,7 @@ exports.BattleItems = {
 		spritenum: 78,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Dark"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -813,7 +769,7 @@ exports.BattleItems = {
 		spritenum: 81,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Bug"
 		},
 		num: 175,
@@ -838,7 +794,7 @@ exports.BattleItems = {
 		spritenum: 86,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ghost"
 		},
 		onModifyPriority: function(priority, pokemon) {
@@ -1052,7 +1008,7 @@ exports.BattleItems = {
 		spritenum: 114,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Water"
 		},
 		num: 182,
@@ -1155,7 +1111,7 @@ exports.BattleItems = {
 		spritenum: 124,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Bug"
 		},
 		onSourceBasePower: function(basePower, user, target, move) {
@@ -1250,7 +1206,7 @@ exports.BattleItems = {
 		spritenum: 140,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Bug"
 		},
 		onUpdate: function(pokemon) {
@@ -1433,7 +1389,7 @@ exports.BattleItems = {
 		spritenum: 158,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ice"
 		},
 		onUpdate: function(pokemon) {
@@ -1453,11 +1409,7 @@ exports.BattleItems = {
 		name: "Garchompite",
 		spritenum: 0,
 		megaStone: "Garchomp-Mega",
-		megaEvolves: "Garchomp",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 683,
 		gen: 6,
 		desc: "Mega-evolves Garchomp."
@@ -1467,11 +1419,7 @@ exports.BattleItems = {
 		name: "Gardevoirite",
 		spritenum: 0,
 		megaStone: "Gardevoir-Mega",
-		megaEvolves: "Gardevoir",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 657,
 		gen: 6,
 		desc: "Mega-evolves Gardevoir."
@@ -1481,11 +1429,7 @@ exports.BattleItems = {
 		name: "Gengarite",
 		spritenum: 0,
 		megaStone: "Gengar-Mega",
-		megaEvolves: "Gengar",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 656,
 		gen: 6,
 		desc: "Mega-evolves Gengar."
@@ -1542,7 +1486,7 @@ exports.BattleItems = {
 		spritenum: 178,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Flying"
 		},
 		num: 173,
@@ -1607,11 +1551,7 @@ exports.BattleItems = {
 		name: "Gyaradosite",
 		spritenum: 0,
 		megaStone: "Gyarados-Mega",
-		megaEvolves: "Gyarados",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 676,
 		gen: 6,
 		desc: "Mega-evolves Gyarados."
@@ -1622,7 +1562,7 @@ exports.BattleItems = {
 		spritenum: 185,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Dragon"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -1698,11 +1638,7 @@ exports.BattleItems = {
 		name: "Heracronite",
 		spritenum: 0,
 		megaStone: "Heracross-Mega",
-		megaEvolves: "Heracross",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 680,
 		gen: 6,
 		desc: "Mega-evolves Heracross."
@@ -1713,7 +1649,7 @@ exports.BattleItems = {
 		spritenum: 213,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 80,
 			type: "Ground"
 		},
 		num: 172,
@@ -1725,11 +1661,7 @@ exports.BattleItems = {
 		name: "Houndoominite",
 		spritenum: 0,
 		megaStone: "Houndoom-Mega",
-		megaEvolves: "Houndoom",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 666,
 		gen: 6,
 		desc: "Mega-evolves Houndoom."
@@ -1740,7 +1672,7 @@ exports.BattleItems = {
 		spritenum: 217,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Dark"
 		},
 		onUpdate: function(pokemon) {
@@ -1865,7 +1797,7 @@ exports.BattleItems = {
 		spritenum: 230,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Dragon"
 		},
 		onAfterMoveSecondary: function(target, source, move) {
@@ -1886,7 +1818,7 @@ exports.BattleItems = {
 		spritenum: 233,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Ghost"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -1908,7 +1840,7 @@ exports.BattleItems = {
 		spritenum: 234,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Poison"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -1947,7 +1879,7 @@ exports.BattleItems = {
 		spritenum: 235,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Fighting"
 		},
 		num: 170,
@@ -1959,11 +1891,7 @@ exports.BattleItems = {
 		name: "Kangaskhanite",
 		spritenum: 0,
 		megaStone: "Kangaskhan-Mega",
-		megaEvolves: "Kangaskhan",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 675,
 		gen: 6,
 		desc: "Mega-evolves Kangaskhan."
@@ -2014,7 +1942,7 @@ exports.BattleItems = {
 		spritenum: 238,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Flying"
 		},
 		onUpdate: function(pokemon) {
@@ -2067,7 +1995,7 @@ exports.BattleItems = {
 		spritenum: 244,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Fighting"
 		},
 		onUpdate: function(pokemon) {
@@ -2114,7 +2042,7 @@ exports.BattleItems = {
 		spritenum: 248,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Grass"
 		},
 		onUpdate: function(pokemon) {
@@ -2204,11 +2132,7 @@ exports.BattleItems = {
 		name: "Lucarionite",
 		spritenum: 0,
 		megaStone: "Lucario-Mega",
-		megaEvolves: "Lucario",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 673,
 		gen: 6,
 		desc: "Mega-evolves Lucario."
@@ -2235,7 +2159,7 @@ exports.BattleItems = {
 		spritenum: 262,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Flying"
 		},
 		onUpdate: function(pokemon) {
@@ -2337,7 +2261,7 @@ exports.BattleItems = {
 		spritenum: 274,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Ghost"
 		},
 		onUpdate: function(pokemon) {
@@ -2361,7 +2285,7 @@ exports.BattleItems = {
 		spritenum: 275,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Rock"
 		},
 		num: 176,
@@ -2382,11 +2306,7 @@ exports.BattleItems = {
 		name: "Manectite",
 		spritenum: 0,
 		megaStone: "Manectric-Mega",
-		megaEvolves: "Manectric",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 682,
 		gen: 6,
 		desc: "Mega-evolves Manectric."
@@ -2421,11 +2341,7 @@ exports.BattleItems = {
 		name: "Mawilite",
 		spritenum: 0,
 		megaStone: "Mawile-Mega",
-		megaEvolves: "Mawile",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 681,
 		gen: 6,
 		desc: "Mega-evolves Mawile."
@@ -2453,11 +2369,7 @@ exports.BattleItems = {
 		name: "Medichamite",
 		spritenum: 0,
 		megaStone: "Medicham-Mega",
-		megaEvolves: "Medicham",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 665,
 		gen: 6,
 		desc: "Mega-evolves Medicham."
@@ -2569,11 +2481,7 @@ exports.BattleItems = {
 		name: "Mewtwonite X",
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-X",
-		megaEvolves: "Mewtwo",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 662,
 		gen: 6,
 		desc: "Mega-evolves Mewtwo into Mega Mewtwo X."
@@ -2583,11 +2491,7 @@ exports.BattleItems = {
 		name: "Mewtwonite Y",
 		spritenum: 0,
 		megaStone: "Mewtwo-Mega-Y",
-		megaEvolves: "Mewtwo",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 663,
 		gen: 6,
 		desc: "Mega-evolves Mewtwo into Mega Mewtwo Y."
@@ -2598,7 +2502,7 @@ exports.BattleItems = {
 		spritenum: 290,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 90,
 			type: "Rock"
 		},
 		onResidual: function(pokemon) {
@@ -2706,7 +2610,7 @@ exports.BattleItems = {
 		spritenum: 302,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Water"
 		},
 		num: 166,
@@ -2752,7 +2656,7 @@ exports.BattleItems = {
 		spritenum: 306,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Dragon"
 		},
 		num: 178,
@@ -2783,7 +2687,7 @@ exports.BattleItems = {
 		spritenum: 311,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Fire"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -2833,7 +2737,7 @@ exports.BattleItems = {
 		spritenum: 319,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Poison"
 		},
 		onUpdate: function(pokemon) {
@@ -2854,7 +2758,7 @@ exports.BattleItems = {
 		spritenum: 323,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Steel"
 		},
 		num: 180,
@@ -2875,7 +2779,7 @@ exports.BattleItems = {
 		spritenum: 329,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Water"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -2897,7 +2801,7 @@ exports.BattleItems = {
 		spritenum: 330,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Psychic"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -2919,7 +2823,7 @@ exports.BattleItems = {
 		spritenum: 333,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Electric"
 		},
 		onUpdate: function(pokemon) {
@@ -2942,7 +2846,7 @@ exports.BattleItems = {
 		spritenum: 334,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Ground"
 		},
 		onUpdate: function(pokemon) {
@@ -2963,7 +2867,7 @@ exports.BattleItems = {
 		spritenum: 335,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Poison"
 		},
 		onUpdate: function(pokemon) {
@@ -2984,7 +2888,7 @@ exports.BattleItems = {
 		spritenum: 337,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Grass"
 		},
 		num: 168,
@@ -2996,11 +2900,7 @@ exports.BattleItems = {
 		name: "Pinsirite",
 		spritenum: 0,
 		megaStone: "Pinsir-Mega",
-		megaEvolves: "Pinsir",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 671,
 		gen: 6,
 		desc: "Mega-evolves Pinsir."
@@ -3085,7 +2985,7 @@ exports.BattleItems = {
 		spritenum: 351,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Ice"
 		},
 		num: 169,
@@ -3142,7 +3042,7 @@ exports.BattleItems = {
 		spritenum: 371,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Poison"
 		},
 		num: 171,
@@ -3196,7 +3096,7 @@ exports.BattleItems = {
 		spritenum: 375,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Ghost"
 		},
 		num: 177,
@@ -3220,7 +3120,7 @@ exports.BattleItems = {
 		spritenum: 381,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Grass"
 		},
 		onUpdate: function(pokemon) {
@@ -3281,7 +3181,7 @@ exports.BattleItems = {
 		spritenum: 384,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Steel"
 		},
 		num: 164,
@@ -3323,7 +3223,7 @@ exports.BattleItems = {
 		spritenum: 409,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Grass"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -3440,7 +3340,7 @@ exports.BattleItems = {
 		spritenum: 0,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Fairy"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -3462,7 +3362,7 @@ exports.BattleItems = {
 		spritenum: 420,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Dark"
 		},
 		onAfterMoveSecondary: function(target, source, move) {
@@ -3508,7 +3408,7 @@ exports.BattleItems = {
 		spritenum: 426,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Fighting"
 		},
 		onUpdate: function(pokemon) {
@@ -3528,11 +3428,7 @@ exports.BattleItems = {
 		name: "Scizorite",
 		spritenum: 0,
 		megaStone: "Scizor-Mega",
-		megaEvolves: "Scizor",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 670,
 		gen: 6,
 		desc: "Mega-evolves Scizor."
@@ -3634,7 +3530,7 @@ exports.BattleItems = {
 		spritenum: 443,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Ground"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -3690,7 +3586,7 @@ exports.BattleItems = {
 		spritenum: 448,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Psychic"
 		},
 		onUpdate: function(pokemon) {
@@ -3825,7 +3721,7 @@ exports.BattleItems = {
 		spritenum: 462,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Dark"
 		},
 		num: 179,
@@ -3882,7 +3778,7 @@ exports.BattleItems = {
 		spritenum: 472,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Psychic"
 		},
 		onUpdate: function(pokemon) {
@@ -3990,7 +3886,7 @@ exports.BattleItems = {
 		spritenum: 486,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Psychic"
 		},
 		num: 174,
@@ -4003,7 +3899,7 @@ exports.BattleItems = {
 		spritenum: 487,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Bug"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -4104,11 +4000,7 @@ exports.BattleItems = {
 		name: "Tyranitarite",
 		spritenum: 0,
 		megaStone: "Tyranitar-Mega",
-		megaEvolves: "Tyranitar",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 669,
 		gen: 6,
 		desc: "Mega-evolves Tyranitar."
@@ -4126,11 +4018,7 @@ exports.BattleItems = {
 		name: "Venusaurite",
 		spritenum: 0,
 		megaStone: "Venusaur-Mega",
-		megaEvolves: "Venusaur",
-		onTakeItem: function(item, source) {
-			if (item.megaEvolves === source.baseSpecies) return false;
-			return true;
-		},
+		onTakeItem: false,
 		num: 659,
 		gen: 6,
 		desc: "Mega-evolves Venusaur."
@@ -4141,7 +4029,7 @@ exports.BattleItems = {
 		spritenum: 526,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Electric"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
@@ -4182,7 +4070,7 @@ exports.BattleItems = {
 		spritenum: 530,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Fire"
 		},
 		num: 181,
@@ -4225,7 +4113,7 @@ exports.BattleItems = {
 		spritenum: 533,
 		isBerry: true,
 		naturalGift: {
-			basePower: 70,
+			basePower: 90,
 			type: "Electric"
 		},
 		num: 167,
@@ -4292,7 +4180,7 @@ exports.BattleItems = {
 		spritenum: 538,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Rock"
 		},
 		onUpdate: function(pokemon) {
@@ -4333,7 +4221,7 @@ exports.BattleItems = {
 		spritenum: 567,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Ice"
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
