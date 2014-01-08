@@ -1520,8 +1520,11 @@ exports.BattleScripts = {
 			// Weather or teammate dependent
 			Snover: 95, Vulpix: 95, Excadrill: 78, Ninetales: 78, Tentacruel: 78, Toxicroak: 78, Venusaur: 78, "Tornadus-Therian": 74,
 
+			// Banned mega
+			Kangaskhan: 75, Gengar: 75, Blaziken: 75,
+
 			// Holistic judgment
-			Carvanha: 90, Blaziken: 74, "Deoxys-Defense": 74, "Deoxys-Speed": 74, Garchomp: 74, Thundurus: 74
+			Carvanha: 90 //, "Deoxys-Defense": 74, "Deoxys-Speed": 74, Garchomp: 74, Thundurus: 74
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
