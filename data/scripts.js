@@ -975,8 +975,8 @@ exports.BattleScripts = {
 				case 'airslash':
 					if (hasMove['hurricane']) rejected = true;
 					break;
-				case 'bravebird': case 'pluck': case 'drillpeck':
-					if (hasMove['acrobatics']) rejected = true;
+				case 'acrobatics': case 'pluck': case 'drillpeck':
+					if (hasMove['bravebird']) rejected = true;
 					break;
 				case 'solarbeam':
 					if ((!hasMove['sunnyday'] && template.species !== 'Ninetales') || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
@@ -1586,7 +1586,7 @@ exports.BattleScripts = {
 			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
 			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
-			// Not available on BW
+			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
 			// Limit 2 of any type
@@ -1637,12 +1637,14 @@ exports.BattleScripts = {
 				}
 			}
 			typeComboCount[typeCombo] = 1;
+
 			// Increment Uber/NU counter
 			if (tier === 'Uber') {
 				uberCount++;
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
+
 		}
 		return pokemon;
 	},
