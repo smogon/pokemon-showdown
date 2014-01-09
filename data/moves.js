@@ -4350,8 +4350,9 @@ exports.BattleMovedex = {
 		id: "flyingpress",
 		name: "Flying Press",
 		pp: 10,
-		onModifyEffectiveness: function(effectiveness, target) {
-			return effectiveness + this.getEffectiveness('Flying', target);
+		getEffectiveness: function(source, target, pokemon) {
+			var type = source.type || source;
+			return this.getEffectiveness(type, target) + this.getEffectiveness('Flying', target);
 		},
 		priority: 0,
 		secondary: false,
@@ -4566,12 +4567,26 @@ exports.BattleMovedex = {
 		name: "Freeze-Dry",
 		pp: 20,
 		priority: 0,
-		onModifyEffectiveness: function(effectiveness, target, pokemon, move) {
-			// Hack to avoid calling getEffectiveness again
-			if (target.hasType('Water')) {
-				// not handling the case of immunity because Water has no immunities
-				return effectiveness + 1 - this.getType('Water').damageTaken[move.type];
+		getEffectiveness: function(source, target, pokemon) {
+			var type = source.type || source;
+			var totalTypeMod = 0;
+			var tarType = '';
+			for (var i=0; i<target.types.length; i++) {
+				tarType = target.types[i];
+				if (!this.data.TypeChart[tarType]) continue;
+				if (tarType === 'Water') {
+					totalTypeMod++;
+					continue;
+				}
+				var typeMod = this.data.TypeChart[tarType].damageTaken[type];
+				if (typeMod === 1) { // super-effective
+					totalTypeMod++;
+				}
+				if (typeMod === 2) { // resist
+					totalTypeMod--;
+				}
 			}
+			return totalTypeMod;
 		},
 		secondary: {
 			chance: 10,
