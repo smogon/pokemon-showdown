@@ -94,7 +94,7 @@ exports.BattleItems = {
 		spritenum: 5,
 		isBerry: true,
 		naturalGift: {
-			basePower: 100,
+			basePower: 60,
 			type: "Dragon"
 		},
 		onUpdate: function(pokemon) {
