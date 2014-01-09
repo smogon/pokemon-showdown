@@ -1534,7 +1534,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	weavile: {
-		viableMoves: {"iceshard":1,"icepunch":1,"knockoff":1,"superpower":1,"pursuit":1,"swordsdance":1},
+		viableMoves: {"iceshard":1,"icepunch":1,"knockoff":1,"pursuit":1,"swordsdance":1},
 		eventPokemon: [
 			{"generation":4,"level":30,"gender":"M","nature":"Jolly","moves":["fakeout","iceshard","nightslash","brickbreak"],"pokeball":"cherishball"}
 		],
@@ -2399,7 +2399,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	banette: {
-		viableMoves: {"destinybond":1,"taunt":1,"shadowclaw":1,"suckerpunch":1,"willowisp":1,"shadowsneak":1,"shadowforce":1},
+		viableMoves: {"destinybond":1,"taunt":1,"shadowclaw":1,"suckerpunch":1,"willowisp":1,"shadowsneak":1},
 		eventPokemon: [
 			{"generation":3,"level":37,"abilities":["insomnia"],"moves":["helpinghand","feintattack","shadowball","curse"]},
 			{"generation":5,"level":37,"gender":"F","isHidden":true,"moves":["feintattack","hex","shadowball","cottonguard"]}
@@ -2838,7 +2838,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	wormadamsandy: {
-		viableMoves: {"earthquake":1,"toxic":1,"rockblast":1,"protect":1,"stealthrock":1,"flashcannon":1,"bulldoze":1},
+		viableMoves: {"earthquake":1,"toxic":1,"rockblast":1,"protect":1,"stealthrock":1,"bulldoze":1},
 		tier: "Limbo"
 	},
 	wormadamtrash: {
